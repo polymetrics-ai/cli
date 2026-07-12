@@ -17,12 +17,12 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "codex",
-    "status": "running"
+    "status": "waiting_for_workers"
   },
   "ready_queue": [
     {
       "number": 325,
-      "status": "worker_ready",
+      "status": "worker_in_progress",
       "dependencies": [],
       "write_scope": [
         "internal/agentloop fixture/replay/policy/redaction/safety files",
@@ -32,7 +32,7 @@
         "Makefile agent-loop-test target",
         ".planning/phases/325-agentloop-characterization"
       ],
-      "decision": "local_critical_path"
+      "decision": "spawned"
     },
     {
       "number": 326,
@@ -144,6 +144,12 @@
       "decision": "local_critical_path",
       "issue_numbers": [325, 326, 327, 335, 328, 329, 336, 330, 331, 337, 332, 338, 333, 334],
       "reason": "Create and natively link complete child issue contracts before Phase 0 worker dispatch."
+    },
+    {
+      "timestamp": "2026-07-12T07:46:44Z",
+      "decision": "spawned",
+      "issue_numbers": [325],
+      "reason": "Assigned the only dependency-ready mutation slice to an isolated Codex worker worktree; all later slices remain dependency-blocked."
     }
   ],
   "subissues": [
@@ -152,10 +158,10 @@
       "url": "https://github.com/polymetrics-ai/cli/issues/325",
       "branch": "fix/325-agentloop-characterization",
       "pr_url": null,
-      "worker": "pending",
-      "status": "worker_ready",
+      "worker": "Codex phase0_worker",
+      "status": "worker_in_progress",
       "write_scope": ["fixture/replay/policy/redaction/safety core", "cmd/loopctl replay and safety", "scripts/tests", "loop entrypoint guards", "Makefile"],
-      "worker_directory": "pending",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-325-agentloop-characterization",
       "verification": "pending red characterization",
       "automated_review": {
         "primary_route": "claude_auto",
@@ -335,5 +341,5 @@
     "quality gate reductions",
     "secret access"
   ],
-  "updated_at": "2026-07-12T07:45:02Z"
+  "updated_at": "2026-07-12T07:46:44Z"
 }

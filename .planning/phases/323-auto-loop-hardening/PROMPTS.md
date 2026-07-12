@@ -16,3 +16,15 @@
 
 Exact worker prompts and compact handoffs will be recorded per child issue. Safety gates, commands,
 test output, and security warnings remain uncompressed.
+
+## Phase 0 worker dispatch
+
+- Issue: #325
+- Worker: Codex `phase0_worker`
+- Worktree: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-325-agentloop-characterization`
+- Branch/base: `fix/325-agentloop-characterization` -> `fix/323-auto-loop-hardening`
+- Scope: sanitized fixture/replay/policy/redaction/safety core, replay/safety CLI, hard driver fuse,
+  shell boundary tests, Makefile gate, and issue artifacts only.
+- Explicit boundary: no historical commit cherry-pick, unmerged Pi runtime, connector change, live
+  action, dependency, merge, or parent artifact mutation.
+- Verification result: pending worker handoff.

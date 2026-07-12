@@ -26,6 +26,11 @@
       "cycle": "issue-roster",
       "decision": "local_critical_path",
       "reason": "Draft parent PR #324 and fourteen native child issues #325-#338 were created before the first mutating worker dispatch."
+    },
+    {
+      "cycle": "phase-0-dispatch",
+      "decision": "spawned",
+      "reason": "Issue #325 was assigned to an isolated Codex worker; all other implementation issues remain dependency-blocked."
     }
   ],
   "humanGate": "parent PR merge to main"

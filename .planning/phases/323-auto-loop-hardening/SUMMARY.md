@@ -1,6 +1,6 @@
 # Summary: Autonomous Delivery Control-Plane Hardening
 
-Status: parent PR open; Phase 0 worker preparation in progress.
+Status: parent PR open; isolated Phase 0 worker active on issue #325.
 
 Issue #323 is the main-based remediation roadmap for the Twenty autonomous-delivery post-mortem.
 The clean parent branch and draft PR #324 are isolated from PR #285. Fourteen native child issues
