@@ -36,6 +36,11 @@
       "cycle": "existing-shepherd-alignment",
       "decision": "local_critical_path",
       "reason": "Normally merge feat/pi-shepherd-loop, guard the real Shepherd entrypoint, and update only its validator model before any further controller work."
+    },
+    {
+      "cycle": "phase-1a-stability-and-successor-reconcile",
+      "decision": "spawned",
+      "reason": "Assigned issue #326 test stabilization to its existing isolated worktree; reconciled the next serial chain as #339 -> #342 -> #343 -> #327 and corrected #339 to adopt the canonical shell CONTROL.json contract rather than the excluded controller experiment."
     }
   ],
   "humanGate": "parent PR merge to main"

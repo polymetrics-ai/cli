@@ -38,14 +38,14 @@
       "number": 326,
       "status": "worker_in_progress",
       "dependencies": [325],
-      "write_scope": ["internal/agentloop/model.go minimal controller identities", "internal/agentloop/controller", "cmd/loopctl read-only status", ".planning/phases/326-controller-fencing"],
+      "write_scope": ["scripts/pi-shepherd-loop.sh", "scripts/tests/pi-shepherd-supervision.sh", ".planning/phases/326-shepherd-supervision", "Makefile agent-loop-test target only if indispensable"],
       "decision": "spawned"
     },
     {
       "number": 339,
       "status": "planned",
       "dependencies": [326],
-      "write_scope": ["internal/agentloop/controller durable revocation/takeover protocol", "fake guardian/process backends", "cmd/loopctl read-only revoking status"],
+      "write_scope": ["internal/agentloop/controller Go successor facade over the canonical #326 CONTROL.json contract", "durable revocation/takeover protocol with fake guardian/process backends", "cmd/loopctl read-only revoking status"],
       "decision": "not_spawned_dependency_blocked"
     },
     {
@@ -202,6 +202,12 @@
       "decision": "contract_split",
       "issue_numbers": [339, 342, 343, 327],
       "reason": "Read-only Phase 1B preflight separated durable revocation protocol, proven OS containment, and exact provider session/driver ownership; #327 now waits for all controller runtime slices."
+    },
+    {
+      "timestamp": "2026-07-12T14:12:21Z",
+      "decision": "spawned",
+      "issue_numbers": [326],
+      "reason": "Reassigned stabilization of the accepted shell supervision implementation and PR #344 to an isolated worker; the abandoned unpublished Go controller experiment is not an implementation dependency."
     }
   ],
   "subissues": [
@@ -229,14 +235,14 @@
     {
       "number": 326,
       "url": "https://github.com/polymetrics-ai/cli/issues/326",
-      "branch": "fix/326-controller-fencing",
-      "pr_url": null,
-      "worker": "Codex phase1_worker",
+      "branch": "fix/326-shepherd-supervision",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/344",
+      "worker": "Codex shepherd_flow_map",
       "status": "worker_in_progress",
-      "write_scope": ["internal/agentloop/model.go minimal controller identities", "internal/agentloop/controller", "cmd/loopctl read-only status", ".planning/phases/326-controller-fencing"],
-      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-326-controller-fencing",
-      "verification": "TDD planning and red characterization pending",
-      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+      "write_scope": ["scripts/pi-shepherd-loop.sh", "scripts/tests/pi-shepherd-supervision.sh", ".planning/phases/326-shepherd-supervision", "Makefile agent-loop-test target only if indispensable"],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-326-shepherd-supervision",
+      "verification": "deterministic regression and repeated supervision-gate stabilization in progress",
+      "automated_review": {"primary_route":"local_independent","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr_local","fallback_route":"human","disposition_summary":"Hosted Claude review is disabled and Copilot is not used; exact-head independent local review is pending.","disposition_url":"pending"}
     },
     {
       "number": 339,
@@ -245,10 +251,10 @@
       "pr_url": null,
       "worker": "pending",
       "status": "planned",
-      "write_scope": ["internal/agentloop/controller durable revocation/takeover protocol", "fake guardian/process backends", "cmd/loopctl read-only revoking status"],
+      "write_scope": ["internal/agentloop/controller Go successor facade over the canonical #326 CONTROL.json contract", "durable revocation/takeover protocol with fake guardian/process backends", "cmd/loopctl read-only revoking status"],
       "worker_directory": "pending",
       "verification": "blocked by #326",
-      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+      "automated_review": {"primary_route":"local_independent","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr_local","fallback_route":"human","disposition_summary":"pending","disposition_url":"pending"}
     },
     {
       "number": 342,
@@ -441,5 +447,5 @@
     "quality gate reductions",
     "secret access"
   ],
-  "updated_at": "2026-07-12T09:31:00Z"
+  "updated_at": "2026-07-12T14:12:21Z"
 }

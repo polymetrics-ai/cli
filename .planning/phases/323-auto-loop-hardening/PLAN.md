@@ -48,9 +48,11 @@ verification is green, and automated review coverage is complete.
 | Slice | Issue / branch | Child outcome | Depends on | Primary write scope |
 |---|---|---|---|---|
 | 0 | #325 / `fix/325-agentloop-characterization` | Sanitized replay oracle and default-deny migration fuse | parent PR #324 | fixture/replay/safety core, `cmd/loopctl`, driver guards, tests |
-| 1A | #326 / `fix/326-controller-fencing` | Controller fence, durable lease, heartbeat, turn/session limits | #325 | minimal shared model, controller store/manager/heartbeat/turn, read-only status |
-| 1B | #339 / `fix/339-controller-takeover` | Authenticated process guardian, exact sessions, fenced takeover and cleanup | #326 | controller process/takeover/adapter core, CLI and driver adapters |
-| 2A | #327 / `fix/327-transactional-state` | Atomic CAS journal, events, create-only checkpoints, recovery | #339 | state/model/checkpoint core and schemas |
+| 1A | #326 / `fix/326-shepherd-supervision` | In-place shell-controller fence, durable limits, process-group supervision, and HALT/resume safety | #325 | existing `scripts/pi-shepherd-loop.sh`, focused shell harness, agent-loop gate |
+| 1B | #339 / `fix/339-controller-takeover` | Go successor facade for the canonical #326 `CONTROL.json` contract, fake guardian protocol, durable revocation/takeover | #326 | controller state/store/supervisor/revocation/claims and read-only status; no live wiring |
+| 1C | #342 / `fix/342-guardian-containment` | Authenticated Unix guardian with proven descendant containment or typed unsupported isolation | #339 | guardian protocol/runtime, `cmd/loopguard`, containment tests |
+| 1D | #343 / `fix/343-guarded-session-host` | Fixed Claude/Pi session adapters and guarded long-running driver host behind the closed fuse | #342 | session adapters, driver host, post-fuse launcher seams |
+| 2A | #327 / `fix/327-transactional-state` | Atomic CAS journal, events, create-only checkpoints, recovery | #343 | controller-owned journal facade, state/event/checkpoint core and schemas |
 | 2B | #335 / `fix/335-authority-terminal` | Contract manifest, durable authority/HALT/RETRY, human decisions, terminals | #327 | contract/authority/terminal core and schemas |
 | 3 | #328 / `fix/328-gate-tickets` | Gate-closure compiler and immutable one-stage tickets | #335 | `internal/agentloop/gate/**`, validation contracts |
 | 4A | #329 / `fix/329-worker-leases` | Worker/worktree leases, quiescence, complete scope audit | #328 | worker/scope core and schemas |
@@ -63,8 +65,10 @@ verification is green, and automated review coverage is complete.
 | 8 | #333 / `fix/333-deterministic-watchers` | No-model watchers, deterministic review packs, risk budgets | #338 | watcher/review/budget core and policy |
 | 9 | #334 / `fix/334-fault-canary` | Historical replay, fault injection, shadow execution, merge-disabled canary | all prior | replay/fault suites and final evidence |
 
-All fifteen issues are native sub-issues of #323. Phases 1, 2, 4, 6, and 7 were split into A/B
-slices after read-only architecture review found their original scopes were not honestly PR-sized.
+All eighteen issues are native sub-issues of #323. Phases 1, 2, 4, 6, and 7 were split into
+dependency-ordered slices after read-only architecture review found their original scopes were not
+honestly PR-sized. Phase 1 now explicitly separates shell supervision, fake takeover protocol,
+OS containment, and provider-session hosting.
 Dependency order is intentionally conservative because phases 1-8 share control-plane contracts;
 parallelism is reserved for read-only design/review or demonstrably disjoint test work.
 
