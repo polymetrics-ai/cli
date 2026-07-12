@@ -128,15 +128,37 @@ RED command/output will be appended after the tests exist and before production 
   path before `printf` fills it, so the inert child could read an empty token and exit 125 before
   executing the provider. `kill -0` also classified zombie leaders as running, and the first reaping
   correction could wait for the same leader twice.
-- Production GREEN: authorization is now written and fsynced in a private inode, published with a
-  create-only hard link, and directory-fsynced. Explicit zombie detection reaps once; an empty or
-  uncertain `ps` result remains supervised until conclusive evidence or the persisted deadline.
+- Production GREEN: explicit zombie detection reaps once; an empty or uncertain `ps` result remains
+  supervised until conclusive evidence or the persisted deadline. The subsequent exact-head review
+  replaced the intermediate filesystem authorization design as described below.
 - Oracle GREEN: the SIGKILL child verifies that its inherited descriptor is the canonical lock and
-  reflocks the same open description before publishing readiness. The test observes durable role
-  binding before child/lock readiness, proves each killed identity disappears, and polls for lock
-  release under a bound instead of sleeping. Turn-cap/HALT failures capture one atomic control
-  snapshot plus bounded diagnostics.
+  does not alter its lock state. The test observes durable role binding before child/lock readiness,
+  proves each killed identity disappears, and polls for lock release under a bound instead of
+  sleeping. Turn-cap/HALT failures capture one atomic control snapshot plus bounded diagnostics.
 - Cumulative correction evidence: combined instant-exit/HALT/ratification matrix 30/30;
   turn-cap matrix 50/50; descendant-held-lock matrix 50/50; two complete 19-scenario suites;
   Phase 0 harness; `make agent-loop-test`; and final `make verify` all pass. Tests use only fake
   providers and test-owned processes.
+
+## Exact-head P1 review corrections — 2026-07-12
+
+- Independent local review blocked commit `508a4554` on four P1 lifecycle/oracle findings and one
+  P1 evidence-hygiene finding: a mismatched PID could be signalled, file authorization could be
+  preseeded or consumed before publication completed, the SIGKILL oracle could acquire the lock it
+  claimed to observe, and unknown filters could silently execute zero tests.
+- RED deterministically reproduced all control failures: preseed escaped to a paused completed turn,
+  controller death never reached a safe pre-GO barrier, and simulated PGID movement killed the
+  now-untrusted role PID. Invalid, duplicate, empty, and unknown filters are separately rejected.
+- The filesystem authorization path was removed. An inert role now re-derives its exact durable
+  fence/turn/role/PID/PGID binding, writes a readiness marker, and kernel-stops itself. Only after the
+  controller bind call has returned from directory fsync and the exact PID is observed stopped does
+  the controller send `CONT`; the role revalidates parent liveness, deadline, and binding after
+  resume before `exec`.
+- A PID/PGID mismatch now preserves recovery evidence without signalling either untrusted identity.
+  The inherited-lock oracle only validates the descriptor/inode; rejection by a fresh controller
+  after the original controller and role leader are proven gone establishes that the untouched
+  descendant retained the lock.
+- GREEN evidence on the corrected design: kernel-GO adversarial matrix 20/20, failed-HALT/instant
+  validator 50/50, shared validator deadline 10/10, two complete 22-scenario suites, Phase 0
+  controls, `make agent-loop-test`, and final `make verify`. All provider processes are synthetic
+  and test-owned.

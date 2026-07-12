@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "phase": "326-shepherd-supervision",
-  "status": "stability_verified_review_pending",
+  "status": "p1_corrections_verified_review_pending",
   "issue": 326,
   "parent_issue": 323,
   "branch": "fix/326-shepherd-supervision",

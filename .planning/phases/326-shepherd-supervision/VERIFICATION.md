@@ -25,7 +25,8 @@ groups. They must never inspect credentials, invoke a model/provider, or signal 
 - `make agent-loop-test`: pass, including `go test -race ./internal/agentloop/...`.
 - The validator-only model policy is asserted through fake local model discovery; no provider call
   is made. Orchestrator/worker model configuration remains unchanged.
-- Final independent review: no remaining in-scope P0/P1 finding.
+- Pre-stability independent review found no P0/P1 at that earlier head; later exact-head review
+  blocked the filesystem authorization revision and drove the corrections below.
 
 Enable blockers deliberately deferred by contract: same-epoch snapshot rollback requires #327's
 per-transition journal predecessor/version; authenticated takeover and escaped-descendant
@@ -41,16 +42,19 @@ phases and later canary gates land.
 
 ## Stability correction result — 2026-07-12
 
-- Role authorization is now complete-before-visible and create-only; no child can consume an empty
-  start token.
+- Filesystem role authorization has been removed. The exact bound role kernel-stops itself and can
+  resume only after the controller's durable bind returns; it revalidates all authority before exec.
 - Leader completion distinguishes explicit zombies from live/uncertain processes and reaps each
   leader at most once.
-- Cumulative repeated evidence: 30/30 combined instant-exit/HALT/ratification runs, 50/50
-  turn-cap runs, 50/50 descendant-held-lock SIGKILL runs, two full supervision suites, Phase 0
-  controls, and `make agent-loop-test`.
+- A PID/PGID mismatch never signals the untrusted PID; it retains durable unresolved evidence for
+  authenticated recovery.
+- Invalid/duplicate/empty/unknown focused-test filters fail rather than reporting a zero-test green.
+- Current-design repeated evidence: kernel-GO adversarial matrix 20/20, failed-HALT/instant
+  validator 50/50, shared validator deadline 10/10, two full 22-scenario suites, Phase 0 controls,
+  and `make agent-loop-test`.
 - Final `make verify` passes formatting/tidy, vet, all Go tests, build, docs validation, CLI smoke,
-  lint, 547 connector definitions, race/control gates, and the corrected supervision harness.
+  lint, 547 connector definitions, race/control gates, and the expanded 22-scenario harness.
 - The SIGKILL oracle directly validates the inherited canonical lock descriptor and waits for
-  durable binding/process disappearance rather than inferring them from timing.
+  durable binding/process disappearance without acquiring or changing that lock.
 
 Pending delivery actions: exact-head independent local review, push, CI, and parent integration.

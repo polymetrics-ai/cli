@@ -3,8 +3,10 @@ set -u
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 REAL_PYTHON_BIN="$(command -v python3)"
+REAL_PS_BIN="$(command -v ps)"
 TEST_TMP="$(mktemp -d)"
 failures=0
+executed_tests=0
 SUITE_PID=$$
 WATCHDOG_PID=""
 SUITE_TIMEOUT_SECONDS="${SUITE_TIMEOUT_SECONDS:-120}"
@@ -75,6 +77,7 @@ run_test() {
     fail "missing test function: $name"
     return
   fi
+  executed_tests=$((executed_tests + 1))
   "$name" || rc=$?
   if [[ "$rc" -ne 0 ]]; then
     fail "$name returned unexpected status $rc"
@@ -145,7 +148,6 @@ duration="$2"
 if [[ -n "${DESCENDANT_LOCK_READY_FILE:-}" ]]; then
   "$REAL_PYTHON_BIN" - "$AUTO_LOOP_CONTROL_FD" "$TEST_REPO/.planning/auto-loop/CONTROL.lock" \
     "$DESCENDANT_LOCK_READY_FILE" "$nonce" <<'PY'
-import fcntl
 import os
 import pathlib
 import stat
@@ -159,7 +161,6 @@ held = os.fstat(fd)
 canonical = os.stat(lock_path, follow_symlinks=False)
 if not stat.S_ISREG(held.st_mode) or (held.st_dev, held.st_ino) != (canonical.st_dev, canonical.st_ino):
     raise SystemExit("descendant inherited the wrong controller lock")
-fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
 marker_fd = os.open(marker, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
 try:
     os.write(marker_fd, (nonce + "\n").encode("utf-8"))
@@ -196,6 +197,10 @@ SH
   cat >"$root/bin/python3" <<'SH'
 #!/usr/bin/env bash
 set -u
+if [[ "${2:-}" == *'.role-ready.'* && "${FAKE_PRESEED_ROLE_GO:-0}" == "1" ]]; then
+  printf '%s\n' "$$" >"${3:?missing role go path}"
+  printf 'preseeded\n' >"$PRESEED_PROBE_FILE"
+fi
 if [[ "${2:-}" == *'.role-ready.'* && "${FAKE_LAUNCH_DELAY:-0}" != "0" ]]; then
   printf 'launching\n' >"$LAUNCH_PROBE_FILE"
   /bin/sleep "$FAKE_LAUNCH_DELAY"
@@ -207,6 +212,26 @@ fi
 exec "$REAL_PYTHON_BIN" "$@"
 SH
   chmod +x "$root/bin/python3"
+
+  cat >"$root/bin/ps" <<'SH'
+#!/usr/bin/env bash
+set -u
+if [[ "${1:-}" == "-o" && "${2:-}" == "pgid=" && "${3:-}" == "-p" && \
+      -e "$PGID_MISMATCH_ARM_FILE" ]]; then
+  printf '%s\n' "$(( ${4:?missing pid} + 100000 ))"
+  exit 0
+fi
+if [[ "${1:-}" == "-o" && "${2:-}" == "stat=" && "${3:-}" == "-p" && \
+      "${FAKE_GO_PROBE_DELAY:-0}" != "0" && ! -e "$GO_PROBE_ONCE_FILE" ]] && \
+   find "$TEST_REPO/.planning/auto-loop" -name '.role-go-ready.*' -type f -size +0c -print -quit 2>/dev/null | grep -q .; then
+  printf '%s %s\n' "$$" "$TEST_REPO/bin/ps" >>"$CONTROLLER_PID_FILE"
+  : >"$GO_PROBE_ONCE_FILE"
+  printf 'probing\n' >"$GO_PROBE_FILE"
+  /bin/sleep "$FAKE_GO_PROBE_DELAY"
+fi
+exec "$REAL_PS_BIN" "$@"
+SH
+  chmod +x "$root/bin/ps"
 
   cat >"$root/bin/pi" <<'SH'
 #!/usr/bin/env bash
@@ -336,6 +361,7 @@ driver_env() {
     "EVENT_LOG=$root/events"
     "CHILD_PID_FILE=$root/child-pids"
     "MODEL_PID_FILE=$root/model-pids"
+    "CONTROLLER_PID_FILE=$root/controller-pids"
     "NATURAL_EXIT_LOG=$root/natural-exits"
     "TEST_NONCE=$(cat "$root/nonce")"
     "TEST_REPO=$root"
@@ -344,12 +370,19 @@ driver_env() {
     "FAKE_MODEL_MISSING=${FAKE_MODEL_MISSING:-0}"
     "FAKE_LAUNCH_DELAY=${FAKE_LAUNCH_DELAY:-0}"
     "FAKE_BIND_DELAY=${FAKE_BIND_DELAY:-0}"
+    "FAKE_PRESEED_ROLE_GO=${FAKE_PRESEED_ROLE_GO:-0}"
+    "FAKE_GO_PROBE_DELAY=${FAKE_GO_PROBE_DELAY:-0}"
     "DESCENDANT_LOCK_READY_FILE=${DESCENDANT_LOCK_READY_FILE:-}"
     "MODEL_PROBE_FILE=$root/model-probe"
     "MODEL_COMPLETION_FILE=$root/model-completion"
     "LAUNCH_PROBE_FILE=$root/launch-probe"
     "BIND_PROBE_FILE=$root/bind-probe"
+    "PRESEED_PROBE_FILE=$root/preseed-probe"
+    "PGID_MISMATCH_ARM_FILE=$root/pgid-mismatch-arm"
+    "GO_PROBE_FILE=$root/go-probe"
+    "GO_PROBE_ONCE_FILE=$root/go-probe-once"
     "REAL_PYTHON_BIN=$REAL_PYTHON_BIN"
+    "REAL_PS_BIN=$REAL_PS_BIN"
     "MAX_ITERATIONS=${MAX_ITERATIONS:-1}"
     "MAX_TURNS=${MAX_TURNS:-20}"
     "TURN_TIMEOUT_SECONDS=${TURN_TIMEOUT_SECONDS:-30}"
@@ -602,7 +635,7 @@ test_validator_shares_the_hard_turn_deadline() {
   prepare_fixture "$root"
 
   (
-    DRIVER_EXEC=1 FAKE_MODE=validator-hang TURN_TIMEOUT_SECONDS=5 \
+    DRIVER_EXEC=1 FAKE_MODE=validator-hang TURN_TIMEOUT_SECONDS=8 \
       driver_env "$root" "synthetic validator deadline" >"$root/stdout" 2>"$root/stderr"
   ) &
   driver=$!
@@ -619,7 +652,7 @@ test_validator_shares_the_hard_turn_deadline() {
   end="$(monotonic_now)"
   elapsed_fast="$(python3 - "$start" "$end" <<'PY'
 import sys
-print("yes" if float(sys.argv[2]) - float(sys.argv[1]) < 4.5 else "no")
+print("yes" if float(sys.argv[2]) - float(sys.argv[1]) < 7.5 else "no")
 PY
 )"
 
@@ -798,6 +831,52 @@ test_role_is_not_authorized_after_deadline() {
   fi
 }
 
+test_preseeded_role_go_cannot_launch_provider() {
+  local root rc=0
+  root="$(mktemp -d "$TEST_TMP/preseed-role-go.XXXXXX")"
+  prepare_fixture "$root"
+
+  FAKE_PRESEED_ROLE_GO=1 driver_env "$root" "synthetic preseeded role go" \
+    >"$root/stdout" 2>"$root/stderr" || rc=$?
+  if [[ ! -s "$root/preseed-probe" ]]; then
+    fail "role-go preseed fixture did not arm"
+  fi
+  if [[ "$rc" -ne 4 || -s "$root/events" ]] || \
+     [[ "$(control_field "$root" phase)" != "recovery_required" ]]; then
+    fail "preseeded role-go marker launched a provider or escaped recovery: rc=$rc control=$(control_snapshot "$root")"
+  fi
+}
+
+test_controller_sigkill_before_role_go_never_launches_provider() {
+  local root driver leader probe_pid state
+  root="$(mktemp -d "$TEST_TMP/pre-go-sigkill.XXXXXX")"
+  prepare_fixture "$root"
+
+  (
+    DRIVER_EXEC=1 FAKE_GO_PROBE_DELAY=5 TURN_TIMEOUT_SECONDS=15 \
+      driver_env "$root" "synthetic pre-go sigkill" >"$root/stdout" 2>"$root/stderr"
+  ) &
+  driver=$!
+  register_controller "$root" "$driver"
+  if ! wait_for_file "$root/go-probe"; then
+    fail "pre-go SIGKILL fixture did not reach the stopped role handshake"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  leader="$(control_field "$root" active_turn.leader_pid)"
+  printf '%s %s\n' "$leader" "$REAL_PYTHON_BIN" >>"$root/controller-pids"
+  signal_owned_process KILL "$driver" "$root/scripts/pi-shepherd-loop.sh"
+  wait "$driver" 2>/dev/null || true
+  probe_pid="$(awk '$2 ~ /\/bin\/ps$/ { pid=$1 } END { print pid }' "$root/controller-pids")"
+  kill_owned_process "$probe_pid" "$root/bin/ps"
+  state="$($REAL_PS_BIN -o stat= -p "$leader" 2>/dev/null | tr -d '[:space:]' || true)"
+  if [[ -s "$root/events" || "$state" != T* ]]; then
+    fail "controller SIGKILL released or lost the pre-go role: state=$state control=$(control_snapshot "$root")"
+  fi
+  kill_owned_process "$leader" "$REAL_PYTHON_BIN"
+}
+
 test_signal_drains_group_and_requires_recovery() {
   local root driver child child_nonce phase bystander rc=0
   root="$(mktemp -d "$TEST_TMP/signal.XXXXXX")"
@@ -834,6 +913,46 @@ test_signal_drains_group_and_requires_recovery() {
     fail "signal persisted phase=$phase, want recovery_required"
   fi
   assert_bystander_alive "$bystander" "signal teardown"
+}
+
+test_pgid_mismatch_never_signals_untrusted_pid() {
+  local root driver child child_nonce leader rc=0
+  root="$(mktemp -d "$TEST_TMP/pgid-mismatch.XXXXXX")"
+  prepare_fixture "$root"
+
+  (
+    DRIVER_EXEC=1 FAKE_MODE=signal TURN_TIMEOUT_SECONDS=15 \
+      driver_env "$root" "synthetic pgid mismatch" >"$root/stdout" 2>"$root/stderr"
+  ) &
+  driver=$!
+  register_controller "$root" "$driver"
+  if ! wait_for_control_value "$root" active_turn.active_role orchestrator || \
+     ! wait_for_role_child "$root/child-pids"; then
+    fail "PGID mismatch fixture did not reach a bound role tree"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  read -r child child_nonce < <(grep -v 'bystander' "$root/child-pids" | tail -n 1)
+  leader="$(control_field "$root" active_turn.leader_pid)"
+  printf '%s %s\n' "$leader" "$root/bin/pi" >>"$root/controller-pids"
+  : >"$root/pgid-mismatch-arm"
+  signal_owned_process TERM "$driver" "$root/scripts/pi-shepherd-loop.sh"
+  wait "$driver" 2>/dev/null || rc=$?
+
+  if [[ "$rc" -ne 4 || "$(control_field "$root" phase)" != "recovery_required" ]] || \
+     [[ "$(control_field "$root" children_quiescent)" == "true" ]] || \
+     [[ -z "$(control_field "$root" active_turn.process_group_id)" ]]; then
+    fail "PGID mismatch did not preserve unresolved recovery evidence"
+  fi
+  if ! owned_process_alive "$leader" "$root/bin/pi"; then
+    fail "PGID mismatch signalled the now-untrusted leader PID"
+  fi
+  if ! owned_process_alive "$child" "$child_nonce"; then
+    fail "PGID mismatch unexpectedly signalled the registered descendant"
+  fi
+  kill_owned_process "$leader" "$root/bin/pi"
+  kill_owned_process "$child" "$child_nonce"
 }
 
 test_sigkill_controller_does_not_admit_replacement() {
@@ -989,7 +1108,7 @@ test_failed_halt_persistence_never_claims_halted() {
   if [[ "$(control_field "$root" phase)" == "halted" ]] || \
      [[ -n "$(control_field "$root" halt.code)" ]]; then
     snapshot="$(control_snapshot "$root")"
-    diagnostic="$(tail -n 6 "$root/stderr" 2>/dev/null | tr '\n' '|')"
+    diagnostic="$(tail -n 12 "$root/.planning/auto-loop/driver.log" 2>/dev/null | tr '\n' '|')"
     fail "failed HALT persistence observed control=$snapshot halt=$(control_field "$root" halt.code) stderr=$diagnostic"
   fi
 }
@@ -1183,25 +1302,67 @@ test_turn_limit_survives_pause_resume() {
   fi
 }
 
-run_test test_concurrent_controllers_have_one_winner
-run_test test_hard_deadline_drains_process_tree
-run_test test_leader_exit_with_live_descendant_halts
-run_test test_validator_shares_the_hard_turn_deadline
-run_test test_missing_validator_model_fails_before_work
-run_test test_halt_is_durable_and_blocks_resume
-run_test test_signal_during_startup_is_durable
-run_test test_signal_during_role_startup_does_not_orphan
-run_test test_role_stays_inert_until_durable_bind
-run_test test_role_is_not_authorized_after_deadline
-run_test test_signal_drains_group_and_requires_recovery
-run_test test_sigkill_controller_does_not_admit_replacement
-run_test test_fence_movement_fails_closed
-run_test test_failed_halt_persistence_never_claims_halted
-run_test test_resume_requires_clean_paused_state
-run_test test_control_path_aliases_fail_closed
-run_test test_terminal_requires_shepherd_ratification
-run_test test_run_counters_survive_pause_resume
-run_test test_turn_limit_survives_pause_resume
+TEST_NAMES=(
+  test_concurrent_controllers_have_one_winner
+  test_hard_deadline_drains_process_tree
+  test_leader_exit_with_live_descendant_halts
+  test_validator_shares_the_hard_turn_deadline
+  test_missing_validator_model_fails_before_work
+  test_halt_is_durable_and_blocks_resume
+  test_signal_during_startup_is_durable
+  test_signal_during_role_startup_does_not_orphan
+  test_role_stays_inert_until_durable_bind
+  test_role_is_not_authorized_after_deadline
+  test_preseeded_role_go_cannot_launch_provider
+  test_controller_sigkill_before_role_go_never_launches_provider
+  test_signal_drains_group_and_requires_recovery
+  test_pgid_mismatch_never_signals_untrusted_pid
+  test_sigkill_controller_does_not_admit_replacement
+  test_fence_movement_fails_closed
+  test_failed_halt_persistence_never_claims_halted
+  test_resume_requires_clean_paused_state
+  test_control_path_aliases_fail_closed
+  test_terminal_requires_shepherd_ratification
+  test_run_counters_survive_pause_resume
+  test_turn_limit_survives_pause_resume
+)
+
+validate_test_filter() {
+  local request known seen="," found
+  local -a requests
+  [[ -n "${SHEPHERD_TEST_FILTER:-}" ]] || return 0
+  if [[ ",${SHEPHERD_TEST_FILTER}," == *",,"* ]]; then
+    fail "invalid Shepherd test filter: empty test name"
+    return 1
+  fi
+  IFS=',' read -r -a requests <<<"$SHEPHERD_TEST_FILTER"
+  for request in "${requests[@]}"; do
+    if [[ -z "$request" || "$seen" == *",${request},"* ]]; then
+      fail "invalid or duplicate Shepherd test filter: ${request:-<empty>}"
+      return 1
+    fi
+    found=0
+    for known in "${TEST_NAMES[@]}"; do
+      [[ "$request" == "$known" ]] && found=$((found + 1))
+    done
+    if [[ "$found" -ne 1 ]]; then
+      fail "unknown Shepherd test filter: $request"
+      return 1
+    fi
+    seen="${seen}${request},"
+  done
+}
+
+filter_valid=1
+validate_test_filter || filter_valid=0
+if (( filter_valid == 1 )); then
+  for test_name in "${TEST_NAMES[@]}"; do
+    run_test "$test_name"
+  done
+  if (( executed_tests == 0 )); then
+    fail "Shepherd test filter selected zero tests"
+  fi
+fi
 
 if (( failures > 0 )); then
   printf 'pi-shepherd-supervision: %d failure(s)\n' "$failures" >&2

@@ -593,7 +593,7 @@ ACTIVE_ROLE_PID=""
 ACTIVE_ROLE_PGID=""
 ACTIVE_ROLE_GROUP_READY=0
 ACTIVE_ROLE_READY_FILE=""
-ACTIVE_ROLE_START_FILE=""
+ACTIVE_ROLE_GO_READY_FILE=""
 ACTIVE_ROLE_OUTPUT_FILE=""
 TURN_DEADLINE_MONO=0
 ACTIVE_SECONDS_BASE=0
@@ -670,8 +670,8 @@ drain_role_group() {
   fi
   if (( ACTIVE_ROLE_GROUP_READY == 1 )); then
     if [[ -n "$observed_pgid" && "$observed_pgid" != "$pgid" ]]; then
-      kill -TERM "$pid" 2>/dev/null || true
-      wait "$pid" 2>/dev/null || true
+      # A PID whose observed group no longer matches the durable binding is untrusted. Never signal
+      # that PID (or the possibly reused PGID); retain the handles for authenticated recovery.
       return 1
     fi
   elif [[ "$observed_pgid" == "$pid" ]]; then
@@ -720,56 +720,11 @@ drain_role_group() {
 
 cleanup_role_artifacts() {
   [[ -z "$ACTIVE_ROLE_READY_FILE" ]] || rm -f "$ACTIVE_ROLE_READY_FILE" 2>/dev/null || true
-  [[ -z "$ACTIVE_ROLE_START_FILE" ]] || rm -f "$ACTIVE_ROLE_START_FILE" 2>/dev/null || true
+  [[ -z "$ACTIVE_ROLE_GO_READY_FILE" ]] || rm -f "$ACTIVE_ROLE_GO_READY_FILE" 2>/dev/null || true
   [[ -z "$ACTIVE_ROLE_OUTPUT_FILE" ]] || rm -f "$ACTIVE_ROLE_OUTPUT_FILE" 2>/dev/null || true
   ACTIVE_ROLE_READY_FILE=""
-  ACTIVE_ROLE_START_FILE=""
+  ACTIVE_ROLE_GO_READY_FILE=""
   ACTIVE_ROLE_OUTPUT_FILE=""
-}
-
-publish_role_authorization() { # path exact-pid
-  python3 - "$1" "$2" <<'PY'
-import os
-import pathlib
-import tempfile
-import sys
-
-path = pathlib.Path(sys.argv[1])
-payload = (sys.argv[2] + "\n").encode("ascii", "strict")
-fd = -1
-temporary = ""
-directory_fd = -1
-try:
-    fd, temporary = tempfile.mkstemp(prefix=".role-authorize.", dir=path.parent)
-    os.fchmod(fd, 0o600)
-    written = 0
-    while written < len(payload):
-        count = os.write(fd, payload[written:])
-        if count <= 0:
-            raise OSError("short role authorization write")
-        written += count
-    os.fsync(fd)
-    os.close(fd)
-    fd = -1
-    # link is create-only: an existing file or symlink is rejected rather than overwritten. The
-    # inert role can observe the target only after the complete token is durable in the inode.
-    os.link(temporary, path, follow_symlinks=False)
-    os.unlink(temporary)
-    temporary = ""
-    directory_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
-    directory_fd = os.open(path.parent, directory_flags)
-    os.fsync(directory_fd)
-finally:
-    if directory_fd >= 0:
-        os.close(directory_fd)
-    if fd >= 0:
-        os.close(fd)
-    if temporary:
-        try:
-            os.unlink(temporary)
-        except FileNotFoundError:
-            pass
-PY
 }
 
 controller_emergency() { # code reason final-phase
@@ -970,50 +925,106 @@ PY
 }
 
 start_role_group() { # role command [arguments...]
-  local role="$1" ready_file start_file pid pgid attempt
+  local role="$1" ready_file go_ready_file pid pgid go_pid role_state attempt
   shift
   ready_file="$STATE_DIR/.role-ready.$TURN_ID.$role"
-  start_file="$STATE_DIR/.role-start.$TURN_ID.$role"
+  go_ready_file="$STATE_DIR/.role-go-ready.$TURN_ID.$role"
   ACTIVE_ROLE_READY_FILE="$ready_file"
-  ACTIVE_ROLE_START_FILE="$start_file"
-  python3 - "$ready_file" "$start_file" "$TURN_TIMEOUT_SECONDS" "$@" >>"$LOG_FILE" 2>&1 <<'PY' &
+  ACTIVE_ROLE_GO_READY_FILE="$go_ready_file"
+  python3 - "$ready_file" "$go_ready_file" "$CONTROL_JSON" "$CONTROL_FENCE" "$TURN_ID" \
+    "$role" "$TURN_TIMEOUT_SECONDS" "$@" >>"$LOG_FILE" 2>&1 <<'PY' &
+import json
 import os
+import signal
+import stat
 import sys
 import time
 
-ready, start, timeout_raw, command, *arguments = sys.argv[1:]
+ready, go_ready, control_path, fence_text, expected_turn, role, timeout_raw, command, *arguments = sys.argv[1:]
 parent_pid = os.getppid()
 timeout = max(1, int(timeout_raw))
 os.setsid()
-fd = os.open(ready, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-try:
-    os.write(fd, f"{os.getpid()}\n".encode())
-    os.fsync(fd)
-finally:
-    os.close(fd)
 
-# Stay inert until the controller has durably bound this exact PID/PGID. If the controller dies
-# before authorization, exit without ever executing the mutating role command.
-deadline = time.monotonic() + timeout
-while True:
+def write_all(fd, payload):
+    written = 0
+    while written < len(payload):
+        count = os.write(fd, payload[written:])
+        if count <= 0:
+            raise OSError("short role handshake write")
+        written += count
+
+def read_control():
     flags = os.O_RDONLY
     if hasattr(os, "O_NOFOLLOW"):
         flags |= os.O_NOFOLLOW
     try:
-        start_fd = os.open(start, flags)
-    except FileNotFoundError:
-        if os.getppid() != parent_pid or time.monotonic() >= deadline:
-            raise SystemExit(125)
-        time.sleep(0.01)
-        continue
-    try:
-        token = os.read(start_fd, 128).decode("ascii", "strict").strip()
-    finally:
-        os.close(start_fd)
-    if token != str(os.getpid()):
+        fd = os.open(control_path, flags)
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_size > 131072:
+            raise OSError("unsafe control state")
+        with os.fdopen(fd, "rb") as handle:
+            value = json.loads(handle.read().decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
         raise SystemExit(125)
-    os.unlink(start)
-    break
+    if not isinstance(value, dict) or value.get("schema_version") != "1.0":
+        raise SystemExit(125)
+    return value
+
+def fence_of(value):
+    return "|".join(str(value.get(key, "")) for key in (
+        "run_id", "generation", "controller_id", "control_revision"
+    ))
+
+def is_exact_binding(value):
+    if fence_of(value) != fence_text or value.get("phase") != "active":
+        raise SystemExit(125)
+    turn = value.get("active_turn")
+    if not isinstance(turn, dict) or turn.get("turn_id") != expected_turn:
+        raise SystemExit(125)
+    active_role = turn.get("active_role")
+    if active_role is None:
+        if turn.get("leader_pid") is not None or turn.get("process_group_id") is not None:
+            raise SystemExit(125)
+        return False
+    if (
+        active_role != role
+        or turn.get("leader_pid") != os.getpid()
+        or turn.get("process_group_id") != os.getpid()
+        or value.get("children_quiescent") is not False
+    ):
+        raise SystemExit(125)
+    return True
+
+fd = os.open(ready, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+try:
+    write_all(fd, f"{os.getpid()}\n".encode())
+    os.fsync(fd)
+finally:
+    os.close(fd)
+
+# Stay inert until the canonical control record contains this exact fence, turn, role, PID, and
+# PGID. Then stop in the kernel. Only the controller, after its bind transaction has returned from
+# directory fsync, sends CONT. A preseeded marker can cause denial only; it cannot resume this role.
+deadline = time.monotonic() + timeout
+while True:
+    if os.getppid() != parent_pid or time.monotonic() >= deadline:
+        raise SystemExit(125)
+    if is_exact_binding(read_control()):
+        break
+    time.sleep(0.01)
+
+fd = os.open(go_ready, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+try:
+    write_all(fd, f"{os.getpid()}\n".encode())
+    os.fsync(fd)
+finally:
+    os.close(fd)
+os.kill(os.getpid(), signal.SIGSTOP)
+
+# CONT is only a wake-up. Re-derive authority after resumption so stale/moved state, parent death,
+# or a deadline that elapsed while stopped can never execute the provider.
+if os.getppid() != parent_pid or time.monotonic() >= deadline or not is_exact_binding(read_control()):
+    raise SystemExit(125)
 os.execvp(command, [command, *arguments])
 PY
   pid=$!
@@ -1042,10 +1053,35 @@ PY
     controller_emergency TURN_DEADLINE "$role exhausted the persisted turn deadline before authorization" halted
     return 124
   fi
-  if ! publish_role_authorization "$start_file" "$pid" 2>/dev/null; then
-    controller_emergency ROLE_START_FAILED "could not authorize bound $role process group" recovery_required
+  role_state=""
+  for ((attempt=0; attempt<200; attempt++)); do
+    if [[ -s "$go_ready_file" ]]; then
+      role_state="$(ps -o stat= -p "$pid" 2>/dev/null | tr -d '[:space:]' || true)"
+      [[ "$role_state" == T* ]] && break
+    fi
+    leader_process_exited "$pid" && break
+    if (( SECONDS >= TURN_DEADLINE_MONO )); then
+      controller_emergency TURN_DEADLINE "$role exhausted the persisted turn deadline before GO" halted
+      return 124
+    fi
+    sleep 0.01
+  done
+  go_pid="$(cat "$go_ready_file" 2>/dev/null || true)"
+  if [[ ! "$go_pid" =~ ^[0-9]+$ || "$go_pid" -ne "$pid" || "$role_state" != T* ]]; then
+    controller_emergency ROLE_START_FAILED \
+      "could not establish stopped $role GO handshake (marker=${go_pid:-missing}, state=${role_state:-missing})" \
+      recovery_required
     return 126
   fi
+  if (( SECONDS >= TURN_DEADLINE_MONO )); then
+    controller_emergency TURN_DEADLINE "$role exhausted the persisted turn deadline before GO" halted
+    return 124
+  fi
+  if ! control_state assert >/dev/null || ! rm -f "$go_ready_file" || ! kill -CONT "$pid" 2>/dev/null; then
+    controller_emergency ROLE_START_FAILED "could not release durably bound $role process group" recovery_required
+    return 126
+  fi
+  ACTIVE_ROLE_GO_READY_FILE=""
   return 0
 }
 
