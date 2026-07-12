@@ -1,0 +1,185 @@
+{
+  "parent_issue": {
+    "number": 156,
+    "url": "https://github.com/polymetrics-ai/cli/issues/156",
+    "title": "Zendesk: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/156-zendesk-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/225",
+    "base": "main",
+    "head": "feat/156-zendesk-cli-parity",
+    "draft": true,
+    "state": "OPEN"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 157,
+      "status": "sub_pr_open_review_blocked",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/zendesk",
+        ".planning/phases/issue-157-zendesk-cli-surface-metadata"
+      ],
+      "decision": "await_external_review_or_human_fallback",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/238"
+    },
+    {
+      "number": 158,
+      "status": "planned",
+      "dependencies": [
+        157,
+        159,
+        161,
+        163
+      ],
+      "write_scope": [
+        "cmd",
+        "internal/cli",
+        "internal/connectors/commandrunner",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-158-zendesk-help-renderer"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 159,
+      "status": "planned",
+      "dependencies": [
+        157,
+        160
+      ],
+      "write_scope": [
+        "internal/connectors/defs/zendesk/streams.json",
+        "internal/connectors/defs/zendesk/schemas",
+        "internal/connectors/defs/zendesk/fixtures",
+        ".planning/phases/issue-159-zendesk-stream-runner"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 160,
+      "status": "blocked_on_157_integration",
+      "dependencies": [
+        157
+      ],
+      "write_scope": [
+        "internal/connectors/defs/zendesk/api_surface.json",
+        ".planning/phases/issue-160-zendesk-operation-ledger"
+      ],
+      "decision": "not_spawned_parent_branch_missing_157"
+    },
+    {
+      "number": 161,
+      "status": "planned",
+      "dependencies": [
+        157,
+        160
+      ],
+      "write_scope": [
+        "internal/connectors/defs/zendesk/cli_surface.json",
+        "internal/connectors/defs/zendesk/operations.json",
+        ".planning/phases/issue-161-zendesk-direct-read"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 162,
+      "status": "planned",
+      "dependencies": [
+        160
+      ],
+      "write_scope": [
+        "internal/connectors/defs/zendesk",
+        "internal/connectors/engine",
+        ".planning/phases/issue-162-zendesk-advanced-query-binary-engine"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 163,
+      "status": "planned",
+      "dependencies": [
+        157,
+        160
+      ],
+      "write_scope": [
+        "internal/connectors/defs/zendesk/writes.json",
+        "internal/connectors/defs/zendesk/operations.json",
+        ".planning/phases/issue-163-zendesk-sensitive-admin-policy"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:34:19Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [
+        157
+      ],
+      "reason": "No subagent tool is exposed in this Pi harness. The orchestrator will execute #157 locally after the parent PR exists."
+    },
+    {
+      "timestamp": "2026-07-09T19:45:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        157
+      ],
+      "reason": "Draft parent PR #225 now exists; proceed locally with #157 because mutating worker spawn is unavailable."
+    },
+    {
+      "timestamp": "2026-07-09T21:30:00Z",
+      "decision": "sub_pr_open_review_blocked",
+      "issue_numbers": [
+        157
+      ],
+      "reason": "#157 stacked PR #238 is open with local and CI verification green. CodeRabbit skipped non-default target auto-review; manual review remained rate-limited after the reported wait. Copilot fallback did not create a review request, so integration waits for later CodeRabbit or human fallback."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 157,
+      "url": "https://github.com/polymetrics-ai/cli/issues/157",
+      "branch": "feat/157-zendesk-cli-surface-metadata",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/238",
+      "worker": "local-pi-orchestrator",
+      "status": "sub_pr_open_review_blocked",
+      "write_scope": [
+        "internal/connectors/defs/zendesk",
+        ".planning/phases/issue-157-zendesk-cli-surface-metadata"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-156-zendesk-cli-parity",
+      "verification": "passed_local_and_ci",
+      "automated_review": {
+        "primary_route": "coderabbit",
+        "status": "rate_limited_after_stacked_skip",
+        "head_sha": "580581b8b368521c772b77d6d41feb9d2116acba",
+        "reviewed_range": "none; CodeRabbit skipped stacked auto-review and manual review remained rate-limited",
+        "coverage_route": "pending_human_or_later_coderabbit",
+        "fallback_route": "copilot_attempted_unavailable",
+        "disposition_summary": "No actionable findings received; automated review coverage remains pending before integration.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/238"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "credentialed connector checks",
+    "destructive external actions",
+    "production deployment",
+    "quality gate reductions",
+    "reverse ETL execution"
+  ],
+  "updated_at": "2026-07-09T21:30:00Z"
+}
