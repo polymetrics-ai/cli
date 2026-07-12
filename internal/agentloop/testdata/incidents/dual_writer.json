@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "incident_id": "synthetic:incident:dual_writer",
+  "summary": "Two distinct workers acquired write ownership for one bound worktree.",
+  "binding": {"run_id":"synthetic:run:dual_writer","generation_id":"synthetic:generation:dual_writer","controller_id":"synthetic:controller:dual_writer","turn_id":"synthetic:turn:dual_writer","attempt_id":"synthetic:attempt:dual_writer","stage_id":"synthetic:stage:dual_writer","ticket_id":"synthetic:ticket:dual_writer","evidence_id":"synthetic:evidence:dual_writer","head_sha":"synthetic:head:dual_writer"},
+  "events": [
+    {"sequence":1,"kind":"writer_lease_acquired","actor_id":"synthetic:worker:dual_writer_a","binding":{"run_id":"synthetic:run:dual_writer","generation_id":"synthetic:generation:dual_writer","controller_id":"synthetic:controller:dual_writer","turn_id":"synthetic:turn:dual_writer","attempt_id":"synthetic:attempt:dual_writer","stage_id":"synthetic:stage:dual_writer","ticket_id":"synthetic:ticket:dual_writer","evidence_id":"synthetic:evidence:dual_writer","head_sha":"synthetic:head:dual_writer"}},
+    {"sequence":2,"kind":"writer_lease_acquired","actor_id":"synthetic:worker:dual_writer_b","binding":{"run_id":"synthetic:run:dual_writer","generation_id":"synthetic:generation:dual_writer","controller_id":"synthetic:controller:dual_writer","turn_id":"synthetic:turn:dual_writer","attempt_id":"synthetic:attempt:dual_writer","stage_id":"synthetic:stage:dual_writer","ticket_id":"synthetic:ticket:dual_writer","evidence_id":"synthetic:evidence:dual_writer","head_sha":"synthetic:head:dual_writer"}},
+    {"sequence":3,"kind":"worktree_mutated","actor_id":"synthetic:worker:dual_writer_b","binding":{"run_id":"synthetic:run:dual_writer","generation_id":"synthetic:generation:dual_writer","controller_id":"synthetic:controller:dual_writer","turn_id":"synthetic:turn:dual_writer","attempt_id":"synthetic:attempt:dual_writer","stage_id":"synthetic:stage:dual_writer","ticket_id":"synthetic:ticket:dual_writer","evidence_id":"synthetic:evidence:dual_writer","head_sha":"synthetic:head:dual_writer"}}
+  ],
+  "expected": {"violation_code":"WORKTREE_DUAL_WRITER","legacy_decision":"proceed","required_decision":"halt","required_exit_class":"halt_required"}
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "incident_id": "synthetic:incident:false_green",
+  "summary": "A prior validation result was reused after its evidence became stale.",
+  "binding": {"run_id":"synthetic:run:false_green","generation_id":"synthetic:generation:false_green","controller_id":"synthetic:controller:false_green","turn_id":"synthetic:turn:false_green","attempt_id":"synthetic:attempt:false_green","stage_id":"synthetic:stage:false_green","ticket_id":"synthetic:ticket:false_green","evidence_id":"synthetic:evidence:false_green","head_sha":"synthetic:head:false_green"},
+  "events": [
+    {"sequence":1,"kind":"validation_started","actor_id":"synthetic:validator:false_green","binding":{"run_id":"synthetic:run:false_green","generation_id":"synthetic:generation:false_green","controller_id":"synthetic:controller:false_green","turn_id":"synthetic:turn:false_green","attempt_id":"synthetic:attempt:false_green","stage_id":"synthetic:stage:false_green","ticket_id":"synthetic:ticket:false_green","evidence_id":"synthetic:evidence:false_green","head_sha":"synthetic:head:false_green"}},
+    {"sequence":2,"kind":"validation_evidence_stale","actor_id":"synthetic:watcher:false_green","binding":{"run_id":"synthetic:run:false_green","generation_id":"synthetic:generation:false_green","controller_id":"synthetic:controller:false_green","turn_id":"synthetic:turn:false_green","attempt_id":"synthetic:attempt:false_green","stage_id":"synthetic:stage:false_green","ticket_id":"synthetic:ticket:false_green","evidence_id":"synthetic:evidence:false_green","head_sha":"synthetic:head:false_green"}},
+    {"sequence":3,"kind":"validation_proceeded","actor_id":"synthetic:controller:false_green","binding":{"run_id":"synthetic:run:false_green","generation_id":"synthetic:generation:false_green","controller_id":"synthetic:controller:false_green","turn_id":"synthetic:turn:false_green","attempt_id":"synthetic:attempt:false_green","stage_id":"synthetic:stage:false_green","ticket_id":"synthetic:ticket:false_green","evidence_id":"synthetic:evidence:false_green","head_sha":"synthetic:head:false_green"}}
+  ],
+  "expected": {"violation_code":"VALIDATION_FALSE_GREEN","legacy_decision":"proceed","required_decision":"retry","required_exit_class":"retry_required"}
+}
