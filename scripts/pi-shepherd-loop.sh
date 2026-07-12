@@ -36,7 +36,7 @@
 #   ORCH_MODEL=openai-codex/gpt-5.5           # orchestrator model (thinking level via ":<level>")
 #   PI_TOOLS=read,bash,edit,write,grep,find,ls,subagent
 #   VALIDATOR_BIN=pi                          # Shepherd CLI (cross-model judging is a feature)
-#   VALIDATOR_ARGS="--model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve"
+#   VALIDATOR_ARGS="--model openai-codex/gpt-5.6-sol --thinking high --tools read,bash,edit,write,grep,find,ls --approve"
 #   MAX_ITERATIONS=200                        # hard backstop on orchestrator turns
 #   MAX_REVERTS=6                             # total revert budget per run before HALT
 #   MAX_NO_VERDICT=3                          # consecutive no-verdict turns before HALT
@@ -47,11 +47,42 @@
 #   SEARXNG_BASE=                             # research via the audited searxng connector (pm)
 set -euo pipefail
 
+# AUTO_LOOP_RUN_ENTRYPOINT: scripts/pi-shepherd-loop.sh
+case "${1:-}" in
+  help|-h|--help)
+    printf '%s\n' 'Usage: scripts/pi-shepherd-loop.sh "<problem prompt>" | --resume'
+    exit 0
+    ;;
+esac
+
+AUTO_LOOP_SCRIPT_DIR="${BASH_SOURCE[0]%/*}"
+[[ "$AUTO_LOOP_SCRIPT_DIR" != "${BASH_SOURCE[0]}" ]] || AUTO_LOOP_SCRIPT_DIR="."
+AUTO_LOOP_SAFETY_LIB="$AUTO_LOOP_SCRIPT_DIR/auto-loop-safety.sh"
+if [[ ! -r "$AUTO_LOOP_SAFETY_LIB" ]]; then
+  printf '%s\n' '{"schema_version":"1.0","state":"closed","run_enabled":false,"resume_enabled":false,"code":"AUTO_LOOP_DISABLED_PHASE_0","exit_class":"safety_disabled"}' >&2
+  exit 78
+fi
+# shellcheck source=scripts/auto-loop-safety.sh
+source "$AUTO_LOOP_SAFETY_LIB"
+if auto_loop_safety_guard_driver "scripts/pi-shepherd-loop.sh" json; then
+  printf '%s\n' 'AUTO_LOOP_GUARD_UNEXPECTED_SUCCESS' >&2
+  exit 78
+else
+  safety_rc=$?
+  exit "$safety_rc"
+fi
+
 PI_BIN="${PI_BIN:-pi}"
 ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.5}"
 PI_TOOLS="${PI_TOOLS:-read,bash,edit,write,grep,find,ls,subagent}"
 VALIDATOR_BIN="${VALIDATOR_BIN:-pi}"
-VALIDATOR_ARGS="${VALIDATOR_ARGS:---model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve}"
+VALIDATOR_MODEL="openai-codex/gpt-5.6-sol"
+VALIDATOR_ARGS_OVERRIDDEN=0
+if [[ -n "${VALIDATOR_ARGS:-}" ]]; then
+  VALIDATOR_ARGS_OVERRIDDEN=1
+else
+  VALIDATOR_ARGS="--model $VALIDATOR_MODEL --thinking high --tools read,bash,edit,write,grep,find,ls --approve"
+fi
 MAX_ITERATIONS="${MAX_ITERATIONS:-200}"
 MAX_REVERTS="${MAX_REVERTS:-6}"
 MAX_NO_VERDICT="${MAX_NO_VERDICT:-3}"
@@ -62,6 +93,18 @@ LOOP_CMD="${LOOP_CMD:-/pm-auto-loop}"
 # Research: default SEARXNG_BASE from the shell's SEARXNG_URL (name mismatch guard) and export.
 SEARXNG_BASE="${SEARXNG_BASE:-${SEARXNG_URL:-}}"; export SEARXNG_BASE
 STALL_MINUTES="${STALL_MINUTES:-20}"
+
+# The default Shepherd model must exist before any run state is read or created and before the
+# orchestrator gets a chance to mutate. Explicit VALIDATOR_ARGS remain an expert override and are
+# therefore validated by the caller-provided validator itself.
+if (( VALIDATOR_ARGS_OVERRIDDEN == 0 )); then
+  if ! "$VALIDATOR_BIN" --offline --list-models "$VALIDATOR_MODEL" 2>/dev/null | \
+    awk '$1 == "openai-codex" && $2 == "gpt-5.6-sol" { found=1 } END { exit !found }'; then
+    printf 'FATAL: Shepherd requires %s with high reasoning; upgrade Pi to >=0.80.6 or provide a validated VALIDATOR_ARGS override.\n' \
+      "$VALIDATOR_MODEL" >&2
+    exit 2
+  fi
+fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE_DIR="$REPO_ROOT/.planning/auto-loop"

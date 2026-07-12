@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "325-agentloop-characterization",
+  "status": "complete",
+  "reason": "Implementation, adversarial review, and all required local verification gates passed; ready for stacked parent review.",
+  "details": {
+    "lifecycle": [
+      "load-project-context",
+      "profile-repo",
+      "prepare-design-and-prompts",
+      "prd-coverage-gate",
+      "gsd-plan-phase",
+      "tdd-gate-before-execution",
+      "gsd-execute-phase",
+      "local-verification",
+      "gsd-verify-work",
+      "gsd-gap-loop",
+      "write-phase-summary"
+    ],
+    "agentMode": "parent_spawned_worker",
+    "coveragePassed": true,
+    "tddGatePassed": true,
+    "verificationPassed": true,
+    "verificationMissingRequired": [],
+    "orchestrationDecisions": [
+      {
+        "cycle": "plan",
+        "decision": "local_critical_path",
+        "reason": "Parent already spawned this isolated issue worker; complete the tightly coupled phase contract before test mutation."
+      },
+      {
+        "cycle": "tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "Added all thirteen fixtures and coupled Go/CLI/shell tests in the isolated child worktree, then captured expected failures before production edits."
+      },
+      {
+        "cycle": "gap-red",
+        "decision": "local_critical_path",
+        "reason": "Deleted the uncommitted partial implementation, strengthened fact semantics and the no-side-effect sandbox from adversarial review, and captured a second red cycle."
+      },
+      {
+        "cycle": "review-gap-loop",
+        "decision": "adversarial_read_only_review",
+        "reason": "Closed decoy suppression, output reflection, historical truth, terminal precedence, and cross-resource splice gaps through test-first corrections; final review approved with no P0/P1."
+      },
+      {
+        "cycle": "verification",
+        "decision": "all_required_gates_passed",
+        "reason": "Targeted, race, CLI, isolated shell, aggregate Make, syntax, patch, and uninterrupted full make verify gates exited 0."
+      }
+    ]
+  },
+  "updatedAt": "2026-07-12T09:07:48Z"
+}

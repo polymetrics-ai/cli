@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "325-agentloop-characterization",
+  "planRefs": [
+    ".planning/phases/325-agentloop-characterization/EVAL-PLAN.md",
+    ".planning/phases/325-agentloop-characterization/PLAN.md",
+    ".planning/phases/325-agentloop-characterization/TEST-PLAN.md"
+  ],
+  "ledgerRef": ".planning/phases/325-agentloop-characterization/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [
+    {
+      "id": "fixture-replay",
+      "text": "id:fixture-replay type:behavior — add thirteen strict synthetic fixtures, typed decoding,",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "structural-redaction",
+      "text": "id:structural-redaction type:behavior — reject raw prompt/command/session-path surfaces and",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "safety-policy",
+      "text": "id:safety-policy type:behavior — add immutable closed safety status, tracked entrypoint",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "loopctl-cli",
+      "text": "id:loopctl-cli type:behavior — add replay and safety command wiring with tested help,",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "driver-fuse",
+      "text": "id:driver-fuse type:behavior — guard both tracked drivers before persistence or launch while",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "entrypoint-enumeration",
+      "text": "id:entrypoint-enumeration type:behavior — add shell tests that compare marked driver wrappers",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "make-gate",
+      "text": "id:make-gate type:behavior — add `agent-loop-test` and include it in `make verify` without",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "phase-memory",
+      "text": "id:phase-memory type:docs — keep GSD ledger, verification, summary, prompts, run state, role",
+      "docsOnly": true,
+      "behavior": false
+    }
+  ],
+  "behaviorTasks": [
+    {
+      "id": "fixture-replay",
+      "text": "id:fixture-replay type:behavior — add thirteen strict synthetic fixtures, typed decoding,",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "structural-redaction",
+      "text": "id:structural-redaction type:behavior — reject raw prompt/command/session-path surfaces and",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "safety-policy",
+      "text": "id:safety-policy type:behavior — add immutable closed safety status, tracked entrypoint",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "loopctl-cli",
+      "text": "id:loopctl-cli type:behavior — add replay and safety command wiring with tested help,",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "driver-fuse",
+      "text": "id:driver-fuse type:behavior — guard both tracked drivers before persistence or launch while",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "entrypoint-enumeration",
+      "text": "id:entrypoint-enumeration type:behavior — add shell tests that compare marked driver wrappers",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "make-gate",
+      "text": "id:make-gate type:behavior — add `agent-loop-test` and include it in `make verify` without",
+      "docsOnly": false,
+      "behavior": true
+    }
+  ],
+  "failures": [],
+  "updatedAt": "2026-07-12T08:21:19.525Z"
+}

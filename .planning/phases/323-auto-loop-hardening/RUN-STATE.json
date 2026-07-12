@@ -1,0 +1,47 @@
+{
+  "phase": "323-auto-loop-hardening",
+  "status": "in_progress",
+  "parent_issue": 323,
+  "parent_branch": "fix/323-auto-loop-hardening",
+  "parent_pr": 324,
+  "gsd": {
+    "doctor": "passed_with_node_24_path",
+    "adapter_programming_loop": "unavailable_not_in_registry",
+    "fallback": "installed_gsd_programming_loop_dry_run"
+  },
+  "verificationPassed": false,
+  "verificationReason": "Existing Shepherd alignment and targeted Phase 0 gates pass; dependent hardening phases and full verification remain.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "parent-scaffold",
+      "decision": "local_critical_path",
+      "reason": "Create the isolated parent branch, durable plan, draft parent PR, and child issue contracts before mutating workers start."
+    },
+    {
+      "cycle": "architecture-recon",
+      "decision": "read_only_spawned",
+      "reason": "Three read-only subagents inspect baseline architecture, characterization tests, and control-plane design without sharing mutation authority."
+    },
+    {
+      "cycle": "issue-roster",
+      "decision": "local_critical_path",
+      "reason": "Draft parent PR #324 and fifteen native child issues #325-#339 were created before the first mutating worker dispatch."
+    },
+    {
+      "cycle": "phase-0-dispatch",
+      "decision": "spawned",
+      "reason": "Issue #325 was assigned to an isolated Codex worker; all other implementation issues remain dependency-blocked."
+    },
+    {
+      "cycle": "existing-shepherd-alignment",
+      "decision": "local_critical_path",
+      "reason": "Normally merge feat/pi-shepherd-loop, guard the real Shepherd entrypoint, and update only its validator model before any further controller work."
+    },
+    {
+      "cycle": "phase-1a-stability-and-successor-reconcile",
+      "decision": "spawned",
+      "reason": "Assigned issue #326 test stabilization to its existing isolated worktree; reconciled the next serial chain as #339 -> #342 -> #343 -> #327 and corrected #339 to adopt the canonical shell CONTROL.json contract rather than the excluded controller experiment."
+    }
+  ],
+  "humanGate": "parent PR merge to main"
+}

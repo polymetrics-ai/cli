@@ -9,7 +9,8 @@
     "auto_advance": false,
     "nyquist_validation": true,
     "use_worktrees": false,
-    "tdd_mode": true
+    "tdd_mode": true,
+    "universal_programming_loop": true
   },
   "planning": {
     "commit_docs": true,
