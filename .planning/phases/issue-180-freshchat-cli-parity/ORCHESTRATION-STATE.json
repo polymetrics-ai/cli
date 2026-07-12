@@ -1,0 +1,415 @@
+{
+  "parent_issue": {
+    "number": 180,
+    "url": "https://github.com/polymetrics-ai/cli/issues/180",
+    "title": "Freshchat: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/180-freshchat-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/226",
+    "base": "main",
+    "head": "feat/180-freshchat-cli-parity",
+    "draft": false,
+    "state": "open"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-api-harness",
+    "status": "incremental_review_followup_green_review_pending"
+  },
+  "ready_queue": [
+    {
+      "number": 181,
+      "status": "integrated_parent_final_incremental_review_pending",
+      "dependencies": [
+        "parent_pr_open"
+      ],
+      "write_scope": [
+        "internal/connectors/defs/freshchat/cli_surface.json",
+        "internal/connectors/engine/*_test.go",
+        ".planning/phases/issue-181-freshchat-cli-surface-metadata/**"
+      ],
+      "decision": "merged_to_parent_branch"
+    },
+    {
+      "number": 182,
+      "status": "integrated_parent_final_incremental_review_pending",
+      "dependencies": [
+        181,
+        184
+      ],
+      "write_scope": [
+        "help renderer",
+        "docs/cli/**",
+        "website/**",
+        "generated help/manual artifacts",
+        ".planning/phases/issue-182-freshchat-help-renderer/**"
+      ],
+      "decision": "merged_to_parent_branch"
+    },
+    {
+      "number": 183,
+      "status": "integrated_parent_final_incremental_review_pending",
+      "dependencies": [
+        181,
+        184
+      ],
+      "write_scope": [
+        "internal/connectors/defs/freshchat/streams.json",
+        "internal/connectors/defs/freshchat/schemas/**",
+        "internal/connectors/defs/freshchat/fixtures/**"
+      ],
+      "decision": "merged_to_parent_branch"
+    },
+    {
+      "number": 184,
+      "status": "integrated_parent_final_incremental_review_pending",
+      "dependencies": [
+        181
+      ],
+      "write_scope": [
+        "internal/connectors/defs/freshchat/api_surface.json",
+        "internal/connectors/defs/freshchat/operations.json",
+        "cmd/connectorgen/*freshchat*test.go",
+        ".planning/phases/issue-184-freshchat-operation-ledger/**"
+      ],
+      "decision": "merged_to_parent_branch"
+    },
+    {
+      "number": 185,
+      "status": "integrated_parent_final_incremental_review_pending",
+      "dependencies": [
+        181,
+        184
+      ],
+      "write_scope": [
+        "direct-read metadata/engine/tests for Freshchat"
+      ],
+      "decision": "merged_to_parent_branch"
+    },
+    {
+      "number": 186,
+      "status": "integrated_parent_final_incremental_review_pending",
+      "dependencies": [
+        184,
+        185
+      ],
+      "write_scope": [
+        "advanced query/binary metadata/engine/tests for Freshchat"
+      ],
+      "decision": "merged_to_parent_branch"
+    },
+    {
+      "number": 187,
+      "status": "integrated_parent_final_incremental_review_pending",
+      "dependencies": [
+        184
+      ],
+      "write_scope": [
+        "sensitive/admin policy metadata/tests for Freshchat"
+      ],
+      "decision": "merged_to_parent_branch"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:37:13Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [
+        181
+      ],
+      "reason": "No Pi subagent tool is available in this API harness; run issue #181 as a local critical-path stacked branch after parent PR setup."
+    },
+    {
+      "timestamp": "2026-07-09T22:55:00Z",
+      "decision": "opened_stacked_pr_ci_repair_pending",
+      "issue_numbers": [
+        182
+      ],
+      "reason": "Opened PR #245 against parent branch; local gates passed. Initial website CI failed on stale generated website data, so a generated-data fix was committed and needs CI rerun."
+    },
+    {
+      "timestamp": "2026-07-09T23:07:17Z",
+      "decision": "merged_stacked_pr_to_parent_review_pending",
+      "issue_numbers": [
+        182
+      ],
+      "reason": "PR #245 CI passed and was squash-merged to parent branch as f50a2298; automated review remains pending through parent PR coverage/fallback."
+    },
+    {
+      "timestamp": "2026-07-09T23:12:00Z",
+      "decision": "started_local_critical_path",
+      "issue_numbers": [
+        183
+      ],
+      "reason": "Issue #183 stream runner is unblocked; no Pi subagent tool is available, so start locally on feat/183-freshchat-stream-runner."
+    },
+    {
+      "timestamp": "2026-07-09T23:31:42Z",
+      "decision": "merged_stacked_pr_to_parent_review_pending",
+      "issue_numbers": [
+        183
+      ],
+      "reason": "PR #247 CI passed and was squash-merged to parent branch as fd49739a; automated review remains pending through parent PR coverage/fallback."
+    },
+    {
+      "timestamp": "2026-07-09T23:36:00Z",
+      "decision": "started_local_critical_path",
+      "issue_numbers": [
+        185
+      ],
+      "reason": "Issue #185 direct read is unblocked; no Pi subagent tool is available, so start locally on feat/185-freshchat-direct-read."
+    },
+    {
+      "timestamp": "2026-07-10T00:18:00Z",
+      "decision": "merged_stacked_pr_to_parent_review_pending",
+      "issue_numbers": [
+        185
+      ],
+      "reason": "PR #248 CI passed and was squash-merged to parent branch as 31f3382e; CodeRabbit skipped the non-default-base stacked review, so automated review remains pending through parent PR coverage/fallback."
+    },
+    {
+      "timestamp": "2026-07-10T01:02:00Z",
+      "decision": "merged_stacked_pr_to_parent_review_pending",
+      "issue_numbers": [
+        186
+      ],
+      "reason": "PR #250 CI passed and was squash-merged to parent branch as 9b6ba32d; CodeRabbit skipped the non-default-base stacked review, so automated review remains pending through parent PR coverage/fallback."
+    },
+    {
+      "timestamp": "2026-07-10T01:38:00Z",
+      "decision": "merged_stacked_pr_to_parent_review_pending",
+      "issue_numbers": [
+        187
+      ],
+      "reason": "PR #251 CI passed and was squash-merged to parent branch as 639f88c0; CodeRabbit skipped the non-default-base stacked review, so automated review remains pending through parent PR coverage/fallback."
+    },
+    {
+      "timestamp": "2026-07-10T02:47:13Z",
+      "decision": "parent_coderabbit_findings_addressed_locally",
+      "issue_numbers": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187
+      ],
+      "reason": "Parent PR #226 CodeRabbit review completed with actionable findings. No subagent tool is available, so fixes were handled locally on feat/180-freshchat-cli-parity; full local gates now pass and incremental review is pending after push."
+    },
+    {
+      "timestamp": "2026-07-10T04:05:00Z",
+      "decision": "parent_incremental_findings_addressed_locally",
+      "issue_numbers": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187
+      ],
+      "reason": "Parent PR #226 CodeRabbit incremental run 4fc19851-a5f4-406a-9af5-99fc3c344157 reported Freshchat docs/rendering polish findings. No subagent tool is available, so fixes were handled locally; full local gates now pass and final incremental review is pending after push."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 181,
+      "url": "https://github.com/polymetrics-ai/cli/issues/181",
+      "branch": "feat/181-freshchat-cli-surface-metadata",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/241",
+      "worker": "local_critical_path",
+      "status": "merged_to_parent_review_pending",
+      "merge_commit": "ef7cfda1a2298243b6aea825691e54991e4388b7",
+      "write_scope": "Freshchat CLI surface metadata and narrow tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_and_ci",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base_then_skipped_parent_draft",
+        "head_sha": "ef7cfda1a2298243b6aea825691e54991e4388b7",
+        "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
+        "disposition_summary": "CodeRabbit skipped stacked PR #241 because non-default base branch reviews are disabled, then skipped parent PR #226 because it is draft. Do not count #181 as review-complete until parent PR #226 receives coverage for ef7cfda1 or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
+      }
+    },
+    {
+      "number": 184,
+      "url": "https://github.com/polymetrics-ai/cli/issues/184",
+      "branch": "feat/184-freshchat-operation-ledger",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/243",
+      "worker": "local_critical_path",
+      "status": "merged_to_parent_review_pending",
+      "merge_commit": "fd359cfbb1a464c163b4fb5d2e0547caa2f18aaa",
+      "write_scope": "Freshchat api_surface operation ledger and narrow connectorgen tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_and_ci",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base_then_skipped_parent_draft",
+        "head_sha": "fd359cfbb1a464c163b4fb5d2e0547caa2f18aaa",
+        "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
+        "disposition_summary": "CodeRabbit skipped stacked PR #243 because non-default base branch reviews are disabled, then skipped parent PR #226 because it is draft. Do not count #184 as review-complete until parent PR #226 receives coverage for fd359cfb or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
+      }
+    },
+    {
+      "number": 182,
+      "url": "https://github.com/polymetrics-ai/cli/issues/182",
+      "branch": "feat/182-freshchat-help-renderer",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/245",
+      "worker": "local_critical_path",
+      "status": "merged_to_parent_review_pending",
+      "write_scope": "Freshchat command-surface help routing, generated manual/skill docs, CLI docs, and website docs",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_and_ci",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base_then_parent_pending",
+        "head_sha": "f50a229812acf6e7edf05822669769827c8fdee2",
+        "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
+        "disposition_summary": "CodeRabbit skipped stacked PR #245 because reviews are disabled for the non-default base branch. Do not count #182 as review-complete until parent PR #226 receives coverage for f50a2298 or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
+      },
+      "merge_commit": "f50a229812acf6e7edf05822669769827c8fdee2"
+    },
+    {
+      "number": 183,
+      "url": "https://github.com/polymetrics-ai/cli/issues/183",
+      "branch": "feat/183-freshchat-stream-runner",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/247",
+      "worker": "local_critical_path",
+      "status": "merged_to_parent_review_pending",
+      "merge_commit": "fd49739af89ca6b2acb12c0be09232c053c98a7e",
+      "write_scope": "Freshchat implemented ETL stream replay fixtures and conformance regression coverage",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_and_ci",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base_then_parent_pending",
+        "head_sha": "fd49739af89ca6b2acb12c0be09232c053c98a7e",
+        "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
+        "disposition_summary": "CodeRabbit skipped stacked PR #247 because reviews are disabled for the non-default base branch. Do not count #183 as review-complete until parent PR #226 receives coverage for fd49739a or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
+      }
+    },
+    {
+      "number": 185,
+      "url": "https://github.com/polymetrics-ai/cli/issues/185",
+      "branch": "feat/185-freshchat-direct-read",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/248",
+      "worker": "local_critical_path",
+      "status": "merged_to_parent_review_pending",
+      "merge_commit": "31f3382e11681fa69ec55027c42f17511d099915",
+      "write_scope": "Freshchat typed users/fetch direct-read request-body policy, metadata, docs, and validation tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_and_ci",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base_then_parent_pending",
+        "head_sha": "31f3382e11681fa69ec55027c42f17511d099915",
+        "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
+        "disposition_summary": "CodeRabbit skipped stacked PR #248 because reviews are disabled for the non-default base branch. Do not count #185 as review-complete until parent PR #226 receives coverage for 31f3382e or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
+      }
+    },
+    {
+      "number": 186,
+      "url": "https://github.com/polymetrics-ai/cli/issues/186",
+      "branch": "feat/186-freshchat-advanced-query-binary",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/250",
+      "worker": "local_critical_path",
+      "status": "merged_to_parent_review_pending",
+      "merge_commit": "9b6ba32de7398a9c49110816efe7060bdc5345ed",
+      "write_scope": "Freshchat typed file_upload operation metadata, fail-closed upload command wiring, docs, and validation tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_and_ci",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base_then_parent_pending",
+        "head_sha": "9b6ba32de7398a9c49110816efe7060bdc5345ed",
+        "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
+        "disposition_summary": "CodeRabbit skipped stacked PR #250 because reviews are disabled for the non-default base branch. Do not count #186 as review-complete until parent PR #226 receives coverage for 9b6ba32d or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
+      }
+    },
+    {
+      "number": 187,
+      "url": "https://github.com/polymetrics-ai/cli/issues/187",
+      "branch": "feat/187-freshchat-sensitive-admin-policy",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/251",
+      "worker": "local_critical_path",
+      "status": "merged_to_parent_review_pending",
+      "merge_commit": "639f88c0976b36e9f34094f5040353785b84d80e",
+      "write_scope": "Freshchat typed confirmation metadata for admin, sensitive, and destructive reverse ETL writes",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_and_ci",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base_then_parent_pending",
+        "head_sha": "639f88c0976b36e9f34094f5040353785b84d80e",
+        "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
+        "disposition_summary": "CodeRabbit skipped stacked PR #251 because reviews are disabled for the non-default base branch. Do not count #187 as review-complete until parent PR #226 receives coverage for 639f88c0 or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "credentialed connector checks",
+    "reverse ETL execution",
+    "destructive external actions",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-10T04:05:00Z",
+  "parent_review": {
+    "primary_route": "coderabbit_automatic_then_manual_retry",
+    "status": "incremental_followup_addressed_final_review_pending",
+    "run_id": "321be408-2a1b-4ece-a55c-0e4333fc0b51",
+    "reviewed_range": "ae01c3f962fe089fc26e274fba1f9bbad540f7dd..c6d32aeb3a047e239e56f75b6a41523d81df0882",
+    "findings": {
+      "actionable_comments": 11,
+      "outside_diff_comments": 1,
+      "nitpicks": 1,
+      "premerge_warnings": [
+        "out_of_scope_parent_intent_false_positive",
+        "docstring_coverage_repo_baseline"
+      ]
+    },
+    "disposition_summary": "Addressed valid fixture read_query, max_items, upload max_bytes, redaction, shared direct-read helper, and docs/test findings. The api_key-only help-test suggestion was adjusted to block secret sample values while preserving documented secret field names.",
+    "local_verification": "website data generation, gofmt, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate, and CLI/help/docs parity checks pass.",
+    "incremental_run_id": "4fc19851-a5f4-406a-9af5-99fc3c344157",
+    "incremental_reviewed_range": "c6d32aeb3a047e239e56f75b6a41523d81df0882..888f2730b3db6c0f8ee300c3261370212de6043e",
+    "incremental_findings": {
+      "minor_comments": 1,
+      "nitpicks": 1,
+      "summary": [
+        "malformed Freshchat credential flag rendering",
+        "duplicated unsupported_local upload wording"
+      ]
+    },
+    "incremental_disposition_summary": "Addressed still-valid docs/rendering findings by normalizing command-surface flag metadata punctuation and limiting unsupported-local free-text metadata to true local_workflow commands; regenerated Freshchat manual/skill docs.",
+    "incremental_local_verification": "focused tests, docs validation, connectorgen validation, go vet ./..., go test ./..., go build ./cmd/pm, make verify, and docs grep pass."
+  }
+}

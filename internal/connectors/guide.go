@@ -146,20 +146,32 @@ func commandSurfaceSection(surface *CommandSurface) GuideSection {
 
 func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 	name := "--" + strings.TrimLeft(flag.Name, "-")
-	parts := []string{name}
 	if flag.Type != "" {
-		parts[0] += " (" + flag.Type + ")"
+		name += " (" + flag.Type + ")"
 	}
-	if flag.Summary != "" {
-		parts = append(parts, flag.Summary)
-	}
+	meta := []string{}
 	if len(flag.Values) > 0 {
-		parts = append(parts, "values="+strings.Join(flag.Values, "|"))
+		meta = append(meta, "values="+strings.Join(flag.Values, "|"))
 	}
 	if flag.MapsTo != "" {
-		parts = append(parts, "maps_to="+flag.MapsTo)
+		meta = append(meta, "maps_to="+flag.MapsTo)
 	}
-	return strings.Join(parts, ": ")
+	if flag.MaxItems > 0 {
+		meta = append(meta, fmt.Sprintf("max_items=%d", flag.MaxItems))
+	}
+	parts := []string{}
+	if flag.Summary != "" {
+		summary := flag.Summary
+		if len(meta) > 0 {
+			summary = strings.TrimRight(summary, ".")
+		}
+		parts = append(parts, summary)
+	}
+	parts = append(parts, meta...)
+	if len(parts) == 0 {
+		return name
+	}
+	return name + ": " + strings.Join(parts, "; ")
 }
 
 func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
@@ -180,7 +192,7 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if cmd.Write != "" {
 		meta = append(meta, "write="+cmd.Write)
 	}
-	if cmd.Availability == "unsupported_local" || cmd.Intent == "local_workflow" {
+	if cmd.Intent == "local_workflow" {
 		meta = append(meta, "unsupported local workflow")
 	}
 	if len(meta) > 0 {

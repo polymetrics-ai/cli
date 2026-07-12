@@ -603,22 +603,49 @@ func readRawRecordsWithReplay(b engine.Bundle, streamName string, tracker *hitTr
 	rb := withReplayURL(b, readReplay.URL)
 	req := readRequestFor(streamName, runtimeConfigForEngine(b), nil)
 	if len(pages) > 0 && len(pages[0].ReadQuery) > 0 {
-		req.Query = cloneStringMap(pages[0].ReadQuery)
+		applyFixtureReadQuery(b, &req, pages[0].ReadQuery)
 	}
 	return engine.Read(context.Background(), rb, req, engine.HooksFor(b.Name), func(r connectors.Record) error {
 		return onRecord(map[string]any(r))
 	})
 }
 
-func cloneStringMap(in map[string]string) map[string]string {
-	if len(in) == 0 {
+func applyFixtureReadQuery(b engine.Bundle, req *connectors.ReadRequest, readQuery map[string]string) {
+	if len(readQuery) == 0 {
+		return
+	}
+	configKeys := readableSpecConfigKeys(b)
+	query := map[string]string{}
+	for key, value := range readQuery {
+		if configKeys[key] {
+			if req.Config.Config == nil {
+				req.Config.Config = map[string]string{}
+			}
+			req.Config.Config[key] = value
+			continue
+		}
+		query[key] = value
+	}
+	if len(query) > 0 {
+		req.Query = query
+	}
+}
+
+func readableSpecConfigKeys(b engine.Bundle) map[string]bool {
+	if b.Spec == nil {
 		return nil
 	}
-	out := make(map[string]string, len(in))
-	for k, v := range in {
-		out[k] = v
+	secretKeys := map[string]bool{}
+	for _, key := range b.Spec.SecretKeys() {
+		secretKeys[key] = true
 	}
-	return out
+	keys := map[string]bool{}
+	for _, key := range b.Spec.Properties() {
+		if !secretKeys[key] {
+			keys[key] = true
+		}
+	}
+	return keys
 }
 
 func firstIncrementalStreamWithFixtures(b engine.Bundle) (engine.StreamSpec, bool) {

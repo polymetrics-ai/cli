@@ -42,7 +42,7 @@
             }
           },
           "risk": { "type": "string" },
-          "confirm": { "type": "string", "enum": ["", "destructive"] },
+          "confirm": { "type": "string", "enum": ["", "destructive", "admin", "sensitive"] },
           "hook": { "type": "string" }
         }
       }

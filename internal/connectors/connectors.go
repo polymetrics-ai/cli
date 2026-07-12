@@ -95,6 +95,7 @@ type DirectReadRequest struct {
 	Config       RuntimeConfig
 	PathParams   map[string]string
 	Query        map[string]string
+	Body         map[string]any
 	MaxBytes     int
 	OutputPolicy string
 }

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/metrics/instant",
+    "query": {}
+  },
+  "read_query": {
+    "metrics_metric": "synthetic-conformance-value",
+    "metrics_group_by": "synthetic-conformance-value",
+    "metrics_filter_by": "synthetic-conformance-value",
+    "metrics_summary": "synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "metrics": [
+        "online_agents"
+      ],
+      "filters": {},
+      "data": []
+    }
+  }
+}

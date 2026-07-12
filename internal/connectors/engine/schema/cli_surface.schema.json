@@ -50,7 +50,8 @@
             "type": "array",
             "items": { "type": "string" }
           },
-          "maps_to": { "type": "string" }
+          "maps_to": { "type": "string" },
+          "max_items": { "type": "integer" }
         }
       }
     },
@@ -112,7 +113,8 @@
                   "type": "array",
                   "items": { "type": "string" }
                 },
-                "maps_to": { "type": "string" }
+                "maps_to": { "type": "string" },
+                "max_items": { "type": "integer" }
               }
             }
           },
@@ -134,7 +136,7 @@
           },
           "output_policy": {
             "type": "string",
-            "enum": ["github_contents_file_metadata", "github_contents_directory"]
+            "enum": ["github_contents_file_metadata", "github_contents_directory", "freshchat_users_fetch"]
           },
           "risk": { "type": "string" },
           "approval": { "type": "string" },

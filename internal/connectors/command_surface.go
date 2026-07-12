@@ -27,11 +27,12 @@ type CommandSurfaceGroup struct {
 }
 
 type CommandSurfaceFlag struct {
-	Name    string
-	Type    string
-	Summary string
-	Values  []string
-	MapsTo  string
+	Name     string
+	Type     string
+	Summary  string
+	Values   []string
+	MapsTo   string
+	MaxItems int
 }
 
 type CommandSurfaceCommand struct {

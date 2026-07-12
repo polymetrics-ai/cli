@@ -1,0 +1,235 @@
+{
+  "phase": "issue-180-freshchat-cli-parity",
+  "parent_issue": 180,
+  "status": "parent_incremental_review_followup_green_review_pending",
+  "gsd": {
+    "doctor": "pass",
+    "verify_pi": "pass",
+    "list_json": "pass",
+    "plan_phase_command": "scripts/gsd prompt plan-phase issue-180-freshchat-cli-parity --skip-research",
+    "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-180-freshchat-cli-parity --dry-run",
+    "programming_loop_result": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "follow-up review-fix local gates pass; final incremental CodeRabbit review and human gate remain pending",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T19:37:13Z",
+      "cycle": "parent-init",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "Current Pi harness tool list has no subagent tool; mutating workers cannot be spawned or isolated by the runtime.",
+      "issue_numbers": [
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T19:37:13Z",
+      "cycle": "parent-init",
+      "decision": "local_critical_path",
+      "reason": "Coordinator will set up parent PR and execute issue #181 locally/stacked after the parent PR exists.",
+      "issue_numbers": [
+        181
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T19:45:00Z",
+      "cycle": "parent-pr-open",
+      "decision": "local_critical_path",
+      "reason": "Draft parent PR https://github.com/polymetrics-ai/cli/pull/226 opened after planning checkpoint push; proceed to stacked issue #181 branch.",
+      "issue_numbers": [
+        181
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T21:28:00Z",
+      "cycle": "subissue-pr-open",
+      "decision": "await_review_coverage",
+      "reason": "Issue #181 verified locally and opened as stacked PR https://github.com/polymetrics-ai/cli/pull/241 against the parent branch.",
+      "issue_numbers": [
+        181
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T21:33:00Z",
+      "cycle": "automated-review-routing",
+      "decision": "parent_pr_fallback_pending",
+      "reason": "CodeRabbit skipped stacked PR #241 because non-default base auto reviews are disabled; parent PR #226 must receive coverage for the integrated range or an approved fallback must be recorded before #181 is review-complete.",
+      "issue_numbers": [
+        181
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T21:45:17Z",
+      "cycle": "subissue-merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #241 checks passed and was squash-merged to parent branch as ef7cfda1; parent PR #226 CodeRabbit coverage remains pending because the parent PR is still draft.",
+      "issue_numbers": [
+        181
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T21:50:00Z",
+      "cycle": "subissue-start",
+      "decision": "started_local_critical_path",
+      "reason": "Issue #184 operation ledger is unblocked by #181 integration; no Pi subagent tool is available, so start locally on feat/184-freshchat-operation-ledger.",
+      "issue_numbers": [
+        184
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T21:55:09Z",
+      "cycle": "subissue-pr-open",
+      "decision": "parent_pr_fallback_pending",
+      "reason": "Issue #184 verified locally and opened as stacked PR #243; CodeRabbit skipped the non-default base, so parent PR coverage or approved fallback remains required.",
+      "issue_numbers": [
+        184
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T22:11:22Z",
+      "cycle": "subissue-merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #243 checks passed and was squash-merged to parent branch as fd359cfb; parent PR #226 CodeRabbit coverage remains pending because the parent PR is still draft.",
+      "issue_numbers": [
+        184
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T22:12:00Z",
+      "cycle": "subissue-start",
+      "decision": "started_local_critical_path",
+      "reason": "Issue #182 help renderer is unblocked by #181/#184 integration; no Pi subagent tool is available, so start locally on feat/182-freshchat-help-renderer.",
+      "issue_numbers": [
+        182
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T22:37:00Z",
+      "cycle": "subissue-pr-open",
+      "decision": "parent_pr_fallback_pending",
+      "reason": "Issue #182 verified locally and opened as stacked PR #245; CodeRabbit skipped the non-default base, so parent PR coverage or approved fallback remains required.",
+      "issue_numbers": [
+        182
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T23:07:17Z",
+      "cycle": "subissue-merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #245 checks passed and was squash-merged to parent branch as f50a2298; parent PR #226 CodeRabbit coverage remains pending because stacked review was skipped and parent PR is still draft.",
+      "issue_numbers": [
+        182
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T23:12:00Z",
+      "cycle": "subissue-start",
+      "decision": "started_local_critical_path",
+      "reason": "Issue #183 stream runner is unblocked by #181/#184 integration; no Pi subagent tool is available, so start locally on feat/183-freshchat-stream-runner.",
+      "issue_numbers": [
+        183
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T23:31:42Z",
+      "cycle": "subissue-merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #247 checks passed and was squash-merged to parent branch as fd49739a; parent PR #226 CodeRabbit coverage remains pending because stacked review was skipped and parent PR is still draft.",
+      "issue_numbers": [
+        183
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T23:36:00Z",
+      "cycle": "subissue-start",
+      "decision": "started_local_critical_path",
+      "reason": "Issue #185 direct read is unblocked by #181/#184 integration; no Pi subagent tool is available, so start locally on feat/185-freshchat-direct-read.",
+      "issue_numbers": [
+        185
+      ]
+    },
+    {
+      "timestamp": "2026-07-10T00:18:00Z",
+      "cycle": "subissue-merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #248 checks passed and was squash-merged to parent branch as 31f3382e; parent PR #226 CodeRabbit coverage remains pending because stacked review was skipped and parent PR is still draft.",
+      "issue_numbers": [
+        185
+      ]
+    },
+    {
+      "timestamp": "2026-07-10T01:02:00Z",
+      "cycle": "subissue-merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #250 checks passed and was squash-merged to parent branch as 9b6ba32d; parent PR #226 CodeRabbit coverage remains pending because stacked review was skipped and parent PR is still draft.",
+      "issue_numbers": [
+        186
+      ]
+    },
+    {
+      "timestamp": "2026-07-10T01:38:00Z",
+      "cycle": "subissue-merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #251 checks passed and was squash-merged to parent branch as 639f88c0; parent PR #226 CodeRabbit coverage remains pending because stacked review was skipped and parent PR is still draft.",
+      "issue_numbers": [
+        187
+      ]
+    },
+    {
+      "timestamp": "2026-07-10T02:05:00Z",
+      "cycle": "parent-final-verification",
+      "decision": "local_full_green_review_pending",
+      "reason": "All Freshchat parity subissues are merged to the parent branch and final local gates pass; automated review coverage is still pending through parent PR #226.",
+      "issue_numbers": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187
+      ]
+    },
+    {
+      "timestamp": "2026-07-10T02:47:13Z",
+      "cycle": "parent-coderabbit-review-fixes",
+      "decision": "review_findings_addressed_green_incremental_review_pending",
+      "reason": "CodeRabbit reviewed parent PR #226 range ae01c3f..c6d32aeb and reported 11 actionable comments plus one nitpick; fixes were implemented locally with full gates passing, pending push and incremental CodeRabbit coverage.",
+      "issue_numbers": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187
+      ]
+    },
+    {
+      "timestamp": "2026-07-10T04:05:00Z",
+      "cycle": "parent-coderabbit-incremental-followup",
+      "decision": "incremental_findings_addressed_green_review_pending",
+      "reason": "CodeRabbit incremental run 4fc19851-a5f4-406a-9af5-99fc3c344157 reported Freshchat docs/rendering polish findings; fixes were implemented locally with full gates passing, pending push and final incremental CodeRabbit coverage.",
+      "issue_numbers": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187
+      ]
+    }
+  ],
+  "updated_at": "2026-07-10T04:05:00Z"
+}

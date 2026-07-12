@@ -147,12 +147,27 @@ func isManualCommand(cmd string) bool {
 func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	text, ok := docs[topic]
 	if !ok {
+		registry := appRegistry()
+		if c, ok := registry.Get(topic); ok {
+			if provider, ok := c.(connectors.CommandSurfaceProvider); ok && provider.CommandSurface() != nil {
+				return writeConnectorCommandManual(topic, c, stdout, jsonOut)
+			}
+		}
 		return fmt.Errorf("help topic %q not found", topic)
 	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": text})
 	}
 	fmt.Fprint(stdout, text)
+	return nil
+}
+
+func writeConnectorCommandManual(name string, connector connectors.Connector, stdout io.Writer, jsonOut bool) error {
+	manual := connectors.RenderConnectorManual(connector)
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": name, "manual": manual})
+	}
+	fmt.Fprint(stdout, manual)
 	return nil
 }
 
@@ -610,7 +625,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
-		return usageErrorf("missing connector command path")
+		return writeConnectorCommandManual(connectorName, connector, stdout, jsonOut)
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError

@@ -315,6 +315,40 @@ func TestRuntimeDoctorJSONDoesNotLeakPostgresPassword(t *testing.T) {
 	}
 }
 
+func TestFreshchatCommandSurfaceHelp(t *testing.T) {
+	tests := [][]string{
+		{"freshchat"},
+		{"freshchat", "--help"},
+	}
+	for _, args := range tests {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr=%s stdout=%s", args, code, stderr.String(), stdout.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{
+				"NAME",
+				"pm freshchat <command> [flags]",
+				"COMMAND SURFACE",
+				"user list",
+				"conversation update",
+				"reverse ETL writes require plan, preview, approval, execute",
+			} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("Freshchat help output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+				}
+			}
+			for _, marker := range []string{"sample-token", "api_key=sample", "api_key: sample", "\"api_key\":\""} {
+				if strings.Contains(out, marker) {
+					t.Fatalf("Freshchat help appears to contain secret-shaped sample data:\n%s", out)
+				}
+			}
+		})
+	}
+}
+
 func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
 	var gotPath, gotState string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -566,6 +600,48 @@ func TestGitHubCommandSurfaceBlocksOperationBeforeCredentialResolution(t *testin
 	}
 	if strings.Contains(out, "missing --credential") || strings.Contains(stderr.String(), "missing --credential") {
 		t.Fatalf("operation-backed command attempted credential resolution before blocking:\nstdout=%s\nstderr=%s", out, stderr.String())
+	}
+}
+
+func TestFreshchatUploadCommandsBlockTypedOperationsBeforeCredentialResolution(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	tests := []struct {
+		name      string
+		args      []string
+		command   string
+		operation string
+	}{
+		{
+			name:      "file upload",
+			args:      []string{"freshchat", "file", "upload", "--root", root, "--json"},
+			command:   "file upload",
+			operation: "operation freshchat.files.upload",
+		},
+		{
+			name:      "image upload",
+			args:      []string{"freshchat", "image", "upload", "--root", root, "--json"},
+			command:   "image upload",
+			operation: "operation freshchat.images.upload",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code == 0 {
+				t.Fatalf("%s code = 0, want policy error; stdout=%s", tt.command, stdout.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{`"category": "policy"`, `"code": "connector_command_blocked"`, tt.command, tt.operation} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("blocked operation output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+				}
+			}
+			if strings.Contains(out, "missing --credential") || strings.Contains(stderr.String(), "missing --credential") {
+				t.Fatalf("operation-backed command attempted credential resolution before blocking:\nstdout=%s\nstderr=%s", out, stderr.String())
+			}
+		})
 	}
 }
 

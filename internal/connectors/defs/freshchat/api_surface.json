@@ -1,8 +1,9 @@
 {
   "api": "Freshchat REST API v2",
   "docs": "https://developers.freshchat.com/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Pass B expansion of the Freshchat v2 API reference. JSON GET list/detail endpoints are covered as streams. Plain JSON resource mutations are exposed as write actions. Multipart uploads, binary/download-style report artifacts, and POST search endpoints whose request-body read semantics are not modeled by the engine read path are excluded with endpoint-specific reasons.",
+  "reviewed_at": "2026-07-09",
+  "operation_ledger_version": 1,
+  "scope": "Freshchat v2 API reference operation ledger. JSON GET list/detail endpoints are covered as streams. Plain JSON resource mutations are exposed as write actions. The request-body users/fetch read is covered by a typed direct-read policy. Multipart/binary uploads remain blocked until typed file-transfer policies are implemented.",
   "endpoints": [
     { "method": "GET", "path": "/accounts/configuration", "covered_by": { "stream": "account_configuration" } },
 
@@ -16,7 +17,7 @@
 
     { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
     { "method": "POST", "path": "/users", "covered_by": { "write": "create_user" } },
-    { "method": "POST", "path": "/users/fetch", "excluded": { "category": "out_of_scope", "reason": "read-like subset fetch requires request-body search criteria; engine read streams currently do not send declared stream.body payloads" } },
+    { "method": "POST", "path": "/users/fetch", "covered_by": { "direct_read": "user fetch" } },
     { "method": "GET", "path": "/users/{user_id}", "covered_by": { "stream": "user_details" } },
     { "method": "PUT", "path": "/users/{user_id}", "covered_by": { "write": "update_user" } },
     { "method": "GET", "path": "/users/{user_id}/conversations", "covered_by": { "stream": "user_conversations" } },
@@ -34,8 +35,30 @@
     { "method": "GET", "path": "/roles", "covered_by": { "stream": "roles" } },
 
     { "method": "POST", "path": "/csat/{conversation_id}", "covered_by": { "write": "create_csat_rating" } },
-    { "method": "POST", "path": "/files/upload", "excluded": { "category": "binary_payload", "reason": "file upload is multipart/binary transfer and is not expressible by the JSON/form write dialect without a hook" } },
-    { "method": "POST", "path": "/images/upload", "excluded": { "category": "binary_payload", "reason": "image upload is multipart/binary transfer and is not expressible by the JSON/form write dialect without a hook" } },
+    {
+      "method": "POST",
+      "path": "/files/upload",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "file upload is multipart/binary transfer and is not exposed without an explicit file-transfer policy",
+        "source_url": "https://developers.freshchat.com/api/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/images/upload",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "image upload is multipart/binary transfer and is not exposed without an explicit file-transfer policy",
+        "source_url": "https://developers.freshchat.com/api/"
+      }
+    },
 
     { "method": "POST", "path": "/outbound-messages/whatsapp", "covered_by": { "write": "send_outbound_whatsapp_message" } },
     { "method": "GET", "path": "/outbound-messages", "covered_by": { "stream": "outbound_messages" } },
