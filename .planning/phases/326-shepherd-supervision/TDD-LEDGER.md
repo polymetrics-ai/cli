@@ -43,3 +43,16 @@ RED command/output will be appended after the tests exist and before production 
 - Production files changed before RED: none.
 - Expected-failure integrity: the harness cleaned every recorded test child on exit; no external
   provider, GitHub mutation, credential, or non-test process was touched.
+
+## RED harness audit
+
+- An independent read-only audit confirmed each baseline failure maps to a missing launcher
+  behavior, then identified potential false-green/test-safety gaps before implementation.
+- The harness now removes exactly one sentinel-delimited Phase 0 block, uses a clean environment,
+  verifies nonce-bound PID identity before cleanup, preserves same-user bystanders outside the
+  role group, measures hard-deadline elapsed time, requires exact contention exits/codes, renames
+  rather than chmods the resume prompt, and adds the previously missing fence-movement case.
+- Audited RED: `bash scripts/tests/pi-shepherd-supervision.sh` exits 1 with 13 expected assertions,
+  including 32/32 controller launches, natural deadline completion, live orphan, missing durable
+  HALT/recovery, absent active fence, and reset turn cap. Bystanders survive, and only nonce-bound
+  test processes are eligible for cleanup.

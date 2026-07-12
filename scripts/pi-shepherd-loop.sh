@@ -47,6 +47,7 @@
 #   SEARXNG_BASE=                             # research via the audited searxng connector (pm)
 set -euo pipefail
 
+# AUTO_LOOP_PHASE0_GUARD_BEGIN
 # AUTO_LOOP_RUN_ENTRYPOINT: scripts/pi-shepherd-loop.sh
 case "${1:-}" in
   help|-h|--help)
@@ -71,6 +72,7 @@ else
   safety_rc=$?
   exit "$safety_rc"
 fi
+# AUTO_LOOP_PHASE0_GUARD_END
 
 PI_BIN="${PI_BIN:-pi}"
 ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.5}"
