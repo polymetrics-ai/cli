@@ -250,3 +250,17 @@ RED command/output will be appended after the tests exist and before production 
   independently verified process authorization/oracles, verdict/checkpoint durability, and test
   discrimination. The #327/#335/#342 deferrals above remain production-enable blockers rather than
   claims of this closed-fuse issue.
+
+## CI timing-oracle correction — 2026-07-13
+
+- GitHub Verify passed every Go, connector, build, documentation, smoke, lint, and control gate,
+  then exposed one runner-speed-dependent assertion in the validator shared-deadline test. The
+  controller had no corresponding failure; the oracle compared elapsed time after child startup to
+  a fixed 7.5-second threshold instead of the persisted turn deadline.
+- The fixture now deliberately consumes most of a 15-second turn before launching a 30-second
+  TERM-resistant validator child, snapshots `active_turn.deadline_at`, and requires teardown within
+  the actual remaining persisted budget plus five bounded cleanup seconds. It also rejects a
+  fixture that did not consume enough budget to distinguish a wrongly refreshed role timeout.
+- Corrected focused evidence: 10/10 consecutive repetitions pass with no natural child completion.
+  The complete unfiltered `make agent-loop-test` gate also passes in 9m38s. A new CI Verify run is
+  required before delivery is green again.

@@ -487,7 +487,7 @@ write_malformed_verdict() {
 if [[ "$role" == "validator" ]]; then
   if [[ "$FAKE_MODE" == "validator-hang" ]]; then
     child_nonce="$TEST_NONCE-validator-$$"
-    "$TEST_REPO/bin/test-child" "$child_nonce" 10 &
+    "$TEST_REPO/bin/test-child" "$child_nonce" 30 &
     child=$!
     printf '%s %s\n' "$child" "$child_nonce" >>"$CHILD_PID_FILE"
     wait "$child"
@@ -536,7 +536,7 @@ esac
 
 case "$FAKE_MODE" in
   validator-hang)
-    /bin/sleep 3
+    /bin/sleep 8
     ;;
   concurrent)
     /bin/sleep 1
@@ -999,12 +999,12 @@ test_leader_exit_with_live_descendant_halts() {
 }
 
 test_validator_shares_the_hard_turn_deadline() {
-  local root driver child child_nonce rc=0 start end elapsed_fast
+  local root driver child child_nonce rc=0 start end deadline_at deadline_epoch now_epoch remaining allowed
   root="$(mktemp -d "$TEST_TMP/validator-deadline.XXXXXX")"
   prepare_fixture "$root"
 
   (
-    DRIVER_EXEC=1 FAKE_MODE=validator-hang TURN_TIMEOUT_SECONDS=12 \
+    DRIVER_EXEC=1 FAKE_MODE=validator-hang TURN_TIMEOUT_SECONDS=15 \
       driver_env "$root" "synthetic validator deadline" >"$root/stdout" 2>"$root/stderr"
   ) &
   driver=$!
@@ -1016,21 +1016,31 @@ test_validator_shares_the_hard_turn_deadline() {
     return
   fi
   read -r child child_nonce < <(grep -v 'bystander' "$root/child-pids" | tail -n 1)
+  deadline_at="$(control_field "$root" active_turn.deadline_at)"
+  deadline_epoch="$(python3 - "$deadline_at" <<'PY'
+import datetime as dt
+import sys
+try:
+    print(int(dt.datetime.fromisoformat(sys.argv[1].replace("Z", "+00:00")).timestamp()))
+except (IndexError, ValueError):
+    print(0)
+PY
+)"
+  now_epoch="$(date -u +%s)"
+  remaining=$((deadline_epoch - now_epoch))
+  allowed=$((remaining + 5))
   start="$(monotonic_now)"
   wait "$driver" || rc=$?
   end="$(monotonic_now)"
-  elapsed_fast="$(python3 - "$start" "$end" <<'PY'
-import sys
-print("yes" if float(sys.argv[2]) - float(sys.argv[1]) < 7.5 else "no")
-PY
-)"
 
-  if [[ "$rc" -ne 4 || "$elapsed_fast" != "yes" ]] || \
+  if [[ "$rc" -ne 4 ]] || \
      [[ "$(event_count "$root" orchestrator)" -ne 1 || "$(event_count "$root" validator)" -ne 1 ]] || \
      [[ "$(control_field "$root" phase)" != "halted" ]] || \
      [[ "$(control_field "$root" halt.code)" != "TURN_DEADLINE" ]] || \
+     (( remaining <= 0 || allowed >= 15 )) || \
+     ! duration_less_than "$start" "$end" "$allowed" || \
      checkpoint_marker_exists "$root"; then
-    fail "validator did not share the persisted hard turn deadline"
+    fail "validator did not share the persisted hard turn deadline: rc=$rc remaining=$remaining allowed=$allowed start=$start end=$end control=$(control_snapshot "$root")"
   fi
   if owned_process_alive "$child" "$child_nonce" || \
      grep -Fxq "$child_nonce" "$root/natural-exits" 2>/dev/null; then
