@@ -1,0 +1,55 @@
+{
+  "phase": "issue-188-front-cli-parity",
+  "status": "in_progress",
+  "parent_issue": 188,
+  "parent_pr": 224,
+  "parent_branch": "feat/188-front-cli-parity",
+  "default_branch": "main",
+  "gsd": {
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "completed",
+    "plan_prompt": "scripts/gsd prompt plan-phase 188 --skip-research --tdd",
+    "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase issue-188-front-cli-parity --dry-run",
+    "programming_loop_status": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-spf13-cobra",
+    "golang-spf13-viper",
+    "golang-lint"
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "preflight_only_full_gates_not_run",
+  "human_gate": "parent PR merge to main",
+  "orchestrationDecisions": [
+    {
+      "cycle": "parent-planning",
+      "decision": "local_critical_path",
+      "reason": "Seed parent orchestration artifacts before production edits and before opening the parent PR."
+    },
+    {
+      "cycle": "parent-pr-seed",
+      "decision": "local_critical_path",
+      "reason": "Pushed feat/188-front-cli-parity and opened draft parent PR #224 to main."
+    },
+    {
+      "cycle": "worker-dispatch",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "The active API tool set does not expose Pi subagent tooling; issue #189 will run locally after parent PR seed or in an isolated Pi worker when available."
+    }
+  ],
+  "updated_at": "2026-07-09T19:36:00Z"
+}

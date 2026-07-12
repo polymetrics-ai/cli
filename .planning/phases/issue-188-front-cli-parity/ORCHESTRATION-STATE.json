@@ -1,0 +1,284 @@
+{
+  "parent_issue": {
+    "number": 188,
+    "url": "https://github.com/polymetrics-ai/cli/issues/188",
+    "title": "Front: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/188-front-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/224",
+    "base": "main",
+    "head": "feat/188-front-cli-parity",
+    "draft": true,
+    "state": "OPEN"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-api",
+    "status": "blocked"
+  },
+  "ready_queue": [
+    {
+      "number": 189,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/front",
+        ".planning/phases/issue-189-front-cli-surface-metadata"
+      ],
+      "decision": "not_spawned_runtime_capability_missing"
+    },
+    {
+      "number": 192,
+      "status": "planned",
+      "dependencies": [189],
+      "write_scope": [
+        "internal/connectors/defs/front/api_surface.json",
+        ".planning/phases/issue-192-front-operation-ledger"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 194,
+      "status": "planned",
+      "dependencies": [192],
+      "write_scope": [
+        "internal/connectors/defs/front",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        ".planning/phases/issue-194-front-advanced-query-binary-engine"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 191,
+      "status": "planned",
+      "dependencies": [189, 192],
+      "write_scope": [
+        "internal/connectors/defs/front/streams.json",
+        "internal/connectors/defs/front/schemas",
+        "internal/connectors/defs/front/fixtures",
+        ".planning/phases/issue-191-front-stream-runner"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 193,
+      "status": "planned",
+      "dependencies": [192, 194],
+      "write_scope": [
+        "internal/connectors/defs/front",
+        "internal/connectors/commandrunner",
+        ".planning/phases/issue-193-front-direct-read"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 195,
+      "status": "planned",
+      "dependencies": [192],
+      "write_scope": [
+        "internal/connectors/defs/front/writes.json",
+        "internal/connectors/defs/front/api_surface.json",
+        "internal/connectors/defs/front/docs.md",
+        ".planning/phases/issue-195-front-sensitive-admin-policy"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 190,
+      "status": "planned",
+      "dependencies": [189],
+      "write_scope": [
+        "cmd",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-190-front-help-renderer"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:36:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [188],
+      "reason": "Create parent planning artifacts and seed branch before production edits."
+    },
+    {
+      "timestamp": "2026-07-09T19:36:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [188],
+      "reason": "Pushed feat/188-front-cli-parity and opened draft parent PR #224 to main."
+    },
+    {
+      "timestamp": "2026-07-09T19:36:00Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [189],
+      "reason": "The active API session has no Pi subagent tool; #189 is ready but cannot be spawned here."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 189,
+      "url": "https://github.com/polymetrics-ai/cli/issues/189",
+      "branch": "feat/189-front-cli-surface-metadata",
+      "pr_url": "",
+      "worker": "not_spawned_runtime_capability_missing",
+      "status": "worker_ready",
+      "write_scope": ["internal/connectors/defs/front", ".planning/phases/issue-189-front-cli-surface-metadata"],
+      "worker_directory": "",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending sub-PR and parent PR review fallback if needed",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/224"
+      }
+    },
+    {
+      "number": 190,
+      "url": "https://github.com/polymetrics-ai/cli/issues/190",
+      "branch": "feat/190-front-help-renderer",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["cmd", "internal/cli", "docs/cli", "website", ".planning/phases/issue-190-front-help-renderer"],
+      "worker_directory": "",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "blocked on #189 metadata",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 191,
+      "url": "https://github.com/polymetrics-ai/cli/issues/191",
+      "branch": "feat/191-front-stream-runner",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/front", ".planning/phases/issue-191-front-stream-runner"],
+      "worker_directory": "",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "blocked on #189/#192 metadata and ledger",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 192,
+      "url": "https://github.com/polymetrics-ai/cli/issues/192",
+      "branch": "feat/192-front-operation-ledger",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/front/api_surface.json", ".planning/phases/issue-192-front-operation-ledger"],
+      "worker_directory": "",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "blocked on #189 official inventory",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 193,
+      "url": "https://github.com/polymetrics-ai/cli/issues/193",
+      "branch": "feat/193-front-direct-read",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/front", "internal/connectors/commandrunner", ".planning/phases/issue-193-front-direct-read"],
+      "worker_directory": "",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "blocked on #192/#194",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 194,
+      "url": "https://github.com/polymetrics-ai/cli/issues/194",
+      "branch": "feat/194-front-advanced-query-binary-engine",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/front", "internal/connectors/engine", "internal/connectors/commandrunner", ".planning/phases/issue-194-front-advanced-query-binary-engine"],
+      "worker_directory": "",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "blocked on #192 classifications",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 195,
+      "url": "https://github.com/polymetrics-ai/cli/issues/195",
+      "branch": "feat/195-front-sensitive-admin-policy",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/front", ".planning/phases/issue-195-front-sensitive-admin-policy"],
+      "worker_directory": "",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "blocked on #192 classifications",
+        "disposition_url": ""
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "credentialed connector checks",
+    "reverse ETL execution",
+    "production deployment",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-09T19:36:00Z"
+}
