@@ -38,7 +38,7 @@
       "number": 326,
       "status": "planned",
       "dependencies": [325],
-      "write_scope": ["internal/agentloop/controller", "cmd/loopctl"],
+      "write_scope": ["internal/agentloop/model.go minimal controller identities", "internal/agentloop/controller", "cmd/loopctl read-only status", ".planning/phases/326-controller-fencing"],
       "decision": "not_spawned_dependency_blocked"
     },
     {
@@ -188,7 +188,7 @@
       "pr_url": null,
       "worker": "pending",
       "status": "planned",
-      "write_scope": ["internal/agentloop/controller", "cmd/loopctl"],
+      "write_scope": ["internal/agentloop/model.go minimal controller identities", "internal/agentloop/controller", "cmd/loopctl read-only status", ".planning/phases/326-controller-fencing"],
       "worker_directory": "pending",
       "verification": "blocked by #325",
       "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
