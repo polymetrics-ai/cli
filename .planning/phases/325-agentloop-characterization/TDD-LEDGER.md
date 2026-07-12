@@ -76,3 +76,75 @@ Phase: 325-agentloop-characterization
 - Test weakening: none.
 - Implementation authorization: the strict TDD gate may pass only after reading these exact task
   IDs and `red-confirmed` statuses.
+
+## Adversarial gap cycle — strengthened red
+
+Read-only review rejected the first characterization as too conclusion-shaped and found shell
+sandbox gaps. The uncommitted partial implementation was deleted before this cycle; only tests,
+fixtures, and phase artifacts remained when the following failures were captured.
+
+### fixture-replay
+
+- Status: red-confirmed
+- Command: `go test ./internal/agentloop/... -count=1`
+- Exit: 1
+- Expected evidence: the strengthened suite cannot compile because fact-based `Fixture`, `Fact`,
+  `LoadFixture`, and `Replay` do not exist.
+- Strengthening: neutral resource/owner/before/after facts; observed decision/outcome correctness
+  separated from required policy; fact/order/actor/binding mutations for all thirteen incidents;
+  distinct synthetic identities for the three correct HALTs; phantom-dispatch and missing-handoff
+  reasons; missing-artifact plus later repo-gate failure.
+- Security negatives added: oversize file/string/event/count, symlink file/entry, duplicate incident
+  IDs, missing required correctness booleans, `.jsonl` pre-open rejection, and non-echoing errors.
+
+### structural-redaction
+
+- Status: red-confirmed
+- Command: `go test ./internal/agentloop/... -count=1`
+- Exit: 1
+- Expected evidence: required presence-aware booleans, structural fact validation, and generic
+  non-echoing validation/I/O errors are absent.
+
+### safety-policy
+
+- Status: red-confirmed
+- Commands: `go test ./internal/agentloop/... -count=1` and
+  `bash scripts/tests/auto-loop-control.sh`
+- Exit: 1 for each
+- Expected evidence: immutable Go/shell safety policy remains absent; direct enable/open/run/resume
+  commands cannot yet be rejected by a policy implementation.
+
+### loopctl-cli
+
+- Status: red-confirmed
+- Command: `go test ./cmd/loopctl/... -count=1`
+- Exit: 1
+- Expected evidence: eight `run` call sites are undefined, including negative enable-like commands
+  and a caller-path non-echo test.
+
+### driver-fuse
+
+- Status: red-confirmed
+- Command: `bash scripts/tests/auto-loop-control.sh`
+- Exit: 1 with 39 expected failures
+- Expected evidence: under `env -i`, stub-only PATH, isolated HOME/config, non-writable state, and
+  unreadable resume input, both drivers invoke pre-guard tools and fail to deny run/resume,
+  enable-like environment, `--enable`, and `--force`; help also invokes tools.
+
+### entrypoint-enumeration
+
+- Status: red-confirmed
+- Command: `bash scripts/tests/auto-loop-control.sh`
+- Exit: 1
+- Expected evidence: independently discovered filename+semantic candidates have no canonical
+  helper/inventory/guard parity yet.
+
+### make-gate
+
+- Status: red-confirmed
+- Command: `bash scripts/tests/auto-loop-control.sh`
+- Exit: 1
+- Expected evidence: the phase target and verify integration remain absent.
+
+No partial implementation from the rejected first green attempt was present during this gap-red
+capture. Implementation may resume only from this strengthened contract.

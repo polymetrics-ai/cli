@@ -32,8 +32,13 @@
         "cycle": "tdd-gate",
         "decision": "local_critical_path",
         "reason": "Added all thirteen fixtures and coupled Go/CLI/shell tests in the isolated child worktree, then captured expected failures before production edits."
+      },
+      {
+        "cycle": "gap-red",
+        "decision": "local_critical_path",
+        "reason": "Deleted the uncommitted partial implementation, strengthened fact semantics and the no-side-effect sandbox from adversarial review, and captured a second red cycle."
       }
     ]
   },
-  "updatedAt": "2026-07-12T08:35:00Z"
+  "updatedAt": "2026-07-12T09:20:00Z"
 }

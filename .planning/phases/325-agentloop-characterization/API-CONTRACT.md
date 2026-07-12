@@ -23,10 +23,15 @@ Replay result field order:
 1. `schema_version`
 2. `incident_id`
 3. `violation_code`
-4. `legacy_decision`
-5. `required_decision`
-6. `required_exit_class`
-7. `matched_expectation`
+4. `reason_codes`
+5. `observed_decision`
+6. `observed_outcome`
+7. `observed_decision_correct`
+8. `observed_outcome_correct`
+9. `required_decision`
+10. `required_outcome`
+11. `required_exit_class`
+12. `matched_expectation`
 
 Safety status field order:
 
