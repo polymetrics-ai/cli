@@ -1,0 +1,27 @@
+{
+  "phase": "issue-97-linear-cli-surface",
+  "parentIssue": 80,
+  "issue": 97,
+  "branch": "feat/80-linear-cli-parity",
+  "status": "verified_green_slice_parent_pr_open",
+  "gsd": {
+    "programmingLoopPrompt": "scripts/gsd prompt programming-loop init --phase issue-97-linear-cli-surface --dry-run",
+    "programmingLoopAvailable": false,
+    "manualFallback": "scripts/gsd returned: unknown GSD command: programming-loop"
+  },
+  "verificationPassed": true,
+  "verificationStatus": "make verify passed; website unit test blocked separately because local website dependencies are not installed",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Parent orchestrator selected #97 as first unblocked lane; no subagent tool is available in this harness."
+    }
+  ],
+  "tdd": {
+    "red": "failed as expected: linear cli surface missing",
+    "green": "passed: Linear cli_surface.json added and focused test passes",
+    "refactor": "passed: gofmt, generated website data, connectorgen validate, conformance, and make verify"
+  },
+  "updatedAt": "2026-07-09T00:00:00Z"
+}

@@ -1,0 +1,8 @@
+{
+  "status": "verified",
+  "parent_issue": 80,
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/131",
+  "manual_gsd_fallback": true,
+  "completed_at": "2026-07-09",
+  "verification": "make verify passed; connectorgen validate passed; Linear focused tests passed"
+}

@@ -262,6 +262,32 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	if err := validateDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
+	if cmd.Stream != "" {
+		query, err := queryOverrides(cmd, req.Flags)
+		if err != nil {
+			return Result{}, err
+		}
+		var body connectors.Record
+		readReq := connectors.ReadRequest{Stream: cmd.Stream, Config: req.Config, Query: query, Limit: 1}
+		err = connector.Read(ctx, readReq, connectors.LimitEmitter(1, func(record connectors.Record) error {
+			body = redactRecord(record)
+			return nil
+		}))
+		if err := connectors.IgnoreReadLimit(err); err != nil {
+			return Result{}, err
+		}
+		if body == nil {
+			body = connectors.Record{}
+		}
+		direct := connectors.DirectReadResult{
+			Connector: connector.Name(),
+			Method:    "STREAM",
+			Path:      cmd.Stream,
+			Status:    http.StatusOK,
+			Body:      body,
+		}
+		return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
+	}
 	pathParams, query, err := directReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, err
@@ -295,6 +321,20 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 }
 
 func validateDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	if cmd.Stream != "" {
+		for _, stream := range connectors.ManifestOf(connector).Streams {
+			if stream.Name == cmd.Stream {
+				return nil
+			}
+		}
+		return &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       fmt.Sprintf("direct_read stream %q is not declared in connector manifest", cmd.Stream),
+		}
+	}
 	if _, ok := connector.(connectors.DirectReader); !ok {
 		return &BlockedCommandError{
 			Connector:    connector.Name(),

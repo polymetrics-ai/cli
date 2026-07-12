@@ -522,6 +522,202 @@ func TestGitHubProjectsDiscussionsCommandsMapToGraphQLStreams(t *testing.T) {
 	}
 }
 
+func TestLinearCLISurfaceMapsImplementedStreams(t *testing.T) {
+	b, err := Load(defs.FS, "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("linear cli surface missing")
+	}
+
+	want := map[string]string{
+		"issue list":   "issues",
+		"team list":    "teams",
+		"project list": "projects",
+		"user list":    "users",
+	}
+	for _, cmd := range b.CLISurface.Commands {
+		stream, ok := want[cmd.Path]
+		if !ok {
+			continue
+		}
+		if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream != stream || cmd.Operation != "" {
+			t.Fatalf("command %q = intent=%q availability=%q stream=%q operation=%q, want implemented etl stream %q with no operation",
+				cmd.Path, cmd.Intent, cmd.Availability, cmd.Stream, cmd.Operation, stream)
+		}
+		delete(want, cmd.Path)
+	}
+	if len(want) > 0 {
+		t.Fatalf("missing Linear CLI commands: %v", want)
+	}
+}
+
+func TestLinearStreamsUseFixedGraphQLDocuments(t *testing.T) {
+	b, err := Load(defs.FS, "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+	streams := map[string]StreamSpec{}
+	for _, stream := range b.Streams {
+		streams[stream.Name] = stream
+	}
+	for _, name := range []string{"issues", "teams", "projects", "users", "issue", "team", "project", "user"} {
+		stream, ok := streams[name]
+		if !ok {
+			t.Fatalf("linear stream %q missing", name)
+		}
+		if stream.GraphQL == nil {
+			t.Fatalf("linear stream %q GraphQL = nil, want fixed document", name)
+		}
+		if stream.Method != "POST" || stream.Path != "/graphql" {
+			t.Fatalf("linear stream %q method/path = %s %s, want POST /graphql", name, stream.Method, stream.Path)
+		}
+		if stream.Conformance != nil && stream.Conformance.SkipDynamic {
+			t.Fatalf("linear stream %q still has skip_dynamic marker: %s", name, stream.Conformance.Reason)
+		}
+	}
+}
+
+func TestLinearOperationLedgerInventoriesGraphQLOperations(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+	if b.Surface == nil || b.Surface.OperationLedgerVersion != 1 {
+		t.Fatalf("linear api surface ledger version = %+v, want v1", b.Surface)
+	}
+	deprecatedQueries := map[string]bool{
+		"attachmentIssue":   true,
+		"roadmap":           true,
+		"roadmapToProject":  true,
+		"roadmapToProjects": true,
+		"roadmaps":          true,
+	}
+	deprecatedMutations := map[string]bool{
+		"integrationIntercomSettingsUpdate": true,
+		"integrationLoom":                   true,
+		"integrationSettingsUpdate":         true,
+		"notificationSubscriptionDelete":    true,
+		"organizationStartTrial":            true,
+		"projectArchive":                    true,
+		"projectUpdateDelete":               true,
+		"roadmapArchive":                    true,
+		"roadmapCreate":                     true,
+		"roadmapDelete":                     true,
+		"roadmapUnarchive":                  true,
+		"roadmapUpdate":                     true,
+	}
+	covered, blocked, queryRows, mutationRows, deprecatedQueryRows, deprecatedMutationRows, rawRows := 0, 0, 0, 0, 0, 0, 0
+	for _, ep := range b.Surface.Endpoints {
+		if ep.CoveredBy != nil {
+			covered++
+		}
+		if ep.Operation != nil {
+			blocked++
+			if !ep.Operation.BlockedByDefault || ep.Operation.Status != "blocked" {
+				t.Fatalf("operation row %+v is not blocked by default", ep.Operation)
+			}
+		}
+		if strings.Contains(ep.Path, "(raw arbitrary query or mutation)") {
+			rawRows++
+			continue
+		}
+		if name, ok := graphQLSurfaceName(ep.Path, "query"); ok {
+			queryRows++
+			if deprecatedQueries[name] {
+				deprecatedQueryRows++
+			}
+		}
+		if name, ok := graphQLSurfaceName(ep.Path, "mutation"); ok {
+			mutationRows++
+			if deprecatedMutations[name] {
+				deprecatedMutationRows++
+			}
+		}
+	}
+	if rawRows != 1 {
+		t.Fatalf("raw GraphQL rows = %d, want exactly one blocked raw row", rawRows)
+	}
+	if queryRows != 161 || mutationRows != 370 {
+		t.Fatalf("ledger rows query=%d mutation=%d, want live schema inventory query=161 mutation=370", queryRows, mutationRows)
+	}
+	if got := queryRows - deprecatedQueryRows; got != 156 {
+		t.Fatalf("non-deprecated query rows = %d, want refreshed prompt official count 156", got)
+	}
+	if got := mutationRows - deprecatedMutationRows; got != 358 {
+		t.Fatalf("non-deprecated mutation rows = %d, want refreshed prompt official count 358", got)
+	}
+	if covered < 514 {
+		t.Fatalf("covered endpoint rows = %d, want all official non-deprecated Linear operations covered", covered)
+	}
+}
+
+func TestLinearMutationOperationsModeledAsTypedWrites(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+	writes := map[string]bool{}
+	for _, action := range b.Writes {
+		writes[action.Name] = true
+		if action.BodyType != "graphql" || action.GraphQL == nil {
+			t.Fatalf("linear write %q is not a fixed GraphQL action", action.Name)
+		}
+		if strings.TrimSpace(action.Risk) == "" {
+			t.Fatalf("linear write %q missing risk text", action.Name)
+		}
+	}
+
+	mutationRows, coveredMutationRows := 0, 0
+	var blocked []string
+	for _, ep := range b.Surface.Endpoints {
+		if !strings.Contains(ep.Path, "(mutation:") {
+			continue
+		}
+		mutationRows++
+		if ep.CoveredBy != nil && ep.CoveredBy.Write != "" {
+			coveredMutationRows++
+			if !writes[ep.CoveredBy.Write] {
+				t.Fatalf("mutation row %s covered_by.write %q is not declared", ep.Path, ep.CoveredBy.Write)
+			}
+			continue
+		}
+		if ep.Operation == nil || !hardBlockedLinearMutation(ep.Operation) {
+			blocked = append(blocked, ep.Path)
+		}
+	}
+	if mutationRows != 370 {
+		t.Fatalf("mutationRows = %d, want full Linear live-schema mutation inventory", mutationRows)
+	}
+	if len(blocked) > 0 {
+		t.Fatalf("%d Linear mutation rows are neither typed writes nor exact hard blocks; first rows: %v", len(blocked), blocked[:min(len(blocked), 10)])
+	}
+	if coveredMutationRows < 358 {
+		t.Fatalf("covered mutation rows = %d, want all official non-deprecated Linear mutations modeled as typed writes", coveredMutationRows)
+	}
+}
+
+func graphQLSurfaceName(path, kind string) (string, bool) {
+	prefix := "/graphql (" + kind + ": "
+	if !strings.HasPrefix(path, prefix) || !strings.HasSuffix(path, ")") {
+		return "", false
+	}
+	return strings.TrimSuffix(strings.TrimPrefix(path, prefix), ")"), true
+}
+
+func hardBlockedLinearMutation(op *SurfaceOperation) bool {
+	if op == nil || op.Status != "blocked" || !op.BlockedByDefault {
+		return false
+	}
+	switch op.Model {
+	case "duplicate", "deprecated", "disallowed", "binary_read":
+		return true
+	default:
+		return false
+	}
+}
+
 func TestBundleLoadParsesCLISurface(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

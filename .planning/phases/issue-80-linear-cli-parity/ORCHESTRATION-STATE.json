@@ -1,0 +1,121 @@
+{
+  "parent_issue": {
+    "number": 80,
+    "url": "https://github.com/polymetrics-ai/cli/issues/80",
+    "title": "Linear CLI feature parity parent roadmap",
+    "state": "open"
+  },
+  "parent_branch": "feat/80-linear-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/131",
+    "base": "main",
+    "head": "feat/80-linear-cli-parity",
+    "draft": true,
+    "state": "open"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-harness",
+    "status": "verified_pending_commit_push_review"
+  },
+  "ready_queue": [
+    {"number": 97, "status": "verified", "dependencies": [], "decision": "local_critical_path"},
+    {"number": 98, "status": "verified", "dependencies": [97], "decision": "consolidated_local_critical_path"},
+    {"number": 99, "status": "verified", "dependencies": [97], "decision": "consolidated_local_critical_path"},
+    {"number": 100, "status": "verified", "dependencies": [97], "decision": "consolidated_local_critical_path"},
+    {"number": 101, "status": "verified", "dependencies": [100], "decision": "consolidated_local_critical_path"},
+    {"number": 102, "status": "verified", "dependencies": [100], "decision": "consolidated_local_critical_path"},
+    {"number": 103, "status": "verified", "dependencies": [100], "decision": "consolidated_local_critical_path"}
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T00:00:00Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [97, 98, 99, 100, 101, 102, 103],
+      "reason": "No Pi subagent tool is exposed in this harness; mutating workers could not be spawned into isolated contexts. The orchestrator completed the critical path locally with per-issue phase artifacts."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 97,
+      "url": "https://github.com/polymetrics-ai/cli/issues/97",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "prior #97 slice passed make verify"
+    },
+    {
+      "number": 98,
+      "url": "https://github.com/polymetrics-ai/cli/issues/98",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Linear help renderer tests and docs/help parity passed"
+    },
+    {
+      "number": 99,
+      "url": "https://github.com/polymetrics-ai/cli/issues/99",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Linear stream runner tests and conformance passed"
+    },
+    {
+      "number": 100,
+      "url": "https://github.com/polymetrics-ai/cli/issues/100",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Linear operation ledger test and connectorgen validation passed"
+    },
+    {
+      "number": 101,
+      "url": "https://github.com/polymetrics-ai/cli/issues/101",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Stream-backed direct-read CLI test passed"
+    },
+    {
+      "number": 102,
+      "url": "https://github.com/polymetrics-ai/cli/issues/102",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Fixed GraphQL stream/write tests passed"
+    },
+    {
+      "number": 103,
+      "url": "https://github.com/polymetrics-ai/cli/issues/103",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Raw/admin/sensitive operations blocked by default and validation passed"
+    }
+  ],
+  "automated_review": {
+    "primary_route": "pending_parent_pr",
+    "status": "pending",
+    "coverage_route": "parent_pr_after_push",
+    "disposition_summary": "CodeRabbit previously skipped draft PR #131; reroute after verified commits are pushed and PR readiness is decided."
+  },
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deploys",
+    "quality gate reductions",
+    "generic write tools",
+    "live reverse ETL execution outside plan/preview/approval/execute"
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}

@@ -1,0 +1,23 @@
+{
+  "phase": "issue-80-linear-all-ops",
+  "parentIssue": 80,
+  "branch": "feat/80-linear-cli-parity",
+  "status": "verified_full_surface_prompt_target",
+  "manualGsdFallback": true,
+  "promptSource": "PI_CONNECTOR_PROMPT.md",
+  "coverage": {
+    "linearApiSurfaceRows": 532,
+    "liveGraphQLRootFields": 531,
+    "officialNonDeprecatedFields": 514,
+    "officialQueryFields": 156,
+    "officialMutationFields": 358,
+    "coveredRows": 530,
+    "blockedRows": 2,
+    "writeActions": 369,
+    "streams": 161,
+    "blockedReasons": [
+      "raw arbitrary GraphQL remains disallowed",
+      "integrationSettingsUpdate is deprecated by the live Linear GraphQL schema"
+    ]
+  }
+}

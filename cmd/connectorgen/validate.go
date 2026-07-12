@@ -893,7 +893,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			}}
 		}
 	case "direct_read":
-		if cmd.Operation != "" {
+		if cmd.Operation != "" || cmd.Stream != "" {
 			return nil
 		}
 		var findings []Finding
@@ -902,7 +902,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceMissingMapping,
-				Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference exactly one api_surface endpoint", i, cmd.Path),
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a stream or exactly one api_surface endpoint", i, cmd.Path),
 			})
 		}
 		for _, ep := range cmd.APISurface {

@@ -496,6 +496,7 @@ func materializeConfigDefaults(b Bundle, cfg connectors.RuntimeConfig) connector
 // (e.g. a network token exchange) honors the caller's context instead of
 // running under context.Background().
 func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks) (*Runtime, error) {
+	cfg = materializeConfigDefaults(b, cfg)
 	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
 	if err != nil {
 		return nil, fmt.Errorf("engine: resolve base url: %w", err)

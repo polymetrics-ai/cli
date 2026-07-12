@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
 )
 
 // newWriteTestBundle builds a minimal Bundle wired against srv with a single
@@ -239,6 +240,90 @@ func TestWriteGraphQLBodyUsesFixedDocumentAndDeclaredVariables(t *testing.T) {
 	}
 	if vars["issueId"] != "I_kwDO123" {
 		t.Fatalf("variables.issueId = %#v, want record issue id", vars["issueId"])
+	}
+}
+
+func TestLinearWriteActionUsesFixedGraphQLMutation(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"data":{"issueCreate":{"success":true,"issue":{"id":"iss_1","identifier":"ENG-1","title":"Ship Linear CLI"}}}}`)
+	b, err := Load(defs.FS, "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "create_issue",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": srv.URL},
+			Secrets: map[string]string{"api_key": "sample-linear-token"},
+		},
+	}, []connectors.Record{{"team_id": "team_1", "title": "Ship Linear CLI"}}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	if cap.method != http.MethodPost || cap.path != "/graphql" {
+		t.Fatalf("request = %s %s, want POST /graphql", cap.method, cap.path)
+	}
+	got := cap.json()
+	query, _ := got["query"].(string)
+	if !strings.Contains(query, "mutation createIssue") || !strings.Contains(query, "issueCreate(input: $input)") || strings.Contains(query, "delete") {
+		t.Fatalf("query = %q, want fixed Linear create mutation", query)
+	}
+	if got["operationName"] != "createIssue" {
+		t.Fatalf("operationName = %v, want createIssue", got["operationName"])
+	}
+	vars, ok := got["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables = %#v, want object", got["variables"])
+	}
+	input, ok := vars["input"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables.input = %#v, want object", vars["input"])
+	}
+	if input["teamId"] != "team_1" || input["title"] != "Ship Linear CLI" {
+		t.Fatalf("input = %+v, want teamId/title from approved record fields", input)
+	}
+	if _, ok := input["labelIds"]; ok {
+		t.Fatalf("input = %+v, optional labelIds must be absent unless explicitly supported", input)
+	}
+}
+
+func TestWriteGraphQLVariableSourcePreservesArraysAndObjects(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"data":{"updateLabels":{"ok":true}}}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "update_labels",
+		Kind:     "update",
+		Method:   http.MethodPost,
+		Path:     "/graphql",
+		BodyType: "graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "mutation UpdateLabels($ids: [String!]!, $metadata: JSON) { updateLabels(ids: $ids, metadata: $metadata) { ok } }",
+			OperationName: "UpdateLabels",
+			Variables: map[string]any{
+				"ids":      map[string]any{"source": "record.ids", "type": "string_array"},
+				"metadata": map[string]any{"source": "record.metadata", "type": "json", "omit_when_empty": true},
+			},
+		},
+		RecordSchema: json.RawMessage(`{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","items":{"type":"string"}},"metadata":{"type":"object"}}}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_labels"}, []connectors.Record{{
+		"ids":      []any{"label_1", "label_2"},
+		"metadata": map[string]any{"source": "test"},
+	}}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	vars := cap.json()["variables"].(map[string]any)
+	ids, ok := vars["ids"].([]any)
+	if !ok || len(ids) != 2 || ids[0] != "label_1" || ids[1] != "label_2" {
+		t.Fatalf("ids = %#v, want preserved string array", vars["ids"])
+	}
+	metadata, ok := vars["metadata"].(map[string]any)
+	if !ok || metadata["source"] != "test" {
+		t.Fatalf("metadata = %#v, want preserved object", vars["metadata"])
 	}
 }
 

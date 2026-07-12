@@ -1,5 +1,8 @@
 {
-  "request": { "method": "POST", "path": "/" },
+  "request": {
+    "method": "POST",
+    "path": "/graphql"
+  },
   "response": {
     "status": 200,
     "body": {
@@ -19,13 +22,32 @@
               "updatedAt": "2026-01-02T00:00:00.000Z",
               "completedAt": null,
               "canceledAt": null,
-              "state": { "id": "state_1", "name": "Todo", "type": "unstarted" },
-              "team": { "id": "team_1", "key": "ENG", "name": "Engineering" },
-              "assignee": { "id": "user_1", "name": "Fixture User", "email": "fixture@example.com" },
-              "creator": { "id": "user_1", "name": "Fixture User", "email": "fixture@example.com" }
+              "state": {
+                "id": "state_1",
+                "name": "Todo",
+                "type": "unstarted"
+              },
+              "team": {
+                "id": "team_1",
+                "key": "ENG",
+                "name": "Engineering"
+              },
+              "assignee": {
+                "id": "user_1",
+                "name": "Fixture User",
+                "email": "fixture@example.com"
+              },
+              "creator": {
+                "id": "user_1",
+                "name": "Fixture User",
+                "email": "fixture@example.com"
+              }
             }
           ],
-          "pageInfo": { "hasNextPage": true, "endCursor": "cursor_fixture_2" }
+          "pageInfo": {
+            "hasNextPage": true,
+            "endCursor": "cursor_fixture_2"
+          }
         }
       }
     }

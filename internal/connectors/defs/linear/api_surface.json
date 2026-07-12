@@ -1,15 +1,3743 @@
 {
   "api": "Linear GraphQL API (https://api.linear.app/graphql)",
   "docs": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
-  "reviewed_at": "2026-07-03",
-  "scope": "Legacy-parity Linear GraphQL surface plus a typed Pass B blocker. The current bundle covers the 4 legacy root connections (issues, teams, projects, users). Full Linear GraphQL expansion is quarantined because every additional read connection and mutation shares POST /graphql and requires a fixed GraphQL request body plus cursor state in variables; the defs-only read path does not send stream.body, write actions cannot inject static GraphQL documents safely, and this workstream may not create or edit a hook package.",
+  "reviewed_at": "2026-07-09",
+  "operation_ledger_version": 1,
+  "scope": "Linear GraphQL operation ledger generated from live Linear schema introspection plus @linear/sdk fixed documents. All non-deprecated live query and mutation fields are modeled as fixed GraphQL streams or typed reverse-ETL write actions; deprecated/raw arbitrary GraphQL rows are blocked with exact evidence.",
   "endpoints": [
-    { "method": "GET", "path": "/graphql (query: issues)", "covered_by": { "stream": "issues" } },
-    { "method": "GET", "path": "/graphql (query: teams)", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/graphql (query: projects)", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/graphql (query: users)", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/graphql (query: viewer)", "excluded": { "category": "non_data_endpoint", "reason": "bounded identity/connectivity check used by Check(), not a syncable object stream" } },
-    { "method": "POST", "path": "/graphql (mutations: issueCreate, issueUpdate, commentCreate, ...)", "excluded": { "category": "out_of_scope", "reason": "Blocked by typed ENGINE_GAP in docs/migration/quarantine.json: Linear mutations require fixed GraphQL query documents and variables in the JSON body; the write dialect can only send record-shaped bodies, and exposing a generic GraphQL mutation body would violate connector tool-surface rules." } },
-    { "method": "GET", "path": "/graphql (query: comments, cycles, labels, workflowStates, webhooks, other root connections)", "excluded": { "category": "out_of_scope", "reason": "Blocked by typed ENGINE_GAP in docs/migration/quarantine.json: Linear read connections require POST request bodies and body-cursor pagination via variables, but the declarative read path currently sends nil body and this pass cannot add or edit a StreamHook." } }
+    {
+      "method": "POST",
+      "path": "/graphql (query: issues)",
+      "covered_by": {
+        "stream": "issues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: teams)",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projects)",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: users)",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issue)",
+      "covered_by": {
+        "stream": "issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: team)",
+      "covered_by": {
+        "stream": "team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: project)",
+      "covered_by": {
+        "stream": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: user)",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueCreate)",
+      "covered_by": {
+        "write": "create_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueUpdate)",
+      "covered_by": {
+        "write": "update_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: commentCreate)",
+      "covered_by": {
+        "write": "comment_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectCreate)",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: administrableTeams)",
+      "covered_by": {
+        "stream": "administrable_teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: agentActivities)",
+      "covered_by": {
+        "stream": "agent_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: agentActivity)",
+      "covered_by": {
+        "stream": "agent_activity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: agentSession)",
+      "covered_by": {
+        "stream": "agent_session"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: agentSessions)",
+      "covered_by": {
+        "stream": "agent_sessions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: agentSkill)",
+      "covered_by": {
+        "stream": "agent_skill"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: agentSkills)",
+      "covered_by": {
+        "stream": "agent_skills"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: applicationInfo)",
+      "covered_by": {
+        "stream": "application_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: archivedIntegrations)",
+      "covered_by": {
+        "stream": "archived_integrations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: attachment)",
+      "covered_by": {
+        "stream": "attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: attachmentIssue)",
+      "covered_by": {
+        "stream": "attachment_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: attachments)",
+      "covered_by": {
+        "stream": "attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: attachmentsForURL)",
+      "covered_by": {
+        "stream": "attachments_for_url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: auditEntries)",
+      "covered_by": {
+        "stream": "audit_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: auditEntryTypes)",
+      "covered_by": {
+        "stream": "audit_entry_types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: authenticationSessions)",
+      "covered_by": {
+        "stream": "authentication_sessions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: availableUsers)",
+      "covered_by": {
+        "stream": "available_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: comment)",
+      "covered_by": {
+        "stream": "comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: comments)",
+      "covered_by": {
+        "stream": "comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customView)",
+      "covered_by": {
+        "stream": "custom_view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customViewHasSubscribers)",
+      "covered_by": {
+        "stream": "custom_view_has_subscribers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customViews)",
+      "covered_by": {
+        "stream": "custom_views"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customer)",
+      "covered_by": {
+        "stream": "customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customerNeed)",
+      "covered_by": {
+        "stream": "customer_need"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customerNeeds)",
+      "covered_by": {
+        "stream": "customer_needs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customerStatus)",
+      "covered_by": {
+        "stream": "customer_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customerStatuses)",
+      "covered_by": {
+        "stream": "customer_statuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customerTier)",
+      "covered_by": {
+        "stream": "customer_tier"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customerTiers)",
+      "covered_by": {
+        "stream": "customer_tiers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customers)",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: cycle)",
+      "covered_by": {
+        "stream": "cycle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: cycles)",
+      "covered_by": {
+        "stream": "cycles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: document)",
+      "covered_by": {
+        "stream": "document"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: documentContentHistory)",
+      "covered_by": {
+        "stream": "document_content_history"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: documents)",
+      "covered_by": {
+        "stream": "documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: emailIntakeAddress)",
+      "covered_by": {
+        "stream": "email_intake_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: emoji)",
+      "covered_by": {
+        "stream": "emoji"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: emojis)",
+      "covered_by": {
+        "stream": "emojis"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: entityExternalLink)",
+      "covered_by": {
+        "stream": "entity_external_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: externalUser)",
+      "covered_by": {
+        "stream": "external_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: externalUsers)",
+      "covered_by": {
+        "stream": "external_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: favorite)",
+      "covered_by": {
+        "stream": "favorite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: favorites)",
+      "covered_by": {
+        "stream": "favorites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiative)",
+      "covered_by": {
+        "stream": "initiative"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeFilterSuggestion)",
+      "covered_by": {
+        "stream": "initiative_filter_suggestion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeLabel)",
+      "covered_by": {
+        "stream": "initiative_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeLabels)",
+      "covered_by": {
+        "stream": "initiative_labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeRelation)",
+      "covered_by": {
+        "stream": "initiative_relation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeRelations)",
+      "covered_by": {
+        "stream": "initiative_relations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeToProject)",
+      "covered_by": {
+        "stream": "initiative_to_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeToProjects)",
+      "covered_by": {
+        "stream": "initiative_to_projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeUpdate)",
+      "covered_by": {
+        "stream": "initiative_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeUpdates)",
+      "covered_by": {
+        "stream": "initiative_updates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiatives)",
+      "covered_by": {
+        "stream": "initiatives"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: integration)",
+      "covered_by": {
+        "stream": "integration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: integrationHasScopes)",
+      "covered_by": {
+        "stream": "integration_has_scopes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: integrationTemplate)",
+      "covered_by": {
+        "stream": "integration_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: integrationTemplates)",
+      "covered_by": {
+        "stream": "integration_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: integrations)",
+      "covered_by": {
+        "stream": "integrations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: integrationsSettings)",
+      "covered_by": {
+        "stream": "integrations_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueFigmaFileKeySearch)",
+      "covered_by": {
+        "stream": "issue_figma_file_key_search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueFilterSuggestion)",
+      "covered_by": {
+        "stream": "issue_filter_suggestion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueImportCheckCSV)",
+      "covered_by": {
+        "stream": "issue_import_check_csv"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueImportCheckSync)",
+      "covered_by": {
+        "stream": "issue_import_check_sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueImportJqlCheck)",
+      "covered_by": {
+        "stream": "issue_import_jql_check"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueLabel)",
+      "covered_by": {
+        "stream": "issue_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueLabels)",
+      "covered_by": {
+        "stream": "issue_labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issuePriorityValues)",
+      "covered_by": {
+        "stream": "issue_priority_values"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueRelation)",
+      "covered_by": {
+        "stream": "issue_relation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueRelations)",
+      "covered_by": {
+        "stream": "issue_relations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueRepositorySuggestions)",
+      "covered_by": {
+        "stream": "issue_repository_suggestions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueSearch)",
+      "covered_by": {
+        "stream": "issue_search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueTitleSuggestionFromCustomerRequest)",
+      "covered_by": {
+        "stream": "issue_title_suggestion_from_customer_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueToRelease)",
+      "covered_by": {
+        "stream": "issue_to_release"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueToReleases)",
+      "covered_by": {
+        "stream": "issue_to_releases"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: issueVcsBranchSearch)",
+      "covered_by": {
+        "stream": "issue_vcs_branch_search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: latestReleaseByAccessKey)",
+      "covered_by": {
+        "stream": "latest_release_by_access_key"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: notification)",
+      "covered_by": {
+        "stream": "notification"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: notificationSubscription)",
+      "covered_by": {
+        "stream": "notification_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: notificationSubscriptions)",
+      "covered_by": {
+        "stream": "notification_subscriptions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: notifications)",
+      "covered_by": {
+        "stream": "notifications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organization)",
+      "covered_by": {
+        "stream": "organization"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organizationExists)",
+      "covered_by": {
+        "stream": "organization_exists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organizationInvite)",
+      "covered_by": {
+        "stream": "organization_invite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organizationInvites)",
+      "covered_by": {
+        "stream": "organization_invites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectFilterSuggestion)",
+      "covered_by": {
+        "stream": "project_filter_suggestion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectLabel)",
+      "covered_by": {
+        "stream": "project_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectLabels)",
+      "covered_by": {
+        "stream": "project_labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectMilestone)",
+      "covered_by": {
+        "stream": "project_milestone"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectMilestones)",
+      "covered_by": {
+        "stream": "project_milestones"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectRelation)",
+      "covered_by": {
+        "stream": "project_relation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectRelations)",
+      "covered_by": {
+        "stream": "project_relations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectStatus)",
+      "covered_by": {
+        "stream": "project_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectStatuses)",
+      "covered_by": {
+        "stream": "project_statuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectUpdate)",
+      "covered_by": {
+        "stream": "project_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectUpdates)",
+      "covered_by": {
+        "stream": "project_updates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: pushSubscriptionTest)",
+      "covered_by": {
+        "stream": "push_subscription_test"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: rateLimitStatus)",
+      "covered_by": {
+        "stream": "rate_limit_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: recentReleasesByAccessKey)",
+      "covered_by": {
+        "stream": "recent_releases_by_access_key"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: release)",
+      "covered_by": {
+        "stream": "release"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: releaseNote)",
+      "covered_by": {
+        "stream": "release_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: releaseNotes)",
+      "covered_by": {
+        "stream": "release_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: releasePipeline)",
+      "covered_by": {
+        "stream": "release_pipeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: releasePipelineByAccessKey)",
+      "covered_by": {
+        "stream": "release_pipeline_by_access_key"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: releasePipelines)",
+      "covered_by": {
+        "stream": "release_pipelines"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: releaseSearch)",
+      "covered_by": {
+        "stream": "release_search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: releaseStage)",
+      "covered_by": {
+        "stream": "release_stage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: releaseStages)",
+      "covered_by": {
+        "stream": "release_stages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: releases)",
+      "covered_by": {
+        "stream": "releases"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: roadmap)",
+      "covered_by": {
+        "stream": "roadmap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: roadmapToProject)",
+      "covered_by": {
+        "stream": "roadmap_to_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: roadmapToProjects)",
+      "covered_by": {
+        "stream": "roadmap_to_projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: roadmaps)",
+      "covered_by": {
+        "stream": "roadmaps"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: searchDocuments)",
+      "covered_by": {
+        "stream": "search_documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: searchIssues)",
+      "covered_by": {
+        "stream": "search_issues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: searchProjects)",
+      "covered_by": {
+        "stream": "search_projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: semanticSearch)",
+      "covered_by": {
+        "stream": "semantic_search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: slaConfigurations)",
+      "covered_by": {
+        "stream": "sla_configurations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: ssoUrlFromEmail)",
+      "covered_by": {
+        "stream": "sso_url_from_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: teamMembership)",
+      "covered_by": {
+        "stream": "team_membership"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: teamMemberships)",
+      "covered_by": {
+        "stream": "team_memberships"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: template)",
+      "covered_by": {
+        "stream": "template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: templates)",
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: templatesForIntegration)",
+      "covered_by": {
+        "stream": "templates_for_integration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: timeSchedule)",
+      "covered_by": {
+        "stream": "time_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: timeSchedules)",
+      "covered_by": {
+        "stream": "time_schedules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: triageResponsibilities)",
+      "covered_by": {
+        "stream": "triage_responsibilities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: triageResponsibility)",
+      "covered_by": {
+        "stream": "triage_responsibility"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: userSessions)",
+      "covered_by": {
+        "stream": "user_sessions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: userSettings)",
+      "covered_by": {
+        "stream": "user_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: verifyGitHubEnterpriseServerInstallation)",
+      "covered_by": {
+        "stream": "verify_git_hub_enterprise_server_installation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: viewer)",
+      "covered_by": {
+        "stream": "viewer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: webhook)",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: webhooks)",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: workflowState)",
+      "covered_by": {
+        "stream": "workflow_state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: workflowStates)",
+      "covered_by": {
+        "stream": "workflow_states"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentActivityCreate)",
+      "covered_by": {
+        "write": "agent_activity_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentSessionCreateOnComment)",
+      "covered_by": {
+        "write": "agent_session_create_on_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentSessionCreateOnIssue)",
+      "covered_by": {
+        "write": "agent_session_create_on_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentSessionUpdate)",
+      "covered_by": {
+        "write": "agent_session_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentSessionUpdateExternalUrl)",
+      "covered_by": {
+        "write": "agent_session_update_external_url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentSkillCreate)",
+      "covered_by": {
+        "write": "agent_skill_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentSkillDelete)",
+      "covered_by": {
+        "write": "agent_skill_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentSkillUpdate)",
+      "covered_by": {
+        "write": "agent_skill_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: airbyteIntegrationConnect)",
+      "covered_by": {
+        "write": "airbyte_integration_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentCreate)",
+      "covered_by": {
+        "write": "attachment_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentDelete)",
+      "covered_by": {
+        "write": "attachment_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkDiscord)",
+      "covered_by": {
+        "write": "attachment_link_discord"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkFront)",
+      "covered_by": {
+        "write": "attachment_link_front"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkGitHubIssue)",
+      "covered_by": {
+        "write": "attachment_link_git_hub_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkGitHubPR)",
+      "covered_by": {
+        "write": "attachment_link_git_hub_pr"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkGitLabMR)",
+      "covered_by": {
+        "write": "attachment_link_git_lab_mr"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkIntercom)",
+      "covered_by": {
+        "write": "attachment_link_intercom"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkJiraIssue)",
+      "covered_by": {
+        "write": "attachment_link_jira_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkSalesforce)",
+      "covered_by": {
+        "write": "attachment_link_salesforce"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkSlack)",
+      "covered_by": {
+        "write": "attachment_link_slack"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkURL)",
+      "covered_by": {
+        "write": "attachment_link_url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentLinkZendesk)",
+      "covered_by": {
+        "write": "attachment_link_zendesk"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentSyncToSlack)",
+      "covered_by": {
+        "write": "attachment_sync_to_slack"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: attachmentUpdate)",
+      "covered_by": {
+        "write": "attachment_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: commentDelete)",
+      "covered_by": {
+        "write": "comment_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: commentResolve)",
+      "covered_by": {
+        "write": "comment_resolve"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: commentUnresolve)",
+      "covered_by": {
+        "write": "comment_unresolve"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: commentUpdate)",
+      "covered_by": {
+        "write": "comment_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: contactCreate)",
+      "covered_by": {
+        "write": "contact_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: createCsvExportReport)",
+      "covered_by": {
+        "write": "create_csv_export_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: createInitiativeUpdateReminder)",
+      "covered_by": {
+        "write": "create_initiative_update_reminder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: createProjectUpdateReminder)",
+      "covered_by": {
+        "write": "create_project_update_reminder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customViewCreate)",
+      "covered_by": {
+        "write": "custom_view_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customViewDelete)",
+      "covered_by": {
+        "write": "custom_view_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customViewUpdate)",
+      "covered_by": {
+        "write": "custom_view_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerCreate)",
+      "covered_by": {
+        "write": "customer_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerDelete)",
+      "covered_by": {
+        "write": "customer_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerMerge)",
+      "covered_by": {
+        "write": "customer_merge"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerNeedArchive)",
+      "covered_by": {
+        "write": "customer_need_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerNeedCreate)",
+      "covered_by": {
+        "write": "customer_need_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerNeedCreateFromAttachment)",
+      "covered_by": {
+        "write": "customer_need_create_from_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerNeedDelete)",
+      "covered_by": {
+        "write": "customer_need_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerNeedUnarchive)",
+      "covered_by": {
+        "write": "customer_need_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerNeedUpdate)",
+      "covered_by": {
+        "write": "customer_need_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerStatusCreate)",
+      "covered_by": {
+        "write": "customer_status_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerStatusDelete)",
+      "covered_by": {
+        "write": "customer_status_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerStatusUpdate)",
+      "covered_by": {
+        "write": "customer_status_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerTierCreate)",
+      "covered_by": {
+        "write": "customer_tier_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerTierDelete)",
+      "covered_by": {
+        "write": "customer_tier_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerTierUpdate)",
+      "covered_by": {
+        "write": "customer_tier_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerUnsync)",
+      "covered_by": {
+        "write": "customer_unsync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerUpdate)",
+      "covered_by": {
+        "write": "customer_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: customerUpsert)",
+      "covered_by": {
+        "write": "customer_upsert"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: cycleArchive)",
+      "covered_by": {
+        "write": "cycle_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: cycleCreate)",
+      "covered_by": {
+        "write": "cycle_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: cycleShiftAll)",
+      "covered_by": {
+        "write": "cycle_shift_all"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: cycleStartUpcomingCycleToday)",
+      "covered_by": {
+        "write": "cycle_start_upcoming_cycle_today"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: cycleUpdate)",
+      "covered_by": {
+        "write": "cycle_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: documentCreate)",
+      "covered_by": {
+        "write": "document_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: documentDelete)",
+      "covered_by": {
+        "write": "document_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: documentUnarchive)",
+      "covered_by": {
+        "write": "document_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: documentUpdate)",
+      "covered_by": {
+        "write": "document_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emailIntakeAddressCreate)",
+      "covered_by": {
+        "write": "email_intake_address_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emailIntakeAddressDelete)",
+      "covered_by": {
+        "write": "email_intake_address_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emailIntakeAddressRefreshSesDomainStatus)",
+      "covered_by": {
+        "write": "email_intake_address_refresh_ses_domain_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emailIntakeAddressRotate)",
+      "covered_by": {
+        "write": "email_intake_address_rotate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emailIntakeAddressUpdate)",
+      "covered_by": {
+        "write": "email_intake_address_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emailTokenUserAccountAuth)",
+      "covered_by": {
+        "write": "email_token_user_account_auth"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emailUnsubscribe)",
+      "covered_by": {
+        "write": "email_unsubscribe"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emailUserAccountAuthChallenge)",
+      "covered_by": {
+        "write": "email_user_account_auth_challenge"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emojiCreate)",
+      "covered_by": {
+        "write": "emoji_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: emojiDelete)",
+      "covered_by": {
+        "write": "emoji_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: entityExternalLinkCreate)",
+      "covered_by": {
+        "write": "entity_external_link_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: entityExternalLinkDelete)",
+      "covered_by": {
+        "write": "entity_external_link_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: entityExternalLinkUpdate)",
+      "covered_by": {
+        "write": "entity_external_link_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: favoriteCreate)",
+      "covered_by": {
+        "write": "favorite_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: favoriteDelete)",
+      "covered_by": {
+        "write": "favorite_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: favoriteUpdate)",
+      "covered_by": {
+        "write": "favorite_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: fileUpload)",
+      "covered_by": {
+        "write": "file_upload"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: gitAutomationStateCreate)",
+      "covered_by": {
+        "write": "git_automation_state_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: gitAutomationStateDelete)",
+      "covered_by": {
+        "write": "git_automation_state_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: gitAutomationStateUpdate)",
+      "covered_by": {
+        "write": "git_automation_state_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: gitAutomationTargetBranchCreate)",
+      "covered_by": {
+        "write": "git_automation_target_branch_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: gitAutomationTargetBranchDelete)",
+      "covered_by": {
+        "write": "git_automation_target_branch_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: gitAutomationTargetBranchUpdate)",
+      "covered_by": {
+        "write": "git_automation_target_branch_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: googleUserAccountAuth)",
+      "covered_by": {
+        "write": "google_user_account_auth"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: imageUploadFromUrl)",
+      "covered_by": {
+        "write": "image_upload_from_url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: importFileUpload)",
+      "covered_by": {
+        "write": "import_file_upload"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeArchive)",
+      "covered_by": {
+        "write": "initiative_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeCreate)",
+      "covered_by": {
+        "write": "initiative_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeDelete)",
+      "covered_by": {
+        "write": "initiative_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeLabelCreate)",
+      "covered_by": {
+        "write": "initiative_label_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeLabelDelete)",
+      "covered_by": {
+        "write": "initiative_label_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeLabelRestore)",
+      "covered_by": {
+        "write": "initiative_label_restore"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeLabelRetire)",
+      "covered_by": {
+        "write": "initiative_label_retire"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeLabelUpdate)",
+      "covered_by": {
+        "write": "initiative_label_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeRelationCreate)",
+      "covered_by": {
+        "write": "initiative_relation_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeRelationDelete)",
+      "covered_by": {
+        "write": "initiative_relation_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeRelationUpdate)",
+      "covered_by": {
+        "write": "initiative_relation_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeToProjectCreate)",
+      "covered_by": {
+        "write": "initiative_to_project_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeToProjectDelete)",
+      "covered_by": {
+        "write": "initiative_to_project_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeToProjectUpdate)",
+      "covered_by": {
+        "write": "initiative_to_project_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeUnarchive)",
+      "covered_by": {
+        "write": "initiative_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeUpdate)",
+      "covered_by": {
+        "write": "initiative_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeUpdateArchive)",
+      "covered_by": {
+        "write": "initiative_update_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeUpdateCreate)",
+      "covered_by": {
+        "write": "initiative_update_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeUpdateUnarchive)",
+      "covered_by": {
+        "write": "initiative_update_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeUpdateUpdate)",
+      "covered_by": {
+        "write": "initiative_update_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationArchive)",
+      "covered_by": {
+        "write": "integration_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationAsksConnectChannel)",
+      "covered_by": {
+        "write": "integration_asks_connect_channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationDelete)",
+      "covered_by": {
+        "write": "integration_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationDiscord)",
+      "covered_by": {
+        "write": "integration_discord"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationFigma)",
+      "covered_by": {
+        "write": "integration_figma"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationFront)",
+      "covered_by": {
+        "write": "integration_front"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGitHubEnterpriseServerConnect)",
+      "covered_by": {
+        "write": "integration_git_hub_enterprise_server_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGitHubPersonal)",
+      "covered_by": {
+        "write": "integration_git_hub_personal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGithubCommitCreate)",
+      "covered_by": {
+        "write": "integration_github_commit_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGithubConnect)",
+      "covered_by": {
+        "write": "integration_github_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGithubImportConnect)",
+      "covered_by": {
+        "write": "integration_github_import_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGithubImportRefresh)",
+      "covered_by": {
+        "write": "integration_github_import_refresh"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGithubRemoveCodeAccess)",
+      "covered_by": {
+        "write": "integration_github_remove_code_access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGitlabConnect)",
+      "covered_by": {
+        "write": "integration_gitlab_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGitlabTestConnection)",
+      "covered_by": {
+        "write": "integration_gitlab_test_connection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGong)",
+      "covered_by": {
+        "write": "integration_gong"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGoogleSheets)",
+      "covered_by": {
+        "write": "integration_google_sheets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationIntercom)",
+      "covered_by": {
+        "write": "integration_intercom"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationIntercomDelete)",
+      "covered_by": {
+        "write": "integration_intercom_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationIntercomSettingsUpdate)",
+      "covered_by": {
+        "write": "integration_intercom_settings_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationJiraPersonal)",
+      "covered_by": {
+        "write": "integration_jira_personal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationLoom)",
+      "covered_by": {
+        "write": "integration_loom"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationMicrosoftPersonalConnect)",
+      "covered_by": {
+        "write": "integration_microsoft_personal_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationMicrosoftTeams)",
+      "covered_by": {
+        "write": "integration_microsoft_teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationRequest)",
+      "covered_by": {
+        "write": "integration_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSalesforce)",
+      "covered_by": {
+        "write": "integration_salesforce"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSentryConnect)",
+      "covered_by": {
+        "write": "integration_sentry_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlack)",
+      "covered_by": {
+        "write": "integration_slack"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackAsks)",
+      "covered_by": {
+        "write": "integration_slack_asks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackCustomViewNotifications)",
+      "covered_by": {
+        "write": "integration_slack_custom_view_notifications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackCustomerChannelLink)",
+      "covered_by": {
+        "write": "integration_slack_customer_channel_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackImportEmojis)",
+      "covered_by": {
+        "write": "integration_slack_import_emojis"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackOrAsksUpdateSlackTeamName)",
+      "covered_by": {
+        "write": "integration_slack_or_asks_update_slack_team_name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackOrgProjectUpdatesPost)",
+      "covered_by": {
+        "write": "integration_slack_org_project_updates_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackPersonal)",
+      "covered_by": {
+        "write": "integration_slack_personal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackPost)",
+      "covered_by": {
+        "write": "integration_slack_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackProjectPost)",
+      "covered_by": {
+        "write": "integration_slack_project_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationTemplateCreate)",
+      "covered_by": {
+        "write": "integration_template_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationTemplateDelete)",
+      "covered_by": {
+        "write": "integration_template_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationZendesk)",
+      "covered_by": {
+        "write": "integration_zendesk"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationsSettingsCreate)",
+      "covered_by": {
+        "write": "integrations_settings_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationsSettingsUpdate)",
+      "covered_by": {
+        "write": "integrations_settings_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueAddLabel)",
+      "covered_by": {
+        "write": "issue_add_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueArchive)",
+      "covered_by": {
+        "write": "issue_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueBatchCreate)",
+      "covered_by": {
+        "write": "issue_batch_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueBatchUpdate)",
+      "covered_by": {
+        "write": "issue_batch_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueDelete)",
+      "covered_by": {
+        "write": "issue_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueExternalSyncDisable)",
+      "covered_by": {
+        "write": "issue_external_sync_disable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportCreateAsana)",
+      "covered_by": {
+        "write": "issue_import_create_asana"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportCreateCSVJira)",
+      "covered_by": {
+        "write": "issue_import_create_csv_jira"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportCreateClubhouse)",
+      "covered_by": {
+        "write": "issue_import_create_clubhouse"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportCreateGithub)",
+      "covered_by": {
+        "write": "issue_import_create_github"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportCreateJira)",
+      "covered_by": {
+        "write": "issue_import_create_jira"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportDelete)",
+      "covered_by": {
+        "write": "issue_import_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportProcess)",
+      "covered_by": {
+        "write": "issue_import_process"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportUpdate)",
+      "covered_by": {
+        "write": "issue_import_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueLabelCreate)",
+      "covered_by": {
+        "write": "issue_label_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueLabelDelete)",
+      "covered_by": {
+        "write": "issue_label_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueLabelRestore)",
+      "covered_by": {
+        "write": "issue_label_restore"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueLabelRetire)",
+      "covered_by": {
+        "write": "issue_label_retire"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueLabelUpdate)",
+      "covered_by": {
+        "write": "issue_label_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueRelationCreate)",
+      "covered_by": {
+        "write": "issue_relation_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueRelationDelete)",
+      "covered_by": {
+        "write": "issue_relation_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueRelationUpdate)",
+      "covered_by": {
+        "write": "issue_relation_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueReminder)",
+      "covered_by": {
+        "write": "issue_reminder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueRemoveLabel)",
+      "covered_by": {
+        "write": "issue_remove_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueShare)",
+      "covered_by": {
+        "write": "issue_share"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueSubscribe)",
+      "covered_by": {
+        "write": "issue_subscribe"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueToReleaseCreate)",
+      "covered_by": {
+        "write": "issue_to_release_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueToReleaseDelete)",
+      "covered_by": {
+        "write": "issue_to_release_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueToReleaseDeleteByIssueAndRelease)",
+      "covered_by": {
+        "write": "issue_to_release_delete_by_issue_and_release"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueUnarchive)",
+      "covered_by": {
+        "write": "issue_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueUnshare)",
+      "covered_by": {
+        "write": "issue_unshare"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueUnsubscribe)",
+      "covered_by": {
+        "write": "issue_unsubscribe"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: logout)",
+      "covered_by": {
+        "write": "logout"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: logoutAllSessions)",
+      "covered_by": {
+        "write": "logout_all_sessions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: logoutOtherSessions)",
+      "covered_by": {
+        "write": "logout_other_sessions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: logoutSession)",
+      "covered_by": {
+        "write": "logout_session"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationArchive)",
+      "covered_by": {
+        "write": "notification_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationArchiveAll)",
+      "covered_by": {
+        "write": "notification_archive_all"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationCategoryChannelSubscriptionUpdate)",
+      "covered_by": {
+        "write": "notification_category_channel_subscription_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationMarkReadAll)",
+      "covered_by": {
+        "write": "notification_mark_read_all"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationMarkUnreadAll)",
+      "covered_by": {
+        "write": "notification_mark_unread_all"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationSnoozeAll)",
+      "covered_by": {
+        "write": "notification_snooze_all"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationSubscriptionCreate)",
+      "covered_by": {
+        "write": "notification_subscription_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationSubscriptionDelete)",
+      "covered_by": {
+        "write": "notification_subscription_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationSubscriptionUpdate)",
+      "covered_by": {
+        "write": "notification_subscription_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationUnarchive)",
+      "covered_by": {
+        "write": "notification_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationUnsnoozeAll)",
+      "covered_by": {
+        "write": "notification_unsnooze_all"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: notificationUpdate)",
+      "covered_by": {
+        "write": "notification_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationCancelDelete)",
+      "covered_by": {
+        "write": "organization_cancel_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDelete)",
+      "covered_by": {
+        "write": "organization_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDeleteChallenge)",
+      "covered_by": {
+        "write": "organization_delete_challenge"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDomainDelete)",
+      "covered_by": {
+        "write": "organization_domain_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationInviteCreate)",
+      "covered_by": {
+        "write": "organization_invite_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationInviteDelete)",
+      "covered_by": {
+        "write": "organization_invite_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationInviteUpdate)",
+      "covered_by": {
+        "write": "organization_invite_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationStartTrial)",
+      "covered_by": {
+        "write": "organization_start_trial"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationStartTrialForPlan)",
+      "covered_by": {
+        "write": "organization_start_trial_for_plan"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationUpdate)",
+      "covered_by": {
+        "write": "organization_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectAddLabel)",
+      "covered_by": {
+        "write": "project_add_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectArchive)",
+      "covered_by": {
+        "write": "project_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectDelete)",
+      "covered_by": {
+        "write": "project_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectExternalSyncDisable)",
+      "covered_by": {
+        "write": "project_external_sync_disable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectLabelCreate)",
+      "covered_by": {
+        "write": "project_label_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectLabelDelete)",
+      "covered_by": {
+        "write": "project_label_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectLabelRestore)",
+      "covered_by": {
+        "write": "project_label_restore"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectLabelRetire)",
+      "covered_by": {
+        "write": "project_label_retire"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectLabelUpdate)",
+      "covered_by": {
+        "write": "project_label_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectMilestoneCreate)",
+      "covered_by": {
+        "write": "project_milestone_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectMilestoneDelete)",
+      "covered_by": {
+        "write": "project_milestone_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectMilestoneUpdate)",
+      "covered_by": {
+        "write": "project_milestone_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectRelationCreate)",
+      "covered_by": {
+        "write": "project_relation_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectRelationDelete)",
+      "covered_by": {
+        "write": "project_relation_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectRelationUpdate)",
+      "covered_by": {
+        "write": "project_relation_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectRemoveLabel)",
+      "covered_by": {
+        "write": "project_remove_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectStatusArchive)",
+      "covered_by": {
+        "write": "project_status_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectStatusCreate)",
+      "covered_by": {
+        "write": "project_status_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectStatusUnarchive)",
+      "covered_by": {
+        "write": "project_status_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectStatusUpdate)",
+      "covered_by": {
+        "write": "project_status_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectUnarchive)",
+      "covered_by": {
+        "write": "project_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectUpdate)",
+      "covered_by": {
+        "write": "project_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectUpdateArchive)",
+      "covered_by": {
+        "write": "project_update_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectUpdateCreate)",
+      "covered_by": {
+        "write": "project_update_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectUpdateDelete)",
+      "covered_by": {
+        "write": "project_update_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectUpdateUnarchive)",
+      "covered_by": {
+        "write": "project_update_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectUpdateUpdate)",
+      "covered_by": {
+        "write": "project_update_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: pushSubscriptionCreate)",
+      "covered_by": {
+        "write": "push_subscription_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: pushSubscriptionDelete)",
+      "covered_by": {
+        "write": "push_subscription_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: reactionCreate)",
+      "covered_by": {
+        "write": "reaction_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: reactionDelete)",
+      "covered_by": {
+        "write": "reaction_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: refreshGoogleSheetsData)",
+      "covered_by": {
+        "write": "refresh_google_sheets_data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseArchive)",
+      "covered_by": {
+        "write": "release_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseComplete)",
+      "covered_by": {
+        "write": "release_complete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseCompleteByAccessKey)",
+      "covered_by": {
+        "write": "release_complete_by_access_key"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseCreate)",
+      "covered_by": {
+        "write": "release_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseDelete)",
+      "covered_by": {
+        "write": "release_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseNoteCreate)",
+      "covered_by": {
+        "write": "release_note_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseNoteDelete)",
+      "covered_by": {
+        "write": "release_note_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseNoteUpdate)",
+      "covered_by": {
+        "write": "release_note_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releasePipelineArchive)",
+      "covered_by": {
+        "write": "release_pipeline_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releasePipelineCreate)",
+      "covered_by": {
+        "write": "release_pipeline_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releasePipelineDelete)",
+      "covered_by": {
+        "write": "release_pipeline_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releasePipelineUnarchive)",
+      "covered_by": {
+        "write": "release_pipeline_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releasePipelineUpdate)",
+      "covered_by": {
+        "write": "release_pipeline_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseStageArchive)",
+      "covered_by": {
+        "write": "release_stage_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseStageCreate)",
+      "covered_by": {
+        "write": "release_stage_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseStageUnarchive)",
+      "covered_by": {
+        "write": "release_stage_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseStageUpdate)",
+      "covered_by": {
+        "write": "release_stage_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseSync)",
+      "covered_by": {
+        "write": "release_sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseSyncByAccessKey)",
+      "covered_by": {
+        "write": "release_sync_by_access_key"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseUnarchive)",
+      "covered_by": {
+        "write": "release_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseUpdate)",
+      "covered_by": {
+        "write": "release_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseUpdateByPipeline)",
+      "covered_by": {
+        "write": "release_update_by_pipeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: releaseUpdateByPipelineByAccessKey)",
+      "covered_by": {
+        "write": "release_update_by_pipeline_by_access_key"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: resendOrganizationInvite)",
+      "covered_by": {
+        "write": "resend_organization_invite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: resendOrganizationInviteByEmail)",
+      "covered_by": {
+        "write": "resend_organization_invite_by_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: roadmapArchive)",
+      "covered_by": {
+        "write": "roadmap_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: roadmapCreate)",
+      "covered_by": {
+        "write": "roadmap_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: roadmapDelete)",
+      "covered_by": {
+        "write": "roadmap_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: roadmapToProjectCreate)",
+      "covered_by": {
+        "write": "roadmap_to_project_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: roadmapToProjectDelete)",
+      "covered_by": {
+        "write": "roadmap_to_project_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: roadmapToProjectUpdate)",
+      "covered_by": {
+        "write": "roadmap_to_project_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: roadmapUnarchive)",
+      "covered_by": {
+        "write": "roadmap_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: roadmapUpdate)",
+      "covered_by": {
+        "write": "roadmap_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: samlTokenUserAccountAuth)",
+      "covered_by": {
+        "write": "saml_token_user_account_auth"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: teamCreate)",
+      "covered_by": {
+        "write": "team_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: teamCyclesDelete)",
+      "covered_by": {
+        "write": "team_cycles_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: teamDelete)",
+      "covered_by": {
+        "write": "team_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: teamKeyDelete)",
+      "covered_by": {
+        "write": "team_key_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: teamMembershipCreate)",
+      "covered_by": {
+        "write": "team_membership_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: teamMembershipDelete)",
+      "covered_by": {
+        "write": "team_membership_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: teamMembershipUpdate)",
+      "covered_by": {
+        "write": "team_membership_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: teamUnarchive)",
+      "covered_by": {
+        "write": "team_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: teamUpdate)",
+      "covered_by": {
+        "write": "team_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: templateCreate)",
+      "covered_by": {
+        "write": "template_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: templateDelete)",
+      "covered_by": {
+        "write": "template_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: templateUpdate)",
+      "covered_by": {
+        "write": "template_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: timeScheduleCreate)",
+      "covered_by": {
+        "write": "time_schedule_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: timeScheduleDelete)",
+      "covered_by": {
+        "write": "time_schedule_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: timeScheduleRefreshIntegrationSchedule)",
+      "covered_by": {
+        "write": "time_schedule_refresh_integration_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: timeScheduleUpdate)",
+      "covered_by": {
+        "write": "time_schedule_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: timeScheduleUpsertExternal)",
+      "covered_by": {
+        "write": "time_schedule_upsert_external"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: trackAnonymousEvent)",
+      "covered_by": {
+        "write": "track_anonymous_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: triageResponsibilityCreate)",
+      "covered_by": {
+        "write": "triage_responsibility_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: triageResponsibilityDelete)",
+      "covered_by": {
+        "write": "triage_responsibility_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: triageResponsibilityUpdate)",
+      "covered_by": {
+        "write": "triage_responsibility_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userChangeRole)",
+      "covered_by": {
+        "write": "user_change_role"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userDiscordConnect)",
+      "covered_by": {
+        "write": "user_discord_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userExternalUserDisconnect)",
+      "covered_by": {
+        "write": "user_external_user_disconnect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userFlagUpdate)",
+      "covered_by": {
+        "write": "user_flag_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userRevokeAllSessions)",
+      "covered_by": {
+        "write": "user_revoke_all_sessions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userRevokeSession)",
+      "covered_by": {
+        "write": "user_revoke_session"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userSettingsFlagsReset)",
+      "covered_by": {
+        "write": "user_settings_flags_reset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userSettingsUpdate)",
+      "covered_by": {
+        "write": "user_settings_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userSuspend)",
+      "covered_by": {
+        "write": "user_suspend"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userUnlinkFromIdentityProvider)",
+      "covered_by": {
+        "write": "user_unlink_from_identity_provider"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userUnsuspend)",
+      "covered_by": {
+        "write": "user_unsuspend"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: userUpdate)",
+      "covered_by": {
+        "write": "user_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: viewPreferencesCreate)",
+      "covered_by": {
+        "write": "view_preferences_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: viewPreferencesDelete)",
+      "covered_by": {
+        "write": "view_preferences_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: viewPreferencesUpdate)",
+      "covered_by": {
+        "write": "view_preferences_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: webhookCreate)",
+      "covered_by": {
+        "write": "webhook_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: webhookDelete)",
+      "covered_by": {
+        "write": "webhook_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: webhookRotateSecret)",
+      "covered_by": {
+        "write": "webhook_rotate_secret"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: webhookUpdate)",
+      "covered_by": {
+        "write": "webhook_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: workflowStateArchive)",
+      "covered_by": {
+        "write": "workflow_state_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: workflowStateCreate)",
+      "covered_by": {
+        "write": "workflow_state_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: workflowStateUpdate)",
+      "covered_by": {
+        "write": "workflow_state_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: agentSessionSandbox)",
+      "covered_by": {
+        "stream": "agent_session_sandbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: attachmentSources)",
+      "covered_by": {
+        "stream": "attachment_sources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customViewDetailsSuggestion)",
+      "covered_by": {
+        "stream": "custom_view_details_suggestion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: documentContentHistoryTimeline)",
+      "covered_by": {
+        "stream": "document_content_history_timeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: documentContentHistoryEntries)",
+      "covered_by": {
+        "stream": "document_content_history_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: fetchData)",
+      "covered_by": {
+        "stream": "fetch_data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeLeadTeamChangeImpact)",
+      "covered_by": {
+        "stream": "initiative_lead_team_change_impact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: microsoftTeamsChannels)",
+      "covered_by": {
+        "stream": "microsoft_teams_channels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: notificationsUnreadCount)",
+      "covered_by": {
+        "stream": "notifications_unread_count"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: oauthApplications)",
+      "covered_by": {
+        "stream": "oauth_applications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: oauthApplication)",
+      "covered_by": {
+        "stream": "oauth_application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organizationDomainClaimRequest)",
+      "covered_by": {
+        "stream": "organization_domain_claim_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organizationInviteDetails)",
+      "covered_by": {
+        "stream": "organization_invite_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: archivedTeams)",
+      "covered_by": {
+        "stream": "archived_teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organizationMeta)",
+      "covered_by": {
+        "stream": "organization_meta"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectStatusProjectCount)",
+      "covered_by": {
+        "stream": "project_status_project_count"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: failuresForOauthWebhooks)",
+      "covered_by": {
+        "stream": "failures_for_oauth_webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: fileUploadDangerouslyDelete)",
+      "covered_by": {
+        "write": "file_upload_dangerously_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentActivityCreatePrompt)",
+      "covered_by": {
+        "write": "agent_activity_create_prompt"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentActivitySendQueued)",
+      "covered_by": {
+        "write": "agent_activity_send_queued"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentActivityDeleteQueued)",
+      "covered_by": {
+        "write": "agent_activity_delete_queued"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentSessionCreate)",
+      "covered_by": {
+        "write": "agent_session_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: passkeyLoginStart)",
+      "covered_by": {
+        "write": "passkey_login_start"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: passkeyLoginFinish)",
+      "covered_by": {
+        "write": "passkey_login_finish"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: createOrganizationFromOnboarding)",
+      "covered_by": {
+        "write": "create_organization_from_onboarding"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: joinOrganizationFromOnboarding)",
+      "covered_by": {
+        "write": "join_organization_from_onboarding"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: leaveOrganization)",
+      "covered_by": {
+        "write": "leave_organization"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: contactSalesCreate)",
+      "covered_by": {
+        "write": "contact_sales_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectCreateSlackChannel)",
+      "covered_by": {
+        "write": "project_create_slack_channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectReassignStatus)",
+      "covered_by": {
+        "write": "project_reassign_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeLeadTeamUpdate)",
+      "covered_by": {
+        "write": "initiative_lead_team_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeAddLabel)",
+      "covered_by": {
+        "write": "initiative_add_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeRemoveLabel)",
+      "covered_by": {
+        "write": "initiative_remove_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationUpdate)",
+      "covered_by": {
+        "write": "integration_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGoogleCalendarPersonalConnect)",
+      "covered_by": {
+        "write": "integration_google_calendar_personal_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationLaunchDarklyConnect)",
+      "covered_by": {
+        "write": "integration_launch_darkly_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationLaunchDarklyPersonalConnect)",
+      "covered_by": {
+        "write": "integration_launch_darkly_personal_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: jiraIntegrationConnect)",
+      "covered_by": {
+        "write": "jira_integration_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationJiraUpdate)",
+      "covered_by": {
+        "write": "integration_jira_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationJiraFetchProjectStatuses)",
+      "covered_by": {
+        "write": "integration_jira_fetch_project_statuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationCustomerDataAttributesRefresh)",
+      "covered_by": {
+        "write": "integration_customer_data_attributes_refresh"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationOpsgenieConnect)",
+      "covered_by": {
+        "write": "integration_opsgenie_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationOpsgenieRefreshScheduleMappings)",
+      "covered_by": {
+        "write": "integration_opsgenie_refresh_schedule_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationPagerDutyConnect)",
+      "covered_by": {
+        "write": "integration_pager_duty_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationPagerDutyRefreshScheduleMappings)",
+      "covered_by": {
+        "write": "integration_pager_duty_refresh_schedule_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: updateIntegrationSlackScopes)",
+      "covered_by": {
+        "write": "update_integration_slack_scopes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackInitiativePost)",
+      "covered_by": {
+        "write": "integration_slack_initiative_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackOrgInitiativeUpdatesPost)",
+      "covered_by": {
+        "write": "integration_slack_org_initiative_updates_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationMicrosoftTeamsProjectPost)",
+      "covered_by": {
+        "write": "integration_microsoft_teams_project_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSalesforceMetadataRefresh)",
+      "covered_by": {
+        "write": "integration_salesforce_metadata_refresh"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationMcpServerPersonalConnect)",
+      "covered_by": {
+        "write": "integration_mcp_server_personal_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationMcpServerConnect)",
+      "covered_by": {
+        "write": "integration_mcp_server_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackWorkflowAccessUpdate)",
+      "covered_by": {
+        "write": "integration_slack_workflow_access_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportCreateLinearV2)",
+      "covered_by": {
+        "write": "issue_import_create_linear_v2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueDescriptionUpdateFromFront)",
+      "covered_by": {
+        "write": "issue_description_update_from_front"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationCreate)",
+      "covered_by": {
+        "write": "oauth_application_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationUpdate)",
+      "covered_by": {
+        "write": "oauth_application_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationArchive)",
+      "covered_by": {
+        "write": "oauth_application_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationRotateSecret)",
+      "covered_by": {
+        "write": "oauth_application_rotate_secret"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationRotateWebhookSecret)",
+      "covered_by": {
+        "write": "oauth_application_rotate_webhook_secret"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDomainClaim)",
+      "covered_by": {
+        "write": "organization_domain_claim"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDomainVerify)",
+      "covered_by": {
+        "write": "organization_domain_verify"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDomainCreate)",
+      "covered_by": {
+        "write": "organization_domain_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDomainUpdate)",
+      "covered_by": {
+        "write": "organization_domain_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectMilestoneMove)",
+      "covered_by": {
+        "write": "project_milestone_move"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSettingsUpdate)",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Use integrationUpdate instead.",
+        "source_url": "https://api.linear.app/graphql"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (raw arbitrary query or mutation)",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Raw arbitrary GraphQL would bypass reviewed fixed documents, redaction, and write approval policy; use declared streams, direct reads, or reverse-ETL actions only.",
+        "source_url": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
+      }
+    }
   ]
 }
