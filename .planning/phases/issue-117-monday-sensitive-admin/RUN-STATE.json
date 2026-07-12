@@ -1,0 +1,21 @@
+{
+  "phase": "issue-117-monday-sensitive-admin",
+  "issue": 117,
+  "parent_issue": 82,
+  "branch": "feat/82-monday-cli-parity",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-117-monday-sensitive-admin --skip-research",
+    "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "targeted #117 tests passed; full parent verification pending",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "#117 finalizes Monday mutation policy after #114/#116/#115."
+    }
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}

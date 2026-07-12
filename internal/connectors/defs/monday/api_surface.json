@@ -1,14 +1,1625 @@
 {
   "api": "monday.com GraphQL API v2 (https://api.monday.com/v2)",
-  "docs": "https://developer.monday.com/api-reference/docs",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave1-pilot migration: the 5 legacy-parity read streams only (boards, items, users, teams, tags), each a distinct GraphQL root QUERY field (a read, never a mutation) on the SAME single POST /v2 endpoint; monday's full documented API surface (mutations, webhooks, apps, other GraphQL types) is out of scope outside this connector's current declared surface. Every covered/excluded entry below is declared method GET (not the literal wire HTTP verb, which is always POST for GraphQL) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design §E.1 rule 4) — monday.com's GraphQL transport uses POST for both queries and mutations, so the wire verb alone cannot distinguish them the way REST's verb convention does.",
+  "docs": "https://developer.monday.com/api-reference/reference/about-the-api-reference",
+  "reviewed_at": "2026-07-09",
+  "operation_ledger_version": 1,
+  "scope": "Full-surface operation mapping for parent issue #82: all 367 canonical monday.com GraphQL operations are modeled as existing streams, bounded fixed-document direct reads, or named reverse-ETL write actions. Query rows are semantic GET rows even though monday.com GraphQL transport uses POST; mutation rows are named reverse-ETL write actions and live dispatch remains safety-gated.",
   "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v2 (query: account-roles.get_account_roles)",
+      "covered_by": {
+        "direct_read": "account-roles get-account-roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: account.get_account)",
+      "covered_by": {
+        "direct_read": "account view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: plan.get_plan)",
+      "covered_by": {
+        "direct_read": "plan get-plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: activity-logs-new.get_board_activity_logs)",
+      "covered_by": {
+        "direct_read": "activity-logs-new get-board-activity-logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: activity-logs-new.get_user_activity_logs)",
+      "covered_by": {
+        "direct_read": "activity-logs-new get-user-activity-logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: aggregate.get_aggregate)",
+      "covered_by": {
+        "direct_read": "aggregate get-aggregate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai.run_a_prompt)",
+      "covered_by": {
+        "write": "ai_run_a_prompt"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: articles.get_articles)",
+      "covered_by": {
+        "direct_read": "articles get-articles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: articles.get_article_blocks)",
+      "covered_by": {
+        "direct_read": "articles get-article-blocks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: articles.knowledge_base_search)",
+      "covered_by": {
+        "direct_read": "articles knowledge-base-search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: articles.create_article)",
+      "covered_by": {
+        "write": "articles_create_article"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: articles.publish_article)",
+      "covered_by": {
+        "write": "articles_publish_article"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: articles.delete_article)",
+      "covered_by": {
+        "write": "articles_delete_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: assets-1.get_assets)",
+      "covered_by": {
+        "direct_read": "assets-1 get-assets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: assets-1.add_file_to_update)",
+      "covered_by": {
+        "write": "assets_1_add_file_to_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: assets-1.add_file_to_column)",
+      "covered_by": {
+        "write": "assets_1_add_file_to_column"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: audit-event-catalogue.get_audit_event_catalogue)",
+      "covered_by": {
+        "direct_read": "audit-event-catalogue get-audit-event-catalogue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: audit-logs.get_audit_logs)",
+      "covered_by": {
+        "direct_read": "audit-logs get-audit-logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: activity-logs.get_board_activity_logs)",
+      "covered_by": {
+        "direct_read": "activity-logs get-board-activity-logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: get-view-schema-by-type.get_view_schema_by_type)",
+      "covered_by": {
+        "direct_read": "get-view-schema-by-type get-view-schema-by-type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: board-views.get_views)",
+      "covered_by": {
+        "direct_read": "board-views get-views"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: board-views.create_view)",
+      "covered_by": {
+        "write": "board_views_create_view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: board-views.create_view_table)",
+      "covered_by": {
+        "write": "board_views_create_view_table"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: board-views.update_view)",
+      "covered_by": {
+        "write": "board_views_update_view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: board-views.update_view_table)",
+      "covered_by": {
+        "write": "board_views_update_view_table"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: board-views.delete_view)",
+      "covered_by": {
+        "write": "board_views_delete_view"
+      }
+    },
     {
       "method": "GET",
       "path": "/v2 (query: boards)",
       "covered_by": {
         "stream": "boards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: boards.create_board)",
+      "covered_by": {
+        "write": "boards_create_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: boards.set_board_permission)",
+      "covered_by": {
+        "write": "boards_set_board_permission"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: boards.duplicate_board)",
+      "covered_by": {
+        "write": "boards_duplicate_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: boards.update_board)",
+      "covered_by": {
+        "write": "boards_update_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: boards.update_board_hierarchy)",
+      "covered_by": {
+        "write": "boards_update_board_hierarchy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: boards.archive_board)",
+      "covered_by": {
+        "write": "boards_archive_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: boards.delete_board)",
+      "covered_by": {
+        "write": "boards_delete_board"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: backfill-items-api-reference.fetch_job_status)",
+      "covered_by": {
+        "direct_read": "backfill-items-api-reference fetch-job-status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: backfill-items-api-reference.backfill_items)",
+      "covered_by": {
+        "write": "backfill_items_api_reference_backfill_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: ingest-items-api-reference.fetch_job_status)",
+      "covered_by": {
+        "direct_read": "ingest-items-api-reference fetch-job-status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ingest-items-api-reference.ingest_items)",
+      "covered_by": {
+        "write": "ingest_items_api_reference_ingest_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ingest-items-api-reference.behavior_notes)",
+      "covered_by": {
+        "write": "ingest_items_api_reference_behavior_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai-column.configure_categorize_ai_column)",
+      "covered_by": {
+        "write": "ai_column_configure_categorize_ai_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai-column.configure_summarize_ai_column)",
+      "covered_by": {
+        "write": "ai_column_configure_summarize_ai_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai-column.configure_translate_ai_column)",
+      "covered_by": {
+        "write": "ai_column_configure_translate_ai_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai-column.configure_improve_text_ai_column)",
+      "covered_by": {
+        "write": "ai_column_configure_improve_text_ai_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai-column.configure_extract_ai_column)",
+      "covered_by": {
+        "write": "ai_column_configure_extract_ai_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai-column.configure_open_block_ai_column)",
+      "covered_by": {
+        "write": "ai_column_configure_open_block_ai_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai-column.configure_write_me_ai_column)",
+      "covered_by": {
+        "write": "ai_column_configure_write_me_ai_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai-column.configure_person_assignment_ai_column)",
+      "covered_by": {
+        "write": "ai_column_configure_person_assignment_ai_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: ai-column.remove_ai_from_column)",
+      "covered_by": {
+        "write": "ai_column_remove_ai_from_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: auto-number.create_column)",
+      "covered_by": {
+        "write": "auto_number_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: auto-number.clear)",
+      "covered_by": {
+        "write": "auto_number_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: button.create_column)",
+      "covered_by": {
+        "write": "button_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: button.clear)",
+      "covered_by": {
+        "write": "button_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: checkbox.create_column)",
+      "covered_by": {
+        "write": "checkbox_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: checkbox.update_value)",
+      "covered_by": {
+        "write": "checkbox_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: checkbox.clear_value)",
+      "covered_by": {
+        "write": "checkbox_clear_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: checkbox.set_on_item_creation)",
+      "covered_by": {
+        "write": "checkbox_set_on_item_creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: color-picker.create)",
+      "covered_by": {
+        "write": "color_picker_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: color-picker.update_value)",
+      "covered_by": {
+        "write": "color_picker_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: color-picker.clear)",
+      "covered_by": {
+        "write": "color_picker_clear"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: connect.get_connected_board_ids)",
+      "covered_by": {
+        "direct_read": "connect get-connected-board-ids"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: connect.create)",
+      "covered_by": {
+        "write": "connect_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: connect.update)",
+      "covered_by": {
+        "write": "connect_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: connect.clear)",
+      "covered_by": {
+        "write": "connect_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: country.create_column)",
+      "covered_by": {
+        "write": "country_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: country.update_value)",
+      "covered_by": {
+        "write": "country_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: country.clear)",
+      "covered_by": {
+        "write": "country_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: creation-log.create_column)",
+      "covered_by": {
+        "write": "creation_log_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: creation-log.update_and_clear)",
+      "covered_by": {
+        "write": "creation_log_update_and_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: date.create)",
+      "covered_by": {
+        "write": "date_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: date.update_value)",
+      "covered_by": {
+        "write": "date_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: date.set_date_on_item_creation)",
+      "covered_by": {
+        "write": "date_set_date_on_item_creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: date.clear)",
+      "covered_by": {
+        "write": "date_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dependency.update)",
+      "covered_by": {
+        "write": "dependency_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dependency.set_on_item_creation)",
+      "covered_by": {
+        "write": "dependency_set_on_item_creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dependency.clear)",
+      "covered_by": {
+        "write": "dependency_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: document.create_column)",
+      "covered_by": {
+        "write": "document_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: document.create_a_doc_inside_a_doc_column)",
+      "covered_by": {
+        "write": "document_create_a_doc_inside_a_doc_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: document.clear)",
+      "covered_by": {
+        "write": "document_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dropdown.create)",
+      "covered_by": {
+        "write": "dropdown_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dropdown.update_column_settings)",
+      "covered_by": {
+        "write": "dropdown_update_column_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dropdown.update_value)",
+      "covered_by": {
+        "write": "dropdown_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dropdown.clear)",
+      "covered_by": {
+        "write": "dropdown_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dropdown.settings_response_structure)",
+      "covered_by": {
+        "write": "dropdown_settings_response_structure"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: email.update)",
+      "covered_by": {
+        "write": "email_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: email.clear)",
+      "covered_by": {
+        "write": "email_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: files-1.update)",
+      "covered_by": {
+        "write": "files_1_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: files-1.clear)",
+      "covered_by": {
+        "write": "files_1_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: formula.create)",
+      "covered_by": {
+        "write": "formula_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: formula.clear)",
+      "covered_by": {
+        "write": "formula_clear"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: hour.compare_values)",
+      "covered_by": {
+        "direct_read": "hour compare-values"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: hour.create_column)",
+      "covered_by": {
+        "write": "hour_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: hour.update_value)",
+      "covered_by": {
+        "write": "hour_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: hour.set_value_on_item_creation)",
+      "covered_by": {
+        "write": "hour_set_value_on_item_creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: hour.clear)",
+      "covered_by": {
+        "write": "hour_clear"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: last-updated.example_response)",
+      "covered_by": {
+        "direct_read": "last-updated example-response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: last-updated.create)",
+      "covered_by": {
+        "write": "last_updated_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: last-updated.update_and_clear)",
+      "covered_by": {
+        "write": "last_updated_update_and_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: link.update_value)",
+      "covered_by": {
+        "write": "link_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: link.clear)",
+      "covered_by": {
+        "write": "link_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: location.update_value)",
+      "covered_by": {
+        "write": "location_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: location.clear)",
+      "covered_by": {
+        "write": "location_clear"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: long-text.example_response)",
+      "covered_by": {
+        "direct_read": "long-text example-response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: long-text.create)",
+      "covered_by": {
+        "write": "long_text_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: long-text.update_value)",
+      "covered_by": {
+        "write": "long_text_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: long-text.clear)",
+      "covered_by": {
+        "write": "long_text_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: long-text.settings_response_structure)",
+      "covered_by": {
+        "write": "long_text_settings_response_structure"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: mirror.mirroredvalue)",
+      "covered_by": {
+        "direct_read": "mirror mirroredvalue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: mirror.create)",
+      "covered_by": {
+        "write": "mirror_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: mirror.settings_response_structure)",
+      "covered_by": {
+        "write": "mirror_settings_response_structure"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: name.read_via_the_name_field)",
+      "covered_by": {
+        "direct_read": "name read-via-the-name-field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: name.read_via_items_page_by_column_values)",
+      "covered_by": {
+        "direct_read": "name read-via-items-page-by-column-values"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: name.update)",
+      "covered_by": {
+        "write": "name_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: name.set_name_on_item_creation)",
+      "covered_by": {
+        "write": "name_set_name_on_item_creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: name.clear)",
+      "covered_by": {
+        "write": "name_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: number.create)",
+      "covered_by": {
+        "write": "number_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: number.update_value)",
+      "covered_by": {
+        "write": "number_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: number.clear)",
+      "covered_by": {
+        "write": "number_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: people.update_value)",
+      "covered_by": {
+        "write": "people_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: people.clear)",
+      "covered_by": {
+        "write": "people_clear"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: phone.example_response)",
+      "covered_by": {
+        "direct_read": "phone example-response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: phone.update)",
+      "covered_by": {
+        "write": "phone_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: phone.set_phone_on_item_creation)",
+      "covered_by": {
+        "write": "phone_set_phone_on_item_creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: phone.clear)",
+      "covered_by": {
+        "write": "phone_clear"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: progress-tracking.progressvalue)",
+      "covered_by": {
+        "direct_read": "progress-tracking progressvalue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: progress-tracking.create)",
+      "covered_by": {
+        "write": "progress_tracking_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: rating.create)",
+      "covered_by": {
+        "write": "rating_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: rating.update)",
+      "covered_by": {
+        "write": "rating_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: rating.clear)",
+      "covered_by": {
+        "write": "rating_clear"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: status.statusvalue_classic_boards)",
+      "covered_by": {
+        "direct_read": "status statusvalue-classic-boards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: status.batteryvalue_multi_level_boards)",
+      "covered_by": {
+        "direct_read": "status batteryvalue-multi-level-boards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: status.create)",
+      "covered_by": {
+        "write": "status_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: status.update_column_settings)",
+      "covered_by": {
+        "write": "status_update_column_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: status.update_value)",
+      "covered_by": {
+        "write": "status_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: status.clear)",
+      "covered_by": {
+        "write": "status_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: status.important_considerations)",
+      "covered_by": {
+        "write": "status_important_considerations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: subitems-column.subtasksvalue)",
+      "covered_by": {
+        "direct_read": "subitems-column subtasksvalue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: subitems-column.create_column)",
+      "covered_by": {
+        "write": "subitems_column_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: subitems-column.create_a_subitem)",
+      "covered_by": {
+        "write": "subitems_column_create_a_subitem"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: subitems-column.delete_a_subitem)",
+      "covered_by": {
+        "write": "subitems_column_delete_a_subitem"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: tags.query_tags_directly)",
+      "covered_by": {
+        "direct_read": "tags query-tags-directly"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: tags.create_or_get_a_tag)",
+      "covered_by": {
+        "write": "tags_create_or_get_a_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: tags.update_value)",
+      "covered_by": {
+        "write": "tags_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: tags.clear)",
+      "covered_by": {
+        "write": "tags_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: text.create)",
+      "covered_by": {
+        "write": "text_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: text.update_value)",
+      "covered_by": {
+        "write": "text_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: text.clear)",
+      "covered_by": {
+        "write": "text_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: text.settings_response_structure)",
+      "covered_by": {
+        "write": "text_settings_response_structure"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: time-tracking.history_fields)",
+      "covered_by": {
+        "direct_read": "time-tracking history-fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: time-tracking.create)",
+      "covered_by": {
+        "write": "time_tracking_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: time-tracking.settings_response_structure)",
+      "covered_by": {
+        "write": "time_tracking_settings_response_structure"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: timeline.create)",
+      "covered_by": {
+        "write": "timeline_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: timeline.update)",
+      "covered_by": {
+        "write": "timeline_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: timeline.clear)",
+      "covered_by": {
+        "write": "timeline_clear"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: vote.example_response)",
+      "covered_by": {
+        "direct_read": "vote example-response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: vote.create_column)",
+      "covered_by": {
+        "write": "vote_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: vote.clear_value)",
+      "covered_by": {
+        "write": "vote_clear_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: week.create)",
+      "covered_by": {
+        "write": "week_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: week.update_value)",
+      "covered_by": {
+        "write": "week_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: week.clear)",
+      "covered_by": {
+        "write": "week_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: week.settings_response_structure)",
+      "covered_by": {
+        "write": "week_settings_response_structure"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: world-clock.create)",
+      "covered_by": {
+        "write": "world_clock_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: world-clock.update_value)",
+      "covered_by": {
+        "write": "world_clock_update_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: world-clock.clear)",
+      "covered_by": {
+        "write": "world_clock_clear"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: world-clock.settings_response_structure)",
+      "covered_by": {
+        "write": "world_clock_settings_response_structure"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: get-column-type-schema.get_column_type_schema)",
+      "covered_by": {
+        "direct_read": "get-column-type-schema get-column-type-schema"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: get-column-type-schema.status_column)",
+      "covered_by": {
+        "direct_read": "get-column-type-schema status-column"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: get-column-type-schema.date_column)",
+      "covered_by": {
+        "direct_read": "get-column-type-schema date-column"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: columns.get_columns)",
+      "covered_by": {
+        "direct_read": "columns get-columns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: columns.create_column)",
+      "covered_by": {
+        "write": "columns_create_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: columns.change_column_value)",
+      "covered_by": {
+        "write": "columns_change_column_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: columns.change_simple_column_value)",
+      "covered_by": {
+        "write": "columns_change_simple_column_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: columns.change_multiple_column_values)",
+      "covered_by": {
+        "write": "columns_change_multiple_column_values"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: columns.change_column_title)",
+      "covered_by": {
+        "write": "columns_change_column_title"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: columns.update_column)",
+      "covered_by": {
+        "write": "columns_update_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: columns.change_column_metadata)",
+      "covered_by": {
+        "write": "columns_change_column_metadata"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: columns.delete_column)",
+      "covered_by": {
+        "write": "columns_delete_column"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: complexity.get_complexity)",
+      "covered_by": {
+        "direct_read": "complexity get-complexity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: all-widgets-schema.get_all_widgets_schema)",
+      "covered_by": {
+        "direct_read": "all-widgets-schema get-all-widgets-schema"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dashboards-and-widgets.create_dashboard)",
+      "covered_by": {
+        "write": "dashboards_and_widgets_create_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dashboards-and-widgets.create_widget)",
+      "covered_by": {
+        "write": "dashboards_and_widgets_create_widget"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dashboards-and-widgets.update_dashboard)",
+      "covered_by": {
+        "write": "dashboards_and_widgets_update_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dashboards-and-widgets.update_overview_hierarchy)",
+      "covered_by": {
+        "write": "dashboards_and_widgets_update_overview_hierarchy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dashboards-and-widgets.delete_dashboard)",
+      "covered_by": {
+        "write": "dashboards_and_widgets_delete_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: dashboards-and-widgets.delete_widget)",
+      "covered_by": {
+        "write": "dashboards_and_widgets_delete_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: departments.get_departments)",
+      "covered_by": {
+        "direct_read": "departments get-departments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: departments.create_department)",
+      "covered_by": {
+        "write": "departments_create_department"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: departments.assign_department_members)",
+      "covered_by": {
+        "write": "departments_assign_department_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: departments.assign_department_owner)",
+      "covered_by": {
+        "write": "departments_assign_department_owner"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: departments.update_department)",
+      "covered_by": {
+        "write": "departments_update_department"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: departments.clear_users_department)",
+      "covered_by": {
+        "write": "departments_clear_users_department"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: departments.unassign_department_owners)",
+      "covered_by": {
+        "write": "departments_unassign_department_owners"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: departments.delete_department)",
+      "covered_by": {
+        "write": "departments_delete_department"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: export-markdown-from-doc.get_export_markdown_from_doc)",
+      "covered_by": {
+        "direct_read": "export-markdown-from-doc get-export-markdown-from-doc"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: docs.get_docs)",
+      "covered_by": {
+        "direct_read": "docs get-docs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: docs.create_doc)",
+      "covered_by": {
+        "write": "docs_create_doc"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: docs.add_content_to_doc_from_markdown)",
+      "covered_by": {
+        "write": "docs_add_content_to_doc_from_markdown"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: docs.import_doc_from_html)",
+      "covered_by": {
+        "write": "docs_import_doc_from_html"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: docs.update_doc_name)",
+      "covered_by": {
+        "write": "docs_update_doc_name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: docs.duplicate_doc)",
+      "covered_by": {
+        "write": "docs_duplicate_doc"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: docs.delete_doc)",
+      "covered_by": {
+        "write": "docs_delete_doc"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: docs.get_doc_version_history)",
+      "covered_by": {
+        "write": "docs_get_doc_version_history"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: docs.get_doc_version_diff)",
+      "covered_by": {
+        "write": "docs_get_doc_version_diff"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: favorites.get_favorites)",
+      "covered_by": {
+        "direct_read": "favorites get-favorites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: favorites.create_favorite)",
+      "covered_by": {
+        "write": "favorites_create_favorite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: favorites.update_favorite_position)",
+      "covered_by": {
+        "write": "favorites_update_favorite_position"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: favorites.delete_favorite)",
+      "covered_by": {
+        "write": "favorites_delete_favorite"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: folders.get_folders)",
+      "covered_by": {
+        "direct_read": "folders get-folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: folders.create_folder)",
+      "covered_by": {
+        "write": "folders_create_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: folders.update_folder)",
+      "covered_by": {
+        "write": "folders_update_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: folders.delete_folder)",
+      "covered_by": {
+        "write": "folders_delete_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: form.get_form)",
+      "covered_by": {
+        "direct_read": "form get-form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.create_form)",
+      "covered_by": {
+        "write": "form_create_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.create_form_question)",
+      "covered_by": {
+        "write": "form_create_form_question"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.create_form_tag)",
+      "covered_by": {
+        "write": "form_create_form_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.activate_form)",
+      "covered_by": {
+        "write": "form_activate_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.update_form)",
+      "covered_by": {
+        "write": "form_update_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.update_form_question)",
+      "covered_by": {
+        "write": "form_update_form_question"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.update_form_settings)",
+      "covered_by": {
+        "write": "form_update_form_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.set_form_password)",
+      "covered_by": {
+        "write": "form_set_form_password"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.shorten_form_url)",
+      "covered_by": {
+        "write": "form_shorten_form_url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.deactivate_form)",
+      "covered_by": {
+        "write": "form_deactivate_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.delete_question)",
+      "covered_by": {
+        "write": "form_delete_question"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: form.delete_form_tag)",
+      "covered_by": {
+        "write": "form_delete_form_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: groups.get_groups)",
+      "covered_by": {
+        "direct_read": "groups get-groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: groups.create_group)",
+      "covered_by": {
+        "write": "groups_create_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: groups.update_group)",
+      "covered_by": {
+        "write": "groups_update_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: groups.duplicate_group)",
+      "covered_by": {
+        "write": "groups_duplicate_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: groups.move_item_to_group)",
+      "covered_by": {
+        "write": "groups_move_item_to_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: groups.archive_group)",
+      "covered_by": {
+        "write": "groups_archive_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: groups.delete_group)",
+      "covered_by": {
+        "write": "groups_delete_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: items-page-by-column-values.get_items_page_by_column_values)",
+      "covered_by": {
+        "direct_read": "items-page-by-column-values get-items-page-by-column-values"
       }
     },
     {
@@ -20,16 +1631,485 @@
     },
     {
       "method": "GET",
-      "path": "/v2 (query: users)",
+      "path": "/v2 (query: items-page.filtering_items_by_name)",
       "covered_by": {
-        "stream": "users"
+        "direct_read": "items-page filtering-items-by-name"
       }
     },
     {
       "method": "GET",
-      "path": "/v2 (query: teams)",
+      "path": "/v2 (query: items-page.filtering_items_assigned_to_yourself_with_a_checkmark)",
       "covered_by": {
-        "stream": "teams"
+        "direct_read": "items-page filtering-items-assigned-to-yourself-with-a-checkmark"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: items-page.filtering_items_with_specific_status_and_people_column_values)",
+      "covered_by": {
+        "direct_read": "items-page filtering-items-with-specific-status-and-people-column-values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: items-page.filtering_items_with_specific_date_column_values_in_a_particular_group_that_are_not_assigned_to_yourself)",
+      "covered_by": {
+        "direct_read": "items-page filtering-items-with-specific-date-column-values-in-a-particular-group-that-are-not-assigned-to-yourself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: items-page.sorting_items_by_column_type)",
+      "covered_by": {
+        "direct_read": "items-page sorting-items-by-column-type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: next-items-page.get_next_items_page)",
+      "covered_by": {
+        "direct_read": "next-items-page get-next-items-page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: column-values-v2.get_column_values)",
+      "covered_by": {
+        "direct_read": "column-values-v2 get-column-values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: column-values-v2.using_fragments_to_get_column_specific_fields)",
+      "covered_by": {
+        "direct_read": "column-values-v2 using-fragments-to-get-column-specific-fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: items.get_items)",
+      "covered_by": {
+        "direct_read": "items get-items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.create_item)",
+      "covered_by": {
+        "write": "items_create_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.duplicate_item)",
+      "covered_by": {
+        "write": "items_duplicate_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.change_an_items_position)",
+      "covered_by": {
+        "write": "items_change_an_items_position"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.set_item_description_content)",
+      "covered_by": {
+        "write": "items_set_item_description_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.update_assets_on_item)",
+      "covered_by": {
+        "write": "items_update_assets_on_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.move_item_to_group)",
+      "covered_by": {
+        "write": "items_move_item_to_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.move_item_to_board)",
+      "covered_by": {
+        "write": "items_move_item_to_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.archive_item)",
+      "covered_by": {
+        "write": "items_archive_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.clear_item_updates)",
+      "covered_by": {
+        "write": "items_clear_item_updates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: items.delete_item)",
+      "covered_by": {
+        "write": "items_delete_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: managed-columns.get_managed_column)",
+      "covered_by": {
+        "direct_read": "managed-columns get-managed-column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: managed-columns.create_status_managed_column)",
+      "covered_by": {
+        "write": "managed_columns_create_status_managed_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: managed-columns.create_dropdown_managed_column)",
+      "covered_by": {
+        "write": "managed_columns_create_dropdown_managed_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: managed-columns.activate_managed_column)",
+      "covered_by": {
+        "write": "managed_columns_activate_managed_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: managed-columns.attach_dropdown_managed_column)",
+      "covered_by": {
+        "write": "managed_columns_attach_dropdown_managed_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: managed-columns.attach_status_managed_column)",
+      "covered_by": {
+        "write": "managed_columns_attach_status_managed_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: managed-columns.update_status_managed_column)",
+      "covered_by": {
+        "write": "managed_columns_update_status_managed_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: managed-columns.update_dropdown_managed_column)",
+      "covered_by": {
+        "write": "managed_columns_update_dropdown_managed_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: managed-columns.deactivate_managed_column)",
+      "covered_by": {
+        "write": "managed_columns_deactivate_managed_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: managed-columns.delete_managed_column)",
+      "covered_by": {
+        "write": "managed_columns_delete_managed_column"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: me.get_me)",
+      "covered_by": {
+        "direct_read": "me view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: notetaker.notetaker_meetings)",
+      "covered_by": {
+        "direct_read": "notetaker notetaker-meetings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: notification.get_notifications)",
+      "covered_by": {
+        "direct_read": "notification get-notifications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: notification.create_notification)",
+      "covered_by": {
+        "write": "notification_create_notification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: mute-board-settings.get_mute_board_settings)",
+      "covered_by": {
+        "direct_read": "mute-board-settings get-mute-board-settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: mute-board-settings.update_mute_board_settings)",
+      "covered_by": {
+        "write": "mute_board_settings_update_mute_board_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: notifications-settings.get_notifications_settings)",
+      "covered_by": {
+        "direct_read": "notifications-settings get-notifications-settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: object-relations.object_relations)",
+      "covered_by": {
+        "direct_read": "object-relations object-relations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-relations.create_object_relations)",
+      "covered_by": {
+        "write": "object_relations_create_object_relations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-relations.delete_object_relation)",
+      "covered_by": {
+        "write": "object_relations_delete_object_relation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: object-schemas.get_object_schemas)",
+      "covered_by": {
+        "direct_read": "object-schemas get-object-schemas"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.create_object_schema)",
+      "covered_by": {
+        "write": "object_schemas_create_object_schema"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.update_object_schema)",
+      "covered_by": {
+        "write": "object_schemas_update_object_schema"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.delete_object_schema)",
+      "covered_by": {
+        "write": "object_schemas_delete_object_schema"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.create_object_schema_columns)",
+      "covered_by": {
+        "write": "object_schemas_create_object_schema_columns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.update_object_schema_columns)",
+      "covered_by": {
+        "write": "object_schemas_update_object_schema_columns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.delete_object_schema_columns)",
+      "covered_by": {
+        "write": "object_schemas_delete_object_schema_columns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.set_object_schema_column_active_state)",
+      "covered_by": {
+        "write": "object_schemas_set_object_schema_column_active_state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.bulk_object_schema_column_actions)",
+      "covered_by": {
+        "write": "object_schemas_bulk_object_schema_column_actions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.connect_board_to_object_schema)",
+      "covered_by": {
+        "write": "object_schemas_connect_board_to_object_schema"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: object-schemas.detach_boards_from_object_schema)",
+      "covered_by": {
+        "write": "object_schemas_detach_boards_from_object_schema"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: objects.get_objects)",
+      "covered_by": {
+        "direct_read": "objects get-objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: objects.create_object)",
+      "covered_by": {
+        "write": "objects_create_object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: objects.update_object)",
+      "covered_by": {
+        "write": "objects_update_object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: objects.add_subscribers_to_object)",
+      "covered_by": {
+        "write": "objects_add_subscribers_to_object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: objects.archive_object)",
+      "covered_by": {
+        "write": "objects_archive_object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: objects.delete_object)",
+      "covered_by": {
+        "write": "objects_delete_object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: object-types-unique-keys.get_object_types_unique_keys)",
+      "covered_by": {
+        "direct_read": "object-types-unique-keys get-object-types-unique-keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: portfolio.create_portfolio_board)",
+      "covered_by": {
+        "write": "portfolio_create_portfolio_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: portfolio.create_project_board)",
+      "covered_by": {
+        "write": "portfolio_create_project_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: portfolio.convert_board_to_project)",
+      "covered_by": {
+        "write": "portfolio_convert_board_to_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: portfolio.connect_project_to_portfolio)",
+      "covered_by": {
+        "write": "portfolio_connect_project_to_portfolio"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: replies.get_replies)",
+      "covered_by": {
+        "direct_read": "replies get-replies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: resource-directory.get_directory_resources)",
+      "covered_by": {
+        "direct_read": "resource-directory get-directory-resources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: resource-directory.update_directory_resources_attributes)",
+      "covered_by": {
+        "write": "resource_directory_update_directory_resources_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: search.search_across_entities)",
+      "covered_by": {
+        "direct_read": "search search-across-entities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: sequences.allowed_sequences_to_enroll)",
+      "covered_by": {
+        "direct_read": "sequences allowed-sequences-to-enroll"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: sequences.enroll_items_to_sequence)",
+      "covered_by": {
+        "write": "sequences_enroll_items_to_sequence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: subitems.get_subitems)",
+      "covered_by": {
+        "direct_read": "subitems get-subitems"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: subitems.create_subitem)",
+      "covered_by": {
+        "write": "subitems_create_subitem"
       }
     },
     {
@@ -40,27 +2120,458 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/v2 (mutation: tags-1.create_or_get_tag)",
+      "covered_by": {
+        "write": "tags_1_create_or_get_tag"
+      }
+    },
+    {
       "method": "GET",
-      "path": "/v2 (query: me)",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "bounded identity/connectivity check used by Check(), not a syncable object stream"
+      "path": "/v2 (query: teams)",
+      "covered_by": {
+        "stream": "teams"
       }
     },
     {
       "method": "POST",
-      "path": "/v2 (mutations: create_item, change_column_value, ...)",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented in this bundle; monday is read-only in this migration (legacy Write returns ErrUnsupportedOperation)"
+      "path": "/v2 (mutation: teams.create_team)",
+      "covered_by": {
+        "write": "teams_create_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: teams.add_teams_to_board)",
+      "covered_by": {
+        "write": "teams_add_teams_to_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: teams.add_users_to_team)",
+      "covered_by": {
+        "write": "teams_add_users_to_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: teams.add_teams_to_workspace)",
+      "covered_by": {
+        "write": "teams_add_teams_to_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: teams.assign_team_owners)",
+      "covered_by": {
+        "write": "teams_assign_team_owners"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: teams.remove_team_owners)",
+      "covered_by": {
+        "write": "teams_remove_team_owners"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: teams.remove_users_from_team)",
+      "covered_by": {
+        "write": "teams_remove_users_from_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: teams.delete_team)",
+      "covered_by": {
+        "write": "teams_delete_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: teams.delete_teams_from_a_board)",
+      "covered_by": {
+        "write": "teams_delete_teams_from_a_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: teams.delete_teams_from_a_workspace)",
+      "covered_by": {
+        "write": "teams_delete_teams_from_a_workspace"
       }
     },
     {
       "method": "GET",
-      "path": "/v2 (query: workspaces, folders, updates, activity_logs)",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/v2 (query: templates.get_template_installation_status)",
+      "covered_by": {
+        "direct_read": "templates get-template-installation-status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: templates.use_template)",
+      "covered_by": {
+        "write": "templates_use_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: updates.get_updates)",
+      "covered_by": {
+        "direct_read": "updates get-updates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: updates.create_update)",
+      "covered_by": {
+        "write": "updates_create_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: updates.like_update)",
+      "covered_by": {
+        "write": "updates_like_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: updates.unlike_update)",
+      "covered_by": {
+        "write": "updates_unlike_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: updates.edit_update)",
+      "covered_by": {
+        "write": "updates_edit_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: updates.pin_to_top)",
+      "covered_by": {
+        "write": "updates_pin_to_top"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: updates.unpin_from_top)",
+      "covered_by": {
+        "write": "updates_unpin_from_top"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: updates.clear_item_updates)",
+      "covered_by": {
+        "write": "updates_clear_item_updates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: updates.delete_update)",
+      "covered_by": {
+        "write": "updates_delete_update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: viewers.get_viewers)",
+      "covered_by": {
+        "direct_read": "viewers get-viewers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: users)",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: users.get_user_configs)",
+      "covered_by": {
+        "direct_read": "users get-user-configs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.add_users_to_board)",
+      "covered_by": {
+        "write": "users_add_users_to_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.add_users_to_team)",
+      "covered_by": {
+        "write": "users_add_users_to_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.add_users_to_workspace)",
+      "covered_by": {
+        "write": "users_add_users_to_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.activate_users)",
+      "covered_by": {
+        "write": "users_activate_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.invite_users)",
+      "covered_by": {
+        "write": "users_invite_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.update_multiple_users)",
+      "covered_by": {
+        "write": "users_update_multiple_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.update_email_domain)",
+      "covered_by": {
+        "write": "users_update_email_domain"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.update_users_role)",
+      "covered_by": {
+        "write": "users_update_users_role"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.delete_subscribers_from_a_board)",
+      "covered_by": {
+        "write": "users_delete_subscribers_from_a_board"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.clear_users_department)",
+      "covered_by": {
+        "write": "users_clear_users_department"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.remove_users_from_team)",
+      "covered_by": {
+        "write": "users_remove_users_from_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.delete_users_from_workspace)",
+      "covered_by": {
+        "write": "users_delete_users_from_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: users.deactivate_users)",
+      "covered_by": {
+        "write": "users_deactivate_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: validations.get_validations)",
+      "covered_by": {
+        "direct_read": "validations get-validations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: validations.add_required_column)",
+      "covered_by": {
+        "write": "validations_add_required_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: validations.remove_required_column)",
+      "covered_by": {
+        "write": "validations_remove_required_column"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: validations.create_validation_rule)",
+      "covered_by": {
+        "write": "validations_create_validation_rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: validations.update_validation_rule)",
+      "covered_by": {
+        "write": "validations_update_validation_rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: validations.delete_validation_rule)",
+      "covered_by": {
+        "write": "validations_delete_validation_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: version.get_version)",
+      "covered_by": {
+        "direct_read": "version get-version"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: versions.get_versions)",
+      "covered_by": {
+        "direct_read": "versions get-versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: webhooks.get_webhooks)",
+      "covered_by": {
+        "direct_read": "webhooks get-webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: webhooks.create_webhook)",
+      "covered_by": {
+        "write": "webhooks_create_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: webhooks.delete_webhook)",
+      "covered_by": {
+        "write": "webhooks_delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: workspaces.get_workspaces)",
+      "covered_by": {
+        "direct_read": "workspaces get-workspaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: workspaces.create_workspace)",
+      "covered_by": {
+        "write": "workspaces_create_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: workspaces.update_workspace)",
+      "covered_by": {
+        "write": "workspaces_update_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: workspaces.add_teams_to_workspace)",
+      "covered_by": {
+        "write": "workspaces_add_teams_to_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: workspaces.add_users_to_workspace)",
+      "covered_by": {
+        "write": "workspaces_add_users_to_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: workspaces.delete_workspace)",
+      "covered_by": {
+        "write": "workspaces_delete_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: workspaces.delete_teams_from_workspace)",
+      "covered_by": {
+        "write": "workspaces_delete_teams_from_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: workspaces.delete_users_from_workspace)",
+      "covered_by": {
+        "write": "workspaces_delete_users_from_workspace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: custom-activity.get_custom_activity)",
+      "covered_by": {
+        "direct_read": "custom-activity get-custom-activity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: custom-activity.create_custom_activity)",
+      "covered_by": {
+        "write": "custom_activity_create_custom_activity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: custom-activity.delete_custom_activity)",
+      "covered_by": {
+        "write": "custom_activity_delete_custom_activity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: timeline-ea.get_timeline)",
+      "covered_by": {
+        "direct_read": "timeline-ea get-timeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: timeline-item-ea.get_timeline_item)",
+      "covered_by": {
+        "direct_read": "timeline-item-ea get-timeline-item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: timeline-item-ea.create_timeline_item)",
+      "covered_by": {
+        "write": "timeline_item_ea_create_timeline_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutation: timeline-item-ea.delete_timeline_item)",
+      "covered_by": {
+        "write": "timeline_item_ea_delete_timeline_item"
       }
     }
   ]

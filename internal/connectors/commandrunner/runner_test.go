@@ -459,7 +459,7 @@ func TestRunReverseETLRejectsMissingWriteAndUnsupportedFlagMapping(t *testing.T)
 	}
 }
 
-func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
+func TestRunImplementedOperationCommandRequiresDirectReadMetadata(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
 			{
@@ -472,19 +472,18 @@ func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
 	}}
 
 	_, err := Run(context.Background(), connector, Request{Path: []string{"project", "list"}}, func(connectors.Record) error {
-		t.Fatal("emit called for feature-gated operation command")
+		t.Fatal("emit called for incomplete operation command")
 		return nil
 	})
 	if err == nil {
-		t.Fatal("Run error = nil, want feature gate")
+		t.Fatal("Run error = nil, want metadata rejection")
 	}
 	var blocked *BlockedCommandError
 	if !errors.As(err, &blocked) {
 		t.Fatalf("Run error type = %T, want BlockedCommandError", err)
 	}
-	if !strings.Contains(err.Error(), "operation github.projects.list") ||
-		!strings.Contains(err.Error(), "executor is not implemented") {
-		t.Fatalf("Run error = %q, want operation feature gate", err.Error())
+	if !strings.Contains(err.Error(), "direct_read commands require exactly one api_surface endpoint") {
+		t.Fatalf("Run error = %q, want missing api_surface endpoint rejection", err.Error())
 	}
 }
 
@@ -685,6 +684,49 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	}
 	if connector.directReadReq.OutputPolicy != "github_contents_file_metadata" {
 		t.Fatalf("direct read output policy = %q, want github_contents_file_metadata", connector.directReadReq.OutputPolicy)
+	}
+}
+
+func TestRunDirectReadGraphQLOperation(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "thing view",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "acme.thing.view",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/graphql (query: thing.view)"},
+				},
+				OutputPolicy: "graphql_json",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "id", Type: "string", MapsTo: "query.id"},
+				},
+			},
+		},
+	}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:  []string{"thing", "view"},
+		Flags: map[string][]string{"id": {"123"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("DirectRead = nil, want result")
+	}
+	if connector.directReadReq.Operation != "acme.thing.view" {
+		t.Fatalf("operation = %q, want acme.thing.view", connector.directReadReq.Operation)
+	}
+	if connector.directReadReq.Query["id"] != "123" {
+		t.Fatalf("query id = %q, want 123", connector.directReadReq.Query["id"])
+	}
+	if connector.directReadReq.OutputPolicy != "graphql_json" {
+		t.Fatalf("output policy = %q, want graphql_json", connector.directReadReq.OutputPolicy)
 	}
 }
 

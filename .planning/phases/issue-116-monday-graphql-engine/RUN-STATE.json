@@ -1,0 +1,21 @@
+{
+  "phase": "issue-116-monday-graphql-engine",
+  "issue": 116,
+  "parent_issue": 82,
+  "branch": "feat/82-monday-cli-parity",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-116-monday-graphql-engine --skip-research",
+    "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "targeted #116 tests passed; full parent verification pending",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "#116 unlocks safe Monday direct-read execution for #115; execute locally due missing subagent tool."
+    }
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}

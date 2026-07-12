@@ -924,6 +924,63 @@ func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedMondayCLISurface(t *testing.T) {
+	b, err := Load(defs.FS, "monday")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, monday): %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("Monday CLISurface is nil; defs.FS must embed cli_surface.json")
+	}
+	if b.CLISurface.Usage != "pm monday <command> <subcommand> [flags]" {
+		t.Fatalf("Monday CLISurface usage = %q", b.CLISurface.Usage)
+	}
+
+	wantStreams := map[string]string{
+		"board list": "boards",
+		"item list":  "items",
+		"user list":  "users",
+		"team list":  "teams",
+		"tag list":   "tags",
+	}
+	gotStreams := map[string]string{}
+	for _, cmd := range b.CLISurface.Commands {
+		if cmd.Availability == "implemented" && cmd.Intent == "etl" {
+			gotStreams[cmd.Path] = cmd.Stream
+		}
+		if cmd.Intent == "raw_api" || cmd.Intent == "direct_write" {
+			t.Fatalf("Monday command %q exposes forbidden intent %q", cmd.Path, cmd.Intent)
+		}
+	}
+	for path, stream := range wantStreams {
+		if gotStreams[path] != stream {
+			t.Fatalf("Monday implemented command %q maps to stream %q, want %q (all streams: %+v)", path, gotStreams[path], stream, gotStreams)
+		}
+	}
+	if len(gotStreams) != len(wantStreams) {
+		t.Fatalf("Monday implemented commands = %+v, want exactly %+v", gotStreams, wantStreams)
+	}
+}
+
+func TestBundleLoadEmbeddedMondayOperationLedger(t *testing.T) {
+	b, err := Load(os.DirFS("../../../internal/connectors/defs"), "monday")
+	if err != nil {
+		t.Fatalf("Load(os.DirFS, monday): %v", err)
+	}
+	if b.Surface == nil {
+		t.Fatalf("Monday Surface is nil; api_surface.json must load from disk")
+	}
+	if b.Surface.OperationLedgerVersion != 1 {
+		t.Fatalf("Monday operation_ledger_version = %d, want 1", b.Surface.OperationLedgerVersion)
+	}
+	if got := len(b.Surface.Endpoints); got != 367 {
+		t.Fatalf("Monday api_surface endpoints = %d, want 367", got)
+	}
+	if got := len(b.Operations); got != 367 {
+		t.Fatalf("Monday operations = %d, want 367", got)
+	}
+}
+
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

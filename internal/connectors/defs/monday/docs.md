@@ -1,11 +1,15 @@
 # Overview
 
-Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API.
-Read-only.
+Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API and
+models the full canonical monday.com GraphQL operation surface.
 
 Readable streams: `boards`, `items`, `users`, `teams`, `tags`.
 
-This connector is read-only; no write actions are declared.
+CLI command surface metadata covers all 367 canonical GraphQL reference operations: 5 stream-backed
+ETL commands, 82 bounded fixed-document direct-read commands, and 280 named reverse-ETL write
+actions. Fixed direct reads execute bundled GraphQL query documents only; no arbitrary GraphQL
+document input is accepted. Mutation commands are named reverse-ETL actions and require the normal
+plan → preview → approval → execute workflow before any connector dispatch.
 
 Service API documentation: https://developer.monday.com/api-reference/docs.
 
@@ -64,12 +68,25 @@ filter or advance reads.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external monday.com GraphQL API read of
-boards/items/users/teams/tags.
+Read behavior: external monday.com GraphQL API reads through declared streams and bounded fixed
+GraphQL direct-read operations. Direct-read documents are bundled from the official monday.com
+examples and cannot be replaced by user-supplied GraphQL; operations whose official examples require
+object IDs remain bounded example reads until a follow-up adds typed selector flags.
+
+Write behavior: all 280 documented GraphQL mutations are modeled as named reverse-ETL actions in
+`writes.json`. Live mutation dispatch is owned by the Monday WriteHook and remains blocked until each
+action has a hardened per-operation executor body; previews still validate and stage named actions
+without making network calls. This preserves full-surface metadata without introducing a raw GraphQL
+mutation escape hatch.
+
+Sensitive/admin mutation policy: Sensitive or admin mutation specs require non-inline input handling
+(`env_or_stdin`), redaction fields for tokens, webhook URLs, email/file-like inputs, and typed confirmation
+before any future live executor can run plan → preview → approval → execute.
 
 ## Known limits
 
 - Batch defaults: read_page_size=50.
-- API coverage includes 5 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  non_data_endpoint=1, out_of_scope=2.
+- API coverage includes 367 modeled GraphQL operations: 5 stream-backed reads, 82 fixed direct
+  reads, and 280 named reverse-ETL write actions.
+- Mutation live dispatch is intentionally blocked by the Monday WriteHook until per-action typed
+  executors are hardened; no generic mutation body is accepted.

@@ -1,0 +1,23 @@
+{
+  "phase": "issue-82-monday-cli-parity-parent",
+  "parent_issue": 82,
+  "parent_branch": "feat/82-monday-cli-parity",
+  "gsd": {
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "passed",
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-82-monday-cli-parity --skip-research",
+    "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "verificationPassed": true,
+  "verificationBlocker": "local gates passed; automated review/human parent merge gate pending",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No Pi subagent tool is available in this harness; parent orchestrator executed #111-#117 locally and kept issue-scoped evidence."
+    }
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}
