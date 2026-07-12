@@ -59,6 +59,9 @@ type AnnotationsContextValue = {
   removeBookmark: (id: string) => Promise<void>;
   activeId: string | null;
   setActiveId: (id: string | null) => void;
+  viewerAdmin: boolean;
+  sheetOpen: boolean;
+  setSheetOpen: (open: boolean) => void;
   hovered: { id: string; rect: DOMRect } | null;
   setHovered: (value: { id: string; rect: DOMRect } | null) => void;
   requestSignIn: () => void;
@@ -121,17 +124,22 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
   const [hovered, setHovered] = useState<{ id: string; rect: DOMRect } | null>(null);
   const [signInOpen, setSignInOpen] = useState(false);
   const [announcement, setAnnouncement] = useState('');
+  const [viewerAdmin, setViewerAdmin] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const restoredRef = useRef(false);
 
   useEffect(() => {
     const controller = new AbortController();
     fetch(`/api/comments?slug=${encodeURIComponent(slug)}`, { signal: controller.signal })
       .then((response) => (response.ok ? response.json() : { comments: [] }))
-      .then((data: { comments: CommentDto[] }) => setComments(data.comments))
+      .then((data: { comments: CommentDto[]; viewer?: { admin: boolean } }) => {
+        setComments(data.comments);
+        setViewerAdmin(data.viewer?.admin ?? false);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
     return () => controller.abort();
-  }, [slug]);
+  }, [slug, signedIn]);
 
   useEffect(() => {
     if (!signedIn) {
@@ -316,6 +324,9 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
     removeBookmark,
     activeId,
     setActiveId,
+    viewerAdmin,
+    sheetOpen,
+    setSheetOpen,
     hovered,
     setHovered,
     requestSignIn,

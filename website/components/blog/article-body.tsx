@@ -1,11 +1,14 @@
 'use client';
 
+import { useRef } from 'react';
 import { CornerBox } from '@/components/ui/corner-box';
 import type { BlogSection } from '@/lib/blog';
 import { AnnotationsProvider } from '@/components/blog/annotations-provider';
 import { HighlightedBlock, HoverPreview } from '@/components/blog/highlight-text';
 import { SelectionPopover } from '@/components/blog/selection-popover';
 import { CommentComposer } from '@/components/blog/comment-composer';
+import { MarginNotesRail } from '@/components/blog/margin-notes-rail';
+import { CommentsSheet } from '@/components/blog/comments-sheet';
 
 function sectionId(index: number): string {
   return `section-${index + 1}`;
@@ -26,9 +29,11 @@ export function ArticleBody({
   sections: BlogSection[];
   summary: string;
 }) {
+  const gridRef = useRef<HTMLDivElement>(null);
+
   return (
     <AnnotationsProvider slug={slug}>
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_14rem]">
+      <div ref={gridRef} className="relative grid gap-10 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div className="min-w-0" data-annotation-root>
           {sections.map((section, index) => (
             <section key={section.heading} id={sectionId(index)} className="mb-12 scroll-mt-24">
@@ -92,19 +97,21 @@ export function ArticleBody({
           ))}
         </div>
 
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <aside className="lg:self-start">
           <CornerBox className="p-4">
             <p className="font-mono text-[10px] uppercase tracking-widest text-text-disabled">
               Summary
             </p>
             <p className="mt-3 text-[13px] leading-relaxed text-text-tertiary">{summary}</p>
           </CornerBox>
+          <MarginNotesRail containerRef={gridRef} />
         </aside>
       </div>
 
       <SelectionPopover />
       <CommentComposer />
       <HoverPreview />
+      <CommentsSheet sections={sections} />
     </AnnotationsProvider>
   );
 }
