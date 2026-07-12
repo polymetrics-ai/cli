@@ -17,6 +17,8 @@
 | Raw transcript ingestion | `.jsonl` rejected before open; strict bounded `.json` fixture shape |
 | Secret or private-path leakage | structural string scanner and no arbitrary event payload |
 | Expectation echo masquerading as validation | semantic event matcher derives violation first |
+| Decoy or cross-resource fact splice | enumerate bounded correlated tuples; enforce scope/resource identity; reject multi-policy ambiguity |
+| Caller-controlled value reflected in replay output | closed incident/observation enums and incident-to-derived-policy binding |
 | Resource exhaustion | maximum fixture size, bounded fixture count, bounded events and strings |
 | Ambiguous automation result | stable JSON fields and distinct 64/65/78 process exits |
 | Symlink/path surprise | regular-file check; directory loader rejects symlink entries |

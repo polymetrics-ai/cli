@@ -27,12 +27,13 @@
 
 ## Handoff Summary
 
-All behavior tests precede production code; exact red results are in `TDD-LEDGER.md`.
+All behavior tests preceded their implementation or review correction; final suite is green.
 
 ## Verification Evidence
 
-Red confirmed only; no green gate is claimed.
+Red cycles plus targeted, race, CLI, isolated shell, aggregate Make, and full verify greens are
+recorded in `TDD-LEDGER.md` and `VERIFICATION.md`.
 
 ## Unresolved Risks
 
-- Implementation may reveal stricter fixture validation edge cases; tests must not be weakened.
+- No remaining P0/P1. Future corpus changes must preserve truth/source citations and closed output.

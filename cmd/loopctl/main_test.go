@@ -43,6 +43,28 @@ func TestRunHelpAndUnknownCommands(t *testing.T) {
 	}
 }
 
+func TestRunDoesNotEchoUntrustedCommandOrFlag(t *testing.T) {
+	t.Parallel()
+
+	canary := strings.Join([]string{"synthetic", "private", "argument"}, "-")
+	tests := [][]string{
+		{canary},
+		{"replay", "--" + canary},
+		{"safety", "status", "--" + canary},
+	}
+	for _, args := range tests {
+		var stdout bytes.Buffer
+		var stderr bytes.Buffer
+		code := run(args, &stdout, &stderr)
+		if code != 64 {
+			t.Errorf("run(%v) exit = %d, want 64", args, code)
+		}
+		if strings.Contains(stdout.String(), canary) || strings.Contains(stderr.String(), canary) {
+			t.Errorf("run(%v) echoed untrusted argument", args)
+		}
+	}
+}
+
 func TestRunSafetyCommands(t *testing.T) {
 	t.Parallel()
 

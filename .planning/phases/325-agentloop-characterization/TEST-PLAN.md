@@ -13,6 +13,13 @@
 - Assert dead-worker evidence distinguishes phantom dispatch from executed-without-handoff and
   false-green evidence includes a missing required artifact plus later repo-gate failure.
 - Assert directory replay is filename-sorted and repeated marshaling is byte-identical.
+- Prepend wrong-scope decoys, combine two valid incident classes, and mutate shared resource IDs;
+  prove tuple enumeration finds real patterns and rejects ambiguity/cross-resource splices.
+- Preserve audited historical truth: dead-worker fail-open, non-durable HALT, same-head merge-state
+  race, turn-26 terminal ledger divergence, full blocked S3 wait precedence, and valid final
+  human-ready projection.
+- Reject arbitrary output canaries in every observation field, unknown incident IDs, and a canonical
+  incident ID paired with another incident's facts.
 - Reject unknown fields, trailing JSON, incomplete/mismatched/non-synthetic identity, non-monotonic
   sequence, unknown event kind, `.jsonl`, oversize input, raw command/prompt/session path, and a
   sensitive string assembled only in test memory.

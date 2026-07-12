@@ -16,21 +16,21 @@
 
 ## Slice boundaries
 
-- [ ] id:fixture-replay type:behavior — add thirteen strict synthetic fixtures, typed decoding,
+- [x] id:fixture-replay type:behavior — add thirteen strict synthetic fixtures, typed decoding,
   semantic replay rules, expectation matching, deterministic ordering, and stable validation codes.
-- [ ] id:structural-redaction type:behavior — reject raw prompt/command/session-path surfaces and
+- [x] id:structural-redaction type:behavior — reject raw prompt/command/session-path surfaces and
   secret-shaped strings through one structural scanner; prove with runtime-constructed canaries.
-- [ ] id:safety-policy type:behavior — add immutable closed safety status, tracked entrypoint
+- [x] id:safety-policy type:behavior — add immutable closed safety status, tracked entrypoint
   inventory, and typed guard denial with no enable route.
-- [ ] id:loopctl-cli type:behavior — add replay and safety command wiring with tested help,
+- [x] id:loopctl-cli type:behavior — add replay and safety command wiring with tested help,
   stdout/stderr, JSON, and exit-code contracts.
-- [ ] id:driver-fuse type:behavior — guard both tracked drivers before persistence or launch while
+- [x] id:driver-fuse type:behavior — guard both tracked drivers before persistence or launch while
   retaining help.
-- [ ] id:entrypoint-enumeration type:behavior — add shell tests that compare marked driver wrappers
+- [x] id:entrypoint-enumeration type:behavior — add shell tests that compare marked driver wrappers
   to the canonical inventory and prove run/resume cannot invoke harmless stubs.
-- [ ] id:make-gate type:behavior — add `agent-loop-test` and include it in `make verify` without
+- [x] id:make-gate type:behavior — add `agent-loop-test` and include it in `make verify` without
   weakening any existing target.
-- [ ] id:phase-memory type:docs — keep GSD ledger, verification, summary, prompts, run state, role
+- [x] id:phase-memory type:docs — keep GSD ledger, verification, summary, prompts, run state, role
   traces, and worker handoff synchronized with actual evidence.
 
 ## Strict TDD checkpoints

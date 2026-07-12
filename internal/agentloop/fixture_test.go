@@ -24,9 +24,9 @@ func TestIncidentFixturesReplay(t *testing.T) {
 		observedDecisionCorrect bool
 		observedOutcomeCorrect  bool
 	}{
-		{name: "dead worker", file: "dead_worker.json", violationCode: "WORKER_COMPLETION_UNPROVEN", requiredDecision: "retry", requiredOutcome: "correction_preserved_once", exitClass: "retry_required", observedDecisionCorrect: true, observedOutcomeCorrect: true},
+		{name: "dead worker", file: "dead_worker.json", violationCode: "WORKER_COMPLETION_UNPROVEN", requiredDecision: "retry", requiredOutcome: "correction_preserved_once", exitClass: "retry_required", observedDecisionCorrect: false, observedOutcomeCorrect: false},
 		{name: "false green", file: "false_green.json", violationCode: "VALIDATION_FALSE_GREEN", requiredDecision: "retry", requiredOutcome: "correction_preserved_once", exitClass: "retry_required"},
-		{name: "fabricated authority", file: "fabricated_authority.json", violationCode: "AUTHORITY_FABRICATED", requiredDecision: "halt", requiredOutcome: "halt_persisted", exitClass: "halt_required", observedDecisionCorrect: true, observedOutcomeCorrect: true},
+		{name: "fabricated authority", file: "fabricated_authority.json", violationCode: "AUTHORITY_FABRICATED", requiredDecision: "halt", requiredOutcome: "halt_persisted", exitClass: "halt_required", observedDecisionCorrect: true, observedOutcomeCorrect: false},
 		{name: "halt worker survival", file: "halt_worker_survival.json", violationCode: "HALT_REVOCATION_MISSING", requiredDecision: "halt", requiredOutcome: "halt_persisted_children_revoked", exitClass: "halt_required", observedDecisionCorrect: true},
 		{name: "mega turn", file: "mega_turn.json", violationCode: "TURN_SUPERVISION_EXCEEDED", requiredDecision: "halt", requiredOutcome: "halt_persisted", exitClass: "halt_required"},
 		{name: "dual writer", file: "dual_writer.json", violationCode: "WORKTREE_DUAL_WRITER", requiredDecision: "halt", requiredOutcome: "halt_persisted", exitClass: "halt_required"},
@@ -129,10 +129,49 @@ func TestCorrectNegativeVerdictsRemainLoadBearing(t *testing.T) {
 	}
 }
 
+func TestFabricatedAuthorityPreservesCorrectHaltAndNonDurableOutcome(t *testing.T) {
+	t.Parallel()
+
+	fixture := mustLoadTestFixture(t, "fabricated_authority.json")
+	if fixture.Expected.ObservedDecision != "halt" || fixture.Expected.ObservedDecisionCorrect == nil ||
+		!*fixture.Expected.ObservedDecisionCorrect {
+		t.Fatalf("observed decision = %q/%v, want correct halt", fixture.Expected.ObservedDecision, fixture.Expected.ObservedDecisionCorrect)
+	}
+	if fixture.Expected.ObservedOutcome != "driver_exited_without_latch" ||
+		fixture.Expected.ObservedOutcomeCorrect == nil || *fixture.Expected.ObservedOutcomeCorrect {
+		t.Fatalf("observed outcome = %q/%v, want incorrect non-durable latch", fixture.Expected.ObservedOutcome, fixture.Expected.ObservedOutcomeCorrect)
+	}
+	if fixture.Expected.RequiredOutcome != "halt_persisted" {
+		t.Fatalf("required outcome = %q, want halt_persisted", fixture.Expected.RequiredOutcome)
+	}
+	result, err := Replay(fixture)
+	if err != nil {
+		t.Fatalf("Replay() error = %v", err)
+	}
+	if result.ObservedOutcome != "driver_exited_without_latch" || result.ObservedOutcomeCorrect {
+		t.Fatalf("replay observed outcome = %q/%t, want incorrect non-durable latch", result.ObservedOutcome, result.ObservedOutcomeCorrect)
+	}
+
+	mutated := cloneFixture(t, fixture)
+	mutated.Expected.ObservedOutcome = mutated.Expected.RequiredOutcome
+	_, err = Replay(mutated)
+	assertValidationCode(t, err, "FIXTURE_EXPECTATION_INVALID")
+}
+
 func TestDeadWorkerFixtureSeparatesPhantomAndMissingHandoff(t *testing.T) {
 	t.Parallel()
 
-	result, err := Replay(mustLoadTestFixture(t, "dead_worker.json"))
+	fixture := mustLoadTestFixture(t, "dead_worker.json")
+	if fixture.Expected.ObservedDecision != "proceed" || fixture.Expected.ObservedOutcome != "unproven_completion_accepted" ||
+		fixture.Expected.ObservedDecisionCorrect == nil || *fixture.Expected.ObservedDecisionCorrect ||
+		fixture.Expected.ObservedOutcomeCorrect == nil || *fixture.Expected.ObservedOutcomeCorrect {
+		t.Fatalf("dead-worker observation = %+v, want incorrect fail-open proceed", fixture.Expected)
+	}
+	if !hasFact(fixture, "stage_decision", "proceed") {
+		t.Fatal("dead-worker fixture lacks the observed fail-open stage decision")
+	}
+
+	result, err := Replay(fixture)
 	if err != nil {
 		t.Fatalf("Replay() error = %v", err)
 	}
@@ -141,6 +180,87 @@ func TestDeadWorkerFixtureSeparatesPhantomAndMissingHandoff(t *testing.T) {
 	}
 	if !slices.Contains(result.ReasonCodes, "HANDOFF_MISSING") {
 		t.Fatalf("reason codes = %v, want HANDOFF_MISSING", result.ReasonCodes)
+	}
+}
+
+func TestMergeAttestationStalesOnStateNotHead(t *testing.T) {
+	t.Parallel()
+
+	fixture := mustLoadTestFixture(t, "merge_stale_attestation.json")
+	for _, event := range fixture.Events {
+		if event.Fact.Kind == "head_state" {
+			t.Fatal("stale-attestation fixture invented a head movement")
+		}
+		if event.Binding.HeadSHA != fixture.Binding.HeadSHA {
+			t.Fatal("stale-attestation fixture changed its exact head binding")
+		}
+	}
+	state := eventByFactKind(t, &fixture, "merge_state")
+	if state.Fact.Before != "open" || state.Fact.After != "merged" {
+		t.Fatalf("merge state = %s -> %s, want open -> merged", state.Fact.Before, state.Fact.After)
+	}
+	if !hasFact(fixture, "validator_decision", "proceed") {
+		t.Fatal("stale-attestation fixture lacks the stale validator proceed")
+	}
+	result, err := Replay(fixture)
+	if err != nil {
+		t.Fatalf("Replay() error = %v", err)
+	}
+	if !slices.Contains(result.ReasonCodes, "MERGE_STATE_CHANGED_DURING_VALIDATION") {
+		t.Fatalf("reason codes = %v, want MERGE_STATE_CHANGED_DURING_VALIDATION", result.ReasonCodes)
+	}
+}
+
+func TestFinalHumanReadyGateMayProjectDone(t *testing.T) {
+	t.Parallel()
+
+	fixture := cloneFixture(t, mustLoadTestFixture(t, "terminal_projection_mismatch.json"))
+	factByKind(t, &fixture, "stage_state").After = "human_ready"
+	factByKind(t, &fixture, "terminal_state").After = "human_gate"
+	factByKind(t, &fixture, "terminal_projection").After = "done"
+	_, err := Replay(fixture)
+	assertValidationCode(t, err, "FIXTURE_INCIDENT_UNCLASSIFIED")
+}
+
+func TestFinalHumanReadyWaitFactsMayProjectDone(t *testing.T) {
+	t.Parallel()
+
+	fixture := cloneFixture(t, mustLoadTestFixture(t, "interim_human_wait.json"))
+	factByKind(t, &fixture, "stage_state").After = "human_ready"
+	_, err := Replay(fixture)
+	assertValidationCode(t, err, "FIXTURE_INCIDENT_UNCLASSIFIED")
+}
+
+func TestBlockedHumanWaitTakesWaitPrecedence(t *testing.T) {
+	t.Parallel()
+
+	fixture := mustLoadTestFixture(t, "interim_human_wait.json")
+	for kind, after := range map[string]string{
+		"stage_state":         "blocked",
+		"human_wait":          "active",
+		"terminal_state":      "human_gate",
+		"terminal_projection": "done",
+	} {
+		if !hasFact(fixture, kind, after) {
+			t.Fatalf("interim wait fixture lacks %s=%s", kind, after)
+		}
+	}
+	policies := derivePolicies(fixture.Events)
+	if len(policies) != 1 || policies[0].violationCode != "HUMAN_WAIT_PROJECTED_FINAL" {
+		t.Fatalf("derived policies = %+v, want one HUMAN_WAIT_PROJECTED_FINAL wait policy", policies)
+	}
+}
+
+func TestTerminalMismatchPreservesTurn26LedgerDivergence(t *testing.T) {
+	t.Parallel()
+
+	fixture := mustLoadTestFixture(t, "terminal_projection_mismatch.json")
+	if !hasFact(fixture, "stage_state", "running") || !hasFact(fixture, "terminal_state", "none") ||
+		!hasFact(fixture, "terminal_projection", "human_gate") || !hasFact(fixture, "validator_decision", "proceed") {
+		t.Fatal("terminal mismatch fixture lacks the canonical-running/stale-human-gate/proceed fact set")
+	}
+	if fixture.Expected.ObservedDecision != "proceed" || fixture.Expected.ObservedOutcome != "divergent_terminal_state_accepted" {
+		t.Fatalf("terminal observation = %+v, want accepted divergent state", fixture.Expected)
 	}
 }
 
@@ -153,6 +273,41 @@ func TestFalseGreenUsesMissingArtifactAndLaterGateFailureFacts(t *testing.T) {
 	}
 	if !hasFact(fixture, "repo_gate", "failed") {
 		t.Fatal("false-green fixture lacks typed later repo-gate failure fact")
+	}
+	turns := make(map[string]struct{})
+	for _, event := range fixture.Events {
+		turns[event.Binding.TurnID] = struct{}{}
+	}
+	if len(turns) != 2 {
+		t.Fatalf("false-green turn identities = %d, want 2", len(turns))
+	}
+}
+
+func TestCrossTurnAndControllerIdentityIsPreserved(t *testing.T) {
+	t.Parallel()
+
+	merge := mustLoadTestFixture(t, "merge_before_ratification.json")
+	if merge.Events[0].Binding.TurnID == merge.Events[1].Binding.TurnID ||
+		merge.Events[0].Binding.AttemptID == merge.Events[1].Binding.AttemptID ||
+		merge.Events[0].Binding.EvidenceID == merge.Events[1].Binding.EvidenceID {
+		t.Fatal("merge and ratification facts collapsed distinct turn/attempt/evidence identities")
+	}
+
+	dual := mustLoadTestFixture(t, "dual_writer.json")
+	first := eventByFactKind(t, &dual, "writer_lease")
+	secondIndex := -1
+	for i := range dual.Events {
+		if &dual.Events[i] != first && dual.Events[i].Fact.Kind == "writer_lease" {
+			secondIndex = i
+			break
+		}
+	}
+	if secondIndex < 0 {
+		t.Fatal("dual-writer fixture lacks second writer lease")
+	}
+	second := dual.Events[secondIndex]
+	if first.Binding.GenerationID == second.Binding.GenerationID || first.Binding.ControllerID == second.Binding.ControllerID {
+		t.Fatal("dual-writer fixture collapsed distinct controller generations")
 	}
 }
 
@@ -202,10 +357,17 @@ func TestReplayDerivesViolationsFromFacts(t *testing.T) {
 			},
 		},
 		{
-			name: "attested head does not move",
+			name: "verified head movement belongs to another resource",
+			file: "stale_verify_head.json",
+			mutate: func(t *testing.T, fixture *Fixture) {
+				factByKind(t, fixture, "head_state").ResourceID = "synthetic:head-resource:unrelated"
+			},
+		},
+		{
+			name: "attested merge state remains open",
 			file: "merge_stale_attestation.json",
 			mutate: func(t *testing.T, fixture *Fixture) {
-				fact := factByKind(t, fixture, "head_state")
+				fact := factByKind(t, fixture, "merge_state")
 				fact.After = fact.Before
 			},
 		},
@@ -235,6 +397,13 @@ func TestReplayDerivesViolationsFromFacts(t *testing.T) {
 			mutate: func(t *testing.T, fixture *Fixture) {
 				fixture.Events[0], fixture.Events[1] = fixture.Events[1], fixture.Events[0]
 				resequence(fixture.Events)
+			},
+		},
+		{
+			name: "ratification belongs to another integration resource",
+			file: "merge_before_ratification.json",
+			mutate: func(t *testing.T, fixture *Fixture) {
+				factByKind(t, fixture, "ratification_state").ResourceID = "synthetic:integration:unrelated"
 			},
 		},
 		{
@@ -288,7 +457,14 @@ func TestReplayDerivesViolationsFromFacts(t *testing.T) {
 			name: "terminal projection matches durable state",
 			file: "terminal_projection_mismatch.json",
 			mutate: func(t *testing.T, fixture *Fixture) {
-				factByKind(t, fixture, "terminal_projection").After = "human_gate"
+				factByKind(t, fixture, "terminal_projection").After = factByKind(t, fixture, "terminal_state").After
+			},
+		},
+		{
+			name: "final human-ready stage may project done",
+			file: "terminal_projection_mismatch.json",
+			mutate: func(t *testing.T, fixture *Fixture) {
+				factByKind(t, fixture, "stage_state").After = "human_ready"
 			},
 		},
 		{
@@ -323,6 +499,90 @@ func TestReplayDerivesViolationsFromFacts(t *testing.T) {
 			assertOneOfValidationCodes(t, err, "FIXTURE_INCIDENT_UNCLASSIFIED", "FIXTURE_EXPECTATION_MISMATCH")
 		})
 	}
+}
+
+func TestReplayRejectsCrossIdentityFactSplices(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name   string
+		file   string
+		kind   string
+		mutate func(binding *Binding)
+	}{
+		{name: "false green stage", file: "false_green.json", kind: "repo_gate", mutate: func(binding *Binding) { binding.StageID = "synthetic:stage:other" }},
+		{name: "mega turn identity", file: "mega_turn.json", kind: "stage_decision", mutate: func(binding *Binding) { binding.TurnID = "synthetic:turn:other" }},
+		{name: "merge ticket", file: "merge_before_ratification.json", kind: "ratification_state", mutate: func(binding *Binding) { binding.TicketID = "synthetic:ticket:other" }},
+		{name: "dirty evidence", file: "dirty_worktree.json", kind: "validator_decision", mutate: func(binding *Binding) { binding.EvidenceID = "synthetic:evidence:other" }},
+		{name: "human wait stage", file: "interim_human_wait.json", kind: "terminal_projection", mutate: func(binding *Binding) { binding.StageID = "synthetic:stage:other" }},
+		{name: "terminal ticket", file: "terminal_projection_mismatch.json", kind: "terminal_projection", mutate: func(binding *Binding) { binding.TicketID = "synthetic:ticket:other" }},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			fixture := cloneFixture(t, mustLoadTestFixture(t, tt.file))
+			event := eventByFactKind(t, &fixture, tt.kind)
+			tt.mutate(&event.Binding)
+			_, err := Replay(fixture)
+			assertValidationCode(t, err, "FIXTURE_INCIDENT_UNCLASSIFIED")
+		})
+	}
+}
+
+func TestReplayRejectsAmbiguousIncidentPatterns(t *testing.T) {
+	t.Parallel()
+
+	fixture := cloneFixture(t, mustLoadTestFixture(t, "false_green.json"))
+	second := cloneFixture(t, mustLoadTestFixture(t, "dirty_worktree.json"))
+	for i := range second.Events {
+		second.Events[i].Binding.RunID = fixture.Binding.RunID
+		second.Events[i].Binding.GenerationID = fixture.Binding.GenerationID
+		second.Events[i].Binding.ControllerID = fixture.Binding.ControllerID
+	}
+	fixture.Events = append(fixture.Events, second.Events...)
+	resequence(fixture.Events)
+
+	_, err := Replay(fixture)
+	assertValidationCode(t, err, "FIXTURE_INCIDENT_AMBIGUOUS")
+}
+
+func TestReplayFindsCorrelatedPatternAfterWrongScopeDecoy(t *testing.T) {
+	t.Parallel()
+
+	fixture := cloneFixture(t, mustLoadTestFixture(t, "dirty_worktree.json"))
+	dirtyEvents := append([]Event(nil), fixture.Events...)
+	falseGreen := cloneFixture(t, mustLoadTestFixture(t, "false_green.json"))
+	for i := range falseGreen.Events {
+		falseGreen.Events[i].Binding.RunID = fixture.Binding.RunID
+	}
+	decoy := falseGreen.Events[0]
+	decoy.Binding.StageID = "synthetic:stage:wrong_scope_decoy"
+	fixture.Events = append([]Event{decoy}, falseGreen.Events...)
+	fixture.Events = append(fixture.Events, dirtyEvents...)
+	resequence(fixture.Events)
+
+	_, err := Replay(fixture)
+	assertValidationCode(t, err, "FIXTURE_INCIDENT_AMBIGUOUS")
+}
+
+func TestReplayFindsSpecialRuleAfterWrongScopeDecoy(t *testing.T) {
+	t.Parallel()
+
+	fixture := cloneFixture(t, mustLoadTestFixture(t, "dirty_worktree.json"))
+	dirtyEvents := append([]Event(nil), fixture.Events...)
+	mergeAuthority := cloneFixture(t, mustLoadTestFixture(t, "merge_agent_authority.json"))
+	for i := range mergeAuthority.Events {
+		mergeAuthority.Events[i].Binding.RunID = fixture.Binding.RunID
+	}
+	decoy := mergeAuthority.Events[0]
+	decoy.Binding.StageID = "synthetic:stage:wrong_scope_decoy"
+	fixture.Events = append([]Event{decoy}, mergeAuthority.Events...)
+	fixture.Events = append(fixture.Events, dirtyEvents...)
+	resequence(fixture.Events)
+
+	_, err := Replay(fixture)
+	assertValidationCode(t, err, "FIXTURE_INCIDENT_AMBIGUOUS")
 }
 
 func TestLoadFixturesDeterministicOrder(t *testing.T) {
@@ -376,6 +636,26 @@ func TestLoadFixtureRejectsInvalidInputs(t *testing.T) {
 			fixture.Binding.RunID = "run-from-a-real-system"
 			return mustJSON(t, fixture)
 		}},
+		{name: "identity control character", code: "FIXTURE_IDENTITY_INVALID", data: func(t *testing.T) []byte {
+			fixture := cloneFixture(t, base)
+			fixture.IncidentID = "synthetic:incident:line\nterminal"
+			return mustJSON(t, fixture)
+		}},
+		{name: "identity empty segment", code: "FIXTURE_IDENTITY_INVALID", data: func(t *testing.T) []byte {
+			fixture := cloneFixture(t, base)
+			fixture.IncidentID = "synthetic::incident"
+			return mustJSON(t, fixture)
+		}},
+		{name: "fact value control character", code: "FIXTURE_IDENTITY_INVALID", data: func(t *testing.T) []byte {
+			fixture := cloneFixture(t, base)
+			fixture.Events[0].Fact.ResourceID = "synthetic:resource:line\x1bterminal"
+			return mustJSON(t, fixture)
+		}},
+		{name: "synthetic before value control character", code: "FIXTURE_IDENTITY_INVALID", data: func(t *testing.T) []byte {
+			fixture := cloneFixture(t, base)
+			fixture.Events[0].Fact.Before = "synthetic:value:line\nterminal"
+			return mustJSON(t, fixture)
+		}},
 		{name: "non monotonic event", code: "FIXTURE_EVENT_NON_MONOTONIC", data: func(t *testing.T) []byte {
 			fixture := cloneFixture(t, base)
 			fixture.Events[1].Sequence = fixture.Events[0].Sequence
@@ -417,10 +697,10 @@ func TestLoadFixtureRejectsInvalidInputs(t *testing.T) {
 			return mustJSON(t, fixture)
 		}},
 		{name: "missing observed decision correctness", code: "FIXTURE_REQUIRED_FIELD_MISSING", data: func(t *testing.T) []byte {
-			return bytes.Replace(mustJSON(t, base), []byte(`"observed_decision_correct":true,`), nil, 1)
+			return bytes.Replace(mustJSON(t, base), []byte(`"observed_decision_correct":false,`), nil, 1)
 		}},
 		{name: "missing observed outcome correctness", code: "FIXTURE_REQUIRED_FIELD_MISSING", data: func(t *testing.T) []byte {
-			return bytes.Replace(mustJSON(t, base), []byte(`"observed_outcome_correct":true,`), nil, 1)
+			return bytes.Replace(mustJSON(t, base), []byte(`"observed_outcome_correct":false,`), nil, 1)
 		}},
 	}
 
@@ -445,6 +725,18 @@ func TestLoadFixtureRejectsOversizedFileBeforeDecode(t *testing.T) {
 		t.Fatalf("os.WriteFile(): %v", err)
 	}
 	_, err := LoadFixture(path)
+	assertValidationCode(t, err, "FIXTURE_TOO_LARGE")
+}
+
+func TestDecodeFixtureRejectsContentBeyondLimit(t *testing.T) {
+	t.Parallel()
+
+	base, err := os.ReadFile(filepath.Join("testdata", "incidents", "dead_worker.json"))
+	if err != nil {
+		t.Fatalf("os.ReadFile(): %v", err)
+	}
+	padded := append(slices.Clone(base), bytes.Repeat([]byte{' '}, maxFixtureBytes-len(base)+1)...)
+	_, err = decodeFixture(bytes.NewReader(padded))
 	assertValidationCode(t, err, "FIXTURE_TOO_LARGE")
 }
 
@@ -522,6 +814,56 @@ func TestSensitiveRejectionDoesNotEchoCanaryOrPath(t *testing.T) {
 	}
 }
 
+func TestExpectedFieldsRejectArbitraryOutputCanaries(t *testing.T) {
+	t.Parallel()
+
+	canary := "unexpected_output_canary_42"
+	tests := []struct {
+		name   string
+		mutate func(expected *Expected)
+	}{
+		{name: "observed decision", mutate: func(expected *Expected) { expected.ObservedDecision = canary }},
+		{name: "observed outcome", mutate: func(expected *Expected) { expected.ObservedOutcome = canary }},
+		{name: "required decision", mutate: func(expected *Expected) { expected.RequiredDecision = canary }},
+		{name: "required outcome", mutate: func(expected *Expected) { expected.RequiredOutcome = canary }},
+		{name: "required exit class", mutate: func(expected *Expected) { expected.RequiredExitClass = canary }},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			fixture := cloneFixture(t, mustLoadTestFixture(t, "dead_worker.json"))
+			tt.mutate(&fixture.Expected)
+			err := ValidateFixture(fixture)
+			assertValidationCode(t, err, "FIXTURE_EXPECTATION_VALUE_UNKNOWN")
+			if strings.Contains(err.Error(), canary) {
+				t.Fatal("expectation validation echoed the arbitrary output canary")
+			}
+		})
+	}
+}
+
+func TestIncidentIDRejectsArbitraryOutputCanary(t *testing.T) {
+	t.Parallel()
+
+	fixture := cloneFixture(t, mustLoadTestFixture(t, "dead_worker.json"))
+	canary := "synthetic:incident:unexpected_output_canary_42"
+	fixture.IncidentID = canary
+	err := ValidateFixture(fixture)
+	assertValidationCode(t, err, "FIXTURE_INCIDENT_UNKNOWN")
+	if strings.Contains(err.Error(), canary) {
+		t.Fatal("incident validation echoed the arbitrary output canary")
+	}
+}
+
+func TestReplayRejectsIncidentIDSemanticSwap(t *testing.T) {
+	t.Parallel()
+
+	fixture := cloneFixture(t, mustLoadTestFixture(t, "false_green.json"))
+	fixture.IncidentID = "synthetic:incident:dead_worker"
+	_, err := Replay(fixture)
+	assertValidationCode(t, err, "FIXTURE_INCIDENT_ID_MISMATCH")
+}
+
 func TestReplayRejectsExpectationEcho(t *testing.T) {
 	t.Parallel()
 	fixture := mustLoadTestFixture(t, "dead_worker.json")
@@ -547,6 +889,17 @@ func factByKind(t *testing.T, fixture *Fixture, kind string) *Fact {
 		}
 	}
 	t.Fatalf("fixture lacks fact kind %q", kind)
+	return nil
+}
+
+func eventByFactKind(t *testing.T, fixture *Fixture, kind string) *Event {
+	t.Helper()
+	for i := range fixture.Events {
+		if fixture.Events[i].Fact.Kind == kind {
+			return &fixture.Events[i]
+		}
+	}
+	t.Fatalf("fixture lacks event fact kind %q", kind)
 	return nil
 }
 

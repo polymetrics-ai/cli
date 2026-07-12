@@ -2,32 +2,38 @@
 
 ## Rendered Prompt Or Prompt Reference
 
-TBD
+Parent dispatch in `PROMPTS.md`, `SPEC.md`, `API-CONTRACT.md`, and red-confirmed ledger.
 
 ## Files Inspected
 
-- TBD
+- `internal/agentloop` tests/fixtures, Go CLI patterns, both loop drivers, safety harness, Makefile.
 
 ## Actions Taken
 
-- TBD
+- Implemented bounded strict fixture loading, structural validation/redaction, fact-derived replay,
+  immutable safety status/guard, and dependency-free `loopctl`.
+- Added earliest-possible safety guards to both autonomous drivers and Make integration.
+- Refactored replay rules to enumerate correlated tuples and require shared resource identity.
 
 ## Commands Run
 
-- TBD
+- `gofmt`, targeted/race/CLI tests, shell harness, `make agent-loop-test`, `make verify`.
 
 ## Findings
 
-- TBD
+- Closed incident/observation output, canonical ID-to-policy mapping, and tuple ambiguity rejection
+  prevent expectation echo and decoy suppression.
+- Phase 0 intentionally supplies no run/resume enable path.
 
 ## Handoff Summary
 
-TBD
+Implementation is review-approved and ready for stacked parent integration.
 
 ## Verification Evidence
 
-TBD
+All targeted and broad gates in `VERIFICATION.md` passed.
 
 ## Unresolved Risks
 
-- TBD
+- Later phases must replace the blanket fuse only through their brokered authorization contracts;
+  Phase 0 itself cannot operate an autonomous run.

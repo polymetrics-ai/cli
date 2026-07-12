@@ -29,25 +29,32 @@ child process, or reach git/GitHub. Phase 0 intentionally has no production enab
 7. Historical observation is separate from policy: observed decision, observed outcome, and the
    correctness of each may equal the required result. Correct HALT/RETRY behavior is preserved.
 8. JSON output uses stable field names, stable violation/exit classes, and deterministic ordering.
-9. All code uses the Go standard library and local shell utilities already required by the repo.
+9. Output-bearing incident IDs and observation fields are closed vocabularies. An incident ID must
+   map to the violation derived from facts; ambiguous or cross-resource fact composites fail.
+10. All code uses the Go standard library and local shell utilities already required by the repo.
 
 ## Incident matrix
 
 | Fixture | Semantic trigger | Stable violation code | Required decision / exit class |
 | --- | --- | --- | --- |
-| `dead_worker.json` | phantom dispatch plus executed worker without handoff | `WORKER_COMPLETION_UNPROVEN` | `retry` / `retry_required` |
+| `dead_worker.json` | unproven worker completion was accepted with PROCEED | `WORKER_COMPLETION_UNPROVEN` | `retry` / `retry_required` |
 | `false_green.json` | missing required artifact, PROCEED, then repo-gate failure | `VALIDATION_FALSE_GREEN` | `retry` / `retry_required` |
 | `fabricated_authority.json` | agent clears a human-only gate | `AUTHORITY_FABRICATED` | `halt` / `halt_required` |
 | `halt_worker_survival.json` | registered worker remains alive after HALT | `HALT_REVOCATION_MISSING` | `halt` / `halt_required` |
 | `mega_turn.json` | a turn exceeds budget and becomes detached from supervision | `TURN_SUPERVISION_EXCEEDED` | `halt` / `halt_required` |
 | `dual_writer.json` | overlapping actors own one worktree | `WORKTREE_DUAL_WRITER` | `halt` / `halt_required` |
 | `merge_before_ratification.json` | merge precedes ratification | `MERGE_BEFORE_RATIFICATION` | `halt` / `halt_required` |
-| `merge_stale_attestation.json` | head moves after attestation | `MERGE_ATTESTATION_STALE` | `halt` / `halt_required` |
+| `merge_stale_attestation.json` | same-head merge state moves OPEN→MERGED before stale PROCEED | `MERGE_ATTESTATION_STALE` | `halt` / `halt_required` |
 | `merge_agent_authority.json` | an agent completes a human-only merge | `MERGE_AUTHORITY_DENIED` | `halt` / `halt_required` |
 | `stale_verify_head.json` | verified head moves and Shepherd correctly RETRYs | `VERIFY_HEAD_STALE` | `retry` / `retry_required` |
 | `dirty_worktree.json` | worktree becomes dirty and Shepherd correctly RETRYs | `WORKTREE_DIRTY` | `retry` / `retry_required` |
-| `interim_human_wait.json` | waiting-for-human is projected as success | `HUMAN_WAIT_PROJECTED_FINAL` | `wait` / `human_wait_required` |
-| `terminal_projection_mismatch.json` | durable and displayed terminal disagree | `TERMINAL_PROJECTION_MISMATCH` | `halt` / `halt_required` |
+| `interim_human_wait.json` | blocked active human wait/human gate is projected done | `HUMAN_WAIT_PROJECTED_FINAL` | `wait` / `human_wait_required` |
+| `terminal_projection_mismatch.json` | canonical running/non-terminal state conflicts with stale human-gate projection and PROCEED | `TERMINAL_PROJECTION_MISMATCH` | `halt` / `halt_required` |
+
+Truth corrections are grounded in the read-only run post-mortem and driver trace: dead-worker
+fail-open (`ANALYSIS-CODEX.md:98`), same-head merge-state race (`:109,126,159`), non-durable turn-23
+HALT (`:169,173`), turn-26 ledger divergence (`:189-199`), and valid final human-ready projection
+(`:326`). Those source artifacts remain in the completed run worktree and are not copied here.
 
 ## CLI contract
 
