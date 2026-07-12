@@ -1,8 +1,28 @@
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 import { BLOG_POSTS } from '@/lib/blog';
 
+function expectedGitHubDiscussionUrl(title: string): string {
+  return `https://github.com/polymetrics-ai/cli/discussions?discussions_q=${encodeURIComponent(`"${title}"`)}`;
+}
+
 test.describe('blog UI smoke', () => {
+  async function awaitNavbarHydrated(page: Page): Promise<void> {
+    await expect(page.locator('header[data-navbar-hydrated="true"]')).toBeVisible();
+  }
+
+  async function expectDesktopRails(
+    page: Page,
+    path: string,
+    leftSelector: string,
+    rightSelector: string,
+  ): Promise<void> {
+    await page.goto(path);
+    await expect(page.locator(leftSelector)).toBeVisible();
+    await expect(page.locator(`${rightSelector}[data-site-toc]`)).toBeVisible();
+  }
+
   test('lists every blog post on the index page', async ({ page }) => {
     await page.goto('/blog');
 
@@ -28,25 +48,86 @@ test.describe('blog UI smoke', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
 
-    // Wait for hydration (session slot renders) so the click isn't
-    // swallowed by React's pre-hydration event replay.
-    await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
+    // Wait for hydration so the click isn't swallowed by React's
+    // pre-hydration event replay.
+    await awaitNavbarHydrated(page);
     await page.getByRole('navigation').getByRole('link', { name: 'Blog', exact: true }).click();
     await expect(page).toHaveURL(/\/blog$/);
   });
 
-  test('swaps Get Demo for the auth slot on blog routes only', async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
+  test('keeps desktop navigation and search controls clear of each other', async ({ page }) => {
+    await page.setViewportSize({ width: 1152, height: 800 });
+    await page.goto('/');
+    await awaitNavbarHydrated(page);
 
-    await page.goto('/blog/one-cli-to-rule-them-all');
-    await expect(
-      page
-        .locator('header button[aria-label="Account menu"], header button:has-text("Sign in")')
-        .first(),
-    ).toBeVisible();
-    await expect(page.locator('header').getByRole('link', { name: 'Get Demo' })).toBeHidden();
+    const navLinks = page.locator('[data-navbar-links]');
+    const search = page.getByRole('button', { name: 'Search documentation' });
+    const ctas = page.locator('.navbar-desktop-cta');
+    await expect(navLinks).toBeVisible();
+    await expect(search).toBeVisible();
+    await expect(ctas).toBeVisible();
+
+    const [linksBox, searchBox] = await Promise.all([
+      navLinks.boundingBox(),
+      search.boundingBox(),
+    ]);
+    expect(linksBox).not.toBeNull();
+    expect(searchBox).not.toBeNull();
+    expect(linksBox!.x + linksBox!.width + 12).toBeLessThanOrEqual(searchBox!.x);
+  });
+
+  test('keeps navbar CTAs globally and moves blog sign-in above GitHub discussion', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const post = BLOG_POSTS[0];
+    const discussionUrl = expectedGitHubDiscussionUrl(post.title);
+
+    await page.goto(`/blog/${post.slug}`);
+    await awaitNavbarHydrated(page);
+    await expect(page.locator('header').getByRole('link', { name: 'Get Started' })).toBeVisible();
+    await expect(page.locator('header').getByRole('link', { name: 'Get Demo' })).toBeVisible();
+    await expect(page.locator('header').getByRole('button', { name: 'Sign in' })).toHaveCount(0);
+    await expect(page.locator('.home-sidebar-panel [data-blog-auth-card]')).toHaveCount(0);
+
+    const blogDiscussionCard = page.locator('.page-aside-panel [data-blog-auth-card]');
+    await expect(blogDiscussionCard).toBeVisible();
+    await expect(blogDiscussionCard.getByText('Join blog discussion')).toBeVisible();
+    await expect(blogDiscussionCard.getByRole('button', { name: 'Sign in' })).toBeVisible();
+    await expect(blogDiscussionCard.getByRole('link', { name: 'Open GitHub Discussion' })).toHaveCount(0);
+
+    const githubDiscussionLink = page.locator('.page-aside-panel [data-github-discussion-link]');
+    await expect(githubDiscussionLink).toHaveAttribute('href', discussionUrl);
+    await expect(githubDiscussionLink).toContainText('GitHub discussion');
 
     await page.goto('/');
+    await awaitNavbarHydrated(page);
     await expect(page.locator('header').getByRole('link', { name: 'Get Demo' })).toBeVisible();
+    await expect(page.locator('[data-blog-auth-card]')).toHaveCount(0);
+
+    await page.goto('/docs');
+    await awaitNavbarHydrated(page);
+    await expect(page.locator('header').getByRole('link', { name: 'Get Demo' })).toBeVisible();
+    await expect(page.locator('[data-blog-auth-card]')).toHaveCount(0);
+
+    await page.goto('/bookmarks');
+    await awaitNavbarHydrated(page);
+    await expect(page.locator('.page-aside-panel [data-blog-auth-card]')).toBeVisible();
+    await expect(page.locator('.page-aside-panel [data-github-discussion-link]')).toBeVisible();
+  });
+
+  test('mounts both sidebars on every desktop page shell', async ({ page }) => {
+    await page.setViewportSize({ width: 1560, height: 1000 });
+
+    await expectDesktopRails(page, '/', '.home-sidebar-panel', '.home-aside-panel');
+    await expectDesktopRails(page, '/blog', '.home-sidebar-panel', '.page-aside-panel');
+    await expectDesktopRails(
+      page,
+      `/blog/${BLOG_POSTS[0].slug}`,
+      '.home-sidebar-panel',
+      '.page-aside-panel',
+    );
+    await expectDesktopRails(page, '/bookmarks', '.home-sidebar-panel', '.page-aside-panel');
+    await expectDesktopRails(page, '/changelog', '.home-sidebar-panel', '.page-aside-panel');
+    await expectDesktopRails(page, '/patterns', '.home-sidebar-panel', '.page-aside-panel');
+    await expectDesktopRails(page, '/docs', '.docs-sidebar-panel', '.docs-toc-panel');
   });
 });

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Clock, Rss } from 'lucide-react';
 import { BLOG_POSTS, blogUrl } from '@/lib/blog';
+import { HomeSidebar } from '@/components/home/home-sidebar';
+import { PageAside } from '@/components/home/page-aside';
 import { CornerBox } from '@/components/ui/corner-box';
 
 export const metadata: Metadata = {
@@ -22,6 +24,11 @@ export const metadata: Metadata = {
 
 const featured = BLOG_POSTS[0];
 const rest = BLOG_POSTS.slice(1);
+const blogTocItems = [
+  { id: 'blog-overview', label: 'Overview' },
+  { id: 'featured-article', label: 'Featured article' },
+  { id: 'all-articles', label: 'All articles' },
+];
 
 export default function BlogPage() {
   const jsonLd = {
@@ -41,14 +48,19 @@ export default function BlogPage() {
   };
 
   return (
-    <main className="mx-auto w-full max-w-[95rem] px-6 py-16 md:py-24">
-      <div className="mx-auto w-full max-w-[840px]">
+    <div className="mx-auto flex w-full max-w-[95rem] overflow-clip">
+      <HomeSidebar />
+      <main className="min-w-0 flex-1 pattern-bg px-6 py-16 md:py-24 xl:px-8">
+        <div className="mx-auto w-full max-w-[840px]">
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           />
 
-          <header id="blog-overview" className="mb-12 grid gap-6 border-b border-line-structure pb-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+          <header
+            id="blog-overview"
+            className="mb-12 grid scroll-mt-24 gap-6 border-b border-line-structure pb-10 lg:grid-cols-[minmax(0,1fr)_18rem]"
+          >
             <div className="min-w-0">
               <span className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-widest text-text-disabled">
                 <Rss className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
@@ -73,7 +85,11 @@ export default function BlogPage() {
             </div>
           </header>
 
-          <section id="featured-article" aria-label="Featured article" className="mb-12">
+          <section
+            id="featured-article"
+            aria-label="Featured article"
+            className="mb-12 scroll-mt-24"
+          >
             <Link href={blogUrl(featured.slug)} className="block group">
               <CornerBox
                 hoverStripes
@@ -118,7 +134,11 @@ export default function BlogPage() {
             </Link>
           </section>
 
-          <section id="all-articles" aria-label="All articles" className="grid gap-3 md:grid-cols-2">
+          <section
+            id="all-articles"
+            aria-label="All articles"
+            className="grid scroll-mt-24 gap-3 md:grid-cols-2"
+          >
             {rest.map((post) => (
               <Link key={post.slug} href={blogUrl(post.slug)} className="block h-full group">
                 <CornerBox
@@ -156,7 +176,9 @@ export default function BlogPage() {
               </Link>
             ))}
           </section>
-      </div>
-    </main>
+        </div>
+      </main>
+      <PageAside items={blogTocItems} discussionTitle="Polymetrics Blog" />
+    </div>
   );
 }

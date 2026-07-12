@@ -169,6 +169,7 @@ export function MarginNotesRail({ containerRef }: { containerRef: React.RefObjec
               key={item.comment.id}
               type="button"
               onClick={() => activate(item.comment)}
+              aria-label={`Open note by ${item.comment.author.name}`}
               data-margin-note={item.comment.id}
               className={`corner-box-corners absolute w-full border bg-surface-bg p-2.5 text-left transition-[top,border-color] duration-150 ease-out motion-reduce:transition-none ${
                 activeId === item.comment.id
@@ -193,7 +194,7 @@ export function MarginNotesRail({ containerRef }: { containerRef: React.RefObjec
                   {relativeTime(item.comment.createdAt)}
                 </span>
               </span>
-              <span className="mt-1.5 line-clamp-3 block text-[12px] leading-snug text-text-tertiary">
+              <span className="mt-1.5 line-clamp-4 block break-words text-[12px] leading-snug text-text-tertiary">
                 {item.comment.body}
               </span>
               {(replyCounts.get(item.comment.id) ?? 0) > 0 ? (

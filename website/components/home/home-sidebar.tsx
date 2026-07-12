@@ -70,7 +70,11 @@ const changelog = [
 
 const latestBlogPosts = BLOG_POSTS.slice(0, 3);
 
-export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: string }) {
+export function HomeSidebar({
+  className = 'home-sidebar-panel',
+}: {
+  className?: string;
+}) {
   return (
     <Sidebar className={className}>
       <SidebarInner>

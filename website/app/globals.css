@@ -446,11 +446,16 @@ html.dark,
   layered rules regardless of position.
 */
 /* Sidebar responsive display — custom classes to sidestep Tailwind v4 cascade bug */
+.site-sidebar-panel,
 .home-sidebar-panel,
 .home-aside-panel,
+.page-aside-panel,
 .docs-sidebar-panel,
 .docs-toc-panel {
   display: none;
+  flex: 0 0 256px;
+  width: 256px;
+  align-self: flex-start;
 }
 @media (min-width: 64rem) {
   .home-sidebar-panel { display: flex; }
@@ -458,6 +463,7 @@ html.dark,
 }
 @media (min-width: 80rem) {
   .home-aside-panel { display: flex; }
+  .page-aside-panel { display: flex; }
   .docs-toc-panel { display: flex; }
 }
 
@@ -473,6 +479,16 @@ html.dark,
 }
 @media (min-width: 72rem) {
   .navbar-desktop-search { display: flex; }
+}
+
+.comment-thread-children > article {
+  min-width: 0;
+}
+
+.blog-comments-sheet {
+  width: min(380px, calc(100vw - 1rem)) !important;
+  max-width: min(380px, calc(100vw - 1rem)) !important;
+  overscroll-behavior: contain;
 }
 .navbar-mobile-btn { display: flex; }
 @media (min-width: 48rem) {
@@ -505,13 +521,17 @@ html.dark,
   .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .md\:max-w-\[680px\] { max-width: 680px; }
   .md\:px-0 { padding-left: 0; padding-right: 0; }
+  .md\:px-8 { padding-left: 2rem; padding-right: 2rem; }
   .md\:flex-row { flex-direction: row; }
   .md\:items-center { align-items: center; }
   .md\:py-14 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+  .md\:py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+  .md\:py-24 { padding-top: 6rem; padding-bottom: 6rem; }
   .md\:gap-16 { gap: 4rem; }
 }
 @media (min-width: 80rem) {
   .xl\:px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .xl\:px-8 { padding-left: 2rem; padding-right: 2rem; }
   .xl\:max-w-\[840px\] { max-width: 840px; }
 }
 @media (min-width: 96rem) {
@@ -1123,7 +1143,20 @@ html.dark,
    navbar-desktop-*: Tailwind lg: display variants are unreliable here). */
 .blog-margin-rail { display: none; }
 .blog-notes-fab { display: flex; }
+.blog-article-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+.blog-article-aside {
+  min-width: 0;
+}
 @media (min-width: 80rem) {
+  .blog-article-grid {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+    align-items: start;
+  }
+  .blog-article-aside {
+    align-self: start;
+  }
   .blog-margin-rail { display: block; }
   .blog-notes-fab { display: none; }
 }

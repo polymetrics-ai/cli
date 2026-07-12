@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 test.describe('docs UI smoke', () => {
+  async function awaitNavbarHydrated(page: Page): Promise<void> {
+    await expect(page.locator('header[data-navbar-hydrated="true"]')).toBeVisible();
+  }
+
   test('renders an MDX docs page with docs actions', async ({ page }) => {
     await page.goto('/docs/quickstart');
 
@@ -56,9 +61,9 @@ test.describe('docs UI smoke', () => {
       'location',
     );
 
-    // The navbar session slot renders only after hydration; clicking
-    // earlier races React's event replay and can be swallowed.
-    await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
+    // Wait for a client-only navbar marker; clicking earlier can race
+    // React's pre-hydration event replay.
+    await awaitNavbarHydrated(page);
     await toc.getByRole('link', { name: 'The loop' }).click();
     await expect(page).toHaveURL(/\/#loop$/);
     await expect(toc.getByRole('link', { name: 'The loop' })).toHaveAttribute(
@@ -84,7 +89,7 @@ test.describe('docs UI smoke', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
 
-    await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
+    await awaitNavbarHydrated(page);
     await page.locator('header').getByRole('link', { name: 'Changelog' }).click();
     await expect(page).toHaveURL(/\/changelog$/);
     await expect(
