@@ -688,6 +688,45 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunImplementedDirectReadCommandAllowsGenericJSONPolicy(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "ticket view",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/tickets/{id}"},
+				},
+				OutputPolicy: "json",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "id", Type: "integer", MapsTo: "path.id"},
+				},
+			},
+		},
+	}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:  []string{"ticket", "view"},
+		Flags: map[string][]string{"id": {"123"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("DirectRead = nil, want result")
+	}
+	if connector.directReadReq.OutputPolicy != "json" {
+		t.Fatalf("direct read output policy = %q, want json", connector.directReadReq.OutputPolicy)
+	}
+	if connector.directReadReq.PathParams["id"] != "123" {
+		t.Fatalf("direct read id path param = %q, want 123", connector.directReadReq.PathParams["id"])
+	}
+}
+
 func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 	tests := []struct {
 		name     string

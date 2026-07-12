@@ -1,0 +1,4397 @@
+{
+  "tagline": "Work with Freshdesk support records from the command line.",
+  "usage": "pm freshdesk <command> <subcommand> [flags]",
+  "groups": [
+    {
+      "id": "streams",
+      "title": "Stream Reads",
+      "commands": [
+        "ticket",
+        "contact",
+        "company",
+        "agent",
+        "group"
+      ]
+    },
+    {
+      "id": "direct-reads",
+      "title": "Bounded Direct Reads",
+      "commands": [
+        "read"
+      ]
+    },
+    {
+      "id": "writes",
+      "title": "Reverse ETL Writes",
+      "commands": [
+        "write"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved Freshdesk connector credential.",
+      "maps_to": "connection"
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum direct-read response bytes; capped at 1048576."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Preview or approve an existing reverse-ETL command plan."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL command plan before approval."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token for executing an existing reverse-ETL command plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation for destructive Freshdesk write plans."
+    }
+  ],
+  "commands": [
+    {
+      "path": "ticket list",
+      "summary": "List tickets",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickets",
+      "flags": [
+        {
+          "name": "updated-since",
+          "type": "string",
+          "summary": "Use the configured start_date/incremental lower bound for ticket updates.",
+          "maps_to": "config.start_date"
+        }
+      ],
+      "examples": [
+        "pm freshdesk ticket list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets"
+        }
+      ]
+    },
+    {
+      "path": "contact list",
+      "summary": "List contacts",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "examples": [
+        "pm freshdesk contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "company list",
+      "summary": "List companies",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "examples": [
+        "pm freshdesk company list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ]
+    },
+    {
+      "path": "agent list",
+      "summary": "List agents",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agents",
+      "examples": [
+        "pm freshdesk agent list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents"
+        }
+      ]
+    },
+    {
+      "path": "group list",
+      "summary": "List groups",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "examples": [
+        "pm freshdesk group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ]
+    },
+    {
+      "path": "read account",
+      "summary": "View Account",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read admin groups",
+      "summary": "List All Groups",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/groups"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read admin groups id",
+      "summary": "View a Group",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /admin/groups/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/groups/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read admin groups id agents",
+      "summary": "List All Agents in a Group",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /admin/groups/{id}/agents.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/groups/{id}/agents"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read admin skills",
+      "summary": "List all Skills",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/skills"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read admin skills id",
+      "summary": "View a Skill",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /admin/skills/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/skills/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read admin ticket-fields",
+      "summary": "List All Ticket Fields",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/ticket_fields"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read admin ticket-fields id",
+      "summary": "View a Ticket Field",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /admin/ticket_fields/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/ticket_fields/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read admin ticket-fields id sections",
+      "summary": "List All Sections for a Ticket Field",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /admin/ticket_fields/{id}/sections.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/ticket_fields/{id}/sections"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read admin ticket-fields id sections section-id",
+      "summary": "List a specific Section details",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /admin/ticket_fields/{id}/sections/{section_id}.",
+          "maps_to": "path.id"
+        },
+        {
+          "name": "section-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter section_id for /admin/ticket_fields/{id}/sections/{section_id}.",
+          "maps_to": "path.section_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/ticket_fields/{id}/sections/{section_id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read agents",
+      "summary": "List All Agents Availability",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents?page=1&per_page=10&only=availability"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read agents autocomplete",
+      "summary": "Search Agents",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter keyword for /agents/autocomplete?term={keyword}.",
+          "maps_to": "path.keyword"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents/autocomplete?term={keyword}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read agents id",
+      "summary": "View an Agent",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /agents/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read agents id availability",
+      "summary": "View Agent Availability",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /agents/{id}/availability.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents/{id}/availability"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read agents me",
+      "summary": "Currently Authenticated Agent",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents/me"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read automations automation-type-id rules",
+      "summary": "List All Automation Rules",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "automation-type-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter automation_type_id for /automations/{automation_type_id}/rules.",
+          "maps_to": "path.automation_type_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/automations/{automation_type_id}/rules"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read automations automation-type-id rules id",
+      "summary": "View an Automation Rule",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "automation-type-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter automation_type_id for /automations/{automation_type_id}/rules/{id}.",
+          "maps_to": "path.automation_type_id"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /automations/{automation_type_id}/rules/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/automations/{automation_type_id}/rules/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read business-hours",
+      "summary": "List All Business Hours",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business_hours"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read business-hours id",
+      "summary": "View a Business Hour",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /business_hours/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business_hours/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read canned-response-folders",
+      "summary": "List All Folders",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canned_response_folders"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read canned-response-folders id",
+      "summary": "List All Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /canned_response_folders/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canned_response_folders/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read canned-response-folders id responses",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /canned_response_folders/{id}/responses.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canned_response_folders/{id}/responses"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read canned-responses id",
+      "summary": "View a Canned Response",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /canned_responses/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canned_responses/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read channels outbound-messages message-id",
+      "summary": "Retrieve Message",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "message-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter message_id for /channels/outbound-messages/{message_id}.",
+          "maps_to": "path.message_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/channels/outbound-messages/{message_id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read collaboration messages id",
+      "summary": "Get message for thread",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /collaboration/messages/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collaboration/messages/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read collaboration messages id generate-quote",
+      "summary": "Get quoted text for message",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /collaboration/messages/{id}/generate-quote.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collaboration/messages/{id}/generate-quote"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read collaboration threads id",
+      "summary": "Get a thread",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /collaboration/threads/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collaboration/threads/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read companies autocomplete",
+      "summary": "Search Companies",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter keyword for /companies/autocomplete?name={keyword}.",
+          "maps_to": "path.keyword"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/autocomplete?name={keyword}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read companies export id",
+      "summary": "Company Export",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /companies/export/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/export/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read companies id",
+      "summary": "View a Company",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /companies/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read companies imports",
+      "summary": "Company Import",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/imports"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read companies imports id",
+      "summary": "Company Import",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /companies/imports/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/imports/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read company-fields",
+      "summary": "List all company fields",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/company_fields"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read company-fields id",
+      "summary": "View a company field",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /company_fields/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/company_fields/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read contact-fields",
+      "summary": "List all contact fields",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contact_fields"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read contact-fields id",
+      "summary": "View a contact field",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /contact_fields/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contact_fields/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read contacts autocomplete",
+      "summary": "Search Contacts",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter keyword for /contacts/autocomplete?term={keyword}.",
+          "maps_to": "path.keyword"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/autocomplete?term={keyword}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read contacts export id",
+      "summary": "Contact Export",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /contacts/export/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/export/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read contacts id",
+      "summary": "View a Contact",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /contacts/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read contacts imports",
+      "summary": "Contact Import",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/imports"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read contacts imports id",
+      "summary": "Contact Import",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /contacts/imports/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/imports/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read custom-objects schemas",
+      "summary": "Retrieve Existing Custom Objects",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_objects/schemas"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read custom-objects schemas schema-id",
+      "summary": "Retrieve A Specific Custom Object",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "schema-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter schema_id for /custom_objects/schemas/{schema_id}.",
+          "maps_to": "path.schema_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_objects/schemas/{schema_id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read custom-objects schemas schema-id records",
+      "summary": "Retrieve All Records",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "schema-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter schema_id for /custom_objects/schemas/{schema_id}/records.",
+          "maps_to": "path.schema_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_objects/schemas/{schema_id}/records"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read custom-objects schemas schema-id records count",
+      "summary": "Retrieve The Count Of Records",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "schema-id",
+          "type": "string",
+          "summary": "Freshdesk path parameter schema_id for /custom_objects/schemas/{schema_id}/records/count.",
+          "maps_to": "path.schema_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_objects/schemas/{schema_id}/records/count"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read custom-objects schemas schema-id records record-id",
+      "summary": "Retrieve A Record",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "schema-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter schema_id for /custom_objects/schemas/{schema_id}/records/{record_id}.",
+          "maps_to": "path.schema_id"
+        },
+        {
+          "name": "record-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter record_id for /custom_objects/schemas/{schema_id}/records/{record_id}.",
+          "maps_to": "path.record_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_objects/schemas/{schema_id}/records/{record_id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read customer-satisfaction surveys",
+      "summary": "Surveys",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer-satisfaction/surveys"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read customer-satisfaction surveys survey-id responses",
+      "summary": "View all Survey Responses",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "survey-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter survey_id for /customer-satisfaction/surveys/{survey_id}/responses.",
+          "maps_to": "path.survey_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer-satisfaction/surveys/{survey_id}/responses"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions categories",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/categories"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions categories id",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/categories/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/categories/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions categories id forums",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/categories/{id}/forums.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/categories/{id}/forums"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions forums id",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/forums/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/forums/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions forums id follow",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/forums/{id}/follow?user_id={id}.",
+          "maps_to": "path.id"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/forums/{id}/follow?user_id={id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/forums/{id}/follow?user_id={id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions forums id topics",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/forums/{id}/topics.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/forums/{id}/topics"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions topics followed-by",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/topics/followed_by?user_id={id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/topics/followed_by?user_id={id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions topics id",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/topics/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/topics/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions topics id comments",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/topics/{id}/comments.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/topics/{id}/comments"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions topics id follow",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/topics/{id}/follow?user_id={id}.",
+          "maps_to": "path.id"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/topics/{id}/follow?user_id={id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/topics/{id}/follow?user_id={id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read discussions topics participated-by",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /discussions/topics/participated_by?user_id={id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discussions/topics/participated_by?user_id={id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read email mailboxes",
+      "summary": "List All Email Mailboxes",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email/mailboxes"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read email mailboxes id",
+      "summary": "View an Email Mailbox",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /email/mailboxes/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email/mailboxes/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read email settings",
+      "summary": "View Mailbox Settings",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email/settings"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read email-configs",
+      "summary": "List All Email Configs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email_configs"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read email-configs id",
+      "summary": "View an Email Config",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /email_configs/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email_configs/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read groups id",
+      "summary": "View a Group",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /groups/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read jobs id",
+      "summary": "View a Job",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /jobs/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/jobs/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read notifications email bcc",
+      "summary": "View Automatic Bcc emails",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notifications/email/bcc"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read products",
+      "summary": "List All Products",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read products id",
+      "summary": "View a Product",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /products/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read roles",
+      "summary": "List All Roles",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read roles id",
+      "summary": "View a Role",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /roles/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read search companies",
+      "summary": "Filter CompaniesBETA",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "query",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter query for /search/companies?query={query}.",
+          "maps_to": "path.query"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search/companies?query={query}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read search contacts",
+      "summary": "Filter ContactsBETA",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "query",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter query for /search/contacts?query={query}.",
+          "maps_to": "path.query"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search/contacts?query={query}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read search solutions",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter keyword for /search/solutions?term={keyword}.",
+          "maps_to": "path.keyword"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search/solutions?term={keyword}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read search tickets",
+      "summary": "Filter Tickets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "query",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter query for /search/tickets?query={query}.",
+          "maps_to": "path.query"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search/tickets?query={query}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read settings helpdesk",
+      "summary": "View Helpdesk Settings",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/helpdesk"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read sla-policies",
+      "summary": "List All SLA Policies",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sla_policies"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions articles id",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /solutions/articles/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/articles/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions articles id language-code",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /solutions/articles/{id}/{language_code}.",
+          "maps_to": "path.id"
+        },
+        {
+          "name": "language-code",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter language_code for /solutions/articles/{id}/{language_code}.",
+          "maps_to": "path.language_code"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/articles/{id}/{language_code}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions categories",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/categories"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions categories category-id folders",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "category-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter category_id for /solutions/categories/{category_id}/folders.",
+          "maps_to": "path.category_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/categories/{category_id}/folders"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions categories category-id folders language-code",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "category-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter category_id for /solutions/categories/{category_id}/folders/{language_code}.",
+          "maps_to": "path.category_id"
+        },
+        {
+          "name": "language-code",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter language_code for /solutions/categories/{category_id}/folders/{language_code}.",
+          "maps_to": "path.language_code"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/categories/{category_id}/folders/{language_code}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions categories id",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /solutions/categories/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/categories/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions categories id language-code",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /solutions/categories/{id}/{language_code}.",
+          "maps_to": "path.id"
+        },
+        {
+          "name": "language-code",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter language_code for /solutions/categories/{id}/{language_code}.",
+          "maps_to": "path.language_code"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/categories/{id}/{language_code}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions categories language-code",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "language-code",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter language_code for /solutions/categories/{language_code}.",
+          "maps_to": "path.language_code"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/categories/{language_code}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions folders folder-id subfolders",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "folder-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter folder_id for /solutions/folders/{folder_id}/subfolders.",
+          "maps_to": "path.folder_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/folders/{folder_id}/subfolders"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions folders folder-id subfolders language-code",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "folder-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter folder_id for /solutions/folders/{folder_id}/subfolders/{language_code}.",
+          "maps_to": "path.folder_id"
+        },
+        {
+          "name": "language-code",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter language_code for /solutions/folders/{folder_id}/subfolders/{language_code}.",
+          "maps_to": "path.language_code"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/folders/{folder_id}/subfolders/{language_code}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions folders id",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /solutions/folders/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/folders/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions folders id articles",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /solutions/folders/{id}/articles.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/folders/{id}/articles"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions folders id articles language-code",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /solutions/folders/{id}/articles/{language_code}.",
+          "maps_to": "path.id"
+        },
+        {
+          "name": "language-code",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter language_code for /solutions/folders/{id}/articles/{language_code}.",
+          "maps_to": "path.language_code"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/folders/{id}/articles/{language_code}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read solutions folders id language-code",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /solutions/folders/{id}/{language_code}.",
+          "maps_to": "path.id"
+        },
+        {
+          "name": "language-code",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter language_code for /solutions/folders/{id}/{language_code}.",
+          "maps_to": "path.language_code"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/folders/{id}/{language_code}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read surveys",
+      "summary": "List all Surveys",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/surveys"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read surveys satisfaction-ratings",
+      "summary": "View all Satisfaction Ratings",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/surveys/satisfaction_ratings"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read ticket-fields",
+      "summary": "List All Ticket Fields",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket_fields"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read ticket-forms",
+      "summary": "List All Ticket Forms",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket-forms"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read ticket-forms form-id fields field-id",
+      "summary": "View A Ticket Form's Field",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "form-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter form_id for /ticket-forms/{form_id}/fields/{field_id}.",
+          "maps_to": "path.form_id"
+        },
+        {
+          "name": "field-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter field_id for /ticket-forms/{form_id}/fields/{field_id}.",
+          "maps_to": "path.field_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket-forms/{form_id}/fields/{field_id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read ticket-forms id",
+      "summary": "View a Ticket Form",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /ticket-forms/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket-forms/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets archived id",
+      "summary": "List All Satisfaction Ratings of a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/archived/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/archived/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets archived id conversations",
+      "summary": "List All Satisfaction Ratings of a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/archived/{id}/conversations.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/archived/{id}/conversations"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets id",
+      "summary": "View a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/{id}.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets id accesses",
+      "summary": "List All Satisfaction Ratings of a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/{id}/accesses.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}/accesses"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets id associated-tickets",
+      "summary": "View a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/{id}/associated_tickets.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}/associated_tickets"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets id conversations",
+      "summary": "List All Conversations of a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/{id}/conversations.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}/conversations"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets id prime-association",
+      "summary": "View a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/{id}/prime_association.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}/prime_association"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets id summary",
+      "summary": "List All Satisfaction Ratings of a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/{id}/summary.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}/summary"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets id time-entries",
+      "summary": "List All Time Entries of a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/{id}/time_entries.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}/time_entries"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets id watchers",
+      "summary": "Ticket Merge API",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter id for /tickets/{id}/watchers.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}/watchers"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read tickets ticket-id satisfaction-ratings",
+      "summary": "List All Satisfaction Ratings of a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Freshdesk path/query parameter ticket_id for /tickets/{ticket_id}/satisfaction_ratings.",
+          "maps_to": "path.ticket_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{ticket_id}/satisfaction_ratings"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "read time-entries",
+      "summary": "List All Time Entries",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/time_entries"
+        }
+      ],
+      "output_policy": "json",
+      "notes": "Bounded JSON direct read; connector-relative GET only, capped at 1 MiB."
+    },
+    {
+      "path": "write admin groups id delete",
+      "summary": "Delete a Group",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_admin_groups_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/groups/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a Group (DELETE /admin/groups/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write admin skills id delete",
+      "summary": "Delete a Skill",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_admin_skills_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/skills/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a Skill (DELETE /admin/skills/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write admin ticket-fields id delete",
+      "summary": "Delete a Ticket Field",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_admin_ticket_fields_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/ticket_fields/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a Ticket Field (DELETE /admin/ticket_fields/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write admin ticket-fields id sections section-id delete",
+      "summary": "Delete a section",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_admin_ticket_fields_id_sections_section_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "section-id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter section_id.",
+          "maps_to": "record.section_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/ticket_fields/{id}/sections/{section_id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a section (DELETE /admin/ticket_fields/{id}/sections/{section_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write agents id delete",
+      "summary": "Delete an Agent",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_agents_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/agents/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete an Agent (DELETE /agents/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write attachments id delete",
+      "summary": "Delete an attachment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_attachments_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/attachments/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete an attachment (DELETE /attachments/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write companies id delete",
+      "summary": "Delete a Company",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_companies_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/companies/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a Company (DELETE /companies/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write company-field id delete",
+      "summary": "Delete a company field",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_company_field_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/company_field/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a company field (DELETE /company_field/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write contact-field id delete",
+      "summary": "Delete a contact field",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact_field_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contact_field/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a contact field (DELETE /contact_field/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write contacts id delete",
+      "summary": "Soft Delete a Contact",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contacts_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "risk": "Freshdesk Soft Delete a Contact (DELETE /contacts/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write contacts id hard-delete delete",
+      "summary": "Permanently Delete a Contact",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contacts_id_hard_delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{id}/hard_delete"
+        }
+      ],
+      "risk": "Freshdesk Permanently Delete a Contact (DELETE /contacts/{id}/hard_delete); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write conversations id delete",
+      "summary": "Delete a conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_conversations_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/conversations/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a conversation (DELETE /conversations/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write custom-objects schemas schema-id records record-id delete",
+      "summary": "Delete A Record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_objects_schemas_schema_id_records_record_id",
+      "flags": [
+        {
+          "name": "schema-id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter schema_id.",
+          "maps_to": "record.schema_id"
+        },
+        {
+          "name": "record-id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter record_id.",
+          "maps_to": "record.record_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/custom_objects/schemas/{schema_id}/records/{record_id}"
+        }
+      ],
+      "risk": "Freshdesk Delete A Record (DELETE /custom_objects/schemas/{schema_id}/records/{record_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write discussions categories id delete",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_discussions_categories_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/discussions/categories/{id}"
+        }
+      ],
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/categories/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write discussions comments id delete",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_discussions_comments_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/discussions/comments/{id}"
+        }
+      ],
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/comments/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write discussions forums forum-id follow delete",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_discussions_forums_forum_id_follow",
+      "flags": [
+        {
+          "name": "forum-id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter forum_id.",
+          "maps_to": "record.forum_id"
+        },
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter user_id.",
+          "maps_to": "record.user_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/discussions/forums/{forum_id}/follow?user_id={user_id}"
+        }
+      ],
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/forums/{forum_id}/follow?user_id={user_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write discussions forums id delete",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_discussions_forums_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/discussions/forums/{id}"
+        }
+      ],
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/forums/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write discussions topics id delete",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_discussions_topics_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/discussions/topics/{id}"
+        }
+      ],
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/topics/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write discussions topics topic-id follow delete",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_discussions_topics_topic_id_follow",
+      "flags": [
+        {
+          "name": "topic-id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter topic_id.",
+          "maps_to": "record.topic_id"
+        },
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter user_id.",
+          "maps_to": "record.user_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/discussions/topics/{topic_id}/follow?user_id={user_id}"
+        }
+      ],
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/topics/{topic_id}/follow?user_id={user_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write email mailboxes id delete",
+      "summary": "Delete an Email Mailbox",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_email_mailboxes_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/email/mailboxes/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete an Email Mailbox (DELETE /email/mailboxes/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write groups id delete",
+      "summary": "Delete a Group",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_groups_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/groups/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a Group (DELETE /groups/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write solutions articles id delete",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_solutions_articles_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/solutions/articles/{id}"
+        }
+      ],
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /solutions/articles/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write solutions categories id delete",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_solutions_categories_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/solutions/categories/{id}"
+        }
+      ],
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /solutions/categories/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write solutions folders id delete",
+      "summary": "Get details of Canned Responses in a Folder",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_solutions_folders_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/solutions/folders/{id}"
+        }
+      ],
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /solutions/folders/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write ticket-forms form-id fields field-id delete",
+      "summary": "Delete a Ticket Form's Field",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_forms_form_id_fields_field_id",
+      "flags": [
+        {
+          "name": "form-id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter form_id.",
+          "maps_to": "record.form_id"
+        },
+        {
+          "name": "field-id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter field_id.",
+          "maps_to": "record.field_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/ticket-forms/{form_id}/fields/{field_id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a Ticket Form's Field (DELETE /ticket-forms/{form_id}/fields/{field_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write ticket-forms id delete",
+      "summary": "Delete a Ticket Form",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_forms_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/ticket-forms/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a Ticket Form (DELETE /ticket-forms/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets archived id delete",
+      "summary": "List All Satisfaction Ratings of a Ticket",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tickets_archived_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/archived/{id}"
+        }
+      ],
+      "risk": "Freshdesk List All Satisfaction Ratings of a Ticket (DELETE /tickets/archived/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets id delete",
+      "summary": "Delete a Ticket",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tickets_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a Ticket (DELETE /tickets/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets id accesses delete",
+      "summary": "List All Satisfaction Ratings of a Ticket",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tickets_id_accesses",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{id}/accesses"
+        }
+      ],
+      "risk": "Freshdesk List All Satisfaction Ratings of a Ticket (DELETE /tickets/{id}/accesses); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets id summary delete",
+      "summary": "List All Satisfaction Ratings of a Ticket",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tickets_id_summary",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{id}/summary"
+        }
+      ],
+      "risk": "Freshdesk List All Satisfaction Ratings of a Ticket (DELETE /tickets/{id}/summary); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write time-entries id delete",
+      "summary": "Delete a Time Entry",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_time_entries_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/time_entries/{id}"
+        }
+      ],
+      "risk": "Freshdesk Delete a Time Entry (DELETE /time_entries/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write companies create",
+      "summary": "Create a Company",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_companies",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional Freshdesk request field description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional Freshdesk request field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "summary": "Optional Freshdesk request field note.",
+          "maps_to": "record.note"
+        },
+        {
+          "name": "health-score",
+          "type": "string",
+          "summary": "Optional Freshdesk request field health_score.",
+          "maps_to": "record.health_score"
+        },
+        {
+          "name": "account-tier",
+          "type": "string",
+          "summary": "Optional Freshdesk request field account_tier.",
+          "maps_to": "record.account_tier"
+        },
+        {
+          "name": "renewal-date",
+          "type": "string",
+          "summary": "Optional Freshdesk request field renewal_date.",
+          "maps_to": "record.renewal_date"
+        },
+        {
+          "name": "industry",
+          "type": "string",
+          "summary": "Optional Freshdesk request field industry.",
+          "maps_to": "record.industry"
+        },
+        {
+          "name": "lookup-parameter",
+          "type": "string",
+          "summary": "Optional Freshdesk request field lookup_parameter.",
+          "maps_to": "record.lookup_parameter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies"
+        }
+      ],
+      "risk": "Freshdesk Create a Company (POST /companies); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write contacts create",
+      "summary": "Create a Contact",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_contacts",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional Freshdesk request field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Optional Freshdesk request field email.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Optional Freshdesk request field phone.",
+          "maps_to": "record.phone"
+        },
+        {
+          "name": "mobile",
+          "type": "string",
+          "summary": "Optional Freshdesk request field mobile.",
+          "maps_to": "record.mobile"
+        },
+        {
+          "name": "twitter-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field twitter_id.",
+          "maps_to": "record.twitter_id"
+        },
+        {
+          "name": "unique-external-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field unique_external_id.",
+          "maps_to": "record.unique_external_id"
+        },
+        {
+          "name": "other-emails",
+          "type": "string_array",
+          "summary": "Optional Freshdesk request field other_emails.",
+          "maps_to": "record.other_emails"
+        },
+        {
+          "name": "company-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field company_id.",
+          "maps_to": "record.company_id"
+        },
+        {
+          "name": "view-all-tickets",
+          "type": "boolean",
+          "summary": "Optional Freshdesk request field view_all_tickets.",
+          "maps_to": "record.view_all_tickets"
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "summary": "Optional Freshdesk request field address.",
+          "maps_to": "record.address"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional Freshdesk request field description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "job-title",
+          "type": "string",
+          "summary": "Optional Freshdesk request field job_title.",
+          "maps_to": "record.job_title"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "Optional Freshdesk request field language.",
+          "maps_to": "record.language"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Optional Freshdesk request field tags.",
+          "maps_to": "record.tags"
+        },
+        {
+          "name": "time-zone",
+          "type": "string",
+          "summary": "Optional Freshdesk request field time_zone.",
+          "maps_to": "record.time_zone"
+        },
+        {
+          "name": "lookup-parameter",
+          "type": "string",
+          "summary": "Optional Freshdesk request field lookup_parameter.",
+          "maps_to": "record.lookup_parameter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "risk": "Freshdesk Create a Contact (POST /contacts); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write contacts export",
+      "summary": "Contact Export",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_contacts_export",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/export"
+        }
+      ],
+      "risk": "Freshdesk Contact Export (POST /contacts/export); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write contacts merge",
+      "summary": "Merge Contacts",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_contacts_merge",
+      "flags": [
+        {
+          "name": "primary-contact-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field primary_contact_id.",
+          "maps_to": "record.primary_contact_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/merge"
+        }
+      ],
+      "risk": "Freshdesk Merge Contacts (POST /contacts/merge); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets create",
+      "summary": "Create a Ticket",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_tickets",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional Freshdesk request field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "requester-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field requester_id.",
+          "maps_to": "record.requester_id"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Optional Freshdesk request field email.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "facebook-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field facebook_id.",
+          "maps_to": "record.facebook_id"
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Optional Freshdesk request field phone.",
+          "maps_to": "record.phone"
+        },
+        {
+          "name": "twitter-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field twitter_id.",
+          "maps_to": "record.twitter_id"
+        },
+        {
+          "name": "unique-external-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field unique_external_id.",
+          "maps_to": "record.unique_external_id"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Optional Freshdesk request field subject.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Optional Freshdesk request field type.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "status",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field status.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field priority.",
+          "maps_to": "record.priority"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional Freshdesk request field description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "responder-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field responder_id.",
+          "maps_to": "record.responder_id"
+        },
+        {
+          "name": "cc-emails",
+          "type": "string_array",
+          "summary": "Optional Freshdesk request field cc_emails.",
+          "maps_to": "record.cc_emails"
+        },
+        {
+          "name": "due-by",
+          "type": "string",
+          "summary": "Optional Freshdesk request field due_by.",
+          "maps_to": "record.due_by"
+        },
+        {
+          "name": "email-config-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field email_config_id.",
+          "maps_to": "record.email_config_id"
+        },
+        {
+          "name": "fr-due-by",
+          "type": "string",
+          "summary": "Optional Freshdesk request field fr_due_by.",
+          "maps_to": "record.fr_due_by"
+        },
+        {
+          "name": "group-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field group_id.",
+          "maps_to": "record.group_id"
+        },
+        {
+          "name": "parent-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field parent_id.",
+          "maps_to": "record.parent_id"
+        },
+        {
+          "name": "product-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field product_id.",
+          "maps_to": "record.product_id"
+        },
+        {
+          "name": "source",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field source.",
+          "maps_to": "record.source"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Optional Freshdesk request field tags.",
+          "maps_to": "record.tags"
+        },
+        {
+          "name": "company-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field company_id.",
+          "maps_to": "record.company_id"
+        },
+        {
+          "name": "internal-agent-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field internal_agent_id.",
+          "maps_to": "record.internal_agent_id"
+        },
+        {
+          "name": "internal-group-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field internal_group_id.",
+          "maps_to": "record.internal_group_id"
+        },
+        {
+          "name": "lookup-parameter",
+          "type": "string",
+          "summary": "Optional Freshdesk request field lookup_parameter.",
+          "maps_to": "record.lookup_parameter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets"
+        }
+      ],
+      "risk": "Freshdesk Create a Ticket (POST /tickets); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets bulk-delete",
+      "summary": "Delete Multiple Tickets",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_tickets_bulk_delete",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/bulk_delete"
+        }
+      ],
+      "risk": "Freshdesk Delete Multiple Tickets (POST /tickets/bulk_delete); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets bulk-update",
+      "summary": "Update Multiple Tickets",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_tickets_bulk_update",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/bulk_update"
+        }
+      ],
+      "risk": "Freshdesk Update Multiple Tickets (POST /tickets/bulk_update); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets outbound-email create",
+      "summary": "Create an Outbound Email",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_tickets_outbound_email",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional Freshdesk request field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Optional Freshdesk request field email.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Optional Freshdesk request field subject.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Optional Freshdesk request field type.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "status",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field status.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field priority.",
+          "maps_to": "record.priority"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional Freshdesk request field description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "due-by",
+          "type": "string",
+          "summary": "Optional Freshdesk request field due_by.",
+          "maps_to": "record.due_by"
+        },
+        {
+          "name": "email-config-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field email_config_id.",
+          "maps_to": "record.email_config_id"
+        },
+        {
+          "name": "fr-due-by",
+          "type": "string",
+          "summary": "Optional Freshdesk request field fr_due_by.",
+          "maps_to": "record.fr_due_by"
+        },
+        {
+          "name": "group-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field group_id.",
+          "maps_to": "record.group_id"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Optional Freshdesk request field tags.",
+          "maps_to": "record.tags"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/outbound_email"
+        }
+      ],
+      "risk": "Freshdesk Create an Outbound Email (POST /tickets/outbound_email); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets id forward",
+      "summary": "Forward a ticket",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_tickets_id_forward",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Optional Freshdesk request field body.",
+          "maps_to": "record.body"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/forward"
+        }
+      ],
+      "risk": "Freshdesk Forward a ticket (POST /tickets/{id}/forward); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write agents id update",
+      "summary": "Update an Agent",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_agents_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "occasional",
+          "type": "boolean",
+          "summary": "Optional Freshdesk request field occasional.",
+          "maps_to": "record.occasional"
+        },
+        {
+          "name": "signature",
+          "type": "string",
+          "summary": "Optional Freshdesk request field signature.",
+          "maps_to": "record.signature"
+        },
+        {
+          "name": "ticket-scope",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field ticket_scope.",
+          "maps_to": "record.ticket_scope"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Optional Freshdesk request field email.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "Optional Freshdesk request field language.",
+          "maps_to": "record.language"
+        },
+        {
+          "name": "time-zone",
+          "type": "string",
+          "summary": "Optional Freshdesk request field time_zone.",
+          "maps_to": "record.time_zone"
+        },
+        {
+          "name": "focus-mode",
+          "type": "boolean",
+          "summary": "Optional Freshdesk request field focus_mode.",
+          "maps_to": "record.focus_mode"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/agents/{id}"
+        }
+      ],
+      "risk": "Freshdesk Update an Agent (PUT /agents/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write companies id update",
+      "summary": "Update a Company",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_companies_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional Freshdesk request field description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional Freshdesk request field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "summary": "Optional Freshdesk request field note.",
+          "maps_to": "record.note"
+        },
+        {
+          "name": "health-score",
+          "type": "string",
+          "summary": "Optional Freshdesk request field health_score.",
+          "maps_to": "record.health_score"
+        },
+        {
+          "name": "account-tier",
+          "type": "string",
+          "summary": "Optional Freshdesk request field account_tier.",
+          "maps_to": "record.account_tier"
+        },
+        {
+          "name": "renewal-date",
+          "type": "string",
+          "summary": "Optional Freshdesk request field renewal_date.",
+          "maps_to": "record.renewal_date"
+        },
+        {
+          "name": "industry",
+          "type": "string",
+          "summary": "Optional Freshdesk request field industry.",
+          "maps_to": "record.industry"
+        },
+        {
+          "name": "lookup-parameter",
+          "type": "string",
+          "summary": "Optional Freshdesk request field lookup_parameter.",
+          "maps_to": "record.lookup_parameter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/companies/{id}"
+        }
+      ],
+      "risk": "Freshdesk Update a Company (PUT /companies/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write contacts id update",
+      "summary": "Update a Contact",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_contacts_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional Freshdesk request field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Optional Freshdesk request field email.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Optional Freshdesk request field phone.",
+          "maps_to": "record.phone"
+        },
+        {
+          "name": "mobile",
+          "type": "string",
+          "summary": "Optional Freshdesk request field mobile.",
+          "maps_to": "record.mobile"
+        },
+        {
+          "name": "twitter-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field twitter_id.",
+          "maps_to": "record.twitter_id"
+        },
+        {
+          "name": "unique-external-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field unique_external_id.",
+          "maps_to": "record.unique_external_id"
+        },
+        {
+          "name": "other-emails",
+          "type": "string_array",
+          "summary": "Optional Freshdesk request field other_emails.",
+          "maps_to": "record.other_emails"
+        },
+        {
+          "name": "company-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field company_id.",
+          "maps_to": "record.company_id"
+        },
+        {
+          "name": "view-all-tickets",
+          "type": "boolean",
+          "summary": "Optional Freshdesk request field view_all_tickets.",
+          "maps_to": "record.view_all_tickets"
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "summary": "Optional Freshdesk request field address.",
+          "maps_to": "record.address"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional Freshdesk request field description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "job-title",
+          "type": "string",
+          "summary": "Optional Freshdesk request field job_title.",
+          "maps_to": "record.job_title"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "Optional Freshdesk request field language.",
+          "maps_to": "record.language"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Optional Freshdesk request field tags.",
+          "maps_to": "record.tags"
+        },
+        {
+          "name": "time-zone",
+          "type": "string",
+          "summary": "Optional Freshdesk request field time_zone.",
+          "maps_to": "record.time_zone"
+        },
+        {
+          "name": "lookup-parameter",
+          "type": "string",
+          "summary": "Optional Freshdesk request field lookup_parameter.",
+          "maps_to": "record.lookup_parameter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "risk": "Freshdesk Update a Contact (PUT /contacts/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write contacts id make-agent",
+      "summary": "Make Agent",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_contacts_id_make_agent",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "occasional",
+          "type": "boolean",
+          "summary": "Optional Freshdesk request field occasional.",
+          "maps_to": "record.occasional"
+        },
+        {
+          "name": "signature",
+          "type": "string",
+          "summary": "Optional Freshdesk request field signature.",
+          "maps_to": "record.signature"
+        },
+        {
+          "name": "ticket-scope",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field ticket_scope.",
+          "maps_to": "record.ticket_scope"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Optional Freshdesk request field type.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "focus-mode",
+          "type": "boolean",
+          "summary": "Optional Freshdesk request field focus_mode.",
+          "maps_to": "record.focus_mode"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{id}/make_agent"
+        }
+      ],
+      "risk": "Freshdesk Make Agent (PUT /contacts/{id}/make_agent); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write contacts id restore",
+      "summary": "Restore a Contact",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_contacts_id_restore",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{id}/restore"
+        }
+      ],
+      "risk": "Freshdesk Restore a Contact (PUT /contacts/{id}/restore); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write groups id update",
+      "summary": "Update a Group",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_groups_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "auto-ticket-assign",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field auto_ticket_assign.",
+          "maps_to": "record.auto_ticket_assign"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional Freshdesk request field description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "escalate-to",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field escalate_to.",
+          "maps_to": "record.escalate_to"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional Freshdesk request field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "unassigned-for",
+          "type": "string",
+          "summary": "Optional Freshdesk request field unassigned_for.",
+          "maps_to": "record.unassigned_for"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/groups/{id}"
+        }
+      ],
+      "risk": "Freshdesk Update a Group (PUT /groups/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets merge",
+      "summary": "Ticket Merge API",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_tickets_merge",
+      "flags": [
+        {
+          "name": "primary-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field primary_id.",
+          "maps_to": "record.primary_id"
+        },
+        {
+          "name": "convert-recepients-to-cc",
+          "type": "boolean",
+          "summary": "Optional Freshdesk request field convert_recepients_to_cc.",
+          "maps_to": "record.convert_recepients_to_cc"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/merge"
+        }
+      ],
+      "risk": "Freshdesk Ticket Merge API (PUT /tickets/merge); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets id update",
+      "summary": "Update a Ticket",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_tickets_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional Freshdesk request field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "requester-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field requester_id.",
+          "maps_to": "record.requester_id"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Optional Freshdesk request field email.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "facebook-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field facebook_id.",
+          "maps_to": "record.facebook_id"
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Optional Freshdesk request field phone.",
+          "maps_to": "record.phone"
+        },
+        {
+          "name": "twitter-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field twitter_id.",
+          "maps_to": "record.twitter_id"
+        },
+        {
+          "name": "unique-external-id",
+          "type": "string",
+          "summary": "Optional Freshdesk request field unique_external_id.",
+          "maps_to": "record.unique_external_id"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Optional Freshdesk request field subject.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Optional Freshdesk request field type.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "status",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field status.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field priority.",
+          "maps_to": "record.priority"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional Freshdesk request field description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "responder-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field responder_id.",
+          "maps_to": "record.responder_id"
+        },
+        {
+          "name": "due-by",
+          "type": "string",
+          "summary": "Optional Freshdesk request field due_by.",
+          "maps_to": "record.due_by"
+        },
+        {
+          "name": "email-config-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field email_config_id.",
+          "maps_to": "record.email_config_id"
+        },
+        {
+          "name": "fr-due-by",
+          "type": "string",
+          "summary": "Optional Freshdesk request field fr_due_by.",
+          "maps_to": "record.fr_due_by"
+        },
+        {
+          "name": "group-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field group_id.",
+          "maps_to": "record.group_id"
+        },
+        {
+          "name": "parent-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field parent_id.",
+          "maps_to": "record.parent_id"
+        },
+        {
+          "name": "product-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field product_id.",
+          "maps_to": "record.product_id"
+        },
+        {
+          "name": "source",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field source.",
+          "maps_to": "record.source"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Optional Freshdesk request field tags.",
+          "maps_to": "record.tags"
+        },
+        {
+          "name": "company-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field company_id.",
+          "maps_to": "record.company_id"
+        },
+        {
+          "name": "internal-agent-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field internal_agent_id.",
+          "maps_to": "record.internal_agent_id"
+        },
+        {
+          "name": "internal-group-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field internal_group_id.",
+          "maps_to": "record.internal_group_id"
+        },
+        {
+          "name": "lookup-parameter",
+          "type": "string",
+          "summary": "Optional Freshdesk request field lookup_parameter.",
+          "maps_to": "record.lookup_parameter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{id}"
+        }
+      ],
+      "risk": "Freshdesk Update a Ticket (PUT /tickets/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write tickets id restore",
+      "summary": "Restore a Ticket",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_tickets_id_restore",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{id}/restore"
+        }
+      ],
+      "risk": "Freshdesk Restore a Ticket (PUT /tickets/{id}/restore); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    },
+    {
+      "path": "write time-entries id update",
+      "summary": "Update a Time Entry",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_time_entries_id",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required Freshdesk path/query parameter id.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "agent-id",
+          "type": "integer",
+          "summary": "Optional Freshdesk request field agent_id.",
+          "maps_to": "record.agent_id"
+        },
+        {
+          "name": "billable",
+          "type": "boolean",
+          "summary": "Optional Freshdesk request field billable.",
+          "maps_to": "record.billable"
+        },
+        {
+          "name": "executed-at",
+          "type": "string",
+          "summary": "Optional Freshdesk request field executed_at.",
+          "maps_to": "record.executed_at"
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "summary": "Optional Freshdesk request field note.",
+          "maps_to": "record.note"
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "Optional Freshdesk request field start_time.",
+          "maps_to": "record.start_time"
+        },
+        {
+          "name": "time-spent",
+          "type": "string",
+          "summary": "Optional Freshdesk request field time_spent.",
+          "maps_to": "record.time_spent"
+        },
+        {
+          "name": "timer-running",
+          "type": "boolean",
+          "summary": "Optional Freshdesk request field timer_running.",
+          "maps_to": "record.timer_running"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/time_entries/{id}"
+        }
+      ],
+      "risk": "Freshdesk Update a Time Entry (PUT /time_entries/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute; destructive/high-risk Freshdesk writes also require typed confirmation."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "freshdesk",
+      "summary": "Freshdesk streams, bounded direct reads, and gated reverse-ETL commands."
+    },
+    {
+      "name": "freshdesk-writes",
+      "summary": "Freshdesk write commands use named reverse-ETL actions with plan, preview, approval, execute, and destructive confirmation where required."
+    },
+    {
+      "name": "freshdesk-direct-reads",
+      "summary": "Freshdesk direct reads are fixed connector-relative GET operations with JSON output capped at 1 MiB."
+    }
+  ]
+}

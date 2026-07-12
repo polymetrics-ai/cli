@@ -1,14 +1,183 @@
 {
   "api": "Freshdesk REST API v2",
-  "docs": "https://developers.freshdesk.com/api/#change_log",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Freshdesk surface (conversations, time entries, solutions/articles, canned responses, business hours, webhooks, etc.) is out of scope outside this connector's current declared surface; this connector is read-only, matching legacy",
+  "docs": "https://developers.freshdesk.com/api/",
+  "reviewed_at": "2026-07-09",
+  "operation_ledger_version": 1,
+  "scope": "Issue #176/#172 full operation implementation pass: all Freshdesk GET endpoints are executable via existing streams or bounded JSON direct-read commands; JSON-expressible POST/PUT/DELETE operations are named reverse-ETL write actions with plan/preview/approval gates and destructive confirmation where required. The CSV multipart contact import POST remains blocked-by-default until a bounded file_upload executor exists; no raw generic HTTP write surface is exposed.",
   "endpoints": [
+    {
+      "method": "GET",
+      "path": "/tickets/{id}",
+      "covered_by": {
+        "direct_read": "read tickets id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/associated_tickets",
+      "covered_by": {
+        "direct_read": "read tickets id associated-tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/prime_association",
+      "covered_by": {
+        "direct_read": "read tickets id prime-association"
+      }
+    },
     {
       "method": "GET",
       "path": "/tickets",
       "covered_by": {
         "stream": "tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/tickets?query={query}",
+      "covered_by": {
+        "direct_read": "read search tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/watchers",
+      "covered_by": {
+        "direct_read": "read tickets id watchers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_fields",
+      "covered_by": {
+        "direct_read": "read ticket-fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/conversations",
+      "covered_by": {
+        "direct_read": "read tickets id conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/time_entries",
+      "covered_by": {
+        "direct_read": "read tickets id time-entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/satisfaction_ratings",
+      "covered_by": {
+        "direct_read": "read tickets ticket-id satisfaction-ratings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/summary",
+      "covered_by": {
+        "direct_read": "read tickets id summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/archived/{id}",
+      "covered_by": {
+        "direct_read": "read tickets archived id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/archived/{id}/conversations",
+      "covered_by": {
+        "direct_read": "read tickets archived id conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/accesses",
+      "covered_by": {
+        "direct_read": "read tickets id accesses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields",
+      "covered_by": {
+        "direct_read": "read admin ticket-fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields/{id}",
+      "covered_by": {
+        "direct_read": "read admin ticket-fields id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields/{id}/sections",
+      "covered_by": {
+        "direct_read": "read admin ticket-fields id sections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+      "covered_by": {
+        "direct_read": "read admin ticket-fields id sections section-id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket-forms",
+      "covered_by": {
+        "direct_read": "read ticket-forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket-forms/{id}",
+      "covered_by": {
+        "direct_read": "read ticket-forms id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket-forms/{form_id}/fields/{field_id}",
+      "covered_by": {
+        "direct_read": "read ticket-forms form-id fields field-id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels/outbound-messages/{message_id}",
+      "covered_by": {
+        "direct_read": "read channels outbound-messages message-id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account",
+      "covered_by": {
+        "direct_read": "read account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{id}",
+      "covered_by": {
+        "direct_read": "read jobs id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}",
+      "covered_by": {
+        "direct_read": "read contacts id"
       }
     },
     {
@@ -20,9 +189,58 @@
     },
     {
       "method": "GET",
-      "path": "/companies",
+      "path": "/contacts/autocomplete?term={keyword}",
       "covered_by": {
-        "stream": "companies"
+        "direct_read": "read contacts autocomplete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/contacts?query={query}",
+      "covered_by": {
+        "direct_read": "read search contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/export/{id}",
+      "covered_by": {
+        "direct_read": "read contacts export id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/imports",
+      "covered_by": {
+        "direct_read": "read contacts imports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/imports/{id}",
+      "covered_by": {
+        "direct_read": "read contacts imports id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_fields",
+      "covered_by": {
+        "direct_read": "read contact-fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_fields/{id}",
+      "covered_by": {
+        "direct_read": "read contact-fields id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/{id}",
+      "covered_by": {
+        "direct_read": "read agents id"
       }
     },
     {
@@ -34,6 +252,69 @@
     },
     {
       "method": "GET",
+      "path": "/agents/me",
+      "covered_by": {
+        "direct_read": "read agents me"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/autocomplete?term={keyword}",
+      "covered_by": {
+        "direct_read": "read agents autocomplete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents?page=1&per_page=10&only=availability",
+      "covered_by": {
+        "direct_read": "read agents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/{id}/availability",
+      "covered_by": {
+        "direct_read": "read agents id availability"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/skills/{id}",
+      "covered_by": {
+        "direct_read": "read admin skills id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/skills",
+      "covered_by": {
+        "direct_read": "read admin skills"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles/{id}",
+      "covered_by": {
+        "direct_read": "read roles id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "covered_by": {
+        "direct_read": "read roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}",
+      "covered_by": {
+        "direct_read": "read groups id"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/groups",
       "covered_by": {
         "stream": "groups"
@@ -41,42 +322,889 @@
     },
     {
       "method": "GET",
-      "path": "/tickets/{id}/conversations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/admin/groups/{id}",
+      "covered_by": {
+        "direct_read": "read admin groups id"
       }
     },
     {
       "method": "GET",
-      "path": "/tickets/{id}/time_entries",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/admin/groups",
+      "covered_by": {
+        "direct_read": "read admin groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/groups/{id}/agents",
+      "covered_by": {
+        "direct_read": "read admin groups id agents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{id}",
+      "covered_by": {
+        "direct_read": "read companies id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/autocomplete?name={keyword}",
+      "covered_by": {
+        "direct_read": "read companies autocomplete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/companies?query={query}",
+      "covered_by": {
+        "direct_read": "read search companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/export/{id}",
+      "covered_by": {
+        "direct_read": "read companies export id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/imports",
+      "covered_by": {
+        "direct_read": "read companies imports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/imports/{id}",
+      "covered_by": {
+        "direct_read": "read companies imports id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company_fields",
+      "covered_by": {
+        "direct_read": "read company-fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company_fields/{id}",
+      "covered_by": {
+        "direct_read": "read company-fields id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas",
+      "covered_by": {
+        "direct_read": "read custom-objects schemas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema_id}",
+      "covered_by": {
+        "direct_read": "read custom-objects schemas schema-id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema_id}/records/{record_id}",
+      "covered_by": {
+        "direct_read": "read custom-objects schemas schema-id records record-id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema_id}/records",
+      "covered_by": {
+        "direct_read": "read custom-objects schemas schema-id records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema_id}/records/count",
+      "covered_by": {
+        "direct_read": "read custom-objects schemas schema-id records count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema_id}/records?{field_name}{operator}{value}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked because Freshdesk custom-object record filtering encodes the custom field/operator as dynamic query parameter names (for example age%5Bgte%5D=35); the current direct-read command schema only supports fixed query parameter names and must not expose a raw query-string escape hatch.",
+        "source_url": "https://developers.freshdesk.com/api/#filter_records_of_custom_objects",
+        "notes": "Filter Records Of A Custom Object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_responses/{id}",
+      "covered_by": {
+        "direct_read": "read canned-responses id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_response_folders",
+      "covered_by": {
+        "direct_read": "read canned-response-folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_response_folders/{id}",
+      "covered_by": {
+        "direct_read": "read canned-response-folders id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_response_folders/{id}/responses",
+      "covered_by": {
+        "direct_read": "read canned-response-folders id responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/categories/{id}",
+      "covered_by": {
+        "direct_read": "read discussions categories id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/categories",
+      "covered_by": {
+        "direct_read": "read discussions categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/categories/{id}/forums",
+      "covered_by": {
+        "direct_read": "read discussions categories id forums"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/forums/{id}",
+      "covered_by": {
+        "direct_read": "read discussions forums id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/forums/{id}/topics",
+      "covered_by": {
+        "direct_read": "read discussions forums id topics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/forums/{id}/follow?user_id={id}",
+      "covered_by": {
+        "direct_read": "read discussions forums id follow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/{id}",
+      "covered_by": {
+        "direct_read": "read discussions topics id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/{id}/comments",
+      "covered_by": {
+        "direct_read": "read discussions topics id comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/{id}/follow?user_id={id}",
+      "covered_by": {
+        "direct_read": "read discussions topics id follow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/followed_by?user_id={id}",
+      "covered_by": {
+        "direct_read": "read discussions topics followed-by"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/participated_by?user_id={id}",
+      "covered_by": {
+        "direct_read": "read discussions topics participated-by"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/categories/{id}",
+      "covered_by": {
+        "direct_read": "read solutions categories id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/categories/{id}/{language_code}",
+      "covered_by": {
+        "direct_read": "read solutions categories id language-code"
       }
     },
     {
       "method": "GET",
       "path": "/solutions/categories",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "covered_by": {
+        "direct_read": "read solutions categories"
       }
     },
     {
       "method": "GET",
-      "path": "/canned-response-folders",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/solutions/categories/{language_code}",
+      "covered_by": {
+        "direct_read": "read solutions categories language-code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{id}",
+      "covered_by": {
+        "direct_read": "read solutions folders id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{id}/{language_code}",
+      "covered_by": {
+        "direct_read": "read solutions folders id language-code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/categories/{category_id}/folders",
+      "covered_by": {
+        "direct_read": "read solutions categories category-id folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/categories/{category_id}/folders/{language_code}",
+      "covered_by": {
+        "direct_read": "read solutions categories category-id folders language-code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{folder_id}/subfolders",
+      "covered_by": {
+        "direct_read": "read solutions folders folder-id subfolders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{folder_id}/subfolders/{language_code}",
+      "covered_by": {
+        "direct_read": "read solutions folders folder-id subfolders language-code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/articles/{id}",
+      "covered_by": {
+        "direct_read": "read solutions articles id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/articles/{id}/{language_code}",
+      "covered_by": {
+        "direct_read": "read solutions articles id language-code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{id}/articles",
+      "covered_by": {
+        "direct_read": "read solutions folders id articles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{id}/articles/{language_code}",
+      "covered_by": {
+        "direct_read": "read solutions folders id articles language-code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/solutions?term={keyword}",
+      "covered_by": {
+        "direct_read": "read search solutions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer-satisfaction/surveys",
+      "covered_by": {
+        "direct_read": "read customer-satisfaction surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer-satisfaction/surveys/{survey_id}/responses",
+      "covered_by": {
+        "direct_read": "read customer-satisfaction surveys survey-id responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/surveys",
+      "covered_by": {
+        "direct_read": "read surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/surveys/satisfaction_ratings",
+      "covered_by": {
+        "direct_read": "read surveys satisfaction-ratings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}",
+      "covered_by": {
+        "direct_read": "read tickets id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}",
+      "covered_by": {
+        "direct_read": "read groups id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_entries",
+      "covered_by": {
+        "direct_read": "read time-entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_configs/{id}",
+      "covered_by": {
+        "direct_read": "read email-configs id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_configs",
+      "covered_by": {
+        "direct_read": "read email-configs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/mailboxes/{id}",
+      "covered_by": {
+        "direct_read": "read email mailboxes id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/mailboxes",
+      "covered_by": {
+        "direct_read": "read email mailboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/settings",
+      "covered_by": {
+        "direct_read": "read email settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/email/bcc",
+      "covered_by": {
+        "direct_read": "read notifications email bcc"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}",
+      "covered_by": {
+        "direct_read": "read products id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "covered_by": {
+        "direct_read": "read products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_hours/{id}",
+      "covered_by": {
+        "direct_read": "read business-hours id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_hours",
+      "covered_by": {
+        "direct_read": "read business-hours"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sla_policies",
+      "covered_by": {
+        "direct_read": "read sla-policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{automation_type_id}/rules",
+      "covered_by": {
+        "direct_read": "read automations automation-type-id rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{automation_type_id}/rules/{id}",
+      "covered_by": {
+        "direct_read": "read automations automation-type-id rules id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/helpdesk",
+      "covered_by": {
+        "direct_read": "read settings helpdesk"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration/threads/{id}",
+      "covered_by": {
+        "direct_read": "read collaboration threads id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration/messages/{id}",
+      "covered_by": {
+        "direct_read": "read collaboration messages id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration/messages/{id}/generate-quote",
+      "covered_by": {
+        "direct_read": "read collaboration messages id generate-quote"
       }
     },
     {
       "method": "POST",
       "path": "/tickets",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented in this bundle; legacy is read-only"
+      "covered_by": {
+        "write": "post_tickets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/outbound_email",
+      "covered_by": {
+        "write": "post_tickets_outbound_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/bulk_update",
+      "covered_by": {
+        "write": "post_tickets_bulk_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/forward",
+      "covered_by": {
+        "write": "post_tickets_id_forward"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/bulk_delete",
+      "covered_by": {
+        "write": "post_tickets_bulk_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "covered_by": {
+        "write": "post_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/merge",
+      "covered_by": {
+        "write": "post_contacts_merge"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/export",
+      "covered_by": {
+        "write": "post_contacts_export"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/imports",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked because Freshdesk contact import requires a CSV multipart file upload; the current JSON reverse-ETL write dialect cannot safely execute file uploads without a bounded file_upload executor.",
+        "source_url": "https://developers.freshdesk.com/api/#import_contact",
+        "notes": "Contact Import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies",
+      "covered_by": {
+        "write": "post_companies"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}",
+      "covered_by": {
+        "write": "put_tickets_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/merge",
+      "covered_by": {
+        "write": "put_tickets_merge"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}/restore",
+      "covered_by": {
+        "write": "put_tickets_id_restore"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}",
+      "covered_by": {
+        "write": "put_contacts_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}/restore",
+      "covered_by": {
+        "write": "put_contacts_id_restore"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}/make_agent",
+      "covered_by": {
+        "write": "put_contacts_id_make_agent"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/agents/{id}",
+      "covered_by": {
+        "write": "put_agents_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/groups/{id}",
+      "covered_by": {
+        "write": "put_groups_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{id}",
+      "covered_by": {
+        "write": "put_companies_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/time_entries/{id}",
+      "covered_by": {
+        "write": "put_time_entries_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}",
+      "covered_by": {
+        "write": "delete_tickets_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/attachments/{id}",
+      "covered_by": {
+        "write": "delete_attachments_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}/summary",
+      "covered_by": {
+        "write": "delete_tickets_id_summary"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/archived/{id}",
+      "covered_by": {
+        "write": "delete_tickets_archived_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}/accesses",
+      "covered_by": {
+        "write": "delete_tickets_id_accesses"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/ticket_fields/{id}",
+      "covered_by": {
+        "write": "delete_admin_ticket_fields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+      "covered_by": {
+        "write": "delete_admin_ticket_fields_id_sections_section_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ticket-forms/{id}",
+      "covered_by": {
+        "write": "delete_ticket_forms_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ticket-forms/{form_id}/fields/{field_id}",
+      "covered_by": {
+        "write": "delete_ticket_forms_form_id_fields_field_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{id}",
+      "covered_by": {
+        "write": "delete_conversations_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "covered_by": {
+        "write": "delete_contacts_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}/hard_delete",
+      "covered_by": {
+        "write": "delete_contacts_id_hard_delete"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_field/{id}",
+      "covered_by": {
+        "write": "delete_contact_field_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/agents/{id}",
+      "covered_by": {
+        "write": "delete_agents_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/skills/{id}",
+      "covered_by": {
+        "write": "delete_admin_skills_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{id}",
+      "covered_by": {
+        "write": "delete_groups_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/groups/{id}",
+      "covered_by": {
+        "write": "delete_admin_groups_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{id}",
+      "covered_by": {
+        "write": "delete_companies_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/company_field/{id}",
+      "covered_by": {
+        "write": "delete_company_field_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_objects/schemas/{schema_id}/records/{record_id}",
+      "covered_by": {
+        "write": "delete_custom_objects_schemas_schema_id_records_record_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/categories/{id}",
+      "covered_by": {
+        "write": "delete_discussions_categories_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/forums/{id}",
+      "covered_by": {
+        "write": "delete_discussions_forums_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/forums/{forum_id}/follow?user_id={user_id}",
+      "covered_by": {
+        "write": "delete_discussions_forums_forum_id_follow"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/topics/{id}",
+      "covered_by": {
+        "write": "delete_discussions_topics_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/topics/{topic_id}/follow?user_id={user_id}",
+      "covered_by": {
+        "write": "delete_discussions_topics_topic_id_follow"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/comments/{id}",
+      "covered_by": {
+        "write": "delete_discussions_comments_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/solutions/categories/{id}",
+      "covered_by": {
+        "write": "delete_solutions_categories_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/solutions/folders/{id}",
+      "covered_by": {
+        "write": "delete_solutions_folders_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/solutions/articles/{id}",
+      "covered_by": {
+        "write": "delete_solutions_articles_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}",
+      "covered_by": {
+        "write": "delete_tickets_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{id}",
+      "covered_by": {
+        "write": "delete_groups_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/time_entries/{id}",
+      "covered_by": {
+        "write": "delete_time_entries_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/email/mailboxes/{id}",
+      "covered_by": {
+        "write": "delete_email_mailboxes_id"
       }
     }
   ]

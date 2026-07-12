@@ -50,6 +50,35 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 	}
 }
 
+func TestDirectReadJSONPolicyPreservesJSONBody(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/tickets/123" {
+			t.Fatalf("path = %s, want /tickets/123", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"id":123,"subject":"Need help","tags":["vip"]}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundleWithCoverage(srv.URL, http.MethodGet, "/tickets/{id}", SurfaceCoverage{DirectRead: "ticket view"}), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/tickets/{id}",
+		PathParams:   map[string]string{"id": "123"},
+		MaxBytes:     1024,
+		OutputPolicy: "json",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	if body["subject"] != "Need help" {
+		t.Fatalf("subject = %v, want Need help", body["subject"])
+	}
+}
+
 func TestDirectReadResolvesPathWithConfigDefaults(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/repos/octo/hello/contents/README.md" {
@@ -267,6 +296,10 @@ func TestDirectReadDirectoryPolicyRejectsFileResponse(t *testing.T) {
 }
 
 func directReadBundle(baseURL, method, endpointPath string) Bundle {
+	return directReadBundleWithCoverage(baseURL, method, endpointPath, SurfaceCoverage{DirectRead: "repo read-file"})
+}
+
+func directReadBundleWithCoverage(baseURL, method, endpointPath string, coverage SurfaceCoverage) Bundle {
 	return Bundle{
 		Name: "github",
 		HTTP: HTTPBase{URL: baseURL},
@@ -274,11 +307,9 @@ func directReadBundle(baseURL, method, endpointPath string) Bundle {
 			OperationLedgerVersion: 1,
 			Endpoints: []SurfaceEndpoint{
 				{
-					Method: method,
-					Path:   endpointPath,
-					CoveredBy: &SurfaceCoverage{
-						DirectRead: "repo read-file",
-					},
+					Method:    method,
+					Path:      endpointPath,
+					CoveredBy: &coverage,
 				},
 			},
 		},

@@ -1,0 +1,54 @@
+{
+  "phase": "issue-172-freshdesk-cli-parity",
+  "issue": 172,
+  "status": "parent_pr_open",
+  "gsd": {
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json_commands": 69,
+    "planning_command": "scripts/gsd prompt plan-phase 1 --skip-research",
+    "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-172-freshdesk-cli-parity --dry-run",
+    "programming_loop_status": "blocked_unknown_command",
+    "fallback": "manual universal runtime loop via .pi/prompts/pm-gsd-loop.md"
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-spf13-cobra",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation"
+  ],
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Pi tool surface in this harness lacks subagent; first ready lane #173 shares Freshdesk defs write scope with later lanes, so orchestrator executes #173 inline and records no spawned mutating worker."
+    }
+  ],
+  "tdd": {
+    "redEvidence": [
+      "freshdesk api_surface endpoints=10, want 170; exit=1",
+      "test -f internal/connectors/defs/freshdesk/cli_surface.json; exit=1"
+    ],
+    "greenEvidence": [
+      "#173 freshdesk api_surface endpoints=170; methods GET=117 POST=10 PUT=10 DELETE=33; covered=5 blocked=165",
+      "go run ./cmd/connectorgen validate internal/connectors/defs --json: 547 connectors checked, 0 findings, 0 warnings",
+      "go test ./internal/connectors/engine -run CLISurface: pass",
+      "go test ./cmd/connectorgen -run CLISurface: pass",
+      "go test ./cmd/connectorgen ./internal/connectors/engine: pass",
+      "go test ./internal/connectors/conformance -run 'TestConformance/freshdesk': pass"
+    ],
+    "refactorEvidence": ["#173 data-only metadata update; no Go production code changed"]
+  },
+  "verificationPassed": true,
+  "verificationNotes": "Draft parent PR #222 opened; focused #173 gates passed. go test ./... with Go's default 10-minute package timeout fails in internal/connectors/certify; go test ./... -timeout 20m and make verify passed.",
+  "updated_at": "2026-07-09T20:32:07Z"
+}

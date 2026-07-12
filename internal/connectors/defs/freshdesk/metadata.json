@@ -1,14 +1,14 @@
 {
   "name": "freshdesk",
   "display_name": "Freshdesk",
-  "description": "Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.",
+  "description": "Reads Freshdesk support resources and exposes fixed Freshdesk REST API v2 operations through streams, bounded JSON direct reads, and gated reverse-ETL write actions.",
   "integration_type": "api",
-  "docs_url": "https://developers.freshdesk.com/api/#change_log",
+  "docs_url": "https://developers.freshdesk.com/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Freshdesk API read of support tickets, contacts, companies, agents, and groups"
+    "read": "external Freshdesk API reads of support, contact, company, team, admin, collaboration, and settings records through streams and bounded direct reads",
+    "write": "Freshdesk create, update, merge, restore, export-job, admin, and delete operations are named reverse-ETL actions; execution requires plan, preview, approval, and destructive confirmation for high-risk deletes/admin changes",
+    "approval": "Freshdesk writes require reverse ETL plan, preview, approval, execute; destructive/high-risk writes require typed confirmation"
   }
 }

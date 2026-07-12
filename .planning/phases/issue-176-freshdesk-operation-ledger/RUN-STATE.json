@@ -1,0 +1,53 @@
+{
+  "phase": "issue-176-freshdesk-operation-ledger",
+  "issue": 176,
+  "parent_issue": 172,
+  "status": "implemented_full_green",
+  "gsd": {
+    "mode": "manual_fallback",
+    "reason": "scripts/gsd prompt programming-loop is not registered in this adapter; following .pi/prompts/pm-gsd-loop.md and gsd-universal-runtime-loop.md manually."
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Pi subagent tool is unavailable in this harness and the work touches shared direct-read policy plus Freshdesk defs."
+    }
+  ],
+  "freshdeskCoverage": {
+    "endpointsTotal": 170,
+    "coveredRows": 168,
+    "blockedRows": 2,
+    "etlCommands": 5,
+    "directReadCommands": 109,
+    "writeActions": 50,
+    "blockedReasons": [
+      "POST /contacts/imports requires CSV multipart file upload and awaits a bounded file_upload executor",
+      "GET /custom_objects/schemas/{schema_id}/records?{field_name}{operator}{value} requires a typed dynamic-query policy and must not use a raw query-string flag"
+    ]
+  },
+  "tdd": {
+    "redEvidence": [
+      "freshdesk implemented coverage=5, blocked=165, total=170; exit=1",
+      "generic output_policy=json initially rejected by commandrunner, engine DirectRead, and connectorgen schema"
+    ],
+    "greenEvidence": [
+      "go test ./internal/connectors/commandrunner -run DirectRead -count=1",
+      "go test ./internal/connectors/engine -run DirectRead -count=1",
+      "go test ./cmd/connectorgen -run 'CLISurface|Freshdesk' -count=1",
+      "go test ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner",
+      "go test ./internal/connectors/conformance -run 'TestConformance/freshdesk' -count=1",
+      "go run ./cmd/connectorgen validate internal/connectors/defs --json",
+      "/tmp/pm docs validate --connectors-dir docs/connectors",
+      "go vet ./...",
+      "go test ./... -timeout 20m",
+      "go build ./cmd/pm",
+      "make verify"
+    ],
+    "refactorEvidence": [
+      "deduplicated generated CLI command paths and kept advanced dynamic-query/file-upload endpoints blocked instead of adding raw escape hatches"
+    ]
+  },
+  "verificationPassed": true,
+  "updated_at": "2026-07-10T00:00:00Z"
+}

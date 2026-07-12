@@ -1,63 +1,39 @@
-# Overview
+# Freshdesk connector
 
-Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.
+## Overview
 
-Readable streams: `tickets`, `contacts`, `companies`, `agents`, `groups`.
-
-This connector is read-only; no write actions are declared.
-
-Service API documentation: https://developers.freshdesk.com/api/#change_log.
+Freshdesk REST API v2 connector for support tickets, contacts, companies, agents, groups, and the broader Freshdesk operation surface. The connector exposes the legacy five ETL streams plus fixed, connector-relative direct-read commands for JSON GET endpoints and named reverse-ETL write actions for JSON-expressible mutations.
 
 ## Auth setup
 
-Connection fields:
+Create a Freshdesk API key in Freshdesk and store it as the `api_key` secret. Configure `base_url` as the full API base URL, for example `https://acme.freshdesk.com/api/v2`.
 
-- `api_key` (required, secret, string); Freshdesk API key. Sent as the HTTP Basic username (password
-  is the literal X); never logged.
-- `base_url` (required, string); format `uri`; Freshdesk API base URL, e.g. https://<domain>/api/v2
-  (domain example: acme.freshdesk.com).
-- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
-  the stream.
-- `mode` (optional, string).
-- `page_size` (optional, string); default `100`; Records per page (1-100).
-- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; for the tickets stream
-  only, objects updated at or after this time are read (updated_since).
-
-Secret fields are redacted in logs and write previews: `api_key`.
-
-Default configuration values: `max_pages=0`, `page_size=100`.
-
-Authentication behavior:
-
-- HTTP Basic authentication using `secrets.api_key`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/agents` with query `per_page`=`1`.
+Service API documentation: https://developers.freshdesk.com/api/.
 
 ## Streams notes
 
-Default pagination: follows RFC 5988 Link headers with rel=next.
+Implemented streams:
 
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
+- `tickets` (`GET /tickets`), incremental on `updated_at` via `updated_since` using `start_date`.
+- `contacts` (`GET /contacts`).
+- `companies` (`GET /companies`).
+- `agents` (`GET /agents`).
+- `groups` (`GET /groups`).
 
-- `tickets`: GET `/tickets` - records path `.`; follows RFC 5988 Link headers with rel=next;
-  incremental cursor `updated_at`; sent as `updated_since`; formatted as `rfc3339`; initial lower
-  bound from `start_date`.
-- `contacts`: GET `/contacts` - records path `.`; follows RFC 5988 Link headers with rel=next.
-- `companies`: GET `/companies` - records path `.`; follows RFC 5988 Link headers with rel=next.
-- `agents`: GET `/agents` - records path `.`; follows RFC 5988 Link headers with rel=next.
-- `groups`: GET `/groups` - records path `.`; follows RFC 5988 Link headers with rel=next.
+Additional GET endpoints are exposed as bounded direct reads under `pm freshdesk read ...`; they require fixed path/query flags, parse JSON only, and cap responses at 1 MiB.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Freshdesk API read of support tickets,
-contacts, companies, agents, and groups.
+Freshdesk JSON-expressible POST/PUT/DELETE endpoints are exposed as named reverse-ETL actions under `pm freshdesk write ...`. These commands create a reverse-ETL command plan first; operators must preview and approve before execution. Delete/high-risk/admin actions declare `confirm: destructive` and require typed confirmation when executing the approved plan.
+
+The connector intentionally does not expose a raw HTTP write surface. `POST /contacts/imports` remains blocked because Freshdesk requires a CSV multipart file upload; it needs a future bounded `file_upload` executor rather than JSON reverse ETL.
+
+One advanced direct-read row, custom-object record filtering, remains blocked because Freshdesk encodes the custom field/operator as dynamic query parameter names (for example `age%5Bgte%5D=35`). That needs a typed query-builder policy rather than a raw query-string flag.
 
 ## Known limits
 
-- Batch defaults: read_page_size=100.
-- API coverage includes 5 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  out_of_scope=5.
+- No credentialed Freshdesk checks are run by static validation.
+- Direct reads are JSON-only and capped at 1 MiB; binary/file downloads are not streamed to disk.
+- Contact CSV import (`POST /contacts/imports`) is blocked until the connector engine has a bounded file-upload operation executor.
+- Custom-object record filtering is blocked until direct reads support a typed dynamic-query builder for provider-specific filter syntax.
+- `base_url` must include `/api/v2`; the engine does not derive it from a bare Freshdesk domain.
