@@ -22,7 +22,7 @@
   "ready_queue": [
     {
       "number": 325,
-      "status": "worker_in_progress",
+      "status": "provisionally_integrated",
       "dependencies": [],
       "write_scope": [
         "internal/agentloop fixture/replay/policy/redaction/safety files",
@@ -32,14 +32,14 @@
         "Makefile agent-loop-test target",
         ".planning/phases/325-agentloop-characterization"
       ],
-      "decision": "spawned"
+      "decision": "integrated_parent_review_pending"
     },
     {
       "number": 326,
-      "status": "planned",
+      "status": "worker_in_progress",
       "dependencies": [325],
       "write_scope": ["internal/agentloop/model.go minimal controller identities", "internal/agentloop/controller", "cmd/loopctl read-only status", ".planning/phases/326-controller-fencing"],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "spawned"
     },
     {
       "number": 339,
@@ -157,6 +157,18 @@
       "decision": "spawned",
       "issue_numbers": [325],
       "reason": "Assigned the only dependency-ready mutation slice to an isolated Codex worker worktree; all later slices remain dependency-blocked."
+    },
+    {
+      "timestamp": "2026-07-12T09:31:00Z",
+      "decision": "provisionally_integrated",
+      "issue_numbers": [325],
+      "reason": "PR #340 passed all local and GitHub gates and was exact-head rebased into the parent. Claude review was administratively disabled and the single Copilot fallback exhausted quota, so parent review coverage remains pending."
+    },
+    {
+      "timestamp": "2026-07-12T09:31:00Z",
+      "decision": "spawned",
+      "issue_numbers": [326],
+      "reason": "Phase 0 code is present on the parent branch and Phase 1A is the only dependency-ready mutation slice; dispatch uses the corrected controller preflight contract."
     }
   ],
   "subissues": [
@@ -164,21 +176,21 @@
       "number": 325,
       "url": "https://github.com/polymetrics-ai/cli/issues/325",
       "branch": "fix/325-agentloop-characterization",
-      "pr_url": null,
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/340",
       "worker": "Codex phase0_worker",
-      "status": "worker_in_progress",
+      "status": "provisionally_integrated",
       "write_scope": ["fixture/replay/policy/redaction/safety core", "cmd/loopctl replay and safety", "scripts/tests", "loop entrypoint guards", "Makefile"],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-325-agentloop-characterization",
-      "verification": "pending red characterization",
+      "verification": "local full verify, race, shell isolation, independent adversarial review, and all GitHub checks green; rebased parent head 6e7942d8",
       "automated_review": {
         "primary_route": "claude_auto",
-        "status": "pending",
-        "head_sha": "pending",
-        "reviewed_range": "pending",
-        "coverage_route": "sub_pr",
-        "fallback_route": "none",
-        "disposition_summary": "pending",
-        "disposition_url": "pending"
+        "status": "parent_review_pending",
+        "head_sha": "3cd6c7d531e3f7febc565b60d117a61a657e5de3",
+        "reviewed_range": "23269a7e..6e7942d8",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "copilot_backup_quota_exhausted",
+        "disposition_summary": "Independent adversarial review approved with no P0/P1; Claude workflow disabled; one Copilot request returned quota exhaustion; parent coverage remains required.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/340#issuecomment-4950654229"
       }
     },
     {
@@ -186,11 +198,11 @@
       "url": "https://github.com/polymetrics-ai/cli/issues/326",
       "branch": "fix/326-controller-fencing",
       "pr_url": null,
-      "worker": "pending",
-      "status": "planned",
+      "worker": "Codex phase1_worker",
+      "status": "worker_in_progress",
       "write_scope": ["internal/agentloop/model.go minimal controller identities", "internal/agentloop/controller", "cmd/loopctl read-only status", ".planning/phases/326-controller-fencing"],
-      "worker_directory": "pending",
-      "verification": "blocked by #325",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-326-controller-fencing",
+      "verification": "TDD planning and red characterization pending",
       "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
     },
     {
@@ -360,5 +372,5 @@
     "quality gate reductions",
     "secret access"
   ],
-  "updated_at": "2026-07-12T08:05:25Z"
+  "updated_at": "2026-07-12T09:31:00Z"
 }
