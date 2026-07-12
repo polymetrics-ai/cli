@@ -643,6 +643,25 @@ process_group_alive() {
   kill -0 -- "-$pgid" 2>/dev/null
 }
 
+# kill -0 reports zombies as present. Treat an exited or zombie child leader as reapable so a
+# short-lived role cannot consume its whole deadline while bash still has an unreaped child entry.
+leader_process_exited() {
+  local pid="$1" state
+  [[ "$pid" =~ ^[0-9]+$ ]] || return 0
+  kill -0 "$pid" 2>/dev/null || return 0
+  if state="$(ps -o stat= -p "$pid" 2>/dev/null)"; then
+    state="$(tr -d '[:space:]' <<<"$state")"
+    if [[ "$state" == Z* ]]; then
+      return 0
+    fi
+    # An empty/unknown successful probe is not proof of exit; preserve supervision until a
+    # subsequent kill/ps observation is conclusive or the persisted deadline expires.
+    return 1
+  fi
+  kill -0 "$pid" 2>/dev/null || return 0
+  return 1
+}
+
 drain_role_group() {
   local pid="${ACTIVE_ROLE_PID:-}" pgid="${ACTIVE_ROLE_PGID:-}" started observed_pgid=""
   [[ "$pid" =~ ^[0-9]+$ ]] || return 0
@@ -708,6 +727,51 @@ cleanup_role_artifacts() {
   ACTIVE_ROLE_OUTPUT_FILE=""
 }
 
+publish_role_authorization() { # path exact-pid
+  python3 - "$1" "$2" <<'PY'
+import os
+import pathlib
+import tempfile
+import sys
+
+path = pathlib.Path(sys.argv[1])
+payload = (sys.argv[2] + "\n").encode("ascii", "strict")
+fd = -1
+temporary = ""
+directory_fd = -1
+try:
+    fd, temporary = tempfile.mkstemp(prefix=".role-authorize.", dir=path.parent)
+    os.fchmod(fd, 0o600)
+    written = 0
+    while written < len(payload):
+        count = os.write(fd, payload[written:])
+        if count <= 0:
+            raise OSError("short role authorization write")
+        written += count
+    os.fsync(fd)
+    os.close(fd)
+    fd = -1
+    # link is create-only: an existing file or symlink is rejected rather than overwritten. The
+    # inert role can observe the target only after the complete token is durable in the inode.
+    os.link(temporary, path, follow_symlinks=False)
+    os.unlink(temporary)
+    temporary = ""
+    directory_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+    directory_fd = os.open(path.parent, directory_flags)
+    os.fsync(directory_fd)
+finally:
+    if directory_fd >= 0:
+        os.close(directory_fd)
+    if fd >= 0:
+        os.close(fd)
+    if temporary:
+        try:
+            os.unlink(temporary)
+        except FileNotFoundError:
+            pass
+PY
+}
+
 controller_emergency() { # code reason final-phase
   local code="$1" reason="$2" final_phase="$3" latch_phase="halting" latch_ok=0 drain_ok=0
   [[ "$final_phase" == "recovery_required" ]] && latch_phase="recovery_required"
@@ -752,7 +816,7 @@ trap controller_on_signal INT TERM HUP
 trap controller_on_exit EXIT
 
 validator_model_available() {
-  local ready_file output_file pid pgid attempt rc=0 deadline next_heartbeat found=1
+  local ready_file output_file pid pgid attempt rc=0 deadline next_heartbeat found=1 leader_reaped=0
   ready_file="$STATE_DIR/.model-ready.$$.$RANDOM"
   output_file="$STATE_DIR/.model-list.$$.$RANDOM"
   ACTIVE_ROLE_READY_FILE="$ready_file"
@@ -786,7 +850,7 @@ PY
   ACTIVE_ROLE_GROUP_READY=0
   for ((attempt=0; attempt<1000; attempt++)); do
     [[ -s "$ready_file" ]] && break
-    kill -0 "$pid" 2>/dev/null || break
+    leader_process_exited "$pid" && break
     sleep 0.01
   done
   pgid="$(cat "$ready_file" 2>/dev/null || true)"
@@ -801,8 +865,9 @@ PY
   deadline=$((SECONDS + MODEL_PREFLIGHT_TIMEOUT_SECONDS))
   next_heartbeat=$((SECONDS + CONTROL_HEARTBEAT_SECONDS))
   while process_group_alive "$pgid"; do
-    if ! kill -0 "$pid" 2>/dev/null; then
+    if leader_process_exited "$pid"; then
       wait "$pid" 2>/dev/null || rc=$?
+      leader_reaped=1
       if process_group_alive "$pgid"; then
         controller_emergency VALIDATOR_MODEL_PREFLIGHT_ORPHAN "validator-model discovery left live descendants" recovery_required
         return 125
@@ -822,7 +887,7 @@ PY
     fi
     sleep 0.1
   done
-  if [[ -n "$ACTIVE_ROLE_PID" ]]; then
+  if [[ -n "$ACTIVE_ROLE_PID" && "$leader_reaped" -eq 0 ]]; then
     wait "$ACTIVE_ROLE_PID" 2>/dev/null || rc=$?
   fi
   ACTIVE_ROLE_PID=""
@@ -957,7 +1022,7 @@ PY
   ACTIVE_ROLE_GROUP_READY=0
   for ((attempt=0; attempt<200; attempt++)); do
     [[ -s "$ready_file" ]] && break
-    kill -0 "$pid" 2>/dev/null || break
+    leader_process_exited "$pid" && break
     sleep 0.01
   done
   pgid="$(cat "$ready_file" 2>/dev/null || true)"
@@ -977,7 +1042,7 @@ PY
     controller_emergency TURN_DEADLINE "$role exhausted the persisted turn deadline before authorization" halted
     return 124
   fi
-  if ! (umask 077; set -o noclobber; printf '%s\n' "$pid" >"$start_file") 2>/dev/null; then
+  if ! publish_role_authorization "$start_file" "$pid" 2>/dev/null; then
     controller_emergency ROLE_START_FAILED "could not authorize bound $role process group" recovery_required
     return 126
   fi
@@ -985,15 +1050,16 @@ PY
 }
 
 supervise_role_group() { # role
-  local role="$1" role_code rc=0 next_heartbeat=$((SECONDS + CONTROL_HEARTBEAT_SECONDS))
+  local role="$1" role_code rc=0 next_heartbeat=$((SECONDS + CONTROL_HEARTBEAT_SECONDS)) leader_reaped=0
   case "$role" in
     orchestrator) role_code="ORCHESTRATOR" ;;
     validator) role_code="VALIDATOR" ;;
     *) role_code="ROLE" ;;
   esac
   while process_group_alive "$ACTIVE_ROLE_PGID"; do
-    if ! kill -0 "$ACTIVE_ROLE_PID" 2>/dev/null; then
+    if leader_process_exited "$ACTIVE_ROLE_PID"; then
       wait "$ACTIVE_ROLE_PID" 2>/dev/null || rc=$?
+      leader_reaped=1
       if process_group_alive "$ACTIVE_ROLE_PGID"; then
         controller_emergency "${role_code}_ORPHAN" "$role leader exited with live descendants" halted
         return 125
@@ -1013,7 +1079,7 @@ supervise_role_group() { # role
     fi
     sleep 0.1
   done
-  if [[ -n "$ACTIVE_ROLE_PID" ]]; then
+  if [[ -n "$ACTIVE_ROLE_PID" && "$leader_reaped" -eq 0 ]]; then
     wait "$ACTIVE_ROLE_PID" 2>/dev/null || rc=$?
   fi
   if process_group_alive "$ACTIVE_ROLE_PGID"; then

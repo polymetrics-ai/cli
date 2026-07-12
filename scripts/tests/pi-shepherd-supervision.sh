@@ -68,6 +68,9 @@ fail() {
 
 run_test() {
   local name="$1" rc=0
+  if [[ -n "${SHEPHERD_TEST_FILTER:-}" && ",${SHEPHERD_TEST_FILTER}," != *",${name},"* ]]; then
+    return
+  fi
   if ! declare -F "$name" >/dev/null; then
     fail "missing test function: $name"
     return
@@ -139,6 +142,32 @@ SH
 set -u
 nonce="$1"
 duration="$2"
+if [[ -n "${DESCENDANT_LOCK_READY_FILE:-}" ]]; then
+  "$REAL_PYTHON_BIN" - "$AUTO_LOOP_CONTROL_FD" "$TEST_REPO/.planning/auto-loop/CONTROL.lock" \
+    "$DESCENDANT_LOCK_READY_FILE" "$nonce" <<'PY'
+import fcntl
+import os
+import pathlib
+import stat
+import sys
+
+fd = int(sys.argv[1])
+lock_path = sys.argv[2]
+marker = pathlib.Path(sys.argv[3])
+nonce = sys.argv[4]
+held = os.fstat(fd)
+canonical = os.stat(lock_path, follow_symlinks=False)
+if not stat.S_ISREG(held.st_mode) or (held.st_dev, held.st_ino) != (canonical.st_dev, canonical.st_ino):
+    raise SystemExit("descendant inherited the wrong controller lock")
+fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+marker_fd = os.open(marker, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+try:
+    os.write(marker_fd, (nonce + "\n").encode("utf-8"))
+    os.fsync(marker_fd)
+finally:
+    os.close(marker_fd)
+PY
+fi
 exec "$REAL_PYTHON_BIN" -c '
 import pathlib, signal, sys, time
 signal.signal(signal.SIGTERM, signal.SIG_IGN)
@@ -315,6 +344,7 @@ driver_env() {
     "FAKE_MODEL_MISSING=${FAKE_MODEL_MISSING:-0}"
     "FAKE_LAUNCH_DELAY=${FAKE_LAUNCH_DELAY:-0}"
     "FAKE_BIND_DELAY=${FAKE_BIND_DELAY:-0}"
+    "DESCENDANT_LOCK_READY_FILE=${DESCENDANT_LOCK_READY_FILE:-}"
     "MODEL_PROBE_FILE=$root/model-probe"
     "MODEL_COMPLETION_FILE=$root/model-completion"
     "LAUNCH_PROBE_FILE=$root/launch-probe"
@@ -403,6 +433,33 @@ elif value is None:
 else:
     print(value)
 PY
+}
+
+control_snapshot() {
+  local root="$1"
+  python3 - "$root/.planning/auto-loop/CONTROL.json" <<'PY' 2>/dev/null
+import json, pathlib, sys
+path = pathlib.Path(sys.argv[1])
+if not path.exists():
+    print("missing\t\t\t")
+    raise SystemExit(0)
+value = json.loads(path.read_text())
+print("\t".join((
+    str(value.get("phase", "")),
+    str(value.get("turn_ordinal", "")),
+    "null" if value.get("active_turn") is None else "present",
+    str(value.get("children_quiescent", "")).lower(),
+)))
+PY
+}
+
+wait_for_control_value() {
+  local root="$1" expression="$2" expected="$3" attempts="${4:-1000}" i
+  for ((i=0; i<attempts; i++)); do
+    [[ "$(control_field "$root" "$expression")" == "$expected" ]] && return 0
+    /bin/sleep 0.01
+  done
+  return 1
 }
 
 wait_for_file() {
@@ -600,14 +657,16 @@ test_missing_validator_model_fails_before_work() {
 }
 
 test_halt_is_durable_and_blocks_resume() {
-  local root rc before after
+  local root rc before after snapshot diagnostic
   root="$(mktemp -d "$TEST_TMP/halt.XXXXXX")"
   prepare_fixture "$root"
 
   FAKE_MODE=halt driver_env "$root" "synthetic halt task" >"$root/stdout.1" 2>"$root/stderr.1"
   rc=$?
   if [[ "$rc" -ne 4 || "$(control_field "$root" phase)" != "halted" ]]; then
-    fail "validator HALT was not durably latched before exit"
+    snapshot="$(control_snapshot "$root")"
+    diagnostic="$(tail -n 6 "$root/stderr.1" 2>/dev/null | tr '\n' '|')"
+    fail "validator HALT observed rc=$rc control=$snapshot stderr=$diagnostic"
     return
   fi
   before="$(shasum -a 256 "$root/.planning/auto-loop/CONTROL.json" | awk '{print $1}')"
@@ -778,34 +837,60 @@ test_signal_drains_group_and_requires_recovery() {
 }
 
 test_sigkill_controller_does_not_admit_replacement() {
-  local root driver child child_nonce leader before rc=0
+  local root driver child child_nonce leader before rc=0 attempt
   root="$(mktemp -d "$TEST_TMP/sigkill.XXXXXX")"
   prepare_fixture "$root"
 
   (
-    DRIVER_EXEC=1 FAKE_MODE=signal TURN_TIMEOUT_SECONDS=10 driver_env "$root" "synthetic sigkill task" \
+    DRIVER_EXEC=1 FAKE_MODE=signal TURN_TIMEOUT_SECONDS=10 \
+      DESCENDANT_LOCK_READY_FILE="$root/descendant-lock-ready" \
+      driver_env "$root" "synthetic sigkill task" \
       >"$root/stdout.1" 2>"$root/stderr.1"
   ) &
   driver=$!
   register_controller "$root" "$driver"
-  if ! wait_for_role_child "$root/child-pids" || ! wait_for_file "$root/events"; then
-    fail "SIGKILL test did not start fenced role tree"
+  if ! wait_for_control_value "$root" active_turn.active_role orchestrator; then
+    fail "SIGKILL role never reached durable orchestrator binding: control=$(control_snapshot "$root")"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  if ! wait_for_role_child "$root/child-pids"; then
+    fail "SIGKILL bound role did not start its descendant: control=$(control_snapshot "$root")"
     kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
     wait "$driver" 2>/dev/null || true
     return
   fi
   read -r child child_nonce < <(grep -v 'bystander' "$root/child-pids" | tail -n 1)
+  if ! wait_for_file "$root/descendant-lock-ready"; then
+    fail "SIGKILL descendant did not prove inherited lock: child_alive=$(owned_process_alive "$child" "$child_nonce" && printf yes || printf no) control=$(control_snapshot "$root")"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  if [[ "$(cat "$root/descendant-lock-ready")" != "$child_nonce" ]]; then
+    fail "SIGKILL descendant lock proof did not match the owned child"
+    return
+  fi
   leader="$(awk '$1 == "orchestrator" { print $2; exit }' "$root/events")"
   printf '%s %s\n' "$leader" "$root/bin/pi" >>"$root/controller-pids"
   before="$(event_count "$root" orchestrator)"
 
   signal_owned_process KILL "$driver" "$root/scripts/pi-shepherd-loop.sh"
   wait "$driver" 2>/dev/null || true
+  if ! wait_owned_gone "$driver" "$root/scripts/pi-shepherd-loop.sh"; then
+    fail "SIGKILL controller identity remained live"
+    return
+  fi
   if ! owned_process_alive "$child" "$child_nonce"; then
     fail "SIGKILL fixture lost its surviving child before replacement check"
     return
   fi
-  kill_owned_process "$leader" "$root/bin/pi"
+  signal_owned_process KILL "$leader" "$root/bin/pi"
+  if ! wait_owned_gone "$leader" "$root/bin/pi"; then
+    fail "SIGKILL role leader identity remained live"
+    return
+  fi
   if ! owned_process_alive "$child" "$child_nonce"; then
     fail "SIGKILL fixture lost its descendant when only the role leader was removed"
     return
@@ -819,11 +904,18 @@ test_sigkill_controller_does_not_admit_replacement() {
     fail "replacement launched a second orchestrator after controller SIGKILL"
   fi
 
-  kill_owned_process "$child" "$child_nonce"
-  /bin/sleep 0.1
+  signal_owned_process KILL "$child" "$child_nonce"
+  if ! wait_owned_gone "$child" "$child_nonce"; then
+    fail "SIGKILL descendant identity remained live"
+    return
+  fi
   : >"$root/events"
-  rc=0
-  FAKE_MODE=normal driver_env "$root" --resume >"$root/stdout.3" 2>"$root/stderr.3" || rc=$?
+  for ((attempt=0; attempt<200; attempt++)); do
+    rc=0
+    FAKE_MODE=normal driver_env "$root" --resume >"$root/stdout.3" 2>"$root/stderr.3" || rc=$?
+    [[ "$rc" -ne 75 ]] && break
+    /bin/sleep 0.01
+  done
   if [[ "$rc" -ne 4 || -s "$root/events" ]] || ! grep -q 'RECOVERY_REQUIRED' "$root/stderr.3"; then
     fail "post-crash quiescence did not require an explicit recovery decision"
   fi
@@ -884,7 +976,7 @@ PY
 }
 
 test_failed_halt_persistence_never_claims_halted() {
-  local root rc
+  local root rc snapshot diagnostic
   root="$(mktemp -d "$TEST_TMP/halt-persistence.XXXXXX")"
   prepare_fixture "$root"
 
@@ -896,7 +988,9 @@ test_failed_halt_persistence_never_claims_halted() {
   fi
   if [[ "$(control_field "$root" phase)" == "halted" ]] || \
      [[ -n "$(control_field "$root" halt.code)" ]]; then
-    fail "failed HALT persistence was falsely finalized as a durable HALT"
+    snapshot="$(control_snapshot "$root")"
+    diagnostic="$(tail -n 6 "$root/stderr" 2>/dev/null | tr '\n' '|')"
+    fail "failed HALT persistence observed control=$snapshot halt=$(control_field "$root" halt.code) stderr=$diagnostic"
   fi
 }
 
@@ -1050,7 +1144,7 @@ test_run_counters_survive_pause_resume() {
 }
 
 test_turn_limit_survives_pause_resume() {
-  local root first_count rc orchestrator_pgid validator_pgid
+  local root first_count rc orchestrator_pgid validator_pgid snapshot phase ordinal active_turn quiescent diagnostic
   root="$(mktemp -d "$TEST_TMP/turn-limit.XXXXXX")"
   prepare_fixture "$root"
 
@@ -1058,9 +1152,12 @@ test_turn_limit_survives_pause_resume() {
     >"$root/stdout.1" 2>"$root/stderr.1"
   rc=$?
   first_count="$(event_count "$root" orchestrator)"
-  if [[ "$rc" -ne 3 || "$first_count" -ne 1 || "$(control_field "$root" phase)" != "paused" ]] || \
-     [[ "$(control_field "$root" turn_ordinal)" != "1" ]]; then
-    fail "turn limit did not persist paused ordinal 1"
+  snapshot="$(control_snapshot "$root")"
+  IFS=$'\t' read -r phase ordinal active_turn quiescent <<<"$snapshot"
+  if [[ "$rc" -ne 3 || "$first_count" -ne 1 || "$phase" != "paused" || "$ordinal" != "1" ]] || \
+     [[ "$active_turn" != "null" || "$quiescent" != "true" ]]; then
+    diagnostic="$(tail -n 6 "$root/stderr.1" 2>/dev/null | tr '\n' '|')"
+    fail "turn limit observed rc=$rc orchestrators=$first_count control=$snapshot stderr=$diagnostic; want 3/1/paused/1/null/true"
     return
   fi
   if ! awk '$1 == "orchestrator" && $3 == "openai-codex/gpt-5.5" && $4 == "default" { found=1 } END { exit !found }' "$root/events"; then
@@ -1078,9 +1175,11 @@ test_turn_limit_survives_pause_resume() {
 
   FAKE_MODE=normal MAX_TURNS=999 driver_env "$root" --resume >"$root/stdout.2" 2>"$root/stderr.2"
   rc=$?
+  snapshot="$(control_snapshot "$root")"
+  IFS=$'\t' read -r phase ordinal active_turn quiescent <<<"$snapshot"
   if [[ "$rc" -ne 3 || "$(event_count "$root" orchestrator)" -ne "$first_count" ]] || \
-     [[ "$(control_field "$root" turn_ordinal)" != "1" ]]; then
-    fail "resume reset or exceeded persisted turn cap"
+     [[ "$phase" != "paused" || "$ordinal" != "1" || "$active_turn" != "null" || "$quiescent" != "true" ]]; then
+    fail "resume cap observed rc=$rc orchestrators=$(event_count "$root" orchestrator) control=$snapshot"
   fi
 }
 

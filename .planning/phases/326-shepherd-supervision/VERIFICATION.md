@@ -1,6 +1,6 @@
 # Verification: Shepherd Supervision
 
-Status: complete and independently reviewed; ready for the stacked PR checkpoint.
+Status: post-PR stability correction passes local gates; exact-head independent review pending.
 
 ```bash
 bash -n scripts/pi-shepherd-loop.sh scripts/tests/pi-shepherd-supervision.sh
@@ -39,4 +39,18 @@ phases and later canary gates land.
   agent-loop race tests, Phase 0 controls, and the 19-scenario supervision harness.
 - `git diff --check`: pass.
 
-Pending delivery actions: commit, push, stacked PR creation, and automated PR review coverage.
+## Stability correction result — 2026-07-12
+
+- Role authorization is now complete-before-visible and create-only; no child can consume an empty
+  start token.
+- Leader completion distinguishes explicit zombies from live/uncertain processes and reaps each
+  leader at most once.
+- Cumulative repeated evidence: 30/30 combined instant-exit/HALT/ratification runs, 50/50
+  turn-cap runs, 50/50 descendant-held-lock SIGKILL runs, two full supervision suites, Phase 0
+  controls, and `make agent-loop-test`.
+- Final `make verify` passes formatting/tidy, vet, all Go tests, build, docs validation, CLI smoke,
+  lint, 547 connector definitions, race/control gates, and the corrected supervision harness.
+- The SIGKILL oracle directly validates the inherited canonical lock descriptor and waits for
+  durable binding/process disappearance rather than inferring them from timing.
+
+Pending delivery actions: exact-head independent local review, push, CI, and parent integration.

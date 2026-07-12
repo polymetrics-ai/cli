@@ -116,3 +116,27 @@ RED command/output will be appended after the tests exist and before production 
 - Final `make verify` -> pass: formatting/tidy, vet, all Go tests, build, connector-doc validation,
   smoke flow, lint, 547 connector definitions, Go race/control gates, Phase 0 controls, and the
   19-scenario Shepherd supervision harness.
+
+## Post-PR stability correction — 2026-07-12
+
+- Repeated local execution exposed scheduler-dependent failures that single-pass CI did not catch.
+  The strongest preserved RED fixture reached `recovery_required` with
+  `CONTROLLER_UNCLEAN_EXIT`, an allocated turn, and no validator event. A separate run failed the
+  persisted turn-cap assertion at repetition 16, and the original SIGKILL setup failed at
+  repetition 38.
+- Root cause: role authorization used shell noclobber redirection. That creates the authorization
+  path before `printf` fills it, so the inert child could read an empty token and exit 125 before
+  executing the provider. `kill -0` also classified zombie leaders as running, and the first reaping
+  correction could wait for the same leader twice.
+- Production GREEN: authorization is now written and fsynced in a private inode, published with a
+  create-only hard link, and directory-fsynced. Explicit zombie detection reaps once; an empty or
+  uncertain `ps` result remains supervised until conclusive evidence or the persisted deadline.
+- Oracle GREEN: the SIGKILL child verifies that its inherited descriptor is the canonical lock and
+  reflocks the same open description before publishing readiness. The test observes durable role
+  binding before child/lock readiness, proves each killed identity disappears, and polls for lock
+  release under a bound instead of sleeping. Turn-cap/HALT failures capture one atomic control
+  snapshot plus bounded diagnostics.
+- Cumulative correction evidence: combined instant-exit/HALT/ratification matrix 30/30;
+  turn-cap matrix 50/50; descendant-held-lock matrix 50/50; two complete 19-scenario suites;
+  Phase 0 harness; `make agent-loop-test`; and final `make verify` all pass. Tests use only fake
+  providers and test-owned processes.
