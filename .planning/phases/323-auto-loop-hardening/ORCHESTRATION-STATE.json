@@ -1,0 +1,49 @@
+{
+  "parent_issue": {
+    "number": 323,
+    "url": "https://github.com/polymetrics-ai/cli/issues/323",
+    "title": "fix(agentic): harden autonomous delivery control plane after Twenty run",
+    "state": "OPEN"
+  },
+  "parent_branch": "fix/323-auto-loop-hardening",
+  "parent_pr": {
+    "url": "pending",
+    "base": "main",
+    "head": "fix/323-auto-loop-hardening",
+    "draft": true,
+    "state": "PLANNED"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "codex",
+    "status": "running"
+  },
+  "ready_queue": [],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-12T07:34:11Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [],
+      "reason": "Parent PR and native child issue contracts must exist before mutating workers become ready."
+    },
+    {
+      "timestamp": "2026-07-12T07:34:11Z",
+      "decision": "read_only_spawned",
+      "issue_numbers": [],
+      "reason": "Read-only baseline architecture, characterization, and control-design agents were spawned while the parent scaffold is created."
+    }
+  ],
+  "subissues": [],
+  "human_gates": [
+    "parent PR merge to main",
+    "new dependencies",
+    "authentication scope changes",
+    "repository ruleset or merge-principal changes",
+    "destructive external actions",
+    "production deployment",
+    "quality gate reductions",
+    "secret access"
+  ],
+  "updated_at": "2026-07-12T07:34:11Z"
+}

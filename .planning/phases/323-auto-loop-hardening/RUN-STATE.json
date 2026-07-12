@@ -1,0 +1,27 @@
+{
+  "phase": "323-auto-loop-hardening",
+  "status": "in_progress",
+  "parent_issue": 323,
+  "parent_branch": "fix/323-auto-loop-hardening",
+  "parent_pr": null,
+  "gsd": {
+    "doctor": "passed_with_node_24_path",
+    "adapter_programming_loop": "unavailable_not_in_registry",
+    "fallback": "installed_gsd_programming_loop_dry_run"
+  },
+  "verificationPassed": false,
+  "verificationReason": "Parent scaffold only; child implementation and full verification have not run.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "parent-scaffold",
+      "decision": "local_critical_path",
+      "reason": "Create the isolated parent branch, durable plan, draft parent PR, and child issue contracts before mutating workers start."
+    },
+    {
+      "cycle": "architecture-recon",
+      "decision": "read_only_spawned",
+      "reason": "Three read-only subagents inspect baseline architecture, characterization tests, and control-plane design without sharing mutation authority."
+    }
+  ],
+  "humanGate": "parent PR merge to main"
+}
