@@ -145,10 +145,11 @@ export function relativeTime(iso: string): string {
  * author, time, and the first lines of the note.
  */
 export function HoverPreview() {
-  const { hovered, comments, setActiveId } = useAnnotations();
+  const { hovered, comments, setActiveId, replyCounts } = useAnnotations();
   if (!hovered) return null;
   const comment = comments.find((c) => c.id === hovered.id);
   if (!comment) return null;
+  const replies = replyCounts.get(comment.id) ?? 0;
 
   const top = hovered.rect.top - 8;
   const left = Math.min(Math.max(hovered.rect.left, 16), window.innerWidth - 296);
@@ -174,14 +175,21 @@ export function HoverPreview() {
         </span>
       </div>
       <p className="mt-2 line-clamp-2 text-[13px] leading-relaxed text-text-tertiary">{comment.body}</p>
-      <button
-        type="button"
-        tabIndex={-1}
-        onClick={() => setActiveId(comment.id)}
-        className="mt-2 font-mono text-[10px] uppercase tracking-widest text-line-cta"
-      >
-        View note →
-      </button>
+      <div className="mt-2 flex items-center gap-3">
+        <button
+          type="button"
+          tabIndex={-1}
+          onClick={() => setActiveId(comment.id)}
+          className="font-mono text-[10px] uppercase tracking-widest text-line-cta"
+        >
+          View note →
+        </button>
+        {replies > 0 ? (
+          <span className="font-mono text-[9px] uppercase tracking-widest text-text-disabled">
+            {replies} {replies === 1 ? 'reply' : 'replies'}
+          </span>
+        ) : null}
+      </div>
     </div>
   );
 }

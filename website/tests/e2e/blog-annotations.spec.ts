@@ -62,10 +62,17 @@ async function selectInBlock(page: Page, blockIndex: number, needle: string): Pr
 
 async function signUp(page: Page, label: string): Promise<void> {
   const email = `e2e-${label}-${Date.now()}@example.com`;
-  const response = await page.request.post('/api/auth/sign-up/email', {
-    data: { name: `E2E ${label}`, email, password: 'e2e-password-123' },
-  });
-  expect(response.ok()).toBeTruthy();
+  // Better Auth rate-limits the sign-up path; parallel workers signing up
+  // simultaneously can trip it, so retry with a short backoff.
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const response = await page.request.post('/api/auth/sign-up/email', {
+      data: { name: `E2E ${label}`, email, password: 'e2e-password-123' },
+    });
+    if (response.ok()) return;
+    if (response.status() !== 429) break;
+    await page.waitForTimeout(3000);
+  }
+  throw new Error(`sign-up failed for ${email}`);
 }
 
 test.describe('blog annotations', () => {
@@ -159,6 +166,48 @@ test.describe('blog annotations', () => {
     await page.goto('/bookmarks');
     await page.getByRole('button', { name: 'Remove bookmark' }).first().click();
     await expect(page.getByText('Nothing saved yet')).toBeVisible();
+  });
+
+  test('replies thread YouTube-style behind an expander', async ({ page }) => {
+    await signUp(page, 'replier');
+    await page.goto(POST_PATH);
+    const noteText = `Threaded root ${Date.now()}`;
+    const replyText = `First reply ${Date.now()}`;
+
+    // Root note.
+    await selectInBlock(page, 0, 'systems where work happens');
+    await page.getByRole('toolbar', { name: 'Annotate selection' }).getByRole('button', { name: 'Comment' }).click();
+    const composer = page.getByRole('dialog', { name: 'New note' });
+    await composer.getByRole('textbox').fill(noteText);
+    await composer.getByRole('button', { name: 'Post note' }).click();
+    await expect(page.locator('mark[data-annotation-mark]', { hasText: 'systems where work happens' })).toBeVisible();
+
+    // Reply from the sheet.
+    await page.getByRole('button', { name: 'Open all notes' }).click();
+    const sheet = page.locator('[data-slot=sheet-content]');
+    const card = sheet.locator('div.corner-box-corners', { hasText: noteText }).first();
+    await card.getByRole('button', { name: 'Reply', exact: true }).click();
+    await card.getByRole('textbox').fill(replyText);
+    await card.getByRole('button', { name: 'Post reply' }).click();
+
+    await expect(card.locator('[data-reply-id]', { hasText: replyText })).toBeVisible();
+    await expect(card.getByRole('button', { name: /1 reply/ })).toBeVisible();
+
+    // Reply to the reply — flattened with an @mention.
+    const replyRow = card.locator('[data-reply-id]', { hasText: replyText });
+    await replyRow.getByRole('button', { name: /Reply to/ }).click();
+    const nestedText = `Nested ${Date.now()}`;
+    await card.getByRole('textbox').fill(nestedText);
+    await card.getByRole('button', { name: 'Post reply' }).click();
+    const nestedRow = card.locator('[data-reply-id]', { hasText: nestedText }).last();
+    await expect(nestedRow).toBeVisible();
+    await expect(nestedRow.getByText(/@E2E replier/)).toBeVisible();
+
+    // Deleting the root removes the whole thread.
+    await card.getByRole('button', { name: 'Delete note' }).first().click();
+    await card.getByRole('button', { name: 'Confirm' }).click();
+    await expect(sheet.getByText(noteText)).toBeHidden();
+    await expect(sheet.getByText(replyText)).toBeHidden();
   });
 
   test('signed-out bookmarks page asks for sign-in', async ({ page }) => {
