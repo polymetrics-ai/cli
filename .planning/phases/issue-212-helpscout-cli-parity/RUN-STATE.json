@@ -1,0 +1,57 @@
+{
+  "phase": "issue-212-helpscout-cli-parity",
+  "issue": 212,
+  "status": "parent_pr_open",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json_commands": 69,
+    "plan_prompt": "scripts/gsd prompt plan-phase 212 --skip-research --tdd",
+    "programming_loop": "unavailable",
+    "manual_fallback": true,
+    "fallback_reason": "scripts/gsd: unknown GSD command: programming-loop"
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-spf13-cobra",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-lint"
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "setup checks passed; draft parent PR #230 open; implementation gates pending",
+  "orchestrationDecisions": [
+    {
+      "cycle": "parent-planning",
+      "decision": "local_critical_path",
+      "reason": "Parent PR missing and Pi subagent tool unavailable; coordinator must create planning checkpoint and draft parent PR, then run #213 locally."
+    },
+    {
+      "cycle": "worker-spawn",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "No subagent tool is available in this harness; no mutating worker was spawned."
+    }
+  ],
+  "humanGates": [
+    "parent PR merge to main",
+    "new dependencies",
+    "auth scope changes",
+    "credentialed connector checks",
+    "destructive external actions",
+    "production deployment",
+    "quality gate reductions",
+    "reverse ETL execution",
+    "generic shell/http/sql write tools"
+  ],
+  "updated_at": "2026-07-09T19:57:02Z"
+}
