@@ -21,6 +21,7 @@
             "enum": [
               "stream_etl",
               "rest_read",
+              "rest_query",
               "rest_write",
               "graphql_query",
               "graphql_mutation",

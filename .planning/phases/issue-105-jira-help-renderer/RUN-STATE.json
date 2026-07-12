@@ -1,0 +1,79 @@
+{
+  "phase": "issue-105-jira-help-renderer",
+  "parentIssue": 81,
+  "issue": 105,
+  "branch": "feat/81-jira-cli-parity",
+  "status": "verified_review_fixed",
+  "gsd": {
+    "planCommand": "scripts/gsd prompt plan-phase issue-105-jira-help-renderer --skip-research",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-105-jira-help-renderer --dry-run",
+    "programmingLoopStatus": "unavailable_unknown_command",
+    "manualFallback": true
+  },
+  "verificationPassed": true,
+  "verificationSummary": "Issue #105 checks passed: runtime Jira help including JSON help-topic fallback, connector docs, website data/tests/build, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, and connectorgen validate.",
+  "orchestrationDecisions": [
+    { "timestamp": "2026-07-09T14:30:00Z", "cycle": "plan", "decision": "local_critical_path", "reason": "Issue #104 is verified; current Pi harness exposes no subagent tool, so #105 starts locally." },
+    { "timestamp": "2026-07-09T14:58:00Z", "cycle": "red", "decision": "local_critical_path", "reason": "Runtime CLI and website connector-data tests fail for the expected missing Jira help/data behavior." },
+    { "timestamp": "2026-07-09T15:05:00Z", "cycle": "green", "decision": "local_critical_path", "reason": "Runtime Jira help, connector docs, and website data route are green under focused tests." },
+    { "timestamp": "2026-07-09T15:25:33Z", "cycle": "verify", "decision": "local_critical_path", "reason": "Full local gates passed for #105." },
+    { "timestamp": "2026-07-09T15:54:21Z", "cycle": "review-fix", "decision": "copilot_backup", "reason": "CodeRabbit reported a 51 minute rate-limit window after the #105 head; Copilot backup review produced 3 actionable comments that were fixed and re-verified." },
+    { "timestamp": "2026-07-09T16:22:06Z", "cycle": "review-fix", "decision": "copilot_backup", "reason": "Copilot backup re-review of the first fix commit produced 1 startup-latency comment; removed the early registry load and re-ran full gates." },
+    { "timestamp": "2026-07-09T16:40:00Z", "cycle": "review-fix", "decision": "coderabbit_manual_fallback", "reason": "CodeRabbit manual review completed after the retry window and reported one trivial nitpick; added explicit permission-scheme command rendering test and re-ran full gates." }
+  ],
+  "redTests": [
+    { "command": "go test ./internal/cli -run 'TestJiraConnectorCommandSurfaceHelp|TestBareJiraConnectorCommandShowsHelp' -count=1", "status": "failed_as_expected", "evidence": "pm jira --help/help returned help topic not found; bare pm jira returned missing connector command path" },
+    { "command": "cd website && pnpm test:unit -- connector-data", "status": "failed_as_expected", "evidence": "Jira cliSurface was null in generated website connector data" }
+  ],
+  "greenTests": [
+    { "command": "go test ./internal/cli -run 'TestJiraConnectorCommandSurfaceHelp|TestBareJiraConnectorCommandShowsHelp' -count=1", "status": "passed" },
+    { "command": "go test ./internal/connectors/bundleregistry -run CLISurface -count=1", "status": "passed" },
+    { "command": "go test ./internal/connectors -run TestEveryRegisteredConnectorHasGuideManualAndSkill -count=1", "status": "passed" },
+    { "command": "go run ./cmd/connectorgen validate internal/connectors/defs --json", "status": "passed", "evidence": "connectors_checked=547 findings=0 warnings=0" },
+    { "command": "go run ./cmd/pm docs validate --connectors-dir docs/connectors", "status": "passed" },
+    { "command": "cd website && pnpm gen:website-data", "status": "passed" },
+    { "command": "cd website && pnpm test:unit -- connector-data", "status": "passed" },
+    { "command": "git diff --check", "status": "passed" }
+  ],
+  "cliParityChecks": [
+    { "command": "go run ./cmd/pm help connectors", "status": "passed" },
+    { "command": "go run ./cmd/pm connectors", "status": "passed" },
+    { "command": "go run ./cmd/pm connectors inspect jira --json", "status": "passed" },
+    { "command": "go run ./cmd/pm jira --help", "status": "passed" },
+    { "command": "go run ./cmd/pm jira", "status": "passed" },
+    { "command": "go run ./cmd/pm --json jira --help", "status": "passed" },
+    { "command": "go run ./cmd/pm help jira", "status": "passed" },
+    { "command": "go run ./cmd/pm --json help jira", "status": "passed" }
+  ],
+  "automatedReview": {
+    "primaryRoute": "coderabbit_manual_fallback",
+    "primaryStatus": "completed_after_retry_window",
+    "affectedHeadSha": "e927ab5cbc3be86c112f0dfd3f425557dc54bd23",
+    "rateLimitWindow": "51 minutes reported at 2026-07-09T15:32:05Z",
+    "fallbackRoute": "copilot_backup",
+    "fallbackStatus": "commented_review_fixed",
+    "coderabbitReviewId": 4664908438,
+    "copilotReviewIds": [4664513494, 4664733824],
+    "copilotComments": [3552903423, 3552903472, 3552903512, 3553088984],
+    "dispositionSummary": "Fixed JSON help-topic output, command-surface flag punctuation, early connector-registry startup cost for bare built-in commands, and the CodeRabbit permission-scheme test nitpick; re-ran full local gates. Copilot review is backup input and does not satisfy required human approval."
+  },
+  "fullVerification": [
+    { "command": "gofmt -w cmd internal", "status": "passed" },
+    { "command": "go vet ./...", "status": "passed" },
+    { "command": "go test ./...", "status": "passed", "note": "passed after focused certify reruns cleared local timeout/timing flakes" },
+    { "command": "go build ./cmd/pm", "status": "passed" },
+    { "command": "make verify", "status": "passed" },
+    { "command": "go run ./cmd/connectorgen validate internal/connectors/defs", "status": "passed", "evidence": "connectorgen validate: 547 connector(s) checked, 0 findings" },
+    { "command": "cd website && pnpm build", "status": "passed" }
+  ],
+  "humanGates": [
+    "new dependencies",
+    "auth scope changes",
+    "secrets or credentialed connector checks",
+    "destructive external actions",
+    "generic write tools",
+    "reverse ETL execution",
+    "parent PR merge to main"
+  ],
+  "updatedAt": "2026-07-09T16:40:00Z"
+}

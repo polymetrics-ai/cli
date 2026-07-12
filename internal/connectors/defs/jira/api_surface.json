@@ -1,23 +1,4429 @@
 {
   "api": "Jira Cloud REST API v3 (https://developer.atlassian.com/cloud/jira/platform/rest/v3/)",
   "docs": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B review of Jira Cloud REST API v3. The bundle keeps the legacy read-only sync contracts for issue search, project search, and user search. Jira's remaining REST API groups are either detail duplicates, parameterized/fan-out subresources, administrative/configuration metadata, binary attachment payloads, or mutating workflows that are not exposed by the legacy connector.",
+  "reviewed_at": "2026-07-09",
+  "operation_ledger_version": 1,
+  "scope": "Full-surface Jira Cloud REST API v3 pass for issues #107-#110. All 620 official OpenAPI operations are inventoried from swagger-v3.v3.json: 276 GET, 135 POST, 119 PUT, and 90 DELETE. Existing issue/project/user streams remain stream-backed; safe JSON GET endpoints are exposed as bounded typed direct reads with json_redacted output; mutating endpoints are modeled as named reverse-ETL write actions; binary downloads/uploads and POST body read-query operations are explicitly blocked with operation-ledger evidence until their specialized executors are enabled.",
   "endpoints": [
-    { "method": "GET", "path": "/rest/api/3/search", "covered_by": { "stream": "issues" } },
-    { "method": "GET", "path": "/rest/api/3/project/search", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/rest/api/3/users/search", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/rest/api/3/issue/{issueIdOrKey}", "excluded": { "category": "duplicate_of", "reason": "Issue detail returns the same issue object family as the covered issue search stream and requires caller-supplied issue IDs instead of producing an independent collection." } },
-    { "method": "GET", "path": "/rest/api/3/project/{projectIdOrKey}, /rest/api/3/user", "excluded": { "category": "duplicate_of", "reason": "Project and user detail endpoints duplicate the covered project/user search streams and require explicit IDs/accountIds." } },
-    { "method": "GET", "path": "/rest/api/3/myself", "excluded": { "category": "non_data_endpoint", "reason": "Authenticated-user profile introspection is used only by the Check health-check request, not a syncable object stream." } },
-    { "method": "GET", "path": "/rest/api/3/issue/{issueIdOrKey}/comment, /worklog, /watchers, /votes, /remotelink, /properties and similar issue subresources", "excluded": { "category": "out_of_scope", "reason": "Issue subresources require per-issue fan-out from the issue stream, which is not expressible as a standalone declarative stream without a StreamHook." } },
-    { "method": "GET", "path": "/rest/api/3/attachment/content/{id}, /attachment/thumbnail/{id}", "excluded": { "category": "binary_payload", "reason": "Attachment content and thumbnails return binary payloads; this connector syncs structured JSON records only." } },
-    { "method": "GET", "path": "/rest/api/3/project/{projectIdOrKey}/components, /versions, /role, /properties and project metadata subresources", "excluded": { "category": "out_of_scope", "reason": "Project subresources require project-ID fan-out or separate schemas outside the legacy project-search record contract." } },
-    { "method": "GET", "path": "/rest/api/3/auditing/record, /events, /field, /issuetype, /priority, /resolution, /status, /workflow*, /screen*, /permission*, /configuration and other platform/admin metadata", "excluded": { "category": "requires_elevated_scope", "reason": "Administrative and configuration endpoints often require Jira admin scopes/permissions and are outside the default source-read contract." } },
-    { "method": "GET", "path": "/rest/api/3/filter*, /dashboard*, /jql*, /label, /group*, /applicationrole*, /license*, /serverInfo", "excluded": { "category": "out_of_scope", "reason": "Discovery/configuration helpers and non-issue business metadata are not part of legacy's emitted issue/project/user data surface." } },
-    { "method": "POST", "path": "/rest/api/3/search and /rest/api/3/search/jql", "excluded": { "category": "duplicate_of", "reason": "POST search variants expose the same JQL issue search family as the covered GET /search stream; the bundle keeps the legacy GET search shape." } },
-    { "method": "POST", "path": "/rest/api/3/issue, /issue/bulk, /issue/{issueIdOrKey}/comment, /transitions, /worklog, /remotelink and related create actions", "excluded": { "category": "requires_elevated_scope", "reason": "Create/comment/transition/worklog endpoints mutate Jira project data and require a dedicated reverse-ETL approval/risk design; legacy Write is unsupported." } },
-    { "method": "PUT", "path": "/rest/api/3/issue/{issueIdOrKey}, /comment/{id}, /worklog/{id}, /project/*, /filter/*, /workflow* and related update actions", "excluded": { "category": "requires_elevated_scope", "reason": "Update endpoints mutate Jira issues, comments, worklogs, project configuration, or workflow metadata and are intentionally not exposed by this read-only connector." } },
-    { "method": "DELETE", "path": "/rest/api/3/issue*, /comment*, /worklog*, /attachment*, /project*, /filter*, /workflow* and related delete actions", "excluded": { "category": "destructive_admin", "reason": "Delete endpoints remove Jira business data or administrative configuration and are intentionally not exposed." } }
+    {
+      "method": "GET",
+      "path": "/rest/api/3/announcementBanner",
+      "covered_by": {
+        "direct_read": "rest get-banner"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/announcementBanner",
+      "covered_by": {
+        "write": "set_banner"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/app/field/context/configuration/list",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Safe read-query POST requires fixed body-variable direct-read execution; classified as rest_query in operations.json and blocked until that executor shape is wired.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1app~1field~1context~1configuration~1list/post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/app/field/value",
+      "covered_by": {
+        "write": "update_multiple_custom_field_values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/app/field/{fieldIdOrKey}/context/configuration",
+      "covered_by": {
+        "direct_read": "rest get-custom-field-configuration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/app/field/{fieldIdOrKey}/context/configuration",
+      "covered_by": {
+        "write": "update_custom_field_configuration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/app/field/{fieldIdOrKey}/value",
+      "covered_by": {
+        "write": "update_custom_field_value"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/application-properties",
+      "covered_by": {
+        "direct_read": "rest get-application-property"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/application-properties/advanced-settings",
+      "covered_by": {
+        "direct_read": "rest get-advanced-settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/application-properties/{id}",
+      "covered_by": {
+        "write": "set_application_property"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/applicationrole",
+      "covered_by": {
+        "direct_read": "rest get-all-application-roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/applicationrole/{key}",
+      "covered_by": {
+        "direct_read": "rest get-application-role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/attachment/content/{id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary Jira response is inventoried with a bounded binary_download operation, but no local file-output executor is enabled for Jira in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1attachment~1content~1{id}/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/attachment/meta",
+      "covered_by": {
+        "direct_read": "rest get-attachment-meta"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/attachment/thumbnail/{id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary Jira response is inventoried with a bounded binary_download operation, but no local file-output executor is enabled for Jira in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1attachment~1thumbnail~1{id}/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/attachment/{id}",
+      "covered_by": {
+        "direct_read": "rest get-attachment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/attachment/{id}",
+      "covered_by": {
+        "write": "remove_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/attachment/{id}/expand/human",
+      "covered_by": {
+        "direct_read": "rest expand-attachment-for-humans"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/attachment/{id}/expand/raw",
+      "covered_by": {
+        "direct_read": "rest expand-attachment-for-machines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/auditing/record",
+      "covered_by": {
+        "direct_read": "rest get-audit-records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/avatar/{type}/system",
+      "covered_by": {
+        "direct_read": "rest get-all-system-avatars"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/bulk/issues/delete",
+      "covered_by": {
+        "write": "submit_bulk_delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/bulk/issues/fields",
+      "covered_by": {
+        "direct_read": "rest get-bulk-editable-fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/bulk/issues/fields",
+      "covered_by": {
+        "write": "submit_bulk_edit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/bulk/issues/move",
+      "covered_by": {
+        "write": "submit_bulk_move"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/bulk/issues/transition",
+      "covered_by": {
+        "direct_read": "rest get-available-transitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/bulk/issues/transition",
+      "covered_by": {
+        "write": "submit_bulk_transition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/bulk/issues/unwatch",
+      "covered_by": {
+        "write": "submit_bulk_unwatch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/bulk/issues/watch",
+      "covered_by": {
+        "write": "submit_bulk_watch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/bulk/queue/{taskId}",
+      "covered_by": {
+        "direct_read": "rest get-bulk-operation-progress"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/changelog/bulkfetch",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Safe read-query POST requires fixed body-variable direct-read execution; classified as rest_query in operations.json and blocked until that executor shape is wired.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1changelog~1bulkfetch/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/classification-levels",
+      "covered_by": {
+        "direct_read": "rest get-all-user-data-classification-levels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/comment/list",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Safe read-query POST requires fixed body-variable direct-read execution; classified as rest_query in operations.json and blocked until that executor shape is wired.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1comment~1list/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/comment/{commentId}/properties",
+      "covered_by": {
+        "direct_read": "rest get-comment-property-keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/comment/{commentId}/properties/{propertyKey}",
+      "covered_by": {
+        "direct_read": "rest get-comment-property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/comment/{commentId}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "set_comment_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/comment/{commentId}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "delete_comment_property"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/component",
+      "covered_by": {
+        "direct_read": "rest find-components-for-projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/component",
+      "covered_by": {
+        "write": "create_component"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/component/{id}",
+      "covered_by": {
+        "direct_read": "rest get-component"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/component/{id}",
+      "covered_by": {
+        "write": "update_component"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/component/{id}",
+      "covered_by": {
+        "write": "delete_component"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/component/{id}/relatedIssueCounts",
+      "covered_by": {
+        "direct_read": "rest get-component-related-issues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/config/fieldschemes",
+      "covered_by": {
+        "direct_read": "rest get-field-association-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/config/fieldschemes",
+      "covered_by": {
+        "write": "create_field_association_scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/config/fieldschemes/fields",
+      "covered_by": {
+        "write": "update_fields_associated_with_schemes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/config/fieldschemes/fields",
+      "covered_by": {
+        "write": "remove_fields_associated_with_schemes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/config/fieldschemes/fields/parameters",
+      "covered_by": {
+        "write": "update_field_association_scheme_item_parameters"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/config/fieldschemes/fields/parameters",
+      "covered_by": {
+        "write": "remove_field_association_scheme_item_parameters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/config/fieldschemes/projects",
+      "covered_by": {
+        "direct_read": "rest get-projects-with-field-schemes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/config/fieldschemes/projects",
+      "covered_by": {
+        "write": "associate_projects_to_field_association_schemes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/config/fieldschemes/{id}",
+      "covered_by": {
+        "direct_read": "rest get-field-association-scheme-by-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/config/fieldschemes/{id}",
+      "covered_by": {
+        "write": "update_field_association_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/config/fieldschemes/{id}",
+      "covered_by": {
+        "write": "delete_field_association_scheme"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/config/fieldschemes/{id}/clone",
+      "covered_by": {
+        "write": "clone_field_association_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/config/fieldschemes/{id}/fields",
+      "covered_by": {
+        "direct_read": "rest search-field-association-scheme-fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/config/fieldschemes/{id}/fields/{fieldId}/parameters",
+      "covered_by": {
+        "direct_read": "rest get-field-association-scheme-item-parameters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/config/fieldschemes/{id}/projects",
+      "covered_by": {
+        "direct_read": "rest search-field-association-scheme-projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/configuration",
+      "covered_by": {
+        "direct_read": "rest get-configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/configuration/timetracking",
+      "covered_by": {
+        "direct_read": "rest get-selected-time-tracking-implementation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/configuration/timetracking",
+      "covered_by": {
+        "write": "select_time_tracking_implementation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/configuration/timetracking/list",
+      "covered_by": {
+        "direct_read": "rest get-available-time-tracking-implementations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/configuration/timetracking/options",
+      "covered_by": {
+        "direct_read": "rest get-shared-time-tracking-configuration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/configuration/timetracking/options",
+      "covered_by": {
+        "write": "set_shared_time_tracking_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/customFieldOption/{id}",
+      "covered_by": {
+        "direct_read": "rest get-custom-field-option"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/dashboard",
+      "covered_by": {
+        "direct_read": "rest get-all-dashboards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/dashboard",
+      "covered_by": {
+        "write": "create_dashboard"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/dashboard/bulk/edit",
+      "covered_by": {
+        "write": "bulk_edit_dashboards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/dashboard/gadgets",
+      "covered_by": {
+        "direct_read": "rest get-all-available-dashboard-gadgets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/dashboard/search",
+      "covered_by": {
+        "direct_read": "rest get-dashboards-paginated"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/dashboard/{dashboardId}/gadget",
+      "covered_by": {
+        "direct_read": "rest get-all-gadgets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/dashboard/{dashboardId}/gadget",
+      "covered_by": {
+        "write": "add_gadget"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}",
+      "covered_by": {
+        "write": "update_gadget"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}",
+      "covered_by": {
+        "write": "remove_gadget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties",
+      "covered_by": {
+        "direct_read": "rest get-dashboard-item-property-keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}",
+      "covered_by": {
+        "direct_read": "rest get-dashboard-item-property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "set_dashboard_item_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "delete_dashboard_item_property"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/dashboard/{id}",
+      "covered_by": {
+        "direct_read": "rest get-dashboard"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/dashboard/{id}",
+      "covered_by": {
+        "write": "update_dashboard"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/dashboard/{id}",
+      "covered_by": {
+        "write": "delete_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/dashboard/{id}/copy",
+      "covered_by": {
+        "write": "copy_dashboard"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/data-policy",
+      "covered_by": {
+        "direct_read": "rest get-policy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/data-policy/project",
+      "covered_by": {
+        "direct_read": "rest get-policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/events",
+      "covered_by": {
+        "direct_read": "rest get-events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/expression/analyse",
+      "covered_by": {
+        "write": "analyse_expression"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/expression/eval",
+      "covered_by": {
+        "write": "evaluate_jira_expression"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/expression/evaluate",
+      "covered_by": {
+        "write": "evaluate_jsisjira_expression"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field",
+      "covered_by": {
+        "direct_read": "rest get-fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/field",
+      "covered_by": {
+        "write": "create_custom_field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/field/association",
+      "covered_by": {
+        "write": "create_associations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/field/association",
+      "covered_by": {
+        "write": "remove_associations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/search",
+      "covered_by": {
+        "direct_read": "rest get-fields-paginated"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/search/trashed",
+      "covered_by": {
+        "direct_read": "rest get-trashed-fields-paginated"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/field/{fieldId}",
+      "covered_by": {
+        "write": "update_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldId}/association/project",
+      "covered_by": {
+        "direct_read": "rest get-field-project-associations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldId}/context",
+      "covered_by": {
+        "direct_read": "rest get-contexts-for-field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/field/{fieldId}/context",
+      "covered_by": {
+        "write": "create_custom_field_context"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldId}/context/defaultValue",
+      "covered_by": {
+        "direct_read": "rest get-default-values"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/field/{fieldId}/context/defaultValue",
+      "covered_by": {
+        "write": "set_default_values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldId}/context/defaultValues",
+      "covered_by": {
+        "direct_read": "rest get-context-default-values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldId}/context/issuetypemapping",
+      "covered_by": {
+        "direct_read": "rest get-issue-type-mappings-for-contexts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/field/{fieldId}/context/mapping",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Safe read-query POST requires fixed body-variable direct-read execution; classified as rest_query in operations.json and blocked until that executor shape is wired.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1field~1{fieldId}~1context~1mapping/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldId}/context/projectmapping",
+      "covered_by": {
+        "direct_read": "rest get-project-context-mapping"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}",
+      "covered_by": {
+        "write": "update_custom_field_context"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}",
+      "covered_by": {
+        "write": "delete_custom_field_context"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/issuetype",
+      "covered_by": {
+        "write": "add_issue_types_to_context"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/issuetype/remove",
+      "covered_by": {
+        "write": "remove_issue_types_from_context"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/option",
+      "covered_by": {
+        "direct_read": "rest get-options-for-context"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/option",
+      "covered_by": {
+        "write": "create_custom_field_option"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/option",
+      "covered_by": {
+        "write": "update_custom_field_option"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/option/move",
+      "covered_by": {
+        "write": "reorder_custom_field_options"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/option/{optionId}",
+      "covered_by": {
+        "write": "delete_custom_field_option"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/option/{optionId}/issue",
+      "covered_by": {
+        "write": "replace_custom_field_option"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/project",
+      "covered_by": {
+        "write": "assign_projects_to_custom_field_context"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/field/{fieldId}/context/{contextId}/project/remove",
+      "covered_by": {
+        "write": "remove_custom_field_context_from_projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldId}/contexts",
+      "covered_by": {
+        "direct_read": "rest get-contexts-for-field-deprecated"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldId}/screens",
+      "covered_by": {
+        "direct_read": "rest get-screens-for-field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldKey}/option",
+      "covered_by": {
+        "direct_read": "rest get-all-issue-field-options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/field/{fieldKey}/option",
+      "covered_by": {
+        "write": "create_issue_field_option"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldKey}/option/suggestions/edit",
+      "covered_by": {
+        "direct_read": "rest get-selectable-issue-field-options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldKey}/option/suggestions/search",
+      "covered_by": {
+        "direct_read": "rest get-visible-issue-field-options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/{fieldKey}/option/{optionId}",
+      "covered_by": {
+        "direct_read": "rest get-issue-field-option"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/field/{fieldKey}/option/{optionId}",
+      "covered_by": {
+        "write": "update_issue_field_option"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/field/{fieldKey}/option/{optionId}",
+      "covered_by": {
+        "write": "delete_issue_field_option"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/field/{fieldKey}/option/{optionId}/issue",
+      "covered_by": {
+        "write": "replace_issue_field_option"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/field/{id}",
+      "covered_by": {
+        "write": "delete_custom_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/field/{id}/restore",
+      "covered_by": {
+        "write": "restore_custom_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/field/{id}/trash",
+      "covered_by": {
+        "write": "trash_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/fieldconfiguration",
+      "covered_by": {
+        "direct_read": "rest get-all-field-configurations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/fieldconfiguration",
+      "covered_by": {
+        "write": "create_field_configuration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/fieldconfiguration/{id}",
+      "covered_by": {
+        "write": "update_field_configuration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/fieldconfiguration/{id}",
+      "covered_by": {
+        "write": "delete_field_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/fieldconfiguration/{id}/fields",
+      "covered_by": {
+        "direct_read": "rest get-field-configuration-items"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/fieldconfiguration/{id}/fields",
+      "covered_by": {
+        "write": "update_field_configuration_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/fieldconfigurationscheme",
+      "covered_by": {
+        "direct_read": "rest get-all-field-configuration-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/fieldconfigurationscheme",
+      "covered_by": {
+        "write": "create_field_configuration_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/fieldconfigurationscheme/mapping",
+      "covered_by": {
+        "direct_read": "rest get-field-configuration-scheme-mappings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/fieldconfigurationscheme/project",
+      "covered_by": {
+        "direct_read": "rest get-field-configuration-scheme-project-mapping"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/fieldconfigurationscheme/project",
+      "covered_by": {
+        "write": "assign_field_configuration_scheme_to_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/fieldconfigurationscheme/{id}",
+      "covered_by": {
+        "write": "update_field_configuration_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/fieldconfigurationscheme/{id}",
+      "covered_by": {
+        "write": "delete_field_configuration_scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/fieldconfigurationscheme/{id}/mapping",
+      "covered_by": {
+        "write": "set_field_configuration_scheme_mapping"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/fieldconfigurationscheme/{id}/mapping/delete",
+      "covered_by": {
+        "write": "remove_issue_types_from_global_field_configuration_scheme"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/filter",
+      "covered_by": {
+        "write": "create_filter"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/filter/defaultShareScope",
+      "covered_by": {
+        "direct_read": "rest get-default-share-scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/filter/defaultShareScope",
+      "covered_by": {
+        "write": "set_default_share_scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/filter/favourite",
+      "covered_by": {
+        "direct_read": "rest get-favourite-filters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/filter/my",
+      "covered_by": {
+        "direct_read": "rest get-my-filters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/filter/search",
+      "covered_by": {
+        "direct_read": "rest get-filters-paginated"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/filter/{id}",
+      "covered_by": {
+        "direct_read": "rest get-filter"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/filter/{id}",
+      "covered_by": {
+        "write": "update_filter"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/filter/{id}",
+      "covered_by": {
+        "write": "delete_filter"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/filter/{id}/columns",
+      "covered_by": {
+        "direct_read": "rest get-columns"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/filter/{id}/columns",
+      "covered_by": {
+        "write": "set_columns"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/filter/{id}/columns",
+      "covered_by": {
+        "write": "reset_columns"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/filter/{id}/favourite",
+      "covered_by": {
+        "write": "set_favourite_for_filter"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/filter/{id}/favourite",
+      "covered_by": {
+        "write": "delete_favourite_for_filter"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/filter/{id}/owner",
+      "covered_by": {
+        "write": "change_filter_owner"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/filter/{id}/permission",
+      "covered_by": {
+        "direct_read": "rest get-share-permissions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/filter/{id}/permission",
+      "covered_by": {
+        "write": "add_share_permission"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/filter/{id}/permission/{permissionId}",
+      "covered_by": {
+        "direct_read": "rest get-share-permission"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/filter/{id}/permission/{permissionId}",
+      "covered_by": {
+        "write": "delete_share_permission"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/forge/panel/action/bulk/async",
+      "covered_by": {
+        "write": "bulk_pin_unpin_projects_async"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/group",
+      "covered_by": {
+        "direct_read": "rest get-group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/group",
+      "covered_by": {
+        "write": "create_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/group",
+      "covered_by": {
+        "write": "remove_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/group/bulk",
+      "covered_by": {
+        "direct_read": "rest bulk-get-groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/group/member",
+      "covered_by": {
+        "direct_read": "rest get-users-from-group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/group/user",
+      "covered_by": {
+        "write": "add_user_to_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/group/user",
+      "covered_by": {
+        "write": "remove_user_from_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/groups/picker",
+      "covered_by": {
+        "direct_read": "rest find-groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/groupuserpicker",
+      "covered_by": {
+        "direct_read": "rest find-users-and-groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/instance/license",
+      "covered_by": {
+        "direct_read": "rest get-license"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue",
+      "covered_by": {
+        "write": "create_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/archive",
+      "covered_by": {
+        "write": "archive_issues_async"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/archive",
+      "covered_by": {
+        "write": "archive_issues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/bulk",
+      "covered_by": {
+        "write": "create_issues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/bulkfetch",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Safe read-query POST requires fixed body-variable direct-read execution; classified as rest_query in operations.json and blocked until that executor shape is wired.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1issue~1bulkfetch/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/createmeta",
+      "covered_by": {
+        "direct_read": "rest get-create-issue-meta"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/createmeta/{projectIdOrKey}/issuetypes",
+      "covered_by": {
+        "direct_read": "rest get-create-issue-meta-issue-types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/createmeta/{projectIdOrKey}/issuetypes/{issueTypeId}",
+      "covered_by": {
+        "direct_read": "rest get-create-issue-meta-issue-type-id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/limit/report",
+      "covered_by": {
+        "direct_read": "rest get-issue-limit-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/picker",
+      "covered_by": {
+        "direct_read": "rest get-issue-picker-resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/properties",
+      "covered_by": {
+        "write": "bulk_set_issues_properties_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/properties/multi",
+      "covered_by": {
+        "write": "bulk_set_issue_properties_by_issue"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/properties/{propertyKey}",
+      "covered_by": {
+        "write": "bulk_set_issue_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/properties/{propertyKey}",
+      "covered_by": {
+        "write": "bulk_delete_issue_property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/unarchive",
+      "covered_by": {
+        "write": "unarchive_issues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/watching",
+      "covered_by": {
+        "write": "get_is_watching_issue_bulk"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}",
+      "covered_by": {
+        "direct_read": "rest get-issue"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/{issueIdOrKey}",
+      "covered_by": {
+        "write": "edit_issue"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}",
+      "covered_by": {
+        "write": "delete_issue"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/assignee",
+      "covered_by": {
+        "write": "assign_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/attachments",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary file upload requires a typed file_upload executor with source-file bounds; no raw multipart upload escape hatch is exposed.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1issue~1{issueIdOrKey}~1attachments/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/changelog",
+      "covered_by": {
+        "direct_read": "rest get-change-logs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/changelog/list",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Safe read-query POST requires fixed body-variable direct-read execution; classified as rest_query in operations.json and blocked until that executor shape is wired.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1issue~1{issueIdOrKey}~1changelog~1list/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/comment",
+      "covered_by": {
+        "direct_read": "rest get-comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/comment",
+      "covered_by": {
+        "write": "add_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/comment/{id}",
+      "covered_by": {
+        "direct_read": "rest get-comment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/comment/{id}",
+      "covered_by": {
+        "write": "update_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/comment/{id}",
+      "covered_by": {
+        "write": "delete_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/editmeta",
+      "covered_by": {
+        "direct_read": "rest get-edit-issue-meta"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/notify",
+      "covered_by": {
+        "write": "notify"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/properties",
+      "covered_by": {
+        "direct_read": "rest get-issue-property-keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}",
+      "covered_by": {
+        "direct_read": "rest get-issue-property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "set_issue_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "delete_issue_property"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/remotelink",
+      "covered_by": {
+        "direct_read": "rest get-remote-issue-links"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/remotelink",
+      "covered_by": {
+        "write": "create_or_update_remote_issue_link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/remotelink",
+      "covered_by": {
+        "write": "delete_remote_issue_link_by_global_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/remotelink/{linkId}",
+      "covered_by": {
+        "direct_read": "rest get-remote-issue-link-by-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/remotelink/{linkId}",
+      "covered_by": {
+        "write": "update_remote_issue_link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/remotelink/{linkId}",
+      "covered_by": {
+        "write": "delete_remote_issue_link_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/transitions",
+      "covered_by": {
+        "direct_read": "rest get-transitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/transitions",
+      "covered_by": {
+        "write": "do_transition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/votes",
+      "covered_by": {
+        "direct_read": "rest get-votes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/votes",
+      "covered_by": {
+        "write": "add_vote"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/votes",
+      "covered_by": {
+        "write": "remove_vote"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/watchers",
+      "covered_by": {
+        "direct_read": "rest get-issue-watchers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/watchers",
+      "covered_by": {
+        "write": "add_watcher"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/watchers",
+      "covered_by": {
+        "write": "remove_watcher"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog",
+      "covered_by": {
+        "direct_read": "rest get-issue-worklog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog",
+      "covered_by": {
+        "write": "add_worklog"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog",
+      "covered_by": {
+        "write": "bulk_delete_worklogs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/move",
+      "covered_by": {
+        "write": "bulk_move_worklogs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{id}",
+      "covered_by": {
+        "direct_read": "rest get-worklog"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{id}",
+      "covered_by": {
+        "write": "update_worklog"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{id}",
+      "covered_by": {
+        "write": "delete_worklog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties",
+      "covered_by": {
+        "direct_read": "rest get-worklog-property-keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}",
+      "covered_by": {
+        "direct_read": "rest get-worklog-property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "set_worklog_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "delete_worklog_property"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issueLink",
+      "covered_by": {
+        "write": "link_issues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issueLink/{linkId}",
+      "covered_by": {
+        "direct_read": "rest get-issue-link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issueLink/{linkId}",
+      "covered_by": {
+        "write": "delete_issue_link"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issueLinkType",
+      "covered_by": {
+        "direct_read": "rest get-issue-link-types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issueLinkType",
+      "covered_by": {
+        "write": "create_issue_link_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issueLinkType/{issueLinkTypeId}",
+      "covered_by": {
+        "direct_read": "rest get-issue-link-type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issueLinkType/{issueLinkTypeId}",
+      "covered_by": {
+        "write": "update_issue_link_type"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issueLinkType/{issueLinkTypeId}",
+      "covered_by": {
+        "write": "delete_issue_link_type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issues/archive/export",
+      "covered_by": {
+        "write": "export_archived_issues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuesecurityschemes",
+      "covered_by": {
+        "direct_read": "rest get-issue-security-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issuesecurityschemes",
+      "covered_by": {
+        "write": "create_issue_security_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuesecurityschemes/level",
+      "covered_by": {
+        "direct_read": "rest get-security-levels"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuesecurityschemes/level/default",
+      "covered_by": {
+        "write": "set_default_levels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuesecurityschemes/level/member",
+      "covered_by": {
+        "direct_read": "rest get-security-level-members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuesecurityschemes/project",
+      "covered_by": {
+        "direct_read": "rest search-projects-using-security-schemes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuesecurityschemes/project",
+      "covered_by": {
+        "write": "associate_schemes_to_projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuesecurityschemes/search",
+      "covered_by": {
+        "direct_read": "rest search-security-schemes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuesecurityschemes/{id}",
+      "covered_by": {
+        "direct_read": "rest get-issue-security-scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuesecurityschemes/{id}",
+      "covered_by": {
+        "write": "update_issue_security_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuesecurityschemes/{issueSecuritySchemeId}/members",
+      "covered_by": {
+        "direct_read": "rest get-issue-security-level-members"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issuesecurityschemes/{schemeId}",
+      "covered_by": {
+        "write": "delete_security_scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuesecurityschemes/{schemeId}/level",
+      "covered_by": {
+        "write": "add_security_level"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}",
+      "covered_by": {
+        "write": "update_security_level"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}",
+      "covered_by": {
+        "write": "remove_level"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}/member",
+      "covered_by": {
+        "write": "add_security_level_members"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}/member/{memberId}",
+      "covered_by": {
+        "write": "remove_member_from_security_level"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetype",
+      "covered_by": {
+        "direct_read": "rest get-issue-all-types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issuetype",
+      "covered_by": {
+        "write": "create_issue_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetype/project",
+      "covered_by": {
+        "direct_read": "rest get-issue-types-for-project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetype/{id}",
+      "covered_by": {
+        "direct_read": "rest get-issue-type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetype/{id}",
+      "covered_by": {
+        "write": "update_issue_type"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issuetype/{id}",
+      "covered_by": {
+        "write": "delete_issue_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetype/{id}/alternatives",
+      "covered_by": {
+        "direct_read": "rest get-alternative-issue-types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issuetype/{id}/avatar2",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary file upload requires a typed file_upload executor with source-file bounds; no raw multipart upload escape hatch is exposed.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1issuetype~1{id}~1avatar2/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetype/{issueTypeId}/properties",
+      "covered_by": {
+        "direct_read": "rest get-issue-type-property-keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}",
+      "covered_by": {
+        "direct_read": "rest get-issue-type-property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "set_issue_type_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "delete_issue_type_property"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetypescheme",
+      "covered_by": {
+        "direct_read": "rest get-all-issue-type-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issuetypescheme",
+      "covered_by": {
+        "write": "create_issue_type_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetypescheme/mapping",
+      "covered_by": {
+        "direct_read": "rest get-issue-type-schemes-mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetypescheme/project",
+      "covered_by": {
+        "direct_read": "rest get-issue-type-scheme-for-projects"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetypescheme/project",
+      "covered_by": {
+        "write": "assign_issue_type_scheme_to_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetypescheme/{issueTypeSchemeId}",
+      "covered_by": {
+        "write": "update_issue_type_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issuetypescheme/{issueTypeSchemeId}",
+      "covered_by": {
+        "write": "delete_issue_type_scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype",
+      "covered_by": {
+        "write": "add_issue_types_to_issue_type_scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype/move",
+      "covered_by": {
+        "write": "reorder_issue_types_in_issue_type_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeId}",
+      "covered_by": {
+        "write": "remove_issue_type_from_issue_type_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetypescreenscheme",
+      "covered_by": {
+        "direct_read": "rest get-issue-type-screen-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issuetypescreenscheme",
+      "covered_by": {
+        "write": "create_issue_type_screen_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetypescreenscheme/mapping",
+      "covered_by": {
+        "direct_read": "rest get-issue-type-screen-scheme-mappings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetypescreenscheme/project",
+      "covered_by": {
+        "direct_read": "rest get-issue-type-screen-scheme-project-associations"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetypescreenscheme/project",
+      "covered_by": {
+        "write": "assign_issue_type_screen_scheme_to_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}",
+      "covered_by": {
+        "write": "update_issue_type_screen_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}",
+      "covered_by": {
+        "write": "delete_issue_type_screen_scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping",
+      "covered_by": {
+        "write": "append_mappings_for_issue_type_screen_scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/default",
+      "covered_by": {
+        "write": "update_default_screen_scheme"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/remove",
+      "covered_by": {
+        "write": "remove_mappings_from_issue_type_screen_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/project",
+      "covered_by": {
+        "direct_read": "rest get-projects-for-issue-type-screen-scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/jql/autocompletedata",
+      "covered_by": {
+        "direct_read": "rest get-auto-complete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/autocompletedata",
+      "covered_by": {
+        "write": "get_auto_complete_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/jql/autocompletedata/suggestions",
+      "covered_by": {
+        "direct_read": "rest get-field-auto-complete-for-query-string"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/jql/function/computation",
+      "covered_by": {
+        "direct_read": "rest get-precomputations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/function/computation",
+      "covered_by": {
+        "write": "update_precomputations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/function/computation/search",
+      "covered_by": {
+        "write": "get_precomputations_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/match",
+      "covered_by": {
+        "write": "match_issues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/parse",
+      "covered_by": {
+        "write": "parse_jql_queries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/pdcleaner",
+      "covered_by": {
+        "write": "migrate_queries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/sanitize",
+      "covered_by": {
+        "write": "sanitise_jql_queries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/label",
+      "covered_by": {
+        "direct_read": "rest get-all-labels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/license/approximateLicenseCount",
+      "covered_by": {
+        "direct_read": "rest get-approximate-license-count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/license/approximateLicenseCount/product/{applicationKey}",
+      "covered_by": {
+        "direct_read": "rest get-approximate-application-license-count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/mypermissions",
+      "covered_by": {
+        "direct_read": "rest get-my-permissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/mypreferences",
+      "covered_by": {
+        "direct_read": "rest get-preference"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/mypreferences",
+      "covered_by": {
+        "write": "set_preference"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/mypreferences",
+      "covered_by": {
+        "write": "remove_preference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/mypreferences/locale",
+      "covered_by": {
+        "direct_read": "rest get-locale"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/mypreferences/locale",
+      "covered_by": {
+        "write": "set_locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/myself",
+      "covered_by": {
+        "direct_read": "rest get-current-user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/notificationscheme",
+      "covered_by": {
+        "direct_read": "rest get-notification-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/notificationscheme",
+      "covered_by": {
+        "write": "create_notification_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/notificationscheme/project",
+      "covered_by": {
+        "direct_read": "rest get-notification-scheme-to-project-mappings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/notificationscheme/{id}",
+      "covered_by": {
+        "direct_read": "rest get-notification-scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/notificationscheme/{id}",
+      "covered_by": {
+        "write": "update_notification_scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/notificationscheme/{id}/notification",
+      "covered_by": {
+        "write": "add_notifications"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/notificationscheme/{notificationSchemeId}",
+      "covered_by": {
+        "write": "delete_notification_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/notificationscheme/{notificationSchemeId}/notification/{notificationId}",
+      "covered_by": {
+        "write": "remove_notification_from_notification_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/permissions",
+      "covered_by": {
+        "direct_read": "rest get-all-permissions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/permissions/check",
+      "covered_by": {
+        "write": "get_bulk_permissions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/permissions/project",
+      "covered_by": {
+        "write": "get_permitted_projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/permissionscheme",
+      "covered_by": {
+        "direct_read": "rest get-all-permission-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/permissionscheme",
+      "covered_by": {
+        "write": "create_permission_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/permissionscheme/{schemeId}",
+      "covered_by": {
+        "direct_read": "rest get-permission-scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/permissionscheme/{schemeId}",
+      "covered_by": {
+        "write": "update_permission_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/permissionscheme/{schemeId}",
+      "covered_by": {
+        "write": "delete_permission_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/permissionscheme/{schemeId}/permission",
+      "covered_by": {
+        "direct_read": "rest get-permission-scheme-grants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/permissionscheme/{schemeId}/permission",
+      "covered_by": {
+        "write": "create_permission_grant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/permissionscheme/{schemeId}/permission/{permissionId}",
+      "covered_by": {
+        "direct_read": "rest get-permission-scheme-grant"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/permissionscheme/{schemeId}/permission/{permissionId}",
+      "covered_by": {
+        "write": "delete_permission_scheme_entity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/plans/plan",
+      "covered_by": {
+        "direct_read": "rest get-plans"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/plans/plan",
+      "covered_by": {
+        "write": "create_plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/plans/plan/{planId}",
+      "covered_by": {
+        "direct_read": "rest get-plan"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/plans/plan/{planId}",
+      "covered_by": {
+        "write": "update_plan"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/plans/plan/{planId}/archive",
+      "covered_by": {
+        "write": "archive_plan"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/plans/plan/{planId}/duplicate",
+      "covered_by": {
+        "write": "duplicate_plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/plans/plan/{planId}/team",
+      "covered_by": {
+        "direct_read": "rest get-teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/plans/plan/{planId}/team/atlassian",
+      "covered_by": {
+        "write": "add_atlassian_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/plans/plan/{planId}/team/atlassian/{atlassianTeamId}",
+      "covered_by": {
+        "direct_read": "rest get-atlassian-team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/plans/plan/{planId}/team/atlassian/{atlassianTeamId}",
+      "covered_by": {
+        "write": "update_atlassian_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/plans/plan/{planId}/team/atlassian/{atlassianTeamId}",
+      "covered_by": {
+        "write": "remove_atlassian_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/plans/plan/{planId}/team/planonly",
+      "covered_by": {
+        "write": "create_plan_only_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/plans/plan/{planId}/team/planonly/{planOnlyTeamId}",
+      "covered_by": {
+        "direct_read": "rest get-plan-only-team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/plans/plan/{planId}/team/planonly/{planOnlyTeamId}",
+      "covered_by": {
+        "write": "update_plan_only_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/plans/plan/{planId}/team/planonly/{planOnlyTeamId}",
+      "covered_by": {
+        "write": "delete_plan_only_team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/plans/plan/{planId}/trash",
+      "covered_by": {
+        "write": "trash_plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/priority",
+      "covered_by": {
+        "direct_read": "rest get-priorities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/priority",
+      "covered_by": {
+        "write": "create_priority"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/priority/default",
+      "covered_by": {
+        "write": "set_default_priority"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/priority/move",
+      "covered_by": {
+        "write": "move_priorities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/priority/search",
+      "covered_by": {
+        "direct_read": "rest search-priorities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/priority/{id}",
+      "covered_by": {
+        "direct_read": "rest get-priority"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/priority/{id}",
+      "covered_by": {
+        "write": "update_priority"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/priority/{id}",
+      "covered_by": {
+        "write": "delete_priority"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/priorityscheme",
+      "covered_by": {
+        "direct_read": "rest get-priority-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/priorityscheme",
+      "covered_by": {
+        "write": "create_priority_scheme"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/priorityscheme/mappings",
+      "covered_by": {
+        "write": "suggested_priorities_for_mappings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/priorityscheme/priorities/available",
+      "covered_by": {
+        "direct_read": "rest get-available-priorities-by-priority-scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/priorityscheme/{schemeId}",
+      "covered_by": {
+        "write": "update_priority_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/priorityscheme/{schemeId}",
+      "covered_by": {
+        "write": "delete_priority_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/priorityscheme/{schemeId}/priorities",
+      "covered_by": {
+        "direct_read": "rest get-priorities-by-priority-scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/priorityscheme/{schemeId}/projects",
+      "covered_by": {
+        "direct_read": "rest get-projects-by-priority-scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project",
+      "covered_by": {
+        "direct_read": "rest get-all-projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/project",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/project-template",
+      "covered_by": {
+        "write": "create_project_with_custom_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/project-template/edit-template",
+      "covered_by": {
+        "write": "edit_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project-template/live-template",
+      "covered_by": {
+        "direct_read": "rest live-template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/project-template/remove-template",
+      "covered_by": {
+        "write": "remove_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/project-template/save-template",
+      "covered_by": {
+        "write": "save_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/recent",
+      "covered_by": {
+        "direct_read": "rest get-recent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/search",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/type",
+      "covered_by": {
+        "direct_read": "rest get-all-project-types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/type/accessible",
+      "covered_by": {
+        "direct_read": "rest get-all-accessible-project-types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/type/{projectTypeKey}",
+      "covered_by": {
+        "direct_read": "rest get-project-type-by-key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/type/{projectTypeKey}/accessible",
+      "covered_by": {
+        "direct_read": "rest get-accessible-project-type-by-key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}",
+      "covered_by": {
+        "direct_read": "rest get-project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/project/{projectIdOrKey}",
+      "covered_by": {
+        "write": "update_project"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/project/{projectIdOrKey}",
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/project/{projectIdOrKey}/archive",
+      "covered_by": {
+        "write": "archive_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/project/{projectIdOrKey}/avatar",
+      "covered_by": {
+        "write": "update_project_avatar"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/project/{projectIdOrKey}/avatar/{id}",
+      "covered_by": {
+        "write": "delete_project_avatar"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/project/{projectIdOrKey}/avatar2",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary file upload requires a typed file_upload executor with source-file bounds; no raw multipart upload escape hatch is exposed.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1project~1{projectIdOrKey}~1avatar2/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/avatars",
+      "covered_by": {
+        "direct_read": "rest get-all-project-avatars"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/classification-config",
+      "covered_by": {
+        "direct_read": "rest get-project-classification-config"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/classification-level/default",
+      "covered_by": {
+        "direct_read": "rest get-default-project-classification"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/project/{projectIdOrKey}/classification-level/default",
+      "covered_by": {
+        "write": "update_default_project_classification"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/project/{projectIdOrKey}/classification-level/default",
+      "covered_by": {
+        "write": "remove_default_project_classification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/component",
+      "covered_by": {
+        "direct_read": "rest get-project-components-paginated"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/components",
+      "covered_by": {
+        "direct_read": "rest get-project-components"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/project/{projectIdOrKey}/delete",
+      "covered_by": {
+        "write": "delete_project_asynchronously"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/features",
+      "covered_by": {
+        "direct_read": "rest get-features-for-project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/project/{projectIdOrKey}/features/{featureKey}",
+      "covered_by": {
+        "write": "toggle_feature_for_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/properties",
+      "covered_by": {
+        "direct_read": "rest get-project-property-keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}",
+      "covered_by": {
+        "direct_read": "rest get-project-property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "set_project_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "delete_project_property"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/project/{projectIdOrKey}/restore",
+      "covered_by": {
+        "write": "restore"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/role",
+      "covered_by": {
+        "direct_read": "rest get-project-roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/role/{id}",
+      "covered_by": {
+        "direct_read": "rest get-project-role"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/project/{projectIdOrKey}/role/{id}",
+      "covered_by": {
+        "write": "add_actor_users"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/project/{projectIdOrKey}/role/{id}",
+      "covered_by": {
+        "write": "set_actors"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/project/{projectIdOrKey}/role/{id}",
+      "covered_by": {
+        "write": "delete_actor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/roledetails",
+      "covered_by": {
+        "direct_read": "rest get-project-role-details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/statuses",
+      "covered_by": {
+        "direct_read": "rest get-all-statuses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/version",
+      "covered_by": {
+        "direct_read": "rest get-project-versions-paginated"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectIdOrKey}/versions",
+      "covered_by": {
+        "direct_read": "rest get-project-versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectId}/email",
+      "covered_by": {
+        "direct_read": "rest get-project-email"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/project/{projectId}/email",
+      "covered_by": {
+        "write": "update_project_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectId}/hierarchy",
+      "covered_by": {
+        "direct_read": "rest get-hierarchy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectKeyOrId}/issuesecuritylevelscheme",
+      "covered_by": {
+        "direct_read": "rest get-project-issue-security-scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectKeyOrId}/notificationscheme",
+      "covered_by": {
+        "direct_read": "rest get-notification-scheme-for-project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectKeyOrId}/permissionscheme",
+      "covered_by": {
+        "direct_read": "rest get-assigned-permission-scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/project/{projectKeyOrId}/permissionscheme",
+      "covered_by": {
+        "write": "assign_permission_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/{projectKeyOrId}/securitylevel",
+      "covered_by": {
+        "direct_read": "rest get-security-levels-for-project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/projectCategory",
+      "covered_by": {
+        "direct_read": "rest get-all-project-categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/projectCategory",
+      "covered_by": {
+        "write": "create_project_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/projectCategory/{id}",
+      "covered_by": {
+        "direct_read": "rest get-project-category-by-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/projectCategory/{id}",
+      "covered_by": {
+        "write": "update_project_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/projectCategory/{id}",
+      "covered_by": {
+        "write": "remove_project_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/projects/fields",
+      "covered_by": {
+        "direct_read": "rest get-project-fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/projectvalidate/key",
+      "covered_by": {
+        "direct_read": "rest validate-project-key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/projectvalidate/validProjectKey",
+      "covered_by": {
+        "direct_read": "rest get-valid-project-key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/projectvalidate/validProjectName",
+      "covered_by": {
+        "direct_read": "rest get-valid-project-name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/redact",
+      "covered_by": {
+        "write": "redact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/redact/status/{jobId}",
+      "covered_by": {
+        "direct_read": "rest get-redaction-status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/resolution",
+      "covered_by": {
+        "direct_read": "rest get-resolutions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/resolution",
+      "covered_by": {
+        "write": "create_resolution"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/resolution/default",
+      "covered_by": {
+        "write": "set_default_resolution"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/resolution/move",
+      "covered_by": {
+        "write": "move_resolutions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/resolution/search",
+      "covered_by": {
+        "direct_read": "rest search-resolutions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/resolution/{id}",
+      "covered_by": {
+        "direct_read": "rest get-resolution"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/resolution/{id}",
+      "covered_by": {
+        "write": "update_resolution"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/resolution/{id}",
+      "covered_by": {
+        "write": "delete_resolution"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/role",
+      "covered_by": {
+        "direct_read": "rest get-all-project-roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/role",
+      "covered_by": {
+        "write": "create_project_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/role/{id}",
+      "covered_by": {
+        "direct_read": "rest get-project-role-by-id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/role/{id}",
+      "covered_by": {
+        "write": "partial_update_project_role"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/role/{id}",
+      "covered_by": {
+        "write": "fully_update_project_role"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/role/{id}",
+      "covered_by": {
+        "write": "delete_project_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/role/{id}/actors",
+      "covered_by": {
+        "direct_read": "rest get-project-role-actors-for-role"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/role/{id}/actors",
+      "covered_by": {
+        "write": "add_project_role_actors_to_role"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/role/{id}/actors",
+      "covered_by": {
+        "write": "delete_project_role_actors_from_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/screens",
+      "covered_by": {
+        "direct_read": "rest get-screens"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/screens",
+      "covered_by": {
+        "write": "create_screen"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/screens/addToDefault/{fieldId}",
+      "covered_by": {
+        "write": "add_field_to_default_screen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/screens/tabs",
+      "covered_by": {
+        "direct_read": "rest get-bulk-screen-tabs"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/screens/{screenId}",
+      "covered_by": {
+        "write": "update_screen"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/screens/{screenId}",
+      "covered_by": {
+        "write": "delete_screen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/screens/{screenId}/availableFields",
+      "covered_by": {
+        "direct_read": "rest get-available-screen-fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/screens/{screenId}/tabs",
+      "covered_by": {
+        "direct_read": "rest get-all-screen-tabs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/screens/{screenId}/tabs",
+      "covered_by": {
+        "write": "add_screen_tab"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/screens/{screenId}/tabs/{tabId}",
+      "covered_by": {
+        "write": "rename_screen_tab"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/screens/{screenId}/tabs/{tabId}",
+      "covered_by": {
+        "write": "delete_screen_tab"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/screens/{screenId}/tabs/{tabId}/fields",
+      "covered_by": {
+        "direct_read": "rest get-all-screen-tab-fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/screens/{screenId}/tabs/{tabId}/fields",
+      "covered_by": {
+        "write": "add_screen_tab_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/screens/{screenId}/tabs/{tabId}/fields/{id}",
+      "covered_by": {
+        "write": "remove_screen_tab_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/screens/{screenId}/tabs/{tabId}/fields/{id}/move",
+      "covered_by": {
+        "write": "move_screen_tab_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/screens/{screenId}/tabs/{tabId}/move/{pos}",
+      "covered_by": {
+        "write": "move_screen_tab"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/screenscheme",
+      "covered_by": {
+        "direct_read": "rest get-screen-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/screenscheme",
+      "covered_by": {
+        "write": "create_screen_scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/screenscheme/{screenSchemeId}",
+      "covered_by": {
+        "write": "update_screen_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/screenscheme/{screenSchemeId}",
+      "covered_by": {
+        "write": "delete_screen_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/search",
+      "covered_by": {
+        "stream": "issues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/search",
+      "covered_by": {
+        "write": "search_for_issues_using_jql_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/search/approximate-count",
+      "covered_by": {
+        "write": "count_issues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/search/jql",
+      "covered_by": {
+        "direct_read": "rest search-and-reconsile-issues-using-jql"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/search/jql",
+      "covered_by": {
+        "write": "search_and_reconsile_issues_using_jql_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/securitylevel/{id}",
+      "covered_by": {
+        "direct_read": "rest get-issue-security-level"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/serverInfo",
+      "covered_by": {
+        "direct_read": "rest get-server-info"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/settings/columns",
+      "covered_by": {
+        "direct_read": "rest get-issue-navigator-default-columns"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/settings/columns",
+      "covered_by": {
+        "write": "set_issue_navigator_default_columns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/status",
+      "covered_by": {
+        "direct_read": "rest get-statuses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/status/{idOrName}",
+      "covered_by": {
+        "direct_read": "rest get-status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/statuscategory",
+      "covered_by": {
+        "direct_read": "rest get-status-categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/statuscategory/{idOrKey}",
+      "covered_by": {
+        "direct_read": "rest get-status-category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/statuses",
+      "covered_by": {
+        "direct_read": "rest get-statuses-by-id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/statuses",
+      "covered_by": {
+        "write": "create_statuses"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/statuses",
+      "covered_by": {
+        "write": "update_statuses"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/statuses",
+      "covered_by": {
+        "write": "delete_statuses_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/statuses/byNames",
+      "covered_by": {
+        "direct_read": "rest get-statuses-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/statuses/search",
+      "covered_by": {
+        "direct_read": "rest search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/statuses/{statusId}/project/{projectId}/issueTypeUsages",
+      "covered_by": {
+        "direct_read": "rest get-project-issue-type-usages-for-status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/statuses/{statusId}/projectUsages",
+      "covered_by": {
+        "direct_read": "rest get-project-usages-for-status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/statuses/{statusId}/workflowUsages",
+      "covered_by": {
+        "direct_read": "rest get-workflow-usages-for-status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/task/{taskId}",
+      "covered_by": {
+        "direct_read": "rest get-task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/task/{taskId}/cancel",
+      "covered_by": {
+        "write": "cancel_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/uiModifications",
+      "covered_by": {
+        "direct_read": "rest get-ui-modifications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/uiModifications",
+      "covered_by": {
+        "write": "create_ui_modification"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/uiModifications/{uiModificationId}",
+      "covered_by": {
+        "write": "update_ui_modification"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/uiModifications/{uiModificationId}",
+      "covered_by": {
+        "write": "delete_ui_modification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/universal_avatar/type/{type}/owner/{entityId}",
+      "covered_by": {
+        "direct_read": "rest get-avatars"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/universal_avatar/type/{type}/owner/{entityId}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary file upload requires a typed file_upload executor with source-file bounds; no raw multipart upload escape hatch is exposed.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1universal_avatar~1type~1{type}~1owner~1{entityId}/post"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/universal_avatar/type/{type}/owner/{owningObjectId}/avatar/{id}",
+      "covered_by": {
+        "write": "delete_avatar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/universal_avatar/view/type/{type}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary Jira response is inventoried with a bounded binary_download operation, but no local file-output executor is enabled for Jira in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1universal_avatar~1view~1type~1{type}/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/universal_avatar/view/type/{type}/avatar/{id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary Jira response is inventoried with a bounded binary_download operation, but no local file-output executor is enabled for Jira in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1universal_avatar~1view~1type~1{type}~1avatar~1{id}/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/universal_avatar/view/type/{type}/owner/{entityId}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary Jira response is inventoried with a bounded binary_download operation, but no local file-output executor is enabled for Jira in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1universal_avatar~1view~1type~1{type}~1owner~1{entityId}/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user",
+      "covered_by": {
+        "direct_read": "rest get-user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/user",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/user",
+      "covered_by": {
+        "write": "remove_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/assignable/multiProjectSearch",
+      "covered_by": {
+        "direct_read": "rest find-bulk-assignable-users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/assignable/search",
+      "covered_by": {
+        "direct_read": "rest find-assignable-users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/bulk",
+      "covered_by": {
+        "direct_read": "rest bulk-get-users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/bulk/migration",
+      "covered_by": {
+        "direct_read": "rest bulk-get-users-migration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/columns",
+      "covered_by": {
+        "direct_read": "rest get-user-default-columns"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/user/columns",
+      "covered_by": {
+        "write": "set_user_columns"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/user/columns",
+      "covered_by": {
+        "write": "reset_user_columns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/email",
+      "covered_by": {
+        "direct_read": "rest get-user-email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/email/bulk",
+      "covered_by": {
+        "direct_read": "rest get-user-email-bulk"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/groups",
+      "covered_by": {
+        "direct_read": "rest get-user-groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/permission/search",
+      "covered_by": {
+        "direct_read": "rest find-users-with-all-permissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/picker",
+      "covered_by": {
+        "direct_read": "rest find-users-for-picker"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/properties",
+      "covered_by": {
+        "direct_read": "rest get-user-property-keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/properties/{propertyKey}",
+      "covered_by": {
+        "direct_read": "rest get-user-property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/user/properties/{propertyKey}",
+      "covered_by": {
+        "write": "set_user_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/user/properties/{propertyKey}",
+      "covered_by": {
+        "write": "delete_user_property"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/search",
+      "covered_by": {
+        "direct_read": "rest find-users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/search/query",
+      "covered_by": {
+        "direct_read": "rest find-users-by-query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/search/query/key",
+      "covered_by": {
+        "direct_read": "rest find-user-keys-by-query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/user/viewissue/search",
+      "covered_by": {
+        "direct_read": "rest find-users-with-browse-permission"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/users",
+      "covered_by": {
+        "direct_read": "rest get-all-users-default"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/users/search",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/version",
+      "covered_by": {
+        "write": "create_version"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/version/{id}",
+      "covered_by": {
+        "direct_read": "rest get-version"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/version/{id}",
+      "covered_by": {
+        "write": "update_version"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/version/{id}",
+      "covered_by": {
+        "write": "delete_version"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/version/{id}/mergeto/{moveIssuesTo}",
+      "covered_by": {
+        "write": "merge_versions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/version/{id}/move",
+      "covered_by": {
+        "write": "move_version"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/version/{id}/relatedIssueCounts",
+      "covered_by": {
+        "direct_read": "rest get-version-related-issues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/version/{id}/relatedwork",
+      "covered_by": {
+        "direct_read": "rest get-related-work"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/version/{id}/relatedwork",
+      "covered_by": {
+        "write": "create_related_work"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/version/{id}/relatedwork",
+      "covered_by": {
+        "write": "update_related_work"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/version/{id}/removeAndSwap",
+      "covered_by": {
+        "write": "delete_and_replace_version"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/version/{id}/unresolvedIssueCount",
+      "covered_by": {
+        "direct_read": "rest get-version-unresolved-issues"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/version/{versionId}/relatedwork/{relatedWorkId}",
+      "covered_by": {
+        "write": "delete_related_work"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/webhook",
+      "covered_by": {
+        "direct_read": "rest get-dynamic-webhooks-for-app"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/webhook",
+      "covered_by": {
+        "write": "register_dynamic_webhooks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/webhook",
+      "covered_by": {
+        "write": "delete_webhook_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/webhook/failed",
+      "covered_by": {
+        "direct_read": "rest get-failed-webhooks"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/webhook/refresh",
+      "covered_by": {
+        "write": "refresh_webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflow/history",
+      "covered_by": {
+        "write": "read_workflow_from_history"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflow/history/list",
+      "covered_by": {
+        "write": "list_workflow_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflow/rule/config",
+      "covered_by": {
+        "direct_read": "rest get-workflow-transition-rule-configurations"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflow/rule/config",
+      "covered_by": {
+        "write": "update_workflow_transition_rule_configurations"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflow/rule/config/delete",
+      "covered_by": {
+        "write": "delete_workflow_transition_rule_configurations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflow/search",
+      "covered_by": {
+        "direct_read": "rest get-workflows-paginated"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflow/transitions/{transitionId}/properties",
+      "covered_by": {
+        "direct_read": "rest get-workflow-transition-properties"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflow/transitions/{transitionId}/properties",
+      "covered_by": {
+        "write": "create_workflow_transition_property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflow/transitions/{transitionId}/properties",
+      "covered_by": {
+        "write": "update_workflow_transition_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflow/transitions/{transitionId}/properties",
+      "covered_by": {
+        "write": "delete_workflow_transition_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflow/{entityId}",
+      "covered_by": {
+        "write": "delete_inactive_workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflow/{workflowId}/project/{projectId}/issueTypeUsages",
+      "covered_by": {
+        "direct_read": "rest get-workflow-project-issue-type-usages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflow/{workflowId}/projectUsages",
+      "covered_by": {
+        "direct_read": "rest get-project-usages-for-workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflow/{workflowId}/workflowSchemes",
+      "covered_by": {
+        "direct_read": "rest get-workflow-scheme-usages-for-workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflows",
+      "covered_by": {
+        "write": "read_workflows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflows/capabilities",
+      "covered_by": {
+        "direct_read": "rest workflow-capabilities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflows/create",
+      "covered_by": {
+        "write": "create_workflows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflows/create/validation",
+      "covered_by": {
+        "write": "validate_create_workflows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflows/defaultEditor",
+      "covered_by": {
+        "direct_read": "rest get-default-editor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflows/preview",
+      "covered_by": {
+        "write": "read_workflow_previews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflows/search",
+      "covered_by": {
+        "direct_read": "rest search-workflows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflows/update",
+      "covered_by": {
+        "write": "update_workflows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflows/update/validation",
+      "covered_by": {
+        "write": "validate_update_workflows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme",
+      "covered_by": {
+        "direct_read": "rest get-all-workflow-schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflowscheme",
+      "covered_by": {
+        "write": "create_workflow_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/project",
+      "covered_by": {
+        "direct_read": "rest get-workflow-scheme-project-associations"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflowscheme/project",
+      "covered_by": {
+        "write": "assign_scheme_to_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflowscheme/project/switch",
+      "covered_by": {
+        "write": "switch_workflow_scheme_for_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflowscheme/read",
+      "covered_by": {
+        "write": "read_workflow_schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflowscheme/update",
+      "covered_by": {
+        "write": "update_schemes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflowscheme/update/mappings",
+      "covered_by": {
+        "write": "get_required_workflow_scheme_mappings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/{id}",
+      "covered_by": {
+        "direct_read": "rest get-workflow-scheme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflowscheme/{id}",
+      "covered_by": {
+        "write": "update_workflow_scheme"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflowscheme/{id}",
+      "covered_by": {
+        "write": "delete_workflow_scheme"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflowscheme/{id}/createdraft",
+      "covered_by": {
+        "write": "create_workflow_scheme_draft_from_parent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/{id}/default",
+      "covered_by": {
+        "direct_read": "rest get-default-workflow"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflowscheme/{id}/default",
+      "covered_by": {
+        "write": "update_default_workflow"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflowscheme/{id}/default",
+      "covered_by": {
+        "write": "delete_default_workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/{id}/draft",
+      "covered_by": {
+        "direct_read": "rest get-workflow-scheme-draft"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflowscheme/{id}/draft",
+      "covered_by": {
+        "write": "update_workflow_scheme_draft"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflowscheme/{id}/draft",
+      "covered_by": {
+        "write": "delete_workflow_scheme_draft"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/default",
+      "covered_by": {
+        "direct_read": "rest get-draft-default-workflow"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/default",
+      "covered_by": {
+        "write": "update_draft_default_workflow"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/default",
+      "covered_by": {
+        "write": "delete_draft_default_workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/issuetype/{issueType}",
+      "covered_by": {
+        "direct_read": "rest get-workflow-scheme-draft-issue-type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/issuetype/{issueType}",
+      "covered_by": {
+        "write": "set_workflow_scheme_draft_issue_type"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/issuetype/{issueType}",
+      "covered_by": {
+        "write": "delete_workflow_scheme_draft_issue_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/publish",
+      "covered_by": {
+        "write": "publish_draft_workflow_scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/workflow",
+      "covered_by": {
+        "direct_read": "rest get-draft-workflow"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/workflow",
+      "covered_by": {
+        "write": "update_draft_workflow_mapping"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflowscheme/{id}/draft/workflow",
+      "covered_by": {
+        "write": "delete_draft_workflow_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/{id}/issuetype/{issueType}",
+      "covered_by": {
+        "direct_read": "rest get-workflow-scheme-issue-type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflowscheme/{id}/issuetype/{issueType}",
+      "covered_by": {
+        "write": "set_workflow_scheme_issue_type"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflowscheme/{id}/issuetype/{issueType}",
+      "covered_by": {
+        "write": "delete_workflow_scheme_issue_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/{id}/workflow",
+      "covered_by": {
+        "direct_read": "rest get-workflow"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/3/workflowscheme/{id}/workflow",
+      "covered_by": {
+        "write": "update_workflow_mapping"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/api/3/workflowscheme/{id}/workflow",
+      "covered_by": {
+        "write": "delete_workflow_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflowscheme/{workflowSchemeId}/projectUsages",
+      "covered_by": {
+        "direct_read": "rest get-project-usages-for-workflow-scheme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/worklog/deleted",
+      "covered_by": {
+        "direct_read": "rest get-ids-of-worklogs-deleted-since"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/worklog/list",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Safe read-query POST requires fixed body-variable direct-read execution; classified as rest_query in operations.json and blocked until that executor shape is wired.",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json#/paths/~1rest~1api~13~1worklog~1list/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/worklog/updated",
+      "covered_by": {
+        "direct_read": "rest get-ids-of-worklogs-modified-since"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/atlassian-connect/1/addons/{addonKey}/properties",
+      "covered_by": {
+        "direct_read": "rest addon-properties-resource-get-addon-properties-get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}",
+      "covered_by": {
+        "direct_read": "rest addon-properties-resource-get-addon-property-get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "addon_properties_resource_put_addon_property_put"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}",
+      "covered_by": {
+        "write": "addon_properties_resource_delete_addon_property_delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/atlassian-connect/1/app/module/dynamic",
+      "covered_by": {
+        "direct_read": "rest dynamic-modules-resource-get-modules-get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/atlassian-connect/1/app/module/dynamic",
+      "covered_by": {
+        "write": "dynamic_modules_resource_register_modules_post"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/atlassian-connect/1/app/module/dynamic",
+      "covered_by": {
+        "write": "dynamic_modules_resource_remove_modules_delete"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/atlassian-connect/1/migration/field",
+      "covered_by": {
+        "write": "app_issue_field_value_update_resource_update_issue_fields_put"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/atlassian-connect/1/migration/properties/{entityType}",
+      "covered_by": {
+        "write": "migration_resource_update_entity_properties_value_put"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/atlassian-connect/1/migration/workflow/rule/search",
+      "covered_by": {
+        "write": "migration_resource_workflow_rule_search_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/atlassian-connect/1/migration/{connectKey}/{jiraIssueFieldsKey}/task",
+      "covered_by": {
+        "direct_read": "rest connect-to-forge-migration-fetch-task-resource-fetch-migration-task-get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/atlassian-connect/1/migration/{connectKey}/{jiraIssueFieldsKey}/task",
+      "covered_by": {
+        "write": "connect_to_forge_migration_task_submission_resource_submit_task_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/atlassian-connect/1/service-registry",
+      "covered_by": {
+        "direct_read": "rest service-registry-resource-services-get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/forge/1/app/properties",
+      "covered_by": {
+        "direct_read": "rest get-forge-app-property-keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/forge/1/app/properties/{propertyKey}",
+      "covered_by": {
+        "direct_read": "rest get-forge-app-property"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/forge/1/app/properties/{propertyKey}",
+      "covered_by": {
+        "write": "put_forge_app_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/forge/1/app/properties/{propertyKey}",
+      "covered_by": {
+        "write": "delete_forge_app_property"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/internal/api/latest/worklog/bulk",
+      "covered_by": {
+        "write": "get_worklogs_by_issue_id_and_worklog_id"
+      }
+    }
   ]
 }

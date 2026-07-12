@@ -146,20 +146,27 @@ func commandSurfaceSection(surface *CommandSurface) GuideSection {
 
 func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 	name := "--" + strings.TrimLeft(flag.Name, "-")
-	parts := []string{name}
 	if flag.Type != "" {
-		parts[0] += " (" + flag.Type + ")"
+		name += " (" + flag.Type + ")"
 	}
-	if flag.Summary != "" {
-		parts = append(parts, flag.Summary)
-	}
+	meta := []string{}
 	if len(flag.Values) > 0 {
-		parts = append(parts, "values="+strings.Join(flag.Values, "|"))
+		meta = append(meta, "values="+strings.Join(flag.Values, "|"))
 	}
 	if flag.MapsTo != "" {
-		parts = append(parts, "maps_to="+flag.MapsTo)
+		meta = append(meta, "maps_to="+flag.MapsTo)
 	}
-	return strings.Join(parts, ": ")
+	summary := strings.TrimSpace(flag.Summary)
+	if summary == "" && len(meta) == 0 {
+		return name
+	}
+	if summary == "" {
+		return name + ": " + strings.Join(meta, ", ")
+	}
+	if len(meta) == 0 {
+		return name + ": " + summary
+	}
+	return name + ": " + summary + " (" + strings.Join(meta, ", ") + ")"
 }
 
 func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
@@ -487,7 +494,7 @@ func streamSection(manifest Manifest) GuideSection {
 	}
 	lines := []string{}
 	for _, stream := range manifest.Streams {
-		lines = append(lines, stream.Name+": "+stream.Description)
+		lines = append(lines, labelWithOptionalDescription(stream.Name, stream.Description))
 		if len(stream.PrimaryKey) > 0 {
 			lines = append(lines, "  primary key: "+strings.Join(stream.PrimaryKey, ", "))
 		}
@@ -503,6 +510,14 @@ func streamSection(manifest Manifest) GuideSection {
 		}
 	}
 	return GuideSection{Title: "ETL Streams", Lines: lines}
+}
+
+func labelWithOptionalDescription(name, description string) string {
+	line := name + ":"
+	if strings.TrimSpace(description) != "" {
+		line += " " + description
+	}
+	return line
 }
 
 func syncModeSection(manifest Manifest) GuideSection {
@@ -528,7 +543,7 @@ func writeActionSection(manifest Manifest) GuideSection {
 	}
 	lines := []string{}
 	for _, action := range manifest.WriteActions {
-		lines = append(lines, action.Name+": "+action.Description)
+		lines = append(lines, labelWithOptionalDescription(action.Name, action.Description))
 		if action.Method != "" || action.Path != "" {
 			lines = append(lines, "  endpoint: "+strings.TrimSpace(action.Method+" "+action.Path))
 		}

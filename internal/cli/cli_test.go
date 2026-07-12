@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
+	"sync"
 	"testing"
 
 	"polymetrics.ai/internal/cli"
@@ -136,6 +138,78 @@ func TestBareCommandJSONShowsManualForAgents(t *testing.T) {
 		if !strings.Contains(out, want) {
 			t.Fatalf("json manual missing %q:\n%s", want, out)
 		}
+	}
+}
+
+func TestJiraConnectorCommandSurfaceHelp(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "help flag", args: []string{"jira", "--help"}},
+		{name: "help subcommand", args: []string{"jira", "help"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s", tt.args, code, stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{
+				"COMMAND SURFACE",
+				"Usage: pm jira <command> [flags]",
+				"Issue Commands",
+				"issue list - List Jira issues [intent=etl availability=implemented stream=issues]",
+				"issue delete - Delete an issue [intent=direct_write availability=unsafe_or_disallowed]",
+				"permission scheme list - List permission schemes [intent=direct_read availability=planned]",
+				"Help topics:",
+			} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("jira help missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+				}
+			}
+			if strings.Contains(out, "invalid usage") || strings.Contains(stderr.String(), "invalid usage") {
+				t.Fatalf("jira help returned usage error; stdout=%q stderr=%q", out, stderr.String())
+			}
+		})
+	}
+}
+
+func TestBareJiraConnectorCommandShowsHelp(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"jira"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(jira) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"NAME", "SYNOPSIS", "COMMAND SURFACE", "project list", "user list"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("bare jira manual missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+		}
+	}
+}
+
+func TestJiraConnectorCommandSurfaceHelpJSON(t *testing.T) {
+	tests := [][]string{
+		{"--json", "jira", "--help"},
+		{"--json", "help", "jira"},
+	}
+	for _, args := range tests {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s", args, code, stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{`"kind": "CommandManual"`, `"command": "jira"`, `"manual":`, "COMMAND SURFACE"} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("jira json help missing %q:\n%s", want, out)
+				}
+			}
+		})
 	}
 }
 
@@ -383,6 +457,204 @@ func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
 	}
 	if len(env.Records) != 1 || env.Records[0].State != "closed" || env.Records[0].Repository != "octocat/hello-world" || env.Records[0].UserLogin != "octocat" {
 		t.Fatalf("records = %+v, want projected GitHub issue record", env.Records)
+	}
+}
+
+func TestJiraCommandSurfaceRunsStreamBackedCommands(t *testing.T) {
+	type capturedRequest struct {
+		authOK   bool
+		rawQuery string
+	}
+	var requestsMu sync.Mutex
+	requests := map[string]capturedRequest{}
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, pass, ok := r.BasicAuth()
+		requestsMu.Lock()
+		requests[r.URL.Path] = capturedRequest{
+			authOK:   ok && user == "agent@example.invalid" && pass == "test-token",
+			rawQuery: r.URL.RawQuery,
+		}
+		requestsMu.Unlock()
+
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/rest/api/3/search":
+			_, _ = w.Write([]byte(`{"issues":[{"id":"10001","key":"POLY-1","fields":{"summary":"Ship Jira runner","created":"2026-07-01T00:00:00Z","updated":"2026-07-02T00:00:00Z","status":{"name":"Done"},"issuetype":{"name":"Task"},"priority":{"name":"High"},"assignee":{"displayName":"Ada"},"reporter":{"displayName":"Grace"},"project":{"key":"POLY"}}}],"startAt":0,"maxResults":50,"total":1}`))
+		case "/rest/api/3/project/search":
+			_, _ = w.Write([]byte(`{"values":[{"id":"10000","key":"POLY","name":"Polymetrics","projectTypeKey":"software"}],"startAt":0,"maxResults":50,"total":1}`))
+		case "/rest/api/3/users/search":
+			_, _ = w.Write([]byte(`[{"accountId":"abc-123","accountType":"atlassian","displayName":"Ada Lovelace","emailAddress":"ada@example.invalid","active":true}]`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	t.Setenv("JIRA_TEST_TOKEN", "test-token")
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "jira-local",
+		"--connector", "jira",
+		"--config", "email=agent@example.invalid",
+		"--config", "base_url=" + srv.URL,
+		"--from-env", "api_token=JIRA_TEST_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	tests := []struct {
+		name       string
+		args       []string
+		wantPath   string
+		wantKind   string
+		wantStream string
+		wantCount  int
+		wantQuery  map[string]string
+		wantRecord map[string]string
+	}{
+		{
+			name:       "issue list",
+			args:       []string{"jira", "issue", "list", "--credential", "jira-local", "--jql", "project = POLY", "--limit", "1", "--root", root, "--json"},
+			wantPath:   "/rest/api/3/search",
+			wantKind:   "ConnectorCommandRead",
+			wantStream: "issues",
+			wantCount:  1,
+			wantQuery:  map[string]string{"jql": "project = POLY"},
+			wantRecord: map[string]string{"key": "POLY-1", "summary": "Ship Jira runner", "status": "Done", "project": "POLY"},
+		},
+		{
+			name:       "project list",
+			args:       []string{"jira", "project", "list", "--credential", "jira-local", "--query", "Poly", "--limit", "1", "--root", root, "--json"},
+			wantPath:   "/rest/api/3/project/search",
+			wantKind:   "ConnectorCommandRead",
+			wantStream: "projects",
+			wantCount:  1,
+			wantQuery:  map[string]string{"query": "Poly"},
+			wantRecord: map[string]string{"key": "POLY", "name": "Polymetrics"},
+		},
+		{
+			name:       "user list",
+			args:       []string{"jira", "user", "list", "--credential", "jira-local", "--query", "ada", "--limit", "1", "--root", root, "--json"},
+			wantPath:   "/rest/api/3/users/search",
+			wantKind:   "ConnectorCommandRead",
+			wantStream: "users",
+			wantCount:  1,
+			wantQuery:  map[string]string{"query": "ada"},
+			wantRecord: map[string]string{"accountId": "abc-123", "displayName": "Ada Lovelace"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stdout, _ := runCLI(t, tt.args)
+			requestsMu.Lock()
+			request, ok := requests[tt.wantPath]
+			requestsMu.Unlock()
+			if !ok {
+				t.Fatalf("%s was not requested; requests=%v", tt.wantPath, requests)
+			}
+			if !request.authOK {
+				t.Fatalf("%s did not receive expected basic auth", tt.wantPath)
+			}
+			query, err := url.ParseQuery(request.rawQuery)
+			if err != nil {
+				t.Fatalf("parse raw query %q: %v", request.rawQuery, err)
+			}
+			for key, want := range tt.wantQuery {
+				if got := query.Get(key); got != want {
+					t.Fatalf("query[%s] = %q, want %q; raw=%s", key, got, want, request.rawQuery)
+				}
+			}
+
+			var env struct {
+				Kind    string           `json:"kind"`
+				Stream  string           `json:"stream"`
+				Count   int              `json:"count"`
+				Records []map[string]any `json:"records"`
+			}
+			if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+				t.Fatalf("decode json: %v\n%s", err, stdout)
+			}
+			if env.Kind != tt.wantKind || env.Stream != tt.wantStream || env.Count != tt.wantCount {
+				t.Fatalf("envelope = %+v, want kind=%s stream=%s count=%d", env, tt.wantKind, tt.wantStream, tt.wantCount)
+			}
+			if len(env.Records) != 1 {
+				t.Fatalf("records length = %d, want 1", len(env.Records))
+			}
+			for key, want := range tt.wantRecord {
+				if got := fmt.Sprint(env.Records[0][key]); got != want {
+					t.Fatalf("record[%s] = %q, want %q; record=%+v", key, got, want, env.Records[0])
+				}
+			}
+		})
+	}
+}
+
+func TestJiraCommandSurfaceRunsGeneratedDirectRead(t *testing.T) {
+	var gotPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		user, pass, ok := r.BasicAuth()
+		if !ok || user != "agent@example.invalid" || pass != "test-token" {
+			t.Errorf("basic auth = (%q, %q, %v), want Jira test credential", user, pass, ok)
+		}
+		if r.Method != http.MethodGet {
+			t.Errorf("method = %s, want GET", r.Method)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"message":"hello","content":"must redact","nested":{"apiToken":"must redact","name":"visible"}}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	t.Setenv("JIRA_TEST_TOKEN", "test-token")
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "jira-local",
+		"--connector", "jira",
+		"--config", "email=agent@example.invalid",
+		"--config", "base_url=" + srv.URL,
+		"--from-env", "api_token=JIRA_TEST_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"jira", "rest", "get-banner",
+		"--credential", "jira-local",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/rest/api/3/announcementBanner" {
+		t.Fatalf("request path = %q, want announcement banner endpoint", gotPath)
+	}
+
+	var env struct {
+		Kind     string         `json:"kind"`
+		Command  string         `json:"command"`
+		Method   string         `json:"method"`
+		Path     string         `json:"path"`
+		Status   int            `json:"status"`
+		Response map[string]any `json:"response"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Command != "rest get-banner" || env.Method != http.MethodGet || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want generated Jira direct-read result", env)
+	}
+	if _, ok := env.Response["content"]; ok {
+		t.Fatalf("response leaked content: %+v", env.Response)
+	}
+	nested, ok := env.Response["nested"].(map[string]any)
+	if !ok {
+		t.Fatalf("nested response = %T, want map", env.Response["nested"])
+	}
+	if _, ok := nested["apiToken"]; ok {
+		t.Fatalf("response leaked apiToken: %+v", nested)
+	}
+	if env.Response["content_redacted"] != true || nested["apiToken_redacted"] != true || nested["name"] != "visible" {
+		t.Fatalf("response redaction = %+v nested=%+v", env.Response, nested)
 	}
 }
 

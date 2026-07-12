@@ -1,0 +1,116 @@
+{
+  "phase": "issue-104-jira-cli-surface",
+  "parentIssue": 81,
+  "issue": 104,
+  "branch": "feat/81-jira-cli-parity",
+  "status": "verified",
+  "gsd": {
+    "planCommand": "scripts/gsd prompt plan-phase issue-104-jira-cli-surface --skip-research",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-104-jira-cli-surface --dry-run",
+    "programmingLoopStatus": "unavailable_unknown_command",
+    "manualFallback": true
+  },
+  "verificationPassed": true,
+  "verificationSummary": "Issue #104 checks passed: targeted red/green tests, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, and connectorgen validate.",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T12:49:58Z",
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No Pi subagent tool is available and #104 is the first parent-unblocking metadata lane."
+    },
+    {
+      "timestamp": "2026-07-09T12:58:00Z",
+      "cycle": "parent-pr",
+      "decision": "local_critical_path",
+      "reason": "Draft parent PR #129 is open; proceeding to red test locally."
+    },
+    {
+      "timestamp": "2026-07-09T13:10:00Z",
+      "cycle": "green",
+      "decision": "local_critical_path",
+      "reason": "Added Jira CLI-surface metadata and focused validation is green."
+    },
+    {
+      "timestamp": "2026-07-09T14:03:27Z",
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Full local gates passed for the #104 slice."
+    }
+  ],
+  "redTests": [
+    {
+      "command": "go test ./internal/connectors/engine -run TestBundleLoadEmbeddedJiraCLISurface -count=1",
+      "status": "failed_as_expected",
+      "evidence": "Jira CLISurface is nil; defs.FS must embed cli_surface.json"
+    }
+  ],
+  "greenTests": [
+    {
+      "command": "python3 -m json.tool internal/connectors/defs/jira/cli_surface.json >/dev/null",
+      "status": "passed"
+    },
+    {
+      "command": "go test ./internal/connectors/engine -run TestBundleLoadEmbeddedJiraCLISurface -count=1",
+      "status": "passed"
+    },
+    {
+      "command": "go test ./internal/connectors/engine -run CLISurface -count=1",
+      "status": "passed"
+    },
+    {
+      "command": "go test ./cmd/connectorgen -run CLISurface -count=1",
+      "status": "passed"
+    },
+    {
+      "command": "go run ./cmd/connectorgen validate internal/connectors/defs --json",
+      "status": "passed",
+      "evidence": "connectors_checked=547 findings=0 warnings=0"
+    },
+    {
+      "command": "go test ./cmd/connectorgen ./internal/connectors/engine -count=1",
+      "status": "passed"
+    },
+    {
+      "command": "go test ./internal/connectors/conformance -run 'TestConformance/jira' -count=1",
+      "status": "passed"
+    }
+  ],
+  "fullVerification": [
+    {
+      "command": "gofmt -w cmd internal",
+      "status": "passed"
+    },
+    {
+      "command": "go vet ./...",
+      "status": "passed"
+    },
+    {
+      "command": "go test ./...",
+      "status": "passed"
+    },
+    {
+      "command": "go build ./cmd/pm",
+      "status": "passed"
+    },
+    {
+      "command": "make verify",
+      "status": "passed"
+    },
+    {
+      "command": "go run ./cmd/connectorgen validate internal/connectors/defs",
+      "status": "passed",
+      "evidence": "connectorgen validate: 547 connector(s) checked, 0 findings"
+    }
+  ],
+  "humanGates": [
+    "new dependencies",
+    "auth scope changes",
+    "secrets or credentialed connector checks",
+    "destructive external actions",
+    "generic write tools",
+    "reverse ETL execution",
+    "parent PR merge to main"
+  ],
+  "updatedAt": "2026-07-09T14:03:27Z"
+}

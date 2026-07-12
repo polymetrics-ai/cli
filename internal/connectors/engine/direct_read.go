@@ -22,6 +22,7 @@ const (
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyJSONRedacted               = "json_redacted"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -112,6 +113,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
+	case directReadPolicyJSONRedacted:
+		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
@@ -119,6 +122,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 	switch policy {
+	case directReadPolicyJSONRedacted:
+		return redactGenericJSON(body), nil
 	case directReadPolicyGitHubContentsFileMetadata:
 		obj, ok := body.(map[string]any)
 		if !ok {
@@ -162,6 +167,41 @@ func redactGitHubContentsObject(in map[string]any) map[string]any {
 		}
 	}
 	return out
+}
+
+func redactGenericJSON(value any) any {
+	switch v := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(v)+2)
+		for key, item := range v {
+			if isSensitiveDirectReadField(key) {
+				out[key+"_redacted"] = true
+				continue
+			}
+			out[key] = redactGenericJSON(item)
+		}
+		return out
+	case []any:
+		out := make([]any, 0, len(v))
+		for _, item := range v {
+			out = append(out, redactGenericJSON(item))
+		}
+		return out
+	default:
+		return value
+	}
+}
+
+func isSensitiveDirectReadField(key string) bool {
+	clean := strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(key, "-", "_"), " ", "_"))
+	switch clean {
+	case "content", "body", "download_url", "downloadurl", "download_uri", "downloaduri",
+		"token", "access_token", "accesstoken", "api_token", "apitoken", "secret", "password",
+		"client_secret", "clientsecret", "private_key", "privatekey", "credential", "credentials":
+		return true
+	default:
+		return strings.Contains(clean, "secret") || strings.Contains(clean, "password") || strings.Contains(clean, "token")
+	}
 }
 
 func rejectSensitiveRepositoryPath(value string) error {

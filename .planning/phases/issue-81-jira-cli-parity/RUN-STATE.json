@@ -1,0 +1,137 @@
+{
+  "phase": "issue-81-jira-cli-parity",
+  "parentIssue": 81,
+  "branch": "feat/81-jira-cli-parity",
+  "status": "issue_106_verified",
+  "gsd": {
+    "doctor": "passed",
+    "verifyPi": "passed",
+    "listJson": "ran_truncated_by_harness",
+    "planCommand": "scripts/gsd prompt plan-phase issue-81-jira-cli-parity --skip-research",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-81-jira-cli-parity --dry-run",
+    "programmingLoopStatus": "unavailable_unknown_command",
+    "manualFallback": true
+  },
+  "verificationPassed": false,
+  "verificationSummary": "Parent PR #129 is open. Issues #104, #105, and #106 are locally verified with full gates; remaining sub-issues #107-#110 are not implemented, so parent verification is not complete.",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T12:49:58Z",
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Parent PR is missing; coordinator must seed planning artifacts, push the parent branch, and open the draft parent PR before sub-PR completion can be claimed."
+    },
+    {
+      "timestamp": "2026-07-09T12:49:58Z",
+      "cycle": "worker-spawn",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "Current Pi harness exposes no subagent tool; mutating worker isolation cannot be launched from this session. Issue #104 will begin locally as the critical path with separate phase evidence."
+    },
+    {
+      "timestamp": "2026-07-09T12:58:00Z",
+      "cycle": "parent-pr",
+      "decision": "local_critical_path",
+      "reason": "Seed commit 982fa4c1 was pushed and draft parent PR #129 was opened, unblocking local #104 TDD work."
+    },
+    {
+      "timestamp": "2026-07-09T13:10:00Z",
+      "cycle": "issue-104-green",
+      "decision": "local_critical_path",
+      "reason": "Jira CLI-surface metadata passed focused red/green tests and connector validation; full verification still pending."
+    },
+    {
+      "timestamp": "2026-07-09T14:03:27Z",
+      "cycle": "issue-104-verify",
+      "decision": "local_critical_path",
+      "reason": "Issue #104 full gates passed; #105 and #107 are dependency-ready but not spawned because the harness lacks subagent tooling."
+    },
+    {
+      "timestamp": "2026-07-09T15:25:33Z",
+      "cycle": "issue-105-verify",
+      "decision": "local_critical_path",
+      "reason": "Issue #105 full gates passed; #106 is dependency-ready but not spawned because the harness lacks subagent tooling."
+    },
+    {
+      "timestamp": "2026-07-09T15:54:21Z",
+      "cycle": "issue-105-review-fix",
+      "decision": "copilot_backup",
+      "reason": "CodeRabbit reported a 51 minute rate-limit window after the #105 head; Copilot backup review produced 3 comments that were fixed and full gates passed again."
+    },
+    {
+      "timestamp": "2026-07-09T16:22:06Z",
+      "cycle": "issue-105-review-fix-2",
+      "decision": "copilot_backup",
+      "reason": "Copilot backup re-review produced 1 startup-latency comment that was fixed and full gates passed again."
+    },
+    {
+      "timestamp": "2026-07-09T16:40:00Z",
+      "cycle": "issue-105-review-fix-3",
+      "decision": "coderabbit_manual_fallback",
+      "reason": "CodeRabbit completed after the retry window and reported 1 trivial nitpick that was fixed with a test assertion; full gates passed again."
+    },
+    {
+      "timestamp": "2026-07-09T17:21:34Z",
+      "cycle": "issue-106-verify",
+      "decision": "local_critical_path",
+      "reason": "Issue #106 stream runner full gates passed; automated review pending after implementation push."
+    },
+    {
+      "timestamp": "2026-07-09T17:46:04Z",
+      "cycle": "issue-106-review-fix",
+      "decision": "coderabbit_manual_fallback",
+      "reason": "CodeRabbit reported 2 #106 findings; both were fixed and full gates passed again."
+    }
+  ],
+  "verification": [
+    {
+      "scope": "issue-104",
+      "commands": [
+        "gofmt -w cmd internal",
+        "go vet ./...",
+        "go test ./...",
+        "go build ./cmd/pm",
+        "make verify",
+        "go run ./cmd/connectorgen validate internal/connectors/defs"
+      ],
+      "status": "passed"
+    },
+    {
+      "scope": "issue-105",
+      "commands": [
+        "gofmt -w cmd internal",
+        "go vet ./...",
+        "go test ./...",
+        "go build ./cmd/pm",
+        "make verify",
+        "go run ./cmd/connectorgen validate internal/connectors/defs",
+        "cd website && pnpm build"
+      ],
+      "status": "passed_review_fixed"
+    },
+    {
+      "scope": "issue-106",
+      "commands": [
+        "gofmt -w cmd internal",
+        "go vet ./...",
+        "go test ./...",
+        "go build ./cmd/pm",
+        "make verify",
+        "go run ./cmd/connectorgen validate internal/connectors/defs",
+        "cd website && pnpm build"
+      ],
+      "status": "passed_review_fixed"
+    }
+  ],
+  "humanGates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "secrets or credentialed connector checks",
+    "new dependencies",
+    "destructive external actions",
+    "production deploys",
+    "quality gate reductions",
+    "generic shell/http/sql write tools",
+    "reverse ETL execution outside plan-preview-approval-execute"
+  ],
+  "updatedAt": "2026-07-09T17:46:04Z"
+}

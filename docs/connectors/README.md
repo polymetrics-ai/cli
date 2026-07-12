@@ -238,7 +238,7 @@
 - [ip2whois](ip2whois/MANUAL.md): Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing a flattened whois stream and per-role contact streams (registrant, admin, tech, billing). The nameservers stream is not migrated; see docs.md Known limits.
 - [iterable](iterable/MANUAL.md): Reads Iterable lists, campaigns, and templates through the Iterable REST API. Read-only.
 - [jamf-pro](jamf-pro/MANUAL.md): Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf Pro REST API using Basic-credential token-exchange authentication.
-- [jira](jira/MANUAL.md): Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using HTTP Basic auth (email + API token). Read-only.
+- [jira](jira/MANUAL.md): Reads Jira issues, projects, users, and bounded Jira Cloud REST resources; reverse-ETL write actions are typed and require plan, preview, approval, and execute.
 - [jobnimbus](jobnimbus/MANUAL.md): Reads JobNimbus CRM contacts, jobs, tasks, activities, and files through the JobNimbus REST API.
 - [jotform](jotform/MANUAL.md): Reads Jotform forms, submissions, reports, folders, and the account profile through the Jotform REST API.
 - [judge-me-reviews](judge-me-reviews/MANUAL.md): Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, settings, replies, and legacy product/widget resources through the Judge.me REST API.
