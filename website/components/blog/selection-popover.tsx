@@ -78,15 +78,20 @@ export function SelectionPopover() {
   }, [setDraft]);
 
   useEffect(() => {
+    // Once the composer owns the draft, focusing its textarea collapses
+    // the document selection — none of these dismissors may fire then.
     function onMouseUp() {
+      if (composing) return;
       // Wait a tick so the selection has settled.
       window.setTimeout(capture, 0);
     }
     function onKeyUp(event: KeyboardEvent) {
+      if (composing) return;
       if (event.key === 'Shift' || event.key.startsWith('Arrow')) window.setTimeout(capture, 0);
       if (event.key === 'Escape') setDraft(null);
     }
     function onSelectionChange() {
+      if (composing) return;
       if (skipNextClear.current) {
         skipNextClear.current = false;
         return;
@@ -95,6 +100,7 @@ export function SelectionPopover() {
       if (!selection || selection.isCollapsed) setDraft(null);
     }
     function onScroll() {
+      if (composing) return;
       // Position is viewport-fixed; hide rather than track while scrolling.
       setDraft(null);
     }
@@ -109,7 +115,7 @@ export function SelectionPopover() {
       document.removeEventListener('selectionchange', onSelectionChange);
       window.removeEventListener('scroll', onScroll);
     };
-  }, [capture, setDraft]);
+  }, [capture, setDraft, composing]);
 
   if (!mounted || !draft || composing || draft.rect.width === 0) return null;
 

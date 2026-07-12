@@ -28,6 +28,9 @@ test.describe('blog UI smoke', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
 
+    // Wait for hydration (session slot renders) so the click isn't
+    // swallowed by React's pre-hydration event replay.
+    await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
     await page.getByRole('navigation').getByRole('link', { name: 'Blog', exact: true }).click();
     await expect(page).toHaveURL(/\/blog$/);
   });

@@ -108,6 +108,22 @@ OAuth callback URLs to register on each provider:
 Backups: `podman exec cli-polymetrics-db pg_dump -U website website > backup.sql`
 (cron it; the `cli-polymetrics-pgdata` volume holds the live data).
 
+### Annotations rollout checklist
+
+One-time, before the first deploy that includes blog comments:
+
+1. Create the three OAuth apps (GitHub, Google, LinkedIn — LinkedIn needs the
+   "Sign In with LinkedIn using OpenID Connect" product enabled) with the
+   production callback URLs above.
+2. VPS: install `cli-polymetrics.network` + `cli-polymetrics-db.container`,
+   create `db.env`/`website.env` (0600), add `Network=` + `EnvironmentFile=`
+   to the website Quadlet, `systemctl --user daemon-reload`, start the db.
+3. Deploy from `main` as usual; the first request migrates the schema.
+4. Smoke: `curl -I https://cli.polymetrics.ai/blog` → 200; sign in with each
+   provider; post a comment on a post; select text and bookmark it; check
+   `/bookmarks`; delete the test comment as an `ADMIN_EMAILS` account.
+5. Schedule the `pg_dump` backup cron.
+
 ## GitLab Variables
 
 Required built-ins for GitLab Container Registry:

@@ -32,6 +32,11 @@ export const auth = betterAuth({
       maxAge: 300,
     },
   },
+  // Playwright-only escape hatch: e2e specs sign in with credentials
+  // instead of real OAuth. Double-gated so it can never ship enabled.
+  emailAndPassword: {
+    enabled: process.env.E2E_TEST_AUTH === '1' && process.env.NODE_ENV !== 'production',
+  },
   rateLimit: {
     enabled: true,
   },
