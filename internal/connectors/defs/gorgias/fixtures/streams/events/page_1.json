@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 201,
+          "object_type": "ticket",
+          "verb": "created",
+          "object_id": 1,
+          "created_datetime": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

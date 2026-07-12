@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 401,
+          "type": "fixture_job",
+          "status": "completed",
+          "created_datetime": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

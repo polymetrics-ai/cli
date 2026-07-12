@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers/1/custom-fields",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1401,
+          "custom_field_id": 101,
+          "value": "Fixture customer field",
+          "created_datetime": "2026-01-01T00:00:00Z",
+          "updated_datetime": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

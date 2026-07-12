@@ -1,0 +1,415 @@
+{
+  "parent_issue": {
+    "number": 196,
+    "url": "https://github.com/polymetrics-ai/cli/issues/196",
+    "title": "Gorgias: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/196-gorgias-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/229",
+    "base": "main",
+    "head": "feat/196-gorgias-cli-parity",
+    "draft": true,
+    "state": "OPEN"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "subissues_active_review_pending"
+  },
+  "ready_queue": [
+    {
+      "number": 197,
+      "status": "provisionally_integrated",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/metadata.json",
+        "internal/connectors/defs/gorgias/api_surface.json",
+        "internal/connectors/defs/gorgias/cli_surface.json",
+        ".planning/phases/issue-197-gorgias-cli-surface-metadata"
+      ],
+      "decision": "not_spawned_review_blocked"
+    },
+    {
+      "number": 200,
+      "status": "provisionally_integrated",
+      "dependencies": [
+        197
+      ],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/api_surface.json",
+        "internal/connectors/defs/gorgias/docs.md",
+        "cmd/connectorgen/gorgias_api_surface_test.go",
+        ".planning/phases/issue-200-gorgias-operation-ledger"
+      ],
+      "decision": "merged_to_parent_review_pending"
+    },
+    {
+      "number": 199,
+      "status": "provisionally_integrated",
+      "dependencies": [
+        197,
+        200
+      ],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/streams.json",
+        "internal/connectors/defs/gorgias/schemas",
+        "internal/connectors/defs/gorgias/fixtures",
+        "internal/connectors/defs/gorgias/api_surface.json",
+        "internal/connectors/defs/gorgias/cli_surface.json",
+        "internal/connectors/defs/gorgias/docs.md",
+        "internal/connectors/defs/gorgias/metadata.json",
+        "cmd/connectorgen/gorgias_api_surface_test.go",
+        ".planning/phases/issue-199-gorgias-stream-runner"
+      ],
+      "decision": "merged_to_parent_review_pending"
+    },
+    {
+      "number": 201,
+      "status": "planned",
+      "dependencies": [
+        197,
+        200,
+        202
+      ],
+      "write_scope": [
+        "internal/connectors/defs/gorgias",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        ".planning/phases/issue-201-gorgias-direct-read"
+      ],
+      "decision": "not_spawned_dependency_blocked_until_202"
+    },
+    {
+      "number": 202,
+      "status": "worker_ready",
+      "dependencies": [
+        197,
+        200
+      ],
+      "write_scope": [
+        "internal/connectors/engine",
+        "internal/connectors/defs/gorgias",
+        ".planning/phases/issue-202-gorgias-advanced-query-binary"
+      ],
+      "decision": "ready_after_199_provisional_integration"
+    },
+    {
+      "number": 203,
+      "status": "worker_ready",
+      "dependencies": [
+        197,
+        200
+      ],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/writes.json",
+        "internal/connectors/engine",
+        "internal/app",
+        ".planning/phases/issue-203-gorgias-sensitive-admin-policy"
+      ],
+      "decision": "ready_after_199_provisional_integration"
+    },
+    {
+      "number": 198,
+      "status": "planned",
+      "dependencies": [
+        197,
+        199,
+        201,
+        203
+      ],
+      "write_scope": [
+        "internal/cli",
+        "docs/cli",
+        "docs/connectors",
+        "website",
+        ".planning/phases/issue-198-gorgias-help-renderer"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:55:16Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        197
+      ],
+      "reason": "No subagent tool is available in this Pi harness, so the orchestrator cannot spawn pm-gsd-worker. Parent PR is missing; seed parent branch, open draft parent PR, then execute #197 locally. Parallel worker blocker: not_spawned_runtime_capability_missing."
+    },
+    {
+      "timestamp": "2026-07-09T20:02:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        196
+      ],
+      "reason": "Opened draft parent PR #229 after parent planning seed push; sub-issue execution can now start with #197."
+    },
+    {
+      "timestamp": "2026-07-09T21:05:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        197
+      ],
+      "reason": "Local #197 implementation opened sub-PR #237 against parent branch; automated review/check coverage pending."
+    },
+    {
+      "timestamp": "2026-07-09T21:25:00Z",
+      "decision": "not_spawned_review_blocked",
+      "issue_numbers": [
+        200
+      ],
+      "reason": "#197 is provisionally integrated into parent branch after green checks. CodeRabbit skipped sub-PR #237 because base is non-default; parent PR #229 fallback coverage is pending while parent remains draft."
+    },
+    {
+      "timestamp": "2026-07-09T21:45:00Z",
+      "decision": "not_spawned_review_blocked",
+      "issue_numbers": [
+        200
+      ],
+      "reason": "Parent PR #229 checks passed after #197 provisional integration, but CodeRabbit skipped because the parent PR is draft; review coverage for #197 remains pending."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        200
+      ],
+      "reason": "Pi harness lacks subagent spawning, so #200 was executed locally after #197 surface capture. Sub-PR #267 opened against parent branch after local verification passed."
+    },
+    {
+      "timestamp": "2026-07-10T09:45:00Z",
+      "decision": "provisional_integration",
+      "issue_numbers": [
+        200
+      ],
+      "reason": "Sub-PR #267 checks passed and was squash-merged into the parent branch as d10c3eb7. CodeRabbit did not review the non-default stacked PR; parent PR fallback review coverage remains pending."
+    },
+    {
+      "timestamp": "2026-07-10T09:46:00Z",
+      "decision": "ready_queue_updated",
+      "issue_numbers": [
+        199,
+        202,
+        203
+      ],
+      "reason": "#200 operation ledger is provisionally integrated, unblocking stream runner, advanced query/binary, and sensitive/admin policy lanes for local execution or worker assignment."
+    },
+    {
+      "timestamp": "2026-07-10T10:30:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        199
+      ],
+      "reason": "Pi harness lacks subagent spawning, so #199 was executed locally after #200 provisional integration. Sub-PR #268 opened against parent branch after local verification passed."
+    },
+    {
+      "timestamp": "2026-07-10T10:37:00Z",
+      "decision": "provisional_integration",
+      "issue_numbers": [
+        199
+      ],
+      "reason": "Sub-PR #268 checks passed and was squash-merged into the parent branch as 5dd39e17. CodeRabbit did not review the non-default stacked PR; parent PR fallback review coverage remains pending."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 197,
+      "url": "https://github.com/polymetrics-ai/cli/issues/197",
+      "branch": "feat/197-gorgias-cli-surface-metadata",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/237",
+      "worker": "local_critical_path_pi_orchestrator",
+      "status": "provisionally_integrated",
+      "write_scope": [
+        "internal/connectors/defs/gorgias",
+        ".planning/phases/issue-197-gorgias-cli-surface-metadata"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
+      "verification": "local gates, sub-PR checks, and parent PR #229 checks passed after provisional integration",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "skipped",
+        "head_sha": "4d9471cb61405f6351a70bad4e75cf0a97ac05ad",
+        "reviewed_range": "CodeRabbit skipped sub-PR #237 and draft parent PR #229; coverage pending until parent PR fallback review can run or approved fallback is used",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "No actionable review findings; skipped statuses recorded as non-approval. Parent review coverage pending.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/237"
+      }
+    },
+    {
+      "number": 198,
+      "url": "https://github.com/polymetrics-ai/cli/issues/198",
+      "branch": "feat/198-gorgias-help-renderer",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": [
+        "internal/cli",
+        "docs/cli",
+        "docs/connectors",
+        "website",
+        ".planning/phases/issue-198-gorgias-help-renderer"
+      ],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on metadata and command implementation dependencies",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 199,
+      "url": "https://github.com/polymetrics-ai/cli/issues/199",
+      "branch": "feat/199-gorgias-stream-runner",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/268",
+      "worker": "local_critical_path_pi_orchestrator",
+      "status": "provisionally_integrated",
+      "write_scope": [
+        "internal/connectors/defs/gorgias/streams.json",
+        "internal/connectors/defs/gorgias/schemas",
+        "internal/connectors/defs/gorgias/fixtures",
+        "internal/connectors/defs/gorgias/api_surface.json",
+        "internal/connectors/defs/gorgias/cli_surface.json",
+        "internal/connectors/defs/gorgias/docs.md",
+        "internal/connectors/defs/gorgias/metadata.json",
+        "cmd/connectorgen/gorgias_api_surface_test.go",
+        ".planning/phases/issue-199-gorgias-stream-runner"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
+      "verification": "local focused gates, broad gate, sub-PR checks, and parent branch squash merge passed",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "skipped_or_absent",
+        "head_sha": "277cb57695c6b3bb374c373fded6888d9c26e1f5",
+        "reviewed_range": "Sub-PR #268 had no CodeRabbit status/review comments while targeting the non-default parent branch; parent PR fallback coverage pending after squash merge 5dd39e17.",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "No actionable review findings received; skipped/absent automated review is recorded as non-approval pending parent PR fallback.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/268"
+      }
+    },
+    {
+      "number": 200,
+      "url": "https://github.com/polymetrics-ai/cli/issues/200",
+      "branch": "feat/200-gorgias-operation-ledger",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/267",
+      "worker": "local_critical_path_pi_orchestrator",
+      "status": "provisionally_integrated",
+      "write_scope": [
+        "internal/connectors/defs/gorgias/api_surface.json",
+        "internal/connectors/defs/gorgias/docs.md",
+        "cmd/connectorgen/gorgias_api_surface_test.go",
+        ".planning/phases/issue-200-gorgias-operation-ledger"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
+      "verification": "local focused gates, broad gate, sub-PR checks, and parent branch squash merge passed",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "skipped_or_absent",
+        "head_sha": "340216b000bc2be7c7bd725178ad6b0c652a1fd3",
+        "reviewed_range": "Sub-PR #267 had no CodeRabbit status/review comments while targeting the non-default parent branch; parent PR fallback coverage pending after squash merge d10c3eb7.",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "No actionable review findings received; skipped/absent automated review is recorded as non-approval pending parent PR fallback.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/267"
+      }
+    },
+    {
+      "number": 201,
+      "url": "https://github.com/polymetrics-ai/cli/issues/201",
+      "branch": "feat/201-gorgias-direct-read",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": [
+        "internal/connectors/defs/gorgias",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        ".planning/phases/issue-201-gorgias-direct-read"
+      ],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on #197/#200/#202",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 202,
+      "url": "https://github.com/polymetrics-ai/cli/issues/202",
+      "branch": "feat/202-gorgias-advanced-query-binary",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": [
+        "internal/connectors/engine",
+        "internal/connectors/defs/gorgias",
+        ".planning/phases/issue-202-gorgias-advanced-query-binary"
+      ],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on #197/#200",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 203,
+      "url": "https://github.com/polymetrics-ai/cli/issues/203",
+      "branch": "feat/203-gorgias-sensitive-admin-policy",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": [
+        "internal/connectors/defs/gorgias/writes.json",
+        "internal/connectors/engine",
+        "internal/app",
+        ".planning/phases/issue-203-gorgias-sensitive-admin-policy"
+      ],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on #197/#200",
+        "disposition_url": ""
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deployment",
+    "credentialed connector checks",
+    "reverse ETL execution",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-10T10:37:00Z"
+}

@@ -1,0 +1,919 @@
+{
+  "source": "https://developers.gorgias.com/llms.txt plus linked ReadMe markdown OpenAPI definition blocks",
+  "captured_at": "2026-07-09T20:15:00Z",
+  "operation_count": 114,
+  "operations": [
+    {
+      "method": "GET",
+      "path": "/api/account",
+      "operationId": "get-account",
+      "summary": "Retrieve your account",
+      "url": "https://developers.gorgias.com/reference/get-account.md",
+      "connector_relative_path": "/account"
+    },
+    {
+      "method": "GET",
+      "path": "/api/account/settings",
+      "operationId": "list-account-settings",
+      "summary": "List settings",
+      "url": "https://developers.gorgias.com/reference/list-account-settings.md",
+      "connector_relative_path": "/account/settings"
+    },
+    {
+      "method": "POST",
+      "path": "/api/account/settings",
+      "operationId": "create-account-setting",
+      "summary": "Create a setting",
+      "url": "https://developers.gorgias.com/reference/create-account-setting.md",
+      "connector_relative_path": "/account/settings"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/account/settings/{id}",
+      "operationId": "update-account-setting",
+      "summary": "Update a setting",
+      "url": "https://developers.gorgias.com/reference/update-account-setting.md",
+      "connector_relative_path": "/account/settings/{id}"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers",
+      "operationId": "delete-customers",
+      "summary": "Delete customers",
+      "url": "https://developers.gorgias.com/reference/delete-customers.md",
+      "connector_relative_path": "/customers"
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers",
+      "operationId": "list-customers",
+      "summary": "List customers",
+      "url": "https://developers.gorgias.com/reference/list-customers.md",
+      "connector_relative_path": "/customers"
+    },
+    {
+      "method": "POST",
+      "path": "/api/customers",
+      "operationId": "create-customer",
+      "summary": "Create a customer",
+      "url": "https://developers.gorgias.com/reference/create-customer.md",
+      "connector_relative_path": "/customers"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/merge",
+      "operationId": "merge-customers",
+      "summary": "Merge two customers",
+      "url": "https://developers.gorgias.com/reference/merge-customers.md",
+      "connector_relative_path": "/customers/merge"
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/{customer_id}/custom-fields",
+      "operationId": "list-customer-custom-fields-values",
+      "summary": "List customer field values",
+      "url": "https://developers.gorgias.com/reference/list-customer-custom-fields-values.md",
+      "connector_relative_path": "/customers/{customer_id}/custom-fields"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{customer_id}/custom-fields",
+      "operationId": "update-customer-custom-field-values",
+      "summary": "Update customer fields values",
+      "url": "https://developers.gorgias.com/reference/update-customer-custom-field-values.md",
+      "connector_relative_path": "/customers/{customer_id}/custom-fields"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "operationId": "delete-customer-custom-field-value",
+      "summary": "Delete customer field value",
+      "url": "https://developers.gorgias.com/reference/delete-customer-custom-field-value.md",
+      "connector_relative_path": "/customers/{customer_id}/custom-fields/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "operationId": "update-customer-custom-field-value",
+      "summary": "Update customer field value",
+      "url": "https://developers.gorgias.com/reference/update-customer-custom-field-value.md",
+      "connector_relative_path": "/customers/{customer_id}/custom-fields/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{customer_id}/data",
+      "operationId": "update-customer-data",
+      "summary": "Set customer data",
+      "url": "https://developers.gorgias.com/reference/update-customer-data.md",
+      "connector_relative_path": "/customers/{customer_id}/data"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers/{id}",
+      "operationId": "delete-customer",
+      "summary": "Delete a customer",
+      "url": "https://developers.gorgias.com/reference/delete-customer.md",
+      "connector_relative_path": "/customers/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/{id}",
+      "operationId": "get-customer",
+      "summary": "Retrieve a customer",
+      "url": "https://developers.gorgias.com/reference/get-customer.md",
+      "connector_relative_path": "/customers/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{id}",
+      "operationId": "update-customer",
+      "summary": "Update a customer",
+      "url": "https://developers.gorgias.com/reference/update-customer.md",
+      "connector_relative_path": "/customers/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-fields",
+      "operationId": "list-custom-fields",
+      "summary": "List custom fields",
+      "url": "https://developers.gorgias.com/reference/list-custom-fields.md",
+      "connector_relative_path": "/custom-fields"
+    },
+    {
+      "method": "POST",
+      "path": "/api/custom-fields",
+      "operationId": "create-custom-field",
+      "summary": "Create a custom field",
+      "url": "https://developers.gorgias.com/reference/create-custom-field.md",
+      "connector_relative_path": "/custom-fields"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/custom-fields",
+      "operationId": "update-custom-fields",
+      "summary": "Bulk update a list of custom fields",
+      "url": "https://developers.gorgias.com/reference/update-custom-fields.md",
+      "connector_relative_path": "/custom-fields"
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-fields/{id}",
+      "operationId": "get-custom-field",
+      "summary": "Retrieve a custom field",
+      "url": "https://developers.gorgias.com/reference/get-custom-field.md",
+      "connector_relative_path": "/custom-fields/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/custom-fields/{id}",
+      "operationId": "update-custom-field",
+      "summary": "Update a custom field",
+      "url": "https://developers.gorgias.com/reference/update-custom-field.md",
+      "connector_relative_path": "/custom-fields/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/events",
+      "operationId": "list-events",
+      "summary": "List events",
+      "url": "https://developers.gorgias.com/reference/list-events.md",
+      "connector_relative_path": "/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/{id}",
+      "operationId": "get-event",
+      "summary": "Retrieve an event",
+      "url": "https://developers.gorgias.com/reference/get-event.md",
+      "connector_relative_path": "/events/{id}"
+    },
+    {
+      "method": "POST",
+      "path": "/api/upload",
+      "operationId": "",
+      "summary": "Upload files",
+      "url": "https://developers.gorgias.com/reference/post_api-upload.md",
+      "connector_relative_path": "/upload"
+    },
+    {
+      "method": "GET",
+      "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
+      "operationId": "download-file",
+      "summary": "Download a file",
+      "url": "https://developers.gorgias.com/reference/download-file.md",
+      "connector_relative_path": "/{file_type}/download/{domain_hash}/{resource_name}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/integrations",
+      "operationId": "list-integrations",
+      "summary": "List integrations",
+      "url": "https://developers.gorgias.com/reference/list-integrations.md",
+      "connector_relative_path": "/integrations"
+    },
+    {
+      "method": "POST",
+      "path": "/api/integrations",
+      "operationId": "create-integration",
+      "summary": "Create an integration",
+      "url": "https://developers.gorgias.com/reference/create-integration.md",
+      "connector_relative_path": "/integrations"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/integrations/{id}",
+      "operationId": "delete-integration",
+      "summary": "Delete an integration",
+      "url": "https://developers.gorgias.com/reference/delete-integration.md",
+      "connector_relative_path": "/integrations/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/integrations/{id}",
+      "operationId": "get-integration",
+      "summary": "Retrieve an integration",
+      "url": "https://developers.gorgias.com/reference/get-integration.md",
+      "connector_relative_path": "/integrations/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/integrations/{id}",
+      "operationId": "update-integration",
+      "summary": "Update an integration",
+      "url": "https://developers.gorgias.com/reference/update-integration.md",
+      "connector_relative_path": "/integrations/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs",
+      "operationId": "list-jobs",
+      "summary": "List jobs",
+      "url": "https://developers.gorgias.com/reference/list-jobs.md",
+      "connector_relative_path": "/jobs"
+    },
+    {
+      "method": "POST",
+      "path": "/api/jobs",
+      "operationId": "create-job",
+      "summary": "Create a job",
+      "url": "https://developers.gorgias.com/reference/create-job.md",
+      "connector_relative_path": "/jobs"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/jobs/{id}",
+      "operationId": "cancel-job",
+      "summary": "Cancel a job",
+      "url": "https://developers.gorgias.com/reference/cancel-job.md",
+      "connector_relative_path": "/jobs/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs/{id}",
+      "operationId": "get-job",
+      "summary": "Retrieve a job",
+      "url": "https://developers.gorgias.com/reference/get-job.md",
+      "connector_relative_path": "/jobs/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/jobs/{id}",
+      "operationId": "update-job",
+      "summary": "Update a job",
+      "url": "https://developers.gorgias.com/reference/update-job.md",
+      "connector_relative_path": "/jobs/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/macros",
+      "operationId": "list-macros",
+      "summary": "List macros",
+      "url": "https://developers.gorgias.com/reference/list-macros.md",
+      "connector_relative_path": "/macros"
+    },
+    {
+      "method": "POST",
+      "path": "/api/macros",
+      "operationId": "create-macro",
+      "summary": "Create a macro",
+      "url": "https://developers.gorgias.com/reference/create-macro.md",
+      "connector_relative_path": "/macros"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/macros/archive",
+      "operationId": "bulk-archive-macros",
+      "summary": "Archive macros",
+      "url": "https://developers.gorgias.com/reference/bulk-archive-macros.md",
+      "connector_relative_path": "/macros/archive"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/macros/unarchive",
+      "operationId": "bulk-unarchive-macros",
+      "summary": "Unarchive macros",
+      "url": "https://developers.gorgias.com/reference/bulk-unarchive-macros.md",
+      "connector_relative_path": "/macros/unarchive"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/macros/{id}",
+      "operationId": "delete-macro",
+      "summary": "Delete a macro",
+      "url": "https://developers.gorgias.com/reference/delete-macro.md",
+      "connector_relative_path": "/macros/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/macros/{id}",
+      "operationId": "get-macro",
+      "summary": "Retrieve a macro",
+      "url": "https://developers.gorgias.com/reference/get-macro.md",
+      "connector_relative_path": "/macros/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/macros/{id}",
+      "operationId": "update-macro",
+      "summary": "Update a macro",
+      "url": "https://developers.gorgias.com/reference/update-macro.md",
+      "connector_relative_path": "/macros/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/metric-cards/{slug}",
+      "operationId": "get-metric-card",
+      "summary": "Retrieve a metric card by slug",
+      "url": "https://developers.gorgias.com/reference/get-metric-card.md",
+      "connector_relative_path": "/metric-cards/{slug}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/metric-cards",
+      "operationId": "search-metric-cards",
+      "summary": "Search metric cards",
+      "url": "https://developers.gorgias.com/reference/search-metric-cards.md",
+      "connector_relative_path": "/metric-cards"
+    },
+    {
+      "method": "POST",
+      "path": "/api/metric-cards/{slug}/feedback",
+      "operationId": "create-metric-card-feedback",
+      "summary": "Submit feedback on a metric card definition",
+      "url": "https://developers.gorgias.com/reference/create-metric-card-feedback.md",
+      "connector_relative_path": "/metric-cards/{slug}/feedback"
+    },
+    {
+      "method": "GET",
+      "path": "/api/rules",
+      "operationId": "list-rules",
+      "summary": "List rules",
+      "url": "https://developers.gorgias.com/reference/list-rules.md",
+      "connector_relative_path": "/rules"
+    },
+    {
+      "method": "POST",
+      "path": "/api/rules",
+      "operationId": "create-rule",
+      "summary": "Create a rule",
+      "url": "https://developers.gorgias.com/reference/create-rule.md",
+      "connector_relative_path": "/rules"
+    },
+    {
+      "method": "POST",
+      "path": "/api/rules/priorities",
+      "operationId": "update-rules-priorities",
+      "summary": "Update rules' priorities",
+      "url": "https://developers.gorgias.com/reference/update-rules-priorities.md",
+      "connector_relative_path": "/rules/priorities"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/rules/{id}",
+      "operationId": "delete-rule",
+      "summary": "Delete a rule",
+      "url": "https://developers.gorgias.com/reference/delete-rule.md",
+      "connector_relative_path": "/rules/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/rules/{id}",
+      "operationId": "get-rule",
+      "summary": "Retrieve a rule",
+      "url": "https://developers.gorgias.com/reference/get-rule.md",
+      "connector_relative_path": "/rules/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/rules/{id}",
+      "operationId": "update-rule",
+      "summary": "Update a rule",
+      "url": "https://developers.gorgias.com/reference/update-rule.md",
+      "connector_relative_path": "/rules/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/satisfaction-surveys",
+      "operationId": "list-satisfaction-surveys",
+      "summary": "List surveys",
+      "url": "https://developers.gorgias.com/reference/list-satisfaction-surveys.md",
+      "connector_relative_path": "/satisfaction-surveys"
+    },
+    {
+      "method": "POST",
+      "path": "/api/satisfaction-surveys",
+      "operationId": "create-satisfaction-survey",
+      "summary": "Create a survey",
+      "url": "https://developers.gorgias.com/reference/create-satisfaction-survey.md",
+      "connector_relative_path": "/satisfaction-surveys"
+    },
+    {
+      "method": "GET",
+      "path": "/api/satisfaction-surveys/{id}",
+      "operationId": "get-satisfaction-survey",
+      "summary": "Retrieve a survey",
+      "url": "https://developers.gorgias.com/reference/get-satisfaction-survey.md",
+      "connector_relative_path": "/satisfaction-surveys/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/satisfaction-surveys/{id}",
+      "operationId": "update-satisfaction-survey",
+      "summary": "Update a survey",
+      "url": "https://developers.gorgias.com/reference/update-satisfaction-survey.md",
+      "connector_relative_path": "/satisfaction-surveys/{id}"
+    },
+    {
+      "method": "POST",
+      "path": "/api/search",
+      "operationId": "search",
+      "summary": "Search for resources",
+      "url": "https://developers.gorgias.com/reference/search-1.md",
+      "connector_relative_path": "/search"
+    },
+    {
+      "method": "POST",
+      "path": "/api/stats/{name}",
+      "operationId": "get-legacy-statistic",
+      "summary": "Retrieve a statistic",
+      "url": "https://developers.gorgias.com/reference/get-legacy-statistic.md",
+      "connector_relative_path": "/stats/{name}"
+    },
+    {
+      "method": "POST",
+      "path": "/api/stats/{name}/download",
+      "operationId": "download-legacy-statistic",
+      "summary": "Download a statistic",
+      "url": "https://developers.gorgias.com/reference/download-legacy-statistic.md",
+      "connector_relative_path": "/stats/{name}/download"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags",
+      "operationId": "delete-tags",
+      "summary": "Delete tags",
+      "url": "https://developers.gorgias.com/reference/delete-tags.md",
+      "connector_relative_path": "/tags"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "operationId": "list-tags",
+      "summary": "List tags",
+      "url": "https://developers.gorgias.com/reference/list-tags.md",
+      "connector_relative_path": "/tags"
+    },
+    {
+      "method": "POST",
+      "path": "/api/tags",
+      "operationId": "create-tag",
+      "summary": "Create a tag",
+      "url": "https://developers.gorgias.com/reference/create-tag.md",
+      "connector_relative_path": "/tags"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tags/{destination_tag_id}/merge",
+      "operationId": "merge-tags",
+      "summary": "Merge tags",
+      "url": "https://developers.gorgias.com/reference/merge-tags.md",
+      "connector_relative_path": "/tags/{destination_tag_id}/merge"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags/{id}",
+      "operationId": "delete-tag",
+      "summary": "Delete a tag",
+      "url": "https://developers.gorgias.com/reference/delete-tag.md",
+      "connector_relative_path": "/tags/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}",
+      "operationId": "get-tag",
+      "summary": "Retrieve a tag",
+      "url": "https://developers.gorgias.com/reference/get-tag.md",
+      "connector_relative_path": "/tags/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tags/{id}",
+      "operationId": "update-tag",
+      "summary": "Update a tag",
+      "url": "https://developers.gorgias.com/reference/update-tag.md",
+      "connector_relative_path": "/tags/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/teams",
+      "operationId": "list-teams",
+      "summary": "List teams",
+      "url": "https://developers.gorgias.com/reference/list-teams.md",
+      "connector_relative_path": "/teams"
+    },
+    {
+      "method": "POST",
+      "path": "/api/teams",
+      "operationId": "create-team",
+      "summary": "Create a team",
+      "url": "https://developers.gorgias.com/reference/create-team.md",
+      "connector_relative_path": "/teams"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/teams/{id}",
+      "operationId": "delete-team",
+      "summary": "Delete a team",
+      "url": "https://developers.gorgias.com/reference/delete-team.md",
+      "connector_relative_path": "/teams/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/teams/{id}",
+      "operationId": "get-team",
+      "summary": "Retrieve a team",
+      "url": "https://developers.gorgias.com/reference/get-team.md",
+      "connector_relative_path": "/teams/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/teams/{id}",
+      "operationId": "update-team",
+      "summary": "Update a team",
+      "url": "https://developers.gorgias.com/reference/update-team.md",
+      "connector_relative_path": "/teams/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets",
+      "operationId": "list-tickets",
+      "summary": "List tickets",
+      "url": "https://developers.gorgias.com/reference/list-tickets.md",
+      "connector_relative_path": "/tickets"
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets",
+      "operationId": "create-ticket",
+      "summary": "Create a ticket",
+      "url": "https://developers.gorgias.com/reference/create-ticket.md",
+      "connector_relative_path": "/tickets"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{id}",
+      "operationId": "delete-ticket",
+      "summary": "Delete a ticket",
+      "url": "https://developers.gorgias.com/reference/delete-ticket.md",
+      "connector_relative_path": "/tickets/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{id}",
+      "operationId": "get-ticket",
+      "summary": "Retrieve a ticket",
+      "url": "https://developers.gorgias.com/reference/get-ticket.md",
+      "connector_relative_path": "/tickets/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{id}",
+      "operationId": "update-ticket",
+      "summary": "Update a ticket",
+      "url": "https://developers.gorgias.com/reference/update-ticket.md",
+      "connector_relative_path": "/tickets/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/custom-fields",
+      "operationId": "list-ticket-custom-fields",
+      "summary": "List ticket field values",
+      "url": "https://developers.gorgias.com/reference/list-ticket-custom-fields.md",
+      "connector_relative_path": "/tickets/{ticket_id}/custom-fields"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/custom-fields",
+      "operationId": "update-ticket-custom-fields",
+      "summary": "Update ticket fields values",
+      "url": "https://developers.gorgias.com/reference/update-ticket-custom-fields.md",
+      "connector_relative_path": "/tickets/{ticket_id}/custom-fields"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "operationId": "delete-ticket-custom-field",
+      "summary": "Delete ticket field value",
+      "url": "https://developers.gorgias.com/reference/delete-ticket-custom-field.md",
+      "connector_relative_path": "/tickets/{ticket_id}/custom-fields/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "operationId": "update-ticket-custom-field",
+      "summary": "Update ticket field value",
+      "url": "https://developers.gorgias.com/reference/update-ticket-custom-field.md",
+      "connector_relative_path": "/tickets/{ticket_id}/custom-fields/{id}"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "operationId": "delete-ticket-tags",
+      "summary": "Remove ticket tags",
+      "url": "https://developers.gorgias.com/reference/delete-ticket-tags.md",
+      "connector_relative_path": "/tickets/{ticket_id}/tags"
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "operationId": "create-ticket-tags",
+      "summary": "Add ticket tags",
+      "url": "https://developers.gorgias.com/reference/create-ticket-tags.md",
+      "connector_relative_path": "/tickets/{ticket_id}/tags"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "operationId": "update-ticket-tags",
+      "summary": "Set ticket tags",
+      "url": "https://developers.gorgias.com/reference/update-ticket-tags.md",
+      "connector_relative_path": "/tickets/{ticket_id}/tags"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "operationId": "list-ticket-tags",
+      "summary": "List ticket tags",
+      "url": "https://developers.gorgias.com/reference/list-ticket-tags.md",
+      "connector_relative_path": "/tickets/{ticket_id}/tags"
+    },
+    {
+      "method": "GET",
+      "path": "/api/messages",
+      "operationId": "list-messages",
+      "summary": "List messages",
+      "url": "https://developers.gorgias.com/reference/list-messages.md",
+      "connector_relative_path": "/messages"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/messages",
+      "operationId": "list-ticket-messages",
+      "summary": "List messages of a ticket",
+      "url": "https://developers.gorgias.com/reference/list-ticket-messages.md",
+      "connector_relative_path": "/tickets/{ticket_id}/messages"
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets/{ticket_id}/messages",
+      "operationId": "create-ticket-message",
+      "summary": "Create a message",
+      "url": "https://developers.gorgias.com/reference/create-ticket-message.md",
+      "connector_relative_path": "/tickets/{ticket_id}/messages"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "operationId": "delete-ticket-message",
+      "summary": "Delete a message",
+      "url": "https://developers.gorgias.com/reference/delete-ticket-message.md",
+      "connector_relative_path": "/tickets/{ticket_id}/messages/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "operationId": "get-ticket-message",
+      "summary": "Retrieve a message",
+      "url": "https://developers.gorgias.com/reference/get-ticket-message.md",
+      "connector_relative_path": "/tickets/{ticket_id}/messages/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "operationId": "update-ticket-message",
+      "summary": "Update a message",
+      "url": "https://developers.gorgias.com/reference/update-ticket-message.md",
+      "connector_relative_path": "/tickets/{ticket_id}/messages/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/users",
+      "operationId": "list-users",
+      "summary": "List users",
+      "url": "https://developers.gorgias.com/reference/list-users.md",
+      "connector_relative_path": "/users"
+    },
+    {
+      "method": "POST",
+      "path": "/api/users",
+      "operationId": "create-user",
+      "summary": "Create a user",
+      "url": "https://developers.gorgias.com/reference/create-user.md",
+      "connector_relative_path": "/users"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/users/{id}",
+      "operationId": "delete-user",
+      "summary": "Delete a user",
+      "url": "https://developers.gorgias.com/reference/delete-user.md",
+      "connector_relative_path": "/users/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/{id}",
+      "operationId": "get-user",
+      "summary": "Retrieve a user",
+      "url": "https://developers.gorgias.com/reference/get-user.md",
+      "connector_relative_path": "/users/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/users/{id}",
+      "operationId": "update-user",
+      "summary": "Update a user",
+      "url": "https://developers.gorgias.com/reference/update-user.md",
+      "connector_relative_path": "/users/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/views",
+      "operationId": "list-views",
+      "summary": "List views",
+      "url": "https://developers.gorgias.com/reference/list-views.md",
+      "connector_relative_path": "/views"
+    },
+    {
+      "method": "POST",
+      "path": "/api/views",
+      "operationId": "create-view",
+      "summary": "Create a view",
+      "url": "https://developers.gorgias.com/reference/create-view.md",
+      "connector_relative_path": "/views"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/views/{id}",
+      "operationId": "delete-view",
+      "summary": "Delete a view",
+      "url": "https://developers.gorgias.com/reference/delete-view.md",
+      "connector_relative_path": "/views/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/views/{id}",
+      "operationId": "get-view",
+      "summary": "Retrieve a view",
+      "url": "https://developers.gorgias.com/reference/get-view.md",
+      "connector_relative_path": "/views/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/views/{id}",
+      "operationId": "update-view",
+      "summary": "Update a view",
+      "url": "https://developers.gorgias.com/reference/update-view.md",
+      "connector_relative_path": "/views/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/views/{view_id}/items",
+      "operationId": "list-view-items",
+      "summary": "List view's items",
+      "url": "https://developers.gorgias.com/reference/list-view-items.md",
+      "connector_relative_path": "/views/{view_id}/items"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/views/{view_id}/items",
+      "operationId": "update-view-items",
+      "summary": "Search for view's items",
+      "url": "https://developers.gorgias.com/reference/update-view-items.md",
+      "connector_relative_path": "/views/{view_id}/items"
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-calls",
+      "operationId": "list-voice-calls",
+      "summary": "List voice calls",
+      "url": "https://developers.gorgias.com/reference/list-voice-calls.md",
+      "connector_relative_path": "/phone/voice-calls"
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-calls/{id}",
+      "operationId": "get-voice-call",
+      "summary": "Retrieve a voice call",
+      "url": "https://developers.gorgias.com/reference/get-voice-call.md",
+      "connector_relative_path": "/phone/voice-calls/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-recordings",
+      "operationId": "list-voice-call-recordings",
+      "summary": "List voice call recordings",
+      "url": "https://developers.gorgias.com/reference/list-voice-call-recordings.md",
+      "connector_relative_path": "/phone/voice-call-recordings"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/phone/voice-call-recordings/{id}",
+      "operationId": "delete-voice-call-recording",
+      "summary": "Delete a voice call recording",
+      "url": "https://developers.gorgias.com/reference/delete-voice-call-recording.md",
+      "connector_relative_path": "/phone/voice-call-recordings/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-recordings/{id}",
+      "operationId": "get-voice-call-recording",
+      "summary": "Retrieve a voice call recording",
+      "url": "https://developers.gorgias.com/reference/get-voice-call-recording.md",
+      "connector_relative_path": "/phone/voice-call-recordings/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-events",
+      "operationId": "list-voice-call-events",
+      "summary": "List voice call events",
+      "url": "https://developers.gorgias.com/reference/list-voice-call-events.md",
+      "connector_relative_path": "/phone/voice-call-events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-events/{id}",
+      "operationId": "get-voice-call-event",
+      "summary": "Retrieve a voice call event",
+      "url": "https://developers.gorgias.com/reference/get-voice-call-event.md",
+      "connector_relative_path": "/phone/voice-call-events/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/widgets",
+      "operationId": "list-widgets",
+      "summary": "List widgets",
+      "url": "https://developers.gorgias.com/reference/list-widgets.md",
+      "connector_relative_path": "/widgets"
+    },
+    {
+      "method": "POST",
+      "path": "/api/widgets",
+      "operationId": "create-widget",
+      "summary": "Create a widget",
+      "url": "https://developers.gorgias.com/reference/create-widget.md",
+      "connector_relative_path": "/widgets"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/widgets/{id}",
+      "operationId": "delete-widget",
+      "summary": "Delete a widget",
+      "url": "https://developers.gorgias.com/reference/delete-widget.md",
+      "connector_relative_path": "/widgets/{id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/widgets/{id}",
+      "operationId": "get-widget",
+      "summary": "Retrieve a widget",
+      "url": "https://developers.gorgias.com/reference/get-widget.md",
+      "connector_relative_path": "/widgets/{id}"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/widgets/{id}",
+      "operationId": "update-widget",
+      "summary": "Update a widget",
+      "url": "https://developers.gorgias.com/reference/update-widget.md",
+      "connector_relative_path": "/widgets/{id}"
+    },
+    {
+      "method": "POST",
+      "path": "/api/reporting/stats",
+      "operationId": "get-statistic",
+      "summary": "Retrieve a statistic",
+      "url": "https://developers.gorgias.com/reference/get-statistic.md",
+      "connector_relative_path": "/reporting/stats"
+    }
+  ]
+}
