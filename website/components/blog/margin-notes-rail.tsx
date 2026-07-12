@@ -171,7 +171,7 @@ export function MarginNotesRail({ containerRef }: { containerRef: React.RefObjec
               data-margin-note={item.comment.id}
               className={`corner-box-corners absolute w-full border bg-surface-bg p-2.5 text-left transition-[top,border-color] duration-150 ease-out motion-reduce:transition-none ${
                 activeId === item.comment.id
-                  ? 'z-10 border-line-cta shadow-[3px_3px_0_0_#c0d6c8]'
+                  ? 'z-10 border-line-cta'
                   : 'border-line-structure hover:border-line-cta'
               }`}
               style={{ top: item.top }}
@@ -201,7 +201,7 @@ export function MarginNotesRail({ containerRef }: { containerRef: React.RefObjec
               key={`cluster-${item.comments[0].id}`}
               type="button"
               onClick={() => setSheetOpen(true)}
-              className="absolute border border-[#34d399] bg-surface-1 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-line-cta transition-colors hover:bg-surface-2"
+              className="absolute border border-surface-cta-primary bg-surface-1 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-line-cta transition-colors hover:bg-surface-2"
               style={{ top: item.top }}
             >
               +{item.comments.length} notes

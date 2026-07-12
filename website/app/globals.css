@@ -1123,7 +1123,7 @@ html.dark,
    navbar-desktop-*: Tailwind lg: display variants are unreliable here). */
 .blog-margin-rail { display: none; }
 .blog-notes-fab { display: flex; }
-@media (min-width: 64rem) {
+@media (min-width: 80rem) {
   .blog-margin-rail { display: block; }
   .blog-notes-fab { display: none; }
 }

@@ -25,7 +25,7 @@ function DeleteButton({ comment }: { comment: CommentDto }) {
         type="button"
         aria-label="Delete note"
         onClick={() => setConfirming(true)}
-        className="ml-auto flex items-center gap-1 font-mono text-[9px] uppercase tracking-widest text-text-disabled transition-colors hover:text-[--destructive]"
+        className="ml-auto flex items-center gap-1 font-mono text-[9px] uppercase tracking-widest text-text-disabled transition-colors hover:text-destructive"
       >
         <Trash2 className="h-3 w-3" aria-hidden="true" />
         Delete
@@ -37,7 +37,7 @@ function DeleteButton({ comment }: { comment: CommentDto }) {
       <button
         type="button"
         onClick={() => void deleteComment(comment.id)}
-        className="border border-[#b42318] bg-[#b42318] px-1.5 py-0.5 text-white"
+        className="border border-destructive bg-destructive px-1.5 py-0.5 text-white"
       >
         Confirm
       </button>
@@ -94,12 +94,12 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
 
   return (
     <>
-      {/* Mobile trigger — the rail is hidden below lg. */}
+      {/* Floating trigger — shown wherever the margin rail is hidden (<80rem). */}
       <button
         type="button"
         onClick={() => setSheetOpen(true)}
         aria-label={`Open notes (${count})`}
-        className="blog-notes-fab fixed bottom-5 right-5 z-40 items-center gap-2 border border-line-cta bg-surface-bg px-3 py-2.5 shadow-[4px_4px_0_0_#c0d6c8] transition-colors hover:bg-surface-1"
+        className="blog-notes-fab fixed bottom-5 right-5 z-40 items-center gap-2 border border-line-cta bg-surface-bg px-3 py-2.5 shadow-[0_18px_60px_rgba(12,31,23,0.16)] transition-colors hover:bg-surface-1"
       >
         <MessageSquare className="h-4 w-4 text-line-cta" aria-hidden="true" />
         <span className="font-mono text-[11px] font-bold text-text-secondary">{count}</span>
@@ -157,7 +157,7 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
                 <div className="mt-3 flex flex-col gap-3">
                   {list.map((comment) => (
                     <div key={comment.id} className="corner-box-corners border border-line-structure bg-surface-bg p-3">
-                      <blockquote className="truncate border-l-2 border-[#34d399] bg-surface-1 px-2.5 py-1 text-[12px] italic text-text-tertiary">
+                      <blockquote className="truncate border-l-2 border-surface-cta-primary bg-surface-1 px-2.5 py-1 text-[12px] italic text-text-tertiary">
                         {comment.anchor.exact}
                       </blockquote>
                       <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">

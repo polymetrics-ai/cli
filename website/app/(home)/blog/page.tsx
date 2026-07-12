@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Clock, Rss } from 'lucide-react';
 import { BLOG_POSTS, blogUrl } from '@/lib/blog';
-import { HomeSidebar } from '@/components/home/home-sidebar';
-import { OnPageTocAside } from '@/components/ui/on-page-toc';
 import { CornerBox } from '@/components/ui/corner-box';
 
 export const metadata: Metadata = {
@@ -24,11 +22,6 @@ export const metadata: Metadata = {
 
 const featured = BLOG_POSTS[0];
 const rest = BLOG_POSTS.slice(1);
-const tocItems = [
-  { id: 'blog-overview', label: 'Overview' },
-  { id: 'featured-article', label: 'Featured' },
-  { id: 'all-articles', label: 'All articles' },
-];
 
 export default function BlogPage() {
   const jsonLd = {
@@ -48,11 +41,8 @@ export default function BlogPage() {
   };
 
   return (
-    <div className="flex mx-auto w-full max-w-[95rem] overflow-clip">
-      <HomeSidebar />
-
-      <main className="flex-1 min-w-0 pattern-bg overflow-hidden pb-8 xl:px-5 2xl:px-10">
-        <div className="relative z-[1] mx-auto w-full px-4 py-16 sm:px-8 md:px-0 md:max-w-[680px] md:py-24 xl:max-w-[840px]">
+    <main className="mx-auto w-full max-w-[95rem] px-6 py-16 md:py-24">
+      <div className="mx-auto w-full max-w-[840px]">
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -64,7 +54,7 @@ export default function BlogPage() {
                 <Rss className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
                 Polymetrics writing
               </span>
-              <h1 className="mt-4 max-w-[12ch] font-square text-[44px] font-semibold leading-[1] text-text-primary md:text-[68px]">
+              <h1 className="mt-4 max-w-[12ch] font-analog text-[44px] leading-[1] text-text-primary md:text-[68px]">
                 Notes for the data loop.
               </h1>
             </div>
@@ -97,7 +87,7 @@ export default function BlogPage() {
                     <span>{featured.category}</span>
                     <span>{featured.publishedAt}</span>
                   </div>
-                  <h2 className="max-w-[14ch] font-square text-[40px] font-semibold leading-[1.02] text-text-primary md:text-[58px]">
+                  <h2 className="max-w-[14ch] font-analog text-[40px] leading-[1.02] text-text-primary md:text-[58px]">
                     {featured.title}
                   </h2>
                   <p className="mt-5 max-w-[68ch] text-[15px] leading-relaxed text-text-tertiary">
@@ -166,10 +156,7 @@ export default function BlogPage() {
               </Link>
             ))}
           </section>
-        </div>
-      </main>
-
-      <OnPageTocAside className="home-aside-panel" items={tocItems} />
-    </div>
+      </div>
+    </main>
   );
 }

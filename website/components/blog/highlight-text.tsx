@@ -76,7 +76,7 @@ export function HighlightedBlock({
           return (
             <span
               key={index}
-              className="border-b border-dotted border-[#34d399] decoration-clone"
+              className="border-b border-dotted border-surface-cta-primary decoration-clone"
               data-annotation-bookmark={bookmarkIds}
             >
               {segment.text}
@@ -101,10 +101,10 @@ export function HighlightedBlock({
               'cursor-pointer border-b text-inherit transition-colors duration-150',
               hasBookmark ? 'border-dotted' : '',
               isActive
-                ? 'bg-[#34d399]/40 border-[#0f3d2e]'
+                ? 'bg-surface-cta-primary/40 border-line-cta'
                 : depth
-                  ? 'bg-[#34d399]/35 border-[#34d399] hover:bg-[#34d399]/45'
-                  : 'bg-[#34d399]/20 border-[#34d399] hover:bg-[#34d399]/35',
+                  ? 'bg-surface-cta-primary/35 border-surface-cta-primary hover:bg-surface-cta-primary/45'
+                  : 'bg-surface-cta-primary/20 border-surface-cta-primary hover:bg-surface-cta-primary/35',
               comment?.pending ? 'annotation-pending' : '',
             ].join(' ')}
             onMouseEnter={(event) => setHovered({ id: primary, rect: event.currentTarget.getBoundingClientRect() })}
@@ -155,7 +155,7 @@ export function HoverPreview() {
 
   return (
     <div
-      className="corner-box-corners pointer-events-none fixed z-50 w-[280px] -translate-y-full border border-line-structure bg-surface-bg p-3 shadow-[4px_4px_0_0_#c0d6c8]"
+      className="corner-box-corners pointer-events-none fixed z-50 w-[280px] -translate-y-full border border-line-structure bg-surface-bg p-3 shadow-[0_18px_60px_rgba(12,31,23,0.16)]"
       style={{ top, left }}
       role="tooltip"
     >
