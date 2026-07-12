@@ -13,17 +13,5 @@
 //	for _, rec := range pageRecords { emit(connectors.Record(rec)) }
 package connsdk
 
-import "strings"
-
 // Record is a single emitted row. Its underlying type matches connectors.Record.
 type Record = map[string]any
-
-// firstNonEmpty returns the first argument that is non-empty after trimming.
-func firstNonEmpty(values ...string) string {
-	for _, v := range values {
-		if strings.TrimSpace(v) != "" {
-			return v
-		}
-	}
-	return ""
-}

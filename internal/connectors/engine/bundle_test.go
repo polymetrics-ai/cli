@@ -924,6 +924,140 @@ func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedGitLabCLISurface(t *testing.T) {
+	b, err := Load(defs.FS, "gitlab")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, gitlab): %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("GitLab CLISurface is nil; defs.FS must embed cli_surface.json")
+	}
+	if b.CLISurface.Usage != "pm gitlab <command> <subcommand> [flags]" {
+		t.Fatalf("GitLab CLISurface usage = %q", b.CLISurface.Usage)
+	}
+	if b.CLISurface.SourceCLI == nil || b.CLISurface.SourceCLI.Name != "glab" {
+		t.Fatalf("GitLab source CLI = %+v, want glab", b.CLISurface.SourceCLI)
+	}
+
+	want := map[string]struct {
+		stream string
+		method string
+		path   string
+	}{
+		"project list": {stream: "projects", method: "GET", path: "/projects"},
+		"group list":   {stream: "groups", method: "GET", path: "/groups"},
+		"user list":    {stream: "users", method: "GET", path: "/users"},
+		"issue list":   {stream: "issues", method: "GET", path: "/issues"},
+	}
+	for _, cmd := range b.CLISurface.Commands {
+		expected, ok := want[cmd.Path]
+		if !ok {
+			continue
+		}
+		if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream != expected.stream || cmd.Write != "" || cmd.Operation != "" {
+			t.Fatalf("command %q = intent=%q availability=%q stream=%q write=%q operation=%q, want implemented etl stream %q only",
+				cmd.Path, cmd.Intent, cmd.Availability, cmd.Stream, cmd.Write, cmd.Operation, expected.stream)
+		}
+		if len(cmd.APISurface) != 1 || cmd.APISurface[0].Method != expected.method || cmd.APISurface[0].Path != expected.path {
+			t.Fatalf("command %q api_surface = %+v, want %s %s", cmd.Path, cmd.APISurface, expected.method, expected.path)
+		}
+		delete(want, cmd.Path)
+	}
+	if len(want) > 0 {
+		t.Fatalf("missing GitLab CLI stream commands: %v", want)
+	}
+}
+
+func TestBundleLoadGitLabOperationLedgerFromDisk(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "gitlab")
+	if err != nil {
+		t.Fatalf("Load(defs, gitlab): %v", err)
+	}
+	if b.Surface == nil {
+		t.Fatal("GitLab api_surface is nil")
+	}
+	if b.Surface.OperationLedgerVersion != 1 {
+		t.Fatalf("operation ledger version = %d, want 1", b.Surface.OperationLedgerVersion)
+	}
+	if got, want := len(b.Surface.Endpoints), 1145; got != want {
+		t.Fatalf("api surface endpoints = %d, want %d (1,144 official OpenAPI operations plus /users compatibility stream)", got, want)
+	}
+	if got, want := len(b.Operations), 1145; got != want {
+		t.Fatalf("operations = %d, want %d (1,144 official OpenAPI operations plus /users compatibility operation)", got, want)
+	}
+	coveredStreams := map[string]bool{}
+	directReads := map[string]bool{}
+	coveredWrites := map[string]bool{}
+	blockedModels := map[string]int{}
+	coveredEndpointRows := 0
+	for _, ep := range b.Surface.Endpoints {
+		if ep.CoveredBy != nil {
+			coveredEndpointRows++
+			if ep.CoveredBy.Stream != "" {
+				coveredStreams[ep.CoveredBy.Stream] = true
+			}
+			if ep.CoveredBy.DirectRead != "" {
+				directReads[ep.CoveredBy.DirectRead] = true
+			}
+			for _, command := range ep.CoveredBy.DirectReads {
+				directReads[command] = true
+			}
+			if ep.CoveredBy.Write != "" {
+				coveredWrites[ep.CoveredBy.Write] = true
+			}
+			continue
+		}
+		if ep.Operation == nil || !ep.Operation.BlockedByDefault || ep.Operation.Status != "blocked" {
+			t.Fatalf("endpoint %s %s is neither covered nor blocked-by-default: %+v", ep.Method, ep.Path, ep.Operation)
+		}
+		blockedModels[ep.Operation.Model]++
+	}
+	for _, stream := range []string{"projects", "groups", "users", "issues"} {
+		if !coveredStreams[stream] {
+			t.Fatalf("stream %q missing api_surface coverage", stream)
+		}
+	}
+	for _, command := range []string{"project view", "group view", "user events", "issue view"} {
+		if !directReads[command] {
+			t.Fatalf("direct-read command %q missing api_surface coverage", command)
+		}
+	}
+	if coveredEndpointRows != 1142 {
+		t.Fatalf("covered endpoint rows = %d, want 1142", coveredEndpointRows)
+	}
+	if len(coveredWrites) != 637 {
+		t.Fatalf("covered write actions = %d, want 637", len(coveredWrites))
+	}
+	if blockedModels["deprecated"] != 3 || len(blockedModels) != 1 {
+		t.Fatalf("blocked models = %+v, want only 3 deprecated rows", blockedModels)
+	}
+
+	var sawSensitiveWrite, sawDestructiveWrite bool
+	for _, op := range b.Operations {
+		if op.Kind != "rest_write" {
+			continue
+		}
+		if op.Approval == "" || op.Approval == "none" {
+			t.Fatalf("GitLab write operation %q missing approval policy", op.ID)
+		}
+		if op.MutationClass == "secret" {
+			sawSensitiveWrite = true
+			if op.SensitivePolicy == nil || op.SensitivePolicy.ApprovalMode != "typed_confirmation" || op.SensitivePolicy.InputMode == "" {
+				t.Fatalf("secret GitLab operation %q missing typed sensitive policy: %+v", op.ID, op.SensitivePolicy)
+			}
+		}
+		if op.Destructive {
+			sawDestructiveWrite = true
+			if op.SensitivePolicy == nil || op.SensitivePolicy.ApprovalMode != "typed_confirmation" {
+				t.Fatalf("destructive GitLab operation %q missing typed confirmation policy: %+v", op.ID, op.SensitivePolicy)
+			}
+		}
+	}
+	if !sawSensitiveWrite || !sawDestructiveWrite {
+		t.Fatalf("GitLab ledger missing sensitive/destructive write policies: sensitive=%v destructive=%v", sawSensitiveWrite, sawDestructiveWrite)
+	}
+}
+
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

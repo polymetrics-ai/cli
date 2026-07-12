@@ -252,7 +252,7 @@ func writeInTableNDJSON(t *testing.T, dir, table string, rows []connectors.Recor
 	if err != nil {
 		t.Fatalf("create InTable: %v", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 	enc := json.NewEncoder(f)
 	for _, row := range rows {
 		// Wrap in localRawRecord format as written by internal/app
@@ -298,7 +298,7 @@ func TestMaterializationWritesNDJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("OutTable not written: %v", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	var outRows []map[string]any
 	sc := bufio.NewScanner(f)

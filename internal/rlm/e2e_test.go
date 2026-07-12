@@ -41,7 +41,7 @@ func TestLikelyCustomersFlowOffline(t *testing.T) {
 	if err != nil {
 		t.Fatalf("open OutTable: %v", err)
 	}
-	defer f2.Close()
+	defer func() { _ = f2.Close() }()
 
 	sc := bufio.NewScanner(f2)
 	sc.Scan()

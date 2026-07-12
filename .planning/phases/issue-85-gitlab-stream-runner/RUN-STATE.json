@@ -1,0 +1,16 @@
+{
+  "phase": "issue-85-gitlab-stream-runner",
+  "issue": 85,
+  "parent_issue": 78,
+  "parent_pr": 127,
+  "status": "completed_local",
+  "gsd_prompt": "scripts/gsd prompt execute-phase issue-85-gitlab-stream-runner --tdd",
+  "manual_fallback": "programming-loop command unavailable in scripts/gsd registry",
+  "verificationPassed": true,
+  "orchestrationDecisions": [{
+    "cycle": "plan",
+    "decision": "local_critical_path",
+    "reason": "Pi harness has no exposed subagent tool; lane ran inline after planning artifact creation."
+  }],
+  "updated_at": "2026-07-09T15:30:00Z"
+}

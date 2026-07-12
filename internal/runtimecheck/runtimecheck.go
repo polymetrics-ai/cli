@@ -2,7 +2,6 @@ package runtimecheck
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"time"
 
@@ -102,7 +101,7 @@ func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 	checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
 	defer cancel()
 	client := redis.NewClient(&redis.Options{Addr: cfg.DragonflyAddr})
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 	err := client.Ping(checkCtx).Err()
 	result.Latency = time.Since(start)
 	if err != nil {
@@ -164,7 +163,7 @@ func redactPostgresURL(raw string) string {
 			}
 		}
 	}
-	return fmt.Sprintf("%s", raw)
+	return raw
 }
 
 func index(s, substr string) int {

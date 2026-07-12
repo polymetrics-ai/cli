@@ -127,9 +127,13 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 			"order":  order,
 		})
 	}
-	fmt.Fprintf(stdout, "Flow: %s  status=%s\n", m.Name, status)
+	if _, err := fmt.Fprintf(stdout, "Flow: %s  status=%s\n", m.Name, status); err != nil {
+		return err
+	}
 	for i, id := range order {
-		fmt.Fprintf(stdout, "  %d. %s\n", i+1, id)
+		if _, err := fmt.Fprintf(stdout, "  %d. %s\n", i+1, id); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -188,8 +192,8 @@ func flowRun(ctx context.Context, a *app.App, args []string, stdout io.Writer, j
 	if jsonOut {
 		return writeJSON(stdout, result)
 	}
-	fmt.Fprintf(stdout, "Flow %s: %s\n", result.FlowName, result.Status)
-	return nil
+	_, err = fmt.Fprintf(stdout, "Flow %s: %s\n", result.FlowName, result.Status)
+	return err
 }
 
 // flowStatus returns last checkpoint info for a named flow.
@@ -231,9 +235,13 @@ func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{"flow": name, "steps": statuses})
 	}
-	fmt.Fprintf(stdout, "Flow: %s\n", name)
+	if _, err := fmt.Fprintf(stdout, "Flow: %s\n", name); err != nil {
+		return err
+	}
 	for _, s := range statuses {
-		fmt.Fprintf(stdout, "  %s: %s\n", s.ID, s.Status)
+		if _, err := fmt.Fprintf(stdout, "  %s: %s\n", s.ID, s.Status); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -266,11 +274,13 @@ func flowList(args []string, stdout io.Writer, jsonOut bool) error {
 		return err
 	}
 	if len(flows) == 0 {
-		fmt.Fprintln(stdout, "(no flows)")
-		return nil
+		_, err = fmt.Fprintln(stdout, "(no flows)")
+		return err
 	}
 	for _, f := range flows {
-		fmt.Fprintln(stdout, f)
+		if _, err := fmt.Fprintln(stdout, f); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -333,7 +343,7 @@ func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (fl
 		return flow.RLMResult{}, err
 	}
 	if closer != nil {
-		defer closer()
+		defer func() { _ = closer() }()
 	}
 
 	result, err := analyzer.Run(ctx, rlm.RunRequest{

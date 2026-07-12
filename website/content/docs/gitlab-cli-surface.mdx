@@ -1,0 +1,84 @@
+---
+title: GitLab CLI Surface
+description: GitLab connector command parity, operation-ledger coverage, and guarded pm command execution.
+---
+
+The GitLab connector has a JSON-first command surface contract at
+`internal/connectors/defs/gitlab/cli_surface.json`. It is inspired by
+[`glab`](https://gitlab.com/gitlab-org/cli), but `pm` only enables commands with typed connector
+mappings, bounded output, and explicit safety policy.
+
+## Current surface
+
+| Metric | Value |
+|---|---:|
+| Declared command entries | 1,207 |
+| Implemented stream commands | 4 |
+| Implemented runnable direct-read commands | 4 |
+| Implemented operation-backed read/binary/HEAD commands | 497 |
+| Implemented reverse-ETL write commands | 637 |
+| Planned or blocked command entries | 65 |
+| GitLab read streams | 4 |
+| GitLab write actions | 637 |
+| Official OpenAPI operations inventoried | 1,144 |
+| Covered endpoint rows | 1,142 |
+| Deprecated blocked endpoint rows | 3 |
+| Compatibility stream rows | 1 (`GET /users`) |
+| Runtime-enabled raw API commands | 0 |
+
+## Implemented commands
+
+| Command | Backing mode | Endpoint |
+|---|---|---|
+| `pm gitlab project list` | ETL stream | `GET /projects` |
+| `pm gitlab group list` | ETL stream | `GET /groups` |
+| `pm gitlab user list` | ETL stream | `GET /users` |
+| `pm gitlab issue list` | ETL stream | `GET /issues` |
+| `pm gitlab project view --id <id>` | bounded direct read | `GET /projects/{id}` |
+| `pm gitlab group view --id <id>` | bounded direct read | `GET /groups/{id}` |
+| `pm gitlab user events --id <id>` | bounded direct read | `GET /users/{id}/events` |
+| `pm gitlab issue view --project-id <id> --issue-iid <iid>` | bounded direct read | `GET /projects/{id}/issues/{issue_iid}` |
+
+The four bounded direct reads above are runnable today and use the `json_redacted` output policy with
+a 1 MiB default response cap. Sensitive fields are recursively redacted before output, including
+token, secret, password, credential, private, auth, content, and generic `value` fields.
+
+The remaining read-like GitLab operations are represented as operation-backed commands for parity.
+Those commands are intentionally feature-gated by the command runner until a bounded operation
+executor exists, matching the GitHub parity scaffold.
+
+## Safety policy
+
+<Callout type="warn">
+  `pm gitlab` does not expose a `glab api` clone, generic HTTP writes, generic shell execution,
+  generic SQL writes, unsafe binary downloads, or arbitrary GraphQL mutations.
+</Callout>
+
+Every non-deprecated GitLab OpenAPI operation is covered by a stream, bounded direct read,
+operation-backed command, or typed reverse-ETL write action. Sensitive, admin, and destructive writes
+carry risk labels and typed-confirmation requirements. Generated writes still use reverse ETL plan →
+preview → approval → execute; a plain `pm gitlab ...` invocation does not mutate GitLab.
+
+## Help and docs parity
+
+Connector help is rendered from the same metadata used by command dispatch:
+
+```bash
+pm help gitlab
+pm gitlab
+pm gitlab --help
+pm gitlab project view --help
+pm gitlab repo branches check --help
+pm connectors inspect gitlab
+```
+
+The output lists implemented commands separately from planned or blocked commands, including the
+source `glab` path and safety notes. Leaf command help renders without opening project state or
+credentials, including operation-gated and reverse-ETL write commands. Invalid command paths still
+return usage errors; bare connector names render contextual help and exit successfully.
+
+## GraphQL status
+
+GitLab GraphQL remains a reviewed but not-enabled surface for this parity milestone. Future GraphQL
+support must use fixed documents with typed variables, bounded pagination, redaction, and no generic
+mutation escape hatch.

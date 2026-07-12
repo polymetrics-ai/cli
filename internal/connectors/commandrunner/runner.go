@@ -49,6 +49,8 @@ type WriteCommand struct {
 
 var ErrNotWriteCommand = errors.New("connector command is not a reverse ETL write command")
 
+const BlockedReasonUnknownCommand = "unknown command"
+
 type BlockedCommandError struct {
 	Connector    string
 	Command      string
@@ -226,7 +228,7 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 
 	cmd, ok := findCommand(surfaceProvider.CommandSurface(), command)
 	if !ok {
-		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
+		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: BlockedReasonUnknownCommand}
 	}
 	if cmd.Operation != "" {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
@@ -347,7 +349,7 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	switch policy {
-	case "github_contents_file_metadata", "github_contents_directory":
+	case "github_contents_file_metadata", "github_contents_directory", "json_redacted":
 		return true
 	default:
 		return false

@@ -102,6 +102,7 @@ var surfaceOperationRisks = map[string]bool{
 var directReadOutputPolicies = map[string]bool{
 	"github_contents_file_metadata": true,
 	"github_contents_directory":     true,
+	"json_redacted":                 true,
 }
 
 var sourceRequiredOperationModels = map[string]bool{
@@ -118,6 +119,15 @@ var mutationMethods = map[string]bool{
 	"PUT":    true,
 	"PATCH":  true,
 	"DELETE": true,
+}
+
+func isReadOnlySurfaceMethod(method string) bool {
+	switch strings.ToUpper(strings.TrimSpace(method)) {
+	case "GET", "HEAD":
+		return true
+	default:
+		return false
+	}
 }
 
 // requiredDocHeadings are the fixed docs.md headings (design §F.6 /
@@ -620,10 +630,10 @@ func checkAPISurface(b engine.Bundle) []Finding {
 						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead),
 					})
 				}
-				if !strings.EqualFold(ep.Method, "GET") {
+				if !isReadOnlySurfaceMethod(ep.Method) {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path),
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET or HEAD", i, ep.Method, ep.Path),
 					})
 				}
 			}

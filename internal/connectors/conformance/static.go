@@ -104,6 +104,15 @@ var mutationMethods = map[string]bool{
 	"DELETE": true,
 }
 
+func isReadOnlySurfaceMethod(method string) bool {
+	switch strings.ToUpper(strings.TrimSpace(method)) {
+	case "GET", "HEAD":
+		return true
+	default:
+		return false
+	}
+}
+
 // secretLiteralPattern flags secret-shaped literals accidentally committed
 // to fixtures or docs: a Bearer-scheme header value, a long opaque token
 // following an auth-flavored key, or a recognizable vendor secret prefix
@@ -347,8 +356,8 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				if !directReads[directRead] {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead)
 				}
-				if !strings.EqualFold(ep.Method, "GET") {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path)
+				if !isReadOnlySurfaceMethod(ep.Method) {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET or HEAD", i, ep.Method, ep.Path)
 				}
 			}
 			if strings.EqualFold(ep.Method, "GET") {

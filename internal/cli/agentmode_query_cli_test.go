@@ -21,7 +21,7 @@ func seedCLIWarehouseTable(t *testing.T, root, table string, rows []map[string]a
 	if err != nil {
 		t.Fatalf("create warehouse table: %v", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 	enc := json.NewEncoder(f)
 	for _, row := range rows {
 		if err := enc.Encode(row); err != nil {

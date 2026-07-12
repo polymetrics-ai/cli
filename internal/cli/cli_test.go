@@ -63,6 +63,122 @@ func TestRootHelpJSONIsAgentReadable(t *testing.T) {
 	}
 }
 
+func TestGitLabCommandSurfaceHelpRendersFromMetadata(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "bare connector", args: []string{"gitlab"}},
+		{name: "help flag", args: []string{"gitlab", "--help"}},
+		{name: "help topic", args: []string{"help", "gitlab"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s", tt.args, code, stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{
+				"GitLab",
+				"COMMAND SURFACE",
+				"Usage: pm gitlab <command> <subcommand> [flags]",
+				"project list - List visible GitLab projects",
+				"issue list - List GitLab issues visible to the token",
+				"raw API commands are intentionally disallowed",
+			} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("GitLab help missing %q:\n%s", want, out)
+				}
+			}
+		})
+	}
+}
+
+func TestGitLabCommandSurfaceHelpJSONIsAgentReadable(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"--json", "gitlab", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(gitlab --help --json) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"kind": "CommandManual"`, `"command": "gitlab"`, `"manual":`} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("GitLab json manual missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestGitLabCommandSurfaceLeafHelpDoesNotRequireProject(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+		want []string
+	}{
+		{
+			name: "stream",
+			args: []string{"gitlab", "project", "list", "--help"},
+			want: []string{"NAME", "pm gitlab project list", "intent=etl", "stream=projects"},
+		},
+		{
+			name: "direct read",
+			args: []string{"gitlab", "project", "view", "--help"},
+			want: []string{"NAME", "pm gitlab project view", "intent=direct_read", "--id"},
+		},
+		{
+			name: "operation backed",
+			args: []string{"gitlab", "repo", "branches", "check", "--help"},
+			want: []string{"NAME", "pm gitlab repo branches check", "operation=gitlab.head_api_v4_projects_id_repository_branches_branch", "feature-gated"},
+		},
+		{
+			name: "reverse etl write",
+			args: []string{"gitlab", "variable", "variables", "delete", "--help"},
+			want: []string{"NAME", "pm gitlab variable variables delete", "intent=reverse_etl", "Reverse ETL writes require plan, preview, approval, execute"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stdout = %s stderr = %s", tt.args, code, stdout.String(), stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range tt.want {
+				if !strings.Contains(out, want) {
+					t.Fatalf("leaf help missing %q:\n%s", want, out)
+				}
+			}
+		})
+	}
+}
+
+func TestGitLabCommandSurfaceLeafHelpJSONIsAgentReadable(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"--json", "gitlab", "project", "view", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(gitlab project view --help --json) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"kind": "CommandManual"`, `"command": "gitlab project view"`, `"manual":`} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("GitLab leaf json manual missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestGitLabUnknownCommandIsUsageError(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"gitlab", "does", "not-exist"}, &stdout, &stderr)
+	if code != 2 {
+		t.Fatalf("Run(gitlab does not-exist) code = %d stdout = %s stderr = %s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stderr.String(), "unknown connector command") {
+		t.Fatalf("stderr = %q, want unknown connector command", stderr.String())
+	}
+}
+
 func TestVersionCommandReportsBuildMetadata(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"version"}, &stdout, &stderr)
@@ -312,6 +428,149 @@ func TestRuntimeDoctorJSONDoesNotLeakPostgresPassword(t *testing.T) {
 	}
 	if !strings.Contains(out, `"kind": "RuntimeDoctor"`) {
 		t.Fatalf("missing RuntimeDoctor kind:\n%s", out)
+	}
+}
+
+func TestGitLabCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
+	var gotPath, gotAuth, gotState string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		gotAuth = r.Header.Get("Authorization")
+		gotState = r.URL.Query().Get("state")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`[
+			{
+				"id": 201,
+				"iid": 7,
+				"project_id": 300,
+				"title": "fixture issue",
+				"state": "opened",
+				"web_url": "https://gitlab.example.test/acme/project/-/issues/7",
+				"updated_at": "2026-07-09T00:00:00Z",
+				"author": {"id": 99}
+			}
+		]`))
+	}))
+	t.Cleanup(srv.Close)
+	t.Setenv("PM_GITLAB_TEST_TOKEN", "gitlab_fixture_token")
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "gitlab-local",
+		"--connector", "gitlab",
+		"--config", "base_url=" + srv.URL,
+		"--from-env", "access_token=PM_GITLAB_TEST_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"gitlab", "issue", "list",
+		"--credential", "gitlab-local",
+		"--state", "opened",
+		"--limit", "1",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/issues" {
+		t.Fatalf("request path = %q, want /issues", gotPath)
+	}
+	if gotAuth != "Bearer gitlab_fixture_token" {
+		t.Fatalf("Authorization header = %q, want bearer token", gotAuth)
+	}
+	if gotState != "opened" {
+		t.Fatalf("request state = %q, want opened", gotState)
+	}
+
+	var env struct {
+		Kind    string `json:"kind"`
+		Command string `json:"command"`
+		Stream  string `json:"stream"`
+		Count   int    `json:"count"`
+		Records []struct {
+			ID       int    `json:"id"`
+			State    string `json:"state"`
+			AuthorID int    `json:"author_id"`
+		} `json:"records"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandRead" || env.Command != "issue list" || env.Stream != "issues" || env.Count != 1 {
+		t.Fatalf("envelope = %+v, want GitLab ConnectorCommandRead issue list", env)
+	}
+	if len(env.Records) != 1 || env.Records[0].ID != 201 || env.Records[0].State != "opened" || env.Records[0].AuthorID != 99 {
+		t.Fatalf("records = %+v, want projected GitLab issue record", env.Records)
+	}
+}
+
+func TestGitLabCommandSurfaceRunsBoundedDirectReadProjectView(t *testing.T) {
+	var gotPath, gotAuth string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		gotAuth = r.Header.Get("Authorization")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"id": 123,
+			"name": "demo",
+			"path_with_namespace": "acme/demo",
+			"runners_token": "must-not-leak",
+			"variables": [{"key": "TOKEN", "value": "must-not-leak"}]
+		}`))
+	}))
+	t.Cleanup(srv.Close)
+	t.Setenv("PM_GITLAB_TEST_TOKEN", "gitlab_fixture_token")
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "gitlab-local",
+		"--connector", "gitlab",
+		"--config", "base_url=" + srv.URL,
+		"--from-env", "access_token=PM_GITLAB_TEST_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"gitlab", "project", "view",
+		"--credential", "gitlab-local",
+		"--id", "123",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/projects/123" {
+		t.Fatalf("request path = %q, want /projects/123", gotPath)
+	}
+	if gotAuth != "Bearer gitlab_fixture_token" {
+		t.Fatalf("Authorization header = %q, want bearer token", gotAuth)
+	}
+	if strings.Contains(stdout, "must-not-leak") {
+		t.Fatalf("direct read leaked sensitive response value:\n%s", stdout)
+	}
+
+	var env struct {
+		Kind     string         `json:"kind"`
+		Command  string         `json:"command"`
+		Method   string         `json:"method"`
+		Path     string         `json:"path"`
+		Status   int            `json:"status"`
+		Response map[string]any `json:"response"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Command != "project view" || env.Method != "GET" || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want GitLab direct-read project view", env)
+	}
+	if env.Response["runners_token_redacted"] != true {
+		t.Fatalf("response did not include token redaction marker: %+v", env.Response)
+	}
+	variables, _ := env.Response["variables"].([]any)
+	firstVariable, _ := variables[0].(map[string]any)
+	if firstVariable["value_redacted"] != true {
+		t.Fatalf("variable value was not redacted: %+v", firstVariable)
 	}
 }
 

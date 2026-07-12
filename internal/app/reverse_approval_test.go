@@ -107,7 +107,7 @@ func writeWarehouseRows(t *testing.T, a *app.App, table string, rows []connector
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	encoder := json.NewEncoder(file)
 	for _, row := range rows {
 		if err := encoder.Encode(row); err != nil {

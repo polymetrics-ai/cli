@@ -62,8 +62,8 @@ func runScheduleCreate(root string, args []string, stdout io.Writer, jsonOut boo
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "Schedule", "ok": true, "schedule": m})
 	}
-	fmt.Fprintf(stdout, "Created schedule %s (cron: %s, flow: %s)\n", m.Name, m.Cron, m.Flow)
-	return nil
+	_, err := fmt.Fprintf(stdout, "Created schedule %s (cron: %s, flow: %s)\n", m.Name, m.Cron, m.Flow)
+	return err
 }
 
 func runScheduleList(root string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -79,7 +79,9 @@ func runScheduleList(root string, args []string, stdout io.Writer, jsonOut bool)
 		return writeJSON(stdout, envelope{"kind": "ScheduleList", "schedules": manifests})
 	}
 	for _, m := range manifests {
-		fmt.Fprintf(stdout, "%s\t%s\t%s\n", m.Name, m.Cron, m.Flow)
+		if _, err := fmt.Fprintf(stdout, "%s\t%s\t%s\n", m.Name, m.Cron, m.Flow); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -112,8 +114,8 @@ func runScheduleInstall(ctx context.Context, root string, args []string, stdout 
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ScheduleInstall", "ok": true, "schedule": m, "backend": string(backend.Kind())})
 	}
-	fmt.Fprintf(stdout, "Installed schedule %s via %s\n", m.Name, backend.Kind())
-	return nil
+	_, err = fmt.Fprintf(stdout, "Installed schedule %s via %s\n", m.Name, backend.Kind())
+	return err
 }
 
 func runScheduleRemove(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -146,8 +148,8 @@ func runScheduleRemove(ctx context.Context, root string, args []string, stdout i
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ScheduleRemove", "ok": true, "name": name})
 	}
-	fmt.Fprintf(stdout, "Removed schedule %s\n", name)
-	return nil
+	_, err := fmt.Fprintf(stdout, "Removed schedule %s\n", name)
+	return err
 }
 
 func isAlreadyExists(err error) bool {

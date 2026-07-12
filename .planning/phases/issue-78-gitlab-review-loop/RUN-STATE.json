@@ -1,0 +1,73 @@
+{
+  "phase": "issue-78-gitlab-review-loop",
+  "issue": 78,
+  "parent_pr": 127,
+  "branch": "feat/78-gitlab-cli-parity",
+  "status": "claude-review-blocked-after-retry-and-fix-pass-existing-findings-dispositioned",
+  "gsd_prompt": "scripts/gsd prompt code-review issue-78-gitlab-cli-parity-review --tdd",
+  "missing_requested_doc": ".agents/agentic-delivery/workflows/claude-review-loop.md",
+  "fallback_docs": [
+    ".agents/agentic-delivery/contracts/code-review-disposition-template.md",
+    ".agents/agentic-delivery/workflows/automated-review-routing-loop.md",
+    ".agents/agentic-delivery/workflows/coderabbit-review-loop.md",
+    ".agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md"
+  ],
+  "verificationPassed": true,
+  "fullRepositoryGolangCILint": "passed",
+  "claudeReview": {
+    "requested": true,
+    "runs": [
+      {"run_id": 29084800101, "conclusion": "cancelled", "purpose": "initial on-demand review"},
+      {"run_id": 29084886661, "conclusion": "cancelled", "purpose": "retry after initial cancellation"},
+      {"run_id": 29085553120, "conclusion": "cancelled", "purpose": "post-fix on-demand review"}
+    ],
+    "retry_used": true,
+    "post_fix_pass_used": true,
+    "findings": 0,
+    "blocker": "Claude on-demand review cancelled before posting findings on every attempt."
+  },
+  "reviewDispositions": {
+    "existing_inline_threads": 9,
+    "replied": 9,
+    "accepted": 9,
+    "accepted_fix_commits_pushed": true
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Pi subagent/isolation not required for sequential rebase and automated review coordination."
+    },
+    {
+      "cycle": "rebase",
+      "decision": "local_critical_path",
+      "reason": "Sequential rebase onto origin/main completed without conflicts."
+    },
+    {
+      "cycle": "verify-red",
+      "decision": "local_critical_path",
+      "reason": "Full repository golangci-lint failed; coordinator requested fixing it before push/review."
+    },
+    {
+      "cycle": "lint-cleanup",
+      "decision": "local_critical_path",
+      "reason": "Mechanical lint cleanup required no isolated worker and no dependency/secret/credentialed checks."
+    },
+    {
+      "cycle": "verify-green",
+      "decision": "local_critical_path",
+      "reason": "gofmt, vet, build, tests, connectorgen validation, full golangci-lint, make verify, and CLI parity checks passed."
+    },
+    {
+      "cycle": "claude-review",
+      "decision": "not_spawned_review_blocked",
+      "reason": "Claude review workflow cancelled twice; existing inline findings were dispositioned manually per template."
+    },
+    {
+      "cycle": "post-fix-claude-review",
+      "decision": "not_spawned_review_blocked",
+      "reason": "Post-fix Claude review workflow also cancelled before posting findings."
+    }
+  ],
+  "updated_at": "2026-07-10T10:35:00Z"
+}

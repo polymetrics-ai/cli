@@ -1,0 +1,190 @@
+{
+  "parent_issue": {
+    "number": 78,
+    "url": "https://github.com/polymetrics-ai/cli/issues/78",
+    "title": "GitLab CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/78-gitlab-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/127",
+    "base": "main",
+    "head": "feat/78-gitlab-cli-parity",
+    "draft": false,
+    "state": "OPEN"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "local_verified_website_typecheck_blocked"
+  },
+  "ready_queue": [
+    {
+      "number": 83,
+      "status": "completed_pushed",
+      "dependencies": [],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 84,
+      "status": "completed_local",
+      "dependencies": [83],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 85,
+      "status": "completed_local",
+      "dependencies": [83, 84],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 86,
+      "status": "completed_local",
+      "dependencies": [],
+      "decision": "local_critical_path_after_83"
+    },
+    {
+      "number": 87,
+      "status": "completed_local",
+      "dependencies": [86],
+      "decision": "local_critical_path_after_86"
+    },
+    {
+      "number": 88,
+      "status": "completed_local_not_enabled",
+      "dependencies": [86],
+      "decision": "local_critical_path_after_86"
+    },
+    {
+      "number": 89,
+      "status": "completed_local",
+      "dependencies": [86],
+      "decision": "local_critical_path_after_86"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T12:34:52Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [83],
+      "reason": "This Pi harness exposes no subagent tool; #83 was the first ready lane and executed inline with separate artifacts."
+    },
+    {
+      "timestamp": "2026-07-09T15:35:00Z",
+      "decision": "local_critical_path_sequential",
+      "issue_numbers": [84, 85, 86, 87, 88, 89],
+      "reason": "Remaining lanes shared GitLab bundle, CLI, docs, and validator files; orchestrator ran them sequentially inline to avoid write-scope collisions."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 83,
+      "url": "https://github.com/polymetrics-ai/cli/issues/83",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "sub_pr_green_pushed",
+      "verification": "Full Go/connector gates and make verify passed for #83; website generated data refreshed; website typecheck/build blocked by local pnpm lockfile config mismatch"
+    },
+    {
+      "number": 84,
+      "url": "https://github.com/polymetrics-ai/cli/issues/84",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "GitLab connector help tests and runtime help smoke checks passed"
+    },
+    {
+      "number": 85,
+      "url": "https://github.com/polymetrics-ai/cli/issues/85",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "Local fixture stream-runner test for pm gitlab issue list passed"
+    },
+    {
+      "number": 86,
+      "url": "https://github.com/polymetrics-ai/cli/issues/86",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "GitLab OpenAPI operation ledger disk-load test and connectorgen validation passed"
+    },
+    {
+      "number": 87,
+      "url": "https://github.com/polymetrics-ai/cli/issues/87",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "json_redacted policy and GitLab direct-read CLI fixture tests passed"
+    },
+    {
+      "number": 88,
+      "url": "https://github.com/polymetrics-ai/cli/issues/88",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local_not_enabled",
+      "verification": "GraphQL recorded as not required for REST-backed slice; no generic GraphQL/raw executor added"
+    },
+    {
+      "number": 89,
+      "url": "https://github.com/polymetrics-ai/cli/issues/89",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "Sensitive/admin/destructive policy assertions and connectorgen validation passed"
+    }
+  ],
+  "automated_review": {
+    "primary_route": "parent_pr_automatic_review_after_push",
+    "status": "coderabbit_review_addressed_locally",
+    "coverage_route": "parent_pr",
+    "coderabbit": {
+      "status": "commented_addressed_locally",
+      "message": "Initial automatic review was rate-limited; later automatic review completed after the window cleared.",
+      "reviewed_range": "CodeRabbit reviewed files changed from ae01c3f962fe089fc26e274fba1f9bbad540f7dd through 575449211fe35c4b8e0427ad61f5da2a76b344be.",
+      "submitted_at": "2026-07-09T15:32:13Z",
+      "comments": [
+        "Clarify GitLab writes/raw-api help topics.",
+        "Check actual sensitive fixture values in json_redacted leak test.",
+        "Document recursive json_redacted redaction in website docs.",
+        "Nit: add known-safe json_redacted allowlist for metadata fields.",
+        "Nit: use shared commandrunner unknown-command reason constant."
+      ],
+      "disposition": "all actionable and nit comments addressed locally; final gates rerun"
+    },
+    "fallback_route": "copilot_reviewed",
+    "copilot": {
+      "status": "commented_addressed_locally",
+      "requested_reviewer": "Copilot",
+      "requested_at": "2026-07-09T14:28:22Z",
+      "submitted_at": "2026-07-09T14:34:09Z; 2026-07-09T15:29:19Z no-new-comments; 2026-07-09T15:57:18Z follow-up",
+      "comments": [
+        "Narrow json_redacted content redaction so content_type/content_format metadata is preserved while exact content is redacted.",
+        "Drop trailing period from GitLab --connection global flag summary before maps_to rendering.",
+        "Drop trailing period from GitLab --limit global flag summary before maps_to rendering.",
+        "Avoid per-field slice allocation in isSensitiveJSONField.",
+        "Cache connector registry for connector help/manual rendering."
+      ],
+      "disposition": "all actionable comments addressed; focused tests and final gates rerun"
+    }
+  },
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deploys",
+    "quality gate reductions",
+    "credentialed connector checks",
+    "reverse ETL execution"
+  ],
+  "updated_at": "2026-07-09T22:05:00Z"
+}

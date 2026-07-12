@@ -287,10 +287,10 @@ func deterministicRecordID(flowName, stepID string, record map[string]any) strin
 	sort.Strings(keys)
 
 	h := sha256.New()
-	fmt.Fprintf(h, "%s/%s:", flowName, stepID)
+	_, _ = fmt.Fprintf(h, "%s/%s:", flowName, stepID)
 	for _, k := range keys {
 		v, _ := json.Marshal(record[k])
-		fmt.Fprintf(h, "%s=%s;", k, v)
+		_, _ = fmt.Fprintf(h, "%s=%s;", k, v)
 	}
 	return hex.EncodeToString(h.Sum(nil))
 }
@@ -319,12 +319,15 @@ func (r *HTTPActionRunner) writeDLQ(runID string, entries []dlqEntry) (string, e
 	if err != nil {
 		return "", err
 	}
-	defer f.Close()
 	enc := json.NewEncoder(f)
 	for _, e := range entries {
 		if err := enc.Encode(e); err != nil {
+			_ = f.Close()
 			return "", err
 		}
+	}
+	if err := f.Close(); err != nil {
+		return "", err
 	}
 	return path, nil
 }
@@ -404,7 +407,10 @@ func (r *HTTPActionRunner) sendBatch(ctx context.Context, records []map[string]a
 		}
 
 		body, _ := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
-		resp.Body.Close()
+		if err := resp.Body.Close(); err != nil {
+			lastErr = err
+			continue
+		}
 
 		if resp.StatusCode == http.StatusTooManyRequests {
 			// Honor Retry-After if present.

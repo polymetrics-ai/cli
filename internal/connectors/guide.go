@@ -225,6 +225,114 @@ func RenderConnectorManual(c Connector) string {
 	return RenderGuideManual(GuideOf(c))
 }
 
+// RenderConnectorCommandManual renders focused help for one connector command
+// surface entry. It is metadata-only help: callers may invoke it before opening
+// project state or credentials.
+func RenderConnectorCommandManual(c Connector, path []string) (string, error) {
+	provider, ok := c.(CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		return "", fmt.Errorf("connector %q has no command surface", c.Name())
+	}
+	surface := provider.CommandSurface()
+	commandPath := strings.Join(path, " ")
+	var cmd CommandSurfaceCommand
+	found := false
+	for _, candidate := range surface.Commands {
+		if candidate.Path == commandPath {
+			cmd = candidate
+			found = true
+			break
+		}
+	}
+	if !found {
+		return "", fmt.Errorf("unknown connector command %q for %s", commandPath, c.Name())
+	}
+	return renderConnectorCommandManual(c.Name(), surface, cmd), nil
+}
+
+func renderConnectorCommandManual(connectorName string, surface *CommandSurface, cmd CommandSurfaceCommand) string {
+	var b strings.Builder
+	fullCommand := "pm " + connectorName + " " + cmd.Path
+	b.WriteString("NAME\n")
+	b.WriteString("  " + fullCommand)
+	if cmd.Summary != "" {
+		b.WriteString(" - " + cmd.Summary)
+	}
+	b.WriteString("\n\n")
+	b.WriteString("SYNOPSIS\n")
+	b.WriteString("  " + fullCommand + " [flags]\n\n")
+	b.WriteString("DESCRIPTION\n")
+	if cmd.Summary != "" {
+		b.WriteString("  " + cmd.Summary + "\n")
+	} else {
+		b.WriteString("  Connector command declared in cli_surface.json.\n")
+	}
+	if cmd.Notes != "" {
+		b.WriteString("  Notes: " + cmd.Notes + "\n")
+	}
+	b.WriteString("\n")
+	b.WriteString("COMMAND METADATA\n")
+	for _, line := range commandMetadataLines(cmd) {
+		b.WriteString("  " + line + "\n")
+	}
+	if cmd.Operation != "" {
+		b.WriteString("  feature-gated: operation executor is not implemented in this slice\n")
+	}
+	if cmd.Approval != "" {
+		b.WriteString("\nAPPROVAL\n")
+		b.WriteString("  " + cmd.Approval + "\n")
+	}
+	if cmd.Risk != "" {
+		b.WriteString("\nRISK\n")
+		b.WriteString("  " + cmd.Risk + "\n")
+	}
+	if len(cmd.APISurface) > 0 {
+		b.WriteString("\nAPI SURFACE\n")
+		for _, endpoint := range cmd.APISurface {
+			b.WriteString("  " + endpoint.Method + " " + endpoint.Path + "\n")
+		}
+	}
+	if len(surface.GlobalFlags) > 0 || len(cmd.Flags) > 0 {
+		b.WriteString("\nFLAGS\n")
+		for _, flag := range surface.GlobalFlags {
+			b.WriteString("  " + renderCommandSurfaceFlag(flag) + "\n")
+		}
+		for _, flag := range cmd.Flags {
+			b.WriteString("  " + renderCommandSurfaceFlag(flag) + "\n")
+		}
+	}
+	if len(cmd.Examples) > 0 {
+		b.WriteString("\nEXAMPLES\n")
+		for _, example := range cmd.Examples {
+			b.WriteString("  " + example + "\n")
+		}
+	}
+	return b.String()
+}
+
+func commandMetadataLines(cmd CommandSurfaceCommand) []string {
+	pairs := []struct {
+		key   string
+		value string
+	}{
+		{key: "intent", value: cmd.Intent},
+		{key: "availability", value: cmd.Availability},
+		{key: "stream", value: cmd.Stream},
+		{key: "write", value: cmd.Write},
+		{key: "operation", value: cmd.Operation},
+		{key: "output_policy", value: cmd.OutputPolicy},
+		{key: "source_cli_path", value: cmd.SourceCLIPath},
+		{key: "source_url", value: cmd.SourceURL},
+	}
+	lines := make([]string, 0, len(pairs))
+	for _, pair := range pairs {
+		if pair.value != "" {
+			lines = append(lines, pair.key+"="+pair.value)
+		}
+	}
+	return lines
+}
+
 func RenderConnectorSkill(c Connector) string {
 	return RenderGuideSkill(GuideOf(c))
 }
@@ -269,11 +377,11 @@ func ValidateConnectorGuide(c Connector) error {
 func RenderGuideManual(guide ConnectorGuide) string {
 	var b strings.Builder
 	b.WriteString("NAME\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName))
+	fmt.Fprintf(&b, "  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName)
 	b.WriteString("SYNOPSIS\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s --json\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name))
+	fmt.Fprintf(&b, "  pm connectors inspect %s\n", guide.Name)
+	fmt.Fprintf(&b, "  pm connectors inspect %s --json\n", guide.Name)
+	fmt.Fprintf(&b, "  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name)
 	b.WriteString("DESCRIPTION\n")
 	for _, line := range splitParagraphs(guide.Summary) {
 		b.WriteString("  " + line + "\n")
@@ -319,7 +427,7 @@ func RenderGuideManual(guide ConnectorGuide) string {
 	if len(guide.Links) > 0 {
 		b.WriteString("SEE ALSO\n")
 		for _, link := range guide.Links {
-			b.WriteString(fmt.Sprintf("  %s: %s\n", link.Label, link.URL))
+			fmt.Fprintf(&b, "  %s: %s\n", link.Label, link.URL)
 		}
 		b.WriteString("\n")
 	}

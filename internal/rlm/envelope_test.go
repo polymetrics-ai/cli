@@ -18,7 +18,7 @@ func readPlainNDJSON(t *testing.T, path string) []connectors.Record {
 	if err != nil {
 		t.Fatalf("open %q: %v", path, err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 	var out []connectors.Record
 	sc := bufio.NewScanner(f)
 	for sc.Scan() {

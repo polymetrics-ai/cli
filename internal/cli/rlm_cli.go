@@ -83,7 +83,7 @@ func runRLMRun(ctx context.Context, root string, args []string, stdout io.Writer
 		return usageErrorf("rlm run: unknown mode %q (want deterministic|fixture|model|agent)", mode)
 	}
 	if closer != nil {
-		defer closer()
+		defer func() { _ = closer() }()
 	}
 
 	result, err := analyzer.Run(ctx, req)
@@ -96,10 +96,10 @@ func runRLMRun(ctx context.Context, root string, args []string, stdout io.Writer
 		return enc.Encode(result)
 	}
 
-	fmt.Fprintf(stdout, "mode=%s in=%s out=%s records_read=%d records_scored=%d dry_run=%v duration=%s\n",
+	_, err = fmt.Fprintf(stdout, "mode=%s in=%s out=%s records_read=%d records_scored=%d dry_run=%v duration=%s\n",
 		result.Mode, result.InTable, result.OutTable,
 		result.RecordsRead, result.RecordsScored, result.DryRun, result.Duration)
-	return nil
+	return err
 }
 
 // buildAgentAnalyzer constructs the RLM agent backend. When

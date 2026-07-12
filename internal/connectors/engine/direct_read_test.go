@@ -181,6 +181,73 @@ func TestDirectReadRejectsOversizedResponse(t *testing.T) {
 	}
 }
 
+func TestDirectReadJSONRedactedPolicyRemovesSensitiveFields(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"id": 123,
+			"name": "demo",
+			"author": {"username": "alice"},
+			"content_type": "application/json",
+			"token_type": "Bearer",
+			"access_level": 30,
+			"content": "sensitive payload",
+			"token": "secret-token",
+			"owner": {
+				"username": "alice",
+				"private_token": "nested-secret"
+			},
+			"variables": [
+				{"key": "SAFE_NAME", "value": "still-sensitive"}
+			]
+		}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/projects/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/projects/{id}",
+		PathParams:   map[string]string{"id": "123"},
+		MaxBytes:     1024,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	if body["id"] != json.Number("123") || body["name"] != "demo" {
+		t.Fatalf("safe fields = %+v, want id/name preserved", body)
+	}
+	encoded, _ := json.Marshal(body)
+	for _, secret := range []string{"secret-token", "nested-secret", "still-sensitive", "sensitive payload"} {
+		if strings.Contains(string(encoded), secret) {
+			t.Fatalf("sensitive value %q leaked in redacted body: %s", secret, encoded)
+		}
+	}
+	if body["token_redacted"] != true || body["content_redacted"] != true {
+		t.Fatalf("token/content redaction marker missing: %+v", body)
+	}
+	if body["content_type"] != "application/json" || body["token_type"] != "Bearer" || body["access_level"] != json.Number("30") {
+		t.Fatalf("safe metadata was redacted: %+v", body)
+	}
+	author, _ := body["author"].(map[string]any)
+	if author["username"] != "alice" {
+		t.Fatalf("safe author object was redacted: %+v", author)
+	}
+	owner, _ := body["owner"].(map[string]any)
+	if owner["private_token_redacted"] != true {
+		t.Fatalf("nested redaction marker missing: %+v", owner)
+	}
+	variables, _ := body["variables"].([]any)
+	firstVariable, _ := variables[0].(map[string]any)
+	if firstVariable["value_redacted"] != true || firstVariable["key"] != "SAFE_NAME" {
+		t.Fatalf("array redaction mismatch: %+v", firstVariable)
+	}
+}
+
 func TestDirectReadRedactsGitHubFileContent(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

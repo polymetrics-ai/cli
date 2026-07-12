@@ -179,7 +179,6 @@ func writeSyntheticSource(path string, records int) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
 	encoder := json.NewEncoder(file)
 	base := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 	for i := 0; i < records; i++ {
@@ -189,10 +188,11 @@ func writeSyntheticSource(path string, records int) error {
 			"updated_at": base.Add(time.Duration(i) * time.Second).Format(time.RFC3339Nano),
 		}
 		if err := encoder.Encode(record); err != nil {
+			_ = file.Close()
 			return err
 		}
 	}
-	return nil
+	return file.Close()
 }
 
 func runDependencyFree(ctx context.Context, iterations int) (Result, error) {
@@ -210,7 +210,7 @@ func runRuntimeBacked(ctx context.Context, iterations int, cfg runtimecheck.Conf
 	root := filepath.Join(os.TempDir(), fmt.Sprintf("pm-perf-runtime-%d", time.Now().UnixNano()))
 	start := time.Now()
 	dragonfly := pmruntime.OpenDragonflyLeaseStore(cfg.DragonflyAddr)
-	defer dragonfly.Close()
+	defer func() { _ = dragonfly.Close() }()
 	if err := dragonfly.Ping(ctx); err != nil {
 		return Result{Mode: "runtime-backed", Iterations: iterations}, err
 	}

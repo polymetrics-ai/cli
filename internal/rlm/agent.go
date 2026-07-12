@@ -223,7 +223,7 @@ func readAgentOutput(jobDir string) ([]connectors.Record, error) {
 	if err != nil {
 		return nil, fmt.Errorf("rlm: read agent output: %w", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	var records []connectors.Record
 	dec := json.NewDecoder(f)
@@ -337,8 +337,8 @@ func writeFakeOutput(jobDir string, scored []connectors.Record) error {
 	enc := json.NewEncoder(f)
 	for _, r := range scored {
 		if err := enc.Encode(r); err != nil {
-			f.Close()
-			os.Remove(tmp)
+			_ = f.Close()
+			_ = os.Remove(tmp)
 			return err
 		}
 	}

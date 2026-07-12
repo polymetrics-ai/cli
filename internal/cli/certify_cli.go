@@ -224,8 +224,8 @@ func writeCertifyReport(stdout io.Writer, jsonOut bool, rep certify.Report) erro
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ConnectorCertification", "report": rep})
 	}
-	fmt.Fprint(stdout, renderCertifyReportText(rep))
-	return nil
+	_, err := fmt.Fprint(stdout, renderCertifyReportText(rep))
+	return err
 }
 
 func renderCertifyReportText(rep certify.Report) string {
@@ -268,8 +268,8 @@ func writeCertifyBatchReport(stdout io.Writer, jsonOut bool, batch certify.Batch
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ConnectorCertificationBatch", "batch": batch, "matrix": batch.SummaryMatrix().Rows})
 	}
-	fmt.Fprint(stdout, renderBatchMatrixText(batch))
-	return nil
+	_, err := fmt.Fprint(stdout, renderBatchMatrixText(batch))
+	return err
 }
 
 // renderBatchMatrixText renders the certification design §B summary matrix
@@ -302,8 +302,8 @@ func writeCertifySweepReport(stdout io.Writer, jsonOut bool, results map[string]
 		fmt.Fprintf(&b, "%s: scanned=%d cleaned=%d skipped=%d failed=%d\n",
 			name, res.Scanned, len(res.Cleaned), len(res.Skipped), len(res.Failed))
 	}
-	fmt.Fprint(stdout, b.String())
-	return nil
+	_, err := fmt.Fprint(stdout, b.String())
+	return err
 }
 
 // --- exit-code mapping (certification design §A: 0 pass / 1 usage-internal

@@ -256,8 +256,14 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 			return nil, lastErr
 		}
 
-		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
-		resp.Body.Close()
+		respBody, readErr := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
+		closeErr := resp.Body.Close()
+		if readErr != nil {
+			return nil, fmt.Errorf("read response body: %w", readErr)
+		}
+		if closeErr != nil {
+			return nil, fmt.Errorf("close response body: %w", closeErr)
+		}
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
