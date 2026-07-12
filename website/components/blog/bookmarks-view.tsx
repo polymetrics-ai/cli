@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Bookmark, Trash2 } from 'lucide-react';
 import { CornerBox } from '@/components/ui/corner-box';
 import { Skeleton } from '@/components/shadcn/ui/skeleton';
+import { HomeSidebar } from '@/components/home/home-sidebar';
+import { PageAside } from '@/components/home/page-aside';
 import { SiteFooter } from '@/components/home/site-footer';
 import { SignInDialog } from '@/components/auth/sign-in-dialog';
 import { useSession } from '@/lib/auth-client';
@@ -18,24 +20,40 @@ type BookmarkDto = {
   createdAt: string;
 };
 
+const bookmarksTocItems = [
+  { id: 'bookmarks-overview', label: 'Overview' },
+  { id: 'bookmarks-library', label: 'Saved passages' },
+];
+
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="mx-auto w-full px-4 pt-10 sm:px-8 md:max-w-[680px] md:px-0 xl:max-w-[840px]">
-      <header className="mb-10 border-b border-line-structure pb-8">
-        <span className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-widest text-text-disabled">
-          <Bookmark className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
-          Private library
-        </span>
-        <h1 className="mt-4 font-analog text-[44px] leading-[1] text-text-primary">
-          Bookmarks
-        </h1>
-        <p className="mt-4 max-w-[52ch] text-[14px] leading-relaxed text-text-tertiary">
-          Passages you saved across the blog. Only you can see these.
-        </p>
-      </header>
-      {children}
-      <SiteFooter />
-    </main>
+    <div className="mx-auto flex w-full max-w-[95rem] overflow-clip">
+      <HomeSidebar />
+      <main className="min-w-0 flex-1 pattern-bg px-4 pt-10 sm:px-8">
+        <div className="mx-auto w-full md:max-w-[680px] xl:max-w-[840px]">
+          <header
+            id="bookmarks-overview"
+            className="mb-10 scroll-mt-24 border-b border-line-structure pb-8"
+          >
+            <span className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-widest text-text-disabled">
+              <Bookmark className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
+              Private library
+            </span>
+            <h1 className="mt-4 font-analog text-[44px] leading-[1] text-text-primary">
+              Bookmarks
+            </h1>
+            <p className="mt-4 max-w-[52ch] text-[14px] leading-relaxed text-text-tertiary">
+              Passages you saved across the blog. Only you can see these.
+            </p>
+          </header>
+          <div id="bookmarks-library" className="scroll-mt-24">
+            {children}
+          </div>
+          <SiteFooter />
+        </div>
+      </main>
+      <PageAside items={bookmarksTocItems} discussionTitle="Bookmarks" />
+    </div>
   );
 }
 

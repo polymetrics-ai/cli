@@ -7,7 +7,7 @@ const Sidebar = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
       ref={ref}
       data-slot="sidebar"
       className={cn(
-        'site-sidebar-panel sticky hidden w-[256px] shrink-0 bg-line-structure p-px pt-0 xl:flex',
+        'site-sidebar-panel sticky w-[256px] shrink-0 bg-line-structure p-px pt-0',
         className,
       )}
       style={{
@@ -26,7 +26,7 @@ const SidebarInner = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElem
     <nav
       ref={ref}
       data-slot="sidebar-inner"
-      className={cn('flex min-h-0 flex-1 flex-col bg-surface-1', className)}
+      className={cn('flex min-h-0 min-w-0 flex-1 flex-col bg-surface-1', className)}
       {...props}
     />
   ),
@@ -62,7 +62,7 @@ const SidebarFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
     <div
       ref={ref}
       data-slot="sidebar-footer"
-      className={cn('mt-auto shrink-0 border-t border-line-structure', className)}
+      className={cn('mt-auto w-full min-w-0 shrink-0 overflow-hidden border-t border-line-structure', className)}
       {...props}
     />
   ),
@@ -145,13 +145,13 @@ const SidebarStat = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
     ref={ref}
     data-slot="sidebar-stat"
     className={cn(
-      'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border border-line-structure bg-surface-1 px-2 py-1.5',
+      'grid grid-cols-[minmax(0,1fr)_minmax(0,max-content)] items-center gap-2 border border-line-structure bg-surface-1 px-2 py-1.5',
       className,
     )}
     {...props}
   >
-    <span className="min-w-0 truncate text-[12px] text-text-tertiary">{label}</span>
-    <span className="font-mono text-[11px] font-medium text-text-secondary">{value}</span>
+    <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-[12px] text-text-tertiary">{label}</span>
+    <span className="max-w-[6.5rem] overflow-hidden text-ellipsis whitespace-nowrap text-right font-mono text-[11px] font-medium tabular-nums text-text-secondary">{value}</span>
   </div>
 ));
 SidebarStat.displayName = 'SidebarStat';

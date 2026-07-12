@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Calendar, Clock } from 'lucide-react';
 import { BLOG_POSTS, blogUrl, getBlogPost } from '@/lib/blog';
+import { HomeSidebar } from '@/components/home/home-sidebar';
+import { PageAside } from '@/components/home/page-aside';
 import { CornerBox } from '@/components/ui/corner-box';
 import { ArticleBody } from '@/components/blog/article-body';
 
@@ -67,10 +69,20 @@ export default async function BlogPostPage({ params }: Props) {
     mainEntityOfPage: `https://cli.polymetrics.ai${blogUrl(post.slug)}`,
     keywords: post.tags.join(', '),
   };
+  const articleTocItems = [
+    { id: 'article-overview', label: 'Overview' },
+    ...post.sections.map((section, index) => ({
+      id: sectionId(index),
+      label: section.heading,
+    })),
+    { id: 'read-next', label: 'Read next' },
+  ];
 
   return (
-    <main className="mx-auto w-full max-w-[95rem] px-6 py-16 md:py-20">
-      <article className="mx-auto w-full max-w-[840px]">
+    <div className="mx-auto flex w-full max-w-[95rem] overflow-clip">
+      <HomeSidebar />
+      <main className="min-w-0 flex-1 pattern-bg px-5 py-16 md:px-8 md:py-20">
+        <article className="mx-auto w-full max-w-[1040px]">
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -84,7 +96,10 @@ export default async function BlogPostPage({ params }: Props) {
             Blog
           </Link>
 
-          <header id="article-overview" className="mb-10 border-b border-line-structure pb-10">
+          <header
+            id="article-overview"
+            className="mb-10 scroll-mt-24 border-b border-line-structure pb-10"
+          >
             <div className="mb-5 flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-text-disabled">
               <span className="border border-line-structure bg-surface-1 px-2 py-1">
                 {post.category}
@@ -118,7 +133,10 @@ export default async function BlogPostPage({ params }: Props) {
 
           <ArticleBody slug={post.slug} sections={post.sections} summary={post.summary} />
 
-          <footer id="read-next" className="mt-8 border-t border-line-structure pt-8">
+          <footer
+            id="read-next"
+            className="mt-8 scroll-mt-24 border-t border-line-structure pt-8"
+          >
             <h2 className="font-square text-[16px] font-semibold text-text-primary">
               Read next
             </h2>
@@ -144,7 +162,9 @@ export default async function BlogPostPage({ params }: Props) {
               ))}
             </div>
           </footer>
-      </article>
-    </main>
+        </article>
+      </main>
+      <PageAside items={articleTocItems} discussionTitle={post.title} />
+    </div>
   );
 }

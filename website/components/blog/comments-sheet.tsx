@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { ChevronDown, MessageSquare, Reply, Trash2 } from 'lucide-react';
+import { useId, useMemo, useState } from 'react';
+import { ChevronDown, LocateFixed, MessageSquare, Reply, Trash2 } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -15,6 +15,8 @@ import { AuthorChip } from '@/components/blog/author-chip';
 import { relativeTime } from '@/components/blog/highlight-text';
 import type { CommentDto } from '@/components/blog/annotations-provider';
 import type { BlogSection } from '@/lib/blog';
+import { buildCommentTree } from '@/lib/comments/comment-tree';
+import type { CommentTreeNode } from '@/lib/comments/comment-tree';
 
 const REPLY_MAX = 2000;
 
@@ -77,6 +79,7 @@ function ReplyComposer({
   onDone: () => void;
 }) {
   const { submitReply } = useAnnotations();
+  const fieldId = useId();
   const [body, setBody] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -93,13 +96,21 @@ function ReplyComposer({
   }
 
   return (
-    <div className="mt-2">
+    <div className="mt-3 border-l-2 border-surface-cta-primary bg-surface-1 p-2.5">
+      <label
+        htmlFor={fieldId}
+        className="mb-1.5 block font-mono text-[9px] uppercase tracking-widest text-text-disabled"
+      >
+        {placeholder.replace(/…$/, '')}
+      </label>
       <textarea
-        autoFocus
+        id={fieldId}
+        name="reply"
+        autoComplete="off"
         value={body}
         onChange={(event) => setBody(event.target.value.slice(0, REPLY_MAX))}
         rows={2}
-        placeholder={placeholder}
+        placeholder="Write a thoughtful reply…"
         onKeyDown={(event) => {
           if (event.key === 'Escape') onDone();
           if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
@@ -107,9 +118,12 @@ function ReplyComposer({
             void submit();
           }
         }}
-        className="w-full resize-none border border-line-structure bg-surface-bg px-2.5 py-1.5 text-[13px] leading-relaxed text-text-primary outline-none placeholder:text-text-disabled focus:border-line-cta"
+        className="w-full resize-none border border-line-structure bg-surface-bg px-2.5 py-2 text-[13px] leading-relaxed text-text-primary outline-none placeholder:text-text-disabled focus:border-line-cta focus-visible:ring-1 focus-visible:ring-surface-cta-primary"
       />
-      <div className="mt-1.5 flex items-center justify-end gap-2">
+      <div className="mt-1.5 flex items-center gap-2">
+        <span className="mr-auto font-mono text-[9px] tabular-nums text-text-disabled">
+          {body.length}/{REPLY_MAX}
+        </span>
         <button
           type="button"
           onClick={onDone}
@@ -130,6 +144,81 @@ function ReplyComposer({
   );
 }
 
+function ThreadReply({
+  node,
+  depth,
+  rootId,
+  replyingTo,
+  viewerAdmin,
+  onReply,
+  onStopReply,
+}: {
+  node: CommentTreeNode<CommentDto>;
+  depth: number;
+  rootId: string;
+  replyingTo: string | null;
+  viewerAdmin: boolean;
+  onReply: (id: string, rootId: string) => void;
+  onStopReply: () => void;
+}) {
+  const { comment, children } = node;
+
+  return (
+    <article
+      data-reply-id={comment.id}
+      data-thread-depth={depth}
+      className={comment.pending ? 'annotation-pending' : ''}
+      aria-label={`Reply by ${comment.author.name}`}
+    >
+      <AuthorRow comment={comment} />
+      <p className="mt-1.5 break-words text-[13px] leading-[1.65] text-text-secondary">
+        {comment.body}
+      </p>
+      <div className="mt-2 flex min-h-6 items-center gap-3">
+        <button
+          type="button"
+          aria-label={`Reply to ${comment.author.name}`}
+          onClick={() => onReply(comment.id, rootId)}
+          className="flex items-center gap-1 font-mono text-[9px] uppercase tracking-widest text-text-disabled transition-colors hover:text-line-cta focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-line-cta"
+        >
+          <Reply className="h-2.5 w-2.5" aria-hidden="true" />
+          Reply
+        </button>
+        {comment.mine || viewerAdmin ? <DeleteButton comment={comment} /> : null}
+      </div>
+
+      {replyingTo === comment.id ? (
+        <ReplyComposer
+          parentId={comment.id}
+          placeholder={`Reply to ${comment.author.name}…`}
+          onDone={onStopReply}
+        />
+      ) : null}
+
+      {children.length > 0 ? (
+        <div
+          className={`comment-thread-children mt-3 flex flex-col gap-3 border-l border-line-structure ${
+            depth >= 4 ? 'pl-2' : 'ml-2 pl-3'
+          }`}
+        >
+          {children.map((child) => (
+            <ThreadReply
+              key={child.comment.id}
+              node={child}
+              depth={depth + 1}
+              rootId={rootId}
+              replyingTo={replyingTo}
+              viewerAdmin={viewerAdmin}
+              onReply={onReply}
+              onStopReply={onStopReply}
+            />
+          ))}
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
 export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
   const {
     comments,
@@ -138,46 +227,13 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
     sheetOpen,
     setSheetOpen,
     setActiveId,
+    replyCounts,
     viewerAdmin,
     signedIn,
     requestSignIn,
   } = useAnnotations();
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
-
-  const byId = useMemo(() => new Map(comments.map((c) => [c.id, c])), [comments]);
-
-  /** Root ancestor for any comment (replies may nest arbitrarily deep). */
-  const rootOf = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const comment of comments) {
-      let cursor = comment;
-      let guard = 0;
-      while (cursor.parentId && guard < 100) {
-        const parent = byId.get(cursor.parentId);
-        if (!parent) break;
-        cursor = parent;
-        guard += 1;
-      }
-      map.set(comment.id, cursor.id);
-    }
-    return map;
-  }, [comments, byId]);
-
-  const repliesByRoot = useMemo(() => {
-    const map = new Map<string, CommentDto[]>();
-    for (const comment of comments) {
-      if (!comment.parentId) continue;
-      const root = rootOf.get(comment.id) ?? comment.parentId;
-      const list = map.get(root) ?? [];
-      list.push(comment);
-      map.set(root, list);
-    }
-    for (const list of map.values()) {
-      list.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
-    }
-    return map;
-  }, [comments, rootOf]);
 
   const grouped = useMemo(() => {
     const groups = new Map<number, CommentDto[]>();
@@ -231,16 +287,21 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
       </button>
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent side="right" className="w-[380px] max-w-[calc(100vw-2rem)] overflow-y-auto border-l border-line-structure bg-surface-bg p-0 sm:max-w-[380px]">
-          <SheetHeader className="border-b border-line-structure px-5 py-4">
+        <SheetContent side="right" className="blog-comments-sheet overflow-y-auto border-l border-line-structure bg-surface-bg p-0">
+          <SheetHeader className="border-b border-line-structure bg-surface-1 px-5 py-4">
             <p className="font-mono text-[10px] uppercase tracking-widest text-text-disabled">
-              Marginalia
+              Reader conversation
             </p>
-            <SheetTitle className="font-square text-[18px] font-semibold text-text-primary">
-              Notes on this article
-            </SheetTitle>
+            <div className="flex items-center gap-2 pr-8">
+              <SheetTitle className="font-square text-[18px] font-semibold text-text-primary">
+                Notes on this article
+              </SheetTitle>
+              <span className="border border-line-structure bg-surface-bg px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-line-cta">
+                {count}
+              </span>
+            </div>
             <SheetDescription className="text-[12px] text-text-tertiary">
-              {count === 0 ? 'No notes yet.' : `${count} note${count === 1 ? '' : 's'} from readers.`}
+              Select a passage to add a note, or open a thread below to read every reply.
             </SheetDescription>
           </SheetHeader>
 
@@ -281,9 +342,9 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
                 </p>
                 <div className="mt-3 flex flex-col gap-3">
                   {list.map((comment) => {
-                    const replies = repliesByRoot.get(comment.id) ?? [];
-                    const visibleReplies = replies.filter((r) => !r.pending);
-                    const isExpanded = expanded.has(comment.id) || replies.some((r) => r.pending);
+                    const replyTree = buildCommentTree(comments, comment.id);
+                    const visibleReplyCount = replyCounts.get(comment.id) ?? 0;
+                    const isExpanded = expanded.has(comment.id);
                     return (
                       <div key={comment.id} className="corner-box-corners border border-line-structure bg-surface-bg p-3">
                         {comment.anchor ? (
@@ -291,23 +352,24 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
                             {comment.anchor.exact}
                           </blockquote>
                         ) : null}
-                        <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
-                          {comment.body}
-                        </p>
                         <div className="mt-2.5">
                           <AuthorRow comment={comment}>
                             {comment.mine || viewerAdmin ? <DeleteButton comment={comment} /> : null}
                           </AuthorRow>
                         </div>
+                        <p className="mt-2 break-words text-[14px] leading-[1.65] text-text-primary">
+                          {comment.body}
+                        </p>
 
-                        <div className="mt-2 flex items-center gap-3">
+                        <div className="mt-2.5 flex min-h-7 flex-wrap items-center gap-3 border-t border-line-structure pt-2">
                           {sectionIndex !== -1 ? (
                             <button
                               type="button"
                               onClick={() => jumpTo(comment)}
-                              className="font-mono text-[10px] uppercase tracking-widest text-line-cta transition-colors hover:text-text-primary"
+                              className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest text-line-cta transition-colors hover:text-text-primary"
                             >
-                              Jump to text →
+                              <LocateFixed className="h-3 w-3" aria-hidden="true" />
+                              View passage
                             </button>
                           ) : null}
                           <button
@@ -318,7 +380,7 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
                             <Reply className="h-3 w-3" aria-hidden="true" />
                             Reply
                           </button>
-                          {visibleReplies.length > 0 ? (
+                          {visibleReplyCount > 0 ? (
                             <button
                               type="button"
                               aria-expanded={isExpanded}
@@ -336,7 +398,7 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
                                 className={`h-3 w-3 transition-transform motion-reduce:transition-none ${isExpanded ? 'rotate-180' : ''}`}
                                 aria-hidden="true"
                               />
-                              {visibleReplies.length} {visibleReplies.length === 1 ? 'reply' : 'replies'}
+                              {visibleReplyCount} {visibleReplyCount === 1 ? 'reply' : 'replies'}
                             </button>
                           ) : null}
                         </div>
@@ -349,51 +411,20 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
                           />
                         ) : null}
 
-                        {isExpanded && replies.length > 0 ? (
-                          <div className="mt-3 flex flex-col gap-2.5 border-l border-line-structure pl-3">
-                            {replies.map((reply) => {
-                              const directParent =
-                                reply.parentId && reply.parentId !== comment.id
-                                  ? byId.get(reply.parentId)
-                                  : null;
-                              return (
-                                <div
-                                  key={reply.id}
-                                  data-reply-id={reply.id}
-                                  className={reply.pending ? 'annotation-pending' : ''}
-                                >
-                                  <p className="text-[13px] leading-relaxed text-text-secondary">
-                                    {directParent ? (
-                                      <span className="mr-1 font-mono text-[11px] text-line-cta">
-                                        @{directParent.author.name}
-                                      </span>
-                                    ) : null}
-                                    {reply.body}
-                                  </p>
-                                  <div className="mt-1.5">
-                                    <AuthorRow comment={reply}>
-                                      <button
-                                        type="button"
-                                        aria-label={`Reply to ${reply.author.name}`}
-                                        onClick={() => startReply(reply.id, comment.id)}
-                                        className="ml-2 flex items-center gap-1 font-mono text-[9px] uppercase tracking-widest text-text-disabled transition-colors hover:text-text-primary"
-                                      >
-                                        <Reply className="h-2.5 w-2.5" aria-hidden="true" />
-                                        Reply
-                                      </button>
-                                      {reply.mine || viewerAdmin ? <DeleteButton comment={reply} /> : null}
-                                    </AuthorRow>
-                                  </div>
-                                  {replyingTo === reply.id ? (
-                                    <ReplyComposer
-                                      parentId={reply.id}
-                                      placeholder={`Reply to ${reply.author.name}…`}
-                                      onDone={() => setReplyingTo(null)}
-                                    />
-                                  ) : null}
-                                </div>
-                              );
-                            })}
+                        {isExpanded && replyTree.length > 0 ? (
+                          <div className="mt-3 flex flex-col gap-3 border-l-2 border-surface-cta-primary bg-surface-1/50 py-1 pl-3">
+                            {replyTree.map((node) => (
+                              <ThreadReply
+                                key={node.comment.id}
+                                node={node}
+                                depth={1}
+                                rootId={comment.id}
+                                replyingTo={replyingTo}
+                                viewerAdmin={viewerAdmin}
+                                onReply={startReply}
+                                onStopReply={() => setReplyingTo(null)}
+                              />
+                            ))}
                           </div>
                         ) : null}
                       </div>

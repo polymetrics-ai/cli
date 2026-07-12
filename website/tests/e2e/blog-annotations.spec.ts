@@ -12,15 +12,11 @@ const hasDatabase = Boolean(process.env.DATABASE_URL || process.env.PLAYWRIGHT_B
 test.skip(!hasDatabase, 'annotations e2e needs DATABASE_URL (postgres) for the webServer');
 
 /**
- * The navbar session slot renders only after hydration and the session
- * fetch settle — selections dispatched earlier race React's event replay.
+ * The right-rail reader card renders only after hydration and the session
+ * fetch settles — selections dispatched earlier race React's event replay.
  */
 async function awaitHydrated(page: Page): Promise<void> {
-  await expect(
-    page
-      .locator('header button[aria-label="Account menu"], header button:has-text("Sign in")')
-      .first(),
-  ).toBeVisible();
+  await expect(page.locator('[data-blog-auth-card][data-session-ready="true"]')).toBeVisible();
 }
 
 async function selectInBlock(page: Page, blockIndex: number, needle: string): Promise<void> {
@@ -118,9 +114,16 @@ test.describe('blog annotations', () => {
     // Margin rail (desktop viewport) shows the note aligned to the mark.
     await expect(page.locator('[data-margin-note]').filter({ hasText: noteText })).toBeVisible();
 
-    // Hover preview.
+    // Hover gives a lightweight preview; click pins the complete note so
+    // readers can move the pointer into the card and use its controls.
     await mark.hover();
     await expect(page.getByRole('tooltip').filter({ hasText: noteText })).toBeVisible();
+    await mark.click();
+    await page.mouse.move(8, 8);
+    const pinnedNote = page.locator('[data-note-preview="pinned"]');
+    await expect(pinnedNote).toBeVisible();
+    await expect(pinnedNote.getByText(noteText, { exact: true })).toBeVisible();
+    await expect(pinnedNote.getByRole('button', { name: 'Open thread' })).toBeVisible();
 
     // Delete through the sheet with inline confirm.
     await page.getByRole('button', { name: 'Open all notes' }).click();
@@ -149,7 +152,7 @@ test.describe('blog annotations', () => {
     const sheet = page.locator('[data-slot=sheet-content]');
     const entry = sheet.locator('div', { hasText: noteText }).last();
     await expect(entry).toBeVisible();
-    await entry.getByRole('button', { name: 'Jump to text →' }).click();
+    await entry.getByRole('button', { name: 'View passage' }).click();
     await expect(mark).toBeInViewport();
   });
 
@@ -177,7 +180,7 @@ test.describe('blog annotations', () => {
     await expect(page.getByText('Nothing saved yet')).toBeVisible();
   });
 
-  test('replies thread YouTube-style behind an expander', async ({ page }) => {
+  test('replies form a true nested thread behind an expander', async ({ page }) => {
     await signUp(page, 'replier');
     await page.goto(POST_PATH);
     const noteText = `Threaded root ${Date.now()}`;
@@ -200,9 +203,14 @@ test.describe('blog annotations', () => {
     await card.getByRole('button', { name: 'Post reply' }).click();
 
     await expect(card.locator('[data-reply-id]', { hasText: replyText })).toBeVisible();
+    await expect(card.locator('[data-reply-id]', { hasText: replyText })).toHaveAttribute(
+      'data-thread-depth',
+      '1',
+    );
     await expect(card.getByRole('button', { name: /1 reply/ })).toBeVisible();
 
-    // Reply to the reply — flattened with an @mention.
+    // Reply to the reply. It must be a real child of that reply, not a
+    // flattened sibling decorated with an @mention.
     const replyRow = card.locator('[data-reply-id]', { hasText: replyText });
     await replyRow.getByRole('button', { name: /Reply to/ }).click();
     const nestedText = `Nested ${Date.now()}`;
@@ -210,7 +218,8 @@ test.describe('blog annotations', () => {
     await card.getByRole('button', { name: 'Post reply' }).click();
     const nestedRow = card.locator('[data-reply-id]', { hasText: nestedText }).last();
     await expect(nestedRow).toBeVisible();
-    await expect(nestedRow.getByText(/@E2E replier/)).toBeVisible();
+    await expect(nestedRow).toHaveAttribute('data-thread-depth', '2');
+    await expect(replyRow.locator('[data-reply-id]', { hasText: nestedText })).toBeVisible();
 
     // Deleting the root removes the whole thread.
     await card.getByRole('button', { name: 'Delete note' }).first().click();
@@ -231,8 +240,7 @@ test.describe('blog annotations', () => {
     await composer.getByRole('button', { name: 'Post note' }).click();
     await expect(page.locator('mark[data-annotation-mark]', { hasText: 'Most operational data work' })).toBeVisible();
 
-    await page.locator('header button[aria-label="Account menu"]').click();
-    await page.getByRole('menuitem', { name: 'Profile' }).click();
+    await page.locator('[data-blog-auth-card]').getByRole('button', { name: 'Profile' }).click();
     const dialog = page.getByRole('dialog', { name: 'How readers see you' });
     await dialog.getByRole('checkbox').check();
     await dialog.getByRole('button', { name: 'Save' }).click();
@@ -250,24 +258,18 @@ test.describe('blog annotations', () => {
     await card.getByRole('button', { name: 'Post reply' }).click();
     await expect(card.locator('[data-reply-id]', { hasText: 'private reader' })).toBeVisible();
 
-    // Hover previews are transient; re-hover until the popover settles
-    // (parallel-worker load can re-render the sheet mid-hover).
+    // Click pins the same author preview popover that hover opens; this is
+    // more stable inside the sheet after the sidebar changes the viewport.
     const visiblePreview = page.locator('[data-author-preview="visible"]');
-    await expect(async () => {
-      await card.getByRole('button', { name: "View E2E profiled's profile" }).hover();
-      await expect(visiblePreview).toBeVisible({ timeout: 2000 });
-    }).toPass({ timeout: 20_000 });
+    await card.getByRole('button', { name: "View E2E profiled's profile" }).click();
+    await expect(visiblePreview).toBeVisible();
     await expect(visiblePreview.getByText(/Member since/)).toBeVisible();
 
-    // B's chip: default — dynamic placeholder. Park the pointer first so
-    // A's open preview doesn't sit in the hover path.
-    await page.mouse.move(10, 10);
+    await page.keyboard.press('Escape');
     await expect(visiblePreview).toBeHidden();
     const privatePreview = page.locator('[data-author-preview="private"]');
-    await expect(async () => {
-      await card.getByRole('button', { name: "View E2E privatereader's profile" }).hover();
-      await expect(privatePreview).toBeVisible({ timeout: 2000 });
-    }).toPass({ timeout: 20_000 });
+    await card.getByRole('button', { name: "View E2E privatereader's profile" }).click();
+    await expect(privatePreview).toBeVisible();
     await expect(privatePreview.getByText('Profile private', { exact: true })).toBeVisible();
   });
 

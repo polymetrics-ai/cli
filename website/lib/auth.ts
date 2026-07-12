@@ -1,7 +1,17 @@
 import { betterAuth } from 'better-auth';
+import {
+  configuredTrustedProviders,
+  shouldRequireLocalEmailVerified,
+  type SocialProviderId,
+} from '@/lib/auth-config';
 import { getPool } from '@/lib/db';
 
 const baseURL = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
+
+type OAuthProviderConfig = {
+  clientId: string;
+  clientSecret: string;
+};
 
 function provider(idVar: string, secretVar: string) {
   const clientId = process.env[idVar];
@@ -17,14 +27,24 @@ const github = provider('GITHUB_CLIENT_ID', 'GITHUB_CLIENT_SECRET');
 const google = provider('GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET');
 const linkedin = provider('LINKEDIN_CLIENT_ID', 'LINKEDIN_CLIENT_SECRET');
 
+const socialProviders = {
+  ...(github ? { github } : {}),
+  ...(google ? { google } : {}),
+  ...(linkedin ? { linkedin } : {}),
+} satisfies Partial<Record<SocialProviderId, OAuthProviderConfig>>;
+
 export const auth = betterAuth({
   database: getPool(),
   baseURL,
   trustedOrigins: [baseURL],
-  socialProviders: {
-    ...(github ? { github } : {}),
-    ...(google ? { google } : {}),
-    ...(linkedin ? { linkedin } : {}),
+  socialProviders,
+  account: {
+    accountLinking: {
+      enabled: true,
+      trustedProviders: configuredTrustedProviders(socialProviders),
+      requireLocalEmailVerified: shouldRequireLocalEmailVerified(),
+      updateUserInfoOnLink: true,
+    },
   },
   session: {
     cookieCache: {

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "sidebar-and-blog-signin",
+  "status": "completed_with_warnings",
+  "reason": "Implementation and local UI verification completed; production build remains blocked by existing Next/Fumadocs/API route issues outside this scoped UI change.",
+  "details": {
+    "lifecycle": [
+      "load-project-context",
+      "profile-repo",
+      "prepare-design-and-prompts",
+      "prd-coverage-gate",
+      "gsd-plan-phase",
+      "tdd-gate-before-execution",
+      "gsd-execute-phase",
+      "local-verification",
+      "gsd-verify-work",
+      "gsd-gap-loop",
+      "write-phase-summary"
+    ],
+    "agentMode": "inline",
+    "coveragePassed": true,
+    "tddGatePassed": true,
+    "verificationMissingRequired": [],
+    "warnings": [
+      "scripts/gsd prompt programming-loop is not exposed by the repo adapter; used local gsd-programming-loop fallback.",
+      "next build is blocked before/after compilation by existing Fumadocs ESM loader and app/api/comments route export issues."
+    ]
+  },
+  "updatedAt": "2026-07-11T12:00:00.000Z"
+}

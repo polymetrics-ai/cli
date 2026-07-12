@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import {
   Bot,
   Cable,
@@ -16,7 +15,6 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { DocsSearch } from '@/components/docs/docs-search';
-import { UserMenu } from '@/components/auth/user-menu';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,7 +46,7 @@ const PRODUCT_ITEMS = [
 
 /* ─── Exact nav-trigger typography (from Langfuse NavLinks.tsx) ─────── */
 const navTriggerCls =
-  'flex items-center gap-1 py-1.5 whitespace-nowrap font-sans text-[13px] font-[430] leading-[1.2] tracking-[-0.26px] text-text-tertiary hover:text-text-secondary transition-colors focus:outline-none';
+  'flex items-center gap-1 py-1.5 whitespace-nowrap font-sans text-[13px] font-[430] leading-[1.2] tracking-[-0.26px] text-text-tertiary hover:text-text-secondary transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta';
 
 /* ─── Hover corner brackets (from Langfuse corner-box.tsx) ──────────── */
 function HoverCorners() {
@@ -73,7 +71,7 @@ function Kbd({ k, variant }: { k: string; variant: 'primary' | 'secondary' }) {
 
 /* ─── CTA button — exact Langfuse button.tsx structure ───────────────── */
 const btnBase =
-  'inline-flex w-full min-w-0 max-w-full items-center justify-start no-underline gap-[6px] overflow-hidden py-0.5 shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] rounded-[2px] border transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer font-sans text-[12px] font-[450] leading-[150%] tracking-[-0.06px] whitespace-nowrap';
+  'inline-flex w-full min-w-0 max-w-full items-center justify-start no-underline gap-[6px] overflow-hidden py-0.5 shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] rounded-[2px] border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta disabled:pointer-events-none disabled:opacity-50 cursor-pointer font-sans text-[12px] font-[450] leading-[150%] tracking-[-0.06px] whitespace-nowrap';
 
 const btnVariants = {
   primary:   'border-emerald-900 bg-emerald-800 text-white h-[26px] pl-[8px] pr-[3px]',
@@ -295,6 +293,14 @@ function MobileMenu({ open, onOpenChange }: { open: boolean; onOpenChange: (open
               Get Started
             </Link>
           </SheetClose>
+          <a
+            href="https://github.com/polymetrics-ai/cli"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-center border border-line-structure bg-surface-bg px-4 py-2.5 font-sans text-[13px] font-medium text-text-secondary transition-colors hover:border-line-cta hover:bg-surface-1 hover:text-text-primary"
+          >
+            Get Demo
+          </a>
         </div>
       </div>
       </SheetContent>
@@ -313,13 +319,15 @@ const innerPanel = 'flex items-center w-full bg-surface-1 pl-3 pr-2.5';
 
 export function SiteNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  // On the blog the audience action is joining the discussion, not
-  // grabbing a demo — the auth slot takes the secondary CTA's place.
-  const pathname = usePathname();
-  const onBlog = pathname?.startsWith('/blog') ?? false;
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => setHydrated(true), []);
 
   return (
-    <header className="sticky top-0 z-50 h-[60px] bg-surface-1 border-b border-line-structure">
+    <header
+      data-navbar-hydrated={hydrated ? 'true' : 'false'}
+      className="sticky top-0 z-50 h-[60px] bg-surface-1 border-b border-line-structure"
+    >
       <nav className="flex h-full w-full max-w-[95rem] mx-auto">
 
         {/* ── LEFT BOX: logo + "by Polymetrics" ── */}
@@ -340,16 +348,15 @@ export function SiteNavbar() {
 
         {/* ── CENTER: navigation links ── */}
         <div className={`${outerPanel} navbar-desktop-nav flex-1 px-0`}>
-          <div className="grid flex-1 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-2.5 rounded-none bg-surface-1">
-            <span aria-hidden="true" />
-            <div className="flex items-center justify-center gap-4">
+          <div className="flex min-w-0 flex-1 items-center justify-between gap-4 bg-surface-1 px-2.5">
+            <div data-navbar-links className="flex shrink-0 items-center gap-4">
               <ProductDropdown />
               <NavLink href="/docs">Docs</NavLink>
               <NavLink href="/blog">Blog</NavLink>
               <NavLink href="/changelog">Changelog</NavLink>
               <NavLink href="https://github.com/polymetrics-ai/cli" external>GitHub</NavLink>
             </div>
-            <div className="navbar-desktop-search min-w-0 justify-self-end">
+            <div className="navbar-desktop-search min-w-0 flex-1 justify-end">
               <DocsSearch variant="navbar" />
             </div>
           </div>
@@ -367,14 +374,10 @@ export function SiteNavbar() {
               <NavBtn href="/docs" variant="primary" kbdKey="L">
                 Get Started
               </NavBtn>
-              {!onBlog ? (
-                <NavBtn href="https://github.com/polymetrics-ai/cli" variant="secondary" kbdKey="G" external>
-                  Get Demo
-                </NavBtn>
-              ) : null}
+              <NavBtn href="https://github.com/polymetrics-ai/cli" variant="secondary" kbdKey="G" external>
+                Get Demo
+              </NavBtn>
             </div>
-
-            <UserMenu />
 
             {/* Mobile hamburger */}
             <button
