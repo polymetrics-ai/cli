@@ -1,8 +1,8 @@
 # Specification: Phase 0 Incident Replay and Migration Fuse
 
-Issue: #325  
-Parent: #323  
-Parent PR: #324  
+Issue: #325
+Parent: #323
+Parent PR: #324
 Branch: `fix/325-agentloop-characterization`
 
 ## Outcome
