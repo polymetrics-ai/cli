@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "incident_id": "synthetic:incident:stale_verify_head",
+  "summary": "The verified head moved before the stage proceeded.",
+  "binding": {"run_id":"synthetic:run:stale_verify_head","generation_id":"synthetic:generation:stale_verify_head","controller_id":"synthetic:controller:stale_verify_head","turn_id":"synthetic:turn:stale_verify_head","attempt_id":"synthetic:attempt:stale_verify_head","stage_id":"synthetic:stage:stale_verify_head","ticket_id":"synthetic:ticket:stale_verify_head","evidence_id":"synthetic:evidence:stale_verify_head","head_sha":"synthetic:head:stale_verify_head"},
+  "events": [
+    {"sequence":1,"kind":"verification_recorded","actor_id":"synthetic:validator:stale_verify_head","binding":{"run_id":"synthetic:run:stale_verify_head","generation_id":"synthetic:generation:stale_verify_head","controller_id":"synthetic:controller:stale_verify_head","turn_id":"synthetic:turn:stale_verify_head","attempt_id":"synthetic:attempt:stale_verify_head","stage_id":"synthetic:stage:stale_verify_head","ticket_id":"synthetic:ticket:stale_verify_head","evidence_id":"synthetic:evidence:stale_verify_head","head_sha":"synthetic:head:stale_verify_head"}},
+    {"sequence":2,"kind":"head_moved","actor_id":"synthetic:worker:stale_verify_head","binding":{"run_id":"synthetic:run:stale_verify_head","generation_id":"synthetic:generation:stale_verify_head","controller_id":"synthetic:controller:stale_verify_head","turn_id":"synthetic:turn:stale_verify_head","attempt_id":"synthetic:attempt:stale_verify_head","stage_id":"synthetic:stage:stale_verify_head","ticket_id":"synthetic:ticket:stale_verify_head","evidence_id":"synthetic:evidence:stale_verify_head","head_sha":"synthetic:head:stale_verify_head"}},
+    {"sequence":3,"kind":"stage_proceeded","actor_id":"synthetic:controller:stale_verify_head","binding":{"run_id":"synthetic:run:stale_verify_head","generation_id":"synthetic:generation:stale_verify_head","controller_id":"synthetic:controller:stale_verify_head","turn_id":"synthetic:turn:stale_verify_head","attempt_id":"synthetic:attempt:stale_verify_head","stage_id":"synthetic:stage:stale_verify_head","ticket_id":"synthetic:ticket:stale_verify_head","evidence_id":"synthetic:evidence:stale_verify_head","head_sha":"synthetic:head:stale_verify_head"}}
+  ],
+  "expected": {"violation_code":"VERIFY_HEAD_STALE","legacy_decision":"proceed","required_decision":"retry","required_exit_class":"retry_required"}
+}

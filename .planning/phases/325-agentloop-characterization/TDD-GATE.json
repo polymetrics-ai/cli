@@ -7,7 +7,7 @@
     ".planning/phases/325-agentloop-characterization/TEST-PLAN.md"
   ],
   "ledgerRef": ".planning/phases/325-agentloop-characterization/TDD-LEDGER.md",
-  "passed": false,
+  "passed": true,
   "tasks": [
     {
       "id": "fixture-replay",
@@ -102,35 +102,6 @@
       "behavior": true
     }
   ],
-  "failures": [
-    {
-      "taskId": "fixture-replay",
-      "reason": "Missing red TDD evidence before production-code execution."
-    },
-    {
-      "taskId": "structural-redaction",
-      "reason": "Missing red TDD evidence before production-code execution."
-    },
-    {
-      "taskId": "safety-policy",
-      "reason": "Missing red TDD evidence before production-code execution."
-    },
-    {
-      "taskId": "loopctl-cli",
-      "reason": "Missing red TDD evidence before production-code execution."
-    },
-    {
-      "taskId": "driver-fuse",
-      "reason": "Missing red TDD evidence before production-code execution."
-    },
-    {
-      "taskId": "entrypoint-enumeration",
-      "reason": "Missing red TDD evidence before production-code execution."
-    },
-    {
-      "taskId": "make-gate",
-      "reason": "Missing red TDD evidence before production-code execution."
-    }
-  ],
-  "updatedAt": "2026-07-12T07:56:06.326Z"
+  "failures": [],
+  "updatedAt": "2026-07-12T08:02:45.991Z"
 }

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "incident_id": "synthetic:incident:dirty_worktree",
+  "summary": "A stage advanced while committed and uncommitted scope disagreed.",
+  "binding": {"run_id":"synthetic:run:dirty_worktree","generation_id":"synthetic:generation:dirty_worktree","controller_id":"synthetic:controller:dirty_worktree","turn_id":"synthetic:turn:dirty_worktree","attempt_id":"synthetic:attempt:dirty_worktree","stage_id":"synthetic:stage:dirty_worktree","ticket_id":"synthetic:ticket:dirty_worktree","evidence_id":"synthetic:evidence:dirty_worktree","head_sha":"synthetic:head:dirty_worktree"},
+  "events": [
+    {"sequence":1,"kind":"worktree_dirty","actor_id":"synthetic:worker:dirty_worktree","binding":{"run_id":"synthetic:run:dirty_worktree","generation_id":"synthetic:generation:dirty_worktree","controller_id":"synthetic:controller:dirty_worktree","turn_id":"synthetic:turn:dirty_worktree","attempt_id":"synthetic:attempt:dirty_worktree","stage_id":"synthetic:stage:dirty_worktree","ticket_id":"synthetic:ticket:dirty_worktree","evidence_id":"synthetic:evidence:dirty_worktree","head_sha":"synthetic:head:dirty_worktree"}},
+    {"sequence":2,"kind":"stage_proceeded","actor_id":"synthetic:controller:dirty_worktree","binding":{"run_id":"synthetic:run:dirty_worktree","generation_id":"synthetic:generation:dirty_worktree","controller_id":"synthetic:controller:dirty_worktree","turn_id":"synthetic:turn:dirty_worktree","attempt_id":"synthetic:attempt:dirty_worktree","stage_id":"synthetic:stage:dirty_worktree","ticket_id":"synthetic:ticket:dirty_worktree","evidence_id":"synthetic:evidence:dirty_worktree","head_sha":"synthetic:head:dirty_worktree"}}
+  ],
+  "expected": {"violation_code":"WORKTREE_DIRTY","legacy_decision":"proceed","required_decision":"retry","required_exit_class":"retry_required"}
+}

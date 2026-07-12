@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "incident_id": "synthetic:incident:dead_worker",
+  "summary": "A stage advanced after its registered worker became unreachable.",
+  "binding": {"run_id":"synthetic:run:dead_worker","generation_id":"synthetic:generation:dead_worker","controller_id":"synthetic:controller:dead_worker","turn_id":"synthetic:turn:dead_worker","attempt_id":"synthetic:attempt:dead_worker","stage_id":"synthetic:stage:dead_worker","ticket_id":"synthetic:ticket:dead_worker","evidence_id":"synthetic:evidence:dead_worker","head_sha":"synthetic:head:dead_worker"},
+  "events": [
+    {"sequence":1,"kind":"worker_dispatched","actor_id":"synthetic:controller:dead_worker","binding":{"run_id":"synthetic:run:dead_worker","generation_id":"synthetic:generation:dead_worker","controller_id":"synthetic:controller:dead_worker","turn_id":"synthetic:turn:dead_worker","attempt_id":"synthetic:attempt:dead_worker","stage_id":"synthetic:stage:dead_worker","ticket_id":"synthetic:ticket:dead_worker","evidence_id":"synthetic:evidence:dead_worker","head_sha":"synthetic:head:dead_worker"}},
+    {"sequence":2,"kind":"worker_unreachable","actor_id":"synthetic:watcher:dead_worker","binding":{"run_id":"synthetic:run:dead_worker","generation_id":"synthetic:generation:dead_worker","controller_id":"synthetic:controller:dead_worker","turn_id":"synthetic:turn:dead_worker","attempt_id":"synthetic:attempt:dead_worker","stage_id":"synthetic:stage:dead_worker","ticket_id":"synthetic:ticket:dead_worker","evidence_id":"synthetic:evidence:dead_worker","head_sha":"synthetic:head:dead_worker"}},
+    {"sequence":3,"kind":"stage_proceeded","actor_id":"synthetic:controller:dead_worker","binding":{"run_id":"synthetic:run:dead_worker","generation_id":"synthetic:generation:dead_worker","controller_id":"synthetic:controller:dead_worker","turn_id":"synthetic:turn:dead_worker","attempt_id":"synthetic:attempt:dead_worker","stage_id":"synthetic:stage:dead_worker","ticket_id":"synthetic:ticket:dead_worker","evidence_id":"synthetic:evidence:dead_worker","head_sha":"synthetic:head:dead_worker"}}
+  ],
+  "expected": {"violation_code":"WORKER_LIVENESS_LOST","legacy_decision":"proceed","required_decision":"retry","required_exit_class":"retry_required"}
+}
