@@ -1,0 +1,120 @@
+{
+  "parent_issue": {
+    "number": 204,
+    "url": "https://github.com/polymetrics-ai/cli/issues/204",
+    "title": "Crisp: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/204-crisp-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/228",
+    "base": "main",
+    "head": "feat/204-crisp-cli-parity",
+    "draft": true,
+    "state": "open"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-harness",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 205,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold plus issue-205 planning",
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 208,
+      "status": "planned",
+      "dependencies": [205],
+      "write_scope": "internal/connectors/defs/crisp/api_surface.json operation ledger",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 207,
+      "status": "planned",
+      "dependencies": [205, 208],
+      "write_scope": "internal/connectors/defs/crisp streams, schemas, fixtures",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 209,
+      "status": "planned",
+      "dependencies": [205, 208],
+      "write_scope": "internal/connectors/defs/crisp direct-read operations and CLI metadata",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 210,
+      "status": "planned",
+      "dependencies": [208],
+      "write_scope": "internal/connectors/defs/crisp query/binary policy metadata",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 211,
+      "status": "planned",
+      "dependencies": [208],
+      "write_scope": "internal/connectors/defs/crisp sensitive/admin write policy",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 206,
+      "status": "planned",
+      "dependencies": [205, 207, 209, 211],
+      "write_scope": "docs/help/website generated parity surfaces",
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [204],
+      "reason": "Create parent planning seed and draft parent PR before subissue execution."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [205],
+      "reason": "Current Pi harness exposes no subagent tool for isolated mutating workers."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 205,
+      "url": "https://github.com/polymetrics-ai/cli/issues/205",
+      "branch": "feat/205-crisp-cli-surface-metadata",
+      "pr_url": "",
+      "worker": "local-critical-path",
+      "status": "worker_ready",
+      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold plus issue-205 planning",
+      "worker_directory": "current checkout until stacked branch/worktree is created",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "parent PR opened as draft; subissue review pending",
+        "disposition_url": ""
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "new dependencies",
+    "auth scope changes",
+    "credentialed connector checks",
+    "destructive external actions",
+    "reverse ETL execution",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-10T00:10:00Z"
+}

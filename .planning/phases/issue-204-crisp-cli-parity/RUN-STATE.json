@@ -1,0 +1,35 @@
+{
+  "phase": "issue-204-crisp-cli-parity",
+  "parentIssue": 204,
+  "connector": "crisp",
+  "branch": "feat/204-crisp-cli-parity",
+  "status": "parent_pr_open",
+  "gsd": {
+    "doctorPassed": true,
+    "verifyPiPassed": true,
+    "listJsonPassed": true,
+    "planCommand": "scripts/gsd prompt plan-phase 204 --skip-research",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-204-crisp-cli-parity --dry-run",
+    "programmingLoopStatus": "manual_fallback_command_unavailable"
+  },
+  "verificationPassed": false,
+  "verificationNotes": "Full parent verification has not run. Only GSD adapter preflight passed.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Parent PR is missing; create parent planning seed before subissue execution. Current Pi tool surface in this harness has no subagent tool, so mutating workers cannot be spawned."
+    },
+    {
+      "cycle": "parent-pr-open",
+      "decision": "local_critical_path",
+      "reason": "Committed and pushed parent planning seed; opened draft parent PR https://github.com/polymetrics-ai/cli/pull/228."
+    },
+    {
+      "cycle": "worker-ready-queue",
+      "decision": "local_critical_path",
+      "reason": "Subissues #205-#211 exist, but this harness exposes read/bash/edit/write only and no Pi subagent tool for isolated mutating workers. #205 will run locally on a stacked branch."
+    }
+  ],
+  "updatedAt": "2026-07-10T00:10:00Z"
+}

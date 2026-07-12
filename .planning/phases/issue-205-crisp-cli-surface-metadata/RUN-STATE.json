@@ -1,0 +1,21 @@
+{
+  "phase": "issue-205-crisp-cli-surface-metadata",
+  "issue": 205,
+  "parentIssue": 204,
+  "connector": "crisp",
+  "status": "planned",
+  "gsd": {
+    "planCommand": "scripts/gsd prompt plan-phase 204 --skip-research",
+    "programmingLoopStatus": "manual_fallback_command_unavailable"
+  },
+  "verificationPassed": false,
+  "verificationNotes": "No #205 validation has run yet.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Parent PR setup must happen before #205 implementation; current Pi harness has no subagent tool."
+    }
+  ],
+  "updatedAt": "2026-07-10T00:00:00Z"
+}
