@@ -2,7 +2,7 @@
 name: pm-planner
 description: Claude planning worker — decomposes a problem into a parent issue plus sub-issues, and writes per-task GSD plans.
 tools: read, edit, write, grep, find, ls
-model: anthropic/claude-opus-4-8
+model: openai-codex/gpt-5.5
 thinking: xhigh
 ---
 

@@ -97,7 +97,9 @@ func TestRunSafetyCommands(t *testing.T) {
 		if code != 0 {
 			t.Fatalf("exit code = %d, want 0; stderr=%q", code, stderr.String())
 		}
-		if !strings.Contains(stdout.String(), "scripts/claude-auto-loop.sh") || !strings.Contains(stdout.String(), "scripts/pi-auto-loop.sh") {
+		if !strings.Contains(stdout.String(), "scripts/claude-auto-loop.sh") ||
+			!strings.Contains(stdout.String(), "scripts/pi-auto-loop.sh") ||
+			!strings.Contains(stdout.String(), "scripts/pi-shepherd-loop.sh") {
 			t.Fatalf("entrypoint output = %q", stdout.String())
 		}
 	})

@@ -10,7 +10,7 @@
     "fallback": "installed_gsd_programming_loop_dry_run"
   },
   "verificationPassed": false,
-  "verificationReason": "Parent scaffold only; child implementation and full verification have not run.",
+  "verificationReason": "Existing Shepherd alignment and targeted Phase 0 gates pass; dependent hardening phases and full verification remain.",
   "orchestrationDecisions": [
     {
       "cycle": "parent-scaffold",
@@ -31,6 +31,11 @@
       "cycle": "phase-0-dispatch",
       "decision": "spawned",
       "reason": "Issue #325 was assigned to an isolated Codex worker; all other implementation issues remain dependency-blocked."
+    },
+    {
+      "cycle": "existing-shepherd-alignment",
+      "decision": "local_critical_path",
+      "reason": "Normally merge feat/pi-shepherd-loop, guard the real Shepherd entrypoint, and update only its validator model before any further controller work."
     }
   ],
   "humanGate": "parent PR merge to main"

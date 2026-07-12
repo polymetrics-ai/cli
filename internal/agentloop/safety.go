@@ -46,6 +46,7 @@ func TrackedEntrypoints() []string {
 	return []string{
 		"scripts/claude-auto-loop.sh",
 		"scripts/pi-auto-loop.sh",
+		"scripts/pi-shepherd-loop.sh",
 	}
 }
 

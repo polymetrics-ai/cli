@@ -3,22 +3,26 @@
 Parent issue: #323
 Incident provenance: #277
 Parent branch: `fix/323-auto-loop-hardening`
-Parent PR: #324 against `main` (draft)
+Parent PR: #324 against `feat/pi-shepherd-loop` (draft)
 
 ## Outcome
 
-Replace the prompt-enforced connector delivery loop with a fail-closed, transactional,
-restart-safe, independently validated, and cost-bounded control plane. The final parent PR remains
-draft and human-gated until every child issue is integrated, replay/fault-injection verification is
-green, and automated review coverage is complete.
+Harden the existing `scripts/pi-shepherd-loop.sh` delivery path in place so it becomes fail-closed,
+transactional, restart-safe, independently validated, and cost-bounded. The existing launcher,
+prompts, Pi agents, and trace workflow remain the compatibility surface; helper code may enforce
+their contracts but must not replace them with a parallel delivery system. The final parent PR
+remains draft and human-gated until every child issue is integrated, replay/fault-injection
+verification is green, and automated review coverage is complete.
 
 ## Baseline and isolation
 
-- The branch starts at `origin/main` commit `cab8f3df`, which contains the original Claude driver
-  and Shepherd validator from PR #276.
-- The seven post-merge loop commits used by the Twenty run (`0087216c` through `2b40ba52` on local branch
-  `feat/pi-shepherd-loop`) are evidence/baseline inputs. They are not assumed to be on `main` and
-  must be ported selectively through hardened interfaces; wholesale cherry-pick is forbidden.
+- The hardening branch originally forked from `origin/main` at `cab8f3df`. PR #324 was then based on
+  `feat/pi-shepherd-loop`, and commit `2b40ba52` was merged normally into this branch on 2026-07-12.
+  This preserves the implementation used by the Twenty run and the Phase 0 replay/safety history
+  without rebasing or force-pushing either published line.
+- `scripts/pi-shepherd-loop.sh` is the canonical supervised implementation. Hardening work updates
+  that entrypoint and its existing contracts; `scripts/claude-auto-loop.sh` and
+  `scripts/pi-auto-loop.sh` remain compatibility entrypoints behind the same migration fuse.
 - The Twenty connector branch, PR #285, connector bundles, and dirty run checkout are out of scope.
 - Every mutating child worker receives one issue, one branch from this parent branch, one isolated
   worktree, one bounded write scope, and one handoff.
@@ -31,6 +35,8 @@ green, and automated review coverage is complete.
 - Fallback preflight used the installed `gsd-programming-loop` helper in dry-run agent mode. The
   live lifecycle remains the repository's `gsd-universal-runtime-loop.md`, with strict red/green
   evidence on every behavior-changing child issue.
+- A later helper run misclassified this shell/control-plane phase as UI work. Its generated output
+  was preserved in a named stash and excluded from implementation; no generated file was deleted.
 - Required skills loaded for parent planning: `github-issue-first-delivery`,
   `gsd-programming-loop`, `golang-how-to`, `golang-cli`, `golang-testing`,
   `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`,
@@ -61,6 +67,16 @@ All fifteen issues are native sub-issues of #323. Phases 1, 2, 4, 6, and 7 were 
 slices after read-only architecture review found their original scopes were not honestly PR-sized.
 Dependency order is intentionally conservative because phases 1-8 share control-plane contracts;
 parallelism is reserved for read-only design/review or demonstrably disjoint test work.
+
+## Existing implementation alignment checkpoint
+
+- The Phase 0 replay oracle and migration fuse now recognize all three existing launchers,
+  including `scripts/pi-shepherd-loop.sh`, and deny run/resume before state or subprocess effects.
+- Only the Shepherd validator default moves to `openai-codex/gpt-5.6-sol` with `high` reasoning.
+  The orchestrator and every worker remain on their existing models.
+- The default validator path performs an exact local model-catalog preflight before state creation
+  or the first orchestrator turn. Pi 0.80.6 is the verified minimum with the Sol model entry;
+  unsupported runtimes fail closed instead of silently downgrading.
 
 ## TDD and checkpoint policy
 

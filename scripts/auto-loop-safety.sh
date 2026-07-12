@@ -15,12 +15,13 @@ auto_loop_safety_status_json() {
 auto_loop_safety_entrypoints() {
   printf '%s\n' \
     'scripts/claude-auto-loop.sh' \
-    'scripts/pi-auto-loop.sh'
+    'scripts/pi-auto-loop.sh' \
+    'scripts/pi-shepherd-loop.sh'
 }
 
 auto_loop_safety_is_tracked() {
   case "${1:-}" in
-    scripts/claude-auto-loop.sh|scripts/pi-auto-loop.sh) return 0 ;;
+    scripts/claude-auto-loop.sh|scripts/pi-auto-loop.sh|scripts/pi-shepherd-loop.sh) return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -75,7 +76,7 @@ auto_loop_safety_main() {
     entrypoints)
       case "${2:-}" in
         "") auto_loop_safety_entrypoints ;;
-        --json) printf '{"schema_version":"%s","entrypoints":["scripts/claude-auto-loop.sh","scripts/pi-auto-loop.sh"]}\n' "$AUTO_LOOP_SAFETY_SCHEMA_VERSION" ;;
+        --json) printf '{"schema_version":"%s","entrypoints":["scripts/claude-auto-loop.sh","scripts/pi-auto-loop.sh","scripts/pi-shepherd-loop.sh"]}\n' "$AUTO_LOOP_SAFETY_SCHEMA_VERSION" ;;
         *) printf 'auto-loop-safety: unknown entrypoints argument\n' >&2; return 64 ;;
       esac
       return 0

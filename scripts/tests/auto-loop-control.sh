@@ -52,6 +52,7 @@ prepare_repo() {
   mkdir -p "$root/scripts" "$root/.agents/agentic-delivery/prompts"
   cp "$REPO_ROOT/scripts/claude-auto-loop.sh" "$root/scripts/claude-auto-loop.sh"
   cp "$REPO_ROOT/scripts/pi-auto-loop.sh" "$root/scripts/pi-auto-loop.sh"
+  cp "$REPO_ROOT/scripts/pi-shepherd-loop.sh" "$root/scripts/pi-shepherd-loop.sh"
   if [[ -f "$REPO_ROOT/scripts/auto-loop-safety.sh" ]]; then
     cp "$REPO_ROOT/scripts/auto-loop-safety.sh" "$root/scripts/auto-loop-safety.sh"
   fi
@@ -132,10 +133,16 @@ run_driver() {
       CLAUDE_BIN="$root/bin/claude" MAX_ITERATIONS=1 MAX_NO_VERDICT=1 COOLDOWN_SECONDS=0 \
       "$root/scripts/claude-auto-loop.sh" "$argument" >"$root/stdout" 2>"$root/stderr"
     rc=$?
-  else
+  elif [[ "$driver" == "pi" ]]; then
     /usr/bin/env -i "${clean_env[@]}" \
       PI_BIN="$root/bin/pi" MAX_ITERATIONS=1 CONTINUE_SESSION=0 COOLDOWN_SECONDS=0 \
       "$root/scripts/pi-auto-loop.sh" "$argument" >"$root/stdout" 2>"$root/stderr"
+    rc=$?
+  else
+    /usr/bin/env -i "${clean_env[@]}" \
+      PI_BIN="$root/bin/pi" VALIDATOR_BIN="$root/bin/pi" MAX_ITERATIONS=1 \
+      MAX_NO_VERDICT=1 COOLDOWN_SECONDS=0 \
+      "$root/scripts/pi-shepherd-loop.sh" "$argument" >"$root/stdout" 2>"$root/stderr"
     rc=$?
   fi
   after="$(tree_snapshot "$root/.planning")"
@@ -231,7 +238,7 @@ else
   fi
 fi
 
-for driver in claude pi; do
+for driver in claude pi shepherd; do
   run_driver "$driver" run
   run_driver "$driver" resume
   run_driver "$driver" help
@@ -239,6 +246,17 @@ for driver in claude pi; do
   run_driver "$driver" flag-enable
   run_driver "$driver" flag-force
 done
+
+if ! grep -Fq 'ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.5}"' \
+  "$REPO_ROOT/scripts/pi-shepherd-loop.sh"; then
+  fail "Shepherd changed the orchestrator model; only the validator may move to GPT-5.6"
+fi
+if ! grep -Fq 'VALIDATOR_MODEL="openai-codex/gpt-5.6-sol"' \
+  "$REPO_ROOT/scripts/pi-shepherd-loop.sh" || \
+  ! grep -Fq 'VALIDATOR_ARGS="--model $VALIDATOR_MODEL --thinking high ' \
+  "$REPO_ROOT/scripts/pi-shepherd-loop.sh"; then
+  fail "Shepherd validator default is not GPT-5.6 Sol with high reasoning"
+fi
 
 if ! grep -q '^agent-loop-test:' "$REPO_ROOT/Makefile"; then
   fail "Makefile is missing agent-loop-test"

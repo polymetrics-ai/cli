@@ -37,3 +37,20 @@
 | 7 | Trace collisions, untyped handoffs, or embedded child history pass | Schema validation, redaction, unique IDs, and bounded references pass |
 | 8 | Model is invoked for unchanged waits or low-risk checks | Watchers poll deterministically without model; disagreement escalates |
 | 9 | At least one historical/fault scenario bypasses the composed controls | Full replay/fault/shadow/canary suite passes with merge disabled |
+
+## Existing Shepherd alignment — 2026-07-12
+
+- RED: after merging `feat/pi-shepherd-loop`, `bash scripts/tests/auto-loop-control.sh` reported four
+  inventory/guard failures for `scripts/pi-shepherd-loop.sh`.
+- RED (expanded): after adding direct launcher and model assertions, the same harness reported 23
+  failures: the Shepherd performed `dirname`/`mkdir` before denial, all six run/resume/help/override
+  cases were unguarded, and the validator still targeted GPT-5.5. Go tests also rejected the missing
+  third canonical entrypoint.
+- GREEN: added first-action denial, synchronized shell/Go inventories, exercised all three wrappers,
+  and changed only the validator default to `openai-codex/gpt-5.6-sol --thinking high`.
+- GREEN commands:
+  `go test ./internal/agentloop/... ./cmd/loopctl/... -count=1` and
+  `bash -n scripts/auto-loop-safety.sh scripts/pi-shepherd-loop.sh scripts/tests/auto-loop-control.sh && bash scripts/tests/auto-loop-control.sh`.
+- Compatibility evidence: Pi 0.80.3 reports no GPT-5.6 match; a read-only Pi 0.80.6 invocation lists
+  exact `openai-codex/gpt-5.6-sol` support. The launcher now checks this before mutable work once the
+  migration fuse is opened.

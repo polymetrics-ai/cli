@@ -105,14 +105,12 @@ run_pi() { # $1 = "fresh" | "continue"
   local mode="$1" ; local rc=0
   if [[ "$mode" == "continue" ]]; then
     # shellcheck disable=SC2086
-    "$PI_BIN" -c -p --tools "$PI_TOOLS" --approve \
-      --agentScope both --confirmProjectAgents false $PI_EXTRA_FLAGS \
+    "$PI_BIN" -c -p --tools "$PI_TOOLS" --approve $PI_EXTRA_FLAGS \
       "Continue the autonomous loop: RECONCILE from durable state, then advance exactly one stage. Follow .pi/prompts/pm-auto-loop.md." \
       >>"$LOG_FILE" 2>&1 || rc=$?
   else
     # shellcheck disable=SC2086
-    "$PI_BIN" -p --model "$ORCH_MODEL" --tools "$PI_TOOLS" --approve \
-      --agentScope both --confirmProjectAgents false $PI_EXTRA_FLAGS \
+    "$PI_BIN" -p --model "$ORCH_MODEL" --tools "$PI_TOOLS" --approve $PI_EXTRA_FLAGS \
       "$LOOP_CMD $PROBLEM" \
       >>"$LOG_FILE" 2>&1 || rc=$?
   fi

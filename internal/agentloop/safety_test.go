@@ -30,7 +30,11 @@ func TestTrackedEntrypointsReturnsDefensiveSortedCopy(t *testing.T) {
 	t.Parallel()
 
 	first := TrackedEntrypoints()
-	if !slices.Equal(first, []string{"scripts/claude-auto-loop.sh", "scripts/pi-auto-loop.sh"}) {
+	if !slices.Equal(first, []string{
+		"scripts/claude-auto-loop.sh",
+		"scripts/pi-auto-loop.sh",
+		"scripts/pi-shepherd-loop.sh",
+	}) {
 		t.Fatalf("tracked entrypoints = %v", first)
 	}
 	first[0] = "mutated"
@@ -46,6 +50,10 @@ func TestGuardDriverFailsClosed(t *testing.T) {
 	tracked := GuardDriver("scripts/claude-auto-loop.sh")
 	if tracked.Code != "AUTO_LOOP_DISABLED_PHASE_0" || tracked.ExitCode != 78 {
 		t.Fatalf("tracked guard = %+v, want disabled/78", tracked)
+	}
+	shepherd := GuardDriver("scripts/pi-shepherd-loop.sh")
+	if shepherd.Code != "AUTO_LOOP_DISABLED_PHASE_0" || shepherd.ExitCode != 78 {
+		t.Fatalf("shepherd guard = %+v, want disabled/78", shepherd)
 	}
 
 	untracked := GuardDriver("scripts/new-auto-loop.sh")
