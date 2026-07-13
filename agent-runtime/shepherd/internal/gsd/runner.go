@@ -120,7 +120,7 @@ func NewRunner(config Config) (*Runner, error) {
 				return nil, fmt.Errorf("create isolated container state: %w", err)
 			}
 		}
-		if err := provisionContainerPolicy(config.WorkDir, config.Container.GSDStateDir); err != nil {
+		if err := provisionContainerPolicy(config.Container.PolicyDir, config.Container.GSDStateDir); err != nil {
 			return nil, err
 		}
 	}

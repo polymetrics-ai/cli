@@ -17,7 +17,11 @@ func TestContainerRuntimeHidesHostPlanningAndCredentialSurface(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	config := ContainerConfig{Engine: "podman", Image: "localhost/gsd-pi:1.11.0", GSDStateDir: filepath.Join(t.TempDir(), "gsd"), PlanningDir: filepath.Join(t.TempDir(), "planning"), AuthFile: auth, SettingsFile: settings}
+	policyDir := filepath.Join(t.TempDir(), ".gsd")
+	if err := os.MkdirAll(policyDir, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	config := ContainerConfig{Engine: "podman", Image: "localhost/gsd-pi:1.11.0", GSDStateDir: filepath.Join(t.TempDir(), "gsd"), PlanningDir: filepath.Join(t.TempDir(), "planning"), AuthFile: auth, SettingsFile: settings, PolicyDir: policyDir}
 	if err := config.Validate(root); err != nil {
 		t.Fatal(err)
 	}
@@ -137,7 +141,7 @@ func TestProvisionContainerPolicyWritesTrustedContext7MCP(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(workDir, ".gsd", "mcp.json"), []byte(`{"servers":{"evil":{"url":"http://worker.invalid"}}}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := provisionContainerPolicy(workDir, stateDir); err != nil {
+	if err := provisionContainerPolicy(filepath.Join(workDir, ".gsd"), stateDir); err != nil {
 		t.Fatal(err)
 	}
 	raw, err := os.ReadFile(filepath.Join(stateDir, "mcp.json"))
@@ -147,6 +151,42 @@ func TestProvisionContainerPolicyWritesTrustedContext7MCP(t *testing.T) {
 	text := string(raw)
 	if !strings.Contains(text, "https://mcp.context7.com/mcp") || strings.Contains(text, "worker.invalid") {
 		t.Fatalf("unexpected trusted MCP policy: %s", text)
+	}
+}
+
+func TestContainerPolicyIsProvisionedFromOperatorDirectoryOutsideWorkerTree(t *testing.T) {
+	t.Parallel()
+	workDir := t.TempDir()
+	policyDir := filepath.Join(t.TempDir(), ".gsd")
+	stateDir := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(policyDir, "agents"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(policyDir, "PREFERENCES.md"), []byte("operator policy"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(policyDir, "agents", "reviewer.md"), []byte("operator reviewer"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := provisionContainerPolicy(policyDir, stateDir); err != nil {
+		t.Fatal(err)
+	}
+	for path, want := range map[string]string{
+		filepath.Join(stateDir, "PREFERENCES.md"):        "operator policy",
+		filepath.Join(stateDir, "agents", "reviewer.md"): "operator reviewer",
+	} {
+		raw, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(raw) != want {
+			t.Fatalf("%s=%q, want %q", path, raw, want)
+		}
+	}
+	config, _ := validContainerConfig(t)
+	config.PolicyDir = filepath.Join(workDir, ".gsd")
+	if err := config.Validate(workDir); err == nil {
+		t.Fatal("worker-controlled policy directory must be rejected")
 	}
 }
 
@@ -183,5 +223,12 @@ func validContainerConfig(t *testing.T) (ContainerConfig, string) {
 			t.Fatal(err)
 		}
 	}
-	return ContainerConfig{Engine: "podman", Image: "localhost/gsd-pi:1.11.0", GSDStateDir: filepath.Join(t.TempDir(), "gsd"), PlanningDir: filepath.Join(t.TempDir(), "planning"), AuthFile: auth, SettingsFile: settings}, root
+	policyDir := filepath.Join(t.TempDir(), ".gsd")
+	if err := os.MkdirAll(filepath.Join(policyDir, "agents"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(policyDir, "PREFERENCES.md"), []byte("policy"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	return ContainerConfig{Engine: "podman", Image: "localhost/gsd-pi:1.11.0", GSDStateDir: filepath.Join(t.TempDir(), "gsd"), PlanningDir: filepath.Join(t.TempDir(), "planning"), AuthFile: auth, SettingsFile: settings, PolicyDir: policyDir}, root
 }

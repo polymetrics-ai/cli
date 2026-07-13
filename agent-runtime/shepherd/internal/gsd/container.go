@@ -16,6 +16,7 @@ type ContainerConfig struct {
 	AuthFile     string
 	SettingsFile string
 	Network      string
+	PolicyDir    string
 }
 
 func (c ContainerConfig) Validate(workDir string) error {
@@ -30,7 +31,7 @@ func (c ContainerConfig) Validate(workDir string) error {
 	}
 	for label, path := range map[string]string{
 		"work directory": workDir, "GSD state": c.GSDStateDir, "planning state": c.PlanningDir,
-		"auth file": c.AuthFile, "settings file": c.SettingsFile,
+		"auth file": c.AuthFile, "settings file": c.SettingsFile, "governed policy": c.PolicyDir,
 	} {
 		if !filepath.IsAbs(path) {
 			return fmt.Errorf("%s must be absolute", label)
@@ -41,6 +42,12 @@ func (c ContainerConfig) Validate(workDir string) error {
 	}
 	if within, _ := pathInside(workDir, c.PlanningDir); within {
 		return errors.New("container planning state must be outside the worktree")
+	}
+	if within, _ := pathInside(workDir, c.PolicyDir); within {
+		return errors.New("governed policy directory must be outside the worker-controlled worktree")
+	}
+	if info, err := os.Stat(c.PolicyDir); err != nil || !info.IsDir() {
+		return errors.New("governed policy directory must be an existing directory")
 	}
 	for _, path := range []string{c.AuthFile, c.SettingsFile} {
 		resolved, err := filepath.EvalSymlinks(path)
@@ -77,9 +84,9 @@ func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string 
 	}, gsdArgs...)
 }
 
-func provisionContainerPolicy(workDir, stateDir string) error {
+func provisionContainerPolicy(policyDir, stateDir string) error {
 	files := []string{"PREFERENCES.md"}
-	entries, err := os.ReadDir(filepath.Join(workDir, ".gsd", "agents"))
+	entries, err := os.ReadDir(filepath.Join(policyDir, "agents"))
 	if err != nil {
 		return fmt.Errorf("read governed GSD agents: %w", err)
 	}
@@ -89,7 +96,7 @@ func provisionContainerPolicy(workDir, stateDir string) error {
 		}
 	}
 	for _, relative := range files {
-		source := filepath.Join(workDir, ".gsd", relative)
+		source := filepath.Join(policyDir, relative)
 		info, err := os.Lstat(source)
 		if err != nil || !info.Mode().IsRegular() || info.Size() > 256*1024 {
 			return fmt.Errorf("unsafe governed policy file %s", relative)
