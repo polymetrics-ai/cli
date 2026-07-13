@@ -52,3 +52,23 @@ func TestContainerImageReusesBaseNonRootIdentity(t *testing.T) {
 		}
 	}
 }
+
+func TestContainerImageInstallsRequiredGSDRuntimePackages(t *testing.T) {
+	t.Parallel()
+	raw, err := os.ReadFile(filepath.Join("..", "..", "container", "Containerfile"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	containerfile := string(raw)
+	for _, required := range []string{
+		"apt-get update",
+		"apt-get install --yes --no-install-recommends",
+		"ca-certificates",
+		"git",
+		"rm -rf /var/lib/apt/lists/*",
+	} {
+		if !strings.Contains(containerfile, required) {
+			t.Fatalf("container image is missing required GSD runtime setup %q", required)
+		}
+	}
+}

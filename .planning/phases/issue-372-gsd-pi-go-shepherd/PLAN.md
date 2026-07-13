@@ -17,6 +17,8 @@ module without coupling it to the Polymetrics CLI module.
 7. Replay known incidents and run a merge-disabled canary before legacy removal (#379).
 8. Qualify the pinned Podman image: prove it builds without UID collisions, reports the exact GSD
    version, runs as the intended non-root identity, and preserves task-isolated planning state.
+9. Install only GSD's required container OS surface: Git plus CA certificates for verified HTTPS;
+   keep optional shells/tools, publisher CLIs, compilers, and browser payloads outside the image.
 
 ## Boundaries
 

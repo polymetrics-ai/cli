@@ -10,7 +10,7 @@
 - [x] `go test -race ./...` passes inside `agent-runtime/shepherd/`.
 - [x] Root `go list ./...` excludes the nested module.
 - [x] Root `go test ./...` and `go build ./cmd/pm` passed before the adversarial hardening slice.
-- [ ] Root gates rerun after the adversarial hardening slice.
+- [x] Root `make verify` passed after Podman runtime qualification and package hardening.
 - [x] Core named incident guard suite passes.
 - [x] Governed intake canary emits <=15-second heartbeat and corrects premature upstream success to blocked.
 - [x] A delayed human response keeps emitting heartbeats; the Go deadline cancels before GSD's
@@ -24,8 +24,8 @@
   volumes.
 - [x] Pinned image builds and runs as non-root `shepherd` UID/GID 1000 with a writable governed
   home and exact GSD 1.11.0 admission.
-- [ ] Pinned image includes GSD's required `git` executable; dependency addition awaits explicit
-  human approval.
+- [x] Pinned image includes approved `git` and `ca-certificates` dependencies, excludes optional
+  publisher/tooling binaries, and completes a real governed query through Shepherd.
 
 ## Current canary blocker
 
@@ -43,5 +43,8 @@ is supported. The replacement now has a Podman backend that overlays task-isolat
 The approved image/build-cache-only prune reduced Podman images from 42.83 GB to 24.69 GB without
 touching volumes. The image now builds, passes exact-version admission, and runs as the expected
 non-root identity. The integrated governed query then proved that the slim Node base lacks GSD's
-required `git` executable. Installing that image dependency is the current explicit human gate;
-issue 372 remains blocked and was not resumed.
+required `git` executable. After explicit dependency approval, the image installed only Git and
+CA certificates and the governed query completed successfully against isolated state. Issue 372's
+prior delivery generation remains blocked and was not resumed; a full AI canary still requires an
+explicit resume decision or a fresh governed delivery that does not violate immutable milestone
+binding.
