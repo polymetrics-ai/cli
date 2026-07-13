@@ -13,6 +13,12 @@ write actions. Inventory the official REST surface from committed evidence; do n
 or read credentials. Asana has no required connector GraphQL slice: implement bounded attachment
 download semantics instead.
 
+Research intake is complete. Do not recrawl or bulk-fetch the Asana documentation corpus while
+creating the milestone. Use issue #380, this prompt/plan, the committed top-100 research, the
+existing 250-row Asana API ledger, and committed bundle documentation as authoritative intake
+evidence. External Asana URLs are citations for later targeted gap checks, not an instruction to
+fetch every page. Persist the milestone, requirements, slices, and dependency graph first.
+
 For each ready sub-issue, create a branch and isolated worktree from the current parent head, then
 dispatch a bounded worker with all four contract fields:
 
@@ -51,4 +57,3 @@ commands or safety gates.
 When all seven slices are integrated, run the parent verification matrix at the exact parent head,
 update the parent PR from `Refs #380` to `Closes #380` only if all acceptance criteria pass, mark it
 ready for human review, and stop at `human_gate`. Do not merge it.
-

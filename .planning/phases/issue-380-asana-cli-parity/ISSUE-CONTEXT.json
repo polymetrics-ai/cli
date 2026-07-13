@@ -9,6 +9,7 @@
   "non_goals": [
     "credentialed live Asana calls",
     "generic HTTP, shell, SQL, or arbitrary API tools",
+    "additional internet research during milestone intake; the linked issue, committed top-100 research, existing Asana API ledger, and parent plan are authoritative",
     "parent PR merge to main"
   ],
   "acceptance_criteria": [
@@ -68,6 +69,7 @@
   "safety": [
     "never request print summarize or store secret values",
     "fixture and httptest validation only; no live credentialed Asana calls",
+    "do not fetch or recrawl the Asana documentation corpus during milestone intake; preserve external URLs as citations and start from committed evidence",
     "writes remain typed and follow plan preview approval execute",
     "no generic HTTP shell SQL or arbitrary API escape hatch"
   ],
@@ -88,4 +90,3 @@
     "https://developers.asana.com/reference/webhooks"
   ]
 }
-

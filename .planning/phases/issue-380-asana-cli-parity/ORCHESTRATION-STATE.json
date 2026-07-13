@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/380-asana-cli-parity",
   "parent_pr": {
-    "url": "pending",
+    "url": "https://github.com/polymetrics-ai/cli/pull/388",
     "base": "main",
     "head": "feat/380-asana-cli-parity",
     "draft": true,
-    "state": "pending"
+    "state": "open"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -50,5 +50,5 @@
     "secret access credentialed checks destructive external actions or reverse ETL execution",
     "quality gate reductions or parent PR merge to main"
   ],
-  "updated_at": "2026-07-13T17:11:24Z"
+  "updated_at": "2026-07-13T17:41:39Z"
 }
