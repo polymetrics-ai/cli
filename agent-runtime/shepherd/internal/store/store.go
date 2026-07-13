@@ -252,6 +252,40 @@ func (s *Store) RetryFailedIntake(ctx context.Context, deliveryID string) error 
 	return errors.New("only failed pre-milestone intake may be retried")
 }
 
+// PrepareAdoptedDelivery makes a validated, canonically bound milestone runnable. Adoption may
+// recover a failed controller attempt because the caller has independently queried and verified
+// the existing GSD milestone. Blocked and human-gated deliveries still require explicit resume.
+func (s *Store) PrepareAdoptedDelivery(ctx context.Context, deliveryID, milestoneID string) error {
+	if deliveryID == "" || milestoneID == "" {
+		return errors.New("delivery and milestone are required")
+	}
+	now := time.Now().UTC().UnixNano()
+	result, err := s.db.ExecContext(ctx, `UPDATE delivery_runs
+        SET state = ?, generation = CASE WHEN state = ? THEN generation + 1 ELSE generation END,
+            owner = '', updated_at = ?
+        WHERE delivery_id = ? AND state IN (?, ?) AND EXISTS (
+            SELECT 1 FROM deliveries WHERE delivery_id = ? AND milestone_id = ?
+        )`, domain.RunReady, domain.RunFailed, now, deliveryID, domain.RunPlanned, domain.RunFailed,
+		deliveryID, milestoneID)
+	if err != nil {
+		return fmt.Errorf("prepare adopted delivery: %w", err)
+	}
+	if rows, _ := result.RowsAffected(); rows == 1 {
+		return nil
+	}
+	var state domain.RunState
+	var bound string
+	if err := s.db.QueryRowContext(ctx, `SELECT r.state, d.milestone_id
+        FROM delivery_runs r JOIN deliveries d ON d.delivery_id = r.delivery_id
+        WHERE r.delivery_id = ?`, deliveryID).Scan(&state, &bound); err != nil {
+		return fmt.Errorf("read adopted delivery: %w", err)
+	}
+	if state == domain.RunReady && bound == milestoneID {
+		return nil
+	}
+	return fmt.Errorf("delivery in state %s cannot adopt milestone %s", state, milestoneID)
+}
+
 func (s *Store) FinishAttempt(ctx context.Context, deliveryID, owner string, target domain.RunState) error {
 	if err := domain.ValidateRunTransition(domain.RunRunning, target); err != nil {
 		return err

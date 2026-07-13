@@ -277,6 +277,9 @@ func adoptExistingDelivery(ctx context.Context, runner *gsd.Runner, config fileC
 	if err := authority.BindMilestone(ctx, deliveryID, snapshot.MilestoneID); err != nil {
 		return err
 	}
+	if err := authority.PrepareAdoptedDelivery(ctx, deliveryID, snapshot.MilestoneID); err != nil {
+		return err
+	}
 	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
 		return err
 	}

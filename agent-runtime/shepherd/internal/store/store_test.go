@@ -217,3 +217,33 @@ func TestRetryFailedIntakeRequiresUnboundMilestone(t *testing.T) {
 		t.Fatal("failed delivery with a bound milestone must not be reset")
 	}
 }
+
+func TestPrepareAdoptedDeliveryResetsFailedBoundRun(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	db, err := Open(ctx, filepath.Join(t.TempDir(), "shepherd.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	binding := Delivery{ID: "issue-380", Issue: 380, WorkDir: "/tmp/work", ContextHash: "sha256:" + strings.Repeat("a", 64)}
+	if err := db.EnsureDelivery(ctx, binding); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.BeginAttempt(ctx, binding.ID, "owner-1"); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.BindMilestone(ctx, binding.ID, "M001"); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.FinishAttempt(ctx, binding.ID, "owner-1", domain.RunFailed); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.PrepareAdoptedDelivery(ctx, binding.ID, "M001"); err != nil {
+		t.Fatal(err)
+	}
+	run, err := db.BeginAttempt(ctx, binding.ID, "owner-2")
+	if err != nil || run.State != domain.RunRunning || run.Generation != 2 || run.Attempt != 2 {
+		t.Fatalf("adopted run=%+v err=%v", run, err)
+	}
+}
