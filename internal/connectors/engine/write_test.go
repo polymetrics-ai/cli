@@ -69,6 +69,15 @@ func (c *capturedRequest) json() map[string]any {
 	return m
 }
 
+func (c *capturedRequest) jsonArray(t *testing.T) []map[string]any {
+	t.Helper()
+	var out []map[string]any
+	if err := json.Unmarshal(c.body, &out); err != nil {
+		t.Fatalf("body = %s, want top-level JSON array: %v", string(c.body), err)
+	}
+	return out
+}
+
 // --- body construction: json default (record minus path_fields) ---
 
 func TestWriteJSONBodyDefaultExcludesPathFields(t *testing.T) {
@@ -187,6 +196,74 @@ func TestWriteBodyFieldsAllowListForDeleteWithBody(t *testing.T) {
 	}
 	if _, ok := got["path"]; ok {
 		t.Fatalf("body = %+v, path is a path_field and must not appear in body", got)
+	}
+}
+
+func TestWriteRawBodyFieldSendsTopLevelArray(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"ok":true}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:      "batch_people",
+		Kind:      "create",
+		Method:    http.MethodPost,
+		Path:      "/batch/people",
+		BodyField: "records",
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["records"],
+			"properties": {
+				"records": {
+					"type": "array",
+					"items": {"type": "object"}
+				}
+			}
+		}`),
+	})
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "batch_people"}, []connectors.Record{
+		{"records": []any{
+			map[string]any{"name": "Ada"},
+			map[string]any{"name": "Grace"},
+		}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	if cap.path != "/batch/people" {
+		t.Fatalf("path = %q, want /batch/people", cap.path)
+	}
+	if strings.HasPrefix(strings.TrimSpace(string(cap.body)), "{") {
+		t.Fatalf("body = %s, want top-level JSON array without object wrapper", string(cap.body))
+	}
+	got := cap.jsonArray(t)
+	if len(got) != 2 || got[0]["name"] != "Ada" || got[1]["name"] != "Grace" {
+		t.Fatalf("body = %+v, want raw records array", got)
+	}
+}
+
+func TestWriteRawBodyFieldRequiresField(t *testing.T) {
+	srv, _ := captureServer(t, http.StatusOK, "")
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:      "batch_people",
+		Kind:      "create",
+		Method:    http.MethodPost,
+		Path:      "/batch/people",
+		BodyField: "records",
+	})
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "batch_people"}, []connectors.Record{
+		{"name": "missing records"},
+	}, nil)
+	if err == nil {
+		t.Fatalf("Write: want error when body_field is absent")
+	}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+		t.Fatalf("result = %+v, want 0 written / 1 failed", result)
+	}
+	if !strings.Contains(err.Error(), `body_field "records"`) {
+		t.Fatalf("error = %q, want missing body_field detail", err.Error())
 	}
 }
 

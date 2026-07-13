@@ -7,13 +7,21 @@ package certify
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/connectors/conformance"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // credentialName / warehouseCredentialName / connection names used for every
@@ -25,16 +33,13 @@ const (
 	fileCredentialName      = "cert-file"
 	liveConnectionName      = "cert_live"
 	captureConnectionPrefix = "cert_capture_"
+	maxSafeNameLen          = 40
 )
 
-// noDefsBundleReason is recorded on the fixture_conformance stage: wave0 ships
-// zero defs bundles (internal/connectors/defs contains only defs.go until
-// Wave F golden migrations land), so every connector -- sample included --
-// has no bundle to check yet. This is a deliberate, documented skip: the real
-// Tier-0 fixture-conformance integration is a Wave F / V-21 concern and must
-// not import internal/connectors/conformance (owned by a parallel task) nor
-// internal/connectors/defs (whose tree is empty in wave0 regardless).
-const noDefsBundleReason = "skipped: no defs bundle (wave0 ships zero defs bundles; real Tier-0 fixture-conformance integration lands with golden migrations in Wave F / V-21)"
+const (
+	noDefsBundleReason = "skipped: no defs bundle for connector"
+	noFixturesReason   = "skipped: no fixture bundle for connector"
+)
 
 // sabotage lets a test flip the expected envelope kind for a named stage so
 // the pipeline can prove a stage failure surfaces correctly end-to-end
@@ -350,6 +355,14 @@ func cliInfoFrom(res CLIResult) CLIStageInfo {
 	return CLIStageInfo{ArgvRedacted: res.ArgvRedacted, ExitCode: res.ExitCode, Kind: res.Kind}
 }
 
+func (rc *runContext) liveETLRunArgs(connection, stream string) []string {
+	args := []string{"etl", "run", "--connection", connection, "--stream", stream}
+	if rc.opts.Limit > 0 {
+		args = append(args, "--limit", fmt.Sprint(rc.opts.Limit))
+	}
+	return append(args, "--json")
+}
+
 func effectiveCredentialConfig(connector string, config map[string]string) map[string]string {
 	out := make(map[string]string, len(config)+1)
 	for k, v := range config {
@@ -382,9 +395,9 @@ func liveStreamUnavailable(rc *runContext, res CLIResult) bool {
 }
 
 // streamName is the source stream certified: currentStream during --full
-// sweeps, Options.Stream when explicitly set, else "customers" (sample's first
-// stream with a cursor field, matching design §A command spec's default "first
-// stream with a cursor field, else first").
+// sweeps, Options.Stream when explicitly set, else the first known stream with
+// a cursor field, else the first known stream. Connector-specific fallbacks are
+// used only before inspect/catalog metadata is available.
 func (rc *runContext) streamName() string {
 	if rc.currentStream != "" {
 		return rc.currentStream
@@ -392,7 +405,24 @@ func (rc *runContext) streamName() string {
 	if rc.opts.Stream != "" {
 		return rc.opts.Stream
 	}
+	if name, ok := defaultStreamNameFromSpecs(rc.catalogStreamSpecs); ok {
+		return name
+	}
 	return defaultStreamName(rc.opts.Connector)
+}
+
+func defaultStreamNameFromSpecs(specs []streamSpec) (string, bool) {
+	for _, spec := range specs {
+		if spec.Name != "" && spec.CursorField != "" {
+			return spec.Name, true
+		}
+	}
+	for _, spec := range specs {
+		if spec.Name != "" {
+			return spec.Name, true
+		}
+	}
+	return "", false
 }
 
 func defaultStreamName(connector string) string {
@@ -474,7 +504,28 @@ func safeName(name string) string {
 	if out == "" {
 		return "stream"
 	}
-	return out
+	if len(out) <= maxSafeNameLen {
+		return out
+	}
+	sum := sha256.Sum256([]byte(out))
+	const suffixLen = 9 // underscore + 8 hex chars.
+	return strings.TrimRight(out[:maxSafeNameLen-suffixLen], "_") + fmt.Sprintf("_%x", sum[:4])
+}
+
+func (rc *runContext) liveTableName() string {
+	return "cert_live_" + safeName(rc.streamName())
+}
+
+func (rc *runContext) incrementalTableName() string {
+	return "cert_incremental_" + safeName(rc.streamName())
+}
+
+func (rc *runContext) captureTableName(prefix string) string {
+	return prefix + "_" + safeName(rc.streamName())
+}
+
+func (rc *runContext) captureFileName() string {
+	return "capture_" + safeName(rc.streamName())
 }
 
 // queryRowCount runs `pm query run --table <table> --json` and returns the
@@ -570,7 +621,7 @@ func stageFullSweepConnectionCreate(rc *runContext, rep *Report) error {
 			"--destination", "warehouse:" + warehouseCredentialName,
 			"--stream", stream,
 			"--sync-mode", "full_refresh_append",
-			"--table", "cert_live_" + stream,
+			"--table", rc.liveTableName(),
 			"--json"}
 		if primaryKey := rc.primaryKey(); primaryKey != "" {
 			args = append(args, "--primary-key", primaryKey)
@@ -629,14 +680,97 @@ func stagePreflight(rc *runContext, rep *Report) error {
 	return nil
 }
 
-// --- stage 1: fixture_conformance (skip-with-reason: wave0 has no bundles) ---
+// --- stage 1: fixture_conformance ---
 
 func stageFixtureConformance(rc *runContext, rep *Report) error {
 	stage := recordStage(rc, rep, "fixture_conformance", 0, func() (bool, CLIStageInfo, string) {
-		return false, CLIStageInfo{}, noDefsBundleReason
+		bundle, err := loadFixtureConformanceBundle(rc.opts.Connector)
+		if err != nil {
+			if errors.Is(err, fs.ErrNotExist) {
+				return false, CLIStageInfo{}, fmt.Sprintf("%s %q", noDefsBundleReason, rc.opts.Connector)
+			}
+			report := conformance.ReportFromLoadError(rc.opts.Connector, err)
+			return false, CLIStageInfo{}, conformanceFailureSummary(report)
+		}
+		if bundle.Fixtures == nil {
+			return false, CLIStageInfo{}, fmt.Sprintf("%s %q", noFixturesReason, rc.opts.Connector)
+		}
+		report := conformance.RunBundle(bundle)
+		if !report.Passed {
+			return false, CLIStageInfo{}, conformanceFailureSummary(report)
+		}
+		return true, CLIStageInfo{}, ""
 	})
 	_ = stage
 	return nil
+}
+
+func loadFixtureConformanceBundle(connector string) (engine.Bundle, error) {
+	for _, root := range fixtureConformanceDefsRoots() {
+		info, err := os.Stat(filepath.Join(root, connector))
+		if err != nil || !info.IsDir() {
+			continue
+		}
+		return engine.Load(os.DirFS(root), connector)
+	}
+	info, err := fs.Stat(defs.FS, connector)
+	if err != nil || !info.IsDir() {
+		return engine.Bundle{}, fmt.Errorf("load bundle %s: %w", connector, fs.ErrNotExist)
+	}
+	return engine.Load(defs.FS, connector)
+}
+
+func fixtureConformanceDefsRoots() []string {
+	seen := map[string]bool{}
+	var roots []string
+	add := func(root string) {
+		if root == "" {
+			return
+		}
+		root = filepath.Clean(root)
+		if seen[root] {
+			return
+		}
+		seen[root] = true
+		roots = append(roots, root)
+	}
+
+	if _, file, _, ok := runtime.Caller(0); ok {
+		add(filepath.Join(filepath.Dir(file), "..", "defs"))
+	}
+	if wd, err := os.Getwd(); err == nil {
+		for dir := wd; ; dir = filepath.Dir(dir) {
+			add(filepath.Join(dir, "internal", "connectors", "defs"))
+			parent := filepath.Dir(dir)
+			if parent == dir {
+				break
+			}
+		}
+	}
+	return roots
+}
+
+func conformanceFailureSummary(report conformance.Report) string {
+	failures := make([]string, 0)
+	for _, check := range report.Checks {
+		if check.Skipped || check.Passed {
+			continue
+		}
+		if check.Error != "" {
+			failures = append(failures, fmt.Sprintf("%s: %s", check.Name, check.Error))
+			continue
+		}
+		failures = append(failures, check.Name)
+	}
+	if len(failures) == 0 {
+		return "fixture_conformance: conformance failed"
+	}
+	const maxFailures = 5
+	if len(failures) > maxFailures {
+		remaining := len(failures) - maxFailures
+		failures = append(failures[:maxFailures], fmt.Sprintf("... %d more", remaining))
+	}
+	return "fixture_conformance: conformance failed: " + strings.Join(failures, "; ")
 }
 
 // --- stage 2: manual_json ---
@@ -650,6 +784,9 @@ func stageManualJSON(rc *runContext, rep *Report) error {
 		}
 		if hits := ScanForSecrets(res.Stdout, secretValuesFromEnv(rc.opts.SecretEnv)); len(hits) != 0 {
 			return false, cliInfoFrom(res), fmt.Sprintf("manual_json: secret value leaked in connectors inspect output: %v", hits)
+		}
+		if specs := streamSpecsFromInspectEnvelope(res.Envelope); len(specs) > 0 {
+			rc.catalogStreamSpecs = specs
 		}
 		return true, cliInfoFrom(res), ""
 	})
@@ -719,7 +856,7 @@ func stageCatalog(rc *runContext, rep *Report) error {
 			"--destination", "warehouse:" + warehouseCredentialName,
 			"--stream", stream,
 			"--sync-mode", "full_refresh_append",
-			"--table", "cert_live_" + stream,
+			"--table", rc.liveTableName(),
 			"--json"}
 		if primaryKey := rc.primaryKey(); primaryKey != "" {
 			args = append(args, "--primary-key", primaryKey)
@@ -764,6 +901,15 @@ func catalogStreams(env map[string]any) ([]any, int) {
 	}
 	streams, _ := inner["streams"].([]any)
 	return streams, len(streams)
+}
+
+func streamSpecsFromInspectEnvelope(env map[string]any) []streamSpec {
+	manifest, _ := env["manifest"].(map[string]any)
+	if manifest == nil {
+		return nil
+	}
+	streams, _ := manifest["streams"].([]any)
+	return catalogStreamSpecsFromStreams(streams)
 }
 
 func catalogStreamSpecsFromStreams(streams []any) []streamSpec {
@@ -827,11 +973,11 @@ func catalogHasPKAndCursor(streams []any, name string) bool {
 
 func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 	stream := rc.streamName()
-	table := "cert_live_" + stream
+	table := rc.liveTableName()
 	var capturePath string
 
 	stage := recordStage(rc, rep, "etl_full_refresh_append", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("etl", "run", "--connection", rc.liveConnectionName(), "--stream", stream, "--json")
+		res := rc.run(rc.liveETLRunArgs(rc.liveConnectionName(), stream)...)
 		passed, errMsg := assertKind(rc, "etl_full_refresh_append", res, "ETLRun", 0)
 		if !passed {
 			if liveStreamUnavailable(rc, res) {
@@ -856,7 +1002,7 @@ func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 	// The captured JSONL for stages 6/7/10 (capture-replay via the built-in
 	// file connector) is this stage's live output, queried back out via
 	// `pm query run` and stripped of _polymetrics_* bookkeeping fields.
-	capturePath = filepath.Join(rc.root, "capture_"+stream+".jsonl")
+	capturePath = filepath.Join(rc.root, rc.captureFileName()+".jsonl")
 	recordStage(rc, rep, "capture_write", 1, func() (bool, CLIStageInfo, string) {
 		res := rc.run("query", "run", "--table", table, "--json")
 		passed, errMsg := assertKind(rc, "capture_write", res, "QueryResult", 0)
@@ -969,7 +1115,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 		skipStage(rc, rep, "etl_full_refresh_overwrite", "skipped: no capture available (etl_full_refresh_append did not produce one)")
 		return nil
 	}
-	table := "cert_overwrite_" + rc.streamName()
+	table := rc.captureTableName("cert_overwrite")
 	mode := "full_refresh_overwrite"
 
 	if ok, errMsg := rc.setupCaptureConnection(rep, mode, table); !ok {
@@ -1029,7 +1175,7 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 		skipStage(rc, rep, "etl_full_refresh_overwrite_deduped", "skipped: no capture available")
 		return nil
 	}
-	table := "cert_overwrite_deduped_" + rc.streamName()
+	table := rc.captureTableName("cert_overwrite_deduped")
 	mode := "full_refresh_overwrite_deduped"
 
 	if ok, errMsg := rc.setupCaptureConnection(rep, mode, table); !ok {
@@ -1066,7 +1212,7 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 		return nil
 	}
 	stream := rc.streamName()
-	table := "cert_incremental_" + stream
+	table := rc.incrementalTableName()
 	connName := "cert_incremental"
 	if rc.currentStream != "" {
 		connName += "_" + safeName(stream)
@@ -1090,7 +1236,7 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 	})
 
 	stage := recordStage(rc, rep, "etl_incremental_append", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("etl", "run", "--connection", connName, "--stream", stream, "--json")
+		res := rc.run(rc.liveETLRunArgs(connName, stream)...)
 		passed, errMsg := assertKind(rc, "etl_incremental_append", res, "ETLRun", 0)
 		if !passed {
 			if liveStreamUnavailable(rc, res) {
@@ -1124,7 +1270,7 @@ func stageResume(rc *runContext, rep *Report) error {
 	stream := rc.streamName()
 
 	recordStage(rc, rep, "resume", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("etl", "run", "--connection", rc.incrementalConnection, "--stream", stream, "--json")
+		res := rc.run(rc.liveETLRunArgs(rc.incrementalConnection, stream)...)
 		passed, errMsg := assertKind(rc, "resume", res, "ETLRun", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -1187,7 +1333,7 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 		skipStage(rc, rep, "etl_incremental_append_deduped", "skipped: no capture available")
 		return nil
 	}
-	table := "cert_incremental_deduped_" + rc.streamName()
+	table := rc.captureTableName("cert_incremental_deduped")
 	mode := "incremental_append_deduped"
 
 	if ok, errMsg := rc.setupCaptureConnection(rep, mode, table); !ok {
@@ -1218,7 +1364,7 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 // --- stage 11: query_contract ---
 
 func stageQueryContract(rc *runContext, rep *Report) error {
-	table := "cert_live_" + rc.streamName()
+	table := rc.liveTableName()
 	recordStage(rc, rep, "query_contract", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("query", "run", "--table", table, "--limit", "1", "--json")
 		passed, errMsg := assertKind(rc, "query_contract", res, "QueryResult", 0)
@@ -1234,7 +1380,7 @@ func finalizeJSONContract(rep *Report) {
 	allKindsGood := true
 	for _, stage := range rep.Stages {
 		if stage.CLI.Kind == "" {
-			// fixture_conformance is a skip-only stage with no CLI call.
+			// fixture_conformance runs in-process and has no direct CLI call.
 			continue
 		}
 		checked++
@@ -1324,16 +1470,11 @@ func finalizeSecretRedaction(rc *runContext, rep *Report, secretValues []string)
 
 func allStagesPassed(stages []StageResult) bool {
 	for _, s := range stages {
-		if s.Name == "fixture_conformance" {
-			// A documented skip never fails the overall report.
-			continue
-		}
 		if !s.Passed && strings.HasPrefix(s.Error, "skipped: ") {
-			// A documented skip (e.g. Options.Write disabled, or no
-			// available write pairing) never fails the overall report,
-			// exactly like fixture_conformance above (design §A "no
-			// credential -> uncertified, never failed" applies analogously
-			// to an unavailable safe write path).
+			// A documented skip (e.g. unavailable fixture bundle,
+			// Options.Write disabled, or no available write pairing) never
+			// fails the overall report. A real fixture_conformance failure
+			// is not a skip and must fail certification.
 			continue
 		}
 		if !s.Passed {

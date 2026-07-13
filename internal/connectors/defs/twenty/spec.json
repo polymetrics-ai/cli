@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Twenty CRM Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Twenty API key. Sent as Authorization: Bearer <API_KEY> on REST requests; sourced from environment variables or stdin and never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.twenty.com",
+      "description": "Twenty API base URL override for tests or self-hosted deployments."
+    },
+    "replication_start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional RFC3339 lower bound for incremental streams that filter and order by createdAt or updatedAt. Stream wiring is deferred to S3; streams that support server-side createdAt/updatedAt filters will honor it."
+    }
+  }
+}

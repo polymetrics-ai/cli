@@ -1,6 +1,10 @@
 package certify
 
-import "testing"
+import (
+	"path/filepath"
+	"strings"
+	"testing"
+)
 
 func TestCatalogStreamSpecsFromStreams(t *testing.T) {
 	streams := []any{
@@ -77,5 +81,92 @@ func TestFullSweepStreamSpecsFallbackToSelectedStream(t *testing.T) {
 	}
 	if specs[0].Name != "customers" || specs[0].PrimaryKey != "id" || specs[0].CursorField != "updated_at" {
 		t.Fatalf("fallback spec = %+v", specs[0])
+	}
+}
+
+func TestStreamNameDefaultsToFirstCatalogCursorStream(t *testing.T) {
+	rc := &runContext{
+		opts: Options{Connector: "twenty"},
+		catalogStreamSpecs: []streamSpec{
+			{Name: "companies"},
+			{Name: "attachments", CursorField: "updatedAt"},
+			{Name: "people", CursorField: "updatedAt"},
+		},
+	}
+	if got := rc.streamName(); got != "attachments" {
+		t.Fatalf("streamName() = %q, want first catalog stream with cursor", got)
+	}
+}
+
+func TestStreamNameDefaultsToFirstCatalogStreamWhenNoCursor(t *testing.T) {
+	rc := &runContext{
+		opts: Options{Connector: "twenty"},
+		catalogStreamSpecs: []streamSpec{
+			{Name: "companies"},
+			{Name: "attachments"},
+		},
+	}
+	if got := rc.streamName(); got != "companies" {
+		t.Fatalf("streamName() = %q, want first catalog stream when no cursor exists", got)
+	}
+}
+
+func TestInspectStreamSpecsSeedBootstrapCursor(t *testing.T) {
+	envelope := map[string]any{
+		"manifest": map[string]any{
+			"streams": []any{
+				map[string]any{
+					"name":          "attachments",
+					"primary_key":   []any{"id"},
+					"cursor_fields": []any{"updatedAt"},
+				},
+			},
+		},
+	}
+
+	specs := streamSpecsFromInspectEnvelope(envelope)
+	if len(specs) != 1 {
+		t.Fatalf("len(specs) = %d, want 1", len(specs))
+	}
+	rc := &runContext{opts: Options{Connector: "twenty", Stream: "attachments"}, catalogStreamSpecs: specs}
+	if got := rc.cursorField(); got != "updatedAt" {
+		t.Fatalf("cursorField() = %q, want Twenty catalog cursor updatedAt before bootstrap connection", got)
+	}
+}
+
+func TestFullSweepArtifactNamesAreBoundedForLongStream(t *testing.T) {
+	const stream = "message_channel_message_association_message_folders"
+	rc := &runContext{
+		root:          t.TempDir(),
+		opts:          Options{Connector: "twenty"},
+		currentStream: stream,
+	}
+	rc.capturePath = filepath.Join(rc.root, rc.captureFileName()+".jsonl")
+
+	components := map[string]string{
+		"live_connection":    rc.liveConnectionName(),
+		"live_table":         rc.liveTableName(),
+		"capture_connection": rc.captureConnectionName("full_refresh_overwrite_deduped"),
+		"capture_stream":     rc.captureStreamName(),
+		"capture_table":      rc.captureTableName("cert_overwrite_deduped"),
+		"flow_name":          rc.flowName(),
+		"flow_table":         rc.flowTable(),
+		"flow_connection":    rc.flowConnectionName(),
+	}
+	for label, component := range components {
+		if component == "" {
+			t.Fatalf("%s is empty", label)
+		}
+		if strings.ContainsAny(component, `/\\`) {
+			t.Fatalf("%s = %q contains a path separator", label, component)
+		}
+		if len(component) > 96 {
+			t.Fatalf("%s length = %d, want <= 96: %q", label, len(component), component)
+		}
+	}
+
+	rawName := rc.captureConnectionName("full_refresh_overwrite_deduped") + "__" + rc.captureStreamName() + "__" + rc.captureTableName("cert_overwrite_deduped") + ".jsonl.tmp"
+	if len(rawName) > 255 {
+		t.Fatalf("raw capture path component length = %d, want <= 255: %q", len(rawName), rawName)
 	}
 }

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "delete_message_campaigns_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/messageCampaigns/delete_message_campaigns_fixture_id",
+    "no_body": true
+  }
+}

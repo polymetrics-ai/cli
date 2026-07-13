@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "delete_workflows_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/workflows/delete_workflows_fixture_id",
+    "no_body": true
+  }
+}

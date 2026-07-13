@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_timeline_activities_fixture_id",
+    "happensAt": "2026-01-01T00:00:01Z"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/timelineActivities/update_timeline_activities_fixture_id",
+    "body": {
+      "happensAt": "2026-01-01T00:00:01Z"
+    }
+  }
+}

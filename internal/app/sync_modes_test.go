@@ -116,6 +116,41 @@ func rowsByID(rows []connectors.Record) map[string]connectors.Record {
 	return out
 }
 
+func TestRunETLLimitCapsWarehouseRead(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("scripted_limited_warehouse", []connectors.Record{
+		{"id": "a", "name": "Ada", "updated_at": "2026-01-01T00:00:00Z"},
+		{"id": "g", "name": "Grace", "updated_at": "2026-01-02T00:00:00Z"},
+		{"id": "k", "name": "Katherine", "updated_at": "2026-01-03T00:00:00Z"},
+		{"id": "m", "name": "Margaret", "updated_at": "2026-01-04T00:00:00Z"},
+	})
+	a, connection := setupSyncModeApp(t, source, "full_refresh_append")
+
+	run, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10, Limit: 2})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(source.requests) != 1 {
+		t.Fatalf("source read requests = %d, want 1", len(source.requests))
+	}
+	if source.requests[0].Limit != 2 {
+		t.Fatalf("source ReadRequest.Limit = %d, want 2", source.requests[0].Limit)
+	}
+	if run.RecordsRead != 2 || run.RecordsLoaded != 2 || run.BatchCount != 1 {
+		t.Fatalf("unexpected capped warehouse run counts: %+v", run)
+	}
+	rows, err := a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rows) != 2 {
+		t.Fatalf("warehouse rows = %d, want 2", len(rows))
+	}
+	if got := rowsByID(rows); got["a"] == nil || got["g"] == nil || got["k"] != nil {
+		t.Fatalf("warehouse rows by id = %+v, want only a and g", got)
+	}
+}
+
 func TestParseSyncModeMatrix(t *testing.T) {
 	tests := []struct {
 		raw            string

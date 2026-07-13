@@ -1,0 +1,1184 @@
+{
+  "api": "Twenty CRM REST API (https://api.twenty.com/rest)",
+  "docs": "https://docs.twenty.com/developers/extend/api",
+  "reviewed_at": "2026-07-10",
+  "scope": "S3 #280 declares the 28 Twenty REST read streams and covers both list GET /rest/<object> and same-record-shape get-by-id GET /rest/<object>/{id} rows with the same snake_case stream. S4 #281 adds non-destructive reverse-ETL create/update/batch rows from Twenty REST docs/research. S5 #282 covers destructive DELETE /rest/<object>/{id} rows with typed-confirmation gated reverse-ETL delete actions.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/rest/attachments",
+      "covered_by": {
+        "stream": "attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/attachments/{id}",
+      "covered_by": {
+        "stream": "attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/blocklists",
+      "covered_by": {
+        "stream": "blocklists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/blocklists/{id}",
+      "covered_by": {
+        "stream": "blocklists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/calendarChannelEventAssociations",
+      "covered_by": {
+        "stream": "calendar_channel_event_associations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/calendarChannelEventAssociations/{id}",
+      "covered_by": {
+        "stream": "calendar_channel_event_associations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/calendarEventParticipants",
+      "covered_by": {
+        "stream": "calendar_event_participants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/calendarEventParticipants/{id}",
+      "covered_by": {
+        "stream": "calendar_event_participants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/calendarEvents",
+      "covered_by": {
+        "stream": "calendar_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/calendarEvents/{id}",
+      "covered_by": {
+        "stream": "calendar_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/callRecordings",
+      "covered_by": {
+        "stream": "call_recordings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/callRecordings/{id}",
+      "covered_by": {
+        "stream": "call_recordings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/companies/{id}",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/dashboards",
+      "covered_by": {
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/dashboards/{id}",
+      "covered_by": {
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageCampaigns",
+      "covered_by": {
+        "stream": "message_campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageCampaigns/{id}",
+      "covered_by": {
+        "stream": "message_campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageChannelMessageAssociationMessageFolders",
+      "covered_by": {
+        "stream": "message_channel_message_association_message_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}",
+      "covered_by": {
+        "stream": "message_channel_message_association_message_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageChannelMessageAssociations",
+      "covered_by": {
+        "stream": "message_channel_message_associations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageChannelMessageAssociations/{id}",
+      "covered_by": {
+        "stream": "message_channel_message_associations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageListMembers",
+      "covered_by": {
+        "stream": "message_list_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageListMembers/{id}",
+      "covered_by": {
+        "stream": "message_list_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageLists",
+      "covered_by": {
+        "stream": "message_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageLists/{id}",
+      "covered_by": {
+        "stream": "message_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageParticipants",
+      "covered_by": {
+        "stream": "message_participants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageParticipants/{id}",
+      "covered_by": {
+        "stream": "message_participants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageThreads",
+      "covered_by": {
+        "stream": "message_threads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messageThreads/{id}",
+      "covered_by": {
+        "stream": "message_threads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messages",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/messages/{id}",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/noteTargets",
+      "covered_by": {
+        "stream": "note_targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/noteTargets/{id}",
+      "covered_by": {
+        "stream": "note_targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/notes",
+      "covered_by": {
+        "stream": "notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/notes/{id}",
+      "covered_by": {
+        "stream": "notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/opportunities",
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/opportunities/{id}",
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/people",
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/people/{id}",
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/taskTargets",
+      "covered_by": {
+        "stream": "task_targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/taskTargets/{id}",
+      "covered_by": {
+        "stream": "task_targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/tasks/{id}",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/timelineActivities",
+      "covered_by": {
+        "stream": "timeline_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/timelineActivities/{id}",
+      "covered_by": {
+        "stream": "timeline_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workflowAutomatedTriggers",
+      "covered_by": {
+        "stream": "workflow_automated_triggers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workflowAutomatedTriggers/{id}",
+      "covered_by": {
+        "stream": "workflow_automated_triggers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workflowRuns",
+      "covered_by": {
+        "stream": "workflow_runs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workflowRuns/{id}",
+      "covered_by": {
+        "stream": "workflow_runs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workflowVersions",
+      "covered_by": {
+        "stream": "workflow_versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workflowVersions/{id}",
+      "covered_by": {
+        "stream": "workflow_versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workflows",
+      "covered_by": {
+        "stream": "workflows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workflows/{id}",
+      "covered_by": {
+        "stream": "workflows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workspaceMembers",
+      "covered_by": {
+        "stream": "workspace_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/workspaceMembers/{id}",
+      "covered_by": {
+        "stream": "workspace_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/attachments",
+      "covered_by": {
+        "write": "create_attachments"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/attachments/{id}",
+      "covered_by": {
+        "write": "update_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/attachments",
+      "covered_by": {
+        "write": "batch_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/blocklists",
+      "covered_by": {
+        "write": "create_blocklists"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/blocklists/{id}",
+      "covered_by": {
+        "write": "update_blocklists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/blocklists",
+      "covered_by": {
+        "write": "batch_blocklists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/calendarChannelEventAssociations",
+      "covered_by": {
+        "write": "create_calendar_channel_event_associations"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/calendarChannelEventAssociations/{id}",
+      "covered_by": {
+        "write": "update_calendar_channel_event_associations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/calendarChannelEventAssociations",
+      "covered_by": {
+        "write": "batch_calendar_channel_event_associations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/calendarEventParticipants",
+      "covered_by": {
+        "write": "create_calendar_event_participants"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/calendarEventParticipants/{id}",
+      "covered_by": {
+        "write": "update_calendar_event_participants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/calendarEventParticipants",
+      "covered_by": {
+        "write": "batch_calendar_event_participants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/calendarEvents",
+      "covered_by": {
+        "write": "create_calendar_events"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/calendarEvents/{id}",
+      "covered_by": {
+        "write": "update_calendar_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/calendarEvents",
+      "covered_by": {
+        "write": "batch_calendar_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/callRecordings",
+      "covered_by": {
+        "write": "create_call_recordings"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/callRecordings/{id}",
+      "covered_by": {
+        "write": "update_call_recordings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/callRecordings",
+      "covered_by": {
+        "write": "batch_call_recordings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/companies",
+      "covered_by": {
+        "write": "create_companies"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/companies/{id}",
+      "covered_by": {
+        "write": "update_companies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/companies",
+      "covered_by": {
+        "write": "batch_companies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/dashboards",
+      "covered_by": {
+        "write": "create_dashboards"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/dashboards/{id}",
+      "covered_by": {
+        "write": "update_dashboards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/dashboards",
+      "covered_by": {
+        "write": "batch_dashboards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/messageCampaigns",
+      "covered_by": {
+        "write": "create_message_campaigns"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/messageCampaigns/{id}",
+      "covered_by": {
+        "write": "update_message_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/messageCampaigns",
+      "covered_by": {
+        "write": "batch_message_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/messageChannelMessageAssociationMessageFolders",
+      "covered_by": {
+        "write": "create_message_channel_message_association_message_folders"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}",
+      "covered_by": {
+        "write": "update_message_channel_message_association_message_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/messageChannelMessageAssociationMessageFolders",
+      "covered_by": {
+        "write": "batch_message_channel_message_association_message_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/messageChannelMessageAssociations",
+      "covered_by": {
+        "write": "create_message_channel_message_associations"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/messageChannelMessageAssociations/{id}",
+      "covered_by": {
+        "write": "update_message_channel_message_associations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/messageChannelMessageAssociations",
+      "covered_by": {
+        "write": "batch_message_channel_message_associations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/messageListMembers",
+      "covered_by": {
+        "write": "create_message_list_members"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/messageListMembers/{id}",
+      "covered_by": {
+        "write": "update_message_list_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/messageListMembers",
+      "covered_by": {
+        "write": "batch_message_list_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/messageLists",
+      "covered_by": {
+        "write": "create_message_lists"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/messageLists/{id}",
+      "covered_by": {
+        "write": "update_message_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/messageLists",
+      "covered_by": {
+        "write": "batch_message_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/messageParticipants",
+      "covered_by": {
+        "write": "create_message_participants"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/messageParticipants/{id}",
+      "covered_by": {
+        "write": "update_message_participants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/messageParticipants",
+      "covered_by": {
+        "write": "batch_message_participants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/messageThreads",
+      "covered_by": {
+        "write": "create_message_threads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/messageThreads/{id}",
+      "covered_by": {
+        "write": "update_message_threads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/messageThreads",
+      "covered_by": {
+        "write": "batch_message_threads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/messages",
+      "covered_by": {
+        "write": "create_messages"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/messages/{id}",
+      "covered_by": {
+        "write": "update_messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/messages",
+      "covered_by": {
+        "write": "batch_messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/noteTargets",
+      "covered_by": {
+        "write": "create_note_targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/noteTargets/{id}",
+      "covered_by": {
+        "write": "update_note_targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/noteTargets",
+      "covered_by": {
+        "write": "batch_note_targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/notes",
+      "covered_by": {
+        "write": "create_notes"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/notes/{id}",
+      "covered_by": {
+        "write": "update_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/notes",
+      "covered_by": {
+        "write": "batch_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/opportunities",
+      "covered_by": {
+        "write": "create_opportunities"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/opportunities/{id}",
+      "covered_by": {
+        "write": "update_opportunities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/opportunities",
+      "covered_by": {
+        "write": "batch_opportunities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/people",
+      "covered_by": {
+        "write": "create_people"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/people/{id}",
+      "covered_by": {
+        "write": "update_people"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/people",
+      "covered_by": {
+        "write": "batch_people"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/taskTargets",
+      "covered_by": {
+        "write": "create_task_targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/taskTargets/{id}",
+      "covered_by": {
+        "write": "update_task_targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/taskTargets",
+      "covered_by": {
+        "write": "batch_task_targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/tasks",
+      "covered_by": {
+        "write": "create_tasks"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/tasks/{id}",
+      "covered_by": {
+        "write": "update_tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/tasks",
+      "covered_by": {
+        "write": "batch_tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/timelineActivities",
+      "covered_by": {
+        "write": "create_timeline_activities"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/timelineActivities/{id}",
+      "covered_by": {
+        "write": "update_timeline_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/timelineActivities",
+      "covered_by": {
+        "write": "batch_timeline_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/workflowAutomatedTriggers",
+      "covered_by": {
+        "write": "create_workflow_automated_triggers"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/workflowAutomatedTriggers/{id}",
+      "covered_by": {
+        "write": "update_workflow_automated_triggers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/workflowAutomatedTriggers",
+      "covered_by": {
+        "write": "batch_workflow_automated_triggers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/workflowRuns",
+      "covered_by": {
+        "write": "create_workflow_runs"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/workflowRuns/{id}",
+      "covered_by": {
+        "write": "update_workflow_runs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/workflowRuns",
+      "covered_by": {
+        "write": "batch_workflow_runs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/workflowVersions",
+      "covered_by": {
+        "write": "create_workflow_versions"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/workflowVersions/{id}",
+      "covered_by": {
+        "write": "update_workflow_versions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/workflowVersions",
+      "covered_by": {
+        "write": "batch_workflow_versions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/workflows",
+      "covered_by": {
+        "write": "create_workflows"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/workflows/{id}",
+      "covered_by": {
+        "write": "update_workflows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/workflows",
+      "covered_by": {
+        "write": "batch_workflows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/workspaceMembers",
+      "covered_by": {
+        "write": "create_workspace_members"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/workspaceMembers/{id}",
+      "covered_by": {
+        "write": "update_workspace_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/batch/workspaceMembers",
+      "covered_by": {
+        "write": "batch_workspace_members"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/attachments/{id}",
+      "covered_by": {
+        "write": "delete_attachments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/blocklists/{id}",
+      "covered_by": {
+        "write": "delete_blocklists"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/calendarChannelEventAssociations/{id}",
+      "covered_by": {
+        "write": "delete_calendar_channel_event_associations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/calendarEventParticipants/{id}",
+      "covered_by": {
+        "write": "delete_calendar_event_participants"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/calendarEvents/{id}",
+      "covered_by": {
+        "write": "delete_calendar_events"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/callRecordings/{id}",
+      "covered_by": {
+        "write": "delete_call_recordings"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/companies/{id}",
+      "covered_by": {
+        "write": "delete_companies"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/dashboards/{id}",
+      "covered_by": {
+        "write": "delete_dashboards"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/messageCampaigns/{id}",
+      "covered_by": {
+        "write": "delete_message_campaigns"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}",
+      "covered_by": {
+        "write": "delete_message_channel_message_association_message_folders"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/messageChannelMessageAssociations/{id}",
+      "covered_by": {
+        "write": "delete_message_channel_message_associations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/messageListMembers/{id}",
+      "covered_by": {
+        "write": "delete_message_list_members"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/messageLists/{id}",
+      "covered_by": {
+        "write": "delete_message_lists"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/messageParticipants/{id}",
+      "covered_by": {
+        "write": "delete_message_participants"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/messageThreads/{id}",
+      "covered_by": {
+        "write": "delete_message_threads"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/messages/{id}",
+      "covered_by": {
+        "write": "delete_messages"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/noteTargets/{id}",
+      "covered_by": {
+        "write": "delete_note_targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/notes/{id}",
+      "covered_by": {
+        "write": "delete_notes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/opportunities/{id}",
+      "covered_by": {
+        "write": "delete_opportunities"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/people/{id}",
+      "covered_by": {
+        "write": "delete_people"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/taskTargets/{id}",
+      "covered_by": {
+        "write": "delete_task_targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/tasks/{id}",
+      "covered_by": {
+        "write": "delete_tasks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/timelineActivities/{id}",
+      "covered_by": {
+        "write": "delete_timeline_activities"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/workflowAutomatedTriggers/{id}",
+      "covered_by": {
+        "write": "delete_workflow_automated_triggers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/workflowRuns/{id}",
+      "covered_by": {
+        "write": "delete_workflow_runs"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/workflowVersions/{id}",
+      "covered_by": {
+        "write": "delete_workflow_versions"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/workflows/{id}",
+      "covered_by": {
+        "write": "delete_workflows"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/workspaceMembers/{id}",
+      "covered_by": {
+        "write": "delete_workspace_members"
+      }
+    }
+  ]
+}

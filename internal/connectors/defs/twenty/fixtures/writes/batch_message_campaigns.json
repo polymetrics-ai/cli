@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "bodyTemplate": "Fixture bodyTemplate 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/messageCampaigns",
+    "body_exact": [
+      {
+        "bodyTemplate": "Fixture bodyTemplate 1"
+      }
+    ]
+  }
+}

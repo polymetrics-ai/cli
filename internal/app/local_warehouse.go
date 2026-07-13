@@ -38,7 +38,7 @@ type localRawRecord struct {
 	Record       connectors.Record `json:"record"`
 }
 
-func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize, limit int) (etlExecutionResult, error) {
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
 	}
@@ -150,7 +150,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		Stream: streamName,
 		Config: readConfig,
 		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
-	}, func(record connectors.Record) error {
+		Limit:  limit,
+	}, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
 		if stream.CursorField != "" {
@@ -204,8 +205,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			return flush()
 		}
 		return nil
-	})
-	if err != nil {
+	}))
+	if err := connectors.IgnoreReadLimit(err); err != nil {
 		return result, err
 	}
 	if err := flush(); err != nil {

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_workflow_automated_triggers_fixture_id",
+    "settings": "Fixture settings 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/workflowAutomatedTriggers/update_workflow_automated_triggers_fixture_id",
+    "body": {
+      "settings": "Fixture settings 1"
+    }
+  }
+}

@@ -128,12 +128,7 @@ func runHelp(args []string, stdout io.Writer) error {
 	if len(args) > 0 {
 		topic = args[0]
 	}
-	text, ok := docs[topic]
-	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
-	}
-	fmt.Fprint(stdout, text)
-	return nil
+	return writeManual(topic, stdout, false)
 }
 
 func isManualCommand(cmd string) bool {
@@ -146,13 +141,48 @@ func isManualCommand(cmd string) bool {
 
 func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	text, ok := docs[topic]
+	if ok {
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": text})
+		}
+		fmt.Fprint(stdout, text)
+		return nil
+	}
+	written, err := writeConnectorManual(topic, stdout, jsonOut)
+	if err != nil {
+		return err
+	}
+	if written {
+		return nil
+	}
+	return fmt.Errorf("help topic %q not found", topic)
+}
+
+func writeConnectorManual(topic string, stdout io.Writer, jsonOut bool) (bool, error) {
+	if err := safety.ValidateIdentifier(topic, "connector"); err != nil {
+		return false, nil
+	}
+	if err := connectors.RejectLegacyConnectorName(topic); err != nil {
+		return false, err
+	}
+	connector, ok := appRegistry().Get(topic)
 	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
+		return false, nil
 	}
+	manual := connectors.RenderConnectorManual(connector)
 	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": text})
+		return true, writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": manual})
 	}
-	fmt.Fprint(stdout, text)
+	fmt.Fprint(stdout, manual)
+	return true, nil
+}
+
+func writeConnectorCommandManual(connector connectors.Connector, stdout io.Writer, jsonOut bool) error {
+	manual := connectors.RenderConnectorManual(connector)
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": connector.Name(), "manual": manual})
+	}
+	fmt.Fprint(stdout, manual)
 	return nil
 }
 
@@ -549,10 +579,15 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if err != nil {
 			return err
 		}
+		limit, err := parseIntFlag("limit", flags.first("limit"), 0)
+		if err != nil {
+			return err
+		}
 		run, err := a.RunETL(ctx, app.RunETLRequest{
 			Connection: flags.first("connection"),
 			Stream:     flags.first("stream"),
 			BatchSize:  batchSize,
+			Limit:      limit,
 		})
 		if err != nil {
 			return err
@@ -610,7 +645,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
-		return usageErrorf("missing connector command path")
+		return writeConnectorCommandManual(connector, stdout, jsonOut)
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError

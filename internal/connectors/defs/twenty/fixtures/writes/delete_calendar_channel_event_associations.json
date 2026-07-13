@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "delete_calendar_channel_event_associations_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/calendarChannelEventAssociations/delete_calendar_channel_event_associations_fixture_id",
+    "no_body": true
+  }
+}

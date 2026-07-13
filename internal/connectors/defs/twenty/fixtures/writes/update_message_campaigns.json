@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_message_campaigns_fixture_id",
+    "bodyTemplate": "Fixture bodyTemplate 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/messageCampaigns/update_message_campaigns_fixture_id",
+    "body": {
+      "bodyTemplate": "Fixture bodyTemplate 1"
+    }
+  }
+}

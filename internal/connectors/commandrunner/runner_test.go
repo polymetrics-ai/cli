@@ -281,6 +281,36 @@ func TestBuildWriteCommandPlansWithoutExecuting(t *testing.T) {
 	}
 }
 
+func TestBuildWriteCommandCoercesNumberFlag(t *testing.T) {
+	connector := reverseETLFakeConnector()
+
+	result, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"issue", "create"},
+		Flags: map[string][]string{
+			"estimate": {"3.5"},
+		},
+		Config: connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	got, ok := result.Record["estimate"].(float64)
+	if !ok || got != 3.5 {
+		t.Fatalf("plan record estimate = %#v (%T), want float64 3.5", result.Record["estimate"], result.Record["estimate"])
+	}
+
+	_, err = BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"issue", "create"},
+		Flags: map[string][]string{
+			"estimate": {"NaN"},
+		},
+		Config: connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
+	})
+	if err == nil || !strings.Contains(err.Error(), "want finite number") {
+		t.Fatalf("BuildWriteCommand invalid number error = %v, want finite number error", err)
+	}
+}
+
 func TestBuildWriteCommandCarriesDestructiveConfirmationChallenge(t *testing.T) {
 	connector := &fakeConnector{
 		surface: &connectors.CommandSurface{
@@ -502,6 +532,7 @@ func reverseETLFakeConnector() *fakeConnector {
 					Flags: []connectors.CommandSurfaceFlag{
 						{Name: "title", Type: "string", MapsTo: "record.title"},
 						{Name: "body", Type: "string", MapsTo: "record.body"},
+						{Name: "estimate", Type: "number", MapsTo: "record.estimate"},
 					},
 				},
 				{

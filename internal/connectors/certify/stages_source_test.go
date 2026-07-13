@@ -271,6 +271,34 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 	}
 }
 
+func TestSourceStagesPassLimitToLiveETLRuns(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+	r := certify.NewRunner(certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     1,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	})
+
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	if !rep.Passed {
+		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
+	}
+	for _, stageName := range []string{"etl_full_refresh_append", "etl_incremental_append", "resume"} {
+		stage := mustStage(t, rep, stageName)
+		if !containsAny(stage.CLI.ArgvRedacted, "--limit 1") {
+			t.Fatalf("%s argv = %q, want --limit 1", stageName, stage.CLI.ArgvRedacted)
+		}
+	}
+	if rep.Capabilities.Read.Records != 1 {
+		t.Fatalf("Capabilities.Read.Records = %d, want 1", rep.Capabilities.Read.Records)
+	}
+}
+
 // TestSourceStagesSabotageFailsNamedStage proves a deliberately-wrong
 // expected envelope kind flips exactly the sabotaged stage to failed and the
 // overall report to Passed=false, naming the failing stage (PLAN.md T-14 /

@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Message Participant",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "displayName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "handle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "message": {
+      "type": "object"
+    },
+    "messageCampaign": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "person": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "position": {
+      "type": "number"
+    },
+    "role": {
+      "type": "string"
+    },
+    "searchVector": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "workspaceMember": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}
