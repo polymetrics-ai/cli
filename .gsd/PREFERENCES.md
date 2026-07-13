@@ -32,6 +32,10 @@ context_management:
   tool_result_max_chars: 800
 verification_auto_fix: false
 verification_max_retries: 0
+tool_call_loop_guard:
+  repeated_tool:
+    exempt_tools:
+      - gsd_requirement_save
 uat_dispatch: true
 pre_dispatch_hooks:
   - name: polymetrics-unit-policy

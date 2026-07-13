@@ -115,7 +115,7 @@ func NewRunner(config Config) (*Runner, error) {
 		if err := config.Container.Validate(config.WorkDir); err != nil {
 			return nil, err
 		}
-		for _, dir := range []string{config.Container.GSDStateDir, config.Container.PlanningDir, config.Container.SessionsDir, config.Container.BackgroundDir} {
+		for _, dir := range []string{config.Container.GSDStateDir, config.Container.PlanningDir, config.Container.SessionsDir, config.Container.BackgroundDir, config.Container.BackupDir} {
 			if err := os.MkdirAll(dir, 0o700); err != nil {
 				return nil, fmt.Errorf("create isolated container state: %w", err)
 			}

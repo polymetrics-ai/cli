@@ -20,6 +20,7 @@ type ContainerConfig struct {
 	GitCommonDir  string
 	SessionsDir   string
 	BackgroundDir string
+	BackupDir     string
 }
 
 func (c ContainerConfig) Validate(workDir string) error {
@@ -37,6 +38,7 @@ func (c ContainerConfig) Validate(workDir string) error {
 		"auth file": c.AuthFile, "settings file": c.SettingsFile, "governed policy": c.PolicyDir,
 		"git common directory": c.GitCommonDir,
 		"session archive":      c.SessionsDir, "background shell state": c.BackgroundDir,
+		"GSD backup state": c.BackupDir,
 	} {
 		if !filepath.IsAbs(path) {
 			return fmt.Errorf("%s must be absolute", label)
@@ -51,7 +53,7 @@ func (c ContainerConfig) Validate(workDir string) error {
 	if within, _ := pathInside(workDir, c.PolicyDir); within {
 		return errors.New("governed policy directory must be outside the worker-controlled worktree")
 	}
-	for _, path := range []string{c.SessionsDir, c.BackgroundDir} {
+	for _, path := range []string{c.SessionsDir, c.BackgroundDir, c.BackupDir} {
 		if within, _ := pathInside(workDir, path); within {
 			return errors.New("runtime archive directories must be outside the worker-controlled worktree")
 		}
@@ -88,6 +90,7 @@ func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string 
 		"--volume=" + c.GSDStateDir + ":" + filepath.Join(workDir, ".gsd") + ":rw",
 		"--volume=" + c.PlanningDir + ":" + filepath.Join(workDir, ".planning") + ":rw",
 		"--volume=" + c.BackgroundDir + ":" + filepath.Join(workDir, ".bg-shell") + ":rw",
+		"--volume=" + c.BackupDir + ":" + filepath.Join(workDir, ".gsd-backups") + ":rw",
 		"--volume=" + c.AuthFile + ":/home/shepherd/.pi/agent/auth.json:ro",
 		"--volume=" + c.SettingsFile + ":/home/shepherd/.pi/agent/settings.json:ro",
 		"--volume=" + c.SessionsDir + ":/home/shepherd/.pi/agent/sessions:rw",
