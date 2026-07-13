@@ -646,7 +646,7 @@ func approveDepthQuestion(question gsd.Question) (gsd.UIResponse, bool) {
 	}
 	for _, option := range question.Options {
 		normalized := strings.ToLower(strings.TrimSpace(option))
-		if strings.HasPrefix(normalized, "confirm") {
+		if strings.HasPrefix(normalized, "confirm") || strings.HasPrefix(normalized, "depth verified") {
 			return gsd.UIResponse{Value: option}, true
 		}
 	}
