@@ -295,6 +295,7 @@ if [[ "$control_command" == "${FAKE_TERMINAL_UNCERTAIN:-disabled}" && \
   "$REAL_PYTHON_BIN" "$@"
   rc=$?
   if [[ "$rc" -eq 0 ]]; then
+    printf '%s\n' "$control_command" >>"$TERMINAL_COMMIT_PROBE_FILE"
     printf 'CONTROL_COMMIT_UNCERTAIN\n' >&2
     exit 4
   fi
@@ -625,6 +626,7 @@ driver_env() {
     "ASSERT_PROBE_FILE=$root/assert-probe"
     "ASSERT_COMPLETION_FILE=$root/assert-completion"
     "ASSERT_RELEASE_FILE=$root/assert-release"
+    "TERMINAL_COMMIT_PROBE_FILE=$root/terminal-commit-probe"
     "PRESEED_PROBE_FILE=$root/preseed-probe"
     "FLOOD_PROBE_FILE=$root/flood-probe"
     "INTRUDER_PROBE_FILE=$root/intruder-probe"
@@ -1970,15 +1972,22 @@ test_flooded_authorization_channel_is_bounded() {
 }
 
 test_uncertain_terminal_commit_blocks_reentry() {
-  local root transition mode rc before after prompt_before prompt_after
+  local root transition mode iterations rc before after prompt_before prompt_after diagnostics
   for transition in pause release; do
     root="$(mktemp -d "$TEST_TMP/uncertain-$transition.XXXXXX")"
     prepare_fixture "$root"
     mode=normal
+    iterations=0
     [[ "$transition" == "release" ]] && mode=proceed-human-gate
+    [[ "$transition" == "release" ]] && iterations=1
     rc=0
-    FAKE_MODE="$mode" FAKE_TERMINAL_UNCERTAIN="$transition" MAX_TURNS=5 \
+    FAKE_MODE="$mode" FAKE_TERMINAL_UNCERTAIN="$transition" MAX_ITERATIONS="$iterations" MAX_TURNS=5 \
       driver_env "$root" "synthetic uncertain $transition" >"$root/stdout.1" 2>"$root/stderr.1" || rc=$?
+    if ! grep -Fxq "$transition" "$root/terminal-commit-probe" 2>/dev/null; then
+      diagnostics="$(tail -n 6 "$root/stderr.1" 2>/dev/null | tr '\n' ';')"
+      fail "uncertain $transition fixture never committed the injected transition: rc=$rc halt=$(control_field "$root" halt.code) stderr=$diagnostics"
+      continue
+    fi
     if [[ "$rc" -ne 4 || "$(control_field "$root" phase)" != "recovery_required" ]] || \
        [[ "$(control_field "$root" halt.code)" != "CONTROL_COMMIT_UNCERTAIN" ]] || \
        [[ -n "$(control_field "$root" active_turn.turn_id)" ]] || \
@@ -2008,18 +2017,25 @@ test_uncertain_terminal_commit_blocks_reentry() {
 }
 
 test_terminal_guard_survives_failed_recovery_write() {
-  local root transition mode expected_phase rc prompt_before prompt_after snapshot
+  local root transition mode iterations expected_phase rc prompt_before prompt_after snapshot diagnostics
   for transition in pause release; do
     root="$(mktemp -d "$TEST_TMP/guarded-$transition.XXXXXX")"
     prepare_fixture "$root"
     mode=normal
+    iterations=0
     expected_phase=paused
     [[ "$transition" == "release" ]] && mode=proceed-human-gate
+    [[ "$transition" == "release" ]] && iterations=1
     [[ "$transition" == "release" ]] && expected_phase=released
     rc=0
     FAKE_MODE="$mode" FAKE_TERMINAL_UNCERTAIN="$transition" \
-      FAKE_RECOVER_UNCERTAIN_FAIL=1 MAX_TURNS=5 \
+      FAKE_RECOVER_UNCERTAIN_FAIL=1 MAX_ITERATIONS="$iterations" MAX_TURNS=5 \
       driver_env "$root" "synthetic guarded $transition" >"$root/stdout.1" 2>"$root/stderr.1" || rc=$?
+    if ! grep -Fxq "$transition" "$root/terminal-commit-probe" 2>/dev/null; then
+      diagnostics="$(tail -n 6 "$root/stderr.1" 2>/dev/null | tr '\n' ';')"
+      fail "guarded $transition fixture never committed the injected transition: rc=$rc halt=$(control_field "$root" halt.code) stderr=$diagnostics"
+      continue
+    fi
     if [[ "$rc" -ne 4 || "$(control_field "$root" phase)" != "$expected_phase" ]] || \
        [[ ! -f "$root/.planning/auto-loop/CONTROL.transition" ]]; then
       fail "failed $transition recovery did not retain its durable transition guard: rc=$rc control=$(control_snapshot "$root")"

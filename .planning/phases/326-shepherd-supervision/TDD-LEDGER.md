@@ -272,3 +272,20 @@ RED command/output will be appended after the tests exist and before production 
   retaining bounded diagnostics on failure.
 - Corrected cross-run evidence: 10/10 focused repetitions pass, followed by the complete unfiltered
   `make agent-loop-test` gate in 9m44s with all 44 Shepherd functions green.
+
+## CI terminal-fixture isolation correction — 2026-07-13
+
+- The third GitHub Verify run passed all Go, connector, build, documentation, smoke, lint, and
+  controller gates, then reported `recovery_required` with a non-null `active_turn` in the
+  uncertain-pause fixture. That state proves the fixture entered an earlier fail-closed path: a
+  successfully committed pause requires `active_turn == null`, and `recover-uncertain` preserves
+  it. The prior oracle hid the upstream `halt.code` and never proved its injected pause ran.
+- The pause variants now set `MAX_ITERATIONS=0` and enter the end-of-invocation terminal transition
+  directly. Release retains the full PROCEED-to-human-gate route. The fake control helper publishes
+  a probe only after the real pause/release commit succeeds; both terminal tests require the probe
+  and emit the upstream halt code plus a bounded stderr tail when setup fails.
+- Discrimination RED: forcing validator-model preflight failure is now rejected as “fixture never
+  committed the injected transition” with `VALIDATOR_MODEL_UNAVAILABLE`, rather than being
+  misclassified as a terminal recovery defect. Corrected GREEN: both ambiguous-transition and
+  failed-recovery-write fixtures pass 10/10 consecutive combined repetitions. The complete
+  unfiltered `make agent-loop-test` gate then passes in 9m23s with all 44 Shepherd functions green.
