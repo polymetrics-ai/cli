@@ -69,10 +69,15 @@ type Observer struct {
 }
 
 type Question struct {
-	ID      string
-	Method  string
-	Title   string
-	Options []string
+	// ID is the stable semantic ID authored by ask_user_questions. It is safe to
+	// use for narrowly scoped policy decisions and durable audit records.
+	ID string
+	// RequestID is the ephemeral extension RPC envelope ID. Responses must use
+	// this value so the GSD runtime can correlate them with the pending request.
+	RequestID string
+	Method    string
+	Title     string
+	Options   []string
 }
 
 type UIResponse struct {
@@ -270,7 +275,7 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 				Type string `json:"type"`
 				ID   string `json:"id"`
 				UIResponse
-			}{Type: "extension_ui_response", ID: pendingQuestion.ID, UIResponse: answered.response}
+			}{Type: "extension_ui_response", ID: pendingQuestion.RequestID, UIResponse: answered.response}
 			raw, marshalErr := json.Marshal(payload)
 			if marshalErr != nil {
 				cancel()
@@ -464,6 +469,11 @@ func scanEvents(ctx context.Context, reader io.Reader, maxBytes int, output chan
 	}
 	scanner := bufio.NewScanner(reader)
 	scanner.Buffer(make([]byte, 4096), maxBytes)
+	type questionMeta struct {
+		ID      string
+		Options []string
+	}
+	questionMetaByTitle := make(map[string]questionMeta)
 	for scanner.Scan() {
 		var header struct {
 			Type string `json:"type"`
@@ -471,6 +481,51 @@ func scanEvents(ctx context.Context, reader io.Reader, maxBytes int, output chan
 		if err := json.Unmarshal(scanner.Bytes(), &header); err != nil {
 			send(scanResult{err: fmt.Errorf("decode event header: %w", err)})
 			return
+		}
+		if header.Type == string(EventToolStart) {
+			var toolStart struct {
+				ToolName string `json:"toolName"`
+				Input    struct {
+					Questions []struct {
+						ID       string `json:"id"`
+						Header   string `json:"header"`
+						Question string `json:"question"`
+						Options  []struct {
+							Label string `json:"label"`
+						} `json:"options"`
+					} `json:"questions"`
+				} `json:"input"`
+				Args struct {
+					Questions []struct {
+						ID       string `json:"id"`
+						Header   string `json:"header"`
+						Question string `json:"question"`
+						Options  []struct {
+							Label string `json:"label"`
+						} `json:"options"`
+					} `json:"questions"`
+				} `json:"args"`
+			}
+			if err := json.Unmarshal(scanner.Bytes(), &toolStart); err != nil {
+				send(scanResult{err: fmt.Errorf("decode tool metadata: %w", err)})
+				return
+			}
+			if isAskUserQuestions(toolStart.ToolName) {
+				questions := toolStart.Input.Questions
+				if len(questions) == 0 {
+					questions = toolStart.Args.Questions
+				}
+				for _, question := range questions {
+					if question.ID == "" || question.Header == "" || question.Question == "" {
+						continue
+					}
+					options := make([]string, 0, len(question.Options))
+					for _, option := range question.Options {
+						options = append(options, option.Label)
+					}
+					questionMetaByTitle[question.Header+": "+question.Question] = questionMeta{ID: question.ID, Options: options}
+				}
+			}
 		}
 		if header.Type == "extension_ui_request" {
 			var question struct {
@@ -486,7 +541,8 @@ func scanEvents(ctx context.Context, reader io.Reader, maxBytes int, output chan
 			if _, ok := fireAndForgetUI[question.Method]; ok {
 				continue
 			}
-			if !send(scanResult{question: &Question{ID: question.ID, Method: question.Method, Title: question.Title, Options: question.Options}}) {
+			meta := questionMetaByTitle[question.Title]
+			if !send(scanResult{question: &Question{ID: meta.ID, RequestID: question.ID, Method: question.Method, Title: question.Title, Options: question.Options}}) {
 				return
 			}
 			continue
@@ -502,6 +558,14 @@ func scanEvents(ctx context.Context, reader io.Reader, maxBytes int, output chan
 	if err := scanner.Err(); err != nil {
 		send(scanResult{err: fmt.Errorf("scan GSD event stream: %w", err)})
 	}
+}
+
+func isAskUserQuestions(toolName string) bool {
+	if toolName == "ask_user_questions" {
+		return true
+	}
+	parts := strings.Split(toolName, "__")
+	return len(parts) == 3 && parts[0] == "mcp" && parts[1] != "" && parts[2] == "ask_user_questions"
 }
 
 func classifyResult(ctx context.Context, started time.Time, err error, stderr string) Result {

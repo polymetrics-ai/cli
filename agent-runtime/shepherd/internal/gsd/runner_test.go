@@ -1,7 +1,9 @@
 package gsd
 
 import (
+	"bufio"
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,6 +13,33 @@ import (
 	"testing"
 	"time"
 )
+
+func TestRunnerCorrelatesSemanticQuestionIDAndRespondsToRPCRequest(t *testing.T) {
+	t.Parallel()
+
+	runner, err := NewRunner(Config{
+		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+		Timeout: 5 * time.Second, HeartbeatInterval: 25 * time.Millisecond, MaxEventBytes: 4096,
+		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=semantic-question"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var observed Question
+	result := runner.Run(context.Background(), "next", nil, Observer{
+		Question: func(_ context.Context, question Question) (UIResponse, error) {
+			observed = question
+			return UIResponse{Value: "Confirm (Recommended)"}, nil
+		},
+	})
+	if result.Terminal != TerminalSuccess {
+		t.Fatalf("terminal=%s error=%v stderr=%s", result.Terminal, result.Err, result.Stderr)
+	}
+	if observed.ID != "depth_verification_M001-n6ms9v_confirm" || observed.RequestID != "rpc-42" {
+		t.Fatalf("question=%+v", observed)
+	}
+}
 
 func TestRunnerEmitsHeartbeatDuringSilentLiveProcess(t *testing.T) {
 	t.Parallel()
@@ -223,6 +252,21 @@ func TestRunnerHelperProcess(t *testing.T) {
 		fmt.Println(`{"type":"thinking_level_select","level":"high","previousLevel":"off"}`)
 		fmt.Println(`{"type":"extension_ui_request","id":"gate-1","method":"confirm","title":"Continue?"}`)
 		time.Sleep(5 * time.Second)
+		os.Exit(0)
+	case "semantic-question":
+		fmt.Println(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.6-sol"},"source":"restore"}`)
+		fmt.Println(`{"type":"thinking_level_select","level":"high","previousLevel":"off"}`)
+		fmt.Println(`{"type":"tool_execution_start","toolName":"ask_user_questions","toolCallId":"tool-1","input":{"questions":[{"id":"depth_verification_M001-n6ms9v_confirm","header":"Depth check","question":"Confirm that the printed depth verification is sufficient.","options":[{"label":"Confirm (Recommended)"},{"label":"Decline"}]}]}}`)
+		fmt.Println(`{"type":"extension_ui_request","id":"rpc-42","method":"select","title":"Depth check: Confirm that the printed depth verification is sufficient.","options":["Confirm (Recommended)","Decline"]}`)
+		var response struct {
+			Type  string `json:"type"`
+			ID    string `json:"id"`
+			Value string `json:"value"`
+		}
+		if err := json.NewDecoder(bufio.NewReader(os.Stdin)).Decode(&response); err != nil || response.Type != "extension_ui_response" || response.ID != "rpc-42" || response.Value != "Confirm (Recommended)" {
+			fmt.Fprintf(os.Stderr, "invalid response: %+v err=%v\n", response, err)
+			os.Exit(1)
+		}
 		os.Exit(0)
 	case "query":
 		fmt.Print(`{"state":{"activeMilestone":{"id":"M001"},"phase":"complete","nextAction":"Done","blockers":[]},"next":{"action":"stop","unitType":"","unitId":""}}`)
