@@ -4,7 +4,14 @@
   "objective": "Deliver safe Asana CLI parity through seven issue-first stacked slices and a human-gated parent PR",
   "scope": [
     "Asana CLI metadata, help/docs, stream execution, REST operation ledger, direct reads, bounded attachment downloads, and reverse ETL policy",
-    "GSD planning, TDD, verification, worker handoffs, and automated review evidence"
+    "GSD planning, TDD, verification, worker handoffs, and automated review evidence",
+    "#381 CLI surface metadata: validate commands for all 12 existing streams and typed write references without raw API access; no dependencies",
+    "#382 help/docs renderer: credential-free namespace, topic, leaf, JSON, manual, generated artifact, and website parity; depends on #381",
+    "#383 stream runner: representative list commands use the bounded generic stream path with pagination and no duplicate transport; depends on #381",
+    "#384 operation ledger: all 250 baseline REST endpoints retain source evidence and exactly one safe primary classification or explicit exclusion; no dependencies",
+    "#385 direct reads: only fixed allow-listed reads execute with bounded JSON output and declared redaction; depends on #384",
+    "#386 bounded attachment downloads: fixed operations enforce byte limits, safe-root confinement, traversal and symlink defenses, cancellation, and overwrite policy; depends on #384",
+    "#387 reverse ETL safety policy: product-safe writes map to typed actions behind plan-preview-approval-execute while sensitive, admin, and destructive operations remain governed; depends on #384"
   ],
   "non_goals": [
     "credentialed live Asana calls",
@@ -18,51 +25,6 @@
     "CLI help, manual, website, generated artifacts, fixture tests, safety policy, and review evidence are complete"
   ],
   "dependencies": [],
-  "intake_mode": "offline_committed_evidence_only",
-  "sub_issues": [
-    {
-      "issue": 381,
-      "title": "Asana: CLI surface metadata (CLI parity)",
-      "depends_on": [],
-      "outcome": "Validated cli_surface metadata covers the 12 existing streams and typed write references without raw API access."
-    },
-    {
-      "issue": 382,
-      "title": "Asana: help and docs renderer (CLI parity)",
-      "depends_on": [381],
-      "outcome": "Credential-free namespace, topic, leaf, JSON, manual, generated artifact, and website help parity."
-    },
-    {
-      "issue": 383,
-      "title": "Asana: stream runner (CLI parity)",
-      "depends_on": [381],
-      "outcome": "Representative list commands use the bounded generic stream path with pagination and no duplicate transport."
-    },
-    {
-      "issue": 384,
-      "title": "Asana: operation ledger (CLI parity)",
-      "depends_on": [],
-      "outcome": "All 250 baseline REST endpoints retain source evidence and exactly one safe primary classification or explicit exclusion."
-    },
-    {
-      "issue": 385,
-      "title": "Asana: direct reads (CLI parity)",
-      "depends_on": [384],
-      "outcome": "Only fixed allow-listed reads execute, with bounded JSON output and declared redaction."
-    },
-    {
-      "issue": 386,
-      "title": "Asana: bounded attachment downloads (CLI parity)",
-      "depends_on": [384],
-      "outcome": "Fixed attachment operations enforce byte limits, safe-root confinement, traversal and symlink defenses, cancellation, and overwrite policy."
-    },
-    {
-      "issue": 387,
-      "title": "Asana: reverse ETL safety policy (CLI parity)",
-      "depends_on": [384],
-      "outcome": "Product-safe writes map to typed actions behind plan-preview-approval-execute while sensitive, admin, and destructive operations remain governed."
-    }
-  ],
   "write_scope": [
     ".planning/phases/issue-380-asana-cli-parity/**",
     "internal/connectors/defs/asana/**",
