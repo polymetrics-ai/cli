@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "phase": "326-shepherd-supervision",
+  "status": "fifo_capability_correction_verified_review_pending",
+  "issue": 326,
+  "parent_issue": 323,
+  "branch": "fix/326-shepherd-supervision",
+  "base_commit": "aef7fe862522c065d74a9608be7bc259772bb2bb",
+  "production_fuse": "closed",
+  "verification_passed": true,
+  "next": "commit_push_and_two_exact_head_local_reviews",
+  "human_gate": "parent PR merge to main"
+}
