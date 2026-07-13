@@ -45,8 +45,14 @@
 #   PI_EXTRA_FLAGS=""                         # extra flags for every orchestrator invocation
 #   LOOP_CMD=/pm-auto-loop                    # /pm-connector-loop for connector runs
 #   AUTO_LOOP_STATE_DIR=.planning/auto-loop   # set to isolate separate Shepherd runs
+#   NODE_BIN_DIR=~/.nvm/versions/node/v24.13.1/bin  # prepended when present so pi uses current Node
 #   SEARXNG_BASE=                             # research via the audited searxng connector (pm)
 set -euo pipefail
+
+NODE_BIN_DIR="${NODE_BIN_DIR:-$HOME/.nvm/versions/node/v24.13.1/bin}"
+if [[ -x "$NODE_BIN_DIR/node" ]]; then
+  PATH="$NODE_BIN_DIR:$PATH"; export PATH
+fi
 
 PI_BIN="${PI_BIN:-pi}"
 ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.5}"
@@ -63,6 +69,7 @@ LOOP_CMD="${LOOP_CMD:-/pm-auto-loop}"
 # Research: default SEARXNG_BASE from the shell's SEARXNG_URL (name mismatch guard) and export.
 SEARXNG_BASE="${SEARXNG_BASE:-${SEARXNG_URL:-}}"; export SEARXNG_BASE
 STALL_MINUTES="${STALL_MINUTES:-20}"
+STALL_KILL_LIVE_CHILDREN="${STALL_KILL_LIVE_CHILDREN:-1}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE_DIR="${AUTO_LOOP_STATE_DIR:-$REPO_ROOT/.planning/auto-loop}"
@@ -88,28 +95,6 @@ SHEPHERD STATE ROOT FOR THIS RUN:
 - Do not read or write $REPO_ROOT/.planning/auto-loop for this run unless explicitly using it as historical evidence and clearly labeling it historical.
 EOF
 }
-
-# --- preflight: the subagent tool must be available (vendored extension OR installed package) ---
-# We vendor pi-sub-agent under .pi/extensions/ (records child sessions via PI_SUBAGENT_SESSION_DIR),
-# loaded through .pi/settings.json. Accept either the vendored extension or the npm package; fail
-# only if neither is present (subagent tool silently absent → .pi/agents/* cannot be spawned).
-if [[ ! -f "$REPO_ROOT/.pi/extensions/pi-sub-agent/index.ts" ]] \
-   && ! "$PI_BIN" list 2>/dev/null | grep -q "pi-sub-agent"; then
-  echo "FATAL: the pi 'subagent' tool is unavailable — no vendored .pi/extensions/pi-sub-agent and" >&2
-  echo "no installed package, so .pi/agents/* cannot be spawned. Restore the vendored extension or" >&2
-  echo "run:  $PI_BIN install npm:pi-sub-agent" >&2
-  exit 2
-fi
-
-# --- resolve the problem prompt --------------------------------------------------------------
-if [[ "${1:-}" == "--resume" ]]; then
-  [[ -f "$PROMPT_FILE" ]] || { echo "No run to resume (missing $PROMPT_FILE)." >&2; exit 2; }
-  PROBLEM="$(cat "$PROMPT_FILE")"; log "RESUME: $PROBLEM"
-elif [[ -n "${1:-}" ]]; then
-  PROBLEM="$*"; printf '%s' "$PROBLEM" > "$PROMPT_FILE"; log "START: $PROBLEM"
-else
-  echo "Usage: scripts/pi-shepherd-loop.sh \"<problem prompt>\" | --resume" >&2; exit 2
-fi
 
 json_field() { # $1=file $2=key
   [[ -f "$1" ]] || { echo ""; return 0; }
@@ -146,6 +131,92 @@ if best:
 PY
 }
 
+session_age_seconds() { # $1=session-file
+  local sess="$1" mtime
+  [[ -n "$sess" && -f "$sess" ]] || { echo ""; return 0; }
+  mtime="$(stat -f %m "$sess" 2>/dev/null || echo 0)"
+  [[ "$mtime" =~ ^[0-9]+$ ]] || { echo ""; return 0; }
+  echo $(( $(date +%s) - mtime ))
+}
+
+live_child_count() { # $1=pid
+  pgrep -P "$1" 2>/dev/null | wc -l | tr -d ' '
+}
+
+kill_process_tree() { # $1=TERM|KILL $2=root-pid
+  local sig="$1" root="$2" child
+  for child in $(pgrep -P "$root" 2>/dev/null || true); do
+    kill_process_tree "$sig" "$child"
+  done
+  kill "-$sig" "$root" 2>/dev/null || true
+}
+
+stale_session_requires_kill() { # $1=session-file $2=pid
+  local sess="$1" pid="$2" age children
+  age="$(session_age_seconds "$sess")"
+  [[ -n "$age" ]] || return 1
+  (( age > STALL_MINUTES * 60 )) || return 1
+  children="$(live_child_count "$pid")"
+  if (( children > 0 )) && [[ "$STALL_KILL_LIVE_CHILDREN" != "1" ]]; then
+    return 1
+  fi
+  return 0
+}
+
+kill_stale_turn() { # $1=session-file $2=pid
+  local sess="$1" pid="$2" age children
+  age="$(session_age_seconds "$sess")"
+  children="$(live_child_count "$pid")"
+  log "STALL GUARD: no session event ${age:-unknown}s; live_children=${children:-0}; killing turn pid $pid"
+  kill_process_tree TERM "$pid"; sleep 5; kill_process_tree KILL "$pid"
+}
+
+if [[ "${SHEPHERD_STALL_GUARD_SELF_TEST:-}" == "1" ]]; then
+  mkdir -p "$STATE_DIR/sessions"
+  test_sess="$STATE_DIR/sessions/stale-live-child-test.jsonl"
+  : > "$test_sess"
+  touch -t 200001010000 "$test_sess"
+  (trap 'exit 0' TERM; sleep 300 & wait) & test_pid=$!
+  sleep 1
+  if ! stale_session_requires_kill "$test_sess" "$test_pid"; then
+    echo "self-test failed: stale live-child turn was not killable" >&2
+    kill_process_tree KILL "$test_pid"
+    exit 1
+  fi
+  kill_stale_turn "$test_sess" "$test_pid"
+  wait "$test_pid" 2>/dev/null || true
+  sleep 1
+  if kill -0 "$test_pid" 2>/dev/null; then
+    echo "self-test failed: stale live-child turn survived kill" >&2
+    kill_process_tree KILL "$test_pid"
+    exit 1
+  fi
+  echo "self-test passed: stale live-child turn is killed"
+  exit 0
+fi
+
+# --- preflight: the subagent tool must be available (vendored extension OR installed package) ---
+# We vendor pi-sub-agent under .pi/extensions/ (records child sessions via PI_SUBAGENT_SESSION_DIR),
+# loaded through .pi/settings.json. Accept either the vendored extension or the npm package; fail
+# only if neither is present (subagent tool silently absent → .pi/agents/* cannot be spawned).
+if [[ ! -f "$REPO_ROOT/.pi/extensions/pi-sub-agent/index.ts" ]] \
+   && ! "$PI_BIN" list 2>/dev/null | grep -q "pi-sub-agent"; then
+  echo "FATAL: the pi 'subagent' tool is unavailable — no vendored .pi/extensions/pi-sub-agent and" >&2
+  echo "no installed package, so .pi/agents/* cannot be spawned. Restore the vendored extension or" >&2
+  echo "run:  $PI_BIN install npm:pi-sub-agent" >&2
+  exit 2
+fi
+
+# --- resolve the problem prompt --------------------------------------------------------------
+if [[ "${1:-}" == "--resume" ]]; then
+  [[ -f "$PROMPT_FILE" ]] || { echo "No run to resume (missing $PROMPT_FILE)." >&2; exit 2; }
+  PROBLEM="$(cat "$PROMPT_FILE")"; log "RESUME: $PROBLEM"
+elif [[ -n "${1:-}" ]]; then
+  PROBLEM="$*"; printf '%s' "$PROBLEM" > "$PROMPT_FILE"; log "START: $PROBLEM"
+else
+  echo "Usage: scripts/pi-shepherd-loop.sh \"<problem prompt>\" | --resume" >&2; exit 2
+fi
+
 run_orchestrator() { # $1=turn-message — with stall watchdog (session mtime + child liveness)
   local msg="$1" rc=0 pid sess
   # shellcheck disable=SC2086
@@ -155,10 +226,8 @@ run_orchestrator() { # $1=turn-message — with stall watchdog (session mtime + 
     sleep 60
     sess="$(latest_session_file)"
     if [[ -n "$sess" ]]; then
-      local age=$(( $(date +%s) - $(stat -f %m "$sess" 2>/dev/null || echo 0) ))
-      if (( age > STALL_MINUTES * 60 )) && ! pgrep -P "$pid" >/dev/null 2>&1; then
-        log "STALL GUARD: no session event ${age}s and no live children — killing turn pid $pid"
-        kill -TERM "$pid" 2>/dev/null; sleep 5; kill -KILL "$pid" 2>/dev/null || true
+      if stale_session_requires_kill "$sess" "$pid"; then
+        kill_stale_turn "$sess" "$pid"
         return 124
       fi
     fi
