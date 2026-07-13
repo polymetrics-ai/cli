@@ -42,7 +42,10 @@ module without coupling it to the Polymetrics CLI module.
 - The module lives under `agent-runtime/shepherd/` with a separate `go.mod`.
 - Legacy removal and issue/PR closure are a final, separately reviewed cutover step.
 - Local GSD project state is scoped by the canonical issue worktree; external GSD state and
-  managed worktrees are scoped by the delivery `state_dir`. No two deliveries share either path.
+    managed worktrees are scoped by the delivery `state_dir`. No two deliveries share either path.
+14. Publish the protected decision ledger to the bound pull request after every answered GSD gate.
+    Use one marker-owned, idempotently updated PR comment; preserve `human`, `shepherd`, and
+    `contract` provenance; and fail the governed unit if a durable decision cannot be published.
 
 ## Required skills and workflows
 

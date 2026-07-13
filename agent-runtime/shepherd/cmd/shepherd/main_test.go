@@ -1,10 +1,15 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
+	decisionlog "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/decision"
+	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 )
 
@@ -95,6 +100,58 @@ func TestLoadConfigRejectsUnknownFields(t *testing.T) {
 	}
 	if _, err := loadConfig(path); err == nil {
 		t.Fatal("expected unknown config field to fail")
+	}
+}
+
+func TestLoadConfigRequiresCompleteDecisionPRBinding(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "config.json")
+	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","repository":"polymetrics-ai/cli"}`
+	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := loadConfig(path); err == nil {
+		t.Fatal("partial PR binding accepted")
+	}
+}
+
+type recordingDecisionPublisher struct {
+	summaries []string
+	err       error
+}
+
+func (p *recordingDecisionPublisher) SyncDecisionComment(_ context.Context, _ shepherdgithub.Target, summary string) error {
+	p.summaries = append(p.summaries, summary)
+	return p.err
+}
+
+func TestAppendAndPublishDecisionRetainsDurableRecordWhenPublicationFails(t *testing.T) {
+	t.Parallel()
+
+	store, err := decisionlog.Open(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	publisher := &recordingDecisionPublisher{err: errors.New("offline")}
+	question := gsd.Question{ID: "scope", Title: "What should ship?"}
+	response := gsd.UIResponse{Value: "Full safe parity"}
+	err = appendAndPublishDecision(context.Background(), store, publisher,
+		shepherdgithub.Target{Repository: "polymetrics-ai/cli", PullRequest: 388, DeliveryID: "issue-380"},
+		"issue-380", "execution-1", "discuss-milestone/M001", question, response, "shepherd", "approved issue context")
+	if err == nil {
+		t.Fatal("publication failure did not fail the answered gate")
+	}
+	records, readErr := store.Records()
+	if readErr != nil {
+		t.Fatal(readErr)
+	}
+	if len(records) != 1 || records[0].Actor != decisionlog.ActorShepherd || records[0].At.Before(time.Now().Add(-time.Minute)) {
+		t.Fatalf("durable records=%+v", records)
+	}
+	if len(publisher.summaries) != 1 {
+		t.Fatalf("publication attempts=%d", len(publisher.summaries))
 	}
 }
 

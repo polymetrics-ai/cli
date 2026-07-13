@@ -35,6 +35,8 @@
   no host port, and returns JSON search results to a governed worker container.
 - [x] `scripts/gsd prompt programming-loop ...` renders and the Pi compatibility extension merges
   the same local command registry.
+- [x] Every durable Shepherd decision is synchronized to one marker-owned PR summary comment, with
+  actor/basis provenance intact and idempotent create/update tests passing.
 
 ## Current canary blocker
 

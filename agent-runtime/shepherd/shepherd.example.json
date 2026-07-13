@@ -6,6 +6,8 @@
   "work_dir": "/absolute/path/to/issue-worktree",
   "gsd_home": "/absolute/path/to/controlled-gsd-home",
   "state_dir": "/absolute/path/to/protected-shepherd-state/issue-372",
+  "repository": "polymetrics-ai/cli",
+  "pull_request": 388,
   "coordinator_model": "openai-codex/gpt-5.6-sol",
   "gsd_version": "1.11.0",
   "runtime": "podman",

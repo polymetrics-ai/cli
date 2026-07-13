@@ -23,6 +23,7 @@ import (
 	decisionlog "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/decision"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
 	shepherdgit "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git"
+	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/telemetry"
@@ -40,6 +41,8 @@ type fileConfig struct {
 	TimeoutSeconds   int      `json:"timeout_seconds"`
 	HeartbeatSeconds int      `json:"heartbeat_seconds"`
 	MaxEventBytes    int      `json:"max_event_bytes"`
+	Repository       string   `json:"repository"`
+	PullRequest      int      `json:"pull_request"`
 	Runtime          string   `json:"runtime"`
 	ContainerImage   string   `json:"container_image"`
 	AuthFile         string   `json:"auth_file"`
@@ -89,6 +92,7 @@ func run(ctx context.Context, args []string) error {
 	continueUnit := flags.Bool("continue-unit", false, "resume the latest local Pi session bound to the same canonical unit")
 	decisionActor := flags.String("decision-actor", "human", "provenance for interactive decisions: human, shepherd, or contract")
 	decisionBasis := flags.String("decision-basis", "interactive terminal response", "concise provenance basis for interactive decisions")
+	publish := flags.Bool("publish", false, "synchronize the decision ledger to the bound pull request")
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
 	}
@@ -117,7 +121,13 @@ func run(ctx context.Context, args []string) error {
 				filtered = append(filtered, record)
 			}
 		}
-		fmt.Print(decisionlog.Markdown(filtered))
+		summary := decisionlog.Markdown(filtered)
+		if *publish {
+			if err := publishDecisions(ctx, config, deliveryID(*issue), summary); err != nil {
+				return err
+			}
+		}
+		fmt.Print(summary)
 		return nil
 	}
 	if args[0] == "resume" {
@@ -399,6 +409,12 @@ func loadConfig(path string) (fileConfig, error) {
 	if config.Runtime != "host" && config.Runtime != "podman" {
 		return fileConfig{}, errors.New("runtime must be host or podman")
 	}
+	if config.Repository == "" || config.PullRequest <= 0 {
+		return fileConfig{}, errors.New("repository and pull_request are required for decision publication")
+	}
+	if err := shepherdgithub.ValidateTarget(shepherdgithub.Target{Repository: config.Repository, PullRequest: config.PullRequest, DeliveryID: "issue-1"}); err != nil {
+		return fileConfig{}, fmt.Errorf("decision publication target: %w", err)
+	}
 	if config.Runtime == "podman" && (!filepath.IsAbs(config.AuthFile) || !filepath.IsAbs(config.PolicyDir) || !filepath.IsAbs(config.GitCommonDir) || config.ContainerImage == "") {
 		return fileConfig{}, errors.New("podman runtime requires absolute auth_file, policy_dir, and git_common_dir plus container_image")
 	}
@@ -504,6 +520,8 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		return err
 	}
 	defer decisions.Close()
+	decisionPublisher := shepherdgithub.NewCLIClient()
+	decisionTarget := shepherdgithub.Target{Repository: config.Repository, PullRequest: config.PullRequest, DeliveryID: deliveryID}
 	var sequence atomic.Uint64
 	var activityMu sync.Mutex
 	var activityErr error
@@ -548,19 +566,19 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			var responseErr error
 			if confirmDepth {
 				if response, approved := approveDepthQuestion(question); approved {
-					fmt.Fprintln(os.Stderr, "HUMAN GATE [select] planning depth approved by explicit --confirm-depth operator flag")
-					if err := appendDecision(decisions, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
+					fmt.Fprintf(os.Stderr, "DECISION GATE [select] actor=%s planning depth approved by explicit --confirm-depth operator flag\n", decisionActor)
+					if err := appendAndPublishDecision(questionCtx, decisions, decisionPublisher, decisionTarget, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
 						return gsd.UIResponse{Cancelled: true}, err
 					}
 					appendActivity("decision", decisionActor, trustedUnit, "", question.ID, time.Now().UTC())
 					return response, nil
 				}
 			}
-			response, responseErr = terminalQuestion(questionCtx, question)
+			response, responseErr = terminalQuestion(questionCtx, question, decisionActor)
 			if responseErr != nil || response.Cancelled {
 				return response, responseErr
 			}
-			if err := appendDecision(decisions, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
+			if err := appendAndPublishDecision(questionCtx, decisions, decisionPublisher, decisionTarget, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
 				return gsd.UIResponse{Cancelled: true}, err
 			}
 			appendActivity("decision", decisionActor, trustedUnit, "", question.ID, time.Now().UTC())
@@ -742,6 +760,37 @@ func appendDecision(store *decisionlog.Store, deliveryID, executionID, unitID st
 	})
 }
 
+type decisionPublisher interface {
+	SyncDecisionComment(context.Context, shepherdgithub.Target, string) error
+}
+
+func appendAndPublishDecision(ctx context.Context, store *decisionlog.Store, publisher decisionPublisher, target shepherdgithub.Target, deliveryID, executionID, unitID string, question gsd.Question, response gsd.UIResponse, actorValue, basis string) error {
+	if err := appendDecision(store, deliveryID, executionID, unitID, question, response, actorValue, basis); err != nil {
+		return err
+	}
+	records, err := store.Records()
+	if err != nil {
+		return fmt.Errorf("read durable decisions: %w", err)
+	}
+	filtered := records[:0]
+	for _, record := range records {
+		if record.DeliveryID == deliveryID {
+			filtered = append(filtered, record)
+		}
+	}
+	if err := publisher.SyncDecisionComment(ctx, target, decisionlog.Markdown(filtered)); err != nil {
+		return fmt.Errorf("publish durable decision: %w", err)
+	}
+	return nil
+}
+
+func publishDecisions(ctx context.Context, config fileConfig, deliveryID, summary string) error {
+	client := shepherdgithub.NewCLIClient()
+	return client.SyncDecisionComment(ctx, shepherdgithub.Target{
+		Repository: config.Repository, PullRequest: config.PullRequest, DeliveryID: deliveryID,
+	}, summary)
+}
+
 func approveDepthQuestion(question gsd.Question) (gsd.UIResponse, bool) {
 	cancelled := gsd.UIResponse{Cancelled: true}
 	const prefix = "depth_verification_M"
@@ -764,8 +813,12 @@ func approveDepthQuestion(question gsd.Question) (gsd.UIResponse, bool) {
 	return cancelled, false
 }
 
-func terminalQuestion(ctx context.Context, question gsd.Question) (gsd.UIResponse, error) {
-	fmt.Fprintf(os.Stderr, "\nHUMAN GATE [%s] %s\n", question.Method, question.Title)
+func terminalQuestion(ctx context.Context, question gsd.Question, actor string) (gsd.UIResponse, error) {
+	label := "HUMAN GATE"
+	if strings.TrimSpace(actor) != string(decisionlog.ActorHuman) {
+		label = "SHEPHERD GATE actor=" + strings.TrimSpace(actor)
+	}
+	fmt.Fprintf(os.Stderr, "\n%s [%s] %s\n", label, question.Method, question.Title)
 	for i, option := range question.Options {
 		fmt.Fprintf(os.Stderr, "  %d. %s\n", i+1, option)
 	}

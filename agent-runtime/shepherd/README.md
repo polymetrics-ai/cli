@@ -85,11 +85,21 @@ go run ./cmd/shepherd run \
   --decision-basis "explicit user-approved issue context"
 ```
 
-Render the protected ledger as the deterministic section that must be copied into the PR summary
-or a PR comment before handoff:
+Every governed config binds a repository and pull request. After each answered gate, Shepherd
+immediately synchronizes the fsynced ledger to one marker-owned PR comment. The comment preserves
+the actor and concise basis; a Shepherd or contract answer is never presented as human. Publication
+failure fails the governed unit after retaining the durable local decision for reconciliation.
+
+Render the protected ledger locally, or explicitly reconcile the PR comment after an interrupted
+publication:
+
+```json
+{"repository":"polymetrics-ai/cli","pull_request":388}
+```
 
 ```bash
 go run ./cmd/shepherd decisions --config /absolute/private/path/shepherd.json --issue 372
+go run ./cmd/shepherd decisions --config /absolute/private/path/shepherd.json --issue 372 --publish
 ```
 
 Query reconciled workflow state without an LLM. GSD 1.11 query can mutate reconciliation state, so
