@@ -506,7 +506,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	}
 	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
 	result := runner.Run(runCtx, command, args, observer)
-	if result.Terminal == gsd.TerminalSuccess && command == "new-milestone" {
+	if result.Terminal == gsd.TerminalSuccess && command == "new-milestone" && config.Runtime == "podman" {
 		workflow, queryErr := runner.Query(ctx)
 		if queryErr != nil || workflow.MilestoneID == "" {
 			result.Terminal = gsd.TerminalError
@@ -522,8 +522,12 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		result.Terminal = gsd.TerminalError
 		result.Err = restoreErr
 	}
-	if config.Runtime == "podman" && (observedModel == "" || observedThinking == "") {
-		model, thinking, identityErr := gsd.ReadSessionIdentity(filepath.Join(config.StateDir, "runtime", "sessions"))
+	if observedModel == "" || observedThinking == "" {
+		sessionsDir := filepath.Join(config.GSDHome, "agent", "sessions")
+		if config.Runtime == "podman" {
+			sessionsDir = filepath.Join(config.StateDir, "runtime", "sessions")
+		}
+		model, thinking, identityErr := gsd.ReadSessionIdentity(sessionsDir)
 		if identityErr == nil {
 			observedModel, observedThinking = model, thinking
 			appendActivity("model.activity", "session_metadata", trustedUnit, model, "", time.Now().UTC())

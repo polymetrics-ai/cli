@@ -24,10 +24,15 @@ func Inspect(ctx context.Context, root string) (Snapshot, error) {
 	if err != nil {
 		return Snapshot{}, err
 	}
-	// GSD owns nested survivor worktrees under this exact control-plane path.
-	// Their files are intentionally untracked from the parent worktree and must
-	// not make an otherwise clean governed unit fail its postcondition.
-	status, err := run(ctx, root, "status", "--porcelain=v1", "-z", "--untracked-files=all", "--", ".", ":(exclude).gsd-worktrees/**")
+	// Tracked changes are never exempt, including changes to governed policy in
+	// .gsd. Official GSD Pi does own untracked project runtime/projection files
+	// under .gsd and survivor worktrees under .gsd-worktrees, so inspect source
+	// changes separately from those two control-plane paths.
+	tracked, err := run(ctx, root, "status", "--porcelain=v1", "-z", "--untracked-files=no", "--", ".")
+	if err != nil {
+		return Snapshot{}, err
+	}
+	untracked, err := run(ctx, root, "status", "--porcelain=v1", "-z", "--untracked-files=all", "--", ".", ":(exclude).gsd/**", ":(exclude).gsd-worktrees/**")
 	if err != nil {
 		return Snapshot{}, err
 	}
@@ -35,7 +40,7 @@ func Inspect(ctx context.Context, root string) (Snapshot, error) {
 	if len(sha) != 40 {
 		return Snapshot{}, errors.New("git returned an invalid head SHA")
 	}
-	return Snapshot{HeadSHA: sha, Dirty: len(status) > 0}, nil
+	return Snapshot{HeadSHA: sha, Dirty: len(tracked) > 0 || len(untracked) > 0}, nil
 }
 
 func RequireClean(snapshot Snapshot) error {

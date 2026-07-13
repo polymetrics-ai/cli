@@ -45,6 +45,17 @@ func TestRequireCleanDetectsUntrackedWork(t *testing.T) {
 	if err != nil || snapshot.Dirty {
 		t.Fatalf("managed GSD worktree dirtied parent snapshot=%+v err=%v", snapshot, err)
 	}
+	gsdRuntime := filepath.Join(root, ".gsd", "PREFERENCES.md")
+	if err := os.MkdirAll(filepath.Dir(gsdRuntime), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(gsdRuntime, []byte("local runtime state"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	snapshot, err = Inspect(context.Background(), root)
+	if err != nil || snapshot.Dirty {
+		t.Fatalf("untracked GSD runtime state dirtied parent snapshot=%+v err=%v", snapshot, err)
+	}
 	if err := os.WriteFile(filepath.Join(root, "untracked.txt"), []byte("dirty"), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -54,6 +65,41 @@ func TestRequireCleanDetectsUntrackedWork(t *testing.T) {
 	}
 	if err := RequireClean(snapshot); err == nil {
 		t.Fatal("expected dirty worktree to block")
+	}
+}
+
+func TestInspectRejectsTrackedGSDPolicyChanges(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	for _, args := range [][]string{{"init", "-q"}, {"config", "user.email", "test@example.invalid"}, {"config", "user.name", "Test"}} {
+		cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+		if output, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("git %v: %v: %s", args, err, output)
+		}
+	}
+	policy := filepath.Join(root, ".gsd", "PREFERENCES.md")
+	if err := os.MkdirAll(filepath.Dir(policy), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(policy, []byte("governed"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	for _, args := range [][]string{{"add", ".gsd/PREFERENCES.md"}, {"commit", "-qm", "seed"}} {
+		cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+		if output, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("git %v: %v: %s", args, err, output)
+		}
+	}
+	if err := os.WriteFile(policy, []byte("changed"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	snapshot, err := Inspect(context.Background(), root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := RequireClean(snapshot); err == nil {
+		t.Fatal("expected tracked GSD policy change to block")
 	}
 }
 
