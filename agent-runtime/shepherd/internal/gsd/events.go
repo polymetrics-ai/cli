@@ -20,7 +20,7 @@ const (
 )
 
 var allowedEvents = map[EventKind]struct{}{
-	EventAgentStart: {}, EventTurnStart: {}, EventToolStart: {}, EventToolEnd: {},
+	EventAgentStart: {}, EventAgentEnd: {}, EventTurnStart: {}, EventToolStart: {}, EventToolEnd: {},
 	EventModelSelect: {}, EventThinkingSelect: {},
 }
 

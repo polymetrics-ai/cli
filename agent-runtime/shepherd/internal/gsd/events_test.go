@@ -37,6 +37,21 @@ func TestProjectorCapturesCompactEffectiveRuntimeIdentity(t *testing.T) {
 	}
 }
 
+func TestProjectorAcceptsRequestedAgentEndWithoutPayload(t *testing.T) {
+	t.Parallel()
+
+	event, err := ProjectEvent([]byte(`{"type":"agent_end","messages":[{"role":"assistant","provider":"openai-codex","model":"gpt-5.6-sol","content":"must not persist"}]}`), 1024)
+	if err != nil {
+		t.Fatalf("project agent end: %v", err)
+	}
+	if event.Kind != EventAgentEnd || event.Model != "openai-codex/gpt-5.6-sol" {
+		t.Fatalf("agent end=%+v", event)
+	}
+	if strings.Contains(event.String(), "must not persist") {
+		t.Fatalf("projection retained agent payload: %s", event.String())
+	}
+}
+
 func TestProjectorRejectsUnknownAndOversizedEvents(t *testing.T) {
 	t.Parallel()
 
