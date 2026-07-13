@@ -162,10 +162,10 @@ func run(ctx context.Context, args []string) error {
 		}
 		return runFencedQuery(ctx, runner, config, deliveryID(*issue), *issue)
 	case "repair":
-		if *issue <= 0 || *action != "rebuild-markdown" {
-			return errors.New("repair requires --issue and --action rebuild-markdown")
+		if *issue <= 0 || (*action != "rebuild-markdown" && *action != "finalize-milestone-worktree") {
+			return errors.New("repair requires --issue and a supported typed --action")
 		}
-		return runFencedRepair(ctx, runner, config, deliveryID(*issue), *issue)
+		return runFencedRepair(ctx, runner, config, deliveryID(*issue), *issue, *action)
 	case "run":
 		if *confirmDepth {
 			return errors.New("--confirm-depth is accepted only by start")
@@ -214,7 +214,7 @@ func run(ctx context.Context, args []string) error {
 	}
 }
 
-func runFencedRepair(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int) error {
+func runFencedRepair(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, action string) error {
 	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
 		return err
 	}
@@ -233,8 +233,22 @@ func runFencedRepair(ctx context.Context, runner *gsd.Runner, config fileConfig,
 		return err
 	}
 	defer func() { _ = authority.ReleaseLease(context.Background(), lease) }()
-	if err := runner.RebuildMarkdown(ctx); err != nil {
-		return err
+	switch action {
+	case "rebuild-markdown":
+		if err := runner.RebuildMarkdown(ctx); err != nil {
+			return err
+		}
+	case "finalize-milestone-worktree":
+		if delivery.MilestoneID == "" {
+			return errors.New("delivery has no bound milestone worktree")
+		}
+		snapshot, inspectErr := shepherdgit.Inspect(ctx, config.WorkDir)
+		if inspectErr != nil {
+			return inspectErr
+		}
+		if err := shepherdgit.FinalizeInitializingMilestoneWorktree(ctx, config.WorkDir, delivery.MilestoneID, snapshot.HeadSHA); err != nil {
+			return err
+		}
 	}
 	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
 		return err
@@ -244,8 +258,8 @@ func runFencedRepair(ctx context.Context, runner *gsd.Runner, config fileConfig,
 		return err
 	}
 	defer activity.Close()
-	hash := sha256.Sum256([]byte(owner + ":rebuild-markdown"))
-	_, err = activity.Append(ctx, telemetry.Activity{ID: hex.EncodeToString(hash[:]), RunID: deliveryID, Kind: "transition", Status: "rebuild_markdown", At: time.Now().UTC()})
+	hash := sha256.Sum256([]byte(owner + ":" + action))
+	_, err = activity.Append(ctx, telemetry.Activity{ID: hex.EncodeToString(hash[:]), RunID: deliveryID, Kind: "transition", Status: strings.ReplaceAll(action, "-", "_"), At: time.Now().UTC()})
 	return err
 }
 
@@ -495,6 +509,18 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	}
 	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
 	result := runner.Run(runCtx, command, args, observer)
+	if result.Terminal == gsd.TerminalSuccess && command == "new-milestone" {
+		workflow, queryErr := runner.Query(ctx)
+		if queryErr != nil || workflow.MilestoneID == "" {
+			result.Terminal = gsd.TerminalError
+			result.Err = errors.New("completed milestone intake did not expose a canonical milestone")
+		} else if repairErr := shepherdgit.FinalizeInitializingMilestoneWorktree(ctx, config.WorkDir, workflow.MilestoneID, startSnapshot.HeadSHA); repairErr != nil {
+			result.Terminal = gsd.TerminalError
+			result.Err = fmt.Errorf("finalize milestone worktree: %w", repairErr)
+		} else {
+			appendActivity("transition", "finalized_milestone_worktree", trustedUnit, "", "", time.Now().UTC())
+		}
+	}
 	if restoreErr := shepherdgit.RestoreIndex(ctx, config.WorkDir); restoreErr != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = restoreErr

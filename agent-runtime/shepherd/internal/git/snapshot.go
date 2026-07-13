@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -54,6 +55,84 @@ func RestoreIndex(ctx context.Context, root string) error {
 		return fmt.Errorf("restore git index: %w", err)
 	}
 	return nil
+}
+
+// FinalizeInitializingMilestoneWorktree repairs only the narrow interrupted
+// `git worktree add` state produced when the container exits after GSD emits
+// milestone-ready but before Git publishes its index. It never resets source
+// files: read-tree reconstructs the missing index and any real file difference
+// remains visible to the final cleanliness check.
+func FinalizeInitializingMilestoneWorktree(ctx context.Context, root, milestoneID, expectedHead string) error {
+	if !validMilestoneID(milestoneID) || len(expectedHead) != 40 {
+		return errors.New("milestone worktree repair requires a valid milestone and expected head")
+	}
+	child := filepath.Join(root, ".gsd-worktrees", milestoneID)
+	branch, err := run(ctx, child, "symbolic-ref", "--short", "HEAD")
+	if err != nil || strings.TrimSpace(string(branch)) != "milestone/"+milestoneID {
+		return errors.New("managed worktree branch does not match the bound milestone")
+	}
+	for _, workDir := range []string{root, child} {
+		head, headErr := run(ctx, workDir, "rev-parse", "HEAD")
+		if headErr != nil || strings.TrimSpace(string(head)) != expectedHead {
+			return errors.New("managed worktree head does not match the governed unit baseline")
+		}
+	}
+	indexRaw, err := run(ctx, child, "rev-parse", "--git-path", "index")
+	if err != nil {
+		return err
+	}
+	lockedRaw, err := run(ctx, child, "rev-parse", "--git-path", "locked")
+	if err != nil {
+		return err
+	}
+	index := strings.TrimSpace(string(indexRaw))
+	locked := strings.TrimSpace(string(lockedRaw))
+	if indexInfo, indexErr := os.Stat(index); indexErr == nil && indexInfo.Mode().IsRegular() {
+		if _, lockedErr := os.Stat(locked); !os.IsNotExist(lockedErr) {
+			return errors.New("managed worktree has an index but remains locked")
+		}
+		status, statusErr := run(ctx, child, "status", "--porcelain=v1", "-z", "--untracked-files=all")
+		if statusErr != nil || len(status) != 0 {
+			return errors.New("initialized managed worktree is dirty")
+		}
+		return nil
+	} else if !os.IsNotExist(indexErr) {
+		return errors.New("managed worktree index is not a regular file")
+	}
+	lockInfo, err := os.Stat(index + ".lock")
+	if err != nil || !lockInfo.Mode().IsRegular() || lockInfo.Size() != 0 {
+		return errors.New("managed worktree index lock is not a safe interrupted marker")
+	}
+	lockedReason, err := os.ReadFile(locked)
+	if err != nil || strings.TrimSpace(string(lockedReason)) != "initializing" {
+		return errors.New("managed worktree is not locked for initialization")
+	}
+	if err := os.Remove(index + ".lock"); err != nil {
+		return fmt.Errorf("remove stale managed index lock: %w", err)
+	}
+	if _, err := run(ctx, child, "read-tree", "HEAD"); err != nil {
+		return fmt.Errorf("reconstruct managed worktree index: %w", err)
+	}
+	if _, err := run(ctx, root, "worktree", "unlock", child); err != nil {
+		return fmt.Errorf("unlock initialized managed worktree: %w", err)
+	}
+	status, err := run(ctx, child, "status", "--porcelain=v1", "-z", "--untracked-files=all")
+	if err != nil || len(status) != 0 {
+		return errors.New("managed worktree contains changes after index reconstruction")
+	}
+	return nil
+}
+
+func validMilestoneID(value string) bool {
+	if !strings.HasPrefix(value, "M") || len(value) < 3 || len(value) > 64 {
+		return false
+	}
+	for _, char := range value[1:] {
+		if (char < 'A' || char > 'Z') && (char < 'a' || char > 'z') && (char < '0' || char > '9') && char != '-' {
+			return false
+		}
+	}
+	return true
 }
 
 func run(ctx context.Context, root string, args ...string) ([]byte, error) {
