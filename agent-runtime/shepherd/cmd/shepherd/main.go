@@ -462,7 +462,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		}
 		args = []string{before.MilestoneID}
 	}
-	if command == "research-milestone" && before.Next.UnitType != command {
+	if gsd.IsCanonicalUnitCommand(command) && before.Next.UnitType != command {
 		return fmt.Errorf("%s is allowed only when it is the canonical next unit", command)
 	}
 	if continueUnit {

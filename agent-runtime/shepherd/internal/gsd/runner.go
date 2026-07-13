@@ -25,7 +25,19 @@ const (
 )
 
 var supportedCommands = map[string]struct{}{
-	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {}, "research-milestone": {},
+	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {},
+	"research-milestone": {}, "plan-milestone": {}, "research-slice": {}, "plan-slice": {},
+	"execute-task": {}, "complete-slice": {}, "validate-milestone": {}, "complete-milestone": {},
+}
+
+var canonicalUnitCommands = map[string]struct{}{
+	"research-milestone": {}, "plan-milestone": {}, "research-slice": {}, "plan-slice": {},
+	"execute-task": {}, "complete-slice": {}, "validate-milestone": {}, "complete-milestone": {},
+}
+
+func IsCanonicalUnitCommand(command string) bool {
+	_, ok := canonicalUnitCommands[command]
+	return ok
 }
 
 var milestoneTargetPattern = regexp.MustCompile(`^M[0-9]{3,}(?:-[a-z0-9]+)?$`)

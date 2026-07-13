@@ -15,12 +15,12 @@ func Reconcile(command string, result Result, before, snapshot WorkflowSnapshot)
 	if result.Terminal == TerminalBlocked {
 		return TerminalBlocked, nil
 	}
-	if (command == "next" || command == "research-milestone") && before.Phase == snapshot.Phase && before.Next == snapshot.Next {
+	if (command == "next" || IsCanonicalUnitCommand(command)) && before.Phase == snapshot.Phase && before.Next == snapshot.Next {
 		return TerminalError, fmt.Errorf("%s exited successfully without advancing canonical GSD state", command)
 	}
 	switch snapshot.Next.Action {
 	case "dispatch":
-		if command == "next" || command == "new-milestone" || command == "status" || command == "discuss" || command == "research-milestone" {
+		if command == "next" || command == "new-milestone" || command == "status" || command == "discuss" || IsCanonicalUnitCommand(command) {
 			return TerminalSuccess, nil
 		}
 		return TerminalBlocked, fmt.Errorf("%s process exited before pending unit %s/%s was settled", command, snapshot.Next.UnitType, snapshot.Next.UnitID)
