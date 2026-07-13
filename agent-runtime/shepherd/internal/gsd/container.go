@@ -83,7 +83,7 @@ func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string 
 		network = "bridge"
 	}
 	args := []string{
-		"run", "--rm", "--pull=never", "--network=" + network, "--userns=keep-id",
+		"run", "--rm", "--interactive", "--pull=never", "--network=" + network, "--userns=keep-id",
 		"--workdir=" + workDir,
 		"--volume=" + workDir + ":" + workDir + ":rw",
 		"--volume=" + c.GitCommonDir + ":" + c.GitCommonDir + ":rw",
