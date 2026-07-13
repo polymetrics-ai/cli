@@ -14,13 +14,13 @@ driven by `scripts/pi-auto-loop.sh`. It composes the existing
 
 | Stage role | Agent | Model | Provider |
 |---|---|---|---|
-| Orchestrator (main session) | — | `anthropic/claude-opus-4-8` | Claude |
-| Web / API research | `pm-web-researcher` | `anthropic/claude-sonnet-4-5` | Claude |
-| Parent + task planning | `pm-planner` | `anthropic/claude-opus-4-8` | Claude |
+| Orchestrator (main session) | — | `openai-codex/gpt-5.5` | Codex |
+| Web / API research | `pm-web-researcher` | `openai-codex/gpt-5.5` | Codex |
+| Parent + task planning | `pm-planner` | `openai-codex/gpt-5.5` | Codex |
 | Issue creation | `pm-issue-creator` | `openai-codex/gpt-5.5` (xhigh) | Codex |
 | Execute / correct | `pm-gsd-worker` | `openai-codex/gpt-5.5` (xhigh) | Codex |
-| Verify | `pm-verifier` | `anthropic/claude-opus-4-8` | Claude |
-| Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | `anthropic/claude-opus-4-8` | Claude |
+| Verify | `pm-verifier` | `openai-codex/gpt-5.5` | Codex |
+| Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | `openai-codex/gpt-5.5` | Codex |
 
 The orchestrator is the only spawner (recursive `subagent` calls are blocked). The loop is driven
 turn-by-turn by the orchestrator, which persists state after every transition so any turn is a
@@ -29,24 +29,24 @@ safe resume point.
 ## Stage machine
 
 ```
-INTAKE          (Claude) classify problem: connector | implementation; note whether external research is needed
-RESEARCH        (Claude / pm-web-researcher) → durable research doc  [ALWAYS for connector; for implementation only when INTAKE flags an external unknown]
+INTAKE          (Orchestrator) classify problem: connector | implementation; note whether external research is needed
+RESEARCH        (Orchestrator / pm-web-researcher) → durable research doc  [ALWAYS for connector; for implementation only when INTAKE flags an external unknown]
                 gate (connector): coverage self-check unclassified_endpoints==0, all_source_urls_present, complete==true
-PARENT_PLAN     (Claude / pm-planner mode=parent-plan) → parent + ordered sub-issues + dep graph  [consumes the research doc]
+PARENT_PLAN     (Orchestrator / pm-planner mode=parent-plan) → parent + ordered sub-issues + dep graph  [consumes the research doc]
 ISSUE_CREATE    (Codex  / pm-issue-creator) → gh issue create parent + subs (idempotent)
 PARENT_SETUP    create parent branch feat/<N>-<slug> from main; open DRAFT parent PR → main (Refs #<N>; seed --allow-empty commit if no diff). Record parent_branch + parent_pr.
 ─ per ready sub-issue ──────────────────────────── TASK LOOP ─────────────────────────────
-  TASK_PLAN     (Claude / pm-planner mode=task-plan) → PLAN.md, TDD-LEDGER seed, VERIFICATION checklist
+  TASK_PLAN     (Orchestrator / pm-planner mode=task-plan) → PLAN.md, TDD-LEDGER seed, VERIFICATION checklist
   SUB_BRANCH    create sub-branch off the parent branch, own cwd/worktree (mutating worker isolation)
   EXECUTE       (Codex  / pm-gsd-worker) → implement minimal green slices, commit per slice, push
   SUB_PR_OPEN   open sub-PR (base = parent branch; body: Refs #<sub> + Refs #<N>). Record sub_pr number.
-  VERIFY        (Claude / pm-verifier) → run gates → VERIFICATION.md   ── GATE: must pass ──
-  REVIEW        (Claude / pm-reviewer, on the sub-PR) → adversarial findings   ── GATE: must be clean ──
+  VERIFY        (Orchestrator / pm-verifier) → run gates → VERIFICATION.md   ── GATE: must pass ──
+  REVIEW        (Orchestrator / pm-reviewer, on the sub-PR) → adversarial findings   ── GATE: must be clean ──
   CORRECT       (Codex  / pm-gsd-worker) if findings → fix → push  ┐
-                (Claude / pm-reviewer) re-review                    ┘ repeat ≤ max_correction_rounds
+                (Orchestrator / pm-reviewer) re-review                    ┘ repeat ≤ max_correction_rounds
   INTEGRATE     merge sub-PR → parent branch; mark sub-issue complete
 ─────────────────────────────────────────────────────────────────────────────────────────
-PARENT_FINALIZE (Claude) parent PR coverage + disposition → human-ready gate (stop for human)
+PARENT_FINALIZE (Orchestrator) parent PR coverage + disposition → human-ready gate (stop for human)
 ```
 
 RESEARCH is skipped entirely for a fully-specified `implementation` task (no external unknown) — the
@@ -147,17 +147,24 @@ integrated and verified.
 
 ## Runtimes: two ways to drive this loop
 
-The stage machine, durable state, and reconciler above are runtime-agnostic. The supported driver is:
+The stage machine, durable state, and reconciler above are runtime-agnostic. Two supported drivers:
 
 - **Claude-orchestrated + Shepherd validator** (`scripts/claude-auto-loop.sh` +
   `.agents/agentic-delivery/prompts/claude-orchestrator.md`): the first-party Claude Code CLI
-  (`claude -p`) is the orchestrator and does the Claude-role work with full repo context, billed to
-  your **Claude subscription** (flat-rate — no per-token third-party spend). It dispatches **Codex**
-  (`pi --model openai-codex/gpt-5.5`, your ChatGPT subscription) for implementation. This driver adds
-  a **supervisor layer** — see below.
+  (`claude -p`) is the orchestrator, billed to your **Claude subscription** (flat-rate). It
+  dispatches **Codex** (`pi --model openai-codex/gpt-5.5`, your ChatGPT subscription) for
+  implementation, with the Shepherd supervisor layer below. When this driver is used, the Claude
+  roles run **only** on the first-party `claude` CLI — never through a third-party gateway.
 
-The Claude roles run **only** on the first-party `claude` CLI (your subscription). Do not route them
-through any pay-per-token third-party gateway.
+- **Codex-only + Shepherd validator** (`scripts/pi-shepherd-loop.sh` + `.pi/prompts/pm-auto-loop.md`
+  or `/pm-connector-loop`): every role — orchestrator, subagents, validator — runs on Codex via
+  `pi` (`openai-codex/*`, your ChatGPT subscription). Requires `pi install npm:pi-sub-agent` once.
+  The role tags above map to the pi orchestrator session; models come from `.pi/agents/*`
+  frontmatter (all `openai-codex/*`).
+
+Billing hard rule for BOTH drivers: never route any role through OpenRouter or another
+pay-per-token gateway. Claude roles (when used) stay on the first-party `claude` CLI; Codex roles
+stay on `openai-codex/*` via the ChatGPT plan.
 
 ## Validator layer (Shepherd supervisor meta-agent)
 
