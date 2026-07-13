@@ -17,7 +17,7 @@ func Reconcile(command string, result Result, snapshot WorkflowSnapshot) (Termin
 	}
 	switch snapshot.Next.Action {
 	case "dispatch":
-		if command == "next" || command == "new-milestone" || command == "status" {
+		if command == "next" || command == "new-milestone" || command == "status" || command == "discuss" {
 			return TerminalSuccess, nil
 		}
 		return TerminalBlocked, fmt.Errorf("%s process exited before pending unit %s/%s was settled", command, snapshot.Next.UnitType, snapshot.Next.UnitID)

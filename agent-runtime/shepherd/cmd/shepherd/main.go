@@ -171,7 +171,7 @@ func run(ctx context.Context, args []string) error {
 			return errors.New("--issue is required")
 		}
 		if *command == "auto" || *command == "recover" || *command == "new-milestone" {
-			return errors.New("generic run permits only one fenced unit; use --command next or status")
+			return errors.New("generic run permits only one fenced unit; use --command next, discuss, or status")
 		}
 		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth)
 	case "start":
@@ -429,6 +429,12 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	}
 	if before.Next.UnitID != "" {
 		trustedUnit = before.Next.UnitType + "/" + before.Next.UnitID
+	}
+	if command == "discuss" {
+		if before.Next.Action != "dispatch" || before.Next.UnitType != "discuss-milestone" || before.MilestoneID == "" {
+			return errors.New("targeted discuss is allowed only when the canonical next unit is discuss-milestone")
+		}
+		args = []string{before.MilestoneID}
 	}
 	if command == "new-milestone" && before.MilestoneID != "" {
 		return errors.New("an active GSD milestone already exists; use start --adopt-existing after verifying its issue context")

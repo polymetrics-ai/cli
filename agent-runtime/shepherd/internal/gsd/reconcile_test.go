@@ -13,6 +13,17 @@ func TestReconcileAcceptsOneUnitProgress(t *testing.T) {
 	}
 }
 
+func TestReconcileAcceptsTargetedDiscussUnit(t *testing.T) {
+	t.Parallel()
+
+	terminal, err := Reconcile("discuss", Result{Terminal: TerminalSuccess}, WorkflowSnapshot{
+		Phase: "pre-planning", Next: NextDispatch{Action: "dispatch", UnitType: "plan-milestone", UnitID: "M001"},
+	})
+	if terminal != TerminalSuccess || err != nil {
+		t.Fatalf("terminal=%s err=%v", terminal, err)
+	}
+}
+
 func TestReconcileAcceptsCompleteQuery(t *testing.T) {
 	t.Parallel()
 

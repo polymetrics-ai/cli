@@ -119,11 +119,19 @@ func TestRunnerRejectsUnsupportedCommandAndModel(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected model downgrade to fail")
 	}
-	runner, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high"})
+	runner, err := NewRunner(Config{
+		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=silent"},
+	})
 	if err != nil {
 		t.Fatalf("new runner: %v", err)
 	}
-	result := runner.Run(context.Background(), "plan", nil, Observer{})
+	result := runner.Run(context.Background(), "discuss", []string{"M001"}, Observer{})
+	if result.Terminal != TerminalSuccess {
+		t.Fatalf("targeted discuss terminal=%s error=%v", result.Terminal, result.Err)
+	}
+	result = runner.Run(context.Background(), "plan", nil, Observer{})
 	if result.Terminal != TerminalRejected {
 		t.Fatalf("unsupported command terminal=%s", result.Terminal)
 	}

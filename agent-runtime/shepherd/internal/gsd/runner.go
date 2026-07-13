@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -24,8 +25,10 @@ const (
 )
 
 var supportedCommands = map[string]struct{}{
-	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {},
+	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {},
 }
+
+var milestoneTargetPattern = regexp.MustCompile(`^M[0-9]{3,}(?:-[a-z0-9]+)?$`)
 
 var fireAndForgetUI = map[string]struct{}{
 	"notify": {}, "setStatus": {}, "setWidget": {}, "setTitle": {}, "set_editor_text": {},
@@ -160,6 +163,9 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	started := time.Now().UTC()
 	if _, ok := supportedCommands[command]; !ok {
 		return Result{Terminal: TerminalRejected, ExitCode: -1, Err: fmt.Errorf("unsupported headless command %q", command), Started: started, Ended: time.Now().UTC()}
+	}
+	if command == "discuss" && (len(args) != 1 || !milestoneTargetPattern.MatchString(args[0])) {
+		return Result{Terminal: TerminalRejected, ExitCode: -1, Err: errors.New("discuss requires one canonical milestone target"), Started: started, Ended: time.Now().UTC()}
 	}
 	for i, arg := range args {
 		if strings.HasPrefix(arg, "--answers") || strings.HasPrefix(arg, "--context-text") || strings.ContainsAny(arg, "\r\n\x00") {
