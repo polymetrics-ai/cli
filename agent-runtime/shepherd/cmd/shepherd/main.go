@@ -167,16 +167,13 @@ func run(ctx context.Context, args []string) error {
 		}
 		return runFencedRepair(ctx, runner, config, deliveryID(*issue), *issue, *action)
 	case "run":
-		if *confirmDepth {
-			return errors.New("--confirm-depth is accepted only by start")
-		}
 		if *issue <= 0 {
 			return errors.New("--issue is required")
 		}
 		if *command == "auto" || *command == "recover" || *command == "new-milestone" {
 			return errors.New("generic run permits only one fenced unit; use --command next or status")
 		}
-		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, false)
+		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth)
 	case "start":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
