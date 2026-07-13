@@ -196,6 +196,7 @@ func adoptExistingDelivery(ctx context.Context, runner *gsd.Runner, config fileC
 	if err != nil {
 		return err
 	}
+	defer func() { _ = authority.ReleaseLease(context.Background(), lease) }()
 	snapshot, err := runner.Query(ctx)
 	if err != nil {
 		return err
@@ -234,6 +235,7 @@ func runFencedQuery(ctx context.Context, runner *gsd.Runner, config fileConfig, 
 	if err != nil {
 		return err
 	}
+	defer func() { _ = authority.ReleaseLease(context.Background(), lease) }()
 	snapshot, err := runner.Query(ctx)
 	if err != nil {
 		return err
@@ -314,6 +316,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	if err != nil {
 		return err
 	}
+	defer func() { _ = authority.ReleaseLease(context.Background(), lease) }()
 	startSnapshot, err := shepherdgit.Inspect(ctx, config.WorkDir)
 	if err != nil {
 		return err

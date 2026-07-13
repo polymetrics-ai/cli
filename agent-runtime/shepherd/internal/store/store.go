@@ -380,6 +380,19 @@ func (s *Store) CheckLease(ctx context.Context, lease Lease, now time.Time) erro
 	return nil
 }
 
+func (s *Store) ReleaseLease(ctx context.Context, lease Lease) error {
+	result, err := s.db.ExecContext(ctx, `UPDATE leases SET expires_at = 0
+        WHERE run_id = ? AND owner = ? AND epoch = ?`, lease.RunID, lease.Owner, lease.Epoch)
+	if err != nil {
+		return fmt.Errorf("release lease: %w", err)
+	}
+	rows, _ := result.RowsAffected()
+	if rows != 1 {
+		return errors.New("cannot release a stale or fenced lease")
+	}
+	return nil
+}
+
 func (s *Store) PutGrant(ctx context.Context, grant domain.Grant) error {
 	_, err := s.db.ExecContext(ctx, `INSERT OR IGNORE INTO grants
         (run_id, repository, issue, capability, epoch) VALUES (?, ?, ?, ?, ?)`,

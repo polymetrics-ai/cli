@@ -100,6 +100,31 @@ func TestConcurrentLeaseAcquisitionHasOneWinner(t *testing.T) {
 	}
 }
 
+func TestReleasedLeaseCanBeReacquiredWithHigherEpoch(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	db, err := Open(ctx, filepath.Join(t.TempDir(), "shepherd.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	now := time.Unix(1_700_000_000, 0).UTC()
+	first, err := db.AcquireLease(ctx, "issue-372", "owner-a", now, time.Minute)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := db.ReleaseLease(ctx, first); err != nil {
+		t.Fatal(err)
+	}
+	second, err := db.AcquireLease(ctx, "issue-372", "owner-b", now, time.Minute)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if second.Epoch <= first.Epoch {
+		t.Fatalf("epoch did not fence released owner: %d <= %d", second.Epoch, first.Epoch)
+	}
+}
+
 func TestDeliveryBindingIsImmutable(t *testing.T) {
 	t.Parallel()
 
