@@ -397,6 +397,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		},
 		Question: terminalQuestion,
 	}
+	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
 	result := runner.Run(runCtx, command, args, observer)
 	postPhase := ""
 	activityMu.Lock()
@@ -576,7 +577,7 @@ func pathWithin(root, path string) (bool, error) {
 func mapEventKind(kind gsd.EventKind) string {
 	switch kind {
 	case gsd.EventAgentStart:
-		return "run.started"
+		return "transition"
 	case gsd.EventTurnStart:
 		return "unit.started"
 	case gsd.EventToolStart:

@@ -12,15 +12,16 @@ import (
 )
 
 type EvalSummary struct {
-	Runs              int            `json:"runs"`
-	ToolCalls         int            `json:"tool_calls"`
-	Heartbeats        int            `json:"heartbeats"`
-	MaxHeartbeatGapMS int64          `json:"max_heartbeat_gap_ms"`
-	InputTokens       int64          `json:"input_tokens"`
-	OutputTokens      int64          `json:"output_tokens"`
-	CostMicros        int64          `json:"cost_micros"`
-	TerminalCounts    map[string]int `json:"terminal_counts"`
-	ValidationCounts  map[string]int `json:"validation_counts"`
+	Runs                 int            `json:"runs"`
+	ToolCalls            int            `json:"tool_calls"`
+	Heartbeats           int            `json:"heartbeats"`
+	MaxHeartbeatGapMS    int64          `json:"max_heartbeat_gap_ms"`
+	HeartbeatSLOBreaches int            `json:"heartbeat_slo_breaches"`
+	InputTokens          int64          `json:"input_tokens"`
+	OutputTokens         int64          `json:"output_tokens"`
+	CostMicros           int64          `json:"cost_micros"`
+	TerminalCounts       map[string]int `json:"terminal_counts"`
+	ValidationCounts     map[string]int `json:"validation_counts"`
 }
 
 type Sink interface {
@@ -68,25 +69,48 @@ func Evaluate(activities []Activity) EvalSummary {
 	summary := EvalSummary{TerminalCounts: make(map[string]int), ValidationCounts: make(map[string]int)}
 	runs := make(map[string]struct{})
 	lastHeartbeat := make(map[string]time.Time)
+	starts := make(map[string]time.Time)
 	for _, activity := range activities {
 		runs[activity.RunID] = struct{}{}
 		summary.InputTokens += activity.InputTokens
 		summary.OutputTokens += activity.OutputTokens
 		summary.CostMicros += activity.CostMicros
 		switch activity.Kind {
+		case "run.started":
+			starts[activity.RunID] = activity.At
 		case "tool.started":
 			summary.ToolCalls++
 		case "heartbeat":
 			summary.Heartbeats++
-			if previous := lastHeartbeat[activity.RunID]; !previous.IsZero() {
+			previous := lastHeartbeat[activity.RunID]
+			if previous.IsZero() {
+				previous = starts[activity.RunID]
+			}
+			if !previous.IsZero() {
 				gap := activity.At.Sub(previous).Milliseconds()
 				if gap > summary.MaxHeartbeatGapMS {
 					summary.MaxHeartbeatGapMS = gap
+				}
+				if gap > 15_000 {
+					summary.HeartbeatSLOBreaches++
 				}
 			}
 			lastHeartbeat[activity.RunID] = activity.At
 		case "run.terminal":
 			summary.TerminalCounts[activity.Status]++
+			previous := lastHeartbeat[activity.RunID]
+			if previous.IsZero() {
+				previous = starts[activity.RunID]
+			}
+			if !previous.IsZero() {
+				gap := activity.At.Sub(previous).Milliseconds()
+				if gap > summary.MaxHeartbeatGapMS {
+					summary.MaxHeartbeatGapMS = gap
+				}
+				if gap > 15_000 {
+					summary.HeartbeatSLOBreaches++
+				}
+			}
 		case "validation":
 			summary.ValidationCounts[activity.Status]++
 		}

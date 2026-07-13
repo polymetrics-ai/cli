@@ -23,3 +23,15 @@ func TestEvaluateNormalizedEvidence(t *testing.T) {
 		t.Fatalf("summary=%+v", summary)
 	}
 }
+
+func TestEvaluateCountsAHeartbeatFreeLongRunAsBreach(t *testing.T) {
+	t.Parallel()
+	base := time.Unix(100, 0).UTC()
+	summary := Evaluate([]Activity{
+		{RunID: "r1", Kind: "run.started", At: base},
+		{RunID: "r1", Kind: "run.terminal", Status: "blocked", At: base.Add(16 * time.Second)},
+	})
+	if summary.HeartbeatSLOBreaches != 1 || summary.MaxHeartbeatGapMS != 16_000 {
+		t.Fatalf("summary=%+v", summary)
+	}
+}

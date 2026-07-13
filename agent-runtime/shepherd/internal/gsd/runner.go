@@ -151,7 +151,7 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 		"headless", "--json", "--supervised", "--model", r.config.Model,
 		"--response-timeout", strconv.FormatInt(responseTimeout.Milliseconds(), 10),
 		"--max-restarts", "0",
-		"--events", "agent_start,turn_start,tool_execution_start,tool_execution_end,model_select,thinking_level_select,extension_ui_request",
+		"--events", "agent_start,turn_start,tool_execution_start,model_select,thinking_level_select,extension_ui_request",
 		"--timeout", strconv.FormatInt(r.config.Timeout.Milliseconds(), 10), command,
 	)
 	commandArgs = append(commandArgs, args...)
@@ -175,7 +175,7 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	}
 
 	events := make(chan scanResult)
-	go scanEvents(stdout, r.config.MaxEventBytes, events)
+	go scanEvents(ctx, stdout, r.config.MaxEventBytes, events)
 	waited := make(chan error, 1)
 	go func() { waited <- cmd.Wait() }()
 
@@ -346,8 +346,16 @@ func governedEnvironment(gsdHome string, extra []string) []string {
 	)
 }
 
-func scanEvents(reader io.Reader, maxBytes int, output chan<- scanResult) {
+func scanEvents(ctx context.Context, reader io.Reader, maxBytes int, output chan<- scanResult) {
 	defer close(output)
+	send := func(result scanResult) bool {
+		select {
+		case output <- result:
+			return true
+		case <-ctx.Done():
+			return false
+		}
+	}
 	scanner := bufio.NewScanner(reader)
 	scanner.Buffer(make([]byte, 4096), maxBytes)
 	for scanner.Scan() {
@@ -355,7 +363,7 @@ func scanEvents(reader io.Reader, maxBytes int, output chan<- scanResult) {
 			Type string `json:"type"`
 		}
 		if err := json.Unmarshal(scanner.Bytes(), &header); err != nil {
-			output <- scanResult{err: fmt.Errorf("decode event header: %w", err)}
+			send(scanResult{err: fmt.Errorf("decode event header: %w", err)})
 			return
 		}
 		if header.Type == "extension_ui_request" {
@@ -366,23 +374,27 @@ func scanEvents(reader io.Reader, maxBytes int, output chan<- scanResult) {
 				Options []string `json:"options"`
 			}
 			if err := json.Unmarshal(scanner.Bytes(), &question); err != nil || question.ID == "" || question.Method == "" {
-				output <- scanResult{err: errors.New("invalid supervised UI request")}
+				send(scanResult{err: errors.New("invalid supervised UI request")})
 				return
 			}
 			if _, ok := fireAndForgetUI[question.Method]; ok {
 				continue
 			}
-			output <- scanResult{question: &Question{ID: question.ID, Method: question.Method, Title: question.Title, Options: question.Options}}
+			if !send(scanResult{question: &Question{ID: question.ID, Method: question.Method, Title: question.Title, Options: question.Options}}) {
+				return
+			}
 			continue
 		}
 		event, err := ProjectEvent(scanner.Bytes(), maxBytes)
-		output <- scanResult{event: event, err: err}
+		if !send(scanResult{event: event, err: err}) {
+			return
+		}
 		if err != nil {
 			return
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		output <- scanResult{err: fmt.Errorf("scan GSD event stream: %w", err)}
+		send(scanResult{err: fmt.Errorf("scan GSD event stream: %w", err)})
 	}
 }
 
