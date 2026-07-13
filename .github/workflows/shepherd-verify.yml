@@ -1,0 +1,35 @@
+name: Shepherd Verify
+
+on:
+  pull_request:
+    paths:
+      - "agent-runtime/shepherd/**"
+      - ".gsd/PREFERENCES.md"
+      - ".gsd/agents/**"
+      - ".agents/skills/polymetrics-issue-delivery/**"
+      - ".agents/agentic-delivery/contracts/gsd-*.md"
+      - ".agents/agentic-delivery/contracts/external-effect-intent.md"
+      - ".agents/agentic-delivery/schemas/gsd-*.json"
+      - ".agents/agentic-delivery/schemas/external-effect-intent.schema.json"
+      - ".agents/agentic-delivery/schemas/human-decision.schema.json"
+      - "scripts/tests/shepherd-module-boundary.sh"
+      - ".github/workflows/shepherd-verify.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  nested-module:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25.4"
+          cache-dependency-path: agent-runtime/shepherd/go.sum
+      - name: Verify nested module
+        working-directory: agent-runtime/shepherd
+        run: make verify
+      - name: Verify root module boundary
+        run: scripts/tests/shepherd-module-boundary.sh
+

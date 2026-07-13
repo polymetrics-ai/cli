@@ -1,0 +1,25 @@
+{
+  "issue": 372,
+  "branch": "feat/372-gsd-pi-go-shepherd",
+  "phase": "implementation",
+  "verificationPassed": false,
+  "humanGate": "merge-to-main",
+  "orchestrationDecisions": [
+    {
+      "cycle": "qualification",
+      "decision": "local_critical_path",
+      "reason": "Pinned-runtime qualification blocks all implementation slices."
+    },
+    {
+      "cycle": "architecture-review",
+      "decision": "read_only_spawned",
+      "reason": "Independent module-boundary and workflow-contract reviews are non-mutating."
+    },
+    {
+      "cycle": "implementation",
+      "decision": "local_critical_path",
+      "reason": "Production edits stay in the dedicated issue checkout; mutating workers may not share it."
+    }
+  ]
+}
+

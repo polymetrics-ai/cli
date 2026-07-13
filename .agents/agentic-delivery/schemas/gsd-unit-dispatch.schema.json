@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Polymetrics GSD unit dispatch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["run_id", "issue", "milestone_id", "objective", "output_format", "tool_guidance", "boundaries", "worktree", "branch", "base_sha", "write_scope", "tools", "verification"],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "issue": {"type": "integer", "minimum": 1},
+    "milestone_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "objective": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "output_format": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "tool_guidance": {"type": "array", "minItems": 1, "items": {"type": "string", "maxLength": 500}},
+    "boundaries": {"type": "array", "minItems": 1, "items": {"type": "string", "maxLength": 500}},
+    "worktree": {"type": "string", "minLength": 1},
+    "branch": {"type": "string", "minLength": 1},
+    "base_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "write_scope": {"type": "array", "minItems": 1, "items": {"type": "string", "not": {"pattern": "(^/|\\.\\.)"}}},
+    "tools": {"type": "array", "minItems": 1, "items": {"enum": ["read", "edit", "test", "git.status"]}},
+    "verification": {"type": "array", "minItems": 1, "items": {"type": "string", "maxLength": 500}}
+  }
+}
+

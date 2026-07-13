@@ -1,0 +1,14 @@
+{
+  "gsd_command": [
+    "node",
+    "/absolute/path/to/node_modules/@opengsd/gsd-pi/dist/loader.js"
+  ],
+  "work_dir": "/absolute/path/to/issue-worktree",
+  "gsd_home": "/absolute/path/to/controlled-gsd-home",
+  "state_dir": "/absolute/path/to/issue-worktree/.shepherd",
+  "coordinator_model": "openai-codex/gpt-5.6-sol",
+  "timeout_seconds": 3600,
+  "heartbeat_seconds": 15,
+  "max_event_bytes": 262144
+}
+

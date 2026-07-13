@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Shepherd human decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["run_id", "generation", "gate_id", "actor_kind", "approved", "issued_at", "expires_at"],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "generation": {"type": "integer", "minimum": 1},
+    "gate_id": {"type": "string", "minLength": 1},
+    "actor_kind": {"const": "human"},
+    "approved": {"type": "boolean"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"}
+  }
+}
+

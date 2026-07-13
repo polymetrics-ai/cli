@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Shepherd external-effect intent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["run_id", "generation", "kind", "target", "payload_hash", "idempotency_key"],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "generation": {"type": "integer", "minimum": 1},
+    "kind": {"enum": ["issue.create", "issue.update", "issue.close", "pr.create", "pr.update", "pr.close", "comment.create", "branch.create", "git.push"]},
+    "target": {"type": "string", "minLength": 1, "maxLength": 500},
+    "payload_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "idempotency_key": {"type": "string", "minLength": 1, "maxLength": 500}
+  }
+}
+
