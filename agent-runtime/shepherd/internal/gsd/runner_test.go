@@ -86,6 +86,45 @@ func TestRunnerEmitsHeartbeatDuringSilentLiveProcess(t *testing.T) {
 	}
 }
 
+func TestRunnerHeartbeatRetainsConcurrentInFlightTools(t *testing.T) {
+	t.Parallel()
+
+	var mu sync.Mutex
+	var observed []string
+	runner, err := NewRunner(Config{
+		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(),
+		Model: "openai-codex/gpt-5.6-sol", Thinking: "high", Timeout: 5 * time.Second,
+		HeartbeatInterval: 10 * time.Millisecond, MaxEventBytes: 4096,
+		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=concurrent-tools"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	result := runner.Run(context.Background(), "next", nil, Observer{Heartbeat: func(heartbeat Heartbeat) {
+		mu.Lock()
+		observed = append(observed, heartbeat.InFlightTool)
+		mu.Unlock()
+	}})
+	if result.Terminal != TerminalSuccess {
+		t.Fatalf("terminal=%s err=%v", result.Terminal, result.Err)
+	}
+	mu.Lock()
+	defer mu.Unlock()
+	if !containsString(observed, "alpha, beta") || !containsString(observed, "alpha") {
+		t.Fatalf("heartbeat tool summaries=%v, want concurrent then remaining call", observed)
+	}
+}
+
+func containsString(values []string, target string) bool {
+	for _, value := range values {
+		if value == target {
+			return true
+		}
+	}
+	return false
+}
+
 func TestRunnerClassifiesBlockedExit(t *testing.T) {
 	t.Parallel()
 
@@ -328,6 +367,14 @@ func TestRunnerHelperProcess(t *testing.T) {
 			fmt.Fprintf(os.Stderr, "invalid response: %+v err=%v\n", response, err)
 			os.Exit(1)
 		}
+		os.Exit(0)
+	case "concurrent-tools":
+		fmt.Println(`{"type":"tool_execution_start","toolName":"alpha","toolCallId":"call-a"}`)
+		fmt.Println(`{"type":"tool_execution_start","toolName":"beta","toolCallId":"call-b"}`)
+		time.Sleep(200 * time.Millisecond)
+		fmt.Println(`{"type":"tool_execution_end","toolName":"beta","toolCallId":"call-b"}`)
+		time.Sleep(200 * time.Millisecond)
+		fmt.Println(`{"type":"tool_execution_end","toolName":"alpha","toolCallId":"call-a"}`)
 		os.Exit(0)
 	case "query":
 		fmt.Print(`{"state":{"activeMilestone":{"id":"M001"},"phase":"complete","nextAction":"Done","blockers":[]},"next":{"action":"stop","unitType":"","unitId":""}}`)

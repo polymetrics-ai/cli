@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -25,18 +26,19 @@ var allowedEvents = map[EventKind]struct{}{
 }
 
 type Event struct {
-	Kind     EventKind
-	RunID    string
-	UnitID   string
-	Tool     string
-	Status   string
-	Model    string
-	Thinking string
-	At       time.Time
+	Kind       EventKind
+	RunID      string
+	UnitID     string
+	Tool       string
+	ToolCallID string
+	Status     string
+	Model      string
+	Thinking   string
+	At         time.Time
 }
 
 func (e Event) String() string {
-	return fmt.Sprintf("kind=%s run=%s unit=%s tool=%s status=%s model=%s thinking=%s", e.Kind, e.RunID, e.UnitID, e.Tool, e.Status, e.Model, e.Thinking)
+	return fmt.Sprintf("kind=%s run=%s unit=%s tool=%s tool_call_id=%s status=%s model=%s thinking=%s", e.Kind, e.RunID, e.UnitID, e.Tool, e.ToolCallID, e.Status, e.Model, e.Thinking)
 }
 
 func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
@@ -48,6 +50,7 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 		RunID         string    `json:"runId"`
 		UnitID        string    `json:"unitId"`
 		Tool          string    `json:"toolName"`
+		ToolCallID    string    `json:"toolCallId"`
 		Status        string    `json:"status"`
 		IsError       bool      `json:"isError"`
 		Level         string    `json:"level"`
@@ -66,6 +69,10 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 	}
 	if _, ok := allowedEvents[envelope.Type]; !ok {
 		return Event{}, fmt.Errorf("event type %q is not allowlisted", envelope.Type)
+	}
+	if (envelope.Type == EventToolStart || envelope.Type == EventToolEnd) &&
+		(strings.TrimSpace(envelope.Tool) == "" || strings.TrimSpace(envelope.ToolCallID) == "") {
+		return Event{}, errors.New("tool lifecycle event requires toolName and toolCallId")
 	}
 	model := ""
 	if envelope.Type == EventModelSelect && envelope.SelectedModel.Provider != "" && envelope.SelectedModel.ID != "" {
@@ -96,6 +103,6 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 	}
 	return Event{
 		Kind: envelope.Type, RunID: envelope.RunID, UnitID: envelope.UnitID,
-		Tool: envelope.Tool, Status: status, Model: model, Thinking: thinking, At: time.Now().UTC(),
+		Tool: envelope.Tool, ToolCallID: envelope.ToolCallID, Status: status, Model: model, Thinking: thinking, At: time.Now().UTC(),
 	}, nil
 }

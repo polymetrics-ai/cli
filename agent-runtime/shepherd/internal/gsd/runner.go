@@ -12,6 +12,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -276,7 +277,7 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	ticker := time.NewTicker(r.config.HeartbeatInterval)
 	defer ticker.Stop()
 	lastEventAt := started
-	inFlightTool := ""
+	inFlightTools := make(map[string]string)
 	eventsOpen := true
 	var questionResults <-chan questionResult
 	var pendingQuestion *Question
@@ -319,9 +320,19 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 			lastEventAt = scanned.event.At
 			switch scanned.event.Kind {
 			case EventToolStart:
-				inFlightTool = scanned.event.Tool
+				if _, exists := inFlightTools[scanned.event.ToolCallID]; exists {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: fmt.Errorf("duplicate active tool call %q", scanned.event.ToolCallID), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+				}
+				inFlightTools[scanned.event.ToolCallID] = scanned.event.Tool
 			case EventToolEnd:
-				inFlightTool = ""
+				if _, exists := inFlightTools[scanned.event.ToolCallID]; !exists {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: fmt.Errorf("tool end has no active start for %q", scanned.event.ToolCallID), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+				}
+				delete(inFlightTools, scanned.event.ToolCallID)
 			}
 			if observer.Event != nil {
 				observer.Event(scanned.event)
@@ -355,7 +366,7 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 			pendingQuestion = nil
 		case at := <-ticker.C:
 			if observer.Heartbeat != nil {
-				observer.Heartbeat(Heartbeat{At: at.UTC(), LastEventAt: lastEventAt, InFlightTool: inFlightTool, ProcessAlive: true})
+				observer.Heartbeat(Heartbeat{At: at.UTC(), LastEventAt: lastEventAt, InFlightTool: summarizeInFlightTools(inFlightTools), ProcessAlive: true})
 			}
 		case waitErr := <-waited:
 			if eventsOpen {
@@ -374,6 +385,15 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 			return classifyResult(ctx, started, waitErr, stderr.String())
 		}
 	}
+}
+
+func summarizeInFlightTools(active map[string]string) string {
+	tools := make([]string, 0, len(active))
+	for _, tool := range active {
+		tools = append(tools, tool)
+	}
+	sort.Strings(tools)
+	return strings.Join(tools, ", ")
 }
 
 func isWithin(root, path string) bool {

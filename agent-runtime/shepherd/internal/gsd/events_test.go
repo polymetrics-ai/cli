@@ -8,12 +8,12 @@ import (
 func TestProjectorAllowlistDropsPayloads(t *testing.T) {
 	t.Parallel()
 
-	raw := `{"type":"tool_execution_end","runId":"r1","toolName":"bash","isError":true,"result":"secret output","thinkingSignature":{"encrypted_content":"huge"}}`
+	raw := `{"type":"tool_execution_end","runId":"r1","toolName":"bash","toolCallId":"call-1","isError":true,"result":"secret output","thinkingSignature":{"encrypted_content":"huge"}}`
 	event, err := ProjectEvent([]byte(raw), 1024)
 	if err != nil {
 		t.Fatalf("project event: %v", err)
 	}
-	if event.Kind != EventToolEnd || event.RunID != "r1" || event.Tool != "bash" {
+	if event.Kind != EventToolEnd || event.RunID != "r1" || event.Tool != "bash" || event.ToolCallID != "call-1" {
 		t.Fatalf("unexpected projection: %+v", event)
 	}
 	if event.Status != "error" {
@@ -21,6 +21,16 @@ func TestProjectorAllowlistDropsPayloads(t *testing.T) {
 	}
 	if strings.Contains(event.String(), "secret") || strings.Contains(event.String(), "encrypted") {
 		t.Fatalf("projection retained forbidden payload: %s", event.String())
+	}
+}
+
+func TestProjectorRequiresCorrelationIDForToolLifecycle(t *testing.T) {
+	t.Parallel()
+
+	for _, kind := range []string{"tool_execution_start", "tool_execution_end"} {
+		if _, err := ProjectEvent([]byte(`{"type":"`+kind+`","toolName":"bash"}`), 1024); err == nil {
+			t.Fatalf("expected %s without toolCallId to fail closed", kind)
+		}
 	}
 }
 

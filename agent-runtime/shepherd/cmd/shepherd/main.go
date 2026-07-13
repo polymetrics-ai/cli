@@ -95,6 +95,10 @@ func run(ctx context.Context, args []string) error {
 	decisionActor := flags.String("decision-actor", "human", "provenance for interactive decisions: human, shepherd, or contract")
 	decisionBasis := flags.String("decision-basis", "interactive terminal response", "concise provenance basis for interactive decisions")
 	publish := flags.Bool("publish", false, "synchronize the decision ledger to the bound pull request")
+	recordDecision := flags.Bool("record", false, "append an attributed operational decision and publish it")
+	decisionUnit := flags.String("decision-unit", "", "canonical unit for a recorded operational decision")
+	decisionQuestion := flags.String("decision-question", "", "bounded decision being made")
+	decisionAnswer := flags.String("decision-answer", "", "bounded selected action")
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
 	}
@@ -112,6 +116,19 @@ func run(ctx context.Context, args []string) error {
 	if args[0] == "decisions" {
 		if *issue <= 0 {
 			return errors.New("--issue is required")
+		}
+		if *recordDecision {
+			if !*publish {
+				return errors.New("--record requires --publish so the PR remains the visible decision summary")
+			}
+			store, err := decisionlog.Open(filepath.Join(config.StateDir, "decisions"))
+			if err != nil {
+				return err
+			}
+			defer store.Close()
+			return recordOperationalDecision(ctx, store, shepherdgithub.NewCLIClient(), shepherdgithub.Target{
+				Repository: config.Repository, PullRequest: config.PullRequest, DeliveryID: deliveryID(*issue),
+			}, deliveryID(*issue), *decisionUnit, *decisionQuestion, *decisionAnswer, *decisionActor, *decisionBasis)
 		}
 		records, err := decisionlog.Read(filepath.Join(config.StateDir, "decisions"))
 		if err != nil {
@@ -810,6 +827,15 @@ func appendAndPublishDecision(ctx context.Context, store *decisionlog.Store, pub
 		return fmt.Errorf("publish durable decision: %w", err)
 	}
 	return nil
+}
+
+func recordOperationalDecision(ctx context.Context, store *decisionlog.Store, publisher decisionPublisher, target shepherdgithub.Target, deliveryID, unitID, question, answer, actor, basis string) error {
+	if strings.TrimSpace(unitID) == "" || strings.TrimSpace(question) == "" || strings.TrimSpace(answer) == "" {
+		return errors.New("decision unit, question, and answer are required")
+	}
+	executionID := fmt.Sprintf("decision-%d", time.Now().UTC().UnixNano())
+	return appendAndPublishDecision(ctx, store, publisher, target, deliveryID, executionID, unitID,
+		gsd.Question{ID: "operational-decision", Title: question}, gsd.UIResponse{Value: answer}, actor, basis)
 }
 
 func publishDecisions(ctx context.Context, config fileConfig, deliveryID, summary string) error {

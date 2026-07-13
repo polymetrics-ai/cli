@@ -185,6 +185,34 @@ func TestAppendAndPublishDecisionRetainsDurableRecordWhenPublicationFails(t *tes
 	}
 }
 
+func TestRecordOperationalDecisionPublishesAttributedLedgerEntry(t *testing.T) {
+	t.Parallel()
+
+	store, err := decisionlog.Open(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	publisher := &recordingDecisionPublisher{}
+	err = recordOperationalDecision(context.Background(), store, publisher,
+		shepherdgithub.Target{Repository: "polymetrics-ai/cli", PullRequest: 388, DeliveryID: "issue-380"},
+		"issue-380", "reconcile/M001/S01/T04", "Amend the issue write scope?", "Add only internal/connectors/defs/defs_test.go",
+		"shepherd", "approved task plan requires the production embed assertion")
+	if err != nil {
+		t.Fatal(err)
+	}
+	records, err := store.Records()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(records) != 1 || records[0].Actor != decisionlog.ActorShepherd || records[0].Question != "Amend the issue write scope?" {
+		t.Fatalf("records=%+v", records)
+	}
+	if len(publisher.summaries) != 1 || !strings.Contains(publisher.summaries[0], "Add only internal/connectors/defs/defs_test.go") {
+		t.Fatalf("published summaries=%v", publisher.summaries)
+	}
+}
+
 func TestMaterializeContainerContextCopiesPlanningFileIntoProtectedOverlay(t *testing.T) {
 	t.Parallel()
 	workDir := t.TempDir()
