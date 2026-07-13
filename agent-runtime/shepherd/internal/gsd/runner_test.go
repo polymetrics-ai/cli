@@ -131,6 +131,10 @@ func TestRunnerRejectsUnsupportedCommandAndModel(t *testing.T) {
 	if result.Terminal != TerminalSuccess {
 		t.Fatalf("targeted discuss terminal=%s error=%v", result.Terminal, result.Err)
 	}
+	result = runner.Run(context.Background(), "discuss", []string{"M001", "--resume", "019f5d4a-9fb4-7852-b640-d6fdf71bd3d9"}, Observer{})
+	if result.Terminal != TerminalSuccess {
+		t.Fatalf("resumed discuss terminal=%s error=%v", result.Terminal, result.Err)
+	}
 	result = runner.Run(context.Background(), "plan", nil, Observer{})
 	if result.Terminal != TerminalRejected {
 		t.Fatalf("unsupported command terminal=%s", result.Terminal)

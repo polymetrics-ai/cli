@@ -85,6 +85,7 @@ func run(ctx context.Context, args []string) error {
 	decisionPath := flags.String("decision", "", "path to protected explicit human decision JSON")
 	action := flags.String("action", "", "governed maintenance action")
 	confirmDepth := flags.Bool("confirm-depth", false, "apply explicit operator approval only to the GSD planning-depth gate")
+	continueUnit := flags.Bool("continue-unit", false, "resume the latest local Pi session bound to the same canonical unit")
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
 	}
@@ -173,7 +174,7 @@ func run(ctx context.Context, args []string) error {
 		if *command == "auto" || *command == "recover" || *command == "new-milestone" {
 			return errors.New("generic run permits only one fenced unit; use --command next, discuss, or status")
 		}
-		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth)
+		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth, *continueUnit)
 	case "start":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
@@ -205,7 +206,7 @@ func run(ctx context.Context, args []string) error {
 		if *adoptExisting {
 			return adoptExistingDelivery(ctx, runner, config, deliveryID(*issue), *issue, contextHash)
 		}
-		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path}, *confirmDepth)
+		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path}, *confirmDepth, false)
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
@@ -382,7 +383,7 @@ func loadConfig(path string) (fileConfig, error) {
 	return config, nil
 }
 
-func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash, command string, args []string, confirmDepth bool) error {
+func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash, command string, args []string, confirmDepth, continueUnit bool) error {
 	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
 		return err
 	}
@@ -435,6 +436,16 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			return errors.New("targeted discuss is allowed only when the canonical next unit is discuss-milestone")
 		}
 		args = []string{before.MilestoneID}
+	}
+	if continueUnit {
+		if command != "discuss" || config.Runtime == "podman" {
+			return errors.New("--continue-unit supports only a local canonical discuss-milestone")
+		}
+		sessionID, sessionErr := gsd.LatestSessionID(filepath.Join(config.GSDHome, "agent", "sessions"), config.WorkDir)
+		if sessionErr != nil {
+			return fmt.Errorf("resolve local continuation session: %w", sessionErr)
+		}
+		args = append(args, "--resume", sessionID)
 	}
 	if command == "new-milestone" && before.MilestoneID != "" {
 		return errors.New("an active GSD milestone already exists; use start --adopt-existing after verifying its issue context")

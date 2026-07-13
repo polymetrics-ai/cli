@@ -164,7 +164,11 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	if _, ok := supportedCommands[command]; !ok {
 		return Result{Terminal: TerminalRejected, ExitCode: -1, Err: fmt.Errorf("unsupported headless command %q", command), Started: started, Ended: time.Now().UTC()}
 	}
-	if command == "discuss" && (len(args) != 1 || !milestoneTargetPattern.MatchString(args[0])) {
+	validDiscussArgs := len(args) == 1 && milestoneTargetPattern.MatchString(args[0])
+	if len(args) == 3 && milestoneTargetPattern.MatchString(args[0]) && args[1] == "--resume" && sessionIDPattern.MatchString(args[2]) {
+		validDiscussArgs = true
+	}
+	if command == "discuss" && !validDiscussArgs {
 		return Result{Terminal: TerminalRejected, ExitCode: -1, Err: errors.New("discuss requires one canonical milestone target"), Started: started, Ended: time.Now().UTC()}
 	}
 	for i, arg := range args {
