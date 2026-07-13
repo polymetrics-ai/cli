@@ -371,6 +371,11 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		if err := authority.EnsureDelivery(ctx, store.Delivery{ID: deliveryID, Issue: issue, WorkDir: config.WorkDir, ContextHash: contextHash}); err != nil {
 			return err
 		}
+		if command == "new-milestone" {
+			if err := authority.RetryFailedIntake(ctx, deliveryID); err != nil {
+				return err
+			}
+		}
 	} else {
 		delivery, err := authority.GetDelivery(ctx, deliveryID)
 		if err != nil {

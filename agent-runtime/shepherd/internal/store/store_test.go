@@ -181,3 +181,39 @@ func TestDeliveryAttemptStateRequiresExplicitResume(t *testing.T) {
 		t.Fatalf("resumed=%+v err=%v", state, err)
 	}
 }
+
+func TestRetryFailedIntakeRequiresUnboundMilestone(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	db, err := Open(ctx, filepath.Join(t.TempDir(), "shepherd.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	binding := Delivery{ID: "issue-380", Issue: 380, WorkDir: "/tmp/work", ContextHash: "sha256:" + strings.Repeat("a", 64)}
+	if err := db.EnsureDelivery(ctx, binding); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.BeginAttempt(ctx, binding.ID, "owner-1"); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.FinishAttempt(ctx, binding.ID, "owner-1", domain.RunFailed); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.RetryFailedIntake(ctx, binding.ID); err != nil {
+		t.Fatal(err)
+	}
+	state, err := db.BeginAttempt(ctx, binding.ID, "owner-2")
+	if err != nil || state.Generation != 2 || state.Attempt != 2 {
+		t.Fatalf("retry=%+v err=%v", state, err)
+	}
+	if err := db.FinishAttempt(ctx, binding.ID, "owner-2", domain.RunFailed); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.BindMilestone(ctx, binding.ID, "M001"); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.RetryFailedIntake(ctx, binding.ID); err == nil {
+		t.Fatal("failed delivery with a bound milestone must not be reset")
+	}
+}

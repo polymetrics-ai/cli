@@ -221,6 +221,37 @@ func (s *Store) BeginAttempt(ctx context.Context, deliveryID, owner string) (Del
 	return run, nil
 }
 
+// RetryFailedIntake resets only an unbound delivery whose milestone intake failed. It never resets
+// a blocked delivery or a delivery already bound to canonical GSD state.
+func (s *Store) RetryFailedIntake(ctx context.Context, deliveryID string) error {
+	if deliveryID == "" {
+		return errors.New("delivery is required")
+	}
+	now := time.Now().UTC().UnixNano()
+	result, err := s.db.ExecContext(ctx, `UPDATE delivery_runs
+        SET state = ?, generation = generation + 1, owner = '', updated_at = ?
+        WHERE delivery_id = ? AND state = ? AND EXISTS (
+            SELECT 1 FROM deliveries WHERE delivery_id = ? AND milestone_id = ''
+        )`, domain.RunPlanned, now, deliveryID, domain.RunFailed, deliveryID)
+	if err != nil {
+		return fmt.Errorf("retry failed intake: %w", err)
+	}
+	if rows, _ := result.RowsAffected(); rows == 1 {
+		return nil
+	}
+	var state domain.RunState
+	var milestoneID string
+	if err := s.db.QueryRowContext(ctx, `SELECT r.state, d.milestone_id
+        FROM delivery_runs r JOIN deliveries d ON d.delivery_id = r.delivery_id
+        WHERE r.delivery_id = ?`, deliveryID).Scan(&state, &milestoneID); err != nil {
+		return fmt.Errorf("read intake retry state: %w", err)
+	}
+	if state == domain.RunPlanned && milestoneID == "" {
+		return nil
+	}
+	return errors.New("only failed pre-milestone intake may be retried")
+}
+
 func (s *Store) FinishAttempt(ctx context.Context, deliveryID, owner string, target domain.RunState) error {
 	if err := domain.ValidateRunTransition(domain.RunRunning, target); err != nil {
 		return err
