@@ -84,6 +84,7 @@ func run(ctx context.Context, args []string) error {
 	adoptExisting := flags.Bool("adopt-existing", false, "bind a previously created active GSD milestone")
 	decisionPath := flags.String("decision", "", "path to protected explicit human decision JSON")
 	action := flags.String("action", "", "governed maintenance action")
+	confirmDepth := flags.Bool("confirm-depth", false, "apply explicit operator approval only to the GSD planning-depth gate")
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
 	}
@@ -166,13 +167,16 @@ func run(ctx context.Context, args []string) error {
 		}
 		return runFencedRepair(ctx, runner, config, deliveryID(*issue), *issue)
 	case "run":
+		if *confirmDepth {
+			return errors.New("--confirm-depth is accepted only by start")
+		}
 		if *issue <= 0 {
 			return errors.New("--issue is required")
 		}
 		if *command == "auto" || *command == "recover" || *command == "new-milestone" {
 			return errors.New("generic run permits only one fenced unit; use --command next or status")
 		}
-		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil)
+		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, false)
 	case "start":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
@@ -204,7 +208,7 @@ func run(ctx context.Context, args []string) error {
 		if *adoptExisting {
 			return adoptExistingDelivery(ctx, runner, config, deliveryID(*issue), *issue, contextHash)
 		}
-		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path})
+		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path}, *confirmDepth)
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
@@ -364,7 +368,7 @@ func loadConfig(path string) (fileConfig, error) {
 	return config, nil
 }
 
-func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash, command string, args []string) error {
+func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash, command string, args []string, confirmDepth bool) error {
 	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
 		return err
 	}
@@ -475,7 +479,16 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			appendActivity("heartbeat", "alive", "", "", heartbeat.InFlightTool, heartbeat.At)
 			fmt.Fprintf(os.Stderr, "%s heartbeat alive=%t in_flight_tool=%s\n", heartbeat.At.Format(time.RFC3339), heartbeat.ProcessAlive, heartbeat.InFlightTool)
 		},
-		Question: terminalQuestion,
+		Question: func(questionCtx context.Context, question gsd.Question) (gsd.UIResponse, error) {
+			if confirmDepth {
+				if response, approved := approveDepthQuestion(question); approved {
+					appendActivity("human.decision", "approved_depth", trustedUnit, "", "", time.Now().UTC())
+					fmt.Fprintln(os.Stderr, "HUMAN GATE [select] planning depth approved by explicit --confirm-depth operator flag")
+					return response, nil
+				}
+			}
+			return terminalQuestion(questionCtx, question)
+		},
 	}
 	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
 	result := runner.Run(runCtx, command, args, observer)
@@ -583,6 +596,20 @@ func (e commandExitError) Unwrap() error { return e.err }
 func (e commandExitError) ExitCode() int { return e.code }
 
 func deliveryID(issue int) string { return "issue-" + strconv.Itoa(issue) }
+
+func approveDepthQuestion(question gsd.Question) (gsd.UIResponse, bool) {
+	cancelled := gsd.UIResponse{Cancelled: true}
+	if question.Method != "select" || !strings.HasPrefix(strings.ToLower(strings.TrimSpace(question.Title)), "depth check:") {
+		return cancelled, false
+	}
+	for _, option := range question.Options {
+		normalized := strings.ToLower(strings.TrimSpace(option))
+		if strings.HasPrefix(normalized, "confirm depth") {
+			return gsd.UIResponse{Value: option}, true
+		}
+	}
+	return cancelled, false
+}
 
 func terminalQuestion(ctx context.Context, question gsd.Question) (gsd.UIResponse, error) {
 	fmt.Fprintf(os.Stderr, "\nHUMAN GATE [%s] %s\n", question.Method, question.Title)
