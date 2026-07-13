@@ -24,8 +24,17 @@
   volumes.
 - [x] Pinned image builds and runs as non-root `shepherd` UID/GID 1000 with a writable governed
   home and exact GSD 1.11.0 admission.
-- [x] Pinned image includes approved `git` and `ca-certificates` dependencies, excludes optional
-  publisher/tooling binaries, and completes a real governed query through Shepherd.
+- [x] Pinned image includes the approved Go/research toolchain, excludes GitHub/publisher binaries,
+  and completes a real governed query through Shepherd.
+- [x] Runtime probes report Go 1.25.12, GSD Pi 1.11.0, agent-browser 0.31.1, Git, Make, jq, and
+  ripgrep; the bounded curl shim completes GET and rejects POST.
+- [x] Agent-browser opens and snapshots HTTPS with content boundaries and denies `eval`.
+- [x] Context7 is written as a trusted HTTP MCP server into protected task state; worktree MCP
+  configuration is not copied.
+- [x] SearXNG runs by exact digest on `shepherd-research`, generates its secret at runtime, exposes
+  no host port, and returns JSON search results to a governed worker container.
+- [x] `scripts/gsd prompt programming-loop ...` renders and the Pi compatibility extension merges
+  the same local command registry.
 
 ## Current canary blocker
 
@@ -42,9 +51,10 @@ is supported. The replacement now has a Podman backend that overlays task-isolat
 `.planning` mounts and exposes only the code worktree plus explicit read-only auth/settings files.
 The approved image/build-cache-only prune reduced Podman images from 42.83 GB to 24.69 GB without
 touching volumes. The image now builds, passes exact-version admission, and runs as the expected
-non-root identity. The integrated governed query then proved that the slim Node base lacks GSD's
-required `git` executable. After explicit dependency approval, the image installed only Git and
-CA certificates and the governed query completed successfully against isolated state. Issue 372's
+non-root identity. Real qualification found missing Git, ARM64 browser availability, transient npm
+reliability, and login-shell PATH gaps. The approved image now contains the repository build and
+read-oriented research surface with bounded retries and multi-architecture browser setup. SearXNG
+remains a separate private sidecar and Context7 uses GSD Pi's native HTTP MCP client. Issue 372's
 prior delivery generation remains blocked and was not resumed; a full AI canary still requires an
 explicit resume decision or a fresh governed delivery that does not violate immutable milestone
 binding.

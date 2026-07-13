@@ -15,11 +15,18 @@ type ContainerConfig struct {
 	PlanningDir  string
 	AuthFile     string
 	SettingsFile string
+	Network      string
 }
 
 func (c ContainerConfig) Validate(workDir string) error {
 	if c.Engine != "podman" || c.Image == "" || strings.ContainsAny(c.Image, "\r\n\x00") {
 		return errors.New("container runtime requires podman and a pinned image")
+	}
+	if c.Network == "" {
+		c.Network = "bridge"
+	}
+	if !validNetworkName(c.Network) {
+		return errors.New("container network must be a plain Podman network name")
 	}
 	for label, path := range map[string]string{
 		"work directory": workDir, "GSD state": c.GSDStateDir, "planning state": c.PlanningDir,
@@ -49,8 +56,12 @@ func (c ContainerConfig) Validate(workDir string) error {
 }
 
 func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string {
+	network := c.Network
+	if network == "" {
+		network = "bridge"
+	}
 	return append([]string{
-		"run", "--rm", "--pull=never", "--network=bridge", "--userns=keep-id",
+		"run", "--rm", "--pull=never", "--network=" + network, "--userns=keep-id",
 		"--workdir=/workspace",
 		"--volume=" + workDir + ":/workspace:rw",
 		"--volume=" + c.GSDStateDir + ":/workspace/.gsd:rw",
@@ -58,6 +69,7 @@ func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string 
 		"--volume=" + c.AuthFile + ":/home/shepherd/.pi/agent/auth.json:ro",
 		"--volume=" + c.SettingsFile + ":/home/shepherd/.pi/agent/settings.json:ro",
 		"--env=HOME=/home/shepherd", "--env=GSD_HOME=/home/shepherd/.pi",
+		"--env=SEARXNG_BASE=http://searxng:8080",
 		"--env=GIT_TERMINAL_PROMPT=0", "--env=GIT_ASKPASS=",
 		"--env=GIT_CONFIG_COUNT=2", "--env=GIT_CONFIG_KEY_0=credential.helper", "--env=GIT_CONFIG_VALUE_0=",
 		"--env=GIT_CONFIG_KEY_1=remote.origin.pushurl", "--env=GIT_CONFIG_VALUE_1=file:///dev/null/shepherd-disabled",
@@ -94,7 +106,23 @@ func provisionContainerPolicy(workDir, stateDir string) error {
 			return err
 		}
 	}
+	trustedMCP := []byte("{\n  \"mcpServers\": {\n    \"context7\": {\n      \"url\": \"https://mcp.context7.com/mcp\"\n    }\n  }\n}\n")
+	if err := os.WriteFile(filepath.Join(stateDir, "mcp.json"), trustedMCP, 0o600); err != nil {
+		return err
+	}
 	return nil
+}
+
+func validNetworkName(value string) bool {
+	if value == "" || len(value) > 63 || value[0] == '-' {
+		return false
+	}
+	for _, char := range value {
+		if (char < 'a' || char > 'z') && (char < 'A' || char > 'Z') && (char < '0' || char > '9') && char != '.' && char != '_' && char != '-' {
+			return false
+		}
+	}
+	return true
 }
 
 func pathInside(root, path string) (bool, error) {

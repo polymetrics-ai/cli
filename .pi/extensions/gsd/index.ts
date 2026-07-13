@@ -10,6 +10,7 @@ const baseDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(baseDir, "../../..");
 const gsdScript = join(repoRoot, "scripts", "gsd");
 const commandsPath = join(repoRoot, ".gsd", "commands.json");
+const localCommandsPath = join(repoRoot, ".gsd", "local-commands.json");
 
 interface GSDCommand {
 	name: string;
@@ -24,7 +25,10 @@ interface GSDRegistry {
 function loadCommands(): GSDCommand[] {
 	try {
 		const registry = JSON.parse(readFileSync(commandsPath, "utf8")) as GSDRegistry;
-		return registry.commands ?? [];
+		const local = JSON.parse(readFileSync(localCommandsPath, "utf8")) as GSDRegistry;
+		const merged = new Map((registry.commands ?? []).map((command) => [command.name, command]));
+		for (const command of local.commands ?? []) merged.set(command.name, command);
+		return [...merged.values()];
 	} catch {
 		return [];
 	}

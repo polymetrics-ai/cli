@@ -40,10 +40,15 @@ const gsdTools = path.join(gsdHome, "bin", "gsd-tools.cjs");
 const gsdDir = path.join(root, ".gsd");
 const docsDir = path.join(gsdDir, "official-docs");
 const commandsPath = path.join(gsdDir, "commands.json");
+const localCommandsPath = path.join(gsdDir, "local-commands.json");
 const lockPath = path.join(gsdDir, "upstream.lock.json");
 const promptDir = path.join(gsdDir, "prompts");
 
 const specialPrompts = {
+  "programming-loop": {
+    file: path.join(promptDir, "programming-loop.md"),
+    commands: ["plan-phase", "execute-phase", "verify-work", "code-review"],
+  },
   "issue-122-rebootstrap": {
     file: path.join(promptDir, "issue-122-rebootstrap.md"),
     commands: ["onboard", "map-codebase", "new-project", "plan-phase", "programming-loop"],
@@ -105,7 +110,11 @@ function loadRegistry() {
 }
 
 function allCommands() {
-  return loadRegistry().commands || [];
+  const upstream = loadRegistry().commands || [];
+  const local = exists(localCommandsPath) ? (readJSON(localCommandsPath).commands || []) : [];
+  const merged = new Map(upstream.map((command) => [command.name, command]));
+  for (const command of local) merged.set(command.name, command);
+  return [...merged.values()];
 }
 
 function findCommand(name) {
@@ -129,7 +138,7 @@ function commandSection(command) {
 function sourceDocsFor(name) {
   const normalized = commandName(name);
   if (specialPrompts[normalized]) {
-    const files = [specialPrompts[normalized].file, commandsPath, lockPath];
+    const files = [specialPrompts[normalized].file, commandsPath, localCommandsPath, lockPath];
     for (const cmdName of specialPrompts[normalized].commands) {
       const cmd = findCommand(cmdName);
       if (cmd) for (const doc of cmd.sourceDocs || []) files.push(path.join(root, doc.replace(/^docs\//, ".gsd/official-docs/")));

@@ -1,0 +1,79 @@
+#!/usr/bin/env node
+"use strict";
+
+const MAX_BYTES = 2 * 1024 * 1024;
+const args = process.argv.slice(2);
+let head = false;
+let target = "";
+for (const arg of args) {
+  if (["-s", "-S", "-f", "-L", "-sS", "-fsSL", "--compressed"].includes(arg)) continue;
+  if (arg === "-I" || arg === "--head") {
+    head = true;
+    continue;
+  }
+  if (!arg.startsWith("-") && !target) {
+    target = arg;
+    continue;
+  }
+  console.error(`web-fetch: unsupported argument ${arg}`);
+  process.exit(2);
+}
+if (!target) {
+  console.error("usage: web-fetch [-fsSL] [-I|--head] https://host/path");
+  process.exit(2);
+}
+let url;
+try {
+  url = new URL(target);
+} catch {
+  console.error("web-fetch: invalid URL");
+  process.exit(2);
+}
+function validateURL(candidate) {
+  if (candidate.username || candidate.password) throw new Error("credentials in URLs are forbidden");
+  if (candidate.protocol !== "https:" && !(candidate.protocol === "http:" && candidate.hostname === "searxng")) {
+    throw new Error("only HTTPS and the private SearXNG endpoint are allowed");
+  }
+}
+let response;
+for (let redirects = 0; redirects <= 5; redirects++) {
+  try {
+    validateURL(url);
+  } catch (error) {
+    console.error(`web-fetch: ${error.message}`);
+    process.exit(2);
+  }
+  response = await fetch(url, {
+    method: head ? "HEAD" : "GET",
+    redirect: "manual",
+    signal: AbortSignal.timeout(20_000),
+    headers: { "user-agent": "polymetrics-shepherd-research/1" },
+  });
+  if (![301, 302, 303, 307, 308].includes(response.status)) break;
+  const location = response.headers.get("location");
+  if (!location || redirects === 5) {
+    console.error("web-fetch: invalid or excessive redirects");
+    process.exit(1);
+  }
+  url = new URL(location, url);
+}
+if (!response.ok) {
+  console.error(`web-fetch: HTTP ${response.status}`);
+  process.exit(1);
+}
+if (head) {
+  console.log(JSON.stringify({ status: response.status, contentType: response.headers.get("content-type"), contentLength: response.headers.get("content-length") }));
+  process.exit(0);
+}
+const reader = response.body.getReader();
+let total = 0;
+for (;;) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  total += value.byteLength;
+  if (total > MAX_BYTES) {
+    console.error("web-fetch: response exceeded 2 MiB");
+    process.exit(1);
+  }
+  process.stdout.write(value);
+}

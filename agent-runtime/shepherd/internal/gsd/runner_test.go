@@ -73,9 +73,11 @@ func TestRunnerClassifiesBlockedExit(t *testing.T) {
 	if err != nil {
 		t.Fatalf("new runner: %v", err)
 	}
-	result := runner.Run(context.Background(), "next", nil, Observer{})
-	if result.Terminal != TerminalBlocked || result.ExitCode != 10 {
-		t.Fatalf("result=%+v", result)
+	for attempt := 0; attempt < 25; attempt++ {
+		result := runner.Run(context.Background(), "next", nil, Observer{})
+		if result.Terminal != TerminalBlocked || result.ExitCode != 10 {
+			t.Fatalf("attempt=%d result=%+v", attempt, result)
+		}
 	}
 }
 

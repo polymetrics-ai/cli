@@ -40,6 +40,7 @@ type fileConfig struct {
 	Runtime          string   `json:"runtime"`
 	ContainerImage   string   `json:"container_image"`
 	AuthFile         string   `json:"auth_file"`
+	ContainerNetwork string   `json:"container_network"`
 }
 
 type decisionInput struct {
@@ -123,7 +124,7 @@ func run(ctx context.Context, args []string) error {
 	if config.Runtime == "podman" {
 		container = &gsd.ContainerConfig{Engine: "podman", Image: config.ContainerImage,
 			GSDStateDir: filepath.Join(config.StateDir, "runtime", "gsd"), PlanningDir: filepath.Join(config.StateDir, "runtime", "planning"),
-			AuthFile: config.AuthFile, SettingsFile: filepath.Join(config.GSDHome, "agent", "settings.json")}
+			AuthFile: config.AuthFile, SettingsFile: filepath.Join(config.GSDHome, "agent", "settings.json"), Network: config.ContainerNetwork}
 		if err := gsd.ValidatePinnedContainer(ctx, *container, config.GSDVersion); err != nil {
 			return fmt.Errorf("runtime admission: %w", err)
 		}

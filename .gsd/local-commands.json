@@ -1,0 +1,19 @@
+{
+  "commands": [
+    {
+      "name": "programming-loop",
+      "officialCommand": "gsd-programming-loop",
+      "piCommand": "gsd-programming-loop",
+      "genericInvocation": "gsd programming-loop",
+      "description": "Run the Polymetrics universal programming loop with issue-first planning, TDD, verification, and review gates.",
+      "flags": [],
+      "examples": [
+        "gsd-programming-loop init --phase issue-372 --dry-run"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    }
+  ]
+}

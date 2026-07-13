@@ -17,12 +17,34 @@ task-isolated GSD/planning mounts, and explicit read-only auth/settings files:
 
 ```bash
 podman build -t localhost/polymetrics-gsd-pi:1.11.0 \
-  -f agent-runtime/shepherd/container/Containerfile \
-  agent-runtime/shepherd/container
+  -f agent-runtime/shepherd/container/Containerfile .
 ```
 
 The host runtime remains a qualification/debug fallback and keeps all external-effect publishers
 disabled. The container does not mount host SSH, GitHub, cloud, or home-directory credentials.
+
+The governed image contains Go 1.25.12, Make, Git, jq, ripgrep, official GSD Pi 1.11.0, Context7
+MCP 3.2.3, and agent-browser 0.31.1 with Chrome. `curl` is a read-only compatibility wrapper around
+`web-fetch`: common GET/HEAD flags work, responses are capped at 2 MiB, and bodies, auth headers,
+uploads, and non-HTTP(S) schemes are rejected. GitHub CLI and publisher credentials are absent.
+
+Start the private search sidecar before selecting `container_network: shepherd-research`:
+
+```bash
+podman compose -f agent-runtime/shepherd/research/compose.yaml up -d
+```
+
+SearXNG is available only to containers on that network at `http://searxng:8080` and has no host
+port. Agent-browser is deny-by-default: it permits navigation, snapshots, scrolling, waits, and
+reads; content boundaries are enabled and output is capped at 50,000 characters. Shepherd writes
+the Context7 HTTP MCP entry into protected task state rather than trusting worktree MCP config.
+
+Run the pinned official `gsd` binary directly for local interactive work. `scripts/gsd` remains a
+compatibility prompt renderer for shell and legacy Pi callers; its local registry now supports:
+
+```bash
+scripts/gsd prompt programming-loop init --phase issue-372 --dry-run
+```
 
 ## Start an issue milestone
 

@@ -1,3 +1,5 @@
+FROM golang:1.25.12-bookworm AS go-toolchain
+
 FROM node:24.13.1-bookworm-slim
 
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
@@ -6,17 +8,50 @@ RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
         ca-certificates \
         git \
+        jq \
+        make \
+        ripgrep \
     && rm -rf /var/lib/apt/lists/*
 
-RUN npm install --global --omit=dev --no-audit --no-fund @opengsd/gsd-pi@1.11.0 \
+COPY --from=go-toolchain /usr/local/go /usr/local/go
+
+RUN for attempt in 1 2 3; do \
+      npm install --global --omit=dev --no-audit --no-fund \
+        --fetch-retries=5 --fetch-retry-mintimeout=20000 --fetch-retry-maxtimeout=120000 \
+        @opengsd/gsd-pi@1.11.0 @upstash/context7-mcp@3.2.3 agent-browser@0.31.1 \
+      && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      sleep "$((attempt * 5))"; \
+    done \
+    && if [ "$(dpkg --print-architecture)" = "arm64" ]; then \
+         apt-get update \
+         && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends chromium; \
+       else \
+         agent-browser install --with-deps; \
+       fi \
+    && rm -rf /var/lib/apt/lists/* \
     && groupmod --new-name shepherd node \
     && usermod --login shepherd --home /home/shepherd --move-home node \
     && mkdir -p /home/shepherd/.pi/agent /workspace \
     && chown -R shepherd:shepherd /home/shepherd /workspace
 
+COPY agent-runtime/shepherd/container/web-fetch /usr/local/bin/web-fetch
+COPY agent-runtime/shepherd/container/agent-browser-policy.json /etc/shepherd/agent-browser-policy.json
+
+RUN chmod 0555 /usr/local/bin/web-fetch \
+    && ln -sf /usr/local/bin/web-fetch /usr/local/bin/curl \
+    && ln -s /usr/local/go/bin/go /usr/local/bin/go \
+    && ln -s /usr/local/go/bin/gofmt /usr/local/bin/gofmt
+
 USER shepherd
 WORKDIR /workspace
 ENV HOME=/home/shepherd
 ENV GSD_HOME=/home/shepherd/.pi
+ENV PATH=/usr/local/go/bin:${PATH}
+ENV AGENT_BROWSER_CONTENT_BOUNDARIES=1
+ENV AGENT_BROWSER_MAX_OUTPUT=50000
+ENV AGENT_BROWSER_ACTION_POLICY=/etc/shepherd/agent-browser-policy.json
+ENV AGENT_BROWSER_CONFIRM_INTERACTIVE=1
+ENV SEARXNG_BASE=http://searxng:8080
 
 ENTRYPOINT ["gsd"]

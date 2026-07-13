@@ -72,3 +72,116 @@ func TestContainerImageInstallsRequiredGSDRuntimePackages(t *testing.T) {
 		}
 	}
 }
+
+func TestContainerImageInstallsGovernedAgentToolchain(t *testing.T) {
+	t.Parallel()
+	raw, err := os.ReadFile(filepath.Join("..", "..", "container", "Containerfile"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	containerfile := string(raw)
+	for _, required := range []string{
+		"golang:1.25.12-bookworm", "make", "jq", "ripgrep",
+		"agent-browser@0.31.1", "agent-browser install --with-deps",
+		"dpkg --print-architecture", "apt-get install --yes --no-install-recommends chromium",
+		"@upstash/context7-mcp@3.2.3", "COPY agent-runtime/shepherd/container/web-fetch",
+		"ln -sf /usr/local/bin/web-fetch /usr/local/bin/curl",
+		"ln -s /usr/local/go/bin/go /usr/local/bin/go",
+	} {
+		if !strings.Contains(containerfile, required) {
+			t.Errorf("container image is missing governed agent tool %q", required)
+		}
+	}
+	for _, forbidden := range []string{" github-cli", " gh ", "apt-get install curl"} {
+		if strings.Contains(containerfile, forbidden) {
+			t.Errorf("container image includes forbidden publisher/unrestricted fetch surface %q", forbidden)
+		}
+	}
+	policy, err := os.ReadFile(filepath.Join("..", "..", "container", "agent-browser-policy.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(policy), `"close"`) || strings.Contains(string(policy), `"eval"`) {
+		t.Fatal("agent-browser policy must permit cleanup while denying script evaluation")
+	}
+}
+
+func TestContainerUsesValidatedResearchNetwork(t *testing.T) {
+	t.Parallel()
+	config, root := validContainerConfig(t)
+	config.Network = "shepherd-research"
+	if err := config.Validate(root); err != nil {
+		t.Fatal(err)
+	}
+	joined := strings.Join(config.commandArgs(root, nil), " ")
+	if !strings.Contains(joined, "--network=shepherd-research") {
+		t.Fatalf("research network was not applied: %s", joined)
+	}
+	config.Network = "--privileged"
+	if err := config.Validate(root); err == nil {
+		t.Fatal("option-like container network must be rejected")
+	}
+}
+
+func TestProvisionContainerPolicyWritesTrustedContext7MCP(t *testing.T) {
+	t.Parallel()
+	workDir := t.TempDir()
+	stateDir := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(workDir, ".gsd", "agents"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(workDir, ".gsd", "PREFERENCES.md"), []byte("policy"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	// Worker-controlled MCP configuration must never be copied into the protected runtime state.
+	if err := os.WriteFile(filepath.Join(workDir, ".gsd", "mcp.json"), []byte(`{"servers":{"evil":{"url":"http://worker.invalid"}}}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := provisionContainerPolicy(workDir, stateDir); err != nil {
+		t.Fatal(err)
+	}
+	raw, err := os.ReadFile(filepath.Join(stateDir, "mcp.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	text := string(raw)
+	if !strings.Contains(text, "https://mcp.context7.com/mcp") || strings.Contains(text, "worker.invalid") {
+		t.Fatalf("unexpected trusted MCP policy: %s", text)
+	}
+}
+
+func TestResearchSidecarIsPrivatePinnedAndJSONEnabled(t *testing.T) {
+	t.Parallel()
+	root := filepath.Join("..", "..", "research")
+	compose, err := os.ReadFile(filepath.Join(root, "compose.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	settings, err := os.ReadFile(filepath.Join(root, "settings.yml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	composeText := string(compose)
+	if !strings.Contains(composeText, "searxng/searxng:2026.7.10-799086874") || strings.Contains(composeText, "ports:") {
+		t.Fatal("SearXNG must be pinned and must not publish a host port")
+	}
+	if !strings.Contains(composeText, "secrets.token_urlsafe") || strings.Contains(composeText, "SEARXNG_SECRET=") && !strings.Contains(composeText, "SEARXNG_SECRET=\"$$(python") {
+		t.Fatal("SearXNG secret must be generated inside the container at runtime")
+	}
+	if !strings.Contains(string(settings), "formats:") || !strings.Contains(string(settings), "json") {
+		t.Fatal("SearXNG JSON output is not enabled")
+	}
+}
+
+func validContainerConfig(t *testing.T) (ContainerConfig, string) {
+	t.Helper()
+	root := t.TempDir()
+	auth := filepath.Join(t.TempDir(), "auth.json")
+	settings := filepath.Join(t.TempDir(), "settings.json")
+	for _, path := range []string{auth, settings} {
+		if err := os.WriteFile(path, []byte("{}"), 0o600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	return ContainerConfig{Engine: "podman", Image: "localhost/gsd-pi:1.11.0", GSDStateDir: filepath.Join(t.TempDir(), "gsd"), PlanningDir: filepath.Join(t.TempDir(), "planning"), AuthFile: auth, SettingsFile: settings}, root
+}

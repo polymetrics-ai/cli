@@ -17,14 +17,24 @@ module without coupling it to the Polymetrics CLI module.
 7. Replay known incidents and run a merge-disabled canary before legacy removal (#379).
 8. Qualify the pinned Podman image: prove it builds without UID collisions, reports the exact GSD
    version, runs as the intended non-root identity, and preserves task-isolated planning state.
-9. Install only GSD's required container OS surface: Git plus CA certificates for verified HTTPS;
-   keep optional shells/tools, publisher CLIs, compilers, and browser payloads outside the image.
+9. Install the approved agent development surface in the governed image: the repository's pinned Go
+   toolchain, Make, Git, CA trust, jq, ripgrep, a bounded read-only fetch command, and pinned
+   `agent-browser`; explicitly exclude GitHub/publisher CLIs and unrestricted HTTP mutation tools.
+10. Provision trusted Context7 HTTP MCP configuration from the controller, not from worker-controlled
+    repository state, and keep API credentials optional and outside version control.
+11. Run SearXNG as a separately pinned, private-network sidecar with JSON search enabled and no host
+    port; do not bake a search service into the worker image.
+12. Make official GSD Pi the documented execution runtime locally and in Podman. Retain
+    `scripts/gsd` only as a deterministic compatibility prompt renderer, and merge a tested
+    repo-local `programming-loop` command overlay into both the shell renderer and Pi aliases.
 
 ## Boundaries
 
 - GSD Pi owns workflow state. Shepherd only uses documented CLI/query/event surfaces.
 - Shepherd owns external-effect authorization and never autonomously merges to `main`.
 - No raw prompts, reasoning, credentials, command arguments, or tool results are persisted.
+- Research tools default to read-only behavior, bounded output, and controller-owned configuration.
+- The agent image has no GitHub CLI, publisher token, unrestricted curl, or host search port.
 - The module lives under `agent-runtime/shepherd/` with a separate `go.mod`.
 - Legacy removal and issue/PR closure are a final, separately reviewed cutover step.
 

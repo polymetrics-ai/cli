@@ -1,0 +1,21 @@
+services:
+  searxng:
+    image: docker.io/searxng/searxng:2026.7.10-799086874@sha256:cdb828aa32836c05d1983c4ab14bb031130a5b9be310e6369a5cc357dd744ce6
+    restart: unless-stopped
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        export SEARXNG_SECRET="$$(python -c 'import secrets; print(secrets.token_urlsafe(48))')"
+        exec /usr/local/searxng/entrypoint.sh
+    volumes:
+      - ./settings.yml:/etc/searxng/settings.yml:ro
+    networks:
+      - research
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  research:
+    name: shepherd-research
+    internal: false

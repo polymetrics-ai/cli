@@ -10,6 +10,7 @@
   "gsd_version": "1.11.0",
   "runtime": "podman",
   "container_image": "localhost/polymetrics-gsd-pi:1.11.0",
+  "container_network": "shepherd-research",
   "auth_file": "/absolute/path/to/private/auth.json",
   "timeout_seconds": 3600,
   "heartbeat_seconds": 15,

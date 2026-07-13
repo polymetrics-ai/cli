@@ -190,9 +190,18 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	}
 
 	events := make(chan scanResult)
-	go scanEvents(ctx, stdout, r.config.MaxEventBytes, events)
+	scanDone := make(chan struct{})
+	go func() {
+		defer close(scanDone)
+		scanEvents(ctx, stdout, r.config.MaxEventBytes, events)
+	}()
 	waited := make(chan error, 1)
-	go func() { waited <- cmd.Wait() }()
+	go func() {
+		// os/exec documents that Wait must not race a StdoutPipe reader. A fast child can otherwise
+		// close the descriptor before Scanner observes EOF and turn a valid exit into a scan error.
+		<-scanDone
+		waited <- cmd.Wait()
+	}()
 
 	ticker := time.NewTicker(r.config.HeartbeatInterval)
 	defer ticker.Stop()
