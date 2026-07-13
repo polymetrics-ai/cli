@@ -34,6 +34,18 @@ func TestActivityStoreRejectsRawPayloadAndDeduplicates(t *testing.T) {
 	}
 }
 
+func TestActivityStoreAcceptsTypedHumanDecisionAudit(t *testing.T) {
+	store, err := Open(context.Background(), t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	event := Activity{ID: "decision-1", RunID: "issue-380", UnitID: "new-milestone", Kind: "human.decision", Status: "approved_depth", Tool: "depth_verification_M001-abc123_confirm", At: time.Unix(1, 0).UTC()}
+	if appended, err := store.Append(context.Background(), event); err != nil || !appended {
+		t.Fatalf("appended=%t err=%v", appended, err)
+	}
+}
+
 func TestActivityStoreRecoversTornTail(t *testing.T) {
 	t.Parallel()
 
