@@ -52,6 +52,7 @@ type Config struct {
 	HeartbeatInterval time.Duration
 	MaxEventBytes     int
 	Environment       []string
+	Container         *ContainerConfig
 }
 
 type Heartbeat struct {
@@ -103,11 +104,25 @@ type questionResult struct {
 type Runner struct{ config Config }
 
 func NewRunner(config Config) (*Runner, error) {
-	if len(config.Command) == 0 || strings.TrimSpace(config.Command[0]) == "" {
-		return nil, errors.New("GSD command is required")
-	}
 	if !filepath.IsAbs(config.WorkDir) || !filepath.IsAbs(config.GSDHome) {
 		return nil, errors.New("absolute work directory and controlled GSD home are required")
+	}
+	if config.Container == nil {
+		if len(config.Command) == 0 || strings.TrimSpace(config.Command[0]) == "" {
+			return nil, errors.New("GSD command is required")
+		}
+	} else {
+		if err := config.Container.Validate(config.WorkDir); err != nil {
+			return nil, err
+		}
+		for _, dir := range []string{config.Container.GSDStateDir, config.Container.PlanningDir} {
+			if err := os.MkdirAll(dir, 0o700); err != nil {
+				return nil, fmt.Errorf("create isolated container state: %w", err)
+			}
+		}
+		if err := provisionContainerPolicy(config.WorkDir, config.Container.GSDStateDir); err != nil {
+			return nil, err
+		}
 	}
 	if config.Model != requiredModel || config.Thinking != "high" {
 		return nil, fmt.Errorf("model must be %s with high thinking", requiredModel)
@@ -145,7 +160,7 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	ctx, cancel := context.WithTimeout(parent, r.config.Timeout)
 	defer cancel()
 
-	commandArgs := append([]string{}, r.config.Command[1:]...)
+	commandArgs := r.runtimeArgs()
 	responseTimeout := r.config.Timeout + time.Minute
 	commandArgs = append(commandArgs,
 		"headless", "--json", "--supervised", "--model", r.config.Model,
@@ -155,10 +170,10 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 		"--timeout", strconv.FormatInt(r.config.Timeout.Milliseconds(), 10), command,
 	)
 	commandArgs = append(commandArgs, args...)
-	cmd := exec.CommandContext(ctx, r.config.Command[0], commandArgs...)
+	cmd := r.execCommand(ctx, commandArgs)
 	configureProcessTree(cmd)
 	cmd.Dir = r.config.WorkDir
-	cmd.Env = governedEnvironment(r.config.GSDHome, r.config.Environment)
+	r.configureEnvironment(cmd)
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return failedResult(started, err)
@@ -297,12 +312,12 @@ func isWithin(root, path string) bool {
 func (r *Runner) Query(parent context.Context) (WorkflowSnapshot, error) {
 	ctx, cancel := context.WithTimeout(parent, min(r.config.Timeout, 30*time.Second))
 	defer cancel()
-	args := append([]string{}, r.config.Command[1:]...)
+	args := r.runtimeArgs()
 	args = append(args, "headless", "query")
-	cmd := exec.CommandContext(ctx, r.config.Command[0], args...)
+	cmd := r.execCommand(ctx, args)
 	configureProcessTree(cmd)
 	cmd.Dir = r.config.WorkDir
-	cmd.Env = governedEnvironment(r.config.GSDHome, r.config.Environment)
+	r.configureEnvironment(cmd)
 	var stdout boundedBuffer
 	stdout.limit = 1024 * 1024
 	var stderr boundedBuffer
@@ -313,6 +328,97 @@ func (r *Runner) Query(parent context.Context) (WorkflowSnapshot, error) {
 		return WorkflowSnapshot{}, fmt.Errorf("headless query failed: %w: %s", err, stderr.String())
 	}
 	return DecodeQuery([]byte(stdout.String()))
+}
+
+func (r *Runner) RebuildMarkdown(parent context.Context) error {
+	ctx, cancel := context.WithTimeout(parent, min(r.config.Timeout, 60*time.Second))
+	defer cancel()
+	args := r.runtimeArgs()
+	args = append(args, "--no-session", "--print", "/gsd rebuild markdown")
+	cmd := r.execCommand(ctx, args)
+	configureProcessTree(cmd)
+	cmd.Dir = r.config.WorkDir
+	r.configureEnvironment(cmd)
+	var stdout, stderr boundedBuffer
+	stdout.limit, stderr.limit = 64*1024, 64*1024
+	cmd.Stdout, cmd.Stderr = &stdout, &stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("GSD markdown rebuild failed: %w", err)
+	}
+	notifications := filepath.Join(r.config.WorkDir, ".gsd", "notifications.jsonl")
+	if r.config.Container != nil {
+		notifications = filepath.Join(r.config.Container.GSDStateDir, "notifications.jsonl")
+	}
+	return validateRebuildNotification(notifications)
+}
+
+func validateRebuildNotification(path string) error {
+	file, err := os.Open(path)
+	if err != nil {
+		return errors.New("GSD rebuild did not emit a durable result")
+	}
+	defer file.Close()
+	info, err := file.Stat()
+	if err != nil {
+		return err
+	}
+	if info.Size() > 1024*1024 {
+		if _, err := file.Seek(info.Size()-1024*1024, io.SeekStart); err != nil {
+			return err
+		}
+	}
+	scanner := bufio.NewScanner(file)
+	scanner.Buffer(make([]byte, 4096), 256*1024)
+	latest := ""
+	for scanner.Scan() {
+		var entry struct {
+			Message string `json:"message"`
+		}
+		if json.Unmarshal(scanner.Bytes(), &entry) == nil && strings.Contains(entry.Message, "gsd rebuild markdown: rebuilt") {
+			latest = entry.Message
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+	if latest == "" {
+		return errors.New("GSD rebuild result is missing")
+	}
+	if strings.Contains(latest, "Errors:") {
+		return errors.New("GSD rebuild completed with projection errors")
+	}
+	return nil
+}
+
+func (r *Runner) execCommand(ctx context.Context, args []string) *exec.Cmd {
+	if r.config.Container != nil {
+		translated := append([]string{}, args...)
+		for i := 0; i+1 < len(translated); i++ {
+			if translated[i] == "--context" && filepath.IsAbs(translated[i+1]) {
+				relative, err := filepath.Rel(r.config.WorkDir, translated[i+1])
+				if err == nil {
+					translated[i+1] = filepath.ToSlash(filepath.Join("/workspace", relative))
+				}
+			}
+		}
+		return exec.CommandContext(ctx, r.config.Container.Engine, r.config.Container.commandArgs(r.config.WorkDir, translated)...)
+	}
+	return exec.CommandContext(ctx, r.config.Command[0], args...)
+}
+
+func (r *Runner) runtimeArgs() []string {
+	if r.config.Container != nil {
+		return nil
+	}
+	return append([]string{}, r.config.Command[1:]...)
+}
+
+func (r *Runner) configureEnvironment(cmd *exec.Cmd) {
+	if r.config.Container != nil {
+		cmd.Env = os.Environ()
+		return
+	}
+	cmd.Env = governedEnvironment(r.config.GSDHome, r.config.Environment)
 }
 
 func governedEnvironment(gsdHome string, extra []string) []string {

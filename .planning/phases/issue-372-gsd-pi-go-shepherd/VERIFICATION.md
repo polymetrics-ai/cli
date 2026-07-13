@@ -20,3 +20,19 @@
   adversarial tests.
 - [ ] Merge-disabled canary reaches exact-head human gate.
 - [ ] Cleanup inventory reviewed before deletion.
+
+## Current canary blocker
+
+The protected controller adopted `M001-k9bwxs` without duplicating it, and a fenced `next` attempt
+returned exit 10 with no agent/tool events. Targeted GSD audit sampling showed the authoritative DB
+contains the unplanned milestone while markdown cannot represent its empty vision/slices; GSD asks
+for an interactive DB-to-markdown rebuild/menu step and refuses headless dispatch. Shepherd recorded
+the attempt as blocked and now requires a one-shot human resume decision. No recovery command,
+authority reset, state-directory substitution, or legacy cleanup was used.
+
+The root cause is GSD 1.11 planning compatibility: it auto-detected the repository's existing
+multi-milestone `.planning` tree, while its DB-to-planning writer reports that only `flat-phases`
+is supported. The replacement now has a Podman backend design that overlays task-isolated `.gsd`
+and `.planning` mounts and exposes only the code worktree plus explicit read-only auth/settings
+files. Its image build is blocked by Podman VM capacity: 42.83 GB of images (41.19 GB reclaimable)
+and 44.74 GB of volumes (17.64 GB reclaimable). Per the cleanup gate, no prune/removal was run.

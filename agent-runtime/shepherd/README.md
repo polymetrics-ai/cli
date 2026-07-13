@@ -12,6 +12,18 @@ worktree. Provision the controlled `gsd_home` separately; never put
 credentials in the config or repository. Its `agent/settings.json` must pin the configured provider,
 model, and `defaultThinkingLevel: high`; admission fails on any mismatch.
 
+For governed delivery, build and use the Podman image so the agent sees only the issue worktree,
+task-isolated GSD/planning mounts, and explicit read-only auth/settings files:
+
+```bash
+podman build -t localhost/polymetrics-gsd-pi:1.11.0 \
+  -f agent-runtime/shepherd/container/Containerfile \
+  agent-runtime/shepherd/container
+```
+
+The host runtime remains a qualification/debug fallback and keeps all external-effect publishers
+disabled. The container does not mount host SSH, GitHub, cloud, or home-directory credentials.
+
 ## Start an issue milestone
 
 Create a validated context file inside the isolated issue worktree, then run:

@@ -37,6 +37,9 @@ type fileConfig struct {
 	TimeoutSeconds   int      `json:"timeout_seconds"`
 	HeartbeatSeconds int      `json:"heartbeat_seconds"`
 	MaxEventBytes    int      `json:"max_event_bytes"`
+	Runtime          string   `json:"runtime"`
+	ContainerImage   string   `json:"container_image"`
+	AuthFile         string   `json:"auth_file"`
 }
 
 type decisionInput struct {
@@ -59,7 +62,7 @@ func main() {
 
 func run(ctx context.Context, args []string) error {
 	if len(args) == 0 {
-		return errors.New("usage: shepherd <version|query|eval|resume|run|start> [flags]")
+		return errors.New("usage: shepherd <version|query|eval|repair|resume|run|start> [flags]")
 	}
 	if args[0] == "version" {
 		fmt.Println(version)
@@ -73,6 +76,7 @@ func run(ctx context.Context, args []string) error {
 	auto := flags.Bool("auto", false, "continue into GSD auto-mode after milestone intake")
 	adoptExisting := flags.Bool("adopt-existing", false, "bind a previously created active GSD milestone")
 	decisionPath := flags.String("decision", "", "path to protected explicit human decision JSON")
+	action := flags.String("action", "", "governed maintenance action")
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
 	}
@@ -115,7 +119,15 @@ func run(ctx context.Context, args []string) error {
 		defer authority.Close()
 		return authority.ResumeDelivery(ctx, domain.HumanDecision{RunID: input.DeliveryID, Generation: input.Generation, ActorKind: domain.ActorHuman, Approved: true})
 	}
-	if err := gsd.ValidatePinnedCommand(config.GSDCommand, config.GSDVersion); err != nil {
+	var container *gsd.ContainerConfig
+	if config.Runtime == "podman" {
+		container = &gsd.ContainerConfig{Engine: "podman", Image: config.ContainerImage,
+			GSDStateDir: filepath.Join(config.StateDir, "runtime", "gsd"), PlanningDir: filepath.Join(config.StateDir, "runtime", "planning"),
+			AuthFile: config.AuthFile, SettingsFile: filepath.Join(config.GSDHome, "agent", "settings.json")}
+		if err := gsd.ValidatePinnedContainer(ctx, *container, config.GSDVersion); err != nil {
+			return fmt.Errorf("runtime admission: %w", err)
+		}
+	} else if err := gsd.ValidatePinnedCommand(config.GSDCommand, config.GSDVersion); err != nil {
 		return fmt.Errorf("runtime admission: %w", err)
 	}
 	if err := gsd.ValidateRuntimeSettings(config.GSDHome, config.WorkDir, config.CoordinatorModel, "high"); err != nil {
@@ -127,6 +139,7 @@ func run(ctx context.Context, args []string) error {
 		Timeout:           time.Duration(config.TimeoutSeconds) * time.Second,
 		HeartbeatInterval: time.Duration(config.HeartbeatSeconds) * time.Second,
 		MaxEventBytes:     config.MaxEventBytes,
+		Container:         container,
 	})
 	if err != nil {
 		return err
@@ -137,6 +150,11 @@ func run(ctx context.Context, args []string) error {
 			return errors.New("--issue is required because GSD query may reconcile state")
 		}
 		return runFencedQuery(ctx, runner, config, deliveryID(*issue), *issue)
+	case "repair":
+		if *issue <= 0 || *action != "rebuild-markdown" {
+			return errors.New("repair requires --issue and --action rebuild-markdown")
+		}
+		return runFencedRepair(ctx, runner, config, deliveryID(*issue), *issue)
 	case "run":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
@@ -177,6 +195,41 @@ func run(ctx context.Context, args []string) error {
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
+}
+
+func runFencedRepair(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int) error {
+	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
+		return err
+	}
+	authority, err := store.Open(ctx, filepath.Join(config.StateDir, "authority.db"))
+	if err != nil {
+		return err
+	}
+	defer authority.Close()
+	delivery, err := authority.GetDelivery(ctx, deliveryID)
+	if err != nil || delivery.Issue != issue || delivery.WorkDir != config.WorkDir {
+		return errors.New("repair delivery does not match issue/worktree")
+	}
+	owner := fmt.Sprintf("repair-%d", time.Now().UTC().UnixNano())
+	lease, err := authority.AcquireLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = authority.ReleaseLease(context.Background(), lease) }()
+	if err := runner.RebuildMarkdown(ctx); err != nil {
+		return err
+	}
+	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
+		return err
+	}
+	activity, err := telemetry.Open(ctx, filepath.Join(config.StateDir, "activity", "segments"))
+	if err != nil {
+		return err
+	}
+	defer activity.Close()
+	hash := sha256.Sum256([]byte(owner + ":rebuild-markdown"))
+	_, err = activity.Append(ctx, telemetry.Activity{ID: hex.EncodeToString(hash[:]), RunID: deliveryID, Kind: "transition", Status: "rebuild_markdown", At: time.Now().UTC()})
+	return err
 }
 
 func adoptExistingDelivery(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash string) error {
@@ -282,6 +335,15 @@ func loadConfig(path string) (fileConfig, error) {
 	}
 	if config.MaxEventBytes <= 0 {
 		config.MaxEventBytes = 256 * 1024
+	}
+	if config.Runtime == "" {
+		config.Runtime = "host"
+	}
+	if config.Runtime != "host" && config.Runtime != "podman" {
+		return fileConfig{}, errors.New("runtime must be host or podman")
+	}
+	if config.Runtime == "podman" && (!filepath.IsAbs(config.AuthFile) || config.ContainerImage == "") {
+		return fileConfig{}, errors.New("podman runtime requires absolute auth_file and container_image")
 	}
 	if within, err := pathWithin(config.WorkDir, config.StateDir); err != nil || within {
 		return fileConfig{}, errors.New("state_dir must be outside the worker-controlled work directory")

@@ -1,0 +1,15 @@
+FROM node:24.13.1-bookworm-slim
+
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+
+RUN npm install --global --omit=dev --no-audit --no-fund @opengsd/gsd-pi@1.11.0 \
+    && useradd --create-home --uid 1000 shepherd \
+    && mkdir -p /home/shepherd/.pi/agent /workspace \
+    && chown -R shepherd:shepherd /home/shepherd /workspace
+
+USER shepherd
+WORKDIR /workspace
+ENV HOME=/home/shepherd
+ENV GSD_HOME=/home/shepherd/.pi
+
+ENTRYPOINT ["gsd"]

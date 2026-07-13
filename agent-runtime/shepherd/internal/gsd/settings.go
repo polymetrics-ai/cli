@@ -1,11 +1,15 @@
 package gsd
 
 import (
+	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 func ValidateRuntimeSettings(gsdHome, workDir, expectedModel, expectedThinking string) error {
@@ -49,6 +53,19 @@ func ValidateRuntimeSettings(gsdHome, workDir, expectedModel, expectedThinking s
 		if project.DefaultThinkingLevel != "" && project.DefaultThinkingLevel != expectedThinking {
 			return errors.New("project settings override the governed thinking level")
 		}
+	}
+	return nil
+}
+
+func ValidatePinnedContainer(ctx context.Context, config ContainerConfig, expectedVersion string) error {
+	cmd := exec.CommandContext(ctx, config.Engine, "run", "--rm", "--pull=never", "--network=none", config.Image, "--version")
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout, cmd.Stderr = &stdout, &stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("run pinned GSD container: %w", err)
+	}
+	if !strings.Contains(stdout.String(), "GSD v"+expectedVersion) {
+		return fmt.Errorf("container does not report GSD v%s", expectedVersion)
 	}
 	return nil
 }

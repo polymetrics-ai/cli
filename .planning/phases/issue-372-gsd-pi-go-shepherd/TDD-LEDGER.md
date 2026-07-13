@@ -10,6 +10,7 @@
 | #378 telemetry | Raw payload, duplicate, and torn-tail tests | Fsynced normalized JSONL spool with recovery and 0600 files passes; analytics exporters remain pending | PARTIAL |
 | #379 replay/canary | Named failure-class guards failed against absent controller | Core incident guard matrix and intake canary pass; issue-to-draft-PR canary and legacy cutover remain pending | PARTIAL |
 | adversarial runtime hardening | Tests exposed synchronous human-gate waits, missing response timeout, timestamp run IDs, unbound issue context, valid `skip` rejection, fictional `complete`, tool-error loss, project thinking override, symlink escape, and outbox key collision | Human questions are asynchronous with <=15-second heartbeats and controller-first cancellation; stable issue leases, typed JSON intake, immutable milestone binding, persistent attempts/human resume, compact model/thinking events, real 1.11 query shapes, no generic recover/auto, minimal child environment, protected external state, clean-head recording, and collision checks pass unit/race/vet | GREEN |
+| protected canary continuation | The adopted milestone's first fenced `next` returned exit 10 before any agent event because GSD's DB held an unplanned milestone that its markdown projector cannot render | Correctly persisted `blocked`, released the controller lease, reported zero observed tool/heartbeat events, and refused implicit retry; interactive GSD repair plus explicit human resume is required | BLOCKED |
 
 ## Rules
 
