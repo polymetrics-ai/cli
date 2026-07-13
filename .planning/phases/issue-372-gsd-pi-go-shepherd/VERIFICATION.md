@@ -39,6 +39,8 @@
   actor/basis provenance intact and idempotent create/update tests passing.
 - [x] Measured 1.7 MiB and 3.9 MiB nested-agent lifecycle returns fit the bounded 8 MiB scanner
   ceiling while the event projector continues to discard raw payloads.
+- [x] Successful implementation units checkpoint only immutable issue-context `write_scope` paths;
+  out-of-scope changes fail before staging, and subsequent dispatch still starts clean.
 
 ## Current canary blocker
 

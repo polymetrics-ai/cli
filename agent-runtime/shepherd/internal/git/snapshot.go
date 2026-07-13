@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
@@ -48,6 +49,84 @@ func RequireClean(snapshot Snapshot) error {
 		return errors.New("worktree is dirty; reconcile before dispatch")
 	}
 	return nil
+}
+
+func CheckpointWithinScopes(ctx context.Context, root string, scopes []string, message string) (string, error) {
+	if root == "" || len(scopes) == 0 || strings.TrimSpace(message) == "" || strings.ContainsAny(message, "\r\n\x00") {
+		return "", errors.New("repository, write scopes, and one-line checkpoint message are required")
+	}
+	paths, err := changedPaths(ctx, root)
+	if err != nil {
+		return "", err
+	}
+	if len(paths) == 0 {
+		head, err := run(ctx, root, "rev-parse", "HEAD")
+		return strings.TrimSpace(string(head)), err
+	}
+	for _, path := range paths {
+		if !withinAnyScope(path, scopes) {
+			return "", fmt.Errorf("changed path %q is outside the issue write scope", path)
+		}
+	}
+	args := append([]string{"add", "-A", "--"}, paths...)
+	if _, err := run(ctx, root, args...); err != nil {
+		return "", fmt.Errorf("stage scoped checkpoint: %w", err)
+	}
+	if _, err := run(ctx, root, "-c", "core.hooksPath=/dev/null", "commit", "-m", message); err != nil {
+		return "", fmt.Errorf("commit scoped checkpoint: %w", err)
+	}
+	snapshot, err := Inspect(ctx, root)
+	if err != nil {
+		return "", err
+	}
+	if snapshot.Dirty {
+		return "", errors.New("worktree remains dirty after scoped checkpoint")
+	}
+	return snapshot.HeadSHA, nil
+}
+
+func changedPaths(ctx context.Context, root string) ([]string, error) {
+	tracked, err := run(ctx, root, "diff", "--name-only", "-z", "HEAD", "--", ".")
+	if err != nil {
+		return nil, err
+	}
+	untracked, err := run(ctx, root, "ls-files", "--others", "--exclude-standard", "-z", "--", ".")
+	if err != nil {
+		return nil, err
+	}
+	unique := make(map[string]struct{})
+	for _, raw := range append(bytes.Split(tracked, []byte{0}), bytes.Split(untracked, []byte{0})...) {
+		path := filepath.ToSlash(strings.TrimSpace(string(raw)))
+		if path == "" || path == ".gsd" || strings.HasPrefix(path, ".gsd/") || path == ".gsd-worktrees" || strings.HasPrefix(path, ".gsd-worktrees/") {
+			continue
+		}
+		if filepath.IsAbs(path) || path == ".." || strings.HasPrefix(path, "../") || strings.ContainsRune(path, 0) {
+			return nil, errors.New("git returned an unsafe changed path")
+		}
+		unique[path] = struct{}{}
+	}
+	paths := make([]string, 0, len(unique))
+	for path := range unique {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+	return paths, nil
+}
+
+func withinAnyScope(path string, scopes []string) bool {
+	for _, scope := range scopes {
+		scope = filepath.ToSlash(strings.TrimSpace(scope))
+		if prefix, ok := strings.CutSuffix(scope, "/**"); ok {
+			if path == prefix || strings.HasPrefix(path, prefix+"/") {
+				return true
+			}
+			continue
+		}
+		if path == scope {
+			return true
+		}
+	}
+	return false
 }
 
 // RestoreIndex discards only transient staging performed by the governed runtime. It does not

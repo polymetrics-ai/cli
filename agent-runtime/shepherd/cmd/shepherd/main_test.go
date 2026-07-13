@@ -2,9 +2,12 @@ package main
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -189,5 +192,28 @@ func TestMaterializeContainerContextCopiesPlanningFileIntoProtectedOverlay(t *te
 	}
 	if string(got) != string(raw) {
 		t.Fatalf("protected context=%q, want %q", got, raw)
+	}
+}
+
+func TestProtectedIssueContextIsImmutableAndHashBound(t *testing.T) {
+	t.Parallel()
+	stateDir := t.TempDir()
+	raw := []byte(`{"issue":380,"parent_issue":380,"objective":"Asana parity","scope":["connector"],"non_goals":[],"acceptance_criteria":["green"],"dependencies":[],"write_scope":["internal/connectors/engine/**"],"required_reading":["AGENTS.md"],"required_skills":["golang-how-to"],"tdd":{"red":"fail","green":"pass","refactor":"clean"},"verification":["go test ./..."],"safety":["no secrets"],"human_gates":["main merge"],"branch":"feat/380-asana-cli-parity","pr_base":"main","review_route":"local","sources":["https://github.com/polymetrics-ai/cli/issues/380"]}`)
+	if err := materializeProtectedIssueContext(stateDir, 380, raw); err != nil {
+		t.Fatal(err)
+	}
+	hash := sha256.Sum256(raw)
+	context, err := loadProtectedIssueContext(stateDir, 380, "sha256:"+hex.EncodeToString(hash[:]))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(context.WriteScope) != 1 || context.WriteScope[0] != "internal/connectors/engine/**" {
+		t.Fatalf("context=%+v", context)
+	}
+	if err := materializeProtectedIssueContext(stateDir, 380, append(raw, ' ')); err == nil {
+		t.Fatal("protected context overwrite accepted")
+	}
+	if _, err := loadProtectedIssueContext(stateDir, 380, "sha256:"+strings.Repeat("0", 64)); err == nil {
+		t.Fatal("context hash mismatch accepted")
 	}
 }

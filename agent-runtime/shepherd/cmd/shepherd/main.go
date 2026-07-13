@@ -235,6 +235,9 @@ func run(ctx context.Context, args []string) error {
 		if closeErr != nil {
 			return closeErr
 		}
+		if err := materializeProtectedIssueContext(config.StateDir, *issue, raw); err != nil {
+			return fmt.Errorf("materialize protected issue context: %w", err)
+		}
 		if err := materializeContainerContext(config, path, raw); err != nil {
 			return fmt.Errorf("materialize protected context: %w", err)
 		}
@@ -436,6 +439,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	}
 	defer authority.Close()
 	executionID := fmt.Sprintf("execution-%d", time.Now().UTC().UnixNano())
+	var delivery store.Delivery
 	if contextHash != "" {
 		if err := authority.EnsureDelivery(ctx, store.Delivery{ID: deliveryID, Issue: issue, WorkDir: config.WorkDir, ContextHash: contextHash}); err != nil {
 			return err
@@ -445,14 +449,17 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 				return err
 			}
 		}
-	} else {
-		delivery, err := authority.GetDelivery(ctx, deliveryID)
-		if err != nil {
-			return errors.New("delivery has not been initialized with a validated issue context")
-		}
-		if delivery.Issue != issue || delivery.WorkDir != config.WorkDir {
-			return errors.New("delivery does not match requested issue and work directory")
-		}
+	}
+	delivery, err = authority.GetDelivery(ctx, deliveryID)
+	if err != nil {
+		return errors.New("delivery has not been initialized with a validated issue context")
+	}
+	if delivery.Issue != issue || delivery.WorkDir != config.WorkDir {
+		return errors.New("delivery does not match requested issue and work directory")
+	}
+	issueContext, err := loadProtectedIssueContext(config.StateDir, issue, delivery.ContextHash)
+	if err != nil {
+		return fmt.Errorf("protected issue context: %w", err)
 	}
 	lease, err := authority.AcquireLease(ctx, deliveryID, executionID, time.Now().UTC(), time.Duration(config.TimeoutSeconds+60)*time.Second)
 	if err != nil {
@@ -651,6 +658,15 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = err
+	}
+	if result.Terminal == gsd.TerminalSuccess && command == "execute-task" {
+		message := "chore(gsd): complete " + strings.ReplaceAll(before.Next.UnitID, "/", " ")
+		if _, checkpointErr := shepherdgit.CheckpointWithinScopes(ctx, config.WorkDir, issueContext.WriteScope, message); checkpointErr != nil {
+			result.Terminal = gsd.TerminalError
+			result.Err = fmt.Errorf("checkpoint successful task: %w", checkpointErr)
+		} else {
+			appendActivity("transition", "checkpointed_scoped_task", trustedUnit, "", "", time.Now().UTC())
+		}
 	}
 	endSnapshot, snapshotErr := shepherdgit.Inspect(ctx, config.WorkDir)
 	if snapshotErr != nil || shepherdgit.RequireClean(endSnapshot) != nil {
@@ -914,6 +930,104 @@ func materializeContainerContext(config fileConfig, contextPath string, raw []by
 		return err
 	}
 	return os.WriteFile(target, raw, 0o600)
+}
+
+func materializeProtectedIssueContext(stateDir string, issue int, raw []byte) error {
+	if !filepath.IsAbs(stateDir) || issue <= 0 || len(raw) == 0 || len(raw) > contract.MaxIssueContextBytes {
+		return errors.New("valid protected context target and bounded contents are required")
+	}
+	directory := filepath.Join(stateDir, "context")
+	if err := os.MkdirAll(directory, 0o700); err != nil {
+		return err
+	}
+	path := filepath.Join(directory, fmt.Sprintf("issue-%d.json", issue))
+	if err := compareProtectedContext(path, raw); err == nil {
+		return nil
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+	temporary, err := os.CreateTemp(directory, ".issue-context-*")
+	if err != nil {
+		return err
+	}
+	temporaryPath := temporary.Name()
+	defer os.Remove(temporaryPath)
+	if err := temporary.Chmod(0o600); err != nil {
+		_ = temporary.Close()
+		return err
+	}
+	if _, err := temporary.Write(raw); err != nil {
+		_ = temporary.Close()
+		return err
+	}
+	if err := temporary.Sync(); err != nil {
+		_ = temporary.Close()
+		return err
+	}
+	if err := temporary.Close(); err != nil {
+		return err
+	}
+	if err := os.Link(temporaryPath, path); err != nil {
+		if compareErr := compareProtectedContext(path, raw); compareErr == nil {
+			return nil
+		}
+		return errors.New("protected issue context could not be atomically bound")
+	}
+	directoryHandle, err := os.Open(directory)
+	if err != nil {
+		return err
+	}
+	syncErr := directoryHandle.Sync()
+	closeErr := directoryHandle.Close()
+	return errors.Join(syncErr, closeErr)
+}
+
+func loadProtectedIssueContext(stateDir string, issue int, expectedHash string) (contract.IssueContext, error) {
+	path := filepath.Join(stateDir, "context", fmt.Sprintf("issue-%d.json", issue))
+	info, err := os.Lstat(path)
+	if err != nil || !info.Mode().IsRegular() {
+		return contract.IssueContext{}, errors.New("protected issue context must be a regular file")
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		return contract.IssueContext{}, err
+	}
+	context, raw, decodeErr := contract.DecodeIssueContext(file, issue)
+	closeErr := file.Close()
+	if decodeErr != nil {
+		return contract.IssueContext{}, decodeErr
+	}
+	if closeErr != nil {
+		return contract.IssueContext{}, closeErr
+	}
+	hash := sha256.Sum256(raw)
+	if expectedHash != "sha256:"+hex.EncodeToString(hash[:]) {
+		return contract.IssueContext{}, errors.New("protected issue context hash does not match authority")
+	}
+	return context, nil
+}
+
+func compareProtectedContext(path string, expected []byte) error {
+	info, err := os.Lstat(path)
+	if err != nil {
+		return err
+	}
+	if !info.Mode().IsRegular() || info.Size() > contract.MaxIssueContextBytes {
+		return errors.New("protected issue context is not a bounded regular file")
+	}
+	existing, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	if !strings.EqualFold(hex.EncodeToString(sha256Sum(existing)), hex.EncodeToString(sha256Sum(expected))) {
+		return errors.New("protected issue context is already bound to different contents")
+	}
+	return nil
+}
+
+func sha256Sum(raw []byte) []byte {
+	hash := sha256.Sum256(raw)
+	return hash[:]
 }
 
 func mapEventKind(kind gsd.EventKind) string {

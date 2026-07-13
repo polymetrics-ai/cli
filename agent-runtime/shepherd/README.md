@@ -68,6 +68,11 @@ worktree.
 If a prior qualification run already created the correct active milestone, `start --adopt-existing`
 binds it explicitly instead of silently creating a second milestone.
 
+`start` also binds an immutable copy of the validated issue context under protected controller
+state. A successful `execute-task` may edit source files, but Shepherd verifies every changed path
+against that context's `write_scope` and creates a local, hook-disabled checkpoint commit before
+the next clean dispatch. The worker runtime still cannot push.
+
 For official GSD Pi 1.11.0 on the host, runtime admission idempotently applies one qualified
 compatibility patch inside the pinned package: the upstream headless idle timer must wait until all
 tool calls finish. Shepherd refuses a different version, symlinked runtime file, partially patched

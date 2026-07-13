@@ -142,6 +142,68 @@ func TestRestoreIndexPreservesWorkingTreeChanges(t *testing.T) {
 	}
 }
 
+func TestCheckpointWithinScopesCommitsOnlyAllowedChanges(t *testing.T) {
+	t.Parallel()
+	root := initializedRepository(t)
+	allowed := filepath.Join(root, "internal", "connectors", "engine", "bundle.go")
+	if err := os.MkdirAll(filepath.Dir(allowed), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(allowed, []byte("package engine\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	head, err := CheckpointWithinScopes(context.Background(), root, []string{"internal/connectors/engine/**"}, "chore(gsd): complete M001 S01 T01")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(head) != 40 {
+		t.Fatalf("head=%q", head)
+	}
+	snapshot, err := Inspect(context.Background(), root)
+	if err != nil || snapshot.Dirty {
+		t.Fatalf("snapshot=%+v err=%v", snapshot, err)
+	}
+	if second, err := CheckpointWithinScopes(context.Background(), root, []string{"internal/connectors/engine/**"}, "chore(gsd): complete M001 S01 T01"); err != nil || second != head {
+		t.Fatalf("idempotent head=%q err=%v", second, err)
+	}
+}
+
+func TestCheckpointWithinScopesRejectsOutOfScopeChangesWithoutStaging(t *testing.T) {
+	t.Parallel()
+	root := initializedRepository(t)
+	if err := os.WriteFile(filepath.Join(root, "outside.txt"), []byte("no"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := CheckpointWithinScopes(context.Background(), root, []string{"internal/connectors/engine/**"}, "chore(gsd): complete M001 S01 T01"); err == nil {
+		t.Fatal("out-of-scope change accepted")
+	}
+	staged := exec.Command("git", "-C", root, "diff", "--cached", "--quiet")
+	if err := staged.Run(); err != nil {
+		t.Fatal("out-of-scope change was staged")
+	}
+}
+
+func initializedRepository(t *testing.T) string {
+	t.Helper()
+	root := t.TempDir()
+	for _, args := range [][]string{{"init", "-q"}, {"config", "user.email", "test@example.invalid"}, {"config", "user.name", "Test"}} {
+		cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+		if output, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("git %v: %v: %s", args, err, output)
+		}
+	}
+	if err := os.WriteFile(filepath.Join(root, "seed.txt"), []byte("seed"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	for _, args := range [][]string{{"add", "seed.txt"}, {"commit", "-qm", "seed"}} {
+		cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+		if output, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("git %v: %v: %s", args, err, output)
+		}
+	}
+	return root
+}
+
 func TestFinalizeInitializingMilestoneWorktreeRestoresIndexWithoutReset(t *testing.T) {
 	t.Parallel()
 	root := t.TempDir()

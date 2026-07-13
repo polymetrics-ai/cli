@@ -49,6 +49,10 @@ module without coupling it to the Polymetrics CLI module.
 15. Bound lifecycle event lines at a realistic size for official GSD nested-agent returns. Keep raw
     payloads out of telemetry, but allow an 8 MiB input envelope so the compact projector can retain
     the tool-end action after a healthy multi-minute subagent completes.
+16. Permit a successful `execute-task` unit to leave scoped source edits, then create a local
+    controller checkpoint commit before the next fenced unit. Validate every changed path against
+    the immutable protected issue-context `write_scope`; retain the clean-start invariant and never
+    push from the worker runtime.
 
 ## Required skills and workflows
 
