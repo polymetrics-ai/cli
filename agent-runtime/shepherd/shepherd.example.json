@@ -18,5 +18,5 @@
   "auth_file": "/absolute/path/to/private/auth.json",
   "timeout_seconds": 3600,
   "heartbeat_seconds": 15,
-  "max_event_bytes": 262144
+  "max_event_bytes": 8388608
 }

@@ -31,6 +31,8 @@ import (
 
 const version = "0.1.0"
 
+const defaultMaxEventBytes = 8 * 1024 * 1024
+
 type fileConfig struct {
 	GSDCommand       []string `json:"gsd_command"`
 	WorkDir          string   `json:"work_dir"`
@@ -401,7 +403,7 @@ func loadConfig(path string) (fileConfig, error) {
 		config.HeartbeatSeconds = 15
 	}
 	if config.MaxEventBytes <= 0 {
-		config.MaxEventBytes = 256 * 1024
+		config.MaxEventBytes = defaultMaxEventBytes
 	}
 	if config.Runtime == "" {
 		config.Runtime = "host"

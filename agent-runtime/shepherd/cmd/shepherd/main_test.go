@@ -116,6 +116,23 @@ func TestLoadConfigRequiresCompleteDecisionPRBinding(t *testing.T) {
 	}
 }
 
+func TestLoadConfigDefaultsToBoundedNestedAgentEnvelopeSize(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "config.json")
+	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","repository":"polymetrics-ai/cli","pull_request":388}`
+	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	config, err := loadConfig(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if config.MaxEventBytes < 4_000_000 || config.MaxEventBytes > 8*1024*1024 {
+		t.Fatalf("max event bytes=%d does not admit measured nested-agent envelopes within 8 MiB", config.MaxEventBytes)
+	}
+}
+
 type recordingDecisionPublisher struct {
 	summaries []string
 	err       error

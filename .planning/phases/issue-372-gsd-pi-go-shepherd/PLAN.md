@@ -46,6 +46,9 @@ module without coupling it to the Polymetrics CLI module.
 14. Publish the protected decision ledger to the bound pull request after every answered GSD gate.
     Use one marker-owned, idempotently updated PR comment; preserve `human`, `shepherd`, and
     `contract` provenance; and fail the governed unit if a durable decision cannot be published.
+15. Bound lifecycle event lines at a realistic size for official GSD nested-agent returns. Keep raw
+    payloads out of telemetry, but allow an 8 MiB input envelope so the compact projector can retain
+    the tool-end action after a healthy multi-minute subagent completes.
 
 ## Required skills and workflows
 

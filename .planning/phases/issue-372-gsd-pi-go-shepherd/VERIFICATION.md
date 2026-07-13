@@ -37,6 +37,8 @@
   the same local command registry.
 - [x] Every durable Shepherd decision is synchronized to one marker-owned PR summary comment, with
   actor/basis provenance intact and idempotent create/update tests passing.
+- [x] Measured 1.7 MiB and 3.9 MiB nested-agent lifecycle returns fit the bounded 8 MiB scanner
+  ceiling while the event projector continues to discard raw payloads.
 
 ## Current canary blocker
 
