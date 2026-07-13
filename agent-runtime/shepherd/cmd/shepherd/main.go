@@ -10,11 +10,13 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
+	"syscall"
 	"time"
 
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/contract"
@@ -53,7 +55,9 @@ type decisionInput struct {
 }
 
 func main() {
-	if err := run(context.Background(), os.Args[1:]); err != nil {
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	if err := run(ctx, os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, "shepherd:", err)
 		var coded interface{ ExitCode() int }
 		if errors.As(err, &coded) {
