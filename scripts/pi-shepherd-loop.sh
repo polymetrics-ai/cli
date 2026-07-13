@@ -110,9 +110,45 @@ PY
 
 latest_session_file() {
   python3 - "$STATE_DIR/sessions" <<'PY'
-import os,sys
+import datetime as dt
+import json
+import os
+import sys
 root=sys.argv[1]
 best=None
+
+def parse_ts(value):
+    if isinstance(value, (int, float)):
+        return float(value) / (1000 if value > 10_000_000_000 else 1)
+    if not isinstance(value, str) or not value:
+        return None
+    try:
+        return dt.datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        return None
+
+def last_event_epoch(path):
+    last=None
+    try:
+        with open(path, errors="replace") as fh:
+            for line in fh:
+                if line.strip():
+                    last=line
+        if last is None:
+            return None
+        obj=json.loads(last)
+    except Exception:
+        return None
+    candidates=[
+        obj.get("timestamp"),
+        obj.get("message", {}).get("timestamp") if isinstance(obj.get("message"), dict) else None,
+    ]
+    for candidate in candidates:
+        parsed=parse_ts(candidate)
+        if parsed is not None:
+            return parsed
+    return None
+
 if os.path.isdir(root):
     for cur, subdirs, names in os.walk(root):
         subdirs[:] = [d for d in subdirs if d not in {".git","node_modules","vendor"}]
@@ -121,7 +157,7 @@ if os.path.isdir(root):
                 continue
             path=os.path.join(cur,name)
             try:
-                item=(os.path.getmtime(path),path)
+                item=(last_event_epoch(path) or os.path.getmtime(path), path)
             except OSError:
                 continue
             if best is None or item > best:
@@ -132,8 +168,48 @@ PY
 }
 
 session_age_seconds() { # $1=session-file
-  local sess="$1" mtime
+  local sess="$1" event_epoch mtime
   [[ -n "$sess" && -f "$sess" ]] || { echo ""; return 0; }
+  event_epoch="$(python3 - "$sess" <<'PY' 2>/dev/null || true
+import datetime as dt
+import json
+import sys
+
+def parse_ts(value):
+    if isinstance(value, (int, float)):
+        return int(value / (1000 if value > 10_000_000_000 else 1))
+    if not isinstance(value, str) or not value:
+        return None
+    try:
+        return int(dt.datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp())
+    except ValueError:
+        return None
+
+last=None
+try:
+    with open(sys.argv[1], errors="replace") as fh:
+        for line in fh:
+            if line.strip():
+                last=line
+    if last:
+        obj=json.loads(last)
+        candidates=[
+            obj.get("timestamp"),
+            obj.get("message", {}).get("timestamp") if isinstance(obj.get("message"), dict) else None,
+        ]
+        for candidate in candidates:
+            parsed=parse_ts(candidate)
+            if parsed is not None:
+                print(parsed)
+                raise SystemExit(0)
+except Exception:
+    pass
+PY
+)"
+  if [[ "$event_epoch" =~ ^[0-9]+$ ]]; then
+    echo $(( $(date +%s) - event_epoch ))
+    return 0
+  fi
   mtime="$(stat -f %m "$sess" 2>/dev/null || echo 0)"
   [[ "$mtime" =~ ^[0-9]+$ ]] || { echo ""; return 0; }
   echo $(( $(date +%s) - mtime ))
@@ -174,8 +250,8 @@ kill_stale_turn() { # $1=session-file $2=pid
 if [[ "${SHEPHERD_STALL_GUARD_SELF_TEST:-}" == "1" ]]; then
   mkdir -p "$STATE_DIR/sessions"
   test_sess="$STATE_DIR/sessions/stale-live-child-test.jsonl"
-  : > "$test_sess"
-  touch -t 200001010000 "$test_sess"
+  printf '{"type":"message","timestamp":"2000-01-01T00:00:00Z","message":{"role":"assistant","content":"stale"}}\n' > "$test_sess"
+  touch "$test_sess"
   (trap 'exit 0' TERM; sleep 300 & wait) & test_pid=$!
   sleep 1
   if ! stale_session_requires_kill "$test_sess" "$test_pid"; then
