@@ -62,8 +62,30 @@ The process prints normalized lifecycle events and a heartbeat at least every 15
 questions are forwarded to the terminal and require an explicit response. The Go deadline always
 precedes GSD's fallback response timer. Answer files, inline context, chained `--auto`, and generic
 `recover` are rejected. Continue one fenced unit at a time with `run --issue 372 --command next`.
+For a multi-turn local milestone interview, use `--command discuss --continue-unit` after the first
+round. Shepherd resumes only the newest Pi session whose header is bound to the exact configured
+worktree.
 If a prior qualification run already created the correct active milestone, `start --adopt-existing`
 binds it explicitly instead of silently creating a second milestone.
+
+Every answered gate has explicit provenance. Direct terminal answers default to `human`; an agent
+answering from approved issue context must identify itself instead of impersonating a human:
+
+```bash
+go run ./cmd/shepherd run \
+  --config /absolute/private/path/shepherd.json \
+  --issue 372 \
+  --command discuss \
+  --decision-actor shepherd \
+  --decision-basis "explicit user-approved issue context"
+```
+
+Render the protected ledger as the deterministic section that must be copied into the PR summary
+or a PR comment before handoff:
+
+```bash
+go run ./cmd/shepherd decisions --config /absolute/private/path/shepherd.json --issue 372
+```
 
 Query reconciled workflow state without an LLM. GSD 1.11 query can mutate reconciliation state, so
 Shepherd requires the issue identity and holds the same delivery lease:
@@ -91,4 +113,5 @@ go test -race ./...
 ```
 
 The module does not autonomously merge and does not store raw prompts, reasoning, command arguments,
-tool output, or credentials.
+tool output, or credentials. The decision ledger stores only bounded question/answer labels and
+their actor, basis, canonical unit, execution identity, and timestamp.

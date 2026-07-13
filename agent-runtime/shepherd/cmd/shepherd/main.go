@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/contract"
+	decisionlog "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/decision"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
 	shepherdgit "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
@@ -86,6 +87,8 @@ func run(ctx context.Context, args []string) error {
 	action := flags.String("action", "", "governed maintenance action")
 	confirmDepth := flags.Bool("confirm-depth", false, "apply explicit operator approval only to the GSD planning-depth gate")
 	continueUnit := flags.Bool("continue-unit", false, "resume the latest local Pi session bound to the same canonical unit")
+	decisionActor := flags.String("decision-actor", "human", "provenance for interactive decisions: human, shepherd, or contract")
+	decisionBasis := flags.String("decision-basis", "interactive terminal response", "concise provenance basis for interactive decisions")
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
 	}
@@ -99,6 +102,23 @@ func run(ctx context.Context, args []string) error {
 			return err
 		}
 		return json.NewEncoder(os.Stdout).Encode(telemetry.Evaluate(activities))
+	}
+	if args[0] == "decisions" {
+		if *issue <= 0 {
+			return errors.New("--issue is required")
+		}
+		records, err := decisionlog.Read(filepath.Join(config.StateDir, "decisions"))
+		if err != nil {
+			return err
+		}
+		filtered := records[:0]
+		for _, record := range records {
+			if record.DeliveryID == deliveryID(*issue) {
+				filtered = append(filtered, record)
+			}
+		}
+		fmt.Print(decisionlog.Markdown(filtered))
+		return nil
 	}
 	if args[0] == "resume" {
 		if *issue <= 0 {
@@ -174,7 +194,7 @@ func run(ctx context.Context, args []string) error {
 		if *command == "auto" || *command == "recover" || *command == "new-milestone" {
 			return errors.New("generic run permits only one fenced unit; use --command next, discuss, or status")
 		}
-		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth, *continueUnit)
+		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth, *continueUnit, *decisionActor, *decisionBasis)
 	case "start":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
@@ -206,7 +226,7 @@ func run(ctx context.Context, args []string) error {
 		if *adoptExisting {
 			return adoptExistingDelivery(ctx, runner, config, deliveryID(*issue), *issue, contextHash)
 		}
-		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path}, *confirmDepth, false)
+		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path}, *confirmDepth, false, *decisionActor, *decisionBasis)
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
@@ -383,7 +403,7 @@ func loadConfig(path string) (fileConfig, error) {
 	return config, nil
 }
 
-func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash, command string, args []string, confirmDepth, continueUnit bool) error {
+func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash, command string, args []string, confirmDepth, continueUnit bool, decisionActor, decisionBasis string) error {
 	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
 		return err
 	}
@@ -471,6 +491,11 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		return err
 	}
 	defer activity.Close()
+	decisions, err := decisionlog.Open(filepath.Join(config.StateDir, "decisions"))
+	if err != nil {
+		return err
+	}
+	defer decisions.Close()
 	var sequence atomic.Uint64
 	var activityMu sync.Mutex
 	var activityErr error
@@ -511,14 +536,27 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			fmt.Fprintf(os.Stderr, "%s heartbeat alive=%t in_flight_tool=%s\n", heartbeat.At.Format(time.RFC3339), heartbeat.ProcessAlive, heartbeat.InFlightTool)
 		},
 		Question: func(questionCtx context.Context, question gsd.Question) (gsd.UIResponse, error) {
+			var response gsd.UIResponse
+			var responseErr error
 			if confirmDepth {
 				if response, approved := approveDepthQuestion(question); approved {
-					appendActivity("human.decision", "approved_depth", trustedUnit, "", question.ID, time.Now().UTC())
 					fmt.Fprintln(os.Stderr, "HUMAN GATE [select] planning depth approved by explicit --confirm-depth operator flag")
+					if err := appendDecision(decisions, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
+						return gsd.UIResponse{Cancelled: true}, err
+					}
+					appendActivity("decision", decisionActor, trustedUnit, "", question.ID, time.Now().UTC())
 					return response, nil
 				}
 			}
-			return terminalQuestion(questionCtx, question)
+			response, responseErr = terminalQuestion(questionCtx, question)
+			if responseErr != nil || response.Cancelled {
+				return response, responseErr
+			}
+			if err := appendDecision(decisions, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
+				return gsd.UIResponse{Cancelled: true}, err
+			}
+			appendActivity("decision", decisionActor, trustedUnit, "", question.ID, time.Now().UTC())
+			return response, nil
 		},
 	}
 	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
@@ -675,18 +713,38 @@ func (e commandExitError) ExitCode() int { return e.code }
 
 func deliveryID(issue int) string { return "issue-" + strconv.Itoa(issue) }
 
+func appendDecision(store *decisionlog.Store, deliveryID, executionID, unitID string, question gsd.Question, response gsd.UIResponse, actorValue, basis string) error {
+	actor := decisionlog.Actor(strings.TrimSpace(actorValue))
+	if actor != decisionlog.ActorHuman && actor != decisionlog.ActorShepherd && actor != decisionlog.ActorContract {
+		return errors.New("decision actor must be human, shepherd, or contract")
+	}
+	answer := strings.TrimSpace(response.Value)
+	if answer == "" && response.Confirmed != nil {
+		answer = strconv.FormatBool(*response.Confirmed)
+	}
+	questionID := strings.TrimSpace(question.ID)
+	if questionID == "" {
+		questionID = "request-" + strings.TrimSpace(question.RequestID)
+	}
+	idHash := sha256.Sum256([]byte(executionID + ":" + questionID))
+	return store.Append(context.Background(), decisionlog.Record{
+		ID: hex.EncodeToString(idHash[:]), DeliveryID: deliveryID, ExecutionID: executionID, UnitID: unitID,
+		QuestionID: questionID, Question: strings.TrimSpace(question.Title), Answer: answer,
+		Actor: actor, Basis: strings.TrimSpace(basis), At: time.Now().UTC(),
+	})
+}
+
 func approveDepthQuestion(question gsd.Question) (gsd.UIResponse, bool) {
 	cancelled := gsd.UIResponse{Cancelled: true}
 	const prefix = "depth_verification_M"
 	const suffix = "_confirm"
 	id := strings.TrimSpace(question.ID)
 	milestone := strings.TrimSuffix(strings.TrimPrefix(id, prefix), suffix)
-	parts := strings.SplitN(milestone, "-", 2)
 	if question.Method != "select" || !strings.HasPrefix(id, prefix) || !strings.HasSuffix(id, suffix) ||
-		len(parts) != 2 || len(parts[0]) != 3 || strings.Trim(parts[0], "0123456789") != "" ||
-		parts[1] == "" || strings.IndexFunc(parts[1], func(r rune) bool {
-		return (r < 'a' || r > 'z') && (r < '0' || r > '9')
-	}) >= 0 {
+		len(milestone) < 3 || strings.Trim(milestone[:3], "0123456789") != "" ||
+		(len(milestone) > 3 && (milestone[3] != '-' || len(milestone) == 4 || strings.IndexFunc(milestone[4:], func(r rune) bool {
+			return (r < 'a' || r > 'z') && (r < '0' || r > '9')
+		}) >= 0)) {
 		return cancelled, false
 	}
 	for _, option := range question.Options {

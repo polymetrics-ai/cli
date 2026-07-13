@@ -22,6 +22,12 @@ func TestExplicitDepthApprovalIsNarrowlyScoped(t *testing.T) {
 	if !approved || response.Value != variant.Options[0] || response.Cancelled {
 		t.Fatalf("variant response=%+v approved=%t", response, approved)
 	}
+	exact := question
+	exact.ID = "depth_verification_M001_confirm"
+	response, approved = approveDepthQuestion(exact)
+	if !approved || response.Value != exact.Options[0] || response.Cancelled {
+		t.Fatalf("exact response=%+v approved=%t", response, approved)
+	}
 	for _, other := range []gsd.Question{
 		{Method: "confirm", Title: question.Title, Options: []string{"Yes", "No"}},
 		{ID: "approve_dependency", Method: "select", Title: "Approve dependency addition", Options: question.Options},
