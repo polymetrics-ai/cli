@@ -1,0 +1,54 @@
+{
+  "parent_issue": {
+    "number": 380,
+    "url": "https://github.com/polymetrics-ai/cli/issues/380",
+    "title": "Asana CLI feature parity parent roadmap",
+    "state": "open"
+  },
+  "parent_branch": "feat/380-asana-cli-parity",
+  "parent_pr": {
+    "url": "pending",
+    "base": "main",
+    "head": "feat/380-asana-cli-parity",
+    "draft": true,
+    "state": "pending"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "go-shepherd-podman-gsd-pi",
+    "status": "running"
+  },
+  "ready_queue": [
+    {"number": 381, "status": "worker_ready", "dependencies": [], "write_scope": ["internal/connectors/defs/asana/**", "cmd/connectorgen/**"], "decision": "not_spawned_isolation_missing"},
+    {"number": 384, "status": "worker_ready", "dependencies": [], "write_scope": ["internal/connectors/defs/asana/**", "cmd/connectorgen/**"], "decision": "not_spawned_write_scope_collision"},
+    {"number": 382, "status": "planned", "dependencies": [381], "write_scope": ["internal/cli/**", "docs/cli/**", "website/**"], "decision": "not_spawned_dependency_blocked"},
+    {"number": 383, "status": "planned", "dependencies": [381], "write_scope": ["internal/connectors/commandrunner/**", "internal/cli/**"], "decision": "not_spawned_dependency_blocked"},
+    {"number": 385, "status": "planned", "dependencies": [384], "write_scope": ["internal/connectors/commandrunner/**", "internal/cli/**"], "decision": "not_spawned_dependency_blocked"},
+    {"number": 386, "status": "planned", "dependencies": [384], "write_scope": ["internal/connectors/commandrunner/**", "internal/cli/**", "docs/cli/**"], "decision": "not_spawned_dependency_blocked"},
+    {"number": 387, "status": "planned", "dependencies": [384], "write_scope": ["internal/connectors/defs/asana/**", "internal/connectors/engine/**"], "decision": "not_spawned_dependency_blocked"}
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-13T17:11:24Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [380],
+      "reason": "create the parent branch, PR, protected Shepherd state, and first isolated worker before dispatch"
+    }
+  ],
+  "subissues": [
+    {"number": 381, "url": "https://github.com/polymetrics-ai/cli/issues/381", "branch": "feat/381-asana-cli-surface", "pr_url": "pending", "worker": "pending", "status": "worker_ready", "write_scope": ["internal/connectors/defs/asana/**", "cmd/connectorgen/**"], "worker_directory": "pending", "verification": "pending", "automated_review": {"primary_route": "claude_auto", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "sub_pr", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending"}},
+    {"number": 382, "url": "https://github.com/polymetrics-ai/cli/issues/382", "branch": "feat/382-asana-help-docs", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": ["internal/cli/**", "docs/cli/**", "website/**"], "worker_directory": "pending", "verification": "pending", "automated_review": {"primary_route": "claude_auto", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "sub_pr", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending"}},
+    {"number": 383, "url": "https://github.com/polymetrics-ai/cli/issues/383", "branch": "feat/383-asana-stream-runner", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": ["internal/connectors/commandrunner/**", "internal/cli/**"], "worker_directory": "pending", "verification": "pending", "automated_review": {"primary_route": "claude_auto", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "sub_pr", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending"}},
+    {"number": 384, "url": "https://github.com/polymetrics-ai/cli/issues/384", "branch": "feat/384-asana-operation-ledger", "pr_url": "pending", "worker": "pending", "status": "worker_ready", "write_scope": ["internal/connectors/defs/asana/**", "cmd/connectorgen/**"], "worker_directory": "pending", "verification": "pending", "automated_review": {"primary_route": "claude_auto", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "sub_pr", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending"}},
+    {"number": 385, "url": "https://github.com/polymetrics-ai/cli/issues/385", "branch": "feat/385-asana-direct-read", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": ["internal/connectors/commandrunner/**", "internal/cli/**"], "worker_directory": "pending", "verification": "pending", "automated_review": {"primary_route": "claude_auto", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "sub_pr", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending"}},
+    {"number": 386, "url": "https://github.com/polymetrics-ai/cli/issues/386", "branch": "feat/386-asana-attachment-downloads", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": ["internal/connectors/commandrunner/**", "internal/cli/**", "docs/cli/**"], "worker_directory": "pending", "verification": "pending", "automated_review": {"primary_route": "claude_auto", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "sub_pr", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending"}},
+    {"number": 387, "url": "https://github.com/polymetrics-ai/cli/issues/387", "branch": "feat/387-asana-reverse-etl-policy", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": ["internal/connectors/defs/asana/**", "internal/connectors/engine/**"], "worker_directory": "pending", "verification": "pending", "automated_review": {"primary_route": "claude_auto", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "sub_pr", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending"}}
+  ],
+  "human_gates": [
+    "new dependencies or auth scope changes",
+    "secret access credentialed checks destructive external actions or reverse ETL execution",
+    "quality gate reductions or parent PR merge to main"
+  ],
+  "updated_at": "2026-07-13T17:11:24Z"
+}
