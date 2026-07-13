@@ -474,6 +474,13 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	}
 	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
 	result := runner.Run(runCtx, command, args, observer)
+	if config.Runtime == "podman" && (observedModel == "" || observedThinking == "") {
+		model, thinking, identityErr := gsd.ReadSessionIdentity(filepath.Join(config.StateDir, "runtime", "sessions"))
+		if identityErr == nil {
+			observedModel, observedThinking = model, thinking
+			appendActivity("model.activity", "session_metadata", trustedUnit, model, "", time.Now().UTC())
+		}
+	}
 	postPhase := ""
 	activityMu.Lock()
 	spoolErr := activityErr
