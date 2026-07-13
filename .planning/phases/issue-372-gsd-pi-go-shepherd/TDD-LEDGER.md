@@ -19,11 +19,12 @@
 | trusted research services | Tests failed before controller-owned Context7 configuration and a private SearXNG sidecar existed. First SearXNG start refused the default secret and restart-looped. | Shepherd writes only the trusted Context7 HTTP MCP URL into protected state. SearXNG now uses an exact image digest, generates its secret inside the container at runtime, publishes no host port, and returned a valid JSON search over the private network. | GREEN |
 | local programming-loop command | `scripts/gsd prompt programming-loop ...` failed because only the upstream registry was loaded and the Pi extension mirrored the same incomplete registry. | A repo-local registry is merged by both compatibility surfaces; the prompt renders and `scripts/gsd doctor` reports 70 commands. Official GSD Pi remains the actual workflow runtime. | GREEN |
 | fast-exit event drain | Final verification reproduced a race where a fast exit-10 child let `cmd.Wait` close `StdoutPipe` before the scanner observed EOF, misclassifying blocked as error. | Wait is sequenced after event scanning finishes, and the blocked-exit regression now runs 25 consecutive attempts. | GREEN |
+| host-only official GSD Pi migration | Existing host execution had no delivery-scoped `GSD_STATE_DIR`, omitted governed Git identity, and had not proved that tracked `.gsd` policy survives a real local GSD run. The first focused test failed because the runner had no `StateDir` contract. | The runner now rejects state inside the project, exports a delivery-scoped official `GSD_STATE_DIR`, supplies safe-directory and fixed Git identity configuration, and passes unit/race/vet/build gates. Real Asana acceptance and Podman removal remain pending. | PARTIAL |
 
 ## Rules
 
 - A production behavior is not added before its failing test or capability probe exists.
 - Focused package tests are progress evidence; full nested-module and root gates remain required.
 - Failed or incomplete verification is recorded as failed, never inferred from partial success.
-- `scripts/gsd doctor` passed, but the repo-local adapter did not expose `programming-loop`; this
-  slice used the permitted manual-GSD fallback with this ledger, PLAN, and VERIFICATION as evidence.
+- `scripts/gsd doctor` and `scripts/gsd prompt programming-loop ...` pass. The host-runtime
+  migration uses the repository programming-loop contract directly.

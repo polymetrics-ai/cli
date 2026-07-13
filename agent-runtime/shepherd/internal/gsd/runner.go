@@ -46,6 +46,7 @@ type Config struct {
 	Command           []string
 	WorkDir           string
 	GSDHome           string
+	StateDir          string
 	Model             string
 	Thinking          string
 	Timeout           time.Duration
@@ -109,8 +110,16 @@ type questionResult struct {
 type Runner struct{ config Config }
 
 func NewRunner(config Config) (*Runner, error) {
-	if !filepath.IsAbs(config.WorkDir) || !filepath.IsAbs(config.GSDHome) {
-		return nil, errors.New("absolute work directory and controlled GSD home are required")
+	if !filepath.IsAbs(config.WorkDir) || !filepath.IsAbs(config.GSDHome) || !filepath.IsAbs(config.StateDir) {
+		return nil, errors.New("absolute work directory, controlled GSD home, and delivery state directory are required")
+	}
+	if within, err := pathWithin(config.WorkDir, config.StateDir); err != nil || within {
+		return nil, errors.New("delivery state directory must be outside the worker-controlled project")
+	}
+	for _, dir := range []string{config.GSDHome, filepath.Join(config.StateDir, "runtime", "gsd-state")} {
+		if err := os.MkdirAll(dir, 0o700); err != nil {
+			return nil, fmt.Errorf("create local GSD runtime directory: %w", err)
+		}
 	}
 	if config.Container == nil {
 		if len(config.Command) == 0 || strings.TrimSpace(config.Command[0]) == "" {
@@ -423,10 +432,10 @@ func (r *Runner) configureEnvironment(cmd *exec.Cmd) {
 		cmd.Env = os.Environ()
 		return
 	}
-	cmd.Env = governedEnvironment(r.config.GSDHome, r.config.Environment)
+	cmd.Env = governedEnvironment(r.config.GSDHome, r.config.StateDir, r.config.WorkDir, r.config.Environment)
 }
 
-func governedEnvironment(gsdHome string, extra []string) []string {
+func governedEnvironment(gsdHome, stateDir, workDir string, extra []string) []string {
 	combined := append(append([]string{}, os.Environ()...), extra...)
 	environment := make([]string, 0, 16)
 	allowed := map[string]struct{}{
@@ -446,15 +455,30 @@ func governedEnvironment(gsdHome string, extra []string) []string {
 	return append(environment,
 		"HOME="+gsdHome,
 		"GSD_HOME="+gsdHome,
+		"GSD_STATE_DIR="+filepath.Join(stateDir, "runtime", "gsd-state"),
 		"GH_CONFIG_DIR="+filepath.Join(gsdHome, "gh-disabled"),
 		"GIT_TERMINAL_PROMPT=0",
 		"GIT_ASKPASS=",
-		"GIT_CONFIG_COUNT=2",
+		"GIT_CONFIG_COUNT=5",
 		"GIT_CONFIG_KEY_0=credential.helper",
 		"GIT_CONFIG_VALUE_0=",
 		"GIT_CONFIG_KEY_1=remote.origin.pushurl",
 		"GIT_CONFIG_VALUE_1=file:///dev/null/shepherd-disabled",
+		"GIT_CONFIG_KEY_2=safe.directory",
+		"GIT_CONFIG_VALUE_2="+workDir,
+		"GIT_CONFIG_KEY_3=user.name",
+		"GIT_CONFIG_VALUE_3=Polymetrics Shepherd",
+		"GIT_CONFIG_KEY_4=user.email",
+		"GIT_CONFIG_VALUE_4=shepherd@localhost.invalid",
 	)
+}
+
+func pathWithin(root, candidate string) (bool, error) {
+	relative, err := filepath.Rel(filepath.Clean(root), filepath.Clean(candidate))
+	if err != nil {
+		return false, err
+	}
+	return relative != ".." && !strings.HasPrefix(relative, ".."+string(filepath.Separator)), nil
 }
 
 func scanEvents(ctx context.Context, reader io.Reader, maxBytes int, output chan<- scanResult) {

@@ -145,7 +145,7 @@ func run(ctx context.Context, args []string) error {
 		return fmt.Errorf("runtime admission: %w", err)
 	}
 	runner, err := gsd.NewRunner(gsd.Config{
-		Command: config.GSDCommand, WorkDir: config.WorkDir, GSDHome: config.GSDHome,
+		Command: config.GSDCommand, WorkDir: config.WorkDir, GSDHome: config.GSDHome, StateDir: config.StateDir,
 		Model: config.CoordinatorModel, Thinking: "high",
 		Timeout:           time.Duration(config.TimeoutSeconds) * time.Second,
 		HeartbeatInterval: time.Duration(config.HeartbeatSeconds) * time.Second,

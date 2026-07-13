@@ -27,6 +27,10 @@ module without coupling it to the Polymetrics CLI module.
 12. Make official GSD Pi the documented execution runtime locally and in Podman. Retain
     `scripts/gsd` only as a deterministic compatibility prompt renderer, and merge a tested
     repo-local `programming-loop` command overlay into both the shell renderer and Pi aliases.
+13. Replace the Shepherd Podman backend with pinned official GSD Pi running directly on the host.
+    Preserve Git-tracked project policy under each issue worktree's `.gsd/`, set `GSD_STATE_DIR`
+    to the delivery's protected state directory, use a delivery-specific GSD home, and verify the
+    migration against the real Asana issue before deleting the container and search-sidecar assets.
 
 ## Boundaries
 
@@ -37,14 +41,16 @@ module without coupling it to the Polymetrics CLI module.
 - The agent image has no GitHub CLI, publisher token, unrestricted curl, or host search port.
 - The module lives under `agent-runtime/shepherd/` with a separate `go.mod`.
 - Legacy removal and issue/PR closure are a final, separately reviewed cutover step.
+- Local GSD project state is scoped by the canonical issue worktree; external GSD state and
+  managed worktrees are scoped by the delivery `state_dir`. No two deliveries share either path.
 
 ## Required skills and workflows
 
 - `golang-how-to`, `go-engineering`, Go project-layout, design-patterns, observability,
   concurrency, context, testing, error-handling, safety, and database guidance.
 - `gsd-programming-loop` with RED/GREEN/refactor evidence.
-- The repo-local adapter currently lacks `programming-loop`; use and record the permitted
-  manual-GSD fallback for the Podman qualification correction.
+- The repo-local adapter exposes `programming-loop`; use it for the host-runtime migration and
+  record RED/GREEN/refactor evidence below.
 - Issue-first and parent/subissue orchestration contracts.
 
 ## Execution decisions

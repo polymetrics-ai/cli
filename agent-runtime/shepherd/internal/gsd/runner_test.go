@@ -19,7 +19,7 @@ func TestRunnerCorrelatesSemanticQuestionIDAndRespondsToRPCRequest(t *testing.T)
 
 	runner, err := NewRunner(Config{
 		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
-		WorkDir: t.TempDir(), GSDHome: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
 		Timeout: 5 * time.Second, HeartbeatInterval: 25 * time.Millisecond, MaxEventBytes: 4096,
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=semantic-question"},
 	})
@@ -51,6 +51,7 @@ func TestRunnerEmitsHeartbeatDuringSilentLiveProcess(t *testing.T) {
 		Command:           []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
 		WorkDir:           t.TempDir(),
 		GSDHome:           t.TempDir(),
+		StateDir:          t.TempDir(),
 		Model:             "openai-codex/gpt-5.6-sol",
 		Thinking:          "high",
 		Timeout:           5 * time.Second,
@@ -92,6 +93,7 @@ func TestRunnerClassifiesBlockedExit(t *testing.T) {
 		Command:           []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
 		WorkDir:           t.TempDir(),
 		GSDHome:           t.TempDir(),
+		StateDir:          t.TempDir(),
 		Model:             "openai-codex/gpt-5.6-sol",
 		Thinking:          "high",
 		Timeout:           5 * time.Second,
@@ -113,11 +115,11 @@ func TestRunnerClassifiesBlockedExit(t *testing.T) {
 func TestRunnerRejectsUnsupportedCommandAndModel(t *testing.T) {
 	t.Parallel()
 
-	_, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), Model: "openai-codex/gpt-5.5", Thinking: "high"})
+	_, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.5", Thinking: "high"})
 	if err == nil {
 		t.Fatal("expected model downgrade to fail")
 	}
-	runner, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high"})
+	runner, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high"})
 	if err != nil {
 		t.Fatalf("new runner: %v", err)
 	}
@@ -131,6 +133,20 @@ func TestRunnerRejectsUnsupportedCommandAndModel(t *testing.T) {
 	}
 }
 
+func TestRunnerRequiresDeliveryStateOutsideProject(t *testing.T) {
+	t.Parallel()
+
+	workDir := t.TempDir()
+	_, err := NewRunner(Config{
+		Command: []string{"gsd"}, WorkDir: workDir, GSDHome: t.TempDir(),
+		StateDir: filepath.Join(workDir, ".shepherd"),
+		Model:    "openai-codex/gpt-5.6-sol", Thinking: "high",
+	})
+	if err == nil {
+		t.Fatal("expected state inside the project to be rejected")
+	}
+}
+
 func TestRunnerKeepsHeartbeatsWhileHumanGateWaitsAndCancelsBeforeUpstreamFallback(t *testing.T) {
 	t.Parallel()
 
@@ -139,6 +155,7 @@ func TestRunnerKeepsHeartbeatsWhileHumanGateWaitsAndCancelsBeforeUpstreamFallbac
 		Command:           []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
 		WorkDir:           t.TempDir(),
 		GSDHome:           t.TempDir(),
+		StateDir:          t.TempDir(),
 		Model:             "openai-codex/gpt-5.6-sol",
 		Thinking:          "high",
 		Timeout:           500 * time.Millisecond,
@@ -169,7 +186,7 @@ func TestRunnerQueriesSupportedSurface(t *testing.T) {
 
 	runner, err := NewRunner(Config{
 		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
-		WorkDir: t.TempDir(), GSDHome: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=query"},
 	})
 	if err != nil {
@@ -195,7 +212,7 @@ func TestRunnerUsesNativeDBToMarkdownRepairCommand(t *testing.T) {
 	}
 	runner, err := NewRunner(Config{
 		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
-		WorkDir: workDir, GSDHome: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+		WorkDir: workDir, GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=repair"},
 	})
 	if err != nil {
@@ -222,7 +239,12 @@ func TestRunnerHelperProcess(t *testing.T) {
 		return
 	}
 	args := strings.Join(os.Args, " ")
-	if os.Getenv("GH_TOKEN") != "" || os.Getenv("GIT_CONFIG_COUNT") != "2" {
+	if os.Getenv("GH_TOKEN") != "" || os.Getenv("GIT_CONFIG_COUNT") != "5" ||
+		os.Getenv("GSD_STATE_DIR") == "" ||
+		os.Getenv("GIT_CONFIG_KEY_3") != "user.name" ||
+		os.Getenv("GIT_CONFIG_VALUE_3") != "Polymetrics Shepherd" ||
+		os.Getenv("GIT_CONFIG_KEY_4") != "user.email" ||
+		os.Getenv("GIT_CONFIG_VALUE_4") != "shepherd@localhost.invalid" {
 		fmt.Fprintln(os.Stderr, "governed environment was not enforced")
 		os.Exit(1)
 	}
