@@ -19,7 +19,11 @@
       "cycle": "implementation",
       "decision": "local_critical_path",
       "reason": "Production edits stay in the dedicated issue checkout; mutating workers may not share it."
+    },
+    {
+      "cycle": "intake-canary",
+      "decision": "local_critical_path",
+      "reason": "Pinned GSD intake was run merge-disabled; UI classification was corrected and premature success reconciled to blocked."
     }
   ]
 }
-

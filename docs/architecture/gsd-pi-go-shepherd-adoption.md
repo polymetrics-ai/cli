@@ -22,6 +22,12 @@ controller state.
 - Milestone discussion requires a real human depth confirmation; answer defaults do not bypass it.
 - Unfiltered message events can contain large encrypted runtime payloads. Shepherd therefore uses a
   strict lifecycle allowlist and never stores full upstream event objects.
+- A governed intake canary produced native tool events and supervisor heartbeats without gaps over
+  15 seconds, then returned early with a pending discussion unit. Query reconciliation correctly
+  classified the apparent success as blocked.
+- The first actual coordinator session used the requested Sol model but inherited thinking `off`.
+  Shepherd now validates the controlled runtime settings at admission; actual Sol/high validation
+  remains a required qualification gate rather than an inferred success.
 
 ## Consequences
 
@@ -31,4 +37,3 @@ controller state.
   closed; there is no silent downgrade.
 - The existing shell controllers and repo-local GSD adapter remain until deterministic replay and a
   merge-disabled canary pass.
-
