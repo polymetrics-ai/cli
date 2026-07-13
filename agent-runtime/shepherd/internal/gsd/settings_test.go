@@ -6,6 +6,28 @@ import (
 	"testing"
 )
 
+func TestValidateContainerVersionOutputRequiresExactPinnedVersion(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name    string
+		output  string
+		wantErr bool
+	}{
+		{name: "real GSD output", output: "1.11.0\n"},
+		{name: "wrong version", output: "1.12.0\n", wantErr: true},
+		{name: "substring spoof", output: "untrusted 1.11.0 output\n", wantErr: true},
+		{name: "legacy decoration", output: "GSD v1.11.0\n", wantErr: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			err := validateContainerVersionOutput(test.output, "1.11.0")
+			if (err != nil) != test.wantErr {
+				t.Fatalf("validateContainerVersionOutput() error = %v, wantErr %v", err, test.wantErr)
+			}
+		})
+	}
+}
+
 func TestValidateRuntimeSettingsFailsClosedOnThinkingMismatch(t *testing.T) {
 	t.Parallel()
 

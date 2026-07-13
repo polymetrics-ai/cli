@@ -64,8 +64,12 @@ func ValidatePinnedContainer(ctx context.Context, config ContainerConfig, expect
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("run pinned GSD container: %w", err)
 	}
-	if !strings.Contains(stdout.String(), "GSD v"+expectedVersion) {
-		return fmt.Errorf("container does not report GSD v%s", expectedVersion)
+	return validateContainerVersionOutput(stdout.String(), expectedVersion)
+}
+
+func validateContainerVersionOutput(output, expectedVersion string) error {
+	if strings.TrimSpace(output) != expectedVersion {
+		return fmt.Errorf("container does not report exact GSD version %s", expectedVersion)
 	}
 	return nil
 }

@@ -20,6 +20,12 @@
   adversarial tests.
 - [ ] Merge-disabled canary reaches exact-head human gate.
 - [ ] Cleanup inventory reviewed before deletion.
+- [x] Scoped Podman image/build-cache prune reclaimed approximately 18.14 GB without touching
+  volumes.
+- [x] Pinned image builds and runs as non-root `shepherd` UID/GID 1000 with a writable governed
+  home and exact GSD 1.11.0 admission.
+- [ ] Pinned image includes GSD's required `git` executable; dependency addition awaits explicit
+  human approval.
 
 ## Current canary blocker
 
@@ -32,7 +38,10 @@ authority reset, state-directory substitution, or legacy cleanup was used.
 
 The root cause is GSD 1.11 planning compatibility: it auto-detected the repository's existing
 multi-milestone `.planning` tree, while its DB-to-planning writer reports that only `flat-phases`
-is supported. The replacement now has a Podman backend design that overlays task-isolated `.gsd`
-and `.planning` mounts and exposes only the code worktree plus explicit read-only auth/settings
-files. Its image build is blocked by Podman VM capacity: 42.83 GB of images (41.19 GB reclaimable)
-and 44.74 GB of volumes (17.64 GB reclaimable). Per the cleanup gate, no prune/removal was run.
+is supported. The replacement now has a Podman backend that overlays task-isolated `.gsd` and
+`.planning` mounts and exposes only the code worktree plus explicit read-only auth/settings files.
+The approved image/build-cache-only prune reduced Podman images from 42.83 GB to 24.69 GB without
+touching volumes. The image now builds, passes exact-version admission, and runs as the expected
+non-root identity. The integrated governed query then proved that the slim Node base lacks GSD's
+required `git` executable. Installing that image dependency is the current explicit human gate;
+issue 372 remains blocked and was not resumed.

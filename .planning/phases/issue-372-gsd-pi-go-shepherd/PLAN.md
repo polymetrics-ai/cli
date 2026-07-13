@@ -15,6 +15,8 @@ module without coupling it to the Polymetrics CLI module.
 5. Add capability grants, fencing, exact-head ratification, and an idempotent GitHub outbox (#377).
 6. Add redacted local telemetry and analytics export boundaries (#378).
 7. Replay known incidents and run a merge-disabled canary before legacy removal (#379).
+8. Qualify the pinned Podman image: prove it builds without UID collisions, reports the exact GSD
+   version, runs as the intended non-root identity, and preserves task-isolated planning state.
 
 ## Boundaries
 
@@ -29,6 +31,8 @@ module without coupling it to the Polymetrics CLI module.
 - `golang-how-to`, `go-engineering`, Go project-layout, design-patterns, observability,
   concurrency, context, testing, error-handling, safety, and database guidance.
 - `gsd-programming-loop` with RED/GREEN/refactor evidence.
+- The repo-local adapter currently lacks `programming-loop`; use and record the permitted
+  manual-GSD fallback for the Podman qualification correction.
 - Issue-first and parent/subissue orchestration contracts.
 
 ## Execution decisions
@@ -37,4 +41,3 @@ module without coupling it to the Polymetrics CLI module.
 - Architecture/workflow review: `read_only_spawned` using two non-mutating review agents.
 - Production implementation: `local_critical_path` in the dedicated issue branch; no shared-checkout
   mutating subagent is permitted.
-

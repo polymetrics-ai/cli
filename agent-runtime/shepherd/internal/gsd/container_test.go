@@ -31,3 +31,24 @@ func TestContainerRuntimeHidesHostPlanningAndCredentialSurface(t *testing.T) {
 		t.Fatal("container inherited publisher credentials")
 	}
 }
+
+func TestContainerImageReusesBaseNonRootIdentity(t *testing.T) {
+	t.Parallel()
+	raw, err := os.ReadFile(filepath.Join("..", "..", "container", "Containerfile"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	containerfile := string(raw)
+	if strings.Contains(containerfile, "useradd --create-home --uid 1000") {
+		t.Fatal("Node base image already reserves UID 1000; creating another account makes the image unbuildable")
+	}
+	for _, required := range []string{
+		"groupmod --new-name shepherd node",
+		"usermod --login shepherd --home /home/shepherd --move-home node",
+		"USER shepherd",
+	} {
+		if !strings.Contains(containerfile, required) {
+			t.Fatalf("container image does not establish governed non-root identity: missing %q", required)
+		}
+	}
+}

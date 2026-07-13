@@ -3,7 +3,8 @@ FROM node:24.13.1-bookworm-slim
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 RUN npm install --global --omit=dev --no-audit --no-fund @opengsd/gsd-pi@1.11.0 \
-    && useradd --create-home --uid 1000 shepherd \
+    && groupmod --new-name shepherd node \
+    && usermod --login shepherd --home /home/shepherd --move-home node \
     && mkdir -p /home/shepherd/.pi/agent /workspace \
     && chown -R shepherd:shepherd /home/shepherd /workspace
 
