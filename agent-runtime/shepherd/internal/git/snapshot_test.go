@@ -44,3 +44,42 @@ func TestRequireCleanDetectsUntrackedWork(t *testing.T) {
 		t.Fatal("expected dirty worktree to block")
 	}
 }
+
+func TestRestoreIndexPreservesWorkingTreeChanges(t *testing.T) {
+	t.Parallel()
+	root := t.TempDir()
+	for _, args := range [][]string{{"init", "-q"}, {"config", "user.email", "test@example.invalid"}, {"config", "user.name", "Test"}} {
+		cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+		if output, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("git %v: %v: %s", args, err, output)
+		}
+	}
+	tracked := filepath.Join(root, "tracked.txt")
+	if err := os.WriteFile(tracked, []byte("original"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	for _, args := range [][]string{{"add", "tracked.txt"}, {"commit", "-qm", "seed"}} {
+		cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+		if output, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("git %v: %v: %s", args, err, output)
+		}
+	}
+	if err := os.WriteFile(tracked, []byte("changed"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	cmd := exec.Command("git", "-C", root, "add", "tracked.txt")
+	if output, err := cmd.CombinedOutput(); err != nil {
+		t.Fatalf("stage change: %v: %s", err, output)
+	}
+	if err := RestoreIndex(context.Background(), root); err != nil {
+		t.Fatal(err)
+	}
+	staged := exec.Command("git", "-C", root, "diff", "--cached", "--quiet")
+	if err := staged.Run(); err != nil {
+		t.Fatalf("index still differs from HEAD: %v", err)
+	}
+	working := exec.Command("git", "-C", root, "diff", "--quiet")
+	if err := working.Run(); err == nil {
+		t.Fatal("working-tree change was lost")
+	}
+}

@@ -495,6 +495,10 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	}
 	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
 	result := runner.Run(runCtx, command, args, observer)
+	if restoreErr := shepherdgit.RestoreIndex(ctx, config.WorkDir); restoreErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = restoreErr
+	}
 	if config.Runtime == "podman" && (observedModel == "" || observedThinking == "") {
 		model, thinking, identityErr := gsd.ReadSessionIdentity(filepath.Join(config.StateDir, "runtime", "sessions"))
 		if identityErr == nil {

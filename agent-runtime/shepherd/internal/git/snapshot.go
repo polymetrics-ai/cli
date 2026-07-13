@@ -41,6 +41,18 @@ func RequireClean(snapshot Snapshot) error {
 	return nil
 }
 
+// RestoreIndex discards only transient staging performed by the governed runtime. It does not
+// modify working-tree files, so real source edits remain visible to the post-unit cleanliness gate.
+func RestoreIndex(ctx context.Context, root string) error {
+	if root == "" {
+		return errors.New("repository root is required")
+	}
+	if _, err := run(ctx, root, "read-tree", "HEAD"); err != nil {
+		return fmt.Errorf("restore git index: %w", err)
+	}
+	return nil
+}
+
 func run(ctx context.Context, root string, args ...string) ([]byte, error) {
 	commandArgs := append([]string{"-C", root}, args...)
 	cmd := exec.CommandContext(ctx, "git", commandArgs...)
