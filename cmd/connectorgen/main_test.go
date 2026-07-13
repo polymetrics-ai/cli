@@ -382,6 +382,106 @@ func TestValidate_OperationsSecretLookingLiteralIsHardFinding(t *testing.T) {
 	t.Fatalf("no secret literal finding for operations.json; findings=%+v", report.Findings)
 }
 
+func TestValidate_APISurfaceProvenanceMalformedHash(t *testing.T) {
+	apiSurface := strings.Replace(validProvenanceAPISurface(), strings.Repeat("0", 64), "ABC123", 1)
+	report, err := validateDir(operationLedgerBundleFS(apiSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertSurfaceProvenanceFinding(t, report, "sha256")
+	encoded, err := json.Marshal(report)
+	if err != nil {
+		t.Fatalf("json.Marshal(report): %v", err)
+	}
+	for _, want := range []string{`"connector":"cli-surface"`, `"file":"api_surface.json"`, `"rule":"surface_provenance"`, "source_evidence.sha256"} {
+		if !bytes.Contains(encoded, []byte(want)) {
+			t.Fatalf("JSON report missing %q: %s", want, encoded)
+		}
+	}
+}
+
+func TestValidate_APISurfaceProvenanceMutableSourceURL(t *testing.T) {
+	apiSurface := strings.Replace(validProvenanceAPISurface(), provenanceRevision, "main", 1)
+	report, err := validateDir(operationLedgerBundleFS(apiSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertSurfaceProvenanceFinding(t, report, "source_url")
+}
+
+func TestValidate_APISurfaceProvenanceMissingRevision(t *testing.T) {
+	apiSurface := strings.Replace(validProvenanceAPISurface(), "\n\t\t\"revision\": \""+provenanceRevision+"\",", "", 1)
+	report, err := validateDir(operationLedgerBundleFS(apiSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertSurfaceProvenanceFinding(t, report, "revision")
+}
+
+func TestValidate_APISurfaceProvenanceCountMismatch(t *testing.T) {
+	apiSurface := strings.Replace(validProvenanceAPISurface(), `"baseline_operation_count": 3`, `"baseline_operation_count": 2`, 1)
+	report, err := validateDir(operationLedgerBundleFS(apiSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertSurfaceProvenanceFinding(t, report, "baseline_operation_count")
+}
+
+func TestValidate_APISurfaceSourceEvidenceRejectsUnknownField(t *testing.T) {
+	apiSurface := strings.Replace(validProvenanceAPISurface(), `"kind": "openapi",`, "\"kind\": \"openapi\",\n\t\t\"token\": \"not-a-secret\",", 1)
+	report, err := validateDir(operationLedgerBundleFS(apiSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleMetaSchema)
+}
+
+func TestValidate_APISurfaceSourceEvidenceRejectsWrongFieldType(t *testing.T) {
+	apiSurface := strings.Replace(validProvenanceAPISurface(), `"baseline_operation_count": 3`, `"baseline_operation_count": "3"`, 1)
+	report, err := validateDir(operationLedgerBundleFS(apiSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleMetaSchema)
+}
+
+func TestValidate_APISurfaceSourceEvidenceFieldShape(t *testing.T) {
+	secretLookingNote := "api_key=" + strings.Repeat("a", 20)
+	tests := []struct {
+		name        string
+		old         string
+		replacement string
+		messagePart string
+	}{
+		{name: "source kind", old: `"kind": "openapi"`, replacement: `"kind": "OpenAPI"`, messagePart: "kind"},
+		{name: "non HTTPS URL", old: `"source_url": "https://`, replacement: `"source_url": "http://`, messagePart: "source_url"},
+		{name: "capture date", old: `"captured_at": "2026-07-13"`, replacement: `"captured_at": "2026-02-30"`, messagePart: "captured_at"},
+		{name: "supplemental note secret", old: "One documented identity operation supplements the OpenAPI baseline.", replacement: secretLookingNote, messagePart: "supplemental_operations_note"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			apiSurface := strings.Replace(validProvenanceAPISurface(), tt.old, tt.replacement, 1)
+			report, err := validateDir(operationLedgerBundleFS(apiSurface))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			assertSurfaceProvenanceFinding(t, report, tt.messagePart)
+		})
+	}
+}
+
+func TestValidate_APISurfaceProvenanceValidEvidencePasses(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(validProvenanceAPISurface()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	for _, finding := range report.Findings {
+		if finding.Rule == ruleSurfaceProvenance || finding.Rule == ruleMetaSchema {
+			t.Fatalf("valid source evidence produced finding: %+v", finding)
+		}
+	}
+}
+
 func TestValidate_APISurfaceOperationLedgerValidRowsPassCleanly(t *testing.T) {
 	report, err := validateDir(operationLedgerBundleFS(validOperationLedgerAPISurface()))
 	if err != nil {
@@ -1089,6 +1189,16 @@ func assertFindingRule(t *testing.T, report Report, connector, rule string) {
 	t.Fatalf("no finding for connector %q with rule %q; findings=%+v", connector, rule, report.Findings)
 }
 
+func assertSurfaceProvenanceFinding(t *testing.T, report Report, messagePart string) {
+	t.Helper()
+	for _, f := range report.Findings {
+		if f.Connector == "cli-surface" && f.File == "api_surface.json" && f.Rule == ruleSurfaceProvenance && strings.Contains(f.Message, messagePart) {
+			return
+		}
+	}
+	t.Fatalf("no surface provenance finding containing %q; findings=%+v", messagePart, report.Findings)
+}
+
 func cliSurfaceBundleFS(cliSurface string) fstest.MapFS {
 	return fstest.MapFS{
 		"cli-surface/metadata.json": &fstest.MapFile{Data: []byte(`{
@@ -1287,6 +1397,23 @@ func operationLedgerBundleFS(apiSurface string) fstest.MapFS {
 	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
 	return fsys
+}
+
+const provenanceRevision = "0123456789abcdef0123456789abcdef01234567"
+
+func validProvenanceAPISurface() string {
+	return strings.Replace(validOperationLedgerAPISurface(),
+		`"operation_ledger_version": 1,`,
+		`"operation_ledger_version": 1,
+	"source_evidence": {
+		"kind": "openapi",
+		"source_url": "https://example.invalid/openapi/`+provenanceRevision+`/api.yaml",
+		"revision": "`+provenanceRevision+`",
+		"sha256": "`+strings.Repeat("0", 64)+`",
+		"captured_at": "2026-07-13",
+		"baseline_operation_count": 3,
+		"supplemental_operations_note": "One documented identity operation supplements the OpenAPI baseline."
+	},`, 1)
 }
 
 func validOperationLedgerAPISurface() string {

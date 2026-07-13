@@ -406,12 +406,26 @@ type DeleteSpec struct {
 
 // APISurface is the parsed api_surface.json (conformance input only).
 type APISurface struct {
-	API                    string            `json:"api"`
-	Docs                   string            `json:"docs,omitempty"`
-	ReviewedAt             string            `json:"reviewed_at,omitempty"`
-	OperationLedgerVersion int               `json:"operation_ledger_version,omitempty"`
-	Scope                  string            `json:"scope,omitempty"`
-	Endpoints              []SurfaceEndpoint `json:"endpoints"`
+	API                    string                    `json:"api"`
+	Docs                   string                    `json:"docs,omitempty"`
+	ReviewedAt             string                    `json:"reviewed_at,omitempty"`
+	OperationLedgerVersion int                       `json:"operation_ledger_version,omitempty"`
+	Scope                  string                    `json:"scope,omitempty"`
+	SourceEvidence         *APISurfaceSourceEvidence `json:"source_evidence,omitempty"`
+	Endpoints              []SurfaceEndpoint         `json:"endpoints"`
+}
+
+// APISurfaceSourceEvidence records the immutable source used to assemble an
+// API operation baseline. Validation is deliberately offline: SourceURL is
+// inspected for an embedded revision but is never fetched.
+type APISurfaceSourceEvidence struct {
+	Kind                       string `json:"kind"`
+	SourceURL                  string `json:"source_url"`
+	Revision                   string `json:"revision"`
+	SHA256                     string `json:"sha256"`
+	CapturedAt                 string `json:"captured_at"`
+	BaselineOperationCount     int    `json:"baseline_operation_count"`
+	SupplementalOperationsNote string `json:"supplemental_operations_note,omitempty"`
 }
 
 // SurfaceEndpoint is one api_surface.json endpoint entry.
