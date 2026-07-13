@@ -189,6 +189,9 @@ func run(ctx context.Context, args []string) error {
 		if closeErr != nil {
 			return closeErr
 		}
+		if err := materializeContainerContext(config, path, raw); err != nil {
+			return fmt.Errorf("materialize protected context: %w", err)
+		}
 		hash := sha256.Sum256(raw)
 		contextHash := "sha256:" + hex.EncodeToString(hash[:])
 		if *adoptExisting {
@@ -637,6 +640,26 @@ func pathWithin(root, path string) (bool, error) {
 		return false, err
 	}
 	return relative != ".." && !strings.HasPrefix(relative, ".."+string(filepath.Separator)), nil
+}
+
+func materializeContainerContext(config fileConfig, contextPath string, raw []byte) error {
+	if config.Runtime != "podman" {
+		return nil
+	}
+	planningRoot := filepath.Join(config.WorkDir, ".planning")
+	within, err := pathWithin(planningRoot, contextPath)
+	if err != nil || !within {
+		return err
+	}
+	relative, err := filepath.Rel(planningRoot, contextPath)
+	if err != nil || relative == "." || relative == ".." || strings.HasPrefix(relative, ".."+string(filepath.Separator)) {
+		return errors.New("context has an unsafe planning-relative path")
+	}
+	target := filepath.Join(config.StateDir, "runtime", "planning", relative)
+	if err := os.MkdirAll(filepath.Dir(target), 0o700); err != nil {
+		return err
+	}
+	return os.WriteFile(target, raw, 0o600)
 }
 
 func mapEventKind(kind gsd.EventKind) string {
