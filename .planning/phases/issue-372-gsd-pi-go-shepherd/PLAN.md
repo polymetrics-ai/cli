@@ -56,6 +56,9 @@ module without coupling it to the Polymetrics CLI module.
 17. Preserve the primary reconciliation failure when a failed unit also leaves a dirty worktree;
     report both causes so recovery distinguishes a completed scoped task from an incomplete red-test
     checkpoint.
+18. Resolve runtime identity from the newest exact-worktree Pi session only. Ignore older oversized
+    sessions and nested sessions, scan the selected header/metadata with the same 8 MiB bound, and
+    continue rejecting any effective model other than GPT-5.6 Sol/high.
 
 ## Required skills and workflows
 

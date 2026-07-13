@@ -617,7 +617,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		if config.Runtime == "podman" {
 			sessionsDir = filepath.Join(config.StateDir, "runtime", "sessions")
 		}
-		model, thinking, identityErr := gsd.ReadSessionIdentity(sessionsDir)
+		model, thinking, identityErr := gsd.ReadSessionIdentity(sessionsDir, config.WorkDir)
 		if identityErr == nil {
 			observedModel, observedThinking = model, thinking
 			appendActivity("model.activity", "session_metadata", trustedUnit, model, "", time.Now().UTC())

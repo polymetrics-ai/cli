@@ -43,6 +43,8 @@
   out-of-scope changes fail before staging, and subsequent dispatch still starts clean.
 - [x] Dirty-tree finalization preserves the primary canonical reconciliation failure for actionable
   incomplete-task recovery.
+- [x] Runtime identity fallback reads only the newest exact-worktree session and ignores older
+  oversized history while retaining GPT-5.6 Sol/high enforcement.
 
 ## Current canary blocker
 
