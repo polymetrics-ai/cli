@@ -19,6 +19,12 @@ existing 250-row Asana API ledger, and committed bundle documentation as authori
 evidence. External Asana URLs are citations for later targeted gap checks, not an instruction to
 fetch every page. Persist the milestone, requirements, slices, and dependency graph first.
 
+The headless `new-milestone` command receives `ISSUE-CONTEXT.json`, not this file. That context
+therefore contains the complete seven-sub-issue brief and local source paths. During intake, do not
+call `fetch_page`, GitHub, or any external research tool; do not reconstruct issue bodies from the
+network. Targeted external verification is permitted only in a later explicitly fenced research
+unit when a concrete unresolved fact requires it.
+
 For each ready sub-issue, create a branch and isolated worktree from the current parent head, then
 dispatch a bounded worker with all four contract fields:
 

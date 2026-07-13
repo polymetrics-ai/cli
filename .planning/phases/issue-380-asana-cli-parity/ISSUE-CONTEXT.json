@@ -18,6 +18,51 @@
     "CLI help, manual, website, generated artifacts, fixture tests, safety policy, and review evidence are complete"
   ],
   "dependencies": [],
+  "intake_mode": "offline_committed_evidence_only",
+  "sub_issues": [
+    {
+      "issue": 381,
+      "title": "Asana: CLI surface metadata (CLI parity)",
+      "depends_on": [],
+      "outcome": "Validated cli_surface metadata covers the 12 existing streams and typed write references without raw API access."
+    },
+    {
+      "issue": 382,
+      "title": "Asana: help and docs renderer (CLI parity)",
+      "depends_on": [381],
+      "outcome": "Credential-free namespace, topic, leaf, JSON, manual, generated artifact, and website help parity."
+    },
+    {
+      "issue": 383,
+      "title": "Asana: stream runner (CLI parity)",
+      "depends_on": [381],
+      "outcome": "Representative list commands use the bounded generic stream path with pagination and no duplicate transport."
+    },
+    {
+      "issue": 384,
+      "title": "Asana: operation ledger (CLI parity)",
+      "depends_on": [],
+      "outcome": "All 250 baseline REST endpoints retain source evidence and exactly one safe primary classification or explicit exclusion."
+    },
+    {
+      "issue": 385,
+      "title": "Asana: direct reads (CLI parity)",
+      "depends_on": [384],
+      "outcome": "Only fixed allow-listed reads execute, with bounded JSON output and declared redaction."
+    },
+    {
+      "issue": 386,
+      "title": "Asana: bounded attachment downloads (CLI parity)",
+      "depends_on": [384],
+      "outcome": "Fixed attachment operations enforce byte limits, safe-root confinement, traversal and symlink defenses, cancellation, and overwrite policy."
+    },
+    {
+      "issue": 387,
+      "title": "Asana: reverse ETL safety policy (CLI parity)",
+      "depends_on": [384],
+      "outcome": "Product-safe writes map to typed actions behind plan-preview-approval-execute while sensitive, admin, and destructive operations remain governed."
+    }
+  ],
   "write_scope": [
     ".planning/phases/issue-380-asana-cli-parity/**",
     "internal/connectors/defs/asana/**",
@@ -82,11 +127,11 @@
   "pr_base": "main",
   "review_route": "stacked sub-PR review with parent-PR fallback and final human approval",
   "sources": [
-    "https://github.com/polymetrics-ai/cli/issues/380",
+    "GitHub issue #380 and linked sub-issues #381 through #387, fully summarized in this context",
     "docs/plans/connector-cli-parity-top100-research.md",
-    "https://developers.asana.com/reference/tasks",
-    "https://developers.asana.com/reference/projects",
-    "https://developers.asana.com/reference/attachments",
-    "https://developers.asana.com/reference/webhooks"
+    "internal/connectors/defs/asana/docs.md",
+    "internal/connectors/defs/asana/api_surface.json",
+    "internal/connectors/defs/asana/streams.json",
+    "internal/connectors/defs/asana/writes.json"
   ]
 }
