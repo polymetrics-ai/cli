@@ -3,6 +3,7 @@ package gsd
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -71,5 +72,55 @@ func TestValidateRuntimeSettingsRejectsProjectOverride(t *testing.T) {
 	}
 	if err := ValidateRuntimeSettings(home, work, "openai-codex/gpt-5.6-sol", "high"); err == nil {
 		t.Fatal("expected project override to fail admission")
+	}
+}
+
+func TestApplyPinnedHeadlessToolPatchIsExactAndIdempotent(t *testing.T) {
+	t.Parallel()
+	root := t.TempDir()
+	dist := filepath.Join(root, "dist")
+	if err := os.Mkdir(dist, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "package.json"), []byte(`{"name":"@opengsd/gsd-pi","version":"1.11.0"}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	loader := filepath.Join(dist, "loader.js")
+	if err := os.WriteFile(loader, []byte("loader"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	original := `    const interactiveToolCallIds = new Set();
+            shouldArmHeadlessIdleTimeout(toolCallCount, interactiveToolCallIds.size, isQuickCmd)) {
+            if (toolCallId && isInteractiveHeadlessTool(String(eventObj.toolName ?? ''))) {
+                interactiveToolCallIds.add(toolCallId);
+            }
+            if (toolCallId) {
+                interactiveToolCallIds.delete(toolCallId);
+            }
+`
+	path := filepath.Join(dist, "headless.js")
+	if err := os.WriteFile(path, []byte(original), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	command := []string{"node", loader}
+	if err := ApplyPinnedHeadlessToolPatch(command, "1.11.0"); err != nil {
+		t.Fatal(err)
+	}
+	first, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(first), "inFlightToolCallIds.add(toolCallId)") {
+		t.Fatalf("patch missing: %s", first)
+	}
+	if err := ApplyPinnedHeadlessToolPatch(command, "1.11.0"); err != nil {
+		t.Fatal(err)
+	}
+	second, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(first) != string(second) {
+		t.Fatal("idempotent patch changed bytes")
 	}
 }

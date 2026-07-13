@@ -159,8 +159,13 @@ func run(ctx context.Context, args []string) error {
 		if err := gsd.ValidatePinnedContainer(ctx, *container, config.GSDVersion); err != nil {
 			return fmt.Errorf("runtime admission: %w", err)
 		}
-	} else if err := gsd.ValidatePinnedCommand(config.GSDCommand, config.GSDVersion); err != nil {
-		return fmt.Errorf("runtime admission: %w", err)
+	} else {
+		if err := gsd.ValidatePinnedCommand(config.GSDCommand, config.GSDVersion); err != nil {
+			return fmt.Errorf("runtime admission: %w", err)
+		}
+		if err := gsd.ApplyPinnedHeadlessToolPatch(config.GSDCommand, config.GSDVersion); err != nil {
+			return fmt.Errorf("runtime compatibility: %w", err)
+		}
 	}
 	if err := gsd.ValidateRuntimeSettings(config.GSDHome, config.WorkDir, config.CoordinatorModel, "high"); err != nil {
 		return fmt.Errorf("runtime admission: %w", err)

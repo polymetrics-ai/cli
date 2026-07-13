@@ -68,6 +68,11 @@ worktree.
 If a prior qualification run already created the correct active milestone, `start --adopt-existing`
 binds it explicitly instead of silently creating a second milestone.
 
+For official GSD Pi 1.11.0 on the host, runtime admission idempotently applies one qualified
+compatibility patch inside the pinned package: the upstream headless idle timer must wait until all
+tool calls finish. Shepherd refuses a different version, symlinked runtime file, partially patched
+file, or unexpected upstream source shape instead of guessing.
+
 Every answered gate has explicit provenance. Direct terminal answers default to `human`; an agent
 answering from approved issue context must identify itself instead of impersonating a human:
 
