@@ -93,6 +93,16 @@ func TestTerminalDiagnosticIsSingleLineAndBounded(t *testing.T) {
 	}
 }
 
+func TestJoinTerminalFailurePreservesPrimaryCause(t *testing.T) {
+	t.Parallel()
+	primary := errors.New("canonical unit did not advance")
+	secondary := errors.New("worktree must be clean")
+	joined := joinTerminalFailure(primary, secondary)
+	if !errors.Is(joined, primary) || !errors.Is(joined, secondary) {
+		t.Fatalf("joined error=%v", joined)
+	}
+}
+
 func TestLoadConfigRejectsUnknownFields(t *testing.T) {
 	t.Parallel()
 

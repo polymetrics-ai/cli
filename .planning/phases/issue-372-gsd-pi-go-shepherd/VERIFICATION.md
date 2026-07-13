@@ -41,6 +41,8 @@
   ceiling while the event projector continues to discard raw payloads.
 - [x] Successful implementation units checkpoint only immutable issue-context `write_scope` paths;
   out-of-scope changes fail before staging, and subsequent dispatch still starts clean.
+- [x] Dirty-tree finalization preserves the primary canonical reconciliation failure for actionable
+  incomplete-task recovery.
 
 ## Current canary blocker
 

@@ -53,6 +53,9 @@ module without coupling it to the Polymetrics CLI module.
     controller checkpoint commit before the next fenced unit. Validate every changed path against
     the immutable protected issue-context `write_scope`; retain the clean-start invariant and never
     push from the worker runtime.
+17. Preserve the primary reconciliation failure when a failed unit also leaves a dirty worktree;
+    report both causes so recovery distinguishes a completed scoped task from an incomplete red-test
+    checkpoint.
 
 ## Required skills and workflows
 

@@ -669,9 +669,12 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		}
 	}
 	endSnapshot, snapshotErr := shepherdgit.Inspect(ctx, config.WorkDir)
-	if snapshotErr != nil || shepherdgit.RequireClean(endSnapshot) != nil {
+	if snapshotErr != nil {
 		result.Terminal = gsd.TerminalError
-		result.Err = errors.New("worktree must be clean after a governed unit")
+		result.Err = joinTerminalFailure(result.Err, errors.New("inspect worktree after governed unit"))
+	} else if cleanErr := shepherdgit.RequireClean(endSnapshot); cleanErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = joinTerminalFailure(result.Err, errors.New("worktree must be clean after a governed unit"))
 	} else if err := authority.RecordAttemptHeads(ctx, deliveryID, executionID, startSnapshot.HeadSHA, endSnapshot.HeadSHA); err != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = err
@@ -744,6 +747,13 @@ func terminalDiagnostic(stderr string) string {
 		return line
 	}
 	return ""
+}
+
+func joinTerminalFailure(primary, secondary error) error {
+	if primary == nil {
+		return secondary
+	}
+	return errors.Join(primary, secondary)
 }
 
 type commandExitError struct {
