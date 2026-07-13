@@ -66,11 +66,11 @@ Useful prompt templates:
   Example: `/pm-gsd-loop 40` or `/pm-gsd-loop "add DraftIssue to ListProjectItems"`.
 - `/pm-review-loop`: Claude/Copilot review disposition loop.
   Example: `/pm-review-loop 74` (PR number) or `/pm-review-loop feat/40-github-projects-discussions`.
-- `/pm-auto-loop`: fully automated, resumable multi-model delivery loop — Claude Opus 4.8
-  plans/verifies/reviews, Claude Sonnet researches, Codex gpt-5.5 xhigh implements. Given one problem
-  prompt it (researches if needed →) plans the parent + sub-issues, creates issues, opens the parent
-  draft PR and per-slice sub-PRs, then runs plan→execute→verify→review→correct per task until
-  integrated. Handles any task (`problem_type: implementation | connector`).
+- `/pm-auto-loop`: fully automated, resumable delivery loop. The orchestrator model comes from the
+  driver, and worker models come from `.pi/agents/*.md` frontmatter. Given one problem prompt it
+  (researches if needed →) plans the parent + sub-issues, creates issues, opens the parent draft PR
+  and per-slice sub-PRs, then runs plan→execute→verify→review→correct per task until integrated.
+  Handles any task (`problem_type: implementation | connector`).
   Example: `/pm-auto-loop "add a --since flag to pm connectors list"`.
   See `.agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md`.
 - `/pm-connector-loop`: connector specialization of the auto-loop — always runs the RESEARCH stage
@@ -112,12 +112,12 @@ The validator writes `.planning/auto-loop/VALIDATION.jsonl` (per-step scores) an
 `VALIDATOR-VERDICT.json` (the driver acts on `PROCEED`/`RETRY`/`REVERT`/`HALT`). Requires the local
 `claude` CLI to be logged in (`claude -p "ok"` should work).
 
-Model routing is per-agent in `.pi/agents/*.md` (Claude Opus for `pm-planner`/`pm-verifier`/
-`pm-reviewer`/`pm-claude-review-disposition`; Claude Sonnet for `pm-web-researcher`; Codex gpt-5.5
-xhigh for `pm-gsd-worker`/`pm-issue-creator`). Confirm the exact model IDs your subscriptions expose
-with `/model`, then set them once in the agent frontmatter and in `scripts/pi-auto-loop.sh`
-(`ORCH_MODEL`). Connector research uses the repo's `searxng` connector through `pm` (audited path);
-export `SEARXNG_BASE` (+ token if proxied) before launching.
+Model routing is per-agent in `.pi/agents/*.md`; the Codex-only Shepherd profile pins project
+agents to `openai-codex/gpt-5.5` with each agent's declared thinking level, while the Shepherd
+validator defaults to `openai-codex/gpt-5.6-sol --thinking high`. Confirm the exact model IDs your
+subscription exposes with `/model`, then set them once in the agent frontmatter and in the driver
+environment (`ORCH_MODEL` / `VALIDATOR_ARGS`). Connector research uses the repo's `searxng`
+connector through `pm` (audited path); export `SEARXNG_BASE` (+ token if proxied) before launching.
 
 ### Non-interactive (CI / parent-PR review coverage)
 

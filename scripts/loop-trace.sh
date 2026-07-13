@@ -18,7 +18,8 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-STATE_DIR="$REPO_ROOT/.planning/auto-loop"
+STATE_DIR="${AUTO_LOOP_STATE_DIR:-$REPO_ROOT/.planning/auto-loop}"
+[[ "$STATE_DIR" = /* ]] || STATE_DIR="$REPO_ROOT/$STATE_DIR"
 TRACE_DIR="$STATE_DIR/trace"
 CMD="${1:-latest}"; ARG="${2:-}"
 
@@ -31,15 +32,48 @@ session_dirs() {
   ls -d "$base"/*"${slug##*-}"* "$base"/*wt-*twenty* "$base"/*polymetrics* 2>/dev/null | sort -u
 }
 
+session_files() {
+  local limit="${1:-200}"
+  SESSION_DIRS="$(session_dirs | tr '\n' ':')" SESSION_LIMIT="$limit" python3 - <<'PY'
+import os
+
+dirs=[d for d in os.environ.get("SESSION_DIRS","").split(":") if d]
+try:
+    limit=max(1,int(os.environ.get("SESSION_LIMIT","200")))
+except ValueError:
+    limit=200
+files=[]
+seen=set()
+for root in dirs:
+    if not os.path.isdir(root):
+        continue
+    for cur, subdirs, names in os.walk(root):
+        subdirs[:] = [d for d in subdirs if d not in {".git","node_modules","vendor"}]
+        for name in names:
+            if not name.endswith(".jsonl"):
+                continue
+            path=os.path.join(cur,name)
+            if path in seen:
+                continue
+            seen.add(path)
+            try:
+                files.append((os.path.getmtime(path),path))
+            except OSError:
+                pass
+files.sort(reverse=True)
+for _, path in files[:limit]:
+    print(path)
+PY
+}
+
 newest_session() {
-  # shellcheck disable=SC2046
-  ls -t $(session_dirs | sed 's|$|/*.jsonl|') 2>/dev/null | head -1
+  session_files 1 | head -1
 }
 
 case "$CMD" in
   sessions)
-    for d in $(session_dirs); do
-      for f in $(ls -t "$d"/*.jsonl 2>/dev/null | head -12); do
+    while IFS= read -r f; do
+      [[ -n "$f" && -f "$f" ]] || continue
         python3 - "$f" <<'PY'
 import json,sys,os,time
 f=sys.argv[1]
@@ -53,10 +87,10 @@ for line in open(f):
     if ts: last=ts
 age=int(time.time()-os.path.getmtime(f))
 state="active" if age<300 else ("recent" if age<3600 else "ended")
-print(f"{state:7} {os.path.basename(f)[:19]}  events={n:<4} size={os.path.getsize(f)//1024}KB  last_event_age={age}s  cwd=…/{cwd.rsplit('/',1)[-1]}")
+rel=os.path.relpath(f, os.getcwd())
+print(f"{state:7} {rel[:72]:72}  events={n:<4} size={os.path.getsize(f)//1024}KB  last_event_age={age}s  cwd=…/{cwd.rsplit('/',1)[-1]}")
 PY
-      done
-    done ;;
+    done < <(session_files 24) ;;
 
   latest|distill)
     f="${ARG:-$(newest_session)}"
@@ -149,10 +183,33 @@ PY
   live)
     echo "following ALL sessions in known dirs (orchestrator + subagents) — ^C to stop"
     SESSION_DIRS="$(session_dirs | tr '\n' ':')" python3 - <<'PY'
-import json,os,time,glob
+import json,os,re,time
 dirs=[d for d in os.environ["SESSION_DIRS"].split(":") if d]
 offsets={}
-def tag(f): return os.path.basename(f)[11:19]+"/"+os.path.basename(f).split("_")[-1][:6]
+def tag(f):
+    parent=os.path.basename(os.path.dirname(f))
+    base=os.path.basename(f)
+    return f"{parent}/{base[:18]}"
+def session_files():
+    files=[]; seen=set()
+    for root in dirs:
+        if not os.path.isdir(root): continue
+        for cur, subdirs, names in os.walk(root):
+            subdirs[:] = [d for d in subdirs if d not in {".git","node_modules","vendor"}]
+            for name in names:
+                if not name.endswith(".jsonl"): continue
+                path=os.path.join(cur,name)
+                if path in seen: continue
+                seen.add(path)
+                try: files.append((os.path.getmtime(path),path))
+                except OSError: pass
+    files.sort(reverse=True)
+    return [p for _,p in files[:6]]
+def redact(s):
+    if not s: return s
+    s=re.sub(r'(?i)(TWENTY_API_KEY|[A-Z0-9_]*(?:TOKEN|SECRET|PASSWORD|API_KEY))([\s:=]+)([^\s,"\']+)', r'\1\2[REDACTED]', s)
+    s=re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._~+/-]+=*', r'\1[REDACTED]', s)
+    return s
 def digest(line):
     try: e=json.loads(line)
     except Exception: return None
@@ -166,20 +223,18 @@ def digest(line):
         k=c.get("type")
         if k=="toolCall":
             a=c.get("arguments") or {}
-            out.append(f"{t} {c.get('name')}: {(a.get('command') or a.get('path') or a.get('agent') or json.dumps(a))[:110]}")
+            out.append(f"{t} {c.get('name')}: {redact(a.get('command') or a.get('path') or a.get('agent') or json.dumps(a))[:110]}")
         elif k=="thinking":
             th=(c.get("thinking") or "").strip()
             if th:
                 lim=100000 if os.environ.get("LIVE_FULL") else 90
-                out.append(f"{t} 💭 {th[:lim]}")
+                out.append(f"{t} 💭 {redact(th[:lim])}")
         elif k=="text" and m.get("role")=="toolResult":
             out.append(f"{t} ← result {len(c.get('text') or '')}B")
     return "\n".join(out) if out else None
 try:
     while True:
-        files=[]
-        for d in dirs: files+=glob.glob(os.path.join(d,"*.jsonl"))
-        files=sorted(files,key=os.path.getmtime,reverse=True)[:6]
+        files=session_files()
         for f in files:
             size=os.path.getsize(f)
             off=offsets.get(f)

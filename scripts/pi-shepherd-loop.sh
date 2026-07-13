@@ -36,7 +36,7 @@
 #   ORCH_MODEL=openai-codex/gpt-5.5           # orchestrator model (thinking level via ":<level>")
 #   PI_TOOLS=read,bash,edit,write,grep,find,ls,subagent
 #   VALIDATOR_BIN=pi                          # Shepherd CLI (cross-model judging is a feature)
-#   VALIDATOR_ARGS="--model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve"
+#   VALIDATOR_ARGS="--model openai-codex/gpt-5.6-sol --thinking high --tools read,bash,edit,write,grep,find,ls --approve"
 #   MAX_ITERATIONS=200                        # hard backstop on orchestrator turns
 #   MAX_REVERTS=6                             # total revert budget per run before HALT
 #   MAX_NO_VERDICT=3                          # consecutive no-verdict turns before HALT
@@ -44,6 +44,7 @@
 #   COOLDOWN_SECONDS=5
 #   PI_EXTRA_FLAGS=""                         # extra flags for every orchestrator invocation
 #   LOOP_CMD=/pm-auto-loop                    # /pm-connector-loop for connector runs
+#   AUTO_LOOP_STATE_DIR=.planning/auto-loop   # set to isolate separate Shepherd runs
 #   SEARXNG_BASE=                             # research via the audited searxng connector (pm)
 set -euo pipefail
 
@@ -51,7 +52,7 @@ PI_BIN="${PI_BIN:-pi}"
 ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.5}"
 PI_TOOLS="${PI_TOOLS:-read,bash,edit,write,grep,find,ls,subagent}"
 VALIDATOR_BIN="${VALIDATOR_BIN:-pi}"
-VALIDATOR_ARGS="${VALIDATOR_ARGS:---model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve}"
+VALIDATOR_ARGS="${VALIDATOR_ARGS:---model openai-codex/gpt-5.6-sol --thinking high --tools read,bash,edit,write,grep,find,ls --approve}"
 MAX_ITERATIONS="${MAX_ITERATIONS:-200}"
 MAX_REVERTS="${MAX_REVERTS:-6}"
 MAX_NO_VERDICT="${MAX_NO_VERDICT:-3}"
@@ -64,7 +65,8 @@ SEARXNG_BASE="${SEARXNG_BASE:-${SEARXNG_URL:-}}"; export SEARXNG_BASE
 STALL_MINUTES="${STALL_MINUTES:-20}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-STATE_DIR="$REPO_ROOT/.planning/auto-loop"
+STATE_DIR="${AUTO_LOOP_STATE_DIR:-$REPO_ROOT/.planning/auto-loop}"
+[[ "$STATE_DIR" = /* ]] || STATE_DIR="$REPO_ROOT/$STATE_DIR"
 # Subagent observability: locally-patched pi-sub-agent records child sessions here (opt-in).
 PI_SUBAGENT_SESSION_DIR="${PI_SUBAGENT_SESSION_DIR:-$STATE_DIR/sessions}"; export PI_SUBAGENT_SESSION_DIR
 CKPT_DIR="$STATE_DIR/checkpoints"
@@ -76,6 +78,16 @@ VAL_PROMPT="$REPO_ROOT/.agents/agentic-delivery/prompts/shepherd-validator-promp
 mkdir -p "$STATE_DIR" "$CKPT_DIR"
 
 log() { printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*" | tee -a "$LOG_FILE" >&2; }
+
+state_root_instruction() {
+  cat <<EOF
+SHEPHERD STATE ROOT FOR THIS RUN:
+- Use $STATE_DIR as the run ledger root.
+- Read/write RUN.json, ORCHESTRATION-STATE.json, VALIDATION.jsonl, VALIDATOR-VERDICT.json, checkpoints, tasks, trace, sessions, and RESEARCH under $STATE_DIR.
+- If any prompt, workflow, or reference says .planning/auto-loop, interpret that as $STATE_DIR for this run.
+- Do not read or write $REPO_ROOT/.planning/auto-loop for this run unless explicitly using it as historical evidence and clearly labeling it historical.
+EOF
+}
 
 # --- preflight: the subagent tool must be available (vendored extension OR installed package) ---
 # We vendor pi-sub-agent under .pi/extensions/ (records child sessions via PI_SUBAGENT_SESSION_DIR),
@@ -111,6 +123,29 @@ except Exception: print("")
 PY
 }
 
+latest_session_file() {
+  python3 - "$STATE_DIR/sessions" <<'PY'
+import os,sys
+root=sys.argv[1]
+best=None
+if os.path.isdir(root):
+    for cur, subdirs, names in os.walk(root):
+        subdirs[:] = [d for d in subdirs if d not in {".git","node_modules","vendor"}]
+        for name in names:
+            if not name.endswith(".jsonl"):
+                continue
+            path=os.path.join(cur,name)
+            try:
+                item=(os.path.getmtime(path),path)
+            except OSError:
+                continue
+            if best is None or item > best:
+                best=item
+if best:
+    print(best[1])
+PY
+}
+
 run_orchestrator() { # $1=turn-message — with stall watchdog (session mtime + child liveness)
   local msg="$1" rc=0 pid sess
   # shellcheck disable=SC2086
@@ -118,7 +153,7 @@ run_orchestrator() { # $1=turn-message — with stall watchdog (session mtime + 
     "$msg" >>"$LOG_FILE" 2>&1 & pid=$!
   while kill -0 "$pid" 2>/dev/null; do
     sleep 60
-    sess="$(ls -t "$STATE_DIR/sessions"/*.jsonl 2>/dev/null | head -1)"
+    sess="$(latest_session_file)"
     if [[ -n "$sess" ]]; then
       local age=$(( $(date +%s) - $(stat -f %m "$sess" 2>/dev/null || echo 0) ))
       if (( age > STALL_MINUTES * 60 )) && ! pgrep -P "$pid" >/dev/null 2>&1; then
@@ -135,7 +170,9 @@ run_orchestrator() { # $1=turn-message — with stall watchdog (session mtime + 
 run_validator() {
   local rc=0
   # shellcheck disable=SC2086
-  "$VALIDATOR_BIN" -p $VALIDATOR_ARGS --session-dir "$STATE_DIR/sessions" "$(cat "$VAL_PROMPT")" >>"$LOG_FILE" 2>&1 || rc=$?
+  "$VALIDATOR_BIN" -p $VALIDATOR_ARGS --session-dir "$STATE_DIR/sessions" "$(state_root_instruction)
+
+$(cat "$VAL_PROMPT")" >>"$LOG_FILE" 2>&1 || rc=$?
   return $rc
 }
 
@@ -172,7 +209,9 @@ for (( i=1; i<=MAX_ITERATIONS; i++ )); do
   fi
 
   log "── turn $i: ORCHESTRATOR ──${correction:+ (with correction)}"
-  turn_msg="$LOOP_CMD $PROBLEM"
+  turn_msg="$LOOP_CMD $PROBLEM
+
+$(state_root_instruction)"
   if [[ -n "$correction" ]]; then
     turn_msg="$turn_msg
 
@@ -182,7 +221,7 @@ VALIDATOR CORRECTION (apply first): $correction"
 
   log "── turn $i: VALIDATOR ──"
   run_validator || log "turn $i: validator returned non-zero"
-  "$REPO_ROOT/scripts/loop-trace.sh" distill >/dev/null 2>&1 && log "turn $i: trace digest written (see .planning/auto-loop/trace/INDEX.md)" || true
+  AUTO_LOOP_STATE_DIR="$STATE_DIR" "$REPO_ROOT/scripts/loop-trace.sh" distill >/dev/null 2>&1 && log "turn $i: trace digest written (see $STATE_DIR/trace/INDEX.md)" || true
 
   verdict="$(json_field "$VERDICT_JSON" verdict)"
   score="$(json_field "$VERDICT_JSON" step_score)"
