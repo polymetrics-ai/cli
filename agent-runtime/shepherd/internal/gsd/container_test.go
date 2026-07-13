@@ -21,12 +21,16 @@ func TestContainerRuntimeHidesHostPlanningAndCredentialSurface(t *testing.T) {
 	if err := os.MkdirAll(policyDir, 0o700); err != nil {
 		t.Fatal(err)
 	}
-	config := ContainerConfig{Engine: "podman", Image: "localhost/gsd-pi:1.11.0", GSDStateDir: filepath.Join(t.TempDir(), "gsd"), PlanningDir: filepath.Join(t.TempDir(), "planning"), AuthFile: auth, SettingsFile: settings, PolicyDir: policyDir}
+	gitCommonDir := filepath.Join(t.TempDir(), ".git")
+	if err := os.MkdirAll(gitCommonDir, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	config := ContainerConfig{Engine: "podman", Image: "localhost/gsd-pi:1.11.0", GSDStateDir: filepath.Join(t.TempDir(), "gsd"), PlanningDir: filepath.Join(t.TempDir(), "planning"), AuthFile: auth, SettingsFile: settings, PolicyDir: policyDir, GitCommonDir: gitCommonDir}
 	if err := config.Validate(root); err != nil {
 		t.Fatal(err)
 	}
 	joined := strings.Join(config.commandArgs(root, []string{"headless", "query"}), " ")
-	for _, required := range []string{"/workspace/.gsd", "/workspace/.planning", "auth.json:ro", "settings.json:ro", "--pull=never"} {
+	for _, required := range []string{root + ":" + root + ":rw", root + "/.gsd", root + "/.planning", gitCommonDir + ":" + gitCommonDir + ":rw", "GIT_CONFIG_KEY_2=safe.directory", "GIT_CONFIG_VALUE_2=" + root, "auth.json:ro", "settings.json:ro", "--pull=never"} {
 		if !strings.Contains(joined, required) {
 			t.Fatalf("missing %q in %s", required, joined)
 		}
@@ -230,5 +234,9 @@ func validContainerConfig(t *testing.T) (ContainerConfig, string) {
 	if err := os.WriteFile(filepath.Join(policyDir, "PREFERENCES.md"), []byte("policy"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	return ContainerConfig{Engine: "podman", Image: "localhost/gsd-pi:1.11.0", GSDStateDir: filepath.Join(t.TempDir(), "gsd"), PlanningDir: filepath.Join(t.TempDir(), "planning"), AuthFile: auth, SettingsFile: settings, PolicyDir: policyDir}, root
+	gitCommonDir := filepath.Join(t.TempDir(), ".git")
+	if err := os.MkdirAll(gitCommonDir, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	return ContainerConfig{Engine: "podman", Image: "localhost/gsd-pi:1.11.0", GSDStateDir: filepath.Join(t.TempDir(), "gsd"), PlanningDir: filepath.Join(t.TempDir(), "planning"), AuthFile: auth, SettingsFile: settings, PolicyDir: policyDir, GitCommonDir: gitCommonDir}, root
 }

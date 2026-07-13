@@ -401,16 +401,7 @@ func validateRebuildNotification(path string) error {
 
 func (r *Runner) execCommand(ctx context.Context, args []string) *exec.Cmd {
 	if r.config.Container != nil {
-		translated := append([]string{}, args...)
-		for i := 0; i+1 < len(translated); i++ {
-			if translated[i] == "--context" && filepath.IsAbs(translated[i+1]) {
-				relative, err := filepath.Rel(r.config.WorkDir, translated[i+1])
-				if err == nil {
-					translated[i+1] = filepath.ToSlash(filepath.Join("/workspace", relative))
-				}
-			}
-		}
-		return exec.CommandContext(ctx, r.config.Container.Engine, r.config.Container.commandArgs(r.config.WorkDir, translated)...)
+		return exec.CommandContext(ctx, r.config.Container.Engine, r.config.Container.commandArgs(r.config.WorkDir, args)...)
 	}
 	return exec.CommandContext(ctx, r.config.Command[0], args...)
 }

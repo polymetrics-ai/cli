@@ -12,6 +12,7 @@
   "container_image": "localhost/polymetrics-gsd-pi:1.11.0",
   "container_network": "shepherd-research",
   "policy_dir": "/absolute/path/to/operator-controlled/.gsd",
+  "git_common_dir": "/absolute/path/to/repository/.git",
   "auth_file": "/absolute/path/to/private/auth.json",
   "timeout_seconds": 3600,
   "heartbeat_seconds": 15,

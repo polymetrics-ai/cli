@@ -42,6 +42,7 @@ type fileConfig struct {
 	AuthFile         string   `json:"auth_file"`
 	ContainerNetwork string   `json:"container_network"`
 	PolicyDir        string   `json:"policy_dir"`
+	GitCommonDir     string   `json:"git_common_dir"`
 }
 
 type decisionInput struct {
@@ -126,7 +127,7 @@ func run(ctx context.Context, args []string) error {
 		container = &gsd.ContainerConfig{Engine: "podman", Image: config.ContainerImage,
 			GSDStateDir: filepath.Join(config.StateDir, "runtime", "gsd"), PlanningDir: filepath.Join(config.StateDir, "runtime", "planning"),
 			AuthFile: config.AuthFile, SettingsFile: filepath.Join(config.GSDHome, "agent", "settings.json"), Network: config.ContainerNetwork,
-			PolicyDir: config.PolicyDir}
+			PolicyDir: config.PolicyDir, GitCommonDir: config.GitCommonDir}
 		if err := gsd.ValidatePinnedContainer(ctx, *container, config.GSDVersion); err != nil {
 			return fmt.Errorf("runtime admission: %w", err)
 		}
@@ -348,8 +349,8 @@ func loadConfig(path string) (fileConfig, error) {
 	if config.Runtime != "host" && config.Runtime != "podman" {
 		return fileConfig{}, errors.New("runtime must be host or podman")
 	}
-	if config.Runtime == "podman" && (!filepath.IsAbs(config.AuthFile) || !filepath.IsAbs(config.PolicyDir) || config.ContainerImage == "") {
-		return fileConfig{}, errors.New("podman runtime requires absolute auth_file and policy_dir plus container_image")
+	if config.Runtime == "podman" && (!filepath.IsAbs(config.AuthFile) || !filepath.IsAbs(config.PolicyDir) || !filepath.IsAbs(config.GitCommonDir) || config.ContainerImage == "") {
+		return fileConfig{}, errors.New("podman runtime requires absolute auth_file, policy_dir, and git_common_dir plus container_image")
 	}
 	if within, err := pathWithin(config.WorkDir, config.StateDir); err != nil || within {
 		return fileConfig{}, errors.New("state_dir must be outside the worker-controlled work directory")

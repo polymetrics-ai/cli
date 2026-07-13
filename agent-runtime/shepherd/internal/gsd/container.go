@@ -17,6 +17,7 @@ type ContainerConfig struct {
 	SettingsFile string
 	Network      string
 	PolicyDir    string
+	GitCommonDir string
 }
 
 func (c ContainerConfig) Validate(workDir string) error {
@@ -32,6 +33,7 @@ func (c ContainerConfig) Validate(workDir string) error {
 	for label, path := range map[string]string{
 		"work directory": workDir, "GSD state": c.GSDStateDir, "planning state": c.PlanningDir,
 		"auth file": c.AuthFile, "settings file": c.SettingsFile, "governed policy": c.PolicyDir,
+		"git common directory": c.GitCommonDir,
 	} {
 		if !filepath.IsAbs(path) {
 			return fmt.Errorf("%s must be absolute", label)
@@ -48,6 +50,9 @@ func (c ContainerConfig) Validate(workDir string) error {
 	}
 	if info, err := os.Stat(c.PolicyDir); err != nil || !info.IsDir() {
 		return errors.New("governed policy directory must be an existing directory")
+	}
+	if info, err := os.Stat(c.GitCommonDir); err != nil || !info.IsDir() {
+		return errors.New("git common directory must be an existing directory")
 	}
 	for _, path := range []string{c.AuthFile, c.SettingsFile} {
 		resolved, err := filepath.EvalSymlinks(path)
@@ -67,21 +72,24 @@ func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string 
 	if network == "" {
 		network = "bridge"
 	}
-	return append([]string{
+	args := []string{
 		"run", "--rm", "--pull=never", "--network=" + network, "--userns=keep-id",
-		"--workdir=/workspace",
-		"--volume=" + workDir + ":/workspace:rw",
-		"--volume=" + c.GSDStateDir + ":/workspace/.gsd:rw",
-		"--volume=" + c.PlanningDir + ":/workspace/.planning:rw",
+		"--workdir=" + workDir,
+		"--volume=" + workDir + ":" + workDir + ":rw",
+		"--volume=" + c.GitCommonDir + ":" + c.GitCommonDir + ":rw",
+		"--volume=" + c.GSDStateDir + ":" + filepath.Join(workDir, ".gsd") + ":rw",
+		"--volume=" + c.PlanningDir + ":" + filepath.Join(workDir, ".planning") + ":rw",
 		"--volume=" + c.AuthFile + ":/home/shepherd/.pi/agent/auth.json:ro",
 		"--volume=" + c.SettingsFile + ":/home/shepherd/.pi/agent/settings.json:ro",
 		"--env=HOME=/home/shepherd", "--env=GSD_HOME=/home/shepherd/.pi",
 		"--env=SEARXNG_BASE=http://searxng:8080",
 		"--env=GIT_TERMINAL_PROMPT=0", "--env=GIT_ASKPASS=",
-		"--env=GIT_CONFIG_COUNT=2", "--env=GIT_CONFIG_KEY_0=credential.helper", "--env=GIT_CONFIG_VALUE_0=",
+		"--env=GIT_CONFIG_COUNT=3", "--env=GIT_CONFIG_KEY_0=credential.helper", "--env=GIT_CONFIG_VALUE_0=",
 		"--env=GIT_CONFIG_KEY_1=remote.origin.pushurl", "--env=GIT_CONFIG_VALUE_1=file:///dev/null/shepherd-disabled",
+		"--env=GIT_CONFIG_KEY_2=safe.directory", "--env=GIT_CONFIG_VALUE_2=" + workDir,
 		c.Image,
-	}, gsdArgs...)
+	}
+	return append(args, gsdArgs...)
 }
 
 func provisionContainerPolicy(policyDir, stateDir string) error {
