@@ -81,6 +81,8 @@ tmp/
 .gsd/journal/
 .gsd/doctor-history.jsonl
 .gsd/event-log.jsonl
+.gsd/notifications.jsonl
+.gsd/.compat.json
 .gsd/DISCUSSION-MANIFEST.json
 .gsd/milestones/**/*-CONTINUE.md
 .gsd/milestones/**/continue.md
