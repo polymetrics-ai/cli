@@ -11,15 +11,16 @@ import (
 func TestExplicitDepthApprovalIsNarrowlyScoped(t *testing.T) {
 	t.Parallel()
 
-	question := gsd.Question{Method: "select", Title: "Depth check: confirm audited planning depth", Options: []string{"Confirm depth (Recommended)", "Depth insufficient"}}
+	question := gsd.Question{ID: "depth_verification_M001-n6ms9v_confirm", Method: "select", Title: "Confirm the printed depth verification is sufficient", Options: []string{"Confirm (Recommended)", "Reject depth"}}
 	response, approved := approveDepthQuestion(question)
 	if !approved || response.Value != question.Options[0] || response.Cancelled {
 		t.Fatalf("response=%+v approved=%t", response, approved)
 	}
 	for _, other := range []gsd.Question{
 		{Method: "confirm", Title: question.Title, Options: []string{"Yes", "No"}},
-		{Method: "select", Title: "Approve dependency addition", Options: question.Options},
-		{Method: "select", Title: question.Title, Options: []string{"Proceed", "Stop"}},
+		{ID: "approve_dependency", Method: "select", Title: "Approve dependency addition", Options: question.Options},
+		{ID: "depth_verification_M001-n6ms9v_review", Method: "select", Title: question.Title, Options: question.Options},
+		{ID: "depth_verification_M001-n6ms9v_confirm", Method: "select", Title: question.Title, Options: []string{"Proceed", "Stop"}},
 	} {
 		if response, approved := approveDepthQuestion(other); approved || !response.Cancelled {
 			t.Fatalf("unrelated gate was approved: question=%+v response=%+v", other, response)

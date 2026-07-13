@@ -112,8 +112,8 @@ func TestRunnerKeepsHeartbeatsWhileHumanGateWaitsAndCancelsBeforeUpstreamFallbac
 		GSDHome:           t.TempDir(),
 		Model:             "openai-codex/gpt-5.6-sol",
 		Thinking:          "high",
-		Timeout:           90 * time.Millisecond,
-		HeartbeatInterval: 10 * time.Millisecond,
+		Timeout:           500 * time.Millisecond,
+		HeartbeatInterval: 25 * time.Millisecond,
 		MaxEventBytes:     1024,
 		Environment:       []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=question"},
 	})

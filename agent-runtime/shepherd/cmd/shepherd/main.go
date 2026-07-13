@@ -482,7 +482,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		Question: func(questionCtx context.Context, question gsd.Question) (gsd.UIResponse, error) {
 			if confirmDepth {
 				if response, approved := approveDepthQuestion(question); approved {
-					appendActivity("human.decision", "approved_depth", trustedUnit, "", "", time.Now().UTC())
+					appendActivity("human.decision", "approved_depth", trustedUnit, "", question.ID, time.Now().UTC())
 					fmt.Fprintln(os.Stderr, "HUMAN GATE [select] planning depth approved by explicit --confirm-depth operator flag")
 					return response, nil
 				}
@@ -599,12 +599,21 @@ func deliveryID(issue int) string { return "issue-" + strconv.Itoa(issue) }
 
 func approveDepthQuestion(question gsd.Question) (gsd.UIResponse, bool) {
 	cancelled := gsd.UIResponse{Cancelled: true}
-	if question.Method != "select" || !strings.HasPrefix(strings.ToLower(strings.TrimSpace(question.Title)), "depth check:") {
+	const prefix = "depth_verification_M"
+	const suffix = "_confirm"
+	id := strings.TrimSpace(question.ID)
+	milestone := strings.TrimSuffix(strings.TrimPrefix(id, prefix), suffix)
+	parts := strings.SplitN(milestone, "-", 2)
+	if question.Method != "select" || !strings.HasPrefix(id, prefix) || !strings.HasSuffix(id, suffix) ||
+		len(parts) != 2 || len(parts[0]) != 3 || strings.Trim(parts[0], "0123456789") != "" ||
+		parts[1] == "" || strings.IndexFunc(parts[1], func(r rune) bool {
+		return (r < 'a' || r > 'z') && (r < '0' || r > '9')
+	}) >= 0 {
 		return cancelled, false
 	}
 	for _, option := range question.Options {
 		normalized := strings.ToLower(strings.TrimSpace(option))
-		if strings.HasPrefix(normalized, "confirm depth") {
+		if strings.HasPrefix(normalized, "confirm") {
 			return gsd.UIResponse{Value: option}, true
 		}
 	}
