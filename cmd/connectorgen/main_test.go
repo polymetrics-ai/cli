@@ -13,6 +13,8 @@ import (
 	"strings"
 	"testing"
 	"testing/fstest"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // --- validate: accepts the golden control bundle -----------------------------
@@ -102,6 +104,76 @@ func TestValidate_CLISurfaceValidReferencesPassCleanly(t *testing.T) {
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid cli_surface.json, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceCompleteCoveragePassesCleanly(t *testing.T) {
+	cliSurface := strings.Replace(
+		validCLISurfaceJSON(),
+		`"commands": [`,
+		`"coverage_policy": { "require_all_streams": true, "require_all_writes": true },
+		"commands": [`,
+		1,
+	)
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for complete cli_surface coverage, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceCoverageReportsOmittedStream(t *testing.T) {
+	bundle := cliSurfaceCoverageTestBundle(true, false)
+	bundle.Streams = append(bundle.Streams, engine.StreamSpec{Name: "missing_stream"})
+
+	findings := checkCLISurface(bundle)
+	assertCLISurfaceFinding(t, findings, ruleCLISurfaceCoverage, `coverage policy requires an implemented command target for stream "missing_stream"`)
+}
+
+func TestValidate_CLISurfaceCoverageReportsOmittedWrite(t *testing.T) {
+	bundle := cliSurfaceCoverageTestBundle(false, true)
+	bundle.Writes = append(bundle.Writes, engine.WriteAction{Name: "missing_write"})
+
+	findings := checkCLISurface(bundle)
+	assertCLISurfaceFinding(t, findings, ruleCLISurfaceCoverage, `coverage policy requires an implemented command target for write "missing_write"`)
+}
+
+func TestValidate_CLISurfaceRejectsDuplicateCommandPath(t *testing.T) {
+	cliSurface := strings.Replace(validCLISurfaceJSON(), `"path": "widget create"`, `"path": "widget list"`, 1)
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceStructure)
+}
+
+func TestValidate_CLISurfaceCoverageFindingsAreDeterministicAndSorted(t *testing.T) {
+	bundle := cliSurfaceCoverageTestBundle(true, true)
+	bundle.Streams = append(bundle.Streams,
+		engine.StreamSpec{Name: "zeta_stream"},
+		engine.StreamSpec{Name: "alpha_stream"},
+	)
+	bundle.Writes = append(bundle.Writes,
+		engine.WriteAction{Name: "zeta_write"},
+		engine.WriteAction{Name: "alpha_write"},
+	)
+
+	var got []string
+	for _, finding := range checkCLISurface(bundle) {
+		if finding.Rule == ruleCLISurfaceCoverage {
+			got = append(got, finding.Message)
+		}
+	}
+	want := []string{
+		`coverage policy requires an implemented command target for stream "alpha_stream"`,
+		`coverage policy requires an implemented command target for stream "zeta_stream"`,
+		`coverage policy requires an implemented command target for write "alpha_write"`,
+		`coverage policy requires an implemented command target for write "zeta_write"`,
+	}
+	if strings.Join(got, "\n") != strings.Join(want, "\n") {
+		t.Fatalf("coverage findings = %#v, want %#v", got, want)
 	}
 }
 
@@ -1187,6 +1259,50 @@ func assertFindingRule(t *testing.T, report Report, connector, rule string) {
 		}
 	}
 	t.Fatalf("no finding for connector %q with rule %q; findings=%+v", connector, rule, report.Findings)
+}
+
+func assertCLISurfaceFinding(t *testing.T, findings []Finding, rule, message string) {
+	t.Helper()
+	for _, finding := range findings {
+		if finding.Rule == rule && finding.Message == message {
+			return
+		}
+	}
+	t.Fatalf("no CLI surface finding with rule %q and message %q; findings=%+v", rule, message, findings)
+}
+
+func cliSurfaceCoverageTestBundle(requireAllStreams, requireAllWrites bool) engine.Bundle {
+	return engine.Bundle{
+		Name: "cli-surface",
+		Streams: []engine.StreamSpec{
+			{Name: "widgets"},
+		},
+		Writes: []engine.WriteAction{
+			{Name: "create_widget"},
+		},
+		CLISurface: &engine.CLISurface{
+			CoveragePolicy: &engine.CLICoveragePolicy{
+				RequireAllStreams: requireAllStreams,
+				RequireAllWrites:  requireAllWrites,
+			},
+			Commands: []engine.CLICommand{
+				{
+					Path:         "widget list",
+					Intent:       "etl",
+					Availability: "implemented",
+					Stream:       "widgets",
+				},
+				{
+					Path:         "widget create",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "create_widget",
+					Risk:         "creates a widget",
+					Approval:     "reverse ETL writes require plan, preview, approval, execute",
+				},
+			},
+		},
+	}
 }
 
 func assertSurfaceProvenanceFinding(t *testing.T, report Report, messagePart string) {

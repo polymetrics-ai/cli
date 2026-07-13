@@ -567,13 +567,21 @@ type CompositeOperationSpec struct {
 // it maps provider-style command paths to existing streams, write actions,
 // API-surface rows, or explicit unsupported/planned classifications.
 type CLISurface struct {
-	Tagline     string            `json:"tagline"`
-	Usage       string            `json:"usage"`
-	SourceCLI   *CLISourceCLI     `json:"source_cli,omitempty"`
-	Groups      []CLICommandGroup `json:"groups,omitempty"`
-	GlobalFlags []CLIFlag         `json:"global_flags,omitempty"`
-	Commands    []CLICommand      `json:"commands"`
-	HelpTopics  []CLIHelpTopic    `json:"help_topics,omitempty"`
+	Tagline        string             `json:"tagline"`
+	Usage          string             `json:"usage"`
+	SourceCLI      *CLISourceCLI      `json:"source_cli,omitempty"`
+	CoveragePolicy *CLICoveragePolicy `json:"coverage_policy,omitempty"`
+	Groups         []CLICommandGroup  `json:"groups,omitempty"`
+	GlobalFlags    []CLIFlag          `json:"global_flags,omitempty"`
+	Commands       []CLICommand       `json:"commands"`
+	HelpTopics     []CLIHelpTopic     `json:"help_topics,omitempty"`
+}
+
+// CLICoveragePolicy opts a connector into complete declarative command target
+// coverage. An absent policy preserves legacy partial CLI-surface metadata.
+type CLICoveragePolicy struct {
+	RequireAllStreams bool `json:"require_all_streams"`
+	RequireAllWrites  bool `json:"require_all_writes"`
 }
 
 // CLISourceCLI names the external provider CLI used as a parity reference.

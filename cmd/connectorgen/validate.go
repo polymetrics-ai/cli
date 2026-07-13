@@ -31,6 +31,8 @@ const (
 	ruleSurfaceCategory          = "surface_category"
 	ruleSurfaceOperation         = "surface_operation"
 	ruleSurfaceFailFirstRun      = "surface_fail_first_run"
+	ruleCLISurfaceStructure      = "cli_surface_structure"
+	ruleCLISurfaceCoverage       = "cli_surface_coverage"
 	ruleCLISurfaceUnknownTarget  = "cli_surface_unknown_target"
 	ruleCLISurfaceMissingMapping = "cli_surface_missing_mapping"
 	ruleCLISurfaceSafety         = "cli_surface_safety"
@@ -207,7 +209,10 @@ func validateDir(fsys fs.FS) (Report, error) {
 			if list[i].File != list[j].File {
 				return list[i].File < list[j].File
 			}
-			return list[i].Rule < list[j].Rule
+			if list[i].Rule != list[j].Rule {
+				return list[i].Rule < list[j].Rule
+			}
+			return list[i].Message < list[j].Message
 		})
 	}
 	sortFindings(findings)
@@ -858,13 +863,92 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	}
 	endpoints := cliSurfaceEndpointStates(b.Surface)
 
-	var findings []Finding
+	findings := checkCLISurfaceStructure(b)
 	for i, cmd := range b.CLISurface.Commands {
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
+	}
+	findings = append(findings, checkCLISurfaceCoverage(b)...)
+	return findings
+}
+
+func checkCLISurfaceStructure(b engine.Bundle) []Finding {
+	seen := map[string]int{}
+	var findings []Finding
+	for i, cmd := range b.CLISurface.Commands {
+		path := strings.Join(strings.Fields(cmd.Path), " ")
+		if previous, exists := seen[path]; exists {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceStructure,
+				Message:   fmt.Sprintf("duplicate command path %q at commands %d and %d", path, previous, i),
+			})
+			continue
+		}
+		seen[path] = i
+	}
+	return findings
+}
+
+func checkCLISurfaceCoverage(b engine.Bundle) []Finding {
+	policy := b.CLISurface.CoveragePolicy
+	if policy == nil {
+		return nil
+	}
+
+	implementedStreams := map[string]bool{}
+	implementedWrites := map[string]bool{}
+	for _, cmd := range b.CLISurface.Commands {
+		if cmd.Availability != "implemented" {
+			continue
+		}
+		if cmd.Stream != "" {
+			implementedStreams[cmd.Stream] = true
+		}
+		if cmd.Write != "" {
+			implementedWrites[cmd.Write] = true
+		}
+	}
+
+	var missingStreams []string
+	if policy.RequireAllStreams {
+		for _, stream := range b.Streams {
+			if !implementedStreams[stream.Name] {
+				missingStreams = append(missingStreams, stream.Name)
+			}
+		}
+		sort.Strings(missingStreams)
+	}
+	var missingWrites []string
+	if policy.RequireAllWrites {
+		for _, write := range b.Writes {
+			if !implementedWrites[write.Name] {
+				missingWrites = append(missingWrites, write.Name)
+			}
+		}
+		sort.Strings(missingWrites)
+	}
+
+	findings := make([]Finding, 0, len(missingStreams)+len(missingWrites))
+	for _, name := range missingStreams {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceCoverage,
+			Message:   fmt.Sprintf("coverage policy requires an implemented command target for stream %q", name),
+		})
+	}
+	for _, name := range missingWrites {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceCoverage,
+			Message:   fmt.Sprintf("coverage policy requires an implemented command target for write %q", name),
+		})
 	}
 	return findings
 }
