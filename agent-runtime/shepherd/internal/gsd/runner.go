@@ -115,7 +115,7 @@ func NewRunner(config Config) (*Runner, error) {
 		if err := config.Container.Validate(config.WorkDir); err != nil {
 			return nil, err
 		}
-		for _, dir := range []string{config.Container.GSDStateDir, config.Container.PlanningDir} {
+		for _, dir := range []string{config.Container.GSDStateDir, config.Container.PlanningDir, config.Container.SessionsDir, config.Container.BackgroundDir} {
 			if err := os.MkdirAll(dir, 0o700); err != nil {
 				return nil, fmt.Errorf("create isolated container state: %w", err)
 			}
@@ -166,7 +166,7 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 		"headless", "--json", "--supervised", "--model", r.config.Model,
 		"--response-timeout", strconv.FormatInt(responseTimeout.Milliseconds(), 10),
 		"--max-restarts", "0",
-		"--events", "agent_start,turn_start,tool_execution_start,model_select,thinking_level_select,extension_ui_request",
+		"--events", "agent_start,agent_end,turn_start,tool_execution_start,tool_execution_end,model_select,thinking_level_select,extension_ui_request",
 		"--timeout", strconv.FormatInt(r.config.Timeout.Milliseconds(), 10), command,
 	)
 	commandArgs = append(commandArgs, args...)

@@ -9,15 +9,17 @@ import (
 )
 
 type ContainerConfig struct {
-	Engine       string
-	Image        string
-	GSDStateDir  string
-	PlanningDir  string
-	AuthFile     string
-	SettingsFile string
-	Network      string
-	PolicyDir    string
-	GitCommonDir string
+	Engine        string
+	Image         string
+	GSDStateDir   string
+	PlanningDir   string
+	AuthFile      string
+	SettingsFile  string
+	Network       string
+	PolicyDir     string
+	GitCommonDir  string
+	SessionsDir   string
+	BackgroundDir string
 }
 
 func (c ContainerConfig) Validate(workDir string) error {
@@ -34,6 +36,7 @@ func (c ContainerConfig) Validate(workDir string) error {
 		"work directory": workDir, "GSD state": c.GSDStateDir, "planning state": c.PlanningDir,
 		"auth file": c.AuthFile, "settings file": c.SettingsFile, "governed policy": c.PolicyDir,
 		"git common directory": c.GitCommonDir,
+		"session archive":      c.SessionsDir, "background shell state": c.BackgroundDir,
 	} {
 		if !filepath.IsAbs(path) {
 			return fmt.Errorf("%s must be absolute", label)
@@ -47,6 +50,11 @@ func (c ContainerConfig) Validate(workDir string) error {
 	}
 	if within, _ := pathInside(workDir, c.PolicyDir); within {
 		return errors.New("governed policy directory must be outside the worker-controlled worktree")
+	}
+	for _, path := range []string{c.SessionsDir, c.BackgroundDir} {
+		if within, _ := pathInside(workDir, path); within {
+			return errors.New("runtime archive directories must be outside the worker-controlled worktree")
+		}
 	}
 	if info, err := os.Stat(c.PolicyDir); err != nil || !info.IsDir() {
 		return errors.New("governed policy directory must be an existing directory")
@@ -79,8 +87,10 @@ func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string 
 		"--volume=" + c.GitCommonDir + ":" + c.GitCommonDir + ":rw",
 		"--volume=" + c.GSDStateDir + ":" + filepath.Join(workDir, ".gsd") + ":rw",
 		"--volume=" + c.PlanningDir + ":" + filepath.Join(workDir, ".planning") + ":rw",
+		"--volume=" + c.BackgroundDir + ":" + filepath.Join(workDir, ".bg-shell") + ":rw",
 		"--volume=" + c.AuthFile + ":/home/shepherd/.pi/agent/auth.json:ro",
 		"--volume=" + c.SettingsFile + ":/home/shepherd/.pi/agent/settings.json:ro",
+		"--volume=" + c.SessionsDir + ":/home/shepherd/.pi/agent/sessions:rw",
 		"--env=HOME=/home/shepherd", "--env=GSD_HOME=/home/shepherd/.pi",
 		"--env=SEARXNG_BASE=http://searxng:8080",
 		"--env=GIT_TERMINAL_PROMPT=0", "--env=GIT_ASKPASS=",

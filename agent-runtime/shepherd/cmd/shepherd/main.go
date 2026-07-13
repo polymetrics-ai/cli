@@ -127,7 +127,8 @@ func run(ctx context.Context, args []string) error {
 		container = &gsd.ContainerConfig{Engine: "podman", Image: config.ContainerImage,
 			GSDStateDir: filepath.Join(config.StateDir, "runtime", "gsd"), PlanningDir: filepath.Join(config.StateDir, "runtime", "planning"),
 			AuthFile: config.AuthFile, SettingsFile: filepath.Join(config.GSDHome, "agent", "settings.json"), Network: config.ContainerNetwork,
-			PolicyDir: config.PolicyDir, GitCommonDir: config.GitCommonDir}
+			PolicyDir: config.PolicyDir, GitCommonDir: config.GitCommonDir,
+			SessionsDir: filepath.Join(config.StateDir, "runtime", "sessions"), BackgroundDir: filepath.Join(config.StateDir, "runtime", "bg-shell")}
 		if err := gsd.ValidatePinnedContainer(ctx, *container, config.GSDVersion); err != nil {
 			return fmt.Errorf("runtime admission: %w", err)
 		}
