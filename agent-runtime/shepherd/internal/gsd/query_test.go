@@ -24,3 +24,16 @@ func TestDecodeQueryFailsClosedOnUnknownShape(t *testing.T) {
 		}
 	}
 }
+
+func TestDecodeQueryAcceptsPinnedGSD11Skip(t *testing.T) {
+	t.Parallel()
+
+	raw := []byte(`{"state":{"activeMilestone":{"id":"M001"},"phase":"refining","blockers":[],"nextAction":"Skip stale sketch"},"next":{"action":"skip","unitType":"validate-slice","unitId":"S01"}}`)
+	snapshot, err := DecodeQuery(raw)
+	if err != nil {
+		t.Fatalf("decode skip: %v", err)
+	}
+	if snapshot.Next.Action != "skip" {
+		t.Fatalf("action=%q want skip", snapshot.Next.Action)
+	}
+}

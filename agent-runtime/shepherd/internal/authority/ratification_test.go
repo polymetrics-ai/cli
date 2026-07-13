@@ -1,6 +1,7 @@
 package authority
 
 import (
+	"strings"
 	"testing"
 	"time"
 )
@@ -12,7 +13,7 @@ func validRequest(now time.Time) RatificationRequest {
 		CandidateHead: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
 		ObservedHead:  "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
 		RunID:         "run-1", Generation: 2, UnitID: "M001/S01/U01", Attempt: 1, StateVersion: 7,
-		ContractHash: "sha256:contract", EvidenceHash: "sha256:evidence",
+		ContractHash: "sha256:" + strings.Repeat("c", 64), EvidenceHash: "sha256:" + strings.Repeat("e", 64),
 		Validator: RequiredValidator, Thinking: "high", Verdict: "PROCEED",
 		LocalGates: true, UAT: true, MilestoneValid: true,
 		IssuedAt: now.Add(-time.Minute), ExpiresAt: now.Add(10 * time.Minute),
@@ -28,10 +29,10 @@ func TestRatificationBindsExactEvidence(t *testing.T) {
 	if err != nil {
 		t.Fatalf("valid ratification failed: %v", err)
 	}
-	if err := attestation.Recheck(request.Repository, request.PR, request.CandidateHead, request.Generation, request.StateVersion, now); err != nil {
+	if err := attestation.Recheck(request.Repository, request.PR, request.BaseBranch, request.BaseSHA, request.CandidateHead, request.Generation, request.StateVersion, now); err != nil {
 		t.Fatalf("valid recheck failed: %v", err)
 	}
-	if err := attestation.Recheck(request.Repository, request.PR, "cccccccccccccccccccccccccccccccccccccccc", request.Generation, request.StateVersion, now); err == nil {
+	if err := attestation.Recheck(request.Repository, request.PR, request.BaseBranch, request.BaseSHA, "cccccccccccccccccccccccccccccccccccccccc", request.Generation, request.StateVersion, now); err == nil {
 		t.Fatal("expected delivery-time moved head to fail")
 	}
 }
@@ -54,5 +55,10 @@ func TestRatificationRejectsStaleHeadModelAndExpiry(t *testing.T) {
 	request.ExpiresAt = now
 	if _, err := Ratify(request, now); err == nil {
 		t.Fatal("expected expired ratification to fail")
+	}
+	request = validRequest(now)
+	request.IssuedAt = now.Add(time.Minute)
+	if _, err := Ratify(request, now); err == nil {
+		t.Fatal("expected future-issued ratification to fail")
 	}
 }

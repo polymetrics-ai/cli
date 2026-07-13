@@ -15,6 +15,12 @@ func configureProcessTree(cmd *exec.Cmd) {
 		if cmd.Process == nil {
 			return nil
 		}
-		return syscall.Kill(-cmd.Process.Pid, syscall.SIGTERM)
+		pid := cmd.Process.Pid
+		err := syscall.Kill(-pid, syscall.SIGTERM)
+		go func() {
+			time.Sleep(2 * time.Second)
+			_ = syscall.Kill(-pid, syscall.SIGKILL)
+		}()
+		return err
 	}
 }

@@ -7,11 +7,9 @@ on:
       - ".gsd/PREFERENCES.md"
       - ".gsd/agents/**"
       - ".agents/skills/polymetrics-issue-delivery/**"
-      - ".agents/agentic-delivery/contracts/gsd-*.md"
-      - ".agents/agentic-delivery/contracts/external-effect-intent.md"
-      - ".agents/agentic-delivery/schemas/gsd-*.json"
-      - ".agents/agentic-delivery/schemas/external-effect-intent.schema.json"
-      - ".agents/agentic-delivery/schemas/human-decision.schema.json"
+      - ".agents/agentic-delivery/contracts/**"
+      - ".agents/agentic-delivery/schemas/**"
+      - ".planning/phases/issue-372-gsd-pi-go-shepherd/**"
       - "scripts/tests/shepherd-module-boundary.sh"
       - ".github/workflows/shepherd-verify.yml"
 
@@ -32,4 +30,3 @@ jobs:
         run: make verify
       - name: Verify root module boundary
         run: scripts/tests/shepherd-module-boundary.sh
-

@@ -8,7 +8,7 @@ import (
 func TestProjectorAllowlistDropsPayloads(t *testing.T) {
 	t.Parallel()
 
-	raw := `{"type":"tool_execution_end","runId":"r1","toolName":"bash","result":"secret output","thinkingSignature":{"encrypted_content":"huge"}}`
+	raw := `{"type":"tool_execution_end","runId":"r1","toolName":"bash","isError":true,"result":"secret output","thinkingSignature":{"encrypted_content":"huge"}}`
 	event, err := ProjectEvent([]byte(raw), 1024)
 	if err != nil {
 		t.Fatalf("project event: %v", err)
@@ -16,8 +16,24 @@ func TestProjectorAllowlistDropsPayloads(t *testing.T) {
 	if event.Kind != EventToolEnd || event.RunID != "r1" || event.Tool != "bash" {
 		t.Fatalf("unexpected projection: %+v", event)
 	}
+	if event.Status != "error" {
+		t.Fatalf("tool error status=%q", event.Status)
+	}
 	if strings.Contains(event.String(), "secret") || strings.Contains(event.String(), "encrypted") {
 		t.Fatalf("projection retained forbidden payload: %s", event.String())
+	}
+}
+
+func TestProjectorCapturesCompactEffectiveRuntimeIdentity(t *testing.T) {
+	t.Parallel()
+
+	model, err := ProjectEvent([]byte(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.6-sol"},"source":"restore"}`), 1024)
+	if err != nil || model.Model != "openai-codex/gpt-5.6-sol" {
+		t.Fatalf("model event=%+v err=%v", model, err)
+	}
+	thinking, err := ProjectEvent([]byte(`{"type":"thinking_level_select","level":"high","previousLevel":"off"}`), 1024)
+	if err != nil || thinking.Thinking != "high" {
+		t.Fatalf("thinking event=%+v err=%v", thinking, err)
 	}
 }
 

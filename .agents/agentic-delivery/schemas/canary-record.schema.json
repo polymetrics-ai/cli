@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Merge-disabled Shepherd cutover canary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["runtime_version", "policy_hash", "candidate_head_sha", "merge_disabled", "incident_replays", "max_heartbeat_gap_ms", "local_review", "human_gate", "deletion_inventory", "approved"],
+  "properties": {
+    "runtime_version": {"const": "1.11.0"},
+    "policy_hash": {"type": "string", "minLength": 1},
+    "candidate_head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "merge_disabled": {"const": true},
+    "incident_replays": {"type": "object", "minProperties": 10},
+    "max_heartbeat_gap_ms": {"type": "integer", "maximum": 15000},
+    "local_review": {"type": "string", "minLength": 1},
+    "human_gate": {"const": "awaiting_human_merge"},
+    "deletion_inventory": {"type": "array", "items": {"type": "string"}},
+    "approved": {"const": false}
+  }
+}

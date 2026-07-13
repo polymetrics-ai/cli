@@ -1,0 +1,81 @@
+{
+  "issue": 372,
+  "parent_issue": 372,
+  "objective": "Adopt pinned GSD Pi 1.11.0 behind a standalone, governed Go Shepherd without linking it into the Polymetrics CLI binary.",
+  "scope": [
+    "Pinned GSD Pi runtime admission and supervised headless execution",
+    "Issue-bound controller state, leases, human decisions, exact-head evidence, and telemetry",
+    "Merge-disabled canary and post-approval legacy cleanup inventory"
+  ],
+  "non_goals": [
+    "Autonomous merge to main",
+    "Reading GSD private SQLite state",
+    "Removing legacy controllers before the replacement canary passes"
+  ],
+  "acceptance_criteria": [
+    "Every silent live interval emits a heartbeat within 15 seconds",
+    "Human gates cannot be defaulted or auto-approved",
+    "Concurrent controllers for issue 372 are fenced",
+    "The nested Go module passes tests, race tests, vet, and root-module isolation",
+    "The final parent PR remains human-gated"
+  ],
+  "dependencies": [373, 374, 375, 376, 377, 378, 379],
+  "write_scope": [
+    "agent-runtime/shepherd/**",
+    ".agents/agentic-delivery/**",
+    ".gsd/**",
+    ".planning/phases/issue-372-gsd-pi-go-shepherd/**",
+    ".github/workflows/shepherd-verify.yml",
+    "docs/architecture/gsd-pi-go-shepherd-adoption.md",
+    "scripts/tests/shepherd-module-boundary.sh",
+    ".gitignore"
+  ],
+  "required_reading": [
+    "AGENTS.md",
+    ".agents/agentic-delivery/references/gsd-pi-adapter.md",
+    ".agents/agentic-delivery/contracts/issue-agent-contract.md"
+  ],
+  "required_skills": [
+    "golang-how-to",
+    "go-engineering",
+    "golang-concurrency",
+    "golang-context",
+    "golang-database",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "gsd-programming-loop",
+    "github-issue-first-delivery"
+  ],
+  "tdd": {
+    "red": "Add a failing executable guard before each behavior change.",
+    "green": "Implement the smallest fail-closed behavior that passes the guard.",
+    "refactor": "Remove duplicated state and keep GSD workflow ownership separate from Shepherd governance."
+  },
+  "verification": [
+    "go test ./...",
+    "go test -race ./...",
+    "go vet ./...",
+    "scripts/tests/shepherd-module-boundary.sh",
+    "go build ./cmd/pm",
+    "go test ./..."
+  ],
+  "safety": [
+    "Never print or persist secrets, prompts, reasoning, command arguments, or tool output",
+    "No merge capability exists",
+    "External effects remain disabled until exact-head ratification and canary approval"
+  ],
+  "human_gates": [
+    "New dependencies",
+    "Legacy file removal",
+    "Parent PR merge to main"
+  ],
+  "branch": "feat/372-gsd-pi-go-shepherd",
+  "pr_base": "main",
+  "review_route": "Local exact-head validator, then human-gated parent PR",
+  "sources": [
+    "https://github.com/polymetrics-ai/cli/issues/372",
+    "https://github.com/open-gsd/gsd-pi"
+  ]
+}

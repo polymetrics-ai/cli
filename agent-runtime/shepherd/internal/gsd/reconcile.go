@@ -9,17 +9,20 @@ func Reconcile(command string, result Result, snapshot WorkflowSnapshot) (Termin
 	if result.Terminal != TerminalSuccess && result.Terminal != TerminalBlocked {
 		return result.Terminal, result.Err
 	}
-	if len(snapshot.Blockers) > 0 || snapshot.Next.Action == "blocked" || snapshot.Next.Action == "wait" {
+	if len(snapshot.Blockers) > 0 {
 		return TerminalBlocked, nil
 	}
 	if result.Terminal == TerminalBlocked {
 		return TerminalBlocked, nil
 	}
 	switch snapshot.Next.Action {
-	case "complete":
-		return TerminalSuccess, nil
 	case "dispatch":
+		if command == "next" || command == "new-milestone" || command == "status" {
+			return TerminalSuccess, nil
+		}
 		return TerminalBlocked, fmt.Errorf("%s process exited before pending unit %s/%s was settled", command, snapshot.Next.UnitType, snapshot.Next.UnitID)
+	case "skip":
+		return TerminalBlocked, errors.New("GSD query reconciled a mutating skip; run the next fenced unit explicitly")
 	case "stop":
 		if snapshot.Phase == "complete" {
 			return TerminalSuccess, nil

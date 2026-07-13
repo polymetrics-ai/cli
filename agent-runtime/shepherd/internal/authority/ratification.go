@@ -10,6 +10,7 @@ import (
 const RequiredValidator = "openai-codex/gpt-5.6-sol"
 
 var shaPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
+var hashPattern = regexp.MustCompile(`^sha256:[0-9a-f]{64}$`)
 
 type RatificationRequest struct {
 	Repository     string
@@ -38,6 +39,7 @@ type RatificationRequest struct {
 type Attestation struct {
 	Repository   string
 	PR           int
+	BaseBranch   string
 	BaseSHA      string
 	HeadSHA      string
 	RunID        string
@@ -66,7 +68,8 @@ func Ratify(request RatificationRequest, now time.Time) (Attestation, error) {
 	if request.CandidateHead != request.ObservedHead {
 		return Attestation{}, errors.New("candidate evidence moved before ratification")
 	}
-	if request.Generation <= 0 || request.Attempt <= 0 || request.StateVersion <= 0 || request.ContractHash == "" || request.EvidenceHash == "" {
+	if request.Generation <= 0 || request.Attempt <= 0 || request.StateVersion <= 0 ||
+		!hashPattern.MatchString(request.ContractHash) || !hashPattern.MatchString(request.EvidenceHash) {
 		return Attestation{}, errors.New("generation, attempt, state version, and evidence hashes are required")
 	}
 	if request.Validator != RequiredValidator || request.Thinking != "high" {
@@ -75,11 +78,11 @@ func Ratify(request RatificationRequest, now time.Time) (Attestation, error) {
 	if request.Verdict != "PROCEED" || !request.LocalGates || !request.UAT || !request.MilestoneValid {
 		return Attestation{}, errors.New("ratification requires PROCEED and all local, UAT, and milestone gates")
 	}
-	if request.IssuedAt.IsZero() || request.ExpiresAt.IsZero() || !request.ExpiresAt.After(request.IssuedAt) || !now.Before(request.ExpiresAt) {
+	if request.IssuedAt.IsZero() || request.IssuedAt.After(now) || request.ExpiresAt.IsZero() || !request.ExpiresAt.After(request.IssuedAt) || !now.Before(request.ExpiresAt) {
 		return Attestation{}, errors.New("attestation validity window is invalid or expired")
 	}
 	return Attestation{
-		Repository: request.Repository, PR: request.PR, BaseSHA: request.BaseSHA,
+		Repository: request.Repository, PR: request.PR, BaseBranch: request.BaseBranch, BaseSHA: request.BaseSHA,
 		HeadSHA: request.CandidateHead, RunID: request.RunID, Generation: request.Generation,
 		UnitID: request.UnitID, Attempt: request.Attempt, StateVersion: request.StateVersion,
 		ContractHash: request.ContractHash, EvidenceHash: request.EvidenceHash,
@@ -88,8 +91,8 @@ func Ratify(request RatificationRequest, now time.Time) (Attestation, error) {
 	}, nil
 }
 
-func (a Attestation) Recheck(repository string, pr int, observedHead string, generation, stateVersion int64, now time.Time) error {
-	if a.Repository != repository || a.PR != pr || a.HeadSHA != observedHead {
+func (a Attestation) Recheck(repository string, pr int, baseBranch, observedBase, observedHead string, generation, stateVersion int64, now time.Time) error {
+	if a.Repository != repository || a.PR != pr || a.BaseBranch != baseBranch || a.BaseSHA != observedBase || a.HeadSHA != observedHead {
 		return errors.New("ratified target or head moved")
 	}
 	if a.Generation != generation || a.StateVersion != stateVersion {

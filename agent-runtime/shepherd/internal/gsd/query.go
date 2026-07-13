@@ -53,7 +53,7 @@ func DecodeQuery(raw []byte) (WorkflowSnapshot, error) {
 	if value.State.Phase == "" || value.Next.Action == "" {
 		return WorkflowSnapshot{}, errors.New("query snapshot lacks canonical state or next action")
 	}
-	allowedActions := map[string]struct{}{"dispatch": {}, "wait": {}, "complete": {}, "blocked": {}, "stop": {}}
+	allowedActions := map[string]struct{}{"dispatch": {}, "skip": {}, "stop": {}}
 	if _, ok := allowedActions[value.Next.Action]; !ok {
 		return WorkflowSnapshot{}, fmt.Errorf("unknown next action %q", value.Next.Action)
 	}

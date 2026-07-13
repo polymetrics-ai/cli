@@ -5,10 +5,10 @@
   ],
   "work_dir": "/absolute/path/to/issue-worktree",
   "gsd_home": "/absolute/path/to/controlled-gsd-home",
-  "state_dir": "/absolute/path/to/issue-worktree/.shepherd",
+  "state_dir": "/absolute/path/to/protected-shepherd-state/issue-372",
   "coordinator_model": "openai-codex/gpt-5.6-sol",
+  "gsd_version": "1.11.0",
   "timeout_seconds": 3600,
   "heartbeat_seconds": 15,
   "max_event_bytes": 262144
 }
-

@@ -5,7 +5,8 @@ Status: accepted for governed integration; rejected for unmanaged direct adoptio
 ## Decision
 
 Pin `@opengsd/gsd-pi@1.11.0` and use only its documented `headless`, `headless query`, JSON event,
-supervised-response, stop/resume, and recovery surfaces. A standalone Go process supervises those
+supervised-response, and stop/resume surfaces. Generic recovery is deliberately excluded because it
+can delete authoritative hierarchy rows. A standalone Go process supervises those
 interfaces and owns policy, external-effect authority, exact-head ratification, bounded liveness,
 and privacy-safe telemetry.
 
@@ -26,12 +27,14 @@ controller state.
   15 seconds, then returned early with a pending discussion unit. Query reconciliation correctly
   classified the apparent success as blocked.
 - The first actual coordinator session used the requested Sol model but inherited thinking `off`.
-  Shepherd now validates the controlled runtime settings at admission; actual Sol/high validation
-  remains a required qualification gate rather than an inferred success.
+  Shepherd now validates the controlled runtime settings at admission. A subsequent disposable
+  governed session recorded `openai-codex/gpt-5.6-sol` with `thinkingLevel: high` and forwarded the
+  native depth confirmation as a real human gate.
 
 ## Consequences
 
-- Ambiguous progress is blocked and reconciled through `headless query`; it is never called success.
+- `headless query` is treated as a fenced reconciliation transition, not a read-only API; a native
+  `skip` result blocks the controller for an explicit next unit.
 - Human questions are surfaced through supervised mode and remain auditable gates.
 - Model identity is checked from observed events. Missing or different validator identity fails
   closed; there is no silent downgrade.

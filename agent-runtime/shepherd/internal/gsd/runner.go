@@ -24,7 +24,7 @@ const (
 )
 
 var supportedCommands = map[string]struct{}{
-	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "recover": {},
+	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {},
 }
 
 var fireAndForgetUI = map[string]struct{}{
@@ -95,6 +95,11 @@ type scanResult struct {
 	err      error
 }
 
+type questionResult struct {
+	response UIResponse
+	err      error
+}
+
 type Runner struct{ config Config }
 
 func NewRunner(config Config) (*Runner, error) {
@@ -141,16 +146,19 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	defer cancel()
 
 	commandArgs := append([]string{}, r.config.Command[1:]...)
+	responseTimeout := r.config.Timeout + time.Minute
 	commandArgs = append(commandArgs,
 		"headless", "--json", "--supervised", "--model", r.config.Model,
-		"--events", "agent_start,turn_start,tool_execution_start,tool_execution_end,agent_end,extension_ui_request",
+		"--response-timeout", strconv.FormatInt(responseTimeout.Milliseconds(), 10),
+		"--max-restarts", "0",
+		"--events", "agent_start,turn_start,tool_execution_start,tool_execution_end,model_select,thinking_level_select,extension_ui_request",
 		"--timeout", strconv.FormatInt(r.config.Timeout.Milliseconds(), 10), command,
 	)
 	commandArgs = append(commandArgs, args...)
 	cmd := exec.CommandContext(ctx, r.config.Command[0], commandArgs...)
 	configureProcessTree(cmd)
 	cmd.Dir = r.config.WorkDir
-	cmd.Env = append(os.Environ(), append([]string{"GSD_HOME=" + r.config.GSDHome, "GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS="}, r.config.Environment...)...)
+	cmd.Env = governedEnvironment(r.config.GSDHome, r.config.Environment)
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return failedResult(started, err)
@@ -176,6 +184,8 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	lastEventAt := started
 	inFlightTool := ""
 	eventsOpen := true
+	var questionResults <-chan questionResult
+	var pendingQuestion *Question
 	for {
 		select {
 		case scanned, ok := <-events:
@@ -193,27 +203,23 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 				return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: scanned.err, Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
 			}
 			if scanned.question != nil {
-				response := UIResponse{Cancelled: true}
-				if observer.Question != nil {
-					var questionErr error
-					response, questionErr = observer.Question(ctx, *scanned.question)
-					if questionErr != nil {
-						cancel()
-						waitErr := <-waited
-						return Result{Terminal: TerminalBlocked, ExitCode: exitCode(waitErr), Err: questionErr, Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
-					}
-				}
-				payload := struct {
-					Type string `json:"type"`
-					ID   string `json:"id"`
-					UIResponse
-				}{Type: "extension_ui_response", ID: scanned.question.ID, UIResponse: response}
-				raw, marshalErr := json.Marshal(payload)
-				if marshalErr != nil {
+				if pendingQuestion != nil {
 					cancel()
-					continue
+					waitErr := <-waited
+					return Result{Terminal: TerminalBlocked, ExitCode: exitCode(waitErr), Err: errors.New("multiple simultaneous human gates are forbidden"), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
 				}
-				_, _ = stdin.Write(append(raw, '\n'))
+				pendingQuestion = scanned.question
+				results := make(chan questionResult, 1)
+				questionResults = results
+				if observer.Question == nil {
+					results <- questionResult{response: UIResponse{Cancelled: true}}
+				} else {
+					question := *scanned.question
+					go func() {
+						response, questionErr := observer.Question(ctx, question)
+						results <- questionResult{response: response, err: questionErr}
+					}()
+				}
 				continue
 			}
 			lastEventAt = scanned.event.At
@@ -226,6 +232,33 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 			if observer.Event != nil {
 				observer.Event(scanned.event)
 			}
+		case answered := <-questionResults:
+			questionResults = nil
+			if answered.err != nil {
+				cancel()
+				waitErr := <-waited
+				if ctx.Err() != nil {
+					return classifyResult(ctx, started, waitErr, stderr.String())
+				}
+				return Result{Terminal: TerminalBlocked, ExitCode: exitCode(waitErr), Err: answered.err, Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+			}
+			payload := struct {
+				Type string `json:"type"`
+				ID   string `json:"id"`
+				UIResponse
+			}{Type: "extension_ui_response", ID: pendingQuestion.ID, UIResponse: answered.response}
+			raw, marshalErr := json.Marshal(payload)
+			if marshalErr != nil {
+				cancel()
+				waitErr := <-waited
+				return Result{Terminal: TerminalBlocked, ExitCode: exitCode(waitErr), Err: fmt.Errorf("encode supervised response: %w", marshalErr), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+			}
+			if _, writeErr := stdin.Write(append(raw, '\n')); writeErr != nil {
+				cancel()
+				waitErr := <-waited
+				return Result{Terminal: TerminalBlocked, ExitCode: exitCode(waitErr), Err: fmt.Errorf("write supervised response: %w", writeErr), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+			}
+			pendingQuestion = nil
 		case at := <-ticker.C:
 			if observer.Heartbeat != nil {
 				observer.Heartbeat(Heartbeat{At: at.UTC(), LastEventAt: lastEventAt, InFlightTool: inFlightTool, ProcessAlive: true})
@@ -269,7 +302,7 @@ func (r *Runner) Query(parent context.Context) (WorkflowSnapshot, error) {
 	cmd := exec.CommandContext(ctx, r.config.Command[0], args...)
 	configureProcessTree(cmd)
 	cmd.Dir = r.config.WorkDir
-	cmd.Env = append(os.Environ(), append([]string{"GSD_HOME=" + r.config.GSDHome, "GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS="}, r.config.Environment...)...)
+	cmd.Env = governedEnvironment(r.config.GSDHome, r.config.Environment)
 	var stdout boundedBuffer
 	stdout.limit = 1024 * 1024
 	var stderr boundedBuffer
@@ -280,6 +313,37 @@ func (r *Runner) Query(parent context.Context) (WorkflowSnapshot, error) {
 		return WorkflowSnapshot{}, fmt.Errorf("headless query failed: %w: %s", err, stderr.String())
 	}
 	return DecodeQuery([]byte(stdout.String()))
+}
+
+func governedEnvironment(gsdHome string, extra []string) []string {
+	combined := append(append([]string{}, os.Environ()...), extra...)
+	environment := make([]string, 0, 16)
+	allowed := map[string]struct{}{
+		"PATH": {}, "TMPDIR": {}, "LANG": {}, "LC_ALL": {}, "TERM": {}, "COLORTERM": {}, "NO_COLOR": {},
+		"GO_WANT_RUNNER_HELPER": {}, "RUNNER_HELPER_MODE": {},
+	}
+	for _, entry := range combined {
+		name, _, ok := strings.Cut(entry, "=")
+		upper := strings.ToUpper(name)
+		if !ok {
+			continue
+		}
+		if _, keep := allowed[upper]; keep {
+			environment = append(environment, entry)
+		}
+	}
+	return append(environment,
+		"HOME="+gsdHome,
+		"GSD_HOME="+gsdHome,
+		"GH_CONFIG_DIR="+filepath.Join(gsdHome, "gh-disabled"),
+		"GIT_TERMINAL_PROMPT=0",
+		"GIT_ASKPASS=",
+		"GIT_CONFIG_COUNT=2",
+		"GIT_CONFIG_KEY_0=credential.helper",
+		"GIT_CONFIG_VALUE_0=",
+		"GIT_CONFIG_KEY_1=remote.origin.pushurl",
+		"GIT_CONFIG_VALUE_1=file:///dev/null/shepherd-disabled",
+	)
 }
 
 func scanEvents(reader io.Reader, maxBytes int, output chan<- scanResult) {

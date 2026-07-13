@@ -13,9 +13,13 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/contract"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
+	shepherdgit "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/telemetry"
@@ -29,21 +33,33 @@ type fileConfig struct {
 	GSDHome          string   `json:"gsd_home"`
 	StateDir         string   `json:"state_dir"`
 	CoordinatorModel string   `json:"coordinator_model"`
+	GSDVersion       string   `json:"gsd_version"`
 	TimeoutSeconds   int      `json:"timeout_seconds"`
 	HeartbeatSeconds int      `json:"heartbeat_seconds"`
 	MaxEventBytes    int      `json:"max_event_bytes"`
 }
 
+type decisionInput struct {
+	DeliveryID string `json:"delivery_id"`
+	Generation int64  `json:"generation"`
+	Actor      string `json:"actor"`
+	Approved   bool   `json:"approved"`
+}
+
 func main() {
 	if err := run(context.Background(), os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, "shepherd:", err)
+		var coded interface{ ExitCode() int }
+		if errors.As(err, &coded) {
+			os.Exit(coded.ExitCode())
+		}
 		os.Exit(1)
 	}
 }
 
 func run(ctx context.Context, args []string) error {
 	if len(args) == 0 {
-		return errors.New("usage: shepherd <version|query|run|start> [flags]")
+		return errors.New("usage: shepherd <version|query|eval|resume|run|start> [flags]")
 	}
 	if args[0] == "version" {
 		fmt.Println(version)
@@ -55,6 +71,7 @@ func run(ctx context.Context, args []string) error {
 	issue := flags.Int("issue", 0, "GitHub issue number")
 	contextPath := flags.String("context", "", "validated milestone context file")
 	auto := flags.Bool("auto", false, "continue into GSD auto-mode after milestone intake")
+	decisionPath := flags.String("decision", "", "path to protected explicit human decision JSON")
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
 	}
@@ -62,7 +79,45 @@ func run(ctx context.Context, args []string) error {
 	if err != nil {
 		return err
 	}
-	if err := gsd.ValidateRuntimeSettings(config.GSDHome, config.CoordinatorModel, "high"); err != nil {
+	if args[0] == "eval" {
+		activities, err := telemetry.ReadDirectory(filepath.Join(config.StateDir, "activity", "segments"))
+		if err != nil {
+			return err
+		}
+		return json.NewEncoder(os.Stdout).Encode(telemetry.Evaluate(activities))
+	}
+	if args[0] == "resume" {
+		if *issue <= 0 {
+			return errors.New("--issue is required")
+		}
+		path, err := governedPath(config.StateDir, *decisionPath)
+		if err != nil {
+			return fmt.Errorf("decision: %w", err)
+		}
+		raw, err := os.ReadFile(path)
+		if err != nil || len(raw) > 64*1024 {
+			return errors.New("decision is unreadable or oversized")
+		}
+		var input decisionInput
+		decoder := json.NewDecoder(strings.NewReader(string(raw)))
+		decoder.DisallowUnknownFields()
+		if err := decoder.Decode(&input); err != nil {
+			return fmt.Errorf("decode decision: %w", err)
+		}
+		if input.DeliveryID != deliveryID(*issue) || input.Actor != "human" || !input.Approved {
+			return errors.New("decision must be an explicit human approval for this delivery")
+		}
+		authority, err := store.Open(ctx, filepath.Join(config.StateDir, "authority.db"))
+		if err != nil {
+			return err
+		}
+		defer authority.Close()
+		return authority.ResumeDelivery(ctx, domain.HumanDecision{RunID: input.DeliveryID, Generation: input.Generation, ActorKind: domain.ActorHuman, Approved: true})
+	}
+	if err := gsd.ValidatePinnedCommand(config.GSDCommand, config.GSDVersion); err != nil {
+		return fmt.Errorf("runtime admission: %w", err)
+	}
+	if err := gsd.ValidateRuntimeSettings(config.GSDHome, config.WorkDir, config.CoordinatorModel, "high"); err != nil {
 		return fmt.Errorf("runtime admission: %w", err)
 	}
 	runner, err := gsd.NewRunner(gsd.Config{
@@ -77,13 +132,18 @@ func run(ctx context.Context, args []string) error {
 	}
 	switch args[0] {
 	case "query":
-		snapshot, err := runner.Query(ctx)
-		if err != nil {
-			return err
+		if *issue <= 0 {
+			return errors.New("--issue is required because GSD query may reconcile state")
 		}
-		return json.NewEncoder(os.Stdout).Encode(snapshot)
+		return runFencedQuery(ctx, runner, config, deliveryID(*issue), *issue)
 	case "run":
-		return runHeadless(ctx, runner, config, *command, nil)
+		if *issue <= 0 {
+			return errors.New("--issue is required")
+		}
+		if *command == "auto" || *command == "recover" || *command == "new-milestone" {
+			return errors.New("generic run permits only one fenced unit; use --command next or status")
+		}
+		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil)
 	case "start":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
@@ -92,14 +152,60 @@ func run(ctx context.Context, args []string) error {
 		if err != nil {
 			return fmt.Errorf("context: %w", err)
 		}
-		milestoneArgs := []string{"--context", path}
 		if *auto {
-			milestoneArgs = append(milestoneArgs, "--auto")
+			return errors.New("start --auto is disabled; run one fenced GSD unit at a time")
 		}
-		return runHeadless(ctx, runner, config, "new-milestone", milestoneArgs)
+		file, err := os.Open(path)
+		if err != nil {
+			return fmt.Errorf("open context: %w", err)
+		}
+		_, raw, decodeErr := contract.DecodeIssueContext(file, *issue)
+		closeErr := file.Close()
+		if decodeErr != nil {
+			return decodeErr
+		}
+		if closeErr != nil {
+			return closeErr
+		}
+		hash := sha256.Sum256(raw)
+		contextHash := "sha256:" + hex.EncodeToString(hash[:])
+		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path})
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
+}
+
+func runFencedQuery(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int) error {
+	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
+		return err
+	}
+	authority, err := store.Open(ctx, filepath.Join(config.StateDir, "authority.db"))
+	if err != nil {
+		return err
+	}
+	defer authority.Close()
+	delivery, err := authority.GetDelivery(ctx, deliveryID)
+	if err != nil || delivery.Issue != issue || delivery.WorkDir != config.WorkDir {
+		return errors.New("query delivery is not initialized or does not match this issue/worktree")
+	}
+	owner := fmt.Sprintf("query-%d", time.Now().UTC().UnixNano())
+	lease, err := authority.AcquireLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
+	if err != nil {
+		return err
+	}
+	snapshot, err := runner.Query(ctx)
+	if err != nil {
+		return err
+	}
+	if snapshot.MilestoneID != "" {
+		if err := authority.BindMilestone(ctx, deliveryID, snapshot.MilestoneID); err != nil {
+			return err
+		}
+	}
+	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
+		return err
+	}
+	return json.NewEncoder(os.Stdout).Encode(snapshot)
 }
 
 func loadConfig(path string) (fileConfig, error) {
@@ -122,6 +228,9 @@ func loadConfig(path string) (fileConfig, error) {
 	if config.CoordinatorModel == "" {
 		config.CoordinatorModel = "openai-codex/gpt-5.6-sol"
 	}
+	if config.GSDVersion == "" {
+		config.GSDVersion = "1.11.0"
+	}
 	if config.TimeoutSeconds <= 0 {
 		config.TimeoutSeconds = 3600
 	}
@@ -131,10 +240,13 @@ func loadConfig(path string) (fileConfig, error) {
 	if config.MaxEventBytes <= 0 {
 		config.MaxEventBytes = 256 * 1024
 	}
+	if within, err := pathWithin(config.WorkDir, config.StateDir); err != nil || within {
+		return fileConfig{}, errors.New("state_dir must be outside the worker-controlled work directory")
+	}
 	return config, nil
 }
 
-func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, command string, args []string) error {
+func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash, command string, args []string) error {
 	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
 		return err
 	}
@@ -143,32 +255,94 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, com
 		return err
 	}
 	defer authority.Close()
-	runID := fmt.Sprintf("run-%d", time.Now().UTC().UnixNano())
-	lease, err := authority.AcquireLease(ctx, runID, "shepherd", time.Now().UTC(), time.Duration(config.TimeoutSeconds+60)*time.Second)
+	executionID := fmt.Sprintf("execution-%d", time.Now().UTC().UnixNano())
+	if contextHash != "" {
+		if err := authority.EnsureDelivery(ctx, store.Delivery{ID: deliveryID, Issue: issue, WorkDir: config.WorkDir, ContextHash: contextHash}); err != nil {
+			return err
+		}
+	} else {
+		delivery, err := authority.GetDelivery(ctx, deliveryID)
+		if err != nil {
+			return errors.New("delivery has not been initialized with a validated issue context")
+		}
+		if delivery.Issue != issue || delivery.WorkDir != config.WorkDir {
+			return errors.New("delivery does not match requested issue and work directory")
+		}
+	}
+	lease, err := authority.AcquireLease(ctx, deliveryID, executionID, time.Now().UTC(), time.Duration(config.TimeoutSeconds+60)*time.Second)
 	if err != nil {
 		return err
 	}
-	_ = lease
+	attempt, err := authority.BeginAttempt(ctx, deliveryID, executionID)
+	if err != nil {
+		return err
+	}
+	_ = attempt
+	finishedAttempt := false
+	defer func() {
+		if !finishedAttempt {
+			_ = authority.FinishAttempt(context.Background(), deliveryID, executionID, domain.RunFailed)
+		}
+	}()
+	startSnapshot, err := shepherdgit.Inspect(ctx, config.WorkDir)
+	if err != nil {
+		return err
+	}
+	if err := shepherdgit.RequireClean(startSnapshot); err != nil {
+		return err
+	}
+	trustedUnit := command
+	before, queryErr := runner.Query(ctx)
+	if queryErr != nil {
+		return fmt.Errorf("pre-run fenced query failed: %w", queryErr)
+	}
+	if before.Next.UnitID != "" {
+		trustedUnit = before.Next.UnitType + "/" + before.Next.UnitID
+	}
+	if before.MilestoneID != "" {
+		if err := authority.BindMilestone(ctx, deliveryID, before.MilestoneID); err != nil {
+			return err
+		}
+	}
 	activity, err := telemetry.Open(ctx, filepath.Join(config.StateDir, "activity", "segments"))
 	if err != nil {
 		return err
 	}
 	defer activity.Close()
 	var sequence atomic.Uint64
+	var activityMu sync.Mutex
+	var activityErr error
+	runCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
 	appendActivity := func(kind, status, unit, model, tool string, at time.Time) {
+		activityMu.Lock()
+		defer activityMu.Unlock()
+		if activityErr != nil {
+			return
+		}
 		seq := sequence.Add(1)
-		idInput := runID + ":" + strconv.FormatUint(seq, 10) + ":" + kind
+		idInput := executionID + ":" + strconv.FormatUint(seq, 10) + ":" + kind
 		hash := sha256.Sum256([]byte(idInput))
-		_, _ = activity.Append(ctx, telemetry.Activity{
-			ID: hex.EncodeToString(hash[:]), RunID: runID, UnitID: unit, Kind: kind,
+		_, activityErr = activity.Append(runCtx, telemetry.Activity{
+			ID: hex.EncodeToString(hash[:]), RunID: deliveryID, UnitID: unit, Kind: kind,
 			Status: status, Model: model, Tool: tool, At: at,
 		})
+		if activityErr != nil {
+			cancel()
+		}
 	}
+	var observedModel, observedThinking string
 	observer := gsd.Observer{
 		Event: func(event gsd.Event) {
+			if event.Model != "" {
+				observedModel = event.Model
+			}
+			if event.Thinking != "" {
+				observedThinking = event.Thinking
+			}
 			kind := mapEventKind(event.Kind)
-			appendActivity(kind, event.Status, event.UnitID, event.Model, event.Tool, event.At)
-			fmt.Fprintf(os.Stderr, "%s kind=%s unit=%s tool=%s model=%s\n", event.At.Format(time.RFC3339), event.Kind, event.UnitID, event.Tool, event.Model)
+			appendActivity(kind, event.Status, trustedUnit, event.Model, event.Tool, event.At)
+			fmt.Fprintf(os.Stderr, "%s kind=%s unit=%s tool=%s model=%s\n", event.At.Format(time.RFC3339), event.Kind, trustedUnit, event.Tool, event.Model)
 		},
 		Heartbeat: func(heartbeat gsd.Heartbeat) {
 			appendActivity("heartbeat", "alive", "", "", heartbeat.InFlightTool, heartbeat.At)
@@ -176,13 +350,28 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, com
 		},
 		Question: terminalQuestion,
 	}
-	result := runner.Run(ctx, command, args, observer)
-	if result.Terminal == gsd.TerminalSuccess || result.Terminal == gsd.TerminalBlocked {
+	result := runner.Run(runCtx, command, args, observer)
+	postPhase := ""
+	activityMu.Lock()
+	spoolErr := activityErr
+	activityMu.Unlock()
+	if spoolErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = fmt.Errorf("durable activity append failed: %w", spoolErr)
+	}
+	if result.Terminal != gsd.TerminalRejected {
 		snapshot, queryErr := runner.Query(ctx)
 		if queryErr != nil {
 			result.Terminal = gsd.TerminalError
 			result.Err = fmt.Errorf("post-run query reconciliation failed: %w", queryErr)
 		} else {
+			postPhase = snapshot.Phase
+			if snapshot.MilestoneID != "" {
+				if bindErr := authority.BindMilestone(ctx, deliveryID, snapshot.MilestoneID); bindErr != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = bindErr
+				}
+			}
 			terminal, reconcileErr := gsd.Reconcile(command, result, snapshot)
 			result.Terminal = terminal
 			if reconcileErr != nil {
@@ -190,28 +379,100 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, com
 			}
 		}
 	}
+	if result.Terminal == gsd.TerminalSuccess && (observedModel != config.CoordinatorModel || observedThinking != "high") {
+		result.Terminal = gsd.TerminalError
+		result.Err = fmt.Errorf("effective runtime identity was not observed as %s/high", config.CoordinatorModel)
+	}
+	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = err
+	}
+	endSnapshot, snapshotErr := shepherdgit.Inspect(ctx, config.WorkDir)
+	if snapshotErr != nil || shepherdgit.RequireClean(endSnapshot) != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = errors.New("worktree must be clean after a governed unit")
+	} else if err := authority.RecordAttemptHeads(ctx, deliveryID, executionID, startSnapshot.HeadSHA, endSnapshot.HeadSHA); err != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = err
+	}
 	appendActivity("run.terminal", string(result.Terminal), "", "", "", result.Ended)
-	encoded, _ := json.Marshal(struct {
-		RunID    string       `json:"run_id"`
-		Terminal gsd.Terminal `json:"terminal"`
-		ExitCode int          `json:"exit_code"`
-	}{RunID: runID, Terminal: result.Terminal, ExitCode: result.ExitCode})
+	activityMu.Lock()
+	terminalSpoolErr := activityErr
+	activityMu.Unlock()
+	if terminalSpoolErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = fmt.Errorf("durable terminal append failed: %w", terminalSpoolErr)
+	}
+	targetState := domain.RunFailed
+	if result.Terminal == gsd.TerminalBlocked {
+		targetState = domain.RunBlocked
+	}
+	if result.Terminal == gsd.TerminalSuccess {
+		targetState = domain.RunReady
+	}
+	if result.Terminal == gsd.TerminalSuccess && postPhase == "complete" {
+		targetState = domain.RunHumanGate
+	}
+	if err := authority.FinishAttempt(ctx, deliveryID, executionID, targetState); err != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = err
+	} else {
+		finishedAttempt = true
+	}
+	encoded, marshalErr := json.Marshal(struct {
+		DeliveryID  string       `json:"delivery_id"`
+		ExecutionID string       `json:"execution_id"`
+		Terminal    gsd.Terminal `json:"terminal"`
+		ExitCode    int          `json:"exit_code"`
+	}{DeliveryID: deliveryID, ExecutionID: executionID, Terminal: result.Terminal, ExitCode: result.ExitCode})
+	if marshalErr != nil {
+		return marshalErr
+	}
 	fmt.Println(string(encoded))
-	if result.Terminal != gsd.TerminalSuccess && result.Terminal != gsd.TerminalBlocked {
+	if result.Terminal == gsd.TerminalBlocked {
+		return commandExitError{code: 10, err: fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, result.Err)}
+	}
+	if result.Terminal != gsd.TerminalSuccess {
 		return fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, result.Err)
 	}
 	return nil
 }
 
-func terminalQuestion(_ context.Context, question gsd.Question) (gsd.UIResponse, error) {
+type commandExitError struct {
+	code int
+	err  error
+}
+
+func (e commandExitError) Error() string { return e.err.Error() }
+func (e commandExitError) Unwrap() error { return e.err }
+func (e commandExitError) ExitCode() int { return e.code }
+
+func deliveryID(issue int) string { return "issue-" + strconv.Itoa(issue) }
+
+func terminalQuestion(ctx context.Context, question gsd.Question) (gsd.UIResponse, error) {
 	fmt.Fprintf(os.Stderr, "\nHUMAN GATE [%s] %s\n", question.Method, question.Title)
 	for i, option := range question.Options {
 		fmt.Fprintf(os.Stderr, "  %d. %s\n", i+1, option)
 	}
 	fmt.Fprint(os.Stderr, "Response (number, yes/no, text, or cancel): ")
-	line, err := bufio.NewReader(os.Stdin).ReadString('\n')
-	if err != nil {
-		return gsd.UIResponse{Cancelled: true}, errors.New("explicit human response unavailable")
+	type inputResult struct {
+		line string
+		err  error
+	}
+	input := make(chan inputResult, 1)
+	go func() {
+		line, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		input <- inputResult{line: line, err: err}
+	}()
+	var line string
+	select {
+	case <-ctx.Done():
+		return gsd.UIResponse{Cancelled: true}, ctx.Err()
+	case read := <-input:
+		if read.err != nil {
+			return gsd.UIResponse{Cancelled: true}, errors.New("explicit human response unavailable")
+		}
+		line = read.line
 	}
 	answer := strings.TrimSpace(line)
 	if answer == "" || strings.EqualFold(answer, "cancel") {
@@ -238,8 +499,15 @@ func governedPath(root, path string) (string, error) {
 	if !filepath.IsAbs(path) {
 		path = filepath.Join(root, path)
 	}
-	clean := filepath.Clean(path)
-	relative, err := filepath.Rel(root, clean)
+	clean, err := filepath.EvalSymlinks(filepath.Clean(path))
+	if err != nil {
+		return "", errors.New("path cannot be resolved")
+	}
+	canonicalRoot, err := filepath.EvalSymlinks(filepath.Clean(root))
+	if err != nil {
+		return "", errors.New("work directory cannot be resolved")
+	}
+	relative, err := filepath.Rel(canonicalRoot, clean)
 	if err != nil || relative == ".." || strings.HasPrefix(relative, ".."+string(filepath.Separator)) {
 		return "", errors.New("path escapes work directory")
 	}
@@ -248,6 +516,14 @@ func governedPath(root, path string) (string, error) {
 		return "", errors.New("path must be an existing regular file")
 	}
 	return clean, nil
+}
+
+func pathWithin(root, path string) (bool, error) {
+	relative, err := filepath.Rel(filepath.Clean(root), filepath.Clean(path))
+	if err != nil {
+		return false, err
+	}
+	return relative != ".." && !strings.HasPrefix(relative, ".."+string(filepath.Separator)), nil
 }
 
 func mapEventKind(kind gsd.EventKind) string {
@@ -262,6 +538,8 @@ func mapEventKind(kind gsd.EventKind) string {
 		return "tool.terminal"
 	case gsd.EventAgentEnd:
 		return "unit.terminal"
+	case gsd.EventModelSelect, gsd.EventThinkingSelect:
+		return "model.activity"
 	default:
 		return "transition"
 	}

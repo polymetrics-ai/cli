@@ -9,6 +9,7 @@ type RunState string
 
 const (
 	RunPlanned   RunState = "planned"
+	RunReady     RunState = "ready"
 	RunRunning   RunState = "running"
 	RunBlocked   RunState = "blocked"
 	RunFailed    RunState = "failed"
@@ -18,9 +19,10 @@ const (
 
 var allowedRunTransitions = map[RunState]map[RunState]struct{}{
 	RunPlanned:   {RunRunning: {}, RunBlocked: {}, RunFailed: {}},
-	RunRunning:   {RunBlocked: {}, RunFailed: {}, RunHumanGate: {}},
+	RunReady:     {RunRunning: {}, RunFailed: {}},
+	RunRunning:   {RunReady: {}, RunBlocked: {}, RunFailed: {}, RunHumanGate: {}},
 	RunBlocked:   {RunFailed: {}},
-	RunHumanGate: {RunRunning: {}, RunFailed: {}},
+	RunHumanGate: {RunFailed: {}},
 	RunFailed:    {},
 	RunComplete:  {},
 }

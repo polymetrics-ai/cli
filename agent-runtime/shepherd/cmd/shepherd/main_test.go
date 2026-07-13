@@ -24,6 +24,20 @@ func TestGovernedPathRejectsEscape(t *testing.T) {
 	if _, err := governedPath(root, outside); err == nil {
 		t.Fatal("expected path escape to fail")
 	}
+	symlink := filepath.Join(root, "link.json")
+	if err := os.Symlink(outside, symlink); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := governedPath(root, symlink); err == nil {
+		t.Fatal("expected symlink escape to fail")
+	}
+}
+
+func TestDeliveryIDIsStablePerIssue(t *testing.T) {
+	t.Parallel()
+	if got := deliveryID(372); got != "issue-372" {
+		t.Fatalf("delivery id=%q", got)
+	}
 }
 
 func TestLoadConfigRejectsUnknownFields(t *testing.T) {

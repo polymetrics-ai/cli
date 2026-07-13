@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GSD worker handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["run_id", "unit_id", "attempt", "base_sha", "head_sha", "changed_files", "red_evidence", "verification", "effect_intents", "digest_lines", "completion_claim"],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "unit_id": {"type": "string", "minLength": 1},
+    "attempt": {"type": "integer", "minimum": 1},
+    "base_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "changed_files": {"type": "array", "items": {"type": "string"}},
+    "red_evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "verification": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["command_id", "exit_code"], "properties": {"command_id": {"type": "string"}, "exit_code": {"type": "integer"}}}},
+    "effect_intents": {"type": "array", "items": {"$ref": "external-effect-intent.schema.json"}},
+    "digest_lines": {"type": "array", "maxItems": 40, "items": {"type": "string"}},
+    "completion_claim": {"enum": ["candidate_ready", "blocked", "failed"]}
+  }
+}
