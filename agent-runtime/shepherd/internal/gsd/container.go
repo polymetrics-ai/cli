@@ -98,9 +98,11 @@ func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string 
 		"--env=HOME=/home/shepherd", "--env=GSD_HOME=/home/shepherd/.pi",
 		"--env=SEARXNG_BASE=http://searxng:8080",
 		"--env=GIT_TERMINAL_PROMPT=0", "--env=GIT_ASKPASS=",
-		"--env=GIT_CONFIG_COUNT=3", "--env=GIT_CONFIG_KEY_0=credential.helper", "--env=GIT_CONFIG_VALUE_0=",
+		"--env=GIT_CONFIG_COUNT=5", "--env=GIT_CONFIG_KEY_0=credential.helper", "--env=GIT_CONFIG_VALUE_0=",
 		"--env=GIT_CONFIG_KEY_1=remote.origin.pushurl", "--env=GIT_CONFIG_VALUE_1=file:///dev/null/shepherd-disabled",
 		"--env=GIT_CONFIG_KEY_2=safe.directory", "--env=GIT_CONFIG_VALUE_2=" + workDir,
+		"--env=GIT_CONFIG_KEY_3=user.name", "--env=GIT_CONFIG_VALUE_3=Polymetrics Shepherd",
+		"--env=GIT_CONFIG_KEY_4=user.email", "--env=GIT_CONFIG_VALUE_4=shepherd@localhost.invalid",
 		c.Image, "-c", containerGSDCommand, "shepherd-gsd",
 	}
 	return append(args, gsdArgs...)

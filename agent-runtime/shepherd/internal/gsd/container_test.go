@@ -30,7 +30,7 @@ func TestContainerRuntimeHidesHostPlanningAndCredentialSurface(t *testing.T) {
 		t.Fatal(err)
 	}
 	joined := strings.Join(config.commandArgs(root, []string{"headless", "query"}), " ")
-	for _, required := range []string{root + ":" + root + ":rw", root + "/.gsd", root + "/.planning", root + "/.bg-shell", root + "/.gsd-backups", "/home/shepherd/.pi/agent/sessions:rw", gitCommonDir + ":" + gitCommonDir + ":rw", "GIT_CONFIG_KEY_2=safe.directory", "GIT_CONFIG_VALUE_2=" + root, "auth.json:ro", "settings.json:ro", "--pull=never", "--interactive", "--entrypoint=/bin/sh", "find \"$common/worktrees\"", "index.lock", "exit \"$rc\""} {
+	for _, required := range []string{root + ":" + root + ":rw", root + "/.gsd", root + "/.planning", root + "/.bg-shell", root + "/.gsd-backups", "/home/shepherd/.pi/agent/sessions:rw", gitCommonDir + ":" + gitCommonDir + ":rw", "GIT_CONFIG_COUNT=5", "GIT_CONFIG_KEY_2=safe.directory", "GIT_CONFIG_VALUE_2=" + root, "GIT_CONFIG_KEY_3=user.name", "GIT_CONFIG_VALUE_3=Polymetrics Shepherd", "GIT_CONFIG_KEY_4=user.email", "GIT_CONFIG_VALUE_4=shepherd@localhost.invalid", "auth.json:ro", "settings.json:ro", "--pull=never", "--interactive", "--entrypoint=/bin/sh", "find \"$common/worktrees\"", "index.lock", "exit \"$rc\""} {
 		if !strings.Contains(joined, required) {
 			t.Fatalf("missing %q in %s", required, joined)
 		}
