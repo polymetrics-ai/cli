@@ -628,13 +628,40 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		return marshalErr
 	}
 	fmt.Println(string(encoded))
+	terminalErr := result.Err
+	if terminalErr == nil {
+		terminalErr = errors.New("runtime did not provide an error")
+	}
+	if diagnostic := terminalDiagnostic(result.Stderr); diagnostic != "" {
+		terminalErr = fmt.Errorf("%w; runtime: %s", terminalErr, diagnostic)
+	}
 	if result.Terminal == gsd.TerminalBlocked {
-		return commandExitError{code: 10, err: fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, result.Err)}
+		return commandExitError{code: 10, err: fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, terminalErr)}
 	}
 	if result.Terminal != gsd.TerminalSuccess {
-		return fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, result.Err)
+		return fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, terminalErr)
 	}
 	return nil
+}
+
+func terminalDiagnostic(stderr string) string {
+	lines := strings.Split(stderr, "\n")
+	for index := len(lines) - 1; index >= 0; index-- {
+		line := strings.TrimSpace(strings.Map(func(r rune) rune {
+			if r < 0x20 || r == 0x7f {
+				return -1
+			}
+			return r
+		}, lines[index]))
+		if line == "" {
+			continue
+		}
+		if len(line) > 512 {
+			line = line[:512]
+		}
+		return line
+	}
+	return ""
 }
 
 type commandExitError struct {

@@ -159,6 +159,25 @@ func TestRunnerRequiresDeliveryStateOutsideProject(t *testing.T) {
 	}
 }
 
+func TestRunnerBridgesOfficialHeadlessResumeToPiSessions(t *testing.T) {
+	t.Parallel()
+	gsdHome := t.TempDir()
+	_, err := NewRunner(Config{
+		Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: gsdHome, StateDir: t.TempDir(),
+		Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	target, err := os.Readlink(filepath.Join(gsdHome, "sessions"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if target != filepath.Join("agent", "sessions") {
+		t.Fatalf("resume bridge=%q", target)
+	}
+}
+
 func TestRunnerKeepsHeartbeatsWhileHumanGateWaitsAndCancelsBeforeUpstreamFallback(t *testing.T) {
 	t.Parallel()
 

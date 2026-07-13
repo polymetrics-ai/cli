@@ -125,6 +125,11 @@ func NewRunner(config Config) (*Runner, error) {
 		}
 	}
 	if config.Container == nil {
+		if err := ensureLocalSessionBridge(config.GSDHome); err != nil {
+			return nil, err
+		}
+	}
+	if config.Container == nil {
 		if len(config.Command) == 0 || strings.TrimSpace(config.Command[0]) == "" {
 			return nil, errors.New("GSD command is required")
 		}
@@ -157,6 +162,35 @@ func NewRunner(config Config) (*Runner, error) {
 		config.MaxEventBytes = defaultMaxEvent
 	}
 	return &Runner{config: config}, nil
+}
+
+func ensureLocalSessionBridge(gsdHome string) error {
+	piSessions := filepath.Join(gsdHome, "agent", "sessions")
+	if err := os.MkdirAll(piSessions, 0o700); err != nil {
+		return fmt.Errorf("create local Pi sessions directory: %w", err)
+	}
+	resumeSessions := filepath.Join(gsdHome, "sessions")
+	info, err := os.Lstat(resumeSessions)
+	if errors.Is(err, os.ErrNotExist) {
+		if err := os.Symlink(filepath.Join("agent", "sessions"), resumeSessions); err != nil {
+			return fmt.Errorf("create official headless session bridge: %w", err)
+		}
+		return nil
+	}
+	if err != nil {
+		return fmt.Errorf("inspect official headless session bridge: %w", err)
+	}
+	if info.Mode()&os.ModeSymlink == 0 {
+		return errors.New("official headless sessions path conflicts with the governed Pi sessions directory")
+	}
+	target, err := os.Readlink(resumeSessions)
+	if err != nil {
+		return fmt.Errorf("read official headless session bridge: %w", err)
+	}
+	if target != filepath.Join("agent", "sessions") {
+		return errors.New("official headless session bridge has an unexpected target")
+	}
+	return nil
 }
 
 func (r *Runner) Run(parent context.Context, command string, args []string, observer Observer) Result {

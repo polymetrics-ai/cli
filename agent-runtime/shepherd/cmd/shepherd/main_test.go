@@ -68,6 +68,17 @@ func TestDeliveryIDIsStablePerIssue(t *testing.T) {
 	}
 }
 
+func TestTerminalDiagnosticIsSingleLineAndBounded(t *testing.T) {
+	t.Parallel()
+	got := terminalDiagnostic("first\n[headless] Error: session switch cancelled\x00\n")
+	if got != "[headless] Error: session switch cancelled" {
+		t.Fatalf("diagnostic=%q", got)
+	}
+	if len(terminalDiagnostic(string(make([]byte, 2000)))) > 512 {
+		t.Fatal("diagnostic was not bounded")
+	}
+}
+
 func TestLoadConfigRejectsUnknownFields(t *testing.T) {
 	t.Parallel()
 
