@@ -23,7 +23,10 @@ func Inspect(ctx context.Context, root string) (Snapshot, error) {
 	if err != nil {
 		return Snapshot{}, err
 	}
-	status, err := run(ctx, root, "status", "--porcelain=v1", "-z", "--untracked-files=all")
+	// GSD owns nested survivor worktrees under this exact control-plane path.
+	// Their files are intentionally untracked from the parent worktree and must
+	// not make an otherwise clean governed unit fail its postcondition.
+	status, err := run(ctx, root, "status", "--porcelain=v1", "-z", "--untracked-files=all", "--", ".", ":(exclude).gsd-worktrees/**")
 	if err != nil {
 		return Snapshot{}, err
 	}

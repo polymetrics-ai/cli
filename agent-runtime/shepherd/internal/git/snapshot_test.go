@@ -33,6 +33,17 @@ func TestRequireCleanDetectsUntrackedWork(t *testing.T) {
 	if err != nil || snapshot.Dirty {
 		t.Fatalf("clean snapshot=%+v err=%v", snapshot, err)
 	}
+	managedWorktree := filepath.Join(root, ".gsd-worktrees", "M001-test")
+	if err := os.MkdirAll(managedWorktree, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(managedWorktree, "managed.txt"), []byte("runtime state"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	snapshot, err = Inspect(context.Background(), root)
+	if err != nil || snapshot.Dirty {
+		t.Fatalf("managed GSD worktree dirtied parent snapshot=%+v err=%v", snapshot, err)
+	}
 	if err := os.WriteFile(filepath.Join(root, "untracked.txt"), []byte("dirty"), 0o600); err != nil {
 		t.Fatal(err)
 	}
