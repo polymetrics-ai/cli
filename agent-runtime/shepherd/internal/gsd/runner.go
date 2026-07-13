@@ -25,7 +25,7 @@ const (
 )
 
 var supportedCommands = map[string]struct{}{
-	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {},
+	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {}, "research-milestone": {},
 }
 
 var milestoneTargetPattern = regexp.MustCompile(`^M[0-9]{3,}(?:-[a-z0-9]+)?$`)

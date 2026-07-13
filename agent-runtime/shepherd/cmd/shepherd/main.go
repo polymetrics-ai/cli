@@ -457,6 +457,9 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		}
 		args = []string{before.MilestoneID}
 	}
+	if command == "research-milestone" && before.Next.UnitType != command {
+		return fmt.Errorf("%s is allowed only when it is the canonical next unit", command)
+	}
 	if continueUnit {
 		if command != "discuss" || config.Runtime == "podman" {
 			return errors.New("--continue-unit supports only a local canonical discuss-milestone")
@@ -609,7 +612,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 					result.Err = bindErr
 				}
 			}
-			terminal, reconcileErr := gsd.Reconcile(command, result, snapshot)
+			terminal, reconcileErr := gsd.Reconcile(command, result, before, snapshot)
 			result.Terminal = terminal
 			if reconcileErr != nil {
 				result.Err = reconcileErr

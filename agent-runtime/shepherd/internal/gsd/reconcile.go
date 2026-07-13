@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func Reconcile(command string, result Result, snapshot WorkflowSnapshot) (Terminal, error) {
+func Reconcile(command string, result Result, before, snapshot WorkflowSnapshot) (Terminal, error) {
 	if result.Terminal != TerminalSuccess && result.Terminal != TerminalBlocked {
 		return result.Terminal, result.Err
 	}
@@ -15,9 +15,12 @@ func Reconcile(command string, result Result, snapshot WorkflowSnapshot) (Termin
 	if result.Terminal == TerminalBlocked {
 		return TerminalBlocked, nil
 	}
+	if (command == "next" || command == "research-milestone") && before.Phase == snapshot.Phase && before.Next == snapshot.Next {
+		return TerminalError, fmt.Errorf("%s exited successfully without advancing canonical GSD state", command)
+	}
 	switch snapshot.Next.Action {
 	case "dispatch":
-		if command == "next" || command == "new-milestone" || command == "status" || command == "discuss" {
+		if command == "next" || command == "new-milestone" || command == "status" || command == "discuss" || command == "research-milestone" {
 			return TerminalSuccess, nil
 		}
 		return TerminalBlocked, fmt.Errorf("%s process exited before pending unit %s/%s was settled", command, snapshot.Next.UnitType, snapshot.Next.UnitID)
