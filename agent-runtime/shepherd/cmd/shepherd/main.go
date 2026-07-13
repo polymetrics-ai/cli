@@ -71,6 +71,7 @@ func run(ctx context.Context, args []string) error {
 	issue := flags.Int("issue", 0, "GitHub issue number")
 	contextPath := flags.String("context", "", "validated milestone context file")
 	auto := flags.Bool("auto", false, "continue into GSD auto-mode after milestone intake")
+	adoptExisting := flags.Bool("adopt-existing", false, "bind a previously created active GSD milestone")
 	decisionPath := flags.String("decision", "", "path to protected explicit human decision JSON")
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
@@ -169,10 +170,50 @@ func run(ctx context.Context, args []string) error {
 		}
 		hash := sha256.Sum256(raw)
 		contextHash := "sha256:" + hex.EncodeToString(hash[:])
+		if *adoptExisting {
+			return adoptExistingDelivery(ctx, runner, config, deliveryID(*issue), *issue, contextHash)
+		}
 		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path})
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
+}
+
+func adoptExistingDelivery(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash string) error {
+	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
+		return err
+	}
+	authority, err := store.Open(ctx, filepath.Join(config.StateDir, "authority.db"))
+	if err != nil {
+		return err
+	}
+	defer authority.Close()
+	if err := authority.EnsureDelivery(ctx, store.Delivery{ID: deliveryID, Issue: issue, WorkDir: config.WorkDir, ContextHash: contextHash}); err != nil {
+		return err
+	}
+	owner := fmt.Sprintf("adopt-%d", time.Now().UTC().UnixNano())
+	lease, err := authority.AcquireLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
+	if err != nil {
+		return err
+	}
+	snapshot, err := runner.Query(ctx)
+	if err != nil {
+		return err
+	}
+	if snapshot.MilestoneID == "" {
+		return errors.New("no active GSD milestone exists to adopt")
+	}
+	if err := authority.BindMilestone(ctx, deliveryID, snapshot.MilestoneID); err != nil {
+		return err
+	}
+	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
+		return err
+	}
+	return json.NewEncoder(os.Stdout).Encode(struct {
+		DeliveryID  string `json:"delivery_id"`
+		MilestoneID string `json:"milestone_id"`
+		State       string `json:"state"`
+	}{DeliveryID: deliveryID, MilestoneID: snapshot.MilestoneID, State: "adopted"})
 }
 
 func runFencedQuery(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int) error {
@@ -273,17 +314,6 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	if err != nil {
 		return err
 	}
-	attempt, err := authority.BeginAttempt(ctx, deliveryID, executionID)
-	if err != nil {
-		return err
-	}
-	_ = attempt
-	finishedAttempt := false
-	defer func() {
-		if !finishedAttempt {
-			_ = authority.FinishAttempt(context.Background(), deliveryID, executionID, domain.RunFailed)
-		}
-	}()
 	startSnapshot, err := shepherdgit.Inspect(ctx, config.WorkDir)
 	if err != nil {
 		return err
@@ -299,11 +329,25 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	if before.Next.UnitID != "" {
 		trustedUnit = before.Next.UnitType + "/" + before.Next.UnitID
 	}
+	if command == "new-milestone" && before.MilestoneID != "" {
+		return errors.New("an active GSD milestone already exists; use start --adopt-existing after verifying its issue context")
+	}
 	if before.MilestoneID != "" {
 		if err := authority.BindMilestone(ctx, deliveryID, before.MilestoneID); err != nil {
 			return err
 		}
 	}
+	attempt, err := authority.BeginAttempt(ctx, deliveryID, executionID)
+	if err != nil {
+		return err
+	}
+	_ = attempt
+	finishedAttempt := false
+	defer func() {
+		if !finishedAttempt {
+			_ = authority.FinishAttempt(context.Background(), deliveryID, executionID, domain.RunFailed)
+		}
+	}()
 	activity, err := telemetry.Open(ctx, filepath.Join(config.StateDir, "activity", "segments"))
 	if err != nil {
 		return err

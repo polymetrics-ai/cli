@@ -28,6 +28,8 @@ The process prints normalized lifecycle events and a heartbeat at least every 15
 questions are forwarded to the terminal and require an explicit response. The Go deadline always
 precedes GSD's fallback response timer. Answer files, inline context, chained `--auto`, and generic
 `recover` are rejected. Continue one fenced unit at a time with `run --issue 372 --command next`.
+If a prior qualification run already created the correct active milestone, `start --adopt-existing`
+binds it explicitly instead of silently creating a second milestone.
 
 Query reconciled workflow state without an LLM. GSD 1.11 query can mutate reconciliation state, so
 Shepherd requires the issue identity and holds the same delivery lease:
