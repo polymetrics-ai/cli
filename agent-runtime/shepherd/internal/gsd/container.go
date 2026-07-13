@@ -84,6 +84,7 @@ func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string 
 	}
 	args := []string{
 		"run", "--rm", "--interactive", "--pull=never", "--network=" + network, "--userns=keep-id",
+		"--entrypoint=/bin/sh",
 		"--workdir=" + workDir,
 		"--volume=" + workDir + ":" + workDir + ":rw",
 		"--volume=" + c.GitCommonDir + ":" + c.GitCommonDir + ":rw",
@@ -100,10 +101,25 @@ func (c ContainerConfig) commandArgs(workDir string, gsdArgs []string) []string 
 		"--env=GIT_CONFIG_COUNT=3", "--env=GIT_CONFIG_KEY_0=credential.helper", "--env=GIT_CONFIG_VALUE_0=",
 		"--env=GIT_CONFIG_KEY_1=remote.origin.pushurl", "--env=GIT_CONFIG_VALUE_1=file:///dev/null/shepherd-disabled",
 		"--env=GIT_CONFIG_KEY_2=safe.directory", "--env=GIT_CONFIG_VALUE_2=" + workDir,
-		c.Image,
+		c.Image, "-c", containerGSDCommand, "shepherd-gsd",
 	}
 	return append(args, gsdArgs...)
 }
+
+// GSD may publish its terminal milestone-ready notification just before a
+// descendant `git worktree add` finishes copying a large repository. Keeping a
+// shell as container PID 1 lets that orphaned Git process finish; the bounded
+// lock poll prevents Podman from killing it at the instant the Node process
+// exits. The original GSD exit code remains authoritative.
+const containerGSDCommand = `gsd "$@"
+rc=$?
+common=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null || true)
+n=0
+while [ -n "$common" ] && [ -n "$(find "$common/worktrees" -maxdepth 2 -name index.lock -print -quit 2>/dev/null)" ] && [ "$n" -lt 60 ]; do
+  sleep 1
+  n=$((n + 1))
+done
+exit "$rc"`
 
 func provisionContainerPolicy(policyDir, stateDir string) error {
 	files := []string{"PREFERENCES.md"}
