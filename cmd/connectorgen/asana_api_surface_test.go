@@ -20,9 +20,9 @@ const (
 )
 
 type asanaAPISurface struct {
-	Scope          string                     `json:"scope"`
-	SourceEvidence *asanaAPISurfaceEvidence   `json:"source_evidence"`
-	Endpoints      []asanaAPISurfaceEndpoint  `json:"endpoints"`
+	Scope          string                    `json:"scope"`
+	SourceEvidence *asanaAPISurfaceEvidence  `json:"source_evidence"`
+	Endpoints      []asanaAPISurfaceEndpoint `json:"endpoints"`
 }
 
 type asanaAPISurfaceEvidence struct {
