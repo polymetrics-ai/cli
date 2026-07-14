@@ -704,16 +704,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		result.Terminal = gsd.TerminalError
 		result.Err = fmt.Errorf("durable terminal append failed: %w", terminalSpoolErr)
 	}
-	targetState := domain.RunFailed
-	if result.Terminal == gsd.TerminalBlocked {
-		targetState = domain.RunBlocked
-	}
-	if result.Terminal == gsd.TerminalSuccess {
-		targetState = domain.RunReady
-	}
-	if result.Terminal == gsd.TerminalSuccess && postPhase == "complete" {
-		targetState = domain.RunHumanGate
-	}
+	targetState := targetRunState(result.Terminal, result.Err, postPhase)
 	if err := authority.FinishAttempt(ctx, deliveryID, executionID, targetState); err != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = err
@@ -744,6 +735,22 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		return fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, terminalErr)
 	}
 	return nil
+}
+
+func targetRunState(terminal gsd.Terminal, terminalErr error, postPhase string) domain.RunState {
+	if terminal == gsd.TerminalBlocked {
+		if errors.Is(terminalErr, gsd.ErrMutatingSkip) {
+			return domain.RunReady
+		}
+		return domain.RunBlocked
+	}
+	if terminal == gsd.TerminalSuccess {
+		if postPhase == "complete" {
+			return domain.RunHumanGate
+		}
+		return domain.RunReady
+	}
+	return domain.RunFailed
 }
 
 func terminalDiagnostic(stderr string) string {

@@ -1,6 +1,9 @@
 package gsd
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 func TestReconcileAcceptsOneUnitProgress(t *testing.T) {
 	t.Parallel()
@@ -44,5 +47,15 @@ func TestReconcileRejectsFalseGreenCanonicalUnit(t *testing.T) {
 	terminal, err = Reconcile("research-milestone", Result{Terminal: TerminalSuccess}, before, after)
 	if terminal != TerminalSuccess || err != nil {
 		t.Fatalf("advanced terminal=%s err=%v", terminal, err)
+	}
+}
+
+func TestReconcileClassifiesMutatingSkipAsARecoverableFence(t *testing.T) {
+	t.Parallel()
+	before := WorkflowSnapshot{Phase: "planning", Next: NextDispatch{Action: "dispatch", UnitType: "plan-slice", UnitID: "M001/S02"}}
+	after := WorkflowSnapshot{Phase: "executing", Next: NextDispatch{Action: "skip", UnitType: "execute-task", UnitID: "M001/S02/T01"}}
+	terminal, err := Reconcile("plan-slice", Result{Terminal: TerminalSuccess}, before, after)
+	if terminal != TerminalBlocked || !errors.Is(err, ErrMutatingSkip) {
+		t.Fatalf("terminal=%s err=%v", terminal, err)
 	}
 }

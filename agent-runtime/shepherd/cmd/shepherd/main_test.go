@@ -12,6 +12,7 @@ import (
 	"time"
 
 	decisionlog "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/decision"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 )
@@ -100,6 +101,16 @@ func TestJoinTerminalFailurePreservesPrimaryCause(t *testing.T) {
 	joined := joinTerminalFailure(primary, secondary)
 	if !errors.Is(joined, primary) || !errors.Is(joined, secondary) {
 		t.Fatalf("joined error=%v", joined)
+	}
+}
+
+func TestMutatingSkipFenceLeavesAuthorityReady(t *testing.T) {
+	t.Parallel()
+	if got := targetRunState(gsd.TerminalBlocked, gsd.ErrMutatingSkip, "executing"); got != domain.RunReady {
+		t.Fatalf("target state=%s want ready", got)
+	}
+	if got := targetRunState(gsd.TerminalBlocked, errors.New("real blocker"), "executing"); got != domain.RunBlocked {
+		t.Fatalf("real blocker target state=%s", got)
 	}
 }
 
