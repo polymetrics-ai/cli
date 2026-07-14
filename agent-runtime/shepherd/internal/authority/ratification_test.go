@@ -14,8 +14,9 @@ func validRequest(now time.Time) RatificationRequest {
 		ObservedHead:  "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
 		RunID:         "run-1", Generation: 2, UnitID: "M001/S01/U01", Attempt: 1, StateVersion: 7,
 		ContractHash: "sha256:" + strings.Repeat("c", 64), EvidenceHash: "sha256:" + strings.Repeat("e", 64),
-		Validator: RequiredValidator, Thinking: "high", Verdict: "PROCEED",
+		Validator: RequiredValidator, Thinking: "high", ValidatorSessionID: "11111111-1111-1111-1111-111111111111", Verdict: "PROCEED",
 		LocalGates: true, UAT: true, MilestoneValid: true,
+		RequiredLocalGates: true, RequiredUAT: true, RequiredMilestoneValid: true,
 		IssuedAt: now.Add(-time.Minute), ExpiresAt: now.Add(10 * time.Minute),
 	}
 }

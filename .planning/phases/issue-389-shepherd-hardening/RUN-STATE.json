@@ -1,82 +1,58 @@
 {
   "phase": "issue-389-shepherd-hardening",
   "branch": "fix/389-shepherd-proof-recovery",
-  "base_implementation_head": "db13cbaa8e27cbc86130ce2547f3e60b82b5217c",
+  "head_at_retry_start": "19d051c6b5d74e03fa8c8d4b5d392a58052a0499",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_a_complete_green_except_preexisting_lint",
+  "state": "slice_a_retry_corrected_green_except_preexisting_lint",
   "current_slice": "A_real_independent_validation_and_ratification",
   "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
-  "required_skills_loaded": [
-    "gsd-core",
-    "polymetrics-issue-delivery",
-    "gsd-programming-loop",
-    "golang-how-to",
-    "golang-testing",
-    "golang-error-handling",
-    "golang-safety",
-    "golang-security",
-    "golang-context",
-    "golang-concurrency",
-    "golang-design-patterns",
-    "golang-structs-interfaces",
-    "golang-observability",
-    "golang-lint"
+  "false_green": {
+    "commit": "19d051c6b5d74e03fa8c8d4b5d392a58052a0499",
+    "summary": "Previous Slice A completion claim was invalid because production validation had no real proof producer and trusted worker-controlled .gsd/shepherd-validation.json."
+  },
+  "corrected_slice_a": [
+    "Dedicated non-canonical validator process launch: headless shepherd-validate with Sol/high",
+    "Protected nonce-bound validation request/result under Shepherd state outside candidate worktree",
+    "No trust in candidate .gsd/shepherd-validation.json",
+    "Mandatory new validator session after invocation start with exact worktree, Sol/high model and high thinking",
+    "No derived/fabricated session identity fallback",
+    "Candidate head re-read after validation and before ratification/promotion",
+    "Durable governance state version used instead of generation",
+    "Configured issue PR base used instead of hard-coded main",
+    "Required gates derived from official unit metadata",
+    "Extended attestation schema/migration stores full ratification evidence"
   ],
   "orchestration_decisions": [
     {
-      "cycle": "cycle-0",
-      "decision": "read_only_parallel_recon",
-      "reason": "Broad proof/recovery scope benefited from isolated read-only scout before any production edit."
+      "cycle": "cycle-3",
+      "decision": "retry_slice_a_only",
+      "reason": "User requested RETRY correction; Slice B, PR creation, final Sol review, and canaries are blocked."
     },
     {
-      "cycle": "cycle-0",
+      "cycle": "cycle-3",
+      "decision": "real_validator_red_tests_first",
+      "reason": "New tests target production validation.GSDValidator helper-process path rather than fakeIndependentValidator only."
+    },
+    {
+      "cycle": "cycle-3",
       "decision": "local_critical_path",
-      "reason": "No overlapping mutating workers in this checkout; production edits were sequential."
-    },
-    {
-      "cycle": "cycle-0",
-      "decision": "canaries_deferred",
-      "reason": "Twenty/Asana canaries require exact-head independent Sol/high validation and human approval first."
-    },
-    {
-      "cycle": "cycle-1",
-      "decision": "store_guard_first",
-      "reason": "Committed/pushed the coherent store guard checkpoint before broader Slice A production wiring."
-    },
-    {
-      "cycle": "cycle-2",
-      "decision": "validator_port_boundary_fakes_only",
-      "reason": "Deterministic integration tests fake only the typed independent-validator port; production uses GSDValidator."
+      "reason": "Sequential mutating work in this checkout; no parallel mutating workers."
     }
   ],
-  "completed_this_run": [
-    "Committed and pushed b4ca144a test(shepherd): reject unratified proof records",
-    "Added internal/validation typed validator request/result port",
-    "Added production GSDValidator using Sol/high runner against exact candidate worktree/head and bounded validation proof file",
-    "Split attempt CheckpointCandidate from PromoteCandidate",
-    "Rewired runHeadless to validate and authority.Ratify before canonical promotion/adopting .gsd",
-    "Rejected missing, GPT-5.5, RETRY, HALT, stale-head, and failed-gate validation evidence without canonical HEAD or .gsd mutation",
-    "Persisted artifact proof and attestation only after authority.Ratify succeeds"
-  ],
-  "remaining_scope": [
-    "Slice B and later slices not started",
-    "Live Sol final review and Twenty/Asana canaries deferred by instruction",
-    "Pre-existing golangci-lint findings remain recorded and outside Slice A"
-  ],
-  "human_gates": [
-    "No Asana/Twenty canaries before independent Sol/high validation of exact candidate head",
-    "No credentialed checks or secret access",
-    "No parent PR #390 merge and no push to main",
-    "No new dependencies without approval"
+  "blocked": [
+    "Slice B and later slices",
+    "PR creation",
+    "Sol final review",
+    "Twenty/Asana canaries",
+    "Parent PR #390 merge"
   ],
   "last_verification": [
-    "cd agent-runtime/shepherd && go test ./cmd/shepherd -run 'TestSuperviseRejectsInvalidIndependentValidationWithoutPromotion|TestSuperviseRatifiesBeforePromotingCandidate|TestSuperviseFakeRuntimeToFinalHumanGate' -count=1: pass",
-    "cd agent-runtime/shepherd && go test ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd: pass",
+    "cd agent-runtime/shepherd && go test ./internal/validation ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd: pass",
     "cd agent-runtime/shepherd && go test ./...: pass",
     "cd agent-runtime/shepherd && go test -race ./...: pass",
     "cd agent-runtime/shepherd && go vet ./...: pass",
-    "cd agent-runtime/shepherd && golangci-lint run ./...: fail_preexisting_errcheck_ineffassign_staticcheck_unused",
+    "cd agent-runtime/shepherd && golangci-lint run ./...: fail_same_30_preexisting_findings_no_new_validation_finding",
     "cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...: pass"
   ]
 }

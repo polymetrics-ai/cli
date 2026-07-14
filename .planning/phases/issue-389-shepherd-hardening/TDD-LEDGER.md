@@ -55,25 +55,41 @@ GREEN evidence (partial store hardening only):
 - PASS `cd agent-runtime/shepherd && gofmt -w internal/store/proof_test.go internal/store/store.go && go test ./internal/store -run 'TestArtifactProofRejectsUnratifiedResult|TestAttestationRejectsNonProceedVerdicts|TestArtifactProofBindsExactHeadsAndRatification|TestAttestationPersistsValidatorProof' -count=1`
 - Production change: `PutArtifactProof` now rejects unratified proofs; `PutAttestation` now rejects non-`PROCEED` verdicts.
 
-Refactor/green evidence for full Slice A:
-- Added typed `internal/validation.Validator` port with request/result structures binding delivery,
-  generation, unit, attempt, base/candidate head, contract hash, evidence hash, artifact hashes, and
-  required gates.
-- Split attempt checkpointing from canonical promotion with `workspace.Manager.CheckpointCandidate`
-  and `PromoteCandidate`.
-- Rewired `runHeadless` so the candidate remains in the attempt worktree until independent validation
-  and `authority.Ratify` succeed.
-- Removed manufactured validator/attestation constants from `persistSuccessProof`; it now uses the
-  validator result and returned ratification attestation.
-- Production `validation.GSDValidator` invokes GSD on the candidate worktree with Sol/high and requires
-  bounded structured validation evidence from `.gsd/shepherd-validation.json`.
-- PASS `cd agent-runtime/shepherd && go test ./cmd/shepherd -run 'TestSuperviseRejectsInvalidIndependentValidationWithoutPromotion|TestSuperviseRatifiesBeforePromotingCandidate|TestSuperviseFakeRuntimeToFinalHumanGate' -count=1`.
-- PASS `cd agent-runtime/shepherd && go test ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd`.
+False-green evidence for commit `19d051c6`:
+- The previous Slice A completion claim is invalid. Tests only proved fake-validator port behavior and
+  did not test the real production validator implementation.
+- Production validation had no real result producer; it invoked canonical `validate-milestone`, which can
+  mutate GSD workflow state and does not produce Shepherd validation results.
+- Production trusted worker-controlled `.gsd/shepherd-validation.json`, fabricated fallback session IDs,
+  used generation as state version, hard-coded PR base as `main`, and blindly required/claimed UAT.
+- Slice A remains open; Slice B, PR creation, final Sol review, and canaries remain blocked.
+
+Retry RED tests added against the real production validator:
+- [x] `internal/validation`: no validation-result producer exists.
+- [x] `internal/validation`: stale pre-existing result is ignored/rejected.
+- [x] `internal/validation`: no new validator session is rejected.
+- [x] `internal/validation`: validator session model GPT-5.5 is rejected.
+- [x] `internal/validation`: thinking below high is rejected.
+- [x] `internal/validation`: result head/evidence/request nonce mismatch is rejected.
+- [x] `internal/validation`: candidate moving during validation is rejected.
+- [x] `internal/validation`: stale base branch/governance state version is rejected.
+- [x] `internal/validation`/`internal/authority`: RETRY/HALT or missing required gates are rejected.
+- [x] `internal/validation`: failed validation paths leave candidate `.gsd` unchanged and do not mutate Git except the explicit candidate-move fixture.
+
+RED evidence: these tests target production `validation.GSDValidator` with a helper process and would fail against `19d051c6` because it used canonical `validate-milestone`, trusted worker-local `.gsd/shepherd-validation.json`, accepted derived session IDs, lacked protected nonce-bound result transport, and did not bind state/base/gates.
+
+Corrected Slice A GREEN evidence:
+- Added dedicated non-canonical validator process launch (`headless shepherd-validate`) with Sol/high, exact candidate worktree, bounded request path, and exclusive result path.
+- Shepherd now writes nonce-bound validation requests under protected state, outside the candidate worktree, and rejects stale/reused/malformed result files.
+- Removed derived/fabricated validator session identity; a new session after validator start with exact worktree, Sol/high model, and high thinking is mandatory.
+- Result proof binds request ID, nonce, base branch/head, candidate/observed head, durable governance state version, contract/evidence hash, verdict, gates, issue time, and expiry.
+- Extended durable attestation schema/migration to persist repository, PR, base branch, base/candidate/observed head, delivery, generation, unit, attempt, state version, hashes, session ID, model/thinking, verdict, gates, issued, and expiry.
+- Required gates are derived from official unit metadata; UAT is required only for UAT phase metadata.
+- PASS `cd agent-runtime/shepherd && go test ./internal/validation ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd`.
 - PASS `cd agent-runtime/shepherd && go test ./...`.
 - PASS `cd agent-runtime/shepherd && go test -race ./...`.
 - PASS `cd agent-runtime/shepherd && go vet ./...`.
-- FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with pre-existing errcheck,
-  ineffassign, staticcheck, and unused findings; no new lint category was introduced by Slice A.
+- FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with the same 30 pre-existing findings; the earlier new `validation/validator.go` staticcheck finding was fixed.
 - PASS `cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
 
 ## Slice B — Durable attempt lifecycle and crash recovery

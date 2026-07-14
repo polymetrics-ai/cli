@@ -40,8 +40,11 @@ const defaultMaxEventBytes = 8 * 1024 * 1024
 
 const defaultWriteScopePollInterval = 500 * time.Millisecond
 
-var independentValidatorFactory = func(runner *gsd.Runner, config fileConfig) validation.Validator {
-	return validation.GSDValidator{Runner: runner, SessionsDir: filepath.Join(config.GSDHome, "agent", "sessions")}
+var independentValidatorFactory = func(_ *gsd.Runner, config fileConfig) validation.Validator {
+	return validation.GSDValidator{
+		Command: config.GSDCommand, GSDHome: config.GSDHome, StateDir: config.StateDir,
+		SessionsDir: filepath.Join(config.GSDHome, "agent", "sessions"), Timeout: time.Duration(config.TimeoutSeconds) * time.Second,
+	}
 }
 
 type fileConfig struct {
@@ -1013,7 +1016,11 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			result.Err = errors.New("canonical head changed before ratified promotion")
 		} else {
 			validator := independentValidatorFactory(runner, config)
-			if err := persistSuccessProof(ctx, authority, validator, config, registry, issueContext.WriteScope, candidateWorkDir, deliveryID, trustedUnit, before.Next.UnitType, attempt.Generation, unitAttempt.Attempts, startSnapshot.HeadSHA, candidateHead); err != nil {
+			stateVersion, versionErr := authority.GovernanceStateVersion(ctx)
+			if versionErr != nil {
+				result.Terminal = gsd.TerminalError
+				result.Err = versionErr
+			} else if err := persistSuccessProof(ctx, authority, validator, config, registry, issueContext.WriteScope, candidateWorkDir, deliveryID, trustedUnit, before.Next.UnitType, issueContext.PRBase, attempt.Generation, unitAttempt.Attempts, stateVersion, startSnapshot.HeadSHA, candidateHead); err != nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = err
 			} else if attemptWorktree != nil {
@@ -1465,7 +1472,7 @@ func gsdStateArtifacts(workDir string) ([]shepherdgit.Artifact, error) {
 	return artifacts, nil
 }
 
-func persistSuccessProof(ctx context.Context, authorityStore *store.Store, validator validation.Validator, config fileConfig, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType string, generation, attempt int64, startHead, candidateHead string) error {
+func persistSuccessProof(ctx context.Context, authorityStore *store.Store, validator validation.Validator, config fileConfig, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType, baseBranch string, generation, attempt, stateVersion int64, startHead, candidateHead string) error {
 	metadata, ok := registry.Lookup(unitType)
 	if !ok {
 		return fmt.Errorf("missing official unit metadata for %s", unitType)
@@ -1510,14 +1517,15 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 	}
 	evidenceHashValue := "sha256:" + hex.EncodeToString(evidenceHash[:])
 	contractHashValue := "sha256:" + hex.EncodeToString(contractHash[:])
+	requiredGates := requiredGatesForUnit(metadata)
 	validationResult, err := validator.Validate(ctx, validation.Request{
-		Repository: config.Repository, PullRequest: config.PullRequest, BaseBranch: "main",
+		Repository: config.Repository, PullRequest: config.PullRequest, BaseBranch: baseBranch,
 		DeliveryID: deliveryID, Generation: generation, UnitID: unitID, UnitType: unitType, Attempt: attempt,
-		StateVersion: generation, WorkDir: workDir, GSDHome: config.GSDHome,
+		StateVersion: stateVersion, WorkDir: workDir, GSDHome: config.GSDHome, StateDir: config.StateDir,
 		BaseHead: startHead, CandidateHead: candidateHead,
 		ContractHash: contractHashValue,
 		EvidenceHash: evidenceHashValue, ArtifactHashes: artifactHashes,
-		RequireGates: validation.GateRequirements{LocalGates: true, UAT: true, MilestoneValid: true},
+		RequireGates: requiredGates,
 	})
 	if err != nil {
 		return err
@@ -1533,12 +1541,13 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 		return errors.New("validator issue time is required")
 	}
 	attestation, err := authority.Ratify(authority.RatificationRequest{
-		Repository: config.Repository, PR: config.PullRequest, BaseBranch: "main", BaseSHA: startHead,
+		Repository: config.Repository, PR: config.PullRequest, BaseBranch: baseBranch, BaseSHA: startHead,
 		CandidateHead: candidateHead, ObservedHead: validationResult.ObservedHead,
-		RunID: deliveryID, Generation: generation, UnitID: unitID, Attempt: attempt, StateVersion: generation,
+		RunID: deliveryID, Generation: generation, UnitID: unitID, Attempt: attempt, StateVersion: stateVersion,
 		ContractHash: contractHashValue, EvidenceHash: validationResult.EvidenceHash,
-		Validator: validationResult.ObservedModel, Thinking: validationResult.Thinking, Verdict: validationResult.Verdict,
+		Validator: validationResult.ObservedModel, Thinking: validationResult.Thinking, ValidatorSessionID: validationResult.SessionID, Verdict: validationResult.Verdict,
 		LocalGates: validationResult.LocalGates, UAT: validationResult.UAT, MilestoneValid: validationResult.MilestoneValid,
+		RequiredLocalGates: requiredGates.LocalGates, RequiredUAT: requiredGates.UAT, RequiredMilestoneValid: requiredGates.MilestoneValid,
 		IssuedAt: validationResult.IssuedAt, ExpiresAt: validationResult.ExpiresAt,
 	}, time.Now().UTC())
 	if err != nil {
@@ -1554,7 +1563,32 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 	}); err != nil {
 		return err
 	}
-	return authorityStore.PutAttestation(ctx, store.AttestationRecord{RunID: deliveryID, HeadSHA: attestation.HeadSHA, Validator: attestation.Validator, Thinking: attestation.Thinking, Verdict: attestation.Verdict, CreatedAt: attestation.IssuedAt})
+	return authorityStore.PutAttestation(ctx, store.AttestationRecord{
+		Repository: attestation.Repository, PR: attestation.PR, BaseBranch: attestation.BaseBranch,
+		BaseHead: attestation.BaseSHA, CandidateHead: attestation.HeadSHA, ObservedHead: validationResult.ObservedHead,
+		RunID: deliveryID, Generation: generation, UnitID: unitID, Attempt: attempt, StateVersion: stateVersion,
+		ContractHash: attestation.ContractHash, EvidenceHash: attestation.EvidenceHash,
+		ValidatorSessionID: attestation.ValidatorSessionID, HeadSHA: attestation.HeadSHA,
+		Validator: attestation.Validator, Thinking: attestation.Thinking, Verdict: attestation.Verdict,
+		LocalGates: attestation.LocalGates, UAT: attestation.UAT, MilestoneValid: attestation.MilestoneValid,
+		CreatedAt: attestation.IssuedAt, ExpiresAt: attestation.ExpiresAt,
+	})
+}
+
+func requiredGatesForUnit(metadata gsd.UnitMetadata) validation.GateRequirements {
+	gates := validation.GateRequirements{LocalGates: true}
+	for _, phase := range metadata.PhaseChain {
+		switch phase {
+		case "uat":
+			gates.UAT = true
+		case "validation", "completion":
+			gates.MilestoneValid = true
+		}
+	}
+	if metadata.ScopeClass == "section-close" {
+		gates.MilestoneValid = true
+	}
+	return gates
 }
 
 func consumeGitHubDecisionReplies(ctx context.Context, authority *store.Store, client *shepherdgithub.Client, config fileConfig, deliveryID string, issue int) error {

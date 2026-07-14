@@ -41,6 +41,9 @@ status is therefore **not validated, not ratified, not canary-ready**.
    production changes.
 5. `cycle-2/slice-a`: stayed on `local_critical_path`; added deterministic fake-validator integration
    tests at the typed validator port boundary before production rewiring.
+6. `cycle-3/retry-correction`: previous Slice A completion at `19d051c6` is recorded as a false green;
+   production validation had no real proof producer and trusted worktree-local `.gsd/shepherd-validation.json`.
+   Continue only Slice A; keep Slice B, PR creation, final Sol review, and canaries blocked.
 
 ## Ordered implementation slices
 
@@ -57,11 +60,19 @@ validator against exact candidate head plus bounded artifact hashes/gates, persi
 thinking, session identity, verdict, gates, evidence hashes, ratify with `authority.Ratify`, and promote
 only after successful ratification.
 
-Slice A implementation status: complete for deterministic local coverage. Attempt worktrees now produce
-a candidate checkpoint before canonical promotion; invalid validation evidence leaves canonical HEAD and
-canonical `.gsd` unchanged; production validation is behind a typed `validation.Validator` port and the
-GSD-backed validator requires bounded `.gsd/shepherd-validation.json` evidence rather than manufacturing
-a verdict in `persistSuccessProof`.
+Slice A implementation status: **RETRY / false green at `19d051c6`**. The prior code improved
+candidate-before-promotion flow, but the production validator had no real result producer, used the
+canonical `validate-milestone` workflow unit as a generic validator, trusted a worker-controlled
+`.gsd/shepherd-validation.json`, fabricated fallback session identity, used generation as state version,
+hard-coded PR base as `main`, and blindly required/claimed UAT gates. The corrected Slice A must add RED
+tests against the real production validator and keep canaries, PR creation, and Slice B blocked.
+
+Retry RED tests proved: no validation-result producer, stale pre-existing result, no new validator
+session, GPT-5.5 model, non-high thinking, result head/evidence/request nonce mismatch, candidate moves
+during validation, stale base/governance version, RETRY/HALT/missing gates, and unchanged canonical Git
+and `.gsd` on rejected command paths. Corrected production behavior now uses a dedicated non-canonical
+`headless shepherd-validate` process, protected nonce-bound result transport outside the worktree, real
+new session/model/thinking checks, durable state version, extended attestation persistence, and metadata-derived gates.
 
 ### B. Durable attempt lifecycle and crash recovery
 

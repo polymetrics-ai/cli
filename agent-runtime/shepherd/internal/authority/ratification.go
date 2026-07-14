@@ -13,47 +13,55 @@ var shaPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
 var hashPattern = regexp.MustCompile(`^sha256:[0-9a-f]{64}$`)
 
 type RatificationRequest struct {
-	Repository     string
-	PR             int
-	BaseBranch     string
-	BaseSHA        string
-	CandidateHead  string
-	ObservedHead   string
-	RunID          string
-	Generation     int64
-	UnitID         string
-	Attempt        int64
-	StateVersion   int64
-	ContractHash   string
-	EvidenceHash   string
-	Validator      string
-	Thinking       string
-	Verdict        string
-	LocalGates     bool
-	UAT            bool
-	MilestoneValid bool
-	IssuedAt       time.Time
-	ExpiresAt      time.Time
+	Repository             string
+	PR                     int
+	BaseBranch             string
+	BaseSHA                string
+	CandidateHead          string
+	ObservedHead           string
+	RunID                  string
+	Generation             int64
+	UnitID                 string
+	Attempt                int64
+	StateVersion           int64
+	ContractHash           string
+	EvidenceHash           string
+	Validator              string
+	Thinking               string
+	ValidatorSessionID     string
+	Verdict                string
+	LocalGates             bool
+	UAT                    bool
+	MilestoneValid         bool
+	RequiredLocalGates     bool
+	RequiredUAT            bool
+	RequiredMilestoneValid bool
+	IssuedAt               time.Time
+	ExpiresAt              time.Time
 }
 
 type Attestation struct {
-	Repository   string
-	PR           int
-	BaseBranch   string
-	BaseSHA      string
-	HeadSHA      string
-	RunID        string
-	Generation   int64
-	UnitID       string
-	Attempt      int64
-	StateVersion int64
-	ContractHash string
-	EvidenceHash string
-	Validator    string
-	Thinking     string
-	Verdict      string
-	IssuedAt     time.Time
-	ExpiresAt    time.Time
+	Repository         string
+	PR                 int
+	BaseBranch         string
+	BaseSHA            string
+	HeadSHA            string
+	RunID              string
+	Generation         int64
+	UnitID             string
+	Attempt            int64
+	StateVersion       int64
+	ContractHash       string
+	EvidenceHash       string
+	Validator          string
+	Thinking           string
+	ValidatorSessionID string
+	Verdict            string
+	LocalGates         bool
+	UAT                bool
+	MilestoneValid     bool
+	IssuedAt           time.Time
+	ExpiresAt          time.Time
 }
 
 func Ratify(request RatificationRequest, now time.Time) (Attestation, error) {
@@ -72,11 +80,14 @@ func Ratify(request RatificationRequest, now time.Time) (Attestation, error) {
 		!hashPattern.MatchString(request.ContractHash) || !hashPattern.MatchString(request.EvidenceHash) {
 		return Attestation{}, errors.New("generation, attempt, state version, and evidence hashes are required")
 	}
+	if request.ValidatorSessionID == "" {
+		return Attestation{}, errors.New("validator session identity is required")
+	}
 	if request.Validator != RequiredValidator || request.Thinking != "high" {
 		return Attestation{}, fmt.Errorf("validator must be %s with high thinking", RequiredValidator)
 	}
-	if request.Verdict != "PROCEED" || !request.LocalGates || !request.UAT || !request.MilestoneValid {
-		return Attestation{}, errors.New("ratification requires PROCEED and all local, UAT, and milestone gates")
+	if request.Verdict != "PROCEED" || (request.RequiredLocalGates && !request.LocalGates) || (request.RequiredUAT && !request.UAT) || (request.RequiredMilestoneValid && !request.MilestoneValid) {
+		return Attestation{}, errors.New("ratification requires PROCEED and all required gates")
 	}
 	if request.IssuedAt.IsZero() || request.IssuedAt.After(now) || request.ExpiresAt.IsZero() || !request.ExpiresAt.After(request.IssuedAt) || !now.Before(request.ExpiresAt) {
 		return Attestation{}, errors.New("attestation validity window is invalid or expired")
@@ -86,7 +97,8 @@ func Ratify(request RatificationRequest, now time.Time) (Attestation, error) {
 		HeadSHA: request.CandidateHead, RunID: request.RunID, Generation: request.Generation,
 		UnitID: request.UnitID, Attempt: request.Attempt, StateVersion: request.StateVersion,
 		ContractHash: request.ContractHash, EvidenceHash: request.EvidenceHash,
-		Validator: request.Validator, Thinking: request.Thinking, Verdict: request.Verdict,
+		Validator: request.Validator, Thinking: request.Thinking, ValidatorSessionID: request.ValidatorSessionID, Verdict: request.Verdict,
+		LocalGates: request.LocalGates, UAT: request.UAT, MilestoneValid: request.MilestoneValid,
 		IssuedAt: request.IssuedAt.UTC(), ExpiresAt: request.ExpiresAt.UTC(),
 	}, nil
 }

@@ -22,8 +22,9 @@ func TestTwentyIncidentGuards(t *testing.T) {
 		ObservedHead:  "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
 		RunID:         "twenty", Generation: 4, UnitID: "S7/validate", Attempt: 1, StateVersion: 48,
 		ContractHash: "sha256:" + strings.Repeat("c", 64), EvidenceHash: "sha256:" + strings.Repeat("e", 64),
-		Validator: authority.RequiredValidator, Thinking: "high", Verdict: "PROCEED",
+		Validator: authority.RequiredValidator, Thinking: "high", ValidatorSessionID: "11111111-1111-1111-1111-111111111111", Verdict: "PROCEED",
 		LocalGates: true, UAT: true, MilestoneValid: true,
+		RequiredLocalGates: true, RequiredUAT: true, RequiredMilestoneValid: true,
 		IssuedAt: now.Add(-time.Minute), ExpiresAt: now.Add(time.Minute),
 	}
 

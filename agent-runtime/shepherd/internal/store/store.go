@@ -146,12 +146,29 @@ type ArtifactProof struct {
 }
 
 type AttestationRecord struct {
-	RunID     string
-	HeadSHA   string
-	Validator string
-	Thinking  string
-	Verdict   string
-	CreatedAt time.Time
+	Repository         string
+	PR                 int
+	BaseBranch         string
+	BaseHead           string
+	CandidateHead      string
+	ObservedHead       string
+	RunID              string
+	Generation         int64
+	UnitID             string
+	Attempt            int64
+	StateVersion       int64
+	ContractHash       string
+	EvidenceHash       string
+	ValidatorSessionID string
+	HeadSHA            string
+	Validator          string
+	Thinking           string
+	Verdict            string
+	LocalGates         bool
+	UAT                bool
+	MilestoneValid     bool
+	CreatedAt          time.Time
+	ExpiresAt          time.Time
 }
 
 func Open(ctx context.Context, path string) (*Store, error) {
@@ -189,6 +206,10 @@ func (s *Store) migrate(ctx context.Context) error {
 		`PRAGMA foreign_keys=ON`,
 		`PRAGMA synchronous=FULL`,
 		`PRAGMA busy_timeout=5000`,
+		`CREATE TABLE IF NOT EXISTS authority_state (
+            state_id TEXT PRIMARY KEY, version INTEGER NOT NULL, updated_at INTEGER NOT NULL
+        )`,
+		`INSERT OR IGNORE INTO authority_state(state_id, version, updated_at) VALUES ('governance', 1, strftime('%s','now') * 1000000000)`,
 		`CREATE TABLE IF NOT EXISTS leases (
             run_id TEXT PRIMARY KEY, owner TEXT NOT NULL, epoch INTEGER NOT NULL,
             expires_at INTEGER NOT NULL
@@ -219,6 +240,12 @@ func (s *Store) migrate(ctx context.Context) error {
 		`CREATE TABLE IF NOT EXISTS attestations (
             run_id TEXT NOT NULL, head_sha TEXT NOT NULL, validator TEXT NOT NULL,
             thinking TEXT NOT NULL, verdict TEXT NOT NULL, created_at INTEGER NOT NULL,
+            repository TEXT NOT NULL DEFAULT '', pr INTEGER NOT NULL DEFAULT 0, base_branch TEXT NOT NULL DEFAULT '',
+            base_head TEXT NOT NULL DEFAULT '', candidate_head TEXT NOT NULL DEFAULT '', observed_head TEXT NOT NULL DEFAULT '',
+            generation INTEGER NOT NULL DEFAULT 0, unit_id TEXT NOT NULL DEFAULT '', attempt INTEGER NOT NULL DEFAULT 0,
+            state_version INTEGER NOT NULL DEFAULT 0, contract_hash TEXT NOT NULL DEFAULT '', evidence_hash TEXT NOT NULL DEFAULT '',
+            validator_session_id TEXT NOT NULL DEFAULT '', local_gates INTEGER NOT NULL DEFAULT 0,
+            uat INTEGER NOT NULL DEFAULT 0, milestone_valid INTEGER NOT NULL DEFAULT 0, expires_at INTEGER NOT NULL DEFAULT 0,
             PRIMARY KEY (run_id, head_sha)
         )`,
 		`CREATE TABLE IF NOT EXISTS outbox (
@@ -287,6 +314,18 @@ func (s *Store) migrate(ctx context.Context) error {
 			return err
 		}
 	}
+	for name, definition := range map[string]string{
+		"repository": "TEXT NOT NULL DEFAULT ''", "pr": "INTEGER NOT NULL DEFAULT 0", "base_branch": "TEXT NOT NULL DEFAULT ''",
+		"base_head": "TEXT NOT NULL DEFAULT ''", "candidate_head": "TEXT NOT NULL DEFAULT ''", "observed_head": "TEXT NOT NULL DEFAULT ''",
+		"generation": "INTEGER NOT NULL DEFAULT 0", "unit_id": "TEXT NOT NULL DEFAULT ''", "attempt": "INTEGER NOT NULL DEFAULT 0",
+		"state_version": "INTEGER NOT NULL DEFAULT 0", "contract_hash": "TEXT NOT NULL DEFAULT ''", "evidence_hash": "TEXT NOT NULL DEFAULT ''",
+		"validator_session_id": "TEXT NOT NULL DEFAULT ''", "local_gates": "INTEGER NOT NULL DEFAULT 0", "uat": "INTEGER NOT NULL DEFAULT 0",
+		"milestone_valid": "INTEGER NOT NULL DEFAULT 0", "expires_at": "INTEGER NOT NULL DEFAULT 0",
+	} {
+		if err := s.ensureColumn(ctx, "attestations", name, definition); err != nil {
+			return err
+		}
+	}
 	if err := s.verifyDurability(ctx); err != nil {
 		return err
 	}
@@ -299,6 +338,17 @@ func (s *Store) migrate(ctx context.Context) error {
 		}
 	}
 	return nil
+}
+
+func (s *Store) GovernanceStateVersion(ctx context.Context) (int64, error) {
+	var version int64
+	if err := s.db.QueryRowContext(ctx, `SELECT version FROM authority_state WHERE state_id = 'governance'`).Scan(&version); err != nil {
+		return 0, fmt.Errorf("read governance state version: %w", err)
+	}
+	if version <= 0 {
+		return 0, errors.New("governance state version is invalid")
+	}
+	return version, nil
 }
 
 func (s *Store) BeginUnitAttempt(ctx context.Context, key UnitAttemptKey, maxAttempts int64) (UnitAttempt, error) {
@@ -1004,19 +1054,47 @@ func (s *Store) GetArtifactProof(ctx context.Context, proofID string) (ArtifactP
 }
 
 func (s *Store) PutAttestation(ctx context.Context, attestation AttestationRecord) error {
-	if attestation.RunID == "" || !validGitSHA(attestation.HeadSHA) || attestation.Validator != "openai-codex/gpt-5.6-sol" ||
-		attestation.Thinking != "high" || attestation.Verdict != "PROCEED" {
+	if attestation.Repository == "" || attestation.PR <= 0 || attestation.BaseBranch == "" || !validGitSHA(attestation.BaseHead) ||
+		!validGitSHA(attestation.CandidateHead) || !validGitSHA(attestation.ObservedHead) || attestation.RunID == "" ||
+		attestation.Generation <= 0 || strings.TrimSpace(attestation.UnitID) == "" || attestation.Attempt <= 0 ||
+		attestation.StateVersion <= 0 || !validSHA256(attestation.ContractHash) || !validSHA256(attestation.EvidenceHash) ||
+		strings.TrimSpace(attestation.ValidatorSessionID) == "" || !validGitSHA(attestation.HeadSHA) ||
+		attestation.HeadSHA != attestation.CandidateHead || attestation.ObservedHead != attestation.CandidateHead ||
+		attestation.Validator != "openai-codex/gpt-5.6-sol" || attestation.Thinking != "high" || attestation.Verdict != "PROCEED" ||
+		attestation.CreatedAt.IsZero() || attestation.ExpiresAt.IsZero() || !attestation.ExpiresAt.After(attestation.CreatedAt) {
 		return errors.New("complete attestation identity is required")
 	}
 	created := attestation.CreatedAt.UTC()
-	if created.IsZero() {
-		created = time.Now().UTC()
+	expires := attestation.ExpiresAt.UTC()
+	localGates, uat, milestoneValid := 0, 0, 0
+	if attestation.LocalGates {
+		localGates = 1
 	}
-	_, err := s.db.ExecContext(ctx, `INSERT INTO attestations(run_id, head_sha, validator, thinking, verdict, created_at)
-		VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(run_id, head_sha) DO UPDATE SET
+	if attestation.UAT {
+		uat = 1
+	}
+	if attestation.MilestoneValid {
+		milestoneValid = 1
+	}
+	_, err := s.db.ExecContext(ctx, `INSERT INTO attestations(
+		run_id, head_sha, validator, thinking, verdict, created_at, repository, pr, base_branch,
+		base_head, candidate_head, observed_head, generation, unit_id, attempt, state_version,
+		contract_hash, evidence_hash, validator_session_id, local_gates, uat, milestone_valid, expires_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		ON CONFLICT(run_id, head_sha) DO UPDATE SET
 		validator = excluded.validator, thinking = excluded.thinking, verdict = excluded.verdict,
-		created_at = excluded.created_at`, attestation.RunID, attestation.HeadSHA, attestation.Validator,
-		attestation.Thinking, attestation.Verdict, created.UnixNano())
+		created_at = excluded.created_at, repository = excluded.repository, pr = excluded.pr,
+		base_branch = excluded.base_branch, base_head = excluded.base_head, candidate_head = excluded.candidate_head,
+		observed_head = excluded.observed_head, generation = excluded.generation, unit_id = excluded.unit_id,
+		attempt = excluded.attempt, state_version = excluded.state_version, contract_hash = excluded.contract_hash,
+		evidence_hash = excluded.evidence_hash, validator_session_id = excluded.validator_session_id,
+		local_gates = excluded.local_gates, uat = excluded.uat, milestone_valid = excluded.milestone_valid,
+		expires_at = excluded.expires_at`, attestation.RunID, attestation.HeadSHA, attestation.Validator,
+		attestation.Thinking, attestation.Verdict, created.UnixNano(), attestation.Repository, attestation.PR,
+		attestation.BaseBranch, attestation.BaseHead, attestation.CandidateHead, attestation.ObservedHead,
+		attestation.Generation, attestation.UnitID, attestation.Attempt, attestation.StateVersion,
+		attestation.ContractHash, attestation.EvidenceHash, attestation.ValidatorSessionID,
+		localGates, uat, milestoneValid, expires.UnixNano())
 	if err != nil {
 		return fmt.Errorf("put attestation: %w", err)
 	}
@@ -1025,14 +1103,25 @@ func (s *Store) PutAttestation(ctx context.Context, attestation AttestationRecor
 
 func (s *Store) GetAttestation(ctx context.Context, runID, headSHA string) (AttestationRecord, error) {
 	var attestation AttestationRecord
-	var created int64
-	err := s.db.QueryRowContext(ctx, `SELECT run_id, head_sha, validator, thinking, verdict, created_at
-		FROM attestations WHERE run_id = ? AND head_sha = ?`, runID, headSHA).Scan(&attestation.RunID,
-		&attestation.HeadSHA, &attestation.Validator, &attestation.Thinking, &attestation.Verdict, &created)
+	var created, expires int64
+	var localGates, uat, milestoneValid int
+	err := s.db.QueryRowContext(ctx, `SELECT run_id, head_sha, validator, thinking, verdict, created_at,
+		repository, pr, base_branch, base_head, candidate_head, observed_head, generation, unit_id,
+		attempt, state_version, contract_hash, evidence_hash, validator_session_id, local_gates,
+		uat, milestone_valid, expires_at FROM attestations WHERE run_id = ? AND head_sha = ?`, runID, headSHA).Scan(&attestation.RunID,
+		&attestation.HeadSHA, &attestation.Validator, &attestation.Thinking, &attestation.Verdict, &created,
+		&attestation.Repository, &attestation.PR, &attestation.BaseBranch, &attestation.BaseHead,
+		&attestation.CandidateHead, &attestation.ObservedHead, &attestation.Generation, &attestation.UnitID,
+		&attestation.Attempt, &attestation.StateVersion, &attestation.ContractHash, &attestation.EvidenceHash,
+		&attestation.ValidatorSessionID, &localGates, &uat, &milestoneValid, &expires)
 	if err != nil {
 		return AttestationRecord{}, fmt.Errorf("read attestation: %w", err)
 	}
 	attestation.CreatedAt = time.Unix(0, created).UTC()
+	attestation.ExpiresAt = time.Unix(0, expires).UTC()
+	attestation.LocalGates = localGates == 1
+	attestation.UAT = uat == 1
+	attestation.MilestoneValid = milestoneValid == 1
 	return attestation, nil
 }
 

@@ -81,11 +81,25 @@ func TestAttestationRejectsNonProceedVerdicts(t *testing.T) {
 	defer closeStoreForTest(t, db)
 	for _, verdict := range []string{"RETRY", "HALT"} {
 		t.Run(verdict, func(t *testing.T) {
-			record := AttestationRecord{RunID: "issue-389", HeadSHA: strings.Repeat(strings.ToLower(verdict[:1]), 40), Validator: "openai-codex/gpt-5.6-sol", Thinking: "high", Verdict: verdict, CreatedAt: time.Unix(1_700_000_000, 0).UTC()}
+			record := testAttestationRecord(strings.Repeat(strings.ToLower(verdict[:1]), 40))
+			record.Verdict = verdict
 			if err := db.PutAttestation(ctx, record); err == nil {
 				t.Fatalf("%s attestation accepted", verdict)
 			}
 		})
+	}
+}
+
+func testAttestationRecord(head string) AttestationRecord {
+	now := time.Unix(1_700_000_000, 0).UTC()
+	return AttestationRecord{
+		Repository: "polymetrics-ai/cli", PR: 391, BaseBranch: "feat/372-gsd-pi-go-shepherd",
+		BaseHead: strings.Repeat("a", 40), CandidateHead: head, ObservedHead: head,
+		RunID: "issue-389", Generation: 2, UnitID: "M001/S01/T01", Attempt: 1, StateVersion: 7,
+		ContractHash: "sha256:" + strings.Repeat("c", 64), EvidenceHash: "sha256:" + strings.Repeat("e", 64),
+		ValidatorSessionID: "11111111-1111-1111-1111-111111111111", HeadSHA: head,
+		Validator: "openai-codex/gpt-5.6-sol", Thinking: "high", Verdict: "PROCEED",
+		LocalGates: true, UAT: true, MilestoneValid: true, CreatedAt: now, ExpiresAt: now.Add(10 * time.Minute),
 	}
 }
 
@@ -97,7 +111,7 @@ func TestAttestationPersistsValidatorProof(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer closeStoreForTest(t, db)
-	record := AttestationRecord{RunID: "issue-389", HeadSHA: strings.Repeat("e", 40), Validator: "openai-codex/gpt-5.6-sol", Thinking: "high", Verdict: "PROCEED", CreatedAt: time.Unix(1_700_000_000, 0).UTC()}
+	record := testAttestationRecord(strings.Repeat("e", 40))
 	if err := db.PutAttestation(ctx, record); err != nil {
 		t.Fatal(err)
 	}
@@ -105,10 +119,12 @@ func TestAttestationPersistsValidatorProof(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if loaded.Validator != record.Validator || loaded.Thinking != "high" || loaded.Verdict != "PROCEED" {
+	if loaded.Validator != record.Validator || loaded.Thinking != "high" || loaded.Verdict != "PROCEED" || loaded.Repository != record.Repository || loaded.ValidatorSessionID == "" {
 		t.Fatalf("attestation=%+v", loaded)
 	}
 	record.HeadSHA = strings.Repeat("f", 40)
+	record.CandidateHead = record.HeadSHA
+	record.ObservedHead = record.HeadSHA
 	record.Validator = "openai-codex/gpt-5.5"
 	if err := db.PutAttestation(ctx, record); err == nil {
 		t.Fatal("downgraded validator proof accepted")
