@@ -188,18 +188,106 @@ func TestConnectorInspectHumanShowsManualNotRawJSON(t *testing.T) {
 
 func TestDocsGenerateAndValidateConnectorDocs(t *testing.T) {
 	dir := t.TempDir()
-	cliDir := dir + "/cli"
-	connectorsDir := dir + "/connectors"
+	cliDir := filepath.Join(dir, "cli")
+	connectorsDir := filepath.Join(dir, "connectors")
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"docs", "generate", "--dir", cliDir, "--connectors-dir", connectorsDir}, &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("docs generate code = %d stderr = %s", code, stderr.String())
 	}
+	for _, path := range []string{
+		filepath.Join(cliDir, "asana.md"),
+		filepath.Join(cliDir, "github.md"),
+		filepath.Join(connectorsDir, "asana", "MANUAL.md"),
+		filepath.Join(connectorsDir, "asana", "SKILL.md"),
+	} {
+		if _, err := os.Stat(path); err != nil {
+			t.Fatalf("generated docs missing %s: %v", path, err)
+		}
+	}
+	asanaCLI, err := os.ReadFile(filepath.Join(cliDir, "asana.md"))
+	if err != nil {
+		t.Fatalf("read generated asana CLI docs: %v", err)
+	}
+	for _, want := range []string{"# pm asana", "NAME", "pm asana - Inspect and safely plan changes to Asana workspaces, projects, and tasks.", "tasks list", "projects list", "--json"} {
+		if !strings.Contains(string(asanaCLI), want) {
+			t.Fatalf("generated asana CLI docs missing %q:\n%s", want, string(asanaCLI))
+		}
+	}
 	stdout.Reset()
 	stderr.Reset()
-	code = cli.Run([]string{"docs", "validate", "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	code = cli.Run([]string{"docs", "validate", "--dir", cliDir, "--connectors-dir", connectorsDir}, &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("docs validate code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+
+	if err := os.WriteFile(filepath.Join(cliDir, "asana.md"), []byte("stale cli doc\n"), 0o644); err != nil {
+		t.Fatalf("write stale generated cli doc: %v", err)
+	}
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"docs", "validate", "--dir", cliDir, "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("docs validate accepted stale asana CLI docs")
+	}
+	if got := stdout.String() + stderr.String(); !strings.Contains(got, filepath.Join(cliDir, "asana.md")) {
+		t.Fatalf("docs validate drift error missing stale path: %s", got)
+	}
+}
+
+func TestDocsGenerateAndValidateSelectedConnectorsDoesNotRewriteCorpus(t *testing.T) {
+	dir := t.TempDir()
+	cliDir := filepath.Join(dir, "cli")
+	connectorsDir := filepath.Join(dir, "connectors")
+	unrelated := filepath.Join(connectorsDir, "100ms", "MANUAL.md")
+	if err := os.MkdirAll(filepath.Dir(unrelated), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(unrelated, []byte("sentinel\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	githubManual := filepath.Join(connectorsDir, "github", "MANUAL.md")
+	if err := os.MkdirAll(filepath.Dir(githubManual), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(githubManual, []byte("github sentinel\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	args := []string{"docs", "generate", "--dir", cliDir, "--connectors-dir", connectorsDir, "--connector", "asana", "--cli-connector", "github"}
+	var stdout, stderr bytes.Buffer
+	if code := cli.Run(args, &stdout, &stderr); code != 0 {
+		t.Fatalf("targeted docs generate code=%d stderr=%s", code, stderr.String())
+	}
+	got, err := os.ReadFile(unrelated)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != "sentinel\n" {
+		t.Fatalf("targeted generation rewrote unrelated connector: %q", got)
+	}
+	got, err = os.ReadFile(githubManual)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != "github sentinel\n" {
+		t.Fatalf("CLI-only selection rewrote GitHub connector manual: %q", got)
+	}
+	for _, path := range []string{
+		filepath.Join(cliDir, "asana.md"),
+		filepath.Join(cliDir, "github.md"),
+		filepath.Join(connectorsDir, "asana", "MANUAL.md"),
+		filepath.Join(connectorsDir, "asana", "SKILL.md"),
+	} {
+		if _, err := os.Stat(path); err != nil {
+			t.Fatalf("targeted docs missing %s: %v", path, err)
+		}
+	}
+	stdout.Reset()
+	stderr.Reset()
+	validateArgs := []string{"docs", "validate", "--dir", cliDir, "--connectors-dir", connectorsDir, "--connector", "asana", "--cli-connector", "github"}
+	if code := cli.Run(validateArgs, &stdout, &stderr); code != 0 {
+		t.Fatalf("targeted docs validate code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 }
 

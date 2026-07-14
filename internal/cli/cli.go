@@ -1144,30 +1144,54 @@ func runDocs(args []string, stdout io.Writer) error {
 		if dir == "" {
 			return errors.New("missing --dir")
 		}
-		if err := os.MkdirAll(dir, 0o755); err != nil {
+		registry := appRegistry()
+		selected := flags.values["connector"]
+		cliSelected := append(append([]string{}, selected...), flags.values["cli-connector"]...)
+		targeted := len(cliSelected) > 0
+		if err := writeCLIDocs(dir, registry, cliSelected...); err != nil {
 			return err
 		}
-		for topic, text := range docs {
-			if topic == "" || topic == "pm" {
-				continue
-			}
-			path := filepath.Join(dir, topic+".md")
-			if err := os.WriteFile(path, []byte("```\n"+text+"\n```\n"), 0o644); err != nil {
+		connectorsDir := valueOr(flags.first("connectors-dir"), filepath.Join(filepath.Dir(dir), "connectors"))
+		if !targeted || len(selected) > 0 {
+			if err := writeConnectorDocs(connectorsDir, registry, selected...); err != nil {
 				return err
 			}
 		}
-		connectorsDir := valueOr(flags.first("connectors-dir"), filepath.Join(filepath.Dir(dir), "connectors"))
-		if err := writeConnectorDocs(connectorsDir, appRegistry()); err != nil {
-			return err
+		if targeted && len(selected) == 0 {
+			fmt.Fprintf(stdout, "Generated selected CLI docs in %s\n", dir)
+			return nil
 		}
 		fmt.Fprintf(stdout, "Generated docs in %s and connector docs in %s\n", dir, connectorsDir)
 		return nil
 	case "validate":
-		dir := valueOr(flags.first("connectors-dir"), valueOr(flags.first("dir"), "docs/connectors"))
-		if err := validateConnectorDocs(dir, appRegistry()); err != nil {
-			return err
+		registry := appRegistry()
+		selected := flags.values["connector"]
+		cliSelected := append(append([]string{}, selected...), flags.values["cli-connector"]...)
+		targeted := len(cliSelected) > 0
+		dir := flags.first("dir")
+		if dir != "" {
+			if err := validateCLIDocs(dir, registry, cliSelected...); err != nil {
+				return err
+			}
 		}
-		fmt.Fprintf(stdout, "Validated connector docs in %s\n", dir)
+		connectorsDir := flags.first("connectors-dir")
+		if connectorsDir == "" {
+			if dir != "" {
+				connectorsDir = filepath.Join(filepath.Dir(dir), "connectors")
+			} else {
+				connectorsDir = "docs/connectors"
+			}
+		}
+		if !targeted || len(selected) > 0 {
+			if err := validateConnectorDocs(connectorsDir, registry, selected...); err != nil {
+				return err
+			}
+		}
+		if dir != "" {
+			fmt.Fprintf(stdout, "Validated docs in %s and connector docs in %s\n", dir, connectorsDir)
+			return nil
+		}
+		fmt.Fprintf(stdout, "Validated connector docs in %s\n", connectorsDir)
 		return nil
 	default:
 		return errUsage

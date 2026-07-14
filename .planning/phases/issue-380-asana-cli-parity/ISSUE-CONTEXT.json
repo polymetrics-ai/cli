@@ -35,6 +35,7 @@
     "internal/cli/**",
     "cmd/connectorgen/**",
     "docs/cli/**",
+    "docs/connectors/asana/**",
     "website/**"
   ],
   "required_reading": [
