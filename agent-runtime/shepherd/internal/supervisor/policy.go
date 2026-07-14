@@ -24,13 +24,17 @@ type Decision struct {
 }
 
 func Decide(snapshot gsd.WorkflowSnapshot) (Decision, error) {
+	return DecideWithRegistry(snapshot, gsd.BuiltinUnitRegistry())
+}
+
+func DecideWithRegistry(snapshot gsd.WorkflowSnapshot, registry gsd.UnitRegistry) (Decision, error) {
 	decision := Decision{Snapshot: snapshot}
 	switch snapshot.Next.Action {
 	case "dispatch":
 		if snapshot.Next.UnitType == "" {
 			return Decision{}, errors.New("canonical dispatch is missing a unit type")
 		}
-		command, err := commandForUnit(snapshot.Next.UnitType)
+		command, err := registry.CommandForUnit(snapshot.Next.UnitType)
 		if err != nil {
 			return Decision{}, err
 		}
@@ -57,16 +61,5 @@ func Decide(snapshot gsd.WorkflowSnapshot) (Decision, error) {
 		return decision, nil
 	default:
 		return Decision{}, fmt.Errorf("unknown canonical action %q", snapshot.Next.Action)
-	}
-}
-
-func commandForUnit(unitType string) (string, error) {
-	switch unitType {
-	case "discuss-milestone":
-		return "discuss", nil
-	case "research-milestone", "plan-milestone", "research-slice", "plan-slice", "execute-task", "complete-slice", "validate-milestone", "complete-milestone":
-		return unitType, nil
-	default:
-		return "", fmt.Errorf("unsupported canonical unit type %q", unitType)
 	}
 }

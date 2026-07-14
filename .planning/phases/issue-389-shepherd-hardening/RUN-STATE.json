@@ -1,45 +1,38 @@
 {
   "phase": "issue-389-shepherd-hardening",
-  "state": "implemented_verified",
-  "current_slice": "final_verification",
+  "state": "implemented_verified_ready_for_merge_disabled_canaries",
+  "current_slice": "pre_390_blockers_1_to_3_complete",
   "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
-  "human_gate": "parent_pr_merge",
-  "orchestration_decisions": [
-    {
-      "cycle": "reconcile",
-      "decision": "read_only_spawned",
-      "reason": "scout subagent inspected the existing unfinished #389 diff without editing"
-    },
-    {
-      "cycle": "review",
-      "decision": "read_only_spawned",
-      "reason": "reviewer subagent audited supervise retry/model/runtime-contract behavior and found a retry exhaustion blocker"
-    },
-    {
-      "cycle": "execute",
-      "decision": "local_critical_path",
-      "reason": "single issue-scoped Shepherd fix touched shared supervise/runner/runtime-contract code in the active checkout"
-    },
-    {
-      "cycle": "policy-cleanup",
-      "decision": "local_critical_path",
-      "reason": "user authorized removing GitHub-hosted automated review as a default repo gate on this branch"
-    }
+  "human_gate": "live_twenty_asana_canary_approval_and_parent_pr_merge",
+  "implemented": [
+    "GSD 1.11 unit-registry parser and metadata-based model routing",
+    "host-runtime canonical units run through disposable attempt worktrees with promote/discard paths",
+    "Podman canonical supervise path fails closed until disposable worktree semantics are available there",
+    "success path now builds artifact manifests from changed scoped files between exact heads and binds them to official unit metadata",
+    "success path persists Sol/high artifact-proof and attestation records",
+    "retry exhaustion enters durable awaiting_decision and publishes marker-owned GitHub questions through an outbox claim/execute/mark-sent path",
+    "supervise polls GitHub replies for open decision requests and resumes retry/continue replies or blocks stop replies",
+    "per-class recovery budget records are updated for retryable failures and drive final retry/awaiting-decision state",
+    "full fake-runtime shepherd supervise test reaches final_human_gate through the real command orchestration path",
+    "path boundary, workspace symlink, decision evidence, SQLite WAL, and delivery-run migration hardening"
+  ],
+  "remaining_before_parent_pr_390_merge": [
+    "run merge-disabled Twenty canary to final_human_gate after human approval",
+    "run merge-disabled Asana canary to final_human_gate after human approval",
+    "evaluate whether Podman canonical supervise support should gain disposable worktree isolation or remain disabled before cleanup"
+  ],
+  "post_canary_remaining": [
+    "remove obsolete Shepherd-specific Podman leftovers only after host canaries pass and human approves cleanup",
+    "migrate tracked .gsd/.planning state only after canaries pass",
+    "clean obsolete files/references after migration"
   ],
   "last_verification": [
-    "scripts/gsd doctor",
-    "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
     "cd agent-runtime/shepherd && go test ./...",
-    "cd agent-runtime/shepherd && go test ./internal/gsd -run 'TestRunnerCanDeriveGovernedImplementationModel|TestApplyPinnedHeadlessToolPatchReportsContractMismatch|TestApplyPinnedHeadlessToolPatchIsExactAndIdempotent' -count=1",
-    "cd agent-runtime/shepherd && go test ./cmd/shepherd ./internal/gsd -run 'TestFinalUnitRunState|TestRunnerCanDeriveGovernedImplementationModel|TestApplyPinnedHeadlessToolPatchReportsContractMismatch' -count=1",
-    "cd agent-runtime/shepherd && gofmt -w cmd internal",
-    "cd agent-runtime/shepherd && go test ./...",
-    "cd agent-runtime/shepherd && go test -race ./...",
+    "cd agent-runtime/shepherd && go test ./cmd/shepherd -run TestSuperviseFakeRuntimeToFinalHumanGate -count=1 -v",
     "cd agent-runtime/shepherd && go vet ./...",
+    "cd agent-runtime/shepherd && go test -race ./...",
     "cd agent-runtime/shepherd && go build ./cmd/shepherd",
     "cd agent-runtime/shepherd && make verify",
-    "go list ./...",
-    "scripts/tests/shepherd-module-boundary.sh",
-    "gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify"
+    "git diff --check"
   ]
 }

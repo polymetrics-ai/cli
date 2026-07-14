@@ -8,23 +8,25 @@ import (
 type RunState string
 
 const (
-	RunPlanned   RunState = "planned"
-	RunReady     RunState = "ready"
-	RunRunning   RunState = "running"
-	RunBlocked   RunState = "blocked"
-	RunFailed    RunState = "failed"
-	RunHumanGate RunState = "human_gate"
-	RunComplete  RunState = "complete"
+	RunPlanned          RunState = "planned"
+	RunReady            RunState = "ready"
+	RunRunning          RunState = "running"
+	RunBlocked          RunState = "blocked"
+	RunAwaitingDecision RunState = "awaiting_decision"
+	RunFailed           RunState = "failed"
+	RunHumanGate        RunState = "human_gate"
+	RunComplete         RunState = "complete"
 )
 
 var allowedRunTransitions = map[RunState]map[RunState]struct{}{
-	RunPlanned:   {RunRunning: {}, RunBlocked: {}, RunFailed: {}},
-	RunReady:     {RunRunning: {}, RunFailed: {}},
-	RunRunning:   {RunReady: {}, RunBlocked: {}, RunFailed: {}, RunHumanGate: {}},
-	RunBlocked:   {RunFailed: {}},
-	RunHumanGate: {RunFailed: {}},
-	RunFailed:    {},
-	RunComplete:  {},
+	RunPlanned:          {RunRunning: {}, RunBlocked: {}, RunFailed: {}},
+	RunReady:            {RunRunning: {}, RunFailed: {}},
+	RunRunning:          {RunReady: {}, RunBlocked: {}, RunAwaitingDecision: {}, RunFailed: {}, RunHumanGate: {}},
+	RunBlocked:          {RunFailed: {}},
+	RunAwaitingDecision: {RunFailed: {}},
+	RunHumanGate:        {RunFailed: {}},
+	RunFailed:           {},
+	RunComplete:         {},
 }
 
 type ActorKind string
@@ -48,10 +50,11 @@ func ResumeBlocked(runID string, generation int64, decision HumanDecision) (int6
 
 // ResumeStopped validates the exceptional human-authorized recovery path. A
 // generic failed transition remains forbidden; only a generation-bound,
-// unconsumed human decision can return a blocked or failed delivery to ready.
+// unconsumed human decision can return a blocked, awaiting-decision, or failed
+// delivery to ready.
 func ResumeStopped(runID string, generation int64, state RunState, decision HumanDecision) (int64, error) {
-	if state != RunBlocked && state != RunFailed {
-		return 0, errors.New("only a blocked or failed run can be resumed")
+	if state != RunBlocked && state != RunAwaitingDecision && state != RunFailed {
+		return 0, errors.New("only a blocked, awaiting-decision, or failed run can be resumed")
 	}
 	if runID == "" || generation <= 0 || decision.RunID != runID || decision.Generation != generation {
 		return 0, errors.New("human decision does not match run generation")

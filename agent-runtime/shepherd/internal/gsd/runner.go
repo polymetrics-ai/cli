@@ -29,16 +29,17 @@ var governedModels = map[string]struct{}{
 	"openai-codex/gpt-5.5":     {},
 }
 
-var supportedCommands = map[string]struct{}{
-	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {},
-	"research-milestone": {}, "plan-milestone": {}, "research-slice": {}, "plan-slice": {},
-	"execute-task": {}, "complete-slice": {}, "validate-milestone": {}, "complete-milestone": {},
-}
+var supportedCommands = func() map[string]struct{} {
+	commands := map[string]struct{}{
+		"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {},
+	}
+	for command := range BuiltinUnitRegistry().CanonicalCommands() {
+		commands[command] = struct{}{}
+	}
+	return commands
+}()
 
-var canonicalUnitCommands = map[string]struct{}{
-	"research-milestone": {}, "plan-milestone": {}, "research-slice": {}, "plan-slice": {},
-	"execute-task": {}, "complete-slice": {}, "validate-milestone": {}, "complete-milestone": {},
-}
+var canonicalUnitCommands = BuiltinUnitRegistry().CanonicalCommands()
 
 func IsCanonicalUnitCommand(command string) bool {
 	_, ok := canonicalUnitCommands[command]
@@ -191,6 +192,15 @@ func (r *Runner) WithModel(model string) (*Runner, error) {
 	config := r.config
 	config.Model = model
 	return &Runner{config: config}, nil
+}
+
+func (r *Runner) WithWorkDir(workDir string) (*Runner, error) {
+	if !filepath.IsAbs(workDir) {
+		return nil, errors.New("absolute work directory is required")
+	}
+	config := r.config
+	config.WorkDir = workDir
+	return NewRunner(config)
 }
 
 func ensureLocalSessionBridge(gsdHome string) error {
@@ -570,11 +580,56 @@ func governedEnvironment(gsdHome, stateDir, workDir string, extra []string) []st
 }
 
 func pathWithin(root, candidate string) (bool, error) {
-	relative, err := filepath.Rel(filepath.Clean(root), filepath.Clean(candidate))
+	canonicalRoot, err := canonicalPathAllowMissing(root)
+	if err != nil {
+		return false, err
+	}
+	canonicalCandidate, err := canonicalPathAllowMissing(candidate)
+	if err != nil {
+		return false, err
+	}
+	relative, err := filepath.Rel(canonicalRoot, canonicalCandidate)
 	if err != nil {
 		return false, err
 	}
 	return relative != ".." && !strings.HasPrefix(relative, ".."+string(filepath.Separator)), nil
+}
+
+func canonicalPathAllowMissing(path string) (string, error) {
+	if path == "" || !filepath.IsAbs(path) {
+		return "", errors.New("absolute path is required")
+	}
+	clean := filepath.Clean(path)
+	if info, err := os.Lstat(clean); err == nil {
+		if info.Mode()&os.ModeSymlink != 0 {
+			return "", errors.New("path boundary must not be a symlink")
+		}
+		return filepath.EvalSymlinks(clean)
+	} else if !os.IsNotExist(err) {
+		return "", err
+	}
+	ancestor := filepath.Dir(clean)
+	missing := []string{filepath.Base(clean)}
+	for {
+		if _, err := os.Lstat(ancestor); err == nil {
+			resolved, err := filepath.EvalSymlinks(ancestor)
+			if err != nil {
+				return "", err
+			}
+			for i := len(missing) - 1; i >= 0; i-- {
+				resolved = filepath.Join(resolved, missing[i])
+			}
+			return resolved, nil
+		} else if !os.IsNotExist(err) {
+			return "", err
+		}
+		parent := filepath.Dir(ancestor)
+		if parent == ancestor {
+			return "", errors.New("path boundary has no existing ancestor")
+		}
+		missing = append(missing, filepath.Base(ancestor))
+		ancestor = parent
+	}
 }
 
 func scanEvents(ctx context.Context, reader io.Reader, maxBytes int, output chan<- scanResult) {

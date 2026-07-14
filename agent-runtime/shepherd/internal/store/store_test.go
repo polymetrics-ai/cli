@@ -57,6 +57,16 @@ func TestLeaseFencingAndOutboxIdempotency(t *testing.T) {
 	if err != nil || inserted {
 		t.Fatalf("duplicate enqueue: inserted=%v err=%v", inserted, err)
 	}
+	claimed, err := db.ClaimEffect(ctx, second, effect.Key, now.Add(2*time.Minute))
+	if err != nil || claimed != effect {
+		t.Fatalf("claim=%+v err=%v", claimed, err)
+	}
+	if _, err := db.ClaimEffect(ctx, second, effect.Key, now.Add(2*time.Minute)); err == nil {
+		t.Fatal("claimed effect was claimed twice")
+	}
+	if err := db.MarkEffectSent(ctx, second, effect.Key, now.Add(2*time.Minute)); err != nil {
+		t.Fatal(err)
+	}
 	effect.PayloadHash = "sha256:" + strings.Repeat("e", 64)
 	if _, err := db.Enqueue(ctx, second, effect, now.Add(2*time.Minute)); err == nil {
 		t.Fatal("expected conflicting idempotency key to fail")

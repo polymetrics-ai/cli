@@ -3,6 +3,7 @@ package git
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"errors"
 	"fmt"
 	"os"
@@ -16,6 +17,11 @@ type Snapshot struct {
 	HeadSHA string
 	Branch  string
 	Dirty   bool
+}
+
+type Artifact struct {
+	Path string `json:"path"`
+	Hash string `json:"hash"`
 }
 
 func Inspect(ctx context.Context, root string) (Snapshot, error) {
@@ -92,6 +98,39 @@ func CheckpointWithinScopes(ctx context.Context, root string, scopes []string, m
 		return "", errors.New("worktree remains dirty after scoped checkpoint")
 	}
 	return snapshot.HeadSHA, nil
+}
+
+func ArtifactManifest(ctx context.Context, root, startHead, endHead string, scopes []string) ([]Artifact, error) {
+	if root == "" || len(startHead) != 40 || len(endHead) != 40 || len(scopes) == 0 {
+		return nil, errors.New("repository, exact heads, and write scopes are required")
+	}
+	raw, err := run(ctx, root, "diff", "--name-only", "-z", startHead, endHead, "--", ".")
+	if err != nil {
+		return nil, err
+	}
+	var artifacts []Artifact
+	for _, item := range bytes.Split(raw, []byte{0}) {
+		path := filepath.ToSlash(strings.TrimSpace(string(item)))
+		if path == "" {
+			continue
+		}
+		if filepath.IsAbs(path) || path == ".." || strings.HasPrefix(path, "../") || strings.ContainsRune(path, 0) {
+			return nil, errors.New("git returned an unsafe artifact path")
+		}
+		if !withinAnyScope(path, scopes) && !isMutableGSDProjection(path) {
+			return nil, fmt.Errorf("artifact path %q is outside the issue write scope", path)
+		}
+		raw, err := run(ctx, root, "show", endHead+":"+path)
+		if err != nil {
+			// Deleted files are still part of the manifest; bind deletion to a stable marker.
+			artifacts = append(artifacts, Artifact{Path: path, Hash: "sha256:" + strings.Repeat("0", 64)})
+			continue
+		}
+		hash := sha256.Sum256(raw)
+		artifacts = append(artifacts, Artifact{Path: path, Hash: "sha256:" + fmt.Sprintf("%x", hash[:])})
+	}
+	sort.Slice(artifacts, func(i, j int) bool { return artifacts[i].Path < artifacts[j].Path })
+	return artifacts, nil
 }
 
 // ChangedPathsOutsideScopes returns current worker changes that the immutable issue write scope

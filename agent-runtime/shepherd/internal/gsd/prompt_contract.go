@@ -147,10 +147,15 @@ func validatePromptContractRoot(root string) error {
 	if err != nil {
 		return err
 	}
-	allowed, err := extractPlanMilestoneAllowedTools(string(registryRaw))
+	registry, err := ParseUnitRegistry(string(registryRaw))
 	if err != nil {
 		return err
 	}
+	planMetadata, ok := registry.Lookup("plan-milestone")
+	if !ok || len(planMetadata.AllowedGSDTools) == 0 {
+		return fmt.Errorf("%w: plan-milestone allowed tools are missing", ErrRuntimeContractMismatch)
+	}
+	allowed := planMetadata.AllowedGSDTools
 	positive := guidance
 	if index := strings.Index(strings.ToLower(positive), "do not call"); index >= 0 {
 		positive = positive[:index]

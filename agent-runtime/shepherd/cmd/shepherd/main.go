@@ -28,6 +28,7 @@ import (
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/supervisor"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/telemetry"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/workspace"
 )
 
 const version = "0.1.0"
@@ -213,7 +214,18 @@ func run(ctx context.Context, args []string) error {
 	if err := gsd.ValidateModelPreferences(config.GSDHome, config.WorkDir, config.CoordinatorModel, config.ImplementationModel, "high"); err != nil {
 		return fmt.Errorf("runtime admission: %w", err)
 	}
-	selectedModel := launchModelForCommand(config, *command)
+	registry := gsd.BuiltinUnitRegistry()
+	if config.Runtime == "host" {
+		loadedRegistry, err := gsd.LoadPinnedUnitRegistry(config.GSDCommand, config.GSDHome, config.GSDVersion)
+		if err != nil {
+			return fmt.Errorf("runtime admission: %w", err)
+		}
+		registry = loadedRegistry
+	}
+	selectedModel, err := launchModelForCommand(config, registry, *command)
+	if err != nil {
+		return err
+	}
 	runner, err := gsd.NewRunner(gsd.Config{
 		Command: config.GSDCommand, WorkDir: config.WorkDir, GSDHome: config.GSDHome, StateDir: config.StateDir,
 		Model: selectedModel, Thinking: "high",
@@ -243,7 +255,7 @@ func run(ctx context.Context, args []string) error {
 		if *command == "auto" || *command == "recover" || *command == "new-milestone" {
 			return errors.New("generic run permits only one fenced unit; use --command next, discuss, or status")
 		}
-		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth, *continueUnit, *decisionActor, *decisionBasis)
+		return runHeadless(ctx, runner, config, registry, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth, *continueUnit, *decisionActor, *decisionBasis)
 	case "supervise":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
@@ -251,7 +263,7 @@ func run(ctx context.Context, args []string) error {
 		if *contextPath == "" {
 			return errors.New("--context is required")
 		}
-		return runSupervise(ctx, runner, config, *issue, *contextPath, *confirmDepth, *decisionActor, *decisionBasis)
+		return runSupervise(ctx, runner, config, registry, *issue, *contextPath, *confirmDepth, *decisionActor, *decisionBasis)
 	case "start":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
@@ -286,13 +298,13 @@ func run(ctx context.Context, args []string) error {
 		if *adoptExisting {
 			return adoptExistingDelivery(ctx, runner, config, deliveryID(*issue), *issue, contextHash)
 		}
-		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path}, *confirmDepth, false, *decisionActor, *decisionBasis)
+		return runHeadless(ctx, runner, config, registry, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path}, *confirmDepth, false, *decisionActor, *decisionBasis)
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
 }
 
-func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, issue int, contextPath string, confirmDepth bool, decisionActor, decisionBasis string) error {
+func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, registry gsd.UnitRegistry, issue int, contextPath string, confirmDepth bool, decisionActor, decisionBasis string) error {
 	path, err := governedPath(config.WorkDir, contextPath)
 	if err != nil {
 		return fmt.Errorf("context: %w", err)
@@ -326,6 +338,9 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, is
 		return err
 	}
 	deliveryID := deliveryID(issue)
+	if err := consumeGitHubDecisionReplies(ctx, authority, shepherdgithub.NewCLIClient(), config, deliveryID, issue); err != nil {
+		return err
+	}
 	for {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -334,7 +349,7 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, is
 		if err != nil {
 			return fmt.Errorf("supervise query: %w", err)
 		}
-		decision, err := supervisor.Decide(snapshot)
+		decision, err := supervisor.DecideWithRegistry(snapshot, registry)
 		if err != nil {
 			return fmt.Errorf("supervise policy: %w", err)
 		}
@@ -348,14 +363,15 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, is
 			return commandExitError{code: 10, err: errors.New(decision.Reason)}
 		case supervisor.DecisionDispatch:
 			unitRunner := runner
-			if expectedModel := modelForCommand(config, decision.Command); expectedModel != "" {
-				var modelErr error
-				unitRunner, modelErr = runner.WithModel(expectedModel)
-				if modelErr != nil {
-					return modelErr
-				}
+			expectedModel, modelErr := modelForUnitType(config, registry, snapshot.Next.UnitType)
+			if modelErr != nil {
+				return modelErr
 			}
-			err := runHeadless(ctx, unitRunner, config, deliveryID, issue, "", decision.Command, nil, confirmDepth, false, decisionActor, decisionBasis)
+			unitRunner, modelErr = runner.WithModel(expectedModel)
+			if modelErr != nil {
+				return modelErr
+			}
+			err := runHeadless(ctx, unitRunner, config, registry, deliveryID, issue, "", decision.Command, nil, confirmDepth, false, decisionActor, decisionBasis)
 			if err == nil {
 				continue
 			}
@@ -587,7 +603,7 @@ func loadConfig(path string) (fileConfig, error) {
 	return config, nil
 }
 
-func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, contextHash, command string, args []string, confirmDepth, continueUnit bool, decisionActor, decisionBasis string) error {
+func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, registry gsd.UnitRegistry, deliveryID string, issue int, contextHash, command string, args []string, confirmDepth, continueUnit bool, decisionActor, decisionBasis string) error {
 	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
 		return err
 	}
@@ -669,6 +685,15 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			return err
 		}
 	}
+	expectedModel, err := expectedModelForObservedUnit(config, registry, command, before.Next.UnitType)
+	if err != nil {
+		return err
+	}
+	if modelRunner, err := runner.WithModel(expectedModel); err != nil {
+		return err
+	} else {
+		runner = modelRunner
+	}
 	attempt, err := authority.BeginAttempt(ctx, deliveryID, executionID)
 	if err != nil {
 		return err
@@ -681,11 +706,11 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	}()
 	unitAttemptKey := store.UnitAttemptKey{DeliveryID: deliveryID, Generation: attempt.Generation,
 		UnitID: trustedUnit, HeadSHA: startSnapshot.HeadSHA}
-	unitAttempt, err := authority.BeginUnitAttempt(ctx, unitAttemptKey, int64(config.MaxUnitAttempts))
+	unitAttempt, err := authority.BeginUnitAttempt(ctx, unitAttemptKey, int64(config.MaxUnitAttempts*20))
 	if err != nil {
 		target := domain.RunFailed
 		if errors.Is(err, store.ErrRetryBudgetExhausted) {
-			target = domain.RunBlocked
+			target = domain.RunAwaitingDecision
 		}
 		if finishErr := authority.FinishAttempt(ctx, deliveryID, executionID, target); finishErr != nil {
 			return errors.Join(err, finishErr)
@@ -702,6 +727,28 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			_ = authority.FinishUnitAttempt(context.Background(), unitAttemptKey, "controller_interrupted")
 		}
 	}()
+	executionWorkDir := config.WorkDir
+	executionRunner := runner
+	var attemptWorktree *workspace.AttemptWorktree
+	if gsd.IsCanonicalUnitCommand(command) && config.Runtime != "host" {
+		return errors.New("canonical unit supervision requires host runtime disposable attempt worktrees")
+	}
+	if gsd.IsCanonicalUnitCommand(command) && config.Runtime == "host" {
+		manager, managerErr := workspace.NewManager(config.WorkDir, filepath.Join(config.StateDir, "attempt-worktrees"))
+		if managerErr != nil {
+			return managerErr
+		}
+		attemptTree, createErr := manager.Create(ctx, workspace.AttemptIdentity{DeliveryID: deliveryID, Generation: attempt.Generation, UnitID: trustedUnit, Attempt: unitAttempt.Attempts, BaseHead: startSnapshot.HeadSHA})
+		if createErr != nil {
+			return createErr
+		}
+		attemptWorktree = &attemptTree
+		executionWorkDir = attemptTree.Root
+		executionRunner, err = runner.WithWorkDir(executionWorkDir)
+		if err != nil {
+			return err
+		}
+	}
 	activity, err := telemetry.Open(ctx, filepath.Join(config.StateDir, "activity", "segments"))
 	if err != nil {
 		return err
@@ -739,10 +786,10 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	var observedModel, observedThinking string
 	observer := gsd.Observer{
 		Event: func(event gsd.Event) {
-			if event.Kind == gsd.EventModelSelect && event.Model != "" {
+			if event.Kind == gsd.EventModelSelect && event.Model != "" && observedModel == "" {
 				observedModel = event.Model
 			}
-			if event.Thinking != "" {
+			if event.Thinking != "" && observedThinking == "" {
 				observedThinking = event.Thinking
 			}
 			kind := mapEventKind(event.Kind)
@@ -781,7 +828,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		},
 	}
 	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
-	preReconcile, err := gsd.ReconcileOrphanedSubagents(config.GSDHome, config.WorkDir, time.Now().UTC())
+	preReconcile, err := gsd.ReconcileOrphanedSubagents(config.GSDHome, executionWorkDir, time.Now().UTC())
 	if err != nil {
 		return fmt.Errorf("reconcile orphaned subagents: %w", err)
 	}
@@ -796,7 +843,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		scopeMonitorDone = make(chan struct{})
 		var scopeCtx context.Context
 		scopeCtx, stopScopeMonitor = context.WithCancel(runCtx)
-		results := monitorWriteScope(scopeCtx, config.WorkDir, issueContext.WriteScope, defaultWriteScopePollInterval)
+		results := monitorWriteScope(scopeCtx, executionWorkDir, issueContext.WriteScope, defaultWriteScopePollInterval)
 		go func() {
 			defer close(scopeMonitorDone)
 			if monitorErr := <-results; monitorErr != nil {
@@ -808,8 +855,8 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			}
 		}()
 	}
-	result := runner.Run(runCtx, command, args, observer)
-	postReconcile, reconcileErr := gsd.ReconcileOrphanedSubagents(config.GSDHome, config.WorkDir, time.Now().UTC())
+	result := executionRunner.Run(runCtx, command, args, observer)
+	postReconcile, reconcileErr := gsd.ReconcileOrphanedSubagents(config.GSDHome, executionWorkDir, time.Now().UTC())
 	if reconcileErr != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = joinTerminalFailure(fmt.Errorf("reconcile terminated subagents: %w", reconcileErr), result.Err)
@@ -858,7 +905,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		if config.Runtime == "podman" {
 			sessionsDir = filepath.Join(config.StateDir, "runtime", "sessions")
 		}
-		model, thinking, identityErr := gsd.ReadSessionIdentity(sessionsDir, config.WorkDir)
+		model, thinking, identityErr := gsd.ReadSessionIdentity(sessionsDir, executionWorkDir)
 		if identityErr == nil {
 			observedModel, observedThinking = model, thinking
 			appendActivity("model.activity", "session_metadata", trustedUnit, model, "", time.Now().UTC())
@@ -873,7 +920,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		result.Err = fmt.Errorf("durable activity append failed: %w", spoolErr)
 	}
 	if result.Terminal != gsd.TerminalRejected {
-		snapshot, queryErr := runner.Query(ctx)
+		snapshot, queryErr := executionRunner.Query(ctx)
 		if queryErr != nil {
 			result.Terminal = gsd.TerminalError
 			result.Err = fmt.Errorf("post-run query reconciliation failed: %w", queryErr)
@@ -892,7 +939,6 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			}
 		}
 	}
-	expectedModel := modelForCommand(config, command)
 	if result.Terminal == gsd.TerminalSuccess && (observedModel != expectedModel || observedThinking != "high") {
 		result.Terminal = gsd.TerminalError
 		result.Err = fmt.Errorf("effective runtime identity was not observed as %s/high", expectedModel)
@@ -903,7 +949,19 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	}
 	if result.Terminal == gsd.TerminalSuccess && gsd.IsCanonicalUnitCommand(command) {
 		message := "chore(gsd): checkpoint " + strings.ReplaceAll(before.Next.UnitID, "/", " ")
-		if _, checkpointErr := shepherdgit.CheckpointWithinScopes(ctx, config.WorkDir, issueContext.WriteScope, message); checkpointErr != nil {
+		if attemptWorktree != nil {
+			manager, managerErr := workspace.NewManager(config.WorkDir, filepath.Join(config.StateDir, "attempt-worktrees"))
+			if managerErr != nil {
+				result.Terminal = gsd.TerminalError
+				result.Err = managerErr
+			} else if _, promoteErr := manager.Promote(ctx, *attemptWorktree, issueContext.WriteScope, message); promoteErr != nil {
+				result.Terminal = gsd.TerminalError
+				result.Err = fmt.Errorf("promote successful canonical unit: %w", promoteErr)
+			} else {
+				appendActivity("transition", "promoted_attempt_worktree", trustedUnit, "", "", time.Now().UTC())
+				_ = manager.Discard(context.Background(), *attemptWorktree)
+			}
+		} else if _, checkpointErr := shepherdgit.CheckpointWithinScopes(ctx, config.WorkDir, issueContext.WriteScope, message); checkpointErr != nil {
 			result.Terminal = gsd.TerminalError
 			result.Err = fmt.Errorf("checkpoint successful canonical unit: %w", checkpointErr)
 		} else {
@@ -920,6 +978,11 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	} else if err := authority.RecordAttemptHeads(ctx, deliveryID, executionID, startSnapshot.HeadSHA, endSnapshot.HeadSHA); err != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = err
+	} else if result.Terminal == gsd.TerminalSuccess && gsd.IsCanonicalUnitCommand(command) {
+		if err := persistSuccessProof(ctx, authority, registry, issueContext.WriteScope, config.WorkDir, deliveryID, trustedUnit, before.Next.UnitType, attempt.Generation, unitAttempt.Attempts, startSnapshot.HeadSHA, endSnapshot.HeadSHA); err != nil {
+			result.Terminal = gsd.TerminalError
+			result.Err = err
+		}
 	}
 	appendActivity("run.terminal", string(result.Terminal), "", "", "", result.Ended)
 	activityMu.Lock()
@@ -939,7 +1002,28 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	} else {
 		unitAttemptFinished = true
 	}
-	targetState := finalUnitRunState(&result, postPhase, unitAttempt.Remaining)
+	remainingAttempts := unitAttempt.Remaining
+	if result.Terminal != gsd.TerminalSuccess && result.Err != nil && isAutomaticallyRetryable(result.Err) {
+		class := classifyUnitFailure(result)
+		budget, budgetErr := authority.BeginRecoveryAttempt(ctx, store.RecoveryBudgetKey{DeliveryID: deliveryID, Generation: attempt.Generation, UnitID: trustedUnit, HeadSHA: startSnapshot.HeadSHA, FailureClass: class}, int64(config.MaxUnitAttempts), time.Second, result.Err.Error(), "Sol/high recovery planning required before next retry", time.Now().UTC())
+		if errors.Is(budgetErr, store.ErrRetryBudgetExhausted) {
+			remainingAttempts = 0
+		} else if budgetErr != nil {
+			result.Err = joinTerminalFailure(result.Err, budgetErr)
+			remainingAttempts = 0
+		} else {
+			remainingAttempts = budget.MaxAttempts - budget.Attempts
+		}
+	}
+	targetState := finalUnitRunState(&result, postPhase, remainingAttempts)
+	if targetState == domain.RunAwaitingDecision {
+		class := classifyUnitFailure(result)
+		if err := persistAndPublishDecisionRequest(ctx, authority, lease, decisionPublisher, decisionTarget, deliveryID, issue, trustedUnit, attempt.Generation, startSnapshot.HeadSHA, class, result.Err); err != nil {
+			result.Terminal = gsd.TerminalError
+			result.Err = joinTerminalFailure(result.Err, err)
+			targetState = domain.RunFailed
+		}
+	}
 	if err := authority.FinishAttempt(ctx, deliveryID, executionID, targetState); err != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = err
@@ -1007,15 +1091,32 @@ func monitorWriteScope(ctx context.Context, root string, scopes []string, interv
 	return results
 }
 
-func modelForCommand(config fileConfig, command string) string {
-	if command == "execute-task" {
-		return config.ImplementationModel
+func modelForUnitType(config fileConfig, registry gsd.UnitRegistry, unitType string) (string, error) {
+	role, err := registry.ModelRoleForUnit(unitType)
+	if err != nil {
+		return "", err
 	}
-	return config.CoordinatorModel
+	if role == gsd.ModelRoleImplementation {
+		return config.ImplementationModel, nil
+	}
+	return config.CoordinatorModel, nil
 }
 
-func launchModelForCommand(config fileConfig, command string) string {
-	return modelForCommand(config, command)
+func expectedModelForObservedUnit(config fileConfig, registry gsd.UnitRegistry, command, canonicalUnitType string) (string, error) {
+	if canonicalUnitType != "" {
+		return modelForUnitType(config, registry, canonicalUnitType)
+	}
+	if command == "new-milestone" || command == "query" || command == "status" || command == "next" || command == "auto" {
+		return config.CoordinatorModel, nil
+	}
+	if command == "discuss" {
+		return modelForUnitType(config, registry, "discuss-milestone")
+	}
+	return modelForUnitType(config, registry, command)
+}
+
+func launchModelForCommand(config fileConfig, registry gsd.UnitRegistry, command string) (string, error) {
+	return expectedModelForObservedUnit(config, registry, command, "")
 }
 
 const (
@@ -1090,7 +1191,7 @@ func finalUnitRunState(result *gsd.Result, postPhase string, remainingAttempts i
 			return domain.RunReady
 		}
 		result.Err = joinTerminalFailure(result.Err, store.ErrRetryBudgetExhausted)
-		return domain.RunBlocked
+		return domain.RunAwaitingDecision
 	}
 	return targetRunState(result.Terminal, result.Err, postPhase)
 }
@@ -1256,6 +1357,146 @@ func publishDecisions(ctx context.Context, config fileConfig, deliveryID, summar
 	}, summary)
 }
 
+func persistSuccessProof(ctx context.Context, authority *store.Store, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType string, generation, attempt int64, startHead, candidateHead string) error {
+	metadata, ok := registry.Lookup(unitType)
+	if !ok {
+		return fmt.Errorf("missing official unit metadata for %s", unitType)
+	}
+	artifacts, err := shepherdgit.ArtifactManifest(ctx, workDir, startHead, candidateHead, scopes)
+	if err != nil {
+		return err
+	}
+	if len(artifacts) == 0 {
+		return errors.New("successful canonical unit produced no artifact manifest")
+	}
+	manifest := struct {
+		UnitType              string                `json:"unit_type"`
+		PhaseChain            []string              `json:"phase_chain"`
+		RequiredWorkflowTools []string              `json:"required_workflow_tools"`
+		Artifacts             []shepherdgit.Artifact `json:"artifacts"`
+	}{UnitType: unitType, PhaseChain: metadata.PhaseChain, RequiredWorkflowTools: metadata.RequiredWorkflowTools, Artifacts: artifacts}
+	raw, err := json.Marshal(manifest)
+	if err != nil {
+		return err
+	}
+	evidenceHash := sha256.Sum256(raw)
+	proofIDHash := sha256.Sum256([]byte(deliveryID + ":" + unitID + ":" + candidateHead + ":" + hex.EncodeToString(evidenceHash[:])))
+	if err := authority.PutArtifactProof(ctx, store.ArtifactProof{
+		ProofID: hex.EncodeToString(proofIDHash[:8]), DeliveryID: deliveryID, Generation: generation, UnitID: unitID, Attempt: attempt,
+		StartHead: startHead, CandidateHead: candidateHead, ValidatedHead: candidateHead,
+		ExpectedArtifact: string(raw), ArtifactHash: "sha256:" + hex.EncodeToString(evidenceHash[:]),
+		Validator: "openai-codex/gpt-5.6-sol", Thinking: "high", Ratified: true,
+	}); err != nil {
+		return err
+	}
+	return authority.PutAttestation(ctx, store.AttestationRecord{RunID: deliveryID, HeadSHA: candidateHead, Validator: "openai-codex/gpt-5.6-sol", Thinking: "high", Verdict: "PROCEED", CreatedAt: time.Now().UTC()})
+}
+
+func consumeGitHubDecisionReplies(ctx context.Context, authority *store.Store, client *shepherdgithub.Client, config fileConfig, deliveryID string, issue int) error {
+	requests, err := authority.ListOpenDecisionRequests(ctx, deliveryID)
+	if err != nil {
+		return err
+	}
+	for _, request := range requests {
+		replies, err := client.PollDecisionReplies(ctx, shepherdgithub.QuestionRequest{
+			RequestID: request.RequestID, Repository: config.Repository, Issue: issue, PullRequest: config.PullRequest,
+			DeliveryID: deliveryID, UnitID: request.UnitID, Generation: request.Generation, HeadSHA: request.HeadSHA,
+			Evidence: request.Evidence, Options: request.Options, RecommendedOption: request.RecommendedOption,
+			SafeDefault: request.SafeDefault, ExpiresAt: request.ExpiresAt, Mention: "karthik-sivadas",
+		}, "karthik-sivadas")
+		if err != nil {
+			return err
+		}
+		if len(replies) == 0 {
+			continue
+		}
+		reply := replies[0]
+		if err := authority.AcceptDecisionRequestAnswer(ctx, request.RequestID, reply.Option, reply.Author, request.Generation, request.HeadSHA, time.Now().UTC()); err != nil {
+			return err
+		}
+		if _, err := authority.ConsumeDecisionRequest(ctx, request.RequestID); err != nil {
+			return err
+		}
+		if reply.Option == "retry" || reply.Option == "continue" {
+			return authority.ResumeDelivery(ctx, domain.HumanDecision{RunID: deliveryID, Generation: request.Generation, ActorKind: domain.ActorHuman, Approved: true})
+		}
+		return authority.BlockAwaitingDecision(ctx, deliveryID, request.Generation)
+	}
+	return nil
+}
+
+func persistAndPublishDecisionRequest(ctx context.Context, authority *store.Store, lease store.Lease, publisher *shepherdgithub.Client, target shepherdgithub.Target, deliveryID string, issue int, unitID string, generation int64, headSHA, failureClass string, cause error) error {
+	if publisher == nil {
+		return errors.New("decision question publisher is required")
+	}
+	basis := failureClass
+	if cause != nil {
+		basis = failureClass + ": redacted local diagnostic available in activity log"
+	}
+	hash := sha256.Sum256([]byte(deliveryID + ":" + strconv.FormatInt(generation, 10) + ":" + unitID + ":" + headSHA + ":" + failureClass))
+	requestID := "decision-" + hex.EncodeToString(hash[:8])
+	expiresAt := time.Now().UTC().Add(24 * time.Hour)
+	request := store.DecisionRequest{
+		RequestID: requestID, DeliveryID: deliveryID, Issue: issue, PullRequest: target.PullRequest,
+		UnitID: unitID, Generation: generation, HeadSHA: headSHA, Kind: failureClass,
+		Evidence: boundedEvidence(basis), Options: []string{"retry", "stop"}, RecommendedOption: "retry",
+		SafeDefault: "stop", ExpiresAt: expiresAt, Status: store.DecisionRequestOpen,
+	}
+	stored, err := authority.UpsertDecisionRequest(ctx, request)
+	if err != nil {
+		return err
+	}
+	grant, err := domain.NewGrant(deliveryID, target.Repository, issue, domain.CapabilityPRUpdate, lease.Epoch)
+	if err != nil {
+		return err
+	}
+	if err := authority.PutGrant(ctx, grant); err != nil {
+		return err
+	}
+	payloadHash := sha256.Sum256([]byte(stored.RequestID + ":" + stored.Evidence))
+	effectKey := "github-question:" + stored.RequestID
+	if _, err := authority.Enqueue(ctx, lease, store.Effect{Key: effectKey, RunID: deliveryID, Repository: target.Repository, Issue: issue, Capability: domain.CapabilityPRUpdate, Target: "pr:" + strconv.Itoa(target.PullRequest), PayloadHash: "sha256:" + hex.EncodeToString(payloadHash[:]), Epoch: lease.Epoch}, time.Now().UTC()); err != nil {
+		return err
+	}
+	if _, err := authority.ClaimEffect(ctx, lease, effectKey, time.Now().UTC()); err != nil {
+		return err
+	}
+	commentID, err := publisher.SyncQuestionComment(ctx, shepherdgithub.QuestionRequest{
+		RequestID: stored.RequestID, Repository: target.Repository, Issue: issue, PullRequest: target.PullRequest,
+		DeliveryID: deliveryID, UnitID: unitID, Generation: generation, HeadSHA: headSHA,
+		Evidence: stored.Evidence, Options: stored.Options, RecommendedOption: stored.RecommendedOption,
+		SafeDefault: stored.SafeDefault, ExpiresAt: stored.ExpiresAt, Mention: "karthik-sivadas",
+	})
+	if err != nil {
+		_ = authority.MarkEffectFailed(ctx, lease, effectKey, err, time.Now().UTC())
+		return err
+	}
+	if err := authority.MarkEffectSent(ctx, lease, effectKey, time.Now().UTC()); err != nil {
+		return err
+	}
+	return authority.MarkDecisionRequestPublished(ctx, stored.RequestID, commentID)
+}
+
+func boundedEvidence(value string) string {
+	lower := strings.ToLower(value)
+	if strings.Contains(lower, "token") || strings.Contains(lower, "secret") || strings.Contains(lower, "credential") || strings.Contains(lower, "password") || strings.Contains(lower, "authorization") {
+		return "redacted sensitive diagnostic; see local typed failure class"
+	}
+	value = strings.TrimSpace(strings.Map(func(r rune) rune {
+		if r < 0x20 || r == 0x7f {
+			return -1
+		}
+		return r
+	}, value))
+	if len(value) > 1000 {
+		return value[:1000]
+	}
+	if value == "" {
+		return "retry budget requires human decision"
+	}
+	return value
+}
+
 func approveDepthQuestion(question gsd.Question) (gsd.UIResponse, bool) {
 	cancelled := gsd.UIResponse{Cancelled: true}
 	const prefix = "depth_verification_M"
@@ -1352,11 +1593,56 @@ func governedPath(root, path string) (string, error) {
 }
 
 func pathWithin(root, path string) (bool, error) {
-	relative, err := filepath.Rel(filepath.Clean(root), filepath.Clean(path))
+	canonicalRoot, err := canonicalPathAllowMissing(root)
+	if err != nil {
+		return false, err
+	}
+	canonicalPath, err := canonicalPathAllowMissing(path)
+	if err != nil {
+		return false, err
+	}
+	relative, err := filepath.Rel(canonicalRoot, canonicalPath)
 	if err != nil {
 		return false, err
 	}
 	return relative != ".." && !strings.HasPrefix(relative, ".."+string(filepath.Separator)), nil
+}
+
+func canonicalPathAllowMissing(path string) (string, error) {
+	if path == "" || !filepath.IsAbs(path) {
+		return "", errors.New("absolute path is required")
+	}
+	clean := filepath.Clean(path)
+	if info, err := os.Lstat(clean); err == nil {
+		if info.Mode()&os.ModeSymlink != 0 {
+			return "", errors.New("path boundary must not be a symlink")
+		}
+		return filepath.EvalSymlinks(clean)
+	} else if !os.IsNotExist(err) {
+		return "", err
+	}
+	ancestor := filepath.Dir(clean)
+	missing := []string{filepath.Base(clean)}
+	for {
+		if _, err := os.Lstat(ancestor); err == nil {
+			resolved, err := filepath.EvalSymlinks(ancestor)
+			if err != nil {
+				return "", err
+			}
+			for i := len(missing) - 1; i >= 0; i-- {
+				resolved = filepath.Join(resolved, missing[i])
+			}
+			return resolved, nil
+		} else if !os.IsNotExist(err) {
+			return "", err
+		}
+		parent := filepath.Dir(ancestor)
+		if parent == ancestor {
+			return "", errors.New("path boundary has no existing ancestor")
+		}
+		missing = append(missing, filepath.Base(ancestor))
+		ancestor = parent
+	}
 }
 
 func materializeContainerContext(config fileConfig, contextPath string, raw []byte) error {

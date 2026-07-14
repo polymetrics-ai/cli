@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -178,11 +179,11 @@ func TestMonitorWriteScopeFailsClosedWhenRepositoryCannotBeInspected(t *testing.
 	}
 }
 
-func TestFinalUnitRunStateBlocksWhenRetryBudgetExhausted(t *testing.T) {
+func TestFinalUnitRunStateAwaitsDecisionWhenRetryBudgetExhausted(t *testing.T) {
 	t.Parallel()
 	result := gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("artifact missing: M001-ROADMAP.md")}
-	if got := finalUnitRunState(&result, "executing", 0); got != domain.RunBlocked {
-		t.Fatalf("state=%s want blocked", got)
+	if got := finalUnitRunState(&result, "executing", 0); got != domain.RunAwaitingDecision {
+		t.Fatalf("state=%s want awaiting_decision", got)
 	}
 	if !errors.Is(result.Err, store.ErrRetryBudgetExhausted) {
 		t.Fatalf("error=%v, want retry budget exhausted", result.Err)
@@ -289,28 +290,36 @@ func TestLoadConfigDefaultsToBoundedNestedAgentEnvelopeSize(t *testing.T) {
 	}
 }
 
-func TestModelForCommandKeepsImplementationSeparateFromShepherd(t *testing.T) {
+func TestModelForUnitTypeUsesOfficialPhaseMetadata(t *testing.T) {
 	t.Parallel()
 	config := fileConfig{CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5"}
-	if got := modelForCommand(config, "execute-task"); got != config.ImplementationModel {
-		t.Fatalf("execute-task model=%q", got)
+	registry := gsd.BuiltinUnitRegistry()
+	for _, unitType := range []string{"execute-task", "execute-task-simple", "reactive-execute", "quick-task"} {
+		got, err := modelForUnitType(config, registry, unitType)
+		if err != nil || got != config.ImplementationModel {
+			t.Fatalf("%s model=%q err=%v, want implementation %q", unitType, got, err, config.ImplementationModel)
+		}
 	}
-	for _, command := range []string{"research-slice", "plan-slice", "complete-slice", "validate-milestone", "complete-milestone"} {
-		if got := modelForCommand(config, command); got != config.CoordinatorModel {
-			t.Fatalf("%s model=%q", command, got)
+	for _, unitType := range []string{"research-slice", "plan-slice", "complete-slice", "validate-milestone", "run-uat", "complete-milestone"} {
+		got, err := modelForUnitType(config, registry, unitType)
+		if err != nil || got != config.CoordinatorModel {
+			t.Fatalf("%s model=%q err=%v, want coordinator %q", unitType, got, err, config.CoordinatorModel)
 		}
 	}
 }
 
-func TestLaunchModelForCommandUsesImplementationOnlyForDirectExecution(t *testing.T) {
+func TestLaunchModelForCommandUsesOfficialPhaseMetadata(t *testing.T) {
 	t.Parallel()
 	config := fileConfig{CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5"}
-	if got := launchModelForCommand(config, "execute-task"); got != config.ImplementationModel {
-		t.Fatalf("execute-task launch model=%q, want implementation %q", got, config.ImplementationModel)
+	registry := gsd.BuiltinUnitRegistry()
+	got, err := launchModelForCommand(config, registry, "execute-task-simple")
+	if err != nil || got != config.ImplementationModel {
+		t.Fatalf("execute-task-simple launch model=%q err=%v, want implementation %q", got, err, config.ImplementationModel)
 	}
 	for _, command := range []string{"plan-slice", "validate-milestone"} {
-		if got := launchModelForCommand(config, command); got != config.CoordinatorModel {
-			t.Fatalf("%s launch model=%q, want coordinator %q", command, got, config.CoordinatorModel)
+		got, err := launchModelForCommand(config, registry, command)
+		if err != nil || got != config.CoordinatorModel {
+			t.Fatalf("%s launch model=%q err=%v, want coordinator %q", command, got, err, config.CoordinatorModel)
 		}
 	}
 }
@@ -423,4 +432,129 @@ func TestProtectedIssueContextIsImmutableAndHashBound(t *testing.T) {
 	if _, err := loadProtectedIssueContext(stateDir, 380, "sha256:"+strings.Repeat("0", 64)); err == nil {
 		t.Fatal("context hash mismatch accepted")
 	}
+}
+
+func TestSuperviseFakeRuntimeToFinalHumanGate(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	repo := initializedTestRepository(t)
+	branchRaw := runGitForTest(t, repo, "symbolic-ref", "--quiet", "--short", "HEAD")
+	contextPath := filepath.Join(repo, "issue-context.json")
+	contextRaw := `{
+  "issue":389,
+  "parent_issue":372,
+  "objective":"fake supervise integration",
+  "scope":["fake supervise"],
+  "non_goals":["live github"],
+  "acceptance_criteria":["final human gate"],
+  "dependencies":[],
+  "write_scope":["agent-runtime/shepherd/**"],
+  "required_reading":["AGENTS.md"],
+  "required_skills":["golang-how-to"],
+  "tdd":{"red":"fake runtime fails before supervise","green":"supervise reaches final gate","refactor":"keep fake bounded"},
+  "verification":["go test ./..."],
+  "safety":["no secrets"],
+  "human_gates":["parent merge"],
+  "branch":"` + strings.TrimSpace(branchRaw) + `",
+  "pr_base":"main",
+  "review_route":"local",
+  "sources":["issue #389"]
+}`
+	if err := os.WriteFile(contextPath, []byte(contextRaw), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	runGitForTest(t, repo, "add", "issue-context.json")
+	runGitForTest(t, repo, "commit", "-m", "test: add issue context")
+	stateDir := filepath.Join(t.TempDir(), "state")
+	gsdHome := filepath.Join(t.TempDir(), "home")
+	if err := os.MkdirAll(filepath.Join(gsdHome, "agent"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(gsdHome, "agent", "settings.json"), []byte(`{"defaultProvider":"openai-codex","defaultModel":"gpt-5.6-sol","defaultThinkingLevel":"high"}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	runner, err := gsd.NewRunner(gsd.Config{
+		Command: []string{os.Args[0], "-test.run=TestSuperviseFakeRuntimeHelper", "--"},
+		WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir,
+		Model: "openai-codex/gpt-5.6-sol", Thinking: "high", Timeout: 10 * time.Second,
+		Environment: []string{"GO_WANT_RUNNER_HELPER=supervise"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	config := fileConfig{WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir, CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5", GSDVersion: "1.11.0", TimeoutSeconds: 10, HeartbeatSeconds: 1, MaxEventBytes: defaultMaxEventBytes, MaxUnitAttempts: 2, Repository: "polymetrics-ai/cli", PullRequest: 391, Runtime: "host"}
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(filepath.Join(repo, "agent-runtime", "shepherd", "canary.txt")); err != nil {
+		t.Fatalf("promoted canary artifact missing: %v", err)
+	}
+}
+
+func TestSuperviseFakeRuntimeHelper(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "supervise" {
+		return
+	}
+	args := helperArgsAfterDoubleDash(os.Args)
+	if len(args) >= 2 && args[0] == "headless" && args[1] == "query" {
+		statePath := filepath.Join(os.Getenv("GSD_STATE_DIR"), "fake-workflow-state")
+		if _, err := os.Stat(statePath); err == nil {
+			fmt.Print(`{"state":{"activeMilestone":{"id":"M001"},"phase":"complete","nextAction":"stop","blockers":[]},"next":{"action":"stop"}}`)
+		} else {
+			fmt.Print(`{"state":{"activeMilestone":{"id":"M001"},"activeSlice":{"id":"S01"},"activeTask":{"id":"T01"},"phase":"execution","nextAction":"dispatch","blockers":[]},"next":{"action":"dispatch","unitType":"execute-task","unitId":"M001/S01/T01"}}`)
+		}
+		os.Exit(0)
+	}
+	model := ""
+	for i, arg := range args {
+		if arg == "--model" && i+1 < len(args) {
+			model = args[i+1]
+		}
+	}
+	if model != "openai-codex/gpt-5.5" {
+		fmt.Fprintf(os.Stderr, "unexpected model %s", model)
+		os.Exit(2)
+	}
+	workDir := os.Getenv("GSD_PROJECT_ROOT")
+	artifact := filepath.Join(workDir, "agent-runtime", "shepherd", "canary.txt")
+	if err := os.MkdirAll(filepath.Dir(artifact), 0o700); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(2)
+	}
+	if err := os.WriteFile(artifact, []byte("fake supervise artifact\n"), 0o600); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(2)
+	}
+	if err := os.MkdirAll(os.Getenv("GSD_STATE_DIR"), 0o700); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(2)
+	}
+	if err := os.WriteFile(filepath.Join(os.Getenv("GSD_STATE_DIR"), "fake-workflow-state"), []byte("complete"), 0o600); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(2)
+	}
+	fmt.Println(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.5"}}`)
+	fmt.Println(`{"type":"thinking_level_select","level":"high"}`)
+	fmt.Println(`{"type":"agent_end","status":"success"}`)
+	os.Exit(0)
+}
+
+func helperArgsAfterDoubleDash(args []string) []string {
+	for i, arg := range args {
+		if arg == "--" && i+1 < len(args) {
+			return args[i+1:]
+		}
+	}
+	return args
+}
+
+func runGitForTest(t *testing.T, root string, args ...string) string {
+	t.Helper()
+	cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("git %v: %v: %s", args, err, out)
+	}
+	return string(out)
 }

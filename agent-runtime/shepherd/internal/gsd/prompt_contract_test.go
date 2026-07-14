@@ -43,6 +43,8 @@ func TestApplyPinnedPromptToolPatchRepairsPackageAndActiveRuntime(t *testing.T) 
 `
 	registry := `export const UNIT_REGISTRY = {
     "plan-milestone": {
+        kind: "primary",
+        scopeClass: "standard",
         phaseChain: ["planning"],
         toolContract: {
             allowedGsdTools: [
@@ -55,6 +57,9 @@ func TestApplyPinnedPromptToolPatchRepairsPackageAndActiveRuntime(t *testing.T) 
             ],
         },
     },
+    "execute-task": { kind: "primary", scopeClass: "execute-task", phaseChain: ["execution"] },
+    "validate-milestone": { kind: "primary", scopeClass: "section-close", phaseChain: ["validation", "planning"] },
+    "complete-milestone": { kind: "primary", scopeClass: "section-close", phaseChain: ["completion", "validation"] },
 };
 `
 	writeRuntimeContractFixture(t, resources, oldComposer, registry)

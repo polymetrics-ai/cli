@@ -43,6 +43,27 @@
 - GREEN: Replaced active policy with local automated review routing, local review loop, local review disposition agents/prompts, and removed the GitHub Claude review workflow/rubric.
 - Refactor: Historical planning artifacts remain historical; active contracts, workflows, templates, runtime adapters, and website source now avoid GitHub-hosted review as a default gate.
 
+## Pre-#390 implementation slice — registry, decisions, proof, recovery, workspace primitives
+
+- RED: added official unit-registry parsing/routing tests for GSD Pi 1.11 metadata, malformed/partial registry rejection, and symlinked registry rejection.
+- GREEN: added `internal/gsd` unit registry loader, metadata-driven command/model routing, prompt-contract registry validation, and supervise/run rebinding to the canonical unit's expected model before execution.
+- RED: added durable decision request tests for restart survival, exact-once consumption, stale generation/head/expiry rejection, and GitHub reply filtering for unauthorized/bot/edited/malformed replies.
+- GREEN: added `RunAwaitingDecision`, durable `decision_requests`, marker-owned GitHub question comments, exact reply parsing, and retry-exhaustion transition to `awaiting_decision` with a durable GitHub question publication path.
+- RED: added recovery-budget tests proving per-class persistence across restarts and durable exhaustion.
+- GREEN: added `recovery_budgets` keyed by failure class, generation, unit, and head with bounded failure/recovery-plan evidence.
+- RED: added artifact proof and attestation persistence tests for exact-head validation and validator downgrade rejection.
+- GREEN: added durable artifact proof and Sol/high attestation store APIs.
+- RED: added disposable attempt worktree tests for promotion/discard, stale-head rejection, and out-of-scope rejection.
+- GREEN: added `internal/workspace` attempt worktree manager with owned attempt roots, branch isolation, promote/discard semantics, and scope/head checks.
+- Refactor/security: canonicalized path boundary checks, verified SQLite WAL mode, added delivery-run column migration, prevented child model events from overwriting first observed model proof, and bounded/redacted decision evidence before GitHub publication.
+- GREEN wiring follow-up: host-runtime canonical `runHeadless` now creates disposable attempt worktrees, runs the unit in the attempt worktree, promotes only scoped output, and fails closed for Podman canonical units until equivalent isolation exists.
+- GREEN wiring follow-up: retryable failures now update per-class recovery budgets and use that remaining budget for retry versus durable `awaiting_decision`.
+- GREEN wiring follow-up: `supervise` now polls GitHub decision replies for open requests and resumes accepted `retry`/`continue` replies or blocks accepted `stop` replies.
+- GREEN wiring follow-up: successful canonical units now build an artifact manifest from scoped changed files between exact start/end heads, bind it to official GSD unit metadata (`phase_chain` and `required_workflow_tools`), hash it, and persist Sol/high artifact-proof plus attestation records.
+- GREEN wiring follow-up: GitHub question publication now goes through outbox enqueue, claim, execute, and mark-sent/failed semantics before the marker-owned comment is considered published.
+- GREEN wiring follow-up: added a full fake-runtime `shepherd supervise` test that drives the real supervise loop through an execution unit in a disposable worktree and reaches `final_human_gate`.
+- Local review: reviewer/security subagents found missing production wiring; follow-up passes wired host worktrees, reply consumption, recovery budget use, real artifact manifests, outbox claim/mark-sent, and fake-runtime final-gate integration. Remaining work is merge-disabled Twenty/Asana canaries and post-canary cleanup/migration.
+
 ## Final verification evidence
 
 - PASS `gofmt -w cmd internal`
@@ -54,3 +75,6 @@
 - PASS `cd ../.. && go list ./...`
 - PASS `scripts/tests/shepherd-module-boundary.sh`
 - PASS `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify`
+- PASS `cd agent-runtime/shepherd && go test ./...`
+- PASS `cd agent-runtime/shepherd && go vet ./... && go test -race ./... && go build ./cmd/shepherd && make verify`
+- PASS `cd agent-runtime/shepherd && go test ./cmd/shepherd -run TestSuperviseFakeRuntimeToFinalHumanGate -count=1 -v`
