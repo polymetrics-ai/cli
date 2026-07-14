@@ -4,17 +4,6 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Active
 
-### R001 — Asana exposes a validated declarative CLI command vocabulary that references all 12 existing streams and existing typed write actions without unresolved or raw-API mappings.
-- Class: core-capability
-- Status: active
-- Description: Asana exposes a validated declarative CLI command vocabulary that references all 12 existing streams and existing typed write actions without unresolved or raw-API mappings.
-- Why it matters: Every downstream help and runtime command needs one stable, machine-validated source of truth.
-- Source: spec
-- Primary owning slice: M001/S01
-- Supporting slices: M001/S02, M001/S03, M001/S07
-- Validation: mapped
-- Notes: Issue #381; metadata is descriptive and may only reference declared safe capabilities.
-
 ### R002 — Users can discover Asana namespace, topic, and leaf commands without credentials through text help, JSON help, generated manual artifacts, docs/cli, connector docs, and website documentation that agree.
 - Class: launchability
 - Status: active
@@ -72,6 +61,17 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Validated
 
+### R001 — Asana exposes a validated declarative CLI command vocabulary that references all 12 existing streams and existing typed write actions without unresolved or raw-API mappings.
+- Class: core-capability
+- Status: validated
+- Description: Asana exposes a validated declarative CLI command vocabulary that references all 12 existing streams and existing typed write actions without unresolved or raw-API mappings.
+- Why it matters: Every downstream help and runtime command needs one stable, machine-validated source of truth.
+- Source: spec
+- Primary owning slice: M001/S01
+- Supporting slices: M001/S02, M001/S03, M001/S07
+- Validation: S01 evidence: gsd_exec 18679e3c-c484-4051-942c-1ff429fab5b9 confirms 250 unique API identities, 25 unique implemented CLI leaves, exactly 12 unique stream references and 13 unique action references, with no raw transport fields; gsd_exec 5d2e058e-750d-4842-a8b5-54b5c040d37f confirms credential-free production bundle validation with 547 connectors and zero findings; gsd_exec 2fc99a43-c1b6-4064-a517-68c94d0ca712 passes duplicate-path, missing-target, deterministic-ordering, and raw-API negative tests.
+- Notes: Validated by M001 S01 contract proof. Runtime help/docs and command execution are intentionally owned by downstream slices.
+
 ## Deferred
 
 ## Out of Scope
@@ -80,7 +80,7 @@ This file is the explicit capability and coverage contract for the project.
 
 | ID | Class | Status | Primary owner | Supporting | Proof |
 |---|---|---|---|---|---|
-| R001 | core-capability | active | M001/S01 | M001/S02, M001/S03, M001/S07 | mapped |
+| R001 | core-capability | validated | M001/S01 | M001/S02, M001/S03, M001/S07 | S01 evidence: gsd_exec 18679e3c-c484-4051-942c-1ff429fab5b9 confirms 250 unique API identities, 25 unique implemented CLI leaves, exactly 12 unique stream references and 13 unique action references, with no raw transport fields; gsd_exec 5d2e058e-750d-4842-a8b5-54b5c040d37f confirms credential-free production bundle validation with 547 connectors and zero findings; gsd_exec 2fc99a43-c1b6-4064-a517-68c94d0ca712 passes duplicate-path, missing-target, deterministic-ordering, and raw-API negative tests. |
 | R002 | launchability | active | M001/S02 | M001/S01, M001/S03, M001/S05, M001/S06, M001/S07 | mapped |
 | R003 | primary-user-loop | active | M001/S03 | M001/S01, M001/S02 | mapped |
 | R004 | compliance/security | active | M001/S04 | M001/S05, M001/S06, M001/S07 | mapped |
@@ -89,7 +89,7 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Coverage Summary
 
-- Active requirements: 6
-- Mapped to slices: 6
-- Validated: 0
+- Active requirements: 5
+- Mapped to slices: 5
+- Validated: 1 (R001)
 - Unmapped active requirements: 0
