@@ -155,6 +155,22 @@ func TestLoadConfigDefaultsToBoundedNestedAgentEnvelopeSize(t *testing.T) {
 	if config.MaxEventBytes < 4_000_000 || config.MaxEventBytes > 8*1024*1024 {
 		t.Fatalf("max event bytes=%d does not admit measured nested-agent envelopes within 8 MiB", config.MaxEventBytes)
 	}
+	if config.CoordinatorModel != "openai-codex/gpt-5.6-sol" || config.ImplementationModel != "openai-codex/gpt-5.5" {
+		t.Fatalf("model split coordinator=%q implementation=%q", config.CoordinatorModel, config.ImplementationModel)
+	}
+}
+
+func TestModelForCommandKeepsImplementationSeparateFromShepherd(t *testing.T) {
+	t.Parallel()
+	config := fileConfig{CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5"}
+	if got := modelForCommand(config, "execute-task"); got != config.ImplementationModel {
+		t.Fatalf("execute-task model=%q", got)
+	}
+	for _, command := range []string{"research-slice", "plan-slice", "complete-slice", "validate-milestone", "complete-milestone"} {
+		if got := modelForCommand(config, command); got != config.CoordinatorModel {
+			t.Fatalf("%s model=%q", command, got)
+		}
+	}
 }
 
 type recordingDecisionPublisher struct {

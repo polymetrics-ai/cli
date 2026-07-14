@@ -154,9 +154,12 @@ func TestRunnerClassifiesBlockedExit(t *testing.T) {
 func TestRunnerRejectsUnsupportedCommandAndModel(t *testing.T) {
 	t.Parallel()
 
-	_, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.5", Thinking: "high"})
+	_, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-4", Thinking: "high"})
 	if err == nil {
 		t.Fatal("expected model downgrade to fail")
+	}
+	if _, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.5", Thinking: "high"}); err != nil {
+		t.Fatalf("governed implementation model rejected: %v", err)
 	}
 	runner, err := NewRunner(Config{
 		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},

@@ -34,23 +34,24 @@ const version = "0.1.0"
 const defaultMaxEventBytes = 8 * 1024 * 1024
 
 type fileConfig struct {
-	GSDCommand       []string `json:"gsd_command"`
-	WorkDir          string   `json:"work_dir"`
-	GSDHome          string   `json:"gsd_home"`
-	StateDir         string   `json:"state_dir"`
-	CoordinatorModel string   `json:"coordinator_model"`
-	GSDVersion       string   `json:"gsd_version"`
-	TimeoutSeconds   int      `json:"timeout_seconds"`
-	HeartbeatSeconds int      `json:"heartbeat_seconds"`
-	MaxEventBytes    int      `json:"max_event_bytes"`
-	Repository       string   `json:"repository"`
-	PullRequest      int      `json:"pull_request"`
-	Runtime          string   `json:"runtime"`
-	ContainerImage   string   `json:"container_image"`
-	AuthFile         string   `json:"auth_file"`
-	ContainerNetwork string   `json:"container_network"`
-	PolicyDir        string   `json:"policy_dir"`
-	GitCommonDir     string   `json:"git_common_dir"`
+	GSDCommand          []string `json:"gsd_command"`
+	WorkDir             string   `json:"work_dir"`
+	GSDHome             string   `json:"gsd_home"`
+	StateDir            string   `json:"state_dir"`
+	CoordinatorModel    string   `json:"coordinator_model"`
+	ImplementationModel string   `json:"implementation_model"`
+	GSDVersion          string   `json:"gsd_version"`
+	TimeoutSeconds      int      `json:"timeout_seconds"`
+	HeartbeatSeconds    int      `json:"heartbeat_seconds"`
+	MaxEventBytes       int      `json:"max_event_bytes"`
+	Repository          string   `json:"repository"`
+	PullRequest         int      `json:"pull_request"`
+	Runtime             string   `json:"runtime"`
+	ContainerImage      string   `json:"container_image"`
+	AuthFile            string   `json:"auth_file"`
+	ContainerNetwork    string   `json:"container_network"`
+	PolicyDir           string   `json:"policy_dir"`
+	GitCommonDir        string   `json:"git_common_dir"`
 }
 
 type decisionInput struct {
@@ -199,9 +200,13 @@ func run(ctx context.Context, args []string) error {
 	if err := gsd.ValidateRuntimeSettings(config.GSDHome, config.WorkDir, config.CoordinatorModel, "high"); err != nil {
 		return fmt.Errorf("runtime admission: %w", err)
 	}
+	selectedModel := config.CoordinatorModel
+	if args[0] == "run" {
+		selectedModel = modelForCommand(config, *command)
+	}
 	runner, err := gsd.NewRunner(gsd.Config{
 		Command: config.GSDCommand, WorkDir: config.WorkDir, GSDHome: config.GSDHome, StateDir: config.StateDir,
-		Model: config.CoordinatorModel, Thinking: "high",
+		Model: selectedModel, Thinking: "high",
 		Timeout:           time.Duration(config.TimeoutSeconds) * time.Second,
 		HeartbeatInterval: time.Duration(config.HeartbeatSeconds) * time.Second,
 		MaxEventBytes:     config.MaxEventBytes,
@@ -412,6 +417,12 @@ func loadConfig(path string) (fileConfig, error) {
 	}
 	if config.CoordinatorModel == "" {
 		config.CoordinatorModel = "openai-codex/gpt-5.6-sol"
+	}
+	if config.ImplementationModel == "" {
+		config.ImplementationModel = "openai-codex/gpt-5.5"
+	}
+	if config.CoordinatorModel != "openai-codex/gpt-5.6-sol" || config.ImplementationModel != "openai-codex/gpt-5.5" {
+		return fileConfig{}, errors.New("coordinator_model must be gpt-5.6-sol and implementation_model must be gpt-5.5")
 	}
 	if config.GSDVersion == "" {
 		config.GSDVersion = "1.11.0"
@@ -668,9 +679,10 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			}
 		}
 	}
-	if result.Terminal == gsd.TerminalSuccess && (observedModel != config.CoordinatorModel || observedThinking != "high") {
+	expectedModel := modelForCommand(config, command)
+	if result.Terminal == gsd.TerminalSuccess && (observedModel != expectedModel || observedThinking != "high") {
 		result.Terminal = gsd.TerminalError
-		result.Err = fmt.Errorf("effective runtime identity was not observed as %s/high", config.CoordinatorModel)
+		result.Err = fmt.Errorf("effective runtime identity was not observed as %s/high", expectedModel)
 	}
 	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
 		result.Terminal = gsd.TerminalError
@@ -735,6 +747,13 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		return fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, terminalErr)
 	}
 	return nil
+}
+
+func modelForCommand(config fileConfig, command string) string {
+	if command == "execute-task" {
+		return config.ImplementationModel
+	}
+	return config.CoordinatorModel
 }
 
 func targetRunState(terminal gsd.Terminal, terminalErr error, postPhase string) domain.RunState {

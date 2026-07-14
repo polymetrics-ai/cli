@@ -20,10 +20,14 @@ import (
 )
 
 const (
-	requiredModel    = "openai-codex/gpt-5.6-sol"
 	defaultHeartbeat = 15 * time.Second
 	defaultMaxEvent  = 256 * 1024
 )
+
+var governedModels = map[string]struct{}{
+	"openai-codex/gpt-5.6-sol": {},
+	"openai-codex/gpt-5.5":     {},
+}
 
 var supportedCommands = map[string]struct{}{
 	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {},
@@ -159,8 +163,8 @@ func NewRunner(config Config) (*Runner, error) {
 			return nil, err
 		}
 	}
-	if config.Model != requiredModel || config.Thinking != "high" {
-		return nil, fmt.Errorf("model must be %s with high thinking", requiredModel)
+	if _, ok := governedModels[config.Model]; !ok || config.Thinking != "high" {
+		return nil, errors.New("model must be a governed Shepherd or implementation model with high thinking")
 	}
 	if config.Timeout <= 0 {
 		config.Timeout = 5 * time.Minute

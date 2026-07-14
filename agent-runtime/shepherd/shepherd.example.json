@@ -9,6 +9,7 @@
   "repository": "polymetrics-ai/cli",
   "pull_request": 388,
   "coordinator_model": "openai-codex/gpt-5.6-sol",
+  "implementation_model": "openai-codex/gpt-5.5",
   "gsd_version": "1.11.0",
   "runtime": "podman",
   "container_image": "localhost/polymetrics-gsd-pi:1.11.0",
