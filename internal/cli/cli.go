@@ -41,7 +41,18 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		}
 		return 0
 	}
-	if len(rest) > 0 && (rest[0] == "--help" || rest[0] == "-h" || rest[0] == "help") {
+	if (cmd == "help" || cmd == "man") && len(rest) > 0 {
+		if _, staticTopic := docs[rest[0]]; !staticTopic {
+			helpArgs := append([]string{"help"}, rest[1:]...)
+			if handled, err := tryWriteConnectorHelp(rest[0], helpArgs, stdout, jsonOut); handled {
+				if err != nil {
+					return writeError(stdout, stderr, err, jsonOut)
+				}
+				return 0
+			}
+		}
+	}
+	if len(rest) > 0 && isBuiltinCommand(cmd) && (rest[0] == "--help" || rest[0] == "-h" || rest[0] == "help") {
 		if err := writeManual(cmd, stdout, jsonOut); err != nil {
 			return writeError(stdout, stderr, err, jsonOut)
 		}
@@ -58,7 +69,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	case "init":
 		err = runInit(root, stdout, jsonOut)
 	case "help", "man":
-		err = runHelp(rest, stdout)
+		err = runHelp(rest, stdout, jsonOut)
 	case "connectors":
 		err = runConnectors(ctx, root, rest, stdout, jsonOut)
 	case "credentials":
@@ -123,17 +134,12 @@ func runInit(root string, stdout io.Writer, jsonOut bool) error {
 	return nil
 }
 
-func runHelp(args []string, stdout io.Writer) error {
+func runHelp(args []string, stdout io.Writer, jsonOut bool) error {
 	topic := ""
 	if len(args) > 0 {
 		topic = args[0]
 	}
-	text, ok := docs[topic]
-	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
-	}
-	fmt.Fprint(stdout, text)
-	return nil
+	return writeManual(topic, stdout, jsonOut)
 }
 
 func isManualCommand(cmd string) bool {
@@ -142,6 +148,15 @@ func isManualCommand(cmd string) bool {
 	}
 	_, ok := docs[cmd]
 	return ok
+}
+
+func isBuiltinCommand(cmd string) bool {
+	switch cmd {
+	case "init", "help", "man", "connectors", "credentials", "connections", "catalog", "etl", "query", "reverse", "agent", "runtime", "flow", "extract", "perf", "docs", "skills", "version", "rlm", "schedule", "worker":
+		return true
+	default:
+		return false
+	}
 }
 
 func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
@@ -606,6 +621,9 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return usageErrorf("unknown command %q", connectorName)
+	}
+	if handled, err := tryWriteConnectorSurfaceHelp(connectorName, surfaceProvider.CommandSurface(), args, stdout, jsonOut); handled {
+		return err
 	}
 	flags := parseFlags(args)
 	path := flags.values["_"]
