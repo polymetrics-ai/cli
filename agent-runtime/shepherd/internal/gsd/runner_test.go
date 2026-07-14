@@ -86,6 +86,23 @@ func TestRunnerEmitsHeartbeatDuringSilentLiveProcess(t *testing.T) {
 	}
 }
 
+func TestRunnerFailsStartupWithNoAgentActivity(t *testing.T) {
+	t.Parallel()
+	runner, err := NewRunner(Config{
+		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+		Timeout: 5 * time.Second, HeartbeatInterval: 10 * time.Millisecond, StartupNoEventTimeout: 25 * time.Millisecond, MaxEventBytes: 1024,
+		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=no-activity"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	result := runner.Run(context.Background(), "next", nil, Observer{})
+	if result.Terminal != TerminalError || !strings.Contains(result.Err.Error(), "no model, tool, or child activity") {
+		t.Fatalf("result=%+v", result)
+	}
+}
+
 func TestRunnerHeartbeatRetainsConcurrentInFlightTools(t *testing.T) {
 	t.Parallel()
 
@@ -379,6 +396,9 @@ func TestRunnerHelperProcess(t *testing.T) {
 		fmt.Println(`{"type":"thinking_level_select","level":"high","previousLevel":"off"}`)
 		fmt.Println(`{"type":"extension_ui_request","id":"status-1","method":"setStatus","message":"working"}`)
 		time.Sleep(60 * time.Millisecond)
+		os.Exit(0)
+	case "no-activity":
+		time.Sleep(5 * time.Second)
 		os.Exit(0)
 	case "blocked":
 		os.Exit(10)

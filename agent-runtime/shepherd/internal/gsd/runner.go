@@ -64,17 +64,18 @@ const (
 )
 
 type Config struct {
-	Command           []string
-	WorkDir           string
-	GSDHome           string
-	StateDir          string
-	Model             string
-	Thinking          string
-	Timeout           time.Duration
-	HeartbeatInterval time.Duration
-	MaxEventBytes     int
-	Environment       []string
-	Container         *ContainerConfig
+	Command               []string
+	WorkDir               string
+	GSDHome               string
+	StateDir              string
+	Model                 string
+	Thinking              string
+	Timeout               time.Duration
+	HeartbeatInterval     time.Duration
+	StartupNoEventTimeout time.Duration
+	MaxEventBytes         int
+	Environment           []string
+	Container             *ContainerConfig
 }
 
 type Heartbeat struct {
@@ -178,6 +179,12 @@ func NewRunner(config Config) (*Runner, error) {
 	}
 	if config.HeartbeatInterval > defaultHeartbeat {
 		return nil, fmt.Errorf("heartbeat interval must not exceed %s", defaultHeartbeat)
+	}
+	if config.StartupNoEventTimeout <= 0 {
+		config.StartupNoEventTimeout = 2 * time.Minute
+	}
+	if config.StartupNoEventTimeout < 2*config.HeartbeatInterval {
+		config.StartupNoEventTimeout = 2 * config.HeartbeatInterval
 	}
 	if config.MaxEventBytes <= 0 {
 		config.MaxEventBytes = defaultMaxEvent
@@ -391,11 +398,16 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 			}
 			pendingQuestion = nil
 		case at := <-ticker.C:
+			progress, _ := ReadSubagentProgress(r.config.GSDHome, r.config.WorkDir)
 			if observer.Heartbeat != nil {
-				progress, _ := ReadSubagentProgress(r.config.GSDHome, r.config.WorkDir)
 				observer.Heartbeat(Heartbeat{At: at.UTC(), LastEventAt: lastEventAt,
 					InFlightTool: summarizeInFlightTools(inFlightTools), ProcessAlive: true,
 					ChildStatus: progress.Status, ChildCount: progress.RunningChildren, ChildTurns: progress.Turns})
+			}
+			if lastEventAt.Equal(started) && len(inFlightTools) == 0 && progress.RunningChildren == 0 && progress.Turns == 0 && at.Sub(started) >= r.config.StartupNoEventTimeout {
+				cancel()
+				waitErr := <-waited
+				return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: fmt.Errorf("%w: no model, tool, or child activity observed before startup deadline", ErrRuntimeContractMismatch), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
 			}
 		case waitErr := <-waited:
 			if eventsOpen {

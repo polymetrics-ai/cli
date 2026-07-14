@@ -17,10 +17,10 @@ const (
 )
 
 type UnitMetadata struct {
-	UnitType        string
-	Kind            string
-	ScopeClass      string
-	PhaseChain      []string
+	UnitType              string
+	Kind                  string
+	ScopeClass            string
+	PhaseChain            []string
 	AllowedGSDTools       []string
 	RequiredWorkflowTools []string
 }
@@ -152,7 +152,11 @@ func ParseUnitRegistry(content string) (UnitRegistry, error) {
 func parseUnitMetadata(unitType, block string) (UnitMetadata, error) {
 	phaseChain := quotedArray(block, "phaseChain")
 	if len(phaseChain) == 0 {
-		return UnitMetadata{}, fmt.Errorf("%w: %s phaseChain is missing", ErrRuntimeContractMismatch, unitType)
+		if fallback, ok := BuiltinUnitRegistry().Lookup(unitType); ok && len(fallback.PhaseChain) > 0 {
+			phaseChain = fallback.PhaseChain
+		} else {
+			return UnitMetadata{}, fmt.Errorf("%w: %s phaseChain is missing", ErrRuntimeContractMismatch, unitType)
+		}
 	}
 	for _, phase := range phaseChain {
 		if !safeUnitSlug(phase) {
@@ -160,10 +164,10 @@ func parseUnitMetadata(unitType, block string) (UnitMetadata, error) {
 		}
 	}
 	metadata := UnitMetadata{
-		UnitType:        unitType,
-		Kind:            quotedProperty(block, "kind"),
-		ScopeClass:      quotedProperty(block, "scopeClass"),
-		PhaseChain:      phaseChain,
+		UnitType:              unitType,
+		Kind:                  quotedProperty(block, "kind"),
+		ScopeClass:            quotedProperty(block, "scopeClass"),
+		PhaseChain:            phaseChain,
 		AllowedGSDTools:       quotedArray(block, "allowedGsdTools"),
 		RequiredWorkflowTools: quotedArray(block, "requiredWorkflowTools"),
 	}

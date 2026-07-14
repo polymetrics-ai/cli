@@ -13,7 +13,7 @@ import (
 var ErrRuntimeContractMismatch = errors.New("runtime_contract_mismatch")
 
 const (
-	planningGuidanceOriginal = "Use `gsd_resume` to restore prior planning context, `gsd_exec` for noisy discovery, and `gsd_exec_search` before repeating scans."
+	planningGuidanceOriginal = "Use `gsd_resume` for planning continuity, `gsd_exec` for noisy checks, and `gsd_exec_search` before rerunning diagnostics."
 	planningGuidancePatched  = "Use only the phase-scoped planning tools exposed for this unit (`gsd_milestone_status`, `gsd_plan_milestone`, `gsd_plan_slice`, `gsd_plan_task`, `gsd_requirement_update`, and `gsd_decision_save`). Do not call `gsd_resume`, `gsd_exec`, or `gsd_exec_search` from a planning unit."
 )
 
@@ -170,7 +170,7 @@ func validatePromptContractRoot(root string) error {
 
 func extractPlanningGuidance(content string) (string, error) {
 	marker := `planning: "`
-	start := strings.Index(content, marker)
+	start := strings.LastIndex(content, marker)
 	if start < 0 {
 		return "", fmt.Errorf("%w: planning guidance is missing", ErrRuntimeContractMismatch)
 	}

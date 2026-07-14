@@ -464,6 +464,12 @@ func TestSuperviseFakeRuntimeToFinalHumanGate(t *testing.T) {
 	if err := os.WriteFile(contextPath, []byte(contextRaw), 0o600); err != nil {
 		t.Fatal(err)
 	}
+	if err := os.MkdirAll(filepath.Join(repo, ".gsd"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(repo, ".gsd", "STATE.md"), []byte("fake canonical state\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
 	runGitForTest(t, repo, "add", "issue-context.json")
 	runGitForTest(t, repo, "commit", "-m", "test: add issue context")
 	stateDir := filepath.Join(t.TempDir(), "state")

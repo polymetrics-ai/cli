@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -391,6 +392,13 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 	}
 }
 
+func requireMatchingAttemptDispatch(canonical, attempt gsd.WorkflowSnapshot) error {
+	if canonical.MilestoneID != attempt.MilestoneID || canonical.Phase != attempt.Phase || canonical.Next.Action != attempt.Next.Action || canonical.Next.UnitType != attempt.Next.UnitType || canonical.Next.UnitID != attempt.Next.UnitID {
+		return fmt.Errorf("attempt GSD state does not match canonical dispatch: canonical=%s/%s %s %s/%s attempt=%s/%s %s %s/%s", canonical.MilestoneID, canonical.Phase, canonical.Next.Action, canonical.Next.UnitType, canonical.Next.UnitID, attempt.MilestoneID, attempt.Phase, attempt.Next.Action, attempt.Next.UnitType, attempt.Next.UnitID)
+	}
+	return nil
+}
+
 func emitSuperviseStatus(deliveryID string, decision supervisor.Decision) error {
 	encoded, err := json.Marshal(struct {
 		DeliveryID string                  `json:"delivery_id"`
@@ -706,7 +714,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	}()
 	unitAttemptKey := store.UnitAttemptKey{DeliveryID: deliveryID, Generation: attempt.Generation,
 		UnitID: trustedUnit, HeadSHA: startSnapshot.HeadSHA}
-	unitAttempt, err := authority.BeginUnitAttempt(ctx, unitAttemptKey, int64(config.MaxUnitAttempts*20))
+	unitAttempt, err := authority.BeginUnitAttempt(ctx, unitAttemptKey, int64(config.MaxUnitAttempts))
 	if err != nil {
 		target := domain.RunFailed
 		if errors.Is(err, store.ErrRetryBudgetExhausted) {
@@ -730,6 +738,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	executionWorkDir := config.WorkDir
 	executionRunner := runner
 	var attemptWorktree *workspace.AttemptWorktree
+	var attemptManager *workspace.Manager
 	if gsd.IsCanonicalUnitCommand(command) && config.Runtime != "host" {
 		return errors.New("canonical unit supervision requires host runtime disposable attempt worktrees")
 	}
@@ -742,10 +751,21 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		if createErr != nil {
 			return createErr
 		}
+		if prepareErr := manager.PrepareGSDState(ctx, attemptTree); prepareErr != nil {
+			return fmt.Errorf("prepare attempt GSD state: %w", prepareErr)
+		}
 		attemptWorktree = &attemptTree
+		attemptManager = manager
 		executionWorkDir = attemptTree.Root
 		executionRunner, err = runner.WithWorkDir(executionWorkDir)
 		if err != nil {
+			return err
+		}
+		attemptSnapshot, queryErr := executionRunner.Query(ctx)
+		if queryErr != nil {
+			return fmt.Errorf("pre-dispatch attempt query failed: %w", queryErr)
+		}
+		if err := requireMatchingAttemptDispatch(before, attemptSnapshot); err != nil {
 			return err
 		}
 	}
@@ -950,16 +970,18 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	if result.Terminal == gsd.TerminalSuccess && gsd.IsCanonicalUnitCommand(command) {
 		message := "chore(gsd): checkpoint " + strings.ReplaceAll(before.Next.UnitID, "/", " ")
 		if attemptWorktree != nil {
-			manager, managerErr := workspace.NewManager(config.WorkDir, filepath.Join(config.StateDir, "attempt-worktrees"))
-			if managerErr != nil {
+			if attemptManager == nil {
 				result.Terminal = gsd.TerminalError
-				result.Err = managerErr
-			} else if _, promoteErr := manager.Promote(ctx, *attemptWorktree, issueContext.WriteScope, message); promoteErr != nil {
+				result.Err = errors.New("attempt manager missing for promoted unit")
+			} else if _, promoteErr := attemptManager.Promote(ctx, *attemptWorktree, issueContext.WriteScope, message); promoteErr != nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = fmt.Errorf("promote successful canonical unit: %w", promoteErr)
+			} else if adoptErr := attemptManager.AdoptGSDState(ctx, *attemptWorktree); adoptErr != nil {
+				result.Terminal = gsd.TerminalError
+				result.Err = fmt.Errorf("adopt successful GSD state: %w", adoptErr)
 			} else {
 				appendActivity("transition", "promoted_attempt_worktree", trustedUnit, "", "", time.Now().UTC())
-				_ = manager.Discard(context.Background(), *attemptWorktree)
+				_ = attemptManager.Discard(context.Background(), *attemptWorktree)
 			}
 		} else if _, checkpointErr := shepherdgit.CheckpointWithinScopes(ctx, config.WorkDir, issueContext.WriteScope, message); checkpointErr != nil {
 			result.Terminal = gsd.TerminalError
@@ -1357,6 +1379,57 @@ func publishDecisions(ctx context.Context, config fileConfig, deliveryID, summar
 	}, summary)
 }
 
+func gsdStateArtifacts(workDir string) ([]shepherdgit.Artifact, error) {
+	root := filepath.Join(workDir, ".gsd")
+	if info, err := os.Lstat(root); err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
+		return nil, err
+	} else if info.Mode()&os.ModeSymlink != 0 || !info.IsDir() {
+		return nil, errors.New("GSD state root must be a real directory")
+	}
+	var artifacts []shepherdgit.Artifact
+	for _, relRoot := range []string{"STATE.md", "state-manifest.json", "phases"} {
+		path := filepath.Join(root, relRoot)
+		if _, err := os.Lstat(path); os.IsNotExist(err) {
+			continue
+		} else if err != nil {
+			return nil, err
+		}
+		if err := filepath.WalkDir(path, func(path string, entry os.DirEntry, walkErr error) error {
+			if walkErr != nil {
+				return walkErr
+			}
+			info, err := entry.Info()
+			if err != nil {
+				return err
+			}
+			if info.Mode()&os.ModeSymlink != 0 {
+				return errors.New("GSD state artifact must not be a symlink")
+			}
+			if entry.IsDir() || !info.Mode().IsRegular() {
+				return nil
+			}
+			raw, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			rel, err := filepath.Rel(workDir, path)
+			if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(os.PathSeparator)) {
+				return errors.New("GSD state artifact escapes worktree")
+			}
+			hash := sha256.Sum256(raw)
+			artifacts = append(artifacts, shepherdgit.Artifact{Path: filepath.ToSlash(rel), Hash: "sha256:" + hex.EncodeToString(hash[:])})
+			return nil
+		}); err != nil {
+			return nil, err
+		}
+	}
+	sort.Slice(artifacts, func(i, j int) bool { return artifacts[i].Path < artifacts[j].Path })
+	return artifacts, nil
+}
+
 func persistSuccessProof(ctx context.Context, authority *store.Store, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType string, generation, attempt int64, startHead, candidateHead string) error {
 	metadata, ok := registry.Lookup(unitType)
 	if !ok {
@@ -1366,13 +1439,19 @@ func persistSuccessProof(ctx context.Context, authority *store.Store, registry g
 	if err != nil {
 		return err
 	}
+	stateArtifacts, err := gsdStateArtifacts(workDir)
+	if err != nil {
+		return err
+	}
+	artifacts = append(artifacts, stateArtifacts...)
 	if len(artifacts) == 0 {
 		return errors.New("successful canonical unit produced no artifact manifest")
 	}
+	sort.Slice(artifacts, func(i, j int) bool { return artifacts[i].Path < artifacts[j].Path })
 	manifest := struct {
-		UnitType              string                `json:"unit_type"`
-		PhaseChain            []string              `json:"phase_chain"`
-		RequiredWorkflowTools []string              `json:"required_workflow_tools"`
+		UnitType              string                 `json:"unit_type"`
+		PhaseChain            []string               `json:"phase_chain"`
+		RequiredWorkflowTools []string               `json:"required_workflow_tools"`
 		Artifacts             []shepherdgit.Artifact `json:"artifacts"`
 	}{UnitType: unitType, PhaseChain: metadata.PhaseChain, RequiredWorkflowTools: metadata.RequiredWorkflowTools, Artifacts: artifacts}
 	raw, err := json.Marshal(manifest)

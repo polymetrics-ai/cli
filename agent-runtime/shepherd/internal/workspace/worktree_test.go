@@ -44,6 +44,68 @@ func TestAttemptWorktreePromoteAndDiscard(t *testing.T) {
 	}
 }
 
+func TestAttemptWorktreeCopiesAndAdoptsGSDState(t *testing.T) {
+	ctx := context.Background()
+	repo := initRepo(t)
+	if err := os.MkdirAll(filepath.Join(repo, ".gsd", "phases"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(repo, ".gsd", "STATE.md"), []byte("canonical\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	head := gitOutput(t, repo, "rev-parse", "HEAD")
+	manager, err := NewManager(repo, filepath.Join(t.TempDir(), "attempts"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	attempt, err := manager.Create(ctx, AttemptIdentity{DeliveryID: "issue-389", Generation: 1, UnitID: "research-slice/M001/S03", Attempt: 1, BaseHead: head})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := manager.PrepareGSDState(ctx, attempt); err != nil {
+		t.Fatal(err)
+	}
+	if raw, err := os.ReadFile(filepath.Join(attempt.Root, ".gsd", "STATE.md")); err != nil || string(raw) != "canonical\n" {
+		t.Fatalf("prepared state raw=%q err=%v", raw, err)
+	}
+	if err := os.WriteFile(filepath.Join(attempt.Root, ".gsd", "STATE.md"), []byte("advanced\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := manager.AdoptGSDState(ctx, attempt); err != nil {
+		t.Fatal(err)
+	}
+	if raw, err := os.ReadFile(filepath.Join(repo, ".gsd", "STATE.md")); err != nil || string(raw) != "advanced\n" {
+		t.Fatalf("adopted state raw=%q err=%v", raw, err)
+	}
+}
+
+func TestAttemptPromotionIgnoresGSDWorkflowState(t *testing.T) {
+	ctx := context.Background()
+	repo := initRepo(t)
+	head := gitOutput(t, repo, "rev-parse", "HEAD")
+	manager, err := NewManager(repo, filepath.Join(t.TempDir(), "attempts"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	attempt, err := manager.Create(ctx, AttemptIdentity{DeliveryID: "issue-389", Generation: 1, UnitID: "plan-milestone/M001", Attempt: 1, BaseHead: head})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(attempt.Root, ".gsd", "phases"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(attempt.Root, ".gsd", "STATE.md"), []byte("advanced\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	promoted, err := manager.Promote(ctx, attempt, []string{"agent-runtime/shepherd/**"}, "test: no source changes")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if promoted != head {
+		t.Fatalf("promoted=%s, want base head %s", promoted, head)
+	}
+}
+
 func TestAttemptWorktreeRejectsStaleHeadAndOutOfScopePromotion(t *testing.T) {
 	ctx := context.Background()
 	repo := initRepo(t)

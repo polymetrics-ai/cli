@@ -63,6 +63,9 @@
 - GREEN wiring follow-up: GitHub question publication now goes through outbox enqueue, claim, execute, and mark-sent/failed semantics before the marker-owned comment is considered published.
 - GREEN wiring follow-up: added a full fake-runtime `shepherd supervise` test that drives the real supervise loop through an execution unit in a disposable worktree and reaches `final_human_gate`.
 - Local review: reviewer/security subagents found missing production wiring; follow-up passes wired host worktrees, reply consumption, recovery budget use, real artifact manifests, outbox claim/mark-sent, and fake-runtime final-gate integration. Remaining work is merge-disabled Twenty/Asana canaries and post-canary cleanup/migration.
+- RED canary: merge-disabled Asana canary stalled in `research-slice/M001/S03`; attempt worktree started without the canonical `.gsd` workflow state, then official GSD emitted `Cannot dispatch: no active milestone` while Shepherd heartbeats stayed alive with no model/tool/child activity. The run was stopped and does not count as acceptance evidence.
+- GREEN canary fix: attempt worktrees now copy canonical `.gsd` state before dispatch, run a pre-dispatch attempt query that must match the canonical milestone/phase/unit, adopt successful attempt `.gsd` state back after scoped promotion, ignore `.gsd` workflow state during source promotion, and hash official `.gsd` state artifacts for proof when code head is unchanged.
+- GREEN stall/retry fix: Runner now fails startup with a typed runtime-contract error when no model/tool/child activity appears before the startup deadline, and unit retry budgets now use the configured `max_unit_attempts` directly instead of multiplying by 20.
 
 ## Final verification evidence
 
@@ -78,3 +81,4 @@
 - PASS `cd agent-runtime/shepherd && go test ./...`
 - PASS `cd agent-runtime/shepherd && go vet ./... && go test -race ./... && go build ./cmd/shepherd && make verify`
 - PASS `cd agent-runtime/shepherd && go test ./cmd/shepherd -run TestSuperviseFakeRuntimeToFinalHumanGate -count=1 -v`
+- PASS `cd agent-runtime/shepherd && go test ./... && go vet ./... && go test -race ./... && go build -o shepherd ./cmd/shepherd && make verify`

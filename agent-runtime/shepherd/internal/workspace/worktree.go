@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -107,6 +108,23 @@ func (m *Manager) Create(ctx context.Context, identity AttemptIdentity) (Attempt
 	return AttemptWorktree{Root: path, State: AttemptCreated, Identity: identity}, nil
 }
 
+func (m *Manager) PrepareGSDState(ctx context.Context, attempt AttemptWorktree) error {
+	if err := validateIdentity(attempt.Identity); err != nil {
+		return err
+	}
+	return copyGSDState(ctx, filepath.Join(m.RepoRoot, ".gsd"), filepath.Join(attempt.Root, ".gsd"))
+}
+
+func (m *Manager) AdoptGSDState(ctx context.Context, attempt AttemptWorktree) error {
+	if err := validateIdentity(attempt.Identity); err != nil {
+		return err
+	}
+	if !strings.HasPrefix(filepath.Clean(attempt.Root), filepath.Clean(m.Root)+string(os.PathSeparator)) {
+		return errors.New("attempt worktree is not owned by this manager")
+	}
+	return copyGSDState(ctx, filepath.Join(attempt.Root, ".gsd"), filepath.Join(m.RepoRoot, ".gsd"))
+}
+
 func (m *Manager) Promote(ctx context.Context, attempt AttemptWorktree, writeScopes []string, message string) (string, error) {
 	if err := validateIdentity(attempt.Identity); err != nil {
 		return "", err
@@ -158,6 +176,86 @@ func (m *Manager) Discard(ctx context.Context, attempt AttemptWorktree) error {
 	}
 	if _, err := git(ctx, m.RepoRoot, "worktree", "remove", "--force", attempt.Root); err != nil {
 		return fmt.Errorf("discard attempt worktree: %w", err)
+	}
+	return nil
+}
+
+func copyGSDState(ctx context.Context, src, dst string) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	info, err := os.Lstat(src)
+	if err != nil {
+		return fmt.Errorf("inspect GSD state: %w", err)
+	}
+	if info.Mode()&os.ModeSymlink != 0 || !info.IsDir() {
+		return errors.New("GSD state root must be a real directory")
+	}
+	if info, err := os.Lstat(dst); err == nil && info.Mode()&os.ModeSymlink != 0 {
+		return errors.New("destination GSD state root must not be a symlink")
+	} else if err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	if err := os.RemoveAll(dst); err != nil {
+		return fmt.Errorf("clear destination GSD state: %w", err)
+	}
+	if err := os.MkdirAll(dst, 0o700); err != nil {
+		return fmt.Errorf("create destination GSD state: %w", err)
+	}
+	return filepath.WalkDir(src, func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		rel, err := filepath.Rel(src, path)
+		if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(os.PathSeparator)) {
+			return errors.New("GSD state path escapes source root")
+		}
+		if rel == "." {
+			return nil
+		}
+		info, err := entry.Info()
+		if err != nil {
+			return err
+		}
+		if info.Mode()&os.ModeSymlink != 0 {
+			return errors.New("GSD state must not contain symlinks")
+		}
+		target := filepath.Join(dst, rel)
+		if entry.IsDir() {
+			return os.MkdirAll(target, 0o700)
+		}
+		if !info.Mode().IsRegular() {
+			return nil
+		}
+		return copyRegularFile(path, target, info.Mode().Perm())
+	})
+}
+
+func copyRegularFile(src, dst string, mode os.FileMode) error {
+	if mode == 0 {
+		mode = 0o600
+	}
+	if err := os.MkdirAll(filepath.Dir(dst), 0o700); err != nil {
+		return err
+	}
+	in, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer in.Close()
+	out, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, mode)
+	if err != nil {
+		return err
+	}
+	if _, err := io.Copy(out, in); err != nil {
+		_ = out.Close()
+		return err
+	}
+	if err := out.Close(); err != nil {
+		return err
 	}
 	return nil
 }
@@ -218,6 +316,9 @@ func changedPaths(ctx context.Context, root string) ([]string, error) {
 		path := filepath.ToSlash(strings.TrimSpace(string(item[3:])))
 		if path == "" || filepath.IsAbs(path) || path == ".." || strings.HasPrefix(path, "../") {
 			return nil, errors.New("git returned an unsafe changed path")
+		}
+		if path == ".gsd" || strings.HasPrefix(path, ".gsd/") || path == ".gsd-worktrees" || strings.HasPrefix(path, ".gsd-worktrees/") {
+			continue
 		}
 		paths = append(paths, path)
 	}

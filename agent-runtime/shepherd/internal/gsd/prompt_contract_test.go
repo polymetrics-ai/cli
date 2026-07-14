@@ -37,8 +37,11 @@ func TestApplyPinnedPromptToolPatchRepairsPackageAndActiveRuntime(t *testing.T) 
 		t.Fatal(err)
 	}
 
-	oldComposer := `const CONTEXT_MODE_GUIDANCE_BY_LANE = {
-    planning: "Use ` + "`gsd_resume`" + ` to restore prior planning context, ` + "`gsd_exec`" + ` for noisy discovery, and ` + "`gsd_exec_search`" + ` before repeating scans.",
+	oldComposer := `const CONTEXT_MODE_LANE_LABELS = {
+    planning: "planning",
+};
+const CONTEXT_MODE_GUIDANCE_BY_LANE = {
+    planning: "Use ` + "`gsd_resume`" + ` for planning continuity, ` + "`gsd_exec`" + ` for noisy checks, and ` + "`gsd_exec_search`" + ` before rerunning diagnostics.",
 };
 `
 	registry := `export const UNIT_REGISTRY = {
