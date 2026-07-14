@@ -24,7 +24,7 @@ Required reading before acting:
 - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
-- `.agents/agentic-delivery/workflows/claude-review-loop.md`
+- `.agents/agentic-delivery/workflows/local-review-loop.md`
 - `.agents/agentic-delivery/contracts/code-review-disposition-template.md`
 - `.agents/agentic-delivery/contracts/worker-handoff-template.md`
 - `.agents/skills/caveman/SKILL.md`

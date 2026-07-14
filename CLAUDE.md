@@ -12,7 +12,5 @@
   spawn or assign ready workers until human-ready, blocked, or explicitly limited by the user.
 - For automated review routing, follow
   `.agents/agentic-delivery/workflows/automated-review-routing-loop.md` and
-  `.agents/agentic-delivery/workflows/claude-review-loop.md`. Claude Code is the primary automated
-  reviewer via the `.github/workflows/claude-review.yml` Action (auto-review on PR open for trusted
-  authors, plus on-demand `@claude` review); GitHub Copilot review is fallback-only when Claude is
-  unavailable. Do not comment `@claude review` after every push.
+  `.agents/agentic-delivery/workflows/local-review-loop.md`. Local reviewer/verifier/security passes
+  are the default automated review coverage; remote PR-bot review is not required by default.

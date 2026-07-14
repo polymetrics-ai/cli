@@ -43,7 +43,7 @@ body:
         - .agents/agentic-delivery/contracts/issue-agent-contract.md
         - .agents/agentic-delivery/contracts/parent-orchestrator-contract.md
         - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
-        - .agents/agentic-delivery/workflows/claude-review-loop.md
+        - .agents/agentic-delivery/workflows/local-review-loop.md
         - .agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md
         - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
         - .agents/agentic-delivery/matrices/task-skill-matrix.yaml

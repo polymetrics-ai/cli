@@ -38,24 +38,15 @@ docs: update install guide
 
 <!-- Include commands run, screenshots for UI changes, or why verification was not possible. -->
 
-## Automated Review
+## Local Automated Review
 
-<!-- For non-draft PRs targeting main from a trusted author, Claude reviews automatically on open,
-reopen, or ready-for-review, so wait for that instead of posting a manual review command. For new
-unreviewed commits (for example, fix commits), request one more pass with a single @claude review;
-do not comment @claude review after every push. If the automatic review did not run (for example,
-an untrusted or first-time author), a maintainer must invoke @claude review. If a Claude run errors
-or its quota is exhausted and review coverage is blocking progress, re-invoke @claude review or
-request GitHub Copilot review once as backup when enabled. For every actionable Claude or Copilot
-item, reply with Accepted, Accepted with modification, Declined, Deferred, or Needs human, plus the
-reason and evidence. Copilot review is not approval. -->
+<!-- Record local reviewer/verifier/security coverage for the exact head or diff range. Remote
+PR-bot review is not required by default. For every actionable finding, record Accepted, Accepted
+with modification, Declined, Deferred, or Needs human, plus the reason and evidence. -->
 
-- Primary route:
-- Fallback route:
-- PR base/default branch:
-- Latest reviewed commit:
-- Reviewed range:
-- Coverage route:
+- Local route:
+- Reviewed commit or range:
+- Reviewer role/runtime:
 - Coverage status:
 - Disposition summary:
 - Follow-up review status:
@@ -64,8 +55,8 @@ reason and evidence. Copilot review is not approval. -->
 
 - [ ] Tests or docs updated for behavior changes
 - [ ] `make verify` passes locally, or the skipped checks are explained
-- [ ] Claude automatic review completed, Copilot fallback was justified, or review blocker was recorded
-- [ ] Every actionable automated review finding has a reasoned disposition reply
+- [ ] Local automated review coverage recorded, or review blocker was recorded
+- [ ] Every actionable local review finding has a reasoned disposition
 - [ ] Sub-PR merge into parent branch is allowed by the stacked workflow, or this PR targets `main`
 - [ ] Branch name follows `<type>/<description>` such as `feat/new-connector` or `fix/api-pagination`
 - [ ] PR title follows Conventional Commits

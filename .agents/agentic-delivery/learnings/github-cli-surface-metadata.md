@@ -43,7 +43,7 @@ Scope: issue #34, first slice under the GitHub CLI parity parent issue #44.
   implementation when the task changes Go behavior.
 - Commit and push coherent green slices regularly to the active issue/PR branch after local green
   gates. Never push to `main`; stop only when a human gate is triggered.
-- Claude review is a gate after implementation. Each review item needs a disposition comment:
+- Local automated review is a gate after implementation. Each review finding needs a disposition:
   fixing now, deferring with reason, or declining with reason.
 - Never include real tokens, private keys, authorization headers, encrypted secret payloads, or
   secret-looking fixtures in docs, tests, examples, or agent notes.

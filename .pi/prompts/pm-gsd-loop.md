@@ -18,7 +18,7 @@ Required reading:
 - `.agents/agentic-delivery/contracts/issue-agent-contract.md`
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
-- `.agents/agentic-delivery/workflows/claude-review-loop.md`
+- `.agents/agentic-delivery/workflows/local-review-loop.md`
 - `docs/plans/universal-programming-loop-prd.md`
 - `docs/prompts/universal-programming-loop-prompts.md`
 

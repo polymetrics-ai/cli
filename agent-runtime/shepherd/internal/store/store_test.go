@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"errors"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -134,7 +135,7 @@ func TestDeliveryBindingIsImmutable(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer db.Close()
-	binding := Delivery{ID: "issue-372", Issue: 372, WorkDir: "/tmp/work", ContextHash: "sha256:" + strings.Repeat("a", 64)}
+	binding := testDelivery("issue-372", 372)
 	if err := db.EnsureDelivery(ctx, binding); err != nil {
 		t.Fatalf("ensure: %v", err)
 	}
@@ -150,6 +151,42 @@ func TestDeliveryBindingIsImmutable(t *testing.T) {
 	}
 }
 
+func TestIssueProjectIdentityIsExclusiveAndImmutable(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	db, err := Open(ctx, filepath.Join(t.TempDir(), "shepherd.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	root := filepath.Join(t.TempDir(), "wt-issue-389")
+	binding := Delivery{
+		ID: "issue-389", Issue: 389, ParentIssue: 372, WorkDir: root,
+		ContextHash: "sha256:" + strings.Repeat("a", 64), Branch: "feat/389-autonomous-shepherd",
+		BaseBranch: "feat/372-gsd-pi-go-shepherd", GSDProjectRoot: root,
+		InitialHead: strings.Repeat("b", 40), GSDVersion: "1.11.0",
+	}
+	if err := db.EnsureDelivery(ctx, binding); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.EnsureDelivery(ctx, binding); err != nil {
+		t.Fatalf("exact restart was not idempotent: %v", err)
+	}
+
+	other := binding
+	other.ID, other.Issue = "issue-390", 390
+	if err := db.EnsureDelivery(ctx, other); err == nil {
+		t.Fatal("two issues shared one canonical GSD project root")
+	}
+
+	drifted := binding
+	drifted.Branch = "feat/unrelated"
+	if err := db.EnsureDelivery(ctx, drifted); err == nil {
+		t.Fatal("same issue was rebound to a different branch")
+	}
+}
+
 func TestDeliveryAttemptStateRequiresExplicitResume(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
@@ -158,7 +195,7 @@ func TestDeliveryAttemptStateRequiresExplicitResume(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer db.Close()
-	binding := Delivery{ID: "issue-372", Issue: 372, WorkDir: "/tmp/work", ContextHash: "sha256:" + strings.Repeat("a", 64)}
+	binding := testDelivery("issue-372", 372)
 	if err := db.EnsureDelivery(ctx, binding); err != nil {
 		t.Fatal(err)
 	}
@@ -190,7 +227,7 @@ func TestFailedBoundDeliveryRequiresExplicitResume(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer db.Close()
-	binding := Delivery{ID: "issue-380", Issue: 380, WorkDir: "/tmp/work", ContextHash: "sha256:" + strings.Repeat("a", 64)}
+	binding := testDelivery("issue-380", 380)
 	if err := db.EnsureDelivery(ctx, binding); err != nil {
 		t.Fatal(err)
 	}
@@ -224,7 +261,7 @@ func TestRetryFailedIntakeRequiresUnboundMilestone(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer db.Close()
-	binding := Delivery{ID: "issue-380", Issue: 380, WorkDir: "/tmp/work", ContextHash: "sha256:" + strings.Repeat("a", 64)}
+	binding := testDelivery("issue-380", 380)
 	if err := db.EnsureDelivery(ctx, binding); err != nil {
 		t.Fatal(err)
 	}
@@ -260,7 +297,7 @@ func TestPrepareAdoptedDeliveryResetsFailedBoundRun(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer db.Close()
-	binding := Delivery{ID: "issue-380", Issue: 380, WorkDir: "/tmp/work", ContextHash: "sha256:" + strings.Repeat("a", 64)}
+	binding := testDelivery("issue-380", 380)
 	if err := db.EnsureDelivery(ctx, binding); err != nil {
 		t.Fatal(err)
 	}
@@ -279,5 +316,58 @@ func TestPrepareAdoptedDeliveryResetsFailedBoundRun(t *testing.T) {
 	run, err := db.BeginAttempt(ctx, binding.ID, "owner-2")
 	if err != nil || run.State != domain.RunRunning || run.Generation != 2 || run.Attempt != 2 {
 		t.Fatalf("adopted run=%+v err=%v", run, err)
+	}
+}
+
+func TestUnitAttemptBudgetSurvivesStoreRestart(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	path := filepath.Join(t.TempDir(), "shepherd.db")
+	key := UnitAttemptKey{
+		DeliveryID: "issue-389", Generation: 1, UnitID: "plan-milestone/M001",
+		HeadSHA: strings.Repeat("a", 40),
+	}
+
+	first, err := Open(ctx, path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := first.EnsureDelivery(ctx, testDelivery(key.DeliveryID, 389)); err != nil {
+		t.Fatalf("ensure delivery: %v", err)
+	}
+	for want := int64(1); want <= 2; want++ {
+		attempt, err := first.BeginUnitAttempt(ctx, key, 3)
+		if err != nil || attempt.Attempts != want || attempt.Remaining != 3-want {
+			t.Fatalf("attempt=%+v err=%v", attempt, err)
+		}
+		if err := first.FinishUnitAttempt(ctx, key, "interrupted"); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := first.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	second, err := Open(ctx, path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer second.Close()
+	attempt, err := second.BeginUnitAttempt(ctx, key, 3)
+	if err != nil || attempt.Attempts != 3 || attempt.Remaining != 0 {
+		t.Fatalf("reopened attempt=%+v err=%v", attempt, err)
+	}
+	if _, err := second.BeginUnitAttempt(ctx, key, 3); !errors.Is(err, ErrRetryBudgetExhausted) {
+		t.Fatalf("error=%v, want durable retry exhaustion", err)
+	}
+}
+
+func testDelivery(id string, issue int) Delivery {
+	root := filepath.Join("/tmp", id)
+	return Delivery{
+		ID: id, Issue: issue, ParentIssue: 372, WorkDir: root,
+		ContextHash: "sha256:" + strings.Repeat("a", 64), Branch: "feat/" + id,
+		BaseBranch: "feat/372-gsd-pi-go-shepherd", GSDProjectRoot: root,
+		InitialHead: strings.Repeat("b", 40), GSDVersion: "1.11.0",
 	}
 }

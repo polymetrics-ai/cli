@@ -5,13 +5,13 @@
   ],
   "work_dir": "/absolute/path/to/issue-worktree",
   "gsd_home": "/absolute/path/to/controlled-gsd-home",
-  "state_dir": "/absolute/path/to/protected-shepherd-state/issue-372",
+  "state_dir": "/absolute/path/to/protected-shepherd-state/issue-389",
   "repository": "polymetrics-ai/cli",
-  "pull_request": 388,
+  "pull_request": 390,
   "coordinator_model": "openai-codex/gpt-5.6-sol",
   "implementation_model": "openai-codex/gpt-5.5",
   "gsd_version": "1.11.0",
-  "runtime": "podman",
+  "runtime": "host",
   "container_image": "localhost/polymetrics-gsd-pi:1.11.0",
   "container_network": "shepherd-research",
   "policy_dir": "/absolute/path/to/operator-controlled/.gsd",
@@ -19,5 +19,6 @@
   "auth_file": "/absolute/path/to/private/auth.json",
   "timeout_seconds": 3600,
   "heartbeat_seconds": 15,
-  "max_event_bytes": 8388608
+  "max_event_bytes": 8388608,
+  "max_unit_attempts": 3
 }

@@ -43,7 +43,7 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 - Sub-PRs do not use closing keywords because they do not target the default branch.
 - The final parent PR closes integrated sub-issues when the parent branch lands on `main`.
 - If the parent branch has no useful diff yet, create a deliberate parent seed commit so GitHub has
-  a parent PR thread, checks surface, and review target.
+  a parent PR thread, checks surface, and human integration target.
 
 ## Automated sub-PR merge policy
 
@@ -54,10 +54,8 @@ true:
 - branch name and PR title checks pass
 - PR body references the sub-issue and parent issue
 - targeted tests and issue verification pass
-- automated review loop is complete and comments are resolved
-- automated review coverage exists through the sub-PR, through a parent PR fallback review that
-  covers the newly integrated commit range, or through an explicitly recorded Copilot/human fallback
-  because Claude is blocked
+- local automated review loop is complete and findings are resolved or dispositioned
+- local automated review coverage exists for the sub-issue head or integrated parent-branch batch
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable

@@ -151,6 +151,30 @@ func TestRunnerClassifiesBlockedExit(t *testing.T) {
 	}
 }
 
+func TestRunnerCanDeriveGovernedImplementationModel(t *testing.T) {
+	t.Parallel()
+
+	runner, err := NewRunner(Config{
+		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=silent-implementation"},
+	})
+	if err != nil {
+		t.Fatalf("new runner: %v", err)
+	}
+	implementation, err := runner.WithModel("openai-codex/gpt-5.5")
+	if err != nil {
+		t.Fatalf("derive implementation runner: %v", err)
+	}
+	result := implementation.Run(context.Background(), "execute-task", nil, Observer{})
+	if result.Terminal != TerminalSuccess {
+		t.Fatalf("terminal=%s error=%v stderr=%s", result.Terminal, result.Err, result.Stderr)
+	}
+	if _, err := runner.WithModel("openai-codex/gpt-4"); err == nil {
+		t.Fatal("expected ungovened derived model to fail")
+	}
+}
+
 func TestRunnerRejectsUnsupportedCommandAndModel(t *testing.T) {
 	t.Parallel()
 
@@ -329,11 +353,15 @@ func TestRunnerHelperProcess(t *testing.T) {
 		fmt.Fprintln(os.Stderr, "governed environment was not enforced")
 		os.Exit(1)
 	}
+	expectedModel := "openai-codex/gpt-5.6-sol"
+	if os.Getenv("RUNNER_HELPER_MODE") == "silent-implementation" {
+		expectedModel = "openai-codex/gpt-5.5"
+	}
 	if os.Getenv("RUNNER_HELPER_MODE") != "repair" && (!strings.Contains(args, "headless") || (os.Getenv("RUNNER_HELPER_MODE") != "query" &&
 		os.Getenv("RUNNER_HELPER_MODE") != "repair" &&
-		(!strings.Contains(args, "--model openai-codex/gpt-5.6-sol") ||
+		(!strings.Contains(args, "--model "+expectedModel) ||
 			!strings.Contains(args, "--response-timeout") || !strings.Contains(args, "--max-restarts 0")))) {
-		fmt.Fprintln(os.Stderr, "missing governed headless flags")
+		fmt.Fprintf(os.Stderr, "missing governed headless flags: %s\n", args)
 		os.Exit(1)
 	}
 	switch os.Getenv("RUNNER_HELPER_MODE") {
@@ -342,8 +370,12 @@ func TestRunnerHelperProcess(t *testing.T) {
 			os.Exit(1)
 		}
 		os.Exit(0)
-	case "silent":
-		fmt.Println(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.6-sol"},"source":"restore"}`)
+	case "silent", "silent-implementation":
+		modelID := "gpt-5.6-sol"
+		if os.Getenv("RUNNER_HELPER_MODE") == "silent-implementation" {
+			modelID = "gpt-5.5"
+		}
+		fmt.Printf(`{"type":"model_select","model":{"provider":"openai-codex","id":"%s"},"source":"restore"}`+"\n", modelID)
 		fmt.Println(`{"type":"thinking_level_select","level":"high","previousLevel":"off"}`)
 		fmt.Println(`{"type":"extension_ui_request","id":"status-1","method":"setStatus","message":"working"}`)
 		time.Sleep(60 * time.Millisecond)

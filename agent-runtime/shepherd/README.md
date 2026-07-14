@@ -20,23 +20,27 @@ implementation model, atomically restores the coordinator default after the unit
 verifies the effective phase model. Startup self-healing accepts only the exact governed
 implementation-model drift; any other identity fails closed.
 
-For governed delivery, build and use the Podman image so the agent sees only the issue worktree,
-task-isolated GSD/planning mounts, and explicit read-only auth/settings files:
+For governed delivery, use the host-local runtime by default (`"runtime": "host"`) with the exact
+pinned GSD Pi loader in `gsd_command`, protected `gsd_home`, and external-effect publishers disabled.
+This is the qualified #389 path and requires no Podman service for default verification.
+
+The legacy Podman assets remain available for separately authorized qualification/debug runs; they
+are not required by the default supervisor path and are not removed in this issue. If a later
+human-approved canary selects the container runtime, build the image explicitly so the agent sees
+only the issue worktree, task-isolated GSD/planning mounts, and read-only auth/settings files:
 
 ```bash
 podman build -t localhost/polymetrics-gsd-pi:1.11.0 \
   -f agent-runtime/shepherd/container/Containerfile .
 ```
 
-The host runtime remains a qualification/debug fallback and keeps all external-effect publishers
-disabled. The container does not mount host SSH, GitHub, cloud, or home-directory credentials.
+The container does not mount host SSH, GitHub, cloud, or home-directory credentials. The governed
+image contains Go 1.25.12, Make, Git, jq, ripgrep, official GSD Pi 1.11.0, Context7 MCP 3.2.3, and
+agent-browser 0.31.1 with Chrome. `curl` is a read-only compatibility wrapper around `web-fetch`:
+common GET/HEAD flags work, responses are capped at 2 MiB, and bodies, auth headers, uploads, and
+non-HTTP(S) schemes are rejected. GitHub CLI and publisher credentials are absent.
 
-The governed image contains Go 1.25.12, Make, Git, jq, ripgrep, official GSD Pi 1.11.0, Context7
-MCP 3.2.3, and agent-browser 0.31.1 with Chrome. `curl` is a read-only compatibility wrapper around
-`web-fetch`: common GET/HEAD flags work, responses are capped at 2 MiB, and bodies, auth headers,
-uploads, and non-HTTP(S) schemes are rejected. GitHub CLI and publisher credentials are absent.
-
-Start the private search sidecar before selecting `container_network: shepherd-research`:
+Start the private search sidecar only before selecting `container_network: shepherd-research`:
 
 ```bash
 podman compose -f agent-runtime/shepherd/research/compose.yaml up -d
@@ -54,9 +58,47 @@ compatibility prompt renderer for shell and legacy Pi callers; its local registr
 scripts/gsd prompt programming-loop init --phase issue-372 --dry-run
 ```
 
-## Start an issue milestone
+## Supervise an issue milestone
 
-Create a validated context file inside the isolated issue worktree, then run:
+Create a validated context file inside the isolated issue worktree, then run the one-command
+supervisor:
+
+```bash
+cd agent-runtime/shepherd
+go run ./cmd/shepherd supervise \
+  --config /absolute/private/path/shepherd.json \
+  --issue 389 \
+  --context .planning/phases/issue-389-shepherd-hardening/CONTEXT.json
+```
+
+`supervise` materializes the protected issue context, adopts or bootstraps exactly one issue-local
+GSD project identity, then loops over native `headless query`. It dispatches only the canonical
+`next.unitType`: planning, research, validation, completion, and UAT units use the configured
+GPT-5.6 Sol coordinator model with `high` thinking; `execute-task` and delegated execution use the
+configured GPT-5.5 implementation model with `high` thinking. `discuss-milestone` is routed through
+the targeted `discuss` path. Generic `auto`, concurrent dispatch, and parent-PR merge are never
+performed. When canonical GSD reaches `phase=complete,next.action=stop`, Shepherd prints a bounded
+`final_human_gate` status and exits without merging.
+
+The controller persists immutable issue identity in both Shepherd SQLite and `.gsd/ISSUE.json`:
+issue, parent issue, branch, base branch, worktree/project root, initial SHA, context hash, and GSD
+version. Restarting with the exact same identity is idempotent; a mismatched issue or branch fails
+closed. Unit attempts are durably reserved per `{delivery,generation,unit,head}`. The default and
+maximum-configured retry budget is bounded by `max_unit_attempts` (default 3); Shepherd only
+automatically retries reversible runtime, artifact, or interruption failures while budget remains.
+Contract, model/thinking, authority, scope, stale-head, identity, and orphaned-child failures stop at
+the typed blocked/human-gate boundary.
+
+The process prints normalized lifecycle events and at most one heartbeat every 15 seconds. Heartbeats
+include bounded operational child metadata only: status, child count, in-flight tool, and child turn
+count. They never include prompts, model reasoning, output bodies, or credentials. Native GSD
+questions are forwarded to the terminal and require an explicit response. The Go deadline always
+precedes GSD's fallback response timer. Answer files, inline context, chained `--auto`, and generic
+`recover` are rejected.
+
+## Start or run one fenced issue unit
+
+For manual qualification, run one unit at a time:
 
 ```bash
 cd agent-runtime/shepherd
@@ -66,15 +108,11 @@ go run ./cmd/shepherd start \
   --context .planning/phases/issue-372-gsd-pi-go-shepherd/CONTEXT.json
 ```
 
-The process prints normalized lifecycle events and a heartbeat at least every 15 seconds. Native GSD
-questions are forwarded to the terminal and require an explicit response. The Go deadline always
-precedes GSD's fallback response timer. Answer files, inline context, chained `--auto`, and generic
-`recover` are rejected. Continue one fenced unit at a time with `run --issue 372 --command next`.
-For a multi-turn local milestone interview, use `--command discuss --continue-unit` after the first
-round. Shepherd resumes only the newest Pi session whose header is bound to the exact configured
-worktree.
-If a prior qualification run already created the correct active milestone, `start --adopt-existing`
-binds it explicitly instead of silently creating a second milestone.
+Continue one fenced unit at a time with `run --issue 372 --command next`. For a multi-turn local
+milestone interview, use `--command discuss --continue-unit` after the first round. Shepherd resumes
+only the newest Pi session whose header is bound to the exact configured worktree. If a prior
+qualification run already created the correct active milestone, `start --adopt-existing` binds it
+explicitly instead of silently creating a second milestone.
 
 `start` also binds an immutable copy of the validated issue context under protected controller
 state. A successful `execute-task` may edit source files, but Shepherd verifies every changed path

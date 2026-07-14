@@ -14,6 +14,7 @@ import (
 
 type Snapshot struct {
 	HeadSHA string
+	Branch  string
 	Dirty   bool
 }
 
@@ -24,6 +25,10 @@ func Inspect(ctx context.Context, root string) (Snapshot, error) {
 	head, err := run(ctx, root, "rev-parse", "HEAD")
 	if err != nil {
 		return Snapshot{}, err
+	}
+	branchRaw, err := run(ctx, root, "symbolic-ref", "--quiet", "--short", "HEAD")
+	if err != nil {
+		return Snapshot{}, errors.New("issue worktree must be attached to a branch")
 	}
 	// Tracked changes are never exempt, including changes to governed policy in
 	// .gsd. Official GSD Pi does own untracked project runtime/projection files
@@ -38,10 +43,14 @@ func Inspect(ctx context.Context, root string) (Snapshot, error) {
 		return Snapshot{}, err
 	}
 	sha := strings.TrimSpace(string(head))
+	branch := strings.TrimSpace(string(branchRaw))
 	if len(sha) != 40 {
 		return Snapshot{}, errors.New("git returned an invalid head SHA")
 	}
-	return Snapshot{HeadSHA: sha, Dirty: len(tracked) > 0 || len(untracked) > 0}, nil
+	if branch == "" || strings.ContainsAny(branch, "\r\n\x00") {
+		return Snapshot{}, errors.New("git returned an invalid branch")
+	}
+	return Snapshot{HeadSHA: sha, Branch: branch, Dirty: len(tracked) > 0 || len(untracked) > 0}, nil
 }
 
 func RequireClean(snapshot Snapshot) error {

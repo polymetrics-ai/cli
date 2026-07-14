@@ -81,6 +81,9 @@ type Heartbeat struct {
 	LastEventAt  time.Time
 	InFlightTool string
 	ProcessAlive bool
+	ChildStatus  string
+	ChildCount   int
+	ChildTurns   int64
 }
 
 type Observer struct {
@@ -178,6 +181,15 @@ func NewRunner(config Config) (*Runner, error) {
 	if config.MaxEventBytes <= 0 {
 		config.MaxEventBytes = defaultMaxEvent
 	}
+	return &Runner{config: config}, nil
+}
+
+func (r *Runner) WithModel(model string) (*Runner, error) {
+	if _, ok := governedModels[model]; !ok {
+		return nil, errors.New("model must be a governed Shepherd or implementation model with high thinking")
+	}
+	config := r.config
+	config.Model = model
 	return &Runner{config: config}, nil
 }
 
@@ -370,7 +382,10 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 			pendingQuestion = nil
 		case at := <-ticker.C:
 			if observer.Heartbeat != nil {
-				observer.Heartbeat(Heartbeat{At: at.UTC(), LastEventAt: lastEventAt, InFlightTool: summarizeInFlightTools(inFlightTools), ProcessAlive: true})
+				progress, _ := ReadSubagentProgress(r.config.GSDHome, r.config.WorkDir)
+				observer.Heartbeat(Heartbeat{At: at.UTC(), LastEventAt: lastEventAt,
+					InFlightTool: summarizeInFlightTools(inFlightTools), ProcessAlive: true,
+					ChildStatus: progress.Status, ChildCount: progress.RunningChildren, ChildTurns: progress.Turns})
 			}
 		case waitErr := <-waited:
 			if eventsOpen {
@@ -535,6 +550,7 @@ func governedEnvironment(gsdHome, stateDir, workDir string, extra []string) []st
 	return append(environment,
 		"HOME="+gsdHome,
 		"GSD_HOME="+gsdHome,
+		"GSD_PROJECT_ROOT="+workDir,
 		"GSD_STATE_DIR="+filepath.Join(stateDir, "runtime", "gsd-state"),
 		"GH_CONFIG_DIR="+filepath.Join(gsdHome, "gh-disabled"),
 		"GIT_TERMINAL_PROMPT=0",

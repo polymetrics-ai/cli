@@ -26,6 +26,7 @@ import (
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/supervisor"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/telemetry"
 )
 
@@ -46,6 +47,7 @@ type fileConfig struct {
 	TimeoutSeconds      int      `json:"timeout_seconds"`
 	HeartbeatSeconds    int      `json:"heartbeat_seconds"`
 	MaxEventBytes       int      `json:"max_event_bytes"`
+	MaxUnitAttempts     int      `json:"max_unit_attempts"`
 	Repository          string   `json:"repository"`
 	PullRequest         int      `json:"pull_request"`
 	Runtime             string   `json:"runtime"`
@@ -78,7 +80,7 @@ func main() {
 
 func run(ctx context.Context, args []string) error {
 	if len(args) == 0 {
-		return errors.New("usage: shepherd <version|query|eval|repair|resume|run|start> [flags]")
+		return errors.New("usage: shepherd <version|query|eval|repair|resume|run|start|supervise> [flags]")
 	}
 	if args[0] == "version" {
 		fmt.Println(version)
@@ -198,6 +200,9 @@ func run(ctx context.Context, args []string) error {
 		if err := gsd.ApplyPinnedHeadlessToolPatch(config.GSDCommand, config.GSDVersion); err != nil {
 			return fmt.Errorf("runtime compatibility: %w", err)
 		}
+		if err := gsd.ApplyPinnedPromptToolPatch(config.GSDCommand, config.GSDHome, config.GSDVersion); err != nil {
+			return fmt.Errorf("runtime compatibility: %w", err)
+		}
 	}
 	if err := gsd.NormalizeRuntimeSettings(config.GSDHome, config.CoordinatorModel, config.ImplementationModel, "high"); err != nil {
 		return fmt.Errorf("runtime normalization: %w", err)
@@ -239,6 +244,14 @@ func run(ctx context.Context, args []string) error {
 			return errors.New("generic run permits only one fenced unit; use --command next, discuss, or status")
 		}
 		return runHeadless(ctx, runner, config, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth, *continueUnit, *decisionActor, *decisionBasis)
+	case "supervise":
+		if *issue <= 0 {
+			return errors.New("--issue is required")
+		}
+		if *contextPath == "" {
+			return errors.New("--context is required")
+		}
+		return runSupervise(ctx, runner, config, *issue, *contextPath, *confirmDepth, *decisionActor, *decisionBasis)
 	case "start":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
@@ -277,6 +290,112 @@ func run(ctx context.Context, args []string) error {
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
+}
+
+func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, issue int, contextPath string, confirmDepth bool, decisionActor, decisionBasis string) error {
+	path, err := governedPath(config.WorkDir, contextPath)
+	if err != nil {
+		return fmt.Errorf("context: %w", err)
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		return fmt.Errorf("open context: %w", err)
+	}
+	_, raw, decodeErr := contract.DecodeIssueContext(file, issue)
+	closeErr := file.Close()
+	if decodeErr != nil {
+		return decodeErr
+	}
+	if closeErr != nil {
+		return closeErr
+	}
+	if err := materializeProtectedIssueContext(config.StateDir, issue, raw); err != nil {
+		return fmt.Errorf("materialize protected issue context: %w", err)
+	}
+	if err := materializeContainerContext(config, path, raw); err != nil {
+		return fmt.Errorf("materialize protected context: %w", err)
+	}
+	hash := sha256.Sum256(raw)
+	contextHash := "sha256:" + hex.EncodeToString(hash[:])
+	authority, err := store.Open(ctx, filepath.Join(config.StateDir, "authority.db"))
+	if err != nil {
+		return err
+	}
+	defer authority.Close()
+	if _, _, err := ensureIssueDelivery(ctx, authority, config, issue, contextHash); err != nil {
+		return err
+	}
+	deliveryID := deliveryID(issue)
+	for {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		snapshot, err := runner.Query(ctx)
+		if err != nil {
+			return fmt.Errorf("supervise query: %w", err)
+		}
+		decision, err := supervisor.Decide(snapshot)
+		if err != nil {
+			return fmt.Errorf("supervise policy: %w", err)
+		}
+		switch decision.Kind {
+		case supervisor.DecisionFinalGate:
+			return emitSuperviseStatus(deliveryID, decision)
+		case supervisor.DecisionBlocked:
+			if emitErr := emitSuperviseStatus(deliveryID, decision); emitErr != nil {
+				return emitErr
+			}
+			return commandExitError{code: 10, err: errors.New(decision.Reason)}
+		case supervisor.DecisionDispatch:
+			unitRunner := runner
+			if expectedModel := modelForCommand(config, decision.Command); expectedModel != "" {
+				var modelErr error
+				unitRunner, modelErr = runner.WithModel(expectedModel)
+				if modelErr != nil {
+					return modelErr
+				}
+			}
+			err := runHeadless(ctx, unitRunner, config, deliveryID, issue, "", decision.Command, nil, confirmDepth, false, decisionActor, decisionBasis)
+			if err == nil {
+				continue
+			}
+			if isAutomaticallyRetryable(err) {
+				continue
+			}
+			blocked := decision
+			blocked.Kind = supervisor.DecisionBlocked
+			blocked.Reason = classifyUnitFailure(gsd.Result{Terminal: gsd.TerminalError, Err: err})
+			if emitErr := emitSuperviseStatus(deliveryID, blocked); emitErr != nil {
+				return emitErr
+			}
+			return commandExitError{code: 10, err: err}
+		default:
+			return fmt.Errorf("unknown supervise decision %q", decision.Kind)
+		}
+	}
+}
+
+func emitSuperviseStatus(deliveryID string, decision supervisor.Decision) error {
+	encoded, err := json.Marshal(struct {
+		DeliveryID string                  `json:"delivery_id"`
+		Status     supervisor.DecisionKind `json:"status"`
+		Reason     string                  `json:"reason"`
+		Phase      string                  `json:"phase"`
+		NextAction string                  `json:"next_action"`
+		Unit       string                  `json:"unit,omitempty"`
+	}{
+		DeliveryID: deliveryID,
+		Status:     decision.Kind,
+		Reason:     decision.Reason,
+		Phase:      decision.Snapshot.Phase,
+		NextAction: decision.Snapshot.Next.Action,
+		Unit:       decision.Unit,
+	})
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(encoded))
+	return nil
 }
 
 func runFencedRepair(ctx context.Context, runner *gsd.Runner, config fileConfig, deliveryID string, issue int, action string) error {
@@ -337,7 +456,7 @@ func adoptExistingDelivery(ctx context.Context, runner *gsd.Runner, config fileC
 		return err
 	}
 	defer authority.Close()
-	if err := authority.EnsureDelivery(ctx, store.Delivery{ID: deliveryID, Issue: issue, WorkDir: config.WorkDir, ContextHash: contextHash}); err != nil {
+	if _, _, err := ensureIssueDelivery(ctx, authority, config, issue, contextHash); err != nil {
 		return err
 	}
 	owner := fmt.Sprintf("adopt-%d", time.Now().UTC().UnixNano())
@@ -441,6 +560,12 @@ func loadConfig(path string) (fileConfig, error) {
 	if config.MaxEventBytes <= 0 {
 		config.MaxEventBytes = defaultMaxEventBytes
 	}
+	if config.MaxUnitAttempts <= 0 {
+		config.MaxUnitAttempts = 3
+	}
+	if config.MaxUnitAttempts > 20 {
+		return fileConfig{}, errors.New("max_unit_attempts must be between 1 and 20")
+	}
 	if config.Runtime == "" {
 		config.Runtime = "host"
 	}
@@ -474,7 +599,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	executionID := fmt.Sprintf("execution-%d", time.Now().UTC().UnixNano())
 	var delivery store.Delivery
 	if contextHash != "" {
-		if err := authority.EnsureDelivery(ctx, store.Delivery{ID: deliveryID, Issue: issue, WorkDir: config.WorkDir, ContextHash: contextHash}); err != nil {
+		if _, _, err := ensureIssueDelivery(ctx, authority, config, issue, contextHash); err != nil {
 			return err
 		}
 		if command == "new-milestone" {
@@ -493,6 +618,9 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	issueContext, err := loadProtectedIssueContext(config.StateDir, issue, delivery.ContextHash)
 	if err != nil {
 		return fmt.Errorf("protected issue context: %w", err)
+	}
+	if err := validateDeliveryInvocation(delivery, config, issueContext); err != nil {
+		return err
 	}
 	lease, err := authority.AcquireLease(ctx, deliveryID, executionID, time.Now().UTC(), time.Duration(config.TimeoutSeconds+60)*time.Second)
 	if err != nil {
@@ -545,11 +673,33 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	if err != nil {
 		return err
 	}
-	_ = attempt
 	finishedAttempt := false
 	defer func() {
 		if !finishedAttempt {
 			_ = authority.FinishAttempt(context.Background(), deliveryID, executionID, domain.RunFailed)
+		}
+	}()
+	unitAttemptKey := store.UnitAttemptKey{DeliveryID: deliveryID, Generation: attempt.Generation,
+		UnitID: trustedUnit, HeadSHA: startSnapshot.HeadSHA}
+	unitAttempt, err := authority.BeginUnitAttempt(ctx, unitAttemptKey, int64(config.MaxUnitAttempts))
+	if err != nil {
+		target := domain.RunFailed
+		if errors.Is(err, store.ErrRetryBudgetExhausted) {
+			target = domain.RunBlocked
+		}
+		if finishErr := authority.FinishAttempt(ctx, deliveryID, executionID, target); finishErr != nil {
+			return errors.Join(err, finishErr)
+		}
+		finishedAttempt = true
+		if errors.Is(err, store.ErrRetryBudgetExhausted) {
+			return commandExitError{code: 10, err: err}
+		}
+		return err
+	}
+	unitAttemptFinished := false
+	defer func() {
+		if !unitAttemptFinished {
+			_ = authority.FinishUnitAttempt(context.Background(), unitAttemptKey, "controller_interrupted")
 		}
 	}()
 	activity, err := telemetry.Open(ctx, filepath.Join(config.StateDir, "activity", "segments"))
@@ -589,7 +739,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 	var observedModel, observedThinking string
 	observer := gsd.Observer{
 		Event: func(event gsd.Event) {
-			if event.Model != "" {
+			if event.Kind == gsd.EventModelSelect && event.Model != "" {
 				observedModel = event.Model
 			}
 			if event.Thinking != "" {
@@ -600,8 +750,11 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 			fmt.Fprintf(os.Stderr, "%s kind=%s unit=%s tool=%s model=%s\n", event.At.Format(time.RFC3339), event.Kind, trustedUnit, event.Tool, event.Model)
 		},
 		Heartbeat: func(heartbeat gsd.Heartbeat) {
-			appendActivity("heartbeat", "alive", "", "", heartbeat.InFlightTool, heartbeat.At)
-			fmt.Fprintf(os.Stderr, "%s heartbeat alive=%t in_flight_tool=%s\n", heartbeat.At.Format(time.RFC3339), heartbeat.ProcessAlive, heartbeat.InFlightTool)
+			progress := fmt.Sprintf("%s children=%d turns=%d", heartbeat.InFlightTool, heartbeat.ChildCount, heartbeat.ChildTurns)
+			appendActivity("heartbeat", heartbeat.ChildStatus, "", "", strings.TrimSpace(progress), heartbeat.At)
+			fmt.Fprintf(os.Stderr, "%s heartbeat alive=%t in_flight_tool=%s child_status=%s children=%d turns=%d\n",
+				heartbeat.At.Format(time.RFC3339), heartbeat.ProcessAlive, heartbeat.InFlightTool,
+				heartbeat.ChildStatus, heartbeat.ChildCount, heartbeat.ChildTurns)
 		},
 		Question: func(questionCtx context.Context, question gsd.Question) (gsd.UIResponse, error) {
 			var response gsd.UIResponse
@@ -628,6 +781,13 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		},
 	}
 	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
+	preReconcile, err := gsd.ReconcileOrphanedSubagents(config.GSDHome, config.WorkDir, time.Now().UTC())
+	if err != nil {
+		return fmt.Errorf("reconcile orphaned subagents: %w", err)
+	}
+	if preReconcile.InterruptedRuns > 0 {
+		appendActivity("transition", "interrupted_orphaned_subagents", trustedUnit, "", "", time.Now().UTC())
+	}
 	var scopeMu sync.Mutex
 	var scopeViolation error
 	var scopeMonitorDone chan struct{}
@@ -649,6 +809,17 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		}()
 	}
 	result := runner.Run(runCtx, command, args, observer)
+	postReconcile, reconcileErr := gsd.ReconcileOrphanedSubagents(config.GSDHome, config.WorkDir, time.Now().UTC())
+	if reconcileErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = joinTerminalFailure(fmt.Errorf("reconcile terminated subagents: %w", reconcileErr), result.Err)
+	} else if postReconcile.InterruptedRuns > 0 {
+		appendActivity("transition", "interrupted_orphaned_subagents", trustedUnit, "", "", time.Now().UTC())
+		if result.Terminal == gsd.TerminalSuccess {
+			result.Terminal = gsd.TerminalError
+			result.Err = errors.New("GSD process exited while nested subagents were still running")
+		}
+	}
 	if restoreErr := gsd.NormalizeRuntimeSettings(config.GSDHome, config.CoordinatorModel, config.ImplementationModel, "high"); restoreErr != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = joinTerminalFailure(fmt.Errorf("restore coordinator runtime identity: %w", restoreErr), result.Err)
@@ -758,7 +929,17 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		result.Terminal = gsd.TerminalError
 		result.Err = fmt.Errorf("durable terminal append failed: %w", terminalSpoolErr)
 	}
-	targetState := targetRunState(result.Terminal, result.Err, postPhase)
+	unitOutcome := string(result.Terminal)
+	if result.Err != nil {
+		unitOutcome = classifyUnitFailure(result)
+	}
+	if err := authority.FinishUnitAttempt(ctx, unitAttemptKey, unitOutcome); err != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = joinTerminalFailure(result.Err, err)
+	} else {
+		unitAttemptFinished = true
+	}
+	targetState := finalUnitRunState(&result, postPhase, unitAttempt.Remaining)
 	if err := authority.FinishAttempt(ctx, deliveryID, executionID, targetState); err != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = err
@@ -837,6 +1018,83 @@ func launchModelForCommand(config fileConfig, command string) string {
 	return modelForCommand(config, command)
 }
 
+const (
+	unitFailureRuntimeContractMismatch = "runtime_contract_mismatch"
+	unitFailureArtifactMissing         = "artifact_missing"
+	unitFailureFalseGreen              = "false_green"
+	unitFailureInterrupted             = "interrupted"
+	unitFailureOrphanedSubagent        = "orphaned_subagent"
+	unitFailureStaleHead               = "stale_head"
+	unitFailureScopeBreach             = "scope_breach"
+	unitFailureModelDrift              = "model_drift"
+	unitFailureRetryExhausted          = "retry_exhausted"
+	unitFailureRuntimeFailure          = "runtime_failure"
+	unitFailureUnsafe                  = "unsafe_failure"
+)
+
+func classifyUnitFailure(result gsd.Result) string {
+	if result.Err == nil {
+		return string(result.Terminal)
+	}
+	if errors.Is(result.Err, store.ErrRetryBudgetExhausted) {
+		return unitFailureRetryExhausted
+	}
+	if errors.Is(result.Err, gsd.ErrRuntimeContractMismatch) {
+		return unitFailureRuntimeContractMismatch
+	}
+	message := strings.ToLower(result.Err.Error())
+	switch {
+	case strings.Contains(message, "runtime_contract_mismatch") || strings.Contains(message, "runtime contract"):
+		return unitFailureRuntimeContractMismatch
+	case strings.Contains(message, "artifact") && (strings.Contains(message, "missing") || strings.Contains(message, "not found") || strings.Contains(message, "regular file")):
+		return unitFailureArtifactMissing
+	case strings.Contains(message, "canonical") && (strings.Contains(message, "did not advance") || strings.Contains(message, "unchanged")):
+		return unitFailureFalseGreen
+	case result.Terminal == gsd.TerminalCancelled || result.Terminal == gsd.TerminalTimeout || strings.Contains(message, "interrupted") || strings.Contains(message, "cancelled") || strings.Contains(message, "deadline exceeded") || strings.Contains(message, "timeout"):
+		return unitFailureInterrupted
+	case strings.Contains(message, "subagent") && (strings.Contains(message, "orphan") || strings.Contains(message, "still running") || strings.Contains(message, "unreconciled")):
+		return unitFailureOrphanedSubagent
+	case strings.Contains(message, "stale") && strings.Contains(message, "head"):
+		return unitFailureStaleHead
+	case strings.Contains(message, "head continuity") || strings.Contains(message, "head changed"):
+		return unitFailureStaleHead
+	case strings.Contains(message, "scope breach") || strings.Contains(message, "write-scope") || strings.Contains(message, "outside the issue write scope"):
+		return unitFailureScopeBreach
+	case strings.Contains(message, "model") || strings.Contains(message, "thinking") || strings.Contains(message, "runtime identity"):
+		return unitFailureModelDrift
+	case strings.Contains(message, "runtime:") || strings.Contains(message, "headless") || strings.Contains(message, "process"):
+		return unitFailureRuntimeFailure
+	case result.Terminal == gsd.TerminalRejected || result.Terminal == gsd.TerminalBlocked:
+		return unitFailureUnsafe
+	default:
+		return unitFailureUnsafe
+	}
+}
+
+func isAutomaticallyRetryable(err error) bool {
+	if err == nil {
+		return false
+	}
+	class := classifyUnitFailure(gsd.Result{Terminal: gsd.TerminalError, Err: err})
+	switch class {
+	case unitFailureArtifactMissing, unitFailureFalseGreen, unitFailureInterrupted, unitFailureRuntimeFailure:
+		return true
+	default:
+		return false
+	}
+}
+
+func finalUnitRunState(result *gsd.Result, postPhase string, remainingAttempts int64) domain.RunState {
+	if result.Terminal != gsd.TerminalSuccess && result.Terminal != gsd.TerminalBlocked && isAutomaticallyRetryable(result.Err) {
+		if remainingAttempts > 0 {
+			return domain.RunReady
+		}
+		result.Err = joinTerminalFailure(result.Err, store.ErrRetryBudgetExhausted)
+		return domain.RunBlocked
+	}
+	return targetRunState(result.Terminal, result.Err, postPhase)
+}
+
 func targetRunState(terminal gsd.Terminal, terminalErr error, postPhase string) domain.RunState {
 	if terminal == gsd.TerminalBlocked {
 		if errors.Is(terminalErr, gsd.ErrMutatingSkip) {
@@ -890,6 +1148,52 @@ func (e commandExitError) Unwrap() error { return e.err }
 func (e commandExitError) ExitCode() int { return e.code }
 
 func deliveryID(issue int) string { return "issue-" + strconv.Itoa(issue) }
+
+func ensureIssueDelivery(ctx context.Context, authority *store.Store, config fileConfig, issue int, contextHash string) (store.Delivery, contract.IssueContext, error) {
+	issueContext, err := loadProtectedIssueContext(config.StateDir, issue, contextHash)
+	if err != nil {
+		return store.Delivery{}, contract.IssueContext{}, fmt.Errorf("protected issue context: %w", err)
+	}
+	snapshot, err := shepherdgit.Inspect(ctx, config.WorkDir)
+	if err != nil {
+		return store.Delivery{}, contract.IssueContext{}, err
+	}
+	if snapshot.Branch != issueContext.Branch {
+		return store.Delivery{}, contract.IssueContext{}, fmt.Errorf("issue context branch %s does not match attached worktree branch %s", issueContext.Branch, snapshot.Branch)
+	}
+	initialHead := snapshot.HeadSHA
+	if existing, getErr := authority.GetDelivery(ctx, deliveryID(issue)); getErr == nil && existing.InitialHead != "" {
+		initialHead = existing.InitialHead
+	}
+	delivery := store.Delivery{
+		ID: deliveryID(issue), Issue: issue, ParentIssue: issueContext.ParentIssue,
+		WorkDir: config.WorkDir, ContextHash: contextHash, Branch: issueContext.Branch,
+		BaseBranch: issueContext.PRBase, GSDProjectRoot: config.WorkDir,
+		InitialHead: initialHead, GSDVersion: config.GSDVersion,
+	}
+	if err := authority.EnsureDelivery(ctx, delivery); err != nil {
+		return store.Delivery{}, contract.IssueContext{}, err
+	}
+	identity := gsd.IssueProjectIdentity{
+		DeliveryID: delivery.ID, Issue: delivery.Issue, ParentIssue: delivery.ParentIssue,
+		Branch: delivery.Branch, BaseBranch: delivery.BaseBranch, ProjectRoot: delivery.GSDProjectRoot,
+		InitialHead: delivery.InitialHead, ContextHash: delivery.ContextHash, GSDVersion: delivery.GSDVersion,
+	}
+	if err := gsd.BootstrapIssueProject(config.WorkDir, identity, issueContext); err != nil {
+		return store.Delivery{}, contract.IssueContext{}, fmt.Errorf("bootstrap issue GSD project: %w", err)
+	}
+	return delivery, issueContext, nil
+}
+
+func validateDeliveryInvocation(delivery store.Delivery, config fileConfig, issueContext contract.IssueContext) error {
+	if delivery.Issue != issueContext.Issue || delivery.ParentIssue != issueContext.ParentIssue ||
+		delivery.WorkDir != config.WorkDir || delivery.GSDProjectRoot != config.WorkDir ||
+		delivery.Branch != issueContext.Branch || delivery.BaseBranch != issueContext.PRBase ||
+		delivery.GSDVersion != config.GSDVersion {
+		return errors.New("delivery invocation does not match the canonical issue GSD identity")
+	}
+	return nil
+}
 
 func appendDecision(store *decisionlog.Store, deliveryID, executionID, unitID string, question gsd.Question, response gsd.UIResponse, actorValue, basis string) error {
 	actor := decisionlog.Actor(strings.TrimSpace(actorValue))

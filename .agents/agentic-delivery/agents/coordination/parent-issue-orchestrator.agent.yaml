@@ -45,7 +45,7 @@ inputs:
   - .agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md
   - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
   - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
-  - .agents/agentic-delivery/workflows/claude-review-loop.md
+  - .agents/agentic-delivery/workflows/local-review-loop.md
 outputs:
   required:
   - parent branch and parent PR URL
@@ -53,7 +53,7 @@ outputs:
   - worker assignment prompts or subagent task summaries
   - worker handoff records
   - sub-PR merge decisions
-  - automated review coverage records
+  - local automated review coverage records
   - final readiness or blocker summary
 permissions:
   allowed_paths:
@@ -80,11 +80,10 @@ workflow:
 - build_dependency_and_write_scope_queue
 - spawn_or_assign_independent_workers
 - receive_worker_handoffs
-- verify_sub_pr_scope_checks_and_review_route
+- verify_sub_pr_scope_checks_and_local_review_route
 - merge_or_block_sub_prs_to_parent_branch
-- observe_parent_pr_claude_coverage_or_record_fallback
-- route_copilot_backup_when_claude_is_blocked
-- dispatch_automated_review_disposition_work
+- record_parent_batch_local_review_coverage_when_needed
+- dispatch_local_review_disposition_work
 - update_orchestration_state
 - run_final_parent_verification
 - mark_parent_pr_ready_for_human_or_record_blocker
@@ -107,10 +106,9 @@ merge_policy:
   parent_pr_target: main
   parent_pr_merge: human approval required
 coverage_policy:
-  claude_required: true
-  skipped_review_is_approval: false
-  fallback: parent PR review coverage after provisional integration, then Copilot backup when a Claude run errors, its quota is
-    exhausted, or Claude is otherwise unavailable
+  local_review_required: true
+  remote_pr_bot_required: false
+  fallback: human review when local review is unavailable or a human-gated finding remains
 guardrails:
   input:
   - parent PR must exist before sub-issue execution is considered ready
@@ -127,16 +125,15 @@ guardrails:
   output:
   - shared parent artifacts are orchestrator-owned
   - no closing keywords in sub-PRs targeting parent branches
-  - skipped Claude review status is not approval
-  - Claude run failures or quota exhaustion are blockers unless a fallback route is recorded
-  - Copilot backup review is not approval
-  - parent PR review coverage is required for integrated batches skipped on sub-PRs
+  - remote PR-bot output is not required approval
+  - local review blockers remain blockers unless a human fallback route is recorded
+  - integrated batches require local review coverage when the orchestrator marks it needed
 verification:
   required:
   - YAML parse checks for agent specs
   - parent issue or state ledger updated
   - sub-PR gate decisions recorded
-  - automated review coverage records present or blocker recorded
+  - local automated review coverage records present or blocker recorded
   - final parent verification summary before human approval
 adapters:
   codex:

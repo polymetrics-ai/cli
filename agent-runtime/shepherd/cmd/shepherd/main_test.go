@@ -16,6 +16,7 @@ import (
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 )
 
 func initializedTestRepository(t *testing.T) string {
@@ -174,6 +175,61 @@ func TestMonitorWriteScopeFailsClosedWhenRepositoryCannotBeInspected(t *testing.
 		}
 	case <-time.After(time.Second):
 		t.Fatal("scope monitor did not fail closed")
+	}
+}
+
+func TestFinalUnitRunStateBlocksWhenRetryBudgetExhausted(t *testing.T) {
+	t.Parallel()
+	result := gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("artifact missing: M001-ROADMAP.md")}
+	if got := finalUnitRunState(&result, "executing", 0); got != domain.RunBlocked {
+		t.Fatalf("state=%s want blocked", got)
+	}
+	if !errors.Is(result.Err, store.ErrRetryBudgetExhausted) {
+		t.Fatalf("error=%v, want retry budget exhausted", result.Err)
+	}
+	if class := classifyUnitFailure(result); class != unitFailureRetryExhausted {
+		t.Fatalf("class=%s want %s", class, unitFailureRetryExhausted)
+	}
+}
+
+func TestFinalUnitRunStateRetriesWhileBudgetRemains(t *testing.T) {
+	t.Parallel()
+	result := gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("artifact missing: M001-ROADMAP.md")}
+	if got := finalUnitRunState(&result, "executing", 1); got != domain.RunReady {
+		t.Fatalf("state=%s want ready", got)
+	}
+	if errors.Is(result.Err, store.ErrRetryBudgetExhausted) {
+		t.Fatalf("unexpected exhausted marker: %v", result.Err)
+	}
+}
+
+func TestClassifyUnitFailureAndRetryPolicy(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name      string
+		result    gsd.Result
+		class     string
+		retryable bool
+	}{
+		{name: "runtime contract", result: gsd.Result{Terminal: gsd.TerminalError, Err: gsd.ErrRuntimeContractMismatch}, class: unitFailureRuntimeContractMismatch, retryable: false},
+		{name: "missing artifact", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("artifact missing: M001-ROADMAP.md")}, class: unitFailureArtifactMissing, retryable: true},
+		{name: "interrupted", result: gsd.Result{Terminal: gsd.TerminalTimeout, Err: context.DeadlineExceeded}, class: unitFailureInterrupted, retryable: true},
+		{name: "stale head", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("stale head before checkpoint")}, class: unitFailureStaleHead, retryable: false},
+		{name: "scope breach", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("live write-scope breach: changed path outside the issue write scope")}, class: unitFailureScopeBreach, retryable: false},
+		{name: "model drift", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("effective runtime identity was not observed as openai-codex/gpt-5.5/high")}, class: unitFailureModelDrift, retryable: false},
+		{name: "orphan child", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("orphaned subagent still running")}, class: unitFailureOrphanedSubagent, retryable: false},
+	}
+	for _, tc := range tests {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			if got := classifyUnitFailure(tc.result); got != tc.class {
+				t.Fatalf("class=%s want %s", got, tc.class)
+			}
+			if got := isAutomaticallyRetryable(tc.result.Err); got != tc.retryable {
+				t.Fatalf("retryable=%v want %v", got, tc.retryable)
+			}
+		})
 	}
 }
 

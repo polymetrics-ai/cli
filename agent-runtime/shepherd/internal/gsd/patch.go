@@ -1,7 +1,6 @@
 package gsd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -36,32 +35,32 @@ const (
 // running. The patch is exact, local to the pinned package, and idempotent.
 func ApplyPinnedHeadlessToolPatch(command []string, expectedVersion string) error {
 	if expectedVersion != "1.11.0" {
-		return errors.New("headless in-flight tool patch is qualified only for GSD 1.11.0")
+		return fmt.Errorf("%w: headless in-flight tool patch is qualified only for GSD 1.11.0", ErrRuntimeContractMismatch)
 	}
 	if err := ValidatePinnedCommand(command, expectedVersion); err != nil {
-		return err
+		return fmt.Errorf("%w: %v", ErrRuntimeContractMismatch, err)
 	}
 	loader, err := filepath.EvalSymlinks(command[1])
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: resolve pinned headless runtime: %v", ErrRuntimeContractMismatch, err)
 	}
 	path := filepath.Join(filepath.Dir(loader), "headless.js")
 	info, err := os.Lstat(path)
 	if err != nil {
-		return fmt.Errorf("inspect pinned headless runtime: %w", err)
+		return fmt.Errorf("%w: inspect pinned headless runtime: %v", ErrRuntimeContractMismatch, err)
 	}
 	if info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
-		return errors.New("pinned headless runtime must be a regular file")
+		return fmt.Errorf("%w: pinned headless runtime must be a regular file", ErrRuntimeContractMismatch)
 	}
 	raw, err := os.ReadFile(path)
 	if err != nil {
-		return fmt.Errorf("read pinned headless runtime: %w", err)
+		return fmt.Errorf("%w: read pinned headless runtime: %v", ErrRuntimeContractMismatch, err)
 	}
 	content := string(raw)
 	if strings.Contains(content, "inFlightToolCallIds.add(toolCallId)") {
 		for _, marker := range []string{headlessAllToolsSet, headlessIdlePatched, headlessStartPatched, headlessEndPatched} {
 			if strings.Count(content, marker) != 1 {
-				return errors.New("installed headless compatibility patch has unexpected shape")
+				return fmt.Errorf("%w: installed headless compatibility patch has unexpected shape", ErrRuntimeContractMismatch)
 			}
 		}
 		return nil
@@ -74,7 +73,7 @@ func ApplyPinnedHeadlessToolPatch(command []string, expectedVersion string) erro
 	}
 	for _, replacement := range replacements {
 		if strings.Count(content, replacement[0]) != 1 {
-			return errors.New("pinned headless runtime does not match the qualified 1.11.0 patch shape")
+			return fmt.Errorf("%w: pinned headless runtime does not match the qualified 1.11.0 patch shape", ErrRuntimeContractMismatch)
 		}
 		content = strings.Replace(content, replacement[0], replacement[1], 1)
 	}

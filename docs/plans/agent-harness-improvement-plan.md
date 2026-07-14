@@ -188,7 +188,7 @@ in `.planning/phases/github-projects-discussions/`:
 ### 3.7 Cross-reference drift in adapters — C, D2
 
 - `parent-issue-orchestration-loop.md` step 3 load-list omits
-  `automated-review-routing-loop.md` and `claude-review-loop.md` (covered only indirectly
+  `automated-review-routing-loop.md` and `local-review-loop.md` (covered only indirectly
   via the parent-orchestrator contract).
 - `codex-active-orchestration-loop.md` load-list omits `stacked-parent-subissue-workflow.md`
   and the review loops.
@@ -227,7 +227,7 @@ later under the GSD loop.
    the `AGENTS.md` "shared runtime policy" sentence (currently "Codex, Claude, OpenCode, and
    future agents" → add Pi explicitly).
 4. Tighten cross-references (3.7): add `automated-review-routing-loop.md` and
-   `claude-review-loop.md` to `parent-issue-orchestration-loop.md` step 3; add
+   `local-review-loop.md` to `parent-issue-orchestration-loop.md` step 3; add
    `stacked-parent-subissue-workflow.md` + review loops to
    `codex-active-orchestration-loop.md` step 3.
 

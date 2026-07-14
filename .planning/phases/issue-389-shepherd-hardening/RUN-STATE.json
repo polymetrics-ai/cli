@@ -1,0 +1,45 @@
+{
+  "phase": "issue-389-shepherd-hardening",
+  "state": "implemented_verified",
+  "current_slice": "final_verification",
+  "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
+  "human_gate": "parent_pr_merge",
+  "orchestration_decisions": [
+    {
+      "cycle": "reconcile",
+      "decision": "read_only_spawned",
+      "reason": "scout subagent inspected the existing unfinished #389 diff without editing"
+    },
+    {
+      "cycle": "review",
+      "decision": "read_only_spawned",
+      "reason": "reviewer subagent audited supervise retry/model/runtime-contract behavior and found a retry exhaustion blocker"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "single issue-scoped Shepherd fix touched shared supervise/runner/runtime-contract code in the active checkout"
+    },
+    {
+      "cycle": "policy-cleanup",
+      "decision": "local_critical_path",
+      "reason": "user authorized removing GitHub-hosted automated review as a default repo gate on this branch"
+    }
+  ],
+  "last_verification": [
+    "scripts/gsd doctor",
+    "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
+    "cd agent-runtime/shepherd && go test ./...",
+    "cd agent-runtime/shepherd && go test ./internal/gsd -run 'TestRunnerCanDeriveGovernedImplementationModel|TestApplyPinnedHeadlessToolPatchReportsContractMismatch|TestApplyPinnedHeadlessToolPatchIsExactAndIdempotent' -count=1",
+    "cd agent-runtime/shepherd && go test ./cmd/shepherd ./internal/gsd -run 'TestFinalUnitRunState|TestRunnerCanDeriveGovernedImplementationModel|TestApplyPinnedHeadlessToolPatchReportsContractMismatch' -count=1",
+    "cd agent-runtime/shepherd && gofmt -w cmd internal",
+    "cd agent-runtime/shepherd && go test ./...",
+    "cd agent-runtime/shepherd && go test -race ./...",
+    "cd agent-runtime/shepherd && go vet ./...",
+    "cd agent-runtime/shepherd && go build ./cmd/shepherd",
+    "cd agent-runtime/shepherd && make verify",
+    "go list ./...",
+    "scripts/tests/shepherd-module-boundary.sh",
+    "gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify"
+  ]
+}

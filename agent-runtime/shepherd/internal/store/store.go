@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
@@ -36,11 +37,17 @@ type Effect struct {
 }
 
 type Delivery struct {
-	ID          string
-	Issue       int
-	WorkDir     string
-	ContextHash string
-	MilestoneID string
+	ID             string
+	Issue          int
+	ParentIssue    int
+	WorkDir        string
+	ContextHash    string
+	MilestoneID    string
+	Branch         string
+	BaseBranch     string
+	GSDProjectRoot string
+	InitialHead    string
+	GSDVersion     string
 }
 
 type DeliveryRun struct {
@@ -49,6 +56,23 @@ type DeliveryRun struct {
 	Generation int64
 	Attempt    int64
 	Owner      string
+}
+
+var ErrRetryBudgetExhausted = errors.New("unit retry budget exhausted")
+
+type UnitAttemptKey struct {
+	DeliveryID string
+	Generation int64
+	UnitID     string
+	HeadSHA    string
+}
+
+type UnitAttempt struct {
+	UnitAttemptKey
+	Attempts  int64
+	Remaining int64
+	Status    string
+	Failure   string
 }
 
 func Open(ctx context.Context, path string) (*Store, error) {
@@ -92,7 +116,10 @@ func (s *Store) migrate(ctx context.Context) error {
         )`,
 		`CREATE TABLE IF NOT EXISTS deliveries (
             delivery_id TEXT PRIMARY KEY, issue INTEGER NOT NULL, work_dir TEXT NOT NULL,
-            context_hash TEXT NOT NULL, milestone_id TEXT NOT NULL DEFAULT '',
+			context_hash TEXT NOT NULL, milestone_id TEXT NOT NULL DEFAULT '',
+			parent_issue INTEGER NOT NULL DEFAULT 0, branch TEXT NOT NULL DEFAULT '',
+			base_branch TEXT NOT NULL DEFAULT '', gsd_project_root TEXT NOT NULL DEFAULT '',
+			initial_head TEXT NOT NULL DEFAULT '', gsd_version TEXT NOT NULL DEFAULT '',
             created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL
         )`,
 		`CREATE TABLE IF NOT EXISTS delivery_runs (
@@ -121,11 +148,143 @@ func (s *Store) migrate(ctx context.Context) error {
 			payload_hash TEXT NOT NULL, epoch INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'pending',
             created_at INTEGER NOT NULL
         )`,
+		`CREATE TABLE IF NOT EXISTS unit_attempts (
+			delivery_id TEXT NOT NULL REFERENCES deliveries(delivery_id), generation INTEGER NOT NULL,
+			unit_id TEXT NOT NULL, head_sha TEXT NOT NULL, attempts INTEGER NOT NULL,
+			max_attempts INTEGER NOT NULL, status TEXT NOT NULL, last_failure TEXT NOT NULL DEFAULT '',
+			updated_at INTEGER NOT NULL,
+			PRIMARY KEY (delivery_id, generation, unit_id, head_sha)
+		)`,
 	}
 	for _, statement := range statements {
 		if _, err := s.db.ExecContext(ctx, statement); err != nil {
 			return fmt.Errorf("apply supervisor migration: %w", err)
 		}
+	}
+	columns := map[string]string{
+		"parent_issue": "INTEGER NOT NULL DEFAULT 0", "branch": "TEXT NOT NULL DEFAULT ''",
+		"base_branch": "TEXT NOT NULL DEFAULT ''", "gsd_project_root": "TEXT NOT NULL DEFAULT ''",
+		"initial_head": "TEXT NOT NULL DEFAULT ''", "gsd_version": "TEXT NOT NULL DEFAULT ''",
+	}
+	for name, definition := range columns {
+		if err := s.ensureColumn(ctx, "deliveries", name, definition); err != nil {
+			return err
+		}
+	}
+	for _, statement := range []string{
+		`CREATE UNIQUE INDEX IF NOT EXISTS deliveries_issue_unique ON deliveries(issue)`,
+		`CREATE UNIQUE INDEX IF NOT EXISTS deliveries_project_root_unique ON deliveries(gsd_project_root) WHERE gsd_project_root <> ''`,
+	} {
+		if _, err := s.db.ExecContext(ctx, statement); err != nil {
+			return fmt.Errorf("apply supervisor identity index: %w", err)
+		}
+	}
+	return nil
+}
+
+func (s *Store) BeginUnitAttempt(ctx context.Context, key UnitAttemptKey, maxAttempts int64) (UnitAttempt, error) {
+	if key.DeliveryID == "" || key.Generation <= 0 || strings.TrimSpace(key.UnitID) == "" ||
+		strings.ContainsAny(key.UnitID, "\r\n\x00") || !validGitSHA(key.HeadSHA) || maxAttempts <= 0 {
+		return UnitAttempt{}, errors.New("complete bounded unit attempt identity is required")
+	}
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return UnitAttempt{}, err
+	}
+	defer conn.Close()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return UnitAttempt{}, err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	now := time.Now().UTC().UnixNano()
+	if _, err := conn.ExecContext(ctx, `INSERT OR IGNORE INTO unit_attempts
+		(delivery_id, generation, unit_id, head_sha, attempts, max_attempts, status, updated_at)
+		VALUES (?, ?, ?, ?, 0, ?, 'pending', ?)`, key.DeliveryID, key.Generation, key.UnitID,
+		key.HeadSHA, maxAttempts, now); err != nil {
+		return UnitAttempt{}, fmt.Errorf("initialize unit attempt: %w", err)
+	}
+	var attempt UnitAttempt
+	var configuredMax int64
+	attempt.UnitAttemptKey = key
+	if err := conn.QueryRowContext(ctx, `SELECT attempts, max_attempts, status, last_failure
+		FROM unit_attempts WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ?`,
+		key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA).Scan(&attempt.Attempts,
+		&configuredMax, &attempt.Status, &attempt.Failure); err != nil {
+		return UnitAttempt{}, err
+	}
+	if configuredMax != maxAttempts {
+		return UnitAttempt{}, errors.New("unit attempt budget cannot change within a generation")
+	}
+	if attempt.Attempts >= configuredMax {
+		return UnitAttempt{}, ErrRetryBudgetExhausted
+	}
+	attempt.Attempts++
+	attempt.Remaining = configuredMax - attempt.Attempts
+	attempt.Status, attempt.Failure = "running", ""
+	if _, err := conn.ExecContext(ctx, `UPDATE unit_attempts SET attempts = ?, status = ?,
+		last_failure = '', updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ?
+		AND head_sha = ?`, attempt.Attempts, attempt.Status, now, key.DeliveryID, key.Generation,
+		key.UnitID, key.HeadSHA); err != nil {
+		return UnitAttempt{}, err
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return UnitAttempt{}, err
+	}
+	committed = true
+	return attempt, nil
+}
+
+func (s *Store) FinishUnitAttempt(ctx context.Context, key UnitAttemptKey, outcome string) error {
+	outcome = strings.TrimSpace(outcome)
+	if outcome == "" || strings.ContainsAny(outcome, "\r\n\x00") {
+		return errors.New("bounded unit attempt outcome is required")
+	}
+	result, err := s.db.ExecContext(ctx, `UPDATE unit_attempts SET status = 'terminal',
+		last_failure = ?, updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ?
+		AND head_sha = ? AND status = 'running'`, outcome, time.Now().UTC().UnixNano(),
+		key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA)
+	if err != nil {
+		return fmt.Errorf("finish unit attempt: %w", err)
+	}
+	rows, _ := result.RowsAffected()
+	if rows != 1 {
+		return errors.New("unit attempt is not running or is fenced")
+	}
+	return nil
+}
+
+func (s *Store) ensureColumn(ctx context.Context, table, column, definition string) error {
+	rows, err := s.db.QueryContext(ctx, `PRAGMA table_info(`+table+`)`)
+	if err != nil {
+		return fmt.Errorf("inspect supervisor schema: %w", err)
+	}
+	found := false
+	for rows.Next() {
+		var position int
+		var name, dataType string
+		var notNull, primaryKey int
+		var defaultValue any
+		if err := rows.Scan(&position, &name, &dataType, &notNull, &defaultValue, &primaryKey); err != nil {
+			_ = rows.Close()
+			return fmt.Errorf("read supervisor schema: %w", err)
+		}
+		if name == column {
+			found = true
+		}
+	}
+	if err := rows.Close(); err != nil {
+		return err
+	}
+	if found {
+		return nil
+	}
+	if _, err := s.db.ExecContext(ctx, `ALTER TABLE `+table+` ADD COLUMN `+column+` `+definition); err != nil {
+		return fmt.Errorf("add supervisor schema column %s: %w", column, err)
 	}
 	return nil
 }
@@ -148,14 +307,16 @@ func (s *Store) RecordAttemptHeads(ctx context.Context, deliveryID, owner, start
 }
 
 func (s *Store) EnsureDelivery(ctx context.Context, delivery Delivery) error {
-	if delivery.ID == "" || delivery.Issue <= 0 || delivery.WorkDir == "" || !validSHA256(delivery.ContextHash) {
-		return errors.New("valid delivery identity, issue, work directory, and context hash are required")
+	if err := validateDelivery(delivery); err != nil {
+		return err
 	}
 	now := time.Now().UTC().UnixNano()
 	result, err := s.db.ExecContext(ctx, `INSERT OR IGNORE INTO deliveries
-        (delivery_id, issue, work_dir, context_hash, milestone_id, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)`, delivery.ID, delivery.Issue, delivery.WorkDir,
-		delivery.ContextHash, delivery.MilestoneID, now, now)
+		(delivery_id, issue, parent_issue, work_dir, context_hash, milestone_id, branch, base_branch,
+		 gsd_project_root, initial_head, gsd_version, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, delivery.ID, delivery.Issue,
+		delivery.ParentIssue, delivery.WorkDir, delivery.ContextHash, delivery.MilestoneID, delivery.Branch,
+		delivery.BaseBranch, delivery.GSDProjectRoot, delivery.InitialHead, delivery.GSDVersion, now, now)
 	if err != nil {
 		return fmt.Errorf("ensure delivery: %w", err)
 	}
@@ -168,15 +329,40 @@ func (s *Store) EnsureDelivery(ctx context.Context, delivery Delivery) error {
 		}
 		return nil
 	}
-	var current Delivery
-	if err := s.db.QueryRowContext(ctx, `SELECT delivery_id, issue, work_dir, context_hash, milestone_id
-        FROM deliveries WHERE delivery_id = ?`, delivery.ID).Scan(&current.ID, &current.Issue,
-		&current.WorkDir, &current.ContextHash, &current.MilestoneID); err != nil {
+	// Existing pre-identity controller databases are upgraded once, but only
+	// when every newly introduced identity column is still empty.
+	if _, err := s.db.ExecContext(ctx, `UPDATE deliveries SET parent_issue = ?, branch = ?, base_branch = ?,
+		gsd_project_root = ?, initial_head = ?, gsd_version = ?, updated_at = ?
+		WHERE delivery_id = ? AND issue = ? AND work_dir = ? AND context_hash = ?
+		AND parent_issue = 0 AND branch = '' AND base_branch = '' AND gsd_project_root = ''
+		AND initial_head = '' AND gsd_version = ''`, delivery.ParentIssue, delivery.Branch,
+		delivery.BaseBranch, delivery.GSDProjectRoot, delivery.InitialHead, delivery.GSDVersion, now,
+		delivery.ID, delivery.Issue, delivery.WorkDir, delivery.ContextHash); err != nil {
+		return fmt.Errorf("upgrade delivery identity: %w", err)
+	}
+	current, err := s.GetDelivery(ctx, delivery.ID)
+	if err != nil {
 		return fmt.Errorf("read delivery: %w", err)
 	}
-	if current.Issue != delivery.Issue || current.WorkDir != delivery.WorkDir || current.ContextHash != delivery.ContextHash ||
+	if current.Issue != delivery.Issue || current.ParentIssue != delivery.ParentIssue ||
+		current.WorkDir != delivery.WorkDir || current.ContextHash != delivery.ContextHash ||
+		current.Branch != delivery.Branch || current.BaseBranch != delivery.BaseBranch ||
+		current.GSDProjectRoot != delivery.GSDProjectRoot || current.InitialHead != delivery.InitialHead ||
+		current.GSDVersion != delivery.GSDVersion ||
 		(delivery.MilestoneID != "" && current.MilestoneID != "" && current.MilestoneID != delivery.MilestoneID) {
 		return errors.New("delivery identity is already bound to different canonical inputs")
+	}
+	return nil
+}
+
+func validateDelivery(delivery Delivery) error {
+	if delivery.ID == "" || delivery.Issue <= 0 || delivery.ParentIssue <= 0 ||
+		!filepath.IsAbs(delivery.WorkDir) || !filepath.IsAbs(delivery.GSDProjectRoot) ||
+		filepath.Clean(delivery.WorkDir) != filepath.Clean(delivery.GSDProjectRoot) ||
+		!validSHA256(delivery.ContextHash) || strings.TrimSpace(delivery.Branch) == "" ||
+		strings.TrimSpace(delivery.BaseBranch) == "" || !validGitSHA(delivery.InitialHead) ||
+		strings.TrimSpace(delivery.GSDVersion) == "" {
+		return errors.New("complete canonical issue, branch, GSD project, head, version, and context identity are required")
 	}
 	return nil
 }
@@ -345,9 +531,12 @@ func (s *Store) ResumeDelivery(ctx context.Context, decision domain.HumanDecisio
 
 func (s *Store) GetDelivery(ctx context.Context, id string) (Delivery, error) {
 	var delivery Delivery
-	err := s.db.QueryRowContext(ctx, `SELECT delivery_id, issue, work_dir, context_hash, milestone_id
-        FROM deliveries WHERE delivery_id = ?`, id).Scan(&delivery.ID, &delivery.Issue, &delivery.WorkDir,
-		&delivery.ContextHash, &delivery.MilestoneID)
+	err := s.db.QueryRowContext(ctx, `SELECT delivery_id, issue, parent_issue, work_dir, context_hash,
+		milestone_id, branch, base_branch, gsd_project_root, initial_head, gsd_version
+		FROM deliveries WHERE delivery_id = ?`, id).Scan(&delivery.ID, &delivery.Issue,
+		&delivery.ParentIssue, &delivery.WorkDir, &delivery.ContextHash, &delivery.MilestoneID,
+		&delivery.Branch, &delivery.BaseBranch, &delivery.GSDProjectRoot, &delivery.InitialHead,
+		&delivery.GSDVersion)
 	if err != nil {
 		return Delivery{}, fmt.Errorf("read delivery: %w", err)
 	}
@@ -376,6 +565,18 @@ func validSHA256(value string) bool {
 		return false
 	}
 	for _, char := range value[len("sha256:"):] {
+		if !((char >= '0' && char <= '9') || (char >= 'a' && char <= 'f')) {
+			return false
+		}
+	}
+	return true
+}
+
+func validGitSHA(value string) bool {
+	if len(value) != 40 {
+		return false
+	}
+	for _, char := range value {
 		if !((char >= '0' && char <= '9') || (char >= 'a' && char <= 'f')) {
 			return false
 		}

@@ -101,10 +101,9 @@ skills:
       - reverse-etl
   review_disposition:
     capabilities:
-      - Claude automatic/manual review mode selection
-      - Copilot backup review routing when Claude is blocked
-      - review comment triage
-      - disposition replies
+      - local automated review route selection
+      - review finding triage
+      - disposition records
       - follow-up issue routing
       - Go/security/design review skill loading
     required_local_skills:
@@ -120,7 +119,7 @@ skills:
       - go-engineering
     required_for:
       - cli-surface
-      - claude-review
+      - local-review
       - automated-review-routing
       - parent-roadmap
       - stacked-pr
@@ -132,7 +131,7 @@ skills:
       - Codex subagent task decomposition
       - worker write-scope isolation
       - sub-PR merge arbitration
-      - parent PR automated review coverage routing
+      - parent PR local review coverage routing
       - human gate escalation
       - required skill routing for workers
     preferred_local_skills:
