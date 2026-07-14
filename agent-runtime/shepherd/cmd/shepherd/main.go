@@ -20,6 +20,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/authority"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/contract"
 	decisionlog "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/decision"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
@@ -29,6 +30,7 @@ import (
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/supervisor"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/telemetry"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/validation"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/workspace"
 )
 
@@ -37,6 +39,10 @@ const version = "0.1.0"
 const defaultMaxEventBytes = 8 * 1024 * 1024
 
 const defaultWriteScopePollInterval = 500 * time.Millisecond
+
+var independentValidatorFactory = func(runner *gsd.Runner, config fileConfig) validation.Validator {
+	return validation.GSDValidator{Runner: runner, SessionsDir: filepath.Join(config.GSDHome, "agent", "sessions")}
+}
 
 type fileConfig struct {
 	GSDCommand          []string `json:"gsd_command"`
@@ -967,26 +973,27 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		result.Terminal = gsd.TerminalError
 		result.Err = err
 	}
+	candidateWorkDir := config.WorkDir
+	candidateHead := ""
 	if result.Terminal == gsd.TerminalSuccess && gsd.IsCanonicalUnitCommand(command) {
 		message := "chore(gsd): checkpoint " + strings.ReplaceAll(before.Next.UnitID, "/", " ")
 		if attemptWorktree != nil {
 			if attemptManager == nil {
 				result.Terminal = gsd.TerminalError
-				result.Err = errors.New("attempt manager missing for promoted unit")
-			} else if _, promoteErr := attemptManager.Promote(ctx, *attemptWorktree, issueContext.WriteScope, message); promoteErr != nil {
+				result.Err = errors.New("attempt manager missing for candidate unit")
+			} else if head, checkpointErr := attemptManager.CheckpointCandidate(ctx, *attemptWorktree, issueContext.WriteScope, message); checkpointErr != nil {
 				result.Terminal = gsd.TerminalError
-				result.Err = fmt.Errorf("promote successful canonical unit: %w", promoteErr)
-			} else if adoptErr := attemptManager.AdoptGSDState(ctx, *attemptWorktree); adoptErr != nil {
-				result.Terminal = gsd.TerminalError
-				result.Err = fmt.Errorf("adopt successful GSD state: %w", adoptErr)
+				result.Err = fmt.Errorf("checkpoint candidate canonical unit: %w", checkpointErr)
 			} else {
-				appendActivity("transition", "promoted_attempt_worktree", trustedUnit, "", "", time.Now().UTC())
-				_ = attemptManager.Discard(context.Background(), *attemptWorktree)
+				candidateHead = head
+				candidateWorkDir = attemptWorktree.Root
+				appendActivity("transition", "checkpointed_attempt_candidate", trustedUnit, "", "", time.Now().UTC())
 			}
-		} else if _, checkpointErr := shepherdgit.CheckpointWithinScopes(ctx, config.WorkDir, issueContext.WriteScope, message); checkpointErr != nil {
+		} else if head, checkpointErr := shepherdgit.CheckpointWithinScopes(ctx, config.WorkDir, issueContext.WriteScope, message); checkpointErr != nil {
 			result.Terminal = gsd.TerminalError
 			result.Err = fmt.Errorf("checkpoint successful canonical unit: %w", checkpointErr)
 		} else {
+			candidateHead = head
 			appendActivity("transition", "checkpointed_scoped_unit", trustedUnit, "", "", time.Now().UTC())
 		}
 	}
@@ -997,14 +1004,42 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	} else if cleanErr := shepherdgit.RequireClean(endSnapshot); cleanErr != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = joinTerminalFailure(result.Err, errors.New("worktree must be clean after a governed unit"))
+	} else if result.Terminal == gsd.TerminalSuccess && gsd.IsCanonicalUnitCommand(command) {
+		if candidateHead == "" {
+			result.Terminal = gsd.TerminalError
+			result.Err = errors.New("candidate head is required before independent validation")
+		} else if endSnapshot.HeadSHA != startSnapshot.HeadSHA {
+			result.Terminal = gsd.TerminalError
+			result.Err = errors.New("canonical head changed before ratified promotion")
+		} else {
+			validator := independentValidatorFactory(runner, config)
+			if err := persistSuccessProof(ctx, authority, validator, config, registry, issueContext.WriteScope, candidateWorkDir, deliveryID, trustedUnit, before.Next.UnitType, attempt.Generation, unitAttempt.Attempts, startSnapshot.HeadSHA, candidateHead); err != nil {
+				result.Terminal = gsd.TerminalError
+				result.Err = err
+			} else if attemptWorktree != nil {
+				if err := attemptManager.PromoteCandidate(ctx, *attemptWorktree, candidateHead); err != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = fmt.Errorf("promote ratified candidate: %w", err)
+				} else if adoptErr := attemptManager.AdoptGSDState(ctx, *attemptWorktree); adoptErr != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = fmt.Errorf("adopt ratified GSD state: %w", adoptErr)
+				} else {
+					appendActivity("transition", "promoted_ratified_attempt", trustedUnit, "", "", time.Now().UTC())
+					_ = attemptManager.Discard(context.Background(), *attemptWorktree)
+				}
+			}
+		}
+	}
+	endSnapshot, snapshotErr = shepherdgit.Inspect(ctx, config.WorkDir)
+	if snapshotErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = joinTerminalFailure(result.Err, errors.New("inspect worktree after validation and promotion"))
+	} else if cleanErr := shepherdgit.RequireClean(endSnapshot); cleanErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = joinTerminalFailure(result.Err, errors.New("worktree must be clean after validation and promotion"))
 	} else if err := authority.RecordAttemptHeads(ctx, deliveryID, executionID, startSnapshot.HeadSHA, endSnapshot.HeadSHA); err != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = err
-	} else if result.Terminal == gsd.TerminalSuccess && gsd.IsCanonicalUnitCommand(command) {
-		if err := persistSuccessProof(ctx, authority, registry, issueContext.WriteScope, config.WorkDir, deliveryID, trustedUnit, before.Next.UnitType, attempt.Generation, unitAttempt.Attempts, startSnapshot.HeadSHA, endSnapshot.HeadSHA); err != nil {
-			result.Terminal = gsd.TerminalError
-			result.Err = err
-		}
 	}
 	appendActivity("run.terminal", string(result.Terminal), "", "", "", result.Ended)
 	activityMu.Lock()
@@ -1430,7 +1465,7 @@ func gsdStateArtifacts(workDir string) ([]shepherdgit.Artifact, error) {
 	return artifacts, nil
 }
 
-func persistSuccessProof(ctx context.Context, authority *store.Store, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType string, generation, attempt int64, startHead, candidateHead string) error {
+func persistSuccessProof(ctx context.Context, authorityStore *store.Store, validator validation.Validator, config fileConfig, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType string, generation, attempt int64, startHead, candidateHead string) error {
 	metadata, ok := registry.Lookup(unitType)
 	if !ok {
 		return fmt.Errorf("missing official unit metadata for %s", unitType)
@@ -1448,6 +1483,16 @@ func persistSuccessProof(ctx context.Context, authority *store.Store, registry g
 		return errors.New("successful canonical unit produced no artifact manifest")
 	}
 	sort.Slice(artifacts, func(i, j int) bool { return artifacts[i].Path < artifacts[j].Path })
+	contract := struct {
+		UnitType              string   `json:"unit_type"`
+		PhaseChain            []string `json:"phase_chain"`
+		RequiredWorkflowTools []string `json:"required_workflow_tools"`
+	}{UnitType: unitType, PhaseChain: metadata.PhaseChain, RequiredWorkflowTools: metadata.RequiredWorkflowTools}
+	contractRaw, err := json.Marshal(contract)
+	if err != nil {
+		return err
+	}
+	contractHash := sha256.Sum256(contractRaw)
 	manifest := struct {
 		UnitType              string                 `json:"unit_type"`
 		PhaseChain            []string               `json:"phase_chain"`
@@ -1459,16 +1504,57 @@ func persistSuccessProof(ctx context.Context, authority *store.Store, registry g
 		return err
 	}
 	evidenceHash := sha256.Sum256(raw)
+	artifactHashes := make([]validation.ArtifactHash, 0, len(artifacts))
+	for _, artifact := range artifacts {
+		artifactHashes = append(artifactHashes, validation.ArtifactHash{Path: artifact.Path, Hash: artifact.Hash})
+	}
+	evidenceHashValue := "sha256:" + hex.EncodeToString(evidenceHash[:])
+	contractHashValue := "sha256:" + hex.EncodeToString(contractHash[:])
+	validationResult, err := validator.Validate(ctx, validation.Request{
+		Repository: config.Repository, PullRequest: config.PullRequest, BaseBranch: "main",
+		DeliveryID: deliveryID, Generation: generation, UnitID: unitID, UnitType: unitType, Attempt: attempt,
+		StateVersion: generation, WorkDir: workDir, GSDHome: config.GSDHome,
+		BaseHead: startHead, CandidateHead: candidateHead,
+		ContractHash: contractHashValue,
+		EvidenceHash: evidenceHashValue, ArtifactHashes: artifactHashes,
+		RequireGates: validation.GateRequirements{LocalGates: true, UAT: true, MilestoneValid: true},
+	})
+	if err != nil {
+		return err
+	}
+	if validationResult.SessionID == "" {
+		return errors.New("validator session identity is required")
+	}
+	if validationResult.EvidenceHash != evidenceHashValue {
+		return errors.New("validator evidence hash does not match candidate artifacts")
+	}
+	issuedAt := validationResult.IssuedAt
+	if issuedAt.IsZero() {
+		return errors.New("validator issue time is required")
+	}
+	attestation, err := authority.Ratify(authority.RatificationRequest{
+		Repository: config.Repository, PR: config.PullRequest, BaseBranch: "main", BaseSHA: startHead,
+		CandidateHead: candidateHead, ObservedHead: validationResult.ObservedHead,
+		RunID: deliveryID, Generation: generation, UnitID: unitID, Attempt: attempt, StateVersion: generation,
+		ContractHash: contractHashValue, EvidenceHash: validationResult.EvidenceHash,
+		Validator: validationResult.ObservedModel, Thinking: validationResult.Thinking, Verdict: validationResult.Verdict,
+		LocalGates: validationResult.LocalGates, UAT: validationResult.UAT, MilestoneValid: validationResult.MilestoneValid,
+		IssuedAt: validationResult.IssuedAt, ExpiresAt: validationResult.ExpiresAt,
+	}, time.Now().UTC())
+	if err != nil {
+		return err
+	}
 	proofIDHash := sha256.Sum256([]byte(deliveryID + ":" + unitID + ":" + candidateHead + ":" + hex.EncodeToString(evidenceHash[:])))
-	if err := authority.PutArtifactProof(ctx, store.ArtifactProof{
+	if err := authorityStore.PutArtifactProof(ctx, store.ArtifactProof{
 		ProofID: hex.EncodeToString(proofIDHash[:8]), DeliveryID: deliveryID, Generation: generation, UnitID: unitID, Attempt: attempt,
-		StartHead: startHead, CandidateHead: candidateHead, ValidatedHead: candidateHead,
+		StartHead: startHead, CandidateHead: candidateHead, ValidatedHead: attestation.HeadSHA,
 		ExpectedArtifact: string(raw), ArtifactHash: "sha256:" + hex.EncodeToString(evidenceHash[:]),
-		Validator: "openai-codex/gpt-5.6-sol", Thinking: "high", Ratified: true,
+		Validator: attestation.Validator, Thinking: attestation.Thinking,
+		Ratified: attestation.HeadSHA == candidateHead && attestation.Validator == validationResult.ObservedModel,
 	}); err != nil {
 		return err
 	}
-	return authority.PutAttestation(ctx, store.AttestationRecord{RunID: deliveryID, HeadSHA: candidateHead, Validator: "openai-codex/gpt-5.6-sol", Thinking: "high", Verdict: "PROCEED", CreatedAt: time.Now().UTC()})
+	return authorityStore.PutAttestation(ctx, store.AttestationRecord{RunID: deliveryID, HeadSHA: attestation.HeadSHA, Validator: attestation.Validator, Thinking: attestation.Thinking, Verdict: attestation.Verdict, CreatedAt: attestation.IssuedAt})
 }
 
 func consumeGitHubDecisionReplies(ctx context.Context, authority *store.Store, client *shepherdgithub.Client, config fileConfig, deliveryID string, issue int) error {

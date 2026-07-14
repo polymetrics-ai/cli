@@ -4,13 +4,9 @@
   "base_implementation_head": "db13cbaa8e27cbc86130ce2547f3e60b82b5217c",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_a_store_hardening_green_broader_validation_pending",
+  "state": "slice_a_complete_green_except_preexisting_lint",
   "current_slice": "A_real_independent_validation_and_ratification",
   "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
-  "gsd_adapter_health": {
-    "scripts_gsd_doctor": "pass",
-    "scripts_gsd_list": "pass"
-  },
   "required_skills_loaded": [
     "gsd-core",
     "polymetrics-issue-delivery",
@@ -36,7 +32,7 @@
     {
       "cycle": "cycle-0",
       "decision": "local_critical_path",
-      "reason": "No overlapping mutating workers in this checkout; production edits will be sequential."
+      "reason": "No overlapping mutating workers in this checkout; production edits were sequential."
     },
     {
       "cycle": "cycle-0",
@@ -46,31 +42,27 @@
     {
       "cycle": "cycle-1",
       "decision": "store_guard_first",
-      "reason": "Added smallest RED tests preventing unratified proof and non-PROCEED attestation persistence before broader production wiring."
+      "reason": "Committed/pushed the coherent store guard checkpoint before broader Slice A production wiring."
+    },
+    {
+      "cycle": "cycle-2",
+      "decision": "validator_port_boundary_fakes_only",
+      "reason": "Deterministic integration tests fake only the typed independent-validator port; production uses GSDValidator."
     }
   ],
-  "invalidated_prior_claims": [
-    "independent_validation_passed",
-    "ratification_passed",
-    "recovery_planning_passed",
-    "canary_ready",
-    "final_verification_passed"
-  ],
-  "known_findings": [
-    "cmd/shepherd/main.go:persistSuccessProof manufactures Sol/high validator, PROCEED, and Ratified=true",
-    "authority.Ratify exists but is not wired into production success proof",
-    "attempt lifecycle states and promotion/recovery state transitions are incomplete",
-    "fake supervise integration does not yet prove real validation/ratification/outbox/recovery boundaries"
-  ],
   "completed_this_run": [
-    "ArtifactProof persistence now rejects Ratified=false",
-    "Attestation persistence now rejects non-PROCEED verdicts"
+    "Committed and pushed b4ca144a test(shepherd): reject unratified proof records",
+    "Added internal/validation typed validator request/result port",
+    "Added production GSDValidator using Sol/high runner against exact candidate worktree/head and bounded validation proof file",
+    "Split attempt CheckpointCandidate from PromoteCandidate",
+    "Rewired runHeadless to validate and authority.Ratify before canonical promotion/adopting .gsd",
+    "Rejected missing, GPT-5.5, RETRY, HALT, stale-head, and failed-gate validation evidence without canonical HEAD or .gsd mutation",
+    "Persisted artifact proof and attestation only after authority.Ratify succeeds"
   ],
-  "next_actions": [
-    "Add production-path RED test proving successful supervise cannot self-ratify without independent validator evidence",
-    "Replace persistSuccessProof manufacturing with real validation result plus authority.Ratify",
-    "Keep candidate in attempt worktree until validation/ratification succeeds",
-    "Run required nested module and boundary gates before committing"
+  "remaining_scope": [
+    "Slice B and later slices not started",
+    "Live Sol final review and Twenty/Asana canaries deferred by instruction",
+    "Pre-existing golangci-lint findings remain recorded and outside Slice A"
   ],
   "human_gates": [
     "No Asana/Twenty canaries before independent Sol/high validation of exact candidate head",
@@ -79,13 +71,12 @@
     "No new dependencies without approval"
   ],
   "last_verification": [
-    "scripts/gsd doctor: pass",
-    "scripts/gsd list: pass",
-    "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run: pass",
-    "cd agent-runtime/shepherd && go test ./internal/store -run 'TestArtifactProofRejectsUnratifiedResult|TestAttestationRejectsNonProceedVerdicts|TestArtifactProofBindsExactHeadsAndRatification|TestAttestationPersistsValidatorProof' -count=1: pass",
+    "cd agent-runtime/shepherd && go test ./cmd/shepherd -run 'TestSuperviseRejectsInvalidIndependentValidationWithoutPromotion|TestSuperviseRatifiesBeforePromotingCandidate|TestSuperviseFakeRuntimeToFinalHumanGate' -count=1: pass",
+    "cd agent-runtime/shepherd && go test ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd: pass",
     "cd agent-runtime/shepherd && go test ./...: pass",
     "cd agent-runtime/shepherd && go test -race ./...: pass",
-    "cd agent-runtime/shepherd && go vet ./... && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...: pass",
-    "cd agent-runtime/shepherd && golangci-lint run ./...: fail_preexisting_errcheck_ineffassign_staticcheck_unused"
+    "cd agent-runtime/shepherd && go vet ./...: pass",
+    "cd agent-runtime/shepherd && golangci-lint run ./...: fail_preexisting_errcheck_ineffassign_staticcheck_unused",
+    "cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...: pass"
   ]
 }

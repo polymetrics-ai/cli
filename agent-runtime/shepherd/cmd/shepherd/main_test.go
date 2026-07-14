@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -18,6 +19,8 @@ import (
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/validation"
+	_ "modernc.org/sqlite"
 )
 
 func initializedTestRepository(t *testing.T) string {
@@ -490,12 +493,235 @@ func TestSuperviseFakeRuntimeToFinalHumanGate(t *testing.T) {
 		t.Fatal(err)
 	}
 	config := fileConfig{WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir, CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5", GSDVersion: "1.11.0", TimeoutSeconds: 10, HeartbeatSeconds: 1, MaxEventBytes: defaultMaxEventBytes, MaxUnitAttempts: 2, Repository: "polymetrics-ai/cli", PullRequest: 391, Runtime: "host"}
+	restore := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
+	defer restore()
 	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := os.Stat(filepath.Join(repo, "agent-runtime", "shepherd", "canary.txt")); err != nil {
 		t.Fatalf("promoted canary artifact missing: %v", err)
 	}
+}
+
+func TestSuperviseRejectsInvalidIndependentValidationWithoutPromotion(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	for _, test := range []struct {
+		name   string
+		result validation.Result
+	}{
+		{name: "missing validator evidence", result: validation.Result{}},
+		{name: "gpt 5.5 validator", result: validFakeValidationResult("openai-codex/gpt-5.5", "PROCEED")},
+		{name: "retry verdict", result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "RETRY")},
+		{name: "halt verdict", result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "HALT")},
+		{name: "stale candidate head", result: func() validation.Result {
+			result := validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")
+			result.ObservedHead = strings.Repeat("9", 40)
+			return result
+		}()},
+		{name: "failed local gates", result: func() validation.Result {
+			result := validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")
+			result.LocalGates = false
+			return result
+		}()},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+			beforeHead := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
+			beforeGSD := readFileForTest(t, filepath.Join(repo, ".gsd", "STATE.md"))
+			validator := &fakeIndependentValidator{result: test.result}
+			restore := installFakeIndependentValidator(t, validator)
+			defer restore()
+
+			err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
+			if err == nil {
+				t.Fatal("invalid validation unexpectedly promoted")
+			}
+			if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != beforeHead {
+				t.Fatalf("canonical HEAD changed: got %s want %s", got, beforeHead)
+			}
+			if got := readFileForTest(t, filepath.Join(repo, ".gsd", "STATE.md")); got != beforeGSD {
+				t.Fatalf("canonical GSD state changed: got %q want %q", got, beforeGSD)
+			}
+			if _, err := os.Stat(filepath.Join(repo, "agent-runtime", "shepherd", "canary.txt")); !os.IsNotExist(err) {
+				t.Fatalf("canonical canary artifact should not be promoted: %v", err)
+			}
+			if count := countSQLiteRowsForTest(t, filepath.Join(config.StateDir, "authority.db"), "artifact_proofs"); count != 0 {
+				t.Fatalf("artifact proofs persisted on rejected validation: %d", count)
+			}
+			if count := countSQLiteRowsForTest(t, filepath.Join(config.StateDir, "authority.db"), "attestations"); count != 0 {
+				t.Fatalf("attestations persisted on rejected validation: %d", count)
+			}
+			if validator.calls != 1 {
+				t.Fatalf("validator calls=%d want 1", validator.calls)
+			}
+		})
+	}
+}
+
+func TestSuperviseRatifiesBeforePromotingCandidate(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	beforeHead := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
+	beforeGSD := readFileForTest(t, filepath.Join(repo, ".gsd", "STATE.md"))
+	validator := &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED"), onValidate: func(_ context.Context, request validation.Request) error {
+		if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != beforeHead {
+			t.Fatalf("candidate was promoted before validation/ratification: got %s want %s", got, beforeHead)
+		}
+		if got := readFileForTest(t, filepath.Join(repo, ".gsd", "STATE.md")); got != beforeGSD {
+			t.Fatalf("canonical GSD changed before validation/ratification: got %q want %q", got, beforeGSD)
+		}
+		if request.BaseHead != beforeHead || request.CandidateHead == "" || request.CandidateHead == beforeHead {
+			t.Fatalf("validator request not bound to base/candidate heads: %+v", request)
+		}
+		return nil
+	}}
+	restore := installFakeIndependentValidator(t, validator)
+	defer restore()
+
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+		t.Fatal(err)
+	}
+	if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got == beforeHead {
+		t.Fatal("ratified candidate was not promoted")
+	}
+	if got := readFileForTest(t, filepath.Join(repo, ".gsd", "STATE.md")); got == beforeGSD {
+		t.Fatal("ratified GSD state was not adopted")
+	}
+	if _, err := os.Stat(filepath.Join(repo, "agent-runtime", "shepherd", "canary.txt")); err != nil {
+		t.Fatalf("promoted canary artifact missing: %v", err)
+	}
+	if count := countSQLiteRowsForTest(t, filepath.Join(config.StateDir, "authority.db"), "artifact_proofs"); count != 1 {
+		t.Fatalf("artifact proofs=%d want 1", count)
+	}
+	if count := countSQLiteRowsForTest(t, filepath.Join(config.StateDir, "authority.db"), "attestations"); count != 1 {
+		t.Fatalf("attestations=%d want 1", count)
+	}
+	if validator.calls != 1 {
+		t.Fatalf("validator calls=%d want 1", validator.calls)
+	}
+}
+
+func setupFakeSuperviseRuntime(t *testing.T) (string, string, fileConfig, *gsd.Runner) {
+	t.Helper()
+	repo := initializedTestRepository(t)
+	branchRaw := runGitForTest(t, repo, "symbolic-ref", "--quiet", "--short", "HEAD")
+	contextPath := filepath.Join(repo, "issue-context.json")
+	contextRaw := `{
+  "issue":389,
+  "parent_issue":372,
+  "objective":"fake supervise integration",
+  "scope":["fake supervise"],
+  "non_goals":["live github"],
+  "acceptance_criteria":["final human gate"],
+  "dependencies":[],
+  "write_scope":["agent-runtime/shepherd/**"],
+  "required_reading":["AGENTS.md"],
+  "required_skills":["golang-how-to"],
+  "tdd":{"red":"fake runtime fails before supervise","green":"supervise reaches final gate","refactor":"keep fake bounded"},
+  "verification":["go test ./..."],
+  "safety":["no secrets"],
+  "human_gates":["parent merge"],
+  "branch":"` + strings.TrimSpace(branchRaw) + `",
+  "pr_base":"main",
+  "review_route":"local",
+  "sources":["issue #389"]
+}`
+	if err := os.WriteFile(contextPath, []byte(contextRaw), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(repo, ".gsd"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(repo, ".gsd", "STATE.md"), []byte("fake canonical state\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	runGitForTest(t, repo, "add", "issue-context.json")
+	runGitForTest(t, repo, "commit", "-m", "test: add issue context")
+	stateDir := filepath.Join(t.TempDir(), "state")
+	gsdHome := filepath.Join(t.TempDir(), "home")
+	if err := os.MkdirAll(filepath.Join(gsdHome, "agent"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(gsdHome, "agent", "settings.json"), []byte(`{"defaultProvider":"openai-codex","defaultModel":"gpt-5.6-sol","defaultThinkingLevel":"high"}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	runner, err := gsd.NewRunner(gsd.Config{
+		Command: []string{os.Args[0], "-test.run=TestSuperviseFakeRuntimeHelper", "--"},
+		WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir,
+		Model: "openai-codex/gpt-5.6-sol", Thinking: "high", Timeout: 10 * time.Second,
+		Environment: []string{"GO_WANT_RUNNER_HELPER=supervise"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	config := fileConfig{WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir, CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5", GSDVersion: "1.11.0", TimeoutSeconds: 10, HeartbeatSeconds: 1, MaxEventBytes: defaultMaxEventBytes, MaxUnitAttempts: 2, Repository: "polymetrics-ai/cli", PullRequest: 391, Runtime: "host"}
+	return repo, contextPath, config, runner
+}
+
+func validFakeValidationResult(model, verdict string) validation.Result {
+	now := time.Now().UTC()
+	return validation.Result{ObservedModel: model, Thinking: "high", SessionID: "11111111-1111-1111-1111-111111111111", Verdict: verdict, LocalGates: true, UAT: true, MilestoneValid: true, IssuedAt: now.Add(-time.Minute), ExpiresAt: now.Add(10 * time.Minute)}
+}
+
+type fakeIndependentValidator struct {
+	result     validation.Result
+	onValidate func(context.Context, validation.Request) error
+	calls      int
+}
+
+func (f *fakeIndependentValidator) Validate(ctx context.Context, request validation.Request) (validation.Result, error) {
+	f.calls++
+	if f.onValidate != nil {
+		if err := f.onValidate(ctx, request); err != nil {
+			return validation.Result{}, err
+		}
+	}
+	result := f.result
+	if result.ObservedHead == "" {
+		result.ObservedHead = request.CandidateHead
+	}
+	if result.EvidenceHash == "" {
+		result.EvidenceHash = request.EvidenceHash
+	}
+	return result, nil
+}
+
+func installFakeIndependentValidator(t *testing.T, validator validation.Validator) func() {
+	t.Helper()
+	previous := independentValidatorFactory
+	independentValidatorFactory = func(*gsd.Runner, fileConfig) validation.Validator { return validator }
+	return func() { independentValidatorFactory = previous }
+}
+
+func countSQLiteRowsForTest(t *testing.T, path, table string) int {
+	t.Helper()
+	db, err := sql.Open("sqlite", path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if err := db.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
+	var count int
+	if err := db.QueryRow("SELECT COUNT(*) FROM " + table).Scan(&count); err != nil {
+		t.Fatal(err)
+	}
+	return count
+}
+
+func readFileForTest(t *testing.T, path string) string {
+	t.Helper()
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return string(raw)
 }
 
 func TestSuperviseFakeRuntimeHelper(t *testing.T) {
@@ -537,6 +763,10 @@ func TestSuperviseFakeRuntimeHelper(t *testing.T) {
 		os.Exit(2)
 	}
 	if err := os.WriteFile(filepath.Join(os.Getenv("GSD_STATE_DIR"), "fake-workflow-state"), []byte("complete"), 0o600); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(2)
+	}
+	if err := os.WriteFile(filepath.Join(workDir, ".gsd", "STATE.md"), []byte("fake completed state\n"), 0o600); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}

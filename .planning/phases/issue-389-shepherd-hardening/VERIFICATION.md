@@ -10,12 +10,12 @@ the current branch and exact candidate head.
 
 ### A. Independent validation and ratification
 
-- [ ] Missing validator evidence fails closed.
-- [ ] GPT-5.5 validator evidence fails closed.
-- [ ] Stale candidate head fails closed.
-- [ ] Validator `RETRY`/`HALT` fails closed.
-- [ ] `authority.Ratify` is called with real validation result and stored evidence.
-- [ ] Canonical branch remains unchanged on every failed validation/ratification path.
+- [x] Missing validator evidence fails closed.
+- [x] GPT-5.5 validator evidence fails closed.
+- [x] Stale candidate head fails closed.
+- [x] Validator `RETRY`/`HALT` fails closed.
+- [x] `authority.Ratify` is called with real validation result and stored evidence.
+- [x] Canonical branch remains unchanged on every failed validation/ratification path.
 
 ### B. Attempt lifecycle and crash recovery
 
@@ -109,4 +109,11 @@ go list ./...
 - Race gate: PASS `cd agent-runtime/shepherd && go test -race ./...`.
 - Vet/build/make/boundary/root listing: PASS `cd agent-runtime/shepherd && go vet ./... && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
 - Lint gate: FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with existing `errcheck`, `ineffassign`, `staticcheck`, and `unused` findings outside the focused proof hardening. This repair did not claim lint green.
-- Important remaining blocker: production `persistSuccessProof` still manufactures validator/ratification evidence and must be replaced before Slice A can be considered complete.
+- Slice A focused integration: PASS `cd agent-runtime/shepherd && go test ./cmd/shepherd -run 'TestSuperviseRejectsInvalidIndependentValidationWithoutPromotion|TestSuperviseRatifiesBeforePromotingCandidate|TestSuperviseFakeRuntimeToFinalHumanGate' -count=1`.
+- Slice A focused packages: PASS `cd agent-runtime/shepherd && go test ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd`.
+- Full nested test: PASS `cd agent-runtime/shepherd && go test ./...`.
+- Full nested race: PASS `cd agent-runtime/shepherd && go test -race ./...`.
+- Vet: PASS `cd agent-runtime/shepherd && go vet ./...`.
+- Build/make/module-boundary/root list: PASS `cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
+- Lint remains FAIL on pre-existing findings: unchecked closes/removes in `cmd/shepherd`, `internal/decision`, `internal/gsd`, `internal/store`, `internal/telemetry`, `internal/workspace`; pre-existing `ineffassign` in `cmd/shepherd`; pre-existing `staticcheck` style in `internal/store`; pre-existing unused helpers in `internal/gsd`. No new Slice A lint category was introduced.
+- Slice A blocker: none for deterministic local proof-recovery behavior. Live Sol final review and canaries remain deferred by instruction.

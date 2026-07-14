@@ -37,15 +37,44 @@ RED tests:
 RED evidence:
 - FAIL (expected) `cd agent-runtime/shepherd && go test ./internal/store -run 'TestArtifactProofRejectsUnratifiedResult|TestAttestationRejectsNonProceedVerdicts' -count=1`
   - `TestArtifactProofRejectsUnratifiedResult`: `unratified artifact proof accepted`
-- [ ] `cmd/shepherd/main_test.go`: successful supervise path must not create a ratified proof when
+- [x] `cmd/shepherd/main_test.go`: successful supervise path must not create a ratified proof when
       independent validator evidence is absent.
-- [ ] `cmd/shepherd/main_test.go`: stale candidate head leaves canonical branch unchanged.
+- [x] `cmd/shepherd/main_test.go`: stale candidate head leaves canonical branch unchanged.
+- [x] `cmd/shepherd/main_test.go`: GPT-5.5 validator evidence is rejected.
+- [x] `cmd/shepherd/main_test.go`: `RETRY` and `HALT` verdicts are rejected.
+- [x] `cmd/shepherd/main_test.go`: every rejected path leaves canonical HEAD and canonical `.gsd`
+      unchanged.
+- [x] `cmd/shepherd/main_test.go`: successful path validates before promotion and persists proof plus
+      attestation after ratification.
+
+RED evidence:
+- FAIL (expected) `cd agent-runtime/shepherd && go test ./cmd/shepherd -run 'TestSuperviseRejectsInvalidIndependentValidationWithoutPromotion|TestSuperviseRatifiesBeforePromotingCandidate' -count=1`
+  - compile failed because `internal/validation` and `independentValidatorFactory` did not exist yet.
 
 GREEN evidence (partial store hardening only):
 - PASS `cd agent-runtime/shepherd && gofmt -w internal/store/proof_test.go internal/store/store.go && go test ./internal/store -run 'TestArtifactProofRejectsUnratifiedResult|TestAttestationRejectsNonProceedVerdicts|TestArtifactProofBindsExactHeadsAndRatification|TestAttestationPersistsValidatorProof' -count=1`
 - Production change: `PutArtifactProof` now rejects unratified proofs; `PutAttestation` now rejects non-`PROCEED` verdicts.
 
-Refactor evidence: pending; production `persistSuccessProof` still requires follow-up because it manufactures validator/ratification evidence.
+Refactor/green evidence for full Slice A:
+- Added typed `internal/validation.Validator` port with request/result structures binding delivery,
+  generation, unit, attempt, base/candidate head, contract hash, evidence hash, artifact hashes, and
+  required gates.
+- Split attempt checkpointing from canonical promotion with `workspace.Manager.CheckpointCandidate`
+  and `PromoteCandidate`.
+- Rewired `runHeadless` so the candidate remains in the attempt worktree until independent validation
+  and `authority.Ratify` succeed.
+- Removed manufactured validator/attestation constants from `persistSuccessProof`; it now uses the
+  validator result and returned ratification attestation.
+- Production `validation.GSDValidator` invokes GSD on the candidate worktree with Sol/high and requires
+  bounded structured validation evidence from `.gsd/shepherd-validation.json`.
+- PASS `cd agent-runtime/shepherd && go test ./cmd/shepherd -run 'TestSuperviseRejectsInvalidIndependentValidationWithoutPromotion|TestSuperviseRatifiesBeforePromotingCandidate|TestSuperviseFakeRuntimeToFinalHumanGate' -count=1`.
+- PASS `cd agent-runtime/shepherd && go test ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd`.
+- PASS `cd agent-runtime/shepherd && go test ./...`.
+- PASS `cd agent-runtime/shepherd && go test -race ./...`.
+- PASS `cd agent-runtime/shepherd && go vet ./...`.
+- FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with pre-existing errcheck,
+  ineffassign, staticcheck, and unused findings; no new lint category was introduced by Slice A.
+- PASS `cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
 
 ## Slice B — Durable attempt lifecycle and crash recovery
 

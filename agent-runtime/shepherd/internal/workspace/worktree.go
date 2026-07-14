@@ -128,18 +128,12 @@ func (m *Manager) AdoptGSDState(ctx context.Context, attempt AttemptWorktree) er
 	return copyGSDState(ctx, filepath.Join(attempt.Root, ".gsd"), filepath.Join(m.RepoRoot, ".gsd"))
 }
 
-func (m *Manager) Promote(ctx context.Context, attempt AttemptWorktree, writeScopes []string, message string) (string, error) {
+func (m *Manager) CheckpointCandidate(ctx context.Context, attempt AttemptWorktree, writeScopes []string, message string) (string, error) {
 	if err := validateIdentity(attempt.Identity); err != nil {
 		return "", err
 	}
 	if strings.TrimSpace(message) == "" || strings.ContainsAny(message, "\r\n\x00") {
-		return "", errors.New("one-line promotion message is required")
-	}
-	if head, err := git(ctx, m.RepoRoot, "rev-parse", "HEAD"); err != nil || strings.TrimSpace(string(head)) != attempt.Identity.BaseHead {
-		if err != nil {
-			return "", err
-		}
-		return "", errors.New("canonical head changed before promotion")
+		return "", errors.New("one-line candidate checkpoint message is required")
 	}
 	paths, err := changedPaths(ctx, attempt.Root)
 	if err != nil {
@@ -163,14 +157,47 @@ func (m *Manager) Promote(ctx context.Context, attempt AttemptWorktree, writeSco
 	if err != nil {
 		return "", err
 	}
-	attemptHead := strings.TrimSpace(string(attemptHeadRaw))
-	if attemptHead == attempt.Identity.BaseHead {
-		return attemptHead, nil
+	return strings.TrimSpace(string(attemptHeadRaw)), nil
+}
+
+func (m *Manager) PromoteCandidate(ctx context.Context, attempt AttemptWorktree, candidateHead string) error {
+	if err := validateIdentity(attempt.Identity); err != nil {
+		return err
 	}
-	if _, err := git(ctx, m.RepoRoot, "merge", "--ff-only", attemptHead); err != nil {
-		return "", fmt.Errorf("promote attempt head: %w", err)
+	if len(candidateHead) != 40 {
+		return errors.New("candidate head is required for promotion")
 	}
-	return attemptHead, nil
+	if head, err := git(ctx, m.RepoRoot, "rev-parse", "HEAD"); err != nil || strings.TrimSpace(string(head)) != attempt.Identity.BaseHead {
+		if err != nil {
+			return err
+		}
+		return errors.New("canonical head changed before promotion")
+	}
+	attemptHeadRaw, err := git(ctx, attempt.Root, "rev-parse", "HEAD")
+	if err != nil {
+		return err
+	}
+	if strings.TrimSpace(string(attemptHeadRaw)) != candidateHead {
+		return errors.New("attempt candidate head moved before promotion")
+	}
+	if candidateHead == attempt.Identity.BaseHead {
+		return nil
+	}
+	if _, err := git(ctx, m.RepoRoot, "merge", "--ff-only", candidateHead); err != nil {
+		return fmt.Errorf("promote attempt head: %w", err)
+	}
+	return nil
+}
+
+func (m *Manager) Promote(ctx context.Context, attempt AttemptWorktree, writeScopes []string, message string) (string, error) {
+	candidateHead, err := m.CheckpointCandidate(ctx, attempt, writeScopes, message)
+	if err != nil {
+		return "", err
+	}
+	if err := m.PromoteCandidate(ctx, attempt, candidateHead); err != nil {
+		return "", err
+	}
+	return candidateHead, nil
 }
 
 func (m *Manager) Discard(ctx context.Context, attempt AttemptWorktree) error {

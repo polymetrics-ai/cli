@@ -37,6 +37,10 @@ status is therefore **not validated, not ratified, not canary-ready**.
    overlapping mutating workers are allowed.
 3. `cycle-0/safety`: do not run Asana/Twenty canaries, GitHub mutations, or credentialed checks before
    exact-head independent Sol/high validation exists.
+4. `cycle-1/store-guard`: committed/pushed the coherent store guard checkpoint before broader Slice A
+   production changes.
+5. `cycle-2/slice-a`: stayed on `local_critical_path`; added deterministic fake-validator integration
+   tests at the typed validator port boundary before production rewiring.
 
 ## Ordered implementation slices
 
@@ -52,6 +56,12 @@ GREEN target: keep candidates inside attempt worktrees, dispatch a genuinely sep
 validator against exact candidate head plus bounded artifact hashes/gates, persist observed model,
 thinking, session identity, verdict, gates, evidence hashes, ratify with `authority.Ratify`, and promote
 only after successful ratification.
+
+Slice A implementation status: complete for deterministic local coverage. Attempt worktrees now produce
+a candidate checkpoint before canonical promotion; invalid validation evidence leaves canonical HEAD and
+canonical `.gsd` unchanged; production validation is behind a typed `validation.Validator` port and the
+GSD-backed validator requires bounded `.gsd/shepherd-validation.json` evidence rather than manufacturing
+a verdict in `persistSuccessProof`.
 
 ### B. Durable attempt lifecycle and crash recovery
 
