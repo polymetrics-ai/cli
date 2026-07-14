@@ -33,6 +33,8 @@ const version = "0.1.0"
 
 const defaultMaxEventBytes = 8 * 1024 * 1024
 
+const defaultWriteScopePollInterval = 500 * time.Millisecond
+
 type fileConfig struct {
 	GSDCommand          []string `json:"gsd_command"`
 	WorkDir             string   `json:"work_dir"`
@@ -623,7 +625,40 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		},
 	}
 	appendActivity("run.started", "running", trustedUnit, "", "", time.Now().UTC())
+	var scopeMu sync.Mutex
+	var scopeViolation error
+	var scopeMonitorDone chan struct{}
+	var stopScopeMonitor context.CancelFunc
+	if gsd.IsCanonicalUnitCommand(command) {
+		scopeMonitorDone = make(chan struct{})
+		var scopeCtx context.Context
+		scopeCtx, stopScopeMonitor = context.WithCancel(runCtx)
+		results := monitorWriteScope(scopeCtx, config.WorkDir, issueContext.WriteScope, defaultWriteScopePollInterval)
+		go func() {
+			defer close(scopeMonitorDone)
+			if monitorErr := <-results; monitorErr != nil {
+				scopeMu.Lock()
+				scopeViolation = monitorErr
+				scopeMu.Unlock()
+				appendActivity("policy", "write_scope_violation", trustedUnit, "", "", time.Now().UTC())
+				cancel()
+			}
+		}()
+	}
 	result := runner.Run(runCtx, command, args, observer)
+	if stopScopeMonitor != nil {
+		stopScopeMonitor()
+	}
+	if scopeMonitorDone != nil {
+		<-scopeMonitorDone
+	}
+	scopeMu.Lock()
+	monitorErr := scopeViolation
+	scopeMu.Unlock()
+	if monitorErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = joinTerminalFailure(monitorErr, result.Err)
+	}
 	if result.Terminal == gsd.TerminalSuccess && command == "new-milestone" && config.Runtime == "podman" {
 		workflow, queryErr := runner.Query(ctx)
 		if queryErr != nil || workflow.MilestoneID == "" {
@@ -747,6 +782,41 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		return fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, terminalErr)
 	}
 	return nil
+}
+
+func monitorWriteScope(ctx context.Context, root string, scopes []string, interval time.Duration) <-chan error {
+	results := make(chan error, 1)
+	go func() {
+		defer close(results)
+		if interval <= 0 {
+			results <- errors.New("write scope monitor interval must be positive")
+			return
+		}
+		ticker := time.NewTicker(interval)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				results <- nil
+				return
+			case <-ticker.C:
+				paths, err := shepherdgit.ChangedPathsOutsideScopes(ctx, root, scopes)
+				if err != nil {
+					if ctx.Err() != nil {
+						results <- nil
+						return
+					}
+					results <- fmt.Errorf("inspect live write scope: %w", err)
+					return
+				}
+				if len(paths) > 0 {
+					results <- fmt.Errorf("live write-scope breach: changed path %q is outside the issue write scope", paths[0])
+					return
+				}
+			}
+		}
+	}()
+	return results
 }
 
 func modelForCommand(config fileConfig, command string) string {

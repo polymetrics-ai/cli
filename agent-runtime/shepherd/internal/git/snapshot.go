@@ -85,6 +85,25 @@ func CheckpointWithinScopes(ctx context.Context, root string, scopes []string, m
 	return snapshot.HeadSHA, nil
 }
 
+// ChangedPathsOutsideScopes returns current worker changes that the immutable issue write scope
+// does not authorize. It is read-only so callers can use it while a governed unit is running.
+func ChangedPathsOutsideScopes(ctx context.Context, root string, scopes []string) ([]string, error) {
+	if root == "" || len(scopes) == 0 {
+		return nil, errors.New("repository and write scopes are required")
+	}
+	paths, err := changedPaths(ctx, root)
+	if err != nil {
+		return nil, err
+	}
+	outside := make([]string, 0)
+	for _, path := range paths {
+		if !withinAnyScope(path, scopes) && !isMutableGSDProjection(path) {
+			outside = append(outside, path)
+		}
+	}
+	return outside, nil
+}
+
 func changedPaths(ctx context.Context, root string) ([]string, error) {
 	tracked, err := run(ctx, root, "diff", "--name-only", "-z", "HEAD", "--", ".")
 	if err != nil {

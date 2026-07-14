@@ -59,6 +59,13 @@ module without coupling it to the Polymetrics CLI module.
 18. Resolve runtime identity from the newest exact-worktree Pi session only. Ignore older oversized
     sessions and nested sessions, scan the selected header/metadata with the same 8 MiB bound, and
     continue rejecting any effective model other than GPT-5.6 Sol/high.
+19. Detect out-of-scope writes while a canonical unit is still running. Poll the clean-start
+    worktree against the immutable protected issue-context `write_scope`, cancel the existing
+    context on the first forbidden path or inspection failure, retain the final checkpoint guard,
+    and publish a bounded activity/error record. Do not automatically delete worker output.
+20. Correct Asana T02 with connector-targeted documentation generation/validation. A connector
+    issue must not rewrite the global generated-doc corpus; repository-wide exactness remains a
+    separately scoped migration.
 
 ## Required skills and workflows
 
@@ -68,6 +75,10 @@ module without coupling it to the Polymetrics CLI module.
 - The repo-local adapter exposes `programming-loop`; use it for the host-runtime migration and
   record RED/GREEN/refactor evidence below.
 - Issue-first and parent/subissue orchestration contracts.
+- This hardening run used `scripts/gsd prompt programming-loop init --phase
+  issue-372-scope-hardening --dry-run` and loaded `golang-how-to`, `golang-cli`,
+  `golang-testing`, `golang-error-handling`, `golang-safety`, `golang-context`,
+  `golang-concurrency`, and `golang-security`.
 
 ## Execution decisions
 

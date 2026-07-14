@@ -45,6 +45,11 @@
   incomplete-task recovery.
 - [x] Runtime identity fallback reads only the newest exact-worktree session and ignores older
   oversized history while retaining GPT-5.6 Sol/high enforcement.
+- [x] A running canonical unit is cancelled on the first out-of-scope path, with deterministic
+  tests covering allowed writes, forbidden writes, inspection failure, and goroutine shutdown.
+- [x] The post-run scoped checkpoint remains mandatory as defense in depth.
+- [ ] Asana targeted docs generation/validation leaves the unrelated connector corpus unchanged.
+- [x] Host-runtime nested-module tests, race tests, vet, build, and root module-boundary checks pass.
 
 ## Current canary blocker
 

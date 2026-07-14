@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -16,6 +17,27 @@ import (
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 )
+
+func initializedTestRepository(t *testing.T) string {
+	t.Helper()
+	root := t.TempDir()
+	for _, args := range [][]string{{"init", "-q"}, {"config", "user.email", "test@example.invalid"}, {"config", "user.name", "Test"}} {
+		cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+		if output, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("git %v: %v: %s", args, err, output)
+		}
+	}
+	if err := os.WriteFile(filepath.Join(root, "seed.txt"), []byte("seed\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	for _, args := range [][]string{{"add", "seed.txt"}, {"commit", "-qm", "seed"}} {
+		cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+		if output, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("git %v: %v: %s", args, err, output)
+		}
+	}
+	return root
+}
 
 func TestExplicitDepthApprovalIsNarrowlyScoped(t *testing.T) {
 	t.Parallel()
@@ -101,6 +123,57 @@ func TestJoinTerminalFailurePreservesPrimaryCause(t *testing.T) {
 	joined := joinTerminalFailure(primary, secondary)
 	if !errors.Is(joined, primary) || !errors.Is(joined, secondary) {
 		t.Fatalf("joined error=%v", joined)
+	}
+}
+
+func TestMonitorWriteScopeReportsForbiddenWriteAndStopsOnCancellation(t *testing.T) {
+	t.Parallel()
+	root := initializedTestRepository(t)
+	ctx, cancel := context.WithCancel(context.Background())
+	results := monitorWriteScope(ctx, root, []string{"internal/cli/**"}, 5*time.Millisecond)
+
+	outside := filepath.Join(root, "docs", "connectors", "100ms", "MANUAL.md")
+	if err := os.MkdirAll(filepath.Dir(outside), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(outside, []byte("unexpected churn\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	select {
+	case err := <-results:
+		if err == nil || !strings.Contains(err.Error(), "docs/connectors/100ms/MANUAL.md") {
+			t.Fatalf("scope monitor error=%v", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("scope monitor did not report forbidden write")
+	}
+
+	allowedCtx, allowedCancel := context.WithCancel(context.Background())
+	allowedResults := monitorWriteScope(allowedCtx, root, []string{"docs/connectors/**"}, 5*time.Millisecond)
+	allowedCancel()
+	select {
+	case err := <-allowedResults:
+		if err != nil {
+			t.Fatalf("cancelled allowed monitor error=%v", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("scope monitor leaked after cancellation")
+	}
+	cancel()
+}
+
+func TestMonitorWriteScopeFailsClosedWhenRepositoryCannotBeInspected(t *testing.T) {
+	t.Parallel()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	results := monitorWriteScope(ctx, filepath.Join(t.TempDir(), "missing"), []string{"internal/cli/**"}, time.Millisecond)
+	select {
+	case err := <-results:
+		if err == nil || !strings.Contains(err.Error(), "inspect live write scope") {
+			t.Fatalf("scope monitor error=%v", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("scope monitor did not fail closed")
 	}
 }
 

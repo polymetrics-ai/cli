@@ -183,6 +183,29 @@ func TestCheckpointWithinScopesRejectsOutOfScopeChangesWithoutStaging(t *testing
 	}
 }
 
+func TestChangedPathsOutsideScopesReportsOnlyForbiddenPaths(t *testing.T) {
+	t.Parallel()
+	root := initializedRepository(t)
+	allowed := filepath.Join(root, "internal", "cli", "asana.go")
+	if err := os.MkdirAll(filepath.Dir(allowed), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(allowed, []byte("package cli\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "outside.md"), []byte("global churn\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	paths, err := ChangedPathsOutsideScopes(context.Background(), root, []string{"internal/cli/**"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(paths) != 1 || paths[0] != "outside.md" {
+		t.Fatalf("outside paths=%v", paths)
+	}
+}
+
 func TestCheckpointWithinScopesIncludesOnlyMutableTrackedGSDProjections(t *testing.T) {
 	t.Parallel()
 	root := initializedRepository(t)
