@@ -1,0 +1,7 @@
+{
+  "phase": "issue-389-shepherd-hardening",
+  "state": "in_progress",
+  "current_slice": "runtime_contract_admission",
+  "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
+  "human_gate": "parent_pr_merge"
+}
