@@ -3,6 +3,9 @@
     "node",
     "/absolute/path/to/node_modules/@opengsd/gsd-pi/dist/loader.js"
   ],
+  "pi_command": [
+    "/absolute/path/to/pi"
+  ],
   "work_dir": "/absolute/path/to/issue-worktree",
   "gsd_home": "/absolute/path/to/controlled-gsd-home",
   "state_dir": "/absolute/path/to/protected-shepherd-state/issue-389",

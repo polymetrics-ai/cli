@@ -247,6 +247,24 @@ func TestMutatingSkipFenceLeavesAuthorityReady(t *testing.T) {
 	}
 }
 
+func TestIndependentValidatorFactoryUsesConfiguredPiNotGSD(t *testing.T) {
+	t.Parallel()
+	config := fileConfig{
+		PiCommand: []string{"/configured/pi"}, GSDCommand: []string{"/pinned/gsd"},
+		GSDHome: "/protected/home", StateDir: "/protected/state", TimeoutSeconds: 60,
+	}
+	validator, ok := independentValidatorFactory(nil, config).(validation.GSDValidator)
+	if !ok {
+		t.Fatalf("validator type=%T", independentValidatorFactory(nil, config))
+	}
+	if len(validator.Command) != 1 || validator.Command[0] != config.PiCommand[0] {
+		t.Fatalf("validator command=%v want Pi %v", validator.Command, config.PiCommand)
+	}
+	if validator.Command[0] == config.GSDCommand[0] || validator.SessionsDir != "" {
+		t.Fatalf("validator must not use GSD or shared sessions: %+v", validator)
+	}
+}
+
 func TestLoadConfigRejectsUnknownFields(t *testing.T) {
 	t.Parallel()
 
@@ -257,6 +275,19 @@ func TestLoadConfigRejectsUnknownFields(t *testing.T) {
 	}
 	if _, err := loadConfig(path); err == nil {
 		t.Fatal("expected unknown config field to fail")
+	}
+}
+
+func TestLoadConfigRequiresAllowlistedPiExecutable(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "config.json")
+	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","repository":"polymetrics-ai/cli","pull_request":388}`
+	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := loadConfig(path); err == nil || !strings.Contains(err.Error(), "pi_command") {
+		t.Fatalf("missing pi_command err=%v", err)
 	}
 }
 
@@ -277,7 +308,7 @@ func TestLoadConfigDefaultsToBoundedNestedAgentEnvelopeSize(t *testing.T) {
 	t.Parallel()
 
 	path := filepath.Join(t.TempDir(), "config.json")
-	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","repository":"polymetrics-ai/cli","pull_request":388}`
+	raw := `{"gsd_command":["gsd"],"pi_command":["/usr/bin/true"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","repository":"polymetrics-ai/cli","pull_request":388}`
 	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
 		t.Fatal(err)
 	}

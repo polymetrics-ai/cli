@@ -1,43 +1,59 @@
 {
   "phase": "issue-389-shepherd-hardening",
   "branch": "fix/389-shepherd-proof-recovery",
-  "head_at_retry_start": "19d051c6b5d74e03fa8c8d4b5d392a58052a0499",
+  "head_at_retry_start": "99604d48f224b7881ee2afdee97924f2821d2bd6",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_a_retry_corrected_green_except_preexisting_lint",
+  "state": "slice_a_live_pi_correction_green_except_preexisting_lint",
   "current_slice": "A_real_independent_validation_and_ratification",
   "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
-  "false_green": {
-    "commit": "19d051c6b5d74e03fa8c8d4b5d392a58052a0499",
-    "summary": "Previous Slice A completion claim was invalid because production validation had no real proof producer and trusted worker-controlled .gsd/shepherd-validation.json."
-  },
-  "corrected_slice_a": [
-    "Dedicated non-canonical validator process launch: headless shepherd-validate with Sol/high",
-    "Protected nonce-bound validation request/result under Shepherd state outside candidate worktree",
-    "No trust in candidate .gsd/shepherd-validation.json",
-    "Mandatory new validator session after invocation start with exact worktree, Sol/high model and high thinking",
-    "No derived/fabricated session identity fallback",
-    "Candidate head re-read after validation and before ratification/promotion",
-    "Durable governance state version used instead of generation",
-    "Configured issue PR base used instead of hard-coded main",
-    "Required gates derived from official unit metadata",
-    "Extended attestation schema/migration stores full ratification evidence"
+  "false_greens": [
+    {
+      "commit": "19d051c6b5d74e03fa8c8d4b5d392a58052a0499",
+      "summary": "Production validation had no real proof producer and trusted worker-controlled .gsd/shepherd-validation.json."
+    },
+    {
+      "commit": "99604d48f224b7881ee2afdee97924f2821d2bd6",
+      "summary": "Production invoked unsupported gsd headless shepherd-validate; helper tests replaced the command and did not prove production callability."
+    }
   ],
+  "corrected_slice_a": [
+    "Separately configured allowlisted absolute pi_command",
+    "Bounded Pi --help capability probe",
+    "Direct Pi JSON print invocation with openai-codex/gpt-5.6-sol and high thinking",
+    "Read-only tool allowlist read,bash,grep,find,ls and disabled project extensions/skills/templates/themes/context/trust",
+    "Dedicated protected per-invocation session directory",
+    "Stable audit request identity bound to generation/attempt/state version plus fresh cryptographic nonce directory",
+    "Protected nonce-bound request/result transport with replay, malformed, stale and mismatch rejection",
+    "Bounded tail capture of Pi JSON events with no raw prompt/model/output in durable errors",
+    "Fresh exact-worktree Pi session/model/thinking evidence",
+    "Preserved exact-head rereads, required-gate derivation, ratification ordering, durable attestation, and delayed promotion"
+  ],
+  "live_smoke": {
+    "command": "POLYMETRICS_SHEPHERD_LIVE_VALIDATOR=1 go test ./internal/validation -run TestLivePiValidatorSmoke -count=1 -v",
+    "result": "pass",
+    "model": "openai-codex/gpt-5.6-sol",
+    "thinking": "high",
+    "session_id": "019f62b3-9830-7129-9c93-2104ed54a10e",
+    "verdict": "PROCEED",
+    "fixture_head": "6650f5e18ecbbf15c18739a8422fa1ba663a0635",
+    "evidence_hash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  },
   "orchestration_decisions": [
     {
-      "cycle": "cycle-3",
+      "cycle": "cycle-4",
       "decision": "retry_slice_a_only",
-      "reason": "User requested RETRY correction; Slice B, PR creation, final Sol review, and canaries are blocked."
+      "reason": "Correct unsupported production validator subprocess; Slice B and later work remain blocked."
     },
     {
-      "cycle": "cycle-3",
-      "decision": "real_validator_red_tests_first",
-      "reason": "New tests target production validation.GSDValidator helper-process path rather than fakeIndependentValidator only."
+      "cycle": "cycle-4",
+      "decision": "configured_pi_direct",
+      "reason": "Use the installed documented Pi CLI rather than modifying pinned official GSD or inventing a GSD unit."
     },
     {
-      "cycle": "cycle-3",
+      "cycle": "cycle-4",
       "decision": "local_critical_path",
-      "reason": "Sequential mutating work in this checkout; no parallel mutating workers."
+      "reason": "Sequential mutating work; no overlapping workers."
     }
   ],
   "blocked": [
@@ -52,7 +68,7 @@
     "cd agent-runtime/shepherd && go test ./...: pass",
     "cd agent-runtime/shepherd && go test -race ./...: pass",
     "cd agent-runtime/shepherd && go vet ./...: pass",
-    "cd agent-runtime/shepherd && golangci-lint run ./...: fail_same_30_preexisting_findings_no_new_validation_finding",
+    "cd agent-runtime/shepherd && golangci-lint run ./...: fail_same_30_preexisting_findings_no_new_findings",
     "cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...: pass"
   ]
 }

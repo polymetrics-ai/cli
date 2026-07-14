@@ -16,7 +16,9 @@ the current branch and exact candidate head.
 - [x] Validator `RETRY`/`HALT` fails closed against the real production validator.
 - [x] `authority.Ratify` is called with real validation result and stored evidence.
 - [x] Canonical branch remains unchanged on every failed validation/ratification path in command tests; production validator unit tests also prove candidate `.gsd` remains unchanged on rejected paths.
-- [x] Dedicated validator execution is non-canonical/read-only and does not use `validate-milestone`.
+- [x] Dedicated validator execution invokes configured Pi directly and uses neither `validate-milestone` nor invented GSD verbs.
+- [x] Exact Pi flags enforce Sol/high, JSON print mode, dedicated sessions, read-only tools, disabled project resources, and bounded capability probing.
+- [x] Opt-in actual Pi smoke produced a fresh bound Sol/high session/result.
 - [x] Result transport is nonce-bound under protected Shepherd state outside the candidate worktree.
 - [x] New validator session, exact model, high thinking, request nonce, candidate head, evidence hash,
       base branch, and durable state version are all verified.
@@ -114,10 +116,12 @@ go list ./...
 - Vet/build/make/boundary/root listing: PASS `cd agent-runtime/shepherd && go vet ./... && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
 - Lint gate: FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with existing `errcheck`, `ineffassign`, `staticcheck`, and `unused` findings outside the focused proof hardening. This repair did not claim lint green.
 - Previous Slice A completion evidence at `19d051c6`: false green. It did not test the real production validator and left no real proof producer.
-- Corrected production-validator focused gate: PASS `cd agent-runtime/shepherd && go test ./internal/validation ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd`.
+- `99604d48` Slice A evidence: second false green because production called unsupported `gsd headless shepherd-validate`; helper tests did not prove production callability.
+- Corrected Pi production-validator focused gate: PASS `cd agent-runtime/shepherd && go test ./internal/validation ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd`.
+- Exact live Pi smoke: PASS `POLYMETRICS_SHEPHERD_LIVE_VALIDATOR=1 go test ./internal/validation -run TestLivePiValidatorSmoke -count=1 -v`; observed Sol/high, fresh session `019f62b3-9830-7129-9c93-2104ed54a10e`, fixture head `6650f5e18ecbbf15c18739a8422fa1ba663a0635`, bound evidence hash, verdict `PROCEED`.
 - Full nested test: PASS `cd agent-runtime/shepherd && go test ./...`.
 - Full nested race: PASS `cd agent-runtime/shepherd && go test -race ./...`.
 - Vet: PASS `cd agent-runtime/shepherd && go vet ./...`.
 - Build/make/module-boundary/root list: PASS `cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
-- Lint: FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with the same 30 pre-existing findings (`errcheck`, one `ineffassign`, two `staticcheck`, two `unused`). The transient new `validation/validator.go` staticcheck finding was fixed, proving this correction adds no new lint finding category.
+- Lint: FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with the same 30 pre-existing findings (`errcheck`, one `ineffassign`, two `staticcheck`, two `unused`). A newly introduced validator parser staticcheck finding was fixed; final output returns to exactly the 30-item baseline.
 - Canaries, PR creation, final Sol review, and Slice B remain blocked.

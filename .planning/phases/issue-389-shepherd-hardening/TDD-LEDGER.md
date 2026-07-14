@@ -78,8 +78,26 @@ Retry RED tests added against the real production validator:
 
 RED evidence: these tests target production `validation.GSDValidator` with a helper process and would fail against `19d051c6` because it used canonical `validate-milestone`, trusted worker-local `.gsd/shepherd-validation.json`, accepted derived session IDs, lacked protected nonce-bound result transport, and did not bind state/base/gates.
 
-Corrected Slice A GREEN evidence:
-- Added dedicated non-canonical validator process launch (`headless shepherd-validate`) with Sol/high, exact candidate worktree, bounded request path, and exclusive result path.
+Second false-green evidence for commit `99604d48`:
+- The claimed dedicated subprocess was `gsd headless shepherd-validate`, but neither pinned official GSD
+  nor the repository adapter registers that command.
+- Helper tests substituted the Go test executable and manually wrote sessions/results, proving transport
+  parsing but not that the production validator was callable.
+
+Final corrected Slice A GREEN evidence:
+- Added a contract test proving the former GSD executable fails the required Pi capability probe.
+- Added a separately configured `pi_command`; production invokes real Pi with `--mode json --print`,
+  `openai-codex/gpt-5.6-sol`, `--thinking high`, and only `read,bash,grep,find,ls`.
+- Disabled extensions, skills, templates, themes, context files, and project trust for the validator.
+- Added exact fake-Pi process-boundary tests for model/thinking, candidate cwd, tool allowlist, dedicated
+  session directory, fresh session, nonce/head/hash/repository/PR/base binding, malformed/stale/replayed/
+  mismatched results, nonzero exit, timeout, missing result, and startup capability failure.
+- Validation retries now use a stable audit request identity bound to generation/attempt/state version plus
+  a fresh cryptographic nonce subdirectory, preventing collisions while retaining replay evidence.
+- Pi JSON output is bounded in memory, parsed only from final assistant messages, and never included raw
+  in durable errors; only redacted classifications/counts are exposed.
+- Preserved protected nonce-bound transport, exact-head rereads, required-gate derivation, ratification,
+  full durable attestation, and delayed promotion.
 - Shepherd now writes nonce-bound validation requests under protected state, outside the candidate worktree, and rejects stale/reused/malformed result files.
 - Removed derived/fabricated validator session identity; a new session after validator start with exact worktree, Sol/high model, and high thinking is mandatory.
 - Result proof binds request ID, nonce, base branch/head, candidate/observed head, durable governance state version, contract/evidence hash, verdict, gates, issue time, and expiry.
@@ -91,6 +109,7 @@ Corrected Slice A GREEN evidence:
 - PASS `cd agent-runtime/shepherd && go vet ./...`.
 - FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with the same 30 pre-existing findings; the earlier new `validation/validator.go` staticcheck finding was fixed.
 - PASS `cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
+- PASS live smoke: `POLYMETRICS_SHEPHERD_LIVE_VALIDATOR=1 go test ./internal/validation -run TestLivePiValidatorSmoke -count=1 -v` observed `openai-codex/gpt-5.6-sol`, `high`, fresh session `019f62b3-9830-7129-9c93-2104ed54a10e`, bound fixture head `6650f5e18ecbbf15c18739a8422fa1ba663a0635`, bound evidence hash, and `PROCEED`.
 
 ## Slice B — Durable attempt lifecycle and crash recovery
 

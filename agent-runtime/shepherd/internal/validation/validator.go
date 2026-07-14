@@ -1,6 +1,8 @@
 package validation
 
 import (
+	"bufio"
+	"bytes"
 	"context"
 	"crypto/rand"
 	"crypto/sha256"
@@ -17,6 +19,8 @@ import (
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/authority"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 )
+
+const maxValidatorOutputBytes = 2 * 1024 * 1024
 
 type ArtifactHash struct {
 	Path string `json:"path"`
@@ -76,6 +80,7 @@ type GSDValidator struct {
 	SessionsDir string
 	Timeout     time.Duration
 	Now         func() time.Time
+	Nonce       func() (string, error)
 	Environment []string
 }
 
@@ -99,11 +104,14 @@ type protectedRequest struct {
 	ArtifactHashes []ArtifactHash   `json:"artifact_hashes"`
 	RequiredGates  GateRequirements `json:"required_gates"`
 	IssuedAt       time.Time        `json:"issued_at"`
+	ExpiresAt      time.Time        `json:"expires_at"`
 }
 
 type proofFile struct {
 	RequestID      string    `json:"request_id"`
 	Nonce          string    `json:"nonce"`
+	Repository     string    `json:"repository"`
+	PullRequest    int       `json:"pull_request"`
 	BaseBranch     string    `json:"base_branch"`
 	BaseHead       string    `json:"base_head"`
 	CandidateHead  string    `json:"candidate_head"`
@@ -124,8 +132,16 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 	if err := validateRequest(request); err != nil {
 		return Result{}, err
 	}
+	canonicalWorkDir, err := filepath.EvalSymlinks(filepath.Clean(request.WorkDir))
+	if err != nil {
+		return Result{}, fmt.Errorf("resolve candidate worktree: %w", err)
+	}
+	request.WorkDir = canonicalWorkDir
 	if len(v.Command) == 0 {
 		return Result{}, errors.New("validator command is required")
+	}
+	if err := probePiValidator(ctx, v.Command, v.Timeout, v.Environment); err != nil {
+		return Result{}, err
 	}
 	if inside, err := pathInside(request.WorkDir, request.StateDir); err != nil || inside {
 		if err != nil {
@@ -144,11 +160,15 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 	if v.Now != nil {
 		now = v.Now().UTC()
 	}
-	nonce, err := newNonce()
+	nonceFunc := v.Nonce
+	if nonceFunc == nil {
+		nonceFunc = newNonce
+	}
+	nonce, err := nonceFunc()
 	if err != nil {
 		return Result{}, err
 	}
-	root := filepath.Join(request.StateDir, "validation", safePathPart(request.RequestID))
+	root := filepath.Join(request.StateDir, "validation", safePathPart(request.RequestID), nonce)
 	if err := os.MkdirAll(root, 0o700); err != nil {
 		return Result{}, err
 	}
@@ -165,18 +185,21 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 		UnitID: request.UnitID, UnitType: request.UnitType, Attempt: request.Attempt, StateVersion: request.StateVersion,
 		WorkDir: request.WorkDir, BaseHead: request.BaseHead, CandidateHead: request.CandidateHead,
 		ContractHash: request.ContractHash, EvidenceHash: request.EvidenceHash, ArtifactHashes: request.ArtifactHashes,
-		RequiredGates: request.RequireGates, IssuedAt: now,
+		RequiredGates: request.RequireGates, IssuedAt: now, ExpiresAt: now.Add(30 * time.Minute),
 	}
 	if err := writeExclusiveJSON(requestPath, protected); err != nil {
 		return Result{}, err
 	}
 	sessionsDir := v.SessionsDir
 	if sessionsDir == "" {
-		sessionsDir = filepath.Join(request.GSDHome, "agent", "sessions")
+		sessionsDir = filepath.Join(request.StateDir, "validation", safePathPart(request.RequestID), nonce, "sessions")
+	}
+	if err := os.MkdirAll(sessionsDir, 0o700); err != nil {
+		return Result{}, err
 	}
 	previousSession := latestSessionID(sessionsDir, request.WorkDir)
 	started := time.Now().UTC()
-	if err := v.runDedicatedValidator(ctx, request, requestPath, resultPath); err != nil {
+	if err := v.runDedicatedValidator(ctx, request, protected, requestPath, resultPath, sessionsDir); err != nil {
 		return Result{}, err
 	}
 	if observedHead, err = gitHead(ctx, request.WorkDir); err != nil {
@@ -223,40 +246,184 @@ func (v GSDValidator) withDefaults(request Request) Request {
 	return request
 }
 
-func (v GSDValidator) runDedicatedValidator(ctx context.Context, request Request, requestPath, resultPath string) error {
+func probePiValidator(ctx context.Context, command []string, _ time.Duration, env []string) error {
+	probeCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	args := append([]string{}, command[1:]...)
+	args = append(args, "--help")
+	cmd := exec.CommandContext(probeCtx, command[0], args...)
+	cmd.Env = append(os.Environ(), env...)
+	output, err := limitedCombinedOutput(cmd, 128*1024)
+	if err != nil {
+		return fmt.Errorf("validator Pi capability probe failed: %w", err)
+	}
+	help := string(output)
+	for _, required := range []string{"--mode", "--print", "--session-dir", "--tools", "--model", "--thinking"} {
+		if !strings.Contains(help, required) {
+			return fmt.Errorf("validator Pi command does not advertise %s", required)
+		}
+	}
+	return nil
+}
+
+func (v GSDValidator) runDedicatedValidator(ctx context.Context, request Request, protected protectedRequest, requestPath, resultPath, sessionsDir string) error {
 	if v.Timeout > 0 {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, v.Timeout)
 		defer cancel()
 	}
+	prompt, err := validationPrompt(protected, requestPath)
+	if err != nil {
+		return err
+	}
 	args := append([]string{}, v.Command[1:]...)
 	args = append(args,
-		"headless", "shepherd-validate",
-		"--request", requestPath,
-		"--result", resultPath,
-		"--worktree", request.WorkDir,
+		"--mode", "json",
+		"--system-prompt", "You are a deterministic read-only validation process. Follow the supplied validation contract and finish with exactly one compact JSON object, with no markdown or commentary.",
 		"--model", authority.RequiredValidator,
 		"--thinking", "high",
+		"--tools", "read,bash,grep,find,ls",
+		"--no-extensions", "--no-skills", "--no-prompt-templates", "--no-themes", "--no-context-files",
+		"--no-approve",
+		"--session-dir", sessionsDir,
+		"--name", "shepherd-validator-"+protected.RequestID,
+		"--print", prompt,
 	)
 	cmd := exec.CommandContext(ctx, v.Command[0], args...)
 	cmd.Dir = request.WorkDir
 	cmd.Env = append(os.Environ(), v.Environment...)
 	cmd.Env = append(cmd.Env,
+		"PI_CODING_AGENT_DIR="+filepath.Join(request.GSDHome, "agent"),
 		"GSD_PROJECT_ROOT="+request.WorkDir,
 		"GSD_HOME="+request.GSDHome,
 		"GSD_STATE_DIR="+request.StateDir,
 		"GIT_TERMINAL_PROMPT=0",
 		"GIT_ASKPASS=",
 	)
-	if output, err := cmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("dedicated validator failed: %w: %s", err, boundedOutput(output))
+	output, err := limitedCombinedOutput(cmd, maxValidatorOutputBytes)
+	if err != nil {
+		return fmt.Errorf("dedicated validator failed: %w", err)
 	}
-	return nil
+	proof, err := proofFromPiJSON(output)
+	if err != nil {
+		return err
+	}
+	return writeExclusiveJSON(resultPath, proof)
+}
+
+func validationPrompt(request protectedRequest, requestPath string) (string, error) {
+	encoded, err := json.Marshal(request)
+	if err != nil {
+		return "", err
+	}
+	return "You are the read-only Shepherd independent validator. Use only read, bash, grep, find, and ls. " +
+		"Do not edit files, write files, mutate GitHub, promote, merge, or reveal secrets. " +
+		"Copy every identity, nonce, head, hash, repository, PR, base, and state-version field exactly from the request; do not omit any field. " +
+		"Do not run broad tests or unlisted checks. If all required_gates are false, call no tools and return PROCEED after copying the binding fields; do not invent extra requirements. Otherwise use at most five bounded read-only tool calls. " +
+		"Validate the exact candidate worktree and return exactly one compact JSON object with keys " +
+		"request_id, nonce, repository, pull_request, base_branch, base_head, candidate_head, observed_head, state_version, contract_hash, evidence_hash, verdict, local_gates, uat, milestone_valid, issued_at, expires_at. " +
+		"Use PROCEED only if evidence and required gates pass; otherwise RETRY or HALT. " +
+		"Request file: " + requestPath + ". Request JSON: " + string(encoded), nil
+}
+
+func proofFromPiJSON(output []byte) (proofFile, error) {
+	scanner := bufio.NewScanner(bytes.NewReader(output))
+	scanner.Buffer(make([]byte, 4096), maxValidatorOutputBytes)
+	var text strings.Builder
+	assistantMessages := 0
+	for scanner.Scan() {
+		var event struct {
+			Type    string `json:"type"`
+			Message struct {
+				Role    string `json:"role"`
+				Content any    `json:"content"`
+			} `json:"message"`
+		}
+		if json.Unmarshal(scanner.Bytes(), &event) != nil || event.Type != "message_end" || event.Message.Role != "assistant" {
+			continue
+		}
+		assistantMessages++
+		collectText(event.Message.Content, &text)
+	}
+	if err := scanner.Err(); err != nil {
+		return proofFile{}, fmt.Errorf("read validator event stream: %w", err)
+	}
+	proof, err := decodeProofFromText(text.String())
+	if err != nil {
+		return proofFile{}, fmt.Errorf("validator structured evidence missing: assistant_messages=%d text_bytes=%d", assistantMessages, text.Len())
+	}
+	return proof, nil
+}
+
+func collectText(value any, builder *strings.Builder) {
+	switch typed := value.(type) {
+	case map[string]any:
+		if text, ok := typed["text"].(string); ok {
+			builder.WriteString(text)
+			builder.WriteByte('\n')
+		}
+		if delta, ok := typed["delta"].(string); ok {
+			builder.WriteString(delta)
+		}
+		for _, nested := range typed {
+			collectText(nested, builder)
+		}
+	case []any:
+		for _, nested := range typed {
+			collectText(nested, builder)
+		}
+	}
+}
+
+func decodeProofFromText(value string) (proofFile, error) {
+	for start := 0; start < len(value); start++ {
+		if value[start] != '{' {
+			continue
+		}
+		depth := 0
+		quoted := false
+		escaped := false
+		for end := start; end < len(value); end++ {
+			char := value[end]
+			if quoted {
+				if escaped {
+					escaped = false
+					continue
+				}
+				switch char {
+				case '\\':
+					escaped = true
+				case '"':
+					quoted = false
+				}
+				continue
+			}
+			switch char {
+			case '"':
+				quoted = true
+			case '{':
+				depth++
+			case '}':
+				depth--
+				if depth == 0 {
+					var proof proofFile
+					if json.Unmarshal([]byte(value[start:end+1]), &proof) == nil && proof.RequestID != "" && proof.Nonce != "" {
+						return proof, nil
+					}
+					end = len(value)
+				}
+			}
+		}
+	}
+	return proofFile{}, errors.New("validator did not return structured JSON evidence")
 }
 
 func validateProof(proof proofFile, request protectedRequest) error {
 	if proof.RequestID != request.RequestID || proof.Nonce != request.Nonce {
 		return errors.New("validation result does not match request nonce")
+	}
+	if proof.Repository != request.Repository || proof.PullRequest != request.PullRequest {
+		return errors.New("validation result repository or PR does not match request")
 	}
 	if proof.BaseBranch != request.BaseBranch || proof.BaseHead != request.BaseHead || proof.CandidateHead != request.CandidateHead || proof.ObservedHead != request.CandidateHead {
 		return errors.New("validation result head or base does not match request")
@@ -264,20 +431,20 @@ func validateProof(proof proofFile, request protectedRequest) error {
 	if proof.StateVersion != request.StateVersion || proof.ContractHash != request.ContractHash || proof.EvidenceHash != request.EvidenceHash {
 		return errors.New("validation result governance or evidence does not match request")
 	}
-	if proof.Verdict != "PROCEED" {
-		return errors.New("validator did not return PROCEED")
+	if proof.Verdict != "PROCEED" && proof.Verdict != "RETRY" && proof.Verdict != "HALT" {
+		return errors.New("validator returned an unsupported verdict")
 	}
-	if request.RequiredGates.LocalGates && !proof.LocalGates {
+	if proof.Verdict == "PROCEED" && request.RequiredGates.LocalGates && !proof.LocalGates {
 		return errors.New("validator did not pass required local gates")
 	}
-	if request.RequiredGates.UAT && !proof.UAT {
+	if proof.Verdict == "PROCEED" && request.RequiredGates.UAT && !proof.UAT {
 		return errors.New("validator did not pass required UAT gate")
 	}
-	if request.RequiredGates.MilestoneValid && !proof.MilestoneValid {
+	if proof.Verdict == "PROCEED" && request.RequiredGates.MilestoneValid && !proof.MilestoneValid {
 		return errors.New("validator did not pass required milestone gate")
 	}
-	if proof.IssuedAt.IsZero() || proof.ExpiresAt.IsZero() || !proof.ExpiresAt.After(proof.IssuedAt) {
-		return errors.New("validation result validity window is invalid")
+	if proof.IssuedAt.IsZero() || proof.ExpiresAt.IsZero() || !proof.ExpiresAt.After(proof.IssuedAt) || !proof.IssuedAt.Equal(request.IssuedAt) || !proof.ExpiresAt.Equal(request.ExpiresAt) {
+		return errors.New("validation result validity window does not match request")
 	}
 	return nil
 }
@@ -298,8 +465,14 @@ func readValidationProof(path string) (proofFile, error) {
 	if err := json.Unmarshal(raw, &proof); err != nil {
 		return proofFile{}, fmt.Errorf("decode independent validation proof: %w", err)
 	}
-	if proof.Verdict == "" || !validHash(proof.EvidenceHash) || proof.IssuedAt.IsZero() || proof.ExpiresAt.IsZero() {
-		return proofFile{}, errors.New("independent validation proof is incomplete")
+	if proof.Verdict == "" {
+		return proofFile{}, errors.New("independent validation proof is missing verdict")
+	}
+	if !validHash(proof.EvidenceHash) {
+		return proofFile{}, errors.New("independent validation proof has invalid evidence hash")
+	}
+	if proof.IssuedAt.IsZero() || proof.ExpiresAt.IsZero() {
+		return proofFile{}, errors.New("independent validation proof is missing validity timestamps")
 	}
 	return proof, nil
 }
@@ -419,7 +592,7 @@ func newNonce() (string, error) {
 }
 
 func derivedRequestID(request Request) string {
-	input := request.DeliveryID + ":" + request.UnitID + ":" + request.CandidateHead + ":" + request.EvidenceHash
+	input := fmt.Sprintf("%s:%d:%s:%d:%d:%s:%s", request.DeliveryID, request.Generation, request.UnitID, request.Attempt, request.StateVersion, request.CandidateHead, request.EvidenceHash)
 	sum := sha256.Sum256([]byte(input))
 	return "validation-" + hex.EncodeToString(sum[:8])
 }
@@ -452,12 +625,36 @@ func safePathPart(value string) string {
 	}, value)
 }
 
-func boundedOutput(raw []byte) string {
-	value := strings.TrimSpace(string(raw))
-	if len(value) > 2048 {
-		return value[:2048]
+func limitedCombinedOutput(cmd *exec.Cmd, maxBytes int64) ([]byte, error) {
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &limitedWriter{buffer: &stdout, max: maxBytes}
+	cmd.Stderr = &limitedWriter{buffer: &stderr, max: maxBytes}
+	err := cmd.Run()
+	return append(stdout.Bytes(), stderr.Bytes()...), err
+}
+
+type limitedWriter struct {
+	buffer *bytes.Buffer
+	max    int64
+}
+
+func (w *limitedWriter) Write(p []byte) (int, error) {
+	if w.max <= 0 {
+		return len(p), nil
 	}
-	return value
+	if int64(len(p)) >= w.max {
+		w.buffer.Reset()
+		_, _ = w.buffer.Write(p[int64(len(p))-w.max:])
+		return len(p), nil
+	}
+	overflow := int64(w.buffer.Len()+len(p)) - w.max
+	if overflow > 0 {
+		retained := append([]byte(nil), w.buffer.Bytes()[overflow:]...)
+		w.buffer.Reset()
+		_, _ = w.buffer.Write(retained)
+	}
+	_, _ = w.buffer.Write(p)
+	return len(p), nil
 }
 
 func validSHA(value string) bool {

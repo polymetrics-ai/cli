@@ -42,13 +42,14 @@ const defaultWriteScopePollInterval = 500 * time.Millisecond
 
 var independentValidatorFactory = func(_ *gsd.Runner, config fileConfig) validation.Validator {
 	return validation.GSDValidator{
-		Command: config.GSDCommand, GSDHome: config.GSDHome, StateDir: config.StateDir,
-		SessionsDir: filepath.Join(config.GSDHome, "agent", "sessions"), Timeout: time.Duration(config.TimeoutSeconds) * time.Second,
+		Command: config.PiCommand, GSDHome: config.GSDHome, StateDir: config.StateDir,
+		Timeout: time.Duration(config.TimeoutSeconds) * time.Second,
 	}
 }
 
 type fileConfig struct {
 	GSDCommand          []string `json:"gsd_command"`
+	PiCommand           []string `json:"pi_command"`
 	WorkDir             string   `json:"work_dir"`
 	GSDHome             string   `json:"gsd_home"`
 	StateDir            string   `json:"state_dir"`
@@ -572,6 +573,18 @@ func loadConfig(path string) (fileConfig, error) {
 	if !filepath.IsAbs(config.WorkDir) || !filepath.IsAbs(config.GSDHome) || !filepath.IsAbs(config.StateDir) {
 		return fileConfig{}, errors.New("work_dir, gsd_home, and state_dir must be absolute")
 	}
+	if len(config.PiCommand) != 1 || !filepath.IsAbs(config.PiCommand[0]) || strings.ContainsAny(config.PiCommand[0], "\r\n\x00") {
+		return fileConfig{}, errors.New("pi_command must contain one allowlisted absolute Pi executable")
+	}
+	piExecutable, err := filepath.EvalSymlinks(config.PiCommand[0])
+	if err != nil {
+		return fileConfig{}, fmt.Errorf("resolve pi_command: %w", err)
+	}
+	piInfo, err := os.Stat(piExecutable)
+	if err != nil || !piInfo.Mode().IsRegular() || piInfo.Mode()&0o111 == 0 {
+		return fileConfig{}, errors.New("pi_command must resolve to an executable regular file")
+	}
+	config.PiCommand[0] = piExecutable
 	if config.CoordinatorModel == "" {
 		config.CoordinatorModel = "openai-codex/gpt-5.6-sol"
 	}

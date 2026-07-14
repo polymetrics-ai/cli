@@ -43,6 +43,9 @@ status is therefore **not validated, not ratified, not canary-ready**.
    tests at the typed validator port boundary before production rewiring.
 6. `cycle-3/retry-correction`: previous Slice A completion at `19d051c6` is recorded as a false green;
    production validation had no real proof producer and trusted worktree-local `.gsd/shepherd-validation.json`.
+7. `cycle-4/live-pi-correction`: `99604d48` is a second Slice A false green because it invoked the
+   unsupported invented `gsd headless shepherd-validate` verb. Replaced it with a separately configured,
+   capability-probed Pi executable using the exact installed non-interactive JSON/read-only interface.
    Continue only Slice A; keep Slice B, PR creation, final Sol review, and canaries blocked.
 
 ## Ordered implementation slices
@@ -70,9 +73,12 @@ tests against the real production validator and keep canaries, PR creation, and 
 Retry RED tests proved: no validation-result producer, stale pre-existing result, no new validator
 session, GPT-5.5 model, non-high thinking, result head/evidence/request nonce mismatch, candidate moves
 during validation, stale base/governance version, RETRY/HALT/missing gates, and unchanged canonical Git
-and `.gsd` on rejected command paths. Corrected production behavior now uses a dedicated non-canonical
-`headless shepherd-validate` process, protected nonce-bound result transport outside the worktree, real
-new session/model/thinking checks, durable state version, extended attestation persistence, and metadata-derived gates.
+and `.gsd` on rejected command paths. The `99604d48` correction was still false green because its
+subprocess did not exist in official GSD. Final corrected production behavior now invokes a configured Pi
+executable with `--mode json --print`, exact Sol/high, `read,bash,grep,find,ls`, disabled project resources,
+a dedicated protected session directory, a bounded capability probe, fresh nonce directories per retry,
+and redacted process errors. Protected evidence binding, ratification order, delayed promotion, durable
+state version, full attestation persistence, and metadata-derived gates remain enforced.
 
 ### B. Durable attempt lifecycle and crash recovery
 

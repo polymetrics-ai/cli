@@ -21,8 +21,11 @@ verifies the effective phase model. Startup self-healing accepts only the exact 
 implementation-model drift; any other identity fails closed.
 
 For governed delivery, use the host-local runtime by default (`"runtime": "host"`) with the exact
-pinned GSD Pi loader in `gsd_command`, protected `gsd_home`, and external-effect publishers disabled.
-This is the qualified #389 path and requires no Podman service for default verification.
+pinned GSD Pi loader in `gsd_command`, a separately allowlisted absolute Pi executable in `pi_command`,
+protected `gsd_home`, and external-effect publishers disabled. Independent candidate validation invokes
+Pi directly in non-interactive JSON mode with GPT-5.6 Sol/high, a dedicated protected session directory,
+and only `read,bash,grep,find,ls`; it does not dispatch a canonical GSD workflow unit. This is the
+qualified #389 path and requires no Podman service for default verification.
 
 The legacy Podman assets remain available for separately authorized qualification/debug runs; they
 are not required by the default supervisor path and are not removed in this issue. If a later
