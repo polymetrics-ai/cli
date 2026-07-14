@@ -183,6 +183,42 @@ func TestCheckpointWithinScopesRejectsOutOfScopeChangesWithoutStaging(t *testing
 	}
 }
 
+func TestCheckpointWithinScopesIncludesOnlyMutableTrackedGSDProjections(t *testing.T) {
+	t.Parallel()
+	root := initializedRepository(t)
+	if err := os.MkdirAll(filepath.Join(root, ".gsd", "exec"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	requirements := filepath.Join(root, ".gsd", "REQUIREMENTS.md")
+	preferences := filepath.Join(root, ".gsd", "PREFERENCES.md")
+	if err := os.WriteFile(requirements, []byte("active\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(preferences, []byte("governed\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	mustGit(t, root, "add", ".gsd/REQUIREMENTS.md", ".gsd/PREFERENCES.md")
+	mustGit(t, root, "commit", "-qm", "seed gsd")
+	if err := os.WriteFile(requirements, []byte("validated\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, ".gsd", "exec", "runtime.json"), []byte("runtime"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := CheckpointWithinScopes(context.Background(), root, []string{"internal/connectors/engine/**"}, "chore(gsd): checkpoint M001 S01"); err != nil {
+		t.Fatal(err)
+	}
+	if snapshot, err := Inspect(context.Background(), root); err != nil || snapshot.Dirty {
+		t.Fatalf("snapshot=%+v err=%v", snapshot, err)
+	}
+	if err := os.WriteFile(preferences, []byte("weakened\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := CheckpointWithinScopes(context.Background(), root, []string{"internal/connectors/engine/**"}, "chore(gsd): checkpoint M001 S01"); err == nil {
+		t.Fatal("tracked GSD policy mutation was checkpointed")
+	}
+}
+
 func initializedRepository(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()

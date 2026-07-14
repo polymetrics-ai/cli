@@ -676,13 +676,13 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		result.Terminal = gsd.TerminalError
 		result.Err = err
 	}
-	if result.Terminal == gsd.TerminalSuccess && command == "execute-task" {
-		message := "chore(gsd): complete " + strings.ReplaceAll(before.Next.UnitID, "/", " ")
+	if result.Terminal == gsd.TerminalSuccess && gsd.IsCanonicalUnitCommand(command) {
+		message := "chore(gsd): checkpoint " + strings.ReplaceAll(before.Next.UnitID, "/", " ")
 		if _, checkpointErr := shepherdgit.CheckpointWithinScopes(ctx, config.WorkDir, issueContext.WriteScope, message); checkpointErr != nil {
 			result.Terminal = gsd.TerminalError
-			result.Err = fmt.Errorf("checkpoint successful task: %w", checkpointErr)
+			result.Err = fmt.Errorf("checkpoint successful canonical unit: %w", checkpointErr)
 		} else {
-			appendActivity("transition", "checkpointed_scoped_task", trustedUnit, "", "", time.Now().UTC())
+			appendActivity("transition", "checkpointed_scoped_unit", trustedUnit, "", "", time.Now().UTC())
 		}
 	}
 	endSnapshot, snapshotErr := shepherdgit.Inspect(ctx, config.WorkDir)

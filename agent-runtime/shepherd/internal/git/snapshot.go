@@ -64,7 +64,7 @@ func CheckpointWithinScopes(ctx context.Context, root string, scopes []string, m
 		return strings.TrimSpace(string(head)), err
 	}
 	for _, path := range paths {
-		if !withinAnyScope(path, scopes) {
+		if !withinAnyScope(path, scopes) && !isMutableGSDProjection(path) {
 			return "", fmt.Errorf("changed path %q is outside the issue write scope", path)
 		}
 	}
@@ -95,7 +95,17 @@ func changedPaths(ctx context.Context, root string) ([]string, error) {
 		return nil, err
 	}
 	unique := make(map[string]struct{})
-	for _, raw := range append(bytes.Split(tracked, []byte{0}), bytes.Split(untracked, []byte{0})...) {
+	for _, raw := range bytes.Split(tracked, []byte{0}) {
+		path := filepath.ToSlash(strings.TrimSpace(string(raw)))
+		if path == "" || path == ".gsd-worktrees" || strings.HasPrefix(path, ".gsd-worktrees/") {
+			continue
+		}
+		if filepath.IsAbs(path) || path == ".." || strings.HasPrefix(path, "../") || strings.ContainsRune(path, 0) {
+			return nil, errors.New("git returned an unsafe changed path")
+		}
+		unique[path] = struct{}{}
+	}
+	for _, raw := range bytes.Split(untracked, []byte{0}) {
 		path := filepath.ToSlash(strings.TrimSpace(string(raw)))
 		if path == "" || path == ".gsd" || strings.HasPrefix(path, ".gsd/") || path == ".gsd-worktrees" || strings.HasPrefix(path, ".gsd-worktrees/") {
 			continue
@@ -111,6 +121,15 @@ func changedPaths(ctx context.Context, root string) ([]string, error) {
 	}
 	sort.Strings(paths)
 	return paths, nil
+}
+
+func isMutableGSDProjection(path string) bool {
+	switch path {
+	case ".gsd/REQUIREMENTS.md", ".gsd/ROADMAP.md", ".gsd/DECISIONS.md", ".gsd/KNOWLEDGE.md", ".gsd/QUEUE.md":
+		return true
+	default:
+		return strings.HasPrefix(path, ".gsd/phases/")
+	}
 }
 
 func withinAnyScope(path string, scopes []string) bool {
