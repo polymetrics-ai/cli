@@ -3,6 +3,8 @@ package workspace
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -101,7 +103,8 @@ func (m *Manager) Create(ctx context.Context, identity AttemptIdentity) (Attempt
 	if err := rejectSymlinkAncestors(m.Root, parent); err != nil {
 		return AttemptWorktree{}, err
 	}
-	branch := "shepherd/" + safePathPart(identity.DeliveryID) + "/" + safePathPart(identity.UnitID) + "/" + fmt.Sprintf("g%d-a%d", identity.Generation, identity.Attempt)
+	branchHash := sha256.Sum256([]byte(path))
+	branch := "shepherd/" + safePathPart(identity.DeliveryID) + "/" + safePathPart(identity.UnitID) + "/" + fmt.Sprintf("g%d-a%d-%s", identity.Generation, identity.Attempt, hex.EncodeToString(branchHash[:4]))
 	if _, err := git(ctx, m.RepoRoot, "worktree", "add", "-b", branch, path, identity.BaseHead); err != nil {
 		return AttemptWorktree{}, fmt.Errorf("create attempt worktree: %w", err)
 	}
