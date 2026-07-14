@@ -17,15 +17,26 @@ func TestProductionEmbedLoadsRuntimeBundles(t *testing.T) {
 		t.Fatal("LoadAll(FS) returned zero bundles")
 	}
 
-	var github *engine.Bundle
+	var github, asana *engine.Bundle
 	for i := range bundles {
-		if bundles[i].Name == "github" {
+		switch bundles[i].Name {
+		case "github":
 			github = &bundles[i]
-			break
+		case "asana":
+			asana = &bundles[i]
 		}
 	}
 	if github == nil {
 		t.Fatal("LoadAll(FS) missing github bundle")
+	}
+	if asana == nil {
+		t.Fatal("LoadAll(FS) missing asana bundle")
+	}
+	if asana.CLISurface == nil {
+		t.Fatal("production Asana bundle has no CLI surface")
+	}
+	if got, want := len(asana.CLISurface.Commands), 25; got != want {
+		t.Fatalf("production Asana CLI command count = %d, want %d", got, want)
 	}
 	if github.Metadata.Name != "github" {
 		t.Fatalf("github metadata name = %q", github.Metadata.Name)

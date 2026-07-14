@@ -28,6 +28,7 @@
   "write_scope": [
     ".planning/phases/issue-380-asana-cli-parity/**",
     "internal/connectors/defs/asana/**",
+    "internal/connectors/defs/defs_test.go",
     "internal/connectors/native/asana/**",
     "internal/connectors/engine/**",
     "internal/connectors/commandrunner/**",
