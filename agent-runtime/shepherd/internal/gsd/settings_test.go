@@ -1,6 +1,7 @@
 package gsd
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -72,6 +73,162 @@ func TestValidateRuntimeSettingsRejectsProjectOverride(t *testing.T) {
 	}
 	if err := ValidateRuntimeSettings(home, work, "openai-codex/gpt-5.6-sol", "high"); err == nil {
 		t.Fatal("expected project override to fail admission")
+	}
+}
+
+func TestNormalizeRuntimeSettingsRestoresOnlyGovernedImplementationDrift(t *testing.T) {
+	t.Parallel()
+
+	home := t.TempDir()
+	agent := filepath.Join(home, "agent")
+	if err := os.Mkdir(agent, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(agent, "settings.json")
+	raw := `{"defaultProvider":"openai-codex","defaultModel":"gpt-5.5","defaultThinkingLevel":"high","quietStartup":true}`
+	if err := os.WriteFile(path, []byte(raw), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := NormalizeRuntimeSettings(home, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err != nil {
+		t.Fatal(err)
+	}
+	var settings map[string]any
+	updated, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(updated, &settings); err != nil {
+		t.Fatal(err)
+	}
+	if settings["defaultModel"] != "gpt-5.6-sol" || settings["quietStartup"] != true {
+		t.Fatalf("settings not restored with unrelated fields preserved: %s", updated)
+	}
+	info, err := os.Stat(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info.Mode().Perm() != 0o600 {
+		t.Fatalf("settings mode=%o, want 600", info.Mode().Perm())
+	}
+}
+
+func TestNormalizeRuntimeSettingsRejectsUnknownIdentity(t *testing.T) {
+	t.Parallel()
+
+	home := t.TempDir()
+	agent := filepath.Join(home, "agent")
+	if err := os.Mkdir(agent, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(agent, "settings.json")
+	if err := os.WriteFile(path, []byte(`{"defaultProvider":"other","defaultModel":"unknown","defaultThinkingLevel":"high"}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := NormalizeRuntimeSettings(home, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
+		t.Fatal("unknown runtime identity was rewritten instead of rejected")
+	}
+}
+
+func TestValidateModelPreferencesRequiresGovernedEffectivePhaseRouting(t *testing.T) {
+	t.Parallel()
+
+	home := t.TempDir()
+	work := t.TempDir()
+	preferences := `---
+version: 1
+models:
+  research: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  planning:
+    provider: openai-codex
+    model: gpt-5.6-sol
+    thinking: high
+  discuss: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  execution: { provider: openai-codex, model: gpt-5.5, thinking: high }
+  execution_simple: { provider: openai-codex, model: gpt-5.5, thinking: high }
+  completion: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  validation: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  subagent: { provider: openai-codex, model: gpt-5.5, thinking: high }
+  uat: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+skill_discovery: suggest
+---
+`
+	path := filepath.Join(home, "PREFERENCES.md")
+	if err := os.WriteFile(path, []byte(preferences), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := ValidateModelPreferences(home, work, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err != nil {
+		t.Fatalf("valid phase routing rejected: %v", err)
+	}
+
+	drifted := strings.Replace(preferences, "model: gpt-5.5, thinking: high", "model: gpt-5.6-sol, thinking: high", 1)
+	if err := os.WriteFile(path, []byte(drifted), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := ValidateModelPreferences(home, work, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
+		t.Fatal("execution model drift accepted")
+	}
+}
+
+func TestValidateModelPreferencesRejectsMissingMalformedAndDuplicatePolicy(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		name string
+		raw  string
+	}{
+		{name: "missing file"},
+		{name: "missing frontmatter close", raw: "---\nversion: 1\nmodels: {}\n"},
+		{name: "duplicate phase", raw: "---\nmodels:\n  execution: { provider: openai-codex, model: gpt-5.5, thinking: high }\n  execution: { provider: openai-codex, model: gpt-5.5, thinking: high }\n---\n"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			home := t.TempDir()
+			work := t.TempDir()
+			if test.raw != "" {
+				if err := os.WriteFile(filepath.Join(home, "PREFERENCES.md"), []byte(test.raw), 0o600); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if err := ValidateModelPreferences(home, work, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
+				t.Fatal("invalid phase policy accepted")
+			}
+		})
+	}
+}
+
+func TestValidateModelPreferencesRejectsProjectPhaseOverride(t *testing.T) {
+	t.Parallel()
+
+	home := t.TempDir()
+	work := t.TempDir()
+	global := `---
+models:
+  research: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  planning: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  discuss: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  execution: { provider: openai-codex, model: gpt-5.5, thinking: high }
+  execution_simple: { provider: openai-codex, model: gpt-5.5, thinking: high }
+  completion: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  validation: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  subagent: { provider: openai-codex, model: gpt-5.5, thinking: high }
+  uat: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+---
+`
+	if err := os.WriteFile(filepath.Join(home, "PREFERENCES.md"), []byte(global), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(filepath.Join(work, ".gsd"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	project := `---
+models:
+  execution: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+---
+`
+	if err := os.WriteFile(filepath.Join(work, ".gsd", "PREFERENCES.md"), []byte(project), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := ValidateModelPreferences(home, work, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
+		t.Fatal("conflicting project phase override accepted")
 	}
 }
 

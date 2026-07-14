@@ -66,6 +66,13 @@ module without coupling it to the Polymetrics CLI module.
 20. Correct Asana T02 with connector-targeted documentation generation/validation. A connector
     issue must not rewrite the global generated-doc corpus; repository-wide exactness remains a
     separately scoped migration.
+21. Replace per-command Pi session-model mutation with official GSD Pi phase routing. Keep the
+    governed session default at GPT-5.6 Sol/high, require an exact controller-owned
+    `$GSD_HOME/PREFERENCES.md` policy that routes planning/validation/coordination to GPT-5.6
+    Sol/high and execution/subagents to GPT-5.5/high, merge-check project overrides, explicitly
+    launch direct execution with GPT-5.5, atomically restore the coordinator identity after every
+    unit, self-heal only exact governed implementation drift, and retain independent post-unit
+    effective-identity verification.
 
 ## Required skills and workflows
 
@@ -79,6 +86,10 @@ module without coupling it to the Polymetrics CLI module.
   issue-372-scope-hardening --dry-run` and loaded `golang-how-to`, `golang-cli`,
   `golang-testing`, `golang-error-handling`, `golang-safety`, `golang-context`,
   `golang-concurrency`, and `golang-security`.
+- The official phase-model routing correction used `scripts/gsd prompt programming-loop init
+  --phase issue-372-model-routing --dry-run` and loaded `gsd-programming-loop`, `golang-how-to`,
+  `golang-testing`, `golang-error-handling`, `golang-safety`, `golang-context`, and
+  `golang-concurrency`.
 
 ## Execution decisions
 

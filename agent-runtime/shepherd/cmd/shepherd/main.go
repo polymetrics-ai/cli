@@ -199,13 +199,16 @@ func run(ctx context.Context, args []string) error {
 			return fmt.Errorf("runtime compatibility: %w", err)
 		}
 	}
+	if err := gsd.NormalizeRuntimeSettings(config.GSDHome, config.CoordinatorModel, config.ImplementationModel, "high"); err != nil {
+		return fmt.Errorf("runtime normalization: %w", err)
+	}
 	if err := gsd.ValidateRuntimeSettings(config.GSDHome, config.WorkDir, config.CoordinatorModel, "high"); err != nil {
 		return fmt.Errorf("runtime admission: %w", err)
 	}
-	selectedModel := config.CoordinatorModel
-	if args[0] == "run" {
-		selectedModel = modelForCommand(config, *command)
+	if err := gsd.ValidateModelPreferences(config.GSDHome, config.WorkDir, config.CoordinatorModel, config.ImplementationModel, "high"); err != nil {
+		return fmt.Errorf("runtime admission: %w", err)
 	}
+	selectedModel := launchModelForCommand(config, *command)
 	runner, err := gsd.NewRunner(gsd.Config{
 		Command: config.GSDCommand, WorkDir: config.WorkDir, GSDHome: config.GSDHome, StateDir: config.StateDir,
 		Model: selectedModel, Thinking: "high",
@@ -646,6 +649,10 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, del
 		}()
 	}
 	result := runner.Run(runCtx, command, args, observer)
+	if restoreErr := gsd.NormalizeRuntimeSettings(config.GSDHome, config.CoordinatorModel, config.ImplementationModel, "high"); restoreErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = joinTerminalFailure(fmt.Errorf("restore coordinator runtime identity: %w", restoreErr), result.Err)
+	}
 	if stopScopeMonitor != nil {
 		stopScopeMonitor()
 	}
@@ -824,6 +831,10 @@ func modelForCommand(config fileConfig, command string) string {
 		return config.ImplementationModel
 	}
 	return config.CoordinatorModel
+}
+
+func launchModelForCommand(config fileConfig, command string) string {
+	return modelForCommand(config, command)
 }
 
 func targetRunState(terminal gsd.Terminal, terminalErr error, postPhase string) domain.RunState {

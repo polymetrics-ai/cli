@@ -21,7 +21,7 @@ var allowedKinds = map[string]struct{}{
 	"run.started": {}, "run.terminal": {}, "unit.started": {}, "unit.terminal": {},
 	"tool.started": {}, "tool.terminal": {}, "validation": {}, "transition": {},
 	"heartbeat": {}, "cost": {}, "model.activity": {}, "human.decision": {},
-	"decision": {},
+	"decision": {}, "policy": {},
 }
 
 type Activity struct {

@@ -1,5 +1,16 @@
 # Verification Checklist
 
+## Official per-phase model routing
+
+- [x] Missing, malformed, duplicate, or drifted effective phase-model preferences fail admission.
+- [x] Planning, discussion, completion, validation, and UAT require GPT-5.6 Sol/high.
+- [x] Execution, simple execution, and delegated subagents require GPT-5.5/high.
+- [x] Direct execution launches on GPT-5.5/high and atomically restores GPT-5.6 Sol/high; all other
+      units launch from the stable coordinator identity.
+- [x] Post-unit session/event identity still verifies the effective phase model independently.
+- [ ] Real Asana continuation advances without changing the controlled Pi default away from
+      GPT-5.6 Sol/high.
+
 - [x] Pinned GSD Pi version resolves to 1.11.0.
 - [x] `gpt-5.6-sol` appears in the Codex provider catalog with high reasoning support.
 - [x] A disposable governed session was observed as GPT-5.6 Sol/high after the initial `off` mismatch was made admission-fatal.

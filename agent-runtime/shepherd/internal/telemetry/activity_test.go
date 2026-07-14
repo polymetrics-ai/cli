@@ -46,6 +46,23 @@ func TestActivityStoreAcceptsTypedHumanDecisionAudit(t *testing.T) {
 	}
 }
 
+func TestActivityStoreAcceptsBoundedPolicyViolation(t *testing.T) {
+	t.Parallel()
+
+	store, err := Open(context.Background(), t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	event := Activity{
+		ID: "policy-1", RunID: "issue-380", UnitID: "execute-task/M001/S02/T04",
+		Kind: "policy", Status: "write_scope_violation", At: time.Unix(1, 0).UTC(),
+	}
+	if appended, err := store.Append(context.Background(), event); err != nil || !appended {
+		t.Fatalf("append policy activity: appended=%t err=%v", appended, err)
+	}
+}
+
 func TestActivityStoreRecoversTornTail(t *testing.T) {
 	t.Parallel()
 

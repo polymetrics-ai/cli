@@ -246,6 +246,19 @@ func TestModelForCommandKeepsImplementationSeparateFromShepherd(t *testing.T) {
 	}
 }
 
+func TestLaunchModelForCommandUsesImplementationOnlyForDirectExecution(t *testing.T) {
+	t.Parallel()
+	config := fileConfig{CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5"}
+	if got := launchModelForCommand(config, "execute-task"); got != config.ImplementationModel {
+		t.Fatalf("execute-task launch model=%q, want implementation %q", got, config.ImplementationModel)
+	}
+	for _, command := range []string{"plan-slice", "validate-milestone"} {
+		if got := launchModelForCommand(config, command); got != config.CoordinatorModel {
+			t.Fatalf("%s launch model=%q, want coordinator %q", command, got, config.CoordinatorModel)
+		}
+	}
+}
+
 type recordingDecisionPublisher struct {
 	summaries []string
 	err       error

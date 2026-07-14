@@ -10,7 +10,15 @@ Install exact `@opengsd/gsd-pi@1.11.0` outside the repository. Copy `shepherd.ex
 private local path and use absolute paths. `state_dir` must be protected and outside the worker
 worktree. Provision the controlled `gsd_home` separately; never put
 credentials in the config or repository. Its `agent/settings.json` must pin the configured provider,
-model, and `defaultThinkingLevel: high`; admission fails on any mismatch.
+coordinator model, and `defaultThinkingLevel: high`. Its `PREFERENCES.md` must use official GSD Pi
+phase routing: research, planning, discussion, completion, validation, and UAT use the coordinator
+model; execution, simple execution, and subagents use the implementation model. Each governed phase
+must explicitly pin `thinking: high`. Project `.gsd/PREFERENCES.md` values may add unrelated policy,
+but a conflicting phase override fails admission. GSD Pi 1.11.0 direct headless unit aliases do not
+apply the auto/guided phase selector, so Shepherd explicitly launches direct execution on the
+implementation model, atomically restores the coordinator default after the unit, and independently
+verifies the effective phase model. Startup self-healing accepts only the exact governed
+implementation-model drift; any other identity fails closed.
 
 For governed delivery, build and use the Podman image so the agent sees only the issue worktree,
 task-isolated GSD/planning mounts, and explicit read-only auth/settings files:
