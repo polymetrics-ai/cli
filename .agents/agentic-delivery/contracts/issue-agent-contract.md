@@ -62,30 +62,22 @@ before implementation.
 11. Commit after each coherent green slice. Good checkpoints are plan-only, red-test, green
     implementation, refactor, and review-fix batches. Do not commit unrelated files.
 12. Push each committed checkpoint to the active issue/PR branch after the relevant green gates so
-    CI and automatic review can run regularly. Never push to `main`; stop only when a human gate is
-    triggered.
+    CI and collaborators can inspect progress regularly. Never push to `main`; stop only when a
+    human gate is triggered.
 13. Update phase or research artifacts when the issue asks for durable memory.
 14. Open a PR with a Conventional Commit title and `Closes #N` or `Refs #N` in the body.
     - Use `Refs #N` for sub-PRs that target a parent branch.
     - Use `Closes #N` only for PRs that target the default branch and complete the issue.
 15. After implementation and local verification, choose the automated review route using
-    `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`, then run the Claude
-    review loop in
-    `.agents/agentic-delivery/workflows/claude-review-loop.md`.
-16. Confirm that Claude actually produced review records or that the stacked-PR parent-review
-    fallback covers the sub-issue. A skipped-review status, rate-limit notice, or processing-only
-    comment is not approval.
-17. If Claude is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
-    blocking progress, request GitHub Copilot review once as a backup when enabled. Copilot
-    comments are dispositioned like Claude comments, but Copilot review is not approval.
-18. Reply to every actionable automated review item with the disposition template before resolving
-    it.
-19. Ensure accepted fix commits have been reviewed. Prefer Claude's automatic incremental review
-    when active; request manual `@claude review` only when automatic review is paused,
-    disabled, skipped, rate-limit retry is due, or the configured automatic pause threshold was
-    reached.
-20. Ping the human coordinator only after no actionable automated review findings remain or a
-    recorded human review blocker remains.
+    `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`, then run the local review
+    loop in `.agents/agentic-delivery/workflows/local-review-loop.md`.
+16. Confirm that local automated review coverage is recorded for the exact candidate head or diff
+    range. Remote PR-bot review is not required by default.
+17. Reply to or record a disposition for every actionable local automated review item.
+18. Ensure accepted fix commits receive a follow-up local review pass when they materially change the
+    reviewed code.
+19. Ping the human coordinator only after no actionable local review findings remain or a recorded
+    human review blocker remains.
 
 ## Hard stops
 
@@ -106,8 +98,9 @@ Stop and ask for human approval before:
 
 Use `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md` when the issue belongs
 to a parent roadmap. A sub-PR may be merged into the parent branch without human approval only after
-all automated checks pass, automated review comments are resolved, review coverage exists through
-the sub-PR, main-targeted parent PR, or an approved fallback route, and no human gate is triggered.
+all automated checks pass, local automated review findings are resolved or dispositioned, local
+review coverage is recorded for the sub-issue or integrated parent-branch batch, and no human gate is
+triggered.
 
 For parent issues with multiple workers, use
 `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`. The parent orchestrator owns
@@ -134,5 +127,5 @@ Every implementation PR must include:
 - verification commands and results
 - safety notes for auth, secrets, writes, or data movement
 - follow-up issues for work intentionally deferred
-- automated review disposition summary, including accepted, declined, deferred, and human-gated
-  findings, plus the Claude and Copilot route status
+- local automated review disposition summary, including accepted, declined, deferred, and
+  human-gated findings

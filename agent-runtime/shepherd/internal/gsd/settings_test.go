@@ -2,6 +2,7 @@ package gsd
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -229,6 +230,13 @@ models:
 	}
 	if err := ValidateModelPreferences(home, work, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
 		t.Fatal("conflicting project phase override accepted")
+	}
+}
+
+func TestApplyPinnedHeadlessToolPatchReportsContractMismatch(t *testing.T) {
+	t.Parallel()
+	if err := ApplyPinnedHeadlessToolPatch([]string{"node", filepath.Join(t.TempDir(), "dist", "loader.js")}, "1.12.0"); !errors.Is(err, ErrRuntimeContractMismatch) {
+		t.Fatalf("error=%v, want runtime contract mismatch", err)
 	}
 }
 

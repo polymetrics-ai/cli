@@ -1,6 +1,7 @@
 package gsd
 
 import (
+	"errors"
 	"strings"
 	"testing"
 )
@@ -28,8 +29,8 @@ func TestProjectorRequiresCorrelationIDForToolLifecycle(t *testing.T) {
 	t.Parallel()
 
 	for _, kind := range []string{"tool_execution_start", "tool_execution_end"} {
-		if _, err := ProjectEvent([]byte(`{"type":"`+kind+`","toolName":"bash"}`), 1024); err == nil {
-			t.Fatalf("expected %s without toolCallId to fail closed", kind)
+		if _, err := ProjectEvent([]byte(`{"type":"`+kind+`","toolName":"bash"}`), 1024); !errors.Is(err, ErrRuntimeContractMismatch) {
+			t.Fatalf("error=%v, want runtime contract mismatch", err)
 		}
 	}
 }
@@ -65,10 +66,10 @@ func TestProjectorAcceptsRequestedAgentEndWithoutPayload(t *testing.T) {
 func TestProjectorRejectsUnknownAndOversizedEvents(t *testing.T) {
 	t.Parallel()
 
-	if _, err := ProjectEvent([]byte(`{"type":"message_update","content":"raw"}`), 1024); err == nil {
-		t.Fatal("expected unknown event type to fail")
+	if _, err := ProjectEvent([]byte(`{"type":"message_update","content":"raw"}`), 1024); !errors.Is(err, ErrRuntimeContractMismatch) {
+		t.Fatalf("unknown event error=%v, want runtime contract mismatch", err)
 	}
-	if _, err := ProjectEvent([]byte(strings.Repeat("x", 1025)), 1024); err == nil {
-		t.Fatal("expected oversized event to fail")
+	if _, err := ProjectEvent([]byte(strings.Repeat("x", 1025)), 1024); !errors.Is(err, ErrRuntimeContractMismatch) {
+		t.Fatalf("oversized event error=%v, want runtime contract mismatch", err)
 	}
 }

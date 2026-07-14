@@ -21,7 +21,7 @@ contract in `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
    - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
    - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
    - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
-   - `.agents/agentic-delivery/workflows/claude-review-loop.md`
+   - `.agents/agentic-delivery/workflows/local-review-loop.md`
    - `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md`
    - `.agents/skills/caveman/SKILL.md`
 4. Build ready queue from parent issue and orchestration state.
@@ -49,9 +49,9 @@ contract in `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
    - merge eligibility checks
 9. When workers finish, integrate handoffs, verify scope, and close completed agent threads.
 10. Merge eligible sub-PRs into parent branch.
-11. Wait for parent PR automatic review coverage for integrated ranges when required.
+11. Record local review coverage for integrated ranges when required.
 12. Repeat until all subissues are complete, deferred with issue links, or blocked.
-13. Mark parent PR human-ready only after final verification and automated review disposition.
+13. Mark parent PR human-ready only after final verification and local review disposition.
 
 ## Pi Runtime Constraints
 
@@ -75,7 +75,7 @@ At every parent orchestration turn, write one of:
 - `not_spawned_human_gate`: human approval needed.
 - `not_spawned_isolation_missing`: safe worker worktree or working directory is unavailable.
 - `not_spawned_runtime_capability_missing`: subagent tooling unavailable.
-- `not_spawned_review_blocked`: Claude/Copilot/human review route blocks integration.
+- `not_spawned_review_blocked`: local or human review route blocks integration.
 - `not_spawned_verification_blocked`: checks or local gates block integration.
 
 Missing this decision is a workflow defect. The decision must include evidence: agent id(s),

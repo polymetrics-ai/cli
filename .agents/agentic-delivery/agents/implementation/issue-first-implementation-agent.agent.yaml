@@ -41,7 +41,7 @@ inputs:
   - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
   - .agents/agentic-delivery/contracts/issue-agent-contract.md
   - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
-  - .agents/agentic-delivery/workflows/claude-review-loop.md
+  - .agents/agentic-delivery/workflows/local-review-loop.md
 outputs:
   required:
   - code or docs changes scoped to the issue
@@ -49,7 +49,7 @@ outputs:
   - verification summary
   - worker handoff when assigned by a parent issue orchestrator
   - PR body containing Closes or Refs issue number
-  - automated review disposition summary before merge
+  - local automated review disposition summary before merge
 permissions:
   allowed_paths:
   - cmd/**
@@ -86,12 +86,9 @@ workflow:
 - commit_and_push_green_slice_after_green_gates
 - prepare_pr_with_issue_link
 - choose_automated_review_route
-- wait_for_automatic_claude_review_or_record_fallback
-- confirm_claude_review_was_not_only_skipped
-- request_copilot_backup_when_claude_is_blocked_and_enabled
-- route_non_main_base_review_to_parent_pr_when_needed
-- disposition_automated_review_findings
-- ensure_fix_commits_are_claude_reviewed
+- run_local_review_loop
+- disposition_local_review_findings
+- ensure_material_fix_commits_receive_local_review
 - report_worker_handoff_to_orchestrator_when_assigned
 guardrails:
   input:
@@ -105,11 +102,8 @@ guardrails:
   output:
   - no secrets in artifacts
   - PR body must reference issue
-  - skipped Claude review status must not be counted as review completion
-  - Claude run failures or quota exhaustion must be recorded as blockers, not clean reviews
-  - Copilot backup review must not be treated as approval
-  - non-main-base sub-PRs require parent-PR review coverage when Claude skips the sub-PR
-  - every actionable automated review finding must be answered before resolve
+  - remote PR-bot output must not be treated as required approval
+  - every actionable local automated review finding must be dispositioned before handoff
 verification:
   required:
   - targeted tests for changed packages
@@ -117,7 +111,7 @@ verification:
   - GSD plan, TDD ledger, and verification checklist updated
   - green-slice commits pushed to the active issue/PR branch
   - git diff --check
-  - Claude automatic review observed, Copilot backup requested under fallback policy, or blocker recorded
+  - local automated review coverage recorded, or blocker recorded
 adapters:
   codex:
     note: Convert this YAML to a thread prompt plus local tool execution.

@@ -2,7 +2,6 @@ package gsd
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -43,7 +42,7 @@ func (e Event) String() string {
 
 func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 	if maxBytes <= 0 || len(raw) > maxBytes {
-		return Event{}, errors.New("event exceeds configured size")
+		return Event{}, fmt.Errorf("%w: event exceeds configured size", ErrRuntimeContractMismatch)
 	}
 	var envelope struct {
 		Type          EventKind `json:"type"`
@@ -65,14 +64,14 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 		} `json:"messages"`
 	}
 	if err := json.Unmarshal(raw, &envelope); err != nil {
-		return Event{}, fmt.Errorf("decode event envelope: %w", err)
+		return Event{}, fmt.Errorf("%w: decode event envelope: %v", ErrRuntimeContractMismatch, err)
 	}
 	if _, ok := allowedEvents[envelope.Type]; !ok {
-		return Event{}, fmt.Errorf("event type %q is not allowlisted", envelope.Type)
+		return Event{}, fmt.Errorf("%w: event type %q is not allowlisted", ErrRuntimeContractMismatch, envelope.Type)
 	}
 	if (envelope.Type == EventToolStart || envelope.Type == EventToolEnd) &&
 		(strings.TrimSpace(envelope.Tool) == "" || strings.TrimSpace(envelope.ToolCallID) == "") {
-		return Event{}, errors.New("tool lifecycle event requires toolName and toolCallId")
+		return Event{}, fmt.Errorf("%w: tool lifecycle event requires toolName and toolCallId", ErrRuntimeContractMismatch)
 	}
 	model := ""
 	if envelope.Type == EventModelSelect && envelope.SelectedModel.Provider != "" && envelope.SelectedModel.ID != "" {

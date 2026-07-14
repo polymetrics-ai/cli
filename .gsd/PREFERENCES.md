@@ -4,9 +4,15 @@ mode: team
 always_use_skills:
   - polymetrics-issue-delivery
 models:
-  validation:
-    model: openai-codex/gpt-5.6-sol
-    thinking: high
+  research: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  planning: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  discuss: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  execution: { provider: openai-codex, model: gpt-5.5, thinking: high }
+  execution_simple: { provider: openai-codex, model: gpt-5.5, thinking: high }
+  completion: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  validation: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
+  subagent: { provider: openai-codex, model: gpt-5.5, thinking: high }
+  uat: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }
 dynamic_routing:
   enabled: false
 git:

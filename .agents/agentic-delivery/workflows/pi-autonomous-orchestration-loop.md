@@ -8,7 +8,7 @@ can be stopped and resumed at any point (including token exhaustion) without los
 This is the runtime-generic contract. The Pi adapter is `pm-auto-loop` (`.pi/prompts/pm-auto-loop.md`)
 driven by `scripts/pi-auto-loop.sh`. It composes the existing
 `parent-issue-orchestration-loop.md`, `pi-active-orchestration-loop.md`, `gsd-universal-runtime-loop.md`,
-`claude-review-loop.md`, and `code-review-disposition-template.md`.
+`local-review-loop.md`, and `code-review-disposition-template.md`.
 
 ## Roles → agents → models
 

@@ -201,7 +201,7 @@ User-facing errors and status records identify the failure class, safe current s
 - SQLite/WAL state and outbox — persist run generations, leases, checkpoints, retry state, pending effects, and durable human requests.
 - GitHub REST/`gh` integration — reads canonical issue/PR/review state, publishes marker-owned bounded questions and summaries, polls allowlisted answers, and creates or updates the parent PR through narrow replaceable ports.
 - Model providers — execute role-bound work only when exact configured model and thinking observations match policy.
-- Automated review routing — confirms Claude review covers the relevant commits, with recorded Copilot or human fallback only when repository policy permits it.
+- Automated review routing — confirms local reviewer/verifier/security coverage for the relevant commits, with human fallback only when repository policy permits it.
 - Operator terminal — starts and interrupts the foreground process and consumes concise live events and machine-readable status without becoming an ephemeral authority channel.
 
 ## Testing Requirements
@@ -261,5 +261,5 @@ Use strict test-first vertical slices in the nested Go module.
 
 - What exact default retry counts, backoff schedule, and overall recovery budgets should each recoverable failure class use? — Planning should choose conservative validated defaults; configuration must remain bounded and fail closed.
 - What exact JSON schema and exit-code contract should machine-readable status expose? — It must cover current state, generation, issue/unit identity, exact head, heartbeat/progress, retry budget, pending human request, and safe next authority without exposing prohibited data.
-- Which specific GitHub review states satisfy “required automated review coverage” for terminal readiness? — Follow repository policy: Claude is primary; a recorded Copilot or human fallback is acceptable only for the defined blocker path and exact commit range.
+- Which specific review states satisfy “required automated review coverage” for terminal readiness? — Follow repository policy: local automated review coverage is primary; a recorded human fallback is acceptable only for the defined blocker path and exact commit range.
 - Which bootstrap GitHub client should back the narrow ports in V1? — Existing `gh` authentication is acceptable if validated and bounded; policy must remain independent so a least-privilege Shepherd App can replace it later.

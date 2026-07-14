@@ -77,7 +77,6 @@ Result: <pass | fail | blocked>
 - Compact handoff prose is allowed, but exact commands, code, test output, security warnings,
   destructive-action warnings, ordered safety gates, and approval gates must remain exact and
   unambiguous.
-- Do not claim Claude approval from a skipped-review status.
-- Do not claim GitHub Copilot review as approval.
-- Use `provisional_parent_integration` when parent PR fallback coverage is still pending.
+- Do not claim remote PR-bot output as required approval.
+- Use `provisional_parent_integration` when local review coverage for an integrated parent batch is still pending.
 - Name blockers explicitly instead of weakening verification.
