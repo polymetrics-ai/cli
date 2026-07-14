@@ -37,6 +37,7 @@ func captureServer(t *testing.T, status int, body string) (*httptest.Server, *ca
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cap.method = r.Method
 		cap.path = r.URL.Path
+		cap.query = r.URL.Query()
 		raw, _ := io.ReadAll(r.Body)
 		cap.body = raw
 		cap.contentType = r.Header.Get("Content-Type")
@@ -54,6 +55,7 @@ func captureServer(t *testing.T, status int, body string) (*httptest.Server, *ca
 type capturedRequest struct {
 	method      string
 	path        string
+	query       url.Values
 	body        []byte
 	contentType string
 }
@@ -105,6 +107,42 @@ func TestWriteJSONBodyDefaultExcludesPathFields(t *testing.T) {
 }
 
 // --- body construction: form (stripe-shape) ---
+
+func TestWriteQueryTemplatesUseRecordFieldsAndStayOutOfJSONBody(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"ok":true}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Kind:   "delete",
+		Method: http.MethodDelete,
+		Path:   "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/caches",
+		Query: map[string]string{
+			"name": "{{ record.name }}",
+		},
+		BodyType: "none",
+	})
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "update_widget",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"workspace": "acme",
+			"repo_slug": "widgets",
+		}},
+	}, []connectors.Record{{"name": "cache-main"}}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	if cap.path != "/repositories/acme/widgets/pipelines-config/caches" {
+		t.Fatalf("path = %q", cap.path)
+	}
+	if cap.query.Get("name") != "cache-main" {
+		t.Fatalf("query name = %q, want cache-main", cap.query.Get("name"))
+	}
+	if len(cap.body) != 0 {
+		t.Fatalf("body = %q, want empty body for query-only delete", string(cap.body))
+	}
+}
 
 func TestWriteFormBodyStripeShape(t *testing.T) {
 	srv, cap := captureServer(t, http.StatusOK, `{"id":"cus_1"}`)

@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "issues",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uuid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "full_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updated_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "repository": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workspace": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "priority": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kind": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "content": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "reporter": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "assignee": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "component": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "milestone": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "votes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "watches": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "reporter_display_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assignee_display_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "updated_on"
+}

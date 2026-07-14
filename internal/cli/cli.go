@@ -128,12 +128,7 @@ func runHelp(args []string, stdout io.Writer) error {
 	if len(args) > 0 {
 		topic = args[0]
 	}
-	text, ok := docs[topic]
-	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
-	}
-	fmt.Fprint(stdout, text)
-	return nil
+	return writeManual(topic, stdout, false)
 }
 
 func isManualCommand(cmd string) bool {
@@ -147,7 +142,11 @@ func isManualCommand(cmd string) bool {
 func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	text, ok := docs[topic]
 	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
+		connector, ok := appRegistry().Get(topic)
+		if !ok {
+			return fmt.Errorf("help topic %q not found", topic)
+		}
+		text = connectors.RenderConnectorManual(connector)
 	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": text})
@@ -610,7 +609,11 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
-		return usageErrorf("missing connector command path")
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": connectorName, "manual": connectors.RenderConnectorManual(connector)})
+		}
+		fmt.Fprint(stdout, connectors.RenderConnectorManual(connector))
+		return nil
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError

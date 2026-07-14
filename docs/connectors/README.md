@@ -21,12 +21,12 @@
 - [akeneo](akeneo/MANUAL.md): Reads Akeneo PIM products, categories, families, attributes, channels, product models, family variants, attribute groups, association types, locales, currencies, and measure families, and writes create-or-update upserts for the 9 catalog-structure resources, through the Akeneo REST API (OAuth2 password grant).
 - [algolia](algolia/MANUAL.md): Reads Algolia indices, API keys, index settings, dictionaries, security sources, and logs, and writes index settings/API keys, through the Algolia Search REST API.
 - [alpaca-broker-api](alpaca-broker-api/MANUAL.md): Reads Alpaca Broker API accounts, assets, market calendar, clock, country info, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).
-- [alpha-vantage](alpha-vantage/MANUAL.md): Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global quote for a configured stock symbol. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [alpha-vantage](alpha-vantage/MANUAL.md): Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global quote for a configured stock symbol.
 - [amazon-ads](amazon-ads/MANUAL.md): Reads Amazon Advertising profiles, Sponsored Products campaigns, ad groups, product ads, keywords, negative keywords, and portfolios via the Amazon Ads API using a Login with Amazon (LWA) refresh-token grant. Read-only.
 - [amazon-seller-partner](amazon-seller-partner/MANUAL.md): Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, fulfillment, reports, feeds, seller, shipping, vendor, and supporting JSON resources via Login with Amazon (LWA) authentication; exposes declarative writes for SP-API mutations that fit path/body JSON requests.
 - [amazon-sqs](amazon-sqs/MANUAL.md): Reads messages from Amazon SQS via signed ReceiveMessage calls. Read-only; messages are not deleted.
 - [amplitude](amplitude/MANUAL.md): Reads and manages Amplitude behavioral cohorts, chart annotations, annotation categories, event lists, and the governed taxonomy (event/category definitions) through the Amplitude Analytics REST API.
-- [apify-dataset](apify-dataset/MANUAL.md): Reads Apify dataset items and dataset metadata (item_collection, dataset_collection, dataset) through the Apify API v2. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [apify-dataset](apify-dataset/MANUAL.md): Reads Apify dataset items and dataset metadata (item_collection, dataset_collection, dataset) through the Apify API v2.
 - [appcues](appcues/MANUAL.md): Reads and manages Appcues in-app guidance experiences (flows, Flows 2.0, pins, mobile experiences, launchpads, banners, checklists, embeds, NPS 2.0), audience data (segments, tags), operational resources (offline jobs, SDK authentication keys), and individual end-user/group profiles through the Appcues REST API v2.
 - [appfigures](appfigures/MANUAL.md): Reads Appfigures app-store reviews, products, analytics reports (sales/ratings/revenue/subscriptions/ads/estimates), reference data (categories/countries/languages/currencies/stores/SDKs), release events, connected external accounts, account users, and account info through the Appfigures v2 REST API, and manages release events and review responses.
 - [appfollow](appfollow/MANUAL.md): Reads AppFollow account users, app collections, app lists, reviews, review summaries, ratings/ratings history, ASO keywords, rankings, and version/what's-new metadata through the AppFollow REST API v2 (config-list-driven fan-out per app/collection); writes review replies/tags/notes, ASO keyword edits, and account user/app/collection management actions.
@@ -34,19 +34,20 @@
 - [appsflyer](appsflyer/MANUAL.md): Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through the AppsFlyer Pull API. Read-only.
 - [apptivo](apptivo/MANUAL.md): Reads Apptivo CRM customers, contacts, leads, and opportunities through the Apptivo REST DAO API (full refresh); deletes CRM customer records via the documented deleteCustomer DAO action.
 - [asana](asana/MANUAL.md): Reads Asana workspaces, projects, tasks, sections, tags, stories, users, teams, custom fields, project statuses, and team/workspace memberships through the Asana v1 REST API. Writes task/project/section/tag create-update-delete and task comments.
-- [ashby](ashby/MANUAL.md): Reads Ashby applicant-tracking data — candidates, jobs, applications, and users — through the Ashby REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [ashby](ashby/MANUAL.md): Reads Ashby applicant-tracking data — candidates, jobs, applications, and users — through the Ashby REST API.
 - [assemblyai](assemblyai/MANUAL.md): Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and word-search matches, and submits new transcription jobs, through the AssemblyAI REST API.
 - [auth0](auth0/MANUAL.md): Reads Auth0 users, clients, connections, roles, organizations, role assignments, and organization memberships, and creates/updates users, clients, roles, and organizations, through the Auth0 Management API v2.
 - [aviationstack](aviationstack/MANUAL.md): Reads aviationstack flights and aviation reference data (airlines, airports, airplanes, countries) through the aviationstack REST API. Read-only.
 - [avni](avni/MANUAL.md): Reads Avni subjects and encounters through a read-only HTTP API using HTTP Basic authentication.
 - [awin-advertiser](awin-advertiser/MANUAL.md): Reads Awin advertiser transactions, publisher-aggregated performance reports, publisher relationships, and publisher performance reports, and creates advertiser promotion/voucher offers, through the Awin Advertiser REST API.
-- [aws-cloudtrail](aws-cloudtrail/MANUAL.md): Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
-- [babelforce](babelforce/MANUAL.md): Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [aws-cloudtrail](aws-cloudtrail/MANUAL.md): Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only.
+- [babelforce](babelforce/MANUAL.md): Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API.
 - [bamboo-hr](bamboo-hr/MANUAL.md): Reads and writes BambooHR employee, metadata, reporting, time off, applicant tracking, benefits, goals, training, time tracking, scheduling, and webhook resources that are available through the documented Basic-auth API surface.
-- [basecamp](basecamp/MANUAL.md): Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [basecamp](basecamp/MANUAL.md): Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API.
 - [beamer](beamer/MANUAL.md): Reads and writes Beamer NPS survey responses, announcement posts, feature requests, comments, reactions, votes, and end users through the Beamer REST API.
 - [bigmailer](bigmailer/MANUAL.md): Reads and writes BigMailer brands, account users, and brand-scoped contacts, lists, custom fields, message types, segments, senders, templates, suppression lists, and campaigns through the BigMailer REST API.
 - [bing-ads](bing-ads/MANUAL.md): Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, and ads through the v13 Customer Management and Campaign Management REST APIs. Read-only.
+- [bitbucket](bitbucket/MANUAL.md): Reads Bitbucket Cloud repositories, branches, commits, tags, pull requests, issues, pipelines, deployments, downloads metadata, webhooks, branch restrictions, projects, and snippets; exposes approval-gated write plans for selected repository, issue, pull request, pipeline, webhook, branch restriction, and snippet mutations.
 - [bitly](bitly/MANUAL.md): Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short domains, webhooks, QR codes, and group tags, and writes bitlink/campaign/group/channel/webhook/custom-bitlink/QR-code mutations, through the Bitly v4 REST API.
 - [blogger](blogger/MANUAL.md): Reads Blogger (Google Blogger API v3) blogs, posts, pages, comments, and page-view counts using an OAuth 2.0 refresh-token grant. Read-only.
 - [bluetally](bluetally/MANUAL.md): Reads BlueTally IT asset management data (assets, employees, licenses, maintenances, accessories) through the BlueTally REST API.
@@ -61,14 +62,14 @@
 - [brex](brex/MANUAL.md): Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, accounts, statements, transfers, and webhooks through the Brex platform REST API.
 - [bugsnag](bugsnag/MANUAL.md): Reads Bugsnag organizations, projects, collaborators, errors, events, and releases through the Bugsnag Data Access API.
 - [buildkite](buildkite/MANUAL.md): Reads and writes Buildkite organizations, pipelines, builds, agents, teams, and clusters through the Buildkite REST API v2.
-- [bunny-inc](bunny-inc/MANUAL.md): Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, subscriptions) from the per-tenant Bunny GraphQL API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [bunny-inc](bunny-inc/MANUAL.md): Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, subscriptions) from the per-tenant Bunny GraphQL API.
 - [buzzsprout](buzzsprout/MANUAL.md): Reads Buzzsprout podcasts and episodes (titles, publish dates, durations, play counts) and creates/updates episodes through the Buzzsprout REST API.
 - [cal-com](cal-com/MANUAL.md): Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manages bookings/event types/schedules/webhooks through the Cal.com v2 REST API.
 - [calendly](calendly/MANUAL.md): Reads Calendly scheduled events (and their invitees), event types, organization memberships, groups, routing forms and submissions, webhook subscriptions, availability schedules, activity log entries, and the current user, and manages bookings/webhooks/memberships/invitations/event types through the Calendly v2 REST API.
 - [callrail](callrail/MANUAL.md): Reads and writes CallRail call tracking data (calls, companies, users, tags, trackers, form submissions, text messages, notifications, integrations, and more) through the CallRail v3 REST API.
 - [campaign-monitor](campaign-monitor/MANUAL.md): Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscribers, segments, and templates through the createsend.com v3.3 REST API.
 - [campayn](campayn/MANUAL.md): Reads and writes Campayn subscriber lists, signup forms, contacts, email campaigns, and calendar reports through the Campayn REST API.
-- [canny](canny/MANUAL.md): Reads Canny boards, posts, comments, categories, and companies through the Canny REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [canny](canny/MANUAL.md): Reads Canny boards, posts, comments, categories, and companies through the Canny REST API.
 - [capsule-crm](capsule-crm/MANUAL.md): Reads Capsule CRM parties, opportunities, cases, tasks, users, tags, custom field definitions, teams, pipelines, milestones, lost reasons, task categories, boards, and stages, and writes party/opportunity/case/task create, update, and delete actions, through the Capsule v2 REST API.
 - [captain-data](captain-data/MANUAL.md): Reads Captain Data workspace, workflows, jobs, and job results, and writes a launch_workflow action to trigger a new workflow run, through the Captain Data v3 REST API.
 - [care-quality-commission](care-quality-commission/MANUAL.md): Reads Care Quality Commission (CQC) registered locations, providers, and inspection areas from the public CQC Syndication API. Read-only (full-refresh).
@@ -107,7 +108,7 @@
 - [confluence](confluence/MANUAL.md): Reads Confluence Cloud spaces, pages, blog posts, labels, attachments, comments, tasks, and custom content, and writes pages, blog posts, and comments through the Confluence Cloud REST API v2.
 - [convertkit](convertkit/MANUAL.md): Reads ConvertKit (Kit) subscribers, forms, sequences, tags, broadcasts, custom fields, and purchases, and writes subscriber/tag/form/sequence/broadcast/custom-field/purchase/webhook mutations, through the ConvertKit v3 REST API.
 - [convex](convex/MANUAL.md): Reads Convex tables and documents through the deployment HTTP API.
-- [copper](copper/MANUAL.md): Reads Copper CRM people, companies, opportunities, leads, and tasks through the Copper REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [copper](copper/MANUAL.md): Reads Copper CRM people, companies, opportunities, leads, and tasks through the Copper REST API.
 - [countercyclical](countercyclical/MANUAL.md): Reads Countercyclical investments, valuations, research memos, teams, assumptions, and pipelines, and creates investments, through the Countercyclical REST API.
 - [criteo-marketing](criteo-marketing/MANUAL.md): Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad spend statistics, and Marketplace Performance Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API using OAuth2 client-credentials auth.
 - [customer-io](customer-io/MANUAL.md): Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, messages, exports, transactional templates, object types, reporting webhooks, sender identities, snippets, subscription channels/topics, workspaces, and collections; writes snippet/webhook/segment mutations and can send transactional email or trigger broadcasts, through the Customer.io App API.
@@ -121,7 +122,7 @@
 - [devin-ai](devin-ai/MANUAL.md): Reads Devin AI sessions, session child resources, playbooks, knowledge notes, repositories, schedules, membership, metrics, consumption, and secret metadata through the Devin v3 REST API; writes documented organization-scoped JSON mutations.
 - [ding-connect](ding-connect/MANUAL.md): Reads DingConnect reference catalogs (countries, currencies, regions, providers, products, product descriptions, promotions, provider status, error code descriptions, account balance) through the DingConnect REST API, and sends real-money mobile top-up transfers.
 - [discord](discord/MANUAL.md): Reads Discord guild, channel, and role data through the Discord REST API using a bot token. The members stream is out of scope for this migration (see docs.md's Known limits).
-- [dixa](dixa/MANUAL.md): Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [dixa](dixa/MANUAL.md): Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API.
 - [dockerhub](dockerhub/MANUAL.md): Reads public Docker Hub repositories, image tags, and namespace profiles for a configured username or organization via the Docker Hub registry API.
 - [docuseal](docuseal/MANUAL.md): Reads DocuSeal templates, submissions, and submitters, and writes submission/submitter/template mutations through the DocuSeal REST API.
 - [dolibarr](dolibarr/MANUAL.md): Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer invoices, and orders through the Dolibarr REST API.
@@ -151,9 +152,9 @@
 - [facebook-pages](facebook-pages/MANUAL.md): Reads Facebook Page metadata and posts from the Graph API. Read-only.
 - [factorial](factorial/MANUAL.md): Reads FactorialHR employees, teams, time-off leaves, leave types, and locations through the Factorial REST API.
 - [faker](faker/MANUAL.md): Generates deterministic sample users, purchases, and products without network access.
-- [fastbill](fastbill/MANUAL.md): Reads FastBill customers, invoices, products, recurring invoices, and revenues through the FastBill JSON API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [fastbill](fastbill/MANUAL.md): Reads FastBill customers, invoices, products, recurring invoices, and revenues through the FastBill JSON API.
 - [fastly](fastly/MANUAL.md): Reads Fastly services, the current user, the current customer (account), and datacenters through the Fastly REST API. Read-only.
-- [feishu](feishu/MANUAL.md): Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open Platform REST API using a tenant_access_token exchange. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [feishu](feishu/MANUAL.md): Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open Platform REST API using a tenant_access_token exchange.
 - [file](file/MANUAL.md): Reads local JSONL or CSV files as source streams.
 - [fillout](fillout/MANUAL.md): Reads Fillout forms and manages webhooks/submission deletion through the Fillout REST API. Question definitions and submissions LIST remain on the legacy connector pending an engine fan_out fallback-mode gap (see docs.md Known limits).
 - [finage](finage/MANUAL.md): Reads Finage US market data: most active stocks, top gainers and losers, sector performance, delisted companies, and per-symbol market news via the Finage REST API.
@@ -167,8 +168,8 @@
 - [float](float/MANUAL.md): Reads Float people, projects, clients, tasks, and departments through the Float v3 REST API.
 - [flowlu](flowlu/MANUAL.md): Reads Flowlu CRM accounts, leads, tasks, projects, invoices, and agile issues through the Flowlu REST API.
 - [formbricks](formbricks/MANUAL.md): Reads Formbricks surveys, responses, contacts, contact attributes, action classes, webhooks, and account metadata; writes approved management API mutations.
-- [free-agent-connector](free-agent-connector/MANUAL.md): Reads FreeAgent contacts, invoices, bills, projects, and tasks through the FreeAgent v2 REST API using OAuth2 refresh-token authentication. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
-- [freightview](freightview/MANUAL.md): Reads Freightview shipments, quotes, and tracking events through the Freightview v2.0 REST API using the client-credentials session-token flow. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [free-agent-connector](free-agent-connector/MANUAL.md): Reads FreeAgent contacts, invoices, bills, projects, and tasks through the FreeAgent v2 REST API using OAuth2 refresh-token authentication.
+- [freightview](freightview/MANUAL.md): Reads Freightview shipments, quotes, and tracking events through the Freightview v2.0 REST API using the client-credentials session-token flow.
 - [freshbooks](freshbooks/MANUAL.md): Reads FreshBooks clients, invoices, expenses, payments, and items through the FreshBooks accounting REST API.
 - [freshcaller](freshcaller/MANUAL.md): Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcaller REST API.
 - [freshchat](freshchat/MANUAL.md): Reads Freshchat account, user, conversation, agent, group, channel, role, outbound, report, metrics, and business-hours data through the Freshchat v2 REST API; writes Freshchat users, conversations, agents, outbound messages, reports, and CSAT ratings.
@@ -194,12 +195,12 @@
 - [gologin](gologin/MANUAL.md): Reads GoLogin browser profiles, folders, tags, and account information through the GoLogin REST API.
 - [gong](gong/MANUAL.md): Reads Gong users, calls, and scorecards through the Gong REST API (read-only).
 - [google-ads](google-ads/MANUAL.md): Reads accessible customers and allow-listed Google Ads GAQL search resources (campaigns, ad groups) through the Google Ads REST API. Read-only; arbitrary GAQL is not accepted.
-- [google-analytics-data-api](google-analytics-data-api/MANUAL.md): Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
-- [google-calendar](google-calendar/MANUAL.md): Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
-- [google-classroom](google-classroom/MANUAL.md): Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [google-analytics-data-api](google-analytics-data-api/MANUAL.md): Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only.
+- [google-calendar](google-calendar/MANUAL.md): Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token.
+- [google-classroom](google-classroom/MANUAL.md): Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token.
 - [google-directory](google-directory/MANUAL.md): Reads Google Admin SDK Directory users, groups, organizational units, and ChromeOS devices via bearer-token OAuth. Read-only.
 - [google-forms](google-forms/MANUAL.md): Reads Google Forms metadata, form items, and submitted responses through the Google Forms REST API using an OAuth 2.0 refresh-token grant.
-- [google-pagespeed-insights](google-pagespeed-insights/MANUAL.md): Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [google-pagespeed-insights](google-pagespeed-insights/MANUAL.md): Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API.
 - [google-search-console](google-search-console/MANUAL.md): Reads Google Search Console sites, sitemaps, and Search Analytics performance reports (by date, query, page, country, and device) through the Search Console v3 REST API; submits/removes sites and sitemaps through explicit write actions.
 - [google-tasks](google-tasks/MANUAL.md): Reads Google task lists and tasks through the Google Tasks REST API.
 - [google-webfonts](google-webfonts/MANUAL.md): Reads Google Web Fonts families (default, popular, trending, newest, and alphabetical views) through the Google Fonts Developer API. Read-only.
@@ -257,7 +258,7 @@
 - [launchdarkly](launchdarkly/MANUAL.md): Reads LaunchDarkly projects, members, audit log entries, feature flags, and environments through the LaunchDarkly REST API.
 - [leadfeeder](leadfeeder/MANUAL.md): Reads Leadfeeder accounts and their leads, visits, and custom feeds through the Leadfeeder JSON:API.
 - [lemlist](lemlist/MANUAL.md): Reads lemlist campaigns, activities, team metadata, CRM contacts/companies, schedules, tasks, webhooks, unsubscribes, field definitions, and signal-agent data through the lemlist REST API.
-- [less-annoying-crm](less-annoying-crm/MANUAL.md): Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [less-annoying-crm](less-annoying-crm/MANUAL.md): Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API.
 - [lever-hiring](lever-hiring/MANUAL.md): Reads Lever Hiring opportunities, postings, users, requisitions, and stages through the Lever Data API. Read-only (full-refresh).
 - [lightspeed-retail](lightspeed-retail/MANUAL.md): Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and registers through the Lightspeed REST API. Read-only.
 - [linear](linear/MANUAL.md): Reads Linear issues, teams, projects, and users through the Linear GraphQL API. Read-only.
@@ -265,7 +266,7 @@
 - [linkedin-pages](linkedin-pages/MANUAL.md): Reads LinkedIn organization (company page) profile, follower statistics, share statistics, and total follower count through the LinkedIn Community Management REST API.
 - [linkrunner](linkrunner/MANUAL.md): Reads Linkrunner mobile attribution campaigns and attributed users from the Linkrunner Data API.
 - [lob](lob/MANUAL.md): Reads Lob addresses, postcards, letters, checks, and bank accounts through the Lob print & mail REST API.
-- [lokalise](lokalise/MANUAL.md): Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [lokalise](lokalise/MANUAL.md): Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API.
 - [looker](looker/MANUAL.md): Reads Looker users, groups, folders, looks, and dashboards through the Looker API 4.0.
 - [luma](luma/MANUAL.md): Reads and writes the documented Luma public API for events, calendars, guests, contacts, tags, coupons, ticket types, memberships, webhooks, and organization resources.
 - [mailchimp](mailchimp/MANUAL.md): Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.
@@ -279,11 +280,11 @@
 - [mantle](mantle/MANUAL.md): Reads and writes Mantle Core API resources through the heymantle.com REST API.
 - [marketo](marketo/MANUAL.md): Reads Marketo leads, programs, and activities through Marketo REST endpoints. Read-only; does not refresh OAuth tokens internally.
 - [marketstack](marketstack/MANUAL.md): Reads Marketstack exchanges, tickers, end-of-day prices, splits, and dividends through the Marketstack REST API.
-- [mendeley](mendeley/MANUAL.md): Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [mendeley](mendeley/MANUAL.md): Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API.
 - [mention](mention/MANUAL.md): Reads Mention app metadata, accounts, alerts, mentions, alert tags, alert shares, alert preferences, and alert tasks from the Mention social listening REST API.
-- [mercado-ads](mercado-ads/MANUAL.md): Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [mercado-ads](mercado-ads/MANUAL.md): Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API.
 - [merge](merge/MANUAL.md): Reads Merge ATS common-model objects (candidates, applications, jobs, offers, departments, users) through the Merge unified REST API.
-- [metabase](metabase/MANUAL.md): Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using session-token authentication. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [metabase](metabase/MANUAL.md): Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using session-token authentication.
 - [metricool](metricool/MANUAL.md): Reads Metricool brand profiles and per-brand Instagram, Facebook, LinkedIn, and TikTok post analytics through the Metricool REST API.
 - [microsoft-dataverse](microsoft-dataverse/MANUAL.md): Reads Microsoft Dataverse accounts, contacts, leads, opportunities, and users through the Web API.
 - [microsoft-entra-id](microsoft-entra-id/MANUAL.md): Reads Microsoft Entra ID (Azure AD) directory objects — users, groups, applications, service principals, and directory roles — from the Microsoft Graph API using an OAuth2 client-credentials grant. Read-only.
@@ -293,10 +294,10 @@
 - [missive](missive/MANUAL.md): Reads Missive contacts, contact groups, users, teams, and shared labels through the Missive REST API.
 - [mixmax](mixmax/MANUAL.md): Reads Mixmax code snippets, messages, rules, sequences, and meeting types through the Mixmax REST API.
 - [mixpanel](mixpanel/MANUAL.md): Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selected current Query/Annotations API list/detail endpoints.
-- [mode](mode/MANUAL.md): Reads Mode collections (spaces), reports, data sources, groups, and memberships through the Mode REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [mode](mode/MANUAL.md): Reads Mode collections (spaces), reports, data sources, groups, and memberships through the Mode REST API.
 - [monday](monday/MANUAL.md): Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API. Read-only.
 - [mux](mux/MANUAL.md): Reads Mux Video assets, live streams, direct uploads, and system signing keys through the Mux REST API using HTTP Basic authentication.
-- [my-hours](my-hours/MANUAL.md): Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [my-hours](my-hours/MANUAL.md): Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API.
 - [n8n](n8n/MANUAL.md): Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.
 - [nasa](nasa/MANUAL.md): Reads NASA Open API data: Astronomy Picture of the Day, Near-Earth Objects (NeoWs feed and browse), EPIC Earth imagery, and Mars rover photos. Read-only.
 - [navan](navan/MANUAL.md): Reads Navan flight, hotel, car, and rail travel bookings through the Navan REST API using OAuth2 client-credentials authentication.
@@ -365,14 +366,14 @@
 - [plaid](plaid/MANUAL.md): Reads Plaid institutions and category metadata through read-only POST endpoints. All credentials and pagination/filter state travel in the JSON request body (Plaid's own convention), driven by a StreamHook.
 - [planhat](planhat/MANUAL.md): Reads Planhat companies, end users, and licenses through the Planhat REST API.
 - [plausible](plausible/MANUAL.md): Reads Plausible Analytics sites and stats reports through the Stats API.
-- [pocket](pocket/MANUAL.md): Reads saved Pocket items through the v3 retrieve API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [pocket](pocket/MANUAL.md): Reads saved Pocket items through the v3 retrieve API.
 - [pokeapi](pokeapi/MANUAL.md): Reads the documented public PokeAPI v2 resource catalog, including list and detail endpoints.
 - [polygon-stock-api](polygon-stock-api/MANUAL.md): Reads Polygon.io stock tickers, dividends, and splits through the Polygon.io reference REST API.
 - [poplar](poplar/MANUAL.md): Reads Poplar campaigns and orders through read-only REST list endpoints.
 - [postgres](postgres/MANUAL.md): Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency.
 - [posthog](posthog/MANUAL.md): Reads PostHog events and persons for a project via the PostHog REST API. Read-only.
 - [postmarkapp](postmarkapp/MANUAL.md): Reads Postmark server-token API resources including messages, bounces, templates, message streams, stats, webhooks, suppressions, and inbound rules; exposes server-token write actions for sends and resource mutations.
-- [prestashop](prestashop/MANUAL.md): Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [prestashop](prestashop/MANUAL.md): Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API.
 - [pretix](pretix/MANUAL.md): Reads pretix organizers, events, items, and orders through the pretix REST API.
 - [primetric](primetric/MANUAL.md): Reads Primetric employees, projects, clients, and roles through OAuth-authenticated REST list endpoints.
 - [printify](printify/MANUAL.md): Reads and writes Printify shops, catalog resources, products, orders, uploads, and webhooks through the Printify public API.
@@ -404,10 +405,10 @@
 - [rocket-chat](rocket-chat/MANUAL.md): Reads Rocket.Chat users, public channels, private groups, direct messages, and rooms through the REST API.
 - [rocketlane](rocketlane/MANUAL.md): Reads Rocketlane projects, tasks, customers, users, and time entries through the REST API.
 - [rollbar](rollbar/MANUAL.md): Reads and writes documented Rollbar API v1 resources through the declarative connector engine.
-- [rootly](rootly/MANUAL.md): Reads Rootly incidents, services, and users through the Rootly API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [rootly](rootly/MANUAL.md): Reads Rootly incidents, services, and users through the Rootly API. Read-only.
 - [rss](rss/MANUAL.md): Reads RSS channel metadata and feed items from any RSS 2.0 feed URL. Read-only and credential-free.
 - [ruddr](ruddr/MANUAL.md): Reads Ruddr clients, projects, and time entries through the Ruddr API. Read-only.
-- [safetyculture](safetyculture/MANUAL.md): Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [safetyculture](safetyculture/MANUAL.md): Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only.
 - [sage-hr](sage-hr/MANUAL.md): Reads Sage HR employees, teams, time off, recruitment, and onboarding/offboarding data, and writes employee/leave/task lifecycle mutations, through the Sage HR API.
 - [salesflare](salesflare/MANUAL.md): Reads Salesflare accounts, contacts, opportunities, users, tags, tasks, workflows, groups, stages, pipelines, persons, currencies, custom-field types, and email data sources, and writes CRM lifecycle mutations, through the Salesflare REST API.
 - [salesforce](salesforce/MANUAL.md): Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQL queries through the REST API. Read-only.
@@ -534,7 +535,7 @@
 - [xero](xero/MANUAL.md): Reads and writes Xero Accounting API resources through declarative JSON bundle streams and typed write actions.
 - [xkcd](xkcd/MANUAL.md): Reads public XKCD comic metadata from the JSON API. Read-only.
 - [xsolla](xsolla/MANUAL.md): Reads Xsolla merchant transaction search/registry, payouts, payout currency breakdown, and financial report data, and writes full/partial transaction refunds through the Xsolla Pay Station API.
-- [yahoo-finance-price](yahoo-finance-price/MANUAL.md): Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [yahoo-finance-price](yahoo-finance-price/MANUAL.md): Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Read-only.
 - [yotpo](yotpo/MANUAL.md): Reads Yotpo store products, product variants, collections, customers, orders, and webhook targets/filters/subscriptions, and writes product/variant/order/customer/fulfillment/collection-membership/webhook mutations through the Yotpo Core API v3.
 - [you-need-a-budget-ynab](you-need-a-budget-ynab/MANUAL.md): Reads YNAB budgets, accounts, categories, payees, months, transactions, and scheduled transactions, and writes transaction/account/category/payee/scheduled-transaction mutations through the YNAB REST API.
 - [younium](younium/MANUAL.md): Reads and writes Younium accounts, subscriptions, invoices, products, payment terms, currencies, and webhooks through the Younium REST API.

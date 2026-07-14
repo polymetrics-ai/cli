@@ -1,0 +1,4995 @@
+{
+  "actions": [
+    {
+      "name": "create_repository",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "is_private": {
+            "type": "boolean"
+          },
+          "scm": {
+            "type": "string"
+          },
+          "project": {
+            "type": "object"
+          },
+          "language": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Bitbucket repository in the configured workspace",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_issue",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "object"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "assignee": {
+            "type": "object"
+          },
+          "component": {
+            "type": "object"
+          },
+          "milestone": {
+            "type": "object"
+          },
+          "version": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "creates a visible Bitbucket issue and may notify repository participants"
+    },
+    {
+      "name": "update_issue",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "object"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "assignee": {
+            "type": "object"
+          },
+          "component": {
+            "type": "object"
+          },
+          "milestone": {
+            "type": "object"
+          },
+          "version": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "mutates an existing Bitbucket issue"
+    },
+    {
+      "name": "create_pull_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "source": {
+            "type": "object"
+          },
+          "destination": {
+            "type": "object"
+          },
+          "source_branch": {
+            "type": "string"
+          },
+          "destination_branch": {
+            "type": "string"
+          },
+          "close_source_branch": {
+            "type": "boolean"
+          },
+          "reviewers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "creates a visible pull request and may notify reviewers"
+    },
+    {
+      "name": "merge_pull_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/merge",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "close_source_branch": {
+            "type": "boolean"
+          },
+          "merge_strategy": {
+            "type": "string"
+          },
+          "async": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "merges a pull request into its destination branch",
+      "confirm": "destructive",
+      "query": {
+        "async": "{{ record.async }}"
+      }
+    },
+    {
+      "name": "decline_pull_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/decline",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "declines a Bitbucket pull request"
+    },
+    {
+      "name": "run_pipeline",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "target": {
+            "type": "object"
+          },
+          "variables": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "selector": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "starts a Bitbucket pipeline run that may consume CI minutes and deploy artifacts"
+    },
+    {
+      "name": "stop_pipeline",
+      "kind": "update",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines/{{ record.pipeline_uuid }}/stopPipeline",
+      "path_fields": [
+        "pipeline_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pipeline_uuid"
+        ],
+        "properties": {
+          "pipeline_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "stops an in-flight Bitbucket pipeline"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "url",
+          "events"
+        ],
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "creates an outbound webhook that sends repository events to an external URL"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks/{{ record.uid }}",
+      "path_fields": [
+        "uid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "uid"
+        ],
+        "properties": {
+          "uid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes a repository webhook and may interrupt downstream automation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_branch_restriction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branch-restrictions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "branch_match_kind": {
+            "type": "string"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "value": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "changes repository branch protection behavior",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_snippet",
+      "kind": "create",
+      "method": "POST",
+      "path": "/snippets/{{ config.workspace }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "scm": {
+            "type": "string"
+          },
+          "is_private": {
+            "type": "boolean"
+          },
+          "files": {
+            "type": "object"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Bitbucket snippet that may publish code or text content"
+    },
+    {
+      "name": "op_put_addon",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/addon",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Update an installed app",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_addon",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/addon",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Delete an app",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "uuid": {
+            "type": "object"
+          },
+          "full_name": {
+            "type": "object"
+          },
+          "is_private": {
+            "type": "object"
+          },
+          "parent": {
+            "type": "object"
+          },
+          "scm": {
+            "type": "object"
+          },
+          "owner": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object"
+          },
+          "description": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "size": {
+            "type": "object"
+          },
+          "language": {
+            "type": "object"
+          },
+          "has_issues": {
+            "type": "object"
+          },
+          "has_wiki": {
+            "type": "object"
+          },
+          "fork_policy": {
+            "type": "object"
+          },
+          "project": {
+            "type": "object"
+          },
+          "mainbranch": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Update a repository"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "redirect_to": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a repository",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "query": {
+        "redirect_to": "{{ record.redirect_to }}"
+      }
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_branch_restrictions_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branch-restrictions/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "object"
+          },
+          "branch_match_kind": {
+            "type": "object"
+          },
+          "branch_type": {
+            "type": "object"
+          },
+          "pattern": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "users": {
+            "type": "object"
+          },
+          "groups": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Update a branch restriction rule",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_branch_restrictions_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branch-restrictions/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a branch restriction rule",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_branching_model_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branching-model/settings",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Update the branching model config for a repository",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_commit_commit_approve",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/approve",
+      "path_fields": [
+        "commit"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit"
+        ],
+        "properties": {
+          "commit": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Approve a commit"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_commit_commit_approve",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/approve",
+      "path_fields": [
+        "commit"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit"
+        ],
+        "properties": {
+          "commit": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Unapprove a commit",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_commit_commit_comments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/comments",
+      "path_fields": [
+        "commit"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit"
+        ],
+        "properties": {
+          "commit": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create comment for a commit"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "commit",
+        "comment_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "comment_id"
+        ],
+        "properties": {
+          "commit": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a commit comment"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "commit",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "comment_id"
+        ],
+        "properties": {
+          "commit": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a commit comment",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+      "path_fields": [
+        "commit",
+        "app_key",
+        "property_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "app_key",
+          "property_name"
+        ],
+        "properties": {
+          "_attributes": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "commit": {
+            "type": "string"
+          },
+          "app_key": {
+            "type": "string"
+          },
+          "property_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a commit application property"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+      "path_fields": [
+        "commit",
+        "app_key",
+        "property_name"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "app_key",
+          "property_name"
+        ],
+        "properties": {
+          "commit": {
+            "type": "string"
+          },
+          "app_key": {
+            "type": "string"
+          },
+          "property_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a commit application property",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_commit_commit_reports_reportid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}",
+      "path_fields": [
+        "commit",
+        "reportId"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "reportId"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "title": {
+            "type": "object"
+          },
+          "details": {
+            "type": "object"
+          },
+          "external_id": {
+            "type": "object"
+          },
+          "reporter": {
+            "type": "object"
+          },
+          "link": {
+            "type": "object"
+          },
+          "remote_link_enabled": {
+            "type": "object"
+          },
+          "logo_url": {
+            "type": "object"
+          },
+          "report_type": {
+            "type": "object"
+          },
+          "result": {
+            "type": "object"
+          },
+          "data": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "commit": {
+            "type": "string"
+          },
+          "reportId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create or update a report"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_commit_commit_reports_reportid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}",
+      "path_fields": [
+        "commit",
+        "reportId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "reportId"
+        ],
+        "properties": {
+          "commit": {
+            "type": "string"
+          },
+          "reportId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a report",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}/annotations",
+      "path_fields": [
+        "commit",
+        "reportId"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "reportId"
+        ],
+        "properties": {
+          "payload": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "commit": {
+            "type": "string"
+          },
+          "reportId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Bulk create or update annotations"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}/annotations/{{ record.annotationId }}",
+      "path_fields": [
+        "commit",
+        "reportId",
+        "annotationId"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "reportId",
+          "annotationId"
+        ],
+        "properties": {
+          "external_id": {
+            "type": "object"
+          },
+          "uuid": {
+            "type": "object"
+          },
+          "annotation_type": {
+            "type": "object"
+          },
+          "path": {
+            "type": "object"
+          },
+          "line": {
+            "type": "object"
+          },
+          "summary": {
+            "type": "object"
+          },
+          "details": {
+            "type": "object"
+          },
+          "result": {
+            "type": "object"
+          },
+          "severity": {
+            "type": "object"
+          },
+          "link": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "commit": {
+            "type": "string"
+          },
+          "reportId": {
+            "type": "string"
+          },
+          "annotationId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create or update an annotation"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}/annotations/{{ record.annotationId }}",
+      "path_fields": [
+        "commit",
+        "reportId",
+        "annotationId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "reportId",
+          "annotationId"
+        ],
+        "properties": {
+          "commit": {
+            "type": "string"
+          },
+          "reportId": {
+            "type": "string"
+          },
+          "annotationId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete an annotation",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_commit_commit_statuses_build",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/statuses/build",
+      "path_fields": [
+        "commit"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit"
+        ],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "refname": {
+            "type": "object"
+          },
+          "url": {
+            "type": "object"
+          },
+          "state": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object"
+          },
+          "description": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "commit": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a build status for a commit",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_commit_commit_statuses_build_key",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ record.commit }}/statuses/build/{{ record.key }}",
+      "path_fields": [
+        "commit",
+        "key"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "commit",
+          "key"
+        ],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "key": {
+            "type": "string"
+          },
+          "refname": {
+            "type": "object"
+          },
+          "url": {
+            "type": "object"
+          },
+          "state": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object"
+          },
+          "description": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "commit": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a build status for a commit"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_commits",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commits",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "List commits with include/exclude"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_commits_revision",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commits/{{ record.revision }}",
+      "path_fields": [
+        "revision"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "revision"
+        ],
+        "properties": {
+          "revision": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "List commits for revision using include/exclude"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_default_reviewers_target_username",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/default-reviewers/{{ record.target_username }}",
+      "path_fields": [
+        "target_username"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "target_username"
+        ],
+        "properties": {
+          "target_username": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Add a user to the default reviewers",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_default_reviewers_target_username",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/default-reviewers/{{ record.target_username }}",
+      "path_fields": [
+        "target_username"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "target_username"
+        ],
+        "properties": {
+          "target_username": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Remove a user from the default reviewers",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_deploy_keys",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deploy-keys",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Add a repository deploy key",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_deploy_keys_key_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deploy-keys/{{ record.key_id }}",
+      "path_fields": [
+        "key_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "key_id"
+        ],
+        "properties": {
+          "key_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a repository deploy key",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_deploy_keys_key_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deploy-keys/{{ record.key_id }}",
+      "path_fields": [
+        "key_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "key_id"
+        ],
+        "properties": {
+          "key_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a repository deploy key",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deployments_config/environments/{{ record.environment_uuid }}/variables",
+      "path_fields": [
+        "environment_uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "environment_uuid"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          },
+          "environment_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a variable for an environment",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables_variable_uuid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deployments_config/environments/{{ record.environment_uuid }}/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "environment_uuid",
+        "variable_uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "environment_uuid",
+          "variable_uuid"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          },
+          "environment_uuid": {
+            "type": "string"
+          },
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a variable for an environment",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables_variable_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deployments_config/environments/{{ record.environment_uuid }}/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "environment_uuid",
+        "variable_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "environment_uuid",
+          "variable_uuid"
+        ],
+        "properties": {
+          "environment_uuid": {
+            "type": "string"
+          },
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a variable for an environment",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_downloads",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/downloads",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Upload a download artifact"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_downloads_filename",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/downloads/{{ record.filename }}",
+      "path_fields": [
+        "filename"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "filename"
+        ],
+        "properties": {
+          "filename": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a download artifact",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_environments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/environments",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Create an environment"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_environments_environment_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/environments/{{ record.environment_uuid }}",
+      "path_fields": [
+        "environment_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "environment_uuid"
+        ],
+        "properties": {
+          "environment_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete an environment",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_environments_environment_uuid_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/environments/{{ record.environment_uuid }}/changes",
+      "path_fields": [
+        "environment_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "environment_uuid"
+        ],
+        "properties": {
+          "environment_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update an environment"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_forks",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/forks",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "uuid": {
+            "type": "object"
+          },
+          "full_name": {
+            "type": "object"
+          },
+          "is_private": {
+            "type": "object"
+          },
+          "parent": {
+            "type": "object"
+          },
+          "scm": {
+            "type": "object"
+          },
+          "owner": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object"
+          },
+          "description": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "size": {
+            "type": "object"
+          },
+          "language": {
+            "type": "object"
+          },
+          "has_issues": {
+            "type": "object"
+          },
+          "has_wiki": {
+            "type": "object"
+          },
+          "fork_policy": {
+            "type": "object"
+          },
+          "project": {
+            "type": "object"
+          },
+          "mainbranch": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Fork a repository",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_hooks_uid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks/{{ record.uid }}",
+      "path_fields": [
+        "uid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "uid"
+        ],
+        "properties": {
+          "uid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a webhook for a repository",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_issues_export",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/export",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "project_key": {
+            "type": "string"
+          },
+          "project_name": {
+            "type": "string"
+          },
+          "send_email": {
+            "type": "boolean"
+          },
+          "include_attachments": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "Export issues"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_issues_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/import",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Import issues"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_issues_issue_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete an issue",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_issues_issue_id_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/attachments",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Upload an attachment to an issue"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/attachments/{{ record.path }}",
+      "path_fields": [
+        "issue_id",
+        "path"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id",
+          "path"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete an attachment for an issue",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_issues_issue_id_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/changes",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": {
+                "type": "object"
+              },
+              "issue": {
+                "type": "object"
+              }
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "created_on": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object"
+          },
+          "issue": {
+            "type": "object"
+          },
+          "changes": {
+            "type": "object",
+            "properties": {
+              "assignee": {
+                "type": "object"
+              },
+              "state": {
+                "type": "object"
+              },
+              "title": {
+                "type": "object"
+              },
+              "kind": {
+                "type": "object"
+              },
+              "milestone": {
+                "type": "object"
+              },
+              "component": {
+                "type": "object"
+              },
+              "priority": {
+                "type": "object"
+              },
+              "version": {
+                "type": "object"
+              },
+              "content": {
+                "type": "object"
+              }
+            }
+          },
+          "message": {
+            "type": "object",
+            "properties": {
+              "raw": {
+                "type": "object"
+              },
+              "markup": {
+                "type": "object"
+              },
+              "html": {
+                "type": "object"
+              }
+            }
+          },
+          "issue_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Modify the state of an issue"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_issues_issue_id_comments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/comments",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue": {
+            "type": "object"
+          },
+          "issue_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a comment on an issue"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "issue_id",
+        "comment_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id",
+          "comment_id"
+        ],
+        "properties": {
+          "issue": {
+            "type": "object"
+          },
+          "issue_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a comment on an issue"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "issue_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id",
+          "comment_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a comment on an issue",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_issues_issue_id_vote",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/vote",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Vote for an issue"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_issues_issue_id_vote",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/vote",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Remove vote for an issue",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_issues_issue_id_watch",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/watch",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Watch an issue"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_issues_issue_id_watch",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}/watch",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Stop watching an issue",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_override_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/override-settings",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Set the inheritance state for repository settings"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/permissions-config/groups/{{ record.group_slug }}",
+      "path_fields": [
+        "group_slug"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "group_slug"
+        ],
+        "properties": {
+          "permission": {
+            "type": "string",
+            "enum": [
+              "read",
+              "write",
+              "admin"
+            ]
+          },
+          "group_slug": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update an explicit group permission for a repository",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/permissions-config/groups/{{ record.group_slug }}",
+      "path_fields": [
+        "group_slug"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "group_slug"
+        ],
+        "properties": {
+          "group_slug": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete an explicit group permission for a repository",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/permissions-config/users/{{ record.selected_user_id }}",
+      "path_fields": [
+        "selected_user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user_id"
+        ],
+        "properties": {
+          "permission": {
+            "type": "string",
+            "enum": [
+              "read",
+              "write",
+              "admin"
+            ]
+          },
+          "selected_user_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update an explicit user permission for a repository",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/permissions-config/users/{{ record.selected_user_id }}",
+      "path_fields": [
+        "selected_user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user_id"
+        ],
+        "properties": {
+          "selected_user_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete an explicit user permission for a repository",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pipelines_config_caches",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/caches",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete caches",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "query": {
+        "name": "{{ record.name }}"
+      }
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/caches/{{ record.cache_uuid }}",
+      "path_fields": [
+        "cache_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "cache_uuid"
+        ],
+        "properties": {
+          "cache_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a cache",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_pipelines_config_runners",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/runners",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Create repository runner",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/runners/{{ record.runner_uuid }}",
+      "path_fields": [
+        "runner_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "runner_uuid"
+        ],
+        "properties": {
+          "runner_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update repository runner",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/runners/{{ record.runner_uuid }}",
+      "path_fields": [
+        "runner_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "runner_uuid"
+        ],
+        "properties": {
+          "runner_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete repository runner",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pipelines_config",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "enabled": {
+            "type": "object"
+          },
+          "repository": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Update configuration",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pipelines_config_build_number",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/build_number",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "next": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Update the next build number",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_pipelines_config_schedules",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/schedules",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "target": {
+            "type": "object"
+          },
+          "enabled": {
+            "type": "object"
+          },
+          "cron_pattern": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Create a schedule",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/schedules/{{ record.schedule_uuid }}",
+      "path_fields": [
+        "schedule_uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "schedule_uuid"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "object"
+          },
+          "schedule_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a schedule",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/schedules/{{ record.schedule_uuid }}",
+      "path_fields": [
+        "schedule_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "schedule_uuid"
+        ],
+        "properties": {
+          "schedule_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a schedule",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/ssh/key_pair",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "private_key": {
+            "type": "object"
+          },
+          "public_key": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Update SSH key pair",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/ssh/key_pair",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Delete SSH key pair",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/ssh/known_hosts",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "hostname": {
+            "type": "object"
+          },
+          "public_key": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Create a known host",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/ssh/known_hosts/{{ record.known_host_uuid }}",
+      "path_fields": [
+        "known_host_uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "known_host_uuid"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "hostname": {
+            "type": "object"
+          },
+          "public_key": {
+            "type": "object"
+          },
+          "known_host_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a known host",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/ssh/known_hosts/{{ record.known_host_uuid }}",
+      "path_fields": [
+        "known_host_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "known_host_uuid"
+        ],
+        "properties": {
+          "known_host_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a known host",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_pipelines_config_variables",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/variables",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Create a variable for a repository",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "variable_uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "variable_uuid"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          },
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a variable for a repository",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "variable_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "variable_uuid"
+        ],
+        "properties": {
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a variable for a repository",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_properties_app_key_property_name",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+      "path_fields": [
+        "app_key",
+        "property_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "app_key",
+          "property_name"
+        ],
+        "properties": {
+          "_attributes": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "app_key": {
+            "type": "string"
+          },
+          "property_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a repository application property"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_properties_app_key_property_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+      "path_fields": [
+        "app_key",
+        "property_name"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "app_key",
+          "property_name"
+        ],
+        "properties": {
+          "app_key": {
+            "type": "string"
+          },
+          "property_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a repository application property",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pullrequests_pull_request_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "id": {
+            "type": "object"
+          },
+          "title": {
+            "type": "object"
+          },
+          "rendered": {
+            "type": "object"
+          },
+          "summary": {
+            "type": "object"
+          },
+          "state": {
+            "type": "object"
+          },
+          "author": {
+            "type": "object"
+          },
+          "source": {
+            "type": "object"
+          },
+          "destination": {
+            "type": "object"
+          },
+          "merge_commit": {
+            "type": "object"
+          },
+          "comment_count": {
+            "type": "object"
+          },
+          "task_count": {
+            "type": "object"
+          },
+          "close_source_branch": {
+            "type": "object"
+          },
+          "closed_by": {
+            "type": "object"
+          },
+          "reason": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "reviewers": {
+            "type": "object"
+          },
+          "participants": {
+            "type": "object"
+          },
+          "draft": {
+            "type": "object"
+          },
+          "queued": {
+            "type": "object"
+          },
+          "pull_request_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a pull request"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/approve",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Approve a pull request"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/approve",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Unapprove a pull request",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "pullrequest": {
+            "type": "object"
+          },
+          "resolution": {
+            "type": "object"
+          },
+          "pending": {
+            "type": "object"
+          },
+          "pull_request_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a comment on a pull request"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "pull_request_id",
+        "comment_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id",
+          "comment_id"
+        ],
+        "properties": {
+          "pullrequest": {
+            "type": "object"
+          },
+          "resolution": {
+            "type": "object"
+          },
+          "pending": {
+            "type": "object"
+          },
+          "pull_request_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a comment on a pull request"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "pull_request_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id",
+          "comment_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a comment on a pull request",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}/resolve",
+      "path_fields": [
+        "pull_request_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id",
+          "comment_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Resolve a comment thread"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}/resolve",
+      "path_fields": [
+        "pull_request_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id",
+          "comment_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Reopen a comment thread",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/request-changes",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Request changes for a pull request"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/request-changes",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Remove change request for a pull request",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/tasks",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "content": {
+            "type": "object",
+            "properties": {
+              "raw": {
+                "type": "object"
+              }
+            }
+          },
+          "comment": {
+            "type": "object"
+          },
+          "pending": {
+            "type": "boolean"
+          },
+          "pull_request_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a task on a pull request"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/tasks/{{ record.task_id }}",
+      "path_fields": [
+        "pull_request_id",
+        "task_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id",
+          "task_id"
+        ],
+        "properties": {
+          "content": {
+            "type": "object",
+            "properties": {
+              "raw": {
+                "type": "object"
+              }
+            }
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "RESOLVED",
+              "UNRESOLVED"
+            ]
+          },
+          "pull_request_id": {
+            "type": "string"
+          },
+          "task_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a task on a pull request"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/tasks/{{ record.task_id }}",
+      "path_fields": [
+        "pull_request_id",
+        "task_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id",
+          "task_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "string"
+          },
+          "task_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a task on a pull request",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pullrequest_id }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+      "path_fields": [
+        "pullrequest_id",
+        "app_key",
+        "property_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pullrequest_id",
+          "app_key",
+          "property_name"
+        ],
+        "properties": {
+          "_attributes": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "pullrequest_id": {
+            "type": "string"
+          },
+          "app_key": {
+            "type": "string"
+          },
+          "property_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a pull request application property"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pullrequest_id }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+      "path_fields": [
+        "pullrequest_id",
+        "app_key",
+        "property_name"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pullrequest_id",
+          "app_key",
+          "property_name"
+        ],
+        "properties": {
+          "pullrequest_id": {
+            "type": "string"
+          },
+          "app_key": {
+            "type": "string"
+          },
+          "property_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a pull request application property",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_refs_branches",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/branches",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Create a branch"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_refs_branches_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/branches/{{ record.name }}",
+      "path_fields": [
+        "name"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a branch",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_refs_tags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/tags",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "message": {
+            "type": "object"
+          },
+          "date": {
+            "type": "object"
+          },
+          "tagger": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Create a tag"
+    },
+    {
+      "name": "op_delete_repositories_workspace_repo_slug_refs_tags_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/tags/{{ record.name }}",
+      "path_fields": [
+        "name"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a tag",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_repositories_workspace_repo_slug_src",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/src",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "parents": {
+            "type": "string"
+          },
+          "files": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a commit by uploading a file",
+      "query": {
+        "message": "{{ record.message }}",
+        "author": "{{ record.author }}",
+        "parents": "{{ record.parents }}",
+        "files": "{{ record.files }}",
+        "branch": "{{ record.branch }}"
+      }
+    },
+    {
+      "name": "op_post_snippets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/snippets",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "id": {
+            "type": "object"
+          },
+          "title": {
+            "type": "object"
+          },
+          "scm": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "owner": {
+            "type": "object"
+          },
+          "creator": {
+            "type": "object"
+          },
+          "is_private": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Create a snippet",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_snippets_workspace_encoded_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/snippets/{{ config.workspace }}/{{ record.encoded_id }}",
+      "path_fields": [
+        "encoded_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "encoded_id"
+        ],
+        "properties": {
+          "encoded_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a snippet",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_snippets_workspace_encoded_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/snippets/{{ config.workspace }}/{{ record.encoded_id }}",
+      "path_fields": [
+        "encoded_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "encoded_id"
+        ],
+        "properties": {
+          "encoded_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a snippet",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_snippets_workspace_encoded_id_comments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/snippets/{{ config.workspace }}/{{ record.encoded_id }}/comments",
+      "path_fields": [
+        "encoded_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "encoded_id"
+        ],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "snippet": {
+            "type": "object"
+          },
+          "encoded_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a comment on a snippet"
+    },
+    {
+      "name": "op_put_snippets_workspace_encoded_id_comments_comment_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/snippets/{{ config.workspace }}/{{ record.encoded_id }}/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "encoded_id",
+        "comment_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "encoded_id",
+          "comment_id"
+        ],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "snippet": {
+            "type": "object"
+          },
+          "encoded_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a comment on a snippet"
+    },
+    {
+      "name": "op_delete_snippets_workspace_encoded_id_comments_comment_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/snippets/{{ config.workspace }}/{{ record.encoded_id }}/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "encoded_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "encoded_id",
+          "comment_id"
+        ],
+        "properties": {
+          "encoded_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a comment on a snippet",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_snippets_workspace_encoded_id_watch",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/snippets/{{ config.workspace }}/{{ record.encoded_id }}/watch",
+      "path_fields": [
+        "encoded_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "encoded_id"
+        ],
+        "properties": {
+          "encoded_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Watch a snippet"
+    },
+    {
+      "name": "op_delete_snippets_workspace_encoded_id_watch",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/snippets/{{ config.workspace }}/{{ record.encoded_id }}/watch",
+      "path_fields": [
+        "encoded_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "encoded_id"
+        ],
+        "properties": {
+          "encoded_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Stop watching a snippet",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_snippets_workspace_encoded_id_node_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/snippets/{{ config.workspace }}/{{ record.encoded_id }}/{{ record.node_id }}",
+      "path_fields": [
+        "encoded_id",
+        "node_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "encoded_id",
+          "node_id"
+        ],
+        "properties": {
+          "encoded_id": {
+            "type": "string"
+          },
+          "node_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a previous revision of a snippet"
+    },
+    {
+      "name": "op_delete_snippets_workspace_encoded_id_node_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/snippets/{{ config.workspace }}/{{ record.encoded_id }}/{{ record.node_id }}",
+      "path_fields": [
+        "encoded_id",
+        "node_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "encoded_id",
+          "node_id"
+        ],
+        "properties": {
+          "encoded_id": {
+            "type": "string"
+          },
+          "node_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a previous revision of a snippet",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_teams_username_pipelines_config_variables",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.username }}/pipelines_config/variables",
+      "path_fields": [
+        "username"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "username"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          },
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a variable for a user",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_teams_username_pipelines_config_variables_variable_uuid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/teams/{{ record.username }}/pipelines_config/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "username",
+        "variable_uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "username",
+          "variable_uuid"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          },
+          "username": {
+            "type": "string"
+          },
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a variable for a team",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_teams_username_pipelines_config_variables_variable_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.username }}/pipelines_config/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "username",
+        "variable_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "username",
+          "variable_uuid"
+        ],
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a variable for a team",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_users_selected_user_gpg_keys",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ record.selected_user }}/gpg-keys",
+      "path_fields": [
+        "selected_user"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user"
+        ],
+        "properties": {
+          "owner": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "key_id": {
+            "type": "object"
+          },
+          "fingerprint": {
+            "type": "object"
+          },
+          "parent_fingerprint": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object"
+          },
+          "expires_on": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "added_on": {
+            "type": "object"
+          },
+          "last_used": {
+            "type": "object"
+          },
+          "subkeys": {
+            "type": "object"
+          },
+          "links": {
+            "type": "object"
+          },
+          "selected_user": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Add a new GPG key"
+    },
+    {
+      "name": "op_delete_users_selected_user_gpg_keys_fingerprint",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.selected_user }}/gpg-keys/{{ record.fingerprint }}",
+      "path_fields": [
+        "selected_user",
+        "fingerprint"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user",
+          "fingerprint"
+        ],
+        "properties": {
+          "selected_user": {
+            "type": "string"
+          },
+          "fingerprint": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a GPG key",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_users_selected_user_pipelines_config_variables",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ record.selected_user }}/pipelines_config/variables",
+      "path_fields": [
+        "selected_user"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          },
+          "selected_user": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a variable for a user",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_users_selected_user_pipelines_config_variables_variable_uuid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.selected_user }}/pipelines_config/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "selected_user",
+        "variable_uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user",
+          "variable_uuid"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          },
+          "selected_user": {
+            "type": "string"
+          },
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a variable for a user",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_users_selected_user_pipelines_config_variables_variable_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.selected_user }}/pipelines_config/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "selected_user",
+        "variable_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user",
+          "variable_uuid"
+        ],
+        "properties": {
+          "selected_user": {
+            "type": "string"
+          },
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a variable for a user",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_users_selected_user_properties_app_key_property_name",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.selected_user }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+      "path_fields": [
+        "selected_user",
+        "app_key",
+        "property_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user",
+          "app_key",
+          "property_name"
+        ],
+        "properties": {
+          "_attributes": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "selected_user": {
+            "type": "string"
+          },
+          "app_key": {
+            "type": "string"
+          },
+          "property_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a user application property"
+    },
+    {
+      "name": "op_delete_users_selected_user_properties_app_key_property_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.selected_user }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+      "path_fields": [
+        "selected_user",
+        "app_key",
+        "property_name"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user",
+          "app_key",
+          "property_name"
+        ],
+        "properties": {
+          "selected_user": {
+            "type": "string"
+          },
+          "app_key": {
+            "type": "string"
+          },
+          "property_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a user application property",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_users_selected_user_ssh_keys",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ record.selected_user }}/ssh-keys",
+      "path_fields": [
+        "selected_user"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user"
+        ],
+        "properties": {
+          "owner": {
+            "type": "object"
+          },
+          "expires_on": {
+            "type": "object"
+          },
+          "fingerprint": {
+            "type": "object"
+          },
+          "selected_user": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Add a new SSH key",
+      "confirm": "destructive",
+      "query": {
+        "expires_on": "{{ record.expires_on }}"
+      }
+    },
+    {
+      "name": "op_put_users_selected_user_ssh_keys_key_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.selected_user }}/ssh-keys/{{ record.key_id }}",
+      "path_fields": [
+        "selected_user",
+        "key_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user",
+          "key_id"
+        ],
+        "properties": {
+          "owner": {
+            "type": "object"
+          },
+          "expires_on": {
+            "type": "object"
+          },
+          "fingerprint": {
+            "type": "object"
+          },
+          "selected_user": {
+            "type": "string"
+          },
+          "key_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a SSH key",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_users_selected_user_ssh_keys_key_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.selected_user }}/ssh-keys/{{ record.key_id }}",
+      "path_fields": [
+        "selected_user",
+        "key_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "selected_user",
+          "key_id"
+        ],
+        "properties": {
+          "selected_user": {
+            "type": "string"
+          },
+          "key_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a SSH key",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_workspaces_workspace_hooks",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace }}/hooks",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Create a webhook for a workspace",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_workspaces_workspace_hooks_uid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace }}/hooks/{{ record.uid }}",
+      "path_fields": [
+        "uid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "uid"
+        ],
+        "properties": {
+          "uid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a webhook for a workspace",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_workspaces_workspace_hooks_uid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace }}/hooks/{{ record.uid }}",
+      "path_fields": [
+        "uid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "uid"
+        ],
+        "properties": {
+          "uid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a webhook for a workspace",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_workspaces_workspace_pipelines_config_runners",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/runners",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Create workspace runner",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_workspaces_workspace_pipelines_config_runners_runner_uuid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/runners/{{ record.runner_uuid }}",
+      "path_fields": [
+        "runner_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "runner_uuid"
+        ],
+        "properties": {
+          "runner_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update workspace runner",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_workspaces_workspace_pipelines_config_runners_runner_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/runners/{{ record.runner_uuid }}",
+      "path_fields": [
+        "runner_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "runner_uuid"
+        ],
+        "properties": {
+          "runner_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete workspace runner",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_workspaces_workspace_pipelines_config_variables",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/variables",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Create a variable for a workspace",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_workspaces_workspace_pipelines_config_variables_variable_uuid",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "variable_uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "variable_uuid"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
+          },
+          "secured": {
+            "type": "object"
+          },
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update variable for a workspace",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_workspaces_workspace_pipelines_config_variables_variable_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/variables/{{ record.variable_uuid }}",
+      "path_fields": [
+        "variable_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "variable_uuid"
+        ],
+        "properties": {
+          "variable_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a variable for a workspace",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_workspaces_workspace_projects",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace }}/projects",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "owner": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object"
+          },
+          "description": {
+            "type": "object"
+          },
+          "is_private": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "has_publicly_visible_repos": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "Create a project in a workspace"
+    },
+    {
+      "name": "op_put_workspaces_workspace_projects_project_key",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}",
+      "path_fields": [
+        "project_key"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key"
+        ],
+        "properties": {
+          "links": {
+            "type": "object"
+          },
+          "uuid": {
+            "type": "object"
+          },
+          "key": {
+            "type": "object"
+          },
+          "owner": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object"
+          },
+          "description": {
+            "type": "object"
+          },
+          "is_private": {
+            "type": "object"
+          },
+          "created_on": {
+            "type": "object"
+          },
+          "updated_on": {
+            "type": "object"
+          },
+          "has_publicly_visible_repos": {
+            "type": "object"
+          },
+          "project_key": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update a project for a workspace"
+    },
+    {
+      "name": "op_delete_workspaces_workspace_projects_project_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}",
+      "path_fields": [
+        "project_key"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key"
+        ],
+        "properties": {
+          "project_key": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a project for a workspace",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_workspaces_workspace_projects_project_key_branching_model_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}/branching-model/settings",
+      "path_fields": [
+        "project_key"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key"
+        ],
+        "properties": {
+          "project_key": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update the branching model config for a project",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}/default-reviewers/{{ record.selected_user }}",
+      "path_fields": [
+        "project_key",
+        "selected_user"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key",
+          "selected_user"
+        ],
+        "properties": {
+          "project_key": {
+            "type": "string"
+          },
+          "selected_user": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Add the specific user as a default reviewer for the project",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}/default-reviewers/{{ record.selected_user }}",
+      "path_fields": [
+        "project_key",
+        "selected_user"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key",
+          "selected_user"
+        ],
+        "properties": {
+          "project_key": {
+            "type": "string"
+          },
+          "selected_user": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Remove the specific user from the project's default reviewers",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_post_workspaces_workspace_projects_project_key_deploy_keys",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}/deploy-keys",
+      "path_fields": [
+        "project_key"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key"
+        ],
+        "properties": {
+          "project_key": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a project deploy key",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_workspaces_workspace_projects_project_key_deploy_keys_key_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}/deploy-keys/{{ record.key_id }}",
+      "path_fields": [
+        "project_key",
+        "key_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key",
+          "key_id"
+        ],
+        "properties": {
+          "project_key": {
+            "type": "string"
+          },
+          "key_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete a deploy key from a project",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}/permissions-config/groups/{{ record.group_slug }}",
+      "path_fields": [
+        "project_key",
+        "group_slug"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key",
+          "group_slug"
+        ],
+        "properties": {
+          "permission": {
+            "type": "string",
+            "enum": [
+              "read",
+              "write",
+              "create-repo",
+              "admin"
+            ]
+          },
+          "project_key": {
+            "type": "string"
+          },
+          "group_slug": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update an explicit group permission for a project",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}/permissions-config/groups/{{ record.group_slug }}",
+      "path_fields": [
+        "project_key",
+        "group_slug"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key",
+          "group_slug"
+        ],
+        "properties": {
+          "project_key": {
+            "type": "string"
+          },
+          "group_slug": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete an explicit group permission for a project",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_put_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}/permissions-config/users/{{ record.selected_user_id }}",
+      "path_fields": [
+        "project_key",
+        "selected_user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key",
+          "selected_user_id"
+        ],
+        "properties": {
+          "permission": {
+            "type": "string",
+            "enum": [
+              "read",
+              "write",
+              "create-repo",
+              "admin"
+            ]
+          },
+          "project_key": {
+            "type": "string"
+          },
+          "selected_user_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update an explicit user permission for a project",
+      "confirm": "destructive"
+    },
+    {
+      "name": "op_delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ record.project_key }}/permissions-config/users/{{ record.selected_user_id }}",
+      "path_fields": [
+        "project_key",
+        "selected_user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_key",
+          "selected_user_id"
+        ],
+        "properties": {
+          "project_key": {
+            "type": "string"
+          },
+          "selected_user_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Delete an explicit user permission for a project",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    }
+  ]
+}

@@ -219,6 +219,42 @@ func TestDirectReadRedactsGitHubFileContent(t *testing.T) {
 	}
 }
 
+func TestDirectReadReturnsBoundedBitbucketBinaryAsBase64JSON(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/repositories/acme/widgets/diff/abc123" {
+			t.Fatalf("path = %s, want Bitbucket diff path", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "text/plain")
+		_, _ = w.Write([]byte("diff --git a/README.md b/README.md\n"))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/repositories/{workspace}/{repo_slug}/diff/{spec}"), connectors.DirectReadRequest{
+		Method: http.MethodGet,
+		Path:   "/repositories/{workspace}/{repo_slug}/diff/{spec}",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"workspace": "acme",
+			"repo_slug": "widgets",
+		}},
+		PathParams:   map[string]string{"spec": "abc123"},
+		MaxBytes:     1024,
+		OutputPolicy: "bitbucket_binary_base64",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	if body["encoding"] != "base64" || body["bytes"] != 35 || body["content_type"] != "text/plain" {
+		t.Fatalf("binary envelope = %+v", body)
+	}
+	if body["content_base64"] != "ZGlmZiAtLWdpdCBhL1JFQURNRS5tZCBiL1JFQURNRS5tZAo=" {
+		t.Fatalf("content_base64 = %v", body["content_base64"])
+	}
+}
+
 func TestDirectReadRejectsSensitiveRepositoryPathBeforeNetwork(t *testing.T) {
 	var hits int
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {

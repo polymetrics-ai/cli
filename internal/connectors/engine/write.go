@@ -203,19 +203,23 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	if err != nil {
 		return fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
+	query, err := buildWriteQuery(action.Query, vars)
+	if err != nil {
+		return fmt.Errorf("engine: write action %q: resolve query: %w", action.Name, err)
+	}
 	method := methodOrDefault(action.Method)
 
 	switch bodyTypeOf(action) {
 	case "form":
-		form := buildForm(rec, action.PathFields)
-		_, err := rt.Requester.DoForm(ctx, method, path, nil, form)
+		form := buildForm(rec, writeBodyExcludedFields(action))
+		_, err := rt.Requester.DoForm(ctx, method, path, query, form)
 		return err
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
 			return err
 		}
-		resp, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		resp, err := rt.Requester.Do(ctx, method, path, query, payload)
 		if err != nil {
 			return err
 		}
@@ -223,25 +227,79 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			_, err := rt.Requester.Do(ctx, method, path, nil, nil)
+			_, err := rt.Requester.Do(ctx, method, path, query, nil)
 			return err
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, body)
+		_, err := rt.Requester.Do(ctx, method, path, query, body)
 		return err
 	default: // "json" (default)
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
 			body = buildBodyFieldsPayload(rec, action.BodyFields)
 		} else {
-			body = buildJSONBody(rec, action.PathFields)
+			body = buildJSONBody(rec, writeBodyExcludedFields(action))
 		}
 		var payload any
 		if len(body) > 0 {
 			payload = body
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err := rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	}
+}
+
+func buildWriteQuery(templates map[string]string, vars Vars) (url.Values, error) {
+	if len(templates) == 0 {
+		return nil, nil
+	}
+	query := url.Values{}
+	keys := make([]string, 0, len(templates))
+	for key := range templates {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		template := templates[key]
+		if field, ok := exactRecordTemplate(template); ok {
+			value, exists := vars.Record[field]
+			if !exists || strings.TrimSpace(fmt.Sprint(value)) == "" {
+				continue
+			}
+		}
+		value, err := Interpolate(template, vars)
+		if err != nil {
+			return nil, err
+		}
+		if strings.TrimSpace(value) == "" {
+			continue
+		}
+		query.Set(key, value)
+	}
+	return query, nil
+}
+
+func exactRecordTemplate(template string) (string, bool) {
+	trimmed := strings.TrimSpace(template)
+	matches := templatePattern.FindStringSubmatch(trimmed)
+	if len(matches) != 2 || matches[0] != trimmed {
+		return "", false
+	}
+	expr := strings.TrimSpace(matches[1])
+	field, ok := strings.CutPrefix(expr, "record.")
+	if !ok || field == "" || strings.Contains(field, "|") || strings.Contains(field, ".") {
+		return "", false
+	}
+	return strings.TrimSpace(field), true
+}
+
+func writeBodyExcludedFields(action WriteAction) []string {
+	fields := append([]string{}, action.PathFields...)
+	for _, template := range action.Query {
+		if field, ok := exactRecordTemplate(template); ok {
+			fields = append(fields, field)
+		}
+	}
+	return fields
 }
 
 func bodyTypeOf(action WriteAction) string {

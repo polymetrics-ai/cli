@@ -1,0 +1,16 @@
+{
+  "record": {
+    "title": "Synthetic issue",
+    "kind": "bug",
+    "priority": "major"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/issues",
+    "body": {
+      "title": "Synthetic issue",
+      "kind": "bug",
+      "priority": "major"
+    }
+  }
+}

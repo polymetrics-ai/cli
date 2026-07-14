@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/issues"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "issue",
+          "id": 7,
+          "title": "Synthetic issue",
+          "state": "open",
+          "priority": "major",
+          "kind": "bug",
+          "content": {
+            "raw": "Synthetic issue body"
+          },
+          "reporter": {
+            "display_name": "Ada",
+            "uuid": "user-fixture-1"
+          },
+          "assignee": {
+            "display_name": "Lin",
+            "uuid": "user-fixture-2"
+          },
+          "votes": 0,
+          "watches": 1,
+          "created_on": "2026-01-01T00:00:00Z",
+          "updated_on": "2026-01-02T00:00:00Z",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.test/issues/7"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

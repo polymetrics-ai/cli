@@ -1,0 +1,26 @@
+{
+  "name": "bitbucket",
+  "display_name": "Bitbucket",
+  "description": "Reads Bitbucket Cloud repositories, branches, commits, tags, pull requests, issues, pipelines, deployments, downloads metadata, webhooks, branch restrictions, projects, and snippets; exposes approval-gated write plans for selected repository, issue, pull request, pipeline, webhook, branch restriction, and snippet mutations.",
+  "integration_type": "api",
+  "docs_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "rate_limit": {},
+  "risk": {
+    "read": "Bitbucket Cloud REST API reads scoped to the configured workspace/repository; binary payloads and local git workflows are not executed.",
+    "write": "Selected Bitbucket mutations are explicit reverse ETL actions only; destructive/admin/sensitive operations are blocked or require typed confirmation metadata.",
+    "approval": "Reverse ETL writes require plan, preview, approval, execute; destructive/admin operations require typed confirmation when exposed."
+  }
+}

@@ -1,0 +1,2697 @@
+{
+  "api": "Bitbucket Cloud REST API 2.0",
+  "docs": "https://developer.atlassian.com/cloud/bitbucket/rest/",
+  "reviewed_at": "2026-07-09",
+  "operation_ledger_version": 1,
+  "scope": "Full typed surface: every official Bitbucket Swagger operation from https://api.bitbucket.org/swagger.json is covered by an explicit stream, direct-read command, or approval-gated reverse ETL write action. Raw generic API execution remains disallowed. Binary/text reads return bounded base64 JSON only and never write to the local filesystem.",
+  "endpoints": [
+    {
+      "method": "PUT",
+      "path": "/addon",
+      "covered_by": {
+        "write": "op_put_addon"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/addon",
+      "covered_by": {
+        "write": "op_delete_addon"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/addon/{addon_key}/client-key",
+      "covered_by": {
+        "direct_reads": [
+          "operation get addon addon-key client-key"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hook_events",
+      "covered_by": {
+        "direct_reads": [
+          "operation get hook-events"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hook_events/{subject_type}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get hook-events subject-type"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}",
+      "covered_by": {
+        "stream": "repositories",
+        "direct_reads": [
+          "operation get repositories workspace"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}",
+      "covered_by": {
+        "direct_reads": [
+          "repo view"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}",
+      "covered_by": {
+        "write": "create_repository"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions",
+      "covered_by": {
+        "stream": "branch_restrictions",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug branch-restrictions"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions",
+      "covered_by": {
+        "write": "create_branch_restriction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug branch-restrictions id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_branch_restrictions_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_branch_restrictions_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug branching-model"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug branching-model settings"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_branching_model_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_commit_commit_approve"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_commit_commit_approve"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit comments"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_commit_commit_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit comments comment-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_commit_commit_comments_comment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit properties app-key property-name"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/pullrequests",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit pullrequests"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit reports"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit reports reportid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_commit_commit_reports_reportid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_commit_commit_reports_reportid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit reports reportid annotations"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit reports reportid annotations annotationid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit statuses"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_commit_commit_statuses_build"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commit commit statuses build key"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_commit_commit_statuses_build_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commits",
+      "covered_by": {
+        "stream": "commits",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commits"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commits",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_commits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug commits revision"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_commits_revision"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/components",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug components"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/components/{component_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug components component-id"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug default-reviewers"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug default-reviewers target-username"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_default_reviewers_target_username"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_default_reviewers_target_username"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug deploy-keys"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_deploy_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug deploy-keys key-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_deploy_keys_key_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_deploy_keys_key_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments",
+      "covered_by": {
+        "stream": "deployments",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug deployments"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments/{deployment_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug deployments deployment-uuid"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug deployments-config environments environment-uuid variables"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug diff spec"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/diffstat/{spec}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug diffstat spec"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads",
+      "covered_by": {
+        "stream": "downloads",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug downloads"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_downloads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug downloads filename"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_downloads_filename"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/effective-branching-model",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug effective-branching-model"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/effective-default-reviewers",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug effective-default-reviewers"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/environments",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug environments"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/environments",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_environments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug environments environment-uuid"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_environments_environment_uuid"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_environments_environment_uuid_changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/file-conflicts/{spec}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug file-conflicts spec"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/filehistory/{commit}/{path}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug filehistory commit path"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/forks",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug forks"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/forks",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_forks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks",
+      "covered_by": {
+        "stream": "webhooks",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug hooks"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug hooks uid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_hooks_uid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues",
+      "covered_by": {
+        "stream": "issues",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues",
+      "covered_by": {
+        "write": "create_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/export",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_issues_export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/export/{repo_name}-issues-{task_id}.zip",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues export repo-name--issues--task-id-.zip"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/import",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues import"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/import",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_issues_import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}",
+      "covered_by": {
+        "direct_reads": [
+          "issue view"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}",
+      "covered_by": {
+        "write": "update_issue"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_issues_issue_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues issue-id attachments"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_issues_issue_id_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues issue-id attachments path"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues issue-id changes"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_issues_issue_id_changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes/{change_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues issue-id changes change-id"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues issue-id comments"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_issues_issue_id_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues issue-id comments comment-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues issue-id vote"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_issues_issue_id_vote"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_issues_issue_id_vote"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug issues issue-id watch"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_issues_issue_id_watch"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_issues_issue_id_watch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/merge-base/{revspec}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug merge-base revspec"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/milestones",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug milestones"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/milestones/{milestone_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug milestones milestone-id"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/override-settings",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug override-settings"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/override-settings",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_override_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug patch spec"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug permissions-config groups"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug permissions-config groups group-slug"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_permissions_config_groups_group_slug"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug permissions-config users"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug permissions-config users selected-user-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_permissions_config_users_selected_user_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines",
+      "covered_by": {
+        "stream": "pipelines",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines",
+      "covered_by": {
+        "write": "run_pipeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config caches"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pipelines_config_caches"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}/content-uri",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config caches cache-uuid content-uri"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config runners"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_pipelines_config_runners"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config runners runner-uuid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "pipeline view"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines pipeline-uuid steps"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines pipeline-uuid steps step-uuid"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines pipeline-uuid steps step-uuid log"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines pipeline-uuid steps step-uuid logs log-uuid"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines pipeline-uuid steps step-uuid test-reports"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines pipeline-uuid steps step-uuid test-reports test-cases"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines pipeline-uuid steps step-uuid test-reports test-cases test-case-uuid test-case-reasons"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline",
+      "covered_by": {
+        "write": "stop_pipeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pipelines_config"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/build_number",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pipelines_config_build_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config schedules"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_pipelines_config_schedules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config schedules schedule-uuid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}/executions",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config schedules schedule-uuid executions"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config ssh key-pair"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config ssh known-hosts"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config ssh known-hosts known-host-uuid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config variables"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_pipelines_config_variables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pipelines-config variables variable-uuid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug properties app-key property-name"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_properties_app_key_property_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_properties_app_key_property_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
+      "covered_by": {
+        "stream": "pull_requests",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
+      "covered_by": {
+        "write": "create_pull_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/activity",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests activity"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}",
+      "covered_by": {
+        "direct_reads": [
+          "pull-request view"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pullrequests_pull_request_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id activity"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id comments"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id comments comment-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id commits"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id conflicts"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline",
+      "covered_by": {
+        "write": "decline_pull_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id diff"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id diffstat"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge",
+      "covered_by": {
+        "write": "merge_pull_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id merge task-status task-id"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id patch"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/statuses",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id statuses"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id tasks"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pull-request-id tasks task-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug pullrequests pullrequest-id properties app-key property-name"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "write": "op_put_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug refs"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches",
+      "covered_by": {
+        "stream": "branches",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug refs branches"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_refs_branches"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches/{name}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug refs branches name"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches/{name}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_refs_branches_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags",
+      "covered_by": {
+        "stream": "tags",
+        "direct_reads": [
+          "operation get repositories workspace repo-slug refs tags"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_refs_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags/{name}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug refs tags name"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags/{name}",
+      "covered_by": {
+        "write": "op_delete_repositories_workspace_repo_slug_refs_tags_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/src",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug src"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/src",
+      "covered_by": {
+        "write": "op_post_repositories_workspace_repo_slug_src"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/src/{commit}/{path}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug src commit path"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/versions",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug versions"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/versions/{version_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug versions version-id"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/watchers",
+      "covered_by": {
+        "direct_reads": [
+          "operation get repositories workspace repo-slug watchers"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/snippets",
+      "covered_by": {
+        "write": "op_post_snippets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}",
+      "covered_by": {
+        "stream": "snippets",
+        "direct_reads": [
+          "snippet list"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/snippets/{workspace}",
+      "covered_by": {
+        "write": "create_snippet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}",
+      "covered_by": {
+        "write": "op_put_snippets_workspace_encoded_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}",
+      "covered_by": {
+        "write": "op_delete_snippets_workspace_encoded_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/comments",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id comments"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/snippets/{workspace}/{encoded_id}/comments",
+      "covered_by": {
+        "write": "op_post_snippets_workspace_encoded_id_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id comments comment-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "op_put_snippets_workspace_encoded_id_comments_comment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "op_delete_snippets_workspace_encoded_id_comments_comment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/commits",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id commits"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/commits/{revision}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id commits revision"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/files/{path}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id files path"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/watch",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id watch"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}/watch",
+      "covered_by": {
+        "write": "op_put_snippets_workspace_encoded_id_watch"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}/watch",
+      "covered_by": {
+        "write": "op_delete_snippets_workspace_encoded_id_watch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/watchers",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id watchers"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id node-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+      "covered_by": {
+        "write": "op_put_snippets_workspace_encoded_id_node_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+      "covered_by": {
+        "write": "op_delete_snippets_workspace_encoded_id_node_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id node-id files path"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id revision diff"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch",
+      "covered_by": {
+        "direct_reads": [
+          "operation get snippets workspace encoded-id revision patch"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{username}/pipelines_config/variables",
+      "covered_by": {
+        "direct_reads": [
+          "operation get teams username pipelines-config variables"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{username}/pipelines_config/variables",
+      "covered_by": {
+        "write": "op_post_teams_username_pipelines_config_variables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get teams username pipelines-config variables variable-uuid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_put_teams_username_pipelines_config_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_delete_teams_username_pipelines_config_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{username}/search/code",
+      "covered_by": {
+        "direct_reads": [
+          "operation get teams username search code"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user",
+      "covered_by": {
+        "direct_reads": [
+          "operation get user"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/emails",
+      "covered_by": {
+        "direct_reads": [
+          "operation get user emails"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/emails/{email}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get user emails email"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/permissions/repositories",
+      "covered_by": {
+        "direct_reads": [
+          "operation get user permissions repositories"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/permissions/workspaces",
+      "covered_by": {
+        "direct_reads": [
+          "operation get user permissions workspaces"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/workspaces",
+      "covered_by": {
+        "direct_reads": [
+          "operation get user workspaces"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/workspaces/{workspace}/permission",
+      "covered_by": {
+        "direct_reads": [
+          "operation get user workspaces workspace permission"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/workspaces/{workspace}/permissions/repositories",
+      "covered_by": {
+        "direct_reads": [
+          "operation get user workspaces workspace permissions repositories"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get users selected-user"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/gpg-keys",
+      "covered_by": {
+        "direct_reads": [
+          "operation get users selected-user gpg-keys"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{selected_user}/gpg-keys",
+      "covered_by": {
+        "write": "op_post_users_selected_user_gpg_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/gpg-keys/{fingerprint}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get users selected-user gpg-keys fingerprint"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{selected_user}/gpg-keys/{fingerprint}",
+      "covered_by": {
+        "write": "op_delete_users_selected_user_gpg_keys_fingerprint"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/pipelines_config/variables",
+      "covered_by": {
+        "direct_reads": [
+          "operation get users selected-user pipelines-config variables"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{selected_user}/pipelines_config/variables",
+      "covered_by": {
+        "write": "op_post_users_selected_user_pipelines_config_variables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get users selected-user pipelines-config variables variable-uuid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_put_users_selected_user_pipelines_config_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_delete_users_selected_user_pipelines_config_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get users selected-user properties app-key property-name"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "write": "op_put_users_selected_user_properties_app_key_property_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+      "covered_by": {
+        "write": "op_delete_users_selected_user_properties_app_key_property_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/search/code",
+      "covered_by": {
+        "direct_reads": [
+          "operation get users selected-user search code"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/ssh-keys",
+      "covered_by": {
+        "direct_reads": [
+          "operation get users selected-user ssh-keys"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{selected_user}/ssh-keys",
+      "covered_by": {
+        "write": "op_post_users_selected_user_ssh_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/ssh-keys/{key_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get users selected-user ssh-keys key-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{selected_user}/ssh-keys/{key_id}",
+      "covered_by": {
+        "write": "op_put_users_selected_user_ssh_keys_key_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{selected_user}/ssh-keys/{key_id}",
+      "covered_by": {
+        "write": "op_delete_users_selected_user_ssh_keys_key_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces",
+      "covered_by": {
+        "direct_reads": [
+          "workspace list"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/hooks",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace hooks"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/hooks",
+      "covered_by": {
+        "write": "op_post_workspaces_workspace_hooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/hooks/{uid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace hooks uid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/hooks/{uid}",
+      "covered_by": {
+        "write": "op_put_workspaces_workspace_hooks_uid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/hooks/{uid}",
+      "covered_by": {
+        "write": "op_delete_workspaces_workspace_hooks_uid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/members",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace members"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/members/{member}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace members member"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/permissions",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace permissions"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/permissions/repositories",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace permissions repositories"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/permissions/repositories/{repo_slug}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace permissions repositories repo-slug"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace pipelines-config identity oidc .well-known openid-configuration"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/keys.json",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace pipelines-config identity oidc keys.json"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/runners",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace pipelines-config runners"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/pipelines-config/runners",
+      "covered_by": {
+        "write": "op_post_workspaces_workspace_pipelines_config_runners"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace pipelines-config runners runner-uuid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+      "covered_by": {
+        "write": "op_put_workspaces_workspace_pipelines_config_runners_runner_uuid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+      "covered_by": {
+        "write": "op_delete_workspaces_workspace_pipelines_config_runners_runner_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/variables",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace pipelines-config variables"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/pipelines-config/variables",
+      "covered_by": {
+        "write": "op_post_workspaces_workspace_pipelines_config_variables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace pipelines-config variables variable-uuid"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_put_workspaces_workspace_pipelines_config_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+      "covered_by": {
+        "write": "op_delete_workspaces_workspace_pipelines_config_variables_variable_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects",
+      "covered_by": {
+        "stream": "projects",
+        "direct_reads": [
+          "project list"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/projects",
+      "covered_by": {
+        "write": "op_post_workspaces_workspace_projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}",
+      "covered_by": {
+        "write": "op_put_workspaces_workspace_projects_project_key"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}",
+      "covered_by": {
+        "write": "op_delete_workspaces_workspace_projects_project_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key branching-model"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key branching-model settings"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+      "covered_by": {
+        "write": "op_put_workspaces_workspace_projects_project_key_branching_model_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key default-reviewers"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key default-reviewers selected-user"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+      "covered_by": {
+        "write": "op_put_workspaces_workspace_projects_project_key_default_reviewers_selected_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+      "covered_by": {
+        "write": "op_delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key deploy-keys"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+      "covered_by": {
+        "write": "op_post_workspaces_workspace_projects_project_key_deploy_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key deploy-keys key-id"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
+      "covered_by": {
+        "write": "op_delete_workspaces_workspace_projects_project_key_deploy_keys_key_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key permissions-config groups"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key permissions-config groups group-slug"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+      "covered_by": {
+        "write": "op_put_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+      "covered_by": {
+        "write": "op_delete_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key permissions-config users"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace projects project-key permissions-config users selected-user-id"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+      "covered_by": {
+        "write": "op_put_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+      "covered_by": {
+        "write": "op_delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pullrequests/{selected_user}",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace pullrequests selected-user"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/search/code",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace search code"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/settings/gpg/public-key",
+      "covered_by": {
+        "direct_reads": [
+          "operation get workspaces workspace settings gpg public-key"
+        ]
+      }
+    }
+  ]
+}

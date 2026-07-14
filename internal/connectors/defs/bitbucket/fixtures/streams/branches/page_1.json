@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/refs/branches"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "branch",
+          "name": "main",
+          "target": {
+            "hash": "abc123fixture",
+            "date": "2026-01-02T00:00:00Z"
+          },
+          "merge_strategies": [
+            "merge_commit"
+          ],
+          "default_merge_strategy": "merge_commit",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.test/branch/main"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

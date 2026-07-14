@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/workspaces/synthetic-conformance-value/projects"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "project",
+          "key": "SYN",
+          "uuid": "project-fixture-1",
+          "name": "Synthetic Project",
+          "description": "Synthetic project",
+          "is_private": false,
+          "created_on": "2026-01-01T00:00:00Z",
+          "updated_on": "2026-01-02T00:00:00Z",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.test/projects/SYN"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

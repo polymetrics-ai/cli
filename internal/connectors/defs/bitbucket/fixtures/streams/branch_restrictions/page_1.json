@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/branch-restrictions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "branchrestriction",
+          "id": 1,
+          "kind": "push",
+          "pattern": "main",
+          "branch_match_kind": "glob",
+          "users": [],
+          "groups": [],
+          "value": 1
+        }
+      ]
+    }
+  }
+}

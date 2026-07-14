@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/deployments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "deployment",
+          "uuid": "deployment-fixture-1",
+          "environment": {
+            "name": "staging"
+          },
+          "release": {
+            "name": "synthetic"
+          },
+          "deployment_state": {
+            "name": "COMPLETED"
+          },
+          "created_on": "2026-01-01T00:00:00Z",
+          "last_update_time": "2026-01-01T00:01:00Z",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.test/deployments/1"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

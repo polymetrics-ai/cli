@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/workspaces/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uuid": "workspace-fixture",
+      "slug": "synthetic-conformance-value",
+      "name": "Synthetic Workspace"
+    }
+  }
+}

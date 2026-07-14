@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/snippets/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "snippet",
+          "id": "snippet-fixture-1",
+          "title": "Synthetic snippet",
+          "scm": "git",
+          "owner": {
+            "display_name": "Ada"
+          },
+          "creator": {
+            "display_name": "Ada"
+          },
+          "is_private": true,
+          "files": {
+            "README.md": {
+              "links": {
+                "self": {
+                  "href": "https://bitbucket.example.test/snippets/README.md"
+                }
+              }
+            }
+          },
+          "created_on": "2026-01-01T00:00:00Z",
+          "updated_on": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}
