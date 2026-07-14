@@ -1,84 +1,131 @@
-# Issue 389 TDD Ledger
+# Issue 389 TDD Ledger — proof-recovery repair
 
-## Baseline
+## Baseline for this repair run
 
-- Command: `scripts/gsd doctor && scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run`
-- Result: PASS; adapter resources resolved from current repo-local `.gsd` prompt surface.
-- Command: `cd agent-runtime/shepherd && go test ./...`
-- Result: PASS in the reconciled worktree before the final fix slice.
+- Branch: `fix/389-shepherd-proof-recovery`
+- Start head: `db13cbaa8e27cbc86130ce2547f3e60b82b5217c`
+- GSD command: `scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run`
+- GSD adapter checks run: `scripts/gsd doctor`, `scripts/gsd list`
+- Current evidence status: prior claims of independent validation, ratification, recovery planning,
+  final verification, and canary readiness are invalid for this repair run until re-proven against a
+  new exact candidate head.
 
-## Runtime contract admission
+## Skills recorded
 
-- RED: Existing focused tests in `internal/gsd/prompt_contract_test.go` cover forbidden advertised tools and pinned prompt patch failure modes. Added `TestApplyPinnedHeadlessToolPatchReportsContractMismatch` so headless patch qualification errors must preserve `runtime_contract_mismatch` typing.
-- GREEN: Wrapped pinned headless resource shape/version failures and projected event contract failures with `gsd.ErrRuntimeContractMismatch`; focused `go test ./internal/gsd -run 'TestRunnerCanDeriveGovernedImplementationModel|TestApplyPinnedHeadlessToolPatchReportsContractMismatch|TestApplyPinnedHeadlessToolPatchIsExactAndIdempotent' -count=1` passed.
-- Refactor: Kept compatibility checks version-qualified and side-effect free; final module gates passed.
+`gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`, `golang-how-to`,
+`golang-testing`, `golang-error-handling`, `golang-safety`, `golang-security`, `golang-context`,
+`golang-concurrency`, `golang-design-patterns`, `golang-structs-interfaces`,
+`golang-observability`, `golang-lint`.
 
-## Issue identity and bootstrap
+## Read-only recon evidence
 
-- RED: Existing focused tests in `internal/gsd/project_test.go` cover atomic `.gsd/ISSUE.json`, same-issue restart adoption, and cross-issue identity rejection.
-- GREEN: Reused `ensureIssueDelivery` in `supervise` so the validated context is materialized once and immutable Shepherd/GSD identity is adopted or bootstrapped before any dispatch.
-- Refactor: Kept Shepherd SQLite as controller truth and native `.gsd/ISSUE.json` as issue-local GSD identity proof.
+- Scout finding: `cmd/shepherd/main.go:persistSuccessProof` currently writes
+  `Validator="openai-codex/gpt-5.6-sol"`, `Thinking="high"`, `Verdict="PROCEED"`, and
+  `Ratified=true` directly.
+- Scout finding: `internal/authority/ratification.go` contains `authority.Ratify`, but production
+  code does not call it.
+- Scout finding: store proof tests do not yet reject missing ratification or non-PROCEED verdicts.
+- Orchestration decision: start with RED tests around proof/attestation before any production edit.
 
-## Durable attempts and lifecycle
+## Slice A — Real independent validation and ratification
 
-- RED: Existing interrupted prompt recorded missing `classifyUnitFailure`/`isAutomaticallyRetryable` and a missing delivery fixture for `TestUnitAttemptBudgetSurvivesStoreRestart`; reviewer then found exhausted retryable attempts could leave `RunFailed` instead of typed `retry_exhausted` blocked state.
-- GREEN: Added typed failure classification/retry policy, initialized the canonical delivery before durable unit-attempt rows, and added `finalUnitRunState` tests proving retryable failures return `RunReady` only while budget remains and become `RunBlocked` with `store.ErrRetryBudgetExhausted` at exhaustion.
-- Refactor: Added table-driven classification coverage for retryable runtime/artifact/interruption failures and fail-closed contract, stale-head, scope, model, orphan-child, and exhausted-budget failures.
+RED tests:
+- [x] `internal/store/proof_test.go`: reject `ArtifactProof{Ratified:false}`.
+- [x] `internal/store/proof_test.go`: reject attestation verdicts other than real successful
+      ratification (for example `RETRY`/`HALT`).
 
-## Completion proof
+RED evidence:
+- FAIL (expected) `cd agent-runtime/shepherd && go test ./internal/store -run 'TestArtifactProofRejectsUnratifiedResult|TestAttestationRejectsNonProceedVerdicts' -count=1`
+  - `TestArtifactProofRejectsUnratifiedResult`: `unratified artifact proof accepted`
+- [ ] `cmd/shepherd/main_test.go`: successful supervise path must not create a ratified proof when
+      independent validator evidence is absent.
+- [ ] `cmd/shepherd/main_test.go`: stale candidate head leaves canonical branch unchanged.
 
-- RED: Existing completion proof tests cover missing artifacts, unchanged canonical state, stale heads, model drift, write-scope breach, and live children.
-- GREEN: Preserved the exact completion proof path and mapped proof failures into bounded typed classes.
-- Refactor: `targetRunState` continues to convert canonical completion into `RunHumanGate`; final verification passed.
+GREEN evidence (partial store hardening only):
+- PASS `cd agent-runtime/shepherd && gofmt -w internal/store/proof_test.go internal/store/store.go && go test ./internal/store -run 'TestArtifactProofRejectsUnratifiedResult|TestAttestationRejectsNonProceedVerdicts|TestArtifactProofBindsExactHeadsAndRatification|TestAttestationPersistsValidatorProof' -count=1`
+- Production change: `PutArtifactProof` now rejects unratified proofs; `PutAttestation` now rejects non-`PROCEED` verdicts.
 
-## One-command supervision
+Refactor evidence: pending; production `persistSuccessProof` still requires follow-up because it manufactures validator/ratification evidence.
 
-- RED: `supervise` was absent from CLI usage/dispatch and lacked canonical policy coverage; added `TestRunnerCanDeriveGovernedImplementationModel`, which failed to compile until the runner could derive a GPT-5.5 execution runner from the coordinator runner.
-- GREEN: Added `internal/supervisor` policy tests, CLI wiring for `shepherd supervise --config <absolute-config> --issue <N> --context <validated-context.json>`, per-unit supervised model derivation, and bounded blocked status emission for non-retryable failures.
-- Refactor: Kept command selection in a small policy package: dispatch only canonical units, map `discuss-milestone` to targeted `discuss`, stop unsafe `skip`, avoid subagent model events overwriting top-level model proof, and emit final human-gate status at `phase=complete,next.action=stop`.
+## Slice B — Durable attempt lifecycle and crash recovery
 
-## Policy review routing cleanup
+Planned RED tests:
+- [ ] attempt state enum/store supports `created`, `prepared`, `running`, `validated`, `ratified`,
+      `promoting`, `promoted`, `retained_for_recovery`, `cleanup_pending`, `cleanup_complete`, and
+      `cleanup_blocked`.
+- [ ] restart reconciles database-owned orphan worktrees/branches and leaves unknown/live worktrees
+      untouched.
+- [ ] preparation/query/runtime failures transition explicitly.
+- [ ] retry after retained failure creates a fresh attempt worktree.
 
-- RED: `rg 'claude-review-loop|@claude|claude-review.yml|GitHub Copilot review|Copilot backup|Claude automatic review|Claude review' AGENTS.md CLAUDE.md .agents .github .codex .opencode .pi website/content docs/plans` found active GitHub-hosted review requirements.
-- GREEN: Replaced active policy with local automated review routing, local review loop, local review disposition agents/prompts, and removed the GitHub Claude review workflow/rubric.
-- Refactor: Historical planning artifacts remain historical; active contracts, workflows, templates, runtime adapters, and website source now avoid GitHub-hosted review as a default gate.
+GREEN evidence: pending.
+Refactor evidence: pending.
 
-## Pre-#390 implementation slice — registry, decisions, proof, recovery, workspace primitives
+## Slice C — Crash-safe GSD-state promotion
 
-- RED: added official unit-registry parsing/routing tests for GSD Pi 1.11 metadata, malformed/partial registry rejection, and symlinked registry rejection.
-- GREEN: added `internal/gsd` unit registry loader, metadata-driven command/model routing, prompt-contract registry validation, and supervise/run rebinding to the canonical unit's expected model before execution.
-- RED: added durable decision request tests for restart survival, exact-once consumption, stale generation/head/expiry rejection, and GitHub reply filtering for unauthorized/bot/edited/malformed replies.
-- GREEN: added `RunAwaitingDecision`, durable `decision_requests`, marker-owned GitHub question comments, exact reply parsing, and retry-exhaustion transition to `awaiting_decision` with a durable GitHub question publication path.
-- RED: added recovery-budget tests proving per-class persistence across restarts and durable exhaustion.
-- GREEN: added `recovery_budgets` keyed by failure class, generation, unit, and head with bounded failure/recovery-plan evidence.
-- RED: added artifact proof and attestation persistence tests for exact-head validation and validator downgrade rejection.
-- GREEN: added durable artifact proof and Sol/high attestation store APIs.
-- RED: added disposable attempt worktree tests for promotion/discard, stale-head rejection, and out-of-scope rejection.
-- GREEN: added `internal/workspace` attempt worktree manager with owned attempt roots, branch isolation, promote/discard semantics, and scope/head checks.
-- Refactor/security: canonicalized path boundary checks, verified SQLite WAL mode, added delivery-run column migration, prevented child model events from overwriting first observed model proof, and bounded/redacted decision evidence before GitHub publication.
-- GREEN wiring follow-up: host-runtime canonical `runHeadless` now creates disposable attempt worktrees, runs the unit in the attempt worktree, promotes only scoped output, and fails closed for Podman canonical units until equivalent isolation exists.
-- GREEN wiring follow-up: retryable failures now update per-class recovery budgets and use that remaining budget for retry versus durable `awaiting_decision`.
-- GREEN wiring follow-up: `supervise` now polls GitHub decision replies for open requests and resumes accepted `retry`/`continue` replies or blocks accepted `stop` replies.
-- GREEN wiring follow-up: successful canonical units now build an artifact manifest from scoped changed files between exact start/end heads, bind it to official GSD unit metadata (`phase_chain` and `required_workflow_tools`), hash it, and persist Sol/high artifact-proof plus attestation records.
-- GREEN wiring follow-up: GitHub question publication now goes through outbox enqueue, claim, execute, and mark-sent/failed semantics before the marker-owned comment is considered published.
-- GREEN wiring follow-up: added a full fake-runtime `shepherd supervise` test that drives the real supervise loop through an execution unit in a disposable worktree and reaches `final_human_gate`.
-- Local review: reviewer/security subagents found missing production wiring; follow-up passes wired host worktrees, reply consumption, recovery budget use, real artifact manifests, outbox claim/mark-sent, and fake-runtime final-gate integration. Remaining work is merge-disabled Twenty/Asana canaries and post-canary cleanup/migration.
-- RED canary: merge-disabled Asana canary stalled in `research-slice/M001/S03`; attempt worktree started without the canonical `.gsd` workflow state, then official GSD emitted `Cannot dispatch: no active milestone` while Shepherd heartbeats stayed alive with no model/tool/child activity. The run was stopped and does not count as acceptance evidence.
-- GREEN canary fix: attempt worktrees now copy canonical `.gsd` state before dispatch, run a pre-dispatch attempt query that must match the canonical milestone/phase/unit, adopt successful attempt `.gsd` state back after scoped promotion, ignore `.gsd` workflow state during source promotion, and hash official `.gsd` state artifacts for proof when code head is unchanged.
-- GREEN stall/retry fix: Runner now fails startup with a typed runtime-contract error when no model/tool/child activity appears before the startup deadline, and unit retry budgets now use the configured `max_unit_attempts` directly instead of multiplying by 20.
+Planned RED tests:
+- [ ] inject failure before Git promotion.
+- [ ] inject failure after Git promotion.
+- [ ] inject failure before state swap.
+- [ ] inject failure after state swap.
+- [ ] restart is idempotent and converges to one consistent Git/GSD state.
 
-## Final verification evidence
+GREEN evidence: pending.
+Refactor evidence: pending.
 
-- PASS `gofmt -w cmd internal`
-- PASS `go test ./...`
-- PASS `go test -race ./...`
-- PASS `go vet ./...`
-- PASS `go build ./cmd/shepherd`
-- PASS `make verify`
-- PASS `cd ../.. && go list ./...`
-- PASS `scripts/tests/shepherd-module-boundary.sh`
-- PASS `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify`
-- PASS `cd agent-runtime/shepherd && go test ./...`
-- PASS `cd agent-runtime/shepherd && go vet ./... && go test -race ./... && go build ./cmd/shepherd && make verify`
-- PASS `cd agent-runtime/shepherd && go test ./cmd/shepherd -run TestSuperviseFakeRuntimeToFinalHumanGate -count=1 -v`
-- PASS `cd agent-runtime/shepherd && go test ./... && go vet ./... && go test -race ./... && go build -o shepherd ./cmd/shepherd && make verify`
+## Slice D — Official GSD 1.11 registry loading
+
+Planned RED tests:
+- [ ] parse real pinned GSD 1.11 registry fixture with array spreads.
+- [ ] preserve allowed, required, and forbidden tools.
+- [ ] route models only from official metadata.
+- [ ] null/unknown units fail closed or are explicitly governed sidecars.
+
+GREEN evidence: pending.
+Refactor evidence: pending.
+
+## Slice E — Real Sol/high recovery planning
+
+Planned RED tests:
+- [ ] static recovery-planning text is insufficient.
+- [ ] planner result must include observed model/thinking, evidence hash, typed action, and bounded
+      plan.
+- [ ] unallowlisted action fails closed.
+- [ ] budget exhaustion persists `awaiting_decision` across restart.
+
+GREEN evidence: pending.
+Refactor evidence: pending.
+
+## Slice F — Authority-gated external effects
+
+Planned RED tests:
+- [ ] no direct `SyncDecisionComment` production path.
+- [ ] outbox pending, claim, send, failure, restart, and idempotent replay.
+- [ ] worker ports cannot directly mutate GitHub.
+
+GREEN evidence: pending.
+Refactor evidence: pending.
+
+## Slice G — Real supervise integration coverage
+
+Planned RED tests:
+- [ ] success path reaches `final_human_gate` only after independent Sol/high validation,
+      ratification, and promotion.
+- [ ] missing/GPT-5.5 validator evidence fails without canonical mutation.
+- [ ] stale candidate head fails without canonical mutation.
+- [ ] validator `RETRY`/`HALT` fails without canonical mutation.
+- [ ] crash/restart at each promotion boundary.
+- [ ] retained failed attempt followed by fresh attempt.
+- [ ] recovery planning and `awaiting_decision` restart.
+- [ ] outbox restart and duplicate suppression.
+- [ ] official registry spread metadata.
+- [ ] canonical worktree unchanged on every failed path.
+
+GREEN evidence: pending.
+Refactor evidence: pending.
+
+## Verification log
+
+No production-code verification is claimed yet for this repair run. Focused RED tests will be recorded
+before the first production edit, followed by focused GREEN and full nested-module gates after each
+coherent slice.

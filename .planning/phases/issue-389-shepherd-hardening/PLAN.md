@@ -1,79 +1,133 @@
-# Issue 389 Shepherd Hardening Plan
+# Issue 389 Shepherd Proof-Recovery Plan
 
-## Objective
+## Current objective
 
-Make `shepherd supervise --config <path> --issue <N> --context <path>` the single issue-scoped
-entry point from validated intake to the final human gate. The supervisor must fail closed when its
-GSD runtime contract, issue identity, retry authority, child lifecycle, or completion proof is
-ambiguous.
+Repair the existing Shepherd implementation on `fix/389-shepherd-proof-recovery` so completion proof,
+recovery, promotion, registry loading, and external effects are real, durable, restart-safe, and
+authority gated. This branch is stacked under parent branch `feat/372-gsd-pi-go-shepherd` / parent PR
+#390. Do not merge PR #390, do not push to `main`, and do not run live Twenty/Asana canaries until the
+exact candidate head has been independently validated by GPT-5.6 Sol/high.
 
-## Required workflow and skills
+## Required workflow and skills loaded
 
 - GSD command: `scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run`
-- Skills: `gsd-programming-loop`, `github-issue-first-delivery`, `golang-how-to`,
-  `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`,
-  `golang-concurrency`, `golang-error-handling`, `golang-safety`, `golang-testing`,
-  `golang-observability`, and repo-local `.pi/skills/go-implementation`.
-- Parent delivery: issue #389 is stacked under parent #372 and parent PR #390. The final merge to
-  `main` remains human-gated.
+- GSD adapter health: `scripts/gsd doctor`, `scripts/gsd list`
+- Required reading completed this cycle: `AGENTS.md`, required-skills routing, GSD Pi adapter reference,
+  issue-agent contract, issue #389 body, complete issue-389 planning artifacts, and
+  `agent-runtime/shepherd/README.md`.
+- Skills loaded/recorded: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`,
+  `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-safety`, `golang-security`,
+  `golang-context`, `golang-concurrency`, `golang-design-patterns`, `golang-structs-interfaces`,
+  `golang-observability`, and `golang-lint`.
 
-## Slice 1 — Runtime prompt/tool contract admission
+## Reconciled status at start of proof-recovery
 
-- RED: a `plan-milestone` prompt advertises `gsd_resume` while its registry omits that tool.
-- GREEN: Shepherd discovers the active GSD resource root, derives advertised and allowed tools,
-  and rejects any mismatch before Pi starts with `runtime_contract_mismatch`.
-- Refactor: keep compatibility checks version-qualified and side-effect free; retain the existing
-  exact 1.11.0 headless patch.
+Earlier artifacts claimed independent validation, ratification, recovery planning, final verification,
+and canary readiness. Those claims are not accepted as current evidence for this repair run. Read-only
+recon found production code still manufacturing Sol/high validator, `PROCEED`, and `Ratified=true`
+inside `cmd/shepherd/main.go:persistSuccessProof` without calling the real authority ratifier. Current
+status is therefore **not validated, not ratified, not canary-ready**.
 
-## Slice 2 — Canonical issue-scoped GSD identity and bootstrap
+## Orchestration decisions
 
-- RED: two issue identities attempt to share one project root/controller state; an existing issue
-  is restarted with a changed branch, base, root, or initial head.
-- GREEN: persist immutable issue, parent issue, branch, base, GSD project root, initial head, GSD
-  version, and controller generation. Materialize bounded issue-local GSD planning artifacts
-  transactionally and adopt an exact existing binding idempotently.
-- Refactor: preserve GSD's project-root database as workflow truth and Shepherd SQLite as controller
-  truth; never merge databases between issues.
+1. `cycle-0/reconcile`: spawned one read-only scout subagent for code recon; no mutating workers were
+   launched. Decision: `read_only_parallel_recon` because the requested scope is broad and production
+   edits must wait for artifact reconciliation and RED tests.
+2. `cycle-0/execution-mode`: use `local_critical_path` for production edits in this checkout; no
+   overlapping mutating workers are allowed.
+3. `cycle-0/safety`: do not run Asana/Twenty canaries, GitHub mutations, or credentialed checks before
+   exact-head independent Sol/high validation exists.
 
-## Slice 3 — Durable retry and signal/subagent lifecycle
+## Ordered implementation slices
 
-- RED: repeated process restarts exceed the configured unit budget; a signal leaves a persisted
-  subagent `running` without a live process or resumable session; nested work produces no parent
-  progress.
-- GREEN: count attempts durably by issue/unit/generation/head, reconcile orphaned subagent records
-  to `interrupted`, and project nested activity into the existing heartbeat at no more than 15-second
-  gaps.
-- Refactor: cancellation remains context-owned, bounded, idempotent, and free of chain-of-thought.
+### A. Real independent validation and ratification
 
-## Slice 4 — Exact completion proof
+RED tests first:
+- completion proof fails when validator evidence is missing or GPT-5.5;
+- completion proof fails for stale candidate head;
+- validator `RETRY`/`HALT` does not ratify or promote;
+- production success path must call `authority.Ratify` and persist the real attestation.
 
-- RED: a zero-exit unit lacks its expected artifact, leaves an active child, fails to advance GSD
-  SQLite/query state, or runs against a stale Git head.
-- GREEN: success requires canonical state advancement, exact-head continuity, expected artifacts,
-  no live/unreconciled children, governed model evidence, a clean scoped checkpoint, and a current
-  lease.
-- Refactor: classify failures with typed evidence instead of treating every failure as a generic
-  runtime error.
+GREEN target: keep candidates inside attempt worktrees, dispatch a genuinely separate GPT-5.6 Sol/high
+validator against exact candidate head plus bounded artifact hashes/gates, persist observed model,
+thinking, session identity, verdict, gates, evidence hashes, ratify with `authority.Ratify`, and promote
+only after successful ratification.
 
-## Slice 5 — One-command issue supervision
+### B. Durable attempt lifecycle and crash recovery
 
-- RED: a deterministic fake GSD workflow requires operator-selected commands or dispatches the same
-  unit twice after restart.
-- GREEN: `supervise` bootstraps/adopts one issue, selects only the canonical next unit, routes
-  planning/validation to GPT-5.6 Sol/high and execution to GPT-5.5/high, applies bounded recovery,
-  emits live progress, and stops at blocked/human/final merge gates.
-- Refactor: keep policy deterministic and keep external effects behind existing narrow ports.
+RED tests first:
+- all required attempt states persist in SQLite;
+- early preparation/query/runtime failures transition explicitly;
+- restart reconciles database-owned orphan worktrees/branches without deleting unknown or live paths;
+- retry always creates a fresh attempt worktree.
 
-## Verification and checkpoints
+GREEN target: durable attempt identity, branch, path, base/candidate/validated heads, and lifecycle
+states: `created`, `prepared`, `running`, `validated`, `ratified`, `promoting`, `promoted`,
+`retained_for_recovery`, `cleanup_pending`, `cleanup_complete`, and `cleanup_blocked`.
 
-1. Focused test after each RED/GREEN slice.
-2. `go test ./...`
-3. `go test -race ./...`
-4. `go vet ./...`
-5. `go build ./cmd/shepherd`
-6. `make verify` in the nested module.
-7. Root `go list ./...` proves the Shepherd module remains excluded from `pm`.
-8. Root `go test ./...`, `go build ./cmd/pm`, and `make verify` when shared files change.
+### C. Crash-safe GSD-state promotion
 
-Commit and push each coherent green checkpoint to `feat/389-autonomous-shepherd`; never push or
-merge to `main`.
+RED tests first:
+- injected crashes before Git promotion, after Git promotion, before state swap, and after state swap;
+- restart converges to exactly one consistent Git/GSD state;
+- canonical `.gsd` is never removed and repopulated in place.
+
+GREEN target: staged state snapshot validation, SQLite/WAL-safe handling, promotion journal, atomic
+rename/swap with backup/recovery, and idempotent promotion/recovery.
+
+### D. Complete official GSD 1.11 registry loading
+
+RED tests first:
+- real pinned fixture with array spreads such as `RUN_UAT_WORKFLOW_TOOL_NAMES` resolves;
+- allowed/required/forbidden tools are preserved;
+- null/unknown units fail closed unless explicitly governed sidecars;
+- no hard-coded substitution for official phase metadata.
+
+GREEN target: structured normalized export from pinned official runtime, metadata-only model routing,
+and fail-closed registry admission.
+
+### E. Real Sol/high recovery planning
+
+RED tests first:
+- static recovery-planning text is rejected;
+- Sol/high recovery planner output must include observed model/thinking, evidence hash, typed action,
+  bounded plan, and explicit allowlisted action;
+- budget exhaustion enters durable `awaiting_decision` after restart.
+
+GREEN target: dispatch bounded GPT-5.6 Sol/high recovery-planning units, persist selected typed actions,
+and enforce per-class durable budgets.
+
+### F. Authority-gated external effects
+
+RED tests first:
+- decision summaries, questions, statuses, and future GitHub mutations cannot bypass the fenced outbox;
+- outbox pending/claim/send/failure/restart/idempotent replay paths are covered;
+- workers do not receive a direct GitHub mutation path.
+
+GREEN target: remove direct `SyncDecisionComment` production paths and route all external writes through
+authority-granted, idempotent outbox effects.
+
+### G. Real supervise integration coverage
+
+RED tests first for:
+- successful implementation -> independent Sol/high validation -> ratification -> promotion ->
+  `final_human_gate`;
+- missing/GPT-5.5 validator evidence;
+- stale candidate head;
+- validator `RETRY`/`HALT`;
+- crash/restart at every promotion boundary;
+- retained failed attempt followed by fresh attempt;
+- recovery planning and `awaiting_decision` restart;
+- outbox restart and duplicate suppression;
+- official registry spread metadata;
+- canonical worktree unchanged on every failed path.
+
+GREEN target: deterministic local integration tests using fakes for external services, plus full nested
+module gates. Live canaries remain deferred until independent validation passes and human approval exists.
+
+## Checkpoints
+
+- Commit/push plan reconciliation after artifact-only edits if requested by coordinator.
+- Commit/push each coherent green slice after focused and nested module gates pass.
+- Final branch push and draft sub-PR target: `feat/372-gsd-pi-go-shepherd`, title Conventional Commit,
+  body uses `Refs #389`.

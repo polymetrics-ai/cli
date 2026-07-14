@@ -967,7 +967,7 @@ func (s *Store) PutArtifactProof(ctx context.Context, proof ArtifactProof) error
 		proof.Attempt <= 0 || !validGitSHA(proof.StartHead) || !validGitSHA(proof.CandidateHead) ||
 		!validGitSHA(proof.ValidatedHead) || proof.CandidateHead != proof.ValidatedHead ||
 		strings.TrimSpace(proof.ExpectedArtifact) == "" || !validSHA256(proof.ArtifactHash) ||
-		proof.Validator != "openai-codex/gpt-5.6-sol" || proof.Thinking != "high" {
+		proof.Validator != "openai-codex/gpt-5.6-sol" || proof.Thinking != "high" || !proof.Ratified {
 		return errors.New("complete exact-head artifact proof is required")
 	}
 	ratified := 0
@@ -1005,7 +1005,7 @@ func (s *Store) GetArtifactProof(ctx context.Context, proofID string) (ArtifactP
 
 func (s *Store) PutAttestation(ctx context.Context, attestation AttestationRecord) error {
 	if attestation.RunID == "" || !validGitSHA(attestation.HeadSHA) || attestation.Validator != "openai-codex/gpt-5.6-sol" ||
-		attestation.Thinking != "high" || strings.TrimSpace(attestation.Verdict) == "" {
+		attestation.Thinking != "high" || attestation.Verdict != "PROCEED" {
 		return errors.New("complete attestation identity is required")
 	}
 	created := attestation.CreatedAt.UTC()

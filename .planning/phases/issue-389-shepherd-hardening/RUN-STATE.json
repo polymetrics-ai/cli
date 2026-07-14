@@ -1,38 +1,91 @@
 {
   "phase": "issue-389-shepherd-hardening",
-  "state": "implemented_verified_ready_for_merge_disabled_canaries",
-  "current_slice": "pre_390_blockers_1_to_3_complete",
+  "branch": "fix/389-shepherd-proof-recovery",
+  "base_implementation_head": "db13cbaa8e27cbc86130ce2547f3e60b82b5217c",
+  "parent_branch": "feat/372-gsd-pi-go-shepherd",
+  "parent_pr": 390,
+  "state": "slice_a_store_hardening_green_broader_validation_pending",
+  "current_slice": "A_real_independent_validation_and_ratification",
   "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
-  "human_gate": "live_twenty_asana_canary_approval_and_parent_pr_merge",
-  "implemented": [
-    "GSD 1.11 unit-registry parser and metadata-based model routing",
-    "host-runtime canonical units run through disposable attempt worktrees with promote/discard paths",
-    "Podman canonical supervise path fails closed until disposable worktree semantics are available there",
-    "success path now builds artifact manifests from changed scoped files between exact heads and binds them to official unit metadata",
-    "success path persists Sol/high artifact-proof and attestation records",
-    "retry exhaustion enters durable awaiting_decision and publishes marker-owned GitHub questions through an outbox claim/execute/mark-sent path",
-    "supervise polls GitHub replies for open decision requests and resumes retry/continue replies or blocks stop replies",
-    "per-class recovery budget records are updated for retryable failures and drive final retry/awaiting-decision state",
-    "full fake-runtime shepherd supervise test reaches final_human_gate through the real command orchestration path",
-    "path boundary, workspace symlink, decision evidence, SQLite WAL, and delivery-run migration hardening"
+  "gsd_adapter_health": {
+    "scripts_gsd_doctor": "pass",
+    "scripts_gsd_list": "pass"
+  },
+  "required_skills_loaded": [
+    "gsd-core",
+    "polymetrics-issue-delivery",
+    "gsd-programming-loop",
+    "golang-how-to",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-safety",
+    "golang-security",
+    "golang-context",
+    "golang-concurrency",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-observability",
+    "golang-lint"
   ],
-  "remaining_before_parent_pr_390_merge": [
-    "run merge-disabled Twenty canary to final_human_gate after human approval",
-    "run merge-disabled Asana canary to final_human_gate after human approval",
-    "evaluate whether Podman canonical supervise support should gain disposable worktree isolation or remain disabled before cleanup"
+  "orchestration_decisions": [
+    {
+      "cycle": "cycle-0",
+      "decision": "read_only_parallel_recon",
+      "reason": "Broad proof/recovery scope benefited from isolated read-only scout before any production edit."
+    },
+    {
+      "cycle": "cycle-0",
+      "decision": "local_critical_path",
+      "reason": "No overlapping mutating workers in this checkout; production edits will be sequential."
+    },
+    {
+      "cycle": "cycle-0",
+      "decision": "canaries_deferred",
+      "reason": "Twenty/Asana canaries require exact-head independent Sol/high validation and human approval first."
+    },
+    {
+      "cycle": "cycle-1",
+      "decision": "store_guard_first",
+      "reason": "Added smallest RED tests preventing unratified proof and non-PROCEED attestation persistence before broader production wiring."
+    }
   ],
-  "post_canary_remaining": [
-    "remove obsolete Shepherd-specific Podman leftovers only after host canaries pass and human approves cleanup",
-    "migrate tracked .gsd/.planning state only after canaries pass",
-    "clean obsolete files/references after migration"
+  "invalidated_prior_claims": [
+    "independent_validation_passed",
+    "ratification_passed",
+    "recovery_planning_passed",
+    "canary_ready",
+    "final_verification_passed"
+  ],
+  "known_findings": [
+    "cmd/shepherd/main.go:persistSuccessProof manufactures Sol/high validator, PROCEED, and Ratified=true",
+    "authority.Ratify exists but is not wired into production success proof",
+    "attempt lifecycle states and promotion/recovery state transitions are incomplete",
+    "fake supervise integration does not yet prove real validation/ratification/outbox/recovery boundaries"
+  ],
+  "completed_this_run": [
+    "ArtifactProof persistence now rejects Ratified=false",
+    "Attestation persistence now rejects non-PROCEED verdicts"
+  ],
+  "next_actions": [
+    "Add production-path RED test proving successful supervise cannot self-ratify without independent validator evidence",
+    "Replace persistSuccessProof manufacturing with real validation result plus authority.Ratify",
+    "Keep candidate in attempt worktree until validation/ratification succeeds",
+    "Run required nested module and boundary gates before committing"
+  ],
+  "human_gates": [
+    "No Asana/Twenty canaries before independent Sol/high validation of exact candidate head",
+    "No credentialed checks or secret access",
+    "No parent PR #390 merge and no push to main",
+    "No new dependencies without approval"
   ],
   "last_verification": [
-    "cd agent-runtime/shepherd && go test ./...",
-    "cd agent-runtime/shepherd && go test ./cmd/shepherd -run TestSuperviseFakeRuntimeToFinalHumanGate -count=1 -v",
-    "cd agent-runtime/shepherd && go vet ./...",
-    "cd agent-runtime/shepherd && go test -race ./...",
-    "cd agent-runtime/shepherd && go build ./cmd/shepherd",
-    "cd agent-runtime/shepherd && make verify",
-    "git diff --check"
+    "scripts/gsd doctor: pass",
+    "scripts/gsd list: pass",
+    "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run: pass",
+    "cd agent-runtime/shepherd && go test ./internal/store -run 'TestArtifactProofRejectsUnratifiedResult|TestAttestationRejectsNonProceedVerdicts|TestArtifactProofBindsExactHeadsAndRatification|TestAttestationPersistsValidatorProof' -count=1: pass",
+    "cd agent-runtime/shepherd && go test ./...: pass",
+    "cd agent-runtime/shepherd && go test -race ./...: pass",
+    "cd agent-runtime/shepherd && go vet ./... && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...: pass",
+    "cd agent-runtime/shepherd && golangci-lint run ./...: fail_preexisting_errcheck_ineffassign_staticcheck_unused"
   ]
 }

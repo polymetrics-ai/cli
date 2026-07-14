@@ -1,50 +1,112 @@
-# Issue 389 Verification
+# Issue 389 Verification — proof-recovery repair
 
-## Focused gates
+## Evidence policy
 
-- [x] Prompt-advertised tools are a subset of the active unit registry. Covered by `internal/gsd/prompt_contract_test.go` and `make verify`.
-- [x] Two issues cannot share one canonical Shepherd/GSD project identity. Covered by `internal/gsd/project_test.go`.
-- [x] Same-issue restart adopts the exact existing identity. Covered by `internal/gsd/project_test.go` and `internal/store/store_test.go`.
-- [x] Unit attempt budget survives process restart and exhausted retryable failures stop as typed `retry_exhausted` blocked state. Covered by `TestUnitAttemptBudgetSurvivesStoreRestart`, `TestFinalUnitRunStateBlocksWhenRetryBudgetExhausted`, and `TestFinalUnitRunStateRetriesWhileBudgetRemains`.
-- [x] Signal reconciliation interrupts orphaned nested runs. Covered by `internal/gsd/subagents_test.go`.
-- [x] Nested activity is visible through bounded heartbeats. Covered by existing runner/telemetry tests and `make verify`.
-- [x] Success rejects missing artifacts, stale heads, unchanged canonical state, and live children. Covered by completion proof tests in `cmd/shepherd` and final module gates.
-- [x] `supervise` dispatches the canonical sequence and stops at the final human gate. Covered by `internal/supervisor/policy_test.go` and CLI wiring in `cmd/shepherd/main.go`.
-- [x] Planning and validation observe GPT-5.6 Sol/high; execution observes GPT-5.5/high. Covered by model selection tests, `TestRunnerCanDeriveGovernedImplementationModel`, and runtime identity validation in `cmd/shepherd`.
-- [x] Runtime event and headless patch resource-shape failures preserve `runtime_contract_mismatch` typing. Covered by `internal/gsd/events_test.go` and `TestApplyPinnedHeadlessToolPatchReportsContractMismatch`.
+All prior PASS/checkmark claims for independent validation, ratification, recovery planning, canaries,
+and final readiness are superseded for this repair run. A gate is checked only after it is rerun against
+the current branch and exact candidate head.
 
-## Pre-#390 implementation slice gates
+## Focused gates to add/run by slice
 
-- [x] Official GSD Pi 1.11 unit-registry metadata is parsed and used for model routing. Covered by `internal/gsd/registry_test.go`, `internal/supervisor/policy_test.go`, and `cmd/shepherd/main_test.go`.
-- [x] Runtime prompt/tool compatibility rejects malformed or partial registry metadata. Covered by `internal/gsd/prompt_contract_test.go` and `internal/gsd/registry_test.go`.
-- [x] `awaiting_decision` is a durable run state. Covered by `internal/domain` and `internal/store/decision_recovery_test.go`.
-- [x] Durable decision requests survive restart, reject stale generation/head/expiry, and consume answers exactly once. Covered by `internal/store/decision_recovery_test.go`.
-- [x] GitHub question comments are marker-owned, bounded, mention the configured human, and parse only authorized exact unedited replies. Covered by `internal/github/decision_broker_test.go`.
-- [x] Recovery budgets are persisted per failure class. Covered by `internal/store/decision_recovery_test.go`.
-- [x] Artifact proof and Sol/high attestation persistence reject moved heads and validator downgrades. Covered by `internal/store/proof_test.go`.
-- [x] Disposable attempt worktree primitives reject stale head and out-of-scope promotion. Covered by `internal/workspace/worktree_test.go`.
-- [x] Path boundary checks reject symlink final components and canonicalize missing-path ancestors before comparing work/state roots. Covered indirectly by existing config/runtime tests.
+### A. Independent validation and ratification
 
-## Module gates
+- [ ] Missing validator evidence fails closed.
+- [ ] GPT-5.5 validator evidence fails closed.
+- [ ] Stale candidate head fails closed.
+- [ ] Validator `RETRY`/`HALT` fails closed.
+- [ ] `authority.Ratify` is called with real validation result and stored evidence.
+- [ ] Canonical branch remains unchanged on every failed validation/ratification path.
 
-- [x] `gofmt -w cmd internal` — PASS
-- [x] `go test ./...` — PASS
-- [x] `go test -race ./...` — PASS
-- [x] `go vet ./...` — PASS
-- [x] `go build ./cmd/shepherd` — PASS
-- [x] `make verify` — PASS
-- [x] `cd ../.. && go list ./...` — PASS
-- [x] `scripts/tests/shepherd-module-boundary.sh` — PASS
-- [x] `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify` — PASS
+### B. Attempt lifecycle and crash recovery
 
-## Notes
+- [ ] Attempt identity, branch, path, base/candidate/validated heads, and all lifecycle states persist
+      in SQLite.
+- [ ] Restart reconciles database-owned orphan worktrees/branches.
+- [ ] Unknown or live worktrees are never deleted automatically.
+- [ ] Early preparation/query/runtime failures transition explicitly.
+- [ ] Retry always receives a fresh attempt worktree.
 
-- No commits, pushes, GitHub mutations, credential reads, or merge actions were performed.
-- Broader root test gates were not run because the changes are isolated to the nested Shepherd module and phase artifacts.
-- Read-only reviewer subagent flagged retry exhaustion and runtime-contract typing gaps; both were fixed and covered by focused tests.
-- Final local reviewer pass found no critical findings and flagged two stale `.gsd/phases/01-m001/01-CONTEXT.md` remote-review references; both were updated to local review policy.
-- Repository policy now treats automated review coverage as local reviewer/verifier/security evidence; remote PR-bot review is not required by default.
-- Pre-#390 local reviewer/security passes found no credential exposure or critical issue. Follow-up wiring added host disposable worktrees, GitHub reply consumption, and per-class recovery budget use in the real `supervise`/`runHeadless` path.
-- Follow-up completed the prior pre-canary blockers: real artifact manifest hashing from scoped changed files plus official unit metadata, outbox claim/execute/mark-sent for GitHub questions, and a fake-runtime `shepherd supervise` integration test to `final_human_gate`.
-- Asana canary attempt 1 was stopped as invalid evidence: disposable attempt worktree lacked canonical `.gsd` workflow state and stalled before model/tool activity. Fix verification now covers `.gsd` state copy/adoption, pre-dispatch attempt query matching, startup no-activity failure, and direct use of configured retry budgets.
-- Remaining before parent PR #390 merge: rerun merge-disabled Asana canary from a clean committed Shepherd head, then run Twenty canary to `final_human_gate`; post-canary Podman cleanup and `.gsd/.planning` migration remain approval-gated.
+### C. GSD-state promotion
+
+- [ ] No `RemoveAll` and in-place copy into canonical `.gsd` tree.
+- [ ] Staged snapshot is validated before promotion.
+- [ ] SQLite database/WAL state is handled consistently.
+- [ ] Promotion journal supports failures before Git promotion, after Git promotion, before state swap,
+      and after state swap.
+- [ ] Restart converges idempotently to one consistent Git/GSD state.
+
+### D. Official GSD 1.11 registry loading
+
+- [ ] Structured normalized export from pinned runtime replaces regex parsing.
+- [ ] Array spreads such as `RUN_UAT_WORKFLOW_TOOL_NAMES` resolve.
+- [ ] Allowed, required, and forbidden tools are preserved.
+- [ ] Model routing comes only from official phase metadata.
+- [ ] Null/unknown units fail closed unless explicitly governed sidecars.
+- [ ] Real pinned GSD 1.11 registry fixture passes.
+
+### E. Sol/high recovery planning
+
+- [ ] Static recovery text removed.
+- [ ] GPT-5.6 Sol/high recovery-planning unit dispatch is observed and persisted.
+- [ ] Evidence hash, typed action, bounded plan, and model/thinking are stored.
+- [ ] Action allowlist enforced.
+- [ ] Per-class durable recovery budgets enforced.
+- [ ] Exhaustion enters durable `awaiting_decision` and survives restart.
+
+### F. Authority-gated external effects
+
+- [ ] Decision summaries/questions/statuses/future GitHub mutations route through fenced outbox.
+- [ ] Direct `SyncDecisionComment` production paths removed.
+- [ ] Pending/claim/send/failure/restart/idempotent replay covered.
+- [ ] Workers cannot receive direct GitHub mutation paths.
+
+### G. Integration coverage
+
+- [ ] Successful implementation -> independent Sol/high validation -> ratification -> promotion ->
+      `final_human_gate`.
+- [ ] Missing or GPT-5.5 validator evidence.
+- [ ] Stale candidate head.
+- [ ] Validator `RETRY`/`HALT`.
+- [ ] Crash/restart at every promotion boundary.
+- [ ] Retained failed attempt followed by fresh attempt.
+- [ ] Recovery planning and `awaiting_decision` restart.
+- [ ] Outbox restart and duplicate suppression.
+- [ ] Official registry spread metadata.
+- [ ] Canonical worktree remains unchanged on every failed path.
+
+## Required command gates after each coherent slice
+
+```bash
+cd agent-runtime/shepherd
+gofmt -w cmd internal
+go test <focused packages>
+go test ./...
+go test -race ./...
+go vet ./...
+golangci-lint run ./...
+go build ./cmd/shepherd
+make verify
+cd ../..
+scripts/tests/shepherd-module-boundary.sh
+git diff --check
+go list ./...
+```
+
+## Deferred/human-gated checks
+
+- [ ] Merge-disabled Twenty canary to `final_human_gate` — deferred until exact candidate head has
+      independent Sol/high validation and human approval.
+- [ ] Merge-disabled Asana canary to `final_human_gate` — deferred until exact candidate head has
+      independent Sol/high validation and human approval.
+- [ ] Parent PR #390 merge — human-only, not executable by this agent.
+
+## Current verification status
+
+- GSD adapter health: PASS (`scripts/gsd doctor`, `scripts/gsd list`).
+- Programming-loop prompt generation: PASS (`scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run`).
+- Slice A store hardening focused gate: PASS `cd agent-runtime/shepherd && go test ./internal/store -run 'TestArtifactProofRejectsUnratifiedResult|TestAttestationRejectsNonProceedVerdicts|TestArtifactProofBindsExactHeadsAndRatification|TestAttestationPersistsValidatorProof' -count=1`.
+- Nested module unit gate after partial store hardening: PASS `cd agent-runtime/shepherd && go test ./...`.
+- Race gate: PASS `cd agent-runtime/shepherd && go test -race ./...`.
+- Vet/build/make/boundary/root listing: PASS `cd agent-runtime/shepherd && go vet ./... && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
+- Lint gate: FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with existing `errcheck`, `ineffassign`, `staticcheck`, and `unused` findings outside the focused proof hardening. This repair did not claim lint green.
+- Important remaining blocker: production `persistSuccessProof` still manufactures validator/ratification evidence and must be replaced before Slice A can be considered complete.
