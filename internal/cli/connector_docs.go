@@ -154,17 +154,11 @@ func writeConnectorDocs(dir string, registry *connectors.Registry, selected ...s
 		if err := os.MkdirAll(connectorDir, 0o755); err != nil {
 			return fmt.Errorf("create connector docs %s: %w", name, err)
 		}
-		manual := connectorManualDocMarkdown(name, connector)
-		if !global {
-			manual = trimGeneratedTrailingWhitespace(manual)
-		}
+		manual := trimGeneratedTrailingWhitespace(connectorManualDocMarkdown(name, connector))
 		if err := os.WriteFile(filepath.Join(connectorDir, "MANUAL.md"), []byte(manual), 0o644); err != nil {
 			return fmt.Errorf("write connector manual %s: %w", name, err)
 		}
-		skill := connectors.RenderConnectorSkill(connector)
-		if !global {
-			skill = trimGeneratedTrailingWhitespace(skill)
-		}
+		skill := trimGeneratedTrailingWhitespace(connectors.RenderConnectorSkill(connector))
 		if err := os.WriteFile(filepath.Join(connectorDir, "SKILL.md"), []byte(skill), 0o644); err != nil {
 			return fmt.Errorf("write connector skill %s: %w", name, err)
 		}

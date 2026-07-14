@@ -205,6 +205,20 @@ func TestDocsGenerateAndValidateConnectorDocs(t *testing.T) {
 			t.Fatalf("generated docs missing %s: %v", path, err)
 		}
 	}
+	for _, path := range []string{
+		filepath.Join(connectorsDir, "asana", "MANUAL.md"),
+		filepath.Join(connectorsDir, "asana", "SKILL.md"),
+	} {
+		generated, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read generated connector doc %s: %v", path, err)
+		}
+		for lineNumber, line := range strings.Split(string(generated), "\n") {
+			if strings.HasSuffix(line, " ") || strings.HasSuffix(line, "\t") {
+				t.Fatalf("generated connector doc %s has trailing whitespace on line %d: %q", path, lineNumber+1, line)
+			}
+		}
+	}
 	asanaCLI, err := os.ReadFile(filepath.Join(cliDir, "asana.md"))
 	if err != nil {
 		t.Fatalf("read generated asana CLI docs: %v", err)
