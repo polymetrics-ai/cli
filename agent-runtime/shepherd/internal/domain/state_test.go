@@ -43,6 +43,19 @@ func TestBlockedResumeRequiresHumanDecisionAndGenerationBump(t *testing.T) {
 	}
 }
 
+func TestFailedResumeRequiresSameExplicitHumanDecision(t *testing.T) {
+	t.Parallel()
+
+	decision := HumanDecision{RunID: "run-1", Generation: 2, ActorKind: ActorHuman, Approved: true}
+	next, err := ResumeStopped("run-1", 2, RunFailed, decision)
+	if err != nil || next != 3 {
+		t.Fatalf("resume failed delivery: generation=%d err=%v", next, err)
+	}
+	if _, err := ResumeStopped("run-1", 2, RunReady, decision); err == nil {
+		t.Fatal("ready delivery accepted as explicitly resumable")
+	}
+}
+
 func TestMergeCapabilityCannotBeGranted(t *testing.T) {
 	t.Parallel()
 

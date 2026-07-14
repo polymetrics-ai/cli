@@ -324,10 +324,7 @@ func (s *Store) ResumeDelivery(ctx context.Context, decision domain.HumanDecisio
 		decision.RunID).Scan(&state, &generation); err != nil {
 		return fmt.Errorf("read blocked delivery: %w", err)
 	}
-	if state != domain.RunBlocked {
-		return errors.New("only a blocked delivery can be resumed")
-	}
-	next, err := domain.ResumeBlocked(decision.RunID, generation, decision)
+	next, err := domain.ResumeStopped(decision.RunID, generation, state, decision)
 	if err != nil {
 		return err
 	}
