@@ -406,12 +406,26 @@ type DeleteSpec struct {
 
 // APISurface is the parsed api_surface.json (conformance input only).
 type APISurface struct {
-	API                    string            `json:"api"`
-	Docs                   string            `json:"docs,omitempty"`
-	ReviewedAt             string            `json:"reviewed_at,omitempty"`
-	OperationLedgerVersion int               `json:"operation_ledger_version,omitempty"`
-	Scope                  string            `json:"scope,omitempty"`
-	Endpoints              []SurfaceEndpoint `json:"endpoints"`
+	API                    string                    `json:"api"`
+	Docs                   string                    `json:"docs,omitempty"`
+	ReviewedAt             string                    `json:"reviewed_at,omitempty"`
+	OperationLedgerVersion int                       `json:"operation_ledger_version,omitempty"`
+	Scope                  string                    `json:"scope,omitempty"`
+	SourceEvidence         *APISurfaceSourceEvidence `json:"source_evidence,omitempty"`
+	Endpoints              []SurfaceEndpoint         `json:"endpoints"`
+}
+
+// APISurfaceSourceEvidence records the immutable source used to assemble an
+// API operation baseline. Validation is deliberately offline: SourceURL is
+// inspected for an embedded revision but is never fetched.
+type APISurfaceSourceEvidence struct {
+	Kind                       string `json:"kind"`
+	SourceURL                  string `json:"source_url"`
+	Revision                   string `json:"revision"`
+	SHA256                     string `json:"sha256"`
+	CapturedAt                 string `json:"captured_at"`
+	BaselineOperationCount     int    `json:"baseline_operation_count"`
+	SupplementalOperationsNote string `json:"supplemental_operations_note,omitempty"`
 }
 
 // SurfaceEndpoint is one api_surface.json endpoint entry.
@@ -553,13 +567,21 @@ type CompositeOperationSpec struct {
 // it maps provider-style command paths to existing streams, write actions,
 // API-surface rows, or explicit unsupported/planned classifications.
 type CLISurface struct {
-	Tagline     string            `json:"tagline"`
-	Usage       string            `json:"usage"`
-	SourceCLI   *CLISourceCLI     `json:"source_cli,omitempty"`
-	Groups      []CLICommandGroup `json:"groups,omitempty"`
-	GlobalFlags []CLIFlag         `json:"global_flags,omitempty"`
-	Commands    []CLICommand      `json:"commands"`
-	HelpTopics  []CLIHelpTopic    `json:"help_topics,omitempty"`
+	Tagline        string             `json:"tagline"`
+	Usage          string             `json:"usage"`
+	SourceCLI      *CLISourceCLI      `json:"source_cli,omitempty"`
+	CoveragePolicy *CLICoveragePolicy `json:"coverage_policy,omitempty"`
+	Groups         []CLICommandGroup  `json:"groups,omitempty"`
+	GlobalFlags    []CLIFlag          `json:"global_flags,omitempty"`
+	Commands       []CLICommand       `json:"commands"`
+	HelpTopics     []CLIHelpTopic     `json:"help_topics,omitempty"`
+}
+
+// CLICoveragePolicy opts a connector into complete declarative command target
+// coverage. An absent policy preserves legacy partial CLI-surface metadata.
+type CLICoveragePolicy struct {
+	RequireAllStreams bool `json:"require_all_streams"`
+	RequireAllWrites  bool `json:"require_all_writes"`
 }
 
 // CLISourceCLI names the external provider CLI used as a parity reference.

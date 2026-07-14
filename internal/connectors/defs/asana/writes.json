@@ -34,7 +34,7 @@
           }
         }
       },
-      "risk": "external mutation; creates a new task visible to the whole team/project; low risk, no approval required"
+      "risk": "external mutation; creates a new task visible to the whole team/project; approval required"
     },
     {
       "name": "update_task",
@@ -118,7 +118,7 @@
           }
         }
       },
-      "risk": "external mutation; creates a new project visible to the team/workspace; low risk, no approval required"
+      "risk": "external mutation; creates a new project visible to the team/workspace; approval required"
     },
     {
       "name": "update_project",
@@ -193,7 +193,7 @@
           }
         }
       },
-      "risk": "external mutation; creates a new section in a project's board/list view; low risk, no approval required"
+      "risk": "external mutation; creates a new section in a project's board/list view; approval required"
     },
     {
       "name": "update_section",
@@ -217,7 +217,7 @@
           }
         }
       },
-      "risk": "external mutation; renames a section; low risk, no approval required"
+      "risk": "external mutation; renames a section; approval required"
     },
     {
       "name": "delete_section",
@@ -262,7 +262,7 @@
           }
         }
       },
-      "risk": "external mutation; creates a new workspace-visible tag; low risk, no approval required"
+      "risk": "external mutation; creates a new workspace-visible tag; approval required"
     },
     {
       "name": "update_tag",
@@ -287,7 +287,7 @@
           }
         }
       },
-      "risk": "external mutation; renames/recolors a tag visible workspace-wide; low risk, no approval required"
+      "risk": "external mutation; renames/recolors a tag visible workspace-wide; approval required"
     },
     {
       "name": "delete_tag",

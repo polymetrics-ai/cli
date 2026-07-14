@@ -1,0 +1,19 @@
+{
+  "issue": 380,
+  "parent_issue": 380,
+  "branch": "feat/380-asana-cli-parity",
+  "status": "planned",
+  "runtime": "go-shepherd-podman-gsd-pi",
+  "model": "openai-codex/gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "verificationPassed": false,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "parent artifacts and issue hierarchy must exist before isolated workers can start"
+    }
+  ],
+  "human_gate": "parent PR merge to main"
+}
+

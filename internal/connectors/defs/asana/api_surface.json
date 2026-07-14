@@ -2,7 +2,16 @@
   "api": "Asana API v1 (https://app.asana.com/api/1.0)",
   "docs": "https://developers.asana.com/reference/rest-api-reference (OpenAPI source: https://raw.githubusercontent.com/Asana/openapi/master/defs/asana_oas.yaml)",
   "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every endpoint in Asana's official OpenAPI spec (250 operations, including /users/me which the spec omits from its paths map but which is a real, documented, already-used identity alias) is enumerated below, each covered_by a stream/write or excluded with a specific reason. 13 read streams (4 pre-existing + 9 new) plus 13 write actions (all new; legacy shipped none) cover the core PM domain (workspaces/projects/tasks/sections/tags/stories/users/teams/custom_fields/project_statuses/memberships); the remaining ~224 endpoints are duplicate/filtered views of already-covered data, admin/Enterprise-gated configuration, or entire adjacent product sub-domains (Goals, Portfolios, Time Tracking, Webhooks, Project/Task Templates, Allocations/Budgets/Rates) scoped out as future capability-expansion passes of their own rather than partially folded into this one \u2014 see docs.md's Known limits for the full breakdown.",
+  "source_evidence": {
+    "kind": "openapi",
+    "source_url": "https://raw.githubusercontent.com/Asana/openapi/2b84af9d1f2bdd840052a1c7ddbee0ecb6a80869/defs/asana_oas.yaml",
+    "revision": "2b84af9d1f2bdd840052a1c7ddbee0ecb6a80869",
+    "sha256": "0592cd896d2cb52f5a01393c0f86258ead9e896b769780c5891e2375aa4a5150",
+    "captured_at": "2026-07-04",
+    "baseline_operation_count": 250,
+    "supplemental_operations_note": "The documented GET /users/me identity is supplemental because it is omitted from the pinned OpenAPI paths map; recording it preserves the reviewed 250-operation corpus and is not an executable capability grant."
+  },
+  "scope": "Pass B full-surface expansion: every endpoint in Asana's official OpenAPI spec (250 operations, including /users/me which the spec omits from its paths map but which is a real, documented, already-used identity alias) is enumerated below, each covered_by a stream/write or excluded with a specific reason. 12 streams covering 13 GET rows (4 pre-existing + 9 new rows) plus 13 write actions (all new; legacy shipped none) cover the core PM domain (workspaces/projects/tasks/sections/tags/stories/users/teams/custom_fields/project_statuses/memberships); the remaining ~224 endpoints are duplicate/filtered views of already-covered data, admin/Enterprise-gated configuration, or entire adjacent product sub-domains (Goals, Portfolios, Time Tracking, Webhooks, Project/Task Templates, Allocations/Budgets/Rates) scoped out as future capability-expansion passes of their own rather than partially folded into this one \u2014 see docs.md's Known limits for the full breakdown.",
   "endpoints": [
     {
       "method": "GET",

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -186,18 +188,120 @@ func TestConnectorInspectHumanShowsManualNotRawJSON(t *testing.T) {
 
 func TestDocsGenerateAndValidateConnectorDocs(t *testing.T) {
 	dir := t.TempDir()
-	cliDir := dir + "/cli"
-	connectorsDir := dir + "/connectors"
+	cliDir := filepath.Join(dir, "cli")
+	connectorsDir := filepath.Join(dir, "connectors")
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"docs", "generate", "--dir", cliDir, "--connectors-dir", connectorsDir}, &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("docs generate code = %d stderr = %s", code, stderr.String())
 	}
+	for _, path := range []string{
+		filepath.Join(cliDir, "asana.md"),
+		filepath.Join(cliDir, "github.md"),
+		filepath.Join(connectorsDir, "asana", "MANUAL.md"),
+		filepath.Join(connectorsDir, "asana", "SKILL.md"),
+	} {
+		if _, err := os.Stat(path); err != nil {
+			t.Fatalf("generated docs missing %s: %v", path, err)
+		}
+	}
+	for _, path := range []string{
+		filepath.Join(connectorsDir, "asana", "MANUAL.md"),
+		filepath.Join(connectorsDir, "asana", "SKILL.md"),
+	} {
+		generated, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read generated connector doc %s: %v", path, err)
+		}
+		for lineNumber, line := range strings.Split(string(generated), "\n") {
+			if strings.HasSuffix(line, " ") || strings.HasSuffix(line, "\t") {
+				t.Fatalf("generated connector doc %s has trailing whitespace on line %d: %q", path, lineNumber+1, line)
+			}
+		}
+	}
+	asanaCLI, err := os.ReadFile(filepath.Join(cliDir, "asana.md"))
+	if err != nil {
+		t.Fatalf("read generated asana CLI docs: %v", err)
+	}
+	for _, want := range []string{"# pm asana", "NAME", "pm asana - Inspect and safely plan changes to Asana workspaces, projects, and tasks.", "tasks list", "projects list", "--json"} {
+		if !strings.Contains(string(asanaCLI), want) {
+			t.Fatalf("generated asana CLI docs missing %q:\n%s", want, string(asanaCLI))
+		}
+	}
 	stdout.Reset()
 	stderr.Reset()
-	code = cli.Run([]string{"docs", "validate", "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	code = cli.Run([]string{"docs", "validate", "--dir", cliDir, "--connectors-dir", connectorsDir}, &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("docs validate code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+
+	if err := os.WriteFile(filepath.Join(cliDir, "asana.md"), []byte("stale cli doc\n"), 0o644); err != nil {
+		t.Fatalf("write stale generated cli doc: %v", err)
+	}
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"docs", "validate", "--dir", cliDir, "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("docs validate accepted stale asana CLI docs")
+	}
+	if got := stdout.String() + stderr.String(); !strings.Contains(got, filepath.Join(cliDir, "asana.md")) {
+		t.Fatalf("docs validate drift error missing stale path: %s", got)
+	}
+}
+
+func TestDocsGenerateAndValidateSelectedConnectorsDoesNotRewriteCorpus(t *testing.T) {
+	dir := t.TempDir()
+	cliDir := filepath.Join(dir, "cli")
+	connectorsDir := filepath.Join(dir, "connectors")
+	unrelated := filepath.Join(connectorsDir, "100ms", "MANUAL.md")
+	if err := os.MkdirAll(filepath.Dir(unrelated), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(unrelated, []byte("sentinel\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	githubManual := filepath.Join(connectorsDir, "github", "MANUAL.md")
+	if err := os.MkdirAll(filepath.Dir(githubManual), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(githubManual, []byte("github sentinel\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	args := []string{"docs", "generate", "--dir", cliDir, "--connectors-dir", connectorsDir, "--connector", "asana", "--cli-connector", "github"}
+	var stdout, stderr bytes.Buffer
+	if code := cli.Run(args, &stdout, &stderr); code != 0 {
+		t.Fatalf("targeted docs generate code=%d stderr=%s", code, stderr.String())
+	}
+	got, err := os.ReadFile(unrelated)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != "sentinel\n" {
+		t.Fatalf("targeted generation rewrote unrelated connector: %q", got)
+	}
+	got, err = os.ReadFile(githubManual)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != "github sentinel\n" {
+		t.Fatalf("CLI-only selection rewrote GitHub connector manual: %q", got)
+	}
+	for _, path := range []string{
+		filepath.Join(cliDir, "asana.md"),
+		filepath.Join(cliDir, "github.md"),
+		filepath.Join(connectorsDir, "asana", "MANUAL.md"),
+		filepath.Join(connectorsDir, "asana", "SKILL.md"),
+	} {
+		if _, err := os.Stat(path); err != nil {
+			t.Fatalf("targeted docs missing %s: %v", path, err)
+		}
+	}
+	stdout.Reset()
+	stderr.Reset()
+	validateArgs := []string{"docs", "validate", "--dir", cliDir, "--connectors-dir", connectorsDir, "--connector", "asana", "--cli-connector", "github"}
+	if code := cli.Run(validateArgs, &stdout, &stderr); code != 0 {
+		t.Fatalf("targeted docs validate code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 }
 
@@ -566,6 +670,165 @@ func TestGitHubCommandSurfaceBlocksOperationBeforeCredentialResolution(t *testin
 	}
 	if strings.Contains(out, "missing --credential") || strings.Contains(stderr.String(), "missing --credential") {
 		t.Fatalf("operation-backed command attempted credential resolution before blocking:\nstdout=%s\nstderr=%s", out, stderr.String())
+	}
+}
+
+func TestConnectorHelpAliasesAreCredentialFreeAndDeterministic(t *testing.T) {
+	root := t.TempDir()
+	namespaceAliases := [][]string{
+		{"asana", "--root", root},
+		{"help", "asana", "--root", root},
+		{"man", "asana", "--root", root},
+		{"asana", "--help", "--root", root},
+		{"asana", "-h", "--root", root},
+	}
+	namespace := ""
+	for _, args := range namespaceAliases {
+		stdout, _ := runCLI(t, args)
+		if namespace == "" {
+			namespace = stdout
+		} else if stdout != namespace {
+			t.Fatalf("Run(%v) output differs from namespace help", args)
+		}
+	}
+	for _, want := range []string{"NAME", "pm asana", "Organization", "Work Management", "tasks list", "tasks create", "Requires plan, preview, explicit approval, then execute."} {
+		if !strings.Contains(namespace, want) {
+			t.Fatalf("namespace manual missing %q:\n%s", want, namespace)
+		}
+	}
+
+	topicAliases := [][]string{
+		{"asana", "tasks", "--root", root},
+		{"help", "asana", "tasks", "--root", root},
+		{"man", "asana", "tasks", "--root", root},
+		{"asana", "tasks", "--help", "--root", root},
+		{"asana", "tasks", "-h", "--root", root},
+		{"asana", "help", "tasks", "--root", root},
+	}
+	topic := ""
+	for _, args := range topicAliases {
+		stdout, _ := runCLI(t, args)
+		if topic == "" {
+			topic = stdout
+		} else if stdout != topic {
+			t.Fatalf("Run(%v) output differs from topic help", args)
+		}
+	}
+	for _, want := range []string{"pm asana tasks", "tasks list", "tasks create"} {
+		if !strings.Contains(topic, want) {
+			t.Fatalf("topic manual missing %q:\n%s", want, topic)
+		}
+	}
+
+	leafAliases := [][]string{
+		{"asana", "tasks", "list", "--help", "--root", root},
+		{"asana", "tasks", "list", "-h", "--root", root},
+		{"help", "asana", "tasks", "list", "--root", root},
+		{"man", "asana", "tasks", "list", "--root", root},
+		{"asana", "help", "tasks", "list", "--root", root},
+	}
+	leaf := ""
+	for _, args := range leafAliases {
+		stdout, _ := runCLI(t, args)
+		if leaf == "" {
+			leaf = stdout
+		} else if stdout != leaf {
+			t.Fatalf("Run(%v) output differs from leaf help", args)
+		}
+	}
+	for _, want := range []string{"pm asana tasks list", "stream=tasks", "--assignee", "--workspace", "EXAMPLES"} {
+		if !strings.Contains(leaf, want) {
+			t.Fatalf("leaf manual missing %q:\n%s", want, leaf)
+		}
+	}
+
+	if _, err := os.Stat(filepath.Join(root, ".polymetrics")); !os.IsNotExist(err) {
+		t.Fatalf("credential-free help created project state: err=%v", err)
+	}
+}
+
+func TestConnectorHelpJSONMatchesTextManual(t *testing.T) {
+	root := t.TempDir()
+	cases := []struct {
+		args        []string
+		wantCommand string
+		textArgs    []string
+	}{
+		{args: []string{"asana", "--json", "--root", root}, wantCommand: "asana", textArgs: []string{"asana", "--root", root}},
+		{args: []string{"help", "asana", "tasks", "--json", "--root", root}, wantCommand: "asana tasks", textArgs: []string{"asana", "tasks", "--root", root}},
+		{args: []string{"asana", "tasks", "list", "--help", "--json", "--root", root}, wantCommand: "asana tasks list", textArgs: []string{"asana", "tasks", "list", "--help", "--root", root}},
+	}
+	for _, tt := range cases {
+		t.Run(tt.wantCommand, func(t *testing.T) {
+			text, _ := runCLI(t, tt.textArgs)
+			first, _ := runCLI(t, tt.args)
+			second, _ := runCLI(t, tt.args)
+			if first != second {
+				t.Fatalf("JSON help is not byte deterministic:\nfirst=%s\nsecond=%s", first, second)
+			}
+			var env struct {
+				APIVersion string `json:"api_version"`
+				Kind       string `json:"kind"`
+				Command    string `json:"command"`
+				Manual     string `json:"manual"`
+			}
+			if err := json.Unmarshal([]byte(first), &env); err != nil {
+				t.Fatalf("decode JSON help: %v\n%s", err, first)
+			}
+			if env.APIVersion == "" || env.Kind != "CommandManual" || env.Command != tt.wantCommand || env.Manual != text {
+				t.Fatalf("JSON help envelope = %+v, want command=%q and exact text manual", env, tt.wantCommand)
+			}
+		})
+	}
+}
+
+func TestConnectorHelpKeepsStaticHelpJSONConsistent(t *testing.T) {
+	text, _ := runCLI(t, []string{"help", "connectors"})
+	raw, _ := runCLI(t, []string{"help", "connectors", "--json"})
+	var env struct {
+		Kind    string `json:"kind"`
+		Command string `json:"command"`
+		Manual  string `json:"manual"`
+	}
+	if err := json.Unmarshal([]byte(raw), &env); err != nil {
+		t.Fatalf("decode static JSON help: %v\n%s", err, raw)
+	}
+	if env.Kind != "CommandManual" || env.Command != "connectors" || env.Manual != text {
+		t.Fatalf("static JSON help envelope = %+v, want exact connectors manual", env)
+	}
+}
+
+func TestConnectorHelpRejectsUnknownPrefixWithoutOpeningProject(t *testing.T) {
+	root := t.TempDir()
+	for _, args := range [][]string{
+		{"asana", "tasks", "unknown", "--help", "--json", "--root", root},
+		{"asana", "tasks", "unknown", "--json", "--root", root},
+	} {
+		var stdout, stderr bytes.Buffer
+		code := cli.Run(args, &stdout, &stderr)
+		if code == 0 {
+			t.Fatalf("Run(%v) code = 0; stdout=%s", args, stdout.String())
+		}
+		for _, want := range []string{`"category": "usage"`, "unknown connector help path"} {
+			if !strings.Contains(stdout.String(), want) {
+				t.Fatalf("Run(%v) output missing %q:\nstdout=%s\nstderr=%s", args, want, stdout.String(), stderr.String())
+			}
+		}
+	}
+	if _, err := os.Stat(filepath.Join(root, ".polymetrics")); !os.IsNotExist(err) {
+		t.Fatalf("unknown help path created project state: err=%v", err)
+	}
+}
+
+func TestConnectorHelpDoesNotConvertFullCommandIntoHelp(t *testing.T) {
+	root := t.TempDir()
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"asana", "tasks", "list", "--json", "--root", root}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("full command unexpectedly succeeded without project: stdout=%s", stdout.String())
+	}
+	if strings.Contains(stdout.String(), `"kind": "CommandManual"`) || strings.Contains(stderr.String(), "SYNOPSIS") {
+		t.Fatalf("full command was converted into help:\nstdout=%s\nstderr=%s", stdout.String(), stderr.String())
 	}
 }
 

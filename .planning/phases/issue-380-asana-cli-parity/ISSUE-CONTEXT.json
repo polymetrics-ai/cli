@@ -1,0 +1,101 @@
+{
+  "issue": 380,
+  "parent_issue": 380,
+  "objective": "Deliver safe Asana CLI parity through seven issue-first stacked slices and a human-gated parent PR",
+  "scope": [
+    "Asana CLI metadata, help/docs, stream execution, REST operation ledger, direct reads, bounded attachment downloads, and reverse ETL policy",
+    "GSD planning, TDD, verification, worker handoffs, and automated review evidence",
+    "#381 CLI surface metadata: validate commands for all 12 existing streams and typed write references without raw API access; no dependencies",
+    "#382 help/docs renderer: credential-free namespace, topic, leaf, JSON, manual, generated artifact, and website parity; depends on #381",
+    "#383 stream runner: representative list commands use the bounded generic stream path with pagination and no duplicate transport; depends on #381",
+    "#384 operation ledger: all 250 baseline REST endpoints retain source evidence and exactly one safe primary classification or explicit exclusion; no dependencies",
+    "#385 direct reads: only fixed allow-listed reads execute with bounded JSON output and declared redaction; depends on #384",
+    "#386 bounded attachment downloads: fixed operations enforce byte limits, safe-root confinement, traversal and symlink defenses, cancellation, and overwrite policy; depends on #384",
+    "#387 reverse ETL safety policy: product-safe writes map to typed actions behind plan-preview-approval-execute while sensitive, admin, and destructive operations remain governed; depends on #384"
+  ],
+  "non_goals": [
+    "credentialed live Asana calls",
+    "generic HTTP, shell, SQL, or arbitrary API tools",
+    "additional internet research during milestone intake; the linked issue, committed top-100 research, existing Asana API ledger, and parent plan are authoritative",
+    "parent PR merge to main"
+  ],
+  "acceptance_criteria": [
+    "all seven sub-issues are integrated through green reviewed stacked PRs",
+    "Asana connector validation and full parent verification pass at the recorded head",
+    "CLI help, manual, website, generated artifacts, fixture tests, safety policy, and review evidence are complete"
+  ],
+  "dependencies": [],
+  "write_scope": [
+    ".planning/phases/issue-380-asana-cli-parity/**",
+    "internal/connectors/defs/asana/**",
+    "internal/connectors/defs/defs_test.go",
+    "internal/connectors/native/asana/**",
+    "internal/connectors/engine/**",
+    "internal/connectors/commandrunner/**",
+    "internal/cli/**",
+    "cmd/connectorgen/**",
+    "docs/cli/**",
+    "docs/connectors/asana/**",
+    "website/**"
+  ],
+  "required_reading": [
+    "AGENTS.md",
+    "docs/migration/HANDOFF-CODEX.md",
+    "docs/migration/conventions.md",
+    ".agents/agentic-delivery/references/gsd-pi-adapter.md",
+    ".agents/agentic-delivery/contracts/issue-agent-contract.md",
+    ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
+    ".agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md",
+    ".agents/agentic-delivery/references/cli-help-docs-website-parity.md"
+  ],
+  "required_skills": [
+    "gsd-programming-loop",
+    "github-issue-first-delivery",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-documentation"
+  ],
+  "tdd": {
+    "red": "record a failing observable behavior test per implementation slice before production edits",
+    "green": "run the focused test and connector validation successfully at the implementation head",
+    "refactor": "simplify declarative metadata or Go code while retaining focused and broader green gates"
+  },
+  "verification": [
+    "go run ./cmd/connectorgen validate internal/connectors/defs --json",
+    "go test ./internal/connectors/conformance -run TestConformance/asana -count=1",
+    "go test ./...",
+    "go vet ./...",
+    "go build ./cmd/pm",
+    "make verify",
+    "git diff --check"
+  ],
+  "safety": [
+    "never request print summarize or store secret values",
+    "fixture and httptest validation only; no live credentialed Asana calls",
+    "do not fetch or recrawl the Asana documentation corpus during milestone intake; preserve external URLs as citations and start from committed evidence",
+    "writes remain typed and follow plan preview approval execute",
+    "no generic HTTP shell SQL or arbitrary API escape hatch"
+  ],
+  "human_gates": [
+    "new dependencies or auth scope changes",
+    "secret access credentialed checks destructive external actions or reverse ETL execution",
+    "quality gate reductions or parent PR merge to main"
+  ],
+  "branch": "feat/380-asana-cli-parity",
+  "pr_base": "main",
+  "review_route": "stacked sub-PR review with parent-PR fallback and final human approval",
+  "sources": [
+    "GitHub issue #380 and linked sub-issues #381 through #387, fully summarized in this context",
+    "docs/plans/connector-cli-parity-top100-research.md",
+    "internal/connectors/defs/asana/docs.md",
+    "internal/connectors/defs/asana/api_surface.json",
+    "internal/connectors/defs/asana/streams.json",
+    "internal/connectors/defs/asana/writes.json"
+  ]
+}

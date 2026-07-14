@@ -2,23 +2,138 @@ package cli
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
 )
 
-func writeConnectorDocs(dir string, registry *connectors.Registry) error {
+func writeCLIDocs(dir string, registry *connectors.Registry, selected ...string) error {
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		return err
+	}
+	if len(selected) == 0 {
+		topics := make([]string, 0, len(docs))
+		for topic := range docs {
+			if topic == "" || topic == "pm" {
+				continue
+			}
+			topics = append(topics, topic)
+		}
+		sort.Strings(topics)
+		for _, topic := range topics {
+			path := filepath.Join(dir, topic+".md")
+			if err := os.WriteFile(path, []byte(cliDocMarkdown(docs[topic])), 0o644); err != nil {
+				return err
+			}
+		}
+	}
+	return writeConnectorCommandDocs(dir, registry, selected...)
+}
+
+func validateCLIDocs(dir string, registry *connectors.Registry, selected ...string) error {
+	return validateConnectorCommandDocs(dir, registry, selected...)
+}
+
+func cliDocMarkdown(text string) string {
+	return "```\n" + text + "\n```\n"
+}
+
+func writeConnectorCommandDocs(dir string, registry *connectors.Registry, selected ...string) error {
+	names, err := connectorDocNames(registry, selected)
+	if err != nil {
+		return err
+	}
+	for _, name := range names {
+		connector, ok := registry.Get(name)
+		if !ok {
+			continue
+		}
+		provider, ok := connector.(connectors.CommandSurfaceProvider)
+		if !ok || provider.CommandSurface() == nil {
+			continue
+		}
+		markdown, err := connectorCommandDocMarkdown(name, provider.CommandSurface())
+		if err != nil {
+			return err
+		}
+		path := filepath.Join(dir, name+".md")
+		if err := os.WriteFile(path, []byte(markdown), 0o644); err != nil {
+			return fmt.Errorf("write connector command doc %s: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func validateConnectorCommandDocs(dir string, registry *connectors.Registry, selected ...string) error {
+	names, err := connectorDocNames(registry, selected)
+	if err != nil {
+		return err
+	}
+	for _, name := range names {
+		connector, ok := registry.Get(name)
+		if !ok {
+			continue
+		}
+		provider, ok := connector.(connectors.CommandSurfaceProvider)
+		if !ok || provider.CommandSurface() == nil {
+			continue
+		}
+		markdown, err := connectorCommandDocMarkdown(name, provider.CommandSurface())
+		if err != nil {
+			return err
+		}
+		path := filepath.Join(dir, name+".md")
+		if err := validateGeneratedFile(path, markdown, "connector command doc"); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func connectorCommandDocMarkdown(name string, surface *connectors.CommandSurface) (string, error) {
+	var out strings.Builder
+	handled, err := tryWriteConnectorSurfaceHelp(name, surface, nil, &out, false)
+	if err != nil {
+		return "", err
+	}
+	if !handled {
+		return "", fmt.Errorf("connector %s command surface did not render namespace help", name)
+	}
+	return "# pm " + name + "\n\n```text\n" + strings.TrimRight(out.String(), "\n") + "\n```\n", nil
+}
+
+func validateGeneratedFile(path, want, label string) error {
+	got, err := os.ReadFile(path)
+	if err != nil {
+		return fmt.Errorf("missing %s at %s: %w", label, path, err)
+	}
+	if string(got) != want {
+		return fmt.Errorf("%s drift at %s; run pm docs generate", label, path)
+	}
+	return nil
+}
+
+func writeConnectorDocs(dir string, registry *connectors.Registry, selected ...string) error {
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return fmt.Errorf("create connector docs dir: %w", err)
 	}
-	if err := copyConnectorIconAssets(dir); err != nil {
-		return err
+	global := len(selected) == 0
+	if global {
+		if err := copyConnectorIconAssets(dir); err != nil {
+			return err
+		}
+		if err := writeConnectorCatalogDocs(filepath.Join(dir, "catalog"), registry.CatalogEntries()); err != nil {
+			return err
+		}
 	}
-	if err := writeConnectorCatalogDocs(filepath.Join(dir, "catalog"), registry.CatalogEntries()); err != nil {
+	names, err := connectorDocNames(registry, selected)
+	if err != nil {
 		return err
 	}
 	index := strings.Builder{}
@@ -27,67 +142,132 @@ func writeConnectorDocs(dir string, registry *connectors.Registry) error {
 	index.WriteString("## Connector Catalog\n\n")
 	index.WriteString("- [All connectors](catalog/all-connectors.md): generated catalog from declarative bundles and Tier-3 natives.\n\n")
 	index.WriteString("## Runtime Connectors\n\n")
-	for _, meta := range registry.List() {
-		connector, ok := registry.Get(meta.Name)
+	for _, name := range names {
+		connector, ok := registry.Get(name)
 		if !ok {
 			continue
 		}
 		if err := connectors.ValidateConnectorGuide(connector); err != nil {
 			return err
 		}
-		connectorDir := filepath.Join(dir, meta.Name)
+		connectorDir := filepath.Join(dir, name)
 		if err := os.MkdirAll(connectorDir, 0o755); err != nil {
-			return fmt.Errorf("create connector docs %s: %w", meta.Name, err)
+			return fmt.Errorf("create connector docs %s: %w", name, err)
 		}
-		manual := "# pm connectors inspect " + meta.Name + "\n\n```text\n" + connectors.RenderConnectorManual(connector) + "\n```\n"
+		manual := trimGeneratedTrailingWhitespace(connectorManualDocMarkdown(name, connector))
 		if err := os.WriteFile(filepath.Join(connectorDir, "MANUAL.md"), []byte(manual), 0o644); err != nil {
-			return fmt.Errorf("write connector manual %s: %w", meta.Name, err)
+			return fmt.Errorf("write connector manual %s: %w", name, err)
 		}
-		skill := connectors.RenderConnectorSkill(connector)
+		skill := trimGeneratedTrailingWhitespace(connectors.RenderConnectorSkill(connector))
 		if err := os.WriteFile(filepath.Join(connectorDir, "SKILL.md"), []byte(skill), 0o644); err != nil {
-			return fmt.Errorf("write connector skill %s: %w", meta.Name, err)
+			return fmt.Errorf("write connector skill %s: %w", name, err)
 		}
-		index.WriteString("- [" + meta.Name + "](" + meta.Name + "/MANUAL.md): " + meta.Description + "\n")
+		if global {
+			index.WriteString("- [" + name + "](" + name + "/MANUAL.md): " + connector.Metadata().Description + "\n")
+		}
 	}
-	if err := os.WriteFile(filepath.Join(dir, "README.md"), []byte(index.String()), 0o644); err != nil {
-		return fmt.Errorf("write connector docs index: %w", err)
+	if global {
+		if err := os.WriteFile(filepath.Join(dir, "README.md"), []byte(index.String()), 0o644); err != nil {
+			return fmt.Errorf("write connector docs index: %w", err)
+		}
 	}
 	return nil
 }
 
-func validateConnectorDocs(dir string, registry *connectors.Registry) error {
-	if err := validateConnectorCatalogDocs(filepath.Join(dir, "catalog"), len(registry.CatalogEntries())); err != nil {
+func validateConnectorDocs(dir string, registry *connectors.Registry, selected ...string) error {
+	global := len(selected) == 0
+	if global {
+		if err := validateConnectorCatalogDocs(filepath.Join(dir, "catalog"), len(registry.CatalogEntries())); err != nil {
+			return err
+		}
+		if err := connectors.ValidateConnectorIcons(dir, registry.CatalogEntries(), registry.List()); err != nil {
+			return err
+		}
+	}
+	names, err := connectorDocNames(registry, selected)
+	if err != nil {
 		return err
 	}
-	if err := connectors.ValidateConnectorIcons(dir, registry.CatalogEntries(), registry.List()); err != nil {
-		return err
-	}
-	for _, meta := range registry.List() {
-		connector, ok := registry.Get(meta.Name)
+	for _, name := range names {
+		connector, ok := registry.Get(name)
 		if !ok {
 			continue
 		}
 		if err := connectors.ValidateConnectorGuide(connector); err != nil {
 			return err
 		}
-		manualPath := filepath.Join(dir, meta.Name, "MANUAL.md")
-		manual, err := os.ReadFile(manualPath)
-		if err != nil {
-			return fmt.Errorf("connector %s missing manual at %s: %w", meta.Name, manualPath, err)
-		}
-		for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "ICON", "SECURITY", "AGENT WORKFLOW"} {
-			if !strings.Contains(string(manual), required) {
-				return fmt.Errorf("connector %s manual missing %s", meta.Name, required)
+		manualPath := filepath.Join(dir, name, "MANUAL.md")
+		if global {
+			manual, err := os.ReadFile(manualPath)
+			if err != nil {
+				return fmt.Errorf("connector %s missing manual at %s: %w", name, manualPath, err)
 			}
+			for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "ICON", "SECURITY", "AGENT WORKFLOW"} {
+				if !strings.Contains(string(manual), required) {
+					return fmt.Errorf("connector %s manual missing %s", name, required)
+				}
+			}
+			if err := validateConnectorSkillStructure(dir, name); err != nil {
+				return err
+			}
+			continue
 		}
-		if err := validateConnectorSkillFile(dir, meta.Name); err != nil {
+		manual := trimGeneratedTrailingWhitespace(connectorManualDocMarkdown(name, connector))
+		if err := validateGeneratedFile(manualPath, manual, "connector manual"); err != nil {
+			return err
+		}
+		if err := validateConnectorSkillFile(dir, name, connector); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func validateConnectorSkillFile(dir, name string) error {
+func connectorDocNames(registry *connectors.Registry, selected []string) ([]string, error) {
+	if len(selected) == 0 {
+		names := make([]string, 0, len(registry.List()))
+		for _, meta := range registry.List() {
+			names = append(names, meta.Name)
+		}
+		return names, nil
+	}
+	unique := make(map[string]struct{}, len(selected))
+	for _, name := range selected {
+		name = strings.TrimSpace(name)
+		if name == "" {
+			return nil, errors.New("--connector requires a connector name")
+		}
+		if _, ok := registry.Get(name); !ok {
+			return nil, fmt.Errorf("unknown connector %q", name)
+		}
+		unique[name] = struct{}{}
+	}
+	names := make([]string, 0, len(unique))
+	for name := range unique {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	return names, nil
+}
+
+func connectorManualDocMarkdown(name string, connector connectors.Connector) string {
+	return "# pm connectors inspect " + name + "\n\n```text\n" + connectors.RenderConnectorManual(connector) + "\n```\n"
+}
+
+func validateConnectorSkillFile(dir, name string, connector connectors.Connector) error {
+	skillPath := filepath.Join(dir, name, "SKILL.md")
+	return validateGeneratedFile(skillPath, trimGeneratedTrailingWhitespace(connectors.RenderConnectorSkill(connector)), "connector skill")
+}
+
+func trimGeneratedTrailingWhitespace(text string) string {
+	lines := strings.Split(text, "\n")
+	for i := range lines {
+		lines[i] = strings.TrimRight(lines[i], " \t")
+	}
+	return strings.Join(lines, "\n")
+}
+
+func validateConnectorSkillStructure(dir, name string) error {
 	skillPath := filepath.Join(dir, name, "SKILL.md")
 	skill, err := os.ReadFile(skillPath)
 	if err != nil {

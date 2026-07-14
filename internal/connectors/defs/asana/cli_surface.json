@@ -1,0 +1,480 @@
+{
+  "tagline": "Inspect and safely plan changes to Asana workspaces, projects, and tasks.",
+  "usage": "pm asana <topic> <leaf> [flags]",
+  "coverage_policy": {
+    "require_all_streams": true,
+    "require_all_writes": true
+  },
+  "groups": [
+    {
+      "id": "organization",
+      "title": "Organization",
+      "commands": [
+        "workspaces",
+        "users",
+        "teams",
+        "team-memberships",
+        "workspace-memberships"
+      ]
+    },
+    {
+      "id": "work-management",
+      "title": "Work Management",
+      "commands": [
+        "projects",
+        "project-statuses",
+        "sections",
+        "tasks",
+        "stories"
+      ]
+    },
+    {
+      "id": "metadata",
+      "title": "Metadata",
+      "commands": [
+        "tags",
+        "custom-fields"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write deterministic machine-readable JSON output."
+    }
+  ],
+  "commands": [
+    {
+      "path": "workspaces list",
+      "summary": "List available Asana workspaces.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspaces",
+      "examples": [
+        "pm asana workspaces list --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/workspaces" },
+        { "method": "GET", "path": "/workspaces/{workspace_gid}" }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "List Asana users, optionally scoped to a workspace.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "flags": [
+        { "name": "workspace", "type": "string", "summary": "Scope users to an Asana workspace gid.", "maps_to": "config.workspace_id" }
+      ],
+      "examples": [
+        "pm asana users list --workspace <workspace-gid> --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/users" }
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "List teams in an Asana workspace.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "flags": [
+        { "name": "workspace", "type": "string", "summary": "Select the Asana workspace gid.", "maps_to": "config.workspace_id" }
+      ],
+      "examples": [
+        "pm asana teams list --workspace <workspace-gid> --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/workspaces/{workspace_gid}/teams" }
+      ]
+    },
+    {
+      "path": "team-memberships list",
+      "summary": "List Asana team memberships.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team_memberships",
+      "flags": [
+        { "name": "team", "type": "string", "summary": "Filter by Asana team gid.", "maps_to": "config.team_id" },
+        { "name": "workspace", "type": "string", "summary": "Filter by Asana workspace gid.", "maps_to": "config.workspace_id" }
+      ],
+      "examples": [
+        "pm asana team-memberships list --team <team-gid> --workspace <workspace-gid> --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/team_memberships" }
+      ]
+    },
+    {
+      "path": "workspace-memberships list",
+      "summary": "List memberships in an Asana workspace.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspace_memberships",
+      "flags": [
+        { "name": "workspace", "type": "string", "summary": "Select the Asana workspace gid.", "maps_to": "config.workspace_id" }
+      ],
+      "examples": [
+        "pm asana workspace-memberships list --workspace <workspace-gid> --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/workspaces/{workspace_gid}/workspace_memberships" }
+      ]
+    },
+    {
+      "path": "projects list",
+      "summary": "List Asana projects, optionally scoped to a workspace.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "flags": [
+        { "name": "workspace", "type": "string", "summary": "Scope projects to an Asana workspace gid.", "maps_to": "config.workspace_id" }
+      ],
+      "examples": [
+        "pm asana projects list --workspace <workspace-gid> --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/projects" }
+      ]
+    },
+    {
+      "path": "projects create",
+      "summary": "Plan creation of an Asana project.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_project",
+      "flags": [
+        { "name": "data", "type": "string", "summary": "Structured project fields object.", "maps_to": "record.data" },
+        { "name": "name", "type": "string", "summary": "Project name.", "maps_to": "record.data.name" }
+      ],
+      "examples": [
+        "pm asana projects create --name <project-name> --data <project-fields-json>"
+      ],
+      "api_surface": [
+        { "method": "POST", "path": "/projects" }
+      ],
+      "risk": "external mutation; creates a new project visible to the team/workspace; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "projects update",
+      "summary": "Plan updates to an Asana project.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_project",
+      "flags": [
+        { "name": "gid", "type": "string", "summary": "Project gid to update.", "maps_to": "record.gid" },
+        { "name": "data", "type": "string", "summary": "Structured project field updates.", "maps_to": "record.data" }
+      ],
+      "examples": [
+        "pm asana projects update --gid <project-gid> --data <project-fields-json>"
+      ],
+      "api_surface": [
+        { "method": "PUT", "path": "/projects/{project_gid}" }
+      ],
+      "risk": "external mutation; overwrites project fields (can archive, reassign owner); approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "projects delete",
+      "summary": "Plan deletion of an Asana project.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_project",
+      "flags": [
+        { "name": "gid", "type": "string", "summary": "Project gid to delete.", "maps_to": "record.gid" }
+      ],
+      "examples": [
+        "pm asana projects delete --gid <project-gid>"
+      ],
+      "api_surface": [
+        { "method": "DELETE", "path": "/projects/{project_gid}" }
+      ],
+      "risk": "irreversible external deletion of a project and its association with its tasks; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "project-statuses list",
+      "summary": "List statuses for discovered Asana projects.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_statuses",
+      "examples": [
+        "pm asana project-statuses list --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/projects/{project_gid}/project_statuses" }
+      ]
+    },
+    {
+      "path": "sections list",
+      "summary": "List sections for discovered Asana projects.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sections",
+      "examples": [
+        "pm asana sections list --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/projects/{project_gid}/sections" }
+      ]
+    },
+    {
+      "path": "sections create",
+      "summary": "Plan creation of an Asana project section.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_section",
+      "flags": [
+        { "name": "project-gid", "type": "string", "summary": "Parent project gid.", "maps_to": "record.project_gid" },
+        { "name": "data", "type": "string", "summary": "Structured section fields object.", "maps_to": "record.data" },
+        { "name": "name", "type": "string", "summary": "Section name.", "maps_to": "record.data.name" }
+      ],
+      "examples": [
+        "pm asana sections create --project-gid <project-gid> --name <section-name> --data <section-fields-json>"
+      ],
+      "api_surface": [
+        { "method": "POST", "path": "/projects/{project_gid}/sections" }
+      ],
+      "risk": "external mutation; creates a new section in a project's board/list view; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "sections update",
+      "summary": "Plan updates to an Asana section.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_section",
+      "flags": [
+        { "name": "gid", "type": "string", "summary": "Section gid to update.", "maps_to": "record.gid" },
+        { "name": "data", "type": "string", "summary": "Structured section field updates.", "maps_to": "record.data" },
+        { "name": "name", "type": "string", "summary": "Replacement section name.", "maps_to": "record.data.name" }
+      ],
+      "examples": [
+        "pm asana sections update --gid <section-gid> --name <section-name> --data <section-fields-json>"
+      ],
+      "api_surface": [
+        { "method": "PUT", "path": "/sections/{section_gid}" }
+      ],
+      "risk": "external mutation; renames a section; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "sections delete",
+      "summary": "Plan deletion of an empty Asana section.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_section",
+      "flags": [
+        { "name": "gid", "type": "string", "summary": "Section gid to delete.", "maps_to": "record.gid" }
+      ],
+      "examples": [
+        "pm asana sections delete --gid <section-gid>"
+      ],
+      "api_surface": [
+        { "method": "DELETE", "path": "/sections/{section_gid}" }
+      ],
+      "risk": "irreversible external deletion of a section (Asana requires the section be empty of tasks first); approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "tasks list",
+      "summary": "List Asana tasks with optional workspace, project, and assignee scopes.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "flags": [
+        { "name": "assignee", "type": "string", "summary": "Filter by assignee gid or me.", "maps_to": "config.assignee" },
+        { "name": "project", "type": "string", "summary": "Filter by Asana project gid.", "maps_to": "config.project_id" },
+        { "name": "workspace", "type": "string", "summary": "Filter by Asana workspace gid.", "maps_to": "config.workspace_id" }
+      ],
+      "examples": [
+        "pm asana tasks list --project <project-gid> --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/tasks" }
+      ]
+    },
+    {
+      "path": "tasks create",
+      "summary": "Plan creation of an Asana task.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_task",
+      "flags": [
+        { "name": "data", "type": "string", "summary": "Structured task fields object.", "maps_to": "record.data" },
+        { "name": "name", "type": "string", "summary": "Task name.", "maps_to": "record.data.name" },
+        { "name": "workspace", "type": "string", "summary": "Task workspace gid.", "maps_to": "record.data.workspace" }
+      ],
+      "examples": [
+        "pm asana tasks create --name <task-name> --workspace <workspace-gid> --data <task-fields-json>"
+      ],
+      "api_surface": [
+        { "method": "POST", "path": "/tasks" }
+      ],
+      "risk": "external mutation; creates a new task visible to the whole team/project; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "tasks update",
+      "summary": "Plan updates to an Asana task.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_task",
+      "flags": [
+        { "name": "gid", "type": "string", "summary": "Task gid to update.", "maps_to": "record.gid" },
+        { "name": "data", "type": "string", "summary": "Structured task field updates.", "maps_to": "record.data" }
+      ],
+      "examples": [
+        "pm asana tasks update --gid <task-gid> --data <task-fields-json>"
+      ],
+      "api_surface": [
+        { "method": "PUT", "path": "/tasks/{task_gid}" }
+      ],
+      "risk": "external mutation; overwrites task fields (e.g. can mark completed, reassign, reschedule); approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "tasks delete",
+      "summary": "Plan deletion of an Asana task.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task",
+      "flags": [
+        { "name": "gid", "type": "string", "summary": "Task gid to delete.", "maps_to": "record.gid" }
+      ],
+      "examples": [
+        "pm asana tasks delete --gid <task-gid>"
+      ],
+      "api_surface": [
+        { "method": "DELETE", "path": "/tasks/{task_gid}" }
+      ],
+      "risk": "irreversible external deletion of a task; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "tasks comment",
+      "summary": "Plan an Asana task comment.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_comment",
+      "flags": [
+        { "name": "task-gid", "type": "string", "summary": "Task gid receiving the comment.", "maps_to": "record.task_gid" },
+        { "name": "data", "type": "string", "summary": "Structured comment fields object.", "maps_to": "record.data" },
+        { "name": "text", "type": "string", "summary": "Plain-text comment body.", "maps_to": "record.data.text" }
+      ],
+      "examples": [
+        "pm asana tasks comment --task-gid <task-gid> --text <comment-text> --data <comment-fields-json>"
+      ],
+      "api_surface": [
+        { "method": "POST", "path": "/tasks/{task_gid}/stories" }
+      ],
+      "risk": "external mutation; posts a comment visible to everyone with access to the task; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "stories list",
+      "summary": "List stories for discovered Asana tasks.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stories",
+      "examples": [
+        "pm asana stories list --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/tasks/{task_gid}/stories" }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "List Asana tags, optionally scoped to a workspace.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "flags": [
+        { "name": "workspace", "type": "string", "summary": "Scope tags to an Asana workspace gid.", "maps_to": "config.workspace_id" }
+      ],
+      "examples": [
+        "pm asana tags list --workspace <workspace-gid> --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/tags" }
+      ]
+    },
+    {
+      "path": "tags create",
+      "summary": "Plan creation of an Asana tag.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "flags": [
+        { "name": "data", "type": "string", "summary": "Structured tag fields object.", "maps_to": "record.data" },
+        { "name": "name", "type": "string", "summary": "Tag name.", "maps_to": "record.data.name" }
+      ],
+      "examples": [
+        "pm asana tags create --name <tag-name> --data <tag-fields-json>"
+      ],
+      "api_surface": [
+        { "method": "POST", "path": "/tags" }
+      ],
+      "risk": "external mutation; creates a new workspace-visible tag; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "tags update",
+      "summary": "Plan updates to an Asana tag.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tag",
+      "flags": [
+        { "name": "gid", "type": "string", "summary": "Tag gid to update.", "maps_to": "record.gid" },
+        { "name": "data", "type": "string", "summary": "Structured tag field updates.", "maps_to": "record.data" }
+      ],
+      "examples": [
+        "pm asana tags update --gid <tag-gid> --data <tag-fields-json>"
+      ],
+      "api_surface": [
+        { "method": "PUT", "path": "/tags/{tag_gid}" }
+      ],
+      "risk": "external mutation; renames/recolors a tag visible workspace-wide; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "tags delete",
+      "summary": "Plan deletion of an Asana tag.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tag",
+      "flags": [
+        { "name": "gid", "type": "string", "summary": "Tag gid to delete.", "maps_to": "record.gid" }
+      ],
+      "examples": [
+        "pm asana tags delete --gid <tag-gid>"
+      ],
+      "api_surface": [
+        { "method": "DELETE", "path": "/tags/{tag_gid}" }
+      ],
+      "risk": "irreversible external deletion of a tag, removed from every task that carries it; approval required",
+      "approval": "Requires plan, preview, explicit approval, then execute."
+    },
+    {
+      "path": "custom-fields list",
+      "summary": "List custom fields in an Asana workspace.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "flags": [
+        { "name": "workspace", "type": "string", "summary": "Select the Asana workspace gid.", "maps_to": "config.workspace_id" }
+      ],
+      "examples": [
+        "pm asana custom-fields list --workspace <workspace-gid> --json"
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/workspaces/{workspace_gid}/custom_fields" }
+      ]
+    }
+  ]
+}

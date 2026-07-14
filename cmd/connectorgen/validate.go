@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
+	"net/url"
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -22,12 +24,15 @@ const (
 	rulePrimaryKeyMissing        = "primary_key_missing"
 	ruleCursorFieldMissing       = "cursor_field_missing"
 	ruleWritePathFields          = "write_path_fields"
+	ruleSurfaceProvenance        = "surface_provenance"
 	ruleSurfaceCoverage          = "surface_coverage"
 	ruleSurfaceUnknownTarget     = "surface_unknown_target"
 	ruleSurfaceIncomplete        = "surface_incomplete"
 	ruleSurfaceCategory          = "surface_category"
 	ruleSurfaceOperation         = "surface_operation"
 	ruleSurfaceFailFirstRun      = "surface_fail_first_run"
+	ruleCLISurfaceStructure      = "cli_surface_structure"
+	ruleCLISurfaceCoverage       = "cli_surface_coverage"
 	ruleCLISurfaceUnknownTarget  = "cli_surface_unknown_target"
 	ruleCLISurfaceMissingMapping = "cli_surface_missing_mapping"
 	ruleCLISurfaceSafety         = "cli_surface_safety"
@@ -137,6 +142,17 @@ var requiredDocHeadings = []string{
 // Fixtures must only ever carry synthetic data (THREAT-MODEL §4).
 var secretLiteralPattern = regexp.MustCompile(`(?i)(bearer\s+[a-z0-9_\-\.]{16,}|(api[_-]?key|access[_-]?token|secret|password)["' ]*[:=]\s*["']?[a-z0-9_\-\.]{16,}|\bsk_(live|test)_[a-z0-9]{10,}\b|\bgh[pousr]_[a-z0-9_]{20,}\b|\bgithub_pat_[a-z0-9_]{20,}\b)`)
 
+var (
+	surfaceSourceKindPattern = regexp.MustCompile(`^[a-z][a-z0-9_-]*$`)
+	surfaceRevisionPattern   = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$`)
+	surfaceSHA256Pattern     = regexp.MustCompile(`^[a-f0-9]{64}$`)
+)
+
+var mutableSourceRevisions = map[string]bool{
+	"dev": true, "develop": true, "head": true, "latest": true,
+	"main": true, "master": true, "trunk": true,
+}
+
 // Finding is one validate defect: which connector/file/rule it belongs to and
 // a human-readable message.
 type Finding struct {
@@ -193,7 +209,10 @@ func validateDir(fsys fs.FS) (Report, error) {
 			if list[i].File != list[j].File {
 				return list[i].File < list[j].File
 			}
-			return list[i].Rule < list[j].Rule
+			if list[i].Rule != list[j].Rule {
+				return list[i].Rule < list[j].Rule
+			}
+			return list[i].Message < list[j].Message
 		})
 	}
 	sortFindings(findings)
@@ -512,6 +531,109 @@ func checkWritePathFields(b engine.Bundle) []Finding {
 	return findings
 }
 
+// checkSurfaceProvenance validates source_evidence without reading credentials
+// or fetching SourceURL. Each finding names the failed field but never echoes
+// source material, hashes, notes, or other potentially sensitive values.
+func checkSurfaceProvenance(b engine.Bundle) []Finding {
+	evidence := b.Surface.SourceEvidence
+	if evidence == nil {
+		return nil
+	}
+
+	var findings []Finding
+	addFinding := func(field, invariant string) {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "api_surface.json",
+			Rule:      ruleSurfaceProvenance,
+			Message:   fmt.Sprintf("source_evidence.%s %s", field, invariant),
+		})
+	}
+
+	if !surfaceSourceKindPattern.MatchString(evidence.Kind) {
+		addFinding("kind", "must be a non-empty lowercase source kind")
+	}
+
+	revisionValid := surfaceRevisionPattern.MatchString(evidence.Revision)
+	if !revisionValid {
+		addFinding("revision", "must be a non-empty immutable revision identifier")
+	} else if mutableSourceRevisions[strings.ToLower(evidence.Revision)] {
+		addFinding("revision", "must not name a mutable branch or alias")
+		revisionValid = false
+	}
+
+	sourceURL, err := url.Parse(evidence.SourceURL)
+	if err != nil || !strings.EqualFold(sourceURL.Scheme, "https") || sourceURL.Host == "" || sourceURL.User != nil {
+		addFinding("source_url", "must be an absolute HTTPS URL without user information")
+	} else if sourceURLHasMutableReference(sourceURL) {
+		addFinding("source_url", "must not contain a mutable branch or alias")
+	} else if revisionValid && !sourceURLPinsRevision(sourceURL, evidence.Revision) {
+		addFinding("source_url", "must pin the declared revision in a path segment or query value")
+	}
+
+	if !surfaceSHA256Pattern.MatchString(evidence.SHA256) {
+		addFinding("sha256", "must be exactly 64 lowercase hexadecimal characters")
+	}
+
+	if capturedAt, err := time.Parse("2006-01-02", evidence.CapturedAt); err != nil || capturedAt.Format("2006-01-02") != evidence.CapturedAt {
+		addFinding("captured_at", "must be a valid YYYY-MM-DD date")
+	}
+
+	if evidence.BaselineOperationCount != len(b.Surface.Endpoints) {
+		addFinding("baseline_operation_count", fmt.Sprintf("must equal endpoints length %d", len(b.Surface.Endpoints)))
+	}
+
+	if secretLiteralPattern.MatchString(evidence.SupplementalOperationsNote) {
+		addFinding("supplemental_operations_note", "must not contain a secret-looking literal")
+	}
+
+	return findings
+}
+
+func sourceURLPinsRevision(sourceURL *url.URL, revision string) bool {
+	for _, segment := range sourceURLPathSegments(sourceURL) {
+		if segment == revision {
+			return true
+		}
+	}
+	for _, values := range sourceURL.Query() {
+		for _, value := range values {
+			if value == revision {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func sourceURLHasMutableReference(sourceURL *url.URL) bool {
+	for _, segment := range sourceURLPathSegments(sourceURL) {
+		if mutableSourceRevisions[strings.ToLower(segment)] {
+			return true
+		}
+	}
+	for _, values := range sourceURL.Query() {
+		for _, value := range values {
+			if mutableSourceRevisions[strings.ToLower(value)] {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func sourceURLPathSegments(sourceURL *url.URL) []string {
+	escapedSegments := strings.Split(strings.Trim(sourceURL.EscapedPath(), "/"), "/")
+	segments := make([]string, 0, len(escapedSegments))
+	for _, escapedSegment := range escapedSegments {
+		segment, err := url.PathUnescape(escapedSegment)
+		if err == nil {
+			segments = append(segments, segment)
+		}
+	}
+	return segments
+}
+
 // checkAPISurface enforces design §E.1 rules 1-4:
 //  1. every endpoint has exactly one executable covered_by row or an explicit
 //     blocked non-executable classifier. Legacy surfaces use excluded;
@@ -533,7 +655,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 			Message:   "api_surface.json is required for connector authoring and conformance",
 		}}
 	}
-	var findings []Finding
+	findings := checkSurfaceProvenance(b)
 
 	streams := map[string]bool{}
 	for _, s := range b.Streams {
@@ -741,13 +863,92 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	}
 	endpoints := cliSurfaceEndpointStates(b.Surface)
 
-	var findings []Finding
+	findings := checkCLISurfaceStructure(b)
 	for i, cmd := range b.CLISurface.Commands {
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
+	}
+	findings = append(findings, checkCLISurfaceCoverage(b)...)
+	return findings
+}
+
+func checkCLISurfaceStructure(b engine.Bundle) []Finding {
+	seen := map[string]int{}
+	var findings []Finding
+	for i, cmd := range b.CLISurface.Commands {
+		path := strings.Join(strings.Fields(cmd.Path), " ")
+		if previous, exists := seen[path]; exists {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceStructure,
+				Message:   fmt.Sprintf("duplicate command path %q at commands %d and %d", path, previous, i),
+			})
+			continue
+		}
+		seen[path] = i
+	}
+	return findings
+}
+
+func checkCLISurfaceCoverage(b engine.Bundle) []Finding {
+	policy := b.CLISurface.CoveragePolicy
+	if policy == nil {
+		return nil
+	}
+
+	implementedStreams := map[string]bool{}
+	implementedWrites := map[string]bool{}
+	for _, cmd := range b.CLISurface.Commands {
+		if cmd.Availability != "implemented" {
+			continue
+		}
+		if cmd.Stream != "" {
+			implementedStreams[cmd.Stream] = true
+		}
+		if cmd.Write != "" {
+			implementedWrites[cmd.Write] = true
+		}
+	}
+
+	var missingStreams []string
+	if policy.RequireAllStreams {
+		for _, stream := range b.Streams {
+			if !implementedStreams[stream.Name] {
+				missingStreams = append(missingStreams, stream.Name)
+			}
+		}
+		sort.Strings(missingStreams)
+	}
+	var missingWrites []string
+	if policy.RequireAllWrites {
+		for _, write := range b.Writes {
+			if !implementedWrites[write.Name] {
+				missingWrites = append(missingWrites, write.Name)
+			}
+		}
+		sort.Strings(missingWrites)
+	}
+
+	findings := make([]Finding, 0, len(missingStreams)+len(missingWrites))
+	for _, name := range missingStreams {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceCoverage,
+			Message:   fmt.Sprintf("coverage policy requires an implemented command target for stream %q", name),
+		})
+	}
+	for _, name := range missingWrites {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceCoverage,
+			Message:   fmt.Sprintf("coverage policy requires an implemented command target for write %q", name),
+		})
 	}
 	return findings
 }

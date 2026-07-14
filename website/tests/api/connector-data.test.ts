@@ -84,6 +84,50 @@ describe('connector data route', () => {
     });
   });
 
+  it('returns Asana generated connector catalog data for website docs parity', async () => {
+    const { response, json } = await connectorData('asana');
+
+    expect(response.status).toBe(200);
+    expect(json).toMatchObject({
+      slug: 'asana',
+      name: 'Asana',
+      category: 'api',
+      releaseStage: 'ga',
+      capabilities: {
+        check: true,
+        read: true,
+        write: true,
+        query: false,
+        cdc: false,
+        dynamicSchema: false,
+      },
+    });
+    expect((json.streams as Array<{ name: string }>).map((stream) => stream.name)).toEqual(
+      expect.arrayContaining([
+        'workspaces',
+        'projects',
+        'tasks',
+        'custom_fields',
+        'workspace_memberships',
+      ]),
+    );
+    expect(
+      (json.cliSurface as { commands: Array<Record<string, unknown>> }).commands,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: 'workspace-memberships list',
+          intent: 'etl',
+          availability: 'implemented',
+          stream: 'workspace_memberships',
+          examples: expect.arrayContaining([
+            'pm asana workspace-memberships list --workspace <workspace-gid> --json',
+          ]),
+        }),
+      ]),
+    );
+  });
+
   it('returns a 404 JSON payload for unknown connectors', async () => {
     const { response, json } = await connectorData('missing-connector');
 

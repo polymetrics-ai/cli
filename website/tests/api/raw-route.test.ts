@@ -38,6 +38,18 @@ describe('raw Markdown API', () => {
     expect(text).toContain('management_token');
   });
 
+  it('returns synthetic Asana connector Markdown from generated catalog data', async () => {
+    const { response, text } = await rawMarkdown(['connectors', 'asana']);
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toContain('text/markdown');
+    expect(text).toContain('# Asana connector');
+    expect(text).toContain('Reads Asana workspaces, projects, tasks');
+    expect(text).toContain('- **Write:** Yes');
+    expect(text).toContain('| `workspace_memberships` | gid | - | No |');
+    expect(text).toContain('| `create_task` | POST | create |');
+  });
+
   it('rejects traversal-like docs slugs', async () => {
     const { response, text } = await rawMarkdown(['..', 'quickstart']);
 

@@ -10,6 +10,19 @@
     "reviewed_at": { "type": "string" },
     "operation_ledger_version": { "type": "integer", "enum": [1] },
     "scope": { "type": "string" },
+    "source_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string" },
+        "source_url": { "type": "string" },
+        "revision": { "type": "string" },
+        "sha256": { "type": "string" },
+        "captured_at": { "type": "string" },
+        "baseline_operation_count": { "type": "integer" },
+        "supplemental_operations_note": { "type": "string" }
+      }
+    },
     "endpoints": {
       "type": "array",
       "items": {

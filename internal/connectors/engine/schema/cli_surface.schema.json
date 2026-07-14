@@ -17,6 +17,15 @@
         "source": { "type": "string" }
       }
     },
+    "coverage_policy": {
+      "type": "object",
+      "required": ["require_all_streams", "require_all_writes"],
+      "additionalProperties": false,
+      "properties": {
+        "require_all_streams": { "type": "boolean" },
+        "require_all_writes": { "type": "boolean" }
+      }
+    },
     "groups": {
       "type": "array",
       "items": {
