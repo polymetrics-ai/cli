@@ -4,10 +4,10 @@ Phase: issue-392-github-only-auth
 
 ## Red: Single Supported Provider
 
-- Status: pending
-- Command: targeted `website/tests/auth-config.test.ts` Vitest run.
-- Expected: fail because `SOCIAL_PROVIDER_IDS` still contains Google and LinkedIn.
-- Evidence: to be recorded before production edits.
+- Status: expected failure captured
+- Command: `./node_modules/.bin/vitest run tests/auth-config.test.ts`
+- Result: 1 failed, 2 passed.
+- Evidence: `SOCIAL_PROVIDER_IDS` returned `['github', 'google', 'linkedin']` while the launch contract expected `['github']`.
 
 ## Green: Single Supported Provider
 

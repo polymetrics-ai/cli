@@ -2,19 +2,24 @@
   "schemaVersion": "1.0",
   "phase": "issue-392-github-only-auth",
   "status": "in_progress",
-  "reason": "Planning complete; waiting for the red provider-contract test.",
+  "reason": "Red provider-contract test captured; implementation may begin.",
   "details": {
     "agentMode": "inline",
     "adapter": "manual_fallback",
     "adapterReason": "scripts/gsd prompt programming-loop returned unknown GSD command",
     "coveragePassed": false,
-    "tddGatePassed": false,
+    "tddGatePassed": true,
     "verificationPassed": false,
     "orchestrationDecisions": [
       {
         "cycle": "plan",
         "decision": "local_critical_path",
         "reason": "The scoped provider contract is a tightly coupled single-component change in an isolated issue worktree."
+      },
+      {
+        "cycle": "tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "The targeted provider test failed on the pre-change three-provider contract as expected."
       }
     ],
     "warnings": [
