@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "issue-392-github-only-auth",
+  "status": "in_progress",
+  "reason": "Planning complete; waiting for the red provider-contract test.",
+  "details": {
+    "agentMode": "inline",
+    "adapter": "manual_fallback",
+    "adapterReason": "scripts/gsd prompt programming-loop returned unknown GSD command",
+    "coveragePassed": false,
+    "tddGatePassed": false,
+    "verificationPassed": false,
+    "orchestrationDecisions": [
+      {
+        "cycle": "plan",
+        "decision": "local_critical_path",
+        "reason": "The scoped provider contract is a tightly coupled single-component change in an isolated issue worktree."
+      }
+    ],
+    "warnings": [
+      "frontend-design and web-design-guidelines are named by repository policy but their SKILL.md files are not installed in this checkout"
+    ]
+  },
+  "updatedAt": "2026-07-15T00:00:00.000Z"
+}
