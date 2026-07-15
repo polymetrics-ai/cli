@@ -1,6 +1,13 @@
 {
-  "extensions": ["extensions/gsd"],
-  "prompts": ["prompts"],
-  "skills": ["skills"],
-  "enableSkillCommands": true
+ "extensions": [
+  "extensions/pi-sub-agent",
+  "extensions/gsd"
+ ],
+ "prompts": [
+  "prompts"
+ ],
+ "skills": [
+  "skills"
+ ],
+ "enableSkillCommands": true
 }
