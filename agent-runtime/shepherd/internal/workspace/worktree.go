@@ -24,17 +24,11 @@ type AttemptIdentity struct {
 
 type AttemptState string
 
-const (
-	AttemptCreated             AttemptState = "created"
-	AttemptRunning             AttemptState = "running"
-	AttemptValidated           AttemptState = "validated"
-	AttemptPromoted            AttemptState = "promoted"
-	AttemptDiscarded           AttemptState = "discarded"
-	AttemptRetainedForRecovery AttemptState = "retained_for_recovery"
-)
+const AttemptCreated AttemptState = "created"
 
 type AttemptWorktree struct {
 	Root     string
+	Branch   string
 	State    AttemptState
 	Identity AttemptIdentity
 }
@@ -70,8 +64,22 @@ func NewManager(repoRoot, root string) (*Manager, error) {
 	return &Manager{RepoRoot: canonicalRepo, Root: canonicalRoot}, nil
 }
 
-func (m *Manager) Create(ctx context.Context, identity AttemptIdentity) (AttemptWorktree, error) {
+func (m *Manager) Plan(identity AttemptIdentity) (AttemptWorktree, error) {
 	if err := validateIdentity(identity); err != nil {
+		return AttemptWorktree{}, err
+	}
+	path := filepath.Join(m.Root, safePathPart(identity.DeliveryID), fmt.Sprintf("g%d", identity.Generation), safePathPart(identity.UnitID), fmt.Sprintf("attempt-%d", identity.Attempt))
+	if !strings.HasPrefix(filepath.Clean(path), filepath.Clean(m.Root)+string(os.PathSeparator)) {
+		return AttemptWorktree{}, errors.New("attempt path escapes attempt root")
+	}
+	branchHash := sha256.Sum256([]byte(path))
+	branch := "shepherd/" + safePathPart(identity.DeliveryID) + "/" + safePathPart(identity.UnitID) + "/" + fmt.Sprintf("g%d-a%d-%s", identity.Generation, identity.Attempt, hex.EncodeToString(branchHash[:4]))
+	return AttemptWorktree{Root: path, Branch: branch, State: AttemptCreated, Identity: identity}, nil
+}
+
+func (m *Manager) Create(ctx context.Context, identity AttemptIdentity) (AttemptWorktree, error) {
+	planned, err := m.Plan(identity)
+	if err != nil {
 		return AttemptWorktree{}, err
 	}
 	if head, err := git(ctx, m.RepoRoot, "rev-parse", "HEAD"); err != nil || strings.TrimSpace(string(head)) != identity.BaseHead {
@@ -80,10 +88,7 @@ func (m *Manager) Create(ctx context.Context, identity AttemptIdentity) (Attempt
 		}
 		return AttemptWorktree{}, errors.New("canonical head does not match attempt base")
 	}
-	path := filepath.Join(m.Root, safePathPart(identity.DeliveryID), fmt.Sprintf("g%d", identity.Generation), safePathPart(identity.UnitID), fmt.Sprintf("attempt-%d", identity.Attempt))
-	if !strings.HasPrefix(filepath.Clean(path), filepath.Clean(m.Root)+string(os.PathSeparator)) {
-		return AttemptWorktree{}, errors.New("attempt path escapes attempt root")
-	}
+	path := planned.Root
 	if _, err := os.Stat(path); err == nil {
 		return AttemptWorktree{}, errors.New("attempt worktree already exists")
 	} else if !os.IsNotExist(err) {
@@ -103,12 +108,10 @@ func (m *Manager) Create(ctx context.Context, identity AttemptIdentity) (Attempt
 	if err := rejectSymlinkAncestors(m.Root, parent); err != nil {
 		return AttemptWorktree{}, err
 	}
-	branchHash := sha256.Sum256([]byte(path))
-	branch := "shepherd/" + safePathPart(identity.DeliveryID) + "/" + safePathPart(identity.UnitID) + "/" + fmt.Sprintf("g%d-a%d-%s", identity.Generation, identity.Attempt, hex.EncodeToString(branchHash[:4]))
-	if _, err := git(ctx, m.RepoRoot, "worktree", "add", "-b", branch, path, identity.BaseHead); err != nil {
+	if _, err := git(ctx, m.RepoRoot, "worktree", "add", "-b", planned.Branch, path, identity.BaseHead); err != nil {
 		return AttemptWorktree{}, fmt.Errorf("create attempt worktree: %w", err)
 	}
-	return AttemptWorktree{Root: path, State: AttemptCreated, Identity: identity}, nil
+	return planned, nil
 }
 
 func (m *Manager) PrepareGSDState(ctx context.Context, attempt AttemptWorktree) error {
@@ -372,15 +375,55 @@ func withinAnyScope(path string, scopes []string) bool {
 	return false
 }
 
+type boundedGitBuffer struct {
+	bytes.Buffer
+	limit    int
+	exceeded bool
+}
+
+func (b *boundedGitBuffer) Write(p []byte) (int, error) {
+	original := len(p)
+	remaining := b.limit - b.Len()
+	if remaining <= 0 {
+		b.exceeded = true
+		return original, nil
+	}
+	if len(p) > remaining {
+		_, _ = b.Buffer.Write(p[:remaining])
+		b.exceeded = true
+		return original, nil
+	}
+	_, _ = b.Buffer.Write(p)
+	return original, nil
+}
+
 func git(ctx context.Context, root string, args ...string) ([]byte, error) {
 	commandArgs := append([]string{"-C", root}, args...)
 	cmd := exec.CommandContext(ctx, "git", commandArgs...)
-	cmd.Env = append(os.Environ(), "GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS=")
-	var stdout, stderr bytes.Buffer
+	environment := make([]string, 0, len(os.Environ())+2)
+	for _, entry := range os.Environ() {
+		name, _, _ := strings.Cut(entry, "=")
+		if strings.HasPrefix(strings.ToUpper(name), "GIT_") {
+			continue
+		}
+		environment = append(environment, entry)
+	}
+	cmd.Env = append(environment, "GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS=")
+	stdout := boundedGitBuffer{limit: 2 * 1024 * 1024}
+	stderr := boundedGitBuffer{limit: 64 * 1024}
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 	if err := cmd.Run(); err != nil {
-		return nil, fmt.Errorf("git %s failed: %w: %s", args[0], err, strings.TrimSpace(stderr.String()))
+		diagnostic := strings.TrimSpace(strings.Map(func(r rune) rune {
+			if r < 0x20 || r == 0x7f {
+				return ' '
+			}
+			return r
+		}, stderr.String()))
+		return nil, fmt.Errorf("git %s failed: %w: %s", args[0], err, diagnostic)
+	}
+	if stdout.exceeded || stderr.exceeded {
+		return nil, fmt.Errorf("git %s output exceeded the governed limit", args[0])
 	}
 	return stdout.Bytes(), nil
 }

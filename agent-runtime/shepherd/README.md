@@ -8,7 +8,8 @@ ratification, external-effect intents, and privacy-safe telemetry.
 
 Install exact `@opengsd/gsd-pi@1.11.0` outside the repository. Copy `shepherd.example.json` to a
 private local path and use absolute paths. `state_dir` must be protected and outside the worker
-worktree. Provision the controlled `gsd_home` separately; never put
+worktree. `attempt_root` must be outside both the canonical worktree and `state_dir`; neither may
+contain the other. Provision the controlled `gsd_home` separately; never put
 credentials in the config or repository. Its `agent/settings.json` must pin the configured provider,
 coordinator model, and `defaultThinkingLevel: high`. Its `PREFERENCES.md` must use official GSD Pi
 phase routing: research, planning, discussion, completion, validation, and UAT use the coordinator

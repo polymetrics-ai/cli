@@ -18,7 +18,7 @@ exact candidate head has been independently validated by GPT-5.6 Sol/high.
 - Skills loaded/recorded: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`,
   `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-safety`, `golang-security`,
   `golang-context`, `golang-concurrency`, `golang-design-patterns`, `golang-structs-interfaces`,
-  `golang-observability`, and `golang-lint`.
+  `golang-database`, `golang-observability`, and `golang-lint`.
 
 ## Reconciled status at start of proof-recovery
 
@@ -46,7 +46,9 @@ status is therefore **not validated, not ratified, not canary-ready**.
 7. `cycle-4/live-pi-correction`: `99604d48` is a second Slice A false green because it invoked the
    unsupported invented `gsd headless shepherd-validate` verb. Replaced it with a separately configured,
    capability-probed Pi executable using the exact installed non-interactive JSON/read-only interface.
-   Continue only Slice A; keep Slice B, PR creation, final Sol review, and canaries blocked.
+8. `cycle-5/slice-b`: Slice A is accepted GREEN at `95a17f18`. Slice B uses `local_critical_path`
+   because store, workspace, and supervise share mutation paths; no overlapping mutating workers.
+   Slice C, PR creation, final Sol review, and canaries remain blocked.
 
 ## Ordered implementation slices
 
@@ -80,17 +82,27 @@ a dedicated protected session directory, a bounded capability probe, fresh nonce
 and redacted process errors. Protected evidence binding, ratification order, delayed promotion, durable
 state version, full attestation persistence, and metadata-derived gates remain enforced.
 
-### B. Durable attempt lifecycle and crash recovery
+### B. Durable attempt lifecycle and crash recovery — COMPLETE
+
+Slice A acceptance: GREEN at `95a17f18274c87ed0e3fde825b41257039b757de`; preserve its Pi validator,
+protected evidence, ratification, and delayed promotion behavior.
 
 RED tests first:
-- all required attempt states persist in SQLite;
-- early preparation/query/runtime failures transition explicitly;
-- restart reconciles database-owned orphan worktrees/branches without deleting unknown or live paths;
-- retry always creates a fresh attempt worktree.
+- all required attempt states persist through SQLite reopen and existing databases migrate intact;
+- duplicate identity cannot rebind branch/path/base; illegal, terminal, and stale-owner transitions fail closed;
+- real create/prepare/dispatch/validate/ratify/promote/failure/cleanup paths transition explicitly;
+- restart reconciliation cleans only exact database-owned, non-live attempts and is idempotent;
+- unknown, mismatched, checked-out, and live worktrees/branches are untouched and blocked;
+- retry after retention always creates a fresh branch/path.
 
-GREEN target: durable attempt identity, branch, path, base/candidate/validated heads, and lifecycle
-states: `created`, `prepared`, `running`, `validated`, `ratified`, `promoting`, `promoted`,
-`retained_for_recovery`, `cleanup_pending`, `cleanup_complete`, and `cleanup_blocked`.
+GREEN delivered: durable attempt identity, positively confirmed branch/path ownership, controller
+owner/epoch, base/candidate/validated heads, bounded diagnostics, timestamps, and the exact 11-state
+lifecycle. Repository-global locking and SQLite fencing cover bootstrap, query, execution, promotion,
+and cleanup. Startup safely reconciles confirmed non-live resources, interrupts stale delivery/unit
+runs, preserves ambiguous running/promoting/unconfirmed resources, and permits human-gated convergence
+only after exact resources are proven absent. No broad worktree prune, broad branch deletion, unproven
+path removal, or `RemoveAll` was introduced. Slice C promotion journaling and atomic `.gsd` state swap
+remain explicitly excluded.
 
 ### C. Crash-safe GSD-state promotion
 

@@ -1,74 +1,80 @@
 {
   "phase": "issue-389-shepherd-hardening",
   "branch": "fix/389-shepherd-proof-recovery",
-  "head_at_retry_start": "99604d48f224b7881ee2afdee97924f2821d2bd6",
+  "base_head": "95a17f18274c87ed0e3fde825b41257039b757de",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_a_live_pi_correction_green_except_preexisting_lint",
-  "current_slice": "A_real_independent_validation_and_ratification",
+  "state": "slice_b_complete_verified",
+  "current_slice": "B_durable_attempt_lifecycle_and_crash_recovery",
   "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
-  "false_greens": [
+  "completed_slices": [
     {
-      "commit": "19d051c6b5d74e03fa8c8d4b5d392a58052a0499",
-      "summary": "Production validation had no real proof producer and trusted worker-controlled .gsd/shepherd-validation.json."
+      "slice": "A_real_independent_validation_and_ratification",
+      "head": "95a17f18274c87ed0e3fde825b41257039b757de",
+      "status": "green_accepted"
     },
     {
-      "commit": "99604d48f224b7881ee2afdee97924f2821d2bd6",
-      "summary": "Production invoked unsupported gsd headless shepherd-validate; helper tests replaced the command and did not prove production callability."
+      "slice": "B_durable_attempt_lifecycle_and_crash_recovery",
+      "status": "green_verified"
     }
   ],
-  "corrected_slice_a": [
-    "Separately configured allowlisted absolute pi_command",
-    "Bounded Pi --help capability probe",
-    "Direct Pi JSON print invocation with openai-codex/gpt-5.6-sol and high thinking",
-    "Read-only tool allowlist read,bash,grep,find,ls and disabled project extensions/skills/templates/themes/context/trust",
-    "Dedicated protected per-invocation session directory",
-    "Stable audit request identity bound to generation/attempt/state version plus fresh cryptographic nonce directory",
-    "Protected nonce-bound request/result transport with replay, malformed, stale and mismatch rejection",
-    "Bounded tail capture of Pi JSON events with no raw prompt/model/output in durable errors",
-    "Fresh exact-worktree Pi session/model/thinking evidence",
-    "Preserved exact-head rereads, required-gate derivation, ratification ordering, durable attestation, and delayed promotion"
+  "required_skills_loaded": [
+    "gsd-core",
+    "polymetrics-issue-delivery",
+    "gsd-programming-loop",
+    "golang-how-to",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-safety",
+    "golang-security",
+    "golang-context",
+    "golang-concurrency",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-database",
+    "golang-observability",
+    "golang-lint"
   ],
-  "live_smoke": {
-    "command": "POLYMETRICS_SHEPHERD_LIVE_VALIDATOR=1 go test ./internal/validation -run TestLivePiValidatorSmoke -count=1 -v",
-    "result": "pass",
-    "model": "openai-codex/gpt-5.6-sol",
-    "thinking": "high",
-    "session_id": "019f62b3-9830-7129-9c93-2104ed54a10e",
-    "verdict": "PROCEED",
-    "fixture_head": "6650f5e18ecbbf15c18739a8422fa1ba663a0635",
-    "evidence_hash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-  },
   "orchestration_decisions": [
     {
-      "cycle": "cycle-4",
-      "decision": "retry_slice_a_only",
-      "reason": "Correct unsupported production validator subprocess; Slice B and later work remain blocked."
-    },
-    {
-      "cycle": "cycle-4",
-      "decision": "configured_pi_direct",
-      "reason": "Use the installed documented Pi CLI rather than modifying pinned official GSD or inventing a GSD unit."
-    },
-    {
-      "cycle": "cycle-4",
+      "cycle": "cycle-5",
       "decision": "local_critical_path",
-      "reason": "Sequential mutating work; no overlapping workers."
+      "reason": "Store, workspace, and supervise integration shared mutation paths; no overlapping mutating workers were used."
+    },
+    {
+      "cycle": "cycle-5",
+      "decision": "slice_b_only",
+      "reason": "Attempt lifecycle and restart reconciliation completed; Slice C promotion/state-swap journal remains blocked."
     }
   ],
+  "red_evidence": [
+    "Focused store/workspace tests initially failed to compile because durable lifecycle and reconciliation APIs did not exist",
+    "Focused supervise tests then failed with zero cleanup_complete and retained_for_recovery records before integration"
+  ],
+  "green_evidence": [
+    "cd agent-runtime/shepherd && go test ./internal/store ./internal/workspace ./cmd/shepherd: pass",
+    "cd agent-runtime/shepherd && make verify: pass (vet, full tests, race)",
+    "gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify: pass",
+    "cd agent-runtime/shepherd && golangci-lint run ./...: exact baseline 30 findings; no Slice B finding",
+    "independent reviewer, security-auditor, and verifier findings dispositioned; final Slice B crash/recovery blocker fixed"
+  ],
+  "safety_evidence": [
+    "repository-global nofollow flock with inode replacement checks before effects",
+    "attempt_root must be disjoint from canonical worktree and protected state_dir",
+    "cleanup requires durable resources_created plus exact deterministic path, branch, head, Git common directory, and non-ambiguous state",
+    "running, promoting, unconfirmed, unknown, moved, mismatched, and checked-out resources fail closed",
+    "hard-crash lease takeover interrupts stale delivery/unit rows; human resolution requires exact resources already absent",
+    "no broad worktree prune, broad branch deletion, unproven RemoveAll, secrets, GitHub mutation, or new dependency"
+  ],
+  "next_actions": [
+    "Push the verified Slice B commit on fix/389-shepherd-proof-recovery",
+    "Stop without Slice C, PR creation, final Sol review, or canaries"
+  ],
   "blocked": [
-    "Slice B and later slices",
+    "Slice C and later slices",
     "PR creation",
     "Sol final review",
     "Twenty/Asana canaries",
     "Parent PR #390 merge"
-  ],
-  "last_verification": [
-    "cd agent-runtime/shepherd && go test ./internal/validation ./internal/store ./internal/authority ./internal/workspace ./cmd/shepherd: pass",
-    "cd agent-runtime/shepherd && go test ./...: pass",
-    "cd agent-runtime/shepherd && go test -race ./...: pass",
-    "cd agent-runtime/shepherd && go vet ./...: pass",
-    "cd agent-runtime/shepherd && golangci-lint run ./...: fail_same_30_preexisting_findings_no_new_findings",
-    "cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...: pass"
   ]
 }

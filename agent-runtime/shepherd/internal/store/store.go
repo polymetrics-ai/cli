@@ -288,6 +288,17 @@ func (s *Store) migrate(ctx context.Context) error {
 			expected_artifact TEXT NOT NULL, artifact_hash TEXT NOT NULL, validator TEXT NOT NULL,
 			thinking TEXT NOT NULL, ratified INTEGER NOT NULL, created_at INTEGER NOT NULL
 		)`,
+		`CREATE TABLE IF NOT EXISTS attempt_worktrees (
+			delivery_id TEXT NOT NULL REFERENCES deliveries(delivery_id), generation INTEGER NOT NULL,
+			unit_id TEXT NOT NULL, attempt INTEGER NOT NULL, branch TEXT NOT NULL UNIQUE,
+			path TEXT NOT NULL UNIQUE, base_head TEXT NOT NULL, candidate_head TEXT NOT NULL DEFAULT '',
+			validated_head TEXT NOT NULL DEFAULT '', state TEXT NOT NULL,
+			controller_owner TEXT NOT NULL, controller_epoch INTEGER NOT NULL,
+			resources_created INTEGER NOT NULL DEFAULT 0,
+			failure_class TEXT NOT NULL DEFAULT '', cleanup_error TEXT NOT NULL DEFAULT '',
+			created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL,
+			PRIMARY KEY (delivery_id, generation, unit_id, attempt)
+		)`,
 	}
 	for _, statement := range statements {
 		if _, err := s.db.ExecContext(ctx, statement); err != nil {
@@ -1012,7 +1023,15 @@ func (s *Store) BeginRecoveryAttempt(ctx context.Context, key RecoveryBudgetKey,
 	return budget, nil
 }
 
+type contextExecer interface {
+	ExecContext(context.Context, string, ...any) (sql.Result, error)
+}
+
 func (s *Store) PutArtifactProof(ctx context.Context, proof ArtifactProof) error {
+	return putArtifactProof(ctx, s.db, proof)
+}
+
+func putArtifactProof(ctx context.Context, executor contextExecer, proof ArtifactProof) error {
 	if proof.ProofID == "" || proof.DeliveryID == "" || proof.Generation <= 0 || strings.TrimSpace(proof.UnitID) == "" ||
 		proof.Attempt <= 0 || !validGitSHA(proof.StartHead) || !validGitSHA(proof.CandidateHead) ||
 		!validGitSHA(proof.ValidatedHead) || proof.CandidateHead != proof.ValidatedHead ||
@@ -1024,7 +1043,7 @@ func (s *Store) PutArtifactProof(ctx context.Context, proof ArtifactProof) error
 	if proof.Ratified {
 		ratified = 1
 	}
-	_, err := s.db.ExecContext(ctx, `INSERT INTO artifact_proofs
+	_, err := executor.ExecContext(ctx, `INSERT INTO artifact_proofs
 		(proof_id, delivery_id, generation, unit_id, attempt, start_head, candidate_head, validated_head,
 		 expected_artifact, artifact_hash, validator, thinking, ratified, created_at)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, proof.ProofID, proof.DeliveryID,
@@ -1054,6 +1073,10 @@ func (s *Store) GetArtifactProof(ctx context.Context, proofID string) (ArtifactP
 }
 
 func (s *Store) PutAttestation(ctx context.Context, attestation AttestationRecord) error {
+	return putAttestation(ctx, s.db, attestation)
+}
+
+func putAttestation(ctx context.Context, executor contextExecer, attestation AttestationRecord) error {
 	if attestation.Repository == "" || attestation.PR <= 0 || attestation.BaseBranch == "" || !validGitSHA(attestation.BaseHead) ||
 		!validGitSHA(attestation.CandidateHead) || !validGitSHA(attestation.ObservedHead) || attestation.RunID == "" ||
 		attestation.Generation <= 0 || strings.TrimSpace(attestation.UnitID) == "" || attestation.Attempt <= 0 ||
@@ -1076,7 +1099,7 @@ func (s *Store) PutAttestation(ctx context.Context, attestation AttestationRecor
 	if attestation.MilestoneValid {
 		milestoneValid = 1
 	}
-	_, err := s.db.ExecContext(ctx, `INSERT INTO attestations(
+	_, err := executor.ExecContext(ctx, `INSERT INTO attestations(
 		run_id, head_sha, validator, thinking, verdict, created_at, repository, pr, base_branch,
 		base_head, candidate_head, observed_head, generation, unit_id, attempt, state_version,
 		contract_hash, evidence_hash, validator_session_id, local_gates, uat, milestone_valid, expires_at)
@@ -1242,6 +1265,46 @@ func (s *Store) AcquireLease(ctx context.Context, runID, owner string, now time.
         VALUES (?, ?, ?, ?) ON CONFLICT(run_id) DO UPDATE SET owner=excluded.owner,
         epoch=excluded.epoch, expires_at=excluded.expires_at`, runID, owner, epoch, expires.UnixNano()); err != nil {
 		return Lease{}, fmt.Errorf("write lease: %w", err)
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return Lease{}, err
+	}
+	committed = true
+	return Lease{RunID: runID, Owner: owner, Epoch: epoch, ExpiresAt: expires}, nil
+}
+
+// AcquireReconciliationLease immediately fences the prior controller. Callers
+// must hold the repository-global controller lock, which proves the previous
+// Shepherd process no longer owns the repository mutation boundary.
+func (s *Store) AcquireReconciliationLease(ctx context.Context, runID, owner string, now time.Time, ttl time.Duration) (Lease, error) {
+	if runID == "" || owner == "" || ttl <= 0 {
+		return Lease{}, errors.New("run, owner, and positive reconciliation TTL are required")
+	}
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return Lease{}, err
+	}
+	defer func() { _ = conn.Close() }()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return Lease{}, err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var epoch int64
+	err = conn.QueryRowContext(ctx, `SELECT epoch FROM leases WHERE run_id = ?`, runID).Scan(&epoch)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return Lease{}, err
+	}
+	epoch++
+	expires := now.Add(ttl).UTC()
+	if _, err := conn.ExecContext(ctx, `INSERT INTO leases(run_id, owner, epoch, expires_at)
+		VALUES (?, ?, ?, ?) ON CONFLICT(run_id) DO UPDATE SET owner=excluded.owner,
+		epoch=excluded.epoch, expires_at=excluded.expires_at`, runID, owner, epoch, expires.UnixNano()); err != nil {
+		return Lease{}, err
 	}
 	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
 		return Lease{}, err

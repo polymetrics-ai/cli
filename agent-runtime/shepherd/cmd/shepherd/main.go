@@ -40,11 +40,21 @@ const defaultMaxEventBytes = 8 * 1024 * 1024
 
 const defaultWriteScopePollInterval = 500 * time.Millisecond
 
+var errPreDispatchAttemptQuery = errors.New("pre-dispatch attempt query failed")
+
 var independentValidatorFactory = func(_ *gsd.Runner, config fileConfig) validation.Validator {
 	return validation.GSDValidator{
 		Command: config.PiCommand, GSDHome: config.GSDHome, StateDir: config.StateDir,
 		Timeout: time.Duration(config.TimeoutSeconds) * time.Second,
 	}
+}
+
+var prepareAttemptGSDState = func(ctx context.Context, manager *workspace.Manager, attempt workspace.AttemptWorktree) error {
+	return manager.PrepareGSDState(ctx, attempt)
+}
+
+var reconcileOwnedAttempt = func(ctx context.Context, manager *workspace.Manager, owned workspace.OwnedAttempt) (workspace.ReconcileResult, error) {
+	return manager.ReconcileOwnedAttempt(ctx, owned)
 }
 
 type fileConfig struct {
@@ -53,6 +63,7 @@ type fileConfig struct {
 	WorkDir             string   `json:"work_dir"`
 	GSDHome             string   `json:"gsd_home"`
 	StateDir            string   `json:"state_dir"`
+	AttemptRoot         string   `json:"attempt_root"`
 	CoordinatorModel    string   `json:"coordinator_model"`
 	ImplementationModel string   `json:"implementation_model"`
 	GSDVersion          string   `json:"gsd_version"`
@@ -192,6 +203,9 @@ func run(ctx context.Context, args []string) error {
 			return err
 		}
 		defer authority.Close()
+		if err := resolveHumanClearedAttempts(ctx, authority, config, input.DeliveryID); err != nil {
+			return err
+		}
 		return authority.ResumeDelivery(ctx, domain.HumanDecision{RunID: input.DeliveryID, Generation: input.Generation, ActorKind: domain.ActorHuman, Approved: true})
 	}
 	var container *gsd.ContainerConfig
@@ -266,7 +280,7 @@ func run(ctx context.Context, args []string) error {
 		if *command == "auto" || *command == "recover" || *command == "new-milestone" {
 			return errors.New("generic run permits only one fenced unit; use --command next, discuss, or status")
 		}
-		return runHeadless(ctx, runner, config, registry, deliveryID(*issue), *issue, "", *command, nil, *confirmDepth, *continueUnit, *decisionActor, *decisionBasis)
+		return runHeadless(ctx, runner, config, registry, deliveryID(*issue), *issue, "", *command, nil, nil, *confirmDepth, *continueUnit, *decisionActor, *decisionBasis)
 	case "supervise":
 		if *issue <= 0 {
 			return errors.New("--issue is required")
@@ -309,7 +323,7 @@ func run(ctx context.Context, args []string) error {
 		if *adoptExisting {
 			return adoptExistingDelivery(ctx, runner, config, deliveryID(*issue), *issue, contextHash)
 		}
-		return runHeadless(ctx, runner, config, registry, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path}, *confirmDepth, false, *decisionActor, *decisionBasis)
+		return runHeadless(ctx, runner, config, registry, deliveryID(*issue), *issue, contextHash, "new-milestone", []string{"--context", path}, nil, *confirmDepth, false, *decisionActor, *decisionBasis)
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
@@ -345,10 +359,43 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 		return err
 	}
 	defer authority.Close()
+	manager, repositoryLock, lockErr := lockDeliveryWorkspace(config)
+	if lockErr != nil {
+		return fmt.Errorf("startup delivery lock: %w", lockErr)
+	}
 	if _, _, err := ensureIssueDelivery(ctx, authority, config, issue, contextHash); err != nil {
+		_ = repositoryLock.Close()
 		return err
 	}
 	deliveryID := deliveryID(issue)
+	var startupErr error
+	if config.Runtime == "host" {
+		reconcileOwner := fmt.Sprintf("reconcile-%d", time.Now().UTC().UnixNano())
+		reconcileLease, leaseErr := authority.AcquireReconciliationLease(ctx, deliveryID, reconcileOwner, time.Now().UTC(), 90*time.Second)
+		if leaseErr == nil {
+			records, listErr := authority.ListAttemptWorktrees(ctx, deliveryID)
+			switch {
+			case listErr != nil:
+				startupErr = listErr
+			case attemptRecoveryAmbiguous(records):
+				startupErr = errors.New("ambiguous live or partially owned attempt requires human recovery")
+				startupErr = errors.Join(startupErr, authority.ReconcileInterruptedDelivery(ctx, reconcileLease, domain.RunAwaitingDecision))
+			default:
+				startupErr = reconcileAttemptWorktrees(ctx, authority, manager, repositoryLock, deliveryID, reconcileLease)
+				target := domain.RunReady
+				if startupErr != nil {
+					target = domain.RunAwaitingDecision
+				}
+				startupErr = errors.Join(startupErr, authority.ReconcileInterruptedDelivery(ctx, reconcileLease, target))
+			}
+			leaseErr = authority.ReleaseLease(context.Background(), reconcileLease)
+		}
+		startupErr = errors.Join(startupErr, leaseErr)
+	}
+	startupErr = errors.Join(startupErr, repositoryLock.Close())
+	if startupErr != nil {
+		return fmt.Errorf("startup attempt reconciliation: %w", startupErr)
+	}
 	if err := consumeGitHubDecisionReplies(ctx, authority, shepherdgithub.NewCLIClient(), config, deliveryID, issue); err != nil {
 		return err
 	}
@@ -356,7 +403,7 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		snapshot, err := runner.Query(ctx)
+		snapshot, err := superviseQuery(ctx, authority, runner, config, deliveryID)
 		if err != nil {
 			return fmt.Errorf("supervise query: %w", err)
 		}
@@ -382,7 +429,7 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 			if modelErr != nil {
 				return modelErr
 			}
-			err := runHeadless(ctx, unitRunner, config, registry, deliveryID, issue, "", decision.Command, nil, confirmDepth, false, decisionActor, decisionBasis)
+			err := runHeadless(ctx, unitRunner, config, registry, deliveryID, issue, "", decision.Command, nil, &snapshot, confirmDepth, false, decisionActor, decisionBasis)
 			if err == nil {
 				continue
 			}
@@ -407,6 +454,45 @@ func requireMatchingAttemptDispatch(canonical, attempt gsd.WorkflowSnapshot) err
 		return fmt.Errorf("attempt GSD state does not match canonical dispatch: canonical=%s/%s %s %s/%s attempt=%s/%s %s %s/%s", canonical.MilestoneID, canonical.Phase, canonical.Next.Action, canonical.Next.UnitType, canonical.Next.UnitID, attempt.MilestoneID, attempt.Phase, attempt.Next.Action, attempt.Next.UnitType, attempt.Next.UnitID)
 	}
 	return nil
+}
+
+func rejectAmbiguousAttemptRecovery(ctx context.Context, authorityStore *store.Store, deliveryID string) error {
+	records, err := authorityStore.ListAttemptWorktrees(ctx, deliveryID)
+	if err != nil {
+		return err
+	}
+	if attemptRecoveryAmbiguous(records) {
+		return errors.New("ambiguous attempt ownership blocks governed repository access")
+	}
+	return nil
+}
+
+func superviseQuery(ctx context.Context, authorityStore *store.Store, runner *gsd.Runner, config fileConfig, deliveryID string) (snapshot gsd.WorkflowSnapshot, returnErr error) {
+	_, repositoryLock, err := lockDeliveryWorkspace(config)
+	if err != nil {
+		return gsd.WorkflowSnapshot{}, err
+	}
+	defer func() { returnErr = errors.Join(returnErr, repositoryLock.Close()) }()
+	owner := fmt.Sprintf("supervise-query-%d", time.Now().UTC().UnixNano())
+	lease, err := authorityStore.AcquireLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
+	if err != nil {
+		return gsd.WorkflowSnapshot{}, err
+	}
+	defer func() { returnErr = errors.Join(returnErr, authorityStore.ReleaseLease(context.Background(), lease)) }()
+	if err := rejectAmbiguousAttemptRecovery(ctx, authorityStore, deliveryID); err != nil {
+		return gsd.WorkflowSnapshot{}, err
+	}
+	snapshot, err = runner.Query(ctx)
+	if err != nil {
+		return gsd.WorkflowSnapshot{}, err
+	}
+	if err := authorityStore.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
+		return gsd.WorkflowSnapshot{}, err
+	}
+	if err := repositoryLock.Check(); err != nil {
+		return gsd.WorkflowSnapshot{}, err
+	}
+	return snapshot, nil
 }
 
 func emitSuperviseStatus(deliveryID string, decision supervisor.Decision) error {
@@ -445,12 +531,23 @@ func runFencedRepair(ctx context.Context, runner *gsd.Runner, config fileConfig,
 	if err != nil || delivery.Issue != issue || delivery.WorkDir != config.WorkDir {
 		return errors.New("repair delivery does not match issue/worktree")
 	}
+	_, repositoryLock, err := lockDeliveryWorkspace(config)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = repositoryLock.Close() }()
 	owner := fmt.Sprintf("repair-%d", time.Now().UTC().UnixNano())
 	lease, err := authority.AcquireLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
 	if err != nil {
 		return err
 	}
 	defer func() { _ = authority.ReleaseLease(context.Background(), lease) }()
+	if err := repositoryLock.Check(); err != nil {
+		return err
+	}
+	if err := rejectAmbiguousAttemptRecovery(ctx, authority, deliveryID); err != nil {
+		return err
+	}
 	switch action {
 	case "rebuild-markdown":
 		if err := runner.RebuildMarkdown(ctx); err != nil {
@@ -490,6 +587,11 @@ func adoptExistingDelivery(ctx context.Context, runner *gsd.Runner, config fileC
 		return err
 	}
 	defer authority.Close()
+	_, repositoryLock, err := lockDeliveryWorkspace(config)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = repositoryLock.Close() }()
 	if _, _, err := ensureIssueDelivery(ctx, authority, config, issue, contextHash); err != nil {
 		return err
 	}
@@ -499,6 +601,12 @@ func adoptExistingDelivery(ctx context.Context, runner *gsd.Runner, config fileC
 		return err
 	}
 	defer func() { _ = authority.ReleaseLease(context.Background(), lease) }()
+	if err := repositoryLock.Check(); err != nil {
+		return err
+	}
+	if err := rejectAmbiguousAttemptRecovery(ctx, authority, deliveryID); err != nil {
+		return err
+	}
 	snapshot, err := runner.Query(ctx)
 	if err != nil {
 		return err
@@ -535,12 +643,23 @@ func runFencedQuery(ctx context.Context, runner *gsd.Runner, config fileConfig, 
 	if err != nil || delivery.Issue != issue || delivery.WorkDir != config.WorkDir {
 		return errors.New("query delivery is not initialized or does not match this issue/worktree")
 	}
+	_, repositoryLock, err := lockDeliveryWorkspace(config)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = repositoryLock.Close() }()
 	owner := fmt.Sprintf("query-%d", time.Now().UTC().UnixNano())
 	lease, err := authority.AcquireLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
 	if err != nil {
 		return err
 	}
 	defer func() { _ = authority.ReleaseLease(context.Background(), lease) }()
+	if err := repositoryLock.Check(); err != nil {
+		return err
+	}
+	if err := rejectAmbiguousAttemptRecovery(ctx, authority, deliveryID); err != nil {
+		return err
+	}
 	snapshot, err := runner.Query(ctx)
 	if err != nil {
 		return err
@@ -570,8 +689,8 @@ func loadConfig(path string) (fileConfig, error) {
 	if err := decoder.Decode(&config); err != nil {
 		return fileConfig{}, fmt.Errorf("decode config: %w", err)
 	}
-	if !filepath.IsAbs(config.WorkDir) || !filepath.IsAbs(config.GSDHome) || !filepath.IsAbs(config.StateDir) {
-		return fileConfig{}, errors.New("work_dir, gsd_home, and state_dir must be absolute")
+	if !filepath.IsAbs(config.WorkDir) || !filepath.IsAbs(config.GSDHome) || !filepath.IsAbs(config.StateDir) || !filepath.IsAbs(config.AttemptRoot) {
+		return fileConfig{}, errors.New("work_dir, gsd_home, state_dir, and attempt_root must be absolute")
 	}
 	if len(config.PiCommand) != 1 || !filepath.IsAbs(config.PiCommand[0]) || strings.ContainsAny(config.PiCommand[0], "\r\n\x00") {
 		return fileConfig{}, errors.New("pi_command must contain one allowlisted absolute Pi executable")
@@ -630,10 +749,162 @@ func loadConfig(path string) (fileConfig, error) {
 	if within, err := pathWithin(config.WorkDir, config.StateDir); err != nil || within {
 		return fileConfig{}, errors.New("state_dir must be outside the worker-controlled work directory")
 	}
+	if within, err := pathWithin(config.WorkDir, config.AttemptRoot); err != nil || within {
+		return fileConfig{}, errors.New("attempt_root must be outside the canonical work directory")
+	}
+	if within, err := pathWithin(config.StateDir, config.AttemptRoot); err != nil || within {
+		return fileConfig{}, errors.New("protected state_dir must not contain attempt_root")
+	}
+	if within, err := pathWithin(config.AttemptRoot, config.StateDir); err != nil || within {
+		return fileConfig{}, errors.New("attempt_root must not contain protected state_dir")
+	}
 	return config, nil
 }
 
-func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, registry gsd.UnitRegistry, deliveryID string, issue int, contextHash, command string, args []string, confirmDepth, continueUnit bool, decisionActor, decisionBasis string) error {
+func lockDeliveryWorkspace(config fileConfig) (*workspace.Manager, *workspace.RepositoryLock, error) {
+	manager, err := workspace.NewManager(config.WorkDir, config.AttemptRoot)
+	if err != nil {
+		return nil, nil, err
+	}
+	lock, err := manager.TryAcquireRepositoryLock()
+	if err != nil {
+		return nil, nil, err
+	}
+	return manager, lock, nil
+}
+
+func resolveHumanClearedAttempts(ctx context.Context, authorityStore *store.Store, config fileConfig, deliveryID string) error {
+	manager, repositoryLock, err := lockDeliveryWorkspace(config)
+	if err != nil {
+		return err
+	}
+	owner := fmt.Sprintf("human-recovery-%d", time.Now().UTC().UnixNano())
+	lease, leaseErr := authorityStore.AcquireReconciliationLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
+	if leaseErr != nil {
+		_ = repositoryLock.Close()
+		return leaseErr
+	}
+	records, resolveErr := authorityStore.ListAttemptWorktrees(ctx, deliveryID)
+	if resolveErr == nil {
+		for _, record := range records {
+			if record.State == store.AttemptWorktreeCleanupComplete ||
+				(record.ResourcesCreated && record.State != store.AttemptWorktreeRunning && record.State != store.AttemptWorktreePromoting) {
+				continue
+			}
+			attempt := workspace.AttemptWorktree{Root: record.Path, Branch: record.Branch,
+				Identity: workspace.AttemptIdentity{DeliveryID: record.DeliveryID, Generation: record.Generation,
+					UnitID: record.UnitID, Attempt: record.Attempt, BaseHead: record.BaseHead}}
+			if resolveErr = manager.ProveOwnedResourcesAbsent(ctx, attempt); resolveErr != nil {
+				break
+			}
+			resolveErr = authorityStore.ResolveHumanClearedAttempt(ctx, record.Key(), record.ControllerOwner, record.ControllerEpoch, lease)
+			if resolveErr != nil {
+				break
+			}
+		}
+	}
+	releaseErr := authorityStore.ReleaseLease(context.Background(), lease)
+	lockErr := repositoryLock.Close()
+	return errors.Join(resolveErr, releaseErr, lockErr)
+}
+
+type attemptLifecycle struct {
+	store *store.Store
+	key   store.AttemptWorktreeKey
+	owner string
+	epoch int64
+	state store.AttemptWorktreeState
+}
+
+func (l *attemptLifecycle) transition(ctx context.Context, next store.AttemptWorktreeState, update store.AttemptWorktreeUpdate) error {
+	record, err := l.store.TransitionAttemptWorktree(ctx, l.key, l.owner, l.epoch, next, update)
+	if err != nil {
+		return err
+	}
+	l.state = record.State
+	return nil
+}
+
+func (l *attemptLifecycle) retain(ctx context.Context, failureClass string) error {
+	if l == nil || l.state == store.AttemptWorktreeRetainedForRecovery ||
+		l.state == store.AttemptWorktreeCleanupPending || l.state == store.AttemptWorktreeCleanupComplete ||
+		l.state == store.AttemptWorktreeCleanupBlocked {
+		return nil
+	}
+	switch l.state {
+	case store.AttemptWorktreeCreated, store.AttemptWorktreePrepared, store.AttemptWorktreeRunning,
+		store.AttemptWorktreeValidated, store.AttemptWorktreeRatified:
+		return l.transition(ctx, store.AttemptWorktreeRetainedForRecovery, store.AttemptWorktreeUpdate{FailureClass: failureClass})
+	default:
+		return nil
+	}
+}
+
+func attemptRecoveryAmbiguous(records []store.AttemptWorktreeRecord) bool {
+	for _, record := range records {
+		if record.State == store.AttemptWorktreeCleanupComplete {
+			continue
+		}
+		if !record.ResourcesCreated || record.State == store.AttemptWorktreeRunning || record.State == store.AttemptWorktreePromoting {
+			return true
+		}
+	}
+	return false
+}
+
+func reconcileAttemptWorktrees(ctx context.Context, authorityStore *store.Store, manager *workspace.Manager, repositoryLock *workspace.RepositoryLock, deliveryID string, lease store.Lease) error {
+	if err := repositoryLock.Check(); err != nil {
+		return err
+	}
+	records, err := authorityStore.ListAttemptWorktrees(ctx, deliveryID)
+	if err != nil {
+		return err
+	}
+	for _, record := range records {
+		if record.State == store.AttemptWorktreeCleanupComplete {
+			continue
+		}
+		if record.ControllerOwner == lease.Owner && record.ControllerEpoch == lease.Epoch {
+			continue
+		}
+		claimed, claimErr := authorityStore.ClaimAttemptWorktreeCleanup(ctx, record.Key(), record.ControllerOwner, record.ControllerEpoch, lease.Owner, lease.Epoch)
+		if claimErr != nil {
+			return claimErr
+		}
+		expectedHead := claimed.CandidateHead
+		if expectedHead == "" {
+			expectedHead = claimed.BaseHead
+		}
+		owned := workspace.OwnedAttempt{Attempt: workspace.AttemptWorktree{
+			Root: claimed.Path, Branch: claimed.Branch,
+			Identity: workspace.AttemptIdentity{DeliveryID: claimed.DeliveryID, Generation: claimed.Generation,
+				UnitID: claimed.UnitID, Attempt: claimed.Attempt, BaseHead: claimed.BaseHead},
+		}, ExpectedHead: expectedHead}
+		if leaseErr := authorityStore.CheckLease(ctx, lease, time.Now().UTC()); leaseErr != nil {
+			return leaseErr
+		}
+		if lockErr := repositoryLock.Check(); lockErr != nil {
+			return lockErr
+		}
+		result, cleanupErr := reconcileOwnedAttempt(ctx, manager, owned)
+		if cleanupErr != nil || result == workspace.ReconcileBlocked {
+			transitionErr := (&attemptLifecycle{store: authorityStore, key: claimed.Key(), owner: lease.Owner,
+				epoch: lease.Epoch, state: store.AttemptWorktreeCleanupPending}).transition(ctx,
+				store.AttemptWorktreeCleanupBlocked, store.AttemptWorktreeUpdate{CleanupError: "owned_resource_mismatch_or_cleanup_failure"})
+			return errors.Join(cleanupErr, transitionErr)
+		}
+		if result != workspace.ReconcileComplete {
+			return errors.New("attempt reconciliation did not reach a terminal cleanup state")
+		}
+		if _, transitionErr := authorityStore.TransitionAttemptWorktree(ctx, claimed.Key(), lease.Owner, lease.Epoch,
+			store.AttemptWorktreeCleanupComplete, store.AttemptWorktreeUpdate{}); transitionErr != nil {
+			return transitionErr
+		}
+	}
+	return nil
+}
+
+func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, registry gsd.UnitRegistry, deliveryID string, issue int, contextHash, command string, args []string, supervisedSnapshot *gsd.WorkflowSnapshot, confirmDepth, continueUnit bool, decisionActor, decisionBasis string) (returnErr error) {
 	if err := os.MkdirAll(config.StateDir, 0o700); err != nil {
 		return err
 	}
@@ -642,6 +913,11 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		return err
 	}
 	defer authority.Close()
+	attemptManager, repositoryLock, err := lockDeliveryWorkspace(config)
+	if err != nil {
+		return err
+	}
+	defer func() { returnErr = errors.Join(returnErr, repositoryLock.Close()) }()
 	executionID := fmt.Sprintf("execution-%d", time.Now().UTC().UnixNano())
 	var delivery store.Delivery
 	if contextHash != "" {
@@ -668,22 +944,37 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	if err := validateDeliveryInvocation(delivery, config, issueContext); err != nil {
 		return err
 	}
-	lease, err := authority.AcquireLease(ctx, deliveryID, executionID, time.Now().UTC(), time.Duration(config.TimeoutSeconds+60)*time.Second)
+	executionLeaseTTL := time.Duration(2*config.TimeoutSeconds+120) * time.Second
+	lease, err := authority.AcquireLease(ctx, deliveryID, executionID, time.Now().UTC(), executionLeaseTTL)
 	if err != nil {
 		return err
 	}
-	defer func() { _ = authority.ReleaseLease(context.Background(), lease) }()
+	defer func() { returnErr = errors.Join(returnErr, authority.ReleaseLease(context.Background(), lease)) }()
 	startSnapshot, err := shepherdgit.Inspect(ctx, config.WorkDir)
 	if err != nil {
 		return err
 	}
+	if startSnapshot.Branch != delivery.Branch {
+		return errors.New("canonical worktree is not on the authorized delivery branch")
+	}
 	if err := shepherdgit.RequireClean(startSnapshot); err != nil {
 		return err
 	}
+	if gsd.IsCanonicalUnitCommand(command) && config.Runtime == "host" {
+		if err := reconcileAttemptWorktrees(ctx, authority, attemptManager, repositoryLock, deliveryID, lease); err != nil {
+			return fmt.Errorf("reconcile durable attempt worktrees: %w", err)
+		}
+	}
 	trustedUnit := command
-	before, queryErr := runner.Query(ctx)
-	if queryErr != nil {
-		return fmt.Errorf("pre-run fenced query failed: %w", queryErr)
+	var before gsd.WorkflowSnapshot
+	if supervisedSnapshot != nil {
+		before = *supervisedSnapshot
+	} else {
+		var queryErr error
+		before, queryErr = runner.Query(ctx)
+		if queryErr != nil {
+			return fmt.Errorf("pre-run fenced query failed: %w", queryErr)
+		}
 	}
 	if before.Next.UnitID != "" {
 		trustedUnit = before.Next.UnitType + "/" + before.Next.UnitID
@@ -760,35 +1051,57 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	executionWorkDir := config.WorkDir
 	executionRunner := runner
 	var attemptWorktree *workspace.AttemptWorktree
-	var attemptManager *workspace.Manager
+	var lifecycle *attemptLifecycle
 	if gsd.IsCanonicalUnitCommand(command) && config.Runtime != "host" {
 		return errors.New("canonical unit supervision requires host runtime disposable attempt worktrees")
 	}
 	if gsd.IsCanonicalUnitCommand(command) && config.Runtime == "host" {
-		manager, managerErr := workspace.NewManager(config.WorkDir, filepath.Join(config.StateDir, "attempt-worktrees"))
-		if managerErr != nil {
-			return managerErr
+		identity := workspace.AttemptIdentity{DeliveryID: deliveryID, Generation: attempt.Generation,
+			UnitID: trustedUnit, Attempt: unitAttempt.Attempts, BaseHead: startSnapshot.HeadSHA}
+		planned, planErr := attemptManager.Plan(identity)
+		if planErr != nil {
+			return planErr
 		}
-		attemptTree, createErr := manager.Create(ctx, workspace.AttemptIdentity{DeliveryID: deliveryID, Generation: attempt.Generation, UnitID: trustedUnit, Attempt: unitAttempt.Attempts, BaseHead: startSnapshot.HeadSHA})
+		record := store.AttemptWorktreeRecord{DeliveryID: deliveryID, Generation: attempt.Generation,
+			UnitID: trustedUnit, Attempt: unitAttempt.Attempts, Branch: planned.Branch, Path: planned.Root,
+			BaseHead: startSnapshot.HeadSHA, State: store.AttemptWorktreeCreated,
+			ControllerOwner: lease.Owner, ControllerEpoch: lease.Epoch}
+		if err := authority.CreateAttemptWorktree(ctx, record); err != nil {
+			return err
+		}
+		lifecycle = &attemptLifecycle{store: authority, key: record.Key(), owner: lease.Owner,
+			epoch: lease.Epoch, state: store.AttemptWorktreeCreated}
+		defer func() {
+			returnErr = errors.Join(returnErr, lifecycle.retain(context.Background(), "controller_interrupted"))
+		}()
+		attemptTree, createErr := attemptManager.Create(ctx, identity)
 		if createErr != nil {
-			return createErr
-		}
-		if prepareErr := manager.PrepareGSDState(ctx, attemptTree); prepareErr != nil {
-			return fmt.Errorf("prepare attempt GSD state: %w", prepareErr)
+			return errors.Join(createErr, lifecycle.retain(context.Background(), "worktree_creation_failure"))
 		}
 		attemptWorktree = &attemptTree
-		attemptManager = manager
+		if verifyErr := attemptManager.VerifyCreatedAttempt(ctx, attemptTree); verifyErr != nil {
+			return errors.Join(verifyErr, lifecycle.retain(context.Background(), "resource_verification_failure"))
+		}
+		if _, confirmErr := authority.ConfirmAttemptWorktreeResources(ctx, record.Key(), lease.Owner, lease.Epoch); confirmErr != nil {
+			return errors.Join(confirmErr, lifecycle.retain(context.Background(), "resource_confirmation_failure"))
+		}
+		if prepareErr := prepareAttemptGSDState(ctx, attemptManager, attemptTree); prepareErr != nil {
+			return errors.Join(fmt.Errorf("prepare attempt GSD state: %w", prepareErr), lifecycle.retain(context.Background(), "preparation_failure"))
+		}
+		if err := lifecycle.transition(ctx, store.AttemptWorktreePrepared, store.AttemptWorktreeUpdate{}); err != nil {
+			return err
+		}
 		executionWorkDir = attemptTree.Root
 		executionRunner, err = runner.WithWorkDir(executionWorkDir)
 		if err != nil {
-			return err
+			return errors.Join(err, lifecycle.retain(context.Background(), "runner_rebind_failure"))
 		}
 		attemptSnapshot, queryErr := executionRunner.Query(ctx)
 		if queryErr != nil {
-			return fmt.Errorf("pre-dispatch attempt query failed: %w", queryErr)
+			return errors.Join(fmt.Errorf("%w: %v", errPreDispatchAttemptQuery, queryErr), lifecycle.retain(context.Background(), "pre_dispatch_query_failure"))
 		}
 		if err := requireMatchingAttemptDispatch(before, attemptSnapshot); err != nil {
-			return err
+			return errors.Join(err, lifecycle.retain(context.Background(), "pre_dispatch_identity_mismatch"))
 		}
 	}
 	activity, err := telemetry.Open(ctx, filepath.Join(config.StateDir, "activity", "segments"))
@@ -897,6 +1210,17 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			}
 		}()
 	}
+	if lifecycle != nil {
+		if err := lifecycle.transition(ctx, store.AttemptWorktreeRunning, store.AttemptWorktreeUpdate{}); err != nil {
+			if stopScopeMonitor != nil {
+				stopScopeMonitor()
+			}
+			if scopeMonitorDone != nil {
+				<-scopeMonitorDone
+			}
+			return err
+		}
+	}
 	result := executionRunner.Run(runCtx, command, args, observer)
 	postReconcile, reconcileErr := gsd.ReconcileOrphanedSubagents(config.GSDHome, executionWorkDir, time.Now().UTC())
 	if reconcileErr != nil {
@@ -997,9 +1321,18 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			if attemptManager == nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = errors.New("attempt manager missing for candidate unit")
+			} else if lockErr := repositoryLock.Check(); lockErr != nil {
+				result.Terminal = gsd.TerminalError
+				result.Err = lockErr
 			} else if head, checkpointErr := attemptManager.CheckpointCandidate(ctx, *attemptWorktree, issueContext.WriteScope, message); checkpointErr != nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = fmt.Errorf("checkpoint candidate canonical unit: %w", checkpointErr)
+			} else if lifecycle == nil {
+				result.Terminal = gsd.TerminalError
+				result.Err = errors.New("durable attempt lifecycle missing at candidate checkpoint")
+			} else if _, persistErr := authority.RecordAttemptWorktreeCandidate(ctx, lifecycle.key, lifecycle.owner, lifecycle.epoch, head); persistErr != nil {
+				result.Terminal = gsd.TerminalError
+				result.Err = fmt.Errorf("persist attempt candidate: %w", persistErr)
 			} else {
 				candidateHead = head
 				candidateWorkDir = attemptWorktree.Root
@@ -1033,19 +1366,60 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			if versionErr != nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = versionErr
-			} else if err := persistSuccessProof(ctx, authority, validator, config, registry, issueContext.WriteScope, candidateWorkDir, deliveryID, trustedUnit, before.Next.UnitType, issueContext.PRBase, attempt.Generation, unitAttempt.Attempts, stateVersion, startSnapshot.HeadSHA, candidateHead); err != nil {
+			} else if err := persistSuccessProof(ctx, authority, validator, config, registry, issueContext.WriteScope, candidateWorkDir, deliveryID, trustedUnit, before.Next.UnitType, issueContext.PRBase, attempt.Generation, unitAttempt.Attempts, stateVersion, startSnapshot.HeadSHA, candidateHead, lifecycle); err != nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = err
 			} else if attemptWorktree != nil {
-				if err := attemptManager.PromoteCandidate(ctx, *attemptWorktree, candidateHead); err != nil {
+				if lifecycle == nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = errors.New("durable attempt lifecycle missing before promotion")
+				} else if promotionSnapshot, inspectErr := shepherdgit.Inspect(ctx, config.WorkDir); inspectErr != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = inspectErr
+				} else if promotionSnapshot.Branch != delivery.Branch || promotionSnapshot.HeadSHA != startSnapshot.HeadSHA {
+					result.Terminal = gsd.TerminalError
+					result.Err = errors.New("authorized delivery branch or head changed before promotion")
+				} else if cleanErr := shepherdgit.RequireClean(promotionSnapshot); cleanErr != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = cleanErr
+				} else if err := lifecycle.transition(ctx, store.AttemptWorktreePromoting, store.AttemptWorktreeUpdate{CandidateHead: candidateHead, ValidatedHead: candidateHead}); err != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = err
+				} else if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = err
+				} else if err := repositoryLock.Check(); err != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = err
+				} else if err := attemptManager.PromoteCandidate(ctx, *attemptWorktree, candidateHead); err != nil {
 					result.Terminal = gsd.TerminalError
 					result.Err = fmt.Errorf("promote ratified candidate: %w", err)
+				} else if lockErr := repositoryLock.Check(); lockErr != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = lockErr
 				} else if adoptErr := attemptManager.AdoptGSDState(ctx, *attemptWorktree); adoptErr != nil {
 					result.Terminal = gsd.TerminalError
 					result.Err = fmt.Errorf("adopt ratified GSD state: %w", adoptErr)
+				} else if err := lifecycle.transition(ctx, store.AttemptWorktreePromoted, store.AttemptWorktreeUpdate{CandidateHead: candidateHead, ValidatedHead: candidateHead}); err != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = err
+				} else if err := lifecycle.transition(ctx, store.AttemptWorktreeCleanupPending, store.AttemptWorktreeUpdate{}); err != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = err
+				} else if lockErr := repositoryLock.Check(); lockErr != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = lockErr
+				} else if cleanupResult, cleanupErr := reconcileOwnedAttempt(ctx, attemptManager, workspace.OwnedAttempt{Attempt: *attemptWorktree, ExpectedHead: candidateHead}); cleanupErr != nil || cleanupResult != workspace.ReconcileComplete {
+					result.Terminal = gsd.TerminalError
+					result.Err = fmt.Errorf("cleanup promoted attempt: %w", cleanupErr)
+					if transitionErr := lifecycle.transition(ctx, store.AttemptWorktreeCleanupBlocked, store.AttemptWorktreeUpdate{CleanupError: "owned_resource_mismatch_or_cleanup_failure"}); transitionErr != nil {
+						result.Err = errors.Join(result.Err, transitionErr)
+					}
+				} else if err := lifecycle.transition(ctx, store.AttemptWorktreeCleanupComplete, store.AttemptWorktreeUpdate{}); err != nil {
+					result.Terminal = gsd.TerminalError
+					result.Err = err
 				} else {
 					appendActivity("transition", "promoted_ratified_attempt", trustedUnit, "", "", time.Now().UTC())
-					_ = attemptManager.Discard(context.Background(), *attemptWorktree)
 				}
 			}
 		}
@@ -1054,6 +1428,9 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	if snapshotErr != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = joinTerminalFailure(result.Err, errors.New("inspect worktree after validation and promotion"))
+	} else if endSnapshot.Branch != delivery.Branch {
+		result.Terminal = gsd.TerminalError
+		result.Err = joinTerminalFailure(result.Err, errors.New("canonical worktree left the authorized delivery branch"))
 	} else if cleanErr := shepherdgit.RequireClean(endSnapshot); cleanErr != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = joinTerminalFailure(result.Err, errors.New("worktree must be clean after validation and promotion"))
@@ -1068,6 +1445,21 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	if terminalSpoolErr != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = fmt.Errorf("durable terminal append failed: %w", terminalSpoolErr)
+	}
+	if result.Terminal != gsd.TerminalSuccess {
+		terminalErr := result.Err
+		if terminalErr == nil {
+			terminalErr = errors.New("runtime did not provide an error")
+		}
+		if diagnostic := terminalDiagnostic(result.Stderr); diagnostic != "" {
+			terminalErr = fmt.Errorf("%w; runtime: %s", terminalErr, diagnostic)
+		}
+		result.Err = terminalErr
+	}
+	if lifecycle != nil && result.Terminal != gsd.TerminalSuccess {
+		if retainErr := lifecycle.retain(ctx, classifyUnitFailure(result)); retainErr != nil {
+			result.Err = errors.Join(result.Err, retainErr)
+		}
 	}
 	unitOutcome := string(result.Terminal)
 	if result.Err != nil {
@@ -1120,9 +1512,6 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	terminalErr := result.Err
 	if terminalErr == nil {
 		terminalErr = errors.New("runtime did not provide an error")
-	}
-	if diagnostic := terminalDiagnostic(result.Stderr); diagnostic != "" {
-		terminalErr = fmt.Errorf("%w; runtime: %s", terminalErr, diagnostic)
 	}
 	if result.Terminal == gsd.TerminalBlocked {
 		return commandExitError{code: 10, err: fmt.Errorf("GSD terminal=%s exit=%d: %w", result.Terminal, result.ExitCode, terminalErr)}
@@ -1213,6 +1602,9 @@ const (
 func classifyUnitFailure(result gsd.Result) string {
 	if result.Err == nil {
 		return string(result.Terminal)
+	}
+	if errors.Is(result.Err, errPreDispatchAttemptQuery) {
+		return unitFailureUnsafe
 	}
 	if errors.Is(result.Err, store.ErrRetryBudgetExhausted) {
 		return unitFailureRetryExhausted
@@ -1485,7 +1877,7 @@ func gsdStateArtifacts(workDir string) ([]shepherdgit.Artifact, error) {
 	return artifacts, nil
 }
 
-func persistSuccessProof(ctx context.Context, authorityStore *store.Store, validator validation.Validator, config fileConfig, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType, baseBranch string, generation, attempt, stateVersion int64, startHead, candidateHead string) error {
+func persistSuccessProof(ctx context.Context, authorityStore *store.Store, validator validation.Validator, config fileConfig, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType, baseBranch string, generation, attempt, stateVersion int64, startHead, candidateHead string, lifecycle *attemptLifecycle) error {
 	metadata, ok := registry.Lookup(unitType)
 	if !ok {
 		return fmt.Errorf("missing official unit metadata for %s", unitType)
@@ -1553,6 +1945,11 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 	if issuedAt.IsZero() {
 		return errors.New("validator issue time is required")
 	}
+	if lifecycle != nil {
+		if err := lifecycle.transition(ctx, store.AttemptWorktreeValidated, store.AttemptWorktreeUpdate{CandidateHead: candidateHead, ValidatedHead: candidateHead}); err != nil {
+			return err
+		}
+	}
 	attestation, err := authority.Ratify(authority.RatificationRequest{
 		Repository: config.Repository, PR: config.PullRequest, BaseBranch: baseBranch, BaseSHA: startHead,
 		CandidateHead: candidateHead, ObservedHead: validationResult.ObservedHead,
@@ -1567,16 +1964,14 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 		return err
 	}
 	proofIDHash := sha256.Sum256([]byte(deliveryID + ":" + unitID + ":" + candidateHead + ":" + hex.EncodeToString(evidenceHash[:])))
-	if err := authorityStore.PutArtifactProof(ctx, store.ArtifactProof{
+	proofRecord := store.ArtifactProof{
 		ProofID: hex.EncodeToString(proofIDHash[:8]), DeliveryID: deliveryID, Generation: generation, UnitID: unitID, Attempt: attempt,
 		StartHead: startHead, CandidateHead: candidateHead, ValidatedHead: attestation.HeadSHA,
 		ExpectedArtifact: string(raw), ArtifactHash: "sha256:" + hex.EncodeToString(evidenceHash[:]),
 		Validator: attestation.Validator, Thinking: attestation.Thinking,
 		Ratified: attestation.HeadSHA == candidateHead && attestation.Validator == validationResult.ObservedModel,
-	}); err != nil {
-		return err
 	}
-	return authorityStore.PutAttestation(ctx, store.AttestationRecord{
+	attestationRecord := store.AttestationRecord{
 		Repository: attestation.Repository, PR: attestation.PR, BaseBranch: attestation.BaseBranch,
 		BaseHead: attestation.BaseSHA, CandidateHead: attestation.HeadSHA, ObservedHead: validationResult.ObservedHead,
 		RunID: deliveryID, Generation: generation, UnitID: unitID, Attempt: attempt, StateVersion: stateVersion,
@@ -1585,7 +1980,19 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 		Validator: attestation.Validator, Thinking: attestation.Thinking, Verdict: attestation.Verdict,
 		LocalGates: attestation.LocalGates, UAT: attestation.UAT, MilestoneValid: attestation.MilestoneValid,
 		CreatedAt: attestation.IssuedAt, ExpiresAt: attestation.ExpiresAt,
-	})
+	}
+	if lifecycle != nil {
+		record, err := authorityStore.RatifyAttemptWorktree(ctx, lifecycle.key, lifecycle.owner, lifecycle.epoch, proofRecord, attestationRecord)
+		if err != nil {
+			return err
+		}
+		lifecycle.state = record.State
+		return nil
+	}
+	if err := authorityStore.PutArtifactProof(ctx, proofRecord); err != nil {
+		return err
+	}
+	return authorityStore.PutAttestation(ctx, attestationRecord)
 }
 
 func requiredGatesForUnit(metadata gsd.UnitMetadata) validation.GateRequirements {

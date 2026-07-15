@@ -23,14 +23,24 @@ the current branch and exact candidate head.
 - [x] New validator session, exact model, high thinking, request nonce, candidate head, evidence hash,
       base branch, and durable state version are all verified.
 
-### B. Attempt lifecycle and crash recovery
+### B. Attempt lifecycle and crash recovery — COMPLETE
 
-- [ ] Attempt identity, branch, path, base/candidate/validated heads, and all lifecycle states persist
-      in SQLite.
-- [ ] Restart reconciles database-owned orphan worktrees/branches.
-- [ ] Unknown or live worktrees are never deleted automatically.
-- [ ] Early preparation/query/runtime failures transition explicitly.
-- [ ] Retry always receives a fresh attempt worktree.
+- [x] Attempt identity, confirmed branch/path ownership, controller owner/epoch, base/candidate/validated
+      heads, bounded diagnostics, timestamps, and all exact lifecycle states persist in SQLite/reopen.
+- [x] Legal graph rejects skipped/backward/terminal/stale-owner transitions and reserves ratification for
+      the atomic proof+attestation transaction; `promoting` cannot become cleanup-eligible.
+- [x] Real supervise create/prepare/query/dispatch/validate/ratify/promote/failure/cleanup paths update lifecycle.
+- [x] Startup reconciliation runs before the first supervise query and is idempotent across restarts.
+- [x] Cleanup requires confirmed database ownership plus exact path/branch/head/common-dir/non-live proof.
+- [x] Unknown, unconfirmed, mismatched, checked-out, live-running, and promoting resources are preserved.
+- [x] Preparation/query/runtime/cleanup failures transition explicitly with bounded diagnostics.
+- [x] Retry after retained failure receives a fresh branch/worktree.
+- [x] Pre-Slice-B migration preserves delivery-run, proof, and attestation records.
+- [x] Repository-global lock, lease takeover, stale delivery/unit interruption, and human-gated absent-resource
+      resolution provide hard-crash convergence without broad prune, deletion, or `RemoveAll`.
+- [x] `attempt_root` is explicitly disjoint from canonical worktree and protected `state_dir`.
+- [x] Slice A validation, ratification, exact-head, write-scope, and delayed-promotion regressions remain green.
+- [x] Focused tests, full/race module verification, root repository gates, and exact 30-finding lint baseline passed.
 
 ### C. GSD-state promotion
 

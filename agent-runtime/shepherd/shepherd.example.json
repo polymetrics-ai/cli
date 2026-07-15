@@ -9,6 +9,7 @@
   "work_dir": "/absolute/path/to/issue-worktree",
   "gsd_home": "/absolute/path/to/controlled-gsd-home",
   "state_dir": "/absolute/path/to/protected-shepherd-state/issue-389",
+  "attempt_root": "/absolute/disjoint/path/to/shepherd-attempt-worktrees/issue-389",
   "repository": "polymetrics-ai/cli",
   "pull_request": 390,
   "coordinator_model": "openai-codex/gpt-5.6-sol",

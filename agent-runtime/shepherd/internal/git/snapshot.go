@@ -308,7 +308,7 @@ func validMilestoneID(value string) bool {
 func run(ctx context.Context, root string, args ...string) ([]byte, error) {
 	commandArgs := append([]string{"-C", root}, args...)
 	cmd := exec.CommandContext(ctx, "git", commandArgs...)
-	cmd.Env = append(os.Environ(), "GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS=")
+	cmd.Env = sanitizedGitEnvironment(os.Environ())
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
@@ -319,4 +319,16 @@ func run(ctx context.Context, root string, args ...string) ([]byte, error) {
 		return nil, errors.New("git output exceeds safety limit")
 	}
 	return stdout.Bytes(), nil
+}
+
+func sanitizedGitEnvironment(source []string) []string {
+	environment := make([]string, 0, len(source)+2)
+	for _, entry := range source {
+		name, _, _ := strings.Cut(entry, "=")
+		if strings.HasPrefix(strings.ToUpper(name), "GIT_") {
+			continue
+		}
+		environment = append(environment, entry)
+	}
+	return append(environment, "GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS=")
 }

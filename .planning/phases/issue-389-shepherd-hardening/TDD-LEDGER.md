@@ -111,19 +111,47 @@ Final corrected Slice A GREEN evidence:
 - PASS `cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
 - PASS live smoke: `POLYMETRICS_SHEPHERD_LIVE_VALIDATOR=1 go test ./internal/validation -run TestLivePiValidatorSmoke -count=1 -v` observed `openai-codex/gpt-5.6-sol`, `high`, fresh session `019f62b3-9830-7129-9c93-2104ed54a10e`, bound fixture head `6650f5e18ecbbf15c18739a8422fa1ba663a0635`, bound evidence hash, and `PROCEED`.
 
-## Slice B — Durable attempt lifecycle and crash recovery
+## Slice B — Durable attempt lifecycle and crash recovery — IN PROGRESS
 
-Planned RED tests:
-- [ ] attempt state enum/store supports `created`, `prepared`, `running`, `validated`, `ratified`,
-      `promoting`, `promoted`, `retained_for_recovery`, `cleanup_pending`, `cleanup_complete`, and
-      `cleanup_blocked`.
-- [ ] restart reconciles database-owned orphan worktrees/branches and leaves unknown/live worktrees
-      untouched.
-- [ ] preparation/query/runtime failures transition explicitly.
-- [ ] retry after retained failure creates a fresh attempt worktree.
+Slice A accepted GREEN at `95a17f18274c87ed0e3fde825b41257039b757de`.
+Orchestration: `local_critical_path`; no overlapping mutating workers.
 
-GREEN evidence: pending.
-Refactor evidence: pending.
+Completed RED/GREEN tests:
+- [x] all 11 lifecycle states and immutable fields persist and survive SQLite reopen.
+- [x] duplicate attempt identity cannot rebind branch, path, or base head.
+- [x] illegal, backward, terminal, generic-ratification, ambiguous-promotion, and stale-owner transitions fail closed.
+- [x] worktree creation is positively confirmed before `prepared`; dispatch persists `running`.
+- [x] candidate/validated heads persist before validation and proof/attestation/ratification commit atomically.
+- [x] preparation, pre-dispatch query, and runtime failures persist explicit bounded classifications.
+- [x] runtime failure becomes `retained_for_recovery`; cleanup failure becomes `cleanup_blocked`.
+- [x] startup reconciliation removes only exact database-owned, confirmed, non-live worktrees/branches.
+- [x] unknown/mismatched/live/checked-out/unconfirmed paths and branches remain untouched.
+- [x] retry after retained failure creates a fresh branch/path and never reuses the prior worktree.
+- [x] reconciliation is idempotent across repeated supervisor/database restarts.
+- [x] pre-Slice-B schema migration preserves delivery-run, proof, and attestation records.
+- [x] hard-crash reopen fences the old lease, interrupts running unit state, and restores delivery readiness.
+- [x] ambiguous running/promoting attempts durably await human recovery; resume succeeds only after exact resources are proven absent.
+
+RED evidence (2026-07-15):
+- `cd agent-runtime/shepherd && go test ./internal/store ./internal/workspace ./cmd/shepherd` failed as expected.
+- Store compile failures: missing durable `AttemptWorktreeState`, record/update types, and lifecycle APIs.
+- Workspace compile failures: missing branch identity, owned-attempt reconciliation types, and reconciliation API.
+- `cmd/shepherd` remained green before integration, confirming the initial RED boundary was the new Slice B behavior.
+- After store/workspace GREEN, focused supervise tests failed with zero `cleanup_complete` and zero
+  `retained_for_recovery` records, proving the real supervise path was not yet integrated.
+
+GREEN evidence (2026-07-15):
+- PASS `cd agent-runtime/shepherd && go test ./internal/store ./internal/workspace ./cmd/shepherd`.
+- PASS `cd agent-runtime/shepherd && make verify` including `go vet`, full tests, and `go test -race ./...`.
+- PASS repository gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify`.
+- `golangci-lint run ./...`: exactly 30 findings, matching HEAD baseline; no Slice B file finding.
+
+Refactor evidence:
+- Repository-global flock and SQLite lease epochs fence every delivery lease, bootstrap/query, promotion, and cleanup.
+- Attempt workspaces use an explicit disjoint `attempt_root`; exact path/branch/head/common-dir and no-symlink checks precede cleanup.
+- Independent reviewer/security passes drove fail-closed running/promoting recovery, positive resource confirmation,
+  atomic ratification, authorized-branch checks, bounded output, and human-gated convergence fixes.
+- Slice C promotion/state-swap journaling remains explicitly excluded.
 
 ## Slice C — Crash-safe GSD-state promotion
 

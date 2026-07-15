@@ -291,7 +291,7 @@ func (v GSDValidator) runDedicatedValidator(ctx context.Context, request Request
 	)
 	cmd := exec.CommandContext(ctx, v.Command[0], args...)
 	cmd.Dir = request.WorkDir
-	cmd.Env = append(os.Environ(), v.Environment...)
+	cmd.Env = sanitizedValidatorEnvironment(append(os.Environ(), v.Environment...))
 	cmd.Env = append(cmd.Env,
 		"PI_CODING_AGENT_DIR="+filepath.Join(request.GSDHome, "agent"),
 		"GSD_PROJECT_ROOT="+request.WorkDir,
@@ -497,11 +497,24 @@ func validateRequest(request Request) error {
 
 func gitHead(ctx context.Context, workDir string) (string, error) {
 	cmd := exec.CommandContext(ctx, "git", "-C", workDir, "rev-parse", "HEAD")
+	cmd.Env = sanitizedValidatorEnvironment(os.Environ())
 	raw, err := cmd.Output()
 	if err != nil {
 		return "", fmt.Errorf("inspect candidate head: %w", err)
 	}
 	return strings.TrimSpace(string(raw)), nil
+}
+
+func sanitizedValidatorEnvironment(source []string) []string {
+	environment := make([]string, 0, len(source)+2)
+	for _, entry := range source {
+		name, _, _ := strings.Cut(entry, "=")
+		if strings.HasPrefix(strings.ToUpper(name), "GIT_") {
+			continue
+		}
+		environment = append(environment, entry)
+	}
+	return append(environment, "GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS=")
 }
 
 func writeExclusiveJSON(path string, value any) error {

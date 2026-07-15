@@ -20,6 +20,7 @@ import (
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/validation"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/workspace"
 	_ "modernc.org/sqlite"
 )
 
@@ -269,7 +270,7 @@ func TestLoadConfigRejectsUnknownFields(t *testing.T) {
 	t.Parallel()
 
 	path := filepath.Join(t.TempDir(), "config.json")
-	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","unexpected":true}`
+	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","attempt_root":"/tmp/attempts","unexpected":true}`
 	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -282,7 +283,7 @@ func TestLoadConfigRequiresAllowlistedPiExecutable(t *testing.T) {
 	t.Parallel()
 
 	path := filepath.Join(t.TempDir(), "config.json")
-	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","repository":"polymetrics-ai/cli","pull_request":388}`
+	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","attempt_root":"/tmp/attempts","repository":"polymetrics-ai/cli","pull_request":388}`
 	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -295,7 +296,7 @@ func TestLoadConfigRequiresCompleteDecisionPRBinding(t *testing.T) {
 	t.Parallel()
 
 	path := filepath.Join(t.TempDir(), "config.json")
-	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","repository":"polymetrics-ai/cli"}`
+	raw := `{"gsd_command":["gsd"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","attempt_root":"/tmp/attempts","repository":"polymetrics-ai/cli"}`
 	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -308,7 +309,7 @@ func TestLoadConfigDefaultsToBoundedNestedAgentEnvelopeSize(t *testing.T) {
 	t.Parallel()
 
 	path := filepath.Join(t.TempDir(), "config.json")
-	raw := `{"gsd_command":["gsd"],"pi_command":["/usr/bin/true"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","repository":"polymetrics-ai/cli","pull_request":388}`
+	raw := `{"gsd_command":["gsd"],"pi_command":["/usr/bin/true"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/state","attempt_root":"/tmp/attempts","repository":"polymetrics-ai/cli","pull_request":388}`
 	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -321,6 +322,18 @@ func TestLoadConfigDefaultsToBoundedNestedAgentEnvelopeSize(t *testing.T) {
 	}
 	if config.CoordinatorModel != "openai-codex/gpt-5.6-sol" || config.ImplementationModel != "openai-codex/gpt-5.5" {
 		t.Fatalf("model split coordinator=%q implementation=%q", config.CoordinatorModel, config.ImplementationModel)
+	}
+}
+
+func TestLoadConfigRejectsAttemptRootContainingProtectedState(t *testing.T) {
+	t.Parallel()
+	path := filepath.Join(t.TempDir(), "config.json")
+	raw := `{"gsd_command":["gsd"],"pi_command":["/usr/bin/true"],"work_dir":"/tmp/work","gsd_home":"/tmp/home","state_dir":"/tmp/protected-state","attempt_root":"/tmp/protected-state/attempts","repository":"polymetrics-ai/cli","pull_request":388}`
+	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := loadConfig(path); err == nil || !strings.Contains(err.Error(), "attempt_root") {
+		t.Fatalf("nested attempt root err=%v", err)
 	}
 }
 
@@ -523,7 +536,7 @@ func TestSuperviseFakeRuntimeToFinalHumanGate(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	config := fileConfig{WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir, CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5", GSDVersion: "1.11.0", TimeoutSeconds: 10, HeartbeatSeconds: 1, MaxEventBytes: defaultMaxEventBytes, MaxUnitAttempts: 2, Repository: "polymetrics-ai/cli", PullRequest: 391, Runtime: "host"}
+	config := fileConfig{WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir, AttemptRoot: filepath.Join(t.TempDir(), "attempt-worktrees"), CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5", GSDVersion: "1.11.0", TimeoutSeconds: 10, HeartbeatSeconds: 1, MaxEventBytes: defaultMaxEventBytes, MaxUnitAttempts: 2, Repository: "polymetrics-ai/cli", PullRequest: 391, Runtime: "host"}
 	restore := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
 	defer restore()
 	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
@@ -531,6 +544,9 @@ func TestSuperviseFakeRuntimeToFinalHumanGate(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(repo, "agent-runtime", "shepherd", "canary.txt")); err != nil {
 		t.Fatalf("promoted canary artifact missing: %v", err)
+	}
+	if count := countSQLiteQueryForTest(t, filepath.Join(config.StateDir, "authority.db"), "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
+		t.Fatalf("cleanup-complete attempt records=%d want 1", count)
 	}
 }
 
@@ -587,7 +603,244 @@ func TestSuperviseRejectsInvalidIndependentValidationWithoutPromotion(t *testing
 			if validator.calls != 1 {
 				t.Fatalf("validator calls=%d want 1", validator.calls)
 			}
+			if count := countSQLiteQueryForTest(t, filepath.Join(config.StateDir, "authority.db"), "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'retained_for_recovery'"); count != 1 {
+				t.Fatalf("retained attempt records=%d want 1", count)
+			}
 		})
+	}
+}
+
+func TestSupervisePersistsPreparationAndPreDispatchFailures(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	for _, test := range []struct {
+		name         string
+		failureClass string
+		arrange      func(*testing.T, string) func()
+	}{
+		{name: "preparation", failureClass: "preparation_failure", arrange: func(_ *testing.T, _ string) func() {
+			previous := prepareAttemptGSDState
+			prepareAttemptGSDState = func(context.Context, *workspace.Manager, workspace.AttemptWorktree) error {
+				return errors.New("bounded preparation failure")
+			}
+			return func() { prepareAttemptGSDState = previous }
+		}},
+		{name: "pre-dispatch query", failureClass: "pre_dispatch_query_failure", arrange: func(t *testing.T, _ string) func() {
+			t.Setenv("RUNNER_HELPER_MODE", "fail-attempt-query")
+			return func() {}
+		}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+			restore := test.arrange(t, repo)
+			defer restore()
+			err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
+			if err == nil {
+				t.Fatal("early failure unexpectedly succeeded")
+			}
+			query := "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'retained_for_recovery' AND failure_class = '" + test.failureClass + "'"
+			if count := countSQLiteQueryForTest(t, filepath.Join(config.StateDir, "authority.db"), query); count != 1 {
+				t.Fatalf("durable %s records=%d want 1; supervise err=%v", test.failureClass, count, err)
+			}
+		})
+	}
+}
+
+func TestSuperviseRuntimeRetryReconcilesOldAttemptAndRetainsFreshAttempt(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	t.Setenv("RUNNER_HELPER_MODE", "fail-runtime")
+	_, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
+	if err == nil {
+		t.Fatal("runtime failure unexpectedly succeeded")
+	}
+	dbPath := filepath.Join(config.StateDir, "authority.db")
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
+		t.Fatalf("reconciled attempts=%d want 1", count)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'retained_for_recovery' AND failure_class = 'runtime_failure'"); count != 1 {
+		t.Fatalf("retained runtime attempts=%d want 1", count)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(DISTINCT path) FROM attempt_worktrees"); count != 2 {
+		t.Fatalf("distinct retry worktree paths=%d want 2", count)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(DISTINCT branch) FROM attempt_worktrees"); count != 2 {
+		t.Fatalf("distinct retry branches=%d want 2", count)
+	}
+}
+
+func TestSuperviseStartupReconcilesRetainedAttemptBeforeFinalGateQuery(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	_, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	restore := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validation.Result{}})
+	defer restore()
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("rejected validation unexpectedly succeeded")
+	}
+	restore()
+	dbPath := filepath.Join(config.StateDir, "authority.db")
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'retained_for_recovery'"); count != 1 {
+		t.Fatalf("retained attempts=%d want 1", count)
+	}
+	db, err := sql.Open("sqlite", dbPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(`UPDATE delivery_runs SET state = 'running', owner = 'crashed-owner'`); err != nil {
+		_ = db.Close()
+		t.Fatal(err)
+	}
+	if err := db.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+		t.Fatalf("final-gate startup reconciliation: %v", err)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
+		t.Fatalf("startup cleanup-complete attempts=%d want 1", count)
+	}
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+		t.Fatalf("idempotent final-gate restart: %v", err)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
+		t.Fatalf("idempotent cleanup-complete attempts=%d want 1", count)
+	}
+}
+
+func TestSuperviseStartupPreservesAmbiguousRunningAttempt(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	previous := prepareAttemptGSDState
+	defer func() { prepareAttemptGSDState = previous }()
+	prepareAttemptGSDState = func(context.Context, *workspace.Manager, workspace.AttemptWorktree) error {
+		return errors.New("bounded preparation failure")
+	}
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("preparation failure unexpectedly succeeded")
+	}
+	prepareAttemptGSDState = previous
+	dbPath := filepath.Join(config.StateDir, "authority.db")
+	db, err := sql.Open("sqlite", dbPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(`UPDATE attempt_worktrees SET state = 'running', candidate_head = ''`); err != nil {
+		_ = db.Close()
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(`UPDATE delivery_runs SET state = 'running', owner = 'crashed-owner'`); err != nil {
+		_ = db.Close()
+		t.Fatal(err)
+	}
+	var attemptPath, attemptBranch string
+	if err := db.QueryRow(`SELECT path, branch FROM attempt_worktrees`).Scan(&attemptPath, &attemptBranch); err != nil {
+		_ = db.Close()
+		t.Fatal(err)
+	}
+	if err := db.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("ambiguous running attempt did not block startup")
+	}
+	if _, err := os.Stat(attemptPath); err != nil {
+		t.Fatalf("ambiguous running worktree was removed: %v", err)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'running'"); count != 1 {
+		t.Fatalf("ambiguous running state changed: %d", count)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM delivery_runs WHERE state = 'awaiting_decision'"); count != 1 {
+		t.Fatalf("interrupted delivery was not durably blocked: %d", count)
+	}
+	authorityStore, err := store.Open(context.Background(), dbPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := resolveHumanClearedAttempts(context.Background(), authorityStore, config, "issue-389"); err == nil {
+		_ = authorityStore.Close()
+		t.Fatal("human resume accepted while ambiguous resources remained")
+	}
+	runGitForTest(t, repo, "worktree", "remove", "--force", attemptPath)
+	runGitForTest(t, repo, "branch", "-D", "--", attemptBranch)
+	if err := resolveHumanClearedAttempts(context.Background(), authorityStore, config, "issue-389"); err != nil {
+		_ = authorityStore.Close()
+		t.Fatalf("human-cleared resolution: %v", err)
+	}
+	if err := authorityStore.ResumeDelivery(context.Background(), domain.HumanDecision{RunID: "issue-389", Generation: 1, ActorKind: domain.ActorHuman, Approved: true}); err != nil {
+		_ = authorityStore.Close()
+		t.Fatal(err)
+	}
+	if err := authorityStore.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
+		t.Fatalf("human-cleared attempt did not converge: %d", count)
+	}
+}
+
+func TestSupervisePreservesAmbiguousPromotingAttempt(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	_, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	validator := &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED"), onValidate: func(_ context.Context, request validation.Request) error {
+		runGitForTest(t, request.WorkDir, "commit", "--allow-empty", "-m", "move candidate during validation")
+		return nil
+	}}
+	restore := installFakeIndependentValidator(t, validator)
+	defer restore()
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("moved candidate unexpectedly promoted")
+	}
+	dbPath := filepath.Join(config.StateDir, "authority.db")
+	var attemptPath string
+	db, err := sql.Open("sqlite", dbPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := db.QueryRow(`SELECT path FROM attempt_worktrees WHERE state = 'promoting'`).Scan(&attemptPath); err != nil {
+		_ = db.Close()
+		t.Fatalf("promoting attempt not durable: %v", err)
+	}
+	if err := db.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("ambiguous promotion did not block restart")
+	}
+	if _, err := os.Stat(attemptPath); err != nil {
+		t.Fatalf("ambiguous promoting worktree was removed: %v", err)
+	}
+}
+
+func TestSupervisePersistsCleanupBlockedWithoutDeletingAttempt(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	_, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
+	defer restoreValidator()
+	previous := reconcileOwnedAttempt
+	reconcileOwnedAttempt = func(context.Context, *workspace.Manager, workspace.OwnedAttempt) (workspace.ReconcileResult, error) {
+		return workspace.ReconcileBlocked, errors.New("bounded cleanup failure")
+	}
+	defer func() { reconcileOwnedAttempt = previous }()
+	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("cleanup failure unexpectedly succeeded")
+	}
+	dbPath := filepath.Join(config.StateDir, "authority.db")
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_blocked' AND cleanup_error <> ''"); count != 1 {
+		t.Fatalf("cleanup-blocked attempts=%d want 1", count)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_blocked' AND length(cleanup_error) <= 512"); count != 1 {
+		t.Fatalf("cleanup diagnostics were not bounded")
 	}
 }
 
@@ -633,6 +886,9 @@ func TestSuperviseRatifiesBeforePromotingCandidate(t *testing.T) {
 	}
 	if validator.calls != 1 {
 		t.Fatalf("validator calls=%d want 1", validator.calls)
+	}
+	if count := countSQLiteQueryForTest(t, filepath.Join(config.StateDir, "authority.db"), "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
+		t.Fatalf("cleanup-complete attempt records=%d want 1", count)
 	}
 }
 
@@ -689,7 +945,7 @@ func setupFakeSuperviseRuntime(t *testing.T) (string, string, fileConfig, *gsd.R
 	if err != nil {
 		t.Fatal(err)
 	}
-	config := fileConfig{WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir, CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5", GSDVersion: "1.11.0", TimeoutSeconds: 10, HeartbeatSeconds: 1, MaxEventBytes: defaultMaxEventBytes, MaxUnitAttempts: 2, Repository: "polymetrics-ai/cli", PullRequest: 391, Runtime: "host"}
+	config := fileConfig{WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir, AttemptRoot: filepath.Join(t.TempDir(), "attempt-worktrees"), CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5", GSDVersion: "1.11.0", TimeoutSeconds: 10, HeartbeatSeconds: 1, MaxEventBytes: defaultMaxEventBytes, MaxUnitAttempts: 2, Repository: "polymetrics-ai/cli", PullRequest: 391, Runtime: "host"}
 	return repo, contextPath, config, runner
 }
 
@@ -746,6 +1002,24 @@ func countSQLiteRowsForTest(t *testing.T, path, table string) int {
 	return count
 }
 
+func countSQLiteQueryForTest(t *testing.T, path, query string) int {
+	t.Helper()
+	db, err := sql.Open("sqlite", path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if err := db.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
+	var count int
+	if err := db.QueryRow(query).Scan(&count); err != nil {
+		t.Fatal(err)
+	}
+	return count
+}
+
 func readFileForTest(t *testing.T, path string) string {
 	t.Helper()
 	raw, err := os.ReadFile(path)
@@ -760,6 +1034,10 @@ func TestSuperviseFakeRuntimeHelper(t *testing.T) {
 		return
 	}
 	args := helperArgsAfterDoubleDash(os.Args)
+	if os.Getenv("RUNNER_HELPER_MODE") == "fail-attempt-query" && len(args) >= 2 && args[0] == "headless" && args[1] == "query" && strings.Contains(os.Getenv("GSD_PROJECT_ROOT"), "attempt-worktrees") {
+		fmt.Fprintln(os.Stderr, "bounded fake attempt query failure")
+		os.Exit(2)
+	}
 	if len(args) >= 2 && args[0] == "headless" && args[1] == "query" {
 		statePath := filepath.Join(os.Getenv("GSD_STATE_DIR"), "fake-workflow-state")
 		if _, err := os.Stat(statePath); err == nil {
@@ -777,6 +1055,12 @@ func TestSuperviseFakeRuntimeHelper(t *testing.T) {
 	}
 	if model != "openai-codex/gpt-5.5" {
 		fmt.Fprintf(os.Stderr, "unexpected model %s", model)
+		os.Exit(2)
+	}
+	if os.Getenv("RUNNER_HELPER_MODE") == "fail-runtime" {
+		fmt.Println(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.5"}}`)
+		fmt.Println(`{"type":"thinking_level_select","level":"high"}`)
+		fmt.Fprintln(os.Stderr, "bounded fake runtime process failure")
 		os.Exit(2)
 	}
 	workDir := os.Getenv("GSD_PROJECT_ROOT")
