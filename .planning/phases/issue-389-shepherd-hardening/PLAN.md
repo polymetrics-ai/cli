@@ -56,8 +56,13 @@ status is therefore **not validated, not ratified, not canary-ready**.
     `f0fbf47f54c688792a5d53edfa4b680b38b39eed`. Slice D uses `local_critical_path`; official
     runtime validation, normalized export, registry admission, model routing, and command startup
     are one sequential trust boundary. Read-only reviewers are allowed; no overlapping mutating
-    worker is allowed. Slice E onward, PR creation, final Sol review, canaries, GitHub mutation,
-    and parent PR #390 merge remain blocked.
+    worker is allowed.
+11. `cycle-11/slice-e`: Slice D is accepted GREEN at
+    `cacb32e8e16b7ba70742cc5365cb83fffd74ca35`. Slice E uses `local_critical_path` because typed
+    failure classification, separate Sol/high planner execution, protected session evidence, atomic
+    SQLite budget reservation, backoff, and supervise retry state share one trust boundary. Read-only
+    testing/reliability/review/security sidecars may overlap. Slice F onward, PR creation, final review,
+    canaries, GitHub mutation, cleanup/migration, and parent PR #390 merge remain blocked.
 
 ## Ordered implementation slices
 
@@ -183,23 +188,58 @@ unit attempt evidence. Canonical aliases use disposable worktrees and fresh chec
 workflow tool is contract-checked; exporter/runner/validator process trees are bounded and synchronously
 cleaned. Retained Podman and unqualified continuation fail closed. The installed official runtime,
 focused/full/race/vet/build/make/boundary/list/diff gates, and the 28-finding no-differential lint
-baseline pass. Slice E remains blocked.
+baseline pass. Slice E then became the only active slice.
 
 Skills used for Slice D: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`,
 `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`,
 `golang-safety`, `golang-context`, `golang-concurrency`, `golang-design-patterns`,
 `golang-structs-interfaces`, `golang-observability`, and `golang-lint`.
 
-### E. Real Sol/high recovery planning
+### E. Real Sol/high recovery planning — COMPLETE / GREEN
+
+Orchestration: `local_critical_path`; read-only tester/reliability/reviewer/security sidecars only.
+GSD command: `scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto`.
+Skills: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`, `golang-how-to`,
+`golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-context`, `golang-concurrency`, `golang-database`, `golang-design-patterns`,
+`golang-structs-interfaces`, `golang-observability`, `golang-lint`, `golang-code-style`,
+`golang-naming`, and `golang-documentation`.
 
 RED tests first:
-- static recovery-planning text is rejected;
-- Sol/high recovery planner output must include observed model/thinking, evidence hash, typed action,
-  bounded plan, and explicit allowlisted action;
-- budget exhaustion enters durable `awaiting_decision` after restart.
+- the static recovery sentence is rejected as non-evidence;
+- all required failure classes are typed and exhaustive; unknown input fails closed;
+- unsafe classes block without invoking a planner; external-effect uncertainty awaits decision;
+- dead worker, silent tool, missing/invalid artifact, interruption, and reversible validation failure
+  invoke a genuinely separate GPT-5.6 Sol/high planner only while their class budget permits;
+- strict bounded JSON rejects missing/duplicate/unknown/partial/oversized/trailing fields, replay,
+  nonce/head/class/hash/authority mismatch, stale/expired evidence, non-Sol/non-high identity,
+  fabricated sessions, unknown or class-forbidden actions, and executable free-form instructions;
+- class budgets are independently keyed by delivery/generation/unit/head/class, atomically reserved,
+  fenced against concurrent duplicate consumption, immutable in policy, restart-safe, and enforce
+  deterministic bounded exponential backoff;
+- exhaustion durably selects `await_decision` when human input can help and `block` otherwise;
+- planner timeout/cancellation and normal exit synchronously terminate descendants;
+- planning and every rejected path leave canonical Git and canonical `.gsd` unchanged;
+- every accepted retry uses a fresh Slice B attempt worktree.
 
-GREEN target: dispatch bounded GPT-5.6 Sol/high recovery-planning units, persist selected typed actions,
-and enforce per-class durable budgets.
+GREEN target: introduce a narrow `internal/recovery` sidecar package and durable SQLite records. Launch
+Pi directly in protected JSON mode with a fresh cryptographic nonce/session directory and exact
+`openai-codex/gpt-5.6-sol`/`high`; bind one current-run top-level session and strict result to delivery,
+generation, unit, attempt, head, failure class, evidence/authority hashes, action, bounded typed steps,
+backoff, issue/expiry times, and replay state. Persist only redacted bounded diagnostics and structured
+evidence. The controller—not model text—selects and executes allowlisted actions. No external effect is
+retried in Slice E; GitHub/outbox uncertainty remains `await_decision`/blocked until Slice F.
+
+Implemented and verified on 2026-07-15. `internal/recovery` now launches a fresh no-tool Pi process
+pinned to `openai-codex/gpt-5.6-sol`/`high`, validates a strict lifecycle-correlated stream and durable
+no-tool session, and accepts only nonce/evidence/authority-bound typed recommendations. Controller
+policy makes unsafe or ambiguous joined failures dominant, validates class-specific actions and typed
+primitives, and executes no model prose. SQLite persists globally ordered, per-class budgets with
+owner/lease-epoch fencing, deterministic backoff, expiry, crash-safe dispatch disposition, legacy
+exhaustion gating, and fresh-attempt retry ownership. GitHub/outbox uncertainty is typed and blocks
+without another write. Live Sol/high smoke, focused/full/race/vet/build/make/boundary/list/diff gates,
+the exact 28-finding no-differential lint baseline, and independent Sol/high correctness/security
+review cycles pass with all actionable findings dispositioned. Slice F remains blocked.
 
 ### F. Authority-gated external effects
 

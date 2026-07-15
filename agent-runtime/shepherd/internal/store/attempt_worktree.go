@@ -496,6 +496,11 @@ func (s *Store) ReconcileInterruptedDelivery(ctx context.Context, lease Lease, t
 		AND generation = ? AND status = 'running'`, now, lease.RunID, generation); err != nil {
 		return err
 	}
+	if _, err := conn.ExecContext(ctx, `UPDATE recovery_attempts SET status = 'used_failed', updated_at = ?
+		WHERE delivery_id = ? AND generation = ? AND status = 'dispatched' AND dispatch_claim = ?
+		AND dispatch_epoch > 0`, now, lease.RunID, generation, owner); err != nil {
+		return err
+	}
 	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
 		return err
 	}

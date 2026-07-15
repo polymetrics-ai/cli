@@ -2,7 +2,6 @@ package store
 
 import (
 	"context"
-	"errors"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -99,46 +98,5 @@ func TestDecisionRequestRejectsStaleGenerationHeadAndExpiry(t *testing.T) {
 				t.Fatal("stale decision answer accepted")
 			}
 		})
-	}
-}
-
-func TestRecoveryBudgetIsPerFailureClassAndSurvivesRestart(t *testing.T) {
-	t.Parallel()
-	ctx := context.Background()
-	path := filepath.Join(t.TempDir(), "shepherd.db")
-	head := strings.Repeat("d", 40)
-	first, err := Open(ctx, path)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := first.EnsureDelivery(ctx, testDelivery("issue-389", 389)); err != nil {
-		t.Fatal(err)
-	}
-	now := time.Unix(1_700_000_000, 0).UTC()
-	artifactKey := RecoveryBudgetKey{DeliveryID: "issue-389", Generation: 1, UnitID: "execute-task/M001/S01/T01", HeadSHA: head, FailureClass: "artifact_missing"}
-	modelKey := artifactKey
-	modelKey.FailureClass = "model_mismatch"
-	budget, err := first.BeginRecoveryAttempt(ctx, artifactKey, 2, time.Minute, "missing artifact", "recreate artifact", now)
-	if err != nil || budget.Attempts != 1 || budget.NextRetryAt.Sub(now) != time.Minute {
-		t.Fatalf("artifact budget=%+v err=%v", budget, err)
-	}
-	other, err := first.BeginRecoveryAttempt(ctx, modelKey, 1, 0, "model drift", "", now)
-	if err != nil || other.Attempts != 1 {
-		t.Fatalf("model budget=%+v err=%v", other, err)
-	}
-	if err := first.Close(); err != nil {
-		t.Fatal(err)
-	}
-	second, err := Open(ctx, path)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer second.Close()
-	budget, err = second.BeginRecoveryAttempt(ctx, artifactKey, 2, time.Minute, "missing again", "recreate again", now.Add(time.Minute))
-	if err != nil || budget.Attempts != 2 {
-		t.Fatalf("reopened artifact budget=%+v err=%v", budget, err)
-	}
-	if _, err := second.BeginRecoveryAttempt(ctx, artifactKey, 2, time.Minute, "missing third", "", now.Add(2*time.Minute)); !errors.Is(err, ErrRetryBudgetExhausted) {
-		t.Fatalf("error=%v, want recovery budget exhaustion", err)
 	}
 }

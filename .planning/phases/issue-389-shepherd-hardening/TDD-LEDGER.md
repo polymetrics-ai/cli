@@ -257,17 +257,71 @@ closed until disposable-worktree continuation is qualified. The explicitly selec
 model remains a documented architecture trust assumption requiring a future separate UID, OS sandbox,
 or human-qualified container; it is not represented as isolation. Slice E onward is excluded.
 
-## Slice E — Real Sol/high recovery planning
+## Slice E — Real Sol/high recovery planning — COMPLETE / GREEN
+
+Slice D accepted GREEN at `cacb32e8e16b7ba70742cc5365cb83fffd74ca35`.
+Orchestration: `local_critical_path`; no overlapping mutating worker. GSD command:
+`scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto`.
+Skills loaded: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`, `golang-how-to`,
+`golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-context`, `golang-concurrency`, `golang-database`, `golang-design-patterns`,
+`golang-structs-interfaces`, `golang-observability`, `golang-lint`, `golang-code-style`,
+`golang-naming`, and `golang-documentation`.
 
 Planned RED tests:
-- [ ] static recovery-planning text is insufficient.
-- [ ] planner result must include observed model/thinking, evidence hash, typed action, and bounded
-      plan.
-- [ ] unallowlisted action fails closed.
-- [ ] budget exhaustion persists `awaiting_decision` across restart.
+- [x] static recovery text is rejected.
+- [x] required typed failure classes are exhaustive and unknown input fails closed.
+- [x] dead worker retries only within its independent class budget.
+- [x] silent tool persists and enforces deterministic backoff.
+- [x] artifact missing/invalid and reversible validation failure invoke a real Sol/high planner.
+- [x] model/thinking mismatch, scope breach, dirty tree, stale head, and ratification failure block
+      without planner invocation.
+- [x] GitHub/outbox uncertainty blocks without repeating an external effect.
+- [x] unknown failure safely awaits decision or blocks.
+- [x] exhaustion durably enters awaiting decision or blocked according to policy.
+- [x] restart preserves counts, policy, action, plan, session evidence, retry time, and exhaustion.
+- [x] concurrent owner/lease-epoch claims cannot consume one budget attempt twice.
+- [x] GPT-5.5/non-high/stale/fabricated/replayed/mismatched planner evidence is rejected.
+- [x] unallowlisted and class-forbidden actions are rejected.
+- [x] planner cannot widen authority, emit executable commands, broad paths, tools, or external writes.
+- [x] planner timeout/cancellation and normal parent exit synchronously terminate descendants.
+- [x] malformed/oversized/duplicate/case-duplicate/unknown/partial/trailing output fails closed.
+- [x] failed planning/rejection leaves canonical Git and `.gsd` unchanged.
+- [x] accepted retries use fresh Slice B attempt resources.
+- [x] Slices A-D remain green.
 
-GREEN evidence: pending.
-Refactor evidence: pending.
+RED evidence (2026-07-15): `cd agent-runtime/shepherd && go test ./internal/recovery ./internal/store
+./internal/supervisor ./cmd/shepherd -count=1` failed as expected. `internal/recovery` had no production
+files and failed on missing typed classes/actions/policy, strict planner request/result/session evidence,
+and bounded process APIs. `internal/store` failed on missing fenced structured reservation/outcome,
+backoff/dispatch, replay, and durable evidence APIs. Existing supervisor/command packages remained
+green, isolating the RED boundary to Slice E behavior. The RED suite explicitly rejects the static
+recovery sentence and covers typed policy, real Sol/high identity, malformed/replayed evidence,
+class-independent concurrency-safe budgets, restart/backoff/exhaustion, and dispatch claims.
+
+GREEN evidence (2026-07-15): focused recovery/store/supervisor/command tests pass. A live Pi smoke
+observed `openai-codex/gpt-5.6-sol`, `high`, fresh session
+`019f6721-1e33-7dea-9b20-991a2e004715`, a strict bound result, and no tools. Full nested tests,
+race, vet, build, nested/root `make verify`, module boundary, root package listing, formatting, and diff
+checks pass. Nested lint remains the exact accepted 28 findings with no `internal/recovery` finding and
+no new Slice E production finding.
+
+Refactor evidence: independent GPT-5.6 Sol/high correctness and security passes were run repeatedly
+against the complete working diff from Slice D. Every actionable finding was dispositioned, including
+reversible gating, typed silent/dead-worker sentinels, unsafe joined-error dominance, no-tool stream and
+durable-session proof, branch/scope binding, legacy migration, globally ordered crash-safe dispatch,
+plan execution, evidence/action policy binding, owner plus lease-epoch fencing, symlink containment,
+actual-clock expiry, external-effect uncertainty blocking, mutating-skip preservation, noncanonical
+retry blocking, no-decision crash gating, dispatch-owner/epoch-fenced unit disposition, crash
+reconciliation of claimed dispatch, mutating-skip consumption without historical masking, durable
+assistant model proof, pre-unit dispatch failure disposition, persisted dispatch epoch, removal of the
+unfenced unit-finish API, typed decision-comment uncertainty, historical-consumed decision ordering,
+deferred finish-error propagation, complete error-chain preservation, unsafe noncanonical policy
+preservation, unconditional post-backoff authority/GSD/lock/lease revalidation, transactionally
+fenced unit starts, retained runner causes, finish-error chain preservation, and durable outbox-failure
+classification, and deferred delivery-finish error propagation. The accepted
+same-UID host assumption remains documented; unsupported non-Unix process-tree cleanup now fails
+planner construction closed.
 
 ## Slice F — Authority-gated external effects
 

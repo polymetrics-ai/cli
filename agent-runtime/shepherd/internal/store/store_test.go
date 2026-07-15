@@ -371,6 +371,35 @@ func TestUnitAttemptIdentityPersistsAndBindsExactAttempt(t *testing.T) {
 	}
 }
 
+func TestUnitAttemptBudgetAllowsOneWayPolicyExpansion(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	db, err := Open(ctx, filepath.Join(t.TempDir(), "shepherd.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	key := UnitAttemptKey{DeliveryID: "issue-389", Generation: 1, UnitID: "plan-milestone/M001", HeadSHA: strings.Repeat("a", 40)}
+	if err := db.EnsureDelivery(ctx, testDelivery(key.DeliveryID, 389)); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.BeginUnitAttempt(ctx, key, 2); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.finishUnitAttempt(ctx, key, 0, "interrupted", "", 0); err != nil {
+		t.Fatal(err)
+	}
+	if attempt, err := db.BeginUnitAttempt(ctx, key, 37); err != nil || attempt.Remaining != 35 {
+		t.Fatalf("expanded attempt=%+v err=%v", attempt, err)
+	}
+	if err := db.finishUnitAttempt(ctx, key, 0, "interrupted", "", 0); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.BeginUnitAttempt(ctx, key, 2); err == nil {
+		t.Fatal("unit attempt policy shrink was accepted")
+	}
+}
+
 func TestUnitAttemptBudgetSurvivesStoreRestart(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
@@ -392,7 +421,7 @@ func TestUnitAttemptBudgetSurvivesStoreRestart(t *testing.T) {
 		if err != nil || attempt.Attempts != want || attempt.Remaining != 3-want {
 			t.Fatalf("attempt=%+v err=%v", attempt, err)
 		}
-		if err := first.FinishUnitAttempt(ctx, key, "interrupted"); err != nil {
+		if err := first.finishUnitAttempt(ctx, key, 0, "interrupted", "", 0); err != nil {
 			t.Fatal(err)
 		}
 	}

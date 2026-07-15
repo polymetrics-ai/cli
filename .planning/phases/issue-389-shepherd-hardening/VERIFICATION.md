@@ -129,14 +129,32 @@ Final local review disposition (four independent read-only reviewer/security cyc
 - Accepted Slice A validator live-event/session correlation schema remains unchanged; Slice D replaced
   its multi-selection filesystem fallback with one strict current-run session evidence path.
 
-### E. Sol/high recovery planning
+### E. Sol/high recovery planning — COMPLETE / GREEN
 
-- [ ] Static recovery text removed.
-- [ ] GPT-5.6 Sol/high recovery-planning unit dispatch is observed and persisted.
-- [ ] Evidence hash, typed action, bounded plan, and model/thinking are stored.
-- [ ] Action allowlist enforced.
-- [ ] Per-class durable recovery budgets enforced.
-- [ ] Exhaustion enters durable `awaiting_decision` and survives restart.
+- [x] Static recovery text is rejected and removed from production.
+- [x] Required failure classes and typed actions are exhaustive; unknown values fail closed.
+- [x] Unsafe classes and authority/security/dependency/secret/destructive changes never invoke planner retry.
+- [x] GPT-5.6 Sol/high recovery planner is a separate protected Pi process with fresh nonce/session.
+- [x] One fresh top-level session proves exact model, high thinking, session ID, and current-run identity.
+- [x] Strict bounded request/result JSON binds nonce, delivery/generation/unit/attempt/head/class,
+      evidence/authority hashes, action, typed steps, backoff, issued/expiry times, and replay state.
+- [x] Duplicate/case-duplicate/unknown/partial/oversized/trailing/mismatched/stale/replayed output fails closed.
+- [x] Action allowlist and per-class action policy are enforced by the controller and durable store.
+- [x] Plan steps are bounded typed primitives; no arbitrary command/path/tool/external write executes.
+- [x] Durable budgets are independently keyed by delivery/generation/unit/head/failure class.
+- [x] Atomic owner/lease-epoch-fenced reservation prevents duplicate consumption and policy changes.
+- [x] Deterministic exponential backoff and `next_retry_at` survive restart and block early dispatch.
+- [x] Exhaustion durably enters awaiting decision or blocked without redispatch/duplicate decision.
+- [x] Planner failures cannot create an unbounded planner loop.
+- [x] External-effect uncertainty is typed, blocks, and never blindly repeats writes.
+- [x] Planner process groups clean descendants on timeout, cancellation, and normal exit; unsupported
+      non-Unix cleanup fails planner construction closed.
+- [x] Planning/rejection leaves canonical Git and `.gsd` unchanged.
+- [x] Accepted retries use fresh attempt resources.
+- [x] Focused recovery/store/supervisor/command tests pass.
+- [x] Full/race/vet/build/root verify/module-boundary/diff/go-list gates pass.
+- [x] Lint equals the accepted 28-finding baseline with zero Slice E findings.
+- [x] Independent Sol/high correctness and security reviews have no unresolved actionable findings.
 
 ### F. Authority-gated external effects
 
@@ -208,4 +226,10 @@ go list ./...
 - Slice D nested/root verification: PASS nested `make verify`, root `make verify`, `scripts/tests/shepherd-module-boundary.sh`, `git diff --check`, and root `go list ./...` (145 packages).
 - Slice D lint differential: expected nonzero baseline output, 28 findings (`errcheck` 24, `ineffassign` 1, `staticcheck` 2, `unused` 1), below the 29-finding Slice D baseline; the temporary new identity-test finding was removed and there are zero new Slice D production findings.
 - Slice D implementation, local review, coherent checkpoint, push, remote-head confirmation, and clean-worktree confirmation are complete.
-- Slice E onward, canaries, PR creation, final Sol review, GitHub mutation, and parent PR #390 merge remain blocked.
+- Slice E focused GREEN: PASS `cd agent-runtime/shepherd && go test ./internal/recovery ./internal/store ./internal/supervisor ./cmd/shepherd -count=1`.
+- Slice E live planner smoke: PASS `POLYMETRICS_SHEPHERD_LIVE_RECOVERY=1 go test ./internal/recovery -run TestLivePiRecoveryPlannerSmoke -count=1 -v`; observed model `openai-codex/gpt-5.6-sol`, thinking `high`, fresh session `019f6721-1e33-7dea-9b20-991a2e004715`, strict bound action/evidence, and no tools.
+- Slice E final nested gates: PASS full tests, full race, vet, build, and nested `make verify`.
+- Slice E root/repository gates: PASS root `make verify`, module boundary, `git diff --check`, and root `go list ./...` (145 packages).
+- Slice E lint differential: expected nonzero baseline output, exactly 28 findings (`errcheck` 24, `ineffassign` 1, `staticcheck` 2, `unused` 1), with no `internal/recovery` finding and zero new Slice E production findings.
+- Independent GPT-5.6 Sol/high correctness/security review cycles covered the complete working diff from Slice D; every actionable finding is dispositioned in `TDD-LEDGER.md` refactor evidence and there is no unresolved finding.
+- Slice F onward, canaries, PR creation, final issue review, general GitHub mutation, and parent PR #390 merge remain blocked.

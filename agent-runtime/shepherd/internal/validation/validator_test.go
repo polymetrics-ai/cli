@@ -375,7 +375,7 @@ func writeValidationSession(sessionDir, worktree, model, thinking, nonce string)
 	if !ok {
 		return fmt.Errorf("bad model %s", model)
 	}
-	content := fmt.Sprintf("{\"type\":\"session\",\"version\":3,\"timestamp\":%q,\"id\":%q,\"cwd\":%q}\n{\"type\":\"model_change\",\"provider\":%q,\"modelId\":%q}\n{\"type\":\"thinking_level_change\",\"thinkingLevel\":%q}\n", time.Now().UTC().Format(time.RFC3339Nano), id, worktree, provider, modelID, thinking)
+	content := fmt.Sprintf("{\"type\":\"session\",\"version\":3,\"timestamp\":%q,\"id\":%q,\"cwd\":%q}\n{\"type\":\"model_change\",\"provider\":%q,\"modelId\":%q}\n{\"type\":\"thinking_level_change\",\"thinkingLevel\":%q}\n{\"type\":\"message\",\"message\":{\"role\":\"assistant\",\"provider\":%q,\"model\":%q}}\n", time.Now().UTC().Format(time.RFC3339Nano), id, worktree, provider, modelID, thinking, provider, modelID)
 	return os.WriteFile(path, []byte(content), 0o600)
 }
 

@@ -1,12 +1,12 @@
 {
   "phase": "issue-389-shepherd-hardening",
   "branch": "fix/389-shepherd-proof-recovery",
-  "base_head": "f0fbf47f54c688792a5d53edfa4b680b38b39eed",
+  "base_head": "cacb32e8e16b7ba70742cc5365cb83fffd74ca35",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_d_green_checkpoint_pushed",
-  "current_slice": "D_official_gsd_1_11_registry_loading",
-  "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
+  "state": "slice_e_green_checkpoint_ready",
+  "current_slice": "E_real_sol_high_recovery_planning",
+  "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "completed_slices": [
     {
       "slice": "A_real_independent_validation_and_ratification",
@@ -21,6 +21,11 @@
     {
       "slice": "C_crash_safe_gsd_state_promotion",
       "head": "f0fbf47f54c688792a5d53edfa4b680b38b39eed",
+      "status": "green_accepted"
+    },
+    {
+      "slice": "D_official_gsd_1_11_registry_loading",
+      "head": "cacb32e8e16b7ba70742cc5365cb83fffd74ca35",
       "status": "green_accepted"
     }
   ],
@@ -40,7 +45,10 @@
     "golang-structs-interfaces",
     "golang-database",
     "golang-observability",
-    "golang-lint"
+    "golang-lint",
+    "golang-code-style",
+    "golang-naming",
+    "golang-documentation"
   ],
   "orchestration_decisions": [
     {
@@ -72,6 +80,26 @@
       "cycle": "cycle-10-slice-d-review-verify",
       "decision": "local_critical_path",
       "reason": "Four independent read-only reviewer/security cycles were dispositioned; focused, installed-runtime, full, race, vet, build, make, boundary, list, diff, and lint-differential gates pass."
+    },
+    {
+      "cycle": "cycle-11-slice-e-plan",
+      "decision": "local_critical_path",
+      "reason": "Failure classification, planner process/session evidence, durable SQLite budgets, and supervise retry transitions share one trust boundary; production edits stay sequential while read-only sidecars may overlap."
+    },
+    {
+      "cycle": "cycle-12-slice-e-recon",
+      "decision": "read_only_spawned",
+      "reason": "Three independent scouts mapped current recovery/store seams, reusable protected Pi/session patterns, and RED integration helpers; no sidecar mutated the checkout."
+    },
+    {
+      "cycle": "cycle-13-slice-e-review-fix",
+      "decision": "local_critical_path",
+      "reason": "Independent GPT-5.6 Sol/high correctness and security passes reviewed the full working diff; all planner, classification, SQLite fencing, migration, dispatch, no-tool, scope, lease, and external-uncertainty findings were fixed sequentially."
+    },
+    {
+      "cycle": "cycle-14-slice-e-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused, live Sol/high, full, race, vet, build, nested/root make, boundary, list, diff, and exact 28-finding no-differential lint gates passed; generated binaries were removed."
     }
   ],
   "slice_b_checkpoint": {
@@ -80,14 +108,17 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Stop with Slice E onward blocked"
+    "Commit and push one coherent green Slice E checkpoint",
+    "Confirm exact local/remote head equality and a clean worktree",
+    "Stop before Slice F and all remaining human-gated work"
   ],
   "blocked": [
-    "Slice E and later slices",
+    "Slice F and later slices",
     "PR creation",
     "Sol final review",
     "Twenty/Asana canaries",
     "GitHub mutation",
+    "cleanup or migration",
     "Parent PR #390 merge"
   ]
 }

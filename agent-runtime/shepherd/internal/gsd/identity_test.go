@@ -155,6 +155,14 @@ func TestReadSessionIdentityDeltaRejectsSelectedFileReplacementAndAmbiguousRow(t
 	if _, _, _, err := readSessionIdentityDelta(path, 0, "openai-codex/gpt-5.6-sol", "high", selected); err == nil {
 		t.Fatal("wrong model transition hidden by a right assistant identity was accepted")
 	}
+	write("gpt-5.6-sol", false)
+	selected, err = os.Lstat(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, _, _, err := readSessionIdentityDelta(path, 0, "openai-codex/gpt-5.6-sol", "high", selected); err == nil {
+		t.Fatal("model transition without durable assistant identity was accepted")
+	}
 }
 
 func TestReadSessionIdentityForRunRejectsWrongThenRightTransition(t *testing.T) {

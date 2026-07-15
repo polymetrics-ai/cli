@@ -2,6 +2,7 @@ package git
 
 import (
 	"context"
+	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -37,8 +38,8 @@ func TestArtifactManifestBindsChangedScopedFiles(t *testing.T) {
 	if len(manifest) != 1 || manifest[0].Path != "agent-runtime/shepherd/proof.txt" || manifest[0].Hash == "" {
 		t.Fatalf("manifest=%+v", manifest)
 	}
-	if _, err := ArtifactManifest(ctx, root, start, end, []string{"docs/**"}); err == nil {
-		t.Fatal("out-of-scope artifact manifest accepted")
+	if _, err := ArtifactManifest(ctx, root, start, end, []string{"docs/**"}); !errors.Is(err, ErrWriteScopeBreach) {
+		t.Fatalf("out-of-scope artifact manifest err=%v", err)
 	}
 }
 

@@ -24,6 +24,11 @@ const (
 	defaultMaxEvent  = 256 * 1024
 )
 
+var (
+	ErrSilentTool = errors.New("silent_tool")
+	ErrDeadWorker = errors.New("dead_worker")
+)
+
 var governedModels = map[string]struct{}{
 	"openai-codex/gpt-5.6-sol": {},
 	"openai-codex/gpt-5.5":     {},
@@ -437,7 +442,7 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 			if lastEventAt.Equal(started) && len(inFlightTools) == 0 && progress.RunningChildren == 0 && progress.Turns == 0 && at.Sub(started) >= r.config.StartupNoEventTimeout {
 				cancel()
 				waitErr := <-waited
-				return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: fmt.Errorf("%w: no model, tool, or child activity observed before startup deadline", ErrRuntimeContractMismatch), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+				return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: fmt.Errorf("%w: no model, tool, or child activity observed before startup deadline", ErrSilentTool), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
 			}
 		case waitErr := <-waited:
 			if eventsOpen {
@@ -807,8 +812,10 @@ func classifyResult(ctx context.Context, started time.Time, err error, stderr st
 	switch {
 	case errors.Is(ctx.Err(), context.DeadlineExceeded):
 		result.Terminal = TerminalTimeout
+		result.Err = errors.Join(context.DeadlineExceeded, err)
 	case errors.Is(ctx.Err(), context.Canceled):
 		result.Terminal = TerminalCancelled
+		result.Err = errors.Join(context.Canceled, err)
 	case err == nil:
 		result.Terminal = TerminalSuccess
 	case result.ExitCode == 10:
@@ -817,6 +824,9 @@ func classifyResult(ctx context.Context, started time.Time, err error, stderr st
 		result.Terminal = TerminalCancelled
 	default:
 		result.Terminal = TerminalError
+		if err != nil {
+			result.Err = errors.Join(ErrDeadWorker, err)
+		}
 	}
 	return result
 }

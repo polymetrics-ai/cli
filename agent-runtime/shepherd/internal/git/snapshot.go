@@ -13,6 +13,8 @@ import (
 	"strings"
 )
 
+var ErrWriteScopeBreach = errors.New("write_scope_breach")
+
 type Snapshot struct {
 	HeadSHA string
 	Branch  string
@@ -118,7 +120,7 @@ func ArtifactManifest(ctx context.Context, root, startHead, endHead string, scop
 			return nil, errors.New("git returned an unsafe artifact path")
 		}
 		if !withinAnyScope(path, scopes) && !isMutableGSDProjection(path) {
-			return nil, fmt.Errorf("artifact path %q is outside the issue write scope", path)
+			return nil, fmt.Errorf("%w: artifact path %q is outside the issue write scope", ErrWriteScopeBreach, path)
 		}
 		raw, err := run(ctx, root, "show", endHead+":"+path)
 		if err != nil {

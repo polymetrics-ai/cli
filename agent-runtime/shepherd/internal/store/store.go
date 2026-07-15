@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/recovery"
 	_ "modernc.org/sqlite"
 )
 
@@ -59,7 +60,14 @@ type DeliveryRun struct {
 	Owner      string
 }
 
-var ErrRetryBudgetExhausted = errors.New("unit retry budget exhausted")
+var (
+	ErrRetryBudgetExhausted    = errors.New("unit retry budget exhausted")
+	ErrRecoveryClaimFenced     = errors.New("recovery attempt claim is fenced")
+	ErrRecoveryBackoffPending  = errors.New("recovery backoff is pending")
+	ErrRecoveryDispatchClaimed = errors.New("recovery dispatch is already claimed")
+	ErrRecoveryDecisionPending = errors.New("recovery decision is incomplete")
+	ErrRecoveryTerminal        = errors.New("recovery decision blocks dispatch")
+)
 
 type UnitAttemptKey struct {
 	DeliveryID string
@@ -131,13 +139,77 @@ type RecoveryBudgetKey struct {
 
 type RecoveryBudget struct {
 	RecoveryBudgetKey
-	Attempts     int64
-	MaxAttempts  int64
-	Backoff      time.Duration
-	LastFailure  string
-	RecoveryPlan string
-	NextRetryAt  time.Time
-	ExhaustedAt  time.Time
+	PolicyVersion             int
+	Attempts                  int64
+	MaxAttempts               int64
+	BaseBackoff               time.Duration
+	MaxBackoff                time.Duration
+	Backoff                   time.Duration
+	LastFailureHash           string
+	LastDiagnostic            string
+	PlannerEvidenceHash       string
+	PlannerSessionID          string
+	PlannerSessionFingerprint string
+	ObservedModel             string
+	Thinking                  string
+	SelectedAction            recovery.Action
+	BoundedPlan               []recovery.PlanStep
+	NextRetryAt               time.Time
+	ExhaustedAt               time.Time
+	Status                    string
+}
+
+type RecoveryReservation struct {
+	RecoveryBudgetKey
+	UnitAttempt     int64
+	ClaimToken      string
+	ControllerOwner string
+	ControllerEpoch int64
+	PolicyVersion   int
+	MaxAttempts     int64
+	BaseBackoff     time.Duration
+	MaxBackoff      time.Duration
+	FailureHash     string
+	Diagnostic      string
+	Reversible      bool
+	ExhaustedAction recovery.Action
+	Now             time.Time
+}
+
+type RecoveryOutcome struct {
+	RecoveryBudgetKey
+	UnitAttempt               int64
+	ClaimToken                string
+	ControllerOwner           string
+	ControllerEpoch           int64
+	PlannerRequestNonce       string
+	EvidenceHash              string
+	AuthorityScopeHash        string
+	PlannerEvidenceHash       string
+	PlannerSessionID          string
+	PlannerSessionFingerprint string
+	ObservedModel             string
+	Thinking                  string
+	SelectedAction            recovery.Action
+	BoundedPlan               []recovery.PlanStep
+	IssuedAt                  time.Time
+	ExpiresAt                 time.Time
+}
+
+type RecoveryAttempt struct {
+	RecoveryOutcome
+	ReservationIndex int64
+	Sequence         int64
+	FailureHash      string
+	Diagnostic       string
+	Reversible       bool
+	Backoff          time.Duration
+	NextRetryAt      time.Time
+	Status           string
+	RejectedReason   string
+	DispatchedAt     time.Time
+	DispatchClaim    string
+	DispatchEpoch    int64
 }
 
 type ArtifactProof struct {
@@ -296,9 +368,36 @@ func (s *Store) migrate(ctx context.Context) error {
 			attempts INTEGER NOT NULL, max_attempts INTEGER NOT NULL, backoff_ms INTEGER NOT NULL,
 			last_failure TEXT NOT NULL DEFAULT '', recovery_plan TEXT NOT NULL DEFAULT '',
 			next_retry_at INTEGER NOT NULL DEFAULT 0, exhausted_at INTEGER NOT NULL DEFAULT 0,
-			updated_at INTEGER NOT NULL,
+			policy_version INTEGER NOT NULL DEFAULT 0, base_backoff_ms INTEGER NOT NULL DEFAULT 0,
+			max_backoff_ms INTEGER NOT NULL DEFAULT 0, last_failure_hash TEXT NOT NULL DEFAULT '',
+			last_diagnostic TEXT NOT NULL DEFAULT '', planner_evidence_hash TEXT NOT NULL DEFAULT '',
+			planner_session_id TEXT NOT NULL DEFAULT '', planner_session_fingerprint TEXT NOT NULL DEFAULT '',
+			observed_model TEXT NOT NULL DEFAULT '', thinking TEXT NOT NULL DEFAULT '',
+			selected_action TEXT NOT NULL DEFAULT '', bounded_plan_json TEXT NOT NULL DEFAULT '[]',
+			status TEXT NOT NULL DEFAULT '', updated_at INTEGER NOT NULL,
 			PRIMARY KEY (delivery_id, generation, unit_id, head_sha, failure_class)
 		)`,
+		`CREATE TABLE IF NOT EXISTS recovery_attempts (
+			delivery_id TEXT NOT NULL REFERENCES deliveries(delivery_id), generation INTEGER NOT NULL,
+			unit_id TEXT NOT NULL, head_sha TEXT NOT NULL, failure_class TEXT NOT NULL,
+			unit_attempt INTEGER NOT NULL, claim_token TEXT NOT NULL, controller_owner TEXT NOT NULL,
+			controller_epoch INTEGER NOT NULL, reservation_index INTEGER NOT NULL, sequence INTEGER NOT NULL, failure_hash TEXT NOT NULL,
+			diagnostic TEXT NOT NULL, reversible INTEGER NOT NULL, status TEXT NOT NULL,
+			planner_request_nonce TEXT NOT NULL DEFAULT '', evidence_hash TEXT NOT NULL DEFAULT '',
+			authority_scope_hash TEXT NOT NULL DEFAULT '', planner_evidence_hash TEXT NOT NULL DEFAULT '',
+			planner_session_id TEXT NOT NULL DEFAULT '', planner_session_fingerprint TEXT NOT NULL DEFAULT '',
+			observed_model TEXT NOT NULL DEFAULT '', thinking TEXT NOT NULL DEFAULT '',
+			selected_action TEXT NOT NULL DEFAULT '', bounded_plan_json TEXT NOT NULL DEFAULT '[]',
+			backoff_ms INTEGER NOT NULL, next_retry_at INTEGER NOT NULL,
+			issued_at INTEGER NOT NULL DEFAULT 0, expires_at INTEGER NOT NULL DEFAULT 0,
+			rejected_reason TEXT NOT NULL DEFAULT '', dispatch_claim TEXT NOT NULL DEFAULT '',
+			dispatch_epoch INTEGER NOT NULL DEFAULT 0, dispatched_at INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL,
+			PRIMARY KEY (delivery_id, generation, unit_id, head_sha, failure_class, unit_attempt)
+		)`,
+		`CREATE UNIQUE INDEX IF NOT EXISTS recovery_attempts_nonce_unique
+			ON recovery_attempts(planner_request_nonce) WHERE planner_request_nonce <> ''`,
+		`CREATE UNIQUE INDEX IF NOT EXISTS recovery_attempts_evidence_unique
+			ON recovery_attempts(planner_evidence_hash) WHERE planner_evidence_hash <> ''`,
 		`CREATE TABLE IF NOT EXISTS artifact_proofs (
 			proof_id TEXT PRIMARY KEY, delivery_id TEXT NOT NULL REFERENCES deliveries(delivery_id),
 			generation INTEGER NOT NULL, unit_id TEXT NOT NULL, attempt INTEGER NOT NULL,
@@ -365,6 +464,26 @@ func (s *Store) migrate(ctx context.Context) error {
 		}
 	}
 	for name, definition := range map[string]string{
+		"policy_version": "INTEGER NOT NULL DEFAULT 0", "base_backoff_ms": "INTEGER NOT NULL DEFAULT 0",
+		"max_backoff_ms": "INTEGER NOT NULL DEFAULT 0", "last_failure_hash": "TEXT NOT NULL DEFAULT ''",
+		"last_diagnostic": "TEXT NOT NULL DEFAULT ''", "planner_evidence_hash": "TEXT NOT NULL DEFAULT ''",
+		"planner_session_id": "TEXT NOT NULL DEFAULT ''", "planner_session_fingerprint": "TEXT NOT NULL DEFAULT ''",
+		"observed_model": "TEXT NOT NULL DEFAULT ''", "thinking": "TEXT NOT NULL DEFAULT ''",
+		"selected_action": "TEXT NOT NULL DEFAULT ''", "bounded_plan_json": "TEXT NOT NULL DEFAULT '[]'",
+		"status": "TEXT NOT NULL DEFAULT ''",
+	} {
+		if err := s.ensureColumn(ctx, "recovery_budgets", name, definition); err != nil {
+			return err
+		}
+	}
+	legacyRecoveryStamp := time.Now().UTC().UnixNano()
+	if _, err := s.db.ExecContext(ctx, `UPDATE recovery_budgets SET policy_version = ?, max_attempts = attempts,
+		selected_action = ?, status = 'exhausted', exhausted_at = CASE WHEN exhausted_at = 0 THEN ? ELSE exhausted_at END,
+		next_retry_at = 0, bounded_plan_json = '[]', updated_at = ? WHERE policy_version = 0`,
+		recovery.PolicyVersion, recovery.ActionAwaitDecision, legacyRecoveryStamp, legacyRecoveryStamp); err != nil {
+		return fmt.Errorf("exhaust legacy recovery budgets: %w", err)
+	}
+	for name, definition := range map[string]string{
 		"repository": "TEXT NOT NULL DEFAULT ''", "pr": "INTEGER NOT NULL DEFAULT 0", "base_branch": "TEXT NOT NULL DEFAULT ''",
 		"base_head": "TEXT NOT NULL DEFAULT ''", "candidate_head": "TEXT NOT NULL DEFAULT ''", "observed_head": "TEXT NOT NULL DEFAULT ''",
 		"generation": "INTEGER NOT NULL DEFAULT 0", "unit_id": "TEXT NOT NULL DEFAULT ''", "attempt": "INTEGER NOT NULL DEFAULT 0",
@@ -402,6 +521,17 @@ func (s *Store) GovernanceStateVersion(ctx context.Context) (int64, error) {
 }
 
 func (s *Store) BeginUnitAttempt(ctx context.Context, key UnitAttemptKey, maxAttempts int64) (UnitAttempt, error) {
+	return s.beginUnitAttempt(ctx, key, maxAttempts, "", 0)
+}
+
+func (s *Store) BeginUnitAttemptFenced(ctx context.Context, key UnitAttemptKey, maxAttempts int64, controllerOwner string, controllerEpoch int64) (UnitAttempt, error) {
+	if strings.TrimSpace(controllerOwner) == "" || strings.ContainsAny(controllerOwner, "\r\n\x00") || controllerEpoch <= 0 {
+		return UnitAttempt{}, errors.New("controller owner and lease epoch are required")
+	}
+	return s.beginUnitAttempt(ctx, key, maxAttempts, controllerOwner, controllerEpoch)
+}
+
+func (s *Store) beginUnitAttempt(ctx context.Context, key UnitAttemptKey, maxAttempts int64, controllerOwner string, controllerEpoch int64) (UnitAttempt, error) {
 	if key.DeliveryID == "" || key.Generation <= 0 || strings.TrimSpace(key.UnitID) == "" ||
 		strings.ContainsAny(key.UnitID, "\r\n\x00") || !validGitSHA(key.HeadSHA) || maxAttempts <= 0 {
 		return UnitAttempt{}, errors.New("complete bounded unit attempt identity is required")
@@ -421,6 +551,15 @@ func (s *Store) BeginUnitAttempt(ctx context.Context, key UnitAttemptKey, maxAtt
 		}
 	}()
 	now := time.Now().UTC().UnixNano()
+	if controllerOwner != "" {
+		var fenced int
+		if err := conn.QueryRowContext(ctx, `SELECT COUNT(*) FROM delivery_runs WHERE delivery_id = ?
+			AND generation = ? AND state = ? AND owner = ? AND EXISTS (SELECT 1 FROM leases WHERE run_id = ?
+			AND owner = ? AND epoch = ? AND expires_at > ?)`, key.DeliveryID, key.Generation,
+			domain.RunRunning, controllerOwner, key.DeliveryID, controllerOwner, controllerEpoch, now).Scan(&fenced); err != nil || fenced != 1 {
+			return UnitAttempt{}, ErrRecoveryClaimFenced
+		}
+	}
 	if _, err := conn.ExecContext(ctx, `INSERT OR IGNORE INTO unit_attempts
 		(delivery_id, generation, unit_id, head_sha, attempts, max_attempts, status, updated_at)
 		VALUES (?, ?, ?, ?, 0, ?, 'pending', ?)`, key.DeliveryID, key.Generation, key.UnitID,
@@ -436,8 +575,16 @@ func (s *Store) BeginUnitAttempt(ctx context.Context, key UnitAttemptKey, maxAtt
 		&configuredMax, &attempt.Status, &attempt.Failure); err != nil {
 		return UnitAttempt{}, err
 	}
-	if configuredMax != maxAttempts {
-		return UnitAttempt{}, errors.New("unit attempt budget cannot change within a generation")
+	if configuredMax > maxAttempts {
+		return UnitAttempt{}, errors.New("unit attempt budget cannot shrink within a generation")
+	}
+	if configuredMax < maxAttempts {
+		if _, err := conn.ExecContext(ctx, `UPDATE unit_attempts SET max_attempts = ?, updated_at = ?
+			WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ? AND max_attempts = ?`,
+			maxAttempts, now, key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA, configuredMax); err != nil {
+			return UnitAttempt{}, err
+		}
+		configuredMax = maxAttempts
 	}
 	if attempt.Attempts >= configuredMax {
 		return UnitAttempt{}, ErrRetryBudgetExhausted
@@ -458,15 +605,40 @@ func (s *Store) BeginUnitAttempt(ctx context.Context, key UnitAttemptKey, maxAtt
 	return attempt, nil
 }
 
-func (s *Store) FinishUnitAttempt(ctx context.Context, key UnitAttemptKey, outcome string) error {
+func (s *Store) FinishUnitAttemptFenced(ctx context.Context, key UnitAttemptKey, attempt int64, outcome, controllerOwner string, controllerEpoch int64) error {
+	if attempt <= 0 || strings.TrimSpace(controllerOwner) == "" || strings.ContainsAny(controllerOwner, "\r\n\x00") || controllerEpoch <= 0 {
+		return errors.New("unit attempt, controller owner, and lease epoch are required")
+	}
+	return s.finishUnitAttempt(ctx, key, attempt, outcome, controllerOwner, controllerEpoch)
+}
+
+func (s *Store) finishUnitAttempt(ctx context.Context, key UnitAttemptKey, attempt int64, outcome, controllerOwner string, controllerEpoch int64) error {
 	outcome = strings.TrimSpace(outcome)
 	if outcome == "" || strings.ContainsAny(outcome, "\r\n\x00") {
 		return errors.New("bounded unit attempt outcome is required")
 	}
-	result, err := s.db.ExecContext(ctx, `UPDATE unit_attempts SET status = 'terminal',
-		last_failure = ?, updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ?
-		AND head_sha = ? AND status = 'running'`, outcome, time.Now().UTC().UnixNano(),
-		key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA)
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = tx.Rollback() }()
+	stamp := time.Now().UTC().UnixNano()
+	var result sql.Result
+	if controllerOwner == "" {
+		result, err = tx.ExecContext(ctx, `UPDATE unit_attempts SET status = 'terminal',
+			last_failure = ?, updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ?
+			AND head_sha = ? AND status = 'running'`, outcome, stamp, key.DeliveryID, key.Generation,
+			key.UnitID, key.HeadSHA)
+	} else {
+		result, err = tx.ExecContext(ctx, `UPDATE unit_attempts SET status = 'terminal',
+			last_failure = ?, updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ?
+			AND head_sha = ? AND attempts = ? AND status = 'running' AND EXISTS (SELECT 1 FROM delivery_runs
+			WHERE delivery_id = ? AND generation = ? AND state = ? AND owner = ?) AND EXISTS
+			(SELECT 1 FROM leases WHERE run_id = ? AND owner = ? AND epoch = ? AND expires_at > ?)`, outcome,
+			stamp, key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA, attempt, key.DeliveryID,
+			key.Generation, domain.RunRunning, controllerOwner, key.DeliveryID, controllerOwner,
+			controllerEpoch, stamp)
+	}
 	if err != nil {
 		return fmt.Errorf("finish unit attempt: %w", err)
 	}
@@ -474,7 +646,33 @@ func (s *Store) FinishUnitAttempt(ctx context.Context, key UnitAttemptKey, outco
 	if rows != 1 {
 		return errors.New("unit attempt is not running or is fenced")
 	}
-	return nil
+	if controllerOwner != "" {
+		dispatchStatus := "used_failed"
+		if outcome == "success" || outcome == "mutating_skip" {
+			dispatchStatus = "consumed"
+		}
+		var dispatched int64
+		if err := tx.QueryRowContext(ctx, `SELECT COUNT(*) FROM recovery_attempts WHERE delivery_id = ?
+			AND generation = ? AND unit_id = ? AND head_sha = ? AND status = 'dispatched'`, key.DeliveryID,
+			key.Generation, key.UnitID, key.HeadSHA).Scan(&dispatched); err != nil {
+			return err
+		}
+		updated, err := tx.ExecContext(ctx, `UPDATE recovery_attempts SET status = ?, updated_at = ?
+			WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ? AND status = 'dispatched'
+			AND dispatch_claim = ? AND dispatch_epoch = ? AND EXISTS (SELECT 1 FROM delivery_runs WHERE delivery_id = ?
+			AND generation = ? AND state = ? AND owner = ?) AND EXISTS (SELECT 1 FROM leases WHERE run_id = ?
+			AND owner = ? AND epoch = ? AND expires_at > ?)`, dispatchStatus, stamp, key.DeliveryID,
+			key.Generation, key.UnitID, key.HeadSHA, controllerOwner, controllerEpoch, key.DeliveryID, key.Generation,
+			domain.RunRunning, controllerOwner, key.DeliveryID, controllerOwner, controllerEpoch, stamp)
+		if err != nil {
+			return err
+		}
+		rows, _ := updated.RowsAffected()
+		if rows != dispatched {
+			return errors.New("recovery dispatch disposition is fenced")
+		}
+	}
+	return tx.Commit()
 }
 
 func (s *Store) RecordUnitAttemptIdentity(ctx context.Context, identity UnitAttemptIdentity) error {
@@ -1029,12 +1227,13 @@ func (s *Store) ConsumeDecisionRequest(ctx context.Context, requestID string) (D
 	return s.GetDecisionRequest(ctx, requestID)
 }
 
-func (s *Store) BeginRecoveryAttempt(ctx context.Context, key RecoveryBudgetKey, maxAttempts int64, backoff time.Duration, failure, recoveryPlan string, now time.Time) (RecoveryBudget, error) {
-	if err := validateRecoveryBudgetKey(key); err != nil || maxAttempts <= 0 || backoff < 0 {
-		if err != nil {
-			return RecoveryBudget{}, err
-		}
-		return RecoveryBudget{}, errors.New("positive recovery budget is required")
+func (s *Store) BeginRecoveryAttempt(context.Context, RecoveryBudgetKey, int64, time.Duration, string, string, time.Time) (RecoveryBudget, error) {
+	return RecoveryBudget{}, errors.New("static recovery plans are not accepted; use structured fenced recovery evidence")
+}
+
+func (s *Store) ReserveRecoveryAttempt(ctx context.Context, request RecoveryReservation) (RecoveryBudget, error) {
+	if err := validateRecoveryReservation(request); err != nil {
+		return RecoveryBudget{}, err
 	}
 	conn, err := s.db.Conn(ctx)
 	if err != nil {
@@ -1050,56 +1249,672 @@ func (s *Store) BeginRecoveryAttempt(ctx context.Context, key RecoveryBudgetKey,
 			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
 		}
 	}()
-	stamp := now.UTC().UnixNano()
-	if _, err := conn.ExecContext(ctx, `INSERT OR IGNORE INTO recovery_budgets
-		(delivery_id, generation, unit_id, head_sha, failure_class, attempts, max_attempts, backoff_ms, updated_at)
-		VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?)`, key.DeliveryID, key.Generation, key.UnitID,
-		key.HeadSHA, key.FailureClass, maxAttempts, backoff.Milliseconds(), stamp); err != nil {
-		return RecoveryBudget{}, fmt.Errorf("initialize recovery budget: %w", err)
-	}
-	var budget RecoveryBudget
-	budget.RecoveryBudgetKey = key
-	var backoffMS, nextRetryAt, exhaustedAt int64
-	if err := conn.QueryRowContext(ctx, `SELECT attempts, max_attempts, backoff_ms, last_failure,
-		recovery_plan, next_retry_at, exhausted_at FROM recovery_budgets WHERE delivery_id = ? AND generation = ?
-		AND unit_id = ? AND head_sha = ? AND failure_class = ?`, key.DeliveryID, key.Generation,
-		key.UnitID, key.HeadSHA, key.FailureClass).Scan(&budget.Attempts, &budget.MaxAttempts, &backoffMS,
-		&budget.LastFailure, &budget.RecoveryPlan, &nextRetryAt, &exhaustedAt); err != nil {
+	var runState domain.RunState
+	var runGeneration int64
+	var runOwner string
+	if err := conn.QueryRowContext(ctx, `SELECT state, generation, owner FROM delivery_runs WHERE delivery_id = ?`,
+		request.DeliveryID).Scan(&runState, &runGeneration, &runOwner); err != nil {
 		return RecoveryBudget{}, err
 	}
-	if budget.MaxAttempts != maxAttempts || time.Duration(backoffMS)*time.Millisecond != backoff {
-		return RecoveryBudget{}, errors.New("recovery budget cannot change within a generation")
+	if runState != domain.RunRunning || runGeneration != request.Generation || runOwner != request.ControllerOwner {
+		return RecoveryBudget{}, ErrRecoveryClaimFenced
 	}
-	if budget.Attempts >= budget.MaxAttempts {
-		if exhaustedAt == 0 {
-			exhaustedAt = stamp
-			if _, err := conn.ExecContext(ctx, `UPDATE recovery_budgets SET exhausted_at = ?, updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ?`, exhaustedAt, stamp, key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA, key.FailureClass); err != nil {
-				return RecoveryBudget{}, err
-			}
+	var leaseOwner string
+	var leaseEpoch, leaseExpiresAt int64
+	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`,
+		request.DeliveryID).Scan(&leaseOwner, &leaseEpoch, &leaseExpiresAt); err != nil || leaseOwner != request.ControllerOwner ||
+		leaseEpoch != request.ControllerEpoch || time.Now().UTC().UnixNano() >= leaseExpiresAt {
+		return RecoveryBudget{}, ErrRecoveryClaimFenced
+	}
+	stamp := request.Now.UTC().UnixNano()
+	if _, err := conn.ExecContext(ctx, `UPDATE recovery_attempts SET status = 'rejected', selected_action = ?,
+		rejected_reason = 'controller ownership changed before planner completion', updated_at = ?
+		WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ?
+		AND status = 'reserved' AND (controller_owner <> ? OR controller_epoch <> ?)`, recovery.ActionBlock, stamp,
+		request.DeliveryID, request.Generation, request.UnitID, request.HeadSHA, request.FailureClass,
+		request.ControllerOwner, request.ControllerEpoch); err != nil {
+		return RecoveryBudget{}, err
+	}
+	_, err = conn.ExecContext(ctx, `INSERT OR IGNORE INTO recovery_budgets
+		(delivery_id, generation, unit_id, head_sha, failure_class, attempts, max_attempts,
+		 backoff_ms, policy_version, base_backoff_ms, max_backoff_ms, bounded_plan_json, status, updated_at)
+		VALUES (?, ?, ?, ?, ?, 0, ?, 0, ?, ?, ?, '[]', 'ready', ?)`,
+		request.DeliveryID, request.Generation, request.UnitID, request.HeadSHA, request.FailureClass,
+		request.MaxAttempts, request.PolicyVersion, request.BaseBackoff.Milliseconds(),
+		request.MaxBackoff.Milliseconds(), stamp)
+	if err != nil {
+		return RecoveryBudget{}, fmt.Errorf("initialize recovery budget: %w", err)
+	}
+	budget, err := getRecoveryBudgetWith(ctx, conn, request.RecoveryBudgetKey)
+	if err != nil {
+		return RecoveryBudget{}, err
+	}
+	if budget.Status == "exhausted" {
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryBudget{}, err
+		}
+		committed = true
+		return budget, ErrRetryBudgetExhausted
+	}
+	if budget.PolicyVersion != request.PolicyVersion || budget.MaxAttempts != request.MaxAttempts ||
+		budget.BaseBackoff != request.BaseBackoff || budget.MaxBackoff != request.MaxBackoff {
+		return RecoveryBudget{}, errors.New("recovery budget policy cannot change within its key")
+	}
+	var existingClaim, existingOwner string
+	var existingEpoch int64
+	existingErr := conn.QueryRowContext(ctx, `SELECT claim_token, controller_owner, controller_epoch FROM recovery_attempts
+		WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ? AND unit_attempt = ?`,
+		request.DeliveryID, request.Generation, request.UnitID, request.HeadSHA, request.FailureClass,
+		request.UnitAttempt).Scan(&existingClaim, &existingOwner, &existingEpoch)
+	if existingErr == nil {
+		if existingClaim != request.ClaimToken || existingOwner != request.ControllerOwner || existingEpoch != request.ControllerEpoch {
+			return RecoveryBudget{}, ErrRecoveryClaimFenced
 		}
 		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
 			return RecoveryBudget{}, err
 		}
 		committed = true
-		return RecoveryBudget{}, ErrRetryBudgetExhausted
+		return budget, nil
+	}
+	if !errors.Is(existingErr, sql.ErrNoRows) {
+		return RecoveryBudget{}, existingErr
+	}
+	var active int
+	if err := conn.QueryRowContext(ctx, `SELECT COUNT(*) FROM recovery_attempts
+		WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ?
+		AND status = 'reserved'`, request.DeliveryID, request.Generation, request.UnitID, request.HeadSHA,
+		request.FailureClass).Scan(&active); err != nil {
+		return RecoveryBudget{}, err
+	}
+	if active != 0 {
+		return RecoveryBudget{}, ErrRecoveryClaimFenced
+	}
+	var sequence int64
+	if err := conn.QueryRowContext(ctx, `SELECT COALESCE(MAX(sequence), 0) + 1 FROM recovery_attempts
+		WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ?`, request.DeliveryID,
+		request.Generation, request.UnitID, request.HeadSHA).Scan(&sequence); err != nil {
+		return RecoveryBudget{}, err
+	}
+	if budget.Attempts >= budget.MaxAttempts {
+		budget.ExhaustedAt = request.Now.UTC()
+		budget.SelectedAction = request.ExhaustedAction
+		budget.Status = "exhausted"
+		_, err := conn.ExecContext(ctx, `UPDATE recovery_budgets SET exhausted_at = ?, selected_action = ?,
+			status = 'exhausted', updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ?
+			AND head_sha = ? AND failure_class = ?`, stamp, request.ExhaustedAction, stamp,
+			request.DeliveryID, request.Generation, request.UnitID, request.HeadSHA, request.FailureClass)
+		if err != nil {
+			return RecoveryBudget{}, err
+		}
+		_, err = conn.ExecContext(ctx, `INSERT INTO recovery_attempts
+			(delivery_id, generation, unit_id, head_sha, failure_class, unit_attempt, claim_token, controller_owner,
+			 controller_epoch, reservation_index, sequence, failure_hash, diagnostic, reversible, status, selected_action, bounded_plan_json,
+			 backoff_ms, next_retry_at, created_at, updated_at)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'exhausted', ?, '[]', 0, 0, ?, ?)`,
+			request.DeliveryID, request.Generation, request.UnitID, request.HeadSHA, request.FailureClass,
+			request.UnitAttempt, request.ClaimToken, request.ControllerOwner, request.ControllerEpoch, budget.Attempts, sequence,
+			request.FailureHash, request.Diagnostic, request.Reversible, request.ExhaustedAction, stamp, stamp)
+		if err != nil {
+			return RecoveryBudget{}, err
+		}
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryBudget{}, err
+		}
+		committed = true
+		return budget, ErrRetryBudgetExhausted
 	}
 	budget.Attempts++
-	budget.LastFailure = boundedStoreString(failure, 512)
-	budget.RecoveryPlan = boundedStoreString(recoveryPlan, 2048)
-	budget.NextRetryAt = now.Add(backoff).UTC()
-	if _, err := conn.ExecContext(ctx, `UPDATE recovery_budgets SET attempts = ?, last_failure = ?, recovery_plan = ?,
-		next_retry_at = ?, updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ?
-		AND failure_class = ?`, budget.Attempts, budget.LastFailure, budget.RecoveryPlan,
-		budget.NextRetryAt.UnixNano(), stamp, key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA,
-		key.FailureClass); err != nil {
+	budget.Backoff, err = recovery.Backoff(request.BaseBackoff, request.MaxBackoff, budget.Attempts)
+	if err != nil {
+		return RecoveryBudget{}, err
+	}
+	budget.NextRetryAt = request.Now.Add(budget.Backoff).UTC()
+	budget.LastFailureHash = request.FailureHash
+	budget.LastDiagnostic = request.Diagnostic
+	budget.Status = "reserved"
+	_, err = conn.ExecContext(ctx, `INSERT INTO recovery_attempts
+		(delivery_id, generation, unit_id, head_sha, failure_class, unit_attempt, claim_token, controller_owner,
+		 controller_epoch, reservation_index, sequence, failure_hash, diagnostic, reversible, status, bounded_plan_json, backoff_ms,
+		 next_retry_at, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'reserved', '[]', ?, ?, ?, ?)`,
+		request.DeliveryID, request.Generation, request.UnitID, request.HeadSHA, request.FailureClass,
+		request.UnitAttempt, request.ClaimToken, request.ControllerOwner, request.ControllerEpoch, budget.Attempts, sequence,
+		request.FailureHash, request.Diagnostic, request.Reversible, budget.Backoff.Milliseconds(), budget.NextRetryAt.UnixNano(), stamp, stamp)
+	if err != nil {
+		return RecoveryBudget{}, fmt.Errorf("reserve recovery attempt: %w", err)
+	}
+	_, err = conn.ExecContext(ctx, `UPDATE recovery_budgets SET attempts = ?, backoff_ms = ?,
+		last_failure_hash = ?, last_diagnostic = ?, next_retry_at = ?, status = 'reserved', updated_at = ?
+		WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ?`,
+		budget.Attempts, budget.Backoff.Milliseconds(), budget.LastFailureHash, budget.LastDiagnostic,
+		budget.NextRetryAt.UnixNano(), stamp, request.DeliveryID, request.Generation, request.UnitID,
+		request.HeadSHA, request.FailureClass)
+	if err != nil {
 		return RecoveryBudget{}, err
 	}
 	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
 		return RecoveryBudget{}, err
 	}
 	committed = true
-	budget.Backoff = backoff
 	return budget, nil
+}
+
+func (s *Store) CompleteRecoveryAttempt(ctx context.Context, outcome RecoveryOutcome) error {
+	if err := validateRecoveryOutcome(outcome); err != nil {
+		return err
+	}
+	planRaw, err := json.Marshal(outcome.BoundedPlan)
+	if err != nil {
+		return err
+	}
+	status := "terminal"
+	if outcome.SelectedAction == recovery.ActionRetrySameUnit || outcome.SelectedAction == recovery.ActionRetryAfterBackoff || outcome.SelectedAction == recovery.ActionRunRecoveryPlan {
+		status = "planned"
+	}
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var reservedHash string
+	var reversible bool
+	if err := conn.QueryRowContext(ctx, `SELECT failure_hash, reversible FROM recovery_attempts WHERE delivery_id = ?
+		AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ? AND unit_attempt = ?
+		AND claim_token = ? AND controller_owner = ? AND controller_epoch = ? AND status = 'reserved'`, outcome.DeliveryID,
+		outcome.Generation, outcome.UnitID, outcome.HeadSHA, outcome.FailureClass, outcome.UnitAttempt,
+		outcome.ClaimToken, outcome.ControllerOwner, outcome.ControllerEpoch).Scan(&reservedHash, &reversible); err != nil {
+		return ErrRecoveryClaimFenced
+	}
+	if outcome.EvidenceHash != reservedHash {
+		return errors.New("recovery planner evidence does not match the reserved failure")
+	}
+	class, err := recovery.ParseFailureClass(outcome.FailureClass)
+	if err != nil {
+		return err
+	}
+	policy, err := recovery.PolicyFor(recovery.Failure{Class: class, Reversible: reversible})
+	if err != nil {
+		return err
+	}
+	if err := policy.ValidateAction(outcome.SelectedAction); err != nil {
+		return err
+	}
+	stamp := time.Now().UTC().UnixNano()
+	result, err := conn.ExecContext(ctx, `UPDATE recovery_attempts SET status = ?, planner_request_nonce = ?,
+		evidence_hash = ?, authority_scope_hash = ?, planner_evidence_hash = ?, planner_session_id = ?,
+		planner_session_fingerprint = ?, observed_model = ?, thinking = ?, selected_action = ?, bounded_plan_json = ?, issued_at = ?,
+		expires_at = ?, updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ?
+		AND head_sha = ? AND failure_class = ? AND unit_attempt = ? AND claim_token = ? AND controller_owner = ?
+		AND controller_epoch = ? AND status = 'reserved' AND EXISTS (SELECT 1 FROM delivery_runs
+		WHERE delivery_id = ? AND generation = ? AND state = ? AND owner = ?)
+		AND EXISTS (SELECT 1 FROM leases WHERE run_id = ? AND owner = ? AND epoch = ? AND expires_at > ?)`,
+		status, outcome.PlannerRequestNonce, outcome.EvidenceHash, outcome.AuthorityScopeHash,
+		outcome.PlannerEvidenceHash, outcome.PlannerSessionID, outcome.PlannerSessionFingerprint,
+		outcome.ObservedModel, outcome.Thinking, outcome.SelectedAction,
+		string(planRaw), outcome.IssuedAt.UTC().UnixNano(), outcome.ExpiresAt.UTC().UnixNano(), stamp,
+		outcome.DeliveryID, outcome.Generation, outcome.UnitID, outcome.HeadSHA, outcome.FailureClass,
+		outcome.UnitAttempt, outcome.ClaimToken, outcome.ControllerOwner, outcome.ControllerEpoch,
+		outcome.DeliveryID, outcome.Generation, domain.RunRunning, outcome.ControllerOwner,
+		outcome.DeliveryID, outcome.ControllerOwner, outcome.ControllerEpoch, stamp)
+	if err != nil {
+		return fmt.Errorf("complete recovery attempt: %w", err)
+	}
+	rows, _ := result.RowsAffected()
+	if rows != 1 {
+		return ErrRecoveryClaimFenced
+	}
+	_, err = conn.ExecContext(ctx, `UPDATE recovery_budgets SET planner_evidence_hash = ?,
+		planner_session_id = ?, planner_session_fingerprint = ?, observed_model = ?, thinking = ?,
+		selected_action = ?, bounded_plan_json = ?, status = ?, updated_at = ? WHERE delivery_id = ?
+		AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ?`,
+		outcome.PlannerEvidenceHash, outcome.PlannerSessionID, outcome.PlannerSessionFingerprint,
+		outcome.ObservedModel, outcome.Thinking, outcome.SelectedAction, string(planRaw), status, stamp,
+		outcome.DeliveryID, outcome.Generation, outcome.UnitID, outcome.HeadSHA, outcome.FailureClass)
+	if err != nil {
+		return err
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return err
+	}
+	committed = true
+	return nil
+}
+
+func (s *Store) CompleteRecoveryDecision(ctx context.Context, key RecoveryBudgetKey, unitAttempt int64, claimToken, controllerOwner string, controllerEpoch int64, action recovery.Action, now time.Time) error {
+	if err := validateRecoveryBudgetKey(key); err != nil || unitAttempt <= 0 || !validRecoveryToken(claimToken) || strings.TrimSpace(controllerOwner) == "" ||
+		(action != recovery.ActionBlock && action != recovery.ActionAwaitDecision && action != recovery.ActionFinalHumanGate) || now.IsZero() {
+		return errors.New("complete bounded controller recovery decision is required")
+	}
+	return s.finishRecoveryAttempt(ctx, key, unitAttempt, claimToken, controllerOwner, controllerEpoch, action, "terminal", "", now)
+}
+
+func (s *Store) RejectRecoveryAttempt(ctx context.Context, key RecoveryBudgetKey, unitAttempt int64, claimToken, controllerOwner string, controllerEpoch int64, action recovery.Action, reason string, now time.Time) error {
+	if err := validateRecoveryBudgetKey(key); err != nil || unitAttempt <= 0 || !validRecoveryToken(claimToken) || strings.TrimSpace(controllerOwner) == "" ||
+		(action != recovery.ActionBlock && action != recovery.ActionAwaitDecision) || now.IsZero() {
+		return errors.New("complete bounded recovery rejection is required")
+	}
+	return s.finishRecoveryAttempt(ctx, key, unitAttempt, claimToken, controllerOwner, controllerEpoch, action, "rejected", boundedStoreString(reason, 256), now)
+}
+
+func (s *Store) finishRecoveryAttempt(ctx context.Context, key RecoveryBudgetKey, unitAttempt int64, claimToken, controllerOwner string, controllerEpoch int64, action recovery.Action, status, reason string, now time.Time) error {
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var reversible bool
+	if err := conn.QueryRowContext(ctx, `SELECT reversible FROM recovery_attempts WHERE delivery_id = ?
+		AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ? AND unit_attempt = ?
+		AND claim_token = ? AND controller_owner = ? AND controller_epoch = ? AND status = 'reserved'`, key.DeliveryID,
+		key.Generation, key.UnitID, key.HeadSHA, key.FailureClass, unitAttempt, claimToken, controllerOwner,
+		controllerEpoch).Scan(&reversible); err != nil {
+		return ErrRecoveryClaimFenced
+	}
+	class, err := recovery.ParseFailureClass(key.FailureClass)
+	if err != nil {
+		return err
+	}
+	policy, err := recovery.PolicyFor(recovery.Failure{Class: class, Reversible: reversible})
+	if err != nil {
+		return err
+	}
+	if err := policy.ValidateAction(action); err != nil {
+		return err
+	}
+	stamp := time.Now().UTC().UnixNano()
+	result, err := conn.ExecContext(ctx, `UPDATE recovery_attempts SET status = ?, selected_action = ?,
+		rejected_reason = ?, updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ?
+		AND head_sha = ? AND failure_class = ? AND unit_attempt = ? AND claim_token = ? AND controller_owner = ?
+		AND controller_epoch = ? AND status = 'reserved' AND EXISTS (SELECT 1 FROM delivery_runs
+		WHERE delivery_id = ? AND generation = ? AND state = ? AND owner = ?)
+		AND EXISTS (SELECT 1 FROM leases WHERE run_id = ? AND owner = ? AND epoch = ? AND expires_at > ?)`,
+		status, action, reason, stamp, key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA,
+		key.FailureClass, unitAttempt, claimToken, controllerOwner, controllerEpoch, key.DeliveryID,
+		key.Generation, domain.RunRunning, controllerOwner, key.DeliveryID, controllerOwner, controllerEpoch, stamp)
+	if err != nil {
+		return err
+	}
+	rows, _ := result.RowsAffected()
+	if rows != 1 {
+		return ErrRecoveryClaimFenced
+	}
+	if _, err := conn.ExecContext(ctx, `UPDATE recovery_budgets SET selected_action = ?, status = ?,
+		updated_at = ? WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ?
+		AND failure_class = ?`, action, status, stamp, key.DeliveryID, key.Generation, key.UnitID,
+		key.HeadSHA, key.FailureClass); err != nil {
+		return err
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return err
+	}
+	committed = true
+	return nil
+}
+
+func (s *Store) GetRecoveryBudget(ctx context.Context, key RecoveryBudgetKey) (RecoveryBudget, error) {
+	if err := validateRecoveryBudgetKey(key); err != nil {
+		return RecoveryBudget{}, err
+	}
+	return getRecoveryBudgetWith(ctx, s.db, key)
+}
+
+func getRecoveryBudgetWith(ctx context.Context, query interface {
+	QueryRowContext(context.Context, string, ...any) *sql.Row
+}, key RecoveryBudgetKey) (RecoveryBudget, error) {
+	budget := RecoveryBudget{RecoveryBudgetKey: key}
+	var baseMS, maxMS, backoffMS, nextRetryAt, exhaustedAt int64
+	var action, planJSON string
+	err := query.QueryRowContext(ctx, `SELECT policy_version, attempts, max_attempts, base_backoff_ms,
+		max_backoff_ms, backoff_ms, last_failure_hash, last_diagnostic, planner_evidence_hash,
+		planner_session_id, planner_session_fingerprint, observed_model, thinking, selected_action,
+		bounded_plan_json, next_retry_at, exhausted_at, status FROM recovery_budgets WHERE delivery_id = ?
+		AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ?`, key.DeliveryID,
+		key.Generation, key.UnitID, key.HeadSHA, key.FailureClass).Scan(&budget.PolicyVersion,
+		&budget.Attempts, &budget.MaxAttempts, &baseMS, &maxMS, &backoffMS, &budget.LastFailureHash,
+		&budget.LastDiagnostic, &budget.PlannerEvidenceHash, &budget.PlannerSessionID,
+		&budget.PlannerSessionFingerprint, &budget.ObservedModel, &budget.Thinking, &action, &planJSON,
+		&nextRetryAt, &exhaustedAt, &budget.Status)
+	if err != nil {
+		return RecoveryBudget{}, err
+	}
+	budget.BaseBackoff = time.Duration(baseMS) * time.Millisecond
+	budget.MaxBackoff = time.Duration(maxMS) * time.Millisecond
+	budget.Backoff = time.Duration(backoffMS) * time.Millisecond
+	budget.SelectedAction = recovery.Action(action)
+	if nextRetryAt != 0 {
+		budget.NextRetryAt = time.Unix(0, nextRetryAt).UTC()
+	}
+	if exhaustedAt != 0 {
+		budget.ExhaustedAt = time.Unix(0, exhaustedAt).UTC()
+	}
+	if err := json.Unmarshal([]byte(planJSON), &budget.BoundedPlan); err != nil {
+		return RecoveryBudget{}, errors.New("stored recovery plan is malformed")
+	}
+	return budget, nil
+}
+
+func (s *Store) GetRecoveryAttempt(ctx context.Context, key RecoveryBudgetKey, unitAttempt int64) (RecoveryAttempt, error) {
+	if err := validateRecoveryBudgetKey(key); err != nil || unitAttempt <= 0 {
+		return RecoveryAttempt{}, errors.New("complete recovery attempt identity is required")
+	}
+	attempt := RecoveryAttempt{RecoveryOutcome: RecoveryOutcome{RecoveryBudgetKey: key, UnitAttempt: unitAttempt}}
+	var planJSON, action string
+	var backoffMS, nextRetryAt, issuedAt, expiresAt, dispatchedAt int64
+	err := s.db.QueryRowContext(ctx, `SELECT claim_token, controller_owner, controller_epoch, reservation_index, sequence, failure_hash, diagnostic,
+		reversible, status, planner_request_nonce, evidence_hash, authority_scope_hash, planner_evidence_hash,
+		planner_session_id, planner_session_fingerprint, observed_model, thinking, selected_action, bounded_plan_json,
+		backoff_ms, next_retry_at, issued_at, expires_at, rejected_reason, dispatch_claim, dispatch_epoch, dispatched_at
+		FROM recovery_attempts WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ?
+		AND failure_class = ? AND unit_attempt = ?`, key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA,
+		key.FailureClass, unitAttempt).Scan(&attempt.ClaimToken, &attempt.ControllerOwner, &attempt.ControllerEpoch, &attempt.ReservationIndex,
+		&attempt.Sequence, &attempt.FailureHash, &attempt.Diagnostic, &attempt.Reversible, &attempt.Status, &attempt.PlannerRequestNonce,
+		&attempt.EvidenceHash, &attempt.AuthorityScopeHash, &attempt.PlannerEvidenceHash,
+		&attempt.PlannerSessionID, &attempt.PlannerSessionFingerprint,
+		&attempt.ObservedModel, &attempt.Thinking, &action, &planJSON, &backoffMS, &nextRetryAt,
+		&issuedAt, &expiresAt, &attempt.RejectedReason, &attempt.DispatchClaim, &attempt.DispatchEpoch, &dispatchedAt)
+	if err != nil {
+		return RecoveryAttempt{}, err
+	}
+	attempt.SelectedAction = recovery.Action(action)
+	attempt.Backoff = time.Duration(backoffMS) * time.Millisecond
+	if nextRetryAt != 0 {
+		attempt.NextRetryAt = time.Unix(0, nextRetryAt).UTC()
+	}
+	if issuedAt != 0 {
+		attempt.IssuedAt = time.Unix(0, issuedAt).UTC()
+	}
+	if expiresAt != 0 {
+		attempt.ExpiresAt = time.Unix(0, expiresAt).UTC()
+	}
+	if dispatchedAt != 0 {
+		attempt.DispatchedAt = time.Unix(0, dispatchedAt).UTC()
+	}
+	if err := json.Unmarshal([]byte(planJSON), &attempt.BoundedPlan); err != nil {
+		return RecoveryAttempt{}, errors.New("stored recovery attempt plan is malformed")
+	}
+	return attempt, nil
+}
+
+func (s *Store) FailRecoveryDispatch(ctx context.Context, attempt RecoveryAttempt, controllerOwner string, controllerEpoch int64) error {
+	if attempt.SelectedAction == "" {
+		return nil
+	}
+	if err := validateRecoveryBudgetKey(attempt.RecoveryBudgetKey); err != nil || attempt.UnitAttempt <= 0 ||
+		strings.TrimSpace(controllerOwner) == "" || controllerEpoch <= 0 {
+		return errors.New("complete fenced recovery dispatch identity is required")
+	}
+	stamp := time.Now().UTC().UnixNano()
+	result, err := s.db.ExecContext(ctx, `UPDATE recovery_attempts SET status = 'used_failed', updated_at = ?
+		WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ?
+		AND unit_attempt = ? AND status = 'dispatched' AND dispatch_claim = ? AND dispatch_epoch = ?
+		AND EXISTS (SELECT 1 FROM delivery_runs WHERE delivery_id = ? AND generation = ? AND state = ?
+		AND owner = ?) AND EXISTS (SELECT 1 FROM leases WHERE run_id = ? AND owner = ? AND epoch = ?
+		AND expires_at > ?)`, stamp, attempt.DeliveryID, attempt.Generation, attempt.UnitID, attempt.HeadSHA,
+		attempt.FailureClass, attempt.UnitAttempt, controllerOwner, controllerEpoch, attempt.DeliveryID,
+		attempt.Generation, domain.RunRunning, controllerOwner, attempt.DeliveryID, controllerOwner,
+		controllerEpoch, stamp)
+	if err != nil {
+		return err
+	}
+	rows, _ := result.RowsAffected()
+	if rows != 1 {
+		return errors.New("recovery dispatch failure disposition is fenced")
+	}
+	return nil
+}
+
+func (s *Store) ClaimRecoveryDispatch(ctx context.Context, deliveryID string, generation int64, unitID, headSHA, executionID string, controllerEpoch int64, now time.Time) (RecoveryAttempt, error) {
+	if deliveryID == "" || generation <= 0 || unitID == "" || !validGitSHA(headSHA) || executionID == "" || controllerEpoch <= 0 || now.IsZero() {
+		return RecoveryAttempt{}, errors.New("complete recovery dispatch identity is required")
+	}
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return RecoveryAttempt{}, err
+	}
+	defer conn.Close()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return RecoveryAttempt{}, err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var class, status, dispatchOwner, selectedAction string
+	var unitAttempt, nextRetryAt, expiresAt, dispatchEpoch int64
+	err = conn.QueryRowContext(ctx, `SELECT failure_class, unit_attempt, status, next_retry_at, expires_at,
+		dispatch_claim, dispatch_epoch, selected_action FROM recovery_attempts WHERE delivery_id = ? AND generation = ?
+		AND unit_id = ? AND head_sha = ? ORDER BY sequence DESC LIMIT 1`, deliveryID, generation, unitID, headSHA).
+		Scan(&class, &unitAttempt, &status, &nextRetryAt, &expiresAt, &dispatchOwner, &dispatchEpoch, &selectedAction)
+	if errors.Is(err, sql.ErrNoRows) {
+		var exhausted, failedWithoutDecision int
+		if err := conn.QueryRowContext(ctx, `SELECT COUNT(*) FROM recovery_budgets WHERE delivery_id = ?
+			AND generation = ? AND unit_id = ? AND head_sha = ? AND status = 'exhausted'`, deliveryID,
+			generation, unitID, headSHA).Scan(&exhausted); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		if err := conn.QueryRowContext(ctx, `SELECT COUNT(*) FROM unit_attempts WHERE delivery_id = ?
+			AND generation = ? AND unit_id = ? AND head_sha = ? AND status = 'terminal'
+			AND last_failure NOT IN ('success', 'mutating_skip')`, deliveryID, generation, unitID, headSHA).Scan(&failedWithoutDecision); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		committed = true
+		if exhausted > 0 {
+			return RecoveryAttempt{}, ErrRetryBudgetExhausted
+		}
+		if failedWithoutDecision > 0 {
+			return RecoveryAttempt{}, ErrRecoveryDecisionPending
+		}
+		return RecoveryAttempt{}, nil
+	}
+	if err != nil {
+		return RecoveryAttempt{}, err
+	}
+	var runState domain.RunState
+	var runGeneration int64
+	var runOwner string
+	if err := conn.QueryRowContext(ctx, `SELECT state, generation, owner FROM delivery_runs WHERE delivery_id = ?`, deliveryID).
+		Scan(&runState, &runGeneration, &runOwner); err != nil {
+		return RecoveryAttempt{}, err
+	}
+	if runState != domain.RunRunning || runGeneration != generation || runOwner != executionID {
+		return RecoveryAttempt{}, ErrRecoveryDispatchClaimed
+	}
+	var leaseCount int
+	if err := conn.QueryRowContext(ctx, `SELECT COUNT(*) FROM leases WHERE run_id = ? AND owner = ?
+		AND epoch = ? AND expires_at > ?`, deliveryID, executionID, controllerEpoch, time.Now().UTC().UnixNano()).Scan(&leaseCount); err != nil || leaseCount != 1 {
+		return RecoveryAttempt{}, ErrRecoveryDispatchClaimed
+	}
+	key := RecoveryBudgetKey{DeliveryID: deliveryID, Generation: generation, UnitID: unitID, HeadSHA: headSHA, FailureClass: class}
+	switch status {
+	case "consumed":
+		var currentAttempts int64
+		var unitStatus, unitOutcome string
+		unitErr := conn.QueryRowContext(ctx, `SELECT attempts, status, last_failure FROM unit_attempts
+			WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ?`, deliveryID,
+			generation, unitID, headSHA).Scan(&currentAttempts, &unitStatus, &unitOutcome)
+		if unitErr != nil && !errors.Is(unitErr, sql.ErrNoRows) {
+			return RecoveryAttempt{}, unitErr
+		}
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		committed = true
+		if unitErr == nil && currentAttempts >= unitAttempt+1 && unitStatus == "terminal" &&
+			unitOutcome != "success" && unitOutcome != "mutating_skip" {
+			return RecoveryAttempt{}, ErrRecoveryDecisionPending
+		}
+		return RecoveryAttempt{}, nil
+	case "reserved", "used_failed":
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		committed = true
+		return RecoveryAttempt{}, ErrRecoveryDecisionPending
+	case "exhausted":
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		committed = true
+		return RecoveryAttempt{}, ErrRetryBudgetExhausted
+	case "terminal", "rejected":
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		committed = true
+		if recovery.Action(selectedAction) == recovery.ActionAwaitDecision || recovery.Action(selectedAction) == recovery.ActionFinalHumanGate {
+			return RecoveryAttempt{}, ErrRetryBudgetExhausted
+		}
+		return RecoveryAttempt{}, ErrRecoveryTerminal
+	case "planned", "dispatched":
+		if action := recovery.Action(selectedAction); action != recovery.ActionRetrySameUnit && action != recovery.ActionRetryAfterBackoff && action != recovery.ActionRunRecoveryPlan {
+			return RecoveryAttempt{}, ErrRecoveryTerminal
+		}
+	default:
+		return RecoveryAttempt{}, ErrRecoveryTerminal
+	}
+	if now.Before(time.Unix(0, nextRetryAt)) {
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		committed = true
+		if err := conn.Close(); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		attempt, getErr := s.GetRecoveryAttempt(ctx, key, unitAttempt)
+		if getErr != nil {
+			return RecoveryAttempt{}, getErr
+		}
+		return attempt, ErrRecoveryBackoffPending
+	}
+	stamp := now.UTC().UnixNano()
+	if expiresAt == 0 || !now.Before(time.Unix(0, expiresAt)) {
+		if _, err := conn.ExecContext(ctx, `UPDATE recovery_attempts SET status = 'terminal', selected_action = ?,
+			rejected_reason = 'planner evidence expired before dispatch', updated_at = ? WHERE delivery_id = ?
+			AND generation = ? AND unit_id = ? AND head_sha = ? AND failure_class = ? AND unit_attempt = ?`,
+			recovery.ActionAwaitDecision, stamp, deliveryID, generation, unitID, headSHA, class, unitAttempt); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		if _, err := conn.ExecContext(ctx, `UPDATE recovery_budgets SET status = 'exhausted', selected_action = ?,
+			exhausted_at = ?, next_retry_at = 0, updated_at = ? WHERE delivery_id = ? AND generation = ?
+			AND unit_id = ? AND head_sha = ? AND failure_class = ?`, recovery.ActionAwaitDecision, stamp, stamp,
+			deliveryID, generation, unitID, headSHA, class); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		committed = true
+		return RecoveryAttempt{}, ErrRetryBudgetExhausted
+	}
+	if status == "dispatched" && dispatchOwner == executionID && dispatchEpoch == controllerEpoch {
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		committed = true
+		if err := conn.Close(); err != nil {
+			return RecoveryAttempt{}, err
+		}
+		return s.GetRecoveryAttempt(ctx, key, unitAttempt)
+	}
+	result, err := conn.ExecContext(ctx, `UPDATE recovery_attempts SET status = 'dispatched',
+		dispatch_claim = ?, dispatch_epoch = ?, dispatched_at = ?, updated_at = ? WHERE delivery_id = ? AND generation = ?
+		AND unit_id = ? AND head_sha = ? AND failure_class = ? AND unit_attempt = ?
+		AND status IN ('planned', 'dispatched') AND dispatch_claim = ? AND dispatch_epoch = ?`,
+		executionID, controllerEpoch, stamp, stamp, deliveryID, generation, unitID, headSHA, class,
+		unitAttempt, dispatchOwner, dispatchEpoch)
+	if err != nil {
+		return RecoveryAttempt{}, err
+	}
+	rows, _ := result.RowsAffected()
+	if rows != 1 {
+		return RecoveryAttempt{}, ErrRecoveryDispatchClaimed
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return RecoveryAttempt{}, err
+	}
+	committed = true
+	if err := conn.Close(); err != nil {
+		return RecoveryAttempt{}, err
+	}
+	return s.GetRecoveryAttempt(ctx, key, unitAttempt)
+}
+
+func validateRecoveryReservation(request RecoveryReservation) error {
+	if err := validateRecoveryBudgetKey(request.RecoveryBudgetKey); err != nil {
+		return err
+	}
+	if request.UnitAttempt <= 0 || !validRecoveryToken(request.ClaimToken) || strings.TrimSpace(request.ControllerOwner) == "" ||
+		strings.ContainsAny(request.ControllerOwner, "\r\n\x00") || request.ControllerEpoch <= 0 || request.PolicyVersion != recovery.PolicyVersion ||
+		request.MaxAttempts <= 0 || request.BaseBackoff < 0 || request.MaxBackoff < request.BaseBackoff ||
+		request.MaxBackoff <= 0 || !validSHA256(request.FailureHash) || request.Now.IsZero() ||
+		strings.TrimSpace(request.Diagnostic) == "" || len(request.Diagnostic) > 256 ||
+		strings.ContainsAny(request.Diagnostic, "\r\n\x00") {
+		return errors.New("complete bounded recovery reservation is required")
+	}
+	class, err := recovery.ParseFailureClass(request.FailureClass)
+	if err != nil {
+		return err
+	}
+	policy, err := recovery.PolicyFor(recovery.Failure{Class: class, Reversible: request.Reversible})
+	if err != nil {
+		return err
+	}
+	return policy.ValidateAction(request.ExhaustedAction)
+}
+
+func validateRecoveryOutcome(outcome RecoveryOutcome) error {
+	if err := validateRecoveryBudgetKey(outcome.RecoveryBudgetKey); err != nil {
+		return err
+	}
+	validIdentity := outcome.UnitAttempt > 0 && validRecoveryToken(outcome.ClaimToken) &&
+		strings.TrimSpace(outcome.ControllerOwner) != "" && !strings.ContainsAny(outcome.ControllerOwner, "\r\n\x00") && outcome.ControllerEpoch > 0 &&
+		validRecoveryToken(outcome.PlannerRequestNonce) && validSHA256(outcome.EvidenceHash) &&
+		validSHA256(outcome.AuthorityScopeHash) && validSHA256(outcome.PlannerEvidenceHash) &&
+		len(outcome.PlannerSessionID) == 36 && validSHA256(outcome.PlannerSessionFingerprint) &&
+		outcome.ObservedModel == recovery.RequiredModel && outcome.Thinking == recovery.RequiredThinking
+	if !validIdentity || outcome.IssuedAt.IsZero() || outcome.ExpiresAt.Before(outcome.IssuedAt) ||
+		outcome.ExpiresAt.Sub(outcome.IssuedAt) > 10*time.Minute {
+		return errors.New("complete bounded recovery planner evidence is required")
+	}
+	if _, err := recovery.ParseAction(string(outcome.SelectedAction)); err != nil {
+		return err
+	}
+	return recovery.ValidatePlan(outcome.SelectedAction, outcome.BoundedPlan)
+}
+
+func validRecoveryToken(value string) bool {
+	if len(value) != 32 {
+		return false
+	}
+	for _, char := range value {
+		if (char < '0' || char > '9') && (char < 'a' || char > 'f') {
+			return false
+		}
+	}
+	return true
 }
 
 type contextExecer interface {
@@ -1254,7 +2069,8 @@ func validateRecoveryBudgetKey(key RecoveryBudgetKey) error {
 		!validGitSHA(key.HeadSHA) || strings.TrimSpace(key.FailureClass) == "" || strings.ContainsAny(key.FailureClass, "\r\n\x00") {
 		return errors.New("complete recovery budget identity is required")
 	}
-	return nil
+	_, err := recovery.ParseFailureClass(key.FailureClass)
+	return err
 }
 
 func boundedStoreString(value string, limit int) string {

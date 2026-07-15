@@ -18,7 +18,9 @@ import (
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/recovery"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/telemetry"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/validation"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/workspace"
 	_ "modernc.org/sqlite"
@@ -211,59 +213,206 @@ func TestMonitorWriteScopeFailsClosedWhenRepositoryCannotBeInspected(t *testing.
 	}
 }
 
-func TestFinalUnitRunStateAwaitsDecisionWhenRetryBudgetExhausted(t *testing.T) {
+func TestRecoveryRunStateUsesControllerSelectedAction(t *testing.T) {
 	t.Parallel()
-	result := gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("artifact missing: M001-ROADMAP.md")}
-	if got := finalUnitRunState(&result, "executing", 0); got != domain.RunAwaitingDecision {
-		t.Fatalf("state=%s want awaiting_decision", got)
-	}
-	if !errors.Is(result.Err, store.ErrRetryBudgetExhausted) {
-		t.Fatalf("error=%v, want retry budget exhausted", result.Err)
-	}
-	if class := classifyUnitFailure(result); class != unitFailureRetryExhausted {
-		t.Fatalf("class=%s want %s", class, unitFailureRetryExhausted)
-	}
-}
-
-func TestFinalUnitRunStateRetriesWhileBudgetRemains(t *testing.T) {
-	t.Parallel()
-	result := gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("artifact missing: M001-ROADMAP.md")}
-	if got := finalUnitRunState(&result, "executing", 1); got != domain.RunReady {
-		t.Fatalf("state=%s want ready", got)
-	}
-	if errors.Is(result.Err, store.ErrRetryBudgetExhausted) {
-		t.Fatalf("unexpected exhausted marker: %v", result.Err)
+	for _, test := range []struct {
+		name   string
+		action recovery.Action
+		state  domain.RunState
+	}{
+		{name: "retry", action: recovery.ActionRetryAfterBackoff, state: domain.RunReady},
+		{name: "await", action: recovery.ActionAwaitDecision, state: domain.RunAwaitingDecision},
+		{name: "block", action: recovery.ActionBlock, state: domain.RunBlocked},
+		{name: "human gate", action: recovery.ActionFinalHumanGate, state: domain.RunHumanGate},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			result := gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("bounded failure")}
+			if got := recoveryRunState(&result, "executing", test.action); got != test.state {
+				t.Fatalf("state=%s want %s", got, test.state)
+			}
+		})
 	}
 }
 
 func TestClassifyUnitFailureAndRetryPolicy(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		name      string
-		result    gsd.Result
-		class     string
-		retryable bool
+		name   string
+		result gsd.Result
+		class  recovery.FailureClass
 	}{
-		{name: "runtime contract", result: gsd.Result{Terminal: gsd.TerminalError, Err: gsd.ErrRuntimeContractMismatch}, class: unitFailureRuntimeContractMismatch, retryable: false},
-		{name: "missing artifact", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("artifact missing: M001-ROADMAP.md")}, class: unitFailureArtifactMissing, retryable: true},
-		{name: "interrupted", result: gsd.Result{Terminal: gsd.TerminalTimeout, Err: context.DeadlineExceeded}, class: unitFailureInterrupted, retryable: true},
-		{name: "stale head", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("stale head before checkpoint")}, class: unitFailureStaleHead, retryable: false},
-		{name: "scope breach", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("live write-scope breach: changed path outside the issue write scope")}, class: unitFailureScopeBreach, retryable: false},
-		{name: "model drift", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("effective runtime identity was not observed as openai-codex/gpt-5.5/high")}, class: unitFailureModelDrift, retryable: false},
-		{name: "orphan child", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("orphaned subagent still running")}, class: unitFailureOrphanedSubagent, retryable: false},
+		{name: "runtime contract", result: gsd.Result{Terminal: gsd.TerminalError, Err: gsd.ErrRuntimeContractMismatch}, class: recovery.FailureRuntimeContractMismatch},
+		{name: "missing artifact", result: gsd.Result{Terminal: gsd.TerminalError, Err: recovery.MarkFailure(recovery.FailureArtifactMissing, true, errors.New("bounded"))}, class: recovery.FailureArtifactMissing},
+		{name: "interrupted", result: gsd.Result{Terminal: gsd.TerminalTimeout, Err: context.DeadlineExceeded}, class: recovery.FailureInterrupted},
+		{name: "stale head", result: gsd.Result{Terminal: gsd.TerminalError, Err: recovery.MarkFailure(recovery.FailureStaleHead, false, errors.New("bounded"))}, class: recovery.FailureStaleHead},
+		{name: "scope breach", result: gsd.Result{Terminal: gsd.TerminalError, Err: recovery.MarkFailure(recovery.FailureWriteScopeBreach, false, errors.New("bounded"))}, class: recovery.FailureWriteScopeBreach},
+		{name: "model mismatch", result: gsd.Result{Terminal: gsd.TerminalError, Err: recovery.MarkFailure(recovery.FailureModelMismatch, false, errors.New("bounded"))}, class: recovery.FailureModelMismatch},
+		{name: "dead worker", result: gsd.Result{Terminal: gsd.TerminalError, Err: recovery.MarkFailure(recovery.FailureDeadWorker, true, errors.New("bounded"))}, class: recovery.FailureDeadWorker},
+		{name: "unknown", result: gsd.Result{Terminal: gsd.TerminalError, Err: errors.New("novel")}, class: recovery.FailureUnknown},
 	}
-	for _, tc := range tests {
-		tc := tc
-		t.Run(tc.name, func(t *testing.T) {
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			if got := classifyUnitFailure(tc.result); got != tc.class {
-				t.Fatalf("class=%s want %s", got, tc.class)
+			if got := recovery.Classify(test.result).Class; got != test.class {
+				t.Fatalf("class=%s want %s", got, test.class)
 			}
-			if got := isAutomaticallyRetryable(tc.result.Err); got != tc.retryable {
-				t.Fatalf("retryable=%v want %v", got, tc.retryable)
+			failure := recovery.Classify(test.result)
+			policy, err := recovery.PolicyFor(failure)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if isAutomaticallyRetryable(test.result.Err) {
+				t.Fatal("unplanned raw failure was automatically retried")
+			}
+			if policy.PlannerEligible {
+				planned := recovery.MarkDecision(failure, recovery.ActionRetryAfterBackoff, test.result.Err)
+				if !isAutomaticallyRetryable(planned) {
+					t.Fatal("controller-selected retry was not retryable")
+				}
 			}
 		})
 	}
+}
+
+func TestGovernRecoveryInvokesPlannerOnlyForEligibleClasses(t *testing.T) {
+	for _, test := range []struct {
+		name    string
+		failure recovery.Failure
+		action  recovery.Action
+		calls   int
+	}{
+		{name: "artifact missing", failure: recovery.Failure{Class: recovery.FailureArtifactMissing, Reversible: true}, action: recovery.ActionRetryAfterBackoff, calls: 1},
+		{name: "irreversible artifact", failure: recovery.Failure{Class: recovery.FailureArtifactMissing}, action: recovery.ActionBlock},
+		{name: "reversible validation", failure: recovery.Failure{Class: recovery.FailureValidationFailed, Reversible: true}, action: recovery.ActionRetryAfterBackoff, calls: 1},
+		{name: "model mismatch", failure: recovery.Failure{Class: recovery.FailureModelMismatch}, action: recovery.ActionBlock},
+		{name: "thinking mismatch", failure: recovery.Failure{Class: recovery.FailureThinkingMismatch}, action: recovery.ActionBlock},
+		{name: "scope breach", failure: recovery.Failure{Class: recovery.FailureWriteScopeBreach}, action: recovery.ActionBlock},
+		{name: "dirty tree", failure: recovery.Failure{Class: recovery.FailureDirtyTree}, action: recovery.ActionBlock},
+		{name: "unknown", failure: recovery.Failure{Class: recovery.FailureUnknown}, action: recovery.ActionAwaitDecision},
+		{name: "github uncertainty", failure: recovery.Failure{Class: recovery.FailureGitHubPublishUncertain}, action: recovery.ActionBlock},
+		{name: "outbox uncertainty", failure: recovery.Failure{Class: recovery.FailureOutboxUncertain}, action: recovery.ActionBlock},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			db, _, request := setupRecoveryGovernanceTest(t, test.failure)
+			planner := &fakeRecoveryPlanner{}
+			restore := installFakeRecoveryPlanner(t, planner)
+			defer restore()
+			decision, err := governRecovery(context.Background(), request)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if decision.Action != test.action || planner.calls != test.calls {
+				t.Fatalf("decision=%+v planner calls=%d want action=%s calls=%d", decision, planner.calls, test.action, test.calls)
+			}
+			stored, err := db.GetRecoveryAttempt(context.Background(), store.RecoveryBudgetKey{
+				DeliveryID: request.DeliveryID, Generation: request.Generation, UnitID: request.UnitID,
+				HeadSHA: request.HeadSHA, FailureClass: string(test.failure.Class),
+			}, request.UnitAttempt)
+			if err != nil || stored.SelectedAction != test.action {
+				t.Fatalf("stored recovery=%+v err=%v", stored, err)
+			}
+		})
+	}
+}
+
+func TestGovernRecoveryRejectsUnauthorizedBranchBeforePlanner(t *testing.T) {
+	_, _, request := setupRecoveryGovernanceTest(t, recovery.Failure{Class: recovery.FailureArtifactInvalid, Reversible: true})
+	request.AuthorizedBranch = "unauthorized-branch"
+	planner := &fakeRecoveryPlanner{}
+	restore := installFakeRecoveryPlanner(t, planner)
+	defer restore()
+	decision, err := governRecovery(context.Background(), request)
+	if err == nil || decision.Action != recovery.ActionBlock || planner.calls != 0 {
+		t.Fatalf("unauthorized branch decision=%+v planner calls=%d err=%v", decision, planner.calls, err)
+	}
+}
+
+func TestGovernRecoveryRejectsExpiredControllerLeaseBeforeReservation(t *testing.T) {
+	db, _, request := setupRecoveryGovernanceTest(t, recovery.Failure{Class: recovery.FailureArtifactInvalid, Reversible: true})
+	if err := db.ReleaseLease(context.Background(), request.Lease); err != nil {
+		t.Fatal(err)
+	}
+	planner := &fakeRecoveryPlanner{}
+	restore := installFakeRecoveryPlanner(t, planner)
+	defer restore()
+	decision, err := governRecovery(context.Background(), request)
+	if err == nil || decision.Action != recovery.ActionBlock || planner.calls != 0 {
+		t.Fatalf("expired lease decision=%+v planner calls=%d err=%v", decision, planner.calls, err)
+	}
+	if count := countSQLiteQueryForTest(t, filepath.Join(request.Config.StateDir, "authority.db"), "SELECT COUNT(*) FROM recovery_attempts"); count != 0 {
+		t.Fatalf("expired lease created %d recovery attempts", count)
+	}
+}
+
+func TestExecuteRecoveryPlanRunsOnlyTypedControllerPrimitives(t *testing.T) {
+	db, config, request := setupRecoveryGovernanceTest(t, recovery.Failure{Class: recovery.FailureArtifactInvalid, Reversible: true})
+	attempt := store.RecoveryAttempt{RecoveryOutcome: store.RecoveryOutcome{
+		RecoveryBudgetKey: store.RecoveryBudgetKey{DeliveryID: request.DeliveryID, Generation: request.Generation,
+			UnitID: request.UnitID, HeadSHA: request.HeadSHA, FailureClass: string(request.Failure.Class)},
+		SelectedAction: recovery.ActionRunRecoveryPlan,
+		BoundedPlan: []recovery.PlanStep{{Primitive: recovery.PrimitiveInspectRetainedAttempt},
+			{Primitive: recovery.PrimitiveRetryFreshAttempt}},
+	}}
+	if err := executeRecoveryPlan(context.Background(), attempt, db, nil, nil, store.Lease{}, config); err != nil {
+		t.Fatal(err)
+	}
+	attempt.BoundedPlan = []recovery.PlanStep{{Primitive: recovery.Primitive("shell")}}
+	if err := executeRecoveryPlan(context.Background(), attempt, db, nil, nil, store.Lease{}, config); err == nil {
+		t.Fatal("executable recovery primitive was accepted")
+	}
+}
+
+func TestGovernRecoveryRejectsPlannerFailureWithoutCanonicalMutation(t *testing.T) {
+	db, config, request := setupRecoveryGovernanceTest(t, recovery.Failure{Class: recovery.FailureArtifactInvalid, Reversible: true})
+	_ = db
+	beforeHead := runGitForTest(t, config.WorkDir, "rev-parse", "HEAD")
+	beforeState := readFileForTest(t, filepath.Join(config.WorkDir, ".gsd", "STATE.md"))
+	planner := &fakeRecoveryPlanner{err: errors.New("planner timeout")}
+	restore := installFakeRecoveryPlanner(t, planner)
+	defer restore()
+	decision, err := governRecovery(context.Background(), request)
+	if err == nil || decision.Action != recovery.ActionBlock {
+		t.Fatalf("decision=%+v err=%v", decision, err)
+	}
+	if got := runGitForTest(t, config.WorkDir, "rev-parse", "HEAD"); got != beforeHead {
+		t.Fatalf("canonical head changed: got %s want %s", got, beforeHead)
+	}
+	if got := readFileForTest(t, filepath.Join(config.WorkDir, ".gsd", "STATE.md")); got != beforeState {
+		t.Fatalf("canonical GSD state changed: got %q want %q", got, beforeState)
+	}
+}
+
+func setupRecoveryGovernanceTest(t *testing.T, failure recovery.Failure) (*store.Store, fileConfig, recoveryGovernanceRequest) {
+	t.Helper()
+	repo, _, config, _ := setupFakeSuperviseRuntime(t)
+	db, err := store.Open(context.Background(), filepath.Join(config.StateDir, "authority.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = db.Close() })
+	head := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
+	branch := strings.TrimSpace(runGitForTest(t, repo, "symbolic-ref", "--quiet", "--short", "HEAD"))
+	if err := db.EnsureDelivery(context.Background(), store.Delivery{
+		ID: "issue-389", Issue: 389, ParentIssue: 372, WorkDir: repo,
+		ContextHash: "sha256:" + strings.Repeat("a", 64), Branch: branch, BaseBranch: "main",
+		GSDProjectRoot: repo, InitialHead: head, GSDVersion: "1.11.0",
+	}); err != nil {
+		t.Fatal(err)
+	}
+	lease, err := db.AcquireLease(context.Background(), "issue-389", "test-execution", time.Now().UTC(), time.Minute)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.BeginAttempt(context.Background(), "issue-389", "test-execution"); err != nil {
+		t.Fatal(err)
+	}
+	request := recoveryGovernanceRequest{
+		Store: db, Config: config, Issue: 389, DeliveryID: "issue-389", Generation: 1,
+		UnitID: "execute-task/M001/S01/T01", UnitAttempt: 1, HeadSHA: head,
+		ExecutionID: "test-execution", Failure: failure, TerminalError: errors.New("bounded failure"),
+		WriteScope: []string{"agent-runtime/shepherd/**"}, AuthorizedBranch: branch, Lease: lease,
+	}
+	return db, config, request
 }
 
 func TestMutatingSkipFenceLeavesAuthorityReady(t *testing.T) {
@@ -464,6 +613,9 @@ func TestAppendAndPublishDecisionRetainsDurableRecordWhenPublicationFails(t *tes
 		"issue-380", "execution-1", "discuss-milestone/M001", question, response, "shepherd", "approved issue context")
 	if err == nil {
 		t.Fatal("publication failure did not fail the answered gate")
+	}
+	if failure := recovery.Classify(gsd.Result{Terminal: gsd.TerminalError, Err: err}); failure.Class != recovery.FailureGitHubPublishUncertain {
+		t.Fatalf("publication failure classification=%+v", failure)
 	}
 	records, readErr := store.Records()
 	if readErr != nil {
@@ -720,23 +872,61 @@ func TestSuperviseRuntimeRetryReconcilesOldAttemptAndRetainsFreshAttempt(t *test
 		return
 	}
 	t.Setenv("RUNNER_HELPER_MODE", "fail-runtime")
-	_, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	beforeHead := runGitForTest(t, repo, "rev-parse", "HEAD")
+	beforeState := readFileForTest(t, filepath.Join(repo, ".gsd", "STATE.md"))
+	planner := &fakeRecoveryPlanner{}
+	restorePlanner := installFakeRecoveryPlanner(t, planner)
+	defer restorePlanner()
 	err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
 	if err == nil {
 		t.Fatal("runtime failure unexpectedly succeeded")
 	}
 	dbPath := filepath.Join(config.StateDir, "authority.db")
-	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
-		t.Fatalf("reconciled attempts=%d want 1", count)
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 2 {
+		t.Fatalf("reconciled attempts=%d want 2", count)
 	}
-	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'retained_for_recovery' AND failure_class = 'runtime_failure'"); count != 1 {
-		t.Fatalf("retained runtime attempts=%d want 1", count)
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'retained_for_recovery' AND failure_class = 'dead_worker'"); count != 1 {
+		t.Fatalf("retained dead-worker attempts=%d want 1", count)
 	}
-	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(DISTINCT path) FROM attempt_worktrees"); count != 2 {
-		t.Fatalf("distinct retry worktree paths=%d want 2", count)
+	if planner.calls != 2 {
+		t.Fatalf("recovery planner calls=%d want 2 before class-budget exhaustion", planner.calls)
 	}
-	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(DISTINCT branch) FROM attempt_worktrees"); count != 2 {
-		t.Fatalf("distinct retry branches=%d want 2", count)
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM recovery_budgets WHERE failure_class = 'dead_worker' AND attempts = 2 AND selected_action = 'await_decision' AND exhausted_at <> 0"); count != 1 {
+		t.Fatalf("durable exhausted dead-worker budgets=%d want 1", count)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM recovery_attempts WHERE planner_session_id <> '' AND planner_evidence_hash <> '' AND selected_action = 'retry_after_backoff'"); count != 2 {
+		t.Fatalf("structured planner evidence rows=%d want 2", count)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM delivery_runs WHERE state = 'awaiting_decision'"); count != 1 {
+		t.Fatalf("durable awaiting-decision runs=%d want 1", count)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(DISTINCT path) FROM attempt_worktrees"); count != 3 {
+		t.Fatalf("distinct retry worktree paths=%d want 3", count)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(DISTINCT branch) FROM attempt_worktrees"); count != 3 {
+		t.Fatalf("distinct retry branches=%d want 3", count)
+	}
+	activities, err := telemetry.ReadDirectory(filepath.Join(config.StateDir, "activity", "segments"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	statuses := map[string]bool{}
+	for _, activity := range activities {
+		if activity.Kind == "recovery" {
+			statuses[activity.Status] = true
+		}
+	}
+	for _, status := range []string{"budget_reserved", "planner_requested", "planner_result", "action_selected", "backoff_scheduled", "budget_exhausted"} {
+		if !statuses[status] {
+			t.Fatalf("recovery telemetry status %q missing from %v", status, statuses)
+		}
+	}
+	if got := runGitForTest(t, repo, "rev-parse", "HEAD"); got != beforeHead {
+		t.Fatalf("canonical head changed during failed recovery: got %s want %s", got, beforeHead)
+	}
+	if got := readFileForTest(t, filepath.Join(repo, ".gsd", "STATE.md")); got != beforeState {
+		t.Fatalf("canonical GSD state changed during failed recovery: got %q want %q", got, beforeState)
 	}
 }
 
@@ -1021,6 +1211,56 @@ func setupFakeSuperviseRuntime(t *testing.T) (string, string, fileConfig, *gsd.R
 func validFakeValidationResult(model, verdict string) validation.Result {
 	now := time.Now().UTC()
 	return validation.Result{ObservedModel: model, Thinking: "high", SessionID: "11111111-1111-1111-1111-111111111111", Verdict: verdict, LocalGates: true, UAT: true, MilestoneValid: true, IssuedAt: now.Add(-time.Minute), ExpiresAt: now.Add(10 * time.Minute)}
+}
+
+type fakeRecoveryPlanner struct {
+	result recovery.Result
+	err    error
+	calls  int
+}
+
+func (f *fakeRecoveryPlanner) Plan(_ context.Context, request recovery.Request) (recovery.Result, error) {
+	f.calls++
+	if f.err != nil {
+		return recovery.Result{}, f.err
+	}
+	result := f.result
+	now := time.Now().UTC()
+	if result.SchemaVersion == 0 {
+		result.SchemaVersion = recovery.SchemaVersion
+		result.RequestNonce = fmt.Sprintf("%032x", f.calls)
+		result.Issue = request.Issue
+		result.DeliveryID = request.DeliveryID
+		result.Generation = request.Generation
+		result.UnitID = request.UnitID
+		result.Attempt = request.Attempt
+		result.HeadSHA = request.HeadSHA
+		result.FailureClass = request.Failure.Class
+		result.EvidenceHash = request.EvidenceHash
+		result.AuthorityScopeHash = request.AuthorityScopeHash
+		result.ObservedModel = recovery.RequiredModel
+		result.Thinking = recovery.RequiredThinking
+		result.SessionID = "019f5d4a-9fb4-7852-b640-d6fdf71bd3d9"
+		result.SessionFingerprint = "sha256:" + strings.Repeat("2", 64)
+		result.Action = recovery.ActionRetryAfterBackoff
+		result.BoundedPlanSteps = []recovery.PlanStep{{Primitive: recovery.PrimitiveRetryFreshAttempt}}
+		result.Backoff = request.ControllerBackoff
+		result.IssuedAt = now
+		result.ExpiresAt = now.Add(5 * time.Minute)
+		var err error
+		result, err = recovery.SealResult(result)
+		if err != nil {
+			return recovery.Result{}, err
+		}
+	}
+	return result, nil
+}
+
+func installFakeRecoveryPlanner(t *testing.T, planner recovery.Planner) func() {
+	t.Helper()
+	previous := recoveryPlannerFactory
+	recoveryPlannerFactory = func(fileConfig) (recovery.Planner, error) { return planner, nil }
+	return func() { recoveryPlannerFactory = previous }
 }
 
 type fakeIndependentValidator struct {

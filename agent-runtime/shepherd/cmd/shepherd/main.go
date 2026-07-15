@@ -28,6 +28,7 @@ import (
 	shepherdgit "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git"
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/recovery"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/supervisor"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/telemetry"
@@ -48,6 +49,13 @@ var independentValidatorFactory = func(_ *gsd.Runner, config fileConfig) validat
 		Command: config.PiCommand, GSDHome: config.GSDHome, StateDir: config.StateDir,
 		Timeout: time.Duration(config.TimeoutSeconds) * time.Second,
 	}
+}
+
+var recoveryPlannerFactory = func(config fileConfig) (recovery.Planner, error) {
+	return recovery.NewPiPlanner(recovery.PiPlannerConfig{
+		Command: config.PiCommand, GSDHome: config.GSDHome, StateDir: config.StateDir,
+		Timeout: time.Duration(config.TimeoutSeconds) * time.Second,
+	})
 }
 
 var prepareAttemptGSDState = func(ctx context.Context, manager *workspace.Manager, attempt workspace.AttemptWorktree) error {
@@ -481,12 +489,12 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 			if err == nil {
 				continue
 			}
-			if isAutomaticallyRetryable(err) {
+			if recovery.ShouldRetry(err) {
 				continue
 			}
 			blocked := decision
 			blocked.Kind = supervisor.DecisionBlocked
-			blocked.Reason = classifyUnitFailure(gsd.Result{Terminal: gsd.TerminalError, Err: err})
+			blocked.Reason = string(recovery.Classify(gsd.Result{Terminal: gsd.TerminalError, Err: err}).Class)
 			if emitErr := emitSuperviseStatus(deliveryID, blocked); emitErr != nil {
 				return emitErr
 			}
@@ -1148,6 +1156,8 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		}
 		runner = contractRunner
 	}
+	decisionPublisher := shepherdgithub.NewCLIClient()
+	decisionTarget := shepherdgithub.Target{Repository: config.Repository, PullRequest: config.PullRequest, DeliveryID: deliveryID}
 	attempt, err := authority.BeginAttempt(ctx, deliveryID, executionID)
 	if err != nil {
 		return err
@@ -1155,30 +1165,97 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	finishedAttempt := false
 	defer func() {
 		if !finishedAttempt {
-			_ = authority.FinishAttempt(context.Background(), deliveryID, executionID, domain.RunFailed)
+			if finishErr := authority.FinishAttempt(context.Background(), deliveryID, executionID, domain.RunFailed); finishErr != nil {
+				returnErr = errors.Join(returnErr, finishErr)
+			}
 		}
 	}()
+	recoveryDispatch, dispatchErr := waitForRecoveryDispatch(ctx, authority, lease, deliveryID, attempt.Generation, trustedUnit, startSnapshot.HeadSHA, executionID)
+	if dispatchErr != nil {
+		switch {
+		case errors.Is(dispatchErr, store.ErrRetryBudgetExhausted), errors.Is(dispatchErr, store.ErrRecoveryDecisionPending):
+			class := recovery.FailureRetryExhausted
+			if errors.Is(dispatchErr, store.ErrRecoveryDecisionPending) {
+				class = recovery.FailureHumanRequired
+			}
+			decisionErr := recovery.MarkDecision(recovery.Failure{Class: class}, recovery.ActionAwaitDecision, dispatchErr)
+			decisionRequestErr := persistAndPublishDecisionRequest(ctx, authority, lease, decisionPublisher, decisionTarget,
+				deliveryID, issue, trustedUnit, attempt.Generation, startSnapshot.HeadSHA, string(class), decisionErr)
+			target := domain.RunAwaitingDecision
+			if decisionRequestErr != nil {
+				publicationFailure := recovery.Classify(gsd.Result{Terminal: gsd.TerminalError, Err: decisionRequestErr})
+				if publicationFailure.Class == recovery.FailureGitHubPublishUncertain || publicationFailure.Class == recovery.FailureOutboxUncertain {
+					decisionErr = recovery.MarkDecision(publicationFailure, recovery.ActionBlock, decisionErr)
+					target = domain.RunBlocked
+				}
+			}
+			finishErr := authority.FinishAttempt(ctx, deliveryID, executionID, target)
+			finishedAttempt = finishErr == nil
+			return commandExitError{code: 10, err: errors.Join(decisionErr, decisionRequestErr, finishErr)}
+		case errors.Is(dispatchErr, store.ErrRecoveryTerminal):
+			finishErr := authority.FinishAttempt(ctx, deliveryID, executionID, domain.RunBlocked)
+			finishedAttempt = finishErr == nil
+			return commandExitError{code: 10, err: errors.Join(recovery.MarkDecision(recovery.Failure{Class: recovery.FailureHumanRequired}, recovery.ActionBlock, dispatchErr), finishErr)}
+		default:
+			return dispatchErr
+		}
+	}
+	if recoveryDispatch.SelectedAction != "" {
+		lockErr := repositoryLock.Check()
+		_, _, fingerprintErr := canonicalRecoveryFingerprint(ctx, config.WorkDir)
+		authorityHash, authorityErr := recoveryAuthorityScopeHash(ctx, recoveryGovernanceRequest{
+			Config: config, DeliveryID: deliveryID, Generation: attempt.Generation, UnitID: trustedUnit,
+			HeadSHA: startSnapshot.HeadSHA, WriteScope: issueContext.WriteScope, AuthorizedBranch: delivery.Branch,
+		})
+		leaseErr := authority.CheckLease(ctx, lease, time.Now().UTC())
+		if lockErr != nil || fingerprintErr != nil || authorityErr != nil || leaseErr != nil || authorityHash != recoveryDispatch.AuthorityScopeHash {
+			if leaseErr != nil {
+				finishedAttempt = true
+				return errors.Join(errors.New("recovery dispatch authority changed during backoff"), lockErr,
+					fingerprintErr, authorityErr, leaseErr)
+			}
+			dispositionErr := authority.FailRecoveryDispatch(ctx, recoveryDispatch, executionID, lease.Epoch)
+			return errors.Join(errors.New("recovery dispatch authority changed during backoff"), lockErr,
+				fingerprintErr, authorityErr, dispositionErr)
+		}
+	}
+	if err := executeRecoveryPlan(ctx, recoveryDispatch, authority, attemptManager, repositoryLock, lease, config); err != nil {
+		dispositionErr := authority.FailRecoveryDispatch(ctx, recoveryDispatch, executionID, lease.Epoch)
+		return errors.Join(fmt.Errorf("execute bounded recovery plan: %w", err), dispositionErr)
+	}
+	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
+		finishedAttempt = true
+		return err
+	}
 	unitAttemptKey := store.UnitAttemptKey{DeliveryID: deliveryID, Generation: attempt.Generation,
 		UnitID: trustedUnit, HeadSHA: startSnapshot.HeadSHA}
-	unitAttempt, err := authority.BeginUnitAttempt(ctx, unitAttemptKey, int64(config.MaxUnitAttempts))
+	unitAttempt, err := authority.BeginUnitAttemptFenced(ctx, unitAttemptKey, totalUnitAttemptLimit(config.MaxUnitAttempts), executionID, lease.Epoch)
 	if err != nil {
+		if errors.Is(err, store.ErrRecoveryClaimFenced) {
+			finishedAttempt = true
+			return err
+		}
+		dispositionErr := authority.FailRecoveryDispatch(ctx, recoveryDispatch, executionID, lease.Epoch)
 		target := domain.RunFailed
 		if errors.Is(err, store.ErrRetryBudgetExhausted) {
 			target = domain.RunAwaitingDecision
 		}
 		if finishErr := authority.FinishAttempt(ctx, deliveryID, executionID, target); finishErr != nil {
-			return errors.Join(err, finishErr)
+			return errors.Join(err, dispositionErr, finishErr)
 		}
 		finishedAttempt = true
 		if errors.Is(err, store.ErrRetryBudgetExhausted) {
-			return commandExitError{code: 10, err: err}
+			return commandExitError{code: 10, err: errors.Join(err, dispositionErr)}
 		}
-		return err
+		return errors.Join(err, dispositionErr)
 	}
 	unitAttemptFinished := false
 	defer func() {
 		if !unitAttemptFinished {
-			_ = authority.FinishUnitAttempt(context.Background(), unitAttemptKey, "controller_interrupted")
+			if finishErr := authority.FinishUnitAttemptFenced(context.Background(), unitAttemptKey, unitAttempt.Attempts, "controller_interrupted", executionID, lease.Epoch); finishErr != nil {
+				finishedAttempt = true
+				returnErr = errors.Join(returnErr, finishErr)
+			}
 		}
 	}()
 	executionWorkDir := config.WorkDir
@@ -1247,8 +1324,6 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		return err
 	}
 	defer decisions.Close()
-	decisionPublisher := shepherdgithub.NewCLIClient()
-	decisionTarget := shepherdgithub.Target{Repository: config.Repository, PullRequest: config.PullRequest, DeliveryID: deliveryID}
 	var sequence atomic.Uint64
 	var activityMu sync.Mutex
 	var activityErr error
@@ -1411,7 +1486,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	}
 	if restoreErr := shepherdgit.RestoreIndex(ctx, config.WorkDir); restoreErr != nil {
 		result.Terminal = gsd.TerminalError
-		result.Err = restoreErr
+		result.Err = joinTerminalFailure(restoreErr, result.Err)
 	}
 	var sessionEvidence gsd.SessionIdentityEvidence
 	if executionRunner.RequiresSessionBinding() || observedModel == "" || observedThinking == "" {
@@ -1464,25 +1539,25 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	activityMu.Unlock()
 	if spoolErr != nil {
 		result.Terminal = gsd.TerminalError
-		result.Err = fmt.Errorf("durable activity append failed: %w", spoolErr)
+		result.Err = joinTerminalFailure(fmt.Errorf("durable activity append failed: %w", spoolErr), result.Err)
 	}
 	if result.Terminal != gsd.TerminalRejected {
 		snapshot, queryErr := executionRunner.Query(ctx)
 		if queryErr != nil {
 			result.Terminal = gsd.TerminalError
-			result.Err = fmt.Errorf("post-run query reconciliation failed: %w", queryErr)
+			result.Err = joinTerminalFailure(fmt.Errorf("post-run query reconciliation failed: %w", queryErr), result.Err)
 		} else {
 			postPhase = snapshot.Phase
 			if snapshot.MilestoneID != "" {
 				if bindErr := authority.BindMilestone(ctx, deliveryID, snapshot.MilestoneID); bindErr != nil {
 					result.Terminal = gsd.TerminalError
-					result.Err = bindErr
+					result.Err = joinTerminalFailure(bindErr, result.Err)
 				}
 			}
 			terminal, reconcileErr := gsd.Reconcile(registry, command, result, before, snapshot)
 			result.Terminal = terminal
 			if reconcileErr != nil {
-				result.Err = reconcileErr
+				result.Err = joinTerminalFailure(reconcileErr, result.Err)
 			}
 		}
 	}
@@ -1492,7 +1567,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	}
 	if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
 		result.Terminal = gsd.TerminalError
-		result.Err = err
+		result.Err = joinTerminalFailure(err, result.Err)
 	}
 	candidateWorkDir := config.WorkDir
 	candidateHead := ""
@@ -1602,10 +1677,11 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		result.Err = joinTerminalFailure(result.Err, errors.New("canonical worktree left the authorized delivery branch"))
 	} else if cleanErr := shepherdgit.RequireClean(endSnapshot); cleanErr != nil {
 		result.Terminal = gsd.TerminalError
-		result.Err = joinTerminalFailure(result.Err, errors.New("worktree must be clean after validation and promotion"))
+		result.Err = joinTerminalFailure(result.Err, recovery.MarkFailure(recovery.FailureDirtyTree, false,
+			errors.New("worktree must be clean after validation and promotion")))
 	} else if err := authority.RecordAttemptHeads(ctx, deliveryID, executionID, startSnapshot.HeadSHA, endSnapshot.HeadSHA); err != nil {
 		result.Terminal = gsd.TerminalError
-		result.Err = err
+		result.Err = joinTerminalFailure(err, result.Err)
 	}
 	appendActivity("run.terminal", string(result.Terminal), "", "", "", result.Ended)
 	activityMu.Lock()
@@ -1613,7 +1689,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	activityMu.Unlock()
 	if terminalSpoolErr != nil {
 		result.Terminal = gsd.TerminalError
-		result.Err = fmt.Errorf("durable terminal append failed: %w", terminalSpoolErr)
+		result.Err = joinTerminalFailure(fmt.Errorf("durable terminal append failed: %w", terminalSpoolErr), result.Err)
 	}
 	if result.Terminal != gsd.TerminalSuccess {
 		terminalErr := result.Err
@@ -1634,37 +1710,56 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	if result.Err != nil {
 		unitOutcome = classifyUnitFailure(result)
 	}
-	if err := authority.FinishUnitAttempt(ctx, unitAttemptKey, unitOutcome); err != nil {
-		result.Terminal = gsd.TerminalError
-		result.Err = joinTerminalFailure(result.Err, err)
+	if errors.Is(result.Err, gsd.ErrMutatingSkip) {
+		unitOutcome = "mutating_skip"
+	}
+	if err := authority.FinishUnitAttemptFenced(ctx, unitAttemptKey, unitAttempt.Attempts, unitOutcome, executionID, lease.Epoch); err != nil {
+		finishedAttempt = true
+		return joinTerminalFailure(result.Err, err)
 	} else {
 		unitAttemptFinished = true
 	}
-	remainingAttempts := unitAttempt.Remaining
-	if result.Terminal != gsd.TerminalSuccess && result.Err != nil && isAutomaticallyRetryable(result.Err) {
-		class := classifyUnitFailure(result)
-		budget, budgetErr := authority.BeginRecoveryAttempt(ctx, store.RecoveryBudgetKey{DeliveryID: deliveryID, Generation: attempt.Generation, UnitID: trustedUnit, HeadSHA: startSnapshot.HeadSHA, FailureClass: class}, int64(config.MaxUnitAttempts), time.Second, result.Err.Error(), "Sol/high recovery planning required before next retry", time.Now().UTC())
-		if errors.Is(budgetErr, store.ErrRetryBudgetExhausted) {
-			remainingAttempts = 0
-		} else if budgetErr != nil {
-			result.Err = joinTerminalFailure(result.Err, budgetErr)
-			remainingAttempts = 0
-		} else {
-			remainingAttempts = budget.MaxAttempts - budget.Attempts
+	selectedRecoveryAction := recovery.Action("")
+	if result.Terminal != gsd.TerminalSuccess && result.Err != nil && !errors.Is(result.Err, gsd.ErrMutatingSkip) {
+		failure := recovery.Classify(result)
+		if !canonicalUnit {
+			if policy, policyErr := recovery.PolicyFor(failure); policyErr == nil && policy.PlannerEligible {
+				failure = recovery.Failure{Class: recovery.FailureHumanRequired}
+			}
 		}
+		decision, recoveryErr := governRecovery(ctx, recoveryGovernanceRequest{
+			Store: authority, Config: config, Issue: issue, DeliveryID: deliveryID,
+			Generation: attempt.Generation, UnitID: trustedUnit, UnitAttempt: unitAttempt.Attempts,
+			HeadSHA: startSnapshot.HeadSHA, ExecutionID: executionID, Failure: failure,
+			TerminalError: result.Err, WriteScope: issueContext.WriteScope, AuthorizedBranch: delivery.Branch, Lease: lease,
+			Observe: func(status, model, action string) {
+				appendActivity("recovery", status, trustedUnit, model, action, time.Now().UTC())
+			},
+		})
+		selectedRecoveryAction = decision.Action
+		if recoveryErr != nil {
+			result.Err = joinTerminalFailure(result.Err, recoveryErr)
+		}
+		result.Err = recovery.MarkDecision(failure, selectedRecoveryAction, result.Err)
 	}
-	targetState := finalUnitRunState(&result, postPhase, remainingAttempts)
+	targetState := recoveryRunState(&result, postPhase, selectedRecoveryAction)
 	if targetState == domain.RunAwaitingDecision {
 		class := classifyUnitFailure(result)
 		if err := persistAndPublishDecisionRequest(ctx, authority, lease, decisionPublisher, decisionTarget, deliveryID, issue, trustedUnit, attempt.Generation, startSnapshot.HeadSHA, class, result.Err); err != nil {
 			result.Terminal = gsd.TerminalError
+			publicationFailure := recovery.Classify(gsd.Result{Terminal: gsd.TerminalError, Err: err})
 			result.Err = joinTerminalFailure(result.Err, err)
-			targetState = domain.RunFailed
+			if publicationFailure.Class == recovery.FailureGitHubPublishUncertain || publicationFailure.Class == recovery.FailureOutboxUncertain {
+				result.Err = recovery.MarkDecision(publicationFailure, recovery.ActionBlock, result.Err)
+				targetState = domain.RunBlocked
+			} else {
+				targetState = domain.RunFailed
+			}
 		}
 	}
 	if err := authority.FinishAttempt(ctx, deliveryID, executionID, targetState); err != nil {
 		result.Terminal = gsd.TerminalError
-		result.Err = err
+		result.Err = joinTerminalFailure(err, result.Err)
 	} else {
 		finishedAttempt = true
 	}
@@ -1717,7 +1812,8 @@ func monitorWriteScope(ctx context.Context, root string, scopes []string, interv
 					return
 				}
 				if len(paths) > 0 {
-					results <- fmt.Errorf("live write-scope breach: changed path %q is outside the issue write scope", paths[0])
+					results <- recovery.MarkFailure(recovery.FailureWriteScopeBreach, false,
+						fmt.Errorf("live write-scope breach: changed path %q is outside the issue write scope", paths[0]))
 					return
 				}
 			}
@@ -1732,13 +1828,15 @@ func recordObservedRuntimeIdentity(event gsd.Event, expectedModel, expectedThink
 	}
 	if event.Model != "" {
 		if event.Model != expectedModel || (*model != "" && *model != event.Model) {
-			return fmt.Errorf("unexpected top-level model transition to %s; expected %s", event.Model, expectedModel)
+			return recovery.MarkFailure(recovery.FailureModelMismatch, false,
+				fmt.Errorf("unexpected top-level model transition to %s; expected %s", event.Model, expectedModel))
 		}
 		*model = event.Model
 	}
 	if event.Kind == gsd.EventThinkingSelect && event.Thinking != "" {
 		if event.Thinking != expectedThinking || (*thinking != "" && *thinking != event.Thinking) {
-			return fmt.Errorf("unexpected top-level thinking transition to %s; expected %s", event.Thinking, expectedThinking)
+			return recovery.MarkFailure(recovery.FailureThinkingMismatch, false,
+				fmt.Errorf("unexpected top-level thinking transition to %s; expected %s", event.Thinking, expectedThinking))
 		}
 		*thinking = event.Thinking
 	}
@@ -1780,84 +1878,331 @@ func launchModelForCommand(config fileConfig, registry gsd.UnitRegistry, command
 	return expectedModelForObservedUnit(config, registry, command, "")
 }
 
-const (
-	unitFailureRuntimeContractMismatch = "runtime_contract_mismatch"
-	unitFailureArtifactMissing         = "artifact_missing"
-	unitFailureFalseGreen              = "false_green"
-	unitFailureInterrupted             = "interrupted"
-	unitFailureOrphanedSubagent        = "orphaned_subagent"
-	unitFailureStaleHead               = "stale_head"
-	unitFailureScopeBreach             = "scope_breach"
-	unitFailureModelDrift              = "model_drift"
-	unitFailureRetryExhausted          = "retry_exhausted"
-	unitFailureRuntimeFailure          = "runtime_failure"
-	unitFailureUnsafe                  = "unsafe_failure"
-)
-
 func classifyUnitFailure(result gsd.Result) string {
-	if result.Err == nil {
-		return string(result.Terminal)
-	}
-	if errors.Is(result.Err, errPreDispatchAttemptQuery) {
-		return unitFailureUnsafe
-	}
-	if errors.Is(result.Err, store.ErrRetryBudgetExhausted) {
-		return unitFailureRetryExhausted
-	}
-	if errors.Is(result.Err, gsd.ErrRuntimeContractMismatch) {
-		return unitFailureRuntimeContractMismatch
-	}
-	message := strings.ToLower(result.Err.Error())
-	switch {
-	case strings.Contains(message, "runtime_contract_mismatch") || strings.Contains(message, "runtime contract"):
-		return unitFailureRuntimeContractMismatch
-	case strings.Contains(message, "artifact") && (strings.Contains(message, "missing") || strings.Contains(message, "not found") || strings.Contains(message, "regular file")):
-		return unitFailureArtifactMissing
-	case strings.Contains(message, "canonical") && (strings.Contains(message, "did not advance") || strings.Contains(message, "unchanged")):
-		return unitFailureFalseGreen
-	case result.Terminal == gsd.TerminalCancelled || result.Terminal == gsd.TerminalTimeout || strings.Contains(message, "interrupted") || strings.Contains(message, "cancelled") || strings.Contains(message, "deadline exceeded") || strings.Contains(message, "timeout"):
-		return unitFailureInterrupted
-	case strings.Contains(message, "subagent") && (strings.Contains(message, "orphan") || strings.Contains(message, "still running") || strings.Contains(message, "unreconciled")):
-		return unitFailureOrphanedSubagent
-	case strings.Contains(message, "stale") && strings.Contains(message, "head"):
-		return unitFailureStaleHead
-	case strings.Contains(message, "head continuity") || strings.Contains(message, "head changed"):
-		return unitFailureStaleHead
-	case strings.Contains(message, "scope breach") || strings.Contains(message, "write-scope") || strings.Contains(message, "outside the issue write scope"):
-		return unitFailureScopeBreach
-	case strings.Contains(message, "model") || strings.Contains(message, "thinking") || strings.Contains(message, "runtime identity"):
-		return unitFailureModelDrift
-	case strings.Contains(message, "runtime:") || strings.Contains(message, "headless") || strings.Contains(message, "process"):
-		return unitFailureRuntimeFailure
-	case result.Terminal == gsd.TerminalRejected || result.Terminal == gsd.TerminalBlocked:
-		return unitFailureUnsafe
-	default:
-		return unitFailureUnsafe
-	}
+	return string(recovery.Classify(result).Class)
 }
 
 func isAutomaticallyRetryable(err error) bool {
-	if err == nil {
-		return false
-	}
-	class := classifyUnitFailure(gsd.Result{Terminal: gsd.TerminalError, Err: err})
-	switch class {
-	case unitFailureArtifactMissing, unitFailureFalseGreen, unitFailureInterrupted, unitFailureRuntimeFailure:
-		return true
+	return recovery.ShouldRetry(err)
+}
+
+func recoveryRunState(result *gsd.Result, postPhase string, action recovery.Action) domain.RunState {
+	switch action {
+	case recovery.ActionRetrySameUnit, recovery.ActionRetryAfterBackoff, recovery.ActionRunRecoveryPlan:
+		return domain.RunReady
+	case recovery.ActionAwaitDecision:
+		return domain.RunAwaitingDecision
+	case recovery.ActionBlock:
+		return domain.RunBlocked
+	case recovery.ActionFinalHumanGate:
+		return domain.RunHumanGate
+	case "":
+		return targetRunState(result.Terminal, result.Err, postPhase)
 	default:
-		return false
+		result.Err = joinTerminalFailure(result.Err, errors.New("unknown selected recovery action"))
+		return domain.RunBlocked
 	}
 }
 
-func finalUnitRunState(result *gsd.Result, postPhase string, remainingAttempts int64) domain.RunState {
-	if result.Terminal != gsd.TerminalSuccess && result.Terminal != gsd.TerminalBlocked && isAutomaticallyRetryable(result.Err) {
-		if remainingAttempts > 0 {
-			return domain.RunReady
-		}
-		result.Err = joinTerminalFailure(result.Err, store.ErrRetryBudgetExhausted)
-		return domain.RunAwaitingDecision
+type recoveryGovernanceRequest struct {
+	Store            *store.Store
+	Config           fileConfig
+	Issue            int
+	DeliveryID       string
+	Generation       int64
+	UnitID           string
+	UnitAttempt      int64
+	HeadSHA          string
+	ExecutionID      string
+	Failure          recovery.Failure
+	TerminalError    error
+	WriteScope       []string
+	AuthorizedBranch string
+	Lease            store.Lease
+	Observe          func(status, model, action string)
+}
+
+type recoveryGovernanceDecision struct {
+	Action      recovery.Action
+	NextRetryAt time.Time
+}
+
+func governRecovery(ctx context.Context, request recoveryGovernanceRequest) (recoveryGovernanceDecision, error) {
+	if err := request.Store.CheckLease(ctx, request.Lease, time.Now().UTC()); err != nil {
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, err
 	}
-	return targetRunState(result.Terminal, result.Err, postPhase)
+	policy, err := recovery.PolicyFor(request.Failure)
+	if err != nil {
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, err
+	}
+	now := time.Now().UTC()
+	key := store.RecoveryBudgetKey{
+		DeliveryID:   request.DeliveryID,
+		Generation:   request.Generation,
+		UnitID:       request.UnitID,
+		HeadSHA:      request.HeadSHA,
+		FailureClass: string(request.Failure.Class),
+	}
+	maxAttempts := int64(request.Config.MaxUnitAttempts)
+	failureHash := sha256.Sum256([]byte(request.TerminalError.Error()))
+	reservation := store.RecoveryReservation{
+		RecoveryBudgetKey: key,
+		UnitAttempt:       request.UnitAttempt,
+		ClaimToken:        recoveryClaimToken(request),
+		ControllerOwner:   request.ExecutionID,
+		ControllerEpoch:   request.Lease.Epoch,
+		PolicyVersion:     recovery.PolicyVersion,
+		MaxAttempts:       maxAttempts,
+		BaseBackoff:       time.Second,
+		MaxBackoff:        30 * time.Second,
+		FailureHash:       "sha256:" + hex.EncodeToString(failureHash[:]),
+		Diagnostic:        string(request.Failure.Class),
+		Reversible:        request.Failure.Reversible,
+		ExhaustedAction:   policy.ExhaustedAction,
+		Now:               now,
+	}
+	budget, reserveErr := request.Store.ReserveRecoveryAttempt(ctx, reservation)
+	if errors.Is(reserveErr, store.ErrRetryBudgetExhausted) {
+		request.observe("budget_exhausted", "", string(budget.SelectedAction))
+		return recoveryGovernanceDecision{Action: budget.SelectedAction}, reserveErr
+	}
+	if reserveErr != nil {
+		request.observe("budget_rejected", "", string(recovery.ActionBlock))
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, reserveErr
+	}
+	request.observe("budget_reserved", "", string(request.Failure.Class))
+	if !policy.PlannerEligible {
+		if err := request.Store.CheckLease(ctx, request.Lease, time.Now().UTC()); err != nil {
+			return recoveryGovernanceDecision{Action: recovery.ActionBlock}, err
+		}
+		if err := request.Store.CompleteRecoveryDecision(ctx, key, request.UnitAttempt, reservation.ClaimToken, request.ExecutionID, request.Lease.Epoch, policy.DirectAction, now); err != nil {
+			return recoveryGovernanceDecision{Action: recovery.ActionBlock}, err
+		}
+		request.observe("action_selected", "", string(policy.DirectAction))
+		return recoveryGovernanceDecision{Action: policy.DirectAction}, nil
+	}
+	beforeGit, beforeGSD, err := canonicalRecoveryFingerprint(ctx, request.Config.WorkDir)
+	if err != nil {
+		_ = request.Store.RejectRecoveryAttempt(ctx, key, request.UnitAttempt, reservation.ClaimToken, request.ExecutionID, request.Lease.Epoch, recovery.ActionBlock, "canonical fingerprint unavailable", now)
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, err
+	}
+	planner, err := recoveryPlannerFactory(request.Config)
+	if err != nil {
+		_ = request.Store.RejectRecoveryAttempt(ctx, key, request.UnitAttempt, reservation.ClaimToken, request.ExecutionID, request.Lease.Epoch, recovery.ActionBlock, "planner unavailable", now)
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, err
+	}
+	authorityHash, err := recoveryAuthorityScopeHash(ctx, request)
+	if err != nil {
+		rejectErr := request.Store.RejectRecoveryAttempt(ctx, key, request.UnitAttempt, reservation.ClaimToken, request.ExecutionID, request.Lease.Epoch, recovery.ActionBlock, "authority scope unavailable", now)
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, errors.Join(err, rejectErr)
+	}
+	request.observe("planner_requested", recovery.RequiredModel, string(request.Failure.Class))
+	planned, planErr := planner.Plan(ctx, recovery.Request{
+		Issue:              request.Issue,
+		DeliveryID:         request.DeliveryID,
+		Generation:         request.Generation,
+		UnitID:             request.UnitID,
+		Attempt:            request.UnitAttempt,
+		HeadSHA:            request.HeadSHA,
+		Failure:            request.Failure,
+		EvidenceHash:       reservation.FailureHash,
+		AuthorityScopeHash: authorityHash,
+		ControllerBackoff:  budget.Backoff,
+	})
+	if planErr == nil {
+		planErr = recovery.ValidateResult(recovery.Request{
+			Issue: request.Issue, DeliveryID: request.DeliveryID, Generation: request.Generation,
+			UnitID: request.UnitID, Attempt: request.UnitAttempt, HeadSHA: request.HeadSHA,
+			Failure: request.Failure, EvidenceHash: reservation.FailureHash,
+			AuthorityScopeHash: authorityHash, ControllerBackoff: budget.Backoff,
+		}, planned, time.Now().UTC())
+	}
+	if planErr != nil {
+		rejectErr := request.Store.RejectRecoveryAttempt(ctx, key, request.UnitAttempt, reservation.ClaimToken, request.ExecutionID, request.Lease.Epoch, recovery.ActionBlock, "planner evidence rejected", time.Now().UTC())
+		request.observe("planner_rejected", recovery.RequiredModel, string(recovery.ActionBlock))
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, errors.Join(planErr, rejectErr)
+	}
+	afterGit, afterGSD, fingerprintErr := canonicalRecoveryFingerprint(ctx, request.Config.WorkDir)
+	if fingerprintErr != nil || beforeGit != afterGit || beforeGSD != afterGSD {
+		rejectErr := request.Store.RejectRecoveryAttempt(ctx, key, request.UnitAttempt, reservation.ClaimToken, request.ExecutionID, request.Lease.Epoch, recovery.ActionBlock, "canonical state changed during planning", time.Now().UTC())
+		request.observe("planner_rejected", planned.ObservedModel, string(recovery.ActionBlock))
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, errors.Join(errors.New("canonical Git or GSD state changed during recovery planning"), fingerprintErr, rejectErr)
+	}
+	if err := request.Store.CheckLease(ctx, request.Lease, time.Now().UTC()); err != nil {
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, err
+	}
+	outcome := store.RecoveryOutcome{
+		RecoveryBudgetKey:         key,
+		UnitAttempt:               request.UnitAttempt,
+		ClaimToken:                reservation.ClaimToken,
+		ControllerOwner:           request.ExecutionID,
+		ControllerEpoch:           request.Lease.Epoch,
+		PlannerRequestNonce:       planned.RequestNonce,
+		EvidenceHash:              planned.EvidenceHash,
+		AuthorityScopeHash:        planned.AuthorityScopeHash,
+		PlannerEvidenceHash:       planned.PlannerEvidenceHash,
+		PlannerSessionID:          planned.SessionID,
+		PlannerSessionFingerprint: planned.SessionFingerprint,
+		ObservedModel:             planned.ObservedModel,
+		Thinking:                  planned.Thinking,
+		SelectedAction:            planned.Action,
+		BoundedPlan:               planned.BoundedPlanSteps,
+		IssuedAt:                  planned.IssuedAt,
+		ExpiresAt:                 planned.ExpiresAt,
+	}
+	if err := request.Store.CompleteRecoveryAttempt(ctx, outcome); err != nil {
+		return recoveryGovernanceDecision{Action: recovery.ActionBlock}, err
+	}
+	request.observe("planner_result", planned.ObservedModel, string(planned.Action))
+	request.observe("action_selected", planned.ObservedModel, string(planned.Action))
+	if recovery.ShouldRetry(recovery.MarkDecision(request.Failure, planned.Action, request.TerminalError)) {
+		request.observe("backoff_scheduled", planned.ObservedModel, string(planned.Action))
+	}
+	return recoveryGovernanceDecision{Action: planned.Action, NextRetryAt: budget.NextRetryAt}, nil
+}
+
+func (r recoveryGovernanceRequest) observe(status, model, action string) {
+	if r.Observe != nil {
+		r.Observe(status, model, action)
+	}
+}
+
+func totalUnitAttemptLimit(perClassMax int) int64 {
+	if perClassMax <= 0 {
+		return 1
+	}
+	return 1 + int64(len(recovery.AllFailureClasses())*perClassMax)
+}
+
+func recoveryClaimToken(request recoveryGovernanceRequest) string {
+	digest := sha256.Sum256([]byte(fmt.Sprintf("%s\x00%d\x00%s\x00%d\x00%s", request.DeliveryID, request.Generation, request.UnitID, request.UnitAttempt, request.ExecutionID)))
+	return hex.EncodeToString(digest[:16])
+}
+
+func recoveryAuthorityScopeHash(ctx context.Context, request recoveryGovernanceRequest) (string, error) {
+	snapshot, err := shepherdgit.Inspect(ctx, request.Config.WorkDir)
+	if err != nil {
+		return "", err
+	}
+	if snapshot.HeadSHA != request.HeadSHA {
+		return "", recovery.MarkFailure(recovery.FailureStaleHead, false, errors.New("canonical head changed before recovery authority binding"))
+	}
+	if snapshot.Branch != request.AuthorizedBranch {
+		return "", recovery.MarkFailure(recovery.FailureStaleHead, false, errors.New("canonical branch differs from authorized recovery branch"))
+	}
+	scopes := append([]string(nil), request.WriteScope...)
+	sort.Strings(scopes)
+	gsdManifest, err := workspace.BuildGSDManifest(ctx, filepath.Join(request.Config.WorkDir, ".gsd"))
+	if err != nil {
+		return "", err
+	}
+	raw, err := json.Marshal(struct {
+		DeliveryID string   `json:"delivery_id"`
+		Generation int64    `json:"generation"`
+		UnitID     string   `json:"unit_id"`
+		HeadSHA    string   `json:"head_sha"`
+		Branch     string   `json:"branch"`
+		WriteScope []string `json:"write_scope"`
+		GSDHash    string   `json:"gsd_hash"`
+	}{
+		DeliveryID: request.DeliveryID,
+		Generation: request.Generation,
+		UnitID:     request.UnitID,
+		HeadSHA:    request.HeadSHA,
+		Branch:     request.AuthorizedBranch,
+		WriteScope: scopes,
+		GSDHash:    gsdManifest.Hash,
+	})
+	if err != nil {
+		return "", err
+	}
+	digest := sha256.Sum256(raw)
+	return "sha256:" + hex.EncodeToString(digest[:]), nil
+}
+
+func canonicalRecoveryFingerprint(ctx context.Context, workDir string) (string, string, error) {
+	snapshot, err := shepherdgit.Inspect(ctx, workDir)
+	if err != nil {
+		return "", "", err
+	}
+	if err := shepherdgit.RequireClean(snapshot); err != nil {
+		return "", "", recovery.MarkFailure(recovery.FailureDirtyTree, false, err)
+	}
+	manifest, err := workspace.BuildGSDManifest(ctx, filepath.Join(workDir, ".gsd"))
+	if err != nil {
+		return "", "", err
+	}
+	bound := sha256.Sum256([]byte(snapshot.Branch + "\x00" + manifest.Hash))
+	return snapshot.HeadSHA, "sha256:" + hex.EncodeToString(bound[:]), nil
+}
+
+func waitForRecoveryDispatch(ctx context.Context, authority *store.Store, lease store.Lease, deliveryID string, generation int64, unitID, headSHA, executionID string) (store.RecoveryAttempt, error) {
+	for {
+		if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
+			return store.RecoveryAttempt{}, err
+		}
+		attempt, err := authority.ClaimRecoveryDispatch(ctx, deliveryID, generation, unitID, headSHA, executionID, lease.Epoch, time.Now().UTC())
+		if err == nil {
+			return attempt, nil
+		}
+		if !errors.Is(err, store.ErrRecoveryBackoffPending) {
+			return store.RecoveryAttempt{}, err
+		}
+		wait := time.Until(attempt.NextRetryAt)
+		if wait <= 0 {
+			continue
+		}
+		timer := time.NewTimer(wait)
+		select {
+		case <-ctx.Done():
+			if !timer.Stop() {
+				<-timer.C
+			}
+			return store.RecoveryAttempt{}, ctx.Err()
+		case <-timer.C:
+		}
+	}
+}
+
+func executeRecoveryPlan(ctx context.Context, attempt store.RecoveryAttempt, authority *store.Store, manager *workspace.Manager, repositoryLock *workspace.RepositoryLock, lease store.Lease, config fileConfig) error {
+	if attempt.SelectedAction == "" {
+		return nil
+	}
+	if err := recovery.ValidatePlan(attempt.SelectedAction, attempt.BoundedPlan); err != nil {
+		return err
+	}
+	if attempt.SelectedAction != recovery.ActionRunRecoveryPlan {
+		return nil
+	}
+	for _, step := range attempt.BoundedPlan {
+		switch step.Primitive {
+		case recovery.PrimitiveInspectRetainedAttempt:
+			records, err := authority.ListAttemptWorktrees(ctx, attempt.DeliveryID)
+			if err != nil {
+				return err
+			}
+			if attemptRecoveryAmbiguous(records) {
+				return errors.New("retained recovery attempt ownership is ambiguous")
+			}
+		case recovery.PrimitiveReconcileAttemptResources:
+			if err := reconcileAttemptWorktrees(ctx, authority, manager, repositoryLock, attempt.DeliveryID, lease); err != nil {
+				return err
+			}
+		case recovery.PrimitiveVerifyExpectedArtifacts:
+			head, _, err := canonicalRecoveryFingerprint(ctx, config.WorkDir)
+			if err != nil {
+				return err
+			}
+			if head != attempt.HeadSHA {
+				return recovery.MarkFailure(recovery.FailureStaleHead, false, errors.New("canonical head changed before recovery dispatch"))
+			}
+		case recovery.PrimitiveRetryFreshAttempt:
+			// Fresh attempt resources are created immediately after this typed marker.
+		default:
+			return fmt.Errorf("unsupported recovery primitive %q", step.Primitive)
+		}
+	}
+	return nil
 }
 
 func targetRunState(terminal gsd.Terminal, terminalErr error, postPhase string) domain.RunState {
@@ -2000,7 +2345,8 @@ func appendAndPublishDecision(ctx context.Context, store *decisionlog.Store, pub
 		}
 	}
 	if err := publisher.SyncDecisionComment(ctx, target, decisionlog.Markdown(filtered)); err != nil {
-		return fmt.Errorf("publish durable decision: %w", err)
+		return recovery.MarkFailure(recovery.FailureGitHubPublishUncertain, false,
+			fmt.Errorf("publish durable decision: %w", err))
 	}
 	return nil
 }
@@ -2092,15 +2438,19 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 	}
 	artifacts, err := shepherdgit.ArtifactManifest(ctx, workDir, startHead, candidateHead, scopes)
 	if err != nil {
-		return err
+		if errors.Is(err, shepherdgit.ErrWriteScopeBreach) {
+			return recovery.MarkFailure(recovery.FailureWriteScopeBreach, false, err)
+		}
+		return recovery.MarkFailure(recovery.FailureArtifactInvalid, true, err)
 	}
 	stateArtifacts, err := gsdStateArtifacts(workDir)
 	if err != nil {
-		return err
+		return recovery.MarkFailure(recovery.FailureArtifactInvalid, true, err)
 	}
 	artifacts = append(artifacts, stateArtifacts...)
 	if len(artifacts) == 0 {
-		return errors.New("successful canonical unit produced no artifact manifest")
+		return recovery.MarkFailure(recovery.FailureArtifactMissing, true,
+			errors.New("successful canonical unit produced no artifact manifest"))
 	}
 	sort.Slice(artifacts, func(i, j int) bool { return artifacts[i].Path < artifacts[j].Path })
 	contract := struct {
@@ -2141,17 +2491,21 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 		RequireGates: requiredGates,
 	})
 	if err != nil {
-		return err
+		reversible := errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded)
+		return recovery.MarkFailure(recovery.FailureValidationFailed, reversible, err)
 	}
 	if validationResult.SessionID == "" {
-		return errors.New("validator session identity is required")
+		return recovery.MarkFailure(recovery.FailureValidationFailed, false,
+			errors.New("validator session identity is required"))
 	}
 	if validationResult.EvidenceHash != evidenceHashValue {
-		return errors.New("validator evidence hash does not match candidate artifacts")
+		return recovery.MarkFailure(recovery.FailureValidationFailed, false,
+			errors.New("validator evidence hash does not match candidate artifacts"))
 	}
 	issuedAt := validationResult.IssuedAt
 	if issuedAt.IsZero() {
-		return errors.New("validator issue time is required")
+		return recovery.MarkFailure(recovery.FailureValidationFailed, false,
+			errors.New("validator issue time is required"))
 	}
 	if lifecycle != nil {
 		if err := lifecycle.transition(ctx, store.AttemptWorktreeValidated, store.AttemptWorktreeUpdate{CandidateHead: candidateHead, ValidatedHead: candidateHead}); err != nil {
@@ -2169,7 +2523,7 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 		IssuedAt: validationResult.IssuedAt, ExpiresAt: validationResult.ExpiresAt,
 	}, time.Now().UTC())
 	if err != nil {
-		return err
+		return recovery.MarkFailure(recovery.FailureRatificationFailed, false, err)
 	}
 	proofIDHash := sha256.Sum256([]byte(deliveryID + ":" + unitID + ":" + candidateHead + ":" + hex.EncodeToString(evidenceHash[:])))
 	proofRecord := store.ArtifactProof{
@@ -2283,10 +2637,10 @@ func persistAndPublishDecisionRequest(ctx context.Context, authority *store.Stor
 	payloadHash := sha256.Sum256([]byte(stored.RequestID + ":" + stored.Evidence))
 	effectKey := "github-question:" + stored.RequestID
 	if _, err := authority.Enqueue(ctx, lease, store.Effect{Key: effectKey, RunID: deliveryID, Repository: target.Repository, Issue: issue, Capability: domain.CapabilityPRUpdate, Target: "pr:" + strconv.Itoa(target.PullRequest), PayloadHash: "sha256:" + hex.EncodeToString(payloadHash[:]), Epoch: lease.Epoch}, time.Now().UTC()); err != nil {
-		return err
+		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false, err)
 	}
 	if _, err := authority.ClaimEffect(ctx, lease, effectKey, time.Now().UTC()); err != nil {
-		return err
+		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false, err)
 	}
 	commentID, err := publisher.SyncQuestionComment(ctx, shepherdgithub.QuestionRequest{
 		RequestID: stored.RequestID, Repository: target.Repository, Issue: issue, PullRequest: target.PullRequest,
@@ -2295,13 +2649,19 @@ func persistAndPublishDecisionRequest(ctx context.Context, authority *store.Stor
 		SafeDefault: stored.SafeDefault, ExpiresAt: stored.ExpiresAt, Mention: "karthik-sivadas",
 	})
 	if err != nil {
-		_ = authority.MarkEffectFailed(ctx, lease, effectKey, err, time.Now().UTC())
-		return err
+		publishErr := recovery.MarkFailure(recovery.FailureGitHubPublishUncertain, false, err)
+		if markErr := authority.MarkEffectFailed(ctx, lease, effectKey, err, time.Now().UTC()); markErr != nil {
+			return errors.Join(publishErr, recovery.MarkFailure(recovery.FailureOutboxUncertain, false, markErr))
+		}
+		return publishErr
 	}
 	if err := authority.MarkEffectSent(ctx, lease, effectKey, time.Now().UTC()); err != nil {
-		return err
+		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false, err)
 	}
-	return authority.MarkDecisionRequestPublished(ctx, stored.RequestID, commentID)
+	if err := authority.MarkDecisionRequestPublished(ctx, stored.RequestID, commentID); err != nil {
+		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false, err)
+	}
+	return nil
 }
 
 func boundedEvidence(value string) string {

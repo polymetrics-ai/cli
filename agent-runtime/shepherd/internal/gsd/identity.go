@@ -233,6 +233,140 @@ func ReadSessionIdentityEvidenceForRun(root, workDir string, baseline SessionIde
 	return SessionIdentityEvidence{SessionID: current.files[candidate].ID, Fingerprint: fingerprint, Model: model, Thinking: thinking}, nil
 }
 
+// ValidateSessionHasNoToolUse proves that one bounded durable session contains no tool events or tool content.
+func ValidateSessionHasNoToolUse(root, sessionID string) error {
+	if err := validateSessionRoot(root); err != nil || !sessionIDPattern.MatchString(sessionID) {
+		return errors.New("valid no-tool session identity is required")
+	}
+	var selectedPath string
+	err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".jsonl") {
+			return nil
+		}
+		header, _, err := readStrictSessionHeader(path)
+		if err != nil {
+			return err
+		}
+		if header.ID != sessionID {
+			return errors.New("unexpected additional session in no-tool invocation root")
+		}
+		if selectedPath != "" {
+			return errors.New("duplicate durable session identity")
+		}
+		selectedPath = path
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	if selectedPath == "" {
+		return errors.New("durable no-tool session is missing")
+	}
+	file, before, err := openRuntimeFileNoFollow(selectedPath)
+	if err != nil || before.Size() > 16*1024*1024 {
+		return errors.New("open bounded durable no-tool session")
+	}
+	defer func() { _ = file.Close() }()
+	scanner := bufio.NewScanner(io.LimitReader(file, 16*1024*1024+1))
+	scanner.Buffer(make([]byte, 4096), 8*1024*1024)
+	rows := 0
+	for scanner.Scan() {
+		rows++
+		if rows > 100_000 {
+			return errors.New("durable no-tool session exceeds its row bound")
+		}
+		var event struct {
+			Type       string `json:"type"`
+			Role       string `json:"role"`
+			ToolName   string `json:"toolName"`
+			ToolCallID string `json:"toolCallId"`
+			Message    struct {
+				Role       string `json:"role"`
+				ToolName   string `json:"toolName"`
+				ToolCallID string `json:"toolCallId"`
+				Content    []struct {
+					Type string `json:"type"`
+				} `json:"content"`
+			} `json:"message"`
+		}
+		line := append([]byte(nil), scanner.Bytes()...)
+		var generic any
+		if err := rejectDuplicateJSONFields(line); err != nil || json.Unmarshal(line, &generic) != nil ||
+			sessionContainsToolEvidence(generic) || json.Unmarshal(line, &event) != nil {
+			return errors.New("durable no-tool session is malformed, duplicate, or contains tool evidence")
+		}
+		if strings.Contains(strings.ToLower(event.Type), "tool") || strings.Contains(strings.ToLower(event.Role), "tool") ||
+			strings.Contains(strings.ToLower(event.Message.Role), "tool") || event.ToolName != "" || event.ToolCallID != "" ||
+			event.Message.ToolName != "" || event.Message.ToolCallID != "" {
+			return errors.New("durable recovery session contains forbidden tool use")
+		}
+		for _, content := range event.Message.Content {
+			if strings.Contains(strings.ToLower(content.Type), "tool") {
+				return errors.New("durable recovery session contains forbidden tool content")
+			}
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+	after, statErr := file.Stat()
+	pathAfter, pathErr := os.Lstat(selectedPath)
+	if statErr != nil || pathErr != nil || !os.SameFile(before, after) || !os.SameFile(after, pathAfter) ||
+		before.Size() != after.Size() || !before.ModTime().Equal(after.ModTime()) {
+		return errors.New("durable no-tool session changed during validation")
+	}
+	return nil
+}
+
+func sessionContainsToolEvidence(value any) bool {
+	switch typed := value.(type) {
+	case map[string]any:
+		for key, child := range typed {
+			lowerKey := strings.ToLower(key)
+			if strings.Contains(lowerKey, "tool") && sessionToolValuePresent(child) {
+				return true
+			}
+			if lowerKey == "role" || lowerKey == "type" {
+				if text, ok := child.(string); ok && strings.Contains(strings.ToLower(text), "tool") {
+					return true
+				}
+			}
+			if sessionContainsToolEvidence(child) {
+				return true
+			}
+		}
+	case []any:
+		for _, child := range typed {
+			if sessionContainsToolEvidence(child) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func sessionToolValuePresent(value any) bool {
+	switch typed := value.(type) {
+	case nil:
+		return false
+	case string:
+		return strings.TrimSpace(typed) != ""
+	case []any:
+		return len(typed) != 0
+	case map[string]any:
+		return len(typed) != 0
+	case bool:
+		return typed
+	case float64:
+		return typed != 0
+	default:
+		return true
+	}
+}
+
 func readSessionIdentityDelta(path string, offset int64, expectedModel, expectedThinking string, selected os.FileInfo) (string, string, string, error) {
 	file, before, err := openRuntimeFileNoFollow(path)
 	if err != nil || selected == nil || !os.SameFile(selected, before) {
@@ -246,6 +380,7 @@ func readSessionIdentityDelta(path string, offset int64, expectedModel, expected
 		return "", "", "", err
 	}
 	var model, thinking string
+	var assistantObserved bool
 	deltaDigest := sha256.New()
 	scanner := bufio.NewScanner(io.LimitReader(file, 16*1024*1024+1))
 	scanner.Buffer(make([]byte, 4096), 8*1024*1024)
@@ -283,6 +418,7 @@ func readSessionIdentityDelta(path string, offset int64, expectedModel, expected
 			if event.Message.Provider == "" || event.Message.Model == "" {
 				return "", "", "", errors.New("current session contains a partial assistant identity")
 			}
+			assistantObserved = true
 			transitions = append(transitions, event.Message.Provider+"/"+event.Message.Model)
 		}
 		for _, transitionModel := range transitions {
@@ -309,8 +445,8 @@ func readSessionIdentityDelta(path string, offset int64, expectedModel, expected
 	if err != nil || pathErr != nil || !os.SameFile(before, after) || !os.SameFile(after, pathAfter) || before.Size() != after.Size() || !before.ModTime().Equal(after.ModTime()) {
 		return "", "", "", errors.New("current session identity delta changed while reading")
 	}
-	if model == "" || thinking == "" {
-		return "", "", "", errors.New("current session delta lacks exact model and thinking evidence")
+	if model == "" || thinking == "" || !assistantObserved {
+		return "", "", "", errors.New("current session delta lacks exact assistant model and thinking evidence")
 	}
 	return model, thinking, "sha256:" + hex.EncodeToString(deltaDigest.Sum(nil)), nil
 }

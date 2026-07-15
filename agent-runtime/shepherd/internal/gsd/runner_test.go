@@ -102,7 +102,7 @@ func TestRunnerFailsStartupWithNoAgentActivity(t *testing.T) {
 		t.Fatal(err)
 	}
 	result := runner.Run(context.Background(), "next", nil, Observer{})
-	if result.Terminal != TerminalError || !strings.Contains(result.Err.Error(), "no model, tool, or child activity") {
+	if result.Terminal != TerminalError || !errors.Is(result.Err, ErrSilentTool) || !strings.Contains(result.Err.Error(), "no model, tool, or child activity") {
 		t.Fatalf("result=%+v", result)
 	}
 }
