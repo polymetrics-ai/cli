@@ -148,9 +148,13 @@ func (m *Manager) CheckpointCandidate(ctx context.Context, attempt AttemptWorktr
 		if _, err := git(ctx, attempt.Root, args...); err != nil {
 			return "", err
 		}
-		if _, err := git(ctx, attempt.Root, "-c", "core.hooksPath=/dev/null", "commit", "-m", message); err != nil {
-			return "", err
-		}
+	}
+	commitArgs := []string{"-c", "core.hooksPath=/dev/null", "commit", "-m", message}
+	if len(paths) == 0 {
+		commitArgs = append(commitArgs, "--allow-empty")
+	}
+	if _, err := git(ctx, attempt.Root, commitArgs...); err != nil {
+		return "", err
 	}
 	attemptHeadRaw, err := git(ctx, attempt.Root, "rev-parse", "HEAD")
 	if err != nil {

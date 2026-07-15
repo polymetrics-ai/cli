@@ -16,6 +16,10 @@ controller state.
 
 ## Qualification observations
 
+- Governed host execution is currently qualified only on `darwin/arm64` with the pinned Node 24.13.1
+  binary and complete GSD Pi 1.11.0 package manifest. Other platforms fail closed pending review.
+- Retained Podman assets are not an admitted execution path: tags resolve to immutable local IDs,
+  but admission fails closed until a complete image digest is independently qualified and approved.
 - Version 1.11.0 and the Codex `gpt-5.6-sol` model catalog entry were confirmed locally.
 - Filtered headless lifecycle events and `headless query` are machine-readable.
 - A clean-fixture `new-milestone` run returned while the milestone remained in `pre-planning`.

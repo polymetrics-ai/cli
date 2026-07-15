@@ -76,6 +76,17 @@ type UnitAttempt struct {
 	Failure   string
 }
 
+type UnitAttemptIdentity struct {
+	UnitAttemptKey
+	Attempt            int64
+	Model              string
+	Thinking           string
+	SessionID          string
+	SessionFingerprint string
+	StartedAt          time.Time
+	EndedAt            time.Time
+}
+
 type DecisionRequestStatus string
 
 const (
@@ -260,6 +271,13 @@ func (s *Store) migrate(ctx context.Context) error {
 			max_attempts INTEGER NOT NULL, status TEXT NOT NULL, last_failure TEXT NOT NULL DEFAULT '',
 			updated_at INTEGER NOT NULL,
 			PRIMARY KEY (delivery_id, generation, unit_id, head_sha)
+		)`,
+		`CREATE TABLE IF NOT EXISTS unit_attempt_identities (
+			delivery_id TEXT NOT NULL REFERENCES deliveries(delivery_id), generation INTEGER NOT NULL,
+			unit_id TEXT NOT NULL, head_sha TEXT NOT NULL, attempt INTEGER NOT NULL,
+			model TEXT NOT NULL, thinking TEXT NOT NULL, session_id TEXT NOT NULL,
+			session_fingerprint TEXT NOT NULL, started_at INTEGER NOT NULL, ended_at INTEGER NOT NULL,
+			PRIMARY KEY (delivery_id, generation, unit_id, head_sha, attempt)
 		)`,
 		`CREATE TABLE IF NOT EXISTS decision_requests (
 			request_id TEXT PRIMARY KEY, delivery_id TEXT NOT NULL REFERENCES deliveries(delivery_id),
@@ -457,6 +475,46 @@ func (s *Store) FinishUnitAttempt(ctx context.Context, key UnitAttemptKey, outco
 		return errors.New("unit attempt is not running or is fenced")
 	}
 	return nil
+}
+
+func (s *Store) RecordUnitAttemptIdentity(ctx context.Context, identity UnitAttemptIdentity) error {
+	if identity.DeliveryID == "" || identity.Generation <= 0 || identity.UnitID == "" || !validGitSHA(identity.HeadSHA) || identity.Attempt <= 0 ||
+		(identity.Model != "openai-codex/gpt-5.6-sol" && identity.Model != "openai-codex/gpt-5.5") || identity.Thinking != "high" ||
+		len(identity.SessionID) != 36 || strings.ContainsAny(identity.SessionID, "\r\n\x00") || !validSHA256(identity.SessionFingerprint) ||
+		identity.StartedAt.IsZero() || identity.EndedAt.Before(identity.StartedAt) {
+		return errors.New("complete bounded unit attempt identity is required")
+	}
+	result, err := s.db.ExecContext(ctx, `INSERT INTO unit_attempt_identities
+		(delivery_id, generation, unit_id, head_sha, attempt, model, thinking, session_id,
+		 session_fingerprint, started_at, ended_at)
+		SELECT delivery_id, generation, unit_id, head_sha, ?, ?, ?, ?, ?, ?, ? FROM unit_attempts
+		WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ?
+		AND attempts = ? AND status = 'running'`, identity.Attempt, identity.Model, identity.Thinking,
+		identity.SessionID, identity.SessionFingerprint, identity.StartedAt.UTC().UnixNano(), identity.EndedAt.UTC().UnixNano(),
+		identity.DeliveryID, identity.Generation, identity.UnitID, identity.HeadSHA, identity.Attempt)
+	if err != nil {
+		return fmt.Errorf("record unit attempt identity: %w", err)
+	}
+	rows, _ := result.RowsAffected()
+	if rows != 1 {
+		return errors.New("unit attempt identity is not bound to the running attempt")
+	}
+	return nil
+}
+
+func (s *Store) GetUnitAttemptIdentity(ctx context.Context, key UnitAttemptKey, attempt int64) (UnitAttemptIdentity, error) {
+	identity := UnitAttemptIdentity{UnitAttemptKey: key, Attempt: attempt}
+	var startedAt, endedAt int64
+	err := s.db.QueryRowContext(ctx, `SELECT model, thinking, session_id, session_fingerprint, started_at, ended_at
+		FROM unit_attempt_identities WHERE delivery_id = ? AND generation = ? AND unit_id = ? AND head_sha = ? AND attempt = ?`,
+		key.DeliveryID, key.Generation, key.UnitID, key.HeadSHA, attempt).Scan(&identity.Model, &identity.Thinking,
+		&identity.SessionID, &identity.SessionFingerprint, &startedAt, &endedAt)
+	if err != nil {
+		return UnitAttemptIdentity{}, err
+	}
+	identity.StartedAt = time.Unix(0, startedAt).UTC()
+	identity.EndedAt = time.Unix(0, endedAt).UTC()
+	return identity, nil
 }
 
 func (s *Store) verifyDurability(ctx context.Context) error {

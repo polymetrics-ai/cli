@@ -22,7 +22,7 @@ func TestDecideDispatchesOnlyCanonicalUnit(t *testing.T) {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			decision, err := Decide(tc.snapshot)
+			decision, err := DecideWithRegistry(tc.snapshot, testSupervisorRegistry())
 			if err != nil {
 				t.Fatalf("decide: %v", err)
 			}
@@ -39,7 +39,7 @@ func TestDecideRejectsGenericOrUnknownDispatch(t *testing.T) {
 		unitType := unitType
 		t.Run(unitType, func(t *testing.T) {
 			t.Parallel()
-			if _, err := Decide(gsd.WorkflowSnapshot{Next: gsd.NextDispatch{Action: "dispatch", UnitType: unitType}}); err == nil {
+			if _, err := DecideWithRegistry(gsd.WorkflowSnapshot{Next: gsd.NextDispatch{Action: "dispatch", UnitType: unitType}}, testSupervisorRegistry()); err == nil {
 				t.Fatal("expected unsupported canonical dispatch to fail closed")
 			}
 		})
@@ -48,7 +48,7 @@ func TestDecideRejectsGenericOrUnknownDispatch(t *testing.T) {
 
 func TestDecideStopsAtFinalHumanGate(t *testing.T) {
 	t.Parallel()
-	decision, err := Decide(gsd.WorkflowSnapshot{Phase: "complete", Next: gsd.NextDispatch{Action: "stop"}})
+	decision, err := DecideWithRegistry(gsd.WorkflowSnapshot{Phase: "complete", Next: gsd.NextDispatch{Action: "stop"}}, testSupervisorRegistry())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -57,9 +57,17 @@ func TestDecideStopsAtFinalHumanGate(t *testing.T) {
 	}
 }
 
+func testSupervisorRegistry() gsd.UnitRegistry {
+	return gsd.UnitRegistry{Units: map[string]gsd.UnitMetadata{
+		"plan-milestone":    {UnitType: "plan-milestone", PhaseChain: []string{"planning"}},
+		"discuss-milestone": {UnitType: "discuss-milestone", PhaseChain: []string{"discuss", "planning"}},
+		"execute-task":      {UnitType: "execute-task", PhaseChain: []string{"execution"}},
+	}}
+}
+
 func TestDecideStopsUnsafeSkipForHumanDecision(t *testing.T) {
 	t.Parallel()
-	decision, err := Decide(gsd.WorkflowSnapshot{Phase: "executing", Next: gsd.NextDispatch{Action: "skip", UnitType: "execute-task", UnitID: "M001/S01/T01"}})
+	decision, err := DecideWithRegistry(gsd.WorkflowSnapshot{Phase: "executing", Next: gsd.NextDispatch{Action: "skip", UnitType: "execute-task", UnitID: "M001/S01/T01"}}, testSupervisorRegistry())
 	if err != nil {
 		t.Fatal(err)
 	}

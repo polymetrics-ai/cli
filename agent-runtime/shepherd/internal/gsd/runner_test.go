@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -22,6 +23,7 @@ func TestRunnerCorrelatesSemanticQuestionIDAndRespondsToRPCRequest(t *testing.T)
 		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
 		Timeout: 5 * time.Second, HeartbeatInterval: 25 * time.Millisecond, MaxEventBytes: 4096,
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=semantic-question"},
+		Registry:    mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -58,6 +60,7 @@ func TestRunnerEmitsHeartbeatDuringSilentLiveProcess(t *testing.T) {
 		HeartbeatInterval: 10 * time.Millisecond,
 		MaxEventBytes:     1024,
 		Environment:       []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=silent", "GH_TOKEN=must-not-reach-child"},
+		Registry:          mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatalf("new runner: %v", err)
@@ -93,6 +96,7 @@ func TestRunnerFailsStartupWithNoAgentActivity(t *testing.T) {
 		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
 		Timeout: 5 * time.Second, HeartbeatInterval: 10 * time.Millisecond, StartupNoEventTimeout: 25 * time.Millisecond, MaxEventBytes: 1024,
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=no-activity"},
+		Registry:    mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -114,6 +118,7 @@ func TestRunnerHeartbeatRetainsConcurrentInFlightTools(t *testing.T) {
 		Model: "openai-codex/gpt-5.6-sol", Thinking: "high", Timeout: 5 * time.Second,
 		HeartbeatInterval: 10 * time.Millisecond, MaxEventBytes: 4096,
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=concurrent-tools"},
+		Registry:    mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -156,6 +161,7 @@ func TestRunnerClassifiesBlockedExit(t *testing.T) {
 		HeartbeatInterval: 10 * time.Millisecond,
 		MaxEventBytes:     1024,
 		Environment:       []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=blocked"},
+		Registry:          mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatalf("new runner: %v", err)
@@ -168,6 +174,27 @@ func TestRunnerClassifiesBlockedExit(t *testing.T) {
 	}
 }
 
+func TestRunnerRejectsObservedDisallowedWorkflowTool(t *testing.T) {
+	t.Parallel()
+	runner, err := NewRunner(Config{
+		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=disallowed-tool"},
+		Registry:    mustDecodeRegistryFixture(t),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	runner, err = runner.WithUnitContract("plan-milestone")
+	if err != nil {
+		t.Fatal(err)
+	}
+	result := runner.Run(context.Background(), "next", nil, Observer{})
+	if result.Terminal != TerminalError || !errors.Is(result.Err, ErrRuntimeContractMismatch) {
+		t.Fatalf("result=%+v", result)
+	}
+}
+
 func TestRunnerCanDeriveGovernedImplementationModel(t *testing.T) {
 	t.Parallel()
 
@@ -175,6 +202,7 @@ func TestRunnerCanDeriveGovernedImplementationModel(t *testing.T) {
 		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
 		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=silent-implementation"},
+		Registry:    mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatalf("new runner: %v", err)
@@ -192,20 +220,29 @@ func TestRunnerCanDeriveGovernedImplementationModel(t *testing.T) {
 	}
 }
 
+func TestRunnerRequiresAuthoritativeRegistry(t *testing.T) {
+	t.Parallel()
+	_, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high"})
+	if !errors.Is(err, ErrRuntimeContractMismatch) {
+		t.Fatalf("error=%v, want runtime contract mismatch", err)
+	}
+}
+
 func TestRunnerRejectsUnsupportedCommandAndModel(t *testing.T) {
 	t.Parallel()
 
-	_, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-4", Thinking: "high"})
+	_, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-4", Thinking: "high", Registry: mustDecodeRegistryFixture(t)})
 	if err == nil {
 		t.Fatal("expected model downgrade to fail")
 	}
-	if _, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.5", Thinking: "high"}); err != nil {
+	if _, err := NewRunner(Config{Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.5", Thinking: "high", Registry: mustDecodeRegistryFixture(t)}); err != nil {
 		t.Fatalf("governed implementation model rejected: %v", err)
 	}
 	runner, err := NewRunner(Config{
 		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
 		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=silent"},
+		Registry:    mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatalf("new runner: %v", err)
@@ -244,6 +281,7 @@ func TestRunnerRequiresDeliveryStateOutsideProject(t *testing.T) {
 		Command: []string{"gsd"}, WorkDir: workDir, GSDHome: t.TempDir(),
 		StateDir: filepath.Join(workDir, ".shepherd"),
 		Model:    "openai-codex/gpt-5.6-sol", Thinking: "high",
+		Registry: mustDecodeRegistryFixture(t),
 	})
 	if err == nil {
 		t.Fatal("expected state inside the project to be rejected")
@@ -256,6 +294,7 @@ func TestRunnerBridgesOfficialHeadlessResumeToPiSessions(t *testing.T) {
 	_, err := NewRunner(Config{
 		Command: []string{"gsd"}, WorkDir: t.TempDir(), GSDHome: gsdHome, StateDir: t.TempDir(),
 		Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+		Registry: mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -284,6 +323,7 @@ func TestRunnerKeepsHeartbeatsWhileHumanGateWaitsAndCancelsBeforeUpstreamFallbac
 		HeartbeatInterval: 25 * time.Millisecond,
 		MaxEventBytes:     1024,
 		Environment:       []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=question"},
+		Registry:          mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatalf("new runner: %v", err)
@@ -310,6 +350,7 @@ func TestRunnerQueriesSupportedSurface(t *testing.T) {
 		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
 		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=query"},
+		Registry:    mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatalf("new runner: %v", err)
@@ -336,6 +377,7 @@ func TestRunnerUsesNativeDBToMarkdownRepairCommand(t *testing.T) {
 		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
 		WorkDir: workDir, GSDHome: t.TempDir(), StateDir: t.TempDir(), Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
 		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=repair"},
+		Registry:    mustDecodeRegistryFixture(t),
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -396,6 +438,10 @@ func TestRunnerHelperProcess(t *testing.T) {
 		fmt.Println(`{"type":"thinking_level_select","level":"high","previousLevel":"off"}`)
 		fmt.Println(`{"type":"extension_ui_request","id":"status-1","method":"setStatus","message":"working"}`)
 		time.Sleep(60 * time.Millisecond)
+		os.Exit(0)
+	case "disallowed-tool":
+		fmt.Println(`{"type":"tool_execution_start","toolName":"mcp__gsd-workflow__gsd_resume","toolCallId":"call-forbidden"}`)
+		time.Sleep(5 * time.Second)
 		os.Exit(0)
 	case "no-activity":
 		time.Sleep(5 * time.Second)

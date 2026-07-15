@@ -1,12 +1,17 @@
 package gsd
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 )
+
+const immutableImagePrefix = "sha256:"
 
 type ContainerConfig struct {
 	Engine        string
@@ -21,6 +26,45 @@ type ContainerConfig struct {
 	SessionsDir   string
 	BackgroundDir string
 	BackupDir     string
+}
+
+// ResolvePinnedContainerImage resolves a configured local tag exactly once and
+// returns the immutable image ID used for admission, export, and execution.
+func ResolvePinnedContainerImage(ctx context.Context, config ContainerConfig) (ContainerConfig, error) {
+	if ctx == nil || config.Engine != "podman" || config.Image == "" || strings.ContainsAny(config.Image, "\r\n\x00") {
+		return ContainerConfig{}, errors.New("container runtime requires a safe Podman image reference")
+	}
+	inspectCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(inspectCtx, config.Engine, "image", "inspect", "--format={{.Id}}", config.Image)
+	configureProcessTree(cmd)
+	var stdout, stderr boundedBuffer
+	stdout.limit, stderr.limit = 4096, 4096
+	cmd.Stdout, cmd.Stderr = &stdout, &stderr
+	if err := cmd.Run(); err != nil {
+		return ContainerConfig{}, fmt.Errorf("inspect immutable container image: %w", err)
+	}
+	if stdout.Truncated() || stderr.Truncated() {
+		return ContainerConfig{}, errors.New("immutable container image inspection output is oversized")
+	}
+	imageID := strings.TrimSpace(stdout.String())
+	if !validImmutableImageID(imageID) {
+		return ContainerConfig{}, errors.New("podman returned an invalid immutable image ID")
+	}
+	config.Image = imageID
+	return config, nil
+}
+
+func validImmutableImageID(value string) bool {
+	if len(value) != len(immutableImagePrefix)+64 || !strings.HasPrefix(value, immutableImagePrefix) {
+		return false
+	}
+	for _, char := range value[len(immutableImagePrefix):] {
+		if (char < '0' || char > '9') && (char < 'a' || char > 'f') {
+			return false
+		}
+	}
+	return true
 }
 
 func (c ContainerConfig) Validate(workDir string) error {

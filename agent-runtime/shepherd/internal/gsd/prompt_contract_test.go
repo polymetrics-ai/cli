@@ -20,22 +20,8 @@ func TestValidatePromptToolContractRejectsAdvertisedForbiddenTool(t *testing.T) 
 	}
 }
 
-func TestApplyPinnedPromptToolPatchRepairsPackageAndActiveRuntime(t *testing.T) {
+func TestPinnedPromptToolPatchRepairsPackageAndActiveRuntime(t *testing.T) {
 	t.Parallel()
-
-	root := t.TempDir()
-	dist := filepath.Join(root, "dist")
-	resources := filepath.Join(dist, "resources", "extensions", "gsd")
-	if err := os.MkdirAll(resources, 0o700); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(root, "package.json"), []byte(`{"name":"@opengsd/gsd-pi","version":"1.11.0"}`), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	loader := filepath.Join(dist, "loader.js")
-	if err := os.WriteFile(loader, []byte("loader"), 0o600); err != nil {
-		t.Fatal(err)
-	}
 
 	oldComposer := `const CONTEXT_MODE_LANE_LABELS = {
     planning: "planning",
@@ -44,44 +30,17 @@ const CONTEXT_MODE_GUIDANCE_BY_LANE = {
     planning: "Use ` + "`gsd_resume`" + ` for planning continuity, ` + "`gsd_exec`" + ` for noisy checks, and ` + "`gsd_exec_search`" + ` before rerunning diagnostics.",
 };
 `
-	registry := `export const UNIT_REGISTRY = {
-    "plan-milestone": {
-        kind: "primary",
-        scopeClass: "standard",
-        phaseChain: ["planning"],
-        toolContract: {
-            allowedGsdTools: [
-                "gsd_milestone_status",
-                "gsd_plan_milestone",
-                "gsd_plan_slice",
-                "gsd_plan_task",
-                "gsd_decision_save",
-                "gsd_requirement_update",
-            ],
-        },
-    },
-    "execute-task": { kind: "primary", scopeClass: "execute-task", phaseChain: ["execution"] },
-    "validate-milestone": { kind: "primary", scopeClass: "section-close", phaseChain: ["validation", "planning"] },
-    "complete-milestone": { kind: "primary", scopeClass: "section-close", phaseChain: ["completion", "validation"] },
-};
-`
-	writeRuntimeContractFixture(t, resources, oldComposer, registry)
-
-	homeResources := filepath.Join(root, "home", "agent", "extensions", "gsd")
-	if err := os.MkdirAll(homeResources, 0o700); err != nil {
-		t.Fatal(err)
-	}
-	writeRuntimeContractFixture(t, homeResources, oldComposer, registry)
-
-	command := []string{"node", loader}
-	gsdHome := filepath.Join(root, "home")
-	if err := ApplyPinnedPromptToolPatch(command, gsdHome, "1.11.0"); err != nil {
-		t.Fatal(err)
-	}
-	if err := ValidatePinnedPromptToolContracts(command, gsdHome, "1.11.0"); err != nil {
-		t.Fatalf("patched contract rejected: %v", err)
-	}
-	for _, directory := range []string{resources, homeResources} {
+	registrySource := officialRegistryModuleFixture()
+	registry := mustDecodeRegistryFixture(t)
+	patchedComposer := strings.Replace(oldComposer, planningGuidanceOriginal, planningGuidancePatched, 1)
+	for _, directory := range []string{t.TempDir(), t.TempDir()} {
+		writeRuntimeContractFixture(t, directory, oldComposer, registrySource)
+		if err := patchPromptContractRootWithHashes(directory, sha256String(oldComposer), sha256String(patchedComposer)); err != nil {
+			t.Fatal(err)
+		}
+		if err := validatePromptContractRootWithHashes(directory, registry, sha256String(registrySource), sha256String(patchedComposer)); err != nil {
+			t.Fatalf("patched contract rejected: %v", err)
+		}
 		raw, err := os.ReadFile(filepath.Join(directory, "unit-context-composer.js"))
 		if err != nil {
 			t.Fatal(err)
@@ -91,10 +50,9 @@ const CONTEXT_MODE_GUIDANCE_BY_LANE = {
 			!strings.Contains(content, "Do not call `gsd_resume`") {
 			t.Fatalf("runtime was not repaired: %s", content)
 		}
-	}
-
-	if err := ApplyPinnedPromptToolPatch(command, gsdHome, "1.11.0"); err != nil {
-		t.Fatalf("idempotent repair failed: %v", err)
+		if err := patchPromptContractRootWithHashes(directory, sha256String(oldComposer), sha256String(patchedComposer)); err != nil {
+			t.Fatalf("idempotent repair failed: %v", err)
+		}
 	}
 }
 
@@ -102,28 +60,40 @@ func TestValidatePinnedPromptToolContractsRejectsUnqualifiedShape(t *testing.T) 
 	t.Parallel()
 
 	root := t.TempDir()
-	dist := filepath.Join(root, "dist")
-	resources := filepath.Join(dist, "resources", "extensions", "gsd")
-	if err := os.MkdirAll(resources, 0o700); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(root, "package.json"), []byte(`{"name":"@opengsd/gsd-pi","version":"1.11.0"}`), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	loader := filepath.Join(dist, "loader.js")
-	if err := os.WriteFile(loader, []byte("loader"), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	writeRuntimeContractFixture(t, resources, "const unrelated = true;", "export const UNIT_REGISTRY = {};")
-
-	err := ValidatePinnedPromptToolContracts([]string{"node", loader}, filepath.Join(root, "home"), "1.11.0")
+	registrySource := officialRegistryModuleFixture()
+	writeRuntimeContractFixture(t, root, "const unrelated = true;", registrySource)
+	err := validatePromptContractRootWithHashes(root, mustDecodeRegistryFixture(t), sha256String(registrySource), sha256String("const unrelated = true;"))
 	if !errors.Is(err, ErrRuntimeContractMismatch) {
 		t.Fatalf("error=%v, want runtime contract mismatch", err)
 	}
 }
 
+func TestValidatePromptContractRejectsMissingDeclaredPromptTemplate(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	registrySource := officialRegistryModuleFixture()
+	writeRuntimeContractFixture(t, root, `const CONTEXT_MODE_GUIDANCE_BY_LANE = {
+    planning: "Use only the phase-scoped planning tools exposed for this unit (`+"`gsd_milestone_status`"+`, `+"`gsd_plan_milestone`"+`, `+"`gsd_plan_slice`"+`, `+"`gsd_plan_task`"+`, `+"`gsd_requirement_update`"+`, and `+"`gsd_decision_save`"+`). Do not call `+"`gsd_resume`"+`.",
+};`, registrySource)
+	registry := mustDecodeRegistryFixture(t)
+	metadata := registry.Units["plan-milestone"]
+	metadata.PromptTemplates = []string{"plan-milestone"}
+	registry.Units["plan-milestone"] = metadata
+	composerRaw, readErr := os.ReadFile(filepath.Join(root, "unit-context-composer.js"))
+	if readErr != nil {
+		t.Fatal(readErr)
+	}
+	if err := validatePromptContractRootWithHashes(root, registry, sha256String(registrySource), sha256String(string(composerRaw))); !errors.Is(err, ErrRuntimeContractMismatch) {
+		t.Fatalf("error=%v, want missing prompt template contract mismatch", err)
+	}
+}
+
 func writeRuntimeContractFixture(t *testing.T, directory, composer, registry string) {
 	t.Helper()
+	if err := os.MkdirAll(directory, 0o700); err != nil {
+		t.Fatal(err)
+	}
 	if err := os.WriteFile(filepath.Join(directory, "unit-context-composer.js"), []byte(composer), 0o600); err != nil {
 		t.Fatal(err)
 	}

@@ -24,6 +24,34 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+func testUnitRegistry() gsd.UnitRegistry {
+	units := map[string]gsd.UnitMetadata{}
+	add := func(unitType string, phases ...string) {
+		units[unitType] = gsd.UnitMetadata{UnitType: unitType, PhaseChain: phases}
+	}
+	for _, unitType := range []string{"research-milestone", "research-slice", "research-project"} {
+		add(unitType, "research")
+	}
+	for _, unitType := range []string{"plan-milestone", "plan-slice", "refine-slice", "replan-slice"} {
+		add(unitType, "planning")
+	}
+	for _, unitType := range []string{"discuss-milestone", "discuss-project", "discuss-requirements", "discuss-slice", "research-decision", "workflow-preferences"} {
+		add(unitType, "discuss", "planning")
+	}
+	for _, unitType := range []string{"execute-task", "reactive-execute"} {
+		add(unitType, "execution")
+	}
+	add("execute-task-simple", "execution_simple", "execution")
+	for _, unitType := range []string{"validate-milestone", "reassess-roadmap", "gate-evaluate", "rewrite-docs"} {
+		add(unitType, "validation", "planning")
+	}
+	for _, unitType := range []string{"complete-milestone", "complete-slice"} {
+		add(unitType, "completion")
+	}
+	add("run-uat", "uat", "completion")
+	return gsd.UnitRegistry{Units: units}
+}
+
 func initializedTestRepository(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()
@@ -337,11 +365,45 @@ func TestLoadConfigRejectsAttemptRootContainingProtectedState(t *testing.T) {
 	}
 }
 
+func TestUnqualifiedDisposableContinuationFailsClosed(t *testing.T) {
+	t.Parallel()
+	if err := rejectUnqualifiedContinuation(false); err != nil {
+		t.Fatalf("disabled continuation rejected: %v", err)
+	}
+	if err := rejectUnqualifiedContinuation(true); err == nil || !strings.Contains(err.Error(), "unavailable") {
+		t.Fatalf("requested continuation error=%v", err)
+	}
+}
+
+func TestObservedRuntimeIdentityIgnoresSubagentEvents(t *testing.T) {
+	t.Parallel()
+	var model, thinking string
+	for _, event := range []gsd.Event{
+		{Kind: gsd.EventModelSelect, RunID: "child-run", UnitID: "subagent/scout", Model: "openai-codex/gpt-5.5"},
+		{Kind: gsd.EventThinkingSelect, Nested: true, Thinking: "medium"},
+		{Kind: gsd.EventModelSelect, Model: "openai-codex/gpt-5.6-sol"},
+		{Kind: gsd.EventThinkingSelect, Thinking: "high"},
+	} {
+		if err := recordObservedRuntimeIdentity(event, "openai-codex/gpt-5.6-sol", "high", &model, &thinking); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if model != "openai-codex/gpt-5.6-sol" || thinking != "high" {
+		t.Fatalf("observed identity=%s/%s", model, thinking)
+	}
+	if err := recordObservedRuntimeIdentity(gsd.Event{Kind: gsd.EventModelSelect, Model: "openai-codex/gpt-5.5"}, "openai-codex/gpt-5.6-sol", "high", &model, &thinking); err == nil {
+		t.Fatal("later top-level model downgrade was accepted")
+	}
+	if err := recordObservedRuntimeIdentity(gsd.Event{Kind: gsd.EventThinkingSelect, Thinking: "medium"}, "openai-codex/gpt-5.6-sol", "high", &model, &thinking); err == nil {
+		t.Fatal("later top-level thinking downgrade was accepted")
+	}
+}
+
 func TestModelForUnitTypeUsesOfficialPhaseMetadata(t *testing.T) {
 	t.Parallel()
 	config := fileConfig{CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5"}
-	registry := gsd.BuiltinUnitRegistry()
-	for _, unitType := range []string{"execute-task", "execute-task-simple", "reactive-execute", "quick-task"} {
+	registry := testUnitRegistry()
+	for _, unitType := range []string{"execute-task", "execute-task-simple", "reactive-execute"} {
 		got, err := modelForUnitType(config, registry, unitType)
 		if err != nil || got != config.ImplementationModel {
 			t.Fatalf("%s model=%q err=%v, want implementation %q", unitType, got, err, config.ImplementationModel)
@@ -353,12 +415,17 @@ func TestModelForUnitTypeUsesOfficialPhaseMetadata(t *testing.T) {
 			t.Fatalf("%s model=%q err=%v, want coordinator %q", unitType, got, err, config.CoordinatorModel)
 		}
 	}
+	for _, unitType := range []string{"quick-task", "execute-task-lookalike"} {
+		if _, err := modelForUnitType(config, registry, unitType); !errors.Is(err, gsd.ErrRuntimeContractMismatch) {
+			t.Fatalf("%s error=%v, want runtime contract mismatch", unitType, err)
+		}
+	}
 }
 
 func TestLaunchModelForCommandUsesOfficialPhaseMetadata(t *testing.T) {
 	t.Parallel()
 	config := fileConfig{CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5"}
-	registry := gsd.BuiltinUnitRegistry()
+	registry := testUnitRegistry()
 	got, err := launchModelForCommand(config, registry, "execute-task-simple")
 	if err != nil || got != config.ImplementationModel {
 		t.Fatalf("execute-task-simple launch model=%q err=%v, want implementation %q", got, err, config.ImplementationModel)
@@ -532,6 +599,7 @@ func TestSuperviseFakeRuntimeToFinalHumanGate(t *testing.T) {
 		WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir,
 		Model: "openai-codex/gpt-5.6-sol", Thinking: "high", Timeout: 10 * time.Second,
 		Environment: []string{"GO_WANT_RUNNER_HELPER=supervise"},
+		Registry:    testUnitRegistry(),
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -539,7 +607,7 @@ func TestSuperviseFakeRuntimeToFinalHumanGate(t *testing.T) {
 	config := fileConfig{WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir, AttemptRoot: filepath.Join(t.TempDir(), "attempt-worktrees"), CoordinatorModel: "openai-codex/gpt-5.6-sol", ImplementationModel: "openai-codex/gpt-5.5", GSDVersion: "1.11.0", TimeoutSeconds: 10, HeartbeatSeconds: 1, MaxEventBytes: defaultMaxEventBytes, MaxUnitAttempts: 2, Repository: "polymetrics-ai/cli", PullRequest: 391, Runtime: "host"}
 	restore := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
 	defer restore()
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := os.Stat(filepath.Join(repo, "agent-runtime", "shepherd", "canary.txt")); err != nil {
@@ -581,7 +649,7 @@ func TestSuperviseRejectsInvalidIndependentValidationWithoutPromotion(t *testing
 			restore := installFakeIndependentValidator(t, validator)
 			defer restore()
 
-			err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
+			err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
 			if err == nil {
 				t.Fatal("invalid validation unexpectedly promoted")
 			}
@@ -635,7 +703,7 @@ func TestSupervisePersistsPreparationAndPreDispatchFailures(t *testing.T) {
 			repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
 			restore := test.arrange(t, repo)
 			defer restore()
-			err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
+			err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
 			if err == nil {
 				t.Fatal("early failure unexpectedly succeeded")
 			}
@@ -653,7 +721,7 @@ func TestSuperviseRuntimeRetryReconcilesOldAttemptAndRetainsFreshAttempt(t *test
 	}
 	t.Setenv("RUNNER_HELPER_MODE", "fail-runtime")
 	_, contextPath, config, runner := setupFakeSuperviseRuntime(t)
-	err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
+	err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
 	if err == nil {
 		t.Fatal("runtime failure unexpectedly succeeded")
 	}
@@ -679,7 +747,7 @@ func TestSuperviseStartupReconcilesRetainedAttemptBeforeFinalGateQuery(t *testin
 	_, contextPath, config, runner := setupFakeSuperviseRuntime(t)
 	restore := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validation.Result{}})
 	defer restore()
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("rejected validation unexpectedly succeeded")
 	}
 	restore()
@@ -698,13 +766,13 @@ func TestSuperviseStartupReconcilesRetainedAttemptBeforeFinalGateQuery(t *testin
 	if err := db.Close(); err != nil {
 		t.Fatal(err)
 	}
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
 		t.Fatalf("final-gate startup reconciliation: %v", err)
 	}
 	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
 		t.Fatalf("startup cleanup-complete attempts=%d want 1", count)
 	}
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
 		t.Fatalf("idempotent final-gate restart: %v", err)
 	}
 	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
@@ -722,7 +790,7 @@ func TestSuperviseStartupPreservesAmbiguousRunningAttempt(t *testing.T) {
 	prepareAttemptGSDState = func(context.Context, *workspace.Manager, workspace.AttemptWorktree) error {
 		return errors.New("bounded preparation failure")
 	}
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("preparation failure unexpectedly succeeded")
 	}
 	prepareAttemptGSDState = previous
@@ -747,7 +815,7 @@ func TestSuperviseStartupPreservesAmbiguousRunningAttempt(t *testing.T) {
 	if err := db.Close(); err != nil {
 		t.Fatal(err)
 	}
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("ambiguous running attempt did not block startup")
 	}
 	if _, err := os.Stat(attemptPath); err != nil {
@@ -796,7 +864,7 @@ func TestSuperviseRetainsMovedCandidateBeforePromotionIntent(t *testing.T) {
 	}}
 	restore := installFakeIndependentValidator(t, validator)
 	defer restore()
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("moved candidate unexpectedly promoted")
 	}
 	dbPath := filepath.Join(config.StateDir, "authority.db")
@@ -812,7 +880,7 @@ func TestSuperviseRetainsMovedCandidateBeforePromotionIntent(t *testing.T) {
 	if err := db.Close(); err != nil {
 		t.Fatal(err)
 	}
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("moved retained candidate did not remain human-gated")
 	}
 	if _, err := os.Stat(attemptPath); err != nil {
@@ -832,7 +900,7 @@ func TestSupervisePersistsCleanupBlockedWithoutDeletingAttempt(t *testing.T) {
 		return workspace.ReconcileBlocked, errors.New("bounded cleanup failure")
 	}
 	defer func() { reconcileOwnedAttempt = previous }()
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("cleanup failure unexpectedly succeeded")
 	}
 	dbPath := filepath.Join(config.StateDir, "authority.db")
@@ -866,7 +934,7 @@ func TestSuperviseRatifiesBeforePromotingCandidate(t *testing.T) {
 	restore := installFakeIndependentValidator(t, validator)
 	defer restore()
 
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
 		t.Fatal(err)
 	}
 	if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got == beforeHead {
@@ -941,6 +1009,7 @@ func setupFakeSuperviseRuntime(t *testing.T) (string, string, fileConfig, *gsd.R
 		WorkDir: repo, GSDHome: gsdHome, StateDir: stateDir,
 		Model: "openai-codex/gpt-5.6-sol", Thinking: "high", Timeout: 10 * time.Second,
 		Environment: []string{"GO_WANT_RUNNER_HELPER=supervise"},
+		Registry:    testUnitRegistry(),
 	})
 	if err != nil {
 		t.Fatal(err)

@@ -49,10 +49,15 @@ status is therefore **not validated, not ratified, not canary-ready**.
 8. `cycle-5/slice-b`: Slice A is accepted GREEN at `95a17f18`. Slice B used `local_critical_path`
    because store, workspace, and supervise share mutation paths; no overlapping mutating workers.
 9. `cycle-6/slice-c`: Slice B is independently accepted GREEN at
-   `1a050692f9e47b5b4d3d74cfb38e56c67d461399`. Slice C uses `local_critical_path` because the
+   `1a050692f9e47b5b4d3d74cfb38e56c67d461399`. Slice C used `local_critical_path` because the
    promotion journal, Shepherd SQLite, canonical Git, staged GSD snapshot, and filesystem rename
-   protocol form one critical transaction. Slice D onward, PR creation, final Sol review, and
-   canaries remain blocked.
+   protocol form one critical transaction.
+10. `cycle-9/slice-d`: Slice C is accepted GREEN at
+    `f0fbf47f54c688792a5d53edfa4b680b38b39eed`. Slice D uses `local_critical_path`; official
+    runtime validation, normalized export, registry admission, model routing, and command startup
+    are one sequential trust boundary. Read-only reviewers are allowed; no overlapping mutating
+    worker is allowed. Slice E onward, PR creation, final Sol review, canaries, GitHub mutation,
+    and parent PR #390 merge remain blocked.
 
 ## Ordered implementation slices
 
@@ -109,7 +114,7 @@ only after exact resources are proven absent. No broad worktree prune, broad bra
 path removal, or `RemoveAll` was introduced. Slice C promotion journaling and atomic `.gsd` state swap
 remain explicitly excluded.
 
-### C. Crash-safe GSD-state promotion — GREEN (candidate diff)
+### C. Crash-safe GSD-state promotion — COMPLETE / GREEN at `f0fbf47f`
 
 RED tests first:
 - journal close/reopen persistence and exact identity/proof/state/snapshot binding;
@@ -134,18 +139,56 @@ query or dispatch. Slice D onward remains excluded.
 Implemented with journal intent before staging, full proof/attestation identity binding, bounded
 root-confined copies, SQLite online backup/integrity verification, exact pre-Git ownership rechecks,
 crash-safe two-rename installation, rooted cleanup tombstones, and universal blocked-journal gates.
-Exact commit evidence is recorded after the Slice C checkpoint commit.
+Accepted checkpoint: `f0fbf47f54c688792a5d53edfa4b680b38b39eed`.
 
-### D. Complete official GSD 1.11 registry loading
+### D. Complete official GSD 1.11 registry loading — COMPLETE / GREEN
 
-RED tests first:
-- real pinned fixture with array spreads such as `RUN_UAT_WORKFLOW_TOOL_NAMES` resolves;
-- allowed/required/forbidden tools are preserved;
-- null/unknown units fail closed unless explicitly governed sidecars;
-- no hard-coded substitution for official phase metadata.
+Orchestration: `local_critical_path`; read-only recon/review sidecars only.
 
-GREEN target: structured normalized export from pinned official runtime, metadata-only model routing,
-and fail-closed registry admission.
+Required RED tests:
+- realistic pinned 1.11 metadata containing array spreads resolves through a normalized exporter;
+- exact allowed/required/forbidden tools and every forbidden reason survive normalization;
+- missing, malformed, partial, oversized, duplicate, and unexpected JSON fields return
+  `runtime_contract_mismatch`;
+- missing registry/runtime, wrong version, symlink/path escape, and validated-source drift fail closed;
+- official null `phaseChain` or tool contract never receives built-in fallback data;
+- unknown units/phases fail closed; supported sidecars use separate versioned policy and are never
+  represented as official metadata;
+- official planning/research/discussion/completion/validation/UAT/ratification phases route to
+  `openai-codex/gpt-5.6-sol`/`high`;
+- official execution/execution_simple/delegated implementation phases route to
+  `openai-codex/gpt-5.5`/`high`, without unit-name substitution;
+- subagent model events cannot overwrite top-level observed model/thinking evidence;
+- prompt-advertised tools are checked against the complete normalized tool contract;
+- production startup cannot silently fall back to `BuiltinUnitRegistry`;
+- host execution uses an absolute hash-pinned Node binary and a complete, deterministic, privately
+  snapshotted GSD package tree outside canonical/attempt worktrees;
+- registry imports consume only bounded no-follow verified bytes, eliminating verify/import TOCTOU;
+- every top-level model/thinking transition and any session fallback are bound to the current run start;
+- session headers and runtime source reads reject symlinks, duplicate/unknown/trailing fields, stale
+  evidence, file replacement, and bounded-size violations;
+- every observed `gsd_*` tool start is checked against the normalized unit contract;
+- exporter process groups use bounded cancellation/WaitDelay cleanup; retained Podman execution is
+  rebound to an immutable local image ID or fails closed.
+
+GREEN target: import/evaluate only the validated pinned official 1.11 runtime through argv-based,
+timeout/cancellation-aware process execution; emit bounded strict JSON preserving kind, scope class,
+phase chain, allowed/required/forbidden tools and reasons; bind output to validated version/source
+identity; compare all governance fields; route models from official phase metadata; keep sidecar policy
+separate and versioned; and remove all production fallback to built-in/sample registries.
+
+Implemented and verified on 2026-07-15. Host admission now pins the complete v3 package manifest,
+absolute Node binary, prompt/model policy, active prompt tree, current-run session identity, and durable
+unit attempt evidence. Canonical aliases use disposable worktrees and fresh checkpoints. Every observed
+workflow tool is contract-checked; exporter/runner/validator process trees are bounded and synchronously
+cleaned. Retained Podman and unqualified continuation fail closed. The installed official runtime,
+focused/full/race/vet/build/make/boundary/list/diff gates, and the 28-finding no-differential lint
+baseline pass. Slice E remains blocked.
+
+Skills used for Slice D: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`,
+`golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`,
+`golang-safety`, `golang-context`, `golang-concurrency`, `golang-design-patterns`,
+`golang-structs-interfaces`, `golang-observability`, and `golang-lint`.
 
 ### E. Real Sol/high recovery planning
 

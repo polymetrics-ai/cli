@@ -23,10 +23,6 @@ type Decision struct {
 	Snapshot gsd.WorkflowSnapshot
 }
 
-func Decide(snapshot gsd.WorkflowSnapshot) (Decision, error) {
-	return DecideWithRegistry(snapshot, gsd.BuiltinUnitRegistry())
-}
-
 func DecideWithRegistry(snapshot gsd.WorkflowSnapshot, registry gsd.UnitRegistry) (Decision, error) {
 	decision := Decision{Snapshot: snapshot}
 	switch snapshot.Next.Action {

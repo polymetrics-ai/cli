@@ -23,14 +23,18 @@ implementation-model drift; any other identity fails closed.
 
 For governed delivery, use the host-local runtime by default (`"runtime": "host"`) with the exact
 pinned GSD Pi loader in `gsd_command`, a separately allowlisted absolute Pi executable in `pi_command`,
-protected `gsd_home`, and external-effect publishers disabled. Independent candidate validation invokes
+protected `gsd_home`, and external-effect publishers disabled. Slice D qualifies host GSD execution
+only on `darwin/arm64` with Node 24.13.1 and the exact complete GSD Pi 1.11.0 package-tree digest;
+other host platforms fail closed until their Node/package manifests are reviewed and added. Independent candidate validation invokes
 Pi directly in non-interactive JSON mode with GPT-5.6 Sol/high, a dedicated protected session directory,
 and only `read,bash,grep,find,ls`; it does not dispatch a canonical GSD workflow unit. This is the
 qualified #389 path and requires no Podman service for default verification.
 
 The legacy Podman assets remain available for separately authorized qualification/debug runs; they
-are not required by the default supervisor path and are not removed in this issue. If a later
-human-approved canary selects the container runtime, build the image explicitly so the agent sees
+are not required by the default supervisor path and are not removed in this issue. Slice D resolves
+local tags to immutable image IDs but deliberately fails runtime admission because no complete image
+digest has yet been human-qualified. If a later human-approved qualification build is performed, build
+the image explicitly so the agent sees
 only the issue worktree, task-isolated GSD/planning mounts, and read-only auth/settings files:
 
 ```bash
@@ -121,10 +125,10 @@ go run ./cmd/shepherd start \
   --context .planning/phases/issue-372-gsd-pi-go-shepherd/CONTEXT.json
 ```
 
-Continue one fenced unit at a time with `run --issue 372 --command next`. For a multi-turn local
-milestone interview, use `--command discuss --continue-unit` after the first round. Shepherd resumes
-only the newest Pi session whose header is bound to the exact configured worktree. If a prior
-qualification run already created the correct active milestone, `start --adopt-existing` binds it
+Continue one fenced unit at a time with `run --issue 372 --command next`. Governed units now use
+disposable attempt worktrees, so `--continue-unit` fails closed until prior-attempt session identity
+and worktree continuity are independently qualified; start a fresh canonical discussion unit instead.
+If a prior qualification run already created the correct active milestone, `start --adopt-existing` binds it
 explicitly instead of silently creating a second milestone.
 
 `start` also binds an immutable copy of the validated issue context under protected controller

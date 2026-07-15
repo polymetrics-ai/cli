@@ -29,21 +29,8 @@ var governedModels = map[string]struct{}{
 	"openai-codex/gpt-5.5":     {},
 }
 
-var supportedCommands = func() map[string]struct{} {
-	commands := map[string]struct{}{
-		"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {},
-	}
-	for command := range BuiltinUnitRegistry().CanonicalCommands() {
-		commands[command] = struct{}{}
-	}
-	return commands
-}()
-
-var canonicalUnitCommands = BuiltinUnitRegistry().CanonicalCommands()
-
-func IsCanonicalUnitCommand(command string) bool {
-	_, ok := canonicalUnitCommands[command]
-	return ok
+var baseSupportedCommands = map[string]struct{}{
+	"auto": {}, "next": {}, "status": {}, "new-milestone": {}, "query": {}, "discuss": {},
 }
 
 var milestoneTargetPattern = regexp.MustCompile(`^M[0-9]{3,}(?:-[a-z0-9]+)?$`)
@@ -76,6 +63,9 @@ type Config struct {
 	MaxEventBytes         int
 	Environment           []string
 	Container             *ContainerConfig
+	Registry              UnitRegistry
+	RuntimeGuard          *HostRuntimeGuard
+	ContractUnit          string
 }
 
 type Heartbeat struct {
@@ -135,6 +125,9 @@ type questionResult struct {
 type Runner struct{ config Config }
 
 func NewRunner(config Config) (*Runner, error) {
+	if len(config.Registry.Units) == 0 {
+		return nil, fmt.Errorf("%w: authoritative unit registry is required", ErrRuntimeContractMismatch)
+	}
 	if !filepath.IsAbs(config.WorkDir) || !filepath.IsAbs(config.GSDHome) || !filepath.IsAbs(config.StateDir) {
 		return nil, errors.New("absolute work directory, controlled GSD home, and delivery state directory are required")
 	}
@@ -154,6 +147,14 @@ func NewRunner(config Config) (*Runner, error) {
 	if config.Container == nil {
 		if len(config.Command) == 0 || strings.TrimSpace(config.Command[0]) == "" {
 			return nil, errors.New("GSD command is required")
+		}
+		if len(config.Command) == 2 && filepath.Base(config.Command[1]) == "loader.js" && filepath.Base(filepath.Dir(config.Command[1])) == "dist" {
+			if config.RuntimeGuard == nil {
+				return nil, fmt.Errorf("%w: official host runtime guard is required", ErrRuntimeContractMismatch)
+			}
+			if err := config.RuntimeGuard.ValidateForWorkDir(context.Background(), config.WorkDir); err != nil {
+				return nil, err
+			}
 		}
 	} else {
 		if err := config.Container.Validate(config.WorkDir); err != nil {
@@ -192,12 +193,25 @@ func NewRunner(config Config) (*Runner, error) {
 	return &Runner{config: config}, nil
 }
 
+func (r *Runner) RequiresSessionBinding() bool {
+	return r.config.RuntimeGuard != nil || r.config.Container != nil
+}
+
 func (r *Runner) WithModel(model string) (*Runner, error) {
 	if _, ok := governedModels[model]; !ok {
 		return nil, errors.New("model must be a governed Shepherd or implementation model with high thinking")
 	}
 	config := r.config
 	config.Model = model
+	return &Runner{config: config}, nil
+}
+
+func (r *Runner) WithUnitContract(unitType string) (*Runner, error) {
+	if _, ok := r.config.Registry.Lookup(unitType); !ok {
+		return nil, fmt.Errorf("%w: unknown explicit unit contract %q", ErrRuntimeContractMismatch, unitType)
+	}
+	config := r.config
+	config.ContractUnit = unitType
 	return &Runner{config: config}, nil
 }
 
@@ -241,7 +255,12 @@ func ensureLocalSessionBridge(gsdHome string) error {
 
 func (r *Runner) Run(parent context.Context, command string, args []string, observer Observer) Result {
 	started := time.Now().UTC()
-	if _, ok := supportedCommands[command]; !ok {
+	if r.config.RuntimeGuard != nil {
+		if err := r.config.RuntimeGuard.ValidateForWorkDir(parent, r.config.WorkDir); err != nil {
+			return failedResult(started, err)
+		}
+	}
+	if !r.supportsCommand(command) {
 		return Result{Terminal: TerminalRejected, ExitCode: -1, Err: fmt.Errorf("unsupported headless command %q", command), Started: started, Ended: time.Now().UTC()}
 	}
 	validDiscussArgs := len(args) == 1 && milestoneTargetPattern.MatchString(args[0])
@@ -263,7 +282,13 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	}
 	ctx, cancel := context.WithTimeout(parent, r.config.Timeout)
 	defer cancel()
-
+	contractUnit := r.config.ContractUnit
+	if contractUnit == "" {
+		contractUnit = command
+		if command == "discuss" {
+			contractUnit = "discuss-milestone"
+		}
+	}
 	commandArgs := r.runtimeArgs()
 	responseTimeout := r.config.Timeout + time.Minute
 	commandArgs = append(commandArgs,
@@ -353,6 +378,11 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 			lastEventAt = scanned.event.At
 			switch scanned.event.Kind {
 			case EventToolStart:
+				if contractErr := r.config.Registry.ValidateObservedTool(contractUnit, scanned.event.Tool); contractErr != nil {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: contractErr, Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+				}
 				if _, exists := inFlightTools[scanned.event.ToolCallID]; exists {
 					cancel()
 					waitErr := <-waited
@@ -428,6 +458,13 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	}
 }
 
+func (r *Runner) supportsCommand(command string) bool {
+	if _, ok := baseSupportedCommands[command]; ok {
+		return true
+	}
+	return r.config.Registry.IsCanonicalCommand(command)
+}
+
 func summarizeInFlightTools(active map[string]string) string {
 	tools := make([]string, 0, len(active))
 	for _, tool := range active {
@@ -450,6 +487,11 @@ func isWithin(root, path string) bool {
 }
 
 func (r *Runner) Query(parent context.Context) (WorkflowSnapshot, error) {
+	if r.config.RuntimeGuard != nil {
+		if err := r.config.RuntimeGuard.ValidateForWorkDir(parent, r.config.WorkDir); err != nil {
+			return WorkflowSnapshot{}, err
+		}
+	}
 	ctx, cancel := context.WithTimeout(parent, min(r.config.Timeout, 30*time.Second))
 	defer cancel()
 	args := r.runtimeArgs()
@@ -471,6 +513,11 @@ func (r *Runner) Query(parent context.Context) (WorkflowSnapshot, error) {
 }
 
 func (r *Runner) RebuildMarkdown(parent context.Context) error {
+	if r.config.RuntimeGuard != nil {
+		if err := r.config.RuntimeGuard.ValidateForWorkDir(parent, r.config.WorkDir); err != nil {
+			return err
+		}
+	}
 	ctx, cancel := context.WithTimeout(parent, min(r.config.Timeout, 60*time.Second))
 	defer cancel()
 	args := r.runtimeArgs()
@@ -790,9 +837,10 @@ func exitCode(err error) int {
 }
 
 type boundedBuffer struct {
-	mu    sync.Mutex
-	data  bytes.Buffer
-	limit int
+	mu        sync.Mutex
+	data      bytes.Buffer
+	limit     int
+	truncated bool
 }
 
 func (b *boundedBuffer) Write(p []byte) (int, error) {
@@ -800,6 +848,9 @@ func (b *boundedBuffer) Write(p []byte) (int, error) {
 	defer b.mu.Unlock()
 	written := len(p)
 	remaining := b.limit - b.data.Len()
+	if len(p) > remaining {
+		b.truncated = true
+	}
 	if remaining > 0 {
 		if len(p) > remaining {
 			p = p[:remaining]
@@ -813,4 +864,10 @@ func (b *boundedBuffer) String() string {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 	return b.data.String()
+}
+
+func (b *boundedBuffer) Truncated() bool {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.truncated
 }

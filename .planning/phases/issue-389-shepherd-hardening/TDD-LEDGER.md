@@ -154,29 +154,29 @@ Refactor evidence:
   atomic ratification, authorized-branch checks, bounded output, and human-gated convergence fixes.
 - Slice C promotion/state-swap journaling remains explicitly excluded.
 
-## Slice C — Crash-safe GSD-state promotion — GREEN (candidate diff)
+## Slice C — Crash-safe GSD-state promotion — COMPLETE / GREEN at `f0fbf47f`
 
 Orchestration: `local_critical_path`; no overlapping mutating workers.
 
 Required RED tests:
-- [ ] promotion journal persists across store close/reopen.
-- [ ] failure before Git promotion.
-- [ ] failure immediately after Git promotion.
-- [ ] failure before canonical GSD backup rename.
-- [ ] failure after backup rename but before staged-state install.
-- [ ] failure after staged-state install but before journal completion.
-- [ ] restart at every boundary converges idempotently.
-- [ ] repeated recovery produces no duplicate effects.
-- [ ] canonical Git and `.gsd` never finish mixed.
-- [ ] moved canonical head fails closed.
-- [ ] dirty canonical worktree fails closed.
-- [ ] missing, changed, corrupt stage/backup blocks without deletion.
-- [ ] unknown staging/backup directories are never deleted.
-- [ ] expired or mismatched proof before Git promotion blocks promotion.
-- [ ] already-promoted valid journal completes forward without a new verdict.
-- [ ] SQLite data committed through WAL survives staging and installation.
-- [ ] installed `gsd.db` passes integrity check without stale WAL/SHM files.
-- [ ] existing Slice A/B validation, ratification, lifecycle, cleanup, and restart tests remain green.
+- [x] promotion journal persists across store close/reopen.
+- [x] failure before Git promotion.
+- [x] failure immediately after Git promotion.
+- [x] failure before canonical GSD backup rename.
+- [x] failure after backup rename but before staged-state install.
+- [x] failure after staged-state install but before journal completion.
+- [x] restart at every boundary converges idempotently.
+- [x] repeated recovery produces no duplicate effects.
+- [x] canonical Git and `.gsd` never finish mixed.
+- [x] moved canonical head fails closed.
+- [x] dirty canonical worktree fails closed.
+- [x] missing, changed, corrupt stage/backup blocks without deletion.
+- [x] unknown staging/backup directories are never deleted.
+- [x] expired or mismatched proof before Git promotion blocks promotion.
+- [x] already-promoted valid journal completes forward without a new verdict.
+- [x] SQLite data committed through WAL survives staging and installation.
+- [x] installed `gsd.db` passes integrity check without stale WAL/SHM files.
+- [x] existing Slice A/B validation, ratification, lifecycle, cleanup, and restart tests remain green.
 
 RED evidence (2026-07-15):
 - `cd agent-runtime/shepherd && go test ./internal/store ./internal/workspace ./cmd/shepherd` failed as expected.
@@ -203,16 +203,59 @@ deferred: Slice C's approved contract binds both ratified proof and deterministi
 inside the protected journal after worker quiescence; it does not redefine Slice A's evidence schema.
 Slice D onward is excluded.
 
-## Slice D — Official GSD 1.11 registry loading
+## Slice D — Official GSD 1.11 registry loading — COMPLETE / GREEN
+
+Orchestration: `local_critical_path`; read-only recon/review sidecars only. Skills loaded:
+`gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`, `golang-how-to`, `golang-cli`,
+`golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`,
+`golang-concurrency`, `golang-design-patterns`, `golang-structs-interfaces`,
+`golang-observability`, and `golang-lint`.
 
 Planned RED tests:
-- [ ] parse real pinned GSD 1.11 registry fixture with array spreads.
-- [ ] preserve allowed, required, and forbidden tools.
-- [ ] route models only from official metadata.
-- [ ] null/unknown units fail closed or are explicitly governed sidecars.
+- [x] realistic pinned 1.11 registry fixture with array spreads loads through normalized JSON.
+- [x] exact allowed and required tools survive normalization.
+- [x] forbidden tools and reason strings survive normalization.
+- [x] missing/malformed/partial/oversized/duplicate/unexpected fields return `runtime_contract_mismatch`.
+- [x] missing registry, wrong version, symlink, path escape, and source drift fail closed.
+- [x] null phase/tool metadata never receives built-in fallback.
+- [x] unknown units and phases fail closed.
+- [x] versioned sidecar policy is separate from official metadata and narrowly allowlisted.
+- [x] official coordination phases route Sol/high; execution phases route GPT-5.5/high.
+- [x] unit names cannot substitute for phase routing.
+- [x] subagent events cannot overwrite top-level observed model/thinking evidence.
+- [x] prompt-advertised tools must match normalized official tool contracts.
+- [x] production startup has no `BuiltinUnitRegistry` fallback.
+- [x] complete host package snapshot and absolute Node hash pin reject drift and worktree roots.
+- [x] verified-byte registry import removes filesystem verify/import TOCTOU.
+- [x] every unexpected current-run top-level identity transition fails immediately.
+- [x] stale/symlinked/duplicate/unknown/trailing session headers fail closed.
+- [x] observed forbidden or disallowed `gsd_*` tool starts fail closed.
+- [x] exporter and validator descendants are terminated through process-group cancellation and WaitDelay.
+- [x] bounded no-follow hashing and policy reads detect pre/post pathname or inode replacement.
+- [x] Podman tags resolve once to an immutable image ID and fail admission without an approved full-image digest.
 
-GREEN evidence: pending.
-Refactor evidence: pending.
+RED evidence (2026-07-15): `cd agent-runtime/shepherd && go test ./internal/gsd -run
+'Test(LoadPinnedUnitRegistry|NormalizedRegistry|SidecarPolicy|DecodeNormalized)' -count=1` failed at compile time on the new normalized-document schema, bounded loader, strict decoder, and sidecar-policy APIs. This proves the pre-existing regex parser and built-in null substitution cannot satisfy the Slice D contract.
+A second RED run of `go test ./internal/gsd ./cmd/shepherd -run
+'Test(ReadSessionIdentityExcludesPersistedSubagentSessions|ObservedRuntimeIdentityIgnoresSubagentEvents)'`
+failed because the newest delegated session supplied GPT-5.5/medium and the top-level observer had no
+provenance filter.
+GREEN evidence (2026-07-15): focused registry/runtime/session/tool/settings/process/store/workspace/
+validator/command suites pass; the installed official GSD Pi 1.11.0 registry export and complete host
+runtime snapshot qualification pass with the pinned Node binary. Full nested `go test ./...`, full
+`go test -race ./...`, `go vet ./...`, `go build ./cmd/shepherd`, nested and root `make verify`, module
+boundary, root `go list ./...`, gofmt, and `git diff --check` pass. Nested lint is 28 known findings,
+one below the 29-finding Slice D baseline, with no new Slice D production finding.
+
+Refactor evidence: four independent read-only reviewer/security cycles were dispositioned. Fixes include
+v3 root/mode/owner manifests, per-launch settings/preferences/prompt revalidation, exact canonical
+`next`/`discuss` IDs, fresh empty checkpoints for state-only units, durable attempt/session identity,
+strict current-run session deltas, trusted MCP workflow namespaces without blocking non-GSD MCP tools,
+fail-closed uncontracted workflow calls, process-tree cleanup on cancellation and normal validator exit,
+and bounded stable policy/session reads. Retained Podman fails closed. `--continue-unit` also fails
+closed until disposable-worktree continuation is qualified. The explicitly selected same-UID host
+model remains a documented architecture trust assumption requiring a future separate UID, OS sandbox,
+or human-qualified container; it is not represented as isolation. Slice E onward is excluded.
 
 ## Slice E — Real Sol/high recovery planning
 

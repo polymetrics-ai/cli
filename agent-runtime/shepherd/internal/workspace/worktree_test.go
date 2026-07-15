@@ -44,6 +44,27 @@ func TestAttemptWorktreePromoteAndDiscard(t *testing.T) {
 	}
 }
 
+func TestCheckpointCandidateCreatesFreshHeadWithoutSourceChanges(t *testing.T) {
+	ctx := context.Background()
+	repo := initRepo(t)
+	head := gitOutput(t, repo, "rev-parse", "HEAD")
+	manager, err := NewManager(repo, filepath.Join(t.TempDir(), "attempts"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	attempt, err := manager.Create(ctx, AttemptIdentity{DeliveryID: "issue-389", Generation: 1, UnitID: "discuss-milestone/M001", Attempt: 1, BaseHead: head})
+	if err != nil {
+		t.Fatal(err)
+	}
+	candidate, err := manager.CheckpointCandidate(ctx, attempt, []string{"agent-runtime/shepherd/**"}, "test: checkpoint state-only unit")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if candidate == head {
+		t.Fatal("state-only checkpoint did not create a fresh candidate head")
+	}
+}
+
 func TestAttemptWorktreeCopiesGSDStateButRejectsDirectCanonicalAdoption(t *testing.T) {
 	ctx := context.Background()
 	repo := initRepo(t)
@@ -79,7 +100,7 @@ func TestAttemptWorktreeCopiesGSDStateButRejectsDirectCanonicalAdoption(t *testi
 	}
 }
 
-func TestAttemptPromotionIgnoresGSDWorkflowState(t *testing.T) {
+func TestAttemptPromotionCheckpointsButIgnoresGSDWorkflowState(t *testing.T) {
 	ctx := context.Background()
 	repo := initRepo(t)
 	head := gitOutput(t, repo, "rev-parse", "HEAD")
@@ -101,8 +122,11 @@ func TestAttemptPromotionIgnoresGSDWorkflowState(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if promoted != head {
-		t.Fatalf("promoted=%s, want base head %s", promoted, head)
+	if promoted == head {
+		t.Fatalf("promoted=%s, want a fresh checkpoint after base %s", promoted, head)
+	}
+	if _, err := os.Stat(filepath.Join(repo, ".gsd", "STATE.md")); !os.IsNotExist(err) {
+		t.Fatalf("private GSD state entered the canonical Git tree: %v", err)
 	}
 }
 

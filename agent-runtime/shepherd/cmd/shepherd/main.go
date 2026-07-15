@@ -120,7 +120,7 @@ func run(ctx context.Context, args []string) error {
 	decisionPath := flags.String("decision", "", "path to protected explicit human decision JSON")
 	action := flags.String("action", "", "governed maintenance action")
 	confirmDepth := flags.Bool("confirm-depth", false, "apply explicit operator approval only to the GSD planning-depth gate")
-	continueUnit := flags.Bool("continue-unit", false, "resume the latest local Pi session bound to the same canonical unit")
+	continueUnit := flags.Bool("continue-unit", false, "fail closed: disposable governed-unit continuation is not yet qualified")
 	decisionActor := flags.String("decision-actor", "human", "provenance for interactive decisions: human, shepherd, or contract")
 	decisionBasis := flags.String("decision-basis", "interactive terminal response", "concise provenance basis for interactive decisions")
 	publish := flags.Bool("publish", false, "synchronize the decision ledger to the bound pull request")
@@ -210,6 +210,8 @@ func run(ctx context.Context, args []string) error {
 		return authority.ResumeDelivery(ctx, domain.HumanDecision{RunID: input.DeliveryID, Generation: input.Generation, ActorKind: domain.ActorHuman, Approved: true})
 	}
 	var container *gsd.ContainerConfig
+	var runtimeGuard *gsd.HostRuntimeGuard
+	var registry gsd.UnitRegistry
 	if config.Runtime == "podman" {
 		container = &gsd.ContainerConfig{Engine: "podman", Image: config.ContainerImage,
 			GSDStateDir: filepath.Join(config.StateDir, "runtime", "gsd"), PlanningDir: filepath.Join(config.StateDir, "runtime", "planning"),
@@ -217,11 +219,27 @@ func run(ctx context.Context, args []string) error {
 			PolicyDir: config.PolicyDir, GitCommonDir: config.GitCommonDir,
 			SessionsDir: filepath.Join(config.StateDir, "runtime", "sessions"), BackgroundDir: filepath.Join(config.StateDir, "runtime", "bg-shell"),
 			BackupDir: filepath.Join(config.StateDir, "runtime", "gsd-backups")}
-		if err := gsd.ValidatePinnedContainer(ctx, *container, config.GSDVersion); err != nil {
+		resolved, err := gsd.ResolvePinnedContainerImage(ctx, *container)
+		if err != nil {
+			return fmt.Errorf("runtime admission: %w", err)
+		}
+		container = &resolved
+		registry, err = gsd.LoadPinnedContainerUnitRegistry(ctx, *container, config.GSDVersion)
+		if err != nil {
 			return fmt.Errorf("runtime admission: %w", err)
 		}
 	} else {
-		if err := gsd.ValidatePinnedCommand(config.GSDCommand, config.GSDVersion); err != nil {
+		var err error
+		config.GSDCommand, err = gsd.PreparePinnedHostRuntime(ctx, config.GSDCommand, config.GSDHome, config.GSDVersion, config.WorkDir, config.AttemptRoot)
+		if err != nil {
+			return fmt.Errorf("runtime admission: %w", err)
+		}
+		runtimeGuard, err = gsd.NewPinnedHostRuntimeGuard(config.GSDCommand)
+		if err != nil {
+			return fmt.Errorf("runtime admission: %w", err)
+		}
+		registry, err = gsd.LoadPinnedUnitRegistry(ctx, config.GSDCommand, config.GSDHome, config.GSDVersion)
+		if err != nil {
 			return fmt.Errorf("runtime admission: %w", err)
 		}
 		if err := gsd.ApplyPinnedHeadlessToolPatch(config.GSDCommand, config.GSDVersion); err != nil {
@@ -230,6 +248,9 @@ func run(ctx context.Context, args []string) error {
 		if err := gsd.ApplyPinnedPromptToolPatch(config.GSDCommand, config.GSDHome, config.GSDVersion); err != nil {
 			return fmt.Errorf("runtime compatibility: %w", err)
 		}
+		if err := runtimeGuard.BindPromptRuntime(config.GSDCommand, config.GSDHome, registry); err != nil {
+			return fmt.Errorf("runtime admission: %w", err)
+		}
 	}
 	if err := gsd.NormalizeRuntimeSettings(config.GSDHome, config.CoordinatorModel, config.ImplementationModel, "high"); err != nil {
 		return fmt.Errorf("runtime normalization: %w", err)
@@ -237,16 +258,13 @@ func run(ctx context.Context, args []string) error {
 	if err := gsd.ValidateRuntimeSettings(config.GSDHome, config.WorkDir, config.CoordinatorModel, "high"); err != nil {
 		return fmt.Errorf("runtime admission: %w", err)
 	}
-	if err := gsd.ValidateModelPreferences(config.GSDHome, config.WorkDir, config.CoordinatorModel, config.ImplementationModel, "high"); err != nil {
+	if err := gsd.ValidateModelPreferences(config.GSDHome, config.WorkDir, registry, config.CoordinatorModel, config.ImplementationModel, "high"); err != nil {
 		return fmt.Errorf("runtime admission: %w", err)
 	}
-	registry := gsd.BuiltinUnitRegistry()
-	if config.Runtime == "host" {
-		loadedRegistry, err := gsd.LoadPinnedUnitRegistry(config.GSDCommand, config.GSDHome, config.GSDVersion)
-		if err != nil {
+	if runtimeGuard != nil {
+		if err := runtimeGuard.BindModelPolicy(config.WorkDir, config.CoordinatorModel, config.ImplementationModel, "high"); err != nil {
 			return fmt.Errorf("runtime admission: %w", err)
 		}
-		registry = loadedRegistry
 	}
 	selectedModel, err := launchModelForCommand(config, registry, *command)
 	if err != nil {
@@ -259,6 +277,8 @@ func run(ctx context.Context, args []string) error {
 		HeartbeatInterval: time.Duration(config.HeartbeatSeconds) * time.Second,
 		MaxEventBytes:     config.MaxEventBytes,
 		Container:         container,
+		Registry:          registry,
+		RuntimeGuard:      runtimeGuard,
 	})
 	if err != nil {
 		return err
@@ -1057,11 +1077,6 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	if err := shepherdgit.RequireClean(startSnapshot); err != nil {
 		return err
 	}
-	if gsd.IsCanonicalUnitCommand(command) && config.Runtime == "host" {
-		if err := reconcileAttemptWorktrees(ctx, authority, attemptManager, repositoryLock, deliveryID, lease); err != nil {
-			return fmt.Errorf("reconcile durable attempt worktrees: %w", err)
-		}
-	}
 	trustedUnit := command
 	var before gsd.WorkflowSnapshot
 	if supervisedSnapshot != nil {
@@ -1073,8 +1088,32 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			return fmt.Errorf("pre-run fenced query failed: %w", queryErr)
 		}
 	}
-	if before.Next.UnitID != "" {
+	canonicalUnitType := ""
+	canonicalUnit := false
+	if command == "next" && before.Next.Action != "dispatch" {
+		return errors.New("next is allowed only for an explicit canonical dispatch")
+	}
+	if command != "next" || before.Next.Action == "dispatch" {
+		canonicalUnitType, canonicalUnit, err = registry.CanonicalUnitForInvocation(command, before.Next.UnitType)
+		if err != nil {
+			return err
+		}
+	}
+	if canonicalUnit {
+		if before.Next.UnitID == "" {
+			return errors.New("canonical dispatch requires a non-empty unit ID")
+		}
+		if command == "discuss" && before.Next.UnitID != before.MilestoneID {
+			return errors.New("discussion target differs from the canonical unit ID")
+		}
+		trustedUnit = canonicalUnitType + "/" + before.Next.UnitID
+	} else if before.Next.UnitID != "" {
 		trustedUnit = before.Next.UnitType + "/" + before.Next.UnitID
+	}
+	if canonicalUnit && config.Runtime == "host" {
+		if err := reconcileAttemptWorktrees(ctx, authority, attemptManager, repositoryLock, deliveryID, lease); err != nil {
+			return fmt.Errorf("reconcile durable attempt worktrees: %w", err)
+		}
 	}
 	if command == "discuss" {
 		if before.Next.Action != "dispatch" || before.Next.UnitType != "discuss-milestone" || before.MilestoneID == "" {
@@ -1082,18 +1121,8 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		}
 		args = []string{before.MilestoneID}
 	}
-	if gsd.IsCanonicalUnitCommand(command) && before.Next.UnitType != command {
-		return fmt.Errorf("%s is allowed only when it is the canonical next unit", command)
-	}
-	if continueUnit {
-		if command != "discuss" || config.Runtime == "podman" {
-			return errors.New("--continue-unit supports only a local canonical discuss-milestone")
-		}
-		sessionID, sessionErr := gsd.LatestSessionID(filepath.Join(config.GSDHome, "agent", "sessions"), config.WorkDir)
-		if sessionErr != nil {
-			return fmt.Errorf("resolve local continuation session: %w", sessionErr)
-		}
-		args = append(args, "--resume", sessionID)
+	if err := rejectUnqualifiedContinuation(continueUnit); err != nil {
+		return err
 	}
 	if command == "new-milestone" && before.MilestoneID != "" {
 		return errors.New("an active GSD milestone already exists; use start --adopt-existing after verifying its issue context")
@@ -1111,6 +1140,13 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		return err
 	} else {
 		runner = modelRunner
+	}
+	if canonicalUnit {
+		contractRunner, contractErr := runner.WithUnitContract(canonicalUnitType)
+		if contractErr != nil {
+			return contractErr
+		}
+		runner = contractRunner
 	}
 	attempt, err := authority.BeginAttempt(ctx, deliveryID, executionID)
 	if err != nil {
@@ -1149,10 +1185,10 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	executionRunner := runner
 	var attemptWorktree *workspace.AttemptWorktree
 	var lifecycle *attemptLifecycle
-	if gsd.IsCanonicalUnitCommand(command) && config.Runtime != "host" {
+	if canonicalUnit && config.Runtime != "host" {
 		return errors.New("canonical unit supervision requires host runtime disposable attempt worktrees")
 	}
-	if gsd.IsCanonicalUnitCommand(command) && config.Runtime == "host" {
+	if canonicalUnit && config.Runtime == "host" {
 		identity := workspace.AttemptIdentity{DeliveryID: deliveryID, Generation: attempt.Generation,
 			UnitID: trustedUnit, Attempt: unitAttempt.Attempts, BaseHead: startSnapshot.HeadSHA}
 		planned, planErr := attemptManager.Plan(identity)
@@ -1236,13 +1272,12 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		}
 	}
 	var observedModel, observedThinking string
+	var observedIdentityErr error
 	observer := gsd.Observer{
 		Event: func(event gsd.Event) {
-			if event.Kind == gsd.EventModelSelect && event.Model != "" && observedModel == "" {
-				observedModel = event.Model
-			}
-			if event.Thinking != "" && observedThinking == "" {
-				observedThinking = event.Thinking
+			if identityErr := recordObservedRuntimeIdentity(event, expectedModel, "high", &observedModel, &observedThinking); identityErr != nil && observedIdentityErr == nil {
+				observedIdentityErr = identityErr
+				cancel()
 			}
 			kind := mapEventKind(event.Kind)
 			appendActivity(kind, event.Status, trustedUnit, event.Model, event.Tool, event.At)
@@ -1287,11 +1322,22 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	if preReconcile.InterruptedRuns > 0 {
 		appendActivity("transition", "interrupted_orphaned_subagents", trustedUnit, "", "", time.Now().UTC())
 	}
+	sessionsDir := filepath.Join(config.GSDHome, "agent", "sessions")
+	if config.Runtime == "podman" {
+		sessionsDir = filepath.Join(config.StateDir, "runtime", "sessions")
+	}
+	var sessionBaseline gsd.SessionIdentityBaseline
+	if executionRunner.RequiresSessionBinding() {
+		sessionBaseline, err = gsd.CaptureSessionIdentityBaseline(sessionsDir, executionWorkDir)
+		if err != nil {
+			return fmt.Errorf("capture top-level session baseline: %w", err)
+		}
+	}
 	var scopeMu sync.Mutex
 	var scopeViolation error
 	var scopeMonitorDone chan struct{}
 	var stopScopeMonitor context.CancelFunc
-	if gsd.IsCanonicalUnitCommand(command) {
+	if canonicalUnit {
 		scopeMonitorDone = make(chan struct{})
 		var scopeCtx context.Context
 		scopeCtx, stopScopeMonitor = context.WithCancel(runCtx)
@@ -1319,6 +1365,10 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		}
 	}
 	result := executionRunner.Run(runCtx, command, args, observer)
+	if observedIdentityErr != nil {
+		result.Terminal = gsd.TerminalError
+		result.Err = joinTerminalFailure(observedIdentityErr, result.Err)
+	}
 	postReconcile, reconcileErr := gsd.ReconcileOrphanedSubagents(config.GSDHome, executionWorkDir, time.Now().UTC())
 	if reconcileErr != nil {
 		result.Terminal = gsd.TerminalError
@@ -1363,15 +1413,49 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		result.Terminal = gsd.TerminalError
 		result.Err = restoreErr
 	}
-	if observedModel == "" || observedThinking == "" {
-		sessionsDir := filepath.Join(config.GSDHome, "agent", "sessions")
-		if config.Runtime == "podman" {
-			sessionsDir = filepath.Join(config.StateDir, "runtime", "sessions")
+	var sessionEvidence gsd.SessionIdentityEvidence
+	if executionRunner.RequiresSessionBinding() || observedModel == "" || observedThinking == "" {
+		var model, thinking string
+		var identityErr error
+		if executionRunner.RequiresSessionBinding() {
+			sessionEvidence, identityErr = gsd.ReadSessionIdentityEvidenceForRun(sessionsDir, executionWorkDir, sessionBaseline, result.Started, expectedModel, "high")
+			model, thinking = sessionEvidence.Model, sessionEvidence.Thinking
+		} else {
+			model, thinking, identityErr = gsd.ReadSessionIdentitySince(sessionsDir, executionWorkDir, result.Started)
 		}
-		model, thinking, identityErr := gsd.ReadSessionIdentity(sessionsDir, executionWorkDir)
-		if identityErr == nil {
-			observedModel, observedThinking = model, thinking
+		if identityErr != nil {
+			result.Terminal = gsd.TerminalError
+			result.Err = joinTerminalFailure(fmt.Errorf("current top-level session identity: %w", identityErr), result.Err)
+		} else if (model != "" && model != expectedModel) || (thinking != "" && thinking != "high") {
+			result.Terminal = gsd.TerminalError
+			result.Err = joinTerminalFailure(fmt.Errorf("current top-level session identity is %s/%s, expected %s/high", model, thinking, expectedModel), result.Err)
+		} else {
+			if observedModel == "" {
+				observedModel = model
+			} else if model != "" && observedModel != model {
+				result.Terminal = gsd.TerminalError
+				result.Err = joinTerminalFailure(errors.New("live and session model identity differ"), result.Err)
+			}
+			if observedThinking == "" {
+				observedThinking = thinking
+			} else if thinking != "" && observedThinking != thinking {
+				result.Terminal = gsd.TerminalError
+				result.Err = joinTerminalFailure(errors.New("live and session thinking identity differ"), result.Err)
+			}
 			appendActivity("model.activity", "session_metadata", trustedUnit, model, "", time.Now().UTC())
+		}
+	}
+	if canonicalUnit && executionRunner.RequiresSessionBinding() && result.Terminal == gsd.TerminalSuccess {
+		if observedModel == "" || observedThinking == "" || sessionEvidence.SessionID == "" || sessionEvidence.Fingerprint == "" || sessionEvidence.Model != observedModel || sessionEvidence.Thinking != observedThinking {
+			result.Terminal = gsd.TerminalError
+			result.Err = joinTerminalFailure(errors.New("complete current-run unit identity evidence is required"), result.Err)
+		} else if identityErr := authority.RecordUnitAttemptIdentity(ctx, store.UnitAttemptIdentity{
+			UnitAttemptKey: unitAttemptKey, Attempt: unitAttempt.Attempts, Model: observedModel, Thinking: observedThinking,
+			SessionID: sessionEvidence.SessionID, SessionFingerprint: sessionEvidence.Fingerprint,
+			StartedAt: result.Started, EndedAt: result.Ended,
+		}); identityErr != nil {
+			result.Terminal = gsd.TerminalError
+			result.Err = joinTerminalFailure(fmt.Errorf("persist unit attempt runtime identity: %w", identityErr), result.Err)
 		}
 	}
 	postPhase := ""
@@ -1395,7 +1479,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 					result.Err = bindErr
 				}
 			}
-			terminal, reconcileErr := gsd.Reconcile(command, result, before, snapshot)
+			terminal, reconcileErr := gsd.Reconcile(registry, command, result, before, snapshot)
 			result.Terminal = terminal
 			if reconcileErr != nil {
 				result.Err = reconcileErr
@@ -1412,7 +1496,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	}
 	candidateWorkDir := config.WorkDir
 	candidateHead := ""
-	if result.Terminal == gsd.TerminalSuccess && gsd.IsCanonicalUnitCommand(command) {
+	if result.Terminal == gsd.TerminalSuccess && canonicalUnit {
 		message := "chore(gsd): checkpoint " + strings.ReplaceAll(before.Next.UnitID, "/", " ")
 		if attemptWorktree != nil {
 			if attemptManager == nil {
@@ -1450,7 +1534,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	} else if cleanErr := shepherdgit.RequireClean(endSnapshot); cleanErr != nil {
 		result.Terminal = gsd.TerminalError
 		result.Err = joinTerminalFailure(result.Err, errors.New("worktree must be clean after a governed unit"))
-	} else if result.Terminal == gsd.TerminalSuccess && gsd.IsCanonicalUnitCommand(command) {
+	} else if result.Terminal == gsd.TerminalSuccess && canonicalUnit {
 		if candidateHead == "" {
 			result.Terminal = gsd.TerminalError
 			result.Err = errors.New("candidate head is required before independent validation")
@@ -1642,6 +1726,25 @@ func monitorWriteScope(ctx context.Context, root string, scopes []string, interv
 	return results
 }
 
+func recordObservedRuntimeIdentity(event gsd.Event, expectedModel, expectedThinking string, model, thinking *string) error {
+	if !event.IsTopLevelIdentity() {
+		return nil
+	}
+	if event.Model != "" {
+		if event.Model != expectedModel || (*model != "" && *model != event.Model) {
+			return fmt.Errorf("unexpected top-level model transition to %s; expected %s", event.Model, expectedModel)
+		}
+		*model = event.Model
+	}
+	if event.Kind == gsd.EventThinkingSelect && event.Thinking != "" {
+		if event.Thinking != expectedThinking || (*thinking != "" && *thinking != event.Thinking) {
+			return fmt.Errorf("unexpected top-level thinking transition to %s; expected %s", event.Thinking, expectedThinking)
+		}
+		*thinking = event.Thinking
+	}
+	return nil
+}
+
 func modelForUnitType(config fileConfig, registry gsd.UnitRegistry, unitType string) (string, error) {
 	role, err := registry.ModelRoleForUnit(unitType)
 	if err != nil {
@@ -1651,6 +1754,13 @@ func modelForUnitType(config fileConfig, registry gsd.UnitRegistry, unitType str
 		return config.ImplementationModel, nil
 	}
 	return config.CoordinatorModel, nil
+}
+
+func rejectUnqualifiedContinuation(requested bool) error {
+	if requested {
+		return errors.New("--continue-unit is unavailable for disposable governed units until prior-attempt session binding is qualified")
+	}
+	return nil
 }
 
 func expectedModelForObservedUnit(config fileConfig, registry gsd.UnitRegistry, command, canonicalUnitType string) (string, error) {

@@ -1,11 +1,33 @@
 package gsd
 
 import (
+	"context"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 )
+
+func TestImmutableImageIDValidation(t *testing.T) {
+	t.Parallel()
+	if !validImmutableImageID("sha256:" + strings.Repeat("a", 64)) {
+		t.Fatal("valid immutable image ID rejected")
+	}
+	for _, value := range []string{"image:tag", "sha256:" + strings.Repeat("a", 63), "sha256:" + strings.Repeat("g", 64), "sha256:" + strings.Repeat("A", 64)} {
+		if validImmutableImageID(value) {
+			t.Fatalf("invalid immutable image ID accepted: %q", value)
+		}
+	}
+}
+
+func TestContainerRegistryAdmissionRejectsUnqualifiedImmutableImage(t *testing.T) {
+	t.Parallel()
+	config := ContainerConfig{Engine: "podman", Image: "sha256:" + strings.Repeat("a", 64)}
+	if _, err := LoadPinnedContainerUnitRegistry(context.Background(), config, "1.11.0"); !errors.Is(err, ErrRuntimeContractMismatch) {
+		t.Fatalf("error=%v, want fail-closed unqualified image", err)
+	}
+}
 
 func TestContainerRuntimeHidesHostPlanningAndCredentialSurface(t *testing.T) {
 	t.Parallel()

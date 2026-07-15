@@ -1,11 +1,11 @@
 {
   "phase": "issue-389-shepherd-hardening",
   "branch": "fix/389-shepherd-proof-recovery",
-  "base_head": "1a050692f9e47b5b4d3d74cfb38e56c67d461399",
+  "base_head": "f0fbf47f54c688792a5d53edfa4b680b38b39eed",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_c_green_candidate",
-  "current_slice": "C_crash_safe_gsd_state_promotion",
+  "state": "slice_d_green_checkpoint_pushed",
+  "current_slice": "D_official_gsd_1_11_registry_loading",
   "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
   "completed_slices": [
     {
@@ -17,6 +17,11 @@
       "slice": "B_durable_attempt_lifecycle_and_crash_recovery",
       "head": "1a050692f9e47b5b4d3d74cfb38e56c67d461399",
       "status": "green_accepted"
+    },
+    {
+      "slice": "C_crash_safe_gsd_state_promotion",
+      "head": "f0fbf47f54c688792a5d53edfa4b680b38b39eed",
+      "status": "green_accepted"
     }
   ],
   "required_skills_loaded": [
@@ -24,6 +29,7 @@
     "polymetrics-issue-delivery",
     "gsd-programming-loop",
     "golang-how-to",
+    "golang-cli",
     "golang-testing",
     "golang-error-handling",
     "golang-safety",
@@ -56,6 +62,16 @@
       "cycle": "cycle-8-verify",
       "decision": "local_critical_path",
       "reason": "Run final Slice C gates and checkpoint one coherent promotion transaction before any later slice."
+    },
+    {
+      "cycle": "cycle-9-slice-d-plan",
+      "decision": "local_critical_path",
+      "reason": "Official runtime validation, normalized export, registry admission, model routing, and command startup form one sequential trust boundary; only read-only sidecars may overlap."
+    },
+    {
+      "cycle": "cycle-10-slice-d-review-verify",
+      "decision": "local_critical_path",
+      "reason": "Four independent read-only reviewer/security cycles were dispositioned; focused, installed-runtime, full, race, vet, build, make, boundary, list, diff, and lint-differential gates pass."
     }
   ],
   "slice_b_checkpoint": {
@@ -64,12 +80,10 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Run root make verify, module-boundary, root go-list, and exact lint baseline/differential gates",
-    "Commit as feat(shepherd): journal crash-safe promotion and push the active branch",
-    "Stop with Slice D onward blocked"
+    "Stop with Slice E onward blocked"
   ],
   "blocked": [
-    "Slice D and later slices",
+    "Slice E and later slices",
     "PR creation",
     "Sol final review",
     "Twenty/Asana canaries",

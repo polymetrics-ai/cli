@@ -42,7 +42,7 @@ the current branch and exact candidate head.
 - [x] Slice A validation, ratification, exact-head, write-scope, and delayed-promotion regressions remain green.
 - [x] Focused tests, full/race module verification, root repository gates, and exact 30-finding lint baseline passed.
 
-### C. GSD-state promotion — GREEN (candidate diff)
+### C. GSD-state promotion — COMPLETE / GREEN `f0fbf47f`
 
 - [x] Journal identity binds delivery/generation/unit/attempt, base/candidate/validated heads,
       proof/attestation, governance version, and staged GSD manifest/hash.
@@ -70,14 +70,64 @@ full nested tests PASS; store race PASS after final attestation hardening; full 
 PASS before the final store-only binding change; vet/build/gofmt/diff checks PASS. Root `make verify`, module boundary, root `go list`, and diff checks PASS. Nested lint reports 29
 baseline findings and zero findings in Slice C production files (no differential regression).
 
-### D. Official GSD 1.11 registry loading
+### D. Official GSD 1.11 registry loading — COMPLETE / GREEN
 
-- [ ] Structured normalized export from pinned runtime replaces regex parsing.
-- [ ] Array spreads such as `RUN_UAT_WORKFLOW_TOOL_NAMES` resolve.
-- [ ] Allowed, required, and forbidden tools are preserved.
-- [ ] Model routing comes only from official phase metadata.
-- [ ] Null/unknown units fail closed unless explicitly governed sidecars.
-- [ ] Real pinned GSD 1.11 registry fixture passes.
+- [x] Validated pinned runtime root/version/source identity is required before export.
+- [x] Export uses argv execution without shell interpolation, timeout/cancellation, and bounded output.
+- [x] Strict normalized JSON rejects missing, malformed, partial, oversized, duplicate, and unknown fields.
+- [x] Realistic 1.11 array spreads such as `RUN_UAT_WORKFLOW_TOOL_NAMES` resolve.
+- [x] Kind, scope class, phase chain, allowed tools, required tools, forbidden tools, and reasons are exact.
+- [x] Missing registry, wrong version, symlink/path escape, and source drift return `runtime_contract_mismatch`.
+- [x] Null phase/tool contracts receive no built-in fallback.
+- [x] Unknown units/phases fail closed; versioned sidecars remain separate from official metadata.
+- [x] Official coordination phases route Sol/high and execution phases route GPT-5.5/high.
+- [x] Unit names do not influence model routing.
+- [x] Child/subagent model events cannot overwrite top-level observed evidence.
+- [x] Prompt-advertised tools are checked against normalized official contracts.
+- [x] Production startup cannot use `BuiltinUnitRegistry` or another sample fallback.
+- [x] Complete host runtime tree and absolute Node executable are hash-pinned and privately snapshotted.
+- [x] Runtime roots under canonical/attempt worktrees fail closed.
+- [x] Registry import uses verified immutable bytes rather than mutable runtime paths.
+- [x] Current-run identity rejects every unexpected top-level transition and stale fallback session.
+- [x] Session headers reject symlinks, duplicates, unknown/trailing fields, replacement, and ambiguity.
+- [x] Every observed `gsd_*` call is allowed and not forbidden by normalized unit metadata.
+- [x] Exporter and validator process groups synchronously cancel descendants with WaitDelay and bounded cleanup.
+- [x] Runtime/policy hashing is bounded, no-follow, and checks inode/path identity before/after reads.
+- [x] Podman resolves immutable inspected image IDs and fails closed without full-image qualification.
+- [x] Focused GSD, validation, store, supervisor, workspace, and command tests pass.
+- [x] Full/race/vet/build/root verify/module-boundary/diff/go-list gates pass.
+- [x] Lint is 28 findings, below the 29-finding baseline, with zero Slice D differential findings.
+
+Security-auditor finding disposition (first read-only pass, working diff):
+- Host runtime not fully pinned / candidate-root execution — **resolved by complete private v3 snapshot and worktree rejection**.
+- Mutable Podman tag — **resolved by immutable image-ID resolution plus fail-closed image qualification**.
+- Model identity not current-run bound / later transitions ignored — **resolved**.
+- Ambiguous session/event provenance — **resolved for governed current-run evidence and durable attempt binding**.
+- Verify/import and source-hash TOCTOU — **resolved through immutable verified-byte import and stable private snapshot reads**.
+- Incomplete prompt/tool enforcement and Podman patch parity — **resolved by all-observed-tool checks, exact active prompt-tree validation, and fail-closed Podman admission**.
+- Exporter descendant leakage — **resolved with synchronous process-group cleanup and WaitDelay**.
+- Unbounded source hashing — **resolved with bounded no-follow pre/post inode and pathname identity reads**.
+
+Final local review disposition (four independent read-only reviewer/security cycles):
+- Runtime root/mode/owner and verify/import TOCTOU — **resolved** with the complete v3 manifest,
+  private read-only snapshot, per-launch digest/owner/settings/prompt guards, and immutable data imports.
+- Canonical aliases, state-only heads, and attempt identity — **resolved** with canonical type/ID binding,
+  discuss milestone equality, disposable worktrees, fresh hook-disabled checkpoints, and durable
+  generation/head/attempt/session fingerprints.
+- Current-run identity and continuation — **resolved** for governed runs via strict one-session deltas,
+  every-transition validation, live/durable equality, and persisted evidence; unqualified disposable
+  continuation now fails closed.
+- Tool enforcement — **resolved** for every observed `gsd_*` start, including uncontracted commands and
+  foreign MCP spoofing, while normal non-GSD MCP tools remain available.
+- Process cleanup — **resolved** for GSD exporters/runners and independent validator probe/run on
+  cancellation and normal parent exit; dedicated descendant-termination regressions pass.
+- Settings/preferences/session bounds — **resolved** with owned regular no-symlink stable reads and
+  bounded session enumeration.
+- Podman parity — **resolved by fail-closed admission** until a complete image digest is approved.
+- Same-UID host isolation — **documented accepted architecture trust assumption**, not an isolation
+  claim; elimination requires a future separate UID, OS sandbox, or human-qualified container.
+- Accepted Slice A validator live-event/session correlation schema remains unchanged; Slice D replaced
+  its multi-selection filesystem fallback with one strict current-run session evidence path.
 
 ### E. Sol/high recovery planning
 
@@ -152,5 +202,10 @@ go list ./...
 - Full nested race: PASS `cd agent-runtime/shepherd && go test -race ./...`.
 - Vet: PASS `cd agent-runtime/shepherd && go vet ./...`.
 - Build/make/module-boundary/root list: PASS `cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
-- Lint: FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with the same 30 pre-existing findings (`errcheck`, one `ineffassign`, two `staticcheck`, two `unused`). A newly introduced validator parser staticcheck finding was fixed; final output returns to exactly the 30-item baseline.
-- Canaries, PR creation, final Sol review, and Slice D onward remain blocked.
+- Slice D official runtime fixture: PASS `GSD_OFFICIAL_LOADER=.../@opengsd/gsd-pi/dist/loader.js go test ./internal/gsd -run 'TestPrepareInstalledOfficialHostRuntime|TestLoadInstalledOfficialUnitRegistry' -count=1 -v`; exact GSD Pi 1.11.0 registry and the v3 `darwin/arm64` host snapshot passed.
+- Slice D focused gate: PASS `cd agent-runtime/shepherd && go test ./internal/gsd ./internal/validation ./internal/store ./internal/supervisor ./internal/workspace ./cmd/shepherd -count=1`.
+- Slice D final nested unit/race/vet/build gates: PASS `go test ./...`, `go test -race ./...`, `go vet ./...`, and `go build ./cmd/shepherd`.
+- Slice D nested/root verification: PASS nested `make verify`, root `make verify`, `scripts/tests/shepherd-module-boundary.sh`, `git diff --check`, and root `go list ./...` (145 packages).
+- Slice D lint differential: expected nonzero baseline output, 28 findings (`errcheck` 24, `ineffassign` 1, `staticcheck` 2, `unused` 1), below the 29-finding Slice D baseline; the temporary new identity-test finding was removed and there are zero new Slice D production findings.
+- Slice D implementation, local review, coherent checkpoint, push, remote-head confirmation, and clean-worktree confirmation are complete.
+- Slice E onward, canaries, PR creation, final Sol review, GitHub mutation, and parent PR #390 merge remain blocked.

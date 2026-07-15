@@ -33,11 +33,19 @@ type Event struct {
 	Status     string
 	Model      string
 	Thinking   string
+	Nested     bool
 	At         time.Time
 }
 
 func (e Event) String() string {
 	return fmt.Sprintf("kind=%s run=%s unit=%s tool=%s tool_call_id=%s status=%s model=%s thinking=%s", e.Kind, e.RunID, e.UnitID, e.Tool, e.ToolCallID, e.Status, e.Model, e.Thinking)
+}
+
+// IsTopLevelIdentity excludes nested agent events from governed model evidence.
+// Official top-level Pi model/thinking events carry neither subagent run nor
+// unit correlation; delegated events carry at least one of those identifiers.
+func (e Event) IsTopLevelIdentity() bool {
+	return !e.Nested && e.RunID == "" && e.UnitID == ""
 }
 
 func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
@@ -53,6 +61,12 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 		Status        string    `json:"status"`
 		IsError       bool      `json:"isError"`
 		Level         string    `json:"level"`
+		ParentRunID   string    `json:"parentRunId"`
+		ParentAgentID string    `json:"parentAgentId"`
+		AgentID       string    `json:"agentId"`
+		SubagentID    string    `json:"subagentId"`
+		Scope         string    `json:"scope"`
+		Source        string    `json:"source"`
 		SelectedModel struct {
 			Provider string `json:"provider"`
 			ID       string `json:"id"`
@@ -100,8 +114,10 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 	if envelope.Type == EventThinkingSelect {
 		thinking = envelope.Level
 	}
+	nested := envelope.ParentRunID != "" || envelope.ParentAgentID != "" || envelope.AgentID != "" || envelope.SubagentID != "" ||
+		envelope.Scope == "subagent" || envelope.Scope == "nested" || envelope.Source == "subagent" || envelope.Source == "delegated"
 	return Event{
 		Kind: envelope.Type, RunID: envelope.RunID, UnitID: envelope.UnitID,
-		Tool: envelope.Tool, ToolCallID: envelope.ToolCallID, Status: status, Model: model, Thinking: thinking, At: time.Now().UTC(),
+		Tool: envelope.Tool, ToolCallID: envelope.ToolCallID, Status: status, Model: model, Thinking: thinking, Nested: nested, At: time.Now().UTC(),
 	}, nil
 }

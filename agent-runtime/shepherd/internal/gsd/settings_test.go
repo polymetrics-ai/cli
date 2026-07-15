@@ -54,6 +54,34 @@ func TestValidateRuntimeSettingsFailsClosedOnThinkingMismatch(t *testing.T) {
 	}
 }
 
+func TestValidateRuntimeSettingsRejectsSymlinkedAndOversizedPolicy(t *testing.T) {
+	t.Parallel()
+	home := t.TempDir()
+	work := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(home, "agent"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	target := filepath.Join(home, "settings-target.json")
+	if err := os.WriteFile(target, []byte(`{"defaultProvider":"openai-codex","defaultModel":"gpt-5.6-sol","defaultThinkingLevel":"high"}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(target, filepath.Join(home, "agent", "settings.json")); err != nil {
+		t.Fatal(err)
+	}
+	if err := ValidateRuntimeSettings(home, work, "openai-codex/gpt-5.6-sol", "high"); err == nil {
+		t.Fatal("symlinked runtime policy was accepted")
+	}
+	if err := os.Remove(filepath.Join(home, "agent", "settings.json")); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(home, "agent", "settings.json"), make([]byte, 1024*1024+1), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := ValidateRuntimeSettings(home, work, "openai-codex/gpt-5.6-sol", "high"); err == nil {
+		t.Fatal("oversized runtime policy was accepted")
+	}
+}
+
 func TestValidateRuntimeSettingsRejectsProjectOverride(t *testing.T) {
 	t.Parallel()
 
@@ -157,7 +185,7 @@ skill_discovery: suggest
 	if err := os.WriteFile(path, []byte(preferences), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := ValidateModelPreferences(home, work, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err != nil {
+	if err := ValidateModelPreferences(home, work, mustDecodeRegistryFixture(t), "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err != nil {
 		t.Fatalf("valid phase routing rejected: %v", err)
 	}
 
@@ -165,7 +193,7 @@ skill_discovery: suggest
 	if err := os.WriteFile(path, []byte(drifted), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := ValidateModelPreferences(home, work, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
+	if err := ValidateModelPreferences(home, work, mustDecodeRegistryFixture(t), "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
 		t.Fatal("execution model drift accepted")
 	}
 }
@@ -180,6 +208,7 @@ func TestValidateModelPreferencesRejectsMissingMalformedAndDuplicatePolicy(t *te
 		{name: "missing file"},
 		{name: "missing frontmatter close", raw: "---\nversion: 1\nmodels: {}\n"},
 		{name: "duplicate phase", raw: "---\nmodels:\n  execution: { provider: openai-codex, model: gpt-5.5, thinking: high }\n  execution: { provider: openai-codex, model: gpt-5.5, thinking: high }\n---\n"},
+		{name: "duplicate models after field", raw: "---\nmodels:\n  execution: { provider: openai-codex, model: gpt-5.5, thinking: high }\nversion: 1\nmodels:\n  planning: { provider: openai-codex, model: gpt-5.6-sol, thinking: high }\n---\n"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			home := t.TempDir()
@@ -189,7 +218,7 @@ func TestValidateModelPreferencesRejectsMissingMalformedAndDuplicatePolicy(t *te
 					t.Fatal(err)
 				}
 			}
-			if err := ValidateModelPreferences(home, work, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
+			if err := ValidateModelPreferences(home, work, mustDecodeRegistryFixture(t), "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
 				t.Fatal("invalid phase policy accepted")
 			}
 		})
@@ -228,7 +257,7 @@ models:
 	if err := os.WriteFile(filepath.Join(work, ".gsd", "PREFERENCES.md"), []byte(project), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := ValidateModelPreferences(home, work, "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
+	if err := ValidateModelPreferences(home, work, mustDecodeRegistryFixture(t), "openai-codex/gpt-5.6-sol", "openai-codex/gpt-5.5", "high"); err == nil {
 		t.Fatal("conflicting project phase override accepted")
 	}
 }

@@ -329,6 +329,48 @@ func TestPrepareAdoptedDeliveryResetsFailedBoundRun(t *testing.T) {
 	}
 }
 
+func TestUnitAttemptIdentityPersistsAndBindsExactAttempt(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	path := filepath.Join(t.TempDir(), "shepherd.db")
+	db, err := Open(ctx, path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	key := UnitAttemptKey{DeliveryID: "identity-run", Generation: 1, UnitID: "execute-task/M001/S01/T01", HeadSHA: strings.Repeat("a", 40)}
+	if err := db.EnsureDelivery(ctx, testDelivery(key.DeliveryID, 389)); err != nil {
+		t.Fatal(err)
+	}
+	attempt, err := db.BeginUnitAttempt(ctx, key, 2)
+	if err != nil {
+		t.Fatal(err)
+	}
+	started := time.Now().UTC().Add(-time.Second)
+	identity := UnitAttemptIdentity{UnitAttemptKey: key, Attempt: attempt.Attempts, Model: "openai-codex/gpt-5.5", Thinking: "high",
+		SessionID: "019f5d4a-9fb4-7852-b640-d6fdf71bd3d9", SessionFingerprint: "sha256:" + strings.Repeat("b", 64), StartedAt: started, EndedAt: started.Add(time.Second)}
+	if err := db.RecordUnitAttemptIdentity(ctx, identity); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.RecordUnitAttemptIdentity(ctx, identity); err == nil {
+		t.Fatal("duplicate attempt identity was accepted")
+	}
+	if err := db.Close(); err != nil {
+		t.Fatal(err)
+	}
+	db, err = Open(ctx, path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = db.Close() })
+	observed, err := db.GetUnitAttemptIdentity(ctx, key, attempt.Attempts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if observed.Model != identity.Model || observed.Thinking != "high" || observed.SessionID != identity.SessionID || observed.SessionFingerprint != identity.SessionFingerprint || !observed.StartedAt.Equal(identity.StartedAt) || !observed.EndedAt.Equal(identity.EndedAt) {
+		t.Fatalf("persisted identity=%+v", observed)
+	}
+}
+
 func TestUnitAttemptBudgetSurvivesStoreRestart(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()

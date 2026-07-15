@@ -2,8 +2,12 @@ package gsd
 
 import (
 	"bufio"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -14,6 +18,33 @@ import (
 
 var sessionIDPattern = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 
+type sessionIdentityFingerprint struct {
+	ID      string
+	Size    int64
+	ModTime time.Time
+	Info    os.FileInfo
+}
+
+type SessionIdentityBaseline struct {
+	files map[string]sessionIdentityFingerprint
+}
+
+type SessionIdentityEvidence struct {
+	SessionID   string
+	Fingerprint string
+	Model       string
+	Thinking    string
+}
+
+type strictSessionHeader struct {
+	Type          string `json:"type"`
+	Version       int    `json:"version"`
+	ID            string `json:"id"`
+	Timestamp     string `json:"timestamp"`
+	CWD           string `json:"cwd"`
+	ParentSession string `json:"parentSession,omitempty"`
+}
+
 // LatestSessionID returns only the ID of the newest Pi session whose header is
 // bound to the exact requested worktree. It never reads message or tool rows.
 func LatestSessionID(root, workDir string) (string, error) {
@@ -22,8 +53,16 @@ func LatestSessionID(root, workDir string) (string, error) {
 }
 
 func latestSession(root, workDir string) (string, string, error) {
+	return latestSessionSince(root, workDir, time.Time{})
+}
+
+func latestSessionSince(root, workDir string, notBefore time.Time) (string, string, error) {
+	if err := validateSessionRoot(root); err != nil {
+		return "", "", err
+	}
 	var latestPath, latestID string
 	var latestAt time.Time
+	files := 0
 	err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
@@ -31,34 +70,19 @@ func latestSession(root, workDir string) (string, string, error) {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".jsonl") {
 			return nil
 		}
-		file, err := os.Open(path)
+		files++
+		if files > 10_000 {
+			return errors.New("session identity file count exceeds its bound")
+		}
+		header, info, err := readStrictSessionHeader(path)
 		if err != nil {
 			return err
 		}
-		scanner := bufio.NewScanner(file)
-		scanner.Buffer(make([]byte, 4096), 64*1024)
-		var header struct {
-			Type string `json:"type"`
-			ID   string `json:"id"`
-			CWD  string `json:"cwd"`
-		}
-		if scanner.Scan() {
-			_ = json.Unmarshal(scanner.Bytes(), &header)
-		}
-		scanErr := scanner.Err()
-		closeErr := file.Close()
-		if scanErr != nil {
-			return scanErr
-		}
-		if closeErr != nil {
-			return closeErr
-		}
-		if header.Type != "session" || header.CWD != workDir || !sessionIDPattern.MatchString(header.ID) {
+		if header.CWD != workDir || header.ParentSession != "" {
 			return nil
 		}
-		info, err := entry.Info()
-		if err != nil {
-			return err
+		if !notBefore.IsZero() && info.ModTime().Before(notBefore) {
+			return nil
 		}
 		if latestID == "" || info.ModTime().After(latestAt) {
 			latestPath = path
@@ -76,14 +100,244 @@ func latestSession(root, workDir string) (string, string, error) {
 	return latestPath, latestID, nil
 }
 
+func readStrictSessionHeader(path string) (strictSessionHeader, os.FileInfo, error) {
+	var header strictSessionHeader
+	info, err := os.Lstat(path)
+	if err != nil || info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
+		return header, nil, errors.New("session identity evidence must be a regular non-symlink file")
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		return header, nil, err
+	}
+	scanner := bufio.NewScanner(file)
+	scanner.Buffer(make([]byte, 4096), 64*1024)
+	if !scanner.Scan() {
+		_ = file.Close()
+		if scanner.Err() != nil {
+			return header, nil, scanner.Err()
+		}
+		return header, nil, errors.New("session identity header is missing")
+	}
+	raw := append([]byte(nil), scanner.Bytes()...)
+	after, statErr := file.Stat()
+	pathAfter, pathErr := os.Lstat(path)
+	closeErr := file.Close()
+	if err := rejectDuplicateJSONFields(raw); err != nil || jsonStrictDecode(raw, &header) != nil {
+		return header, nil, errors.New("session identity header is malformed, duplicate, unknown, or trailing")
+	}
+	if statErr != nil || pathErr != nil || !os.SameFile(info, after) || !os.SameFile(after, pathAfter) || info.Size() != after.Size() || !info.ModTime().Equal(after.ModTime()) {
+		return header, nil, errors.New("session identity file changed while reading its header")
+	}
+	if closeErr != nil {
+		return header, nil, closeErr
+	}
+	if header.Type != "session" || header.Version != 3 || !sessionIDPattern.MatchString(header.ID) || !filepath.IsAbs(header.CWD) {
+		return header, nil, errors.New("session identity header fields are invalid")
+	}
+	if _, err := time.Parse(time.RFC3339Nano, header.Timestamp); err != nil {
+		return header, nil, errors.New("session identity timestamp is invalid")
+	}
+	return header, after, nil
+}
+
+func validateSessionRoot(root string) error {
+	if !filepath.IsAbs(root) {
+		return errors.New("session identity root must be absolute")
+	}
+	info, err := os.Lstat(root)
+	if err != nil || info.Mode()&os.ModeSymlink != 0 || !info.IsDir() || !runtimePathOwnedByCurrentUser(info) {
+		return errors.New("session identity root must be an owned non-symlink directory")
+	}
+	return nil
+}
+
+// CaptureSessionIdentityBaseline records only strict top-level session file
+// identities before a governed launch. No message or tool content is retained.
+func CaptureSessionIdentityBaseline(root, workDir string) (SessionIdentityBaseline, error) {
+	if err := validateSessionRoot(root); err != nil {
+		return SessionIdentityBaseline{}, err
+	}
+	files := make(map[string]sessionIdentityFingerprint)
+	totalFiles := 0
+	err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".jsonl") {
+			return nil
+		}
+		totalFiles++
+		if totalFiles > 10_000 {
+			return errors.New("session identity file count exceeds its bound")
+		}
+		header, info, err := readStrictSessionHeader(path)
+		if err != nil {
+			return err
+		}
+		if header.CWD == workDir && header.ParentSession == "" {
+			files[path] = sessionIdentityFingerprint{ID: header.ID, Size: info.Size(), ModTime: info.ModTime(), Info: info}
+		}
+		return nil
+	})
+	if errors.Is(err, os.ErrNotExist) {
+		return SessionIdentityBaseline{files: files}, nil
+	}
+	if err != nil {
+		return SessionIdentityBaseline{}, err
+	}
+	return SessionIdentityBaseline{files: files}, nil
+}
+
+// ReadSessionIdentityForRun requires exactly one new or changed top-level
+// session after the captured baseline and launch timestamp.
+func ReadSessionIdentityForRun(root, workDir string, baseline SessionIdentityBaseline, started time.Time, expectedModel, expectedThinking string) (string, string, error) {
+	evidence, err := ReadSessionIdentityEvidenceForRun(root, workDir, baseline, started, expectedModel, expectedThinking)
+	return evidence.Model, evidence.Thinking, err
+}
+
+func ReadSessionIdentityEvidenceForRun(root, workDir string, baseline SessionIdentityBaseline, started time.Time, expectedModel, expectedThinking string) (SessionIdentityEvidence, error) {
+	current, err := CaptureSessionIdentityBaseline(root, workDir)
+	if err != nil {
+		return SessionIdentityEvidence{}, err
+	}
+	var candidate string
+	var candidateOffset int64
+	for path, fingerprint := range current.files {
+		before, existed := baseline.files[path]
+		changed := !existed || before.ID != fingerprint.ID || before.Size != fingerprint.Size || !before.ModTime.Equal(fingerprint.ModTime)
+		if !changed {
+			continue
+		}
+		if existed && (!os.SameFile(before.Info, fingerprint.Info) || fingerprint.Size < before.Size) {
+			return SessionIdentityEvidence{}, errors.New("top-level session file was replaced or truncated during the governed run")
+		}
+		if fingerprint.ModTime.Before(started) {
+			return SessionIdentityEvidence{}, errors.New("changed top-level session evidence predates the current run")
+		}
+		if candidate != "" {
+			return SessionIdentityEvidence{}, errors.New("multiple top-level sessions changed during one governed run")
+		}
+		candidate = path
+		if existed {
+			candidateOffset = before.Size
+		}
+	}
+	if candidate == "" {
+		return SessionIdentityEvidence{}, errors.New("current governed run did not create or update one top-level session")
+	}
+	model, thinking, fingerprint, err := readSessionIdentityDelta(candidate, candidateOffset, expectedModel, expectedThinking, current.files[candidate].Info)
+	if err != nil {
+		return SessionIdentityEvidence{}, err
+	}
+	return SessionIdentityEvidence{SessionID: current.files[candidate].ID, Fingerprint: fingerprint, Model: model, Thinking: thinking}, nil
+}
+
+func readSessionIdentityDelta(path string, offset int64, expectedModel, expectedThinking string, selected os.FileInfo) (string, string, string, error) {
+	file, before, err := openRuntimeFileNoFollow(path)
+	if err != nil || selected == nil || !os.SameFile(selected, before) {
+		return "", "", "", errors.New("open selected current session identity delta")
+	}
+	defer func() { _ = file.Close() }()
+	if offset < 0 || before.Size() < offset || before.Size()-offset > 16*1024*1024 {
+		return "", "", "", errors.New("current session identity delta is invalid or oversized")
+	}
+	if _, err := file.Seek(offset, io.SeekStart); err != nil {
+		return "", "", "", err
+	}
+	var model, thinking string
+	deltaDigest := sha256.New()
+	scanner := bufio.NewScanner(io.LimitReader(file, 16*1024*1024+1))
+	scanner.Buffer(make([]byte, 4096), 8*1024*1024)
+	rows := 0
+	for scanner.Scan() {
+		rows++
+		if rows > 100_000 {
+			return "", "", "", errors.New("current session identity delta exceeds its row bound")
+		}
+		var event struct {
+			Type          string `json:"type"`
+			Provider      string `json:"provider"`
+			ModelID       string `json:"modelId"`
+			ThinkingLevel string `json:"thinkingLevel"`
+			Message       struct {
+				Role     string `json:"role"`
+				Provider string `json:"provider"`
+				Model    string `json:"model"`
+			} `json:"message"`
+		}
+		line := append([]byte(nil), scanner.Bytes()...)
+		_, _ = deltaDigest.Write(line)
+		_, _ = deltaDigest.Write([]byte{'\n'})
+		if err := rejectDuplicateJSONFields(line); err != nil || json.Unmarshal(line, &event) != nil {
+			return "", "", "", errors.New("current session identity delta is malformed or duplicate")
+		}
+		transitions := make([]string, 0, 2)
+		if event.Type == "model_change" {
+			if event.Provider == "" || event.ModelID == "" {
+				return "", "", "", errors.New("current session contains a partial model transition")
+			}
+			transitions = append(transitions, event.Provider+"/"+event.ModelID)
+		}
+		if event.Message.Role == "assistant" {
+			if event.Message.Provider == "" || event.Message.Model == "" {
+				return "", "", "", errors.New("current session contains a partial assistant identity")
+			}
+			transitions = append(transitions, event.Message.Provider+"/"+event.Message.Model)
+		}
+		for _, transitionModel := range transitions {
+			if transitionModel != expectedModel {
+				return "", "", "", fmt.Errorf("unexpected current-session model transition to %s", transitionModel)
+			}
+			model = transitionModel
+		}
+		if event.Type == "thinking_level_change" {
+			if event.ThinkingLevel == "" {
+				return "", "", "", errors.New("current session contains a partial thinking transition")
+			}
+			if event.ThinkingLevel != expectedThinking {
+				return "", "", "", fmt.Errorf("unexpected current-session thinking transition to %s", event.ThinkingLevel)
+			}
+			thinking = event.ThinkingLevel
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return "", "", "", err
+	}
+	after, err := file.Stat()
+	pathAfter, pathErr := os.Lstat(path)
+	if err != nil || pathErr != nil || !os.SameFile(before, after) || !os.SameFile(after, pathAfter) || before.Size() != after.Size() || !before.ModTime().Equal(after.ModTime()) {
+		return "", "", "", errors.New("current session identity delta changed while reading")
+	}
+	if model == "" || thinking == "" {
+		return "", "", "", errors.New("current session delta lacks exact model and thinking evidence")
+	}
+	return model, thinking, "sha256:" + hex.EncodeToString(deltaDigest.Sum(nil)), nil
+}
+
 // ReadSessionIdentity projects only provider/model/thinking metadata from durable Pi sessions.
 // Message content and tool payloads are intentionally not retained or returned.
 func ReadSessionIdentity(root, workDir string) (string, string, error) {
-	path, _, err := latestSession(root, workDir)
+	return ReadSessionIdentitySince(root, workDir, time.Time{})
+}
+
+// ReadSessionIdentitySince accepts only a top-level session touched during the
+// current launched run. It prevents stale or delegated sessions from filling
+// missing live identity events.
+func ReadSessionIdentitySince(root, workDir string, notBefore time.Time) (string, string, error) {
+	path, _, err := latestSessionSince(root, workDir, notBefore)
 	if err != nil {
 		return "", "", err
 	}
+	return readSessionIdentityPath(path)
+}
+
+func readSessionIdentityPath(path string) (string, string, error) {
 	var model, thinking string
+	info, err := os.Lstat(path)
+	if err != nil || info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
+		return "", "", errors.New("session identity evidence must be a regular non-symlink file")
+	}
 	file, err := os.Open(path)
 	if err != nil {
 		return "", "", err
@@ -102,8 +356,10 @@ func ReadSessionIdentity(root, workDir string) (string, string, error) {
 				Model    string `json:"model"`
 			} `json:"message"`
 		}
-		if json.Unmarshal(scanner.Bytes(), &event) != nil {
-			continue
+		line := append([]byte(nil), scanner.Bytes()...)
+		if err := rejectDuplicateJSONFields(line); err != nil || json.Unmarshal(line, &event) != nil {
+			_ = file.Close()
+			return "", "", errors.New("session identity event is malformed or duplicate")
 		}
 		if event.Type == "model_change" && event.Provider != "" && event.ModelID != "" {
 			model = event.Provider + "/" + event.ModelID
@@ -116,9 +372,13 @@ func ReadSessionIdentity(root, workDir string) (string, string, error) {
 		}
 	}
 	scanErr := scanner.Err()
+	after, statErr := file.Stat()
 	closeErr := file.Close()
 	if scanErr != nil {
 		return "", "", scanErr
+	}
+	if statErr != nil || !os.SameFile(info, after) || info.Size() != after.Size() || !info.ModTime().Equal(after.ModTime()) {
+		return "", "", errors.New("session identity evidence changed while reading")
 	}
 	if closeErr != nil {
 		return "", "", closeErr

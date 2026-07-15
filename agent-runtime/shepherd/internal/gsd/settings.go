@@ -1,11 +1,11 @@
 package gsd
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -20,7 +20,7 @@ type runtimeSettings struct {
 
 func ValidateRuntimeSettings(gsdHome, workDir, expectedModel, expectedThinking string) error {
 	path := filepath.Join(gsdHome, "agent", "settings.json")
-	raw, err := os.ReadFile(path)
+	raw, err := readGovernedPolicyFile(path)
 	if err != nil {
 		return fmt.Errorf("read controlled GSD settings: %w", err)
 	}
@@ -36,7 +36,7 @@ func ValidateRuntimeSettings(gsdHome, workDir, expectedModel, expectedThinking s
 		return fmt.Errorf("controlled GSD runtime is %s/%s, expected %s/%s", observed, settings.DefaultThinkingLevel, expectedModel, expectedThinking)
 	}
 	projectPath := filepath.Join(workDir, ".pi", "settings.json")
-	projectRaw, err := os.ReadFile(projectPath)
+	projectRaw, err := readGovernedPolicyFile(projectPath)
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
 		return fmt.Errorf("read project Pi settings: %w", err)
 	}
@@ -70,7 +70,7 @@ func NormalizeRuntimeSettings(gsdHome, coordinatorModel, implementationModel, ex
 	if !info.Mode().IsRegular() {
 		return errors.New("controlled GSD settings must be a regular file")
 	}
-	raw, err := os.ReadFile(path)
+	raw, err := readGovernedPolicyFile(path)
 	if err != nil {
 		return fmt.Errorf("read controlled GSD settings: %w", err)
 	}
@@ -159,9 +159,9 @@ type phaseModelPreference struct {
 // ValidateModelPreferences requires the official GSD Pi effective policy to
 // route each governed phase explicitly. The controller-owned global policy is
 // merged with project overrides using GSD's documented per-key precedence.
-func ValidateModelPreferences(gsdHome, workDir, coordinatorModel, implementationModel, expectedThinking string) error {
+func ValidateModelPreferences(gsdHome, workDir string, registry UnitRegistry, coordinatorModel, implementationModel, expectedThinking string) error {
 	path := filepath.Join(gsdHome, "PREFERENCES.md")
-	raw, err := os.ReadFile(path)
+	raw, err := readGovernedPolicyFile(path)
 	if err != nil {
 		return fmt.Errorf("read controlled GSD preferences: %w", err)
 	}
@@ -170,7 +170,7 @@ func ValidateModelPreferences(gsdHome, workDir, coordinatorModel, implementation
 		return fmt.Errorf("decode controlled GSD model preferences: %w", err)
 	}
 	projectPath := filepath.Join(workDir, ".gsd", "PREFERENCES.md")
-	projectRaw, projectErr := os.ReadFile(projectPath)
+	projectRaw, projectErr := readGovernedPolicyFile(projectPath)
 	if projectErr != nil && !errors.Is(projectErr, os.ErrNotExist) {
 		return fmt.Errorf("read project GSD preferences: %w", projectErr)
 	}
@@ -183,13 +183,19 @@ func ValidateModelPreferences(gsdHome, workDir, coordinatorModel, implementation
 			models[phase] = preference
 		}
 	}
-	expected := map[string]string{
-		"research": coordinatorModel, "planning": coordinatorModel, "discuss": coordinatorModel,
-		"execution": implementationModel, "execution_simple": implementationModel,
-		"completion": coordinatorModel, "validation": coordinatorModel,
-		"subagent": implementationModel, "uat": coordinatorModel,
+	phaseRoles, err := registry.GovernedPhases()
+	if err != nil {
+		return err
 	}
-	for phase, qualifiedModel := range expected {
+	// GSD resolves delegated implementation outside UNIT_REGISTRY through its
+	// explicit subagent phase. Keep that narrow controller policy separate from
+	// official unit metadata.
+	phaseRoles["subagent"] = ModelRoleImplementation
+	for phase, role := range phaseRoles {
+		qualifiedModel := coordinatorModel
+		if role == ModelRoleImplementation {
+			qualifiedModel = implementationModel
+		}
 		provider, model, ok := strings.Cut(qualifiedModel, "/")
 		if !ok || provider == "" || model == "" {
 			return fmt.Errorf("governed model for phase %s must be provider-qualified", phase)
@@ -224,6 +230,7 @@ func parsePhaseModelPreferences(raw []byte, requireModels bool) (map[string]phas
 
 	fields := make(map[string]map[string]string)
 	inModels := false
+	modelsSeen := false
 	currentPhase := ""
 	for lineNumber := 1; lineNumber < frontmatterEnd; lineNumber++ {
 		line := strings.TrimRight(lines[lineNumber], " \t")
@@ -245,9 +252,10 @@ func parsePhaseModelPreferences(raw []byte, requireModels bool) (map[string]phas
 				continue
 			}
 			if key == "models" {
-				if inModels {
+				if modelsSeen {
 					return nil, errors.New("duplicate models block")
 				}
+				modelsSeen = true
 				modelValue := strings.TrimSpace(value)
 				if modelValue == "{}" {
 					inModels = true
@@ -260,7 +268,7 @@ func parsePhaseModelPreferences(raw []byte, requireModels bool) (map[string]phas
 				continue
 			}
 			if inModels {
-				break
+				inModels = false
 			}
 			continue
 		}
@@ -300,7 +308,7 @@ func parsePhaseModelPreferences(raw []byte, requireModels bool) (map[string]phas
 			return nil, fmt.Errorf("phase %s: %w", currentPhase, err)
 		}
 	}
-	if !inModels && requireModels {
+	if !modelsSeen && requireModels {
 		return nil, errors.New("preferences do not contain a models block")
 	}
 
@@ -344,12 +352,47 @@ func addModelField(fields map[string]string, key, value string) error {
 
 func ValidatePinnedContainer(ctx context.Context, config ContainerConfig, expectedVersion string) error {
 	cmd := exec.CommandContext(ctx, config.Engine, "run", "--rm", "--pull=never", "--network=none", config.Image, "--version")
-	var stdout, stderr bytes.Buffer
+	configureProcessTree(cmd)
+	var stdout, stderr boundedBuffer
+	stdout.limit, stderr.limit = 64*1024, 64*1024
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("run pinned GSD container: %w", err)
 	}
+	if stdout.Truncated() || stderr.Truncated() {
+		return errors.New("pinned GSD container version output is oversized")
+	}
 	return validateContainerVersionOutput(stdout.String(), expectedVersion)
+}
+
+func readGovernedPolicyFile(path string) ([]byte, error) {
+	const maxPolicyBytes int64 = 1024 * 1024
+	before, err := os.Lstat(path)
+	if err != nil {
+		return nil, err
+	}
+	if before.Mode()&os.ModeSymlink != 0 || !before.Mode().IsRegular() || !runtimePathOwnedByCurrentUser(before) || before.Size() < 0 || before.Size() > maxPolicyBytes {
+		return nil, errors.New("governed policy must be a bounded owned regular non-symlink file")
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = file.Close() }()
+	opened, err := file.Stat()
+	if err != nil || !os.SameFile(before, opened) {
+		return nil, errors.New("governed policy changed before reading")
+	}
+	raw, err := io.ReadAll(io.LimitReader(file, maxPolicyBytes+1))
+	if err != nil || int64(len(raw)) != opened.Size() || int64(len(raw)) > maxPolicyBytes {
+		return nil, errors.New("governed policy is unreadable or oversized")
+	}
+	after, statErr := file.Stat()
+	pathAfter, pathErr := os.Lstat(path)
+	if statErr != nil || pathErr != nil || !os.SameFile(opened, after) || !os.SameFile(after, pathAfter) || opened.Size() != after.Size() || !opened.ModTime().Equal(after.ModTime()) {
+		return nil, errors.New("governed policy changed while reading")
+	}
+	return raw, nil
 }
 
 func validateContainerVersionOutput(output, expectedVersion string) error {
@@ -371,7 +414,7 @@ func ValidatePinnedCommand(command []string, expectedVersion string) error {
 		return errors.New("GSD command does not target the packaged loader")
 	}
 	packagePath := filepath.Join(filepath.Dir(filepath.Dir(loader)), "package.json")
-	raw, err := os.ReadFile(packagePath)
+	raw, err := readGovernedPolicyFile(packagePath)
 	if err != nil {
 		return fmt.Errorf("read GSD package metadata: %w", err)
 	}

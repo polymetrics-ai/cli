@@ -197,7 +197,10 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 	if err := os.MkdirAll(sessionsDir, 0o700); err != nil {
 		return Result{}, err
 	}
-	previousSession := latestSessionID(sessionsDir, request.WorkDir)
+	sessionBaseline, err := gsd.CaptureSessionIdentityBaseline(sessionsDir, request.WorkDir)
+	if err != nil {
+		return Result{}, fmt.Errorf("capture validator session baseline: %w", err)
+	}
 	started := time.Now().UTC()
 	if err := v.runDedicatedValidator(ctx, request, protected, requestPath, resultPath, sessionsDir); err != nil {
 		return Result{}, err
@@ -215,18 +218,12 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 	if err := validateProof(proof, protected); err != nil {
 		return Result{}, err
 	}
-	sessionID, model, thinking, err := readNewSession(sessionsDir, request.WorkDir, previousSession, started)
+	sessionEvidence, err := gsd.ReadSessionIdentityEvidenceForRun(sessionsDir, request.WorkDir, sessionBaseline, started, authority.RequiredValidator, "high")
 	if err != nil {
-		return Result{}, err
-	}
-	if model != authority.RequiredValidator {
-		return Result{}, fmt.Errorf("validator model was %s", model)
-	}
-	if thinking != "high" {
-		return Result{}, fmt.Errorf("validator thinking was %s", thinking)
+		return Result{}, fmt.Errorf("bind validator session evidence: %w", err)
 	}
 	return Result{
-		ObservedModel: model, Thinking: thinking, SessionID: sessionID,
+		ObservedModel: sessionEvidence.Model, Thinking: sessionEvidence.Thinking, SessionID: sessionEvidence.SessionID,
 		Verdict: proof.Verdict, ObservedHead: proof.ObservedHead, EvidenceHash: proof.EvidenceHash,
 		LocalGates: proof.LocalGates, UAT: proof.UAT, MilestoneValid: proof.MilestoneValid,
 		IssuedAt: proof.IssuedAt, ExpiresAt: proof.ExpiresAt,
@@ -534,68 +531,6 @@ func writeExclusiveJSON(path string, value any) error {
 	return closeErr
 }
 
-func readNewSession(root, workDir, previous string, started time.Time) (string, string, string, error) {
-	id, err := gsd.LatestSessionID(root, workDir)
-	if err != nil {
-		return "", "", "", err
-	}
-	if id == previous {
-		return "", "", "", errors.New("validator did not create a new session")
-	}
-	model, thinking, err := gsd.ReadSessionIdentity(root, workDir)
-	if err != nil {
-		return "", "", "", err
-	}
-	path, err := latestSessionPath(root, workDir, id)
-	if err != nil {
-		return "", "", "", err
-	}
-	info, err := os.Stat(path)
-	if err != nil {
-		return "", "", "", err
-	}
-	if info.ModTime().Before(started) {
-		return "", "", "", errors.New("validator session predates invocation")
-	}
-	return id, model, thinking, nil
-}
-
-func latestSessionID(root, workDir string) string {
-	id, err := gsd.LatestSessionID(root, workDir)
-	if err != nil {
-		return ""
-	}
-	return id
-}
-
-func latestSessionPath(root, workDir, id string) (string, error) {
-	var found string
-	err := filepath.WalkDir(root, func(path string, entry os.DirEntry, walkErr error) error {
-		if walkErr != nil {
-			return walkErr
-		}
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".jsonl") || found != "" {
-			return nil
-		}
-		raw, err := os.ReadFile(path)
-		if err != nil {
-			return err
-		}
-		first, _, _ := strings.Cut(string(raw), "\n")
-		if strings.Contains(first, `"id":"`+id+`"`) && strings.Contains(first, `"cwd":"`+workDir+`"`) {
-			found = path
-		}
-		return nil
-	})
-	if err != nil {
-		return "", err
-	}
-	if found == "" {
-		return "", errors.New("validator session path not found")
-	}
-	return found, nil
-}
-
 func newNonce() (string, error) {
 	var raw [16]byte
 	if _, err := rand.Read(raw[:]); err != nil {
@@ -639,11 +574,13 @@ func safePathPart(value string) string {
 }
 
 func limitedCombinedOutput(cmd *exec.Cmd, maxBytes int64) ([]byte, error) {
+	configureValidationProcessTree(cmd)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &limitedWriter{buffer: &stdout, max: maxBytes}
 	cmd.Stderr = &limitedWriter{buffer: &stderr, max: maxBytes}
 	err := cmd.Run()
-	return append(stdout.Bytes(), stderr.Bytes()...), err
+	cleanupErr := cleanupValidationProcessTree(cmd)
+	return append(stdout.Bytes(), stderr.Bytes()...), errors.Join(err, cleanupErr)
 }
 
 type limitedWriter struct {

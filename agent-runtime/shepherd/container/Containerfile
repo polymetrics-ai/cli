@@ -1,8 +1,14 @@
 FROM golang:1.25.12-bookworm AS go-toolchain
 
+WORKDIR /src
+COPY agent-runtime/shepherd/container/patch_gsd_runtime.go /src/patch_gsd_runtime.go
+RUN go build -trimpath -o /patch-gsd-runtime /src/patch_gsd_runtime.go
+
 FROM node:24.13.1-bookworm-slim
 
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+
+COPY --from=go-toolchain /patch-gsd-runtime /usr/local/bin/patch-gsd-runtime
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
@@ -23,6 +29,8 @@ RUN for attempt in 1 2 3; do \
       [ "$attempt" = 3 ] && exit 1; \
       sleep "$((attempt * 5))"; \
     done \
+    && /usr/local/bin/patch-gsd-runtime /usr/local/lib/node_modules/@opengsd/gsd-pi \
+    && rm -f /usr/local/bin/patch-gsd-runtime \
     && if [ "$(dpkg --print-architecture)" = "arm64" ]; then \
          apt-get update \
          && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends chromium; \

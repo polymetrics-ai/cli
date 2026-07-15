@@ -42,9 +42,9 @@ func TestGSDValidatorRejectsInvalidProductionPiEvidence(t *testing.T) {
 	}{
 		{name: "no validation-result producer exists", mode: "missing-result", wantErr: "structured evidence missing"},
 		{name: "stale pre-existing result", mode: "success", stale: true, wantErr: "stale validation result exists"},
-		{name: "no new validator session", mode: "no-session", wantErr: "no session"},
-		{name: "validator session model is GPT-5.5", mode: "gpt55", wantErr: "validator model"},
-		{name: "thinking is not high", mode: "low-thinking", wantErr: "validator thinking"},
+		{name: "no new validator session", mode: "no-session", wantErr: "did not create or update"},
+		{name: "validator session model is GPT-5.5", mode: "gpt55", wantErr: "unexpected current-session model"},
+		{name: "thinking is not high", mode: "low-thinking", wantErr: "unexpected current-session thinking"},
 		{name: "result head mismatch", mode: "head-mismatch", wantErr: "head or base"},
 		{name: "evidence mismatch", mode: "evidence-mismatch", wantErr: "governance or evidence"},
 		{name: "request nonce mismatch", mode: "nonce-mismatch", wantErr: "request nonce"},
@@ -375,7 +375,7 @@ func writeValidationSession(sessionDir, worktree, model, thinking, nonce string)
 	if !ok {
 		return fmt.Errorf("bad model %s", model)
 	}
-	content := fmt.Sprintf("{\"type\":\"session\",\"id\":%q,\"cwd\":%q}\n{\"type\":\"model_change\",\"provider\":%q,\"modelId\":%q}\n{\"type\":\"thinking_level_change\",\"thinkingLevel\":%q}\n", id, worktree, provider, modelID, thinking)
+	content := fmt.Sprintf("{\"type\":\"session\",\"version\":3,\"timestamp\":%q,\"id\":%q,\"cwd\":%q}\n{\"type\":\"model_change\",\"provider\":%q,\"modelId\":%q}\n{\"type\":\"thinking_level_change\",\"thinkingLevel\":%q}\n", time.Now().UTC().Format(time.RFC3339Nano), id, worktree, provider, modelID, thinking)
 	return os.WriteFile(path, []byte(content), 0o600)
 }
 

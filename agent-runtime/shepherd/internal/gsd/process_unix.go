@@ -15,12 +15,8 @@ func configureProcessTree(cmd *exec.Cmd) {
 		if cmd.Process == nil {
 			return nil
 		}
-		pid := cmd.Process.Pid
-		err := syscall.Kill(-pid, syscall.SIGTERM)
-		go func() {
-			time.Sleep(2 * time.Second)
-			_ = syscall.Kill(-pid, syscall.SIGKILL)
-		}()
-		return err
+		// Kill the still-owned process group synchronously. Delayed goroutines can
+		// target a recycled PGID after Wait returns and are therefore forbidden.
+		return syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
 	}
 }

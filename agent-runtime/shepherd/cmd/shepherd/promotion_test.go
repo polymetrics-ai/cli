@@ -9,7 +9,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 	_ "modernc.org/sqlite"
 )
 
@@ -42,7 +41,7 @@ func TestPromotionFailureBoundariesRecoverForwardIdempotently(t *testing.T) {
 				}
 				return nil
 			})
-			err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
+			err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime")
 			restoreFailpoint()
 			if err == nil {
 				t.Fatal("injected promotion boundary unexpectedly succeeded")
@@ -63,7 +62,7 @@ func TestPromotionFailureBoundariesRecoverForwardIdempotently(t *testing.T) {
 					t.Fatalf("state changed before git: %q", got)
 				}
 			}
-			if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+			if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
 				t.Fatalf("restart recovery: %v", err)
 			}
 			candidateHead := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
@@ -79,7 +78,7 @@ func TestPromotionFailureBoundariesRecoverForwardIdempotently(t *testing.T) {
 			if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
 				t.Fatalf("cleanup-complete attempts=%d", count)
 			}
-			if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+			if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
 				t.Fatalf("idempotent restart: %v", err)
 			}
 			if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != candidateHead {
@@ -99,7 +98,7 @@ func TestPromotionRecoveryRevalidatesStageBeforeGit(t *testing.T) {
 	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
 	defer restoreValidator()
 	restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(promotionBeforeGit))
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("injected pre-Git boundary succeeded")
 	}
 	restoreFailpoint()
@@ -118,7 +117,7 @@ func TestPromotionRecoveryRevalidatesStageBeforeGit(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(stagePath, "STATE.md"), []byte("tampered\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("tampered stage advanced Git")
 	}
 	if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != base {
@@ -140,7 +139,7 @@ func TestPromotionRecoveryMovedHeadFailsClosed(t *testing.T) {
 	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
 	defer restoreValidator()
 	restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(promotionBeforeGit))
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("injected failure succeeded")
 	}
 	restoreFailpoint()
@@ -150,7 +149,7 @@ func TestPromotionRecoveryMovedHeadFailsClosed(t *testing.T) {
 	runGitForTest(t, repo, "add", "moved.txt")
 	runGitForTest(t, repo, "commit", "-m", "move canonical head")
 	moved := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("moved head recovered")
 	}
 	if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != moved {
@@ -169,14 +168,14 @@ func TestPromotionRecoveryDirtyCanonicalFailsClosed(t *testing.T) {
 	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
 	defer restoreValidator()
 	restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(promotionBeforeGit))
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("injected failure succeeded")
 	}
 	restoreFailpoint()
 	if err := os.WriteFile(filepath.Join(repo, "dirty.txt"), []byte("dirty\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("dirty canonical recovered")
 	}
 	if _, err := os.Stat(filepath.Join(repo, "agent-runtime", "shepherd", "canary.txt")); !os.IsNotExist(err) {
@@ -216,12 +215,12 @@ func TestPromotionRecoveryMovedOrDirtyAfterGitFailsClosed(t *testing.T) {
 			restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
 			defer restoreValidator()
 			restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(test.boundary))
-			if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+			if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 				t.Fatal("injected post-Git boundary succeeded")
 			}
 			restoreFailpoint()
 			test.mutate(t, repo)
-			if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+			if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 				t.Fatal("moved/dirty post-Git state recovered")
 			}
 			if count := countSQLiteQueryForTest(t, filepath.Join(config.StateDir, "authority.db"), "SELECT COUNT(*) FROM promotion_journals WHERE state = 'blocked'"); count != 1 {
@@ -240,7 +239,7 @@ func TestPromotionRecoveryExpiredBeforeGitFailsClosed(t *testing.T) {
 	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
 	defer restoreValidator()
 	restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(promotionBeforeGit))
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("injected failure succeeded")
 	}
 	restoreFailpoint()
@@ -255,7 +254,7 @@ func TestPromotionRecoveryExpiredBeforeGitFailsClosed(t *testing.T) {
 	if err := db.Close(); err != nil {
 		t.Fatal(err)
 	}
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("expired pre-Git authority recovered")
 	}
 	if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != base {
@@ -276,7 +275,7 @@ func TestPromotionRecoveryAfterGitIgnoresLaterAttestationExpiryAndCompletesForwa
 	restoreValidator := installFakeIndependentValidator(t, validator)
 	defer restoreValidator()
 	restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(promotionAfterGit))
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("injected failure succeeded")
 	}
 	restoreFailpoint()
@@ -295,7 +294,7 @@ func TestPromotionRecoveryAfterGitIgnoresLaterAttestationExpiryAndCompletesForwa
 		t.Fatal(err)
 	}
 	calls := validator.calls
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
 		t.Fatalf("forward recovery: %v", err)
 	}
 	if validator.calls != calls {
@@ -314,7 +313,7 @@ func TestPromotingAttemptWithoutJournalRemainsHumanGated(t *testing.T) {
 	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED")})
 	defer restoreValidator()
 	restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(promotionAfterJournalCreated))
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("injected journal boundary succeeded")
 	}
 	restoreFailpoint()
@@ -335,7 +334,7 @@ func TestPromotingAttemptWithoutJournalRemainsHumanGated(t *testing.T) {
 	if err := db.Close(); err != nil {
 		t.Fatal(err)
 	}
-	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
 		t.Fatal("promoting attempt without journal did not human-gate")
 	}
 	if _, err := os.Stat(attemptPath); err != nil {
