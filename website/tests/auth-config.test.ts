@@ -15,10 +15,9 @@ describe('auth account linking config', () => {
     expect(
       configuredTrustedProviders({
         github: { configured: true },
-        google: undefined,
-        linkedin: { configured: true },
       }),
-    ).toEqual(['github', 'linkedin']);
+    ).toEqual(['github']);
+    expect(configuredTrustedProviders({ github: undefined })).toEqual([]);
   });
 
   it('keeps local email verification strict in production only', () => {

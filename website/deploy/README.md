@@ -70,15 +70,11 @@ container. One-time setup on the origin VPS (as the `deploy` user):
    BETTER_AUTH_URL=https://cli.polymetrics.ai
    GITHUB_CLIENT_ID=...
    GITHUB_CLIENT_SECRET=...
-   GOOGLE_CLIENT_ID=...
-   GOOGLE_CLIENT_SECRET=...
-   LINKEDIN_CLIENT_ID=...
-   LINKEDIN_CLIENT_SECRET=...
    ADMIN_EMAILS=you@example.com
    ```
 
-   Social providers are optional — sign-in offers whichever providers have
-   credentials configured.
+   GitHub credentials are optional for a secret-free build, but production
+   sign-in is unavailable until both values are configured at runtime.
 
 3. Add these lines to the website Quadlet
    (`~/.config/containers/systemd/cli-polymetrics.container`). The deploy
@@ -100,10 +96,10 @@ container. One-time setup on the origin VPS (as the `deploy` user):
 Schema migrations apply automatically on the website's first database request
 (advisory-locked, idempotent) — no deploy-pipeline step is needed.
 
-OAuth callback URLs to register on each provider:
+GitHub OAuth callback URLs:
 
-- Production: `https://cli.polymetrics.ai/api/auth/callback/{github,google,linkedin}`
-- Local dev: `http://localhost:3000/api/auth/callback/{github,google,linkedin}`
+- Production: `https://cli.polymetrics.ai/api/auth/callback/github`
+- Local dev on port 3100: `http://localhost:3100/api/auth/callback/github`
 
 Backups: `podman exec cli-polymetrics-db pg_dump -U website website > backup.sql`
 (cron it; the `cli-polymetrics-pgdata` volume holds the live data).
@@ -112,15 +108,15 @@ Backups: `podman exec cli-polymetrics-db pg_dump -U website website > backup.sql
 
 One-time, before the first deploy that includes blog comments:
 
-1. Create the three OAuth apps (GitHub, Google, LinkedIn — LinkedIn needs the
-   "Sign In with LinkedIn using OpenID Connect" product enabled) with the
-   production callback URLs above.
+1. Create a dedicated production GitHub OAuth app with the production callback
+   URL above. Keep the local port-3100 app separate because a GitHub OAuth app
+   accepts one callback URL.
 2. VPS: install `cli-polymetrics.network` + `cli-polymetrics-db.container`,
    create `db.env`/`website.env` (0600), add `Network=` + `EnvironmentFile=`
    to the website Quadlet, `systemctl --user daemon-reload`, start the db.
 3. Deploy from `main` as usual; the first request migrates the schema.
-4. Smoke: `curl -I https://cli.polymetrics.ai/blog` → 200; sign in with each
-   provider; post a comment on a post; select text and bookmark it; check
+4. Smoke: `curl -I https://cli.polymetrics.ai/blog` → 200; sign in with GitHub;
+   post a comment on a post; select text and bookmark it; check
    `/bookmarks`; delete the test comment as an `ADMIN_EMAILS` account.
 5. Schedule the `pg_dump` backup cron.
 

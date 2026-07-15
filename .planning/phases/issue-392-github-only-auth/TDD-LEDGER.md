@@ -11,12 +11,14 @@ Phase: issue-392-github-only-auth
 
 ## Green: Single Supported Provider
 
-- Status: pending
-- Command: targeted auth-config test, followed by full website unit suite.
-- Expected: pass after GitHub becomes the only provider in config and UI.
-- Evidence: to be recorded after implementation.
+- Status: passed
+- Targeted command: `./node_modules/.bin/vitest run tests/auth-config.test.ts`
+- Targeted result: 3 tests passed.
+- Full command: `npx -y pnpm@11.7.0 run test:unit`
+- Full result: 9 files and 64 tests passed.
+- Browser evidence: the signed-out Playwright flow found one GitHub button and zero Google or LinkedIn buttons.
 
 ## Refactor
 
-- Status: pending
-- Scope: replace the multi-provider sign-in data loop and dynamic social-provider assembly with explicit GitHub configuration.
+- Status: complete
+- Scope: replaced the multi-provider sign-in data loop and dynamic social-provider assembly with an explicit GitHub action while preserving the existing Better Auth callback and account-linking behavior.
