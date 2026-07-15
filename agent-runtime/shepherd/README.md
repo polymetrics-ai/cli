@@ -93,6 +93,15 @@ automatically retries reversible runtime, artifact, or interruption failures whi
 Contract, model/thinking, authority, scope, stale-head, identity, and orphaned-child failures stop at
 the typed blocked/human-gate boundary.
 
+Canonical-unit work runs in an external attempt worktree with a durable SQLite lifecycle. Ratified
+promotion is journaled before canonical mutation and binds the exact attempt, base/candidate heads,
+proof, validator attestation, governance version, and bounded deterministic `.gsd` manifests. The
+candidate `.gsd/gsd.db` is staged with SQLite's online backup API and integrity checked. Git advances
+only from the exact base; `.gsd` is then installed with same-filesystem stage/backup renames and
+parent-directory fsyncs. Startup recovery runs before GSD query or dispatch, finishes forward after
+Git reaches the candidate, and blocks on moved Git, dirty state, expired pre-promotion authority, or
+resource ownership/hash ambiguity. Direct in-place `.gsd` adoption is disabled.
+
 The process prints normalized lifecycle events and at most one heartbeat every 15 seconds. Heartbeats
 include bounded operational child metadata only: status, child count, in-flight tool, and child turn
 count. They never include prompts, model reasoning, output bodies, or credentials. Native GSD

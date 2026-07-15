@@ -23,7 +23,7 @@ the current branch and exact candidate head.
 - [x] New validator session, exact model, high thinking, request nonce, candidate head, evidence hash,
       base branch, and durable state version are all verified.
 
-### B. Attempt lifecycle and crash recovery — COMPLETE
+### B. Attempt lifecycle and crash recovery — COMPLETE / GREEN `1a050692`
 
 - [x] Attempt identity, confirmed branch/path ownership, controller owner/epoch, base/candidate/validated
       heads, bounded diagnostics, timestamps, and all exact lifecycle states persist in SQLite/reopen.
@@ -42,14 +42,33 @@ the current branch and exact candidate head.
 - [x] Slice A validation, ratification, exact-head, write-scope, and delayed-promotion regressions remain green.
 - [x] Focused tests, full/race module verification, root repository gates, and exact 30-finding lint baseline passed.
 
-### C. GSD-state promotion
+### C. GSD-state promotion — GREEN (candidate diff)
 
-- [ ] No `RemoveAll` and in-place copy into canonical `.gsd` tree.
-- [ ] Staged snapshot is validated before promotion.
-- [ ] SQLite database/WAL state is handled consistently.
-- [ ] Promotion journal supports failures before Git promotion, after Git promotion, before state swap,
-      and after state swap.
-- [ ] Restart converges idempotently to one consistent Git/GSD state.
+- [x] Journal identity binds delivery/generation/unit/attempt, base/candidate/validated heads,
+      proof/attestation, governance version, and staged GSD manifest/hash.
+- [x] Journal close/reopen persistence and the eight required journal states are covered.
+- [x] Candidate `.gsd` is staged and fully validated before any canonical Git mutation.
+- [x] `gsd.db` uses a consistent SQLite snapshot/checkpoint/backup path; integrity passes and installed
+      state has no stale WAL/SHM dependency.
+- [x] Manifest is deterministic and bounded by relative path, file type, count, size, and content hash;
+      symlinks, special files, traversal, and unexpected paths fail closed.
+- [x] No `RemoveAll` or remove-and-repopulate operation touches canonical `.gsd`.
+- [x] Same-filesystem stage/backup renames and parent-directory fsyncs make both rename boundaries recoverable.
+- [x] Failure injection covers before/after Git promotion, before backup rename, between renames, and
+      after install before completion.
+- [x] Restart at every boundary converges idempotently without duplicate effects or mixed Git/GSD state.
+- [x] Base head may resume promotion; candidate head completes forward; any other head blocks.
+- [x] Dirty canonical worktree, stale lease, unauthorized branch, or invalid proof blocks before mutation.
+- [x] Missing/changed/corrupt/mismatched/symlinked stage or backup is preserved and journal becomes blocked.
+- [x] Unknown stage/backup directories remain untouched.
+- [x] `promoting` with a complete valid journal is recoverable; without one remains human-gated.
+- [x] Real supervise startup recovery runs before canonical GSD query or new dispatch.
+- [x] Existing Slice A/B tests remain green; final lint-baseline/differential command is recorded after checkpoint.
+
+Slice C local evidence: focused promotion tests PASS; all nine journal/Git/swap failpoints PASS;
+full nested tests PASS; store race PASS after final attestation hardening; full command/workspace race
+PASS before the final store-only binding change; vet/build/gofmt/diff checks PASS. Root `make verify`, module boundary, root `go list`, and diff checks PASS. Nested lint reports 29
+baseline findings and zero findings in Slice C production files (no differential regression).
 
 ### D. Official GSD 1.11 registry loading
 
@@ -134,4 +153,4 @@ go list ./...
 - Vet: PASS `cd agent-runtime/shepherd && go vet ./...`.
 - Build/make/module-boundary/root list: PASS `cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
 - Lint: FAIL `cd agent-runtime/shepherd && golangci-lint run ./...` with the same 30 pre-existing findings (`errcheck`, one `ineffassign`, two `staticcheck`, two `unused`). A newly introduced validator parser staticcheck finding was fixed; final output returns to exactly the 30-item baseline.
-- Canaries, PR creation, final Sol review, and Slice B remain blocked.
+- Canaries, PR creation, final Sol review, and Slice D onward remain blocked.

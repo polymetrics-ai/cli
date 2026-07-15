@@ -46,9 +46,13 @@ status is therefore **not validated, not ratified, not canary-ready**.
 7. `cycle-4/live-pi-correction`: `99604d48` is a second Slice A false green because it invoked the
    unsupported invented `gsd headless shepherd-validate` verb. Replaced it with a separately configured,
    capability-probed Pi executable using the exact installed non-interactive JSON/read-only interface.
-8. `cycle-5/slice-b`: Slice A is accepted GREEN at `95a17f18`. Slice B uses `local_critical_path`
+8. `cycle-5/slice-b`: Slice A is accepted GREEN at `95a17f18`. Slice B used `local_critical_path`
    because store, workspace, and supervise share mutation paths; no overlapping mutating workers.
-   Slice C, PR creation, final Sol review, and canaries remain blocked.
+9. `cycle-6/slice-c`: Slice B is independently accepted GREEN at
+   `1a050692f9e47b5b4d3d74cfb38e56c67d461399`. Slice C uses `local_critical_path` because the
+   promotion journal, Shepherd SQLite, canonical Git, staged GSD snapshot, and filesystem rename
+   protocol form one critical transaction. Slice D onward, PR creation, final Sol review, and
+   canaries remain blocked.
 
 ## Ordered implementation slices
 
@@ -82,8 +86,9 @@ a dedicated protected session directory, a bounded capability probe, fresh nonce
 and redacted process errors. Protected evidence binding, ratification order, delayed promotion, durable
 state version, full attestation persistence, and metadata-derived gates remain enforced.
 
-### B. Durable attempt lifecycle and crash recovery — COMPLETE
+### B. Durable attempt lifecycle and crash recovery — COMPLETE / GREEN at `1a050692`
 
+Independent checkpoint acceptance: `1a050692f9e47b5b4d3d74cfb38e56c67d461399`.
 Slice A acceptance: GREEN at `95a17f18274c87ed0e3fde825b41257039b757de`; preserve its Pi validator,
 protected evidence, ratification, and delayed promotion behavior.
 
@@ -104,15 +109,32 @@ only after exact resources are proven absent. No broad worktree prune, broad bra
 path removal, or `RemoveAll` was introduced. Slice C promotion journaling and atomic `.gsd` state swap
 remain explicitly excluded.
 
-### C. Crash-safe GSD-state promotion
+### C. Crash-safe GSD-state promotion — GREEN (candidate diff)
 
 RED tests first:
-- injected crashes before Git promotion, after Git promotion, before state swap, and after state swap;
-- restart converges to exactly one consistent Git/GSD state;
-- canonical `.gsd` is never removed and repopulated in place.
+- journal close/reopen persistence and exact identity/proof/state/snapshot binding;
+- failures before Git promotion, immediately after Git promotion, before backup rename, between the
+  backup and install renames, and after install before completion;
+- restart at every boundary converges idempotently with no duplicate effect;
+- canonical Git and `.gsd` never finish mixed; moved/dirty canonical state fails closed;
+- missing, changed, corrupt, unknown, or symlinked stage/backup resources are preserved and blocked;
+- expired/mismatched proof blocks before Git promotion, while already-promoted valid journals finish
+  forward without a new model verdict;
+- SQLite WAL test data survives a consistent staged snapshot; installed `gsd.db` passes integrity
+  checking and has no stale WAL/SHM dependency;
+- all Slice A/B validator, ratification, lifecycle, cleanup, and restart tests remain green.
 
-GREEN target: staged state snapshot validation, SQLite/WAL-safe handling, promotion journal, atomic
-rename/swap with backup/recovery, and idempotent promotion/recovery.
+GREEN target: a protected SQLite promotion journal with states `journal_created`, `state_staged`,
+`git_promoting`, `git_promoted`, `state_swap_started`, `state_installed`, `complete`, and `blocked`;
+a bounded deterministic no-symlink GSD manifest; SQLite-safe `gsd.db` snapshotting and integrity checks;
+same-filesystem stage/backup rename installation with parent-directory fsync; forward-only recovery
+once Git reaches the candidate; exact journal-owned cleanup; and startup recovery before canonical GSD
+query or dispatch. Slice D onward remains excluded.
+
+Implemented with journal intent before staging, full proof/attestation identity binding, bounded
+root-confined copies, SQLite online backup/integrity verification, exact pre-Git ownership rechecks,
+crash-safe two-rename installation, rooted cleanup tombstones, and universal blocked-journal gates.
+Exact commit evidence is recorded after the Slice C checkpoint commit.
 
 ### D. Complete official GSD 1.11 registry loading
 

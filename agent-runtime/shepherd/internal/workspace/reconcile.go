@@ -50,6 +50,27 @@ func (m *Manager) VerifyCreatedAttempt(ctx context.Context, attempt AttemptWorkt
 	return m.verifyManagedWorktree(ctx, planned, attempt.Identity.BaseHead)
 }
 
+// VerifyOwnedAttemptAtHead proves deterministic path, branch, registration, Git common
+// directory, non-symlink identity, and the exact expected candidate head without mutation.
+func (m *Manager) VerifyOwnedAttemptAtHead(ctx context.Context, attempt AttemptWorktree, expectedHead string) error {
+	planned, err := m.Plan(attempt.Identity)
+	if err != nil {
+		return err
+	}
+	if filepath.Clean(attempt.Root) != planned.Root || attempt.Branch != planned.Branch || len(expectedHead) != 40 {
+		return errors.New("attempt identity or expected head does not match manager ownership")
+	}
+	worktrees, err := m.registeredWorktrees(ctx)
+	if err != nil {
+		return err
+	}
+	registered, found := findRegisteredWorktree(worktrees, planned.Root)
+	if !found || registered.Branch != "refs/heads/"+planned.Branch || registered.Head != expectedHead {
+		return errors.New("attempt is not exactly registered at the expected head")
+	}
+	return m.verifyManagedWorktree(ctx, planned, expectedHead)
+}
+
 // ReconcileOwnedAttempt removes only a resource whose path, branch, identity, and head
 // match the manager's deterministic plan. Unknown, live, moved, or mismatched resources
 // are left untouched.

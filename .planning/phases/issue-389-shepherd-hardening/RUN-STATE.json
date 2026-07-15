@@ -1,11 +1,11 @@
 {
   "phase": "issue-389-shepherd-hardening",
   "branch": "fix/389-shepherd-proof-recovery",
-  "base_head": "95a17f18274c87ed0e3fde825b41257039b757de",
+  "base_head": "1a050692f9e47b5b4d3d74cfb38e56c67d461399",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_b_complete_verified",
-  "current_slice": "B_durable_attempt_lifecycle_and_crash_recovery",
+  "state": "slice_c_green_candidate",
+  "current_slice": "C_crash_safe_gsd_state_promotion",
   "gsd_command": "scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run",
   "completed_slices": [
     {
@@ -15,7 +15,8 @@
     },
     {
       "slice": "B_durable_attempt_lifecycle_and_crash_recovery",
-      "status": "green_verified"
+      "head": "1a050692f9e47b5b4d3d74cfb38e56c67d461399",
+      "status": "green_accepted"
     }
   ],
   "required_skills_loaded": [
@@ -37,44 +38,42 @@
   ],
   "orchestration_decisions": [
     {
-      "cycle": "cycle-5",
+      "cycle": "cycle-6",
       "decision": "local_critical_path",
-      "reason": "Store, workspace, and supervise integration shared mutation paths; no overlapping mutating workers were used."
+      "reason": "Promotion journal, SQLite state, canonical Git, staged GSD state, and filesystem rename recovery form one critical transaction; no overlapping mutating workers."
     },
     {
-      "cycle": "cycle-5",
-      "decision": "slice_b_only",
-      "reason": "Attempt lifecycle and restart reconciliation completed; Slice C promotion/state-swap journal remains blocked."
+      "cycle": "cycle-6",
+      "decision": "slice_c_only",
+      "reason": "Implement crash-safe Git/GSD promotion and startup recovery only; Slice D onward remains blocked."
+    },
+    {
+      "cycle": "cycle-7-review-fix",
+      "decision": "local_critical_path",
+      "reason": "Independent read-only reviewer/security findings required sequential fixes across journal SQLite, Git promotion, and filesystem state."
+    },
+    {
+      "cycle": "cycle-8-verify",
+      "decision": "local_critical_path",
+      "reason": "Run final Slice C gates and checkpoint one coherent promotion transaction before any later slice."
     }
   ],
-  "red_evidence": [
-    "Focused store/workspace tests initially failed to compile because durable lifecycle and reconciliation APIs did not exist",
-    "Focused supervise tests then failed with zero cleanup_complete and retained_for_recovery records before integration"
-  ],
-  "green_evidence": [
-    "cd agent-runtime/shepherd && go test ./internal/store ./internal/workspace ./cmd/shepherd: pass",
-    "cd agent-runtime/shepherd && make verify: pass (vet, full tests, race)",
-    "gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify: pass",
-    "cd agent-runtime/shepherd && golangci-lint run ./...: exact baseline 30 findings; no Slice B finding",
-    "independent reviewer, security-auditor, and verifier findings dispositioned; final Slice B crash/recovery blocker fixed"
-  ],
-  "safety_evidence": [
-    "repository-global nofollow flock with inode replacement checks before effects",
-    "attempt_root must be disjoint from canonical worktree and protected state_dir",
-    "cleanup requires durable resources_created plus exact deterministic path, branch, head, Git common directory, and non-ambiguous state",
-    "running, promoting, unconfirmed, unknown, moved, mismatched, and checked-out resources fail closed",
-    "hard-crash lease takeover interrupts stale delivery/unit rows; human resolution requires exact resources already absent",
-    "no broad worktree prune, broad branch deletion, unproven RemoveAll, secrets, GitHub mutation, or new dependency"
-  ],
+  "slice_b_checkpoint": {
+    "head": "1a050692f9e47b5b4d3d74cfb38e56c67d461399",
+    "status": "independent_checkpoint_green",
+    "lint": "exact 30-finding baseline with zero differential findings"
+  },
   "next_actions": [
-    "Push the verified Slice B commit on fix/389-shepherd-proof-recovery",
-    "Stop without Slice C, PR creation, final Sol review, or canaries"
+    "Run root make verify, module-boundary, root go-list, and exact lint baseline/differential gates",
+    "Commit as feat(shepherd): journal crash-safe promotion and push the active branch",
+    "Stop with Slice D onward blocked"
   ],
   "blocked": [
-    "Slice C and later slices",
+    "Slice D and later slices",
     "PR creation",
     "Sol final review",
     "Twenty/Asana canaries",
+    "GitHub mutation",
     "Parent PR #390 merge"
   ]
 }

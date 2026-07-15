@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -363,16 +364,42 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 	if lockErr != nil {
 		return fmt.Errorf("startup delivery lock: %w", lockErr)
 	}
-	if _, _, err := ensureIssueDelivery(ctx, authority, config, issue, contextHash); err != nil {
-		_ = repositoryLock.Close()
-		return err
-	}
 	deliveryID := deliveryID(issue)
 	var startupErr error
-	if config.Runtime == "host" {
+	var reconcileLease store.Lease
+	var reconciliationLeaseHeld bool
+	if existingDelivery, getErr := authority.GetDelivery(ctx, deliveryID); getErr == nil {
 		reconcileOwner := fmt.Sprintf("reconcile-%d", time.Now().UTC().UnixNano())
-		reconcileLease, leaseErr := authority.AcquireReconciliationLease(ctx, deliveryID, reconcileOwner, time.Now().UTC(), 90*time.Second)
-		if leaseErr == nil {
+		reconcileLease, startupErr = authority.AcquireReconciliationLease(ctx, deliveryID, reconcileOwner, time.Now().UTC(), 90*time.Second)
+		if startupErr == nil {
+			reconciliationLeaseHeld = true
+			startupErr = recoverPromotionJournals(ctx, authority, manager, repositoryLock, existingDelivery, reconcileLease)
+		}
+	} else if !errors.Is(getErr, sql.ErrNoRows) {
+		startupErr = getErr
+	}
+	if startupErr != nil {
+		if reconciliationLeaseHeld {
+			startupErr = errors.Join(startupErr, authority.ReleaseLease(context.Background(), reconcileLease))
+		}
+		startupErr = errors.Join(startupErr, repositoryLock.Close())
+		return fmt.Errorf("startup promotion recovery: %w", startupErr)
+	}
+	_, _, ensureErr := ensureIssueDelivery(ctx, authority, config, issue, contextHash)
+	if ensureErr != nil {
+		if reconciliationLeaseHeld {
+			ensureErr = errors.Join(ensureErr, authority.ReleaseLease(context.Background(), reconcileLease))
+		}
+		_ = repositoryLock.Close()
+		return ensureErr
+	}
+	if config.Runtime == "host" {
+		if !reconciliationLeaseHeld {
+			reconcileOwner := fmt.Sprintf("reconcile-%d", time.Now().UTC().UnixNano())
+			reconcileLease, startupErr = authority.AcquireReconciliationLease(ctx, deliveryID, reconcileOwner, time.Now().UTC(), 90*time.Second)
+			reconciliationLeaseHeld = startupErr == nil
+		}
+		if startupErr == nil {
 			records, listErr := authority.ListAttemptWorktrees(ctx, deliveryID)
 			switch {
 			case listErr != nil:
@@ -388,9 +415,10 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 				}
 				startupErr = errors.Join(startupErr, authority.ReconcileInterruptedDelivery(ctx, reconcileLease, target))
 			}
-			leaseErr = authority.ReleaseLease(context.Background(), reconcileLease)
 		}
-		startupErr = errors.Join(startupErr, leaseErr)
+	}
+	if reconciliationLeaseHeld {
+		startupErr = errors.Join(startupErr, authority.ReleaseLease(context.Background(), reconcileLease))
 	}
 	startupErr = errors.Join(startupErr, repositoryLock.Close())
 	if startupErr != nil {
@@ -457,6 +485,13 @@ func requireMatchingAttemptDispatch(canonical, attempt gsd.WorkflowSnapshot) err
 }
 
 func rejectAmbiguousAttemptRecovery(ctx context.Context, authorityStore *store.Store, deliveryID string) error {
+	blocked, err := authorityStore.HasBlockedPromotionJournal(ctx, deliveryID)
+	if err != nil {
+		return err
+	}
+	if blocked {
+		return errors.New("blocked promotion journal requires journal-specific human recovery")
+	}
 	records, err := authorityStore.ListAttemptWorktrees(ctx, deliveryID)
 	if err != nil {
 		return err
@@ -531,11 +566,14 @@ func runFencedRepair(ctx context.Context, runner *gsd.Runner, config fileConfig,
 	if err != nil || delivery.Issue != issue || delivery.WorkDir != config.WorkDir {
 		return errors.New("repair delivery does not match issue/worktree")
 	}
-	_, repositoryLock, err := lockDeliveryWorkspace(config)
+	manager, repositoryLock, err := lockDeliveryWorkspace(config)
 	if err != nil {
 		return err
 	}
 	defer func() { _ = repositoryLock.Close() }()
+	if err := recoverExistingPromotionAtStartup(ctx, authority, manager, repositoryLock, deliveryID); err != nil {
+		return err
+	}
 	owner := fmt.Sprintf("repair-%d", time.Now().UTC().UnixNano())
 	lease, err := authority.AcquireLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
 	if err != nil {
@@ -587,11 +625,14 @@ func adoptExistingDelivery(ctx context.Context, runner *gsd.Runner, config fileC
 		return err
 	}
 	defer authority.Close()
-	_, repositoryLock, err := lockDeliveryWorkspace(config)
+	manager, repositoryLock, err := lockDeliveryWorkspace(config)
 	if err != nil {
 		return err
 	}
 	defer func() { _ = repositoryLock.Close() }()
+	if err := recoverExistingPromotionAtStartup(ctx, authority, manager, repositoryLock, deliveryID); err != nil {
+		return err
+	}
 	if _, _, err := ensureIssueDelivery(ctx, authority, config, issue, contextHash); err != nil {
 		return err
 	}
@@ -643,11 +684,14 @@ func runFencedQuery(ctx context.Context, runner *gsd.Runner, config fileConfig, 
 	if err != nil || delivery.Issue != issue || delivery.WorkDir != config.WorkDir {
 		return errors.New("query delivery is not initialized or does not match this issue/worktree")
 	}
-	_, repositoryLock, err := lockDeliveryWorkspace(config)
+	manager, repositoryLock, err := lockDeliveryWorkspace(config)
 	if err != nil {
 		return err
 	}
 	defer func() { _ = repositoryLock.Close() }()
+	if err := recoverExistingPromotionAtStartup(ctx, authority, manager, repositoryLock, deliveryID); err != nil {
+		return err
+	}
 	owner := fmt.Sprintf("query-%d", time.Now().UTC().UnixNano())
 	lease, err := authority.AcquireLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
 	if err != nil {
@@ -773,7 +817,32 @@ func lockDeliveryWorkspace(config fileConfig) (*workspace.Manager, *workspace.Re
 	return manager, lock, nil
 }
 
+func recoverExistingPromotionAtStartup(ctx context.Context, authorityStore *store.Store, manager *workspace.Manager, repositoryLock *workspace.RepositoryLock, deliveryID string) error {
+	delivery, err := authorityStore.GetDelivery(ctx, deliveryID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	owner := fmt.Sprintf("promotion-recovery-%d", time.Now().UTC().UnixNano())
+	lease, err := authorityStore.AcquireReconciliationLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
+	if err != nil {
+		return err
+	}
+	recoveryErr := recoverPromotionJournals(ctx, authorityStore, manager, repositoryLock, delivery, lease)
+	releaseErr := authorityStore.ReleaseLease(context.Background(), lease)
+	return errors.Join(recoveryErr, releaseErr)
+}
+
 func resolveHumanClearedAttempts(ctx context.Context, authorityStore *store.Store, config fileConfig, deliveryID string) error {
+	blocked, err := authorityStore.HasBlockedPromotionJournal(ctx, deliveryID)
+	if err != nil {
+		return err
+	}
+	if blocked {
+		return errors.New("blocked promotion journal requires journal-specific human recovery")
+	}
 	manager, repositoryLock, err := lockDeliveryWorkspace(config)
 	if err != nil {
 		return err
@@ -787,6 +856,15 @@ func resolveHumanClearedAttempts(ctx context.Context, authorityStore *store.Stor
 	records, resolveErr := authorityStore.ListAttemptWorktrees(ctx, deliveryID)
 	if resolveErr == nil {
 		for _, record := range records {
+			hasJournal, journalErr := authorityStore.AttemptHasPromotionJournal(ctx, record.Key())
+			if journalErr != nil {
+				resolveErr = journalErr
+				break
+			}
+			if hasJournal && record.State == store.AttemptWorktreePromoting {
+				resolveErr = errors.New("journal-owned promotion requires journal-specific human recovery")
+				break
+			}
 			if record.State == store.AttemptWorktreeCleanupComplete ||
 				(record.ResourcesCreated && record.State != store.AttemptWorktreeRunning && record.State != store.AttemptWorktreePromoting) {
 				continue
@@ -864,12 +942,25 @@ func reconcileAttemptWorktrees(ctx context.Context, authorityStore *store.Store,
 		if record.State == store.AttemptWorktreeCleanupComplete {
 			continue
 		}
+		claimed := record
 		if record.ControllerOwner == lease.Owner && record.ControllerEpoch == lease.Epoch {
-			continue
-		}
-		claimed, claimErr := authorityStore.ClaimAttemptWorktreeCleanup(ctx, record.Key(), record.ControllerOwner, record.ControllerEpoch, lease.Owner, lease.Epoch)
-		if claimErr != nil {
-			return claimErr
+			switch record.State {
+			case store.AttemptWorktreePromoted:
+				claimed, err = authorityStore.TransitionAttemptWorktree(ctx, record.Key(), lease.Owner, lease.Epoch,
+					store.AttemptWorktreeCleanupPending, store.AttemptWorktreeUpdate{})
+				if err != nil {
+					return err
+				}
+			case store.AttemptWorktreeCleanupPending:
+			default:
+				continue
+			}
+		} else {
+			var claimErr error
+			claimed, claimErr = authorityStore.ClaimAttemptWorktreeCleanup(ctx, record.Key(), record.ControllerOwner, record.ControllerEpoch, lease.Owner, lease.Epoch)
+			if claimErr != nil {
+				return claimErr
+			}
 		}
 		expectedHead := claimed.CandidateHead
 		if expectedHead == "" {
@@ -918,6 +1009,9 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		return err
 	}
 	defer func() { returnErr = errors.Join(returnErr, repositoryLock.Close()) }()
+	if err := recoverExistingPromotionAtStartup(ctx, authority, attemptManager, repositoryLock, deliveryID); err != nil {
+		return err
+	}
 	executionID := fmt.Sprintf("execution-%d", time.Now().UTC().UnixNano())
 	var delivery store.Delivery
 	if contextHash != "" {
@@ -950,6 +1044,9 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		return err
 	}
 	defer func() { returnErr = errors.Join(returnErr, authority.ReleaseLease(context.Background(), lease)) }()
+	if err := rejectAmbiguousAttemptRecovery(ctx, authority, deliveryID); err != nil {
+		return err
+	}
 	startSnapshot, err := shepherdgit.Inspect(ctx, config.WorkDir)
 	if err != nil {
 		return err
@@ -1382,27 +1479,15 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 				} else if cleanErr := shepherdgit.RequireClean(promotionSnapshot); cleanErr != nil {
 					result.Terminal = gsd.TerminalError
 					result.Err = cleanErr
-				} else if err := lifecycle.transition(ctx, store.AttemptWorktreePromoting, store.AttemptWorktreeUpdate{CandidateHead: candidateHead, ValidatedHead: candidateHead}); err != nil {
-					result.Terminal = gsd.TerminalError
-					result.Err = err
 				} else if err := authority.CheckLease(ctx, lease, time.Now().UTC()); err != nil {
 					result.Terminal = gsd.TerminalError
 					result.Err = err
 				} else if err := repositoryLock.Check(); err != nil {
 					result.Terminal = gsd.TerminalError
 					result.Err = err
-				} else if err := attemptManager.PromoteCandidate(ctx, *attemptWorktree, candidateHead); err != nil {
+				} else if err := promoteRatifiedAttempt(ctx, authority, attemptManager, repositoryLock, lease, delivery, *attemptWorktree, lifecycle); err != nil {
 					result.Terminal = gsd.TerminalError
 					result.Err = fmt.Errorf("promote ratified candidate: %w", err)
-				} else if lockErr := repositoryLock.Check(); lockErr != nil {
-					result.Terminal = gsd.TerminalError
-					result.Err = lockErr
-				} else if adoptErr := attemptManager.AdoptGSDState(ctx, *attemptWorktree); adoptErr != nil {
-					result.Terminal = gsd.TerminalError
-					result.Err = fmt.Errorf("adopt ratified GSD state: %w", adoptErr)
-				} else if err := lifecycle.transition(ctx, store.AttemptWorktreePromoted, store.AttemptWorktreeUpdate{CandidateHead: candidateHead, ValidatedHead: candidateHead}); err != nil {
-					result.Terminal = gsd.TerminalError
-					result.Err = err
 				} else if err := lifecycle.transition(ctx, store.AttemptWorktreeCleanupPending, store.AttemptWorktreeUpdate{}); err != nil {
 					result.Terminal = gsd.TerminalError
 					result.Err = err
@@ -1837,6 +1922,8 @@ func gsdStateArtifacts(workDir string) ([]shepherdgit.Artifact, error) {
 		return nil, errors.New("GSD state root must be a real directory")
 	}
 	var artifacts []shepherdgit.Artifact
+	var totalBytes int64
+	var entries int
 	for _, relRoot := range []string{"STATE.md", "state-manifest.json", "phases"} {
 		path := filepath.Join(root, relRoot)
 		if _, err := os.Lstat(path); os.IsNotExist(err) {
@@ -1855,9 +1942,20 @@ func gsdStateArtifacts(workDir string) ([]shepherdgit.Artifact, error) {
 			if info.Mode()&os.ModeSymlink != 0 {
 				return errors.New("GSD state artifact must not be a symlink")
 			}
-			if entry.IsDir() || !info.Mode().IsRegular() {
+			entries++
+			if entries > workspace.MaxGSDManifestEntries {
+				return errors.New("GSD validation artifact entry limit exceeded")
+			}
+			if entry.IsDir() {
 				return nil
 			}
+			if !info.Mode().IsRegular() {
+				return errors.New("GSD validation artifact must be a regular file")
+			}
+			if info.Size() > workspace.MaxGSDManifestFileBytes || totalBytes > workspace.MaxGSDManifestTotalBytes-info.Size() {
+				return errors.New("GSD validation artifact byte limit exceeded")
+			}
+			totalBytes += info.Size()
 			raw, err := os.ReadFile(path)
 			if err != nil {
 				return err

@@ -299,6 +299,27 @@ func (s *Store) migrate(ctx context.Context) error {
 			created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL,
 			PRIMARY KEY (delivery_id, generation, unit_id, attempt)
 		)`,
+		`CREATE TABLE IF NOT EXISTS promotion_journals (
+			journal_id TEXT PRIMARY KEY, delivery_id TEXT NOT NULL, generation INTEGER NOT NULL,
+			unit_id TEXT NOT NULL, attempt INTEGER NOT NULL, base_head TEXT NOT NULL,
+			candidate_head TEXT NOT NULL, validated_head TEXT NOT NULL, proof_id TEXT NOT NULL,
+			evidence_hash TEXT NOT NULL, validator_session_id TEXT NOT NULL,
+			attestation_repository TEXT NOT NULL, attestation_pr INTEGER NOT NULL,
+			attestation_base_branch TEXT NOT NULL, attestation_contract_hash TEXT NOT NULL,
+			attestation_created_at INTEGER NOT NULL, attestation_validator TEXT NOT NULL, attestation_thinking TEXT NOT NULL,
+			attestation_verdict TEXT NOT NULL, attestation_local_gates INTEGER NOT NULL,
+			attestation_uat INTEGER NOT NULL, attestation_milestone_valid INTEGER NOT NULL,
+			governance_state_version INTEGER NOT NULL, attestation_expires_at INTEGER NOT NULL,
+			manifest_json TEXT NOT NULL, manifest_hash TEXT NOT NULL,
+			backup_manifest_json TEXT NOT NULL, backup_manifest_hash TEXT NOT NULL,
+			stage_path TEXT NOT NULL UNIQUE, backup_path TEXT NOT NULL UNIQUE, canonical_path TEXT NOT NULL,
+			state TEXT NOT NULL, blocked_reason TEXT NOT NULL DEFAULT '', cleanup_complete INTEGER NOT NULL DEFAULT 0,
+			controller_owner TEXT NOT NULL, controller_epoch INTEGER NOT NULL, created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL,
+			FOREIGN KEY (delivery_id, generation, unit_id, attempt)
+				REFERENCES attempt_worktrees(delivery_id, generation, unit_id, attempt)
+		)`,
+		`CREATE INDEX IF NOT EXISTS promotion_journals_delivery_state
+			ON promotion_journals(delivery_id, state, created_at)`,
 	}
 	for _, statement := range statements {
 		if _, err := s.db.ExecContext(ctx, statement); err != nil {
@@ -1099,20 +1120,21 @@ func putAttestation(ctx context.Context, executor contextExecer, attestation Att
 	if attestation.MilestoneValid {
 		milestoneValid = 1
 	}
-	_, err := executor.ExecContext(ctx, `INSERT INTO attestations(
+	result, err := executor.ExecContext(ctx, `INSERT INTO attestations(
 		run_id, head_sha, validator, thinking, verdict, created_at, repository, pr, base_branch,
 		base_head, candidate_head, observed_head, generation, unit_id, attempt, state_version,
 		contract_hash, evidence_hash, validator_session_id, local_gates, uat, milestone_valid, expires_at)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-		ON CONFLICT(run_id, head_sha) DO UPDATE SET
-		validator = excluded.validator, thinking = excluded.thinking, verdict = excluded.verdict,
-		created_at = excluded.created_at, repository = excluded.repository, pr = excluded.pr,
-		base_branch = excluded.base_branch, base_head = excluded.base_head, candidate_head = excluded.candidate_head,
-		observed_head = excluded.observed_head, generation = excluded.generation, unit_id = excluded.unit_id,
-		attempt = excluded.attempt, state_version = excluded.state_version, contract_hash = excluded.contract_hash,
-		evidence_hash = excluded.evidence_hash, validator_session_id = excluded.validator_session_id,
-		local_gates = excluded.local_gates, uat = excluded.uat, milestone_valid = excluded.milestone_valid,
-		expires_at = excluded.expires_at`, attestation.RunID, attestation.HeadSHA, attestation.Validator,
+		ON CONFLICT(run_id, head_sha) DO UPDATE SET head_sha = excluded.head_sha
+		WHERE validator = excluded.validator AND thinking = excluded.thinking AND verdict = excluded.verdict
+		AND created_at = excluded.created_at AND repository = excluded.repository AND pr = excluded.pr
+		AND base_branch = excluded.base_branch AND base_head = excluded.base_head
+		AND candidate_head = excluded.candidate_head AND observed_head = excluded.observed_head
+		AND generation = excluded.generation AND unit_id = excluded.unit_id AND attempt = excluded.attempt
+		AND state_version = excluded.state_version AND contract_hash = excluded.contract_hash
+		AND evidence_hash = excluded.evidence_hash AND validator_session_id = excluded.validator_session_id
+		AND local_gates = excluded.local_gates AND uat = excluded.uat
+		AND milestone_valid = excluded.milestone_valid AND expires_at = excluded.expires_at`, attestation.RunID, attestation.HeadSHA, attestation.Validator,
 		attestation.Thinking, attestation.Verdict, created.UnixNano(), attestation.Repository, attestation.PR,
 		attestation.BaseBranch, attestation.BaseHead, attestation.CandidateHead, attestation.ObservedHead,
 		attestation.Generation, attestation.UnitID, attestation.Attempt, attestation.StateVersion,
@@ -1120,6 +1142,9 @@ func putAttestation(ctx context.Context, executor contextExecer, attestation Att
 		localGates, uat, milestoneValid, expires.UnixNano())
 	if err != nil {
 		return fmt.Errorf("put attestation: %w", err)
+	}
+	if rows, _ := result.RowsAffected(); rows != 1 {
+		return errors.New("attestation identity is immutable and cannot be rebound")
 	}
 	return nil
 }

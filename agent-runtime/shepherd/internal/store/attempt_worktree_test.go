@@ -384,7 +384,8 @@ func advanceAttemptToState(t *testing.T, ctx context.Context, db *Store, record 
 		}
 		update := AttemptWorktreeUpdate{}
 		if state == AttemptWorktreeValidated || state == AttemptWorktreeRatified || state == AttemptWorktreePromoting || state == AttemptWorktreePromoted {
-			update.CandidateHead, update.ValidatedHead = strings.Repeat("c", 40), strings.Repeat("c", 40)
+			candidate := fmt.Sprintf("%040x", record.Attempt+100)
+			update.CandidateHead, update.ValidatedHead = candidate, candidate
 		}
 		transitionAttempt(t, ctx, db, record, state, update)
 		if state == target {

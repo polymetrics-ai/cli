@@ -111,9 +111,10 @@ Final corrected Slice A GREEN evidence:
 - PASS `cd agent-runtime/shepherd && go build ./cmd/shepherd && make verify && cd ../.. && scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...`.
 - PASS live smoke: `POLYMETRICS_SHEPHERD_LIVE_VALIDATOR=1 go test ./internal/validation -run TestLivePiValidatorSmoke -count=1 -v` observed `openai-codex/gpt-5.6-sol`, `high`, fresh session `019f62b3-9830-7129-9c93-2104ed54a10e`, bound fixture head `6650f5e18ecbbf15c18739a8422fa1ba663a0635`, bound evidence hash, and `PROCEED`.
 
-## Slice B — Durable attempt lifecycle and crash recovery — IN PROGRESS
+## Slice B — Durable attempt lifecycle and crash recovery — COMPLETE / GREEN
 
 Slice A accepted GREEN at `95a17f18274c87ed0e3fde825b41257039b757de`.
+Slice B independently accepted GREEN at `1a050692f9e47b5b4d3d74cfb38e56c67d461399`.
 Orchestration: `local_critical_path`; no overlapping mutating workers.
 
 Completed RED/GREEN tests:
@@ -153,17 +154,54 @@ Refactor evidence:
   atomic ratification, authorized-branch checks, bounded output, and human-gated convergence fixes.
 - Slice C promotion/state-swap journaling remains explicitly excluded.
 
-## Slice C — Crash-safe GSD-state promotion
+## Slice C — Crash-safe GSD-state promotion — GREEN (candidate diff)
 
-Planned RED tests:
-- [ ] inject failure before Git promotion.
-- [ ] inject failure after Git promotion.
-- [ ] inject failure before state swap.
-- [ ] inject failure after state swap.
-- [ ] restart is idempotent and converges to one consistent Git/GSD state.
+Orchestration: `local_critical_path`; no overlapping mutating workers.
 
-GREEN evidence: pending.
-Refactor evidence: pending.
+Required RED tests:
+- [ ] promotion journal persists across store close/reopen.
+- [ ] failure before Git promotion.
+- [ ] failure immediately after Git promotion.
+- [ ] failure before canonical GSD backup rename.
+- [ ] failure after backup rename but before staged-state install.
+- [ ] failure after staged-state install but before journal completion.
+- [ ] restart at every boundary converges idempotently.
+- [ ] repeated recovery produces no duplicate effects.
+- [ ] canonical Git and `.gsd` never finish mixed.
+- [ ] moved canonical head fails closed.
+- [ ] dirty canonical worktree fails closed.
+- [ ] missing, changed, corrupt stage/backup blocks without deletion.
+- [ ] unknown staging/backup directories are never deleted.
+- [ ] expired or mismatched proof before Git promotion blocks promotion.
+- [ ] already-promoted valid journal completes forward without a new verdict.
+- [ ] SQLite data committed through WAL survives staging and installation.
+- [ ] installed `gsd.db` passes integrity check without stale WAL/SHM files.
+- [ ] existing Slice A/B validation, ratification, lifecycle, cleanup, and restart tests remain green.
+
+RED evidence (2026-07-15):
+- `cd agent-runtime/shepherd && go test ./internal/store ./internal/workspace ./cmd/shepherd` failed as expected.
+- Store failures: missing durable promotion journal types/states and create/get/transition/recovery-claim APIs.
+- Workspace failures: missing bounded manifest, WAL-safe staging, rename install/recovery, cleanup, and failpoint boundaries.
+- Command failures: missing real promotion coordinator, failure boundaries, startup recovery, and journal state integration.
+- The RED suite covers all requested pre/post-Git and pre/between/post-state-swap boundaries, repeated
+  recovery, moved/dirty heads, corrupt/missing/unknown resources, stale authority, forward recovery,
+  WAL survival/integrity, and Slice B no-journal human gating.
+
+GREEN evidence (2026-07-15): focused store/workspace/command promotion suites pass; full nested
+`go test ./...` passes; final store race rerun passes; earlier full command/workspace race pass remains
+valid for the crash-boundary suite; `go vet ./...`, `go build ./cmd/shepherd`, root `make verify`, module
+boundary, root `go list`, gofmt, and diff checks pass. Nested lint reports 29 baseline findings and no
+Slice C production finding.
+All nine injected journal/Git/swap/completion boundaries converge on restart. WAL-backed SQLite data
+installs standalone and passes integrity checking.
+
+Refactor evidence: two independent reviewer/security cycles drove pre-stage durable intent,
+pre-Git resource and attempt revalidation, immutable full attestation binding, blocked-journal gates,
+bounded root-confined copying, and crash-resumable rooted cleanup tombstones. The stronger request to
+cryptographically include the complete staged SQLite snapshot in the independent model attestation is
+deferred: Slice C's approved contract binds both ratified proof and deterministic full-state manifest
+inside the protected journal after worker quiescence; it does not redefine Slice A's evidence schema.
+Slice D onward is excluded.
 
 ## Slice D — Official GSD 1.11 registry loading
 

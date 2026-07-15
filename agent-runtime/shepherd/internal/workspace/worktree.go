@@ -121,14 +121,10 @@ func (m *Manager) PrepareGSDState(ctx context.Context, attempt AttemptWorktree) 
 	return copyGSDState(ctx, filepath.Join(m.RepoRoot, ".gsd"), filepath.Join(attempt.Root, ".gsd"))
 }
 
-func (m *Manager) AdoptGSDState(ctx context.Context, attempt AttemptWorktree) error {
-	if err := validateIdentity(attempt.Identity); err != nil {
-		return err
-	}
-	if !strings.HasPrefix(filepath.Clean(attempt.Root), filepath.Clean(m.Root)+string(os.PathSeparator)) {
-		return errors.New("attempt worktree is not owned by this manager")
-	}
-	return copyGSDState(ctx, filepath.Join(attempt.Root, ".gsd"), filepath.Join(m.RepoRoot, ".gsd"))
+// AdoptGSDState is intentionally disabled: canonical GSD state may only be
+// installed by the durable promotion journal's staged rename protocol.
+func (m *Manager) AdoptGSDState(context.Context, AttemptWorktree) error {
+	return errors.New("direct GSD state adoption is disabled; use journaled promotion")
 }
 
 func (m *Manager) CheckpointCandidate(ctx context.Context, attempt AttemptWorktree, writeScopes []string, message string) (string, error) {
@@ -235,6 +231,8 @@ func copyGSDState(ctx context.Context, src, dst string) error {
 	if err := os.MkdirAll(dst, 0o700); err != nil {
 		return fmt.Errorf("create destination GSD state: %w", err)
 	}
+	var entries int
+	var totalBytes int64
 	return filepath.WalkDir(src, func(path string, entry os.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
@@ -256,18 +254,26 @@ func copyGSDState(ctx context.Context, src, dst string) error {
 		if info.Mode()&os.ModeSymlink != 0 {
 			return errors.New("GSD state must not contain symlinks")
 		}
+		entries++
+		if entries > MaxGSDManifestEntries {
+			return errors.New("GSD state entry limit exceeded")
+		}
 		target := filepath.Join(dst, rel)
 		if entry.IsDir() {
 			return os.MkdirAll(target, 0o700)
 		}
 		if !info.Mode().IsRegular() {
-			return nil
+			return errors.New("GSD state contains a special file")
 		}
-		return copyRegularFile(path, target, info.Mode().Perm())
+		if info.Size() > MaxGSDManifestFileBytes || totalBytes > MaxGSDManifestTotalBytes-info.Size() {
+			return errors.New("GSD state byte limit exceeded")
+		}
+		totalBytes += info.Size()
+		return copyRegularFile(path, target, info.Mode().Perm(), info.Size())
 	})
 }
 
-func copyRegularFile(src, dst string, mode os.FileMode) error {
+func copyRegularFile(src, dst string, mode os.FileMode, expectedSize int64) error {
 	if mode == 0 {
 		mode = 0o600
 	}
@@ -278,12 +284,21 @@ func copyRegularFile(src, dst string, mode os.FileMode) error {
 	if err != nil {
 		return err
 	}
-	defer in.Close()
+	defer func() { _ = in.Close() }()
 	out, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, mode)
 	if err != nil {
 		return err
 	}
-	if _, err := io.Copy(out, in); err != nil {
+	written, err := io.Copy(out, io.LimitReader(in, MaxGSDManifestFileBytes+1))
+	if err != nil {
+		_ = out.Close()
+		return err
+	}
+	if written != expectedSize {
+		_ = out.Close()
+		return errors.New("GSD source changed during bounded copy")
+	}
+	if err := out.Sync(); err != nil {
 		_ = out.Close()
 		return err
 	}

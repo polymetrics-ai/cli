@@ -785,7 +785,7 @@ func TestSuperviseStartupPreservesAmbiguousRunningAttempt(t *testing.T) {
 	}
 }
 
-func TestSupervisePreservesAmbiguousPromotingAttempt(t *testing.T) {
+func TestSuperviseRetainsMovedCandidateBeforePromotionIntent(t *testing.T) {
 	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
 		return
 	}
@@ -805,18 +805,18 @@ func TestSupervisePreservesAmbiguousPromotingAttempt(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := db.QueryRow(`SELECT path FROM attempt_worktrees WHERE state = 'promoting'`).Scan(&attemptPath); err != nil {
+	if err := db.QueryRow(`SELECT path FROM attempt_worktrees WHERE state = 'retained_for_recovery'`).Scan(&attemptPath); err != nil {
 		_ = db.Close()
-		t.Fatalf("promoting attempt not durable: %v", err)
+		t.Fatalf("moved candidate was not durably retained: %v", err)
 	}
 	if err := db.Close(); err != nil {
 		t.Fatal(err)
 	}
 	if err := runSupervise(context.Background(), runner, config, gsd.BuiltinUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
-		t.Fatal("ambiguous promotion did not block restart")
+		t.Fatal("moved retained candidate did not remain human-gated")
 	}
 	if _, err := os.Stat(attemptPath); err != nil {
-		t.Fatalf("ambiguous promoting worktree was removed: %v", err)
+		t.Fatalf("moved retained attempt was changed: %v", err)
 	}
 }
 
