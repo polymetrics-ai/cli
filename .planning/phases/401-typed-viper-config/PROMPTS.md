@@ -4,8 +4,8 @@
 
 Task: Execute polymetrics-ai/cli#401 as one bounded mutating worker for parent #397.
 
-Downstream artifact: `.planning/phases/401-typed-viper-config/PLAN.md`; PR #441 opened; prior review-fix pushed; final website caveat fixed locally.
-Verification result: final caveat local gates passed; docs caveat fix commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193` and pushed head `3b2558dde5b4f90deac69942371b9b813fb8e312` recorded in PR #441 body; website package scripts blocked by missing `website/node_modules` where applicable; human/parent review fallback pending.
+Downstream artifact: `.planning/phases/401-typed-viper-config/PLAN.md`; PR #441 open; final correction records predecessor hashes only as checkpoints and uses `PR #441 headRefOid / git rev-parse HEAD at handoff` as final-head source.
+Verification result: final correction gates passed locally (`gofmt`, focused config/CLI tests, docs generator, `go vet`, `go build`, `make verify`, diff check). Committed trace will not chase its own future SHA; exact final SHA will be reported from `git rev-parse HEAD` after the last push and may be posted externally by the parent orchestrator.
 
 ## GSD command evidence
 
@@ -40,4 +40,4 @@ Manual GSD programming loop from `.pi/prompts/pm-gsd-loop.md`:
 - Dependency integrated: #400 via PR #440, parent commit `8900db141cc289b65491365d2ebcab490af57789`.
 - Branch: `feat/401-typed-viper-config`.
 - Allowed scope: `internal/config/**`, focused tests, minimal CLI config load/bind/error mapping, ADR-approved Viper dependency delta, config docs/website, issue-local planning artifacts.
-- Review route: Claude disabled manually; Copilot quota exhausted; record human/parent fallback pending.
+- Review route: Claude disabled manually; Copilot quota exhausted; no Claude/Copilot request for this final correction; parent/human review coverage delegated without approval claim.

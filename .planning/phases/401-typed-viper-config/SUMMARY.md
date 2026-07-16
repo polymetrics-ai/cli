@@ -1,6 +1,15 @@
 # Issue 401 Summary — Typed Viper Configuration
 
-Status: final re-review website caveat fixed in commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193` from starting head `77e8fe559b6bab458ed19cb30d3fdc6aa6778f56`; pushed head `3b2558dde5b4f90deac69942371b9b813fb8e312` recorded in PR #441 body; local gates passed; human/parent review fallback remains pending.
+Status: final correction complete locally; predecessor hashes are recorded only as checkpoints; final-head source is `PR #441 headRefOid / git rev-parse HEAD at handoff` and the exact final SHA will be reported after the last push, not committed into trace artifacts. Local gates passed; parent/human review coverage delegated with no approval claim.
+
+## Final correction disposition
+
+- Finding: trace artifacts called predecessor commit `3b2558dde5b4f90deac69942371b9b813fb8e312` the final PR head after PR #441 moved.
+- Disposition: Accepted with modification.
+- Fix: renamed predecessor hashes as implementation/evidence checkpoints, added final-head source `PR #441 headRefOid / git rev-parse HEAD at handoff`, and avoided committing a self-referential final SHA.
+- Finding: CLI manual/docs caveat said all current command behavior uses legacy readers, contradicting fixed `root`/`json` behavior.
+- Disposition: Accepted.
+- Fix: `internal/cli/docs.go` and regenerated `docs/cli/config.md` now state `root`/`json` are CLI-effective in this phase, while runtime/RLM/schedule command readers continue using legacy environment readers until #402; website wording remains aligned.
 
 ## Final re-review disposition
 
@@ -127,11 +136,24 @@ Website package-script checks without dependency install:
 
 Website script failures are dependency-availability blockers only: `website/node_modules` is absent, and this task forbids adding/installing frontend dependencies.
 
+## Final correction verification
+
+Passed locally:
+
+- `gofmt -w cmd internal` -> pass, no output.
+- `go test ./internal/config/... -count=1` -> `ok  	polymetrics.ai/internal/config	0.390s`.
+- `go test ./internal/cli/ -run 'Golden|Config' -count=1` -> `ok  	polymetrics.ai/internal/cli	6.831s`.
+- `node website/scripts/gen-docs-data.mjs` -> `Wrote 11 docs pages to lib/docs.generated.ts.`
+- `go vet ./...` -> pass, no output.
+- `go build ./cmd/pm` -> pass, no output.
+- `make verify` -> pass; smoke path `/var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.ksPDLEnYZB`; ended `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` -> pass, no output.
+
 ## Review route
 
 Sub-PR: https://github.com/polymetrics-ai/cli/pull/441 (non-draft, base `feat/cli-architecture-v2`).
 
-PR body updated with pm-reviewer disposition and final website caveat evidence via GitHub REST patch after `gh pr edit` hit the Projects classic GraphQL deprecation. Latest recorded pushed head at PR-body update time: `3b2558dde5b4f90deac69942371b9b813fb8e312`. Claude workflow remains `disabled_manually`; Copilot quota exhausted for this blocker window. Did not post `@claude review`; did not request Copilot. Human/parent fallback pending.
+PR body was previously updated with pm-reviewer disposition and final website caveat evidence via GitHub REST patch after `gh pr edit` hit the Projects classic GraphQL deprecation. Historical PR body updates may name predecessor checkpoints, but issue-local trace artifacts no longer treat those as final. Claude workflow remains `disabled_manually`; Copilot quota exhausted for this blocker window. Did not post `@claude review`; did not request Copilot. Parent/human review coverage delegated with no approval claim.
 
 ## Human gates
 

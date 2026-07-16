@@ -532,3 +532,83 @@ rg -n 'Only `root` and `json` affect CLI invocation behavior|#402 migrates them|
 ```
 
 Result: exit 0, matches in both `website/content/docs/cli-reference.mdx` and `website/lib/docs.generated.ts`.
+
+## Cycle 10 — final correction plan / validation evidence
+
+Status: planned before production docs edits.
+
+Findings/dispositions:
+
+- Trace artifacts called predecessor commit `3b2558dde5b4f90deac69942371b9b813fb8e312` the final head even after PR #441 moved. Disposition: Accepted with modification. A committed artifact cannot record its own future SHA; predecessor hashes stay as checkpoints only.
+- CLI manual/docs caveat said all current command behavior uses legacy readers, contradicting the fixed `root`/`json` behavior. Disposition: Accepted.
+
+GSD refresh evidence:
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt programming-loop init --phase 401 --dry-run >/tmp/gsd-programming-loop-401-final-correction.prompt 2>/tmp/gsd-programming-loop-401-final-correction.err
+```
+
+Result: `scripts/gsd doctor` passed; programming-loop adapter gap remains:
+
+```text
+scripts/gsd: unknown GSD command: programming-loop
+```
+
+Manual fallback remains `.pi/prompts/pm-gsd-loop.md`.
+
+Skills refreshed for this cycle: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-documentation`, `golang-spf13-viper`, `golang-spf13-cobra`, `golang-safety`, `golang-lint`, `vercel-react-best-practices`, and `vercel-composition-patterns`. Missing repo-local stack skills remain `.pi/skills/go-implementation/SKILL.md`, `.pi/skills/ts-website/SKILL.md`, and `.pi/skills/design-ui/SKILL.md` (`ENOENT`); required Go/website-awareness skills were loaded per `.agents/agentic-delivery/references/required-skills-routing.md`.
+
+Validation evidence before production docs edits:
+
+```bash
+git rev-parse HEAD
+rg -n "3b2558dd|final head|final PR head|headRefOid|git rev-parse HEAD at handoff" .planning/phases/401-typed-viper-config
+rg -n "legacy readers|legacy env readers|legacy environment readers|Current command behavior|root/json|root` and `json|#402" internal/cli/docs.go docs/cli/config.md website/content/docs/cli-reference.mdx
+```
+
+Result: current predecessor checkpoint before this correction was `60edbb4531f801b20a7f2e8f89e42279013416e9`; grep found stale predecessor-as-head claims in `SUMMARY.md`, `VERIFICATION.md`, `PROMPTS.md`, and `RUN-STATE.json`; grep found CLI docs saying current command behavior continues to use legacy readers while website already says only `root`/`json` are CLI-effective now and runtime/RLM/schedule stay legacy until #402.
+
+Planned final gates:
+
+```bash
+gofmt -w cmd internal
+go test ./internal/config/... -count=1
+go test ./internal/cli/ -run 'Golden|Config' -count=1
+node website/scripts/gen-docs-data.mjs
+make verify
+git diff --check origin/feat/cli-architecture-v2...HEAD
+```
+
+Additional local-policy gates: `go vet ./...` and `go build ./cmd/pm`.
+
+## Cycle 11 — final correction green / verification evidence
+
+Implemented final correction: trace artifacts now treat predecessor SHAs as checkpoints and name final-head source as `PR #441 headRefOid / git rev-parse HEAD at handoff`; CLI manual/generated docs now state `root`/`json` are CLI-effective while runtime/RLM/schedule command readers remain on legacy environment readers until #402. Regenerated `docs/cli/config.md` with `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir /tmp/pm-401-final-correction-connectors-docs` after checking `go run ./cmd/pm help docs`; regenerated website docs data with `node website/scripts/gen-docs-data.mjs`.
+
+Required gates:
+
+```bash
+gofmt -w cmd internal
+go test ./internal/config/... -count=1
+go test ./internal/cli/ -run 'Golden|Config' -count=1
+node website/scripts/gen-docs-data.mjs
+go vet ./...
+go build ./cmd/pm
+make verify
+git diff --check origin/feat/cli-architecture-v2...HEAD
+```
+
+Results:
+
+```text
+go test ./internal/config/... -count=1 -> ok  	polymetrics.ai/internal/config	0.390s
+go test ./internal/cli/ -run 'Golden|Config' -count=1 -> ok  	polymetrics.ai/internal/cli	6.831s
+node website/scripts/gen-docs-data.mjs -> Wrote 11 docs pages to lib/docs.generated.ts.
+go vet ./... -> pass, no output
+go build ./cmd/pm -> pass, no output
+make verify -> pass; smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.ksPDLEnYZB; final line: connectorgen validate: 547 connector(s) checked, 0 findings
+git diff --check origin/feat/cli-architecture-v2...HEAD -> pass, no output
+```
+
+No Claude/Copilot request posted. No dependency changes.

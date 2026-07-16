@@ -13,6 +13,27 @@
 
 Add an invocation-scoped `internal/config` package that loads typed app configuration through a fresh Viper instance with explicit flag/env/file/default precedence, reads `.polymetrics/config.yaml` from the invocation root, and integrates the CLI only far enough to validate malformed config through the existing validation exit-code funnel.
 
+## Final correction cycle — PR #441 trace SHA and CLI docs caveat findings
+
+Dispositions: Accepted with modification for trace SHA artifacts; accepted for CLI manual/docs caveat.
+
+Required action for this final correction:
+
+1. Stop treating predecessor commits as the final PR head in issue-local trace artifacts. Keep predecessor SHAs only as implementation/evidence checkpoints.
+2. Record final-head source as `PR #441 headRefOid / git rev-parse HEAD at handoff`; the exact final SHA is intentionally not committed into trace artifacts and will be posted externally by the parent orchestrator after this last push.
+3. Update `PROMPTS.md` downstream artifact/result so it is current and does not leave the final correction result unresolved.
+4. Update `internal/cli/docs.go` and regenerated `docs/cli/config.md` so `root`/`json` are CLI-effective now while runtime/RLM/schedule command consumption remains on legacy readers until #402.
+5. Keep website wording aligned; regenerate generated docs data with existing generators only.
+6. Run the user-requested gates, commit/push one coherent final correction, update PR #441 body via API if needed, and do not request Claude/Copilot.
+
+Final correction slice plan:
+
+- FC0 plan gate: refresh issue-local GSD plan/TDD/verification artifacts before production docs edits; record `local_critical_path` because worker scope has no subagent tool.
+- FC1 validation evidence: grep issue-local trace artifacts for stale predecessor-as-final-head claims and grep CLI/website config docs for contradictory legacy-reader wording.
+- FC2 docs/trace correction: rewrite stale trace claims to predecessor checkpoints plus final-head source, align CLI manual/docs caveat with website wording, regenerate `docs/cli/config.md`, and run `node website/scripts/gen-docs-data.mjs`.
+- FC3 verification: run `gofmt -w cmd internal`, `go test ./internal/config/... -count=1`, `go test ./internal/cli/ -run 'Golden|Config' -count=1`, `node website/scripts/gen-docs-data.mjs`, `make verify`, and `git diff --check origin/feat/cli-architecture-v2...HEAD`; also run `go vet ./...` and `go build ./cmd/pm` per local gate policy.
+- FC4 delivery: commit/push the final correction; do not add a follow-up SHA-recording commit; PR body may record the exact post-push SHA externally.
+
 ## Final re-review cycle — PR #441 website caveat finding
 
 Disposition: Accepted.
@@ -24,7 +45,7 @@ Required action for this final review fix:
 1. Add a concise caveat to `website/content/docs/cli-reference.mdx` that root/json config is CLI-effective now, while runtime/RLM/schedule reader migration remains owned by #402.
 2. Regenerate `website/lib/docs.generated.ts` with `node website/scripts/gen-docs-data.mjs` only.
 3. Run requested gates plus available website package-script checks without adding dependencies.
-4. Update issue-local `SUMMARY.md`, `VERIFICATION.md`, `RUN-STATE.json`, `TDD-LEDGER.md`, and `PROMPTS.md` with final head/gate evidence; update PR #441 body; do not request Claude/Copilot.
+4. Update issue-local `SUMMARY.md`, `VERIFICATION.md`, `RUN-STATE.json`, `TDD-LEDGER.md`, and `PROMPTS.md` with gate evidence and predecessor checkpoints only; exact final head is sourced at handoff from `PR #441 headRefOid / git rev-parse HEAD`; update PR #441 body externally if needed; do not request Claude/Copilot.
 
 Final review-fix slice plan:
 
@@ -32,7 +53,7 @@ Final review-fix slice plan:
 - FRF1 validation evidence: record that `website/content/docs/cli-reference.mdx` lacks the CLI manual caveat before the docs edit.
 - FRF2 docs/data: add only the website caveat and regenerate `website/lib/docs.generated.ts` with the existing docs generator.
 - FRF3 verification: run `node website/scripts/gen-docs-data.mjs`, `git diff --check origin/feat/cli-architecture-v2...HEAD`, `go test ./internal/config/... -count=1`, `go test ./internal/cli/ -run 'Golden|Config' -count=1`, `make verify`, plus existing website scripts that can run without dependency installs; record exact results.
-- FRF4 delivery: commit/push to `feat/401-typed-viper-config`, update PR #441 body with the accepted disposition and latest pushed head, and return compact handoff.
+- FRF4 delivery: commit/push to `feat/401-typed-viper-config`, update PR #441 body with the accepted disposition and a predecessor checkpoint if needed, and return compact handoff. Later corrections must not treat that checkpoint as the final PR head.
 
 ## Review-fix cycle — PR #441 pm-reviewer finding
 
@@ -194,7 +215,7 @@ Additional parity:
 - Grep `docs/cli/**` and `website/**` for config keys/aliases.
 - Record generated help/manual artifact status; regenerate only if parity requires.
 
-Commit/push coherent plan/red/green/refactor checkpoints. Open non-draft stacked PR to `feat/cli-architecture-v2` with Conventional Commit title, `Refs #401`, `Refs #397`, dependency delta, GSD/TDD/skills/parity/gate evidence. Claude workflow remains `disabled_manually`; Copilot quota exhausted. Do not post `@claude review`; do not request Copilot. Record human/parent fallback pending.
+Commit/push coherent plan/red/green/refactor checkpoints. Open non-draft stacked PR to `feat/cli-architecture-v2` with Conventional Commit title, `Refs #401`, `Refs #397`, dependency delta, GSD/TDD/skills/parity/gate evidence. Claude workflow remains `disabled_manually`; Copilot quota exhausted. Do not post `@claude review`; do not request Copilot. Record human/parent fallback as delegated with no approval claim.
 
 ## Spawn decision for this cycle
 

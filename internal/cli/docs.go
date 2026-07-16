@@ -100,8 +100,10 @@ SYNOPSIS
 DESCRIPTION
   pm resolves typed invocation configuration once per CLI run. The loader uses a
   fresh Viper instance for each invocation and never uses the package-level Viper
-  singleton, AutomaticEnv, or file watching. Current command behavior continues
-  to use legacy readers until the env-migration phase, but malformed
+  singleton, AutomaticEnv, or file watching. Only root and json affect CLI
+  invocation behavior in this phase. Runtime, RLM, and schedule keys below are
+  typed and documented now, but those command readers continue using their
+  legacy environment readers until #402 migrates them. Malformed
   .polymetrics/config.yaml files already fail as validation errors.
 
 PRECEDENCE

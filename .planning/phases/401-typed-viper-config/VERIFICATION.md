@@ -100,7 +100,7 @@ Review-fix parity gates:
 - [x] Open non-draft stacked PR to `feat/cli-architecture-v2` with `Refs #401` and `Refs #397`: PR #441.
 - [x] Do not post `@claude review` because repository Claude workflow is `disabled_manually` for this run.
 - [x] Do not request Copilot because quota is exhausted for this blocker window.
-- [x] Record review coverage as human/parent-PR fallback pending; no approval claims.
+- [x] Record review coverage as delegated to human/parent-PR fallback; no approval claims.
 - [x] Update PR body with pm-reviewer finding disposition and review-fix evidence after gates pass — REST patch via `gh api repos/polymetrics-ai/cli/pulls/441 -X PATCH`; `gh pr edit` was blocked by GitHub Projects classic GraphQL deprecation.
 
 ## Final re-review website caveat checklist
@@ -124,7 +124,7 @@ Final gates:
 - [x] `make verify` — pass; smoke path `/var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.k3AV9VUv6j`; final line `connectorgen validate: 547 connector(s) checked, 0 findings`.
 - [x] Caveat grep after edit — pass: `rg -n 'legacy environment readers|#402 migrates them' website/content/docs/cli-reference.mdx website/lib/docs.generated.ts` matched both files.
 - [x] Existing website package-script checks run without dependency installs; exact results recorded below.
-- [x] PR #441 body updated after push with accepted disposition, docs caveat fix commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193`, and pushed head `3b2558dde5b4f90deac69942371b9b813fb8e312`.
+- [x] PR #441 body update after the prior cycle recorded docs caveat fix commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193` and predecessor checkpoint `3b2558dde5b4f90deac69942371b9b813fb8e312`; this is not the final PR head.
 - [x] No Claude/Copilot request posted.
 
 Website package-script checks:
@@ -139,6 +139,32 @@ Website package-script checks:
 
 Website script failures are dependency-availability blockers only: `website/node_modules` is absent, and this task forbids adding/installing frontend dependencies.
 
+## Final correction checklist
+
+Findings/dispositions:
+
+- [x] Trace SHA finding — accepted with modification: predecessor hashes are checkpoints only; final-head source is `PR #441 headRefOid / git rev-parse HEAD at handoff`; exact final SHA is not committed into trace artifacts.
+- [x] CLI manual/docs caveat finding — accepted: `root`/`json` are CLI-effective now; runtime/RLM/schedule command consumption remains on legacy readers until #402.
+
+Pre-edit validation:
+
+- [x] `git rev-parse HEAD` — predecessor checkpoint before this correction: `60edbb4531f801b20a7f2e8f89e42279013416e9`.
+- [x] Trace grep across `.planning/phases/401-typed-viper-config` found stale predecessor-as-final-head claims in `SUMMARY.md`, `VERIFICATION.md`, `PROMPTS.md`, and `RUN-STATE.json`.
+- [x] `rg -n "legacy readers|legacy env readers|legacy environment readers|Current command behavior|root/json|root` and `json|#402" internal/cli/docs.go docs/cli/config.md website/content/docs/cli-reference.mdx` — found CLI/manual wording that contradicted website's fixed `root`/`json` behavior caveat.
+
+Planned final gates:
+
+- [x] `gofmt -w cmd internal` — pass, no output.
+- [x] `go test ./internal/config/... -count=1` — pass: `ok  	polymetrics.ai/internal/config	0.390s`.
+- [x] `go test ./internal/cli/ -run 'Golden|Config' -count=1` — pass: `ok  	polymetrics.ai/internal/cli	6.831s`.
+- [x] `node website/scripts/gen-docs-data.mjs` — pass: `Wrote 11 docs pages to lib/docs.generated.ts.`
+- [x] `go vet ./...` — pass, no output.
+- [x] `go build ./cmd/pm` — pass, no output.
+- [x] `make verify` — pass; smoke path `/var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.ksPDLEnYZB`; final line `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass, no output.
+- [x] PR #441 body may be updated via API after push if needed; exact final head may be named externally, not in committed trace artifacts.
+- [x] No Claude/Copilot request posted.
+
 ## Full `make verify` result
 
 Pass. Final lines:
@@ -146,7 +172,7 @@ Pass. Final lines:
 ```text
 ./pm docs validate --connectors-dir docs/connectors
 Validated connector docs in docs/connectors
-smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.yANpw9EndF
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.ksPDLEnYZB
 golangci-lint run ./internal/connectors/engine/... ./internal/connectors/defs/... ./internal/connectors/hooks/... ./internal/connectors/native/... ./internal/connectors/conformance/... ./internal/connectors/certify/... ./cmd/connectorgen/...
 0 issues.
 go run ./cmd/connectorgen validate internal/connectors/defs
