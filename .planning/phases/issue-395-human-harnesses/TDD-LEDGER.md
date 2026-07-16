@@ -92,9 +92,12 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Local Review And Repair Loop
 
-- Status: planned.
+- Status: red complete.
 - Red contract: require a local exact-head review section, read-only reviewer, isolated repair
   worker, correction loop, and Shepherd next-post teaser; reject the stale Claude workflow copy and
   detailed Shepherd implementation description.
+- Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
+- Red result: failed because the catalog still contained `Reviewing untrusted code without trusting
+  it` instead of `Review, fix, repeat, locally`, before reaching the new body assertions.
 - Green target: preserve the surrounding verification, human merge, and deployment claims while
   accurately reflecting the current Pi local-review contract and active-session evidence.

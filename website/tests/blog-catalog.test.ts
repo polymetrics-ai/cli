@@ -23,6 +23,7 @@ describe('blog catalog', () => {
       expect.arrayContaining([
         'The PR that ate the repository',
         'The repository became a harness',
+        'Review, fix, repeat, locally',
         'What the harness still does not do',
       ]),
     );
@@ -45,7 +46,15 @@ describe('blog catalog', () => {
     expect(articleText).not.toContain('pm reverse approve');
     expect(articleText).toContain('roughly a million changed lines');
     expect(articleText).toContain('isolated worktree');
+    expect(articleText).toContain('exact candidate head SHA');
+    expect(articleText).toContain('read-only reviewer');
+    expect(articleText).toContain('isolated repair worker');
+    expect(articleText).toContain('four correction rounds');
+    expect(articleText).toContain('Remote PR-bot review can still run as supplemental');
+    expect(articleText).toContain('Shepherd is the next story');
     expect(articleText).toContain('star the repository');
+    expect(articleText).not.toContain('The Claude review workflow');
+    expect(articleText).not.toContain('Shepherd independently checks whether');
     expect(articleText).not.toContain('Repository: github.com/polymetrics-ai/cli');
     expect(articleText).not.toContain('Documentation: cli.polymetrics.ai');
     expect(articleText).not.toContain('Inventory snapshot:');

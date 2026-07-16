@@ -89,7 +89,7 @@
 
 ## Local Review Loop Follow-Up
 
-- [ ] Focused catalog test fails while the stale remote-review section remains.
+- [x] Focused catalog test fails while the stale remote-review section remains.
 - [ ] Article describes exact-head local review, read-only findings, disposition, isolated fixes,
   verification, and re-review.
 - [ ] Remote PR-bot review is supplemental rather than the default delivery gate.
