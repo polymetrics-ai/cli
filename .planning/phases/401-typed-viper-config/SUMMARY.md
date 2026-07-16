@@ -24,7 +24,12 @@ Status: planning artifacts created; red tests pending.
 
 ## Red / green evidence
 
-Pending.
+Red captured before production edits:
+
+- `go test ./internal/config/... -count=1` -> fails because `Config`, `Load`, and `Options` do not exist.
+- `go test ./internal/cli/ -run Config -count=1` -> fails because malformed `.polymetrics/config.yaml` is ignored and `pm version --json` exits 0 instead of validation exit 3.
+
+Green pending.
 
 ## Verification
 

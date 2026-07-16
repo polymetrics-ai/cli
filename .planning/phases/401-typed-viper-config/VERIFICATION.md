@@ -19,8 +19,8 @@
 
 ## Focused TDD gates
 
-- [ ] Red: `go test ./internal/config/... -count=1`
-- [ ] Red: `go test ./internal/cli/ -run Config -count=1`
+- [x] Red: `go test ./internal/config/... -count=1` — fail: `undefined: Config`, `undefined: Load`, `undefined: Options`.
+- [x] Red: `go test ./internal/cli/ -run Config -count=1` — fail: malformed config ignored, `version` exited 0 instead of validation exit 3.
 - [ ] Green: `go test ./internal/config/... -count=1`
 - [ ] Green: `go test ./internal/cli/ -run 'Golden|Config' -count=1`
 - [ ] Certify re-entrancy: `go test ./internal/cli/ -run Certify -count=1`

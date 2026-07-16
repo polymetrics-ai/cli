@@ -5,7 +5,7 @@
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
   "subPR": null,
-  "status": "planning_complete_red_tests_pending",
+  "status": "red_tests_captured_implementation_pending",
   "verificationPassed": false,
   "verificationBlocker": "implementation and full make verify pending",
   "gsd": {
@@ -32,10 +32,18 @@
       "cycle": "tdd-plan",
       "decision": "local_critical_path",
       "reason": "worker created issue-local plan, TDD ledger, verification checklist, summary, prompts, and run-state before production edits"
+    },
+    {
+      "cycle": "red-tests",
+      "decision": "local_critical_path",
+      "reason": "focused red tests captured absent internal/config API and malformed config not mapped to validation exit 3 before production edits"
     }
   ],
   "verification": {
-    "focused": {},
+    "focused": {
+      "configRed": "failed as expected: undefined Config/Load/Options in internal/config tests",
+      "cliConfigRed": "failed as expected: malformed config ignored, version exited 0 instead of validation exit 3"
+    },
     "full": {},
     "parity": {}
   },

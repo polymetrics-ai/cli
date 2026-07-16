@@ -90,7 +90,53 @@ Expected red:
 - `internal/config` package/tests absent before implementation.
 - CLI malformed-config validation tests fail until `cli.Run` loads config and maps load errors to validation exit 3.
 
-Actual red evidence: pending.
+Actual red evidence captured before production implementation:
+
+```bash
+go test ./internal/config/... -count=1
+```
+
+Result: fail, exit 1.
+
+```text
+# polymetrics.ai/internal/config [polymetrics.ai/internal/config.test]
+internal/config/config_test.go:20:18: undefined: Config
+internal/config/config_test.go:46:14: undefined: Load
+internal/config/config_test.go:46:19: undefined: Options
+internal/config/config_test.go:88:180: undefined: Config
+internal/config/config_test.go:89:160: undefined: Config
+internal/config/config_test.go:90:158: undefined: Config
+internal/config/config_test.go:91:204: undefined: Config
+internal/config/config_test.go:92: undefined: Config
+internal/config/config_test.go:93:244: undefined: Config
+internal/config/config_test.go:94: undefined: Config
+internal/config/config_test.go:94: too many errors
+FAIL	polymetrics.ai/internal/config [build failed]
+FAIL
+```
+
+```bash
+go test ./internal/cli/ -run Config -count=1
+```
+
+Result: fail, exit 1.
+
+```text
+--- FAIL: TestConfigMalformedFileExitsValidation (0.00s)
+    config_test.go:25: exit code = 0, want 3
+        stdout={
+          "api_version": "polymetrics.ai/v1",
+          "commit": "none",
+          "date": "unknown",
+          "kind": "Version",
+          "version": "dev"
+        }
+
+        stderr=
+FAIL
+FAIL	polymetrics.ai/internal/cli	1.052s
+FAIL
+```
 
 ## Cycle 2 — green implementation evidence
 
