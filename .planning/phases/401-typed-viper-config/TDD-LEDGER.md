@@ -140,11 +140,43 @@ FAIL
 
 ## Cycle 2 — green implementation evidence
 
-Pending.
+Implemented `internal/config` with Viper instance-mode load, explicit env allowlist, typed structs, missing-file handling, malformed-file `LoadError`, bound global flag values, and minimal CLI validation integration. Added Viper v1.21.0 dependency.
+
+```bash
+gofmt -w internal/config internal/cli/cli.go internal/config/config_test.go
+go mod tidy
+go test ./internal/config/... -count=1
+go test ./internal/cli/ -run 'Golden|Config' -count=1
+```
+
+Result:
+
+```text
+ok  	polymetrics.ai/internal/config	0.473s
+ok  	polymetrics.ai/internal/cli	6.887s
+```
+
+Certify re-entrancy focused gate:
+
+```bash
+go test ./internal/cli/ -run Certify -count=1
+```
+
+Result:
+
+```text
+ok  	polymetrics.ai/internal/cli	91.181s
+```
+
+Dependency delta observed after `go get github.com/spf13/viper@v1.21.0 && go mod tidy`:
+
+- Direct: `github.com/spf13/viper v1.21.0`.
+- Indirect additions/updates: `github.com/fsnotify/fsnotify v1.9.0`, `github.com/pelletier/go-toml/v2 v2.2.4`, `github.com/sagikazarmark/locafero v0.11.0`, `github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8`, `github.com/spf13/afero v1.15.0`, `github.com/spf13/cast v1.10.0`, `github.com/spf13/pflag v1.0.10` (upgrade from Cobra's v1.0.9), `github.com/subosito/gotenv v1.6.0`, `go.yaml.in/yaml/v3 v3.0.4`.
+- No additional direct module beyond Viper; no frontend dependency changes.
 
 ## Cycle 3 — refactor / docs parity evidence
 
-Pending.
+Added `pm help config` docs topic, generated `docs/cli/config.md`, updated `website/content/docs/cli-reference.mdx`, and regenerated `website/lib/docs.generated.ts` with `node website/scripts/gen-docs-data.mjs`. Runtime parity checks pending final verification.
 
 ## Cycle 4 — final verification evidence
 

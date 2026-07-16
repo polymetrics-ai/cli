@@ -29,11 +29,15 @@ Red captured before production edits:
 - `go test ./internal/config/... -count=1` -> fails because `Config`, `Load`, and `Options` do not exist.
 - `go test ./internal/cli/ -run Config -count=1` -> fails because malformed `.polymetrics/config.yaml` is ignored and `pm version --json` exits 0 instead of validation exit 3.
 
-Green pending.
+Green:
+
+- `go test ./internal/config/... -count=1` -> `ok  	polymetrics.ai/internal/config	0.473s`.
+- `go test ./internal/cli/ -run 'Golden|Config' -count=1` -> `ok  	polymetrics.ai/internal/cli	6.887s`.
+- `go test ./internal/cli/ -run Certify -count=1` -> `ok  	polymetrics.ai/internal/cli	91.181s`.
 
 ## Verification
 
-Pending.
+Focused gates passed; broader gates pending.
 
 ## Review route
 

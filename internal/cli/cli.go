@@ -12,6 +12,7 @@ import (
 
 	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
@@ -28,10 +29,33 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
 	cmd := newRootCmd(ctx, root, stdout, stderr, jsonOut)
+	if _, err := config.Load(config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}); err != nil {
+		return writeError(stdout, stderr, validationErrorf("%v", err), jsonOut)
+	}
 	if err := executeRootCmd(cmd, cleanArgs); err != nil {
 		return writeError(stdout, stderr, mapCobraErr(err), jsonOut)
 	}
 	return 0
+}
+
+func globalConfigFlags(args []string, root string, jsonOut bool) map[string]config.FlagValue {
+	flags := map[string]config.FlagValue{}
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		switch {
+		case arg == "--json":
+			flags["json"] = config.StaticFlag{FlagName: "json", Value: "true", Type: "bool", Changed: true}
+		case arg == "--root" && i+1 < len(args):
+			flags["root"] = config.StaticFlag{FlagName: "root", Value: root, Type: "string", Changed: true}
+			i++
+		case strings.HasPrefix(arg, "--root="):
+			flags["root"] = config.StaticFlag{FlagName: "root", Value: root, Type: "string", Changed: true}
+		}
+	}
+	if jsonOut {
+		flags["json"] = config.StaticFlag{FlagName: "json", Value: "true", Type: "bool", Changed: true}
+	}
+	return flags
 }
 
 func writeRootManual(stdout io.Writer, jsonOut bool) error {

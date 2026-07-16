@@ -5,8 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-
-	"github.com/spf13/pflag"
 )
 
 type configKeyCase struct {
@@ -152,14 +150,9 @@ func TestLoadBoundGlobalFlagsBeatEnvAndFile(t *testing.T) {
 	t.Setenv("POLYMETRICS_ROOT", "env-root")
 	t.Setenv("POLYMETRICS_JSON", "false")
 
-	flags := pflag.NewFlagSet("test", pflag.ContinueOnError)
-	flags.String("root", root, "")
-	flags.Bool("json", false, "")
-	if err := flags.Set("root", "flag-root"); err != nil {
-		t.Fatalf("set root flag: %v", err)
-	}
-	if err := flags.Set("json", "true"); err != nil {
-		t.Fatalf("set json flag: %v", err)
+	flags := map[string]FlagValue{
+		"root": StaticFlag{FlagName: "root", Value: "flag-root", Type: "string", Changed: true},
+		"json": StaticFlag{FlagName: "json", Value: "true", Type: "bool", Changed: true},
 	}
 
 	cfg, err := Load(Options{Root: root, Flags: flags})
@@ -196,11 +189,8 @@ func TestLoadInvocationIsolationNoStateLeak(t *testing.T) {
 	rootA := writeConfig(t, "project: alpha\njson: true\n")
 	rootB := writeConfig(t, "project: beta\n")
 
-	flagsA := pflag.NewFlagSet("a", pflag.ContinueOnError)
-	flagsA.String("root", rootA, "")
-	flagsA.Bool("json", false, "")
-	if err := flagsA.Set("json", "true"); err != nil {
-		t.Fatalf("set json flag: %v", err)
+	flagsA := map[string]FlagValue{
+		"json": StaticFlag{FlagName: "json", Value: "true", Type: "bool", Changed: true},
 	}
 
 	cfgA, err := Load(Options{Root: rootA, Flags: flagsA})

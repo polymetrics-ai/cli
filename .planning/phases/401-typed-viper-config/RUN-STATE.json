@@ -5,9 +5,9 @@
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
   "subPR": null,
-  "status": "red_tests_captured_implementation_pending",
+  "status": "focused_green_full_verification_pending",
   "verificationPassed": false,
-  "verificationBlocker": "implementation and full make verify pending",
+  "verificationBlocker": "full go vet/go test/go build/make verify and parity checks pending",
   "gsd": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-401.prompt",
@@ -18,8 +18,21 @@
   "dependencyDecision": {
     "viper": "github.com/spf13/viper v1.21.0",
     "approvedBy": "docs/adr/0002-cobra-viper-cli-framework.md",
-    "status": "selected_not_added_yet",
-    "directDependenciesAdded": [],
+    "status": "added_focused_green",
+    "directDependenciesAdded": [
+      "github.com/spf13/viper v1.21.0"
+    ],
+    "indirectGoModDependenciesAddedOrUpdated": [
+      "github.com/fsnotify/fsnotify v1.9.0",
+      "github.com/pelletier/go-toml/v2 v2.2.4",
+      "github.com/sagikazarmark/locafero v0.11.0",
+      "github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8",
+      "github.com/spf13/afero v1.15.0",
+      "github.com/spf13/cast v1.10.0",
+      "github.com/spf13/pflag v1.0.10",
+      "github.com/subosito/gotenv v1.6.0",
+      "go.yaml.in/yaml/v3 v3.0.4"
+    ],
     "humanGate": "additional direct modules, major-version deviation, frontend dependency changes, or unrelated graph changes"
   },
   "orchestrationDecisions": [
@@ -37,15 +50,31 @@
       "cycle": "red-tests",
       "decision": "local_critical_path",
       "reason": "focused red tests captured absent internal/config API and malformed config not mapped to validation exit 3 before production edits"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "implemented internal/config, minimal CLI validation integration, Viper dependency, and config docs locally in assigned scope"
+    },
+    {
+      "cycle": "focused-verify",
+      "decision": "local_critical_path",
+      "reason": "internal/config tests, CLI Golden|Config tests, and CLI Certify tests passed locally"
     }
   ],
   "verification": {
     "focused": {
       "configRed": "failed as expected: undefined Config/Load/Options in internal/config tests",
-      "cliConfigRed": "failed as expected: malformed config ignored, version exited 0 instead of validation exit 3"
+      "cliConfigRed": "failed as expected: malformed config ignored, version exited 0 instead of validation exit 3",
+      "configGreen": "passed: ok polymetrics.ai/internal/config 0.473s",
+      "cliGoldenConfig": "passed: ok polymetrics.ai/internal/cli 6.887s",
+      "cliCertify": "passed: ok polymetrics.ai/internal/cli 91.181s"
     },
     "full": {},
-    "parity": {}
+    "parity": {
+      "docsCli": "docs/cli/config.md added",
+      "website": "website/content/docs/cli-reference.mdx updated; website/lib/docs.generated.ts regenerated"
+    }
   },
   "artifacts": [
     ".planning/phases/401-typed-viper-config/PLAN.md",

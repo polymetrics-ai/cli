@@ -7,9 +7,9 @@
 ## Required gates
 
 - [ ] `gofmt -w cmd internal`
-- [ ] `go test ./internal/config/... -count=1`
-- [ ] `go test ./internal/cli/ -run 'Golden|Config' -count=1`
-- [ ] `go test ./internal/cli/ -run Certify -count=1`
+- [x] `go test ./internal/config/... -count=1` — pass: `ok  	polymetrics.ai/internal/config	0.473s`.
+- [x] `go test ./internal/cli/ -run 'Golden|Config' -count=1` — pass: `ok  	polymetrics.ai/internal/cli	6.887s`.
+- [x] `go test ./internal/cli/ -run Certify -count=1` — pass: `ok  	polymetrics.ai/internal/cli	91.181s`.
 - [ ] `go vet ./...`
 - [ ] `go test ./...`
 - [ ] `go build ./cmd/pm`
@@ -21,35 +21,35 @@
 
 - [x] Red: `go test ./internal/config/... -count=1` — fail: `undefined: Config`, `undefined: Load`, `undefined: Options`.
 - [x] Red: `go test ./internal/cli/ -run Config -count=1` — fail: malformed config ignored, `version` exited 0 instead of validation exit 3.
-- [ ] Green: `go test ./internal/config/... -count=1`
-- [ ] Green: `go test ./internal/cli/ -run 'Golden|Config' -count=1`
-- [ ] Certify re-entrancy: `go test ./internal/cli/ -run Certify -count=1`
+- [x] Green: `go test ./internal/config/... -count=1` — pass.
+- [x] Green: `go test ./internal/cli/ -run 'Golden|Config' -count=1` — pass.
+- [x] Certify re-entrancy: `go test ./internal/cli/ -run Certify -count=1` — pass.
 
 ## Dependency gate
 
-- [ ] Direct dependency added exactly: `github.com/spf13/viper v1.21.0`.
-- [ ] No additional direct modules beyond Viper.
-- [ ] Resolved transitives recorded (`afero`, `cast`, `fsnotify`, `gotenv`, `toml`, `mapstructure`, `sourcegraph/conc`, and Viper-resolved support modules).
-- [ ] No frontend dependency changes.
+- [x] Direct dependency added exactly: `github.com/spf13/viper v1.21.0`.
+- [x] No additional direct modules beyond Viper.
+- [x] Resolved transitives recorded (`fsnotify`, `go-toml/v2`, `locafero`, `sourcegraph/conc`, `afero`, `cast`, pflag upgrade, `gotenv`, `go.yaml.in/yaml/v3`; existing `go-viper/mapstructure/v2` retained).
+- [x] No frontend dependency changes.
 - [ ] `make tidy-check` remains green inside `make verify`; no tidy-check weakening.
 - [ ] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` recorded exactly.
 
 ## Config behavior checklist
 
-- [ ] `internal/config.Load` uses `viper.New()` inside load path only.
-- [ ] No package-level Viper singleton.
-- [ ] No `AutomaticEnv`.
-- [ ] No `WatchConfig` / `OnConfigChange`.
-- [ ] Missing `.polymetrics/config.yaml` is non-error.
-- [ ] Malformed config file returns typed config load error.
-- [ ] CLI maps malformed config to validation exit 3 through `writeError`.
-- [ ] Config file path is derived from invocation project root.
-- [ ] Explicit `POLYMETRICS_*` env bindings with `PM_*` aliases/fallback.
-- [ ] Bound `--root` and `--json` flags outrank env/file in `internal/config` where supplied.
-- [ ] Existing CLI behavior/golden transcripts preserved; `cli.Run` signature unchanged.
-- [ ] Existing scattered `os.Getenv` readers not migrated in this issue.
-- [ ] User-named credential env vars and certify credsfile env refs not treated as app config.
-- [ ] Invocation isolation/no state leak covered by tests.
+- [x] `internal/config.Load` uses `viper.New()` inside load path only.
+- [x] No package-level Viper singleton.
+- [x] No `AutomaticEnv`.
+- [x] No `WatchConfig` / `OnConfigChange`.
+- [x] Missing `.polymetrics/config.yaml` is non-error.
+- [x] Malformed config file returns typed config load error.
+- [x] CLI maps malformed config to validation exit 3 through `writeError`.
+- [x] Config file path is derived from invocation project root.
+- [x] Explicit `POLYMETRICS_*` env bindings with `PM_*` aliases/fallback.
+- [x] Bound `--root` and `--json` flags outrank env/file in `internal/config` where supplied.
+- [x] Existing CLI behavior/golden transcripts preserved; `cli.Run` signature unchanged.
+- [x] Existing scattered `os.Getenv` readers not migrated in this issue.
+- [x] User-named credential env vars and certify credsfile env refs documented as not app config.
+- [x] Invocation isolation/no state leak covered by tests.
 
 ## CLI help / docs / website parity
 
