@@ -5,7 +5,7 @@
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
   "subPR": 441,
-  "status": "review_fix_pr_body_updated_local_verify_passed",
+  "status": "review_fix_pushed",
   "verificationPassed": true,
   "verificationBlocker": "human/parent review fallback pending; local review-fix verification passed",
   "gsd": {
@@ -98,6 +98,11 @@
       "cycle": "review-fix-pr-body",
       "decision": "local_critical_path",
       "reason": "updated PR #441 body with accepted pm-reviewer disposition and review-fix evidence; no @claude or Copilot request posted"
+    },
+    {
+      "cycle": "review-fix-push",
+      "decision": "local_critical_path",
+      "reason": "pushed review-fix implementation commit 0fb9246c38f8bb8d3f2d4b9552c05072fc64629a to feat/401-typed-viper-config; no main push or merge"
     }
   ],
   "verification": {
@@ -174,7 +179,7 @@
       "go test ./internal/config/... -run 'Bootstrap|Discovery|ConfigFileRoot' -count=1",
       "go test ./internal/cli/ -run Config -count=1"
     ],
-    "status": "pr_body_updated_local_verify_passed",
+    "status": "pushed_local_verify_passed",
     "redEvidence": {
       "config": "failed: go test ./internal/config/... -run 'Bootstrap|Discovery|ConfigFileRoot' -count=1 -> undefined ResolveBootstrap",
       "cli": "failed: go test ./internal/cli/ -run Config -count=1 -> env root/alias ignored, env JSON malformed errors not JSON, config-file json/root invocation ignored"
@@ -207,6 +212,7 @@
       "websiteGeneration": "node website/scripts/gen-docs-data.mjs -> Wrote 11 docs pages to lib/docs.generated.ts",
       "grep": "exit 0, 11 matches"
     },
-    "prBodyUpdate": "updated via gh api repos/polymetrics-ai/cli/pulls/441 -X PATCH after gh pr edit failed on Projects classic GraphQL deprecation"
+    "prBodyUpdate": "updated via gh api repos/polymetrics-ai/cli/pulls/441 -X PATCH after gh pr edit failed on Projects classic GraphQL deprecation",
+    "pushedImplementationCommit": "0fb9246c38f8bb8d3f2d4b9552c05072fc64629a"
   }
 }

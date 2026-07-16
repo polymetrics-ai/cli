@@ -1,6 +1,6 @@
 # Issue 401 Summary — Typed Viper Configuration
 
-Status: PR #441 review-fix complete locally; pm-reviewer finding accepted and fixed; review-fix gates passed; PR body updated; branch push pending at artifact update time; human/parent review fallback remains pending.
+Status: PR #441 review-fix pushed; pm-reviewer finding accepted and fixed; review-fix gates passed; PR body updated; human/parent review fallback remains pending.
 
 ## Review-fix disposition
 
