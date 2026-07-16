@@ -1,6 +1,6 @@
 # Issue 401 Summary — Typed Viper Configuration
 
-Status: final re-review website caveat fixed from starting head `77e8fe559b6bab458ed19cb30d3fdc6aa6778f56`; local gates passed; commit/push and PR body update pending; human/parent review fallback remains pending.
+Status: final re-review website caveat fixed in commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193` from starting head `77e8fe559b6bab458ed19cb30d3fdc6aa6778f56`; local gates passed; push/PR body update pending; human/parent review fallback remains pending.
 
 ## Final re-review disposition
 

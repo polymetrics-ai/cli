@@ -5,7 +5,7 @@
 Task: Execute polymetrics-ai/cli#401 as one bounded mutating worker for parent #397.
 
 Downstream artifact: `.planning/phases/401-typed-viper-config/PLAN.md`; PR #441 opened; prior review-fix pushed; final website caveat fixed locally.
-Verification result: final caveat local gates passed; website package scripts blocked by missing `website/node_modules` where applicable; commit/push and PR body update pending; human/parent review fallback pending.
+Verification result: final caveat local gates passed; docs caveat fix commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193` recorded; website package scripts blocked by missing `website/node_modules` where applicable; push and PR body update pending; human/parent review fallback pending.
 
 ## GSD command evidence
 
