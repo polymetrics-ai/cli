@@ -135,3 +135,13 @@
 - [x] ASCII review loop is absent from catalog and rendered article.
 - [x] Desktop and 390px layouts preserve reading order and avoid horizontal overflow.
 - [x] Unit tests, typecheck, focused Chromium test, production build, and `git diff --check` pass.
+
+## Complete Article Image Set Follow-Up
+
+- [ ] Creation-time order and visual subjects map UUID assets to prompts `01` through `06`.
+- [ ] Focused catalog test fails while only image `04` is declared.
+- [ ] Six WebP assets exist at their prompt filenames with original dimensions.
+- [ ] Lead, left float, right float, review loop, release lead, and teaser placements match the brief.
+- [ ] All six images decode at desktop and mobile with alt text and captions.
+- [ ] Annotation block indexes and inline evidence interactions remain unchanged.
+- [ ] Unit tests, typecheck, blog Chromium suite, production build, and `git diff --check` pass.

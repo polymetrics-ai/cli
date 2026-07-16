@@ -206,3 +206,18 @@ the issue, test, review, release, and deployment harnesses used by this reposito
   caption. Do not add a card, rounded frame, overlay copy, or decorative motion.
 - Add the catalog contract before production edits, then verify typecheck, unit tests, focused
   Chromium behavior, production build, and desktop/mobile containment.
+
+## Complete Article Image Set Follow-Up
+
+- Use macOS creation time to map the six UUID-named Downloads PNGs to prompts `01` through `06`.
+  Creation order and visual content agree, so no filename guessing or image-content substitution is
+  required.
+- Preserve every generated composition and export WebP quality 88 using the prompt filenames.
+- Place image `01` below the article header; float image `02` left after the first paragraph of `The
+  tool after the fire`; float image `03` right after the first paragraph of `The repository became
+  a harness`; retain image `04` after paragraph three of the local-review section; place image `05`
+  before the release section heading; and place image `06` between the Shepherd teaser and star ask.
+- Floats apply only from `md` upward. Mobile keeps every image full width in reading order with its
+  original aspect ratio, intrinsic dimensions, alt text, and one-sentence caption.
+- Convert the body stack to a flow-root paragraph stream so desktop floats can wrap prose while
+  annotation block indexes and exact text anchors remain unchanged.

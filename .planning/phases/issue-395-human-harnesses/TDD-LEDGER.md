@@ -197,3 +197,16 @@ Phase: `issue-395-human-harnesses`
 - Build result: `/blog/human-harnesses` prerenders successfully. Better Auth reports the existing
   default-secret warning because no build-only secret was supplied; no secret value was read or
   printed.
+
+## Follow-Up: Complete Article Image Set
+
+- Status: red captured; green pending.
+- Catalog contract: the article exposes all six prompt filenames exactly once, with image `01` as
+  the lead and section placements for `02` through `06` matching the image brief.
+- Asset contract: creation-time order maps UUID sources to prompts in the same order as their visual
+  subjects; every committed asset retains its source dimensions and is exported as WebP quality 88.
+- Browser contract: all six images decode, appear in reading order, preserve float/full placement at
+  1440px, stack at 390px, and introduce no horizontal overflow or annotation-block drift.
+- Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
+- Red result: failed at the missing `01-diff-that-ate-the-room.webp` lead image while only image `04`
+  was declared.

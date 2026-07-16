@@ -144,5 +144,59 @@ describe('blog catalog', () => {
       height: 1024,
       afterBlock: 2,
     });
+
+    const illustratedPost = post as unknown as {
+      leadImage?: { src: string };
+      sections: Array<{
+        heading: string;
+        images?: Array<{
+          src: string;
+          afterBlock?: number;
+          beforeHeading?: boolean;
+          placement: string;
+        }>;
+      }>;
+    };
+    const sectionImages = illustratedPost.sections.flatMap((section) =>
+      (section.images ?? []).map((image) => ({ heading: section.heading, ...image })),
+    );
+    expect(illustratedPost.leadImage?.src).toBe(
+      '/blog/human-harnesses/01-diff-that-ate-the-room.webp',
+    );
+    expect(sectionImages).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          heading: 'The tool after the fire',
+          src: '/blog/human-harnesses/02-isolated-worktables.webp',
+          afterBlock: 0,
+          placement: 'float-left',
+        }),
+        expect.objectContaining({
+          heading: 'The repository became a harness',
+          src: '/blog/human-harnesses/03-branching-harness.webp',
+          afterBlock: 0,
+          placement: 'float-right',
+        }),
+        expect.objectContaining({
+          heading: 'Review, fix, repeat, locally',
+          src: '/blog/human-harnesses/04-review-repair-loop.webp',
+          afterBlock: 2,
+          placement: 'full',
+        }),
+        expect.objectContaining({
+          heading: 'Release and deployment are mutations too',
+          src: '/blog/human-harnesses/05-immutable-release.webp',
+          beforeHeading: true,
+          placement: 'full',
+        }),
+        expect.objectContaining({
+          heading: 'The part where I ask for a star',
+          src: '/blog/human-harnesses/06-shepherd-teaser.webp',
+          afterBlock: 2,
+          placement: 'full',
+        }),
+      ]),
+    );
+    expect(sectionImages).toHaveLength(5);
   });
 });
