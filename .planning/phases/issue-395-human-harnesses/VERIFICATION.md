@@ -117,12 +117,12 @@
 
 ## Inline Reference Preview Follow-Up
 
-- [ ] Focused catalog test fails before the reference model replaces section evidence IDs.
-- [ ] Every reference phrase resolves inside its declared article paragraph.
-- [ ] No detached GitHub evidence trail remains in rendered article markup.
-- [ ] Linked phrase and numbered citation open the same centered evidence dialog.
-- [ ] Dialog retains verified fallback, live refresh, canonical GitHub link, Escape close, and focus
+- [x] Focused catalog test fails before the reference model replaces section evidence IDs.
+- [x] Every reference phrase resolves inside its declared article paragraph.
+- [x] No detached GitHub evidence trail remains in rendered article markup.
+- [x] Linked phrase and numbered citation open the same centered evidence dialog.
+- [x] Dialog retains verified fallback, live refresh, canonical GitHub link, Escape close, and focus
   restoration for both trigger forms.
-- [ ] Desktop and 390px layouts have no horizontal overflow.
-- [ ] Focused unit test, full website unit tests, typecheck, production build, and `git diff --check`
+- [x] Desktop and 390px layouts have no horizontal overflow.
+- [x] Focused unit test, full website unit tests, typecheck, production build, and `git diff --check`
   pass.

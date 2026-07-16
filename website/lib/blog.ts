@@ -3,7 +3,11 @@ export type BlogSection = {
   body: string[];
   points?: string[];
   code?: string;
-  evidenceIds?: string[];
+  evidenceRefs?: Array<{
+    blockIndex: number;
+    evidenceId: string;
+    text: string;
+  }>;
 };
 
 export type BlogEvidenceKind = 'pull_request' | 'commit' | 'workflow';
@@ -259,7 +263,11 @@ export const BLOG_POSTS: BlogPost[] = [
           'The individual changes were mostly reasonable. The package was the disaster. One PR was trying to be the roadmap, the work queue, the integration branch, the test report, and the release decision at the same time. When one check failed, the answer was not which slice broke. The answer was yes.',
           'I eventually realized the agents were not the main problem. I had given fast workers one enormous room, no lanes, and a single door marked MERGE. The million-line PR did not need a braver reviewer. It needed an architecture that made work smaller before review began.',
         ],
-        evidenceIds: ['precursor-pr-27', 'migration-pr-29', 'migration-merge-commit'],
+        evidenceRefs: [
+          { blockIndex: 0, evidenceId: 'precursor-pr-27', text: 'PR #27' },
+          { blockIndex: 0, evidenceId: 'migration-pr-29', text: 'PR #29' },
+          { blockIndex: 0, evidenceId: 'migration-merge-commit', text: 'commit 605b006' },
+        ],
       },
       {
         heading: 'The tool after the fire',
@@ -318,7 +326,10 @@ pm reverse run <plan-id> --approve <approval-token> --json`,
 sub-issue   -> isolated worktree -> red/green -> stacked PR
 stacked PR  -> checks + review -> parent branch
 parent      -> full verification -> human merge -> release`,
-        evidenceIds: ['issue-first-pr-47', 'parent-orchestrator-pr-51'],
+        evidenceRefs: [
+          { blockIndex: 0, evidenceId: 'issue-first-pr-47', text: 'one parent issue' },
+          { blockIndex: 1, evidenceId: 'parent-orchestrator-pr-51', text: 'The parent branch' },
+        ],
       },
       {
         heading: 'Intent before diff',
@@ -328,7 +339,11 @@ parent      -> full verification -> human merge -> release`,
           'When production Go code under cmd or internal changes, the GSD workflow checks for planning and test evidence. In practice that means a plan, a TDD ledger, and a verification checklist exist before production edits. The ledger does not prove the code is correct, but it makes a useful distinction visible: did a test fail because the capability was absent, and did the same test pass because of the change?',
           'This is the code equivalent of binding an approval to a plan. The issue describes the intended mutation; the branch and PR limit its scope; the test demonstrates the behavioral delta. A reviewer can challenge any of those layers instead of reverse-engineering intent from the final diff.',
         ],
-        evidenceIds: ['issue-guard-workflow', 'conventions-workflow', 'gsd-workflow'],
+        evidenceRefs: [
+          { blockIndex: 1, evidenceId: 'issue-guard-workflow', text: 'PR Issue Guard' },
+          { blockIndex: 1, evidenceId: 'conventions-workflow', text: 'conventions workflow' },
+          { blockIndex: 2, evidenceId: 'gsd-workflow', text: 'GSD workflow' },
+        ],
       },
       {
         heading: 'Proof before confidence',
@@ -343,7 +358,11 @@ parent      -> full verification -> human merge -> release`,
           'Security checks: govulncheck, CodeQL, dependency review, and scheduled Scorecard analysis.',
           'Website checks: PostgreSQL migrations, generated data, typecheck, unit tests, Chromium e2e, build, and image construction.',
         ],
-        evidenceIds: ['verify-workflow', 'security-workflow', 'website-workflow'],
+        evidenceRefs: [
+          { blockIndex: 0, evidenceId: 'verify-workflow', text: 'general verification workflow' },
+          { blockIndex: 2, evidenceId: 'security-workflow', text: 'Security runs in parallel' },
+          { blockIndex: 3, evidenceId: 'website-workflow', text: 'website has its own integration harness' },
+        ],
       },
       {
         heading: 'Review, fix, repeat, locally',
@@ -366,7 +385,10 @@ parent      -> full verification -> human merge -> release`,
           'The website follows a similar boundary. Pull requests can build the image, but only a main-branch push or an explicit dispatch can publish it. Deployment requires the website deploy variable, uses a self-hosted Tailscale runner, passes the image tagged with the exact commit SHA to the Quadlet deployment script, and verifies rollout health. The deploy consumes an immutable input instead of rebuilding whatever happens to be on the server.',
           'This is the production form of plan and execute: CI proves one commit, the registry stores an image for that commit, and the deploy step rolls out that exact image. If those identities diverge, the harness is no longer describing the mutation it performs.',
         ],
-        evidenceIds: ['release-workflow', 'website-workflow'],
+        evidenceRefs: [
+          { blockIndex: 0, evidenceId: 'release-workflow', text: 'release workflow' },
+          { blockIndex: 1, evidenceId: 'website-workflow', text: 'website follows a similar boundary' },
+        ],
       },
       {
         heading: 'What GitHub really blocks',

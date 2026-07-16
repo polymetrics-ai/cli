@@ -151,7 +151,7 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Inline Reference Preview
 
-- Status: red captured; green pending.
+- Status: green complete.
 - Catalog contract: every evidence source is referenced by an exact body phrase and block index;
   every phrase resolves in its paragraph; the section-level `evidenceIds` gallery contract is gone.
 - Browser contract: no GitHub evidence trail is rendered; linked claim text and its numbered
@@ -162,3 +162,15 @@ Phase: `issue-395-human-harnesses`
 - Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
 - Red result: failed at the assertion that section-level `evidenceIds` are absent; the current
   catalog still exposes the detached evidence-gallery model.
+- Green result: every evidence source is attached to an exact body phrase and receives its stable
+  evidence-order number; repeated website-workflow references reuse citation `[11]`.
+- Interaction result: the linked phrase and superscript citation both open the same centered source
+  dialog, Escape restores focus to the exact trigger, modified clicks retain native new-tab GitHub
+  navigation, and no detached evidence trail remains.
+- Visual result: desktop review shows readable inline citations and a compact source-record dialog;
+  the browser contract confirms centered 390px containment and no horizontal overflow.
+- Regression result: 64 website unit tests, all 7 blog Chromium tests, website typecheck, focused
+  catalog test, production build, and `git diff --check` pass.
+- Build result: `/blog/human-harnesses` prerenders successfully. Better Auth reports the existing
+  default-secret warning during static collection because no build-only secret was supplied; no
+  secret value was read or printed.

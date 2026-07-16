@@ -1,13 +1,21 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MessageSquareText, X } from 'lucide-react';
 import { segmentBlock } from '@/lib/annotations/anchor';
 import type { BlockType } from '@/lib/annotations/anchor';
+import type { BlogEvidence } from '@/lib/blog';
 import { useAnnotations } from '@/components/blog/annotations-provider';
 
 const BOOKMARK_PREFIX = 'bookmark:';
+const EVIDENCE_PREFIX = 'evidence:';
+
+type InlineEvidenceReference = {
+  evidence: BlogEvidence;
+  number: number;
+  text: string;
+};
 
 /**
  * Renders one block's text with `<mark>` highlights for every comment
@@ -20,15 +28,19 @@ export function HighlightedBlock({
   sectionIndex,
   blockType,
   blockIndex,
+  evidenceReferences = [],
+  onEvidenceOpen,
 }: {
   text: string;
   sectionIndex: number;
   blockType: BlockType;
   blockIndex: number;
+  evidenceReferences?: InlineEvidenceReference[];
+  onEvidenceOpen?: (evidence: BlogEvidence, trigger: HTMLElement) => void;
 }) {
   const { comments, bookmarks, resolutions, activeId, setActiveId, setHovered } = useAnnotations();
 
-  const segments = useMemo(() => {
+  const { segments, evidenceRanges } = useMemo(() => {
     const ranges: Array<{ id: string; start: number; end: number }> = [];
     for (const comment of comments) {
       const resolution = resolutions.get(comment.id);
@@ -54,76 +66,147 @@ export function HighlightedBlock({
         ranges.push({ id: BOOKMARK_PREFIX + bookmark.id, start: resolution.start, end: resolution.end });
       }
     }
-    return segmentBlock(text, ranges);
-  }, [text, sectionIndex, blockType, blockIndex, comments, bookmarks, resolutions]);
+    const nextEvidenceRanges = evidenceReferences.flatMap((reference) => {
+      const start = text.indexOf(reference.text);
+      if (start < 0) return [];
+      const id = EVIDENCE_PREFIX + reference.evidence.id;
+      const range = { id, start, end: start + reference.text.length, reference };
+      ranges.push(range);
+      return [range];
+    });
+    return { segments: segmentBlock(text, ranges), evidenceRanges: nextEvidenceRanges };
+  }, [
+    text,
+    sectionIndex,
+    blockType,
+    blockIndex,
+    comments,
+    bookmarks,
+    resolutions,
+    evidenceReferences,
+  ]);
 
   const commentsById = useMemo(() => new Map(comments.map((c) => [c.id, c])), [comments]);
+
+  let offset = 0;
+
+  const evidenceLink = (
+    reference: InlineEvidenceReference,
+    label: string,
+    triggerLabel: string,
+    className: string,
+  ) => (
+    <a
+      href={reference.evidence.url}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={triggerLabel}
+      className={className}
+      onClick={(event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        onEvidenceOpen?.(reference.evidence, event.currentTarget);
+      }}
+    >
+      {label}
+    </a>
+  );
 
   return (
     <>
       {segments.map((segment, index) => {
-        const commentIds = segment.ids.filter((id) => !id.startsWith(BOOKMARK_PREFIX));
+        const start = offset;
+        const end = start + segment.text.length;
+        offset = end;
+        const commentIds = segment.ids.filter(
+          (id) => !id.startsWith(BOOKMARK_PREFIX) && !id.startsWith(EVIDENCE_PREFIX),
+        );
         const hasBookmark = segment.ids.some((id) => id.startsWith(BOOKMARK_PREFIX));
+        const evidenceRange = evidenceRanges.find(
+          (range) => segment.ids.includes(range.id) && start >= range.start && end <= range.end,
+        );
+        const endingEvidence = evidenceRanges.filter((range) => range.end === end);
+
+        let content;
 
         if (commentIds.length === 0 && !hasBookmark) {
-          return <span key={index}>{segment.text}</span>;
-        }
-
-        if (commentIds.length === 0) {
+          content = evidenceRange
+            ? evidenceLink(
+                evidenceRange.reference,
+                segment.text,
+                `Preview ${evidenceRange.reference.evidence.label} evidence`,
+                'font-medium text-line-cta underline decoration-line-structure underline-offset-[3px] transition-colors hover:decoration-line-cta focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta',
+              )
+            : <span>{segment.text}</span>;
+        } else if (commentIds.length === 0) {
           // Own private bookmark: quiet dotted underline, no background.
           const bookmarkIds = segment.ids
             .filter((id) => id.startsWith(BOOKMARK_PREFIX))
             .map((id) => id.slice(BOOKMARK_PREFIX.length))
             .join(' ');
-          return (
+          content = (
             <span
-              key={index}
               className="border-b border-dotted border-surface-cta-primary decoration-clone"
               data-annotation-bookmark={bookmarkIds}
             >
               {segment.text}
             </span>
           );
+        } else {
+          const primary = commentIds[0];
+          const comment = commentsById.get(primary);
+          const isActive = commentIds.includes(activeId ?? '');
+          const depth = commentIds.length > 1;
+
+          content = (
+            <mark
+              id={`annotation-${primary}`}
+              data-annotation-mark={commentIds.join(' ')}
+              tabIndex={0}
+              role="button"
+              aria-label={`View note by ${comment?.author.name ?? 'a reader'}`}
+              aria-pressed={isActive}
+              className={[
+                'cursor-pointer border-b text-inherit transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta',
+                hasBookmark ? 'border-dotted' : '',
+                isActive
+                  ? 'bg-surface-cta-primary/40 border-line-cta'
+                  : depth
+                    ? 'bg-surface-cta-primary/35 border-surface-cta-primary hover:bg-surface-cta-primary/45'
+                    : 'bg-surface-cta-primary/20 border-surface-cta-primary hover:bg-surface-cta-primary/35',
+                comment?.pending ? 'annotation-pending' : '',
+              ].join(' ')}
+              onMouseEnter={(event) => setHovered({ id: primary, rect: event.currentTarget.getBoundingClientRect() })}
+              onMouseLeave={() => setHovered(null)}
+              onFocus={(event) => setHovered({ id: primary, rect: event.currentTarget.getBoundingClientRect() })}
+              onBlur={() => setHovered(null)}
+              onClick={() => setActiveId(isActive ? null : primary)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  setActiveId(isActive ? null : primary);
+                }
+              }}
+            >
+              {segment.text}
+            </mark>
+          );
         }
 
-        const primary = commentIds[0];
-        const comment = commentsById.get(primary);
-        const isActive = commentIds.includes(activeId ?? '');
-        const depth = commentIds.length > 1;
-
         return (
-          <mark
-            key={index}
-            id={`annotation-${primary}`}
-            data-annotation-mark={commentIds.join(' ')}
-            tabIndex={0}
-            role="button"
-            aria-label={`View note by ${comment?.author.name ?? 'a reader'}`}
-            aria-pressed={isActive}
-            className={[
-              'cursor-pointer border-b text-inherit transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta',
-              hasBookmark ? 'border-dotted' : '',
-              isActive
-                ? 'bg-surface-cta-primary/40 border-line-cta'
-                : depth
-                  ? 'bg-surface-cta-primary/35 border-surface-cta-primary hover:bg-surface-cta-primary/45'
-                  : 'bg-surface-cta-primary/20 border-surface-cta-primary hover:bg-surface-cta-primary/35',
-              comment?.pending ? 'annotation-pending' : '',
-            ].join(' ')}
-            onMouseEnter={(event) => setHovered({ id: primary, rect: event.currentTarget.getBoundingClientRect() })}
-            onMouseLeave={() => setHovered(null)}
-            onFocus={(event) => setHovered({ id: primary, rect: event.currentTarget.getBoundingClientRect() })}
-            onBlur={() => setHovered(null)}
-            onClick={() => setActiveId(isActive ? null : primary)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                setActiveId(isActive ? null : primary);
-              }
-            }}
-          >
-            {segment.text}
-          </mark>
+          <Fragment key={index}>
+            {content}
+            {endingEvidence.map(({ reference }) => (
+              <sup key={reference.evidence.id} className="ml-0.5 align-super leading-none">
+                {evidenceLink(
+                  reference,
+                  `[${reference.number}]`,
+                  `Open citation ${reference.number}: ${reference.evidence.label}`,
+                  'font-mono text-[0.68em] font-semibold text-line-cta no-underline transition-colors hover:bg-surface-cta-primary/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-line-cta',
+                )}
+              </sup>
+            ))}
+          </Fragment>
         );
       })}
     </>

@@ -1,26 +1,30 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ExternalLink,
-  Eye,
   FileCode2,
   GitCommitHorizontal,
   GitPullRequest,
   LoaderCircle,
+  X,
 } from 'lucide-react';
 import type { BlogEvidence, BlogEvidenceKind } from '@/lib/blog';
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 type EvidenceView = BlogEvidence['snapshot'];
 type FetchState = 'loading' | 'live' | 'snapshot';
+type ResolvedEvidence = {
+  evidenceId: string;
+  fetchState: FetchState;
+  view: EvidenceView;
+};
 const liveEvidenceCache = new Map<string, EvidenceView>();
 
 function EvidenceIcon({ kind, className }: { kind: BlogEvidenceKind; className?: string }) {
@@ -119,87 +123,26 @@ function parseEvidence(evidence: BlogEvidence, payload: unknown): EvidenceView {
   return parseWorkflow(evidence, record);
 }
 
-export function GitHubEvidenceMarkers({
-  evidence,
-  evidenceIds,
-  onOpen,
-}: {
-  evidence: BlogEvidence[];
-  evidenceIds: string[];
-  onOpen: (evidence: BlogEvidence, trigger: HTMLButtonElement) => void;
-}) {
-  const items = useMemo(() => {
-    const byId = new Map(evidence.map((item) => [item.id, item]));
-    return evidenceIds.flatMap((id) => {
-      const item = byId.get(id);
-      return item ? [item] : [];
-    });
-  }, [evidence, evidenceIds]);
-
-  if (items.length === 0) return null;
-
-  return (
-    <div className="mt-5 border-y border-line-structure bg-surface-1/45 py-3" data-github-evidence-trail>
-      <div className="mb-2 flex items-center justify-between gap-3 px-3">
-        <p className="font-mono text-[9px] uppercase tracking-widest text-text-disabled">
-          GitHub evidence
-        </p>
-        <span className="font-mono text-[9px] uppercase tracking-widest text-text-disabled">
-          {items.length} {items.length === 1 ? 'source' : 'sources'}
-        </span>
-      </div>
-      <div className="grid gap-px bg-line-structure sm:grid-cols-2">
-        {items.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            aria-label={`Preview ${item.label} evidence`}
-            data-evidence-marker={item.id}
-            onClick={(event) => onOpen(item, event.currentTarget)}
-            className="group flex min-h-14 items-center gap-3 bg-surface-bg px-3 py-2 text-left transition-colors hover:bg-surface-1 focus-visible:relative focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta"
-          >
-            <span className="flex size-8 shrink-0 items-center justify-center border border-line-structure bg-surface-1 text-line-cta transition-colors group-hover:border-line-cta">
-              <EvidenceIcon kind={item.kind} className="size-3.5" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block truncate font-square text-[12px] font-semibold text-text-primary">
-                {item.label}
-              </span>
-              <span className="mt-0.5 block truncate font-mono text-[9px] uppercase tracking-wider text-text-disabled">
-                {item.snapshot.status}
-              </span>
-            </span>
-            <Eye className="size-3.5 shrink-0 text-text-disabled transition-colors group-hover:text-line-cta" aria-hidden="true" />
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export function GitHubEvidenceSheet({
+export function GitHubEvidenceDialog({
   evidence,
   onClose,
 }: {
   evidence: BlogEvidence | null;
   onClose: () => void;
 }) {
-  const [view, setView] = useState<EvidenceView | null>(null);
-  const [fetchState, setFetchState] = useState<FetchState>('snapshot');
+  const [resolved, setResolved] = useState<ResolvedEvidence | null>(null);
 
   useEffect(() => {
     if (!evidence) return;
 
     const cached = liveEvidenceCache.get(evidence.id);
     if (cached) {
-      setView(cached);
-      setFetchState('live');
+      setResolved({ evidenceId: evidence.id, fetchState: 'live', view: cached });
       return;
     }
 
     const controller = new AbortController();
-    setView(evidence.snapshot);
-    setFetchState('loading');
+    setResolved({ evidenceId: evidence.id, fetchState: 'loading', view: evidence.snapshot });
 
     fetch(evidence.apiUrl, {
       headers: { Accept: 'application/vnd.github+json' },
@@ -212,19 +155,26 @@ export function GitHubEvidenceSheet({
       .then((payload) => {
         const nextView = parseEvidence(evidence, payload);
         liveEvidenceCache.set(evidence.id, nextView);
-        setView(nextView);
-        setFetchState('live');
+        setResolved({ evidenceId: evidence.id, fetchState: 'live', view: nextView });
       })
       .catch((error: unknown) => {
         if (error instanceof DOMException && error.name === 'AbortError') return;
-        setView(evidence.snapshot);
-        setFetchState('snapshot');
+        setResolved({
+          evidenceId: evidence.id,
+          fetchState: 'snapshot',
+          view: evidence.snapshot,
+        });
       });
 
     return () => controller.abort();
   }, [evidence]);
 
-  if (!evidence || !view) return null;
+  if (!evidence) return null;
+
+  const current = resolved?.evidenceId === evidence.id
+    ? resolved
+    : { evidenceId: evidence.id, fetchState: 'loading' as const, view: evidence.snapshot };
+  const { fetchState, view } = current;
 
   const closedWithoutMerge = view.status === 'Closed, not merged';
   const statusClass = closedWithoutMerge
@@ -232,31 +182,40 @@ export function GitHubEvidenceSheet({
     : 'border-line-cta bg-surface-cta-primary/20 text-line-cta';
 
   return (
-    <Sheet open onOpenChange={(open) => { if (!open) onClose(); }}>
-      <SheetContent
-        side="right"
-        className="w-full gap-0 border-line-structure bg-surface-bg p-0 sm:max-w-[460px]"
+    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent
+        showCloseButton={false}
+        className="corner-box-corners max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-[560px] gap-0 overflow-hidden rounded-none border border-line-cta bg-surface-bg p-0 text-text-primary shadow-[0_24px_80px_rgba(12,31,23,0.24)] ring-0 sm:max-w-[560px] motion-reduce:transition-none"
         aria-describedby="github-evidence-description"
         data-github-evidence-preview
       >
-        <SheetHeader className="border-b border-line-structure px-5 py-5 pr-14">
+        <header className="relative border-b border-line-structure px-5 py-5 pr-14">
           <div className="mb-3 flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest text-text-disabled">
             <EvidenceIcon kind={evidence.kind} className="size-3.5 text-line-cta" />
-            GitHub evidence
+            Source record
           </div>
-          <SheetTitle className="font-square text-[21px] font-semibold leading-tight text-text-primary">
+          <DialogTitle className="font-square text-[21px] font-semibold leading-tight text-text-primary">
             <span className="sr-only">GitHub evidence: </span>
             {evidence.label}
-          </SheetTitle>
-          <SheetDescription
+          </DialogTitle>
+          <DialogDescription
             id="github-evidence-description"
             className="mt-2 text-[13px] leading-relaxed text-text-tertiary"
           >
             {view.title}
-          </SheetDescription>
-        </SheetHeader>
+          </DialogDescription>
+          <DialogClose asChild>
+            <button
+              type="button"
+              aria-label="Close evidence"
+              className="absolute right-4 top-4 flex size-8 items-center justify-center border border-line-structure bg-surface-bg text-text-tertiary transition-colors hover:border-line-cta hover:bg-surface-1 hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta"
+            >
+              <X className="size-3.5" aria-hidden="true" />
+            </button>
+          </DialogClose>
+        </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
+        <div className="min-h-0 overflow-y-auto px-5 py-5">
           <div className="flex flex-wrap items-center gap-2">
             <span className={`border px-2 py-1 font-mono text-[9px] uppercase tracking-widest ${statusClass}`}>
               {view.status}
@@ -298,7 +257,7 @@ export function GitHubEvidenceSheet({
           </p>
         </div>
 
-        <SheetFooter className="border-t border-line-structure bg-surface-1 p-4">
+        <div className="border-t border-line-structure bg-surface-1 p-4">
           <a
             href={evidence.url}
             target="_blank"
@@ -308,8 +267,8 @@ export function GitHubEvidenceSheet({
             {evidence.openLabel}
             <ExternalLink className="size-3.5" aria-hidden="true" />
           </a>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

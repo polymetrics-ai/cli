@@ -144,11 +144,11 @@ the issue, test, review, release, and deployment harnesses used by this reposito
   action tokens; GitHub state labels use restrained neutral, red, and green semantic accents.
 - Type: preserve Instrument Serif for the essay thesis, Chakra Petch for evidence labels, and the
   existing body face for long-form reading.
-- Layout: quiet prose first; compact evidence markers follow only sourced claims; a right-side
-  evidence docket holds live metadata and the canonical external action.
-- Signature: the evidence docket behaves like an inspectable case file, with exact SHA, status,
-  changed-line totals, and source link rather than a generic preview card.
-- Motion: one sheet transition and a refresh-state icon only; respect reduced motion and avoid
+- Layout: quiet prose first; exact sourced phrases carry compact numbered references; a centered
+  evidence dialog holds live metadata and the canonical external action.
+- Signature: the source-record dialog behaves like an inspectable case file, with exact SHA,
+  status, changed-line totals, and source link rather than a generic preview card.
+- Motion: one dialog transition and a refresh-state icon only; respect reduced motion and avoid
   scroll-triggered decoration.
 
 ### Required Skills For This Follow-Up

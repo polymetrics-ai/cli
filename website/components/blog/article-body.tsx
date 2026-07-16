@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { CornerBox } from '@/components/ui/corner-box';
 import type { BlogEvidence, BlogSection } from '@/lib/blog';
 import { AnnotationsProvider } from '@/components/blog/annotations-provider';
@@ -9,10 +9,7 @@ import { SelectionPopover } from '@/components/blog/selection-popover';
 import { CommentComposer } from '@/components/blog/comment-composer';
 import { MarginNotesRail } from '@/components/blog/margin-notes-rail';
 import { CommentsSheet } from '@/components/blog/comments-sheet';
-import {
-  GitHubEvidenceMarkers,
-  GitHubEvidenceSheet,
-} from '@/components/blog/github-evidence';
+import { GitHubEvidenceDialog } from '@/components/blog/github-evidence';
 
 function sectionId(index: number): string {
   return `section-${index + 1}`;
@@ -36,8 +33,12 @@ export function ArticleBody({
   evidence: BlogEvidence[];
 }) {
   const gridRef = useRef<HTMLDivElement>(null);
-  const evidenceTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const evidenceTriggerRef = useRef<HTMLElement | null>(null);
   const [activeEvidence, setActiveEvidence] = useState<BlogEvidence | null>(null);
+  const evidenceById = useMemo(
+    () => new Map(evidence.map((item, index) => [item.id, { evidence: item, number: index + 1 }])),
+    [evidence],
+  );
 
   const closeEvidence = () => {
     const trigger = evidenceTriggerRef.current;
@@ -75,6 +76,15 @@ export function ArticleBody({
                       sectionIndex={index}
                       blockType="body"
                       blockIndex={blockIndex}
+                      evidenceReferences={(section.evidenceRefs ?? []).flatMap((reference) => {
+                        if (reference.blockIndex !== blockIndex) return [];
+                        const item = evidenceById.get(reference.evidenceId);
+                        return item ? [{ ...item, text: reference.text }] : [];
+                      })}
+                      onEvidenceOpen={(item, trigger) => {
+                        evidenceTriggerRef.current = trigger;
+                        setActiveEvidence(item);
+                      }}
                     />
                   </p>
                 ))}
@@ -107,17 +117,6 @@ export function ArticleBody({
                   <code>{section.code}</code>
                 </pre>
               ) : null}
-
-              {section.evidenceIds ? (
-                <GitHubEvidenceMarkers
-                  evidence={evidence}
-                  evidenceIds={section.evidenceIds}
-                  onOpen={(item, trigger) => {
-                    evidenceTriggerRef.current = trigger;
-                    setActiveEvidence(item);
-                  }}
-                />
-              ) : null}
             </section>
           ))}
         </div>
@@ -137,7 +136,7 @@ export function ArticleBody({
       <CommentComposer />
       <HoverPreview />
       <CommentsSheet sections={sections} />
-      <GitHubEvidenceSheet evidence={activeEvidence} onClose={closeEvidence} />
+      <GitHubEvidenceDialog evidence={activeEvidence} onClose={closeEvidence} />
     </AnnotationsProvider>
   );
 }
