@@ -21,6 +21,10 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
+# Better Auth validates route modules while Next collects build data. This
+# public placeholder exists only in the builder stage; the runner reads the
+# real secret from its runtime EnvironmentFile.
+ENV BETTER_AUTH_SECRET=build-only-f7Q2mP9xL4vN8cR1sT6wY3kH5jD0aBzE
 RUN pnpm build
 
 # ── runner ────────────────────────────────────────────────────────────────────

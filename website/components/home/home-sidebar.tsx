@@ -6,6 +6,7 @@ import {
   GitBranch as Github,
   HardDrive,
   Lock,
+  Newspaper,
   PackageCheck,
   Scale,
   Sparkles,
@@ -13,6 +14,7 @@ import {
 } from 'lucide-react';
 import { SidebarLink } from '@/components/home/sidebar-link';
 import { DOCUMENTATION_NAV } from '@/components/docs/doc-nav';
+import { BLOG_POSTS, blogUrl } from '@/lib/blog';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.generated';
 import {
   Sidebar,
@@ -66,7 +68,13 @@ const changelog = [
   { version: 'v0.1.0', label: 'Local AES-GCM vault', icon: Lock },
 ];
 
-export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: string }) {
+const latestBlogPosts = BLOG_POSTS.slice(0, 3);
+
+export function HomeSidebar({
+  className = 'home-sidebar-panel',
+}: {
+  className?: string;
+}) {
   return (
     <Sidebar className={className}>
       <SidebarInner>
@@ -110,6 +118,34 @@ export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: 
                       </span>
                       <span className="truncate text-[13px] leading-snug text-text-tertiary transition-colors group-hover:text-text-secondary">
                         {label}
+                      </span>
+                    </span>
+                  </SidebarLink>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          <SidebarGroup>
+            <SidebarGroupHeader>
+              <SidebarGroupLabel>Blog</SidebarGroupLabel>
+              <Newspaper className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
+            </SidebarGroupHeader>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {latestBlogPosts.map((post) => (
+                  <SidebarLink key={post.slug} href={blogUrl(post.slug)}>
+                    <span className="flex min-w-0 items-start gap-2">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border border-transparent transition-colors group-hover:border-line-structure group-hover:bg-surface-1">
+                        <Newspaper className="h-3.5 w-3.5 text-text-disabled transition-colors group-hover:text-line-cta" aria-hidden="true" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-[13px] leading-snug text-text-tertiary transition-colors group-hover:text-text-secondary">
+                          {post.title}
+                        </span>
+                        <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-wider text-text-disabled">
+                          {post.readingTime}
+                        </span>
                       </span>
                     </span>
                   </SidebarLink>

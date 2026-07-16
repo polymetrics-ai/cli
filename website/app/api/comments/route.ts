@@ -1,0 +1,123 @@
+import { NextResponse } from 'next/server';
+import { getSessionUser } from '@/lib/auth-session';
+import { isValidAnchorShape, blockText } from '@/lib/annotations/anchor';
+import { checkRateLimit } from '@/lib/annotations/rate-limit';
+import { getCommentMeta, insertComment, listCommentsBySlug } from '@/lib/db/comments';
+import { getBlogPost } from '@/lib/blog';
+import type { Anchor } from '@/lib/annotations/anchor';
+
+export const dynamic = 'force-dynamic';
+
+export const COMMENT_MAX_LENGTH = 2000;
+
+function error(message: string, status: number, headers?: HeadersInit) {
+  return NextResponse.json({ error: message }, { status, headers });
+}
+
+/**
+ * The server validates anchor shape and addressing (the block must exist)
+ * but not the quote text — content edits must never brick old anchors;
+ * the client resolves and orphans gracefully.
+ */
+function validateAnchor(slug: string, anchor: unknown): string | Anchor {
+  const post = getBlogPost(slug);
+  if (!post) return 'unknown post slug';
+  if (!isValidAnchorShape(anchor)) return 'invalid anchor';
+  if (anchor.sectionIndex >= post.sections.length) return 'anchor section out of range';
+  if (blockText(post, anchor.blockType, anchor.sectionIndex, anchor.blockIndex) === undefined) {
+    return 'anchor block out of range';
+  }
+  return anchor;
+}
+
+export async function GET(request: Request) {
+  const slug = new URL(request.url).searchParams.get('slug');
+  if (!slug || !getBlogPost(slug)) return error('unknown post slug', 400);
+
+  const [user, comments] = await Promise.all([
+    getSessionUser(request.headers),
+    listCommentsBySlug(slug),
+  ]);
+
+  return NextResponse.json({
+    comments: comments.map((comment) => ({
+      id: comment.id,
+      body: comment.body,
+      anchor: comment.anchor,
+      parentId: comment.parentId,
+      createdAt: comment.createdAt,
+      author: comment.author,
+      mine: user !== null && comment.userId === user.id,
+    })),
+    viewer: { admin: user?.isAdmin ?? false },
+  });
+}
+
+export async function POST(request: Request) {
+  const user = await getSessionUser(request.headers);
+  if (!user) return error('sign in to comment', 401);
+
+  let payload: { slug?: unknown; body?: unknown; anchor?: unknown; parentId?: unknown };
+  try {
+    payload = await request.json();
+  } catch {
+    return error('invalid JSON body', 400);
+  }
+
+  if (typeof payload.slug !== 'string' || !getBlogPost(payload.slug)) {
+    return error('unknown post slug', 400);
+  }
+  if (typeof payload.body !== 'string' || payload.body.trim().length === 0) {
+    return error('comment body is required', 400);
+  }
+  if (payload.body.length > COMMENT_MAX_LENGTH) {
+    return error(`comment body exceeds ${COMMENT_MAX_LENGTH} characters`, 400);
+  }
+
+  // A comment is either a reply (parentId, no anchor — it inherits the
+  // root note's thread) or a root note (anchor required).
+  let anchor: Anchor | undefined;
+  let parentId: string | undefined;
+  if (payload.parentId !== undefined) {
+    if (typeof payload.parentId !== 'string') return error('invalid parent comment', 400);
+    const parent = await getCommentMeta(payload.parentId);
+    if (!parent || parent.postSlug !== payload.slug) {
+      return error('parent comment not found on this post', 400);
+    }
+    parentId = payload.parentId;
+  } else {
+    const validated = validateAnchor(payload.slug, payload.anchor);
+    if (typeof validated === 'string') return error(validated, 400);
+    anchor = validated;
+  }
+
+  const rate = checkRateLimit('comment:create', user.id);
+  if (!rate.allowed) {
+    return error('too many comments, slow down', 429, {
+      'Retry-After': String(rate.retryAfterSeconds),
+    });
+  }
+
+  const comment = await insertComment({
+    postSlug: payload.slug,
+    userId: user.id,
+    body: payload.body.trim(),
+    anchor,
+    parentId,
+  });
+
+  return NextResponse.json(
+    {
+      comment: {
+        id: comment.id,
+        body: comment.body,
+        anchor: comment.anchor,
+        parentId: comment.parentId,
+        createdAt: comment.createdAt,
+        author: comment.author,
+        mine: true,
+      },
+    },
+    { status: 201 },
+  );
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import type { CSSProperties, MouseEvent } from 'react';
+import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 import { Cable, Heart, MessageSquare } from 'lucide-react';
 import {
   Sidebar,
@@ -32,6 +32,8 @@ interface TocIndicator {
 interface OnPageTocAsideProps {
   items: OnPageTocItem[];
   className: string;
+  children?: ReactNode;
+  discussionHref?: string;
 }
 
 interface TocPathPoint {
@@ -69,6 +71,8 @@ const CREATOR_LINKS = [
     iconSrc: '/social/x.svg',
   },
 ] as const;
+
+const DEFAULT_DISCUSSION_HREF = 'https://github.com/polymetrics-ai/cli/discussions';
 
 function findListItem(list: HTMLDivElement | null, id: string) {
   if (!list) return null;
@@ -159,7 +163,12 @@ function getScrollPosition(items: OnPageTocItem[]): TocScrollPosition {
   };
 }
 
-export function OnPageTocAside({ items, className }: OnPageTocAsideProps) {
+export function OnPageTocAside({
+  items,
+  className,
+  children,
+  discussionHref = DEFAULT_DISCUSSION_HREF,
+}: OnPageTocAsideProps) {
   const rawId = useId();
   const idPrefix = rawId.replace(/:/g, '');
   const gradientId = `site-toc-active-${idPrefix}`;
@@ -391,19 +400,23 @@ export function OnPageTocAside({ items, className }: OnPageTocAsideProps) {
           )}
         </SidebarContent>
 
+        {children}
+
         <SidebarFooter className="site-toc-footer">
           <a
-            href="https://github.com/polymetrics-ai/cli/discussions"
+            href={discussionHref}
             target="_blank"
             rel="noreferrer"
+            data-current-discussion-link
+            data-github-discussion-link
             className="site-toc-footer-link site-toc-footer-link-block"
           >
             <span className="flex items-center gap-2 text-[12px] font-medium text-text-secondary">
               <MessageSquare className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
-              Join the discussion
+              GitHub discussion
             </span>
             <span className="mt-1 block text-[11px] leading-snug text-text-tertiary">
-              Questions, ideas, and feedback.
+              Open this page on GitHub Discussions.
             </span>
           </a>
           <div className="site-toc-footer-link site-toc-footer-link-block">

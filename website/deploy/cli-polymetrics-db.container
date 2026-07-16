@@ -1,0 +1,28 @@
+# Postgres sidecar for website comments/bookmarks/auth.
+# Install once on the origin host:
+#   cp cli-polymetrics-db.container ~/.config/containers/systemd/
+#   install -m 0600 /dev/null ~/.config/cli-polymetrics/db.env   # then fill in
+#   systemctl --user daemon-reload && systemctl --user start cli-polymetrics-db
+#
+# db.env must define:
+#   POSTGRES_DB=website
+#   POSTGRES_USER=website
+#   POSTGRES_PASSWORD=<generated>
+[Unit]
+Description=Postgres sidecar for cli.polymetrics.ai
+
+[Container]
+Image=docker.io/library/postgres:17-alpine
+Network=cli-polymetrics.network
+EnvironmentFile=%h/.config/cli-polymetrics/db.env
+Volume=cli-polymetrics-pgdata:/var/lib/postgresql/data
+HealthCmd=pg_isready -U website -d website
+HealthInterval=10s
+HealthTimeout=5s
+HealthRetries=5
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
