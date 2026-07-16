@@ -48,9 +48,9 @@ const stats = [
   },
   {
     label: 'License',
-    value: 'Elastic-2.0',
+    value: 'AGPL-3.0',
     href: 'https://github.com/polymetrics-ai/cli/blob/main/LICENSE',
-    tooltip: 'Elastic License 2.0',
+    tooltip: 'AGPL core, MIT connector definitions',
     icon: Scale,
   },
   {

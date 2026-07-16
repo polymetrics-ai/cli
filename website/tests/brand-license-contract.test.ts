@@ -52,7 +52,9 @@ describe('repository license boundaries', () => {
     const definitionsLicense = readRepositoryFile('internal/connectors/defs/LICENSE');
     const licensingMap = readRepositoryFile('LICENSING.md');
 
-    expect(rootLicense).toMatch(/^GNU AFFERO GENERAL PUBLIC LICENSE\nVersion 3/);
+    expect(rootLicense.trimStart()).toMatch(
+      /^GNU AFFERO GENERAL PUBLIC LICENSE\n\s+Version 3/,
+    );
     expect(rootLicense).toContain('13. Remote Network Interaction; Use with the GNU General Public License.');
     expect(definitionsLicense).toMatch(/^MIT License\n\nCopyright \(c\) 2026 Polymetrics AI/);
     expect(licensingMap).toContain('default license is `AGPL-3.0-only`');

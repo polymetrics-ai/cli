@@ -3,7 +3,7 @@
 | Slice | Red evidence | Green evidence | Refactor evidence | Status |
 | --- | --- | --- | --- | --- |
 | Shared PM logo | `npm run test:unit -- tests/brand-license-contract.test.ts` fails because `@/components/brand/pm-logo-mark` was deleted | Focused `-t "PM brand mark"` run passes: 2 tests | Removed three local cursor implementations and the now-unused global cursor animation | Green |
-| Mixed license boundary | Contract assertions committed in the same focused test; collection was initially blocked by the missing shared logo module | Pending | Pending | Red queued |
+| Mixed license boundary | Full focused run fails on missing `internal/connectors/defs/LICENSE` and stale Elastic/public-source copy | Full focused run passes: 4 tests; root AGPL, nested MIT, map, and maintained copy agree | Consolidated policy in `LICENSING.md`; public surfaces link to the canonical files | Green |
 
 ## Rules
 

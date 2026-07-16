@@ -254,8 +254,8 @@ export default function HomePage() {
           </div>
         </HomeSection>
 
-        {/* ── Public source & local-first ────────────────────────────── */}
-        <HomeSection id="public-source" pattern="p025" className="pt-[120px]">
+        {/* ── Open source & local-first ──────────────────────────────── */}
+        <HomeSection id="open-source" pattern="p025" className="pt-[120px]">
           <CornerBox withStripes className="px-8 py-10 md:py-14 relative overflow-hidden">
             {/* Accent glow in top-right corner */}
             <span
@@ -273,7 +273,7 @@ export default function HomePage() {
                   <TextHighlight>No vendor lock-in.</TextHighlight>
                 </Heading>
                 <Text className="text-left">
-                  pm is public source under Elastic License 2.0, written in pure Go, and trivially cross-compiled. No CGO, no Docker, no 8 GB of services. Install with a single{' '}
+                  The pm core is open source under AGPL-3.0-only, while connector definitions are MIT licensed for straightforward contribution and reuse. It is written in pure Go and trivially cross-compiled. No CGO, no Docker, no 8 GB of services. Install with a single{' '}
                   <code className="font-mono text-[13px] bg-surface-2 rounded px-1">go install</code>{' '}
                   and run anywhere.
                 </Text>

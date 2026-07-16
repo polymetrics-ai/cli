@@ -62,4 +62,13 @@ make verify
 
 ## Licensing
 
-By contributing, you agree that your contribution is provided under the repository license in `LICENSE`.
+Contributions are licensed according to their destination path:
+
+- Connector definitions under `internal/connectors/defs/` are provided under
+  the MIT License in `internal/connectors/defs/LICENSE`.
+- Contributions elsewhere are provided under `AGPL-3.0-only` unless a more
+  specific license notice applies.
+
+By contributing, you represent that you have the right to provide the
+contribution under the applicable license. See `LICENSING.md` for the complete
+boundary map.
