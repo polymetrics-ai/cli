@@ -1,0 +1,50 @@
+{
+  "issue": 401,
+  "parentIssue": 397,
+  "branch": "feat/401-typed-viper-config",
+  "baseBranch": "feat/cli-architecture-v2",
+  "parentPR": 438,
+  "subPR": null,
+  "status": "planning_complete_red_tests_pending",
+  "verificationPassed": false,
+  "verificationBlocker": "implementation and full make verify pending",
+  "gsd": {
+    "doctor": "passed",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-401.prompt",
+    "programmingLoop": "manual_fallback",
+    "programmingLoopFailure": "scripts/gsd: unknown GSD command: programming-loop",
+    "fallbackPrompt": ".pi/prompts/pm-gsd-loop.md"
+  },
+  "dependencyDecision": {
+    "viper": "github.com/spf13/viper v1.21.0",
+    "approvedBy": "docs/adr/0002-cobra-viper-cli-framework.md",
+    "status": "selected_not_added_yet",
+    "directDependenciesAdded": [],
+    "humanGate": "additional direct modules, major-version deviation, frontend dependency changes, or unrelated graph changes"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "spawned",
+      "reason": "parent #397 assigned isolated worker directory, branch, issue #401, and bounded write scope; worker does not spawn subagents"
+    },
+    {
+      "cycle": "tdd-plan",
+      "decision": "local_critical_path",
+      "reason": "worker created issue-local plan, TDD ledger, verification checklist, summary, prompts, and run-state before production edits"
+    }
+  ],
+  "verification": {
+    "focused": {},
+    "full": {},
+    "parity": {}
+  },
+  "artifacts": [
+    ".planning/phases/401-typed-viper-config/PLAN.md",
+    ".planning/phases/401-typed-viper-config/TDD-LEDGER.md",
+    ".planning/phases/401-typed-viper-config/VERIFICATION.md",
+    ".planning/phases/401-typed-viper-config/SUMMARY.md",
+    ".planning/phases/401-typed-viper-config/PROMPTS.md",
+    ".planning/phases/401-typed-viper-config/RUN-STATE.json"
+  ]
+}
