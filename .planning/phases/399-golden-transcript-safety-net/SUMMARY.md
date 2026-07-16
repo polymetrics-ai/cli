@@ -14,9 +14,16 @@ Status: in progress.
 - Full local gates passed: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `git diff -- go.mod`, and `git diff --check`.
 - CLI parity spot checks passed for `pm help docs`, bare `pm connectors`, `pm docs --help`, and docs/website grep.
 
+## PR / review status
+
+- Commit pushed: `7c904e21fca4abbfc45cc5a913f34e6c14df79a1`.
+- Stacked sub-PR opened: https://github.com/polymetrics-ai/cli/pull/439 (`test/399-golden-transcript-safety-net` → `feat/cli-architecture-v2`).
+- CI status at handoff: most checks pass; `verify` still in progress in GitHub Actions after local `make verify` passed.
+- Claude review status: pending/blocked because `Claude Code Review` workflow is `disabled_manually`; no approval claimed. Parent-PR fallback coverage remains pending.
+
 ## Pending
 
-- Commit, push, and open stacked sub-PR to `feat/cli-architecture-v2`.
+- Parent orchestrator to monitor CI verify, automated review fallback/parent coverage, and integration decision.
 
 ## Safety
 

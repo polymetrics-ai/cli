@@ -132,3 +132,11 @@ Results:
 - `./pm docs --help`: pass; output begins `NAME\n  pm docs - generate CLI documentation`.
 - docs/website grep: pass; CLI docs and website generated docs reference `pm docs` / `pm connectors`.
 - Website docs: no source `website/content/**` update needed because #399 adds tests and aligns tracked generated CLI markdown to existing runtime help; no new CLI command/flag/output behavior introduced.
+
+### PR / CI / review status
+
+- Branch pushed: `test/399-golden-transcript-safety-net`.
+- Sub-PR opened: https://github.com/polymetrics-ai/cli/pull/439.
+- Head SHA: `7c904e21fca4abbfc45cc5a913f34e6c14df79a1`.
+- GitHub checks observed: branch-name, pr-title, require-linked-issue, gsd-workflow-evidence, Dependency Review, govulncheck, and CodeQL passed; `verify` still pending at handoff after local `make verify` passed.
+- Claude review route: workflow `Claude Code Review` is `disabled_manually`; no Claude approval claimed. Parent-PR fallback coverage remains pending.

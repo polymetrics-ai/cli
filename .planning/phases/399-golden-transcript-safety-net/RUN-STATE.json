@@ -4,6 +4,8 @@
   "issue": 399,
   "parent_issue": 397,
   "parent_pr": 438,
+  "sub_pr": 439,
+  "head_sha": "7c904e21fca4abbfc45cc5a913f34e6c14df79a1",
   "workflow": "spawned-bounded-worker",
   "current_plan": "golden-transcript-harness-and-docs-diff-test",
   "gsd": {
@@ -52,6 +54,16 @@
     "build": "go build ./cmd/pm: passed",
     "make_verify": "make verify: passed",
     "go_mod_diff": "git diff -- go.mod: empty"
+  },
+  "review": {
+    "primary_route": "claude_auto",
+    "status": "pending_blocked_workflow_disabled_manually",
+    "coverage_route": "parent_pr_fallback_pending",
+    "approval_claimed": false
+  },
+  "ci": {
+    "github_actions": "pending_verify_at_handoff",
+    "local_gates": "passed"
   },
   "last_updated": "2026-07-16"
 }

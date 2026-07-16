@@ -44,3 +44,7 @@ Passed local gates:
 - `make verify`
 - `git diff -- go.mod` (empty)
 - CLI parity spot checks for `pm help docs`, bare `pm connectors`, `pm docs --help`, and docs/website grep.
+
+Sub-PR: https://github.com/polymetrics-ai/cli/pull/439  
+Head SHA: `7c904e21fca4abbfc45cc5a913f34e6c14df79a1`  
+Automated review: Claude workflow observed `disabled_manually`; coverage pending / parent-PR fallback pending.
