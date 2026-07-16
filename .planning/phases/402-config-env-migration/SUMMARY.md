@@ -1,13 +1,16 @@
 # Phase 402 Summary
 
-Status: review-fix green for PR #448; pending push/parent-human review fallback.
+Status: PR #448 open; latest status-trace push complete at handoff; CI status sourced from PR #448 checks at handoff; human/parent fallback review pending.
 
 ## Current state
 
+- PR #448 is open against `feat/cli-architecture-v2`; final head is verified externally at handoff with PR #448 `headRefOid` and `git rev-parse HEAD` (no self-referential SHA recorded here). Pre-status-correction checkpoint: `40c34439dde0b46a84dcd1ac3a3b3b59fe36410f`.
+- CI source: PR #448 `statusCheckRollup`; before this status trace commit, `verify` was `IN_PROGRESS` and other reported checks were success/skipped.
 - Required reading complete for issue #402, parent #397/PR #438, GSD contracts/workflows, runtime/RLM references, CLI parity, ADR 0002, CLI Architecture v2 Phase/Stage 4.
 - GSD adapter `doctor` passed; `programming-loop` command absent, so manual GSD fallback recorded.
 - Env-reader classification, red tests, implementation, docs parity, and verification evidence recorded in phase artifacts.
 - Review-fix accepted findings: thread typed worker activities into `pm worker serve`; thread typed runtime endpoints into `pm perf compare --runtime`; parent ledger stale finding is parent-orchestrator-owned and handoff-only.
+- Targeted re-review disposition: accepted; code fixes clean. Parent/human fallback review remains pending; Claude/Copilot not requested for this cycle.
 
 ## Delivered
 

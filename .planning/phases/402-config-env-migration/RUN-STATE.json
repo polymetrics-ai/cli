@@ -4,7 +4,7 @@
   "branch": "refactor/402-config-env-migration",
   "baseBranch": "feat/cli-architecture-v2",
   "verificationPassed": true,
-  "status": "review_fix_green_pending_push_parent_review",
+  "status": "pr_open_latest_push_complete_ci_status_from_pr_checks_parent_review_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-402.prompt",
@@ -12,7 +12,8 @@
     "fallback": "manual_gsd_universal_runtime_loop",
     "reviewFixDoctor": "passed",
     "reviewFixPlanPhasePrompt": "/tmp/gsd-plan-phase-402-reviewfix.prompt",
-    "reviewFixProgrammingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop"
+    "reviewFixProgrammingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "statusCorrectionPlanPhasePrompt": "/tmp/gsd-plan-phase-402-status-correction.prompt"
   },
   "orchestrationDecisions": [
     {
@@ -39,12 +40,29 @@
       "cycle": "review-fix-verify",
       "decision": "local_critical_path",
       "reason": "review fixes and full local gates completed inline in isolated worker cwd"
+    },
+    {
+      "cycle": "status-correction",
+      "decision": "local_critical_path",
+      "reason": "status-only phase artifact correction in isolated worker cwd; no code, dependency, parent, merge, or automated-review action"
     }
   ],
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/448",
+  "statusCorrection": {
+    "disposition": "accepted",
+    "targetedReReview": "clean",
+    "pullRequestState": "OPEN",
+    "baseBranch": "feat/cli-architecture-v2",
+    "headSource": "PR #448 headRefOid and git rev-parse HEAD at handoff",
+    "preStatusCorrectionHead": "40c34439dde0b46a84dcd1ac3a3b3b59fe36410f",
+    "latestPush": "complete at handoff; final SHA intentionally not embedded to avoid a self-referential claim",
+    "ciSource": "PR #448 statusCheckRollup at handoff",
+    "preStatusCorrectionCI": "verify IN_PROGRESS; other reported checks success/skipped"
+  },
   "reviewRoute": {
-    "claude": "do_not_request_this_cycle",
-    "copilot": "do_not_request_this_cycle",
-    "fallback": "human_parent_review_pending"
+    "claude": "not_requested_per_instruction",
+    "copilot": "not_requested_per_instruction",
+    "fallback": "human_parent_review_pending",
+    "coverageStatus": "targeted_re_review_clean_parent_human_fallback_pending"
   }
 }
