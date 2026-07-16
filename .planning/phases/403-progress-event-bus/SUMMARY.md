@@ -25,6 +25,8 @@ Status: implementation pushed; verification blocked on repeated focused race tim
 - `go test -race ./internal/worker/... -run TestSubmitterEmits -count=1`
 - `go list -deps -f '{{if not .Standard}}{{.ImportPath}}{{end}}' ./internal/events | grep -v '^$'` output only `polymetrics.ai/internal/safety` and `polymetrics.ai/internal/events`.
 - `git diff -- go.mod go.sum` empty.
+- `go vet ./...`
+- `go build ./cmd/pm`
 
 ## Blocker
 

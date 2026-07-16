@@ -6,9 +6,9 @@
 - [x] `go test -race ./internal/events/... -count=1`
 - [ ] `go test -race ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` — blocked by certify package timeout
 - [ ] `go test -race ./...` — not run after repeated focused race timeout
-- [ ] `go vet ./...` — not run after repeated focused race timeout
+- [x] `go vet ./...`
 - [ ] `go test ./...` — not run after repeated focused race timeout
-- [ ] `go build ./cmd/pm` — not run after repeated focused race timeout
+- [x] `go build ./cmd/pm`
 - [ ] `make verify` — not run after repeated focused race timeout
 - [x] `git diff --check origin/feat/cli-architecture-v2...HEAD`
 - [x] `git diff -- go.mod go.sum` empty
@@ -34,6 +34,8 @@
 | `go list -deps -f '{{if not .Standard}}{{.ImportPath}}{{end}}' ./internal/events \| grep -v '^$'` | pass | Output only `polymetrics.ai/internal/safety` and `polymetrics.ai/internal/events`. |
 | `go test -race ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` | fail | Go test default timeout: `panic: test timed out after 10m0s` in `internal/connectors/certify` after flow/app passed. |
 | `go test -race -timeout 30m ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` | fail | `internal/connectors/certify` timed out after 30m in existing source-stage tests after flow/app passed. |
+| `go vet ./...` | pass | no output |
+| `go build ./cmd/pm` | pass | no output |
 | `git diff --check origin/feat/cli-architecture-v2...HEAD && git diff -- go.mod go.sum` | pass | Post-commit rerun clean; go.mod/go.sum diff empty. |
 
 ## Gate notes
