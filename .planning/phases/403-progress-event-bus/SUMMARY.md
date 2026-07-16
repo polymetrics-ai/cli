@@ -1,6 +1,6 @@
 # SUMMARY — Issue 403 progress event bus
 
-Status: implementation pushed; verification blocked on repeated focused race timeout in existing `internal/connectors/certify` source-stage tests.
+Status: final verification passed. Coordinator-provided strict full race gate passed at branch head `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`; remaining non-race final gates passed in this worker run.
 
 ## Delivered
 
@@ -28,13 +28,31 @@ Status: implementation pushed; verification blocked on repeated focused race tim
 - `go vet ./...`
 - `go build ./cmd/pm`
 
-## Blocker
+## Strict race resolution
 
-- Exact focused package race gate failed: `go test -race ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` hit Go test default `panic: test timed out after 10m0s` in `internal/connectors/certify` after flow/app passed.
-- Supplemental longer run also failed: `go test -race -timeout 30m ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` timed out in `internal/connectors/certify` source-stage tests after flow/app passed.
+- Coordinator external gate at branch head `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`:
 
-## Review / PR
+```text
+go test -race ./... -count=1 -timeout 120m
+PASS
+internal/cli 1841.988s
+internal/connectors/certify 3892.688s
+internal/events 1.317s
+real 3898.97
+user 6294.91
+sys 84.56
+```
 
-- Branch pushed.
-- Sub-PR not opened because local verification gate is blocked.
-- Claude disabled / Copilot quota exhausted per task; no review requests made.
+- Baseline/worker suspect certify tests had nearly identical pass times, confirming prior 10m/30m timeouts were suite duration, not event regression.
+
+## Final verification
+
+- `gofmt -w cmd internal` — pass, no production file diff.
+- `go vet ./...` — pass, no output.
+- `go test ./...` — pass, `internal/cli 163.985s`, `internal/connectors/certify 343.668s`, `internal/events 2.383s`, `real 348.54`.
+- `go build ./cmd/pm` — pass, no output.
+- `make verify` — pass, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`, `real 367.33`.
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass, no output.
+- `git diff -- go.mod go.sum` — pass, no output; no dependency delta.
+- CLI parity: N/A; no CLI command/flag/help/docs/website surface changed. `--progress` belongs to #405.
+- PR will be opened non-draft to current `feat/cli-architecture-v2`. No Claude/Copilot request per task.

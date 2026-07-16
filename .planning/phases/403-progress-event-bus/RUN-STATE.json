@@ -5,14 +5,67 @@
   "branch": "feat/403-progress-event-bus",
   "baseParentHead": "e5ee4075db8f8350b216a6d1ff64297e204b8515",
   "mode": "bounded-mutating-worker",
-  "verificationPassed": false,
-  "verificationBlocker": "go test -race focused package gate timed out in internal/connectors/certify after 10m default and 30m supplemental timeout",
+  "verificationPassed": true,
+  "verificationBlocker": null,
   "gsdAdapter": {
-    "doctor": "passed",
+    "doctor": "passed; rerun 2026-07-17",
+    "list": "passed; 69 commands",
     "planPhasePrompt": "generated",
     "programmingLoopDryRun": "failed: scripts/gsd: unknown GSD command: programming-loop",
     "fallback": "loaded .pi/prompts/pm-gsd-loop.md and running universal loop inline/manual"
   },
+  "externalRaceGate": {
+    "source": "coordinator external PR-head gate evidence",
+    "head": "2c2c16f850484ff5c4c8b99d065f4ef3361dbc61",
+    "command": "go test -race ./... -count=1 -timeout 120m",
+    "result": "PASS",
+    "durations": {
+      "internal/cli": "1841.988s",
+      "internal/connectors/certify": "3892.688s",
+      "internal/events": "1.317s",
+      "real": "3898.97",
+      "user": "6294.91",
+      "sys": "84.56"
+    },
+    "analysis": "baseline/worker suspect certify tests had nearly identical pass times, confirming prior 10m/30m timeout was suite duration, not event regression"
+  },
+  "finalGates": [
+    {
+      "command": "gofmt -w cmd internal",
+      "result": "pass",
+      "evidence": "no output; real 0.27 user 0.45 sys 0.32; no production file diff"
+    },
+    {
+      "command": "go vet ./...",
+      "result": "pass",
+      "evidence": "no output; real 2.19 user 1.22 sys 2.70"
+    },
+    {
+      "command": "go test ./...",
+      "result": "pass",
+      "evidence": "internal/cli 163.985s; internal/connectors/certify 343.668s; internal/events 2.383s; real 348.54 user 783.02 sys 47.85"
+    },
+    {
+      "command": "go build ./cmd/pm",
+      "result": "pass",
+      "evidence": "no output; real 1.14 user 0.56 sys 1.21"
+    },
+    {
+      "command": "make verify",
+      "result": "pass",
+      "evidence": "go test -timeout 20m ./... passed; docs validate passed; smoke ok; golangci-lint 0 issues; connectorgen validate: 547 connector(s) checked, 0 findings; real 367.33 user 787.62 sys 68.30"
+    },
+    {
+      "command": "git diff --check origin/feat/cli-architecture-v2...HEAD",
+      "result": "pass",
+      "evidence": "no output after fetching current origin/feat/cli-architecture-v2; real 0.02"
+    },
+    {
+      "command": "git diff -- go.mod go.sum",
+      "result": "pass",
+      "evidence": "no output; no dependency delta; final rerun real 0.01"
+    }
+  ],
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -33,6 +86,16 @@
       "cycle": "verify",
       "decision": "not_spawned_verification_blocked",
       "reason": "focused race gate repeatedly timed out in internal/connectors/certify source-stage tests; no further production edits after blocker"
+    },
+    {
+      "cycle": "finalize-plan",
+      "decision": "local_critical_path",
+      "reason": "coordinator supplied strict full-race pass evidence at PR head 2c2c16f850484ff5c4c8b99d065f4ef3361dbc61; worker ran remaining final gates locally without self-SHA chase"
+    },
+    {
+      "cycle": "final-verify",
+      "decision": "local_critical_path",
+      "reason": "remaining final gates passed locally; no production code changes and no dependency delta"
     }
   ]
 }

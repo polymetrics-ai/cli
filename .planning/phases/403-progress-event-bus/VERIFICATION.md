@@ -4,12 +4,12 @@
 
 - [x] `gofmt -w cmd internal`
 - [x] `go test -race ./internal/events/... -count=1`
-- [ ] `go test -race ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` — blocked by certify package timeout
-- [ ] `go test -race ./...` — not run after repeated focused race timeout
+- [x] `go test -race ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` — superseded by strict full-race gate below; prior 10m/30m timeouts matched suite duration
+- [x] `go test -race ./... -count=1 -timeout 120m` — external PR-head source on `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`
 - [x] `go vet ./...`
-- [ ] `go test ./...` — not run after repeated focused race timeout
+- [x] `go test ./...`
 - [x] `go build ./cmd/pm`
-- [ ] `make verify` — not run after repeated focused race timeout
+- [x] `make verify`
 - [x] `git diff --check origin/feat/cli-architecture-v2...HEAD`
 - [x] `git diff -- go.mod go.sum` empty
 - [x] dependency inspection confirms `internal/events` imports only stdlib + `internal/safety`
@@ -34,9 +34,14 @@
 | `go list -deps -f '{{if not .Standard}}{{.ImportPath}}{{end}}' ./internal/events \| grep -v '^$'` | pass | Output only `polymetrics.ai/internal/safety` and `polymetrics.ai/internal/events`. |
 | `go test -race ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` | fail | Go test default timeout: `panic: test timed out after 10m0s` in `internal/connectors/certify` after flow/app passed. |
 | `go test -race -timeout 30m ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` | fail | `internal/connectors/certify` timed out after 30m in existing source-stage tests after flow/app passed. |
-| `go vet ./...` | pass | no output |
-| `go build ./cmd/pm` | pass | no output |
-| `git diff --check origin/feat/cli-architecture-v2...HEAD && git diff -- go.mod go.sum` | pass | Post-commit rerun clean; go.mod/go.sum diff empty. |
+| `go test -race ./... -count=1 -timeout 120m` | pass | External PR-head source at `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`: `PASS`; `internal/cli 1841.988s`; `internal/connectors/certify 3892.688s`; `internal/events 1.317s`; `real 3898.97`; `user 6294.91`; `sys 84.56`. Baseline/worker suspect certify tests had nearly identical pass times, confirming prior 10m/30m timeout was suite duration, not event regression. |
+| `gofmt -w cmd internal` | pass | no output; `real 0.27`, `user 0.45`, `sys 0.32`; no production file diff. |
+| `go vet ./...` | pass | no output; `real 2.19`, `user 1.22`, `sys 2.70`. |
+| `go test ./...` | pass | `internal/cli 163.985s`; `internal/connectors/certify 343.668s`; `internal/events 2.383s`; `real 348.54`, `user 783.02`, `sys 47.85`. |
+| `go build ./cmd/pm` | pass | no output; `real 1.14`, `user 0.56`, `sys 1.21`. |
+| `make verify` | pass | includes fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, lint, connectorgen validate. `smoke ok`; `0 issues`; `connectorgen validate: 547 connector(s) checked, 0 findings`; `real 367.33`, `user 787.62`, `sys 68.30`. |
+| `git diff --check origin/feat/cli-architecture-v2...HEAD` | pass | no output after fetching current `origin/feat/cli-architecture-v2`; `real 0.02`. |
+| `git diff -- go.mod go.sum` | pass | no output; no dependency delta; final rerun `real 0.01`. |
 
 ## Gate notes
 

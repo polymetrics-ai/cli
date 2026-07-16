@@ -4,6 +4,7 @@ Sub-issue: https://github.com/polymetrics-ai/cli/issues/403
 Parent: https://github.com/polymetrics-ai/cli/issues/397 / PR #438
 Branch: `feat/403-progress-event-bus`
 Base parent head: `e5ee4075`
+Coordinator-confirmed race head: `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`
 Mode: bounded mutating worker in isolated cwd.
 
 ## Required reading complete
@@ -131,6 +132,36 @@ Implementation:
 - poll `DescribeWorkflowExecution` while waiting for `run.Get` in a goroutine.
 - select on `ctx.Done()` and result channel; no goroutine leaks.
 - do not alter Temporal logger setup.
+
+## Finalization plan — 2026-07-17
+
+Coordinator completed the strict full race gate externally on branch head
+`2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`. This worker will not rebase, chase a self-generated
+SHA, or make production changes unless a real remaining gate failure requires it. The finalization
+slice is documentation/evidence plus the requested non-race final gates, then push and open the
+stacked PR to the current `feat/cli-architecture-v2` base.
+
+External strict race evidence to carry forward honestly:
+
+```text
+go test -race ./... -count=1 -timeout 120m
+PASS
+internal/cli 1841.988s
+internal/connectors/certify 3892.688s
+internal/events 1.317s
+real 3898.97
+user 6294.91
+sys 84.56
+```
+
+Baseline/worker suspect certify tests had nearly identical pass times, confirming prior 10m/30m
+timeouts were suite duration, not an event-regression signal.
+
+Remaining final gates passed locally after this evidence update: gofmt had no production diff; vet and
+build had no output; `go test ./...` passed with `internal/connectors/certify 343.668s`; `make verify`
+passed with `0 issues` and `connectorgen validate: 547 connector(s) checked, 0 findings`; diff-check
+was clean; `go.mod`/`go.sum` diff was empty. `verificationPassed=true` is now recorded in
+`RUN-STATE.json`.
 
 ## Verification plan
 
