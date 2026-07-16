@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { Fragment, useMemo, useRef, useState } from 'react';
 import { CornerBox } from '@/components/ui/corner-box';
 import type { BlogEvidence, BlogSection } from '@/lib/blog';
@@ -11,6 +10,7 @@ import { CommentComposer } from '@/components/blog/comment-composer';
 import { MarginNotesRail } from '@/components/blog/margin-notes-rail';
 import { CommentsSheet } from '@/components/blog/comments-sheet';
 import { GitHubEvidenceDialog } from '@/components/blog/github-evidence';
+import { ArticleFigure } from '@/components/blog/article-figure';
 
 function sectionId(index: number): string {
   return `section-${index + 1}`;
@@ -53,6 +53,11 @@ export function ArticleBody({
         <div className="min-w-0" data-annotation-root>
           {sections.map((section, index) => (
             <section key={section.heading} id={sectionId(index)} className="mb-12 scroll-mt-24">
+              {(section.images ?? [])
+                .filter((image) => image.beforeHeading)
+                .map((image) => (
+                  <ArticleFigure key={image.src} image={image} className="mb-5" />
+                ))}
               <div className="mb-4 flex items-baseline gap-3 border-b border-line-structure pb-2">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-text-disabled">
                   {String(index + 1).padStart(2, '0')}
@@ -62,7 +67,7 @@ export function ArticleBody({
                 </h2>
               </div>
 
-              <div className="flex flex-col gap-4">
+              <div className="flow-root">
                 {section.body.map((paragraph, blockIndex) => (
                   <Fragment key={`${section.heading}-${blockIndex}`}>
                     <p
@@ -70,7 +75,7 @@ export function ArticleBody({
                       data-section-index={index}
                       data-block-type="body"
                       data-block-index={blockIndex}
-                      className="text-[15px] leading-[1.75] text-text-tertiary"
+                      className="mb-4 text-[15px] leading-[1.75] text-text-tertiary"
                     >
                       <HighlightedBlock
                         text={paragraph}
@@ -88,21 +93,9 @@ export function ArticleBody({
                         }}
                       />
                     </p>
-                    {section.image?.afterBlock === blockIndex ? (
-                      <figure className="my-2 border-y border-line-structure" data-blog-section-image>
-                        <Image
-                          src={section.image.src}
-                          alt={section.image.alt}
-                          width={section.image.width}
-                          height={section.image.height}
-                          sizes="(max-width: 767px) calc(100vw - 2rem), 760px"
-                          className="h-auto w-full object-cover"
-                        />
-                        <figcaption className="border-t border-line-structure bg-surface-1 px-3 py-2 text-[11px] leading-relaxed text-text-disabled">
-                          {section.image.caption}
-                        </figcaption>
-                      </figure>
-                    ) : null}
+                    {(section.images ?? [])
+                      .filter((image) => image.afterBlock === blockIndex)
+                      .map((image) => <ArticleFigure key={image.src} image={image} />)}
                   </Fragment>
                 ))}
               </div>

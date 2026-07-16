@@ -1,16 +1,20 @@
+export type BlogImage = {
+  src: string;
+  alt: string;
+  caption: string;
+  width: number;
+  height: number;
+  placement: 'full' | 'float-left' | 'float-right';
+  afterBlock?: number;
+  beforeHeading?: boolean;
+};
+
 export type BlogSection = {
   heading: string;
   body: string[];
   points?: string[];
   code?: string;
-  image?: {
-    src: string;
-    alt: string;
-    caption: string;
-    width: number;
-    height: number;
-    afterBlock: number;
-  };
+  images?: BlogImage[];
   evidenceRefs?: Array<{
     blockIndex: number;
     evidenceId: string;
@@ -47,6 +51,7 @@ export type BlogPost = {
   category: string;
   tags: string[];
   summary: string;
+  leadImage?: BlogImage;
   repositoryCta?: {
     label: string;
     href: string;
@@ -68,6 +73,14 @@ export const BLOG_POSTS: BlogPost[] = [
     tags: ['human harnesses', 'GitHub Actions', 'approval gates', 'AI agents'],
     summary:
       'A giant pull request turned GitHub into a loading spinner and taught us that intent, evidence, approval, and mutation must stay visible for every operator, including the human at the keyboard.',
+    leadImage: {
+      src: '/blog/human-harnesses/01-diff-that-ate-the-room.webp',
+      alt: 'An enormous accordion-fold code diff filling a review room around one small terminal.',
+      caption: 'One delivery unit grew until the review room became part of the diff.',
+      width: 1672,
+      height: 941,
+      placement: 'full',
+    },
     repositoryCta: {
       label: 'Star Polymetrics on GitHub',
       href: 'https://github.com/polymetrics-ai/cli',
@@ -286,6 +299,17 @@ export const BLOG_POSTS: BlogPost[] = [
           'The connector rewrite now stores each integration as a JSON bundle and interprets it through a shared engine. API operations are classified as streams, direct reads, writes, binary transfers, native protocol work, hooks, or typed exclusions. That classification matters because a list operation, a file download, and a DELETE should not inherit the same runtime policy.',
           'That local loop eventually raised a more awkward question: who checks whether the loop itself is behaving? I am leaving that unanswered here, because it became its own engineering story.',
         ],
+        images: [
+          {
+            src: '/blog/human-harnesses/02-isolated-worktables.webp',
+            alt: 'Four separated worktables handling bounded parts of one connector migration.',
+            caption: 'Isolated worktables keep bounded changes from competing in one checkout.',
+            width: 1122,
+            height: 1402,
+            placement: 'float-left',
+            afterBlock: 0,
+          },
+        ],
       },
       {
         heading: 'What the repository actually contains',
@@ -334,6 +358,17 @@ pm reverse run <plan-id> --approve <approval-token> --json`,
 sub-issue   -> isolated worktree -> red/green -> stacked PR
 stacked PR  -> checks + review -> parent branch
 parent      -> full verification -> human merge -> release`,
+        images: [
+          {
+            src: '/blog/human-harnesses/03-branching-harness.webp',
+            alt: 'A physical branch-and-review model routing small work units toward one human gate.',
+            caption: 'Bounded work lanes rejoin only after testing, verification, and review.',
+            width: 1122,
+            height: 1402,
+            placement: 'float-right',
+            afterBlock: 0,
+          },
+        ],
         evidenceRefs: [
           { blockIndex: 0, evidenceId: 'issue-first-pr-47', text: 'one parent issue' },
           { blockIndex: 1, evidenceId: 'parent-orchestrator-pr-51', text: 'The parent branch' },
@@ -381,15 +416,18 @@ parent      -> full verification -> human merge -> release`,
           'The live Pi session that prompted this update made the loop wonderfully unglamorous. A review sidecar returned three findings. One was accepted with modification, one was declined with a recorded scope reason, and one was accepted. The isolated repair worker fixed the accepted items and made the full verification gate green. Verification then caught trailing whitespace in the worker evidence and sent the same bounded worktree around once more. That second lap is the feature, not an embarrassment.',
           'Remote PR-bot review can still run as supplemental shadow or canary evidence during the cutover. It is no longer the default delivery gate. GitHub receives the branch, PR, checks, and durable review summary; the fast review-and-repair conversation happens locally, where a moved head immediately invalidates the old verdict.',
         ],
-        image: {
-          src: '/blog/human-harnesses/04-review-repair-loop.webp',
-          alt: 'Separate review and repair stations passing the same verified artifact around a loop.',
-          caption:
-            'Review and repair stay separate while verification sends the same artifact back around the loop.',
-          width: 1536,
-          height: 1024,
-          afterBlock: 2,
-        },
+        images: [
+          {
+            src: '/blog/human-harnesses/04-review-repair-loop.webp',
+            alt: 'Separate review and repair stations passing the same verified artifact around a loop.',
+            caption:
+              'Review and repair stay separate while verification sends the same artifact back around the loop.',
+            width: 1536,
+            height: 1024,
+            placement: 'full',
+            afterBlock: 2,
+          },
+        ],
       },
       {
         heading: 'Release and deployment are mutations too',
@@ -397,6 +435,17 @@ parent      -> full verification -> human merge -> release`,
           'Merging code is not the final write. The release workflow lets release-please assemble the version and changelog on main, and GoReleaser builds artifacts only when a release is actually created. That separates ordinary integration from publication.',
           'The website follows a similar boundary. Pull requests can build the image, but only a main-branch push or an explicit dispatch can publish it. Deployment requires the website deploy variable, uses a self-hosted Tailscale runner, passes the image tagged with the exact commit SHA to the Quadlet deployment script, and verifies rollout health. The deploy consumes an immutable input instead of rebuilding whatever happens to be on the server.',
           'This is the production form of plan and execute: CI proves one commit, the registry stores an image for that commit, and the deploy step rolls out that exact image. If those identities diverge, the harness is no longer describing the mutation it performs.',
+        ],
+        images: [
+          {
+            src: '/blog/human-harnesses/05-immutable-release.webp',
+            alt: 'One sealed build artifact moving unchanged through registry and deployment gates.',
+            caption: 'One verified artifact moves unchanged from build to registry to deployment.',
+            width: 1916,
+            height: 821,
+            placement: 'full',
+            beforeHeading: true,
+          },
         ],
         evidenceRefs: [
           { blockIndex: 0, evidenceId: 'release-workflow', text: 'release workflow' },
@@ -443,6 +492,17 @@ parent      -> full verification -> human merge -> release`,
           'Shepherd is the next story. It starts with the question this post deliberately leaves open: what happens when the harness itself needs supervision? That deserves a full engineering note, so I am leaving it at the question rather than smuggling the implementation into this one.',
           'And now the shameless human bit: if this story made you laugh, wince, or remember a pull request whose scrollbar looked like a rounding error, please star the repository. A star will not certify 547 connectors or make make verify finish before lunch. It does tell me this strange, open-source plan is useful to someone outside my terminal.',
           'If you have survived your own giant-PR saga, leave a note on the paragraph that brought back the memories. I would genuinely like to hear the story, partly for research and partly so I know I am not the only person who has tried to review a small novel through GitHub.',
+        ],
+        images: [
+          {
+            src: '/blog/human-harnesses/06-shepherd-teaser.webp',
+            alt: 'A closed workshop observation window watching an active engineering loop.',
+            caption: 'The next question is not whether the loop works, but who supervises the loop.',
+            width: 1672,
+            height: 941,
+            placement: 'full',
+            afterBlock: 2,
+          },
         ],
       },
     ],

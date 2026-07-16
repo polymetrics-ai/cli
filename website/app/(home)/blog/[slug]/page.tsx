@@ -7,6 +7,7 @@ import { HomeSidebar } from '@/components/home/home-sidebar';
 import { PageAside } from '@/components/home/page-aside';
 import { CornerBox } from '@/components/ui/corner-box';
 import { ArticleBody } from '@/components/blog/article-body';
+import { ArticleFigure } from '@/components/blog/article-figure';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -98,7 +99,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           <header
             id="article-overview"
-            className="mb-10 scroll-mt-24 border-b border-line-structure pb-10"
+            className={`scroll-mt-24 border-b border-line-structure pb-10 ${post.leadImage ? 'mb-6' : 'mb-10'}`}
           >
             <div className="mb-5 flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-text-disabled">
               <span className="border border-line-structure bg-surface-1 px-2 py-1">
@@ -144,6 +145,10 @@ export default async function BlogPostPage({ params }: Props) {
               </a>
             ) : null}
           </header>
+
+          {post.leadImage ? (
+            <ArticleFigure image={post.leadImage} className="mb-10" preload />
+          ) : null}
 
           <ArticleBody
             slug={post.slug}

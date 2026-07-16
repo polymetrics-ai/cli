@@ -124,26 +124,21 @@ describe('blog catalog', () => {
 
     const reviewSection = post.sections.find(
       (section) => section.heading === 'Review, fix, repeat, locally',
-    ) as typeof post.sections[number] & {
-      image?: {
-        src: string;
-        alt: string;
-        caption: string;
-        width: number;
-        height: number;
-        afterBlock: number;
-      };
-    };
+    );
+    if (!reviewSection) throw new Error('Expected local review section');
     expect(reviewSection.code).toBeUndefined();
-    expect(reviewSection.image).toEqual({
-      src: '/blog/human-harnesses/04-review-repair-loop.webp',
-      alt: 'Separate review and repair stations passing the same verified artifact around a loop.',
-      caption:
-        'Review and repair stay separate while verification sends the same artifact back around the loop.',
-      width: 1536,
-      height: 1024,
-      afterBlock: 2,
-    });
+    expect(reviewSection.images).toContainEqual(
+      expect.objectContaining({
+        src: '/blog/human-harnesses/04-review-repair-loop.webp',
+        alt: 'Separate review and repair stations passing the same verified artifact around a loop.',
+        caption:
+          'Review and repair stay separate while verification sends the same artifact back around the loop.',
+        width: 1536,
+        height: 1024,
+        placement: 'full',
+        afterBlock: 2,
+      }),
+    );
 
     const illustratedPost = post as unknown as {
       leadImage?: { src: string };

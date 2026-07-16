@@ -20,6 +20,9 @@ single master into every placement.
 ## 01. The Diff That Ate The Room
 
 - File: `website/public/blog/human-harnesses/01-diff-that-ate-the-room.webp`
+- Selected source: `~/Downloads/harness blog/929dc0e4-7d41-4e36-8ada-bdc36cea0a25.png`
+- Status: placed in creation order at the original 16:9 composition and exported as WebP quality
+  88.
 - Placement: full width immediately below the article header and above section 01.
 - Aspect ratio: 16:9, 2400 x 1350.
 - Alt text: `An enormous accordion-fold code diff filling a review room around one small terminal.`
@@ -37,6 +40,9 @@ single master into every placement.
 ## 02. From Shared Checkout To Isolated Work
 
 - File: `website/public/blog/human-harnesses/02-isolated-worktables.webp`
+- Selected source: `~/Downloads/harness blog/1cb19a0e-467f-4a5f-9970-576f7eb6ac4b.png`
+- Status: placed in creation order at the original 4:5 composition and exported as WebP quality
+  88.
 - Placement: floated left beside the second and third paragraphs of `The tool after the fire`; stack
   full width above those paragraphs below 768px.
 - Aspect ratio: 4:5, 1440 x 1800.
@@ -54,6 +60,9 @@ single master into every placement.
 ## 03. The Repository Becomes The Harness
 
 - File: `website/public/blog/human-harnesses/03-branching-harness.webp`
+- Selected source: `~/Downloads/harness blog/f2b07008-c364-4c46-874f-9ff15f146054.png`
+- Status: placed in creation order at the original 4:5 composition and exported as WebP quality
+  88.
 - Placement: floated right after the first paragraph of `The repository became a harness`; stack
   full width between paragraphs one and two below 768px.
 - Aspect ratio: 4:5, 1440 x 1800.
@@ -91,6 +100,9 @@ single master into every placement.
 ## 05. An Immutable Artifact Goes To Production
 
 - File: `website/public/blog/human-harnesses/05-immutable-release.webp`
+- Selected source: `~/Downloads/harness blog/791b23bc-63ab-483e-8cb6-c63a6c77b089.png`
+- Status: placed in creation order at the original 21:9 composition and exported as WebP quality
+  88.
 - Placement: panoramic image above `Release and deployment are mutations too`.
 - Aspect ratio: 21:9, 2520 x 1080.
 - Alt text: `One sealed build artifact moving unchanged through registry and deployment gates.`
@@ -106,6 +118,9 @@ single master into every placement.
 ## 06. The Next Question
 
 - File: `website/public/blog/human-harnesses/06-shepherd-teaser.webp`
+- Selected source: `~/Downloads/harness blog/3324284f-c099-4587-a8c5-992d9d03da69.png`
+- Status: placed in creation order at the original 16:9 composition and exported as WebP quality
+  88.
 - Placement: below the Shepherd teaser paragraph and above the final star request.
 - Aspect ratio: 16:9, 2400 x 1350.
 - Alt text: `A closed workshop observation window watching an active engineering loop.`

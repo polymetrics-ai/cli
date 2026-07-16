@@ -200,7 +200,7 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Complete Article Image Set
 
-- Status: red captured; green pending.
+- Status: green complete.
 - Catalog contract: the article exposes all six prompt filenames exactly once, with image `01` as
   the lead and section placements for `02` through `06` matching the image brief.
 - Asset contract: creation-time order maps UUID sources to prompts in the same order as their visual
@@ -210,3 +210,18 @@ Phase: `issue-395-human-harnesses`
 - Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
 - Red result: failed at the missing `01-diff-that-ate-the-room.webp` lead image while only image `04`
   was declared.
+- Source result: image creation timestamps and visual subjects map the six UUID PNG files to prompts
+  `01` through `06` in order; the mapping is recorded beside each prompt.
+- Asset result: all six files retain their generated dimensions and were exported without cropping
+  as WebP quality 88; the combined committed image set is approximately 1.1 MB.
+- Green result: the catalog exposes one lead and five section figures with the requested full,
+  left-float, right-float, review-loop, release-lead, and teaser positions.
+- Browser result: all six images decode and retain exact paragraph order. At 390px they stack at
+  full content width; at 768px, 1024px, and 1440px the two vertical images float at 42% and the
+  remaining images stay full width. Every checked viewport has zero horizontal overflow.
+- Regression result: all 64 website unit tests, all 8 blog Chromium tests, and website typecheck
+  pass. Inline evidence and annotation block indexes remain intact.
+- Build result: the production Next.js build passes and prerenders `/blog/human-harnesses` with all
+  six assets. The existing default-secret warning appears because no build-only auth secret was
+  supplied; no secret value was read or printed.
+- Hygiene result: `git diff --check` passes.

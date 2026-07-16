@@ -96,39 +96,83 @@ test.describe('blog UI smoke', () => {
     ).toBe(true);
   });
 
-  test('replaces the local review loop with its responsive editorial image', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+  test('places all six harness images in the editorial reading order', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto('/blog/human-harnesses');
 
-    const figure = page.locator('[data-blog-section-image]');
-    const image = figure.getByRole('img', {
-      name: 'Separate review and repair stations passing the same verified artifact around a loop.',
-    });
-    await image.scrollIntoViewIfNeeded();
-    await expect(image).toBeVisible();
-    await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth))
-      .toBeGreaterThan(0);
-    await expect(image).toHaveAttribute('src', /04-review-repair-loop\.webp/);
+    const imageSources = [
+      '/blog/human-harnesses/01-diff-that-ate-the-room.webp',
+      '/blog/human-harnesses/02-isolated-worktables.webp',
+      '/blog/human-harnesses/03-branching-harness.webp',
+      '/blog/human-harnesses/04-review-repair-loop.webp',
+      '/blog/human-harnesses/05-immutable-release.webp',
+      '/blog/human-harnesses/06-shepherd-teaser.webp',
+    ];
+    const figures = imageSources.map((src) => page.locator(`[data-blog-image="${src}"]`));
+
+    await expect(page.locator('[data-blog-image]')).toHaveCount(6);
+    for (const [index, figure] of figures.entries()) {
+      await expect(figure).toBeVisible();
+      await figure.scrollIntoViewIfNeeded();
+      const image = figure.locator('img');
+      await expect(image).toHaveAttribute('src', new RegExp(imageSources[index].split('/').at(-1)!));
+      await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth))
+        .toBeGreaterThan(0);
+    }
+
+    const [leadFigure, leftFigure, rightFigure, reviewFigure, releaseFigure, teaserFigure] = figures;
+    expect(await leftFigure.evaluate((element) => getComputedStyle(element).float)).toBe('left');
+    expect(await rightFigure.evaluate((element) => getComputedStyle(element).float)).toBe('right');
+
+    expect(
+      await leadFigure.evaluate((element) =>
+        Boolean(
+          element.compareDocumentPosition(document.querySelector('#section-1')!) &
+            Node.DOCUMENT_POSITION_FOLLOWING,
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      await releaseFigure.evaluate((element) =>
+        element.nextElementSibling?.querySelector('h2')?.textContent,
+      ),
+    ).toContain('Release and deployment are mutations too');
+    for (const figure of [reviewFigure, teaserFigure]) {
+      expect(
+        await figure.evaluate((element) => ({
+          previousBlock: (element.previousElementSibling as HTMLElement | null)?.dataset.blockIndex,
+          nextBlock: (element.nextElementSibling as HTMLElement | null)?.dataset.blockIndex,
+        })),
+      ).toEqual({ previousBlock: '2', nextBlock: '3' });
+    }
+
     await expect(
       page.getByText('implement -> verify -> review exact head -> disposition', { exact: false }),
     ).toHaveCount(0);
-    await expect(figure).toContainText(
-      'Review and repair stay separate while verification sends the same artifact back around the loop.',
-    );
-    expect(
-      await figure.evaluate((element) => ({
-        previousBlock: (element.previousElementSibling as HTMLElement | null)?.dataset.blockIndex,
-        nextBlock: (element.nextElementSibling as HTMLElement | null)?.dataset.blockIndex,
-      })),
-    ).toEqual({ previousBlock: '2', nextBlock: '3' });
 
-    const box = await figure.boundingBox();
-    expect(box).not.toBeNull();
-    expect(box!.x).toBeGreaterThanOrEqual(0);
-    expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+    await page.setViewportSize({ width: 390, height: 844 });
+    for (const figure of figures) {
+      await expect(figure).toBeVisible();
+      expect(await figure.evaluate((element) => getComputedStyle(element).float)).toBe('none');
+      const box = await figure.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.x).toBeGreaterThanOrEqual(0);
+      expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+    }
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
     ).toBe(true);
+
+    for (const width of [768, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect(await leftFigure.evaluate((element) => getComputedStyle(element).float)).toBe('left');
+      expect(await rightFigure.evaluate((element) => getComputedStyle(element).float)).toBe(
+        'right',
+      );
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+      ).toBe(true);
+    }
   });
 
   test('links the blog from the desktop navbar', async ({ page }) => {

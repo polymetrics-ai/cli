@@ -473,7 +473,7 @@ html.dark,
 .navbar-desktop-search {
   display: none;
 }
-@media (min-width: 48rem) {
+@media (min-width: 50rem) {
   .navbar-desktop-nav { display: flex; }
   .navbar-desktop-cta { display: flex; }
 }
@@ -491,7 +491,7 @@ html.dark,
   overscroll-behavior: contain;
 }
 .navbar-mobile-btn { display: flex; }
-@media (min-width: 48rem) {
+@media (min-width: 50rem) {
   .navbar-mobile-btn { display: none; }
 }
 .navbar-by-tag { display: none; }
@@ -499,14 +499,36 @@ html.dark,
   .navbar-by-tag { display: block; }
 }
 .navbar-mobile-panel { display: block; }
-@media (min-width: 48rem) {
+@media (min-width: 50rem) {
   .navbar-mobile-panel { display: none; }
 }
 /* Spacer visible only on mobile — pushes hamburger to the right edge */
 .navbar-mobile-spacer { display: flex; flex: 1; }
-@media (min-width: 48rem) {
+@media (min-width: 50rem) {
   /* Desktop: side panels use lg:flex-1, spacer not needed */
   .navbar-mobile-spacer { display: none; }
+}
+
+/* Editorial figures use unlayered responsive rules for the same Tailwind v4
+   cascade reason as the navigation and sidebar display helpers above. */
+.article-figure {
+  clear: both;
+  width: 100%;
+}
+@media (min-width: 48rem) {
+  .article-figure--float-left,
+  .article-figure--float-right {
+    clear: none;
+    width: 42%;
+  }
+  .article-figure--float-left {
+    float: left;
+    margin-right: 1.5rem;
+  }
+  .article-figure--float-right {
+    float: right;
+    margin-left: 1.5rem;
+  }
 }
 
 @media (min-width: 40rem) {
