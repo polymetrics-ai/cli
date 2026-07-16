@@ -2,6 +2,8 @@
 
 ## Required gate checklist
 
+### Original implementation gates
+
 - [x] `gofmt -w cmd internal`
 - [x] `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1`
 - [x] `go test ./internal/cli/ -run Certify -count=1`
@@ -25,6 +27,21 @@
 - [x] `docs/cli/connections.md` parity checked by docs-generate-diff/golden docs test; no update needed because help unchanged.
 - [x] Website docs/source/generated data checked under `website/**`; no update needed because generated docs unchanged.
 - [x] Generated help/manual artifacts checked via existing generator/docs validation.
+
+## Review-fix gate checklist — PR #450 finding
+
+- [x] Red validation captured: `grep -R -- '<credential>:<credential-name>' website/content/docs/etl.mdx website/lib/docs.generated.ts` found stale website/generated placeholders.
+- [x] `node website/scripts/gen-docs-data.mjs`
+- [x] `gofmt -w cmd internal`
+- [x] `go test ./internal/cli/... -run 'Connections|Golden' -count=1`
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `npm --prefix website run gen:docs`
+- [x] `make verify`
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD`
+- [x] `git diff -- go.mod go.sum`
+- [x] Available website scripts checked without installing dependencies: `website/node_modules` absent, so `typecheck`/`lint`/`test:unit` skipped; CI authoritative.
+- [x] PR body updated with accepted disposition and verification results via GitHub API PATCH after `gh pr edit` hit a deprecated Projects Classic GraphQL error.
 
 ## Optional / safety-limited
 
@@ -82,3 +99,53 @@ npm run gen:docs --prefix website
 ```
 
 Result: pass. Docs diff had no output; docs validate passed; website generator wrote 11 docs pages with no tracked diff.
+
+## Review-fix results — PR #450 finding
+
+```bash
+node website/scripts/gen-docs-data.mjs
+```
+
+Result: pass (`Wrote 11 docs pages to lib/docs.generated.ts.`).
+
+```bash
+gofmt -w cmd internal
+go test ./internal/cli/... -run 'Connections|Golden' -count=1
+```
+
+Result: pass (`ok   polymetrics.ai/internal/cli 10.109s`).
+
+```bash
+go vet ./...
+go build ./cmd/pm
+```
+
+Result: pass / no output.
+
+```bash
+npm --prefix website run gen:docs
+if [ -d website/node_modules ]; then
+  npm --prefix website run typecheck
+  npm --prefix website run lint
+  npm --prefix website run test:unit
+else
+  echo "website/node_modules absent; skipped npm typecheck/lint/test:unit (CI authoritative)"
+fi
+```
+
+Result: `gen:docs` pass (`Wrote 11 docs pages to lib/docs.generated.ts.`); `website/node_modules` absent, so typecheck/lint/test:unit skipped without installing dependencies.
+
+```bash
+make verify
+```
+
+Result: pass. Completed gofmt, tidy-check, vet, `go test -timeout 20m ./...`, `go build ./cmd/pm`, docs validate, local smoke flow, golangci-lint, and `connectorgen validate`; terminal tail included `connectorgen validate: 547 connector(s) checked, 0 findings`.
+
+```bash
+! grep -R -- '<credential>:<credential-name>' website/content/docs/etl.mdx website/lib/docs.generated.ts
+grep -R -- '<connector>:<credential>' website/content/docs/etl.mdx website/lib/docs.generated.ts >/tmp/421-credential-shape-grep.txt && wc -l /tmp/421-credential-shape-grep.txt
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+Result: pass. Stale placeholder absent; `<connector>:<credential>` found in 3 places (website source plus generated data); diff checks had no output; go.mod/go.sum diff empty.

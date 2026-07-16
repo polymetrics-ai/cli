@@ -6,7 +6,7 @@ Issue: #421 — nativize connections namespace.
 
 `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`.
 
-Repo skill gap: `.pi/skills/go-implementation/SKILL.md` was required by worker instructions but is absent in this checkout (`ENOENT`); global Go skills above are loaded and used.
+Review-fix addition: `vercel-react-best-practices` loaded for website/generated TypeScript docs data. No React component or UI behavior change. Repo skill gap: `.pi/skills/go-implementation/SKILL.md` and `.pi/skills/ts-website/SKILL.md` were required by worker instructions but are absent in this checkout (`ENOENT`); global Go/website skills above are loaded and used.
 
 Rule anchors:
 
@@ -18,6 +18,7 @@ Rule anchors:
 - `golang-spf13-cobra`: best practices #1 RunE, #3 Args validators, #4 Out/Err writers, #5 fresh command tree; flags guidance for `StringArray`, `NoOptDefVal`, and unknown-flag compatibility.
 - `golang-security`: trust-boundary questions #1-#3; no secrets; command args are untrusted.
 - `golang-safety`: #2 safe assertions and #10 useful zero/default values.
+- `vercel-react-best-practices`: website docs generated TypeScript only; no React component/performance-sensitive path changed.
 
 ## GSD command evidence
 
@@ -42,6 +43,8 @@ Result:
 | 2 | Green | `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1` | Pass | Native connections parser green; golden transcripts unchanged. |
 | 3 | Refactor | `gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/connections_cli_test.go`; `go test ./internal/cli/ -run Certify -count=1`; `go vet ./...`; `go build ./cmd/pm` | Pass | Gofmt clean; certify re-entrancy, vet, and build preserved. |
 | 4 | Gate | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; runtime help/docs/website/diff checks | Pass | Full local gates, parity checks, and diff guards passed; no go.mod/go.sum diff. |
+| 5 | Review-fix red validation | `grep -R -- '<credential>:<credential-name>' website/content/docs/etl.mdx website/lib/docs.generated.ts` | Fail desired state | Accepted PR #450 finding reproduced: website ETL docs and generated data used credential-first placeholder instead of parser-required `<connector>:<credential>`. |
+| 6 | Review-fix green | `node website/scripts/gen-docs-data.mjs`; `gofmt -w cmd internal`; `go test ./internal/cli/... -run 'Connections|Golden' -count=1`; `go vet ./...`; `go build ./cmd/pm`; `npm --prefix website run gen:docs`; `make verify`; diff guards | Pass | Website source uses `<connector>:<credential>`, generated docs data regenerated, stale placeholder grep clean, requested gates passed. Website `typecheck`/`lint`/`test:unit` skipped because `website/node_modules` is absent; no dependency install performed. |
 
 ## Planned red tests
 
@@ -162,4 +165,78 @@ Generated docs in <tmp>/cli and connector docs in <tmp>/connectors
 Validated connector docs in docs/connectors
 Wrote 11 docs pages to lib/docs.generated.ts.
 # git diff checks: no output; docs/website/golden diff line count = 0
+```
+
+## Review-fix outputs
+
+```bash
+grep -R -- '<credential>:<credential-name>' website/content/docs/etl.mdx website/lib/docs.generated.ts
+```
+
+```text
+website/content/docs/etl.mdx:  --source <credential>:<credential-name> \
+website/content/docs/etl.mdx:  --destination <credential>:<credential-name> \
+# website/lib/docs.generated.ts also matched the same stale placeholders in the generated ETL page body; full generated line omitted here for length.
+```
+
+```bash
+node website/scripts/gen-docs-data.mjs
+```
+
+```text
+Wrote 11 docs pages to lib/docs.generated.ts.
+```
+
+```bash
+gofmt -w cmd internal
+go test ./internal/cli/... -run 'Connections|Golden' -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	10.109s
+```
+
+```bash
+go vet ./...
+go build ./cmd/pm
+npm --prefix website run gen:docs
+```
+
+```text
+> cli-polymetrics-ai@0.1.0 gen:docs
+> node scripts/gen-docs-data.mjs
+
+Wrote 11 docs pages to lib/docs.generated.ts.
+```
+
+```bash
+if [ -d website/node_modules ]; then npm --prefix website run typecheck; npm --prefix website run lint; npm --prefix website run test:unit; else echo "website/node_modules absent; skipped npm typecheck/lint/test:unit (CI authoritative)"; fi
+```
+
+```text
+website/node_modules absent; skipped npm typecheck/lint/test:unit (CI authoritative)
+```
+
+```bash
+make verify
+```
+
+```text
+pass; completed gofmt, tidy-check, vet, go test -timeout 20m ./..., go build ./cmd/pm, docs validate, local smoke flow, golangci-lint, and connectorgen validate.
+Terminal tail:
+0 issues.
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+```bash
+! grep -R -- '<credential>:<credential-name>' website/content/docs/etl.mdx website/lib/docs.generated.ts
+grep -R -- '<connector>:<credential>' website/content/docs/etl.mdx website/lib/docs.generated.ts >/tmp/421-credential-shape-grep.txt && wc -l /tmp/421-credential-shape-grep.txt
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+```text
+       3 /tmp/421-credential-shape-grep.txt
+# diff checks: no output; go.mod/go.sum diff empty
 ```

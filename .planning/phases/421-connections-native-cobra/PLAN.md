@@ -112,3 +112,27 @@ Excluded:
 ## Parity stance
 
 This phase changes parser ownership only. Help text, docs, website, generated manuals, golden stdout/stderr/exit, JSON envelopes, stdout/stderr discipline, global late flags, fresh-tree re-entrancy, and app/domain behavior should remain byte-identical unless an intentional reviewed change is recorded. No intentional user-facing output change is planned.
+
+## Review-fix slice — PR #450 / issue #421
+
+Finding: website ETL page documents `connections create --source/--destination` as `<credential>:<credential-name>`, but parser/runtime/docs require `<connector>:<credential>` (`internal/cli/parse.go`, `docs/cli/connections.md`). Generated docs data mirrors the wrong website source.
+
+Disposition: accepted. Scope stays limited to `website/content/docs/etl.mdx`, regenerated `website/lib/docs.generated.ts`, issue-local phase artifacts, and PR body. No help-tree behavior changes, no new tests beyond requested focused gates, no secrets or credentialed checks.
+
+Additional skill note: review-fix loaded `vercel-react-best-practices` for website/generated TypeScript docs data. Repo-specific `.pi/skills/ts-website/SKILL.md` is absent in this checkout; no UI component changes.
+
+Red validation before production edit:
+
+```bash
+grep -R -- '<credential>:<credential-name>' website/content/docs/etl.mdx website/lib/docs.generated.ts
+```
+
+Result: fails desired parity by finding the stale placeholder in both website source and generated docs data.
+
+Review-fix plan:
+
+1. Replace the website ETL source/destination placeholder shape with `<connector>:<credential>` and keep examples generic/safe.
+2. Regenerate `website/lib/docs.generated.ts` with `node website/scripts/gen-docs-data.mjs`.
+3. Run requested gates: focused CLI test, `make verify`, diff check against `origin/feat/cli-architecture-v2...HEAD`, and `go.mod`/`go.sum` diff guard. Run available website scripts without installing dependencies.
+4. Update phase artifacts and PR body with accepted disposition and gate results; do not request Claude/Copilot.
+5. Commit and push the review-fix slice on `refactor/421-connections-native-cobra`.

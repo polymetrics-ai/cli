@@ -1,13 +1,13 @@
 # Phase 421 Summary
 
-Status: PR #450 open against `feat/cli-architecture-v2`; remote checks in progress at artifact update; human/parent fallback review pending.
+Status: PR #450 open against `feat/cli-architecture-v2`; accepted website ETL credential-shape review fix implemented and locally verified; commit/push checkpoint pending at this artifact point.
 
 ## Current state
 
 - Worker branch: `refactor/421-connections-native-cobra`; sub-PR: https://github.com/polymetrics-ai/cli/pull/450.
 - GSD adapter doctor passed; `programming-loop` prompt command missing, so manual GSD fallback recorded.
 - Required reading and skills loaded. Repo-specific `.pi/skills/go-implementation/SKILL.md` is missing; global Go skills loaded.
-- Scope stayed inside `connections` CLI/router/tests and issue-local planning artifacts.
+- Scope stayed inside `connections` CLI/router/tests, website ETL docs/generated data for the accepted review fix, and issue-local planning artifacts.
 
 ## Delivered
 
@@ -18,6 +18,10 @@ Status: PR #450 open against `feat/cli-architecture-v2`; remote checks in progre
 - Added no-op connection-name completion seam returning `ShellCompDirectiveNoFileComp`; Phase 15 completion implementation deferred.
 - Added focused tests for native metadata, flag-form behavior, list tolerance, invalid action usage, and completion seam.
 
+## Review-fix disposition
+
+Accepted finding: `website/content/docs/etl.mdx` used `<credential>:<credential-name>` for `connections create --source/--destination`, while parser/docs require `<connector>:<credential>`. Fixed the website source and regenerated `website/lib/docs.generated.ts`. No secrets, credential values, help-tree behavior, new dependencies, or unrelated namespaces.
+
 ## Verification
 
 - `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1` passed.
@@ -26,6 +30,7 @@ Status: PR #450 open against `feat/cli-architecture-v2`; remote checks in progre
 - Runtime help parity checked: `./pm help connections`, `./pm connections`, `./pm connections --help`, `./pm connections --json`, and invalid action JSON usage error.
 - Docs/website/golden diff empty; docs generate/validate and `npm run gen:docs --prefix website` passed with no tracked diff.
 - `git diff --check origin/feat/cli-architecture-v2...HEAD` passed; `go.mod`/`go.sum` diff empty.
+- Review-fix gates passed: `node website/scripts/gen-docs-data.mjs`, `gofmt -w cmd internal`, `go test ./internal/cli/... -run 'Connections|Golden' -count=1`, `go vet ./...`, `go build ./cmd/pm`, `npm --prefix website run gen:docs`, `make verify`, stale placeholder grep, diff check, and go.mod/go.sum guard. `website/node_modules` absent, so website typecheck/lint/test:unit were skipped without installing dependencies; CI authoritative.
 
 ## Safety
 

@@ -43,8 +43,8 @@ A **connection** is the named pairing of a connector credential and a storage cr
 
 ```bash
 pm connections create <name> \
-  --source <credential>:<credential-name> \
-  --destination <credential>:<credential-name> \
+  --source <connector>:<credential> \
+  --destination <connector>:<credential> \
   --stream <stream-name> \
   --primary-key <field> \
   --cursor <field> \
