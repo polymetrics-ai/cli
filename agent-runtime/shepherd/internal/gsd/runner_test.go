@@ -7,10 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
+	"syscall"
 	"testing"
 	"time"
 )
@@ -195,6 +198,71 @@ func TestRunnerRejectsObservedDisallowedWorkflowTool(t *testing.T) {
 	}
 }
 
+func TestRunnerProcessesGovernanceEventsBeforeClassifyingImmediateParentExit(t *testing.T) {
+	for _, test := range []struct {
+		mode     string
+		terminal Terminal
+	}{
+		{mode: "immediate-disallowed-tool", terminal: TerminalError},
+		{mode: "immediate-mismatched-tool-end", terminal: TerminalError},
+		{mode: "immediate-question", terminal: TerminalBlocked},
+		{mode: "immediate-ui-alias", terminal: TerminalError},
+		{mode: "immediate-ui-collision", terminal: TerminalError},
+		{mode: "immediate-ui-method-alias", terminal: TerminalError},
+		{mode: "immediate-tool-input-alias", terminal: TerminalError},
+	} {
+		t.Run(test.mode, func(t *testing.T) {
+			runner, err := NewRunner(Config{
+				Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+				WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(),
+				Model: "openai-codex/gpt-5.6-sol", Thinking: "high", Timeout: 5 * time.Second,
+				HeartbeatInterval: 10 * time.Millisecond, MaxEventBytes: 4096,
+				Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=" + test.mode},
+				Registry:    mustDecodeRegistryFixture(t),
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			runner, err = runner.WithUnitContract("plan-milestone")
+			if err != nil {
+				t.Fatal(err)
+			}
+			result := runner.Run(context.Background(), "next", nil, Observer{})
+			if result.Terminal != test.terminal {
+				t.Fatalf("result=%+v", result)
+			}
+		})
+	}
+}
+
+func TestRunnerRecordsSuccessfulNonGSDRequiredWorkflowTool(t *testing.T) {
+	registry := mustDecodeRegistryFixture(t)
+	metadata := registry.Units["plan-milestone"]
+	metadata.AllowedGSDTools = append(metadata.AllowedGSDTools, "ask_user_questions")
+	metadata.RequiredWorkflowTools = []string{"ask_user_questions"}
+	registry.Units["plan-milestone"] = metadata
+	runner, err := NewRunner(Config{
+		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: t.TempDir(),
+		Model: "openai-codex/gpt-5.6-sol", Thinking: "high", Timeout: 5 * time.Second,
+		HeartbeatInterval: 10 * time.Millisecond, MaxEventBytes: 4096,
+		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=required-ask-user"},
+		Registry:    registry,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	runner, err = runner.WithUnitContract("plan-milestone")
+	if err != nil {
+		t.Fatal(err)
+	}
+	result := runner.Run(context.Background(), "next", nil, Observer{})
+	if result.Terminal != TerminalSuccess || len(result.ObservedWorkflowTools) != 1 ||
+		result.ObservedWorkflowTools[0] != "ask_user_questions" {
+		t.Fatalf("result=%+v", result)
+	}
+}
+
 func TestRunnerCanDeriveGovernedImplementationModel(t *testing.T) {
 	t.Parallel()
 
@@ -343,6 +411,40 @@ func TestRunnerKeepsHeartbeatsWhileHumanGateWaitsAndCancelsBeforeUpstreamFallbac
 	}
 }
 
+func TestRunnerKillsInheritedOutputDescendantAfterSuccessfulParentExit(t *testing.T) {
+	stateDir := t.TempDir()
+	runner, err := NewRunner(Config{
+		Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+		WorkDir: t.TempDir(), GSDHome: t.TempDir(), StateDir: stateDir,
+		Model: "openai-codex/gpt-5.6-sol", Thinking: "high", Timeout: 5 * time.Second,
+		HeartbeatInterval: 10 * time.Millisecond, MaxEventBytes: 4096,
+		Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=background-descendant"},
+		Registry:    mustDecodeRegistryFixture(t),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	started := time.Now()
+	result := runner.Run(context.Background(), "next", nil, Observer{})
+	if result.Terminal != TerminalSuccess {
+		t.Fatalf("result=%+v", result)
+	}
+	if elapsed := time.Since(started); elapsed > 3*time.Second {
+		t.Fatalf("successful parent cleanup took %s", elapsed)
+	}
+	raw, err := os.ReadFile(filepath.Join(stateDir, "runtime", "gsd-state", "runner-child.pid"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	pid, err := strconv.Atoi(string(raw))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := syscall.Kill(pid, 0); !errors.Is(err, syscall.ESRCH) {
+		t.Fatalf("supervised descendant pid %d survived cleanup: %v", pid, err)
+	}
+}
+
 func TestRunnerQueriesSupportedSurface(t *testing.T) {
 	t.Parallel()
 
@@ -387,6 +489,59 @@ func TestRunnerUsesNativeDBToMarkdownRepairCommand(t *testing.T) {
 	}
 }
 
+func TestRunnerMaintenanceKillsDescendantsAfterParentExit(t *testing.T) {
+	for _, method := range []string{"query", "repair"} {
+		t.Run(method, func(t *testing.T) {
+			workDir := t.TempDir()
+			if method == "repair" {
+				if err := os.Mkdir(filepath.Join(workDir, ".gsd"), 0o700); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(filepath.Join(workDir, ".gsd", "notifications.jsonl"),
+					[]byte(`{"message":"gsd rebuild markdown: rebuilt markdown projections from the canonical DB"}`+"\n"), 0o600); err != nil {
+					t.Fatal(err)
+				}
+			}
+			stateDir := t.TempDir()
+			pidFile := filepath.Join(stateDir, "runtime", "gsd-state", "runner-child.pid")
+			runner, err := NewRunner(Config{
+				Command: []string{os.Args[0], "-test.run=TestRunnerHelperProcess", "--"},
+				WorkDir: workDir, GSDHome: t.TempDir(), StateDir: stateDir,
+				Model: "openai-codex/gpt-5.6-sol", Thinking: "high",
+				Environment: []string{"GO_WANT_RUNNER_HELPER=1", "RUNNER_HELPER_MODE=" + method + "-descendant"},
+				Registry:    mustDecodeRegistryFixture(t),
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if method == "query" {
+				_, err = runner.Query(context.Background())
+			} else {
+				err = runner.RebuildMarkdown(context.Background())
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			raw, err := os.ReadFile(pidFile)
+			if err != nil {
+				t.Fatal(err)
+			}
+			pid, err := strconv.Atoi(string(raw))
+			if err != nil {
+				t.Fatal(err)
+			}
+			deadline := time.Now().Add(5 * time.Second)
+			for time.Now().Before(deadline) {
+				if err := syscall.Kill(pid, 0); errors.Is(err, syscall.ESRCH) {
+					return
+				}
+				time.Sleep(10 * time.Millisecond)
+			}
+			t.Fatalf("%s descendant pid %d survived parent exit", method, pid)
+		})
+	}
+}
+
 func TestRebuildNotificationFailsOnProjectionErrors(t *testing.T) {
 	t.Parallel()
 	path := filepath.Join(t.TempDir(), "notifications.jsonl")
@@ -416,18 +571,33 @@ func TestRunnerHelperProcess(t *testing.T) {
 	if os.Getenv("RUNNER_HELPER_MODE") == "silent-implementation" {
 		expectedModel = "openai-codex/gpt-5.5"
 	}
-	if os.Getenv("RUNNER_HELPER_MODE") != "repair" && (!strings.Contains(args, "headless") || (os.Getenv("RUNNER_HELPER_MODE") != "query" &&
-		os.Getenv("RUNNER_HELPER_MODE") != "repair" &&
+	helperMode := os.Getenv("RUNNER_HELPER_MODE")
+	maintenanceMode := strings.HasPrefix(helperMode, "query") || strings.HasPrefix(helperMode, "repair")
+	if !strings.HasPrefix(helperMode, "repair") && (!strings.Contains(args, "headless") || (!maintenanceMode &&
 		(!strings.Contains(args, "--model "+expectedModel) ||
 			!strings.Contains(args, "--response-timeout") || !strings.Contains(args, "--max-restarts 0")))) {
 		fmt.Fprintf(os.Stderr, "missing governed headless flags: %s\n", args)
 		os.Exit(1)
 	}
-	switch os.Getenv("RUNNER_HELPER_MODE") {
-	case "repair":
+	if !maintenanceMode && helperMode != "no-activity" {
+		fmt.Println(`{"type":"agent_start"}`)
+		fmt.Println(`{"type":"turn_start"}`)
+	}
+	switch helperMode {
+	case "repair", "repair-descendant":
 		if !strings.Contains(args, "--no-session --print /gsd rebuild markdown") {
 			os.Exit(1)
 		}
+		if helperMode == "repair-descendant" {
+			spawnRunnerHelperDescendant()
+		}
+		os.Exit(0)
+	case "background-descendant":
+		spawnRunnerHelperDescendant()
+		fmt.Println(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.6-sol"},"source":"restore"}`)
+		fmt.Println(`{"type":"thinking_level_select","level":"high","previousLevel":"off"}`)
+		fmt.Println(`{"type":"turn_end","message":{"role":"assistant","stopReason":"stop"}}`)
+		fmt.Println(`{"type":"agent_end"}`)
 		os.Exit(0)
 	case "silent", "silent-implementation":
 		modelID := "gpt-5.6-sol"
@@ -438,21 +608,50 @@ func TestRunnerHelperProcess(t *testing.T) {
 		fmt.Println(`{"type":"thinking_level_select","level":"high","previousLevel":"off"}`)
 		fmt.Println(`{"type":"extension_ui_request","id":"status-1","method":"setStatus","message":"working"}`)
 		time.Sleep(60 * time.Millisecond)
+		fmt.Println(`{"type":"turn_end","message":{"role":"assistant","stopReason":"stop"}}`)
+		fmt.Println(`{"type":"agent_end"}`)
 		os.Exit(0)
-	case "disallowed-tool":
+	case "disallowed-tool", "immediate-disallowed-tool":
 		fmt.Println(`{"type":"tool_execution_start","toolName":"mcp__gsd-workflow__gsd_resume","toolCallId":"call-forbidden"}`)
-		time.Sleep(5 * time.Second)
+		if helperMode == "disallowed-tool" {
+			time.Sleep(5 * time.Second)
+		}
+		os.Exit(0)
+	case "required-ask-user":
+		fmt.Println(`{"type":"tool_execution_start","toolName":"ask_user_questions","toolCallId":"required-ask"}`)
+		fmt.Println(`{"type":"tool_execution_end","toolName":"ask_user_questions","toolCallId":"required-ask","isError":false}`)
+		fmt.Println(`{"type":"turn_end","message":{"role":"assistant","stopReason":"stop"}}`)
+		fmt.Println(`{"type":"agent_end"}`)
+		os.Exit(0)
+	case "immediate-mismatched-tool-end":
+		fmt.Println(`{"type":"tool_execution_start","toolName":"mcp__context7__resolve-library-id","toolCallId":"call-mismatch"}`)
+		fmt.Println(`{"type":"tool_execution_end","toolName":"mcp__gsd-workflow__gsd_resume","toolCallId":"call-mismatch"}`)
+		fmt.Println(`{"type":"agent_end"}`)
 		os.Exit(0)
 	case "no-activity":
 		time.Sleep(5 * time.Second)
 		os.Exit(0)
 	case "blocked":
 		os.Exit(10)
-	case "question":
+	case "immediate-ui-alias":
+		fmt.Println(`{"Type":"extension_ui_request","id":"gate-alias","method":"confirm","title":"Continue?"}`)
+		os.Exit(0)
+	case "immediate-ui-collision":
+		fmt.Println(`{"type":"agent_start","Type":"extension_ui_request","id":"gate-collision","method":"confirm","title":"Continue?"}`)
+		os.Exit(0)
+	case "immediate-ui-method-alias":
+		fmt.Println(`{"type":"extension_ui_request","id":"gate-method","Method":"setStatus","title":"Continue?"}`)
+		os.Exit(0)
+	case "immediate-tool-input-alias":
+		fmt.Println(`{"type":"tool_execution_start","toolName":"ask_user_questions","toolCallId":"tool-alias","Input":{"Questions":[{"id":"q1","header":"H","question":"Q","options":[{"label":"A"}]}]}}`)
+		os.Exit(0)
+	case "question", "immediate-question":
 		fmt.Println(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.6-sol"},"source":"restore"}`)
 		fmt.Println(`{"type":"thinking_level_select","level":"high","previousLevel":"off"}`)
 		fmt.Println(`{"type":"extension_ui_request","id":"gate-1","method":"confirm","title":"Continue?"}`)
-		time.Sleep(5 * time.Second)
+		if helperMode == "question" {
+			time.Sleep(5 * time.Second)
+		}
 		os.Exit(0)
 	case "semantic-question":
 		fmt.Println(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.6-sol"},"source":"restore"}`)
@@ -468,19 +667,42 @@ func TestRunnerHelperProcess(t *testing.T) {
 			fmt.Fprintf(os.Stderr, "invalid response: %+v err=%v\n", response, err)
 			os.Exit(1)
 		}
+		fmt.Println(`{"type":"tool_execution_end","toolName":"ask_user_questions","toolCallId":"tool-1","isError":false}`)
+		fmt.Println(`{"type":"turn_end","message":{"role":"assistant","stopReason":"stop"}}`)
+		fmt.Println(`{"type":"agent_end"}`)
 		os.Exit(0)
 	case "concurrent-tools":
 		fmt.Println(`{"type":"tool_execution_start","toolName":"alpha","toolCallId":"call-a"}`)
 		fmt.Println(`{"type":"tool_execution_start","toolName":"beta","toolCallId":"call-b"}`)
 		time.Sleep(200 * time.Millisecond)
-		fmt.Println(`{"type":"tool_execution_end","toolName":"beta","toolCallId":"call-b"}`)
+		fmt.Println(`{"type":"tool_execution_end","toolName":"beta","toolCallId":"call-b","isError":false}`)
 		time.Sleep(200 * time.Millisecond)
-		fmt.Println(`{"type":"tool_execution_end","toolName":"alpha","toolCallId":"call-a"}`)
+		fmt.Println(`{"type":"tool_execution_end","toolName":"alpha","toolCallId":"call-a","isError":false}`)
+		fmt.Println(`{"type":"turn_end","message":{"role":"assistant","stopReason":"stop"}}`)
+		fmt.Println(`{"type":"agent_end"}`)
 		os.Exit(0)
-	case "query":
+	case "query", "query-descendant":
+		if helperMode == "query-descendant" {
+			spawnRunnerHelperDescendant()
+		}
 		fmt.Print(`{"state":{"activeMilestone":{"id":"M001"},"phase":"complete","nextAction":"Done","blockers":[]},"next":{"action":"stop","unitType":"","unitId":""}}`)
 		os.Exit(0)
 	default:
 		os.Exit(1)
+	}
+}
+
+func spawnRunnerHelperDescendant() {
+	child := exec.Command("/bin/sleep", "30")
+	child.Stdout, child.Stderr = os.Stdout, os.Stderr
+	if err := child.Start(); err != nil {
+		os.Exit(3)
+	}
+	pidFile := filepath.Join(os.Getenv("GSD_STATE_DIR"), "runner-child.pid")
+	if err := os.MkdirAll(filepath.Dir(pidFile), 0o700); err != nil {
+		os.Exit(4)
+	}
+	if err := os.WriteFile(pidFile, []byte(strconv.Itoa(child.Process.Pid)), 0o600); err != nil {
+		os.Exit(5)
 	}
 }

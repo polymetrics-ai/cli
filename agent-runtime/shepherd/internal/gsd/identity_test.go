@@ -1,8 +1,11 @@
 package gsd
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -162,6 +165,34 @@ func TestReadSessionIdentityDeltaRejectsSelectedFileReplacementAndAmbiguousRow(t
 	}
 	if _, _, _, err := readSessionIdentityDelta(path, 0, "openai-codex/gpt-5.6-sol", "high", selected); err == nil {
 		t.Fatal("model transition without durable assistant identity was accepted")
+	}
+}
+
+func TestDurableAssistantEvidenceRejectsNonMessageRows(t *testing.T) {
+	t.Parallel()
+	root := t.TempDir()
+	workDir := t.TempDir()
+	sessionID := "019f5d4a-9fb4-7852-b640-d6fdf71bd3d9"
+	proof := `{"verdict":"PROCEED"}`
+	digest := sha256.Sum256([]byte(proof))
+	proofHash := "sha256:" + hex.EncodeToString(digest[:])
+	raw := []byte(`{"type":"session","version":3,"timestamp":"2026-07-15T00:00:00Z","id":"` + sessionID + `","cwd":"` + workDir + `"}` + "\n" +
+		`{"type":"model_change","provider":"openai-codex","modelId":"gpt-5.6-sol"}` + "\n" +
+		`{"type":"thinking_level_change","thinkingLevel":"high"}` + "\n" +
+		`{"type":"tool_result","message":{"role":"assistant","provider":"openai-codex","model":"gpt-5.6-sol","stopReason":"stop","content":[{"type":"text","text":` + strconv.Quote(proof) + `}]}}` + "\n")
+	if err := os.WriteFile(filepath.Join(root, "session.jsonl"), raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := ValidateSessionSuccessfulCompletion(root, sessionID); err == nil {
+		t.Fatal("non-message row satisfied durable completion")
+	}
+	if err := ValidateSessionAssistantProof(root, sessionID, proofHash); err == nil {
+		t.Fatal("non-message row satisfied durable validator proof")
+	}
+	baseline := SessionIdentityBaseline{files: map[string]sessionIdentityFingerprint{}}
+	if _, _, err := ReadSessionIdentityForRun(root, workDir, baseline, time.Now().Add(-time.Second),
+		"openai-codex/gpt-5.6-sol", "high"); err == nil {
+		t.Fatal("non-message row satisfied durable assistant identity")
 	}
 }
 

@@ -165,6 +165,35 @@ func ResetPromotionStage(ctx context.Context, paths PromotionPaths) error {
 	return syncDirectory(filepath.Dir(paths.Stage))
 }
 
+// SnapshotGSDManifest creates a bounded normalized copy of candidate GSD state in
+// controller-owned storage. SQLite WAL state is folded through the same online
+// backup path used by promotion, so the returned hash binds the exact installable
+// representation rather than transient WAL/SHM bytes.
+func SnapshotGSDManifest(ctx context.Context, source, protectedRoot string) (GSDManifest, error) {
+	if !filepath.IsAbs(source) || !filepath.IsAbs(protectedRoot) || filepath.Clean(source) != source ||
+		filepath.Clean(protectedRoot) != protectedRoot {
+		return GSDManifest{}, errors.New("absolute clean snapshot paths are required")
+	}
+	info, err := os.Lstat(protectedRoot)
+	if err != nil || info.Mode()&os.ModeSymlink != 0 || !info.IsDir() {
+		return GSDManifest{}, errors.New("protected snapshot root must be a real directory")
+	}
+	root, err := os.MkdirTemp(protectedRoot, ".validated-gsd-")
+	if err != nil {
+		return GSDManifest{}, err
+	}
+	defer func() { _ = os.RemoveAll(root) }()
+	stage := filepath.Join(root, "snapshot")
+	if err := copyGSDTreeToStage(ctx, source, stage); err != nil {
+		return GSDManifest{}, err
+	}
+	manifest, err := BuildGSDManifest(ctx, stage)
+	if err != nil {
+		return GSDManifest{}, err
+	}
+	return manifest, nil
+}
+
 func StageGSDState(ctx context.Context, source string, paths PromotionPaths) (StagedGSDState, error) {
 	if err := validatePromotionPaths(paths); err != nil {
 		return StagedGSDState{}, err
@@ -373,6 +402,7 @@ func copyGSDTreeToStage(ctx context.Context, source, stage string) error {
 	var sourceDBInfo os.FileInfo
 	var entries int
 	var totalBytes, sqliteBytes int64
+	var sqliteSidecarFound bool
 	err = filepath.WalkDir(source, func(path string, entry os.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
@@ -407,6 +437,7 @@ func copyGSDTreeToStage(ctx context.Context, source, stage string) error {
 			totalBytes += info.Size()
 		}
 		if manifestPath == "gsd.db-wal" || manifestPath == "gsd.db-shm" {
+			sqliteSidecarFound = true
 			if !info.Mode().IsRegular() {
 				return fmt.Errorf("SQLite sidecar is not regular: %q", manifestPath)
 			}
@@ -444,6 +475,9 @@ func copyGSDTreeToStage(ctx context.Context, source, stage string) error {
 	})
 	if err != nil {
 		return fmt.Errorf("stage candidate GSD state: %w", err)
+	}
+	if sourceDB == "" && sqliteSidecarFound {
+		return errors.New("candidate GSD state contains SQLite sidecars without gsd.db")
 	}
 	if sourceDB != "" {
 		if err := snapshotSQLite(ctx, sourceDB, sourceDBInfo, filepath.Join(stage, "gsd.db")); err != nil {

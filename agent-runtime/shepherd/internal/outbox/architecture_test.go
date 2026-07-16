@@ -28,8 +28,9 @@ func TestProductionGitHubWritesCannotBypassOutboxExecutor(t *testing.T) {
 		if walkErr != nil {
 			return walkErr
 		}
+		slashPath := filepath.ToSlash(path)
 		if entry.IsDir() || !strings.HasSuffix(path, ".go") || strings.HasSuffix(path, "_test.go") ||
-			strings.Contains(filepath.ToSlash(path), "/internal/outbox/") {
+			strings.Contains(slashPath, "/internal/outbox/") || strings.Contains(slashPath, "/integration/") {
 			return nil
 		}
 		parsed, err := parser.ParseFile(token.NewFileSet(), path, nil, 0)
@@ -70,8 +71,9 @@ func TestControllerAuthorizationCallSiteIsCentralized(t *testing.T) {
 		if walkErr != nil {
 			return walkErr
 		}
+		slashPath := filepath.ToSlash(path)
 		if entry.IsDir() || !strings.HasSuffix(path, ".go") || strings.HasSuffix(path, "_test.go") ||
-			strings.Contains(filepath.ToSlash(path), "/internal/outbox/") {
+			strings.Contains(slashPath, "/internal/outbox/") || strings.Contains(slashPath, "/integration/") {
 			return nil
 		}
 		parsed, err := parser.ParseFile(token.NewFileSet(), path, nil, 0)

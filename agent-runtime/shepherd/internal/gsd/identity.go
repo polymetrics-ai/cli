@@ -233,6 +233,183 @@ func ReadSessionIdentityEvidenceForRun(root, workDir string, baseline SessionIde
 	return SessionIdentityEvidence{SessionID: current.files[candidate].ID, Fingerprint: fingerprint, Model: model, Thinking: thinking}, nil
 }
 
+// ValidateSessionSuccessfulCompletion requires the final assistant row in one
+// exact durable session to record a successful stop.
+func ValidateSessionSuccessfulCompletion(root, sessionID string) error {
+	if err := validateSessionRoot(root); err != nil || !sessionIDPattern.MatchString(sessionID) {
+		return errors.New("valid durable session completion identity is required")
+	}
+	var selectedPath string
+	err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".jsonl") {
+			return nil
+		}
+		header, _, err := readStrictSessionHeader(path)
+		if err != nil {
+			return err
+		}
+		if header.ID != sessionID {
+			return nil
+		}
+		if selectedPath != "" {
+			return errors.New("duplicate durable session completion identity")
+		}
+		selectedPath = path
+		return nil
+	})
+	if err != nil || selectedPath == "" {
+		return errors.Join(errors.New("durable session completion is missing"), err)
+	}
+	file, info, err := openRuntimeFileNoFollow(selectedPath)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = file.Close() }()
+	if info.Size() < 0 || info.Size() > 16*1024*1024 {
+		return errors.New("durable session completion is oversized")
+	}
+	scanner := bufio.NewScanner(io.LimitReader(file, 16*1024*1024+1))
+	scanner.Buffer(make([]byte, 4096), 8*1024*1024)
+	lastAssistantStop := ""
+	for scanner.Scan() {
+		line := append([]byte(nil), scanner.Bytes()...)
+		var event struct {
+			Type    string `json:"type"`
+			Message struct {
+				Role       string `json:"role"`
+				StopReason string `json:"stopReason"`
+			} `json:"message"`
+		}
+		if err := rejectDuplicateJSONFields(line); err != nil || json.Unmarshal(line, &event) != nil {
+			return errors.New("durable session completion is malformed")
+		}
+		if event.Message.Role != "" && event.Type != "message" {
+			return errors.New("assistant-shaped payload appears outside a durable message row")
+		}
+		if event.Type == "message" && event.Message.Role == "assistant" {
+			lastAssistantStop = event.Message.StopReason
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+	if lastAssistantStop != "stop" {
+		return errors.New("durable session final assistant response was not successful")
+	}
+	return nil
+}
+
+// ValidateSessionAssistantProof binds one strict terminal assistant proof to the
+// exact durable top-level session selected for the governed run.
+func ValidateSessionAssistantProof(root, sessionID, expectedHash string) error {
+	if err := validateSessionRoot(root); err != nil || !sessionIDPattern.MatchString(sessionID) ||
+		!strings.HasPrefix(expectedHash, "sha256:") || len(expectedHash) != len("sha256:")+64 {
+		return errors.New("valid durable assistant proof identity is required")
+	}
+	var selectedPath string
+	err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".jsonl") {
+			return nil
+		}
+		header, _, err := readStrictSessionHeader(path)
+		if err != nil {
+			return err
+		}
+		if header.ID != sessionID {
+			return errors.New("unexpected additional session in validator invocation root")
+		}
+		if selectedPath != "" {
+			return errors.New("duplicate durable validator session identity")
+		}
+		selectedPath = path
+		return nil
+	})
+	if err != nil || selectedPath == "" {
+		return errors.Join(errors.New("durable validator session proof is missing"), err)
+	}
+	file, info, err := openRuntimeFileNoFollow(selectedPath)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = file.Close() }()
+	if info.Size() < 0 || info.Size() > 16*1024*1024 {
+		return errors.New("durable validator session proof is oversized")
+	}
+	scanner := bufio.NewScanner(io.LimitReader(file, 16*1024*1024+1))
+	scanner.Buffer(make([]byte, 4096), 8*1024*1024)
+	assistantRows, matchedRow := 0, 0
+	for scanner.Scan() {
+		line := append([]byte(nil), scanner.Bytes()...)
+		var event struct {
+			Type    string `json:"type"`
+			Message struct {
+				Role       string `json:"role"`
+				Content    any    `json:"content"`
+				StopReason string `json:"stopReason"`
+			} `json:"message"`
+		}
+		if err := rejectDuplicateJSONFields(line); err != nil || json.Unmarshal(line, &event) != nil {
+			return errors.New("durable validator session proof is malformed")
+		}
+		if event.Message.Role != "" && event.Type != "message" {
+			return errors.New("assistant-shaped payload appears outside a durable message row")
+		}
+		if event.Type != "message" || event.Message.Role != "assistant" {
+			continue
+		}
+		assistantRows++
+		text := strings.TrimSpace(sessionAssistantText(event.Message.Content))
+		if text == "" {
+			continue
+		}
+		digest := sha256.Sum256([]byte(text))
+		observedHash := "sha256:" + hex.EncodeToString(digest[:])
+		if observedHash == expectedHash {
+			if event.Message.StopReason != "stop" || matchedRow != 0 {
+				return errors.New("durable validator proof is not one successful terminal response")
+			}
+			matchedRow = assistantRows
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+	if matchedRow == 0 || matchedRow != assistantRows {
+		return errors.New("stream proof does not match the final durable assistant response")
+	}
+	return nil
+}
+
+func sessionAssistantText(value any) string {
+	var text strings.Builder
+	var collect func(any)
+	collect = func(current any) {
+		switch typed := current.(type) {
+		case map[string]any:
+			if value, ok := typed["text"].(string); ok {
+				text.WriteString(value)
+			}
+			for key, nested := range typed {
+				if key != "text" {
+					collect(nested)
+				}
+			}
+		case []any:
+			for _, nested := range typed {
+				collect(nested)
+			}
+		}
+	}
+	collect(value)
+	return text.String()
+}
+
 // ValidateSessionHasNoToolUse proves that one bounded durable session contains no tool events or tool content.
 func ValidateSessionHasNoToolUse(root, sessionID string) error {
 	if err := validateSessionRoot(root); err != nil || !sessionIDPattern.MatchString(sessionID) {
@@ -407,6 +584,9 @@ func readSessionIdentityDelta(path string, offset int64, expectedModel, expected
 		if err := rejectDuplicateJSONFields(line); err != nil || json.Unmarshal(line, &event) != nil {
 			return "", "", "", errors.New("current session identity delta is malformed or duplicate")
 		}
+		if event.Message.Role != "" && event.Type != "message" {
+			return "", "", "", errors.New("assistant-shaped payload appears outside a current session message row")
+		}
 		transitions := make([]string, 0, 2)
 		if event.Type == "model_change" {
 			if event.Provider == "" || event.ModelID == "" {
@@ -414,7 +594,7 @@ func readSessionIdentityDelta(path string, offset int64, expectedModel, expected
 			}
 			transitions = append(transitions, event.Provider+"/"+event.ModelID)
 		}
-		if event.Message.Role == "assistant" {
+		if event.Type == "message" && event.Message.Role == "assistant" {
 			if event.Message.Provider == "" || event.Message.Model == "" {
 				return "", "", "", errors.New("current session contains a partial assistant identity")
 			}
@@ -497,13 +677,17 @@ func readSessionIdentityPath(path string) (string, string, error) {
 			_ = file.Close()
 			return "", "", errors.New("session identity event is malformed or duplicate")
 		}
+		if event.Message.Role != "" && event.Type != "message" {
+			_ = file.Close()
+			return "", "", errors.New("assistant-shaped payload appears outside a session message row")
+		}
 		if event.Type == "model_change" && event.Provider != "" && event.ModelID != "" {
 			model = event.Provider + "/" + event.ModelID
 		}
 		if event.Type == "thinking_level_change" && event.ThinkingLevel != "" {
 			thinking = event.ThinkingLevel
 		}
-		if event.Message.Role == "assistant" && event.Message.Provider != "" && event.Message.Model != "" {
+		if event.Type == "message" && event.Message.Role == "assistant" && event.Message.Provider != "" && event.Message.Model != "" {
 			model = event.Message.Provider + "/" + event.Message.Model
 		}
 	}

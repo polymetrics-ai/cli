@@ -109,23 +109,26 @@ type protectedRequest struct {
 }
 
 type proofFile struct {
-	RequestID      string    `json:"request_id"`
-	Nonce          string    `json:"nonce"`
-	Repository     string    `json:"repository"`
-	PullRequest    int       `json:"pull_request"`
-	BaseBranch     string    `json:"base_branch"`
-	BaseHead       string    `json:"base_head"`
-	CandidateHead  string    `json:"candidate_head"`
-	ObservedHead   string    `json:"observed_head"`
-	StateVersion   int64     `json:"state_version"`
-	ContractHash   string    `json:"contract_hash"`
-	EvidenceHash   string    `json:"evidence_hash"`
-	Verdict        string    `json:"verdict"`
-	LocalGates     bool      `json:"local_gates"`
-	UAT            bool      `json:"uat"`
-	MilestoneValid bool      `json:"milestone_valid"`
-	IssuedAt       time.Time `json:"issued_at"`
-	ExpiresAt      time.Time `json:"expires_at"`
+	StreamSessionID           string    `json:"stream_session_id,omitempty"`
+	StreamProofHash           string    `json:"stream_proof_hash,omitempty"`
+	StreamSuccessfulToolCount int       `json:"stream_successful_tool_count,omitempty"`
+	RequestID                 string    `json:"request_id"`
+	Nonce                     string    `json:"nonce"`
+	Repository                string    `json:"repository"`
+	PullRequest               int       `json:"pull_request"`
+	BaseBranch                string    `json:"base_branch"`
+	BaseHead                  string    `json:"base_head"`
+	CandidateHead             string    `json:"candidate_head"`
+	ObservedHead              string    `json:"observed_head"`
+	StateVersion              int64     `json:"state_version"`
+	ContractHash              string    `json:"contract_hash"`
+	EvidenceHash              string    `json:"evidence_hash"`
+	Verdict                   string    `json:"verdict"`
+	LocalGates                bool      `json:"local_gates"`
+	UAT                       bool      `json:"uat"`
+	MilestoneValid            bool      `json:"milestone_valid"`
+	IssuedAt                  time.Time `json:"issued_at"`
+	ExpiresAt                 time.Time `json:"expires_at"`
 }
 
 func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, error) {
@@ -141,14 +144,15 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 	if len(v.Command) == 0 {
 		return Result{}, errors.New("validator command is required")
 	}
-	if err := probePiValidator(ctx, v.Command, v.Timeout, v.Environment); err != nil {
-		return Result{}, err
-	}
 	if inside, err := pathInside(request.WorkDir, request.StateDir); err != nil || inside {
 		if err != nil {
 			return Result{}, err
 		}
 		return Result{}, errors.New("validator state directory must be outside the candidate worktree")
+	}
+	if err := probePiValidator(ctx, v.Command, v.Timeout, v.Environment, request.WorkDir,
+		request.StateDir, request.GSDHome); err != nil {
+		return Result{}, err
 	}
 	observedHead, err := gitHead(ctx, request.WorkDir)
 	if err != nil {
@@ -198,7 +202,13 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 	if sessionsDir == "" {
 		sessionsDir = filepath.Join(request.StateDir, "validation", safePathPart(request.RequestID), nonce, "sessions")
 	}
-	if err := os.MkdirAll(sessionsDir, 0o700); err != nil {
+	if err := os.MkdirAll(filepath.Dir(sessionsDir), 0o700); err != nil {
+		return Result{}, err
+	}
+	if err := os.Mkdir(sessionsDir, 0o700); err != nil {
+		if errors.Is(err, os.ErrExist) {
+			return Result{}, errors.New("validator session directory must be fresh for this invocation")
+		}
 		return Result{}, err
 	}
 	sessionBaseline, err := gsd.CaptureSessionIdentityBaseline(sessionsDir, request.WorkDir)
@@ -215,6 +225,9 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 	if observedHead != request.CandidateHead {
 		return Result{}, errors.New("candidate head moved during validation")
 	}
+	if err := verifyArtifactHashes(request.WorkDir, request.ArtifactHashes); err != nil {
+		return Result{}, fmt.Errorf("revalidate candidate artifacts after validation: %w", err)
+	}
 	proof, err := readValidationProof(resultPath)
 	if err != nil {
 		return Result{}, err
@@ -225,6 +238,13 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 	sessionEvidence, err := gsd.ReadSessionIdentityEvidenceForRun(sessionsDir, request.WorkDir, sessionBaseline, started, authority.RequiredValidator, "high")
 	if err != nil {
 		return Result{}, fmt.Errorf("bind validator session evidence: %w", err)
+	}
+	if proof.StreamSessionID == "" || proof.StreamSessionID != sessionEvidence.SessionID {
+		return Result{}, errors.New("validator event stream session does not match durable session evidence")
+	}
+	if err := gsd.ValidateSessionAssistantProof(sessionsDir, sessionEvidence.SessionID,
+		proof.StreamProofHash); err != nil {
+		return Result{}, fmt.Errorf("bind validator proof to durable session: %w", err)
 	}
 	return Result{
 		ObservedModel: sessionEvidence.Model, Thinking: sessionEvidence.Thinking, SessionID: sessionEvidence.SessionID,
@@ -247,13 +267,37 @@ func (v GSDValidator) withDefaults(request Request) Request {
 	return request
 }
 
-func probePiValidator(ctx context.Context, command []string, _ time.Duration, env []string) error {
+func probePiValidator(ctx context.Context, command []string, _ time.Duration, env []string,
+	_ string, stateDir string, _ string,
+) error {
 	probeCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
+	if err := os.MkdirAll(stateDir, 0o700); err != nil {
+		return err
+	}
+	probeHome, err := os.MkdirTemp(stateDir, "validator-probe-")
+	if err != nil {
+		return err
+	}
+	defer func() { _ = os.RemoveAll(probeHome) }()
+	probeProject := filepath.Join(probeHome, "project")
+	probeAgent := filepath.Join(probeHome, "agent")
+	probeGSDHome := filepath.Join(probeHome, "gsd-home")
+	probeState := filepath.Join(probeHome, "state")
+	for _, directory := range []string{probeProject, probeAgent, probeGSDHome, probeState} {
+		if err := os.MkdirAll(directory, 0o700); err != nil {
+			return err
+		}
+	}
 	args := append([]string{}, command[1:]...)
-	args = append(args, "--help")
+	args = append(args, "--no-tools", "--no-extensions", "--no-skills", "--no-prompt-templates",
+		"--no-themes", "--no-context-files", "--no-approve", "--help")
 	cmd := exec.CommandContext(probeCtx, command[0], args...)
-	cmd.Env = append(os.Environ(), env...)
+	cmd.Dir = probeProject
+	cmd.Env = sanitizedValidatorEnvironment(append(os.Environ(), env...))
+	cmd.Env = append(cmd.Env, "HOME="+probeHome, "PI_CODING_AGENT_DIR="+probeAgent,
+		"GSD_PROJECT_ROOT="+probeProject, "GSD_HOME="+probeGSDHome, "GSD_STATE_DIR="+probeState,
+		"GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS=")
 	output, err := limitedCombinedOutput(cmd, 128*1024)
 	if err != nil {
 		return fmt.Errorf("validator Pi capability probe failed: %w", err)
@@ -308,6 +352,9 @@ func (v GSDValidator) runDedicatedValidator(ctx context.Context, request Request
 	)
 	output, err := limitedCombinedOutput(cmd, maxValidatorOutputBytes)
 	if err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
 		return fmt.Errorf("dedicated validator failed: %w", err)
 	}
 	proof, err := proofFromPiJSON(output)
@@ -335,30 +382,157 @@ func validationPrompt(request protectedRequest, requestPath string) (string, err
 func proofFromPiJSON(output []byte) (proofFile, error) {
 	scanner := bufio.NewScanner(bytes.NewReader(output))
 	scanner.Buffer(make([]byte, 4096), maxValidatorOutputBytes)
-	var text strings.Builder
-	assistantMessages := 0
+	var proofTexts []string
+	started, ended, settled, sessionSeen := false, false, false, false
+	turnActive, messageActive := false, false
+	activeMessageRole, streamSessionID := "", ""
+	turns, messagesInTurn := 0, 0
+	proofObserved := false
+	activeTools := make(map[string]string)
+	toolCalls, successfulToolCalls := 0, 0
+	lines := 0
 	for scanner.Scan() {
+		lines++
+		if settled {
+			return proofFile{}, errors.New("validator event stream continued after agent_settled")
+		}
 		var event struct {
-			Type    string `json:"type"`
-			Message struct {
-				Role    string `json:"role"`
-				Content any    `json:"content"`
+			Type       string `json:"type"`
+			ID         string `json:"id"`
+			ToolCallID string `json:"toolCallId"`
+			ToolName   string `json:"toolName"`
+			WillRetry  bool   `json:"willRetry"`
+			IsError    *bool  `json:"isError"`
+			Status     string `json:"status"`
+			Message    struct {
+				Role       string `json:"role"`
+				Content    any    `json:"content"`
+				StopReason string `json:"stopReason"`
 			} `json:"message"`
 		}
-		if json.Unmarshal(scanner.Bytes(), &event) != nil || event.Type != "message_end" || event.Message.Role != "assistant" {
-			continue
+		if duplicateErr := gsd.RejectDuplicateJSONFields(scanner.Bytes()); duplicateErr != nil {
+			return proofFile{}, errors.New("validator event stream contains duplicate JSON fields")
 		}
-		assistantMessages++
-		collectText(event.Message.Content, &text)
+		if err := json.Unmarshal(scanner.Bytes(), &event); err != nil || event.Type == "" {
+			return proofFile{}, errors.New("validator event stream contains malformed JSON")
+		}
+		if ended && event.Type != "agent_settled" {
+			return proofFile{}, errors.New("validator event stream continued after agent_end")
+		}
+		switch event.Type {
+		case "session":
+			if lines != 1 || sessionSeen || started || event.ID == "" {
+				return proofFile{}, errors.New("validator session event is incomplete or out of order")
+			}
+			sessionSeen = true
+			streamSessionID = event.ID
+		case "agent_start":
+			if !sessionSeen || started {
+				return proofFile{}, errors.New("validator agent_start is out of order")
+			}
+			started = true
+		case "agent_end":
+			if !started || ended || event.WillRetry || (event.Status != "" && event.Status != "success") ||
+				turnActive || messageActive || turns == 0 || len(activeTools) != 0 {
+				return proofFile{}, errors.New("validator agent_end has active or missing lifecycle state")
+			}
+			ended = true
+		case "agent_settled":
+			if !ended {
+				return proofFile{}, errors.New("validator agent_settled preceded agent_end")
+			}
+			settled = true
+		case "turn_start":
+			if !started || ended || proofObserved || turnActive || messageActive || len(activeTools) != 0 {
+				return proofFile{}, errors.New("validator turn_start is out of order")
+			}
+			turnActive = true
+			turns++
+			messagesInTurn = 0
+		case "message_start":
+			if !turnActive || messageActive || proofObserved || event.Message.Role == "" {
+				return proofFile{}, errors.New("validator message_start is out of order")
+			}
+			messageActive = true
+			activeMessageRole = event.Message.Role
+		case "message_update":
+			if !turnActive || !messageActive || event.Message.Role != activeMessageRole {
+				return proofFile{}, errors.New("validator message_update is out of order")
+			}
+		case "message_end":
+			if !turnActive || !messageActive || event.Message.Role != activeMessageRole {
+				return proofFile{}, errors.New("validator message_end is out of order")
+			}
+			if event.Message.Role == "assistant" {
+				var text strings.Builder
+				collectText(event.Message.Content, &text)
+				if value := strings.TrimSpace(text.String()); value != "" {
+					if event.Message.StopReason != "stop" || proofObserved || len(activeTools) != 0 {
+						return proofFile{}, errors.New("validator proof message is not a successful terminal response")
+					}
+					proofTexts = append(proofTexts, value)
+					proofObserved = true
+				}
+			}
+			messagesInTurn++
+			messageActive = false
+			activeMessageRole = ""
+		case "tool_execution_start":
+			if !turnActive || messageActive || messagesInTurn == 0 || proofObserved || event.ToolCallID == "" || !allowedValidatorTool(event.ToolName) ||
+				activeTools[event.ToolCallID] != "" || toolCalls >= 5 {
+				return proofFile{}, errors.New("validator used an unbound or forbidden tool")
+			}
+			activeTools[event.ToolCallID] = event.ToolName
+			toolCalls++
+		case "tool_execution_update":
+			if !turnActive || messageActive {
+				return proofFile{}, errors.New("validator tool update is outside its turn")
+			}
+			toolName, active := activeTools[event.ToolCallID]
+			if event.ToolCallID == "" || event.ToolName == "" || !active || toolName != event.ToolName {
+				return proofFile{}, errors.New("validator tool update is unbound")
+			}
+		case "tool_execution_end":
+			if !turnActive || messageActive {
+				return proofFile{}, errors.New("validator tool completion is outside its turn")
+			}
+			toolName, active := activeTools[event.ToolCallID]
+			if event.ToolCallID == "" || event.ToolName == "" || !active || toolName != event.ToolName {
+				return proofFile{}, errors.New("validator tool completion is unbound")
+			}
+			if event.IsError == nil || *event.IsError || (event.Status != "" && event.Status != "success") {
+				return proofFile{}, errors.New("validator tool completion did not report explicit success")
+			}
+			delete(activeTools, event.ToolCallID)
+			successfulToolCalls++
+		case "turn_end":
+			if !turnActive || messageActive || messagesInTurn == 0 || len(activeTools) != 0 {
+				return proofFile{}, errors.New("validator turn_end is out of order")
+			}
+			turnActive = false
+		default:
+			return proofFile{}, fmt.Errorf("validator emitted unsupported event %q", event.Type)
+		}
 	}
 	if err := scanner.Err(); err != nil {
 		return proofFile{}, fmt.Errorf("read validator event stream: %w", err)
 	}
-	proof, err := decodeProofFromText(text.String())
-	if err != nil {
-		return proofFile{}, fmt.Errorf("validator structured evidence missing: assistant_messages=%d text_bytes=%d", assistantMessages, text.Len())
+	if !sessionSeen || !started || !ended || !settled || len(proofTexts) != 1 {
+		return proofFile{}, fmt.Errorf("validator structured evidence missing: proof_messages=%d", len(proofTexts))
 	}
+	proof, err := decodeProofFromText(proofTexts[0])
+	if err != nil {
+		return proofFile{}, fmt.Errorf("validator structured evidence missing: proof_messages=%d", len(proofTexts))
+	}
+	proof.StreamSessionID = streamSessionID
+	proof.StreamSuccessfulToolCount = successfulToolCalls
+	proofDigest := sha256.Sum256([]byte(proofTexts[0]))
+	proof.StreamProofHash = "sha256:" + hex.EncodeToString(proofDigest[:])
 	return proof, nil
+}
+
+func allowedValidatorTool(name string) bool {
+	return name == "read" || name == "grep" || name == "find" || name == "ls"
 }
 
 func collectText(value any, builder *strings.Builder) {
@@ -382,46 +556,65 @@ func collectText(value any, builder *strings.Builder) {
 }
 
 func decodeProofFromText(value string) (proofFile, error) {
-	for start := 0; start < len(value); start++ {
-		if value[start] != '{' {
-			continue
-		}
-		depth := 0
-		quoted := false
-		escaped := false
-		for end := start; end < len(value); end++ {
-			char := value[end]
-			if quoted {
-				if escaped {
-					escaped = false
-					continue
-				}
-				switch char {
-				case '\\':
-					escaped = true
-				case '"':
-					quoted = false
-				}
-				continue
-			}
-			switch char {
-			case '"':
-				quoted = true
-			case '{':
-				depth++
-			case '}':
-				depth--
-				if depth == 0 {
-					var proof proofFile
-					if json.Unmarshal([]byte(value[start:end+1]), &proof) == nil && proof.RequestID != "" && proof.Nonce != "" {
-						return proof, nil
-					}
-					end = len(value)
-				}
-			}
+	raw := []byte(strings.TrimSpace(value))
+	fields, err := strictProofFields(raw)
+	if err != nil {
+		return proofFile{}, errors.New("validator did not return one strict JSON proof")
+	}
+	allowed := map[string]struct{}{
+		"request_id": {}, "nonce": {}, "repository": {}, "pull_request": {}, "base_branch": {},
+		"base_head": {}, "candidate_head": {}, "observed_head": {}, "state_version": {},
+		"contract_hash": {}, "evidence_hash": {}, "verdict": {}, "local_gates": {}, "uat": {},
+		"milestone_valid": {}, "issued_at": {}, "expires_at": {},
+	}
+	if len(fields) != len(allowed) {
+		return proofFile{}, errors.New("validator proof has missing or extra fields")
+	}
+	for name := range fields {
+		if _, ok := allowed[name]; !ok {
+			return proofFile{}, errors.New("validator proof has an unknown field")
 		}
 	}
-	return proofFile{}, errors.New("validator did not return structured JSON evidence")
+	var proof proofFile
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&proof); err != nil || decoder.Decode(&struct{}{}) != io.EOF ||
+		proof.RequestID == "" || proof.Nonce == "" {
+		return proofFile{}, errors.New("validator did not return structured JSON evidence")
+	}
+	return proof, nil
+}
+
+func strictProofFields(raw []byte) (map[string]json.RawMessage, error) {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	start, err := decoder.Token()
+	if err != nil || start != json.Delim('{') {
+		return nil, errors.New("validator proof must be an object")
+	}
+	fields := make(map[string]json.RawMessage)
+	for decoder.More() {
+		keyToken, err := decoder.Token()
+		if err != nil {
+			return nil, err
+		}
+		key, ok := keyToken.(string)
+		if !ok {
+			return nil, errors.New("validator proof key must be a string")
+		}
+		if _, duplicate := fields[key]; duplicate {
+			return nil, errors.New("validator proof has duplicate fields")
+		}
+		var rawValue json.RawMessage
+		if err := decoder.Decode(&rawValue); err != nil {
+			return nil, err
+		}
+		fields[key] = rawValue
+	}
+	end, err := decoder.Token()
+	if err != nil || end != json.Delim('}') || decoder.Decode(&struct{}{}) != io.EOF {
+		return nil, errors.New("validator proof has trailing data")
+	}
+	return fields, nil
 }
 
 func validateProof(proof proofFile, request protectedRequest) error {
@@ -439,6 +632,11 @@ func validateProof(proof proofFile, request protectedRequest) error {
 	}
 	if proof.Verdict != "PROCEED" && proof.Verdict != "RETRY" && proof.Verdict != "HALT" {
 		return errors.New("validator returned an unsupported verdict")
+	}
+	if proof.Verdict == "PROCEED" &&
+		(request.RequiredGates.LocalGates || request.RequiredGates.UAT || request.RequiredGates.MilestoneValid) &&
+		proof.StreamSuccessfulToolCount == 0 {
+		return errors.New("validator PROCEED lacks successful evidence-gathering tool use")
 	}
 	if proof.Verdict == "PROCEED" && request.RequiredGates.LocalGates && !proof.LocalGates {
 		return errors.New("validator did not pass required local gates")
@@ -470,6 +668,12 @@ func readValidationProof(path string) (proofFile, error) {
 	var proof proofFile
 	if err := json.Unmarshal(raw, &proof); err != nil {
 		return proofFile{}, fmt.Errorf("decode independent validation proof: %w", err)
+	}
+	if proof.StreamSessionID == "" {
+		return proofFile{}, errors.New("independent validation proof is missing stream session identity")
+	}
+	if !validHash(proof.StreamProofHash) {
+		return proofFile{}, errors.New("independent validation proof is missing stream proof hash")
 	}
 	if proof.Verdict == "" {
 		return proofFile{}, errors.New("independent validation proof is missing verdict")
@@ -625,32 +829,38 @@ func safePathPart(value string) string {
 func limitedCombinedOutput(cmd *exec.Cmd, maxBytes int64) ([]byte, error) {
 	configureValidationProcessTree(cmd)
 	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &limitedWriter{buffer: &stdout, max: maxBytes}
-	cmd.Stderr = &limitedWriter{buffer: &stderr, max: maxBytes}
+	stdoutWriter := &limitedWriter{buffer: &stdout, max: maxBytes}
+	stderrWriter := &limitedWriter{buffer: &stderr, max: maxBytes}
+	cmd.Stdout = stdoutWriter
+	cmd.Stderr = stderrWriter
 	err := cmd.Run()
 	cleanupErr := cleanupValidationProcessTree(cmd)
-	return append(stdout.Bytes(), stderr.Bytes()...), errors.Join(err, cleanupErr)
+	if stdoutWriter.exceeded || stderrWriter.exceeded {
+		return nil, errors.Join(errors.New("validator process output exceeded its bound"), err, cleanupErr)
+	}
+	return stdout.Bytes(), errors.Join(err, cleanupErr)
 }
 
 type limitedWriter struct {
-	buffer *bytes.Buffer
-	max    int64
+	buffer   *bytes.Buffer
+	max      int64
+	exceeded bool
 }
 
 func (w *limitedWriter) Write(p []byte) (int, error) {
 	if w.max <= 0 {
+		w.exceeded = true
 		return len(p), nil
 	}
-	if int64(len(p)) >= w.max {
-		w.buffer.Reset()
-		_, _ = w.buffer.Write(p[int64(len(p))-w.max:])
+	remaining := w.max - int64(w.buffer.Len())
+	if remaining <= 0 {
+		w.exceeded = true
 		return len(p), nil
 	}
-	overflow := int64(w.buffer.Len()+len(p)) - w.max
-	if overflow > 0 {
-		retained := append([]byte(nil), w.buffer.Bytes()[overflow:]...)
-		w.buffer.Reset()
-		_, _ = w.buffer.Write(retained)
+	if int64(len(p)) > remaining {
+		w.exceeded = true
+		_, _ = w.buffer.Write(p[:remaining])
+		return len(p), nil
 	}
 	_, _ = w.buffer.Write(p)
 	return len(p), nil

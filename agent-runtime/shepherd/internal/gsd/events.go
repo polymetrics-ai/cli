@@ -12,6 +12,7 @@ type EventKind string
 const (
 	EventAgentStart     EventKind = "agent_start"
 	EventTurnStart      EventKind = "turn_start"
+	EventTurnEnd        EventKind = "turn_end"
 	EventToolStart      EventKind = "tool_execution_start"
 	EventToolEnd        EventKind = "tool_execution_end"
 	EventAgentEnd       EventKind = "agent_end"
@@ -20,7 +21,7 @@ const (
 )
 
 var allowedEvents = map[EventKind]struct{}{
-	EventAgentStart: {}, EventAgentEnd: {}, EventTurnStart: {}, EventToolStart: {}, EventToolEnd: {},
+	EventAgentStart: {}, EventAgentEnd: {}, EventTurnStart: {}, EventTurnEnd: {}, EventToolStart: {}, EventToolEnd: {},
 	EventModelSelect: {}, EventThinkingSelect: {},
 }
 
@@ -33,6 +34,8 @@ type Event struct {
 	Status     string
 	Model      string
 	Thinking   string
+	StopReason string
+	WillRetry  bool
 	Nested     bool
 	At         time.Time
 }
@@ -59,7 +62,7 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 		Tool          string    `json:"toolName"`
 		ToolCallID    string    `json:"toolCallId"`
 		Status        string    `json:"status"`
-		IsError       bool      `json:"isError"`
+		IsError       *bool     `json:"isError"`
 		Level         string    `json:"level"`
 		ParentRunID   string    `json:"parentRunId"`
 		ParentAgentID string    `json:"parentAgentId"`
@@ -67,6 +70,11 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 		SubagentID    string    `json:"subagentId"`
 		Scope         string    `json:"scope"`
 		Source        string    `json:"source"`
+		WillRetry     bool      `json:"willRetry"`
+		Message       struct {
+			Role       string `json:"role"`
+			StopReason string `json:"stopReason"`
+		} `json:"message"`
 		SelectedModel struct {
 			Provider string `json:"provider"`
 			ID       string `json:"id"`
@@ -77,6 +85,9 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 			Model    string `json:"model"`
 		} `json:"messages"`
 	}
+	if err := rejectDuplicateJSONFields(raw); err != nil {
+		return Event{}, fmt.Errorf("%w: event contains duplicate fields", ErrRuntimeContractMismatch)
+	}
 	if err := json.Unmarshal(raw, &envelope); err != nil {
 		return Event{}, fmt.Errorf("%w: decode event envelope: %v", ErrRuntimeContractMismatch, err)
 	}
@@ -86,6 +97,21 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 	if (envelope.Type == EventToolStart || envelope.Type == EventToolEnd) &&
 		(strings.TrimSpace(envelope.Tool) == "" || strings.TrimSpace(envelope.ToolCallID) == "") {
 		return Event{}, fmt.Errorf("%w: tool lifecycle event requires toolName and toolCallId", ErrRuntimeContractMismatch)
+	}
+	if envelope.Type == EventToolEnd {
+		if envelope.IsError == nil {
+			return Event{}, fmt.Errorf("%w: tool completion requires explicit isError", ErrRuntimeContractMismatch)
+		}
+		expectedStatus := "success"
+		if *envelope.IsError {
+			expectedStatus = "error"
+		}
+		if envelope.Status != "" && envelope.Status != expectedStatus {
+			return Event{}, fmt.Errorf("%w: tool completion status conflicts with isError", ErrRuntimeContractMismatch)
+		}
+	}
+	if envelope.Type == EventTurnEnd && (envelope.Message.Role != "assistant" || envelope.Message.StopReason == "") {
+		return Event{}, fmt.Errorf("%w: turn_end requires assistant stop reason", ErrRuntimeContractMismatch)
 	}
 	model := ""
 	if envelope.Type == EventModelSelect && envelope.SelectedModel.Provider != "" && envelope.SelectedModel.ID != "" {
@@ -104,7 +130,7 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 	}
 	status := envelope.Status
 	if envelope.Type == EventToolEnd {
-		if envelope.IsError {
+		if *envelope.IsError {
 			status = "error"
 		} else {
 			status = "success"
@@ -118,6 +144,7 @@ func ProjectEvent(raw []byte, maxBytes int) (Event, error) {
 		envelope.Scope == "subagent" || envelope.Scope == "nested" || envelope.Source == "subagent" || envelope.Source == "delegated"
 	return Event{
 		Kind: envelope.Type, RunID: envelope.RunID, UnitID: envelope.UnitID,
-		Tool: envelope.Tool, ToolCallID: envelope.ToolCallID, Status: status, Model: model, Thinking: thinking, Nested: nested, At: time.Now().UTC(),
+		Tool: envelope.Tool, ToolCallID: envelope.ToolCallID, Status: status, Model: model, Thinking: thinking,
+		StopReason: envelope.Message.StopReason, WillRetry: envelope.WillRetry, Nested: nested, At: time.Now().UTC(),
 	}, nil
 }

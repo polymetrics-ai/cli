@@ -41,7 +41,7 @@ func ResolvePinnedContainerImage(ctx context.Context, config ContainerConfig) (C
 	var stdout, stderr boundedBuffer
 	stdout.limit, stderr.limit = 4096, 4096
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
-	if err := cmd.Run(); err != nil {
+	if err := runProcessTree(cmd); err != nil {
 		return ContainerConfig{}, fmt.Errorf("inspect immutable container image: %w", err)
 	}
 	if stdout.Truncated() || stderr.Truncated() {

@@ -28,6 +28,11 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+func TestMain(m *testing.M) {
+	exitAwaitingDecision = func() bool { return true }
+	os.Exit(m.Run())
+}
+
 func testUnitRegistry() gsd.UnitRegistry {
 	units := map[string]gsd.UnitMetadata{}
 	add := func(unitType string, phases ...string) {
@@ -501,6 +506,18 @@ func TestLoadConfigDefaultsToBoundedNestedAgentEnvelopeSize(t *testing.T) {
 	}
 	if config.CoordinatorModel != "openai-codex/gpt-5.6-sol" || config.ImplementationModel != "openai-codex/gpt-5.5" {
 		t.Fatalf("model split coordinator=%q implementation=%q", config.CoordinatorModel, config.ImplementationModel)
+	}
+}
+
+func TestLoadConfigRejectsNonCleanAbsoluteRoots(t *testing.T) {
+	t.Parallel()
+	path := filepath.Join(t.TempDir(), "config.json")
+	raw := `{"gsd_command":["gsd"],"pi_command":["/usr/bin/true"],"work_dir":"/tmp/work/","gsd_home":"/tmp/home","state_dir":"/tmp/state","attempt_root":"/tmp/attempts","repository":"polymetrics-ai/cli","pull_request":388}`
+	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := loadConfig(path); err == nil || !strings.Contains(err.Error(), "clean absolute path") {
+		t.Fatalf("non-clean root err=%v", err)
 	}
 }
 
@@ -1435,6 +1452,7 @@ func TestSuperviseFakeRuntimeHelper(t *testing.T) {
 		os.Exit(2)
 	}
 	if os.Getenv("RUNNER_HELPER_MODE") == "fail-runtime" {
+		fmt.Println(`{"type":"agent_start"}`)
 		fmt.Println(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.5"}}`)
 		fmt.Println(`{"type":"thinking_level_select","level":"high"}`)
 		fmt.Fprintln(os.Stderr, "bounded fake runtime process failure")
@@ -1462,8 +1480,11 @@ func TestSuperviseFakeRuntimeHelper(t *testing.T) {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
+	fmt.Println(`{"type":"agent_start"}`)
+	fmt.Println(`{"type":"turn_start"}`)
 	fmt.Println(`{"type":"model_select","model":{"provider":"openai-codex","id":"gpt-5.5"}}`)
 	fmt.Println(`{"type":"thinking_level_select","level":"high"}`)
+	fmt.Println(`{"type":"turn_end","message":{"role":"assistant","stopReason":"stop"}}`)
 	fmt.Println(`{"type":"agent_end","status":"success"}`)
 	os.Exit(0)
 }

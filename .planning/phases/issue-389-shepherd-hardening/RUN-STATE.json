@@ -1,11 +1,12 @@
 {
   "phase": "issue-389-shepherd-hardening",
   "branch": "fix/389-shepherd-proof-recovery",
-  "base_head": "9556cb24412f3598b2b8a94a3089b61ef3d1dd91",
+  "base_head": "ea88c92f5f3c0b1c5f3f434fa52efba24624f803",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_f_green_reviewed_checkpoint_ready",
-  "current_slice": "F_authority_gated_external_effects",
+  "state": "slice_g_green_reviewed_checkpoint_ready",
+  "verificationPassed": true,
+  "current_slice": "G_real_supervise_integration_coverage",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "completed_slices": [
     {
@@ -32,6 +33,11 @@
       "slice": "E_real_sol_high_recovery_planning",
       "head": "9556cb24412f3598b2b8a94a3089b61ef3d1dd91",
       "status": "green_accepted"
+    },
+    {
+      "slice": "F_authority_gated_external_effects",
+      "head": "ea88c92f5f3c0b1c5f3f434fa52efba24624f803",
+      "status": "green_accepted"
     }
   ],
   "required_skills_loaded": [
@@ -55,16 +61,51 @@
     "golang-naming",
     "golang-documentation"
   ],
-  "orchestration_decisions": [
+  "orchestrationDecisions": [
+    {
+      "cycle": "cycle-0-reconcile",
+      "decision": "read_only_spawned",
+      "reason": "One read-only scout reconciled the broad inherited implementation before RED tests; no mutating worker was launched."
+    },
+    {
+      "cycle": "cycle-0-execution-mode",
+      "decision": "local_critical_path",
+      "reason": "All production edits remain sequential in this checkout with no overlapping mutating worker."
+    },
+    {
+      "cycle": "cycle-0-safety",
+      "decision": "local_critical_path",
+      "reason": "Canaries, GitHub mutation, and credentialed checks remain blocked until exact-head independent validation."
+    },
+    {
+      "cycle": "cycle-1-store-guard",
+      "decision": "local_critical_path",
+      "reason": "Checkpoint the coherent store guard before broader Slice A production changes."
+    },
+    {
+      "cycle": "cycle-2-slice-a",
+      "decision": "local_critical_path",
+      "reason": "Add deterministic typed-validator RED tests before production rewiring."
+    },
+    {
+      "cycle": "cycle-3-retry-correction",
+      "decision": "local_critical_path",
+      "reason": "Correct the 19d051c6 false green that trusted worktree-local fabricated validation."
+    },
+    {
+      "cycle": "cycle-4-live-pi-correction",
+      "decision": "local_critical_path",
+      "reason": "Replace the 99604d48 invented GSD validation verb with the qualified read-only Pi process."
+    },
+    {
+      "cycle": "cycle-5-slice-b",
+      "decision": "local_critical_path",
+      "reason": "Keep Slice B store, workspace, and supervise mutation paths on one sequential critical path."
+    },
     {
       "cycle": "cycle-6",
       "decision": "local_critical_path",
       "reason": "Promotion journal, SQLite state, canonical Git, staged GSD state, and filesystem rename recovery form one critical transaction; no overlapping mutating workers."
-    },
-    {
-      "cycle": "cycle-6",
-      "decision": "slice_c_only",
-      "reason": "Implement crash-safe Git/GSD promotion and startup recovery only; Slice D onward remains blocked."
     },
     {
       "cycle": "cycle-7-review-fix",
@@ -135,6 +176,66 @@
       "cycle": "cycle-20-slice-f-verify",
       "decision": "local_critical_path",
       "reason": "Focused/full/race/vet/build, nested and root make verify, module boundary, root go list, formatting, diff, and exact 28-finding lint-baseline checks pass; no live GitHub mutation occurred."
+    },
+    {
+      "cycle": "cycle-21-slice-g-plan",
+      "decision": "local_critical_path",
+      "reason": "The real supervise command boundary, process fakes, local Git repositories, official registry, SQLite authority/outbox stores, crash synchronization, and shared integration harness form one sequential test trust boundary; no mutating worker may overlap, while read-only recon/review sidecars may run independently."
+    },
+    {
+      "cycle": "cycle-22-slice-g-red",
+      "decision": "local_critical_path",
+      "reason": "Build-tagged tests invoke the actual built CLI and fail before store creation because production runtime admission has no compile-time-only deterministic executor seam; this is the first proven Slice G gap."
+    },
+    {
+      "cycle": "cycle-23-slice-g-green",
+      "decision": "local_critical_path",
+      "reason": "The real CLI harness, official metadata routing, disposable Git worktrees, SQLite authority/outbox state, normalized GSD proof/staging, decisions, crash seams, and final gate passed sequential RED-to-GREEN implementation."
+    },
+    {
+      "cycle": "cycle-24-slice-g-review-fix",
+      "decision": "local_critical_path",
+      "reason": "Independent GPT-5.6 Sol/xhigh review cycles drove sequential fixes for session/proof binding, fake-process isolation, exact canonical/proof oracles, WAL-safe stage binding, legacy post-Git recovery, reply/outbox collisions, heartbeat cadence, and final-gate GSD drift."
+    },
+    {
+      "cycle": "cycle-25-slice-g-verify",
+      "decision": "local_critical_path",
+      "reason": "Normal/race integration with race-built children, full nested unit/race/vet/build/make, root make verify, boundary/list/diff/JSON checks, and exact no-differential 28-finding default/tagged lint gates pass; no live mutation occurred."
+    },
+    {
+      "cycle": "cycle-26-slice-g-review-closure",
+      "decision": "local_critical_path",
+      "reason": "All independent GPT-5.6 Sol/xhigh working-tree findings were fixed sequentially; final correctness and security passes report no findings after strict validator lifecycle/tool/proof parsing, isolated probing, normalized promotion proof, and legacy compatibility hardening."
+    },
+    {
+      "cycle": "cycle-27-slice-g-exact-head-review-fix",
+      "decision": "local_critical_path",
+      "reason": "The first exact-head review at 4592734803f20e1b4893efae2ebd900525a92868 found continuous-decision, SIGINT, pre-send outbox, terminal-event, and descendant-cleanup gaps. Sequential RED/GREEN fixes now prove same-process fenced reply and expiry, complete Pi/GSD lifecycle and tool pairing, controller-owned process pipes, ordinary-exit descendant cleanup, real SIGINT, and both pre-send outbox crash boundaries; final post-fix working-tree closure has no unresolved Slice G finding."
+    },
+    {
+      "cycle": "cycle-28-slice-g-validator-proof-review-fix",
+      "decision": "local_critical_path",
+      "reason": "Replacement exact-head review at b08c93cc6b1de6a6c89d57c14da6c14d01d7e420 found incomplete validator turn/session provenance. Sequential fixes require a fresh exclusive session directory, complete ordered successful non-retrying Pi lifecycle, and exact stream-to-final-durable-assistant proof hashing; focused correctness/security closure reports no remaining finding."
+    },
+    {
+      "cycle": "cycle-29-slice-g-implementation-proof-review-fix",
+      "decision": "local_critical_path",
+      "reason": "Exact-head review at c1a34d23585329a9eb7f64a1ef687e0268c17666 found implementation turn/final-stop, lifecycle alias, durable assistant-row, and detached-output gaps. Sequential fixes require final successful implementation turns and durable stops, recursive case-fold/Unicode-safe canonical JSON with a strict field bound, type=message assistant provenance, and bounded controller pipe drains; final working-tree review reports no finding."
+    },
+    {
+      "cycle": "cycle-30-slice-g-workflow-provenance-review-fix",
+      "decision": "local_critical_path",
+      "reason": "Exact-head review at ee8f1fa785a8a44295d839b3bac9c970a81f37cd found missing positive workflow-transition and validator evidence-tool provenance. Sequential fixes require every official required workflow tool to complete successfully, persist observed transitions in the validator-bound proof manifest, recheck them at promotion, and reject zero, missing, failed, null, or conflicting validator tool outcomes; final correctness/security review reports no finding."
+    },
+    {
+      "cycle": "cycle-31-slice-g-terminal-status-review-fix",
+      "decision": "local_critical_path",
+      "reason": "Exact-head review at 3542ee007df66648c1f1292e2f0d58d04a8dada5 found explicit errored agent terminal statuses were not rejected. Implementation and validator agent_end now reject every explicit non-success status with process-level regressions; final gates and review rerun before checkpoint amendment."
+    },
+    {
+      "cycle": "cycle-32-slice-g-audit-normalization",
+      "decision": "local_critical_path",
+      "reason": "Normalize the complete cycles 0-31 orchestration audit under the required schema before final exact-head verification."
     }
   ],
   "slice_b_checkpoint": {
@@ -143,12 +244,12 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Push only fix/389-shepherd-proof-recovery",
-    "Confirm exact local/remote equality and a clean worktree",
-    "Stop before Slice G, PR creation, canaries, live mutation, or parent merge"
+    "Run final immutable exact-head GPT-5.6 Sol/high correctness/restart/security/test-realism review",
+    "Push only fix/389-shepherd-proof-recovery and confirm exact local/remote equality and cleanliness",
+    "Stop before canaries, PR creation, live mutation, cleanup/migration, or parent merge"
   ],
   "blocked": [
-    "Slice G and later slices",
+    "Slices after G",
     "PR creation",
     "live GitHub mutation",
     "Twenty/Asana canaries",

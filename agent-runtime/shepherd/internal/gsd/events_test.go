@@ -2,6 +2,7 @@ package gsd
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -35,6 +36,20 @@ func TestProjectorRequiresCorrelationIDForToolLifecycle(t *testing.T) {
 	}
 }
 
+func TestProjectorRequiresUnambiguousToolCompletionOutcome(t *testing.T) {
+	t.Parallel()
+	for _, raw := range []string{
+		`{"type":"tool_execution_end","toolName":"read","toolCallId":"call-1"}`,
+		`{"type":"tool_execution_end","toolName":"read","toolCallId":"call-1","isError":null}`,
+		`{"type":"tool_execution_end","toolName":"read","toolCallId":"call-1","isError":false,"status":"error"}`,
+		`{"type":"tool_execution_end","toolName":"read","toolCallId":"call-1","isError":true,"status":"success"}`,
+	} {
+		if _, err := ProjectEvent([]byte(raw), 1024); !errors.Is(err, ErrRuntimeContractMismatch) {
+			t.Fatalf("ambiguous completion %s error=%v", raw, err)
+		}
+	}
+}
+
 func TestProjectorCapturesCompactEffectiveRuntimeIdentity(t *testing.T) {
 	t.Parallel()
 
@@ -60,6 +75,40 @@ func TestProjectorAcceptsRequestedAgentEndWithoutPayload(t *testing.T) {
 	}
 	if strings.Contains(event.String(), "must not persist") {
 		t.Fatalf("projection retained agent payload: %s", event.String())
+	}
+}
+
+func TestProjectorRejectsDuplicateLifecycleFields(t *testing.T) {
+	t.Parallel()
+	for _, raw := range []string{
+		`{"type":"agent_end","willRetry":true,"willRetry":false}`,
+		`{"type":"turn_end","message":{"role":"assistant","stopReason":"error","stopReason":"stop"}}`,
+		`{"type":"agent_start","type":"agent_end"}`,
+		`{"type":"agent_end","willRetry":true,"WillRetry":false}`,
+		`{"type":"turn_end","message":{"role":"assistant","stopReason":"error","StopReason":"stop"}}`,
+		`{"type":"agent_end","Type":"agent_start"}`,
+		`{"type":"agent_end","scope":"subagent","ſcope":"top"}`,
+		`{"type":"agent_end","ſcope":"top"}`,
+	} {
+		if _, err := ProjectEvent([]byte(raw), 1024); !errors.Is(err, ErrRuntimeContractMismatch) {
+			t.Fatalf("duplicate lifecycle event error=%v", err)
+		}
+	}
+}
+
+func TestDuplicateFieldValidationBoundsDistinctObjectKeys(t *testing.T) {
+	t.Parallel()
+	var raw strings.Builder
+	raw.WriteByte('{')
+	for index := 0; index < 1025; index++ {
+		if index > 0 {
+			raw.WriteByte(',')
+		}
+		fmt.Fprintf(&raw, "%q:true", fmt.Sprintf("field-%04d", index))
+	}
+	raw.WriteByte('}')
+	if err := rejectDuplicateJSONFields([]byte(raw.String())); err == nil || !strings.Contains(err.Error(), "field-count bound") {
+		t.Fatalf("oversized object fields error=%v", err)
 	}
 }
 

@@ -194,7 +194,17 @@ controller decisions.
 go vet ./...
 go test ./...
 go test -race ./...
+go test -tags=integration ./integration/... -count=1
+go test -race -tags=integration ./integration/... -count=1
 ```
+
+The `integration`-tagged suite is intentionally qualified only on `darwin/arm64`. It builds and
+invokes the real `shepherd supervise` executable against isolated real Git repositories and SQLite
+stores. Only the external GSD, Pi, and GitHub processes are deterministic fakes. The suite imports
+the official GSD Pi 1.11 registry, enforces durable model/session evidence, strictly allowlists the
+fake GitHub comment endpoints, and exercises promotion, decision, outbox, and process-termination
+restart boundaries. Compile-time crash/executor seams are absent from normal release builds; the
+untagged tests prove their environment variables are inert.
 
 The module does not autonomously merge and does not store raw prompts, reasoning, command arguments,
 tool output, or credentials. The decision ledger stores only bounded question/answer labels and

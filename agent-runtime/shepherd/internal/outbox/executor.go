@@ -233,6 +233,7 @@ func (d *Dispatcher) Dispatch(ctx context.Context, authorization Authorization, 
 	if err != nil {
 		return Result{}, err
 	}
+	integrationClaimedBoundary()
 	planCtx, cancelPlan, _, err := d.fencedContext(ctx, claim)
 	if err != nil {
 		markErr := d.store.MarkFailed(ctx, claim, ErrorPreSend, d.clock())
@@ -276,8 +277,12 @@ func (d *Dispatcher) Dispatch(ctx context.Context, authorization Authorization, 
 		}
 		return Result{}, errors.Join(err, d.store.MarkFailed(ctx, claim, code, executionNow))
 	}
+	integrationExecutionStartedBoundary()
 	result, err := d.executor.Send(writeCtx, claim.EffectRecord, plan)
 	settledAt := d.clock()
+	if err == nil {
+		integrationPostSendBoundary()
+	}
 	if err != nil {
 		// Every error returned after invoking the write port is ambiguous. The
 		// marker reconciliation path, not blind retry, is the only recovery.

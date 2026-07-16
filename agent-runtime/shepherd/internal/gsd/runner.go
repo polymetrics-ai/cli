@@ -70,6 +70,7 @@ type Config struct {
 	Container             *ContainerConfig
 	Registry              UnitRegistry
 	RuntimeGuard          *HostRuntimeGuard
+	RequireSessionBinding bool
 	ContractUnit          string
 }
 
@@ -108,12 +109,13 @@ type UIResponse struct {
 }
 
 type Result struct {
-	Terminal Terminal
-	ExitCode int
-	Err      error
-	Stderr   string
-	Started  time.Time
-	Ended    time.Time
+	Terminal              Terminal
+	ObservedWorkflowTools []string
+	ExitCode              int
+	Err                   error
+	Stderr                string
+	Started               time.Time
+	Ended                 time.Time
 }
 
 type scanResult struct {
@@ -199,7 +201,7 @@ func NewRunner(config Config) (*Runner, error) {
 }
 
 func (r *Runner) RequiresSessionBinding() bool {
-	return r.config.RuntimeGuard != nil || r.config.Container != nil
+	return r.config.RuntimeGuard != nil || r.config.Container != nil || r.config.RequireSessionBinding
 }
 
 func (r *Runner) WithModel(model string) (*Runner, error) {
@@ -300,7 +302,7 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 		"headless", "--json", "--supervised", "--model", r.config.Model,
 		"--response-timeout", strconv.FormatInt(responseTimeout.Milliseconds(), 10),
 		"--max-restarts", "0",
-		"--events", "agent_start,agent_end,turn_start,tool_execution_start,tool_execution_end,model_select,thinking_level_select,extension_ui_request",
+		"--events", "agent_start,agent_end,turn_start,turn_end,tool_execution_start,tool_execution_end,model_select,thinking_level_select,extension_ui_request",
 		"--timeout", strconv.FormatInt(r.config.Timeout.Milliseconds(), 10), command,
 	)
 	commandArgs = append(commandArgs, args...)
@@ -308,48 +310,103 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 	configureProcessTree(cmd)
 	cmd.Dir = r.config.WorkDir
 	r.configureEnvironment(cmd)
-	stdout, err := cmd.StdoutPipe()
+	stdout, stdoutWriter, err := os.Pipe()
 	if err != nil {
 		return failedResult(started, err)
 	}
+	defer func() { _ = stdout.Close() }()
+	cmd.Stdout = stdoutWriter
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		return failedResult(started, err)
 	}
 	var stderr boundedBuffer
 	stderr.limit = 64 * 1024
-	cmd.Stderr = &stderr
-	if err := cmd.Start(); err != nil {
+	stderrReader, stderrWriter, err := os.Pipe()
+	if err != nil {
+		_ = stdoutWriter.Close()
 		return failedResult(started, err)
+	}
+	defer func() { _ = stderrReader.Close() }()
+	cmd.Stderr = stderrWriter
+	stderrDone := make(chan error, 1)
+	go func() {
+		_, copyErr := io.Copy(&stderr, stderrReader)
+		stderrDone <- copyErr
+	}()
+	if err := cmd.Start(); err != nil {
+		_ = stdoutWriter.Close()
+		_ = stderrWriter.Close()
+		return failedResult(started, err)
+	}
+	if closeErr := errors.Join(stdoutWriter.Close(), stderrWriter.Close()); closeErr != nil {
+		_ = cleanupProcessTree(cmd)
+		_ = cmd.Wait()
+		return failedResult(started, errors.Join(closeErr, <-stderrDone))
 	}
 
 	events := make(chan scanResult)
-	scanDone := make(chan struct{})
+	stdoutDone := make(chan error, 1)
 	go func() {
-		defer close(scanDone)
 		scanEvents(ctx, stdout, r.config.MaxEventBytes, events)
+		stdoutDone <- nil
 	}()
 	waited := make(chan error, 1)
 	go func() {
-		// os/exec documents that Wait must not race a StdoutPipe reader. A fast child can otherwise
-		// close the descriptor before Scanner observes EOF and turn a valid exit into a scan error.
-		<-scanDone
-		waited <- cmd.Wait()
+		// stdout is a controller-owned pipe rather than StdoutPipe, so Wait can
+		// complete when the parent exits. Cleanup then kills descendants that
+		// inherited the writer, allowing the scanner to drain and reach EOF.
+		waitErr := cmd.Wait()
+		cleanupErr := cleanupProcessTree(cmd)
+		drainErr := waitControllerOutputs(stdout, stdoutDone, stderrReader, stderrDone)
+		waited <- errors.Join(waitErr, cleanupErr, drainErr)
 	}()
 
 	ticker := time.NewTicker(r.config.HeartbeatInterval)
 	defer ticker.Stop()
 	lastEventAt := started
+	agentStarted, agentEnded := false, false
+	turnActive, turnHadTool, successfulTurn := false, false, false
 	inFlightTools := make(map[string]string)
+	observedWorkflowTools := make(map[string]struct{})
 	eventsOpen := true
+	var processWaitErr error
+	processWaited := false
+	waitNotification := (<-chan error)(waited)
 	var questionResults <-chan questionResult
 	var pendingQuestion *Question
+	finishAfterEventDrain := func() Result {
+		if pendingQuestion != nil {
+			return Result{Terminal: TerminalBlocked, ExitCode: exitCode(processWaitErr),
+				Err: errors.New("GSD parent exited with an unanswered human gate"), Stderr: stderr.String(),
+				Started: started, Ended: time.Now().UTC()}
+		}
+		if len(inFlightTools) != 0 {
+			return Result{Terminal: TerminalError, ExitCode: exitCode(processWaitErr),
+				Err: errors.New("GSD parent exited with active tool calls"), Stderr: stderr.String(),
+				Started: started, Ended: time.Now().UTC()}
+		}
+		if processWaitErr == nil && (!agentStarted || !agentEnded || turnActive || !successfulTurn) {
+			return Result{Terminal: TerminalError, ExitCode: 0,
+				Err: errors.New("successful GSD parent omitted its complete agent lifecycle"), Stderr: stderr.String(),
+				Started: started, Ended: time.Now().UTC()}
+		}
+		result := classifyResult(ctx, started, processWaitErr, stderr.String())
+		for tool := range observedWorkflowTools {
+			result.ObservedWorkflowTools = append(result.ObservedWorkflowTools, tool)
+		}
+		sort.Strings(result.ObservedWorkflowTools)
+		return result
+	}
 	for {
 		select {
 		case scanned, ok := <-events:
 			if !ok {
 				eventsOpen = false
 				events = nil
+				if processWaited {
+					return finishAfterEventDrain()
+				}
 				continue
 			}
 			if scanned.err != nil {
@@ -361,6 +418,13 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 				return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: scanned.err, Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
 			}
 			if scanned.question != nil {
+				if !agentStarted || agentEnded {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+						Err: errors.New("human gate occurred outside the agent lifecycle"), Stderr: stderr.String(),
+						Started: started, Ended: time.Now().UTC()}
+				}
 				if pendingQuestion != nil {
 					cancel()
 					waitErr := <-waited
@@ -381,8 +445,73 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 				continue
 			}
 			lastEventAt = scanned.event.At
+			if scanned.event.Kind != EventAgentStart && !agentStarted {
+				cancel()
+				waitErr := <-waited
+				return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+					Err: errors.New("GSD event preceded agent_start"), Stderr: stderr.String(),
+					Started: started, Ended: time.Now().UTC()}
+			}
+			if agentEnded {
+				cancel()
+				waitErr := <-waited
+				return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+					Err: errors.New("GSD event followed agent_end"), Stderr: stderr.String(),
+					Started: started, Ended: time.Now().UTC()}
+			}
 			switch scanned.event.Kind {
+			case EventAgentStart:
+				if agentStarted || agentEnded {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+						Err: errors.New("duplicate or out-of-order agent_start"), Stderr: stderr.String(),
+						Started: started, Ended: time.Now().UTC()}
+				}
+				agentStarted = true
+			case EventAgentEnd:
+				if !agentStarted || agentEnded || scanned.event.WillRetry ||
+					(scanned.event.Status != "" && scanned.event.Status != "success") ||
+					turnActive || !successfulTurn || len(inFlightTools) != 0 || pendingQuestion != nil {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+						Err: errors.New("incomplete or out-of-order agent_end"), Stderr: stderr.String(),
+						Started: started, Ended: time.Now().UTC()}
+				}
+				agentEnded = true
+			case EventTurnStart:
+				if turnActive || successfulTurn || len(inFlightTools) != 0 {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+						Err: errors.New("duplicate or out-of-order turn_start"), Stderr: stderr.String(),
+						Started: started, Ended: time.Now().UTC()}
+				}
+				turnActive = true
+				turnHadTool = false
+			case EventTurnEnd:
+				validStop := scanned.event.StopReason == "stop"
+				validToolUse := scanned.event.StopReason == "toolUse" && turnHadTool
+				if !turnActive || len(inFlightTools) != 0 || (!validStop && !validToolUse) {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+						Err: errors.New("incomplete or unsuccessful turn_end"), Stderr: stderr.String(),
+						Started: started, Ended: time.Now().UTC()}
+				}
+				turnActive = false
+				if validStop {
+					successfulTurn = true
+				}
 			case EventToolStart:
+				if !turnActive {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+						Err: errors.New("tool start occurred outside a turn"), Stderr: stderr.String(),
+						Started: started, Ended: time.Now().UTC()}
+				}
 				if contractErr := r.config.Registry.ValidateObservedTool(contractUnit, scanned.event.Tool); contractErr != nil {
 					cancel()
 					waitErr := <-waited
@@ -394,13 +523,34 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: fmt.Errorf("duplicate active tool call %q", scanned.event.ToolCallID), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
 				}
 				inFlightTools[scanned.event.ToolCallID] = scanned.event.Tool
+				turnHadTool = true
 			case EventToolEnd:
-				if _, exists := inFlightTools[scanned.event.ToolCallID]; !exists {
+				if !turnActive {
 					cancel()
 					waitErr := <-waited
-					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: fmt.Errorf("tool end has no active start for %q", scanned.event.ToolCallID), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+						Err: errors.New("tool end occurred outside a turn"), Stderr: stderr.String(),
+						Started: started, Ended: time.Now().UTC()}
+				}
+				startedTool, exists := inFlightTools[scanned.event.ToolCallID]
+				if !exists || startedTool != scanned.event.Tool {
+					cancel()
+					waitErr := <-waited
+					return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr),
+						Err:    fmt.Errorf("tool end does not match active start for %q", scanned.event.ToolCallID),
+						Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
 				}
 				delete(inFlightTools, scanned.event.ToolCallID)
+				if scanned.event.Status == "success" {
+					canonicalTool, canonicalErr := canonicalObservedToolName(startedTool)
+					if canonicalErr != nil {
+						cancel()
+						waitErr := <-waited
+						return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: canonicalErr,
+							Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+					}
+					observedWorkflowTools[canonicalTool] = struct{}{}
+				}
 			}
 			if observer.Event != nil {
 				observer.Event(scanned.event)
@@ -414,6 +564,13 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 					return classifyResult(ctx, started, waitErr, stderr.String())
 				}
 				return Result{Terminal: TerminalBlocked, ExitCode: exitCode(waitErr), Err: answered.err, Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
+			}
+			if answered.response.Cancelled {
+				cancel()
+				waitErr := <-waited
+				return Result{Terminal: TerminalBlocked, ExitCode: exitCode(waitErr),
+					Err: errors.New("human gate was cancelled"), Stderr: stderr.String(),
+					Started: started, Ended: time.Now().UTC()}
 			}
 			payload := struct {
 				Type string `json:"type"`
@@ -444,18 +601,14 @@ func (r *Runner) Run(parent context.Context, command string, args []string, obse
 				waitErr := <-waited
 				return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: fmt.Errorf("%w: no model, tool, or child activity observed before startup deadline", ErrSilentTool), Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
 			}
-		case waitErr := <-waited:
-			if eventsOpen {
-				for scanned := range events {
-					if scanned.err != nil {
-						return Result{Terminal: TerminalError, ExitCode: exitCode(waitErr), Err: scanned.err, Stderr: stderr.String(), Started: started, Ended: time.Now().UTC()}
-					}
-					if observer.Event != nil {
-						observer.Event(scanned.event)
-					}
-				}
+		case waitErr := <-waitNotification:
+			processWaitErr = waitErr
+			processWaited = true
+			waitNotification = nil
+			waited <- waitErr
+			if !eventsOpen {
+				return finishAfterEventDrain()
 			}
-			return classifyResult(ctx, started, waitErr, stderr.String())
 		case <-ctx.Done():
 			waitErr := <-waited
 			return classifyResult(ctx, started, waitErr, stderr.String())
@@ -511,7 +664,7 @@ func (r *Runner) Query(parent context.Context) (WorkflowSnapshot, error) {
 	stderr.limit = 64 * 1024
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
-	if err := cmd.Run(); err != nil {
+	if err := runProcessTree(cmd); err != nil {
 		return WorkflowSnapshot{}, fmt.Errorf("headless query failed: %w: %s", err, stderr.String())
 	}
 	return DecodeQuery([]byte(stdout.String()))
@@ -534,7 +687,7 @@ func (r *Runner) RebuildMarkdown(parent context.Context) error {
 	var stdout, stderr boundedBuffer
 	stdout.limit, stderr.limit = 64*1024, 64*1024
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
-	if err := cmd.Run(); err != nil {
+	if err := runProcessTree(cmd); err != nil {
 		return fmt.Errorf("GSD markdown rebuild failed: %w", err)
 	}
 	notifications := filepath.Join(r.config.WorkDir, ".gsd", "notifications.jsonl")
@@ -714,6 +867,10 @@ func scanEvents(ctx context.Context, reader io.Reader, maxBytes int, output chan
 	}
 	questionMetaByTitle := make(map[string]questionMeta)
 	for scanner.Scan() {
+		if err := RejectDuplicateJSONFields(scanner.Bytes()); err != nil {
+			send(scanResult{err: fmt.Errorf("%w: ambiguous event fields: %v", ErrRuntimeContractMismatch, err)})
+			return
+		}
 		var header struct {
 			Type string `json:"type"`
 		}

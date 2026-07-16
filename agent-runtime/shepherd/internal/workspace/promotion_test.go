@@ -45,9 +45,16 @@ func TestStageGSDStateSnapshotsCommittedWALAndInstallsStandaloneDatabase(t *test
 	if err := os.WriteFile(filepath.Join(paths.Canonical, "STATE.md"), []byte("old\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
+	validated, err := SnapshotGSDManifest(ctx, source, root)
+	if err != nil {
+		t.Fatal(err)
+	}
 	staged, err := StageGSDState(ctx, source, paths)
 	if err != nil {
 		t.Fatal(err)
+	}
+	if staged.ManifestHash != validated.Hash {
+		t.Fatalf("normalized staged hash=%s want validator-bound %s", staged.ManifestHash, validated.Hash)
 	}
 	if _, err := os.Stat(filepath.Join(paths.Stage, "gsd.db-wal")); !os.IsNotExist(err) {
 		t.Fatalf("staged WAL exists: %v", err)
@@ -69,6 +76,40 @@ func TestStageGSDStateSnapshotsCommittedWALAndInstallsStandaloneDatabase(t *test
 	}
 	if err := installed.QueryRowContext(ctx, `PRAGMA integrity_check`).Scan(&integrity); err != nil || integrity != "ok" {
 		t.Fatalf("integrity=%q err=%v", integrity, err)
+	}
+}
+
+func TestSnapshotGSDManifestRejectsOrphanSQLiteSidecars(t *testing.T) {
+	for _, fixture := range []struct {
+		name    string
+		content []byte
+	}{
+		{name: "zero-length WAL", content: nil},
+		{name: "zero-length SHM", content: nil},
+		{name: "non-empty WAL", content: []byte("orphan")},
+	} {
+		t.Run(fixture.name, func(t *testing.T) {
+			root := t.TempDir()
+			source := filepath.Join(root, "candidate")
+			protected := filepath.Join(root, "protected")
+			if err := os.MkdirAll(source, 0o700); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.MkdirAll(protected, 0o700); err != nil {
+				t.Fatal(err)
+			}
+			name := "gsd.db-wal"
+			if strings.Contains(fixture.name, "SHM") {
+				name = "gsd.db-shm"
+			}
+			if err := os.WriteFile(filepath.Join(source, name), fixture.content, 0o600); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := SnapshotGSDManifest(context.Background(), source, protected); err == nil ||
+				!strings.Contains(err.Error(), "without gsd.db") {
+				t.Fatalf("orphan sidecar err=%v", err)
+			}
+		})
 	}
 }
 

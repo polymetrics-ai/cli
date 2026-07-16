@@ -12,6 +12,8 @@
   `cacb32e8e16b7ba70742cc5365cb83fffd74ca35`.
 - Slice E — real Sol/high recovery planning:
   `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`.
+- Slice F — authority-gated external effects:
+  `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`.
 
 ## Accepted Slice E checkpoint
 
@@ -22,7 +24,7 @@ actions/primitives. Unsafe or ambiguous joined failures dominate; GitHub/outbox 
 and blocks without another write. Reservations, results, expiry, and dispatch are bound to owner plus
 lease epoch. Failed retries remain in fresh Slice B worktrees and cannot replay an older plan.
 
-## Slice F GREEN / reviewed / checkpoint ready
+## Accepted Slice F checkpoint
 
 The immutable base is `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`; local and remote heads matched
 and the worktree was clean before planning-only edits. Slice F makes a strict durable fenced outbox the
@@ -65,7 +67,35 @@ verification, module boundary, root package listing, formatting, and diff checks
 accepted 28 findings with no Slice F package finding. Repeated independent correctness, security, and
 restart/reliability review findings are fully dispositioned. No live GitHub mutation occurred.
 
-The coherent Slice F checkpoint is locally ready after exact-head read-only correctness/restart review
-reported no actionable findings. Push only this branch, confirm local/remote equality and a clean
-worktree, then stop before Slice G, PR creation, final issue review, canaries, live mutation,
-cleanup/migration, and parent PR #390 merge.
+Slice F is accepted at `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`; exact local/remote equality
+and a clean worktree were confirmed before Slice G activation.
+
+## Active Slice G — GREEN / checkpoint ready
+
+Slice G now adds build-tagged process-level coverage for the actual built `shepherd supervise` command.
+The harness uses isolated real Git repositories and SQLite stores while replacing only GSD/Pi/GitHub
+processes with strict bounded fakes. It proves official-metadata GPT-5.5/high execution and GPT-5.6
+Sol/high planning, fresh implementation/validator/recovery sessions, exact diff/hash/phase/tool proof,
+ratification, WAL-normalized staged Git/GSD promotion, legacy post-Git forward recovery, complete
+canonical-state rejection oracles, outbox reconciliation/collision/uncertainty, exact human reply
+binding, two-heartbeat cadence, and terminal `final_human_gate` without merge capability.
+
+Strict RED exposed the missing compile-only process seam. Later REDs exposed artifact mutation after
+validator return, empty governed deltas, validator deadline typing, unbound staged GSD state, transient
+WAL/SHM hashing, legacy proof recovery, and final-gate GSD drift. Production now normalizes installable
+GSD state in protected storage, binds it into evidence, verifies the exact stage, preserves Slice-F
+post-Git recovery, and rechecks canonical GSD before every final-gate projection. Exact-head review fixes
+also keep awaiting-decision supervision alive with fenced polling/expiry, enforce complete Pi/GSD lifecycle
+and tool pairing, clean every GSD process group after ordinary exit, and cover SIGINT plus both pre-send
+outbox boundaries. Release builds compile only inert seam implementations.
+
+Normal/race integration (including race-built child binaries), full nested unit/race/vet/build and
+`make verify`, root `make verify`, module boundary/root listing/diff/JSON checks, and default/tagged lint
+all pass; lint is exactly the accepted 28 findings with zero differential. Independent GPT-5.6
+Sol/xhigh findings from exact-head reviews `45927348`, `b08c93cc`, `c1a34d23`, and `ee8f1fa7` are dispositioned,
+including complete fresh validator and implementation turn/session/durable-proof provenance, strict
+case-fold-safe lifecycle JSON, canonical assistant rows, and bounded detached output draining. Final post-fix correctness/security working-tree
+closure reports no unresolved Slice G finding. Checkpoint amendment, next immutable exact-head review,
+push/equality confirmation, and stopping remain.
+Execution stayed `local_critical_path`; no live writes, canaries, PR creation, cleanup/migration, later
+slices, or parent PR #390 merge occurred.

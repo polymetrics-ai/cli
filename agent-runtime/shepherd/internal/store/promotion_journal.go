@@ -181,6 +181,40 @@ func (s *Store) AttemptHasPromotionJournal(ctx context.Context, key AttemptWorkt
 	return count > 0, nil
 }
 
+func (s *Store) GetFinalGatePromotionJournal(ctx context.Context, deliveryID string, generation int64,
+	headSHA string,
+) (PromotionJournal, error) {
+	if strings.TrimSpace(deliveryID) == "" || generation <= 0 || !validGitSHA(headSHA) {
+		return PromotionJournal{}, errors.New("final-gate promotion identity is required")
+	}
+	rows, err := s.db.QueryContext(ctx, promotionJournalSelect+` WHERE delivery_id = ?
+		AND candidate_head = ? AND validated_head = ? AND state = ? AND cleanup_complete = 1
+		AND (generation = ? OR (generation + 1 = ? AND EXISTS (
+			SELECT 1 FROM human_decisions h WHERE h.delivery_id = promotion_journals.delivery_id
+			AND h.generation = promotion_journals.generation AND h.approved = 1))) LIMIT 2`,
+		deliveryID, headSHA, headSHA, PromotionJournalComplete, generation, generation)
+	if err != nil {
+		return PromotionJournal{}, err
+	}
+	defer func() { _ = rows.Close() }()
+	var journal PromotionJournal
+	count := 0
+	for rows.Next() {
+		journal, err = scanPromotionJournal(rows)
+		if err != nil {
+			return PromotionJournal{}, err
+		}
+		count++
+	}
+	if err := rows.Err(); err != nil {
+		return PromotionJournal{}, err
+	}
+	if count != 1 {
+		return PromotionJournal{}, errors.New("exactly one resolved promotion must bind the final gate")
+	}
+	return journal, nil
+}
+
 func (s *Store) GetPromotionJournal(ctx context.Context, journalID string) (PromotionJournal, error) {
 	if err := validatePromotionJournalID(journalID); err != nil {
 		return PromotionJournal{}, err

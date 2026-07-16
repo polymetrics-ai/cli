@@ -204,7 +204,7 @@ func loadPinnedUnitRegistryWithOptions(ctx context.Context, command []string, gs
 	stdout.limit = maxNormalizedRegistryBytes + 1
 	stderr.limit = maxRegistryStderrBytes
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
-	if runErr := cmd.Run(); runErr != nil {
+	if runErr := runProcessTree(cmd); runErr != nil {
 		if exportCtx.Err() != nil {
 			return UnitRegistry{}, registryMismatch("official registry exporter was cancelled or timed out")
 		}
@@ -552,6 +552,9 @@ func requireJSONEOF(decoder *json.Decoder) error {
 	return nil
 }
 
+// RejectDuplicateJSONFields rejects duplicate keys at every JSON object depth.
+func RejectDuplicateJSONFields(raw []byte) error { return rejectDuplicateJSONFields(raw) }
+
 func rejectDuplicateJSONFields(raw []byte) error {
 	decoder := json.NewDecoder(bytes.NewReader(raw))
 	decoder.UseNumber()
@@ -564,7 +567,46 @@ func rejectDuplicateJSONFields(raw []byte) error {
 		}
 		return errors.New("trailing JSON token")
 	}
-	return nil
+	return rejectLifecycleJSONAliases(raw)
+}
+
+func rejectLifecycleJSONAliases(raw []byte) error {
+	canonical := []string{
+		"type", "id", "willRetry", "message", "messages", "role", "content", "stopReason",
+		"toolName", "toolCallId", "isError", "runId", "unitId", "status", "model", "provider",
+		"level", "parentRunId", "parentAgentId", "agentId", "subagentId", "scope", "source",
+		"method", "title", "options", "input", "args", "questions", "header", "question", "label",
+	}
+	var value any
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	if err := decoder.Decode(&value); err != nil {
+		return err
+	}
+	var walk func(any) error
+	walk = func(current any) error {
+		switch typed := current.(type) {
+		case map[string]any:
+			for key, nested := range typed {
+				for _, exact := range canonical {
+					if strings.EqualFold(key, exact) && key != exact {
+						return fmt.Errorf("noncanonical JSON field alias %q", key)
+					}
+				}
+				if err := walk(nested); err != nil {
+					return err
+				}
+			}
+		case []any:
+			for _, nested := range typed {
+				if err := walk(nested); err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	}
+	return walk(value)
 }
 
 func walkJSONValue(decoder *json.Decoder) error {
@@ -578,8 +620,11 @@ func walkJSONValue(decoder *json.Decoder) error {
 	}
 	switch delim {
 	case '{':
-		seen := make(map[string]struct{})
+		seen := make([]string, 0)
 		for decoder.More() {
+			if len(seen) >= 1024 {
+				return errors.New("JSON object exceeds its field-count bound")
+			}
 			keyToken, err := decoder.Token()
 			if err != nil {
 				return err
@@ -588,10 +633,12 @@ func walkJSONValue(decoder *json.Decoder) error {
 			if !ok {
 				return errors.New("JSON object key is not a string")
 			}
-			if _, duplicate := seen[key]; duplicate {
-				return fmt.Errorf("duplicate JSON field %q", key)
+			for _, observed := range seen {
+				if strings.EqualFold(observed, key) {
+					return fmt.Errorf("duplicate JSON field %q", key)
+				}
 			}
-			seen[key] = struct{}{}
+			seen = append(seen, key)
 			if err := walkJSONValue(decoder); err != nil {
 				return err
 			}
@@ -724,7 +771,7 @@ func (r UnitRegistry) ValidateObservedTool(unitType, observedTool string) error 
 func canonicalObservedToolName(tool string) (string, error) {
 	parts := strings.Split(tool, "__")
 	if len(parts) == 3 && parts[0] == "mcp" && parts[1] != "" && parts[2] != "" {
-		if parts[1] != "gsd-workflow" && strings.HasPrefix(parts[2], "gsd_") {
+		if parts[1] != "gsd-workflow" && (strings.HasPrefix(parts[2], "gsd_") || parts[2] == "ask_user_questions") {
 			return "", registryMismatch(fmt.Sprintf("untrusted MCP namespace %q for workflow tool", parts[1]))
 		}
 		return parts[2], nil

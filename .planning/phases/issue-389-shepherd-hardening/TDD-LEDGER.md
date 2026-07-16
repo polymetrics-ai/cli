@@ -324,7 +324,7 @@ classification, and deferred delivery-finish error propagation. The accepted
 same-UID host assumption remains documented; unsupported non-Unix process-tree cleanup now fails
 planner construction closed.
 
-## Slice F — Authority-gated external effects — GREEN / REVIEWED / CHECKPOINT READY
+## Slice F — Authority-gated external effects — COMPLETE / GREEN at `ea88c92f`
 
 Slice E accepted GREEN at `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`.
 Orchestration: `local_critical_path`; no overlapping mutating worker. Read-only tester/reliability/
@@ -376,29 +376,92 @@ promotion-decision resolution, exact-head final-gate proof under repository lock
 repair, mandatory execution fences, bounded secret scanning, and old-generation uncertainty settlement
 before manual resume.
 
-## Slice G — Real supervise integration coverage
+## Slice G — Real supervise integration coverage — GREEN / REVIEW IN PROGRESS
 
-Planned RED tests:
-- [ ] success path reaches `final_human_gate` only after independent Sol/high validation,
-      ratification, and promotion.
-- [ ] missing/GPT-5.5 validator evidence fails without canonical mutation.
-- [ ] stale candidate head fails without canonical mutation.
-- [ ] validator `RETRY`/`HALT` fails without canonical mutation.
-- [ ] crash/restart at each promotion boundary.
-- [ ] retained failed attempt followed by fresh attempt.
-- [ ] recovery planning and `awaiting_decision` restart.
-- [ ] outbox restart and duplicate suppression.
-- [ ] official registry spread metadata.
-- [ ] canonical worktree unchanged on every failed path.
+Base: accepted Slice F checkpoint `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`.
+Orchestration: `local_critical_path`; one sequential harness/command/storage trust boundary, no
+mutating sidecar. Read-only recon/reliability/security/review sidecars may overlap.
+GSD command: `scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto`.
+Skills: `gsd-core`, `polymetrics-issue-delivery`, `golang-how-to`, `golang-cli`, `golang-testing`,
+`golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`,
+`golang-database`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-lint`, and
+`golang-troubleshooting`. Requested `.pi/skills/go-implementation/SKILL.md` is absent; no manual-GSD
+fallback is used because the repo-local programming-loop adapter is healthy.
 
-GREEN evidence: pending.
-Refactor evidence: pending.
+Process-level tests (`//go:build integration`):
+- [x] real built CLI parses supervise args/config and reaches `final_human_gate` only after GPT-5.5/high
+      implementation, fresh GPT-5.6 Sol/high validation, exact candidate proof, ratification, journaled
+      Git/GSD promotion, attempt cleanup, and outbox convergence; merge is never attempted.
+- [x] missing validator result, GPT-5.5 validator identity, non-high thinking, stale/moving candidate,
+      `RETRY`, `HALT`, missing required gate, no governed delta, and missing/changed artifact each preserve
+      the complete canonical branch/head/status/GSD manifest and retain a bounded durable failure.
+- [x] subprocess termination/restart covers journal-created, normalized state staging, pre-Git, post-Git,
+      both state-swap rename boundaries, post-install/pre-complete, and final-gate projection without
+      duplicate promotion or mixed canonical Git/GSD.
+- [x] termination while running, validation timeout then fresh attempt, exact branch/path/session identity,
+      no old candidate/validator proof reuse, and unknown/ambiguous worktree preservation/blocking pass.
+- [x] typed recovery planning uses a fresh GPT-5.6 Sol/high process, fenced budget reservation,
+      deterministic exhaustion/`awaiting_decision`, restart-safe exact reply acceptance, and unauthorized,
+      edited, stale, or duplicate reply rejection without lost/duplicate requests.
+- [x] pending, expired-claim, post-write/pre-sent crash, exact-marker reconciliation, duplicate suppression,
+      duplicate-marker collision blocking, and markerless uncertainty never blindly replay.
+- [x] official GSD 1.11 spread metadata preserves exact phase chains/tool contracts and routes execution to
+      GPT-5.5/high and planning to GPT-5.6 Sol/high; unknown/partial/stale metadata fails closed.
+- [x] every test invokes the actual executable/config/process boundary, uses isolated real Git/SQLite
+      state, strict deterministic argv fakes, bounded heartbeat/output, sanitized environment, no network/
+      credential access, race-instrumented child binaries, and no test order.
+
+RED evidence (2026-07-16, before production edits):
+- `cd agent-runtime/shepherd && go test -tags=integration ./integration/... -run TestSuperviseFakeRuntime -count=1` fails.
+- Success fails at the actual built CLI with `runtime admission: runtime_contract_mismatch: complete installed GSD runtime tree differs from the qualified package`; the fake executor is never observed.
+- All seven validator-rejection cases fail before `authority.db` exists, proving direct-call package-main helpers do not exercise the real command/admission boundary and cannot satisfy Slice G.
+- Root cause: the built command couples full pinned host runtime preparation to the child executor. A compile-tagged integration binary needs a narrow bounded fake executor seam while retaining exact official registry export/admission, metadata routing, command/config parsing, stores, validation, ratification, promotion, outbox, and final-gate paths. Release builds must have no reachable override.
+GREEN evidence (2026-07-16):
+- actual-CLI success/rejection/registry/recovery tests pass with real local Git and SQLite;
+- normalized SQLite/WAL-aware GSD snapshots bind validation evidence to the exact installed stage;
+- candidate no-delta, post-validator mutation, and post-final-gate canonical GSD drift fail closed;
+- Slice-F-format post-Git journals retain forward recovery compatibility;
+- outbox pending/claimed/sent/uncertain and duplicate-marker boundaries converge without blind replay;
+- implementation and planner/validator sessions are fresh, model/thinking bound, and joined to exact
+  proof/promotion identities in process assertions;
+- `go test -tags=integration ./integration/... -count=1` passes;
+- `go test -race -tags=integration ./integration/... -count=1` passes with race-built Shepherd/helper children;
+- full nested unit/race/vet/build and nested `make verify` pass;
+- root `make verify`, module boundary, root package listing, formatting, JSON, and diff checks pass;
+- default and integration-tagged lint each remain exactly the accepted 28 findings (25 `errcheck`,
+  2 `staticcheck`, 1 `unused`) with zero differential.
+
+Refactor evidence:
+- two independent GPT-5.6 Sol/xhigh read-only cycles found and drove fixes for fake-GitHub target/payload
+  strictness, credential-free environments, session binding, candidate-local workflow state, complete
+  canonical/proof oracles, child race instrumentation, normalized staged-state binding, legacy post-Git
+  recovery, continuous heartbeat evidence, reply ambiguity, and final-gate GSD revalidation;
+- the first exact-head review of `4592734803f20e1b4893efae2ebd900525a92868` found missing continuous
+  decision polling/expiry, SIGINT and pre-send outbox boundaries, terminal Pi lifecycle handling, and
+  ordinary-exit descendant cleanup; sequential fixes add exact branch/head/lock/lease application fences,
+  same-process decision tests, complete ordered lifecycle/tool pairing, controller-owned process pipes,
+  and inherited-output descendant regressions;
+- replacement exact-head review at `b08c93cc6b1de6a6c89d57c14da6c14d01d7e420` found validator
+  turn/session provenance gaps; sequential fixes require complete successful non-retrying Pi lifecycle,
+  exact stream-to-final-durable-proof hashing, and an exclusively created fresh session directory, with
+  missing/duplicate/out-of-order/error/retry/tool-before-message/session/proof-reuse regressions;
+- exact-head review at `c1a34d23585329a9eb7f64a1ef687e0268c17666` found implementation-turn,
+  lifecycle-alias, durable assistant-row, and escaped-output-drain gaps. Fixes require final successful
+  implementation turns and durable stops, recursive case-fold/Unicode-safe canonical JSON fields with a
+  strict object-field bound, type=`message` assistant provenance, and bounded controller pipe draining;
+- exact-head review at `ee8f1fa785a8a44295d839b3bac9c970a81f37cd` found missing positive
+  workflow-transition and validator evidence-tool provenance. Fixes require every official required tool
+  to complete successfully, persist observed transitions in the validator-bound manifest, recheck them at
+  promotion, and reject zero/missing/failed validator evidence-tool outcomes;
+- exact-head review at `3542ee007df66648c1f1292e2f0d58d04a8dada5` found explicit errored
+  implementation/validator `agent_end` statuses were ignored; both paths now reject every explicit
+  non-success terminal status with process-level regressions;
+- final post-fix GPT-5.6 Sol/xhigh correctness/security working-tree closure reports no unresolved Slice G
+  finding. The next exact-head pass follows checkpoint amendment because its future SHA cannot be recorded.
 
 ## Verification log
 
-Slices A-E are accepted at their recorded exact checkpoints. Slice F planning is active at immutable
-base `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`; local and remote matched and the worktree was clean
-before planning-only edits. The Slice F RED failure must be captured next, before production code. GREEN
-then requires the focused outbox/store/GitHub/domain/recovery/command gate, full nested tests/race/vet/
-build/`make verify`, root verification, module boundary, diff/package checks, and zero findings beyond
-the accepted 28-finding lint baseline.
+Slices A-F remain accepted at their exact checkpoints. Slice G is GREEN, working-tree reviewed with no
+findings, and checkpoint-ready on immutable base `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`;
+checkpoint creation followed by immutable exact-head review, push, and equality confirmation remain.
+No live GitHub/API mutation, connector access, canary, cleanup/migration, PR creation, or parent merge ran.

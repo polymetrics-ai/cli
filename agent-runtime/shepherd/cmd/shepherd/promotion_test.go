@@ -2,7 +2,10 @@ package main
 
 import (
 	"context"
+	"crypto/sha256"
 	"database/sql"
+	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"os"
 	"path/filepath"
@@ -11,6 +14,7 @@ import (
 	"time"
 
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 	_ "modernc.org/sqlite"
 )
 
@@ -58,6 +62,7 @@ func TestPromotionFailureBoundariesRecoverForwardIdempotently(t *testing.T) {
 	}
 	boundaries := []promotionBoundary{
 		promotionAfterJournalCreated,
+		promotionAfterStateStaged,
 		promotionBeforeGit,
 		promotionAfterGit,
 		promotionAfterGitJournaled,
@@ -94,7 +99,7 @@ func TestPromotionFailureBoundariesRecoverForwardIdempotently(t *testing.T) {
 			if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM promotion_journals WHERE state <> 'complete'"); count != wantIncomplete {
 				t.Fatalf("incomplete journals=%d want %d", count, wantIncomplete)
 			}
-			if boundary == promotionAfterJournalCreated || boundary == promotionBeforeGit {
+			if boundary == promotionAfterJournalCreated || boundary == promotionAfterStateStaged || boundary == promotionBeforeGit {
 				decisionReplyPollerFactory = func() decisionReplyPoller {
 					return decisionReplyPollerFunc(func(_ context.Context, request shepherdgithub.QuestionRequest,
 						actor string,
@@ -401,7 +406,67 @@ func TestPromotionRecoveryExpiredBeforeGitFailsClosed(t *testing.T) {
 	}
 }
 
-func TestPromotionRecoveryAfterGitIgnoresLaterAttestationExpiryAndCompletesForward(t *testing.T) {
+func TestValidatedGSDManifestHashDistinguishesLegacyFromCorruption(t *testing.T) {
+	legacyRaw := `{"unit_type":"execute-task","phase_chain":["execution"],"required_workflow_tools":["gsd_task_complete"],"artifacts":[{"path":"STATE.md","hash":"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}]}`
+	legacyDigest := sha256.Sum256([]byte(legacyRaw))
+	_, err := validatedGSDManifestHash(store.ArtifactProof{ExpectedArtifact: legacyRaw,
+		ArtifactHash: "sha256:" + hex.EncodeToString(legacyDigest[:])})
+	if !errors.Is(err, errLegacyGSDManifest) {
+		t.Fatalf("legacy manifest err=%v", err)
+	}
+	for _, raw := range []string{
+		"{}", "null", legacyRaw + " trailing",
+		strings.Replace(legacyRaw, `"artifacts"`, `"gsd_manifest_hash":null,"artifacts"`, 1),
+		strings.Replace(legacyRaw, `"artifacts"`, `"gsd_manifest_hash":"","artifacts"`, 1),
+		strings.Replace(legacyRaw, `"artifacts"`, `"gsd_manifest_hash":"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","gsd_manifest_hash":"sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","artifacts"`, 1),
+	} {
+		digest := sha256.Sum256([]byte(raw))
+		if _, err := validatedGSDManifestHash(store.ArtifactProof{ExpectedArtifact: raw,
+			ArtifactHash: "sha256:" + hex.EncodeToString(digest[:])}); err == nil ||
+			errors.Is(err, errLegacyGSDManifest) {
+			t.Fatalf("corrupt manifest %q err=%v", raw, err)
+		}
+	}
+}
+
+func TestPromotionRecoveryBlocksLegacyProofBeforeGit(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	base := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
+	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{
+		result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED"),
+	})
+	defer restoreValidator()
+	restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(promotionBeforeGit))
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+		false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("injected failure succeeded")
+	}
+	restoreFailpoint()
+	db, err := sql.Open("sqlite", filepath.Join(config.StateDir, "authority.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	downgradePromotionProofToLegacy(t, db)
+	if err := db.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+		false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("legacy pre-Git proof recovered without normalized state binding")
+	}
+	if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != base {
+		t.Fatalf("legacy pre-Git recovery changed head: %s != %s", got, base)
+	}
+	if count := countSQLiteQueryForTest(t, filepath.Join(config.StateDir, "authority.db"),
+		"SELECT COUNT(*) FROM promotion_journals WHERE state = 'blocked' AND blocked_reason = 'legacy_pre_git_manifest_requires_human_reconciliation'"); count != 1 {
+		t.Fatalf("blocked legacy journals=%d", count)
+	}
+}
+
+func TestPromotionRecoveryAfterGitCompletesLegacyProofForward(t *testing.T) {
 	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
 		return
 	}
@@ -422,10 +487,7 @@ func TestPromotionRecoveryAfterGitIgnoresLaterAttestationExpiryAndCompletesForwa
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := db.Exec(`UPDATE attestations SET expires_at = 1`); err != nil {
-		_ = db.Close()
-		t.Fatal(err)
-	}
+	downgradePromotionProofToLegacy(t, db)
 	if err := db.Close(); err != nil {
 		t.Fatal(err)
 	}
@@ -438,6 +500,35 @@ func TestPromotionRecoveryAfterGitIgnoresLaterAttestationExpiryAndCompletesForwa
 	}
 	if got := readFileForTest(t, filepath.Join(repo, ".gsd", "STATE.md")); got != "fake completed state\n" {
 		t.Fatalf("state=%q", got)
+	}
+}
+
+func downgradePromotionProofToLegacy(t *testing.T, db *sql.DB) {
+	t.Helper()
+	var proofID, expectedArtifact string
+	if err := db.QueryRow(`SELECT proof_id, expected_artifact FROM artifact_proofs`).Scan(&proofID, &expectedArtifact); err != nil {
+		t.Fatal(err)
+	}
+	var legacyManifest map[string]any
+	if err := json.Unmarshal([]byte(expectedArtifact), &legacyManifest); err != nil {
+		t.Fatal(err)
+	}
+	delete(legacyManifest, "gsd_manifest_hash")
+	legacyRaw, err := json.Marshal(legacyManifest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	legacyDigest := sha256.Sum256(legacyRaw)
+	legacyHash := "sha256:" + hex.EncodeToString(legacyDigest[:])
+	if _, err := db.Exec(`UPDATE artifact_proofs SET expected_artifact = ?, artifact_hash = ? WHERE proof_id = ?`,
+		string(legacyRaw), legacyHash, proofID); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(`UPDATE attestations SET evidence_hash = ?, expires_at = 1`, legacyHash); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(`UPDATE promotion_journals SET evidence_hash = ?`, legacyHash); err != nil {
+		t.Fatal(err)
 	}
 }
 

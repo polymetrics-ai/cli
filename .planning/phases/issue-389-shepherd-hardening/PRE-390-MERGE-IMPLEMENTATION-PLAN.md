@@ -1149,22 +1149,29 @@ Only after all evidence is complete:
 
 # Implementation checklist summary
 
+Slice G local integration evidence is GREEN as of 2026-07-16: normal/race actual-CLI suites,
+normalized GSD staging/final-gate proofs, outbox/decision/restart matrices, nested/root verification,
+and the no-differential lint baseline pass. Final working-tree correctness/security reviews report no
+findings after dispositioning the first `45927348` exact-head review; checkpoint amendment and its
+replacement immutable exact-head review remain;
+canaries, cleanup/migration, parent integration, PR updates, and merge remain human-gated/deferred.
+
 Use this as the high-level progress checklist.
 
-- [ ] Issue A: GSD 1.11 unit-registry compatibility implemented and verified.
-- [ ] Issue A: official phase metadata routes models correctly.
-- [ ] Issue B: disposable per-attempt worktrees implemented and verified.
-- [ ] Issue B: promote/discard/recovery semantics are durable and restart-safe.
-- [ ] Issue C: artifact proof implemented and verified.
-- [ ] Issue C: exact-head continuity implemented and verified.
-- [ ] Issue C: Sol/high validation and ratification implemented and verified.
-- [ ] Issue C: authority-gated outbox implemented and verified.
-- [ ] Issue D: durable `awaiting_decision` implemented and verified.
-- [ ] Issue D: GitHub question/reply broker implemented and verified.
-- [ ] Issue E: per-class recovery budgets implemented and verified.
-- [ ] Issue E: Sol/high recovery planning implemented and verified.
-- [ ] Issue F: real `shepherd supervise` fake-runtime integration reaches `final_human_gate`.
-- [ ] Issue F: restart/recovery integration passes.
+- [x] Issue A: GSD 1.11 unit-registry compatibility implemented and verified.
+- [x] Issue A: official phase metadata routes models correctly.
+- [x] Issue B: disposable per-attempt worktrees implemented and verified.
+- [x] Issue B: promote/discard/recovery semantics are durable and restart-safe.
+- [x] Issue C: artifact proof implemented and verified.
+- [x] Issue C: exact-head continuity implemented and verified.
+- [x] Issue C: Sol/high validation and ratification implemented and verified.
+- [x] Issue C: authority-gated outbox implemented and verified.
+- [x] Issue D: durable `awaiting_decision` implemented and verified.
+- [x] Issue D: GitHub question/reply broker implemented and verified.
+- [x] Issue E: per-class recovery budgets implemented and verified.
+- [x] Issue E: Sol/high recovery planning implemented and verified.
+- [x] Issue F: real `shepherd supervise` fake-runtime integration reaches `final_human_gate`.
+- [x] Issue F: restart/recovery integration passes.
 - [ ] Issue G: merge-disabled Twenty canary reaches `final_human_gate`.
 - [ ] Issue G: merge-disabled Asana canary reaches `final_human_gate`.
 - [ ] Issue H: post-canary Shepherd Podman cleanup completed or explicitly deferred.

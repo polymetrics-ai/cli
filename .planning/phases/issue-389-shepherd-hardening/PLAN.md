@@ -13,16 +13,20 @@ exact candidate head has been independently validated by GPT-5.6 Sol/high.
 - Active GSD command: `scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto`
 - GSD adapter health/provenance: `scripts/gsd doctor`, `scripts/gsd list`, and
   `scripts/gsd sources programming-loop`.
-- Required reading completed for Slice F: `AGENTS.md`, required-skills routing, GSD Pi adapter,
+- Required reading completed for Slice G: `AGENTS.md`, required-skills routing, GSD Pi adapter,
   issue-agent contract, universal runtime loop, local review loop, runtime/RLM integration reference,
   issue #389 planning artifacts, and the applicable project/Go skills.
 - Skills loaded/recorded: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`,
   `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-safety`,
   `golang-security`, `golang-context`, `golang-concurrency`, `golang-database`,
   `golang-design-patterns`, `golang-structs-interfaces`, `golang-observability`, `golang-lint`,
-  `golang-code-style`, `golang-naming`, and `golang-documentation`.
-- Immutable Slice F base: `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`; local and remote heads
-  matched and the worktree was clean before these planning-only edits.
+  `golang-code-style`, `golang-naming`, `golang-documentation`, and `golang-troubleshooting`.
+- Requested `.pi/skills/go-implementation/SKILL.md` is absent in this checkout; the available
+  repo-local `gsd-core`/`polymetrics-issue-delivery` skills plus `golang-how-to` and the recorded
+  task-specific Go skills are the non-manual workflow path. No GSD fallback is used.
+- Immutable Slice G base / accepted Slice F checkpoint:
+  `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`; local and remote heads matched and the worktree was
+  clean before Slice G planning edits.
 
 ## Reconciled status at start of proof-recovery
 
@@ -70,8 +74,13 @@ status is therefore **not validated, not ratified, not canary-ready**.
     `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`. Slice F uses `local_critical_path` because effect
     schemas, controller-derived authorization, durable outbox state, fenced claims, executor capability
     isolation, reconciliation, and command integration form one sequential trust boundary. Only
-    read-only tester/reviewer/reliability/security sidecars may overlap. Slice G onward, PR creation,
-    live GitHub mutation, canaries, cleanup/migration, and parent PR #390 merge remain blocked.
+    read-only tester/reviewer/reliability/security sidecars may overlap.
+13. `cycle-21/slice-g`: Slice F is accepted GREEN at
+    `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`. Slice G uses `local_critical_path` because the real
+    command boundary, process fakes, isolated Git/state roots, official registry, SQLite stores, and
+    crash synchronization share one test trust boundary. Read-only recon/review sidecars may overlap;
+    no mutating worker may share this checkout. PR creation, live GitHub mutation, canaries,
+    cleanup/migration, and parent PR #390 merge remain blocked.
 
 ## Ordered implementation slices
 
@@ -251,7 +260,7 @@ the exact 28-finding no-differential lint baseline, and independent Sol/high cor
 review cycles pass with all actionable findings dispositioned. Accepted checkpoint:
 `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`.
 
-### F. Authority-gated external effects — GREEN / REVIEWED / CHECKPOINT READY
+### F. Authority-gated external effects — COMPLETE / GREEN at `ea88c92f`
 
 Orchestration: `local_critical_path`; no overlapping mutating worker. Read-only tester, reliability,
 reviewer, and security sidecars may overlap. No live GitHub mutation is permitted in this slice.
@@ -303,7 +312,16 @@ fully dispositioned, including final exact-head correctness/restart closure with
 No live GitHub mutation occurred. The coherent checkpoint is ready; push only this branch, confirm
 local/remote equality and cleanliness, then stop before Slice G.
 
-### G. Real supervise integration coverage
+### G. Real supervise integration coverage — GREEN / CHECKPOINT READY
+
+Orchestration: `local_critical_path`; no overlapping mutating worker. Build-tagged integration tests
+invoke the built `shepherd supervise` executable with isolated real Git repositories and SQLite
+stores. Only GSD/Pi/GitHub process boundaries may be deterministic fakes. No live external API call,
+credential access, production crash flag, dependency addition, PR, canary, migration, cleanup, or
+parent merge is permitted.
+
+CLI parity: test-only coverage uses the existing command/config/output contract; no command, flag, help,
+manual, or website surface changed, so additional parity artifacts are not applicable.
 
 RED tests first for:
 - successful implementation -> independent Sol/high validation -> ratification -> promotion ->
@@ -318,13 +336,40 @@ RED tests first for:
 - official registry spread metadata;
 - canonical worktree unchanged on every failed path.
 
-GREEN target: deterministic local integration tests using fakes for external services, plus full nested
-module gates. Live canaries remain deferred until independent validation passes and human approval exists.
+GREEN delivered: the `//go:build integration` harness under `agent-runtime/shepherd/integration/`
+builds real normal/race binaries, invokes actual `shepherd supervise`, creates isolated repositories,
+state/GSD/attempt roots, and strict bounded argv fakes, and verifies stdout/exit, complete canonical
+state, official metadata routing, durable session/proof/attestation/journal/attempt/decision/outbox
+joins, and continuous bounded telemetry. Compile-only executor/crash seams are inert in release builds.
+RED-driven production fixes add post-validator artifact checks, typed validator deadlines, no-delta
+rejection, normalized WAL-safe GSD evidence/staging, Slice-F post-Git compatibility, final-gate
+canonical GSD revalidation, continuous fenced decision polling/expiry, complete Pi/GSD lifecycle
+validation, and synchronous process-group cleanup across every qualified GSD subprocess path.
+
+Focused and all four `-tags=integration` gates pass, including race-built child processes. Full nested
+unit/race/vet/build/`make verify`, root `make verify`, module boundary, root `go list`, diff/JSON/format,
+and exact 28-finding default/tagged lint baseline pass with zero Slice G differential. The first exact-head pass at `4592734803f20e1b4893efae2ebd900525a92868` found continuous-decision,
+SIGINT, pre-send outbox, Pi terminal-event, and descendant-cleanup gaps. Those findings were fixed with
+same-process reply/expiry coverage, exact application fences, complete lifecycle/tool pairing, controller-
+owned process pipes, and immediate-exit regressions. Replacement exact-head review at
+`b08c93cc6b1de6a6c89d57c14da6c14d01d7e420` then found incomplete validator turn/session provenance.
+The validator now requires a fresh exclusive session directory, complete successful non-retrying Pi
+turn/message lifecycle, and an exact hash match between stream proof and the final durable assistant
+response. Exact-head review at `c1a34d23585329a9eb7f64a1ef687e0268c17666` then hardened the same
+standard for implementation turns, durable final-stop evidence, duplicate/case-fold/Unicode aliases,
+assistant-row provenance, and bounded detached-child output drains. Exact-head review at
+`ee8f1fa785a8a44295d839b3bac9c970a81f37cd` then required positive provenance for every official
+required workflow transition and explicit successful validator evidence-gathering tools; both are now
+hashed into proof or fail closed. Final GPT-5.6 Sol/xhigh correctness/security working-tree closure reports
+no unresolved Slice G finding. The next immutable exact-head pass follows checkpoint
+amendment; that future SHA cannot be recorded here. Live
+canaries stay deferred.
 
 ## Checkpoints
 
-- Do not checkpoint planning-only Slice F activation separately; production RED evidence follows next.
-- Commit/push one coherent GREEN Slice F checkpoint after focused/full gates and exact-head independent
-  reviews pass; preferred subject: `feat(shepherd): fence external effects through outbox`.
+- Do not checkpoint Slice G planning-only activation separately; capture process-level RED first.
+- Commit/push one coherent GREEN Slice G checkpoint after focused/full gates and exact-head independent
+  review pass. Preferred test-only subject: `test(shepherd): exercise supervise lifecycle end to end`;
+  use an accurate `fix(shepherd): ...` subject if production defects require correction.
 - Confirm exact local/remote branch equality, clean worktree, and no generated binaries, then stop before
-  Slice G, PR creation, canaries, live GitHub mutation, cleanup/migration, or parent PR #390 merge.
+  canaries, PR creation, live GitHub mutation, cleanup/migration, or parent PR #390 merge.

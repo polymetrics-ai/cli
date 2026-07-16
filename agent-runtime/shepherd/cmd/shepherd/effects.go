@@ -243,6 +243,7 @@ func (c *externalEffectController) request(ctx context.Context, intent outbox.In
 	if err != nil {
 		return outbox.Result{}, fmt.Errorf("enqueue authorized external effect: %w", err)
 	}
+	integrationEffectEnqueuedBoundary()
 	return c.dispatchRecord(ctx, authorization, record, now)
 }
 
@@ -255,14 +256,14 @@ func (c *externalEffectController) dispatchRecord(ctx context.Context, authoriza
 	case outbox.StateSent:
 		return record.Result, nil
 	case outbox.StatePending:
-		return c.dispatcher.Dispatch(ctx, authorization, c.lease.Owner, c.lease.Epoch, now, effectClaimTTL)
+		return c.dispatcher.Dispatch(ctx, authorization, c.lease.Owner, c.lease.Epoch, now, integrationEffectTTL())
 	case outbox.StateFailed:
 		if err := c.store.RetryFailed(ctx, authorization, now); err != nil {
 			return outbox.Result{}, err
 		}
-		return c.dispatcher.Dispatch(ctx, authorization, c.lease.Owner, c.lease.Epoch, now, effectClaimTTL)
+		return c.dispatcher.Dispatch(ctx, authorization, c.lease.Owner, c.lease.Epoch, now, integrationEffectTTL())
 	case outbox.StateUncertain:
-		return c.dispatcher.Reconcile(ctx, authorization, c.lease.Owner, c.lease.Epoch, now, effectClaimTTL)
+		return c.dispatcher.Reconcile(ctx, authorization, c.lease.Owner, c.lease.Epoch, now, integrationEffectTTL())
 	case outbox.StateClaimed:
 		return outbox.Result{}, errors.New("external effect is already claimed and requires fenced recovery")
 	case outbox.StateBlocked, outbox.StateCancelled:

@@ -356,7 +356,7 @@ func ValidatePinnedContainer(ctx context.Context, config ContainerConfig, expect
 	var stdout, stderr boundedBuffer
 	stdout.limit, stderr.limit = 64*1024, 64*1024
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
-	if err := cmd.Run(); err != nil {
+	if err := runProcessTree(cmd); err != nil {
 		return fmt.Errorf("run pinned GSD container: %w", err)
 	}
 	if stdout.Truncated() || stderr.Truncated() {

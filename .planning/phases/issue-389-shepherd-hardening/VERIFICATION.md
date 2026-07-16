@@ -156,7 +156,7 @@ Final local review disposition (four independent read-only reviewer/security cyc
 - [x] Lint equals the accepted 28-finding baseline with zero Slice E findings.
 - [x] Independent Sol/high correctness and security reviews have no unresolved actionable findings.
 
-### F. Authority-gated external effects — GREEN / REVIEWED / CHECKPOINT READY
+### F. Authority-gated external effects — COMPLETE / GREEN `ea88c92f`
 
 Architecture and authority:
 - [x] Decision summaries, questions, statuses, and future governed mutations route only through the
@@ -197,19 +197,42 @@ Gates and review:
       actionable findings.
 - [x] No live GitHub mutation occurred.
 
-### G. Integration coverage
+### G. Real supervise integration coverage — GREEN / EXACT-HEAD REVIEW PENDING
 
-- [ ] Successful implementation -> independent Sol/high validation -> ratification -> promotion ->
-      `final_human_gate`.
-- [ ] Missing or GPT-5.5 validator evidence.
-- [ ] Stale candidate head.
-- [ ] Validator `RETRY`/`HALT`.
-- [ ] Crash/restart at every promotion boundary.
-- [ ] Retained failed attempt followed by fresh attempt.
-- [ ] Recovery planning and `awaiting_decision` restart.
-- [ ] Outbox restart and duplicate suppression.
-- [ ] Official registry spread metadata.
-- [ ] Canonical worktree remains unchanged on every failed path.
+Harness integrity:
+- [x] `//go:build integration` tests build a temporary Shepherd executable and invoke actual
+      `shepherd supervise` argv/config parsing; no direct `runSupervise` shortcut.
+- [x] Each test owns isolated real Git, SQLite, GSD home/state, attempt root, process logs, and fakes.
+- [x] GSD/Pi/GitHub fakes are bounded strict-argv processes; no network, credentials, shared user state,
+      production-reachable crash flag, or order dependence.
+
+Lifecycle and rejection:
+- [x] Success proves metadata-routed GPT-5.5/high implementation, fresh GPT-5.6 Sol/high validation,
+      exact-head/hash artifact proof, attestation/ratification, normalized Git/GSD promotion, safe attempt
+      cleanup, durable outbox convergence, terminal JSON `final_human_gate`, and no merge attempt.
+- [x] Missing/GPT-5.5/non-high validator evidence, stale/moving candidate, `RETRY`, `HALT`, missing gate,
+      no governed delta, and missing/changed artifact preserve canonical branch/head/status/GSD and persist
+      correct bounded failure/retention.
+- [x] Promotion restart covers every durable journal/Git/state-swap/final-projection boundary with
+      idempotent forward convergence, WAL-normalized proof binding, legacy post-Git recovery, and no mixed state.
+- [x] Running termination, validation failure/fresh attempt, exact session/path identity, stale evidence
+      rejection, and unknown/ambiguous worktree preservation/blocking pass.
+- [x] Recovery planning/budget/awaiting-decision/reply restart and unauthorized/edited/stale/duplicate reply
+      rejection pass.
+- [x] Outbox pending/expired claim/post-write uncertainty/reconciliation/duplicate/collision cases suppress
+      duplicate writes and never blindly replay.
+- [x] Official registry spread metadata preserves exact phase/tool contracts and routes by phase; unknown/
+      partial/stale metadata fails closed.
+
+Required gates:
+- [x] `go test -tags=integration ./integration/... -run TestSuperviseFakeRuntime -count=1`.
+- [x] `go test -tags=integration ./integration/... -run TestSuperviseRestart -count=1`.
+- [x] `go test -tags=integration ./integration/... -count=1`.
+- [x] `go test -race -tags=integration ./integration/... -count=1` (race-built child processes).
+- [x] Focused component regression command passes.
+- [x] Full nested tests/race/vet/build/`make verify`, root `make verify`, boundary, diff, and root list pass.
+- [x] Default and integration-tagged lint remain exactly 28 accepted findings with zero Slice G differential.
+- [ ] Exact-head GPT-5.6 Sol/high correctness/restart/security/test-realism review has no unresolved finding.
 
 ## Required command gates after each coherent slice
 
@@ -273,5 +296,40 @@ go list ./...
 - Slice F independent correctness/security/restart reviews: all actionable findings dispositioned through repeated GPT-5.6 Sol/xhigh read-only cycles.
 - Slice F live mutation: none; GitHub behavior used fakes and durable local stores only.
 - Slice F exact-head correctness/restart closure: no actionable findings after all review fixes.
-- Slice F checkpoint is locally ready; push/equality/cleanliness confirmation remains.
-- Slice G onward, canaries, PR creation, live GitHub mutation, cleanup/migration, and parent PR #390 merge remain blocked.
+- Slice F accepted checkpoint: `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`; local/remote equality and cleanliness confirmed before Slice G.
+- Slice G programming-loop activation: PASS through the healthy repo-local adapter; requested
+  `.pi/skills/go-implementation/SKILL.md` is absent and recorded, without requiring manual fallback.
+- Slice G RED: captured before production edits. The required fake-runtime command failed at built-CLI
+  runtime admission before any store existed because no compile-tagged executor seam was available.
+- Slice G GREEN: PASS actual-CLI success/rejection/registry/recovery/outbox/promotion/final-gate suites,
+  including normalized WAL staging, Slice-F post-Git proof compatibility, post-validation/final-gate GSD
+  drift rejection, exact proof diff/hash/metadata oracles, strict fake GitHub writes, and two heartbeats.
+- Slice G full gates before exact-head review: PASS normal and race integration suites, full nested
+  unit/race/vet/build and nested `make verify`, root `make verify`, module boundary, root `go list`,
+  JSON/diff/format checks, and exact no-differential 28-finding default/tagged lint baseline.
+- Exact-head review-fix focused/full normal integration gates: PASS, including same-process decision reply
+  and expiry, real SIGINT, post-claim/post-execution outbox recovery, `agent_settled`, complete ordered
+  GSD lifecycle/tool pairing, and inherited-output descendant cleanup. Final normal/race integration,
+  nested `make verify`, root `make verify`, vet/build, module-boundary, JSON/diff/hygiene, and exact
+  no-differential 28-finding default/tagged lint gates pass before checkpoint amendment.
+- First exact-head review at `4592734803f20e1b4893efae2ebd900525a92868`: BLOCKED with actionable
+  continuous-decision, SIGINT, pre-send outbox, terminal-event, and descendant-cleanup findings.
+- Post-fix working-tree GPT-5.6 Sol/xhigh correctness/security closure: PASS; all first exact-head findings
+  dispositioned.
+- Replacement exact-head review at `b08c93cc6b1de6a6c89d57c14da6c14d01d7e420`: BLOCKED on incomplete
+  validator turn/session provenance. The validator now requires an exclusive fresh session root, ordered
+  successful non-retrying Pi lifecycle, and exact stream/final-durable-proof hash identity; focused review
+  reports no remaining finding.
+- Exact-head review at `c1a34d23585329a9eb7f64a1ef687e0268c17666`: BLOCKED on implementation
+  turn/final-stop proof, lifecycle JSON aliases, durable assistant row provenance, and unbounded detached
+  output drains. Fixes and adversarial regressions cover missing/error/retrying turns, exact durable stop,
+  duplicate/ASCII/Unicode aliases, assistant-shaped non-message rows, detached output, and bounded object
+  fields; final working-tree closure reports no finding.
+- Exact-head review at `ee8f1fa785a8a44295d839b3bac9c970a81f37cd`: BLOCKED on positive
+  workflow-transition and validator evidence-tool provenance. Complete required-tool sets, explicit
+  successful outcomes, hashed observed-tool manifests, promotion rechecks, zero/partial workflow negatives,
+  and zero/missing/failed validator-tool negatives now pass focused review with no findings.
+- Exact-head review at `3542ee007df66648c1f1292e2f0d58d04a8dada5`: implementation and validator
+  explicit errored `agent_end` statuses now fail closed with process regressions; RUN-STATE uses the required
+  auditable orchestration/verification schema. Next immutable exact-head closure follows amendment.
+- Canaries, PR creation, live GitHub mutation, cleanup/migration, later slices, and parent PR #390 merge remain blocked.

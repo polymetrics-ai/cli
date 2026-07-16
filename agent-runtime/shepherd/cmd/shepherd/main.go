@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -44,6 +45,8 @@ const defaultMaxEventBytes = 8 * 1024 * 1024
 const defaultWriteScopePollInterval = 500 * time.Millisecond
 
 var errPreDispatchAttemptQuery = errors.New("pre-dispatch attempt query failed")
+
+var exitAwaitingDecision = integrationExitAwaitingDecision
 
 var independentValidatorFactory = func(_ *gsd.Runner, config fileConfig) validation.Validator {
 	return validation.GSDValidator{
@@ -249,6 +252,7 @@ func run(ctx context.Context, args []string) error {
 	var container *gsd.ContainerConfig
 	var runtimeGuard *gsd.HostRuntimeGuard
 	var registry gsd.UnitRegistry
+	forceSessionBinding := false
 	if config.Runtime == "podman" {
 		container = &gsd.ContainerConfig{Engine: "podman", Image: config.ContainerImage,
 			GSDStateDir: filepath.Join(config.StateDir, "runtime", "gsd"), PlanningDir: filepath.Join(config.StateDir, "runtime", "planning"),
@@ -266,27 +270,41 @@ func run(ctx context.Context, args []string) error {
 			return fmt.Errorf("runtime admission: %w", err)
 		}
 	} else {
-		var err error
-		config.GSDCommand, err = gsd.PreparePinnedHostRuntime(ctx, config.GSDCommand, config.GSDHome, config.GSDVersion, config.WorkDir, config.AttemptRoot)
-		if err != nil {
-			return fmt.Errorf("runtime admission: %w", err)
+		integrationExecutor, integrationErr := integrationGSDExecutor()
+		if integrationErr != nil {
+			return fmt.Errorf("runtime admission: %w", integrationErr)
 		}
-		runtimeGuard, err = gsd.NewPinnedHostRuntimeGuard(config.GSDCommand)
-		if err != nil {
-			return fmt.Errorf("runtime admission: %w", err)
-		}
-		registry, err = gsd.LoadPinnedUnitRegistry(ctx, config.GSDCommand, config.GSDHome, config.GSDVersion)
-		if err != nil {
-			return fmt.Errorf("runtime admission: %w", err)
-		}
-		if err := gsd.ApplyPinnedHeadlessToolPatch(config.GSDCommand, config.GSDVersion); err != nil {
-			return fmt.Errorf("runtime compatibility: %w", err)
-		}
-		if err := gsd.ApplyPinnedPromptToolPatch(config.GSDCommand, config.GSDHome, config.GSDVersion); err != nil {
-			return fmt.Errorf("runtime compatibility: %w", err)
-		}
-		if err := runtimeGuard.BindPromptRuntime(config.GSDCommand, config.GSDHome, registry); err != nil {
-			return fmt.Errorf("runtime admission: %w", err)
+		if integrationExecutor != "" {
+			// The integration binary imports the exact official registry but
+			// replaces only external execution. Session evidence remains mandatory.
+			registry, err = gsd.LoadPinnedUnitRegistry(ctx, config.GSDCommand, config.GSDHome, config.GSDVersion)
+			if err != nil {
+				return fmt.Errorf("runtime admission: %w", err)
+			}
+			config.GSDCommand = []string{integrationExecutor}
+			forceSessionBinding = true
+		} else {
+			config.GSDCommand, err = gsd.PreparePinnedHostRuntime(ctx, config.GSDCommand, config.GSDHome, config.GSDVersion, config.WorkDir, config.AttemptRoot)
+			if err != nil {
+				return fmt.Errorf("runtime admission: %w", err)
+			}
+			runtimeGuard, err = gsd.NewPinnedHostRuntimeGuard(config.GSDCommand)
+			if err != nil {
+				return fmt.Errorf("runtime admission: %w", err)
+			}
+			registry, err = gsd.LoadPinnedUnitRegistry(ctx, config.GSDCommand, config.GSDHome, config.GSDVersion)
+			if err != nil {
+				return fmt.Errorf("runtime admission: %w", err)
+			}
+			if err := gsd.ApplyPinnedHeadlessToolPatch(config.GSDCommand, config.GSDVersion); err != nil {
+				return fmt.Errorf("runtime compatibility: %w", err)
+			}
+			if err := gsd.ApplyPinnedPromptToolPatch(config.GSDCommand, config.GSDHome, config.GSDVersion); err != nil {
+				return fmt.Errorf("runtime compatibility: %w", err)
+			}
+			if err := runtimeGuard.BindPromptRuntime(config.GSDCommand, config.GSDHome, registry); err != nil {
+				return fmt.Errorf("runtime admission: %w", err)
+			}
 		}
 	}
 	if err := gsd.NormalizeRuntimeSettings(config.GSDHome, config.CoordinatorModel, config.ImplementationModel, "high"); err != nil {
@@ -310,12 +328,13 @@ func run(ctx context.Context, args []string) error {
 	runner, err := gsd.NewRunner(gsd.Config{
 		Command: config.GSDCommand, WorkDir: config.WorkDir, GSDHome: config.GSDHome, StateDir: config.StateDir,
 		Model: selectedModel, Thinking: "high",
-		Timeout:           time.Duration(config.TimeoutSeconds) * time.Second,
-		HeartbeatInterval: time.Duration(config.HeartbeatSeconds) * time.Second,
-		MaxEventBytes:     config.MaxEventBytes,
-		Container:         container,
-		Registry:          registry,
-		RuntimeGuard:      runtimeGuard,
+		Timeout:               time.Duration(config.TimeoutSeconds) * time.Second,
+		HeartbeatInterval:     time.Duration(config.HeartbeatSeconds) * time.Second,
+		MaxEventBytes:         config.MaxEventBytes,
+		Container:             container,
+		Registry:              registry,
+		RuntimeGuard:          runtimeGuard,
+		RequireSessionBinding: forceSessionBinding,
 	})
 	if err != nil {
 		return err
@@ -470,11 +489,14 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 			pollCutoff := time.Now().UTC()
 			if startupErr == nil {
 				_, startupErr = consumeGitHubDecisionReplies(ctx, authority, reconcileLease,
-					decisionReplyPollerFactory(), deliveryID, preRecoveryRun.Generation, preRecoveryHead.HeadSHA)
+					decisionReplyPollerFactory(), deliveryID, preRecoveryRun.Generation, preRecoveryHead.HeadSHA,
+					decisionApplicationFence(ctx, repositoryLock, config.WorkDir, existingDelivery.Branch,
+						preRecoveryHead.HeadSHA))
 			}
 			if startupErr == nil {
 				startupErr = expireUnansweredDecisionRequests(ctx, authority, reconcileLease, deliveryID,
-					pollCutoff)
+					pollCutoff, decisionApplicationFence(ctx, repositoryLock, config.WorkDir,
+						existingDelivery.Branch, preRecoveryHead.HeadSHA))
 			}
 			if startupErr == nil {
 				postDecisionRun, decisionErr := authority.GetDeliveryRun(ctx, deliveryID)
@@ -545,7 +567,8 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 		}
 		if startupErr == nil {
 			_, startupErr = consumeGitHubDecisionReplies(ctx, authority, reconcileLease,
-				decisionReplyPollerFactory(), deliveryID, runState.Generation, canonical.HeadSHA)
+				decisionReplyPollerFactory(), deliveryID, runState.Generation, canonical.HeadSHA,
+				decisionApplicationFence(ctx, repositoryLock, config.WorkDir, delivery.Branch, canonical.HeadSHA))
 		}
 		if startupErr == nil {
 			runState, runErr = authority.GetDeliveryRun(ctx, deliveryID)
@@ -564,15 +587,18 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 	if startupErr == nil && reconciliationLeaseHeld {
 		runState, runErr := authority.GetDeliveryRun(ctx, deliveryID)
 		canonical, inspectErr := shepherdgit.Inspect(ctx, config.WorkDir)
-		startupErr = errors.Join(runErr, inspectErr)
+		delivery, deliveryErr := authority.GetDelivery(ctx, deliveryID)
+		startupErr = errors.Join(runErr, inspectErr, deliveryErr)
 		pollCutoff := time.Now().UTC()
 		if startupErr == nil {
 			_, startupErr = consumeGitHubDecisionReplies(ctx, authority, reconcileLease,
-				decisionReplyPollerFactory(), deliveryID, runState.Generation, canonical.HeadSHA)
+				decisionReplyPollerFactory(), deliveryID, runState.Generation, canonical.HeadSHA,
+				decisionApplicationFence(ctx, repositoryLock, config.WorkDir, delivery.Branch, canonical.HeadSHA))
 		}
 		if startupErr == nil {
 			startupErr = expireUnansweredDecisionRequests(ctx, authority, reconcileLease, deliveryID,
-				pollCutoff)
+				pollCutoff, decisionApplicationFence(ctx, repositoryLock, config.WorkDir,
+					delivery.Branch, canonical.HeadSHA))
 		}
 		if startupErr == nil {
 			startupErr = authority.ResolveRecoveredPromotionDecisions(ctx, reconcileLease, time.Now().UTC())
@@ -624,6 +650,10 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 				inspectErr = shepherdgit.RequireClean(canonical)
 			}
 			if inspectErr == nil {
+				inspectErr = validateFinalGateGSDState(ctx, authority, config.StateDir, config.WorkDir,
+					deliveryID, runState.Generation, canonical.HeadSHA)
+			}
+			if inspectErr == nil {
 				gateErr = authority.ProjectFinalHumanGate(ctx, gateLease, runState.Generation,
 					canonical.HeadSHA, time.Now().UTC())
 			} else {
@@ -636,6 +666,13 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 			}
 			return emitSuperviseStatus(deliveryID, decision)
 		case supervisor.DecisionBlocked:
+			waited, waitErr := waitForHumanDecision(ctx, authority, config, deliveryID, decision)
+			if waitErr != nil {
+				return waitErr
+			}
+			if waited {
+				continue
+			}
 			if emitErr := emitSuperviseStatus(deliveryID, decision); emitErr != nil {
 				return emitErr
 			}
@@ -654,17 +691,95 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 				continue
 			}
 			if recovery.ShouldRetry(err) {
+				integrationRetryBoundary()
 				continue
 			}
 			blocked := decision
 			blocked.Kind = supervisor.DecisionBlocked
 			blocked.Reason = string(recovery.Classify(gsd.Result{Terminal: gsd.TerminalError, Err: err}).Class)
+			waited, waitErr := waitForHumanDecision(ctx, authority, config, deliveryID, blocked)
+			if waitErr != nil {
+				return waitErr
+			}
+			if waited {
+				continue
+			}
 			if emitErr := emitSuperviseStatus(deliveryID, blocked); emitErr != nil {
 				return emitErr
 			}
 			return commandExitError{code: 10, err: err}
 		default:
 			return fmt.Errorf("unknown supervise decision %q", decision.Kind)
+		}
+	}
+}
+
+func waitForHumanDecision(
+	ctx context.Context,
+	authority *store.Store,
+	config fileConfig,
+	deliveryID string,
+	decision supervisor.Decision,
+) (bool, error) {
+	runState, err := authority.GetDeliveryRun(ctx, deliveryID)
+	if err != nil {
+		return false, err
+	}
+	if runState.State != domain.RunAwaitingDecision || exitAwaitingDecision() {
+		return false, nil
+	}
+	interval := time.Duration(config.HeartbeatSeconds) * time.Second
+	if interval <= 0 {
+		interval = 15 * time.Second
+	}
+	for {
+		if err := emitSuperviseStatus(deliveryID, decision); err != nil {
+			return true, err
+		}
+		timer := time.NewTimer(interval)
+		select {
+		case <-ctx.Done():
+			if !timer.Stop() {
+				<-timer.C
+			}
+			return true, ctx.Err()
+		case <-timer.C:
+		}
+		_, repositoryLock, err := lockDeliveryWorkspace(config)
+		if err != nil {
+			return true, err
+		}
+		owner := fmt.Sprintf("decision-poll-%d", time.Now().UTC().UnixNano())
+		lease, err := authority.AcquireReconciliationLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
+		if err != nil {
+			return true, errors.Join(err, repositoryLock.Close())
+		}
+		canonical, inspectErr := shepherdgit.Inspect(ctx, config.WorkDir)
+		delivery, deliveryErr := authority.GetDelivery(ctx, deliveryID)
+		inspectErr = errors.Join(inspectErr, deliveryErr)
+		if inspectErr == nil && canonical.Branch != delivery.Branch {
+			inspectErr = errors.New("decision polling requires the immutable delivery branch")
+		}
+		pollCutoff := time.Now().UTC()
+		if inspectErr == nil {
+			_, inspectErr = consumeGitHubDecisionReplies(ctx, authority, lease, decisionReplyPollerFactory(),
+				deliveryID, runState.Generation, canonical.HeadSHA,
+				decisionApplicationFence(ctx, repositoryLock, config.WorkDir, delivery.Branch, canonical.HeadSHA))
+		}
+		if inspectErr == nil {
+			inspectErr = expireUnansweredDecisionRequests(ctx, authority, lease, deliveryID, pollCutoff,
+				decisionApplicationFence(ctx, repositoryLock, config.WorkDir, delivery.Branch, canonical.HeadSHA))
+		}
+		releaseErr := authority.ReleaseLease(context.Background(), lease)
+		if err := errors.Join(inspectErr, releaseErr, repositoryLock.Close()); err != nil {
+			return true, err
+		}
+		runState, err = authority.GetDeliveryRun(ctx, deliveryID)
+		if err != nil {
+			return true, err
+		}
+		if runState.State != domain.RunAwaitingDecision {
+			return true, nil
 		}
 	}
 }
@@ -927,6 +1042,14 @@ func loadConfig(path string) (fileConfig, error) {
 	}
 	if !filepath.IsAbs(config.WorkDir) || !filepath.IsAbs(config.GSDHome) || !filepath.IsAbs(config.StateDir) || !filepath.IsAbs(config.AttemptRoot) {
 		return fileConfig{}, errors.New("work_dir, gsd_home, state_dir, and attempt_root must be absolute")
+	}
+	for name, value := range map[string]string{
+		"work_dir": config.WorkDir, "gsd_home": config.GSDHome,
+		"state_dir": config.StateDir, "attempt_root": config.AttemptRoot,
+	} {
+		if filepath.Clean(value) != value {
+			return fileConfig{}, fmt.Errorf("%s must be a clean absolute path", name)
+		}
 	}
 	if len(config.PiCommand) != 1 || !filepath.IsAbs(config.PiCommand[0]) || strings.ContainsAny(config.PiCommand[0], "\r\n\x00") {
 		return fileConfig{}, errors.New("pi_command must contain one allowlisted absolute Pi executable")
@@ -1778,6 +1901,10 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		if observedModel == "" || observedThinking == "" || sessionEvidence.SessionID == "" || sessionEvidence.Fingerprint == "" || sessionEvidence.Model != observedModel || sessionEvidence.Thinking != observedThinking {
 			result.Terminal = gsd.TerminalError
 			result.Err = joinTerminalFailure(errors.New("complete current-run unit identity evidence is required"), result.Err)
+		} else if completionErr := gsd.ValidateSessionSuccessfulCompletion(sessionsDir,
+			sessionEvidence.SessionID); completionErr != nil {
+			result.Terminal = gsd.TerminalError
+			result.Err = joinTerminalFailure(fmt.Errorf("current top-level session completion: %w", completionErr), result.Err)
 		} else if identityErr := authority.RecordUnitAttemptIdentity(ctx, store.UnitAttemptIdentity{
 			UnitAttemptKey: unitAttemptKey, Attempt: unitAttempt.Attempts, Model: observedModel, Thinking: observedThinking,
 			SessionID: sessionEvidence.SessionID, SessionFingerprint: sessionEvidence.Fingerprint,
@@ -1837,6 +1964,10 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			} else if head, checkpointErr := attemptManager.CheckpointCandidate(ctx, *attemptWorktree, issueContext.WriteScope, message); checkpointErr != nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = fmt.Errorf("checkpoint candidate canonical unit: %w", checkpointErr)
+			} else if head == startSnapshot.HeadSHA {
+				result.Terminal = gsd.TerminalError
+				result.Err = recovery.MarkFailure(recovery.FailureArtifactMissing, true,
+					errors.New("successful canonical unit did not advance the candidate head"))
 			} else if lifecycle == nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = errors.New("durable attempt lifecycle missing at candidate checkpoint")
@@ -1851,6 +1982,10 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		} else if head, checkpointErr := shepherdgit.CheckpointWithinScopes(ctx, config.WorkDir, issueContext.WriteScope, message); checkpointErr != nil {
 			result.Terminal = gsd.TerminalError
 			result.Err = fmt.Errorf("checkpoint successful canonical unit: %w", checkpointErr)
+		} else if head == startSnapshot.HeadSHA {
+			result.Terminal = gsd.TerminalError
+			result.Err = recovery.MarkFailure(recovery.FailureArtifactMissing, true,
+				errors.New("successful canonical unit did not advance the candidate head"))
 		} else {
 			candidateHead = head
 			appendActivity("transition", "checkpointed_scoped_unit", trustedUnit, "", "", time.Now().UTC())
@@ -1876,7 +2011,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			if versionErr != nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = versionErr
-			} else if err := persistSuccessProof(ctx, authority, validator, config, registry, issueContext.WriteScope, candidateWorkDir, deliveryID, trustedUnit, before.Next.UnitType, issueContext.PRBase, attempt.Generation, unitAttempt.Attempts, stateVersion, startSnapshot.HeadSHA, candidateHead, lifecycle); err != nil {
+			} else if err := persistSuccessProof(ctx, authority, validator, config, registry, issueContext.WriteScope, candidateWorkDir, deliveryID, trustedUnit, before.Next.UnitType, issueContext.PRBase, attempt.Generation, unitAttempt.Attempts, stateVersion, startSnapshot.HeadSHA, candidateHead, result.ObservedWorkflowTools, lifecycle); err != nil {
 				result.Terminal = gsd.TerminalError
 				result.Err = err
 			} else if attemptWorktree != nil {
@@ -2028,7 +2163,11 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		}
 	}
 	if targetState == domain.RunHumanGate {
-		gateErr := authority.ResolveRecoveredPromotionDecisions(ctx, lease, time.Now().UTC())
+		gateErr := validateFinalGateGSDState(ctx, authority, config.StateDir, config.WorkDir,
+			deliveryID, attempt.Generation, endSnapshot.HeadSHA)
+		if gateErr == nil {
+			gateErr = authority.ResolveRecoveredPromotionDecisions(ctx, lease, time.Now().UTC())
+		}
 		if gateErr == nil {
 			gateErr = authority.ProjectFinalHumanGate(ctx, lease, attempt.Generation,
 				endSnapshot.HeadSHA, time.Now().UTC())
@@ -2038,6 +2177,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			result.Err = joinTerminalFailure(result.Err, gateErr)
 			targetState = domain.RunFailed
 		} else {
+			integrationFinalGateBoundary()
 			finishedAttempt = true
 		}
 	}
@@ -2708,10 +2848,19 @@ func gsdStateArtifacts(workDir string) ([]shepherdgit.Artifact, error) {
 	return artifacts, nil
 }
 
-func persistSuccessProof(ctx context.Context, authorityStore *store.Store, validator validation.Validator, config fileConfig, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType, baseBranch string, generation, attempt, stateVersion int64, startHead, candidateHead string, lifecycle *attemptLifecycle) error {
+func persistSuccessProof(ctx context.Context, authorityStore *store.Store, validator validation.Validator, config fileConfig, registry gsd.UnitRegistry, scopes []string, workDir, deliveryID, unitID, unitType, baseBranch string, generation, attempt, stateVersion int64, startHead, candidateHead string, observedWorkflowTools []string, lifecycle *attemptLifecycle) error {
 	metadata, ok := registry.Lookup(unitType)
 	if !ok {
 		return fmt.Errorf("missing official unit metadata for %s", unitType)
+	}
+	observedWorkflowTools = append([]string(nil), observedWorkflowTools...)
+	sort.Strings(observedWorkflowTools)
+	observedWorkflowTools = slices.Compact(observedWorkflowTools)
+	for _, required := range metadata.RequiredWorkflowTools {
+		if !slices.Contains(observedWorkflowTools, required) {
+			return recovery.MarkFailure(recovery.FailureArtifactInvalid, true,
+				fmt.Errorf("successful canonical unit lacks required workflow transition %s", required))
+		}
 	}
 	artifacts, err := shepherdgit.ArtifactManifest(ctx, workDir, startHead, candidateHead, scopes)
 	if err != nil {
@@ -2720,6 +2869,20 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 		}
 		return recovery.MarkFailure(recovery.FailureArtifactInvalid, true, err)
 	}
+	gsdManifest, err := workspace.SnapshotGSDManifest(ctx, filepath.Join(workDir, ".gsd"), config.StateDir)
+	if err != nil {
+		return recovery.MarkFailure(recovery.FailureArtifactInvalid, true, err)
+	}
+	baseGSDManifest, err := workspace.SnapshotGSDManifest(ctx, filepath.Join(config.WorkDir, ".gsd"), config.StateDir)
+	if err != nil {
+		return recovery.MarkFailure(recovery.FailureArtifactInvalid, true, err)
+	}
+	gsdStateChanged := filepath.Clean(workDir) != filepath.Clean(config.WorkDir) &&
+		gsdManifest.Hash != baseGSDManifest.Hash
+	if len(artifacts) == 0 && !gsdStateChanged {
+		return recovery.MarkFailure(recovery.FailureArtifactMissing, true,
+			errors.New("successful canonical unit did not change a governed artifact"))
+	}
 	stateArtifacts, err := gsdStateArtifacts(workDir)
 	if err != nil {
 		return recovery.MarkFailure(recovery.FailureArtifactInvalid, true, err)
@@ -2727,7 +2890,7 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 	artifacts = append(artifacts, stateArtifacts...)
 	if len(artifacts) == 0 {
 		return recovery.MarkFailure(recovery.FailureArtifactMissing, true,
-			errors.New("successful canonical unit produced no artifact manifest"))
+			errors.New("successful canonical unit produced no verifiable artifact"))
 	}
 	sort.Slice(artifacts, func(i, j int) bool { return artifacts[i].Path < artifacts[j].Path })
 	contract := struct {
@@ -2744,8 +2907,11 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 		UnitType              string                 `json:"unit_type"`
 		PhaseChain            []string               `json:"phase_chain"`
 		RequiredWorkflowTools []string               `json:"required_workflow_tools"`
+		ObservedWorkflowTools []string               `json:"observed_workflow_tools"`
+		GSDManifestHash       string                 `json:"gsd_manifest_hash"`
 		Artifacts             []shepherdgit.Artifact `json:"artifacts"`
-	}{UnitType: unitType, PhaseChain: metadata.PhaseChain, RequiredWorkflowTools: metadata.RequiredWorkflowTools, Artifacts: artifacts}
+	}{UnitType: unitType, PhaseChain: metadata.PhaseChain, RequiredWorkflowTools: metadata.RequiredWorkflowTools,
+		ObservedWorkflowTools: observedWorkflowTools, GSDManifestHash: gsdManifest.Hash, Artifacts: artifacts}
 	raw, err := json.Marshal(manifest)
 	if err != nil {
 		return err
@@ -2770,6 +2936,9 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 	if err != nil {
 		reversible := errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded)
 		return recovery.MarkFailure(recovery.FailureValidationFailed, reversible, err)
+	}
+	if err := integrationPostValidationBoundary(workDir); err != nil {
+		return recovery.MarkFailure(recovery.FailureValidationFailed, false, err)
 	}
 	if validationResult.SessionID == "" {
 		return recovery.MarkFailure(recovery.FailureValidationFailed, false,
@@ -2855,14 +3024,21 @@ type decisionReplyPoller interface {
 }
 
 func expireUnansweredDecisionRequests(ctx context.Context, authority *store.Store, lease store.Lease,
-	deliveryID string, now time.Time) error {
+	deliveryID string, eligibilityCutoff time.Time, applyFence func() error) error {
 	requests, err := authority.ListOpenDecisionRequests(ctx, deliveryID)
 	if err != nil {
 		return err
 	}
 	for _, request := range requests {
-		if !request.ExpiresAt.After(now) {
-			if err := authority.ExpireDecisionRequestAndBlock(ctx, lease, request.RequestID, now); err != nil {
+		if !request.ExpiresAt.After(eligibilityCutoff) {
+			if applyFence == nil {
+				return errors.New("decision expiry application fence is required")
+			}
+			if err := applyFence(); err != nil {
+				return err
+			}
+			commitAt := time.Now().UTC()
+			if err := authority.ExpireDecisionRequestAndBlock(ctx, lease, request.RequestID, commitAt); err != nil {
 				return err
 			}
 		}
@@ -2870,8 +3046,26 @@ func expireUnansweredDecisionRequests(ctx context.Context, authority *store.Stor
 	return nil
 }
 
+func decisionApplicationFence(ctx context.Context, repositoryLock *workspace.RepositoryLock,
+	workDir, branch, headSHA string) func() error {
+	return func() error {
+		if err := repositoryLock.Check(); err != nil {
+			return err
+		}
+		canonical, err := shepherdgit.Inspect(ctx, workDir)
+		if err != nil {
+			return err
+		}
+		if canonical.Branch != branch || canonical.HeadSHA != headSHA {
+			return errors.New("decision reply authority changed during polling")
+		}
+		return nil
+	}
+}
+
 func consumeGitHubDecisionReplies(ctx context.Context, authority *store.Store, lease store.Lease,
-	client decisionReplyPoller, deliveryID string, generation int64, headSHA string) (bool, error) {
+	client decisionReplyPoller, deliveryID string, generation int64, headSHA string,
+	applyFence func() error) (bool, error) {
 	requests, err := authority.ListDecisionAnswerRecovery(ctx, deliveryID, generation, headSHA)
 	if err != nil {
 		return false, err
@@ -2908,6 +3102,12 @@ func consumeGitHubDecisionReplies(ctx context.Context, authority *store.Store, l
 		candidates = append(candidates, candidate{request: request, reply: reply})
 	}
 	apply := func(candidate candidate) error {
+		if applyFence == nil {
+			return errors.New("decision reply application fence is required")
+		}
+		if err := applyFence(); err != nil {
+			return err
+		}
 		return authority.ApplyDecisionRequestAnswer(ctx, lease, candidate.request.RequestID,
 			candidate.reply.Option, candidate.reply.Author, candidate.reply.AuthorID, candidate.reply.CommentID,
 			candidate.request.Generation, candidate.request.HeadSHA, candidate.reply.CreatedAt, time.Now().UTC())
@@ -2942,7 +3142,7 @@ func persistAndPublishDecisionRequest(ctx context.Context, authority *store.Stor
 	}
 	hash := sha256.Sum256([]byte(deliveryID + ":" + strconv.FormatInt(generation, 10) + ":" + unitID + ":" + headSHA + ":" + failureClass))
 	requestID := "decision-" + hex.EncodeToString(hash[:8])
-	expiresAt := time.Now().UTC().Add(24 * time.Hour)
+	expiresAt := time.Now().UTC().Add(integrationDecisionTTL())
 	request := store.DecisionRequest{
 		RequestID: requestID, DeliveryID: deliveryID, Repository: effects.facts.Repository,
 		Issue: issue, PullRequest: effects.facts.PullRequest,
