@@ -20,6 +20,7 @@ describe('blog catalog', () => {
     const headings = post?.sections.map((section) => section.heading);
     expect(headings).toEqual(
       expect.arrayContaining([
+        'The PR that ate the repository',
         'The repository became a harness',
         'What the harness still does not do',
       ]),
@@ -41,5 +42,11 @@ describe('blog catalog', () => {
     expect(articleText).toContain('7,088');
     expect(articleText).toContain('pm reverse run <plan-id> --approve <approval-token> --json');
     expect(articleText).not.toContain('pm reverse approve');
+    expect(articleText).toContain('roughly a million changed lines');
+    expect(articleText).toContain('isolated worktree');
+    expect(articleText).toContain('star the repository');
+    expect(articleText).not.toContain('Repository: github.com/polymetrics-ai/cli');
+    expect(articleText).not.toContain('Documentation: cli.polymetrics.ai');
+    expect(articleText).not.toContain('Inventory snapshot:');
   });
 });

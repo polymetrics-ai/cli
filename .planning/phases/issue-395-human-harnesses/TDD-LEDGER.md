@@ -54,8 +54,11 @@ Phase: `issue-395-human-harnesses`
 
 ## Revision: Million-Line PR Narrative
 
-- Status: planned.
+- Status: red complete.
 - Red contract: require the merge-nightmare story, structural parent/sub-issue architecture, and a
   human star request; reject the repository/documentation/inventory footer requested for removal.
+- Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
+- Red result: failed because `The PR that ate the repository` and the revised narrative contract
+  were absent.
 - Green contract: preserve verified technical claims and CLI examples while the revised narrative
   passes the catalog, browser, typecheck, and production-build checks.
