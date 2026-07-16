@@ -1,0 +1,23 @@
+{
+  "phase": "403-progress-event-bus",
+  "issue": 403,
+  "parentIssue": 397,
+  "branch": "feat/403-progress-event-bus",
+  "baseParentHead": "e5ee4075db8f8350b216a6d1ff64297e204b8515",
+  "mode": "bounded-mutating-worker",
+  "verificationPassed": false,
+  "verificationBlocker": "not yet run; plan checkpoint only",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "planPhasePrompt": "generated",
+    "programmingLoopDryRun": "failed: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "loaded .pi/prompts/pm-gsd-loop.md and running universal loop inline/manual"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "direct bounded mutating worker in isolated cwd; no subagent tool by worker contract; no recursive delegation"
+    }
+  ]
+}
