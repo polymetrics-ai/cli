@@ -184,3 +184,12 @@ Result: no output, exit 0.
 ## Final verification evidence
 
 See `VERIFICATION.md`. Full `make verify` initially failed at tidy-check while dependency files were intentionally unstaged; after staging `go.mod`/`go.sum`, the same gate passed. No quality gate was weakened.
+
+Post-commit checks:
+
+```bash
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum
+```
+
+Result: whitespace check passed with no output; dependency diff shows only the recorded Cobra v1.10.2 / pflag / mousetrap delta plus go.sum module-metadata checksums.

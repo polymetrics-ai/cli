@@ -4,9 +4,9 @@
   "branch": "refactor/400-cobra-router-shell",
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "implemented_green_local",
+  "status": "implemented_committed_pr_pending",
   "verificationPassed": true,
-  "verificationBlocker": "post-commit diff checks and PR creation pending",
+  "verificationBlocker": "push and stacked PR creation pending",
   "gsd": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-400.prompt",
@@ -50,7 +50,7 @@
     {
       "cycle": "verify",
       "decision": "local_critical_path",
-      "reason": "focused gates and make verify passed locally; post-commit diff checks still pending"
+      "reason": "focused gates, make verify, and post-commit diff checks passed locally"
     }
   ],
   "verification": {

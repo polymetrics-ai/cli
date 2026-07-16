@@ -35,7 +35,7 @@ scripts/gsd prompt programming-loop init --phase 400 --dry-run >/tmp/gsd-program
 
 ## Verification result
 
-Focused and full local gates passed. Post-commit diff checks / PR creation pending.
+Focused/full local gates and post-commit diff checks passed. PR creation pending.
 
 Key results:
 
@@ -46,3 +46,5 @@ Key results:
 - `go test ./...` passed.
 - `go build ./cmd/pm` passed.
 - `make verify` passed.
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` passed.
+- `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` recorded expected Cobra/pflag/mousetrap dependency delta.

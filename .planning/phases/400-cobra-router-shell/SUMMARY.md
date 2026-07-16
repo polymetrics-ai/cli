@@ -1,6 +1,6 @@
 # Issue 400 Summary — Cobra Router Shell
 
-Status: implementation green locally; stacked PR pending.
+Status: implementation committed locally; push/stacked PR pending.
 
 ## Scope delivered
 
@@ -37,10 +37,10 @@ Passed locally:
 - `go build ./cmd/pm`
 - `make verify`
 
-Pending after implementation commit:
+Post-commit checks:
 
-- `git diff --check origin/feat/cli-architecture-v2...HEAD`
-- `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum`
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` -> pass, no output.
+- `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` -> recorded expected dependency delta.
 
 ## Dependency delta
 

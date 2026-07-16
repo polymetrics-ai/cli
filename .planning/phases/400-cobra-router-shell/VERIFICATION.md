@@ -14,8 +14,8 @@
 - [x] `go test ./...` — pass; includes `internal/cli` and connector/certify packages (`internal/connectors/certify` took `341.683s`).
 - [x] `go build ./cmd/pm` — pass, no output.
 - [x] `make verify` — pass after staging the approved `go.mod`/`go.sum` dependency delta so tidy-check compares post-tidy files to the index. Earlier pre-staging run failed at tidy-check only because dependency files were uncommitted/un-staged; no gate weakened.
-- [ ] `git diff --check origin/feat/cli-architecture-v2...HEAD` — pending after implementation commit.
-- [ ] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` — pending after implementation commit.
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass after implementation commit; no output, exit 0.
+- [x] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` — pass/recorded expected dependency delta: Cobra v1.10.2 direct, pflag/mousetrap indirect, go.sum metadata-only checksums.
 
 ## Focused TDD gates
 
@@ -48,7 +48,7 @@ Applies: yes, because routing/help behavior is CLI-visible even though target is
 
 ## Review route
 
-- [ ] Open non-draft stacked PR to `feat/cli-architecture-v2` with `Refs #400` and `Refs #397`.
+- [ ] Open non-draft stacked PR to `feat/cli-architecture-v2` with `Refs #400` and `Refs #397` — pending.
 - [x] Do not post `@claude review` because repository Claude workflow is already `disabled_manually`.
 - [x] Do not request Copilot because quota is exhausted for this blocker window.
 - [x] Record review status as human/parent-PR fallback pending; no approval claims.
