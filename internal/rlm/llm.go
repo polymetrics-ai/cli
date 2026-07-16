@@ -36,15 +36,29 @@ func LLMConfigFromEnv(getenv func(string) string) LLMConfig {
 	if getenv == nil {
 		getenv = func(string) string { return "" }
 	}
-	provider := strings.TrimSpace(getenv("PM_LLM_PROVIDER"))
+	return LLMConfigFromSettings(
+		getenv("PM_LLM_PROVIDER"),
+		getenv("PM_LLM_BASE_URL"),
+		getenv("PM_LLM_MODEL"),
+		getenv,
+	)
+}
+
+// LLMConfigFromSettings combines non-secret typed settings with env-only API-key
+// intake. API keys remain environment-only and are never loaded from config files.
+func LLMConfigFromSettings(provider, baseURL, model string, getenv func(string) string) LLMConfig {
+	if getenv == nil {
+		getenv = func(string) string { return "" }
+	}
+	provider = strings.TrimSpace(provider)
 	if provider == "" {
 		provider = "openrouter"
 	}
 	cfg := LLMConfig{
 		Provider: provider,
-		BaseURL:  strings.TrimSpace(getenv("PM_LLM_BASE_URL")),
+		BaseURL:  strings.TrimSpace(baseURL),
 		APIKey:   strings.TrimSpace(getenv("PM_LLM_API_KEY")),
-		Model:    strings.TrimSpace(getenv("PM_LLM_MODEL")),
+		Model:    strings.TrimSpace(model),
 	}
 	if provider == "openrouter" {
 		if cfg.BaseURL == "" {

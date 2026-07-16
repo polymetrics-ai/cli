@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/rlm"
 	"polymetrics.ai/internal/rlm/router"
 )
@@ -21,7 +22,7 @@ import (
 // uses it (Tier 2) and otherwise falls back to the offline keyword heuristic
 // (Tier 1). The RLM execution branch is wired in a later slice; until then a
 // data_analysis/ml route returns its decision so the caller can escalate.
-func runExtract(ctx context.Context, a *app.App, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runExtract(ctx context.Context, a *app.App, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	request := flags.first("request")
 	if request == "" {
@@ -32,7 +33,7 @@ func runExtract(ctx context.Context, a *app.App, root string, args []string, std
 		return err
 	}
 
-	r := &router.Router{LLM: extractLLM(flags)} // nil LLM → heuristic-only
+	r := &router.Router{LLM: extractLLM(cfg, flags)} // nil LLM → heuristic-only
 	decision := r.Classify(ctx, request, "")
 
 	route := "simple_query"
@@ -68,7 +69,7 @@ func runExtract(ctx context.Context, a *app.App, root string, args []string, std
 		// return the decision so the caller can supply tables or escalate.
 		inTable, outTable := flags.first("in"), flags.first("out")
 		if inTable != "" && outTable != "" {
-			analyzer, closer, err := buildAgentAnalyzer(request)
+			analyzer, closer, err := buildAgentAnalyzer(cfg, request)
 			if err != nil {
 				env["note"] = fmt.Sprintf("rlm_analysis route; agent backend unavailable: %v", err)
 			} else {
@@ -103,8 +104,8 @@ func runExtract(ctx context.Context, a *app.App, root string, args []string, std
 // extractLLM resolves an optional Tier-2 classifier from flags/env. It returns
 // nil (heuristic-only) when no LLM provider is resolvable, so routing always
 // works offline. --provider/--model/--llm-base-url override the env config.
-func extractLLM(flags parsedFlags) router.LLMClassifier {
-	cfg := rlm.LLMConfigFromEnv(os.Getenv)
+func extractLLM(invocation config.Config, flags parsedFlags) router.LLMClassifier {
+	cfg := rlm.LLMConfigFromSettings(invocation.RLM.LLM.Provider, invocation.RLM.LLM.BaseURL, invocation.RLM.LLM.Model, os.Getenv)
 	if p := flags.first("provider"); p != "" {
 		cfg.Provider = p
 	}

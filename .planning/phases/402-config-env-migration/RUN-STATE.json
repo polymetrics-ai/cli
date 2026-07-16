@@ -1,0 +1,68 @@
+{
+  "phase": 402,
+  "issue": 402,
+  "branch": "refactor/402-config-env-migration",
+  "baseBranch": "feat/cli-architecture-v2",
+  "verificationPassed": true,
+  "status": "pr_open_latest_push_complete_ci_status_from_pr_checks_parent_review_pending",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-402.prompt",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "reviewFixDoctor": "passed",
+    "reviewFixPlanPhasePrompt": "/tmp/gsd-plan-phase-402-reviewfix.prompt",
+    "reviewFixProgrammingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "statusCorrectionPlanPhasePrompt": "/tmp/gsd-plan-phase-402-status-correction.prompt"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "bounded mutating worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for typed config injection; no subagent available"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "typed config injection completed in allowed scopes with local gates passing"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #448 review findings require same issue scope edits in isolated cwd; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "review fixes and full local gates completed inline in isolated worker cwd"
+    },
+    {
+      "cycle": "status-correction",
+      "decision": "local_critical_path",
+      "reason": "status-only phase artifact correction in isolated worker cwd; no code, dependency, parent, merge, or automated-review action"
+    }
+  ],
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/448",
+  "statusCorrection": {
+    "disposition": "accepted",
+    "targetedReReview": "clean",
+    "pullRequestState": "OPEN",
+    "baseBranch": "feat/cli-architecture-v2",
+    "headSource": "PR #448 headRefOid and git rev-parse HEAD at handoff",
+    "preStatusCorrectionHead": "40c34439dde0b46a84dcd1ac3a3b3b59fe36410f",
+    "latestPush": "complete at handoff; final SHA intentionally not embedded to avoid a self-referential claim",
+    "ciSource": "PR #448 statusCheckRollup at handoff",
+    "preStatusCorrectionCI": "verify IN_PROGRESS; other reported checks success/skipped"
+  },
+  "reviewRoute": {
+    "claude": "not_requested_per_instruction",
+    "copilot": "not_requested_per_instruction",
+    "fallback": "human_parent_review_pending",
+    "coverageStatus": "targeted_re_review_clean_parent_human_fallback_pending"
+  }
+}

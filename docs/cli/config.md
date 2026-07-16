@@ -9,11 +9,13 @@ SYNOPSIS
 DESCRIPTION
   pm resolves typed invocation configuration once per CLI run. The loader uses a
   fresh Viper instance for each invocation and never uses the package-level Viper
-  singleton, AutomaticEnv, or file watching. Only root and json affect CLI
-  invocation behavior in this phase. Runtime, RLM, and schedule keys below are
-  typed and documented now, but those command readers continue using their
-  legacy environment readers until #402 migrates them. Malformed
-  .polymetrics/config.yaml files already fail as validation errors.
+  singleton, AutomaticEnv, or file watching. Root and json affect invocation
+  bootstrap. Runtime, RLM, and schedule keys are consumed by migrated runtime,
+  worker, agent image, schedule, and RLM non-secret call sites. Worker/RLM agent
+  Temporal execution remains opt-in: runtime.temporal_addr must be explicitly
+  set by env or config file for those paths, while runtime doctor keeps local
+  Compose defaults. Malformed .polymetrics/config.yaml files fail as validation
+  errors.
 
 PRECEDENCE
   1. Bound global flags: --root and --json.

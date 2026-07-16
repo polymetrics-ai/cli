@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
-	"os"
 
 	enumspb "go.temporal.io/api/enums/v1"
 	"go.temporal.io/sdk/client"
@@ -26,6 +25,13 @@ var DefaultEnvPass = []string{"PM_LLM_BASE_URL", "PM_LLM_API_KEY", "PM_LLM_MODEL
 // in this process on a unique per-process queue (dev fallback). When false it is
 // a thin client that targets the shared queue served by `pm worker serve`.
 func SubmitterFor(addr string, embedded bool) (rlm.SubmitFunc, func() error, error) {
+	return SubmitterForActivities(addr, embedded, defaultActivities())
+}
+
+func SubmitterForActivities(addr string, embedded bool, acts *PodmanActivities) (rlm.SubmitFunc, func() error, error) {
+	if acts == nil {
+		acts = defaultActivities()
+	}
 	c, err := client.Dial(client.Options{HostPort: addr, Logger: noopLogger{}})
 	if err != nil {
 		return nil, nil, fmt.Errorf("worker: dial temporal: %w", err)
@@ -36,7 +42,7 @@ func SubmitterFor(addr string, embedded bool) (rlm.SubmitFunc, func() error, err
 	if embedded {
 		taskQueue = TaskQueue + "-embedded-" + randSuffix()
 		w = worker.New(c, taskQueue, worker.Options{})
-		registerWorker(w, defaultActivities())
+		registerWorker(w, acts)
 		if err := w.Start(); err != nil {
 			c.Close()
 			return nil, nil, fmt.Errorf("worker: start embedded worker: %w", err)
@@ -77,17 +83,19 @@ func registerWorker(w worker.Worker, acts *PodmanActivities) {
 	w.RegisterActivity(acts)
 }
 
-// defaultActivities builds the production PodmanActivities from the environment.
-func defaultActivities() *PodmanActivities {
-	bin := os.Getenv("POLYMETRICS_PODMAN_BIN")
-	if bin == "" {
-		bin = "podman"
+// NewPodmanActivities builds production PodmanActivities from explicit typed settings.
+func NewPodmanActivities(podmanBin, image string) *PodmanActivities {
+	if podmanBin == "" {
+		podmanBin = "podman"
 	}
-	image := os.Getenv("POLYMETRICS_RLM_IMAGE")
 	if image == "" {
 		image = "ghcr.io/polymetrics/rlm-agent:latest"
 	}
-	return &PodmanActivities{PodmanBin: bin, Image: image, EnvPass: DefaultEnvPass}
+	return &PodmanActivities{PodmanBin: podmanBin, Image: image, EnvPass: DefaultEnvPass}
+}
+
+func defaultActivities() *PodmanActivities {
+	return NewPodmanActivities("", "")
 }
 
 func randSuffix() string {

@@ -11,6 +11,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"polymetrics.ai/internal/config"
 )
 
 func testCtx(t *testing.T) context.Context {
@@ -78,7 +80,7 @@ func writeManifestFile(t *testing.T, content string) string {
 func TestFlowList(t *testing.T) {
 	dir := t.TempDir()
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"list", "--flows-dir", dir}, &out, true)
+	err := runFlow(testCtx(t), config.Config{}, nil, []string{"list", "--flows-dir", dir}, &out, true)
 	require.NoError(t, err)
 
 	var result map[string]any
@@ -94,7 +96,7 @@ func TestFlowList(t *testing.T) {
 func TestFlowPlanValid(t *testing.T) {
 	path := writeManifestFile(t, validFlowManifestJSON)
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"plan", "--file", path}, &out, true)
+	err := runFlow(testCtx(t), config.Config{}, nil, []string{"plan", "--file", path}, &out, true)
 	require.NoError(t, err)
 
 	var result map[string]any
@@ -106,7 +108,7 @@ func TestFlowPlanValid(t *testing.T) {
 func TestFlowPlanCyclic(t *testing.T) {
 	path := writeManifestFile(t, cyclicFlowManifestJSON)
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"plan", "--file", path}, &out, true)
+	err := runFlow(testCtx(t), config.Config{}, nil, []string{"plan", "--file", path}, &out, true)
 	require.Error(t, err, "cyclic manifest should produce an error")
 	assert.True(t, strings.Contains(err.Error(), "cyclic") || strings.Contains(err.Error(), "flow:"),
 		"error should mention cycle: %v", err)
@@ -116,7 +118,7 @@ func TestFlowPlanCyclic(t *testing.T) {
 func TestFlowStatusMissing(t *testing.T) {
 	dir := t.TempDir()
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"status", "nonexistent", "--flows-dir", dir}, &out, true)
+	err := runFlow(testCtx(t), config.Config{}, nil, []string{"status", "nonexistent", "--flows-dir", dir}, &out, true)
 	require.Error(t, err)
 }
 
@@ -124,7 +126,7 @@ func TestFlowStatusMissing(t *testing.T) {
 func TestFlowPreviewValid(t *testing.T) {
 	path := writeManifestFile(t, validFlowManifestJSON)
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"preview", "--file", path}, &out, true)
+	err := runFlow(testCtx(t), config.Config{}, nil, []string{"preview", "--file", path}, &out, true)
 	require.NoError(t, err)
 
 	var result map[string]any

@@ -65,15 +65,16 @@ type Bootstrap struct {
 
 // Config is the typed app configuration resolved for one CLI invocation.
 type Config struct {
-	Root       string          `json:"root" mapstructure:"root"`
-	JSON       bool            `json:"json" mapstructure:"json"`
-	Version    int             `json:"version" mapstructure:"version"`
-	Project    string          `json:"project" mapstructure:"project"`
-	Warehouse  WarehouseConfig `json:"warehouse" mapstructure:"warehouse"`
-	Runtime    RuntimeConfig   `json:"runtime" mapstructure:"runtime"`
-	RLM        RLMConfig       `json:"rlm" mapstructure:"rlm"`
-	Schedule   ScheduleConfig  `json:"schedule" mapstructure:"schedule"`
-	ConfigFile string          `json:"config_file" mapstructure:"-"`
+	Root         string          `json:"root" mapstructure:"root"`
+	JSON         bool            `json:"json" mapstructure:"json"`
+	Version      int             `json:"version" mapstructure:"version"`
+	Project      string          `json:"project" mapstructure:"project"`
+	Warehouse    WarehouseConfig `json:"warehouse" mapstructure:"warehouse"`
+	Runtime      RuntimeConfig   `json:"runtime" mapstructure:"runtime"`
+	RLM          RLMConfig       `json:"rlm" mapstructure:"rlm"`
+	Schedule     ScheduleConfig  `json:"schedule" mapstructure:"schedule"`
+	ConfigFile   string          `json:"config_file" mapstructure:"-"`
+	ExplicitKeys map[string]bool `json:"-" mapstructure:"-"`
 }
 
 // WarehouseConfig mirrors the non-secret workspace warehouse defaults written by pm init.
@@ -108,6 +109,12 @@ type LLMConfig struct {
 // ScheduleConfig configures local schedule installation seams.
 type ScheduleConfig struct {
 	CrontabFile string `json:"crontab_file" mapstructure:"crontab_file"`
+}
+
+// IsExplicit reports whether a config key was provided by a bound flag,
+// environment variable, or the config file rather than only by defaults.
+func (c Config) IsExplicit(key string) bool {
+	return c.ExplicitKeys != nil && c.ExplicitKeys[key]
 }
 
 // LoadError reports a config file read/decode/unmarshal failure.
@@ -192,6 +199,7 @@ func Load(opts Options) (Config, error) {
 		return Config{}, &LoadError{Path: configPath, Err: err}
 	}
 	cfg.ConfigFile = configPath
+	cfg.ExplicitKeys = explicitKeys(v, opts.Flags)
 	return cfg, nil
 }
 
@@ -268,6 +276,24 @@ func lookupBoundEnv(key string) (string, bool) {
 		}
 	}
 	return "", false
+}
+
+func explicitKeys(v *viper.Viper, flags map[string]FlagValue) map[string]bool {
+	keys := make(map[string]bool)
+	for _, binding := range allEnvBindings() {
+		if _, ok := changedFlagValue(flags, binding.key); ok {
+			keys[binding.key] = true
+			continue
+		}
+		if _, ok := lookupBoundEnv(binding.key); ok {
+			keys[binding.key] = true
+			continue
+		}
+		if v.InConfig(binding.key) {
+			keys[binding.key] = true
+		}
+	}
+	return keys
 }
 
 func envNamesForKey(key string) []string {

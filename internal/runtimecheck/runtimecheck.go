@@ -3,13 +3,14 @@ package runtimecheck
 import (
 	"context"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 	"go.temporal.io/sdk/client"
 	tlog "go.temporal.io/sdk/log"
+
+	pmconfig "polymetrics.ai/internal/config"
 )
 
 type Config struct {
@@ -33,13 +34,21 @@ type Report struct {
 	Checks   []CheckResult `json:"checks"`
 }
 
-func FromEnv() Config {
+func FromConfig(cfg pmconfig.Config) Config {
 	return Config{
-		PostgresURL:   envOr("POLYMETRICS_POSTGRES_URL", "postgres://polymetrics:polymetrics@localhost:15433/polymetrics?sslmode=disable"),
-		DragonflyAddr: envOr("POLYMETRICS_DRAGONFLY_ADDR", "localhost:6379"),
-		TemporalAddr:  envOr("POLYMETRICS_TEMPORAL_ADDR", "localhost:7233"),
+		PostgresURL:   stringOr(cfg.Runtime.PostgresURL, "postgres://polymetrics:polymetrics@localhost:15433/polymetrics?sslmode=disable"),
+		DragonflyAddr: stringOr(cfg.Runtime.DragonflyAddr, "localhost:6379"),
+		TemporalAddr:  stringOr(cfg.Runtime.TemporalAddr, "localhost:7233"),
 		Timeout:       3 * time.Second,
 	}
+}
+
+func FromEnv() Config {
+	cfg, err := pmconfig.Load(pmconfig.Options{})
+	if err != nil {
+		return FromConfig(pmconfig.Config{})
+	}
+	return FromConfig(cfg)
 }
 
 func Doctor(ctx context.Context, cfg Config) Report {
@@ -143,8 +152,8 @@ func (noopLogger) Error(string, ...interface{}) {}
 
 var _ tlog.Logger = noopLogger{}
 
-func envOr(name, fallback string) string {
-	if value := os.Getenv(name); value != "" {
+func stringOr(value, fallback string) string {
+	if value != "" {
 		return value
 	}
 	return fallback

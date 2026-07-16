@@ -9,7 +9,10 @@ import (
 )
 
 // CrontabBackend installs schedules by appending to the user's crontab.
-type CrontabBackend struct{}
+type CrontabBackend struct {
+	// File redirects crontab writes to a file, primarily for tests/certification.
+	File string
+}
 
 func (b CrontabBackend) Kind() BackendKind { return KindCrontab }
 
@@ -19,8 +22,7 @@ func (b CrontabBackend) Install(ctx context.Context, m Manifest, pmBin string) e
 		return err
 	}
 
-	// PM_CRONTAB_FILE is set in tests to redirect writes to a temp file.
-	if crontabFile := os.Getenv("PM_CRONTAB_FILE"); crontabFile != "" {
+	if crontabFile := b.File; crontabFile != "" {
 		existing, _ := os.ReadFile(crontabFile)
 		content := string(existing)
 		content, err = removeCrontabLine(content, m.Name)
@@ -61,7 +63,7 @@ func (b CrontabBackend) Install(ctx context.Context, m Manifest, pmBin string) e
 }
 
 func (b CrontabBackend) Remove(ctx context.Context, name string) error {
-	if crontabFile := os.Getenv("PM_CRONTAB_FILE"); crontabFile != "" {
+	if crontabFile := b.File; crontabFile != "" {
 		existing, _ := os.ReadFile(crontabFile)
 		updated, err := removeCrontabLine(string(existing), name)
 		if err != nil {

@@ -8,24 +8,25 @@ import (
 	"os"
 	"path/filepath"
 
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/rlm"
 	"polymetrics.ai/internal/temporalprobe"
 	"polymetrics.ai/internal/worker"
 )
 
-func runRLM(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runRLM(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return usageErrorf("rlm: missing subcommand (try: rlm run)")
 	}
 	switch args[0] {
 	case "run":
-		return runRLMRun(ctx, root, args[1:], stdout, jsonOut)
+		return runRLMRun(ctx, cfg, root, args[1:], stdout, jsonOut)
 	default:
 		return usageErrorf("rlm: unknown subcommand %q", args[0])
 	}
 }
 
-func runRLMRun(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runRLMRun(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 
 	specPath := flags.first("spec")
@@ -74,7 +75,7 @@ func runRLMRun(ctx context.Context, root string, args []string, stdout io.Writer
 	case "model":
 		analyzer = &rlm.ModelAnalyzer{}
 	case "agent":
-		a, c, err := buildAgentAnalyzer(flags.first("request"))
+		a, c, err := buildAgentAnalyzer(cfg, flags.first("request"))
 		if err != nil {
 			return err
 		}
@@ -102,16 +103,16 @@ func runRLMRun(ctx context.Context, root string, args []string, stdout io.Writer
 	return nil
 }
 
-// buildAgentAnalyzer constructs the RLM agent backend. When
-// POLYMETRICS_RLM_FAKE_RUNNER is set it runs fully offline (no Temporal/podman) —
-// the hermetic dev/test path. Otherwise it wires the real Temporal submitter
-// (daemon by default; embedded with POLYMETRICS_RLM_EMBEDDED_WORKER=1) and probe.
-func buildAgentAnalyzer(request string) (rlm.Analyzer, func() error, error) {
-	cfg := rlm.AgentConfigFromEnv(os.Getenv)
+// buildAgentAnalyzer constructs the RLM agent backend. When rlm.fake_runner is
+// set it runs fully offline (no Temporal/podman) — the hermetic dev/test path.
+// Otherwise it wires the real Temporal submitter (daemon by default; embedded
+// with rlm.embedded_worker=true) and probe.
+func buildAgentAnalyzer(cfg config.Config, request string) (rlm.Analyzer, func() error, error) {
+	agentCfg := agentConfigFromConfig(cfg)
 
-	if os.Getenv("POLYMETRICS_RLM_FAKE_RUNNER") != "" {
+	if cfg.RLM.FakeRunner {
 		a := &rlm.AgentAnalyzer{
-			Cfg:      rlm.AgentConfig{TemporalAddr: "fake", PodmanBin: "fake", Image: cfg.Image, MaxIter: cfg.MaxIter},
+			Cfg:      rlm.AgentConfig{TemporalAddr: "fake", PodmanBin: "fake", Image: agentCfg.Image, MaxIter: agentCfg.MaxIter},
 			Probe:    func(context.Context, string) bool { return true },
 			LookPath: func(string) (string, error) { return "fake", nil },
 			Submit:   rlm.NewFakeRunnerSubmit(),
@@ -120,19 +121,35 @@ func buildAgentAnalyzer(request string) (rlm.Analyzer, func() error, error) {
 		return a, nil, nil
 	}
 
-	if cfg.TemporalAddr == "" {
+	if agentCfg.TemporalAddr == "" {
 		return nil, nil, rlm.ErrRemoteUnavailable
 	}
-	embedded := os.Getenv("POLYMETRICS_RLM_EMBEDDED_WORKER") == "1"
-	submit, closer, err := worker.SubmitterFor(cfg.TemporalAddr, embedded)
+	embedded := cfg.RLM.EmbeddedWorker
+	submit, closer, err := worker.SubmitterForActivities(agentCfg.TemporalAddr, embedded, worker.NewPodmanActivities(agentCfg.PodmanBin, agentCfg.Image))
 	if err != nil {
 		return nil, nil, fmt.Errorf("rlm: %w (%v)", rlm.ErrRemoteUnavailable, err)
 	}
 	a := &rlm.AgentAnalyzer{
-		Cfg:     cfg,
+		Cfg:     agentCfg,
 		Probe:   temporalprobe.Probe,
 		Submit:  submit,
 		Request: request,
 	}
 	return a, closer, nil
+}
+
+func agentConfigFromConfig(cfg config.Config) rlm.AgentConfig {
+	agentCfg := rlm.AgentConfig{
+		TemporalAddr: explicitTemporalAddr(cfg),
+		Image:        cfg.RLM.Image,
+		PodmanBin:    cfg.RLM.PodmanBin,
+		MaxIter:      4,
+	}
+	if agentCfg.PodmanBin == "" {
+		agentCfg.PodmanBin = "podman"
+	}
+	if agentCfg.Image == "" {
+		agentCfg.Image = "ghcr.io/polymetrics/rlm-agent:latest"
+	}
+	return agentCfg
 }
