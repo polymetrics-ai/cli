@@ -28,8 +28,21 @@ Result:
 | 1 | Red | `go test ./internal/runtimecheck/... -count=1` | Fail | `undefined: FromConfig`; proves runtimecheck needs typed config API. |
 | 2 | Red | `go test ./internal/schedule/... -count=1` | Fail | Missing `BackendConfig`, `SelectBackendFromConfig`, `CrontabBackend.File`; proves schedule needs injected config seam. |
 | 3 | Red | `go test ./internal/cli/ -run 'Config|Runtime|RLM|Schedule|Worker|AgentImage' -count=1` | Fail | Runtime/worker/RLM config-file tests fail against legacy env readers. |
-| 4 | Green | pending | pending | Implement minimal config injection. |
-| 3 | Refactor | pending | pending | Docs caveat and cleanup while tests green. |
+| 4 | Green | `go test ./internal/config/... -count=1 && go test ./internal/runtimecheck/... -count=1 && go test ./internal/schedule/... -count=1 && go test ./internal/worker/... -count=1 && go test ./internal/rlm/... -count=1` | Pass | Added explicit config metadata, runtimecheck FromConfig, schedule backend config/file seam, worker submitter activity injection, RLM typed non-secret settings. |
+| 5 | Green | `go test ./internal/cli/ -run 'Golden|Config|Runtime|RLM|Schedule|Worker|AgentImage' -count=1` | Pass | CLI config-file/runtime/worker/schedule/agent image/RLM coverage green; golden transcripts unchanged. |
+| 6 | Green | `go test ./internal/cli/ -run Certify -count=1` | Pass | Certify crontab save/restore behavior preserved. |
+| 7 | Refactor | docs/help parity | Pass | Updated config caveat in embedded docs, `docs/cli/config.md`, website source, and generated website data. |
+| 8 | Gate | `go vet ./...`; `go build ./cmd/pm`; `go test ./...`; `make verify` | Pass | Full local gate green; no go.mod/go.sum diff. |
+
+## Implemented green slice
+
+- `internal/config`: added `ExplicitKeys`/`IsExplicit` metadata from changed bound flags, env aliases, and config-file keys to preserve opt-in Temporal semantics while still providing defaults to runtime doctor/runtime ETL.
+- `internal/runtimecheck`: added `FromConfig(config.Config)` as primary API; compatibility `FromEnv` delegates through typed loader.
+- `internal/cli`: resolved config once in `Run` and injects through Cobra legacy handlers into runtime, runtime ETL, worker, schedule, agent image, RLM, extract, and flow RLM paths.
+- `internal/schedule`: added narrow `BackendConfig`, `SelectBackendFromConfig`, and `CrontabBackend.File`; legacy `SelectBackend` delegates through typed loader while keeping Temporal opt-in.
+- `internal/worker`: added `SubmitterForActivities`/`NewPodmanActivities`; default compatibility path delegates through typed config.
+- `internal/rlm`: added `LLMConfigFromSettings` for non-secret typed LLM settings; API keys remain env-only.
+- Docs: config caveat updated because runtime/RLM/schedule keys are now active in migrated call sites.
 
 ## Planned red tests
 
@@ -89,4 +102,57 @@ redis: 2026/07/16 21:23:13 pool.go:724: redis: connection pool: failed to dial a
 FAIL
 FAIL	polymetrics.ai/internal/cli	3.817s
 FAIL
+```
+
+## Exact green outputs
+
+### Focused packages
+
+```bash
+go test ./internal/config/... -count=1 && go test ./internal/runtimecheck/... -count=1 && go test ./internal/schedule/... -count=1 && go test ./internal/worker/... -count=1 && go test ./internal/rlm/... -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/config	0.397s
+ok  	polymetrics.ai/internal/runtimecheck	0.366s
+ok  	polymetrics.ai/internal/schedule	0.347s
+ok  	polymetrics.ai/internal/worker	0.538s
+ok  	polymetrics.ai/internal/rlm	0.672s
+ok  	polymetrics.ai/internal/rlm/router	0.330s
+```
+
+### CLI focused/golden
+
+```bash
+go test ./internal/cli/ -run 'Golden|Config|Runtime|RLM|Schedule|Worker|AgentImage' -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	11.286s
+```
+
+### Certify crontab preservation
+
+```bash
+go test ./internal/cli/ -run Certify -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	92.245s
+```
+
+### Full gates
+
+```bash
+go vet ./...
+go build ./cmd/pm
+go test ./...
+make verify
+```
+
+```text
+go vet ./...: pass (no output)
+go build ./cmd/pm: pass (no output)
+go test ./...: pass
+make verify: pass; smoke ok; golangci-lint 0 issues; connectorgen validate 547 connector(s) checked, 0 findings
 ```

@@ -58,6 +58,46 @@ func TestWorkerStatusUsesExplicitConfigFileTemporalAddr(t *testing.T) {
 	}
 }
 
+func TestScheduleInstallUsesConfigFileCrontabPath(t *testing.T) {
+	crontabFile := t.TempDir() + "/crontab"
+	root := writeMigrationConfig(t, "schedule:\n  crontab_file: "+crontabFile+"\n")
+	initProject(t, root)
+
+	_, stderr, code := scheduleRun(t, root, "schedule", "create",
+		"--name", "nightly-leads",
+		"--cron", "0 2 * * *",
+		"--flow", "likely-customers",
+	)
+	if code != 0 {
+		t.Fatalf("create: exit %d, stderr=%q", code, stderr)
+	}
+	_, stderr, code = scheduleRun(t, root, "schedule", "install", "nightly-leads", "--crontab")
+	if code != 0 {
+		t.Fatalf("install: exit %d, stderr=%q", code, stderr)
+	}
+	data, err := os.ReadFile(crontabFile)
+	if err != nil {
+		t.Fatalf("read configured crontab: %v", err)
+	}
+	if !bytes.Contains(data, []byte("pm-schedule-nightly-leads")) {
+		t.Fatalf("configured crontab missing sentinel: %q", string(data))
+	}
+}
+
+func TestAgentImageUsesConfigFilePodmanBin(t *testing.T) {
+	root := writeMigrationConfig(t, "rlm:\n  podman_bin: definitely-not-a-real-binary-from-config\n")
+	initProject(t, root)
+
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{"--root", root, "agent", "image", "build"}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatal("want non-zero exit when configured podman bin is absent")
+	}
+	if !bytes.Contains(stderr.Bytes(), []byte("definitely-not-a-real-binary-from-config")) {
+		t.Fatalf("stderr = %q, want configured podman bin", stderr.String())
+	}
+}
+
 func TestRLMAgentFakeRunnerUsesConfigFile(t *testing.T) {
 	root := writeMigrationConfig(t, `rlm:
   fake_runner: true
@@ -85,6 +125,18 @@ func TestRLMAgentFakeRunnerUsesConfigFile(t *testing.T) {
 
 func writeMigrationConfig(t *testing.T, yaml string) string {
 	t.Helper()
+	for _, name := range []string{
+		"POLYMETRICS_POSTGRES_URL", "PM_POSTGRES_URL",
+		"POLYMETRICS_DRAGONFLY_ADDR", "PM_DRAGONFLY_ADDR",
+		"POLYMETRICS_TEMPORAL_ADDR", "PM_TEMPORAL_ADDR",
+		"POLYMETRICS_RLM_IMAGE", "PM_RLM_IMAGE",
+		"POLYMETRICS_PODMAN_BIN", "PM_PODMAN_BIN",
+		"POLYMETRICS_RLM_FAKE_RUNNER", "PM_RLM_FAKE_RUNNER",
+		"POLYMETRICS_RLM_EMBEDDED_WORKER", "PM_RLM_EMBEDDED_WORKER",
+		"POLYMETRICS_CRONTAB_FILE", "PM_CRONTAB_FILE",
+	} {
+		t.Setenv(name, "")
+	}
 	root := t.TempDir()
 	dir := filepath.Join(root, ".polymetrics")
 	if err := os.MkdirAll(dir, 0o700); err != nil {

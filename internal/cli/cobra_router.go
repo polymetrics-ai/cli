@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/config"
 )
 
 type cobraLegacyHandler func(context.Context, string, []string, io.Writer, bool) error
@@ -38,7 +39,9 @@ func markCobraLegacyError(err error) error {
 	return &cobraLegacyError{err: err}
 }
 
-func newRootCmd(ctx context.Context, root string, stdout, stderr io.Writer, jsonOut bool) *cobra.Command {
+func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer) *cobra.Command {
+	root := cfg.Root
+	jsonOut := cfg.JSON
 	cmd := &cobra.Command{
 		Use:                "pm",
 		Short:              "local-first Polymetrics AI ETL and reverse ETL CLI",
@@ -61,7 +64,7 @@ func newRootCmd(ctx context.Context, root string, stdout, stderr io.Writer, json
 	cmd.PersistentFlags().String("root", root, "project root (parsed by the legacy global parser)")
 	cmd.PersistentFlags().Bool("json", jsonOut, "write machine-readable JSON output (parsed by the legacy global parser)")
 	setManualHelp(cmd, "", stdout, jsonOut)
-	for _, spec := range cobraLegacyCommands() {
+	for _, spec := range cobraLegacyCommands(cfg) {
 		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec))
 	}
 	return cmd
@@ -79,7 +82,7 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	return err
 }
 
-func cobraLegacyCommands() []cobraLegacyCommand {
+func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 	return []cobraLegacyCommand{
 		{name: "init", handler: func(_ context.Context, root string, _ []string, stdout io.Writer, jsonOut bool) error {
 			return runInit(root, stdout, jsonOut)
@@ -99,7 +102,7 @@ func cobraLegacyCommands() []cobraLegacyCommand {
 			return withApp(root, func(a *app.App) error { return runCatalog(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "etl", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut) })
+			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
 		}},
 		{name: "query", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runQuery(ctx, a, args, stdout, jsonOut) })
@@ -108,16 +111,16 @@ func cobraLegacyCommands() []cobraLegacyCommand {
 			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "agent", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runAgent(ctx, root, args, stdout, jsonOut)
+			return runAgent(ctx, cfg, root, args, stdout, jsonOut)
 		}},
 		{name: "runtime", handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runRuntime(ctx, args, stdout, jsonOut)
+			return runRuntime(ctx, cfg, args, stdout, jsonOut)
 		}},
 		{name: "flow", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runFlow(ctx, a, args, stdout, jsonOut) })
+			return withApp(root, func(a *app.App) error { return runFlow(ctx, cfg, a, args, stdout, jsonOut) })
 		}},
 		{name: "extract", hidden: true, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, root, args, stdout, jsonOut) })
+			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
 		}},
 		{name: "perf", handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runPerf(ctx, args, stdout, jsonOut)
@@ -132,13 +135,13 @@ func cobraLegacyCommands() []cobraLegacyCommand {
 			return runVersion(args, stdout, jsonOut)
 		}},
 		{name: "rlm", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runRLM(ctx, root, args, stdout, jsonOut)
+			return runRLM(ctx, cfg, root, args, stdout, jsonOut)
 		}},
 		{name: "schedule", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runSchedule(ctx, root, args, stdout, jsonOut)
+			return runSchedule(ctx, cfg, root, args, stdout, jsonOut)
 		}},
 		{name: "worker", hidden: true, handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runWorker(ctx, args, stdout, jsonOut)
+			return runWorker(ctx, cfg, args, stdout, jsonOut)
 		}},
 	}
 }

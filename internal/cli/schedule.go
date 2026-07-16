@@ -8,10 +8,11 @@ import (
 	"os"
 	"time"
 
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/schedule"
 )
 
-func runSchedule(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runSchedule(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return usageErrorf("usage: pm schedule <create|list|install|remove>")
 	}
@@ -21,9 +22,9 @@ func runSchedule(ctx context.Context, root string, args []string, stdout io.Writ
 	case "list":
 		return runScheduleList(root, args[1:], stdout, jsonOut)
 	case "install":
-		return runScheduleInstall(ctx, root, args[1:], stdout, jsonOut)
+		return runScheduleInstall(ctx, cfg, root, args[1:], stdout, jsonOut)
 	case "remove":
-		return runScheduleRemove(ctx, root, args[1:], stdout, jsonOut)
+		return runScheduleRemove(ctx, cfg, root, args[1:], stdout, jsonOut)
 	default:
 		return usageErrorf("unknown schedule subcommand %q", args[0])
 	}
@@ -84,7 +85,7 @@ func runScheduleList(root string, args []string, stdout io.Writer, jsonOut bool)
 	return nil
 }
 
-func runScheduleInstall(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runScheduleInstall(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	positionals := flags.values["_"]
 	if len(positionals) == 0 {
@@ -103,7 +104,7 @@ func runScheduleInstall(ctx context.Context, root string, args []string, stdout 
 	m.Root = root
 
 	pmBin, _ := os.Executable()
-	backend := schedule.SelectBackend(ctx, forceCrontab, nil)
+	backend := schedule.SelectBackendFromConfig(ctx, forceCrontab, nil, scheduleConfig(cfg))
 
 	if err := backend.Install(ctx, m, pmBin); err != nil {
 		return fmt.Errorf("install failed: %w", err)
@@ -116,7 +117,7 @@ func runScheduleInstall(ctx context.Context, root string, args []string, stdout 
 	return nil
 }
 
-func runScheduleRemove(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runScheduleRemove(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	positionals := flags.values["_"]
 	if len(positionals) == 0 {
@@ -133,10 +134,11 @@ func runScheduleRemove(ctx context.Context, root string, args []string, stdout i
 	}
 
 	// Best-effort backend removal (ignores errors if backend binary absent).
-	backend := schedule.SelectBackend(ctx, forceCrontab, nil)
+	backendCfg := scheduleConfig(cfg)
+	backend := schedule.SelectBackendFromConfig(ctx, forceCrontab, nil, backendCfg)
 	_ = backend.Remove(ctx, name)
 	if backend.Kind() != schedule.KindCrontab {
-		_ = (schedule.CrontabBackend{}).Remove(ctx, name)
+		_ = (schedule.CrontabBackend{File: backendCfg.CrontabFile}).Remove(ctx, name)
 	}
 
 	if err := schedule.Delete(root, name); err != nil {
@@ -148,6 +150,14 @@ func runScheduleRemove(ctx context.Context, root string, args []string, stdout i
 	}
 	fmt.Fprintf(stdout, "Removed schedule %s\n", name)
 	return nil
+}
+
+func scheduleConfig(cfg config.Config) schedule.BackendConfig {
+	backendCfg := schedule.BackendConfig{CrontabFile: cfg.Schedule.CrontabFile}
+	if cfg.IsExplicit("runtime.temporal_addr") {
+		backendCfg.TemporalAddr = cfg.Runtime.TemporalAddr
+	}
+	return backendCfg
 }
 
 func isAlreadyExists(err error) bool {

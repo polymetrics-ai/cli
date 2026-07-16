@@ -60,28 +60,39 @@ Strict exclusions:
 | `internal/connectors/certify/*` | secret env, credsfile, `PM_CRONTAB_FILE` save/restore | certify secret/test seams | exclude except behavior preserved through CLI config load |
 | `internal/cli/golden_transcript_test.go` | update golden env flag | test-only seam | exclude |
 
+## Delivered implementation matrix
+
+| Scope | Delivery |
+|---|---|
+| `internal/config` | Added explicit-source metadata (`ExplicitKeys`, `IsExplicit`) without global Viper state or AutomaticEnv. |
+| `internal/runtimecheck` | `FromConfig(config.Config)` primary; `FromEnv` compatibility delegates through typed load. |
+| CLI config injection | `Run` resolves config once, then Cobra legacy handlers inject it into runtime, ETL runtime recording, worker, schedule, agent image, RLM, extract, and flow RLM paths. |
+| Schedule | Added `BackendConfig`, `SelectBackendFromConfig`, and `CrontabBackend.File`; CLI injects explicit Temporal and crontab file; legacy `SelectBackend` remains compatible. |
+| Worker/RLM | Worker status/serve and RLM agent use explicit typed Temporal; RLM image/bin/fake/embedded and non-secret LLM provider/base/model come from typed config; API keys/env forwarding remain env-only. |
+| Docs | Updated embedded config help, `docs/cli/config.md`, website source, and generated website docs data. |
+
 ## Slice plan
 
-1. Planning checkpoint
+1. Planning checkpoint ✅
    - Create phase artifacts and record GSD adapter fallback, skills, classification, verification plan.
    - Commit/push plan-only checkpoint if green enough.
 
-2. Red tests
+2. Red tests ✅
    - Add focused failing tests for runtimecheck FromConfig/FromEnv alias, CLI config-file injection for runtime/worker/schedule/agent image/RLM, and save/restore crontab behavior.
    - Capture exact red output in `TDD-LEDGER.md`.
 
-3. Green implementation
+3. Green implementation ✅
    - Add `internal/config` explicit key metadata helper if needed for worker/RLM/schedule opt-in semantics while preserving goldens.
    - Add runtimecheck FromConfig and compatibility FromEnv.
    - Inject config through Cobra wrapper/legacy handlers; migrate named call sites.
    - Add worker typed activities submitter and RLM config helpers; keep API keys/env forwarding excluded.
    - Add CrontabBackend file field and backend config injection; preserve `PM_CRONTAB_FILE` behavior.
 
-4. Docs parity slice
+4. Docs parity slice ✅
    - Update `docs/cli/config.md`, `website/content/docs/cli-reference.mdx`, and generated website data only if caveat changes.
    - Runtime help strings unchanged unless explicitly needed; golden transcripts should remain byte-identical.
 
-5. Verification and PR
+5. Verification and PR (verification ✅, PR pending)
    - Run focused gates, full gates when feasible, diff checks, docs/help parity.
    - Open stacked PR to `feat/cli-architecture-v2` with `Refs #402`, `Refs #397`.
    - Review route: Claude disabled, Copilot quota exhausted; record human/parent fallback pending, do not request either.
@@ -98,4 +109,4 @@ Strict exclusions:
 
 ## Parity stance
 
-CLI-visible help/output should remain byte-identical. Config docs caveat currently says runtime/RLM/schedule readers are legacy until #402; update caveat only after behavior is active. No generated broad docs churn beyond matching website data if docs change.
+Golden transcripts remain byte-identical. Config docs caveat changed because behavior is active in migrated call sites; embedded help, `docs/cli/config.md`, website source, and generated website data are aligned. Hidden `worker --help` remains unavailable as pre-existing hidden-command behavior; visible namespace help/bare namespace checks passed for runtime, agent, rlm, and schedule.

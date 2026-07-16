@@ -37,7 +37,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	if err != nil {
 		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
 	}
-	cmd := newRootCmd(ctx, cfg.Root, stdout, stderr, cfg.JSON)
+	cmd := newRootCmd(ctx, cfg, stdout, stderr)
 	if err := executeRootCmd(cmd, cleanArgs); err != nil {
 		return writeError(stdout, stderr, mapCobraErr(err), cfg.JSON)
 	}
@@ -439,7 +439,7 @@ func runCatalog(ctx context.Context, a *app.App, args []string, stdout io.Writer
 	return nil
 }
 
-func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool, cfg config.Config) error {
 	if len(args) == 0 {
 		return errUsage
 	}
@@ -519,7 +519,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		}
 		runtimeRecorded := false
 		if flags.first("runtime") == "true" {
-			if err := recordRuntimeETL(ctx, run); err != nil {
+			if err := recordRuntimeETL(ctx, run, cfg); err != nil {
 				return err
 			}
 			runtimeRecorded = true
@@ -1044,12 +1044,12 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 	}
 }
 
-func runAgent(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runAgent(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return errUsage
 	}
 	if args[0] == "image" {
-		return runAgentImage(ctx, root, args[1:], stdout, jsonOut)
+		return runAgentImage(ctx, cfg, root, args[1:], stdout, jsonOut)
 	}
 	if args[0] != "plan" {
 		return errUsage
@@ -1116,16 +1116,16 @@ func runDocs(args []string, stdout io.Writer) error {
 	}
 }
 
-func runRuntime(ctx context.Context, args []string, stdout io.Writer, jsonOut bool) error {
+func runRuntime(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 || args[0] != "doctor" {
 		return errUsage
 	}
-	cfg := runtimecheck.FromEnv()
-	report := runtimecheck.Doctor(ctx, cfg)
+	runtimeCfg := runtimecheck.FromConfig(cfg)
+	report := runtimecheck.Doctor(ctx, runtimeCfg)
 	if jsonOut {
 		return writeJSON(stdout, envelope{
 			"kind":   "RuntimeDoctor",
-			"config": runtimecheck.RedactedConfig(cfg),
+			"config": runtimecheck.RedactedConfig(runtimeCfg),
 			"report": report,
 		})
 	}

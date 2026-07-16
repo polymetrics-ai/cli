@@ -4,33 +4,38 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"os"
 	"time"
 
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/temporalprobe"
 	"polymetrics.ai/internal/worker"
 )
 
 // runWorker dispatches `pm worker serve|status`. The worker daemon hosts the RLM
 // Temporal workflow + podman activity for `pm rlm run --mode agent`.
-func runWorker(ctx context.Context, args []string, stdout io.Writer, jsonOut bool) error {
+func runWorker(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return usageErrorf("worker: missing subcommand (serve|status)")
 	}
 	switch args[0] {
 	case "serve":
-		return runWorkerServe(ctx, stdout, jsonOut)
+		return runWorkerServe(ctx, cfg, stdout, jsonOut)
 	case "status":
-		return runWorkerStatus(ctx, stdout, jsonOut)
+		return runWorkerStatus(ctx, cfg, stdout, jsonOut)
 	default:
 		return usageErrorf("worker: unknown subcommand %q (want serve|status)", args[0])
 	}
 }
 
-func temporalAddr() string { return os.Getenv("POLYMETRICS_TEMPORAL_ADDR") }
+func explicitTemporalAddr(cfg config.Config) string {
+	if cfg.IsExplicit("runtime.temporal_addr") {
+		return cfg.Runtime.TemporalAddr
+	}
+	return ""
+}
 
-func runWorkerServe(ctx context.Context, stdout io.Writer, jsonOut bool) error {
-	addr := temporalAddr()
+func runWorkerServe(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) error {
+	addr := explicitTemporalAddr(cfg)
 	if addr == "" {
 		return validationErrorf("worker serve: POLYMETRICS_TEMPORAL_ADDR is not set")
 	}
@@ -42,8 +47,8 @@ func runWorkerServe(ctx context.Context, stdout io.Writer, jsonOut bool) error {
 	return worker.Serve(ctx, addr)
 }
 
-func runWorkerStatus(ctx context.Context, stdout io.Writer, jsonOut bool) error {
-	addr := temporalAddr()
+func runWorkerStatus(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) error {
+	addr := explicitTemporalAddr(cfg)
 	probeCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
 	reachable := addr != "" && temporalprobe.Probe(probeCtx, addr)

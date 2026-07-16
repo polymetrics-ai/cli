@@ -2,36 +2,41 @@
 
 ## Required gate checklist
 
-- [ ] `gofmt -w cmd internal`
-- [ ] `go test ./internal/config/... -count=1`
-- [ ] `go test ./internal/runtimecheck/... -count=1`
-- [ ] `go test ./internal/schedule/... -count=1`
-- [ ] `go test ./internal/worker/... -count=1`
-- [ ] `go test ./internal/cli/ -run 'Golden|Config|Runtime|RLM|Schedule|Worker|AgentImage' -count=1`
-- [ ] `go test ./internal/cli/ -run Certify -count=1`
-- [ ] `go vet ./...`
-- [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make verify`
-- [ ] `git diff --check origin/feat/cli-architecture-v2...HEAD`
-- [ ] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum`
+- [x] `gofmt -w cmd internal`
+- [x] `go test ./internal/config/... -count=1`
+- [x] `go test ./internal/runtimecheck/... -count=1`
+- [x] `go test ./internal/schedule/... -count=1`
+- [x] `go test ./internal/worker/... -count=1`
+- [x] `go test ./internal/cli/ -run 'Golden|Config|Runtime|RLM|Schedule|Worker|AgentImage' -count=1`
+- [x] `go test ./internal/cli/ -run Certify -count=1`
+- [x] `go vet ./...`
+- [x] `go test ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD`
+- [x] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` (no output)
 
 ## Optional / safety-limited
 
-- [ ] Runtime-backed integration tests: not planned; do not start services. Run only if already available and safe.
-- [ ] No credentialed checks.
-- [ ] No reverse ETL execution.
-- [ ] No new dependencies.
+- [x] Runtime-backed integration tests not run; services were not started.
+- [x] No credentialed checks.
+- [x] No reverse ETL execution outside `make verify` local smoke flow required by project gate.
+- [x] No new dependencies.
 
 ## CLI parity checklist
 
-- [ ] Golden transcripts unchanged (`go test ./internal/cli/ -run Golden -count=1`).
-- [ ] `pm help config` checked if config docs change.
-- [ ] `pm runtime --help`, `pm worker --help`, `pm schedule --help`, `pm rlm --help`, `pm agent --help` unchanged or documented.
-- [ ] `docs/cli/config.md` updated if caveat changed.
-- [ ] `website/content/docs/cli-reference.mdx` and generated `website/lib/docs.generated.ts` updated if caveat changed.
-- [ ] Bare namespace behavior unchanged.
+- [x] Golden transcripts unchanged (`go test ./internal/cli/ -run Golden -count=1` included in focused CLI gate).
+- [x] `./pm help config` checked after docs caveat change.
+- [x] `./pm runtime --help`, `./pm schedule --help`, `./pm rlm --help`, `./pm agent --help` checked; hidden `worker --help` remains pre-existing unavailable hidden-topic behavior.
+- [x] `docs/cli/config.md` updated.
+- [x] `website/content/docs/cli-reference.mdx` and generated `website/lib/docs.generated.ts` updated.
+- [x] Bare namespace behavior unchanged for visible namespaces (`runtime`, `agent`, `rlm`, `schedule` exit 0).
 
 ## Results
 
-Pending.
+- Focused packages: pass.
+- CLI focused/golden/config migration: pass.
+- Certify: pass.
+- Full gates: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` pass.
+- Docs/help parity: pass for changed config docs and visible affected namespaces; `worker --help` hidden-topic failure recorded as pre-existing hidden-command behavior.
+- Runtime services/credentialed checks not run.

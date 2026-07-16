@@ -3,8 +3,8 @@
   "issue": 402,
   "branch": "refactor/402-config-env-migration",
   "baseBranch": "feat/cli-architecture-v2",
-  "verificationPassed": false,
-  "status": "in_progress",
+  "verificationPassed": true,
+  "status": "green_committed_pending_push_pr",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-402.prompt",
@@ -21,6 +21,16 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "red tests added inline for typed config injection; no subagent available"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "typed config injection completed in allowed scopes with local gates passing"
     }
-  ]
+  ],
+  "reviewRoute": {
+    "claude": "disabled",
+    "copilot": "quota_exhausted",
+    "fallback": "human_parent_review_pending"
+  }
 }

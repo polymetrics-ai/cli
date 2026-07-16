@@ -10,12 +10,13 @@ import (
 	"strings"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/rlm"
 )
 
 // runFlow dispatches pm flow subcommands: plan | preview | run | status | list.
-func runFlow(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+func runFlow(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return usageErrorf("flow: subcommand required (plan|preview|run|status|list)")
 	}
@@ -29,7 +30,7 @@ func runFlow(ctx context.Context, a *app.App, args []string, stdout io.Writer, j
 	case "preview":
 		return flowPlan(ctx, rest, stdout, jsonOut, true)
 	case "run":
-		return flowRun(ctx, a, rest, stdout, jsonOut)
+		return flowRun(ctx, cfg, a, rest, stdout, jsonOut)
 	case "status":
 		return flowStatus(rest, stdout, jsonOut)
 	case "list":
@@ -135,7 +136,7 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 }
 
 // flowRun executes the flow.
-func flowRun(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
 	file, flowsDir, force, positional := parseFlowFlags(args)
 	if file == "" {
 		if len(positional) == 0 {
@@ -162,7 +163,7 @@ func flowRun(ctx context.Context, a *app.App, args []string, stdout io.Writer, j
 	// Build a no-op adapter when app is nil (testing without real app).
 	var adapter flow.AppAdapter
 	if a != nil {
-		adapter = &appFlowAdapter{app: a}
+		adapter = &appFlowAdapter{app: a, cfg: cfg}
 	} else {
 		adapter = &noopAppAdapter{}
 	}
@@ -291,6 +292,7 @@ func (n *noopAppAdapter) RLMRun(_ context.Context, _ flow.RLMRunRequest) (flow.R
 // appFlowAdapter wraps *app.App to satisfy AppAdapter.
 type appFlowAdapter struct {
 	app *app.App
+	cfg config.Config
 }
 
 func (a *appFlowAdapter) ETLRun(ctx context.Context, connectionID string, streams []string) (flow.ETLResult, error) {
@@ -328,7 +330,7 @@ func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (fl
 		return flow.RLMResult{}, fmt.Errorf("flow rlm: parse spec: %w", err)
 	}
 
-	analyzer, closer, err := flowRLMAnalyzer(req.Mode)
+	analyzer, closer, err := flowRLMAnalyzer(a.cfg, req.Mode)
 	if err != nil {
 		return flow.RLMResult{}, err
 	}
@@ -353,7 +355,7 @@ func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (fl
 	}, nil
 }
 
-func flowRLMAnalyzer(mode string) (rlm.Analyzer, func() error, error) {
+func flowRLMAnalyzer(cfg config.Config, mode string) (rlm.Analyzer, func() error, error) {
 	if mode == "" {
 		mode = "deterministic"
 	}
@@ -365,7 +367,7 @@ func flowRLMAnalyzer(mode string) (rlm.Analyzer, func() error, error) {
 	case "model":
 		return &rlm.ModelAnalyzer{}, nil, nil
 	case "agent":
-		return buildAgentAnalyzer("")
+		return buildAgentAnalyzer(cfg, "")
 	default:
 		return nil, nil, usageErrorf("flow rlm: unknown mode %q (want deterministic|fixture|model|agent)", mode)
 	}
