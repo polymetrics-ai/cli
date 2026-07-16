@@ -46,6 +46,30 @@ Applies: yes, because routing/help behavior is CLI-visible even though target is
 - [x] Generated help/manual artifacts: no update; golden suite remained byte-identical.
 - [x] Completion/discovery metadata: not applicable in Phase 2; shell completion is Phase 15.
 
+## Review-fix verification plan — PR #440
+
+Required exact gates after fixes:
+
+- [x] `gofmt -w cmd internal` — pass, no output.
+- [x] `go test ./internal/cli/ -run 'TestCobraRouterShell|Golden' -count=1` — pass: `ok  	polymetrics.ai/internal/cli	7.724s`.
+- [x] `go test ./internal/cli/ -run Certify -count=1` — pass: `ok  	polymetrics.ai/internal/cli	92.156s`.
+- [x] `go test ./internal/cli/ -count=1` — pass: `ok  	polymetrics.ai/internal/cli	155.648s`.
+- [x] `go vet ./...` — pass, no output.
+- [x] `go test ./...` — pass; notable uncached packages: `polymetrics.ai/internal/cli 162.510s`, `polymetrics.ai/internal/connectors/certify 347.398s`.
+- [x] `go build ./cmd/pm` — pass, no output.
+- [x] `make verify` — pass; ended with `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass, no output.
+- [x] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` — pass/recorded unchanged approved Cobra delta only.
+
+Review-fix targeted assertions:
+
+- [x] Legacy handler/root-fallback plain errors containing `unknown flag` or `unknown command` remain legacy/internal, not usage/exit 2.
+- [x] Genuine Cobra parse errors map to existing usage taxonomy through `writeError`.
+- [x] Fresh roots define persistent `--root` and `--json` with defaults from parsed invocation state.
+- [x] Fresh command trees do not share persistent flag state.
+- [x] Every registered top-level wrapper, including `init`, has `DisableFlagParsing` and expected visibility.
+- [x] Deterministic dynamic connector passthrough accepts connector-specific flags plus late `--root`/`--json` globals without live credentials.
+
 ## Review route
 
 - [x] Open non-draft stacked PR to `feat/cli-architecture-v2` with `Refs #400` and `Refs #397`: PR #440.
@@ -53,9 +77,18 @@ Applies: yes, because routing/help behavior is CLI-visible even though target is
 - [x] Do not request Copilot because quota is exhausted for this blocker window.
 - [x] Record review status as human/parent-PR fallback pending; no approval claims.
 
+## Review-fix CLI parity spot checks
+
+- [x] `/tmp/pm-400 help connectors` — exit 0; stdout 4967 bytes; stderr 0 bytes.
+- [x] `/tmp/pm-400 connectors` — exit 0; stdout 4967 bytes; stderr 0 bytes.
+- [x] `/tmp/pm-400 docs --help` — exit 0; stdout 818 bytes; stderr 0 bytes.
+- [x] `docs/cli/**` not updated: no help text/command/flag output changed; golden/docs generation tests remained green.
+- [x] `website/**` not updated: no user-facing help/docs text changed.
+- [x] Generated help/manual artifacts not updated: golden suite remained byte-identical.
+
 ## Full `make verify` result
 
-Final run passed:
+Review-fix final run passed:
 
 ```text
 gofmt -w cmd internal
@@ -66,8 +99,8 @@ go test -timeout 20m ./...
 go build ./cmd/pm
 ./pm docs validate --connectors-dir docs/connectors
 Validated connector docs in docs/connectors
-smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.sWngLklYSz
-golangci-lint run ./internal/connectors/engine/... ./internal/connectors/defs/... ./internal/connectors/hooks/... ./internal/connectors/native/... ./internal/connectors/conformance/... ./internal/connectors/certify/...
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.3VKyH34MCu
+golangci-lint run ./internal/connectors/engine/... ./internal/connectors/defs/... ./internal/connectors/hooks/... ./internal/connectors/native/... ./internal/connectors/conformance/... ./internal/connectors/certify/... ./cmd/connectorgen/...
 0 issues.
 go run ./cmd/connectorgen validate internal/connectors/defs
 connectorgen validate: 547 connector(s) checked, 0 findings

@@ -19,6 +19,25 @@ type cobraLegacyCommand struct {
 	handler cobraLegacyHandler
 }
 
+type cobraLegacyError struct {
+	err error
+}
+
+func (e *cobraLegacyError) Error() string { return e.err.Error() }
+
+func (e *cobraLegacyError) Unwrap() error { return e.err }
+
+func markCobraLegacyError(err error) error {
+	if err == nil {
+		return nil
+	}
+	var legacy *cobraLegacyError
+	if errors.As(err, &legacy) {
+		return err
+	}
+	return &cobraLegacyError{err: err}
+}
+
 func newRootCmd(ctx context.Context, root string, stdout, stderr io.Writer, jsonOut bool) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "pm",
@@ -29,16 +48,18 @@ func newRootCmd(ctx context.Context, root string, stdout, stderr io.Writer, json
 		SilenceUsage:       true,
 		RunE: func(_ *cobra.Command, args []string) error {
 			if len(args) == 0 || isRootManualArg(args[0]) {
-				return writeRootManual(stdout, jsonOut)
+				return markCobraLegacyError(writeRootManual(stdout, jsonOut))
 			}
 			if len(args) > 1 && isHelpArg(args[1]) {
-				return writeManual(args[0], stdout, jsonOut)
+				return markCobraLegacyError(writeManual(args[0], stdout, jsonOut))
 			}
-			return runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, jsonOut)
+			return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, jsonOut))
 		},
 	}
 	cmd.SetOut(stdout)
 	cmd.SetErr(stderr)
+	cmd.PersistentFlags().String("root", root, "project root (parsed by the legacy global parser)")
+	cmd.PersistentFlags().Bool("json", jsonOut, "write machine-readable JSON output (parsed by the legacy global parser)")
 	setManualHelp(cmd, "", stdout, jsonOut)
 	for _, spec := range cobraLegacyCommands() {
 		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec))
@@ -132,12 +153,12 @@ func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, j
 		SilenceUsage:       true,
 		RunE: func(_ *cobra.Command, args []string) error {
 			if len(args) > 0 && isHelpArg(args[0]) {
-				return writeManual(spec.name, stdout, jsonOut)
+				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
 			}
 			if len(args) == 0 && isManualCommand(spec.name) {
-				return writeManual(spec.name, stdout, jsonOut)
+				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
 			}
-			return spec.handler(ctx, root, args, stdout, jsonOut)
+			return markCobraLegacyError(spec.handler(ctx, root, args, stdout, jsonOut))
 		},
 	}
 	setManualHelp(cmd, spec.name, stdout, jsonOut)
@@ -190,6 +211,10 @@ func mapCobraErr(err error) error {
 	}
 	var ce *cliError
 	if errors.As(err, &ce) || errors.Is(err, errUsage) {
+		return err
+	}
+	var legacy *cobraLegacyError
+	if errors.As(err, &legacy) {
 		return err
 	}
 	message := strings.TrimSpace(err.Error())

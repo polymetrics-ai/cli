@@ -35,9 +35,9 @@ scripts/gsd prompt programming-loop init --phase 400 --dry-run >/tmp/gsd-program
 
 ## Verification result
 
-Focused/full local gates and post-commit diff checks passed. PR #440 open; GitHub Actions verify still in progress at last check.
+Focused/full local gates and post-commit diff checks passed for initial implementation. PR #440 open. Review-fix cycle completed locally after pm-reviewer findings; push pending at artifact update time.
 
-Key results:
+Key initial results:
 
 - `go test ./internal/cli/ -run Golden -count=1` passed byte-identical.
 - `go test ./internal/cli/ -run Certify -count=1` passed.
@@ -48,3 +48,9 @@ Key results:
 - `make verify` passed.
 - `git diff --check origin/feat/cli-architecture-v2...HEAD` passed.
 - `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` recorded expected Cobra/pflag/mousetrap dependency delta.
+
+Review-fix results:
+
+- Red: `go test ./internal/cli/ -run TestCobraRouterShell -count=1` failed on missing persistent root flags and legacy error reclassification.
+- Green: `go test ./internal/cli/ -run TestCobraRouterShell -count=1` passed: `ok  	polymetrics.ai/internal/cli	2.026s`.
+- Exact gates passed: `gofmt -w cmd internal`; `go test ./internal/cli/ -run 'TestCobraRouterShell|Golden' -count=1`; `go test ./internal/cli/ -run Certify -count=1`; `go test ./internal/cli/ -count=1`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; `git diff --check origin/feat/cli-architecture-v2...HEAD`; `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum`.

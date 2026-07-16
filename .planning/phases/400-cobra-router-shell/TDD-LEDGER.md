@@ -18,6 +18,7 @@
 - `golang-spf13-cobra` — Best Practices #1 `RunE`, #4 injected writers, #5 fresh command tree per test/run; `DisableFlagParsing` available for strangler wrappers.
 - `golang-security` — Security Thinking Model #1-#3 for untrusted argv; avoid generic shell/write surfaces and command injection patterns.
 - `golang-documentation` — loaded for CLI help/manual parity review; docs changes currently expected not applicable.
+- `golang-lint` — loaded for review-fix gate interpretation (`go vet`, `make verify`, `git diff --check`).
 
 Missing repo-local stack skill: `.pi/skills/go-implementation/SKILL.md` returned `ENOENT`; recorded in plan and handoff. User-required Go skills were loaded.
 
@@ -182,9 +183,82 @@ git diff --check && git diff --cached --check
 
 Result: no output, exit 0.
 
+## Review-fix cycle — PR #440 pm-reviewer findings
+
+Disposition before edits: accepted both findings.
+
+Planned red tests before production edits:
+
+```bash
+go test ./internal/cli/ -run TestCobraRouterShell -count=1
+```
+
+Expected red:
+
+- Persistent root `--root` / `--json` flag assertions fail because fresh root commands currently define no persistent flags.
+- Legacy handler-style plain errors containing `unknown flag` / `unknown command` are reclassified by `mapCobraErr` as usage errors instead of preserving legacy internal classification.
+- Wrapper coverage fails for `init` / all-wrapper `DisableFlagParsing` assertions if any registered wrapper is omitted.
+- Dynamic connector passthrough coverage protects arbitrary connector flags plus late globals without live credentials.
+
+Actual red captured before production edits:
+
+```bash
+go test ./internal/cli/ -run TestCobraRouterShell -count=1
+```
+
+Result: fail, exit 1.
+
+```text
+--- FAIL: TestCobraRouterShellRootPersistentFlagsArePerFreshCommand (0.00s)
+    cobra_router_test.go:87: fresh roots must define persistent --root flags: first=<nil> second=<nil>
+--- FAIL: TestCobraRouterShellDoesNotReclassifyLegacyHandlerErrors (0.00s)
+    --- FAIL: TestCobraRouterShellDoesNotReclassifyLegacyHandlerErrors/unknown_flag_text (0.00s)
+        cobra_router_test.go:147: category = usage, want internal for "legacy connector handler failed: unknown flag --private"
+    --- FAIL: TestCobraRouterShellDoesNotReclassifyLegacyHandlerErrors/unknown_command_text (0.00s)
+        cobra_router_test.go:147: category = usage, want internal for "legacy connector handler failed: unknown command \"private\""
+FAIL
+FAIL	polymetrics.ai/internal/cli	2.030s
+FAIL
+```
+
+GSD review-fix command evidence:
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt plan-phase 400 --skip-research >/tmp/gsd-plan-phase-400-review-fix.prompt
+scripts/gsd prompt programming-loop init --phase 400 --dry-run >/tmp/gsd-programming-loop-400-review-fix.prompt
+```
+
+Result: doctor pass; plan prompt pass (`142 /tmp/gsd-plan-phase-400-review-fix.prompt`); programming-loop adapter gap persists with `scripts/gsd: unknown GSD command: programming-loop`, so `.pi/prompts/pm-gsd-loop.md` manual fallback remains active.
+
+Review-fix green slice:
+
+```bash
+gofmt -w internal/cli/cobra_router.go internal/cli/cobra_router_test.go
+go test ./internal/cli/ -run TestCobraRouterShell -count=1
+```
+
+Result:
+
+```text
+ok  	polymetrics.ai/internal/cli	2.026s
+```
+
+Implementation: added per-root persistent `--root` / `--json` definitions with parsed-state defaults, marked legacy/root-fallback errors with `cobraLegacyError`, and bypassed those errors in `mapCobraErr` so genuine Cobra parse errors still map to usage while legacy plain errors keep internal classification.
+
 ## Final verification evidence
 
-See `VERIFICATION.md`. Full `make verify` initially failed at tidy-check while dependency files were intentionally unstaged; after staging `go.mod`/`go.sum`, the same gate passed. No quality gate was weakened.
+Review-fix exact gates passed after implementation:
+
+```text
+ok  	polymetrics.ai/internal/cli	7.724s   # go test ./internal/cli/ -run 'TestCobraRouterShell|Golden' -count=1
+ok  	polymetrics.ai/internal/cli	92.156s  # go test ./internal/cli/ -run Certify -count=1
+ok  	polymetrics.ai/internal/cli	155.648s # go test ./internal/cli/ -count=1
+```
+
+Additional gates: `gofmt -w cmd internal` pass; `go vet ./...` pass with no output; `go test ./...` pass (`internal/cli 162.510s`, `internal/connectors/certify 347.398s`); `go build ./cmd/pm` pass with no output; `make verify` pass ending `connectorgen validate: 547 connector(s) checked, 0 findings`; `git diff --check origin/feat/cli-architecture-v2...HEAD` pass with no output; dependency diff unchanged from approved Cobra delta.
+
+See `VERIFICATION.md` for the complete gate checklist. No quality gate was weakened.
 
 Post-commit checks:
 

@@ -130,9 +130,30 @@ Note: `.pi/skills/go-implementation/SKILL.md` was required by the worker policy 
 5. Open non-draft stacked sub-PR to `feat/cli-architecture-v2` with Conventional Commit title, `Refs #400`, `Refs #397`, GSD/TDD/skills/dependency/parity/verification evidence.
 6. Review route: Claude workflow already `disabled_manually`; Copilot quota exhausted. Do not post `@claude review`; do not request Copilot again. Record human/parent-PR fallback pending.
 
+## Review-fix cycle — PR #440 pm-reviewer dispositions
+
+Accepted findings:
+
+1. `mapCobraErr` must not reclassify legacy/root-fallback plain errors that merely contain Cobra-like text (`unknown flag`, `unknown command`). Keep `writeError` taxonomy unchanged by marking legacy handler/root-fallback errors before they reach `mapCobraErr`, then bypassing them there. Add regression tests for legacy bypass and genuine Cobra parse-error usage mapping.
+2. Fresh root commands must define persistent `--root` and `--json` flags per ADR 0002 while `parseGlobal` remains the semantic owner and root/wrappers keep `DisableFlagParsing`. Flag defaults must reflect already-parsed invocation state and not share state across fresh command trees.
+
+Residual scope to close:
+
+- Assert every registered top-level wrapper, including `init`, has `DisableFlagParsing` and expected visibility (`extract`/`worker` hidden only).
+- Add deterministic dynamic connector passthrough coverage for arbitrary connector flags with late global flags, using local `httptest` and no credentials beyond test-local fixture credentials.
+- Exercise actual Cobra error mapping and legacy bypass without changing transcript behavior.
+
+Review-fix TDD plan:
+
+1. Add focused failing tests in `internal/cli/cobra_router_test.go` for persistent root flags, wrapper visibility/flag parsing, legacy handler error bypass, genuine Cobra parse error mapping, and dynamic connector passthrough with late globals.
+2. Capture red output with `go test ./internal/cli/ -run TestCobraRouterShell -count=1` before production edits.
+3. Implement the smallest router changes: root persistent flag definitions plus legacy error marking/bypass.
+4. Run the exact gates requested by the review-fix task, update `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, and `RUN-STATE.json`, then commit/push.
+5. Update PR #440 body with accepted disposition summary and corrected verification. Do not post `@claude review`; do not request Copilot again.
+
 ## Spawn decision for this cycle
 
-`spawned`: parent #397 assigned this issue, branch, isolated worker directory, and bounded write scope. This worker does not spawn subagents.
+`local_critical_path`: review-fix work is handled inline by the assigned issue worker in the existing isolated worktree; no subagents are available to this worker.
 
 ## Human gates
 
