@@ -49,8 +49,9 @@
 - Local-review contract: focused test, typecheck, production build, and desktop/mobile Chromium
   assertions pass; the local loop is present and the stale Claude-workflow language is absent.
 - Interactive-evidence contract: focused catalog test, offline Chromium interaction, 64 unit tests,
-  typecheck, production build, GitHub CORS check, and `git diff --check` pass. The final 390px
-  assertion is committed for remote Website CI after the in-app browser blocked localhost reload.
+  typecheck, production build, GitHub CORS check, and `git diff --check` pass. Remote Website CI
+  also passes explicit focus return, 390px sheet containment, horizontal overflow, and website image
+  construction after the in-app browser blocked localhost reload.
 
 ## Scope
 

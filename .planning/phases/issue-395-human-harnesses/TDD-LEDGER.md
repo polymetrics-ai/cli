@@ -113,7 +113,7 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Interactive GitHub Evidence
 
-- Status: green complete pending remote mobile assertion.
+- Status: green complete.
 - Red catalog contract: require canonical PR `#27`, PR `#29`, merge commit `605b006`, issue-first
   PR `#47`, parent-orchestrator PR `#51`, section-to-evidence references, and a repository star CTA.
 - Red browser contract: require an evidence marker to open an in-page sheet with a verified
@@ -140,10 +140,11 @@ Phase: `issue-395-human-harnesses`
   was provided; no secret value was read or printed.
 - Visual result: the desktop evidence sheet screenshot is clear, fully contained, and keeps the
   article visible behind it. The in-app browser refused a localhost refresh under its URL policy;
-  the 390px containment/overflow assertion is therefore committed for remote Website CI rather
-  than represented as a completed local screenshot.
+  remote Website CI passed the 390px containment and horizontal-overflow assertion.
 - Remote correction round 1: Website CI reached the new evidence test and failed only the added
   focus-return assertion. The controlled sheet was not mounted through a Radix trigger, so its
   external marker remained inactive after Escape. The marker callback now records the activating
   button and the close path returns focus explicitly on the next animation frame. The same remote
-  test will exercise focus return and then continue into the 390px containment assertion.
+  test passed focus return and then continued through the 390px containment assertion. Website
+  checks and the website image build both passed; deployment was correctly skipped for the stacked
+  pull request.
