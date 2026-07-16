@@ -7,7 +7,7 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "1678f9ab",
   "verificationPassed": true,
-  "status": "local_verification_passed_pr_pending",
+  "status": "pr_open_remote_checks_in_progress_human_parent_review_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-421.prompt",
@@ -37,11 +37,11 @@
       "reason": "full local gates, runtime help/docs/website parity checks, and diff guards completed inline in isolated worker cwd"
     }
   ],
-  "pullRequest": null,
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/450",
   "reviewRoute": {
     "claude": "disabled_not_requested_per_instruction",
     "copilot": "quota_exhausted_not_requested_per_instruction",
     "fallback": "human_parent_review_pending",
-    "coverageStatus": "not_started"
+    "coverageStatus": "pending_remote_checks_in_progress"
   }
 }

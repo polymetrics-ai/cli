@@ -90,10 +90,10 @@ Excluded:
    - Docs/website updates: not applicable because help/output did not change.
    - Verified runtime help: `pm help connections`, bare `pm connections`, `pm connections --help`, JSON manual, invalid action, and representative `connections create/list --json` local fixture tests.
 
-5. Full verification / PR ✅ / pending PR creation
+5. Full verification / PR ✅
    - Required focused and full gates passed.
    - Diff check against `origin/feat/cli-architecture-v2...HEAD` passed; `go.mod`/`go.sum` diff empty.
-   - Green implementation committed/pushed; non-draft stacked PR pending.
+   - Green implementation committed/pushed; non-draft stacked PR #450 opened against `feat/cli-architecture-v2`.
    - Do not request Claude/Copilot; record human/parent fallback pending per dispatch instruction.
 
 ## Planned tests / validations

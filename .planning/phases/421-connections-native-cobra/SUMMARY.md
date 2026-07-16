@@ -1,10 +1,10 @@
 # Phase 421 Summary
 
-Status: local verification passed; stacked PR pending/open step next; human/parent fallback review pending.
+Status: PR #450 open against `feat/cli-architecture-v2`; remote checks in progress at artifact update; human/parent fallback review pending.
 
 ## Current state
 
-- Worker branch: `refactor/421-connections-native-cobra`.
+- Worker branch: `refactor/421-connections-native-cobra`; sub-PR: https://github.com/polymetrics-ai/cli/pull/450.
 - GSD adapter doctor passed; `programming-loop` prompt command missing, so manual GSD fallback recorded.
 - Required reading and skills loaded. Repo-specific `.pi/skills/go-implementation/SKILL.md` is missing; global Go skills loaded.
 - Scope stayed inside `connections` CLI/router/tests and issue-local planning artifacts.
