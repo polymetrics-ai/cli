@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	"polymetrics.ai/internal/events"
 )
 
 // ETLResult is the result of a sync run.
@@ -167,6 +169,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	}
 
 	flowOp := e.Manifest.Name
+	e.emitFlowEvent(ctx, events.KindStarted, "running", "", StepResult{}, "")
 
 	if opts.DryRun {
 		for _, id := range order {
@@ -179,6 +182,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 		}
 		result.Status = "dry_run"
 		e.appendLedger(ctx, flowOp, "dry_run", "")
+		e.emitFlowEvent(ctx, events.KindCompleted, "dry_run", "", StepResult{}, "")
 		return result, nil
 	}
 
@@ -193,12 +197,14 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			if chk == "success" {
 				sr.Status = "skipped"
 				result.Steps = append(result.Steps, sr)
+				e.emitStepEvent(ctx, events.KindSkipped, "skipped", sr, "")
 				continue
 			}
 		}
 
 		op := e.Manifest.Name + "/" + id
 		e.appendLedger(ctx, op, "running", "")
+		e.emitStepEvent(ctx, events.KindStarted, "running", sr, "")
 
 		start := time.Now()
 		var stepErr error
@@ -252,6 +258,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.Status = "failed"
 			sr.Error = stepErr.Error()
 			e.appendLedger(ctx, op, "failed", stepErr.Error())
+			e.emitStepEvent(ctx, events.KindFailed, "failed", sr, stepErr.Error())
 			result.Steps = append(result.Steps, sr)
 			runErr = fmt.Errorf("%w: step %s: %v", ErrStepFailed, id, stepErr)
 			break
@@ -259,6 +266,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 
 		sr.Status = "ok"
 		e.appendLedger(ctx, op, "success", "")
+		e.emitStepEvent(ctx, events.KindCompleted, "success", sr, "")
 		if e.Checkpoint != nil {
 			_ = e.Checkpoint.Set(e.Manifest.Name, id, "success")
 		}
@@ -268,12 +276,34 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	if runErr != nil {
 		result.Status = "failed"
 		e.appendLedger(ctx, flowOp, "failed", runErr.Error())
+		e.emitFlowEvent(ctx, events.KindFailed, "failed", "", StepResult{}, runErr.Error())
 		return result, runErr
 	}
 
 	result.Status = "ok"
 	e.appendLedger(ctx, flowOp, "success", "")
+	e.emitFlowEvent(ctx, events.KindCompleted, "success", "", StepResult{}, "")
 	return result, nil
+}
+
+func (e *Engine) emitFlowEvent(ctx context.Context, kind events.Kind, status, stepID string, result StepResult, message string) {
+	events.Emit(ctx, events.Event{
+		Kind:    kind,
+		Scope:   events.ScopeFlow,
+		RunID:   e.Manifest.Name,
+		StepID:  stepID,
+		Status:  status,
+		Message: message,
+		Counters: events.Counters{
+			RecordsRead:    int64(result.RecordsRead),
+			RecordsWritten: int64(result.RecordsWritten),
+			RecordsFailed:  int64(result.RecordsFailed),
+		},
+	})
+}
+
+func (e *Engine) emitStepEvent(ctx context.Context, kind events.Kind, status string, result StepResult, message string) {
+	e.emitFlowEvent(ctx, kind, status, result.ID, result, message)
 }
 
 func firstTable(tables []string) string {
