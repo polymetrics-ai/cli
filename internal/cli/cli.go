@@ -408,18 +408,13 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 	}
 }
 
-func runCatalog(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
-	}
-	flags := parseFlags(args[1:])
-	connection := flags.first("connection")
+func runCatalogAction(ctx context.Context, a *app.App, action string, connection string, stdout io.Writer, jsonOut bool) error {
 	if connection == "" {
 		return errors.New("missing --connection")
 	}
 	var snapshot app.CatalogSnapshot
 	var err error
-	switch args[0] {
+	switch action {
 	case "refresh":
 		snapshot, err = a.RefreshCatalog(ctx, connection)
 	case "show":

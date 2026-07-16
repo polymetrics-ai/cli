@@ -67,10 +67,12 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	for _, spec := range cobraLegacyCommands(cfg) {
 		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec))
 	}
+	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
 	return cmd
 }
 
 func executeRootCmd(cmd *cobra.Command, args []string) error {
+	args = normalizeCatalogConnectionArgs(args)
 	if len(args) > 0 && lookupTopLevelCommand(cmd, args[0]) == nil {
 		return cmd.RunE(cmd, args)
 	}
@@ -80,6 +82,24 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	}
 	_, err := cmd.ExecuteC()
 	return err
+}
+
+func normalizeCatalogConnectionArgs(args []string) []string {
+	if len(args) < 3 || args[0] != "catalog" || (args[1] != "refresh" && args[1] != "show") {
+		return args
+	}
+	out := make([]string, 0, len(args))
+	out = append(out, args[0], args[1])
+	for i := 2; i < len(args); i++ {
+		arg := args[i]
+		if arg == "--connection" && i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
+			out = append(out, "--connection="+args[i+1])
+			i++
+			continue
+		}
+		out = append(out, arg)
+	}
+	return out
 }
 
 func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
@@ -97,9 +117,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "connections", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runConnections(ctx, a, args, stdout, jsonOut) })
-		}},
-		{name: "catalog", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runCatalog(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "etl", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
@@ -144,6 +161,50 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 			return runWorker(ctx, cfg, args, stdout, jsonOut)
 		}},
 	}
+}
+
+func newCatalogCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "catalog",
+		Args:          cobra.NoArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("catalog", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "catalog", stdout, jsonOut)
+	cmd.AddCommand(newCatalogActionCobraCommand(ctx, root, stdout, jsonOut, "refresh"))
+	cmd.AddCommand(newCatalogActionCobraCommand(ctx, root, stdout, jsonOut, "show"))
+	return cmd
+}
+
+func newCatalogActionCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, action string) *cobra.Command {
+	var connections []string
+	cmd := &cobra.Command{
+		Use:           action,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		RunE: func(_ *cobra.Command, _ []string) error {
+			connection := ""
+			if len(connections) > 0 {
+				connection = connections[len(connections)-1]
+			}
+			return markCobraLegacyError(withApp(root, func(a *app.App) error {
+				return runCatalogAction(ctx, a, action, connection, stdout, jsonOut)
+			}))
+		},
+	}
+	setManualHelp(cmd, "catalog", stdout, jsonOut)
+	cmd.Flags().StringArrayVar(&connections, "connection", nil, "connection name")
+	if flag := cmd.Flags().Lookup("connection"); flag != nil {
+		flag.NoOptDefVal = "true"
+	}
+	return cmd
 }
 
 func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, spec cobraLegacyCommand) *cobra.Command {

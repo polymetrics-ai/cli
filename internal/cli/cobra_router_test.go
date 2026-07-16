@@ -46,8 +46,12 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 		"schedule":    false,
 		"worker":      true,
 	}
-	if len(expectedHidden) != len(cobraLegacyCommands(config.Config{})) {
-		t.Fatalf("expectedHidden covers %d commands, cobraLegacyCommands registers %d", len(expectedHidden), len(cobraLegacyCommands(config.Config{})))
+	legacyCommands := map[string]struct{}{}
+	for _, spec := range cobraLegacyCommands(config.Config{}) {
+		legacyCommands[spec.name] = struct{}{}
+	}
+	if len(expectedHidden) != len(legacyCommands)+1 {
+		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native catalog registers %d", len(expectedHidden), len(legacyCommands)+1)
 	}
 
 	for _, root := range []*cobra.Command{first, second} {
@@ -66,14 +70,54 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 				if got.Hidden != hidden {
 					t.Fatalf("%s hidden = %t, want %t", name, got.Hidden, hidden)
 				}
-				if !got.DisableFlagParsing {
+				_, legacy := legacyCommands[name]
+				if legacy && !got.DisableFlagParsing {
 					t.Fatalf("%s wrapper must keep DisableFlagParsing", name)
+				}
+				if name == "catalog" && got.DisableFlagParsing {
+					t.Fatalf("%s command must use native Cobra flag parsing", name)
 				}
 			}
 			for _, cmd := range root.Commands() {
 				if _, ok := expectedHidden[cmd.Name()]; !ok {
 					t.Fatalf("unexpected top-level cobra wrapper %q", cmd.Name())
 				}
+			}
+		})
+	}
+}
+
+func TestCatalogCommandIsNativeCobraSubtree(t *testing.T) {
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	catalog := findCobraCommand(root, "catalog")
+	if catalog == nil {
+		t.Fatal("missing catalog command")
+	}
+	if catalog.DisableFlagParsing {
+		t.Fatal("catalog command must use native Cobra flag parsing")
+	}
+
+	for _, name := range []string{"refresh", "show"} {
+		t.Run(name, func(t *testing.T) {
+			action := findCobraCommand(catalog, name)
+			if action == nil {
+				t.Fatalf("missing catalog %s subcommand", name)
+			}
+			if action.DisableFlagParsing {
+				t.Fatalf("catalog %s must use native Cobra flag parsing", name)
+			}
+			flag := action.Flags().Lookup("connection")
+			if flag == nil {
+				t.Fatalf("catalog %s missing native --connection flag", name)
+			}
+			if got, want := flag.Value.Type(), "stringArray"; got != want {
+				t.Fatalf("catalog %s --connection flag type = %q, want %q", name, got, want)
+			}
+			if got, want := flag.NoOptDefVal, "true"; got != want {
+				t.Fatalf("catalog %s --connection NoOptDefVal = %q, want %q", name, got, want)
+			}
+			if !action.FParseErrWhitelist.UnknownFlags {
+				t.Fatalf("catalog %s must preserve legacy unknown-flag tolerance", name)
 			}
 		})
 	}
