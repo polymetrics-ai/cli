@@ -171,6 +171,7 @@ Refactor kept behavior byte-identical:
 - `Run` now delegates to `newRootCmd` + `executeRootCmd`; top-level switch removed from `Run`.
 - Legacy handlers and `parseFlags` remain unchanged under wrappers.
 - `runManualAlias` fixed to preserve `--json help` / `--json man` root manual envelopes.
+- Root fallback preserves legacy `nosuch --help` / dynamic connector `github help` manual interception before connector dispatch.
 - Golden fixture file was not regenerated or edited.
 
 Refactor gate:
@@ -193,3 +194,21 @@ git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum
 ```
 
 Result: whitespace check passed with no output; dependency diff shows only the recorded Cobra v1.10.2 / pflag / mousetrap delta plus go.sum module-metadata checksums.
+
+Post-self-review fallback-help test and final gates after commit `e027a12e`:
+
+```bash
+go test ./internal/cli/ -run 'TestCobraRouterShell|Golden' -count=1
+# ok  	polymetrics.ai/internal/cli	6.374s
+
+go test ./internal/cli/ -run Certify -count=1
+# ok  	polymetrics.ai/internal/cli	91.679s
+
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+git diff --check origin/feat/cli-architecture-v2...HEAD
+```
+
+Result: pass; `make verify` ended with `connectorgen validate: 547 connector(s) checked, 0 findings`.

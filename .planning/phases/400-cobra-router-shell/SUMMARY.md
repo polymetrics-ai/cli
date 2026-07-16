@@ -1,6 +1,6 @@
 # Issue 400 Summary — Cobra Router Shell
 
-Status: implementation committed locally; push/stacked PR pending.
+Status: pushed; stacked PR #440 open; CI verify still in progress at last check.
 
 ## Scope delivered
 
@@ -10,7 +10,7 @@ Status: implementation committed locally; push/stacked PR pending.
 - Kept `extract` and `worker` hidden.
 - Preserved dynamic `pm <connector> <path...>` fallback and arbitrary flag passthrough.
 - Added `mapCobraErr` so Cobra/pflag-style errors still flow into `writeError`; `writeError` remains the sole exit-code authority.
-- Added focused internal Cobra shell tests.
+- Added focused internal Cobra shell tests, including legacy fallback help interception for unknown/dynamic connector commands.
 - Added approved dependency `github.com/spf13/cobra v1.10.2`.
 
 ## TDD evidence
@@ -26,6 +26,8 @@ Green/refactor:
 - `go test ./internal/cli/ -run Golden -count=1` -> pass, byte-identical; no golden fixture updates.
 - `go test ./internal/cli/ -run Certify -count=1` -> pass.
 - `go test ./internal/cli/ -count=1` -> pass.
+- Post-refactor `go test ./internal/cli/ -run 'TestCobraRouterShell|Golden' -count=1` -> pass.
+- Post-refactor `go test ./internal/cli/ -run Certify -count=1` -> pass.
 
 ## Verification
 

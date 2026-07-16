@@ -35,7 +35,7 @@ scripts/gsd prompt programming-loop init --phase 400 --dry-run >/tmp/gsd-program
 
 ## Verification result
 
-Focused/full local gates and post-commit diff checks passed. PR creation pending.
+Focused/full local gates and post-commit diff checks passed. PR #440 open; GitHub Actions verify still in progress at last check.
 
 Key results:
 

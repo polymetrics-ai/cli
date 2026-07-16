@@ -4,9 +4,9 @@
   "branch": "refactor/400-cobra-router-shell",
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "implemented_committed_pr_pending",
+  "status": "pr_open_ci_verify_pending",
   "verificationPassed": true,
-  "verificationBlocker": "push and stacked PR creation pending",
+  "verificationBlocker": "GitHub Actions verify check still in progress at last observation; local make verify passed",
   "gsd": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-400.prompt",
@@ -51,6 +51,11 @@
       "cycle": "verify",
       "decision": "local_critical_path",
       "reason": "focused gates, make verify, and post-commit diff checks passed locally"
+    },
+    {
+      "cycle": "pr-open",
+      "decision": "local_critical_path",
+      "reason": "sub-PR #440 opened and pushed; external review coverage remains human/parent fallback pending because Claude is disabled and Copilot quota is exhausted"
     }
   ],
   "verification": {

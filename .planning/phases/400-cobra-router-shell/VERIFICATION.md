@@ -7,8 +7,8 @@
 ## Required gates
 
 - [x] `gofmt -w cmd internal` — pass.
-- [x] `go test ./internal/cli/ -run Golden -count=1` — pass: `ok  	polymetrics.ai/internal/cli	6.369s`.
-- [x] `go test ./internal/cli/ -run Certify -count=1` — pass: `ok  	polymetrics.ai/internal/cli	95.783s`.
+- [x] `go test ./internal/cli/ -run Golden -count=1` — pass: `ok  	polymetrics.ai/internal/cli	6.369s`; post-refactor combined router/golden gate pass: `ok  	polymetrics.ai/internal/cli	6.374s`.
+- [x] `go test ./internal/cli/ -run Certify -count=1` — pass: `ok  	polymetrics.ai/internal/cli	95.783s`; post-refactor pass: `ok  	polymetrics.ai/internal/cli	91.679s`.
 - [x] `go test ./internal/cli/ -count=1` — pass: `ok  	polymetrics.ai/internal/cli	154.218s`.
 - [x] `go vet ./...` — pass, no output.
 - [x] `go test ./...` — pass; includes `internal/cli` and connector/certify packages (`internal/connectors/certify` took `341.683s`).
@@ -21,7 +21,7 @@
 
 - [x] Red validation before implementation: `go list -deps ./internal/cli | grep '^github.com/spf13/cobra$'` failed with no output, exit 1.
 - [x] Red focused test before implementation: `go test ./internal/cli/ -run TestCobraRouterShell -count=1` failed with missing Cobra module.
-- [x] Green focused test after implementation: `go test ./internal/cli/ -run TestCobraRouterShell -count=1` passed: `ok  	polymetrics.ai/internal/cli	0.532s`.
+- [x] Green focused test after implementation: `go test ./internal/cli/ -run TestCobraRouterShell -count=1` passed: `ok  	polymetrics.ai/internal/cli	0.532s`; fallback help interception coverage added and passed in combined `TestCobraRouterShell|Golden` gate.
 - [x] Golden suite byte-identical: no golden fixture update.
 - [x] Certify in-process re-entrancy gate stays green.
 
@@ -48,7 +48,7 @@ Applies: yes, because routing/help behavior is CLI-visible even though target is
 
 ## Review route
 
-- [ ] Open non-draft stacked PR to `feat/cli-architecture-v2` with `Refs #400` and `Refs #397` — pending.
+- [x] Open non-draft stacked PR to `feat/cli-architecture-v2` with `Refs #400` and `Refs #397`: PR #440.
 - [x] Do not post `@claude review` because repository Claude workflow is already `disabled_manually`.
 - [x] Do not request Copilot because quota is exhausted for this blocker window.
 - [x] Record review status as human/parent-PR fallback pending; no approval claims.
