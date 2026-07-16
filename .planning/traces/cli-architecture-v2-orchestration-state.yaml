@@ -16,14 +16,14 @@ default_branch: main
 orchestrator:
   mode: active_owner
   runtime: pi
-  status: running
+  status: waiting_for_review
 ready_queue:
   - number: 402
-    status: worker_ready
+    status: sub_pr_open
     dependencies: [401]
-    write_scope: "runtimecheck, worker, schedule, agent-image, and RLM typed-config migration"
-    decision: local_critical_path
-    reason: "Issues #399-#401 are provisionally integrated; parent state checkpoint precedes isolated #402 dispatch."
+    write_scope: "runtimecheck, worker, schedule, agent-image, perf, and RLM typed-config migration"
+    decision: not_spawned_verification_blocked
+    reason: "PR #448 head 0d7c87e8 awaits latest status-only CI rerun; local code gates and targeted re-review are clean."
   - number: 403
     status: planned
     dependencies: [402]
@@ -75,6 +75,18 @@ spawn_decisions:
     decision: local_critical_path
     issue_numbers: [402]
     reason: "Coordinator updates parent integration ledger before creating and dispatching isolated #402 worktree."
+  - timestamp: 2026-07-16T15:42:00Z
+    decision: spawned
+    issue_numbers: [402]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-402-config-env-migration."
+  - timestamp: 2026-07-16T16:35:00Z
+    decision: read_only_spawned
+    issue_numbers: [402]
+    reason: "pm-reviewer found worker-serve and perf ambient config reloads; worker fixed both and targeted re-review was clean."
+  - timestamp: 2026-07-16T17:27:41Z
+    decision: not_spawned_verification_blocked
+    issue_numbers: [403, 404, 406, 410]
+    reason: "First parallel fan-out depends on #402 integration; PR #448 latest CI is pending."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -118,14 +130,14 @@ subissues:
     automated_review: {primary_route: human, status: blocked, head_sha: 28af02a5f26426f4845a796733dff075a1cb26a2, reviewed_range: "8900db14..7683087d", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Config/bootstrap/docs findings fixed; final sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/441"}
   - number: 402
     url: https://github.com/polymetrics-ai/cli/issues/402
-    branch: pending
-    pr_url: ""
-    worker: unassigned
-    status: worker_ready
-    write_scope: "runtimecheck, worker, schedule, agent-image, and RLM config call sites"
-    worker_directory: ""
-    verification: not_run_worker_ready
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Ready after #401 integration; dispatch pending parent state checkpoint.", disposition_url: ""}
+    branch: refactor/402-config-env-migration
+    pr_url: https://github.com/polymetrics-ai/cli/pull/448
+    worker: pm-gsd-worker
+    status: sub_pr_open
+    write_scope: "runtimecheck, worker, schedule, agent-image, perf, RLM config call sites, tests, docs parity"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-402-config-env-migration
+    verification: "Local full gates passed; targeted re-review clean; latest status-only CI rerun pending."
+    automated_review: {primary_route: human, status: blocked, head_sha: 0d7c87e8d963ea841101def68b264b2f976d4381, reviewed_range: "7683087d..0d7c87e8", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "High/medium sidecar findings fixed; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/448"}
   - number: 403
     url: https://github.com/polymetrics-ai/cli/issues/403
     branch: pending
@@ -316,4 +328,4 @@ human_gates:
   - production deploys
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
-updated_at: 2026-07-16T15:40:57Z
+updated_at: 2026-07-16T17:27:41Z
