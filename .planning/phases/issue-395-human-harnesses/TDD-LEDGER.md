@@ -70,3 +70,14 @@ Phase: `issue-395-human-harnesses`
 - Build result: the production Next.js build passes and prerenders `/blog/human-harnesses`.
 - Reading-time check: approximately 3,059 source words, recorded as a 14-minute read at 220 words
   per minute.
+
+## Follow-Up: Current Publication Date
+
+- Status: planned.
+- Red contract: expect only `human-harnesses` to publish and update on `2026-07-16` while preserving
+  its existing content contract.
+- Green target: update the two metadata fields, then verify the rendered article header shows
+  `July 16, 2026` without changing another blog entry.
+- GSD activation: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase
+  issue-395-human-harnesses --dry-run` remains unavailable because `programming-loop` is absent
+  from the repo-local registry, so the recorded manual-GSD loop continues.

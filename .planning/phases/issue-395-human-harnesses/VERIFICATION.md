@@ -66,3 +66,12 @@
 - [x] Updates the catalog contract and reading time to 14 minutes.
 - [x] Passes 64 unit tests, 6 focused blog Playwright tests, typecheck, and production build.
 - [x] Passes desktop/mobile content assertions with no horizontal overflow.
+
+## Publication-Date Follow-Up
+
+- [ ] Focused catalog test fails against the future placeholder date.
+- [ ] Only `human-harnesses` uses `publishedAt: '2026-07-16'` and `updatedAt: '2026-07-16'`.
+- [ ] Focused catalog test and website typecheck pass.
+- [ ] Production build prerenders `/blog/human-harnesses`.
+- [ ] Local article header renders `July 16, 2026`.
+- [ ] Deployment remains human-gated and no production environment is mutated by this change.

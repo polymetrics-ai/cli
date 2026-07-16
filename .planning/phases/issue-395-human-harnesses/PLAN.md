@@ -86,3 +86,17 @@ the issue, test, review, release, and deployment harnesses used by this reposito
 - Remove the closing repository, documentation, and dated inventory bullet list.
 - End with a natural request to star the repository.
 - Preserve the verified inventory numbers in the technical body where they provide necessary scale.
+
+## Publication-Date And Deployment Follow-Up
+
+- Change only the `human-harnesses` `publishedAt` and `updatedAt` values from the future placeholder
+  to `2026-07-16`, the current date for this delivery.
+- Extend the focused catalog contract first so any unchanged future date fails before the production
+  metadata edit.
+- Re-run the focused catalog test, typecheck, production build, and browser assertion that the
+  article header renders `July 16, 2026`.
+- Document the existing deployment path rather than changing it: merge the stacked sub-PR into the
+  parent branch, complete parent verification and human review, merge the parent PR into `main`,
+  and let Website CI/CD publish and deploy the immutable GHCR image.
+- No workflow, runner, VPS, OAuth, database, environment, or deployment mutation is part of this
+  follow-up.
