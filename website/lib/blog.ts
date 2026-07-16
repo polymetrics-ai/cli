@@ -20,6 +20,161 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'human-harnesses',
+    title: 'Humans Need Harnesses Too',
+    description:
+      'We built approval gates so agents could not quietly damage your data. The repository taught us that people, pull requests, releases, and deployments need the same hard stops.',
+    publishedAt: '2026-08-04',
+    updatedAt: '2026-08-04',
+    readingTime: '12 min read',
+    category: 'Build in public',
+    tags: ['human harnesses', 'GitHub Actions', 'approval gates', 'AI agents'],
+    summary:
+      'A harness is not an agent feature. It is a sequence that makes intent, evidence, approval, and mutation explicit for every operator, including the human at the keyboard.',
+    sections: [
+      {
+        heading: 'The tool changed the shape of the work',
+        body: [
+          'I will start with a confession. I stopped using the large AI coding platforms as my daily driver. They can move quickly, but I was spending too much time steering the platform, arranging agents, and recovering context instead of staying with the problem.',
+          'Then I found Pi. It was small, direct, and easy to shape around the repository. Combined with GSD, it gave me a programming loop I could inspect: define the issue, plan the slice, write the failing test, make it pass, verify the result, and leave evidence for the next person or agent.',
+          'That workflow helped make Polymetrics possible. More importantly, it exposed the lesson behind this article: speed without a visible control loop is just a faster way to arrive at an unreviewed decision.',
+        ],
+      },
+      {
+        heading: 'The itch',
+        body: [
+          'I wanted a real CLI for every connector, the way gh is my daily driver for GitHub. Not a configuration file interpreted by a cloud service I cannot see, but a command surface that can inspect a connector, extract data, query it locally, plan a write, and explain every failure.',
+          'The connector rewrite now stores each integration as a JSON bundle and interprets it through a shared engine. API operations are classified as streams, direct reads, writes, binary transfers, native protocol work, hooks, or typed exclusions. That classification matters because a list operation, a file download, and a DELETE should not inherit the same runtime policy.',
+          'I also built a Shepherd-style supervisor around the agent workflow. One correction to my earlier shorthand is important: Shepherd is not the thing that writes all 547 connectors. Connector workers perform the mapping; Shepherd independently checks whether the orchestration is progressing, whether workers collide, whether verification is real, and whether the run should continue, revert, or stop for a human.',
+        ],
+      },
+      {
+        heading: 'What the repository actually contains',
+        body: [
+          'These are repository inventory numbers, not a claim that every connector is production-certified. At the time of writing there are 547 connector definition directories, each with an API-surface inventory. Those files contain 29,129 classified endpoint entries: 14,783 read operations and 14,346 mutations, including 2,903 DELETE operations.',
+          'The same bundles define 7,088 ETL streams. Some operations are implemented, some are deliberately excluded, some depend on hooks or native code, and some still need live certification. The inventory tells us the size and shape of the work. It does not let us skip the proof that a connector behaves correctly against a real service.',
+        ],
+        points: [
+          '547 connector bundles with explicit API-surface inventories.',
+          '29,129 operations classified before they are exposed as product behavior.',
+          '14,783 reads and 14,346 mutations, with 2,903 DELETE operations called out explicitly.',
+          '7,088 ETL streams defined for conformance and certification work.',
+        ],
+      },
+      {
+        heading: 'The uncomfortable realization',
+        body: [
+          'From the start, Polymetrics had an agent contract: machine-readable JSON, stable exit behavior, credentials referenced instead of printed, and reverse ETL split into plan, preview, approval, and execution. The point was to let an LLM use the same CLI as a person without giving it a quiet path to mutate a destination.',
+          'Then one night I watched myself work. It was late, I was tired, and I was about to aim a write at the wrong environment. The thing that saved me was not better judgment. It was the same stop I had designed for an agent.',
+          'That is the uncomfortable part: I am also an unreliable agent. Humans paste a correct command into the wrong terminal. We skim diffs, approve familiar-looking output, reuse stale plans, and reach for force when the system slows us down. A safety model that protects data only when an AI is operating it has misunderstood the operator.',
+        ],
+      },
+      {
+        heading: 'The runtime harness',
+        body: [
+          'A harness turns a mutation from one action into a sequence with named states. First describe the intended change. Then calculate and preview the concrete effect. Bind approval to that plan. Only then execute it. A failure returns structured status and leaves the destination unchanged whenever the operation boundary allows it.',
+          'The August 4 target is to make that model explicit for people as well as agents. Destructive and sensitive paths should be unavailable until policy enables them. Approval should be scoped to a specific plan rather than becoming an ambient yes to everything. The same command should behave predictably from a terminal, CI job, cron entry, or agent loop.',
+          'This is also where honesty matters. A mapped operation is not automatically an executable command, and an executable command is not automatically certified. The inventory, runtime policy, conformance tests, and live certification are separate gates because each answers a different question.',
+        ],
+        code: `pm reverse plan sync --source-table candidates --destination github:write --json
+pm reverse preview <plan-id> --json
+pm reverse approve <plan-id> --json
+pm reverse run <plan-id> --json`,
+      },
+      {
+        heading: 'The repository became a harness',
+        body: [
+          'While building the runtime, we ended up applying the same structure to the repository. A pull request is also a proposed mutation. It changes the code people install, the generated connector catalog, the release artifacts, and sometimes the process running in production. Treating it as a loose diff would contradict the product we are building.',
+          'The repository therefore asks for intent before code, evidence before confidence, review before integration, and an immutable artifact before deployment. GitHub Actions is the execution layer, but the harness begins earlier in the issue contract and ends later in rollout verification.',
+        ],
+        code: `data:    plan -> preview -> approve -> execute -> audit
+code:    issue -> plan -> red -> green -> review -> merge
+release: change -> release PR -> tag -> signed build artifacts
+deploy:  tested commit -> immutable image -> rollout -> health check`,
+      },
+      {
+        heading: 'Intent before diff',
+        body: [
+          'Every non-trivial change starts with an issue that states the objective, scope, exclusions, acceptance criteria, verification, safety notes, and review route. The PR Issue Guard checks that relationship. The conventions workflow checks the branch name and Conventional Commit PR title, so the change identifies itself before anyone reads the implementation.',
+          'The GSD workflow checks for planning and test evidence on implementation work. In practice that means a plan, a TDD ledger, and a verification checklist exist before production edits. The ledger does not prove the code is correct, but it makes a useful distinction visible: did a test fail because the capability was absent, and did the same test pass because of the change?',
+          'This is the code equivalent of binding an approval to a plan. The issue describes the intended mutation; the branch and PR limit its scope; the test demonstrates the behavioral delta. A reviewer can challenge any of those layers instead of reverse-engineering intent from the final diff.',
+        ],
+      },
+      {
+        heading: 'Proof before confidence',
+        body: [
+          'The general verification workflow installs the pinned Go toolchain and linter, runs make verify, and then fails if verification changed generated files. That last check is easy to overlook. A generator that produces an uncommitted diff is evidence that source and published artifacts disagree, so the harness treats drift as a failure rather than a cleanup task.',
+          'Security runs in parallel: govulncheck inspects reachable Go vulnerabilities, CodeQL analyzes Go and JavaScript or TypeScript, and dependency review rejects newly introduced high-severity dependency risk. A weekly OpenSSF Scorecard run adds a slower repository-level view of supply-chain posture.',
+          'The website has its own integration harness. It starts PostgreSQL 17, regenerates website data and checks for drift, typechecks, runs unit tests, installs Chromium, exercises the site with Playwright, creates a production build, and then builds the container image. That sequence catches failures that a component test cannot: migrations, generated catalog mismatches, route rendering, browser behavior, and production compilation.',
+        ],
+        points: [
+          'Deterministic checks: formatting, linting, tests, builds, and generated-file drift.',
+          'Security checks: govulncheck, CodeQL, dependency review, and scheduled Scorecard analysis.',
+          'Website checks: PostgreSQL migrations, generated data, typecheck, unit tests, Chromium e2e, build, and image construction.',
+        ],
+      },
+      {
+        heading: 'Reviewing untrusted code without trusting it',
+        body: [
+          'The Claude review workflow contains one of the clearest examples of a harness changing behavior. A public pull request is untrusted code, and the review credential is valuable. Running that pull request while the credential is available would give hostile code a chance to exfiltrate it.',
+          'So the review is static. The workflow checks the author relationship before the secret reaches the job, checks permissions again inside the action, blocks bots by default, checks out the base repository, and asks the reviewer to inspect the PR diff without running the proposed code. Compilation and tests belong to separate jobs that do not receive the Claude credential.',
+          'The workflow also avoids reviewing every push. It runs automatically when a trusted author opens, reopens, or marks a PR ready, and maintainers can request a deliberate follow-up review after fixes. That is a quota decision, but it is also a state-machine decision: review a meaningful checkpoint, record dispositions, then request another pass only when the reviewed commit range changed.',
+        ],
+      },
+      {
+        heading: 'Release and deployment are mutations too',
+        body: [
+          'Merging code is not the final write. The release workflow lets release-please assemble the version and changelog on main, and GoReleaser builds artifacts only when a release is actually created. That separates ordinary integration from publication.',
+          'The website follows a similar boundary. Pull requests can build the image, but only a main-branch push or an explicit dispatch can publish it. Deployment requires the website deploy variable, uses a self-hosted Tailscale runner, passes the image tagged with the exact commit SHA to the Quadlet deployment script, and verifies rollout health. The deploy consumes an immutable input instead of rebuilding whatever happens to be on the server.',
+          'This is the production form of plan and execute: CI proves one commit, the registry stores an image for that commit, and the deploy step rolls out that exact image. If those identities diverge, the harness is no longer describing the mutation it performs.',
+        ],
+      },
+      {
+        heading: 'What GitHub really blocks',
+        body: [
+          'There is a difference between a workflow that runs and a check that GitHub requires before main can move. At the time of writing, main uses strict required status checks for verify, govulncheck, CodeQL, branch-name, and pr-title, and the rule applies to administrators. A branch that is behind main must be brought current before those checks can authorize the merge.',
+          'Other useful workflows also run, including the issue guard, GSD evidence check, dependency review, and website suite when relevant files change. They are part of our delivery contract, but they are not all listed as required branch-protection contexts today. Saying otherwise would turn a process expectation into a false technical guarantee.',
+          'The parent PR is still human-gated. Sub-PRs can be integrated into a parent branch after scoped checks and review coverage, but the parent branch does not merge to main automatically. That gate matters because a green collection of local changes can still be incoherent as one product release.',
+        ],
+      },
+      {
+        heading: 'What the harness still does not do',
+        body: [
+          'The repository is active and the harness is not finished. Branch protection currently requires status checks but not a positive review count. The human gate on the parent PR is repository policy, not a GitHub rule that mathematically prevents every maintainer from merging without review.',
+          'Automated review is also an input, not an oracle. Claude can be disabled or run out of quota, and a skipped or failed review is not coverage. The fallback is a recorded review of the relevant commit range by another reviewer, not pretending that a workflow name in the checks list means somebody examined the change.',
+          'The production environment does not yet require an environment reviewer, so a qualifying main push can deploy when the deployment variable is enabled. Actions are version-tagged rather than pinned to full commit SHAs, and repository settings do not currently enforce SHA pinning. Those are real hardening opportunities, and naming them is part of the harness: an unrecorded gap is impossible to prioritize.',
+        ],
+        points: [
+          'Add an enforced review requirement or preserve an auditable human-gate record for parent merges.',
+          'Add a production environment approval when deployment independence becomes more important than immediate rollout.',
+          'Pin third-party actions by commit and enable repository-level pinning policy.',
+          'Treat unavailable automated review as a visible blocker or explicit human fallback, never as a silent pass.',
+        ],
+      },
+      {
+        heading: 'Same contract, both species',
+        body: [
+          'The useful idea is not that humans and agents are identical. It is that neither should receive a special path around the state machine. A shell script should not get an easier write path than an agent. A maintainer should not get a less reproducible deployment because they know the server. Familiarity is not evidence.',
+          'Stable JSON and exit behavior make runtime state legible. Issues, TDD ledgers, checks, and reviewed commit ranges make repository state legible. Immutable image tags make deployment state legible. In each case the harness replaces an assumption with an object we can inspect.',
+          'That is why human harnesses are becoming a first-class part of Polymetrics. The safest operator is not the one who promises never to make a mistake. It is the one whose tools expect mistakes and stop them before intention becomes mutation.',
+        ],
+      },
+      {
+        heading: 'Where this goes next',
+        body: [
+          'The immediate work is certification. Connector inventory is broad; live, repeatable evidence is the next gate. We are also tightening approval scopes, improving bulk-write previews, extending dry-run diffs, and making destructive confirmation policy consistent across connector actions.',
+          'Distribution is part of the same story: release binaries and a Homebrew path should make the first useful run short without bypassing provenance. The MCP surface should let agents discover the same typed operations without inventing a second, more permissive API.',
+          'The next engineering note will separate two stories that are easy to conflate: how connector operations are classified into product surfaces, and how the Shepherd supervisor judges the agents doing that work. One creates the map; the other checks the journey.',
+        ],
+        points: [
+          'Repository: github.com/polymetrics-ai/cli',
+          'Documentation: cli.polymetrics.ai',
+          'Inventory snapshot: 547 API-surface files and 29,129 endpoint entries on July 16, 2026.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'one-cli-to-rule-them-all',
     title: 'One CLI To Rule Them All',
     description:

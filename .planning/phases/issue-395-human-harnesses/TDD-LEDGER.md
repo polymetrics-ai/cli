@@ -18,11 +18,19 @@ Phase: `issue-395-human-harnesses`
 
 ## Green: Human Harnesses Catalog Contract
 
-- Status: pending.
-- Expected result: pass after the smallest `BLOG_POSTS` entry is added.
+- Status: complete.
+- Command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`
+- Result: passed after adding the post to the existing `BLOG_POSTS` catalog.
+- Scope: no renderer, route, component, dependency, auth, or database changes were needed.
 
 ## Refactor
 
-- Status: pending.
-- Editorial pass will remove unsupported claims, duplicated transitions, and unnecessary renderer
-  changes while preserving the supplied first-person voice.
+- Status: complete.
+- Replaced stale operation counts with a fresh API-surface inventory.
+- Corrected the draft's Shepherd description: connector workers perform surface mapping; the
+  Shepherd-style layer independently validates orchestration decisions.
+- Distinguished workflows that run from status checks currently required by `main` branch
+  protection.
+- Reframed August 4 behavior as a release target and separated inventory, implementation,
+  conformance, and live certification.
+- Kept the existing renderer and static catalog architecture unchanged.

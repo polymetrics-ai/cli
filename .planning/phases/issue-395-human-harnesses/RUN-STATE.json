@@ -6,7 +6,7 @@
   "branch": "docs/395-human-harnesses",
   "base_branch": "feat/293-blog-annotations",
   "gsd_mode": "manual_fallback",
-  "current_step": "red_test",
+  "current_step": "verification",
   "human_gates": [
     "parent_review_coverage",
     "parent_merge_to_main",
