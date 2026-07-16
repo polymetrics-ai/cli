@@ -40,8 +40,8 @@ Fallback: `.pi/prompts/pm-gsd-loop.md` loaded and executed inline/manual; decisi
 
 | Slice | Test / validation | Red evidence | Green evidence | Refactor evidence |
 |---|---|---|---|---|
-| 1 events package | `go test ./internal/events/... -count=1` | pending | pending | pending |
-| 1 race | `go test -race ./internal/events/... -count=1` | pending | pending | pending |
+| 1 events package | `go test ./internal/events/... -count=1` | fail (build): undefined `FromContext`, `Event`, `KindStarted`, `ScopeFlow`, `NewCollector`, `WithEmitter`, `Emit` | pass: `ok   polymetrics.ai/internal/events 0.340s` | `gofmt -w internal/events` |
+| 1 race | `go test -race ./internal/events/... -count=1` | pending until package builds | pass: `ok   polymetrics.ai/internal/events 1.179s` | no refactor beyond gofmt |
 | 2 flow sequence | `go test -race ./internal/flow/... -run TestEngineEmits -count=1` | pending | pending | pending |
 | 3 app ETL sequence | `go test -race ./internal/app/... -run 'TestRunETLEmits|TestRunWarehouseETLEmits' -count=1` | pending | pending | pending |
 | 4 certify sequence | `go test -race ./internal/connectors/certify/... -run TestRunBatchEmits -count=1` | pending | pending | pending |
