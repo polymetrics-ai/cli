@@ -211,7 +211,39 @@ go test ./internal/cli/ -run Golden -count=1
 git diff -- go.mod
 ```
 
-Results: pending until the fix is committed so the commit-range gate includes the correction.
+Results after whitespace correction commit `6fcd2eb9d167f6256afb4bbdeac6cb462ca2d8a4`:
+
+```text
+git diff --check origin/feat/cli-architecture-v2...HEAD
+status=0
+```
+
+```text
+git diff --name-only origin/feat/cli-architecture-v2...HEAD
+.planning/phases/399-golden-transcript-safety-net/PLAN.md
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md
+.planning/phases/399-golden-transcript-safety-net/RUN-STATE.json
+.planning/phases/399-golden-transcript-safety-net/SUMMARY.md
+.planning/phases/399-golden-transcript-safety-net/TDD-LEDGER.md
+.planning/phases/399-golden-transcript-safety-net/VERIFICATION.md
+docs/cli/connectors.md
+internal/cli/golden_transcript_test.go
+internal/cli/testdata/golden_transcripts.json
+```
+
+```text
+go test ./internal/cli/ -run Golden -count=1
+ok  	polymetrics.ai/internal/cli	6.234s
+```
+
+```text
+git diff -- go.mod
+status=0
+```
+
+Final post-push `git diff --check origin/feat/cli-architecture-v2...HEAD` is recorded in the
+worker handoff because the handoff can name the pushed head SHA without self-referential artifact
+churn.
 
 ### PR / CI / review status
 

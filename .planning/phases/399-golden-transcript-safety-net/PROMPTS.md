@@ -48,4 +48,4 @@ Passed local gates:
 Sub-PR: https://github.com/polymetrics-ai/cli/pull/439
 Pre-review-fix head SHA: `d7ffbb1ee01b709a3470f62976cba65c2c586921`; review-fix commit recorded in worker handoff.
 Automated review: Claude workflow observed `disabled_manually`; coverage pending / parent-PR fallback pending. Review-fix cycle did not post `@claude review`.
-Verification-fix cycle: commit-range whitespace correction planned; final gate evidence is recorded in `VERIFICATION.md` and handoff after commit/push.
+Verification-fix cycle: commit-range whitespace correction completed locally; final gate evidence is recorded in `VERIFICATION.md` and handoff after commit/push.

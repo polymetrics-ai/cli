@@ -1,11 +1,11 @@
 {
   "phase": "399-golden-transcript-safety-net",
-  "status": "review_fix_verified",
+  "status": "verification_fix_verified",
   "issue": 399,
   "parent_issue": 397,
   "parent_pr": 438,
   "sub_pr": 439,
-  "head_sha": "7c904e21fca4abbfc45cc5a913f34e6c14df79a1",
+  "head_sha": "final pushed head recorded in worker handoff",
   "workflow": "spawned-bounded-worker",
   "current_plan": "golden-transcript-harness-and-docs-diff-test",
   "gsd": {
@@ -25,6 +25,11 @@
       "cycle": "review-fix",
       "decision": "local_critical_path",
       "reason": "Existing spawned worker applied read-only sidecar dispositions locally; worker role does not spawn subagents."
+    },
+    {
+      "cycle": "verification-fix",
+      "decision": "local_critical_path",
+      "reason": "Existing spawned worker corrected committed PR-range whitespace and recorded exact local gates; worker role does not spawn subagents."
     }
   ],
   "human_gates": [
@@ -56,11 +61,14 @@
   "verificationPassed": true,
   "verification": {
     "format": "gofmt -w internal/cli: passed",
-    "focused": "go test ./internal/cli/ -run Golden -count=1: passed (ok polymetrics.ai/internal/cli 6.257s)",
+    "focused": "go test ./internal/cli/ -run Golden -count=1: passed (ok polymetrics.ai/internal/cli 6.234s)",
     "package_tests": "go test ./internal/cli/ -count=1: passed (ok polymetrics.ai/internal/cli 155.838s)",
     "make_verify": "make verify: passed; connectorgen validate: 547 connector(s) checked, 0 findings",
     "diff_check": "git diff --check: passed (no output)",
-    "go_mod_diff": "git diff -- go.mod: empty"
+    "go_mod_diff": "git diff -- go.mod: empty (exit 0)",
+    "commit_range_diff_check": "git diff --check origin/feat/cli-architecture-v2...HEAD: passed after whitespace correction commit 6fcd2eb9d167f6256afb4bbdeac6cb462ca2d8a4 (no output; exit 0)",
+    "commit_range_files": "git diff --name-only origin/feat/cli-architecture-v2...HEAD: listed 9 PR-changed files; see VERIFICATION.md",
+    "final_push_check": "pending final push; rerun git diff --check origin/feat/cli-architecture-v2...HEAD and record in worker handoff"
   },
   "review": {
     "primary_route": "claude_auto",
@@ -70,7 +78,7 @@
   },
   "ci": {
     "github_actions": "pending_review_fix_ci_after_push",
-    "local_gates": "passed"
+    "local_gates": "passed verification-fix exact gates"
   },
-  "last_updated": "2026-07-16-review-fix"
+  "last_updated": "2026-07-16-verification-fix"
 }

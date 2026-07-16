@@ -40,7 +40,8 @@ Status: review-fix verified.
   `git diff --check` evidence was worktree-only and incomplete.
 - Scope: whitespace/artifact verification correction only. No production behavior change, no
   dependencies, no PR merge, no `@claude review`.
-- Planned gates: `git diff --check origin/feat/cli-architecture-v2...HEAD`,
+- Correction commit `6fcd2eb9d167f6256afb4bbdeac6cb462ca2d8a4` passed:
+  `git diff --check origin/feat/cli-architecture-v2...HEAD`,
   `git diff --name-only origin/feat/cli-architecture-v2...HEAD`,
   `go test ./internal/cli/ -run Golden -count=1`, and `git diff -- go.mod`.
 

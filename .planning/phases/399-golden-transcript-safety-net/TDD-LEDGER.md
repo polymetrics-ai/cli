@@ -136,8 +136,31 @@ git diff --check origin/feat/cli-architecture-v2...HEAD
 status=2
 ```
 
-Planned green validation: strip trailing whitespace from every PR-changed file, then commit and
-run the requested commit-range gates exactly.
+Green validation after whitespace correction commit `6fcd2eb9d167f6256afb4bbdeac6cb462ca2d8a4`:
+
+```text
+git diff --check origin/feat/cli-architecture-v2...HEAD
+status=0
+
+git diff --name-only origin/feat/cli-architecture-v2...HEAD
+.planning/phases/399-golden-transcript-safety-net/PLAN.md
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md
+.planning/phases/399-golden-transcript-safety-net/RUN-STATE.json
+.planning/phases/399-golden-transcript-safety-net/SUMMARY.md
+.planning/phases/399-golden-transcript-safety-net/TDD-LEDGER.md
+.planning/phases/399-golden-transcript-safety-net/VERIFICATION.md
+docs/cli/connectors.md
+internal/cli/golden_transcript_test.go
+internal/cli/testdata/golden_transcripts.json
+
+go test ./internal/cli/ -run Golden -count=1
+ok  	polymetrics.ai/internal/cli	6.234s
+
+git diff -- go.mod
+status=0
+```
+
+Final post-push commit-range whitespace check is recorded in the worker handoff.
 
 ## Notes
 
