@@ -3,6 +3,14 @@ export type BlogSection = {
   body: string[];
   points?: string[];
   code?: string;
+  image?: {
+    src: string;
+    alt: string;
+    caption: string;
+    width: number;
+    height: number;
+    afterBlock: number;
+  };
   evidenceRefs?: Array<{
     blockIndex: number;
     evidenceId: string;
@@ -373,10 +381,15 @@ parent      -> full verification -> human merge -> release`,
           'The live Pi session that prompted this update made the loop wonderfully unglamorous. A review sidecar returned three findings. One was accepted with modification, one was declined with a recorded scope reason, and one was accepted. The isolated repair worker fixed the accepted items and made the full verification gate green. Verification then caught trailing whitespace in the worker evidence and sent the same bounded worktree around once more. That second lap is the feature, not an embarrassment.',
           'Remote PR-bot review can still run as supplemental shadow or canary evidence during the cutover. It is no longer the default delivery gate. GitHub receives the branch, PR, checks, and durable review summary; the fast review-and-repair conversation happens locally, where a moved head immediately invalidates the old verdict.',
         ],
-        code: `implement -> verify -> review exact head -> disposition
-                      ^                         |
-                      |                         v
-                 re-review <- verify <- isolated fix`,
+        image: {
+          src: '/blog/human-harnesses/04-review-repair-loop.webp',
+          alt: 'Separate review and repair stations passing the same verified artifact around a loop.',
+          caption:
+            'Review and repair stay separate while verification sends the same artifact back around the loop.',
+          width: 1536,
+          height: 1024,
+          afterBlock: 2,
+        },
       },
       {
         heading: 'Release and deployment are mutations too',

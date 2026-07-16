@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
+import { Fragment, useMemo, useRef, useState } from 'react';
 import { CornerBox } from '@/components/ui/corner-box';
 import type { BlogEvidence, BlogSection } from '@/lib/blog';
 import { AnnotationsProvider } from '@/components/blog/annotations-provider';
@@ -63,30 +64,46 @@ export function ArticleBody({
 
               <div className="flex flex-col gap-4">
                 {section.body.map((paragraph, blockIndex) => (
-                  <p
-                    key={paragraph}
-                    data-annotation-block
-                    data-section-index={index}
-                    data-block-type="body"
-                    data-block-index={blockIndex}
-                    className="text-[15px] leading-[1.75] text-text-tertiary"
-                  >
-                    <HighlightedBlock
-                      text={paragraph}
-                      sectionIndex={index}
-                      blockType="body"
-                      blockIndex={blockIndex}
-                      evidenceReferences={(section.evidenceRefs ?? []).flatMap((reference) => {
-                        if (reference.blockIndex !== blockIndex) return [];
-                        const item = evidenceById.get(reference.evidenceId);
-                        return item ? [{ ...item, text: reference.text }] : [];
-                      })}
-                      onEvidenceOpen={(item, trigger) => {
-                        evidenceTriggerRef.current = trigger;
-                        setActiveEvidence(item);
-                      }}
-                    />
-                  </p>
+                  <Fragment key={`${section.heading}-${blockIndex}`}>
+                    <p
+                      data-annotation-block
+                      data-section-index={index}
+                      data-block-type="body"
+                      data-block-index={blockIndex}
+                      className="text-[15px] leading-[1.75] text-text-tertiary"
+                    >
+                      <HighlightedBlock
+                        text={paragraph}
+                        sectionIndex={index}
+                        blockType="body"
+                        blockIndex={blockIndex}
+                        evidenceReferences={(section.evidenceRefs ?? []).flatMap((reference) => {
+                          if (reference.blockIndex !== blockIndex) return [];
+                          const item = evidenceById.get(reference.evidenceId);
+                          return item ? [{ ...item, text: reference.text }] : [];
+                        })}
+                        onEvidenceOpen={(item, trigger) => {
+                          evidenceTriggerRef.current = trigger;
+                          setActiveEvidence(item);
+                        }}
+                      />
+                    </p>
+                    {section.image?.afterBlock === blockIndex ? (
+                      <figure className="my-2 border-y border-line-structure" data-blog-section-image>
+                        <Image
+                          src={section.image.src}
+                          alt={section.image.alt}
+                          width={section.image.width}
+                          height={section.image.height}
+                          sizes="(max-width: 767px) calc(100vw - 2rem), 760px"
+                          className="h-auto w-full object-cover"
+                        />
+                        <figcaption className="border-t border-line-structure bg-surface-1 px-3 py-2 text-[11px] leading-relaxed text-text-disabled">
+                          {section.image.caption}
+                        </figcaption>
+                      </figure>
+                    ) : null}
+                  </Fragment>
                 ))}
               </div>
 

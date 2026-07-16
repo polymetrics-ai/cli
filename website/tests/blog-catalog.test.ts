@@ -7,6 +7,7 @@ describe('blog catalog', () => {
     const post = getBlogPost('human-harnesses');
 
     expect(post).toBeDefined();
+    if (!post) throw new Error('Expected human-harnesses blog post');
     expect(post).toMatchObject({
       title: 'Humans Need Harnesses Too',
       publishedAt: '2026-07-16',

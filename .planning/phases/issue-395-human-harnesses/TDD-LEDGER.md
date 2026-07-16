@@ -177,7 +177,7 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Review Loop Image
 
-- Status: red captured; green pending.
+- Status: green complete.
 - Catalog contract: the local review section no longer exposes its ASCII loop as `code`; it declares
   the approved review-repair image, intrinsic 3:2 dimensions, placement after paragraph three,
   descriptive alt text, and one-sentence caption.
@@ -185,3 +185,15 @@ Phase: `issue-395-human-harnesses`
   ASCII loop does not appear in the article.
 - Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
 - Red result: failed because the review section still returned the exact ASCII loop in `code`.
+- Green result: the section declares the approved 1536x1024 asset after block index two and no
+  longer contains the ASCII loop; the focused catalog contract passes.
+- Asset result: the selected Downloads PNG was exported without a crop as a 326 KB WebP at quality
+  88, preserving the 3:2 composition.
+- Browser result: decoded image pixels, alt text, caption, exact paragraph order, 390px containment,
+  and zero horizontal overflow pass in configured Chromium. Desktop and mobile captures show the
+  complete loop with no text collision.
+- Regression result: 64 website unit tests, all 8 blog Chromium tests, typecheck, production build,
+  and `git diff --check` pass.
+- Build result: `/blog/human-harnesses` prerenders successfully. Better Auth reports the existing
+  default-secret warning because no build-only secret was supplied; no secret value was read or
+  printed.

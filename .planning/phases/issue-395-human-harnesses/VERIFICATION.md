@@ -129,9 +129,9 @@
 
 ## Review Loop Image Follow-Up
 
-- [ ] Focused catalog test fails before the ASCII loop is replaced.
-- [ ] Approved Downloads asset is exported to WebP at its original 3:2 composition.
-- [ ] Figure renders after paragraph three with intrinsic dimensions, alt text, and caption.
-- [ ] ASCII review loop is absent from catalog and rendered article.
-- [ ] Desktop and 390px layouts preserve reading order and avoid horizontal overflow.
-- [ ] Unit tests, typecheck, focused Chromium test, production build, and `git diff --check` pass.
+- [x] Focused catalog test fails before the ASCII loop is replaced.
+- [x] Approved Downloads asset is exported to WebP at its original 3:2 composition.
+- [x] Figure renders after paragraph three with intrinsic dimensions, alt text, and caption.
+- [x] ASCII review loop is absent from catalog and rendered article.
+- [x] Desktop and 390px layouts preserve reading order and avoid horizontal overflow.
+- [x] Unit tests, typecheck, focused Chromium test, production build, and `git diff --check` pass.

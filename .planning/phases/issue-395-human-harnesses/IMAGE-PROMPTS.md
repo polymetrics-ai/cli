@@ -71,6 +71,8 @@ single master into every placement.
 ## 04. Review, Fix, Repeat
 
 - File: `website/public/blog/human-harnesses/04-review-repair-loop.webp`
+- Selected source: `~/Downloads/harness blog/8c6bb99b-7ee5-4d41-ae8e-40c25243a8d2.png`
+- Status: placed at the original 3:2 composition and exported as WebP quality 88.
 - Placement: full-width interruption between paragraphs three and four of `Review, fix, repeat,
   locally`.
 - Aspect ratio: 3:2, 2100 x 1400.

@@ -96,6 +96,41 @@ test.describe('blog UI smoke', () => {
     ).toBe(true);
   });
 
+  test('replaces the local review loop with its responsive editorial image', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/blog/human-harnesses');
+
+    const figure = page.locator('[data-blog-section-image]');
+    const image = figure.getByRole('img', {
+      name: 'Separate review and repair stations passing the same verified artifact around a loop.',
+    });
+    await image.scrollIntoViewIfNeeded();
+    await expect(image).toBeVisible();
+    await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth))
+      .toBeGreaterThan(0);
+    await expect(image).toHaveAttribute('src', /04-review-repair-loop\.webp/);
+    await expect(
+      page.getByText('implement -> verify -> review exact head -> disposition', { exact: false }),
+    ).toHaveCount(0);
+    await expect(figure).toContainText(
+      'Review and repair stay separate while verification sends the same artifact back around the loop.',
+    );
+    expect(
+      await figure.evaluate((element) => ({
+        previousBlock: (element.previousElementSibling as HTMLElement | null)?.dataset.blockIndex,
+        nextBlock: (element.nextElementSibling as HTMLElement | null)?.dataset.blockIndex,
+      })),
+    ).toEqual({ previousBlock: '2', nextBlock: '3' });
+
+    const box = await figure.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+  });
+
   test('links the blog from the desktop navbar', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
