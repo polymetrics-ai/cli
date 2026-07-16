@@ -51,3 +51,11 @@ Phase: `issue-395-human-harnesses`
   human-readable plan output supplies the token consumed by `pm reverse run --approve`.
 - Verification: catalog test, typecheck, six blog Playwright tests, production build, and
   `git diff --check` passed after the review fix.
+
+## Revision: Million-Line PR Narrative
+
+- Status: planned.
+- Red contract: require the merge-nightmare story, structural parent/sub-issue architecture, and a
+  human star request; reject the repository/documentation/inventory footer requested for removal.
+- Green contract: preserve verified technical claims and CLI examples while the revised narrative
+  passes the catalog, browser, typecheck, and production-build checks.

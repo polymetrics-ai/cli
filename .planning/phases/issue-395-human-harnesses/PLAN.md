@@ -75,3 +75,14 @@ the issue, test, review, release, and deployment harnesses used by this reposito
 3. Green article implementation and updated verification evidence.
 4. Review fixes, if any.
 
+## Requested Narrative Revision
+
+- Reframe the essay around the oversized, roughly million-line pull request that made review,
+  conflict resolution, and integration confidence collapse into one merge event.
+- Explain how that failure led to the parent issue, bounded sub-issue, isolated worktree, collision
+  rule, stacked PR, review-coverage, and human-gated parent architecture.
+- Keep the technical workflow evidence, but make the prose sound like a person telling the story
+  rather than a repository audit report.
+- Remove the closing repository, documentation, and dated inventory bullet list.
+- End with a natural request to star the repository.
+- Preserve the verified inventory numbers in the technical body where they provide necessary scale.
