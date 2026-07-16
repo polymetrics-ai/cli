@@ -16,20 +16,32 @@ default_branch: main
 orchestrator:
   mode: active_owner
   runtime: pi
-  status: waiting_for_review
+  status: running
 ready_queue:
-  - number: 402
-    status: sub_pr_open
-    dependencies: [401]
-    write_scope: "runtimecheck, worker, schedule, agent-image, perf, and RLM typed-config migration"
-    decision: not_spawned_verification_blocked
-    reason: "PR #448 head 0d7c87e8 awaits latest status-only CI rerun; local code gates and targeted re-review are clean."
   - number: 403
-    status: planned
+    status: worker_ready
     dependencies: [402]
-    write_scope: "internal/events and named instrumentation points"
-    decision: not_spawned_dependency_blocked
-    reason: "First parallel fan-out waits for #402 parent integration."
+    write_scope: "internal/events plus flow/ETL/certify/worker instrumentation"
+    decision: spawned
+    reason: "Disjoint from isolated catalog namespace scope; dispatch after worktree creation."
+  - number: 406
+    status: worker_ready
+    dependencies: [402]
+    write_scope: "catalog Cobra node/flags/help/tests/docs only"
+    decision: spawned
+    reason: "Disjoint from events packages and instrumentation; dispatch after worktree creation."
+  - number: 404
+    status: worker_ready
+    dependencies: [402]
+    write_scope: "logging/redaction/vault/Temporal logger bridge"
+    decision: not_spawned_write_scope_collision
+    reason: "Collides with #403 at worker/submit.go and related run context seams; re-evaluate after #403 integration."
+  - number: 410
+    status: worker_ready
+    dependencies: [402]
+    write_scope: "telemetry package, config/docs, CLI/app/flow/certify/connsdk/worker spans"
+    decision: not_spawned_write_scope_collision
+    reason: "Collides with #403 across app/flow/certify/worker and with #404 at CLI/config/worker; defer until both integrate."
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -87,6 +99,18 @@ spawn_decisions:
     decision: not_spawned_verification_blocked
     issue_numbers: [403, 404, 406, 410]
     reason: "First parallel fan-out depends on #402 integration; PR #448 latest CI is pending."
+  - timestamp: 2026-07-16T17:45:00Z
+    decision: read_only_spawned
+    issue_numbers: [403, 404, 406, 410]
+    reason: "Four pm-scout sidecars mapped exact expected write sets and collisions after #402 integration."
+  - timestamp: 2026-07-16T17:52:48Z
+    decision: spawned
+    issue_numbers: [403, 406]
+    reason: "Only events and catalog scopes are disjoint; #404/#410 deferred for documented shared-file collisions."
+  - timestamp: 2026-07-16T17:52:48Z
+    decision: not_spawned_write_scope_collision
+    issue_numbers: [404, 410]
+    reason: "#404 overlaps #403 worker/submit; #410 overlaps #403 app/flow/certify/worker and #404 CLI/config/worker."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -133,31 +157,31 @@ subissues:
     branch: refactor/402-config-env-migration
     pr_url: https://github.com/polymetrics-ai/cli/pull/448
     worker: pm-gsd-worker
-    status: sub_pr_open
+    status: provisionally_integrated
     write_scope: "runtimecheck, worker, schedule, agent-image, perf, RLM config call sites, tests, docs parity"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-402-config-env-migration
-    verification: "Local full gates passed; targeted re-review clean; latest status-only CI rerun pending."
-    automated_review: {primary_route: human, status: blocked, head_sha: 0d7c87e8d963ea841101def68b264b2f976d4381, reviewed_range: "7683087d..0d7c87e8", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "High/medium sidecar findings fixed; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/448"}
+    verification: "Local and remote Go/website gates passed; parent squash commit cc2a90e918b2814a64516d6bad6d14462b3ac079."
+    automated_review: {primary_route: human, status: blocked, head_sha: 0d7c87e8d963ea841101def68b264b2f976d4381, reviewed_range: "7683087d..cc2a90e9", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "High/medium sidecar findings fixed; targeted re-review clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/448"}
   - number: 403
     url: https://github.com/polymetrics-ai/cli/issues/403
-    branch: pending
+    branch: feat/403-progress-event-bus
     pr_url: ""
-    worker: unassigned
-    status: planned
-    write_scope: "internal/events and named instrumentation points"
-    worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #402.", disposition_url: ""}
+    worker: pm-gsd-worker
+    status: worker_in_progress
+    write_scope: "internal/events plus flow/ETL/certify/worker instrumentation and focused tests"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-403-progress-event-bus
+    verification: in_progress
+    automated_review: {primary_route: blocked, status: pending, head_sha: "", reviewed_range: "", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Worker dispatch planned after state commit.", disposition_url: ""}
   - number: 404
     url: https://github.com/polymetrics-ai/cli/issues/404
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: planned
-    write_scope: "logging/redaction packages and Temporal logger bridge"
+    status: worker_ready
+    write_scope: "logging/redaction packages, vault registration, retention, Temporal logger bridge"
     worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #402.", disposition_url: ""}
+    verification: not_run_write_scope_collision
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Deferred until #403 clears worker/submit collision.", disposition_url: ""}
   - number: 405
     url: https://github.com/polymetrics-ai/cli/issues/405
     branch: pending
@@ -170,14 +194,14 @@ subissues:
     automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #403.", disposition_url: ""}
   - number: 406
     url: https://github.com/polymetrics-ai/cli/issues/406
-    branch: pending
+    branch: refactor/406-catalog-native-cobra
     pr_url: ""
-    worker: unassigned
-    status: planned
-    write_scope: "catalog command node, tests, and parity docs"
-    worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #402.", disposition_url: ""}
+    worker: pm-gsd-worker
+    status: worker_in_progress
+    write_scope: "catalog Cobra node/flags/help/tests and parity docs only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-406-catalog-native-cobra
+    verification: in_progress
+    automated_review: {primary_route: blocked, status: pending, head_sha: "", reviewed_range: "", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Worker dispatch planned after state commit.", disposition_url: ""}
   - number: 407
     url: https://github.com/polymetrics-ai/cli/issues/407
     branch: pending
@@ -213,11 +237,11 @@ subissues:
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: planned
-    write_scope: "internal/telemetry and allowlisted tracing call sites"
+    status: worker_ready
+    write_scope: "internal/telemetry, config/docs, CLI/app/flow/certify/connsdk/worker spans"
     worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #402.", disposition_url: ""}
+    verification: not_run_write_scope_collision
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Deferred until #403 and #404 clear shared instrumentation seams.", disposition_url: ""}
   - number: 411
     url: https://github.com/polymetrics-ai/cli/issues/411
     branch: pending
@@ -328,4 +352,4 @@ human_gates:
   - production deploys
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
-updated_at: 2026-07-16T17:27:41Z
+updated_at: 2026-07-16T17:52:48Z
