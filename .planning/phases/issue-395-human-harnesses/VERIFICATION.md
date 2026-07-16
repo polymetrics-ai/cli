@@ -70,8 +70,19 @@
 ## Publication-Date Follow-Up
 
 - [x] Focused catalog test fails against the future placeholder date.
-- [ ] Only `human-harnesses` uses `publishedAt: '2026-07-16'` and `updatedAt: '2026-07-16'`.
-- [ ] Focused catalog test and website typecheck pass.
-- [ ] Production build prerenders `/blog/human-harnesses`.
-- [ ] Local article header renders `July 16, 2026`.
-- [ ] Deployment remains human-gated and no production environment is mutated by this change.
+- [x] Only `human-harnesses` uses `publishedAt: '2026-07-16'` and `updatedAt: '2026-07-16'`.
+- [x] Focused catalog test and website typecheck pass.
+- [x] Production build prerenders `/blog/human-harnesses`.
+- [x] Local article header renders `2026-07-16` and does not render `2026-08-04`.
+- [x] Deployment remains human-gated and no production environment is mutated by this change.
+
+## Deployment Readiness Snapshot
+
+- [x] `WEBSITE_DEPLOY_ENABLED` currently evaluates to `true` without exposing variable contents.
+- [x] The `polymetrics-origin-website` runner is online and has the required self-hosted, Linux,
+  Tailscale, and website labels.
+- [x] The `website-production` environment exists; it currently has no environment protection
+  rules, so parent-PR human review remains a process gate rather than a GitHub environment gate.
+- [x] The expected website deployment variable names exist.
+- [x] OAuth and database configuration remains in the VPS-side mode-0600 environment files, not in
+  the GitHub repository or Actions secret store.

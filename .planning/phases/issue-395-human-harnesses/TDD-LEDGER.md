@@ -73,14 +73,19 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Current Publication Date
 
-- Status: red complete.
+- Status: green complete.
 - Red contract: expect only `human-harnesses` to publish and update on `2026-07-16` while preserving
   its existing content contract.
 - Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
 - Red result: failed with the catalog still returning `2026-08-04` for both fields, exactly isolating
   the requested metadata delta.
-- Green target: update the two metadata fields, then verify the rendered article header shows
-  `July 16, 2026` without changing another blog entry.
+- Green result: the same catalog contract passes after changing only the two `human-harnesses`
+  metadata fields to `2026-07-16`; website typecheck also passes.
+- Render result: a headless Chromium assertion against the local article finds `2026-07-16` and
+  rejects the previous `2026-08-04` placeholder.
+- Build result: the production Next.js build passes and prerenders `/blog/human-harnesses`. The
+  standalone build reports that `BETTER_AUTH_SECRET` was not supplied; the static article build is
+  still successful and no secret value was read or printed.
 - GSD activation: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase
   issue-395-human-harnesses --dry-run` remains unavailable because `programming-loop` is absent
   from the repo-local registry, so the recorded manual-GSD loop continues.

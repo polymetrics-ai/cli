@@ -94,7 +94,7 @@ the issue, test, review, release, and deployment harnesses used by this reposito
 - Extend the focused catalog contract first so any unchanged future date fails before the production
   metadata edit.
 - Re-run the focused catalog test, typecheck, production build, and browser assertion that the
-  article header renders `July 16, 2026`.
+  article header renders `2026-07-16`.
 - Document the existing deployment path rather than changing it: merge the stacked sub-PR into the
   parent branch, complete parent verification and human review, merge the parent PR into `main`,
   and let Website CI/CD publish and deploy the immutable GHCR image.

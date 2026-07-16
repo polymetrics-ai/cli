@@ -15,6 +15,8 @@
   layered checks, and the final human merge gate.
 - Removed the repository, documentation, and inventory-snapshot footer and replaced it with a
   conversational request to star the repository.
+- Changed only the `human-harnesses` publication and update dates to `2026-07-16` so the article
+  header reflects the current delivery date.
 
 ## Evidence
 
@@ -30,6 +32,8 @@
 - Desktop/mobile screenshots and overflow assertions: pass.
 - Narrative contract: the giant-PR origin story, isolated-worktree architecture, 14-minute reading
   time, and star request are present; the removed footer strings are absent.
+- Date contract: focused test, typecheck, production build, and a local Chromium render assertion
+  pass with `2026-07-16`; the old `2026-08-04` placeholder is absent.
 
 ## Scope
 

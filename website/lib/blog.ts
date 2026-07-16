@@ -24,8 +24,8 @@ export const BLOG_POSTS: BlogPost[] = [
     title: 'Humans Need Harnesses Too',
     description:
       'One pull request grew to roughly a million changed lines and turned merging into archaeology. The recovery became the harness architecture we now use for code, data, and humans.',
-    publishedAt: '2026-08-04',
-    updatedAt: '2026-08-04',
+    publishedAt: '2026-07-16',
+    updatedAt: '2026-07-16',
     readingTime: '14 min read',
     category: 'Build in public',
     tags: ['human harnesses', 'GitHub Actions', 'approval gates', 'AI agents'],
