@@ -43,5 +43,7 @@ Phase: `issue-395-human-harnesses`
   explicit HTTP mutations, and 177 mixed/nonstandard rows.
 - Tightened the article's PR Issue Guard and GSD workflow descriptions to their actual enforcement
   boundaries.
+- Replaced an unsupported reference to signed release artifacts with the versioned GoReleaser
+  artifacts the repository actually produces.
 - Verification: catalog test, typecheck, six blog Playwright tests, production build, and
   `git diff --check` passed after the review fix.

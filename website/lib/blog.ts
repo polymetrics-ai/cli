@@ -91,7 +91,7 @@ pm reverse run <plan-id> --json`,
         ],
         code: `data:    plan -> preview -> approve -> execute -> audit
 code:    issue -> plan -> red -> green -> review -> merge
-release: change -> release PR -> tag -> signed build artifacts
+release: change -> release PR -> tag -> versioned build artifacts
 deploy:  tested commit -> immutable image -> rollout -> health check`,
       },
       {
