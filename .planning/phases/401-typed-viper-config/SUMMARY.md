@@ -1,6 +1,6 @@
 # Issue 401 Summary — Typed Viper Configuration
 
-Status: planning artifacts created; red tests pending.
+Status: PR #441 open; local verification passed; GitHub checks queued at last observation; human/parent review fallback pending.
 
 ## Scope target
 
@@ -60,7 +60,9 @@ CLI parity:
 
 ## Review route
 
-Claude workflow remains `disabled_manually`; Copilot quota exhausted for this blocker window. Do not post `@claude review`; do not request Copilot. Human/parent fallback pending.
+Sub-PR: https://github.com/polymetrics-ai/cli/pull/441 (non-draft, base `feat/cli-architecture-v2`).
+
+Claude workflow remains `disabled_manually`; Copilot quota exhausted for this blocker window. Did not post `@claude review`; did not request Copilot. Human/parent fallback pending. GitHub checks queued at last observation: branch-name, pr-title, govulncheck, CodeQL, Dependency Review, verify, Website checks.
 
 ## Human gates
 

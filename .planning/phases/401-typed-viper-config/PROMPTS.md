@@ -4,8 +4,8 @@
 
 Task: Execute polymetrics-ai/cli#401 as one bounded mutating worker for parent #397.
 
-Downstream artifact: `.planning/phases/401-typed-viper-config/PLAN.md`
-Verification result: pending
+Downstream artifact: `.planning/phases/401-typed-viper-config/PLAN.md`; PR #441 opened.
+Verification result: local gates passed; GitHub checks queued and human/parent review fallback pending.
 
 ## GSD command evidence
 

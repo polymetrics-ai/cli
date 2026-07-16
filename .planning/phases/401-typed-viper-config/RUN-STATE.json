@@ -4,10 +4,10 @@
   "branch": "feat/401-typed-viper-config",
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "subPR": null,
-  "status": "local_verification_passed_pr_pending",
+  "subPR": 441,
+  "status": "pr_open_ci_pending",
   "verificationPassed": true,
-  "verificationBlocker": "external CI and human/parent review fallback pending after PR open",
+  "verificationBlocker": "GitHub checks queued and human/parent review fallback pending; local verification passed",
   "gsd": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-401.prompt",
@@ -68,6 +68,11 @@
       "cycle": "full-verify",
       "decision": "local_critical_path",
       "reason": "gofmt, vet, go test ./..., go build, make verify, diff check, dependency diff, and parity checks passed locally"
+    },
+    {
+      "cycle": "pr-open",
+      "decision": "local_critical_path",
+      "reason": "non-draft stacked PR #441 opened to feat/cli-architecture-v2; GitHub checks queued; Claude disabled and Copilot quota exhausted so human/parent fallback pending"
     }
   ],
   "verification": {
@@ -104,5 +109,13 @@
     ".planning/phases/401-typed-viper-config/SUMMARY.md",
     ".planning/phases/401-typed-viper-config/PROMPTS.md",
     ".planning/phases/401-typed-viper-config/RUN-STATE.json"
-  ]
+  ],
+  "review": {
+    "primaryRoute": "human",
+    "fallbackRoute": "none",
+    "coverageRoute": "blocked",
+    "coverageStatus": "pending_human_parent_fallback",
+    "reviewURL": "https://github.com/polymetrics-ai/cli/pull/441",
+    "notes": "Claude workflow disabled_manually; Copilot quota exhausted; no @claude review or Copilot request made per task."
+  }
 }

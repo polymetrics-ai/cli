@@ -67,10 +67,10 @@ Applies: yes, config behavior and docs are CLI-visible.
 
 ## Review route
 
-- [ ] Open non-draft stacked PR to `feat/cli-architecture-v2` with `Refs #401` and `Refs #397`.
-- [ ] Do not post `@claude review` because repository Claude workflow is `disabled_manually` for this run.
-- [ ] Do not request Copilot because quota is exhausted for this blocker window.
-- [ ] Record review coverage as human/parent-PR fallback pending; no approval claims.
+- [x] Open non-draft stacked PR to `feat/cli-architecture-v2` with `Refs #401` and `Refs #397`: PR #441.
+- [x] Do not post `@claude review` because repository Claude workflow is `disabled_manually` for this run.
+- [x] Do not request Copilot because quota is exhausted for this blocker window.
+- [x] Record review coverage as human/parent-PR fallback pending; no approval claims.
 
 ## Full `make verify` result
 
