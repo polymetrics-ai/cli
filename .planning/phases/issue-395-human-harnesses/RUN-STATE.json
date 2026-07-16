@@ -1,0 +1,15 @@
+{
+  "phase": "issue-395-human-harnesses",
+  "issue": 395,
+  "parent_issue": 293,
+  "state": "worker_in_progress",
+  "branch": "docs/395-human-harnesses",
+  "base_branch": "feat/293-blog-annotations",
+  "gsd_mode": "manual_fallback",
+  "current_step": "red_test",
+  "human_gates": [
+    "parent_review_coverage",
+    "parent_merge_to_main",
+    "production_deployment"
+  ]
+}
