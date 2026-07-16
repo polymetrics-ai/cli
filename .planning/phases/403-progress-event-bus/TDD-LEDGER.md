@@ -46,7 +46,7 @@ Fallback: `.pi/prompts/pm-gsd-loop.md` loaded and executed inline/manual; decisi
 | 3 app ETL sequence | `go test -race ./internal/app/... -run 'TestRunETLEmits|TestRunWarehouseETLEmits' -count=1` | fail: collector sequence length 0, want ETL start/batch progress/completed for connector + warehouse flush paths | pass: `ok   polymetrics.ai/internal/app 18.027s` | `gofmt -w internal/app` |
 | 4 certify sequence | `go test -race ./internal/connectors/certify/... -run TestRunBatchEmits -count=1` | fail: collector sequence length 0, want certify batch/connector lifecycle | pass: `ok   polymetrics.ai/internal/connectors/certify 1.632s` | `gofmt -w internal/connectors/certify` |
 | 5 worker poller | `go test -race ./internal/worker/... -run TestSubmitterEmits -count=1` | fail (build): undefined `workflowPollInterval`, `submitterForWorkflowClient`, `workflowRun` | pass: `ok   polymetrics.ai/internal/worker 1.351s` | `gofmt -w internal/worker` |
-| final focused | `go test -race ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` | pending | timed out at 180s after flow/app passed; rerun with longer timeout pending | pending |
+| final focused | `go test -race ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` | pending | fail: exact command hit Go test default `panic: test timed out after 10m0s` in `internal/connectors/certify` after flow/app passed; supplemental `-timeout 30m` also timed out in existing certify source-stage tests | blocked by repeated verification timeout |
 | final broad | issue verification commands | pending | pending | pending |
 
 ## Red test capture rule

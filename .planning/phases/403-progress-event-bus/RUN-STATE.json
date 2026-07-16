@@ -6,7 +6,7 @@
   "baseParentHead": "e5ee4075db8f8350b216a6d1ff64297e204b8515",
   "mode": "bounded-mutating-worker",
   "verificationPassed": false,
-  "verificationBlocker": "not yet run; plan checkpoint only",
+  "verificationBlocker": "go test -race focused package gate timed out in internal/connectors/certify after 10m default and 30m supplemental timeout",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "generated",
@@ -18,6 +18,21 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "direct bounded mutating worker in isolated cwd; no subagent tool by worker contract; no recursive delegation"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for events, flow, app ETL, certify batch, and worker poller"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "implemented scoped event bus and named instrumentation inline in assigned branch"
+    },
+    {
+      "cycle": "verify",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "focused race gate repeatedly timed out in internal/connectors/certify source-stage tests; no further production edits after blocker"
     }
   ]
 }

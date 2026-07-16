@@ -1,9 +1,9 @@
 # PLAN — Issue 403 progress event bus
 
-Sub-issue: https://github.com/polymetrics-ai/cli/issues/403  
-Parent: https://github.com/polymetrics-ai/cli/issues/397 / PR #438  
-Branch: `feat/403-progress-event-bus`  
-Base parent head: `e5ee4075`  
+Sub-issue: https://github.com/polymetrics-ai/cli/issues/403
+Parent: https://github.com/polymetrics-ai/cli/issues/397 / PR #438
+Branch: `feat/403-progress-event-bus`
+Base parent head: `e5ee4075`
 Mode: bounded mutating worker in isolated cwd.
 
 ## Required reading complete
