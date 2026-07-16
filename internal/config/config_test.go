@@ -351,6 +351,25 @@ func TestLoadConfigFileRootDoesNotRelocateDiscovery(t *testing.T) {
 	}
 }
 
+func TestLoadRecordsExplicitKeys(t *testing.T) {
+	clearBoundEnv(t)
+	root := writeConfig(t, "runtime:\n  temporal_addr: configured-temporal:7233\nrlm:\n  fake_runner: false\n")
+	t.Setenv("PM_CRONTAB_FILE", "configured-crontab")
+
+	cfg, err := Load(Options{Root: root})
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	for _, key := range []string{"runtime.temporal_addr", "rlm.fake_runner", "schedule.crontab_file"} {
+		if !cfg.IsExplicit(key) {
+			t.Fatalf("IsExplicit(%q) = false, want true", key)
+		}
+	}
+	if cfg.IsExplicit("runtime.dragonfly_addr") {
+		t.Fatal("runtime.dragonfly_addr should not be explicit when only defaulted")
+	}
+}
+
 func TestLoadInvocationIsolationNoStateLeak(t *testing.T) {
 	clearBoundEnv(t)
 	rootA := writeConfig(t, "project: alpha\njson: true\n")
