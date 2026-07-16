@@ -3,7 +3,6 @@ package cli
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"strings"
 
@@ -197,5 +196,5 @@ func mapCobraErr(err error) error {
 	if strings.Contains(message, "unknown command") || strings.Contains(message, "unknown flag") || strings.Contains(message, "unknown shorthand flag") {
 		return usageErrorf("%s", message)
 	}
-	return fmt.Errorf("%s", message)
+	return err
 }
