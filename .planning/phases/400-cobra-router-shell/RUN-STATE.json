@@ -1,0 +1,141 @@
+{
+  "issue": 400,
+  "parentIssue": 397,
+  "branch": "refactor/400-cobra-router-shell",
+  "baseBranch": "feat/cli-architecture-v2",
+  "parentPR": 438,
+  "subPR": 440,
+  "status": "review_fix_pushed_ci_pending",
+  "verificationPassed": true,
+  "verificationBlocker": "GitHub verify and CodeQL checks pending at last observation; local review-fix gates passed, automated review coverage remains human/parent fallback pending",
+  "gsd": {
+    "doctor": "passed",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-400-review-fix.prompt",
+    "programmingLoop": "manual_fallback",
+    "programmingLoopFailure": "scripts/gsd: unknown GSD command: programming-loop",
+    "fallbackPrompt": ".pi/prompts/pm-gsd-loop.md"
+  },
+  "reviewFix": {
+    "source": "pm-reviewer read-only findings supplied in task",
+    "dispositions": [
+      {
+        "severity": "MEDIUM",
+        "finding": "mapCobraErr reclassifies legacy handler/root-fallback plain errors containing Cobra-like unknown flag/unknown command text",
+        "disposition": "accepted",
+        "action": "added cobraLegacyError marking around legacy wrappers/root fallback and bypassed those errors in mapCobraErr; genuine Cobra parse errors still map to usage"
+      },
+      {
+        "severity": "LOW/MEDIUM",
+        "finding": "fresh root command lacks persistent --root and --json definitions required by ADR 0002 Stage 2",
+        "disposition": "accepted",
+        "action": "defined persistent flags on each fresh root with parsed-state defaults while keeping parseGlobal ownership and DisableFlagParsing"
+      }
+    ],
+    "residualGapsClosed": [
+      "assert every registered top-level wrapper including init has DisableFlagParsing and expected visibility",
+      "add deterministic dynamic connector passthrough coverage with connector flags and late globals",
+      "exercise genuine Cobra error mapping and legacy bypass"
+    ]
+  },
+  "dependencyDecision": {
+    "cobra": "github.com/spf13/cobra v1.10.2",
+    "approvedBy": "docs/adr/0002-cobra-viper-cli-framework.md",
+    "status": "added_no_new_review_fix_dependencies",
+    "directDependenciesAdded": [
+      "github.com/spf13/cobra v1.10.2"
+    ],
+    "indirectGoModDependenciesAdded": [
+      "github.com/inconshreveable/mousetrap v1.1.0",
+      "github.com/spf13/pflag v1.0.9"
+    ],
+    "goSumMetadataOnly": [
+      "github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod",
+      "github.com/russross/blackfriday/v2 v2.1.0/go.mod",
+      "go.yaml.in/yaml/v3 v3.0.4/go.mod"
+    ]
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "spawned",
+      "reason": "parent #397 assigned isolated worker directory, branch, issue #400, and bounded write scope; worker does not spawn subagents"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red validation captured inline: Cobra absent from dependency graph and focused Cobra router test fails before implementation"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "worker implemented assigned Cobra router shell locally; no subagents available to worker"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused gates, make verify, and post-commit diff checks passed locally"
+    },
+    {
+      "cycle": "pr-open",
+      "decision": "local_critical_path",
+      "reason": "sub-PR #440 opened and pushed; external review coverage remains human/parent fallback pending because Claude is disabled and Copilot quota is exhausted"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "review-fix work is in the assigned issue worktree; no subagents are available to this worker"
+    },
+    {
+      "cycle": "review-fix-red",
+      "decision": "local_critical_path",
+      "reason": "focused red tests captured missing persistent flags and legacy-error reclassification before production edits"
+    },
+    {
+      "cycle": "review-fix-execute",
+      "decision": "local_critical_path",
+      "reason": "implemented accepted pm-reviewer fixes locally in assigned scope"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "exact review-fix gates passed locally; no subagent or automated reviewer invoked per task instruction"
+    },
+    {
+      "cycle": "review-fix-push",
+      "decision": "local_critical_path",
+      "reason": "review-fix commit pushed to origin/refactor/400-cobra-router-shell; PR body updated; CI verify and CodeQL pending at last check"
+    }
+  ],
+  "verification": {
+    "focused": {
+      "cobraRouterAndGolden": "passed: ok polymetrics.ai/internal/cli 7.724s",
+      "certify": "passed: ok polymetrics.ai/internal/cli 92.156s",
+      "internalCLI": "passed: ok polymetrics.ai/internal/cli 155.648s"
+    },
+    "full": {
+      "gofmt": "passed",
+      "vet": "passed_no_output",
+      "goTestAll": "passed: internal/cli 162.510s; internal/connectors/certify 347.398s",
+      "build": "passed_no_output",
+      "makeVerify": "passed: connectorgen validate: 547 connector(s) checked, 0 findings",
+      "diffCheck": "passed_no_output",
+      "dependencyDiff": "approved_cobra_delta_only"
+    },
+    "parity": {
+      "helpConnectors": "passed: exit 0 stdout 4967 stderr 0",
+      "bareConnectors": "passed: exit 0 stdout 4967 stderr 0",
+      "docsHelp": "passed: exit 0 stdout 818 stderr 0",
+      "hiddenWorkerHelpJSON": "previously_passed_current_golden_behavior",
+      "docsCliUpdated": "not_applicable_byte_identical",
+      "websiteUpdated": "not_applicable_byte_identical"
+    }
+  },
+  "artifacts": [
+    ".planning/phases/400-cobra-router-shell/PLAN.md",
+    ".planning/phases/400-cobra-router-shell/TDD-LEDGER.md",
+    ".planning/phases/400-cobra-router-shell/VERIFICATION.md",
+    ".planning/phases/400-cobra-router-shell/SUMMARY.md",
+    ".planning/phases/400-cobra-router-shell/PROMPTS.md",
+    ".planning/phases/400-cobra-router-shell/RUN-STATE.json"
+  ]
+}
