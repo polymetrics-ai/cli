@@ -58,5 +58,55 @@ describe('blog catalog', () => {
     expect(articleText).not.toContain('Repository: github.com/polymetrics-ai/cli');
     expect(articleText).not.toContain('Documentation: cli.polymetrics.ai');
     expect(articleText).not.toContain('Inventory snapshot:');
+
+    const interactivePost = post as unknown as {
+      repositoryCta?: { label: string; href: string };
+      evidence?: Array<{
+        id: string;
+        url: string;
+        apiUrl?: string;
+        snapshot: { status: string; stats: Array<{ label: string; value: string }> };
+      }>;
+      sections: Array<{ evidenceIds?: string[] }>;
+    };
+    const evidenceById = new Map(
+      interactivePost.evidence?.map((evidence) => [evidence.id, evidence]) ?? [],
+    );
+
+    expect(interactivePost.repositoryCta).toEqual({
+      label: 'Star Polymetrics on GitHub',
+      href: 'https://github.com/polymetrics-ai/cli',
+    });
+    expect(evidenceById.get('precursor-pr-27')).toMatchObject({
+      url: 'https://github.com/polymetrics-ai/cli/pull/27',
+      apiUrl: 'https://api.github.com/repos/polymetrics-ai/cli/pulls/27',
+      snapshot: { status: 'Closed, not merged' },
+    });
+    expect(evidenceById.get('migration-pr-29')).toMatchObject({
+      url: 'https://github.com/polymetrics-ai/cli/pull/29',
+      apiUrl: 'https://api.github.com/repos/polymetrics-ai/cli/pulls/29',
+      snapshot: { status: 'Merged' },
+    });
+    expect(evidenceById.get('migration-merge-commit')).toMatchObject({
+      url: 'https://github.com/polymetrics-ai/cli/commit/605b006e5aa1adae697d5b7dd26ec485c570c250',
+      apiUrl:
+        'https://api.github.com/repos/polymetrics-ai/cli/commits/605b006e5aa1adae697d5b7dd26ec485c570c250',
+    });
+    expect(evidenceById.get('migration-merge-commit')?.snapshot.stats).toEqual(
+      expect.arrayContaining([{ label: 'Changed lines', value: '2,792,444' }]),
+    );
+    expect(evidenceById.get('issue-first-pr-47')?.url).toBe(
+      'https://github.com/polymetrics-ai/cli/pull/47',
+    );
+    expect(evidenceById.get('parent-orchestrator-pr-51')?.url).toBe(
+      'https://github.com/polymetrics-ai/cli/pull/51',
+    );
+
+    const referencedEvidence = new Set(
+      interactivePost.sections.flatMap((section) => section.evidenceIds ?? []),
+    );
+    for (const id of evidenceById.keys()) {
+      expect(referencedEvidence).toContain(id);
+    }
   });
 });

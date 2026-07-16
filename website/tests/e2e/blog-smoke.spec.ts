@@ -44,6 +44,34 @@ test.describe('blog UI smoke', () => {
     }
   });
 
+  test('previews GitHub evidence in place and keeps the star action explicit', async ({ page }) => {
+    await page.route('https://api.github.com/**', (route) => route.abort());
+    await page.goto('/blog/human-harnesses');
+    const articleUrl = page.url();
+
+    await page.getByRole('button', { name: 'Preview PR #27 evidence' }).click();
+    const preview = page.getByRole('dialog', { name: 'GitHub evidence: PR #27' });
+    await expect(preview).toBeVisible();
+    await expect(preview.getByText('Verified snapshot')).toBeVisible();
+    await expect(preview.getByText('Closed, not merged')).toBeVisible();
+    await expect(preview.getByText('1,961,878')).toBeVisible();
+
+    const sourceLink = preview.getByRole('link', { name: 'Open PR #27 on GitHub' });
+    await expect(sourceLink).toHaveAttribute(
+      'href',
+      'https://github.com/polymetrics-ai/cli/pull/27',
+    );
+    await expect(sourceLink).toHaveAttribute('target', '_blank');
+    expect(page.url()).toBe(articleUrl);
+
+    await page.keyboard.press('Escape');
+    await expect(preview).toBeHidden();
+
+    const starLink = page.getByRole('link', { name: 'Star Polymetrics on GitHub' });
+    await expect(starLink).toHaveAttribute('href', 'https://github.com/polymetrics-ai/cli');
+    await expect(starLink).toHaveAttribute('target', '_blank');
+  });
+
   test('links the blog from the desktop navbar', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');

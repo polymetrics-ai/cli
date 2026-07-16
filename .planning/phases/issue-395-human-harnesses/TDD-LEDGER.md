@@ -113,7 +113,7 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Interactive GitHub Evidence
 
-- Status: planned.
+- Status: red complete.
 - Red catalog contract: require canonical PR `#27`, PR `#29`, merge commit `605b006`, issue-first
   PR `#47`, parent-orchestrator PR `#51`, section-to-evidence references, and a repository star CTA.
 - Red browser contract: require an evidence marker to open an in-page sheet with a verified
@@ -125,3 +125,6 @@ Phase: `issue-395-human-harnesses`
   data-driven.
 - Visual target: evidence remains subordinate to prose, works at 390px and 1440px, has visible
   keyboard focus, and introduces no horizontal overflow.
+- Red result: the focused catalog test failed at the first new assertion because the post did not
+  yet expose the repository CTA; no production code had been changed.
+- Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
