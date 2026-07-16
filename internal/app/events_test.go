@@ -111,6 +111,89 @@ func TestRunWarehouseETLEmitsFlushEvents(t *testing.T) {
 	assertBatchCounters(t, collector.Events(), []int64{2, 3})
 }
 
+func TestRunETLEmitsFailedTerminalEvent(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := &streamingSource{total: 1}
+	dest := &failingDestination{}
+	registry := connectors.NewRegistry()
+	registry.Register(source)
+	registry.Register(dest)
+	a.registry = registry
+
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "source", Connector: source.Name()}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "dest", Connector: dest.Name(), Config: map[string]string{"path": filepath.Join(root, "out")}}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "source_to_dest",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "source"},
+		Destination: EndpointConfig{Connector: dest.Name(), Credential: "dest"},
+		Streams: map[string]StreamConfig{
+			"records": {SyncMode: "full_refresh_overwrite", PrimaryKey: []string{"id"}, DestinationTable: "records"},
+		},
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	collector := events.NewCollector()
+	_, err = a.RunETL(events.WithEmitter(ctx, collector), RunETLRequest{Connection: "source_to_dest", Stream: "records", BatchSize: 1})
+	if err == nil {
+		t.Fatal("RunETL() error = nil, want destination failure")
+	}
+
+	got := appEventSequence(collector.Events())
+	want := []string{
+		"etl:records:started:running",
+		"etl:records:failed:failed",
+	}
+	assertAppEventSequence(t, got, want)
+}
+
+type failingDestination struct{}
+
+func (d *failingDestination) Name() string { return "failing_destination" }
+
+func (d *failingDestination) Metadata() connectors.Metadata {
+	return connectors.Metadata{
+		Name:         d.Name(),
+		DisplayName:  "Failing Destination",
+		Description:  "Test destination that fails writes.",
+		Capabilities: connectors.Capabilities{Check: true, Catalog: true, Write: true},
+	}
+}
+
+func (d *failingDestination) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
+	return ctx.Err()
+}
+
+func (d *failingDestination) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return connectors.Catalog{Connector: d.Name()}, nil
+}
+
+func (d *failingDestination) Read(context.Context, connectors.ReadRequest, func(connectors.Record) error) error {
+	return connectors.ErrUnsupportedOperation
+}
+
+func (d *failingDestination) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{}, errFailingDestination
+}
+
+var errFailingDestination = errString("destination failed")
+
+type errString string
+
+func (e errString) Error() string { return string(e) }
+
 func appEventSequence(in []events.Event) []string {
 	out := make([]string, 0, len(in))
 	for _, ev := range in {

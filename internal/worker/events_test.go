@@ -66,8 +66,40 @@ func TestSubmitterEmitsPollingEventsAndPreservesCancellation(t *testing.T) {
 	}
 }
 
+func TestSubmitterEmitsSuccessEvents(t *testing.T) {
+	oldInterval := workflowPollInterval
+	workflowPollInterval = time.Hour
+	t.Cleanup(func() { workflowPollInterval = oldInterval })
+
+	fake := &fakeWorkflowClient{run: &successfulWorkflowRun{id: "rlm-fp", runID: "run-2"}, described: make(chan struct{}, 1)}
+	submit := submitterForWorkflowClient(fake, TaskQueue)
+	collector := events.NewCollector()
+
+	result, err := submit(events.WithEmitter(context.Background(), collector), rlm.AgentRequest{Fingerprint: "fp"})
+	if err != nil {
+		t.Fatalf("submit error = %v", err)
+	}
+	if result.RecordsScored != 2 {
+		t.Fatalf("RecordsScored = %d, want 2", result.RecordsScored)
+	}
+
+	got := workerEventSequence(collector.Events())
+	want := []string{
+		"worker::started:submitted",
+		"worker::completed:success",
+	}
+	if len(got) != len(want) {
+		t.Fatalf("sequence length = %d, want %d\ngot %#v", len(got), len(want), got)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("sequence[%d] = %q, want %q\ngot %#v", i, got[i], want[i], got)
+		}
+	}
+}
+
 type fakeWorkflowClient struct {
-	run        *fakeWorkflowRun
+	run        workflowRun
 	workflowID string
 	described  chan struct{}
 }
@@ -98,6 +130,22 @@ func (f *fakeWorkflowRun) Get(ctx context.Context, _ any) error {
 func (f *fakeWorkflowRun) GetID() string { return f.id }
 
 func (f *fakeWorkflowRun) GetRunID() string { return f.runID }
+
+type successfulWorkflowRun struct {
+	id    string
+	runID string
+}
+
+func (f *successfulWorkflowRun) Get(_ context.Context, value any) error {
+	if result, ok := value.(*rlm.AgentResult); ok {
+		*result = rlm.AgentResult{JobDir: "job", RecordsRead: 2, RecordsScored: 2}
+	}
+	return nil
+}
+
+func (f *successfulWorkflowRun) GetID() string { return f.id }
+
+func (f *successfulWorkflowRun) GetRunID() string { return f.runID }
 
 func workerEventSequence(in []events.Event) []string {
 	out := make([]string, 0, len(in))

@@ -59,6 +59,36 @@ func TestEngineEmitsFailureProgressEvents(t *testing.T) {
 	assertStringSlice(t, got, want)
 }
 
+func TestEngineEmitsSkippedProgressEvents(t *testing.T) {
+	m := twoStepManifest()
+	tracker := &stepCallTracker{}
+	checkpoint := &FileCheckpointStore{Dir: t.TempDir()}
+	if err := checkpoint.Set(m.Name, "sync-hubspot", "success"); err != nil {
+		t.Fatal(err)
+	}
+	e := newEngineForTest(t, m, tracker, &stubLedger{}, checkpoint)
+	collector := events.NewCollector()
+	ctx := events.WithEmitter(context.Background(), collector)
+
+	result, err := e.Run(ctx, RunOptions{})
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	if result.Status != "ok" {
+		t.Fatalf("result.Status = %q, want ok", result.Status)
+	}
+
+	got := eventSequence(collector.Events())
+	want := []string{
+		"flow::started:running",
+		"flow:sync-hubspot:skipped:skipped",
+		"flow:score-contacts:started:running",
+		"flow:score-contacts:completed:success",
+		"flow::completed:success",
+	}
+	assertStringSlice(t, got, want)
+}
+
 func eventSequence(in []events.Event) []string {
 	out := make([]string, 0, len(in))
 	for _, ev := range in {

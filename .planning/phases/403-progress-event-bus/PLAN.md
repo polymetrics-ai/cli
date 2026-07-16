@@ -4,7 +4,7 @@ Sub-issue: https://github.com/polymetrics-ai/cli/issues/403
 Parent: https://github.com/polymetrics-ai/cli/issues/397 / PR #438
 Branch: `feat/403-progress-event-bus`
 Base parent head: `e5ee4075`
-Coordinator-confirmed race head: `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`
+Previous coordinator-confirmed race head: `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61` (invalidated by PR #451 review-fix production changes; strict full-race rerun pending with parent orchestrator)
 Mode: bounded mutating worker in isolated cwd.
 
 ## Required reading complete
@@ -133,35 +133,43 @@ Implementation:
 - select on `ctx.Done()` and result channel; no goroutine leaks.
 - do not alter Temporal logger setup.
 
-## Finalization plan — 2026-07-17
+## Review-fix plan — 2026-07-17
 
-Coordinator completed the strict full race gate externally on branch head
-`2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`. This worker will not rebase, chase a self-generated
-SHA, or make production changes unless a real remaining gate failure requires it. The finalization
-slice is documentation/evidence plus the requested non-race final gates, then push and open the
-stacked PR to the current `feat/cli-architecture-v2` base.
+PR #451 review findings accepted:
 
-External strict race evidence to carry forward honestly:
+1. HIGH Chan backpressure/close semantics: keep the internal queue strictly within configured
+   capacity; evict/coalesce progress first for lifecycle insertion; if the queue is full of lifecycle
+   events and the consumer stalls, use a bounded wait with context cancellation/close handling and
+   explicit lifecycle drop accounting; define/test deterministic close-drop accounting; keep Close
+   finite; prevent Multi fanout from being indefinitely stalled by Chan.
+2. MEDIUM Throttle stale progress after terminal: flush the latest pending progress before terminal
+   lifecycle events so completed/failed/skipped remain last, with tests that do not codify terminal
+   then progress ordering.
+3. Race evidence trace: production fixes invalidate the previous strict race evidence at
+   `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61` and current head `e5404809fc66296f6d02e243b09b431dade921fb`.
+   `RUN-STATE.json` now records `verificationPassed=false`; strict full-race rerun is pending with
+   the parent orchestrator after final production head. This worker will not rerun the 65-minute full
+   race gate.
+4. Residual event sequence gaps: add focused terminal/error/skip/cancel tests only where needed to
+   support issue #403 acceptance without broad fixture churn.
 
-```text
-go test -race ./... -count=1 -timeout 120m
-PASS
-internal/cli 1841.988s
-internal/connectors/certify 3892.688s
-internal/events 1.317s
-real 3898.97
-user 6294.91
-sys 84.56
-```
+Review-fix TDD slices:
 
-Baseline/worker suspect certify tests had nearly identical pass times, confirming prior 10m/30m
-timeouts were suite duration, not an event-regression signal.
+1. Add failing `internal/events` tests for Chan strict capacity/accounted lifecycle timeout,
+   deterministic close-drop accounting, Multi+Chan finite fanout, and Throttle terminal ordering.
+2. Add focused existing-instrumentation sequence tests for skipped flow steps, ETL failure terminal
+   event, certify skip/error terminal paths, and worker successful terminal path if gaps are present.
+3. Implement minimal events package fixes, keeping dependency-free stdlib + `internal/safety` only.
+4. Re-run the requested focused race/non-race gates and update this phase's TDD/verification
+   artifacts and PR body with accepted finding dispositions and pending strict full-race status.
 
-Remaining final gates passed locally after this evidence update: gofmt had no production diff; vet and
-build had no output; `go test ./...` passed with `internal/connectors/certify 343.668s`; `make verify`
-passed with `0 issues` and `connectorgen validate: 547 connector(s) checked, 0 findings`; diff-check
-was clean; `go.mod`/`go.sum` diff was empty. `verificationPassed=true` is now recorded in
-`RUN-STATE.json`.
+Review-fix result:
+
+- Chan/Throttle red test captured before production fix; green focused/race events tests passed.
+- Focused flow/app/certify/worker sequence tests passed under `-race`.
+- `go vet ./...`, focused non-race package tests, `go build ./cmd/pm`, `make verify`, diff-check,
+  dependency inspection, and go.mod/go.sum check passed.
+- Strict full-race remains pending parent orchestrator rerun; `verificationPassed=false` by design.
 
 ## Verification plan
 

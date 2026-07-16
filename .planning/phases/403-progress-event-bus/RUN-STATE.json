@@ -5,20 +5,20 @@
   "branch": "feat/403-progress-event-bus",
   "baseParentHead": "e5ee4075db8f8350b216a6d1ff64297e204b8515",
   "mode": "bounded-mutating-worker",
-  "verificationPassed": true,
-  "verificationBlocker": null,
+  "verificationPassed": false,
+  "verificationBlocker": "strict full-race rerun pending with parent orchestrator after accepted PR #451 review-fix production changes; worker did not rerun 65-minute full race",
   "gsdAdapter": {
-    "doctor": "passed; rerun 2026-07-17",
-    "list": "passed; 69 commands",
-    "planPhasePrompt": "generated",
-    "programmingLoopDryRun": "failed: scripts/gsd: unknown GSD command: programming-loop",
+    "doctor": "passed; rerun 2026-07-17 for review-fix",
+    "list": "passed; 69 commands; rerun 2026-07-17 for review-fix",
+    "planPhasePrompt": "generated; rerun saved to /tmp/gsd-plan-403-reviewfix.txt",
+    "programmingLoopDryRun": "failed: scripts/gsd: unknown GSD command: programming-loop; rerun 2026-07-17",
     "fallback": "loaded .pi/prompts/pm-gsd-loop.md and running universal loop inline/manual"
   },
   "externalRaceGate": {
-    "source": "coordinator external PR-head gate evidence",
+    "source": "coordinator external PR-head gate evidence before review-fix",
     "head": "2c2c16f850484ff5c4c8b99d065f4ef3361dbc61",
     "command": "go test -race ./... -count=1 -timeout 120m",
-    "result": "PASS",
+    "result": "PASS_INVALIDATED_BY_REVIEW_FIX",
     "durations": {
       "internal/cli": "1841.988s",
       "internal/connectors/certify": "3892.688s",
@@ -27,43 +27,103 @@
       "user": "6294.91",
       "sys": "84.56"
     },
-    "analysis": "baseline/worker suspect certify tests had nearly identical pass times, confirming prior 10m/30m timeout was suite duration, not event regression"
+    "analysis": "prior evidence must not be claimed for current head e5404809fc66296f6d02e243b09b431dade921fb or later because production review-fix changes were made"
+  },
+  "reviewFix": {
+    "pr": 451,
+    "baseHead": "e5404809fc66296f6d02e243b09b431dade921fb",
+    "findingsAccepted": [
+      "HIGH Chan backpressure/close semantics",
+      "MEDIUM Throttle stale progress after terminal",
+      "Race evidence invalidated by production fixes",
+      "Residual event sequence gaps require focused terminal/error/skip/cancel tests"
+    ],
+    "semantics": [
+      "Chan internal queue stays within configured capacity",
+      "Chan evicts/coalesces progress before lifecycle insertion",
+      "Chan full-lifecycle backpressure uses bounded wait with context and close handling",
+      "Chan DropStats accounts progress and lifecycle drops; Close uses finite accounted close-drop semantics",
+      "Throttle flushes pending progress before completed/failed/skipped terminal lifecycle events",
+      "Multi fanout is finite when a Chan sink is stalled"
+    ],
+    "strictFullRace": "pending_parent_orchestrator_final_head",
+    "redEvidence": {
+      "command": "go test ./internal/events/... -run 'TestChan|TestThrottle' -count=1",
+      "result": "FAIL build: sink.DropStats undefined at events_test.go:108:19, 132:19, 146:16"
+    },
+    "localGates": [
+      {
+        "command": "gofmt -w cmd internal",
+        "result": "pass",
+        "evidence": "no output"
+      },
+      {
+        "command": "go test -race ./internal/events/... -count=1",
+        "result": "pass",
+        "evidence": "ok polymetrics.ai/internal/events 1.388s"
+      },
+      {
+        "command": "go test -race ./internal/flow/... -run 'Test.*Emits' -count=1",
+        "result": "pass",
+        "evidence": "ok polymetrics.ai/internal/flow 1.291s"
+      },
+      {
+        "command": "go test -race ./internal/app/... -run 'Test.*Emits' -count=1",
+        "result": "pass",
+        "evidence": "ok polymetrics.ai/internal/app 29.128s"
+      },
+      {
+        "command": "go test -race ./internal/connectors/certify/... -run 'TestRunBatchEmits' -count=1",
+        "result": "pass",
+        "evidence": "ok polymetrics.ai/internal/connectors/certify 1.639s"
+      },
+      {
+        "command": "go test -race ./internal/worker/... -run 'TestSubmitterEmits' -count=1",
+        "result": "pass",
+        "evidence": "ok polymetrics.ai/internal/worker 1.331s"
+      },
+      {
+        "command": "go vet ./...",
+        "result": "pass",
+        "evidence": "no output"
+      },
+      {
+        "command": "go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1",
+        "result": "pass",
+        "evidence": "events 0.488s; flow 0.506s; app 18.817s; certify 340.499s; worker 0.439s"
+      },
+      {
+        "command": "go build ./cmd/pm",
+        "result": "pass",
+        "evidence": "no output"
+      },
+      {
+        "command": "make verify",
+        "result": "pass",
+        "evidence": "go test -timeout 20m ./... passed; smoke ok; golangci-lint 0 issues; connectorgen validate: 547 connector(s) checked, 0 findings"
+      },
+      {
+        "command": "git diff --check origin/feat/cli-architecture-v2...HEAD",
+        "result": "pass",
+        "evidence": "no output"
+      },
+      {
+        "command": "git diff -- go.mod go.sum",
+        "result": "pass",
+        "evidence": "no output; no dependency delta"
+      }
+    ]
   },
   "finalGates": [
     {
-      "command": "gofmt -w cmd internal",
-      "result": "pass",
-      "evidence": "no output; real 0.27 user 0.45 sys 0.32; no production file diff"
-    },
-    {
-      "command": "go vet ./...",
-      "result": "pass",
-      "evidence": "no output; real 2.19 user 1.22 sys 2.70"
-    },
-    {
-      "command": "go test ./...",
-      "result": "pass",
-      "evidence": "internal/cli 163.985s; internal/connectors/certify 343.668s; internal/events 2.383s; real 348.54 user 783.02 sys 47.85"
-    },
-    {
-      "command": "go build ./cmd/pm",
-      "result": "pass",
-      "evidence": "no output; real 1.14 user 0.56 sys 1.21"
-    },
-    {
       "command": "make verify",
-      "result": "pass",
-      "evidence": "go test -timeout 20m ./... passed; docs validate passed; smoke ok; golangci-lint 0 issues; connectorgen validate: 547 connector(s) checked, 0 findings; real 367.33 user 787.62 sys 68.30"
+      "result": "pass_review_fix",
+      "evidence": "review-fix feasible gate passed"
     },
     {
-      "command": "git diff --check origin/feat/cli-architecture-v2...HEAD",
-      "result": "pass",
-      "evidence": "no output after fetching current origin/feat/cli-architecture-v2; real 0.02"
-    },
-    {
-      "command": "git diff -- go.mod go.sum",
-      "result": "pass",
-      "evidence": "no output; no dependency delta; final rerun real 0.01"
+      "command": "go test -race ./... -count=1 -timeout 120m",
+      "result": "pending_parent_orchestrator",
+      "evidence": "not rerun by worker per task; prior pass invalidated"
     }
   ],
   "orchestrationDecisions": [
@@ -95,7 +155,27 @@
     {
       "cycle": "final-verify",
       "decision": "local_critical_path",
-      "reason": "remaining final gates passed locally; no production code changes and no dependency delta"
+      "reason": "remaining final gates passed locally before review-fix; now invalidated by accepted production fixes"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #451 findings accepted; phase artifacts updated before production edits; no subagent tool available"
+    },
+    {
+      "cycle": "review-fix-tdd",
+      "decision": "local_critical_path",
+      "reason": "focused failing events tests captured before production fix"
+    },
+    {
+      "cycle": "review-fix-execute",
+      "decision": "local_critical_path",
+      "reason": "implemented minimal Chan/Throttle semantics and focused sequence tests in assigned write scope"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "focused race/non-race gates and make verify passed; strict full race pending with parent orchestrator"
     }
   ]
 }

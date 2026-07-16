@@ -17,9 +17,9 @@ scripts/gsd prompt plan-phase 403 --skip-research
 scripts/gsd prompt programming-loop init --phase 403 --dry-run
 ```
 
-Downstream artifact: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.json`, `SUMMARY.md`, scoped implementation, and focused tests pushed; finalization evidence update in progress.
+Downstream artifact: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.json`, `SUMMARY.md`, scoped implementation, focused tests, and PR #451 review-fix updates.
 
-Verification result: strict full race passed by coordinator external PR-head source at `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`; remaining non-race final gates passed locally. Prior focused `internal/connectors/certify` 10m/30m timeouts are recorded as suite-duration evidence, not event regression.
+Verification result: review-fix focused gates and `make verify` passed locally; strict full race is pending parent orchestrator rerun on final production head. Prior strict full-race evidence at `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61` is invalidated by accepted production fixes.
 
 ## Finalization snapshot — 2026-07-17
 
@@ -54,9 +54,17 @@ git diff -- go.mod go.sum
 Downstream artifact: final gate update complete; commit/push and non-draft stacked PR to current
 `feat/cli-architecture-v2` with `Refs #403` and `Refs #397` pending.
 
-Verification result: passed. `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`,
-`go build ./cmd/pm`, `make verify`, `git diff --check origin/feat/cli-architecture-v2...HEAD`,
-and `git diff -- go.mod go.sum` all passed; `verificationPassed=true`.
+Verification result: superseded by PR #451 review-fix. Original non-race gates passed, but `verificationPassed=true` is invalidated by production changes; see review-fix snapshot.
+
+## Review-fix snapshot — 2026-07-17
+
+Task: fix accepted PR #451 findings for issue #403 at starting head `e5404809fc66296f6d02e243b09b431dade921fb`.
+
+Accepted findings: Chan backpressure/close accounting, Throttle terminal ordering, invalidated full-race evidence, focused terminal/error/skip/cancel sequence gaps.
+
+Downstream artifact: review-fix red tests, minimal events fix, focused sequence tests, updated phase artifacts and PR body.
+
+Verification result: local focused gates and `make verify` passed. Strict full race (`go test -race ./... -count=1 -timeout 120m`) was not rerun by worker and remains pending with parent orchestrator for final production head; `RUN-STATE.json` records `verificationPassed=false`.
 
 ## Adapter gap
 

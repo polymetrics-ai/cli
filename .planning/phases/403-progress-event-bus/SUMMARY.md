@@ -1,58 +1,46 @@
 # SUMMARY — Issue 403 progress event bus
 
-Status: final verification passed. Coordinator-provided strict full race gate passed at branch head `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`; remaining non-race final gates passed in this worker run.
+Status: PR #451 review-fix complete locally; strict full-race remains pending with parent orchestrator because accepted production fixes invalidate the prior full-race evidence.
 
-## Delivered
+## Review findings accepted and fixed
 
-- New dependency-free `internal/events` package:
-  - typed `Event`, `Counters`, `Kind`, `Scope`
-  - `Emitter` via context with `Nop` default
-  - sinks: `Nop`, NDJSON writer sink, bounded/coalescing `Chan`, `Throttle`, `Multi`, and in-memory `Collector`
-  - NDJSON sanitizes terminal controls and redacts secret-like values through `internal/safety`
-- Instrumentation:
-  - `internal/flow/engine.go` emits flow/step lifecycle events
-  - `internal/app/app.go` and `internal/app/local_warehouse.go` emit ETL lifecycle and flush progress
-  - `internal/connectors/certify/batch.go` emits batch and connector worker-pool lifecycle
-  - `internal/worker/submit.go` emits Temporal workflow submit/poll/done/cancel events through a testable client seam
-- Tests added beside packages for event sinks, deterministic sequences, race-clean concurrent emit, and worker cancellation without external Temporal service.
+- HIGH Chan backpressure/close semantics:
+  - internal queue remains within configured capacity;
+  - lifecycle insertion evicts/coalesces progress first;
+  - full-lifecycle stalls use bounded wait with context/close handling;
+  - `DropStats` accounts progress and lifecycle drops;
+  - `Close` is finite with explicit accounted close-drop semantics;
+  - `Multi` is no longer indefinitely stalled by a full/stalled `Chan` sink.
+- MEDIUM Throttle stale progress after terminal:
+  - pending progress flushes before completed/failed/skipped terminal lifecycle events;
+  - terminal lifecycle remains last.
+- Residual sequence gaps:
+  - added focused tests for flow skip, ETL failure terminal, certify skip/failure, and worker success paths.
 
-## Passing evidence
+## Delivered earlier in issue #403
 
-- `go test -race ./internal/events/... -count=1`
-- `go test -race ./internal/flow/... -run 'TestEngineEmits' -count=1`
-- `go test -race ./internal/app/... -run 'TestRunETLEmits|TestRunWarehouseETLEmits' -count=1`
-- `go test -race ./internal/connectors/certify/... -run TestRunBatchEmits -count=1`
-- `go test -race ./internal/worker/... -run TestSubmitterEmits -count=1`
-- `go list -deps -f '{{if not .Standard}}{{.ImportPath}}{{end}}' ./internal/events | grep -v '^$'` output only `polymetrics.ai/internal/safety` and `polymetrics.ai/internal/events`.
-- `git diff -- go.mod go.sum` empty.
-- `go vet ./...`
-- `go build ./cmd/pm`
+- Dependency-free `internal/events` package with typed events, context emitter, Nop, NDJSON, Chan, Throttle, Multi, Collector.
+- Instrumentation in flow, ETL flush, certify batch, and worker polling paths.
+- Secret/terminal sanitization for NDJSON via `internal/safety`.
 
-## Strict race resolution
+## Verification
 
-- Coordinator external gate at branch head `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61`:
+Passed locally on review-fix head:
 
-```text
-go test -race ./... -count=1 -timeout 120m
-PASS
-internal/cli 1841.988s
-internal/connectors/certify 3892.688s
-internal/events 1.317s
-real 3898.97
-user 6294.91
-sys 84.56
-```
+- `go test -race ./internal/events/... -count=1` — `ok ... 1.388s`
+- `go test -race ./internal/flow/... -run 'Test.*Emits' -count=1` — `ok ... 1.291s`
+- `go test -race ./internal/app/... -run 'Test.*Emits' -count=1` — `ok ... 29.128s`
+- `go test -race ./internal/connectors/certify/... -run 'TestRunBatchEmits' -count=1` — `ok ... 1.639s`
+- `go test -race ./internal/worker/... -run 'TestSubmitterEmits' -count=1` — `ok ... 1.331s`
+- `go vet ./...` — pass, no output
+- `go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` — pass (`certify 340.499s`)
+- `go build ./cmd/pm` — pass, no output
+- `make verify` — pass; `smoke ok`; `0 issues`; `connectorgen validate: 547 connector(s) checked, 0 findings`
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass, no output
+- `git diff -- go.mod go.sum` — pass, no output
 
-- Baseline/worker suspect certify tests had nearly identical pass times, confirming prior 10m/30m timeouts were suite duration, not event regression.
+## Pending
 
-## Final verification
-
-- `gofmt -w cmd internal` — pass, no production file diff.
-- `go vet ./...` — pass, no output.
-- `go test ./...` — pass, `internal/cli 163.985s`, `internal/connectors/certify 343.668s`, `internal/events 2.383s`, `real 348.54`.
-- `go build ./cmd/pm` — pass, no output.
-- `make verify` — pass, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`, `real 367.33`.
-- `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass, no output.
-- `git diff -- go.mod go.sum` — pass, no output; no dependency delta.
-- CLI parity: N/A; no CLI command/flag/help/docs/website surface changed. `--progress` belongs to #405.
-- PR will be opened non-draft to current `feat/cli-architecture-v2`. No Claude/Copilot request per task.
+- `go test -race ./... -count=1 -timeout 120m`: **pending parent orchestrator** on final production head. Prior pass at `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61` is invalidated; do not claim it covers `e5404809fc66296f6d02e243b09b431dade921fb` or later.
+- CLI parity: N/A, no CLI command/flag/help/docs/website surface changed; `--progress ndjson` remains #405.
+- No Claude/Copilot requested per review-fix instruction.

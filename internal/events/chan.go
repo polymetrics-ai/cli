@@ -3,18 +3,39 @@ package events
 import (
 	"context"
 	"sync"
+	"time"
 )
 
+const defaultChanLifecycleWait = 50 * time.Millisecond
+
+// DropStats reports events that a Chan could not deliver. Progress drops include
+// coalesced progress updates; lifecycle drops include terminal and other
+// lifecycle events rejected by bounded backpressure or explicit Close drop
+// semantics.
+type DropStats struct {
+	Progress  uint64
+	Lifecycle uint64
+}
+
+// Total returns all accounted drops.
+func (s DropStats) Total() uint64 {
+	return s.Progress + s.Lifecycle
+}
+
 // Chan is a bounded channel-backed emitter for TUI and progress consumers.
-// Lifecycle events are queued or block until context cancellation; progress
-// events may be coalesced with drop accounting when the queue is full.
+// The internal queue never exceeds the configured capacity. Progress events may
+// be coalesced or evicted first; lifecycle events use a bounded wait when the
+// queue is full and are explicitly counted in DropStats when not delivered.
+// Close is finite and uses accounted close-drop semantics for queued events.
 type Chan struct {
 	capacity int
 
-	mu      sync.Mutex
-	queue   []Event
-	dropped uint64
-	closed  bool
+	mu               sync.Mutex
+	queue            []Event
+	droppedProgress  uint64
+	droppedLifecycle uint64
+	closed           bool
+	lifecycleWait    time.Duration
 
 	out       chan Event
 	notify    chan struct{}
@@ -28,10 +49,11 @@ func NewChan(capacity int) *Chan {
 		capacity = 1
 	}
 	c := &Chan{
-		capacity: capacity,
-		out:      make(chan Event),
-		notify:   make(chan struct{}, 1),
-		done:     make(chan struct{}),
+		capacity:      capacity,
+		lifecycleWait: defaultChanLifecycleWait,
+		out:           make(chan Event),
+		notify:        make(chan struct{}, 1),
+		done:          make(chan struct{}),
 	}
 	go c.run()
 	return c
@@ -52,9 +74,20 @@ func (c *Chan) Dropped() uint64 {
 	if c == nil {
 		return 0
 	}
+	return c.DropStats().Progress
+}
+
+// DropStats returns progress and lifecycle drops accounted by backpressure,
+// coalescing, or Close. Close is explicitly drop-accounting: queued events that
+// have not already been delivered on Events are counted and discarded so Close
+// remains finite even when consumers stall.
+func (c *Chan) DropStats() DropStats {
+	if c == nil {
+		return DropStats{}
+	}
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	return c.dropped
+	return DropStats{Progress: c.droppedProgress, Lifecycle: c.droppedLifecycle}
 }
 
 // Close stops the sink and closes Events().
@@ -65,6 +98,10 @@ func (c *Chan) Close() {
 	c.closeOnce.Do(func() {
 		c.mu.Lock()
 		c.closed = true
+		for _, event := range c.queue {
+			c.accountDropLocked(event)
+		}
+		c.queue = nil
 		c.mu.Unlock()
 		close(c.done)
 		c.signal()
@@ -89,29 +126,39 @@ func (c *Chan) Emit(ctx context.Context, event Event) {
 		c.enqueueProgressLocked(event)
 		return
 	}
+	var timer *time.Timer
 	for len(c.queue) >= c.capacity && !c.closed {
-		progressCount := c.progressCountLocked()
-		if progressCount > 1 && c.dropOldestProgressLocked() {
-			break
+		if c.dropOldestProgressLocked() {
+			continue
 		}
-		if progressCount == 1 {
-			// Keep the latest coalesced progress visible; lifecycle may exceed the
-			// progress queue bound instead of silently erasing the only progress state.
-			break
+		if timer == nil {
+			timer = time.NewTimer(c.lifecycleWait)
+			defer timer.Stop()
 		}
 		c.mu.Unlock()
 		select {
 		case <-ctx.Done():
 			c.mu.Lock()
+			c.accountDropLocked(event)
+			return
+		case <-timer.C:
+			c.mu.Lock()
+			c.accountDropLocked(event)
 			return
 		case <-c.notify:
 			c.mu.Lock()
 		case <-c.done:
 			c.mu.Lock()
+			c.accountDropLocked(event)
 			return
 		}
 	}
 	if c.closed {
+		c.accountDropLocked(event)
+		return
+	}
+	if len(c.queue) >= c.capacity {
+		c.accountDropLocked(event)
 		return
 	}
 	c.queue = append(c.queue, event)
@@ -127,18 +174,18 @@ func (c *Chan) enqueueProgressLocked(event Event) {
 	for i := len(c.queue) - 1; i >= 0; i-- {
 		if !c.queue[i].Lifecycle() && sameProgressSlot(c.queue[i], event) {
 			c.queue[i] = event
-			c.dropped++
+			c.droppedProgress++
 			return
 		}
 	}
 	for i := len(c.queue) - 1; i >= 0; i-- {
 		if !c.queue[i].Lifecycle() {
 			c.queue[i] = event
-			c.dropped++
+			c.droppedProgress++
 			return
 		}
 	}
-	c.dropped++
+	c.droppedProgress++
 }
 
 func (c *Chan) dropOldestProgressLocked() bool {
@@ -148,7 +195,7 @@ func (c *Chan) dropOldestProgressLocked() bool {
 		}
 		copy(c.queue[i:], c.queue[i+1:])
 		c.queue = c.queue[:len(c.queue)-1]
-		c.dropped++
+		c.droppedProgress++
 		c.signal()
 		return true
 	}
@@ -191,9 +238,20 @@ func (c *Chan) run() {
 		select {
 		case c.out <- event:
 		case <-c.done:
+			c.mu.Lock()
+			c.accountDropLocked(event)
+			c.mu.Unlock()
 			return
 		}
 	}
+}
+
+func (c *Chan) accountDropLocked(event Event) {
+	if event.Lifecycle() {
+		c.droppedLifecycle++
+		return
+	}
+	c.droppedProgress++
 }
 
 func (c *Chan) signal() {

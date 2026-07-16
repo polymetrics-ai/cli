@@ -33,6 +33,10 @@ func (t *Throttle) Emit(ctx context.Context, event Event) {
 		return
 	}
 	if event.Lifecycle() {
+		pending := t.takePendingForLifecycle(event)
+		if pending != nil {
+			t.sink.Emit(ctx, *pending)
+		}
 		t.sink.Emit(ctx, event)
 		return
 	}
@@ -60,6 +64,20 @@ func (t *Throttle) Flush(ctx context.Context) {
 	if t == nil {
 		return
 	}
+	pending := t.takePending()
+	if pending != nil {
+		t.sink.Emit(ctx, *pending)
+	}
+}
+
+func (t *Throttle) takePendingForLifecycle(event Event) *Event {
+	if !terminalLifecycle(event.Kind) {
+		return nil
+	}
+	return t.takePending()
+}
+
+func (t *Throttle) takePending() *Event {
 	var pending *Event
 	t.mu.Lock()
 	if t.pending != nil {
@@ -69,8 +87,15 @@ func (t *Throttle) Flush(ctx context.Context) {
 		t.last = t.now()
 	}
 	t.mu.Unlock()
-	if pending != nil {
-		t.sink.Emit(ctx, *pending)
+	return pending
+}
+
+func terminalLifecycle(kind Kind) bool {
+	switch kind {
+	case KindCompleted, KindFailed, KindSkipped:
+		return true
+	default:
+		return false
 	}
 }
 
