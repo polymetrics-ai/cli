@@ -86,3 +86,14 @@
 - [x] The expected website deployment variable names exist.
 - [x] OAuth and database configuration remains in the VPS-side mode-0600 environment files, not in
   the GitHub repository or Actions secret store.
+
+## Local Review Loop Follow-Up
+
+- [ ] Focused catalog test fails while the stale remote-review section remains.
+- [ ] Article describes exact-head local review, read-only findings, disposition, isolated fixes,
+  verification, and re-review.
+- [ ] Remote PR-bot review is supplemental rather than the default delivery gate.
+- [ ] Shepherd implementation detail is removed and only the next-post teaser remains.
+- [ ] Focused catalog test, typecheck, production build, and `git diff --check` pass.
+- [ ] Local article renders the new section and omits the stale Claude workflow language.
+- [ ] No Warp/Pi session, GitHub workflow, runtime, or production environment is mutated.

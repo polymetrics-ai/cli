@@ -89,3 +89,12 @@ Phase: `issue-395-human-harnesses`
 - GSD activation: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase
   issue-395-human-harnesses --dry-run` remains unavailable because `programming-loop` is absent
   from the repo-local registry, so the recorded manual-GSD loop continues.
+
+## Follow-Up: Local Review And Repair Loop
+
+- Status: planned.
+- Red contract: require a local exact-head review section, read-only reviewer, isolated repair
+  worker, correction loop, and Shepherd next-post teaser; reject the stale Claude workflow copy and
+  detailed Shepherd implementation description.
+- Green target: preserve the surrounding verification, human merge, and deployment claims while
+  accurately reflecting the current Pi local-review contract and active-session evidence.

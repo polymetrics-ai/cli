@@ -100,3 +100,20 @@ the issue, test, review, release, and deployment harnesses used by this reposito
   and let Website CI/CD publish and deploy the immutable GHCR image.
 - No workflow, runner, VPS, OAuth, database, environment, or deployment mutation is part of this
   follow-up.
+
+## Local Review Loop Follow-Up
+
+- Replace the stale remote Claude-workflow section with the current local exact-head review gate.
+- Describe the real local sequence observed in the active Pi sessions: verification, independent
+  read-only review, disposition, isolated repair, focused verification, and re-review until clean.
+- Explain that moved heads invalidate review evidence, accepted findings are fixed by a separate
+  bounded worker, and the correction loop stops for a human when its cap is reached.
+- Keep optional remote PR-bot review as supplemental shadow/canary input rather than the default
+  delivery gate.
+- Remove the detailed Shepherd implementation description. Mention Shepherd only as the next
+  engineering story about supervising the loop itself.
+- Update the focused catalog contract before editing the article, then run the focused test,
+  typecheck, production build, and local browser assertions.
+- Live evidence consulted read-only: the active Shepherd proof/recovery and CLI architecture Pi
+  sessions, their worktree state, and the local-review contract/workflow artifacts. Warp UI access
+  was blocked by the desktop safety layer; no live session was interrupted or mutated.
