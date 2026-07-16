@@ -91,6 +91,8 @@ test.describe('blog annotations', () => {
 
     await expect(page.getByRole('heading', { name: 'Join the discussion' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Continue with GitHub' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Continue with Google' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Continue with LinkedIn' })).toHaveCount(0);
   });
 
   test('signed-in reader comments, sees the highlight and margin note, and deletes it', async ({ page }) => {

@@ -20,17 +20,12 @@ function provider(idVar: string, secretVar: string) {
   return { clientId, clientSecret };
 }
 
-// Providers are included only when their credentials are present so the
-// site builds and boots (docs, blog, existing APIs) without any OAuth
-// secrets configured — sign-in simply offers what is wired up.
+// GitHub is included only when both credentials are present so the public
+// site still builds and boots without OAuth secrets in build environments.
 const github = provider('GITHUB_CLIENT_ID', 'GITHUB_CLIENT_SECRET');
-const google = provider('GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET');
-const linkedin = provider('LINKEDIN_CLIENT_ID', 'LINKEDIN_CLIENT_SECRET');
 
 const socialProviders = {
   ...(github ? { github } : {}),
-  ...(google ? { google } : {}),
-  ...(linkedin ? { linkedin } : {}),
 } satisfies Partial<Record<SocialProviderId, OAuthProviderConfig>>;
 
 export const auth = betterAuth({
