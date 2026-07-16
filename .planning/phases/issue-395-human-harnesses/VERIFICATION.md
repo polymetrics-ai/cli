@@ -37,9 +37,9 @@
 
 - [x] No secrets read or changed.
 - [x] No runtime mutation or production deployment.
-- [ ] Stacked PR targets `feat/293-blog-annotations` and uses `Refs`, not `Closes`.
-- [ ] Automated review coverage or documented parent/human fallback is recorded.
-- [ ] Parent merge into `main` remains human-gated.
+- [x] Stacked PR `#396` targets `feat/293-blog-annotations` and uses `Refs`, not `Closes`.
+- [x] Automated review is unavailable; parent/human fallback is recorded in the PR body.
+- [x] Parent merge into `main` remains human-gated.
 
 ## Residual Parent-Branch Findings
 
