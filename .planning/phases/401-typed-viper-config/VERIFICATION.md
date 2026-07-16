@@ -103,6 +103,42 @@ Review-fix parity gates:
 - [x] Record review coverage as human/parent-PR fallback pending; no approval claims.
 - [x] Update PR body with pm-reviewer finding disposition and review-fix evidence after gates pass — REST patch via `gh api repos/polymetrics-ai/cli/pulls/441 -X PATCH`; `gh pr edit` was blocked by GitHub Projects classic GraphQL deprecation.
 
+## Final re-review website caveat checklist
+
+Finding disposition: Accepted. Required action: website config section must distinguish `root`/`json` as CLI-effective now from runtime/RLM/schedule typed keys whose command-reader migration remains owned by #402.
+
+Pre-edit validation:
+
+- [x] `rg -n "Current command behavior|#402|legacy readers|env-reader migration" website/content/docs/cli-reference.mdx` — exit 1, no output; caveat absent from website config docs.
+- [x] `rg -n "Current command behavior|legacy readers|env-migration" docs/cli/config.md website/content/docs/cli-reference.mdx` — exit 0; caveat present only in `docs/cli/config.md` before this cycle.
+
+Final gates:
+
+- [x] `gofmt -w cmd internal` — pass, no output.
+- [x] `node website/scripts/gen-docs-data.mjs` — pass: `Wrote 11 docs pages to lib/docs.generated.ts.`
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass, no output.
+- [x] `go test ./internal/config/... -count=1` — pass: `ok  	polymetrics.ai/internal/config	0.498s`.
+- [x] `go test ./internal/cli/ -run 'Golden|Config' -count=1` — pass: `ok  	polymetrics.ai/internal/cli	6.817s`.
+- [x] `go vet ./...` — pass, no output.
+- [x] `go build ./cmd/pm` — pass, no output.
+- [x] `make verify` — pass; smoke path `/var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.k3AV9VUv6j`; final line `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- [x] Caveat grep after edit — pass: `rg -n 'legacy environment readers|#402 migrates them' website/content/docs/cli-reference.mdx website/lib/docs.generated.ts` matched both files.
+- [x] Existing website package-script checks run without dependency installs; exact results recorded below.
+- [ ] PR #441 body updated with accepted disposition and latest pushed head for this cycle after commit/push.
+- [x] No Claude/Copilot request posted.
+
+Website package-script checks:
+
+- [x] `npm --prefix website run gen:docs` — pass; `Wrote 11 docs pages to lib/docs.generated.ts.`
+- [ ] `npm --prefix website run typecheck` — failed, exit 127: `sh: tsc: command not found`.
+- [ ] `npm --prefix website run test:unit` — failed, exit 127: `sh: vitest: command not found`.
+- [ ] `npm --prefix website run build` — failed, exit 127: `sh: next: command not found`.
+- [ ] `npm --prefix website run lint` — failed, exit 127: `sh: next: command not found`.
+- [ ] `npm --prefix website run test:e2e` — failed, exit 1: `Error: Cannot find module '@playwright/test'`.
+- [ ] `npm --prefix website run test` — failed, exit 127: `sh: vitest: command not found`.
+
+Website script failures are dependency-availability blockers only: `website/node_modules` is absent, and this task forbids adding/installing frontend dependencies.
+
 ## Full `make verify` result
 
 Pass. Final lines:

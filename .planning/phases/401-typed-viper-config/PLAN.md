@@ -13,6 +13,27 @@
 
 Add an invocation-scoped `internal/config` package that loads typed app configuration through a fresh Viper instance with explicit flag/env/file/default precedence, reads `.polymetrics/config.yaml` from the invocation root, and integrates the CLI only far enough to validate malformed config through the existing validation exit-code funnel.
 
+## Final re-review cycle — PR #441 website caveat finding
+
+Disposition: Accepted.
+
+Finding: website config section lists runtime/RLM/schedule typed keys without the CLI manual's caveat that those commands still use legacy env readers until #402, potentially implying current command consumption.
+
+Required action for this final review fix:
+
+1. Add a concise caveat to `website/content/docs/cli-reference.mdx` that root/json config is CLI-effective now, while runtime/RLM/schedule reader migration remains owned by #402.
+2. Regenerate `website/lib/docs.generated.ts` with `node website/scripts/gen-docs-data.mjs` only.
+3. Run requested gates plus available website package-script checks without adding dependencies.
+4. Update issue-local `SUMMARY.md`, `VERIFICATION.md`, `RUN-STATE.json`, `TDD-LEDGER.md`, and `PROMPTS.md` with final head/gate evidence; update PR #441 body; do not request Claude/Copilot.
+
+Final review-fix slice plan:
+
+- FRF0 plan gate: refresh issue-local GSD artifacts before production docs edit; record `local_critical_path` because worker scope has no subagent tool.
+- FRF1 validation evidence: record that `website/content/docs/cli-reference.mdx` lacks the CLI manual caveat before the docs edit.
+- FRF2 docs/data: add only the website caveat and regenerate `website/lib/docs.generated.ts` with the existing docs generator.
+- FRF3 verification: run `node website/scripts/gen-docs-data.mjs`, `git diff --check origin/feat/cli-architecture-v2...HEAD`, `go test ./internal/config/... -count=1`, `go test ./internal/cli/ -run 'Golden|Config' -count=1`, `make verify`, plus existing website scripts that can run without dependency installs; record exact results.
+- FRF4 delivery: commit/push to `feat/401-typed-viper-config`, update PR #441 body with the accepted disposition and latest pushed head, and return compact handoff.
+
 ## Review-fix cycle — PR #441 pm-reviewer finding
 
 Disposition: Accepted.
@@ -180,6 +201,8 @@ Commit/push coherent plan/red/green/refactor checkpoints. Open non-draft stacked
 Initial implementation cycle: `spawned` — parent #397 assigned this isolated worker directory, branch, issue #401, and bounded write scope. This worker does not spawn subagents.
 
 Review-fix cycle: `local_critical_path` — same isolated worktree and branch; no subagent tool in worker scope; issue #401 review fix is within the bounded `internal/config`, `internal/cli`, docs, and issue-local planning scope.
+
+Final re-review caveat cycle: `local_critical_path` — same isolated worktree and branch; no subagent tool in worker scope; docs-only website caveat plus generated website data and issue-local trace updates are on the critical path for PR #441.
 
 ## Human gates
 

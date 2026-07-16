@@ -5,9 +5,9 @@
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
   "subPR": 441,
-  "status": "review_fix_pushed",
+  "status": "final_review_fix_local_verify_passed",
   "verificationPassed": true,
-  "verificationBlocker": "human/parent review fallback pending; local review-fix verification passed",
+  "verificationBlocker": "website package scripts that require local frontend dependencies failed because website/node_modules is absent and this task forbids installing dependencies; human/parent review fallback still pending",
   "gsd": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-401.prompt",
@@ -103,6 +103,21 @@
       "cycle": "review-fix-push",
       "decision": "local_critical_path",
       "reason": "pushed review-fix implementation commit 0fb9246c38f8bb8d3f2d4b9552c05072fc64629a to feat/401-typed-viper-config; no main push or merge"
+    },
+    {
+      "cycle": "final-review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "accepted PR #441 low website caveat finding; same isolated worker branch/worktree; plan/TDD/verification/summary/prompts/run-state updated before production docs edit; worker cannot spawn subagents"
+    },
+    {
+      "cycle": "final-review-fix-execute",
+      "decision": "local_critical_path",
+      "reason": "added website config caveat distinguishing root/json effective behavior from runtime/RLM/schedule reader migration owned by #402; regenerated website docs data only"
+    },
+    {
+      "cycle": "final-review-fix-full-verify",
+      "decision": "local_critical_path",
+      "reason": "gofmt, docs generator, diff check, focused config/CLI tests, vet, build, make verify, caveat grep, and website package-script attempts completed; package scripts requiring node_modules failed without dependency install"
     }
   ],
   "verification": {
@@ -114,7 +129,9 @@
       "cliCertify": "passed: ok polymetrics.ai/internal/cli 91.270s",
       "reviewFixConfig": "passed: ok polymetrics.ai/internal/config 0.331s",
       "reviewFixCliGoldenConfig": "passed: ok polymetrics.ai/internal/cli 10.587s",
-      "reviewFixCliCertify": "passed: ok polymetrics.ai/internal/cli 120.088s"
+      "reviewFixCliCertify": "passed: ok polymetrics.ai/internal/cli 120.088s",
+      "finalReviewFixConfig": "passed: ok polymetrics.ai/internal/config 0.498s",
+      "finalReviewFixCliGoldenConfig": "passed: ok polymetrics.ai/internal/cli 6.817s"
     },
     "full": {
       "gofmt": "passed",
@@ -130,7 +147,9 @@
       "reviewFixBuild": "passed_no_output",
       "reviewFixMakeVerify": "passed: connectorgen validate: 547 connector(s) checked, 0 findings",
       "reviewFixDiffCheck": "passed_no_output",
-      "reviewFixDependencyDiff": "approved_viper_delta_only_no_new_review_fix_dependency"
+      "reviewFixDependencyDiff": "approved_viper_delta_only_no_new_review_fix_dependency",
+      "finalReviewFixMakeVerify": "passed: smoke ok /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.k3AV9VUv6j; connectorgen validate: 547 connector(s) checked, 0 findings",
+      "finalReviewFixDiffCheck": "passed_no_output"
     },
     "parity": {
       "helpConfig": "passed: exit 0 stdout 4203 stderr 0",
@@ -144,7 +163,9 @@
       "reviewFixBareRuntime": "passed: exit 0 stdout 470 stderr 0",
       "reviewFixRuntimeHelp": "passed: exit 0 stdout 470 stderr 0",
       "reviewFixConfigHelp": "passed: exit 0 stdout 4375 stderr 0",
-      "reviewFixGrep": "passed: root/json env alias malformed/relocate grep exit 0, 11 matches"
+      "reviewFixGrep": "passed: root/json env alias malformed/relocate grep exit 0, 11 matches",
+      "finalReviewFixWebsiteCaveat": "passed: caveat present in website/content/docs/cli-reference.mdx and website/lib/docs.generated.ts",
+      "finalReviewFixWebsiteScripts": "gen:docs passed; typecheck/test/build/lint/e2e scripts failed because website/node_modules is absent and dependency install is forbidden"
     }
   },
   "artifacts": [
@@ -214,5 +235,60 @@
     },
     "prBodyUpdate": "updated via gh api repos/polymetrics-ai/cli/pulls/441 -X PATCH after gh pr edit failed on Projects classic GraphQL deprecation",
     "pushedImplementationCommit": "0fb9246c38f8bb8d3f2d4b9552c05072fc64629a"
+  },
+  "currentHeadBeforeFinalReviewFix": "77e8fe559b6bab458ed19cb30d3fdc6aa6778f56",
+  "finalReviewFix": {
+    "finding": "LOW: website config section listed runtime/RLM/schedule typed keys without CLI manual caveat that those command readers still use legacy env readers until #402",
+    "disposition": "accepted",
+    "status": "local_verify_passed_commit_push_pending",
+    "currentHeadBeforeFix": "77e8fe559b6bab458ed19cb30d3fdc6aa6778f56",
+    "requiredBehavior": [
+      "website docs distinguish root/json as CLI-effective now",
+      "website docs state runtime/RLM/schedule typed keys are documented now but command-reader migration is #402",
+      "regenerate website/lib/docs.generated.ts with node website/scripts/gen-docs-data.mjs only",
+      "do not add dependencies or request Claude/Copilot"
+    ],
+    "preEditValidation": {
+      "websiteCaveatGrep": "rg -n \"Current command behavior|#402|legacy readers|env-reader migration\" website/content/docs/cli-reference.mdx -> exit 1, no output",
+      "manualCaveatGrep": "rg -n \"Current command behavior|legacy readers|env-migration\" docs/cli/config.md website/content/docs/cli-reference.mdx -> exit 0; matches only docs/cli/config.md before edit"
+    },
+    "plannedGates": [
+      "node website/scripts/gen-docs-data.mjs",
+      "git diff --check origin/feat/cli-architecture-v2...HEAD",
+      "go test ./internal/config/... -count=1",
+      "go test ./internal/cli/ -run 'Golden|Config' -count=1",
+      "make verify",
+      "website package scripts available without dependency installs"
+    ],
+    "latestPushedHeadAfterFix": "pending_commit_push",
+    "implementation": {
+      "website": "website/content/docs/cli-reference.mdx",
+      "generated": "website/lib/docs.generated.ts",
+      "behavior": "docs-only caveat; no Go behavior change",
+      "caveat": "Only root/json affect CLI invocation behavior now; runtime/RLM/schedule typed keys remain on legacy readers until #402."
+    },
+    "greenEvidence": {
+      "gofmt": "passed_no_output",
+      "docsGenerator": "Wrote 11 docs pages to lib/docs.generated.ts.",
+      "diffCheck": "passed_no_output",
+      "configTests": "ok polymetrics.ai/internal/config 0.498s",
+      "cliGoldenConfig": "ok polymetrics.ai/internal/cli 6.817s",
+      "vet": "passed_no_output",
+      "build": "passed_no_output",
+      "makeVerify": "passed: smoke ok /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.k3AV9VUv6j; connectorgen validate: 547 connector(s) checked, 0 findings",
+      "caveatGrep": "passed: website/content/docs/cli-reference.mdx and website/lib/docs.generated.ts matched caveat terms"
+    },
+    "websitePackageScripts": {
+      "npm --prefix website run gen:docs": "passed: Wrote 11 docs pages to lib/docs.generated.ts.",
+      "npm --prefix website run typecheck": "failed_exit_127: sh: tsc: command not found",
+      "npm --prefix website run test:unit": "failed_exit_127: sh: vitest: command not found",
+      "npm --prefix website run build": "failed_exit_127: sh: next: command not found",
+      "npm --prefix website run lint": "failed_exit_127: sh: next: command not found",
+      "npm --prefix website run test:e2e": "failed_exit_1: Error: Cannot find module '@playwright/test'",
+      "npm --prefix website run test": "failed_exit_127: sh: vitest: command not found",
+      "blocker": "website/node_modules absent; no dependency install/addition allowed by task"
+    },
+    "prBodyUpdate": "pending_after_push",
+    "reviewRequests": "none; user explicitly said do not request Claude/Copilot"
   }
 }

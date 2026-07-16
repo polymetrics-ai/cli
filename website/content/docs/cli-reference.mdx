@@ -31,6 +31,8 @@ This page is the public website contract for the `pm` CLI. When a command is add
 
 Missing config files are allowed. Malformed YAML is a validation error (exit `3`). The `root` key in a file does not relocate config discovery for the same invocation; use `--root`, `POLYMETRICS_ROOT`, or `PM_ROOT` before loading another project. For malformed files, `--json`, `POLYMETRICS_JSON=true`, or `PM_JSON=true` selects the same single JSON `Error` envelope on stdout used by other validation errors.
 
+Only `root` and `json` affect CLI invocation behavior in this phase. Runtime, RLM, and schedule keys below are typed and documented now, but those command readers continue using their legacy environment readers until #402 migrates them.
+
 | Config key | Default | Primary env | Legacy alias |
 |---|---|---|---|
 | `root` | invocation root (`.`) | `POLYMETRICS_ROOT` | `PM_ROOT` |

@@ -1,6 +1,14 @@
 # Issue 401 Summary — Typed Viper Configuration
 
-Status: PR #441 review-fix pushed; pm-reviewer finding accepted and fixed; review-fix gates passed; PR body updated; human/parent review fallback remains pending.
+Status: final re-review website caveat fixed from starting head `77e8fe559b6bab458ed19cb30d3fdc6aa6778f56`; local gates passed; commit/push and PR body update pending; human/parent review fallback remains pending.
+
+## Final re-review disposition
+
+- Finding: website config section lists runtime/RLM/schedule typed keys without the CLI manual caveat that those command readers still use legacy env readers until #402.
+- Disposition: Accepted.
+- Fix: added a concise website caveat distinguishing `root`/`json` as CLI-effective now from runtime/RLM/schedule migration owned by #402, then regenerated `website/lib/docs.generated.ts`.
+- Pre-edit validation: `rg -n "Current command behavior|#402|legacy readers|env-reader migration" website/content/docs/cli-reference.mdx` exited 1 with no output; `docs/cli/config.md` already carried the caveat.
+- Scope guard: no Go code behavior change, no dependency change, no frontend dependency install, no parent/shared edit, no Claude/Copilot request.
 
 ## Review-fix disposition
 
@@ -92,6 +100,32 @@ Review-fix CLI parity:
 - `/tmp/pm-401-reviewfix config --help` -> exit 0; stdout 4375 bytes; stderr 0 bytes.
 - Docs/website grep for `POLYMETRICS_ROOT|PM_ROOT|POLYMETRICS_JSON|PM_JSON|malformed|relocate` -> pass, 11 matches.
 - `node website/scripts/gen-docs-data.mjs` -> `Wrote 11 docs pages to lib/docs.generated.ts`.
+
+## Final re-review verification
+
+Passed locally:
+
+- `gofmt -w cmd internal` -> pass, no output.
+- `node website/scripts/gen-docs-data.mjs` -> `Wrote 11 docs pages to lib/docs.generated.ts.`
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` -> pass, no output.
+- `go test ./internal/config/... -count=1` -> `ok  	polymetrics.ai/internal/config	0.498s`.
+- `go test ./internal/cli/ -run 'Golden|Config' -count=1` -> `ok  	polymetrics.ai/internal/cli	6.817s`.
+- `go vet ./...` -> pass, no output.
+- `go build ./cmd/pm` -> pass, no output.
+- `make verify` -> pass; smoke path `/var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.k3AV9VUv6j`; ended `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- Caveat grep -> pass across `website/content/docs/cli-reference.mdx` and `website/lib/docs.generated.ts`.
+
+Website package-script checks without dependency install:
+
+- `npm --prefix website run gen:docs` -> pass; `Wrote 11 docs pages to lib/docs.generated.ts.`
+- `npm --prefix website run typecheck` -> failed, exit 127: `sh: tsc: command not found`.
+- `npm --prefix website run test:unit` -> failed, exit 127: `sh: vitest: command not found`.
+- `npm --prefix website run build` -> failed, exit 127: `sh: next: command not found`.
+- `npm --prefix website run lint` -> failed, exit 127: `sh: next: command not found`.
+- `npm --prefix website run test:e2e` -> failed, exit 1: `Error: Cannot find module '@playwright/test'`.
+- `npm --prefix website run test` -> failed, exit 127: `sh: vitest: command not found`.
+
+Website script failures are dependency-availability blockers only: `website/node_modules` is absent, and this task forbids adding/installing frontend dependencies.
 
 ## Review route
 

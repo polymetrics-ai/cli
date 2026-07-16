@@ -422,3 +422,113 @@ Result:
 /tmp/pm-401-reviewfix config --help -> exit 0, stdout 4375 bytes, stderr 0 bytes
 rg -> exit 0, 11 matches
 ```
+
+## Cycle 8 — final re-review website caveat plan / validation evidence
+
+Status: planned before production docs edit.
+
+Finding disposition: Accepted. Website config docs list runtime/RLM/schedule typed keys without the CLI manual caveat that those command readers still migrate in #402.
+
+GSD refresh evidence:
+
+```bash
+scripts/gsd doctor
+```
+
+Result: pass (`ok` for node, repo root, official docs, commands registry, upstream lock, Pi settings/extension/skill/prompt, commands=69).
+
+```bash
+scripts/gsd prompt programming-loop init --phase 401 --dry-run >/tmp/gsd-programming-loop-401-final-reviewfix.prompt 2>/tmp/gsd-programming-loop-401-final-reviewfix.err
+```
+
+Result: adapter gap remains, exit 1:
+
+```text
+scripts/gsd: unknown GSD command: programming-loop
+```
+
+Manual fallback remains `.pi/prompts/pm-gsd-loop.md`.
+
+Skills refreshed for this cycle: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-documentation`, `golang-spf13-viper`, `golang-spf13-cobra`, `golang-safety`, `golang-lint`, `vercel-react-best-practices`, and `vercel-composition-patterns`. Missing repo-local stack skill remains `.pi/skills/go-implementation/SKILL.md` (`ENOENT`); required Go/website-awareness skills were loaded per `.agents/agentic-delivery/references/required-skills-routing.md`.
+
+Docs validation evidence before production docs edit:
+
+```bash
+rg -n "Current command behavior|#402|legacy readers|env-reader migration" website/content/docs/cli-reference.mdx
+```
+
+Result: exit 1, no output.
+
+```bash
+rg -n "Current command behavior|legacy readers|env-migration" docs/cli/config.md website/content/docs/cli-reference.mdx
+```
+
+Result:
+
+```text
+docs/cli/config.md:12:  singleton, AutomaticEnv, or file watching. Current command behavior continues
+docs/cli/config.md:13:  to use legacy readers until the env-migration phase, but malformed
+exit=0
+```
+
+Planned final gates:
+
+```bash
+node website/scripts/gen-docs-data.mjs
+git diff --check origin/feat/cli-architecture-v2...HEAD
+go test ./internal/config/... -count=1
+go test ./internal/cli/ -run 'Golden|Config' -count=1
+make verify
+```
+
+Website package-script checks will be run only through existing `website/package.json` scripts without installing or adding dependencies.
+
+## Cycle 9 — final re-review docs green / verification evidence
+
+Implemented docs-only caveat in `website/content/docs/cli-reference.mdx`, distinguishing `root`/`json` as CLI-effective now from runtime/RLM/schedule reader migration owned by #402. Regenerated `website/lib/docs.generated.ts` with the existing generator. No Go code, dependencies, frontend dependency install, Claude request, or Copilot request.
+
+Required gates:
+
+```bash
+gofmt -w cmd internal
+node website/scripts/gen-docs-data.mjs
+git diff --check origin/feat/cli-architecture-v2...HEAD
+go test ./internal/config/... -count=1
+go test ./internal/cli/ -run 'Golden|Config' -count=1
+go vet ./...
+go build ./cmd/pm
+make verify
+```
+
+Results:
+
+```text
+gofmt -w cmd internal -> pass, no output
+node website/scripts/gen-docs-data.mjs -> Wrote 11 docs pages to lib/docs.generated.ts.
+git diff --check origin/feat/cli-architecture-v2...HEAD -> pass, no output
+go test ./internal/config/... -count=1 -> ok  	polymetrics.ai/internal/config	0.498s
+go test ./internal/cli/ -run 'Golden|Config' -count=1 -> ok  	polymetrics.ai/internal/cli	6.817s
+go vet ./... -> pass, no output
+go build ./cmd/pm -> pass, no output
+make verify -> pass; smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.k3AV9VUv6j; final line: connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+Website package-script checks (no dependency install/addition):
+
+```text
+npm --prefix website run gen:docs -> pass; Wrote 11 docs pages to lib/docs.generated.ts.
+npm --prefix website run typecheck -> failed, exit 127: sh: tsc: command not found
+npm --prefix website run test:unit -> failed, exit 127: sh: vitest: command not found
+npm --prefix website run build -> failed, exit 127: sh: next: command not found
+npm --prefix website run lint -> failed, exit 127: sh: next: command not found
+npm --prefix website run test:e2e -> failed, exit 1: Error: Cannot find module '@playwright/test'
+npm --prefix website run test -> failed, exit 127: sh: vitest: command not found
+```
+
+Post-edit caveat grep:
+
+```bash
+rg -n 'Only `root` and `json` affect CLI invocation behavior|#402 migrates them|legacy environment readers' website/content/docs/cli-reference.mdx website/lib/docs.generated.ts
+```
+
+Result: exit 0, matches in both `website/content/docs/cli-reference.mdx` and `website/lib/docs.generated.ts`.
