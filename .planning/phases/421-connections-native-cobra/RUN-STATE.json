@@ -7,7 +7,7 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "1678f9ab",
   "verificationPassed": false,
-  "status": "planning_complete_red_tests_pending",
+  "status": "red_tests_captured_green_implementation_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-421.prompt",
@@ -20,6 +20,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "first serialized Phase 9 namespace worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for native connections subtree, flag semantics, list tolerance, and invalid action usage; no subagent available"
     }
   ],
   "pullRequest": null,

@@ -50,8 +50,9 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 	for _, spec := range cobraLegacyCommands(config.Config{}) {
 		legacyCommands[spec.name] = struct{}{}
 	}
-	if len(expectedHidden) != len(legacyCommands)+1 {
-		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native catalog registers %d", len(expectedHidden), len(legacyCommands)+1)
+	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}}
+	if len(expectedHidden) != len(legacyCommands)+len(nativeCommands) {
+		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native commands registers %d", len(expectedHidden), len(legacyCommands)+len(nativeCommands))
 	}
 
 	for _, root := range []*cobra.Command{first, second} {
@@ -71,10 +72,11 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 					t.Fatalf("%s hidden = %t, want %t", name, got.Hidden, hidden)
 				}
 				_, legacy := legacyCommands[name]
+				_, native := nativeCommands[name]
 				if legacy && !got.DisableFlagParsing {
 					t.Fatalf("%s wrapper must keep DisableFlagParsing", name)
 				}
-				if name == "catalog" && got.DisableFlagParsing {
+				if native && got.DisableFlagParsing {
 					t.Fatalf("%s command must use native Cobra flag parsing", name)
 				}
 			}
@@ -120,6 +122,63 @@ func TestCatalogCommandIsNativeCobraSubtree(t *testing.T) {
 				t.Fatalf("catalog %s must preserve legacy unknown-flag tolerance", name)
 			}
 		})
+	}
+}
+
+func TestConnectionsCommandIsNativeCobraSubtree(t *testing.T) {
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	connections := findCobraCommand(root, "connections")
+	if connections == nil {
+		t.Fatal("missing connections command")
+	}
+	if connections.DisableFlagParsing {
+		t.Fatal("connections command must use native Cobra flag parsing")
+	}
+	if connections.ValidArgsFunction == nil {
+		t.Fatal("connections command must preserve connection-name completion compatibility seam")
+	}
+	completions, directive := connections.ValidArgsFunction(connections, nil, "")
+	if len(completions) != 0 {
+		t.Fatalf("connection completion seam returned %v, want no Phase 15 completions", completions)
+	}
+	if directive != cobra.ShellCompDirectiveNoFileComp {
+		t.Fatalf("connection completion directive = %v, want NoFileComp", directive)
+	}
+
+	create := findCobraCommand(connections, "create")
+	if create == nil {
+		t.Fatal("missing connections create subcommand")
+	}
+	if create.DisableFlagParsing {
+		t.Fatal("connections create must use native Cobra flag parsing")
+	}
+	if !create.FParseErrWhitelist.UnknownFlags {
+		t.Fatal("connections create must preserve legacy unknown-flag tolerance")
+	}
+	for _, name := range []string{"source", "destination", "stream", "sync-mode", "cursor", "primary-key", "table", "source-config", "destination-config"} {
+		t.Run("create flag "+name, func(t *testing.T) {
+			flag := create.Flags().Lookup(name)
+			if flag == nil {
+				t.Fatalf("connections create missing native --%s flag", name)
+			}
+			if got, want := flag.Value.Type(), "stringArray"; got != want {
+				t.Fatalf("connections create --%s flag type = %q, want %q", name, got, want)
+			}
+			if got, want := flag.NoOptDefVal, "true"; got != want {
+				t.Fatalf("connections create --%s NoOptDefVal = %q, want %q", name, got, want)
+			}
+		})
+	}
+
+	list := findCobraCommand(connections, "list")
+	if list == nil {
+		t.Fatal("missing connections list subcommand")
+	}
+	if list.DisableFlagParsing {
+		t.Fatal("connections list must use native Cobra flag parsing")
+	}
+	if !list.FParseErrWhitelist.UnknownFlags {
+		t.Fatal("connections list must preserve legacy unknown-flag tolerance")
 	}
 }
 

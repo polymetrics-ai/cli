@@ -38,7 +38,7 @@ Result:
 | Step | Kind | Command / test | Result | Notes |
 |---:|---|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS | Green | Pre-production artifact checkpoint; no production code touched. |
-| 1 | Red | `go test ./internal/cli/ -run 'Connections|CobraRouterShell' -count=1` | Pending | Add native-subtree and behavior tests before production code. |
+| 1 | Red | `go test ./internal/cli/ -run 'Connections|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `connections` remains legacy; invalid action opens project before usage classification. |
 | 2 | Green | `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1` | Pending | Native parser + goldens. |
 | 3 | Refactor | `gofmt -w cmd internal`; `go test ./internal/cli/ -run Certify -count=1` | Pending | Re-entrancy/certify smoke. |
 | 4 | Gate | `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; diff checks | Pending | Full local gates. |
@@ -51,7 +51,30 @@ Result:
 
 ## Exact red outputs
 
-Pending; capture after adding tests and before production implementation.
+```bash
+go test ./internal/cli/ -run 'Connections|CobraRouterShell' -count=1
+```
+
+```text
+--- FAIL: TestCobraRouterShellBuildsFreshHiddenWrapperTree (0.00s)
+    cobra_router_test.go:55: expectedHidden covers 21 commands, legacy commands plus native commands registers 22
+--- FAIL: TestConnectionsCommandIsNativeCobraSubtree (0.00s)
+    cobra_router_test.go:135: connections command must use native Cobra flag parsing
+--- FAIL: TestConnectionsInvalidActionIsUsageBeforeProjectOpen (0.00s)
+    connections_cli_test.go:130: Run(connections bogus --json) code = 1, want 2; stdout={
+          "api_version": "polymetrics.ai/v1",
+          "error": {
+            "category": "internal",
+            "code": "internal_error",
+            "message": "open project at .polymetrics: stat .polymetrics: no such file or directory"
+          },
+          "kind": "Error"
+        }
+         stderr=error: open project at .polymetrics: stat .polymetrics: no such file or directory
+FAIL
+FAIL	polymetrics.ai/internal/cli	5.562s
+FAIL
+```
 
 ## Exact green outputs
 
