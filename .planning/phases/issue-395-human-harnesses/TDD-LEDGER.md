@@ -10,10 +10,11 @@ Phase: `issue-395-human-harnesses`
 
 ## Red: Human Harnesses Catalog Contract
 
-- Status: pending.
+- Status: complete.
 - Test: resolve `human-harnesses` through `getBlogPost` and require the verified inventory figures,
   delivery-harness section, current-limitations section, and August 4 publication metadata.
-- Expected result: fail because the slug does not exist.
+- Command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`
+- Result: failed as expected because `getBlogPost('human-harnesses')` returned `undefined`.
 
 ## Green: Human Harnesses Catalog Contract
 
@@ -25,4 +26,3 @@ Phase: `issue-395-human-harnesses`
 - Status: pending.
 - Editorial pass will remove unsupported claims, duplicated transitions, and unnecessary renderer
   changes while preserving the supplied first-person voice.
-
