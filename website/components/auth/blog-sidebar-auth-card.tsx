@@ -6,7 +6,7 @@ import { Bookmark, IdCard, LogOut, MessageSquare } from 'lucide-react';
 import { CornerBox } from '@/components/ui/corner-box';
 import { ProfileSettingsDialog } from '@/components/auth/profile-settings-dialog';
 import { SignInDialog } from '@/components/auth/sign-in-dialog';
-import { signOut, useSession } from '@/lib/auth-client';
+import { signOut, useHydratedSession } from '@/lib/auth-client';
 
 function AccountAvatar({ name, image }: { name: string; image: string | null | undefined }) {
   if (image) {
@@ -49,7 +49,7 @@ function ActionButton({
 }
 
 export function BlogSidebarAuthCard() {
-  const { data: session, isPending } = useSession();
+  const { data: session, isPending } = useHydratedSession();
   const [signInOpen, setSignInOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 

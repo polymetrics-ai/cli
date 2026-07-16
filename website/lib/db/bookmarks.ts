@@ -92,11 +92,12 @@ export async function insertBookmark(input: {
   const { rows } = await getPool().query<BookmarkRow>(
     `SELECT * FROM bookmark
      WHERE user_id = $1 AND post_slug = $2 AND section_index = $3
-       AND block_index = $4 AND start_offset = $5 AND exact = $6`,
+       AND block_type = $4 AND block_index = $5 AND start_offset = $6 AND exact = $7`,
     [
       input.userId,
       input.postSlug,
       input.anchor.sectionIndex,
+      input.anchor.blockType,
       input.anchor.blockIndex,
       input.anchor.startOffset,
       input.anchor.exact,

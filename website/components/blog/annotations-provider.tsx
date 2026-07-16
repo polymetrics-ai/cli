@@ -13,7 +13,7 @@ import type { ReactNode } from 'react';
 import { getBlogPost } from '@/lib/blog';
 import { resolveAnchor } from '@/lib/annotations/anchor';
 import type { Anchor, Resolution } from '@/lib/annotations/anchor';
-import { useSession } from '@/lib/auth-client';
+import { useHydratedSession } from '@/lib/auth-client';
 import { SignInDialog } from '@/components/auth/sign-in-dialog';
 
 export type AuthorProfileDto = {
@@ -132,7 +132,7 @@ function anchorsEqual(a: Anchor, b: Anchor): boolean {
 }
 
 export function AnnotationsProvider({ slug, children }: { slug: string; children: ReactNode }) {
-  const { data: session } = useSession();
+  const { data: session } = useHydratedSession();
   const signedIn = session !== null && session !== undefined;
 
   const [comments, setComments] = useState<CommentDto[]>([]);
@@ -346,9 +346,18 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
         }
       }
       setComments((current) => current.filter((c) => !removed.has(c.id)));
-      const response = await fetch(`/api/comments/${id}`, { method: 'DELETE' });
-      if (!response.ok) {
-        setComments(previous);
+      try {
+        const response = await fetch(`/api/comments/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error(String(response.status));
+      } catch {
+        setComments((current) => {
+          const currentIds = new Set(current.map((comment) => comment.id));
+          return [
+            ...current,
+            ...previous.filter((comment) => removed.has(comment.id) && !currentIds.has(comment.id)),
+          ].sort((left, right) => left.createdAt.localeCompare(right.createdAt));
+        });
+        announce('Deleting failed - the note was restored');
         return false;
       }
       announce('Note deleted');
@@ -369,9 +378,18 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
 
     if (existing) {
       setBookmarks((current) => current.filter((b) => b.id !== existing.id));
-      const response = await fetch(`/api/bookmarks/${existing.id}`, { method: 'DELETE' });
-      if (!response.ok) setBookmarks((current) => [...current, existing]);
-      else announce('Bookmark removed');
+      try {
+        const response = await fetch(`/api/bookmarks/${existing.id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error(String(response.status));
+        announce('Bookmark removed');
+      } catch {
+        setBookmarks((current) =>
+          current.some((bookmark) => bookmark.id === existing.id)
+            ? current
+            : [...current, existing].sort((left, right) => right.createdAt.localeCompare(left.createdAt)),
+        );
+        announce('Removing bookmark failed');
+      }
       return;
     }
 
@@ -404,10 +422,19 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
       const existing = bookmarks.find((bookmark) => bookmark.id === id);
       if (!existing) return;
       setBookmarks((current) => current.filter((b) => b.id !== id));
-      const response = await fetch(`/api/bookmarks/${id}`, { method: 'DELETE' });
-      if (!response.ok) setBookmarks((current) => [...current, existing]);
+      try {
+        const response = await fetch(`/api/bookmarks/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error(String(response.status));
+      } catch {
+        setBookmarks((current) =>
+          current.some((bookmark) => bookmark.id === existing.id)
+            ? current
+            : [...current, existing].sort((left, right) => right.createdAt.localeCompare(left.createdAt)),
+        );
+        announce('Removing bookmark failed');
+      }
     },
-    [bookmarks],
+    [bookmarks, announce],
   );
 
   const value: AnnotationsContextValue = {
