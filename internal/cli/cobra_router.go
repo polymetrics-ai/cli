@@ -31,6 +31,9 @@ func newRootCmd(ctx context.Context, root string, stdout, stderr io.Writer, json
 			if len(args) == 0 || isRootManualArg(args[0]) {
 				return writeRootManual(stdout, jsonOut)
 			}
+			if len(args) > 1 && isHelpArg(args[1]) {
+				return writeManual(args[0], stdout, jsonOut)
+			}
 			return runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, jsonOut)
 		},
 	}
