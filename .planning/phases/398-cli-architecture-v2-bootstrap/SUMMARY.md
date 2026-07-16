@@ -1,6 +1,6 @@
 # Summary — Issue 398 CLI Architecture v2 Bootstrap
 
-Status: in progress.
+Status: complete (parent review coverage pending on draft PR #438).
 
 ## Delivered
 
@@ -8,6 +8,9 @@ Status: in progress.
 - Updated `.planning/PROJECT.md`, `.planning/ROADMAP.md`, and `.planning/STATE.md` with CLI Architecture v2 milestone state while preserving connector-parity workstreams.
 - Added CLI Architecture v2 source plan, execution prompt, TUI design, ADRs 0002–0004, and local Pi/orchestration traces.
 - Confirmed Stage 0 is a `local_critical_path` bootstrap because it owns shared parent branch/PR and shared planning artifacts.
+- Pushed seed commit `2f012400632ad64b1c0c3e2ba98d8bd98999b25d` to `feat/cli-architecture-v2`.
+- Opened draft parent PR [#438](https://github.com/polymetrics-ai/cli/pull/438) from `feat/cli-architecture-v2` to `main` with `Refs #397`.
+- Added durable parent state at `.planning/traces/cli-architecture-v2-orchestration-state.yaml` and spawned issue #399 in an isolated worktree.
 
 ## Verification
 
@@ -19,12 +22,11 @@ Status: in progress.
 - `git diff --check` and `git diff --cached --check`: pass.
 - `git diff --name-only -- cmd internal` and cached equivalent: no output.
 
-## Pending
+## Review State
 
-- Commit and push `feat/cli-architecture-v2`.
-- Open draft parent PR to `main` with `Refs #397`.
-- Add durable orchestration state ledger with parent PR URL.
-- Recompute ready queue and spawn next independent worker after parent PR exists.
+- Parent PR is draft; automated review coverage remains pending.
+- Parent merge to `main` remains human-gated.
+- Next dependency chain is active through issue #399; later phases remain dependency-blocked.
 
 ## Safety
 

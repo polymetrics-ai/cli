@@ -27,6 +27,17 @@ After push/PR creation:
 gh pr view --json number,url,state,isDraft,baseRefName,headRefName,title
 ```
 
+## Results
+
+- `scripts/gsd doctor`: pass.
+- New-milestone and plan-phase generated prompts: non-empty.
+- Programming-loop shell prompt: unavailable with exact error `scripts/gsd: unknown GSD command: programming-loop`; Pi-local `/pm-gsd-loop` fallback recorded.
+- Planning/roadmap preservation grep checks: pass.
+- `git diff --check`: pass.
+- `git diff --name-only -- cmd internal`: no output.
+- Seed commit: `2f012400632ad64b1c0c3e2ba98d8bd98999b25d`.
+- Draft parent PR: [#438](https://github.com/polymetrics-ai/cli/pull/438), `feat/cli-architecture-v2` → `main`.
+
 ## Expected Results
 
 - GSD doctor exits 0.

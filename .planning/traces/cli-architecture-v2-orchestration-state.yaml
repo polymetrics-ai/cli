@@ -1,0 +1,299 @@
+apiVersion: polymetrics.ai/orchestration-state/v1
+kind: OrchestrationState
+parent_issue:
+  number: 397
+  url: https://github.com/polymetrics-ai/cli/issues/397
+  title: "epic(cli): deliver CLI Architecture v2"
+  state: open
+parent_branch: feat/cli-architecture-v2
+parent_pr:
+  url: https://github.com/polymetrics-ai/cli/pull/438
+  base: main
+  head: feat/cli-architecture-v2
+  draft: true
+  state: open
+default_branch: main
+orchestrator:
+  mode: active_owner
+  runtime: pi
+  status: waiting_for_review
+ready_queue:
+  - number: 399
+    status: sub_pr_open
+    dependencies: [398]
+    write_scope: "internal/cli golden transcript harness and docs/cli generation diff"
+    decision: not_spawned_review_blocked
+    reason: "PR #439 head c2d2b5d awaits CI and Copilot backup review after Claude workflow was confirmed disabled_manually."
+  - number: 400
+    status: planned
+    dependencies: [399]
+    write_scope: "Cobra root router shell, wrappers, and focused CLI tests"
+    decision: not_spawned_dependency_blocked
+    reason: "Issue #399 is not integrated into the parent branch."
+spawn_decisions:
+  - timestamp: 2026-07-16T09:05:00Z
+    decision: local_critical_path
+    issue_numbers: [398]
+    reason: "Stage 0 owned shared planning artifacts plus parent branch and parent PR."
+  - timestamp: 2026-07-16T09:16:00Z
+    decision: spawned
+    issue_numbers: [399]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-399-golden-transcript-safety-net; subagent wrapper did not expose a separate agent id."
+  - timestamp: 2026-07-16T10:02:00Z
+    decision: read_only_spawned
+    issue_numbers: [399]
+    reason: "pm-reviewer adversarial sidecar inspected PR #439 in the isolated worker worktree."
+  - timestamp: 2026-07-16T10:04:00Z
+    decision: spawned
+    issue_numbers: [399]
+    reason: "pm-gsd-worker review-fix cycle accepted or dispositioned three sidecar findings."
+  - timestamp: 2026-07-16T10:22:00Z
+    decision: spawned
+    issue_numbers: [399]
+    reason: "pm-gsd-worker corrected committed trailing whitespace found by commit-range verification."
+  - timestamp: 2026-07-16T10:33:00Z
+    decision: not_spawned_review_blocked
+    issue_numbers: [400]
+    reason: "PR #439 CI and Copilot backup review are pending; #400 depends on parent integration of #399."
+subissues:
+  - number: 398
+    url: https://github.com/polymetrics-ai/cli/issues/398
+    branch: feat/cli-architecture-v2
+    pr_url: https://github.com/polymetrics-ai/cli/pull/438
+    worker: main_pi_orchestrator
+    status: provisionally_integrated
+    write_scope: ".planning parent bootstrap and CLI Architecture v2 source docs"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-cli-architectur-improvement
+    verification: "Stage 0 planning gates passed; no cmd/** or internal/** changes."
+    automated_review: {primary_route: blocked, status: pending, head_sha: 2f012400632ad64b1c0c3e2ba98d8bd98999b25d, reviewed_range: "", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Draft parent PR review pending.", disposition_url: ""}
+  - number: 399
+    url: https://github.com/polymetrics-ai/cli/issues/399
+    branch: test/399-golden-transcript-safety-net
+    pr_url: https://github.com/polymetrics-ai/cli/pull/439
+    worker: pm-gsd-worker
+    status: sub_pr_open
+    write_scope: "internal/cli golden transcript harness, fixtures, docs/cli diff test, issue-local GSD artifacts"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-399-golden-transcript-safety-net
+    verification: "Local make verify passed; commit-range git diff --check passed; remote verify and CodeQL pending."
+    automated_review: {primary_route: copilot_backup, status: pending, head_sha: c2d2b5da6c94ba09599b777ae9f3515cae2c0729, reviewed_range: "2f012400..c2d2b5da", coverage_route: copilot_backup, fallback_route: human, disposition_summary: "Claude workflow disabled_manually; Copilot requested once through REST after gh pr edit failed.", disposition_url: ""}
+  - number: 400
+    url: https://github.com/polymetrics-ai/cli/issues/400
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "Cobra root router shell, wrappers, and focused CLI tests"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #399.", disposition_url: ""}
+  - number: 401
+    url: https://github.com/polymetrics-ai/cli/issues/401
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "internal/config typed Viper configuration and parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #400.", disposition_url: ""}
+  - number: 402
+    url: https://github.com/polymetrics-ai/cli/issues/402
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "runtimecheck, worker, schedule, and RLM config call sites"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #401.", disposition_url: ""}
+  - number: 403
+    url: https://github.com/polymetrics-ai/cli/issues/403
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "internal/events and named instrumentation points"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #402.", disposition_url: ""}
+  - number: 404
+    url: https://github.com/polymetrics-ai/cli/issues/404
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "logging/redaction packages and Temporal logger bridge"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #402.", disposition_url: ""}
+  - number: 405
+    url: https://github.com/polymetrics-ai/cli/issues/405
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "CLI run options, global flags, and internal/ui styles foundation"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #403.", disposition_url: ""}
+  - number: 406
+    url: https://github.com/polymetrics-ai/cli/issues/406
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "catalog command node, tests, and parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #402.", disposition_url: ""}
+  - number: 407
+    url: https://github.com/polymetrics-ai/cli/issues/407
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "Serialized namespace migration umbrella; grandchildren #421-#437"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #406 and serialized grandchild chain.", disposition_url: ""}
+  - number: 408
+    url: https://github.com/polymetrics-ai/cli/issues/408
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "flow and ETL dashboard models and command wiring"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #405.", disposition_url: ""}
+  - number: 409
+    url: https://github.com/polymetrics-ai/cli/issues/409
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "flow and schedule wizard commands, tests, and parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #408.", disposition_url: ""}
+  - number: 410
+    url: https://github.com/polymetrics-ai/cli/issues/410
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "internal/telemetry and allowlisted tracing call sites"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #402.", disposition_url: ""}
+  - number: 411
+    url: https://github.com/polymetrics-ai/cli/issues/411
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "query tables, connector browser, query grid, and parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409.", disposition_url: ""}
+  - number: 412
+    url: https://github.com/polymetrics-ai/cli/issues/412
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "docs viewer, pager, tests, and parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409.", disposition_url: ""}
+  - number: 413
+    url: https://github.com/polymetrics-ai/cli/issues/413
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "connector registration, shell completion, tests, and docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #407.", disposition_url: ""}
+  - number: 414
+    url: https://github.com/polymetrics-ai/cli/issues/414
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "certify and RLM dashboard models and command wiring"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #407 and #408.", disposition_url: ""}
+  - number: 415
+    url: https://github.com/polymetrics-ai/cli/issues/415
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "OpenTelemetry metrics, exporters, and benchmarks"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #410.", disposition_url: ""}
+  - number: 416
+    url: https://github.com/polymetrics-ai/cli/issues/416
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "guided reverse ETL and connection prompting without secret prompts"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409.", disposition_url: ""}
+  - number: 417
+    url: https://github.com/polymetrics-ai/cli/issues/417
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "help tree, generated man pages, website/docs/golden parity"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #411, #412, #413, #414, and #416; includes #399 legacy connector-help follow-up.", disposition_url: ""}
+  - number: 418
+    url: https://github.com/polymetrics-ai/cli/issues/418
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "TUI accessibility fixes and a11y parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #411, #412, #414, and #416.", disposition_url: ""}
+  - number: 419
+    url: https://github.com/polymetrics-ai/cli/issues/419
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "optional pinned OpenTelemetry log bridge"
+    worker_directory: ""
+    verification: not_run_human_decision_pending
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Optional phase; blocked by #404, #410, and later human decision.", disposition_url: ""}
+  - number: 420
+    url: https://github.com/polymetrics-ai/cli/issues/420
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "dead parser cleanup, AGENTS.md/CONTEXT.md, and final verification"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #415, #417, and #418.", disposition_url: ""}
+human_gates:
+  - parent PR merge to main
+  - dependency additions outside ADR 0002-0004 phase budgets
+  - auth scope changes
+  - secrets or credential values
+  - credentialed connector checks
+  - destructive/admin actions
+  - production deploys
+  - reverse ETL execution outside plan, preview, approval, execute
+  - quality-gate reductions
+updated_at: 2026-07-16T10:33:00Z
