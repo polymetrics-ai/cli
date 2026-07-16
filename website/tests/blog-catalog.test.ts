@@ -68,7 +68,11 @@ describe('blog catalog', () => {
         apiUrl?: string;
         snapshot: { status: string; stats: Array<{ label: string; value: string }> };
       }>;
-      sections: Array<{ evidenceIds?: string[] }>;
+      sections: Array<{
+        body: string[];
+        evidenceRefs?: Array<{ blockIndex: number; evidenceId: string; text: string }>;
+        evidenceIds?: string[];
+      }>;
     };
     const evidenceById = new Map(
       interactivePost.evidence?.map((evidence) => [evidence.id, evidence]) ?? [],
@@ -103,11 +107,18 @@ describe('blog catalog', () => {
       'https://github.com/polymetrics-ai/cli/pull/51',
     );
 
-    const referencedEvidence = new Set(
-      interactivePost.sections.flatMap((section) => section.evidenceIds ?? []),
+    expect(interactivePost.sections.every((section) => section.evidenceIds === undefined)).toBe(true);
+
+    const references = interactivePost.sections.flatMap((section) =>
+      (section.evidenceRefs ?? []).map((reference) => ({ section, reference })),
     );
+    const referencedEvidence = new Set(references.map(({ reference }) => reference.evidenceId));
     for (const id of evidenceById.keys()) {
       expect(referencedEvidence).toContain(id);
+    }
+    for (const { section, reference } of references) {
+      expect(evidenceById.has(reference.evidenceId)).toBe(true);
+      expect(section.body[reference.blockIndex]).toContain(reference.text);
     }
   });
 });

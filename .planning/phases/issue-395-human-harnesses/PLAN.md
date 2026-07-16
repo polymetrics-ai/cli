@@ -160,3 +160,36 @@ the issue, test, review, release, and deployment harnesses used by this reposito
   adding renderer mode flags.
 - `web-design-guidelines`: unavailable locally; keyboard, focus, labeling, external-link, mobile,
   and reduced-motion checks are the recorded manual fallback.
+
+## Inline Reference Preview Follow-Up
+
+- Replace the detached, section-level GitHub evidence rails with references attached to the exact
+  phrases they support. The phrase and its numbered marker must both be interactive links.
+- Assign citation numbers from the stable article evidence order. Repeated evidence keeps the same
+  number instead of creating a second source identity.
+- Open evidence in a compact centered dialog that traps focus, closes on Escape, restores focus to
+  the activating phrase or marker, and exposes the canonical GitHub URL as an explicit new-tab link.
+- Keep the on-demand public GitHub refresh and verified static fallback; do not add credentials,
+  route-level fetching, or iframe embedding.
+- Preserve annotation behavior. If a reader annotation overlaps cited text, its note interaction
+  owns the text while the adjacent citation marker remains available for evidence.
+- Remove the visual evidence gallery entirely so sourcing reads as editorial typography, not a
+  second card layout inside the article.
+
+### Reference Research
+
+- MediaWiki Page Previews keeps contextual exploration attached to the source link and avoids
+  forcing navigation away from the article.
+- Wikimedia Reference Previews attaches detail to inline footnote markers. Its June 2026 click
+  experiment keeps the preview persistent and requires a separate action to visit the reference
+  list, which maps to the requested modal plus explicit GitHub action.
+- The implementation intentionally uses a dialog rather than hover-only UI so it works on touch,
+  keyboard, and pointer input without accidental moving popovers.
+
+### Required Skills For This Follow-Up
+
+- `frontend-design`: editorial citation hierarchy and a restrained evidence dialog.
+- `vercel-react-best-practices`: retain interaction-time fetching and static fallback data.
+- `vercel-composition-patterns`: extend the existing text renderer and keep one shared dialog state.
+- `web-design-guidelines`: unavailable locally; keyboard, focus, label, mobile containment, and
+  reduced-motion assertions remain the documented fallback.

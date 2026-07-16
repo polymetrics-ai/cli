@@ -44,12 +44,18 @@ test.describe('blog UI smoke', () => {
     }
   });
 
-  test('previews GitHub evidence in place and keeps the star action explicit', async ({ page }) => {
+  test('opens inline GitHub references without leaving the article', async ({ page }) => {
     await page.route('https://api.github.com/**', (route) => route.abort());
     await page.goto('/blog/human-harnesses');
     const articleUrl = page.url();
 
-    await page.getByRole('button', { name: 'Preview PR #27 evidence' }).click();
+    await expect(page.locator('[data-github-evidence-trail]')).toHaveCount(0);
+    const claimLink = page.getByRole('link', { name: 'Preview PR #27 evidence' }).first();
+    const citationLink = page.getByRole('link', { name: 'Open citation 1: PR #27' }).first();
+    await expect(claimLink).toHaveText('PR #27');
+    await expect(citationLink).toHaveText('[1]');
+
+    await claimLink.click();
     const preview = page.getByRole('dialog', { name: 'GitHub evidence: PR #27' });
     await expect(preview).toBeVisible();
     await expect(preview.getByText('Verified snapshot')).toBeVisible();
@@ -66,19 +72,25 @@ test.describe('blog UI smoke', () => {
 
     await page.keyboard.press('Escape');
     await expect(preview).toBeHidden();
-    await expect(page.getByRole('button', { name: 'Preview PR #27 evidence' })).toBeFocused();
+    await expect(claimLink).toBeFocused();
+
+    await citationLink.click();
+    await expect(preview).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(citationLink).toBeFocused();
 
     const starLink = page.getByRole('link', { name: 'Star Polymetrics on GitHub' });
     await expect(starLink).toHaveAttribute('href', 'https://github.com/polymetrics-ai/cli');
     await expect(starLink).toHaveAttribute('target', '_blank');
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.getByRole('button', { name: 'Preview PR #27 evidence' }).click();
+    await citationLink.click();
     await expect(preview).toBeVisible();
     const previewBox = await preview.boundingBox();
     expect(previewBox).not.toBeNull();
     expect(previewBox!.x).toBeGreaterThanOrEqual(0);
     expect(previewBox!.x + previewBox!.width).toBeLessThanOrEqual(390);
+    expect(Math.abs(previewBox!.x + previewBox!.width / 2 - 195)).toBeLessThanOrEqual(2);
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
     ).toBe(true);

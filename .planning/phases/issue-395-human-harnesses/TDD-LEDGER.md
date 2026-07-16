@@ -148,3 +148,17 @@ Phase: `issue-395-human-harnesses`
   test passed focus return and then continued through the 390px containment assertion. Website
   checks and the website image build both passed; deployment was correctly skipped for the stacked
   pull request.
+
+## Follow-Up: Inline Reference Preview
+
+- Status: red captured; green pending.
+- Catalog contract: every evidence source is referenced by an exact body phrase and block index;
+  every phrase resolves in its paragraph; the section-level `evidenceIds` gallery contract is gone.
+- Browser contract: no GitHub evidence trail is rendered; linked claim text and its numbered
+  citation both open a centered dialog; the dialog retains verified fallback data, canonical source
+  action, Escape close, focus return, and 390px containment.
+- Regression contract: text annotations, repository star CTA, static prerendering, and public
+  interaction-time GitHub refresh remain unchanged.
+- Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
+- Red result: failed at the assertion that section-level `evidenceIds` are absent; the current
+  catalog still exposes the detached evidence-gallery model.
