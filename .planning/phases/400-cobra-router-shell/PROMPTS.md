@@ -35,7 +35,7 @@ scripts/gsd prompt programming-loop init --phase 400 --dry-run >/tmp/gsd-program
 
 ## Verification result
 
-Focused/full local gates and post-commit diff checks passed for initial implementation. PR #440 open. Review-fix cycle completed locally after pm-reviewer findings; push pending at artifact update time.
+Focused/full local gates and post-commit diff checks passed for initial implementation. PR #440 open. Review-fix cycle completed and pushed after pm-reviewer findings; CI verify/CodeQL pending at last observation.
 
 Key initial results:
 

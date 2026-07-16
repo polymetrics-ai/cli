@@ -1,6 +1,6 @@
 # Issue 400 Summary — Cobra Router Shell
 
-Status: PR #440 review-fix implemented locally; exact gates passed; push pending.
+Status: PR #440 review-fix pushed; exact local gates passed; CI verify/CodeQL pending at last check.
 
 ## Scope delivered
 
@@ -75,7 +75,7 @@ Residual gaps closed in scope: all-wrapper `DisableFlagParsing`/visibility asser
 
 ## Review route
 
-Claude workflow is `disabled_manually`; Copilot quota already exhausted for this blocker window. Do not post `@claude review`; do not request Copilot. Record human/parent-PR fallback pending; no approval claims.
+Claude workflow is `disabled_manually`; Copilot quota already exhausted for this blocker window. Do not post `@claude review`; do not request Copilot. Record human/parent-PR fallback pending; no approval claims. GitHub checks pending at last observation: `verify`, `CodeQL`.
 
 ## Human gates
 

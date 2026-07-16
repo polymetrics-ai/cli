@@ -5,9 +5,9 @@
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
   "subPR": 440,
-  "status": "review_fix_local_verified_push_pending",
+  "status": "review_fix_pushed_ci_pending",
   "verificationPassed": true,
-  "verificationBlocker": "none; local review-fix gates passed, automated review coverage remains human/parent fallback pending",
+  "verificationBlocker": "GitHub verify and CodeQL checks pending at last observation; local review-fix gates passed, automated review coverage remains human/parent fallback pending",
   "gsd": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-400-review-fix.prompt",
@@ -99,6 +99,11 @@
       "cycle": "review-fix-verify",
       "decision": "local_critical_path",
       "reason": "exact review-fix gates passed locally; no subagent or automated reviewer invoked per task instruction"
+    },
+    {
+      "cycle": "review-fix-push",
+      "decision": "local_critical_path",
+      "reason": "review-fix commit pushed to origin/refactor/400-cobra-router-shell; PR body updated; CI verify and CodeQL pending at last check"
     }
   ],
   "verification": {
