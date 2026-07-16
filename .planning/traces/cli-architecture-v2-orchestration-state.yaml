@@ -16,20 +16,20 @@ default_branch: main
 orchestrator:
   mode: active_owner
   runtime: pi
-  status: waiting_for_review
+  status: running
 ready_queue:
-  - number: 399
-    status: sub_pr_open
-    dependencies: [398]
-    write_scope: "internal/cli golden transcript harness and docs/cli generation diff"
-    decision: not_spawned_review_blocked
-    reason: "PR #439 head c2d2b5d awaits CI and Copilot backup review after Claude workflow was confirmed disabled_manually."
-  - number: 400
+  - number: 402
+    status: worker_ready
+    dependencies: [401]
+    write_scope: "runtimecheck, worker, schedule, agent-image, and RLM typed-config migration"
+    decision: local_critical_path
+    reason: "Issues #399-#401 are provisionally integrated; parent state checkpoint precedes isolated #402 dispatch."
+  - number: 403
     status: planned
-    dependencies: [399]
-    write_scope: "Cobra root router shell, wrappers, and focused CLI tests"
+    dependencies: [402]
+    write_scope: "internal/events and named instrumentation points"
     decision: not_spawned_dependency_blocked
-    reason: "Issue #399 is not integrated into the parent branch."
+    reason: "First parallel fan-out waits for #402 parent integration."
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -55,6 +55,26 @@ spawn_decisions:
     decision: not_spawned_review_blocked
     issue_numbers: [400]
     reason: "PR #439 CI and Copilot backup review are pending; #400 depends on parent integration of #399."
+  - timestamp: 2026-07-16T10:45:10Z
+    decision: spawned
+    issue_numbers: [400]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-400-cobra-router-shell after provisional #399 integration."
+  - timestamp: 2026-07-16T12:15:00Z
+    decision: read_only_spawned
+    issue_numbers: [400]
+    reason: "pm-reviewer found two router defects; worker fixed both and targeted re-review was clean."
+  - timestamp: 2026-07-16T13:09:10Z
+    decision: spawned
+    issue_numbers: [401]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-401-typed-viper-config after provisional #400 integration."
+  - timestamp: 2026-07-16T13:55:00Z
+    decision: read_only_spawned
+    issue_numbers: [401]
+    reason: "pm-reviewer config/security/parity sidecars drove bootstrap and docs fixes; final sidecar was clean."
+  - timestamp: 2026-07-16T15:40:57Z
+    decision: local_critical_path
+    issue_numbers: [402]
+    reason: "Coordinator updates parent integration ledger before creating and dispatching isolated #402 worktree."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -71,41 +91,41 @@ subissues:
     branch: test/399-golden-transcript-safety-net
     pr_url: https://github.com/polymetrics-ai/cli/pull/439
     worker: pm-gsd-worker
-    status: sub_pr_open
+    status: provisionally_integrated
     write_scope: "internal/cli golden transcript harness, fixtures, docs/cli diff test, issue-local GSD artifacts"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-399-golden-transcript-safety-net
-    verification: "Local make verify passed; commit-range git diff --check passed; remote verify and CodeQL pending."
-    automated_review: {primary_route: copilot_backup, status: pending, head_sha: c2d2b5da6c94ba09599b777ae9f3515cae2c0729, reviewed_range: "2f012400..c2d2b5da", coverage_route: copilot_backup, fallback_route: human, disposition_summary: "Claude workflow disabled_manually; Copilot requested once through REST after gh pr edit failed.", disposition_url: ""}
+    verification: "Local and remote gates passed; parent squash commit 379cb5015335ff7c9b20e5bb780952ead22c53b2."
+    automated_review: {primary_route: human, status: blocked, head_sha: c2d2b5da6c94ba09599b777ae9f3515cae2c0729, reviewed_range: "2f012400..379cb501", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled; Copilot quota exhausted; local sidecar findings dispositioned; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/439#issuecomment-4990871082"}
   - number: 400
     url: https://github.com/polymetrics-ai/cli/issues/400
-    branch: pending
-    pr_url: ""
-    worker: unassigned
-    status: planned
-    write_scope: "Cobra root router shell, wrappers, and focused CLI tests"
-    worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #399.", disposition_url: ""}
+    branch: refactor/400-cobra-router-shell
+    pr_url: https://github.com/polymetrics-ai/cli/pull/440
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "Cobra root router shell, wrappers, focused tests, ADR-approved dependency delta"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-400-cobra-router-shell
+    verification: "Local and remote gates passed; parent squash commit 8900db141cc289b65491365d2ebcab490af57789."
+    automated_review: {primary_route: human, status: blocked, head_sha: cf9aed57183d91611c84352db2546365bcdcc807, reviewed_range: "379cb501..8900db14", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Two pm-reviewer findings fixed; targeted sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/440"}
   - number: 401
     url: https://github.com/polymetrics-ai/cli/issues/401
-    branch: pending
-    pr_url: ""
-    worker: unassigned
-    status: planned
-    write_scope: "internal/config typed Viper configuration and parity docs"
-    worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #400.", disposition_url: ""}
+    branch: feat/401-typed-viper-config
+    pr_url: https://github.com/polymetrics-ai/cli/pull/441
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "internal/config, CLI config integration/tests, docs/website parity, ADR-approved dependency delta"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-401-typed-viper-config
+    verification: "Local and remote Go/website gates passed; parent squash commit 7683087d41646c92b2bd7f677f47cf2bc9d88462."
+    automated_review: {primary_route: human, status: blocked, head_sha: 28af02a5f26426f4845a796733dff075a1cb26a2, reviewed_range: "8900db14..7683087d", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Config/bootstrap/docs findings fixed; final sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/441"}
   - number: 402
     url: https://github.com/polymetrics-ai/cli/issues/402
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: planned
-    write_scope: "runtimecheck, worker, schedule, and RLM config call sites"
+    status: worker_ready
+    write_scope: "runtimecheck, worker, schedule, agent-image, and RLM config call sites"
     worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #401.", disposition_url: ""}
+    verification: not_run_worker_ready
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Ready after #401 integration; dispatch pending parent state checkpoint.", disposition_url: ""}
   - number: 403
     url: https://github.com/polymetrics-ai/cli/issues/403
     branch: pending
@@ -296,4 +316,4 @@ human_gates:
   - production deploys
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
-updated_at: 2026-07-16T10:33:00Z
+updated_at: 2026-07-16T15:40:57Z
