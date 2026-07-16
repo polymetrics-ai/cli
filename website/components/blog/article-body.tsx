@@ -1,14 +1,18 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { CornerBox } from '@/components/ui/corner-box';
-import type { BlogSection } from '@/lib/blog';
+import type { BlogEvidence, BlogSection } from '@/lib/blog';
 import { AnnotationsProvider } from '@/components/blog/annotations-provider';
 import { HighlightedBlock, HoverPreview } from '@/components/blog/highlight-text';
 import { SelectionPopover } from '@/components/blog/selection-popover';
 import { CommentComposer } from '@/components/blog/comment-composer';
 import { MarginNotesRail } from '@/components/blog/margin-notes-rail';
 import { CommentsSheet } from '@/components/blog/comments-sheet';
+import {
+  GitHubEvidenceMarkers,
+  GitHubEvidenceSheet,
+} from '@/components/blog/github-evidence';
 
 function sectionId(index: number): string {
   return `section-${index + 1}`;
@@ -24,12 +28,15 @@ export function ArticleBody({
   slug,
   sections,
   summary,
+  evidence,
 }: {
   slug: string;
   sections: BlogSection[];
   summary: string;
+  evidence: BlogEvidence[];
 }) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const [activeEvidence, setActiveEvidence] = useState<BlogEvidence | null>(null);
 
   return (
     <AnnotationsProvider slug={slug}>
@@ -93,6 +100,14 @@ export function ArticleBody({
                   <code>{section.code}</code>
                 </pre>
               ) : null}
+
+              {section.evidenceIds ? (
+                <GitHubEvidenceMarkers
+                  evidence={evidence}
+                  evidenceIds={section.evidenceIds}
+                  onOpen={setActiveEvidence}
+                />
+              ) : null}
             </section>
           ))}
         </div>
@@ -112,6 +127,7 @@ export function ArticleBody({
       <CommentComposer />
       <HoverPreview />
       <CommentsSheet sections={sections} />
+      <GitHubEvidenceSheet evidence={activeEvidence} onClose={() => setActiveEvidence(null)} />
     </AnnotationsProvider>
   );
 }

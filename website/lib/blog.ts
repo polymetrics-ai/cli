@@ -3,6 +3,26 @@ export type BlogSection = {
   body: string[];
   points?: string[];
   code?: string;
+  evidenceIds?: string[];
+};
+
+export type BlogEvidenceKind = 'pull_request' | 'commit' | 'workflow';
+
+export type BlogEvidence = {
+  id: string;
+  kind: BlogEvidenceKind;
+  label: string;
+  url: string;
+  apiUrl: string;
+  openLabel: string;
+  snapshot: {
+    title: string;
+    status: string;
+    ref: string;
+    verifiedAt: string;
+    summary: string;
+    stats: Array<{ label: string; value: string }>;
+  };
 };
 
 export type BlogPost = {
@@ -15,6 +35,11 @@ export type BlogPost = {
   category: string;
   tags: string[];
   summary: string;
+  repositoryCta?: {
+    label: string;
+    href: string;
+  };
+  evidence?: BlogEvidence[];
   sections: BlogSection[];
 };
 
@@ -23,7 +48,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'human-harnesses',
     title: 'Humans Need Harnesses Too',
     description:
-      'One pull request grew to roughly a million changed lines and turned merging into archaeology. The recovery became the harness architecture we now use for code, data, and humans.',
+      'One pull request crossed 1.9 million changed lines and turned merging into archaeology. The recovery became the harness architecture we now use for code, data, and humans.',
     publishedAt: '2026-07-16',
     updatedAt: '2026-07-16',
     readingTime: '14 min read',
@@ -31,15 +56,210 @@ export const BLOG_POSTS: BlogPost[] = [
     tags: ['human harnesses', 'GitHub Actions', 'approval gates', 'AI agents'],
     summary:
       'A giant pull request turned GitHub into a loading spinner and taught us that intent, evidence, approval, and mutation must stay visible for every operator, including the human at the keyboard.',
+    repositoryCta: {
+      label: 'Star Polymetrics on GitHub',
+      href: 'https://github.com/polymetrics-ai/cli',
+    },
+    evidence: [
+      {
+        id: 'precursor-pr-27',
+        kind: 'pull_request',
+        label: 'PR #27',
+        url: 'https://github.com/polymetrics-ai/cli/pull/27',
+        apiUrl: 'https://api.github.com/repos/polymetrics-ai/cli/pulls/27',
+        openLabel: 'Open PR #27 on GitHub',
+        snapshot: {
+          title: 'Connector architecture v2 bundles and certification harness',
+          status: 'Closed, not merged',
+          ref: '5ce0e094f7e937859e344f37782b028f4bd1fcbf',
+          verifiedAt: '2026-07-16',
+          summary:
+            'The original migration delivery unit. It accumulated 1,961,878 changed lines across 24,803 files before closing without a merge.',
+          stats: [
+            { label: 'Changed lines', value: '1,961,878' },
+            { label: 'Additions', value: '1,932,552' },
+            { label: 'Deletions', value: '29,326' },
+            { label: 'Files', value: '24,803' },
+          ],
+        },
+      },
+      {
+        id: 'migration-pr-29',
+        kind: 'pull_request',
+        label: 'PR #29',
+        url: 'https://github.com/polymetrics-ai/cli/pull/29',
+        apiUrl: 'https://api.github.com/repos/polymetrics-ai/cli/pulls/29',
+        openLabel: 'Open PR #29 on GitHub',
+        snapshot: {
+          title: 'Complete connector architecture v2 migration',
+          status: 'Merged',
+          ref: 'a1c1af7535f9ac273f701a40b2a32d7d376ea18a',
+          verifiedAt: '2026-07-16',
+          summary:
+            'The conflict-resolved replacement merged 2,792,444 changed lines across 28,733 files on July 6, 2026.',
+          stats: [
+            { label: 'Changed lines', value: '2,792,444' },
+            { label: 'Additions', value: '2,242,501' },
+            { label: 'Deletions', value: '549,943' },
+            { label: 'Files', value: '28,733' },
+          ],
+        },
+      },
+      {
+        id: 'migration-merge-commit',
+        kind: 'commit',
+        label: 'Commit 605b006',
+        url: 'https://github.com/polymetrics-ai/cli/commit/605b006e5aa1adae697d5b7dd26ec485c570c250',
+        apiUrl:
+          'https://api.github.com/repos/polymetrics-ai/cli/commits/605b006e5aa1adae697d5b7dd26ec485c570c250',
+        openLabel: 'Open commit 605b006 on GitHub',
+        snapshot: {
+          title: 'Complete connector architecture v2 migration (#29)',
+          status: 'Committed to main',
+          ref: '605b006e5aa1adae697d5b7dd26ec485c570c250',
+          verifiedAt: '2026-07-16',
+          summary:
+            'The exact main-branch commit produced by the recovery merge. This is the durable object behind the story, not a reconstructed screenshot.',
+          stats: [
+            { label: 'Changed lines', value: '2,792,444' },
+            { label: 'Additions', value: '2,242,501' },
+            { label: 'Deletions', value: '549,943' },
+            { label: 'SHA', value: '605b006' },
+          ],
+        },
+      },
+      {
+        id: 'issue-first-pr-47',
+        kind: 'pull_request',
+        label: 'PR #47',
+        url: 'https://github.com/polymetrics-ai/cli/pull/47',
+        apiUrl: 'https://api.github.com/repos/polymetrics-ai/cli/pulls/47',
+        openLabel: 'Open PR #47 on GitHub',
+        snapshot: {
+          title: 'Add issue-first delivery system',
+          status: 'Merged',
+          ref: '7eb144f59b548dcab4831bbf9df14cea45775985',
+          verifiedAt: '2026-07-16',
+          summary:
+            'Introduced the issue-scoped delivery contracts and evidence structure that followed the oversized migration.',
+          stats: [
+            { label: 'Changed lines', value: '3,164' },
+            { label: 'Additions', value: '2,931' },
+            { label: 'Deletions', value: '233' },
+            { label: 'Files', value: '50' },
+          ],
+        },
+      },
+      {
+        id: 'parent-orchestrator-pr-51',
+        kind: 'pull_request',
+        label: 'PR #51',
+        url: 'https://github.com/polymetrics-ai/cli/pull/51',
+        apiUrl: 'https://api.github.com/repos/polymetrics-ai/cli/pulls/51',
+        openLabel: 'Open PR #51 on GitHub',
+        snapshot: {
+          title: 'Add parent issue orchestrator',
+          status: 'Merged',
+          ref: '484c3dcad57e8e5c099e1ad1e85438006f39167a',
+          verifiedAt: '2026-07-16',
+          summary:
+            'Added explicit parent ownership for dependency graphs, sub-PR integration, review coverage, and the final human gate.',
+          stats: [
+            { label: 'Changed lines', value: '1,435' },
+            { label: 'Additions', value: '1,316' },
+            { label: 'Deletions', value: '119' },
+            { label: 'Files', value: '31' },
+          ],
+        },
+      },
+      ...[
+        {
+          id: 'issue-guard-workflow',
+          label: 'PR issue guard',
+          file: 'pr-issue-guard.yml',
+          sha: '8640b533d857581f946d40163c5bc9804eaf9d57',
+          size: '962 B',
+          summary: 'Checks the accepted issue-reference shape in pull-request titles and bodies.',
+        },
+        {
+          id: 'conventions-workflow',
+          label: 'Conventions',
+          file: 'conventions.yml',
+          sha: '23c69d3df3609fa7951a2d7b09fd77c56b2df590',
+          size: '2,041 B',
+          summary: 'Checks branch naming and Conventional Commit pull-request titles.',
+        },
+        {
+          id: 'gsd-workflow',
+          label: 'GSD evidence',
+          file: 'gsd-workflow.yml',
+          sha: 'a14de8d214ca468111cd795af09edd66487e849b',
+          size: '549 B',
+          summary: 'Requires planning and test evidence when production Go code changes.',
+        },
+        {
+          id: 'verify-workflow',
+          label: 'Verify workflow',
+          file: 'verify.yml',
+          sha: '6ca4873f168083e16f8c6117e61b6df4f84fb46a',
+          size: '858 B',
+          summary: 'Runs the repository verification gate and rejects generated-file drift.',
+        },
+        {
+          id: 'security-workflow',
+          label: 'Security workflow',
+          file: 'security.yml',
+          sha: '30e31ffa0a423563895443c59bfb992acfb24205',
+          size: '1,650 B',
+          summary: 'Runs the repository vulnerability and static-analysis security checks.',
+        },
+        {
+          id: 'website-workflow',
+          label: 'Website workflow',
+          file: 'website.yml',
+          sha: '79af5f1f4371832468724974d79a07be43fa445f',
+          size: '5,286 B',
+          summary: 'Builds and tests the website, publishes its image, and controls deployment.',
+        },
+        {
+          id: 'release-workflow',
+          label: 'Release workflow',
+          file: 'release.yml',
+          sha: '20a5ea9b3d0b6b09b5ecedf2db542a63a7692f1b',
+          size: '1,427 B',
+          summary: 'Separates main-branch integration from version and artifact publication.',
+        },
+      ].map(({ id, label, file, sha, size, summary }): BlogEvidence => ({
+        id,
+        kind: 'workflow',
+        label,
+        url: `https://github.com/polymetrics-ai/cli/blob/main/.github/workflows/${file}`,
+        apiUrl: `https://api.github.com/repos/polymetrics-ai/cli/contents/.github/workflows/${file}?ref=main`,
+        openLabel: `Open ${file} on GitHub`,
+        snapshot: {
+          title: file,
+          status: 'Tracked on main',
+          ref: sha,
+          verifiedAt: '2026-07-16',
+          summary,
+          stats: [
+            { label: 'Branch', value: 'main' },
+            { label: 'File size', value: size },
+            { label: 'Blob', value: sha.slice(0, 7) },
+          ],
+        },
+      })),
+    ],
     sections: [
       {
         heading: 'The PR that ate the repository',
         body: [
-          'This story starts with one pull request and roughly a million changed lines. That is not a motivational metaphor. It was connector definitions, schemas, fixtures, generated documentation, tests, and enough JSON to make the diff viewer reconsider its career choices.',
+          'This story starts with PR #27 and 1,961,878 changed lines. That is not a motivational metaphor. It was connector definitions, schemas, fixtures, generated documentation, tests, and enough JSON to make the diff viewer reconsider its career choices. That PR closed without merging; the conflict-resolved PR #29 eventually landed 2,792,444 changed lines in commit 605b006.',
           'At that size, code review stops being code review. The scrollbar becomes a rounding error. A useful comment on line 412,000 is less a review note and more a message in a bottle. Every merge conflict asks the same cheerful question: do you still remember why this file changed three weeks ago?',
           'The individual changes were mostly reasonable. The package was the disaster. One PR was trying to be the roadmap, the work queue, the integration branch, the test report, and the release decision at the same time. When one check failed, the answer was not which slice broke. The answer was yes.',
           'I eventually realized the agents were not the main problem. I had given fast workers one enormous room, no lanes, and a single door marked MERGE. The million-line PR did not need a braver reviewer. It needed an architecture that made work smaller before review began.',
         ],
+        evidenceIds: ['precursor-pr-27', 'migration-pr-29', 'migration-merge-commit'],
       },
       {
         heading: 'The tool after the fire',
@@ -98,6 +318,7 @@ pm reverse run <plan-id> --approve <approval-token> --json`,
 sub-issue   -> isolated worktree -> red/green -> stacked PR
 stacked PR  -> checks + review -> parent branch
 parent      -> full verification -> human merge -> release`,
+        evidenceIds: ['issue-first-pr-47', 'parent-orchestrator-pr-51'],
       },
       {
         heading: 'Intent before diff',
@@ -107,6 +328,7 @@ parent      -> full verification -> human merge -> release`,
           'When production Go code under cmd or internal changes, the GSD workflow checks for planning and test evidence. In practice that means a plan, a TDD ledger, and a verification checklist exist before production edits. The ledger does not prove the code is correct, but it makes a useful distinction visible: did a test fail because the capability was absent, and did the same test pass because of the change?',
           'This is the code equivalent of binding an approval to a plan. The issue describes the intended mutation; the branch and PR limit its scope; the test demonstrates the behavioral delta. A reviewer can challenge any of those layers instead of reverse-engineering intent from the final diff.',
         ],
+        evidenceIds: ['issue-guard-workflow', 'conventions-workflow', 'gsd-workflow'],
       },
       {
         heading: 'Proof before confidence',
@@ -121,6 +343,7 @@ parent      -> full verification -> human merge -> release`,
           'Security checks: govulncheck, CodeQL, dependency review, and scheduled Scorecard analysis.',
           'Website checks: PostgreSQL migrations, generated data, typecheck, unit tests, Chromium e2e, build, and image construction.',
         ],
+        evidenceIds: ['verify-workflow', 'security-workflow', 'website-workflow'],
       },
       {
         heading: 'Review, fix, repeat, locally',
@@ -143,6 +366,7 @@ parent      -> full verification -> human merge -> release`,
           'The website follows a similar boundary. Pull requests can build the image, but only a main-branch push or an explicit dispatch can publish it. Deployment requires the website deploy variable, uses a self-hosted Tailscale runner, passes the image tagged with the exact commit SHA to the Quadlet deployment script, and verifies rollout health. The deploy consumes an immutable input instead of rebuilding whatever happens to be on the server.',
           'This is the production form of plan and execute: CI proves one commit, the registry stores an image for that commit, and the deploy step rolls out that exact image. If those identities diverge, the harness is no longer describing the mutation it performs.',
         ],
+        evidenceIds: ['release-workflow', 'website-workflow'],
       },
       {
         heading: 'What GitHub really blocks',

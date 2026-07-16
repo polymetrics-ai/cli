@@ -54,7 +54,7 @@ test.describe('blog UI smoke', () => {
     await expect(preview).toBeVisible();
     await expect(preview.getByText('Verified snapshot')).toBeVisible();
     await expect(preview.getByText('Closed, not merged')).toBeVisible();
-    await expect(preview.getByText('1,961,878')).toBeVisible();
+    await expect(preview.getByText('1,961,878', { exact: true })).toBeVisible();
 
     const sourceLink = preview.getByRole('link', { name: 'Open PR #27 on GitHub' });
     await expect(sourceLink).toHaveAttribute(
@@ -66,10 +66,22 @@ test.describe('blog UI smoke', () => {
 
     await page.keyboard.press('Escape');
     await expect(preview).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Preview PR #27 evidence' })).toBeFocused();
 
     const starLink = page.getByRole('link', { name: 'Star Polymetrics on GitHub' });
     await expect(starLink).toHaveAttribute('href', 'https://github.com/polymetrics-ai/cli');
     await expect(starLink).toHaveAttribute('target', '_blank');
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.getByRole('button', { name: 'Preview PR #27 evidence' }).click();
+    await expect(preview).toBeVisible();
+    const previewBox = await preview.boundingBox();
+    expect(previewBox).not.toBeNull();
+    expect(previewBox!.x).toBeGreaterThanOrEqual(0);
+    expect(previewBox!.x + previewBox!.width).toBeLessThanOrEqual(390);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
   });
 
   test('links the blog from the desktop navbar', async ({ page }) => {

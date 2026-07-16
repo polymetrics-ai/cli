@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight, Calendar, Clock } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Calendar, Clock, ExternalLink, Star } from 'lucide-react';
 import { BLOG_POSTS, blogUrl, getBlogPost } from '@/lib/blog';
 import { HomeSidebar } from '@/components/home/home-sidebar';
 import { PageAside } from '@/components/home/page-aside';
@@ -129,9 +129,28 @@ export default async function BlogPostPage({ params }: Props) {
                 </span>
               ))}
             </div>
+            {post.repositoryCta ? (
+              <a
+                href={post.repositoryCta.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={post.repositoryCta.label}
+                className="mt-6 inline-flex min-h-10 items-center gap-2 border border-line-cta bg-line-cta px-3 font-square text-[11px] font-semibold uppercase tracking-normal text-surface-bg transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta"
+                data-repository-star-link
+              >
+                <Star className="size-3.5" aria-hidden="true" />
+                {post.repositoryCta.label}
+                <ExternalLink className="size-3.5" aria-hidden="true" />
+              </a>
+            ) : null}
           </header>
 
-          <ArticleBody slug={post.slug} sections={post.sections} summary={post.summary} />
+          <ArticleBody
+            slug={post.slug}
+            sections={post.sections}
+            summary={post.summary}
+            evidence={post.evidence ?? []}
+          />
 
           <footer
             id="read-next"

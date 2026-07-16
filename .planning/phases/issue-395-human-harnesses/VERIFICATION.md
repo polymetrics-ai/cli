@@ -101,14 +101,15 @@
 
 ## Interactive GitHub Evidence Follow-Up
 
-- [ ] Catalog contract covers canonical PR, commit, structural-harness, and repository URLs.
-- [ ] Focused unit test fails before the evidence model is implemented and passes afterward.
-- [ ] Evidence markers open an in-page sheet and preserve the article scroll position.
-- [ ] The sheet exposes exact status/SHA/change totals and a canonical external GitHub link.
-- [ ] Public GitHub refresh has a verified static fallback and does not use credentials.
-- [ ] Repository CTA opens `polymetrics-ai/cli` in a new tab at GitHub's native Star control.
-- [ ] Escape, close button, focus return, and external-link labels work with keyboard navigation.
-- [ ] Mobile and desktop screenshots show no overlap or horizontal overflow.
-- [ ] Reduced-motion rendering remains usable.
-- [ ] Image prompt guide records six varied placements without rendering broken placeholders.
-- [ ] Focused e2e, unit tests, typecheck, production build, and `git diff --check` pass.
+- [x] Catalog contract covers canonical PR, commit, structural-harness, and repository URLs.
+- [x] Focused unit test fails before the evidence model is implemented and passes afterward.
+- [x] Evidence markers open an in-page sheet and preserve the article scroll position.
+- [x] The sheet exposes exact status/SHA/change totals and a canonical external GitHub link.
+- [x] Public GitHub refresh has a verified static fallback and does not use credentials.
+- [x] Repository CTA opens `polymetrics-ai/cli` in a new tab at GitHub's native Star control.
+- [x] Escape, close button, focus return, and external-link labels are covered by the focused e2e.
+- [ ] Remote Website CI passes the new 390px sheet containment and overflow assertion.
+- [x] Reduced-motion rendering remains usable through `motion-reduce:animate-none`.
+- [x] Image prompt guide records six varied placements without rendering broken placeholders.
+- [x] Focused e2e, 64 unit tests, typecheck, production build, and `git diff --check` pass locally
+  before the final mobile assertion was added; remote CI owns the final updated e2e pass.

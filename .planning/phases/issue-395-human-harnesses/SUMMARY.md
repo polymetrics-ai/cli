@@ -22,6 +22,13 @@
 - Grounded the revision in the active Shepherd proof/recovery and CLI architecture Pi sessions,
   including the observed second repair lap after verification caught trailing whitespace.
 - Removed Shepherd implementation detail from this post and retained only the next-post teaser.
+- Added an interactive GitHub evidence trail with public live refresh and verified offline
+  snapshots for the failed precursor, merged recovery, exact merge commit, structural delivery PRs,
+  and workflow source files.
+- Added an explicit new-tab repository star CTA and documented the GitHub limitation that prevents
+  a safe GET link from performing the star action directly.
+- Added six production-ready ChatGPT Images prompts with varied editorial placements, asset names,
+  crops, alt text, and mobile behavior.
 
 ## Evidence
 
@@ -41,13 +48,18 @@
   pass with `2026-07-16`; the old `2026-08-04` placeholder is absent.
 - Local-review contract: focused test, typecheck, production build, and desktop/mobile Chromium
   assertions pass; the local loop is present and the stale Claude-workflow language is absent.
+- Interactive-evidence contract: focused catalog test, offline Chromium interaction, 64 unit tests,
+  typecheck, production build, GitHub CORS check, and `git diff --check` pass. The final 390px
+  assertion is committed for remote Website CI after the in-app browser blocked localhost reload.
 
 ## Scope
 
-- Production: `website/lib/blog.ts` only.
-- Test: `website/tests/blog-catalog.test.ts` only.
-- No dependencies, workflows, auth, database, comments, runtime, connectors, or generated artifacts
-  changed.
+- Production: blog catalog data, the shared article renderer, one reusable evidence component, and
+  the blog post header CTA.
+- Tests: focused catalog and blog smoke contracts.
+- Design artifact: the issue-local ChatGPT Images prompt and placement guide.
+- No dependencies, workflows, auth, database, comments, runtime, connectors, or generated website
+  data changed.
 
 ## Delivery Notes
 

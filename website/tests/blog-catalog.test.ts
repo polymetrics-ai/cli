@@ -44,7 +44,8 @@ describe('blog catalog', () => {
     expect(articleText).toContain('7,088');
     expect(articleText).toContain('pm reverse run <plan-id> --approve <approval-token> --json');
     expect(articleText).not.toContain('pm reverse approve');
-    expect(articleText).toContain('roughly a million changed lines');
+    expect(articleText).toContain('PR #27 and 1,961,878 changed lines');
+    expect(articleText).toContain('PR #29 eventually landed 2,792,444 changed lines');
     expect(articleText).toContain('isolated worktree');
     expect(articleText).toContain('exact candidate head SHA');
     expect(articleText).toContain('read-only reviewer');

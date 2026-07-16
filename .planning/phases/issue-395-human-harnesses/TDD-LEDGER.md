@@ -113,7 +113,7 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Interactive GitHub Evidence
 
-- Status: red complete.
+- Status: green complete pending remote mobile assertion.
 - Red catalog contract: require canonical PR `#27`, PR `#29`, merge commit `605b006`, issue-first
   PR `#47`, parent-orchestrator PR `#51`, section-to-evidence references, and a repository star CTA.
 - Red browser contract: require an evidence marker to open an in-page sheet with a verified
@@ -128,3 +128,17 @@ Phase: `issue-395-human-harnesses`
 - Red result: the focused catalog test failed at the first new assertion because the post did not
   yet expose the repository CTA; no production code had been changed.
 - Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
+- Green result: the focused catalog contract passes with canonical PR, commit, workflow, section
+  reference, and repository CTA metadata.
+- Interaction result: configured Chromium passed the offline evidence-preview path, exact snapshot
+  values, canonical new-tab link, Escape close, and same-tab preservation.
+- Live-path evidence: GitHub's public PR endpoint returned HTTP 200 with
+  `access-control-allow-origin: *`; the client refresh is cached per evidence item and uses no token.
+- Regression result: all 64 website unit tests and website typecheck pass.
+- Build result: the production Next.js build passes and prerenders `/blog/human-harnesses`. The
+  standalone build reports the existing default-secret warning because no build-only auth secret
+  was provided; no secret value was read or printed.
+- Visual result: the desktop evidence sheet screenshot is clear, fully contained, and keeps the
+  article visible behind it. The in-app browser refused a localhost refresh under its URL policy;
+  the 390px containment/overflow assertion is therefore committed for remote Website CI rather
+  than represented as a completed local screenshot.
