@@ -4,7 +4,7 @@
   "branch": "refactor/406-catalog-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "verificationPassed": true,
-  "status": "local_verification_passed_pr_pending",
+  "status": "pr_open_remote_checks_queued_human_parent_review_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-406.prompt",
@@ -33,11 +33,11 @@
       "reason": "focused and full local gates completed inline in isolated worker cwd"
     }
   ],
-  "pullRequest": "",
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/449",
   "reviewRoute": {
     "claude": "disabled_not_requested_per_instruction",
     "copilot": "quota_exhausted_not_requested_per_instruction",
     "fallback": "human_parent_review_pending",
-    "coverageStatus": "pending"
+    "coverageStatus": "pending_remote_checks_queued"
   }
 }

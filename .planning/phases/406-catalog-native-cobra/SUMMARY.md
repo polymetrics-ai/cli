@@ -1,10 +1,10 @@
 # Phase 406 Summary
 
-Status: implementation and local verification complete; PR creation pending.
+Status: PR #449 open against `feat/cli-architecture-v2`; remote checks queued at handoff; human/parent fallback review pending.
 
 ## Current state
 
-- Worker branch: `refactor/406-catalog-native-cobra`.
+- Worker branch: `refactor/406-catalog-native-cobra`; sub-PR: https://github.com/polymetrics-ai/cli/pull/449.
 - GSD adapter doctor passed; `programming-loop` prompt command missing, so manual GSD fallback recorded.
 - Required reading and skills loaded. Phase artifacts created before production edits and updated after red/green/gates.
 - Scope stayed inside catalog CLI/router/tests and issue-local planning artifacts.
