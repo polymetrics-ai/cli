@@ -11,6 +11,7 @@ describe('blog catalog', () => {
       title: 'Humans Need Harnesses Too',
       publishedAt: '2026-08-04',
       updatedAt: '2026-08-04',
+      readingTime: '14 min read',
       category: 'Build in public',
     });
     expect(post?.tags).toEqual(

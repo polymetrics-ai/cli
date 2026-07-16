@@ -53,3 +53,16 @@
   parent PR is merged.
 - The final build loaded the existing local environment without printing any value and completed
   without auth warnings.
+
+## Requested Narrative Revision
+
+- [x] Opens with the roughly million-line, single-PR merge failure that motivated the architecture.
+- [x] Connects that failure to parent issues, bounded sub-issues, isolated worktrees, stacked PRs,
+  layered verification, and a human-gated parent merge.
+- [x] Keeps the technical claims and CLI examples while using a more conversational, lightly funny
+  narrative voice.
+- [x] Removes the repository, documentation, and inventory-snapshot footer.
+- [x] Ends with a direct request to star the repository.
+- [x] Updates the catalog contract and reading time to 14 minutes.
+- [x] Passes 64 unit tests, 6 focused blog Playwright tests, typecheck, and production build.
+- [x] Passes desktop/mobile content assertions with no horizontal overflow.

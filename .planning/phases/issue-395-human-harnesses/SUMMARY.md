@@ -10,6 +10,11 @@
   certification.
 - Corrected the Shepherd description so it matches the repository's supervisor/validator role.
 - Added a focused catalog contract test without changing the article renderer or route system.
+- Reframed the article around the roughly million-line pull request that inspired the harness
+  architecture, including parent issues, bounded sub-issues, isolated worktrees, stacked PRs,
+  layered checks, and the final human merge gate.
+- Removed the repository, documentation, and inventory-snapshot footer and replaced it with a
+  conversational request to star the repository.
 
 ## Evidence
 
@@ -23,6 +28,8 @@
 - Production build: pass; the new slug was statically generated.
 - Website generation: pass with no drift.
 - Desktop/mobile screenshots and overflow assertions: pass.
+- Narrative contract: the giant-PR origin story, isolated-worktree architecture, 14-minute reading
+  time, and star request are present; the removed footer strings are absent.
 
 ## Scope
 

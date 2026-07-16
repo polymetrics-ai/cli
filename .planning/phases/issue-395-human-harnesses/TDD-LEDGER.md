@@ -54,7 +54,7 @@ Phase: `issue-395-human-harnesses`
 
 ## Revision: Million-Line PR Narrative
 
-- Status: red complete.
+- Status: green complete.
 - Red contract: require the merge-nightmare story, structural parent/sub-issue architecture, and a
   human star request; reject the repository/documentation/inventory footer requested for removal.
 - Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
@@ -62,3 +62,11 @@ Phase: `issue-395-human-harnesses`
   were absent.
 - Green contract: preserve verified technical claims and CLI examples while the revised narrative
   passes the catalog, browser, typecheck, and production-build checks.
+- Green result: the catalog contract passes with the million-line PR story, isolated-worktree
+  architecture, star request, and removed footer; typecheck and `git diff --check` also pass.
+- Regression result: all 64 website unit tests and all 6 focused blog Playwright tests pass.
+- Browser result: desktop and mobile assertions find no horizontal overflow, show the revised first
+  and final headings, include the star request, and exclude the removed footer.
+- Build result: the production Next.js build passes and prerenders `/blog/human-harnesses`.
+- Reading-time check: approximately 3,059 source words, recorded as a 14-minute read at 220 words
+  per minute.
