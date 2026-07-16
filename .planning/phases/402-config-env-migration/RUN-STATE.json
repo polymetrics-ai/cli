@@ -1,0 +1,21 @@
+{
+  "phase": 402,
+  "issue": 402,
+  "branch": "refactor/402-config-env-migration",
+  "baseBranch": "feat/cli-architecture-v2",
+  "verificationPassed": false,
+  "status": "in_progress",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-402.prompt",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "bounded mutating worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    }
+  ]
+}
