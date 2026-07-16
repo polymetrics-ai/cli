@@ -33,6 +33,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
+import { PmLogoMark } from '@/components/brand/pm-logo-mark';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.generated';
 
 /* ─── Product dropdown items ──────────────────────────────────────────── */
@@ -134,16 +135,6 @@ function NavBtn({
         </Link>
       )}
     </div>
-  );
-}
-
-/* ─── Logo mark — terminal CLI: PM_ (blinking cursor) on emerald square ── */
-function PmLogoMark() {
-  return (
-    <span className="flex items-center justify-center h-[26px] min-w-[26px] px-1 bg-emerald-800 select-none">
-      <span className="font-mono font-bold text-[13px] leading-none text-white tracking-tight">PM</span>
-      <span aria-hidden className="font-mono font-bold text-[13px] leading-none text-white cursor-blink">_</span>
-    </span>
   );
 }
 
@@ -338,7 +329,7 @@ export function SiteNavbar() {
               className="flex items-center gap-2 group/logo shrink-0"
               aria-label="PM homepage"
             >
-              <PmLogoMark />
+              <PmLogoMark decorative className="h-[26px] w-[26px] shrink-0 select-none" />
               <span className="navbar-by-tag font-square text-[11px] font-light uppercase tracking-[0.14em] leading-none text-text-tertiary/70 whitespace-nowrap hover:text-text-tertiary transition-colors">
                 command line interface
               </span>

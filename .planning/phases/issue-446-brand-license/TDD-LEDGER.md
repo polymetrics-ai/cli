@@ -2,8 +2,8 @@
 
 | Slice | Red evidence | Green evidence | Refactor evidence | Status |
 | --- | --- | --- | --- | --- |
-| Shared PM logo | `npm run test:unit -- tests/brand-license-contract.test.ts` fails because `@/components/brand/pm-logo-mark` was deleted | Pending | Pending | Red |
-| Mixed license boundary | Contract assertions committed in the same focused test; collection is blocked first by the missing shared logo module | Pending | Pending | Red queued |
+| Shared PM logo | `npm run test:unit -- tests/brand-license-contract.test.ts` fails because `@/components/brand/pm-logo-mark` was deleted | Focused `-t "PM brand mark"` run passes: 2 tests | Removed three local cursor implementations and the now-unused global cursor animation | Green |
+| Mixed license boundary | Contract assertions committed in the same focused test; collection was initially blocked by the missing shared logo module | Pending | Pending | Red queued |
 
 ## Rules
 

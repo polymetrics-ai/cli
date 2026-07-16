@@ -12,6 +12,7 @@ import {
   Sparkles,
   Star,
 } from 'lucide-react';
+import { PmLogoMark } from '@/components/brand/pm-logo-mark';
 import { SidebarLink } from '@/components/home/sidebar-link';
 import { DOCUMENTATION_NAV } from '@/components/docs/doc-nav';
 import { BLOG_POSTS, blogUrl } from '@/lib/blog';
@@ -195,9 +196,7 @@ export function HomeSidebar({
             className="link-box group relative grid min-w-0 grid-cols-[2rem_minmax(0,1fr)] items-center gap-2 px-4 py-3 text-[12px] text-text-tertiary transition-colors hover:bg-surface-bg hover:text-text-secondary"
           >
             <span aria-hidden className="corner-box-hover-child" />
-            <span className="flex h-8 w-8 items-center justify-center bg-emerald-800 font-mono text-[13px] font-bold leading-none text-white">
-              PM<span aria-hidden className="cursor-blink">_</span>
-            </span>
+            <PmLogoMark decorative className="h-8 w-8 shrink-0 select-none" />
             <span className="min-w-0">
               <span className="block font-square text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
                 pm CLI
