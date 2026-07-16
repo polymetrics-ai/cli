@@ -1,0 +1,57 @@
+{
+  "phase": "399-golden-transcript-safety-net",
+  "status": "verified",
+  "issue": 399,
+  "parent_issue": 397,
+  "parent_pr": 438,
+  "workflow": "spawned-bounded-worker",
+  "current_plan": "golden-transcript-harness-and-docs-diff-test",
+  "gsd": {
+    "doctor": "passed",
+    "plan_phase_prompt": "scripts/gsd prompt plan-phase 399 --skip-research",
+    "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase 399 --dry-run",
+    "programming_loop_result": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "Pi-local .pi/prompts/pm-gsd-loop.md prompt contract used for manual GSD/TDD discipline"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "worker-start",
+      "decision": "spawned",
+      "reason": "Parent issue #397 assigned one isolated worker directory, branch, issue #399, and bounded write scope. Worker does not spawn subagents."
+    }
+  ],
+  "human_gates": [
+    "new_dependencies",
+    "auth_scope_changes",
+    "destructive_admin_actions",
+    "production_deploys",
+    "credentialed_connector_checks",
+    "reverse_etl_execution",
+    "quality_gate_reductions",
+    "main_branch_merge"
+  ],
+  "scope_guard": {
+    "allowed_paths": [
+      ".planning/phases/399-golden-transcript-safety-net",
+      "internal/cli"
+    ],
+    "forbidden_paths": [
+      ".planning/PROJECT.md",
+      ".planning/ROADMAP.md",
+      ".planning/STATE.md",
+      "internal/connectors/defs",
+      "go.mod"
+    ],
+    "no_production_dispatcher_changes": true
+  },
+  "verificationPassed": true,
+  "verification": {
+    "focused": "go test ./internal/cli/ -run Golden -count=1: passed",
+    "vet": "go vet ./...: passed",
+    "tests": "go test ./...: passed",
+    "build": "go build ./cmd/pm: passed",
+    "make_verify": "make verify: passed",
+    "go_mod_diff": "git diff -- go.mod: empty"
+  },
+  "last_updated": "2026-07-16"
+}
