@@ -1,22 +1,30 @@
 # Phase 406 Summary
 
-Status: planning complete; red tests pending; production code untouched.
+Status: implementation and local verification complete; PR creation pending.
 
 ## Current state
 
-- Worker cwd/branch isolated: `refactor/406-catalog-native-cobra` at dispatch base `e5ee4075`.
+- Worker branch: `refactor/406-catalog-native-cobra`.
 - GSD adapter doctor passed; `programming-loop` prompt command missing, so manual GSD fallback recorded.
-- Required reading and skills loaded. Phase artifacts created before production edits.
-- Scope locked to catalog native Cobra node/flags/help/tests/parity and issue-local planning artifacts.
+- Required reading and skills loaded. Phase artifacts created before production edits and updated after red/green/gates.
+- Scope stayed inside catalog CLI/router/tests and issue-local planning artifacts.
 
 ## Delivered
 
-- Planning artifacts only so far: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, `RUN-STATE.json`, `PROMPTS.md`.
+- Replaced only top-level `pm catalog` legacy Cobra wrapper with a native Cobra subtree.
+- Added native `catalog refresh` and `catalog show` with `StringArray` `--connection`, `NoOptDefVal="true"`, unknown-flag whitelist, last-wins connection selection, and custom docs-map help/usage.
+- Added a small catalog argument normalizer so pflag optional-value behavior preserves legacy `--connection value` while still supporting bare `--connection`.
+- Split `runCatalogAction` to keep existing app refresh/show output behavior unchanged.
+- Added tests for native subtree metadata, invalid action usage classification, `--connection` space/equals/repeated/bare behavior, unknown-flag tolerance, and golden/docs parity.
 
 ## Verification
 
-Pending. No production gates run after code yet.
+- `go test ./internal/cli/ -run 'Catalog|CobraRouterShell|Golden' -count=1` passed.
+- `go test ./internal/cli/ -run Certify -count=1` passed.
+- `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` passed.
+- Runtime help parity checked: `./pm help catalog`, `./pm catalog`, `./pm catalog --help`, `./pm catalog --json`, and invalid action JSON usage error.
+- Docs/website/golden diff empty; go.mod/go.sum diff empty.
 
 ## Safety
 
-No secrets requested or printed. No credentialed checks. No runtime services started. No dependency changes. No parent/shared orchestration edits. No merge.
+No secrets requested or printed. No credentialed checks. No runtime services started. No dependency changes. No parent/shared orchestration edits. No merge. `make verify` ran only the repository's local temp-dir smoke flow, including local reverse run to temp outbox.

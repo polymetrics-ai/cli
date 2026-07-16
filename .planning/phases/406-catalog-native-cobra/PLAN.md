@@ -51,6 +51,17 @@ Excluded:
 - Invalid action without `--connection` currently reports missing connection before usage; acceptance requires invalid action usage error.
 - Help and docs currently come from canonical `docs` map and generated `docs/cli/catalog.md`; golden catalog help fixtures exist and should not change.
 
+## Delivered implementation matrix
+
+| Scope | Delivery |
+|---|---|
+| Native catalog Cobra node | `catalog` removed from legacy wrapper list and registered as a native Cobra command with custom docs-map help/usage. |
+| Catalog actions | Added native `refresh` and `show` subcommands with StringArray `--connection`, `NoOptDefVal="true"`, unknown-flag whitelist, arbitrary extra-arg tolerance, and last-wins adaptation. |
+| Legacy flag parity | Added catalog-specific pre-normalization so `--connection value` keeps legacy space-form behavior while `NoOptDefVal` preserves bare `--connection` -> `true`. |
+| Handler adaptation | Split `runCatalogAction` from `runCatalog` so native actions reuse existing refresh/show output paths without touching app semantics. |
+| Tests | Added native subtree/flag metadata tests, invalid-action usage classification test, and connection flag-form/unknown-flag behavior tests. |
+| Docs/goldens | No help/docs/website/golden fixture changes; parity verified by existing golden docs test and runtime help checks. |
+
 ## Slice plan
 
 1. Planning checkpoint ✅

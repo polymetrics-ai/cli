@@ -3,8 +3,8 @@
   "issue": 406,
   "branch": "refactor/406-catalog-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
-  "verificationPassed": false,
-  "status": "planning_complete_red_tests_pending",
+  "verificationPassed": true,
+  "status": "local_verification_passed_pr_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-406.prompt",
@@ -16,6 +16,21 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "bounded mutating worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for native catalog subtree and catalog flag semantics; no subagent available"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native catalog Cobra subtree implemented in allowed internal/cli scope"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused and full local gates completed inline in isolated worker cwd"
     }
   ],
   "pullRequest": "",

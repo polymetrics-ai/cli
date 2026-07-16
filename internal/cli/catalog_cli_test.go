@@ -66,6 +66,76 @@ func TestConnectorCatalogFiltersAndInspect(t *testing.T) {
 	}
 }
 
+func TestCatalogConnectionFlagFormsPreserveLegacySemantics(t *testing.T) {
+	root := t.TempDir()
+	var initStdout, initStderr bytes.Buffer
+	if code := cli.Run([]string{"init", "--root", root, "--json"}, &initStdout, &initStderr); code != 0 {
+		t.Fatalf("init code = %d stdout=%s stderr=%s", code, initStdout.String(), initStderr.String())
+	}
+
+	tests := []struct {
+		name        string
+		args        []string
+		wantMessage string
+	}{
+		{
+			name:        "space form",
+			args:        []string{"catalog", "show", "--connection", "space-form", "--root", root, "--json"},
+			wantMessage: `connection "space-form" not found`,
+		},
+		{
+			name:        "equals form",
+			args:        []string{"catalog", "show", "--connection=equals-form", "--root", root, "--json"},
+			wantMessage: `connection "equals-form" not found`,
+		},
+		{
+			name:        "repeated last wins",
+			args:        []string{"catalog", "show", "--connection", "first", "--connection", "second", "--root", root, "--json"},
+			wantMessage: `connection "second" not found`,
+		},
+		{
+			name:        "bare connection keeps true sentinel",
+			args:        []string{"catalog", "show", "--connection", "--root", root, "--json"},
+			wantMessage: `connection "true" not found`,
+		},
+		{
+			name:        "unknown action flag tolerated",
+			args:        []string{"catalog", "show", "--connection", "known", "--unknown", "value", "--root", root, "--json"},
+			wantMessage: `connection "known" not found`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code != 1 {
+				t.Fatalf("Run(%v) code = %d, want 1; stdout=%s stderr=%s", tt.args, code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(stdout.String()+stderr.String(), tt.wantMessage) {
+				t.Fatalf("Run(%v) missing %q; stdout=%s stderr=%s", tt.args, tt.wantMessage, stdout.String(), stderr.String())
+			}
+			if strings.Contains(stdout.String()+stderr.String(), "unknown flag") {
+				t.Fatalf("Run(%v) rejected legacy-tolerated unknown flag: stdout=%s stderr=%s", tt.args, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestCatalogInvalidActionIsUsageBeforeConnectionValidation(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"catalog", "bogus", "--json"}, &stdout, &stderr)
+	if code != 2 {
+		t.Fatalf("Run(catalog bogus --json) code = %d, want 2; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), `"category": "usage"`) {
+		t.Fatalf("invalid catalog action did not produce usage error: stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	if strings.Contains(stdout.String(), `"kind": "CommandManual"`) {
+		t.Fatalf("invalid catalog action rendered contextual help instead of usage error: stdout=%s", stdout.String())
+	}
+}
+
 func TestDocsGenerateIncludesConnectorCatalog(t *testing.T) {
 	dir := t.TempDir()
 	cliDir := filepath.Join(dir, "cli")
