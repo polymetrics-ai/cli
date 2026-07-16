@@ -10,7 +10,7 @@
 - [ ] `go test ./...` — not run after repeated focused race timeout
 - [ ] `go build ./cmd/pm` — not run after repeated focused race timeout
 - [ ] `make verify` — not run after repeated focused race timeout
-- [ ] `git diff --check origin/feat/cli-architecture-v2...HEAD` — initial failure from planning trailing whitespace fixed in working tree; needs post-commit rerun
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD`
 - [x] `git diff -- go.mod go.sum` empty
 - [x] dependency inspection confirms `internal/events` imports only stdlib + `internal/safety`
 - [x] CLI parity marked N/A: no CLI surface, no `--progress` flag in this issue.
@@ -34,7 +34,7 @@
 | `go list -deps -f '{{if not .Standard}}{{.ImportPath}}{{end}}' ./internal/events \| grep -v '^$'` | pass | Output only `polymetrics.ai/internal/safety` and `polymetrics.ai/internal/events`. |
 | `go test -race ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` | fail | Go test default timeout: `panic: test timed out after 10m0s` in `internal/connectors/certify` after flow/app passed. |
 | `go test -race -timeout 30m ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` | fail | `internal/connectors/certify` timed out after 30m in existing source-stage tests after flow/app passed. |
-| `git diff --check origin/feat/cli-architecture-v2...HEAD && git diff -- go.mod go.sum` | fail | Initial run found trailing whitespace in planning files; working tree fixed, post-commit rerun pending. |
+| `git diff --check origin/feat/cli-architecture-v2...HEAD && git diff -- go.mod go.sum` | pass | Post-commit rerun clean; go.mod/go.sum diff empty. |
 
 ## Gate notes
 
