@@ -4,12 +4,15 @@
   "branch": "refactor/402-config-env-migration",
   "baseBranch": "feat/cli-architecture-v2",
   "verificationPassed": true,
-  "status": "pr_opened_pending_human_parent_review",
+  "status": "review_fix_green_pending_push_parent_review",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-402.prompt",
     "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
-    "fallback": "manual_gsd_universal_runtime_loop"
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "reviewFixDoctor": "passed",
+    "reviewFixPlanPhasePrompt": "/tmp/gsd-plan-phase-402-reviewfix.prompt",
+    "reviewFixProgrammingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop"
   },
   "orchestrationDecisions": [
     {
@@ -26,12 +29,22 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "typed config injection completed in allowed scopes with local gates passing"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #448 review findings require same issue scope edits in isolated cwd; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "review fixes and full local gates completed inline in isolated worker cwd"
     }
   ],
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/448",
   "reviewRoute": {
-    "claude": "disabled",
-    "copilot": "quota_exhausted",
+    "claude": "do_not_request_this_cycle",
+    "copilot": "do_not_request_this_cycle",
     "fallback": "human_parent_review_pending"
   }
 }

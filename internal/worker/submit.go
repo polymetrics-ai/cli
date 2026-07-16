@@ -11,7 +11,6 @@ import (
 	tlog "go.temporal.io/sdk/log"
 	"go.temporal.io/sdk/worker"
 
-	pmconfig "polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/rlm"
 )
 
@@ -84,7 +83,7 @@ func registerWorker(w worker.Worker, acts *PodmanActivities) {
 	w.RegisterActivity(acts)
 }
 
-// defaultActivities builds the production PodmanActivities from the environment.
+// NewPodmanActivities builds production PodmanActivities from explicit typed settings.
 func NewPodmanActivities(podmanBin, image string) *PodmanActivities {
 	if podmanBin == "" {
 		podmanBin = "podman"
@@ -96,11 +95,7 @@ func NewPodmanActivities(podmanBin, image string) *PodmanActivities {
 }
 
 func defaultActivities() *PodmanActivities {
-	cfg, err := pmconfig.Load(pmconfig.Options{})
-	if err != nil {
-		return NewPodmanActivities("", "")
-	}
-	return NewPodmanActivities(cfg.RLM.PodmanBin, cfg.RLM.Image)
+	return NewPodmanActivities("", "")
 }
 
 func randSuffix() string {

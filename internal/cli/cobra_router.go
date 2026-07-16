@@ -123,7 +123,7 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
 		}},
 		{name: "perf", handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runPerf(ctx, args, stdout, jsonOut)
+			return runPerf(ctx, cfg, args, stdout, jsonOut)
 		}},
 		{name: "docs", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, _ bool) error {
 			return runDocs(args, stdout)

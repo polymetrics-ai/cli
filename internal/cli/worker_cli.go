@@ -11,6 +11,10 @@ import (
 	"polymetrics.ai/internal/worker"
 )
 
+type workerServeFunc func(context.Context, string, *worker.PodmanActivities) error
+
+var workerServe workerServeFunc = worker.ServeWithActivities
+
 // runWorker dispatches `pm worker serve|status`. The worker daemon hosts the RLM
 // Temporal workflow + podman activity for `pm rlm run --mode agent`.
 func runWorker(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {
@@ -44,7 +48,8 @@ func runWorkerServe(ctx context.Context, cfg config.Config, stdout io.Writer, js
 	} else {
 		fmt.Fprintf(stdout, "pm worker serving on task queue %q (temporal=%s); Ctrl-C to stop\n", worker.TaskQueue, addr)
 	}
-	return worker.Serve(ctx, addr)
+	activities := worker.NewPodmanActivities(cfg.RLM.PodmanBin, cfg.RLM.Image)
+	return workerServe(ctx, addr, activities)
 }
 
 func runWorkerStatus(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) error {

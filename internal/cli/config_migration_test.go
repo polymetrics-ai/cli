@@ -2,10 +2,13 @@ package cli
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"polymetrics.ai/internal/worker"
 )
 
 func TestRuntimeDoctorUsesConfigFile(t *testing.T) {
@@ -55,6 +58,95 @@ func TestWorkerStatusUsesExplicitConfigFileTemporalAddr(t *testing.T) {
 	}
 	if env["status"] != "unavailable" {
 		t.Fatalf("status = %v, want unavailable for closed local port", env["status"])
+	}
+}
+
+func TestWorkerServeThreadsConfigFileActivities(t *testing.T) {
+	root := writeMigrationConfig(t, `runtime:
+  temporal_addr: 127.0.0.1:7233
+rlm:
+  image: ghcr.io/example/custom-rlm-agent:test
+  podman_bin: /tmp/custom-podman-from-config
+`)
+
+	origServe := workerServe
+	var capturedAddr string
+	var capturedActivities *worker.PodmanActivities
+	workerServe = func(ctx context.Context, addr string, acts *worker.PodmanActivities) error {
+		if ctx == nil {
+			t.Fatal("worker serve got nil context")
+		}
+		capturedAddr = addr
+		capturedActivities = acts
+		return nil
+	}
+	t.Cleanup(func() { workerServe = origServe })
+
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{"--root", root, "--json", "worker", "serve"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit = %d, stderr = %s", code, stderr.String())
+	}
+	if capturedAddr != "127.0.0.1:7233" {
+		t.Fatalf("addr = %q, want config-file temporal addr", capturedAddr)
+	}
+	if capturedActivities == nil {
+		t.Fatal("worker serve did not receive activities")
+	}
+	if capturedActivities.PodmanBin != "/tmp/custom-podman-from-config" {
+		t.Fatalf("PodmanBin = %q, want config-file podman bin", capturedActivities.PodmanBin)
+	}
+	if capturedActivities.Image != "ghcr.io/example/custom-rlm-agent:test" {
+		t.Fatalf("Image = %q, want config-file image", capturedActivities.Image)
+	}
+}
+
+func TestPerfCompareRuntimeUsesConfigFileEndpoints(t *testing.T) {
+	root := writeMigrationConfig(t, `runtime:
+  postgres_url: postgres://127.0.0.1:1/polymetrics?sslmode=disable
+  dragonfly_addr: 127.0.0.1:2
+  temporal_addr: 127.0.0.1:3
+`)
+
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{"--root", root, "--json", "perf", "compare", "--iterations", "1", "--runtime"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit = %d, stderr = %s", code, stderr.String())
+	}
+	var env map[string]any
+	if err := json.Unmarshal(stdout.Bytes(), &env); err != nil {
+		t.Fatalf("stdout not JSON: %v — %s", err, stdout.String())
+	}
+	comparison, ok := env["comparison"].(map[string]any)
+	if !ok {
+		t.Fatalf("missing comparison object: %v", env)
+	}
+	report, ok := comparison["runtime_report"].(map[string]any)
+	if !ok {
+		t.Fatalf("missing runtime report: %v", comparison)
+	}
+	checks, ok := report["checks"].([]any)
+	if !ok {
+		t.Fatalf("missing runtime checks: %v", report)
+	}
+	endpoints := map[string]string{}
+	for _, item := range checks {
+		check, ok := item.(map[string]any)
+		if !ok {
+			t.Fatalf("check has unexpected shape: %v", item)
+		}
+		name, _ := check["name"].(string)
+		endpoint, _ := check["endpoint"].(string)
+		endpoints[name] = endpoint
+	}
+	if endpoints["postgres"] != "postgres://127.0.0.1:1/polymetrics?sslmode=disable" {
+		t.Fatalf("postgres endpoint = %q, want config-file endpoint", endpoints["postgres"])
+	}
+	if endpoints["dragonfly"] != "127.0.0.1:2" {
+		t.Fatalf("dragonfly endpoint = %q, want config-file endpoint", endpoints["dragonfly"])
+	}
+	if endpoints["temporal"] != "127.0.0.1:3" {
+		t.Fatalf("temporal endpoint = %q, want config-file endpoint", endpoints["temporal"])
 	}
 }
 

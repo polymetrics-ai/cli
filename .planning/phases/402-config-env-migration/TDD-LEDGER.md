@@ -4,7 +4,7 @@ Issue: #402 — migrate config-shaped env reads to typed config.
 
 ## Skills loaded
 
-`gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-concurrency`, `golang-spf13-cobra`, `golang-spf13-viper`, `golang-documentation` (docs caveat only if changed).
+`gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-concurrency`, `golang-spf13-cobra`, `golang-spf13-viper`, `golang-documentation` (docs caveat only if changed), `golang-lint` (review-fix vet/quality disposition).
 
 ## GSD command evidence
 
@@ -19,6 +19,7 @@ Result:
 - `doctor`: pass.
 - `plan-phase`: prompt written.
 - `programming-loop`: blocked by adapter registry (`scripts/gsd: unknown GSD command: programming-loop`); manual GSD fallback active.
+- Review-fix 2026-07-16: `scripts/gsd doctor` pass; `scripts/gsd prompt plan-phase 402 --skip-research >/tmp/gsd-plan-phase-402-reviewfix.prompt` pass; `scripts/gsd prompt programming-loop init --phase 402 --dry-run >/tmp/gsd-programming-loop-402-reviewfix.prompt` still blocked with the same unknown-command error, so manual GSD fallback remains active.
 
 ## Red / green / refactor log
 
@@ -33,6 +34,8 @@ Result:
 | 6 | Green | `go test ./internal/cli/ -run Certify -count=1` | Pass | Certify crontab save/restore behavior preserved. |
 | 7 | Refactor | docs/help parity | Pass | Updated config caveat in embedded docs, `docs/cli/config.md`, website source, and generated website data. |
 | 8 | Gate | `go vet ./...`; `go build ./cmd/pm`; `go test ./...`; `make verify` | Pass | Full local gate green; no go.mod/go.sum diff. |
+| 9 | Review-fix red | `go test ./internal/cli/ -run 'Config|Runtime|Perf|Worker' -count=1` | Fail | New tests first; compile fails on missing worker serve injection seam before production fixes. |
+| 10 | Review-fix green | Requested focused gates + full gates | Pass | Worker serve typed activities and perf typed runtime endpoints green; no Temporal/runtime services started. |
 
 ## Implemented green slice
 
@@ -40,7 +43,8 @@ Result:
 - `internal/runtimecheck`: added `FromConfig(config.Config)` as primary API; compatibility `FromEnv` delegates through typed loader.
 - `internal/cli`: resolved config once in `Run` and injects through Cobra legacy handlers into runtime, runtime ETL, worker, schedule, agent image, RLM, extract, and flow RLM paths.
 - `internal/schedule`: added narrow `BackendConfig`, `SelectBackendFromConfig`, and `CrontabBackend.File`; legacy `SelectBackend` delegates through typed loader while keeping Temporal opt-in.
-- `internal/worker`: added `SubmitterForActivities`/`NewPodmanActivities`; default compatibility path delegates through typed config.
+- `internal/worker`: added `SubmitterForActivities`/`NewPodmanActivities`; review-fix removes ambient config reload from default activities and adds typed activity injection for worker serve.
+- `internal/perf`: review-fix threads CLI-resolved runtimecheck config into `pm perf compare --runtime`; `runtimecheck.FromEnv` remains available but perf no longer calls it.
 - `internal/rlm`: added `LLMConfigFromSettings` for non-secret typed LLM settings; API keys remain env-only.
 - Docs: config caveat updated because runtime/RLM/schedule keys are now active in migrated call sites.
 
@@ -49,7 +53,8 @@ Result:
 - `internal/runtimecheck`: `FromConfig` maps `config.Config.Runtime`; `FromEnv` honors `PM_*` alias through typed loader.
 - `internal/schedule`: typed backend config selects Temporal only when explicit addr provided; crontab file injection writes temp file without raw env dependency.
 - `internal/cli`: runtime doctor config-file value appears in redacted output; worker status remains byte-compatible when temporal unset but accepts explicit config file; schedule install/remove honors config-file crontab path; agent image uses config-file podman bin; RLM fake runner works from config-file key.
-- `internal/worker`: typed submitter activities use injected podman image/bin; cancellation tests remain green.
+- `internal/worker`: typed submitter and serve activities use injected podman image/bin; cancellation tests remain green.
+- `internal/perf`/CLI: perf runtime comparison uses config-file runtime endpoints and returns degraded runtime report without starting services.
 - Exclusion guard: credential `--from-env` and provider API-key env paths remain raw env only.
 
 ## Exact red outputs
@@ -104,6 +109,21 @@ FAIL	polymetrics.ai/internal/cli	3.817s
 FAIL
 ```
 
+### Review-fix worker/perf red
+
+```bash
+go test ./internal/cli/ -run 'Config|Runtime|Perf|Worker' -count=1
+```
+
+```text
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/config_migration_test.go:72:15: undefined: workerServe
+internal/cli/config_migration_test.go:75:2: undefined: workerServe
+internal/cli/config_migration_test.go:83:21: undefined: workerServe
+FAIL	polymetrics.ai/internal/cli [build failed]
+FAIL
+```
+
 ## Exact green outputs
 
 ### Focused packages
@@ -139,6 +159,56 @@ go test ./internal/cli/ -run Certify -count=1
 
 ```text
 ok  	polymetrics.ai/internal/cli	92.245s
+```
+
+### Review-fix focused packages
+
+```bash
+go test ./internal/config/... -count=1
+go test ./internal/runtimecheck/... -count=1
+go test ./internal/perf/... -count=1
+go test ./internal/worker/... -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/config	0.227s
+ok  	polymetrics.ai/internal/runtimecheck	0.253s
+ok  	polymetrics.ai/internal/perf	1.068s
+ok  	polymetrics.ai/internal/worker	0.428s
+```
+
+### Review-fix CLI focused/golden
+
+```bash
+go test ./internal/cli/ -run 'Golden|Config|Runtime|Perf|Worker' -count=1
+go test ./internal/cli/ -run Certify -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	15.553s
+ok  	polymetrics.ai/internal/cli	90.660s
+```
+
+### Review-fix full gates
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum
+```
+
+```text
+gofmt -w cmd internal: pass (no output)
+go vet ./...: pass (no output)
+go test ./...: pass
+go build ./cmd/pm: pass (no output)
+make verify: pass; smoke ok; golangci-lint 0 issues; connectorgen validate 547 connector(s) checked, 0 findings
+git diff --check origin/feat/cli-architecture-v2...HEAD: pass (no output)
+git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum: pass (no output)
 ```
 
 ### Full gates

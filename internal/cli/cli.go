@@ -1140,7 +1140,7 @@ func runRuntime(ctx context.Context, cfg config.Config, args []string, stdout io
 	return nil
 }
 
-func runPerf(ctx context.Context, args []string, stdout io.Writer, jsonOut bool) error {
+func runPerf(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return errUsage
 	}
@@ -1152,8 +1152,9 @@ func runPerf(ctx context.Context, args []string, stdout io.Writer, jsonOut bool)
 			return err
 		}
 		comparison, err := perf.Compare(ctx, perf.CompareRequest{
-			Iterations: iterations,
-			Runtime:    flags.first("runtime") == "true",
+			Iterations:    iterations,
+			Runtime:       flags.first("runtime") == "true",
+			RuntimeConfig: runtimecheck.FromConfig(cfg),
 		})
 		if err != nil {
 			return err
