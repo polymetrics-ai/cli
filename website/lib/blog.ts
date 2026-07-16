@@ -51,13 +51,15 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: 'What the repository actually contains',
         body: [
-          'These are repository inventory numbers, not a claim that every connector is production-certified. At the time of writing there are 547 connector definition directories, each with an API-surface inventory. Those files contain 29,129 classified endpoint entries: 14,783 read operations and 14,346 mutations, including 2,903 DELETE operations.',
+          'These are repository inventory numbers, not a claim that every connector is production-certified. At the time of writing there are 547 connector definition directories, each with an API-surface inventory. Those files contain 29,129 classified endpoint entries: 14,780 GET reads, 3 HEAD checks, 14,169 explicit POST, PUT, PATCH, or DELETE mutations, and 177 hook, wildcard, GraphQL, WebSocket, or composite-method rows. The explicit mutations include 2,903 DELETE operations.',
           'The same bundles define 7,088 ETL streams. Some operations are implemented, some are deliberately excluded, some depend on hooks or native code, and some still need live certification. The inventory tells us the size and shape of the work. It does not let us skip the proof that a connector behaves correctly against a real service.',
         ],
         points: [
           '547 connector bundles with explicit API-surface inventories.',
           '29,129 operations classified before they are exposed as product behavior.',
-          '14,783 reads and 14,346 mutations, with 2,903 DELETE operations called out explicitly.',
+          '14,780 GET reads, 3 HEAD checks, and 14,169 explicit HTTP mutations.',
+          '177 mixed or nonstandard method rows remain visible instead of being mislabeled as writes.',
+          '2,903 DELETE operations are called out explicitly inside the mutation inventory.',
           '7,088 ETL streams defined for conformance and certification work.',
         ],
       },
@@ -95,8 +97,8 @@ deploy:  tested commit -> immutable image -> rollout -> health check`,
       {
         heading: 'Intent before diff',
         body: [
-          'Every non-trivial change starts with an issue that states the objective, scope, exclusions, acceptance criteria, verification, safety notes, and review route. The PR Issue Guard checks that relationship. The conventions workflow checks the branch name and Conventional Commit PR title, so the change identifies itself before anyone reads the implementation.',
-          'The GSD workflow checks for planning and test evidence on implementation work. In practice that means a plan, a TDD ledger, and a verification checklist exist before production edits. The ledger does not prove the code is correct, but it makes a useful distinction visible: did a test fail because the capability was absent, and did the same test pass because of the change?',
+          'Every non-trivial change starts with an issue that states the objective, scope, exclusions, acceptance criteria, verification, safety notes, and review route. The PR Issue Guard checks that the title and PR body use an accepted issue-reference shape. It does not prove that the issue exists or that the diff matches its scope; reviewers still own that judgment. The conventions workflow checks the branch name and Conventional Commit PR title, so the change identifies itself before anyone reads the implementation.',
+          'When production Go code under cmd or internal changes, the GSD workflow checks for planning and test evidence. In practice that means a plan, a TDD ledger, and a verification checklist exist before production edits. The ledger does not prove the code is correct, but it makes a useful distinction visible: did a test fail because the capability was absent, and did the same test pass because of the change?',
           'This is the code equivalent of binding an approval to a plan. The issue describes the intended mutation; the branch and PR limit its scope; the test demonstrates the behavioral delta. A reviewer can challenge any of those layers instead of reverse-engineering intent from the final diff.',
         ],
       },
@@ -132,7 +134,7 @@ deploy:  tested commit -> immutable image -> rollout -> health check`,
       {
         heading: 'What GitHub really blocks',
         body: [
-          'There is a difference between a workflow that runs and a check that GitHub requires before main can move. At the time of writing, main uses strict required status checks for verify, govulncheck, CodeQL, branch-name, and pr-title, and the rule applies to administrators. A branch that is behind main must be brought current before those checks can authorize the merge.',
+          'There is a difference between a workflow that runs and a check that GitHub requires before main can move. At the time of writing, main uses strict required status checks for verify, govulncheck, CodeQL, branch-name, and pr-title, and the rule applies to administrators. It also requires linear history and resolved review conversations. A branch that is behind main must be brought current before those checks can authorize the merge.',
           'Other useful workflows also run, including the issue guard, GSD evidence check, dependency review, and website suite when relevant files change. They are part of our delivery contract, but they are not all listed as required branch-protection contexts today. Saying otherwise would turn a process expectation into a false technical guarantee.',
           'The parent PR is still human-gated. Sub-PRs can be integrated into a parent branch after scoped checks and review coverage, but the parent branch does not merge to main automatically. That gate matters because a green collection of local changes can still be incoherent as one product release.',
         ],

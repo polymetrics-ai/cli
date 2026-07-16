@@ -34,3 +34,14 @@ Phase: `issue-395-human-harnesses`
 - Reframed August 4 behavior as a release target and separated inventory, implementation,
   conformance, and live certification.
 - Kept the existing renderer and static catalog architecture unchanged.
+
+## Review Fix: Method Classification
+
+- Parent-orchestrator audit identified that treating every non-GET/HEAD operation as a mutation
+  mislabeled hook, wildcard, GraphQL, WebSocket, and composite-method rows.
+- Updated the article and catalog contract to report 14,780 GET reads, 3 HEAD checks, 14,169
+  explicit HTTP mutations, and 177 mixed/nonstandard rows.
+- Tightened the article's PR Issue Guard and GSD workflow descriptions to their actual enforcement
+  boundaries.
+- Verification: catalog test, typecheck, six blog Playwright tests, production build, and
+  `git diff --check` passed after the review fix.

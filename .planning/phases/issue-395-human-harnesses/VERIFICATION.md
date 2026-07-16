@@ -7,30 +7,31 @@
 - [x] Count declared streams.
 - [x] Inspect issue guard, GSD, verification, security, Claude, release, and website workflows.
 - [x] Inspect current `main` branch-protection required checks.
-- [ ] Re-run all inventory counts before final commit.
+- [x] Re-run all inventory counts before final commit.
 
 ## Focused Checks
 
-- [ ] Catalog unit test passes.
-- [ ] Blog smoke test includes and opens every catalog post.
-- [ ] `/blog` links to `/blog/human-harnesses`.
-- [ ] `/blog/human-harnesses` renders the complete article.
+- [x] Catalog unit test passes.
+- [x] Blog smoke test includes and opens every catalog post.
+- [x] `/blog` links to `/blog/human-harnesses`.
+- [x] `/blog/human-harnesses` renders the complete article.
 
 ## Website Gates
 
-- [ ] `pnpm run typecheck`
-- [ ] `pnpm run test:unit`
-- [ ] Focused Playwright blog smoke tests.
-- [ ] `pnpm run build`
-- [ ] `git diff --check`
+- [x] `pnpm run typecheck`
+- [x] `pnpm run test:unit` - 64 tests passed.
+- [x] Focused Playwright blog smoke tests - 6 tests passed.
+- [x] `pnpm run build` - passed and prerendered `/blog/human-harnesses`.
+- [x] `pnpm run gen:website-data` - passed with no generated drift.
+- [x] `git diff --check`
 
 ## Visual Checks
 
-- [ ] Desktop article screenshot: header, body, left navigation, marginalia, and right rail do not
+- [x] Desktop article screenshot: header, body, left navigation, marginalia, and right rail do not
   overlap.
-- [ ] Mobile article screenshot: title and prose fit, navigation remains usable, and no horizontal
+- [x] Mobile article screenshot: title and prose fit, navigation remains usable, and no horizontal
   overflow appears.
-- [ ] Blog index card text and metadata fit at desktop and mobile widths.
+- [x] Blog index card text and metadata fit at desktop and mobile widths.
 
 ## Safety And Delivery
 
@@ -40,3 +41,15 @@
 - [ ] Automated review coverage or documented parent/human fallback is recorded.
 - [ ] Parent merge into `main` remains human-gated.
 
+## Residual Parent-Branch Findings
+
+- The blog smoke suite passes, but navigating to bookmarks can log an existing auth-card hydration
+  mismatch. Issue 395 does not change that component.
+- Mobile floating note controls can temporarily cover the lowest line at the viewport edge. The
+  article itself has no horizontal overflow; changing the shared annotation controls is outside this
+  content-only issue.
+- The post is dated August 4 but is immediately visible because the current static catalog has no
+  publication scheduler. This matches the requested local preview and must be considered when the
+  parent PR is merged.
+- The final build loaded the existing local environment without printing any value and completed
+  without auth warnings.

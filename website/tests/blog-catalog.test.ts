@@ -34,8 +34,9 @@ describe('blog catalog', () => {
       .join(' ');
 
     expect(articleText).toContain('29,129');
-    expect(articleText).toContain('14,783');
-    expect(articleText).toContain('14,346');
+    expect(articleText).toContain('14,780');
+    expect(articleText).toContain('14,169');
+    expect(articleText).toContain('177');
     expect(articleText).toContain('2,903');
     expect(articleText).toContain('7,088');
   });
