@@ -243,3 +243,182 @@ git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum
 ```
 
 Result: diff check pass/no output; dependency diff recorded approved Viper delta only.
+
+## Cycle 5 — review-fix plan / accepted pm-reviewer finding
+
+Status: planned before review-fix production edits.
+
+Finding disposition: Accepted. CLI must honor `POLYMETRICS_ROOT`/`PM_ROOT` for discovery before loading `.polymetrics/config.yaml`, honor `POLYMETRICS_JSON`/`PM_JSON` for malformed-config error rendering, and use loaded `Config.Root`/`Config.JSON` for invocation after successful load.
+
+GSD refresh evidence:
+
+```bash
+scripts/gsd doctor
+```
+
+Result: pass (`ok` for node, repo root, official docs, commands registry, upstream lock, Pi settings/extension/skill/prompt, commands=69).
+
+```bash
+scripts/gsd prompt programming-loop init --phase 401 --dry-run >/tmp/gsd-programming-loop-401-reviewfix.prompt 2>/tmp/gsd-programming-loop-401-reviewfix.err
+```
+
+Result: adapter gap remains, exit 1:
+
+```text
+scripts/gsd: unknown GSD command: programming-loop
+```
+
+Manual fallback remains `.pi/prompts/pm-gsd-loop.md`.
+
+Skills refreshed for this review-fix cycle: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-documentation`, `golang-spf13-viper`, `golang-spf13-cobra`, `golang-safety`, and `golang-lint`. Missing repo-local stack skill remains `.pi/skills/go-implementation/SKILL.md` (`ENOENT`), with required Go skills loaded per `.agents/agentic-delivery/references/required-skills-routing.md` Always-on Go skill routing and CLI/Viper rules.
+
+Planned red tests before production edits:
+
+```bash
+go test ./internal/config/... -run 'Bootstrap|Discovery|ConfigFileRoot' -count=1
+go test ./internal/cli/ -run Config -count=1
+```
+
+Expected red: env/alias root discovery, env/alias JSON malformed-error rendering, config-file `json`/`root` invocation, and CLI invocation isolation fail because current CLI discards `Config` and uses flag-only root/json.
+
+Actual red evidence captured before review-fix production edits:
+
+```bash
+gofmt -w internal/config/config_test.go internal/cli/config_test.go
+go test ./internal/config/... -run 'Bootstrap|Discovery|ConfigFileRoot' -count=1
+```
+
+Result: fail, exit 1.
+
+```text
+# polymetrics.ai/internal/config [polymetrics.ai/internal/config.test]
+internal/config/config_test.go:246:22: undefined: ResolveBootstrap
+FAIL	polymetrics.ai/internal/config [build failed]
+FAIL
+```
+
+```bash
+go test ./internal/cli/ -run Config -count=1
+```
+
+Result: fail, exit 1.
+
+```text
+--- FAIL: TestConfigRootEnvControlsDiscoveryAndInvocationRoot (0.00s)
+    config_test.go:62: env root was not initialized: stat /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/TestConfigRootEnvControlsDiscoveryAndInvocationRoot985015084/002/.polymetrics/config.yaml: no such file or directory
+--- FAIL: TestConfigPMRootAliasControlsDiscoveryAndInvocationRoot (0.00s)
+    config_test.go:81: PM_ROOT alias root was not initialized: stat /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/TestConfigPMRootAliasControlsDiscoveryAndInvocationRoot346832289/002/.polymetrics/config.yaml: no such file or directory
+--- FAIL: TestConfigJSONEnvRendersMalformedConfigAsJSON (0.00s)
+    config_test.go:110: exit code = 0, want 3
+        stdout=pm dev
+        commit: none
+        built: unknown
+
+        stderr=
+--- FAIL: TestConfigPMJSONAliasRendersMalformedConfigAsJSON (0.00s)
+    config_test.go:127: exit code = 0, want 3
+        stdout=pm dev
+        commit: none
+        built: unknown
+
+        stderr=
+--- FAIL: TestConfigFileJSONControlsInvocationOutput (0.00s)
+    config_test.go:155: stdout = pm dev
+        commit: none
+        built: unknown
+        , want JSON version envelope from config file json
+--- FAIL: TestConfigFileRootControlsInvocationWithoutRelocatingDiscovery (0.00s)
+    config_test.go:174: stdout = Initialized Polymetrics project at /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/TestConfigFileRootControlsInvocationWithoutRelocatingDiscovery3262617763/001/.polymetrics
+        , want JSON init result for file root
+--- FAIL: TestConfigInvocationIsolation (0.00s)
+    config_test.go:188: json root stdout = pm dev
+        commit: none
+        built: unknown
+        , want JSON version envelope
+FAIL
+FAIL	polymetrics.ai/internal/cli	1.061s
+FAIL
+```
+
+Test-plan correction before final green: `TestConfigFileRootControlsInvocationWithoutRelocatingDiscovery` now uses cwd/default discovery instead of explicit `--root` so it validates file `root` behavior without violating flags > file precedence.
+
+## Cycle 6 — review-fix green implementation evidence
+
+Implemented shared `internal/config.ResolveBootstrap`, reused the same env-binding table for bootstrap and Viper `BindEnv`, moved config-file discovery to the bootstrap root, and changed `cli.Run` to use loaded `Config.Root`/`Config.JSON` for command invocation after successful load. No `AutomaticEnv`, `WatchConfig`, package-level Viper singleton, new dependency, or #402 env-reader migration added.
+
+Focused green gates:
+
+```bash
+gofmt -w internal/config/config.go internal/config/config_test.go internal/cli/cli.go internal/cli/config_test.go internal/cli/docs.go
+go test ./internal/config/... -count=1
+go test ./internal/cli/ -run 'Golden|Config' -count=1
+```
+
+Result:
+
+```text
+ok  	polymetrics.ai/internal/config	0.507s
+ok  	polymetrics.ai/internal/cli	7.054s
+```
+
+```bash
+go test ./internal/cli/ -run Certify -count=1
+```
+
+Result:
+
+```text
+ok  	polymetrics.ai/internal/cli	103.737s
+```
+
+Docs parity update: clarified that `--json`, `POLYMETRICS_JSON=true`, or `PM_JSON=true` selects JSON error envelopes for malformed config, and that `PM_ROOT` can select discovery root before file load. Regenerated website data with `node website/scripts/gen-docs-data.mjs`.
+
+## Cycle 7 — review-fix full verification evidence
+
+```bash
+gofmt -w cmd internal
+go test ./internal/config/... -count=1
+go test ./internal/cli/ -run 'Golden|Config' -count=1
+go test ./internal/cli/ -run Certify -count=1
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum
+```
+
+Results:
+
+```text
+go test ./internal/config/... -count=1 -> ok  	polymetrics.ai/internal/config	0.331s
+go test ./internal/cli/ -run 'Golden|Config' -count=1 -> ok  	polymetrics.ai/internal/cli	10.587s
+go test ./internal/cli/ -run Certify -count=1 -> ok  	polymetrics.ai/internal/cli	120.088s
+go vet ./... -> pass, no output
+go test ./... -> pass; internal/cli 197.284s; internal/config 1.086s; internal/connectors/certify 385.345s
+go build ./cmd/pm -> pass, no output
+make verify -> pass; final line: connectorgen validate: 547 connector(s) checked, 0 findings
+git diff --check origin/feat/cli-architecture-v2...HEAD -> pass, no output
+git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum -> approved Viper delta only; no new review-fix dependency changes
+```
+
+Config help/docs/website parity:
+
+```bash
+go build -o /tmp/pm-401-reviewfix ./cmd/pm
+/tmp/pm-401-reviewfix help config
+/tmp/pm-401-reviewfix runtime
+/tmp/pm-401-reviewfix runtime --help
+/tmp/pm-401-reviewfix config --help
+rg -n "POLYMETRICS_ROOT|PM_ROOT|POLYMETRICS_JSON|PM_JSON|malformed|relocate" docs/cli/config.md website/content/docs/cli-reference.mdx website/lib/docs.generated.ts
+```
+
+Result:
+
+```text
+/tmp/pm-401-reviewfix help config -> exit 0, stdout 4375 bytes, stderr 0 bytes
+/tmp/pm-401-reviewfix runtime -> exit 0, stdout 470 bytes, stderr 0 bytes
+/tmp/pm-401-reviewfix runtime --help -> exit 0, stdout 470 bytes, stderr 0 bytes
+/tmp/pm-401-reviewfix config --help -> exit 0, stdout 4375 bytes, stderr 0 bytes
+rg -> exit 0, 11 matches
+```

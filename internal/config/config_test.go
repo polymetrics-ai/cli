@@ -184,6 +184,173 @@ func TestLoadMalformedFile(t *testing.T) {
 	}
 }
 
+func TestResolveBootstrapRootAndJSONPrecedence(t *testing.T) {
+	cases := []struct {
+		name     string
+		root     string
+		flags    map[string]FlagValue
+		setupEnv func(t *testing.T)
+		wantRoot string
+		wantJSON bool
+	}{
+		{
+			name:     "defaults use invocation root",
+			root:     "default-root",
+			wantRoot: "default-root",
+		},
+		{
+			name: "primary env beats alias and default",
+			root: "default-root",
+			setupEnv: func(t *testing.T) {
+				t.Setenv("POLYMETRICS_ROOT", "primary-root")
+				t.Setenv("PM_ROOT", "alias-root")
+				t.Setenv("POLYMETRICS_JSON", "false")
+				t.Setenv("PM_JSON", "true")
+			},
+			wantRoot: "primary-root",
+			wantJSON: false,
+		},
+		{
+			name: "pm alias beats default when primary absent",
+			root: "default-root",
+			setupEnv: func(t *testing.T) {
+				t.Setenv("PM_ROOT", "alias-root")
+				t.Setenv("PM_JSON", "true")
+			},
+			wantRoot: "alias-root",
+			wantJSON: true,
+		},
+		{
+			name: "flags beat env",
+			root: "default-root",
+			flags: map[string]FlagValue{
+				"root": StaticFlag{FlagName: "root", Value: "flag-root", Type: "string", Changed: true},
+				"json": StaticFlag{FlagName: "json", Value: "true", Type: "bool", Changed: true},
+			},
+			setupEnv: func(t *testing.T) {
+				t.Setenv("POLYMETRICS_ROOT", "primary-root")
+				t.Setenv("POLYMETRICS_JSON", "false")
+			},
+			wantRoot: "flag-root",
+			wantJSON: true,
+		},
+	}
+
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			clearBoundEnv(t)
+			if tt.setupEnv != nil {
+				tt.setupEnv(t)
+			}
+
+			bootstrap, err := ResolveBootstrap(Options{Root: tt.root, Flags: tt.flags})
+			if err != nil {
+				t.Fatalf("ResolveBootstrap: %v", err)
+			}
+			if bootstrap.Root != tt.wantRoot {
+				t.Fatalf("Root = %q, want %q", bootstrap.Root, tt.wantRoot)
+			}
+			if bootstrap.JSON != tt.wantJSON {
+				t.Fatalf("JSON = %v, want %v", bootstrap.JSON, tt.wantJSON)
+			}
+		})
+	}
+}
+
+func TestLoadUsesBootstrapRootForConfigDiscovery(t *testing.T) {
+	clearBoundEnv(t)
+	defaultRoot := t.TempDir()
+	envRoot := writeConfig(t, "project: env-project\n")
+	t.Setenv("POLYMETRICS_ROOT", envRoot)
+
+	cfg, err := Load(Options{Root: defaultRoot})
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.ConfigFile != filepath.Join(envRoot, ".polymetrics", "config.yaml") {
+		t.Fatalf("ConfigFile = %q, want env root config", cfg.ConfigFile)
+	}
+	if cfg.Root != envRoot {
+		t.Fatalf("Root = %q, want env root", cfg.Root)
+	}
+	if cfg.Project != "env-project" {
+		t.Fatalf("Project = %q, want env-project", cfg.Project)
+	}
+}
+
+func TestLoadUsesPMRootAliasForConfigDiscovery(t *testing.T) {
+	clearBoundEnv(t)
+	defaultRoot := t.TempDir()
+	aliasRoot := writeConfig(t, "project: alias-project\n")
+	t.Setenv("PM_ROOT", aliasRoot)
+
+	cfg, err := Load(Options{Root: defaultRoot})
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.ConfigFile != filepath.Join(aliasRoot, ".polymetrics", "config.yaml") {
+		t.Fatalf("ConfigFile = %q, want alias root config", cfg.ConfigFile)
+	}
+	if cfg.Root != aliasRoot {
+		t.Fatalf("Root = %q, want alias root", cfg.Root)
+	}
+	if cfg.Project != "alias-project" {
+		t.Fatalf("Project = %q, want alias-project", cfg.Project)
+	}
+}
+
+func TestLoadExplicitRootFlagOverridesEnvForConfigDiscovery(t *testing.T) {
+	clearBoundEnv(t)
+	defaultRoot := t.TempDir()
+	envRoot := writeConfig(t, "project: env-project\n")
+	flagRoot := writeConfig(t, "project: flag-project\n")
+	t.Setenv("POLYMETRICS_ROOT", envRoot)
+	flags := map[string]FlagValue{
+		"root": StaticFlag{FlagName: "root", Value: flagRoot, Type: "string", Changed: true},
+	}
+
+	cfg, err := Load(Options{Root: defaultRoot, Flags: flags})
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.ConfigFile != filepath.Join(flagRoot, ".polymetrics", "config.yaml") {
+		t.Fatalf("ConfigFile = %q, want flag root config", cfg.ConfigFile)
+	}
+	if cfg.Root != flagRoot {
+		t.Fatalf("Root = %q, want flag root", cfg.Root)
+	}
+	if cfg.Project != "flag-project" {
+		t.Fatalf("Project = %q, want flag-project", cfg.Project)
+	}
+}
+
+func TestLoadConfigFileRootDoesNotRelocateDiscovery(t *testing.T) {
+	clearBoundEnv(t)
+	effectiveRoot := t.TempDir()
+	effectiveConfigDir := filepath.Join(effectiveRoot, ".polymetrics")
+	if err := os.MkdirAll(effectiveConfigDir, 0o700); err != nil {
+		t.Fatalf("create effective config dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(effectiveConfigDir, "config.yaml"), []byte("runtime:\n  postgres_url: [unterminated\n"), 0o600); err != nil {
+		t.Fatalf("write effective config: %v", err)
+	}
+	discoveryRoot := writeConfig(t, "root: "+effectiveRoot+"\nproject: discovery-project\n")
+
+	cfg, err := Load(Options{Root: discoveryRoot})
+	if err != nil {
+		t.Fatalf("Load should not relocate to file root during same load: %v", err)
+	}
+	if cfg.ConfigFile != filepath.Join(discoveryRoot, ".polymetrics", "config.yaml") {
+		t.Fatalf("ConfigFile = %q, want discovery root config", cfg.ConfigFile)
+	}
+	if cfg.Root != effectiveRoot {
+		t.Fatalf("Root = %q, want file root", cfg.Root)
+	}
+	if cfg.Project != "discovery-project" {
+		t.Fatalf("Project = %q, want discovery-project", cfg.Project)
+	}
+}
+
 func TestLoadInvocationIsolationNoStateLeak(t *testing.T) {
 	clearBoundEnv(t)
 	rootA := writeConfig(t, "project: alpha\njson: true\n")

@@ -24,8 +24,10 @@ PRECEDENCE
 CONFIG FILE
   The config file path is <project-root>/.polymetrics/config.yaml. Missing files
   are allowed. The root key in a config file does not relocate config-file
-  discovery for the same invocation; use --root or POLYMETRICS_ROOT to select a
-  different project root before the file is read.
+  discovery for the same invocation; use --root, POLYMETRICS_ROOT, or PM_ROOT to
+  select a different project root before the file is read. If a file is
+  malformed, --json, POLYMETRICS_JSON=true, or PM_JSON=true selects the same
+  single JSON Error envelope on stdout used by other validation errors.
 
   Example:
 

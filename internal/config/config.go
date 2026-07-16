@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/spf13/viper"
 )
@@ -55,6 +56,12 @@ func (f StaticFlag) HasChanged() bool    { return f.Changed }
 func (f StaticFlag) Name() string        { return f.FlagName }
 func (f StaticFlag) ValueString() string { return f.Value }
 func (f StaticFlag) ValueType() string   { return f.Type }
+
+// Bootstrap is the minimal invocation view needed before reading the config file.
+type Bootstrap struct {
+	Root string
+	JSON bool
+}
 
 // Config is the typed app configuration resolved for one CLI invocation.
 type Config struct {
@@ -126,18 +133,51 @@ func (e *LoadError) Unwrap() error {
 	return e.Err
 }
 
-// Load resolves config for one invocation. Precedence is bound flags, explicit
-// environment variables, .polymetrics/config.yaml, then defaults.
-func Load(opts Options) (Config, error) {
+// ResolveBootstrap resolves the minimal config state needed before config-file
+// discovery. Precedence is bound flags, explicit primary environment variables,
+// PM_* aliases, then invocation defaults.
+func ResolveBootstrap(opts Options) (Bootstrap, error) {
 	root := opts.Root
 	if root == "" {
 		root = "."
 	}
-	configPath := filepath.Join(root, configRelativeDirectory, configFileName)
+	bootstrap := Bootstrap{Root: root}
+
+	if value, ok := changedFlagValue(opts.Flags, "root"); ok {
+		bootstrap.Root = value
+	} else if value, ok := lookupBoundEnv("root"); ok {
+		bootstrap.Root = value
+	}
+
+	if value, ok := changedFlagValue(opts.Flags, "json"); ok {
+		jsonValue, err := parseBoolBinding("--json", value)
+		if err != nil {
+			return bootstrap, err
+		}
+		bootstrap.JSON = jsonValue
+	} else if value, ok := lookupBoundEnv("json"); ok {
+		jsonValue, err := parseBoolBinding("json environment", value)
+		if err != nil {
+			return bootstrap, err
+		}
+		bootstrap.JSON = jsonValue
+	}
+
+	return bootstrap, nil
+}
+
+// Load resolves config for one invocation. Precedence is bound flags, explicit
+// environment variables, .polymetrics/config.yaml, then defaults.
+func Load(opts Options) (Config, error) {
+	bootstrap, err := ResolveBootstrap(opts)
+	configPath := filepath.Join(bootstrap.Root, configRelativeDirectory, configFileName)
+	if err != nil {
+		return Config{}, &LoadError{Path: configPath, Err: err}
+	}
 
 	v := viper.New()
 	v.SetConfigFile(configPath)
-	setDefaults(v, root)
+	setDefaults(v, bootstrap)
 	bindEnv(v)
 	if err := bindFlags(v, opts.Flags); err != nil {
 		return Config{}, &LoadError{Path: configPath, Err: err}
@@ -155,9 +195,9 @@ func Load(opts Options) (Config, error) {
 	return cfg, nil
 }
 
-func setDefaults(v *viper.Viper, root string) {
-	v.SetDefault("root", root)
-	v.SetDefault("json", false)
+func setDefaults(v *viper.Viper, bootstrap Bootstrap) {
+	v.SetDefault("root", bootstrap.Root)
+	v.SetDefault("json", bootstrap.JSON)
 	v.SetDefault("version", 1)
 	v.SetDefault("project", defaultProject)
 	v.SetDefault("warehouse.connector", defaultWarehouse)
@@ -175,30 +215,76 @@ func setDefaults(v *viper.Viper, root string) {
 	v.SetDefault("schedule.crontab_file", "")
 }
 
-func bindEnv(v *viper.Viper) {
-	bindings := map[string][]string{
-		"root":                   {"POLYMETRICS_ROOT", "PM_ROOT"},
-		"json":                   {"POLYMETRICS_JSON", "PM_JSON"},
-		"version":                {"POLYMETRICS_VERSION", "PM_VERSION"},
-		"project":                {"POLYMETRICS_PROJECT", "PM_PROJECT"},
-		"warehouse.connector":    {"POLYMETRICS_WAREHOUSE_CONNECTOR", "PM_WAREHOUSE_CONNECTOR"},
-		"warehouse.path":         {"POLYMETRICS_WAREHOUSE_PATH", "PM_WAREHOUSE_PATH"},
-		"runtime.postgres_url":   {"POLYMETRICS_POSTGRES_URL", "PM_POSTGRES_URL"},
-		"runtime.dragonfly_addr": {"POLYMETRICS_DRAGONFLY_ADDR", "PM_DRAGONFLY_ADDR"},
-		"runtime.temporal_addr":  {"POLYMETRICS_TEMPORAL_ADDR", "PM_TEMPORAL_ADDR"},
-		"rlm.image":              {"POLYMETRICS_RLM_IMAGE", "PM_RLM_IMAGE"},
-		"rlm.podman_bin":         {"POLYMETRICS_PODMAN_BIN", "PM_PODMAN_BIN"},
-		"rlm.fake_runner":        {"POLYMETRICS_RLM_FAKE_RUNNER", "PM_RLM_FAKE_RUNNER"},
-		"rlm.embedded_worker":    {"POLYMETRICS_RLM_EMBEDDED_WORKER", "PM_RLM_EMBEDDED_WORKER"},
-		"rlm.llm.provider":       {"POLYMETRICS_LLM_PROVIDER", "PM_LLM_PROVIDER"},
-		"rlm.llm.base_url":       {"POLYMETRICS_LLM_BASE_URL", "PM_LLM_BASE_URL"},
-		"rlm.llm.model":          {"POLYMETRICS_LLM_MODEL", "PM_LLM_MODEL"},
-		"schedule.crontab_file":  {"POLYMETRICS_CRONTAB_FILE", "PM_CRONTAB_FILE"},
+type envBinding struct {
+	key   string
+	names []string
+}
+
+func allEnvBindings() []envBinding {
+	return []envBinding{
+		{key: "root", names: []string{"POLYMETRICS_ROOT", "PM_ROOT"}},
+		{key: "json", names: []string{"POLYMETRICS_JSON", "PM_JSON"}},
+		{key: "version", names: []string{"POLYMETRICS_VERSION", "PM_VERSION"}},
+		{key: "project", names: []string{"POLYMETRICS_PROJECT", "PM_PROJECT"}},
+		{key: "warehouse.connector", names: []string{"POLYMETRICS_WAREHOUSE_CONNECTOR", "PM_WAREHOUSE_CONNECTOR"}},
+		{key: "warehouse.path", names: []string{"POLYMETRICS_WAREHOUSE_PATH", "PM_WAREHOUSE_PATH"}},
+		{key: "runtime.postgres_url", names: []string{"POLYMETRICS_POSTGRES_URL", "PM_POSTGRES_URL"}},
+		{key: "runtime.dragonfly_addr", names: []string{"POLYMETRICS_DRAGONFLY_ADDR", "PM_DRAGONFLY_ADDR"}},
+		{key: "runtime.temporal_addr", names: []string{"POLYMETRICS_TEMPORAL_ADDR", "PM_TEMPORAL_ADDR"}},
+		{key: "rlm.image", names: []string{"POLYMETRICS_RLM_IMAGE", "PM_RLM_IMAGE"}},
+		{key: "rlm.podman_bin", names: []string{"POLYMETRICS_PODMAN_BIN", "PM_PODMAN_BIN"}},
+		{key: "rlm.fake_runner", names: []string{"POLYMETRICS_RLM_FAKE_RUNNER", "PM_RLM_FAKE_RUNNER"}},
+		{key: "rlm.embedded_worker", names: []string{"POLYMETRICS_RLM_EMBEDDED_WORKER", "PM_RLM_EMBEDDED_WORKER"}},
+		{key: "rlm.llm.provider", names: []string{"POLYMETRICS_LLM_PROVIDER", "PM_LLM_PROVIDER"}},
+		{key: "rlm.llm.base_url", names: []string{"POLYMETRICS_LLM_BASE_URL", "PM_LLM_BASE_URL"}},
+		{key: "rlm.llm.model", names: []string{"POLYMETRICS_LLM_MODEL", "PM_LLM_MODEL"}},
+		{key: "schedule.crontab_file", names: []string{"POLYMETRICS_CRONTAB_FILE", "PM_CRONTAB_FILE"}},
 	}
-	for key, envNames := range bindings {
-		args := append([]string{key}, envNames...)
+}
+
+func bindEnv(v *viper.Viper) {
+	for _, binding := range allEnvBindings() {
+		args := append([]string{binding.key}, binding.names...)
 		_ = v.BindEnv(args...)
 	}
+}
+
+func changedFlagValue(flags map[string]FlagValue, name string) (string, bool) {
+	if len(flags) == 0 {
+		return "", false
+	}
+	flag := flags[name]
+	if flag == nil || !flag.HasChanged() {
+		return "", false
+	}
+	return flag.ValueString(), true
+}
+
+func lookupBoundEnv(key string) (string, bool) {
+	for _, name := range envNamesForKey(key) {
+		value, ok := os.LookupEnv(name)
+		if ok && value != "" {
+			return value, true
+		}
+	}
+	return "", false
+}
+
+func envNamesForKey(key string) []string {
+	for _, binding := range allEnvBindings() {
+		if binding.key == key {
+			return binding.names
+		}
+	}
+	return nil
+}
+
+func parseBoolBinding(source string, value string) (bool, error) {
+	parsed, err := strconv.ParseBool(value)
+	if err != nil {
+		return false, fmt.Errorf("parse %s %q: %w", source, value, err)
+	}
+	return parsed, nil
 }
 
 func bindFlags(v *viper.Viper, flags map[string]FlagValue) error {

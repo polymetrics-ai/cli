@@ -5,9 +5,9 @@
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
   "subPR": 441,
-  "status": "pr_open_ci_pending",
+  "status": "review_fix_pr_body_updated_local_verify_passed",
   "verificationPassed": true,
-  "verificationBlocker": "GitHub checks queued and human/parent review fallback pending; local verification passed",
+  "verificationBlocker": "human/parent review fallback pending; local review-fix verification passed",
   "gsd": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-401.prompt",
@@ -73,6 +73,31 @@
       "cycle": "pr-open",
       "decision": "local_critical_path",
       "reason": "non-draft stacked PR #441 opened to feat/cli-architecture-v2; GitHub checks queued; Claude disabled and Copilot quota exhausted so human/parent fallback pending"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "accepted PR #441 pm-reviewer finding; same isolated worker branch/worktree; plan/TDD/verification/summary/run-state updated before production edits; worker cannot spawn subagents"
+    },
+    {
+      "cycle": "review-fix-red-tests",
+      "decision": "local_critical_path",
+      "reason": "added focused config/CLI tests and captured red evidence before review-fix production edits"
+    },
+    {
+      "cycle": "review-fix-execute",
+      "decision": "local_critical_path",
+      "reason": "implemented shared config bootstrap resolver, config discovery fix, CLI invocation Config.Root/Config.JSON use, tests, and docs in assigned scope"
+    },
+    {
+      "cycle": "review-fix-full-verify",
+      "decision": "local_critical_path",
+      "reason": "gofmt, focused config/CLI/certify tests, vet, go test ./..., build, make verify, diff checks, and config docs parity checks passed locally"
+    },
+    {
+      "cycle": "review-fix-pr-body",
+      "decision": "local_critical_path",
+      "reason": "updated PR #441 body with accepted pm-reviewer disposition and review-fix evidence; no @claude or Copilot request posted"
     }
   ],
   "verification": {
@@ -81,7 +106,10 @@
       "cliConfigRed": "failed as expected: malformed config ignored, version exited 0 instead of validation exit 3",
       "configGreen": "passed: ok polymetrics.ai/internal/config 0.228s",
       "cliGoldenConfig": "passed: ok polymetrics.ai/internal/cli 6.812s",
-      "cliCertify": "passed: ok polymetrics.ai/internal/cli 91.270s"
+      "cliCertify": "passed: ok polymetrics.ai/internal/cli 91.270s",
+      "reviewFixConfig": "passed: ok polymetrics.ai/internal/config 0.331s",
+      "reviewFixCliGoldenConfig": "passed: ok polymetrics.ai/internal/cli 10.587s",
+      "reviewFixCliCertify": "passed: ok polymetrics.ai/internal/cli 120.088s"
     },
     "full": {
       "gofmt": "passed",
@@ -90,7 +118,14 @@
       "build": "passed_no_output",
       "makeVerify": "passed: connectorgen validate: 547 connector(s) checked, 0 findings",
       "diffCheck": "passed_no_output",
-      "dependencyDiff": "approved_viper_delta_only"
+      "dependencyDiff": "approved_viper_delta_only",
+      "reviewFixGofmt": "passed_no_output",
+      "reviewFixVet": "passed_no_output",
+      "reviewFixGoTestAll": "passed: internal/cli 197.284s; internal/config 1.086s; internal/connectors/certify 385.345s",
+      "reviewFixBuild": "passed_no_output",
+      "reviewFixMakeVerify": "passed: connectorgen validate: 547 connector(s) checked, 0 findings",
+      "reviewFixDiffCheck": "passed_no_output",
+      "reviewFixDependencyDiff": "approved_viper_delta_only_no_new_review_fix_dependency"
     },
     "parity": {
       "helpConfig": "passed: exit 0 stdout 4203 stderr 0",
@@ -99,7 +134,12 @@
       "configHelp": "passed: exit 0 stdout 4203 stderr 0",
       "docsCli": "docs/cli/config.md added",
       "website": "website/content/docs/cli-reference.mdx updated; website/lib/docs.generated.ts regenerated",
-      "grep": "passed: config key/alias grep exit 0, 11 lines"
+      "grep": "passed: config key/alias grep exit 0, 11 lines",
+      "reviewFixHelpConfig": "passed: exit 0 stdout 4375 stderr 0",
+      "reviewFixBareRuntime": "passed: exit 0 stdout 470 stderr 0",
+      "reviewFixRuntimeHelp": "passed: exit 0 stdout 470 stderr 0",
+      "reviewFixConfigHelp": "passed: exit 0 stdout 4375 stderr 0",
+      "reviewFixGrep": "passed: root/json env alias malformed/relocate grep exit 0, 11 matches"
     }
   },
   "artifacts": [
@@ -117,5 +157,56 @@
     "coverageStatus": "pending_human_parent_fallback",
     "reviewURL": "https://github.com/polymetrics-ai/cli/pull/441",
     "notes": "Claude workflow disabled_manually; Copilot quota exhausted; no @claude review or Copilot request made per task."
+  },
+  "reviewFix": {
+    "finding": "MEDIUM: docs promised env-driven root/json config behavior, but CLI used flag-only bootstrap, validation-only config.Load, discarded Config, and rendered malformed-config errors with flag-only jsonOut",
+    "disposition": "accepted",
+    "requiredBehavior": [
+      "resolve root/json from bound flags > POLYMETRICS_* primary env > PM_* alias > defaults before config-file discovery",
+      "use effective root for <effective-root>/.polymetrics/config.yaml; explicit --root overrides env",
+      "use bootstrap JSON for malformed-config error rendering; explicit --json overrides env",
+      "after successful load, invoke commands with Config.Root and Config.JSON",
+      "preserve file root non-relocation for the same load",
+      "keep #402 scattered env-reader migration out of scope",
+      "keep Viper instance-scoped with no package globals, AutomaticEnv, or WatchConfig"
+    ],
+    "plannedRedGates": [
+      "go test ./internal/config/... -run 'Bootstrap|Discovery|ConfigFileRoot' -count=1",
+      "go test ./internal/cli/ -run Config -count=1"
+    ],
+    "status": "pr_body_updated_local_verify_passed",
+    "redEvidence": {
+      "config": "failed: go test ./internal/config/... -run 'Bootstrap|Discovery|ConfigFileRoot' -count=1 -> undefined ResolveBootstrap",
+      "cli": "failed: go test ./internal/cli/ -run Config -count=1 -> env root/alias ignored, env JSON malformed errors not JSON, config-file json/root invocation ignored"
+    },
+    "implementation": {
+      "api": "config.ResolveBootstrap(config.Options) (config.Bootstrap, error)",
+      "behavior": [
+        "bootstrap root/json resolved from bound flags > POLYMETRICS_* > PM_* > defaults before file discovery",
+        "config.Load discovers <bootstrap-root>/.polymetrics/config.yaml and preserves file-root non-relocation",
+        "cli.Run renders malformed config with bootstrap JSON and invokes commands with loaded Config.Root/Config.JSON after successful load",
+        "no #402 env-reader migration; no new dependencies; no AutomaticEnv/WatchConfig/package-level Viper singleton"
+      ]
+    },
+    "greenEvidence": {
+      "config": "ok polymetrics.ai/internal/config 0.331s",
+      "cliGoldenConfig": "ok polymetrics.ai/internal/cli 10.587s",
+      "cliCertify": "ok polymetrics.ai/internal/cli 120.088s",
+      "vet": "passed_no_output",
+      "goTestAll": "passed: internal/cli 197.284s; internal/config 1.086s; internal/connectors/certify 385.345s",
+      "build": "passed_no_output",
+      "makeVerify": "passed: connectorgen validate: 547 connector(s) checked, 0 findings",
+      "diffCheck": "passed_no_output",
+      "dependencyDiff": "approved_viper_delta_only_no_new_review_fix_dependency"
+    },
+    "parity": {
+      "helpConfig": "exit 0 stdout 4375 stderr 0",
+      "bareRuntime": "exit 0 stdout 470 stderr 0",
+      "runtimeHelp": "exit 0 stdout 470 stderr 0",
+      "configHelp": "exit 0 stdout 4375 stderr 0",
+      "websiteGeneration": "node website/scripts/gen-docs-data.mjs -> Wrote 11 docs pages to lib/docs.generated.ts",
+      "grep": "exit 0, 11 matches"
+    },
+    "prBodyUpdate": "updated via gh api repos/polymetrics-ai/cli/pulls/441 -X PATCH after gh pr edit failed on Projects classic GraphQL deprecation"
   }
 }

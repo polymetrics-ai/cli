@@ -1,6 +1,13 @@
 # Issue 401 Summary — Typed Viper Configuration
 
-Status: PR #441 open; local verification passed; GitHub checks queued at last observation; human/parent review fallback pending.
+Status: PR #441 review-fix complete locally; pm-reviewer finding accepted and fixed; review-fix gates passed; PR body updated; branch push pending at artifact update time; human/parent review fallback remains pending.
+
+## Review-fix disposition
+
+- Finding: CLI promised env-driven `root`/`json` config behavior but only used flag-only bootstrap, validation-only `config.Load`, and flag-only malformed-config JSON rendering.
+- Disposition: Accepted.
+- Fix: added shared `internal/config.ResolveBootstrap`, use env/alias root for config discovery, use bootstrap JSON for malformed-load errors, then invoke commands with resolved `Config.Root` and `Config.JSON` after successful load.
+- Scope guard: kept #402 scattered env-reader migration, new dependencies, parent/shared artifacts, frontend dependency changes, and automated review requests out of scope.
 
 ## Scope target
 
@@ -58,11 +65,39 @@ CLI parity:
 - `/tmp/pm-401 config --help` -> exit 0; stdout 4203 bytes; stderr 0 bytes.
 - Docs/website grep for config keys/aliases -> exit 0, 11 lines.
 
+## Review-fix verification
+
+Red captured before production edits:
+
+- `go test ./internal/config/... -run 'Bootstrap|Discovery|ConfigFileRoot' -count=1` -> failed with `undefined: ResolveBootstrap`.
+- `go test ./internal/cli/ -run Config -count=1` -> failed because env root/alias, env JSON malformed errors, config-file JSON/root invocation, and isolation were not honored.
+
+Green / gates:
+
+- `go test ./internal/config/... -count=1` -> `ok  	polymetrics.ai/internal/config	0.331s`.
+- `go test ./internal/cli/ -run 'Golden|Config' -count=1` -> `ok  	polymetrics.ai/internal/cli	10.587s`.
+- `go test ./internal/cli/ -run Certify -count=1` -> `ok  	polymetrics.ai/internal/cli	120.088s`.
+- `go vet ./...` -> pass, no output.
+- `go test ./...` -> pass; `internal/cli 197.284s`, `internal/config 1.086s`, `internal/connectors/certify 385.345s`.
+- `go build ./cmd/pm` -> pass, no output.
+- `make verify` -> pass; ended `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` -> pass, no output.
+- `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` -> approved Viper delta only; no new review-fix dependency changes.
+
+Review-fix CLI parity:
+
+- `/tmp/pm-401-reviewfix help config` -> exit 0; stdout 4375 bytes; stderr 0 bytes.
+- `/tmp/pm-401-reviewfix runtime` -> exit 0; stdout 470 bytes; stderr 0 bytes.
+- `/tmp/pm-401-reviewfix runtime --help` -> exit 0; stdout 470 bytes; stderr 0 bytes.
+- `/tmp/pm-401-reviewfix config --help` -> exit 0; stdout 4375 bytes; stderr 0 bytes.
+- Docs/website grep for `POLYMETRICS_ROOT|PM_ROOT|POLYMETRICS_JSON|PM_JSON|malformed|relocate` -> pass, 11 matches.
+- `node website/scripts/gen-docs-data.mjs` -> `Wrote 11 docs pages to lib/docs.generated.ts`.
+
 ## Review route
 
 Sub-PR: https://github.com/polymetrics-ai/cli/pull/441 (non-draft, base `feat/cli-architecture-v2`).
 
-Claude workflow remains `disabled_manually`; Copilot quota exhausted for this blocker window. Did not post `@claude review`; did not request Copilot. Human/parent fallback pending. GitHub checks queued at last observation: branch-name, pr-title, govulncheck, CodeQL, Dependency Review, verify, Website checks.
+PR body updated with pm-reviewer disposition and evidence via GitHub REST patch after `gh pr edit` hit the Projects classic GraphQL deprecation. Claude workflow remains `disabled_manually`; Copilot quota exhausted for this blocker window. Did not post `@claude review`; did not request Copilot. Human/parent fallback pending.
 
 ## Human gates
 

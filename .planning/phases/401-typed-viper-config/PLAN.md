@@ -13,6 +13,29 @@
 
 Add an invocation-scoped `internal/config` package that loads typed app configuration through a fresh Viper instance with explicit flag/env/file/default precedence, reads `.polymetrics/config.yaml` from the invocation root, and integrates the CLI only far enough to validate malformed config through the existing validation exit-code funnel.
 
+## Review-fix cycle — PR #441 pm-reviewer finding
+
+Disposition: Accepted.
+
+Finding: docs promise `POLYMETRICS_ROOT`/`PM_ROOT` choose config discovery root and `POLYMETRICS_JSON`/`PM_JSON` control invocation behavior, but CLI currently computes config path from flag-only root, calls `config.Load` only for validation, discards `Config`, and renders malformed-config errors with flag-only `jsonOut`.
+
+Required behavior for this review fix:
+
+1. Add one `internal/config` bootstrap resolver for `root` and `json` using bound flags > `POLYMETRICS_*` primary env > `PM_*` alias > defaults before config-file discovery.
+2. Use the bootstrap root for `<effective-root>/.polymetrics/config.yaml`; explicit `--root` overrides env; file `root` does not relocate discovery for the same load.
+3. Use bootstrap JSON for malformed-config error rendering; explicit `--json` overrides env; preserve the one JSON envelope on stdout and human diagnostics on stderr.
+4. After successful load, invoke commands with resolved `Config.Root` and `Config.JSON` so flags > env > file > default precedence affects command behavior, not validation only.
+5. Keep #402 env-reader migration out of scope and keep Viper instance-scoped with no package globals, `AutomaticEnv`, or `WatchConfig`.
+6. Update config help/docs/website only as needed to clarify malformed-file JSON rendering and file-root non-relocation.
+
+Review-fix slice plan:
+
+- RF0 plan gate: update `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, and `RUN-STATE.json`; record accepted finding and `local_critical_path` decision.
+- RF1 red tests: add failing `internal/config` bootstrap/discovery tests and failing `internal/cli` tests for `POLYMETRICS_ROOT`, `PM_ROOT`, `--root` override, `POLYMETRICS_JSON`/`PM_JSON` malformed-error JSON, explicit `--json` override, config-file `json`/`root` invocation, and isolation.
+- RF2 green implementation: expose the small bootstrap resolver inside `internal/config`; have `Load` and CLI share it; invoke Cobra with loaded `Config.Root`/`Config.JSON`; preserve malformed-load validation classification and JSON envelope/stdout-stderr contract.
+- RF3 docs parity: update `config` help/manual/website and regenerate existing website data only through `node website/scripts/gen-docs-data.mjs` if docs change.
+- RF4 verification: run the user-required focused gates, full gates, diff checks, and config help/docs/website parity checks; commit and push the review-fix slice; update PR #441 body with disposition and evidence.
+
 ## Scope
 
 Allowed writes:
@@ -154,7 +177,9 @@ Commit/push coherent plan/red/green/refactor checkpoints. Open non-draft stacked
 
 ## Spawn decision for this cycle
 
-`spawned`: parent #397 assigned this isolated worker directory, branch, issue #401, and bounded write scope. This worker does not spawn subagents; subsequent implementation/verification cycles will be `local_critical_path`.
+Initial implementation cycle: `spawned` — parent #397 assigned this isolated worker directory, branch, issue #401, and bounded write scope. This worker does not spawn subagents.
+
+Review-fix cycle: `local_critical_path` — same isolated worktree and branch; no subagent tool in worker scope; issue #401 review fix is within the bounded `internal/config`, `internal/cli`, docs, and issue-local planning scope.
 
 ## Human gates
 

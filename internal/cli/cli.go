@@ -28,12 +28,18 @@ const maxConnectorCommandLimit = 10000
 func Run(args []string, stdout, stderr io.Writer) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
-	cmd := newRootCmd(ctx, root, stdout, stderr, jsonOut)
-	if _, err := config.Load(config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}); err != nil {
-		return writeError(stdout, stderr, validationErrorf("%v", err), jsonOut)
+	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
+	bootstrap, err := config.ResolveBootstrap(opts)
+	if err != nil {
+		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
 	}
+	cfg, err := config.Load(opts)
+	if err != nil {
+		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
+	}
+	cmd := newRootCmd(ctx, cfg.Root, stdout, stderr, cfg.JSON)
 	if err := executeRootCmd(cmd, cleanArgs); err != nil {
-		return writeError(stdout, stderr, mapCobraErr(err), jsonOut)
+		return writeError(stdout, stderr, mapCobraErr(err), cfg.JSON)
 	}
 	return 0
 }
