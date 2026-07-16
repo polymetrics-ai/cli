@@ -37,7 +37,26 @@ Green:
 
 ## Verification
 
-Focused gates passed; broader gates pending.
+Passed locally:
+
+- `gofmt -w cmd internal`.
+- `go test ./internal/config/... -count=1` -> `ok  	polymetrics.ai/internal/config	0.228s`.
+- `go test ./internal/cli/ -run 'Golden|Config' -count=1` -> `ok  	polymetrics.ai/internal/cli	6.812s`.
+- `go test ./internal/cli/ -run Certify -count=1` -> `ok  	polymetrics.ai/internal/cli	91.270s`.
+- `go vet ./...` -> pass, no output.
+- `go test ./...` -> pass; `internal/cli 158.655s`, `internal/connectors/certify 343.692s`.
+- `go build ./cmd/pm` -> pass, no output.
+- `make verify` -> pass; ended `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` -> pass, no output.
+- `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` -> approved Viper delta only.
+
+CLI parity:
+
+- `/tmp/pm-401 help config` -> exit 0; stdout 4203 bytes; stderr 0 bytes.
+- `/tmp/pm-401 runtime` -> exit 0; stdout 470 bytes; stderr 0 bytes.
+- `/tmp/pm-401 runtime --help` -> exit 0; stdout 470 bytes; stderr 0 bytes.
+- `/tmp/pm-401 config --help` -> exit 0; stdout 4203 bytes; stderr 0 bytes.
+- Docs/website grep for config keys/aliases -> exit 0, 11 lines.
 
 ## Review route
 

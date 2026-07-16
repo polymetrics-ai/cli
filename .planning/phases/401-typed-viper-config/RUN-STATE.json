@@ -5,9 +5,9 @@
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
   "subPR": null,
-  "status": "focused_green_full_verification_pending",
-  "verificationPassed": false,
-  "verificationBlocker": "full go vet/go test/go build/make verify and parity checks pending",
+  "status": "local_verification_passed_pr_pending",
+  "verificationPassed": true,
+  "verificationBlocker": "external CI and human/parent review fallback pending after PR open",
   "gsd": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-401.prompt",
@@ -18,7 +18,7 @@
   "dependencyDecision": {
     "viper": "github.com/spf13/viper v1.21.0",
     "approvedBy": "docs/adr/0002-cobra-viper-cli-framework.md",
-    "status": "added_focused_green",
+    "status": "added_local_verify_passed",
     "directDependenciesAdded": [
       "github.com/spf13/viper v1.21.0"
     ],
@@ -32,6 +32,9 @@
       "github.com/spf13/pflag v1.0.10",
       "github.com/subosito/gotenv v1.6.0",
       "go.yaml.in/yaml/v3 v3.0.4"
+    ],
+    "goSumOnly": [
+      "github.com/frankban/quicktest v1.14.6"
     ],
     "humanGate": "additional direct modules, major-version deviation, frontend dependency changes, or unrelated graph changes"
   },
@@ -60,20 +63,38 @@
       "cycle": "focused-verify",
       "decision": "local_critical_path",
       "reason": "internal/config tests, CLI Golden|Config tests, and CLI Certify tests passed locally"
+    },
+    {
+      "cycle": "full-verify",
+      "decision": "local_critical_path",
+      "reason": "gofmt, vet, go test ./..., go build, make verify, diff check, dependency diff, and parity checks passed locally"
     }
   ],
   "verification": {
     "focused": {
       "configRed": "failed as expected: undefined Config/Load/Options in internal/config tests",
       "cliConfigRed": "failed as expected: malformed config ignored, version exited 0 instead of validation exit 3",
-      "configGreen": "passed: ok polymetrics.ai/internal/config 0.473s",
-      "cliGoldenConfig": "passed: ok polymetrics.ai/internal/cli 6.887s",
-      "cliCertify": "passed: ok polymetrics.ai/internal/cli 91.181s"
+      "configGreen": "passed: ok polymetrics.ai/internal/config 0.228s",
+      "cliGoldenConfig": "passed: ok polymetrics.ai/internal/cli 6.812s",
+      "cliCertify": "passed: ok polymetrics.ai/internal/cli 91.270s"
     },
-    "full": {},
+    "full": {
+      "gofmt": "passed",
+      "vet": "passed_no_output",
+      "goTestAll": "passed: internal/cli 158.655s; internal/connectors/certify 343.692s",
+      "build": "passed_no_output",
+      "makeVerify": "passed: connectorgen validate: 547 connector(s) checked, 0 findings",
+      "diffCheck": "passed_no_output",
+      "dependencyDiff": "approved_viper_delta_only"
+    },
     "parity": {
+      "helpConfig": "passed: exit 0 stdout 4203 stderr 0",
+      "bareRuntime": "passed: exit 0 stdout 470 stderr 0",
+      "runtimeHelp": "passed: exit 0 stdout 470 stderr 0",
+      "configHelp": "passed: exit 0 stdout 4203 stderr 0",
       "docsCli": "docs/cli/config.md added",
-      "website": "website/content/docs/cli-reference.mdx updated; website/lib/docs.generated.ts regenerated"
+      "website": "website/content/docs/cli-reference.mdx updated; website/lib/docs.generated.ts regenerated",
+      "grep": "passed: config key/alias grep exit 0, 11 lines"
     }
   },
   "artifacts": [

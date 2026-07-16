@@ -6,16 +6,16 @@
 
 ## Required gates
 
-- [ ] `gofmt -w cmd internal`
-- [x] `go test ./internal/config/... -count=1` — pass: `ok  	polymetrics.ai/internal/config	0.473s`.
-- [x] `go test ./internal/cli/ -run 'Golden|Config' -count=1` — pass: `ok  	polymetrics.ai/internal/cli	6.887s`.
-- [x] `go test ./internal/cli/ -run Certify -count=1` — pass: `ok  	polymetrics.ai/internal/cli	91.181s`.
-- [ ] `go vet ./...`
-- [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make verify`
-- [ ] `git diff --check origin/feat/cli-architecture-v2...HEAD`
-- [ ] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum`
+- [x] `gofmt -w cmd internal` — pass, no output.
+- [x] `go test ./internal/config/... -count=1` — pass: `ok  	polymetrics.ai/internal/config	0.228s`.
+- [x] `go test ./internal/cli/ -run 'Golden|Config' -count=1` — pass: `ok  	polymetrics.ai/internal/cli	6.812s`.
+- [x] `go test ./internal/cli/ -run Certify -count=1` — pass: `ok  	polymetrics.ai/internal/cli	91.270s`.
+- [x] `go vet ./...` — pass, no output.
+- [x] `go test ./...` — pass; notable packages: `polymetrics.ai/internal/cli 158.655s`, `polymetrics.ai/internal/connectors/certify 343.692s`.
+- [x] `go build ./cmd/pm` — pass, no output.
+- [x] `make verify` — pass; ended `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass, no output.
+- [x] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` — pass/recorded approved Viper delta.
 
 ## Focused TDD gates
 
@@ -31,8 +31,8 @@
 - [x] No additional direct modules beyond Viper.
 - [x] Resolved transitives recorded (`fsnotify`, `go-toml/v2`, `locafero`, `sourcegraph/conc`, `afero`, `cast`, pflag upgrade, `gotenv`, `go.yaml.in/yaml/v3`; existing `go-viper/mapstructure/v2` retained).
 - [x] No frontend dependency changes.
-- [ ] `make tidy-check` remains green inside `make verify`; no tidy-check weakening.
-- [ ] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` recorded exactly.
+- [x] `make tidy-check` remains green inside `make verify`; no tidy-check weakening.
+- [x] `git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum` recorded exactly.
 
 ## Config behavior checklist
 
@@ -55,15 +55,15 @@
 
 Applies: yes, config behavior and docs are CLI-visible.
 
-- [ ] Runtime help checked: `pm help <config-topic>` or chosen topic.
-- [ ] Command help checked: `pm runtime --help` and/or changed command help.
-- [ ] Bare namespace behavior checked: `pm runtime` and one unchanged namespace command.
-- [ ] `docs/cli/**` updated or marked with exact exemption.
-- [ ] `website/**` updated or marked with exact exemption.
-- [ ] Generated help/manual artifacts updated or marked with exact exemption.
-- [ ] Docs mention config keys, defaults, precedence, aliases, file format, and security boundaries.
-- [ ] Docs do not include secret values and do not route user-named credential env vars through app config.
-- [ ] Docs/website grep parity recorded.
+- [x] Runtime help checked: `/tmp/pm-401 help config` — exit 0; stdout 4203 bytes; stderr 0 bytes.
+- [x] Command help checked: `/tmp/pm-401 runtime --help` — exit 0; stdout 470 bytes; stderr 0 bytes; `/tmp/pm-401 config --help` — exit 0; stdout 4203 bytes; stderr 0 bytes.
+- [x] Bare namespace behavior checked: `/tmp/pm-401 runtime` — exit 0; stdout 470 bytes; stderr 0 bytes.
+- [x] `docs/cli/**` updated: `docs/cli/config.md` generated from embedded `configHelp`.
+- [x] `website/**` updated: `website/content/docs/cli-reference.mdx` plus regenerated `website/lib/docs.generated.ts`.
+- [x] Generated help/manual artifacts updated: `docs/cli/config.md`; website docs generated data regenerated with `node website/scripts/gen-docs-data.mjs`.
+- [x] Docs mention config keys, defaults, precedence, aliases, file format, and security boundaries.
+- [x] Docs do not include secret values and do not route user-named credential env vars through app config.
+- [x] Docs/website grep parity recorded: `rg -n "POLYMETRICS_ROOT|PM_ROOT|runtime.postgres_url|rlm.llm.model|PM_LLM_API_KEY" docs/cli website/content/docs/cli-reference.mdx website/lib/docs.generated.ts` — exit 0, 11 lines.
 
 ## Review route
 
@@ -74,4 +74,14 @@ Applies: yes, config behavior and docs are CLI-visible.
 
 ## Full `make verify` result
 
-Pending.
+Pass. Final lines:
+
+```text
+./pm docs validate --connectors-dir docs/connectors
+Validated connector docs in docs/connectors
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.yANpw9EndF
+golangci-lint run ./internal/connectors/engine/... ./internal/connectors/defs/... ./internal/connectors/hooks/... ./internal/connectors/native/... ./internal/connectors/conformance/... ./internal/connectors/certify/... ./cmd/connectorgen/...
+0 issues.
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 547 connector(s) checked, 0 findings
+```

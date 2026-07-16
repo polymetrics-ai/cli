@@ -176,8 +176,70 @@ Dependency delta observed after `go get github.com/spf13/viper@v1.21.0 && go mod
 
 ## Cycle 3 — refactor / docs parity evidence
 
-Added `pm help config` docs topic, generated `docs/cli/config.md`, updated `website/content/docs/cli-reference.mdx`, and regenerated `website/lib/docs.generated.ts` with `node website/scripts/gen-docs-data.mjs`. Runtime parity checks pending final verification.
+Added `pm help config` docs topic, generated `docs/cli/config.md`, updated `website/content/docs/cli-reference.mdx`, and regenerated `website/lib/docs.generated.ts` with `node website/scripts/gen-docs-data.mjs`.
+
+Parity spot checks after `go build -o /tmp/pm-401 ./cmd/pm`:
+
+```text
+/tmp/pm-401 help config      -> exit 0, stdout 4203 bytes, stderr 0 bytes
+/tmp/pm-401 runtime          -> exit 0, stdout 470 bytes, stderr 0 bytes
+/tmp/pm-401 runtime --help   -> exit 0, stdout 470 bytes, stderr 0 bytes
+/tmp/pm-401 config --help    -> exit 0, stdout 4203 bytes, stderr 0 bytes
+```
+
+Docs/website grep:
+
+```bash
+rg -n "POLYMETRICS_ROOT|PM_ROOT|runtime.postgres_url|rlm.llm.model|PM_LLM_API_KEY" docs/cli website/content/docs/cli-reference.mdx website/lib/docs.generated.ts
+```
+
+Result: exit 0, 11 lines.
+
+Refactor safety checks:
+
+- `cli.Run(args, stdout, stderr) int` signature preserved.
+- Existing `os.Getenv` readers left for #402.
+- No `AutomaticEnv`, `WatchConfig`, or package-level Viper singleton.
+- `viper.New()` appears only in `internal/config.Load`.
 
 ## Cycle 4 — final verification evidence
 
-Pending.
+```bash
+gofmt -w cmd internal
+go test ./internal/config/... -count=1
+go test ./internal/cli/ -run 'Golden|Config' -count=1
+go test ./internal/cli/ -run Certify -count=1
+```
+
+Result:
+
+```text
+ok  	polymetrics.ai/internal/config	0.228s
+ok  	polymetrics.ai/internal/cli	6.812s
+ok  	polymetrics.ai/internal/cli	91.270s
+```
+
+```bash
+go vet ./...
+go test ./...
+go build ./cmd/pm
+```
+
+Result: pass. `go vet` and `go build` produced no output; `go test ./...` passed with notable packages `polymetrics.ai/internal/cli 158.655s` and `polymetrics.ai/internal/connectors/certify 343.692s`.
+
+```bash
+make verify
+```
+
+Result: pass; final line:
+
+```text
+connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+```bash
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff origin/feat/cli-architecture-v2...HEAD -- go.mod go.sum
+```
+
+Result: diff check pass/no output; dependency diff recorded approved Viper delta only.
