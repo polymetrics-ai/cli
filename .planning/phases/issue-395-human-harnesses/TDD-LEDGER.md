@@ -174,3 +174,14 @@ Phase: `issue-395-human-harnesses`
 - Build result: `/blog/human-harnesses` prerenders successfully. Better Auth reports the existing
   default-secret warning during static collection because no build-only secret was supplied; no
   secret value was read or printed.
+
+## Follow-Up: Review Loop Image
+
+- Status: red captured; green pending.
+- Catalog contract: the local review section no longer exposes its ASCII loop as `code`; it declares
+  the approved review-repair image, intrinsic 3:2 dimensions, placement after paragraph three,
+  descriptive alt text, and one-sentence caption.
+- Browser contract: the image renders in reading order, remains contained at 390px, and the removed
+  ASCII loop does not appear in the article.
+- Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
+- Red result: failed because the review section still returned the exact ASCII loop in `code`.

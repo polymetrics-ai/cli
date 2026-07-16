@@ -120,5 +120,28 @@ describe('blog catalog', () => {
       expect(evidenceById.has(reference.evidenceId)).toBe(true);
       expect(section.body[reference.blockIndex]).toContain(reference.text);
     }
+
+    const reviewSection = post.sections.find(
+      (section) => section.heading === 'Review, fix, repeat, locally',
+    ) as typeof post.sections[number] & {
+      image?: {
+        src: string;
+        alt: string;
+        caption: string;
+        width: number;
+        height: number;
+        afterBlock: number;
+      };
+    };
+    expect(reviewSection.code).toBeUndefined();
+    expect(reviewSection.image).toEqual({
+      src: '/blog/human-harnesses/04-review-repair-loop.webp',
+      alt: 'Separate review and repair stations passing the same verified artifact around a loop.',
+      caption:
+        'Review and repair stay separate while verification sends the same artifact back around the loop.',
+      width: 1536,
+      height: 1024,
+      afterBlock: 2,
+    });
   });
 });

@@ -193,3 +193,16 @@ the issue, test, review, release, and deployment harnesses used by this reposito
 - `vercel-composition-patterns`: extend the existing text renderer and keep one shared dialog state.
 - `web-design-guidelines`: unavailable locally; keyboard, focus, label, mobile containment, and
   reduced-motion assertions remain the documented fallback.
+
+## Review Loop Image Follow-Up
+
+- Replace the ASCII review/fix loop in `Review, fix, repeat, locally` with the approved 3:2 asset
+  from `~/Downloads/harness blog/8c6bb99b-7ee5-4d41-ae8e-40c25243a8d2.png`.
+- Export it as `website/public/blog/human-harnesses/04-review-repair-loop.webp` at quality 88 without
+  cropping, recoloring, or adding text.
+- Render the figure after body paragraph three and before paragraph four, matching the existing
+  image-placement brief and preserving annotation block indexes.
+- Use intrinsic dimensions, responsive width, descriptive alt text, and a one-sentence editorial
+  caption. Do not add a card, rounded frame, overlay copy, or decorative motion.
+- Add the catalog contract before production edits, then verify typecheck, unit tests, focused
+  Chromium behavior, production build, and desktop/mobile containment.
