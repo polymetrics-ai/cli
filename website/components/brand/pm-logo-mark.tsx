@@ -33,15 +33,33 @@ export function PmLogoMark({
             animation: pm-logo-mark-m 1.05s step-end infinite;
           }
 
+          .pm-logo-mark__cursor {
+            opacity: 0;
+            animation: pm-logo-mark-cursor 1.05s step-end infinite;
+          }
+
           @keyframes pm-logo-mark-m {
             0%, 49% { opacity: 1; }
             50%, 100% { opacity: 0; }
           }
 
+          @keyframes pm-logo-mark-cursor {
+            0%, 49% { opacity: 0; }
+            50%, 100% { opacity: 1; }
+          }
+
           @media (prefers-reduced-motion: reduce) {
-            .pm-logo-mark__m {
+            .pm-logo-mark__m,
+            .pm-logo-mark__cursor {
               animation: none;
+            }
+
+            .pm-logo-mark__m {
               opacity: 1;
+            }
+
+            .pm-logo-mark__cursor {
+              opacity: 0;
             }
           }
         `}
@@ -52,6 +70,9 @@ export function PmLogoMark({
       </text>
       <text className="pm-logo-mark__letter pm-logo-mark__m" x="13.1" y="17.4">
         M
+      </text>
+      <text className="pm-logo-mark__letter pm-logo-mark__cursor" x="13.1" y="17.4">
+        _
       </text>
     </svg>
   );

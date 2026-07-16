@@ -4,8 +4,8 @@
 
 - Restored a single accessible `PmLogoMark` component after its deletion in
   commit `605b006e` (PR #29).
-- The mark keeps `P` static, blinks only `M`, renders no underscore, and falls
-  back to a stable `PM` for reduced-motion users.
+- The mark keeps `P` static, alternates the second position between `M` and `_`,
+  and falls back to a stable `PM` for reduced-motion users.
 - Replaced local logo implementations in the navbar, home sidebar, and footer.
 - Changed the repository default from Elastic License 2.0 to the official GNU
   AGPL v3 text, identified as `AGPL-3.0-only`.

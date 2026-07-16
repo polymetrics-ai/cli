@@ -6,7 +6,8 @@ Base: `origin/main` at `c3e62448`
 
 ## Objective
 
-Restore one shared website PM mark with a static `P` and blinking `M`, then
+Restore one shared website PM mark with a static `P` and a second position that
+alternates between `M` and an underscore cursor, then
 replace the repository's Elastic License 2.0 policy with an explicit mixed
 license boundary: `AGPL-3.0-only` by default and `MIT` for
 `internal/connectors/defs/**`.
@@ -54,7 +55,7 @@ skipping the design review.
 ## Scope
 
 - Add a reusable, accessible PM SVG component.
-- Keep `P` static and blink `M`; render no underscore.
+- Keep `P` static and alternate the second position between `M` and `_`.
 - Keep `PM` stable when reduced motion is requested.
 - Use the component in navbar, home sidebar, and site footer.
 - Replace root `LICENSE` with the unmodified official AGPL v3 text.
@@ -76,8 +77,8 @@ skipping the design review.
 
 ## Red-Green Plan
 
-1. Red: logo contract expects a shared component, no underscore, and all three
-   consumers.
+1. Red: logo contract expects a shared component, complementary `M`/`_` states,
+   and all three consumers.
 2. Red: licensing contract expects AGPL root, MIT defs, a path map, and no
    stale Elastic License declarations in maintained repository/website copy.
 3. Green: restore and integrate the PM logo component.
@@ -109,7 +110,8 @@ Visual:
 
 - Desktop and mobile screenshot of the navbar/sidebar/footer mark.
 - Reduced-motion check showing a stable `PM` mark.
-- Confirm no layout shift, clipped letters, or underscore cursor.
+- Confirm `M` and `_` occupy the same stable position without clipping or
+  layout shift.
 
 ## Human Gates
 

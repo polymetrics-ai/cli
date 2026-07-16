@@ -14,7 +14,7 @@ function readRepositoryFile(relativePath: string) {
 }
 
 describe('PM brand mark', () => {
-  it('keeps P static, blinks M, and renders no cursor glyph', () => {
+  it('keeps P static and alternates M with an underscore cursor', () => {
     const markup = renderToStaticMarkup(
       createElement(PmLogoMark, { title: 'Polymetrics CLI' }),
     );
@@ -23,8 +23,10 @@ describe('PM brand mark', () => {
     expect(markup).toContain('>P</text>');
     expect(markup).toContain('pm-logo-mark__m');
     expect(markup).toContain('>M</text>');
-    expect(markup).not.toContain('>_</text>');
+    expect(markup).toContain('pm-logo-mark__cursor');
+    expect(markup).toContain('>_</text>');
     expect(markup).toContain('@keyframes pm-logo-mark-m');
+    expect(markup).toContain('@keyframes pm-logo-mark-cursor');
     expect(markup).toContain('@media (prefers-reduced-motion: reduce)');
   });
 

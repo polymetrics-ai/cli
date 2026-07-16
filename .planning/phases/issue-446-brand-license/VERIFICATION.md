@@ -22,9 +22,10 @@
 
 - [x] Desktop navbar/sidebar/footer render the same PM mark.
 - [x] Mobile navbar renders the mark without clipping or layout shift.
-- [x] `P` computed opacity remains `1`; sampled `M` opacity alternates `1/0`.
+- [x] `P` computed opacity remains `1`; every sampled `M`/`_` opacity pair is
+  complementary (`1/0` or `0/1`).
 - [x] Reduced-motion mode reports no animation and shows a stable `PM`.
-- [x] All three marks render `PM` with no underscore cursor.
+- [x] All three marks alternate complementary `M`/`_` states in the same slot.
 
 ## Review Gates
 
