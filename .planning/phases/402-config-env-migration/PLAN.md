@@ -92,9 +92,9 @@ Strict exclusions:
    - Update `docs/cli/config.md`, `website/content/docs/cli-reference.mdx`, and generated website data only if caveat changes.
    - Runtime help strings unchanged unless explicitly needed; golden transcripts should remain byte-identical.
 
-5. Verification and PR (verification ✅, PR pending)
+5. Verification and PR ✅ (`#448`)
    - Run focused gates, full gates when feasible, diff checks, docs/help parity.
-   - Open stacked PR to `feat/cli-architecture-v2` with `Refs #402`, `Refs #397`.
+   - Opened stacked PR `#448` to `feat/cli-architecture-v2` with `Refs #402`, `Refs #397`.
    - Review route: Claude disabled, Copilot quota exhausted; record human/parent fallback pending, do not request either.
 
 ## Planned tests / validations

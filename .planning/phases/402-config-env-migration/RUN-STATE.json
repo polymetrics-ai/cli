@@ -4,7 +4,7 @@
   "branch": "refactor/402-config-env-migration",
   "baseBranch": "feat/cli-architecture-v2",
   "verificationPassed": true,
-  "status": "green_committed_pending_push_pr",
+  "status": "pr_opened_pending_human_parent_review",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-402.prompt",
@@ -28,6 +28,7 @@
       "reason": "typed config injection completed in allowed scopes with local gates passing"
     }
   ],
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/448",
   "reviewRoute": {
     "claude": "disabled",
     "copilot": "quota_exhausted",
