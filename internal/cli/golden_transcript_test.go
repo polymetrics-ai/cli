@@ -101,7 +101,10 @@ var goldenTranscriptInputs = []struct {
 	{Name: "connectors_catalog_legacy_type_json", Args: []string{"connectors", "catalog", "--type", "source", "--json"}},
 	{Name: "connectors_inspect_unknown_json", Args: []string{"connectors", "inspect", "nosuch", "--json"}},
 	{Name: "connectors_inspect_unsafe_json", Args: []string{"connectors", "inspect", "bad\x1b[31m", "--json"}},
-	{Name: "connectors_help_github_intercept", Args: []string{"connectors", "help", "github"}},
+	// Known legacy dispatcher behavior: pm connectors help <name> is intercepted
+	// as namespace help, not the documented connector-manual alias. Preserve
+	// fixture fidelity here; help-tree cleanup is deferred to issue #417.
+	{Name: "connectors_help_github_known_legacy_namespace_help_intercept", Args: []string{"connectors", "help", "github"}},
 
 	{Name: "version_plain", Args: []string{"version"}},
 	{Name: "version_json", Args: []string{"version", "--json"}},
@@ -166,6 +169,8 @@ func TestGoldenTranscripts(t *testing.T) {
 func TestGoldenDocsGenerateMatchesTrackedCLIManuals(t *testing.T) {
 	dir := t.TempDir()
 	generatedCLI := filepath.Join(dir, "cli")
+	// Connector manuals still generate to a temp dir to avoid repository writes;
+	// issue #399 intentionally diffs only top-level docs/cli manuals.
 	generatedConnectors := filepath.Join(dir, "connectors")
 
 	var stdout, stderr bytes.Buffer

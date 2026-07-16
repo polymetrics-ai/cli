@@ -38,9 +38,12 @@ Skills loaded and applied:
 - `golang-error-handling` — Required for stable error taxonomy and stderr behavior.
 - `golang-documentation` — Required for generated docs/manual parity tests.
 - `golang-security` — Loaded because tests handle command args, filesystem temp output, and external-ish CLI IO boundaries.
+- `golang-safety` — Loaded for review-fix hardening checks around fixture/test safety.
+- `golang-lint` — Loaded for review disposition/gate interpretation.
+- `caveman` — Loaded for compact worker handoff prose.
 - `gsd-core` — Repo-local GSD/Pi adapter guidance.
 
-Rule references: `.agents/agentic-delivery/references/required-skills-routing.md` sections **Always-on Go skill routing**, **CLI and command behavior**, and **Documentation for Go behavior**; `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` parity checklist.
+Rule references: `.agents/agentic-delivery/references/required-skills-routing.md` sections **Always-on Go skill routing**, **CLI and command behavior**, **Documentation for Go behavior**, and **Reviews and hardening**; `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` parity checklist.
 
 ## Slice plan
 
@@ -104,6 +107,24 @@ Expected red/absent result: no `Golden` tests execute and no docs-generate-diff 
 ## Spawn decision for this cycle
 
 `spawned`: parent issue #397 assigned this isolated worker directory, branch, and issue-scoped write scope for #399. This worker does not spawn subagents.
+
+## Review-fix cycle — 2026-07-16
+
+Sidecar review dispositions:
+
+1. **MEDIUM accepted with modification** — rename/annotate the `pm connectors help <name>` golden so it records a known legacy namespace-help interception, not an endorsed connector-manual alias contract. Do not change dispatcher behavior. Defer behavior/docs cleanup to help-tree issue #417.
+2. **LOW declined for scope** — keep docs-generation diff scoped to `docs/cli/**`; add a concise test comment that connector manuals are generated to a temp dir only to avoid repository writes.
+3. **LOW accepted** — make `RUN-STATE.json` allowed-path evidence include `docs/cli/**` / `docs/cli/connectors.md` because the original slice changed that tracked generated CLI doc.
+
+Review-fix plan:
+
+1. Update issue-local phase artifacts with dispositions and scope notes before test/fixture edits.
+2. Rename the ambiguous golden case name in `internal/cli/golden_transcript_test.go` and `internal/cli/testdata/golden_transcripts.json`; keep args/exit/stdout/stderr unchanged.
+3. Add a clarifying comment in the docs-generation diff test; do not expand comparison beyond `docs/cli/**`.
+4. Run requested gates: `gofmt -w internal/cli`, `go test ./internal/cli/ -run Golden -count=1`, `go test ./internal/cli/ -count=1`, `make verify`, `git diff --check`, and `git diff -- go.mod`.
+5. Commit/push one coherent review-fix commit and update PR #439 body with dispositions. Do not post `@claude review`; coverage route remains `parent_pr_fallback` pending/blocked.
+
+Review-fix execution decision: `local_critical_path` — existing spawned worker applies bounded review fixes locally; no subagents spawned by worker role.
 
 ## Human gates
 

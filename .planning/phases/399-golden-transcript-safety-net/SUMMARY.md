@@ -1,12 +1,12 @@
 # Summary — Issue 399 Golden Transcript Safety Net
 
-Status: in progress.
+Status: review-fix verified.
 
 ## Delivered so far
 
 - Created issue-local GSD plan, TDD ledger, verification checklist, summary, prompts snapshot, and run-state artifacts before test harness edits.
 - Confirmed GSD adapter health and recorded programming-loop adapter gap with Pi-local fallback.
-- Loaded required Go/CLI/testing/docs/security skills.
+- Loaded required Go/CLI/testing/docs/security/safety/lint skills plus `gsd-core` and `caveman`.
 - Captured red/absent evidence for missing golden transcript/docs-diff tests.
 - Added 89 golden CLI transcripts pinning exit code, stdout, and stderr.
 - Added docs generation diff test and removed one stale generated-doc drift block from `docs/cli/connectors.md`.
@@ -16,20 +16,33 @@ Status: in progress.
 
 ## PR / review status
 
-- Commit pushed: `7c904e21fca4abbfc45cc5a913f34e6c14df79a1`.
+- Pre-review-fix head: `d7ffbb1ee01b709a3470f62976cba65c2c586921`.
 - Stacked sub-PR opened: https://github.com/polymetrics-ai/cli/pull/439 (`test/399-golden-transcript-safety-net` → `feat/cli-architecture-v2`).
-- CI status at handoff: most checks pass; `verify` still in progress in GitHub Actions after local `make verify` passed.
-- Claude review status: pending/blocked because `Claude Code Review` workflow is `disabled_manually`; no approval claimed. Parent-PR fallback coverage remains pending.
+- Review-fix local gates passed; CI will run after review-fix push.
+- Claude review status: pending/blocked because `Claude Code Review` workflow is `disabled_manually`; no approval claimed. Parent-PR fallback coverage remains pending/blocked.
+
+## Review-fix dispositions — 2026-07-16
+
+- MEDIUM `pm connectors help <name>` golden ambiguity: accepted with modification. Rename/annotate as known legacy namespace-help interception; no dispatcher behavior change; defer help-tree cleanup to #417.
+- LOW connector-manual recursive docs comparison: declined for #399 scope. Keep temp generation diff scoped to `docs/cli/**`; connector manuals are generated to temp dir only to avoid repository writes.
+- LOW RUN-STATE allowed paths: accepted. Recorded `docs/cli/**` / `docs/cli/connectors.md` in scope evidence.
+
+## Review-fix delivered
+
+- Renamed/annotated `pm connectors help github` golden case as known legacy namespace-help interception. Fixture exit/stdout/stderr unchanged.
+- Added docs-generation test comment clarifying connector output goes to temp dir while #399 intentionally diffs only `docs/cli/**`.
+- Updated phase artifacts and RUN-STATE with dispositions, allowed docs path, and `local_critical_path` review-fix decision.
+- Requested local gates passed: `gofmt -w internal/cli`, `go test ./internal/cli/ -run Golden -count=1`, `go test ./internal/cli/ -count=1`, `make verify`, `git diff --check`, `git diff -- go.mod`.
 
 ## Pending
 
-- Parent orchestrator to monitor CI verify, automated review fallback/parent coverage, and integration decision.
+- Parent orchestrator to monitor automated review fallback/parent coverage and integration decision.
 
 ## Safety
 
 - No secrets.
 - No credentialed connector checks.
 - No new dependencies.
-- No production dispatcher changes planned.
+- No production dispatcher changes made.
 - No reverse ETL execution.
 - Parent PR merge to `main` remains human-gated.

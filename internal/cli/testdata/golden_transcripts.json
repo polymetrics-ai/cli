@@ -723,7 +723,7 @@
     "stderr": "error: connector contains invalid control characters\n"
   },
   {
-    "name": "connectors_help_github_intercept",
+    "name": "connectors_help_github_known_legacy_namespace_help_intercept",
     "args": [
       "connectors",
       "help",

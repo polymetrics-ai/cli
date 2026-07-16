@@ -12,9 +12,12 @@ Test-harness and docs-parity safety-net work for existing CLI behavior. No produ
 - `golang-error-handling`
 - `golang-documentation`
 - `golang-security`
+- `golang-safety`
+- `golang-lint`
+- `caveman`
 - `gsd-core`
 
-Skill routing source: `.agents/agentic-delivery/references/required-skills-routing.md` sections **Always-on Go skill routing**, **CLI and command behavior**, and **Documentation for Go behavior**.
+Skill routing source: `.agents/agentic-delivery/references/required-skills-routing.md` sections **Always-on Go skill routing**, **CLI and command behavior**, **Documentation for Go behavior**, and **Reviews and hardening**.
 
 ## Initial red / absent evidence to capture before harness edits
 
@@ -69,6 +72,40 @@ Skill routing source: `.agents/agentic-delivery/references/required-skills-routi
   - `make verify`: pass; completed docs-check, smoke, lint, and `connectorgen validate: 547 connector(s) checked, 0 findings`.
   - `git diff -- go.mod`: empty.
   - CLI parity spot checks: `pm help docs`, bare `pm connectors`, `pm docs --help`, docs/website grep all pass.
+
+## Review-fix cycle — 2026-07-16
+
+| Finding | Disposition | TDD / validation note |
+|---|---|---|
+| `pm connectors help <name>` golden could endorse legacy namespace-help interception despite docs saying connector-manual alias | Accepted with modification | Rename/annotate the case as known legacy interception; keep fixture exit/stdout/stderr unchanged; defer behavior/docs cleanup to #417. |
+| Docs-generation test compares only top-level `docs/cli/**`, not recursive connector manuals | Declined for #399 scope | Preserve acceptance criterion. Connector manuals still generate into `t.TempDir()` to avoid repository writes; comparison intentionally remains `docs/cli/**`. |
+| `RUN-STATE.json` allowed paths omit `docs/cli/connectors.md` | Accepted | Add `docs/cli/**` / `docs/cli/connectors.md` to scope evidence before final verification. |
+
+Review-fix validation plan: no production dispatcher behavior changes; focused goldens must stay green after fixture-name/comment updates, then full requested gates run and are logged in `VERIFICATION.md`.
+
+Pre-edit validation evidence:
+
+```text
+go test ./internal/cli/ -run Golden -count=1
+ok  	polymetrics.ai/internal/cli	6.381s
+```
+
+Review-fix green evidence:
+
+```text
+gofmt -w internal/cli
+go test ./internal/cli/ -run Golden -count=1
+ok  	polymetrics.ai/internal/cli	6.257s
+
+go test ./internal/cli/ -count=1
+ok  	polymetrics.ai/internal/cli	155.838s
+```
+
+Full review-fix gate evidence:
+
+- `make verify`: pass; completed fmt, tidy-check, vet, full tests, build, docs validation, smoke, lint, and `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- `git diff --check`: pass (no output).
+- `git diff -- go.mod`: empty.
 
 ## Notes
 

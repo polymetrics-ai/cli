@@ -27,10 +27,10 @@ Fallback: use `.pi/prompts/pm-gsd-loop.md` as manual GSD/TDD contract.
 
 ## Downstream artifact
 
-- `PLAN.md`: created before test harness edits.
-- `TDD-LEDGER.md`: created; red evidence pending.
-- `VERIFICATION.md`: created; results pending.
-- `RUN-STATE.json`: created; `verificationPassed=false` until full `make verify` passes.
+- `PLAN.md`: created before test harness edits; updated with review-fix dispositions and `local_critical_path` decision.
+- `TDD-LEDGER.md`: records initial red/absent evidence, docs-diff red, green evidence, and review-fix validation.
+- `VERIFICATION.md`: records original gates and review-fix requested gates.
+- `RUN-STATE.json`: updated with allowed `docs/cli/**` scope evidence and `verificationPassed=true` after review-fix `make verify` passed.
 
 ## Verification result
 
@@ -46,5 +46,5 @@ Passed local gates:
 - CLI parity spot checks for `pm help docs`, bare `pm connectors`, `pm docs --help`, and docs/website grep.
 
 Sub-PR: https://github.com/polymetrics-ai/cli/pull/439  
-Head SHA: `7c904e21fca4abbfc45cc5a913f34e6c14df79a1`  
-Automated review: Claude workflow observed `disabled_manually`; coverage pending / parent-PR fallback pending.
+Pre-review-fix head SHA: `d7ffbb1ee01b709a3470f62976cba65c2c586921`; review-fix commit recorded in worker handoff.
+Automated review: Claude workflow observed `disabled_manually`; coverage pending / parent-PR fallback pending. Review-fix cycle did not post `@claude review`.

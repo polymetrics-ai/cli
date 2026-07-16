@@ -49,6 +49,24 @@ rg -n "docs|connectors" docs/cli website
 
 Mark website docs as not applicable if no CLI-visible docs behavior changes occur.
 
+## Review-fix requested commands
+
+```bash
+gofmt -w internal/cli
+go test ./internal/cli/ -run Golden -count=1
+go test ./internal/cli/ -count=1
+make verify
+git diff --check
+git diff -- go.mod
+```
+
+Review-fix scope notes:
+
+- Do not change production dispatcher behavior.
+- `pm connectors help <name>` golden records current legacy namespace-help interception only; behavior/docs cleanup is deferred to #417.
+- Docs-generation diff intentionally compares generated top-level CLI manuals against `docs/cli/**`; connector manuals are generated to a temp directory only to avoid repository writes during the test.
+- Claude workflow is `disabled_manually`; do not post `@claude review`; coverage route remains `parent_pr_fallback` pending/blocked.
+
 ## Expected results
 
 - GSD doctor exits 0.
@@ -133,10 +151,38 @@ Results:
 - docs/website grep: pass; CLI docs and website generated docs reference `pm docs` / `pm connectors`.
 - Website docs: no source `website/content/**` update needed because #399 adds tests and aligns tracked generated CLI markdown to existing runtime help; no new CLI command/flag/output behavior introduced.
 
+### Review-fix disposition log
+
+Dispositions completed:
+
+- MEDIUM `pm connectors help <name>` golden ambiguity: accepted with modification; renamed/annotated as known legacy namespace-help interception and deferred dispatcher/help-tree change to #417.
+- LOW connector-manual recursive docs comparison: declined for #399 scope; added clarifying test comment that connector manuals generate to temp dir to avoid repository writes while comparison remains `docs/cli/**`.
+- LOW RUN-STATE allowed paths: accepted; included `docs/cli/**` / `docs/cli/connectors.md` in scope evidence.
+
+Review-fix gates:
+
+```text
+gofmt -w internal/cli
+go test ./internal/cli/ -run Golden -count=1
+ok  	polymetrics.ai/internal/cli	6.257s
+
+go test ./internal/cli/ -count=1
+ok  	polymetrics.ai/internal/cli	155.838s
+
+make verify
+PASS: completed fmt, tidy-check, vet, full tests, build, docs validation, smoke, lint, and connectorgen validate: 547 connector(s) checked, 0 findings.
+
+git diff --check
+(no output)
+
+git diff -- go.mod
+(no output)
+```
+
 ### PR / CI / review status
 
 - Branch pushed: `test/399-golden-transcript-safety-net`.
 - Sub-PR opened: https://github.com/polymetrics-ai/cli/pull/439.
-- Head SHA: `7c904e21fca4abbfc45cc5a913f34e6c14df79a1`.
-- GitHub checks observed: branch-name, pr-title, require-linked-issue, gsd-workflow-evidence, Dependency Review, govulncheck, and CodeQL passed; `verify` still pending at handoff after local `make verify` passed.
-- Claude review route: workflow `Claude Code Review` is `disabled_manually`; no Claude approval claimed. Parent-PR fallback coverage remains pending.
+- Pre-review-fix head SHA: `d7ffbb1ee01b709a3470f62976cba65c2c586921`; review-fix commit SHA is recorded in worker handoff after commit/push.
+- GitHub checks observed before review fix: branch-name, pr-title, require-linked-issue, gsd-workflow-evidence, Dependency Review, govulncheck, CodeQL, and verify were running/passing per PR view; review-fix CI will run after push.
+- Claude review route: workflow `Claude Code Review` is `disabled_manually`; no Claude approval claimed. Parent-PR fallback coverage remains pending/blocked.
