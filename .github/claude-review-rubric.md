@@ -44,7 +44,9 @@ because it looks like a lint nit.
 - No hardcoded secrets/credentials; connector auth handled via existing paths.
 - Input validation on external/config-driven data; SQL built safely for DuckDB.
 - No sensitive data written to logs.
-- License-header / Elastic License 2.0 expectations respected for new files.
+- The applicable SPDX boundary is respected: `AGPL-3.0-only` by default and
+  `MIT` for files under `internal/connectors/defs/`; nested third-party notices
+  take precedence where present.
 
 ## Output format
 - **Inline comments** (`mcp__github_inline_comment__create_inline_comment`,

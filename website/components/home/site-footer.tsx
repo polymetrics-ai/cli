@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { PmLogoMark } from '@/components/brand/pm-logo-mark';
 import { CornerBox } from '@/components/ui/corner-box';
 
 const REPO = 'https://github.com/polymetrics-ai/cli';
@@ -41,8 +42,9 @@ const COLUMNS: Col[] = [
   {
     title: 'Community',
     links: [
-      ['Public Source', REPO],
-      ['Elastic License 2.0', `${REPO}/blob/main/LICENSE`],
+      ['Open Source', REPO],
+      ['AGPL-3.0 core', `${REPO}/blob/main/LICENSE`],
+      ['MIT connector definitions', `${REPO}/blob/main/internal/connectors/defs/LICENSE`],
       ['Star on GitHub', REPO],
       ['Report a bug', `${REPO}/issues/new`],
     ],
@@ -138,7 +140,9 @@ export function SiteFooter() {
 
         {/* Legal links */}
         <div className="flex flex-wrap items-center gap-5 border-t border-line-structure px-6 py-4 text-[12px]">
-          <FooterLink label="Elastic License 2.0" href={`${REPO}/blob/main/LICENSE`} />
+          <FooterLink label="AGPL-3.0-only core" href={`${REPO}/blob/main/LICENSE`} />
+          <FooterLink label="MIT definitions" href={`${REPO}/blob/main/internal/connectors/defs/LICENSE`} />
+          <FooterLink label="License map" href={`${REPO}/blob/main/LICENSING.md`} />
           <FooterLink label="Privacy" href="#" />
           <FooterLink label="Security" href={`${REPO}/security`} />
         </div>
@@ -146,12 +150,9 @@ export function SiteFooter() {
         {/* Copyright + trademark footnote */}
         <div className="flex flex-col gap-3 border-t border-line-structure px-6 py-4">
           <div className="flex flex-wrap items-center justify-between gap-2 text-[12px] text-text-tertiary">
-            <span>© 2026 Polymetrics AI, public source project.</span>
+            <span>© 2026 Polymetrics AI, open source project.</span>
             <span className="flex items-center gap-2">
-              <span className="flex items-center justify-center h-[18px] min-w-[18px] px-1 bg-emerald-800 select-none">
-                <span className="font-mono font-bold text-[10px] leading-none text-white tracking-tight">PM</span>
-                <span aria-hidden className="font-mono font-bold text-[10px] leading-none text-white cursor-blink">_</span>
-              </span>
+              <PmLogoMark decorative className="h-[18px] w-[18px] shrink-0 select-none" />
               Built in pure Go.
             </span>
           </div>
