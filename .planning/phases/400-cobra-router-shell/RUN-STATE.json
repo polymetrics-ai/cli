@@ -1,0 +1,37 @@
+{
+  "issue": 400,
+  "parentIssue": 397,
+  "branch": "refactor/400-cobra-router-shell",
+  "baseBranch": "feat/cli-architecture-v2",
+  "parentPR": 438,
+  "status": "planning",
+  "verificationPassed": false,
+  "verificationBlocker": "implementation pending",
+  "gsd": {
+    "doctor": "passed",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-400.prompt",
+    "programmingLoop": "manual_fallback",
+    "programmingLoopFailure": "scripts/gsd: unknown GSD command: programming-loop",
+    "fallbackPrompt": ".pi/prompts/pm-gsd-loop.md"
+  },
+  "dependencyDecision": {
+    "cobra": "github.com/spf13/cobra v1.10.2",
+    "approvedBy": "docs/adr/0002-cobra-viper-cli-framework.md",
+    "status": "selected_not_added"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "spawned",
+      "reason": "parent #397 assigned isolated worker directory, branch, issue #400, and bounded write scope; worker does not spawn subagents"
+    }
+  ],
+  "artifacts": [
+    ".planning/phases/400-cobra-router-shell/PLAN.md",
+    ".planning/phases/400-cobra-router-shell/TDD-LEDGER.md",
+    ".planning/phases/400-cobra-router-shell/VERIFICATION.md",
+    ".planning/phases/400-cobra-router-shell/SUMMARY.md",
+    ".planning/phases/400-cobra-router-shell/PROMPTS.md",
+    ".planning/phases/400-cobra-router-shell/RUN-STATE.json"
+  ]
+}
