@@ -179,6 +179,40 @@ git diff -- go.mod
 (no output)
 ```
 
+### Commit-range whitespace correction — 2026-07-16
+
+Coordinator found the previous `git diff --check` claim was worktree-only evidence and did not
+cover committed PR-range whitespace. Correct red evidence before the fix:
+
+```text
+git diff --check origin/feat/cli-architecture-v2...HEAD
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:3: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:4: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:5: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:6: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:7: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md:7: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md:8: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md:9: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md:48: trailing whitespace.
+status=2
+```
+
+Correction scope: remove trailing whitespace / whitespace-only blank-line defects from all files
+changed by PR #439. No production behavior change, dependency change, review-request change, or PR
+merge.
+
+Requested post-fix gates:
+
+```bash
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff --name-only origin/feat/cli-architecture-v2...HEAD
+go test ./internal/cli/ -run Golden -count=1
+git diff -- go.mod
+```
+
+Results: pending until the fix is committed so the commit-range gate includes the correction.
+
 ### PR / CI / review status
 
 - Branch pushed: `test/399-golden-transcript-safety-net`.

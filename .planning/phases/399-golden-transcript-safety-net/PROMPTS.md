@@ -4,9 +4,9 @@
 
 Task: Execute polymetrics-ai/cli#399 as one bounded mutating worker for parent #397.
 
-Worker branch: `test/399-golden-transcript-safety-net`  
-Worker directory: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-399-golden-transcript-safety-net`  
-Parent branch: `feat/cli-architecture-v2`  
+Worker branch: `test/399-golden-transcript-safety-net`
+Worker directory: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-399-golden-transcript-safety-net`
+Parent branch: `feat/cli-architecture-v2`
 Parent PR: https://github.com/polymetrics-ai/cli/pull/438
 
 Required command path:
@@ -45,6 +45,7 @@ Passed local gates:
 - `git diff -- go.mod` (empty)
 - CLI parity spot checks for `pm help docs`, bare `pm connectors`, `pm docs --help`, and docs/website grep.
 
-Sub-PR: https://github.com/polymetrics-ai/cli/pull/439  
+Sub-PR: https://github.com/polymetrics-ai/cli/pull/439
 Pre-review-fix head SHA: `d7ffbb1ee01b709a3470f62976cba65c2c586921`; review-fix commit recorded in worker handoff.
 Automated review: Claude workflow observed `disabled_manually`; coverage pending / parent-PR fallback pending. Review-fix cycle did not post `@claude review`.
+Verification-fix cycle: commit-range whitespace correction planned; final gate evidence is recorded in `VERIFICATION.md` and handoff after commit/push.

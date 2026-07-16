@@ -34,6 +34,16 @@ Status: review-fix verified.
 - Updated phase artifacts and RUN-STATE with dispositions, allowed docs path, and `local_critical_path` review-fix decision.
 - Requested local gates passed: `gofmt -w internal/cli`, `go test ./internal/cli/ -run Golden -count=1`, `go test ./internal/cli/ -count=1`, `make verify`, `git diff --check`, `git diff -- go.mod`.
 
+## Verification-fix cycle — 2026-07-16
+
+- Coordinator found committed PR-range trailing whitespace in `PLAN.md` and `PROMPTS.md`; earlier
+  `git diff --check` evidence was worktree-only and incomplete.
+- Scope: whitespace/artifact verification correction only. No production behavior change, no
+  dependencies, no PR merge, no `@claude review`.
+- Planned gates: `git diff --check origin/feat/cli-architecture-v2...HEAD`,
+  `git diff --name-only origin/feat/cli-architecture-v2...HEAD`,
+  `go test ./internal/cli/ -run Golden -count=1`, and `git diff -- go.mod`.
+
 ## Pending
 
 - Parent orchestrator to monitor automated review fallback/parent coverage and integration decision.

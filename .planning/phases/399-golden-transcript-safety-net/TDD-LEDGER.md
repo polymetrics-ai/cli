@@ -107,6 +107,38 @@ Full review-fix gate evidence:
 - `git diff --check`: pass (no output).
 - `git diff -- go.mod`: empty.
 
+## Verification-fix cycle — 2026-07-16
+
+Classification: validation/artifact correction only. No production behavior change and no test
+weakening. Red/green validation is the commit-range whitespace gate.
+
+Loaded skills for this cycle: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`,
+`golang-error-handling`, `golang-documentation`, `golang-security`, `golang-safety`,
+`golang-lint`, and `caveman`. Routing source:
+`.agents/agentic-delivery/references/required-skills-routing.md` sections **Always-on Go skill
+routing**, **CLI and command behavior**, **Documentation for Go behavior**, and **Reviews and
+hardening**. Project-local `.pi/skills/go-implementation/SKILL.md` was requested by worker policy
+but is not present in this checkout; Go routing fell back to the required global Go skills above.
+
+Pre-fix red validation evidence:
+
+```text
+git diff --check origin/feat/cli-architecture-v2...HEAD
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:3: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:4: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:5: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:6: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PLAN.md:7: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md:7: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md:8: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md:9: trailing whitespace.
+.planning/phases/399-golden-transcript-safety-net/PROMPTS.md:48: trailing whitespace.
+status=2
+```
+
+Planned green validation: strip trailing whitespace from every PR-changed file, then commit and
+run the requested commit-range gates exactly.
+
 ## Notes
 
 - Do not store secrets or credential values in transcripts.

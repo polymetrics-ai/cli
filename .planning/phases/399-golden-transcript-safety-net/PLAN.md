@@ -1,10 +1,10 @@
 # Issue 399 Plan — Golden Transcript Safety Net
 
-**Issue:** [#399](https://github.com/polymetrics-ai/cli/issues/399)  
-**Parent:** [#397](https://github.com/polymetrics-ai/cli/issues/397)  
-**Parent PR:** [#438](https://github.com/polymetrics-ai/cli/pull/438) (`feat/cli-architecture-v2` → `main`, draft)  
-**Worker branch:** `test/399-golden-transcript-safety-net`  
-**Mode:** spawned bounded mutating worker / stacked sub-PR  
+**Issue:** [#399](https://github.com/polymetrics-ai/cli/issues/399)
+**Parent:** [#397](https://github.com/polymetrics-ai/cli/issues/397)
+**Parent PR:** [#438](https://github.com/polymetrics-ai/cli/pull/438) (`feat/cli-architecture-v2` → `main`, draft)
+**Worker branch:** `test/399-golden-transcript-safety-net`
+**Mode:** spawned bounded mutating worker / stacked sub-PR
 **GSD command path:** `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 399 --skip-research`; `scripts/gsd prompt programming-loop init --phase 399 --dry-run` failed with `scripts/gsd: unknown GSD command: programming-loop`, so the Pi-local `.pi/prompts/pm-gsd-loop.md` contract is the recorded manual GSD programming-loop fallback.
 
 ## Objective
@@ -125,6 +125,31 @@ Review-fix plan:
 5. Commit/push one coherent review-fix commit and update PR #439 body with dispositions. Do not post `@claude review`; coverage route remains `parent_pr_fallback` pending/blocked.
 
 Review-fix execution decision: `local_critical_path` — existing spawned worker applies bounded review fixes locally; no subagents spawned by worker role.
+
+## Verification-fix cycle — 2026-07-16
+
+Coordinator found committed PR-range trailing whitespace that the earlier worktree-only
+`git diff --check` evidence did not catch. No production behavior change, dependency change,
+review-route change, PR merge, or scope expansion is allowed.
+
+Verification-fix plan:
+
+1. Record red validation evidence from `git diff --check origin/feat/cli-architecture-v2...HEAD`
+   failing on committed `PLAN.md` / `PROMPTS.md` trailing whitespace.
+2. Remove trailing whitespace and whitespace-only blank-line defects from every file changed by PR
+   #439, preserving Markdown content and avoiding generated rewrites.
+3. Run and record the requested gates exactly:
+   - `git diff --check origin/feat/cli-architecture-v2...HEAD`
+   - `git diff --name-only origin/feat/cli-architecture-v2...HEAD`
+   - `go test ./internal/cli/ -run Golden -count=1`
+   - `git diff -- go.mod`
+4. Commit and push one coherent verification-fix commit to
+   `test/399-golden-transcript-safety-net`.
+5. Re-run `git diff --check origin/feat/cli-architecture-v2...HEAD` after push. Do not post
+   `@claude review`; review route remains blocked/pending.
+
+Verification-fix execution decision: `local_critical_path` — existing spawned worker applies the
+bounded correction locally; no subagents spawned by this worker role.
 
 ## Human gates
 
