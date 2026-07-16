@@ -158,6 +158,7 @@ deploy:  tested commit -> immutable image -> rollout -> health check`,
         body: [
           'The useful idea is not that humans and agents are identical. It is that neither should receive a special path around the state machine. A shell script should not get an easier write path than an agent. A maintainer should not get a less reproducible deployment because they know the server. Familiarity is not evidence.',
           'Stable JSON and exit behavior make runtime state legible. Issues, TDD ledgers, checks, and reviewed commit ranges make repository state legible. Immutable image tags make deployment state legible. In each case the harness replaces an assumption with an object we can inspect.',
+          'This page is part of that feedback loop. A reader can highlight a passage, attach a marginal note to the exact text, continue the reply thread, or open the page-level GitHub discussion. The annotation does not make the argument correct; it makes disagreement specific, durable, and reviewable.',
           'That is why human harnesses are becoming a first-class part of Polymetrics. The safest operator is not the one who promises never to make a mistake. It is the one whose tools expect mistakes and stop them before intention becomes mutation.',
         ],
       },
