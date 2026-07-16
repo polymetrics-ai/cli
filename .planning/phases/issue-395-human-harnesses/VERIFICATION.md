@@ -98,3 +98,17 @@
 - [x] Local article renders the new section and omits the stale Claude workflow language.
 - [x] Desktop and mobile Chromium assertions find no horizontal overflow.
 - [x] No Warp/Pi session, GitHub workflow, runtime, or production environment is mutated.
+
+## Interactive GitHub Evidence Follow-Up
+
+- [ ] Catalog contract covers canonical PR, commit, structural-harness, and repository URLs.
+- [ ] Focused unit test fails before the evidence model is implemented and passes afterward.
+- [ ] Evidence markers open an in-page sheet and preserve the article scroll position.
+- [ ] The sheet exposes exact status/SHA/change totals and a canonical external GitHub link.
+- [ ] Public GitHub refresh has a verified static fallback and does not use credentials.
+- [ ] Repository CTA opens `polymetrics-ai/cli` in a new tab at GitHub's native Star control.
+- [ ] Escape, close button, focus return, and external-link labels work with keyboard navigation.
+- [ ] Mobile and desktop screenshots show no overlap or horizontal overflow.
+- [ ] Reduced-motion rendering remains usable.
+- [ ] Image prompt guide records six varied placements without rendering broken placeholders.
+- [ ] Focused e2e, unit tests, typecheck, production build, and `git diff --check` pass.

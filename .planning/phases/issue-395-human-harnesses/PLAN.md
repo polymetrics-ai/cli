@@ -117,3 +117,46 @@ the issue, test, review, release, and deployment harnesses used by this reposito
 - Live evidence consulted read-only: the active Shepherd proof/recovery and CLI architecture Pi
   sessions, their worktree state, and the local-review contract/workflow artifacts. Warp UI access
   was blocked by the desktop safety layer; no live session was interrupted or mutated.
+
+## Interactive GitHub Evidence Follow-Up
+
+- Replace unsupported narrative-scale wording with canonical GitHub evidence for the abandoned
+  precursor PR `#27`, the merged recovery PR `#29`, and merge commit `605b006`.
+- Add typed, reusable evidence metadata to the blog catalog and an on-demand client preview that
+  refreshes public GitHub metadata without credentials. Verified static values remain available
+  when GitHub is unavailable or rate-limited.
+- Keep the reader on the article while inspecting evidence in an accessible sheet; provide a
+  separate canonical GitHub link for the full page because GitHub denies iframe embedding.
+- Add evidence references to the issue-first and parent-orchestration PRs where the article claims
+  those structural changes were implemented.
+- Add a direct repository CTA. GitHub does not provide a safe GET URL that performs a star, so the
+  CTA opens the repository in a new tab at the native Star control instead of pretending an action
+  occurred.
+- Provide a production-oriented ChatGPT Images brief with six prompts, exact aspect ratios,
+  filenames, alt text, and varied top, left, right, between-paragraph, and below-section placements.
+  Do not render empty image slots before approved assets exist.
+
+### Design Direction
+
+- Subject: an engineering post-mortem for developers evaluating an agent-assisted repository.
+- Job: let a skeptical reader verify the story without losing their reading position.
+- Palette: preserve the existing `surface-bg`, `surface-1`, `line-structure`, `line-cta`, and emerald
+  action tokens; GitHub state labels use restrained neutral, red, and green semantic accents.
+- Type: preserve Instrument Serif for the essay thesis, Chakra Petch for evidence labels, and the
+  existing body face for long-form reading.
+- Layout: quiet prose first; compact evidence markers follow only sourced claims; a right-side
+  evidence docket holds live metadata and the canonical external action.
+- Signature: the evidence docket behaves like an inspectable case file, with exact SHA, status,
+  changed-line totals, and source link rather than a generic preview card.
+- Motion: one sheet transition and a refresh-state icon only; respect reduced motion and avoid
+  scroll-triggered decoration.
+
+### Required Skills For This Follow-Up
+
+- `frontend-design`: evidence-led editorial direction and one intentional signature interaction.
+- `vercel-react-best-practices`: fetch only after interaction, keep static fallbacks, and avoid
+  adding route-level data waterfalls.
+- `vercel-composition-patterns`: keep evidence preview state in one reusable component rather than
+  adding renderer mode flags.
+- `web-design-guidelines`: unavailable locally; keyboard, focus, labeling, external-link, mobile,
+  and reduced-motion checks are the recorded manual fallback.

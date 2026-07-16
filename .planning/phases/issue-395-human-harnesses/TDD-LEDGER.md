@@ -110,3 +110,18 @@ Phase: `issue-395-human-harnesses`
   value.
 - Browser result: desktop and mobile Chromium assertions render the new section, omit the stale
   Claude workflow language, and find no horizontal overflow.
+
+## Follow-Up: Interactive GitHub Evidence
+
+- Status: planned.
+- Red catalog contract: require canonical PR `#27`, PR `#29`, merge commit `605b006`, issue-first
+  PR `#47`, parent-orchestrator PR `#51`, section-to-evidence references, and a repository star CTA.
+- Red browser contract: require an evidence marker to open an in-page sheet with a verified
+  fallback, canonical external link, close behavior, and no same-tab navigation.
+- Green target: fetch public GitHub metadata only after opening a preview; preserve the static
+  evidence snapshot on network or rate-limit failure; keep comments and text-selection behavior
+  unchanged.
+- Refactor target: isolate the evidence UI in one client component and keep the article renderer
+  data-driven.
+- Visual target: evidence remains subordinate to prose, works at 390px and 1440px, has visible
+  keyboard focus, and introduces no horizontal overflow.
