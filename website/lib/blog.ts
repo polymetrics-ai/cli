@@ -48,7 +48,7 @@ export const BLOG_POSTS: BlogPost[] = [
           'I had been using the large AI coding platforms to chase that goal. They could produce code quickly, but I was spending too much time arranging agents, recovering context, and discovering that five fast workers editing the same generated file is just a merge conflict speedrun with nicer typography.',
           'Then I found Pi. It was small, direct, and easy to shape around the repository. Combined with GSD, it gave me a loop I could inspect: define the issue, plan the slice, write the failing test, make it pass, verify the result, and leave evidence for the next person or agent. Boring steps, in the best possible sense.',
           'The connector rewrite now stores each integration as a JSON bundle and interprets it through a shared engine. API operations are classified as streams, direct reads, writes, binary transfers, native protocol work, hooks, or typed exclusions. That classification matters because a list operation, a file download, and a DELETE should not inherit the same runtime policy.',
-          'I also built a Shepherd-style supervisor around the workflow. Shepherd is not the thing secretly typing all 547 connectors while dramatic music plays. Connector workers perform the mapping; Shepherd independently checks whether orchestration is progressing, workers are colliding, verification is real, and the run should continue, revert, or stop for a human.',
+          'That local loop eventually raised a more awkward question: who checks whether the loop itself is behaving? I am leaving that unanswered here, because it became its own engineering story.',
         ],
       },
       {
@@ -123,12 +123,18 @@ parent      -> full verification -> human merge -> release`,
         ],
       },
       {
-        heading: 'Reviewing untrusted code without trusting it',
+        heading: 'Review, fix, repeat, locally',
         body: [
-          'The Claude review workflow contains one of the clearest examples of a harness changing behavior. A public pull request is untrusted code, and the review credential is valuable. Running that pull request while the credential is available would give hostile code a chance to exfiltrate it.',
-          'So the review is static. The workflow checks the author relationship before the secret reaches the job, checks permissions again inside the action, blocks bots by default, checks out the base repository, and asks the reviewer to inspect the PR diff without running the proposed code. Compilation and tests belong to separate jobs that do not receive the Claude credential.',
-          'The workflow also avoids reviewing every push. It runs automatically when a trusted author opens, reopens, or marks a PR ready, and maintainers can request a deliberate follow-up review after fixes. That is a quota decision, but it is also a state-machine decision: review a meaningful checkpoint, record dispositions, then request another pass only when the reviewed commit range changed.',
+          'Review used to arrive later, through a remote pull-request bot. That produced useful findings, but it also put credentials, network availability, provider quotas, and GitHub event timing on the critical path. A correction loop should not need to leave the machine just to discover that the fix introduced another bug.',
+          'The default gate now runs locally inside the Pi delivery loop. After implementation passes verification, the orchestrator records the exact candidate head SHA and base SHA, then launches an independent read-only reviewer. The reviewer can inspect and search the scoped code, but it cannot edit files, push commits, post comments, merge branches, or quietly turn its own opinion into a mutation.',
+          'Every actionable finding gets a disposition: accept it, accept it with a narrower change, decline it with a reason, defer it to a named follow-up, or stop for a human. Accepted work goes to an isolated repair worker with a bounded write scope. That worker fixes the code and reruns focused tests; verification runs again; then the reviewer sees the new exact head. The loop can repeat for up to four correction rounds before it stops pretending persistence is wisdom and asks a person.',
+          'The live Pi session that prompted this update made the loop wonderfully unglamorous. A review sidecar returned three findings. One was accepted with modification, one was declined with a recorded scope reason, and one was accepted. The isolated repair worker fixed the accepted items and made the full verification gate green. Verification then caught trailing whitespace in the worker evidence and sent the same bounded worktree around once more. That second lap is the feature, not an embarrassment.',
+          'Remote PR-bot review can still run as supplemental shadow or canary evidence during the cutover. It is no longer the default delivery gate. GitHub receives the branch, PR, checks, and durable review summary; the fast review-and-repair conversation happens locally, where a moved head immediately invalidates the old verdict.',
         ],
+        code: `implement -> verify -> review exact head -> disposition
+                      ^                         |
+                      |                         v
+                 re-review <- verify <- isolated fix`,
       },
       {
         heading: 'Release and deployment are mutations too',
@@ -151,14 +157,14 @@ parent      -> full verification -> human merge -> release`,
         heading: 'What the harness still does not do',
         body: [
           'Now for the paragraph marketing pages usually hide behind a gradient: the repository is active and the harness is not finished. Branch protection currently requires status checks but not a positive review count. The human gate on the parent PR is repository policy, not a GitHub rule that mathematically prevents every maintainer from merging without review.',
-          'Automated review is also an input, not an oracle. Claude can be disabled or run out of quota, and a skipped or failed review is not coverage. The fallback is a recorded review of the relevant commit range by another reviewer, not pretending that a workflow name in the checks list means somebody examined the change.',
+          'Local automated review is still input, not an oracle. Its verdict binds the candidate and base SHAs, the policy bundle, the observed reviewer model and thinking level, independent checks, findings, dispositions, and creation time. Move the head and the evidence expires. Keep the head fixed and the reviewer still cannot approve its own edits, because it has no edit path; a separate bounded worker must make every accepted change.',
           'The production environment does not yet require an environment reviewer, so a qualifying main push can deploy when the deployment variable is enabled. Actions are version-tagged rather than pinned to full commit SHAs, and repository settings do not currently enforce SHA pinning. Those are real hardening opportunities, and naming them is part of the harness: an unrecorded gap is impossible to prioritize.',
         ],
         points: [
           'Add an enforced review requirement or preserve an auditable human-gate record for parent merges.',
           'Add a production environment approval when deployment independence becomes more important than immediate rollout.',
           'Pin third-party actions by commit and enable repository-level pinning policy.',
-          'Treat unavailable automated review as a visible blocker or explicit human fallback, never as a silent pass.',
+          'Invalidate local review evidence when the head moves, and stop for a human when the correction cap is reached.',
         ],
       },
       {
@@ -175,7 +181,7 @@ parent      -> full verification -> human merge -> release`,
         body: [
           'The immediate work is certification. Connector inventory is broad; live, repeatable evidence is the next gate. We are also tightening approval scopes, improving bulk-write previews, extending dry-run diffs, and making destructive confirmation policy consistent across connector actions.',
           'Distribution is part of the same story: release binaries and a Homebrew path should make the first useful run short without bypassing provenance. The MCP surface should let agents discover the same typed operations without inventing a second, more permissive API.',
-          'The next engineering note will separate two stories that are easy to conflate: how connector operations are classified into product surfaces, and how the Shepherd supervisor judges the agents doing that work. One creates the map; the other checks the journey.',
+          'Shepherd is the next story. It starts with the question this post deliberately leaves open: what happens when the harness itself needs supervision? That deserves a full engineering note, so I am leaving it at the question rather than smuggling the implementation into this one.',
           'And now the shameless human bit: if this story made you laugh, wince, or remember a pull request whose scrollbar looked like a rounding error, please star the repository. A star will not certify 547 connectors or make make verify finish before lunch. It does tell me this strange, open-source plan is useful to someone outside my terminal.',
           'If you have survived your own giant-PR saga, leave a note on the paragraph that brought back the memories. I would genuinely like to hear the story, partly for research and partly so I know I am not the only person who has tried to review a small novel through GitHub.',
         ],

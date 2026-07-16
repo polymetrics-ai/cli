@@ -17,6 +17,11 @@
   conversational request to star the repository.
 - Changed only the `human-harnesses` publication and update dates to `2026-07-16` so the article
   header reflects the current delivery date.
+- Replaced the remote Claude-workflow review section with the current Pi exact-head local review,
+  disposition, isolated repair, verification, and re-review loop.
+- Grounded the revision in the active Shepherd proof/recovery and CLI architecture Pi sessions,
+  including the observed second repair lap after verification caught trailing whitespace.
+- Removed Shepherd implementation detail from this post and retained only the next-post teaser.
 
 ## Evidence
 
@@ -34,6 +39,8 @@
   time, and star request are present; the removed footer strings are absent.
 - Date contract: focused test, typecheck, production build, and a local Chromium render assertion
   pass with `2026-07-16`; the old `2026-08-04` placeholder is absent.
+- Local-review contract: focused test, typecheck, production build, and desktop/mobile Chromium
+  assertions pass; the local loop is present and the stale Claude-workflow language is absent.
 
 ## Scope
 

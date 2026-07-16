@@ -90,10 +90,11 @@
 ## Local Review Loop Follow-Up
 
 - [x] Focused catalog test fails while the stale remote-review section remains.
-- [ ] Article describes exact-head local review, read-only findings, disposition, isolated fixes,
+- [x] Article describes exact-head local review, read-only findings, disposition, isolated fixes,
   verification, and re-review.
-- [ ] Remote PR-bot review is supplemental rather than the default delivery gate.
-- [ ] Shepherd implementation detail is removed and only the next-post teaser remains.
-- [ ] Focused catalog test, typecheck, production build, and `git diff --check` pass.
-- [ ] Local article renders the new section and omits the stale Claude workflow language.
-- [ ] No Warp/Pi session, GitHub workflow, runtime, or production environment is mutated.
+- [x] Remote PR-bot review is supplemental rather than the default delivery gate.
+- [x] Shepherd implementation detail is removed and only the next-post teaser remains.
+- [x] Focused catalog test, typecheck, production build, and `git diff --check` pass.
+- [x] Local article renders the new section and omits the stale Claude workflow language.
+- [x] Desktop and mobile Chromium assertions find no horizontal overflow.
+- [x] No Warp/Pi session, GitHub workflow, runtime, or production environment is mutated.

@@ -92,7 +92,7 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Local Review And Repair Loop
 
-- Status: red complete.
+- Status: green complete.
 - Red contract: require a local exact-head review section, read-only reviewer, isolated repair
   worker, correction loop, and Shepherd next-post teaser; reject the stale Claude workflow copy and
   detailed Shepherd implementation description.
@@ -101,3 +101,12 @@ Phase: `issue-395-human-harnesses`
   it` instead of `Review, fix, repeat, locally`, before reaching the new body assertions.
 - Green target: preserve the surrounding verification, human merge, and deployment claims while
   accurately reflecting the current Pi local-review contract and active-session evidence.
+- Green result: the catalog contract passes with `Review, fix, repeat, locally`, exact-head review,
+  a read-only reviewer, bounded disposition and repair, a four-round cap, supplemental remote-bot
+  language, and the Shepherd next-post teaser.
+- Regression result: all 64 website unit tests, website typecheck, and `git diff --check` pass.
+- Build result: the production Next.js build passes and prerenders `/blog/human-harnesses`; the
+  standalone build again reports that no local `BETTER_AUTH_SECRET` was supplied without exposing a
+  value.
+- Browser result: desktop and mobile Chromium assertions render the new section, omit the stale
+  Claude workflow language, and find no horizontal overflow.
