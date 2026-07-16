@@ -150,4 +150,16 @@ CREATE TABLE IF NOT EXISTS profile_settings (
 );
 `,
   },
+  {
+    id: 4,
+    name: 'bookmark-block-type-identity',
+    sql: `
+-- Body paragraphs and bullet points use independent block indexes. Keep
+-- otherwise-identical anchors in those two block namespaces distinct.
+ALTER TABLE bookmark DROP CONSTRAINT bookmark_unique_anchor;
+ALTER TABLE bookmark
+  ADD CONSTRAINT bookmark_unique_anchor
+  UNIQUE (user_id, post_slug, section_index, block_type, block_index, start_offset, exact);
+`,
+  },
 ];

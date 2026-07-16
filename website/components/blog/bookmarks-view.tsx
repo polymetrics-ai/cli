@@ -9,7 +9,7 @@ import { HomeSidebar } from '@/components/home/home-sidebar';
 import { PageAside } from '@/components/home/page-aside';
 import { SiteFooter } from '@/components/home/site-footer';
 import { SignInDialog } from '@/components/auth/sign-in-dialog';
-import { useSession } from '@/lib/auth-client';
+import { useHydratedSession } from '@/lib/auth-client';
 import { getBlogPost } from '@/lib/blog';
 import type { Anchor } from '@/lib/annotations/anchor';
 
@@ -58,9 +58,10 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 export function BookmarksView() {
-  const { data: session, isPending } = useSession();
+  const { data: session, isPending } = useHydratedSession();
   const [bookmarks, setBookmarks] = useState<BookmarkDto[] | null>(null);
   const [signInOpen, setSignInOpen] = useState(false);
+  const [removeError, setRemoveError] = useState('');
 
   useEffect(() => {
     if (!session) return;
@@ -83,8 +84,23 @@ export function BookmarksView() {
   }, [bookmarks]);
 
   async function remove(id: string) {
-    setBookmarks((current) => (current ?? []).filter((b) => b.id !== id));
-    await fetch(`/api/bookmarks/${id}`, { method: 'DELETE' });
+    const existing = bookmarks?.find((bookmark) => bookmark.id === id);
+    if (!existing) return;
+    setRemoveError('');
+    setBookmarks((current) => (current ?? []).filter((bookmark) => bookmark.id !== id));
+    try {
+      const response = await fetch(`/api/bookmarks/${id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error(String(response.status));
+    } catch {
+      setBookmarks((current) =>
+        (current ?? []).some((bookmark) => bookmark.id === id)
+          ? current
+          : [...(current ?? []), existing].sort((left, right) =>
+              right.createdAt.localeCompare(left.createdAt),
+            ),
+      );
+      setRemoveError('Removing the bookmark failed. Your saved passage was restored.');
+    }
   }
 
   if (isPending) {
@@ -125,6 +141,14 @@ export function BookmarksView() {
 
   return (
     <Shell>
+      {removeError ? (
+        <p
+          role="status"
+          className="mb-4 border border-line-structure bg-surface-1 px-3 py-2 text-[12px] text-text-tertiary"
+        >
+          {removeError}
+        </p>
+      ) : null}
       {bookmarks === null ? (
         <div className="flex flex-col gap-3">
           <Skeleton className="h-16 w-full rounded-none" />

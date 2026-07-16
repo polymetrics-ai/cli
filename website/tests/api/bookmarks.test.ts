@@ -91,6 +91,35 @@ describe('/api/bookmarks', () => {
     expect(bookmarks).toHaveLength(1);
   });
 
+  it('keeps body and point anchors distinct when their quote coordinates match', async () => {
+    mockSession.mockResolvedValue(user(alice));
+    const sectionIndex = post.sections.findIndex(
+      (section) => section.body.length > 0 && (section.points?.length ?? 0) > 0,
+    );
+    expect(sectionIndex).toBeGreaterThanOrEqual(0);
+
+    const shared = {
+      ...validAnchor(),
+      sectionIndex,
+      blockIndex: 0,
+      exact: 'same quote',
+      prefix: '',
+      suffix: '',
+      startOffset: 0,
+    };
+    const body = await POST(postRequest({ slug, anchor: { ...shared, blockType: 'body' } }));
+    const point = await POST(postRequest({ slug, anchor: { ...shared, blockType: 'point' } }));
+
+    expect(body.status).toBe(201);
+    expect(point.status).toBe(201);
+    const bodyBookmark = (await body.json()).bookmark;
+    const pointBookmark = (await point.json()).bookmark;
+    expect(pointBookmark.id).not.toBe(bodyBookmark.id);
+
+    const listed = await GET(new Request(`http://localhost/api/bookmarks?slug=${slug}`));
+    expect((await listed.json()).bookmarks).toHaveLength(2);
+  });
+
   it('keeps bookmarks private per user', async () => {
     mockSession.mockResolvedValue(user(alice));
     await POST(postRequest({ slug, anchor: validAnchor() }));

@@ -44,6 +44,23 @@ test.describe('blog UI smoke', () => {
     }
   });
 
+  test('hydrates the blog auth rail without a session-state mismatch', async ({ page }) => {
+    const hydrationErrors: string[] = [];
+    await page.route(/\/api\/auth\/get-session$/, (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: 'null' }),
+    );
+    page.on('console', (message) => {
+      if (message.text().includes('Hydration failed')) hydrationErrors.push(message.text());
+    });
+    page.on('pageerror', (error) => {
+      if (error.message.includes('Hydration failed')) hydrationErrors.push(error.message);
+    });
+
+    await page.goto('/blog/human-harnesses');
+    await expect(page.locator('[data-blog-auth-card][data-session-ready="true"]')).toBeVisible();
+    expect(hydrationErrors).toEqual([]);
+  });
+
   test('opens inline GitHub references without leaving the article', async ({ page }) => {
     await page.route('https://api.github.com/**', (route) => route.abort());
     await page.goto('/blog/human-harnesses');

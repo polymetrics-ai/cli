@@ -26,7 +26,7 @@ function mockedComments() {
         parentId: null,
         createdAt,
         author: { name: 'Karthik Sivadas', image: null },
-        mine: false,
+        mine: true,
       },
       {
         id: 'reply-one',
@@ -95,4 +95,17 @@ test('renders replies beneath their direct parents and keeps messages visible on
   const sheetBox = await sheet.boundingBox();
   expect(sheetBox).not.toBeNull();
   expect(sheetBox!.width).toBeGreaterThanOrEqual(370);
+});
+
+test('restores an optimistically removed note when delete loses the network', async ({ page }) => {
+  await page.route(/\/api\/comments\/root-note$/, (route) => route.abort('failed'));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(POST_PATH);
+  await page.getByRole('button', { name: /Open notes/ }).click();
+
+  const sheet = page.locator('[data-slot="sheet-content"]');
+  await sheet.getByRole('button', { name: 'Delete note' }).click();
+  await sheet.getByRole('button', { name: 'Confirm' }).click();
+
+  await expect(sheet.getByText(ROOT_BODY, { exact: true })).toBeVisible();
 });
