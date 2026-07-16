@@ -7,7 +7,7 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "1678f9ab",
   "verificationPassed": true,
-  "status": "review_fix_verified_pr_body_updated_ready_to_push",
+  "status": "review_fix_verified_pr_body_updated_pushed",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-421.prompt",
@@ -57,6 +57,6 @@
     "claude": "disabled_not_requested_per_instruction",
     "copilot": "not_requested_per_instruction",
     "fallback": "human_parent_review_pending",
-    "coverageStatus": "pr_body_updated_review_fix_pending_remote_checks_after_push"
+    "coverageStatus": "pr_body_updated_review_fix_pushed_remote_checks_pending"
   }
 }

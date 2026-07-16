@@ -1,6 +1,6 @@
 # Phase 421 Summary
 
-Status: PR #450 open against `feat/cli-architecture-v2`; accepted website ETL credential-shape review fix implemented and locally verified; commit/push checkpoint pending at this artifact point.
+Status: PR #450 open against `feat/cli-architecture-v2`; accepted website ETL credential-shape review fix implemented, locally verified, PR body updated, and review-fix checkpoint pushed.
 
 ## Current state
 
