@@ -5,7 +5,7 @@
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
   "subPR": 441,
-  "status": "final_review_fix_commit_recorded_push_pending",
+  "status": "final_review_fix_pr_body_updated",
   "verificationPassed": true,
   "verificationBlocker": "website package scripts that require local frontend dependencies failed because website/node_modules is absent and this task forbids installing dependencies; human/parent review fallback still pending",
   "gsd": {
@@ -123,6 +123,11 @@
       "cycle": "final-review-fix-commit-record",
       "decision": "local_critical_path",
       "reason": "recorded docs caveat fix commit 10938836cf2a846e03e2c284ce2ddeeec7c4f193 in issue-local trace artifacts before push; final PR body update will cite pushed branch head after traceability commit"
+    },
+    {
+      "cycle": "final-review-fix-pr-body",
+      "decision": "local_critical_path",
+      "reason": "updated PR #441 body with accepted website caveat disposition, docs caveat fix commit 10938836cf2a846e03e2c284ce2ddeeec7c4f193, and pushed head b577ec363e4d9301f45843b6610957d11dc57e55; no Claude/Copilot request posted"
     }
   ],
   "verification": {
@@ -245,7 +250,7 @@
   "finalReviewFix": {
     "finding": "LOW: website config section listed runtime/RLM/schedule typed keys without CLI manual caveat that those command readers still use legacy env readers until #402",
     "disposition": "accepted",
-    "status": "fix_commit_recorded_push_pending",
+    "status": "pr_body_updated_traceability_commit_pending",
     "currentHeadBeforeFix": "77e8fe559b6bab458ed19cb30d3fdc6aa6778f56",
     "requiredBehavior": [
       "website docs distinguish root/json as CLI-effective now",
@@ -265,7 +270,7 @@
       "make verify",
       "website package scripts available without dependency installs"
     ],
-    "latestPushedHeadAfterFix": "10938836cf2a846e03e2c284ce2ddeeec7c4f193",
+    "latestPushedHeadAfterFix": "b577ec363e4d9301f45843b6610957d11dc57e55",
     "implementation": {
       "website": "website/content/docs/cli-reference.mdx",
       "generated": "website/lib/docs.generated.ts",
@@ -293,8 +298,9 @@
       "npm --prefix website run test": "failed_exit_127: sh: vitest: command not found",
       "blocker": "website/node_modules absent; no dependency install/addition allowed by task"
     },
-    "prBodyUpdate": "pending_after_push_of_traceability_commit",
+    "prBodyUpdate": "updated via gh api repos/polymetrics-ai/cli/pulls/441 -X PATCH with pushed head b577ec363e4d9301f45843b6610957d11dc57e55; final PR body will be refreshed after traceability commit push",
     "reviewRequests": "none; user explicitly said do not request Claude/Copilot",
-    "docsCaveatFixCommit": "10938836cf2a846e03e2c284ce2ddeeec7c4f193"
+    "docsCaveatFixCommit": "10938836cf2a846e03e2c284ce2ddeeec7c4f193",
+    "traceabilityCommit": "pending"
   }
 }
