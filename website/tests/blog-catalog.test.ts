@@ -9,8 +9,8 @@ describe('blog catalog', () => {
     expect(post).toBeDefined();
     expect(post).toMatchObject({
       title: 'Humans Need Harnesses Too',
-      publishedAt: '2026-08-04',
-      updatedAt: '2026-08-04',
+      publishedAt: '2026-07-16',
+      updatedAt: '2026-07-16',
       readingTime: '14 min read',
       category: 'Build in public',
     });

@@ -69,7 +69,7 @@
 
 ## Publication-Date Follow-Up
 
-- [ ] Focused catalog test fails against the future placeholder date.
+- [x] Focused catalog test fails against the future placeholder date.
 - [ ] Only `human-harnesses` uses `publishedAt: '2026-07-16'` and `updatedAt: '2026-07-16'`.
 - [ ] Focused catalog test and website typecheck pass.
 - [ ] Production build prerenders `/blog/human-harnesses`.

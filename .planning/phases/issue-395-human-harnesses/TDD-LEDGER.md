@@ -73,9 +73,12 @@ Phase: `issue-395-human-harnesses`
 
 ## Follow-Up: Current Publication Date
 
-- Status: planned.
+- Status: red complete.
 - Red contract: expect only `human-harnesses` to publish and update on `2026-07-16` while preserving
   its existing content contract.
+- Red command: `npx -y pnpm@11.7.0 exec vitest run tests/blog-catalog.test.ts`.
+- Red result: failed with the catalog still returning `2026-08-04` for both fields, exactly isolating
+  the requested metadata delta.
 - Green target: update the two metadata fields, then verify the rendered article header shows
   `July 16, 2026` without changing another blog entry.
 - GSD activation: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase
