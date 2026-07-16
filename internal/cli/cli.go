@@ -342,70 +342,79 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 	}
 }
 
-func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
+type connectionsCreateFlags struct {
+	Sources            []string
+	Destinations       []string
+	Streams            []string
+	SyncModes          []string
+	Cursors            []string
+	PrimaryKeys        []string
+	Tables             []string
+	SourceConfigs      []string
+	DestinationConfigs []string
+}
+
+func runConnectionsCreate(ctx context.Context, a *app.App, name string, flags connectionsCreateFlags, stdout io.Writer, jsonOut bool) error {
+	source, err := parseEndpoint(lastString(flags.Sources))
+	if err != nil {
+		return err
 	}
-	switch args[0] {
-	case "create":
-		if len(args) < 2 {
-			return errUsage
-		}
-		flags := parseFlags(args[2:])
-		source, err := parseEndpoint(flags.first("source"))
-		if err != nil {
-			return err
-		}
-		dest, err := parseEndpoint(flags.first("destination"))
-		if err != nil {
-			return err
-		}
-		stream := flags.first("stream")
-		if stream == "" {
-			return errors.New("missing --stream")
-		}
-		sourceConfig, err := keyValues(flags.values["source-config"])
-		if err != nil {
-			return err
-		}
-		destConfig, err := keyValues(flags.values["destination-config"])
-		if err != nil {
-			return err
-		}
-		source.Config = sourceConfig
-		dest.Config = destConfig
-		streamCfg := app.StreamConfig{
-			SyncMode:         valueOr(flags.first("sync-mode"), "full_refresh_overwrite"),
-			CursorField:      flags.first("cursor"),
-			PrimaryKey:       flags.values["primary-key"],
-			DestinationTable: valueOr(flags.first("table"), stream),
-		}
-		conn, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
-			Name:        args[1],
-			Source:      source,
-			Destination: dest,
-			Streams:     map[string]app.StreamConfig{stream: streamCfg},
-		})
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "Connection", "connection": conn})
-		}
-		fmt.Fprintf(stdout, "Created connection %s\n", conn.Name)
-		return nil
-	case "list":
-		conns := a.ListConnections()
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ConnectionList", "connections": conns})
-		}
-		for _, conn := range conns {
-			fmt.Fprintf(stdout, "%s\t%s:%s -> %s:%s\n", conn.Name, conn.Source.Connector, conn.Source.Credential, conn.Destination.Connector, conn.Destination.Credential)
-		}
-		return nil
-	default:
-		return errUsage
+	dest, err := parseEndpoint(lastString(flags.Destinations))
+	if err != nil {
+		return err
 	}
+	stream := lastString(flags.Streams)
+	if stream == "" {
+		return errors.New("missing --stream")
+	}
+	sourceConfig, err := keyValues(flags.SourceConfigs)
+	if err != nil {
+		return err
+	}
+	destConfig, err := keyValues(flags.DestinationConfigs)
+	if err != nil {
+		return err
+	}
+	source.Config = sourceConfig
+	dest.Config = destConfig
+	streamCfg := app.StreamConfig{
+		SyncMode:         valueOr(lastString(flags.SyncModes), "full_refresh_overwrite"),
+		CursorField:      lastString(flags.Cursors),
+		PrimaryKey:       flags.PrimaryKeys,
+		DestinationTable: valueOr(lastString(flags.Tables), stream),
+	}
+	conn, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
+		Name:        name,
+		Source:      source,
+		Destination: dest,
+		Streams:     map[string]app.StreamConfig{stream: streamCfg},
+	})
+	if err != nil {
+		return err
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "Connection", "connection": conn})
+	}
+	fmt.Fprintf(stdout, "Created connection %s\n", conn.Name)
+	return nil
+}
+
+func runConnectionsList(a *app.App, stdout io.Writer, jsonOut bool) error {
+	conns := a.ListConnections()
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "ConnectionList", "connections": conns})
+	}
+	for _, conn := range conns {
+		fmt.Fprintf(stdout, "%s\t%s:%s -> %s:%s\n", conn.Name, conn.Source.Connector, conn.Source.Credential, conn.Destination.Connector, conn.Destination.Credential)
+	}
+	return nil
+}
+
+func lastString(values []string) string {
+	if len(values) == 0 {
+		return ""
+	}
+	return values[len(values)-1]
 }
 
 func runCatalogAction(ctx context.Context, a *app.App, action string, connection string, stdout io.Writer, jsonOut bool) error {

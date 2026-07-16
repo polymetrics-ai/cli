@@ -67,12 +67,13 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	for _, spec := range cobraLegacyCommands(cfg) {
 		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec))
 	}
+	cmd.AddCommand(newConnectionsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
 	return cmd
 }
 
 func executeRootCmd(cmd *cobra.Command, args []string) error {
-	args = normalizeCatalogConnectionArgs(args)
+	args = normalizeNativeStringArrayArgs(args)
 	if len(args) > 0 && lookupTopLevelCommand(cmd, args[0]) == nil {
 		return cmd.RunE(cmd, args)
 	}
@@ -84,22 +85,54 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	return err
 }
 
-func normalizeCatalogConnectionArgs(args []string) []string {
-	if len(args) < 3 || args[0] != "catalog" || (args[1] != "refresh" && args[1] != "show") {
-		return args
+func normalizeNativeStringArrayArgs(args []string) []string {
+	if len(args) >= 3 && args[0] == "catalog" && (args[1] == "refresh" || args[1] == "show") {
+		return normalizeStringArraySpaceValues(args, 2, map[string]struct{}{"connection": {}})
 	}
+	if len(args) >= 2 && args[0] == "connections" && args[1] == "create" {
+		return normalizeStringArraySpaceValues(args, 2, connectionsCreateFlagNames)
+	}
+	return args
+}
+
+var connectionsCreateFlagNames = map[string]struct{}{
+	"source":             {},
+	"destination":        {},
+	"stream":             {},
+	"sync-mode":          {},
+	"cursor":             {},
+	"primary-key":        {},
+	"table":              {},
+	"source-config":      {},
+	"destination-config": {},
+}
+
+func normalizeStringArraySpaceValues(args []string, start int, flagNames map[string]struct{}) []string {
 	out := make([]string, 0, len(args))
-	out = append(out, args[0], args[1])
-	for i := 2; i < len(args); i++ {
+	out = append(out, args[:start]...)
+	for i := start; i < len(args); i++ {
 		arg := args[i]
-		if arg == "--connection" && i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
-			out = append(out, "--connection="+args[i+1])
-			i++
-			continue
+		if flagName, ok := nativeStringArrayFlagName(arg); ok {
+			if _, known := flagNames[flagName]; known && i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
+				out = append(out, arg+"="+args[i+1])
+				i++
+				continue
+			}
 		}
 		out = append(out, arg)
 	}
 	return out
+}
+
+func nativeStringArrayFlagName(arg string) (string, bool) {
+	if !strings.HasPrefix(arg, "--") || strings.Contains(arg, "=") {
+		return "", false
+	}
+	name := strings.TrimPrefix(arg, "--")
+	if name == "" {
+		return "", false
+	}
+	return name, true
 }
 
 func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
@@ -114,9 +147,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "credentials", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runCredentials(ctx, a, args, stdout, jsonOut) })
-		}},
-		{name: "connections", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runConnections(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "etl", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
@@ -161,6 +191,87 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 			return runWorker(ctx, cfg, args, stdout, jsonOut)
 		}},
 	}
+}
+
+func newConnectionsCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "connections",
+		Args:          cobra.NoArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			return completeConnectionNames(cmd, args, toComplete)
+		},
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("connections", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "connections", stdout, jsonOut)
+	cmd.AddCommand(newConnectionsCreateCobraCommand(ctx, root, stdout, jsonOut))
+	cmd.AddCommand(newConnectionsListCobraCommand(ctx, root, stdout, jsonOut))
+	return cmd
+}
+
+func newConnectionsCreateCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	var flags connectionsCreateFlags
+	cmd := &cobra.Command{
+		Use:           "create <name>",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		RunE: func(_ *cobra.Command, args []string) error {
+			if len(args) < 1 {
+				return errUsage
+			}
+			return markCobraLegacyError(withApp(root, func(a *app.App) error {
+				return runConnectionsCreate(ctx, a, args[0], flags, stdout, jsonOut)
+			}))
+		},
+	}
+	setManualHelp(cmd, "connections", stdout, jsonOut)
+	addConnectionsStringArrayFlag(cmd, &flags.Sources, "source", "source connector:credential")
+	addConnectionsStringArrayFlag(cmd, &flags.Destinations, "destination", "destination connector:credential")
+	addConnectionsStringArrayFlag(cmd, &flags.Streams, "stream", "stream name")
+	addConnectionsStringArrayFlag(cmd, &flags.SyncModes, "sync-mode", "sync mode")
+	addConnectionsStringArrayFlag(cmd, &flags.Cursors, "cursor", "cursor field")
+	addConnectionsStringArrayFlag(cmd, &flags.PrimaryKeys, "primary-key", "primary key field")
+	addConnectionsStringArrayFlag(cmd, &flags.Tables, "table", "destination table")
+	addConnectionsStringArrayFlag(cmd, &flags.SourceConfigs, "source-config", "source config key=value")
+	addConnectionsStringArrayFlag(cmd, &flags.DestinationConfigs, "destination-config", "destination config key=value")
+	return cmd
+}
+
+func newConnectionsListCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "list",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(withApp(root, func(a *app.App) error {
+				return runConnectionsList(a, stdout, jsonOut)
+			}))
+		},
+	}
+	setManualHelp(cmd, "connections", stdout, jsonOut)
+	return cmd
+}
+
+func addConnectionsStringArrayFlag(cmd *cobra.Command, target *[]string, name string, usage string) {
+	cmd.Flags().StringArrayVar(target, name, nil, usage)
+	if flag := cmd.Flags().Lookup(name); flag != nil {
+		flag.NoOptDefVal = "true"
+	}
+}
+
+func completeConnectionNames(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+	return nil, cobra.ShellCompDirectiveNoFileComp
 }
 
 func newCatalogCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {

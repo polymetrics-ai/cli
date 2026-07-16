@@ -39,8 +39,8 @@ Result:
 |---:|---|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS | Green | Pre-production artifact checkpoint; no production code touched. |
 | 1 | Red | `go test ./internal/cli/ -run 'Connections|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `connections` remains legacy; invalid action opens project before usage classification. |
-| 2 | Green | `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1` | Pending | Native parser + goldens. |
-| 3 | Refactor | `gofmt -w cmd internal`; `go test ./internal/cli/ -run Certify -count=1` | Pending | Re-entrancy/certify smoke. |
+| 2 | Green | `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1` | Pass | Native connections parser green; golden transcripts unchanged. |
+| 3 | Refactor | `gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/connections_cli_test.go`; `go test ./internal/cli/ -run Certify -count=1`; `go vet ./...`; `go build ./cmd/pm` | Pass | Gofmt clean; certify re-entrancy, vet, and build preserved. |
 | 4 | Gate | `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; diff checks | Pending | Full local gates. |
 
 ## Planned red tests
@@ -78,4 +78,36 @@ FAIL
 
 ## Exact green outputs
 
-Pending.
+```bash
+gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/connections_cli_test.go
+go test ./internal/cli/ -run 'Connections|CobraRouterShell' -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	6.329s
+```
+
+```bash
+go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	12.034s
+```
+
+```bash
+go test ./internal/cli/ -run Certify -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	95.754s
+```
+
+```bash
+go vet ./...
+go build ./cmd/pm
+```
+
+```text
+# no output; both commands exited 0
+```

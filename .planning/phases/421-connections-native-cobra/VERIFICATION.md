@@ -3,11 +3,11 @@
 ## Required gate checklist
 
 - [ ] `gofmt -w cmd internal`
-- [ ] `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1`
-- [ ] `go test ./internal/cli/ -run Certify -count=1`
-- [ ] `go vet ./...`
+- [x] `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1`
+- [x] `go test ./internal/cli/ -run Certify -count=1`
+- [x] `go vet ./...`
 - [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
+- [x] `go build ./cmd/pm`
 - [ ] `make verify`
 - [ ] `git diff --check origin/feat/cli-architecture-v2...HEAD`
 - [ ] `git diff -- go.mod go.sum`
@@ -35,4 +35,21 @@
 
 ## Results
 
-Pending.
+```bash
+go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1
+```
+
+Result: pass (`ok  	polymetrics.ai/internal/cli	12.034s`).
+
+```bash
+go test ./internal/cli/ -run Certify -count=1
+```
+
+Result: pass (`ok  	polymetrics.ai/internal/cli	95.754s`).
+
+```bash
+go vet ./...
+go build ./cmd/pm
+```
+
+Result: pass / no output.

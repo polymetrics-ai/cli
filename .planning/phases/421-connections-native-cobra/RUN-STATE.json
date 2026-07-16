@@ -7,7 +7,7 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "1678f9ab",
   "verificationPassed": false,
-  "status": "red_tests_captured_green_implementation_pending",
+  "status": "green_implementation_focused_gates_passed_full_verification_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-421.prompt",
@@ -25,6 +25,11 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "red tests added inline for native connections subtree, flag semantics, list tolerance, and invalid action usage; no subagent available"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native connections Cobra subtree implemented in allowed internal/cli scope; focused gates, certify smoke, vet, and build passed"
     }
   ],
   "pullRequest": null,
