@@ -27,79 +27,9 @@ const maxConnectorCommandLimit = 10000
 func Run(args []string, stdout, stderr io.Writer) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
-	if len(cleanArgs) == 0 {
-		if err := writeRootManual(stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
-	}
-	cmd := cleanArgs[0]
-	rest := cleanArgs[1:]
-	if cmd == "--help" || cmd == "-h" || (cmd == "help" && len(rest) == 0) || cmd == "man" && len(rest) == 0 {
-		if err := writeRootManual(stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
-	}
-	if len(rest) > 0 && (rest[0] == "--help" || rest[0] == "-h" || rest[0] == "help") {
-		if err := writeManual(cmd, stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
-	}
-	if len(rest) == 0 && isManualCommand(cmd) {
-		if err := writeManual(cmd, stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
-	}
-	var err error
-	switch cmd {
-	case "init":
-		err = runInit(root, stdout, jsonOut)
-	case "help", "man":
-		err = runHelp(rest, stdout)
-	case "connectors":
-		err = runConnectors(ctx, root, rest, stdout, jsonOut)
-	case "credentials":
-		err = withApp(root, func(a *app.App) error { return runCredentials(ctx, a, rest, stdout, jsonOut) })
-	case "connections":
-		err = withApp(root, func(a *app.App) error { return runConnections(ctx, a, rest, stdout, jsonOut) })
-	case "catalog":
-		err = withApp(root, func(a *app.App) error { return runCatalog(ctx, a, rest, stdout, jsonOut) })
-	case "etl":
-		err = withApp(root, func(a *app.App) error { return runETL(ctx, a, rest, stdout, jsonOut) })
-	case "query":
-		err = withApp(root, func(a *app.App) error { return runQuery(ctx, a, rest, stdout, jsonOut) })
-	case "reverse":
-		err = withApp(root, func(a *app.App) error { return runReverse(ctx, a, rest, stdout, jsonOut) })
-	case "agent":
-		err = runAgent(ctx, root, rest, stdout, jsonOut)
-	case "runtime":
-		err = runRuntime(ctx, rest, stdout, jsonOut)
-	case "flow":
-		err = withApp(root, func(a *app.App) error { return runFlow(ctx, a, rest, stdout, jsonOut) })
-	case "extract":
-		err = withApp(root, func(a *app.App) error { return runExtract(ctx, a, root, rest, stdout, jsonOut) })
-	case "perf":
-		err = runPerf(ctx, rest, stdout, jsonOut)
-	case "docs":
-		err = runDocs(rest, stdout)
-	case "skills":
-		err = runSkills(rest, stdout, jsonOut)
-	case "version":
-		err = runVersion(rest, stdout, jsonOut)
-	case "rlm":
-		err = runRLM(ctx, root, rest, stdout, jsonOut)
-	case "schedule":
-		err = runSchedule(ctx, root, rest, stdout, jsonOut)
-	case "worker":
-		err = runWorker(ctx, rest, stdout, jsonOut)
-	default:
-		err = runMaybeConnectorCommand(ctx, root, cmd, rest, stdout, jsonOut)
-	}
-	if err != nil {
-		return writeError(stdout, stderr, err, jsonOut)
+	cmd := newRootCmd(ctx, root, stdout, stderr, jsonOut)
+	if err := executeRootCmd(cmd, cleanArgs); err != nil {
+		return writeError(stdout, stderr, mapCobraErr(err), jsonOut)
 	}
 	return 0
 }

@@ -35,4 +35,14 @@ scripts/gsd prompt programming-loop init --phase 400 --dry-run >/tmp/gsd-program
 
 ## Verification result
 
-Pending.
+Focused and full local gates passed. Post-commit diff checks / PR creation pending.
+
+Key results:
+
+- `go test ./internal/cli/ -run Golden -count=1` passed byte-identical.
+- `go test ./internal/cli/ -run Certify -count=1` passed.
+- `go test ./internal/cli/ -count=1` passed.
+- `go vet ./...` passed.
+- `go test ./...` passed.
+- `go build ./cmd/pm` passed.
+- `make verify` passed.

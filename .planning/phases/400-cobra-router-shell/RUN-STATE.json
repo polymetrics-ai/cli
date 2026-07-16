@@ -4,9 +4,9 @@
   "branch": "refactor/400-cobra-router-shell",
   "baseBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "planning",
-  "verificationPassed": false,
-  "verificationBlocker": "implementation pending",
+  "status": "implemented_green_local",
+  "verificationPassed": true,
+  "verificationBlocker": "post-commit diff checks and PR creation pending",
   "gsd": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-400.prompt",
@@ -17,15 +17,65 @@
   "dependencyDecision": {
     "cobra": "github.com/spf13/cobra v1.10.2",
     "approvedBy": "docs/adr/0002-cobra-viper-cli-framework.md",
-    "status": "selected_not_added"
+    "status": "added",
+    "directDependenciesAdded": [
+      "github.com/spf13/cobra v1.10.2"
+    ],
+    "indirectGoModDependenciesAdded": [
+      "github.com/inconshreveable/mousetrap v1.1.0",
+      "github.com/spf13/pflag v1.0.9"
+    ],
+    "goSumMetadataOnly": [
+      "github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod",
+      "github.com/russross/blackfriday/v2 v2.1.0/go.mod",
+      "go.yaml.in/yaml/v3 v3.0.4/go.mod"
+    ]
   },
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "spawned",
       "reason": "parent #397 assigned isolated worker directory, branch, issue #400, and bounded write scope; worker does not spawn subagents"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red validation captured inline: Cobra absent from dependency graph and focused Cobra router test fails before implementation"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "worker implemented assigned Cobra router shell locally; no subagents available to worker"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused gates and make verify passed locally; post-commit diff checks still pending"
     }
   ],
+  "verification": {
+    "focused": {
+      "cobraRouterTest": "passed",
+      "golden": "passed_byte_identical",
+      "certify": "passed",
+      "internalCLI": "passed"
+    },
+    "full": {
+      "gofmt": "passed",
+      "vet": "passed",
+      "goTestAll": "passed",
+      "build": "passed",
+      "makeVerify": "passed"
+    },
+    "parity": {
+      "helpConnectors": "passed",
+      "bareConnectors": "passed",
+      "docsHelp": "passed",
+      "hiddenWorkerHelpJSON": "passed_current_golden_behavior",
+      "docsCliUpdated": "not_applicable_byte_identical",
+      "websiteUpdated": "not_applicable_byte_identical"
+    }
+  },
   "artifacts": [
     ".planning/phases/400-cobra-router-shell/PLAN.md",
     ".planning/phases/400-cobra-router-shell/TDD-LEDGER.md",
