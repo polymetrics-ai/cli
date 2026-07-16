@@ -25,8 +25,10 @@ Result:
 | Step | Kind | Command / test | Result | Notes |
 |---:|---|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS | Green | Pre-production artifact checkpoint. |
-| 1 | Red | pending | pending | Add tests proving config-file/env alias injection for named readers and exclusions. |
-| 2 | Green | pending | pending | Implement minimal config injection. |
+| 1 | Red | `go test ./internal/runtimecheck/... -count=1` | Fail | `undefined: FromConfig`; proves runtimecheck needs typed config API. |
+| 2 | Red | `go test ./internal/schedule/... -count=1` | Fail | Missing `BackendConfig`, `SelectBackendFromConfig`, `CrontabBackend.File`; proves schedule needs injected config seam. |
+| 3 | Red | `go test ./internal/cli/ -run 'Config|Runtime|RLM|Schedule|Worker|AgentImage' -count=1` | Fail | Runtime/worker/RLM config-file tests fail against legacy env readers. |
+| 4 | Green | pending | pending | Implement minimal config injection. |
 | 3 | Refactor | pending | pending | Docs caveat and cleanup while tests green. |
 
 ## Planned red tests
@@ -39,4 +41,52 @@ Result:
 
 ## Exact red outputs
 
-Pending.
+### Runtimecheck
+
+```bash
+go test ./internal/runtimecheck/... -count=1
+```
+
+```text
+# polymetrics.ai/internal/runtimecheck [polymetrics.ai/internal/runtimecheck.test]
+internal/runtimecheck/runtimecheck_config_test.go:18:9: undefined: FromConfig
+FAIL	polymetrics.ai/internal/runtimecheck [build failed]
+FAIL
+```
+
+### Schedule
+
+```bash
+go test ./internal/schedule/... -count=1
+```
+
+```text
+# polymetrics.ai/internal/schedule [polymetrics.ai/internal/schedule.test]
+internal/schedule/config_test.go:12:9: undefined: BackendConfig
+internal/schedule/config_test.go:17:13: undefined: SelectBackendFromConfig
+internal/schedule/config_test.go:26:28: unknown field File in struct literal of type CrontabBackend
+FAIL	polymetrics.ai/internal/schedule [build failed]
+FAIL
+```
+
+### CLI config migration
+
+```bash
+go test ./internal/cli/ -run 'Config|Runtime|RLM|Schedule|Worker|AgentImage' -count=1
+```
+
+```text
+--- FAIL: TestRuntimeDoctorUsesConfigFile (0.03s)
+    config_migration_test.go:32: postgres_url = postgres://***@localhost:15433/polymetrics?sslmode=disable, want config-file value
+--- FAIL: TestWorkerStatusUsesExplicitConfigFileTemporalAddr (0.00s)
+    config_migration_test.go:54: addr = , want explicit config-file temporal addr
+--- FAIL: TestRLMAgentFakeRunnerUsesConfigFile (0.00s)
+    config_migration_test.go:79: exit = 1, stderr = error: rlm: remote agent backend unavailable (set POLYMETRICS_TEMPORAL_ADDR and install podman, or use --mode deterministic)
+redis: 2026/07/16 21:23:12 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/16 21:23:12 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/16 21:23:13 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/16 21:23:13 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+FAIL
+FAIL	polymetrics.ai/internal/cli	3.817s
+FAIL
+```

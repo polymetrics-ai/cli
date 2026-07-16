@@ -16,6 +16,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "bounded mutating worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for typed config injection; no subagent available"
     }
   ]
 }
