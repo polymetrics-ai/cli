@@ -36,7 +36,14 @@ export function ArticleBody({
   evidence: BlogEvidence[];
 }) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const evidenceTriggerRef = useRef<HTMLButtonElement | null>(null);
   const [activeEvidence, setActiveEvidence] = useState<BlogEvidence | null>(null);
+
+  const closeEvidence = () => {
+    const trigger = evidenceTriggerRef.current;
+    setActiveEvidence(null);
+    window.requestAnimationFrame(() => trigger?.focus());
+  };
 
   return (
     <AnnotationsProvider slug={slug}>
@@ -105,7 +112,10 @@ export function ArticleBody({
                 <GitHubEvidenceMarkers
                   evidence={evidence}
                   evidenceIds={section.evidenceIds}
-                  onOpen={setActiveEvidence}
+                  onOpen={(item, trigger) => {
+                    evidenceTriggerRef.current = trigger;
+                    setActiveEvidence(item);
+                  }}
                 />
               ) : null}
             </section>
@@ -127,7 +137,7 @@ export function ArticleBody({
       <CommentComposer />
       <HoverPreview />
       <CommentsSheet sections={sections} />
-      <GitHubEvidenceSheet evidence={activeEvidence} onClose={() => setActiveEvidence(null)} />
+      <GitHubEvidenceSheet evidence={activeEvidence} onClose={closeEvidence} />
     </AnnotationsProvider>
   );
 }

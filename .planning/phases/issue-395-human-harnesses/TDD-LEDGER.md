@@ -142,3 +142,8 @@ Phase: `issue-395-human-harnesses`
   article visible behind it. The in-app browser refused a localhost refresh under its URL policy;
   the 390px containment/overflow assertion is therefore committed for remote Website CI rather
   than represented as a completed local screenshot.
+- Remote correction round 1: Website CI reached the new evidence test and failed only the added
+  focus-return assertion. The controlled sheet was not mounted through a Radix trigger, so its
+  external marker remained inactive after Escape. The marker callback now records the activating
+  button and the close path returns focus explicitly on the next animation frame. The same remote
+  test will exercise focus return and then continue into the 390px containment assertion.

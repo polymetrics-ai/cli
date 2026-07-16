@@ -126,7 +126,7 @@ export function GitHubEvidenceMarkers({
 }: {
   evidence: BlogEvidence[];
   evidenceIds: string[];
-  onOpen: (evidence: BlogEvidence) => void;
+  onOpen: (evidence: BlogEvidence, trigger: HTMLButtonElement) => void;
 }) {
   const items = useMemo(() => {
     const byId = new Map(evidence.map((item) => [item.id, item]));
@@ -155,7 +155,7 @@ export function GitHubEvidenceMarkers({
             type="button"
             aria-label={`Preview ${item.label} evidence`}
             data-evidence-marker={item.id}
-            onClick={() => onOpen(item)}
+            onClick={(event) => onOpen(item, event.currentTarget)}
             className="group flex min-h-14 items-center gap-3 bg-surface-bg px-3 py-2 text-left transition-colors hover:bg-surface-1 focus-visible:relative focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta"
           >
             <span className="flex size-8 shrink-0 items-center justify-center border border-line-structure bg-surface-1 text-line-cta transition-colors group-hover:border-line-cta">
