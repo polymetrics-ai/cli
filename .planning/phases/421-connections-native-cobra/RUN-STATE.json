@@ -6,8 +6,8 @@
   "branch": "refactor/421-connections-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "1678f9ab",
-  "verificationPassed": false,
-  "status": "green_implementation_focused_gates_passed_full_verification_pending",
+  "verificationPassed": true,
+  "status": "local_verification_passed_pr_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-421.prompt",
@@ -30,6 +30,11 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "native connections Cobra subtree implemented in allowed internal/cli scope; focused gates, certify smoke, vet, and build passed"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "full local gates, runtime help/docs/website parity checks, and diff guards completed inline in isolated worker cwd"
     }
   ],
   "pullRequest": null,

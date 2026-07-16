@@ -58,42 +58,42 @@ Excluded:
 
 ## Delivered implementation matrix
 
-| Scope | Planned delivery |
+| Scope | Delivery |
 |---|---|
-| Native connections Cobra node | Remove `connections` from legacy wrapper list and register native command with custom docs-map help/usage. |
-| Actions | Add native `create` and `list` subcommands. |
-| Flag parity | Use pflag declarations with `StringArrayVar` where repetition matters or last-wins must be recoverable; set `NoOptDefVal="true"`; whitelist unknown flags; normalize optional-value flags so legacy `--flag value` keeps working. |
-| Handler adaptation | Split `runConnectionsAction`/request construction so native actions reuse existing app behavior without changing domain semantics. |
-| Bare/invalid behavior | Bare namespace help exit 0; invalid action usage exit 2 through `mapCobraErr`. |
-| Completion seam | Provide a package-level connection-name completion seam returning no completions/NoFileComp until Phase 15 wires project-aware completion. |
-| Docs/goldens | Expect no golden/docs/website/generated changes; verify docs-generate-diff/goldens and runtime help. |
+| Native connections Cobra node | `connections` removed from legacy wrapper list and registered as a native command with custom docs-map help/usage. |
+| Actions | Added native `create` and `list` subcommands. |
+| Flag parity | Added pflag `StringArrayVar` declarations for all `create` flags, `NoOptDefVal="true"`, unknown-flag whitelist, and native optional-value normalization so legacy `--flag value` keeps working. |
+| Handler adaptation | Replaced `runConnections`/`parseFlags` with `runConnectionsCreate` and `runConnectionsList`, preserving validation order, last-wins singleton flags, repeated primary keys/configs, output envelopes, and app/domain behavior. |
+| Bare/invalid behavior | Bare namespace help exits 0; invalid action exits 2 through `mapCobraErr` without opening `.polymetrics` first. |
+| Completion seam | Added no-op connection-name completion seam returning `ShellCompDirectiveNoFileComp`; Phase 15 implementation deferred. |
+| Docs/goldens | No help/docs/website/golden fixture changes; parity verified by focused golden/docs tests, runtime help checks, docs generation diff, and website docs generator. |
 
 ## Slice plan
 
 1. Planning checkpoint ✅
    - Create phase artifacts and record adapter fallback, missing repo Go skill file, loaded skills, scope, parity checklist, and verification plan.
 
-2. Red tests
-   - Add focused tests proving `connections` is not yet native: command should have `DisableFlagParsing=false`; native `create`/`list` subcommands; `create` flag metadata for repeated/listable and singleton flags; `NoOptDefVal="true"`; unknown-flag whitelist; list unknown-flag tolerance; completion seam exists.
-   - Add behavior tests for create flag forms: equals, space, repeated last-wins, repeated primary key accumulation, bare bool preservation, unknown flag tolerance, extra args tolerance, and late global `--root`/`--json` via existing global parser.
-   - Add invalid-action usage test if not already covered by goldens.
-   - Capture exact red output in `TDD-LEDGER.md` before production code.
+2. Red tests ✅
+   - Added focused tests proving `connections` was not native: command should have `DisableFlagParsing=false`; native `create`/`list` subcommands; `create` flag metadata; `NoOptDefVal="true"`; unknown-flag whitelist; list unknown-flag tolerance; completion seam exists.
+   - Added behavior tests for create flag forms: equals, space, repeated last-wins, repeated primary key accumulation, bare bool preservation, unknown flag tolerance, extra args tolerance, and late global `--root`/`--json` via existing global parser.
+   - Added invalid-action usage test.
+   - Captured exact red output in `TDD-LEDGER.md` before production code.
 
-3. Green implementation
-   - Add native `connections` subtree in `cobra_router.go`, with action subcommands and custom docs-map help/usage.
-   - Add normalization for `connections create` optional-value flags so pflag `NoOptDefVal` does not swallow legacy space-form values.
-   - Add `runConnectionsCreate` / `runConnectionsList` helper(s) that accept already-parsed values while preserving current validation/order/output behavior.
-   - Remove `connections` namespace `parseFlags` call site when native path no longer needs it.
+3. Green implementation ✅
+   - Added native `connections` subtree in `cobra_router.go`, with action subcommands and custom docs-map help/usage.
+   - Added normalization for `connections create` optional-value flags so pflag `NoOptDefVal` does not swallow legacy space-form values.
+   - Added `runConnectionsCreate` / `runConnectionsList` helpers that accept already-parsed values while preserving current validation/order/output behavior.
+   - Removed the `connections` namespace `parseFlags` call site.
 
-4. Parity / golden check
-   - Golden transcript changes expected: empty.
-   - Docs/website updates expected: not applicable unless help output intentionally changes; generated docs check should remain green.
-   - Verify runtime help: `pm help connections`, bare `pm connections`, `pm connections --help`, JSON manual, and representative `connections create/list --json` local fixture commands.
+4. Parity / golden check ✅
+   - Golden transcript changes: empty.
+   - Docs/website updates: not applicable because help/output did not change.
+   - Verified runtime help: `pm help connections`, bare `pm connections`, `pm connections --help`, JSON manual, invalid action, and representative `connections create/list --json` local fixture tests.
 
-5. Full verification / PR
-   - Run required focused and full gates.
-   - Diff check against `origin/feat/cli-architecture-v2...HEAD`; `go.mod`/`go.sum` diff must be empty.
-   - Commit/push green slice; open non-draft stacked PR to `feat/cli-architecture-v2` with `Refs #421`, `Refs #407`, and `Refs #397`.
+5. Full verification / PR ✅ / pending PR creation
+   - Required focused and full gates passed.
+   - Diff check against `origin/feat/cli-architecture-v2...HEAD` passed; `go.mod`/`go.sum` diff empty.
+   - Green implementation committed/pushed; non-draft stacked PR pending.
    - Do not request Claude/Copilot; record human/parent fallback pending per dispatch instruction.
 
 ## Planned tests / validations

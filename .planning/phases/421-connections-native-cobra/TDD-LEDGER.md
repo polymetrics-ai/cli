@@ -41,7 +41,7 @@ Result:
 | 1 | Red | `go test ./internal/cli/ -run 'Connections|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `connections` remains legacy; invalid action opens project before usage classification. |
 | 2 | Green | `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1` | Pass | Native connections parser green; golden transcripts unchanged. |
 | 3 | Refactor | `gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/connections_cli_test.go`; `go test ./internal/cli/ -run Certify -count=1`; `go vet ./...`; `go build ./cmd/pm` | Pass | Gofmt clean; certify re-entrancy, vet, and build preserved. |
-| 4 | Gate | `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; diff checks | Pending | Full local gates. |
+| 4 | Gate | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; runtime help/docs/website/diff checks | Pass | Full local gates, parity checks, and diff guards passed; no go.mod/go.sum diff. |
 
 ## Planned red tests
 
@@ -110,4 +110,56 @@ go build ./cmd/pm
 
 ```text
 # no output; both commands exited 0
+```
+
+```bash
+go test ./...
+```
+
+```text
+# pass; full package output emitted in terminal run, with slow packages including:
+ok  	polymetrics.ai/internal/cli	199.324s
+ok  	polymetrics.ai/internal/connectors/certify	398.504s
+```
+
+```bash
+make verify
+```
+
+```text
+# pass; completed gofmt, tidy-check, vet, go test -timeout 20m ./..., go build ./cmd/pm,
+# docs validate, local smoke flow, golangci-lint, and connectorgen validate.
+# Terminal tail:
+0 issues.
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+```bash
+./pm help connections
+./pm connections
+./pm connections --help
+./pm connections --json
+./pm connections bogus --json
+```
+
+```text
+help/bare/--help byte-identical; help bytes=1148; JSON manual bytes=1299; invalid action exit=2; stderr=error: unknown command "bogus" for "pm connections"
+```
+
+```bash
+./pm docs generate --dir "$TMP/cli" --connectors-dir "$TMP/connectors"
+diff -ru docs/cli "$TMP/cli"
+./pm docs validate --connectors-dir docs/connectors
+npm run gen:docs --prefix website
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+```text
+Generated docs in <tmp>/cli and connector docs in <tmp>/connectors
+# diff -ru: no output
+Validated connector docs in docs/connectors
+Wrote 11 docs pages to lib/docs.generated.ts.
+# git diff checks: no output; docs/website/golden diff line count = 0
 ```

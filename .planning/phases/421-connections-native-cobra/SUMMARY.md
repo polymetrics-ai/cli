@@ -1,26 +1,32 @@
 # Phase 421 Summary
 
-Status: planning artifacts created; red tests pending; no production code edited yet.
+Status: local verification passed; stacked PR pending/open step next; human/parent fallback review pending.
 
 ## Current state
 
 - Worker branch: `refactor/421-connections-native-cobra`.
 - GSD adapter doctor passed; `programming-loop` prompt command missing, so manual GSD fallback recorded.
 - Required reading and skills loaded. Repo-specific `.pi/skills/go-implementation/SKILL.md` is missing; global Go skills loaded.
-- Scope limited to `connections` native Cobra parser/handler/tests and directly applicable parity artifacts.
+- Scope stayed inside `connections` CLI/router/tests and issue-local planning artifacts.
 
-## Planned delivery
+## Delivered
 
-- Replace top-level `pm connections` legacy Cobra wrapper with native Cobra subtree.
-- Add native `connections create` and `connections list` actions with declared flags preserving legacy repeated, bare bool, unknown-flag, extra-arg, and global late-flag compatibility.
-- Remove `connections` namespace `parseFlags` call site after native adaptation.
-- Preserve docs-map help and golden stdout/stderr/exit identity; no docs/website generated changes expected.
-- Preserve connection-name completion seam for Phase 15 without implementing completion.
+- Replaced top-level `pm connections` legacy Cobra wrapper with a native Cobra subtree.
+- Added native `connections create` and `connections list` actions with declared `StringArray` flags, `NoOptDefVal="true"`, unknown-flag whitelist, optional-value normalization, and docs-map help/usage.
+- Removed the `connections` namespace `parseFlags` call site.
+- Preserved legacy flag semantics: space/equals forms, repeated singleton last-wins, repeated `--primary-key`, repeated configs, bare bool sentinels, unknown flag tolerance, extra arg tolerance, and late `--root`/`--json` globals.
+- Added no-op connection-name completion seam returning `ShellCompDirectiveNoFileComp`; Phase 15 completion implementation deferred.
+- Added focused tests for native metadata, flag-form behavior, list tolerance, invalid action usage, and completion seam.
 
 ## Verification
 
-Pending. Planned gates are in `VERIFICATION.md`.
+- `go test ./internal/cli/... -run 'Connections|CobraRouterShell|Golden' -count=1` passed.
+- `go test ./internal/cli/ -run Certify -count=1` passed.
+- `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` passed.
+- Runtime help parity checked: `./pm help connections`, `./pm connections`, `./pm connections --help`, `./pm connections --json`, and invalid action JSON usage error.
+- Docs/website/golden diff empty; docs generate/validate and `npm run gen:docs --prefix website` passed with no tracked diff.
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` passed; `go.mod`/`go.sum` diff empty.
 
 ## Safety
 
-No secrets. No credentialed checks. No runtime services. No dependency changes. No parent/shared orchestration edits. No merge.
+No secrets requested or printed. No credentialed checks. No runtime services started. No dependency changes. No parent/shared orchestration edits. No merge. `make verify` ran only the repository's local temp-dir smoke flow, including local reverse run to temp outbox.

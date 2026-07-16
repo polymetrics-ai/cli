@@ -16,8 +16,8 @@ Results:
 
 ## Kickoff snapshot
 
-- Downstream artifact: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, `RUN-STATE.json` created before production edits.
-- Verification result: pending; see `VERIFICATION.md`.
+- Downstream artifact: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, `RUN-STATE.json` created before production edits and updated after red/green/verify.
+- Verification result: passed; see `VERIFICATION.md`.
 - Execution decision: `local_critical_path` — isolated worker cwd/branch, no subagent tool, first serialized Phase 9 namespace worker.
 
 ## User task summary
