@@ -5,15 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os/exec"
-	"strconv"
 	"strings"
 )
 
 const maxCommentBytes = 60 * 1024
 
-type Runner interface {
+type runner interface {
 	Run(context.Context, []string, []byte) ([]byte, error)
 }
 
@@ -23,64 +21,13 @@ type Target struct {
 	DeliveryID  string
 }
 
-type Client struct {
-	runner Runner
-}
-
-func NewClient(runner Runner) *Client { return &Client{runner: runner} }
-
-func NewCLIClient() *Client { return NewClient(cliRunner{}) }
-
-func (c *Client) SyncDecisionComment(ctx context.Context, target Target, summary string) error {
-	if c == nil || c.runner == nil {
-		return errors.New("GitHub runner is required")
-	}
-	if err := ValidateTarget(target); err != nil {
-		return err
-	}
-	marker := "<!-- shepherd-decisions:" + target.DeliveryID + " -->"
-	body := marker + "\n\n" + strings.TrimSpace(summary) + "\n"
-	if len(body) > maxCommentBytes {
-		return errors.New("decision summary exceeds the bounded PR comment size")
-	}
-	endpoint := "repos/" + target.Repository + "/issues/" + strconv.Itoa(target.PullRequest) + "/comments"
-	raw, err := c.runner.Run(ctx, []string{"api", endpoint, "--paginate", "--slurp", "--method", "GET"}, nil)
-	if err != nil {
-		return fmt.Errorf("list PR comments: %w", err)
-	}
-	comments, err := decodeComments(raw)
-	if err != nil {
-		return err
-	}
-	var owned []int64
-	for _, comment := range comments {
-		if strings.HasPrefix(comment.Body, marker) {
-			owned = append(owned, comment.ID)
-		}
-	}
-	if len(owned) > 1 {
-		return errors.New("multiple Shepherd decision comments claim this delivery")
-	}
-	method := "POST"
-	if len(owned) == 1 {
-		method = "PATCH"
-		endpoint = "repos/" + target.Repository + "/issues/comments/" + strconv.FormatInt(owned[0], 10)
-	}
-	payload, err := json.Marshal(struct {
-		Body string `json:"body"`
-	}{Body: body})
-	if err != nil {
-		return err
-	}
-	if _, err := c.runner.Run(ctx, []string{"api", endpoint, "--method", method, "--input", "-", "--silent"}, payload); err != nil {
-		return fmt.Errorf("publish Shepherd decisions: %w", err)
-	}
-	return nil
-}
-
 type comment struct {
 	ID   int64  `json:"id"`
 	Body string `json:"body"`
+	User struct {
+		Login string `json:"login"`
+		Type  string `json:"type"`
+	} `json:"user"`
 }
 
 func decodeComments(raw []byte) ([]comment, error) {
@@ -108,7 +55,7 @@ func ValidateTarget(target Target) error {
 }
 
 func safeSlug(value string) bool {
-	if value == "" {
+	if value == "" || value == "." || value == ".." {
 		return false
 	}
 	for _, r := range value {

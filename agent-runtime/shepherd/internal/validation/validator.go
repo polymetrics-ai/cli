@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -156,6 +157,9 @@ func (v GSDValidator) Validate(ctx context.Context, request Request) (Result, er
 	if observedHead != request.CandidateHead {
 		return Result{}, errors.New("candidate head moved before validation")
 	}
+	if err := verifyArtifactHashes(request.WorkDir, request.ArtifactHashes); err != nil {
+		return Result{}, err
+	}
 	now := time.Now().UTC()
 	if v.Now != nil {
 		now = v.Now().UTC()
@@ -279,7 +283,7 @@ func (v GSDValidator) runDedicatedValidator(ctx context.Context, request Request
 		"--system-prompt", "You are a deterministic read-only validation process. Follow the supplied validation contract and finish with exactly one compact JSON object, with no markdown or commentary.",
 		"--model", authority.RequiredValidator,
 		"--thinking", "high",
-		"--tools", "read,bash,grep,find,ls",
+		"--tools", "read,grep,find,ls",
 		"--no-extensions", "--no-skills", "--no-prompt-templates", "--no-themes", "--no-context-files",
 		"--no-approve",
 		"--session-dir", sessionsDir,
@@ -288,8 +292,13 @@ func (v GSDValidator) runDedicatedValidator(ctx context.Context, request Request
 	)
 	cmd := exec.CommandContext(ctx, v.Command[0], args...)
 	cmd.Dir = request.WorkDir
+	validatorHome := filepath.Join(sessionsDir, "home")
+	if err := os.MkdirAll(validatorHome, 0o700); err != nil {
+		return fmt.Errorf("create isolated validator home: %w", err)
+	}
 	cmd.Env = sanitizedValidatorEnvironment(append(os.Environ(), v.Environment...))
 	cmd.Env = append(cmd.Env,
+		"HOME="+validatorHome,
 		"PI_CODING_AGENT_DIR="+filepath.Join(request.GSDHome, "agent"),
 		"GSD_PROJECT_ROOT="+request.WorkDir,
 		"GSD_HOME="+request.GSDHome,
@@ -313,7 +322,7 @@ func validationPrompt(request protectedRequest, requestPath string) (string, err
 	if err != nil {
 		return "", err
 	}
-	return "You are the read-only Shepherd independent validator. Use only read, bash, grep, find, and ls. " +
+	return "You are the read-only Shepherd independent validator. Use only read, grep, find, and ls; no shell or network-capable tool is available. " +
 		"Do not edit files, write files, mutate GitHub, promote, merge, or reveal secrets. " +
 		"Copy every identity, nonce, head, hash, repository, PR, base, and state-version field exactly from the request; do not omit any field. " +
 		"Do not run broad tests or unlisted checks. If all required_gates are false, call no tools and return PROCEED after copying the binding fields; do not invent extra requirements. Otherwise use at most five bounded read-only tool calls. " +
@@ -492,6 +501,40 @@ func validateRequest(request Request) error {
 	return nil
 }
 
+func verifyArtifactHashes(workDir string, artifacts []ArtifactHash) error {
+	if len(artifacts) == 0 || len(artifacts) > 128 {
+		return errors.New("validation artifact set is empty or exceeds the governed limit")
+	}
+	for _, artifact := range artifacts {
+		if filepath.IsAbs(artifact.Path) || filepath.Clean(artifact.Path) != artifact.Path {
+			return errors.New("validation artifact path is not a clean relative path")
+		}
+		path := filepath.Join(workDir, artifact.Path)
+		inside, err := pathInside(workDir, path)
+		if err != nil || !inside {
+			return errors.New("validation artifact escapes the candidate worktree")
+		}
+		file, err := os.Open(path)
+		if err != nil {
+			return fmt.Errorf("open validation artifact: %w", err)
+		}
+		digest := sha256.New()
+		written, copyErr := io.Copy(digest, io.LimitReader(file, 8*1024*1024+1))
+		closeErr := file.Close()
+		if copyErr != nil || closeErr != nil {
+			return errors.Join(copyErr, closeErr)
+		}
+		if written > 8*1024*1024 {
+			return errors.New("validation artifact exceeds the governed size limit")
+		}
+		observed := "sha256:" + hex.EncodeToString(digest.Sum(nil))
+		if observed != artifact.Hash {
+			return errors.New("validation artifact hash does not match protected evidence")
+		}
+	}
+	return nil
+}
+
 func gitHead(ctx context.Context, workDir string) (string, error) {
 	cmd := exec.CommandContext(ctx, "git", "-C", workDir, "rev-parse", "HEAD")
 	cmd.Env = sanitizedValidatorEnvironment(os.Environ())
@@ -503,10 +546,16 @@ func gitHead(ctx context.Context, workDir string) (string, error) {
 }
 
 func sanitizedValidatorEnvironment(source []string) []string {
-	environment := make([]string, 0, len(source)+2)
+	allowed := map[string]struct{}{
+		"PATH": {}, "TMPDIR": {}, "TMP": {}, "TEMP": {}, "LANG": {}, "LC_ALL": {},
+		"LC_CTYPE": {}, "TZ": {}, "SSL_CERT_FILE": {}, "SSL_CERT_DIR": {},
+	}
+	environment := make([]string, 0, len(allowed)+4)
 	for _, entry := range source {
-		name, _, _ := strings.Cut(entry, "=")
-		if strings.HasPrefix(strings.ToUpper(name), "GIT_") {
+		name, _, found := strings.Cut(entry, "=")
+		upper := strings.ToUpper(name)
+		_, safeRuntimeVariable := allowed[upper]
+		if !found || !safeRuntimeVariable && !strings.HasPrefix(upper, "GO_WANT_VALIDATOR_HELPER") {
 			continue
 		}
 		environment = append(environment, entry)

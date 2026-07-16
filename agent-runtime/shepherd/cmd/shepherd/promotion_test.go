@@ -8,9 +8,49 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
+	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	_ "modernc.org/sqlite"
 )
+
+func TestCompletedCleanPromotionResolutionPersistsAcrossRestart(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	_ = repo
+	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{
+		result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED"),
+	})
+	defer restoreValidator()
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+		false, "shepherd", "fake runtime"); err != nil {
+		t.Fatal(err)
+	}
+	dbPath := filepath.Join(config.StateDir, "authority.db")
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM promotion_journals WHERE state = 'complete' AND cleanup_complete = 1 AND decisions_resolved = 1"); count != 1 {
+		t.Fatalf("resolved completed journals=%d want 1", count)
+	}
+	db, err := sql.Open("sqlite", dbPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(`UPDATE promotion_journals SET decisions_resolved = 0`); err != nil {
+		_ = db.Close()
+		t.Fatal(err)
+	}
+	if err := db.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+		false, "shepherd", "fake runtime"); err != nil {
+		t.Fatalf("resolution-only restart: %v", err)
+	}
+	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM promotion_journals WHERE decisions_resolved = 0"); count != 0 {
+		t.Fatalf("unresolved journals after restart=%d", count)
+	}
+}
 
 func TestPromotionFailureBoundariesRecoverForwardIdempotently(t *testing.T) {
 	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
@@ -55,6 +95,15 @@ func TestPromotionFailureBoundariesRecoverForwardIdempotently(t *testing.T) {
 				t.Fatalf("incomplete journals=%d want %d", count, wantIncomplete)
 			}
 			if boundary == promotionAfterJournalCreated || boundary == promotionBeforeGit {
+				decisionReplyPollerFactory = func() decisionReplyPoller {
+					return decisionReplyPollerFunc(func(_ context.Context, request shepherdgithub.QuestionRequest,
+						actor string,
+					) ([]shepherdgithub.Reply, error) {
+						return []shepherdgithub.Reply{{RequestID: request.RequestID, Option: "retry", Author: actor,
+							AuthorID: 6113982, CommentID: request.QuestionCommentID + 1,
+							CreatedAt: time.Now().UTC()}}, nil
+					})
+				}
 				if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != baseHead {
 					t.Fatalf("HEAD=%s want base=%s", got, baseHead)
 				}
@@ -85,6 +134,86 @@ func TestPromotionFailureBoundariesRecoverForwardIdempotently(t *testing.T) {
 				t.Fatalf("duplicate Git effect: %s != %s", got, candidateHead)
 			}
 		})
+	}
+}
+
+func TestPreGitHardCrashWithoutDecisionRecoversDeterministically(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	baseHead := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
+	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{
+		result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED"),
+	})
+	defer restoreValidator()
+	restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(promotionBeforeGit))
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+		false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("injected pre-Git boundary succeeded")
+	}
+	restoreFailpoint()
+	db, err := sql.Open("sqlite", filepath.Join(config.StateDir, "authority.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(`DELETE FROM decision_requests`); err != nil {
+		_ = db.Close()
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(`UPDATE delivery_runs SET state = 'running', owner = 'crashed-controller'`); err != nil {
+		_ = db.Close()
+		t.Fatal(err)
+	}
+	if err := db.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != baseHead {
+		t.Fatalf("precondition HEAD=%s want %s", got, baseHead)
+	}
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+		false, "shepherd", "fake runtime"); err != nil {
+		t.Fatalf("hard-crash restart recovery: %v", err)
+	}
+	candidateHead := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
+	if candidateHead == baseHead {
+		t.Fatal("hard-crash restart did not promote candidate")
+	}
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+		false, "shepherd", "fake runtime"); err != nil {
+		t.Fatalf("idempotent hard-crash restart: %v", err)
+	}
+	if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != candidateHead {
+		t.Fatalf("second restart changed promoted HEAD: %s != %s", got, candidateHead)
+	}
+}
+
+func TestPreGitPromotionRecoveryWaitsForUnexpiredDecision(t *testing.T) {
+	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
+		return
+	}
+	repo, contextPath, config, runner := setupFakeSuperviseRuntime(t)
+	baseHead := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
+	restoreValidator := installFakeIndependentValidator(t, &fakeIndependentValidator{
+		result: validFakeValidationResult("openai-codex/gpt-5.6-sol", "PROCEED"),
+	})
+	defer restoreValidator()
+	restoreFailpoint := installPromotionFailpoint(t, failAtPromotionBoundary(promotionBeforeGit))
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+		false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("injected pre-Git boundary succeeded")
+	}
+	restoreFailpoint()
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+		false, "shepherd", "fake runtime"); err == nil || !strings.Contains(err.Error(), "decision defers") {
+		t.Fatalf("unanswered pre-Git decision did not defer recovery: %v", err)
+	}
+	if got := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD")); got != baseHead {
+		t.Fatalf("unanswered pre-Git decision advanced HEAD: %s != %s", got, baseHead)
+	}
+	if count := countSQLiteQueryForTest(t, filepath.Join(config.StateDir, "authority.db"),
+		"SELECT COUNT(*) FROM decision_requests WHERE status = 'published'"); count != 1 {
+		t.Fatalf("published pre-Git decisions=%d want 1", count)
 	}
 }
 
@@ -225,6 +354,13 @@ func TestPromotionRecoveryMovedOrDirtyAfterGitFailsClosed(t *testing.T) {
 			}
 			if count := countSQLiteQueryForTest(t, filepath.Join(config.StateDir, "authority.db"), "SELECT COUNT(*) FROM promotion_journals WHERE state = 'blocked'"); count != 1 {
 				t.Fatalf("blocked journals=%d", count)
+			}
+			if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath,
+				false, "shepherd", "fake runtime"); err == nil {
+				t.Fatal("second restart bypassed blocked promotion journal")
+			}
+			if count := countSQLiteQueryForTest(t, filepath.Join(config.StateDir, "authority.db"), "SELECT COUNT(*) FROM promotion_journals WHERE state = 'blocked'"); count != 1 {
+				t.Fatalf("blocked journals after second restart=%d", count)
 			}
 		})
 	}

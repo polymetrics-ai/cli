@@ -98,11 +98,119 @@ func recoverPromotionJournals(
 	delivery store.Delivery,
 	lease store.Lease,
 ) error {
+	return recoverPromotionJournalsMatching(ctx, authority, manager, repositoryLock, delivery, lease,
+		func(store.PromotionJournal) (bool, error) { return true, nil })
+}
+
+func validatePreGitPromotionJournals(
+	ctx context.Context,
+	authority *store.Store,
+	manager *workspace.Manager,
+	delivery store.Delivery,
+	lease store.Lease,
+) error {
 	journals, err := authority.ListIncompletePromotionJournals(ctx, delivery.ID)
 	if err != nil {
 		return err
 	}
 	for _, journal := range journals {
+		if journal.State != store.PromotionJournalCreated && journal.State != store.PromotionJournalStateStaged &&
+			journal.State != store.PromotionJournalGitPromoting {
+			continue
+		}
+		journal, err = authority.ClaimPromotionJournalRecovery(ctx, journal.JournalID, lease)
+		if err != nil {
+			return err
+		}
+		if _, snapshotErr := canonicalPromotionSnapshot(ctx, manager.RepoRoot, delivery.Branch,
+			journal.BaseHead, journal.BaseHead); snapshotErr != nil {
+			return blockPromotionJournal(ctx, authority, lease, journal.JournalID,
+				"canonical_git_moved_or_dirty")
+		}
+		paths, pathErr := workspace.PlanPromotionPaths(manager.RepoRoot, journal.JournalID)
+		if pathErr != nil || paths.Canonical != journal.CanonicalPath || paths.Stage != journal.StagePath ||
+			paths.Backup != journal.BackupPath {
+			return blockPromotionJournal(ctx, authority, lease, journal.JournalID,
+				"promotion_path_ownership_mismatch")
+		}
+		attemptRecord, getErr := authority.GetAttemptWorktree(ctx, journal.AttemptKey())
+		if getErr != nil {
+			return blockPromotionJournal(ctx, authority, lease, journal.JournalID, "promotion_attempt_missing")
+		}
+		attempt := workspace.AttemptWorktree{Root: attemptRecord.Path, Branch: attemptRecord.Branch,
+			Identity: workspace.AttemptIdentity{DeliveryID: attemptRecord.DeliveryID,
+				Generation: attemptRecord.Generation, UnitID: attemptRecord.UnitID,
+				Attempt: attemptRecord.Attempt, BaseHead: attemptRecord.BaseHead}}
+		validationErr := manager.VerifyOwnedAttemptAtHead(ctx, attempt, journal.CandidateHead)
+		if validationErr == nil {
+			validationErr = authority.ValidatePromotionAuthority(ctx, lease, journal.JournalID, time.Now().UTC())
+		}
+		if validationErr == nil && journal.ManifestHash != "" {
+			validationErr = workspace.ValidateStagedGSDState(ctx, paths, journal.ManifestHash,
+				journal.BackupManifestHash)
+		}
+		if validationErr != nil {
+			return blockPromotionJournal(ctx, authority, lease, journal.JournalID,
+				promotionFailureClass(promotionIntegrityError{reason: "pre_git_authority_or_stage_invalid",
+					err: validationErr}))
+		}
+	}
+	return nil
+}
+
+func recoverPostGitPromotionJournals(
+	ctx context.Context,
+	authority *store.Store,
+	manager *workspace.Manager,
+	repositoryLock *workspace.RepositoryLock,
+	delivery store.Delivery,
+	lease store.Lease,
+) error {
+	return recoverPromotionJournalsMatching(ctx, authority, manager, repositoryLock, delivery, lease,
+		func(journal store.PromotionJournal) (bool, error) {
+			switch journal.State {
+			case store.PromotionJournalGitPromoting:
+				snapshot, err := shepherdgit.Inspect(ctx, manager.RepoRoot)
+				if err != nil {
+					return false, err
+				}
+				return snapshot.Branch != delivery.Branch || snapshot.HeadSHA != journal.BaseHead, nil
+			case store.PromotionJournalGitPromoted, store.PromotionJournalStateSwapStarted,
+				store.PromotionJournalStateInstalled, store.PromotionJournalComplete:
+				return true, nil
+			default:
+				return false, nil
+			}
+		})
+}
+
+func recoverPromotionJournalsMatching(
+	ctx context.Context,
+	authority *store.Store,
+	manager *workspace.Manager,
+	repositoryLock *workspace.RepositoryLock,
+	delivery store.Delivery,
+	lease store.Lease,
+	matches func(store.PromotionJournal) (bool, error),
+) error {
+	journals, err := authority.ListIncompletePromotionJournals(ctx, delivery.ID)
+	if err != nil {
+		return err
+	}
+	for _, journal := range journals {
+		matched, matchErr := matches(journal)
+		if matchErr != nil {
+			return matchErr
+		}
+		if !matched {
+			continue
+		}
+		if journal.State == store.PromotionJournalComplete && journal.CleanupComplete && !journal.DecisionsResolved {
+			// Promotion and owned-resource cleanup are already durable. Only the
+			// post-poll decision-resolution projection remains; replaying the
+			// promotion claim would incorrectly require a cleaned attempt.
+			continue
+		}
 		journal, err = authority.ClaimPromotionJournalRecovery(ctx, journal.JournalID, lease)
 		if err != nil {
 			return err

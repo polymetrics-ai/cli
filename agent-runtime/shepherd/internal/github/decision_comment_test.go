@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
+
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/outbox"
 )
 
 type fakeRunner struct {
@@ -27,59 +29,52 @@ func (f *fakeRunner) Run(_ context.Context, args []string, stdin []byte) ([]byte
 	return response, nil
 }
 
-func TestDecisionCommentSyncCreatesThenUpdatesMarkerOwnedComment(t *testing.T) {
+func TestOutboxCommentTransportKeepsBodyOnStdin(t *testing.T) {
 	t.Parallel()
-
-	marker := "<!-- shepherd-decisions:issue-380 -->"
-	tests := []struct {
-		name       string
-		comments   string
-		wantMethod string
-		wantPath   string
-	}{
-		{name: "create", comments: `[[{"id":1,"body":"unrelated"}]]`, wantMethod: "POST", wantPath: "repos/polymetrics-ai/cli/issues/388/comments"},
-		{name: "update", comments: `[[{"id":42,"body":"` + marker + `\n\nold"}]]`, wantMethod: "PATCH", wantPath: "repos/polymetrics-ai/cli/issues/comments/42"},
+	target := outbox.Target{Repository: "polymetrics-ai/cli", Issue: 389, PullRequest: 390}
+	runner := &fakeRunner{responses: [][]byte{
+		[]byte(`[[{"id":1,"body":"unrelated","user":{"login":"shepherd-test","type":"User"}}]]`),
+		[]byte(`{"id":42,"body":"<!-- shepherd-effect:test -->\n\nbounded body\n","user":{"login":"shepherd-test","type":"User"}}`),
+	}}
+	port := cliCommentPort{runner: runner}
+	comments, err := port.ListComments(context.Background(), target)
+	if err != nil {
+		t.Fatal(err)
 	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			runner := &fakeRunner{responses: [][]byte{[]byte(test.comments)}}
-			client := NewClient(runner)
-			if err := client.SyncDecisionComment(context.Background(), Target{Repository: "polymetrics-ai/cli", PullRequest: 388, DeliveryID: "issue-380"}, "## Shepherd decisions\n\n| Actor |\n|---|\n| shepherd |"); err != nil {
-				t.Fatal(err)
-			}
-			if len(runner.calls) != 2 {
-				t.Fatalf("calls=%d, want 2", len(runner.calls))
-			}
-			write := runner.calls[1]
-			joined := strings.Join(write.args, " ")
-			if !strings.Contains(joined, test.wantMethod) || !strings.Contains(joined, test.wantPath) {
-				t.Fatalf("write args=%q", joined)
-			}
-			if strings.Contains(joined, "Shepherd decisions") {
-				t.Fatal("comment body leaked into process arguments")
-			}
-			var payload struct {
-				Body string `json:"body"`
-			}
-			if err := json.Unmarshal([]byte(write.stdin), &payload); err != nil {
-				t.Fatal(err)
-			}
-			if !strings.Contains(payload.Body, marker) || !strings.Contains(payload.Body, "shepherd") {
-				t.Fatalf("write stdin=%q", write.stdin)
-			}
-		})
+	if len(comments) != 1 || comments[0].ID != 1 {
+		t.Fatalf("comments=%+v", comments)
+	}
+	body := "<!-- shepherd-effect:test -->\n\nbounded body\n"
+	created, err := port.CreateComment(context.Background(), target, body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if created.ID != 42 || created.Author != "shepherd-test" || len(runner.calls) != 2 {
+		t.Fatalf("comment=%+v calls=%d", created, len(runner.calls))
+	}
+	write := runner.calls[1]
+	if joined := strings.Join(write.args, " "); strings.Contains(joined, "bounded body") ||
+		!strings.Contains(joined, "--method POST") || !strings.Contains(joined, "--input -") {
+		t.Fatalf("unsafe write args=%q", joined)
+	}
+	var payload struct {
+		Body string `json:"body"`
+	}
+	if err := json.Unmarshal([]byte(write.stdin), &payload); err != nil {
+		t.Fatal(err)
+	}
+	if payload.Body != body {
+		t.Fatalf("stdin body=%q", payload.Body)
 	}
 }
 
-func TestDecisionCommentSyncRejectsAmbiguousOwnershipAndUnsafeTarget(t *testing.T) {
+func TestOutboxCommentTransportRejectsUnsafeTargets(t *testing.T) {
 	t.Parallel()
-	marker := "<!-- shepherd-decisions:issue-380 -->"
-	runner := &fakeRunner{responses: [][]byte{[]byte(`[[{"id":1,"body":"` + marker + `"},{"id":2,"body":"` + marker + `"}]]`)}}
-	client := NewClient(runner)
-	if err := client.SyncDecisionComment(context.Background(), Target{Repository: "polymetrics-ai/cli", PullRequest: 388, DeliveryID: "issue-380"}, "summary"); err == nil {
-		t.Fatal("ambiguous owned comments accepted")
-	}
-	if err := client.SyncDecisionComment(context.Background(), Target{Repository: "../escape", PullRequest: 388, DeliveryID: "issue-380"}, "summary"); err == nil {
+	port := cliCommentPort{runner: &fakeRunner{}}
+	if _, err := port.ListComments(context.Background(), outbox.Target{Repository: "../escape", Issue: 389, PullRequest: 390}); err == nil {
 		t.Fatal("unsafe repository accepted")
+	}
+	if _, err := port.UpdateComment(context.Background(), outbox.Target{Repository: "polymetrics-ai/cli", Issue: 389, PullRequest: 390}, 0, "body"); err == nil {
+		t.Fatal("non-positive comment identity accepted")
 	}
 }

@@ -259,6 +259,7 @@ or human-qualified container; it is not represented as isolation. Slice E onward
 
 ## Slice E — Real Sol/high recovery planning — COMPLETE / GREEN
 
+Accepted checkpoint: `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`.
 Slice D accepted GREEN at `cacb32e8e16b7ba70742cc5365cb83fffd74ca35`.
 Orchestration: `local_critical_path`; no overlapping mutating worker. GSD command:
 `scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto`.
@@ -323,15 +324,57 @@ classification, and deferred delivery-finish error propagation. The accepted
 same-UID host assumption remains documented; unsupported non-Unix process-tree cleanup now fails
 planner construction closed.
 
-## Slice F — Authority-gated external effects
+## Slice F — Authority-gated external effects — GREEN / REVIEWED / CHECKPOINT READY
+
+Slice E accepted GREEN at `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`.
+Orchestration: `local_critical_path`; no overlapping mutating worker. Read-only tester/reliability/
+review/security sidecars may overlap. GSD command:
+`scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto`.
+No live GitHub mutation is allowed; tests use fakes, in-memory runners, or `httptest`.
 
 Planned RED tests:
-- [ ] no direct `SyncDecisionComment` production path.
-- [ ] outbox pending, claim, send, failure, restart, and idempotent replay.
-- [ ] worker ports cannot directly mutate GitHub.
+- [x] architecture rejects direct `SyncDecisionComment`, `SyncQuestionComment`, and other
+      write-capable GitHub calls outside the outbox GitHub executor.
+- [x] reply polling exposes only a read-only GitHub port; only the executor receives write capability.
+- [x] workers, units, validators, recovery planners, reviewers, enqueue helpers, and executors cannot
+      create grants or expand controller-derived authority.
+- [x] immutable grants bind delivery, repository, issue/PR, capability, generation, head, epoch, and target.
+- [x] merge capabilities, unsupported effect types, changed targets, stale heads/epochs, and capability
+      mismatches fail closed.
+- [x] strict versioned payloads reject missing, duplicate/case-duplicate, unknown, partial, oversized,
+      trailing, secret-bearing, arbitrary-command, and unbounded diagnostic fields.
+- [x] canonical payload/hash, stable idempotency key, grant identity, claim identity, and bounded typed
+      results/errors persist unchanged across SQLite reopen.
+- [x] `pending`, `claimed`, `sent`, `failed`, `uncertain`, `blocked`, and `cancelled` enforce legal,
+      owner-fenced, epoch-fenced, and terminal transitions.
+- [x] claim expiry/recovery is deterministic and fenced; definite pre-send failures may retry only by
+      policy; ambiguous post-send failures become `uncertain` and are never blindly replayed.
+- [x] exact stable comment marker/payload reconciliation suppresses duplicates and blocks duplicate
+      markers, payload conflicts, target changes, and ambiguous reads.
+- [x] older decision-summary revisions cannot overwrite newer ledger revisions.
+- [x] question effects bind request ID, generation, unit, head, and external comment ID.
+- [x] startup reconciles every decision-ledger/outbox crash boundary without pretending the two SQLite
+      stores are atomic.
+- [x] all required effect telemetry is typed, bounded, secret-free, and emitted at correct transitions.
+- [x] existing Slices A-E remain green.
 
-GREEN evidence: pending.
-Refactor evidence: pending.
+RED evidence (2026-07-15): test-only `internal/outbox` architecture, strict payload/policy,
+durable state-machine, fenced claim recovery, marker reconciliation, duplicate/conflict, and post-send
+uncertainty tests were added before production code. `cd agent-runtime/shepherd && go test
+./internal/outbox -count=1` fails as expected because `Comment`, `Target`, `Controller`, `Authorization`,
+`Event`, and the durable outbox/executor APIs do not exist. The broader focused command also reached the
+same outbox build failure while existing store/GitHub/domain/recovery packages remained green; its
+command package tail exceeded the 120-second capture, so that run is RED evidence only, not verification.
+GREEN evidence (2026-07-16): focused and full nested tests pass; full race, vet, build, nested/root
+`make verify`, module boundary, root `go list`, formatting, and diff checks pass. Nested lint remains
+exactly the accepted 28 findings with no Slice F package finding. No live GitHub mutation occurred.
+Refactor evidence: repeated independent GPT-5.6 Sol/xhigh correctness, security, and restart/reliability
+passes dispositioned all actionable findings. Fixes include immutable delivery targets, current-store
+controller revalidation, fresh Git/lease fences, summary slot serialization, exact uncertainty
+reconciliation, atomic reply/run transitions with immutable actor/comment/time provenance, safe expiry,
+promotion-decision resolution, exact-head final-gate proof under repository lock, crash-safe ledger-tail
+repair, mandatory execution fences, bounded secret scanning, and old-generation uncertainty settlement
+before manual resume.
 
 ## Slice G — Real supervise integration coverage
 
@@ -353,6 +396,9 @@ Refactor evidence: pending.
 
 ## Verification log
 
-No production-code verification is claimed yet for this repair run. Focused RED tests will be recorded
-before the first production edit, followed by focused GREEN and full nested-module gates after each
-coherent slice.
+Slices A-E are accepted at their recorded exact checkpoints. Slice F planning is active at immutable
+base `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`; local and remote matched and the worktree was clean
+before planning-only edits. The Slice F RED failure must be captured next, before production code. GREEN
+then requires the focused outbox/store/GitHub/domain/recovery/command gate, full nested tests/race/vet/
+build/`make verify`, root verification, module boundary, diff/package checks, and zero findings beyond
+the accepted 28-finding lint baseline.

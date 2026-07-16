@@ -25,6 +25,14 @@ func TestDecodeQueryFailsClosedOnUnknownShape(t *testing.T) {
 	}
 }
 
+func TestDecodeQueryRejectsUnsafeUnitIdentity(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"state":{"phase":"executing"},"next":{"action":"dispatch","unitType":"execute-task","unitId":"execute-task/M001; gh api"}}`)
+	if _, err := DecodeQuery(raw); err == nil {
+		t.Fatal("unsafe command-shaped unit identity was accepted")
+	}
+}
+
 func TestDecodeQueryAcceptsPinnedGSD11Skip(t *testing.T) {
 	t.Parallel()
 

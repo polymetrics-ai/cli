@@ -27,7 +27,8 @@ protected `gsd_home`, and external-effect publishers disabled. Slice D qualifies
 only on `darwin/arm64` with Node 24.13.1 and the exact complete GSD Pi 1.11.0 package-tree digest;
 other host platforms fail closed until their Node/package manifests are reviewed and added. Independent candidate validation invokes
 Pi directly in non-interactive JSON mode with GPT-5.6 Sol/high, a dedicated protected session directory,
-and only `read,bash,grep,find,ls`; it does not dispatch a canonical GSD workflow unit. This is the
+an isolated credential-free home/environment, and only `read,grep,find,ls` (no shell or network-capable
+tool); it does not dispatch a canonical GSD workflow unit. This is the
 qualified #389 path and requires no Podman service for default verification.
 
 The legacy Podman assets remain available for separately authorized qualification/debug runs; they

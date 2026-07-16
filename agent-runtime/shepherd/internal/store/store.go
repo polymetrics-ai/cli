@@ -13,6 +13,7 @@ import (
 
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/recovery"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/sensitive"
 	_ "modernc.org/sqlite"
 )
 
@@ -27,21 +28,12 @@ type Lease struct {
 	ExpiresAt time.Time
 }
 
-type Effect struct {
-	Key         string
-	RunID       string
-	Repository  string
-	Issue       int
-	Capability  domain.Capability
-	Target      string
-	PayloadHash string
-	Epoch       int64
-}
-
 type Delivery struct {
 	ID             string
 	Issue          int
 	ParentIssue    int
+	Repository     string
+	PullRequest    int
 	WorkDir        string
 	ContextHash    string
 	MilestoneID    string
@@ -67,6 +59,9 @@ var (
 	ErrRecoveryDispatchClaimed = errors.New("recovery dispatch is already claimed")
 	ErrRecoveryDecisionPending = errors.New("recovery decision is incomplete")
 	ErrRecoveryTerminal        = errors.New("recovery decision blocks dispatch")
+	ErrLegacyExternalEffects   = errors.New("legacy external effects require human reconciliation")
+	ErrLegacyDeliveryTarget    = errors.New("legacy delivery target requires human reconciliation")
+	ErrLegacyDecisionReply     = errors.New("legacy decision reply requires human reconciliation")
 )
 
 type UnitAttemptKey struct {
@@ -110,6 +105,7 @@ const (
 type DecisionRequest struct {
 	RequestID         string
 	DeliveryID        string
+	Repository        string
 	Issue             int
 	PullRequest       int
 	UnitID            string
@@ -125,6 +121,8 @@ type DecisionRequest struct {
 	Status            DecisionRequestStatus
 	AcceptedAnswer    string
 	AcceptedBy        string
+	AcceptedActorID   int64
+	AcceptedCommentID int64
 	AcceptedAt        time.Time
 	ConsumedAt        time.Time
 }
@@ -300,7 +298,8 @@ func (s *Store) migrate(ctx context.Context) error {
 		`CREATE TABLE IF NOT EXISTS deliveries (
             delivery_id TEXT PRIMARY KEY, issue INTEGER NOT NULL, work_dir TEXT NOT NULL,
 			context_hash TEXT NOT NULL, milestone_id TEXT NOT NULL DEFAULT '',
-			parent_issue INTEGER NOT NULL DEFAULT 0, branch TEXT NOT NULL DEFAULT '',
+			parent_issue INTEGER NOT NULL DEFAULT 0, repository TEXT NOT NULL DEFAULT '',
+			pull_request INTEGER NOT NULL DEFAULT 0, branch TEXT NOT NULL DEFAULT '',
 			base_branch TEXT NOT NULL DEFAULT '', gsd_project_root TEXT NOT NULL DEFAULT '',
 			initial_head TEXT NOT NULL DEFAULT '', gsd_version TEXT NOT NULL DEFAULT '',
             created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL
@@ -315,11 +314,6 @@ func (s *Store) migrate(ctx context.Context) error {
             delivery_id TEXT NOT NULL, generation INTEGER NOT NULL, approved INTEGER NOT NULL,
             consumed_at INTEGER NOT NULL, PRIMARY KEY (delivery_id, generation)
         )`,
-		`CREATE TABLE IF NOT EXISTS grants (
-            run_id TEXT NOT NULL, repository TEXT NOT NULL, issue INTEGER NOT NULL,
-            capability TEXT NOT NULL, epoch INTEGER NOT NULL,
-            PRIMARY KEY (run_id, repository, issue, capability, epoch)
-        )`,
 		`CREATE TABLE IF NOT EXISTS attestations (
             run_id TEXT NOT NULL, head_sha TEXT NOT NULL, validator TEXT NOT NULL,
             thinking TEXT NOT NULL, verdict TEXT NOT NULL, created_at INTEGER NOT NULL,
@@ -330,12 +324,6 @@ func (s *Store) migrate(ctx context.Context) error {
             validator_session_id TEXT NOT NULL DEFAULT '', local_gates INTEGER NOT NULL DEFAULT 0,
             uat INTEGER NOT NULL DEFAULT 0, milestone_valid INTEGER NOT NULL DEFAULT 0, expires_at INTEGER NOT NULL DEFAULT 0,
             PRIMARY KEY (run_id, head_sha)
-        )`,
-		`CREATE TABLE IF NOT EXISTS outbox (
-			effect_key TEXT PRIMARY KEY, run_id TEXT NOT NULL, repository TEXT NOT NULL,
-			issue INTEGER NOT NULL, capability TEXT NOT NULL, target TEXT NOT NULL,
-			payload_hash TEXT NOT NULL, epoch INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'pending',
-            created_at INTEGER NOT NULL
         )`,
 		`CREATE TABLE IF NOT EXISTS unit_attempts (
 			delivery_id TEXT NOT NULL REFERENCES deliveries(delivery_id), generation INTEGER NOT NULL,
@@ -353,13 +341,15 @@ func (s *Store) migrate(ctx context.Context) error {
 		)`,
 		`CREATE TABLE IF NOT EXISTS decision_requests (
 			request_id TEXT PRIMARY KEY, delivery_id TEXT NOT NULL REFERENCES deliveries(delivery_id),
-			issue INTEGER NOT NULL, pull_request INTEGER NOT NULL, unit_id TEXT NOT NULL,
+			repository TEXT NOT NULL, issue INTEGER NOT NULL, pull_request INTEGER NOT NULL, unit_id TEXT NOT NULL,
 			generation INTEGER NOT NULL, head_sha TEXT NOT NULL, kind TEXT NOT NULL,
 			evidence TEXT NOT NULL, options_json TEXT NOT NULL, recommended_option TEXT NOT NULL DEFAULT '',
 			safe_default TEXT NOT NULL DEFAULT '', expires_at INTEGER NOT NULL,
 			github_comment_id INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL,
 			accepted_answer TEXT NOT NULL DEFAULT '', accepted_by TEXT NOT NULL DEFAULT '',
-			accepted_at INTEGER NOT NULL DEFAULT 0, consumed_at INTEGER NOT NULL DEFAULT 0,
+			accepted_actor_id INTEGER NOT NULL DEFAULT 0, accepted_comment_id INTEGER NOT NULL DEFAULT 0,
+			accepted_at INTEGER NOT NULL DEFAULT 0,
+			consumed_at INTEGER NOT NULL DEFAULT 0,
 			created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL
 		)`,
 		`CREATE TABLE IF NOT EXISTS recovery_budgets (
@@ -431,7 +421,7 @@ func (s *Store) migrate(ctx context.Context) error {
 			backup_manifest_json TEXT NOT NULL, backup_manifest_hash TEXT NOT NULL,
 			stage_path TEXT NOT NULL UNIQUE, backup_path TEXT NOT NULL UNIQUE, canonical_path TEXT NOT NULL,
 			state TEXT NOT NULL, blocked_reason TEXT NOT NULL DEFAULT '', cleanup_complete INTEGER NOT NULL DEFAULT 0,
-			controller_owner TEXT NOT NULL, controller_epoch INTEGER NOT NULL, created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL,
+			decisions_resolved INTEGER NOT NULL DEFAULT 0, controller_owner TEXT NOT NULL, controller_epoch INTEGER NOT NULL, created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL,
 			FOREIGN KEY (delivery_id, generation, unit_id, attempt)
 				REFERENCES attempt_worktrees(delivery_id, generation, unit_id, attempt)
 		)`,
@@ -443,8 +433,19 @@ func (s *Store) migrate(ctx context.Context) error {
 			return fmt.Errorf("apply supervisor migration: %w", err)
 		}
 	}
+	var legacyOutboxTables int
+	if err := s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM sqlite_master
+		WHERE type = 'table' AND name = 'outbox'`).Scan(&legacyOutboxTables); err != nil {
+		return fmt.Errorf("inspect legacy outbox schema: %w", err)
+	}
+	if legacyOutboxTables == 1 {
+		if _, err := s.db.ExecContext(ctx, `UPDATE outbox SET status = 'blocked' WHERE status <> 'sent'`); err != nil {
+			return fmt.Errorf("quarantine legacy outbox effects: %w", err)
+		}
+	}
 	columns := map[string]string{
-		"parent_issue": "INTEGER NOT NULL DEFAULT 0", "branch": "TEXT NOT NULL DEFAULT ''",
+		"parent_issue": "INTEGER NOT NULL DEFAULT 0", "repository": "TEXT NOT NULL DEFAULT ''",
+		"pull_request": "INTEGER NOT NULL DEFAULT 0", "branch": "TEXT NOT NULL DEFAULT ''",
 		"base_branch": "TEXT NOT NULL DEFAULT ''", "gsd_project_root": "TEXT NOT NULL DEFAULT ''",
 		"initial_head": "TEXT NOT NULL DEFAULT ''", "gsd_version": "TEXT NOT NULL DEFAULT ''",
 	}
@@ -453,10 +454,17 @@ func (s *Store) migrate(ctx context.Context) error {
 			return err
 		}
 	}
-	for name, definition := range map[string]string{"claimed_by": "TEXT NOT NULL DEFAULT ''", "claimed_at": "INTEGER NOT NULL DEFAULT 0", "sent_at": "INTEGER NOT NULL DEFAULT 0", "last_error": "TEXT NOT NULL DEFAULT ''"} {
-		if err := s.ensureColumn(ctx, "outbox", name, definition); err != nil {
-			return err
-		}
+	if err := s.ensureColumn(ctx, "decision_requests", "repository", "TEXT NOT NULL DEFAULT ''"); err != nil {
+		return err
+	}
+	if err := s.ensureColumn(ctx, "decision_requests", "accepted_comment_id", "INTEGER NOT NULL DEFAULT 0"); err != nil {
+		return err
+	}
+	if err := s.ensureColumn(ctx, "decision_requests", "accepted_actor_id", "INTEGER NOT NULL DEFAULT 0"); err != nil {
+		return err
+	}
+	if err := s.ensureColumn(ctx, "promotion_journals", "decisions_resolved", "INTEGER NOT NULL DEFAULT 0"); err != nil {
+		return err
 	}
 	for name, definition := range map[string]string{"start_head": "TEXT NOT NULL DEFAULT ''", "end_head": "TEXT NOT NULL DEFAULT ''"} {
 		if err := s.ensureColumn(ctx, "delivery_runs", name, definition); err != nil {
@@ -780,11 +788,12 @@ func (s *Store) EnsureDelivery(ctx context.Context, delivery Delivery) error {
 	}
 	now := time.Now().UTC().UnixNano()
 	result, err := s.db.ExecContext(ctx, `INSERT OR IGNORE INTO deliveries
-		(delivery_id, issue, parent_issue, work_dir, context_hash, milestone_id, branch, base_branch,
-		 gsd_project_root, initial_head, gsd_version, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, delivery.ID, delivery.Issue,
-		delivery.ParentIssue, delivery.WorkDir, delivery.ContextHash, delivery.MilestoneID, delivery.Branch,
-		delivery.BaseBranch, delivery.GSDProjectRoot, delivery.InitialHead, delivery.GSDVersion, now, now)
+		(delivery_id, issue, parent_issue, repository, pull_request, work_dir, context_hash, milestone_id,
+		 branch, base_branch, gsd_project_root, initial_head, gsd_version, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, delivery.ID, delivery.Issue,
+		delivery.ParentIssue, delivery.Repository, delivery.PullRequest, delivery.WorkDir, delivery.ContextHash,
+		delivery.MilestoneID, delivery.Branch, delivery.BaseBranch, delivery.GSDProjectRoot,
+		delivery.InitialHead, delivery.GSDVersion, now, now)
 	if err != nil {
 		return fmt.Errorf("ensure delivery: %w", err)
 	}
@@ -812,7 +821,11 @@ func (s *Store) EnsureDelivery(ctx context.Context, delivery Delivery) error {
 	if err != nil {
 		return fmt.Errorf("read delivery: %w", err)
 	}
+	if current.Repository == "" || current.PullRequest == 0 {
+		return ErrLegacyDeliveryTarget
+	}
 	if current.Issue != delivery.Issue || current.ParentIssue != delivery.ParentIssue ||
+		current.Repository != delivery.Repository || current.PullRequest != delivery.PullRequest ||
 		current.WorkDir != delivery.WorkDir || current.ContextHash != delivery.ContextHash ||
 		current.Branch != delivery.Branch || current.BaseBranch != delivery.BaseBranch ||
 		current.GSDProjectRoot != delivery.GSDProjectRoot || current.InitialHead != delivery.InitialHead ||
@@ -825,7 +838,7 @@ func (s *Store) EnsureDelivery(ctx context.Context, delivery Delivery) error {
 
 func validateDelivery(delivery Delivery) error {
 	if delivery.ID == "" || delivery.Issue <= 0 || delivery.ParentIssue <= 0 ||
-		!filepath.IsAbs(delivery.WorkDir) || !filepath.IsAbs(delivery.GSDProjectRoot) ||
+		!validRepository(delivery.Repository) || delivery.PullRequest <= 0 || !filepath.IsAbs(delivery.WorkDir) || !filepath.IsAbs(delivery.GSDProjectRoot) ||
 		filepath.Clean(delivery.WorkDir) != filepath.Clean(delivery.GSDProjectRoot) ||
 		!validSHA256(delivery.ContextHash) || strings.TrimSpace(delivery.Branch) == "" ||
 		strings.TrimSpace(delivery.BaseBranch) == "" || !validGitSHA(delivery.InitialHead) ||
@@ -941,6 +954,9 @@ func (s *Store) PrepareAdoptedDelivery(ctx context.Context, deliveryID, mileston
 }
 
 func (s *Store) FinishAttempt(ctx context.Context, deliveryID, owner string, target domain.RunState) error {
+	if target == domain.RunHumanGate {
+		return errors.New("final human gate requires exact promotion proof projection")
+	}
 	if err := domain.ValidateRunTransition(domain.RunRunning, target); err != nil {
 		return err
 	}
@@ -954,6 +970,153 @@ func (s *Store) FinishAttempt(ctx context.Context, deliveryID, owner string, tar
 	if rows != 1 {
 		return errors.New("delivery attempt is stale or owned by another controller")
 	}
+	return nil
+}
+
+func (s *Store) IsRecoveredPromotionDecision(ctx context.Context, request DecisionRequest) (bool, error) {
+	var count int
+	if err := s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM promotion_journals WHERE delivery_id = ?
+		AND generation = ? AND unit_id = ? AND state = ? AND cleanup_complete = 1
+		AND decisions_resolved = 0`, request.DeliveryID, request.Generation, request.UnitID,
+		PromotionJournalComplete).Scan(&count); err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
+func (s *Store) CancelUnpublishedRecoveredPromotionDecision(ctx context.Context, lease Lease,
+	request DecisionRequest, now time.Time) error {
+	if lease.RunID != request.DeliveryID || request.Status != DecisionRequestOpen || now.IsZero() {
+		return errors.New("fenced unpublished recovered promotion decision is required")
+	}
+	result, err := s.db.ExecContext(ctx, `UPDATE decision_requests SET status = ?, updated_at = ?
+		WHERE request_id = ? AND delivery_id = ? AND generation = ? AND unit_id = ? AND status = ?
+		AND EXISTS (SELECT 1 FROM leases WHERE run_id = ? AND owner = ? AND epoch = ? AND expires_at > ?)
+		AND EXISTS (SELECT 1 FROM promotion_journals WHERE delivery_id = ? AND generation = ?
+			AND unit_id = ? AND state = ? AND cleanup_complete = 1 AND decisions_resolved = 0)`,
+		DecisionRequestCancelled, now.UTC().UnixNano(), request.RequestID, request.DeliveryID,
+		request.Generation, request.UnitID, DecisionRequestOpen, lease.RunID, lease.Owner, lease.Epoch,
+		now.UTC().UnixNano(), request.DeliveryID, request.Generation, request.UnitID, PromotionJournalComplete)
+	if err != nil {
+		return err
+	}
+	if rows, _ := result.RowsAffected(); rows != 1 {
+		return errors.New("recovered promotion decision cancellation is stale")
+	}
+	return nil
+}
+
+func (s *Store) ResolveRecoveredPromotionDecisions(ctx context.Context, lease Lease, now time.Time) error {
+	if lease.RunID == "" || now.IsZero() {
+		return errors.New("fenced recovered promotion decision identity is required")
+	}
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = conn.Close() }()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var owner string
+	var epoch, expiresAt int64
+	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`,
+		lease.RunID).Scan(&owner, &epoch, &expiresAt); err != nil {
+		return err
+	}
+	if owner != lease.Owner || epoch != lease.Epoch || now.UTC().UnixNano() >= expiresAt {
+		return errors.New("recovered promotion decision lease is stale")
+	}
+	if _, err := conn.ExecContext(ctx, `UPDATE decision_requests SET status = ?, updated_at = ?
+		WHERE delivery_id = ? AND status IN (?, ?) AND EXISTS (
+			SELECT 1 FROM promotion_journals p WHERE p.delivery_id = decision_requests.delivery_id
+			AND p.generation = decision_requests.generation AND p.unit_id = decision_requests.unit_id
+			AND p.state = ? AND p.cleanup_complete = 1 AND p.decisions_resolved = 0
+		)`, DecisionRequestCancelled, now.UTC().UnixNano(), lease.RunID,
+		DecisionRequestOpen, DecisionRequestPublished, PromotionJournalComplete); err != nil {
+		return err
+	}
+	if _, err := conn.ExecContext(ctx, `UPDATE promotion_journals SET decisions_resolved = 1, updated_at = ?
+		WHERE delivery_id = ? AND state = ? AND cleanup_complete = 1 AND decisions_resolved = 0
+		AND NOT EXISTS (SELECT 1 FROM decision_requests q WHERE q.delivery_id = promotion_journals.delivery_id
+			AND q.generation = promotion_journals.generation AND q.unit_id = promotion_journals.unit_id
+			AND q.status = ?)`, now.UTC().UnixNano(), lease.RunID, PromotionJournalComplete,
+		DecisionRequestAnswered); err != nil {
+		return err
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return err
+	}
+	committed = true
+	return nil
+}
+
+func (s *Store) ProjectFinalHumanGate(ctx context.Context, lease Lease, generation int64,
+	headSHA string, now time.Time) error {
+	if lease.RunID == "" || generation <= 0 || !validGitSHA(headSHA) || now.IsZero() {
+		return errors.New("fenced final human gate identity is required")
+	}
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = conn.Close() }()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var owner string
+	var epoch, expiresAt int64
+	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`,
+		lease.RunID).Scan(&owner, &epoch, &expiresAt); err != nil {
+		return err
+	}
+	if owner != lease.Owner || epoch != lease.Epoch || now.UTC().UnixNano() >= expiresAt {
+		return errors.New("final human gate projection lease is stale")
+	}
+	result, err := conn.ExecContext(ctx, `UPDATE delivery_runs SET state = ?, owner = '', updated_at = ?
+		WHERE delivery_id = ? AND generation = ? AND state IN (?, ?, ?, ?, ?, ?, ?) AND
+		(state <> ? OR owner = ?) AND NOT EXISTS (
+			SELECT 1 FROM decision_requests q WHERE q.delivery_id = delivery_runs.delivery_id
+			AND q.generation = delivery_runs.generation AND (q.status IN (?, ?, ?, ?) OR
+				(q.status = ? AND q.accepted_answer NOT IN (?, ?)))
+		) AND EXISTS (
+			SELECT 1 FROM promotion_journals p WHERE p.delivery_id = delivery_runs.delivery_id
+			AND p.candidate_head = ? AND p.validated_head = ? AND p.state = ? AND p.cleanup_complete = 1
+			AND p.decisions_resolved = 1 AND (
+				p.generation = delivery_runs.generation OR (
+					p.generation + 1 = delivery_runs.generation AND EXISTS (
+						SELECT 1 FROM human_decisions h WHERE h.delivery_id = p.delivery_id
+						AND h.generation = p.generation AND h.approved = 1
+					)
+				)
+			)
+		)`, domain.RunHumanGate, now.UTC().UnixNano(), lease.RunID, generation,
+		domain.RunPlanned, domain.RunReady, domain.RunFailed, domain.RunBlocked, domain.RunAwaitingDecision,
+		domain.RunHumanGate, domain.RunRunning, domain.RunRunning, lease.Owner,
+		DecisionRequestOpen, DecisionRequestPublished, DecisionRequestAnswered, DecisionRequestExpired,
+		DecisionRequestConsumed, "retry", "continue", headSHA, headSHA, PromotionJournalComplete)
+	if err != nil {
+		return err
+	}
+	if rows, _ := result.RowsAffected(); rows != 1 {
+		return errors.New("delivery is not eligible for final human gate projection")
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return err
+	}
+	committed = true
 	return nil
 }
 
@@ -1016,16 +1179,47 @@ func (s *Store) ResumeDelivery(ctx context.Context, decision domain.HumanDecisio
 
 func (s *Store) GetDelivery(ctx context.Context, id string) (Delivery, error) {
 	var delivery Delivery
-	err := s.db.QueryRowContext(ctx, `SELECT delivery_id, issue, parent_issue, work_dir, context_hash,
-		milestone_id, branch, base_branch, gsd_project_root, initial_head, gsd_version
+	err := s.db.QueryRowContext(ctx, `SELECT delivery_id, issue, parent_issue, repository, pull_request,
+		work_dir, context_hash, milestone_id, branch, base_branch, gsd_project_root, initial_head, gsd_version
 		FROM deliveries WHERE delivery_id = ?`, id).Scan(&delivery.ID, &delivery.Issue,
-		&delivery.ParentIssue, &delivery.WorkDir, &delivery.ContextHash, &delivery.MilestoneID,
+		&delivery.ParentIssue, &delivery.Repository, &delivery.PullRequest, &delivery.WorkDir,
+		&delivery.ContextHash, &delivery.MilestoneID,
 		&delivery.Branch, &delivery.BaseBranch, &delivery.GSDProjectRoot, &delivery.InitialHead,
 		&delivery.GSDVersion)
 	if err != nil {
 		return Delivery{}, fmt.Errorf("read delivery: %w", err)
 	}
 	return delivery, nil
+}
+
+func (s *Store) HasLegacyExternalEffects(ctx context.Context) (bool, error) {
+	var tables int
+	if err := s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM sqlite_master
+		WHERE type = 'table' AND name = 'outbox'`).Scan(&tables); err != nil {
+		return false, err
+	}
+	if tables == 0 {
+		return false, nil
+	}
+	var effects int
+	if err := s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM outbox`).Scan(&effects); err != nil {
+		return false, err
+	}
+	return effects > 0, nil
+}
+
+func (s *Store) GetDeliveryRun(ctx context.Context, deliveryID string) (DeliveryRun, error) {
+	if deliveryID == "" {
+		return DeliveryRun{}, errors.New("delivery identity is required")
+	}
+	var run DeliveryRun
+	err := s.db.QueryRowContext(ctx, `SELECT delivery_id, state, generation, attempt, owner
+		FROM delivery_runs WHERE delivery_id = ?`, deliveryID).Scan(&run.DeliveryID, &run.State,
+		&run.Generation, &run.Attempt, &run.Owner)
+	if err != nil {
+		return DeliveryRun{}, fmt.Errorf("read delivery run: %w", err)
+	}
+	return run, nil
 }
 
 func (s *Store) BindMilestone(ctx context.Context, deliveryID, milestoneID string) error {
@@ -1052,18 +1246,26 @@ func (s *Store) UpsertDecisionRequest(ctx context.Context, request DecisionReque
 	if err := validateDecisionRequest(request); err != nil {
 		return DecisionRequest{}, err
 	}
+	delivery, err := s.GetDelivery(ctx, request.DeliveryID)
+	if err != nil {
+		return DecisionRequest{}, err
+	}
+	if delivery.Repository != request.Repository || delivery.Issue != request.Issue ||
+		delivery.PullRequest != request.PullRequest {
+		return DecisionRequest{}, errors.New("decision request target does not match immutable delivery authority")
+	}
 	optionsRaw, err := jsonMarshalStrings(request.Options)
 	if err != nil {
 		return DecisionRequest{}, err
 	}
 	now := time.Now().UTC().UnixNano()
 	_, err = s.db.ExecContext(ctx, `INSERT INTO decision_requests
-		(request_id, delivery_id, issue, pull_request, unit_id, generation, head_sha, kind,
+		(request_id, delivery_id, repository, issue, pull_request, unit_id, generation, head_sha, kind,
 		 evidence, options_json, recommended_option, safe_default, expires_at, status,
 		 created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-		ON CONFLICT(request_id) DO NOTHING`, request.RequestID, request.DeliveryID, request.Issue,
-		request.PullRequest, request.UnitID, request.Generation, request.HeadSHA, request.Kind,
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		ON CONFLICT(request_id) DO NOTHING`, request.RequestID, request.DeliveryID, request.Repository,
+		request.Issue, request.PullRequest, request.UnitID, request.Generation, request.HeadSHA, request.Kind,
 		request.Evidence, optionsRaw, request.RecommendedOption, request.SafeDefault,
 		request.ExpiresAt.UTC().UnixNano(), request.Status, now, now)
 	if err != nil {
@@ -1073,20 +1275,235 @@ func (s *Store) UpsertDecisionRequest(ctx context.Context, request DecisionReque
 	if err != nil {
 		return DecisionRequest{}, err
 	}
-	if existing.DeliveryID != request.DeliveryID || existing.Generation != request.Generation ||
-		existing.HeadSHA != request.HeadSHA || existing.UnitID != request.UnitID || existing.Kind != request.Kind ||
+	if existing.DeliveryID != request.DeliveryID || existing.Repository != request.Repository ||
+		existing.Issue != request.Issue || existing.PullRequest != request.PullRequest ||
+		existing.Generation != request.Generation || existing.HeadSHA != request.HeadSHA ||
+		existing.UnitID != request.UnitID || existing.Kind != request.Kind ||
 		strings.Join(existing.Options, "\x00") != strings.Join(request.Options, "\x00") {
 		return DecisionRequest{}, errors.New("decision request id collides with different identity")
 	}
 	return existing, nil
 }
 
+func (s *Store) CancelStaleDecisionRequests(ctx context.Context, lease Lease, deliveryID, repository string,
+	issue, pullRequest int, generation int64, headSHA string, now time.Time) error {
+	if lease.RunID != deliveryID || !validRepository(repository) || issue <= 0 || pullRequest <= 0 ||
+		generation <= 0 || !validGitSHA(headSHA) || now.IsZero() {
+		return errors.New("complete fenced current decision-request identity is required")
+	}
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var owner string
+	var epoch, expiresAt int64
+	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`,
+		deliveryID).Scan(&owner, &epoch, &expiresAt); err != nil {
+		return err
+	}
+	if owner != lease.Owner || epoch != lease.Epoch || now.UTC().UnixNano() >= expiresAt {
+		return errors.New("stale decision-request cancellation lease")
+	}
+	if _, err := conn.ExecContext(ctx, `UPDATE decision_requests SET status = ?, updated_at = ?
+		WHERE delivery_id = ? AND status IN (?, ?) AND (repository <> ? OR issue <> ? OR pull_request <> ?
+		OR generation <> ? OR head_sha <> ?) AND NOT EXISTS (
+			SELECT 1 FROM promotion_journals p WHERE p.delivery_id = decision_requests.delivery_id
+			AND p.generation = decision_requests.generation AND p.unit_id = decision_requests.unit_id
+			AND p.state = ? AND p.cleanup_complete = 1 AND p.decisions_resolved = 0
+		)`, DecisionRequestCancelled, now.UTC().UnixNano(), deliveryID, DecisionRequestOpen,
+		DecisionRequestPublished, repository, issue, pullRequest, generation, headSHA,
+		PromotionJournalComplete); err != nil {
+		return err
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return err
+	}
+	committed = true
+	return nil
+}
+
+func (s *Store) CancelUnansweredPromotionDecisions(ctx context.Context, lease Lease, now time.Time) error {
+	if lease.RunID == "" || now.IsZero() {
+		return errors.New("fenced promotion decision cancellation is required")
+	}
+	_, err := s.db.ExecContext(ctx, `UPDATE decision_requests SET status = ?, updated_at = ?
+		WHERE delivery_id = ? AND status IN (?, ?) AND EXISTS (
+			SELECT 1 FROM leases WHERE run_id = ? AND owner = ? AND epoch = ? AND expires_at > ?
+		) AND EXISTS (
+			SELECT 1 FROM promotion_journals p WHERE p.delivery_id = decision_requests.delivery_id
+			AND p.generation = decision_requests.generation AND p.unit_id = decision_requests.unit_id
+			AND p.state <> ? AND p.decisions_resolved = 0
+		) AND (EXISTS (
+			SELECT 1 FROM decision_requests approved WHERE approved.delivery_id = decision_requests.delivery_id
+			AND approved.generation = decision_requests.generation AND approved.unit_id = decision_requests.unit_id
+			AND approved.status = ? AND approved.accepted_answer IN (?, ?)
+		) OR EXISTS (
+			SELECT 1 FROM promotion_journals completed WHERE completed.delivery_id = decision_requests.delivery_id
+			AND completed.generation = decision_requests.generation AND completed.unit_id = decision_requests.unit_id
+			AND completed.state = ? AND completed.cleanup_complete = 1
+		))`, DecisionRequestCancelled, now.UTC().UnixNano(), lease.RunID, DecisionRequestOpen,
+		DecisionRequestPublished, lease.RunID, lease.Owner, lease.Epoch, now.UTC().UnixNano(),
+		PromotionJournalBlocked, DecisionRequestConsumed, "retry", "continue", PromotionJournalComplete)
+	return err
+}
+
+func (s *Store) ResumeDeliveryFenced(ctx context.Context, lease Lease, decision domain.HumanDecision,
+	now time.Time,
+) error {
+	if lease.RunID == "" || decision.RunID != lease.RunID || decision.Generation <= 0 || now.IsZero() {
+		return errors.New("fenced resume decision is required")
+	}
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var leaseOwner string
+	var leaseEpoch, leaseExpires int64
+	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`,
+		lease.RunID).Scan(&leaseOwner, &leaseEpoch, &leaseExpires); err != nil {
+		return err
+	}
+	if leaseOwner != lease.Owner || leaseEpoch != lease.Epoch || now.UTC().UnixNano() >= leaseExpires {
+		return errors.New("resume controller lease is stale")
+	}
+	var state domain.RunState
+	var generation int64
+	if err := conn.QueryRowContext(ctx, `SELECT state, generation FROM delivery_runs WHERE delivery_id = ?`,
+		decision.RunID).Scan(&state, &generation); err != nil {
+		return err
+	}
+	next, err := domain.ResumeStopped(decision.RunID, generation, state, decision)
+	if err != nil {
+		return err
+	}
+	stamp := now.UTC().UnixNano()
+	if _, err := conn.ExecContext(ctx, `UPDATE decision_requests SET status = ?, updated_at = ?
+		WHERE delivery_id = ? AND generation = ? AND status IN (?, ?)`, DecisionRequestCancelled,
+		stamp, decision.RunID, generation, DecisionRequestOpen, DecisionRequestPublished); err != nil {
+		return err
+	}
+	if _, err := conn.ExecContext(ctx, `INSERT INTO human_decisions(delivery_id, generation, approved, consumed_at)
+		VALUES (?, ?, 1, ?)`, decision.RunID, generation, stamp); err != nil {
+		return errors.New("human decision was already consumed")
+	}
+	result, err := conn.ExecContext(ctx, `UPDATE delivery_runs SET state = ?, generation = ?, owner = '', updated_at = ?
+		WHERE delivery_id = ? AND state = ? AND generation = ?`, domain.RunReady, next, stamp,
+		decision.RunID, state, generation)
+	if err != nil {
+		return err
+	}
+	if rows, _ := result.RowsAffected(); rows != 1 {
+		return errors.New("delivery changed during fenced resume")
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return err
+	}
+	committed = true
+	return nil
+}
+
+func (s *Store) HasBlockingDecisionDisposition(ctx context.Context, deliveryID string,
+	generation int64) (bool, error) {
+	var count int
+	if err := s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM decision_requests WHERE delivery_id = ?
+		AND generation = ? AND (status = ? OR (status = ? AND accepted_answer NOT IN (?, ?)))`,
+		deliveryID, generation, DecisionRequestExpired, DecisionRequestConsumed, "retry", "continue").Scan(&count); err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
+func (s *Store) HasOutstandingDecisionRequest(ctx context.Context, deliveryID, repository string, issue,
+	pullRequest int, generation int64, headSHA string) (bool, error) {
+	var count int
+	if err := s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM decision_requests WHERE delivery_id = ?
+		AND repository = ? AND issue = ? AND pull_request = ? AND generation = ? AND head_sha = ?
+		AND status IN (?, ?, ?, ?)`, deliveryID, repository, issue, pullRequest, generation, headSHA,
+		DecisionRequestOpen, DecisionRequestPublished, DecisionRequestAnswered, DecisionRequestConsumed).Scan(&count); err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
 func (s *Store) ListOpenDecisionRequests(ctx context.Context, deliveryID string) ([]DecisionRequest, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT request_id FROM decision_requests WHERE delivery_id = ? AND status IN (?, ?) ORDER BY created_at`, deliveryID, DecisionRequestOpen, DecisionRequestPublished)
+	return s.listDecisionRequestsByStatus(ctx, deliveryID, DecisionRequestOpen, DecisionRequestPublished)
+}
+
+func (s *Store) ListDecisionAnswerRecovery(ctx context.Context, deliveryID string, generation int64,
+	headSHA string) ([]DecisionRequest, error) {
+	if deliveryID == "" || generation <= 0 || !validGitSHA(headSHA) {
+		return nil, errors.New("current decision answer recovery identity is required")
+	}
+	rows, err := s.db.QueryContext(ctx, `SELECT request_id FROM decision_requests WHERE delivery_id = ?
+		AND status IN (?, ?, ?) AND ((generation = ? AND head_sha = ?) OR EXISTS (
+			SELECT 1 FROM promotion_journals p WHERE p.delivery_id = decision_requests.delivery_id
+			AND p.generation = decision_requests.generation AND p.unit_id = decision_requests.unit_id
+			AND p.state = ? AND p.cleanup_complete = 1 AND p.decisions_resolved = 0
+		)) ORDER BY created_at`, deliveryID, DecisionRequestPublished, DecisionRequestAnswered,
+		DecisionRequestConsumed, generation, headSHA, PromotionJournalComplete)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
+	var ids []string
+	for rows.Next() {
+		var id string
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		ids = append(ids, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	requests := make([]DecisionRequest, 0, len(ids))
+	for _, id := range ids {
+		request, err := s.GetDecisionRequest(ctx, id)
+		if err != nil {
+			return nil, err
+		}
+		requests = append(requests, request)
+	}
+	return requests, nil
+}
+
+func (s *Store) listDecisionRequestsByStatus(ctx context.Context, deliveryID string,
+	statuses ...DecisionRequestStatus) ([]DecisionRequest, error) {
+	if deliveryID == "" || len(statuses) == 0 {
+		return nil, errors.New("delivery and decision request statuses are required")
+	}
+	placeholders := strings.TrimRight(strings.Repeat("?,", len(statuses)), ",")
+	arguments := make([]any, 0, len(statuses)+1)
+	arguments = append(arguments, deliveryID)
+	for _, status := range statuses {
+		arguments = append(arguments, status)
+	}
+	rows, err := s.db.QueryContext(ctx, `SELECT request_id FROM decision_requests WHERE delivery_id = ? AND status IN (`+
+		placeholders+`) ORDER BY created_at`, arguments...)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = rows.Close() }()
 	var ids []string
 	for rows.Next() {
 		var id string
@@ -1113,14 +1530,14 @@ func (s *Store) GetDecisionRequest(ctx context.Context, requestID string) (Decis
 	var request DecisionRequest
 	var optionsRaw string
 	var expiresAt, acceptedAt, consumedAt int64
-	err := s.db.QueryRowContext(ctx, `SELECT request_id, delivery_id, issue, pull_request, unit_id,
+	err := s.db.QueryRowContext(ctx, `SELECT request_id, delivery_id, repository, issue, pull_request, unit_id,
 		generation, head_sha, kind, evidence, options_json, recommended_option, safe_default,
-		expires_at, github_comment_id, status, accepted_answer, accepted_by, accepted_at, consumed_at
-		FROM decision_requests WHERE request_id = ?`, requestID).Scan(&request.RequestID, &request.DeliveryID,
-		&request.Issue, &request.PullRequest, &request.UnitID, &request.Generation, &request.HeadSHA,
+		expires_at, github_comment_id, status, accepted_answer, accepted_by, accepted_actor_id,
+		accepted_comment_id, accepted_at, consumed_at FROM decision_requests WHERE request_id = ?`, requestID).Scan(&request.RequestID, &request.DeliveryID,
+		&request.Repository, &request.Issue, &request.PullRequest, &request.UnitID, &request.Generation, &request.HeadSHA,
 		&request.Kind, &request.Evidence, &optionsRaw, &request.RecommendedOption, &request.SafeDefault,
 		&expiresAt, &request.GitHubCommentID, &request.Status, &request.AcceptedAnswer, &request.AcceptedBy,
-		&acceptedAt, &consumedAt)
+		&request.AcceptedActorID, &request.AcceptedCommentID, &acceptedAt, &consumedAt)
 	if err != nil {
 		return DecisionRequest{}, fmt.Errorf("read decision request: %w", err)
 	}
@@ -1139,26 +1556,133 @@ func (s *Store) GetDecisionRequest(ctx context.Context, requestID string) (Decis
 	return request, nil
 }
 
-func (s *Store) MarkDecisionRequestPublished(ctx context.Context, requestID string, commentID int64) error {
-	if requestID == "" || commentID <= 0 {
-		return errors.New("decision request and comment identity are required")
+func (s *Store) MarkDecisionRequestPublishedFenced(ctx context.Context, lease Lease,
+	request DecisionRequest, commentID int64, now time.Time) error {
+	if request.RequestID == "" || commentID <= 0 || now.IsZero() || lease.RunID != request.DeliveryID {
+		return errors.New("fenced decision request and comment identity are required")
 	}
-	result, err := s.db.ExecContext(ctx, `UPDATE decision_requests SET status = ?, github_comment_id = ?, updated_at = ?
-		WHERE request_id = ? AND status IN (?, ?)`, DecisionRequestPublished, commentID,
-		time.Now().UTC().UnixNano(), requestID, DecisionRequestOpen, DecisionRequestPublished)
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var owner string
+	var epoch, expiresAt int64
+	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`,
+		lease.RunID).Scan(&owner, &epoch, &expiresAt); err != nil {
+		return err
+	}
+	if owner != lease.Owner || epoch != lease.Epoch || now.UTC().UnixNano() >= expiresAt {
+		return errors.New("decision publication projection lease is stale")
+	}
+	result, err := conn.ExecContext(ctx, `UPDATE decision_requests SET status = ?, github_comment_id = ?, updated_at = ?
+		WHERE request_id = ? AND delivery_id = ? AND repository = ? AND issue = ? AND pull_request = ?
+		AND generation = ? AND head_sha = ? AND status IN (?, ?)
+		AND (github_comment_id = 0 OR github_comment_id = ?)`, DecisionRequestPublished, commentID,
+		now.UTC().UnixNano(), request.RequestID, request.DeliveryID, request.Repository, request.Issue,
+		request.PullRequest, request.Generation, request.HeadSHA,
+		DecisionRequestOpen, DecisionRequestPublished, commentID)
 	if err != nil {
 		return fmt.Errorf("mark decision request published: %w", err)
 	}
-	rows, _ := result.RowsAffected()
-	if rows != 1 {
-		return errors.New("decision request cannot be marked published")
+	if rows, _ := result.RowsAffected(); rows != 1 {
+		return errors.New("decision request publication projection is stale or rebound")
 	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return err
+	}
+	committed = true
 	return nil
 }
 
-func (s *Store) AcceptDecisionRequestAnswer(ctx context.Context, requestID, answer, actor string, generation int64, headSHA string, now time.Time) error {
-	answer = strings.TrimSpace(answer)
-	if requestID == "" || answer == "" || strings.TrimSpace(actor) == "" || generation <= 0 || !validGitSHA(headSHA) {
+func (s *Store) ExpireDecisionRequestAndBlock(ctx context.Context, lease Lease, requestID string, now time.Time) error {
+	if requestID == "" || now.IsZero() {
+		return errors.New("decision request and expiry time are required")
+	}
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
+		return err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
+		}
+	}()
+	var leaseOwner string
+	var leaseEpoch, leaseExpires int64
+	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`,
+		lease.RunID).Scan(&leaseOwner, &leaseEpoch, &leaseExpires); err != nil {
+		return err
+	}
+	if leaseOwner != lease.Owner || leaseEpoch != lease.Epoch || now.UTC().UnixNano() >= leaseExpires {
+		return errors.New("decision expiry controller lease is stale")
+	}
+	var deliveryID, safeDefault string
+	var generation, expiresAt int64
+	var status DecisionRequestStatus
+	if err := conn.QueryRowContext(ctx, `SELECT delivery_id, generation, safe_default, expires_at, status
+		FROM decision_requests WHERE request_id = ?`, requestID).Scan(&deliveryID, &generation,
+		&safeDefault, &expiresAt, &status); err != nil {
+		return err
+	}
+	if deliveryID != lease.RunID || safeDefault != "stop" || now.UTC().UnixNano() < expiresAt {
+		return errors.New("decision request is not eligible for safe-stop expiry")
+	}
+	if status != DecisionRequestExpired {
+		if status != DecisionRequestOpen && status != DecisionRequestPublished {
+			return errors.New("decision request is not open for expiry")
+		}
+		if _, err := conn.ExecContext(ctx, `UPDATE decision_requests SET status = ?, updated_at = ?
+			WHERE request_id = ? AND status = ?`, DecisionRequestExpired, now.UTC().UnixNano(), requestID,
+			status); err != nil {
+			return err
+		}
+	}
+	var runState domain.RunState
+	var runGeneration int64
+	if err := conn.QueryRowContext(ctx, `SELECT state, generation FROM delivery_runs WHERE delivery_id = ?`,
+		deliveryID).Scan(&runState, &runGeneration); err != nil {
+		return err
+	}
+	if runGeneration != generation {
+		return errors.New("expired decision request generation is stale")
+	}
+	if runState != domain.RunBlocked {
+		if runState != domain.RunReady && runState != domain.RunRunning && runState != domain.RunAwaitingDecision {
+			return errors.New("delivery state cannot accept safe-stop decision expiry")
+		}
+		if _, err := conn.ExecContext(ctx, `UPDATE delivery_runs SET state = ?, owner = '', updated_at = ?
+			WHERE delivery_id = ? AND generation = ? AND state = ?`, domain.RunBlocked,
+			now.UTC().UnixNano(), deliveryID, generation, runState); err != nil {
+			return err
+		}
+	}
+	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+		return err
+	}
+	committed = true
+	return nil
+}
+
+func (s *Store) ApplyDecisionRequestAnswer(ctx context.Context, lease Lease, requestID, answer, actor string,
+	actorID, commentID, generation int64, headSHA string, replyAt, now time.Time) error {
+	answer, actor = strings.TrimSpace(answer), strings.TrimSpace(actor)
+	if requestID == "" || answer == "" || actor == "" || actorID <= 0 || commentID <= 0 || generation <= 0 ||
+		!validGitSHA(headSHA) || replyAt.IsZero() || now.IsZero() || replyAt.After(now) {
 		return errors.New("complete decision answer identity is required")
 	}
 	request, err := s.GetDecisionRequest(ctx, requestID)
@@ -1172,32 +1696,16 @@ func (s *Store) AcceptDecisionRequestAnswer(ctx context.Context, requestID, answ
 			break
 		}
 	}
-	if !allowed {
-		return errors.New("decision answer is not one of the bounded options")
+	if !allowed || lease.RunID != request.DeliveryID {
+		return errors.New("decision answer is not one of the bounded options or delivery authority is stale")
 	}
-	result, err := s.db.ExecContext(ctx, `UPDATE decision_requests SET status = ?, accepted_answer = ?,
-		accepted_by = ?, accepted_at = ?, updated_at = ? WHERE request_id = ? AND generation = ? AND head_sha = ?
-		AND status IN (?, ?) AND consumed_at = 0 AND expires_at > ?`, DecisionRequestAnswered,
-		strings.TrimSpace(answer), strings.TrimSpace(actor), now.UTC().UnixNano(), now.UTC().UnixNano(),
-		requestID, generation, headSHA, DecisionRequestOpen, DecisionRequestPublished, now.UTC().UnixNano())
-	if err != nil {
-		return fmt.Errorf("accept decision request answer: %w", err)
-	}
-	rows, _ := result.RowsAffected()
-	if rows != 1 {
-		return errors.New("decision answer is stale, duplicate, expired, or unauthorized for this generation/head")
-	}
-	return nil
-}
-
-func (s *Store) ConsumeDecisionRequest(ctx context.Context, requestID string) (DecisionRequest, error) {
 	conn, err := s.db.Conn(ctx)
 	if err != nil {
-		return DecisionRequest{}, err
+		return err
 	}
 	defer conn.Close()
 	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
-		return DecisionRequest{}, err
+		return err
 	}
 	committed := false
 	defer func() {
@@ -1205,26 +1713,141 @@ func (s *Store) ConsumeDecisionRequest(ctx context.Context, requestID string) (D
 			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
 		}
 	}()
+	var leaseOwner string
+	var leaseEpoch, leaseExpires int64
+	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`,
+		lease.RunID).Scan(&leaseOwner, &leaseEpoch, &leaseExpires); err != nil {
+		return err
+	}
+	if leaseOwner != lease.Owner || leaseEpoch != lease.Epoch || now.UTC().UnixNano() >= leaseExpires {
+		return errors.New("decision answer controller lease is stale")
+	}
 	var status DecisionRequestStatus
-	if err := conn.QueryRowContext(ctx, `SELECT status FROM decision_requests WHERE request_id = ?`, requestID).Scan(&status); err != nil {
-		return DecisionRequest{}, fmt.Errorf("read decision request status: %w", err)
+	var storedAnswer, storedActor string
+	var storedActorID, questionCommentID, acceptedCommentID, expiresAt int64
+	if err := conn.QueryRowContext(ctx, `SELECT status, accepted_answer, accepted_by, accepted_actor_id,
+		github_comment_id, accepted_comment_id, expires_at FROM decision_requests WHERE request_id = ? AND delivery_id = ?
+		AND generation = ? AND head_sha = ?`, requestID, lease.RunID, generation, headSHA).Scan(&status,
+		&storedAnswer, &storedActor, &storedActorID, &questionCommentID, &acceptedCommentID, &expiresAt); err != nil {
+		return err
 	}
-	if status != DecisionRequestAnswered {
-		return DecisionRequest{}, errors.New("decision request has no unconsumed accepted answer")
+	switch status {
+	case DecisionRequestPublished:
+		if questionCommentID <= 0 || commentID <= questionCommentID || replyAt.UTC().UnixNano() >= expiresAt {
+			return errors.New("decision reply was not created after the question and before expiry")
+		}
+	case DecisionRequestAnswered:
+		if storedAnswer != answer || storedActor != actor || storedActorID != actorID ||
+			acceptedCommentID != commentID {
+			return errors.New("persisted decision reply identity cannot be rebound")
+		}
+	case DecisionRequestConsumed:
+		if storedAnswer != answer || storedActor != actor || storedActorID != actorID ||
+			acceptedCommentID != commentID {
+			return errors.New("persisted decision reply identity cannot be rebound")
+		}
+		if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
+			return err
+		}
+		committed = true
+		return nil
+	default:
+		return errors.New("decision request is not eligible for answer application")
 	}
-	if _, err := conn.ExecContext(ctx, `UPDATE decision_requests SET status = ?, consumed_at = ?, updated_at = ?
-		WHERE request_id = ? AND status = ? AND consumed_at = 0`, DecisionRequestConsumed,
-		time.Now().UTC().UnixNano(), time.Now().UTC().UnixNano(), requestID, DecisionRequestAnswered); err != nil {
-		return DecisionRequest{}, err
+	var runState domain.RunState
+	var runGeneration int64
+	if err := conn.QueryRowContext(ctx, `SELECT state, generation FROM delivery_runs WHERE delivery_id = ?`,
+		lease.RunID).Scan(&runState, &runGeneration); err != nil {
+		return err
+	}
+	approved := answer == "retry" || answer == "continue"
+	var promotionDecision int
+	if err := conn.QueryRowContext(ctx, `SELECT COUNT(*) FROM promotion_journals WHERE delivery_id = ?
+		AND generation = ? AND unit_id = ? AND state <> ?`, lease.RunID, generation, request.UnitID,
+		PromotionJournalBlocked).Scan(&promotionDecision); err != nil {
+		return err
+	}
+	if promotionDecision > 0 {
+		if runGeneration != generation {
+			return errors.New("recovered promotion reply generation is stale")
+		}
+		if approved {
+			if runState != domain.RunReady && runState != domain.RunFailed &&
+				runState != domain.RunAwaitingDecision && runState != domain.RunBlocked {
+				return errors.New("recovered promotion reply cannot resume the current delivery state")
+			}
+			if _, err := conn.ExecContext(ctx, `INSERT OR IGNORE INTO human_decisions
+				(delivery_id, generation, approved, consumed_at) VALUES (?, ?, 1, ?)`, lease.RunID,
+				generation, now.UTC().UnixNano()); err != nil {
+				return err
+			}
+			if _, err := conn.ExecContext(ctx, `UPDATE delivery_runs SET state = ?, owner = '', updated_at = ?
+				WHERE delivery_id = ? AND generation = ?`, domain.RunReady, now.UTC().UnixNano(),
+				lease.RunID, generation); err != nil {
+				return err
+			}
+		} else {
+			if runState != domain.RunReady && runState != domain.RunFailed &&
+				runState != domain.RunAwaitingDecision && runState != domain.RunBlocked {
+				return errors.New("recovered promotion reply cannot block the current delivery state")
+			}
+			if _, err := conn.ExecContext(ctx, `UPDATE delivery_runs SET state = ?, owner = '', updated_at = ?
+				WHERE delivery_id = ? AND generation = ?`, domain.RunBlocked, now.UTC().UnixNano(),
+				lease.RunID, generation); err != nil {
+				return err
+			}
+		}
+	} else if approved {
+		switch {
+		case runGeneration == generation && (runState == domain.RunFailed ||
+			runState == domain.RunAwaitingDecision || runState == domain.RunBlocked):
+			next, err := domain.ResumeStopped(lease.RunID, runGeneration, runState, domain.HumanDecision{
+				RunID: lease.RunID, Generation: generation, ActorKind: domain.ActorHuman, Approved: true,
+			})
+			if err != nil {
+				return err
+			}
+			if _, err := conn.ExecContext(ctx, `INSERT INTO human_decisions(delivery_id, generation, approved, consumed_at)
+				VALUES (?, ?, 1, ?)`, lease.RunID, generation, now.UTC().UnixNano()); err != nil {
+				return errors.New("human decision was already consumed")
+			}
+			if _, err := conn.ExecContext(ctx, `UPDATE delivery_runs SET state = ?, generation = ?, owner = '', updated_at = ?
+				WHERE delivery_id = ? AND state = ? AND generation = ?`, domain.RunReady, next,
+				now.UTC().UnixNano(), lease.RunID, runState, generation); err != nil {
+				return err
+			}
+		case runGeneration == generation+1 && runState == domain.RunReady:
+			// The same durable answer was already applied before restart.
+		default:
+			return errors.New("decision reply cannot resume the current delivery generation")
+		}
+	} else {
+		switch {
+		case runGeneration == generation && runState == domain.RunAwaitingDecision:
+			if _, err := conn.ExecContext(ctx, `UPDATE delivery_runs SET state = ?, owner = '', updated_at = ?
+				WHERE delivery_id = ? AND generation = ? AND state = ?`, domain.RunBlocked,
+				now.UTC().UnixNano(), lease.RunID, generation, domain.RunAwaitingDecision); err != nil {
+				return err
+			}
+		case runGeneration == generation && runState == domain.RunBlocked:
+			// The same safe-stop answer was already applied before restart.
+		default:
+			return errors.New("decision reply cannot block the current delivery generation")
+		}
+	}
+	if _, err := conn.ExecContext(ctx, `UPDATE decision_requests SET status = ?, accepted_answer = ?,
+		accepted_by = ?, accepted_actor_id = ?, accepted_comment_id = ?,
+		accepted_at = CASE WHEN accepted_at = 0 THEN ? ELSE accepted_at END,
+		consumed_at = ?, updated_at = ? WHERE request_id = ? AND delivery_id = ?`, DecisionRequestConsumed,
+		answer, actor, actorID, commentID, replyAt.UTC().UnixNano(), now.UTC().UnixNano(), now.UTC().UnixNano(),
+		requestID, lease.RunID); err != nil {
+		return err
 	}
 	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
-		return DecisionRequest{}, err
+		return err
 	}
 	committed = true
-	if err := conn.Close(); err != nil {
-		return DecisionRequest{}, err
-	}
-	return s.GetDecisionRequest(ctx, requestID)
+	return nil
 }
 
 func (s *Store) BeginRecoveryAttempt(context.Context, RecoveryBudgetKey, int64, time.Duration, string, string, time.Time) (RecoveryBudget, error) {
@@ -2047,7 +2670,8 @@ func (s *Store) GetAttestation(ctx context.Context, runID, headSHA string) (Atte
 }
 
 func validateDecisionRequest(request DecisionRequest) error {
-	if request.RequestID == "" || request.DeliveryID == "" || request.Issue <= 0 || request.PullRequest <= 0 ||
+	if request.RequestID == "" || request.DeliveryID == "" || !validRepository(request.Repository) ||
+		request.Issue <= 0 || request.PullRequest <= 0 ||
 		strings.TrimSpace(request.UnitID) == "" || request.Generation <= 0 || !validGitSHA(request.HeadSHA) ||
 		strings.TrimSpace(request.Kind) == "" || strings.TrimSpace(request.Evidence) == "" || len(request.Options) == 0 ||
 		request.ExpiresAt.IsZero() {
@@ -2056,12 +2680,58 @@ func validateDecisionRequest(request DecisionRequest) error {
 	if request.Status == "" {
 		return errors.New("decision request status is required")
 	}
+	if err := sensitive.ValidatePublicIdentifier(request.UnitID); err != nil {
+		return fmt.Errorf("decision request unit: %w", err)
+	}
+	if err := sensitive.ValidatePublicIdentifier(request.Kind); err != nil {
+		return fmt.Errorf("decision request kind: %w", err)
+	}
+	if err := sensitive.ValidatePublicText(request.Evidence); err != nil {
+		return fmt.Errorf("decision request evidence: %w", err)
+	}
+	allowedOptions := make(map[string]struct{}, len(request.Options))
 	for _, option := range request.Options {
-		if strings.TrimSpace(option) == "" || strings.ContainsAny(option, "\r\n\x00") {
+		if strings.TrimSpace(option) == "" || strings.ContainsAny(option, "\r\n\x00") ||
+			sensitive.ValidatePublicIdentifier(option) != nil {
 			return errors.New("decision request options must be bounded single-line values")
+		}
+		normalized := strings.ToLower(option)
+		if _, duplicate := allowedOptions[normalized]; duplicate {
+			return errors.New("decision request options contain a duplicate")
+		}
+		allowedOptions[normalized] = struct{}{}
+	}
+	for _, option := range []string{request.RecommendedOption, request.SafeDefault} {
+		if option != "" {
+			if sensitive.ValidatePublicIdentifier(option) != nil {
+				return errors.New("decision request policy option is unsafe")
+			}
+			if _, allowed := allowedOptions[strings.ToLower(option)]; !allowed {
+				return errors.New("decision request policy option is not allowlisted")
+			}
 		}
 	}
 	return nil
+}
+
+func validRepository(repository string) bool {
+	parts := strings.Split(repository, "/")
+	if len(parts) != 2 {
+		return false
+	}
+	for _, part := range parts {
+		if part == "" || part == "." || part == ".." {
+			return false
+		}
+		for _, character := range part {
+			if (character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z') ||
+				(character >= '0' && character <= '9') || strings.ContainsRune("._-", character) {
+				continue
+			}
+			return false
+		}
+	}
+	return true
 }
 
 func validateRecoveryBudgetKey(key RecoveryBudgetKey) error {
@@ -2236,159 +2906,4 @@ func (s *Store) ReleaseLease(ctx context.Context, lease Lease) error {
 		return errors.New("cannot release a stale or fenced lease")
 	}
 	return nil
-}
-
-func (s *Store) PutGrant(ctx context.Context, grant domain.Grant) error {
-	_, err := s.db.ExecContext(ctx, `INSERT OR IGNORE INTO grants
-        (run_id, repository, issue, capability, epoch) VALUES (?, ?, ?, ?, ?)`,
-		grant.RunID, grant.Repository, grant.Issue, grant.Capability, grant.Epoch)
-	if err != nil {
-		return fmt.Errorf("put grant: %w", err)
-	}
-	return nil
-}
-
-func (s *Store) ClaimEffect(ctx context.Context, lease Lease, key string, now time.Time) (Effect, error) {
-	if key == "" {
-		return Effect{}, errors.New("effect key is required")
-	}
-	conn, err := s.db.Conn(ctx)
-	if err != nil {
-		return Effect{}, err
-	}
-	defer conn.Close()
-	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
-		return Effect{}, err
-	}
-	committed := false
-	defer func() {
-		if !committed {
-			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
-		}
-	}()
-	var owner string
-	var epoch, expiresAt int64
-	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`, lease.RunID).Scan(&owner, &epoch, &expiresAt); err != nil {
-		return Effect{}, fmt.Errorf("read fenced lease: %w", err)
-	}
-	if owner != lease.Owner || epoch != lease.Epoch || now.UnixNano() >= expiresAt {
-		return Effect{}, errors.New("lease is stale, expired, or fenced")
-	}
-	result, err := conn.ExecContext(ctx, `UPDATE outbox SET status = 'claimed', claimed_by = ?, claimed_at = ?, last_error = ''
-		WHERE effect_key = ? AND run_id = ? AND epoch = ? AND status = 'pending'`, lease.Owner, now.UTC().UnixNano(), key, lease.RunID, lease.Epoch)
-	if err != nil {
-		return Effect{}, fmt.Errorf("claim effect: %w", err)
-	}
-	rows, _ := result.RowsAffected()
-	if rows != 1 {
-		return Effect{}, errors.New("effect is not pending for this lease")
-	}
-	var effect Effect
-	if err := conn.QueryRowContext(ctx, `SELECT effect_key, run_id, repository, issue, capability, target, payload_hash, epoch
-		FROM outbox WHERE effect_key = ?`, key).Scan(&effect.Key, &effect.RunID, &effect.Repository,
-		&effect.Issue, &effect.Capability, &effect.Target, &effect.PayloadHash, &effect.Epoch); err != nil {
-		return Effect{}, err
-	}
-	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
-		return Effect{}, err
-	}
-	committed = true
-	return effect, nil
-}
-
-func (s *Store) MarkEffectSent(ctx context.Context, lease Lease, key string, now time.Time) error {
-	return s.markClaimedEffect(ctx, lease, key, "sent", "", now)
-}
-
-func (s *Store) MarkEffectFailed(ctx context.Context, lease Lease, key string, cause error, now time.Time) error {
-	message := "effect failed"
-	if cause != nil {
-		message = boundedStoreString(cause.Error(), 512)
-	}
-	return s.markClaimedEffect(ctx, lease, key, "failed", message, now)
-}
-
-func (s *Store) markClaimedEffect(ctx context.Context, lease Lease, key, status, message string, now time.Time) error {
-	if key == "" || (status != "sent" && status != "failed") {
-		return errors.New("effect key and terminal status are required")
-	}
-	result, err := s.db.ExecContext(ctx, `UPDATE outbox SET status = ?, sent_at = ?, last_error = ?
-		WHERE effect_key = ? AND run_id = ? AND epoch = ? AND status = 'claimed' AND claimed_by = ?`, status, now.UTC().UnixNano(), message, key, lease.RunID, lease.Epoch, lease.Owner)
-	if err != nil {
-		return fmt.Errorf("mark effect %s: %w", status, err)
-	}
-	rows, _ := result.RowsAffected()
-	if rows != 1 {
-		return errors.New("claimed effect is stale or fenced")
-	}
-	return nil
-}
-
-func (s *Store) Enqueue(ctx context.Context, lease Lease, effect Effect, now time.Time) (bool, error) {
-	if effect.Key == "" || effect.RunID != lease.RunID || effect.Repository == "" || effect.Issue <= 0 ||
-		effect.Target == "" || !validSHA256(effect.PayloadHash) || effect.Epoch != lease.Epoch ||
-		!domain.IsGrantableCapability(effect.Capability) {
-		return false, errors.New("effect identity does not match fenced lease")
-	}
-	conn, err := s.db.Conn(ctx)
-	if err != nil {
-		return false, err
-	}
-	defer conn.Close()
-	if _, err := conn.ExecContext(ctx, `BEGIN IMMEDIATE`); err != nil {
-		return false, fmt.Errorf("begin outbox transaction: %w", err)
-	}
-	committed := false
-	defer func() {
-		if !committed {
-			_, _ = conn.ExecContext(context.Background(), `ROLLBACK`)
-		}
-	}()
-	var owner string
-	var epoch, expiresAt int64
-	if err := conn.QueryRowContext(ctx, `SELECT owner, epoch, expires_at FROM leases WHERE run_id = ?`, lease.RunID).
-		Scan(&owner, &epoch, &expiresAt); err != nil {
-		return false, fmt.Errorf("read fenced lease: %w", err)
-	}
-	if owner != lease.Owner || epoch != lease.Epoch || now.UnixNano() >= expiresAt {
-		return false, errors.New("lease is stale, expired, or fenced")
-	}
-	var grantCount int
-	if err := conn.QueryRowContext(ctx, `SELECT COUNT(*) FROM grants WHERE run_id = ? AND repository = ?
-		AND issue = ? AND capability = ? AND epoch = ?`, effect.RunID, effect.Repository, effect.Issue,
-		effect.Capability, effect.Epoch).Scan(&grantCount); err != nil {
-		return false, fmt.Errorf("check effect grant: %w", err)
-	}
-	if grantCount != 1 {
-		return false, errors.New("no matching capability grant for effect")
-	}
-	result, err := conn.ExecContext(ctx, `INSERT OR IGNORE INTO outbox
-		(effect_key, run_id, repository, issue, capability, target, payload_hash, epoch, created_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, effect.Key, effect.RunID, effect.Repository, effect.Issue,
-		effect.Capability, effect.Target, effect.PayloadHash, effect.Epoch, now.UTC().UnixNano())
-	if err != nil {
-		return false, fmt.Errorf("enqueue effect: %w", err)
-	}
-	if _, err := conn.ExecContext(ctx, `COMMIT`); err != nil {
-		return false, err
-	}
-	committed = true
-	rows, err := result.RowsAffected()
-	if err != nil {
-		return false, err
-	}
-	if rows == 1 {
-		return true, nil
-	}
-	var existing Effect
-	if err := conn.QueryRowContext(ctx, `SELECT effect_key, run_id, repository, issue, capability,
-        target, payload_hash, epoch FROM outbox WHERE effect_key = ?`, effect.Key).Scan(&existing.Key,
-		&existing.RunID, &existing.Repository, &existing.Issue, &existing.Capability, &existing.Target,
-		&existing.PayloadHash, &existing.Epoch); err != nil {
-		return false, err
-	}
-	if existing != effect {
-		return false, errors.New("idempotency key collides with a different effect")
-	}
-	return false, nil
 }

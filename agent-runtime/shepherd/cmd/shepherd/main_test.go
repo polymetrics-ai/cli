@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -18,6 +19,7 @@ import (
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/outbox"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/recovery"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/telemetry"
@@ -393,8 +395,8 @@ func setupRecoveryGovernanceTest(t *testing.T, failure recovery.Failure) (*store
 	head := strings.TrimSpace(runGitForTest(t, repo, "rev-parse", "HEAD"))
 	branch := strings.TrimSpace(runGitForTest(t, repo, "symbolic-ref", "--quiet", "--short", "HEAD"))
 	if err := db.EnsureDelivery(context.Background(), store.Delivery{
-		ID: "issue-389", Issue: 389, ParentIssue: 372, WorkDir: repo,
-		ContextHash: "sha256:" + strings.Repeat("a", 64), Branch: branch, BaseBranch: "main",
+		ID: "issue-389", Issue: 389, ParentIssue: 372, Repository: config.Repository,
+		PullRequest: config.PullRequest, WorkDir: repo, ContextHash: "sha256:" + strings.Repeat("a", 64), Branch: branch, BaseBranch: "main",
 		GSDProjectRoot: repo, InitialHead: head, GSDVersion: "1.11.0",
 	}); err != nil {
 		t.Fatal(err)
@@ -587,73 +589,77 @@ func TestLaunchModelForCommandUsesOfficialPhaseMetadata(t *testing.T) {
 	}
 }
 
-type recordingDecisionPublisher struct {
-	summaries []string
+type recordingEffectRequester struct {
+	snapshots []decisionlog.Snapshot
+	questions []store.DecisionRequest
 	err       error
 }
 
-func (p *recordingDecisionPublisher) SyncDecisionComment(_ context.Context, _ shepherdgithub.Target, summary string) error {
-	p.summaries = append(p.summaries, summary)
-	return p.err
+func (r *recordingEffectRequester) RequestSummary(_ context.Context, snapshot decisionlog.Snapshot) (outbox.Result, error) {
+	r.snapshots = append(r.snapshots, snapshot)
+	return outbox.Result{Code: outbox.ResultSent, ExternalID: 77, ExternalActor: "shepherd-test"}, r.err
 }
 
-func TestAppendAndPublishDecisionRetainsDurableRecordWhenPublicationFails(t *testing.T) {
+func (r *recordingEffectRequester) RequestQuestion(_ context.Context, request store.DecisionRequest) (outbox.Result, error) {
+	r.questions = append(r.questions, request)
+	return outbox.Result{Code: outbox.ResultSent, ExternalID: 78, ExternalActor: "shepherd-test"}, r.err
+}
+
+func TestAppendAndRequestDecisionRetainsDurableRecordWhenOutboxFails(t *testing.T) {
 	t.Parallel()
 
-	store, err := decisionlog.Open(t.TempDir())
+	decisionStore, err := decisionlog.Open(t.TempDir())
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer store.Close()
-	publisher := &recordingDecisionPublisher{err: errors.New("offline")}
+	defer decisionStore.Close()
+	effects := &recordingEffectRequester{err: errors.New("offline")}
 	question := gsd.Question{ID: "scope", Title: "What should ship?"}
 	response := gsd.UIResponse{Value: "Full safe parity"}
-	err = appendAndPublishDecision(context.Background(), store, publisher,
-		shepherdgithub.Target{Repository: "polymetrics-ai/cli", PullRequest: 388, DeliveryID: "issue-380"},
+	err = appendAndRequestDecisionSummary(context.Background(), decisionStore, effects,
 		"issue-380", "execution-1", "discuss-milestone/M001", question, response, "shepherd", "approved issue context")
 	if err == nil {
-		t.Fatal("publication failure did not fail the answered gate")
+		t.Fatal("outbox failure did not fail the answered gate")
 	}
-	if failure := recovery.Classify(gsd.Result{Terminal: gsd.TerminalError, Err: err}); failure.Class != recovery.FailureGitHubPublishUncertain {
-		t.Fatalf("publication failure classification=%+v", failure)
+	if failure := recovery.Classify(gsd.Result{Terminal: gsd.TerminalError, Err: err}); failure.Class != recovery.FailureOutboxUncertain {
+		t.Fatalf("outbox failure classification=%+v", failure)
 	}
-	records, readErr := store.Records()
+	records, readErr := decisionStore.Records()
 	if readErr != nil {
 		t.Fatal(readErr)
 	}
 	if len(records) != 1 || records[0].Actor != decisionlog.ActorShepherd || records[0].At.Before(time.Now().Add(-time.Minute)) {
 		t.Fatalf("durable records=%+v", records)
 	}
-	if len(publisher.summaries) != 1 {
-		t.Fatalf("publication attempts=%d", len(publisher.summaries))
+	if len(effects.snapshots) != 1 {
+		t.Fatalf("effect requests=%d", len(effects.snapshots))
 	}
 }
 
-func TestRecordOperationalDecisionPublishesAttributedLedgerEntry(t *testing.T) {
+func TestRecordOperationalDecisionRequestsAttributedLedgerEffect(t *testing.T) {
 	t.Parallel()
 
-	store, err := decisionlog.Open(t.TempDir())
+	decisionStore, err := decisionlog.Open(t.TempDir())
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer store.Close()
-	publisher := &recordingDecisionPublisher{}
-	err = recordOperationalDecision(context.Background(), store, publisher,
-		shepherdgithub.Target{Repository: "polymetrics-ai/cli", PullRequest: 388, DeliveryID: "issue-380"},
+	defer decisionStore.Close()
+	effects := &recordingEffectRequester{}
+	err = recordOperationalDecision(context.Background(), decisionStore, effects,
 		"issue-380", "reconcile/M001/S01/T04", "Amend the issue write scope?", "Add only internal/connectors/defs/defs_test.go",
 		"shepherd", "approved task plan requires the production embed assertion")
 	if err != nil {
 		t.Fatal(err)
 	}
-	records, err := store.Records()
+	records, err := decisionStore.Records()
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(records) != 1 || records[0].Actor != decisionlog.ActorShepherd || records[0].Question != "Amend the issue write scope?" {
 		t.Fatalf("records=%+v", records)
 	}
-	if len(publisher.summaries) != 1 || !strings.Contains(publisher.summaries[0], "Add only internal/connectors/defs/defs_test.go") {
-		t.Fatalf("published summaries=%v", publisher.summaries)
+	if len(effects.snapshots) != 1 || !strings.Contains(effects.snapshots[0].Summary, "Add only internal/connectors/defs/defs_test.go") {
+		t.Fatalf("requested summaries=%+v", effects.snapshots)
 	}
 }
 
@@ -930,7 +936,7 @@ func TestSuperviseRuntimeRetryReconcilesOldAttemptAndRetainsFreshAttempt(t *test
 	}
 }
 
-func TestSuperviseStartupReconcilesRetainedAttemptBeforeFinalGateQuery(t *testing.T) {
+func TestSuperviseStartupReconcilesRetainedAttemptButRejectsUnprovenFinalGate(t *testing.T) {
 	if os.Getenv("GO_WANT_RUNNER_HELPER") != "" {
 		return
 	}
@@ -956,14 +962,14 @@ func TestSuperviseStartupReconcilesRetainedAttemptBeforeFinalGateQuery(t *testin
 	if err := db.Close(); err != nil {
 		t.Fatal(err)
 	}
-	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
-		t.Fatalf("final-gate startup reconciliation: %v", err)
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("unproven final gate succeeded after rejected validation")
 	}
 	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
 		t.Fatalf("startup cleanup-complete attempts=%d want 1", count)
 	}
-	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err != nil {
-		t.Fatalf("idempotent final-gate restart: %v", err)
+	if err := runSupervise(context.Background(), runner, config, testUnitRegistry(), 389, contextPath, false, "shepherd", "fake runtime"); err == nil {
+		t.Fatal("unproven final gate succeeded on idempotent restart")
 	}
 	if count := countSQLiteQueryForTest(t, dbPath, "SELECT COUNT(*) FROM attempt_worktrees WHERE state = 'cleanup_complete'"); count != 1 {
 		t.Fatalf("idempotent cleanup-complete attempts=%d want 1", count)
@@ -1021,13 +1027,13 @@ func TestSuperviseStartupPreservesAmbiguousRunningAttempt(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := resolveHumanClearedAttempts(context.Background(), authorityStore, config, "issue-389"); err == nil {
+	if err := resolveHumanClearedAttempts(context.Background(), authorityStore, config, "issue-389", nil, nil); err == nil {
 		_ = authorityStore.Close()
 		t.Fatal("human resume accepted while ambiguous resources remained")
 	}
 	runGitForTest(t, repo, "worktree", "remove", "--force", attemptPath)
 	runGitForTest(t, repo, "branch", "-D", "--", attemptBranch)
-	if err := resolveHumanClearedAttempts(context.Background(), authorityStore, config, "issue-389"); err != nil {
+	if err := resolveHumanClearedAttempts(context.Background(), authorityStore, config, "issue-389", nil, nil); err != nil {
 		_ = authorityStore.Close()
 		t.Fatalf("human-cleared resolution: %v", err)
 	}
@@ -1150,8 +1156,70 @@ func TestSuperviseRatifiesBeforePromotingCandidate(t *testing.T) {
 	}
 }
 
+type fakeOutboxCommentPort struct {
+	mu       sync.Mutex
+	comments []outbox.Comment
+	nextID   int64
+}
+
+func (p *fakeOutboxCommentPort) Actor(context.Context) (string, error) {
+	return "shepherd-test", nil
+}
+
+func (p *fakeOutboxCommentPort) ListComments(context.Context, outbox.Target) ([]outbox.Comment, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return append([]outbox.Comment(nil), p.comments...), nil
+}
+
+func (p *fakeOutboxCommentPort) CreateComment(_ context.Context, _ outbox.Target, body string) (outbox.Comment, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	p.nextID++
+	comment := outbox.Comment{ID: p.nextID, Body: body, Author: "shepherd-test", AuthorType: "User"}
+	p.comments = append(p.comments, comment)
+	return comment, nil
+}
+
+func (p *fakeOutboxCommentPort) UpdateComment(_ context.Context, _ outbox.Target, commentID int64, body string) (outbox.Comment, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	for index := range p.comments {
+		if p.comments[index].ID == commentID {
+			p.comments[index].Body = body
+			return p.comments[index], nil
+		}
+	}
+	return outbox.Comment{}, errors.New("fake comment is missing")
+}
+
+type fakeDecisionReplyPoller struct{}
+
+func (fakeDecisionReplyPoller) PollDecisionReplies(context.Context, shepherdgithub.QuestionRequest, string) ([]shepherdgithub.Reply, error) {
+	return nil, nil
+}
+
+type decisionReplyPollerFunc func(context.Context, shepherdgithub.QuestionRequest, string) ([]shepherdgithub.Reply, error)
+
+func (f decisionReplyPollerFunc) PollDecisionReplies(ctx context.Context, request shepherdgithub.QuestionRequest,
+	actor string,
+) ([]shepherdgithub.Reply, error) {
+	return f(ctx, request, actor)
+}
+
 func setupFakeSuperviseRuntime(t *testing.T) (string, string, fileConfig, *gsd.Runner) {
 	t.Helper()
+	commentPort := &fakeOutboxCommentPort{nextID: 100}
+	previousEffectFactory := externalEffectDispatcherFactory
+	previousReplyFactory := decisionReplyPollerFactory
+	externalEffectDispatcherFactory = func(database *outbox.Store, fence outbox.ExecutionFence) *outbox.Dispatcher {
+		return outbox.NewGitHubDispatcher(database, commentPort, fence)
+	}
+	decisionReplyPollerFactory = func() decisionReplyPoller { return fakeDecisionReplyPoller{} }
+	t.Cleanup(func() {
+		externalEffectDispatcherFactory = previousEffectFactory
+		decisionReplyPollerFactory = previousReplyFactory
+	})
 	repo := initializedTestRepository(t)
 	branchRaw := runGitForTest(t, repo, "symbolic-ref", "--quiet", "--short", "HEAD")
 	contextPath := filepath.Join(repo, "issue-context.json")

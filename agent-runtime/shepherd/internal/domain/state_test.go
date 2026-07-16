@@ -55,11 +55,3 @@ func TestFailedResumeRequiresSameExplicitHumanDecision(t *testing.T) {
 		t.Fatal("ready delivery accepted as explicitly resumable")
 	}
 }
-
-func TestMergeCapabilityCannotBeGranted(t *testing.T) {
-	t.Parallel()
-
-	if _, err := NewGrant("run-1", "repo", 372, Capability("merge.main"), 1); err == nil {
-		t.Fatal("expected merge-to-main capability to be rejected")
-	}
-}

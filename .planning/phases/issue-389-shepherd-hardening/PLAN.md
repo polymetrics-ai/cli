@@ -10,15 +10,19 @@ exact candidate head has been independently validated by GPT-5.6 Sol/high.
 
 ## Required workflow and skills loaded
 
-- GSD command: `scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run`
-- GSD adapter health: `scripts/gsd doctor`, `scripts/gsd list`
-- Required reading completed this cycle: `AGENTS.md`, required-skills routing, GSD Pi adapter reference,
-  issue-agent contract, issue #389 body, complete issue-389 planning artifacts, and
-  `agent-runtime/shepherd/README.md`.
+- Active GSD command: `scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto`
+- GSD adapter health/provenance: `scripts/gsd doctor`, `scripts/gsd list`, and
+  `scripts/gsd sources programming-loop`.
+- Required reading completed for Slice F: `AGENTS.md`, required-skills routing, GSD Pi adapter,
+  issue-agent contract, universal runtime loop, local review loop, runtime/RLM integration reference,
+  issue #389 planning artifacts, and the applicable project/Go skills.
 - Skills loaded/recorded: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`,
-  `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-safety`, `golang-security`,
-  `golang-context`, `golang-concurrency`, `golang-design-patterns`, `golang-structs-interfaces`,
-  `golang-database`, `golang-observability`, and `golang-lint`.
+  `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-safety`,
+  `golang-security`, `golang-context`, `golang-concurrency`, `golang-database`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-observability`, `golang-lint`,
+  `golang-code-style`, `golang-naming`, and `golang-documentation`.
+- Immutable Slice F base: `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`; local and remote heads
+  matched and the worktree was clean before these planning-only edits.
 
 ## Reconciled status at start of proof-recovery
 
@@ -61,8 +65,13 @@ status is therefore **not validated, not ratified, not canary-ready**.
     `cacb32e8e16b7ba70742cc5365cb83fffd74ca35`. Slice E uses `local_critical_path` because typed
     failure classification, separate Sol/high planner execution, protected session evidence, atomic
     SQLite budget reservation, backoff, and supervise retry state share one trust boundary. Read-only
-    testing/reliability/review/security sidecars may overlap. Slice F onward, PR creation, final review,
-    canaries, GitHub mutation, cleanup/migration, and parent PR #390 merge remain blocked.
+    testing/reliability/review/security sidecars may overlap.
+12. `cycle-15/slice-f`: Slice E is accepted GREEN at
+    `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`. Slice F uses `local_critical_path` because effect
+    schemas, controller-derived authorization, durable outbox state, fenced claims, executor capability
+    isolation, reconciliation, and command integration form one sequential trust boundary. Only
+    read-only tester/reviewer/reliability/security sidecars may overlap. Slice G onward, PR creation,
+    live GitHub mutation, canaries, cleanup/migration, and parent PR #390 merge remain blocked.
 
 ## Ordered implementation slices
 
@@ -239,17 +248,60 @@ owner/lease-epoch fencing, deterministic backoff, expiry, crash-safe dispatch di
 exhaustion gating, and fresh-attempt retry ownership. GitHub/outbox uncertainty is typed and blocks
 without another write. Live Sol/high smoke, focused/full/race/vet/build/make/boundary/list/diff gates,
 the exact 28-finding no-differential lint baseline, and independent Sol/high correctness/security
-review cycles pass with all actionable findings dispositioned. Slice F remains blocked.
+review cycles pass with all actionable findings dispositioned. Accepted checkpoint:
+`9556cb24412f3598b2b8a94a3089b61ef3d1dd91`.
 
-### F. Authority-gated external effects
+### F. Authority-gated external effects — GREEN / REVIEWED / CHECKPOINT READY
+
+Orchestration: `local_critical_path`; no overlapping mutating worker. Read-only tester, reliability,
+reviewer, and security sidecars may overlap. No live GitHub mutation is permitted in this slice.
 
 RED tests first:
-- decision summaries, questions, statuses, and future GitHub mutations cannot bypass the fenced outbox;
-- outbox pending/claim/send/failure/restart/idempotent replay paths are covered;
-- workers do not receive a direct GitHub mutation path.
+- architecture checks reject direct `SyncDecisionComment`, `SyncQuestionComment`, or any other
+  write-capable GitHub call outside the outbox GitHub executor;
+- reply polling receives a read-only GitHub port, while only the executor receives write capability;
+- workers, GSD units, validators, recovery planners, reviewers, enqueue helpers, and executors cannot
+  mint grants or expand authority;
+- controller-derived grants are immutable and bind delivery, repository, issue/PR, capability,
+  generation, candidate head, epoch, and exact target;
+- `forbidden_main_merge`, `merge.main`, `pr.merge`, unsupported effect types, changed targets, stale
+  heads, stale epochs, and capability mismatch fail closed before enqueue or execution;
+- strict versioned payload decoding rejects missing, duplicate, case-duplicate, unknown, partial,
+  oversized, trailing, secret-bearing, command-bearing, and unbounded diagnostic fields;
+- canonical payload bytes/hash, stable idempotency identity, grant identity, claim identity, and bounded
+  typed result/error survive SQLite reopen without mutation;
+- the explicit `pending`, `claimed`, `sent`, `failed`, `uncertain`, `blocked`, and `cancelled` graph
+  rejects illegal, stale-owner, stale-epoch, and terminal transitions;
+- expired claim recovery is fenced and restart-safe; definite pre-send failure may retry only within
+  policy, while ambiguous post-send failure becomes `uncertain` and is never blindly replayed;
+- deterministic Shepherd-owned comment markers reconcile exact marker/payload identity before write,
+  suppress exact duplicates, and block duplicate markers, conflicting payloads, changed targets, or
+  ambiguous read results;
+- older claimed decision-summary revisions cannot overwrite a newer ledger revision;
+- question effects remain bound to request ID, generation, unit, candidate head, and external comment ID;
+- every decision-ledger/outbox crash boundary converges through deterministic startup reconciliation
+  without claiming cross-database atomicity;
+- telemetry covers `effect_requested`, `effect_authorized`, `effect_enqueued`, `effect_claimed`,
+  `effect_execution_started`, `effect_sent`, `effect_failed`, `effect_uncertain`, `effect_reconciled`,
+  `effect_blocked`, and `effect_claim_recovered` without secrets or unbounded payloads.
 
-GREEN target: remove direct `SyncDecisionComment` production paths and route all external writes through
-authority-granted, idempotent outbox effects.
+GREEN target: add a narrow `internal/outbox` package with strict immutable effect/grant/result records,
+fenced durable claims, an allowlisted executor registry, deterministic GitHub comment reconciliation,
+and bounded typed telemetry. Central controller admission derives grants; enqueue helpers and executors
+only validate them. Replace decision-summary and decision-question direct publication with durable
+request/enqueue and successful-result projection. Preserve read-only reply polling and fail closed for
+all unsupported future PR/issue/push/merge effects. Use only fakes, in-memory runners, and `httptest`.
+
+Focused gate:
+`cd agent-runtime/shepherd && go test ./internal/outbox ./internal/store ./internal/github ./internal/domain ./internal/recovery ./cmd/shepherd -count=1`.
+Full gates: nested tests/race/vet/build/`make verify`, root `make verify`, module boundary,
+`git diff --check`, root `go list ./...`, and exact 28-finding lint baseline with zero differential.
+GREEN achieved on 2026-07-16. RED preceded production edits. Focused/full/race/vet/build, nested/root
+verification, module-boundary, root package-list, formatting, diff, and exact 28-finding lint-baseline
+gates pass. Repeated independent GPT-5.6 Sol/xhigh correctness, security, and reliability findings are
+fully dispositioned, including final exact-head correctness/restart closure with no actionable findings.
+No live GitHub mutation occurred. The coherent checkpoint is ready; push only this branch, confirm
+local/remote equality and cleanliness, then stop before Slice G.
 
 ### G. Real supervise integration coverage
 
@@ -271,7 +323,8 @@ module gates. Live canaries remain deferred until independent validation passes 
 
 ## Checkpoints
 
-- Commit/push plan reconciliation after artifact-only edits if requested by coordinator.
-- Commit/push each coherent green slice after focused and nested module gates pass.
-- Final branch push and draft sub-PR target: `feat/372-gsd-pi-go-shepherd`, title Conventional Commit,
-  body uses `Refs #389`.
+- Do not checkpoint planning-only Slice F activation separately; production RED evidence follows next.
+- Commit/push one coherent GREEN Slice F checkpoint after focused/full gates and exact-head independent
+  reviews pass; preferred subject: `feat(shepherd): fence external effects through outbox`.
+- Confirm exact local/remote branch equality, clean worktree, and no generated binaries, then stop before
+  Slice G, PR creation, canaries, live GitHub mutation, cleanup/migration, or parent PR #390 merge.

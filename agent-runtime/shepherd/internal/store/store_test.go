@@ -11,7 +11,7 @@ import (
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
 )
 
-func TestLeaseFencingAndOutboxIdempotency(t *testing.T) {
+func TestLeaseFencing(t *testing.T) {
 	t.Parallel()
 
 	ctx := context.Background()
@@ -36,40 +36,33 @@ func TestLeaseFencingAndOutboxIdempotency(t *testing.T) {
 	if err := db.CheckLease(ctx, first, now.Add(2*time.Minute)); err == nil {
 		t.Fatal("expected stale lease to fail")
 	}
+	if err := db.CheckLease(ctx, second, now.Add(2*time.Minute)); err != nil {
+		t.Fatalf("current lease rejected: %v", err)
+	}
+}
 
-	grant, err := domain.NewGrant("run-1", "repo", 372, domain.CapabilityPRUpdate, second.Epoch)
+func TestLegacyExternalEffectsAreDetectedAndQuarantined(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	database, err := Open(ctx, filepath.Join(t.TempDir(), "shepherd.db"))
 	if err != nil {
-		t.Fatalf("grant: %v", err)
-	}
-	if err := db.PutGrant(ctx, grant); err != nil {
-		t.Fatalf("put grant: %v", err)
-	}
-
-	effect := Effect{
-		Key: "pr:372:ready:abc123", RunID: "run-1", Repository: "repo", Issue: 372,
-		Capability: domain.CapabilityPRUpdate, Target: "pr:380", PayloadHash: "sha256:" + strings.Repeat("d", 64), Epoch: second.Epoch,
-	}
-	inserted, err := db.Enqueue(ctx, second, effect, now.Add(2*time.Minute))
-	if err != nil || !inserted {
-		t.Fatalf("first enqueue: inserted=%v err=%v", inserted, err)
-	}
-	inserted, err = db.Enqueue(ctx, second, effect, now.Add(2*time.Minute))
-	if err != nil || inserted {
-		t.Fatalf("duplicate enqueue: inserted=%v err=%v", inserted, err)
-	}
-	claimed, err := db.ClaimEffect(ctx, second, effect.Key, now.Add(2*time.Minute))
-	if err != nil || claimed != effect {
-		t.Fatalf("claim=%+v err=%v", claimed, err)
-	}
-	if _, err := db.ClaimEffect(ctx, second, effect.Key, now.Add(2*time.Minute)); err == nil {
-		t.Fatal("claimed effect was claimed twice")
-	}
-	if err := db.MarkEffectSent(ctx, second, effect.Key, now.Add(2*time.Minute)); err != nil {
 		t.Fatal(err)
 	}
-	effect.PayloadHash = "sha256:" + strings.Repeat("e", 64)
-	if _, err := db.Enqueue(ctx, second, effect, now.Add(2*time.Minute)); err == nil {
-		t.Fatal("expected conflicting idempotency key to fail")
+	defer database.Close()
+	legacy, err := database.HasLegacyExternalEffects(ctx)
+	if err != nil || legacy {
+		t.Fatalf("new database legacy=%t err=%v", legacy, err)
+	}
+	if _, err := database.db.ExecContext(ctx, `CREATE TABLE outbox (
+		effect_key TEXT PRIMARY KEY, status TEXT NOT NULL)`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := database.db.ExecContext(ctx, `INSERT INTO outbox(effect_key, status) VALUES ('legacy', 'pending')`); err != nil {
+		t.Fatal(err)
+	}
+	legacy, err = database.HasLegacyExternalEffects(ctx)
+	if err != nil || !legacy {
+		t.Fatalf("legacy database legacy=%t err=%v", legacy, err)
 	}
 }
 
@@ -172,7 +165,8 @@ func TestIssueProjectIdentityIsExclusiveAndImmutable(t *testing.T) {
 	defer db.Close()
 	root := filepath.Join(t.TempDir(), "wt-issue-389")
 	binding := Delivery{
-		ID: "issue-389", Issue: 389, ParentIssue: 372, WorkDir: root,
+		ID: "issue-389", Issue: 389, ParentIssue: 372, Repository: "polymetrics-ai/cli",
+		PullRequest: 390, WorkDir: root,
 		ContextHash: "sha256:" + strings.Repeat("a", 64), Branch: "feat/389-autonomous-shepherd",
 		BaseBranch: "feat/372-gsd-pi-go-shepherd", GSDProjectRoot: root,
 		InitialHead: strings.Repeat("b", 40), GSDVersion: "1.11.0",
@@ -194,6 +188,94 @@ func TestIssueProjectIdentityIsExclusiveAndImmutable(t *testing.T) {
 	drifted.Branch = "feat/unrelated"
 	if err := db.EnsureDelivery(ctx, drifted); err == nil {
 		t.Fatal("same issue was rebound to a different branch")
+	}
+	drifted = binding
+	drifted.PullRequest++
+	if err := db.EnsureDelivery(ctx, drifted); err == nil {
+		t.Fatal("same issue was rebound to a different external target")
+	}
+	if _, err := db.db.ExecContext(ctx, `UPDATE deliveries SET repository = '', pull_request = 0 WHERE delivery_id = ?`,
+		binding.ID); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.EnsureDelivery(ctx, binding); !errors.Is(err, ErrLegacyDeliveryTarget) {
+		t.Fatalf("legacy delivery target error=%v, want explicit human reconciliation", err)
+	}
+}
+
+func TestFinalHumanGateProjectionRequiresExactPromotionProof(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	db, err := Open(ctx, filepath.Join(t.TempDir(), "state.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	binding := testDelivery("issue-final-gate", 389)
+	if err := db.EnsureDelivery(ctx, binding); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.BeginAttempt(ctx, binding.ID, "worker"); err != nil {
+		t.Fatal(err)
+	}
+	if err := db.FinishAttempt(ctx, binding.ID, "worker", domain.RunHumanGate); err == nil {
+		t.Fatal("generic attempt completion bypassed final-gate proof")
+	}
+	now := time.Now().UTC()
+	lease, err := db.AcquireLease(ctx, binding.ID, "final-gate", now, time.Minute)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := db.ProjectFinalHumanGate(ctx, lease, 1, binding.InitialHead, now); err == nil {
+		t.Fatal("final human gate was accepted without exact promotion proof")
+	}
+	run, err := db.GetDeliveryRun(ctx, binding.ID)
+	if err != nil || run.State != domain.RunRunning {
+		t.Fatalf("unproven final gate run=%+v err=%v", run, err)
+	}
+	if err := db.ProjectFinalHumanGate(ctx, Lease{RunID: binding.ID, Owner: "stale", Epoch: lease.Epoch},
+		1, binding.InitialHead, now); err == nil {
+		t.Fatal("stale controller projected final human gate")
+	}
+}
+
+func TestFinalHumanGateProjectionRejectsStoppedStatesWithoutRecoveredPromotion(t *testing.T) {
+	t.Parallel()
+	for index, state := range []domain.RunState{domain.RunPlanned, domain.RunReady, domain.RunFailed, domain.RunBlocked, domain.RunAwaitingDecision} {
+		state := state
+		t.Run(string(state), func(t *testing.T) {
+			t.Parallel()
+			ctx := context.Background()
+			db, err := Open(ctx, filepath.Join(t.TempDir(), "state.db"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			t.Cleanup(func() { _ = db.Close() })
+			binding := testDelivery("issue-stopped-"+string(rune('a'+index)), 400+index)
+			if err := db.EnsureDelivery(ctx, binding); err != nil {
+				t.Fatal(err)
+			}
+			if state != domain.RunPlanned {
+				if _, err := db.BeginAttempt(ctx, binding.ID, "worker"); err != nil {
+					t.Fatal(err)
+				}
+				if err := db.FinishAttempt(ctx, binding.ID, "worker", state); err != nil {
+					t.Fatal(err)
+				}
+			}
+			now := time.Now().UTC()
+			lease, err := db.AcquireLease(ctx, binding.ID, "final-gate", now, time.Minute)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := db.ProjectFinalHumanGate(ctx, lease, 1, binding.InitialHead, now); err == nil {
+				t.Fatalf("stopped state %s bypassed explicit recovery", state)
+			}
+			run, err := db.GetDeliveryRun(ctx, binding.ID)
+			if err != nil || run.State != state {
+				t.Fatalf("stopped run=%+v err=%v", run, err)
+			}
+		})
 	}
 }
 
@@ -446,7 +528,8 @@ func TestUnitAttemptBudgetSurvivesStoreRestart(t *testing.T) {
 func testDelivery(id string, issue int) Delivery {
 	root := filepath.Join("/tmp", id)
 	return Delivery{
-		ID: id, Issue: issue, ParentIssue: 372, WorkDir: root,
+		ID: id, Issue: issue, ParentIssue: 372, Repository: "polymetrics-ai/cli",
+		PullRequest: 390, WorkDir: root,
 		ContextHash: "sha256:" + strings.Repeat("a", 64), Branch: "feat/" + id,
 		BaseBranch: "feat/372-gsd-pi-go-shepherd", GSDProjectRoot: root,
 		InitialHead: strings.Repeat("b", 40), GSDVersion: "1.11.0",

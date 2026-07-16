@@ -28,6 +28,7 @@ import (
 	shepherdgit "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git"
 	shepherdgithub "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/github"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/outbox"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/recovery"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/store"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/supervisor"
@@ -56,6 +57,10 @@ var recoveryPlannerFactory = func(config fileConfig) (recovery.Planner, error) {
 		Command: config.PiCommand, GSDHome: config.GSDHome, StateDir: config.StateDir,
 		Timeout: time.Duration(config.TimeoutSeconds) * time.Second,
 	})
+}
+
+var decisionReplyPollerFactory = func() decisionReplyPoller {
+	return shepherdgithub.NewCLIReplyPoller()
 }
 
 var prepareAttemptGSDState = func(ctx context.Context, manager *workspace.Manager, attempt workspace.AttemptWorktree) error {
@@ -143,6 +148,11 @@ func run(ctx context.Context, args []string) error {
 	if err != nil {
 		return err
 	}
+	resolvedWorkDir, err := filepath.EvalSymlinks(config.WorkDir)
+	if err != nil {
+		return fmt.Errorf("resolve governed work_dir: %w", err)
+	}
+	config.WorkDir = resolvedWorkDir
 	if args[0] == "eval" {
 		activities, err := telemetry.ReadDirectory(filepath.Join(config.StateDir, "activity", "segments"))
 		if err != nil {
@@ -158,32 +168,33 @@ func run(ctx context.Context, args []string) error {
 			if !*publish {
 				return errors.New("--record requires --publish so the PR remains the visible decision summary")
 			}
-			store, err := decisionlog.Open(filepath.Join(config.StateDir, "decisions"))
+			decisionStore, err := decisionlog.Open(filepath.Join(config.StateDir, "decisions"))
 			if err != nil {
 				return err
 			}
-			defer store.Close()
-			return recordOperationalDecision(ctx, store, shepherdgithub.NewCLIClient(), shepherdgithub.Target{
-				Repository: config.Repository, PullRequest: config.PullRequest, DeliveryID: deliveryID(*issue),
-			}, deliveryID(*issue), *decisionUnit, *decisionQuestion, *decisionAnswer, *decisionActor, *decisionBasis)
+			defer decisionStore.Close()
+			return withStandaloneExternalEffectController(ctx, config, *issue, func(effects *externalEffectController) error {
+				return recordOperationalDecision(ctx, decisionStore, effects, deliveryID(*issue), *decisionUnit,
+					*decisionQuestion, *decisionAnswer, *decisionActor, *decisionBasis)
+			})
 		}
 		records, err := decisionlog.Read(filepath.Join(config.StateDir, "decisions"))
 		if err != nil {
 			return err
 		}
-		filtered := records[:0]
-		for _, record := range records {
-			if record.DeliveryID == deliveryID(*issue) {
-				filtered = append(filtered, record)
-			}
+		snapshot, err := decisionlog.SnapshotRecords(records, deliveryID(*issue))
+		if err != nil {
+			return err
 		}
-		summary := decisionlog.Markdown(filtered)
 		if *publish {
-			if err := publishDecisions(ctx, config, deliveryID(*issue), summary); err != nil {
+			if err := withStandaloneExternalEffectController(ctx, config, *issue, func(effects *externalEffectController) error {
+				_, err := effects.RequestSummary(ctx, snapshot)
+				return err
+			}); err != nil {
 				return err
 			}
 		}
-		fmt.Print(summary)
+		fmt.Print(snapshot.Summary)
 		return nil
 	}
 	if args[0] == "resume" {
@@ -207,15 +218,33 @@ func run(ctx context.Context, args []string) error {
 		if input.DeliveryID != deliveryID(*issue) || input.Actor != "human" || !input.Approved {
 			return errors.New("decision must be an explicit human approval for this delivery")
 		}
-		authority, err := store.Open(ctx, filepath.Join(config.StateDir, "authority.db"))
-		if err != nil {
-			return err
+		if err := withStandaloneExternalEffectController(ctx, config, *issue,
+			func(controller *externalEffectController) error {
+				if err := controller.RecoverClaims(ctx); err != nil {
+					return err
+				}
+				if err := controller.RecoverUncertain(ctx); err != nil {
+					return err
+				}
+				if err := resolveHumanClearedAttempts(ctx, controller.authority, config,
+					input.DeliveryID, controller.workspaceManager, &controller.lease); err != nil {
+					return err
+				}
+				activeClaims, err := controller.store.ListDelivery(ctx, input.DeliveryID, outbox.StateClaimed)
+				if err != nil {
+					return err
+				}
+				if len(activeClaims) > 0 {
+					return errors.New("active external effect claim must expire or settle before resume")
+				}
+				return controller.authority.ResumeDeliveryFenced(ctx, controller.lease, domain.HumanDecision{
+					RunID: input.DeliveryID, Generation: input.Generation,
+					ActorKind: domain.ActorHuman, Approved: true,
+				}, time.Now().UTC())
+			}); err != nil {
+			return fmt.Errorf("fenced human resume: %w", err)
 		}
-		defer authority.Close()
-		if err := resolveHumanClearedAttempts(ctx, authority, config, input.DeliveryID); err != nil {
-			return err
-		}
-		return authority.ResumeDelivery(ctx, domain.HumanDecision{RunID: input.DeliveryID, Generation: input.Generation, ActorKind: domain.ActorHuman, Approved: true})
+		return nil
 	}
 	var container *gsd.ContainerConfig
 	var runtimeGuard *gsd.HostRuntimeGuard
@@ -401,7 +430,75 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 		reconcileLease, startupErr = authority.AcquireReconciliationLease(ctx, deliveryID, reconcileOwner, time.Now().UTC(), 90*time.Second)
 		if startupErr == nil {
 			reconciliationLeaseHeld = true
-			startupErr = recoverPromotionJournals(ctx, authority, manager, repositoryLock, existingDelivery, reconcileLease)
+			preRecoveryRun, runErr := authority.GetDeliveryRun(ctx, deliveryID)
+			preRecoveryHead, inspectErr := shepherdgit.Inspect(ctx, config.WorkDir)
+			startupErr = errors.Join(runErr, inspectErr)
+			if startupErr == nil {
+				startupErr = recoverPostGitPromotionJournals(ctx, authority, manager, repositoryLock,
+					existingDelivery, reconcileLease)
+			}
+			if startupErr == nil {
+				blocked, blockedErr := authority.HasBlockedPromotionJournal(ctx, deliveryID)
+				startupErr = blockedErr
+				if blockedErr == nil && blocked {
+					startupErr = errors.New("blocked promotion journal requires journal-specific human recovery")
+				}
+			}
+			if startupErr == nil {
+				startupErr = validatePreGitPromotionJournals(ctx, authority, manager, existingDelivery,
+					reconcileLease)
+			}
+			if startupErr == nil && config.Runtime == "host" && preRecoveryRun.State == domain.RunRunning {
+				startupErr = reconcileInterruptedHostDelivery(ctx, authority, manager, repositoryLock,
+					config, deliveryID, reconcileLease)
+				if startupErr == nil {
+					preRecoveryRun, startupErr = authority.GetDeliveryRun(ctx, deliveryID)
+				}
+			}
+			if startupErr == nil {
+				preRecoveryHead, startupErr = shepherdgit.Inspect(ctx, config.WorkDir)
+			}
+			if startupErr == nil {
+				preRecoveryEffects, effectErr := openExternalEffectController(ctx, authority, reconcileLease,
+					config, deliveryID, issue, preRecoveryRun.Generation, preRecoveryHead.HeadSHA)
+				if effectErr == nil {
+					effectErr = reconcileExternalEffects(ctx, authority, preRecoveryEffects, config.StateDir, deliveryID)
+					effectErr = errors.Join(effectErr, preRecoveryEffects.Close())
+				}
+				startupErr = effectErr
+			}
+			pollCutoff := time.Now().UTC()
+			if startupErr == nil {
+				_, startupErr = consumeGitHubDecisionReplies(ctx, authority, reconcileLease,
+					decisionReplyPollerFactory(), deliveryID, preRecoveryRun.Generation, preRecoveryHead.HeadSHA)
+			}
+			if startupErr == nil {
+				startupErr = expireUnansweredDecisionRequests(ctx, authority, reconcileLease, deliveryID,
+					pollCutoff)
+			}
+			if startupErr == nil {
+				postDecisionRun, decisionErr := authority.GetDeliveryRun(ctx, deliveryID)
+				blocking, blockingErr := authority.HasBlockingDecisionDisposition(ctx, deliveryID,
+					postDecisionRun.Generation)
+				startupErr = errors.Join(decisionErr, blockingErr)
+				if startupErr == nil && blocking {
+					startupErr = errors.New("human decision blocks recovered promotion")
+				}
+				if startupErr == nil {
+					startupErr = authority.CancelUnansweredPromotionDecisions(ctx, reconcileLease,
+						time.Now().UTC())
+				}
+				if startupErr == nil {
+					openRequests, openErr := authority.ListOpenDecisionRequests(ctx, deliveryID)
+					startupErr = openErr
+					if openErr == nil && len(openRequests) > 0 {
+						startupErr = errors.New("unrelated human decision defers recovered promotion")
+					}
+				}
+			}
+			if startupErr == nil {
+				startupErr = recoverPromotionJournals(ctx, authority, manager, repositoryLock, existingDelivery, reconcileLease)
+			}
 		}
 	} else if !errors.Is(getErr, sql.ErrNoRows) {
 		startupErr = getErr
@@ -428,21 +525,57 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 			reconciliationLeaseHeld = startupErr == nil
 		}
 		if startupErr == nil {
-			records, listErr := authority.ListAttemptWorktrees(ctx, deliveryID)
-			switch {
-			case listErr != nil:
-				startupErr = listErr
-			case attemptRecoveryAmbiguous(records):
-				startupErr = errors.New("ambiguous live or partially owned attempt requires human recovery")
-				startupErr = errors.Join(startupErr, authority.ReconcileInterruptedDelivery(ctx, reconcileLease, domain.RunAwaitingDecision))
-			default:
-				startupErr = reconcileAttemptWorktrees(ctx, authority, manager, repositoryLock, deliveryID, reconcileLease)
-				target := domain.RunReady
-				if startupErr != nil {
-					target = domain.RunAwaitingDecision
-				}
-				startupErr = errors.Join(startupErr, authority.ReconcileInterruptedDelivery(ctx, reconcileLease, target))
+			startupErr = reconcileInterruptedHostDelivery(ctx, authority, manager, repositoryLock,
+				config, deliveryID, reconcileLease)
+		}
+	}
+	if startupErr == nil && !reconciliationLeaseHeld {
+		reconcileOwner := fmt.Sprintf("reconcile-%d", time.Now().UTC().UnixNano())
+		reconcileLease, startupErr = authority.AcquireReconciliationLease(ctx, deliveryID, reconcileOwner,
+			time.Now().UTC(), 90*time.Second)
+		reconciliationLeaseHeld = startupErr == nil
+	}
+	if startupErr == nil {
+		runState, runErr := authority.GetDeliveryRun(ctx, deliveryID)
+		canonical, inspectErr := shepherdgit.Inspect(ctx, config.WorkDir)
+		delivery, deliveryErr := authority.GetDelivery(ctx, deliveryID)
+		startupErr = errors.Join(runErr, inspectErr, deliveryErr)
+		if startupErr == nil && (canonical.Branch != delivery.Branch || canonical.HeadSHA == "") {
+			startupErr = errors.New("external effect reconciliation requires the authorized canonical branch and head")
+		}
+		if startupErr == nil {
+			_, startupErr = consumeGitHubDecisionReplies(ctx, authority, reconcileLease,
+				decisionReplyPollerFactory(), deliveryID, runState.Generation, canonical.HeadSHA)
+		}
+		if startupErr == nil {
+			runState, runErr = authority.GetDeliveryRun(ctx, deliveryID)
+			startupErr = runErr
+		}
+		if startupErr == nil {
+			effects, effectErr := openExternalEffectController(ctx, authority, reconcileLease, config,
+				deliveryID, issue, runState.Generation, canonical.HeadSHA)
+			if effectErr == nil {
+				effectErr = reconcileExternalEffects(ctx, authority, effects, config.StateDir, deliveryID)
+				effectErr = errors.Join(effectErr, effects.Close())
 			}
+			startupErr = effectErr
+		}
+	}
+	if startupErr == nil && reconciliationLeaseHeld {
+		runState, runErr := authority.GetDeliveryRun(ctx, deliveryID)
+		canonical, inspectErr := shepherdgit.Inspect(ctx, config.WorkDir)
+		startupErr = errors.Join(runErr, inspectErr)
+		pollCutoff := time.Now().UTC()
+		if startupErr == nil {
+			_, startupErr = consumeGitHubDecisionReplies(ctx, authority, reconcileLease,
+				decisionReplyPollerFactory(), deliveryID, runState.Generation, canonical.HeadSHA)
+		}
+		if startupErr == nil {
+			startupErr = expireUnansweredDecisionRequests(ctx, authority, reconcileLease, deliveryID,
+				pollCutoff)
+		}
+		if startupErr == nil {
+			startupErr = authority.ResolveRecoveredPromotionDecisions(ctx, reconcileLease, time.Now().UTC())
 		}
 	}
 	if reconciliationLeaseHeld {
@@ -451,9 +584,6 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 	startupErr = errors.Join(startupErr, repositoryLock.Close())
 	if startupErr != nil {
 		return fmt.Errorf("startup attempt reconciliation: %w", startupErr)
-	}
-	if err := consumeGitHubDecisionReplies(ctx, authority, shepherdgithub.NewCLIClient(), config, deliveryID, issue); err != nil {
-		return err
 	}
 	for {
 		if err := ctx.Err(); err != nil {
@@ -469,6 +599,41 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 		}
 		switch decision.Kind {
 		case supervisor.DecisionFinalGate:
+			_, finalRepositoryLock, gateErr := lockDeliveryWorkspace(config)
+			if gateErr != nil {
+				return gateErr
+			}
+			runState, runErr := authority.GetDeliveryRun(ctx, deliveryID)
+			delivery, deliveryErr := authority.GetDelivery(ctx, deliveryID)
+			if runErr != nil || deliveryErr != nil {
+				_ = finalRepositoryLock.Close()
+				return errors.Join(runErr, deliveryErr)
+			}
+			now := time.Now().UTC()
+			gateLease, gateErr := authority.AcquireLease(ctx, deliveryID,
+				fmt.Sprintf("final-gate-%d", now.UnixNano()), now, 90*time.Second)
+			if gateErr != nil {
+				_ = finalRepositoryLock.Close()
+				return gateErr
+			}
+			canonical, inspectErr := shepherdgit.Inspect(ctx, config.WorkDir)
+			if inspectErr == nil && canonical.Branch != delivery.Branch {
+				inspectErr = errors.New("final human gate requires the immutable delivery branch")
+			}
+			if inspectErr == nil {
+				inspectErr = shepherdgit.RequireClean(canonical)
+			}
+			if inspectErr == nil {
+				gateErr = authority.ProjectFinalHumanGate(ctx, gateLease, runState.Generation,
+					canonical.HeadSHA, time.Now().UTC())
+			} else {
+				gateErr = inspectErr
+			}
+			gateErr = errors.Join(gateErr, authority.ReleaseLease(context.Background(), gateLease),
+				finalRepositoryLock.Close())
+			if gateErr != nil {
+				return gateErr
+			}
 			return emitSuperviseStatus(deliveryID, decision)
 		case supervisor.DecisionBlocked:
 			if emitErr := emitSuperviseStatus(deliveryID, decision); emitErr != nil {
@@ -476,12 +641,11 @@ func runSupervise(ctx context.Context, runner *gsd.Runner, config fileConfig, re
 			}
 			return commandExitError{code: 10, err: errors.New(decision.Reason)}
 		case supervisor.DecisionDispatch:
-			unitRunner := runner
 			expectedModel, modelErr := modelForUnitType(config, registry, snapshot.Next.UnitType)
 			if modelErr != nil {
 				return modelErr
 			}
-			unitRunner, modelErr = runner.WithModel(expectedModel)
+			unitRunner, modelErr := runner.WithModel(expectedModel)
 			if modelErr != nil {
 				return modelErr
 			}
@@ -858,12 +1022,28 @@ func recoverExistingPromotionAtStartup(ctx context.Context, authorityStore *stor
 	if err != nil {
 		return err
 	}
-	recoveryErr := recoverPromotionJournals(ctx, authorityStore, manager, repositoryLock, delivery, lease)
+	recoveryErr := recoverPostGitPromotionJournals(ctx, authorityStore, manager, repositoryLock, delivery, lease)
+	if recoveryErr == nil {
+		blocked, blockedErr := authorityStore.HasBlockedPromotionJournal(ctx, deliveryID)
+		recoveryErr = blockedErr
+		if blockedErr == nil && blocked {
+			recoveryErr = errors.New("blocked promotion journal requires journal-specific human recovery")
+		}
+	}
+	if recoveryErr == nil {
+		journals, listErr := authorityStore.ListIncompletePromotionJournals(ctx, deliveryID)
+		recoveryErr = listErr
+		if listErr == nil && len(journals) > 0 {
+			recoveryErr = errors.New("pre-Git promotion recovery requires supervise decision reconciliation")
+		}
+	}
 	releaseErr := authorityStore.ReleaseLease(context.Background(), lease)
 	return errors.Join(recoveryErr, releaseErr)
 }
 
-func resolveHumanClearedAttempts(ctx context.Context, authorityStore *store.Store, config fileConfig, deliveryID string) error {
+func resolveHumanClearedAttempts(ctx context.Context, authorityStore *store.Store, config fileConfig,
+	deliveryID string, heldManager *workspace.Manager, heldLease *store.Lease,
+) error {
 	blocked, err := authorityStore.HasBlockedPromotionJournal(ctx, deliveryID)
 	if err != nil {
 		return err
@@ -871,15 +1051,24 @@ func resolveHumanClearedAttempts(ctx context.Context, authorityStore *store.Stor
 	if blocked {
 		return errors.New("blocked promotion journal requires journal-specific human recovery")
 	}
-	manager, repositoryLock, err := lockDeliveryWorkspace(config)
-	if err != nil {
-		return err
-	}
-	owner := fmt.Sprintf("human-recovery-%d", time.Now().UTC().UnixNano())
-	lease, leaseErr := authorityStore.AcquireReconciliationLease(ctx, deliveryID, owner, time.Now().UTC(), 90*time.Second)
-	if leaseErr != nil {
-		_ = repositoryLock.Close()
-		return leaseErr
+	manager := heldManager
+	var lease store.Lease
+	var repositoryLock *workspace.RepositoryLock
+	ownsFence := heldManager == nil || heldLease == nil
+	if ownsFence {
+		manager, repositoryLock, err = lockDeliveryWorkspace(config)
+		if err != nil {
+			return err
+		}
+		owner := fmt.Sprintf("human-recovery-%d", time.Now().UTC().UnixNano())
+		lease, err = authorityStore.AcquireReconciliationLease(ctx, deliveryID, owner,
+			time.Now().UTC(), 90*time.Second)
+		if err != nil {
+			_ = repositoryLock.Close()
+			return err
+		}
+	} else {
+		lease = *heldLease
 	}
 	records, resolveErr := authorityStore.ListAttemptWorktrees(ctx, deliveryID)
 	if resolveErr == nil {
@@ -908,6 +1097,9 @@ func resolveHumanClearedAttempts(ctx context.Context, authorityStore *store.Stor
 				break
 			}
 		}
+	}
+	if !ownsFence {
+		return resolveErr
 	}
 	releaseErr := authorityStore.ReleaseLease(context.Background(), lease)
 	lockErr := repositoryLock.Close()
@@ -958,6 +1150,55 @@ func attemptRecoveryAmbiguous(records []store.AttemptWorktreeRecord) bool {
 	return false
 }
 
+func reconcileInterruptedHostDelivery(ctx context.Context, authorityStore *store.Store,
+	manager *workspace.Manager, repositoryLock *workspace.RepositoryLock, config fileConfig,
+	deliveryID string, lease store.Lease,
+) error {
+	records, err := authorityStore.ListAttemptWorktrees(ctx, deliveryID)
+	if err != nil {
+		return err
+	}
+	ungovernedRecords := make([]store.AttemptWorktreeRecord, 0, len(records))
+	for _, record := range records {
+		if record.State == store.AttemptWorktreePromoting {
+			hasJournal, journalErr := authorityStore.AttemptHasPromotionJournal(ctx, record.Key())
+			if journalErr != nil {
+				return journalErr
+			}
+			if hasJournal {
+				continue
+			}
+		}
+		ungovernedRecords = append(ungovernedRecords, record)
+	}
+	if attemptRecoveryAmbiguous(ungovernedRecords) {
+		return errors.Join(errors.New("ambiguous live or partially owned attempt requires human recovery"),
+			authorityStore.ReconcileInterruptedDelivery(ctx, lease, domain.RunAwaitingDecision))
+	}
+	reconcileErr := reconcileAttemptWorktrees(ctx, authorityStore, manager, repositoryLock, deliveryID, lease)
+	target := domain.RunReady
+	if reconcileErr == nil {
+		runState, runErr := authorityStore.GetDeliveryRun(ctx, deliveryID)
+		delivery, deliveryErr := authorityStore.GetDelivery(ctx, deliveryID)
+		canonical, inspectErr := shepherdgit.Inspect(ctx, config.WorkDir)
+		reconcileErr = errors.Join(runErr, deliveryErr, inspectErr)
+		if reconcileErr == nil {
+			outstanding, gateErr := authorityStore.HasOutstandingDecisionRequest(ctx, deliveryID,
+				delivery.Repository, delivery.Issue, delivery.PullRequest, runState.Generation,
+				canonical.HeadSHA)
+			reconcileErr = gateErr
+			if outstanding {
+				target = domain.RunAwaitingDecision
+			}
+		}
+	}
+	if reconcileErr != nil {
+		target = domain.RunAwaitingDecision
+	}
+	return errors.Join(reconcileErr,
+		authorityStore.ReconcileInterruptedDelivery(ctx, lease, target))
+}
+
 func reconcileAttemptWorktrees(ctx context.Context, authorityStore *store.Store, manager *workspace.Manager, repositoryLock *workspace.RepositoryLock, deliveryID string, lease store.Lease) error {
 	if err := repositoryLock.Check(); err != nil {
 		return err
@@ -969,6 +1210,15 @@ func reconcileAttemptWorktrees(ctx context.Context, authorityStore *store.Store,
 	for _, record := range records {
 		if record.State == store.AttemptWorktreeCleanupComplete {
 			continue
+		}
+		if record.State == store.AttemptWorktreePromoting {
+			hasJournal, journalErr := authorityStore.AttemptHasPromotionJournal(ctx, record.Key())
+			if journalErr != nil {
+				return journalErr
+			}
+			if hasJournal {
+				continue
+			}
 		}
 		claimed := record
 		if record.ControllerOwner == lease.Owner && record.ControllerEpoch == lease.Epoch {
@@ -1156,8 +1406,6 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 		}
 		runner = contractRunner
 	}
-	decisionPublisher := shepherdgithub.NewCLIClient()
-	decisionTarget := shepherdgithub.Target{Repository: config.Repository, PullRequest: config.PullRequest, DeliveryID: deliveryID}
 	attempt, err := authority.BeginAttempt(ctx, deliveryID, executionID)
 	if err != nil {
 		return err
@@ -1170,6 +1418,12 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			}
 		}
 	}()
+	effects, err := openExternalEffectController(ctx, authority, lease, config, deliveryID, issue,
+		attempt.Generation, startSnapshot.HeadSHA)
+	if err != nil {
+		return err
+	}
+	defer func() { returnErr = errors.Join(returnErr, effects.Close()) }()
 	recoveryDispatch, dispatchErr := waitForRecoveryDispatch(ctx, authority, lease, deliveryID, attempt.Generation, trustedUnit, startSnapshot.HeadSHA, executionID)
 	if dispatchErr != nil {
 		switch {
@@ -1179,7 +1433,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 				class = recovery.FailureHumanRequired
 			}
 			decisionErr := recovery.MarkDecision(recovery.Failure{Class: class}, recovery.ActionAwaitDecision, dispatchErr)
-			decisionRequestErr := persistAndPublishDecisionRequest(ctx, authority, lease, decisionPublisher, decisionTarget,
+			decisionRequestErr := persistAndPublishDecisionRequest(ctx, authority, effects,
 				deliveryID, issue, trustedUnit, attempt.Generation, startSnapshot.HeadSHA, string(class), decisionErr)
 			target := domain.RunAwaitingDecision
 			if decisionRequestErr != nil {
@@ -1371,7 +1625,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			if confirmDepth {
 				if response, approved := approveDepthQuestion(question); approved {
 					fmt.Fprintf(os.Stderr, "DECISION GATE [select] actor=%s planning depth approved by explicit --confirm-depth operator flag\n", decisionActor)
-					if err := appendAndPublishDecision(questionCtx, decisions, decisionPublisher, decisionTarget, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
+					if err := appendAndRequestDecisionSummary(questionCtx, decisions, effects, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
 						return gsd.UIResponse{Cancelled: true}, err
 					}
 					appendActivity("decision", decisionActor, trustedUnit, "", question.ID, time.Now().UTC())
@@ -1382,7 +1636,7 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			if responseErr != nil || response.Cancelled {
 				return response, responseErr
 			}
-			if err := appendAndPublishDecision(questionCtx, decisions, decisionPublisher, decisionTarget, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
+			if err := appendAndRequestDecisionSummary(questionCtx, decisions, effects, deliveryID, executionID, trustedUnit, question, response, decisionActor, decisionBasis); err != nil {
 				return gsd.UIResponse{Cancelled: true}, err
 			}
 			appendActivity("decision", decisionActor, trustedUnit, "", question.ID, time.Now().UTC())
@@ -1745,10 +1999,26 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 	targetState := recoveryRunState(&result, postPhase, selectedRecoveryAction)
 	if targetState == domain.RunAwaitingDecision {
 		class := classifyUnitFailure(result)
-		if err := persistAndPublishDecisionRequest(ctx, authority, lease, decisionPublisher, decisionTarget, deliveryID, issue, trustedUnit, attempt.Generation, startSnapshot.HeadSHA, class, result.Err); err != nil {
+		decisionHead := endSnapshot.HeadSHA
+		questionEffects := effects
+		var publicationErr error
+		if len(decisionHead) != 40 {
+			publicationErr = errors.New("decision publication requires the current canonical head")
+		} else if decisionHead != effects.facts.HeadSHA {
+			questionEffects, publicationErr = openExternalEffectController(ctx, authority, lease, config,
+				deliveryID, issue, attempt.Generation, decisionHead)
+			if publicationErr == nil {
+				defer func() { returnErr = errors.Join(returnErr, questionEffects.Close()) }()
+			}
+		}
+		if publicationErr == nil {
+			publicationErr = persistAndPublishDecisionRequest(ctx, authority, questionEffects, deliveryID,
+				issue, trustedUnit, attempt.Generation, decisionHead, class, result.Err)
+		}
+		if publicationErr != nil {
 			result.Terminal = gsd.TerminalError
-			publicationFailure := recovery.Classify(gsd.Result{Terminal: gsd.TerminalError, Err: err})
-			result.Err = joinTerminalFailure(result.Err, err)
+			publicationFailure := recovery.Classify(gsd.Result{Terminal: gsd.TerminalError, Err: publicationErr})
+			result.Err = joinTerminalFailure(result.Err, publicationErr)
 			if publicationFailure.Class == recovery.FailureGitHubPublishUncertain || publicationFailure.Class == recovery.FailureOutboxUncertain {
 				result.Err = recovery.MarkDecision(publicationFailure, recovery.ActionBlock, result.Err)
 				targetState = domain.RunBlocked
@@ -1757,11 +2027,27 @@ func runHeadless(ctx context.Context, runner *gsd.Runner, config fileConfig, reg
 			}
 		}
 	}
-	if err := authority.FinishAttempt(ctx, deliveryID, executionID, targetState); err != nil {
-		result.Terminal = gsd.TerminalError
-		result.Err = joinTerminalFailure(err, result.Err)
-	} else {
-		finishedAttempt = true
+	if targetState == domain.RunHumanGate {
+		gateErr := authority.ResolveRecoveredPromotionDecisions(ctx, lease, time.Now().UTC())
+		if gateErr == nil {
+			gateErr = authority.ProjectFinalHumanGate(ctx, lease, attempt.Generation,
+				endSnapshot.HeadSHA, time.Now().UTC())
+		}
+		if gateErr != nil {
+			result.Terminal = gsd.TerminalError
+			result.Err = joinTerminalFailure(result.Err, gateErr)
+			targetState = domain.RunFailed
+		} else {
+			finishedAttempt = true
+		}
+	}
+	if !finishedAttempt {
+		if err := authority.FinishAttempt(ctx, deliveryID, executionID, targetState); err != nil {
+			result.Terminal = gsd.TerminalError
+			result.Err = joinTerminalFailure(err, result.Err)
+		} else {
+			finishedAttempt = true
+		}
 	}
 	encoded, marshalErr := json.Marshal(struct {
 		DeliveryID  string       `json:"delivery_id"`
@@ -2277,6 +2563,7 @@ func ensureIssueDelivery(ctx context.Context, authority *store.Store, config fil
 	}
 	delivery := store.Delivery{
 		ID: deliveryID(issue), Issue: issue, ParentIssue: issueContext.ParentIssue,
+		Repository: config.Repository, PullRequest: config.PullRequest,
 		WorkDir: config.WorkDir, ContextHash: contextHash, Branch: issueContext.Branch,
 		BaseBranch: issueContext.PRBase, GSDProjectRoot: config.WorkDir,
 		InitialHead: initialHead, GSDVersion: config.GSDVersion,
@@ -2297,6 +2584,7 @@ func ensureIssueDelivery(ctx context.Context, authority *store.Store, config fil
 
 func validateDeliveryInvocation(delivery store.Delivery, config fileConfig, issueContext contract.IssueContext) error {
 	if delivery.Issue != issueContext.Issue || delivery.ParentIssue != issueContext.ParentIssue ||
+		delivery.Repository != config.Repository || delivery.PullRequest != config.PullRequest ||
 		delivery.WorkDir != config.WorkDir || delivery.GSDProjectRoot != config.WorkDir ||
 		delivery.Branch != issueContext.Branch || delivery.BaseBranch != issueContext.PRBase ||
 		delivery.GSDVersion != config.GSDVersion {
@@ -2326,45 +2614,34 @@ func appendDecision(store *decisionlog.Store, deliveryID, executionID, unitID st
 	})
 }
 
-type decisionPublisher interface {
-	SyncDecisionComment(context.Context, shepherdgithub.Target, string) error
-}
-
-func appendAndPublishDecision(ctx context.Context, store *decisionlog.Store, publisher decisionPublisher, target shepherdgithub.Target, deliveryID, executionID, unitID string, question gsd.Question, response gsd.UIResponse, actorValue, basis string) error {
-	if err := appendDecision(store, deliveryID, executionID, unitID, question, response, actorValue, basis); err != nil {
+func appendAndRequestDecisionSummary(ctx context.Context, decisionStore *decisionlog.Store,
+	effects externalEffectRequester, deliveryID, executionID, unitID string, question gsd.Question,
+	response gsd.UIResponse, actorValue, basis string) error {
+	if effects == nil {
+		return errors.New("external effect requester is required")
+	}
+	if err := appendDecision(decisionStore, deliveryID, executionID, unitID, question, response, actorValue, basis); err != nil {
 		return err
 	}
-	records, err := store.Records()
+	snapshot, err := decisionStore.Snapshot(deliveryID)
 	if err != nil {
-		return fmt.Errorf("read durable decisions: %w", err)
+		return fmt.Errorf("read durable decision snapshot: %w", err)
 	}
-	filtered := records[:0]
-	for _, record := range records {
-		if record.DeliveryID == deliveryID {
-			filtered = append(filtered, record)
-		}
-	}
-	if err := publisher.SyncDecisionComment(ctx, target, decisionlog.Markdown(filtered)); err != nil {
-		return recovery.MarkFailure(recovery.FailureGitHubPublishUncertain, false,
-			fmt.Errorf("publish durable decision: %w", err))
+	if _, err := effects.RequestSummary(ctx, snapshot); err != nil {
+		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false,
+			fmt.Errorf("request durable decision-summary effect: %w", err))
 	}
 	return nil
 }
 
-func recordOperationalDecision(ctx context.Context, store *decisionlog.Store, publisher decisionPublisher, target shepherdgithub.Target, deliveryID, unitID, question, answer, actor, basis string) error {
+func recordOperationalDecision(ctx context.Context, decisionStore *decisionlog.Store,
+	effects externalEffectRequester, deliveryID, unitID, question, answer, actor, basis string) error {
 	if strings.TrimSpace(unitID) == "" || strings.TrimSpace(question) == "" || strings.TrimSpace(answer) == "" {
 		return errors.New("decision unit, question, and answer are required")
 	}
 	executionID := fmt.Sprintf("decision-%d", time.Now().UTC().UnixNano())
-	return appendAndPublishDecision(ctx, store, publisher, target, deliveryID, executionID, unitID,
+	return appendAndRequestDecisionSummary(ctx, decisionStore, effects, deliveryID, executionID, unitID,
 		gsd.Question{ID: "operational-decision", Title: question}, gsd.UIResponse{Value: answer}, actor, basis)
-}
-
-func publishDecisions(ctx context.Context, config fileConfig, deliveryID, summary string) error {
-	client := shepherdgithub.NewCLIClient()
-	return client.SyncDecisionComment(ctx, shepherdgithub.Target{
-		Repository: config.Repository, PullRequest: config.PullRequest, DeliveryID: deliveryID,
-	}, summary)
 }
 
 func gsdStateArtifacts(workDir string) ([]shepherdgit.Artifact, error) {
@@ -2573,42 +2850,91 @@ func requiredGatesForUnit(metadata gsd.UnitMetadata) validation.GateRequirements
 	return gates
 }
 
-func consumeGitHubDecisionReplies(ctx context.Context, authority *store.Store, client *shepherdgithub.Client, config fileConfig, deliveryID string, issue int) error {
+type decisionReplyPoller interface {
+	PollDecisionReplies(context.Context, shepherdgithub.QuestionRequest, string) ([]shepherdgithub.Reply, error)
+}
+
+func expireUnansweredDecisionRequests(ctx context.Context, authority *store.Store, lease store.Lease,
+	deliveryID string, now time.Time) error {
 	requests, err := authority.ListOpenDecisionRequests(ctx, deliveryID)
 	if err != nil {
 		return err
 	}
 	for _, request := range requests {
-		replies, err := client.PollDecisionReplies(ctx, shepherdgithub.QuestionRequest{
-			RequestID: request.RequestID, Repository: config.Repository, Issue: issue, PullRequest: config.PullRequest,
-			DeliveryID: deliveryID, UnitID: request.UnitID, Generation: request.Generation, HeadSHA: request.HeadSHA,
-			Evidence: request.Evidence, Options: request.Options, RecommendedOption: request.RecommendedOption,
-			SafeDefault: request.SafeDefault, ExpiresAt: request.ExpiresAt, Mention: "karthik-sivadas",
-		}, "karthik-sivadas")
-		if err != nil {
-			return err
+		if !request.ExpiresAt.After(now) {
+			if err := authority.ExpireDecisionRequestAndBlock(ctx, lease, request.RequestID, now); err != nil {
+				return err
+			}
 		}
-		if len(replies) == 0 {
-			continue
-		}
-		reply := replies[0]
-		if err := authority.AcceptDecisionRequestAnswer(ctx, request.RequestID, reply.Option, reply.Author, request.Generation, request.HeadSHA, time.Now().UTC()); err != nil {
-			return err
-		}
-		if _, err := authority.ConsumeDecisionRequest(ctx, request.RequestID); err != nil {
-			return err
-		}
-		if reply.Option == "retry" || reply.Option == "continue" {
-			return authority.ResumeDelivery(ctx, domain.HumanDecision{RunID: deliveryID, Generation: request.Generation, ActorKind: domain.ActorHuman, Approved: true})
-		}
-		return authority.BlockAwaitingDecision(ctx, deliveryID, request.Generation)
 	}
 	return nil
 }
 
-func persistAndPublishDecisionRequest(ctx context.Context, authority *store.Store, lease store.Lease, publisher *shepherdgithub.Client, target shepherdgithub.Target, deliveryID string, issue int, unitID string, generation int64, headSHA, failureClass string, cause error) error {
-	if publisher == nil {
-		return errors.New("decision question publisher is required")
+func consumeGitHubDecisionReplies(ctx context.Context, authority *store.Store, lease store.Lease,
+	client decisionReplyPoller, deliveryID string, generation int64, headSHA string) (bool, error) {
+	requests, err := authority.ListDecisionAnswerRecovery(ctx, deliveryID, generation, headSHA)
+	if err != nil {
+		return false, err
+	}
+	type candidate struct {
+		request store.DecisionRequest
+		reply   shepherdgithub.Reply
+	}
+	candidates := make([]candidate, 0, len(requests))
+	for _, request := range requests {
+		if request.AcceptedAnswer != "" && (request.AcceptedActorID <= 0 || request.AcceptedCommentID <= 0) {
+			return false, store.ErrLegacyDecisionReply
+		}
+		reply := shepherdgithub.Reply{RequestID: request.RequestID, Option: request.AcceptedAnswer,
+			Author: request.AcceptedBy, AuthorID: request.AcceptedActorID, CommentID: request.AcceptedCommentID,
+			CreatedAt: request.AcceptedAt}
+		if request.AcceptedAnswer == "" {
+			replies, err := client.PollDecisionReplies(ctx, shepherdgithub.QuestionRequest{
+				RequestID: request.RequestID, Repository: request.Repository, Issue: request.Issue,
+				PullRequest: request.PullRequest,
+				DeliveryID:  deliveryID, UnitID: request.UnitID, Generation: request.Generation, HeadSHA: request.HeadSHA,
+				Evidence: request.Evidence, Options: request.Options, RecommendedOption: request.RecommendedOption,
+				SafeDefault: request.SafeDefault, ExpiresAt: request.ExpiresAt, Mention: "karthik-sivadas",
+				QuestionCommentID: request.GitHubCommentID,
+			}, "karthik-sivadas")
+			if err != nil {
+				return false, err
+			}
+			if len(replies) == 0 {
+				continue
+			}
+			reply = replies[0]
+		}
+		candidates = append(candidates, candidate{request: request, reply: reply})
+	}
+	apply := func(candidate candidate) error {
+		return authority.ApplyDecisionRequestAnswer(ctx, lease, candidate.request.RequestID,
+			candidate.reply.Option, candidate.reply.Author, candidate.reply.AuthorID, candidate.reply.CommentID,
+			candidate.request.Generation, candidate.request.HeadSHA, candidate.reply.CreatedAt, time.Now().UTC())
+	}
+	for _, candidate := range candidates {
+		if candidate.reply.Option != "retry" && candidate.reply.Option != "continue" {
+			if err := apply(candidate); err != nil {
+				return false, err
+			}
+			return true, nil
+		}
+	}
+	applied := false
+	for _, candidate := range candidates {
+		if err := apply(candidate); err != nil {
+			return applied, err
+		}
+		applied = true
+	}
+	return applied, nil
+}
+
+func persistAndPublishDecisionRequest(ctx context.Context, authority *store.Store,
+	effects *externalEffectController, deliveryID string, issue int, unitID string, generation int64,
+	headSHA, failureClass string, cause error) error {
+	if effects == nil {
+		return errors.New("external effect controller is required")
 	}
 	basis := failureClass
 	if cause != nil {
@@ -2618,7 +2944,8 @@ func persistAndPublishDecisionRequest(ctx context.Context, authority *store.Stor
 	requestID := "decision-" + hex.EncodeToString(hash[:8])
 	expiresAt := time.Now().UTC().Add(24 * time.Hour)
 	request := store.DecisionRequest{
-		RequestID: requestID, DeliveryID: deliveryID, Issue: issue, PullRequest: target.PullRequest,
+		RequestID: requestID, DeliveryID: deliveryID, Repository: effects.facts.Repository,
+		Issue: issue, PullRequest: effects.facts.PullRequest,
 		UnitID: unitID, Generation: generation, HeadSHA: headSHA, Kind: failureClass,
 		Evidence: boundedEvidence(basis), Options: []string{"retry", "stop"}, RecommendedOption: "retry",
 		SafeDefault: "stop", ExpiresAt: expiresAt, Status: store.DecisionRequestOpen,
@@ -2627,38 +2954,13 @@ func persistAndPublishDecisionRequest(ctx context.Context, authority *store.Stor
 	if err != nil {
 		return err
 	}
-	grant, err := domain.NewGrant(deliveryID, target.Repository, issue, domain.CapabilityPRUpdate, lease.Epoch)
+	result, err := effects.RequestQuestion(ctx, stored)
 	if err != nil {
-		return err
+		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false,
+			fmt.Errorf("request durable decision-question effect: %w", err))
 	}
-	if err := authority.PutGrant(ctx, grant); err != nil {
-		return err
-	}
-	payloadHash := sha256.Sum256([]byte(stored.RequestID + ":" + stored.Evidence))
-	effectKey := "github-question:" + stored.RequestID
-	if _, err := authority.Enqueue(ctx, lease, store.Effect{Key: effectKey, RunID: deliveryID, Repository: target.Repository, Issue: issue, Capability: domain.CapabilityPRUpdate, Target: "pr:" + strconv.Itoa(target.PullRequest), PayloadHash: "sha256:" + hex.EncodeToString(payloadHash[:]), Epoch: lease.Epoch}, time.Now().UTC()); err != nil {
-		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false, err)
-	}
-	if _, err := authority.ClaimEffect(ctx, lease, effectKey, time.Now().UTC()); err != nil {
-		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false, err)
-	}
-	commentID, err := publisher.SyncQuestionComment(ctx, shepherdgithub.QuestionRequest{
-		RequestID: stored.RequestID, Repository: target.Repository, Issue: issue, PullRequest: target.PullRequest,
-		DeliveryID: deliveryID, UnitID: unitID, Generation: generation, HeadSHA: headSHA,
-		Evidence: stored.Evidence, Options: stored.Options, RecommendedOption: stored.RecommendedOption,
-		SafeDefault: stored.SafeDefault, ExpiresAt: stored.ExpiresAt, Mention: "karthik-sivadas",
-	})
-	if err != nil {
-		publishErr := recovery.MarkFailure(recovery.FailureGitHubPublishUncertain, false, err)
-		if markErr := authority.MarkEffectFailed(ctx, lease, effectKey, err, time.Now().UTC()); markErr != nil {
-			return errors.Join(publishErr, recovery.MarkFailure(recovery.FailureOutboxUncertain, false, markErr))
-		}
-		return publishErr
-	}
-	if err := authority.MarkEffectSent(ctx, lease, effectKey, time.Now().UTC()); err != nil {
-		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false, err)
-	}
-	if err := authority.MarkDecisionRequestPublished(ctx, stored.RequestID, commentID); err != nil {
+	if err := authority.MarkDecisionRequestPublishedFenced(ctx, effects.lease, stored,
+		result.ExternalID, time.Now().UTC()); err != nil {
 		return recovery.MarkFailure(recovery.FailureOutboxUncertain, false, err)
 	}
 	return nil

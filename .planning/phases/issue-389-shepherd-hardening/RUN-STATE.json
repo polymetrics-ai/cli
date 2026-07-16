@@ -1,11 +1,11 @@
 {
   "phase": "issue-389-shepherd-hardening",
   "branch": "fix/389-shepherd-proof-recovery",
-  "base_head": "cacb32e8e16b7ba70742cc5365cb83fffd74ca35",
+  "base_head": "9556cb24412f3598b2b8a94a3089b61ef3d1dd91",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_e_green_checkpoint_ready",
-  "current_slice": "E_real_sol_high_recovery_planning",
+  "state": "slice_f_green_reviewed_checkpoint_ready",
+  "current_slice": "F_authority_gated_external_effects",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "completed_slices": [
     {
@@ -26,6 +26,11 @@
     {
       "slice": "D_official_gsd_1_11_registry_loading",
       "head": "cacb32e8e16b7ba70742cc5365cb83fffd74ca35",
+      "status": "green_accepted"
+    },
+    {
+      "slice": "E_real_sol_high_recovery_planning",
+      "head": "9556cb24412f3598b2b8a94a3089b61ef3d1dd91",
       "status": "green_accepted"
     }
   ],
@@ -100,6 +105,36 @@
       "cycle": "cycle-14-slice-e-verify",
       "decision": "local_critical_path",
       "reason": "Focused, live Sol/high, full, race, vet, build, nested/root make, boundary, list, diff, and exact 28-finding no-differential lint gates passed; generated binaries were removed."
+    },
+    {
+      "cycle": "cycle-15-slice-f-plan",
+      "decision": "local_critical_path",
+      "reason": "Effect schemas, controller-derived grants, durable outbox state, fenced claims, executor capability isolation, reconciliation, and command integration form one sequential trust boundary; only read-only tester/reviewer/reliability/security sidecars may overlap."
+    },
+    {
+      "cycle": "cycle-16-slice-f-recon",
+      "decision": "read_only_spawned",
+      "reason": "Three independent read-only scouts mapped the legacy grant/outbox schema, every direct GitHub write path and capability leak, and a minimal no-dependency Slice F package/test seam; no sidecar mutated the checkout."
+    },
+    {
+      "cycle": "cycle-17-slice-f-red",
+      "decision": "local_critical_path",
+      "reason": "Test-only strict payload/policy, durable state-machine, fencing, claim recovery, marker reconciliation, uncertainty, and architecture coverage fails on the missing outbox APIs before any Slice F production edit."
+    },
+    {
+      "cycle": "cycle-18-slice-f-green",
+      "decision": "local_critical_path",
+      "reason": "Implemented strict immutable effects, centralized epoch-fenced controller admission, a separate SQLite outbox, fenced claims/results/events, deterministic marker reconciliation, read-only reply polling, legacy-route removal, and decision-ledger/question startup convergence; focused and full nested tests pass before review."
+    },
+    {
+      "cycle": "cycle-19-slice-f-review-fix",
+      "decision": "local_critical_path",
+      "reason": "Repeated independent GPT-5.6 Sol/xhigh correctness, security, and reliability passes drove sequential fixes for immutable targets, summary serialization, uncertainty/expiry, reply provenance and crash recovery, promotion decisions, exact-head final gates, secret scanning, and fenced manual resume."
+    },
+    {
+      "cycle": "cycle-20-slice-f-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused/full/race/vet/build, nested and root make verify, module boundary, root go list, formatting, diff, and exact 28-finding lint-baseline checks pass; no live GitHub mutation occurred."
     }
   ],
   "slice_b_checkpoint": {
@@ -108,16 +143,15 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Commit and push one coherent green Slice E checkpoint",
-    "Confirm exact local/remote head equality and a clean worktree",
-    "Stop before Slice F and all remaining human-gated work"
+    "Push only fix/389-shepherd-proof-recovery",
+    "Confirm exact local/remote equality and a clean worktree",
+    "Stop before Slice G, PR creation, canaries, live mutation, or parent merge"
   ],
   "blocked": [
-    "Slice F and later slices",
+    "Slice G and later slices",
     "PR creation",
-    "Sol final review",
+    "live GitHub mutation",
     "Twenty/Asana canaries",
-    "GitHub mutation",
     "cleanup or migration",
     "Parent PR #390 merge"
   ]

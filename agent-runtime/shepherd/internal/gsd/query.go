@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/sensitive"
 )
 
 type WorkflowSnapshot struct {
@@ -56,6 +58,11 @@ func DecodeQuery(raw []byte) (WorkflowSnapshot, error) {
 	allowedActions := map[string]struct{}{"dispatch": {}, "skip": {}, "stop": {}}
 	if _, ok := allowedActions[value.Next.Action]; !ok {
 		return WorkflowSnapshot{}, fmt.Errorf("unknown next action %q", value.Next.Action)
+	}
+	if value.Next.UnitID != "" {
+		if err := sensitive.ValidatePublicIdentifier(value.Next.UnitID); err != nil {
+			return WorkflowSnapshot{}, fmt.Errorf("unsafe next unit identity: %w", err)
+		}
 	}
 	snapshot := WorkflowSnapshot{Phase: value.State.Phase, NextAction: value.State.NextAction, Blockers: value.State.Blockers}
 	if value.State.ActiveMilestone != nil {

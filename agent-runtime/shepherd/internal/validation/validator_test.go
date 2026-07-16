@@ -283,7 +283,7 @@ func TestGSDValidatorHelperProcess(t *testing.T) {
 func assertValidatorPiArguments(args []string) {
 	expected := map[string]string{
 		"--mode": "json", "--model": "openai-codex/gpt-5.6-sol", "--thinking": "high",
-		"--tools": "read,bash,grep,find,ls",
+		"--tools": "read,grep,find,ls",
 	}
 	for flag, want := range expected {
 		if got := flagValue(args, flag); got != want {
@@ -300,6 +300,28 @@ func assertValidatorPiArguments(args []string) {
 	if containsArg(args, "headless") || containsArg(args, "shepherd-validate") || containsArg(args, "edit") || containsArg(args, "write") || containsArg(args, "subagent") {
 		fmt.Fprintln(os.Stderr, "unsafe or invented validator argument")
 		os.Exit(2)
+	}
+}
+
+func TestSanitizedValidatorEnvironmentDropsCredentialsAndHome(t *testing.T) {
+	t.Parallel()
+	environment := sanitizedValidatorEnvironment([]string{
+		"PATH=/usr/bin", "HOME=/secret-home", "GH_TOKEN=secret", "GITHUB_TOKEN=secret",
+		"SSH_AUTH_SOCK=/tmp/agent", "GIT_CONFIG_GLOBAL=/secret", "OPENAI_API_KEY=secret",
+		"GO_WANT_VALIDATOR_HELPER=valid",
+	})
+	joined := strings.Join(environment, "\n")
+	for _, forbidden := range []string{"HOME=", "GH_TOKEN=", "GITHUB_TOKEN=", "SSH_AUTH_SOCK=",
+		"GIT_CONFIG_GLOBAL=", "OPENAI_API_KEY="} {
+		if strings.Contains(joined, forbidden) {
+			t.Fatalf("validator environment retained %s: %q", forbidden, joined)
+		}
+	}
+	for _, required := range []string{"PATH=/usr/bin", "GO_WANT_VALIDATOR_HELPER=valid",
+		"GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS="} {
+		if !strings.Contains(joined, required) {
+			t.Fatalf("validator environment omitted %s: %q", required, joined)
+		}
 	}
 }
 

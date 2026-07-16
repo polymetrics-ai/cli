@@ -1,6 +1,7 @@
 package replay
 
 import (
+	"errors"
 	"strings"
 	"testing"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/contract"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/domain"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
+	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/outbox"
 )
 
 func TestTwentyIncidentGuards(t *testing.T) {
@@ -43,8 +45,7 @@ func TestTwentyIncidentGuards(t *testing.T) {
 			return contract.Dispatch{Objective: "load", OutputFormat: "handoff", ToolGuidance: []string{"edit"}, Tools: []contract.Tool{contract.ToolEdit}, Boundaries: []string{"scope"}, WriteScope: []string{"../docs"}}.Validate()
 		}},
 		{"hard-gate-breach", func() error {
-			_, err := domain.NewGrant("twenty", "repo", 277, domain.Capability("merge.main"), 1)
-			return err
+			return rejectExternalCapability(outbox.Capability("merge.main"))
 		}},
 		{"scope-reduction-halt", func() error {
 			return contract.Dispatch{Objective: "reduce", OutputFormat: "handoff", ToolGuidance: []string{"edit"}, Tools: []contract.Tool{contract.ToolEdit}, Boundaries: nil, WriteScope: []string{"internal/**"}}.Validate()
@@ -57,8 +58,7 @@ func TestTwentyIncidentGuards(t *testing.T) {
 			return contract.Dispatch{Objective: "engine", OutputFormat: "handoff", ToolGuidance: []string{"edit"}, Tools: []contract.Tool{contract.ToolEdit}, Boundaries: []string{"scope"}, WriteScope: []string{"/internal/connectors/engine"}}.Validate()
 		}},
 		{"merge-before-ratification", func() error {
-			_, err := domain.NewGrant("twenty", "repo", 277, domain.Capability("pr.merge"), 1)
-			return err
+			return rejectExternalCapability(outbox.Capability("pr.merge"))
 		}},
 		{"stale-verify-head", func() error {
 			request := validRatification
@@ -78,4 +78,11 @@ func TestTwentyIncidentGuards(t *testing.T) {
 			}
 		})
 	}
+}
+
+func rejectExternalCapability(capability outbox.Capability) error {
+	if outbox.IsGrantableCapability(capability) {
+		return nil
+	}
+	return errors.New("external capability is not grantable")
 }

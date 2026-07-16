@@ -156,12 +156,46 @@ Final local review disposition (four independent read-only reviewer/security cyc
 - [x] Lint equals the accepted 28-finding baseline with zero Slice E findings.
 - [x] Independent Sol/high correctness and security reviews have no unresolved actionable findings.
 
-### F. Authority-gated external effects
+### F. Authority-gated external effects — GREEN / REVIEWED / CHECKPOINT READY
 
-- [ ] Decision summaries/questions/statuses/future GitHub mutations route through fenced outbox.
-- [ ] Direct `SyncDecisionComment` production paths removed.
-- [ ] Pending/claim/send/failure/restart/idempotent replay covered.
-- [ ] Workers cannot receive direct GitHub mutation paths.
+Architecture and authority:
+- [x] Decision summaries, questions, statuses, and future governed mutations route only through the
+      fenced durable outbox.
+- [x] Direct `SyncDecisionComment`, `SyncQuestionComment`, and other write-capable GitHub production
+      paths outside the outbox executor are absent by architecture test.
+- [x] Reply polling depends on a read-only GitHub port; only the executor receives write capability.
+- [x] Only controller policy derives immutable narrow grants; workers/helpers/executors cannot self-grant.
+- [x] Grants bind delivery/repository/issue-or-PR/capability/generation/head/epoch/target.
+- [x] `forbidden_main_merge`, `merge.main`, `pr.merge`, unsupported effects, stale heads/epochs, and
+      changed targets fail closed.
+
+Persistence, state, and recovery:
+- [x] Strict versioned payload decoding and canonical payload/hash identity are covered.
+- [x] Persisted records contain no credentials, tokens, raw environment values, arbitrary commands,
+      payload secrets, or unbounded diagnostics.
+- [x] Pending/claimed/sent/failed/uncertain/blocked/cancelled legal transitions and terminality pass.
+- [x] Claim owner/epoch fencing, expiration, crash recovery, restart, and idempotent replay pass.
+- [x] Definite pre-send failure follows bounded policy; ambiguous post-send failure becomes uncertain
+      and is never blindly replayed.
+- [x] Immutable request, authority, claim, result, and bounded typed error identity survive SQLite reopen.
+
+GitHub reconciliation and cross-store honesty:
+- [x] Stable Shepherd markers reconcile exact marker/payload identity before write.
+- [x] Exact duplicates suppress writes; duplicate markers, payload conflicts, changed targets, and
+      ambiguous read results block.
+- [x] Older claimed summary revisions cannot overwrite newer ledger revisions.
+- [x] Question effects bind request ID, generation, unit, head, and external comment ID.
+- [x] Deterministic startup reconciliation covers every decision-ledger/outbox crash boundary without
+      claiming cross-database atomicity.
+- [x] All required typed bounded telemetry transitions are covered.
+
+Gates and review:
+- [x] Focused outbox/store/GitHub/domain/recovery/command tests pass.
+- [x] Full/race/vet/build/nested and root verify/module-boundary/diff/go-list gates pass.
+- [x] Lint remains exactly the accepted 28 findings with zero Slice F differential.
+- [x] Independent exact-head GPT-5.6 Sol/high correctness and security reviews have no unresolved
+      actionable findings.
+- [x] No live GitHub mutation occurred.
 
 ### G. Integration coverage
 
@@ -206,7 +240,7 @@ go list ./...
 ## Current verification status
 
 - GSD adapter health: PASS (`scripts/gsd doctor`, `scripts/gsd list`).
-- Programming-loop prompt generation: PASS (`scripts/gsd prompt programming-loop init --phase issue-389-shepherd-hardening --dry-run`).
+- Slice F programming-loop activation: PASS (`scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto`); `scripts/gsd sources programming-loop` resolved the repo-local adapter and pinned official sources.
 - Slice A store hardening focused gate: PASS `cd agent-runtime/shepherd && go test ./internal/store -run 'TestArtifactProofRejectsUnratifiedResult|TestAttestationRejectsNonProceedVerdicts|TestArtifactProofBindsExactHeadsAndRatification|TestAttestationPersistsValidatorProof' -count=1`.
 - Nested module unit gate after partial store hardening: PASS `cd agent-runtime/shepherd && go test ./...`.
 - Race gate: PASS `cd agent-runtime/shepherd && go test -race ./...`.
@@ -231,5 +265,13 @@ go list ./...
 - Slice E final nested gates: PASS full tests, full race, vet, build, and nested `make verify`.
 - Slice E root/repository gates: PASS root `make verify`, module boundary, `git diff --check`, and root `go list ./...` (145 packages).
 - Slice E lint differential: expected nonzero baseline output, exactly 28 findings (`errcheck` 24, `ineffassign` 1, `staticcheck` 2, `unused` 1), with no `internal/recovery` finding and zero new Slice E production findings.
-- Independent GPT-5.6 Sol/high correctness/security review cycles covered the complete working diff from Slice D; every actionable finding is dispositioned in `TDD-LEDGER.md` refactor evidence and there is no unresolved finding.
-- Slice F onward, canaries, PR creation, final issue review, general GitHub mutation, and parent PR #390 merge remain blocked.
+- Independent GPT-5.6 Sol/high correctness/security review cycles covered the complete Slice E working diff from Slice D; every actionable finding is dispositioned in `TDD-LEDGER.md` refactor evidence and there is no unresolved finding.
+- Slice E checkpoint acceptance: PASS at `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`; local/remote equality and clean worktree were confirmed before Slice F planning edits.
+- Slice F RED: PASS as a TDD gate (expected failing capability probe), `cd agent-runtime/shepherd && go test ./internal/outbox -count=1` fails on the intentionally missing typed outbox/controller/store/executor APIs before production edits.
+- Slice F GREEN: focused/full/race/vet/build/nested and root `make verify`/module-boundary/diff/root `go list` gates pass on 2026-07-16.
+- Slice F lint differential: expected nonzero exit with exactly the accepted 28 findings (`errcheck` 25, `staticcheck` 2, `unused` 1); no Slice F package finding.
+- Slice F independent correctness/security/restart reviews: all actionable findings dispositioned through repeated GPT-5.6 Sol/xhigh read-only cycles.
+- Slice F live mutation: none; GitHub behavior used fakes and durable local stores only.
+- Slice F exact-head correctness/restart closure: no actionable findings after all review fixes.
+- Slice F checkpoint is locally ready; push/equality/cleanliness confirmation remains.
+- Slice G onward, canaries, PR creation, live GitHub mutation, cleanup/migration, and parent PR #390 merge remain blocked.

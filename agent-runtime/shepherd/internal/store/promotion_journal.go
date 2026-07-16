@@ -61,6 +61,7 @@ type PromotionJournal struct {
 	State                     PromotionJournalState
 	BlockedReason             string
 	CleanupComplete           bool
+	DecisionsResolved         bool
 	ControllerOwner           string
 	ControllerEpoch           int64
 	CreatedAt                 time.Time
@@ -192,7 +193,7 @@ func (s *Store) ListIncompletePromotionJournals(ctx context.Context, deliveryID 
 		return nil, errors.New("delivery ID is required")
 	}
 	rows, err := s.db.QueryContext(ctx, promotionJournalSelect+` WHERE delivery_id = ?
-		AND state <> ? AND (state <> ? OR cleanup_complete = 0)
+		AND state <> ? AND (state <> ? OR cleanup_complete = 0 OR decisions_resolved = 0)
 		ORDER BY created_at, journal_id LIMIT 65`, deliveryID, PromotionJournalBlocked,
 		PromotionJournalComplete)
 	if err != nil {
@@ -687,7 +688,7 @@ const promotionJournalSelect = `SELECT journal_id, delivery_id, generation, unit
 	attestation_validator, attestation_thinking, attestation_verdict, attestation_local_gates,
 	attestation_uat, attestation_milestone_valid, governance_state_version, attestation_expires_at, manifest_json, manifest_hash,
 	backup_manifest_json, backup_manifest_hash, stage_path, backup_path, canonical_path,
-	state, blocked_reason, cleanup_complete, controller_owner, controller_epoch, created_at, updated_at
+	state, blocked_reason, cleanup_complete, decisions_resolved, controller_owner, controller_epoch, created_at, updated_at
 	FROM promotion_journals`
 
 type promotionJournalScanner interface{ Scan(...any) error }
@@ -695,7 +696,7 @@ type promotionJournalScanner interface{ Scan(...any) error }
 func scanPromotionJournal(scanner promotionJournalScanner) (PromotionJournal, error) {
 	var journal PromotionJournal
 	var expires, attestationCreated, created, updated int64
-	var cleanupComplete, localGates, uat, milestoneValid int
+	var cleanupComplete, decisionsResolved, localGates, uat, milestoneValid int
 	err := scanner.Scan(&journal.JournalID, &journal.DeliveryID, &journal.Generation, &journal.UnitID,
 		&journal.Attempt, &journal.BaseHead, &journal.CandidateHead, &journal.ValidatedHead,
 		&journal.ProofID, &journal.EvidenceHash, &journal.ValidatorSessionID,
@@ -704,7 +705,7 @@ func scanPromotionJournal(scanner promotionJournalScanner) (PromotionJournal, er
 		&localGates, &uat, &milestoneValid, &journal.GovernanceStateVersion, &expires, &journal.ManifestJSON, &journal.ManifestHash,
 		&journal.BackupManifestJSON, &journal.BackupManifestHash, &journal.StagePath,
 		&journal.BackupPath, &journal.CanonicalPath, &journal.State, &journal.BlockedReason,
-		&cleanupComplete, &journal.ControllerOwner, &journal.ControllerEpoch, &created, &updated)
+		&cleanupComplete, &decisionsResolved, &journal.ControllerOwner, &journal.ControllerEpoch, &created, &updated)
 	if err != nil {
 		return PromotionJournal{}, err
 	}
@@ -713,6 +714,7 @@ func scanPromotionJournal(scanner promotionJournalScanner) (PromotionJournal, er
 	journal.AttestationLocalGates, journal.AttestationUAT = localGates == 1, uat == 1
 	journal.AttestationMilestoneValid = milestoneValid == 1
 	journal.CleanupComplete = cleanupComplete == 1
+	journal.DecisionsResolved = decisionsResolved == 1
 	journal.CreatedAt, journal.UpdatedAt = time.Unix(0, created).UTC(), time.Unix(0, updated).UTC()
 	return journal, nil
 }
