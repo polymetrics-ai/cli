@@ -14,8 +14,9 @@ import (
 )
 
 type CompareRequest struct {
-	Iterations int  `json:"iterations"`
-	Runtime    bool `json:"runtime"`
+	Iterations    int                 `json:"iterations"`
+	Runtime       bool                `json:"runtime"`
+	RuntimeConfig runtimecheck.Config `json:"-"`
 }
 
 type Result struct {
@@ -71,7 +72,7 @@ func Compare(ctx context.Context, req CompareRequest) (Comparison, error) {
 	if !req.Runtime {
 		return comparison, nil
 	}
-	cfg := runtimecheck.FromEnv()
+	cfg := req.RuntimeConfig
 	report := runtimecheck.Doctor(ctx, cfg)
 	comparison.RuntimeReport = &report
 	if !runtimecheck.Healthy(report) {

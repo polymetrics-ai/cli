@@ -12,11 +12,13 @@ import (
 	"testing"
 
 	"github.com/spf13/cobra"
+
+	"polymetrics.ai/internal/config"
 )
 
 func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
-	first := newRootCmd(context.Background(), "/first-root", io.Discard, io.Discard, false)
-	second := newRootCmd(context.Background(), "/second-root", io.Discard, io.Discard, true)
+	first := newRootCmd(context.Background(), testRouterConfig("/first-root", false), io.Discard, io.Discard)
+	second := newRootCmd(context.Background(), testRouterConfig("/second-root", true), io.Discard, io.Discard)
 	if first == second {
 		t.Fatal("newRootCmd returned the same command tree instance")
 	}
@@ -44,8 +46,8 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 		"schedule":    false,
 		"worker":      true,
 	}
-	if len(expectedHidden) != len(cobraLegacyCommands()) {
-		t.Fatalf("expectedHidden covers %d commands, cobraLegacyCommands registers %d", len(expectedHidden), len(cobraLegacyCommands()))
+	if len(expectedHidden) != len(cobraLegacyCommands(config.Config{})) {
+		t.Fatalf("expectedHidden covers %d commands, cobraLegacyCommands registers %d", len(expectedHidden), len(cobraLegacyCommands(config.Config{})))
 	}
 
 	for _, root := range []*cobra.Command{first, second} {
@@ -78,8 +80,8 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 }
 
 func TestCobraRouterShellRootPersistentFlagsArePerFreshCommand(t *testing.T) {
-	first := newRootCmd(context.Background(), "/first-root", io.Discard, io.Discard, false)
-	second := newRootCmd(context.Background(), "/second-root", io.Discard, io.Discard, true)
+	first := newRootCmd(context.Background(), testRouterConfig("/first-root", false), io.Discard, io.Discard)
+	second := newRootCmd(context.Background(), testRouterConfig("/second-root", true), io.Discard, io.Discard)
 
 	firstRoot := first.PersistentFlags().Lookup("root")
 	secondRoot := second.PersistentFlags().Lookup("root")
@@ -278,6 +280,10 @@ func runCobraRouterCLI(t *testing.T, args []string) (stdout string, stderr strin
 		t.Fatalf("Run(%v) code = %d stderr=%s stdout=%s", args, code, errBuf.String(), outBuf.String())
 	}
 	return outBuf.String(), errBuf.String()
+}
+
+func testRouterConfig(root string, jsonOut bool) config.Config {
+	return config.Config{Root: root, JSON: jsonOut}
 }
 
 func findCobraCommand(root *cobra.Command, name string) *cobra.Command {
