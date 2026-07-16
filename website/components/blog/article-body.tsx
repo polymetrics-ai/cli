@@ -1,14 +1,16 @@
 'use client';
 
-import { useRef } from 'react';
+import { Fragment, useMemo, useRef, useState } from 'react';
 import { CornerBox } from '@/components/ui/corner-box';
-import type { BlogSection } from '@/lib/blog';
+import type { BlogEvidence, BlogSection } from '@/lib/blog';
 import { AnnotationsProvider } from '@/components/blog/annotations-provider';
 import { HighlightedBlock, HoverPreview } from '@/components/blog/highlight-text';
 import { SelectionPopover } from '@/components/blog/selection-popover';
 import { CommentComposer } from '@/components/blog/comment-composer';
 import { MarginNotesRail } from '@/components/blog/margin-notes-rail';
 import { CommentsSheet } from '@/components/blog/comments-sheet';
+import { GitHubEvidenceDialog } from '@/components/blog/github-evidence';
+import { ArticleFigure } from '@/components/blog/article-figure';
 
 function sectionId(index: number): string {
   return `section-${index + 1}`;
@@ -24,12 +26,26 @@ export function ArticleBody({
   slug,
   sections,
   summary,
+  evidence,
 }: {
   slug: string;
   sections: BlogSection[];
   summary: string;
+  evidence: BlogEvidence[];
 }) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const evidenceTriggerRef = useRef<HTMLElement | null>(null);
+  const [activeEvidence, setActiveEvidence] = useState<BlogEvidence | null>(null);
+  const evidenceById = useMemo(
+    () => new Map(evidence.map((item, index) => [item.id, { evidence: item, number: index + 1 }])),
+    [evidence],
+  );
+
+  const closeEvidence = () => {
+    const trigger = evidenceTriggerRef.current;
+    setActiveEvidence(null);
+    window.requestAnimationFrame(() => trigger?.focus());
+  };
 
   return (
     <AnnotationsProvider slug={slug}>
@@ -37,6 +53,11 @@ export function ArticleBody({
         <div className="min-w-0" data-annotation-root>
           {sections.map((section, index) => (
             <section key={section.heading} id={sectionId(index)} className="mb-12 scroll-mt-24">
+              {(section.images ?? [])
+                .filter((image) => image.beforeHeading)
+                .map((image) => (
+                  <ArticleFigure key={image.src} image={image} className="mb-5" />
+                ))}
               <div className="mb-4 flex items-baseline gap-3 border-b border-line-structure pb-2">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-text-disabled">
                   {String(index + 1).padStart(2, '0')}
@@ -46,23 +67,36 @@ export function ArticleBody({
                 </h2>
               </div>
 
-              <div className="flex flex-col gap-4">
+              <div className="flow-root">
                 {section.body.map((paragraph, blockIndex) => (
-                  <p
-                    key={paragraph}
-                    data-annotation-block
-                    data-section-index={index}
-                    data-block-type="body"
-                    data-block-index={blockIndex}
-                    className="text-[15px] leading-[1.75] text-text-tertiary"
-                  >
-                    <HighlightedBlock
-                      text={paragraph}
-                      sectionIndex={index}
-                      blockType="body"
-                      blockIndex={blockIndex}
-                    />
-                  </p>
+                  <Fragment key={`${section.heading}-${blockIndex}`}>
+                    <p
+                      data-annotation-block
+                      data-section-index={index}
+                      data-block-type="body"
+                      data-block-index={blockIndex}
+                      className="mb-4 text-[15px] leading-[1.75] text-text-tertiary"
+                    >
+                      <HighlightedBlock
+                        text={paragraph}
+                        sectionIndex={index}
+                        blockType="body"
+                        blockIndex={blockIndex}
+                        evidenceReferences={(section.evidenceRefs ?? []).flatMap((reference) => {
+                          if (reference.blockIndex !== blockIndex) return [];
+                          const item = evidenceById.get(reference.evidenceId);
+                          return item ? [{ ...item, text: reference.text }] : [];
+                        })}
+                        onEvidenceOpen={(item, trigger) => {
+                          evidenceTriggerRef.current = trigger;
+                          setActiveEvidence(item);
+                        }}
+                      />
+                    </p>
+                    {(section.images ?? [])
+                      .filter((image) => image.afterBlock === blockIndex)
+                      .map((image) => <ArticleFigure key={image.src} image={image} />)}
+                  </Fragment>
                 ))}
               </div>
 
@@ -112,6 +146,7 @@ export function ArticleBody({
       <CommentComposer />
       <HoverPreview />
       <CommentsSheet sections={sections} />
+      <GitHubEvidenceDialog evidence={activeEvidence} onClose={closeEvidence} />
     </AnnotationsProvider>
   );
 }

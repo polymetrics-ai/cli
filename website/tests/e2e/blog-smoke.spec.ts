@@ -44,6 +44,137 @@ test.describe('blog UI smoke', () => {
     }
   });
 
+  test('opens inline GitHub references without leaving the article', async ({ page }) => {
+    await page.route('https://api.github.com/**', (route) => route.abort());
+    await page.goto('/blog/human-harnesses');
+    const articleUrl = page.url();
+
+    await expect(page.locator('[data-github-evidence-trail]')).toHaveCount(0);
+    const claimLink = page.getByRole('link', { name: 'Preview PR #27 evidence' }).first();
+    const citationLink = page.getByRole('link', { name: 'Open citation 1: PR #27' }).first();
+    await expect(claimLink).toHaveText('PR #27');
+    await expect(citationLink).toHaveText('[1]');
+
+    await claimLink.click();
+    const preview = page.getByRole('dialog', { name: 'GitHub evidence: PR #27' });
+    await expect(preview).toBeVisible();
+    await expect(preview.getByText('Verified snapshot')).toBeVisible();
+    await expect(preview.getByText('Closed, not merged')).toBeVisible();
+    await expect(preview.getByText('1,961,878', { exact: true })).toBeVisible();
+
+    const sourceLink = preview.getByRole('link', { name: 'Open PR #27 on GitHub' });
+    await expect(sourceLink).toHaveAttribute(
+      'href',
+      'https://github.com/polymetrics-ai/cli/pull/27',
+    );
+    await expect(sourceLink).toHaveAttribute('target', '_blank');
+    expect(page.url()).toBe(articleUrl);
+
+    await page.keyboard.press('Escape');
+    await expect(preview).toBeHidden();
+    await expect(claimLink).toBeFocused();
+
+    await citationLink.click();
+    await expect(preview).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(citationLink).toBeFocused();
+
+    const starLink = page.getByRole('link', { name: 'Star Polymetrics on GitHub' });
+    await expect(starLink).toHaveAttribute('href', 'https://github.com/polymetrics-ai/cli');
+    await expect(starLink).toHaveAttribute('target', '_blank');
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await citationLink.click();
+    await expect(preview).toBeVisible();
+    const previewBox = await preview.boundingBox();
+    expect(previewBox).not.toBeNull();
+    expect(previewBox!.x).toBeGreaterThanOrEqual(0);
+    expect(previewBox!.x + previewBox!.width).toBeLessThanOrEqual(390);
+    expect(Math.abs(previewBox!.x + previewBox!.width / 2 - 195)).toBeLessThanOrEqual(2);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+  });
+
+  test('places all six harness images in the editorial reading order', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto('/blog/human-harnesses');
+
+    const imageSources = [
+      '/blog/human-harnesses/01-diff-that-ate-the-room.webp',
+      '/blog/human-harnesses/02-isolated-worktables.webp',
+      '/blog/human-harnesses/03-branching-harness.webp',
+      '/blog/human-harnesses/04-review-repair-loop.webp',
+      '/blog/human-harnesses/05-immutable-release.webp',
+      '/blog/human-harnesses/06-shepherd-teaser.webp',
+    ];
+    const figures = imageSources.map((src) => page.locator(`[data-blog-image="${src}"]`));
+
+    await expect(page.locator('[data-blog-image]')).toHaveCount(6);
+    for (const [index, figure] of figures.entries()) {
+      await expect(figure).toBeVisible();
+      await figure.scrollIntoViewIfNeeded();
+      const image = figure.locator('img');
+      await expect(image).toHaveAttribute('src', new RegExp(imageSources[index].split('/').at(-1)!));
+      await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth))
+        .toBeGreaterThan(0);
+    }
+
+    const [leadFigure, leftFigure, rightFigure, reviewFigure, releaseFigure, teaserFigure] = figures;
+    expect(await leftFigure.evaluate((element) => getComputedStyle(element).float)).toBe('left');
+    expect(await rightFigure.evaluate((element) => getComputedStyle(element).float)).toBe('right');
+
+    expect(
+      await leadFigure.evaluate((element) =>
+        Boolean(
+          element.compareDocumentPosition(document.querySelector('#section-1')!) &
+            Node.DOCUMENT_POSITION_FOLLOWING,
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      await releaseFigure.evaluate((element) =>
+        element.nextElementSibling?.querySelector('h2')?.textContent,
+      ),
+    ).toContain('Release and deployment are mutations too');
+    for (const figure of [reviewFigure, teaserFigure]) {
+      expect(
+        await figure.evaluate((element) => ({
+          previousBlock: (element.previousElementSibling as HTMLElement | null)?.dataset.blockIndex,
+          nextBlock: (element.nextElementSibling as HTMLElement | null)?.dataset.blockIndex,
+        })),
+      ).toEqual({ previousBlock: '2', nextBlock: '3' });
+    }
+
+    await expect(
+      page.getByText('implement -> verify -> review exact head -> disposition', { exact: false }),
+    ).toHaveCount(0);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    for (const figure of figures) {
+      await expect(figure).toBeVisible();
+      expect(await figure.evaluate((element) => getComputedStyle(element).float)).toBe('none');
+      const box = await figure.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.x).toBeGreaterThanOrEqual(0);
+      expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+    }
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+
+    for (const width of [768, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect(await leftFigure.evaluate((element) => getComputedStyle(element).float)).toBe('left');
+      expect(await rightFigure.evaluate((element) => getComputedStyle(element).float)).toBe(
+        'right',
+      );
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+      ).toBe(true);
+    }
+  });
+
   test('links the blog from the desktop navbar', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');

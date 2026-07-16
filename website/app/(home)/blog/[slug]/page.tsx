@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight, Calendar, Clock } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Calendar, Clock, ExternalLink, Star } from 'lucide-react';
 import { BLOG_POSTS, blogUrl, getBlogPost } from '@/lib/blog';
 import { HomeSidebar } from '@/components/home/home-sidebar';
 import { PageAside } from '@/components/home/page-aside';
 import { CornerBox } from '@/components/ui/corner-box';
 import { ArticleBody } from '@/components/blog/article-body';
+import { ArticleFigure } from '@/components/blog/article-figure';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -98,7 +99,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           <header
             id="article-overview"
-            className="mb-10 scroll-mt-24 border-b border-line-structure pb-10"
+            className={`scroll-mt-24 border-b border-line-structure pb-10 ${post.leadImage ? 'mb-6' : 'mb-10'}`}
           >
             <div className="mb-5 flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-text-disabled">
               <span className="border border-line-structure bg-surface-1 px-2 py-1">
@@ -129,9 +130,32 @@ export default async function BlogPostPage({ params }: Props) {
                 </span>
               ))}
             </div>
+            {post.repositoryCta ? (
+              <a
+                href={post.repositoryCta.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={post.repositoryCta.label}
+                className="mt-6 inline-flex min-h-10 items-center gap-2 border border-line-cta bg-line-cta px-3 font-square text-[11px] font-semibold uppercase tracking-normal text-surface-bg transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta"
+                data-repository-star-link
+              >
+                <Star className="size-3.5" aria-hidden="true" />
+                {post.repositoryCta.label}
+                <ExternalLink className="size-3.5" aria-hidden="true" />
+              </a>
+            ) : null}
           </header>
 
-          <ArticleBody slug={post.slug} sections={post.sections} summary={post.summary} />
+          {post.leadImage ? (
+            <ArticleFigure image={post.leadImage} className="mb-10" preload />
+          ) : null}
+
+          <ArticleBody
+            slug={post.slug}
+            sections={post.sections}
+            summary={post.summary}
+            evidence={post.evidence ?? []}
+          />
 
           <footer
             id="read-next"
