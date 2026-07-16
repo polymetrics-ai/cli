@@ -39,5 +39,7 @@ describe('blog catalog', () => {
     expect(articleText).toContain('177');
     expect(articleText).toContain('2,903');
     expect(articleText).toContain('7,088');
+    expect(articleText).toContain('pm reverse run <plan-id> --approve <approval-token> --json');
+    expect(articleText).not.toContain('pm reverse approve');
   });
 });

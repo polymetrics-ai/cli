@@ -78,10 +78,9 @@ export const BLOG_POSTS: BlogPost[] = [
           'The August 4 target is to make that model explicit for people as well as agents. Destructive and sensitive paths should be unavailable until policy enables them. Approval should be scoped to a specific plan rather than becoming an ambient yes to everything. The same command should behave predictably from a terminal, CI job, cron entry, or agent loop.',
           'This is also where honesty matters. A mapped operation is not automatically an executable command, and an executable command is not automatically certified. The inventory, runtime policy, conformance tests, and live certification are separate gates because each answers a different question.',
         ],
-        code: `pm reverse plan sync --source-table candidates --destination github:write --json
+        code: `pm reverse plan candidates_to_github --source-table candidates --destination github:github-local --action create_issue --map title:title
 pm reverse preview <plan-id> --json
-pm reverse approve <plan-id> --json
-pm reverse run <plan-id> --json`,
+pm reverse run <plan-id> --approve <approval-token> --json`,
       },
       {
         heading: 'The repository became a harness',

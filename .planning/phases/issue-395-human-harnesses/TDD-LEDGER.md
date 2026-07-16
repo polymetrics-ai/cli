@@ -47,5 +47,7 @@ Phase: `issue-395-human-harnesses`
   artifacts the repository actually produces.
 - Preserved the supplied draft's connection between the article annotation UI and a durable human
   feedback loop.
+- Replaced the draft-style standalone approval command with the documented reverse ETL contract:
+  human-readable plan output supplies the token consumed by `pm reverse run --approve`.
 - Verification: catalog test, typecheck, six blog Playwright tests, production build, and
   `git diff --check` passed after the review fix.
