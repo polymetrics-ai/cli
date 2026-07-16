@@ -1,6 +1,6 @@
 # Issue 401 Summary — Typed Viper Configuration
 
-Status: final re-review website caveat fixed in commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193` from starting head `77e8fe559b6bab458ed19cb30d3fdc6aa6778f56`; pushed head `b577ec363e4d9301f45843b6610957d11dc57e55` recorded in PR #441 body; local gates passed; human/parent review fallback remains pending.
+Status: final re-review website caveat fixed in commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193` from starting head `77e8fe559b6bab458ed19cb30d3fdc6aa6778f56`; pushed head `3b2558dde5b4f90deac69942371b9b813fb8e312` recorded in PR #441 body; local gates passed; human/parent review fallback remains pending.
 
 ## Final re-review disposition
 
@@ -131,7 +131,7 @@ Website script failures are dependency-availability blockers only: `website/node
 
 Sub-PR: https://github.com/polymetrics-ai/cli/pull/441 (non-draft, base `feat/cli-architecture-v2`).
 
-PR body updated with pm-reviewer disposition and final website caveat evidence via GitHub REST patch after `gh pr edit` hit the Projects classic GraphQL deprecation. Latest recorded pushed head at PR-body update time: `b577ec363e4d9301f45843b6610957d11dc57e55`. Claude workflow remains `disabled_manually`; Copilot quota exhausted for this blocker window. Did not post `@claude review`; did not request Copilot. Human/parent fallback pending.
+PR body updated with pm-reviewer disposition and final website caveat evidence via GitHub REST patch after `gh pr edit` hit the Projects classic GraphQL deprecation. Latest recorded pushed head at PR-body update time: `3b2558dde5b4f90deac69942371b9b813fb8e312`. Claude workflow remains `disabled_manually`; Copilot quota exhausted for this blocker window. Did not post `@claude review`; did not request Copilot. Human/parent fallback pending.
 
 ## Human gates
 

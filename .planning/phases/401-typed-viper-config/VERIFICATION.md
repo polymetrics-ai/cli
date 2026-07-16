@@ -124,7 +124,7 @@ Final gates:
 - [x] `make verify` — pass; smoke path `/var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.k3AV9VUv6j`; final line `connectorgen validate: 547 connector(s) checked, 0 findings`.
 - [x] Caveat grep after edit — pass: `rg -n 'legacy environment readers|#402 migrates them' website/content/docs/cli-reference.mdx website/lib/docs.generated.ts` matched both files.
 - [x] Existing website package-script checks run without dependency installs; exact results recorded below.
-- [x] PR #441 body updated after push with accepted disposition, docs caveat fix commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193`, and pushed head `b577ec363e4d9301f45843b6610957d11dc57e55`.
+- [x] PR #441 body updated after push with accepted disposition, docs caveat fix commit `10938836cf2a846e03e2c284ce2ddeeec7c4f193`, and pushed head `3b2558dde5b4f90deac69942371b9b813fb8e312`.
 - [x] No Claude/Copilot request posted.
 
 Website package-script checks:
