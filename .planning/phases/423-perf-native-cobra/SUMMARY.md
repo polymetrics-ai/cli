@@ -1,6 +1,6 @@
 # Phase 423 Summary
 
-Status: planning checkpoint created; production code not touched yet.
+Status: red tests captured; production code not touched yet.
 
 ## Current state
 
@@ -19,7 +19,7 @@ Status: planning checkpoint created; production code not touched yet.
 
 ## Verification state
 
-Pending red tests, green implementation, full local gates, CLI parity checks, PR, and review-route recording.
+Red test captured: `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1` fails because `perf` remains a legacy wrapper and native perf subcommands/flags are missing. Pending green implementation, full local gates, CLI parity checks, PR, and review-route recording.
 
 ## Safety
 

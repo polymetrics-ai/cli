@@ -8,7 +8,7 @@
   "baseHeadAtDispatch": "6fbff849932e891a8184000fb677e1b6fca7f6d4",
   "baseHeadAtPlanning": "6fbff849932e891a8184000fb677e1b6fca7f6d4",
   "verificationPassed": false,
-  "status": "planning_checkpoint",
+  "status": "red_tests_captured",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-423.prompt",
@@ -21,6 +21,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "third serialized Phase 9 namespace worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for native perf subtree, flag semantics, runtime config use, bare help, and invalid action usage; no subagent available"
     }
   ],
   "pullRequest": null,

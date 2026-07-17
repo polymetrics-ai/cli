@@ -39,8 +39,7 @@ Result:
 | Step | Kind | Command / test | Result | Notes |
 |---:|---|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS | Green | Pre-production artifact checkpoint; no production code touched. |
-| 1 | Red | Pending | Pending | Add focused native-perf subtree and behavior tests before production code. |
-| 2 | Green | Pending | Pending | Implement minimal native perf Cobra subtree. |
+| 1 | Red | `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `perf` remains legacy; behavior tests already preserve current flag semantics. || 2 | Green | Pending | Pending | Implement minimal native perf Cobra subtree. |
 | 3 | Refactor | Pending | Pending | Run focused/golden gates. |
 | 4 | Full gate | Pending | Pending | Run full local gates and CLI parity checks. |
 
@@ -53,7 +52,29 @@ Result:
 
 ## Exact red outputs
 
-Pending — capture before production code.
+```bash
+go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1
+```
+
+```text
+--- FAIL: TestCobraRouterShellBuildsFreshHiddenWrapperTree (0.00s)
+    cobra_router_test.go:55: expectedHidden covers 21 commands, legacy commands plus native commands registers 22
+--- FAIL: TestPerfCommandIsNativeCobraSubtree (0.00s)
+    cobra_router_test.go:181: perf command must use native Cobra flag parsing
+redis: 2026/07/18 00:29:07 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/18 00:29:08 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/18 00:29:08 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/18 00:29:08 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/18 00:29:10 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/18 00:29:10 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/18 00:29:11 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/18 00:29:11 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+FAIL
+FAIL	polymetrics.ai/internal/cli	12.967s
+FAIL
+```
+
+Red note: loopback runtime-check connection-refused messages are expected from `--runtime` flag validation against local test endpoints; no services were started and no secrets are involved.
 
 ## Exact green outputs
 
