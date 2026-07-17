@@ -69,6 +69,7 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	}
 	cmd.AddCommand(newConnectionsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
+	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	return cmd
 }
 
@@ -92,6 +93,9 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 	if len(args) >= 2 && args[0] == "connections" && args[1] == "create" {
 		return normalizeStringArraySpaceValues(args, 2, connectionsCreateFlagNames)
 	}
+	if len(args) >= 2 && args[0] == "query" && args[1] == "run" {
+		return normalizeStringArraySpaceValues(args, 2, queryRunFlagNames)
+	}
 	return args
 }
 
@@ -105,6 +109,15 @@ var connectionsCreateFlagNames = map[string]struct{}{
 	"table":              {},
 	"source-config":      {},
 	"destination-config": {},
+}
+
+var queryRunFlagNames = map[string]struct{}{
+	"table":      {},
+	"sql":        {},
+	"limit":      {},
+	"fields":     {},
+	"agent-mode": {},
+	"sample":     {},
 }
 
 func normalizeStringArraySpaceValues(args []string, start int, flagNames map[string]struct{}) []string {
@@ -150,9 +163,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "etl", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
-		}},
-		{name: "query", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runQuery(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "reverse", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, stdout, jsonOut) })
@@ -271,6 +281,84 @@ func addConnectionsStringArrayFlag(cmd *cobra.Command, target *[]string, name st
 }
 
 func completeConnectionNames(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+	return nil, cobra.ShellCompDirectiveNoFileComp
+}
+
+type queryRunFlags struct {
+	Tables     []string
+	SQLs       []string
+	Limits     []string
+	Fields     []string
+	AgentModes []string
+	Samples    []string
+}
+
+func (f queryRunFlags) parsed() parsedFlags {
+	values := map[string][]string{}
+	add := func(name string, vals []string) {
+		if len(vals) > 0 {
+			values[name] = append([]string(nil), vals...)
+		}
+	}
+	add("table", f.Tables)
+	add("sql", f.SQLs)
+	add("limit", f.Limits)
+	add("fields", f.Fields)
+	add("agent-mode", f.AgentModes)
+	add("sample", f.Samples)
+	return parsedFlags{values: values}
+}
+
+func newQueryCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "query",
+		Args:          cobra.NoArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("query", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "query", stdout, jsonOut)
+	cmd.AddCommand(newQueryRunCobraCommand(ctx, root, stdout, jsonOut))
+	return cmd
+}
+
+func newQueryRunCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	var flags queryRunFlags
+	cmd := &cobra.Command{
+		Use:           "run",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(withApp(root, func(a *app.App) error {
+				return runQueryRun(ctx, a, flags.parsed(), stdout, jsonOut)
+			}))
+		},
+	}
+	setManualHelp(cmd, "query", stdout, jsonOut)
+	addQueryStringArrayFlag(cmd, &flags.Tables, "table", "local warehouse table to scan")
+	addQueryStringArrayFlag(cmd, &flags.SQLs, "sql", "read-only SQL query")
+	addQueryStringArrayFlag(cmd, &flags.Limits, "limit", "maximum rows to read")
+	addQueryStringArrayFlag(cmd, &flags.Fields, "fields", "comma-separated fields to project")
+	addQueryStringArrayFlag(cmd, &flags.AgentModes, "agent-mode", "agent output mode")
+	addQueryStringArrayFlag(cmd, &flags.Samples, "sample", "summary sample size")
+	return cmd
+}
+
+func addQueryStringArrayFlag(cmd *cobra.Command, target *[]string, name string, usage string) {
+	cmd.Flags().StringArrayVar(target, name, nil, usage)
+	if flag := cmd.Flags().Lookup(name); flag != nil {
+		flag.NoOptDefVal = "true"
+	}
+}
+
+func completeNoFile(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 	return nil, cobra.ShellCompDirectiveNoFileComp
 }
 

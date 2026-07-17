@@ -1,0 +1,48 @@
+{
+  "phase": 422,
+  "issue": 422,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "branch": "refactor/422-query-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "baseHeadAtDispatch": "e6faecfb",
+  "baseHeadAtPlanning": "f12d573b",
+  "verificationPassed": true,
+  "status": "pr_open_local_verified_remote_checks_pending",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-422.prompt",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop_plus_pi_pm_gsd_loop_prompt",
+    "skillGap": ".pi/skills/go-implementation/SKILL.md missing; global Go skills loaded"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "second serialized Phase 9 namespace worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for native query subtree, flag semantics, invalid action usage, and SQL write rejection; no subagent available"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native query Cobra subtree implemented in allowed internal/cli scope; focused query/golden gate, certify smoke, vet, and build passed"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "full local gates, runtime help/docs/website parity checks, SQL safety rejection, and diff guards completed inline in isolated worker cwd"
+    }
+  ],
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/452",
+  "reviewRoute": {
+    "claude": "disabled_not_requested_per_instruction",
+    "copilot": "not_requested_per_instruction",
+    "fallback": "human_parent_review_pending",
+    "coverageStatus": "human_parent_review_pending_remote_checks_pending"
+  }
+}
