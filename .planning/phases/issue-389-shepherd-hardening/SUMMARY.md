@@ -188,5 +188,13 @@ Production `resolveQualifiedNode` remains fail-closed for symlinks.
 The second failure is assertion timing: one runner test performs an immediate PID probe after cleanup,
 while adjacent GSD process tests use bounded eventual `ESRCH` verification. The test-only repair will
 share a strict five-second bounded helper without accepting a running descendant or changing production
-cleanup. Full targeted stress, nested/root gates, exact lint baseline, exact-head Sol/high review, normal
-push, and new PR CI are pending; `verificationPassed=false`. No canary or merge is authorized.
+cleanup. Implementation commit `20540e79bf8929390e64fcd165046d6704199e6b` changes only five
+`internal/gsd/*_test.go` files: all fixture Node commands/hashes use one complete-chain canonical helper,
+production symlink rejection has a direct regression, and runner/process cleanup assertions use one
+strict bounded `ESRCH` helper that cannot accept a live descendant.
+
+Targeted Node/descendant/security sets pass at count 10; full GSD race count 3 and normal count 5 pass.
+Full nested normal/race/integration/race-integration/vet/build/make and root verify/boundary/list/diff/
+JSON/hygiene gates pass. Lint remains exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`, with zero
+changed-file finding. Generated binaries are absent and `verificationPassed=true`. Exact-head Sol/high
+review, normal push, and new PR CI are pending. No canary or merge is authorized.

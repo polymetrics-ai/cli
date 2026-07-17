@@ -445,7 +445,7 @@ identity. Canonical packaged-loader integration and all declared local gates pas
 `verificationPassed=true`; exact-head correctness/security reviews at `c72778de` pass, and the final
 docs-only evidence commit receives replacement exact-head review before push.
 
-## Draft PR #456 nested-module test-infrastructure fix — IN PROGRESS
+## Draft PR #456 nested-module test-infrastructure fix — IMPLEMENTED / LOCAL GREEN
 
 Authorization is strictly test/planning-only. Failed GitHub evidence: workflow run `29578379908`, job
 `87877981167`, check `nested-module`.
@@ -481,8 +481,17 @@ TDD/implementation contract:
 - Allowed writes: `agent-runtime/shepherd/internal/gsd/*_test.go`, an optional test-only helper under
   that package, issue-389 phase artifacts, and PR #456 evidence. No production `.go` change is allowed.
 
+Implementation commit `20540e79bf8929390e64fcd165046d6704199e6b` adds only five GSD test files.
+`qualifiedNodePathForTest` canonicalizes complete fixture Node symlink chains while a direct
+`resolveQualifiedNode` regression proves production still rejects the symlink itself. One shared bounded
+five-second/10 ms PID helper replaces the immediate assertion and adjacent duplicate loops; it succeeds
+only on `ESRCH`, so a running descendant remains a hard failure. Targeted count-10 sets, full GSD race
+count-3 and normal count-5, all nested normal/race/integration/race-integration/vet/build/make gates,
+root verify/boundary/list/diff/JSON/hygiene, and exact lint baseline pass. Exact-head review, normal push,
+and fresh PR CI remain.
+
 Orchestration: active parent owner revalidated draft parent PR #390 and stacked draft PR #456 before
-this stage. One isolated GPT-5.5/high worker will own the test-only GSD scope; the coordinator owns shared
+this stage. One isolated GPT-5.5/high worker owned the test-only GSD scope; the coordinator owns shared
 phase artifacts, verification, exact-head GPT-5.6 Sol/high review, push, and PR status. Skills loaded:
 `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`, `golang-how-to`, `golang-testing`,
 `golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`,

@@ -820,3 +820,53 @@ cleanup change.
 
 `verificationPassed=false` until all requested targeted/full gates, exact-head review, push, and fresh
 PR CI complete. No test source or production source was edited before this RED evidence.
+
+### GREEN — portable fixtures and bounded descendant assertion
+
+Isolated `openai-codex/gpt-5.5`/high worker commit:
+`20540e79bf8929390e64fcd165046d6704199e6b` (`test(shepherd): make GSD runtime checks portable`).
+Only these test files changed:
+
+- `internal/gsd/process_unix_test.go`
+- `internal/gsd/registry_test.go`
+- `internal/gsd/runner_test.go`
+- `internal/gsd/runtime_snapshot_test.go`
+- `internal/gsd/test_helpers_test.go`
+
+`qualifiedNodePathForTest` now applies `exec.LookPath`, `filepath.Abs`, and
+`filepath.EvalSymlinks`; registry/snapshot commands and hashes use that canonical fixture binary.
+`TestResolveQualifiedNodeRejectsSymlinkedExecutable` first accepts the exact canonical binary/hash,
+then requires `ErrRuntimeContractMismatch` for a symlink to the same binary. Production files and
+qualification policy are unchanged.
+
+`waitForPIDExitForTest` polls `syscall.Kill(pid, 0)` for `ESRCH` with a five-second deadline and 10 ms
+interval. The formerly immediate runner assertion and adjacent duplicated ordinary-exit/maintenance
+loops use it. Any process that remains live through the bound fails; no platform skip or production
+cleanup change was added.
+
+Coordinator GREEN evidence:
+
+```text
+Node fixture target set -count=10: PASS (6.146s)
+Requested descendant target set -count=10: PASS (0.398s)
+Adjacent maintenance/process descendant set -count=10: PASS (0.453s)
+Symlink fixture/security regressions -count=10: PASS (2.823s)
+go test -race ./internal/gsd -count=3: PASS (37.554s)
+go test ./internal/gsd -count=5: PASS (10.462s)
+go test ./...: PASS
+go test -race ./...: PASS
+go test -tags=integration ./integration/... -count=1: PASS (122.417s)
+go test -race -tags=integration ./integration/... -count=1: PASS (583.931s)
+go vet ./...: PASS
+go build ./cmd/shepherd: PASS
+make verify (nested): PASS
+make verify (root): PASS
+scripts/tests/shepherd-module-boundary.sh: PASS
+go list ./...: PASS (145 packages)
+git diff --check and planning JSON: PASS
+generated pm/shepherd binaries absent: PASS
+```
+
+`golangci-lint run ./...` returns the accepted nonzero baseline exactly: 25 `errcheck`, 2
+`staticcheck`, 1 `unused`, with no finding in any changed test file. `verificationPassed=true`; fresh
+exact-head GPT-5.6 Sol/high review, normal push, and fresh PR #456 CI remain.

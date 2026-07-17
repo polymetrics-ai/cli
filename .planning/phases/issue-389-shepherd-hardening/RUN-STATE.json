@@ -4,9 +4,9 @@
   "base_head": "ee474811378edd604e1e86e413f0bcafeced452b",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "stacked_pr_ci_fix_in_progress",
-  "verificationPassed": false,
-  "current_slice": "draft_pr_456_nested_module_test_infrastructure_fix",
+  "state": "stacked_pr_ci_fix_verified_review_pending",
+  "verificationPassed": true,
+  "current_slice": "draft_pr_456_nested_module_test_infrastructure_fix_local_green",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "authorized_review_fix": {
     "authorization": "Production changes are limited to the two confirmed exact-head findings and minimum schema/test propagation.",
@@ -56,7 +56,16 @@
     ],
     "node_fixture_red": "Ordinary local NVM Node is canonical and passes; a temporary symlinked Node PATH reproduces runtime_contract_mismatch: open bounded runtime source; canonical target PATH passes.",
     "descendant_red": "CI runner_test.go:444 probes syscall.Kill(pid, 0) immediately while adjacent cleanup tests use bounded ESRCH polling.",
+    "implementation_head": "20540e79bf8929390e64fcd165046d6704199e6b",
+    "implementation_model": "openai-codex/gpt-5.5",
+    "implementation_thinking": "high",
+    "targeted_stress": "pass",
+    "full_local_verification": "pass",
+    "lint": "25 errcheck, 2 staticcheck, 1 unused; zero changed-file findings",
+    "exact_head_review": "pending",
+    "fresh_pr_ci": "pending",
     "production_change_authorized": false,
+    "production_files_changed": false,
     "production_symlink_policy_must_remain_fail_closed": true
   },
   "completed_slices": [
@@ -337,6 +346,16 @@
       "cycle": "cycle-41-draft-pr-456-nested-module-ci-fix-plan-red",
       "decision": "local_critical_path",
       "reason": "Active parent owner revalidated draft PRs #390/#456 and recorded the test-only authorization before worker launch. CI run 29578379908 job 87877981167 is RED. Ordinary local Node is canonical, but a controlled symlinked Node PATH reproduces the exact no-follow failure and canonical PATH passes; runner_test.go:444 alone uses an immediate PID probe instead of adjacent bounded ESRCH polling. Production edits are forbidden and verificationPassed is false."
+    },
+    {
+      "cycle": "cycle-42-draft-pr-456-nested-module-ci-fix-green",
+      "decision": "spawned",
+      "reason": "One isolated openai-codex/gpt-5.5 high worker at /tmp/issue-389-ci-fix-worker produced 20540e79bf8929390e64fcd165046d6704199e6b, changing only five internal/gsd test files. Canonical fixture Node resolution, direct production symlink rejection, and bounded ESRCH assertion helpers pass worker and coordinator targeted stress with no production edit."
+    },
+    {
+      "cycle": "cycle-43-draft-pr-456-nested-module-ci-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "Coordinator targeted count-10, internal GSD race count-3/normal count-5, full nested normal/race/integration/race-integration/vet/build/make, root make/boundary/list/diff/JSON/hygiene, binary absence, and exact 25 errcheck/2 staticcheck/1 unused zero-differential lint gates pass. verificationPassed is true; exact-head Sol/high review and fresh PR CI remain."
     }
   ],
   "slice_b_checkpoint": {
@@ -345,9 +364,9 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Commit the CI-fix planning/RED checkpoint, then run the isolated GPT-5.5/high test-only worker",
-    "Run targeted stress and full verification/lint with no production diff, then exact-head GPT-5.6 Sol/high review",
-    "Push normally, update draft PR #456 evidence, monitor fresh CI, and stop before separately authorized canaries"
+    "Commit local GREEN evidence and run fresh exact-head GPT-5.6 Sol/high review over 7432f0a5da90f255b74307d12c26863b61c1a16f...HEAD",
+    "Push normally, confirm local/remote equality, update draft PR #456 evidence, and monitor fresh CI",
+    "If CI is green, commit final stacked_pr_green_awaiting_canary_approval evidence, review/push that exact head, monitor final CI, and stop before canaries"
   ],
   "blocked": [
     "Twenty/Asana canaries without separate explicit approval",

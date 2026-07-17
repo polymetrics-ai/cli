@@ -294,25 +294,25 @@ Preconditions/workflow:
 
 Test-only implementation requirements:
 
-- [ ] Shared `qualifiedNodePathForTest(t)` uses `exec.LookPath`, `filepath.Abs`, and complete
+- [x] Shared `qualifiedNodePathForTest(t)` uses `exec.LookPath`, `filepath.Abs`, and complete
       `filepath.EvalSymlinks` before existing production qualification.
-- [ ] All relevant registry/host snapshot/hash fixtures use the canonical helper.
-- [ ] Production qualified runtime still rejects a symlinked Node executable.
-- [ ] Shared descendant helper polls with a strict five-second maximum/short interval and rejects a
+- [x] All relevant registry/host snapshot/hash fixtures use the canonical helper.
+- [x] Production qualified runtime still rejects a symlinked Node executable.
+- [x] Shared descendant helper polls with a strict five-second maximum/10 ms interval and rejects a
       genuinely running process; no Linux skip or arbitrary sleep.
-- [ ] Diff contains only `internal/gsd/*_test.go`, optional test-only helper, and issue-389 artifacts.
-- [ ] No production `.go`, dependency, workflow, or quality-gate change.
+- [x] Diff contains only `internal/gsd/*_test.go`, optional test-only helper, and issue-389 artifacts.
+- [x] No production `.go`, dependency, workflow, or quality-gate change.
 
 Targeted/full gates:
 
-- [ ] Node fixture target set `-count=10` passes with ordinary current PATH.
-- [ ] Descendant cleanup target set `-count=10` passes.
-- [ ] `go test -race ./internal/gsd -count=3` passes.
-- [ ] `go test ./internal/gsd -count=5` passes.
-- [ ] Full nested normal/race/integration/race-integration/vet/build/`make verify` passes.
-- [ ] Default lint remains exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`, zero differential.
-- [ ] Root `make verify`, module boundary, diff check, and root `go list ./...` pass.
-- [ ] Generated binaries removed; planning JSON and worktree hygiene pass.
+- [x] Node fixture target set `-count=10` passes with ordinary current PATH.
+- [x] Descendant cleanup target set `-count=10` passes, including adjacent maintenance/process cases.
+- [x] `go test -race ./internal/gsd -count=3` passes.
+- [x] `go test ./internal/gsd -count=5` passes.
+- [x] Full nested normal/race/integration/race-integration/vet/build/`make verify` passes.
+- [x] Default lint remains exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`, zero differential.
+- [x] Root `make verify`, module boundary, diff check, and root `go list ./...` pass.
+- [x] Generated binaries removed; planning JSON and worktree hygiene pass.
 - [ ] Fresh read-only GPT-5.6 Sol/high review of `7432f0a5...HEAD` has no unresolved findings.
 - [ ] Normal push produces exact local/remote equality and clean tree.
 - [ ] Fresh PR #456 checks all pass; PR remains draft.
