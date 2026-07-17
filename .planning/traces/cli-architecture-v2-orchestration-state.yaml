@@ -19,11 +19,11 @@ orchestrator:
   status: running
 ready_queue:
   - number: 423
-    status: worker_ready
+    status: in_progress
     dependencies: [422, 405]
     write_scope: "perf Cobra namespace node/handler/tests/parity only"
-    decision: next_dispatch_candidate
-    reason: "#405 is provisionally integrated at 087ec03c; #423 is next serialized Phase 9 namespace owner before #410 telemetry spans."
+    decision: spawned
+    reason: "Dispatched in isolated worktree ../wt-423-perf-native-cobra from parent head 3f92f8ef; #410 remains serialized behind it."
   - number: 410
     status: worker_ready
     dependencies: [402, 404, 405]
@@ -171,6 +171,10 @@ spawn_decisions:
     decision: next_dispatch_candidate
     issue_numbers: [423]
     reason: "Queue rebuilt after #405 integration: #423 perf namespace is the next serialized Phase 9 command before #410 telemetry."
+  - timestamp: 2026-07-17T18:49:42Z
+    decision: spawned
+    issue_numbers: [423]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-423-perf-native-cobra from parent head 3f92f8ef44bc39fe104f3f11c3eac324b6f222bb."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -424,14 +428,14 @@ subissues:
     automated_review: {primary_route: human, status: blocked, head_sha: af785a371e156dbc19d334798c101fffa1365f60, reviewed_range: "5474d0f4..5680debb", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Adversarial query/SQL-safety review clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/452"}
   - number: 423
     url: https://github.com/polymetrics-ai/cli/issues/423
-    branch: pending
+    branch: refactor/423-perf-native-cobra
     pr_url: ""
-    worker: unassigned
-    status: worker_ready
+    worker: pm-gsd-worker
+    status: in_progress
     write_scope: "perf Cobra namespace node/handler/tests/parity only"
-    worker_directory: ""
-    verification: not_run_write_scope_collision
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Deferred behind #405 central CLI ownership.", disposition_url: ""}
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-423-perf-native-cobra
+    verification: in_progress
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched after #405; stacked PR/review pending.", disposition_url: ""}
   - number: 453
     url: https://github.com/polymetrics-ai/cli/issues/453
     branch: fix/453-reverse-smoke-preview
