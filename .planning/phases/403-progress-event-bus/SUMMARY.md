@@ -1,6 +1,6 @@
 # SUMMARY — Issue 403 progress event bus
 
-Status: PR #451 second targeted review-fix complete locally; strict full-race remains pending with parent orchestrator because accepted production fixes invalidate prior full-race evidence.
+Status: PR #451 finalization complete. Coordinator strict full-race passed on production head `f16207974cc25f6df111fcd2a99c6acec41f3c44`; requested local gates passed; `verificationPassed=true` is valid after final gates. Later commit(s) are artifacts-only.
 
 ## Second targeted review findings accepted and fixed
 
@@ -22,19 +22,34 @@ Status: PR #451 second targeted review-fix complete locally; strict full-race re
 
 ## Verification
 
-Passed locally on second review-fix head:
+Strict full-race passed externally on production head `f16207974cc25f6df111fcd2a99c6acec41f3c44`:
 
-- `gofmt -w internal/events` — pass, no output
-- `go test -race ./internal/events/... -count=1` — `ok ... 1.279s`
+```text
+go test -race ./... -count=1 -timeout 120m
+PASS
+internal/cli 1842.794s
+internal/connectors/certify 3802.054s
+internal/events 2.665s
+internal/flow 2.590s
+internal/worker 1.611s
+real 3809.60
+user 6223.47
+sys 77.80
+```
+
+Final local gates passed after the strict race:
+
+- `gofmt -w cmd internal` — pass; no `cmd/**` or `internal/**` diff
 - `go vet ./...` — pass, no output
-- `go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` — pass (`certify 339.825s`)
+- `go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` — pass (`events 0.604s`; `flow 0.793s`; `app 17.306s`; `certify 335.483s`; `worker 0.534s`)
 - `go build ./cmd/pm` — pass, no output
-- `make verify` — pass; `smoke ok`; `0 issues`; `connectorgen validate: 547 connector(s) checked, 0 findings`
+- `make verify` — pass; `internal/cli 163.819s`; `internal/connectors/certify 336.906s`; `smoke ok`; `0 issues`; `connectorgen validate: 547 connector(s) checked, 0 findings`
 - `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass, no output
 - `git diff -- go.mod go.sum` — pass, no output
+- production/dependency diff check — pass; no `cmd/**`, `internal/**`, `go.mod`, or `go.sum` diff after final gates
 
 ## Pending
 
-- `go test -race ./... -count=1 -timeout 120m`: **pending parent orchestrator** on final production head. Prior pass at `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61` is invalidated; do not claim it covers `c9813a788d2bc0ccc29e79920ce6e5e8084e8a8e` or later.
 - CLI parity: N/A, no CLI command/flag/help/docs/website surface changed; `--progress ndjson` remains #405.
-- No Claude/Copilot requested per review-fix instruction.
+- No Claude/Copilot requested per finalization instruction.
+- Parent PR merge to `main` remains human-gated.

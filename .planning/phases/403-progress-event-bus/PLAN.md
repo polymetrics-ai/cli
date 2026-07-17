@@ -3,8 +3,10 @@
 Sub-issue: https://github.com/polymetrics-ai/cli/issues/403
 Parent: https://github.com/polymetrics-ai/cli/issues/397 / PR #438
 Branch: `feat/403-progress-event-bus`
-Base parent head: `e5ee4075`
-Previous coordinator-confirmed race head: `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61` (invalidated by PR #451 review-fix production changes; strict full-race rerun pending with parent orchestrator)
+Original base parent head: `e5ee4075`
+Current parent head: `f12d573b6415aed2c47cb3fd346c564d3b752a60` (includes parent #421 and parent ledger checkpoint)
+Production race head: `f16207974cc25f6df111fcd2a99c6acec41f3c44` (coordinator external PR-head source after rebase onto current parent; strict full-race passed)
+Post-race artifact policy: commits after `f16207974cc25f6df111fcd2a99c6acec41f3c44` may update issue-local artifacts/PR body only; no production self-SHA chase.
 Mode: bounded mutating worker in isolated cwd.
 
 ## Required reading complete
@@ -152,9 +154,8 @@ PR #451 review findings accepted:
    then progress ordering.
 3. Race evidence trace: production fixes invalidate the previous strict race evidence at
    `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61` and current head `e5404809fc66296f6d02e243b09b431dade921fb`.
-   `RUN-STATE.json` now records `verificationPassed=false`; strict full-race rerun is pending with
-   the parent orchestrator after final production head. This worker will not rerun the 65-minute full
-   race gate.
+   At review-fix time `RUN-STATE.json` recorded `verificationPassed=false`; this is superseded by
+   the coordinator strict full-race pass at production head `f16207974cc25f6df111fcd2a99c6acec41f3c44` below.
 4. Residual event sequence gaps: add focused terminal/error/skip/cancel tests only where needed to
    support issue #403 acceptance without broad fixture churn.
 
@@ -166,7 +167,7 @@ Review-fix TDD slices:
    event, certify skip/error terminal paths, and worker successful terminal path if gaps are present.
 3. Implement minimal events package fixes, keeping dependency-free stdlib + `internal/safety` only.
 4. Re-run the requested focused race/non-race gates and update this phase's TDD/verification
-   artifacts and PR body with accepted finding dispositions and pending strict full-race status.
+   artifacts and PR body with accepted finding dispositions and then-pending strict full-race status.
 
 Review-fix result:
 
@@ -174,7 +175,7 @@ Review-fix result:
 - Focused flow/app/certify/worker sequence tests passed under `-race`.
 - `go vet ./...`, focused non-race package tests, `go build ./cmd/pm`, `make verify`, diff-check,
   dependency inspection, and go.mod/go.sum check passed.
-- Strict full-race remains pending parent orchestrator rerun; `verificationPassed=false` by design.
+- Strict full-race was pending parent orchestrator rerun at review-fix handoff; superseded by final PR-head pass at `f16207974cc25f6df111fcd2a99c6acec41f3c44`.
 
 ## Second targeted review-fix plan — 2026-07-17
 
@@ -203,15 +204,51 @@ Second review-fix TDD slices:
    closure are deterministic.
 3. Narrow `Multi` docs/test names/artifacts/PR body to synchronous fanout plus bounded-`Chan`
    finite behavior; no asynchronous fanout.
-4. Run requested local gates, keep strict full-race pending/`verificationPassed=false` because
-   production changed.
+4. Run requested local gates; strict full-race was pending at this step because production changed and is superseded by the final PR-head pass below.
 
 Second review-fix result:
 
 - Red regression captured: `go test ./internal/events/... -run TestChanCloseWaitsForInFlightEventAccounting -count=1` failed with `DropStats() after Close = {Progress:1 Lifecycle:0}, want {Progress:1 Lifecycle:1}`.
 - `Chan` now has a runner `stopped` acknowledgment; `Close` waits for `out` closure and in-flight drop accounting. Regression green asserts exact `{Progress:1 Lifecycle:1}` for stalled/no-consumer in-flight close.
 - `Multi` contract narrowed: synchronous fanout; bounded `Chan` finite, arbitrary custom/writer sinks must be finite or context-aware.
-- Requested local gates and `make verify` passed; strict full race remains pending parent orchestrator rerun; `verificationPassed=false` by design.
+- Requested local gates and `make verify` passed; strict full race was pending until the coordinator's final PR-head rerun below.
+
+## Final PR-head finalization plan — 2026-07-17
+
+Task: finalize PR #451 / issue #403 after coordinator rebased `feat/403-progress-event-bus` onto current parent `f12d573b6415aed2c47cb3fd346c564d3b752a60` and passed strict race on production head `f16207974cc25f6df111fcd2a99c6acec41f3c44`.
+
+External strict race evidence source: coordinator PR-head run, not this worker's self-SHA chase.
+
+```text
+go test -race ./... -count=1 -timeout 120m
+PASS
+internal/cli 1842.794s
+internal/connectors/certify 3802.054s
+internal/events 2.665s
+internal/flow 2.590s
+internal/worker 1.611s
+real 3809.60
+user 6223.47
+sys 77.80
+```
+
+Finalization slice:
+
+1. Run `gofmt -w cmd internal` and stop if it changes `cmd/**` or `internal/**`.
+2. Run requested local gates: `go vet ./...`, focused package tests, `go build ./cmd/pm`, `make verify`, diff-check, and go.mod/go.sum check.
+3. Set `verificationPassed=true` only after the external strict race plus all requested local gates pass.
+4. Commit/push issue-local artifact updates only; production head for race remains `f16207974cc25f6df111fcd2a99c6acec41f3c44`.
+
+Finalization result:
+
+- `gofmt -w cmd internal` passed and left no `cmd/**` or `internal/**` diff.
+- `go vet ./...` passed with no output.
+- `go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` passed: `events 0.604s`; `flow 0.793s`; `app 17.306s`; `certify 335.483s`; `worker 0.534s`.
+- `go build ./cmd/pm` passed with no output.
+- `make verify` passed: `go test -timeout 20m ./...` passed (`internal/cli 163.819s`, `internal/connectors/certify 336.906s`); `smoke ok`; `0 issues`; `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` passed with no output.
+- `git diff -- go.mod go.sum` passed with no output.
+- `RUN-STATE.json` may now record `verificationPassed=true`; any later commit is artifacts-only.
 
 ## Verification plan
 

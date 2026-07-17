@@ -65,7 +65,7 @@ Fallback: `.pi/prompts/pm-gsd-loop.md` loaded and executed inline/manual; decisi
 
 - HIGH Chan backpressure/close semantics accepted: queue must stay within capacity; lifecycle delivery under full lifecycle queues must bounded-wait with context/close handling and explicit drop accounting; Close uses explicit accounted close-drop semantics; Multi must not block indefinitely on Chan.
 - MEDIUM Throttle terminal ordering accepted: latest pending progress must flush before completed/failed/skipped terminal lifecycle events; terminal remains last.
-- Race evidence accepted: prior strict full-race pass is invalidated by production fixes. `verificationPassed=false` until parent orchestrator reruns strict full race on final production head.
+- Race evidence accepted: prior strict full-race pass is invalidated by production fixes. Superseding coordinator PR-head strict race passed on production head `f16207974cc25f6df111fcd2a99c6acec41f3c44`; `verificationPassed=true` only after final local gates.
 - Residual sequence gaps accepted for focused tests only; no broad fixture churn.
 
 ## Second targeted review-fix accepted findings
@@ -112,6 +112,39 @@ runner, waits for `stopped`; the runner accounts any event removed from the queu
 Multi contract correction: `Multi` remains synchronous. The finite fanout test is explicitly scoped
 as `TestMultiWithBoundedChanDoesNotBlockIndefinitelyWhenChanLifecycleQueueStalls`; arbitrary custom
 or writer sinks must be finite or observe context cancellation.
+
+## Final PR-head verification — 2026-07-17
+
+Production head: `f16207974cc25f6df111fcd2a99c6acec41f3c44` after coordinator rebase onto parent `f12d573b6415aed2c47cb3fd346c564d3b752a60`.
+
+Strict race evidence source: external coordinator PR-head run on production head; not self-SHA chase.
+
+```text
+go test -race ./... -count=1 -timeout 120m
+PASS
+internal/cli 1842.794s
+internal/connectors/certify 3802.054s
+internal/events 2.665s
+internal/flow 2.590s
+internal/worker 1.611s
+real 3809.60
+user 6223.47
+sys 77.80
+```
+
+Final local gate evidence captured after the strict race passed:
+
+- `gofmt -w cmd internal` — pass; no `cmd/**` or `internal/**` diff.
+- `go vet ./...` — pass; no output.
+- `go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` — pass: `events 0.604s`; `flow 0.793s`; `app 17.306s`; `certify 335.483s`; `worker 0.534s`.
+- `go build ./cmd/pm` — pass; no output.
+- `make verify` — pass: `go test -timeout 20m ./...` passed (`internal/cli 163.819s`, `internal/connectors/certify 336.906s`); `smoke ok`; `0 issues`; `connectorgen validate: 547 connector(s) checked, 0 findings`.
+- `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass; no output.
+- `git diff -- go.mod go.sum` — pass; no output.
+
+No red test is required for this finalization slice because it is artifacts-only after reviewed production code; the behavior-changing production head is `f16207974cc25f6df111fcd2a99c6acec41f3c44` and had strict race coverage before artifact updates.
+
+`verificationPassed=true` is valid only after this section's external race plus final local gates.
 
 ## Red test capture rule
 
