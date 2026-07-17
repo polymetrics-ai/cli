@@ -19,11 +19,11 @@ orchestrator:
   status: running
 ready_queue:
   - number: 405
-    status: worker_ready
+    status: in_progress
     dependencies: [403, 404]
     write_scope: "CLI run options, global flags, and internal/ui styles foundation"
-    decision: next_dispatch_candidate
-    reason: "#404 is provisionally integrated at 30de4977; #405 now leads because it owns central CLI/app wiring before #423 and before #410 telemetry spans."
+    decision: spawned
+    reason: "Dispatched in isolated worktree ../wt-405-tty-ndjson-progress from parent head 7910d529 after #404 integration; #423/#410 remain serialized behind it."
   - number: 423
     status: worker_ready
     dependencies: [422]
@@ -165,6 +165,10 @@ spawn_decisions:
     decision: next_dispatch_candidate
     issue_numbers: [405]
     reason: "Queue rebuilt after #404 integration: #405 now owns central CLI/global options before #423 perf namespace and #410 telemetry spans."
+  - timestamp: 2026-07-17T15:37:34Z
+    decision: spawned
+    issue_numbers: [405]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-405-tty-ndjson-progress from parent head 7910d5293372452f9eb014efbac42c0c5260f5ff."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -238,14 +242,14 @@ subissues:
     automated_review: {primary_route: human, status: blocked, head_sha: 06ed082ca8fd34c1b74696d23f358c154cf4e55e, reviewed_range: "20475ddf..30de4977", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled; Copilot quota exhausted; second-review and final residual findings fixed; final pm-reviewer and security-auditor sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/455"}
   - number: 405
     url: https://github.com/polymetrics-ai/cli/issues/405
-    branch: pending
+    branch: feat/405-tty-ndjson-progress
     pr_url: ""
-    worker: unassigned
-    status: worker_ready
+    worker: pm-gsd-worker
+    status: in_progress
     write_scope: "CLI run options, global flags, and internal/ui styles foundation"
-    worker_directory: ""
-    verification: not_run_ready_after_404
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Ready after #404; dispatch next before #423/#410 due central CLI/app wiring collisions.", disposition_url: ""}
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-405-tty-ndjson-progress
+    verification: in_progress
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched after #404; stacked PR/review pending.", disposition_url: ""}
   - number: 406
     url: https://github.com/polymetrics-ai/cli/issues/406
     branch: refactor/406-catalog-native-cobra
