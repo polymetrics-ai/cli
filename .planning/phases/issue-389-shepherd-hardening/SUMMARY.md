@@ -146,3 +146,16 @@ Focused normal/race Git/validation/cmd tests, full nested normal tests, vet, bui
 Deletion integration is still blocked by the absent packaged official GSD loader, and exact-head review is
 coordinator-owned; `verificationPassed=false` remains intentional. The shared repository Git
 config/environment concern is declined as out of scope under the accepted same-UID host trust assumption.
+
+## Cleanup / UTF-8 residual follow-up
+
+Starting clean at `ec8c2dc523a2ce55c0d4a4bcbd9b5739df541fad`, this follow-up closes three adjacent
+residuals without amending or rebasing. Git process groups are explicitly cleaned after ordinary parent
+exit for both generic `run` and `hashGitObject`/`cat-file`, with parent context priority over output
+limits and output limits over cleanup errors. Validator artifact revalidation now runs as per-artifact
+work so descriptor roots/files close before the next bounded item. Git name-status status/path records
+must be valid UTF-8 before conversion, hashing, deletion sentinel evidence, or JSON proof construction.
+
+Focused normal and race gates for `./internal/git ./internal/validation ./cmd/shepherd` pass, and
+`git diff --check` passes. `verificationPassed=false` remains intentional pending coordinator-owned
+integration and exact-head review gates.

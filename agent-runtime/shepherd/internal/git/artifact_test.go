@@ -105,7 +105,7 @@ func TestArtifactManifestOutOfScopeDeletionFailsClosed(t *testing.T) {
 }
 
 func TestArtifactManifestRejectsUnknownAndMalformedStatus(t *testing.T) {
-	for _, mode := range []string{"unknown-status", "malformed-status", "leading-terminator", "interior-terminator", "extra-terminator", "missing-final-terminator"} {
+	for _, mode := range []string{"unknown-status", "malformed-status", "leading-terminator", "interior-terminator", "extra-terminator", "missing-final-terminator", "invalid-utf8-status", "invalid-utf8-path", "invalid-utf8-deletion-path"} {
 		t.Run(mode, func(t *testing.T) {
 			root := t.TempDir()
 			installFakeGit(t, root, mode)
@@ -325,6 +325,16 @@ func fakeGitMain(mode string) {
 		for {
 			fmt.Print(strings.Repeat("o", 64*1024))
 		}
+	case "run-success-descendant":
+		child := exec.Command("/bin/sleep", "30")
+		if err := child.Start(); err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+			os.Exit(2)
+		}
+		if path := os.Getenv("SHEPHERD_GIT_CHILD_PID"); path != "" {
+			_ = os.WriteFile(path, []byte(strconv.Itoa(child.Process.Pid)), 0o600)
+		}
+		fmt.Print("ok")
 	case "env":
 		for _, entry := range os.Environ() {
 			fmt.Println(entry)
@@ -341,6 +351,12 @@ func fakeGitMain(mode string) {
 		_, _ = os.Stdout.Write([]byte{'A', 0, 'a', 'g', 'e', 'n', 't', '-', 'r', 'u', 'n', 't', 'i', 'm', 'e', '/', 's', 'h', 'e', 'p', 'h', 'e', 'r', 'd', '/', 'x', 0, 0})
 	case "missing-final-terminator":
 		_, _ = os.Stdout.Write([]byte{'A', 0, 'a', 'g', 'e', 'n', 't', '-', 'r', 'u', 'n', 't', 'i', 'm', 'e', '/', 's', 'h', 'e', 'p', 'h', 'e', 'r', 'd', '/', 'x'})
+	case "invalid-utf8-status":
+		_, _ = os.Stdout.Write([]byte{0xff, 0, 'a', 'g', 'e', 'n', 't', '-', 'r', 'u', 'n', 't', 'i', 'm', 'e', '/', 's', 'h', 'e', 'p', 'h', 'e', 'r', 'd', '/', 'x', 0})
+	case "invalid-utf8-path":
+		_, _ = os.Stdout.Write([]byte{'A', 0, 'a', 'g', 'e', 'n', 't', '-', 'r', 'u', 'n', 't', 'i', 'm', 'e', '/', 's', 'h', 'e', 'p', 'h', 'e', 'r', 'd', '/', 0xff, 0})
+	case "invalid-utf8-deletion-path":
+		_, _ = os.Stdout.Write([]byte{'D', 0, 'a', 'g', 'e', 'n', 't', '-', 'r', 'u', 'n', 't', 'i', 'm', 'e', '/', 's', 'h', 'e', 'p', 'h', 'e', 'r', 'd', '/', 0xff, 0})
 	case "129-records":
 		if isCatBlob {
 			if marker := os.Getenv("SHEPHERD_GIT_CATFILE_MARKER"); marker != "" {
@@ -410,6 +426,23 @@ func fakeGitMain(mode string) {
 			for {
 				_, _ = os.Stdout.Write(bytes.Repeat([]byte("x"), 64*1024))
 			}
+		}
+	case "cat-success-descendant":
+		if isCatSize {
+			fmt.Println(1)
+			return
+		}
+		if isCatBlob {
+			child := exec.Command("/bin/sleep", "30")
+			if err := child.Start(); err != nil {
+				_, _ = fmt.Fprintln(os.Stderr, err)
+				os.Exit(2)
+			}
+			if path := os.Getenv("SHEPHERD_GIT_CHILD_PID"); path != "" {
+				_ = os.WriteFile(path, []byte(strconv.Itoa(child.Process.Pid)), 0o600)
+			}
+			fmt.Print("x")
+			return
 		}
 	case "git-failure":
 		_, _ = fmt.Fprint(os.Stderr, "\x1b[31mfatal: no object\x00\n")

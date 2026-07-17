@@ -680,6 +680,53 @@ cd agent-runtime/shepherd && go build ./cmd/shepherd && rm -f shepherd && git di
 # PASS
 ```
 
+## Post-Slice-G cleanup/UTF-8 residual follow-up — RED
+
+Start head: `ec8c2dc523a2ce55c0d4a4bcbd9b5739df541fad` with a clean worktree. Current phase artifacts/diff were read before test edits; deletion integration remains coordinator/loader-owned.
+
+Confirmed adjacent RED tests added before production edits:
+
+- `internal/git`: invalid UTF-8 in `--name-status -z` status/path records is rejected before string conversion, including deletion records.
+- `internal/git` Unix: successful fake Git parents that leave same-process-group sleeping descendants are synchronously cleaned after ordinary `run` and `hashGitObject` parent exit.
+- `internal/validation` Unix: artifact verification closes each descriptor root/file before the next artifact under a bounded 128-item set and low file-descriptor limit.
+
+Exact RED evidence captured before production edits:
+
+```bash
+cd agent-runtime/shepherd && go test ./internal/git -run 'TestArtifactManifestRejectsUnknownAndMalformedStatus|TestRunCleansProcessGroupDescendantsAfterSuccessfulParentExit|TestHashGitObjectCleansProcessGroupDescendantsAfterSuccessfulParentExit' -count=1
+```
+FAIL:
+- `TestArtifactManifestRejectsUnknownAndMalformedStatus/invalid-utf8-deletion-path`: `status err=<nil>` and deletion artifact path converted to `�`.
+- `TestRunCleansProcessGroupDescendantsAfterSuccessfulParentExit`: sleeping descendant survived process-group cleanup.
+- `TestHashGitObjectCleansProcessGroupDescendantsAfterSuccessfulParentExit`: sleeping descendant survived process-group cleanup.
+
+```bash
+cd agent-runtime/shepherd && go test ./internal/validation -run TestVerifyArtifactHashesClosesArtifactRootPerItem -count=1
+```
+FAIL: helper exited with `verify retained roots: openat agent-runtime: too many open files`.
+
+GREEN/refactor evidence:
+
+- `run` and `hashGitObject` now explicitly call `cleanupGitProcessTree` after `Run`/`Wait`, while `Cmd.Cancel` only signals the process group; parent-context errors retain priority over output-limit errors, and output-limit errors retain priority over cleanup errors.
+- Unix process cleanup now synchronously kills and polls the Git process group after parent exit, covering both generic Git commands and `cat-file blob` hashing.
+- Git name-status parsing rejects invalid UTF-8 status/path records before string conversion, scope checks, deletion sentinel construction, object hashing, or JSON evidence conversion.
+- Validator artifact verification is extracted into per-artifact verification so each `os.Root`/file closes before the next bounded artifact, with close errors propagated.
+
+GREEN commands:
+
+```bash
+cd agent-runtime/shepherd && go test ./internal/git -run 'TestArtifactManifestRejectsUnknownAndMalformedStatus|TestRunCleansProcessGroupDescendantsAfterSuccessfulParentExit|TestHashGitObjectCleansProcessGroupDescendantsAfterSuccessfulParentExit' -count=1
+# PASS ok github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git 0.525s
+cd agent-runtime/shepherd && go test ./internal/validation -run TestVerifyArtifactHashesClosesArtifactRootPerItem -count=1
+# PASS ok github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/validation 0.422s
+cd agent-runtime/shepherd && go test ./internal/git ./internal/validation ./cmd/shepherd -count=1
+# PASS internal/git 1.310s, internal/validation 5.546s, cmd/shepherd 44.649s
+cd agent-runtime/shepherd && go test -race ./internal/git ./internal/validation ./cmd/shepherd -count=1
+# PASS internal/git 26.482s, internal/validation 102.176s, cmd/shepherd 255.966s
+git diff --check
+# PASS
+```
+
 Blocked integration gate remains environment-owned:
 
 ```bash

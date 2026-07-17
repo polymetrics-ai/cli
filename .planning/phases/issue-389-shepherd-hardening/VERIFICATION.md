@@ -425,3 +425,21 @@ go list ./...
 Out-of-scope disposition: shared repository Git config/environment trust remains declined for this
 bounded fix under the accepted same-UID host trust assumption. No environment allowlist/config policy was changed.
 `verificationPassed=false` remains correct.
+
+### Post-Slice-G cleanup / UTF-8 residual follow-up
+
+- [x] Start SHA verified clean at `ec8c2dc523a2ce55c0d4a4bcbd9b5739df541fad`.
+- [x] RED captured before production edits for invalid UTF-8 name-status deletion records, ordinary-exit
+      Git descendant cleanup in `run`, ordinary-exit `cat-file` descendant cleanup in `hashGitObject`,
+      and per-artifact validator root/file closure under the 128-item bound.
+- [x] `run` and `hashGitObject` explicitly clean Git process groups after `Run`/`Wait` with parent
+      context priority before output-limit classification and cleanup errors below both.
+- [x] Validator artifact verification closes each per-artifact `os.Root`/file before verifying the next
+      item and preserves the 128-artifact limit.
+- [x] Git name-status status/path records reject invalid UTF-8 before conversion, hashing, JSON evidence,
+      and deletion sentinel construction.
+- [x] Focused normal: `go test ./internal/git ./internal/validation ./cmd/shepherd -count=1` PASS.
+- [x] Focused race: `go test -race ./internal/git ./internal/validation ./cmd/shepherd -count=1` PASS.
+- [x] Diff hygiene: `git diff --check` PASS.
+- [ ] Integration loader/deletion/process gates and exact-head GPT-5.6 Sol/high review remain
+      coordinator-owned; `verificationPassed=false` remains correct.

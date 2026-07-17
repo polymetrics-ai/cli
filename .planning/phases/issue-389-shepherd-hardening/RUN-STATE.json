@@ -4,9 +4,9 @@
   "base_head": "ee474811378edd604e1e86e413f0bcafeced452b",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_g_exact_head_review_followup_focused_green",
+  "state": "slice_g_cleanup_utf8_review_followup_focused_green",
   "verificationPassed": false,
-  "current_slice": "post_slice_g_bounded_git_and_descriptor_root_followup",
+  "current_slice": "post_slice_g_git_cleanup_validator_utf8_followup",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "authorized_review_fix": {
     "authorization": "Production changes are limited to the two confirmed exact-head findings and minimum schema/test propagation.",
@@ -292,6 +292,11 @@
       "cycle": "cycle-37-slice-g-exact-head-review-followup",
       "decision": "local_critical_path",
       "reason": "Confirmed adjacent gaps in bounded Git parsing, hashGitObject object limits, process-group cleanup, descriptor-relative validator file access, and deletion-sentinel source-of-truth share one sequential trust boundary; RED was captured before production edits and focused normal/race gates now pass. Git config/environment policy is declined as out-of-scope under the documented same-UID host trust assumption."
+    },
+    {
+      "cycle": "cycle-38-slice-g-cleanup-utf8-followup",
+      "decision": "local_critical_path",
+      "reason": "Authorized exact-head residual cleanup, validator descriptor lifetime, and Git name-status UTF-8 parsing share one adjacent trust boundary; RED was captured before production edits and focused normal/race gates now pass. verificationPassed remains false for coordinator-owned integration/review gates."
     }
   ],
   "slice_b_checkpoint": {
@@ -300,10 +305,10 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Coordinator provisions the packaged official GSD loader and runs deletion integration tests, including normal and race where available",
-    "Run fresh exact-head GPT-5.6 Sol/high correctness/security review over the new follow-up commit range",
+    "Coordinator provisions the packaged official GSD loader and runs deletion/process integration tests, including normal and race where available",
+    "Run fresh exact-head GPT-5.6 Sol/high correctness/security review over the new cleanup/UTF-8 follow-up commit range",
     "Keep verificationPassed=false until coordinator-owned integration/review gates complete",
-    "After review passes, push only fix/389-shepherd-proof-recovery, open the draft stacked PR, monitor CI, and stop"
+    "After review passes, push only fix/389-shepherd-proof-recovery, open/update the draft stacked PR, monitor CI, and stop"
   ],
   "blocked": [
     "draft stacked PR creation until replacement exact-head review passes",

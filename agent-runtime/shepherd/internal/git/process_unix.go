@@ -12,10 +12,10 @@ import (
 func configureGitProcessTree(cmd *exec.Cmd) {
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 	cmd.WaitDelay = 5 * time.Second
-	cmd.Cancel = func() error { return cleanupGitProcessTree(cmd) }
+	cmd.Cancel = func() error { return signalGitProcessTree(cmd) }
 }
 
-func cleanupGitProcessTree(cmd *exec.Cmd) error {
+func signalGitProcessTree(cmd *exec.Cmd) error {
 	if cmd.Process == nil {
 		return nil
 	}
@@ -24,4 +24,26 @@ func cleanupGitProcessTree(cmd *exec.Cmd) error {
 		return nil
 	}
 	return err
+}
+
+func cleanupGitProcessTree(cmd *exec.Cmd) error {
+	if err := signalGitProcessTree(cmd); err != nil {
+		return err
+	}
+	if cmd.Process == nil {
+		return nil
+	}
+	processGroup := -cmd.Process.Pid
+	deadline := time.Now().Add(cmd.WaitDelay)
+	for time.Now().Before(deadline) {
+		probeErr := syscall.Kill(processGroup, 0)
+		if errors.Is(probeErr, syscall.ESRCH) {
+			return nil
+		}
+		if probeErr != nil {
+			return probeErr
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	return errors.New("timed out cleaning git process group")
 }

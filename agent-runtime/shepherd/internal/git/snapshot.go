@@ -16,6 +16,7 @@ import (
 	"strings"
 	"sync"
 	"unicode"
+	"unicode/utf8"
 )
 
 var ErrWriteScopeBreach = errors.New("write_scope_breach")
@@ -174,7 +175,7 @@ func parseNameStatus(raw []byte, scopes []string) ([]nameStatusEntry, error) {
 	}
 	entries := make([]nameStatusEntry, 0, len(records)/2)
 	for i := 0; i < len(records); i += 2 {
-		if len(records[i]) == 0 || len(records[i+1]) == 0 {
+		if len(records[i]) == 0 || len(records[i+1]) == 0 || !utf8.Valid(records[i]) || !utf8.Valid(records[i+1]) {
 			return nil, errors.New("git returned malformed artifact status")
 		}
 		status := string(records[i])
@@ -403,6 +404,7 @@ func hashGitObject(ctx context.Context, root, object string) (string, error) {
 	digest := sha256.New()
 	written, copyErr := copyHashBounded(digest, stdout, declared, func() { cancel(ErrOutputLimit) })
 	waitErr := cmd.Wait()
+	cleanupErr := cleanupGitProcessTree(cmd)
 	if ctxErr := ctx.Err(); ctxErr != nil {
 		return "", ctxErr
 	}
@@ -414,6 +416,9 @@ func hashGitObject(ctx context.Context, root, object string) (string, error) {
 	}
 	if waitErr != nil {
 		return "", fmt.Errorf("git cat-file failed: %w: %s", waitErr, sanitizeDiagnostic(stderr.String()))
+	}
+	if cleanupErr != nil {
+		return "", fmt.Errorf("cleanup git cat-file process tree: %w", cleanupErr)
 	}
 	if written != declared {
 		return "", errors.New("git cat-file streamed byte count does not match declared size")
@@ -469,6 +474,7 @@ func run(ctx context.Context, root string, args ...string) ([]byte, error) {
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
 	err := cmd.Run()
+	cleanupErr := cleanupGitProcessTree(cmd)
 	if ctxErr := ctx.Err(); ctxErr != nil {
 		return nil, ctxErr
 	}
@@ -477,6 +483,9 @@ func run(ctx context.Context, root string, args ...string) ([]byte, error) {
 	}
 	if err != nil {
 		return nil, fmt.Errorf("git %s failed: %w: %s", args[0], err, sanitizeDiagnostic(stderr.String()))
+	}
+	if cleanupErr != nil {
+		return nil, fmt.Errorf("cleanup git %s process tree: %w", args[0], cleanupErr)
 	}
 	return stdout.Bytes(), nil
 }

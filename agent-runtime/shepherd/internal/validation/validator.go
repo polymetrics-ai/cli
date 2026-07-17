@@ -716,53 +716,60 @@ func verifyArtifactHashes(workDir string, artifacts []ArtifactHash) error {
 		return errors.New("validation artifact set is empty or exceeds the governed limit")
 	}
 	for _, artifact := range artifacts {
-		parent, leaf, parentMissing, err := openStableArtifactParent(workDir, artifact.Path)
-		if err != nil {
+		if err := verifyArtifactHash(workDir, artifact); err != nil {
 			return err
 		}
-		if parent != nil {
-			defer func(root *os.Root) { _ = root.Close() }(parent)
-		}
-		if artifact.Deleted {
-			if artifact.Hash != DeletionSentinelHash {
-				return errors.New("validation deleted artifact must use the deletion sentinel")
-			}
-			if parentMissing {
-				continue
-			}
-			if _, err := parent.Lstat(leaf); errors.Is(err, os.ErrNotExist) {
-				continue
-			} else if err != nil {
-				return err
-			}
-			return errors.New("validation deleted artifact exists in the candidate worktree")
-		}
-		if artifact.Hash == DeletionSentinelHash {
-			return errors.New("validation present artifact must not use the deletion sentinel")
+	}
+	return nil
+}
+
+func verifyArtifactHash(workDir string, artifact ArtifactHash) (err error) {
+	parent, leaf, parentMissing, err := openStableArtifactParent(workDir, artifact.Path)
+	if err != nil {
+		return err
+	}
+	if parent != nil {
+		defer func() { err = errors.Join(err, parent.Close()) }()
+	}
+	if artifact.Deleted {
+		if artifact.Hash != DeletionSentinelHash {
+			return errors.New("validation deleted artifact must use the deletion sentinel")
 		}
 		if parentMissing {
-			return errors.New("validation present artifact is missing")
+			return nil
 		}
-		file, info, err := openStableArtifactFile(parent, leaf)
-		if err != nil {
+		if _, err := parent.Lstat(leaf); errors.Is(err, os.ErrNotExist) {
+			return nil
+		} else if err != nil {
 			return err
 		}
-		digest := sha256.New()
-		written, copyErr := io.Copy(digest, io.LimitReader(file, 8*1024*1024+1))
-		closeErr := file.Close()
-		if copyErr != nil || closeErr != nil {
-			return errors.Join(copyErr, closeErr)
-		}
-		if !info.Mode().IsRegular() {
-			return errors.New("validation present artifact must be a regular non-symlink file")
-		}
-		if written > 8*1024*1024 {
-			return errors.New("validation artifact exceeds the governed size limit")
-		}
-		observed := "sha256:" + hex.EncodeToString(digest.Sum(nil))
-		if observed != artifact.Hash {
-			return errors.New("validation artifact hash does not match protected evidence")
-		}
+		return errors.New("validation deleted artifact exists in the candidate worktree")
+	}
+	if artifact.Hash == DeletionSentinelHash {
+		return errors.New("validation present artifact must not use the deletion sentinel")
+	}
+	if parentMissing {
+		return errors.New("validation present artifact is missing")
+	}
+	file, info, err := openStableArtifactFile(parent, leaf)
+	if err != nil {
+		return err
+	}
+	digest := sha256.New()
+	written, copyErr := io.Copy(digest, io.LimitReader(file, 8*1024*1024+1))
+	closeErr := file.Close()
+	if copyErr != nil || closeErr != nil {
+		return errors.Join(copyErr, closeErr)
+	}
+	if !info.Mode().IsRegular() {
+		return errors.New("validation present artifact must be a regular non-symlink file")
+	}
+	if written > 8*1024*1024 {
+		return errors.New("validation artifact exceeds the governed size limit")
+	}
+	observed := "sha256:" + hex.EncodeToString(digest.Sum(nil))
+	if observed != artifact.Hash {
+		return errors.New("validation artifact hash does not match protected evidence")
 	}
 	return nil
 }
