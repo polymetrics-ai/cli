@@ -185,12 +185,16 @@ func (n *NDJSON) Emit(_ context.Context, event Event) {
 
 var _ Emitter = (*NDJSON)(nil)
 
-// Multi emits every event to each configured sink in order.
+// Multi emits every event to each configured sink synchronously in order.
+// Multi does not create goroutines or make arbitrary sinks finite; sinks that
+// can block must return on context cancellation or otherwise bound their work.
+// The built-in bounded Chan sink observes this contract for backpressure and
+// close paths.
 type Multi struct {
 	sinks []Emitter
 }
 
-// NewMulti returns a sink that fans out events to sinks.
+// NewMulti returns a synchronous fanout sink.
 func NewMulti(sinks ...Emitter) *Multi {
 	out := make([]Emitter, 0, len(sinks))
 	for _, sink := range sinks {

@@ -66,6 +66,16 @@ Downstream artifact: review-fix red tests, minimal events fix, focused sequence 
 
 Verification result: local focused gates and `make verify` passed. Strict full race (`go test -race ./... -count=1 -timeout 120m`) was not rerun by worker and remains pending with parent orchestrator for final production head; `RUN-STATE.json` records `verificationPassed=false`.
 
+## Second targeted review-fix snapshot — 2026-07-17
+
+Task: fix accepted PR #451 findings for issue #403 at starting head `c9813a788d2bc0ccc29e79920ce6e5e8084e8a8e`.
+
+Accepted findings: `Chan.Close` must wait for runner acknowledgment so in-flight blocked events are accounted before `Close` returns and `Events()` is closed deterministically; `Multi` contract claims must be narrowed to synchronous fanout with bounded `Chan` sinks only.
+
+Downstream artifact: red in-flight close regression, minimal `Chan` stopped acknowledgment, corrected Multi comments/tests/artifacts/PR body, requested local gates.
+
+Verification result: requested focused gates and `make verify` passed locally; strict full race remains parent-orchestrator pending because production changed.
+
 ## Adapter gap
 
 `programming-loop` is not in `.gsd/commands.json`; `scripts/gsd prompt programming-loop init --phase 403 --dry-run` returned `scripts/gsd: unknown GSD command: programming-loop`. Loaded `.pi/prompts/pm-gsd-loop.md` and running inline/manual universal loop.

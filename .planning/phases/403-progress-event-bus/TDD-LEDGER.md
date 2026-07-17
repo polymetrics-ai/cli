@@ -13,6 +13,11 @@
 - `golang-design-patterns` — small dependency-free sinks and lifecycle boundaries.
 - `golang-structs-interfaces` — small `Emitter` interface, typed `Event` struct.
 - `golang-error-handling` — wrapped errors, no swallowed setup failures.
+- `golang-lint` — `go vet`/quality-gate checks and race-safety review.
+- `golang-code-style` — minimal, clear concurrency edits.
+- `golang-documentation` — corrected sink contract comments and PR/artifact claims.
+- `golang-naming` — precise test/comment naming for bounded Chan vs synchronous Multi.
+- `golang-troubleshooting` — root-cause analysis for in-flight close nondeterminism.
 
 Stack implementation skill note: `.pi/skills/go-implementation/SKILL.md` was requested by worker
 instructions but is absent in this checkout (`ENOENT`); loaded `gsd-core` plus the required global
@@ -62,6 +67,51 @@ Fallback: `.pi/prompts/pm-gsd-loop.md` loaded and executed inline/manual; decisi
 - MEDIUM Throttle terminal ordering accepted: latest pending progress must flush before completed/failed/skipped terminal lifecycle events; terminal remains last.
 - Race evidence accepted: prior strict full-race pass is invalidated by production fixes. `verificationPassed=false` until parent orchestrator reruns strict full race on final production head.
 - Residual sequence gaps accepted for focused tests only; no broad fixture churn.
+
+## Second targeted review-fix accepted findings
+
+- MEDIUM Chan Close in-flight acknowledgment accepted: add red regression for a lifecycle event
+  removed from the queue and blocked on `Events()` with no consumer; `Close` must wait for runner
+  shutdown so immediate `DropStats()` and `Events()` closure are deterministic.
+- LOW Multi contract correction accepted: `Multi` remains synchronous; only bounded `Chan` sinks have
+  finite backpressure/close semantics. Custom sinks must be finite or honor context cancellation.
+
+Red command before production edits:
+
+```bash
+go test ./internal/events/... -run TestChanCloseWaitsForInFlightEventAccounting -count=1
+```
+
+Red evidence at starting head `c9813a788d2bc0ccc29e79920ce6e5e8084e8a8e`:
+
+```text
+--- FAIL: TestChanCloseWaitsForInFlightEventAccounting (0.00s)
+    events_test.go:194: DropStats() after Close = {Progress:1 Lifecycle:0}, want {Progress:1 Lifecycle:1}
+FAIL
+FAIL	polymetrics.ai/internal/events	0.382s
+FAIL
+```
+
+Green evidence:
+
+```bash
+gofmt -w internal/events
+go test ./internal/events/... -run TestChanCloseWaitsForInFlightEventAccounting -count=1
+```
+
+Result: `ok   polymetrics.ai/internal/events   0.430s`.
+
+Focused race evidence: `go test -race ./internal/events/... -count=1` passed with
+`ok   polymetrics.ai/internal/events   1.279s` on the final local gate rerun.
+
+Close semantics after fix: `Close` sets `closed`, accounts queued events, closes `done`, signals the
+runner, waits for `stopped`; the runner accounts any event removed from the queue and blocked on
+`out`, closes `Events()`, then closes `stopped`. The regression asserts exact drops
+`{Progress:1 Lifecycle:1}` for one queued progress event plus one in-flight lifecycle event.
+
+Multi contract correction: `Multi` remains synchronous. The finite fanout test is explicitly scoped
+as `TestMultiWithBoundedChanDoesNotBlockIndefinitelyWhenChanLifecycleQueueStalls`; arbitrary custom
+or writer sinks must be finite or observe context cancellation.
 
 ## Red test capture rule
 

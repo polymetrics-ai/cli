@@ -1,21 +1,18 @@
 # SUMMARY — Issue 403 progress event bus
 
-Status: PR #451 review-fix complete locally; strict full-race remains pending with parent orchestrator because accepted production fixes invalidate the prior full-race evidence.
+Status: PR #451 second targeted review-fix complete locally; strict full-race remains pending with parent orchestrator because accepted production fixes invalidate prior full-race evidence.
 
-## Review findings accepted and fixed
+## Second targeted review findings accepted and fixed
 
-- HIGH Chan backpressure/close semantics:
-  - internal queue remains within configured capacity;
-  - lifecycle insertion evicts/coalesces progress first;
-  - full-lifecycle stalls use bounded wait with context/close handling;
-  - `DropStats` accounts progress and lifecycle drops;
-  - `Close` is finite with explicit accounted close-drop semantics;
-  - `Multi` is no longer indefinitely stalled by a full/stalled `Chan` sink.
-- MEDIUM Throttle stale progress after terminal:
-  - pending progress flushes before completed/failed/skipped terminal lifecycle events;
-  - terminal lifecycle remains last.
-- Residual sequence gaps:
-  - added focused tests for flow skip, ETL failure terminal, certify skip/failure, and worker success paths.
+- MEDIUM `Chan.Close` in-flight acknowledgment:
+  - added regression forcing one lifecycle event removed from the queue and blocked on `Events()` with no consumer, plus one queued progress event;
+  - red: `DropStats() after Close = {Progress:1 Lifecycle:0}, want {Progress:1 Lifecycle:1}`;
+  - fixed with runner `stopped` acknowledgment: `Close` closes `done`, waits for runner to account in-flight drop, close `Events()`, then return;
+  - green asserts `Close` finite, `Events()` closed immediately after `Close`, exact `DropStats{Progress:1, Lifecycle:1}`.
+- LOW `Multi` contract correction:
+  - `Multi` remains synchronous and does not make arbitrary custom/writer sinks finite;
+  - comments/tests/artifacts/PR claim narrowed to bounded `Chan` sinks; blocking custom sinks must be finite or honor context cancellation;
+  - no goroutine-per-sink fanout added.
 
 ## Delivered earlier in issue #403
 
@@ -25,15 +22,12 @@ Status: PR #451 review-fix complete locally; strict full-race remains pending wi
 
 ## Verification
 
-Passed locally on review-fix head:
+Passed locally on second review-fix head:
 
-- `go test -race ./internal/events/... -count=1` — `ok ... 1.388s`
-- `go test -race ./internal/flow/... -run 'Test.*Emits' -count=1` — `ok ... 1.291s`
-- `go test -race ./internal/app/... -run 'Test.*Emits' -count=1` — `ok ... 29.128s`
-- `go test -race ./internal/connectors/certify/... -run 'TestRunBatchEmits' -count=1` — `ok ... 1.639s`
-- `go test -race ./internal/worker/... -run 'TestSubmitterEmits' -count=1` — `ok ... 1.331s`
+- `gofmt -w internal/events` — pass, no output
+- `go test -race ./internal/events/... -count=1` — `ok ... 1.279s`
 - `go vet ./...` — pass, no output
-- `go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` — pass (`certify 340.499s`)
+- `go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` — pass (`certify 339.825s`)
 - `go build ./cmd/pm` — pass, no output
 - `make verify` — pass; `smoke ok`; `0 issues`; `connectorgen validate: 547 connector(s) checked, 0 findings`
 - `git diff --check origin/feat/cli-architecture-v2...HEAD` — pass, no output
@@ -41,6 +35,6 @@ Passed locally on review-fix head:
 
 ## Pending
 
-- `go test -race ./... -count=1 -timeout 120m`: **pending parent orchestrator** on final production head. Prior pass at `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61` is invalidated; do not claim it covers `e5404809fc66296f6d02e243b09b431dade921fb` or later.
+- `go test -race ./... -count=1 -timeout 120m`: **pending parent orchestrator** on final production head. Prior pass at `2c2c16f850484ff5c4c8b99d065f4ef3361dbc61` is invalidated; do not claim it covers `c9813a788d2bc0ccc29e79920ce6e5e8084e8a8e` or later.
 - CLI parity: N/A, no CLI command/flag/help/docs/website surface changed; `--progress ndjson` remains #405.
 - No Claude/Copilot requested per review-fix instruction.

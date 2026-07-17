@@ -50,6 +50,11 @@ Routing source: `.agents/agentic-delivery/references/required-skills-routing.md`
 - `golang-design-patterns`
 - `golang-structs-interfaces`
 - `golang-error-handling`
+- `golang-lint`
+- `golang-code-style`
+- `golang-documentation`
+- `golang-naming`
+- `golang-troubleshooting`
 
 ## Scope
 
@@ -170,6 +175,43 @@ Review-fix result:
 - `go vet ./...`, focused non-race package tests, `go build ./cmd/pm`, `make verify`, diff-check,
   dependency inspection, and go.mod/go.sum check passed.
 - Strict full-race remains pending parent orchestrator rerun; `verificationPassed=false` by design.
+
+## Second targeted review-fix plan — 2026-07-17
+
+Starting head: `c9813a788d2bc0ccc29e79920ce6e5e8084e8a8e` on PR #451.
+
+Accepted findings:
+
+1. MEDIUM `Chan.Close` in-flight accounting: current close can return after closing `done` but
+   before the runner accounts an event already removed from the queue and blocked on `out`, so
+   immediate `DropStats()` and `Events()` closure are nondeterministic. Add a runner stopped/closed
+   acknowledgment. `Close` must stay finite with stalled/no consumer; runner must observe `done`,
+   account any in-flight drop exactly once, close `out`, then acknowledge.
+2. LOW `Multi` contract gap: `Multi` is synchronous and cannot make arbitrary custom or writer
+   sinks finite. Narrow comments, tests, artifacts, and PR claims to `Multi` with bounded `Chan`,
+   and document that blocking sinks must honor context/cancellation or otherwise be finite. Do not
+   add goroutine-per-sink fanout.
+
+Second review-fix TDD slices:
+
+1. Add failing `internal/events` regression that forces an in-flight lifecycle event blocked on
+   `out` with a queued progress event and no consumer; assert `Close` returns finite, `Events()` is
+   closed immediately after `Close`, and `DropStats()` is exactly one lifecycle plus one progress
+   drop.
+2. Implement minimal `Chan` runner acknowledgment/stopped channel; ensure `Close` waits for the
+   runner after closing `done`, without holding the mutex, so in-flight drop accounting and `out`
+   closure are deterministic.
+3. Narrow `Multi` docs/test names/artifacts/PR body to synchronous fanout plus bounded-`Chan`
+   finite behavior; no asynchronous fanout.
+4. Run requested local gates, keep strict full-race pending/`verificationPassed=false` because
+   production changed.
+
+Second review-fix result:
+
+- Red regression captured: `go test ./internal/events/... -run TestChanCloseWaitsForInFlightEventAccounting -count=1` failed with `DropStats() after Close = {Progress:1 Lifecycle:0}, want {Progress:1 Lifecycle:1}`.
+- `Chan` now has a runner `stopped` acknowledgment; `Close` waits for `out` closure and in-flight drop accounting. Regression green asserts exact `{Progress:1 Lifecycle:1}` for stalled/no-consumer in-flight close.
+- `Multi` contract narrowed: synchronous fanout; bounded `Chan` finite, arbitrary custom/writer sinks must be finite or context-aware.
+- Requested local gates and `make verify` passed; strict full race remains pending parent orchestrator rerun; `verificationPassed=false` by design.
 
 ## Verification plan
 

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"runtime"
 	"sync"
 	"testing"
 	"time"
@@ -165,7 +166,44 @@ func TestChanCloseAccountsQueuedEvents(t *testing.T) {
 	}
 }
 
-func TestMultiDoesNotBlockIndefinitelyWhenChanLifecycleQueueStalls(t *testing.T) {
+func TestChanCloseWaitsForInFlightEventAccounting(t *testing.T) {
+	previousProcs := runtime.GOMAXPROCS(1)
+	defer runtime.GOMAXPROCS(previousProcs)
+
+	sink := NewChan(2)
+	ctx := context.Background()
+
+	sink.Emit(ctx, Event{Kind: KindStarted, Scope: ScopeETL, RunID: "run-in-flight"})
+	sink.Emit(ctx, Event{Kind: KindProgress, Scope: ScopeETL, RunID: "run-in-flight"})
+	waitForQueueLen(t, sink, 1)
+
+	closed := make(chan struct{})
+	go func() {
+		sink.Close()
+		close(closed)
+	}()
+
+	select {
+	case <-closed:
+	case <-time.After(250 * time.Millisecond):
+		t.Fatal("Close blocked with in-flight event and stalled consumer")
+	}
+
+	want := DropStats{Progress: 1, Lifecycle: 1}
+	if got := sink.DropStats(); got != want {
+		t.Fatalf("DropStats() after Close = %+v, want %+v", got, want)
+	}
+	select {
+	case _, ok := <-sink.Events():
+		if ok {
+			t.Fatal("Events() yielded an event after Close; want closed channel")
+		}
+	default:
+		t.Fatal("Events() not closed immediately after Close")
+	}
+}
+
+func TestMultiWithBoundedChanDoesNotBlockIndefinitelyWhenChanLifecycleQueueStalls(t *testing.T) {
 	sink := NewChan(1)
 	defer sink.Close()
 	collector := NewCollector()
@@ -246,6 +284,24 @@ func TestThrottleFlushesPendingProgressBeforeTerminal(t *testing.T) {
 	if throttle.Dropped() == 0 {
 		t.Fatal("Dropped() = 0, want throttle coalescing accounting")
 	}
+}
+
+func waitForQueueLen(t *testing.T, sink *Chan, want int) {
+	t.Helper()
+	deadline := time.Now().Add(time.Second)
+	for time.Now().Before(deadline) {
+		sink.mu.Lock()
+		got := len(sink.queue)
+		sink.mu.Unlock()
+		if got == want {
+			return
+		}
+		time.Sleep(time.Millisecond)
+	}
+	sink.mu.Lock()
+	got := len(sink.queue)
+	sink.mu.Unlock()
+	t.Fatalf("queue length = %d, want %d", got, want)
 }
 
 func drainEvents(t *testing.T, ch <-chan Event, n int) []Event {

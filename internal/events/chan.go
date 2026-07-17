@@ -26,7 +26,8 @@ func (s DropStats) Total() uint64 {
 // The internal queue never exceeds the configured capacity. Progress events may
 // be coalesced or evicted first; lifecycle events use a bounded wait when the
 // queue is full and are explicitly counted in DropStats when not delivered.
-// Close is finite and uses accounted close-drop semantics for queued events.
+// Close is finite and waits for the runner to account any in-flight event,
+// close Events, and acknowledge shutdown.
 type Chan struct {
 	capacity int
 
@@ -40,6 +41,7 @@ type Chan struct {
 	out       chan Event
 	notify    chan struct{}
 	done      chan struct{}
+	stopped   chan struct{}
 	closeOnce sync.Once
 }
 
@@ -54,6 +56,7 @@ func NewChan(capacity int) *Chan {
 		out:           make(chan Event),
 		notify:        make(chan struct{}, 1),
 		done:          make(chan struct{}),
+		stopped:       make(chan struct{}),
 	}
 	go c.run()
 	return c
@@ -78,9 +81,9 @@ func (c *Chan) Dropped() uint64 {
 }
 
 // DropStats returns progress and lifecycle drops accounted by backpressure,
-// coalescing, or Close. Close is explicitly drop-accounting: queued events that
-// have not already been delivered on Events are counted and discarded so Close
-// remains finite even when consumers stall.
+// coalescing, or Close. Close is explicitly drop-accounting: queued and
+// in-flight events that have not already been delivered on Events are counted
+// and discarded so Close remains finite even when consumers stall.
 func (c *Chan) DropStats() DropStats {
 	if c == nil {
 		return DropStats{}
@@ -90,7 +93,7 @@ func (c *Chan) DropStats() DropStats {
 	return DropStats{Progress: c.droppedProgress, Lifecycle: c.droppedLifecycle}
 }
 
-// Close stops the sink and closes Events().
+// Close stops the sink, waits for in-flight drop accounting, and closes Events().
 func (c *Chan) Close() {
 	if c == nil {
 		return
@@ -105,6 +108,7 @@ func (c *Chan) Close() {
 		c.mu.Unlock()
 		close(c.done)
 		c.signal()
+		<-c.stopped
 	})
 }
 
@@ -213,7 +217,10 @@ func (c *Chan) progressCountLocked() int {
 }
 
 func (c *Chan) run() {
-	defer close(c.out)
+	defer func() {
+		close(c.out)
+		close(c.stopped)
+	}()
 	for {
 		c.mu.Lock()
 		for len(c.queue) == 0 && !c.closed {

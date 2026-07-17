@@ -2,7 +2,19 @@
 
 ## Checklist
 
-Review-fix requested local gates:
+Second targeted review-fix requested local gates:
+
+- [x] `gofmt -w internal/events`
+- [x] `go test -race ./internal/events/... -count=1`
+- [x] `go vet ./...`
+- [x] `go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD`
+- [x] `git diff -- go.mod go.sum` empty
+- [x] Strict full-race remains pending/`verificationPassed=false` because production changed.
+
+Review-fix requested local gates (previous pass at `c9813a788d2bc0ccc29e79920ce6e5e8084e8a8e`):
 
 - [x] `gofmt -w cmd internal`
 - [x] `go test -race ./internal/events/... -count=1`
@@ -34,6 +46,21 @@ Strict full-race status:
 | `scripts/gsd list` | pass | Review-fix rerun; 69 commands. |
 | `scripts/gsd prompt plan-phase 403 --skip-research` | pass | Review-fix rerun; prompt generated to `/tmp/gsd-plan-403-reviewfix.txt`. |
 | `scripts/gsd prompt programming-loop init --phase 403 --dry-run` | fail | Review-fix rerun; adapter gap remains `scripts/gsd: unknown GSD command: programming-loop`; manual inline loop continues. |
+| `scripts/gsd doctor` | pass | Second targeted review-fix rerun 2026-07-17. |
+| `scripts/gsd list` | pass | Second targeted review-fix rerun; 69 commands. |
+| `scripts/gsd prompt plan-phase 403 --skip-research` | pass | Second targeted review-fix rerun; prompt generated to `/tmp/gsd-plan-403-reviewfix2.txt`. |
+| `scripts/gsd prompt programming-loop init --phase 403 --dry-run` | fail | Second targeted review-fix rerun; adapter gap remains `scripts/gsd: unknown GSD command: programming-loop`; manual inline loop continues. |
+| `go test ./internal/events/... -run TestChanCloseWaitsForInFlightEventAccounting -count=1` | fail | Second review-fix red: `DropStats() after Close = {Progress:1 Lifecycle:0}, want {Progress:1 Lifecycle:1}` at `events_test.go:194`; proves `Close` returned before runner accounted in-flight lifecycle drop. |
+| `gofmt -w internal/events` | pass | Second review-fix final: no output. |
+| `go test ./internal/events/... -run TestChanCloseWaitsForInFlightEventAccounting -count=1` | pass | Second review-fix green: `ok   polymetrics.ai/internal/events 0.430s`. |
+| `go test -race ./internal/events/... -count=1` | pass | Second review-fix final: `ok   polymetrics.ai/internal/events 1.279s`. |
+| `go vet ./...` | pass | Second review-fix final: no output. |
+| `go test ./internal/events/... ./internal/flow/... ./internal/app/... ./internal/connectors/certify/... ./internal/worker/... -count=1` | pass | `events 0.272s`; `flow 0.367s`; `app 17.145s`; `certify 339.825s`; `worker 0.535s`. |
+| `go build ./cmd/pm` | pass | Second review-fix final: no output. |
+| `make verify` | pass | Second review-fix final: `go test -timeout 20m ./...` passed; `internal/events 4.218s`; `smoke ok`; `0 issues`; `connectorgen validate: 547 connector(s) checked, 0 findings`. |
+| `git fetch origin feat/cli-architecture-v2` | pass | Updated `origin/feat/cli-architecture-v2` from `1678f9ab` to `e6faecfb` for diff-check base. |
+| `git diff --check origin/feat/cli-architecture-v2...HEAD` | pass | no output. |
+| `git diff -- go.mod go.sum` | pass | no output; no dependency delta. |
 | `go test ./internal/events/... -run 'TestChan\|TestThrottle' -count=1` | fail | Review-fix red: build failed because `sink.DropStats` was undefined at `internal/events/events_test.go:108:19`, `:132:19`, `:146:16`. |
 | `go test ./internal/events/... -run 'TestChan\|TestThrottle' -count=1` | pass | Review-fix green after Chan/Throttle fix: `ok   polymetrics.ai/internal/events 0.385s`. |
 | `go test -race ./internal/events/... -count=1` | pass | Review-fix final: `ok   polymetrics.ai/internal/events 1.388s`. Prior pass was `1.178s`. |
