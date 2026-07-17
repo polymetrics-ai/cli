@@ -73,7 +73,7 @@
   ],
   "reviewFix": {
     "startingHead": "3702318efa5514b8fad20c99bba2e3281164bec7",
-    "status": "locally_verified_pr_body_updated_pending_push",
+    "status": "pushed_pr_body_updated_review_coverage_pending",
     "acceptedFindings": [
       "TTY env semantics: CI/PM_NO_TUI non-empty values including 0/false suppress TUI",
       "Color degradation: NO_COLOR non-empty, CLICOLOR=0, TERM=dumb",
@@ -116,7 +116,7 @@
   },
   "reviewFix2": {
     "startingHead": "2195a66659be9d62bf99bfc8e2506e77da81e02f",
-    "status": "locally_verified_pr_body_updated_pending_push",
+    "status": "pushed_pr_body_updated_review_coverage_pending",
     "acceptedFindings": [
       "Remove or reword CLICOLOR_FORCE claims from docs/design/tui-ux-design.md because code honors NO_COLOR, CLICOLOR, and TERM only",
       "Document exit code 3 validation errors for invalid global UI/progress flags in root, ETL, and flow help plus generated docs"
@@ -197,7 +197,7 @@
     "grep": "--progress ndjson, Future TTY renderers, stderr may also include, invalid UI/progress flag"
   },
   "review": {
-    "status": "pr_body_updated_pending_push_and_review_coverage",
+    "status": "pushed_review_coverage_pending",
     "route": "pr_457_same_branch"
   }
 }

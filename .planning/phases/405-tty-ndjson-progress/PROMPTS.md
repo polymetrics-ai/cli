@@ -58,7 +58,7 @@ Task: focused pm-reviewer fix for remaining findings only; do not reset/discard/
 
 Prompt source: user review-fix #2 handoff with two accepted findings: remove/reword stale `CLICOLOR_FORCE` design-doc claims and document exit `3` validation errors for invalid global UI/progress flags in root/ETL/flow help plus generated docs.
 
-Downstream artifact: red validation captured, test expectation updated, implementation docs fixed, `docs/cli` regenerated, golden transcripts regenerated, PR body updated, push pending.
+Downstream artifact: red validation captured, test expectation updated, implementation docs fixed, `docs/cli` regenerated, golden transcripts regenerated, PR body updated, branch pushed.
 
 Verification result: pass locally. Focused CLI/docs gate passed and combined `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify` exited 0.
 

@@ -149,7 +149,7 @@ Full gates if Go/help changed:
 - [x] `go build ./cmd/pm`
 - [x] `make verify`
 - [x] PR #457 body updated with review-fix #2 disposition via GitHub REST API.
-- [ ] `git push origin feat/405-tty-ndjson-progress`
+- [x] `git push origin feat/405-tty-ndjson-progress`
 
 Review-fix #2 command log:
 
@@ -161,6 +161,7 @@ Review-fix #2 command log:
 | `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1` | pass | `internal/cli 6.724s`. |
 | `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify` | pass | `go test ./...`: `internal/cli 170.546s`, `internal/connectors/certify 339.739s`; `make verify`: `internal/cli 171.209s`, `internal/connectors/certify 342.470s`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`. |
 | `gh api --method PATCH repos/polymetrics-ai/cli/pulls/457 --input /tmp/pr-457-body-rf2.json --silent` | pass | PR body updated; no output. |
+| `git push origin feat/405-tty-ndjson-progress` | pass | pushed `2195a666..8afb0ea5`; GitHub reported existing default-branch Dependabot vulnerability notice. |
 
 Safety notes:
 

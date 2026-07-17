@@ -74,5 +74,4 @@ Remote Website checks initially failed because `website/lib/docs.generated.ts` n
 
 ## Pending
 
-- Push review-fix #2 slice to `origin feat/405-tty-ndjson-progress`.
 - Confirm automated review coverage after fix commit; do not merge parent PR #438 to `main`.
