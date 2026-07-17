@@ -1,0 +1,33 @@
+{
+  "phase": "410-otel-tracing",
+  "issue": 410,
+  "parentIssue": 397,
+  "parentPR": 438,
+  "branch": "feat/410-otel-tracing",
+  "baseBranch": "feat/cli-architecture-v2",
+  "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing",
+  "status": "planned",
+  "gsd": {
+    "doctorPassed": true,
+    "planPhasePromptGenerated": true,
+    "programmingLoopAvailable": false,
+    "manualFallback": "scripts/gsd prompt programming-loop init --phase 410 --dry-run returned unknown GSD command; manual GSD/TDD fallback recorded."
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "implementation not started",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Pi worker owns one isolated issue worktree and has no subagent tool; inline worker execution required."
+    }
+  ],
+  "dependenciesApproved": [
+    "go.opentelemetry.io/otel@v1.44.0",
+    "go.opentelemetry.io/otel/sdk@v1.44.0",
+    "go.opentelemetry.io/otel/exporters/stdout/stdouttrace@v1.44.0",
+    "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.44.0"
+  ],
+  "humanGatesTriggered": [],
+  "updatedAt": "2026-07-18T00:00:00Z"
+}
