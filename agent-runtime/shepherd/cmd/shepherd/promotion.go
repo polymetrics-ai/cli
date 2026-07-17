@@ -536,7 +536,7 @@ func validatedGSDManifestHash(proof store.ArtifactProof) (string, error) {
 		if _, err := hex.DecodeString(artifact.Hash[len("sha256:"):]); err != nil {
 			return "", errors.New("ratified proof has invalid artifact entry")
 		}
-		if artifact.Deleted != (artifact.Hash == "sha256:0000000000000000000000000000000000000000000000000000000000000000") {
+		if artifact.Deleted != (artifact.Hash == shepherdgit.DeletionSentinelHash) {
 			return "", errors.New("ratified proof has inconsistent deletion artifact entry")
 		}
 	}

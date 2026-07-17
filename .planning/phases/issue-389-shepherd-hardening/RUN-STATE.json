@@ -4,9 +4,9 @@
   "base_head": "ee474811378edd604e1e86e413f0bcafeced452b",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_g_exact_head_review_fix_focused_green",
+  "state": "slice_g_exact_head_review_followup_focused_green",
   "verificationPassed": false,
-  "current_slice": "post_slice_g_exact_head_deletion_and_git_output_review_fix",
+  "current_slice": "post_slice_g_bounded_git_and_descriptor_root_followup",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "authorized_review_fix": {
     "authorization": "Production changes are limited to the two confirmed exact-head findings and minimum schema/test propagation.",
@@ -27,8 +27,12 @@
       "agent-runtime/shepherd/internal/validation/**",
       "agent-runtime/shepherd/cmd/shepherd/**",
       "agent-runtime/shepherd/integration/**",
-      ".planning/phases/issue-389-shepherd-hardening/**"
-    ]
+      ".planning/phases/issue-389-shepherd-hardening/**",
+      "agent-runtime/shepherd/internal/git/process_unix.go",
+      "agent-runtime/shepherd/internal/git/process_other.go",
+      "agent-runtime/shepherd/internal/git/process_unix_test.go"
+    ],
+    "followup": "Confirmed adjacent bounded Git parsing/process cleanup, hashGitObject size/stderr classification, descriptor-relative validator access, and deletion sentinel source-of-truth fixes. Shared repository Git-config/environment policy remains declined as out-of-scope under accepted same-UID host trust assumption."
   },
   "completed_slices": [
     {
@@ -283,6 +287,11 @@
       "cycle": "cycle-36-slice-g-exact-head-review-fix-green-verify",
       "decision": "local_critical_path",
       "reason": "Implemented typed deletion proofs, validator absence/no-follow revalidation, bounded Git stdout/stderr/object hashing, command/promotion propagation, and deletion integration fixtures; focused/full nested normal-race and root verification pass, while packaged-loader deletion integration and exact-head review remain pending."
+    },
+    {
+      "cycle": "cycle-37-slice-g-exact-head-review-followup",
+      "decision": "local_critical_path",
+      "reason": "Confirmed adjacent gaps in bounded Git parsing, hashGitObject object limits, process-group cleanup, descriptor-relative validator file access, and deletion-sentinel source-of-truth share one sequential trust boundary; RED was captured before production edits and focused normal/race gates now pass. Git config/environment policy is declined as out-of-scope under the documented same-UID host trust assumption."
     }
   ],
   "slice_b_checkpoint": {
@@ -291,8 +300,8 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Provision the packaged official GSD loader and run the deletion integration tests, including normal and race where available",
-    "Run fresh exact-head GPT-5.6 Sol/high correctness/security review over d72e597e35b5104cf58936612053705c280fc2b1...HEAD",
+    "Coordinator provisions the packaged official GSD loader and runs deletion integration tests, including normal and race where available",
+    "Run fresh exact-head GPT-5.6 Sol/high correctness/security review over the new follow-up commit range",
     "Keep verificationPassed=false until coordinator-owned integration/review gates complete",
     "After review passes, push only fix/389-shepherd-proof-recovery, open the draft stacked PR, monitor CI, and stop"
   ],

@@ -18,11 +18,12 @@ import (
 	"time"
 
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/authority"
+	shepherdgit "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 )
 
 const maxValidatorOutputBytes = 2 * 1024 * 1024
-const DeletionSentinelHash = "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+const DeletionSentinelHash = shepherdgit.DeletionSentinelHash
 
 type ArtifactHash struct {
 	Path    string `json:"path"`
@@ -715,37 +716,45 @@ func verifyArtifactHashes(workDir string, artifacts []ArtifactHash) error {
 		return errors.New("validation artifact set is empty or exceeds the governed limit")
 	}
 	for _, artifact := range artifacts {
-		path, info, err := resolveArtifactNoFollow(workDir, artifact.Path)
+		parent, leaf, parentMissing, err := openStableArtifactParent(workDir, artifact.Path)
 		if err != nil {
 			return err
+		}
+		if parent != nil {
+			defer func(root *os.Root) { _ = root.Close() }(parent)
 		}
 		if artifact.Deleted {
 			if artifact.Hash != DeletionSentinelHash {
 				return errors.New("validation deleted artifact must use the deletion sentinel")
 			}
-			if info != nil {
-				return errors.New("validation deleted artifact exists in the candidate worktree")
+			if parentMissing {
+				continue
 			}
-			continue
+			if _, err := parent.Lstat(leaf); errors.Is(err, os.ErrNotExist) {
+				continue
+			} else if err != nil {
+				return err
+			}
+			return errors.New("validation deleted artifact exists in the candidate worktree")
 		}
 		if artifact.Hash == DeletionSentinelHash {
 			return errors.New("validation present artifact must not use the deletion sentinel")
 		}
-		if info == nil {
+		if parentMissing {
 			return errors.New("validation present artifact is missing")
 		}
-		if info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
-			return errors.New("validation present artifact must be a regular non-symlink file")
-		}
-		file, err := os.Open(path)
+		file, info, err := openStableArtifactFile(parent, leaf)
 		if err != nil {
-			return fmt.Errorf("open validation artifact: %w", err)
+			return err
 		}
 		digest := sha256.New()
 		written, copyErr := io.Copy(digest, io.LimitReader(file, 8*1024*1024+1))
 		closeErr := file.Close()
 		if copyErr != nil || closeErr != nil {
 			return errors.Join(copyErr, closeErr)
+		}
+		if !info.Mode().IsRegular() {
+			return errors.New("validation present artifact must be a regular non-symlink file")
 		}
 		if written > 8*1024*1024 {
 			return errors.New("validation artifact exceeds the governed size limit")
@@ -758,41 +767,104 @@ func verifyArtifactHashes(workDir string, artifacts []ArtifactHash) error {
 	return nil
 }
 
-func resolveArtifactNoFollow(workDir, relPath string) (string, os.FileInfo, error) {
-	if filepath.IsAbs(relPath) || filepath.Clean(relPath) != relPath || relPath == "." || relPath == ".." || strings.HasPrefix(relPath, "../") || strings.ContainsRune(relPath, 0) {
-		return "", nil, errors.New("validation artifact path is not a clean relative path")
+func openStableArtifactParent(workDir, relPath string) (*os.Root, string, bool, error) {
+	parts, err := validateArtifactRelativePath(relPath)
+	if err != nil {
+		return nil, "", false, err
 	}
-	root := filepath.Clean(workDir)
-	path := filepath.Join(root, filepath.FromSlash(relPath))
-	lexicalRel, err := filepath.Rel(root, path)
-	if err != nil || lexicalRel == ".." || strings.HasPrefix(lexicalRel, ".."+string(os.PathSeparator)) {
-		return "", nil, errors.New("validation artifact escapes the candidate worktree")
+	rootPath := filepath.Clean(workDir)
+	before, err := os.Lstat(rootPath)
+	if err != nil {
+		return nil, "", false, err
 	}
-	current := root
-	parts := strings.Split(filepath.ToSlash(relPath), "/")
-	for index, part := range parts {
-		if part == "" || part == "." || part == ".." {
-			return "", nil, errors.New("validation artifact path is not a clean relative path")
-		}
-		current = filepath.Join(current, part)
-		info, err := os.Lstat(current)
-		if errors.Is(err, os.ErrNotExist) {
-			return path, nil, nil
-		}
+	if before.Mode()&os.ModeSymlink != 0 || !before.IsDir() {
+		return nil, "", false, errors.New("validation worktree root must be a real directory")
+	}
+	root, err := os.OpenRoot(rootPath)
+	if err != nil {
+		return nil, "", false, err
+	}
+	rootInfo, statErr := root.Stat(".")
+	after, lstatErr := os.Lstat(rootPath)
+	if statErr != nil || lstatErr != nil || after.Mode()&os.ModeSymlink != 0 || !os.SameFile(before, rootInfo) || !os.SameFile(before, after) {
+		_ = root.Close()
+		return nil, "", false, errors.New("validation worktree root changed during open")
+	}
+	for _, part := range parts[:len(parts)-1] {
+		next, missing, err := openStableChildRoot(root, part)
 		if err != nil {
-			return "", nil, err
+			_ = root.Close()
+			return nil, "", false, err
 		}
-		if info.Mode()&os.ModeSymlink != 0 {
-			return "", nil, errors.New("validation artifact path contains a symlink")
+		if missing {
+			_ = root.Close()
+			return nil, parts[len(parts)-1], true, nil
 		}
-		if index < len(parts)-1 && !info.IsDir() {
-			return "", nil, errors.New("validation artifact parent is not a directory")
-		}
-		if index == len(parts)-1 {
-			return path, info, nil
+		_ = root.Close()
+		root = next
+	}
+	return root, parts[len(parts)-1], false, nil
+}
+
+func validateArtifactRelativePath(relPath string) ([]string, error) {
+	if filepath.IsAbs(relPath) || filepath.Clean(relPath) != relPath || relPath == "." || relPath == ".." || strings.HasPrefix(relPath, "../") || strings.ContainsRune(relPath, 0) {
+		return nil, errors.New("validation artifact path is not a clean relative path")
+	}
+	parts := strings.Split(filepath.ToSlash(relPath), "/")
+	for _, part := range parts {
+		if part == "" || part == "." || part == ".." {
+			return nil, errors.New("validation artifact path is not a clean relative path")
 		}
 	}
-	return path, nil, nil
+	return parts, nil
+}
+
+func openStableChildRoot(parent *os.Root, name string) (*os.Root, bool, error) {
+	before, err := parent.Lstat(name)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil, true, nil
+	}
+	if err != nil {
+		return nil, false, err
+	}
+	if before.Mode()&os.ModeSymlink != 0 || !before.IsDir() {
+		return nil, false, errors.New("validation artifact parent is not a stable directory")
+	}
+	child, err := parent.OpenRoot(name)
+	if err != nil {
+		return nil, false, err
+	}
+	childInfo, statErr := child.Stat(".")
+	after, lstatErr := parent.Lstat(name)
+	if statErr != nil || lstatErr != nil || after.Mode()&os.ModeSymlink != 0 || !os.SameFile(before, childInfo) || !os.SameFile(before, after) {
+		_ = child.Close()
+		return nil, false, errors.New("validation artifact parent changed during open")
+	}
+	return child, false, nil
+}
+
+func openStableArtifactFile(parent *os.Root, leaf string) (*os.File, os.FileInfo, error) {
+	before, err := parent.Lstat(leaf)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil, nil, errors.New("validation present artifact is missing")
+	}
+	if err != nil {
+		return nil, nil, err
+	}
+	if before.Mode()&os.ModeSymlink != 0 || !before.Mode().IsRegular() {
+		return nil, nil, errors.New("validation present artifact must be a regular non-symlink file")
+	}
+	file, err := parent.Open(leaf)
+	if err != nil {
+		return nil, nil, fmt.Errorf("open validation artifact: %w", err)
+	}
+	opened, statErr := file.Stat()
+	after, lstatErr := parent.Lstat(leaf)
+	if statErr != nil || lstatErr != nil || after.Mode()&os.ModeSymlink != 0 || !after.Mode().IsRegular() || !os.SameFile(before, opened) || !os.SameFile(before, after) {
+		_ = file.Close()
+		return nil, nil, errors.New("validation artifact changed during open")
+	}
+	return file, opened, nil
 }
 
 func gitHead(ctx context.Context, workDir string) (string, error) {

@@ -12,7 +12,9 @@ import (
 	"os/exec"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
+	"sync"
 	"unicode"
 )
 
@@ -23,6 +25,7 @@ const DeletionSentinelHash = "sha256:0000000000000000000000000000000000000000000
 const maxGitStdoutBytes = 1024 * 1024
 const maxGitStderrBytes = 64 * 1024
 const maxGitObjectBytes = 8 * 1024 * 1024
+const maxGitArtifacts = 128
 
 type Snapshot struct {
 	HeadSHA string
@@ -120,44 +123,76 @@ func ArtifactManifest(ctx context.Context, root, startHead, endHead string, scop
 	if err != nil {
 		return nil, err
 	}
+	entries, err := parseNameStatus(raw, scopes)
+	if err != nil {
+		return nil, err
+	}
 	var artifacts []Artifact
-	records := bytes.Split(raw, []byte{0})
-	for i := 0; i < len(records); {
-		if len(records[i]) == 0 {
-			i++
-			continue
-		}
-		status := string(records[i])
-		i++
-		if i >= len(records) || len(records[i]) == 0 {
-			return nil, errors.New("git returned malformed artifact status")
-		}
-		path := filepath.ToSlash(string(records[i]))
-		i++
-		if err := validateArtifactPath(path); err != nil {
-			return nil, err
-		}
-		if !withinAnyScope(path, scopes) && !isMutableGSDProjection(path) {
-			return nil, fmt.Errorf("%w: artifact path %q is outside the issue write scope", ErrWriteScopeBreach, path)
-		}
-		switch status {
+	for _, entry := range entries {
+		switch entry.status {
 		case "D":
-			artifacts = append(artifacts, Artifact{Path: path, Hash: DeletionSentinelHash, Deleted: true})
+			artifacts = append(artifacts, Artifact{Path: entry.path, Hash: DeletionSentinelHash, Deleted: true})
 		case "A", "M", "T":
-			hash, err := hashGitObject(ctx, root, endHead+":"+path)
+			hash, err := hashGitObject(ctx, root, endHead+":"+entry.path)
 			if err != nil {
 				return nil, err
 			}
 			if hash == DeletionSentinelHash {
 				return nil, errors.New("present artifact unexpectedly hashed to the deletion sentinel")
 			}
-			artifacts = append(artifacts, Artifact{Path: path, Hash: hash})
+			artifacts = append(artifacts, Artifact{Path: entry.path, Hash: hash})
 		default:
-			return nil, fmt.Errorf("git returned unsupported artifact status %q", status)
+			return nil, fmt.Errorf("git returned unsupported artifact status %q", entry.status)
 		}
 	}
 	sort.Slice(artifacts, func(i, j int) bool { return artifacts[i].Path < artifacts[j].Path })
 	return artifacts, nil
+}
+
+type nameStatusEntry struct {
+	status string
+	path   string
+}
+
+func parseNameStatus(raw []byte, scopes []string) ([]nameStatusEntry, error) {
+	if len(raw) == 0 {
+		return nil, nil
+	}
+	if raw[0] == 0 || raw[len(raw)-1] != 0 {
+		return nil, errors.New("git returned malformed artifact status")
+	}
+	records := bytes.Split(raw, []byte{0})
+	if len(records) < 2 || len(records[len(records)-1]) != 0 {
+		return nil, errors.New("git returned malformed artifact status")
+	}
+	records = records[:len(records)-1]
+	if len(records)%2 != 0 {
+		return nil, errors.New("git returned malformed artifact status")
+	}
+	if len(records)/2 > maxGitArtifacts {
+		return nil, errors.New("git artifact set exceeds the governed limit")
+	}
+	entries := make([]nameStatusEntry, 0, len(records)/2)
+	for i := 0; i < len(records); i += 2 {
+		if len(records[i]) == 0 || len(records[i+1]) == 0 {
+			return nil, errors.New("git returned malformed artifact status")
+		}
+		status := string(records[i])
+		switch status {
+		case "A", "M", "T", "D":
+		default:
+			return nil, fmt.Errorf("git returned unsupported artifact status %q", status)
+		}
+		path := filepath.ToSlash(string(records[i+1]))
+		if err := validateArtifactPath(path); err != nil {
+			return nil, err
+		}
+		if !withinAnyScope(path, scopes) && !isMutableGSDProjection(path) {
+			return nil, fmt.Errorf("%w: artifact path %q is outside the issue write scope", ErrWriteScopeBreach, path)
+		}
+		entries = append(entries, nameStatusEntry{status: status, path: path})
+	}
+	return entries, nil
 }
 
 // ChangedPathsOutsideScopes returns current worker changes that the immutable issue write scope
@@ -340,9 +375,23 @@ func validateArtifactPath(path string) error {
 }
 
 func hashGitObject(ctx context.Context, root, object string) (string, error) {
-	cmd := exec.CommandContext(ctx, "git", "-C", root, "cat-file", "blob", object)
+	sizeRaw, err := run(ctx, root, "cat-file", "-s", object)
+	if err != nil {
+		return "", fmt.Errorf("git cat-file size failed: %w", err)
+	}
+	declared, err := strconv.ParseInt(strings.TrimSpace(string(sizeRaw)), 10, 64)
+	if err != nil || declared < 0 {
+		return "", errors.New("git cat-file returned an invalid object size")
+	}
+	if declared > maxGitObjectBytes {
+		return "", fmt.Errorf("hash git object: %w", ErrOutputLimit)
+	}
+	internalCtx, cancel := context.WithCancelCause(ctx)
+	defer cancel(nil)
+	cmd := exec.CommandContext(internalCtx, "git", "-C", root, "cat-file", "blob", object)
 	cmd.Env = sanitizedGitEnvironment(os.Environ())
-	stderr := &boundedBuffer{max: maxGitStderrBytes}
+	configureGitProcessTree(cmd)
+	stderr := newBoundedBuffer(maxGitStderrBytes, func() { cancel(ErrOutputLimit) })
 	cmd.Stderr = stderr
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
@@ -352,12 +401,12 @@ func hashGitObject(ctx context.Context, root, object string) (string, error) {
 		return "", err
 	}
 	digest := sha256.New()
-	written, copyErr := copyHashBounded(digest, stdout, maxGitObjectBytes)
+	written, copyErr := copyHashBounded(digest, stdout, declared, func() { cancel(ErrOutputLimit) })
 	waitErr := cmd.Wait()
 	if ctxErr := ctx.Err(); ctxErr != nil {
 		return "", ctxErr
 	}
-	if written > maxGitObjectBytes {
+	if errors.Is(context.Cause(internalCtx), ErrOutputLimit) || written > declared || stderr.Exceeded() {
 		return "", fmt.Errorf("hash git object: %w", ErrOutputLimit)
 	}
 	if copyErr != nil {
@@ -366,25 +415,35 @@ func hashGitObject(ctx context.Context, root, object string) (string, error) {
 	if waitErr != nil {
 		return "", fmt.Errorf("git cat-file failed: %w: %s", waitErr, sanitizeDiagnostic(stderr.String()))
 	}
+	if written != declared {
+		return "", errors.New("git cat-file streamed byte count does not match declared size")
+	}
 	return "sha256:" + hex.EncodeToString(digest.Sum(nil)), nil
 }
 
-func copyHashBounded(digest io.Writer, source io.Reader, max int64) (int64, error) {
+func copyHashBounded(digest io.Writer, source io.Reader, declared int64, onLimit func()) (int64, error) {
 	var total int64
 	buffer := make([]byte, 32*1024)
 	for {
 		n, err := source.Read(buffer)
 		if n > 0 {
-			total += int64(n)
-			if total <= max {
-				if _, writeErr := digest.Write(buffer[:n]); writeErr != nil {
-					return total, writeErr
+			chunk := buffer[:n]
+			if total+int64(n) > declared {
+				allowed := declared - total
+				if allowed > 0 {
+					if _, writeErr := digest.Write(chunk[:allowed]); writeErr != nil {
+						return total + int64(n), writeErr
+					}
 				}
-			} else if before := total - int64(n); before < max {
-				if _, writeErr := digest.Write(buffer[:max-before]); writeErr != nil {
-					return total, writeErr
+				if onLimit != nil {
+					onLimit()
 				}
+				return total + int64(n), ErrOutputLimit
 			}
+			if _, writeErr := digest.Write(chunk); writeErr != nil {
+				return total, writeErr
+			}
+			total += int64(n)
 		}
 		if err != nil {
 			if errors.Is(err, io.EOF) {
@@ -400,16 +459,20 @@ func run(ctx context.Context, root string, args ...string) ([]byte, error) {
 		return nil, errors.New("git argv is required")
 	}
 	commandArgs := append([]string{"-C", root}, args...)
-	cmd := exec.CommandContext(ctx, "git", commandArgs...)
+	internalCtx, cancel := context.WithCancelCause(ctx)
+	defer cancel(nil)
+	cmd := exec.CommandContext(internalCtx, "git", commandArgs...)
 	cmd.Env = sanitizedGitEnvironment(os.Environ())
-	stdout, stderr := &boundedBuffer{max: maxGitStdoutBytes}, &boundedBuffer{max: maxGitStderrBytes}
+	configureGitProcessTree(cmd)
+	stdout := newBoundedBuffer(maxGitStdoutBytes, func() { cancel(ErrOutputLimit) })
+	stderr := newBoundedBuffer(maxGitStderrBytes, func() { cancel(ErrOutputLimit) })
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
 	err := cmd.Run()
 	if ctxErr := ctx.Err(); ctxErr != nil {
 		return nil, ctxErr
 	}
-	if stdout.exceeded || stderr.exceeded {
+	if errors.Is(context.Cause(internalCtx), ErrOutputLimit) || stdout.Exceeded() || stderr.Exceeded() {
 		return nil, fmt.Errorf("git %s output exceeded governed limit: %w", args[0], ErrOutputLimit)
 	}
 	if err != nil {
@@ -433,32 +496,65 @@ func sanitizeDiagnostic(value string) string {
 }
 
 type boundedBuffer struct {
+	mu       sync.Mutex
 	buffer   bytes.Buffer
 	max      int
 	exceeded bool
+	onLimit  func()
+	once     sync.Once
+}
+
+func newBoundedBuffer(max int, onLimit func()) *boundedBuffer {
+	return &boundedBuffer{max: max, onLimit: onLimit}
 }
 
 func (b *boundedBuffer) Write(p []byte) (int, error) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
 	if b.max <= 0 {
-		b.exceeded = true
-		return len(p), nil
+		b.markExceededLocked()
+		return len(p), ErrOutputLimit
 	}
 	remaining := b.max - b.buffer.Len()
 	if remaining <= 0 {
-		b.exceeded = true
-		return len(p), nil
+		b.markExceededLocked()
+		return len(p), ErrOutputLimit
 	}
 	if len(p) > remaining {
-		b.exceeded = true
 		_, _ = b.buffer.Write(p[:remaining])
-		return len(p), nil
+		b.markExceededLocked()
+		return len(p), ErrOutputLimit
 	}
 	_, _ = b.buffer.Write(p)
 	return len(p), nil
 }
 
-func (b *boundedBuffer) Bytes() []byte  { return b.buffer.Bytes() }
-func (b *boundedBuffer) String() string { return b.buffer.String() }
+func (b *boundedBuffer) markExceededLocked() {
+	b.exceeded = true
+	b.once.Do(func() {
+		if b.onLimit != nil {
+			b.onLimit()
+		}
+	})
+}
+
+func (b *boundedBuffer) Exceeded() bool {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.exceeded
+}
+
+func (b *boundedBuffer) Bytes() []byte {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return append([]byte(nil), b.buffer.Bytes()...)
+}
+
+func (b *boundedBuffer) String() string {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.buffer.String()
+}
 
 func sanitizedGitEnvironment(source []string) []string {
 	environment := make([]string, 0, len(source)+2)

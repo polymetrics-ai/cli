@@ -601,3 +601,89 @@ Slices A-G remain accepted at their exact checkpoints. Slice G is accepted at
 checkpoint's content. The replacement exact-head review is blocked only on the two findings above.
 No credential access, connector operation, canary, cleanup/migration, PR merge, or `main` mutation ran.
 The only GitHub access in this stage so far was read-only parent-PR metadata.
+
+## Post-Slice-G bounded Git / descriptor-root follow-up — FOCUSED GREEN
+
+Start head: `bfc937ef2bc523950c14929b73b00d9e054957d6` with a clean worktree.
+GSD checks: `scripts/gsd doctor`, `scripts/gsd list`, and
+`scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto --dry-run` passed.
+Skills recorded: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`, `golang-how-to`,
+`golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-context`, `golang-concurrency`, and `golang-lint`.
+
+Confirmed adjacent RED tests added before production edits:
+
+- strict full `--name-status -z --no-renames` parsing rejects leading, interior, extra, missing-final,
+  malformed, and unknown records;
+- a 129-record status stream is rejected before any `cat-file` process is spawned;
+- `hashGitObject` rejects declared sizes above 8 MiB before streaming, allows exact 8 MiB, rejects
+  streamed-byte mismatch, classifies nonzero cat-file separately from `ErrOutputLimit`, detects stderr
+  overflow, and returns `ErrOutputLimit` on stream overflow;
+- generic Git stdout/stderr exact limits pass, overflow returns `ErrOutputLimit`, parent cancellation
+  remains `context.Canceled`, and a Unix process-tree regression proves endless descendants are reaped.
+
+Exact RED evidence captured before production edits:
+
+```bash
+cd agent-runtime/shepherd && go test ./internal/git -count=1
+```
+Expected FAIL with:
+
+- `TestArtifactManifestRejectsUnknownAndMalformedStatus/leading-terminator`: `status err=<nil>` and a
+  manufactured present artifact;
+- `TestArtifactManifestRejectsUnknownAndMalformedStatus/interior-terminator`: `status err=<nil>` and
+  manufactured artifacts;
+- `TestArtifactManifestRejectsUnknownAndMalformedStatus/extra-terminator`: `status err=<nil>`;
+- `TestArtifactManifestRejectsUnknownAndMalformedStatus/missing-final-terminator`: `status err=<nil>`;
+- `TestArtifactManifestParsesAllStatusesBeforeHashing`: 129 artifacts accepted and hashed;
+- `TestHashGitObjectChecksDeclaredSizeBeforeStreaming`: oversized declared object returned a hash and
+  `err=<nil>`;
+- `TestHashGitObjectExactLimitPassesAndSizeMustMatch`: declared-size mismatch returned a hash and
+  `err=<nil>`;
+- `TestHashGitObjectClassifiesCatFileFailuresAndOverflow`: stderr overflow returned `err=<nil>`;
+- `TestRunOutputLimitTerminatesProcessGroupDescendants`: endless output returned
+  `context deadline exceeded` instead of `ErrOutputLimit` and process-group cleanup.
+
+GREEN/refactor evidence:
+
+- Added strict name-status parsing and a 128-artifact pre-hash ceiling.
+- Added bounded argv Git process execution with internal `ErrOutputLimit` cancellation, parent-context
+  precedence, finite `WaitDelay`, and Unix process-group cleanup; no shell was introduced.
+- `hashGitObject` now uses bounded `git cat-file -s` before streaming, exact byte-count verification,
+  bounded stderr detection, and immediate process cleanup on stream/stderr overflow.
+- Validator deletion/present checks now open through descriptor-relative `os.Root`, pin existing parent
+  roots, reject symlinks/replacement by stable file identity, check deleted absence relative to the
+  pinned parent, and hash the opened descriptor for present files.
+- Validation and promotion now alias the Git package deletion sentinel as the source of truth.
+- Declined disposition: shared-repository Git config/environment policy remains out of scope for this
+  bounded follow-up under the documented accepted same-UID host trust assumption; no environment
+  allowlist/config policy was changed.
+
+GREEN commands:
+
+```bash
+cd agent-runtime/shepherd && go test ./internal/git -count=1
+# PASS ok github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git 1.205s
+cd agent-runtime/shepherd && go test ./internal/validation -count=1
+# PASS ok github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/validation 4.758s
+cd agent-runtime/shepherd && go test ./cmd/shepherd -count=1
+# PASS ok github.com/polymetrics-ai/cli/agent-runtime/shepherd/cmd/shepherd 44.967s
+cd agent-runtime/shepherd && go test ./internal/git ./internal/validation ./cmd/shepherd -count=1
+# PASS internal/git 1.160s, internal/validation 4.840s, cmd/shepherd 44.643s
+cd agent-runtime/shepherd && go test -race ./internal/git ./internal/validation ./cmd/shepherd -count=1
+# PASS internal/git 20.773s, internal/validation 100.993s, cmd/shepherd 254.629s
+cd agent-runtime/shepherd && go test ./...
+# PASS all Shepherd nested packages
+cd agent-runtime/shepherd && go vet ./...
+# PASS
+cd agent-runtime/shepherd && go build ./cmd/shepherd && rm -f shepherd && git diff --check
+# PASS
+```
+
+Blocked integration gate remains environment-owned:
+
+```bash
+cd agent-runtime/shepherd && go test -tags=integration ./integration/... -run 'TestSupervise.*Delet|TestArtifact.*Delet' -count=1
+```
+FAIL: `official GSD loader is unavailable at /tmp/.tools/gsd-pi-1.11.0/node_modules/@opengsd/gsd-pi/dist/loader.js`.
+No production fallback or fake admission bypass was added. `verificationPassed=false` remains correct.

@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/contract"
+	shepherdgit "github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd"
 	"github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/workspace"
 	_ "modernc.org/sqlite"
@@ -1528,7 +1529,7 @@ func assertProofMatchesCanonical(t *testing.T, authorityPath, repo, candidateHea
 	for _, artifact := range manifest.Artifacts {
 		proofPaths[artifact.Path] = struct{}{}
 		if artifact.Deleted {
-			if artifact.Hash != "sha256:0000000000000000000000000000000000000000000000000000000000000000" {
+			if artifact.Hash != shepherdgit.DeletionSentinelHash {
 				t.Fatalf("deleted artifact %s hash=%s", artifact.Path, artifact.Hash)
 			}
 			if _, err := os.Lstat(filepath.Join(repo, filepath.FromSlash(artifact.Path))); !errors.Is(err, os.ErrNotExist) {

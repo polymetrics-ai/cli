@@ -400,3 +400,28 @@ go list ./...
   exact-head review remain coordinator-owned pending gates.
 - Draft stacked PR creation is pending replacement exact-head review. Canaries, credentials,
   cleanup/migration, ready-for-review transition, every PR merge, and `main` mutation remain blocked.
+
+### Post-Slice-G bounded Git / descriptor-root follow-up
+
+- [x] Start SHA verified clean at `bfc937ef2bc523950c14929b73b00d9e054957d6`.
+- [x] GSD adapter checks passed: `scripts/gsd doctor`, `scripts/gsd list`, and programming-loop dry-run.
+- [x] RED captured before production edits for strict name-status parsing, 129-record pre-hash limit,
+      hashGitObject declared-size/object/stderr failures, and generic Git endless-output cleanup.
+- [x] Exact 8 MiB object limit passes; 8 MiB + 1 is rejected before blob streaming.
+- [x] Generic Git exact stdout/stderr limits pass; overflow returns `ErrOutputLimit`; parent cancellation
+      identity remains `context.Canceled`.
+- [x] Unix Git process-group cleanup reaps an endless descendant on internal output-limit cancellation.
+- [x] Validator present/deleted file access uses descriptor-relative `os.Root` stable identity checks and
+      hashes the opened descriptor.
+- [x] Validator and promotion use `internal/git.DeletionSentinelHash` as the deletion sentinel source of truth.
+- [x] Focused normal: `go test ./internal/git ./internal/validation ./cmd/shepherd -count=1` PASS.
+- [x] Focused race: `go test -race ./internal/git ./internal/validation ./cmd/shepherd -count=1` PASS.
+- [x] Full nested normal: `go test ./...` PASS.
+- [x] Vet/build/diff: `go vet ./...`, `go build ./cmd/shepherd`, generated binary removal, and
+      `git diff --check` PASS.
+- [ ] Deletion integration remains blocked by missing packaged official GSD loader in this isolated checkout.
+- [ ] Exact-head GPT-5.6 Sol/high review remains coordinator-owned.
+
+Out-of-scope disposition: shared repository Git config/environment trust remains declined for this
+bounded fix under the accepted same-UID host trust assumption. No environment allowlist/config policy was changed.
+`verificationPassed=false` remains correct.

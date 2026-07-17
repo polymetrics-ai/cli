@@ -130,3 +130,19 @@ Focused Git/validation/command tests, focused race, full nested normal/race, vet
 baseline gates passed. The new built-CLI deletion integration tests could not execute in this isolated
 checkout because the packaged official GSD loader is absent; `verificationPassed` intentionally remains
 false and coordinator-owned exact-head review/full integration gates remain pending.
+
+## Bounded Git / descriptor-root follow-up
+
+Starting clean at `bfc937ef2bc523950c14929b73b00d9e054957d6`, the follow-up closes confirmed adjacent
+bounded-Git gaps without amending or rebasing. Git status parsing is now strict before hashing and rejects
+malformed/extra terminators plus more than 128 artifacts before any `cat-file` spawn. `hashGitObject`
+uses bounded `cat-file -s`, rejects oversized immutable objects before streaming, accepts exact 8 MiB,
+verifies streamed bytes match the declared size, and cancels/reaps the Git process group on stream or
+stderr overflow. Generic Git execution uses internal `ErrOutputLimit` cancellation with parent context
+precedence and finite process-tree cleanup. Validator artifact reads now use descriptor-relative
+`os.Root` stable identity checks, and validation/promotion alias the Git deletion sentinel.
+
+Focused normal/race Git/validation/cmd tests, full nested normal tests, vet, build, and diff checks pass.
+Deletion integration is still blocked by the absent packaged official GSD loader, and exact-head review is
+coordinator-owned; `verificationPassed=false` remains intentional. The shared repository Git
+config/environment concern is declined as out of scope under the accepted same-UID host trust assumption.

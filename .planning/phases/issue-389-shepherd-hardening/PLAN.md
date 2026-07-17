@@ -440,3 +440,22 @@ sanitized, and validator pre/post checks enforce absence or regular-file stabili
 symlinked path components. Promotion proof and actual-CLI integration fixtures now preserve deletion
 identity. Keep `verificationPassed=false` until coordinator provisions the official integration loader
 and completes exact-head review.
+
+## Post-Slice-G bounded Git / descriptor-root follow-up
+
+Confirmed adjacent scope only:
+
+- Pre-parse the entire `--name-status -z --no-renames` stream strictly; reject leading/interior/extra
+  terminators, malformed pairs, unknown statuses, and more than 128 artifacts before hashing.
+- Use bounded `git cat-file -s` as the immutable object-size gate; exact 8 MiB passes, over-limit is
+  rejected before blob streaming, and streamed bytes must equal the declared size.
+- On generic Git or `cat-file` stdout/stderr/object overflow, cancel the internal process group and reap
+  descendants with finite `WaitDelay`; parent context cancellation identity takes precedence.
+- Strengthen validator artifact access with descriptor-relative `os.Root` stable identity checks and hash
+  only opened descriptors; deleted absence is checked relative to the pinned parent root.
+- Use `internal/git.DeletionSentinelHash` as the source of truth in validation and promotion.
+
+Orchestration decision: `local_critical_path`; these parser, process, object-hashing, validator, and
+promotion-sentinel changes share one trust boundary. No worker spawn, no dependency, no shell, no GitHub
+mutation, no canary, no cleanup/migration, no amend/rebase/push. Shared repository Git config/environment
+hardening is declined as out of scope under the documented accepted same-UID host trust assumption.
