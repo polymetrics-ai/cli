@@ -6,7 +6,7 @@
   "branch": "feat/410-otel-tracing",
   "baseBranch": "feat/cli-architecture-v2",
   "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing",
-  "status": "planned",
+  "status": "red-tests-recorded",
   "gsd": {
     "doctorPassed": true,
     "planPhasePromptGenerated": true,
@@ -20,6 +20,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "Pi worker owns one isolated issue worktree and has no subagent tool; inline worker execution required."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Red tests added and failing as expected before production edits."
     }
   ],
   "dependenciesApproved": [

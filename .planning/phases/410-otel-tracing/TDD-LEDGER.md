@@ -34,13 +34,10 @@ Result:
 | # | Cycle | Type | Command / evidence | Result | Notes |
 |---:|---|---|---|---|---|
 | 1 | plan | Planning | Create phase artifacts before production edits | Pass | `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.json`, `SUMMARY.md`, `PROMPTS.md` created. |
-| 2 | red | Test | Pending | Pending | Disabled mode no SDK/dir. |
-| 3 | red | Test | Pending | Pending | File exporter smoke. |
-| 4 | red | Test | Pending | Pending | Attribute allowlist + secret absence. |
-| 5 | red | Test | Pending | Pending | Command/ETL/flow/certify/HTTP spans. |
-| 6 | red | Test | Pending | Pending | Exporter/init/shutdown exit-code neutrality. |
-| 7 | green | Implementation | Pending | Pending | Minimal tracing core/instrumentation. |
-| 8 | refactor | Verification | Pending | Pending | Docs/help parity and full gates. |
+| 2 | red | Test | `go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/app ./internal/flow -run 'Telemetry|TestLoadTelemetry' -count=1` | Fail | Disabled mode no SDK/dir, file exporter, allowlist, command/certify, ETL/flow, HTTP spans, and neutral failure tests added before production code. |
+| 3 | red | Output | `internal/telemetry/telemetry_test.go:18:17: undefined: Init`; `internal/config/telemetry_config_test.go:15:9: cfg.Telemetry undefined`; CLI telemetry dir missing and warning absent; connsdk/app/flow build failed pending telemetry package | Fail | Expected red: telemetry package/config/instrumentation not implemented yet. |
+| 4 | green | Implementation | Pending | Pending | Minimal tracing core/instrumentation. |
+| 5 | refactor | Verification | Pending | Pending | Docs/help parity and full gates. |
 
 ## Red-test requirements
 
