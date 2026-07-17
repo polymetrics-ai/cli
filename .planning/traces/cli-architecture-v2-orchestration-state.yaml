@@ -18,18 +18,12 @@ orchestrator:
   runtime: pi
   status: running
 ready_queue:
-  - number: 404
-    status: in_progress_review_fix_dirty
-    dependencies: [402]
-    write_scope: "logging/redaction/vault/Temporal logger bridge"
-    decision: local_critical_path
-    reason: "Power-outage recovery found PR #455 open at e2764780 with uncommitted second-review fixes preserved in wt-404; T13 red captured and T14 verification pending."
   - number: 405
     status: worker_ready
-    dependencies: [403]
+    dependencies: [403, 404]
     write_scope: "CLI run options, global flags, and internal/ui styles foundation"
-    decision: not_spawned_write_scope_collision
-    reason: "Serialize after #404 because both may own CLI stderr/run wiring; also collides with #423 central Cobra files."
+    decision: next_dispatch_candidate
+    reason: "#404 is provisionally integrated at 30de4977; #405 now leads because it owns central CLI/app wiring before #423 and before #410 telemetry spans."
   - number: 423
     status: worker_ready
     dependencies: [422]
@@ -38,10 +32,10 @@ ready_queue:
     reason: "Held behind #405 because both own internal/cli/cli.go and cobra_router.go; Phase 9 remains serialized."
   - number: 410
     status: worker_ready
-    dependencies: [402]
+    dependencies: [402, 404]
     write_scope: "telemetry package, config/docs, CLI/app/flow/certify/connsdk/worker spans"
     decision: not_spawned_write_scope_collision
-    reason: "Collides with #404 logging/config/worker and #405 CLI/app/events seams; defer until both integrate."
+    reason: "#404 collision cleared, but #410 still collides with #405 CLI/app/events seams; defer until #405 integrates."
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -163,6 +157,14 @@ spawn_decisions:
     decision: local_critical_path
     issue_numbers: [404]
     reason: "Recovered after power outage without resetting worker worktree; dirty second security review-fix changes preserved and green/verification resumes from T14."
+  - timestamp: 2026-07-17T15:35:40Z
+    decision: local_critical_path
+    issue_numbers: [404]
+    reason: "Coordinator provisionally integrated PR #455 after final clean targeted/security re-reviews, remote checks, and extended CLI race; parent squash 30de49776bae98f3408e7b62041a5da042dd3a1e."
+  - timestamp: 2026-07-17T15:36:16Z
+    decision: next_dispatch_candidate
+    issue_numbers: [405]
+    reason: "Queue rebuilt after #404 integration: #405 now owns central CLI/global options before #423 perf namespace and #410 telemetry spans."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -229,11 +231,11 @@ subissues:
     branch: feat/404-redacted-slog
     pr_url: https://github.com/polymetrics-ai/cli/pull/455
     worker: pm-gsd-worker
-    status: in_progress_review_fix_dirty
+    status: provisionally_integrated
     write_scope: "logging/redaction packages, vault registration, retention, Temporal logger bridge"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-404-redacted-slog
-    verification: "Remote PR #455 at e2764780 had green CI, but targeted reviews found second-review blockers; dirty local fixes after e2764780 are preserved, T13 red evidence recorded, and T14 gates are pending."
-    automated_review: {primary_route: human, status: blocked, head_sha: e27647806b44d40c09bccc1199e290c3054db452, reviewed_range: "20475ddf..e2764780", coverage_route: blocked, fallback_route: human, disposition_summary: "Second-review blockers accepted; uncommitted fixes preserved after outage; focused gates/re-review pending before integration.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/455"}
+    verification: "Second review-fix and final residual gates passed; final clean targeted/security re-reviews; PR checks passed at 06ed082c; coordinator extended race `go test -race ./internal/cli/... -count=1 -timeout 45m` passed on production head 7bd3cfae in 1786.300s; parent squash 30de49776bae98f3408e7b62041a5da042dd3a1e."
+    automated_review: {primary_route: human, status: blocked, head_sha: 06ed082ca8fd34c1b74696d23f358c154cf4e55e, reviewed_range: "20475ddf..30de4977", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled; Copilot quota exhausted; second-review and final residual findings fixed; final pm-reviewer and security-auditor sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/455"}
   - number: 405
     url: https://github.com/polymetrics-ai/cli/issues/405
     branch: pending
@@ -242,8 +244,8 @@ subissues:
     status: worker_ready
     write_scope: "CLI run options, global flags, and internal/ui styles foundation"
     worker_directory: ""
-    verification: not_run_write_scope_collision
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #403.", disposition_url: ""}
+    verification: not_run_ready_after_404
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Ready after #404; dispatch next before #423/#410 due central CLI/app wiring collisions.", disposition_url: ""}
   - number: 406
     url: https://github.com/polymetrics-ai/cli/issues/406
     branch: refactor/406-catalog-native-cobra
@@ -293,7 +295,7 @@ subissues:
     write_scope: "internal/telemetry, config/docs, CLI/app/flow/certify/connsdk/worker spans"
     worker_directory: ""
     verification: not_run_write_scope_collision
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Deferred until #403 and #404 clear shared instrumentation seams.", disposition_url: ""}
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "#404 cleared; defer until #405 clears shared CLI/app/events instrumentation seams.", disposition_url: ""}
   - number: 411
     url: https://github.com/polymetrics-ai/cli/issues/411
     branch: pending
