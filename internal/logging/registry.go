@@ -65,6 +65,8 @@ func (r *ValueRegistry) Register(value string) {
 	}
 }
 
+// registryVariants covers only bounded reversible URL encodings as defense in depth.
+// It does not claim coverage for irreversible encodings such as hashes or bespoke transforms.
 func registryVariants(value string) []string {
 	variants := []string{value}
 	for _, encoded := range []string{url.QueryEscape(value), url.PathEscape(value)} {

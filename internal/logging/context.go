@@ -70,7 +70,7 @@ func RegisterValueFromContext(ctx context.Context, value string) {
 
 // RedactText applies the shared terminal, heuristic, and registered-value redaction primitive.
 func RedactText(ctx context.Context, value string) string {
-	return redactText(ctx, value, defaultRegistry)
+	return redactText(ctx, value, nil)
 }
 
 // RedactLine applies RedactText and collapses control/newline diagnostics to one safe line.
@@ -148,15 +148,12 @@ func redactText(ctx context.Context, value string, fallback *ValueRegistry) stri
 	value = safety.SanitizeTerminal(value)
 	value = safety.RedactErrorText(value)
 	if registry, ok := registryFromContext(ctx); ok {
-		value = registry.redactString(value)
+		return registry.redactString(value)
 	}
 	if fallback != nil {
-		value = fallback.redactString(value)
+		return fallback.redactString(value)
 	}
-	if fallback != defaultRegistry {
-		value = defaultRegistry.redactString(value)
-	}
-	return value
+	return defaultRegistry.redactString(value)
 }
 
 func registryFromContext(ctx context.Context) (*ValueRegistry, bool) {

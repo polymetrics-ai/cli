@@ -72,12 +72,13 @@ rlm:
 	origServe := workerServe
 	var capturedAddr string
 	var capturedActivities *worker.PodmanActivities
-	workerServe = func(ctx context.Context, addr string, acts *worker.PodmanActivities) error {
+	workerServe = func(ctx context.Context, addr string, acts *worker.PodmanActivities, ready func()) error {
 		if ctx == nil {
 			t.Fatal("worker serve got nil context")
 		}
 		capturedAddr = addr
 		capturedActivities = acts
+		ready()
 		return nil
 	}
 	t.Cleanup(func() { workerServe = origServe })

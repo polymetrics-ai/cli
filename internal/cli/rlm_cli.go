@@ -7,12 +7,16 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"time"
 
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/rlm"
 	"polymetrics.ai/internal/temporalprobe"
 	"polymetrics.ai/internal/worker"
 )
+
+var temporalProbe = temporalprobe.Probe
+var workerSubmitterForActivities = worker.SubmitterForActivitiesContext
 
 func runRLM(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
@@ -124,14 +128,19 @@ func buildAgentAnalyzer(ctx context.Context, cfg config.Config, request string) 
 	if agentCfg.TemporalAddr == "" {
 		return nil, nil, rlm.ErrRemoteUnavailable
 	}
+	probeCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+	if !temporalProbe(probeCtx, agentCfg.TemporalAddr) {
+		return nil, nil, rlm.ErrRemoteUnavailable
+	}
 	embedded := cfg.RLM.EmbeddedWorker
-	submit, closer, err := worker.SubmitterForActivitiesContext(ctx, agentCfg.TemporalAddr, embedded, worker.NewPodmanActivities(agentCfg.PodmanBin, agentCfg.Image))
+	submit, closer, err := workerSubmitterForActivities(ctx, agentCfg.TemporalAddr, embedded, worker.NewPodmanActivities(agentCfg.PodmanBin, agentCfg.Image))
 	if err != nil {
 		return nil, nil, fmt.Errorf("rlm: %w (%v)", rlm.ErrRemoteUnavailable, err)
 	}
 	a := &rlm.AgentAnalyzer{
 		Cfg:     agentCfg,
-		Probe:   temporalprobe.Probe,
+		Probe:   temporalProbe,
 		Submit:  submit,
 		Request: request,
 	}

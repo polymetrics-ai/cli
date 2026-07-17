@@ -2,12 +2,11 @@
 
 ## Required gates
 
-Review-fix command set (requested by coordinator):
+Second review-fix command set (requested by coordinator):
 
 ```bash
 gofmt -w cmd internal
-go test -race ./internal/logging/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... -count=1
-go test ./internal/cli/... -run 'TestRedactedRunLogsSmoke|Logging|Error|JSON' -count=1
+go test -race ./internal/logging/... ./internal/safety/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... ./internal/cli/... -run 'Logging|Redact|Temporal|WorkerServe|RunFile|Registry|URL|Error|JSON' -count=1 -timeout 20m
 go vet ./...
 go test ./...
 go build ./cmd/pm
@@ -42,6 +41,16 @@ Extended full CLI race remains pending for coordinator and must not be run by th
 | Review-fix diff check | `git diff --check origin/feat/cli-architecture-v2...HEAD` | PASS | Exited 0. |
 | Review-fix dependency check | `git diff -- go.mod go.sum` | PASS | Empty. |
 | Extended full CLI race | not run | PENDING/COORDINATOR | Explicitly deferred by coordinator; `verificationPassed=false`. |
+| Second review-fix planning | phase artifacts updated before production edits | PASS | PR #455 at `e27647806b44d40c09bccc1199e290c3054db452`; no production edits yet. |
+| Second review-fix red tests | see TDD ledger T13 | PASS | Red captured before production edits; failure output did not print synthetic marker values. |
+| Second review-fix format | `gofmt -w cmd internal` | PASS | Exited 0. |
+| Second review-fix focused race | `go test -race ./internal/logging/... ./internal/safety/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... ./internal/cli/... -run 'Logging|Redact|Temporal|WorkerServe|RunFile|Registry|URL|Error|JSON' -count=1 -timeout 20m` | PASS | Exited 0; `internal/cli` 172.417s; no services; not the full CLI race. |
+| Second review-fix vet | `go vet ./...` | PASS | Exited 0. |
+| Second review-fix tests | `go test ./...` | PASS | Exited 0; `internal/cli` 168.669s; `internal/connectors/certify` 338.765s. |
+| Second review-fix build | `go build ./cmd/pm` | PASS | Exited 0. |
+| Second review-fix verify | `make verify` | PASS | Exited 0; includes safe reverse smoke with preview before run, lint, docs validate, and connectorgen validate. |
+| Second review-fix diff check | `git diff --check origin/feat/cli-architecture-v2...HEAD` | PASS | Exited 0. |
+| Second review-fix dependency check | `git diff -- go.mod go.sum` | PASS | Empty. |
 
 ## Issue-specific acceptance checks
 

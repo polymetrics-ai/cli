@@ -6,13 +6,11 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/cli"
-	pmlogging "polymetrics.ai/internal/logging"
 )
 
 func TestRedactedErrorOutputSingleLineSmoke(t *testing.T) {
-	pmlogging.RegisterValue(syntheticLogCanary)
 	root := t.TempDir()
-	stdout, stderr, code := runCLIRawForLogSmoke(root, "help", syntheticLogCanary+"\nforged-line", "--json")
+	stdout, stderr, code := runCLIRawForLogSmoke(root, "help", "line-one\nforged-line", "--json")
 	if code == 0 {
 		t.Fatalf("help with unknown topic exit code = 0, want failure")
 	}

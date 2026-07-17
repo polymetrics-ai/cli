@@ -27,3 +27,11 @@ Task: security/adversarial review-fix PR #455 issue #404 at `1cf8673b23b4b1b2b7a
 Downstream artifact: PLAN/TDD/VERIFICATION/RUN-STATE/SUMMARY updated for review-fix before production edits.
 
 Verification result: red tests captured, fixes implemented, requested gates passed; `verificationPassed=false`; extended full CLI race explicitly pending coordinator.
+
+## Second security review-fix kickoff snapshot
+
+Task: second security review-fix PR #455 issue #404 at `e27647806b44d40c09bccc1199e290c3054db452`. No merge/deps/TTY/perf/OTel/parent edits. Accepted findings: generic/raw URL fail-closed redaction, context-aware bounded Temporal dials and RLM probe ordering, slog group semantics, worker serve ready/start output seam, fail-closed `Any`, process-wide active log leases/retention, scoped/global registry hardening plus dynamic key/group caps, and bounded encoded-variant disposition.
+
+Downstream artifact: PLAN/TDD/VERIFICATION/RUN-STATE/SUMMARY updated before test and production edits.
+
+Verification result: requested second-review gates passed after outage recovery; extended full CLI race remains coordinator-owned/deferred and was not run by this worker.

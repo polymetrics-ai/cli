@@ -26,8 +26,10 @@
 - `docs/prompts/universal-programming-loop-prompts.md`
 - `docs/plans/cli-architecture-v2-improvement-plan.md` Stage 6/Pillar C
 - `docs/prompts/cli-architecture-v2-gsd-execution-prompt.md` Stage 6
+- `docs/adr/0002-cobra-viper-cli-framework.md`
 - `docs/adr/0003-interactive-tui-layer.md` sibling layering
 - `docs/adr/0004-opentelemetry-observability.md`
+- `.pi/skills/go-implementation/SKILL.md` attempted but missing in this worktree (`ENOENT`); loaded required Go implementation/review skills from routing instead.
 - Current seams: `internal/safety/safety.go`, `internal/vault/vault.go`, `internal/app/app.go`, `internal/events/events.go`, `internal/worker/{submit,serve}.go`, `internal/runtimecheck/runtimecheck.go`, `internal/temporalprobe/temporalprobe.go`, `internal/cli/{cli,cobra_router,parse,errors,worker_cli,runtime_helpers}.go`, CLI golden/contract tests.
 
 ## Skills loaded
@@ -45,6 +47,10 @@
 - `golang-structs-interfaces` — small handler/interfaces, concrete returns.
 - `golang-documentation` — package docs/godoc for new logging package.
 - `golang-cli` — stdout/stderr contract and CLI test seams.
+- `golang-lint` — `go vet`/static quality gate expectations.
+- `golang-samber-slog` — standard slog handler semantics and pipeline ordering.
+- `golang-code-style` — small focused Go changes and readable tests.
+- `golang-troubleshooting` — root-cause-first review-fix debugging.
 - `caveman` — final handoff compression only.
 
 ## GSD adapter evidence
@@ -56,22 +62,24 @@
 
 ## Slice plan
 
-### Review-fix cycle — accepted blockers from PR #455 adversarial/security pass
+### Second security review-fix cycle — PR #455 at `e27647806b44d40c09bccc1199e290c3054db452`
 
-Execution decision: `local_critical_path` — existing isolated worker cwd, no recursive subagents. Findings treated as untrusted review input; coordinator-owned accepted blockers only.
+Execution decision: `local_critical_path` — existing isolated worker cwd, no recursive subagents. Findings treated as untrusted review input; coordinator-owned accepted blockers only. No merge/deps/TTY/perf/OTel/parent edits. No services or real credentials.
 
 TDD slices before production edits:
 
-1. Redaction hardening: add red tests for inline/empty slog groups, sensitive group state, deferred bound-attr redaction, typed `url.URL`/`*url.URL` encoded-value scrubbing, and bounded invocation registry behavior.
-2. Safe error boundary primitive: add red tests for context-scoped registry redaction across CLI JSON/stderr, app run state, events, logs, and connsdk HTTP errors without surfacing remote bodies.
-3. Run-log filesystem hardening: add red tests for `.polymetrics` symlink rejection, `logs` symlink rejection, chmod/permission fail-closed behavior where hermetic, and retention preserving unrelated JSONL while pruning only handler-owned valid run logs.
-4. Temporal probe lifecycle: add red tests proving `Probe` uses finite context-aware dial/health flow without an orphan timeout goroutine or logger retention.
-5. Run correlation: add red tests proving `recordRuntimeETL` and Temporal structured logger routing bind validated run IDs into file routing even if the SDK adapter drops Handle context.
-6. Plain diagnostic hygiene: add focused tests for single-line stderr diagnostics while keeping JSON escaped and error envelope taxonomy unchanged.
+1. Generic/raw URL fail-closed redaction: red tests for `internal/safety.RedactErrorText` case-insensitive schemes, userinfo/query/fragment clearing, malformed credential/query URLs, percent-encoded values, uppercase schemes, and non-HTTP DSN coverage where relevant.
+2. Context-aware Temporal dial: red tests for `SubmitterForActivitiesContext` and worker serve using bounded/cancelable dial seams; `rlm_cli` finite probe must run before constructing submitter so unreachable dial cannot bypass it; no goroutine outlives caller.
+3. Slog group semantics: red tests for `WithGroup`/`WithAttrs` standard behavior with bound attrs carrying group paths, nested/bound/record attrs in JSON and run-file fields, no duplicate/lost groups, late registry redaction still applied.
+4. Worker serve output contract: red tests proving startup failure emits exactly one JSON `Error` envelope and no prior `WorkerServe`; success emits exactly one start envelope after dial/worker start; plain output appears only after ready.
+5. Fail-closed `Any`: red tests for unknown structs/containers/Stringer not stringifying raw; safe scalars/maps recursively handled; `[]byte`, `json.RawMessage`, `http.Header`, request/response/body/header-like values, and unsupported types replaced with stable type markers; `LogValuer` recursion preserved.
+6. Retention active leases: red two-handler concurrent retention test keyed by canonical project path with per-run active leases; never delete active/open logs; decrement/delete only after successful remove or confirmed absence; preserve unrelated JSONL; fail safe on uncertain leased/recent files and document residual.
+7. Scoped/global hardening and dynamic key/group bounds: red tests proving scoped registry suppresses global fallback, `vault.Get` registers scoped first, bound handler registry matches, dynamic key/group collections capped and unsafe names replaced at Handle without cross-invocation clear/over-redaction.
+8. Encoded variants disposition: bounded explicit encoded variants stay defense-in-depth after fail-closed body/header handling; document no irreversible-encoding coverage claim in artifacts/PR disposition.
 
-Implementation boundaries: `internal/logging`, `internal/safety`, `internal/events`, `internal/app`, `internal/cli`, `internal/runtimecheck`, `internal/temporalprobe`, `internal/worker`, `internal/connectors/connsdk`, and this phase's artifacts only. No parent artifact edits, no deps, no OTel/perf/TTY work, no services/real credentials.
+Implementation boundaries: `internal/logging`, `internal/safety`, `internal/vault`, `internal/app`, `internal/cli`, `internal/runtimecheck`, `internal/temporalprobe`, `internal/worker`, `internal/connectors/connsdk`, and this phase's artifacts only. No parent artifact edits, no deps, no OTel/perf/TTY work, no services/real credentials.
 
-Review-fix verification target is the user-specified command set. `verificationPassed` remains false until coordinator runs the deferred extended full CLI race; this worker will not run that extended race.
+Second review-fix verification target is the coordinator-specified command set with focused `-run` filters. Result after outage recovery: all requested second-review gates passed, including focused race with the filtered `./internal/cli/...` suite. `verificationPassed` remains false because the extended full CLI race is coordinator-owned and was not run by this worker.
 
 ### Slice 0 — planning checkpoint
 

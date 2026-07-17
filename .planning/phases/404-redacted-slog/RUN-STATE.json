@@ -9,7 +9,7 @@
   "mode": "manual-gsd-fallback",
   "verificationPassed": false,
   "fallbackReason": "scripts/gsd prompt programming-loop init --phase 404 --dry-run failed: unknown GSD command: programming-loop",
-  "verificationBlocker": "Coordinator-deferred extended full CLI race pending after PR #455 review-fix; worker must not run it. Requested non-extended gates passed.",
+  "verificationBlocker": "Requested second review-fix gates passed after outage recovery; extended full CLI race remains coordinator-owned and pending before integration.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -40,6 +40,11 @@
       "cycle": "review-fix-verify",
       "decision": "not_spawned_verification_blocked",
       "reason": "Requested review-fix gates passed, but extended full CLI race remains explicitly coordinator-deferred, so verificationPassed stays false."
+    },
+    {
+      "cycle": "second-security-review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "Coordinator assigned second security review-fix for PR #455 at e27647806b44d40c09bccc1199e290c3054db452 in existing isolated worker cwd; no subagent tool available and recursive delegation forbidden."
     }
   ],
   "gates": {
@@ -56,6 +61,17 @@
     "goBuildPm": "pass",
     "makeVerify": "pass",
     "diffCheck": "pass",
-    "goModGoSumDiff": "pass"
+    "goModGoSumDiff": "pass",
+    "secondReviewFixPlanning": "pass",
+    "secondReviewFixRedTests": "red-captured",
+    "secondReviewFixFocusedRace": "pass",
+    "secondReviewFixExtendedFullCLIRace": "coordinator-owned-pending",
+    "secondReviewFixFormat": "pass",
+    "secondReviewFixVet": "pass",
+    "secondReviewFixGoTestAll": "pass",
+    "secondReviewFixGoBuildPm": "pass",
+    "secondReviewFixMakeVerify": "pass",
+    "secondReviewFixDiffCheck": "pass",
+    "secondReviewFixGoModGoSumDiff": "pass"
   }
 }

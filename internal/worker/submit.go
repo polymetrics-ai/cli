@@ -23,6 +23,17 @@ import (
 const TaskQueue = "polymetrics-rlm"
 
 var workflowPollInterval = time.Second
+var temporalDialTimeout = 3 * time.Second
+
+var temporalClientDial = func(ctx context.Context, addr string, logger tlog.Logger) (client.Client, error) {
+	return client.DialContext(ctx, client.Options{
+		HostPort: addr,
+		Logger:   logger,
+		ConnectionOptions: client.ConnectionOptions{
+			GetSystemInfoTimeout: temporalDialTimeout,
+		},
+	})
+}
 
 // DefaultEnvPass is the set of LLM env vars forwarded into the agent container.
 var DefaultEnvPass = []string{"PM_LLM_BASE_URL", "PM_LLM_API_KEY", "PM_LLM_MODEL", "OPENROUTER_API_KEY", "PM_LLM_PROVIDER"}
@@ -43,7 +54,7 @@ func SubmitterForActivitiesContext(ctx context.Context, addr string, embedded bo
 	if acts == nil {
 		acts = defaultActivities()
 	}
-	c, err := client.Dial(client.Options{HostPort: addr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(ctx))})
+	c, err := dialTemporalClient(ctx, addr)
 	if err != nil {
 		return nil, nil, fmt.Errorf("worker: dial temporal: %w", err)
 	}
@@ -70,6 +81,15 @@ func SubmitterForActivitiesContext(ctx context.Context, addr string, embedded bo
 		return nil
 	}
 	return submit, closer, nil
+}
+
+func dialTemporalClient(ctx context.Context, addr string) (client.Client, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	dialCtx, cancel := context.WithTimeout(ctx, temporalDialTimeout)
+	defer cancel()
+	return temporalClientDial(dialCtx, addr, tlog.NewStructuredLogger(pmlogging.FromContext(dialCtx)))
 }
 
 type workflowRun interface {

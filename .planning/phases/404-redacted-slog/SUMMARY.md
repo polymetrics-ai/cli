@@ -1,6 +1,6 @@
 # SUMMARY — Issue #404
 
-Status: PR #455 review-fix implemented locally; requested non-extended gates passed. `verificationPassed=false` because extended full CLI race remains coordinator-pending and was not run by this worker.
+Status: second PR #455 security review-fix implemented after power-outage recovery; requested second-review gates passed. `verificationPassed=false` because extended full CLI race remains coordinator-owned/pending and was not run in this worker gate.
 
 PR: https://github.com/polymetrics-ai/cli/pull/455
 Head: see current `feat/404-redacted-slog` branch head.
@@ -52,6 +52,30 @@ Review-fix PASS:
 PENDING:
 
 - Extended full CLI race: explicitly deferred to coordinator; not run.
+
+## Second review-fix result
+
+Accepted findings fixed with TDD before production edits:
+
+- `safety.RedactErrorText` generic/raw URL fail-closed behavior.
+- Context-aware bounded Temporal dials and RLM finite probe before submitter construction.
+- `slog.Handler` `WithGroup`/`WithAttrs` semantics without duplicate/lost groups.
+- Worker serve output emits start envelope/plain text only after ready; startup failure emits one `Error` envelope.
+- Fail-closed `Any` redaction for unsafe/unsupported values.
+- Process-wide active log leases for retention; uncertain/leased/recent files are skipped and residual cross-process limitations documented.
+- Scoped registry hardening and bounded unsafe dynamic keys/groups.
+- Encoded variants documented as bounded defense-in-depth only.
+
+Second review-fix PASS:
+
+- `gofmt -w cmd internal`
+- `go test -race ./internal/logging/... ./internal/safety/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... ./internal/cli/... -run 'Logging|Redact|Temporal|WorkerServe|RunFile|Registry|URL|Error|JSON' -count=1 -timeout 20m`
+- `go vet ./...`
+- `go test ./...`
+- `go build ./cmd/pm`
+- `make verify`
+- `git diff --check origin/feat/cli-architecture-v2...HEAD`
+- `git diff -- go.mod go.sum`
 
 ## Review route
 

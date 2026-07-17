@@ -18,6 +18,7 @@ import (
 )
 
 const defaultMaxLogFiles = 25
+const retentionRecentWindow = 2 * time.Second
 
 // RunFileOptions configures per-run JSONL routing.
 type RunFileOptions struct {
@@ -27,7 +28,7 @@ type RunFileOptions struct {
 // RunFileHandler writes records to .polymetrics/logs/<run-id>.jsonl based on context.
 type RunFileHandler struct {
 	state  *runFileState
-	attrs  []slog.Attr
+	attrs  []groupedAttrs
 	groups []string
 }
 
@@ -37,6 +38,8 @@ type runFileState struct {
 	maxFiles   int
 	logsRoot   *os.Root
 	files      map[string]*os.File
+	leases     map[string]struct{}
+	projectKey string
 	closed     bool
 }
 
@@ -49,7 +52,7 @@ func NewRunFileHandler(projectDir string, opts RunFileOptions) *RunFileHandler {
 	if maxFiles <= 0 {
 		maxFiles = defaultMaxLogFiles
 	}
-	return &RunFileHandler{state: &runFileState{projectDir: projectDir, maxFiles: maxFiles, files: map[string]*os.File{}}}
+	return &RunFileHandler{state: &runFileState{projectDir: projectDir, maxFiles: maxFiles, files: map[string]*os.File{}, leases: map[string]struct{}{}}}
 }
 
 func (h *RunFileHandler) Enabled(context.Context, slog.Level) bool { return h != nil }
@@ -83,15 +86,19 @@ func (h *RunFileHandler) Handle(ctx context.Context, record slog.Record) error {
 
 func (h *RunFileHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
 	clone := *h
-	clone.attrs = append(append([]slog.Attr(nil), h.attrs...), attrs...)
-	clone.groups = append([]string(nil), h.groups...)
+	clone.attrs = append(cloneGroupedAttrs(h.attrs), groupedAttrs{groups: cloneStrings(h.groups), attrs: cloneAttrs(attrs)})
+	clone.groups = cloneStrings(h.groups)
 	return &clone
 }
 
 func (h *RunFileHandler) WithGroup(name string) slog.Handler {
 	clone := *h
-	clone.attrs = append([]slog.Attr(nil), h.attrs...)
-	clone.groups = append(append([]string(nil), h.groups...), sanitizeKey(name))
+	clone.attrs = cloneGroupedAttrs(h.attrs)
+	if name == "" {
+		clone.groups = cloneStrings(h.groups)
+	} else {
+		clone.groups = append(cloneStrings(h.groups), name)
+	}
 	return &clone
 }
 
@@ -109,13 +116,17 @@ func (h *RunFileHandler) recordFields(record slog.Record) map[string]any {
 		"level": record.Level.String(),
 		"msg":   record.Message,
 	}
-	for _, attr := range h.attrs {
-		addAttr(fields, h.groups, attr)
-	}
+	entries := append(cloneGroupedAttrs(h.attrs), groupedAttrs{groups: cloneStrings(h.groups)})
 	record.Attrs(func(attr slog.Attr) bool {
-		addAttr(fields, h.groups, attr)
-		return true
+		last := len(entries) - 1
+		if len(entries[last].attrs) < maxDynamicAttrs {
+			entries[last].attrs = append(entries[last].attrs, attr)
+		}
+		return len(entries[last].attrs) < maxDynamicAttrs
 	})
+	for _, attr := range mergeGroupAttrs(wrapRunFileEntries(entries)) {
+		addAttr(fields, nil, attr)
+	}
 	return fields
 }
 
@@ -139,6 +150,7 @@ func (s *runFileState) fileForLocked(runID string) (*os.File, error) {
 		return nil, err
 	}
 	s.files[runID] = file
+	s.acquireLeaseLocked(runID)
 	if err := s.pruneLocked(runID); err != nil {
 		return nil, err
 	}
@@ -150,6 +162,9 @@ func (s *runFileState) ensureLogsRootLocked() error {
 		return nil
 	}
 	absProjectDir, err := filepath.Abs(s.projectDir)
+	if err == nil {
+		s.projectKey = canonicalProjectPath(absProjectDir)
+	}
 	if err != nil {
 		return err
 	}
@@ -202,6 +217,9 @@ func ensureRootDir(root *os.Root, name string, mode os.FileMode) error {
 	return nil
 }
 
+// pruneLocked deletes only inactive, handler-owned logs. It intentionally skips active,
+// leased, recent, or uncertain files because portable stdlib-only cross-process
+// file locking is not available here; the safe failure mode is extra retention.
 func (s *runFileState) pruneLocked(currentRunID string) error {
 	if s.maxFiles <= 0 || s.logsRoot == nil {
 		return nil
@@ -214,6 +232,8 @@ func (s *runFileState) pruneLocked(currentRunID string) error {
 		name    string
 		runID   string
 		modTime time.Time
+		active  bool
+		recent  bool
 	}
 	logs := make([]logEntry, 0, len(entries))
 	for _, entry := range entries {
@@ -226,7 +246,9 @@ func (s *runFileState) pruneLocked(currentRunID string) error {
 		if err != nil || !info.Mode().IsRegular() {
 			continue
 		}
-		logs = append(logs, logEntry{name: name, runID: runID, modTime: info.ModTime()})
+		active := s.files[runID] != nil || isRunLogActive(s.projectKey, runID)
+		recent := time.Since(info.ModTime()) < retentionRecentWindow
+		logs = append(logs, logEntry{name: name, runID: runID, modTime: info.ModTime(), active: active, recent: recent})
 	}
 	if len(logs) <= s.maxFiles {
 		return nil
@@ -242,14 +264,13 @@ func (s *runFileState) pruneLocked(currentRunID string) error {
 		if remove <= 0 {
 			break
 		}
-		if entry.runID == currentRunID {
+		if entry.runID == currentRunID || entry.active || entry.recent {
 			continue
 		}
-		if file := s.files[entry.runID]; file != nil {
-			_ = file.Close()
-			delete(s.files, entry.runID)
+		err := s.logsRoot.Remove(entry.name)
+		if err != nil && !errors.Is(err, os.ErrNotExist) {
+			continue
 		}
-		_ = s.logsRoot.Remove(entry.name)
 		remove--
 	}
 	return nil
@@ -266,7 +287,9 @@ func (s *runFileState) close() error {
 	for runID, file := range s.files {
 		if err := file.Close(); err != nil {
 			errs = append(errs, fmt.Errorf("close %s: %w", runID, err))
+			continue
 		}
+		s.releaseLeaseLocked(runID)
 		delete(s.files, runID)
 	}
 	if s.logsRoot != nil {
@@ -276,6 +299,72 @@ func (s *runFileState) close() error {
 		s.logsRoot = nil
 	}
 	return errorsJoin(errs)
+}
+
+func wrapRunFileEntries(entries []groupedAttrs) []slog.Attr {
+	out := make([]slog.Attr, 0)
+	for _, entry := range entries {
+		out = append(out, wrapGroups(entry.groups, entry.attrs)...)
+	}
+	return out
+}
+
+var runLogLeases = struct {
+	mu       sync.Mutex
+	projects map[string]map[string]int
+}{projects: map[string]map[string]int{}}
+
+func (s *runFileState) acquireLeaseLocked(runID string) {
+	if s.projectKey == "" {
+		s.projectKey = canonicalProjectPath(s.projectDir)
+	}
+	runLogLeases.mu.Lock()
+	defer runLogLeases.mu.Unlock()
+	runs := runLogLeases.projects[s.projectKey]
+	if runs == nil {
+		runs = map[string]int{}
+		runLogLeases.projects[s.projectKey] = runs
+	}
+	runs[runID]++
+	s.leases[runID] = struct{}{}
+}
+
+func (s *runFileState) releaseLeaseLocked(runID string) {
+	if _, ok := s.leases[runID]; !ok {
+		return
+	}
+	delete(s.leases, runID)
+	runLogLeases.mu.Lock()
+	defer runLogLeases.mu.Unlock()
+	runs := runLogLeases.projects[s.projectKey]
+	if runs == nil {
+		return
+	}
+	if runs[runID] <= 1 {
+		delete(runs, runID)
+	} else {
+		runs[runID]--
+	}
+	if len(runs) == 0 {
+		delete(runLogLeases.projects, s.projectKey)
+	}
+}
+
+func isRunLogActive(projectKey, runID string) bool {
+	runLogLeases.mu.Lock()
+	defer runLogLeases.mu.Unlock()
+	return runLogLeases.projects[projectKey][runID] > 0
+}
+
+func canonicalProjectPath(path string) string {
+	abs, err := filepath.Abs(path)
+	if err != nil {
+		return filepath.Clean(path)
+	}
+	if real, err := filepath.EvalSymlinks(abs); err == nil {
+		return filepath.Clean(real)
+	}
+	return filepath.Clean(abs)
 }
 
 func ownedRunLogName(name string) (string, bool) {
@@ -332,8 +421,12 @@ func addAttr(fields map[string]any, groups []string, attr slog.Attr) {
 	if attr.Value.Kind() == slog.KindGroup {
 		groupTarget := target
 		if attr.Key != "" {
-			groupTarget = map[string]any{}
-			target[attr.Key] = groupTarget
+			existing, _ := target[attr.Key].(map[string]any)
+			if existing == nil {
+				existing = map[string]any{}
+				target[attr.Key] = existing
+			}
+			groupTarget = existing
 		}
 		for _, child := range attr.Value.Group() {
 			addAttr(groupTarget, nil, child)
@@ -367,7 +460,7 @@ func slogValueAny(value slog.Value) any {
 		}
 		return out
 	case slog.KindAny:
-		return fmt.Sprint(value.Any())
+		return typeMarker(value.Any())
 	default:
 		return value.String()
 	}

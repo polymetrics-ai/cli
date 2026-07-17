@@ -11,9 +11,9 @@ import (
 	"polymetrics.ai/internal/worker"
 )
 
-type workerServeFunc func(context.Context, string, *worker.PodmanActivities) error
+type workerServeFunc func(context.Context, string, *worker.PodmanActivities, func()) error
 
-var workerServe workerServeFunc = worker.ServeWithActivities
+var workerServe workerServeFunc = worker.ServeWithActivitiesReady
 
 // runWorker dispatches `pm worker serve|status`. The worker daemon hosts the RLM
 // Temporal workflow + podman activity for `pm rlm run --mode agent`.
@@ -43,13 +43,15 @@ func runWorkerServe(ctx context.Context, cfg config.Config, stdout io.Writer, js
 	if addr == "" {
 		return validationErrorf("worker serve: POLYMETRICS_TEMPORAL_ADDR is not set")
 	}
-	if jsonOut {
-		_ = writeJSON(stdout, envelope{"kind": "WorkerServe", "status": "starting", "addr": addr, "task_queue": worker.TaskQueue})
-	} else {
-		fmt.Fprintf(stdout, "pm worker serving on task queue %q (temporal=%s); Ctrl-C to stop\n", worker.TaskQueue, addr)
+	ready := func() {
+		if jsonOut {
+			_ = writeJSON(stdout, envelope{"kind": "WorkerServe", "status": "ready", "addr": addr, "task_queue": worker.TaskQueue})
+		} else {
+			fmt.Fprintf(stdout, "pm worker serving on task queue %q (temporal=%s); Ctrl-C to stop\n", worker.TaskQueue, addr)
+		}
 	}
 	activities := worker.NewPodmanActivities(cfg.RLM.PodmanBin, cfg.RLM.Image)
-	return workerServe(ctx, addr, activities)
+	return workerServe(ctx, addr, activities, ready)
 }
 
 func runWorkerStatus(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) error {

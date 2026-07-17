@@ -2,13 +2,18 @@
 
 ## Loaded skills
 
-`gsd-core`, `golang-how-to`, `golang-testing`, `golang-security`, `golang-safety`, `golang-observability`, `golang-context`, `golang-concurrency`, `golang-error-handling`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-cli`, `caveman`.
+`gsd-core`, `golang-how-to`, `golang-testing`, `golang-security`, `golang-safety`, `golang-observability`, `golang-context`, `golang-concurrency`, `golang-error-handling`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-cli`, `golang-lint`, `golang-samber-slog`, `golang-code-style`, `golang-troubleshooting`, `caveman`.
+
+Attempted `.pi/skills/go-implementation/SKILL.md` per worker instruction, but the file is absent in this worktree (`ENOENT`). Used repo routing + cc-skills Go implementation/review skills above.
 
 Routing notes from `.agents/agentic-delivery/references/required-skills-routing.md`:
 
 - Go work starts with `golang-how-to`.
 - Runtime/Temporal work also loads context/concurrency/security/safety/testing/documentation.
 - CLI stdout/stderr seam work loads `golang-cli`; no CLI-visible docs/help change planned.
+- Review/security hardening loads `golang-security`, `golang-safety`, `golang-error-handling`, `golang-lint`, and `golang-testing`.
+- Runtime/Temporal/worker cancellation work loads `golang-context` and `golang-concurrency`.
+- Slog handler semantics load `golang-samber-slog`/observability while keeping stdlib-only production code.
 
 ## GSD command evidence
 
@@ -38,6 +43,9 @@ Review-fix note: synthetic non-secret markers may appear in test fixtures only; 
 | T9 | Review-fix safe error boundaries | same focused command as T8 | RED — app/CLI/connsdk tests fail before safe context registry + output redaction implementation | GREEN — app state/events/logs and CLI stdout/stderr focused tests clean; connsdk no longer surfaces response body | pending requested gates |
 | T10 | Review-fix Temporal/runtime correlation | same focused command as T8 plus later runtime/worker focused tests | RED — temporalprobe bounded dial seam missing and bound run-ID routing test not yet implemented | GREEN — temporalprobe bounded dial tests and Temporal bound run-id routing test pass | requested gates passed except extended CLI race deferred |
 | T11 | Review-fix requested verification | Coordinator command set in VERIFICATION.md | n/a after green | GREEN — requested gofmt, focused race, CLI focused, vet, all tests, build, make verify, diff-check, go.mod/go.sum diff all exited 0 | extended full CLI race not run per instruction |
+| T12 | Second review-fix planning | PLAN/VERIFICATION/RUN-STATE/PROMPTS/SUMMARY update for PR #455 at `e27647806b44d40c09bccc1199e290c3054db452` | n/a | Planned before test/production edits | production edits pending |
+| T13 | Second review-fix red tests | `go test ./internal/safety/... ./internal/logging/... ./internal/vault/... ./internal/worker/... ./internal/cli/... ./internal/temporalprobe/... -run 'Logging|Redact|Temporal|WorkerServe|RunFile|Registry|URL|Error|JSON' -count=1` | RED — safety URL redaction leaks raw URL components; logging group semantics duplicates/loses groups; unsafe Any lacks stable type markers; scoped registry still consults global fallback; unsafe dynamic keys/groups sanitize into misleading names; retention deletes active cross-handler log; worker dial seam undefined; worker serve ready callback seam test not yet buildable. No synthetic marker values printed. | pending | production edits next |
+| T14 | Second review-fix focused race | coordinator command in VERIFICATION.md | n/a after T13 red | GREEN — `gofmt`, focused race with `./internal/cli/...` filtered tests, `go vet`, `go test ./...`, `go build ./cmd/pm`, `make verify`, diff-check, and go.mod/go.sum diff all exited 0 | extended full CLI race remains coordinator-owned and not run |
 
 ## Canary handling rule
 
