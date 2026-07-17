@@ -1,6 +1,6 @@
 # SUMMARY — Issue 405 TTY gate and NDJSON progress
 
-Status: review-fix cycle for PR #457 is locally verified; PR body updated and branch push remains.
+Status: review-fix #3 for PR #457 is locally verified; PR body updated and branch push remains.
 
 ## Delivered
 
@@ -72,6 +72,21 @@ Remote Website checks initially failed because `website/lib/docs.generated.ts` n
 - Full gate passed: `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify`.
 - Key full-gate output: `go test ./...` included `internal/cli 170.546s`, `internal/connectors/certify 339.739s`; `make verify` included `internal/cli 171.209s`, `internal/connectors/certify 342.470s`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`.
 
+## Review-fix #3 delivered
+
+- Corrected website docs overclaims: `pm docs validate` is now described as connector-docs validation through `--connectors-dir`, not embedded-help / `docs/cli/**` / website MDX validation.
+- Removed unsupported `--website-dir` from website docs examples.
+- Regenerated `website/lib/docs.generated.ts` with `cd website && pnpm run gen:docs`.
+- Preserved CLI/website parity wording: tests, generators, website data generation, and `make verify` cover those surfaces where applicable.
+
+## Review-fix #3 verification
+
+- Red validation captured: website docs contained unsupported `--website-dir` and `pm docs validate` overclaim; `./pm docs` showed runtime truth `pm docs validate [--connectors-dir <path>]`.
+- Website docs data: `cd website && pnpm run gen:docs` passed (`Wrote 11 docs pages to lib/docs.generated.ts`).
+- Focused Go gate passed: `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1` (`internal/cli 6.642s`).
+- Full gate passed: `make verify` (`Validated connector docs in docs/connectors`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`).
+- Website typecheck blocked locally because `node_modules` is missing: `sh: tsc: command not found`.
+
 ## Pending
 
-- Confirm automated review coverage after fix commit; do not merge parent PR #438 to `main`.
+- Push final docs-fix commit, then confirm automated review coverage after fix commit; do not merge parent PR #438 to `main`.

@@ -201,3 +201,26 @@ Review-fix #2 slice plan:
 - Minimal docs/help fix in `internal/cli/docs.go` and `docs/design/tui-ux-design.md` only; regenerate `docs/cli/**` and golden/manual artifacts through `pm docs generate`/golden updater as needed.
 - Focused gates: `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1`, docs generator/diff checks, then full gates if Go/help changed.
 - Update PR #457 body with review-fix #2 disposition and push `feat/405-tty-ndjson-progress`.
+
+## Review-fix cycle #3 — final docs-writer P2 at PR #457 head `1c1ae22dbeb333fe11abb34029e896e0523ee723`
+
+Scope: docs-only correction for website overclaims; same branch/PR; no reset/discard/recreate.
+
+Required skills/references for this final docs fix:
+
+- Re-read `AGENTS.md`, issue #405, GSD contract/loop, phase artifacts, `required-skills-routing.md`, GSD adapter, CLI parity, runtime/RLM/website integration, and website package/docs sources.
+- Loaded `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`, `golang-documentation`, `vercel-react-best-practices`, and `vercel-composition-patterns`.
+- Stack implementation skill note: `.pi/skills/ts-website/SKILL.md`, `.pi/skills/go-implementation/SKILL.md`, and `.pi/skills/design-ui/SKILL.md` are absent in this checkout (`ENOENT`/not found). This slice changes website docs/generated data only; loaded available repo/global routing skills instead.
+
+Accepted docs-writer finding to fix:
+
+- `website/content/docs/cli-reference.mdx` and `website/content/docs/architecture.mdx` incorrectly state or imply that runtime `pm docs validate` checks embedded help, checked-in CLI markdown, website MDX, or accepts/uses `--website-dir`. Runtime truth: `pm docs validate` validates connector docs through `--connectors-dir`; CLI/website parity is enforced by tests, generators, and `make verify` where applicable.
+
+Final docs slice plan:
+
+- Red validation before production docs edits: `rg -n -- '--website-dir|embedded help|checked-in CLI markdown|website MDX|pm docs validate' website/content/docs/cli-reference.mdx website/content/docs/architecture.mdx` shows stale website claims; `./pm docs` shows runtime synopsis only supports `pm docs validate [--connectors-dir <path>]`.
+- Minimal docs edits only in `website/content/docs/cli-reference.mdx` and `website/content/docs/architecture.mdx`; do not add unsupported CLI flags.
+- Regenerate `website/lib/docs.generated.ts` with the existing website docs generator.
+- Focused gates: `cd website && pnpm run gen:docs`; website docs grep proving `--website-dir` and overclaim language are gone; `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1`.
+- Full gate if feasible because website docs changed: `make verify` (or record blocker); also run `git diff --check` and confirm no unrelated docs/connectors drift.
+- Update PR #457 body with review-fix #3 disposition/gates and push `feat/405-tty-ndjson-progress`.

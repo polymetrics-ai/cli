@@ -3,7 +3,7 @@ title: CLI Reference
 description: Complete command surface for the pm binary, including docs coverage, safety boundaries, and JSON envelopes.
 ---
 
-This page is the public website contract for the `pm` CLI. When a command is added to the Go dispatcher, `pm docs validate` requires the command to appear here, in the embedded manual, and in `docs/cli`.
+This page is the public website contract for the `pm` CLI. Command/help, checked-in `docs/cli/**`, and website parity is enforced by focused tests, docs generators, and `make verify` where applicable. `pm docs validate` separately validates generated connector docs.
 
 ## Global contract
 
@@ -264,10 +264,12 @@ Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The depende
 
 ```bash
 pm docs generate --dir docs/cli --connectors-dir docs/connectors
-pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs
+pm docs validate --connectors-dir docs/connectors
 ```
 
-`pm docs validate` is a release gate. It fails when a public command or subcommand is missing from embedded help, checked-in CLI markdown, website MDX, or connector docs.
+`pm docs validate` validates generated connector manuals under the connector docs directory.
+
+Runtime help, embedded command manuals, checked-in CLI markdown, and website MDX parity are covered by focused tests, generator drift checks, website docs data generation, and `make verify` where applicable.
 
 ## Exit codes
 

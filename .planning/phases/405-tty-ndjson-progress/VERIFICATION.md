@@ -169,3 +169,46 @@ Safety notes:
 - [x] No new dependencies planned.
 - [x] No credentialed connector checks planned.
 - [x] No reverse ETL execution planned outside standard local verification smoke gates.
+
+## Review-fix #3 verification checklist — final docs-writer P2 at PR #457 head `1c1ae22dbeb333fe11abb34029e896e0523ee723`
+
+Focused red/green gates:
+
+- [x] Red docs validation: `rg -n -- '--website-dir|embedded help|checked-in CLI markdown|website MDX|pm docs validate' website/content/docs/cli-reference.mdx website/content/docs/architecture.mdx` showed stale website claims.
+- [x] Runtime truth validation: `./pm docs` showed `pm docs validate [--connectors-dir <path>]` and connector-docs-only validation wording.
+- [x] Website docs reworded so `pm docs validate` is described as connector docs validation through `--connectors-dir`; CLI/website parity is described as covered by tests/generators/`make verify` where applicable.
+- [x] Unsupported `--website-dir` removed from website docs and generated website data.
+- [x] `cd website && pnpm run gen:docs` regenerated `website/lib/docs.generated.ts`.
+- [x] Website grep confirms no unsupported `--website-dir`; source docs no longer tie `pm docs validate` to embedded help / CLI markdown / website MDX checking.
+- [x] `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1` passed.
+
+Full gates if feasible:
+
+- [x] `make verify`
+- [x] `git diff --check`
+- [x] PR #457 body updated with review-fix #3 disposition and gate results.
+- [ ] `git push origin feat/405-tty-ndjson-progress`
+
+Review-fix #3 command log:
+
+| Command | Result | Notes |
+|---|---|---|
+| `rg -n -- '--website-dir|embedded help|checked-in CLI markdown|website MDX|pm docs validate' website/content/docs/cli-reference.mdx website/content/docs/architecture.mdx` | fail | Stale website claims present before docs edits. |
+| `./pm docs` | pass | Runtime docs synopsis shows only `pm docs validate [--connectors-dir <path>]`; validation text says connector MANUAL.md sections only. |
+| `cd website && pnpm run gen:docs` | pass | Wrote 11 docs pages to `website/lib/docs.generated.ts`. |
+| `rg -n -- '--website-dir' website/content/docs website/lib/docs.generated.ts` | pass | No matches; `rg` exits 1 because the unsupported flag is absent. |
+| `rg -n -- 'pm docs validate.*(embedded|checked-in|website MDX|website command|--dir)' website/content/docs/cli-reference.mdx website/content/docs/architecture.mdx` | pass | No source-doc overclaim matches; `rg` exits 1 because no matches. |
+| `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1` | pass | `ok polymetrics.ai/internal/cli 6.642s`. |
+| `cd website && pnpm run typecheck` | blocked | `sh: tsc: command not found`; local `node_modules` missing. |
+| `make verify` | pass | `./pm docs validate --connectors-dir docs/connectors`; `Validated connector docs in docs/connectors`; `smoke ok`; `0 issues`; `connectorgen validate: 547 connector(s) checked, 0 findings`. |
+| `git diff --check` | pass | no output. |
+| `git diff -- go.mod go.sum` | pass | no output. |
+| `git diff --name-only docs/connectors | wc -l` | pass | `0`. |
+| `gh api --method PATCH repos/polymetrics-ai/cli/pulls/457 --input /tmp/pr-457-body-rf3.json --silent` | pass | PR #457 body updated; no output. |
+
+Safety notes:
+
+- [x] No secrets needed.
+- [x] No new dependencies planned.
+- [x] No credentialed connector checks planned.
+- [x] No reverse ETL execution planned outside standard local verification smoke gates.

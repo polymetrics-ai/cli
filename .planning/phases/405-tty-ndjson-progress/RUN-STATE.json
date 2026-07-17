@@ -30,6 +30,9 @@
     "golang-spf13-viper",
     "vercel-react-best-practices",
     "vercel-composition-patterns",
+    "missing .pi/skills/ts-website/SKILL.md",
+    "missing .pi/skills/go-implementation/SKILL.md",
+    "missing .pi/skills/design-ui/SKILL.md",
     ".agents/agentic-delivery/references/runtime-rlm-website-integration.md",
     "docs/design/tui-ux-design.md",
     "docs/adr/0003-interactive-tui-layer.md"
@@ -69,6 +72,21 @@
       "cycle": "review-fix-2-verify",
       "decision": "local_critical_path",
       "reason": "focused docs/help gates and full local gates passed inline"
+    },
+    {
+      "cycle": "review-fix-3-plan",
+      "decision": "local_critical_path",
+      "reason": "final docs-writer P2 at head 1c1ae22dbeb333fe11abb34029e896e0523ee723; bounded worker has no subagent tool"
+    },
+    {
+      "cycle": "review-fix-3-tdd",
+      "decision": "local_critical_path",
+      "reason": "red validation captured for website docs overclaim and runtime docs validate synopsis truth"
+    },
+    {
+      "cycle": "review-fix-3-verify",
+      "decision": "local_critical_path",
+      "reason": "website docs generator, focused CLI tests, and make verify passed inline; website typecheck blocked by missing local node_modules"
     }
   ],
   "reviewFix": {
@@ -153,6 +171,54 @@
         "command": "gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify",
         "result": "pass",
         "evidence": "go test ./... internal/cli 170.546s and internal/connectors/certify 339.739s; make verify internal/cli 171.209s and internal/connectors/certify 342.470s; smoke ok; 0 issues; connectorgen validate: 547 connector(s) checked, 0 findings"
+      }
+    ]
+  },
+  "reviewFix3": {
+    "startingHead": "1c1ae22dbeb333fe11abb34029e896e0523ee723",
+    "status": "locally_verified_pr_body_updated_push_pending",
+    "acceptedFindings": [
+      "Website docs must not claim pm docs validate checks embedded help, checked-in CLI markdown, or website MDX",
+      "Website docs must not document unsupported --website-dir for pm docs validate",
+      "Website docs should state pm docs validate validates connector docs through --connectors-dir; CLI/website parity is covered by tests, generators, and make verify where applicable"
+    ],
+    "redEvidence": [
+      {
+        "command": "rg -n -- '--website-dir|embedded help|checked-in CLI markdown|website MDX|pm docs validate' website/content/docs/cli-reference.mdx website/content/docs/architecture.mdx",
+        "result": "fail",
+        "evidence": "stale website docs overclaim pm docs validate scope and include unsupported --website-dir examples"
+      },
+      {
+        "command": "./pm docs",
+        "result": "pass",
+        "evidence": "runtime docs synopsis shows pm docs validate [--connectors-dir <path>] and validation checks connector MANUAL.md sections only"
+      }
+    ],
+    "greenEvidence": [
+      {
+        "command": "cd website && pnpm run gen:docs",
+        "result": "pass",
+        "evidence": "Wrote 11 docs pages to lib/docs.generated.ts"
+      },
+      {
+        "command": "rg -n -- '--website-dir' website/content/docs website/lib/docs.generated.ts",
+        "result": "pass",
+        "evidence": "no matches; rg exits 1 because unsupported flag is absent"
+      },
+      {
+        "command": "go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1",
+        "result": "pass",
+        "evidence": "ok polymetrics.ai/internal/cli 6.642s"
+      },
+      {
+        "command": "make verify",
+        "result": "pass",
+        "evidence": "docs validate connector docs; smoke ok; 0 issues; connectorgen validate: 547 connector(s) checked, 0 findings"
+      },
+      {
+        "command": "cd website && pnpm run typecheck",
+        "result": "blocked",
+        "evidence": "sh: tsc: command not found; local node_modules missing"
       }
     ]
   },

@@ -342,3 +342,85 @@ smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.JYQwR5QWMh
 0 issues.
 connectorgen validate: 547 connector(s) checked, 0 findings
 ```
+
+## Review-fix cycle #3 — final docs-writer P2 at PR #457 head `1c1ae22dbeb333fe11abb34029e896e0523ee723`
+
+Loaded skills/references for this docs-only website fix: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`, `golang-documentation`, `vercel-react-best-practices`, `vercel-composition-patterns`, `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`, and `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`. Stack implementation skill note: `.pi/skills/ts-website/SKILL.md`, `.pi/skills/go-implementation/SKILL.md`, and `.pi/skills/design-ui/SKILL.md` are absent in this checkout; loaded available routing skills instead.
+
+Planned red validation before production docs edits:
+
+- `rg -n -- '--website-dir|embedded help|checked-in CLI markdown|website MDX|pm docs validate' website/content/docs/cli-reference.mdx website/content/docs/architecture.mdx` must show stale website claims.
+- `./pm docs` must show the runtime synopsis only supports `pm docs validate [--connectors-dir <path>]`.
+
+Review-fix #3 red validation captured — 2026-07-17:
+
+```bash
+rg -n -- '--website-dir|embedded help|checked-in CLI markdown|website MDX|pm docs validate' website/content/docs/cli-reference.mdx website/content/docs/architecture.mdx
+```
+
+Result: fail/stale docs validation. Matches include unsupported `--website-dir`, embedded-help / checked-in CLI markdown / website MDX validation claims, and `pm docs validate` release-gate overclaim in `website/content/docs/cli-reference.mdx` and `website/content/docs/architecture.mdx`.
+
+```bash
+./pm docs
+```
+
+Result: runtime truth captured. Key output:
+
+```text
+SYNOPSIS
+  pm docs generate --dir <path>
+  pm docs validate [--connectors-dir <path>]
+
+DESCRIPTION
+  Writes embedded command documentation as markdown files. Generation also
+  writes connector manuals under a connector docs directory. By default, when
+  --dir is docs/cli, connector docs are written to docs/connectors.
+
+  Validation checks every registered connector has a generated MANUAL.md with
+  required human and agent workflow sections. This is intended for CI hooks and
+  local preflight checks before adding or changing connectors.
+```
+
+Review-fix #3 green evidence captured — 2026-07-17:
+
+```bash
+cd website && pnpm run gen:docs
+```
+
+Result: pass.
+
+```text
+Wrote 11 docs pages to lib/docs.generated.ts.
+```
+
+```bash
+rg -n -- '--website-dir' website/content/docs website/lib/docs.generated.ts
+```
+
+Result: pass/no matches (command exits 1 because `rg` found no matches).
+
+```bash
+go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1
+```
+
+Result: pass; `ok polymetrics.ai/internal/cli 6.642s`.
+
+```bash
+make verify
+```
+
+Result: pass. Key output:
+
+```text
+./pm docs validate --connectors-dir docs/connectors
+Validated connector docs in docs/connectors
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.zTZPadGuaI
+0 issues.
+connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+```bash
+cd website && pnpm run typecheck
+```
+
+Result: blocked local environment, not product failure: `sh: tsc: command not found`; `node_modules` missing.
