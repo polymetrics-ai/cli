@@ -41,7 +41,7 @@ Result:
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS | Green | Pre-production artifact checkpoint; no production code touched. |
 | 1 | Red | `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `perf` remains legacy; behavior tests already preserve current flag semantics. || 2 | Green | `gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/perf_cli_test.go`; `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1` | Pass | Native perf parser green; flag semantics, runtime config use, bare help, and invalid action preserved. |
 | 3 | Refactor | `gofmt -w cmd internal`; `go test ./internal/cli/... -run 'Perf|CobraRouterShell|Golden' -count=1`; `go test ./internal/cli/ -run Certify -count=1`; `go vet ./...`; `go build ./cmd/pm` | Pass | Golden-focused gate, certify re-entrancy smoke, vet, and build preserved. |
-| 4 | Full gate | Pending | Pending | Run full local gates and CLI parity checks. |
+| 4 | Full gate | `go test ./...`; `make verify`; `go build ./cmd/pm`; runtime help/docs/website/diff checks | Pass | Full local gates, CLI parity checks, and diff guards passed; no go.mod/go.sum diff. |
 
 ## Planned red tests
 
@@ -105,4 +105,75 @@ go test ./internal/cli/ -run Certify -count=1
 
 ```text
 ok  	polymetrics.ai/internal/cli	91.433s
+```
+
+```bash
+go test ./...
+```
+
+```text
+ok  	polymetrics.ai/cmd/connectorgen	6.152s
+ok  	polymetrics.ai/cmd/iconregistrygen	0.726s
+ok  	polymetrics.ai/cmd/pm	0.846s
+ok  	polymetrics.ai/cmd/prissueguard	0.332s
+ok  	polymetrics.ai/internal/agentmode	1.160s
+ok  	polymetrics.ai/internal/app	20.112s
+ok  	polymetrics.ai/internal/cli	179.296s
+ok  	polymetrics.ai/internal/connectors/certify	367.560s
+# pass; remaining packages also passed in terminal run.
+```
+
+```bash
+make verify
+```
+
+```text
+pass; completed gofmt, tidy-check, vet, go test -timeout 20m ./..., go build ./cmd/pm,
+docs validate, local smoke flow, golangci-lint, and connectorgen validate.
+Terminal tail:
+0 issues.
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+```bash
+go build ./cmd/pm
+```
+
+```text
+# no output; command exited 0
+```
+
+```bash
+./pm help perf
+./pm perf
+./pm perf --help
+./pm perf --json
+./pm perf bogus --json
+./pm perf compare --iterations 1 --runtime=false --json
+./pm perf sync-modes --records 5 --json
+```
+
+```text
+help/bare/--help byte-identical; help bytes=874; JSON manual bytes=1004;
+invalid action exit=2; stderr=error: unknown command "bogus" for "pm perf";
+compare kind=PerformanceComparison iterations=1 records=3 runtime_backed absent;
+sync-modes kind=SyncModeBenchmark records=5 and all result records=5.
+```
+
+```bash
+./pm docs generate --dir "$TMP_DOCS/cli" --connectors-dir "$TMP_DOCS/connectors"
+diff -ru docs/cli "$TMP_DOCS/cli"
+./pm docs validate --connectors-dir docs/connectors
+npm --prefix website run gen:docs
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+```text
+Generated docs in <tmp>/cli and connector docs in <tmp>/connectors
+# diff -ru: no output
+Validated connector docs in docs/connectors
+Wrote 11 docs pages to lib/docs.generated.ts.
+# git diff checks: no output; go.mod/go.sum diff empty
 ```

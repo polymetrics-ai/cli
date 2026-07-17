@@ -1,6 +1,6 @@
 # Phase 423 Summary
 
-Status: native perf implementation complete; focused/golden gates, certify smoke, vet, and build passed; full gates pending.
+Status: native perf implementation complete; full local verification and parity checks passed; PR pending.
 
 ## Current state
 
@@ -23,7 +23,15 @@ Red test captured: `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=
 
 Focused green gates passed: `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1`, `go test ./internal/cli/... -run 'Perf|CobraRouterShell|Golden' -count=1`, `go test ./internal/cli/ -run Certify -count=1`, `gofmt -w cmd internal`, `go vet ./...`, and `go build ./cmd/pm`.
 
-Pending full local gates, CLI parity checks, PR, and review-route recording.
+Full gates passed: `go test ./...`, `make verify`, and an explicit final `go build ./cmd/pm`.
+
+Runtime help parity checked: `./pm help perf`, `./pm perf`, `./pm perf --help`, `./pm perf --json`, invalid action JSON usage error, `perf compare` JSON, and `perf sync-modes` JSON.
+
+Docs/website/generated checks passed: `./pm docs generate` diff against `docs/cli`, `./pm docs validate`, and `npm --prefix website run gen:docs`; no tracked docs/website/golden changes.
+
+Diff guards passed: `git diff --check origin/feat/cli-architecture-v2...HEAD`; `git diff -- go.mod go.sum` empty.
+
+Pending PR and review-route recording.
 
 ## Safety
 
