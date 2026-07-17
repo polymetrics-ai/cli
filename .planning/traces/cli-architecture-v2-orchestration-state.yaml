@@ -18,18 +18,12 @@ orchestrator:
   runtime: pi
   status: running
 ready_queue:
-  - number: 423
-    status: in_progress
-    dependencies: [422, 405]
-    write_scope: "perf Cobra namespace node/handler/tests/parity only"
-    decision: spawned
-    reason: "Dispatched in isolated worktree ../wt-423-perf-native-cobra from parent head 3f92f8ef; #410 remains serialized behind it."
   - number: 410
     status: worker_ready
-    dependencies: [402, 404, 405]
+    dependencies: [402, 404, 405, 423]
     write_scope: "telemetry package, config/docs, CLI/app/flow/certify/connsdk/worker spans"
-    decision: not_spawned_write_scope_collision
-    reason: "#404/#405 collisions cleared, but #410 still overlaps #423 central CLI/app/flow surfaces; defer until #423 integrates."
+    decision: next_dispatch_candidate
+    reason: "#404/#405/#423 are provisionally integrated; telemetry spans are next now that shared CLI/app/flow namespace seams are clear."
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -175,6 +169,14 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [423]
     reason: "pm-gsd-worker dispatched in isolated worktree ../wt-423-perf-native-cobra from parent head 3f92f8ef44bc39fe104f3f11c3eac324b6f222bb."
+  - timestamp: 2026-07-17T20:21:21Z
+    decision: local_critical_path
+    issue_numbers: [423]
+    reason: "Coordinator provisionally integrated PR #458 after final clean targeted/security/docs re-reviews and remote checks; parent squash 03dc5d9518c25e9bc6ced281f70c25fbc51bd198."
+  - timestamp: 2026-07-17T20:21:41Z
+    decision: next_dispatch_candidate
+    issue_numbers: [410]
+    reason: "Queue rebuilt after #423 integration: #410 telemetry spans are now unblocked from #404/#405/#423 shared surfaces."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -304,8 +306,8 @@ subissues:
     status: worker_ready
     write_scope: "internal/telemetry, config/docs, CLI/app/flow/certify/connsdk/worker spans"
     worker_directory: ""
-    verification: not_run_write_scope_collision
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "#404/#405 cleared; defer until #423 clears shared CLI/app/flow namespace seams.", disposition_url: ""}
+    verification: not_run_ready_after_423
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Ready after #404/#405/#423; dispatch next for telemetry spans.", disposition_url: ""}
   - number: 411
     url: https://github.com/polymetrics-ai/cli/issues/411
     branch: pending
@@ -429,13 +431,13 @@ subissues:
   - number: 423
     url: https://github.com/polymetrics-ai/cli/issues/423
     branch: refactor/423-perf-native-cobra
-    pr_url: ""
+    pr_url: https://github.com/polymetrics-ai/cli/pull/458
     worker: pm-gsd-worker
-    status: in_progress
+    status: provisionally_integrated
     write_scope: "perf Cobra namespace node/handler/tests/parity only"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-423-perf-native-cobra
-    verification: in_progress
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched after #405; stacked PR/review pending.", disposition_url: ""}
+    verification: "Local full gates, remote PR checks, and final targeted/security/docs re-reviews passed at 09630ac7; parent squash 03dc5d9518c25e9bc6ced281f70c25fbc51bd198."
+    automated_review: {primary_route: human, status: blocked, head_sha: 09630ac7c486c47d969ca018c9ddeb142204669c, reviewed_range: "087ec03c..03dc5d95", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled/no run; Copilot quota exhausted; pm-reviewer/security-auditor/docs-writer findings fixed and final sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/458"}
   - number: 453
     url: https://github.com/polymetrics-ai/cli/issues/453
     branch: fix/453-reverse-smoke-preview
