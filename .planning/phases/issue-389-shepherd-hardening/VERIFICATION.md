@@ -246,7 +246,7 @@ Required gates:
 - [x] Ancestry-only merge `17ca31f6d04def71d55137d25d8194feaea10829` has the required two parents.
 - [x] The ancestry merge has zero diff from accepted Slice G and leaves a clean worktree.
 - [x] Planning reconciliation touches only `.planning/phases/issue-389-shepherd-hardening/`.
-- [ ] Fresh full normal/race/integration/vet/build/verify/lint/hygiene gates pass after planning commit.
+- [x] Fresh full normal/race/integration/vet/build/verify/lint/hygiene gates pass after planning commit and authorized review fixes.
 - [ ] Fresh exact-head GPT-5.6 Sol/high correctness/security/recovery/test-realism review has no findings.
 - [ ] Branch push, exact local/remote equality, clean tree, draft stacked PR, and required CI checks pass.
 
@@ -260,9 +260,9 @@ Deletion proof:
       after validation.
 - [x] Scoped deletion, out-of-scope deletion, deterministic rename, malformed/unknown status, recreated
       path variants, flag/sentinel mismatch, and disappearing present artifacts are covered.
-- [ ] Actual built-CLI deletion reaches ratification, promotion, and `final_human_gate`; rejected variants
-      leave canonical Git/GSD unchanged. Test exists but this isolated checkout lacks the packaged
-      official GSD loader required to execute the integration harness.
+- [x] Actual built-CLI deletion reaches ratification, promotion, and `final_human_gate`; recreated-path
+      rejection leaves canonical Git/GSD unchanged. Canonical normal and race integration runs pass with
+      the packaged official GSD loader.
 
 Bounded Git execution:
 - [x] Git diff status, stdout, stderr, object bytes, and errors are bounded during execution.
@@ -273,7 +273,7 @@ Bounded Git execution:
 Gates/review:
 - [x] Focused Git/validator/command tests pass.
 - [x] Focused race and full normal/race nested Shepherd tests pass.
-- [ ] Deletion integration tests are blocked by missing packaged official GSD loader in this checkout.
+- [x] Canonical deletion integration and full integration suites pass in normal and race modes with the packaged official GSD loader.
 - [x] Full nested tests/race/vet/build/`make verify`, root `make verify`, boundary/list/diff/hygiene pass.
 - [x] Default and integration-tagged lint remain exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`.
 - [ ] Fresh exact-head GPT-5.6 Sol/high correctness and security reviews have no unresolved findings.
@@ -396,8 +396,12 @@ go list ./...
   normal/race, vet/build/nested `make verify`, root `make verify`, module boundary, diff check, root
   package list, and exact default/tagged 28-finding lint baseline. Generated `shepherd` and `pm` binaries
   were removed.
-- `verificationPassed` is false during the authorized review-fix cycle because deletion integration and
-  exact-head review remain coordinator-owned pending gates.
+- Canonical packaged-loader deletion integration and full integration suites: PASS normal and race.
+- Initial post-fix lint run found one new test-only `errcheck`; the cleanup return is now explicitly
+  discarded, affected normal/race tests pass, and default/tagged lint reruns match exactly 25 `errcheck`,
+  2 `staticcheck`, 1 `unused`.
+- Full nested/root verification, module boundary, list, JSON/diff/hygiene, and binary cleanup pass;
+  `verificationPassed` is true.
 - Draft stacked PR creation is pending replacement exact-head review. Canaries, credentials,
   cleanup/migration, ready-for-review transition, every PR merge, and `main` mutation remain blocked.
 
@@ -419,12 +423,12 @@ go list ./...
 - [x] Full nested normal: `go test ./...` PASS.
 - [x] Vet/build/diff: `go vet ./...`, `go build ./cmd/shepherd`, generated binary removal, and
       `git diff --check` PASS.
-- [ ] Deletion integration remains blocked by missing packaged official GSD loader in this isolated checkout.
+- [x] Temporary worker lacked the packaged loader; canonical deletion/full integration normal and race gates pass.
 - [ ] Exact-head GPT-5.6 Sol/high review remains coordinator-owned.
 
 Out-of-scope disposition: shared repository Git config/environment trust remains declined for this
 bounded fix under the accepted same-UID host trust assumption. No environment allowlist/config policy was changed.
-`verificationPassed=false` remains correct.
+`verificationPassed=true` after canonical full gates.
 
 ### Post-Slice-G cleanup / UTF-8 residual follow-up
 
@@ -441,5 +445,5 @@ bounded fix under the accepted same-UID host trust assumption. No environment al
 - [x] Focused normal: `go test ./internal/git ./internal/validation ./cmd/shepherd -count=1` PASS.
 - [x] Focused race: `go test -race ./internal/git ./internal/validation ./cmd/shepherd -count=1` PASS.
 - [x] Diff hygiene: `git diff --check` PASS.
-- [ ] Integration loader/deletion/process gates and exact-head GPT-5.6 Sol/high review remain
-      coordinator-owned; `verificationPassed=false` remains correct.
+- [x] Coordinator-owned packaged-loader deletion/process and full integration normal/race gates pass.
+- [ ] Exact-head GPT-5.6 Sol/high review remains pending; `verificationPassed=true` after full local gates.

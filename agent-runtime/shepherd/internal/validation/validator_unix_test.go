@@ -37,7 +37,7 @@ func verifyArtifactHashesCloseHelper() {
 		fmt.Fprintf(os.Stderr, "tempdir: %v\n", err)
 		os.Exit(2)
 	}
-	defer os.RemoveAll(workDir)
+	defer func() { _ = os.RemoveAll(workDir) }()
 	artifacts := make([]ArtifactHash, 0, 128)
 	for i := 0; i < 128; i++ {
 		rel := fmt.Sprintf("agent-runtime/shepherd/artifact-%03d/proof.txt", i)

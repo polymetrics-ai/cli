@@ -423,9 +423,9 @@ TDD/implementation contract:
   exact-head, ratification, or promotion gates.
 - Focused RED was captured before production edits. GREEN/refactor now passes focused Git/validation/
   command tests, focused race, full nested normal/race, vet/build/nested and root verify, boundary,
-  diff, root list, and default/tagged lint-baseline gates. The deletion integration tests are present
-  but blocked in this isolated checkout by the missing packaged official GSD loader; fresh exact-head
-  GPT-5.6 Sol/high correctness/security review remains coordinator-owned.
+  diff, root list, and default/tagged lint-baseline gates. The isolated worker lacked the packaged
+  official GSD loader, but canonical-checkout deletion and full integration suites now pass in normal
+  and race modes; fresh exact-head GPT-5.6 Sol/high correctness/security review remains pending.
 
 Authorized production paths are limited to `agent-runtime/shepherd/internal/git/**`,
 `agent-runtime/shepherd/internal/validation/**`, minimum evidence conversion under
@@ -438,8 +438,8 @@ Implementation summary: `ArtifactManifest` now uses bounded argv Git execution a
 streamed through the validator-aligned 8 MiB limit, Git stdout/stderr diagnostics are bounded and
 sanitized, and validator pre/post checks enforce absence or regular-file stability without following
 symlinked path components. Promotion proof and actual-CLI integration fixtures now preserve deletion
-identity. Keep `verificationPassed=false` until coordinator provisions the official integration loader
-and completes exact-head review.
+identity. Canonical packaged-loader integration and all declared local gates pass, so
+`verificationPassed=true`; exact-head review remains the final pre-push gate.
 
 ## Post-Slice-G bounded Git / descriptor-root follow-up
 
@@ -455,7 +455,9 @@ Confirmed adjacent scope only:
   only opened descriptors; deleted absence is checked relative to the pinned parent root.
 - Use `internal/git.DeletionSentinelHash` as the source of truth in validation and promotion.
 
-Orchestration decision: `local_critical_path`; these parser, process, object-hashing, validator, and
-promotion-sentinel changes share one trust boundary. No worker spawn, no dependency, no shell, no GitHub
-mutation, no canary, no cleanup/migration, no amend/rebase/push. Shared repository Git config/environment
-hardening is declined as out of scope under the documented accepted same-UID host trust assumption.
+Orchestration decision: `spawned`; one isolated GPT-5.5/high worker owned these parser, process,
+object-hashing, validator, and promotion-sentinel changes as one trust boundary, while the coordinator
+performed independent review and canonical verification. No overlapping mutating worker, dependency,
+shell, GitHub mutation, canary, cleanup/migration, amend/rebase, or push occurred. Shared repository Git
+config/environment hardening is declined as out of scope under the documented accepted same-UID host
+trust assumption.

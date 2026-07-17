@@ -4,9 +4,9 @@
   "base_head": "ee474811378edd604e1e86e413f0bcafeced452b",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_g_cleanup_utf8_review_followup_focused_green",
-  "verificationPassed": false,
-  "current_slice": "post_slice_g_git_cleanup_validator_utf8_followup",
+  "state": "slice_g_exact_head_review_fix_verified_review_pending",
+  "verificationPassed": true,
+  "current_slice": "post_slice_g_exact_head_deletion_and_git_output_review_fix",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "authorized_review_fix": {
     "authorization": "Production changes are limited to the two confirmed exact-head findings and minimum schema/test propagation.",
@@ -280,23 +280,28 @@
     },
     {
       "cycle": "cycle-35-slice-g-exact-head-review-fix-red",
-      "decision": "local_critical_path",
+      "decision": "spawned",
       "reason": "Added test-only deletion identity, validator absence/symlink, bounded Git output/error-classification, and built-CLI deletion process regressions, then captured expected focused RED before any production edit; official-loader absence is recorded for the integration RED environment."
     },
     {
       "cycle": "cycle-36-slice-g-exact-head-review-fix-green-verify",
-      "decision": "local_critical_path",
+      "decision": "spawned",
       "reason": "Implemented typed deletion proofs, validator absence/no-follow revalidation, bounded Git stdout/stderr/object hashing, command/promotion propagation, and deletion integration fixtures; focused/full nested normal-race and root verification pass, while packaged-loader deletion integration and exact-head review remain pending."
     },
     {
       "cycle": "cycle-37-slice-g-exact-head-review-followup",
-      "decision": "local_critical_path",
+      "decision": "spawned",
       "reason": "Confirmed adjacent gaps in bounded Git parsing, hashGitObject object limits, process-group cleanup, descriptor-relative validator file access, and deletion-sentinel source-of-truth share one sequential trust boundary; RED was captured before production edits and focused normal/race gates now pass. Git config/environment policy is declined as out-of-scope under the documented same-UID host trust assumption."
     },
     {
       "cycle": "cycle-38-slice-g-cleanup-utf8-followup",
-      "decision": "local_critical_path",
+      "decision": "spawned",
       "reason": "Authorized exact-head residual cleanup, validator descriptor lifetime, and Git name-status UTF-8 parsing share one adjacent trust boundary; RED was captured before production edits and focused normal/race gates now pass. verificationPassed remains false for coordinator-owned integration/review gates."
+    },
+    {
+      "cycle": "cycle-39-slice-g-review-fix-full-verify",
+      "decision": "local_critical_path",
+      "reason": "Canonical checkout with the packaged official loader passes focused deletion normal/race, full normal/race integration, focused/full Shepherd normal/race, vet/build/nested make, root make, module boundary, root list, JSON/diff/hygiene, and exact 25 errcheck/2 staticcheck/1 unused default/tagged lint after fixing one new test-only errcheck; verificationPassed is true and exact-head GPT-5.6 Sol/high review is the remaining gate."
     }
   ],
   "slice_b_checkpoint": {
@@ -305,10 +310,9 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Coordinator provisions the packaged official GSD loader and runs deletion/process integration tests, including normal and race where available",
-    "Run fresh exact-head GPT-5.6 Sol/high correctness/security review over the new cleanup/UTF-8 follow-up commit range",
-    "Keep verificationPassed=false until coordinator-owned integration/review gates complete",
-    "After review passes, push only fix/389-shepherd-proof-recovery, open/update the draft stacked PR, monitor CI, and stop"
+    "Run fresh exact-head GPT-5.6 Sol/high correctness/security review over d72e597e35b5104cf58936612053705c280fc2b1...HEAD",
+    "After review passes, push only fix/389-shepherd-proof-recovery and confirm exact local/remote equality and cleanliness",
+    "Open the draft stacked PR into feat/372-gsd-pi-go-shepherd, monitor required CI, and stop before canaries"
   ],
   "blocked": [
     "draft stacked PR creation until replacement exact-head review passes",

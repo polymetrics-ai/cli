@@ -157,5 +157,16 @@ work so descriptor roots/files close before the next bounded item. Git name-stat
 must be valid UTF-8 before conversion, hashing, deletion sentinel evidence, or JSON proof construction.
 
 Focused normal and race gates for `./internal/git ./internal/validation ./cmd/shepherd` pass, and
-`git diff --check` passes. `verificationPassed=false` remains intentional pending coordinator-owned
-integration and exact-head review gates.
+`git diff --check` passes. The temporary worker lacked the packaged loader, but canonical deletion and
+full integration suites now pass in normal/race modes.
+
+## Canonical review-fix verification
+
+Canonical focused/full Shepherd normal and race tests, focused deletion and full integration normal
+and race tests, vet/build/nested `make verify`, root `make verify`, module boundary, root package list,
+planning JSON, formatting/diff hygiene, and binary cleanup pass. One new test-only `errcheck` from the
+first lint run was fixed; default and integration-tagged lint reruns exactly match the accepted
+25 `errcheck`, 2 `staticcheck`, 1 `unused` baseline with zero differential. `verificationPassed=true`.
+Fresh exact-head GPT-5.6 Sol/high correctness/security review remains the only pre-push gate.
+No live external operation, credential access, canary, cleanup/migration, PR merge, or `main` mutation
+occurred.

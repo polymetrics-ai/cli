@@ -586,13 +586,14 @@ Integration environment note:
 ```bash
 cd agent-runtime/shepherd && go test -tags=integration ./integration/... -run 'TestSupervise.*Delet|TestArtifact.*Delet' -count=1
 ```
-Still cannot execute in this checkout because the packaged official GSD loader is absent at
-`/tmp/.tools/gsd-pi-1.11.0/.../loader.js`; no production fallback or fake admission bypass was added.
-The deletion process tests compile in the integration package and remain a coordinator/loader-provisioned gate.
+The isolated worker could not execute this gate because its temporary checkout lacked the packaged
+loader at `/tmp/.tools/gsd-pi-1.11.0/.../loader.js`; no production fallback or fake admission bypass
+was added. The coordinator later ran the deletion process tests with the canonical packaged loader in
+normal and race modes, both passing.
 
-Orchestration decision: `local_critical_path` for planning, RED, GREEN, and verification because Git
-artifact parsing, validator request identity, command evidence hashing, and process integration share one
-sequential trust boundary.
+Orchestration decision: `spawned` for RED/GREEN implementation: one isolated GPT-5.5/high worker owned
+Git artifact parsing, validator request identity, command evidence hashing, and process integration as
+one sequential trust boundary. Planning and canonical verification remained coordinator-owned.
 
 ## Verification log
 
@@ -727,10 +728,41 @@ git diff --check
 # PASS
 ```
 
-Blocked integration gate remains environment-owned:
+Isolated-worker integration gate was environment-blocked:
 
 ```bash
 cd agent-runtime/shepherd && go test -tags=integration ./integration/... -run 'TestSupervise.*Delet|TestArtifact.*Delet' -count=1
 ```
-FAIL: `official GSD loader is unavailable at /tmp/.tools/gsd-pi-1.11.0/node_modules/@opengsd/gsd-pi/dist/loader.js`.
-No production fallback or fake admission bypass was added. `verificationPassed=false` remains correct.
+FAIL in the temporary worker only: `official GSD loader is unavailable at /tmp/.tools/gsd-pi-1.11.0/node_modules/@opengsd/gsd-pi/dist/loader.js`.
+No production fallback or fake admission bypass was added. Canonical packaged-loader runs later pass.
+
+## Canonical review-fix verification — GREEN / REVIEW PENDING
+
+Coordinator canonical-checkout evidence after fast-forwarding all isolated GPT-5.5/high commits:
+
+```bash
+cd agent-runtime/shepherd
+gofmt -w internal/git internal/validation cmd/shepherd integration
+go test ./internal/git -count=1
+go test ./internal/validation -count=1
+go test ./cmd/shepherd -count=1
+go test -tags=integration ./integration/... -run 'TestSupervise.*Delet|TestArtifact.*Delet' -count=1
+go test -race -tags=integration ./integration/... -run 'TestSupervise.*Delet|TestArtifact.*Delet' -count=1
+go test ./internal/git ./internal/validation ./cmd/shepherd -count=1
+go test -race ./internal/git ./internal/validation ./cmd/shepherd -count=1
+go test -tags=integration ./integration/... -count=1
+go test -race -tags=integration ./integration/... -count=1
+go test ./...
+go test -race ./...
+go vet ./...
+go build ./cmd/shepherd
+make verify
+```
+
+All pass. Root `make verify`, module boundary, root `go list ./...`, planning JSON, diff hygiene, and
+binary cleanup also pass. First lint run found one new test-only unchecked `os.RemoveAll`; after the
+scoped test cleanup fix and affected normal/race reruns, default and integration-tagged lint both return
+exactly 28 accepted findings: 25 `errcheck`, 2 `staticcheck`, 1 `unused`, zero differential.
+`verificationPassed=true`; exact-head GPT-5.6 Sol/high correctness/security review remains the only
+pre-push gate. No credential, connector/API operation, canary, cleanup/migration, PR/merge, or `main`
+mutation occurred.
