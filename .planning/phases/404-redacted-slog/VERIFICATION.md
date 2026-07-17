@@ -15,7 +15,7 @@ git diff --check origin/feat/cli-architecture-v2...HEAD
 git diff -- go.mod go.sum
 ```
 
-Extended full CLI race remains pending for coordinator and must not be run by this worker. `verificationPassed=false` until that coordinator gate is complete.
+Extended full CLI race completed by coordinator on production head `7bd3cfae2750f771fe2f27dcdfc7df40eccc3509`. `verificationPassed=true`; final artifact-only updates do not change production code.
 
 | Gate | Command | Status | Notes |
 |---|---|---|---|
@@ -40,7 +40,7 @@ Extended full CLI race remains pending for coordinator and must not be run by th
 | Review-fix verify | `make verify` | PASS | Exited 0. |
 | Review-fix diff check | `git diff --check origin/feat/cli-architecture-v2...HEAD` | PASS | Exited 0. |
 | Review-fix dependency check | `git diff -- go.mod go.sum` | PASS | Empty. |
-| Extended full CLI race | not run | PENDING/COORDINATOR | Explicitly deferred by coordinator; `verificationPassed=false`. |
+| Extended full CLI race | `go test -race ./internal/cli/... -count=1 -timeout 45m` | PASS | Exited 0 on production head `7bd3cfae2750f771fe2f27dcdfc7df40eccc3509`; `internal/cli` 1786.300s. |
 | Second review-fix planning | phase artifacts updated before production edits | PASS | PR #455 at `e27647806b44d40c09bccc1199e290c3054db452`; no production edits yet. |
 | Second review-fix red tests | see TDD ledger T13 | PASS | Red captured before production edits; failure output did not print synthetic marker values. |
 | Second review-fix format | `gofmt -w cmd internal` | PASS | Exited 0. |

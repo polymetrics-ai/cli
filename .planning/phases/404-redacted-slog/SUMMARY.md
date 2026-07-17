@@ -1,6 +1,6 @@
 # SUMMARY — Issue #404
 
-Status: PR #455 second review-fix and final residual fixes implemented after power-outage recovery; requested gates passed. `verificationPassed=false` because extended full CLI race remains coordinator-owned/pending and was not run in this worker gate.
+Status: PR #455 second review-fix, final residual fixes, and coordinator-owned extended CLI race are complete. `verificationPassed=true`; final artifact-only updates do not change production code.
 
 PR: https://github.com/polymetrics-ai/cli/pull/455
 Head: see current `feat/404-redacted-slog` branch head.
@@ -82,6 +82,7 @@ Final gate PASS:
 - `make verify`
 - `git diff --check origin/feat/cli-architecture-v2...HEAD`
 - `git diff -- go.mod go.sum`
+- Coordinator extended race on production head `7bd3cfae2750f771fe2f27dcdfc7df40eccc3509`: `go test -race ./internal/cli/... -count=1 -timeout 45m` (`internal/cli` 1786.300s)
 
 ## Review route
 

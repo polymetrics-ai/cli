@@ -7,9 +7,9 @@
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/455",
   "head": "see-current-branch-head",
   "mode": "manual-gsd-fallback",
-  "verificationPassed": false,
+  "verificationPassed": true,
   "fallbackReason": "scripts/gsd prompt programming-loop init --phase 404 --dry-run failed: unknown GSD command: programming-loop",
-  "verificationBlocker": "Requested second review-fix and final residual gates passed; extended full CLI race remains coordinator-owned and pending before integration.",
+  "verificationBlocker": "",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -55,7 +55,7 @@
     "reviewFixFocusedUnit": "pass",
     "reviewFixFocusedRace": "pass",
     "reviewFixCLIFocused": "pass",
-    "extendedFullCLIRace": "coordinator-deferred",
+    "extendedFullCLIRace": "pass",
     "goVet": "pass",
     "goTestAll": "pass",
     "goBuildPm": "pass",
@@ -65,7 +65,7 @@
     "secondReviewFixPlanning": "pass",
     "secondReviewFixRedTests": "red-captured",
     "secondReviewFixFocusedRace": "pass",
-    "secondReviewFixExtendedFullCLIRace": "coordinator-owned-pending",
+    "secondReviewFixExtendedFullCLIRace": "pass",
     "secondReviewFixFormat": "pass",
     "secondReviewFixVet": "pass",
     "secondReviewFixGoTestAll": "pass",
@@ -81,6 +81,9 @@
     "finalReReviewGoBuildPm": "pass",
     "finalReReviewMakeVerify": "pass",
     "finalReReviewDiffCheck": "pass",
-    "finalReReviewGoModGoSumDiff": "pass"
+    "finalReReviewGoModGoSumDiff": "pass",
+    "extendedFullCLIRaceCommand": "go test -race ./internal/cli/... -count=1 -timeout 45m",
+    "extendedFullCLIRaceHead": "7bd3cfae2750f771fe2f27dcdfc7df40eccc3509",
+    "extendedFullCLIRaceDuration": "internal/cli 1786.300s"
   }
 }

@@ -34,4 +34,4 @@ Task: second security review-fix PR #455 issue #404 at `e27647806b44d40c09bccc11
 
 Downstream artifact: PLAN/TDD/VERIFICATION/RUN-STATE/SUMMARY updated before test and production edits.
 
-Verification result: requested second-review gates passed after outage recovery; final re-review residuals were fixed with red/green focused tests and the expanded focused gate rerun passed. Extended full CLI race remains coordinator-owned/deferred and was not run by this worker.
+Verification result: requested second-review gates passed after outage recovery; final re-review residuals were fixed with red/green focused tests and the expanded focused gate rerun passed. Coordinator-owned extended full CLI race passed on production head `7bd3cfae2750f771fe2f27dcdfc7df40eccc3509` (`internal/cli` 1786.300s); later updates are artifact-only.
