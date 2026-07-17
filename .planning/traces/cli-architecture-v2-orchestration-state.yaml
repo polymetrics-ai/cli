@@ -19,11 +19,11 @@ orchestrator:
   status: running
 ready_queue:
   - number: 404
-    status: in_progress
+    status: in_progress_review_fix_dirty
     dependencies: [402]
     write_scope: "logging/redaction/vault/Temporal logger bridge"
-    decision: spawned
-    reason: "Safety interlock cleared; earlier Phase 6 logging foundation owns shared stderr/vault/worker seams first."
+    decision: local_critical_path
+    reason: "Power-outage recovery found PR #455 open at e2764780 with uncommitted second-review fixes preserved in wt-404; T13 red captured and T14 verification pending."
   - number: 405
     status: worker_ready
     dependencies: [403]
@@ -159,6 +159,10 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [404]
     reason: "Direct fallback map serialized Phase 6 logging before #405/#423 and kept #410 deferred across logging/CLI/worker overlaps."
+  - timestamp: 2026-07-17T13:36:28Z
+    decision: local_critical_path
+    issue_numbers: [404]
+    reason: "Recovered after power outage without resetting worker worktree; dirty second security review-fix changes preserved and green/verification resumes from T14."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -223,13 +227,13 @@ subissues:
   - number: 404
     url: https://github.com/polymetrics-ai/cli/issues/404
     branch: feat/404-redacted-slog
-    pr_url: ""
+    pr_url: https://github.com/polymetrics-ai/cli/pull/455
     worker: pm-gsd-worker
-    status: in_progress
+    status: in_progress_review_fix_dirty
     write_scope: "logging/redaction packages, vault registration, retention, Temporal logger bridge"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-404-redacted-slog
-    verification: not_run_worker_spawned
-    automated_review: {primary_route: blocked, status: blocked, head_sha: 20475ddf8ae3486282ead4fc7d2129f2bd1129b3, reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched from current parent; review pending.", disposition_url: ""}
+    verification: "Remote PR #455 at e2764780 had green CI, but targeted reviews found second-review blockers; dirty local fixes after e2764780 are preserved, T13 red evidence recorded, and T14 gates are pending."
+    automated_review: {primary_route: human, status: blocked, head_sha: e27647806b44d40c09bccc1199e290c3054db452, reviewed_range: "20475ddf..e2764780", coverage_route: blocked, fallback_route: human, disposition_summary: "Second-review blockers accepted; uncommitted fixes preserved after outage; focused gates/re-review pending before integration.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/455"}
   - number: 405
     url: https://github.com/polymetrics-ai/cli/issues/405
     branch: pending
@@ -440,4 +444,4 @@ human_gates:
   - production deploys
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
-updated_at: 2026-07-17T09:05:47Z
+updated_at: 2026-07-17T13:36:28Z
