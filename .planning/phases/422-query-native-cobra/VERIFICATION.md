@@ -2,12 +2,12 @@
 
 ## Required gate checklist
 
-- [ ] `gofmt -w cmd internal`
-- [ ] `go test ./internal/cli/... -run 'Query|CobraRouterShell|Golden' -count=1`
-- [ ] `go test ./internal/cli/ -run Certify -count=1`
-- [ ] `go vet ./...`
+- [x] `gofmt -w cmd internal`
+- [x] `go test ./internal/cli/... -run 'Query|CobraRouterShell|Golden' -count=1`
+- [x] `go test ./internal/cli/ -run Certify -count=1`
+- [x] `go vet ./...`
 - [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
+- [x] `go build ./cmd/pm`
 - [ ] `make verify`
 - [ ] `git diff --check origin/feat/cli-architecture-v2...HEAD`
 - [ ] `git diff -- go.mod go.sum`
@@ -38,4 +38,24 @@
 
 ## Results
 
-Pending.
+```bash
+go test ./internal/cli/... -run 'Query|CobraRouterShell|Golden' -count=1
+```
+
+Result: pass (`ok  	polymetrics.ai/internal/cli	10.691s`).
+
+```bash
+go test ./internal/cli/ -run Certify -count=1
+```
+
+Result: pass (`ok  	polymetrics.ai/internal/cli	91.638s`).
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go build ./cmd/pm
+```
+
+Result: pass; `go vet` and `go build` exited 0 with no output.
+
+Full `go test ./...`, `make verify`, runtime help/docs/website parity, and diff guards pending.

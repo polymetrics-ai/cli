@@ -57,21 +57,34 @@ Excluded:
 - `--sql` routes to `App.QuerySQL`; default JSONL engine only supports `SELECT * FROM <table> [LIMIT n]`, DuckDB-tagged engine has strict read-only `validateSelectOnly` guards. This phase must not loosen either guard or expose generic SQL write.
 - Help/docs currently come from canonical `docs` map and checked-in `docs/cli/query.md`; website query docs already describe read-only SQL and agent-mode output. No intentional help text change planned.
 
+## Delivered implementation matrix
+
+| Scope | Delivery |
+|---|---|
+| Native query Cobra node | `query` removed from legacy wrapper list and registered as a native command with custom docs-map help/usage. |
+| Action | Added native `run` subcommand. |
+| Flag parity | Added pflag `StringArrayVar` declarations for `--table`, `--sql`, `--limit`, `--fields`, `--agent-mode`, and `--sample`; set `NoOptDefVal="true"`; preserved unknown-flag tolerance and optional-value normalization for legacy space-form values. |
+| Handler adaptation | Replaced `runQuery`/query `parseFlags` path with `runQueryRun` receiving parsed native flag values while preserving validation order, repeated flag semantics, output envelopes, and app/query-engine behavior. |
+| Bare/invalid behavior | Bare namespace help exits 0; invalid action exits 2 through `mapCobraErr` without opening `.polymetrics` first. |
+| SQL safety | Read-only SQL guards remain in app query engines; no generic SQL write, no SQL grammar expansion, no app/query-engine behavior changes. |
+| Completion metadata | Native flags are declared; `query run` has a no-file completion seam. Phase 15 completion implementation deferred. |
+| Docs/goldens | No help/docs/website/golden fixture changes expected; focused golden test passed. |
+
 ## Slice plan
 
-1. Planning checkpoint
-   - Create phase artifacts and record adapter fallback, missing repo Go skill file, loaded skills, scope, parity checklist, SQL safety stance, and verification plan.
+1. Planning checkpoint ✅
+   - Created phase artifacts and recorded adapter fallback, missing repo Go skill file, loaded skills, scope, parity checklist, SQL safety stance, and verification plan.
 
-2. Red tests
-   - Add focused tests proving `query` is not yet native: top-level command should have `DisableFlagParsing=false`, native `run` subcommand should exist, declared flags should have legacy-compatible metadata (`StringArray` + `NoOptDefVal="true"` where optional values matter), unknown-flag tolerance, and no-file completion fallback.
-   - Add behavior tests for query flag forms: equals, space, repeated scalar last-wins, repeated/comma `--fields` accumulation, bare bool sentinel preservation, unknown flag tolerance, extra args tolerance, late global `--root`/`--json`, agent-mode summary/stream, malformed integer validation, invalid action usage-before-project-open, and read-only SQL rejection.
-   - Capture exact red output in `TDD-LEDGER.md` before production code.
+2. Red tests ✅
+   - Added focused tests proving `query` was not yet native: top-level command should have `DisableFlagParsing=false`, native `run` subcommand should exist, declared flags should have legacy-compatible metadata (`StringArray` + `NoOptDefVal="true"`), unknown-flag tolerance, and no-file completion fallback.
+   - Added behavior tests for query flag forms: equals, space, repeated scalar last-wins, repeated/comma `--fields` accumulation, bare bool sentinel preservation, unknown flag tolerance, extra args tolerance, late global `--root`/`--json`, SQL last-wins, invalid action usage-before-project-open, and read-only SQL rejection.
+   - Captured exact red output in `TDD-LEDGER.md` before production code.
 
-3. Green implementation
-   - Add native `query` subtree in `cobra_router.go` with docs-map help/usage.
-   - Add native `query run` declared flags and normalization for optional value flags so pflag `NoOptDefVal` does not swallow legacy space-form values.
-   - Add a query handler adapter that accepts parsed flag values and preserves existing validation order, output envelopes, agent mode behavior, and SQL read-only guard routing.
-   - Remove the `query` namespace legacy wrapper/`parseFlags` call site when no longer needed.
+3. Green implementation ✅
+   - Added native `query` subtree in `cobra_router.go` with docs-map help/usage.
+   - Added native `query run` declared flags and normalization for optional value flags so pflag `NoOptDefVal` does not swallow legacy space-form values.
+   - Added a query handler adapter that accepts parsed flag values and preserves existing validation order, output envelopes, agent mode behavior, and SQL read-only guard routing.
+   - Removed the `query` namespace legacy wrapper/`parseFlags` call site.
 
 4. Parity / golden check
    - Golden transcript changes expected: empty.

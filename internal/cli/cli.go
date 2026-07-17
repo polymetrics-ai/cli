@@ -864,11 +864,7 @@ func directConnector(a *app.App, args []string) (connectors.Connector, connector
 	}, nil
 }
 
-func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 || args[0] != "run" {
-		return errUsage
-	}
-	flags := parseFlags(args[1:])
+func runQueryRun(ctx context.Context, a *app.App, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
 	limit, err := parseIntFlag("limit", valueOr(flags.first("limit"), "100"), 100)
 	if err != nil {
 		return err

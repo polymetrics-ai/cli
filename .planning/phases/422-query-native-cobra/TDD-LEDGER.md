@@ -40,8 +40,8 @@ Result:
 |---:|---|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS | Green | Pre-production artifact checkpoint; no production code touched. |
 | 1 | Red | `go test ./internal/cli/ -run 'Query|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `query` remains legacy; invalid action opens project before usage classification. |
-| 2 | Green | Pending | Pending | Native query parser green. |
-| 3 | Refactor | Pending | Pending | Gofmt + focused gate. |
+| 2 | Green | `gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/query_cli_test.go`; `go test ./internal/cli/ -run 'Query|CobraRouterShell' -count=1` | Pass | Native query parser green; invalid action usage and read-only SQL rejection preserved. |
+| 3 | Refactor | `go test ./internal/cli/... -run 'Query|CobraRouterShell|Golden' -count=1`; `go test ./internal/cli/ -run Certify -count=1`; `go vet ./...`; `go build ./cmd/pm` | Pass | Golden-focused gate, certify re-entrancy smoke, vet, and build preserved. |
 | 4 | Full gate | Pending | Pending | Required issue verification and parity checks. |
 
 ## Planned red tests
@@ -80,4 +80,36 @@ FAIL
 
 ## Exact green outputs
 
-Pending.
+```bash
+gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/query_cli_test.go
+go test ./internal/cli/ -run 'Query|CobraRouterShell' -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	4.919s
+```
+
+```bash
+go test ./internal/cli/... -run 'Query|CobraRouterShell|Golden' -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	10.691s
+```
+
+```bash
+go test ./internal/cli/ -run Certify -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	91.638s
+```
+
+```bash
+go vet ./...
+go build ./cmd/pm
+```
+
+```text
+# no output; both commands exited 0
+```
