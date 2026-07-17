@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -133,6 +132,24 @@ func TestPreparePinnedHostRuntimeRejectsWorkerControlledSourceAndNodeDrift(t *te
 	}
 }
 
+func TestResolveQualifiedNodeRejectsSymlinkedExecutable(t *testing.T) {
+	canonicalNode := qualifiedNodePathForTest(t)
+	nodeDigest, _, err := boundedRuntimeFileSHA256(canonicalNode, 256*1024*1024)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if resolved, err := resolveQualifiedNode([]string{canonicalNode}, nodeDigest); err != nil || resolved != canonicalNode {
+		t.Fatalf("canonical node resolved to %q error=%v", resolved, err)
+	}
+	link := filepath.Join(t.TempDir(), "node")
+	if err := os.Symlink(canonicalNode, link); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := resolveQualifiedNode([]string{link}, nodeDigest); !errors.Is(err, ErrRuntimeContractMismatch) {
+		t.Fatalf("symlinked node error=%v, want runtime contract mismatch", err)
+	}
+}
+
 func TestBoundedRuntimeSourceRejectsSymlink(t *testing.T) {
 	t.Parallel()
 	root := t.TempDir()
@@ -181,14 +198,7 @@ func writeHostRuntimeSnapshotFixture(t *testing.T) ([]string, string) {
 			t.Fatal(err)
 		}
 	}
-	node, err := exec.LookPath("node")
-	if err != nil {
-		t.Fatal(err)
-	}
-	node, err = filepath.Abs(node)
-	if err != nil {
-		t.Fatal(err)
-	}
+	node := qualifiedNodePathForTest(t)
 	return []string{node, filepath.Join(dist, "loader.js")}, root
 }
 
@@ -213,7 +223,8 @@ func snapshotQualificationForFixture(t *testing.T, sourceRoot string) hostRuntim
 	if err := copyRuntimeTree(context.Background(), sourceRoot, patchedRoot, options); err != nil {
 		t.Fatal(err)
 	}
-	command := []string{"node", filepath.Join(patchedRoot, "dist", "loader.js")}
+	node := qualifiedNodePathForTest(t)
+	command := []string{node, filepath.Join(patchedRoot, "dist", "loader.js")}
 	if err := ApplyPinnedHeadlessToolPatch(command, "1.11.0"); err != nil {
 		t.Fatal(err)
 	}
@@ -228,14 +239,6 @@ func snapshotQualificationForFixture(t *testing.T, sourceRoot string) hostRuntim
 		t.Fatal(err)
 	}
 	snapshotDigest, _, _, err := runtimeTreeDigest(context.Background(), patchedRoot, options)
-	if err != nil {
-		t.Fatal(err)
-	}
-	node, err := exec.LookPath("node")
-	if err != nil {
-		t.Fatal(err)
-	}
-	node, err = filepath.Abs(node)
 	if err != nil {
 		t.Fatal(err)
 	}

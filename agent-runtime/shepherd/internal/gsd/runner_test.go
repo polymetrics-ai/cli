@@ -13,7 +13,6 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
-	"syscall"
 	"testing"
 	"time"
 )
@@ -440,9 +439,7 @@ func TestRunnerKillsInheritedOutputDescendantAfterSuccessfulParentExit(t *testin
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := syscall.Kill(pid, 0); !errors.Is(err, syscall.ESRCH) {
-		t.Fatalf("supervised descendant pid %d survived cleanup: %v", pid, err)
-	}
+	waitForPIDExitForTest(t, pid, "supervised descendant")
 }
 
 func TestRunnerQueriesSupportedSurface(t *testing.T) {
@@ -530,14 +527,7 @@ func TestRunnerMaintenanceKillsDescendantsAfterParentExit(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			deadline := time.Now().Add(5 * time.Second)
-			for time.Now().Before(deadline) {
-				if err := syscall.Kill(pid, 0); errors.Is(err, syscall.ESRCH) {
-					return
-				}
-				time.Sleep(10 * time.Millisecond)
-			}
-			t.Fatalf("%s descendant pid %d survived parent exit", method, pid)
+			waitForPIDExitForTest(t, pid, method+" descendant")
 		})
 	}
 }

@@ -45,14 +45,7 @@ func TestCleanupProcessTreeTerminatesDescendantAfterParentExit(t *testing.T) {
 	if err := cleanupProcessTree(cmd); err != nil {
 		t.Fatal(err)
 	}
-	deadline := time.Now().Add(5 * time.Second)
-	for time.Now().Before(deadline) {
-		if err := syscall.Kill(childPID, 0); errors.Is(err, syscall.ESRCH) {
-			return
-		}
-		time.Sleep(10 * time.Millisecond)
-	}
-	t.Fatalf("descendant pid %d survived cleanup after ordinary parent exit", childPID)
+	waitForPIDExitForTest(t, childPID, "descendant after ordinary parent exit")
 }
 
 func TestRunProcessTreeBoundsDetachedInheritedOutput(t *testing.T) {
@@ -135,13 +128,5 @@ func TestKillProcessTreeSynchronouslyTerminatesDescendant(t *testing.T) {
 	_ = cmd.Cancel()
 	cancel()
 	_ = cmd.Wait()
-	deadline = time.Now().Add(5 * time.Second)
-	for time.Now().Before(deadline) {
-		err := syscall.Kill(childPID, 0)
-		if errors.Is(err, syscall.ESRCH) {
-			return
-		}
-		time.Sleep(10 * time.Millisecond)
-	}
-	t.Fatalf("descendant pid %d survived synchronous process-group termination", childPID)
+	waitForPIDExitForTest(t, childPID, "descendant after synchronous process-group termination")
 }

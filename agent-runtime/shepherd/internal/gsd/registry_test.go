@@ -56,6 +56,24 @@ func TestLoadPinnedUnitRegistryNormalizesSpreadArraysAndCompleteContracts(t *tes
 	}
 }
 
+func TestRegistryRuntimeFixtureCanonicalizesSymlinkedNodeOnPATH(t *testing.T) {
+	canonicalNode := qualifiedNodePathForTest(t)
+	linkDir := t.TempDir()
+	link := filepath.Join(linkDir, "node")
+	if err := os.Symlink(canonicalNode, link); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("PATH", linkDir+string(os.PathListSeparator)+os.Getenv("PATH"))
+
+	command, gsdHome, options := writeRegistryRuntimeFixture(t, officialRegistryModuleFixture())
+	if command[0] != canonicalNode {
+		t.Fatalf("fixture command node=%q want canonical %q", command[0], canonicalNode)
+	}
+	if _, err := loadPinnedUnitRegistryWithOptions(context.Background(), command, gsdHome, "1.11.0", options); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestVerifiedRegistryDataURLsAreImmutableAfterSourceReplacement(t *testing.T) {
 	t.Parallel()
 	command, _, options := writeRegistryRuntimeFixture(t, officialRegistryModuleFixture())
@@ -391,19 +409,12 @@ func writeRegistryRuntimeFixture(t *testing.T, module string) ([]string, string,
 			t.Fatal(err)
 		}
 	}
-	nodePath, err := exec.LookPath("node")
-	if err != nil {
-		t.Fatal(err)
-	}
-	nodePath, err = filepath.Abs(nodePath)
-	if err != nil {
-		t.Fatal(err)
-	}
+	nodePath := qualifiedNodePathForTest(t)
 	nodeDigest, _, err := boundedRuntimeFileSHA256(nodePath, 256*1024*1024)
 	if err != nil {
 		t.Fatal(err)
 	}
-	return []string{"node", loader}, t.TempDir(), registryLoadOptions{
+	return []string{nodePath, loader}, t.TempDir(), registryLoadOptions{
 		expectedRegistrySHA256:   sha256String(module),
 		expectedDependencySHA256: sha256String(browser),
 		expectedLoaderSHA256:     sha256String(loaderSource),
