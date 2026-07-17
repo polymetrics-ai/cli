@@ -425,7 +425,8 @@ TDD/implementation contract:
   command tests, focused race, full nested normal/race, vet/build/nested and root verify, boundary,
   diff, root list, and default/tagged lint-baseline gates. The isolated worker lacked the packaged
   official GSD loader, but canonical-checkout deletion and full integration suites now pass in normal
-  and race modes; fresh exact-head GPT-5.6 Sol/high correctness/security review remains pending.
+  and race modes; fresh exact-head GPT-5.6 Sol/high correctness/security reviews at `c72778de` pass
+  with no findings, with replacement review required after the final docs-only evidence commit.
 
 Authorized production paths are limited to `agent-runtime/shepherd/internal/git/**`,
 `agent-runtime/shepherd/internal/validation/**`, minimum evidence conversion under
@@ -439,7 +440,8 @@ streamed through the validator-aligned 8 MiB limit, Git stdout/stderr diagnostic
 sanitized, and validator pre/post checks enforce absence or regular-file stability without following
 symlinked path components. Promotion proof and actual-CLI integration fixtures now preserve deletion
 identity. Canonical packaged-loader integration and all declared local gates pass, so
-`verificationPassed=true`; exact-head review remains the final pre-push gate.
+`verificationPassed=true`; exact-head correctness/security reviews at `c72778de` pass, and the final
+docs-only evidence commit receives replacement exact-head review before push.
 
 ## Post-Slice-G bounded Git / descriptor-root follow-up
 

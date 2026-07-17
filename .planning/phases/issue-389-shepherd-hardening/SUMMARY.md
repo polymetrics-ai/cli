@@ -167,6 +167,7 @@ and race tests, vet/build/nested `make verify`, root `make verify`, module bound
 planning JSON, formatting/diff hygiene, and binary cleanup pass. One new test-only `errcheck` from the
 first lint run was fixed; default and integration-tagged lint reruns exactly match the accepted
 25 `errcheck`, 2 `staticcheck`, 1 `unused` baseline with zero differential. `verificationPassed=true`.
-Fresh exact-head GPT-5.6 Sol/high correctness/security review remains the only pre-push gate.
-No live external operation, credential access, canary, cleanup/migration, PR merge, or `main` mutation
-occurred.
+Two fresh independent read-only GPT-5.6 Sol/high correctness and security reviews at
+`c72778def85ddccdee91bd648d7c0d569eb5fa94` against the exact parent base pass with no findings.
+A replacement review follows this final docs-only evidence commit before push. No live external
+operation, credential access, canary, cleanup/migration, PR merge, or `main` mutation occurred.

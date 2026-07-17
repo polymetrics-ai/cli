@@ -247,7 +247,7 @@ Required gates:
 - [x] The ancestry merge has zero diff from accepted Slice G and leaves a clean worktree.
 - [x] Planning reconciliation touches only `.planning/phases/issue-389-shepherd-hardening/`.
 - [x] Fresh full normal/race/integration/vet/build/verify/lint/hygiene gates pass after planning commit and authorized review fixes.
-- [ ] Fresh exact-head GPT-5.6 Sol/high correctness/security/recovery/test-realism review has no findings.
+- [x] Fresh exact-head GPT-5.6 Sol/high correctness/security/recovery/test-realism reviews at `c72778de` have no findings; final docs-only evidence commit receives replacement review before push.
 - [ ] Branch push, exact local/remote equality, clean tree, draft stacked PR, and required CI checks pass.
 
 ### Post-Slice-G exact-head review fix
@@ -276,7 +276,7 @@ Gates/review:
 - [x] Canonical deletion integration and full integration suites pass in normal and race modes with the packaged official GSD loader.
 - [x] Full nested tests/race/vet/build/`make verify`, root `make verify`, boundary/list/diff/hygiene pass.
 - [x] Default and integration-tagged lint remain exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`.
-- [ ] Fresh exact-head GPT-5.6 Sol/high correctness and security reviews have no unresolved findings.
+- [x] Fresh exact-head GPT-5.6 Sol/high correctness and security reviews at `c72778de` have no unresolved findings.
 - [ ] Only then: fast-forward push, draft stacked PR, CI monitoring, and stop before canaries.
 
 ## Required command gates after each coherent slice
@@ -424,7 +424,7 @@ go list ./...
 - [x] Vet/build/diff: `go vet ./...`, `go build ./cmd/shepherd`, generated binary removal, and
       `git diff --check` PASS.
 - [x] Temporary worker lacked the packaged loader; canonical deletion/full integration normal and race gates pass.
-- [ ] Exact-head GPT-5.6 Sol/high review remains coordinator-owned.
+- [x] Coordinator-owned exact-head GPT-5.6 Sol/high correctness/security reviews at `c72778de` pass with no findings.
 
 Out-of-scope disposition: shared repository Git config/environment trust remains declined for this
 bounded fix under the accepted same-UID host trust assumption. No environment allowlist/config policy was changed.
@@ -446,4 +446,5 @@ bounded fix under the accepted same-UID host trust assumption. No environment al
 - [x] Focused race: `go test -race ./internal/git ./internal/validation ./cmd/shepherd -count=1` PASS.
 - [x] Diff hygiene: `git diff --check` PASS.
 - [x] Coordinator-owned packaged-loader deletion/process and full integration normal/race gates pass.
-- [ ] Exact-head GPT-5.6 Sol/high review remains pending; `verificationPassed=true` after full local gates.
+- [x] Exact-head GPT-5.6 Sol/high correctness/security reviews at `c72778de` pass; `verificationPassed=true` after full local gates.
+- [ ] Replacement review after the final docs-only evidence commit remains required before push.

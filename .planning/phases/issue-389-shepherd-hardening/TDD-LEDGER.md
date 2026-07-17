@@ -763,6 +763,11 @@ All pass. Root `make verify`, module boundary, root `go list ./...`, planning JS
 binary cleanup also pass. First lint run found one new test-only unchecked `os.RemoveAll`; after the
 scoped test cleanup fix and affected normal/race reruns, default and integration-tagged lint both return
 exactly 28 accepted findings: 25 `errcheck`, 2 `staticcheck`, 1 `unused`, zero differential.
-`verificationPassed=true`; exact-head GPT-5.6 Sol/high correctness/security review remains the only
-pre-push gate. No credential, connector/API operation, canary, cleanup/migration, PR/merge, or `main`
-mutation occurred.
+`verificationPassed=true`. Two fresh independent read-only GPT-5.6 Sol/high processes reviewed exact
+head `c72778def85ddccdee91bd648d7c0d569eb5fa94` against
+`d72e597e35b5104cf58936612053705c280fc2b1`: correctness/recovery/test-realism PASS with no findings;
+security PASS with no findings. Both confirm typed deletion/evidence/promotion binding, bounded Git
+process/output behavior, descriptor-relative path stability, actual-CLI realism, and authorized scope.
+The shared Git-config item remains a nonblocking documented same-UID trust assumption. This final
+evidence-only commit will receive replacement exact-head review before push. No credential,
+connector/API operation, canary, cleanup/migration, PR/merge, or `main` mutation occurred.
