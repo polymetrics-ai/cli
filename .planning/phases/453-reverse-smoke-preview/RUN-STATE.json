@@ -1,0 +1,46 @@
+{
+  "phase": 453,
+  "issue": 453,
+  "parentIssue": 397,
+  "branch": "fix/453-reverse-smoke-preview",
+  "baseBranch": "feat/cli-architecture-v2",
+  "baseHeadAtDispatch": "5680debb",
+  "verificationPassed": true,
+  "status": "local_verified_pr_pending",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-453.prompt",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop_plus_pi_pm_gsd_loop_prompt",
+    "skillGap": ".pi/skills/go-implementation/SKILL.md missing; global Go skills loaded"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "isolated worker cwd/branch for one scoped safety issue; no subagent tool available and recursive delegation blocked"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused Makefile ordering regression added inline and failed before production edit because reverse preview was missing"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "Makefile preview step inserted after PLAN_ID extraction and focused ordering regression passed before smoke/verify"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "issue-required local gates passed inline in isolated worker cwd; smoke/verify ran only after preview step and focused regression were green"
+    }
+  ],
+  "reviewRoute": {
+    "claude": "disabled_not_requested_per_instruction",
+    "copilot": "quota_exhausted_not_requested_per_instruction",
+    "fallback": "human_parent_review_pending",
+    "coverageStatus": "pending"
+  }
+}
