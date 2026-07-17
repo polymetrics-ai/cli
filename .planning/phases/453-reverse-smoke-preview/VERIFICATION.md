@@ -93,3 +93,84 @@ git diff -- go.mod go.sum
 ```
 
 Result: pass; no output.
+
+## Review-fix verification checklist — PR #454 MEDIUM finding (2026-07-17)
+
+Safety / scope:
+
+- [x] Finding accepted: raw substring test matcher can false-pass.
+- [x] Plan/TDD/verification artifacts updated before review-fix code edits.
+- [x] Red negative synthetic cases captured before parser hardening.
+- [x] No Makefile smoke target behavior changes needed or made in this review-fix.
+- [x] No secrets, new dependencies, credentialed connector checks, runtime services, or non-temp reverse ETL.
+- [x] `make smoke` and `make verify` allowed only because current Makefile already contains preview before approval/run.
+- [x] PR body update queued with accepted disposition and red/green evidence; final PR edit occurs after push with final head.
+- [x] No Claude/Copilot request.
+
+Required review-fix gates:
+
+- [x] `gofmt -w internal/safety`
+- [x] `go test ./internal/safety -run 'TestSmokeNoBuildReverse' -count=1`
+- [x] `go test ./...`
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make smoke`
+- [x] `make verify`
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD`
+- [x] `git diff -- go.mod go.sum`
+
+Review-fix results:
+
+```bash
+go test ./internal/safety -run 'TestSmokeNoBuildReverse' -count=1
+```
+
+Result: red before parser hardening; synthetic commented, `echo`, `printf` help-text, and `false &&` cases were incorrectly accepted by raw substring matching.
+
+```bash
+gofmt -w internal/safety && go test ./internal/safety -run 'TestSmokeNoBuildReverse' -count=1
+```
+
+Result: pass.
+
+```text
+ok  	polymetrics.ai/internal/safety	0.430s
+```
+
+```bash
+go test ./...
+```
+
+Result: pass; final package output included `ok  	polymetrics.ai/internal/worker	(cached)`.
+
+```bash
+go vet ./...
+go build ./cmd/pm
+```
+
+Result: pass; no output.
+
+```bash
+make smoke
+```
+
+Result: pass; local temp outbox only; Make echoed `reverse plan` → `reverse preview` → approval extraction → `reverse run` and printed `smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.DhRT7oIVIV`.
+
+```bash
+make verify
+```
+
+Result: pass; covered gofmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, local temp smoke, lint, and connectorgen validate. Tail ended:
+
+```text
+0 issues.
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+```bash
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+Result: pass / empty; no output.

@@ -84,3 +84,26 @@ After green, only run existing temporary local smoke; no external connector/runt
 ## Parity stance
 
 CLI help/docs/website parity is N/A: no command, flag, help text, runtime output contract, connector surface, docs, website, or generated manual behavior changes. This issue only changes repository smoke ordering and a regression test.
+
+## Review-fix plan — PR #454 MEDIUM finding (2026-07-17)
+
+Finding accepted: `internal/safety/smoke_makefile_test.go` raw substring matching can pass when the expected reverse safety commands appear only in comments, `echo`/`printf`/help text, unrelated targets, or wrong-order recipe text.
+
+Execution decision: `local_critical_path` — same isolated worker cwd/branch, one PR review-fix scope, no subagent tool available to this worker.
+
+Review-fix slice:
+
+1. Artifact checkpoint ✅
+   - Update PLAN/TDD-LEDGER/VERIFICATION before production/test edits.
+   - Record GSD command path, manual programming-loop fallback, loaded Go skills, accepted disposition, and target gates.
+2. Red test/validation ✅
+   - Added negative table/synthetic recipe coverage proving commented markers, `echo`/`printf`/help text, unrelated targets, and wrong-order markers do not satisfy the smoke contract.
+   - Ran `go test ./internal/safety -run 'TestSmokeNoBuildReverse' -count=1` before parser hardening and captured failure against the raw substring matcher.
+3. Minimal green parser ✅
+   - Parses only the `smoke-no-build` recipe.
+   - Converts tab-indented Make recipe lines into executable shell command lines: ignores blank/comment-only lines, normalizes `\` continuations, trims Make tab/`@` prefix, and splits semicolon-terminated shell statements with quote awareness.
+   - Matches exact anchored command/assignment statements for plan, ID extraction, preview, approval extraction, and run. Rejects prefixed `echo`, `printf`, `false &&`, comment text, unrelated target text, and wrong-order command sequence.
+4. Verification / PR update ✅
+   - Ran requested gates exactly: `gofmt -w internal/safety`, focused safety test, `go test ./...`, `go vet ./...`, `go build ./cmd/pm`, `make smoke`, `make verify`, `git diff --check origin/feat/cli-architecture-v2...HEAD`, and `git diff -- go.mod go.sum`.
+   - Updated issue artifacts with red/green evidence and accepted disposition; PR #454 body update scheduled after push with final head.
+   - Commit prepared; push pending; no Claude/Copilot request.

@@ -6,7 +6,7 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "5680debb",
   "verificationPassed": true,
-  "status": "pr_open_local_verified_review_pending",
+  "status": "pr_open_reviewfix_verified_push_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed",
@@ -35,6 +35,26 @@
       "cycle": "verify",
       "decision": "local_critical_path",
       "reason": "issue-required local gates passed inline in isolated worker cwd; smoke/verify ran only after preview step and focused regression were green"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #454 MEDIUM finding accepted; same isolated worker cwd/branch; no subagent tool available and recursive delegation blocked"
+    },
+    {
+      "cycle": "review-fix-red",
+      "decision": "local_critical_path",
+      "reason": "negative synthetic safety cases added inline and failed before parser hardening against raw substring matcher"
+    },
+    {
+      "cycle": "review-fix-green",
+      "decision": "local_critical_path",
+      "reason": "smoke-no-build recipe parser hardened to executable exact statements and focused safety test passed"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "requested local gates passed inline; smoke/verify ran only with existing plan-preview-approval-run Makefile interlock"
     }
   ],
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/454",
@@ -43,5 +63,12 @@
     "copilot": "quota_exhausted_not_requested_per_instruction",
     "fallback": "human_parent_review_pending",
     "coverageStatus": "human_parent_review_pending"
+  },
+  "reviewFix": {
+    "finding": "MEDIUM accepted: raw substring matching in internal/safety/smoke_makefile_test.go could false-pass on comments, echo/printf/help text, unrelated targets, or prefixed/wrong-order markers",
+    "red": "go test ./internal/safety -run 'TestSmokeNoBuildReverse' -count=1 failed before parser hardening on synthetic false-positive cases",
+    "green": "gofmt -w internal/safety && go test ./internal/safety -run 'TestSmokeNoBuildReverse' -count=1 passed",
+    "gates": "gofmt, focused safety test, go test ./..., go vet ./..., go build ./cmd/pm, make smoke, make verify, diff checks passed",
+    "reviewRoute": "no Claude/Copilot requested per user instruction; human/parent review route remains pending"
   }
 }

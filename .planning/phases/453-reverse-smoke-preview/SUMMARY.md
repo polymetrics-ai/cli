@@ -41,3 +41,38 @@ Full gates passed: `gofmt -w cmd internal`, `go test ./...`, `go vet ./...`, `go
 ## Safety
 
 No secrets requested or printed by this implementation. No credentialed checks. No runtime services started. No dependency changes. No parent/shared orchestration edits. Reverse execution only occurred through existing local temp smoke after preview step existed and focused ordering test was green. No merge.
+
+## Review-fix update — PR #454 MEDIUM finding (2026-07-17)
+
+Status: accepted finding fixed locally; commit prepared; push and PR body update pending.
+
+Delivered:
+
+- Hardened `internal/safety/smoke_makefile_test.go` so the smoke contract parses executable `smoke-no-build` shell statements instead of raw substrings.
+- Added negative synthetic cases for commented markers, `echo` text, `printf`/help text, `false &&` prefixes, unrelated targets, and wrong-order markers.
+- Preserved exact required order: `reverse plan` → `PLAN_ID` extraction → `reverse preview` → approval extraction → `reverse run`.
+- No Makefile behavior, dependency, docs, website, connector, or CLI product changes in this review-fix.
+
+Focused red before parser hardening:
+
+```bash
+go test ./internal/safety -run 'TestSmokeNoBuildReverse' -count=1
+```
+
+Result: fail; synthetic false-positive cases were accepted by raw substring matching.
+
+Focused green and full gates passed after parser hardening:
+
+```bash
+gofmt -w internal/safety
+go test ./internal/safety -run 'TestSmokeNoBuildReverse' -count=1
+go test ./...
+go vet ./...
+go build ./cmd/pm
+make smoke
+make verify
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+Review route: no Claude/Copilot requested per review-fix instruction; human/parent review remains the route.
