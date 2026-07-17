@@ -19,17 +19,17 @@ orchestrator:
   status: running
 ready_queue:
   - number: 403
-    status: blocked
+    status: in_review
     dependencies: [402]
     write_scope: "internal/events plus flow/ETL/certify/worker instrumentation"
     decision: local_critical_path
-    reason: "Strict full-repo race gate is running after baseline/worker certify timing matched; no PR until result."
-  - number: 421
+    reason: "PR #451 review fixes are statically clean; rebase onto current parent then run the final strict full-repo race gate."
+  - number: 422
     status: worker_ready
-    dependencies: [406]
-    write_scope: "connections Cobra namespace node/handler/tests/parity only"
+    dependencies: [421]
+    write_scope: "query Cobra namespace node/handler/tests/parity only"
     decision: spawned
-    reason: "First serialized Phase 9 grandchild; disjoint from #403 event packages."
+    reason: "Second serialized Phase 9 grandchild starts from provisionally integrated #421 and is disjoint from #403 event packages."
   - number: 404
     status: worker_ready
     dependencies: [402]
@@ -123,6 +123,18 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [421]
     reason: "First serialized Phase 9 namespace worker is disjoint from #403 event instrumentation."
+  - timestamp: 2026-07-17T03:23:26Z
+    decision: local_critical_path
+    issue_numbers: [421]
+    reason: "Coordinator provisionally integrated PR #450 after local/remote gates, accepted website parity fix, and clean targeted re-review."
+  - timestamp: 2026-07-17T03:39:24Z
+    decision: read_only_spawned
+    issue_numbers: [403]
+    reason: "Two adversarial review-fix cycles hardened Chan/Throttle behavior; final targeted review at 60a1d232 was clean."
+  - timestamp: 2026-07-17T03:44:48Z
+    decision: spawned
+    issue_numbers: [422]
+    reason: "Second serialized Phase 9 namespace worker starts from parent squash e6faecfb and is disjoint from #403."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -177,13 +189,13 @@ subissues:
   - number: 403
     url: https://github.com/polymetrics-ai/cli/issues/403
     branch: feat/403-progress-event-bus
-    pr_url: ""
+    pr_url: https://github.com/polymetrics-ai/cli/pull/451
     worker: pm-gsd-worker
-    status: blocked
+    status: in_review
     write_scope: "internal/events plus flow/ETL/certify/worker instrumentation and focused tests"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-403-progress-event-bus
-    verification: "Focused race tests pass; broad gate timed out due baseline-slow certify suite; strict extended full-repo race rerun is local critical path."
-    automated_review: {primary_route: blocked, status: blocked, head_sha: 2c2c16f850484ff5c4c8b99d065f4ef3361dbc61, reviewed_range: "e5ee4075..2c2c16f8", coverage_route: blocked, fallback_route: human, disposition_summary: "No PR until strict race and remaining full gates pass.", disposition_url: ""}
+    verification: "Focused race, vet, package, build, and make verify gates pass after two review-fix cycles; final full-repo race is pending after rebase onto current parent."
+    automated_review: {primary_route: human, status: blocked, head_sha: 60a1d232db50259f14a1d6831d2ec8aa18b47578, reviewed_range: "e6faecfb..60a1d232", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Chan/Throttle/accounting findings fixed; final pm-reviewer sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/451"}
   - number: 404
     url: https://github.com/polymetrics-ai/cli/issues/404
     branch: pending
@@ -218,11 +230,11 @@ subissues:
     url: https://github.com/polymetrics-ai/cli/issues/407
     branch: pending
     pr_url: ""
-    worker: unassigned
-    status: planned
+    worker: parent_orchestrator
+    status: in_progress
     write_scope: "Serialized namespace migration umbrella; grandchildren #421-#437"
-    worker_directory: ""
-    verification: not_run_dependency_blocked
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-cli-architectur-improvement
+    verification: "#421 provisionally integrated; #422 dispatched; remaining grandchildren stay serialized."
     automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #406 and serialized grandchild chain.", disposition_url: ""}
   - number: 408
     url: https://github.com/polymetrics-ai/cli/issues/408
@@ -354,6 +366,26 @@ subissues:
     worker_directory: ""
     verification: not_run_dependency_blocked
     automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #415, #417, and #418.", disposition_url: ""}
+  - number: 421
+    url: https://github.com/polymetrics-ai/cli/issues/421
+    branch: refactor/421-connections-native-cobra
+    pr_url: https://github.com/polymetrics-ai/cli/pull/450
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "connections Cobra namespace node/handler/tests and directly applicable website parity"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-421-connections-native-cobra
+    verification: "Local/remote Go, website, security, and verify gates passed; parent squash commit e6faecfbe62f7b9f67156c40a8ad8600d8da4ac1."
+    automated_review: {primary_route: human, status: blocked, head_sha: e5eb4af4a479e1da968dddb48055019a8875f58a, reviewed_range: "1678f9ab..e6faecfb", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Website endpoint placeholder finding fixed; targeted sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/450"}
+  - number: 422
+    url: https://github.com/polymetrics-ai/cli/issues/422
+    branch: refactor/422-query-native-cobra
+    pr_url: ""
+    worker: pm-gsd-worker
+    status: worker_ready
+    write_scope: "query Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-422-query-native-cobra
+    verification: not_run_worker_spawned
+    automated_review: {primary_route: blocked, status: blocked, head_sha: e6faecfbe62f7b9f67156c40a8ad8600d8da4ac1, reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched from current parent; review pending.", disposition_url: ""}
 human_gates:
   - parent PR merge to main
   - dependency additions outside ADR 0002-0004 phase budgets
@@ -364,4 +396,4 @@ human_gates:
   - production deploys
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
-updated_at: 2026-07-16T20:52:10Z
+updated_at: 2026-07-17T03:44:48Z
