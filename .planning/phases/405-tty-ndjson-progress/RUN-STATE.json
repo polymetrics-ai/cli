@@ -6,8 +6,8 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseParentHead": "d8e532eb20d24d982c09772ecae48abb3bb64271",
   "mode": "bounded-mutating-worker",
-  "verificationPassed": false,
-  "verificationBlocker": "full_gates_pending",
+  "verificationPassed": true,
+  "verificationBlocker": null,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed; 69 commands",
@@ -44,6 +44,11 @@
       "cycle": "execute",
       "decision": "local_critical_path",
       "reason": "implemented scoped UI detection/styles, RunWithOptions/global flags, stderr NDJSON wiring, and docs parity inline"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused gates, full local gates, make verify, and CLI parity checks passed inline"
     }
   ],
   "redEvidence": [
@@ -90,13 +95,54 @@
       "evidence": "ok polymetrics.ai/internal/cli 169.642s"
     }
   ],
-  "finalGates": [],
+  "finalGates": [
+    {
+      "command": "gofmt -w cmd internal",
+      "result": "pass",
+      "evidence": "included in combined final gate; no output"
+    },
+    {
+      "command": "go vet ./...",
+      "result": "pass",
+      "evidence": "included in combined final gate; no output before go test output"
+    },
+    {
+      "command": "go test ./...",
+      "result": "pass",
+      "evidence": "internal/cli 173.250s; internal/connectors/certify 346.045s; internal/ui 3.694s; internal/ui/styles 3.197s"
+    },
+    {
+      "command": "go build ./cmd/pm",
+      "result": "pass",
+      "evidence": "included in combined final gate; no output"
+    },
+    {
+      "command": "make verify",
+      "result": "pass",
+      "evidence": "go test -timeout 20m ./... passed; internal/cli 174.571s; internal/connectors/certify 348.926s; smoke ok; 0 issues; connectorgen validate: 547 connector(s) checked, 0 findings"
+    },
+    {
+      "command": "git diff --check origin/feat/cli-architecture-v2...HEAD",
+      "result": "pass",
+      "evidence": "no output"
+    },
+    {
+      "command": "git diff -- go.mod go.sum",
+      "result": "pass",
+      "evidence": "no output after final gates; approved x/term dependency delta reviewed against base"
+    }
+  ],
   "cliParity": {
     "applies": true,
-    "status": "pending"
+    "status": "passed",
+    "runtimeHelp": ["pm --help", "pm help config", "pm etl --help", "pm flow --help"],
+    "bareNamespaces": ["pm etl", "pm flow"],
+    "docs": "docs/cli regenerated and matched pm docs generate",
+    "website": "website/content/docs/cli-reference.mdx updated",
+    "invalidAction": "pm --root <tmp> flow bogus exited 2"
   },
   "review": {
-    "status": "not_started",
+    "status": "pending_pr_creation",
     "route": "pending_stacked_pr"
   }
 }

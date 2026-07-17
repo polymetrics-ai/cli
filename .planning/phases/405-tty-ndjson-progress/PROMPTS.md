@@ -18,9 +18,9 @@ scripts/gsd prompt plan-phase 405 --skip-research
 scripts/gsd prompt programming-loop init --phase 405 --dry-run
 ```
 
-Downstream artifact: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.json`, `SUMMARY.md`, focused red tests, implementation, docs parity, PR.
+Downstream artifact: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.json`, `SUMMARY.md`, focused red tests, implementation, docs parity, and stacked PR.
 
-Verification result: pending. `programming-loop` prompt command failed with `scripts/gsd: unknown GSD command: programming-loop`; loaded `.pi/prompts/pm-gsd-loop.md` and running inline/manual universal loop.
+Verification result: local gates passed. `programming-loop` prompt command failed with `scripts/gsd: unknown GSD command: programming-loop`; loaded `.pi/prompts/pm-gsd-loop.md` and ran inline/manual universal loop.
 
 ## Acceptance snapshot
 
@@ -29,3 +29,13 @@ Verification result: pending. `programming-loop` prompt command failed with `scr
 - `--progress ndjson` emits sanitized progress events to stderr; stdout remains the final command output/envelope.
 - Palette/glyph foundation degrades for no-color and ASCII constraints.
 - CLI help/docs/website parity required.
+
+## Final verification snapshot — 2026-07-17
+
+```bash
+gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify
+```
+
+Verification result: pass; `go test ./...` included `internal/cli 173.250s`, `internal/connectors/certify 346.045s`; `make verify` included `internal/cli 174.571s`, `internal/connectors/certify 348.926s`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`.
+
+CLI parity result: pass for runtime help, bare `pm etl`/`pm flow`, invalid `pm flow bogus` exit 2 on initialized root, `docs/cli/**`, and website grep.

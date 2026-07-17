@@ -53,7 +53,7 @@ Fallback: loaded `.pi/prompts/pm-gsd-loop.md` and running the universal programm
 | 3 stderr-only NDJSON | `go test ./internal/cli/... -run TestProgressNDJSON -count=1` | fail (build): same undefined run-options API as slice 2 | pass: `ok polymetrics.ai/internal/cli 1.045s` | no extra refactor |
 | 4 docs/help parity | `go test ./internal/cli/... -run 'Test.*Help|TestGoldenDocsGenerateMatchesTrackedCLIManuals' -count=1` plus docs/website grep | fail: `TestGoldenDocsGenerateMatchesTrackedCLIManuals` drifted for `config.md` after docs-map change; help output initially missed new flags | pass: `ok polymetrics.ai/internal/cli 1.448s` after `pm docs generate`, golden transcript update, website update | docs regenerated; golden transcripts updated intentionally |
 | focused package | `go test ./internal/cli/... -count=1` | pending after slices | pass: `ok polymetrics.ai/internal/cli 169.642s` | no extra refactor |
-| final gates | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify` | pending | pending | pending |
+| final gates | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify` | pending after focused green | pass: combined gate exited 0; `go test ./...` included `internal/cli 173.250s`, `internal/connectors/certify 346.045s`; `make verify` passed with `internal/cli 174.571s`, `internal/connectors/certify 348.926s`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings` | `go mod tidy` in `make verify`; no post-gate working-tree changes |
 
 ## Red test capture rule
 
@@ -97,6 +97,41 @@ go test ./internal/cli/... -run TestProgressNDJSON -count=1
 
 Result: fail/build on same missing run-options API. This is the required red evidence before production edits.
 
+## Final gate evidence — 2026-07-17
+
+```bash
+gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify
+```
+
+Result: pass. Key output:
+
+```text
+ok  polymetrics.ai/internal/cli 173.250s
+ok  polymetrics.ai/internal/connectors/certify 346.045s
+...
+make verify
+ok  polymetrics.ai/internal/cli 174.571s
+ok  polymetrics.ai/internal/connectors/certify 348.926s
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.U8utLpbB3Q
+0 issues.
+connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+Targeted parity:
+
+```bash
+./pm --help
+./pm help config
+./pm etl --help
+./pm flow --help
+./pm etl
+./pm flow
+./pm --root "$tmpdir" flow bogus
+rg -n -- '--plain|--no-input|--progress ndjson' docs/cli website/content/docs/cli-reference.mdx
+```
+
+Result: pass. `flow bogus` exit `2` with `error: flow: unknown subcommand "bogus"`.
+
 ## Review disposition ledger
 
-No automated review findings yet. Open stacked PR after local gates; record Claude/Copilot/human route status here and in PR body.
+No automated review findings yet. Stacked PR pending; record Claude/Copilot/human route status after PR creation.
