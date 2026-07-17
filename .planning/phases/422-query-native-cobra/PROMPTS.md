@@ -20,6 +20,6 @@ Result:
 
 Downstream artifact: `.planning/phases/422-query-native-cobra/PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, `RUN-STATE.json`.
 
-Verification result: pending red tests and implementation gates.
+Verification result: pass — focused query/golden, certify smoke, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, runtime help/docs/website parity, SQL read-only rejection, and diff guards passed.
 
 Execution decision: `local_critical_path` — worker cwd/branch isolated; no subagent tool available; no delegation.

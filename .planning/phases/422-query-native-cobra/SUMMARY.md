@@ -1,6 +1,6 @@
 # Phase 422 Summary
 
-Status: native query implementation green on focused gates; full verification next.
+Status: native query implementation complete; full local verification and parity checks passed; PR pending.
 
 ## Current state
 
@@ -31,7 +31,13 @@ Result: fail as expected. `query` remains legacy (`DisableFlagParsing`), expecte
 
 Focused green gates passed: `go test ./internal/cli/... -run 'Query|CobraRouterShell|Golden' -count=1`, `go test ./internal/cli/ -run Certify -count=1`, `gofmt -w cmd internal`, `go vet ./...`, and `go build ./cmd/pm`.
 
-Full gates and parity checks pending.
+Full gates passed: `go test ./...` and `make verify`.
+
+Runtime help parity checked: `./pm help query`, `./pm query`, `./pm query --help`, `./pm query --json`, invalid action JSON usage error, local fixture query JSON, and read-only SQL rejection.
+
+Docs/website/generated checks passed: `./pm docs generate` diff against `docs/cli`, `./pm docs validate`, and `npm --prefix website run gen:docs`; no tracked docs/website/golden changes.
+
+Diff guards passed: `git diff --check origin/feat/cli-architecture-v2...HEAD`; `git diff -- go.mod go.sum` empty.
 
 ## Safety
 

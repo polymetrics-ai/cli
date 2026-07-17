@@ -42,7 +42,7 @@ Result:
 | 1 | Red | `go test ./internal/cli/ -run 'Query|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `query` remains legacy; invalid action opens project before usage classification. |
 | 2 | Green | `gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/query_cli_test.go`; `go test ./internal/cli/ -run 'Query|CobraRouterShell' -count=1` | Pass | Native query parser green; invalid action usage and read-only SQL rejection preserved. |
 | 3 | Refactor | `go test ./internal/cli/... -run 'Query|CobraRouterShell|Golden' -count=1`; `go test ./internal/cli/ -run Certify -count=1`; `go vet ./...`; `go build ./cmd/pm` | Pass | Golden-focused gate, certify re-entrancy smoke, vet, and build preserved. |
-| 4 | Full gate | Pending | Pending | Required issue verification and parity checks. |
+| 4 | Full gate | `go test ./...`; `make verify`; runtime help/docs/website/diff checks | Pass | Full local gates, parity checks, and diff guards passed; no go.mod/go.sum diff. |
 
 ## Planned red tests
 
@@ -112,4 +112,66 @@ go build ./cmd/pm
 
 ```text
 # no output; both commands exited 0
+```
+
+```bash
+go test ./...
+```
+
+```text
+ok  	polymetrics.ai/cmd/connectorgen	10.602s
+ok  	polymetrics.ai/cmd/iconregistrygen	1.660s
+ok  	polymetrics.ai/cmd/pm	0.647s
+ok  	polymetrics.ai/cmd/prissueguard	0.907s
+ok  	polymetrics.ai/internal/agentmode	1.296s
+ok  	polymetrics.ai/internal/app	23.257s
+ok  	polymetrics.ai/internal/cli	205.284s
+ok  	polymetrics.ai/internal/connectors/certify	380.015s
+# pass; remaining packages also passed in terminal run.
+```
+
+```bash
+make verify
+```
+
+```text
+pass; completed gofmt, tidy-check, vet, go test -timeout 20m ./..., go build ./cmd/pm,
+docs validate, local smoke flow, golangci-lint, and connectorgen validate.
+Terminal tail:
+0 issues.
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+```bash
+./pm help query
+./pm query
+./pm query --help
+./pm query --json
+./pm query bogus --json
+./pm query run --table customers --fields id,email --limit 1 --root "$QUERY_ROOT" --json
+./pm query run --sql "DELETE FROM customers" --root "$QUERY_ROOT" --json
+```
+
+```text
+help/bare/--help byte-identical; help bytes=1189; JSON manual bytes=1368;
+invalid action exit=2; stderr=error: unknown command "bogus" for "pm query";
+query run kind=QueryResult; read-only SQL rejection exit=1 kind=Error.
+```
+
+```bash
+./pm docs generate --dir "$TMP_DOCS/cli" --connectors-dir "$TMP_DOCS/connectors"
+diff -ru docs/cli "$TMP_DOCS/cli"
+./pm docs validate --connectors-dir docs/connectors
+npm --prefix website run gen:docs
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+```text
+Generated docs in <tmp>/cli and connector docs in <tmp>/connectors
+# diff -ru: no output
+Validated connector docs in docs/connectors
+Wrote 11 docs pages to lib/docs.generated.ts.
+# git diff checks: no output; go.mod/go.sum diff empty
 ```

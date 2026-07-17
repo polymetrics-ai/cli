@@ -7,8 +7,8 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "e6faecfb",
   "baseHeadAtPlanning": "f12d573b",
-  "verificationPassed": false,
-  "status": "focused_green_full_verification_next",
+  "verificationPassed": true,
+  "status": "verified_pr_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-422.prompt",
@@ -31,6 +31,11 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "native query Cobra subtree implemented in allowed internal/cli scope; focused query/golden gate, certify smoke, vet, and build passed"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "full local gates, runtime help/docs/website parity checks, SQL safety rejection, and diff guards completed inline in isolated worker cwd"
     }
   ],
   "pullRequest": "pending",

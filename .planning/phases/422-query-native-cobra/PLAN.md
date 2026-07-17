@@ -86,16 +86,16 @@ Excluded:
    - Added a query handler adapter that accepts parsed flag values and preserves existing validation order, output envelopes, agent mode behavior, and SQL read-only guard routing.
    - Removed the `query` namespace legacy wrapper/`parseFlags` call site.
 
-4. Parity / golden check
-   - Golden transcript changes expected: empty.
-   - Docs/website updates expected: not applicable unless help/output intentionally changes.
-   - Verify runtime help: `pm help query`, bare `pm query`, `pm query --help`, JSON manual, invalid action JSON usage error, representative query run JSON, and read-only rejection.
-   - Verify generated docs/manual and website docs generator/diff.
+4. Parity / golden check ✅
+   - Golden transcript changes: empty.
+   - Docs/website updates: not applicable because help/output did not change.
+   - Verified runtime help: `pm help query`, bare `pm query`, `pm query --help`, JSON manual, invalid action JSON usage error, representative query run JSON, and read-only rejection.
+   - Verified generated docs/manual and website docs generator/diff.
 
 5. Full verification / PR
-   - Run required focused and full gates.
-   - Confirm `git diff --check origin/feat/cli-architecture-v2...HEAD` passes and `go.mod`/`go.sum` diff empty.
-   - Commit and push coherent green slices on `refactor/422-query-native-cobra`; open non-draft stacked PR against `feat/cli-architecture-v2` with `Refs #422`, `Refs #407`, `Refs #397`.
+   - Required focused and full gates passed.
+   - `git diff --check origin/feat/cli-architecture-v2...HEAD` passed and `go.mod`/`go.sum` diff empty.
+   - Commit/push checkpoints completed: planning, red tests, green implementation. PR still pending.
    - Do not request Claude/Copilot; record human/parent fallback pending per dispatch instruction.
 
 ## Planned tests / validations
