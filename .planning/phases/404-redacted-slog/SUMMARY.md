@@ -3,7 +3,7 @@
 Status: implementation pushed; PR #455 open; non-race/full verify green; issue race command blocked by existing slow `internal/cli` race suite timeout.
 
 PR: https://github.com/polymetrics-ai/cli/pull/455
-Head: `f22757ce47b95585c5148fc1b518a013c21e609b`
+Head: see current `feat/404-redacted-slog` branch head.
 
 ## Delivered
 
