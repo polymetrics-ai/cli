@@ -7,6 +7,7 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
+	pmlogging "polymetrics.ai/internal/logging"
 	pmruntime "polymetrics.ai/internal/runtime"
 	"polymetrics.ai/internal/runtimecheck"
 )
@@ -29,6 +30,7 @@ func runtimeETLRunRecord(run app.Run) pmruntime.RunRecord {
 }
 
 func recordRuntimeETL(ctx context.Context, run app.Run, cfg config.Config) error {
+	ctx = pmlogging.WithRunID(ctx, run.ID)
 	runtimeCfg := runtimecheck.FromConfig(cfg)
 	report := runtimecheck.Doctor(ctx, runtimeCfg)
 	if !runtimecheck.Healthy(report) {

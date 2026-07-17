@@ -1,14 +1,19 @@
 package vault_test
 
 import (
+	"bytes"
 	"context"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
+	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/vault"
 )
+
+const syntheticVaultCanary = "pm-test-vault-redaction-value-404"
 
 func TestVaultEncryptsSecretsAtRest(t *testing.T) {
 	ctx := context.Background()
@@ -49,5 +54,28 @@ func TestVaultEncryptsSecretsAtRest(t *testing.T) {
 	}
 	if strings.Contains(combined.String(), "super-secret-token") {
 		t.Fatalf("vault files contain plaintext secret")
+	}
+}
+
+func TestVaultGetRegistersValuesForRedaction(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+
+	v, err := vault.Init(filepath.Join(root, ".polymetrics"))
+	if err != nil {
+		t.Fatalf("Init() error = %v", err)
+	}
+	if err := v.Put(ctx, "cred_test", map[string]string{"token": syntheticVaultCanary}); err != nil {
+		t.Fatalf("Put() error = %v", err)
+	}
+	if _, err := v.Get(ctx, "cred_test"); err != nil {
+		t.Fatalf("Get() error = %v", err)
+	}
+
+	var buf bytes.Buffer
+	logger := slog.New(pmlogging.NewRedactingHandler(slog.NewJSONHandler(&buf, nil), pmlogging.RedactionOptions{}))
+	logger.Info("vault value should be registered", "message", "contains "+syntheticVaultCanary)
+	if strings.Contains(buf.String(), syntheticVaultCanary) {
+		t.Fatalf("registered vault value was not redacted")
 	}
 }

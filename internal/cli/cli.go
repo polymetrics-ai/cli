@@ -16,6 +16,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
@@ -26,20 +27,24 @@ type envelope map[string]any
 const maxConnectorCommandLimit = 10000
 
 func Run(args []string, stdout, stderr io.Writer) int {
-	ctx := context.Background()
+	ctx := pmlogging.WithRegistry(context.Background(), pmlogging.NewValueRegistry())
 	root, jsonOut, cleanArgs := parseGlobal(args)
 	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
 	bootstrap, err := config.ResolveBootstrap(opts)
 	if err != nil {
-		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
+		return writeError(ctx, stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
 	}
 	cfg, err := config.Load(opts)
 	if err != nil {
-		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
+		return writeError(ctx, stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
 	}
+	logger, closeLogs := pmlogging.NewLogger(filepath.Join(cfg.Root, ".polymetrics"), stderr, pmlogging.LoggerOptions{Registry: pmlogging.RegistryFromContext(ctx)})
+	defer func() { _ = closeLogs() }()
+	ctx = pmlogging.WithLogger(ctx, logger)
+
 	cmd := newRootCmd(ctx, cfg, stdout, stderr)
 	if err := executeRootCmd(cmd, cleanArgs); err != nil {
-		return writeError(stdout, stderr, mapCobraErr(err), cfg.JSON)
+		return writeError(ctx, stdout, stderr, mapCobraErr(err), cfg.JSON)
 	}
 	return 0
 }

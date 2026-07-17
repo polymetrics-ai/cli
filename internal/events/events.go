@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -111,7 +112,7 @@ func FromContext(ctx context.Context) Emitter {
 
 // Emit sends event to the emitter stored in ctx.
 func Emit(ctx context.Context, event Event) {
-	FromContext(ctx).Emit(ctx, event)
+	FromContext(ctx).Emit(ctx, sanitizeEvent(ctx, event))
 }
 
 // Nop is an emitter sink that discards every event.
@@ -134,13 +135,13 @@ func NewCollector() *Collector {
 }
 
 // Emit implements Emitter.
-func (c *Collector) Emit(_ context.Context, event Event) {
+func (c *Collector) Emit(ctx context.Context, event Event) {
 	if c == nil {
 		return
 	}
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	c.events = append(c.events, event.Clone())
+	c.events = append(c.events, sanitizeEvent(ctx, event))
 }
 
 // Events returns a copy of collected events.
@@ -174,13 +175,13 @@ func NewNDJSON(w io.Writer) *NDJSON {
 }
 
 // Emit implements Emitter.
-func (n *NDJSON) Emit(_ context.Context, event Event) {
+func (n *NDJSON) Emit(ctx context.Context, event Event) {
 	if n == nil || n.enc == nil {
 		return
 	}
 	n.mu.Lock()
 	defer n.mu.Unlock()
-	_ = n.enc.Encode(sanitizeEvent(event))
+	_ = n.enc.Encode(sanitizeEvent(ctx, event))
 }
 
 var _ Emitter = (*NDJSON)(nil)
@@ -211,6 +212,7 @@ func (m *Multi) Emit(ctx context.Context, event Event) {
 	if m == nil {
 		return
 	}
+	event = sanitizeEvent(ctx, event)
 	for _, sink := range m.sinks {
 		sink.Emit(ctx, event.Clone())
 	}
@@ -218,29 +220,29 @@ func (m *Multi) Emit(ctx context.Context, event Event) {
 
 var _ Emitter = (*Multi)(nil)
 
-func sanitizeEvent(event Event) Event {
+func sanitizeEvent(ctx context.Context, event Event) Event {
 	event = event.Clone()
-	event.RunID = sanitizeString(event.RunID)
-	event.StepID = sanitizeString(event.StepID)
-	event.Status = sanitizeString(event.Status)
-	event.Message = sanitizeString(event.Message)
+	event.RunID = sanitizeString(ctx, event.RunID)
+	event.StepID = sanitizeString(ctx, event.StepID)
+	event.Status = sanitizeString(ctx, event.Status)
+	event.Message = sanitizeString(ctx, event.Message)
 	if len(event.Attrs) > 0 {
 		attrs := make(map[string]string, len(event.Attrs))
 		for k, v := range event.Attrs {
-			key := sanitizeString(k)
+			key := sanitizeString(ctx, k)
 			if secretKey(key) {
 				attrs[key] = "[redacted]"
 				continue
 			}
-			attrs[key] = sanitizeString(v)
+			attrs[key] = sanitizeString(ctx, v)
 		}
 		event.Attrs = attrs
 	}
 	return event
 }
 
-func sanitizeString(value string) string {
-	return safety.RedactErrorText(safety.SanitizeTerminal(value))
+func sanitizeString(ctx context.Context, value string) string {
+	return pmlogging.RedactText(ctx, safety.SanitizeTerminal(value))
 }
 
 func secretKey(key string) bool {

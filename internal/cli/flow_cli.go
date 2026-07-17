@@ -330,7 +330,7 @@ func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (fl
 		return flow.RLMResult{}, fmt.Errorf("flow rlm: parse spec: %w", err)
 	}
 
-	analyzer, closer, err := flowRLMAnalyzer(a.cfg, req.Mode)
+	analyzer, closer, err := flowRLMAnalyzer(ctx, a.cfg, req.Mode)
 	if err != nil {
 		return flow.RLMResult{}, err
 	}
@@ -355,7 +355,7 @@ func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (fl
 	}, nil
 }
 
-func flowRLMAnalyzer(cfg config.Config, mode string) (rlm.Analyzer, func() error, error) {
+func flowRLMAnalyzer(ctx context.Context, cfg config.Config, mode string) (rlm.Analyzer, func() error, error) {
 	if mode == "" {
 		mode = "deterministic"
 	}
@@ -367,7 +367,7 @@ func flowRLMAnalyzer(cfg config.Config, mode string) (rlm.Analyzer, func() error
 	case "model":
 		return &rlm.ModelAnalyzer{}, nil, nil
 	case "agent":
-		return buildAgentAnalyzer(cfg, "")
+		return buildAgentAnalyzer(ctx, cfg, "")
 	default:
 		return nil, nil, usageErrorf("flow rlm: unknown mode %q (want deterministic|fixture|model|agent)", mode)
 	}

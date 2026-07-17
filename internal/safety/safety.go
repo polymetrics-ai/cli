@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var httpURLPattern = regexp.MustCompile(`https?://[^\s]+`)
+var rawURLPattern = regexp.MustCompile(`(?i)\b[a-z][a-z0-9+.-]*://[^\s<>"']+`)
 var jsonBodyPattern = regexp.MustCompile(`: \{.*\}$`)
 var secretAssignmentPattern = regexp.MustCompile(`(?i)(api[_-]?key|access[_-]?token|token|secret|password)=([^\s&]+)`)
 
@@ -47,8 +47,26 @@ func SanitizeTerminal(text string) string {
 	return b.String()
 }
 
+func SanitizeTerminalLine(text string) string {
+	text = SanitizeTerminal(text)
+	var b strings.Builder
+	lastSpace := false
+	for _, r := range text {
+		if r == '\n' || r == '\t' {
+			if !lastSpace {
+				b.WriteByte(' ')
+				lastSpace = true
+			}
+			continue
+		}
+		b.WriteRune(r)
+		lastSpace = r == ' '
+	}
+	return strings.TrimSpace(b.String())
+}
+
 func RedactErrorText(text string) string {
-	text = httpURLPattern.ReplaceAllStringFunc(text, redactURL)
+	text = rawURLPattern.ReplaceAllStringFunc(text, redactURL)
 	text = jsonBodyPattern.ReplaceAllString(text, ": [redacted]")
 	text = secretAssignmentPattern.ReplaceAllString(text, "$1=[redacted]")
 	return text
@@ -58,7 +76,7 @@ func redactURL(raw string) string {
 	suffix := ""
 	for len(raw) > 0 {
 		last := raw[len(raw)-1]
-		if last != ':' && last != ',' && last != ')' && last != ']' && last != '}' {
+		if !strings.ContainsRune(":,.!?;)]}", rune(last)) {
 			break
 		}
 		suffix = string(last) + suffix
@@ -66,10 +84,20 @@ func redactURL(raw string) string {
 	}
 	parsed, err := url.Parse(raw)
 	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
-		return raw + suffix
+		return "[redacted-url]" + suffix
 	}
+	parsed.Scheme = strings.ToLower(parsed.Scheme)
+	parsed.User = nil
 	parsed.RawQuery = ""
+	parsed.ForceQuery = false
 	parsed.Fragment = ""
+	parsed.RawPath = ""
+	parsed.Host = strings.ToLower(SanitizeTerminalLine(parsed.Host))
+	parsed.Path = SanitizeTerminalLine(parsed.Path)
+	parsed.Opaque = SanitizeTerminalLine(parsed.Opaque)
+	if parsed.Host == "" {
+		return "[redacted-url]" + suffix
+	}
 	return parsed.String() + suffix
 }
 

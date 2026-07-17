@@ -15,6 +15,7 @@ import (
 	"go.temporal.io/sdk/worker"
 
 	"polymetrics.ai/internal/events"
+	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/rlm"
 )
 
@@ -22,6 +23,17 @@ import (
 const TaskQueue = "polymetrics-rlm"
 
 var workflowPollInterval = time.Second
+var temporalDialTimeout = 3 * time.Second
+
+var temporalClientDial = func(ctx context.Context, addr string, logger tlog.Logger) (client.Client, error) {
+	return client.DialContext(ctx, client.Options{
+		HostPort: addr,
+		Logger:   logger,
+		ConnectionOptions: client.ConnectionOptions{
+			GetSystemInfoTimeout: temporalDialTimeout,
+		},
+	})
+}
 
 // DefaultEnvPass is the set of LLM env vars forwarded into the agent container.
 var DefaultEnvPass = []string{"PM_LLM_BASE_URL", "PM_LLM_API_KEY", "PM_LLM_MODEL", "OPENROUTER_API_KEY", "PM_LLM_PROVIDER"}
@@ -31,14 +43,18 @@ var DefaultEnvPass = []string{"PM_LLM_BASE_URL", "PM_LLM_API_KEY", "PM_LLM_MODEL
 // in this process on a unique per-process queue (dev fallback). When false it is
 // a thin client that targets the shared queue served by `pm worker serve`.
 func SubmitterFor(addr string, embedded bool) (rlm.SubmitFunc, func() error, error) {
-	return SubmitterForActivities(addr, embedded, defaultActivities())
+	return SubmitterForActivitiesContext(context.Background(), addr, embedded, defaultActivities())
 }
 
 func SubmitterForActivities(addr string, embedded bool, acts *PodmanActivities) (rlm.SubmitFunc, func() error, error) {
+	return SubmitterForActivitiesContext(context.Background(), addr, embedded, acts)
+}
+
+func SubmitterForActivitiesContext(ctx context.Context, addr string, embedded bool, acts *PodmanActivities) (rlm.SubmitFunc, func() error, error) {
 	if acts == nil {
 		acts = defaultActivities()
 	}
-	c, err := client.Dial(client.Options{HostPort: addr, Logger: noopLogger{}})
+	c, err := dialTemporalClient(ctx, addr)
 	if err != nil {
 		return nil, nil, fmt.Errorf("worker: dial temporal: %w", err)
 	}
@@ -65,6 +81,15 @@ func SubmitterForActivities(addr string, embedded bool, acts *PodmanActivities) 
 		return nil
 	}
 	return submit, closer, nil
+}
+
+func dialTemporalClient(ctx context.Context, addr string) (client.Client, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	dialCtx, cancel := context.WithTimeout(ctx, temporalDialTimeout)
+	defer cancel()
+	return temporalClientDial(dialCtx, addr, tlog.NewStructuredLogger(pmlogging.FromContext(dialCtx)))
 }
 
 type workflowRun interface {
@@ -128,7 +153,7 @@ func submitterForWorkflowClient(c workflowClient, taskQueue string) rlm.SubmitFu
 					if errors.Is(out.err, context.Canceled) {
 						status = "canceled"
 					}
-					events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, status, out.err.Error()))
+					events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, status, pmlogging.RedactText(ctx, out.err.Error())))
 					return rlm.AgentResult{}, out.err
 				}
 				events.Emit(ctx, workerEvent(events.KindCompleted, workflowID, runID, "success", ""))
@@ -137,12 +162,12 @@ func submitterForWorkflowClient(c workflowClient, taskQueue string) rlm.SubmitFu
 				_, describeErr := c.DescribeWorkflowExecution(ctx, workflowID, runID)
 				message := ""
 				if describeErr != nil && ctx.Err() == nil {
-					message = describeErr.Error()
+					message = pmlogging.RedactText(ctx, describeErr.Error())
 				}
 				events.Emit(ctx, workerEvent(events.KindProgress, workflowID, runID, "polling", message))
 			case <-ctx.Done():
 				cancel()
-				events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, "canceled", ctx.Err().Error()))
+				events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, "canceled", pmlogging.RedactText(ctx, ctx.Err().Error())))
 				return rlm.AgentResult{}, ctx.Err()
 			}
 		}
@@ -189,12 +214,3 @@ func randSuffix() string {
 	_, _ = rand.Read(b[:])
 	return hex.EncodeToString(b[:])
 }
-
-type noopLogger struct{}
-
-func (noopLogger) Debug(string, ...interface{}) {}
-func (noopLogger) Info(string, ...interface{})  {}
-func (noopLogger) Warn(string, ...interface{})  {}
-func (noopLogger) Error(string, ...interface{}) {}
-
-var _ tlog.Logger = noopLogger{}

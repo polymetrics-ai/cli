@@ -18,6 +18,7 @@ import (
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/events"
+	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/vault"
@@ -206,6 +207,7 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	fields := make([]string, 0, len(req.Secrets))
 	for k := range req.Secrets {
 		fields = append(fields, k)
+		pmlogging.RegisterSensitiveKey(k)
 	}
 	sort.Strings(fields)
 	meta := CredentialMeta{
@@ -410,9 +412,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err != nil {
 		return Run{}, err
 	}
+	ctx = pmlogging.WithRunID(ctx, runID)
 	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
 	a.state.Runs = append(a.state.Runs, run)
 	_ = a.save()
+	pmlogging.FromContext(ctx).InfoContext(ctx, "etl run started", "run_id", runID, "connection", req.Connection, "stream", req.Stream)
 	a.emitETLEvent(ctx, events.KindStarted, runID, req.Stream, "running", etlExecutionResult{}, "")
 
 	source, sourceRuntime, err := a.resolveEndpoint(ctx, conn.Source)
@@ -584,6 +588,7 @@ func (a *App) completeRun(ctx context.Context, runID string, result etlExecution
 	if err := a.save(); err != nil {
 		return Run{}, err
 	}
+	pmlogging.FromContext(ctx).InfoContext(ctx, "etl run completed", "run_id", runID, "stream", run.Stream, "records_read", result.RecordsRead, "records_loaded", result.RecordsLoaded, "records_failed", result.RecordsFailed, "batches", result.BatchCount)
 	a.emitETLEvent(ctx, events.KindCompleted, runID, run.Stream, "success", result, "")
 	return run, nil
 }
@@ -1061,6 +1066,7 @@ func (a *App) resolveEndpoint(ctx context.Context, endpoint EndpointConfig) (con
 	if !ok {
 		return nil, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
 	}
+	registerConnectorSecretFields(connector)
 	return connector, runtime, nil
 }
 
@@ -1080,6 +1086,7 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	if !ok {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q not found", name)
 	}
+	registerCredentialSecretFields(cred.SecretFields)
 	secrets, err := a.vault.Get(ctx, cred.ID)
 	if err != nil {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, err
@@ -1089,6 +1096,24 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 		config[k] = v
 	}
 	return cred, connectors.RuntimeConfig{ProjectDir: a.projectDir, Config: config, Secrets: secrets}, nil
+}
+
+func registerCredentialSecretFields(fields []string) {
+	for _, field := range fields {
+		pmlogging.RegisterSensitiveKey(field)
+	}
+}
+
+func registerConnectorSecretFields(connector connectors.Connector) {
+	manifest := connectors.ManifestOf(connector)
+	for _, field := range manifest.SecretFields {
+		pmlogging.RegisterSensitiveKey(field.Name)
+	}
+	for _, mode := range manifest.AuthModes {
+		for _, field := range mode.SecretFields {
+			pmlogging.RegisterSensitiveKey(field)
+		}
+	}
 }
 
 func (a *App) emitETLEvent(ctx context.Context, kind events.Kind, runID, streamName, status string, result etlExecutionResult, message string) {
@@ -1131,15 +1156,17 @@ func (a *App) failRun(ctx context.Context, runID string, err error) (Run, error)
 	for i := range a.state.Runs {
 		if a.state.Runs[i].ID == runID {
 			a.state.Runs[i].Status = "failed"
-			a.state.Runs[i].Error = safety.RedactErrorText(err.Error())
+			a.state.Runs[i].Error = pmlogging.RedactText(ctx, err.Error())
 			a.state.Runs[i].CompletedAt = time.Now().UTC()
 			run := a.state.Runs[i]
 			_ = a.save()
+			pmlogging.FromContext(ctx).InfoContext(ctx, "etl run failed", "run_id", runID, "stream", run.Stream, "error", err)
 			a.emitETLEvent(ctx, events.KindFailed, runID, run.Stream, "failed", etlExecutionResult{}, run.Error)
 			return run, err
 		}
 	}
-	a.emitETLEvent(ctx, events.KindFailed, runID, "", "failed", etlExecutionResult{}, safety.RedactErrorText(err.Error()))
+	pmlogging.FromContext(ctx).InfoContext(ctx, "etl run failed", "run_id", runID, "error", err)
+	a.emitETLEvent(ctx, events.KindFailed, runID, "", "failed", etlExecutionResult{}, pmlogging.RedactText(ctx, err.Error()))
 	return Run{}, err
 }
 

@@ -37,14 +37,11 @@ type HTTPError struct {
 }
 
 func (e *HTTPError) Error() string {
-	msg := strings.TrimSpace(e.Body)
+	msg := http.StatusText(e.Status)
 	if msg == "" {
-		msg = http.StatusText(e.Status)
+		msg = "http error"
 	}
-	if len(msg) > 512 {
-		msg = msg[:512] + "..."
-	}
-	return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", e.Status, e.URL, msg))
+	return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", e.Status, safeErrorURL(e.URL), msg))
 }
 
 // Requester performs JSON HTTP requests with auth, retry, and rate-limit handling.
@@ -260,7 +257,7 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 		resp.Body.Close()
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
-			lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+			lastErr = &HTTPError{Status: resp.StatusCode, URL: safeErrorURL(fullURL), Body: truncate(respBody)}
 			if werr := r.sleep(ctx, r.backoff(attempt, resp.Header.Get("Retry-After"))); werr != nil {
 				return nil, werr
 			}
@@ -268,13 +265,13 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+			return nil, &HTTPError{Status: resp.StatusCode, URL: safeErrorURL(fullURL), Body: truncate(respBody)}
 		}
 
 		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL}, nil
 	}
 	if lastErr == nil {
-		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)
+		lastErr = fmt.Errorf("request to %s failed after %d attempts", safeErrorURL(fullURL), attempts)
 	}
 	return nil, lastErr
 }
@@ -356,6 +353,22 @@ func parseRetryAfter(value string) (time.Duration, bool) {
 		return d, true
 	}
 	return 0, false
+}
+
+func safeErrorURL(raw string) string {
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		return safety.RedactErrorText(raw)
+	}
+	parsed.User = nil
+	parsed.RawQuery = ""
+	parsed.ForceQuery = false
+	parsed.Fragment = ""
+	parsed.RawPath = ""
+	parsed.Host = safety.SanitizeTerminalLine(parsed.Host)
+	parsed.Path = safety.SanitizeTerminalLine(parsed.Path)
+	parsed.Opaque = safety.SanitizeTerminalLine(parsed.Opaque)
+	return parsed.String()
 }
 
 func truncate(body []byte) string {

@@ -1,12 +1,18 @@
 package app
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
+	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/events"
+	pmlogging "polymetrics.ai/internal/logging"
 )
 
 func TestRunETLEmitsConnectorFlushEvents(t *testing.T) {
@@ -159,6 +165,102 @@ func TestRunETLEmitsFailedTerminalEvent(t *testing.T) {
 	assertAppEventSequence(t, got, want)
 }
 
+func TestRunETLFailureRedactsRegisteredValuesAcrossStateEventsAndLogs(t *testing.T) {
+	const marker = "pm-test-app-redaction-marker-404"
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := &streamingSource{total: 1}
+	dest := &secretFailingDestination{}
+	registry := connectors.NewRegistry()
+	registry.Register(source)
+	registry.Register(dest)
+	a.registry = registry
+
+	valueRegistry := pmlogging.NewValueRegistry()
+	var stderr bytes.Buffer
+	logger, closeLogs := pmlogging.NewLogger(filepath.Join(root, ".polymetrics"), &stderr, pmlogging.LoggerOptions{Registry: valueRegistry})
+	defer func() { _ = closeLogs() }()
+	collector := events.NewCollector()
+	ctx := pmlogging.WithRegistry(context.Background(), valueRegistry)
+	ctx = pmlogging.WithLogger(ctx, logger)
+	ctx = events.WithEmitter(ctx, collector)
+
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "source", Connector: source.Name()}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "dest", Connector: dest.Name(), Secrets: map[string]string{"token": marker}, Config: map[string]string{"path": filepath.Join(root, "out")}}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "source_to_secret_failing_dest",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "source"},
+		Destination: EndpointConfig{Connector: dest.Name(), Credential: "dest"},
+		Streams: map[string]StreamConfig{
+			"records": {SyncMode: "full_refresh_overwrite", PrimaryKey: []string{"id"}, DestinationTable: "records"},
+		},
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	run, err := a.RunETL(ctx, RunETLRequest{Connection: "source_to_secret_failing_dest", Stream: "records", BatchSize: 1})
+	if err == nil {
+		t.Fatal("RunETL() error = nil, want destination failure")
+	}
+	if !bytes.Contains([]byte("dirty "+marker), []byte(marker)) {
+		t.Fatalf("synthetic scanner failed to detect dirty fixture")
+	}
+	assertNoMarker(t, marker, "run error", []byte(run.Error))
+	stateBytes, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read state: %v", err)
+	}
+	assertNoMarker(t, marker, "state", stateBytes)
+	eventBytes, err := json.Marshal(collector.Events())
+	if err != nil {
+		t.Fatalf("marshal events: %v", err)
+	}
+	assertNoMarker(t, marker, "events", eventBytes)
+	logBytes := readAllRunLogs(t, filepath.Join(root, ".polymetrics", "logs"))
+	assertNoMarker(t, marker, "logs", logBytes)
+	assertNoMarker(t, marker, "stderr", stderr.Bytes())
+}
+
+type secretFailingDestination struct{}
+
+func (d *secretFailingDestination) Name() string { return "secret_failing_destination" }
+
+func (d *secretFailingDestination) Metadata() connectors.Metadata {
+	return connectors.Metadata{
+		Name:         d.Name(),
+		DisplayName:  "Secret Failing Destination",
+		Description:  "Test destination that fails with a registered value in the error.",
+		Capabilities: connectors.Capabilities{Check: true, Catalog: true, Write: true},
+	}
+}
+
+func (d *secretFailingDestination) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
+	return ctx.Err()
+}
+
+func (d *secretFailingDestination) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return connectors.Catalog{Connector: d.Name()}, nil
+}
+
+func (d *secretFailingDestination) Read(context.Context, connectors.ReadRequest, func(connectors.Record) error) error {
+	return connectors.ErrUnsupportedOperation
+}
+
+func (d *secretFailingDestination) Write(_ context.Context, req connectors.WriteRequest, _ []connectors.Record) (connectors.WriteResult, error) {
+	secret := req.Config.Secrets["token"]
+	return connectors.WriteResult{}, fmt.Errorf("remote write rejected %s\nfor https://api.example.test/items?token=%s", secret, secret)
+}
+
 type failingDestination struct{}
 
 func (d *failingDestination) Name() string { return "failing_destination" }
@@ -229,5 +331,35 @@ func assertBatchCounters(t *testing.T, in []events.Event, loaded []int64) {
 		if got[i] != loaded[i] {
 			t.Fatalf("progress[%d].RecordsWritten = %d, want %d (all=%v)", i, got[i], loaded[i], got)
 		}
+	}
+}
+
+func readAllRunLogs(t *testing.T, dir string) []byte {
+	t.Helper()
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		t.Fatalf("read log dir: %v", err)
+	}
+	var out bytes.Buffer
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".jsonl") {
+			continue
+		}
+		data, err := os.ReadFile(filepath.Join(dir, entry.Name()))
+		if err != nil {
+			t.Fatalf("read log file: %v", err)
+		}
+		out.Write(data)
+	}
+	if out.Len() == 0 {
+		t.Fatalf("expected run logs")
+	}
+	return out.Bytes()
+}
+
+func assertNoMarker(t *testing.T, marker, label string, data []byte) {
+	t.Helper()
+	if bytes.Contains(data, []byte(marker)) {
+		t.Fatalf("%s contained synthetic marker", label)
 	}
 }

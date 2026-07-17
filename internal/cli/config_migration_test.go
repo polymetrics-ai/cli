@@ -31,8 +31,8 @@ func TestRuntimeDoctorUsesConfigFile(t *testing.T) {
 	if !ok {
 		t.Fatalf("missing config object: %v", env)
 	}
-	if cfg["postgres_url"] != "postgres://127.0.0.1:1/polymetrics?sslmode=disable" {
-		t.Fatalf("postgres_url = %v, want config-file value", cfg["postgres_url"])
+	if cfg["postgres_url"] != "postgres://127.0.0.1:1/polymetrics" {
+		t.Fatalf("postgres_url = %v, want redacted config-file value", cfg["postgres_url"])
 	}
 	if cfg["dragonfly_addr"] != "127.0.0.1:1" || cfg["temporal_addr"] != "127.0.0.1:1" {
 		t.Fatalf("runtime config = %v, want configured endpoints", cfg)
@@ -72,12 +72,13 @@ rlm:
 	origServe := workerServe
 	var capturedAddr string
 	var capturedActivities *worker.PodmanActivities
-	workerServe = func(ctx context.Context, addr string, acts *worker.PodmanActivities) error {
+	workerServe = func(ctx context.Context, addr string, acts *worker.PodmanActivities, ready func()) error {
 		if ctx == nil {
 			t.Fatal("worker serve got nil context")
 		}
 		capturedAddr = addr
 		capturedActivities = acts
+		ready()
 		return nil
 	}
 	t.Cleanup(func() { workerServe = origServe })
@@ -139,8 +140,8 @@ func TestPerfCompareRuntimeUsesConfigFileEndpoints(t *testing.T) {
 		endpoint, _ := check["endpoint"].(string)
 		endpoints[name] = endpoint
 	}
-	if endpoints["postgres"] != "postgres://127.0.0.1:1/polymetrics?sslmode=disable" {
-		t.Fatalf("postgres endpoint = %q, want config-file endpoint", endpoints["postgres"])
+	if endpoints["postgres"] != "postgres://127.0.0.1:1/polymetrics" {
+		t.Fatalf("postgres endpoint = %q, want redacted config-file endpoint", endpoints["postgres"])
 	}
 	if endpoints["dragonfly"] != "127.0.0.1:2" {
 		t.Fatalf("dragonfly endpoint = %q, want config-file endpoint", endpoints["dragonfly"])
