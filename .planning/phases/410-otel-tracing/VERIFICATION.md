@@ -10,7 +10,7 @@
 - [x] `go vet ./...`.
 - [x] `go test ./...`.
 - [x] `go build ./cmd/pm`.
-- [ ] `make verify` (first run failed at tidy-check while dependency diff was uncommitted; rerun after green-slice commit).
+- [x] `make verify` (passed after green-slice commit).
 
 ## Focused test gates
 
@@ -41,7 +41,7 @@ Applies because config/env/help docs change.
 - [x] `go.mod` direct OTel lines match ADR 0004 Stage 12 trace modules (`otel`, `sdk`, `stdouttrace`, `otlptracehttp` at v1.44.0).
 - [x] No `otelhttp`, metrics SDK direct import, otel log bridge, Temporal OTel contrib, or grpc exporter added.
 - [x] MVS consequence recorded: OTel v1.44.0 updates existing `golang.org/x/*`, `google.golang.org/grpc`, `grpc-gateway`, and `go.opentelemetry.io/*` indirects; no unapproved top-level non-OTel module was intentionally added.
-- [ ] `go mod tidy`/`make tidy-check` clean after commit (pending rerun; first `make verify` failed because dependency diff was uncommitted).
+- [x] `go mod tidy`/`make tidy-check` clean after commit (`make verify` passed).
 
 ## Runtime/credential boundaries
 
@@ -56,3 +56,10 @@ Applies because config/env/help docs change.
 | `scripts/gsd doctor` | pass | Adapter checks all `ok`; 69 commands. |
 | `scripts/gsd prompt plan-phase 410 --skip-research` | pass | 142-line prompt generated. |
 | `scripts/gsd prompt programming-loop init --phase 410 --dry-run` | fail/fallback | `unknown GSD command: programming-loop`; manual GSD fallback active. |
+| `go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/app ./internal/flow -run 'Telemetry\|TestLoadTelemetry\|Golden\|Config' -count=1` | pass | Focused telemetry/config/CLI/connsdk/app/flow gate. |
+| File/off/secret smoke script | pass | `PM_TELEMETRY=file` command/certify spans; default no telemetry dir; synthetic marker/forbidden attr grep clean. |
+| `gofmt -w cmd internal` | pass | No output. |
+| `go vet ./...` | pass | No output. |
+| `go test ./...` | pass | Full test suite passed; slowest packages `internal/connectors/certify` ~352s and `internal/cli` ~208s. |
+| `go build ./cmd/pm` | pass | No output. |
+| `make verify` | pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, connectorgen validate all passed. |

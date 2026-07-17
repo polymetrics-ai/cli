@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: implementation green on focused/full Go gates; `make verify` rerun pending after green-slice commit.
+Status: verified; stacked PR prep pending.
 
 ## Current state
 
@@ -25,10 +25,10 @@ Status: implementation green on focused/full Go gates; `make verify` rerun pendi
 - Focused telemetry/config/CLI/connsdk/app/flow tests passed.
 - File/off/secret smoke passed with synthetic marker.
 - `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm` passed.
-- First `make verify` run failed at `tidy-check` because go.mod/go.sum dependency changes were uncommitted; rerun after commit.
+- First `make verify` run failed at `tidy-check` because go.mod/go.sum dependency changes were uncommitted.
+- Green implementation slice committed/pushed, then `make verify` passed from clean dependency diff.
 
 ## Next
 
-1. Commit and push green implementation slice.
-2. Rerun `make verify` from clean dependency diff.
-3. Open stacked PR and record automated review route.
+1. Commit/push verification artifact update.
+2. Open stacked PR and record automated review route.

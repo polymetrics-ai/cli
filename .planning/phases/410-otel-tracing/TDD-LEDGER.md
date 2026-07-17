@@ -41,6 +41,7 @@ Result:
 | 6 | green | Gates | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm` | Pass | Full Go tests passed; CLI package ~208s, certify package ~352s. |
 | 7 | parity | Help/docs/website | `./pm --help`; `./pm help config`; `./pm etl`; `./pm flow`; `./pm connectors`; invalid `./pm connectors bogus --json` exit 2; docs generate/diff; `npm --prefix website run gen:docs` | Pass | Runtime help/docs/website parity updated for telemetry config. |
 | 8 | gate | `make verify` before commit | Fail | Expected tidy-check failure because go.mod/go.sum dependency changes were uncommitted; rerun after green-slice commit. |
+| 9 | gate | `make verify` after green-slice commit | Pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, and connectorgen validate passed. |
 
 ## Red-test requirements
 
