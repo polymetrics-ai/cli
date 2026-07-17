@@ -65,6 +65,9 @@ Optional/runtime-backed gates:
 | CLI parity commands | pass | `./pm --help`, `./pm help config`, `./pm etl --help`, `./pm flow --help`, `./pm etl`, `./pm flow`, initialized-root `./pm flow bogus` exit 2, docs/website grep for new flags. |
 | `git diff --check origin/feat/cli-architecture-v2...HEAD` | pass | no output. |
 | `git diff -- go.mod go.sum` | pass | no output after final gates; dependency delta reviewed against base separately. |
+| Remote Website checks (initial PR run) | fail | Generated website data drift: `M lib/docs.generated.ts`. |
+| `cd website && pnpm run gen:website-data` | pass | Regenerated `website/lib/docs.generated.ts`; no connector/generated data changes beyond docs data. |
+| `cd website && pnpm install --frozen-lockfile` | blocked local | `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`; CI install succeeded, so local typecheck/unit not rerun here. |
 
 ## Gate notes
 

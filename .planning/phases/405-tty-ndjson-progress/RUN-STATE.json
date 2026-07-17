@@ -49,6 +49,11 @@
       "cycle": "verify",
       "decision": "local_critical_path",
       "reason": "focused gates, full local gates, make verify, and CLI parity checks passed inline"
+    },
+    {
+      "cycle": "remote-gap-loop",
+      "decision": "local_critical_path",
+      "reason": "remote Website checks reported generated docs data drift; regenerated website/lib/docs.generated.ts inline"
     }
   ],
   "redEvidence": [
@@ -130,6 +135,21 @@
       "command": "git diff -- go.mod go.sum",
       "result": "pass",
       "evidence": "no output after final gates; approved x/term dependency delta reviewed against base"
+    },
+    {
+      "command": "remote Website checks initial PR run",
+      "result": "fail_then_fixed",
+      "evidence": "failed on generated website data drift: M lib/docs.generated.ts"
+    },
+    {
+      "command": "cd website && pnpm run gen:website-data",
+      "result": "pass",
+      "evidence": "Wrote 11 docs pages to lib/docs.generated.ts; regenerated connector data unchanged except docs generated file dirty before commit"
+    },
+    {
+      "command": "cd website && pnpm install --frozen-lockfile",
+      "result": "blocked_local",
+      "evidence": "ERR_PNPM_LOCKFILE_CONFIG_MISMATCH; CI install succeeded"
     }
   ],
   "cliParity": {
@@ -138,7 +158,7 @@
     "runtimeHelp": ["pm --help", "pm help config", "pm etl --help", "pm flow --help"],
     "bareNamespaces": ["pm etl", "pm flow"],
     "docs": "docs/cli regenerated and matched pm docs generate",
-    "website": "website/content/docs/cli-reference.mdx updated",
+    "website": "website/content/docs/cli-reference.mdx and website/lib/docs.generated.ts updated",
     "invalidAction": "pm --root <tmp> flow bogus exited 2"
   },
   "review": {

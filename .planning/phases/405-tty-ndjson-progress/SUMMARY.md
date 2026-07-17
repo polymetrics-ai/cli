@@ -9,7 +9,7 @@ Status: implementation and local verification complete; stacked PR pending.
 - Global `--plain`, `--no-input`, and `--progress ndjson` parsing.
 - `events.NDJSON` progress wired to stderr only.
 - `internal/ui/styles` palette/glyph foundation with no-color and ASCII fallback.
-- Runtime help, `docs/cli/**`, website CLI reference, and golden help fixtures updated.
+- Runtime help, `docs/cli/**`, website CLI reference, generated website docs data, and golden help fixtures updated.
 - Stage-approved dependency: `golang.org/x/term v0.42.0`.
 
 ## TDD evidence
@@ -41,8 +41,10 @@ connectorgen validate: 547 connector(s) checked, 0 findings
 
 CLI parity passed: `pm --help`, `pm help config`, `pm etl --help`, `pm flow --help`, `pm etl`, `pm flow`, initialized-root `pm flow bogus` exit 2, docs/website grep for new flags.
 
+Remote Website checks initially failed because `website/lib/docs.generated.ts` needed regeneration. Ran `cd website && pnpm run gen:website-data` and committed the generated docs data. Local `pnpm install --frozen-lockfile` is blocked by `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`; CI install succeeded, so remote rerun is source of truth for website typecheck/tests.
+
 ## Pending
 
-- Commit/push final artifact update.
-- Open stacked PR to `feat/cli-architecture-v2` with `Refs #405` and `Refs #397`.
-- Automated review coverage pending after PR creation.
+- Push generated website docs data fix.
+- Confirm remote Website checks rerun.
+- Automated review coverage pending after PR creation (no Claude run observed yet).
