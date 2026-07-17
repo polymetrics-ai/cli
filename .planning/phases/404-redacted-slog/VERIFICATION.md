@@ -7,34 +7,34 @@
 | GSD doctor | `scripts/gsd doctor` | PASS | Adapter healthy. |
 | Plan prompt | `scripts/gsd prompt plan-phase 404 --skip-research` | PASS | Prompt generated. |
 | Programming loop dry-run | `scripts/gsd prompt programming-loop init --phase 404 --dry-run` | FALLBACK | Command missing from adapter; manual GSD loop recorded. |
-| Format | `gofmt -w cmd internal` | pending | Run after code edits. |
-| Focused race | `go test -race ./internal/logging/... ./internal/vault/... ./internal/worker/... ./internal/runtimecheck/... ./internal/cli/... -count=1` | pending | Includes no Temporal service. |
-| Vet | `go vet ./...` | pending | Full repo. |
-| Tests | `go test ./...` | pending | Full repo. |
-| Build | `go build ./cmd/pm` | pending | CLI build. |
-| Verify | `make verify` | pending | Full project gate when feasible. |
-| Diff check | `git diff --check origin/feat/cli-architecture-v2...HEAD` | pending | Whitespace. |
-| Dependency check | `git diff -- go.mod go.sum` | pending | Must be empty. |
+| Format | `gofmt -w cmd internal` | PASS | Also run by `make verify`. |
+| Focused race | `go test -race ./internal/logging/... ./internal/vault/... ./internal/worker/... ./internal/runtimecheck/... ./internal/cli/... -count=1` | FAIL/BLOCKED | Exact command timed out in `./internal/cli` at Go default 10m; `./internal/cli -timeout=20m` also timed out. Non-CLI focused race packages passed. No Temporal service used. |
+| Vet | `go vet ./...` | PASS | Exited 0. |
+| Tests | `go test ./...` | PASS | Exited 0; `internal/cli` 174.986s, `internal/connectors/certify` 346.816s. |
+| Build | `go build ./cmd/pm` | PASS | Exited 0. |
+| Verify | `make verify` | PASS | Exited 0; includes `go test -timeout 20m ./...`, docs validate, smoke, lint, connectorgen validate. |
+| Diff check | `git diff --check origin/feat/cli-architecture-v2...HEAD` | PASS | Exited 0. |
+| Dependency check | `git diff -- go.mod go.sum` | PASS | Empty after `make verify`/`go mod tidy`. |
 
 ## Issue-specific acceptance checks
 
 | Check | Status | Evidence target |
 |---|---|---|
-| `RedactingHandler` fixed-key redaction | pending | `internal/logging` unit tests. |
-| Connector SecretFields key redaction | pending | CLI logger setup + logging unit test extra key. |
-| Registered-value redaction from vault.Get only | pending | `internal/vault` focused test + code grep. |
-| Registry never logs/stores/returns raw values | pending | Fingerprint-only registry implementation and tests. |
-| Message/attrs/nested groups/errors/URLs/query values sanitized | pending | `internal/logging` unit tests. |
-| No bodies/headers/argv/secrets emitted | pending | Sensitive-key set + smoke grep. |
-| Context-routed `.polymetrics/logs/<validated-run-id>.jsonl` | pending | `internal/logging` routing tests + CLI smoke. |
-| Traversal/control chars/symlink escape blocked | pending | `internal/logging` routing tests. |
-| 0700 log dir / 0600 log file | pending | `internal/logging` routing tests. |
-| Bounded retention | pending | `internal/logging` retention test. |
-| Deterministic close/no leaks | pending | handler `Close` test + race gate. |
-| Warn+ fanout only to provided stderr | pending | logging unit test; stdout JSON smoke. |
-| Temporal structured logger bridge | pending | static replacement + no-service tests. |
-| End-to-end secret-absence hook proves fail and real log clean | pending | `internal/cli` smoke test. |
-| Events/ledger/logging sibling layering preserved | pending | code review; no logs derived from events. |
+| `RedactingHandler` fixed-key redaction | PASS (focused) | `internal/logging` unit tests. |
+| Connector SecretFields key redaction | PASS (focused) | CLI logger setup + logging unit extra-key test. |
+| Registered-value redaction from vault.Get only | PASS (focused) | `internal/vault` focused test. |
+| Registry never logs/stores/returns raw values | PASS (focused) | Fingerprint-only registry; no raw-value accessors. |
+| Message/attrs/nested groups/errors/URLs/query values sanitized | PASS (focused) | `internal/logging` unit tests. |
+| No bodies/headers/argv/secrets emitted | PASS (focused) | Sensitive-key set + smoke scanner. |
+| Context-routed `.polymetrics/logs/<validated-run-id>.jsonl` | PASS (focused) | `internal/logging` routing tests + CLI smoke. |
+| Traversal/control chars/symlink escape blocked | PASS (focused) | `internal/logging` routing tests. |
+| 0700 log dir / 0600 log file | PASS (focused) | `internal/logging` routing tests. |
+| Bounded retention | PASS (focused) | `internal/logging` retention test. |
+| Deterministic close/no leaks | PASS (focused) | handler `Close` test; race pending. |
+| Warn+ fanout only to provided stderr | PASS (focused) | logging unit test; stdout JSON smoke. |
+| Temporal structured logger bridge | PASS (focused) | `tlog.NewStructuredLogger(pmlogging.FromContext(ctx))`; no-service tests. |
+| End-to-end secret-absence hook proves fail and real log clean | PASS (focused) | `internal/cli` smoke test. |
+| Events/ledger/logging sibling layering preserved | PASS (code review) | ETL logs added beside events; no logs derived from events. |
 
 ## CLI parity status
 

@@ -15,6 +15,7 @@ import (
 	"go.temporal.io/sdk/worker"
 
 	"polymetrics.ai/internal/events"
+	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/rlm"
 )
 
@@ -31,14 +32,18 @@ var DefaultEnvPass = []string{"PM_LLM_BASE_URL", "PM_LLM_API_KEY", "PM_LLM_MODEL
 // in this process on a unique per-process queue (dev fallback). When false it is
 // a thin client that targets the shared queue served by `pm worker serve`.
 func SubmitterFor(addr string, embedded bool) (rlm.SubmitFunc, func() error, error) {
-	return SubmitterForActivities(addr, embedded, defaultActivities())
+	return SubmitterForActivitiesContext(context.Background(), addr, embedded, defaultActivities())
 }
 
 func SubmitterForActivities(addr string, embedded bool, acts *PodmanActivities) (rlm.SubmitFunc, func() error, error) {
+	return SubmitterForActivitiesContext(context.Background(), addr, embedded, acts)
+}
+
+func SubmitterForActivitiesContext(ctx context.Context, addr string, embedded bool, acts *PodmanActivities) (rlm.SubmitFunc, func() error, error) {
 	if acts == nil {
 		acts = defaultActivities()
 	}
-	c, err := client.Dial(client.Options{HostPort: addr, Logger: noopLogger{}})
+	c, err := client.Dial(client.Options{HostPort: addr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(ctx))})
 	if err != nil {
 		return nil, nil, fmt.Errorf("worker: dial temporal: %w", err)
 	}
@@ -189,12 +194,3 @@ func randSuffix() string {
 	_, _ = rand.Read(b[:])
 	return hex.EncodeToString(b[:])
 }
-
-type noopLogger struct{}
-
-func (noopLogger) Debug(string, ...interface{}) {}
-func (noopLogger) Info(string, ...interface{})  {}
-func (noopLogger) Warn(string, ...interface{})  {}
-func (noopLogger) Error(string, ...interface{}) {}
-
-var _ tlog.Logger = noopLogger{}

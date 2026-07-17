@@ -69,7 +69,7 @@ func runExtract(ctx context.Context, a *app.App, cfg config.Config, root string,
 		// return the decision so the caller can supply tables or escalate.
 		inTable, outTable := flags.first("in"), flags.first("out")
 		if inTable != "" && outTable != "" {
-			analyzer, closer, err := buildAgentAnalyzer(cfg, request)
+			analyzer, closer, err := buildAgentAnalyzer(ctx, cfg, request)
 			if err != nil {
 				env["note"] = fmt.Sprintf("rlm_analysis route; agent backend unavailable: %v", err)
 			} else {

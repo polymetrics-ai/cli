@@ -16,6 +16,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
@@ -37,6 +38,10 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	if err != nil {
 		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
 	}
+	logger, closeLogs := pmlogging.NewLogger(filepath.Join(cfg.Root, ".polymetrics"), stderr, pmlogging.LoggerOptions{})
+	defer func() { _ = closeLogs() }()
+	ctx = pmlogging.WithLogger(ctx, logger)
+
 	cmd := newRootCmd(ctx, cfg, stdout, stderr)
 	if err := executeRootCmd(cmd, cleanArgs); err != nil {
 		return writeError(stdout, stderr, mapCobraErr(err), cfg.JSON)

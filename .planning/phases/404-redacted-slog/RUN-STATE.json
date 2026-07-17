@@ -7,6 +7,7 @@
   "mode": "manual-gsd-fallback",
   "verificationPassed": false,
   "fallbackReason": "scripts/gsd prompt programming-loop init --phase 404 --dry-run failed: unknown GSD command: programming-loop",
+  "verificationBlocker": "Exact issue race gate times out in ./internal/cli; make verify and non-race full gates pass.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -17,6 +18,16 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "Red tests added inline within issue write scope before production edits."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Implemented scoped logging/vault/app/Temporal changes inline after red tests."
+    },
+    {
+      "cycle": "verify",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "Exact issue race gate for ./internal/cli exceeded default and 20m test timeouts; broader make verify passed."
     }
   ],
   "gates": {
@@ -24,11 +35,13 @@
     "gsdPlanPrompt": "pass",
     "gsdProgrammingLoopDryRun": "fallback",
     "redTests": "red-captured",
-    "focusedRace": "pending",
-    "goVet": "pending",
-    "goTestAll": "pending",
-    "goBuildPm": "pending",
-    "makeVerify": "pending",
-    "goModGoSumDiff": "pending"
+    "focusedUnit": "pass",
+    "focusedRaceWithoutCLI": "pass",
+    "focusedRaceWithCLI": "timeout",
+    "goVet": "pass",
+    "goTestAll": "pass",
+    "goBuildPm": "pass",
+    "makeVerify": "pass",
+    "goModGoSumDiff": "pass"
   }
 }

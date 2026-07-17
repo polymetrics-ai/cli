@@ -75,7 +75,7 @@ func runRLMRun(ctx context.Context, cfg config.Config, root string, args []strin
 	case "model":
 		analyzer = &rlm.ModelAnalyzer{}
 	case "agent":
-		a, c, err := buildAgentAnalyzer(cfg, flags.first("request"))
+		a, c, err := buildAgentAnalyzer(ctx, cfg, flags.first("request"))
 		if err != nil {
 			return err
 		}
@@ -107,7 +107,7 @@ func runRLMRun(ctx context.Context, cfg config.Config, root string, args []strin
 // set it runs fully offline (no Temporal/podman) — the hermetic dev/test path.
 // Otherwise it wires the real Temporal submitter (daemon by default; embedded
 // with rlm.embedded_worker=true) and probe.
-func buildAgentAnalyzer(cfg config.Config, request string) (rlm.Analyzer, func() error, error) {
+func buildAgentAnalyzer(ctx context.Context, cfg config.Config, request string) (rlm.Analyzer, func() error, error) {
 	agentCfg := agentConfigFromConfig(cfg)
 
 	if cfg.RLM.FakeRunner {
@@ -125,7 +125,7 @@ func buildAgentAnalyzer(cfg config.Config, request string) (rlm.Analyzer, func()
 		return nil, nil, rlm.ErrRemoteUnavailable
 	}
 	embedded := cfg.RLM.EmbeddedWorker
-	submit, closer, err := worker.SubmitterForActivities(agentCfg.TemporalAddr, embedded, worker.NewPodmanActivities(agentCfg.PodmanBin, agentCfg.Image))
+	submit, closer, err := worker.SubmitterForActivitiesContext(ctx, agentCfg.TemporalAddr, embedded, worker.NewPodmanActivities(agentCfg.PodmanBin, agentCfg.Image))
 	if err != nil {
 		return nil, nil, fmt.Errorf("rlm: %w (%v)", rlm.ErrRemoteUnavailable, err)
 	}

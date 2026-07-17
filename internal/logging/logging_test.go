@@ -11,6 +11,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	tlog "go.temporal.io/sdk/log"
 )
 
 const syntheticCanary = "pm-test-canary-redaction-value-404"
@@ -49,6 +51,16 @@ func TestRedactingHandlerScrubsMessagesAttrsGroupsErrorsAndURLs(t *testing.T) {
 	}
 	if !strings.Contains(out, "[redacted]") {
 		t.Fatalf("redacted log missing replacement marker: %s", out)
+	}
+}
+
+func TestRegisterSensitiveKeyRedactsDynamicConnectorFields(t *testing.T) {
+	RegisterSensitiveKey("connector_dynamic_secret")
+	var buf bytes.Buffer
+	logger := slog.New(NewRedactingHandler(slog.NewJSONHandler(&buf, nil), RedactionOptions{}))
+	logger.Info("dynamic key", "connector_dynamic_secret", "field-value")
+	if strings.Contains(buf.String(), "field-value") {
+		t.Fatalf("dynamic sensitive key was not redacted")
 	}
 }
 
@@ -113,7 +125,7 @@ func TestRunFileHandlerRejectsUnsafeRunIDsAndUsesSafePermissions(t *testing.T) {
 	if got := info.Mode().Perm(); got != 0o600 {
 		t.Fatalf("log file mode = %o, want 0600", got)
 	}
-	for _, rel := range []string{"escape.jsonl", "..", "bad\nrun.jsonl"} {
+	for _, rel := range []string{"escape.jsonl", "bad\nrun.jsonl"} {
 		if _, err := os.Stat(filepath.Join(logsDir, rel)); err == nil {
 			t.Fatalf("unsafe run id created log path %q", rel)
 		}
@@ -167,13 +179,13 @@ func TestRunFileHandlerBlocksSymlinkEscape(t *testing.T) {
 	}
 }
 
-func TestTemporalLoggerUsesContextRedactingLogger(t *testing.T) {
+func TestTemporalStructuredLoggerUsesContextRedactingLogger(t *testing.T) {
 	registry := NewValueRegistry()
 	registry.Register(syntheticCanary)
 
 	var buf bytes.Buffer
 	logger := slog.New(NewRedactingHandler(slog.NewJSONHandler(&buf, nil), RedactionOptions{Registry: registry}))
-	temporal := TemporalLogger(WithLogger(context.Background(), logger))
+	temporal := tlog.NewStructuredLogger(FromContext(WithLogger(context.Background(), logger)))
 	temporal.Warn("temporal warning", "token", syntheticCanary)
 
 	out := buf.String()

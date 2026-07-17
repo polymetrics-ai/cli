@@ -9,6 +9,8 @@ import (
 
 	"go.temporal.io/sdk/client"
 	tlog "go.temporal.io/sdk/log"
+
+	pmlogging "polymetrics.ai/internal/logging"
 )
 
 const defaultTimeout = 3 * time.Second
@@ -30,7 +32,7 @@ func Probe(ctx context.Context, addr string) bool {
 
 	done := make(chan bool, 1)
 	go func() {
-		c, err := client.Dial(client.Options{HostPort: addr, Logger: noopLogger{}})
+		c, err := client.Dial(client.Options{HostPort: addr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(ctx))})
 		if err != nil {
 			done <- false
 			return
@@ -49,12 +51,3 @@ func Probe(ctx context.Context, addr string) bool {
 		return false
 	}
 }
-
-type noopLogger struct{}
-
-func (noopLogger) Debug(string, ...interface{}) {}
-func (noopLogger) Info(string, ...interface{})  {}
-func (noopLogger) Warn(string, ...interface{})  {}
-func (noopLogger) Error(string, ...interface{}) {}
-
-var _ tlog.Logger = noopLogger{}

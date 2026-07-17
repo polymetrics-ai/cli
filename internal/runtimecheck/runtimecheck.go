@@ -11,6 +11,7 @@ import (
 	tlog "go.temporal.io/sdk/log"
 
 	pmconfig "polymetrics.ai/internal/config"
+	pmlogging "polymetrics.ai/internal/logging"
 )
 
 type Config struct {
@@ -126,7 +127,7 @@ func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 func checkTemporal(ctx context.Context, cfg Config) CheckResult {
 	start := time.Now()
 	result := CheckResult{Name: "temporal", Endpoint: cfg.TemporalAddr}
-	c, err := client.Dial(client.Options{HostPort: cfg.TemporalAddr, Logger: noopLogger{}})
+	c, err := client.Dial(client.Options{HostPort: cfg.TemporalAddr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(ctx))})
 	if err == nil {
 		defer c.Close()
 		checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
@@ -142,15 +143,6 @@ func checkTemporal(ctx context.Context, cfg Config) CheckResult {
 	result.Status = "ok"
 	return result
 }
-
-type noopLogger struct{}
-
-func (noopLogger) Debug(string, ...interface{}) {}
-func (noopLogger) Info(string, ...interface{})  {}
-func (noopLogger) Warn(string, ...interface{})  {}
-func (noopLogger) Error(string, ...interface{}) {}
-
-var _ tlog.Logger = noopLogger{}
 
 func stringOr(value, fallback string) string {
 	if value != "" {

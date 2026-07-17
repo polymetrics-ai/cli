@@ -5,7 +5,10 @@ import (
 	"fmt"
 
 	"go.temporal.io/sdk/client"
+	tlog "go.temporal.io/sdk/log"
 	"go.temporal.io/sdk/worker"
+
+	pmlogging "polymetrics.ai/internal/logging"
 )
 
 // Serve runs the long-lived RLM worker daemon: it hosts the workflow + podman
@@ -20,7 +23,7 @@ func ServeWithActivities(ctx context.Context, addr string, acts *PodmanActivitie
 	if acts == nil {
 		acts = defaultActivities()
 	}
-	c, err := client.Dial(client.Options{HostPort: addr, Logger: noopLogger{}})
+	c, err := client.Dial(client.Options{HostPort: addr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(ctx))})
 	if err != nil {
 		return fmt.Errorf("worker serve: dial temporal: %w", err)
 	}

@@ -1,19 +1,39 @@
 # SUMMARY — Issue #404
 
-Status: planning complete; production edits not started.
+Status: implementation green for non-race/full verify; issue race command blocked by existing slow `internal/cli` race suite timeout.
 
-## Current state
+## Delivered
 
-- Issue #404/#397 contracts read.
-- Required GSD/review/handoff contracts read.
-- Required Go skills loaded and recorded.
-- GSD adapter healthy for doctor/plan prompt.
-- `programming-loop` prompt command missing from `scripts/gsd`; manual GSD universal loop fallback recorded.
-- Execution decision: `local_critical_path`.
+- Added `internal/logging` redacting slog foundation:
+  - outer `RedactingHandler`;
+  - fixed + dynamic sensitive-key redaction;
+  - fingerprint-only registered-value registry;
+  - message/attr/group/error/URL/query sanitization;
+  - context run-id logger helpers;
+  - per-run JSONL handler with run ID validation, `os.Root` symlink/traversal defense, 0700 dirs, 0600 files, retention pruning, deterministic close;
+  - warn+ fanout to provided stderr.
+- Fed registered-value redaction at `vault.Get` only.
+- Added ETL run start/complete/fail info logs beside events; no logs derived from events.
+- Replaced Temporal `noopLogger` seams with pinned `tlog.NewStructuredLogger(pmlogging.FromContext(ctx))`.
+- Added focused tests and hermetic CLI log smoke with scanner-failure proof and real-log clean proof.
 
-## Next
+## Verification
 
-1. Add red tests for `internal/logging`, vault registry, CLI smoke, and Temporal logger bridge.
-2. Capture exact red output in `TDD-LEDGER.md`.
-3. Implement smallest green slices without dependency changes.
-4. Run focused gates, then full issue verification.
+PASS:
+
+- `go test ./internal/logging/... ./internal/vault/... ./internal/cli/... -run 'TestRedactingHandler|TestRegisterSensitiveKey|TestRunFileHandler|TestRunLogger|TestTemporalStructuredLogger|TestVaultGetRegistersValuesForRedaction|TestRedactedRunLogsSmoke' -count=1`
+- `go test -race ./internal/logging/... ./internal/vault/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... -count=1`
+- `go test ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... -count=1`
+- `go vet ./...`
+- `go test ./...`
+- `go build ./cmd/pm`
+- `make verify`
+
+BLOCKED:
+
+- `go test -race ./internal/logging/... ./internal/vault/... ./internal/worker/... ./internal/runtimecheck/... ./internal/cli/... -count=1` timed out because `./internal/cli` exceeds the Go test timeout while repeatedly loading connector bundles.
+- `go test -race ./internal/cli/... -count=1 -timeout=20m` also timed out, later in docs generation.
+
+## Review route
+
+Claude disabled / Copilot quota exhausted per assignment. Human/parent fallback pending; no automated review request made.
