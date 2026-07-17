@@ -1,10 +1,10 @@
 # Phase 423 Summary
 
-Status: native perf implementation complete; full local verification and parity checks passed; PR pending.
+Status: PR #458 open against `feat/cli-architecture-v2`; native perf implementation complete; full local verification and parity checks passed; remote checks queued.
 
 ## Current state
 
-- Worker branch: `refactor/423-perf-native-cobra`.
+- Worker branch: `refactor/423-perf-native-cobra`; sub-PR: https://github.com/polymetrics-ai/cli/pull/458.
 - Base branch: `feat/cli-architecture-v2`; dispatch/planning head `6fbff849932e891a8184000fb677e1b6fca7f6d4`.
 - GSD adapter doctor passed; `programming-loop` prompt command missing, so manual GSD fallback recorded.
 - Required reading and skills loaded. Repo-specific `.pi/skills/go-implementation/SKILL.md` is missing; global Go skills loaded.
@@ -31,7 +31,7 @@ Docs/website/generated checks passed: `./pm docs generate` diff against `docs/cl
 
 Diff guards passed: `git diff --check origin/feat/cli-architecture-v2...HEAD`; `git diff -- go.mod go.sum` empty.
 
-Pending PR and review-route recording.
+Sub-PR #458 opened non-draft against `feat/cli-architecture-v2`; remote checks queued at PR creation. Claude/Copilot not manually requested; review coverage pending per stacked PR policy.
 
 ## Safety
 

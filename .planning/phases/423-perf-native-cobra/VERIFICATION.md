@@ -115,3 +115,5 @@ git diff -- go.mod go.sum
 ```
 
 Result: pass / no output.
+
+Remote PR checks at PR #458 creation: branch-name, pr-title, Dependency Review, GSD workflow evidence, require-linked-issue, govulncheck, verify, and CodeQL queued. Final artifact-only push will retrigger remote checks.

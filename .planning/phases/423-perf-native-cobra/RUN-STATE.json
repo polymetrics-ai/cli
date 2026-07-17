@@ -8,7 +8,7 @@
   "baseHeadAtDispatch": "6fbff849932e891a8184000fb677e1b6fca7f6d4",
   "baseHeadAtPlanning": "6fbff849932e891a8184000fb677e1b6fca7f6d4",
   "verificationPassed": true,
-  "status": "local_verified_pr_pending",
+  "status": "pr_open_local_verified_remote_checks_queued",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-423.prompt",
@@ -38,11 +38,11 @@
       "reason": "full local gates, runtime help/docs/website parity checks, perf JSON checks, and diff guards completed inline in isolated worker cwd"
     }
   ],
-  "pullRequest": null,
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/458",
   "reviewRoute": {
-    "claude": "not_requested_planning_checkpoint",
-    "copilot": "not_requested_planning_checkpoint",
-    "fallback": "none",
-    "coverageStatus": "not_started"
+    "claude": "auto_expected_if_trusted_author_trigger_runs",
+    "copilot": "not_requested",
+    "fallback": "parent_or_human_review_pending_if_sub_pr_auto_review_skips",
+    "coverageStatus": "remote_checks_queued_review_pending"
   }
 }
