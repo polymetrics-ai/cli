@@ -1,6 +1,9 @@
 # SUMMARY — Issue #404
 
-Status: implementation green for non-race/full verify; issue race command blocked by existing slow `internal/cli` race suite timeout.
+Status: implementation pushed; PR #455 open; non-race/full verify green; issue race command blocked by existing slow `internal/cli` race suite timeout.
+
+PR: https://github.com/polymetrics-ai/cli/pull/455
+Head: `bdadaf34d39729c7ea982060efe07ba406bc0d20`
 
 ## Delivered
 
