@@ -5,7 +5,7 @@
   "branch": "feat/404-redacted-slog",
   "base": "20475ddf8ae3486282ead4fc7d2129f2bd1129b3",
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/455",
-  "head": "bdadaf34d39729c7ea982060efe07ba406bc0d20",
+  "head": "f22757ce47b95585c5148fc1b518a013c21e609b",
   "mode": "manual-gsd-fallback",
   "verificationPassed": false,
   "fallbackReason": "scripts/gsd prompt programming-loop init --phase 404 --dry-run failed: unknown GSD command: programming-loop",
