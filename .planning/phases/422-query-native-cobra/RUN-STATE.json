@@ -8,7 +8,7 @@
   "baseHeadAtDispatch": "e6faecfb",
   "baseHeadAtPlanning": "f12d573b",
   "verificationPassed": false,
-  "status": "planning_checkpoint_complete_red_tests_next",
+  "status": "red_tests_captured_green_implementation_next",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-422.prompt",
@@ -21,6 +21,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "second serialized Phase 9 namespace worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for native query subtree, flag semantics, invalid action usage, and SQL write rejection; no subagent available"
     }
   ],
   "pullRequest": "pending",

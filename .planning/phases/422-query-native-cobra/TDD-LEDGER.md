@@ -39,7 +39,7 @@ Result:
 | Step | Kind | Command / test | Result | Notes |
 |---:|---|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS | Green | Pre-production artifact checkpoint; no production code touched. |
-| 1 | Red | Pending: `go test ./internal/cli/ -run 'Query|CobraRouterShell' -count=1` | Pending | Will fail until `query` is native and invalid action avoids project open. |
+| 1 | Red | `go test ./internal/cli/ -run 'Query|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `query` remains legacy; invalid action opens project before usage classification. |
 | 2 | Green | Pending | Pending | Native query parser green. |
 | 3 | Refactor | Pending | Pending | Gofmt + focused gate. |
 | 4 | Full gate | Pending | Pending | Required issue verification and parity checks. |
@@ -53,7 +53,30 @@ Result:
 
 ## Exact red outputs
 
-Pending capture before production edits.
+```bash
+go test ./internal/cli/ -run 'Query|CobraRouterShell' -count=1
+```
+
+```text
+--- FAIL: TestCobraRouterShellBuildsFreshHiddenWrapperTree (0.00s)
+    cobra_router_test.go:55: expectedHidden covers 21 commands, legacy commands plus native commands registers 22
+--- FAIL: TestQueryCommandIsNativeCobraSubtree (0.00s)
+    cobra_router_test.go:135: query command must use native Cobra flag parsing
+--- FAIL: TestQueryInvalidActionIsUsageBeforeProjectOpen (0.00s)
+    query_cli_test.go:94: Run(query bogus --json) code = 1, want 2; stdout={
+          "api_version": "polymetrics.ai/v1",
+          "error": {
+            "category": "internal",
+            "code": "internal_error",
+            "message": "open project at .polymetrics: stat .polymetrics: no such file or directory"
+          },
+          "kind": "Error"
+        }
+         stderr=error: open project at .polymetrics: stat .polymetrics: no such file or directory
+FAIL
+FAIL	polymetrics.ai/internal/cli	7.544s
+FAIL
+```
 
 ## Exact green outputs
 

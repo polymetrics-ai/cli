@@ -50,7 +50,7 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 	for _, spec := range cobraLegacyCommands(config.Config{}) {
 		legacyCommands[spec.name] = struct{}{}
 	}
-	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}}
+	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}}
 	if len(expectedHidden) != len(legacyCommands)+len(nativeCommands) {
 		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native commands registers %d", len(expectedHidden), len(legacyCommands)+len(nativeCommands))
 	}
@@ -120,6 +120,52 @@ func TestCatalogCommandIsNativeCobraSubtree(t *testing.T) {
 			}
 			if !action.FParseErrWhitelist.UnknownFlags {
 				t.Fatalf("catalog %s must preserve legacy unknown-flag tolerance", name)
+			}
+		})
+	}
+}
+
+func TestQueryCommandIsNativeCobraSubtree(t *testing.T) {
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	query := findCobraCommand(root, "query")
+	if query == nil {
+		t.Fatal("missing query command")
+	}
+	if query.DisableFlagParsing {
+		t.Fatal("query command must use native Cobra flag parsing")
+	}
+
+	run := findCobraCommand(query, "run")
+	if run == nil {
+		t.Fatal("missing query run subcommand")
+	}
+	if run.DisableFlagParsing {
+		t.Fatal("query run must use native Cobra flag parsing")
+	}
+	if !run.FParseErrWhitelist.UnknownFlags {
+		t.Fatal("query run must preserve legacy unknown-flag tolerance")
+	}
+	if run.ValidArgsFunction == nil {
+		t.Fatal("query run must suppress file completion fallback until Phase 15 completions")
+	}
+	completions, directive := run.ValidArgsFunction(run, nil, "")
+	if len(completions) != 0 {
+		t.Fatalf("query run completion seam returned %v, want no Phase 15 completions", completions)
+	}
+	if directive != cobra.ShellCompDirectiveNoFileComp {
+		t.Fatalf("query run completion directive = %v, want NoFileComp", directive)
+	}
+	for _, name := range []string{"table", "sql", "limit", "fields", "agent-mode", "sample"} {
+		t.Run("run flag "+name, func(t *testing.T) {
+			flag := run.Flags().Lookup(name)
+			if flag == nil {
+				t.Fatalf("query run missing native --%s flag", name)
+			}
+			if got, want := flag.Value.Type(), "stringArray"; got != want {
+				t.Fatalf("query run --%s flag type = %q, want %q", name, got, want)
+			}
+			if got, want := flag.NoOptDefVal, "true"; got != want {
+				t.Fatalf("query run --%s NoOptDefVal = %q, want %q", name, got, want)
 			}
 		})
 	}

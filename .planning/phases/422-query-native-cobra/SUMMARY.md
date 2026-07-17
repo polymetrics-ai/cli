@@ -1,6 +1,6 @@
 # Phase 422 Summary
 
-Status: planning checkpoint complete; red tests next.
+Status: red tests captured; green implementation next.
 
 ## Current state
 
@@ -20,7 +20,15 @@ Status: planning checkpoint complete; red tests next.
 
 ## Verification
 
-Pending red/green/full gates.
+Red test captured:
+
+```bash
+go test ./internal/cli/ -run 'Query|CobraRouterShell' -count=1
+```
+
+Result: fail as expected. `query` remains legacy (`DisableFlagParsing`), expected native/legacy command count mismatches, and invalid action opens `.polymetrics` before usage classification.
+
+Green/full gates pending.
 
 ## Safety
 
