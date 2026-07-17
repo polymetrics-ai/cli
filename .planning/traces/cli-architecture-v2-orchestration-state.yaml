@@ -18,30 +18,36 @@ orchestrator:
   runtime: pi
   status: running
 ready_queue:
-  - number: 403
-    status: in_review
-    dependencies: [402]
-    write_scope: "internal/events plus flow/ETL/certify/worker instrumentation"
-    decision: local_critical_path
-    reason: "PR #451 review fixes are statically clean; rebase onto current parent then run the final strict full-repo race gate."
-  - number: 422
+  - number: 453
     status: worker_ready
-    dependencies: [421]
-    write_scope: "query Cobra namespace node/handler/tests/parity only"
+    dependencies: []
+    write_scope: "Makefile reverse smoke preview ordering, durable regression, issue-local GSD artifacts"
     decision: spawned
-    reason: "Second serialized Phase 9 grandchild starts from provisionally integrated #421 and is disjoint from #403 event packages."
+    reason: "Safety-critical fix for pre-existing plan-to-run smoke gap; no further make verify or worker dispatch until integrated."
   - number: 404
     status: worker_ready
     dependencies: [402]
     write_scope: "logging/redaction/vault/Temporal logger bridge"
-    decision: not_spawned_write_scope_collision
-    reason: "Collides with #403 at worker/submit.go and related run context seams; re-evaluate after #403 integration."
+    decision: not_spawned_safety_blocked
+    reason: "#403 collision cleared, but dispatch waits for #453 reverse smoke safety fix."
+  - number: 405
+    status: worker_ready
+    dependencies: [403]
+    write_scope: "CLI run options, global flags, and internal/ui styles foundation"
+    decision: not_spawned_safety_blocked
+    reason: "Dependency #403 integrated; dispatch waits for #453 and a fresh collision map against Phase 9 CLI seams."
+  - number: 423
+    status: worker_ready
+    dependencies: [422]
+    write_scope: "perf Cobra namespace node/handler/tests/parity only"
+    decision: not_spawned_safety_blocked
+    reason: "Third serialized Phase 9 grandchild is ready but held until #453 restores safe make verify ordering."
   - number: 410
     status: worker_ready
     dependencies: [402]
     write_scope: "telemetry package, config/docs, CLI/app/flow/certify/connsdk/worker spans"
     decision: not_spawned_write_scope_collision
-    reason: "Collides with #403 across app/flow/certify/worker and with #404 at CLI/config/worker; defer until both integrate."
+    reason: "Still collides with #404 at CLI/config/worker seams; defer until logging integrates."
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -135,6 +141,18 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [422]
     reason: "Second serialized Phase 9 namespace worker starts from parent squash e6faecfb and is disjoint from #403."
+  - timestamp: 2026-07-17T05:24:33Z
+    decision: local_critical_path
+    issue_numbers: [403]
+    reason: "Coordinator provisionally integrated PR #451 after strict 120m race, final local/remote gates, and clean adversarial review."
+  - timestamp: 2026-07-17T05:24:55Z
+    decision: local_critical_path
+    issue_numbers: [422]
+    reason: "Coordinator provisionally integrated PR #452 after local/remote gates and clean SQL-safety/CLI adversarial review."
+  - timestamp: 2026-07-17T05:25:38Z
+    decision: spawned
+    issue_numbers: [453]
+    reason: "Pre-existing reverse smoke skipped preview; safety interlock holds all further worker dispatch and make verify until bounded fix integrates."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -191,11 +209,11 @@ subissues:
     branch: feat/403-progress-event-bus
     pr_url: https://github.com/polymetrics-ai/cli/pull/451
     worker: pm-gsd-worker
-    status: in_review
+    status: provisionally_integrated
     write_scope: "internal/events plus flow/ETL/certify/worker instrumentation and focused tests"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-403-progress-event-bus
-    verification: "Focused race, vet, package, build, and make verify gates pass after two review-fix cycles; final full-repo race is pending after rebase onto current parent."
-    automated_review: {primary_route: human, status: blocked, head_sha: 60a1d232db50259f14a1d6831d2ec8aa18b47578, reviewed_range: "e6faecfb..60a1d232", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Chan/Throttle/accounting findings fixed; final pm-reviewer sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/451"}
+    verification: "Strict race at production head f1620797 passed in 3809.60s; final local/remote gates passed; parent squash 5474d0f443a162c30ebdb20716eb6e45f3ffdc64."
+    automated_review: {primary_route: human, status: blocked, head_sha: f57d80329fc0a5ba2d084b39f811631f26e7418a, reviewed_range: "f12d573b..5474d0f4", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Chan/Throttle/accounting findings fixed; final pm-reviewer sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/451"}
   - number: 404
     url: https://github.com/polymetrics-ai/cli/issues/404
     branch: pending
@@ -211,10 +229,10 @@ subissues:
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: planned
+    status: worker_ready
     write_scope: "CLI run options, global flags, and internal/ui styles foundation"
     worker_directory: ""
-    verification: not_run_dependency_blocked
+    verification: not_run_safety_blocked
     automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #403.", disposition_url: ""}
   - number: 406
     url: https://github.com/polymetrics-ai/cli/issues/406
@@ -234,7 +252,7 @@ subissues:
     status: in_progress
     write_scope: "Serialized namespace migration umbrella; grandchildren #421-#437"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-cli-architectur-improvement
-    verification: "#421 provisionally integrated; #422 dispatched; remaining grandchildren stay serialized."
+    verification: "#421 and #422 provisionally integrated; #423 ready but safety-held; remaining grandchildren stay serialized."
     automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #406 and serialized grandchild chain.", disposition_url: ""}
   - number: 408
     url: https://github.com/polymetrics-ai/cli/issues/408
@@ -379,13 +397,23 @@ subissues:
   - number: 422
     url: https://github.com/polymetrics-ai/cli/issues/422
     branch: refactor/422-query-native-cobra
+    pr_url: https://github.com/polymetrics-ai/cli/pull/452
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "query Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-422-query-native-cobra
+    verification: "Local/remote Go/security gates passed; SQL safety sidecar clean; parent squash 5680debbaddd4fe8cbc6346a80dfef7910d8287d."
+    automated_review: {primary_route: human, status: blocked, head_sha: af785a371e156dbc19d334798c101fffa1365f60, reviewed_range: "5474d0f4..5680debb", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Adversarial query/SQL-safety review clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/452"}
+  - number: 453
+    url: https://github.com/polymetrics-ai/cli/issues/453
+    branch: fix/453-reverse-smoke-preview
     pr_url: ""
     worker: pm-gsd-worker
     status: worker_ready
-    write_scope: "query Cobra namespace node/handler/tests/parity only"
-    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-422-query-native-cobra
+    write_scope: "Makefile reverse smoke preview ordering, durable regression, issue-local GSD artifacts"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-453-reverse-smoke-preview
     verification: not_run_worker_spawned
-    automated_review: {primary_route: blocked, status: blocked, head_sha: e6faecfbe62f7b9f67156c40a8ad8600d8da4ac1, reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched from current parent; review pending.", disposition_url: ""}
+    automated_review: {primary_route: blocked, status: blocked, head_sha: 5680debbaddd4fe8cbc6346a80dfef7910d8287d, reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Safety worker dispatched; review pending.", disposition_url: ""}
 human_gates:
   - parent PR merge to main
   - dependency additions outside ADR 0002-0004 phase budgets
@@ -396,4 +424,4 @@ human_gates:
   - production deploys
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
-updated_at: 2026-07-17T03:44:48Z
+updated_at: 2026-07-17T05:25:38Z
