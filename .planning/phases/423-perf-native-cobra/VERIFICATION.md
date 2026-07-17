@@ -27,6 +27,29 @@
 - [x] Website docs/source/generated data checked under `website/**`; no update needed because generated docs unchanged.
 - [x] Generated help/manual artifacts checked via existing generator/docs validation.
 
+## Review-fix verification checklist
+
+- [x] Planning artifacts updated with accepted review findings, TDD red plan, and verification checklist before production edits.
+- [x] Red test evidence captured for perf flag bounds, docs/manual parity, runtime error redaction, and Redis diagnostic routing.
+- [x] `go test ./internal/cli/ -run 'Perf' -count=1`
+- [x] `go test ./internal/perf -count=1`
+- [x] `go test ./internal/runtimecheck -count=1`
+- [x] `go test ./internal/cli/...`
+- [x] `gofmt -w cmd internal`
+- [x] `go vet ./...`
+- [x] `go test ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
+- [x] Regenerate `docs/cli/perf.md` from `internal/cli/docs.go`.
+- [x] Update/regenerate golden transcripts for perf manual changes.
+- [x] Update website source docs and regenerate `website/lib/docs.generated.ts`.
+- [x] Runtime help/parity checked: `./pm help perf`, `./pm perf`, `./pm perf --help`, `./pm perf --json`.
+- [x] Invalid numeric flag parity checked: `./pm perf compare --iterations nope --json`, oversized `--iterations`, `./pm perf sync-modes --records nope --json`, oversized `--records` exit 3 validation errors.
+- [x] Runtime metadata parity checked: `./pm perf compare --iterations 1 --runtime --json` uses loopback-only endpoints; no services started.
+- [x] `git diff -- go.mod go.sum` empty; no new dependencies.
+- [ ] PR #458 body updated with review dispositions, verification, and residual risks.
+- [ ] Commit pushed to `refactor/423-perf-native-cobra` only.
+
 ## Optional / safety-limited
 
 - [x] Runtime-backed integration tests not run; no services started.
@@ -36,6 +59,56 @@
 - [x] No new dependencies.
 
 ## Results
+
+### Review-fix results
+
+```bash
+go test ./internal/cli/ -run 'Perf' -count=1
+go test ./internal/perf -count=1
+go test ./internal/runtimecheck -count=1
+```
+
+Result: pass (`ok   polymetrics.ai/internal/cli 11.366s`; `ok   polymetrics.ai/internal/perf 1.061s`; `ok   polymetrics.ai/internal/runtimecheck 0.426s`).
+
+```bash
+go run ./cmd/pm docs generate --dir docs/cli --connectors-dir "$TMP_CONNECTORS"
+POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli/ -run TestGoldenTranscripts -count=1
+npm --prefix website run gen:docs
+go test ./internal/cli/... -run 'Perf|GoldenDocs|GoldenTranscripts' -count=1
+```
+
+Result: pass. Docs generated to `docs/cli`; golden transcripts regenerated; website docs generator wrote 11 docs pages; focused perf/golden/docs gate passed (`ok   polymetrics.ai/internal/cli 20.859s`).
+
+```bash
+go test ./internal/cli/...
+gofmt -w cmd internal
+go vet ./...
+go build ./cmd/pm
+go test ./internal/perf -count=1
+go test ./internal/runtimecheck -count=1
+go test ./...
+make verify
+git diff -- go.mod go.sum
+git diff --check origin/feat/cli-architecture-v2...HEAD
+```
+
+Result: pass. `go test ./internal/cli/...` passed (`ok   polymetrics.ai/internal/cli 186.954s`); `go vet` and `go build` emitted no output; `go test ./...` passed; `make verify` passed and ended with `connectorgen validate: 547 connector(s) checked, 0 findings`; go.mod/go.sum diff and diff-check emitted no output.
+
+```bash
+./pm help perf
+./pm perf
+./pm perf --help
+./pm perf --json
+./pm perf compare --iterations nope --json
+./pm perf compare --iterations 1001 --json
+./pm perf sync-modes --records nope --json
+./pm perf sync-modes --records 100001 --json
+./pm perf compare --iterations 1 --runtime=false --json
+./pm perf sync-modes --records 5 --json
+./pm --root "$root" --json perf compare --iterations 1 --runtime
+```
+
+Result: pass. Help/bare/`--help` bytes=1555 and stderr=0; JSON manual bytes=1695 and stderr=0; invalid/oversized numeric flags exited 3 with JSON `validation_error`; dependency-free compare and sync-mode JSON passed; runtime loopback compare produced `runtime_report` with redacted Postgres endpoint, Dragonfly/Temporal topology endpoints, all statuses `error`, stderr_bytes=0, raw_redis=0.
 
 ```bash
 go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1

@@ -1,6 +1,6 @@
 # Phase 423 Summary
 
-Status: PR #458 open against `feat/cli-architecture-v2`; native perf implementation complete; full local verification and parity checks passed; remote checks queued.
+Status: PR #458 open against `feat/cli-architecture-v2`; review-fix implementation and local verification complete on `refactor/423-perf-native-cobra`; commit/PR-body update/push pending.
 
 ## Current state
 
@@ -32,6 +32,19 @@ Docs/website/generated checks passed: `./pm docs generate` diff against `docs/cl
 Diff guards passed: `git diff --check origin/feat/cli-architecture-v2...HEAD`; `git diff -- go.mod go.sum` empty.
 
 Sub-PR #458 opened non-draft against `feat/cli-architecture-v2`; remote checks queued at PR creation. Claude/Copilot not manually requested; review coverage pending per stacked PR policy.
+
+## Review-fix state
+
+Accepted review findings recorded in `PLAN.md`: perf exit status parity, runtime metadata/security text, bounded workload flags, runtime error redaction, Dragonfly/Temporal topology metadata docs, and Redis diagnostic routing. TDD red plan and verification checklist were updated before production edits.
+
+Delivered review-fix slice:
+
+- Added bounded perf workload constants and CLI validation: `--iterations` 1..1000 and `--records` 1..100000; invalid/oversized values return exit 3 JSON `validation_error`.
+- Added internal perf API max guards, runtime-backed error redaction through `internal/logging`, and cleanup for temp benchmark roots.
+- Routed go-redis diagnostics through the redacting logger at quiet level; loopback runtime compare produced no raw `redis:` stderr.
+- Updated canonical perf manual, generated `docs/cli/perf.md`, golden transcripts, website source docs, and `website/lib/docs.generated.ts` for exit 3 and runtime metadata/topology wording.
+
+Current decision: `local_critical_path` — same isolated worker branch/cwd, no subagent tool, no reset/recreate. Next required action: commit, update PR #458 body with dispositions/verification, push same branch.
 
 ## Safety
 

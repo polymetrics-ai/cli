@@ -260,7 +260,7 @@ pm perf compare --iterations 25 --runtime --json
 pm perf sync-modes --records 1000 --json
 ```
 
-Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The dependency-free path is the default.
+Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The dependency-free path is the default. `pm perf compare --runtime --json` includes a `runtime_report` with check names, status, latency, redacted error text, a redacted PostgreSQL endpoint, and DragonflyDB/Temporal topology endpoints. Those endpoints are not credentials, and decrypted secrets are not printed. Perf workload flags are bounded: `--iterations` accepts 1 through 1000 and `--records` accepts 1 through 100000; invalid values exit `3` (`validation_error`).
 
 ```bash
 pm docs generate --dir docs/cli --connectors-dir docs/connectors

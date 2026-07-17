@@ -1219,7 +1219,7 @@ func runRuntime(ctx context.Context, cfg config.Config, args []string, stdout io
 }
 
 func runPerfCompare(ctx context.Context, cfg config.Config, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
-	iterations, err := parseIntFlag("iterations", valueOr(flags.first("iterations"), "25"), 25)
+	iterations, err := parsePositiveIntFlag("iterations", flags.first("iterations"), perf.DefaultCompareIterations, perf.MaxCompareIterations)
 	if err != nil {
 		return err
 	}
@@ -1244,7 +1244,7 @@ func runPerfCompare(ctx context.Context, cfg config.Config, flags parsedFlags, s
 }
 
 func runPerfSyncModes(ctx context.Context, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
-	records, err := parseIntFlag("records", valueOr(flags.first("records"), "1000"), 1000)
+	records, err := parsePositiveIntFlag("records", flags.first("records"), perf.DefaultSyncModeRecords, perf.MaxSyncModeRecords)
 	if err != nil {
 		return err
 	}

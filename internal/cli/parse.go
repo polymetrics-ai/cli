@@ -174,6 +174,20 @@ func parseIntFlag(name, value string, fallback int) (int, error) {
 	return n, nil
 }
 
+func parsePositiveIntFlag(name, value string, fallback, max int) (int, error) {
+	n, err := parseIntFlag(name, value, fallback)
+	if err != nil {
+		return 0, err
+	}
+	if n <= 0 {
+		return 0, validationErrorf("invalid --%s %q, want integer between 1 and max %d", name, value, max)
+	}
+	if max > 0 && n > max {
+		return 0, validationErrorf("invalid --%s %q, want integer between 1 and max %d", name, value, max)
+	}
+	return n, nil
+}
+
 func writeJSON(w io.Writer, v any) error {
 	// Stamp every JSON envelope with the API version so agents get a consistent
 	// contract (api_version + kind) on every response, not just on errors.

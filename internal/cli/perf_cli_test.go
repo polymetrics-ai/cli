@@ -3,8 +3,11 @@ package cli
 import (
 	"bytes"
 	"encoding/json"
+	"strconv"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/perf"
 )
 
 func TestPerfCompareFlagFormsPreserveLegacySemantics(t *testing.T) {
@@ -120,6 +123,60 @@ func TestPerfCompareBareIterationsValidation(t *testing.T) {
 	}
 }
 
+func TestPerfCompareRejectsInvalidAndOversizedIterations(t *testing.T) {
+	tests := []struct {
+		name        string
+		value       string
+		wantMessage string
+	}{
+		{name: "invalid", value: "not-a-number", wantMessage: "invalid --iterations"},
+		{name: "zero", value: "0", wantMessage: "invalid --iterations"},
+		{name: "oversized", value: strconv.Itoa(perf.MaxCompareIterations + 1), wantMessage: "max " + strconv.Itoa(perf.MaxCompareIterations)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := Run([]string{"perf", "compare", "--iterations", tt.value, "--json"}, &stdout, &stderr)
+			if code != 3 {
+				t.Fatalf("Run(perf compare --iterations %s --json) code = %d, want 3; stdout=%s stderr=%s", tt.value, code, stdout.String(), stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{`"kind": "Error"`, `"category": "validation"`, `"code": "validation_error"`, tt.wantMessage} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("validation output missing %q: stdout=%s stderr=%s", want, out, stderr.String())
+				}
+			}
+		})
+	}
+}
+
+func TestPerfSyncModesRejectsInvalidAndOversizedRecords(t *testing.T) {
+	tests := []struct {
+		name        string
+		value       string
+		wantMessage string
+	}{
+		{name: "invalid", value: "not-a-number", wantMessage: "invalid --records"},
+		{name: "zero", value: "0", wantMessage: "invalid --records"},
+		{name: "oversized", value: strconv.Itoa(perf.MaxSyncModeRecords + 1), wantMessage: "max " + strconv.Itoa(perf.MaxSyncModeRecords)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := Run([]string{"perf", "sync-modes", "--records", tt.value, "--json"}, &stdout, &stderr)
+			if code != 3 {
+				t.Fatalf("Run(perf sync-modes --records %s --json) code = %d, want 3; stdout=%s stderr=%s", tt.value, code, stdout.String(), stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{`"kind": "Error"`, `"category": "validation"`, `"code": "validation_error"`, tt.wantMessage} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("validation output missing %q: stdout=%s stderr=%s", want, out, stderr.String())
+				}
+			}
+		})
+	}
+}
+
 func TestPerfSyncModesFlagFormsPreserveLegacySemantics(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	args := []string{
@@ -162,6 +219,26 @@ func TestPerfSyncModesFlagFormsPreserveLegacySemantics(t *testing.T) {
 	for _, result := range env.Benchmark.Results {
 		if result.Records != 20 {
 			t.Fatalf("result %s records = %d, want 20", result.Mode, result.Records)
+		}
+	}
+}
+
+func TestPerfManualMentionsValidationAndRuntimeMetadata(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{"perf", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(perf --help) code = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{
+		"runtime_report",
+		"PostgreSQL endpoint is redacted",
+		"DragonflyDB and Temporal endpoints are topology metadata",
+		"No decrypted secrets are printed",
+		"3 validation error",
+	} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("perf manual missing %q:\n%s", want, out)
 		}
 	}
 }

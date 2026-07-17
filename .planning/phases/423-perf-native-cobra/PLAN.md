@@ -101,3 +101,45 @@ Excluded:
 ## Parity stance
 
 This phase changes parser ownership only. Help text, docs, website, generated manuals, golden stdout/stderr/exit, JSON envelopes, stdout/stderr discipline, global late flags, fresh-tree re-entrancy, completion metadata, runtime service safety, and perf benchmark behavior should remain byte-identical unless an intentional reviewed change is recorded. No intentional user-facing output change is planned.
+
+## Review-fix cycle — PR #458 head `3a50385714c52c7483e6a137ced3285f73f2b929`
+
+Execution decision: `local_critical_path` — review-fix is in the existing isolated worker cwd/branch; no subagent tool available; keep same PR/branch and do not reset.
+
+Accepted findings to fix:
+
+1. Perf manual/help/goldens omit exit 3 even though invalid numeric flags return validation errors.
+2. Perf SECURITY text says counts/durations only, but `--runtime --json` includes `runtime_report` check metadata.
+3. `perf compare --iterations` and `perf sync-modes --records` are unbounded workload controls.
+4. Runtime-backed perf error strings need the shared redaction path before storage/printing.
+5. Dragonfly/Temporal endpoints in `runtime_report` are topology metadata, not credentials; document this rather than suppressing them.
+6. go-redis diagnostics can bypass CLI formatting on runtime health failures; route them through the redacting logger and keep terminal output quiet when possible.
+
+Review-fix scope:
+
+- Allowed production scope: `internal/cli/**` perf parsing/docs/tests, `internal/perf/**` benchmark guards/cleanup/redaction, `internal/runtimecheck/**` runtime health diagnostic routing, `docs/cli/perf.md`, website docs/generated data for perf/runtime metadata parity, and this phase directory.
+- Excluded: #410 telemetry, new dependencies, runtime service startup, credentialed checks, parent ledgers/PR merge state, broad connector/generated rewrites outside the named perf/docs surfaces, and `main` push.
+
+TDD red plan before production edits:
+
+- Add CLI tests for invalid and oversized `--iterations`/`--records` returning exit 3 with JSON `validation_error`, while small/default values still pass.
+- Add docs/manual parity tests that perf help mentions exit 3 and runtime metadata/redaction/topology semantics.
+- Add internal perf tests for direct API max guards and redaction of runtime-backed error strings before `RuntimeBacked.Error` is exposed.
+- Add runtimecheck test that a failing Dragonfly health check no longer writes raw `redis:` library diagnostics to process stderr.
+- Capture exact failing output in `TDD-LEDGER.md` before editing production code.
+
+Minimal implementation plan:
+
+1. Define bounded perf workload defaults/maxima in `internal/perf`; enforce direct API guards and CLI validation with exit 3 for oversized/invalid values.
+2. Redact runtime-backed errors in `perf.Compare` using `internal/logging` before storing them in results; keep runtime report check errors on the existing redaction path.
+3. Add safe temp-root cleanup for generated perf benchmark roots with `defer os.RemoveAll(root)`.
+4. Route go-redis internal diagnostics through the shared logger from runtimecheck, at a quiet level, so they inherit redaction and stop bypassing CLI/test formatting.
+5. Update canonical perf manual text in `internal/cli/docs.go`, regenerate `docs/cli/perf.md`, update golden transcripts, update website content/docs/generated data where applicable, and document Dragonfly/Temporal endpoints as non-secret topology metadata.
+
+Review-fix verification plan:
+
+- Focused red/green: `go test ./internal/cli/ -run 'Perf|GoldenDocs|GoldenTranscripts' -count=1`, `go test ./internal/perf -count=1`, `go test ./internal/runtimecheck -count=1`.
+- Docs/website: `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir "$TMP_CONNECTORS"`, `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli/ -run TestGoldenTranscripts -count=1`, `npm --prefix website run gen:docs` (or `gen:website-data` if docs data requires connector data refresh).
+- Required gates after green: `go test ./internal/cli/...`, `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, plus diff guards for go.mod/go.sum and CLI docs/website generated parity.
+
+Review-fix result: implemented and locally verified. All accepted findings are dispositioned in-scope; runtime-backed integration services were not started by task constraint, and loopback-only runtime metadata checks were used.
