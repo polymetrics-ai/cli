@@ -479,9 +479,54 @@ canonicalizes accepted evidence only.
       planning checkpoint.
 - [ ] Authorized branch push, exact local/remote equality, draft stacked PR, and CI monitoring.
 
+## Post-Slice-G exact-head review fix — IN PROGRESS
+
+Authorization: change only deletion-proof identity/revalidation and bounded Git execution plus minimum
+evidence/process-test propagation. Preserve `ee474811`, `17ca31f6`, and `e53e9e56`; no amend, rebase,
+rewrite, dependency, credential, canary, cleanup/migration, merge, or `main` mutation.
+
+Confirmed review findings:
+
+- **High:** `ArtifactManifest` creates a zero-hash deletion marker, but `verifyArtifactHashes` always
+  opens the path, so an authorized tracked deletion cannot be independently validated or promoted.
+- **Medium:** the Git runner buffers stdout/stderr without execution-time bounds, checks stdout only
+  after process completion, and converts every `git show` failure—including size and Git errors—into
+  a deletion marker.
+
+RED tests before production edits:
+
+- [ ] Scoped tracked deletion yields explicit `Deleted=true` plus exact sentinel.
+- [ ] Out-of-scope deletion remains `ErrWriteScopeBreach`.
+- [ ] Rename is deterministic deletion plus addition with rename detection disabled.
+- [ ] Unknown/malformed status, Git failure, and oversized object never become deletion.
+- [ ] Validator accepts deletion only when the exact candidate path and symlink-free containing path
+      are absent; recreated file/directory/symlink and symlinked parent fail.
+- [ ] Deletion flag/sentinel mismatch and present-artifact deletion sentinel fail.
+- [ ] Present artifacts that disappear or become symlinks fail before/post validation.
+- [ ] Git stdout/stderr are bounded while running; exact limit passes, over-limit has typed identity,
+      errors are bounded/redacted, cancellation remains classifiable, and Git environment is sanitized.
+- [ ] Actual built `shepherd supervise` deletion succeeds through validator, ratification, promotion,
+      and `final_human_gate`; rejected variants preserve canonical Git/GSD.
+
+Planned RED commands:
+
+```bash
+cd agent-runtime/shepherd
+go test ./internal/git -count=1
+go test ./internal/validation -count=1
+go test ./cmd/shepherd -count=1
+go test -tags=integration ./integration/... -run 'TestSupervise.*Delet|TestArtifact.*Delet' -count=1
+```
+
+GREEN/refactor evidence and exact commands will be appended after they run. Orchestration decision:
+`local_critical_path` for planning; implementation uses one isolated GPT-5.5/high worker because Git
+artifact parsing, validator request identity, command evidence hashing, and process integration share
+one sequential trust boundary.
+
 ## Verification log
 
 Slices A-G remain accepted at their exact checkpoints. Slice G is accepted at
 `ee474811378edd604e1e86e413f0bcafeced452b`; parent ancestry is reconciled without altering that
-checkpoint's content. No credential access, connector operation, canary, cleanup/migration, PR merge,
-or `main` mutation ran. The only GitHub access in this stage so far was read-only parent-PR metadata.
+checkpoint's content. The replacement exact-head review is blocked only on the two findings above.
+No credential access, connector operation, canary, cleanup/migration, PR merge, or `main` mutation ran.
+The only GitHub access in this stage so far was read-only parent-PR metadata.

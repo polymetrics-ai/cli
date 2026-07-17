@@ -250,6 +250,33 @@ Required gates:
 - [ ] Fresh exact-head GPT-5.6 Sol/high correctness/security/recovery/test-realism review has no findings.
 - [ ] Branch push, exact local/remote equality, clean tree, draft stacked PR, and required CI checks pass.
 
+### Post-Slice-G exact-head review fix
+
+Deletion proof:
+- [ ] Explicit typed deletion and exact sentinel are jointly required and hash-bound.
+- [ ] Present artifacts require `Deleted=false`, a normal content hash, regular no-follow path, and
+      exact bounded content digest.
+- [ ] Deleted artifacts require exact absence through a symlink-free contained parent chain before and
+      after validation.
+- [ ] Scoped deletion, out-of-scope deletion, deterministic rename, malformed/unknown status, recreated
+      path variants, flag/sentinel mismatch, and disappearing present artifacts are covered.
+- [ ] Actual built-CLI deletion reaches ratification, promotion, and `final_human_gate`; rejected variants
+      leave canonical Git/GSD unchanged.
+
+Bounded Git execution:
+- [ ] Git diff status, stdout, stderr, object bytes, and errors are bounded during execution.
+- [ ] Exact limits pass; over-limit stdout/stderr return typed/sentinel errors with bounded diagnostics.
+- [ ] Context cancellation and nonzero Git exit remain distinguishable and never create deletion records.
+- [ ] Argv execution and sanitized Git environment remain unchanged; no shell or dependency is added.
+
+Gates/review:
+- [ ] Focused Git/validator/command/deletion integration tests pass.
+- [ ] Focused race and full normal/race integration tests pass.
+- [ ] Full nested tests/race/vet/build/`make verify`, root `make verify`, boundary/list/diff/JSON/hygiene pass.
+- [ ] Default and integration-tagged lint remain exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`.
+- [ ] Fresh exact-head GPT-5.6 Sol/high correctness and security reviews have no unresolved findings.
+- [ ] Only then: fast-forward push, draft stacked PR, CI monitoring, and stop before canaries.
+
 ## Required command gates after each coherent slice
 
 ```bash
@@ -355,6 +382,11 @@ go list ./...
 - Slice G checkpoint push/equality/cleanliness: PASS before synchronization.
 - Parent synchronization guards: PASS; PR #390 metadata/head, pre-squash ancestry, exact tree identity,
   two-parent `ours` merge, and zero Slice G content diff were verified.
-- Fresh post-planning synchronization gates and exact-head review remain pending.
-- Draft stacked PR creation is authorized only after those gates pass. Canaries, cleanup/migration,
-  ready-for-review transition, every PR merge, and `main` mutation remain blocked.
+- Fresh post-planning synchronization gates passed, but replacement exact-head GPT-5.6 Sol/high review
+  of `e53e9e56b67145419a11f1b577f858922e1a4c50` BLOCKED on typed deletion revalidation and bounded
+  Git output/error classification. Both findings are accepted and explicitly authorized for repair.
+- During pre-fix verification, one Shepherd query cleanup `EPERM` failed closed then passed 20/20 plus
+  full rerun; optional root-wide race timed out without a race report and is not an issue-389 gate.
+- `verificationPassed` is false during the authorized review-fix cycle.
+- Draft stacked PR creation is pending replacement exact-head review. Canaries, credentials,
+  cleanup/migration, ready-for-review transition, every PR merge, and `main` mutation remain blocked.

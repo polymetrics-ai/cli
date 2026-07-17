@@ -2,11 +2,13 @@
 
 ## Current objective
 
-Slices A-G of the Shepherd proof/recovery repair are accepted through exact Slice G checkpoint
-`ee474811378edd604e1e86e413f0bcafeced452b`. The active stage is post-Slice-G parent ancestry
-synchronization, fresh exact-head verification/review, and preparation of a draft stacked PR into
-`feat/372-gsd-pi-go-shepherd` / parent PR #390. Do not merge any PR, push to `main`, or run live
-Twenty/Asana canaries without separate explicit approval.
+Slices A-G of the Shepherd proof/recovery repair remain accepted through exact Slice G checkpoint
+`ee474811378edd604e1e86e413f0bcafeced452b`; the ancestry and planning commits remain immutable at
+`17ca31f6d04def71d55137d25d8194feaea10829` and
+`e53e9e56b67145419a11f1b577f858922e1a4c50`. The active stage is the explicitly authorized,
+post-Slice-G exact-head review fix for typed deletion proofs and execution-time bounded Git output.
+Draft stacked PR creation stays pending until replacement exact-head GPT-5.6 Sol/high review passes.
+Do not merge any PR, push to `main`, run canaries, access credentials, or perform cleanup/migration.
 
 ## Required workflow and skills loaded
 
@@ -24,6 +26,9 @@ Twenty/Asana canaries without separate explicit approval.
 - Requested `.pi/skills/go-implementation/SKILL.md` is absent in this checkout; the available
   repo-local `gsd-core`/`polymetrics-issue-delivery` skills plus `golang-how-to` and the recorded
   task-specific Go skills are the non-manual workflow path. No GSD fallback is used.
+- Post-Slice-G review-fix skills loaded/recorded: `gsd-core`, `polymetrics-issue-delivery`,
+  `gsd-programming-loop`, `golang-how-to`, `golang-testing`, `golang-error-handling`,
+  `golang-security`, `golang-safety`, `golang-lint`, `golang-context`, and `golang-concurrency`.
 - Immutable Slice G base / accepted Slice F checkpoint:
   `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`; local and remote heads matched and the worktree was
   clean before Slice G planning edits.
@@ -389,3 +394,38 @@ stay deferred pending separate explicit approval.
 - Only after those gates pass: push `fix/389-shepherd-proof-recovery`, confirm exact local/remote
   equality and cleanliness, open the authorized draft stacked PR with `Refs #389` and `Refs #372`,
   monitor CI, and stop. Do not run canaries, cleanup/migration, merge any PR, or mutate `main`.
+
+## Post-Slice-G exact-head review fix — IN PROGRESS
+
+Authorization is limited to two confirmed findings from the GPT-5.6 Sol/high review of
+`e53e9e56b67145419a11f1b577f858922e1a4c50`:
+
+1. **High — deletion proof mismatch:** `ArtifactManifest` emits a deletion sentinel but protected
+   validator revalidation always opens the absent path.
+2. **Medium — unbounded/misclassified Git output:** Git stdout/stderr are buffered before the limit
+   check, and every `git show` error is incorrectly converted into a deletion artifact.
+
+TDD/implementation contract:
+
+- Add explicit `Deleted bool` identity while retaining the exact deletion sentinel; non-deleted JSON
+  remains compatible through `omitempty`.
+- Parse `git diff --name-status -z --no-renames`; accept only canonical `A`, `M`, `T`, and `D` status
+  records, representing renames deterministically as deletion plus addition. Reject malformed/unknown
+  status and propagate every Git/hash error.
+- Bound stdout and stderr throughout execution. Hash present Git objects through a bounded streaming
+  path aligned with the validator's 8 MiB artifact limit; never buffer complete blobs or treat limit,
+  cancellation, or Git failures as deletion.
+- Revalidate deleted paths as absent with no-follow containment across existing parent components;
+  reject recreated files, directories, symlinks, and inconsistent flag/sentinel combinations before
+  and after independent validation.
+- Propagate deletion identity through artifact/evidence JSON, protected validator requests, proof
+  hashing, promotion binding, unit fixtures, and actual-CLI integration coverage without weakening
+  exact-head, ratification, or promotion gates.
+- Capture focused RED before production edits, then GREEN/refactor, full normal/race/integration/vet/
+  build/verify/lint gates, and fresh exact-head GPT-5.6 Sol/high correctness/security review.
+
+Authorized production paths are limited to `agent-runtime/shepherd/internal/git/**`,
+`agent-runtime/shepherd/internal/validation/**`, minimum evidence conversion under
+`agent-runtime/shepherd/cmd/shepherd/**`, minimum process tests under
+`agent-runtime/shepherd/integration/**`, and this phase directory. No dependencies or unrelated
+behavior changes are authorized.

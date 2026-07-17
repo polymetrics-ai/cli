@@ -4,10 +4,32 @@
   "base_head": "ee474811378edd604e1e86e413f0bcafeced452b",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "stacked_pr_preparation",
-  "verificationPassed": true,
-  "current_slice": "post_slice_g_parent_sync_and_stacked_pr_preparation",
+  "state": "slice_g_exact_head_review_fix_in_progress",
+  "verificationPassed": false,
+  "current_slice": "post_slice_g_exact_head_deletion_and_git_output_review_fix",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
+  "authorized_review_fix": {
+    "authorization": "Production changes are limited to the two confirmed exact-head findings and minimum schema/test propagation.",
+    "findings": [
+      {
+        "severity": "high",
+        "id": "typed_deletion_proof_revalidation",
+        "summary": "ArtifactManifest deletion markers cannot pass validator revalidation because the absent path is always opened."
+      },
+      {
+        "severity": "medium",
+        "id": "bounded_git_output_and_error_classification",
+        "summary": "Git stdout and stderr are not execution-time bounded and every git show failure is misclassified as deletion."
+      }
+    ],
+    "allowed_paths": [
+      "agent-runtime/shepherd/internal/git/**",
+      "agent-runtime/shepherd/internal/validation/**",
+      "agent-runtime/shepherd/cmd/shepherd/**",
+      "agent-runtime/shepherd/integration/**",
+      ".planning/phases/issue-389-shepherd-hardening/**"
+    ]
+  },
   "completed_slices": [
     {
       "slice": "A_real_independent_validation_and_ratification",
@@ -246,6 +268,11 @@
       "cycle": "cycle-33-post-slice-g-parent-sync",
       "decision": "local_critical_path",
       "reason": "Accept Slice G at ee474811378edd604e1e86e413f0bcafeced452b, revalidate open draft parent PR #390 at d72e597e35b5104cf58936612053705c280fc2b1, prove pre-squash ancestry and exact tree equality, and record ancestry-only merge 17ca31f6d04def71d55137d25d8194feaea10829 with zero Slice G content diff; fresh full gates and exact-head review precede the authorized branch push and draft stacked PR."
+    },
+    {
+      "cycle": "cycle-34-slice-g-exact-head-review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "Replacement exact-head GPT-5.6 Sol/high review blocked e53e9e56b67145419a11f1b577f858922e1a4c50 on one high typed-deletion mismatch and one medium unbounded/misclassified Git-output defect. Human authorization limits production changes to these findings and minimum schema/test propagation; RED precedes an isolated GPT-5.5/high implementation worker."
     }
   ],
   "slice_b_checkpoint": {
@@ -254,16 +281,18 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Commit the phase-directory-only planning reconciliation separately",
-    "Run full post-synchronization normal/race/integration/vet/build/verify/lint/hygiene gates",
-    "Run fresh exact-head GPT-5.6 Sol/high correctness/security/recovery/test-realism review over d72e597e35b5104cf58936612053705c280fc2b1..HEAD",
-    "Push only fix/389-shepherd-proof-recovery and confirm exact local/remote equality and cleanliness",
-    "Open and monitor the authorized draft stacked PR into feat/372-gsd-pi-go-shepherd, then stop"
+    "Capture focused RED tests for typed deletion proof and execution-time bounded Git output before production edits",
+    "Implement only the authorized findings with GPT-5.5/high and minimum schema/process-test propagation",
+    "Run focused/full normal/race/integration/vet/build/verify/lint/hygiene gates",
+    "Run fresh exact-head GPT-5.6 Sol/high correctness/security review over d72e597e35b5104cf58936612053705c280fc2b1...HEAD",
+    "After review passes, push only fix/389-shepherd-proof-recovery, open the draft stacked PR, monitor CI, and stop"
   ],
   "blocked": [
+    "draft stacked PR creation until replacement exact-head review passes",
     "Twenty/Asana canaries without separate explicit approval",
+    "credential access or live connector/API operations",
     "cleanup or migration",
-    "ready-for-review transition or any PR merge",
+    "parent integration, ready-for-review transition, or any PR merge",
     "Parent PR #390 merge",
     "all main mutation"
   ]
