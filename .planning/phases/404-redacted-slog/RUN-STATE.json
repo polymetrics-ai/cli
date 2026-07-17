@@ -9,7 +9,7 @@
   "mode": "manual-gsd-fallback",
   "verificationPassed": false,
   "fallbackReason": "scripts/gsd prompt programming-loop init --phase 404 --dry-run failed: unknown GSD command: programming-loop",
-  "verificationBlocker": "Requested second review-fix gates passed after outage recovery; extended full CLI race remains coordinator-owned and pending before integration.",
+  "verificationBlocker": "Requested second review-fix and final residual gates passed; extended full CLI race remains coordinator-owned and pending before integration.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -72,6 +72,15 @@
     "secondReviewFixGoBuildPm": "pass",
     "secondReviewFixMakeVerify": "pass",
     "secondReviewFixDiffCheck": "pass",
-    "secondReviewFixGoModGoSumDiff": "pass"
+    "secondReviewFixGoModGoSumDiff": "pass",
+    "finalReReviewRedTests": "red-captured",
+    "finalReReviewFocusedTests": "pass",
+    "finalReReviewFocusedRace": "pass",
+    "finalReReviewVet": "pass",
+    "finalReReviewGoTestAll": "pass",
+    "finalReReviewGoBuildPm": "pass",
+    "finalReReviewMakeVerify": "pass",
+    "finalReReviewDiffCheck": "pass",
+    "finalReReviewGoModGoSumDiff": "pass"
   }
 }

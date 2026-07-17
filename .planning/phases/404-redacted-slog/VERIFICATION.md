@@ -51,6 +51,15 @@ Extended full CLI race remains pending for coordinator and must not be run by th
 | Second review-fix verify | `make verify` | PASS | Exited 0; includes safe reverse smoke with preview before run, lint, docs validate, and connectorgen validate. |
 | Second review-fix diff check | `git diff --check origin/feat/cli-architecture-v2...HEAD` | PASS | Exited 0. |
 | Second review-fix dependency check | `git diff -- go.mod go.sum` | PASS | Empty. |
+| Final re-review red tests | `go test ./internal/runtimecheck ./internal/temporalprobe -run 'Postgres|DialContext' -count=1` | RED/PASS | Red captured before production edits: Postgres query/fragment/malformed leakage and missing `DialContext`; synthetic markers not printed. |
+| Final re-review focused tests | `go test ./internal/runtimecheck ./internal/temporalprobe -run 'Postgres|DialContext' -count=1` | PASS | Exited 0 after fixes. |
+| Final re-review focused race | `go test -race ./internal/logging/... ./internal/safety/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... ./internal/cli/... -run 'Logging|Redact|Temporal|WorkerServe|RunFile|Registry|URL|Error|JSON|Postgres|DialContext' -count=1 -timeout 20m` | PASS | Exited 0; `internal/cli` 172.524s; no services; not the full CLI race. |
+| Final re-review vet | `go vet ./...` | PASS | Exited 0. |
+| Final re-review tests | `go test ./...` | PASS | Exited 0; `internal/cli` 169.537s. |
+| Final re-review build | `go build ./cmd/pm` | PASS | Exited 0. |
+| Final re-review verify | `make verify` | PASS | Exited 0; includes safe reverse smoke with preview before run, lint, docs validate, and connectorgen validate. |
+| Final re-review diff check | `git diff --check origin/feat/cli-architecture-v2...HEAD` | PASS | Exited 0. |
+| Final re-review dependency check | `git diff -- go.mod go.sum` | PASS | Empty. |
 
 ## Issue-specific acceptance checks
 

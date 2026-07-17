@@ -2,7 +2,8 @@ package runtimecheck
 
 import (
 	"context"
-	"fmt"
+	"net/url"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -127,11 +128,11 @@ func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 func checkTemporal(ctx context.Context, cfg Config) CheckResult {
 	start := time.Now()
 	result := CheckResult{Name: "temporal", Endpoint: cfg.TemporalAddr}
-	c, err := client.Dial(client.Options{HostPort: cfg.TemporalAddr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(ctx)), ConnectionOptions: client.ConnectionOptions{GetSystemInfoTimeout: cfg.Timeout}})
+	checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
+	defer cancel()
+	c, err := client.DialContext(checkCtx, client.Options{HostPort: cfg.TemporalAddr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(checkCtx)), ConnectionOptions: client.ConnectionOptions{GetSystemInfoTimeout: cfg.Timeout}})
 	if err == nil {
 		defer c.Close()
-		checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
-		defer cancel()
 		_, err = c.CheckHealth(checkCtx, &client.CheckHealthRequest{})
 	}
 	result.Latency = time.Since(start)
@@ -155,24 +156,19 @@ func redactPostgresURL(raw string) string {
 	if raw == "" {
 		return raw
 	}
-	// Avoid importing net/url just for display; this keeps malformed DSNs redacted too.
-	for _, marker := range []string{"://"} {
-		if i := index(raw, marker); i >= 0 {
-			prefix := raw[:i+len(marker)]
-			rest := raw[i+len(marker):]
-			if at := index(rest, "@"); at >= 0 {
-				return prefix + "***@" + rest[at+1:]
-			}
-		}
+	parsed, err := url.Parse(raw)
+	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
+		return "[redacted-url]"
 	}
-	return fmt.Sprintf("%s", raw)
-}
-
-func index(s, substr string) int {
-	for i := 0; i+len(substr) <= len(s); i++ {
-		if s[i:i+len(substr)] == substr {
-			return i
-		}
+	hadUser := parsed.User != nil
+	parsed.User = nil
+	parsed.RawQuery = ""
+	parsed.ForceQuery = false
+	parsed.Fragment = ""
+	parsed.RawPath = ""
+	redacted := parsed.String()
+	if hadUser {
+		redacted = strings.Replace(redacted, "://", "://***@", 1)
 	}
-	return -1
+	return redacted
 }

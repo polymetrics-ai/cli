@@ -2,6 +2,8 @@ package temporalprobe
 
 import (
 	"context"
+	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -24,6 +26,16 @@ func TestProbe_UnreachableFailsFast(t *testing.T) {
 	}
 	if elapsed := time.Since(start); elapsed > 5*time.Second {
 		t.Fatalf("probe took too long: %v", elapsed)
+	}
+}
+
+func TestProbeTemporalDialUsesDialContext(t *testing.T) {
+	src, err := os.ReadFile("temporalprobe.go")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(src), "client.DialContext") {
+		t.Fatal("temporal probe dial must use client.DialContext so caller cancellation bounds dial setup")
 	}
 }
 

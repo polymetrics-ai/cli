@@ -24,7 +24,7 @@ var dialTemporal = func(ctx context.Context, addr string, timeout time.Duration,
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	return client.Dial(client.Options{
+	return client.DialContext(ctx, client.Options{
 		HostPort: addr,
 		Logger:   logger,
 		ConnectionOptions: client.ConnectionOptions{

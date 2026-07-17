@@ -79,7 +79,7 @@ TDD slices before production edits:
 
 Implementation boundaries: `internal/logging`, `internal/safety`, `internal/vault`, `internal/app`, `internal/cli`, `internal/runtimecheck`, `internal/temporalprobe`, `internal/worker`, `internal/connectors/connsdk`, and this phase's artifacts only. No parent artifact edits, no deps, no OTel/perf/TTY work, no services/real credentials.
 
-Second review-fix verification target is the coordinator-specified command set with focused `-run` filters. Result after outage recovery: all requested second-review gates passed, including focused race with the filtered `./internal/cli/...` suite. `verificationPassed` remains false because the extended full CLI race is coordinator-owned and was not run by this worker.
+Second review-fix verification target is the coordinator-specified command set with focused `-run` filters. Result after outage recovery: all requested second-review gates passed. Final re-review residuals for runtime doctor Postgres URL redaction and Temporal `DialContext` usage were fixed with red/green focused tests, and the full requested gate set was rerun with the expanded focused race filter. `verificationPassed` remains false because the extended full CLI race is coordinator-owned and was not run by this worker.
 
 ### Slice 0 — planning checkpoint
 

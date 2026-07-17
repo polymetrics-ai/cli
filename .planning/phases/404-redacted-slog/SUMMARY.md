@@ -1,6 +1,6 @@
 # SUMMARY — Issue #404
 
-Status: second PR #455 security review-fix implemented after power-outage recovery; requested second-review gates passed. `verificationPassed=false` because extended full CLI race remains coordinator-owned/pending and was not run in this worker gate.
+Status: PR #455 second review-fix and final residual fixes implemented after power-outage recovery; requested gates passed. `verificationPassed=false` because extended full CLI race remains coordinator-owned/pending and was not run in this worker gate.
 
 PR: https://github.com/polymetrics-ai/cli/pull/455
 Head: see current `feat/404-redacted-slog` branch head.
@@ -66,10 +66,16 @@ Accepted findings fixed with TDD before production edits:
 - Scoped registry hardening and bounded unsafe dynamic keys/groups.
 - Encoded variants documented as bounded defense-in-depth only.
 
-Second review-fix PASS:
+Second review-fix PASS, then final re-review residuals fixed:
+
+- Runtime doctor Postgres endpoint redaction now clears userinfo/query/fragment and fails closed on malformed DSNs.
+- Runtime doctor and Temporal probe dials now use `client.DialContext` under bounded contexts.
+
+Final gate PASS:
 
 - `gofmt -w cmd internal`
-- `go test -race ./internal/logging/... ./internal/safety/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... ./internal/cli/... -run 'Logging|Redact|Temporal|WorkerServe|RunFile|Registry|URL|Error|JSON' -count=1 -timeout 20m`
+- `go test ./internal/runtimecheck ./internal/temporalprobe -run 'Postgres|DialContext' -count=1` (red then green)
+- `go test -race ./internal/logging/... ./internal/safety/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... ./internal/cli/... -run 'Logging|Redact|Temporal|WorkerServe|RunFile|Registry|URL|Error|JSON|Postgres|DialContext' -count=1 -timeout 20m`
 - `go vet ./...`
 - `go test ./...`
 - `go build ./cmd/pm`
