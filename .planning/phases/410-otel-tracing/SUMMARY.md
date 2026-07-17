@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: verified; stacked PR prep pending.
+Status: review-fix planned for PR #459; verification pending rerun.
 
 ## Current state
 
@@ -28,7 +28,14 @@ Status: verified; stacked PR prep pending.
 - First `make verify` run failed at `tidy-check` because go.mod/go.sum dependency changes were uncommitted.
 - Green implementation slice committed/pushed, then `make verify` passed from clean dependency diff.
 
+## Review-fix queue (PR #459)
+
+Accepted review findings target error attr safety, config-sourced OTLP guard, file exporter path/symlink hardening, event attr placement, OTLP failure neutrality, endpoint validation, help/docs exporter wording, and warning redaction/stdout discipline.
+
+Current execution decision: `local_critical_path`. This worker stays on `feat/410-otel-tracing`; coordinator sidecars/human fallback handle review coverage. No Claude/Copilot request from this worker.
+
 ## Next
 
-1. Commit/push verification artifact update.
-2. Open stacked PR and record automated review route.
+1. Add review-fix red tests and capture exact failing output.
+2. Implement minimal fixes.
+3. Run focused gates, smoke/parity checks, full gates, update PR #459 body, commit and push.

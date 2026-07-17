@@ -1,5 +1,19 @@
 # Verification — Phase 410 OpenTelemetry tracing
 
+## Review-fix verification checklist (PR #459)
+
+- [ ] Red tests captured before production edits for accepted findings.
+- [ ] Exported span tests assert error metadata is allowlisted, registry-redacted, and contains no SDK `exception.*` attrs/events.
+- [ ] Failed command, HTTP, and flow spans omit synthetic registered marker and response-body-like details; `capture=minimal` suppresses message-like error attrs.
+- [ ] Config-sourced OTLP exporter/endpoint rejected or disabled by default with sanitized warning; env/CLI opt-in accepted.
+- [ ] Telemetry file exporter rejects absolute paths, `..` escapes, symlinked dirs, and symlinked files; created dirs/files use restrictive permissions.
+- [ ] Event attrs are attached to span events and remain allowlisted; retry/attempt/status metadata not overwritten/lost.
+- [ ] OTLP init/export/shutdown failures preserve exit code and stdout JSON; stderr uses redacted `warning: telemetry:` only.
+- [ ] OTLP endpoint validation rejects userinfo/query/fragment and non-http(s) without leaking endpoint secrets.
+- [ ] Root/config help, docs/cli, website data, and goldens mention HTTP method/status/attempt/retry attrs and supported exporters `none,file,otlp` consistently.
+- [ ] Redis/exporter/log/telemetry warning smokes show redacted stderr and uncorrupted stdout JSON.
+- [ ] `git diff --check` and `git diff -- go.mod go.sum` clean/expected (no new dependencies).
+
 ## Required gates
 
 - [x] File exporter smoke: enabled tracing writes JSONL spans with expected names.
@@ -49,6 +63,35 @@ Applies because config/env/help docs change.
 - No credentialed connector checks.
 - Reverse ETL plan → preview → approval → execute semantics untouched; no reverse ETL execution.
 
+## Review-fix focused gates to run
+
+```bash
+go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'Telemetry|OTLP|Endpoint|Event|RecordError|FileExporter' -count=1
+go test ./internal/connectors/connsdk -run Telemetry -count=1
+go test ./internal/cli -run 'Telemetry|Golden|Config|Agentic' -count=1
+go test ./internal/app -run Telemetry -count=1
+go test ./internal/flow -run Telemetry -count=1
+```
+
+## Review-fix final gates to rerun
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+git diff --check
+git diff -- go.mod go.sum
+```
+
+Additional smoke/parity:
+
+- file/off/secret telemetry smoke with synthetic marker.
+- OTLP failure/endpoint smoke with no credentialed services.
+- `./pm --help`, `./pm help config`, `./pm etl`, `./pm flow`, `./pm connectors`, invalid `./pm connectors bogus --json`.
+- docs generation/diff and `npm --prefix website run gen:docs` when help/docs change.
+
 ## Results log
 
 | Command | Result | Evidence |
@@ -63,3 +106,6 @@ Applies because config/env/help docs change.
 | `go test ./...` | pass | Full test suite passed; slowest packages `internal/connectors/certify` ~352s and `internal/cli` ~208s. |
 | `go build ./cmd/pm` | pass | No output. |
 | `make verify` | pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, connectorgen validate all passed. |
+| `scripts/gsd doctor` (review-fix rerun) | pass | Adapter checks all `ok`; 69 commands. |
+| `scripts/gsd prompt plan-phase 410 --skip-research` (review-fix rerun) | pass | 142-line prompt generated. |
+| `scripts/gsd prompt programming-loop init --phase 410 --dry-run` (review-fix rerun) | fail/fallback | `unknown GSD command: programming-loop`; manual GSD fallback remains active. |

@@ -3,18 +3,19 @@
   "issue": 410,
   "parentIssue": 397,
   "parentPR": 438,
+  "pr": 459,
   "branch": "feat/410-otel-tracing",
   "baseBranch": "feat/cli-architecture-v2",
   "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing",
-  "status": "verified",
+  "status": "review_fix_planned",
   "gsd": {
     "doctorPassed": true,
     "planPhasePromptGenerated": true,
     "programmingLoopAvailable": false,
-    "manualFallback": "scripts/gsd prompt programming-loop init --phase 410 --dry-run returned unknown GSD command; manual GSD/TDD fallback recorded."
+    "manualFallback": "scripts/gsd prompt programming-loop init --phase 410 --dry-run returned unknown GSD command; manual GSD/TDD fallback recorded. Review-fix rerun on 2026-07-18 confirmed same fallback."
   },
-  "verificationPassed": true,
-  "verificationBlocker": "",
+  "verificationPassed": false,
+  "verificationBlocker": "review fixes pending; red tests not captured yet for PR #459 findings",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -40,6 +41,11 @@
       "cycle": "verify-rerun",
       "decision": "local_critical_path",
       "reason": "After committing dependency diff, make verify passed in the isolated issue worktree."
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 review findings accepted; this isolated worker must add red tests and fixes inline. Coordinator sidecars/human fallback own review coverage; no Claude/Copilot request."
     }
   ],
   "dependenciesApproved": [
@@ -47,6 +53,16 @@
     "go.opentelemetry.io/otel/sdk@v1.44.0",
     "go.opentelemetry.io/otel/exporters/stdout/stdouttrace@v1.44.0",
     "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.44.0"
+  ],
+  "reviewFindingsAccepted": [
+    "error telemetry avoids SDK exception.* raw RecordError leakage",
+    "config-sourced OTLP network telemetry rejected without trusted env/CLI opt-in",
+    "file exporter path traversal and symlink hardening",
+    "event attrs attached to events",
+    "OTLP failure warning/exit neutrality",
+    "OTLP endpoint validation",
+    "help/docs exporter and HTTP attr wording parity",
+    "warning redaction/stdout discipline"
   ],
   "humanGatesTriggered": [],
   "updatedAt": "2026-07-18T00:00:00Z"

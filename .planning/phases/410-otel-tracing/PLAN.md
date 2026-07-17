@@ -114,13 +114,38 @@ Excluded:
 | Exporter/init/shutdown failures warn without changing exit codes | CLI tests with failing exporter/shutdown hooks |
 | Secret and attribute allowlist tests pass | test token absence grep + allowlist walker |
 
+## Review-fix plan — PR #459 findings at `df9447f0fefcf2e52c8f5a0fece318d80e4ce9d8`
+
+Execution decision: `local_critical_path` — this Pi worker owns the isolated issue worktree, has no subagent tool, and review coverage is handled by coordinator sidecars/human fallback. Do not request Copilot/Claude again.
+
+Accepted findings and fix slices:
+
+1. Error telemetry safety (HIGH): replace direct SDK `RecordError` use with allowlisted, registry-redacted, stable error metadata. In `capture=minimal`, suppress message-like error attrs. Add exported-span tests for failed command, HTTP, and flow spans using synthetic registered marker and response-body-like errors.
+2. Config-sourced OTLP guard (HIGH/MED): prevent project config from silently enabling/redirecting OTLP. Allow network exporter/endpoint only through explicit trusted env/CLI opt-in; reject config-sourced OTLP by default with sanitized warning and disabled telemetry. Keep default/file local behavior safe.
+3. File exporter path safety (MED): constrain telemetry file output under project root, reject absolute or escaping directories, reject symlinked dirs/files, use restrictive permissions and no-follow/exclusive create where feasible.
+4. Event attributes (MED): attach filtered attrs to events with `trace.WithAttributes(...)` rather than span attrs; assert retry/attempt event attrs are present and allowlisted.
+5. OTLP failure neutrality (MED): route init/export/shutdown failures through sanitized `telemetryWarning`, preserve exit code/stdout JSON, and bound shutdown.
+6. OTLP endpoint validation (LOW): allow http/https only; reject userinfo, query, and fragment without leaking endpoint secrets.
+7. Help/docs parity (LOW): update root/config help and generated docs/website data so HTTP attrs mention method/status/attempt/retry and still exclude query/headers/bodies/argv.
+8. Exporter wording (LOW): keep supported values consistent as `none,file,otlp`; remove undocumented `off` wording unless implemented intentionally.
+9. Warning redaction/stdout discipline (LOW): ensure Redis/exporter/log/telemetry warnings are redacted and never corrupt stdout JSON.
+
+Planned red tests before production edits:
+
+- `internal/telemetry`: exported JSON spans for `RecordError` contain only `pm.error.*` allowlisted metadata, not SDK `exception.*`, synthetic registered markers, response-body-like text, query strings, or raw messages in minimal capture; AddEvent retains event attrs.
+- `internal/config`/`internal/cli`: config-file `telemetry.exporter: otlp` and endpoint are rejected/disabled with sanitized stderr warning; env opt-in to OTLP is accepted; endpoint validation rejects userinfo/query/fragment and non-http schemes.
+- `internal/telemetry`: file exporter rejects absolute/escaping paths and symlinked dirs/files under the project telemetry root.
+- `internal/connectors/connsdk`: failed HTTP request spans/events preserve allowlisted status/attempt/retry attrs and omit response-body-like error details.
+- `internal/cli`: OTLP exporter failure preserves command exit code/stdout JSON and emits only `warning: telemetry:` redacted stderr.
+- CLI help/docs golden: root help/config docs support values and HTTP attr wording are consistent.
+
 ## Commit/push checkpoints
 
-1. Planning artifacts checkpoint.
-2. Red-test checkpoint if tests can compile without dependencies; otherwise dependency + red tests checkpoint with failing output recorded.
-3. Green telemetry core + focused tests.
-4. Green instrumentation + docs parity.
-5. Full verification + PR checkpoint.
+1. Review-fix planning artifacts checkpoint.
+2. Review-fix red-test checkpoint with exact failing output recorded.
+3. Green security/config/path/event/OTLP implementation checkpoint.
+4. Docs parity/generated artifact checkpoint if generated diffs are required.
+5. Full verification + PR body update checkpoint.
 
 ## PR plan
 

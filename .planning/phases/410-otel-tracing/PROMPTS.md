@@ -4,7 +4,7 @@
 
 - Source: user task for Issue #410 worker handoff.
 - Downstream artifact: `.planning/phases/410-otel-tracing/PLAN.md`.
-- Verification result: `make verify` passed after implementation commit; stacked PR prep pending.
+- Verification result: `make verify` passed after implementation commit; PR #459 review-fix cycle pending.
 
 ## GSD prompt command
 
@@ -40,3 +40,7 @@ Manual GSD/TDD fallback recorded in `PLAN.md`, `TDD-LEDGER.md`, and `RUN-STATE.j
 ## Worker execution prompt digest
 
 Implement Issue #410 only: default-off, secret-safe, exit-code-neutral OpenTelemetry tracing with file/OTLP exporters, command/ETL/flow/certify/connsdk HTTP spans, strict attribute allowlist, no bodies/headers/query/argv/secrets, no later metrics/log bridge work, no credentialed checks, no parent artifact edits.
+
+## Review-fix prompt digest — PR #459 head `df9447f0fefcf2e52c8f5a0fece318d80e4ce9d8`
+
+Stay on `feat/410-otel-tracing`; do not reset/discard/recreate; push same PR. Before production edits, update phase artifacts, add failing tests, and record red output. Fix accepted findings: safe error metadata/no SDK `RecordError` leakage; config-sourced OTLP guard; file exporter traversal/symlink hardening; event attrs on events; OTLP failure warning neutrality; endpoint validation; help/docs exporter wording; warning redaction/stdout discipline. Do not request Copilot/Claude; coordinator handles review coverage.
