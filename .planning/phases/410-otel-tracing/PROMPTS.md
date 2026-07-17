@@ -4,7 +4,7 @@
 
 - Source: user task for Issue #410 worker handoff.
 - Downstream artifact: `.planning/phases/410-otel-tracing/PLAN.md`.
-- Verification result: `make verify` passed after implementation commit and again after PR #459 review-fix commit.
+- Verification result: `make verify` passed after implementation commit, after PR #459 review-fix commit, and after final focused residual review-fix.
 
 ## GSD prompt command
 
@@ -44,3 +44,7 @@ Implement Issue #410 only: default-off, secret-safe, exit-code-neutral OpenTelem
 ## Review-fix prompt digest — PR #459 head `df9447f0fefcf2e52c8f5a0fece318d80e4ce9d8`
 
 Stay on `feat/410-otel-tracing`; do not reset/discard/recreate; push same PR. Before production edits, update phase artifacts, add failing tests, and record red output. Fix accepted findings: safe error metadata/no SDK `RecordError` leakage; config-sourced OTLP guard; file exporter traversal/symlink hardening; event attrs on events; OTLP failure warning neutrality; endpoint validation; help/docs exporter wording; warning redaction/stdout discipline. Do not request Copilot/Claude; coordinator handles review coverage.
+
+## Final focused review-fix prompt digest — PR #459 head `75433cefa9a00671b06c6c3e83bcde1e4730211c`
+
+Stay on same branch/PR; do not reset/discard/recreate; do not request Claude/Copilot. Before production edits, update phase artifacts/TDD ledger and add red tests. Fix accepted residuals: own/sanitize ambient OTLP env (`OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`, `OTEL_EXPORTER_OTLP_HEADERS`, etc.) before exporter construction; add redacted project warnings and no raw process stderr; update ADR 0004 superseding note; root help/goldens exporter values; config docs/website wording requiring both exporter and endpoint from trusted env/flag.

@@ -1,5 +1,16 @@
 # Verification — Phase 410 OpenTelemetry tracing
 
+## Final focused review-fix checklist (PR #459 head `75433cefa9a00671b06c6c3e83bcde1e4730211c`)
+
+- [x] Red tests captured before production edits for ambient OTel env bypass and docs/help wording residuals.
+- [x] Unsafe `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` is validated/rejected before exporter construction, emits only redacted project `warning: telemetry:`, produces no raw process stderr, and does not contact the unvalidated collector.
+- [x] Unsupported `OTEL_EXPORTER_OTLP_HEADERS` / traces headers and other unsafe OTLP env are warned/neutralized before `otlptracehttp.New`, no raw process stderr, no secret/header reaches collector.
+- [x] OTLP exporter always passes a validated endpoint/default and empty supported headers to the SDK constructor.
+- [x] ADR 0004 superseding note matches hardened trusted-env behavior.
+- [x] Root help/goldens list `none`, `off`, `file`, and `otlp`.
+- [x] Config docs/website say both OTLP exporter and endpoint must come from trusted env/flag; config-file endpoint alone is ignored.
+- [x] Focused tests/docs generation/goldens/website data plus `gofmt`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify` if feasible, `git diff --check`, and `git diff -- go.mod go.sum` complete.
+
 ## Review-fix verification checklist (PR #459)
 
 - [x] Red tests captured before production edits for accepted findings.
@@ -125,3 +136,12 @@ Additional smoke/parity:
 | `make verify` (review-fix first run) | fail | `tidy-check` promoted existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct because event attrs use `trace.WithAttributes`; rerun after accepting tidy diff required. |
 | `make verify` (review-fix after commit) | pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, and connectorgen validate passed. |
 | `git diff --check`; `git diff -- go.mod go.sum` | pass | No output after final planning update. |
+| `go test ./internal/cli -run 'TestTelemetryRejectsUnsafeAmbientOTLPTracesEndpointBeforeExporter\|TestTelemetryNeutralizesUnsupportedAmbientOTLPHeaders' -count=1` (final residual red) | fail | Red evidence captured in `TDD-LEDGER.md` row 20 before production edits. |
+| `go test ./internal/cli -run 'TestTelemetryRejectsUnsafeAmbientOTLPTracesEndpointBeforeExporter\|TestTelemetryNeutralizesUnsupportedAmbientOTLPHeaders' -count=1` | pass | Unsafe traces endpoint rejected before exporter construction; unsupported OTLP headers neutralized with no raw process stderr and no ambient Authorization header. |
+| `go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry\|TestLoadTelemetry\|Golden\|Config' -count=1` | pass | Ambient OTLP env hardening, config traces endpoint alias, goldens, and docs drift checks passed. |
+| `go test ./internal/telemetry -count=1`; `go test ./internal/connectors/connsdk -run Telemetry -count=1`; `go test ./internal/app -run Telemetry -count=1`; `go test ./internal/flow -run Telemetry -count=1` | pass | Focused telemetry consumers passed. |
+| `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1`; `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir $TMP/connectors`; `npm --prefix website run gen:docs` | pass | Root help goldens, docs/cli config page, website source/generated data updated. |
+| `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm` (final residual) | pass | Full Go gates passed; `internal/cli` ~195s and `internal/connectors/certify` ~346s in this run. |
+| `make verify` (final residual) | pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, and connectorgen validate passed. |
+| Runtime help/docs parity final | pass | `./pm --help`; `./pm help config`; `./pm etl`; `./pm flow`; `./pm connectors`; invalid `./pm connectors bogus --json` exit 2; generated docs diff clean; `npm --prefix website run gen:docs` passed. |
+| `git diff --check`; `git diff -- go.mod go.sum` (final residual) | pass | No output. |

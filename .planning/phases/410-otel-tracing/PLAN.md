@@ -141,9 +141,31 @@ Planned red tests before production edits:
 - `internal/cli`: OTLP exporter failure preserves command exit code/stdout JSON and emits only `warning: telemetry:` redacted stderr.
 - CLI help/docs golden: root help/config docs support values and HTTP attr wording are consistent.
 
+## Final focused review-fix plan — PR #459 residuals at `75433cefa9a00671b06c6c3e83bcde1e4730211c`
+
+Execution decision: `local_critical_path` — same isolated issue worktree/branch, no subagent tool, no Claude/Copilot request per user instruction.
+
+Accepted residuals and slices:
+
+1. Ambient OTel env bypass (MED): own OTLP env before exporter construction. Support only trusted exporter opt-in plus validated endpoint/default, add `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` as a validated endpoint alias, warn without values for unsafe endpoint/unsupported header env, neutralize unsupported `OTEL_EXPORTER_OTLP_*` env while calling `otlptracehttp.New`, and keep warnings on project stderr only.
+2. ADR docs (LOW): add superseding note to ADR 0004 that config-file OTLP endpoint language is replaced by trusted env/flag endpoint behavior.
+3. Root help/goldens (LOW): ensure root help lists all exporter values `none`, `off`, `file`, and `otlp`.
+4. Config docs/website wording (LOW): say both OTLP exporter and endpoint must come from trusted env/flag; config-file endpoint alone is ignored.
+
+Planned red tests before production edits:
+
+- `internal/cli`: unsafe `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` with userinfo/query is rejected with redacted `warning: telemetry:` on project stderr, does not call the collector, and emits nothing/raw-secret to process stderr.
+- `internal/cli`: unsupported `OTEL_EXPORTER_OTLP_HEADERS` is ignored with redacted project warning; no raw process stderr and no Authorization header reaches the collector.
+- Docs/help focused checks fail until root/config help, ADR, docs/CLI, website source, generated website data, and goldens match trusted-env wording.
+
 ## Commit/push checkpoints
 
-1. Review-fix planning artifacts checkpoint.
+1. Final residual planning artifact checkpoint.
+2. Final residual red-test checkpoint with exact failing output recorded.
+3. Ambient OTel env hardening implementation checkpoint.
+4. Docs/help/golden/website checkpoint.
+5. Full verification + PR body update checkpoint.
+6. Review-fix planning artifacts checkpoint.
 2. Review-fix red-test checkpoint with exact failing output recorded.
 3. Green security/config/path/event/OTLP implementation checkpoint.
 4. Docs parity/generated artifact checkpoint if generated diffs are required.

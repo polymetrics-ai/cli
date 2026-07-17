@@ -39,8 +39,14 @@ ships `log.NewStructuredLogger(*slog.Logger)`.
    `Shutdown` (3s, warn-and-continue — telemetry never alters exit codes). Exporter modes:
    `none` (default — **no SDK constructed**, zero flush latency), `file` (JSONL under
    `.polymetrics/telemetry/` via stdout exporters with `WithWriter` — the offline
-   inspection mode), `otlp` (http/protobuf; endpoint via config or standard
-   `OTEL_EXPORTER_OTLP_ENDPOINT`; `OTEL_SDK_DISABLED` always wins).
+   inspection mode), `otlp` (http/protobuf; `OTEL_SDK_DISABLED` always wins).
+
+   **Superseding security note (issue #410 hardening):** OTLP network tracing and any
+   custom collector endpoint must be selected from trusted env/flag sources. Config-file
+   OTLP exporter or endpoint values alone are ignored. Supported endpoint env aliases are
+   validated before exporter construction; ambient OTLP headers, TLS, compression, timeout,
+   and protocol env vars are warned and neutralized so the SDK cannot log raw parse errors
+   or route traces to unvalidated collectors.
 3. **Span map**: `pm.command` (root, in the dispatch seam — portable to cobra
    `PersistentPreRunE`) → `pm.etl.run` / `pm.flow.run` / `pm.flow.step` /
    `pm.certify.batch` / `pm.certify.connector` / `pm.rlm.submit` → `pm.connector.http`.

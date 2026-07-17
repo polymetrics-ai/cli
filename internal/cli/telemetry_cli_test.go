@@ -2,11 +2,13 @@ package cli_test
 
 import (
 	"bytes"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"testing"
 
 	"polymetrics.ai/internal/cli"
@@ -144,6 +146,102 @@ func TestTelemetryConfigSourcedOTLPRejectedAndEnvOptInAccepted(t *testing.T) {
 	}
 }
 
+func TestTelemetryRejectsUnsafeAmbientOTLPTracesEndpointBeforeExporter(t *testing.T) {
+	const marker = "pm_ambient_traces_endpoint_marker"
+	hitCh := make(chan struct{}, 1)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case hitCh <- struct{}{}:
+		default:
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	root := t.TempDir()
+	t.Setenv("PM_TELEMETRY", "otlp")
+	t.Setenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT", server.URL+"/v1/traces?token="+marker)
+	var stdout, stderr bytes.Buffer
+	var code int
+
+	processStderr := captureProcessStderr(t, func() {
+		code = cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+	})
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s processStderr=%s", code, stdout.String(), stderr.String(), processStderr)
+	}
+	if !strings.Contains(stdout.String(), `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout.String())
+	}
+	if !strings.Contains(stderr.String(), "warning: telemetry:") || !strings.Contains(stderr.String(), "invalid OTLP endpoint") {
+		t.Fatalf("project stderr missing redacted OTLP endpoint warning: %q", stderr.String())
+	}
+	if processStderr != "" {
+		t.Fatalf("process stderr = %q, want empty", processStderr)
+	}
+	for _, forbidden := range []string{marker, "token=", "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"} {
+		if strings.Contains(stderr.String(), forbidden) || strings.Contains(processStderr, forbidden) {
+			t.Fatalf("stderr leaked %q: project=%q process=%q", forbidden, stderr.String(), processStderr)
+		}
+	}
+	select {
+	case <-hitCh:
+		t.Fatal("unsafe ambient traces endpoint was used as collector")
+	default:
+	}
+}
+
+func TestTelemetryNeutralizesUnsupportedAmbientOTLPHeaders(t *testing.T) {
+	const marker = "pm_ambient_header_marker"
+	authCh := make(chan string, 1)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case authCh <- r.Header.Get("Authorization"):
+		default:
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	root := t.TempDir()
+	t.Setenv("PM_TELEMETRY", "otlp")
+	t.Setenv("OTEL_EXPORTER_OTLP_ENDPOINT", server.URL)
+	t.Setenv("OTEL_EXPORTER_OTLP_HEADERS", "Authorization=Bearer%20"+marker+",X-Bad=%zz"+marker)
+	var stdout, stderr bytes.Buffer
+	var code int
+
+	processStderr := captureProcessStderr(t, func() {
+		code = cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+	})
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s processStderr=%s", code, stdout.String(), stderr.String(), processStderr)
+	}
+	if !strings.Contains(stdout.String(), `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout.String())
+	}
+	if !strings.Contains(stderr.String(), "warning: telemetry:") || !strings.Contains(stderr.String(), "OTEL_EXPORTER_OTLP_HEADERS") {
+		t.Fatalf("project stderr missing unsupported headers warning: %q", stderr.String())
+	}
+	if processStderr != "" {
+		t.Fatalf("process stderr = %q, want empty", processStderr)
+	}
+	for _, forbidden := range []string{marker, "Authorization", "Bearer", "%zz"} {
+		if strings.Contains(stderr.String(), forbidden) || strings.Contains(processStderr, forbidden) {
+			t.Fatalf("stderr leaked %q: project=%q process=%q", forbidden, stderr.String(), processStderr)
+		}
+	}
+	select {
+	case auth := <-authCh:
+		if auth != "" {
+			t.Fatalf("collector received ambient Authorization header %q", auth)
+		}
+	default:
+		t.Fatal("collector was not called for safe OTLP endpoint")
+	}
+}
+
 func TestTelemetryOTLPExportFailureUsesProjectWarningAndKeepsStdout(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "collector failed", http.StatusInternalServerError)
@@ -184,6 +282,51 @@ func TestTelemetryCertifyConnectorSpan(t *testing.T) {
 	assertCLIContains(t, data, "pm.certify.connector")
 	assertCLINotContains(t, data, "sample-cli-token")
 	assertCLINotContains(t, data, "PM_CERT_SAMPLE_TOKEN")
+}
+
+func captureProcessStderr(t *testing.T, fn func()) string {
+	t.Helper()
+	old := os.Stderr
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("pipe stderr: %v", err)
+	}
+	savedFD, err := syscall.Dup(int(old.Fd()))
+	if err != nil {
+		_ = r.Close()
+		_ = w.Close()
+		t.Fatalf("dup stderr: %v", err)
+	}
+	if err := syscall.Dup2(int(w.Fd()), int(old.Fd())); err != nil {
+		_ = syscall.Close(savedFD)
+		_ = r.Close()
+		_ = w.Close()
+		t.Fatalf("redirect stderr: %v", err)
+	}
+	os.Stderr = w
+	outCh := make(chan string, 1)
+	go func() {
+		var buf bytes.Buffer
+		_, _ = io.Copy(&buf, r)
+		outCh <- buf.String()
+	}()
+	restored := false
+	restore := func() {
+		if restored {
+			return
+		}
+		restored = true
+		_ = syscall.Dup2(savedFD, int(old.Fd()))
+		_ = syscall.Close(savedFD)
+		os.Stderr = old
+		_ = w.Close()
+		_ = r.Close()
+	}
+	defer restore()
+
+	fn()
+	restore()
+	return <-outCh
 }
 
 func readCLITelemetry(t *testing.T, dir string) []byte {

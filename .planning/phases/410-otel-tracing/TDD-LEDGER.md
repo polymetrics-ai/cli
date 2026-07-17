@@ -18,9 +18,11 @@
 - `golang-design-patterns` — explicit lifecycle and bounded shutdown patterns.
 - `golang-structs-interfaces` — small test seams and config/source metadata types.
 - `golang-dependency-management` — no new dependencies; OTel dependency budget unchanged.
+- `vercel-react-best-practices` — website generated-data/docs parity sanity; no React component changes.
+- `vercel-composition-patterns` — website composition awareness; no reusable component changes.
 - `caveman` — final worker handoff compression only.
 
-Note: required stack skill `.pi/skills/go-implementation/SKILL.md` is absent in this checkout (`.pi/skills` contains only `gsd-core`); loaded repo/global Go implementation skills above instead and will record this in the handoff.
+Note: required stack skills `.pi/skills/go-implementation/SKILL.md` and `.pi/skills/ts-website/SKILL.md` are absent in this checkout (`.pi/skills` contains only `gsd-core`); loaded repo/global Go and website skills above instead and will record this in the handoff.
 
 ## GSD command evidence
 
@@ -32,6 +34,8 @@ scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-revie
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-reviewfix.txt
 scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-reviewfix-rerun.txt
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-reviewfix-rerun.txt
+scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-final-reviewfix.txt
+scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-final-reviewfix.txt
 ```
 
 Result:
@@ -40,6 +44,7 @@ Result:
 - `plan-phase`: generated 142-line prompt (initial and review-fix rerun).
 - `programming-loop`: failed with `scripts/gsd: unknown GSD command: programming-loop`; manual GSD/TDD fallback recorded in PLAN/RUN-STATE.
 - Review-fix rerun in this Pi worker: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
+- Final focused review-fix rerun at PR #459 head `75433cefa9a00671b06c6c3e83bcde1e4730211c`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 
 ## Review-fix accepted findings
 
@@ -54,6 +59,15 @@ Result:
 | LOW docs root HTTP attr wording | Accepted | help/golden/docs/website checks updated |
 | LOW exporter `none/off` wording mismatch | Accepted | remove `/off` wording unless code alias intentionally added |
 | LOW warnings stdout/redaction hardening | Accepted | warning tests/secret smoke assert stderr only and registered marker redacted |
+
+## Final residual review-fix accepted findings
+
+| Finding | Disposition | Planned red evidence |
+|---|---|---|
+| MED ambient OTel env bypass can consume `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`/headers and write raw stderr or route to unvalidated collector | Accepted | CLI tests capture process stderr while setting unsafe traces endpoint and unsupported headers; expect only project `warning: telemetry:` with no marker and no unvalidated collector/header use |
+| LOW ADR 0004 says OTLP endpoint via config | Accepted | ADR docs updated with superseding trusted-env/flag note |
+| LOW root help/goldens omit full exporter values | Accepted | Golden/root help asserts `none`, `off`, `file`, `otlp` |
+| LOW config docs/website imply config endpoint works when network telemetry env-enabled | Accepted | Reword docs/website to require both exporter and endpoint from trusted env/flag; config-file endpoint alone ignored |
 
 ## Ledger
 
@@ -78,6 +92,10 @@ Result:
 | 17 | review-fix green | Broad gates | `go vet ./...`; `go test ./...`; `go build ./cmd/pm` | Pass | Full Go vet/test/build passed. |
 | 18 | review-fix verify | `make verify` | Fail | `tidy-check` promoted existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct because event attrs use `trace.WithAttributes`; no new version/checksum. Rerun after accepting tidy diff required. |
 | 19 | review-fix verify | `make verify` after review-fix commit | Pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, and connectorgen validate passed. |
+| 20 | final residual red | Test | `go test ./internal/cli -run 'TestTelemetryRejectsUnsafeAmbientOTLPTracesEndpointBeforeExporter|TestTelemetryNeutralizesUnsupportedAmbientOTLPHeaders' -count=1` | Fail | Expected red before production edits. Exact key output: `project stderr missing redacted OTLP endpoint warning: ""`; `project stderr missing unsupported headers warning: ""`; exit code 1. |
+| 21 | final residual green | Test | `go test ./internal/cli -run 'TestTelemetryRejectsUnsafeAmbientOTLPTracesEndpointBeforeExporter|TestTelemetryNeutralizesUnsupportedAmbientOTLPHeaders' -count=1` | Pass | Unsafe traces endpoint now rejected before exporter construction; unsupported OTLP headers warned/neutralized with no raw process stderr or Authorization header. |
+| 22 | final residual green | Focused tests/docs | `go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry|TestLoadTelemetry|Golden|Config' -count=1`; `go test ./internal/telemetry -count=1`; `go test ./internal/connectors/connsdk -run Telemetry -count=1`; `go test ./internal/app -run Telemetry -count=1`; `go test ./internal/flow -run Telemetry -count=1` | Pass | Ambient env hardening, config alias, golden transcripts, generated docs drift, and affected telemetry consumers green after docs/golden/website regeneration. |
+| 23 | final residual verify | Broad gates/parity | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; runtime help/docs parity; `git diff --check`; `git diff -- go.mod go.sum` | Pass | Full final gates passed; no go.mod/go.sum diff; docs generation and website data clean. |
 
 ## Red-test requirements
 

@@ -48,11 +48,12 @@ TELEMETRY
   telemetry.exporter defaults to none (off is accepted as a disabled alias). No
   SDK is constructed and no .polymetrics/telemetry directory is created while
   disabled. Set PM_TELEMETRY=file or POLYMETRICS_TELEMETRY=file to write
-  stdouttrace JSONL spans under telemetry.directory. Network OTLP tracing must
-  be explicitly enabled from environment variables; config-file OTLP exporter or
-  endpoint values are ignored by default. Set PM_TELEMETRY=otlp and configure
-  OTEL_EXPORTER_OTLP_ENDPOINT or PM_TELEMETRY_ENDPOINT for OTLP HTTP/protobuf.
-  OTEL_SDK_DISABLED=true always disables tracing.
+  stdouttrace JSONL spans under telemetry.directory. Network OTLP tracing and
+  any custom collector endpoint must be selected from trusted env/flag sources;
+  config-file OTLP exporter or endpoint values are ignored. Set
+  PM_TELEMETRY=otlp and configure OTEL_EXPORTER_OTLP_ENDPOINT,
+  OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, or PM_TELEMETRY_ENDPOINT for OTLP
+  HTTP/protobuf. OTEL_SDK_DISABLED=true always disables tracing.
 
   Telemetry failures are warnings on stderr, not command failures. Stdout keeps
   the command's normal human output or single JSON envelope. Span attributes are
@@ -169,10 +170,12 @@ KEYS
 
   telemetry.endpoint
     Default: empty. Primary env: POLYMETRICS_TELEMETRY_ENDPOINT. Aliases:
-    PM_TELEMETRY_ENDPOINT, POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT, and
-    standard OTEL_EXPORTER_OTLP_ENDPOINT. OTLP endpoints must be http/https URLs
-    without userinfo, query strings, or fragments, and config-file endpoints are
-    ignored unless network telemetry is explicitly enabled by env.
+    PM_TELEMETRY_ENDPOINT, POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT,
+    OTEL_EXPORTER_OTLP_ENDPOINT, and OTEL_EXPORTER_OTLP_TRACES_ENDPOINT. OTLP
+    endpoints must be http/https URLs without userinfo, query strings, or
+    fragments. Custom OTLP endpoints must come from a trusted env/flag source;
+    config-file endpoint values alone are ignored, and OTLP otherwise uses the
+    local default collector endpoint.
 
   telemetry.directory
     Default: .polymetrics/telemetry. Primary env: POLYMETRICS_TELEMETRY_DIR.
@@ -190,8 +193,10 @@ SECURITY
   Do not store secret values in config.yaml or examples. LLM API keys such as
   PM_LLM_API_KEY and provider-specific keys remain environment-only secret
   inputs and are not documented with values. OTLP endpoint URLs with userinfo,
-  query strings, or fragments are rejected; emitted spans still drop userinfo,
-  query strings, headers, bodies, raw argv, and credential values.
+  query strings, or fragments are rejected; ambient OTLP header/TLS/compression
+  env vars are warned and neutralized before exporter construction. Emitted
+  spans still drop userinfo, query strings, headers, bodies, raw argv, and
+  credential values.
 
 EXIT STATUS
   0 success

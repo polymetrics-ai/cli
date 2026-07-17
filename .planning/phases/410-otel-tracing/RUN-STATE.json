@@ -7,7 +7,7 @@
   "branch": "feat/410-otel-tracing",
   "baseBranch": "feat/cli-architecture-v2",
   "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing",
-  "status": "review_fix_verified",
+  "status": "final_review_fix_verified",
   "gsd": {
     "doctorPassed": true,
     "planPhasePromptGenerated": true,
@@ -61,6 +61,16 @@
       "cycle": "review-fix-verify-rerun",
       "decision": "local_critical_path",
       "reason": "After committing the review-fix slice, make verify passed in the isolated issue worktree."
+    },
+    {
+      "cycle": "final-review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 residuals accepted at head 75433cefa9a00671b06c6c3e83bcde1e4730211c; same isolated worker/branch, no subagent tool, no Claude/Copilot request."
+    },
+    {
+      "cycle": "final-review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "Final focused residual fix verified locally with focused tests, docs generation, full Go gates, make verify, and diff checks."
     }
   ],
   "dependenciesApproved": [
@@ -77,7 +87,11 @@
     "OTLP failure warning/exit neutrality",
     "OTLP endpoint validation",
     "help/docs exporter and HTTP attr wording parity",
-    "warning redaction/stdout discipline"
+    "warning redaction/stdout discipline",
+    "ambient OTel env bypass neutralized before OTLP exporter construction",
+    "ADR 0004 superseding trusted-env OTLP behavior note",
+    "root help/goldens full telemetry exporter values none/off/file/otlp",
+    "config docs/website require OTLP exporter and endpoint from trusted env/flag"
   ],
   "humanGatesTriggered": [],
   "updatedAt": "2026-07-18T00:00:00Z"

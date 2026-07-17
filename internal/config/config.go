@@ -277,7 +277,7 @@ func allEnvBindings() []envBinding {
 		{key: "rlm.llm.model", names: []string{"POLYMETRICS_LLM_MODEL", "PM_LLM_MODEL"}},
 		{key: "schedule.crontab_file", names: []string{"POLYMETRICS_CRONTAB_FILE", "PM_CRONTAB_FILE"}},
 		{key: "telemetry.exporter", names: []string{"POLYMETRICS_TELEMETRY", "PM_TELEMETRY"}},
-		{key: "telemetry.endpoint", names: []string{"POLYMETRICS_TELEMETRY_ENDPOINT", "PM_TELEMETRY_ENDPOINT", "POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT", "OTEL_EXPORTER_OTLP_ENDPOINT"}},
+		{key: "telemetry.endpoint", names: []string{"POLYMETRICS_TELEMETRY_ENDPOINT", "PM_TELEMETRY_ENDPOINT", "POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT", "OTEL_EXPORTER_OTLP_ENDPOINT", "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"}},
 		{key: "telemetry.directory", names: []string{"POLYMETRICS_TELEMETRY_DIR", "PM_TELEMETRY_DIR"}},
 		{key: "telemetry.capture", names: []string{"POLYMETRICS_TELEMETRY_CAPTURE", "PM_TELEMETRY_CAPTURE"}},
 	}

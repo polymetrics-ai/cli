@@ -27,7 +27,7 @@ func TestLoadTelemetryDefaultsAndEnv(t *testing.T) {
 
 	t.Setenv("PM_TELEMETRY", "file")
 	t.Setenv("PM_TELEMETRY_DIR", "custom-telemetry")
-	t.Setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "https://collector.example.test/v1/traces")
+	t.Setenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT", "https://collector.example.test/v1/traces")
 	t.Setenv("PM_TELEMETRY_CAPTURE", "minimal")
 	cfg, err = Load(Options{Root: root})
 	if err != nil {
@@ -40,7 +40,7 @@ func TestLoadTelemetryDefaultsAndEnv(t *testing.T) {
 		t.Fatalf("Telemetry.Directory env = %q, want custom-telemetry", cfg.Telemetry.Directory)
 	}
 	if cfg.Telemetry.Endpoint != "https://collector.example.test/v1/traces" {
-		t.Fatalf("Telemetry.Endpoint env = %q, want OTEL endpoint", cfg.Telemetry.Endpoint)
+		t.Fatalf("Telemetry.Endpoint env = %q, want OTEL traces endpoint", cfg.Telemetry.Endpoint)
 	}
 	if cfg.Telemetry.Capture != "minimal" {
 		t.Fatalf("Telemetry.Capture env = %q, want minimal", cfg.Telemetry.Capture)

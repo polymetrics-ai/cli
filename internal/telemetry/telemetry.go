@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 
 	"go.opentelemetry.io/otel/attribute"
@@ -36,9 +37,10 @@ const (
 )
 
 const (
-	captureDefault = "default"
-	captureMinimal = "minimal"
-	defaultTimeout = 3 * time.Second
+	captureDefault         = "default"
+	captureMinimal         = "minimal"
+	defaultTimeout         = 3 * time.Second
+	defaultOTLPEndpointURL = "http://localhost:4318/v1/traces"
 )
 
 // WarningFunc receives sanitized telemetry warnings. Callers should write them to stderr.
@@ -271,15 +273,7 @@ func newExporter(ctx context.Context, cfg Config, warn WarningFunc) (sdktrace.Sp
 		}
 		return warningExporter{ctx: ctx, warn: warn, next: exporter}, file, nil
 	case ExporterOTLP:
-		opts := []otlptracehttp.Option{otlptracehttp.WithTimeout(timeoutOrDefault(cfg.ShutdownTimeout))}
-		if endpoint := strings.TrimSpace(cfg.Endpoint); endpoint != "" {
-			validated, err := validateOTLPEndpoint(endpoint)
-			if err != nil {
-				return nil, nil, err
-			}
-			opts = append(opts, otlptracehttp.WithEndpointURL(validated))
-		}
-		exporter, err := otlptracehttp.New(ctx, opts...)
+		exporter, err := newOTLPExporter(ctx, cfg, warn)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -287,6 +281,26 @@ func newExporter(ctx context.Context, cfg Config, warn WarningFunc) (sdktrace.Sp
 	default:
 		return nil, nil, fmt.Errorf("unsupported exporter %q", cfg.Exporter)
 	}
+}
+
+func newOTLPExporter(ctx context.Context, cfg Config, warn WarningFunc) (sdktrace.SpanExporter, error) {
+	endpoint := strings.TrimSpace(cfg.Endpoint)
+	if endpoint == "" {
+		endpoint = defaultOTLPEndpointURL
+	}
+	validated, err := validateOTLPEndpoint(endpoint)
+	if err != nil {
+		return nil, err
+	}
+	warnUnsupportedOTLPEnv(ctx, warn)
+	opts := []otlptracehttp.Option{
+		otlptracehttp.WithTimeout(timeoutOrDefault(cfg.ShutdownTimeout)),
+		otlptracehttp.WithEndpointURL(validated),
+		otlptracehttp.WithHeaders(map[string]string{}),
+	}
+	return withSanitizedOTLPEnv(func() (sdktrace.SpanExporter, error) {
+		return otlptracehttp.New(ctx, opts...)
+	})
 }
 
 func newFileExporter(cfg Config) (sdktrace.SpanExporter, io.Closer, error) {
@@ -426,6 +440,76 @@ func rejectSymlink(path string) error {
 		return errors.New("telemetry file must not be a symlink")
 	}
 	return errors.New("telemetry file already exists")
+}
+
+var (
+	otlpEnvMu = sync.Mutex{}
+
+	supportedOTLPEndpointEnv = []string{
+		"OTEL_EXPORTER_OTLP_ENDPOINT",
+		"OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
+	}
+
+	unsupportedOTLPEnv = []string{
+		"OTEL_EXPORTER_OTLP_HEADERS",
+		"OTEL_EXPORTER_OTLP_TRACES_HEADERS",
+		"OTEL_EXPORTER_OTLP_CERTIFICATE",
+		"OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE",
+		"OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE",
+		"OTEL_EXPORTER_OTLP_CLIENT_KEY",
+		"OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE",
+		"OTEL_EXPORTER_OTLP_TRACES_CLIENT_KEY",
+		"OTEL_EXPORTER_OTLP_INSECURE",
+		"OTEL_EXPORTER_OTLP_TRACES_INSECURE",
+		"OTEL_EXPORTER_OTLP_COMPRESSION",
+		"OTEL_EXPORTER_OTLP_TRACES_COMPRESSION",
+		"OTEL_EXPORTER_OTLP_PROTOCOL",
+		"OTEL_EXPORTER_OTLP_TRACES_PROTOCOL",
+		"OTEL_EXPORTER_OTLP_TIMEOUT",
+		"OTEL_EXPORTER_OTLP_TRACES_TIMEOUT",
+	}
+)
+
+type savedEnvValue struct {
+	value string
+	ok    bool
+}
+
+func warnUnsupportedOTLPEnv(ctx context.Context, warn WarningFunc) {
+	for _, name := range unsupportedOTLPEnv {
+		if _, ok := os.LookupEnv(name); ok {
+			warnf(ctx, warn, "unsupported OTLP environment variable %s ignored; configure only telemetry exporter and endpoint through trusted env/flag", name)
+		}
+	}
+}
+
+func withSanitizedOTLPEnv(fn func() (sdktrace.SpanExporter, error)) (sdktrace.SpanExporter, error) {
+	otlpEnvMu.Lock()
+	defer otlpEnvMu.Unlock()
+
+	all := append([]string{}, supportedOTLPEndpointEnv...)
+	all = append(all, unsupportedOTLPEnv...)
+	saved := make(map[string]savedEnvValue, len(all))
+	defer restoreEnv(saved)
+	for _, name := range all {
+		value, ok := os.LookupEnv(name)
+		saved[name] = savedEnvValue{value: value, ok: ok}
+		if err := os.Unsetenv(name); err != nil {
+			return nil, fmt.Errorf("sanitize OTLP environment: %w", err)
+		}
+	}
+
+	return fn()
+}
+
+func restoreEnv(saved map[string]savedEnvValue) {
+	for name, item := range saved {
+		if item.ok {
+			_ = os.Setenv(name, item.value)
+			continue
+		}
+		_ = os.Unsetenv(name)
+	}
 }
 
 func validateOTLPEndpoint(endpoint string) (string, error) {

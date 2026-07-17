@@ -25,7 +25,7 @@ This page is the public website contract for the `pm` CLI. Command/help, checked
 
 Future TTY renderers are eligible only when stdout is a TTY and `--json`, `--plain`, `--no-input`, non-empty `PM_NO_TUI`, non-empty `CI`, and `TERM=dumb` do not force the plain path. The current `cmd/pm` entrypoint keeps the plain path until a TTY renderer is wired intentionally. Use `--progress ndjson` on long-running commands when agents need live progress without polling checkpoint files.
 
-OpenTelemetry tracing is default-off. Use `PM_TELEMETRY=file` to write stdouttrace JSONL spans under `.polymetrics/telemetry`, or `PM_TELEMETRY=otlp` with `OTEL_EXPORTER_OTLP_ENDPOINT` for an OTLP HTTP/protobuf collector. Config-file OTLP exporter or endpoint values are ignored unless network telemetry is explicitly enabled from the environment. Telemetry warnings go to stderr and never change command exit codes or stdout JSON envelopes. Connector HTTP spans record only method, scheme, host, path, status, and retry/attempt metadata -- no request or response bodies, headers, query strings, raw argv, or credential values.
+OpenTelemetry tracing is default-off. Supported exporters are `none`, `off`, `file`, and `otlp`. Use `PM_TELEMETRY=file` to write stdouttrace JSONL spans under `.polymetrics/telemetry`, or set `PM_TELEMETRY=otlp` with a trusted env/flag endpoint such as `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`, or `PM_TELEMETRY_ENDPOINT` for an OTLP HTTP/protobuf collector. Config-file OTLP exporter or endpoint values are ignored; any custom collector endpoint must come from trusted env/flag. Telemetry warnings go to stderr and never change command exit codes or stdout JSON envelopes. Connector HTTP spans record only method, scheme, host, path, status, and retry/attempt metadata -- no request or response bodies, headers, query strings, raw argv, or credential values.
 
 ## Configuration
 
@@ -61,7 +61,7 @@ Root and `json` affect invocation bootstrap. Runtime, RLM, schedule, and telemet
 | `rlm.llm.model` | empty | `POLYMETRICS_LLM_MODEL` | `PM_LLM_MODEL` |
 | `schedule.crontab_file` | empty | `POLYMETRICS_CRONTAB_FILE` | `PM_CRONTAB_FILE` |
 | `telemetry.exporter` | `none` | `POLYMETRICS_TELEMETRY` | `PM_TELEMETRY` |
-| `telemetry.endpoint` | empty | `POLYMETRICS_TELEMETRY_ENDPOINT` | `PM_TELEMETRY_ENDPOINT`, `POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_ENDPOINT` |
+| `telemetry.endpoint` | empty | `POLYMETRICS_TELEMETRY_ENDPOINT` | `PM_TELEMETRY_ENDPOINT`, `POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` |
 | `telemetry.directory` | `.polymetrics/telemetry` | `POLYMETRICS_TELEMETRY_DIR` | `PM_TELEMETRY_DIR` |
 | `telemetry.capture` | `default` | `POLYMETRICS_TELEMETRY_CAPTURE` | `PM_TELEMETRY_CAPTURE` |
 
@@ -93,10 +93,10 @@ telemetry:
   capture: default
 ```
 
-Telemetry values are non-secret configuration. Supported exporters are `none`, `off`, `file`, and `otlp`; `off` is a disabled alias. `OTEL_SDK_DISABLED=true` always disables tracing. OTLP endpoints must be `http` or `https` URLs without userinfo, query strings, or fragments. `telemetry.directory` must be relative, stay under `--root`, and avoid symlinked telemetry directories or files. Set `telemetry.capture` to `minimal` to keep span names while stripping span attributes.
+Telemetry values are non-secret configuration. Supported exporters are `none`, `off`, `file`, and `otlp`; `off` is a disabled alias. `OTEL_SDK_DISABLED=true` always disables tracing. Custom OTLP endpoints must come from a trusted env/flag source; config-file endpoint values alone are ignored, and OTLP otherwise uses the local default collector endpoint. OTLP endpoints must be `http` or `https` URLs without userinfo, query strings, or fragments. `telemetry.directory` must be relative, stay under `--root`, and avoid symlinked telemetry directories or files. Set `telemetry.capture` to `minimal` to keep span names while stripping span attributes.
 
 <Callout type="warning">
-  Configuration is not a secret store. User-named credential variables passed to `--from-env`, connector certification credsfile entries, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat. OTLP endpoint URLs with credentials, query strings, or fragments are rejected; emitted spans still drop userinfo, query strings, headers, bodies, raw argv, and credential values.
+  Configuration is not a secret store. User-named credential variables passed to `--from-env`, connector certification credsfile entries, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat. OTLP endpoint URLs with credentials, query strings, or fragments are rejected; ambient OTLP header/TLS/compression env vars are warned and neutralized before exporter construction. Emitted spans still drop userinfo, query strings, headers, bodies, raw argv, and credential values.
 </Callout>
 
 ## Command map

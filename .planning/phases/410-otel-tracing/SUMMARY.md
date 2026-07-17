@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: review-fix verified locally for PR #459; push/PR body update pending.
+Status: final focused review-fix verified locally for PR #459; push/PR body update pending.
 
 ## Current state
 
@@ -39,6 +39,13 @@ Status: review-fix verified locally for PR #459; push/PR body update pending.
 
 Current execution decision: `local_critical_path`. This worker stayed on `feat/410-otel-tracing`; coordinator sidecars/human fallback handle review coverage. No Claude/Copilot request from this worker.
 
+## Final focused review-fix delivered
+
+- Ambient OTel env bypass fixed: `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` is bound/validated before exporter construction; unsafe endpoint values warn through project stderr, do not reach process stderr, and do not contact unvalidated collectors.
+- Unsupported ambient OTLP headers/TLS/compression/protocol/timeout env are warned and neutralized before `otlptracehttp.New`; exporter construction always passes a validated endpoint/default and empty headers.
+- Docs residuals fixed: ADR 0004 superseding note, root help/goldens exporter values `none/off/file/otlp`, config docs/website trusted-env endpoint wording, generated website data.
+- Red tests captured before production edits; no Claude/Copilot request.
+
 ## Verification final
 
-Focused tests, docs/golden/website generation, file/off/secret smoke, OTLP endpoint smoke, `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` passed after the review-fix commit.
+Focused tests, docs/golden/website generation, file/off/secret smoke, OTLP endpoint smoke, `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` passed after the previous review-fix commit. Final focused review-fix verification also passed: focused ambient env tests, docs generation/diff, website data generation, runtime help parity, full Go gates, `make verify`, `git diff --check`, and `git diff -- go.mod go.sum`.
