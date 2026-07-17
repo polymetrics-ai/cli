@@ -9,7 +9,7 @@
   "baseHeadAtPlanning": "6fbff849932e891a8184000fb677e1b6fca7f6d4",
   "headAtReviewFixStart": "3a50385714c52c7483e6a137ced3285f73f2b929",
   "verificationPassed": true,
-  "status": "review_fix_local_verified_commit_pending",
+  "status": "review_fix_local_verified_pr_body_updated_pushed",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-423-review-fix.prompt",
@@ -77,6 +77,6 @@
     "claude": "review_findings_supplied_by_orchestrator_for_head_3a50385714c52c7483e6a137ced3285f73f2b929",
     "copilot": "not_requested",
     "fallback": "parent_or_human_review_pending_if_sub_pr_auto_review_skips",
-    "coverageStatus": "review_fix_local_verified_commit_pending"
+    "coverageStatus": "review_fix_local_verified_pr_body_updated_pushed_remote_checks_pending"
   }
 }

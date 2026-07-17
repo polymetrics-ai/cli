@@ -47,8 +47,8 @@
 - [x] Invalid numeric flag parity checked: `./pm perf compare --iterations nope --json`, oversized `--iterations`, `./pm perf sync-modes --records nope --json`, oversized `--records` exit 3 validation errors.
 - [x] Runtime metadata parity checked: `./pm perf compare --iterations 1 --runtime --json` uses loopback-only endpoints; no services started.
 - [x] `git diff -- go.mod go.sum` empty; no new dependencies.
-- [ ] PR #458 body updated with review dispositions, verification, and residual risks.
-- [ ] Commit pushed to `refactor/423-perf-native-cobra` only.
+- [x] PR #458 body updated with review dispositions, verification, and residual risks.
+- [x] Commit pushed to `refactor/423-perf-native-cobra` only.
 
 ## Optional / safety-limited
 

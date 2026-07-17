@@ -1,6 +1,6 @@
 # Phase 423 Summary
 
-Status: PR #458 open against `feat/cli-architecture-v2`; review-fix implementation and local verification complete on `refactor/423-perf-native-cobra`; commit/PR-body update/push pending.
+Status: PR #458 open against `feat/cli-architecture-v2`; review-fix implementation, local verification, PR body update, and push complete/pending final remote checks on `refactor/423-perf-native-cobra`.
 
 ## Current state
 
@@ -44,7 +44,7 @@ Delivered review-fix slice:
 - Routed go-redis diagnostics through the redacting logger at quiet level; loopback runtime compare produced no raw `redis:` stderr.
 - Updated canonical perf manual, generated `docs/cli/perf.md`, golden transcripts, website source docs, and `website/lib/docs.generated.ts` for exit 3 and runtime metadata/topology wording.
 
-Current decision: `local_critical_path` — same isolated worker branch/cwd, no subagent tool, no reset/recreate. Next required action: commit, update PR #458 body with dispositions/verification, push same branch.
+Current decision: `local_critical_path` — same isolated worker branch/cwd, no subagent tool, no reset/recreate. PR #458 body records dispositions/verification; branch push is complete/pending final remote checks.
 
 ## Safety
 
