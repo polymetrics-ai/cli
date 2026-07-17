@@ -185,3 +185,19 @@ Add failing tests before production code/docs edits:
 - Full gates: `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`. **Done; combined gate exited 0.**
 - Website/docs checks: `pm docs generate` parity, `cd website && pnpm run gen:docs`, grep website/docs for `--progress ndjson` and mixed stderr wording. **Done; docs generated data updated and `docs/connectors/**` drift removed.**
 - Update PR #457 body with review dispositions, new verification, and head SHA; push to same branch only. **PR body updated via GitHub API; push pending.**
+
+## Review-fix cycle #2 — PR #457 head `2195a66659be9d62bf99bfc8e2506e77da81e02f`
+
+Scope: focused pm-reviewer fix only; same branch/PR; no reset/recreate.
+
+Accepted findings to fix:
+
+1. `docs/design/tui-ux-design.md` must stop claiming `CLICOLOR_FORCE` is honored; code honors `NO_COLOR`, `CLICOLOR`, and `TERM` only.
+2. Root, ETL, and flow help/docs must document exit `3` validation errors for invalid global UI/progress flags; regenerate generated docs/goldens with existing project commands.
+
+Review-fix #2 slice plan:
+
+- Add/update focused help docs test expectation first so root/ETL/flow exit-code omissions fail before production docs edits; capture grep validation that `CLICOLOR_FORCE` remains in design doc.
+- Minimal docs/help fix in `internal/cli/docs.go` and `docs/design/tui-ux-design.md` only; regenerate `docs/cli/**` and golden/manual artifacts through `pm docs generate`/golden updater as needed.
+- Focused gates: `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1`, docs generator/diff checks, then full gates if Go/help changed.
+- Update PR #457 body with review-fix #2 disposition and push `feat/405-tty-ndjson-progress`.

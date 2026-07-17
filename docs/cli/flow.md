@@ -38,5 +38,6 @@ EXIT STATUS
   0 success
   1 runtime error
   2 usage error
+  3 validation error, including invalid UI/progress flag
 
 ```

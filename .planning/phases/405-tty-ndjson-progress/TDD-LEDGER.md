@@ -271,3 +271,74 @@ smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.CnpIQlCCHU
 0 issues.
 connectorgen validate: 547 connector(s) checked, 0 findings
 ```
+
+## Review-fix cycle #2 — PR #457 head `2195a66659be9d62bf99bfc8e2506e77da81e02f`
+
+Loaded skills unchanged for this docs/help fix: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-documentation`, `golang-lint`, `golang-spf13-cobra`. Stack implementation skill note remains: `.pi/skills/go-implementation/SKILL.md` missing (`ENOENT`), so repo/global Go routing skills are loaded instead.
+
+Planned red validation before production docs/help edits:
+
+- `rg -n "CLICOLOR_FORCE" docs/design/tui-ux-design.md` must show stale docs claims.
+- Update `TestGlobalUIFlagsDocumentedInHelp` expectation first, then run `go test ./internal/cli/... -run 'TestGlobalUIFlagsDocumentedInHelp' -count=1`; expected red: root/ETL/flow help missing exit `3` invalid UI/progress flag wording.
+
+Review-fix #2 red evidence captured — 2026-07-17:
+
+```bash
+rg -n "CLICOLOR_FORCE" docs/design/tui-ux-design.md
+```
+
+Result: fail/stale docs validation. Matches remain at `docs/design/tui-ux-design.md:63` and `:376`.
+
+```bash
+go test ./internal/cli/... -run 'TestGlobalUIFlagsDocumentedInHelp' -count=1
+```
+
+Result: fail. Key output:
+
+```text
+--- FAIL: TestGlobalUIFlagsDocumentedInHelp/root_help
+    help output missing "3 validation error"
+--- FAIL: TestGlobalUIFlagsDocumentedInHelp/etl_help
+    help output missing "3 validation error"
+--- FAIL: TestGlobalUIFlagsDocumentedInHelp/flow_help
+    help output missing "3 validation error"
+FAIL	polymetrics.ai/internal/cli	0.538s
+```
+
+Review-fix #2 green evidence captured — 2026-07-17:
+
+```bash
+tmp_connectors=$(mktemp -d); go run ./cmd/pm docs generate --dir docs/cli --connectors-dir "$tmp_connectors"; rm -rf "$tmp_connectors"
+```
+
+Result: pass.
+
+```text
+Generated docs in docs/cli and connector docs in /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.fztdKsog5X
+```
+
+```bash
+POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1
+```
+
+Result: pass; `ok polymetrics.ai/internal/cli 9.869s`.
+
+```bash
+go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1
+```
+
+Result: pass; `ok polymetrics.ai/internal/cli 6.724s`.
+
+```bash
+gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify
+```
+
+Result: pass. Key output:
+
+```text
+go test ./...: ok polymetrics.ai/internal/cli 170.546s; ok polymetrics.ai/internal/connectors/certify 339.739s
+make verify: ok polymetrics.ai/internal/cli 171.209s; ok polymetrics.ai/internal/connectors/certify 342.470s
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.JYQwR5QWMh
+0 issues.
+connectorgen validate: 547 connector(s) checked, 0 findings
+```

@@ -60,7 +60,7 @@ Rules:
   reinforcement. A colorblind user reading glyphs only loses nothing.
 - All styled *static* output (piped-safe summaries, pretty tables) goes through lipgloss
   print helpers so colorprofile degrades TrueColor→256→16→none automatically and honors
-  `NO_COLOR`, `CLICOLOR`, `CLICOLOR_FORCE`, `TERM=dumb`. Non-TTY output gets no ANSI at all
+  `NO_COLOR`, `CLICOLOR=0`, and `TERM=dumb`. Non-TTY output gets no ANSI at all
   (and remains under `safety.SanitizeTerminal` as today).
 - `ui accessible_colors` setting (config + `PM_ACCESSIBLE_COLORS`) remaps every token to
   the standard 16 ANSI colors so the user's own terminal palette controls contrast
@@ -373,9 +373,9 @@ connector/field *names*, but values arrive only via `--from-env`/`--value-stdin`
 2. **Reduced motion**: `ui.spinner: disabled` config (and implied by accessible mode) →
    static `● running` lines with action-specific text; progress becomes periodic plain
    updates.
-3. **Color**: NO_COLOR / CLICOLOR / CLICOLOR_FORCE / TERM=dumb honored everywhere
-   (colorprofile); `accessible_colors` remaps tokens to the 16-color terminal palette;
-   color is never the only carrier (glyph + word always present).
+3. **Color**: NO_COLOR / CLICOLOR / TERM=dumb honored everywhere (colorprofile);
+   `accessible_colors` remaps tokens to the 16-color terminal palette; color is never
+   the only carrier (glyph + word always present).
 4. **Screen-reader-safe structure**: positional context is textual
    (`Step 2 of 4: steps`), no braille spinners, tables render with header words not just
    rules.

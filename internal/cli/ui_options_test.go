@@ -214,10 +214,10 @@ func TestGlobalUIFlagsDocumentedInHelp(t *testing.T) {
 		args []string
 		want []string
 	}{
-		{name: "root help", args: []string{"--help"}, want: []string{"--plain", "--no-input", "--progress ndjson", "Future TTY renderers"}},
+		{name: "root help", args: []string{"--help"}, want: []string{"--plain", "--no-input", "--progress ndjson", "Future TTY renderers", "3 validation error", "invalid UI/progress flag"}},
 		{name: "config help", args: []string{"help", "config"}, want: []string{"--plain", "--no-input", "--progress ndjson", "invalid UI/progress flag"}},
-		{name: "etl help", args: []string{"etl", "--help"}, want: []string{"--progress ndjson", "stderr", "stderr may also include the final error diagnostic"}},
-		{name: "flow help", args: []string{"flow", "--help"}, want: []string{"--progress ndjson", "stderr", "stderr may also include the final error diagnostic"}},
+		{name: "etl help", args: []string{"etl", "--help"}, want: []string{"--progress ndjson", "stderr", "stderr may also include the final error diagnostic", "3 validation error", "invalid UI/progress flag"}},
+		{name: "flow help", args: []string{"flow", "--help"}, want: []string{"--progress ndjson", "stderr", "stderr may also include the final error diagnostic", "3 validation error", "invalid UI/progress flag"}},
 	}
 
 	for _, tt := range tests {

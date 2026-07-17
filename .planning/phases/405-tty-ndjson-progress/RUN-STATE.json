@@ -54,6 +54,21 @@
       "cycle": "review-fix-verify",
       "decision": "local_critical_path",
       "reason": "focused gates and full local gates passed inline"
+    },
+    {
+      "cycle": "review-fix-2-plan",
+      "decision": "local_critical_path",
+      "reason": "focused pm-reviewer docs/help findings at head 2195a66659be9d62bf99bfc8e2506e77da81e02f; bounded worker has no subagent tool"
+    },
+    {
+      "cycle": "review-fix-2-tdd",
+      "decision": "local_critical_path",
+      "reason": "red validation captured for stale CLICOLOR_FORCE docs and root/ETL/flow help exit-code omissions"
+    },
+    {
+      "cycle": "review-fix-2-verify",
+      "decision": "local_critical_path",
+      "reason": "focused docs/help gates and full local gates passed inline"
     }
   ],
   "reviewFix": {
@@ -99,6 +114,48 @@
       }
     ]
   },
+  "reviewFix2": {
+    "startingHead": "2195a66659be9d62bf99bfc8e2506e77da81e02f",
+    "status": "locally_verified_pr_body_updated_pending_push",
+    "acceptedFindings": [
+      "Remove or reword CLICOLOR_FORCE claims from docs/design/tui-ux-design.md because code honors NO_COLOR, CLICOLOR, and TERM only",
+      "Document exit code 3 validation errors for invalid global UI/progress flags in root, ETL, and flow help plus generated docs"
+    ],
+    "redEvidence": [
+      {
+        "command": "rg -n \"CLICOLOR_FORCE\" docs/design/tui-ux-design.md",
+        "result": "fail",
+        "evidence": "stale docs claims at docs/design/tui-ux-design.md:63 and :376"
+      },
+      {
+        "command": "go test ./internal/cli/... -run 'TestGlobalUIFlagsDocumentedInHelp' -count=1",
+        "result": "fail",
+        "evidence": "root, ETL, and flow help missing 3 validation error invalid UI/progress flag wording"
+      }
+    ],
+    "greenEvidence": [
+      {
+        "command": "go run ./cmd/pm docs generate --dir docs/cli --connectors-dir $tmp_connectors",
+        "result": "pass",
+        "evidence": "Generated docs in docs/cli; connector docs written to temp dir only"
+      },
+      {
+        "command": "POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1",
+        "result": "pass",
+        "evidence": "ok polymetrics.ai/internal/cli 9.869s"
+      },
+      {
+        "command": "go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1",
+        "result": "pass",
+        "evidence": "ok polymetrics.ai/internal/cli 6.724s"
+      },
+      {
+        "command": "gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify",
+        "result": "pass",
+        "evidence": "go test ./... internal/cli 170.546s and internal/connectors/certify 339.739s; make verify internal/cli 171.209s and internal/connectors/certify 342.470s; smoke ok; 0 issues; connectorgen validate: 547 connector(s) checked, 0 findings"
+      }
+    ]
+  },
   "finalGates": [
     {
       "command": "cd website && pnpm run gen:docs",
@@ -140,7 +197,7 @@
     "grep": "--progress ndjson, Future TTY renderers, stderr may also include, invalid UI/progress flag"
   },
   "review": {
-    "status": "pending_push",
+    "status": "pr_body_updated_pending_push_and_review_coverage",
     "route": "pr_457_same_branch"
   }
 }

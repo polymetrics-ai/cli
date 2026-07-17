@@ -130,3 +130,41 @@ Safety notes:
 - [x] No credentialed connector checks run.
 - [x] No reverse ETL execution run outside `make verify` smoke gate using local sample/outbox fixture.
 - [x] No parent/shared ledger edits made.
+
+## Review-fix #2 verification checklist — PR #457 head `2195a66659be9d62bf99bfc8e2506e77da81e02f`
+
+Focused red/green gates:
+
+- [x] Red docs validation: `rg -n "CLICOLOR_FORCE" docs/design/tui-ux-design.md` showed stale design-doc claims at lines 63 and 376.
+- [x] Red help test after test expectation update: `go test ./internal/cli/... -run 'TestGlobalUIFlagsDocumentedInHelp' -count=1` failed for root/ETL/flow missing `3 validation error` wording.
+- [x] Regenerated docs via existing project command: `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir "$tmp_connectors"`.
+- [x] Regenerated golden/manual artifacts: `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1`.
+- [x] Focused gate: `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1` passed, `internal/cli 6.724s`.
+
+Full gates if Go/help changed:
+
+- [x] `gofmt -w cmd internal`
+- [x] `go vet ./...`
+- [x] `go test ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
+- [x] PR #457 body updated with review-fix #2 disposition via GitHub REST API.
+- [ ] `git push origin feat/405-tty-ndjson-progress`
+
+Review-fix #2 command log:
+
+| Command | Result | Notes |
+|---|---|---|
+| `go test ./internal/cli/... -run 'TestGlobalUIFlagsDocumentedInHelp' -count=1` | fail | root/ETL/flow help missing `3 validation error`. |
+| `tmp_connectors=$(mktemp -d); go run ./cmd/pm docs generate --dir docs/cli --connectors-dir "$tmp_connectors"; rm -rf "$tmp_connectors"` | pass | Regenerated `docs/cli`; connector docs written to temp dir only. |
+| `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1` | pass | `internal/cli 9.869s`. |
+| `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1` | pass | `internal/cli 6.724s`. |
+| `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify` | pass | `go test ./...`: `internal/cli 170.546s`, `internal/connectors/certify 339.739s`; `make verify`: `internal/cli 171.209s`, `internal/connectors/certify 342.470s`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`. |
+| `gh api --method PATCH repos/polymetrics-ai/cli/pulls/457 --input /tmp/pr-457-body-rf2.json --silent` | pass | PR body updated; no output. |
+
+Safety notes:
+
+- [x] No secrets needed.
+- [x] No new dependencies planned.
+- [x] No credentialed connector checks planned.
+- [x] No reverse ETL execution planned outside standard local verification smoke gates.

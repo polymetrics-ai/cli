@@ -59,7 +59,20 @@ Remote Website checks initially failed because `website/lib/docs.generated.ts` n
 - Final combined gate passed: `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify`.
 - Key full-gate output: `go test ./...` included `internal/cli 170.511s`, `internal/connectors/certify 340.438s`; `make verify` included `internal/cli 171.287s`, `internal/connectors/certify 342.514s`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`.
 
+## Review-fix #2 delivered
+
+- Removed `CLICOLOR_FORCE` support claims from `docs/design/tui-ux-design.md`; design docs now state the implemented color controls: `NO_COLOR`, `CLICOLOR=0`, and `TERM=dumb`.
+- Added exit code `3` validation-error wording for invalid UI/progress flags to root, ETL, and flow runtime help.
+- Regenerated `docs/cli/etl.md`, `docs/cli/flow.md`, and golden transcripts with existing project commands.
+
+## Review-fix #2 verification
+
+- Red validation captured: `rg -n "CLICOLOR_FORCE" docs/design/tui-ux-design.md` found stale claims; `go test ./internal/cli/... -run 'TestGlobalUIFlagsDocumentedInHelp' -count=1` failed for root/ETL/flow missing `3 validation error` wording.
+- Focused gate passed: `go test ./internal/cli/... -run 'TestGolden|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1` (`internal/cli 6.724s`).
+- Full gate passed: `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify`.
+- Key full-gate output: `go test ./...` included `internal/cli 170.546s`, `internal/connectors/certify 339.739s`; `make verify` included `internal/cli 171.209s`, `internal/connectors/certify 342.470s`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`.
+
 ## Pending
 
-- Push review-fix slice to `origin feat/405-tty-ndjson-progress`.
+- Push review-fix #2 slice to `origin feat/405-tty-ndjson-progress`.
 - Confirm automated review coverage after fix commit; do not merge parent PR #438 to `main`.
