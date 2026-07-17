@@ -198,5 +198,26 @@ Full nested normal/race/integration/race-integration/vet/build/make and root ver
 JSON/hygiene gates pass. Lint remains exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`, with zero
 changed-file finding. Generated binaries are absent and `verificationPassed=true`. Fresh independent
 read-only GPT-5.6 Sol/high review of `7432f0a5...2b0c5ea7` passes with no findings and confirms the six
-required scope/security/portability/assertion/evidence/gate conditions. Replacement review follows this
-evidence-only commit before normal push; new PR CI remains pending. No canary or merge is authorized.
+required scope/security/portability/assertion/evidence/gate conditions. Replacement review at
+`0ab3651cfa437f035b2bfc81ce7a82483c37f5d5` also passed before push.
+
+Fresh CI run `29587523261`, job `87908092713`, confirmed the descendant assertion fix and exposed the
+remaining cross-owner portability condition: GitHub's canonical host Node is not owned by the runner,
+so unchanged production bounded/no-follow/owned-regular qualification correctly rejects it. Human
+authorization now permits one test-process-owned Node copy only. The fixture will resolve host Node only
+for source bytes, stream at most 256 MiB plus one into an exclusively created executable under a private
+0700 temp directory, verify ownership/type/mode without following symlinks, share it once per test
+process, and remove the exact directory through package lifecycle. Production policy and code remain
+immutable.
+
+The implemented fixture is lazy and package-scoped: `sync.Once` copies Node only for test processes that
+request it, while `TestMain` removes the exact private directory. The copy is streamed through a 256 MiB
++ 1 limiter into an exclusively created file, synced, closed, chmodded 0500, and `Lstat`-verified as an
+owned regular non-symlink executable. Repeated calls return one path; unchanged production qualification
+accepts it and rejects a symlink to it.
+
+Focused count-10, GSD race count-3/normal count-5, full nested normal/race/integration/race-integration/
+vet/build/make, root verify/boundary/list/diff/JSON/hygiene, exact lint baseline, fixture-temp cleanup,
+and generated-binary absence all pass. `verificationPassed=true`; state is
+`stacked_pr_ci_recheck_pending`. Exact-head review, normal push, and fresh CI remain; CI success is not
+claimed. No canary or merge is authorized.

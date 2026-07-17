@@ -7,10 +7,11 @@ Slices A-G of the Shepherd proof/recovery repair remain accepted through exact S
 `17ca31f6d04def71d55137d25d8194feaea10829` and
 `e53e9e56b67145419a11f1b577f858922e1a4c50`. Typed deletion proofs and execution-time bounded Git
 output are accepted at draft stacked PR #456 head `7432f0a5da90f255b74307d12c26863b61c1a16f`.
-The active stage is the explicitly authorized test-infrastructure repair for that PR's failed
-`nested-module` check: canonicalize Node only in GSD test fixtures and make one descendant assertion
-use bounded eventual verification. Production `.go` files, security policy, dependencies, canaries,
-credentials, cleanup/migration, PR merges, and `main` remain out of scope.
+The first test-infrastructure repair removed the descendant assertion failure, but fresh PR #456 CI
+run `29587523261`, job `87908092713`, proved the GitHub Ubuntu canonical Node is not owned by the test
+user and still correctly fails production qualification. The active stage is the explicitly authorized
+test-owned Node executable fixture. Production `.go` files, security policy, workflows, dependencies,
+Podman/provisioning, canaries, credentials, cleanup/migration, PR merges, and `main` remain out of scope.
 
 ## Required workflow and skills loaded
 
@@ -499,6 +500,62 @@ phase artifacts, verification, exact-head GPT-5.6 Sol/high review, push, and PR 
 `golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`,
 `golang-concurrency`, and `golang-lint`. Requested `.pi/skills/go-implementation/SKILL.md` is absent;
 the healthy repo-local GSD adapter is used without manual fallback.
+
+## Draft PR #456 test-owned Node CI correction — IMPLEMENTED / LOCAL GREEN
+
+Fresh CI RED: workflow run `29587523261`, job `87908092713`, check `nested-module`. The prior bounded
+PID correction succeeded: no descendant-cleanup test failed. All remaining failures report
+`runtime_contract_mismatch: open bounded runtime source`, including the canonical-node admission step
+in `TestResolveQualifiedNodeRejectsSymlinkedExecutable`. The host Node symlink chain now resolves, but
+the GitHub-hosted executable is not owned by the runner user. Production correctly requires current-user
+ownership, regular/non-symlink/executable type, no-follow opening, bounded bytes, and exact hash.
+Ordinary local environments cannot faithfully reproduce the cross-owner condition without privilege
+manipulation; no local RED will be manufactured by weakening production behavior.
+
+Test-only implementation contract:
+
+- Introduce one package-lifecycle test-owned Node executable, preferably lazy `sync.Once` setup governed
+  by package `TestMain` so helper subprocesses that never request Node create nothing and the exact private
+  temp directory is removed before final `os.Exit`.
+- Resolve host `node` with `exec.LookPath`, `filepath.Abs`, and `filepath.EvalSymlinks` only to obtain
+  source bytes. Copy once per test process into a mode-0700 private temporary directory.
+- Stream at most 256 MiB plus one byte; reject max+1, never buffer the executable, create the destination
+  exclusively, then sync, close, and chmod owner-executable only.
+- `Lstat` the destination and require current-user ownership, regular non-symlink type, and executable
+  mode. Keep setup/cleanup errors bounded and never expose executable contents or secret values.
+- Make `qualifiedNodePathForTest` return the shared test-owned path. Prove the owned canonical copy passes
+  unchanged production qualification and a symlink to it remains rejected.
+- Prove a symlinked `node` on PATH resolves through the shared test-owned fixture, while pinned registry
+  and private runtime snapshot behavior remain green.
+- Change only `agent-runtime/shepherd/internal/gsd/*_test.go` plus issue-389 phase artifacts. Do not
+  modify `resolveQualifiedNode`, `source_file_unix.go`, any production file, workflow, dependency, or gate.
+
+TDD uses the fresh CI failure as RED. Focused count-10, GSD race count-3/normal count-5, full nested
+normal/race/integration/race-integration/vet/build/make, root verify/boundary/list/diff/JSON/hygiene,
+exact lint baseline, and fresh GPT-5.6 Sol/high review must pass before one normal push. Before push,
+state becomes `stacked_pr_ci_recheck_pending`; it must not claim remote CI success. No planning-only
+commit follows green CI because it would stale the successful checks.
+
+Implementation uses lazy `sync.Once` plus package `TestMain`: helper subprocesses that never request Node
+copy nothing, while each requesting test process creates exactly one private, owned executable. Source
+resolution is `LookPath` + `Abs` + `EvalSymlinks`; `io.LimitReader`/`io.Copy` detects 256 MiB + 1 without
+buffering. The destination uses exclusive create, checked source/destination closes, sync, chmod 0500,
+and owned regular non-symlink executable `Lstat` verification. `TestMain` removes only the recorded
+private directory and fails the process on cleanup errors. The same copied path passes unchanged
+`resolveQualifiedNode`; a symlink to it remains rejected.
+
+Focused count-10, GSD race count-3/normal count-5, full nested normal/race/integration/race-integration/
+vet/build/make, root verify/boundary/list/diff/JSON/hygiene, exact lint baseline, fixture-temp cleanup,
+and generated-binary absence all pass. State is `stacked_pr_ci_recheck_pending`; exact-head review and
+fresh CI remain and remote success is not claimed.
+
+Orchestration: active parent owner confirms PR #390 remains draft/human-gated and PR #456 remains the
+only issue-389 delivery. One isolated GPT-5.5/high worker owned test-only implementation; coordinator owns
+phase evidence integration, canonical full verification, exact-head GPT-5.6 Sol/high review, push, PR
+status, and CI monitoring. Skills: `gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`,
+`golang-how-to`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`,
+`golang-safety`, and `golang-lint`. `.pi/skills/go-implementation/SKILL.md` remains absent; the healthy
+repo-local GSD adapter is used without fallback.
 
 ## Post-Slice-G bounded Git / descriptor-root follow-up
 

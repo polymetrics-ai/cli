@@ -319,6 +319,45 @@ Targeted/full gates:
 - [ ] Fresh PR #456 checks all pass; PR remains draft.
 - [ ] Only then set `stacked_pr_green_awaiting_canary_approval`; canaries remain separately gated.
 
+### Draft PR #456 test-owned Node executable correction
+
+RED/workflow:
+
+- [x] Start local/remote/PR head clean and equal at `0ab3651cfa437f035b2bfc81ce7a82483c37f5d5`.
+- [x] Fresh CI run `29587523261`, job `87908092713`, `nested-module` failure recorded.
+- [x] Descendant cleanup is green in fresh CI; remaining failures are bounded runtime source admission.
+- [x] Cross-owner host Node condition is accepted as CI RED; no privilege manipulation or weakened local RED.
+- [x] GSD doctor/list/sources/programming-loop and required skill loading pass.
+
+Test-owned executable:
+
+- [x] One shared test-owned Node copy is created at most once per test process.
+- [x] Source uses `LookPath` + `Abs` + `EvalSymlinks` only to obtain copy bytes.
+- [x] Private directory is mode 0700; destination uses exclusive create and owner-only executable mode.
+- [x] Streaming copy rejects 256 MiB + 1 without full-file buffering.
+- [x] Destination is synced, closed, chmodded, then `Lstat`-verified as current-user-owned executable
+      regular non-symlink.
+- [x] Package lifecycle removes the exact temporary directory before `os.Exit`, including setup failure.
+- [x] Copied canonical binary passes unchanged production qualification.
+- [x] Symlink to copied binary remains rejected by unchanged production qualification.
+- [x] Symlinked PATH fixture, pinned registry, and private snapshot behaviors pass.
+- [x] No production, workflow, dependency, provisioning, platform skip, or quality-gate change.
+
+Gates/review/push:
+
+- [x] Requested focused test set passes `-count=10`.
+- [x] `go test -race ./internal/gsd -count=3` passes.
+- [x] `go test ./internal/gsd -count=5` passes.
+- [x] Full nested normal/race/integration/race-integration/vet/build/`make verify` passes.
+- [x] Lint remains exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`, zero changed-file findings.
+- [x] Root verify/module-boundary/list/diff/JSON/hygiene and binary absence pass.
+- [x] Test-owned fixture directory is absent after test-process exit.
+- [x] Before push, RUN-STATE is exactly `stacked_pr_ci_recheck_pending`, without claiming CI success.
+- [ ] Fresh GPT-5.6 Sol/high exact-head review of `0ab3651c...HEAD` has no findings.
+- [ ] One normal push yields exact local/remote equality and a clean tree.
+- [ ] Fresh PR #456 checks are green at the exact pushed head; PR remains draft.
+- [ ] Green CI evidence is posted to PR #456 without another commit.
+
 ## Required command gates after each coherent slice
 
 ```bash

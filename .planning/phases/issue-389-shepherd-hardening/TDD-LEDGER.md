@@ -875,5 +875,89 @@ Fresh independent read-only `openai-codex/gpt-5.6-sol`/high review of exact rang
 returns PASS with no findings. It confirms only test/planning files changed; production no-follow/
 no-symlink/hash qualification is intact; all fixture commands/hashes use deterministic canonical Node;
 PID assertions are strict, bounded, and cannot accept a live descendant; evidence is truthful; and no
-quality gate was weakened. This evidence-only commit requires replacement exact-head review before
-normal push. Fresh PR #456 CI remains pending.
+quality gate was weakened. Replacement exact-head GPT-5.6 Sol/high review at
+`0ab3651cfa437f035b2bfc81ce7a82483c37f5d5` also passed with no findings before normal push.
+
+## Draft PR #456 test-owned Node executable correction — RED
+
+Start head/local/remote/PR: `0ab3651cfa437f035b2bfc81ce7a82483c37f5d5`, clean and draft. Parent PR
+#390 remains draft at `d72e597e35b5104cf58936612053705c280fc2b1` and human-gated. Repo-local GSD
+doctor/list/sources/programming-loop checks pass. Required skills loaded: `gsd-core`,
+`polymetrics-issue-delivery`, `gsd-programming-loop`, `golang-how-to`, `golang-testing`,
+`golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, and
+`golang-lint`; requested `go-implementation` remains absent without fallback.
+
+Fresh CI is the RED environment:
+
+```text
+workflow run: 29587523261
+job: 87908092713
+check: nested-module
+runtime_contract_mismatch: open bounded runtime source
+```
+
+The prior descendant timing failure is absent. Remaining failures include
+`TestRegistryRuntimeFixtureCanonicalizesSymlinkedNodeOnPATH`,
+`TestResolveQualifiedNodeRejectsSymlinkedExecutable`, pinned registry tests, and private host snapshot
+tests. `EvalSymlinks` succeeds, but bounded production admission rejects the canonical host Node because
+it is not owned by the runner user. This is correct production behavior. Ordinary local environments
+cannot reproduce cross-owner CI faithfully without privilege manipulation; no local RED is manufactured
+and production ownership/no-follow/type/mode/hash checks remain immutable.
+
+Required direct GREEN tests:
+
+- copied test-owned canonical Node passes unchanged `resolveQualifiedNode` qualification;
+- a symlink to that exact owned binary returns `ErrRuntimeContractMismatch`;
+- a symlinked Node on PATH still leads registry fixtures to the shared test-owned canonical executable;
+- pinned registry and private runtime snapshot behavior stays valid.
+
+Implementation must copy only once per test process through package lifecycle, stream with 256 MiB + 1
+rejection, use exclusive create, sync/close/chmod, verify owned regular non-symlink executable identity,
+and remove only its exact private temp directory in `TestMain`. No production, workflow, dependency,
+provisioning, canary, cleanup/migration, merge, or `main` change is authorized. `verificationPassed=false`
+until all local gates pass.
+
+### GREEN — one bounded test-process-owned Node executable
+
+Isolated `openai-codex/gpt-5.5`/high worker produced temporary handoff
+`4b2e5b4290908c270cbe6146ab9ed5c45543db97`; coordinator integrated only its two authorized test-file
+changes with the pre-recorded phase evidence for one final commit.
+
+Implementation:
+
+- lazy package `sync.Once` creates at most one copy per requesting test process;
+- package `TestMain` removes only the recorded fixture directory before `os.Exit` and fails on cleanup;
+- source `node` uses `LookPath`, `Abs`, and `EvalSymlinks` only for copy bytes;
+- private temp directory is enforced at 0700;
+- fixed destination uses exclusive create, streaming `io.LimitReader`/`io.Copy`, and 256 MiB + 1 rejection;
+- source/destination close errors are checked, destination is synced then chmodded 0500;
+- final `Lstat` requires exact size, regular non-symlink executable type, and current-user ownership;
+- repeated helper calls return one path; unchanged production qualification accepts it and rejects a
+  symlink to it;
+- errors are bounded and include no executable contents or secrets.
+
+Coordinator verification:
+
+```text
+focused test-owned Node set -count=10: PASS (12.104s)
+go test -race ./internal/gsd -count=3: PASS (38.626s)
+go test ./internal/gsd -count=5: PASS (12.336s)
+go test ./...: PASS
+go test -race ./...: PASS
+go test -tags=integration ./integration/... -count=1: PASS (133.398s)
+go test -race -tags=integration ./integration/... -count=1: PASS (583.408s)
+go vet ./...: PASS
+go build ./cmd/shepherd: PASS
+make verify (nested): PASS
+make verify (root): PASS
+scripts/tests/shepherd-module-boundary.sh: PASS
+go list ./...: PASS (145 packages)
+git diff --check and planning JSON: PASS
+test-owned fixture temporary directory absent after test processes: PASS
+generated pm/shepherd binaries absent: PASS
+```
+
+Lint returns the exact accepted baseline: 25 `errcheck`, 2 `staticcheck`, 1 `unused`, with zero finding
+in either changed test file. No production, workflow, dependency, provisioning, skip, or gate change.
+`verificationPassed=true`; state is `stacked_pr_ci_recheck_pending`. Exact-head GPT-5.6 Sol/high review,
+normal push, and fresh CI remain; CI success is not claimed.

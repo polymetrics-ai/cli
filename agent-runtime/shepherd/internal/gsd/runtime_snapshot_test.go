@@ -133,7 +133,11 @@ func TestPreparePinnedHostRuntimeRejectsWorkerControlledSourceAndNodeDrift(t *te
 }
 
 func TestResolveQualifiedNodeRejectsSymlinkedExecutable(t *testing.T) {
+	firstNode := qualifiedNodePathForTest(t)
 	canonicalNode := qualifiedNodePathForTest(t)
+	if canonicalNode != firstNode {
+		t.Fatalf("test-owned Node fixture path changed: first=%q second=%q", firstNode, canonicalNode)
+	}
 	nodeDigest, _, err := boundedRuntimeFileSHA256(canonicalNode, 256*1024*1024)
 	if err != nil {
 		t.Fatal(err)

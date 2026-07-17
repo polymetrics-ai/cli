@@ -4,9 +4,9 @@
   "base_head": "ee474811378edd604e1e86e413f0bcafeced452b",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "stacked_pr_ci_fix_review_evidence_pending_replacement",
+  "state": "stacked_pr_ci_recheck_pending",
   "verificationPassed": true,
-  "current_slice": "draft_pr_456_nested_module_test_infrastructure_fix_reviewed",
+  "current_slice": "draft_pr_456_test_owned_node_executable_fixture_local_green",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "authorized_review_fix": {
     "authorization": "Production changes are limited to the two confirmed exact-head findings and minimum schema/test propagation.",
@@ -66,11 +66,39 @@
     "review_model": "openai-codex/gpt-5.6-sol",
     "review_thinking": "high",
     "review_result": "pass_no_findings_all_six_confirmations",
-    "replacement_review_after_evidence_commit": "pending",
-    "fresh_pr_ci": "pending",
+    "replacement_review_after_evidence_commit": "pass_at_0ab3651cfa437f035b2bfc81ce7a82483c37f5d5",
+    "fresh_pr_ci": "failed_run_29587523261_job_87908092713_canonical_host_node_not_owned_by_runner",
     "production_change_authorized": false,
     "production_files_changed": false,
     "production_symlink_policy_must_remain_fail_closed": true
+  },
+  "authorized_test_owned_node_ci_fix": {
+    "authorization": "Test-only package-lifecycle Node executable copy and issue-389 planning evidence; production and workflows prohibited.",
+    "start_head": "0ab3651cfa437f035b2bfc81ce7a82483c37f5d5",
+    "red_workflow_run": 29587523261,
+    "red_job": 87908092713,
+    "red_check": "nested-module",
+    "red_summary": "Canonical GitHub Ubuntu Node is not owned by the runner and correctly fails unchanged production bounded no-follow qualification; descendant cleanup now passes.",
+    "local_red_disposition": "Cross-owner condition cannot be faithfully reproduced without privilege manipulation; do not manufacture RED or weaken production.",
+    "allowed_paths": [
+      "agent-runtime/shepherd/internal/gsd/*_test.go",
+      ".planning/phases/issue-389-shepherd-hardening/**"
+    ],
+    "required_state_before_push": "stacked_pr_ci_recheck_pending",
+    "worker_handoff": "4b2e5b4290908c270cbe6146ab9ed5c45543db97",
+    "implementation_model": "openai-codex/gpt-5.5",
+    "implementation_thinking": "high",
+    "copy_lifecycle": "lazy sync.Once per test process with TestMain exact-directory cleanup",
+    "copy_bound": "256 MiB plus one byte rejection",
+    "targeted_stress": "pass",
+    "full_local_verification": "pass",
+    "lint": "25 errcheck, 2 staticcheck, 1 unused; zero changed-file findings",
+    "fixture_cleanup": "pass_no_temp_executable_remaining",
+    "exact_head_review": "pending",
+    "production_change_authorized": false,
+    "production_files_changed": false,
+    "workflow_change_authorized": false,
+    "ci_success": "not_claimed_recheck_pending"
   },
   "completed_slices": [
     {
@@ -365,6 +393,21 @@
       "cycle": "cycle-44-draft-pr-456-nested-module-ci-fix-review",
       "decision": "read_only_spawned",
       "reason": "Fresh independent openai-codex/gpt-5.6-sol high review of 7432f0a5da90f255b74307d12c26863b61c1a16f...2b0c5ea75686d1f5c4891c00d592f4aea4bca0ae passes with no findings and confirms test/planning-only scope, unchanged production symlink security, deterministic canonical fixtures, strict bounded live-process rejection, truthful evidence, and unchanged quality gates. The evidence-only commit receives replacement exact-head review before push."
+    },
+    {
+      "cycle": "cycle-45-draft-pr-456-test-owned-node-plan-red",
+      "decision": "local_critical_path",
+      "reason": "Active parent owner accepts fresh CI run 29587523261 job 87908092713 as RED: descendant cleanup is fixed, while canonical GitHub Node still correctly fails current-user ownership qualification. Plan authorizes one isolated GPT-5.5/high test-only worker for a bounded package-lifecycle owned executable copy; no local privilege RED, production/workflow change, provisioning, dependency, canary, cleanup/migration, merge, or main mutation. verificationPassed is false."
+    },
+    {
+      "cycle": "cycle-46-draft-pr-456-test-owned-node-green",
+      "decision": "spawned",
+      "reason": "One isolated openai-codex/gpt-5.5 high worker produced test-only handoff 4b2e5b4290908c270cbe6146ab9ed5c45543db97. Coordinator integrated only two internal/gsd test files: lazy once-per-process bounded streaming Node copy, exact TestMain cleanup, owned regular executable verification, unchanged production admission success, and symlink rejection."
+    },
+    {
+      "cycle": "cycle-47-draft-pr-456-test-owned-node-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused count-10, internal GSD race count-3/normal count-5, full nested normal/race/integration/race-integration/vet/build/make, root make/boundary/list/diff/JSON/hygiene, fixture-temp and generated-binary absence, and exact 25 errcheck/2 staticcheck/1 unused zero-differential lint pass. verificationPassed is true and state is stacked_pr_ci_recheck_pending; exact-head review and fresh CI remain, with no CI success claim."
     }
   ],
   "slice_b_checkpoint": {
@@ -373,9 +416,9 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Commit review evidence and run replacement exact-head GPT-5.6 Sol/high review over 7432f0a5da90f255b74307d12c26863b61c1a16f...HEAD",
-    "Push normally, confirm local/remote equality, update draft PR #456 evidence, and monitor fresh CI",
-    "If CI is green, commit final stacked_pr_green_awaiting_canary_approval evidence, review/push that exact head, monitor final CI, and stop before canaries"
+    "Commit the authorized test/planning diff once with test(shepherd): qualify test-owned Node runtime",
+    "Run fresh exact-head GPT-5.6 Sol/high review over 0ab3651cfa437f035b2bfc81ce7a82483c37f5d5...HEAD",
+    "Push normally, monitor fresh PR #456 checks, comment green evidence without another commit, and stop before canaries"
   ],
   "blocked": [
     "Twenty/Asana canaries without separate explicit approval",
