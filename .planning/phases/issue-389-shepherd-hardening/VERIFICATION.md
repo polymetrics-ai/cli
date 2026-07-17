@@ -353,7 +353,15 @@ Gates/review/push:
 - [x] Root verify/module-boundary/list/diff/JSON/hygiene and binary absence pass.
 - [x] Test-owned fixture directory is absent after test-process exit.
 - [x] Before push, RUN-STATE is exactly `stacked_pr_ci_recheck_pending`, without claiming CI success.
-- [ ] Fresh GPT-5.6 Sol/high exact-head review of `0ab3651c...HEAD` has no findings.
+- [x] Initial GPT-5.6 Sol/high exact-head review at `5c07a67b` ran; one medium symlinked-PATH test finding accepted.
+- [x] Fresh helper process performs its first fixture setup with PATH pointing to a symlink and proves a
+      distinct owned canonical child copy without recursion.
+- [x] Child process has a 10-second bound, 64 KiB per-stream output bound, minimal environment, and exact
+      recursion marker; child `TestMain` cleans its own fixture.
+- [x] Affected/full gates rerun after the review fix. Initial integration-race run timed out at 600.5s
+      without race report; exact unchanged retry passed at 594.7s.
+- [x] One new test-only `QF1008` fixed; lint baseline and zero changed-file findings restored.
+- [ ] Replacement GPT-5.6 Sol/high exact-head review of `0ab3651c...HEAD` has no findings.
 - [ ] One normal push yields exact local/remote equality and a clean tree.
 - [ ] Fresh PR #456 checks are green at the exact pushed head; PR remains draft.
 - [ ] Green CI evidence is posted to PR #456 without another commit.

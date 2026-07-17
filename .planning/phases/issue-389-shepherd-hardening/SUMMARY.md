@@ -219,5 +219,15 @@ accepts it and rejects a symlink to it.
 Focused count-10, GSD race count-3/normal count-5, full nested normal/race/integration/race-integration/
 vet/build/make, root verify/boundary/list/diff/JSON/hygiene, exact lint baseline, fixture-temp cleanup,
 and generated-binary absence all pass. `verificationPassed=true`; state is
-`stacked_pr_ci_recheck_pending`. Exact-head review, normal push, and fresh CI remain; CI success is not
+`stacked_pr_ci_recheck_pending`. Initial exact-head Sol/high review at `5c07a67b` BLOCKED on one test
+quality issue: the registry PATH-symlink test primed `sync.Once` before changing PATH. The accepted
+in-scope correction now runs first-time fixture setup in a bounded fresh helper test process under the
+symlinked PATH, proves `LookPath`/`EvalSymlinks` source identity plus a distinct child-owned canonical
+copy, loads the registry, and cleans via child `TestMain` without recursion.
+
+Focused/full normal/race/integration gates pass. One integration-race run timed out at 600.5s without a
+race report; the exact unchanged retry passed at 594.7s. One new test-only staticcheck finding was fixed;
+lint is again exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`. Nested/root verification, boundary,
+list/diff/JSON/hygiene and fixture/binary cleanup pass. State returns to
+`stacked_pr_ci_recheck_pending`; replacement review, normal push, and fresh CI remain. CI success is not
 claimed. No canary or merge is authorized.

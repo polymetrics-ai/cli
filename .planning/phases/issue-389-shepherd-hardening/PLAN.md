@@ -546,8 +546,20 @@ private directory and fails the process on cleanup errors. The same copied path 
 
 Focused count-10, GSD race count-3/normal count-5, full nested normal/race/integration/race-integration/
 vet/build/make, root verify/boundary/list/diff/JSON/hygiene, exact lint baseline, fixture-temp cleanup,
-and generated-binary absence all pass. State is `stacked_pr_ci_recheck_pending`; exact-head review and
-fresh CI remain and remote success is not claimed.
+and generated-binary absence all passed at `5c07a67b`. Exact-head GPT-5.6 Sol/high review BLOCKED on
+one in-scope test-quality defect: `TestRegistryRuntimeFixtureCanonicalizesSymlinkedNodeOnPATH` called the
+shared helper before changing PATH, so `sync.Once` was already consumed and first-time PATH symlink
+resolution was not exercised. The accepted review fix now uses a bounded fresh helper test process whose
+first fixture setup sees PATH pointing to a symlink, verifies `LookPath`/`EvalSymlinks` source identity,
+creates a distinct child-owned canonical copy, loads the registry, avoids recursion, bounds output, and
+cleans through child `TestMain`.
+
+Focused count-10/race and full nested normal/race/integration gates pass. One integration-race run hit
+the existing 10-minute ceiling at 600.5s without a race report; the exact unchanged retry passed at
+594.7s. Vet/build/nested/root make, boundary/list/diff/JSON/hygiene and fixture/binary cleanup pass. One
+new test-only `QF1008` was fixed and lint again matches exactly 25 `errcheck`, 2 `staticcheck`, 1
+`unused`. State is restored to `stacked_pr_ci_recheck_pending`; replacement exact-head review and fresh
+CI remain, and remote success is unclaimed.
 
 Orchestration: active parent owner confirms PR #390 remains draft/human-gated and PR #456 remains the
 only issue-389 delivery. One isolated GPT-5.5/high worker owned test-only implementation; coordinator owns

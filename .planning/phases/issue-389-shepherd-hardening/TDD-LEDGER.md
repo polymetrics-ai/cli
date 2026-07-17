@@ -961,3 +961,48 @@ Lint returns the exact accepted baseline: 25 `errcheck`, 2 `staticcheck`, 1 `unu
 in either changed test file. No production, workflow, dependency, provisioning, skip, or gate change.
 `verificationPassed=true`; state is `stacked_pr_ci_recheck_pending`. Exact-head GPT-5.6 Sol/high review,
 normal push, and fresh CI remain; CI success is not claimed.
+
+### Exact-head review RED — symlinked PATH setup not exercised
+
+Fresh read-only `openai-codex/gpt-5.6-sol`/high review of
+`0ab3651cfa437f035b2bfc81ce7a82483c37f5d5...5c07a67b5f9c3bec0714fee83369091d28a9cd40`
+returns BLOCKED with one medium in-scope finding. The registry PATH test calls
+`qualifiedNodePathForTest` before creating/prepending its symlink; that consumes package `sync.Once`.
+The later fixture call returns the cached path without `LookPath`/`EvalSymlinks`, so the test could pass
+if first-time symlinked PATH source resolution were broken.
+
+Accepted correction: launch the exact test in a fresh helper test process. The parent creates a PATH
+symlink to its owned fixture; the child begins with fresh package state, performs its first fixture setup
+under that PATH, proves the resulting command is a distinct child-owned canonical executable, and loads
+the registry. The environment marker prevents recursion. No production or package policy change is
+needed. `verificationPassed=false` while the test and affected/full gates are rerun.
+
+### Review-fix GREEN — fresh first-setup child process
+
+Isolated GPT-5.5/high worker handoff `64ad9d119465fc3f6e5da2209ca20b611f6ce7ff` changed only
+`internal/gsd/registry_test.go`. The parent creates a symlink to its owned copy, then launches the exact
+test in a fresh binary process with a 10-second context, bounded 64 KiB stdout/stderr collectors, minimal
+explicit environment, and recursion marker. The child begins with unused `sync.Once`, proves `LookPath`
+sees the PATH symlink and `EvalSymlinks` reaches the parent source, then requires registry fixture setup
+to create a distinct child-owned regular executable under the child's fixture directory and load the
+registry. Child and parent `TestMain` each remove their own exact fixture directory.
+
+Verification after integration:
+
+```text
+focused fresh-process/snapshot set -count=10: PASS (19.064s)
+focused fresh-process/symlink race -count=3: PASS (9.312s)
+go test ./internal/gsd -count=5: PASS (16.001s)
+full nested normal/race: PASS
+full integration normal: PASS (128.235s)
+full integration race first run: TIMEOUT at 600.541s during missing_required_gate; no race report
+full integration race exact unchanged retry: PASS (594.664s)
+go vet, go build, nested make verify: PASS
+```
+
+First lint run found one new test-only `QF1008` on `b.Buffer.Len()`; using the embedded `b.Len()` fixes
+it. Affected normal/race tests pass, and lint returns the exact 25 `errcheck`, 2 `staticcheck`, 1
+`unused` baseline with zero changed-file findings. Nested/root make, module boundary, 145-package list,
+diff/JSON/hygiene, fixture-temp cleanup, and generated-binary absence pass after the final source edit.
+`verificationPassed=true`; state returns to `stacked_pr_ci_recheck_pending`. Replacement exact-head review
+and fresh CI remain.

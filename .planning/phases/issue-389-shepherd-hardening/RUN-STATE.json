@@ -6,7 +6,7 @@
   "parent_pr": 390,
   "state": "stacked_pr_ci_recheck_pending",
   "verificationPassed": true,
-  "current_slice": "draft_pr_456_test_owned_node_executable_fixture_local_green",
+  "current_slice": "draft_pr_456_test_owned_node_review_fix_local_green",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "authorized_review_fix": {
     "authorization": "Production changes are limited to the two confirmed exact-head findings and minimum schema/test propagation.",
@@ -94,7 +94,7 @@
     "full_local_verification": "pass",
     "lint": "25 errcheck, 2 staticcheck, 1 unused; zero changed-file findings",
     "fixture_cleanup": "pass_no_temp_executable_remaining",
-    "exact_head_review": "pending",
+    "exact_head_review": "initial_blocked_at_5c07a67b_fixed_replacement_pending",
     "production_change_authorized": false,
     "production_files_changed": false,
     "workflow_change_authorized": false,
@@ -408,6 +408,16 @@
       "cycle": "cycle-47-draft-pr-456-test-owned-node-verify",
       "decision": "local_critical_path",
       "reason": "Focused count-10, internal GSD race count-3/normal count-5, full nested normal/race/integration/race-integration/vet/build/make, root make/boundary/list/diff/JSON/hygiene, fixture-temp and generated-binary absence, and exact 25 errcheck/2 staticcheck/1 unused zero-differential lint pass. verificationPassed is true and state is stacked_pr_ci_recheck_pending; exact-head review and fresh CI remain, with no CI success claim."
+    },
+    {
+      "cycle": "cycle-48-draft-pr-456-test-owned-node-review-fix",
+      "decision": "read_only_spawned",
+      "reason": "Fresh openai-codex/gpt-5.6-sol high review of 0ab3651cfa437f035b2bfc81ce7a82483c37f5d5...5c07a67b5f9c3bec0714fee83369091d28a9cd40 blocks on one medium in-scope test defect: the PATH-symlink test consumes sync.Once before changing PATH. Accepted fix delegates a fresh-process first-setup regression to an isolated GPT-5.5/high worker; verificationPassed returns false until affected/full gates and replacement review pass."
+    },
+    {
+      "cycle": "cycle-49-draft-pr-456-test-owned-node-review-fix-verify",
+      "decision": "spawned",
+      "reason": "Isolated GPT-5.5/high handoff 64ad9d119465fc3f6e5da2209ca20b611f6ce7ff adds a bounded fresh-process first-setup symlink regression. Focused/full normal/race/integration, vet/build/nested/root make, boundary/list/diff/JSON/hygiene and fixture/binary cleanup pass; one 600.5s race-integration timeout had no race report and exact retry passed at 594.7s. New QF1008 was fixed and exact lint baseline restored. verificationPassed is true; state is stacked_pr_ci_recheck_pending and replacement review remains."
     }
   ],
   "slice_b_checkpoint": {
@@ -416,8 +426,8 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Commit the authorized test/planning diff once with test(shepherd): qualify test-owned Node runtime",
-    "Run fresh exact-head GPT-5.6 Sol/high review over 0ab3651cfa437f035b2bfc81ce7a82483c37f5d5...HEAD",
+    "Commit the additive symlinked-PATH review fix and durable evidence",
+    "Run replacement exact-head GPT-5.6 Sol/high review over 0ab3651cfa437f035b2bfc81ce7a82483c37f5d5...HEAD",
     "Push normally, monitor fresh PR #456 checks, comment green evidence without another commit, and stop before canaries"
   ],
   "blocked": [

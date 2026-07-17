@@ -1,6 +1,7 @@
 package gsd
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -56,22 +57,140 @@ func TestLoadPinnedUnitRegistryNormalizesSpreadArraysAndCompleteContracts(t *tes
 	}
 }
 
+const (
+	registrySymlinkedNodeChildEnv  = "GSD_TEST_REGISTRY_SYMLINKED_NODE_CHILD"
+	registrySymlinkedNodeLinkEnv   = "GSD_TEST_REGISTRY_SYMLINKED_NODE_LINK"
+	registrySymlinkedNodeSourceEnv = "GSD_TEST_REGISTRY_SYMLINKED_NODE_SOURCE"
+)
+
 func TestRegistryRuntimeFixtureCanonicalizesSymlinkedNodeOnPATH(t *testing.T) {
-	canonicalNode := qualifiedNodePathForTest(t)
-	linkDir := t.TempDir()
-	link := filepath.Join(linkDir, "node")
-	if err := os.Symlink(canonicalNode, link); err != nil {
+	if os.Getenv(registrySymlinkedNodeChildEnv) == "1" {
+		testRegistryRuntimeFixtureCanonicalizesSymlinkedNodeOnPATHChild(t)
+		return
+	}
+
+	parentNode := qualifiedNodePathForTest(t)
+	parentNodeSource, err := filepath.EvalSymlinks(parentNode)
+	if err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PATH", linkDir+string(os.PathListSeparator)+os.Getenv("PATH"))
+	linkDir := t.TempDir()
+	link := filepath.Join(linkDir, "node")
+	if err := os.Symlink(parentNode, link); err != nil {
+		t.Fatal(err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	executable, err := os.Executable()
+	if err != nil {
+		t.Fatal(err)
+	}
+	cmd := exec.CommandContext(ctx, executable, "-test.run=^TestRegistryRuntimeFixtureCanonicalizesSymlinkedNodeOnPATH$")
+	childPath := linkDir
+	if inheritedPath := os.Getenv("PATH"); inheritedPath != "" {
+		childPath += string(os.PathListSeparator) + inheritedPath
+	}
+	cmd.Env = []string{
+		registrySymlinkedNodeChildEnv + "=1",
+		registrySymlinkedNodeLinkEnv + "=" + link,
+		registrySymlinkedNodeSourceEnv + "=" + parentNodeSource,
+		"PATH=" + childPath,
+		"TMPDIR=" + os.TempDir(),
+	}
+	var stdout, stderr boundedTestOutput
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	if err := cmd.Run(); err != nil {
+		if ctx.Err() != nil {
+			t.Fatalf("child registry fixture test timed out: %v\nstdout:\n%s\nstderr:\n%s", ctx.Err(), stdout.String(), stderr.String())
+		}
+		t.Fatalf("child registry fixture test failed: %v\nstdout:\n%s\nstderr:\n%s", err, stdout.String(), stderr.String())
+	}
+}
+
+func testRegistryRuntimeFixtureCanonicalizesSymlinkedNodeOnPATHChild(t *testing.T) {
+	pathLink := os.Getenv(registrySymlinkedNodeLinkEnv)
+	sourceTarget := os.Getenv(registrySymlinkedNodeSourceEnv)
+	if pathLink == "" || sourceTarget == "" {
+		t.Fatal("child symlink fixture environment is incomplete")
+	}
+	if firstPathEntry, _, _ := strings.Cut(os.Getenv("PATH"), string(os.PathListSeparator)); firstPathEntry != filepath.Dir(pathLink) {
+		t.Fatalf("child PATH begins with %q, want symlink directory %q", firstPathEntry, filepath.Dir(pathLink))
+	}
+
+	looked, err := exec.LookPath("node")
+	if err != nil {
+		t.Fatal(err)
+	}
+	looked, err = filepath.Abs(looked)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if looked != pathLink {
+		t.Fatalf("LookPath node=%q want PATH symlink %q", looked, pathLink)
+	}
+	resolvedSource, err := filepath.EvalSymlinks(looked)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if resolvedSource != sourceTarget {
+		t.Fatalf("PATH symlink source=%q want parent-owned executable %q", resolvedSource, sourceTarget)
+	}
 
 	command, gsdHome, options := writeRegistryRuntimeFixture(t, officialRegistryModuleFixture())
-	if command[0] != canonicalNode {
-		t.Fatalf("fixture command node=%q want canonical %q", command[0], canonicalNode)
+	childNode := command[0]
+	if childNode == pathLink || childNode == sourceTarget {
+		t.Fatalf("fixture command node=%q must be distinct from PATH symlink %q and source %q", childNode, pathLink, sourceTarget)
+	}
+	childNodeSource, err := filepath.EvalSymlinks(childNode)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if childNodeSource == pathLink || childNodeSource == sourceTarget {
+		t.Fatalf("fixture command node source=%q must be distinct from PATH symlink %q and source %q", childNodeSource, pathLink, sourceTarget)
+	}
+	info, err := os.Lstat(childNode)
+	if err != nil || info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() || info.Mode().Perm()&0o111 == 0 || !runtimePathOwnedByCurrentUser(info) {
+		t.Fatalf("fixture command node=%q is not an executable non-symlink regular file owned by the current user", childNode)
+	}
+	testOwnedNodeMu.Lock()
+	childFixtureDir := testOwnedNodeDir
+	testOwnedNodeMu.Unlock()
+	if childFixtureDir == "" || filepath.Dir(childNode) != childFixtureDir {
+		t.Fatalf("fixture command node=%q is not in the child-owned fixture directory %q", childNode, childFixtureDir)
 	}
 	if _, err := loadPinnedUnitRegistryWithOptions(context.Background(), command, gsdHome, "1.11.0", options); err != nil {
 		t.Fatal(err)
 	}
+}
+
+type boundedTestOutput struct {
+	bytes.Buffer
+	truncated bool
+}
+
+func (b *boundedTestOutput) Write(p []byte) (int, error) {
+	const max = 64 * 1024
+	remaining := max - b.Len()
+	if remaining > 0 {
+		if len(p) <= remaining {
+			_, _ = b.Buffer.Write(p)
+		} else {
+			_, _ = b.Buffer.Write(p[:remaining])
+			b.truncated = true
+		}
+	} else if len(p) > 0 {
+		b.truncated = true
+	}
+	return len(p), nil
+}
+
+func (b *boundedTestOutput) String() string {
+	if b.truncated {
+		return b.Buffer.String() + "\n[truncated]\n"
+	}
+	return b.Buffer.String()
 }
 
 func TestVerifiedRegistryDataURLsAreImmutableAfterSourceReplacement(t *testing.T) {
