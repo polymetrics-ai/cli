@@ -5,10 +5,12 @@
 Slices A-G of the Shepherd proof/recovery repair remain accepted through exact Slice G checkpoint
 `ee474811378edd604e1e86e413f0bcafeced452b`; the ancestry and planning commits remain immutable at
 `17ca31f6d04def71d55137d25d8194feaea10829` and
-`e53e9e56b67145419a11f1b577f858922e1a4c50`. The active stage is the explicitly authorized,
-post-Slice-G exact-head review fix for typed deletion proofs and execution-time bounded Git output.
-Draft stacked PR creation stays pending until replacement exact-head GPT-5.6 Sol/high review passes.
-Do not merge any PR, push to `main`, run canaries, access credentials, or perform cleanup/migration.
+`e53e9e56b67145419a11f1b577f858922e1a4c50`. Typed deletion proofs and execution-time bounded Git
+output are accepted at draft stacked PR #456 head `7432f0a5da90f255b74307d12c26863b61c1a16f`.
+The active stage is the explicitly authorized test-infrastructure repair for that PR's failed
+`nested-module` check: canonicalize Node only in GSD test fixtures and make one descendant assertion
+use bounded eventual verification. Production `.go` files, security policy, dependencies, canaries,
+credentials, cleanup/migration, PR merges, and `main` remain out of scope.
 
 ## Required workflow and skills loaded
 
@@ -442,6 +444,50 @@ symlinked path components. Promotion proof and actual-CLI integration fixtures n
 identity. Canonical packaged-loader integration and all declared local gates pass, so
 `verificationPassed=true`; exact-head correctness/security reviews at `c72778de` pass, and the final
 docs-only evidence commit receives replacement exact-head review before push.
+
+## Draft PR #456 nested-module test-infrastructure fix — IN PROGRESS
+
+Authorization is strictly test/planning-only. Failed GitHub evidence: workflow run `29578379908`, job
+`87877981167`, check `nested-module`.
+
+Two independent RED classes are recorded:
+
+1. **Node fixture portability.** GSD fixtures use `exec.LookPath("node")` plus `filepath.Abs`; an
+   executable symlink is then correctly rejected by production `boundedRuntimeFileSHA256` through
+   `O_NOFOLLOW`. The ordinary local NVM Node is already a canonical regular file, so the requested
+   ordinary local RED passes here rather than failing. A temporary symlinked `node` placed first on
+   `PATH` reproduces the exact `runtime_contract_mismatch: open bounded runtime source`; prepending
+   the canonical executable directory passes without edits. The test fix will centralize
+   `qualifiedNodePathForTest(t)` using `LookPath`, `Abs`, and `EvalSymlinks`, while existing production
+   ownership/regular/executable/hash qualification and no-symlink rejection remain unchanged.
+2. **Descendant assertion timing.** CI failed
+   `TestRunnerKillsInheritedOutputDescendantAfterSuccessfulParentExit` at `runner_test.go:444` because
+   it calls `syscall.Kill(pid, 0)` once immediately after cleanup. Adjacent GSD process tests poll for
+   `ESRCH` for at most five seconds. One shared bounded helper will use the same strict eventual
+   contract, with short bounded polling and no platform skip; a genuinely live descendant still fails.
+
+TDD/implementation contract:
+
+- Before test edits, retain the CI log and symlinked-Node RED/control evidence above.
+- Add one shared test helper for canonical Node resolution; use it in every registry/snapshot fixture
+  that hashes or qualifies Node.
+- Retain/add a regression proving production `resolveQualifiedNode` rejects a symlinked executable;
+  do not change production qualification.
+- Consolidate bounded descendant disappearance verification and replace the lone immediate assertion;
+  Linux zombie handling, if needed, is test-only and must never accept a running process.
+- Run the requested targeted count-10, race count-3, package count-5, full nested/integration/race/vet/
+  build/make/lint, root verify/boundary/list/diff, exact-head GPT-5.6 Sol/high review, normal push, and
+  fresh PR #456 CI monitoring.
+- Allowed writes: `agent-runtime/shepherd/internal/gsd/*_test.go`, an optional test-only helper under
+  that package, issue-389 phase artifacts, and PR #456 evidence. No production `.go` change is allowed.
+
+Orchestration: active parent owner revalidated draft parent PR #390 and stacked draft PR #456 before
+this stage. One isolated GPT-5.5/high worker will own the test-only GSD scope; the coordinator owns shared
+phase artifacts, verification, exact-head GPT-5.6 Sol/high review, push, and PR status. Skills loaded:
+`gsd-core`, `polymetrics-issue-delivery`, `gsd-programming-loop`, `golang-how-to`, `golang-testing`,
+`golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`,
+`golang-concurrency`, and `golang-lint`. Requested `.pi/skills/go-implementation/SKILL.md` is absent;
+the healthy repo-local GSD adapter is used without manual fallback.
 
 ## Post-Slice-G bounded Git / descriptor-root follow-up
 

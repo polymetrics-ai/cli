@@ -279,6 +279,45 @@ Gates/review:
 - [x] Fresh exact-head GPT-5.6 Sol/high correctness and security reviews at `c72778de` have no unresolved findings.
 - [ ] Only then: fast-forward push, draft stacked PR, CI monitoring, and stop before canaries.
 
+### Draft PR #456 nested-module test-infrastructure fix
+
+Preconditions/workflow:
+
+- [x] Clean branch/local/remote/PR head all equal `7432f0a5da90f255b74307d12c26863b61c1a16f`.
+- [x] PR #456 remains open/draft against `feat/372-gsd-pi-go-shepherd`; parent PR #390 remains draft.
+- [x] Repo-local GSD doctor/list/sources/programming-loop prompt passes; required Go skills loaded.
+- [x] Workflow run `29578379908`, job `87877981167`, `nested-module` failure is recorded.
+- [x] Ordinary local Node is truthfully recorded as canonical, not a symlink; the ordinary fixture test passes.
+- [x] Temporary symlinked-Node PATH reproduces `runtime_contract_mismatch: open bounded runtime source`.
+- [x] Canonical real-Node PATH passes the same unedited fixture test.
+- [x] Immediate PID assertion differs from adjacent bounded five-second `ESRCH` polling.
+
+Test-only implementation requirements:
+
+- [ ] Shared `qualifiedNodePathForTest(t)` uses `exec.LookPath`, `filepath.Abs`, and complete
+      `filepath.EvalSymlinks` before existing production qualification.
+- [ ] All relevant registry/host snapshot/hash fixtures use the canonical helper.
+- [ ] Production qualified runtime still rejects a symlinked Node executable.
+- [ ] Shared descendant helper polls with a strict five-second maximum/short interval and rejects a
+      genuinely running process; no Linux skip or arbitrary sleep.
+- [ ] Diff contains only `internal/gsd/*_test.go`, optional test-only helper, and issue-389 artifacts.
+- [ ] No production `.go`, dependency, workflow, or quality-gate change.
+
+Targeted/full gates:
+
+- [ ] Node fixture target set `-count=10` passes with ordinary current PATH.
+- [ ] Descendant cleanup target set `-count=10` passes.
+- [ ] `go test -race ./internal/gsd -count=3` passes.
+- [ ] `go test ./internal/gsd -count=5` passes.
+- [ ] Full nested normal/race/integration/race-integration/vet/build/`make verify` passes.
+- [ ] Default lint remains exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`, zero differential.
+- [ ] Root `make verify`, module boundary, diff check, and root `go list ./...` pass.
+- [ ] Generated binaries removed; planning JSON and worktree hygiene pass.
+- [ ] Fresh read-only GPT-5.6 Sol/high review of `7432f0a5...HEAD` has no unresolved findings.
+- [ ] Normal push produces exact local/remote equality and clean tree.
+- [ ] Fresh PR #456 checks all pass; PR remains draft.
+- [ ] Only then set `stacked_pr_green_awaiting_canary_approval`; canaries remain separately gated.
+
 ## Required command gates after each coherent slice
 
 ```bash

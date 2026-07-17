@@ -771,3 +771,52 @@ process/output behavior, descriptor-relative path stability, actual-CLI realism,
 The shared Git-config item remains a nonblocking documented same-UID trust assumption. This final
 evidence-only commit will receive replacement exact-head review before push. No credential,
 connector/API operation, canary, cleanup/migration, PR/merge, or `main` mutation occurred.
+
+## Draft PR #456 nested-module test-infrastructure fix — RED
+
+Start head/local/remote: `7432f0a5da90f255b74307d12c26863b61c1a16f`, clean. Draft PR #456 is
+open from `fix/389-shepherd-proof-recovery` to `feat/372-gsd-pi-go-shepherd`; parent draft PR #390
+remains the human-gated integration target. Failed GitHub evidence: workflow run `29578379908`, job
+`87877981167`, check `nested-module`.
+
+GSD command: `scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto`.
+Adapter doctor/list/source checks pass. Skills: `gsd-core`, `polymetrics-issue-delivery`,
+`gsd-programming-loop`, `golang-how-to`, `golang-testing`, `golang-troubleshooting`,
+`golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`,
+and `golang-lint`. `.pi/skills/go-implementation/SKILL.md` is absent; no manual fallback.
+
+### RED A — Node fixture portability
+
+The requested ordinary local reproduction did not fail because the current NVM Node command
+`/Users/karthiksivadas/.nvm/versions/node/v24.13.1/bin/node` is a regular canonical file, not a
+terminal symlink. This mismatch is recorded rather than overwritten. The same pre-edit test passes
+with ordinary `PATH`.
+
+A deterministic temporary symlinked `node` placed first on `PATH` reproduces the CI class exactly:
+
+```text
+registry_test.go:35: runtime_contract_mismatch: open bounded runtime source
+FAIL github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/gsd
+```
+
+The unedited control with the symlink target's canonical directory prepended to `PATH` passes. Root
+cause: test fixtures hash/qualify `exec.LookPath("node")` after lexical `filepath.Abs`, so production
+`O_NOFOLLOW` correctly rejects a symlink. Fixture canonicalization must use `filepath.EvalSymlinks`;
+production no-symlink admission must not change.
+
+### RED B — descendant assertion timing
+
+CI failed:
+
+```text
+TestRunnerKillsInheritedOutputDescendantAfterSuccessfulParentExit
+runner_test.go:444: supervised descendant pid 6847 survived cleanup: <nil>
+```
+
+That test performs one immediate `syscall.Kill(pid, 0)` check. Adjacent process-cleanup tests already
+poll for `ESRCH` with a five-second maximum and 10 ms interval. The test-only fix must share bounded
+eventual verification, fail on a genuinely live process, and introduce no platform skip or production
+cleanup change.
+
+`verificationPassed=false` until all requested targeted/full gates, exact-head review, push, and fresh
+PR CI complete. No test source or production source was edited before this RED evidence.

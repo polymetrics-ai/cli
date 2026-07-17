@@ -171,3 +171,22 @@ Two fresh independent read-only GPT-5.6 Sol/high correctness and security review
 `c72778def85ddccdee91bd648d7c0d569eb5fa94` against the exact parent base pass with no findings.
 A replacement review follows this final docs-only evidence commit before push. No live external
 operation, credential access, canary, cleanup/migration, PR merge, or `main` mutation occurred.
+
+## Draft PR #456 nested-module CI repair
+
+Draft PR #456 opened cleanly at `7432f0a5da90f255b74307d12c26863b61c1a16f`; nine checks passed and
+`nested-module` failed in workflow `29578379908`, job `87877981167`. Human authorization now permits
+only GSD test fixture/assertion changes and issue-389/PR evidence.
+
+The first failure class is test portability: registry/snapshot fixtures hash the lexical Node path.
+Production intentionally opens qualified runtime files with `O_NOFOLLOW`, so a symlinked `node` is
+rejected. The ordinary local NVM Node is already canonical and its unedited test passes; a temporary
+symlinked PATH reproduces the exact CI error, while the canonical target directory passes. The test-only
+repair will resolve the complete symlink chain before existing ownership/type/mode/hash qualification.
+Production `resolveQualifiedNode` remains fail-closed for symlinks.
+
+The second failure is assertion timing: one runner test performs an immediate PID probe after cleanup,
+while adjacent GSD process tests use bounded eventual `ESRCH` verification. The test-only repair will
+share a strict five-second bounded helper without accepting a running descendant or changing production
+cleanup. Full targeted stress, nested/root gates, exact lint baseline, exact-head Sol/high review, normal
+push, and new PR CI are pending; `verificationPassed=false`. No canary or merge is authorized.
