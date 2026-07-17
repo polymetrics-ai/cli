@@ -4,7 +4,7 @@ NAME
 
 SYNOPSIS
   pm help config
-  pm <command> --root <path> [--json]
+  pm <command> --root <path> [--json] [--plain] [--no-input] [--progress ndjson]
 
 DESCRIPTION
   pm resolves typed invocation configuration once per CLI run. The loader uses a
@@ -18,12 +18,28 @@ DESCRIPTION
   errors.
 
 PRECEDENCE
-  1. Bound global flags: --root and --json.
+  1. Bound global config flags: --root and --json.
   2. Explicit POLYMETRICS_* environment variables.
   3. Documented PM_* legacy aliases when the primary POLYMETRICS_* variable is
      not set.
   4. .polymetrics/config.yaml under the invocation project root.
   5. Built-in defaults.
+
+UI AND PROGRESS FLAGS
+  --plain
+    Force the plain output path. Use this in scripts, pipes, and tests that
+    need deterministic non-interactive behavior.
+
+  --no-input
+    Disable prompts and TTY UI. Interactive-only paths must fail by naming the
+    flag or file to provide instead of prompting.
+
+  --progress ndjson
+    Stream sanitized progress events to stderr as newline-delimited JSON.
+    Stdout remains reserved for the command's final output or single JSON
+    envelope. Supported value: ndjson.
+
+  PM_NO_TUI=1, CI=1, TERM=dumb, and non-TTY stdout force the plain path.
 
 CONFIG FILE
   The config file path is <project-root>/.polymetrics/config.yaml. Missing files

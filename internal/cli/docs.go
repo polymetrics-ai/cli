@@ -41,6 +41,23 @@ COMMANDS
   version           print build version metadata
   help, man         show detailed documentation
 
+GLOBAL OPTIONS
+  --json
+    Emit machine-readable output when supported.
+  --root <path>
+    Select the project root containing .polymetrics.
+  --plain
+    Force the plain non-TTY path even when stdout is a terminal.
+  --no-input
+    Disable interactive prompting and TTY UI.
+  --progress ndjson
+    Stream sanitized progress events as newline-delimited JSON on stderr.
+    Stdout remains the command's final output or single JSON envelope.
+
+TTY GATE
+  Interactive UI activates only when stdout is a TTY and --json, --plain,
+  --no-input, PM_NO_TUI, CI, and TERM=dumb do not force the plain path.
+
 HUMAN QUICK START
   pm init
   pm credentials add sample-local --connector sample
@@ -95,7 +112,7 @@ const configHelp = `NAME
 
 SYNOPSIS
   pm help config
-  pm <command> --root <path> [--json]
+  pm <command> --root <path> [--json] [--plain] [--no-input] [--progress ndjson]
 
 DESCRIPTION
   pm resolves typed invocation configuration once per CLI run. The loader uses a
@@ -109,12 +126,28 @@ DESCRIPTION
   errors.
 
 PRECEDENCE
-  1. Bound global flags: --root and --json.
+  1. Bound global config flags: --root and --json.
   2. Explicit POLYMETRICS_* environment variables.
   3. Documented PM_* legacy aliases when the primary POLYMETRICS_* variable is
      not set.
   4. .polymetrics/config.yaml under the invocation project root.
   5. Built-in defaults.
+
+UI AND PROGRESS FLAGS
+  --plain
+    Force the plain output path. Use this in scripts, pipes, and tests that
+    need deterministic non-interactive behavior.
+
+  --no-input
+    Disable prompts and TTY UI. Interactive-only paths must fail by naming the
+    flag or file to provide instead of prompting.
+
+  --progress ndjson
+    Stream sanitized progress events to stderr as newline-delimited JSON.
+    Stdout remains reserved for the command's final output or single JSON
+    envelope. Supported value: ndjson.
+
+  PM_NO_TUI=1, CI=1, TERM=dumb, and non-TTY stdout force the plain path.
 
 CONFIG FILE
   The config file path is <project-root>/.polymetrics/config.yaml. Missing files
@@ -453,7 +486,7 @@ SYNOPSIS
   pm etl check --connector <name> [--config key=value] [--json]
   pm etl catalog --connector <name> [--config key=value] [--json]
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
-  pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
+  pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json] [--progress ndjson]
   pm etl status <run-id> [--json]
 
 DESCRIPTION
@@ -481,6 +514,11 @@ DESCRIPTION
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
+
+PROGRESS
+  Add --progress ndjson to stream sanitized ETL progress events to stderr.
+  Stdout remains the final human line or single JSON envelope. CI, PM_NO_TUI,
+  --plain, --no-input, pipes, and TERM=dumb keep the plain path.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -586,7 +624,7 @@ const flowHelp = `NAME
 SYNOPSIS
   pm flow plan --file flow.json [--json]
   pm flow preview --file flow.json [--json]
-  pm flow run --file flow.json [--force] [--json]
+  pm flow run --file flow.json [--force] [--json] [--progress ndjson]
   pm flow status <name> [--flows-dir .polymetrics/flows] [--json]
   pm flow list [--flows-dir .polymetrics/flows] [--json]
 
@@ -594,6 +632,11 @@ DESCRIPTION
   Flow manifests compose sync, query, rlm, and action steps. Dependencies are
   inferred from in/out warehouse tables. RLM steps reuse pm rlm analyzers and
   may reference a spec path relative to the flow manifest file.
+
+PROGRESS
+  Add --progress ndjson to stream sanitized flow progress events to stderr.
+  Stdout remains the final human line or single JSON envelope. CI, PM_NO_TUI,
+  --plain, --no-input, pipes, and TERM=dumb keep the plain path.
 
 RLM STEP EXAMPLE
   {

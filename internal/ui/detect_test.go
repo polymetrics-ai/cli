@@ -1,0 +1,110 @@
+package ui
+
+import "testing"
+
+func TestDetectModeUsesADRGate(t *testing.T) {
+	tests := []struct {
+		name string
+		opts DetectOptions
+		want Mode
+	}{
+		{
+			name: "tty default enables tui",
+			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			want: ModeTUI,
+		},
+		{
+			name: "stdout pipe forces plain",
+			opts: DetectOptions{StdoutTTY: false, Env: map[string]string{"TERM": "xterm-256color"}},
+			want: ModePlain,
+		},
+		{
+			name: "json forces plain",
+			opts: DetectOptions{StdoutTTY: true, JSON: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			want: ModePlain,
+		},
+		{
+			name: "plain flag forces plain",
+			opts: DetectOptions{StdoutTTY: true, Plain: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			want: ModePlain,
+		},
+		{
+			name: "no input forces plain",
+			opts: DetectOptions{StdoutTTY: true, NoInput: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			want: ModePlain,
+		},
+		{
+			name: "pm no tui forces plain",
+			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_NO_TUI": "1"}},
+			want: ModePlain,
+		},
+		{
+			name: "ci forces plain",
+			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "true"}},
+			want: ModePlain,
+		},
+		{
+			name: "dumb term forces plain",
+			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "dumb"}},
+			want: ModePlain,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Detect(tt.opts)
+			if got.Mode != tt.want {
+				t.Fatalf("Detect(%+v).Mode = %q, want %q (reasons=%v)", tt.opts, got.Mode, tt.want, got.Reasons)
+			}
+		})
+	}
+}
+
+func TestDetectCapabilitiesDegradeForColorAndASCII(t *testing.T) {
+	tests := []struct {
+		name      string
+		opts      DetectOptions
+		wantColor bool
+		wantASCII bool
+	}{
+		{
+			name:      "tty color unicode default",
+			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			wantColor: true,
+			wantASCII: false,
+		},
+		{
+			name:      "no color disables color",
+			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "1"}},
+			wantColor: false,
+			wantASCII: false,
+		},
+		{
+			name:      "pipe disables color and uses ascii",
+			opts:      DetectOptions{StdoutTTY: false, Env: map[string]string{"TERM": "xterm-256color"}},
+			wantColor: false,
+			wantASCII: true,
+		},
+		{
+			name:      "pm ascii requests ascii",
+			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_ASCII": "1"}},
+			wantColor: true,
+			wantASCII: true,
+		},
+		{
+			name:      "dumb term disables color and uses ascii",
+			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "dumb"}},
+			wantColor: false,
+			wantASCII: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Detect(tt.opts)
+			if got.Color != tt.wantColor || got.ASCII != tt.wantASCII {
+				t.Fatalf("Detect(%+v) Color/ASCII = %t/%t, want %t/%t", tt.opts, got.Color, got.ASCII, tt.wantColor, tt.wantASCII)
+			}
+		})
+	}
+}

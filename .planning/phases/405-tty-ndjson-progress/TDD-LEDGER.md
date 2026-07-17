@@ -48,15 +48,54 @@ Fallback: loaded `.pi/prompts/pm-gsd-loop.md` and running the universal programm
 
 | Slice | Test / validation | Red evidence | Green evidence | Refactor evidence |
 |---|---|---|---|---|
-| 1 ui detection/styles | `go test ./internal/ui/... -count=1` | pending — write failing tests before production code | pending | pending |
-| 2 CLI run options/global flags | `go test ./internal/cli/... -run 'TestRunWithOptions|TestGlobalUI|TestProgress' -count=1` | pending — write failing tests before production code | pending | pending |
-| 3 stderr-only NDJSON | `go test ./internal/cli/... -run TestProgressNDJSON -count=1` | pending — write failing test before production code | pending | pending |
-| 4 docs/help parity | `go test ./internal/cli/... -run 'Test.*Help|TestGoldenDocsGenerateMatchesTrackedCLIManuals' -count=1` plus docs/website grep | pending — validation should fail until docs updated | pending | pending |
+| 1 ui detection/styles | `go test ./internal/ui/... -count=1` | fail (build): undefined `DetectOptions`, `Mode`, `ModeTUI`, `ModePlain`, `ResolveGlyphs`, `ResolvePalette`, `Options`, `ProfileNone`, `TokenOK` | pass: `ok polymetrics.ai/internal/ui 0.155s`; `ok polymetrics.ai/internal/ui/styles 0.286s` | `gofmt -w internal/cli internal/ui` |
+| 2 CLI run options/global flags | `go test ./internal/cli/... -run 'TestRunWithOptions|TestGlobalUI|TestProgress' -count=1` | fail (build): undefined `RunWithOptions`, `RunOptions`, `ModePlain`, `ModeAuto` | pass: `ok polymetrics.ai/internal/cli 1.033s` | `gofmt -w internal/cli internal/ui`; test adjusted to preserve existing JSON-error stderr diagnostic contract |
+| 3 stderr-only NDJSON | `go test ./internal/cli/... -run TestProgressNDJSON -count=1` | fail (build): same undefined run-options API as slice 2 | pass: `ok polymetrics.ai/internal/cli 1.045s` | no extra refactor |
+| 4 docs/help parity | `go test ./internal/cli/... -run 'Test.*Help|TestGoldenDocsGenerateMatchesTrackedCLIManuals' -count=1` plus docs/website grep | fail: `TestGoldenDocsGenerateMatchesTrackedCLIManuals` drifted for `config.md` after docs-map change; help output initially missed new flags | pass: `ok polymetrics.ai/internal/cli 1.448s` after `pm docs generate`, golden transcript update, website update | docs regenerated; golden transcripts updated intentionally |
+| focused package | `go test ./internal/cli/... -count=1` | pending after slices | pass: `ok polymetrics.ai/internal/cli 169.642s` | no extra refactor |
 | final gates | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify` | pending | pending | pending |
 
 ## Red test capture rule
 
 Before production edits, add focused failing tests only. Capture exact command and failure output here before implementing each slice.
+
+### Initial red evidence — 2026-07-17
+
+```bash
+go test ./internal/ui/... -count=1
+```
+
+Result: fail/build. Key output:
+
+```text
+internal/ui/detect_test.go:8:8: undefined: DetectOptions
+internal/ui/detect_test.go:9:8: undefined: Mode
+internal/ui/detect_test.go:14:10: undefined: ModeTUI
+internal/ui/styles/styles_test.go:9:13: undefined: ResolveGlyphs
+internal/ui/styles/styles_test.go:21:11: undefined: ResolvePalette
+FAIL	polymetrics.ai/internal/ui [build failed]
+FAIL	polymetrics.ai/internal/ui/styles [build failed]
+```
+
+```bash
+go test ./internal/cli/... -run 'TestRunWithOptions|TestGlobalUI|TestProgress' -count=1
+```
+
+Result: fail/build. Key output:
+
+```text
+internal/cli/ui_options_test.go:21:14: undefined: RunWithOptions
+internal/cli/ui_options_test.go:21:61: undefined: RunOptions
+internal/cli/ui_options_test.go:21:78: undefined: ModePlain
+internal/cli/ui_options_test.go:35:20: undefined: ModeAuto
+FAIL	polymetrics.ai/internal/cli [build failed]
+```
+
+```bash
+go test ./internal/cli/... -run TestProgressNDJSON -count=1
+```
+
+Result: fail/build on same missing run-options API. This is the required red evidence before production edits.
 
 ## Review disposition ledger
 

@@ -63,6 +63,9 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	cmd.SetErr(stderr)
 	cmd.PersistentFlags().String("root", root, "project root (parsed by the legacy global parser)")
 	cmd.PersistentFlags().Bool("json", jsonOut, "write machine-readable JSON output (parsed by the legacy global parser)")
+	cmd.PersistentFlags().Bool("plain", false, "force plain non-TTY output (parsed by the legacy global parser)")
+	cmd.PersistentFlags().Bool("no-input", false, "disable interactive prompting and TTY UI (parsed by the legacy global parser)")
+	cmd.PersistentFlags().String("progress", "", "progress output format: ndjson writes sanitized events to stderr (parsed by the legacy global parser)")
 	setManualHelp(cmd, "", stdout, jsonOut)
 	for _, spec := range cobraLegacyCommands(cfg) {
 		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec))

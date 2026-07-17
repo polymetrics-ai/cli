@@ -7,7 +7,7 @@
   "baseParentHead": "d8e532eb20d24d982c09772ecae48abb3bb64271",
   "mode": "bounded-mutating-worker",
   "verificationPassed": false,
-  "verificationBlocker": "implementation_not_started",
+  "verificationBlocker": "full_gates_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed; 69 commands",
@@ -34,10 +34,62 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "bounded mutating worker already running in isolated cwd; no subagent tool by worker contract; no recursive delegation"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for ui detection/styles, cli run options/global flags, and stderr-only NDJSON progress"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "implemented scoped UI detection/styles, RunWithOptions/global flags, stderr NDJSON wiring, and docs parity inline"
     }
   ],
-  "redEvidence": [],
-  "greenEvidence": [],
+  "redEvidence": [
+    {
+      "command": "go test ./internal/ui/... -count=1",
+      "result": "fail_build",
+      "evidence": "undefined DetectOptions/Mode/ModeTUI/ModePlain and undefined styles ResolveGlyphs/ResolvePalette/Options/ProfileNone/TokenOK"
+    },
+    {
+      "command": "go test ./internal/cli/... -run 'TestRunWithOptions|TestGlobalUI|TestProgress' -count=1",
+      "result": "fail_build",
+      "evidence": "undefined RunWithOptions/RunOptions/ModePlain/ModeAuto"
+    },
+    {
+      "command": "go test ./internal/cli/... -run TestProgressNDJSON -count=1",
+      "result": "fail_build",
+      "evidence": "same missing run-options API as CLI red gate"
+    }
+  ],
+  "greenEvidence": [
+    {
+      "command": "go test ./internal/ui/... -count=1",
+      "result": "pass",
+      "evidence": "ok internal/ui 0.155s; ok internal/ui/styles 0.286s"
+    },
+    {
+      "command": "go test ./internal/cli/... -run 'TestRunWithOptions|TestGlobalUI|TestProgress' -count=1",
+      "result": "pass",
+      "evidence": "ok polymetrics.ai/internal/cli 1.033s"
+    },
+    {
+      "command": "go test ./internal/cli/... -run TestProgressNDJSON -count=1",
+      "result": "pass",
+      "evidence": "ok polymetrics.ai/internal/cli 1.045s"
+    },
+    {
+      "command": "go test ./internal/cli/... -run 'Test.*Help|TestGoldenDocsGenerateMatchesTrackedCLIManuals' -count=1",
+      "result": "pass",
+      "evidence": "ok polymetrics.ai/internal/cli 1.448s"
+    },
+    {
+      "command": "go test ./internal/cli/... -count=1",
+      "result": "pass",
+      "evidence": "ok polymetrics.ai/internal/cli 169.642s"
+    }
+  ],
   "finalGates": [],
   "cliParity": {
     "applies": true,

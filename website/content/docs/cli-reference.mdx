@@ -14,10 +14,15 @@ This page is the public website contract for the `pm` CLI. When a command is add
 | `pm <command> --help` | Prints that command group's embedded manual. |
 | `--json` | Emits a structured envelope for commands that support machine output. |
 | `--root <path>` | Selects the project root containing `.polymetrics`. |
+| `--plain` | Forces the plain non-TTY path even when stdout is a terminal. |
+| `--no-input` | Disables prompting and TTY UI. |
+| `--progress ndjson` | Streams sanitized progress events to stderr as NDJSON; stdout remains the final output or single JSON envelope. |
 
 <Callout type="info">
   `--json` is the agent path for operational commands. A few developer-facing commands, such as `pm help`, are intentionally plain text because they return human manuals.
 </Callout>
+
+Interactive UI activates only when stdout is a TTY and `--json`, `--plain`, `--no-input`, `PM_NO_TUI`, `CI`, and `TERM=dumb` do not force the plain path. Use `--progress ndjson` on long-running commands when agents need live progress without polling checkpoint files.
 
 ## Configuration
 
@@ -185,11 +190,11 @@ pm connectors help 100ms
 pm etl check --connector github --config repository=OWNER/REPO --json
 pm etl catalog --connector github --config repository=OWNER/REPO --json
 pm etl read --connector github --stream issues --limit 10 --config repository=OWNER/REPO --json
-pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 500 --json
+pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 500 --json --progress ndjson
 pm etl status <run-id> --json
 ```
 
-Use direct `check`, `catalog`, and `read` while developing a connector or testing credentials. Use `pm etl run` for configured syncs.
+Use direct `check`, `catalog`, and `read` while developing a connector or testing credentials. Use `pm etl run` for configured syncs. `--progress ndjson` writes progress to stderr only; stdout stays the final human line or one JSON envelope.
 
 ```bash
 pm query run --table github_pull_requests --limit 20 --json
@@ -234,7 +239,7 @@ RLM agent mode is optional and runtime-backed. It uses Temporal plus a Podman-ma
 ```bash
 pm flow plan --file flow.json --json
 pm flow preview --file flow.json --json
-pm flow run --file flow.json --force --json
+pm flow run --file flow.json --force --json --progress ndjson
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 
@@ -244,7 +249,7 @@ pm schedule install nightly --crontab --json
 pm schedule remove nightly --crontab --json
 ```
 
-Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. Schedules install named flows into the local scheduler backend.
+Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. `--progress ndjson` streams flow progress to stderr only. Schedules install named flows into the local scheduler backend.
 
 ## Operational commands
 

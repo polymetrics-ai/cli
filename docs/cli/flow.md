@@ -5,7 +5,7 @@ NAME
 SYNOPSIS
   pm flow plan --file flow.json [--json]
   pm flow preview --file flow.json [--json]
-  pm flow run --file flow.json [--force] [--json]
+  pm flow run --file flow.json [--force] [--json] [--progress ndjson]
   pm flow status <name> [--flows-dir .polymetrics/flows] [--json]
   pm flow list [--flows-dir .polymetrics/flows] [--json]
 
@@ -13,6 +13,11 @@ DESCRIPTION
   Flow manifests compose sync, query, rlm, and action steps. Dependencies are
   inferred from in/out warehouse tables. RLM steps reuse pm rlm analyzers and
   may reference a spec path relative to the flow manifest file.
+
+PROGRESS
+  Add --progress ndjson to stream sanitized flow progress events to stderr.
+  Stdout remains the final human line or single JSON envelope. CI, PM_NO_TUI,
+  --plain, --no-input, pipes, and TERM=dumb keep the plain path.
 
 RLM STEP EXAMPLE
   {
