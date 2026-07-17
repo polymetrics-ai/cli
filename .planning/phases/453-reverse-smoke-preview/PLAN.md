@@ -75,11 +75,11 @@ After green, only run existing temporary local smoke; no external connector/runt
    - Inserted `./pm reverse preview "$$PLAN_ID" --root "$$SMOKE_DIR" --json >/dev/null;` after `PLAN_ID=` and before `APPROVAL=` / `reverse run`.
    - Kept temp root/outbox flow unchanged.
 
-4. Verification / PR ✅ / pending PR
+4. Verification / PR ✅
    - Ran focused ordering test before smoke.
    - Ran required gates after fix: `gofmt -w cmd internal`, `go test ./...`, `go vet ./...`, `go build ./cmd/pm`, `make smoke`, `make verify`, `git diff --check origin/feat/cli-architecture-v2...HEAD`, `git diff -- go.mod go.sum`.
    - `make verify` redundantly covered gofmt/tidy/vet/test/build/docs/smoke/lint/connectorgen; exact coverage recorded.
-   - PR open/push pending.
+   - Opened non-draft stacked PR #454 to `feat/cli-architecture-v2` with `Refs #453` and `Refs #397`.
 
 ## Parity stance
 

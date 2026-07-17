@@ -1,10 +1,10 @@
 # Phase 453 Summary
 
-Status: implementation complete; full local verification passed; PR pending.
+Status: PR #454 open against `feat/cli-architecture-v2`; implementation complete; full local verification passed.
 
 ## Current state
 
-- Worker branch: `fix/453-reverse-smoke-preview`.
+- Worker branch: `fix/453-reverse-smoke-preview`; sub-PR: https://github.com/polymetrics-ai/cli/pull/454.
 - Base branch: `feat/cli-architecture-v2`; dispatch/base parent commit `5680debb`.
 - GSD adapter doctor passed; `programming-loop` prompt command missing, so manual GSD fallback recorded.
 - Scope limited to `Makefile` reverse smoke ordering, one durable regression check, and issue-local phase artifacts.

@@ -15,7 +15,7 @@ scripts/gsd prompt programming-loop init --phase 453 --dry-run >/tmp/gsd-program
 
 Downstream artifact: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, `RUN-STATE.json` created and updated through local verification.
 
-Verification result: local verification passed; PR pending.
+Verification result: local verification passed; PR #454 open.
 
 ## Manual GSD fallback note
 
