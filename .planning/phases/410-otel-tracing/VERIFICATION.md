@@ -3,16 +3,16 @@
 ## Review-fix verification checklist (PR #459)
 
 - [x] Red tests captured before production edits for accepted findings.
-- [ ] Exported span tests assert error metadata is allowlisted, registry-redacted, and contains no SDK `exception.*` attrs/events.
-- [ ] Failed command, HTTP, and flow spans omit synthetic registered marker and response-body-like details; `capture=minimal` suppresses message-like error attrs.
-- [ ] Config-sourced OTLP exporter/endpoint rejected or disabled by default with sanitized warning; env/CLI opt-in accepted.
-- [ ] Telemetry file exporter rejects absolute paths, `..` escapes, symlinked dirs, and symlinked files; created dirs/files use restrictive permissions.
-- [ ] Event attrs are attached to span events and remain allowlisted; retry/attempt/status metadata not overwritten/lost.
-- [ ] OTLP init/export/shutdown failures preserve exit code and stdout JSON; stderr uses redacted `warning: telemetry:` only.
-- [ ] OTLP endpoint validation rejects userinfo/query/fragment and non-http(s) without leaking endpoint secrets.
-- [ ] Root/config help, docs/cli, website data, and goldens mention HTTP method/status/attempt/retry attrs and supported exporters `none,file,otlp` consistently.
-- [ ] Redis/exporter/log/telemetry warning smokes show redacted stderr and uncorrupted stdout JSON.
-- [ ] `git diff --check` and `git diff -- go.mod go.sum` clean/expected (no new module/version; review-fix event attrs promote existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct).
+- [x] Exported span tests assert error metadata is allowlisted, registry-redacted, and contains no SDK `exception.*` attrs/events.
+- [x] Failed command, HTTP, and flow spans omit synthetic registered marker and response-body-like details; `capture=minimal` suppresses message-like error attrs.
+- [x] Config-sourced OTLP exporter/endpoint rejected or disabled by default with sanitized warning; env/CLI opt-in accepted.
+- [x] Telemetry file exporter rejects absolute paths, `..` escapes, symlinked dirs, and symlinked files; created dirs/files use restrictive permissions.
+- [x] Event attrs are attached to span events and remain allowlisted; retry/attempt/status metadata not overwritten/lost.
+- [x] OTLP init/export/shutdown failures preserve exit code and stdout JSON; stderr uses redacted `warning: telemetry:` only.
+- [x] OTLP endpoint validation rejects userinfo/query/fragment and non-http(s) without leaking endpoint secrets.
+- [x] Root/config help, docs/cli, website data, and goldens mention HTTP method/status/attempt/retry attrs and supported exporters `none,off,file,otlp` consistently.
+- [x] Exporter/log/telemetry warning smokes show redacted stderr and uncorrupted stdout JSON; Redis runtime smoke not applicable to tracing review fix.
+- [x] `git diff --check` and `git diff -- go.mod go.sum` clean/expected (no new module/version; review-fix event attrs promote existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct).
 
 ## Required gates
 
@@ -123,3 +123,5 @@ Additional smoke/parity:
 | Help/docs/website generation | pass | `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts`; `./pm docs generate --dir docs/cli --connectors-dir $TMP/connectors`; `npm --prefix website run gen:docs`; golden/docs test passed. |
 | `go vet ./...`; `go test ./...`; `go build ./cmd/pm` | pass | Full Go vet/test/build passed before `make verify` rerun. |
 | `make verify` (review-fix first run) | fail | `tidy-check` promoted existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct because event attrs use `trace.WithAttributes`; rerun after accepting tidy diff required. |
+| `make verify` (review-fix after commit) | pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, and connectorgen validate passed. |
+| `git diff --check`; `git diff -- go.mod go.sum` | pass | No output after final planning update. |

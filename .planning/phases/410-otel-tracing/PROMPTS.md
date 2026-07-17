@@ -4,7 +4,7 @@
 
 - Source: user task for Issue #410 worker handoff.
 - Downstream artifact: `.planning/phases/410-otel-tracing/PLAN.md`.
-- Verification result: `make verify` passed after implementation commit; PR #459 review-fix cycle pending.
+- Verification result: `make verify` passed after implementation commit and again after PR #459 review-fix commit.
 
 ## GSD prompt command
 

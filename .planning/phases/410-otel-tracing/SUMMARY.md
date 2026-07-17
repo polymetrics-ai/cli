@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: review-fix in progress for PR #459; red tests captured; verification pending rerun.
+Status: review-fix verified locally for PR #459; push/PR body update pending.
 
 ## Current state
 
@@ -28,14 +28,17 @@ Status: review-fix in progress for PR #459; red tests captured; verification pen
 - First `make verify` run failed at `tidy-check` because go.mod/go.sum dependency changes were uncommitted.
 - Green implementation slice committed/pushed, then `make verify` passed from clean dependency diff.
 
-## Review-fix queue (PR #459)
+## Review-fix delivered (PR #459)
 
-Accepted review findings target error attr safety, config-sourced OTLP guard, file exporter path/symlink hardening, event attr placement, OTLP failure neutrality, endpoint validation, help/docs exporter wording, and warning redaction/stdout discipline.
+- Error telemetry no longer calls SDK `RecordError`; spans export only allowlisted `pm.error.type`, `pm.error.code`, and `pm.error.status_code` metadata with no `exception.*`, raw messages, registered markers, or response-body-like text.
+- Config-file OTLP exporter/endpoint values are rejected/ignored unless network telemetry is explicitly enabled by env/CLI source; env opt-in remains accepted.
+- File exporter directories are constrained under `--root`, reject absolute/escaping/symlinked paths and existing/symlink files, and use `0700` dirs plus `0600` `O_EXCL` files.
+- Event attributes now use `trace.WithAttributes` on events; HTTP retry/attempt/status attrs remain event-scoped and allowlisted.
+- OTLP export/shutdown/init failures warn through redacted `warning: telemetry:` and preserve stdout/exit code.
+- Root/config help, `docs/cli/config.md`, golden transcripts, website source, and generated website docs data are updated.
 
-Current execution decision: `local_critical_path`. This worker stays on `feat/410-otel-tracing`; coordinator sidecars/human fallback handle review coverage. No Claude/Copilot request from this worker.
+Current execution decision: `local_critical_path`. This worker stayed on `feat/410-otel-tracing`; coordinator sidecars/human fallback handle review coverage. No Claude/Copilot request from this worker.
 
-## Next
+## Verification final
 
-1. Complete minimal review-fix implementation from captured red tests.
-2. Run focused gates, smoke/parity checks, full gates.
-3. Update phase artifacts, PR #459 body, commit and push.
+Focused tests, docs/golden/website generation, file/off/secret smoke, OTLP endpoint smoke, `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` passed after the review-fix commit.

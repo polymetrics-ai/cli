@@ -77,6 +77,7 @@ Result:
 | 16 | review-fix green | Focused gates/smoke/docs | `go test ./internal/telemetry -count=1`; `go test ./internal/connectors/connsdk -run Telemetry -count=1`; `go test ./internal/cli -run 'Telemetry|Golden|Config|Agentic' -count=1`; `go test ./internal/app -run Telemetry -count=1`; `go test ./internal/flow -run Telemetry -count=1`; `go test ./internal/config -count=1`; file/off/secret smoke; OTLP endpoint smoke; golden/docs/website generation | Pass | Focused package gates, stdout/secret smoke, help parity smoke, golden update, `docs/cli` generation, and `npm --prefix website run gen:docs` passed. |
 | 17 | review-fix green | Broad gates | `go vet ./...`; `go test ./...`; `go build ./cmd/pm` | Pass | Full Go vet/test/build passed. |
 | 18 | review-fix verify | `make verify` | Fail | `tidy-check` promoted existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct because event attrs use `trace.WithAttributes`; no new version/checksum. Rerun after accepting tidy diff required. |
+| 19 | review-fix verify | `make verify` after review-fix commit | Pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, and connectorgen validate passed. |
 
 ## Red-test requirements
 
