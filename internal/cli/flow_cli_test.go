@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/safety"
 )
 
 func testCtx(t *testing.T) context.Context {
@@ -102,6 +103,76 @@ func TestFlowPlanValid(t *testing.T) {
 	var result map[string]any
 	require.NoError(t, json.Unmarshal(out.Bytes(), &result))
 	assert.Equal(t, "ok", result["status"])
+}
+
+// TestFlowPlanSanitizesUnsafeStepIDsInHumanOutput keeps human flow output terminal-safe without changing JSON.
+func TestFlowPlanSanitizesUnsafeStepIDsInHumanOutput(t *testing.T) {
+	unsafeID := "score\x1b]0;owned\x07\u202Edone"
+	manifest := map[string]any{
+		"version": 1,
+		"name":    "unsafe-flow",
+		"steps": []map[string]any{
+			{
+				"id":   unsafeID,
+				"kind": "query",
+				"sql":  "SELECT * FROM customers",
+				"in":   []string{},
+				"out":  []string{"scored_customers"},
+			},
+		},
+	}
+	data, err := json.Marshal(manifest)
+	require.NoError(t, err)
+	path := writeManifestFile(t, string(data))
+
+	var human bytes.Buffer
+	err = runFlow(testCtx(t), config.Config{}, nil, []string{"plan", "--file", path}, &human, false)
+	require.NoError(t, err)
+	assertNoUnsafeTerminalControls(t, human.String())
+	assert.NotContains(t, human.String(), unsafeID)
+
+	var machine bytes.Buffer
+	err = runFlow(testCtx(t), config.Config{}, nil, []string{"plan", "--file", path}, &machine, true)
+	require.NoError(t, err)
+	var out struct {
+		Order []string `json:"order"`
+	}
+	require.NoError(t, json.Unmarshal(machine.Bytes(), &out))
+	require.Equal(t, []string{unsafeID}, out.Order)
+}
+
+func TestFlowListSanitizesUnsafeFilenamesInHumanOutput(t *testing.T) {
+	dir := t.TempDir()
+	unsafeName := "nightly\x1b]2;owned\x07\u202Eflow"
+	err := os.WriteFile(filepath.Join(dir, unsafeName+".json"), []byte(`{"version":1}`), 0o644)
+	require.NoError(t, err)
+
+	var human bytes.Buffer
+	err = runFlow(testCtx(t), config.Config{}, nil, []string{"list", "--flows-dir", dir}, &human, false)
+	require.NoError(t, err)
+	assertNoUnsafeTerminalControls(t, human.String())
+	assert.NotContains(t, human.String(), unsafeName)
+
+	var machine bytes.Buffer
+	err = runFlow(testCtx(t), config.Config{}, nil, []string{"list", "--flows-dir", dir}, &machine, true)
+	require.NoError(t, err)
+	var out struct {
+		Flows []string `json:"flows"`
+	}
+	require.NoError(t, json.Unmarshal(machine.Bytes(), &out))
+	require.Equal(t, []string{unsafeName}, out.Flows)
+}
+
+func assertNoUnsafeTerminalControls(t *testing.T, text string) {
+	t.Helper()
+	for _, r := range text {
+		if r == '\n' || r == '\t' {
+			continue
+		}
+		if r < 0x20 || r == 0x7f || (r >= 0x80 && r <= 0x9f) || safety.IsDangerousUnicode(r) {
+			t.Fatalf("human output contains unsafe terminal rune %U in %q", r, text)
+		}
+	}
 }
 
 // TestFlowPlanCyclic checks that `pm flow plan --file cyclic.json` returns a non-nil error.

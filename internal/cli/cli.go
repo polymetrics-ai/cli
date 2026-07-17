@@ -10,26 +10,55 @@ import (
 	"path/filepath"
 	"strings"
 
+	"golang.org/x/term"
+
 	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/events"
 	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
+	pmui "polymetrics.ai/internal/ui"
 )
 
 type envelope map[string]any
 
 const maxConnectorCommandLimit = 10000
 
+// RunMode controls how RunWithOptions evaluates the TTY gate.
+type RunMode string
+
+const (
+	// ModeAuto evaluates the deterministic TTY gate.
+	ModeAuto RunMode = "auto"
+	// ModePlain forces the legacy plain path.
+	ModePlain RunMode = "plain"
+)
+
+// RunOptions carries invocation-scoped UI detection facts for tests and future
+// TTY renderers. Nil StdoutIsTerminal falls back to os.File + x/term detection.
+type RunOptions struct {
+	Mode             RunMode
+	StdoutIsTerminal *bool
+	Env              map[string]string
+}
+
 func Run(args []string, stdout, stderr io.Writer) int {
+	return RunWithOptions(args, stdout, stderr, RunOptions{Mode: ModePlain})
+}
+
+func RunWithOptions(args []string, stdout, stderr io.Writer, runOpts RunOptions) int {
 	ctx := pmlogging.WithRegistry(context.Background(), pmlogging.NewValueRegistry())
-	root, jsonOut, cleanArgs := parseGlobal(args)
-	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
+	globals, parseErr := parseGlobal(args)
+	if parseErr != nil {
+		return writeError(ctx, stdout, stderr, parseErr, globals.jsonOut)
+	}
+	opts := config.Options{Root: globals.root, Flags: globalConfigFlags(args, globals.root, globals.jsonOut)}
 	bootstrap, err := config.ResolveBootstrap(opts)
 	if err != nil {
 		return writeError(ctx, stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
@@ -42,11 +71,55 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	defer func() { _ = closeLogs() }()
 	ctx = pmlogging.WithLogger(ctx, logger)
 
+	_ = detectInvocationUI(globals, runOpts, stdout, cfg.JSON)
+	if globals.progress == "ndjson" {
+		ctx = events.WithEmitter(ctx, events.NewNDJSON(stderr))
+	}
+
 	cmd := newRootCmd(ctx, cfg, stdout, stderr)
-	if err := executeRootCmd(cmd, cleanArgs); err != nil {
+	if err := executeRootCmd(cmd, globals.clean); err != nil {
 		return writeError(ctx, stdout, stderr, mapCobraErr(err), cfg.JSON)
 	}
 	return 0
+}
+
+func detectInvocationUI(globals globalOptions, runOpts RunOptions, stdout io.Writer, jsonOut bool) pmui.Detection {
+	mode := runOpts.Mode
+	if mode == "" {
+		mode = ModeAuto
+	}
+	plain := globals.plain || mode == ModePlain
+	return pmui.Detect(pmui.DetectOptions{
+		StdoutTTY: stdoutIsTerminal(stdout, runOpts.StdoutIsTerminal),
+		JSON:      jsonOut,
+		Plain:     plain,
+		NoInput:   globals.noInput,
+		Env:       invocationEnv(runOpts.Env),
+	})
+}
+
+func stdoutIsTerminal(stdout io.Writer, override *bool) bool {
+	if override != nil {
+		return *override
+	}
+	file, ok := stdout.(*os.File)
+	if !ok || file == nil {
+		return false
+	}
+	return term.IsTerminal(int(file.Fd()))
+}
+
+func invocationEnv(override map[string]string) map[string]string {
+	keys := []string{"TERM", "PM_NO_TUI", "CI", "NO_COLOR", "CLICOLOR", "PM_ASCII"}
+	out := make(map[string]string, len(keys))
+	for _, key := range keys {
+		if override != nil {
+			out[key] = override[key]
+			continue
+		}
+		out[key] = os.Getenv(key)
+	}
+	return out
 }
 
 func globalConfigFlags(args []string, root string, jsonOut bool) map[string]config.FlagValue {

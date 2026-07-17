@@ -25,23 +25,72 @@ func (p parsedFlags) first(name string) string {
 	return values[len(values)-1]
 }
 
-func parseGlobal(args []string) (root string, jsonOut bool, clean []string) {
-	root = "."
+type globalOptions struct {
+	root     string
+	jsonOut  bool
+	plain    bool
+	noInput  bool
+	progress string
+	clean    []string
+}
+
+func parseGlobal(args []string) (globalOptions, error) {
+	out := globalOptions{root: "."}
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		switch {
 		case arg == "--json":
-			jsonOut = true
+			out.jsonOut = true
+		case arg == "--plain":
+			out.plain = true
+		case strings.HasPrefix(arg, "--plain="):
+			value := strings.TrimPrefix(arg, "--plain=")
+			parsed, err := parseGlobalBool("--plain", value)
+			if err != nil {
+				return out, err
+			}
+			out.plain = parsed
+		case arg == "--no-input":
+			out.noInput = true
+		case strings.HasPrefix(arg, "--no-input="):
+			value := strings.TrimPrefix(arg, "--no-input=")
+			parsed, err := parseGlobalBool("--no-input", value)
+			if err != nil {
+				return out, err
+			}
+			out.noInput = parsed
+		case arg == "--progress":
+			if i+1 >= len(args) || strings.HasPrefix(args[i+1], "--") {
+				return out, validationErrorf("invalid --progress %q, want ndjson", "")
+			}
+			out.progress = args[i+1]
+			i++
+		case strings.HasPrefix(arg, "--progress="):
+			out.progress = strings.TrimPrefix(arg, "--progress=")
 		case arg == "--root" && i+1 < len(args):
-			root = args[i+1]
+			out.root = args[i+1]
 			i++
 		case strings.HasPrefix(arg, "--root="):
-			root = strings.TrimPrefix(arg, "--root=")
+			out.root = strings.TrimPrefix(arg, "--root=")
 		default:
-			clean = append(clean, arg)
+			out.clean = append(out.clean, arg)
 		}
 	}
-	return root, jsonOut, clean
+	if out.progress != "" && out.progress != "ndjson" {
+		return out, validationErrorf("invalid --progress %q, want ndjson", out.progress)
+	}
+	return out, nil
+}
+
+func parseGlobalBool(name, value string) (bool, error) {
+	switch strings.ToLower(strings.TrimSpace(value)) {
+	case "1", "true", "yes", "on":
+		return true, nil
+	case "0", "false", "no", "off":
+		return false, nil
+	default:
+		return false, validationErrorf("invalid %s %q, want true or false", name, value)
+	}
 }
 
 func parseFlags(args []string) parsedFlags {

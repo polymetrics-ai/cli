@@ -13,6 +13,7 @@ import (
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/rlm"
+	"polymetrics.ai/internal/safety"
 )
 
 // runFlow dispatches pm flow subcommands: plan | preview | run | status | list.
@@ -128,9 +129,9 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 			"order":  order,
 		})
 	}
-	fmt.Fprintf(stdout, "Flow: %s  status=%s\n", m.Name, status)
+	fmt.Fprintf(stdout, "Flow: %s  status=%s\n", humanFlowField(m.Name), humanFlowField(status))
 	for i, id := range order {
-		fmt.Fprintf(stdout, "  %d. %s\n", i+1, id)
+		fmt.Fprintf(stdout, "  %d. %s\n", i+1, humanFlowField(id))
 	}
 	return nil
 }
@@ -189,7 +190,7 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 	if jsonOut {
 		return writeJSON(stdout, result)
 	}
-	fmt.Fprintf(stdout, "Flow %s: %s\n", result.FlowName, result.Status)
+	fmt.Fprintf(stdout, "Flow %s: %s\n", humanFlowField(result.FlowName), humanFlowField(result.Status))
 	return nil
 }
 
@@ -232,9 +233,9 @@ func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{"flow": name, "steps": statuses})
 	}
-	fmt.Fprintf(stdout, "Flow: %s\n", name)
+	fmt.Fprintf(stdout, "Flow: %s\n", humanFlowField(name))
 	for _, s := range statuses {
-		fmt.Fprintf(stdout, "  %s: %s\n", s.ID, s.Status)
+		fmt.Fprintf(stdout, "  %s: %s\n", humanFlowField(s.ID), humanFlowField(s.Status))
 	}
 	return nil
 }
@@ -271,9 +272,13 @@ func flowList(args []string, stdout io.Writer, jsonOut bool) error {
 		return nil
 	}
 	for _, f := range flows {
-		fmt.Fprintln(stdout, f)
+		fmt.Fprintln(stdout, humanFlowField(f))
 	}
 	return nil
+}
+
+func humanFlowField(value string) string {
+	return safety.SanitizeTerminalLine(value)
 }
 
 // noopAppAdapter satisfies AppAdapter for plan/preview (no real app needed).
