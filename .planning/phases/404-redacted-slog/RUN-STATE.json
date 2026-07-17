@@ -1,0 +1,29 @@
+{
+  "phase": "404-redacted-slog",
+  "issue": 404,
+  "parentIssue": 397,
+  "branch": "feat/404-redacted-slog",
+  "base": "20475ddf8ae3486282ead4fc7d2129f2bd1129b3",
+  "mode": "manual-gsd-fallback",
+  "verificationPassed": false,
+  "fallbackReason": "scripts/gsd prompt programming-loop init --phase 404 --dry-run failed: unknown GSD command: programming-loop",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Worker is already isolated in assigned cwd; recursive subagents unavailable/forbidden for mutating worker; execute issue inline under GSD universal loop."
+    }
+  ],
+  "gates": {
+    "gsdDoctor": "pass",
+    "gsdPlanPrompt": "pass",
+    "gsdProgrammingLoopDryRun": "fallback",
+    "redTests": "pending",
+    "focusedRace": "pending",
+    "goVet": "pending",
+    "goTestAll": "pending",
+    "goBuildPm": "pending",
+    "makeVerify": "pending",
+    "goModGoSumDiff": "pending"
+  }
+}
