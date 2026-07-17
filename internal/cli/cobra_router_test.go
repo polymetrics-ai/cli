@@ -50,7 +50,7 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 	for _, spec := range cobraLegacyCommands(config.Config{}) {
 		legacyCommands[spec.name] = struct{}{}
 	}
-	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}}
+	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}}
 	if len(expectedHidden) != len(legacyCommands)+len(nativeCommands) {
 		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native commands registers %d", len(expectedHidden), len(legacyCommands)+len(nativeCommands))
 	}
@@ -168,6 +168,83 @@ func TestQueryCommandIsNativeCobraSubtree(t *testing.T) {
 				t.Fatalf("query run --%s NoOptDefVal = %q, want %q", name, got, want)
 			}
 		})
+	}
+}
+
+func TestPerfCommandIsNativeCobraSubtree(t *testing.T) {
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	perf := findCobraCommand(root, "perf")
+	if perf == nil {
+		t.Fatal("missing perf command")
+	}
+	if perf.DisableFlagParsing {
+		t.Fatal("perf command must use native Cobra flag parsing")
+	}
+
+	compare := findCobraCommand(perf, "compare")
+	if compare == nil {
+		t.Fatal("missing perf compare subcommand")
+	}
+	if compare.DisableFlagParsing {
+		t.Fatal("perf compare must use native Cobra flag parsing")
+	}
+	if !compare.FParseErrWhitelist.UnknownFlags {
+		t.Fatal("perf compare must preserve legacy unknown-flag tolerance")
+	}
+	if compare.ValidArgsFunction == nil {
+		t.Fatal("perf compare must suppress file completion fallback until Phase 15 completions")
+	}
+	completions, directive := compare.ValidArgsFunction(compare, nil, "")
+	if len(completions) != 0 {
+		t.Fatalf("perf compare completion seam returned %v, want no Phase 15 completions", completions)
+	}
+	if directive != cobra.ShellCompDirectiveNoFileComp {
+		t.Fatalf("perf compare completion directive = %v, want NoFileComp", directive)
+	}
+	for _, name := range []string{"iterations", "runtime"} {
+		t.Run("compare flag "+name, func(t *testing.T) {
+			flag := compare.Flags().Lookup(name)
+			if flag == nil {
+				t.Fatalf("perf compare missing native --%s flag", name)
+			}
+			if got, want := flag.Value.Type(), "stringArray"; got != want {
+				t.Fatalf("perf compare --%s flag type = %q, want %q", name, got, want)
+			}
+			if got, want := flag.NoOptDefVal, "true"; got != want {
+				t.Fatalf("perf compare --%s NoOptDefVal = %q, want %q", name, got, want)
+			}
+		})
+	}
+
+	syncModes := findCobraCommand(perf, "sync-modes")
+	if syncModes == nil {
+		t.Fatal("missing perf sync-modes subcommand")
+	}
+	if syncModes.DisableFlagParsing {
+		t.Fatal("perf sync-modes must use native Cobra flag parsing")
+	}
+	if !syncModes.FParseErrWhitelist.UnknownFlags {
+		t.Fatal("perf sync-modes must preserve legacy unknown-flag tolerance")
+	}
+	if syncModes.ValidArgsFunction == nil {
+		t.Fatal("perf sync-modes must suppress file completion fallback until Phase 15 completions")
+	}
+	completions, directive = syncModes.ValidArgsFunction(syncModes, nil, "")
+	if len(completions) != 0 {
+		t.Fatalf("perf sync-modes completion seam returned %v, want no Phase 15 completions", completions)
+	}
+	if directive != cobra.ShellCompDirectiveNoFileComp {
+		t.Fatalf("perf sync-modes completion directive = %v, want NoFileComp", directive)
+	}
+	flag := syncModes.Flags().Lookup("records")
+	if flag == nil {
+		t.Fatal("perf sync-modes missing native --records flag")
+	}
+	if got, want := flag.Value.Type(), "stringArray"; got != want {
+		t.Fatalf("perf sync-modes --records flag type = %q, want %q", got, want)
+	}
+	if got, want := flag.NoOptDefVal, "true"; got != want {
+		t.Fatalf("perf sync-modes --records NoOptDefVal = %q, want %q", got, want)
 	}
 }
 

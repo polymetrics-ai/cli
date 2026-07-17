@@ -2,6 +2,7 @@ package runtimecheck
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strings"
 	"time"
@@ -34,6 +35,16 @@ type Report struct {
 	Mode     string        `json:"mode"`
 	Duration time.Duration `json:"duration"`
 	Checks   []CheckResult `json:"checks"`
+}
+
+func init() {
+	redis.SetLogger(redisLogAdapter{})
+}
+
+type redisLogAdapter struct{}
+
+func (redisLogAdapter) Printf(ctx context.Context, format string, v ...interface{}) {
+	pmlogging.FromContext(ctx).DebugContext(ctx, "redis diagnostic", "message", fmt.Sprintf(format, v...))
 }
 
 func FromConfig(cfg pmconfig.Config) Config {
