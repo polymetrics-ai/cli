@@ -39,9 +39,10 @@ type Detection struct {
 // paths never need ANSI or Unicode assumptions.
 func Detect(opts DetectOptions) Detection {
 	term := strings.ToLower(strings.TrimSpace(envValue(opts.Env, "TERM")))
-	noColor := envTruthy(envValue(opts.Env, "NO_COLOR"))
+	noColor := envNonEmpty(envValue(opts.Env, "NO_COLOR"))
+	clicolorDisabled := strings.TrimSpace(envValue(opts.Env, "CLICOLOR")) == "0"
 	ascii := !opts.StdoutTTY || term == "dumb" || envTruthy(envValue(opts.Env, "PM_ASCII"))
-	color := opts.StdoutTTY && term != "dumb" && !noColor
+	color := opts.StdoutTTY && term != "dumb" && !noColor && !clicolorDisabled
 
 	reasons := make([]string, 0, 6)
 	if !opts.StdoutTTY {
@@ -56,10 +57,10 @@ func Detect(opts DetectOptions) Detection {
 	if opts.NoInput {
 		reasons = append(reasons, "no_input")
 	}
-	if envTruthy(envValue(opts.Env, "PM_NO_TUI")) {
+	if envNonEmpty(envValue(opts.Env, "PM_NO_TUI")) {
 		reasons = append(reasons, "pm_no_tui")
 	}
-	if envTruthy(envValue(opts.Env, "CI")) {
+	if envNonEmpty(envValue(opts.Env, "CI")) {
 		reasons = append(reasons, "ci")
 	}
 	if term == "dumb" {
@@ -78,6 +79,10 @@ func envValue(env map[string]string, key string) string {
 		return ""
 	}
 	return env[key]
+}
+
+func envNonEmpty(value string) bool {
+	return strings.TrimSpace(value) != ""
 }
 
 func envTruthy(value string) bool {

@@ -45,6 +45,22 @@ func TestGlobalUIFlagsAreStrippedBeforeDispatch(t *testing.T) {
 	}
 }
 
+func TestInvocationEnvCapturesColorControls(t *testing.T) {
+	t.Setenv("TERM", "xterm-256color")
+	t.Setenv("NO_COLOR", "0")
+	t.Setenv("CLICOLOR", "0")
+
+	got := invocationEnv(nil)
+	for _, key := range []string{"TERM", "NO_COLOR", "CLICOLOR"} {
+		if got[key] == "" {
+			t.Fatalf("invocationEnv missing %s in %#v", key, got)
+		}
+	}
+	if got["NO_COLOR"] != "0" || got["CLICOLOR"] != "0" {
+		t.Fatalf("invocationEnv color controls = %#v, want NO_COLOR=0 and CLICOLOR=0", got)
+	}
+}
+
 func TestProgressFlagRejectsUnsupportedValue(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := Run([]string{"--json", "--progress", "pretty", "version"}, &stdout, &stderr)
@@ -140,16 +156,68 @@ func TestProgressNDJSONWritesOnlyStderr(t *testing.T) {
 	}
 }
 
+func TestProgressNDJSONFailureDocumentsMixedStderr(t *testing.T) {
+	root := t.TempDir()
+	initProject(t, root)
+
+	flowDir := t.TempDir()
+	manifest := `{
+		"version": 1,
+		"name": "failing-progress-flow",
+		"steps": [
+			{
+				"id": "score",
+				"kind": "rlm",
+				"spec": "missing-spec.json",
+				"mode": "fixture",
+				"in": [],
+				"out": ["lead_scores"]
+			}
+		]
+	}`
+	manifestPath := filepath.Join(flowDir, "flow.json")
+	if err := os.WriteFile(manifestPath, []byte(manifest), 0o644); err != nil {
+		t.Fatalf("write manifest: %v", err)
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{"--root", root, "--json", "--progress", "ndjson", "flow", "run", "--file", manifestPath}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("Run failing progress flow code = 0, want non-zero\nstdout=%s\nstderr=%s", stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), `"kind": "Error"`) {
+		t.Fatalf("stdout missing final JSON error envelope:\n%s", stdout.String())
+	}
+
+	var sawNDJSON, sawDiagnostic bool
+	for _, line := range strings.Split(strings.TrimSpace(stderr.String()), "\n") {
+		if strings.HasPrefix(line, "error:") {
+			sawDiagnostic = true
+			continue
+		}
+		var event map[string]any
+		if err := json.Unmarshal([]byte(line), &event); err != nil {
+			t.Fatalf("stderr line is neither NDJSON progress nor error diagnostic: %v\nline=%q\nstderr=%s", err, line, stderr.String())
+		}
+		if event["kind"] != "" && event["scope"] == "flow" {
+			sawNDJSON = true
+		}
+	}
+	if !sawNDJSON || !sawDiagnostic {
+		t.Fatalf("stderr should be mixed on failure: sawNDJSON=%t sawDiagnostic=%t stderr=%q", sawNDJSON, sawDiagnostic, stderr.String())
+	}
+}
+
 func TestGlobalUIFlagsDocumentedInHelp(t *testing.T) {
 	tests := []struct {
 		name string
 		args []string
 		want []string
 	}{
-		{name: "root help", args: []string{"--help"}, want: []string{"--plain", "--no-input", "--progress ndjson"}},
-		{name: "config help", args: []string{"help", "config"}, want: []string{"--plain", "--no-input", "--progress ndjson"}},
-		{name: "etl help", args: []string{"etl", "--help"}, want: []string{"--progress ndjson", "stderr"}},
-		{name: "flow help", args: []string{"flow", "--help"}, want: []string{"--progress ndjson", "stderr"}},
+		{name: "root help", args: []string{"--help"}, want: []string{"--plain", "--no-input", "--progress ndjson", "Future TTY renderers"}},
+		{name: "config help", args: []string{"help", "config"}, want: []string{"--plain", "--no-input", "--progress ndjson", "invalid UI/progress flag"}},
+		{name: "etl help", args: []string{"etl", "--help"}, want: []string{"--progress ndjson", "stderr", "stderr may also include the final error diagnostic"}},
+		{name: "flow help", args: []string{"flow", "--help"}, want: []string{"--progress ndjson", "stderr", "stderr may also include the final error diagnostic"}},
 	}
 
 	for _, tt := range tests {

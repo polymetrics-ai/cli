@@ -95,12 +95,12 @@ Reverse ETL is deliberately split across plan, preview, approval, and run. Agent
 ```bash
 pm flow plan --file flow.json --json
 pm flow preview --file flow.json --json
-pm flow run --file flow.json --force --json
+pm flow run --file flow.json --force --json --progress ndjson
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 ```
 
-Flow manifests describe ordered ETL and query steps. `plan` and `preview` validate the manifest and DAG. `run` executes supported steps through existing app primitives and checkpoints progress.
+Flow manifests describe ordered ETL and query steps. `plan` and `preview` validate the manifest and DAG. `run` executes supported steps through existing app primitives and checkpoints progress. Add `--progress ndjson` when agents need sanitized flow progress events on stderr while stdout remains the final result; on failures, stderr may also include the final error diagnostic.
 Flow dependencies are inferred from `in` and `out` warehouse tables. Supported step kinds are `sync`, `query`, `rlm`, and approval-gated `action`. RLM steps reuse the same analyzers as `pm rlm run`; a relative `spec` path is resolved from the flow manifest file.
 
 ```json

@@ -74,3 +74,59 @@ Optional/runtime-backed gates:
 - Runtime-backed services and credentialed connector checks are not in scope and were not run.
 - Parent PR #438 remains draft/human-gated; do not merge to `main`.
 - `verificationPassed=true` in `RUN-STATE.json` is valid after full local gates and `make verify` passed.
+
+## Review-fix verification checklist — PR #457 head `3702318efa5514b8fad20c99bba2e3281164bec7`
+
+Cycle status: focused red evidence captured, implementation completed, focused green gates and full local gates passed. PR #457 body updated via GitHub API; branch push remains the only post-verification step.
+
+Focused red/green gates:
+
+- [x] `go test ./internal/ui/... -run 'TestDetectModeUsesADRGate|TestDetectCapabilitiesDegradeForColorAndASCII|TestPaletteANSI16DimUsesBrightBlackSGR' -count=1` — pass, `internal/ui 0.172s`, `internal/ui/styles 0.317s`.
+- [x] `go test ./internal/cli/... -run 'TestInvocationEnvCapturesColorControls|TestFlow.*Sanitizes.*Human|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1` — pass, `internal/cli 6.686s`.
+- [x] `go test ./internal/cli/... -count=1` — pass, `internal/cli 169.138s`.
+
+Docs / parity gates:
+
+- [x] Runtime help reworded truthfully for future TTY-gated renderers; no current interactive activation claim while `cmd/pm` uses `cli.Run` plain mode.
+- [x] `docs/cli/config.md`, `docs/cli/etl.md`, and `docs/cli/flow.md` regenerated/updated from embedded docs.
+- [x] Website ETL docs mention `--progress ndjson`.
+- [x] Website architecture flow command/prose mention `--progress ndjson`.
+- [x] Website CLI reference documents future TTY-gated wording and mixed stderr diagnostics on failures.
+- [x] `website/lib/docs.generated.ts` regenerated via `cd website && pnpm run gen:docs`.
+- [x] Grep: `rg -n -- '--progress ndjson|Future TTY renderers|stderr may also include|invalid UI/progress flag' docs/cli website/content/docs website/lib/docs.generated.ts`.
+- [x] Unintended generated `docs/connectors/**` drift from docs generation was removed; `git diff --name-only docs/connectors | wc -l` returned `0`.
+
+Full gates after implementation:
+
+- [x] `gofmt -w cmd internal`
+- [x] `go vet ./...`
+- [x] `go test ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD` and `git diff --check`
+- [x] PR #457 body update via GitHub API (`gh pr edit` hit a GitHub Projects classic GraphQL deprecation error; REST PATCH succeeded)
+- [ ] `git push origin feat/405-tty-ndjson-progress`
+
+Review-fix command log:
+
+| Command | Result | Notes |
+|---|---|---|
+| `go test ./internal/ui/... -run 'TestDetectModeUsesADRGate\|TestDetectCapabilitiesDegradeForColorAndASCII\|TestPaletteANSI16DimUsesBrightBlackSGR' -count=1` | pass | `internal/ui 0.172s`; `internal/ui/styles 0.317s`. |
+| `go test ./internal/cli/... -run 'TestInvocationEnvCapturesColorControls\|TestFlow.*Sanitizes.*Human\|TestGlobalUIFlagsDocumentedInHelp\|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1` | pass | `internal/cli 6.686s`. |
+| `cd website && pnpm run gen:docs` | pass | Wrote 11 docs pages to `lib/docs.generated.ts`. |
+| `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1` | pass | Updated `internal/cli/testdata/golden_transcripts.json`. |
+| `go test ./internal/cli/... -count=1` | pass | `internal/cli 169.138s`. |
+| `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify` | pass | `go test ./...`: `internal/cli 170.511s`, `internal/connectors/certify 340.438s`; `make verify`: `internal/cli 171.287s`, `internal/connectors/certify 342.514s`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`. |
+| `git diff --check origin/feat/cli-architecture-v2...HEAD && git diff --check` | pass | no output. |
+| `git diff -- go.mod go.sum` | pass | no output. |
+| `git diff --name-only docs/connectors \| wc -l` | pass | `0`. |
+| `gh pr edit 457 --body-file /tmp/pr-457-body.md` | fail_then_fixed | GraphQL Projects classic deprecation error; REST PATCH fallback used. |
+| `gh api --method PATCH repos/polymetrics-ai/cli/pulls/457 --input /tmp/pr-457-body.json --silent` | pass | no output. |
+
+Safety notes:
+
+- [x] No secrets needed.
+- [x] No new dependencies added.
+- [x] No credentialed connector checks run.
+- [x] No reverse ETL execution run outside `make verify` smoke gate using local sample/outbox fixture.
+- [x] No parent/shared ledger edits made.

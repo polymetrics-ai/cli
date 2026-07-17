@@ -1,6 +1,6 @@
 # SUMMARY — Issue 405 TTY gate and NDJSON progress
 
-Status: implementation and local verification complete; stacked PR pending.
+Status: review-fix cycle for PR #457 is locally verified; PR body updated and branch push remains.
 
 ## Delivered
 
@@ -43,8 +43,23 @@ CLI parity passed: `pm --help`, `pm help config`, `pm etl --help`, `pm flow --he
 
 Remote Website checks initially failed because `website/lib/docs.generated.ts` needed regeneration. Ran `cd website && pnpm run gen:website-data` and committed the generated docs data. Local `pnpm install --frozen-lockfile` is blocked by `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`; CI install succeeded, so remote rerun is source of truth for website typecheck/tests.
 
+## Review-fix delivered
+
+- `PM_NO_TUI` and `CI` now suppress TUI on any non-empty value, including `0` and `false`.
+- `NO_COLOR` now suppresses color on any non-empty value; `CLICOLOR=0` is captured and suppresses color; `TERM=dumb` remains no-color/ASCII.
+- ANSI16 `TokenDim` now maps color index 8 to bright-black SGR `90` instead of invalid `38`.
+- Human `pm flow` outputs sanitize terminal controls in flow names, step IDs, statuses, and listed filenames while JSON output remains raw.
+- Runtime help, `docs/cli/**`, website ETL/architecture/CLI reference, golden transcripts, and `website/lib/docs.generated.ts` updated for future TTY wording, mixed stderr diagnostics, and exit-code 3 wording.
+
+## Review-fix verification
+
+- Focused UI review gate passed: `internal/ui 0.172s`; `internal/ui/styles 0.317s`.
+- Focused CLI review gate passed: `internal/cli 6.686s`.
+- Full CLI package passed: `internal/cli 169.138s`.
+- Final combined gate passed: `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify`.
+- Key full-gate output: `go test ./...` included `internal/cli 170.511s`, `internal/connectors/certify 340.438s`; `make verify` included `internal/cli 171.287s`, `internal/connectors/certify 342.514s`, `smoke ok`, `0 issues`, `connectorgen validate: 547 connector(s) checked, 0 findings`.
+
 ## Pending
 
-- Push generated website docs data fix.
-- Confirm remote Website checks rerun.
-- Automated review coverage pending after PR creation (no Claude run observed yet).
+- Push review-fix slice to `origin feat/405-tty-ndjson-progress`.
+- Confirm automated review coverage after fix commit; do not merge parent PR #438 to `main`.

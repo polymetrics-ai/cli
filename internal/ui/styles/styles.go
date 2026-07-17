@@ -2,7 +2,10 @@
 // future Polymetrics TTY renderers.
 package styles
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 // ColorProfile describes the highest color capability available to a renderer.
 type ColorProfile string
@@ -90,7 +93,11 @@ func (p Palette) Style(token Token, text string) string {
 	}
 	switch p.profile {
 	case ProfileANSI16:
-		return fmt.Sprintf("\x1b[3%sm%s\x1b[0m", color, text)
+		sgr, ok := ansi16ForegroundSGR(color)
+		if !ok {
+			return text
+		}
+		return fmt.Sprintf("\x1b[%dm%s\x1b[0m", sgr, text)
 	case ProfileANSI256:
 		return fmt.Sprintf("\x1b[38;5;%sm%s\x1b[0m", color, text)
 	case ProfileTrueColor:
@@ -101,6 +108,21 @@ func (p Palette) Style(token Token, text string) string {
 		return fmt.Sprintf("\x1b[38;2;%d;%d;%dm%s\x1b[0m", r, g, b, text)
 	default:
 		return text
+	}
+}
+
+func ansi16ForegroundSGR(color string) (int, bool) {
+	n, err := strconv.Atoi(color)
+	if err != nil {
+		return 0, false
+	}
+	switch {
+	case n >= 0 && n <= 7:
+		return 30 + n, true
+	case n >= 8 && n <= 15:
+		return 90 + (n - 8), true
+	default:
+		return 0, false
 	}
 }
 

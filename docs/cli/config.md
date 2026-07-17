@@ -37,9 +37,12 @@ UI AND PROGRESS FLAGS
   --progress ndjson
     Stream sanitized progress events to stderr as newline-delimited JSON.
     Stdout remains reserved for the command's final output or single JSON
-    envelope. Supported value: ndjson.
+    envelope. Supported value: ndjson. On failures, stderr may also include the
+    final error diagnostic after progress events.
 
-  PM_NO_TUI=1, CI=1, TERM=dumb, and non-TTY stdout force the plain path.
+  Future TTY renderers are eligible only when stdout is a TTY. --json,
+  --plain, --no-input, non-empty PM_NO_TUI, non-empty CI, TERM=dumb, and
+  non-TTY stdout force the plain path.
 
 CONFIG FILE
   The config file path is <project-root>/.polymetrics/config.yaml. Missing files
@@ -148,6 +151,6 @@ SECURITY
 
 EXIT STATUS
   0 success
-  3 malformed config validation error
+  3 validation error, including malformed config or invalid UI/progress flag
 
 ```

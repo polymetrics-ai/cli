@@ -143,3 +143,45 @@ Implementation:
 3. Green implementation checkpoint after focused gates pass.
 4. Docs/website parity checkpoint after help/docs tests pass.
 5. Final verification checkpoint after full local gates; push to `origin feat/405-tty-ndjson-progress` only, never `main`.
+
+## Review-fix cycle — PR #457 head `3702318efa5514b8fad20c99bba2e3281164bec7`
+
+Status: accepted review findings fixed and locally verified; PR #457 body updated, branch push remains.
+
+Accepted findings to fix:
+
+1. TTY env semantics: `PM_NO_TUI` and `CI` suppress TUI on any non-empty value, including `0` and `false`.
+2. Color degradation: `NO_COLOR` suppresses color on any non-empty value, `CLICOLOR=0` suppresses color, and `TERM=dumb` remains no-color/ASCII. Capture `CLICOLOR` for CLI detection. Do not add undocumented `CLICOLOR_FORCE` claims.
+3. ANSI16 dim token: `TokenDim` must not emit incomplete `\x1b[38m`; bright ANSI16 colors map to `90`–`97`.
+4. Terminal controls in human flow output: sanitize human stdout fields for project-controlled flow step IDs / filenames with `safety.SanitizeTerminalLine`; preserve JSON output semantics.
+5. Docs parity: add `--progress ndjson` to website ETL docs and website architecture flow example/prose; regenerate `website/lib/docs.generated.ts`.
+6. Runtime wording: root help and website CLI reference must not imply current `cmd/pm` launches an interactive UI; reword as future TTY-gated renderer support while `cmd/pm` stays plain.
+7. Config docs: broaden exit code 3 wording so invalid UI/progress flags are included.
+8. NDJSON stderr hardening: document current truth that `--progress ndjson` uses stderr for progress but failure paths may also include final diagnostics; add a regression/prose note rather than claiming progress-only stderr.
+
+Review-fix slice plan:
+
+### Slice R1 — Review red tests
+
+Add failing tests before production code/docs edits:
+
+- `internal/ui` tests for `CI=0`, `CI=false`, `PM_NO_TUI=0`, `PM_NO_TUI=false`, `NO_COLOR=0`, `NO_COLOR=false`, and `CLICOLOR=0`.
+- `internal/cli` test for `invocationEnv` capturing `CLICOLOR`.
+- `internal/ui/styles` test for ANSI16 `TokenDim` emitting `\x1b[90m` instead of `\x1b[38m`.
+- `internal/cli` flow human-output regression tests for control, bidi, and OSC-like step IDs / filenames; JSON behavior remains raw/unchanged.
+- Help/docs tests requiring future/TTY-gated wording and mixed-stderr diagnostics prose.
+
+### Slice R2 — Minimal implementation
+
+- Replace truthy suppression for `PM_NO_TUI`, `CI`, and `NO_COLOR` with non-empty env semantics.
+- Add `CLICOLOR` to invocation env capture and color gate; keep `TERM=dumb` no-color/ASCII behavior.
+- Fix ANSI16 SGR mapping for 0–7 and 8–15 color indexes.
+- Sanitize only human stdout fields in `flow` CLI output (`plan`, `run`, `status`, `list`); leave JSON envelopes raw.
+- Update embedded docs/manual text, generated `docs/cli/**`, website MDX, website generated docs data, and golden transcripts.
+
+### Slice R3 — Verification and PR update
+
+- Focused tests: `go test ./internal/ui/... -count=1`; `go test ./internal/cli/... -run 'Test.*(TTY|Color|Dim|Flow|Help|Progress|Invocation)' -count=1`; docs generator/golden checks. **Done.**
+- Full gates: `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`. **Done; combined gate exited 0.**
+- Website/docs checks: `pm docs generate` parity, `cd website && pnpm run gen:docs`, grep website/docs for `--progress ndjson` and mixed stderr wording. **Done; docs generated data updated and `docs/connectors/**` drift removed.**
+- Update PR #457 body with review dispositions, new verification, and head SHA; push to same branch only. **PR body updated via GitHub API; push pending.**

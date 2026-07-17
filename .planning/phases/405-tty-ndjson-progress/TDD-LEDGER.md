@@ -135,3 +135,139 @@ Result: pass. `flow bogus` exit `2` with `error: flow: unknown subcommand "bogus
 ## Review disposition ledger
 
 No automated review findings yet. Stacked PR pending; record Claude/Copilot/human route status after PR creation.
+
+## Review-fix cycle — PR #457 head `3702318efa5514b8fad20c99bba2e3281164bec7`
+
+### Additional loaded skills / references
+
+- `golang-lint` — review-fix gate includes `go vet ./...` and static-quality checks.
+- `golang-spf13-viper` — config/env layering reviewed for CLI env capture implications.
+- `vercel-react-best-practices`, `vercel-composition-patterns` — website docs/generated data checked; no React component code in scope.
+- `.agents/agentic-delivery/references/runtime-rlm-website-integration.md` — website architecture doc touchpoint loaded.
+
+### Accepted findings mapped to red tests
+
+| Finding | Planned red test / validation | Red evidence | Green evidence |
+|---|---|---|---|
+| TTY env semantics | `go test ./internal/ui/... -run TestDetectModeUsesADRGate -count=1` with `CI=0/false`, `PM_NO_TUI=0/false` | fail: `PM_NO_TUI=0`, `PM_NO_TUI=false`, `CI=0`, `CI=false` returned `Mode="tui"`, want `plain` | pass: focused `go test ./internal/ui/...` review gate included ADR env cases; `internal/ui 0.172s`, `internal/ui/styles 0.317s` |
+| Color degradation | `go test ./internal/ui/... -run TestDetectCapabilitiesDegradeForColorAndASCII -count=1`; `go test ./internal/cli/... -run TestInvocationEnvCapturesColorControls -count=1` | fail: `NO_COLOR=0`, `NO_COLOR=false`, `CLICOLOR=0` returned `Color=true`; `invocationEnv` missing `CLICOLOR` | pass: focused UI and CLI review gates passed; CLI gate `internal/cli 6.686s` |
+| ANSI16 dim SGR | `go test ./internal/ui/styles -run TestPaletteANSI16DimUsesBrightBlackSGR -count=1` | fail: `ANSI16 dim style = "\x1b[38mdim\x1b[0m", want bright-black SGR 90` | pass: focused UI/styles review gate included `TokenDim` SGR 90 case |
+| Human terminal controls | `go test ./internal/cli/... -run 'TestFlow.*Sanitizes.*Human' -count=1` | fail: human flow plan/list output contains unsafe terminal rune `U+001B` from step ID / filename payloads | pass: focused CLI review gate sanitized human plan/list output and preserved raw JSON output |
+| Docs/runtime wording + mixed stderr | `go test ./internal/cli/... -run TestGlobalUIFlagsDocumentedInHelp -count=1`; docs/website grep | fail: root help missing `Future TTY renderers`; config help missing `invalid UI/progress flag`; etl/flow help missing `stderr may also include the final error diagnostic` | pass: focused CLI review gate passed; docs/website grep found `--progress ndjson`, future TTY wording, mixed-stderr diagnostics, and exit-code wording |
+| Website/docs parity | `cd website && pnpm run gen:docs`; generated diff check | pending until docs edits | pass: `cd website && pnpm run gen:docs` wrote 11 docs pages to `website/lib/docs.generated.ts`; focused CLI golden docs/transcripts passed |
+
+### Red test capture rule for review fixes
+
+Do not edit production Go/docs for these findings until the focused red tests above fail and exact output is captured here. Preserve JSON output semantics for flow outputs; sanitize only human stdout fields unless a test proves JSON changed unexpectedly.
+
+### Review-fix red evidence captured — 2026-07-17
+
+```bash
+go test ./internal/ui/... -run 'TestDetectModeUsesADRGate|TestDetectCapabilitiesDegradeForColorAndASCII|TestPaletteANSI16DimUsesBrightBlackSGR' -count=1
+```
+
+Result: fail. Key output:
+
+```text
+--- FAIL: TestDetectModeUsesADRGate/pm_no_tui_zero_still_forces_plain
+    Detect(... Env:map[PM_NO_TUI:0 TERM:xterm-256color]).Mode = "tui", want "plain" (reasons=[])
+--- FAIL: TestDetectModeUsesADRGate/pm_no_tui_false_still_forces_plain
+    Detect(... Env:map[PM_NO_TUI:false TERM:xterm-256color]).Mode = "tui", want "plain" (reasons=[])
+--- FAIL: TestDetectModeUsesADRGate/ci_zero_still_forces_plain
+    Detect(... Env:map[CI:0 TERM:xterm-256color]).Mode = "tui", want "plain" (reasons=[])
+--- FAIL: TestDetectModeUsesADRGate/ci_false_still_forces_plain
+    Detect(... Env:map[CI:false TERM:xterm-256color]).Mode = "tui", want "plain" (reasons=[])
+--- FAIL: TestDetectCapabilitiesDegradeForColorAndASCII/no_color_zero_disables_color
+    Color/ASCII = true/false, want false/false
+--- FAIL: TestDetectCapabilitiesDegradeForColorAndASCII/no_color_false_disables_color
+    Color/ASCII = true/false, want false/false
+--- FAIL: TestDetectCapabilitiesDegradeForColorAndASCII/clicolor_zero_disables_color
+    Color/ASCII = true/false, want false/false
+--- FAIL: TestPaletteANSI16DimUsesBrightBlackSGR
+    ANSI16 dim style = "\x1b[38mdim\x1b[0m", want bright-black SGR 90
+FAIL
+```
+
+```bash
+go test ./internal/cli/... -run 'TestInvocationEnvCapturesColorControls|TestFlow.*Sanitizes.*Human|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1
+```
+
+Result: fail. Key output:
+
+```text
+--- FAIL: TestFlowPlanSanitizesUnsafeStepIDsInHumanOutput
+    human output contains unsafe terminal rune U+001B in "Flow: unsafe-flow  status=ok\n  1. score\x1b]0;owned\a\u202edone\n"
+--- FAIL: TestFlowListSanitizesUnsafeFilenamesInHumanOutput
+    human output contains unsafe terminal rune U+001B in "nightly\x1b]2;owned\a\u202eflow\n"
+--- FAIL: TestInvocationEnvCapturesColorControls
+    invocationEnv missing CLICOLOR in map[string]string{"CI":"", "NO_COLOR":"0", "PM_ASCII":"", "PM_NO_TUI":"", "TERM":"xterm-256color"}
+--- FAIL: TestGlobalUIFlagsDocumentedInHelp/root_help
+    help output missing "Future TTY renderers"
+--- FAIL: TestGlobalUIFlagsDocumentedInHelp/config_help
+    help output missing "invalid UI/progress flag"
+--- FAIL: TestGlobalUIFlagsDocumentedInHelp/etl_help
+    help output missing "stderr may also include the final error diagnostic"
+--- FAIL: TestGlobalUIFlagsDocumentedInHelp/flow_help
+    help output missing "stderr may also include the final error diagnostic"
+FAIL
+```
+
+### Review-fix green evidence captured — 2026-07-17
+
+```bash
+go test ./internal/ui/... -run 'TestDetectModeUsesADRGate|TestDetectCapabilitiesDegradeForColorAndASCII|TestPaletteANSI16DimUsesBrightBlackSGR' -count=1
+```
+
+Result: pass.
+
+```text
+ok  	polymetrics.ai/internal/ui	0.172s
+ok  	polymetrics.ai/internal/ui/styles	0.317s
+```
+
+```bash
+go test ./internal/cli/... -run 'TestInvocationEnvCapturesColorControls|TestFlow.*Sanitizes.*Human|TestGlobalUIFlagsDocumentedInHelp|TestProgressNDJSONFailureDocumentsMixedStderr' -count=1
+```
+
+Result: pass.
+
+```text
+ok  	polymetrics.ai/internal/cli	6.686s
+```
+
+```bash
+go test ./internal/cli/... -count=1
+```
+
+Result: pass.
+
+```text
+ok  	polymetrics.ai/internal/cli	169.138s
+```
+
+```bash
+cd website && pnpm run gen:docs
+```
+
+Result: pass.
+
+```text
+Wrote 11 docs pages to lib/docs.generated.ts.
+```
+
+```bash
+gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify
+```
+
+Result: pass. Key output:
+
+```text
+ok  	polymetrics.ai/internal/cli	170.511s
+ok  	polymetrics.ai/internal/connectors/certify	340.438s
+make verify
+ok  	polymetrics.ai/internal/cli	171.287s
+ok  	polymetrics.ai/internal/connectors/certify	342.514s
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.CnpIQlCCHU
+0 issues.
+connectorgen validate: 547 connector(s) checked, 0 findings
+```

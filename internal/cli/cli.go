@@ -110,7 +110,7 @@ func stdoutIsTerminal(stdout io.Writer, override *bool) bool {
 }
 
 func invocationEnv(override map[string]string) map[string]string {
-	keys := []string{"TERM", "PM_NO_TUI", "CI", "NO_COLOR", "PM_ASCII"}
+	keys := []string{"TERM", "PM_NO_TUI", "CI", "NO_COLOR", "CLICOLOR", "PM_ASCII"}
 	out := make(map[string]string, len(keys))
 	for _, key := range keys {
 		if override != nil {

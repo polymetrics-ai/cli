@@ -39,8 +39,28 @@ func TestDetectModeUsesADRGate(t *testing.T) {
 			want: ModePlain,
 		},
 		{
+			name: "pm no tui zero still forces plain",
+			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_NO_TUI": "0"}},
+			want: ModePlain,
+		},
+		{
+			name: "pm no tui false still forces plain",
+			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_NO_TUI": "false"}},
+			want: ModePlain,
+		},
+		{
 			name: "ci forces plain",
 			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "true"}},
+			want: ModePlain,
+		},
+		{
+			name: "ci zero still forces plain",
+			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "0"}},
+			want: ModePlain,
+		},
+		{
+			name: "ci false still forces plain",
+			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "false"}},
 			want: ModePlain,
 		},
 		{
@@ -76,6 +96,24 @@ func TestDetectCapabilitiesDegradeForColorAndASCII(t *testing.T) {
 		{
 			name:      "no color disables color",
 			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "1"}},
+			wantColor: false,
+			wantASCII: false,
+		},
+		{
+			name:      "no color zero disables color",
+			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "0"}},
+			wantColor: false,
+			wantASCII: false,
+		},
+		{
+			name:      "no color false disables color",
+			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "false"}},
+			wantColor: false,
+			wantASCII: false,
+		},
+		{
+			name:      "clicolor zero disables color",
+			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CLICOLOR": "0"}},
 			wantColor: false,
 			wantASCII: false,
 		},

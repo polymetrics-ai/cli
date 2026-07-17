@@ -17,6 +17,17 @@ func TestGlyphsDegradeToASCII(t *testing.T) {
 	}
 }
 
+func TestPaletteANSI16DimUsesBrightBlackSGR(t *testing.T) {
+	palette := ResolvePalette(Options{Profile: ProfileANSI16})
+
+	if got := palette.Style(TokenOK, "ok"); got != "\x1b[32mok\x1b[0m" {
+		t.Fatalf("ANSI16 ok style = %q, want green SGR 32", got)
+	}
+	if got := palette.Style(TokenDim, "dim"); got != "\x1b[90mdim\x1b[0m" {
+		t.Fatalf("ANSI16 dim style = %q, want bright-black SGR 90", got)
+	}
+}
+
 func TestPaletteDegradesColorProfiles(t *testing.T) {
 	plain := ResolvePalette(Options{Profile: ProfileNone, Dark: true})
 	if got := plain.Style(TokenOK, "ok"); got != "ok" {

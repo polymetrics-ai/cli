@@ -16,13 +16,13 @@ This page is the public website contract for the `pm` CLI. When a command is add
 | `--root <path>` | Selects the project root containing `.polymetrics`. |
 | `--plain` | Forces the plain non-TTY path even when stdout is a terminal. |
 | `--no-input` | Disables prompting and TTY UI. |
-| `--progress ndjson` | Streams sanitized progress events to stderr as NDJSON; stdout remains the final output or single JSON envelope. |
+| `--progress ndjson` | Streams sanitized progress events to stderr as NDJSON; stdout remains the final output or single JSON envelope. On failures, stderr may also include the final error diagnostic. |
 
 <Callout type="info">
   `--json` is the agent path for operational commands. A few developer-facing commands, such as `pm help`, are intentionally plain text because they return human manuals.
 </Callout>
 
-Interactive UI activates only when stdout is a TTY and `--json`, `--plain`, `--no-input`, `PM_NO_TUI`, `CI`, and `TERM=dumb` do not force the plain path. Use `--progress ndjson` on long-running commands when agents need live progress without polling checkpoint files.
+Future TTY renderers are eligible only when stdout is a TTY and `--json`, `--plain`, `--no-input`, non-empty `PM_NO_TUI`, non-empty `CI`, and `TERM=dumb` do not force the plain path. The current `cmd/pm` entrypoint keeps the plain path until a TTY renderer is wired intentionally. Use `--progress ndjson` on long-running commands when agents need live progress without polling checkpoint files.
 
 ## Configuration
 
@@ -34,7 +34,7 @@ Interactive UI activates only when stdout is a TTY and `--json`, `--plain`, `--n
 4. `<project-root>/.polymetrics/config.yaml`.
 5. Built-in defaults.
 
-Missing config files are allowed. Malformed YAML is a validation error (exit `3`). The `root` key in a file does not relocate config discovery for the same invocation; use `--root`, `POLYMETRICS_ROOT`, or `PM_ROOT` before loading another project. For malformed files, `--json`, `POLYMETRICS_JSON=true`, or `PM_JSON=true` selects the same single JSON `Error` envelope on stdout used by other validation errors.
+Missing config files are allowed. Malformed YAML and invalid UI/progress flag values are validation errors (exit `3`). The `root` key in a file does not relocate config discovery for the same invocation; use `--root`, `POLYMETRICS_ROOT`, or `PM_ROOT` before loading another project. For malformed files, `--json`, `POLYMETRICS_JSON=true`, or `PM_JSON=true` selects the same single JSON `Error` envelope on stdout used by other validation errors.
 
 Root and `json` affect invocation bootstrap. Runtime, RLM, and schedule keys are consumed by migrated runtime, worker, agent image, schedule, and RLM non-secret call sites. Worker/RLM agent Temporal execution remains opt-in: `runtime.temporal_addr` must be explicitly set by env or config file for those paths, while runtime doctor keeps local Compose defaults.
 
@@ -194,7 +194,7 @@ pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 
 pm etl status <run-id> --json
 ```
 
-Use direct `check`, `catalog`, and `read` while developing a connector or testing credentials. Use `pm etl run` for configured syncs. `--progress ndjson` writes progress to stderr only; stdout stays the final human line or one JSON envelope.
+Use direct `check`, `catalog`, and `read` while developing a connector or testing credentials. Use `pm etl run` for configured syncs. `--progress ndjson` writes progress events to stderr; stdout stays the final human line or one JSON envelope. On failures, stderr may also include the final error diagnostic.
 
 ```bash
 pm query run --table github_pull_requests --limit 20 --json
@@ -249,7 +249,7 @@ pm schedule install nightly --crontab --json
 pm schedule remove nightly --crontab --json
 ```
 
-Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. `--progress ndjson` streams flow progress to stderr only. Schedules install named flows into the local scheduler backend.
+Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. `--progress ndjson` streams flow progress events to stderr; on failures, stderr may also include the final error diagnostic. Schedules install named flows into the local scheduler backend.
 
 ## Operational commands
 
@@ -275,7 +275,7 @@ pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir w
 |---:|---|---|
 | `0` | success | Continue. |
 | `2` | usage | Fix command shape. |
-| `3` | validation | Fix argument values. |
+| `3` | validation | Fix argument values, including invalid UI/progress flag values. |
 | `4` | auth | Add or rotate credentials. |
 | `5` | connector | Inspect connector-specific failure. |
 | `6` | runtime | Start required runtime service. |

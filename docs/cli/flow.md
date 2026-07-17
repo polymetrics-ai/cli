@@ -16,8 +16,9 @@ DESCRIPTION
 
 PROGRESS
   Add --progress ndjson to stream sanitized flow progress events to stderr.
-  Stdout remains the final human line or single JSON envelope. CI, PM_NO_TUI,
-  --plain, --no-input, pipes, and TERM=dumb keep the plain path.
+  Stdout remains the final human line or single JSON envelope. On failures,
+  stderr may also include the final error diagnostic after progress events.
+  CI, PM_NO_TUI, --plain, --no-input, pipes, and TERM=dumb keep the plain path.
 
 RLM STEP EXAMPLE
   {
