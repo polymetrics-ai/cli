@@ -25,10 +25,10 @@ Fallback: manual GSD universal programming loop. Execution decision for this wor
 | ID | Slice | Test/validation | Red evidence | Green evidence | Refactor/gate |
 |---|---|---|---|---|---|
 | T0 | Planning | Phase artifacts created before production edits | n/a | This ledger + PLAN/VERIFICATION created | pending commit |
-| T1 | Logging primitives | `go test ./internal/logging/... -run 'TestRedactingHandler|TestRunFileHandler|TestLoggerFanout' -count=1` | pending | pending | pending |
-| T2 | Vault registry | `go test ./internal/vault/... -run TestVaultGetRegistersValuesForRedaction -count=1` | pending | pending | pending |
-| T3 | CLI log smoke | `go test ./internal/cli/... -run TestRedactedRunLogsSmoke -count=1` | pending | pending | pending |
-| T4 | Temporal bridge | `go test ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... -count=1` | pending | pending | pending |
+| T1 | Logging primitives | `go test ./internal/logging/... -run 'TestRedactingHandler|TestRunFileHandler|TestRunLogger|TestTemporalLogger' -count=1` | RED — build failed: `undefined: NewValueRegistry`, `undefined: NewRedactingHandler`, `undefined: RedactionOptions`, `undefined: NewLogger`, `undefined: LoggerOptions`, `undefined: WithRunID`, `undefined: NewRunFileHandler`, `undefined: RunFileOptions` | pending | pending |
+| T2 | Vault registry | `go test ./internal/vault/... -run TestVaultGetRegistersValuesForRedaction -count=1` | RED — build failed: `polymetrics.ai/internal/logging: no non-test Go files` | pending | pending |
+| T3 | CLI log smoke | `go test ./internal/cli/... -run TestRedactedRunLogsSmoke -count=1` | RED — `expected at least one run log` | pending | pending |
+| T4 | Temporal bridge | `go test ./internal/logging/... -run TestTemporalLoggerUsesContextRedactingLogger -count=1` | RED covered by T1 missing `TemporalLogger`/logging package API | pending | pending |
 | T5 | Focused race gate | `go test -race ./internal/logging/... ./internal/vault/... ./internal/worker/... ./internal/runtimecheck/... ./internal/cli/... -count=1` | pending | pending | pending |
 | T6 | Full gate | `go vet ./... && go test ./... && go build ./cmd/pm && make verify` | pending | pending | pending |
 

@@ -12,13 +12,18 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "Worker is already isolated in assigned cwd; recursive subagents unavailable/forbidden for mutating worker; execute issue inline under GSD universal loop."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Red tests added inline within issue write scope before production edits."
     }
   ],
   "gates": {
     "gsdDoctor": "pass",
     "gsdPlanPrompt": "pass",
     "gsdProgrammingLoopDryRun": "fallback",
-    "redTests": "pending",
+    "redTests": "red-captured",
     "focusedRace": "pending",
     "goVet": "pending",
     "goTestAll": "pending",
