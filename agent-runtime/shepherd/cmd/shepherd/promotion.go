@@ -517,8 +517,9 @@ func validatedGSDManifestHash(proof store.ArtifactProof) (string, error) {
 		ObservedWorkflowTools []string `json:"observed_workflow_tools"`
 		GSDManifestHash       string   `json:"gsd_manifest_hash"`
 		Artifacts             []struct {
-			Path string `json:"path"`
-			Hash string `json:"hash"`
+			Path    string `json:"path"`
+			Hash    string `json:"hash"`
+			Deleted bool   `json:"deleted,omitempty"`
 		} `json:"artifacts"`
 	}
 	decoder := json.NewDecoder(bytes.NewReader([]byte(proof.ExpectedArtifact)))
@@ -534,6 +535,9 @@ func validatedGSDManifestHash(proof store.ArtifactProof) (string, error) {
 		}
 		if _, err := hex.DecodeString(artifact.Hash[len("sha256:"):]); err != nil {
 			return "", errors.New("ratified proof has invalid artifact entry")
+		}
+		if artifact.Deleted != (artifact.Hash == "sha256:0000000000000000000000000000000000000000000000000000000000000000") {
+			return "", errors.New("ratified proof has inconsistent deletion artifact entry")
 		}
 	}
 	if !hasManifestHash {

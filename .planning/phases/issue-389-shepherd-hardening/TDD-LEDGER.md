@@ -479,7 +479,7 @@ canonicalizes accepted evidence only.
       planning checkpoint.
 - [ ] Authorized branch push, exact local/remote equality, draft stacked PR, and CI monitoring.
 
-## Post-Slice-G exact-head review fix — IN PROGRESS
+## Post-Slice-G exact-head review fix — FOCUSED GREEN / INTEGRATION LOADER BLOCKED
 
 Authorization: change only deletion-proof identity/revalidation and bounded Git execution plus minimum
 evidence/process-test propagation. Preserve `ee474811`, `17ca31f6`, and `e53e9e56`; no amend, rebase,
@@ -495,33 +495,104 @@ Confirmed review findings:
 
 RED tests before production edits:
 
-- [ ] Scoped tracked deletion yields explicit `Deleted=true` plus exact sentinel.
-- [ ] Out-of-scope deletion remains `ErrWriteScopeBreach`.
-- [ ] Rename is deterministic deletion plus addition with rename detection disabled.
-- [ ] Unknown/malformed status, Git failure, and oversized object never become deletion.
-- [ ] Validator accepts deletion only when the exact candidate path and symlink-free containing path
+- [x] Scoped tracked deletion yields explicit `Deleted=true` plus exact sentinel.
+- [x] Out-of-scope deletion remains `ErrWriteScopeBreach`.
+- [x] Rename is deterministic deletion plus addition with rename detection disabled.
+- [x] Unknown/malformed status, Git failure, and oversized object never become deletion.
+- [x] Validator accepts deletion only when the exact candidate path and symlink-free containing path
       are absent; recreated file/directory/symlink and symlinked parent fail.
-- [ ] Deletion flag/sentinel mismatch and present-artifact deletion sentinel fail.
-- [ ] Present artifacts that disappear or become symlinks fail before/post validation.
-- [ ] Git stdout/stderr are bounded while running; exact limit passes, over-limit has typed identity,
+- [x] Deletion flag/sentinel mismatch and present-artifact deletion sentinel fail.
+- [x] Present artifacts that disappear or become symlinks fail before/post validation.
+- [x] Git stdout/stderr are bounded while running; exact limit passes, over-limit has typed identity,
       errors are bounded/redacted, cancellation remains classifiable, and Git environment is sanitized.
-- [ ] Actual built `shepherd supervise` deletion succeeds through validator, ratification, promotion,
+- [x] Actual built `shepherd supervise` deletion succeeds through validator, ratification, promotion,
       and `final_human_gate`; rejected variants preserve canonical Git/GSD.
 
-Planned RED commands:
+RED evidence captured before production edits:
 
 ```bash
-cd agent-runtime/shepherd
-go test ./internal/git -count=1
-go test ./internal/validation -count=1
-go test ./cmd/shepherd -count=1
-go test -tags=integration ./integration/... -run 'TestSupervise.*Delet|TestArtifact.*Delet' -count=1
+cd agent-runtime/shepherd && go test ./internal/git -count=1
+```
+Expected FAIL: `Artifact.Deleted`, `DeletionSentinelHash`, `ErrOutputLimit`, `maxGitStdoutBytes`, and
+`maxGitStderrBytes` are undefined, proving deletion identity and typed bounded Git output do not exist.
+
+```bash
+cd agent-runtime/shepherd && go test ./internal/validation -count=1
+```
+Expected FAIL: `ArtifactHash.Deleted` and `DeletionSentinelHash` are undefined, proving protected
+validator requests cannot express typed deletion proofs.
+
+```bash
+cd agent-runtime/shepherd && go test ./cmd/shepherd -count=1
+```
+Control PASS in 43.465s; command package still compiles before production rewiring.
+
+```bash
+cd agent-runtime/shepherd && go test -tags=integration ./integration/... -run 'TestSupervise.*Delet|TestArtifact.*Delet' -count=1
+```
+Environment-blocked RED: built deletion tests could not reach runtime because this isolated checkout lacks
+the packaged official GSD loader at `/tmp/.tools/gsd-pi-1.11.0/.../loader.js`; retrying with the only local
+loader failed admission with `runtime_contract_mismatch: GSD command does not target the packaged loader`.
+The process tests are present and remain a required GREEN gate when the loader is available.
+
+GREEN/refactor evidence:
+
+- Added typed `Deleted` JSON identity with `omitempty` to Git artifacts and validator artifact hashes,
+  using the exact shared deletion sentinel string.
+- `ArtifactManifest` now parses `git diff --name-status -z --no-renames`, treats `D` as deletion,
+  `A/M/T` as present object hashes, rejects malformed/unknown status, and propagates Git/hash/limit
+  failures without manufacturing deletion.
+- Git stdout/stderr use bounded draining buffers with typed `ErrOutputLimit`, bounded sanitized
+  diagnostics, argv execution, sanitized Git environment, and context cancellation identity.
+- Present Git objects are hashed as a stream through `git cat-file blob` with an 8 MiB governed
+  maximum; oversized blobs return `ErrOutputLimit` and never become deletion.
+- Validator pre/post revalidation now requires consistent flag/sentinel pairs. Deleted paths pass only
+  when absent through a lexical, no-follow existing-component walk; present paths must remain regular
+  non-symlink files with the bound digest.
+- Command evidence conversion, promotion proof decoding, integration proof assertions, and fake-runtime
+  deletion scenarios propagate the typed deletion bit.
+
+GREEN commands:
+
+```bash
+cd agent-runtime/shepherd && go test ./internal/git -count=1
+# PASS ok github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/git 1.078s
+cd agent-runtime/shepherd && go test ./internal/validation -count=1
+# PASS ok github.com/polymetrics-ai/cli/agent-runtime/shepherd/internal/validation 4.585s
+cd agent-runtime/shepherd && go test ./cmd/shepherd -count=1
+# PASS ok github.com/polymetrics-ai/cli/agent-runtime/shepherd/cmd/shepherd 45.426s
+cd agent-runtime/shepherd && go test ./internal/git ./internal/validation ./cmd/shepherd -count=1
+# PASS internal/git 0.917s, internal/validation 4.930s, cmd/shepherd 44.446s
+cd agent-runtime/shepherd && go test -race ./internal/git ./internal/validation ./cmd/shepherd -count=1
+# PASS internal/git 8.417s, internal/validation 100.724s, cmd/shepherd 253.859s
+cd agent-runtime/shepherd && go test ./...
+# PASS all Shepherd nested packages
+cd agent-runtime/shepherd && go test -race ./...
+# PASS all Shepherd nested packages
+cd agent-runtime/shepherd && go vet ./... && go build ./cmd/shepherd && make verify
+# PASS; generated agent-runtime/shepherd/shepherd removed afterwards
+scripts/tests/shepherd-module-boundary.sh && git diff --check && go list ./...
+# PASS boundary; PASS diff check; PASS root package list
+make verify
+# PASS root verify/smoke/connectorgen; generated ./pm removed afterwards
+cd agent-runtime/shepherd && golangci-lint run ./...
+# Expected nonzero accepted baseline: exactly 28 issues (25 errcheck, 2 staticcheck, 1 unused)
+cd agent-runtime/shepherd && golangci-lint run --build-tags=integration ./...
+# Expected nonzero accepted baseline: exactly 28 issues (25 errcheck, 2 staticcheck, 1 unused)
 ```
 
-GREEN/refactor evidence and exact commands will be appended after they run. Orchestration decision:
-`local_critical_path` for planning; implementation uses one isolated GPT-5.5/high worker because Git
-artifact parsing, validator request identity, command evidence hashing, and process integration share
-one sequential trust boundary.
+Integration environment note:
+
+```bash
+cd agent-runtime/shepherd && go test -tags=integration ./integration/... -run 'TestSupervise.*Delet|TestArtifact.*Delet' -count=1
+```
+Still cannot execute in this checkout because the packaged official GSD loader is absent at
+`/tmp/.tools/gsd-pi-1.11.0/.../loader.js`; no production fallback or fake admission bypass was added.
+The deletion process tests compile in the integration package and remain a coordinator/loader-provisioned gate.
+
+Orchestration decision: `local_critical_path` for planning, RED, GREEN, and verification because Git
+artifact parsing, validator request identity, command evidence hashing, and process integration share one
+sequential trust boundary.
 
 ## Verification log
 

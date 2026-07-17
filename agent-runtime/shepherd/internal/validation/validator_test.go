@@ -17,6 +17,142 @@ import (
 
 const testNonce = "11111111111111111111111111111111"
 
+func TestVerifyArtifactHashesAcceptsDeletionOnlyWhenPathAbsent(t *testing.T) {
+	workDir := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(workDir, "agent-runtime", "shepherd"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	deleted := ArtifactHash{Path: "agent-runtime/shepherd/deleted.txt", Hash: DeletionSentinelHash, Deleted: true}
+	if err := verifyArtifactHashes(workDir, []ArtifactHash{deleted}); err != nil {
+		t.Fatalf("absent deletion rejected: %v", err)
+	}
+	for _, test := range []struct {
+		name  string
+		setup func() error
+	}{
+		{name: "regular file", setup: func() error {
+			return os.WriteFile(filepath.Join(workDir, "agent-runtime", "shepherd", "deleted.txt"), []byte("recreated"), 0o600)
+		}},
+		{name: "directory", setup: func() error {
+			_ = os.Remove(filepath.Join(workDir, "agent-runtime", "shepherd", "deleted.txt"))
+			return os.Mkdir(filepath.Join(workDir, "agent-runtime", "shepherd", "deleted.txt"), 0o700)
+		}},
+		{name: "symlink", setup: func() error {
+			_ = os.RemoveAll(filepath.Join(workDir, "agent-runtime", "shepherd", "deleted.txt"))
+			return os.Symlink("missing-target", filepath.Join(workDir, "agent-runtime", "shepherd", "deleted.txt"))
+		}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if err := os.RemoveAll(filepath.Join(workDir, "agent-runtime", "shepherd", "deleted.txt")); err != nil {
+				t.Fatal(err)
+			}
+			if err := test.setup(); err != nil {
+				t.Fatal(err)
+			}
+			if err := verifyArtifactHashes(workDir, []ArtifactHash{deleted}); err == nil {
+				t.Fatal("recreated deleted artifact accepted")
+			}
+		})
+	}
+}
+
+func TestVerifyArtifactHashesRejectsDeletionThroughSymlinkedParent(t *testing.T) {
+	workDir := t.TempDir()
+	outside := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(workDir, "agent-runtime"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(outside, filepath.Join(workDir, "agent-runtime", "shepherd")); err != nil {
+		t.Fatal(err)
+	}
+	artifact := ArtifactHash{Path: "agent-runtime/shepherd/deleted.txt", Hash: DeletionSentinelHash, Deleted: true}
+	if err := verifyArtifactHashes(workDir, []ArtifactHash{artifact}); err == nil {
+		t.Fatal("deletion through symlinked parent accepted")
+	}
+}
+
+func TestVerifyArtifactHashesRejectsDeletionFlagAndSentinelMismatch(t *testing.T) {
+	workDir := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(workDir, "agent-runtime", "shepherd"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	presentPath := filepath.Join(workDir, "agent-runtime", "shepherd", "present.txt")
+	if err := os.WriteFile(presentPath, []byte("present"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	presentSum := sha256.Sum256([]byte("present"))
+	for _, artifact := range []ArtifactHash{
+		{Path: "agent-runtime/shepherd/deleted.txt", Hash: "sha256:" + strings.Repeat("a", 64), Deleted: true},
+		{Path: "agent-runtime/shepherd/present.txt", Hash: DeletionSentinelHash},
+		{Path: "agent-runtime/shepherd/present.txt", Hash: "sha256:" + hex.EncodeToString(presentSum[:]), Deleted: true},
+	} {
+		if err := verifyArtifactHashes(workDir, []ArtifactHash{artifact}); err == nil {
+			t.Fatalf("mismatched artifact accepted: %+v", artifact)
+		}
+	}
+}
+
+func TestVerifyArtifactHashesPresentFilesStayRegularAndStable(t *testing.T) {
+	workDir := t.TempDir()
+	artifactPath := filepath.Join(workDir, "agent-runtime", "shepherd", "present.txt")
+	if err := os.MkdirAll(filepath.Dir(artifactPath), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(artifactPath, []byte("present"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	sum := sha256.Sum256([]byte("present"))
+	artifact := ArtifactHash{Path: "agent-runtime/shepherd/present.txt", Hash: "sha256:" + hex.EncodeToString(sum[:])}
+	if err := verifyArtifactHashes(workDir, []ArtifactHash{artifact}); err != nil {
+		t.Fatalf("present artifact rejected: %v", err)
+	}
+	if err := os.Remove(artifactPath); err != nil {
+		t.Fatal(err)
+	}
+	if err := verifyArtifactHashes(workDir, []ArtifactHash{artifact}); err == nil {
+		t.Fatal("missing present artifact accepted")
+	}
+	if err := os.Symlink("target", artifactPath); err != nil {
+		t.Fatal(err)
+	}
+	if err := verifyArtifactHashes(workDir, []ArtifactHash{artifact}); err == nil {
+		t.Fatal("symlink present artifact accepted")
+	}
+}
+
+func TestArtifactHashJSONOmitsDeletedWhenFalse(t *testing.T) {
+	raw, err := json.Marshal(ArtifactHash{Path: "agent-runtime/shepherd/present.txt", Hash: "sha256:" + strings.Repeat("a", 64)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(raw), "deleted") {
+		t.Fatalf("non-deleted JSON changed: %s", raw)
+	}
+}
+
+func TestValidateRequestRequiresConsistentDeletionArtifacts(t *testing.T) {
+	request := completeValidationRequestForDeletionTest()
+	request.ArtifactHashes = []ArtifactHash{{Path: "agent-runtime/shepherd/deleted.txt", Hash: DeletionSentinelHash}}
+	if err := validateRequest(request); err == nil {
+		t.Fatal("sentinel without deleted flag accepted")
+	}
+	request.ArtifactHashes = []ArtifactHash{{Path: "agent-runtime/shepherd/deleted.txt", Hash: "sha256:" + strings.Repeat("b", 64), Deleted: true}}
+	if err := validateRequest(request); err == nil {
+		t.Fatal("deleted flag without sentinel accepted")
+	}
+}
+
+func completeValidationRequestForDeletionTest() Request {
+	return Request{
+		RequestID: "validation-delete", Repository: "polymetrics-ai/cli", PullRequest: 389,
+		BaseBranch: "main", DeliveryID: "issue-389", Generation: 1, UnitID: "unit", UnitType: "execute-task",
+		Attempt: 1, StateVersion: 1, WorkDir: "/tmp/work", GSDHome: "/tmp/gsd", StateDir: "/tmp/state",
+		BaseHead: strings.Repeat("a", 40), CandidateHead: strings.Repeat("b", 40),
+		ContractHash: "sha256:" + strings.Repeat("c", 64), EvidenceHash: "sha256:" + strings.Repeat("d", 64),
+		ArtifactHashes: []ArtifactHash{{Path: "agent-runtime/shepherd/present.txt", Hash: "sha256:" + strings.Repeat("e", 64)}},
+	}
+}
+
 func TestProductionValidatorRejectsUnsupportedInventedGSDInterface(t *testing.T) {
 	t.Parallel()
 	gsdPath, err := exec.LookPath("gsd")

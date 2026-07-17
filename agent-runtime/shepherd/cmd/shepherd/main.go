@@ -2919,7 +2919,7 @@ func persistSuccessProof(ctx context.Context, authorityStore *store.Store, valid
 	evidenceHash := sha256.Sum256(raw)
 	artifactHashes := make([]validation.ArtifactHash, 0, len(artifacts))
 	for _, artifact := range artifacts {
-		artifactHashes = append(artifactHashes, validation.ArtifactHash{Path: artifact.Path, Hash: artifact.Hash})
+		artifactHashes = append(artifactHashes, validation.ArtifactHash{Path: artifact.Path, Hash: artifact.Hash, Deleted: artifact.Deleted})
 	}
 	evidenceHashValue := "sha256:" + hex.EncodeToString(evidenceHash[:])
 	contractHashValue := "sha256:" + hex.EncodeToString(contractHash[:])

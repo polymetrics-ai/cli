@@ -395,7 +395,7 @@ stay deferred pending separate explicit approval.
   equality and cleanliness, open the authorized draft stacked PR with `Refs #389` and `Refs #372`,
   monitor CI, and stop. Do not run canaries, cleanup/migration, merge any PR, or mutate `main`.
 
-## Post-Slice-G exact-head review fix — IN PROGRESS
+## Post-Slice-G exact-head review fix — IMPLEMENTED / FOCUSED GREEN
 
 Authorization is limited to two confirmed findings from the GPT-5.6 Sol/high review of
 `e53e9e56b67145419a11f1b577f858922e1a4c50`:
@@ -421,11 +421,22 @@ TDD/implementation contract:
 - Propagate deletion identity through artifact/evidence JSON, protected validator requests, proof
   hashing, promotion binding, unit fixtures, and actual-CLI integration coverage without weakening
   exact-head, ratification, or promotion gates.
-- Capture focused RED before production edits, then GREEN/refactor, full normal/race/integration/vet/
-  build/verify/lint gates, and fresh exact-head GPT-5.6 Sol/high correctness/security review.
+- Focused RED was captured before production edits. GREEN/refactor now passes focused Git/validation/
+  command tests, focused race, full nested normal/race, vet/build/nested and root verify, boundary,
+  diff, root list, and default/tagged lint-baseline gates. The deletion integration tests are present
+  but blocked in this isolated checkout by the missing packaged official GSD loader; fresh exact-head
+  GPT-5.6 Sol/high correctness/security review remains coordinator-owned.
 
 Authorized production paths are limited to `agent-runtime/shepherd/internal/git/**`,
 `agent-runtime/shepherd/internal/validation/**`, minimum evidence conversion under
 `agent-runtime/shepherd/cmd/shepherd/**`, minimum process tests under
 `agent-runtime/shepherd/integration/**`, and this phase directory. No dependencies or unrelated
 behavior changes are authorized.
+
+Implementation summary: `ArtifactManifest` now uses bounded argv Git execution and
+`diff --name-status -z --no-renames`; deletions are explicit typed artifacts, present blob hashing is
+streamed through the validator-aligned 8 MiB limit, Git stdout/stderr diagnostics are bounded and
+sanitized, and validator pre/post checks enforce absence or regular-file stability without following
+symlinked path components. Promotion proof and actual-CLI integration fixtures now preserve deletion
+identity. Keep `verificationPassed=false` until coordinator provisions the official integration loader
+and completes exact-head review.

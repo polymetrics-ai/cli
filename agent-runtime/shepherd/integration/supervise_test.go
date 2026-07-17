@@ -143,6 +143,40 @@ func TestSuperviseRoutesPlanningMetadataToSolHigh(t *testing.T) {
 		[]string{"planning"}, []string{"gsd_milestone_status", "gsd_plan_milestone", "gsd_plan_slice", "gsd_plan_task"})
 }
 
+func TestSuperviseTrackedDeletionReachesFinalGate(t *testing.T) {
+	fixture := newFixture(t, "tracked-deletion")
+	result := fixture.supervise(t)
+	if result.err != nil {
+		t.Fatalf("deletion supervise failed: %v\nstdout:\n%s\nstderr:\n%s", result.err, result.stdout, result.stderr)
+	}
+	if terminal := finalStatus(t, result.stdout); terminal.Status != "final_human_gate" {
+		t.Fatalf("terminal=%+v", terminal)
+	}
+	candidateHead := git(t, fixture.repo, "rev-parse", "HEAD")
+	if candidateHead == fixture.baseHead {
+		t.Fatal("canonical Git did not promote deletion candidate")
+	}
+	if _, err := os.Lstat(filepath.Join(fixture.repo, "agent-runtime", "shepherd", "integration-artifact.txt")); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("canonical deleted content still exists: %v", err)
+	}
+	authority := filepath.Join(fixture.stateDir, "authority.db")
+	assertCount(t, authority, `SELECT COUNT(*) FROM artifact_proofs
+		WHERE candidate_head = ? AND validated_head = ? AND expected_artifact LIKE '%"deleted":true%'`,
+		1, candidateHead, candidateHead)
+	assertProofMatchesCanonical(t, authority, fixture.repo, candidateHead, "execute-task",
+		[]string{"execution"}, []string{"gsd_task_complete", "gsd_exec", "gsd_exec_search", "gsd_resume", "gsd_capture_thought"})
+}
+
+func TestSuperviseTrackedDeletionRejectsRecreatedPathAfterValidation(t *testing.T) {
+	fixture := newFixture(t, "tracked-deletion-recreated")
+	result := fixture.supervise(t)
+	if result.err == nil {
+		t.Fatalf("recreated deletion unexpectedly promoted:\n%s", result.stdout)
+	}
+	fixture.assertCanonicalUnchanged(t)
+	assertCount(t, filepath.Join(fixture.stateDir, "authority.db"), `SELECT COUNT(*) FROM promotion_journals`, 0)
+}
+
 func TestSuperviseAcceptsValidatedGSDStateOnlyCandidate(t *testing.T) {
 	fixture := newFixture(t, "gsd-state-only")
 	result := fixture.supervise(t)
@@ -953,6 +987,10 @@ func newFixture(t *testing.T, scenario string) fixture {
 }`, branch)
 	writeFile(t, contextPath, contextRaw, 0o600)
 	writeFile(t, filepath.Join(repo, ".gsd", "STATE.md"), "process-boundary canonical state\n", 0o600)
+	if strings.HasPrefix(scenario, "tracked-deletion") {
+		writeFile(t, filepath.Join(repo, "agent-runtime", "shepherd", "integration-artifact.txt"), "canonical artifact to delete\n", 0o600)
+		git(t, repo, "add", "agent-runtime/shepherd/integration-artifact.txt")
+	}
 	git(t, repo, "add", "issue-context.json")
 	git(t, repo, "commit", "-qm", "test: add governed context")
 	baseHead := git(t, repo, "rev-parse", "HEAD")
@@ -1459,8 +1497,9 @@ func assertProofMatchesCanonical(t *testing.T, authorityPath, repo, candidateHea
 		ObservedWorkflowTools []string `json:"observed_workflow_tools"`
 		GSDManifestHash       string   `json:"gsd_manifest_hash"`
 		Artifacts             []struct {
-			Path string `json:"path"`
-			Hash string `json:"hash"`
+			Path    string `json:"path"`
+			Hash    string `json:"hash"`
+			Deleted bool   `json:"deleted,omitempty"`
 		} `json:"artifacts"`
 	}
 	if err := json.Unmarshal([]byte(raw), &manifest); err != nil || manifest.GSDManifestHash == "" ||
@@ -1488,6 +1527,15 @@ func assertProofMatchesCanonical(t *testing.T, authorityPath, repo, candidateHea
 	proofPaths := make(map[string]struct{}, len(manifest.Artifacts))
 	for _, artifact := range manifest.Artifacts {
 		proofPaths[artifact.Path] = struct{}{}
+		if artifact.Deleted {
+			if artifact.Hash != "sha256:0000000000000000000000000000000000000000000000000000000000000000" {
+				t.Fatalf("deleted artifact %s hash=%s", artifact.Path, artifact.Hash)
+			}
+			if _, err := os.Lstat(filepath.Join(repo, filepath.FromSlash(artifact.Path))); !errors.Is(err, os.ErrNotExist) {
+				t.Fatalf("deleted artifact %s exists after promotion: %v", artifact.Path, err)
+			}
+			continue
+		}
 		content, err := os.ReadFile(filepath.Join(repo, filepath.FromSlash(artifact.Path)))
 		if err != nil {
 			t.Fatalf("read promoted proof artifact %s: %v", artifact.Path, err)

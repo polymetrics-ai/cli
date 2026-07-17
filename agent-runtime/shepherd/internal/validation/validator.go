@@ -22,10 +22,12 @@ import (
 )
 
 const maxValidatorOutputBytes = 2 * 1024 * 1024
+const DeletionSentinelHash = "sha256:0000000000000000000000000000000000000000000000000000000000000000"
 
 type ArtifactHash struct {
-	Path string `json:"path"`
-	Hash string `json:"hash"`
+	Path    string `json:"path"`
+	Hash    string `json:"hash"`
+	Deleted bool   `json:"deleted,omitempty"`
 }
 
 type Request struct {
@@ -701,6 +703,9 @@ func validateRequest(request Request) error {
 		if strings.TrimSpace(artifact.Path) == "" || !validHash(artifact.Hash) {
 			return errors.New("validation artifact hashes must be complete")
 		}
+		if artifact.Deleted != (artifact.Hash == DeletionSentinelHash) {
+			return errors.New("validation deletion artifact identity is inconsistent")
+		}
 	}
 	return nil
 }
@@ -710,13 +715,27 @@ func verifyArtifactHashes(workDir string, artifacts []ArtifactHash) error {
 		return errors.New("validation artifact set is empty or exceeds the governed limit")
 	}
 	for _, artifact := range artifacts {
-		if filepath.IsAbs(artifact.Path) || filepath.Clean(artifact.Path) != artifact.Path {
-			return errors.New("validation artifact path is not a clean relative path")
+		path, info, err := resolveArtifactNoFollow(workDir, artifact.Path)
+		if err != nil {
+			return err
 		}
-		path := filepath.Join(workDir, artifact.Path)
-		inside, err := pathInside(workDir, path)
-		if err != nil || !inside {
-			return errors.New("validation artifact escapes the candidate worktree")
+		if artifact.Deleted {
+			if artifact.Hash != DeletionSentinelHash {
+				return errors.New("validation deleted artifact must use the deletion sentinel")
+			}
+			if info != nil {
+				return errors.New("validation deleted artifact exists in the candidate worktree")
+			}
+			continue
+		}
+		if artifact.Hash == DeletionSentinelHash {
+			return errors.New("validation present artifact must not use the deletion sentinel")
+		}
+		if info == nil {
+			return errors.New("validation present artifact is missing")
+		}
+		if info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
+			return errors.New("validation present artifact must be a regular non-symlink file")
 		}
 		file, err := os.Open(path)
 		if err != nil {
@@ -737,6 +756,43 @@ func verifyArtifactHashes(workDir string, artifacts []ArtifactHash) error {
 		}
 	}
 	return nil
+}
+
+func resolveArtifactNoFollow(workDir, relPath string) (string, os.FileInfo, error) {
+	if filepath.IsAbs(relPath) || filepath.Clean(relPath) != relPath || relPath == "." || relPath == ".." || strings.HasPrefix(relPath, "../") || strings.ContainsRune(relPath, 0) {
+		return "", nil, errors.New("validation artifact path is not a clean relative path")
+	}
+	root := filepath.Clean(workDir)
+	path := filepath.Join(root, filepath.FromSlash(relPath))
+	lexicalRel, err := filepath.Rel(root, path)
+	if err != nil || lexicalRel == ".." || strings.HasPrefix(lexicalRel, ".."+string(os.PathSeparator)) {
+		return "", nil, errors.New("validation artifact escapes the candidate worktree")
+	}
+	current := root
+	parts := strings.Split(filepath.ToSlash(relPath), "/")
+	for index, part := range parts {
+		if part == "" || part == "." || part == ".." {
+			return "", nil, errors.New("validation artifact path is not a clean relative path")
+		}
+		current = filepath.Join(current, part)
+		info, err := os.Lstat(current)
+		if errors.Is(err, os.ErrNotExist) {
+			return path, nil, nil
+		}
+		if err != nil {
+			return "", nil, err
+		}
+		if info.Mode()&os.ModeSymlink != 0 {
+			return "", nil, errors.New("validation artifact path contains a symlink")
+		}
+		if index < len(parts)-1 && !info.IsDir() {
+			return "", nil, errors.New("validation artifact parent is not a directory")
+		}
+		if index == len(parts)-1 {
+			return path, info, nil
+		}
+	}
+	return path, nil, nil
 }
 
 func gitHead(ctx context.Context, workDir string) (string, error) {

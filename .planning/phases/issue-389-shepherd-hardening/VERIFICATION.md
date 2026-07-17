@@ -253,27 +253,29 @@ Required gates:
 ### Post-Slice-G exact-head review fix
 
 Deletion proof:
-- [ ] Explicit typed deletion and exact sentinel are jointly required and hash-bound.
-- [ ] Present artifacts require `Deleted=false`, a normal content hash, regular no-follow path, and
+- [x] Explicit typed deletion and exact sentinel are jointly required and hash-bound.
+- [x] Present artifacts require `Deleted=false`, a normal content hash, regular no-follow path, and
       exact bounded content digest.
-- [ ] Deleted artifacts require exact absence through a symlink-free contained parent chain before and
+- [x] Deleted artifacts require exact absence through a symlink-free contained parent chain before and
       after validation.
-- [ ] Scoped deletion, out-of-scope deletion, deterministic rename, malformed/unknown status, recreated
+- [x] Scoped deletion, out-of-scope deletion, deterministic rename, malformed/unknown status, recreated
       path variants, flag/sentinel mismatch, and disappearing present artifacts are covered.
 - [ ] Actual built-CLI deletion reaches ratification, promotion, and `final_human_gate`; rejected variants
-      leave canonical Git/GSD unchanged.
+      leave canonical Git/GSD unchanged. Test exists but this isolated checkout lacks the packaged
+      official GSD loader required to execute the integration harness.
 
 Bounded Git execution:
-- [ ] Git diff status, stdout, stderr, object bytes, and errors are bounded during execution.
-- [ ] Exact limits pass; over-limit stdout/stderr return typed/sentinel errors with bounded diagnostics.
-- [ ] Context cancellation and nonzero Git exit remain distinguishable and never create deletion records.
-- [ ] Argv execution and sanitized Git environment remain unchanged; no shell or dependency is added.
+- [x] Git diff status, stdout, stderr, object bytes, and errors are bounded during execution.
+- [x] Exact limits pass; over-limit stdout/stderr return typed/sentinel errors with bounded diagnostics.
+- [x] Context cancellation and nonzero Git exit remain distinguishable and never create deletion records.
+- [x] Argv execution and sanitized Git environment remain unchanged; no shell or dependency is added.
 
 Gates/review:
-- [ ] Focused Git/validator/command/deletion integration tests pass.
-- [ ] Focused race and full normal/race integration tests pass.
-- [ ] Full nested tests/race/vet/build/`make verify`, root `make verify`, boundary/list/diff/JSON/hygiene pass.
-- [ ] Default and integration-tagged lint remain exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`.
+- [x] Focused Git/validator/command tests pass.
+- [x] Focused race and full normal/race nested Shepherd tests pass.
+- [ ] Deletion integration tests are blocked by missing packaged official GSD loader in this checkout.
+- [x] Full nested tests/race/vet/build/`make verify`, root `make verify`, boundary/list/diff/hygiene pass.
+- [x] Default and integration-tagged lint remain exactly 25 `errcheck`, 2 `staticcheck`, 1 `unused`.
 - [ ] Fresh exact-head GPT-5.6 Sol/high correctness and security reviews have no unresolved findings.
 - [ ] Only then: fast-forward push, draft stacked PR, CI monitoring, and stop before canaries.
 
@@ -387,6 +389,14 @@ go list ./...
   Git output/error classification. Both findings are accepted and explicitly authorized for repair.
 - During pre-fix verification, one Shepherd query cleanup `EPERM` failed closed then passed 20/20 plus
   full rerun; optional root-wide race timed out without a race report and is not an issue-389 gate.
-- `verificationPassed` is false during the authorized review-fix cycle.
+- Post-Slice-G review-fix RED: PASS as expected before production edits for internal Git/validation
+  typed-deletion and output-limit tests; command package control passed; deletion integration RED is
+  environment-blocked by the absent packaged official GSD loader.
+- Post-Slice-G review-fix GREEN: PASS focused Git/validation/command tests, focused race, full nested
+  normal/race, vet/build/nested `make verify`, root `make verify`, module boundary, diff check, root
+  package list, and exact default/tagged 28-finding lint baseline. Generated `shepherd` and `pm` binaries
+  were removed.
+- `verificationPassed` is false during the authorized review-fix cycle because deletion integration and
+  exact-head review remain coordinator-owned pending gates.
 - Draft stacked PR creation is pending replacement exact-head review. Canaries, credentials,
   cleanup/migration, ready-for-review transition, every PR merge, and `main` mutation remain blocked.

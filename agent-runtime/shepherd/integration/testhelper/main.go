@@ -169,7 +169,11 @@ func runUnit(args []string) error {
 		return finishImplementation(workDir, runtimeModel)
 	}
 	artifact := filepath.Join(workDir, "agent-runtime", "shepherd", "integration-artifact.txt")
-	if scenarioName() != "missing-candidate-artifact" && scenarioName() != "gsd-state-only" {
+	if strings.HasPrefix(scenarioName(), "tracked-deletion") {
+		if err := os.Remove(artifact); err != nil {
+			return err
+		}
+	} else if scenarioName() != "missing-candidate-artifact" && scenarioName() != "gsd-state-only" {
 		if err := os.MkdirAll(filepath.Dir(artifact), 0o700); err != nil {
 			return err
 		}
@@ -324,6 +328,12 @@ func runValidator(args []string) error {
 	if scenario == "artifact-changed" {
 		if err := os.Remove(filepath.Join(os.Getenv("GSD_PROJECT_ROOT"), "agent-runtime", "shepherd",
 			"integration-artifact.txt")); err != nil {
+			return err
+		}
+	}
+	if scenario == "tracked-deletion-recreated" {
+		path := filepath.Join(os.Getenv("GSD_PROJECT_ROOT"), "agent-runtime", "shepherd", "integration-artifact.txt")
+		if err := os.WriteFile(path, []byte("recreated during validation\n"), 0o600); err != nil {
 			return err
 		}
 	}

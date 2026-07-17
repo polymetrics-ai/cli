@@ -114,3 +114,19 @@ Fresh full verification and exact-head GPT-5.6 Sol/high review follow this check
 pass may this branch be pushed and a draft stacked PR be opened. Execution remains
 `local_critical_path`; canaries, cleanup/migration, every PR merge, and all `main` mutation remain
 blocked.
+
+## Post-Slice-G exact-head review fix
+
+The authorized review fix now adds typed deletion artifacts and bounded Git execution. Git artifact
+manifests parse `--name-status -z --no-renames`, bind deletions with `deleted:true` plus the exact
+zero-hash sentinel, stream present object hashing through an 8 MiB maximum, and expose typed
+`ErrOutputLimit` for bounded stdout/stderr/object overflow. Validator requests preserve non-deleted JSON
+via `omitempty`, enforce flag/sentinel consistency, and revalidate deleted paths as absent through a
+lexical no-follow component walk before and after independent validation. Promotion proof decoding and
+process integration fixtures understand deleted artifacts.
+
+Focused Git/validation/command tests, focused race, full nested normal/race, vet/build/nested
+`make verify`, root `make verify`, module-boundary, diff, root package list, and default/tagged lint
+baseline gates passed. The new built-CLI deletion integration tests could not execute in this isolated
+checkout because the packaged official GSD loader is absent; `verificationPassed` intentionally remains
+false and coordinator-owned exact-head review/full integration gates remain pending.
