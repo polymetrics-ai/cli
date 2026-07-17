@@ -116,16 +116,22 @@ func TestRequesterReturnsHTTPErrorOn404(t *testing.T) {
 	if httpErr.Status != http.StatusNotFound {
 		t.Fatalf("status = %d", httpErr.Status)
 	}
+	if strings.Contains(httpErr.Error(), "nope") {
+		t.Fatalf("HTTPError surfaced response body")
+	}
 }
 
 func TestHTTPErrorErrorRedactsURLQueryAndBody(t *testing.T) {
-	err := (&HTTPError{Status: http.StatusUnauthorized, URL: "https://api.example.test/items?api_key=secret-token", Body: `{"error":"secret-token denied"}`}).Error()
-	for _, leaked := range []string{"secret-token", "api_key=", "denied"} {
+	err := (&HTTPError{Status: http.StatusUnauthorized, URL: "https://user:secret-token@api.example.test/items?api_key=secret-token#frag", Body: `{"error":"secret-token denied"}`}).Error()
+	for _, leaked := range []string{"secret-token", "api_key=", "denied", "user:", "#frag"} {
 		if strings.Contains(err, leaked) {
 			t.Fatalf("HTTPError leaked %q in %q", leaked, err)
 		}
 	}
-	if !strings.Contains(err, "http 401") || !strings.Contains(err, "https://api.example.test/items") {
+	if strings.Contains(err, "{\"error\"") {
+		t.Fatalf("HTTPError surfaced remote response body: %q", err)
+	}
+	if !strings.Contains(err, "http 401") || !strings.Contains(err, "https://api.example.test/items") || !strings.Contains(err, "Unauthorized") {
 		t.Fatalf("HTTPError lost useful context: %q", err)
 	}
 }

@@ -65,7 +65,7 @@ func (h *RunFileHandler) Handle(ctx context.Context, record slog.Record) error {
 	fields := h.recordFields(record)
 	line, err := json.Marshal(fields)
 	if err != nil {
-		return nil
+		return err
 	}
 	line = append(line, '\n')
 
@@ -73,9 +73,11 @@ func (h *RunFileHandler) Handle(ctx context.Context, record slog.Record) error {
 	defer h.state.mu.Unlock()
 	file, err := h.state.fileForLocked(runID)
 	if err != nil {
-		return nil
+		return err
 	}
-	_, _ = file.Write(line)
+	if _, err := file.Write(line); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -132,9 +134,14 @@ func (s *runFileState) fileForLocked(runID string) (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
-	_ = file.Chmod(0o600)
+	if err := file.Chmod(0o600); err != nil {
+		_ = file.Close()
+		return nil, err
+	}
 	s.files[runID] = file
-	_ = s.pruneLocked(runID)
+	if err := s.pruneLocked(runID); err != nil {
+		return nil, err
+	}
 	return file, nil
 }
 
@@ -142,23 +149,56 @@ func (s *runFileState) ensureLogsRootLocked() error {
 	if s.logsRoot != nil {
 		return nil
 	}
-	if err := os.MkdirAll(s.projectDir, 0o700); err != nil {
+	absProjectDir, err := filepath.Abs(s.projectDir)
+	if err != nil {
 		return err
 	}
-	projectRoot, err := os.OpenRoot(s.projectDir)
+	parentDir := filepath.Dir(absProjectDir)
+	projectBase := filepath.Base(absProjectDir)
+	parentRoot, err := os.OpenRoot(parentDir)
+	if err != nil {
+		return err
+	}
+	defer parentRoot.Close()
+	if err := ensureRootDir(parentRoot, projectBase, 0o700); err != nil {
+		return err
+	}
+	projectRoot, err := parentRoot.OpenRoot(projectBase)
 	if err != nil {
 		return err
 	}
 	defer projectRoot.Close()
-	if err := projectRoot.MkdirAll("logs", 0o700); err != nil {
+	if err := ensureRootDir(projectRoot, "logs", 0o700); err != nil {
 		return err
 	}
-	_ = projectRoot.Chmod("logs", 0o700)
 	logsRoot, err := projectRoot.OpenRoot("logs")
 	if err != nil {
 		return err
 	}
 	s.logsRoot = logsRoot
+	return nil
+}
+
+func ensureRootDir(root *os.Root, name string, mode os.FileMode) error {
+	info, err := root.Lstat(name)
+	if errors.Is(err, os.ErrNotExist) {
+		if err := root.Mkdir(name, mode); err != nil {
+			return err
+		}
+		info, err = root.Lstat(name)
+	}
+	if err != nil {
+		return err
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		return fmt.Errorf("%s must not be a symlink", name)
+	}
+	if !info.IsDir() {
+		return fmt.Errorf("%s is not a directory", name)
+	}
+	if err := root.Chmod(name, mode); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -178,14 +218,15 @@ func (s *runFileState) pruneLocked(currentRunID string) error {
 	logs := make([]logEntry, 0, len(entries))
 	for _, entry := range entries {
 		name := entry.Name()
-		if entry.IsDir() || !strings.HasSuffix(name, ".jsonl") {
+		runID, ok := ownedRunLogName(name)
+		if entry.IsDir() || !ok {
 			continue
 		}
 		info, err := s.logsRoot.Stat(name)
-		if err != nil {
+		if err != nil || !info.Mode().IsRegular() {
 			continue
 		}
-		logs = append(logs, logEntry{name: name, runID: strings.TrimSuffix(name, ".jsonl"), modTime: info.ModTime()})
+		logs = append(logs, logEntry{name: name, runID: runID, modTime: info.ModTime()})
 	}
 	if len(logs) <= s.maxFiles {
 		return nil
@@ -235,6 +276,17 @@ func (s *runFileState) close() error {
 		s.logsRoot = nil
 	}
 	return errorsJoin(errs)
+}
+
+func ownedRunLogName(name string) (string, bool) {
+	if !strings.HasSuffix(name, ".jsonl") {
+		return "", false
+	}
+	runID := strings.TrimSuffix(name, ".jsonl")
+	if !strings.HasPrefix(runID, "run_") || !validRunID(runID) {
+		return "", false
+	}
+	return runID, true
 }
 
 func validRunID(runID string) bool {

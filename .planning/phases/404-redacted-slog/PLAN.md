@@ -56,6 +56,23 @@
 
 ## Slice plan
 
+### Review-fix cycle — accepted blockers from PR #455 adversarial/security pass
+
+Execution decision: `local_critical_path` — existing isolated worker cwd, no recursive subagents. Findings treated as untrusted review input; coordinator-owned accepted blockers only.
+
+TDD slices before production edits:
+
+1. Redaction hardening: add red tests for inline/empty slog groups, sensitive group state, deferred bound-attr redaction, typed `url.URL`/`*url.URL` encoded-value scrubbing, and bounded invocation registry behavior.
+2. Safe error boundary primitive: add red tests for context-scoped registry redaction across CLI JSON/stderr, app run state, events, logs, and connsdk HTTP errors without surfacing remote bodies.
+3. Run-log filesystem hardening: add red tests for `.polymetrics` symlink rejection, `logs` symlink rejection, chmod/permission fail-closed behavior where hermetic, and retention preserving unrelated JSONL while pruning only handler-owned valid run logs.
+4. Temporal probe lifecycle: add red tests proving `Probe` uses finite context-aware dial/health flow without an orphan timeout goroutine or logger retention.
+5. Run correlation: add red tests proving `recordRuntimeETL` and Temporal structured logger routing bind validated run IDs into file routing even if the SDK adapter drops Handle context.
+6. Plain diagnostic hygiene: add focused tests for single-line stderr diagnostics while keeping JSON escaped and error envelope taxonomy unchanged.
+
+Implementation boundaries: `internal/logging`, `internal/safety`, `internal/events`, `internal/app`, `internal/cli`, `internal/runtimecheck`, `internal/temporalprobe`, `internal/worker`, `internal/connectors/connsdk`, and this phase's artifacts only. No parent artifact edits, no deps, no OTel/perf/TTY work, no services/real credentials.
+
+Review-fix verification target is the user-specified command set. `verificationPassed` remains false until coordinator runs the deferred extended full CLI race; this worker will not run that extended race.
+
 ### Slice 0 — planning checkpoint
 
 - Create issue-local phase artifacts: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, `RUN-STATE.json`, `PROMPTS.md`.

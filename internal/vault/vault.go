@@ -115,7 +115,7 @@ func (v *Vault) Get(ctx context.Context, id string) (map[string]string, error) {
 		out = map[string]string{}
 	}
 	for _, value := range out {
-		pmlogging.RegisterValue(value)
+		pmlogging.RegisterValueFromContext(ctx, value)
 	}
 	return out, nil
 }

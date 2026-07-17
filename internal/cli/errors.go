@@ -1,11 +1,12 @@
 package cli
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
 
-	"polymetrics.ai/internal/safety"
+	pmlogging "polymetrics.ai/internal/logging"
 )
 
 const apiVersion = "polymetrics.ai/v1"
@@ -126,7 +127,7 @@ func exitCodeFor(err *cliError) int {
 	}
 }
 
-func writeError(stdout, stderr io.Writer, err error, jsonOut bool) int {
+func writeError(ctx context.Context, stdout, stderr io.Writer, err error, jsonOut bool) int {
 	ce := classifyError(err)
 	if ce == nil {
 		return 0
@@ -134,7 +135,7 @@ func writeError(stdout, stderr io.Writer, err error, jsonOut bool) int {
 	if ce.alreadyReported {
 		return exitCodeFor(ce)
 	}
-	message := safety.SanitizeTerminal(safety.RedactErrorText(ce.Error()))
+	message := pmlogging.RedactText(ctx, ce.Error())
 	if jsonOut {
 		_ = writeJSON(stdout, envelope{
 			"api_version": apiVersion,
@@ -146,6 +147,6 @@ func writeError(stdout, stderr io.Writer, err error, jsonOut bool) int {
 			},
 		})
 	}
-	fmt.Fprintf(stderr, "error: %s\n", message)
+	fmt.Fprintf(stderr, "error: %s\n", pmlogging.RedactLine(ctx, ce.Error()))
 	return exitCodeFor(ce)
 }

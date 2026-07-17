@@ -47,6 +47,24 @@ func SanitizeTerminal(text string) string {
 	return b.String()
 }
 
+func SanitizeTerminalLine(text string) string {
+	text = SanitizeTerminal(text)
+	var b strings.Builder
+	lastSpace := false
+	for _, r := range text {
+		if r == '\n' || r == '\t' {
+			if !lastSpace {
+				b.WriteByte(' ')
+				lastSpace = true
+			}
+			continue
+		}
+		b.WriteRune(r)
+		lastSpace = r == ' '
+	}
+	return strings.TrimSpace(b.String())
+}
+
 func RedactErrorText(text string) string {
 	text = httpURLPattern.ReplaceAllStringFunc(text, redactURL)
 	text = jsonBodyPattern.ReplaceAllString(text, ": [redacted]")

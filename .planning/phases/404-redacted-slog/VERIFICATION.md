@@ -2,6 +2,22 @@
 
 ## Required gates
 
+Review-fix command set (requested by coordinator):
+
+```bash
+gofmt -w cmd internal
+go test -race ./internal/logging/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... -count=1
+go test ./internal/cli/... -run 'TestRedactedRunLogsSmoke|Logging|Error|JSON' -count=1
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+Extended full CLI race remains pending for coordinator and must not be run by this worker. `verificationPassed=false` until that coordinator gate is complete.
+
 | Gate | Command | Status | Notes |
 |---|---|---|---|
 | GSD doctor | `scripts/gsd doctor` | PASS | Adapter healthy. |
@@ -15,6 +31,17 @@
 | Verify | `make verify` | PASS | Exited 0; includes `go test -timeout 20m ./...`, docs validate, smoke, lint, connectorgen validate. |
 | Diff check | `git diff --check origin/feat/cli-architecture-v2...HEAD` | PASS | Exited 0. |
 | Dependency check | `git diff -- go.mod go.sum` | PASS | Empty after `make verify`/`go mod tidy`. |
+| Review-fix focused red tests | see TDD ledger T8-T10 | PASS | Red captured before production edits; green focused packages pass. |
+| Review-fix format | `gofmt -w cmd internal` | PASS | Exited 0. |
+| Review-fix focused race | `go test -race ./internal/logging/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... -count=1` | PASS | Exited 0; no services. |
+| Review-fix CLI focused | `go test ./internal/cli/... -run 'TestRedactedRunLogsSmoke|Logging|Error|JSON' -count=1` | PASS | Exited 0. |
+| Review-fix vet | `go vet ./...` | PASS | Exited 0. |
+| Review-fix tests | `go test ./...` | PASS | Exited 0 after connsdk body classification fix. |
+| Review-fix build | `go build ./cmd/pm` | PASS | Exited 0. |
+| Review-fix verify | `make verify` | PASS | Exited 0. |
+| Review-fix diff check | `git diff --check origin/feat/cli-architecture-v2...HEAD` | PASS | Exited 0. |
+| Review-fix dependency check | `git diff -- go.mod go.sum` | PASS | Empty. |
+| Extended full CLI race | not run | PENDING/COORDINATOR | Explicitly deferred by coordinator; `verificationPassed=false`. |
 
 ## Issue-specific acceptance checks
 

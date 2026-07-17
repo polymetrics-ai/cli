@@ -1156,7 +1156,7 @@ func (a *App) failRun(ctx context.Context, runID string, err error) (Run, error)
 	for i := range a.state.Runs {
 		if a.state.Runs[i].ID == runID {
 			a.state.Runs[i].Status = "failed"
-			a.state.Runs[i].Error = safety.RedactErrorText(err.Error())
+			a.state.Runs[i].Error = pmlogging.RedactText(ctx, err.Error())
 			a.state.Runs[i].CompletedAt = time.Now().UTC()
 			run := a.state.Runs[i]
 			_ = a.save()
@@ -1166,7 +1166,7 @@ func (a *App) failRun(ctx context.Context, runID string, err error) (Run, error)
 		}
 	}
 	pmlogging.FromContext(ctx).InfoContext(ctx, "etl run failed", "run_id", runID, "error", err)
-	a.emitETLEvent(ctx, events.KindFailed, runID, "", "failed", etlExecutionResult{}, safety.RedactErrorText(err.Error()))
+	a.emitETLEvent(ctx, events.KindFailed, runID, "", "failed", etlExecutionResult{}, pmlogging.RedactText(ctx, err.Error()))
 	return Run{}, err
 }
 

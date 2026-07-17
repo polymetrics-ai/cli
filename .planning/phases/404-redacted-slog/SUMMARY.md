@@ -1,6 +1,6 @@
 # SUMMARY — Issue #404
 
-Status: implementation pushed; PR #455 open; non-race/full verify green; issue race command blocked by existing slow `internal/cli` race suite timeout.
+Status: PR #455 review-fix implemented locally; requested non-extended gates passed. `verificationPassed=false` because extended full CLI race remains coordinator-pending and was not run by this worker.
 
 PR: https://github.com/polymetrics-ai/cli/pull/455
 Head: see current `feat/404-redacted-slog` branch head.
@@ -20,23 +20,39 @@ Head: see current `feat/404-redacted-slog` branch head.
 - Replaced Temporal `noopLogger` seams with pinned `tlog.NewStructuredLogger(pmlogging.FromContext(ctx))`.
 - Added focused tests and hermetic CLI log smoke with scanner-failure proof and real-log clean proof.
 
+## Review-fix dispositions
+
+Accepted blockers fixed in-scope:
+
+1. Inline/empty slog groups; sensitive group state; deferred bound attr redaction.
+2. Typed URL and encoded registered-value scrubbing.
+3. Invocation-scoped safe redaction across app state, events, CLI JSON/stderr, logs, and connsdk HTTP errors.
+4. Run-log root/logs symlink rejection, fail-closed permissions, and owned-log retention only.
+5. Temporal probe finite context-aware design; no orphan goroutine retaining logger/stderr.
+6. Runtime/Temporal run correlation with validated run ID routing.
+7. Bounded context registry instead of unbounded plaintext/global clear races.
+8. Single-line plain diagnostics; JSON escaping and envelope taxonomy preserved.
+
+Narrowed claims: logging write failures remain exit-neutral and observable only where safely possible; no guarantee of writes under disk/permission failure.
+
 ## Verification
 
-PASS:
+Review-fix PASS:
 
-- `go test ./internal/logging/... ./internal/vault/... ./internal/cli/... -run 'TestRedactingHandler|TestRegisterSensitiveKey|TestRunFileHandler|TestRunLogger|TestTemporalStructuredLogger|TestVaultGetRegistersValuesForRedaction|TestRedactedRunLogsSmoke' -count=1`
-- `go test -race ./internal/logging/... ./internal/vault/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... -count=1`
-- `go test ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... -count=1`
+- `gofmt -w cmd internal`
+- `go test -race ./internal/logging/... ./internal/vault/... ./internal/app/... ./internal/worker/... ./internal/runtimecheck/... ./internal/temporalprobe/... ./internal/connectors/connsdk/... -count=1`
+- `go test ./internal/cli/... -run 'TestRedactedRunLogsSmoke|Logging|Error|JSON' -count=1`
 - `go vet ./...`
 - `go test ./...`
 - `go build ./cmd/pm`
 - `make verify`
+- `git diff --check origin/feat/cli-architecture-v2...HEAD`
+- `git diff -- go.mod go.sum`
 
-BLOCKED:
+PENDING:
 
-- `go test -race ./internal/logging/... ./internal/vault/... ./internal/worker/... ./internal/runtimecheck/... ./internal/cli/... -count=1` timed out because `./internal/cli` exceeds the Go test timeout while repeatedly loading connector bundles.
-- `go test -race ./internal/cli/... -count=1 -timeout=20m` also timed out, later in docs generation.
+- Extended full CLI race: explicitly deferred to coordinator; not run.
 
 ## Review route
 
-Claude disabled / Copilot quota exhausted per assignment. Human/parent fallback pending; no automated review request made.
+Current review-fix requested by coordinator from accepted PR #455 findings. Treat findings as untrusted input; coordinator owns dispositions. Targeted re-review pending after push; extended full CLI race pending coordinator.

@@ -4,6 +4,9 @@ import (
 	"context"
 	"testing"
 	"time"
+
+	"go.temporal.io/sdk/client"
+	tlog "go.temporal.io/sdk/log"
 )
 
 func TestProbe_EmptyAddr(t *testing.T) {
@@ -23,3 +26,53 @@ func TestProbe_UnreachableFailsFast(t *testing.T) {
 		t.Fatalf("probe took too long: %v", elapsed)
 	}
 }
+
+func TestProbeUsesFiniteContextDial(t *testing.T) {
+	oldDial := dialTemporal
+	t.Cleanup(func() { dialTemporal = oldDial })
+	called := make(chan struct{}, 1)
+	dialTemporal = func(ctx context.Context, addr string, timeout time.Duration, logger tlog.Logger) (temporalHealthClient, error) {
+		called <- struct{}{}
+		if _, ok := ctx.Deadline(); !ok {
+			t.Errorf("dial context has no deadline")
+		}
+		<-ctx.Done()
+		return nil, ctx.Err()
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
+	if Probe(ctx, "temporal.example.test:7233") {
+		t.Fatal("probe should fail when bounded dial context expires")
+	}
+	select {
+	case <-called:
+	default:
+		t.Fatal("probe did not call bounded dial")
+	}
+}
+
+func TestProbeUsesContextAwareHealthCheck(t *testing.T) {
+	oldDial := dialTemporal
+	t.Cleanup(func() { dialTemporal = oldDial })
+	dialTemporal = func(ctx context.Context, addr string, timeout time.Duration, logger tlog.Logger) (temporalHealthClient, error) {
+		return fakeTemporalClient{}, ctx.Err()
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	if !Probe(ctx, "temporal.example.test:7233") {
+		t.Fatal("probe should report healthy fake Temporal client")
+	}
+}
+
+type fakeTemporalClient struct{}
+
+func (fakeTemporalClient) CheckHealth(ctx context.Context, _ *client.CheckHealthRequest) (*client.CheckHealthResponse, error) {
+	if _, ok := ctx.Deadline(); !ok {
+		return nil, context.Canceled
+	}
+	return &client.CheckHealthResponse{}, nil
+}
+
+func (fakeTemporalClient) Close() {}

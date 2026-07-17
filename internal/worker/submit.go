@@ -133,7 +133,7 @@ func submitterForWorkflowClient(c workflowClient, taskQueue string) rlm.SubmitFu
 					if errors.Is(out.err, context.Canceled) {
 						status = "canceled"
 					}
-					events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, status, out.err.Error()))
+					events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, status, pmlogging.RedactText(ctx, out.err.Error())))
 					return rlm.AgentResult{}, out.err
 				}
 				events.Emit(ctx, workerEvent(events.KindCompleted, workflowID, runID, "success", ""))
@@ -142,12 +142,12 @@ func submitterForWorkflowClient(c workflowClient, taskQueue string) rlm.SubmitFu
 				_, describeErr := c.DescribeWorkflowExecution(ctx, workflowID, runID)
 				message := ""
 				if describeErr != nil && ctx.Err() == nil {
-					message = describeErr.Error()
+					message = pmlogging.RedactText(ctx, describeErr.Error())
 				}
 				events.Emit(ctx, workerEvent(events.KindProgress, workflowID, runID, "polling", message))
 			case <-ctx.Done():
 				cancel()
-				events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, "canceled", ctx.Err().Error()))
+				events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, "canceled", pmlogging.RedactText(ctx, ctx.Err().Error())))
 				return rlm.AgentResult{}, ctx.Err()
 			}
 		}

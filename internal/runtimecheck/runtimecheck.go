@@ -99,7 +99,7 @@ func checkPostgres(ctx context.Context, cfg Config) CheckResult {
 	result.Latency = time.Since(start)
 	if err != nil {
 		result.Status = "error"
-		result.Error = err.Error()
+		result.Error = pmlogging.RedactText(ctx, err.Error())
 		return result
 	}
 	result.Status = "ok"
@@ -117,7 +117,7 @@ func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 	result.Latency = time.Since(start)
 	if err != nil {
 		result.Status = "error"
-		result.Error = err.Error()
+		result.Error = pmlogging.RedactText(ctx, err.Error())
 		return result
 	}
 	result.Status = "ok"
@@ -127,7 +127,7 @@ func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 func checkTemporal(ctx context.Context, cfg Config) CheckResult {
 	start := time.Now()
 	result := CheckResult{Name: "temporal", Endpoint: cfg.TemporalAddr}
-	c, err := client.Dial(client.Options{HostPort: cfg.TemporalAddr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(ctx))})
+	c, err := client.Dial(client.Options{HostPort: cfg.TemporalAddr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(ctx)), ConnectionOptions: client.ConnectionOptions{GetSystemInfoTimeout: cfg.Timeout}})
 	if err == nil {
 		defer c.Close()
 		checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
@@ -137,7 +137,7 @@ func checkTemporal(ctx context.Context, cfg Config) CheckResult {
 	result.Latency = time.Since(start)
 	if err != nil {
 		result.Status = "error"
-		result.Error = err.Error()
+		result.Error = pmlogging.RedactText(ctx, err.Error())
 		return result
 	}
 	result.Status = "ok"

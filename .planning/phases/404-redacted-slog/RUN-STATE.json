@@ -9,7 +9,7 @@
   "mode": "manual-gsd-fallback",
   "verificationPassed": false,
   "fallbackReason": "scripts/gsd prompt programming-loop init --phase 404 --dry-run failed: unknown GSD command: programming-loop",
-  "verificationBlocker": "Exact issue race gate times out in ./internal/cli; make verify and non-race full gates pass.",
+  "verificationBlocker": "Coordinator-deferred extended full CLI race pending after PR #455 review-fix; worker must not run it. Requested non-extended gates passed.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -30,6 +30,16 @@
       "cycle": "verify",
       "decision": "not_spawned_verification_blocked",
       "reason": "Exact issue race gate for ./internal/cli exceeded default and 20m test timeouts; broader make verify passed."
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "Accepted PR #455 security blockers require scoped fixes in the existing isolated worker cwd; no subagent tool available and recursive delegation is forbidden."
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "Requested review-fix gates passed, but extended full CLI race remains explicitly coordinator-deferred, so verificationPassed stays false."
     }
   ],
   "gates": {
@@ -37,13 +47,15 @@
     "gsdPlanPrompt": "pass",
     "gsdProgrammingLoopDryRun": "fallback",
     "redTests": "red-captured",
-    "focusedUnit": "pass",
-    "focusedRaceWithoutCLI": "pass",
-    "focusedRaceWithCLI": "timeout",
+    "reviewFixFocusedUnit": "pass",
+    "reviewFixFocusedRace": "pass",
+    "reviewFixCLIFocused": "pass",
+    "extendedFullCLIRace": "coordinator-deferred",
     "goVet": "pass",
     "goTestAll": "pass",
     "goBuildPm": "pass",
     "makeVerify": "pass",
+    "diffCheck": "pass",
     "goModGoSumDiff": "pass"
   }
 }

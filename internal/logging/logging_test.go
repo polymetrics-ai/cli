@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"log/slog"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -61,6 +62,68 @@ func TestRegisterSensitiveKeyRedactsDynamicConnectorFields(t *testing.T) {
 	logger.Info("dynamic key", "connector_dynamic_secret", "field-value")
 	if strings.Contains(buf.String(), "field-value") {
 		t.Fatalf("dynamic sensitive key was not redacted")
+	}
+}
+
+func TestRedactingHandlerRedactsInlineEmptyAndSensitiveGroupsAtHandle(t *testing.T) {
+	registry := NewValueRegistry()
+	var buf bytes.Buffer
+	logger := slog.New(NewRedactingHandler(slog.NewJSONHandler(&buf, nil), RedactionOptions{Registry: registry}))
+
+	bound := logger.With(
+		slog.Group("", slog.String("inline_note", "inline "+syntheticCanary)),
+		slog.Group("\u202e", slog.String("sanitized_empty_note", "hidden "+syntheticCanary)),
+	).WithGroup("token")
+	registry.Register(syntheticCanary)
+	bound.Info("late-bound attrs", slog.String("child", "sensitive-group-child-value"))
+
+	out := buf.String()
+	assertDoesNotContainCanary(t, out)
+	if strings.Contains(out, "sensitive-group-child-value") {
+		t.Fatalf("sensitive group child value was not redacted")
+	}
+}
+
+func TestRedactingHandlerScrubsTypedURLsAndEncodedValues(t *testing.T) {
+	registry := NewValueRegistry()
+	registry.Register(syntheticCanary)
+
+	escapedPath := url.PathEscape(syntheticCanary)
+	escapedQuery := url.QueryEscape(syntheticCanary)
+	typed, err := url.Parse("https://user:" + syntheticCanary + "@" + syntheticCanary + ".example.test/path/" + escapedPath + "?token=" + escapedQuery + "#frag")
+	if err != nil {
+		t.Fatalf("parse typed url: %v", err)
+	}
+
+	var buf bytes.Buffer
+	logger := slog.New(NewRedactingHandler(slog.NewJSONHandler(&buf, nil), RedactionOptions{Registry: registry}))
+	logger.Info("typed urls", "typed", *typed, "ptr", typed)
+
+	out := buf.String()
+	assertDoesNotContainCanary(t, out)
+	if strings.Contains(out, escapedPath) || strings.Contains(out, escapedQuery) {
+		t.Fatalf("encoded registered value was not redacted")
+	}
+	for _, forbidden := range []string{"user:", "?token=", "#frag"} {
+		if strings.Contains(out, forbidden) {
+			t.Fatalf("typed url retained forbidden component %q", forbidden)
+		}
+	}
+}
+
+func TestValueRegistryBoundsEntriesWithoutClearingPlaintext(t *testing.T) {
+	registry := NewValueRegistryWithLimit(2)
+	registry.Register("first-redaction-value")
+	registry.Register("second-redaction-value")
+	registry.Register("third-redaction-value")
+
+	if strings.Contains(registry.redactString("first-redaction-value"), redactedValue) {
+		t.Fatalf("oldest registry value was not evicted")
+	}
+	for _, value := range []string{"second-redaction-value", "third-redaction-value"} {
+		if !strings.Contains(registry.redactString(value), redactedValue) {
+			t.Fatalf("recent registry value was not redacted")
+		}
 	}
 }
 
@@ -134,6 +197,15 @@ func TestRunFileHandlerRejectsUnsafeRunIDsAndUsesSafePermissions(t *testing.T) {
 
 func TestRunFileHandlerPrunesRetention(t *testing.T) {
 	projectDir := t.TempDir()
+	logsDir := filepath.Join(projectDir, "logs")
+	if err := os.MkdirAll(logsDir, 0o700); err != nil {
+		t.Fatalf("mkdir logs: %v", err)
+	}
+	unrelated := filepath.Join(logsDir, "manual.jsonl")
+	if err := os.WriteFile(unrelated, []byte("keep\n"), 0o600); err != nil {
+		t.Fatalf("write unrelated log: %v", err)
+	}
+
 	handler := NewRunFileHandler(projectDir, RunFileOptions{MaxFiles: 2})
 	logger := slog.New(handler)
 	for _, id := range []string{"run_old", "run_mid", "run_new"} {
@@ -144,12 +216,15 @@ func TestRunFileHandlerPrunesRetention(t *testing.T) {
 		t.Fatalf("close handler: %v", err)
 	}
 
-	matches, err := filepath.Glob(filepath.Join(projectDir, "logs", "*.jsonl"))
+	if _, err := os.Stat(unrelated); err != nil {
+		t.Fatalf("retention pruned unrelated jsonl: %v", err)
+	}
+	matches, err := filepath.Glob(filepath.Join(projectDir, "logs", "run_*.jsonl"))
 	if err != nil {
 		t.Fatalf("glob logs: %v", err)
 	}
 	if len(matches) != 2 {
-		t.Fatalf("retention kept %d files, want 2 (%v)", len(matches), matches)
+		t.Fatalf("retention kept %d owned files, want 2 (%v)", len(matches), matches)
 	}
 	for _, path := range matches {
 		if filepath.Base(path) == "run_old.jsonl" {
@@ -173,7 +248,29 @@ func TestRunFileHandlerBlocksSymlinkEscape(t *testing.T) {
 	}
 
 	if _, err := os.Stat(filepath.Join(outside, "run_escape.jsonl")); err == nil {
-		t.Fatalf("log handler followed symlink outside project")
+		t.Fatalf("log handler followed logs symlink outside project")
+	} else if !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("stat outside log: %v", err)
+	}
+}
+
+func TestRunFileHandlerRejectsPolymetricsRootSymlink(t *testing.T) {
+	parent := t.TempDir()
+	outside := t.TempDir()
+	projectDir := filepath.Join(parent, ".polymetrics")
+	if err := os.Symlink(outside, projectDir); err != nil {
+		t.Skipf("symlink unavailable: %v", err)
+	}
+
+	handler := NewRunFileHandler(projectDir, RunFileOptions{MaxFiles: 5})
+	logger := slog.New(handler)
+	logger.InfoContext(WithRunID(context.Background(), "run_escape"), "should not escape")
+	if err := handler.Close(); err != nil {
+		t.Fatalf("close handler: %v", err)
+	}
+
+	if _, err := os.Stat(filepath.Join(outside, "logs", "run_escape.jsonl")); err == nil {
+		t.Fatalf("log handler followed .polymetrics symlink outside project")
 	} else if !errors.Is(err, os.ErrNotExist) {
 		t.Fatalf("stat outside log: %v", err)
 	}
@@ -192,6 +289,27 @@ func TestTemporalStructuredLoggerUsesContextRedactingLogger(t *testing.T) {
 	assertDoesNotContainCanary(t, out)
 	if !strings.Contains(out, "temporal warning") {
 		t.Fatalf("temporal logger did not write through slog: %s", out)
+	}
+}
+
+func TestTemporalStructuredLoggerWithBoundRunIDRoutesWhenAdapterDropsContext(t *testing.T) {
+	projectDir := t.TempDir()
+	var stderr bytes.Buffer
+	logger, closeLogs := NewLogger(projectDir, &stderr, LoggerOptions{MaxLogFiles: 5})
+	ctx := WithLogger(context.Background(), logger)
+	ctx = WithRunID(ctx, "run_temporal_bound")
+	temporal := tlog.NewStructuredLogger(FromContext(ctx))
+	temporal.Warn("temporal warning without slog context")
+	if err := closeLogs(); err != nil {
+		t.Fatalf("close logs: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(projectDir, "logs", "run_temporal_bound.jsonl"))
+	if err != nil {
+		t.Fatalf("read bound temporal log: %v", err)
+	}
+	if !bytes.Contains(data, []byte("temporal warning without slog context")) {
+		t.Fatalf("bound temporal logger did not route to run log")
 	}
 }
 

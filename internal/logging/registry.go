@@ -4,25 +4,42 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"hash"
+	"net/url"
 	"sort"
 	"sync"
 )
 
 const redactedValue = "[redacted]"
+const defaultMaxRegistryEntries = 4096
 
 // ValueRegistry stores fingerprints of values that must be redacted from log text.
 // It never stores or returns the raw registered values.
 type ValueRegistry struct {
-	mu      sync.RWMutex
-	salt    [32]byte
-	entries map[int]map[[32]byte]struct{}
+	mu         sync.RWMutex
+	salt       [32]byte
+	entries    map[int]map[[32]byte]struct{}
+	order      []registryEntry
+	maxEntries int
+}
+
+type registryEntry struct {
+	length int
+	digest [32]byte
 }
 
 var defaultRegistry = NewValueRegistry()
 
-// NewValueRegistry returns an empty concurrency-safe redaction registry.
+// NewValueRegistry returns an empty bounded concurrency-safe redaction registry.
 func NewValueRegistry() *ValueRegistry {
-	r := &ValueRegistry{entries: map[int]map[[32]byte]struct{}{}}
+	return NewValueRegistryWithLimit(defaultMaxRegistryEntries)
+}
+
+// NewValueRegistryWithLimit returns an empty registry that retains at most maxEntries fingerprints.
+func NewValueRegistryWithLimit(maxEntries int) *ValueRegistry {
+	if maxEntries <= 0 {
+		maxEntries = defaultMaxRegistryEntries
+	}
+	r := &ValueRegistry{entries: map[int]map[[32]byte]struct{}{}, maxEntries: maxEntries}
 	_, _ = rand.Read(r.salt[:])
 	return r
 }
@@ -37,17 +54,66 @@ func (r *ValueRegistry) Register(value string) {
 	if r == nil || value == "" {
 		return
 	}
-	digest := r.digest(value)
+	variants := registryVariants(value)
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.entries == nil {
 		r.entries = map[int]map[[32]byte]struct{}{}
 	}
+	for _, variant := range variants {
+		r.registerLocked(variant)
+	}
+}
+
+func registryVariants(value string) []string {
+	variants := []string{value}
+	for _, encoded := range []string{url.QueryEscape(value), url.PathEscape(value)} {
+		if encoded == "" || encoded == value {
+			continue
+		}
+		seen := false
+		for _, existing := range variants {
+			if existing == encoded {
+				seen = true
+				break
+			}
+		}
+		if !seen {
+			variants = append(variants, encoded)
+		}
+	}
+	return variants
+}
+
+func (r *ValueRegistry) registerLocked(value string) {
+	if value == "" {
+		return
+	}
+	digest := r.digest(value)
 	length := len(value)
 	if r.entries[length] == nil {
 		r.entries[length] = map[[32]byte]struct{}{}
 	}
+	if _, exists := r.entries[length][digest]; exists {
+		return
+	}
 	r.entries[length][digest] = struct{}{}
+	r.order = append(r.order, registryEntry{length: length, digest: digest})
+	r.pruneLocked()
+}
+
+func (r *ValueRegistry) pruneLocked() {
+	for r.maxEntries > 0 && len(r.order) > r.maxEntries {
+		oldest := r.order[0]
+		copy(r.order, r.order[1:])
+		r.order = r.order[:len(r.order)-1]
+		if set := r.entries[oldest.length]; set != nil {
+			delete(set, oldest.digest)
+			if len(set) == 0 {
+				delete(r.entries, oldest.length)
+			}
+		}
+	}
 }
 
 func (r *ValueRegistry) redactString(value string) string {

@@ -15,6 +15,24 @@ import (
 
 const defaultTimeout = 3 * time.Second
 
+type temporalHealthClient interface {
+	CheckHealth(context.Context, *client.CheckHealthRequest) (*client.CheckHealthResponse, error)
+	Close()
+}
+
+var dialTemporal = func(ctx context.Context, addr string, timeout time.Duration, logger tlog.Logger) (temporalHealthClient, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	return client.Dial(client.Options{
+		HostPort: addr,
+		Logger:   logger,
+		ConnectionOptions: client.ConnectionOptions{
+			GetSystemInfoTimeout: timeout,
+		},
+	})
+}
+
 // Probe reports whether a Temporal frontend at addr is reachable and healthy.
 // It bounds dial+health-check time so an unreachable address fails fast instead
 // of hanging. An empty addr is always false. The bound honors a shorter context
@@ -23,31 +41,25 @@ func Probe(ctx context.Context, addr string) bool {
 	if addr == "" {
 		return false
 	}
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	timeout := defaultTimeout
 	if dl, ok := ctx.Deadline(); ok {
-		if d := time.Until(dl); d > 0 && d < timeout {
+		if d := time.Until(dl); d <= 0 {
+			return false
+		} else if d < timeout {
 			timeout = d
 		}
 	}
+	probeCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
 
-	done := make(chan bool, 1)
-	go func() {
-		c, err := client.Dial(client.Options{HostPort: addr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(ctx))})
-		if err != nil {
-			done <- false
-			return
-		}
-		defer c.Close()
-		checkCtx, cancel := context.WithTimeout(ctx, timeout)
-		defer cancel()
-		_, err = c.CheckHealth(checkCtx, &client.CheckHealthRequest{})
-		done <- err == nil
-	}()
-
-	select {
-	case ok := <-done:
-		return ok
-	case <-time.After(timeout):
+	c, err := dialTemporal(probeCtx, addr, timeout, tlog.NewStructuredLogger(pmlogging.FromContext(probeCtx)))
+	if err != nil {
 		return false
 	}
+	defer c.Close()
+	_, err = c.CheckHealth(probeCtx, &client.CheckHealthRequest{})
+	return err == nil
 }
