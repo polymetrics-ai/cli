@@ -104,7 +104,7 @@ Safety / scope:
 - [x] No Makefile smoke target behavior changes needed or made in this review-fix.
 - [x] No secrets, new dependencies, credentialed connector checks, runtime services, or non-temp reverse ETL.
 - [x] `make smoke` and `make verify` allowed only because current Makefile already contains preview before approval/run.
-- [x] PR body update queued with accepted disposition and red/green evidence; final PR edit occurs after push with final head.
+- [x] PR body updated with accepted disposition and red/green evidence.
 - [x] No Claude/Copilot request.
 
 Required review-fix gates:

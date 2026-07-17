@@ -105,5 +105,5 @@ Review-fix slice:
    - Matches exact anchored command/assignment statements for plan, ID extraction, preview, approval extraction, and run. Rejects prefixed `echo`, `printf`, `false &&`, comment text, unrelated target text, and wrong-order command sequence.
 4. Verification / PR update ✅
    - Ran requested gates exactly: `gofmt -w internal/safety`, focused safety test, `go test ./...`, `go vet ./...`, `go build ./cmd/pm`, `make smoke`, `make verify`, `git diff --check origin/feat/cli-architecture-v2...HEAD`, and `git diff -- go.mod go.sum`.
-   - Updated issue artifacts with red/green evidence and accepted disposition; PR #454 body update scheduled after push with final head.
-   - Commit prepared; push pending; no Claude/Copilot request.
+   - Updated issue artifacts and PR #454 body with red/green evidence and accepted disposition.
+   - Review-fix commits pushed; no Claude/Copilot request.

@@ -32,7 +32,7 @@ scripts/gsd prompt programming-loop init --phase 453 --dry-run >/tmp/gsd-program
 
 Downstream artifact: PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE updated with accepted disposition and red/green review-fix evidence.
 
-Verification result: requested review-fix gates passed locally; PR #454 body update queued after push with final head.
+Verification result: requested review-fix gates passed locally; PR #454 body updated with accepted disposition and red/green evidence.
 
 ## Manual GSD fallback note
 

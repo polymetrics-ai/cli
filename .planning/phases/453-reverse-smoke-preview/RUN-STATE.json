@@ -6,7 +6,7 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "5680debb",
   "verificationPassed": true,
-  "status": "pr_open_reviewfix_verified_push_pending",
+  "status": "pr_open_reviewfix_verified_pushed_pr_body_updated",
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed",

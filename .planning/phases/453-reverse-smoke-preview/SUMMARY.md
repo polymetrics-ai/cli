@@ -44,7 +44,7 @@ No secrets requested or printed by this implementation. No credentialed checks. 
 
 ## Review-fix update — PR #454 MEDIUM finding (2026-07-17)
 
-Status: accepted finding fixed locally; commit prepared; push and PR body update pending.
+Status: accepted finding fixed locally; review-fix pushed; PR body updated with accepted disposition and red/green evidence.
 
 Delivered:
 
