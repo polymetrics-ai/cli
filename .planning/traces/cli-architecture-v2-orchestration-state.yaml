@@ -18,24 +18,18 @@ orchestrator:
   runtime: pi
   status: running
 ready_queue:
-  - number: 405
-    status: in_progress
-    dependencies: [403, 404]
-    write_scope: "CLI run options, global flags, and internal/ui styles foundation"
-    decision: spawned
-    reason: "Dispatched in isolated worktree ../wt-405-tty-ndjson-progress from parent head 7910d529 after #404 integration; #423/#410 remain serialized behind it."
   - number: 423
     status: worker_ready
-    dependencies: [422]
+    dependencies: [422, 405]
     write_scope: "perf Cobra namespace node/handler/tests/parity only"
-    decision: not_spawned_write_scope_collision
-    reason: "Held behind #405 because both own internal/cli/cli.go and cobra_router.go; Phase 9 remains serialized."
+    decision: next_dispatch_candidate
+    reason: "#405 is provisionally integrated at 087ec03c; #423 is next serialized Phase 9 namespace owner before #410 telemetry spans."
   - number: 410
     status: worker_ready
-    dependencies: [402, 404]
+    dependencies: [402, 404, 405]
     write_scope: "telemetry package, config/docs, CLI/app/flow/certify/connsdk/worker spans"
     decision: not_spawned_write_scope_collision
-    reason: "#404 collision cleared, but #410 still collides with #405 CLI/app/events seams; defer until #405 integrates."
+    reason: "#404/#405 collisions cleared, but #410 still overlaps #423 central CLI/app/flow surfaces; defer until #423 integrates."
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -169,6 +163,14 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [405]
     reason: "pm-gsd-worker dispatched in isolated worktree ../wt-405-tty-ndjson-progress from parent head 7910d5293372452f9eb014efbac42c0c5260f5ff."
+  - timestamp: 2026-07-17T18:47:28Z
+    decision: local_critical_path
+    issue_numbers: [405]
+    reason: "Coordinator provisionally integrated PR #457 after final clean targeted/security/docs re-reviews and remote checks; parent squash 087ec03c395eaef9d3eecbd88eb0d28c012d8f00."
+  - timestamp: 2026-07-17T18:47:51Z
+    decision: next_dispatch_candidate
+    issue_numbers: [423]
+    reason: "Queue rebuilt after #405 integration: #423 perf namespace is the next serialized Phase 9 command before #410 telemetry."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -243,13 +245,13 @@ subissues:
   - number: 405
     url: https://github.com/polymetrics-ai/cli/issues/405
     branch: feat/405-tty-ndjson-progress
-    pr_url: ""
+    pr_url: https://github.com/polymetrics-ai/cli/pull/457
     worker: pm-gsd-worker
-    status: in_progress
+    status: provisionally_integrated
     write_scope: "CLI run options, global flags, and internal/ui styles foundation"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-405-tty-ndjson-progress
-    verification: in_progress
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched after #404; stacked PR/review pending.", disposition_url: ""}
+    verification: "Local full gates, website docs checks, remote PR checks, and final targeted/security/docs re-reviews passed at ca827fef; parent squash 087ec03c395eaef9d3eecbd88eb0d28c012d8f00."
+    automated_review: {primary_route: human, status: blocked, head_sha: ca827fef1e5e302b15fa198f9bfefe674c5455cf, reviewed_range: "30de4977..087ec03c", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled/no run; Copilot quota exhausted; pm-reviewer/security-auditor/docs-writer findings fixed and final sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/457"}
   - number: 406
     url: https://github.com/polymetrics-ai/cli/issues/406
     branch: refactor/406-catalog-native-cobra
@@ -299,7 +301,7 @@ subissues:
     write_scope: "internal/telemetry, config/docs, CLI/app/flow/certify/connsdk/worker spans"
     worker_directory: ""
     verification: not_run_write_scope_collision
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "#404 cleared; defer until #405 clears shared CLI/app/events instrumentation seams.", disposition_url: ""}
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "#404/#405 cleared; defer until #423 clears shared CLI/app/flow namespace seams.", disposition_url: ""}
   - number: 411
     url: https://github.com/polymetrics-ai/cli/issues/411
     branch: pending
