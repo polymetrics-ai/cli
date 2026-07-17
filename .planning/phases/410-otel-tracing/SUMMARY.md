@@ -1,12 +1,12 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: review-fix planned for PR #459; verification pending rerun.
+Status: review-fix in progress for PR #459; red tests captured; verification pending rerun.
 
 ## Current state
 
 - Parent PR #438 exists and is draft/human-gated.
 - Worker branch `feat/410-otel-tracing` starts at parent head `c753071b9d6ed795cfdd80fd95f3e1c3e04792e9`.
-- GSD doctor passed; plan-phase prompt generated; programming-loop prompt unavailable, manual GSD/TDD fallback active.
+- GSD doctor passed; plan-phase prompt generated and rerun; programming-loop prompt unavailable, manual GSD/TDD fallback active.
 - Required skills loaded and recorded.
 - Dependency budget restricted to ADR 0004 Stage 12 OTel trace modules at v1.44.0.
 
@@ -36,6 +36,6 @@ Current execution decision: `local_critical_path`. This worker stays on `feat/41
 
 ## Next
 
-1. Add review-fix red tests and capture exact failing output.
-2. Implement minimal fixes.
-3. Run focused gates, smoke/parity checks, full gates, update PR #459 body, commit and push.
+1. Complete minimal review-fix implementation from captured red tests.
+2. Run focused gates, smoke/parity checks, full gates.
+3. Update phase artifacts, PR #459 body, commit and push.

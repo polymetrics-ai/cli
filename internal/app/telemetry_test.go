@@ -47,7 +47,7 @@ func TestRunETLEmitsTelemetrySpan(t *testing.T) {
 	}
 
 	dir := filepath.Join(root, ".polymetrics", "telemetry")
-	ctx, handle := telemetry.Init(ctx, telemetry.Config{Exporter: telemetry.ExporterFile, Directory: dir, RunID: "etl-span"}, func(string) {})
+	ctx, handle := telemetry.Init(ctx, telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "etl-span"}, func(string) {})
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "source_to_dest", Stream: "records", BatchSize: 1}); err != nil {
 		t.Fatalf("RunETL: %v", err)
 	}

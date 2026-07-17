@@ -61,6 +61,20 @@ func (e *cliError) Error() string {
 
 func (e *cliError) Unwrap() error { return e.err }
 
+func (e *cliError) TelemetryErrorClass() string {
+	if e == nil {
+		return ""
+	}
+	return string(e.category)
+}
+
+func (e *cliError) TelemetryErrorCode() string {
+	if e == nil {
+		return ""
+	}
+	return e.code
+}
+
 func usageErrorf(format string, args ...any) error {
 	return &cliError{category: categoryUsage, code: "usage_error", message: fmt.Sprintf(format, args...)}
 }

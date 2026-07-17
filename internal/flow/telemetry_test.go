@@ -3,6 +3,7 @@ package flow
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,8 +13,9 @@ import (
 )
 
 func TestEngineRunEmitsFlowAndStepTelemetrySpans(t *testing.T) {
-	dir := t.TempDir()
-	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, Directory: dir, RunID: "flow-span"}, func(string) {})
+	root := t.TempDir()
+	dir := filepath.Join(root, ".polymetrics", "telemetry")
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "flow-span"}, func(string) {})
 	engine := &Engine{
 		Manifest: FlowManifest{
 			Name: "nightly_test_flow",
@@ -45,6 +47,38 @@ func TestEngineRunEmitsFlowAndStepTelemetrySpans(t *testing.T) {
 	assertFlowTelemetryContains(t, data, "sync")
 }
 
+func TestEngineRunFailedStepTelemetryRedactsError(t *testing.T) {
+	const marker = "pm_flow_response_body_marker"
+	root := t.TempDir()
+	dir := filepath.Join(root, ".polymetrics", "telemetry")
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "flow-failed-span"}, func(string) {})
+	engine := &Engine{
+		Manifest: FlowManifest{
+			Name: "failed_flow",
+			Steps: []FlowStep{
+				{ID: "sync_accounts", Kind: KindSync, Connection: "source_to_dest", Streams: []string{"accounts"}},
+			},
+		},
+		App:     failingTelemetryFlowApp{marker: marker},
+		LockDir: t.TempDir(),
+	}
+
+	_, err := engine.Run(ctx, RunOptions{})
+	if err == nil {
+		t.Fatal("Run error = nil, want failed step")
+	}
+	telemetry.Shutdown(context.Background(), handle, func(string) {})
+
+	data := readFlowTelemetry(t, dir)
+	assertFlowTelemetryContains(t, data, "pm.flow.step")
+	assertFlowTelemetryContains(t, data, "pm.error.type")
+	assertFlowTelemetryContains(t, data, "pm.error.code")
+	assertFlowTelemetryNotContains(t, data, "exception.")
+	assertFlowTelemetryNotContains(t, data, "errorString")
+	assertFlowTelemetryNotContains(t, data, marker)
+	assertFlowTelemetryNotContains(t, data, "response body")
+}
+
 type telemetryFlowApp struct{}
 
 func (telemetryFlowApp) ETLRun(context.Context, string, []string) (ETLResult, error) {
@@ -56,6 +90,22 @@ func (telemetryFlowApp) QuerySQL(context.Context, string, int) ([]map[string]any
 }
 
 func (telemetryFlowApp) RLMRun(context.Context, RLMRunRequest) (RLMResult, error) {
+	return RLMResult{}, nil
+}
+
+type failingTelemetryFlowApp struct {
+	marker string
+}
+
+func (f failingTelemetryFlowApp) ETLRun(context.Context, string, []string) (ETLResult, error) {
+	return ETLResult{}, fmt.Errorf("upstream response body contained %s", f.marker)
+}
+
+func (f failingTelemetryFlowApp) QuerySQL(context.Context, string, int) ([]map[string]any, error) {
+	return nil, nil
+}
+
+func (f failingTelemetryFlowApp) RLMRun(context.Context, RLMRunRequest) (RLMResult, error) {
 	return RLMResult{}, nil
 }
 
@@ -86,5 +136,12 @@ func assertFlowTelemetryContains(t *testing.T, data []byte, needle string) {
 	t.Helper()
 	if !bytes.Contains(data, []byte(needle)) {
 		t.Fatalf("telemetry output missing %q:\n%s", needle, data)
+	}
+}
+
+func assertFlowTelemetryNotContains(t *testing.T, data []byte, needle string) {
+	t.Helper()
+	if bytes.Contains(data, []byte(needle)) {
+		t.Fatalf("telemetry output contains forbidden %q:\n%s", needle, data)
 	}
 }

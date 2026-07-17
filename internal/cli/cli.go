@@ -73,7 +73,12 @@ func RunWithOptions(args []string, stdout, stderr io.Writer, runOpts RunOptions)
 	defer func() { _ = closeLogs() }()
 	ctx = pmlogging.WithLogger(ctx, logger)
 
-	ctx, telemetryHandle := telemetry.Init(ctx, telemetryConfig(cfg), telemetryWarning(ctx, stderr))
+	warnTelemetry := telemetryWarning(ctx, stderr)
+	telemetryCfg, telemetryWarnings := telemetryConfig(cfg)
+	for _, warning := range telemetryWarnings {
+		warnTelemetry(warning)
+	}
+	ctx, telemetryHandle := telemetry.Init(ctx, telemetryCfg, warnTelemetry)
 	_ = detectInvocationUI(globals, runOpts, stdout, cfg.JSON)
 	if globals.progress == "ndjson" {
 		ctx = events.WithEmitter(ctx, events.NewNDJSON(stderr))
@@ -84,33 +89,48 @@ func RunWithOptions(args []string, stdout, stderr io.Writer, runOpts RunOptions)
 	exitCode := 0
 	if err := executeRootCmd(cmd, globals.clean); err != nil {
 		mapped := mapCobraErr(err)
-		commandSpan.RecordError(mapped)
+		commandSpan.RecordError(classifyError(mapped))
 		exitCode = writeError(ctx, stdout, stderr, mapped, cfg.JSON)
 		commandSpan.SetAttributes(telemetry.StringAttr("pm.command.status", "error"), telemetry.IntAttr("pm.command.exit_code", exitCode))
 	} else {
 		commandSpan.SetAttributes(telemetry.StringAttr("pm.command.status", "ok"), telemetry.IntAttr("pm.command.exit_code", 0))
 	}
 	commandSpan.End()
-	telemetry.Shutdown(ctx, telemetryHandle, telemetryWarning(ctx, stderr))
+	telemetry.Shutdown(ctx, telemetryHandle, warnTelemetry)
 	return exitCode
 }
 
-func telemetryConfig(cfg config.Config) telemetry.Config {
+func telemetryConfig(cfg config.Config) (telemetry.Config, []string) {
 	dir := cfg.Telemetry.Directory
 	if dir == "" {
 		dir = filepath.Join(".polymetrics", "telemetry")
 	}
-	if !filepath.IsAbs(dir) {
-		dir = filepath.Join(cfg.Root, dir)
+	exporter := strings.TrimSpace(cfg.Telemetry.Exporter)
+	endpoint := strings.TrimSpace(cfg.Telemetry.Endpoint)
+	var warnings []string
+	if strings.EqualFold(exporter, "otlp") {
+		if !trustedTelemetrySource(cfg.Source("telemetry.exporter")) {
+			exporter = string(telemetry.ExporterNone)
+			endpoint = ""
+			warnings = append(warnings, "config-sourced OTLP telemetry exporter ignored; set PM_TELEMETRY=otlp or POLYMETRICS_TELEMETRY=otlp to enable network telemetry")
+		} else if endpoint != "" && !trustedTelemetrySource(cfg.Source("telemetry.endpoint")) {
+			endpoint = ""
+			warnings = append(warnings, "config-sourced OTLP telemetry endpoint ignored; set OTEL_EXPORTER_OTLP_ENDPOINT or PM_TELEMETRY_ENDPOINT to choose a collector")
+		}
 	}
 	return telemetry.Config{
-		Exporter:    telemetry.Exporter(cfg.Telemetry.Exporter),
-		Endpoint:    cfg.Telemetry.Endpoint,
+		Exporter:    telemetry.Exporter(exporter),
+		Endpoint:    endpoint,
 		Directory:   dir,
+		ProjectRoot: cfg.Root,
 		Capture:     cfg.Telemetry.Capture,
 		RunID:       commandRunID(),
 		ServiceName: "pm",
-	}
+	}, warnings
+}
+
+func trustedTelemetrySource(source string) bool {
+	return source == "env" || source == "flag"
 }
 
 func telemetryWarning(ctx context.Context, stderr io.Writer) telemetry.WarningFunc {

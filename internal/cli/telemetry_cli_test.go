@@ -2,6 +2,8 @@ package cli_test
 
 import (
 	"bytes"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
@@ -71,6 +73,100 @@ func TestTelemetryFileExporterInitFailureIsExitCodeNeutral(t *testing.T) {
 	}
 	if strings.Contains(stdout.String(), `"kind": "Error"`) {
 		t.Fatalf("stdout contains Error envelope despite neutral telemetry failure: %s", stdout.String())
+	}
+}
+
+func TestTelemetryFailedCommandSpanDoesNotExportRawError(t *testing.T) {
+	const marker = "pm_command_failure_marker"
+	root := t.TempDir()
+	t.Setenv("PM_TELEMETRY", "file")
+	var stdout, stderr bytes.Buffer
+
+	code := cli.Run([]string{"--root", root, "--json", "help", marker}, &stdout, &stderr)
+
+	if code == 0 {
+		t.Fatalf("exit code = 0, want failure; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	data := readCLITelemetry(t, filepath.Join(root, ".polymetrics", "telemetry"))
+	assertCLIContains(t, data, "pm.command")
+	assertCLIContains(t, data, "pm.error.type")
+	assertCLIContains(t, data, "pm.error.code")
+	assertCLIContains(t, data, "internal_error")
+	assertCLINotContains(t, data, "exception.")
+	assertCLINotContains(t, data, marker)
+}
+
+func TestTelemetryConfigSourcedOTLPRejectedAndEnvOptInAccepted(t *testing.T) {
+	const marker = "pm_config_otlp_marker"
+	root := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(root, ".polymetrics"), 0o700); err != nil {
+		t.Fatalf("mkdir config dir: %v", err)
+	}
+	configPath := filepath.Join(root, ".polymetrics", "config.yaml")
+	configBody := "telemetry:\n  exporter: otlp\n  endpoint: https://user:" + marker + "@collector.example.test/v1/traces?token=" + marker + "\n"
+	if err := os.WriteFile(configPath, []byte(configBody), 0o600); err != nil {
+		t.Fatalf("write config: %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+
+	code := cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout.String())
+	}
+	if !strings.Contains(stderr.String(), "warning: telemetry:") || !strings.Contains(stderr.String(), "config-sourced OTLP") {
+		t.Fatalf("stderr missing config-sourced OTLP warning: %q", stderr.String())
+	}
+	if strings.Contains(stderr.String(), marker) || strings.Contains(stderr.String(), "token=") || strings.Contains(stderr.String(), "user:") {
+		t.Fatalf("stderr leaked config endpoint detail: %q", stderr.String())
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+	stdout.Reset()
+	stderr.Reset()
+	root = t.TempDir()
+	t.Setenv("PM_TELEMETRY", "otlp")
+	t.Setenv("OTEL_EXPORTER_OTLP_ENDPOINT", server.URL)
+
+	code = cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+
+	if code != 0 {
+		t.Fatalf("env opt-in exit code = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if strings.Contains(stderr.String(), "config-sourced OTLP") {
+		t.Fatalf("env opt-in stderr reported config-sourced rejection: %q", stderr.String())
+	}
+}
+
+func TestTelemetryOTLPExportFailureUsesProjectWarningAndKeepsStdout(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "collector failed", http.StatusInternalServerError)
+	}))
+	defer server.Close()
+	root := t.TempDir()
+	t.Setenv("PM_TELEMETRY", "otlp")
+	t.Setenv("OTEL_EXPORTER_OTLP_ENDPOINT", server.URL)
+	var stdout, stderr bytes.Buffer
+
+	code := cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout.String())
+	}
+	if strings.Contains(stdout.String(), "telemetry") || strings.Contains(stdout.String(), `"kind": "Error"`) {
+		t.Fatalf("stdout corrupted by telemetry failure: %s", stdout.String())
+	}
+	if !strings.Contains(stderr.String(), "warning: telemetry:") {
+		t.Fatalf("stderr missing telemetry warning: %q", stderr.String())
 	}
 }
 

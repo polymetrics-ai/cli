@@ -66,7 +66,9 @@ OBSERVABILITY
   secret-safe spans under .polymetrics/telemetry, or PM_TELEMETRY=otlp with
   OTEL_EXPORTER_OTLP_ENDPOINT for an OTLP HTTP/protobuf collector. Telemetry
   warnings go to stderr and never change command exit codes or stdout JSON
-  envelopes. HTTP spans record only scheme, host, and path metadata.
+  envelopes. HTTP spans record method, scheme, host, path, status, attempt,
+  and retry metadata only; query strings, headers, bodies, and argv are never
+  recorded.
 
 HUMAN QUICK START
   pm init
@@ -164,11 +166,13 @@ UI AND PROGRESS FLAGS
   non-TTY stdout force the plain path.
 
 TELEMETRY
-  telemetry.exporter defaults to none/off. No SDK is constructed and no
-  .polymetrics/telemetry directory is created while disabled. Set
-  PM_TELEMETRY=file or POLYMETRICS_TELEMETRY=file to write stdouttrace JSONL
-  spans under telemetry.directory. Set PM_TELEMETRY=otlp and configure
-  telemetry.endpoint or OTEL_EXPORTER_OTLP_ENDPOINT for OTLP HTTP/protobuf.
+  telemetry.exporter defaults to none (off is accepted as a disabled alias). No
+  SDK is constructed and no .polymetrics/telemetry directory is created while
+  disabled. Set PM_TELEMETRY=file or POLYMETRICS_TELEMETRY=file to write
+  stdouttrace JSONL spans under telemetry.directory. Network OTLP tracing must
+  be explicitly enabled from environment variables; config-file OTLP exporter or
+  endpoint values are ignored by default. Set PM_TELEMETRY=otlp and configure
+  OTEL_EXPORTER_OTLP_ENDPOINT or PM_TELEMETRY_ENDPOINT for OTLP HTTP/protobuf.
   OTEL_SDK_DISABLED=true always disables tracing.
 
   Telemetry failures are warnings on stderr, not command failures. Stdout keeps
@@ -282,16 +286,19 @@ KEYS
 
   telemetry.exporter
     Default: none. Primary env: POLYMETRICS_TELEMETRY. Alias: PM_TELEMETRY.
-    Supported values: none, file, otlp.
+    Supported values: none, off, file, otlp. off is a disabled alias.
 
   telemetry.endpoint
     Default: empty. Primary env: POLYMETRICS_TELEMETRY_ENDPOINT. Aliases:
     PM_TELEMETRY_ENDPOINT, POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT, and
-    standard OTEL_EXPORTER_OTLP_ENDPOINT.
+    standard OTEL_EXPORTER_OTLP_ENDPOINT. OTLP endpoints must be http/https URLs
+    without userinfo, query strings, or fragments, and config-file endpoints are
+    ignored unless network telemetry is explicitly enabled by env.
 
   telemetry.directory
     Default: .polymetrics/telemetry. Primary env: POLYMETRICS_TELEMETRY_DIR.
-    Alias: PM_TELEMETRY_DIR. Relative paths are resolved under --root.
+    Alias: PM_TELEMETRY_DIR. Paths must be relative, stay under --root, and must
+    not traverse symlinked telemetry directories or files.
 
   telemetry.capture
     Default: default. Primary env: POLYMETRICS_TELEMETRY_CAPTURE. Alias:
@@ -303,9 +310,9 @@ SECURITY
   connector certification credsfile entries are credential data, not app config.
   Do not store secret values in config.yaml or examples. LLM API keys such as
   PM_LLM_API_KEY and provider-specific keys remain environment-only secret
-  inputs and are not documented with values. Telemetry endpoint URLs should not
-  contain credentials; emitted spans still drop userinfo, query strings,
-  headers, bodies, raw argv, and credential values.
+  inputs and are not documented with values. OTLP endpoint URLs with userinfo,
+  query strings, or fragments are rejected; emitted spans still drop userinfo,
+  query strings, headers, bodies, raw argv, and credential values.
 
 EXIT STATUS
   0 success

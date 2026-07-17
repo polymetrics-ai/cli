@@ -18,8 +18,9 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	"go.opentelemetry.io/otel/trace"
 
-	"polymetrics.ai/internal/safety"
+	pmlogging "polymetrics.ai/internal/logging"
 )
 
 // Exporter names the tracing exporter mode.
@@ -48,6 +49,7 @@ type Config struct {
 	Exporter        Exporter
 	Endpoint        string
 	Directory       string
+	ProjectRoot     string
 	Capture         string
 	RunID           string
 	ServiceName     string
@@ -109,9 +111,8 @@ type Span interface {
 type otelSpan struct {
 	ctx           context.Context
 	end           func()
-	addEvent      func(string)
+	addEvent      func(string, []attribute.KeyValue)
 	setAttributes func(...attribute.KeyValue)
-	recordError   func(error)
 	setStatus     func(codes.Code, string)
 	isRecording   func() bool
 }
@@ -122,10 +123,7 @@ func (s otelSpan) AddEvent(name string, attrs ...Attr) {
 	if name == "" {
 		return
 	}
-	if filtered := filterAttrs(s.ctx, attrs); len(filtered) > 0 {
-		s.setAttributes(filtered...)
-	}
-	s.addEvent(sanitizeString(name))
+	s.addEvent(sanitizeLine(s.ctx, name), filterAttrs(s.ctx, attrs))
 }
 
 func (s otelSpan) SetAttributes(attrs ...Attr) {
@@ -136,7 +134,11 @@ func (s otelSpan) RecordError(err error) {
 	if err == nil {
 		return
 	}
-	s.recordError(errors.New(sanitizeString(err.Error())))
+	attrs := errorAttrs(s.ctx, err)
+	if len(attrs) > 0 {
+		s.setAttributes(attrs...)
+		s.addEvent("pm.error", attrs)
+	}
 	s.setStatus(codes.Error, "error")
 }
 
@@ -145,7 +147,7 @@ func (s otelSpan) SetStatus(status string) {
 		s.setStatus(codes.Error, "error")
 		return
 	}
-	s.setStatus(codes.Ok, sanitizeString(status))
+	s.setStatus(codes.Ok, sanitizeLine(s.ctx, status))
 }
 
 func (s otelSpan) IsRecording() bool { return s.isRecording() }
@@ -160,9 +162,9 @@ func Init(ctx context.Context, cfg Config, warn WarningFunc) (context.Context, *
 		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
 	}
 
-	exporter, file, err := newExporter(ctx, cfg)
+	exporter, file, err := newExporter(ctx, cfg, warn)
 	if err != nil {
-		warnf(warn, "initialize telemetry exporter: %v", err)
+		warnf(ctx, warn, "initialize telemetry exporter: %v", err)
 		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
 	}
 
@@ -200,15 +202,16 @@ func Init(ctx context.Context, cfg Config, warn WarningFunc) (context.Context, *
 			end: func() {
 				span.End()
 			},
-			addEvent: func(name string) {
-				span.AddEvent(name)
+			addEvent: func(name string, attrs []attribute.KeyValue) {
+				if len(attrs) == 0 {
+					span.AddEvent(name)
+					return
+				}
+				span.AddEvent(name, trace.WithAttributes(attrs...))
 			},
 			setAttributes: span.SetAttributes,
-			recordError: func(err error) {
-				span.RecordError(err)
-			},
-			setStatus:   span.SetStatus,
-			isRecording: span.IsRecording,
+			setStatus:     span.SetStatus,
+			isRecording:   span.IsRecording,
 		}
 	})
 	ctx = context.WithValue(ctx, tracerContextKey{}, starter)
@@ -228,7 +231,7 @@ func Shutdown(ctx context.Context, handle *Handle, warn WarningFunc) {
 	shutdownCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), timeout)
 	defer cancel()
 	if err := handle.shutdown(shutdownCtx); err != nil {
-		warnf(warn, "telemetry shutdown: %v", err)
+		warnf(ctx, warn, "telemetry shutdown: %v", err)
 	}
 }
 
@@ -259,39 +262,50 @@ func HTTPAttrs(method, rawURL string) []Attr {
 	}
 }
 
-func newExporter(ctx context.Context, cfg Config) (sdktrace.SpanExporter, io.Closer, error) {
+func newExporter(ctx context.Context, cfg Config, warn WarningFunc) (sdktrace.SpanExporter, io.Closer, error) {
 	switch normalizeExporter(cfg.Exporter) {
 	case ExporterFile:
-		return newFileExporter(cfg)
+		exporter, file, err := newFileExporter(cfg)
+		if err != nil {
+			return nil, nil, err
+		}
+		return warningExporter{ctx: ctx, warn: warn, next: exporter}, file, nil
 	case ExporterOTLP:
-		opts := []otlptracehttp.Option{}
+		opts := []otlptracehttp.Option{otlptracehttp.WithTimeout(timeoutOrDefault(cfg.ShutdownTimeout))}
 		if endpoint := strings.TrimSpace(cfg.Endpoint); endpoint != "" {
-			if strings.Contains(endpoint, "://") {
-				opts = append(opts, otlptracehttp.WithEndpointURL(endpoint))
-			} else {
-				opts = append(opts, otlptracehttp.WithEndpoint(endpoint))
+			validated, err := validateOTLPEndpoint(endpoint)
+			if err != nil {
+				return nil, nil, err
 			}
+			opts = append(opts, otlptracehttp.WithEndpointURL(validated))
 		}
 		exporter, err := otlptracehttp.New(ctx, opts...)
-		return exporter, nil, err
+		if err != nil {
+			return nil, nil, err
+		}
+		return warningExporter{ctx: ctx, warn: warn, next: exporter}, nil, nil
 	default:
 		return nil, nil, fmt.Errorf("unsupported exporter %q", cfg.Exporter)
 	}
 }
 
 func newFileExporter(cfg Config) (sdktrace.SpanExporter, io.Closer, error) {
-	dir := strings.TrimSpace(cfg.Directory)
-	if dir == "" {
-		dir = filepath.Join(".polymetrics", "telemetry")
+	dir, err := resolveTelemetryDir(cfg.ProjectRoot, cfg.Directory)
+	if err != nil {
+		return nil, nil, err
 	}
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := mkdirAllNoSymlink(dir.root, dir.path); err != nil {
 		return nil, nil, err
 	}
 	name := safeFileName(cfg.RunID)
 	if name == "" {
 		name = time.Now().UTC().Format("20060102T150405.000000000Z")
 	}
-	file, err := os.OpenFile(filepath.Join(dir, name+".jsonl"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o600)
+	filePath := filepath.Join(dir.path, name+".jsonl")
+	if err := rejectSymlink(filePath); err != nil {
+		return nil, nil, err
+	}
+	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0o600)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -301,6 +315,131 @@ func newFileExporter(cfg Config) (sdktrace.SpanExporter, io.Closer, error) {
 		return nil, nil, err
 	}
 	return exporter, file, nil
+}
+
+type warningExporter struct {
+	ctx  context.Context
+	warn WarningFunc
+	next sdktrace.SpanExporter
+}
+
+func (e warningExporter) ExportSpans(ctx context.Context, spans []sdktrace.ReadOnlySpan) error {
+	if e.next == nil {
+		return nil
+	}
+	if err := e.next.ExportSpans(ctx, spans); err != nil {
+		warnf(e.ctx, e.warn, "telemetry export failed")
+	}
+	return nil
+}
+
+func (e warningExporter) Shutdown(ctx context.Context) error {
+	if e.next == nil {
+		return nil
+	}
+	if err := e.next.Shutdown(ctx); err != nil {
+		warnf(e.ctx, e.warn, "telemetry exporter shutdown failed")
+	}
+	return nil
+}
+
+type telemetryDir struct {
+	root string
+	path string
+}
+
+func resolveTelemetryDir(projectRoot, directory string) (telemetryDir, error) {
+	root := strings.TrimSpace(projectRoot)
+	if root == "" {
+		root = "."
+	}
+	rootAbs, err := filepath.Abs(root)
+	if err != nil {
+		return telemetryDir{}, fmt.Errorf("resolve project root: %w", err)
+	}
+	dir := strings.TrimSpace(directory)
+	if dir == "" {
+		dir = filepath.Join(".polymetrics", "telemetry")
+	}
+	if filepath.IsAbs(dir) || !filepath.IsLocal(dir) {
+		return telemetryDir{}, errors.New("telemetry directory must be relative to the project root")
+	}
+	clean := filepath.Clean(dir)
+	pathAbs := filepath.Join(rootAbs, clean)
+	rel, err := filepath.Rel(rootAbs, pathAbs)
+	if err != nil {
+		return telemetryDir{}, fmt.Errorf("compare telemetry directory to project root: %w", err)
+	}
+	if rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) || filepath.IsAbs(rel) {
+		return telemetryDir{}, errors.New("telemetry directory must stay under the project root")
+	}
+	return telemetryDir{root: rootAbs, path: pathAbs}, nil
+}
+
+func mkdirAllNoSymlink(root, target string) error {
+	info, err := os.Lstat(root)
+	if err != nil {
+		return fmt.Errorf("stat project root: %w", err)
+	}
+	if !info.IsDir() {
+		return errors.New("project root is not a directory")
+	}
+	rel, err := filepath.Rel(root, target)
+	if err != nil {
+		return fmt.Errorf("compare telemetry directory to project root: %w", err)
+	}
+	current := root
+	for _, part := range strings.Split(rel, string(filepath.Separator)) {
+		if part == "" || part == "." {
+			continue
+		}
+		current = filepath.Join(current, part)
+		info, err := os.Lstat(current)
+		if errors.Is(err, os.ErrNotExist) {
+			if err := os.Mkdir(current, 0o700); err != nil {
+				return fmt.Errorf("create telemetry directory: %w", err)
+			}
+			info, err = os.Lstat(current)
+		}
+		if err != nil {
+			return fmt.Errorf("stat telemetry directory: %w", err)
+		}
+		if info.Mode()&os.ModeSymlink != 0 {
+			return errors.New("telemetry directory must not contain symlinks")
+		}
+		if !info.IsDir() {
+			return errors.New("telemetry directory path contains a non-directory")
+		}
+	}
+	return nil
+}
+
+func rejectSymlink(path string) error {
+	info, err := os.Lstat(path)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+	if err != nil {
+		return fmt.Errorf("stat telemetry file: %w", err)
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		return errors.New("telemetry file must not be a symlink")
+	}
+	return errors.New("telemetry file already exists")
+}
+
+func validateOTLPEndpoint(endpoint string) (string, error) {
+	parsed, err := url.Parse(strings.TrimSpace(endpoint))
+	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
+		return "", errors.New("invalid OTLP endpoint: endpoint must be an http or https URL without credentials, query, or fragment")
+	}
+	if parsed.Scheme != "http" && parsed.Scheme != "https" {
+		return "", errors.New("invalid OTLP endpoint: endpoint must be an http or https URL without credentials, query, or fragment")
+	}
+	if parsed.User != nil || parsed.RawQuery != "" || parsed.ForceQuery || parsed.Fragment != "" {
+		return "", errors.New("invalid OTLP endpoint: endpoint must be an http or https URL without credentials, query, or fragment")
+	}
+	return parsed.String(), nil
 }
 
 var safeNamePattern = regexp.MustCompile(`[^A-Za-z0-9._-]+`)
@@ -327,7 +466,7 @@ func filterAttrs(ctx context.Context, attrs []Attr) []attribute.KeyValue {
 		key := attribute.Key(attr.Key)
 		switch value := attr.Value.(type) {
 		case string:
-			out = append(out, key.String(sanitizeString(value)))
+			out = append(out, key.String(sanitizeLine(ctx, value)))
 		case int:
 			out = append(out, key.Int(value))
 		case int64:
@@ -335,7 +474,7 @@ func filterAttrs(ctx context.Context, attrs []Attr) []attribute.KeyValue {
 		case bool:
 			out = append(out, key.Bool(value))
 		default:
-			out = append(out, key.String(sanitizeString(fmt.Sprint(value))))
+			out = append(out, key.String(sanitizeLine(ctx, fmt.Sprint(value))))
 		}
 	}
 	return out
@@ -365,6 +504,102 @@ var allowedAttributeKeys = map[string]struct{}{
 	"pm.http.attempt":       {},
 	"pm.http.max_attempts":  {},
 	"pm.http.retry":         {},
+	"pm.error.type":         {},
+	"pm.error.code":         {},
+	"pm.error.status_code":  {},
+}
+
+func errorAttrs(ctx context.Context, err error) []attribute.KeyValue {
+	if err == nil {
+		return nil
+	}
+	attrs := []Attr{StringAttr("pm.error.type", errorType(err))}
+	if code := errorCode(err); code != "" {
+		attrs = append(attrs, StringAttr("pm.error.code", code))
+	}
+	if status := errorStatusCode(err); status > 0 {
+		attrs = append(attrs, IntAttr("pm.error.status_code", status))
+	}
+	return filterAttrs(ctx, attrs)
+}
+
+func errorType(err error) string {
+	if err == nil {
+		return "error"
+	}
+	var classifier errorClassifier
+	if errors.As(err, &classifier) {
+		if class := safeErrorToken(classifier.TelemetryErrorClass()); class != "" {
+			return class
+		}
+	}
+	if errors.Is(err, context.Canceled) {
+		return "context.Canceled"
+	}
+	if errors.Is(err, context.DeadlineExceeded) {
+		return "context.DeadlineExceeded"
+	}
+	if errorStatusCode(err) > 0 {
+		return "http"
+	}
+	return "error"
+}
+
+func errorCode(err error) string {
+	var coder errorCoder
+	if errors.As(err, &coder) {
+		if code := safeErrorToken(coder.TelemetryErrorCode()); code != "" {
+			return code
+		}
+	}
+	switch {
+	case errors.Is(err, context.Canceled):
+		return "context_canceled"
+	case errors.Is(err, context.DeadlineExceeded):
+		return "context_deadline_exceeded"
+	case errorStatusCode(err) > 0:
+		return "http_status"
+	default:
+		return "error"
+	}
+}
+
+func safeErrorToken(value string) string {
+	value = strings.TrimSpace(value)
+	if value == "" || len(value) > 80 {
+		return ""
+	}
+	for _, r := range value {
+		switch {
+		case r >= 'a' && r <= 'z':
+		case r >= 'A' && r <= 'Z':
+		case r >= '0' && r <= '9':
+		case r == '_' || r == '-' || r == '.' || r == ':':
+		default:
+			return ""
+		}
+	}
+	return value
+}
+
+type errorClassifier interface {
+	TelemetryErrorClass() string
+}
+
+type errorCoder interface {
+	TelemetryErrorCode() string
+}
+
+type statusCoder interface {
+	StatusCode() int
+}
+
+func errorStatusCode(err error) int {
+	var status statusCoder
+	if errors.As(err, &status) {
+		return status.StatusCode()
+	}
+	return 0
 }
 
 func captureMode(ctx context.Context) string {
@@ -399,6 +634,8 @@ func normalizeExporter(exporter Exporter) Exporter {
 		return ExporterFile
 	case "otlp":
 		return ExporterOTLP
+	case "", "none", "off":
+		return ExporterNone
 	default:
 		return ExporterNone
 	}
@@ -416,13 +653,13 @@ func timeoutOrDefault(timeout time.Duration) time.Duration {
 	return timeout
 }
 
-func warnf(warn WarningFunc, format string, args ...any) {
+func warnf(ctx context.Context, warn WarningFunc, format string, args ...any) {
 	if warn == nil {
 		return
 	}
-	warn(sanitizeString(fmt.Sprintf(format, args...)))
+	warn(sanitizeLine(ctx, fmt.Sprintf(format, args...)))
 }
 
-func sanitizeString(value string) string {
-	return safety.SanitizeTerminalLine(safety.RedactErrorText(value))
+func sanitizeLine(ctx context.Context, value string) string {
+	return pmlogging.RedactLine(ctx, value)
 }

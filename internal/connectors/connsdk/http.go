@@ -45,6 +45,20 @@ func (e *HTTPError) Error() string {
 	return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", e.Status, safeErrorURL(e.URL), msg))
 }
 
+// StatusCode returns the HTTP response status for safe telemetry classification.
+func (e *HTTPError) StatusCode() int {
+	if e == nil {
+		return 0
+	}
+	return e.Status
+}
+
+// TelemetryErrorClass returns a stable error class for secret-safe tracing.
+func (e *HTTPError) TelemetryErrorClass() string { return "http" }
+
+// TelemetryErrorCode returns a stable error code for secret-safe tracing.
+func (e *HTTPError) TelemetryErrorCode() string { return "http_status" }
+
 // Requester performs JSON HTTP requests with auth, retry, and rate-limit handling.
 // The zero value is usable once Client/BaseURL are set; sensible defaults are
 // applied for the rest on first use.

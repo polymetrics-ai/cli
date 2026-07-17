@@ -7,7 +7,7 @@
   "branch": "feat/410-otel-tracing",
   "baseBranch": "feat/cli-architecture-v2",
   "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing",
-  "status": "review_fix_planned",
+  "status": "review_fix_in_progress",
   "gsd": {
     "doctorPassed": true,
     "planPhasePromptGenerated": true,
@@ -15,7 +15,7 @@
     "manualFallback": "scripts/gsd prompt programming-loop init --phase 410 --dry-run returned unknown GSD command; manual GSD/TDD fallback recorded. Review-fix rerun on 2026-07-18 confirmed same fallback."
   },
   "verificationPassed": false,
-  "verificationBlocker": "review fixes pending; red tests not captured yet for PR #459 findings",
+  "verificationBlocker": "make verify rerun pending after accepting go.opentelemetry.io/otel/trace direct promotion from tidy-check",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -46,6 +46,16 @@
       "cycle": "review-fix-plan",
       "decision": "local_critical_path",
       "reason": "PR #459 review findings accepted; this isolated worker must add red tests and fixes inline. Coordinator sidecars/human fallback own review coverage; no Claude/Copilot request."
+    },
+    {
+      "cycle": "review-fix-resume",
+      "decision": "local_critical_path",
+      "reason": "Pi worker resumed same issue branch/worktree with red evidence captured; no subagent tool available and no new review request allowed."
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "First review-fix make verify stopped at tidy-check because event attrs require existing go.opentelemetry.io/otel/trace to move from indirect to direct; rerun after accepting tidy diff."
     }
   ],
   "dependenciesApproved": [

@@ -17,7 +17,7 @@ This page is the public website contract for the `pm` CLI. Command/help, checked
 | `--plain` | Forces the plain non-TTY path even when stdout is a terminal. |
 | `--no-input` | Disables prompting and TTY UI. |
 | `--progress ndjson` | Streams sanitized progress events to stderr as NDJSON; stdout remains the final output or single JSON envelope. On failures, stderr may also include the final error diagnostic. |
-| `PM_TELEMETRY=file\|otlp` | Opts into secret-safe OpenTelemetry tracing. Default `none` constructs no SDK and creates no telemetry directory. |
+| `PM_TELEMETRY=none\|off\|file\|otlp` | Controls secret-safe OpenTelemetry tracing. Default `none` and alias `off` construct no SDK and create no telemetry directory. |
 
 <Callout type="info">
   `--json` is the agent path for operational commands. A few developer-facing commands, such as `pm help`, are intentionally plain text because they return human manuals.
@@ -25,7 +25,7 @@ This page is the public website contract for the `pm` CLI. Command/help, checked
 
 Future TTY renderers are eligible only when stdout is a TTY and `--json`, `--plain`, `--no-input`, non-empty `PM_NO_TUI`, non-empty `CI`, and `TERM=dumb` do not force the plain path. The current `cmd/pm` entrypoint keeps the plain path until a TTY renderer is wired intentionally. Use `--progress ndjson` on long-running commands when agents need live progress without polling checkpoint files.
 
-OpenTelemetry tracing is default-off. Use `PM_TELEMETRY=file` to write stdouttrace JSONL spans under `.polymetrics/telemetry`, or `PM_TELEMETRY=otlp` with `OTEL_EXPORTER_OTLP_ENDPOINT` for an OTLP HTTP/protobuf collector. Telemetry warnings go to stderr and never change command exit codes or stdout JSON envelopes. Connector HTTP spans record only method, scheme, host, path, status, and retry/attempt metadata -- no request or response bodies, headers, query strings, raw argv, or credential values.
+OpenTelemetry tracing is default-off. Use `PM_TELEMETRY=file` to write stdouttrace JSONL spans under `.polymetrics/telemetry`, or `PM_TELEMETRY=otlp` with `OTEL_EXPORTER_OTLP_ENDPOINT` for an OTLP HTTP/protobuf collector. Config-file OTLP exporter or endpoint values are ignored unless network telemetry is explicitly enabled from the environment. Telemetry warnings go to stderr and never change command exit codes or stdout JSON envelopes. Connector HTTP spans record only method, scheme, host, path, status, and retry/attempt metadata -- no request or response bodies, headers, query strings, raw argv, or credential values.
 
 ## Configuration
 
@@ -93,10 +93,10 @@ telemetry:
   capture: default
 ```
 
-Telemetry values are non-secret configuration. `OTEL_SDK_DISABLED=true` always disables tracing. Set `telemetry.capture` to `minimal` to keep span names while stripping span attributes.
+Telemetry values are non-secret configuration. Supported exporters are `none`, `off`, `file`, and `otlp`; `off` is a disabled alias. `OTEL_SDK_DISABLED=true` always disables tracing. OTLP endpoints must be `http` or `https` URLs without userinfo, query strings, or fragments. `telemetry.directory` must be relative, stay under `--root`, and avoid symlinked telemetry directories or files. Set `telemetry.capture` to `minimal` to keep span names while stripping span attributes.
 
 <Callout type="warning">
-  Configuration is not a secret store. User-named credential variables passed to `--from-env`, connector certification credsfile entries, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat. Telemetry endpoint URLs should not contain credentials; emitted spans still drop userinfo, query strings, headers, bodies, raw argv, and credential values.
+  Configuration is not a secret store. User-named credential variables passed to `--from-env`, connector certification credsfile entries, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat. OTLP endpoint URLs with credentials, query strings, or fragments are rejected; emitted spans still drop userinfo, query strings, headers, bodies, raw argv, and credential values.
 </Callout>
 
 ## Command map

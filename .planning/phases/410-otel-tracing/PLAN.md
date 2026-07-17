@@ -50,6 +50,8 @@ Approved by ADR 0004 Stage 12 only:
 - `go.opentelemetry.io/otel/exporters/stdout/stdouttrace@v1.44.0`
 - `go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.44.0`
 
+Review-fix note: event attributes require `trace.WithAttributes`, so `go mod tidy` promotes existing `go.opentelemetry.io/otel/trace@v1.44.0` from indirect to direct with no version/checksum change. This is treated as an existing OTel trace API submodule promotion, not a new module/version.
+
 No `otelhttp`, no grpc exporter promotion, no metrics SDK, no otel log bridge, no Temporal OTel contrib in this issue. Any version/module deviation is a human gate.
 
 ## Scope / write plan

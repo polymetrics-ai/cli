@@ -3,6 +3,9 @@ package connsdk
 import (
 	"bytes"
 	"context"
+	"encoding/json"
+	"errors"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -10,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/telemetry"
 )
@@ -28,8 +32,9 @@ func TestRequesterDoEmitsSecretSafeHTTPSpanTelemetry(t *testing.T) {
 	}))
 	defer server.Close()
 
-	dir := t.TempDir()
-	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, Directory: dir, RunID: "http-span"}, func(string) {})
+	root := t.TempDir()
+	dir := filepath.Join(root, ".polymetrics", "telemetry")
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "http-span"}, func(string) {})
 	requester := &Requester{
 		Client:     server.Client(),
 		BaseURL:    server.URL,
@@ -62,6 +67,51 @@ func TestRequesterDoEmitsSecretSafeHTTPSpanTelemetry(t *testing.T) {
 	assertConnSDKNotContains(t, data, "url.full")
 }
 
+func TestRequesterDoFailedHTTPSpanHasSafeErrorAndEventAttrs(t *testing.T) {
+	const marker = "pm_http_response_body_marker"
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "response body contains "+marker, http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+
+	root := t.TempDir()
+	dir := filepath.Join(root, ".polymetrics", "telemetry")
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "http-failed-span"}, func(string) {})
+	requester := &Requester{
+		Client:      server.Client(),
+		BaseURL:     server.URL,
+		MaxRetries:  1,
+		BaseBackoff: time.Nanosecond,
+		Sleep: func(context.Context, time.Duration) error {
+			return nil
+		},
+	}
+
+	_, err := requester.Do(ctx, http.MethodGet, "/v1/fail", url.Values{"api_key": []string{marker}}, nil)
+	if err == nil {
+		t.Fatal("Do error = nil, want HTTP failure")
+	}
+	telemetry.Shutdown(context.Background(), handle, func(string) {})
+
+	data := readConnSDKTelemetry(t, dir)
+	assertConnSDKContains(t, data, "pm.connector.http")
+	assertConnSDKContains(t, data, "pm.error.type")
+	assertConnSDKContains(t, data, "pm.error.code")
+	assertConnSDKContains(t, data, "http_status")
+	assertConnSDKContains(t, data, "pm.error.status_code")
+	assertConnSDKNotContains(t, data, "exception.")
+	assertConnSDKNotContains(t, data, "connsdk.HTTPError")
+	assertConnSDKNotContains(t, data, marker)
+	assertConnSDKNotContains(t, data, "response body")
+	assertConnSDKNotContains(t, data, "api_key")
+	if !connSDKSpanEventHasAttr(t, data, "pm.connector.http.retry", "pm.http.status_code") {
+		t.Fatalf("retry event missing status attr:\n%s", data)
+	}
+	if !connSDKSpanEventHasAttr(t, data, "pm.connector.http.retry", "pm.http.attempt") {
+		t.Fatalf("retry event missing attempt attr:\n%s", data)
+	}
+}
+
 func readConnSDKTelemetry(t *testing.T, dir string) []byte {
 	t.Helper()
 	entries, err := os.ReadDir(dir)
@@ -83,6 +133,36 @@ func readConnSDKTelemetry(t *testing.T, dir string) []byte {
 		t.Fatalf("no telemetry JSONL data under %s", dir)
 	}
 	return out.Bytes()
+}
+
+func connSDKSpanEventHasAttr(t *testing.T, data []byte, eventName, attrKey string) bool {
+	t.Helper()
+	dec := json.NewDecoder(bytes.NewReader(data))
+	for {
+		var span map[string]any
+		err := dec.Decode(&span)
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			t.Fatalf("decode span JSON: %v\n%s", err, data)
+		}
+		events, _ := span["Events"].([]any)
+		for _, rawEvent := range events {
+			event, _ := rawEvent.(map[string]any)
+			if event["Name"] != eventName {
+				continue
+			}
+			attrs, _ := event["Attributes"].([]any)
+			for _, rawAttr := range attrs {
+				attr, _ := rawAttr.(map[string]any)
+				if attr["Key"] == attrKey {
+					return true
+				}
+			}
+		}
+	}
+	return false
 }
 
 func assertConnSDKContains(t *testing.T, data []byte, needle string) {

@@ -30,6 +30,8 @@ scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410.txt
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410.txt
 scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-reviewfix.txt
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-reviewfix.txt
+scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-reviewfix-rerun.txt
+scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-reviewfix-rerun.txt
 ```
 
 Result:
@@ -37,6 +39,7 @@ Result:
 - `doctor`: pass (rerun 2026-07-18; 69 commands).
 - `plan-phase`: generated 142-line prompt (initial and review-fix rerun).
 - `programming-loop`: failed with `scripts/gsd: unknown GSD command: programming-loop`; manual GSD/TDD fallback recorded in PLAN/RUN-STATE.
+- Review-fix rerun in this Pi worker: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 
 ## Review-fix accepted findings
 
@@ -66,7 +69,14 @@ Result:
 | 8 | gate | `make verify` before commit | Fail | Expected tidy-check failure because go.mod/go.sum dependency changes were uncommitted; rerun after green-slice commit. |
 | 9 | gate | `make verify` after green-slice commit | Pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, and connectorgen validate passed. |
 | 10 | review-fix plan | Planning | Updated phase artifacts for PR #459 review findings before production edits | Pass | New accepted findings, planned red tests, verification checklist, and local-critical-path decision recorded. |
-| 11 | review-fix red | Planned test | `go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'Telemetry|OTLP|Endpoint|Event|RecordError|FileExporter' -count=1` | Pending | Add failing tests before production edits; record exact red output here. |
+| 11 | review-fix red | Test | `go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'Telemetry|OTLP|Endpoint|Event|RecordError|FileExporter' -count=1` | Fail | Expected red before production edits. Exact key output: `internal/telemetry/telemetry_test.go:23:75: unknown field ProjectRoot in struct literal of type Config`; `internal/connectors/connsdk/telemetry_test.go:37:105: unknown field ProjectRoot in struct literal of type "polymetrics.ai/internal/telemetry".Config`; `internal/flow/telemetry_test.go:18:105: unknown field ProjectRoot in struct literal of type "polymetrics.ai/internal/telemetry".Config`; `telemetry_cli_test.go:92: telemetry output missing "pm.error.type"` with exported `exception` event; `telemetry_cli_test.go:119: stderr missing config-sourced OTLP warning: ""`; `telemetry_cli_test.go:167: stderr missing telemetry warning: ""`; exit code 1. |
+| 12 | review-fix resume | Planning | `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 410 --skip-research`; `scripts/gsd prompt programming-loop init --phase 410 --dry-run` | Pass/fallback | Doctor passed; plan prompt regenerated; programming-loop command still unavailable (`scripts/gsd: unknown GSD command: programming-loop`). Continuing local-critical-path manual GSD/TDD with existing red evidence and no subagent spawn. |
+| 13 | review-fix red | Test | `go test ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'TestTelemetryFailedCommandSpanDoesNotExportRawError|TestRequesterDoFailedHTTPSpanHasSafeErrorAndEventAttrs|TestEngineRunFailedStepTelemetryRedactsError' -count=1` | Fail | Added stricter stable error class/code assertions before implementation. Exact key output: CLI telemetry missing `internal_error` and exported `pm.error.type=cli.cobraLegacyError`; connsdk telemetry contained forbidden `connsdk.HTTPError`; flow telemetry contained forbidden `errors.errorString`/`fmt.wrapError`; exit code 1. |
+| 14 | review-fix green | Test | `go test ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'TestTelemetryFailedCommandSpanDoesNotExportRawError|TestRequesterDoFailedHTTPSpanHasSafeErrorAndEventAttrs|TestEngineRunFailedStepTelemetryRedactsError' -count=1` | Pass | Stable error metadata now uses allowlisted `pm.error.type`/`pm.error.code`/`pm.error.status_code` without SDK `exception.*` or Go wrapper type names. |
+| 15 | review-fix green | Test | `go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'Telemetry|OTLP|Endpoint|Event|RecordError|FileExporter' -count=1` | Pass | Review-fix focused telemetry/config/CLI/connsdk/flow test set passed. |
+| 16 | review-fix green | Focused gates/smoke/docs | `go test ./internal/telemetry -count=1`; `go test ./internal/connectors/connsdk -run Telemetry -count=1`; `go test ./internal/cli -run 'Telemetry|Golden|Config|Agentic' -count=1`; `go test ./internal/app -run Telemetry -count=1`; `go test ./internal/flow -run Telemetry -count=1`; `go test ./internal/config -count=1`; file/off/secret smoke; OTLP endpoint smoke; golden/docs/website generation | Pass | Focused package gates, stdout/secret smoke, help parity smoke, golden update, `docs/cli` generation, and `npm --prefix website run gen:docs` passed. |
+| 17 | review-fix green | Broad gates | `go vet ./...`; `go test ./...`; `go build ./cmd/pm` | Pass | Full Go vet/test/build passed. |
+| 18 | review-fix verify | `make verify` | Fail | `tidy-check` promoted existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct because event attrs use `trace.WithAttributes`; no new version/checksum. Rerun after accepting tidy diff required. |
 
 ## Red-test requirements
 

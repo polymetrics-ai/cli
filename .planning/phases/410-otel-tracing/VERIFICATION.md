@@ -2,7 +2,7 @@
 
 ## Review-fix verification checklist (PR #459)
 
-- [ ] Red tests captured before production edits for accepted findings.
+- [x] Red tests captured before production edits for accepted findings.
 - [ ] Exported span tests assert error metadata is allowlisted, registry-redacted, and contains no SDK `exception.*` attrs/events.
 - [ ] Failed command, HTTP, and flow spans omit synthetic registered marker and response-body-like details; `capture=minimal` suppresses message-like error attrs.
 - [ ] Config-sourced OTLP exporter/endpoint rejected or disabled by default with sanitized warning; env/CLI opt-in accepted.
@@ -12,7 +12,7 @@
 - [ ] OTLP endpoint validation rejects userinfo/query/fragment and non-http(s) without leaking endpoint secrets.
 - [ ] Root/config help, docs/cli, website data, and goldens mention HTTP method/status/attempt/retry attrs and supported exporters `none,file,otlp` consistently.
 - [ ] Redis/exporter/log/telemetry warning smokes show redacted stderr and uncorrupted stdout JSON.
-- [ ] `git diff --check` and `git diff -- go.mod go.sum` clean/expected (no new dependencies).
+- [ ] `git diff --check` and `git diff -- go.mod go.sum` clean/expected (no new module/version; review-fix event attrs promote existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct).
 
 ## Required gates
 
@@ -52,7 +52,8 @@ Applies because config/env/help docs change.
 
 ## Dependency verification
 
-- [x] `go.mod` direct OTel lines match ADR 0004 Stage 12 trace modules (`otel`, `sdk`, `stdouttrace`, `otlptracehttp` at v1.44.0).
+- [x] Initial `go.mod` direct OTel lines matched ADR 0004 Stage 12 trace modules (`otel`, `sdk`, `stdouttrace`, `otlptracehttp` at v1.44.0).
+- [x] Review-fix event attrs require `trace.WithAttributes`; `go mod tidy` promotes existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct with no version or checksum change.
 - [x] No `otelhttp`, metrics SDK direct import, otel log bridge, Temporal OTel contrib, or grpc exporter added.
 - [x] MVS consequence recorded: OTel v1.44.0 updates existing `golang.org/x/*`, `google.golang.org/grpc`, `grpc-gateway`, and `go.opentelemetry.io/*` indirects; no unapproved top-level non-OTel module was intentionally added.
 - [x] `go mod tidy`/`make tidy-check` clean after commit (`make verify` passed).
@@ -109,3 +110,16 @@ Additional smoke/parity:
 | `scripts/gsd doctor` (review-fix rerun) | pass | Adapter checks all `ok`; 69 commands. |
 | `scripts/gsd prompt plan-phase 410 --skip-research` (review-fix rerun) | pass | 142-line prompt generated. |
 | `scripts/gsd prompt programming-loop init --phase 410 --dry-run` (review-fix rerun) | fail/fallback | `unknown GSD command: programming-loop`; manual GSD fallback remains active. |
+| `go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'Telemetry\|OTLP\|Endpoint\|Event\|RecordError\|FileExporter' -count=1` (review-fix red) | fail | Red evidence captured in `TDD-LEDGER.md` row 11 before production edits. |
+| `scripts/gsd doctor` (review-fix resume rerun) | pass | Adapter checks all `ok`; 69 commands. |
+| `scripts/gsd prompt plan-phase 410 --skip-research` (review-fix resume rerun) | pass | Prompt regenerated to `/tmp/gsd-plan-phase-410-reviewfix-rerun.txt`. |
+| `scripts/gsd prompt programming-loop init --phase 410 --dry-run` (review-fix resume rerun) | fail/fallback | `unknown GSD command: programming-loop`; manual GSD fallback remains active. |
+| `go test ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'TestTelemetryFailedCommandSpanDoesNotExportRawError\|TestRequesterDoFailedHTTPSpanHasSafeErrorAndEventAttrs\|TestEngineRunFailedStepTelemetryRedactsError' -count=1` (stable error red) | fail | Expected red: missing `internal_error`, forbidden `connsdk.HTTPError`, forbidden `errors.errorString`/`fmt.wrapError`. |
+| `go test ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'TestTelemetryFailedCommandSpanDoesNotExportRawError\|TestRequesterDoFailedHTTPSpanHasSafeErrorAndEventAttrs\|TestEngineRunFailedStepTelemetryRedactsError' -count=1` | pass | Stable class/code/status error metadata green. |
+| `go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/flow -run 'Telemetry\|OTLP\|Endpoint\|Event\|RecordError\|FileExporter' -count=1` | pass | Review-fix focused telemetry/config/CLI/connsdk/flow gate passed. |
+| `go test ./internal/telemetry -count=1`; `go test ./internal/connectors/connsdk -run Telemetry -count=1`; `go test ./internal/cli -run 'Telemetry\|Golden\|Config\|Agentic' -count=1`; `go test ./internal/app -run Telemetry -count=1`; `go test ./internal/flow -run Telemetry -count=1`; `go test ./internal/config -count=1` | pass | Focused package gates passed after docs/golden generation. |
+| File/off/secret telemetry smoke | pass | Synthetic marker smoke: off mode no telemetry dir; file mode command/certify spans; stdout JSON parsed; forbidden telemetry grep clean. |
+| OTLP endpoint smoke | pass | Invalid endpoint preserved Version stdout JSON, emitted redacted `warning: telemetry:` with no synthetic marker/userinfo/query leak. |
+| Help/docs/website generation | pass | `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts`; `./pm docs generate --dir docs/cli --connectors-dir $TMP/connectors`; `npm --prefix website run gen:docs`; golden/docs test passed. |
+| `go vet ./...`; `go test ./...`; `go build ./cmd/pm` | pass | Full Go vet/test/build passed before `make verify` rerun. |
+| `make verify` (review-fix first run) | fail | `tidy-check` promoted existing `go.opentelemetry.io/otel/trace v1.44.0` from indirect to direct because event attrs use `trace.WithAttributes`; rerun after accepting tidy diff required. |
