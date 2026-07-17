@@ -14,6 +14,8 @@
   `9556cb24412f3598b2b8a94a3089b61ef3d1dd91`.
 - Slice F — authority-gated external effects:
   `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`.
+- Slice G — real built-CLI supervise integration coverage:
+  `ee474811378edd604e1e86e413f0bcafeced452b`.
 
 ## Accepted Slice E checkpoint
 
@@ -70,7 +72,7 @@ restart/reliability review findings are fully dispositioned. No live GitHub muta
 Slice F is accepted at `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`; exact local/remote equality
 and a clean worktree were confirmed before Slice G activation.
 
-## Active Slice G — GREEN / checkpoint ready
+## Accepted Slice G checkpoint
 
 Slice G now adds build-tagged process-level coverage for the actual built `shepherd supervise` command.
 The harness uses isolated real Git repositories and SQLite stores while replacing only GSD/Pi/GitHub
@@ -92,10 +94,23 @@ outbox boundaries. Release builds compile only inert seam implementations.
 Normal/race integration (including race-built child binaries), full nested unit/race/vet/build and
 `make verify`, root `make verify`, module boundary/root listing/diff/JSON checks, and default/tagged lint
 all pass; lint is exactly the accepted 28 findings with zero differential. Independent GPT-5.6
-Sol/xhigh findings from exact-head reviews `45927348`, `b08c93cc`, `c1a34d23`, and `ee8f1fa7` are dispositioned,
-including complete fresh validator and implementation turn/session/durable-proof provenance, strict
-case-fold-safe lifecycle JSON, canonical assistant rows, and bounded detached output draining. Final post-fix correctness/security working-tree
-closure reports no unresolved Slice G finding. Checkpoint amendment, next immutable exact-head review,
-push/equality confirmation, and stopping remain.
-Execution stayed `local_critical_path`; no live writes, canaries, PR creation, cleanup/migration, later
-slices, or parent PR #390 merge occurred.
+Sol/high findings from exact-head reviews `45927348`, `b08c93cc`, `c1a34d23`, `ee8f1fa7`, and later
+closure cycles are dispositioned, including complete fresh validator and implementation
+turn/session/durable-proof provenance, strict case-fold-safe lifecycle JSON, canonical assistant rows,
+and bounded detached output draining. Final immutable exact-head correctness, security, restart,
+verification, and test-realism review at `ee474811378edd604e1e86e413f0bcafeced452b` reports no
+findings. Local/remote equality, cleanliness, and generated-binary absence were confirmed.
+
+## Post-Slice-G parent synchronization
+
+Parent PR #390 was revalidated open/draft from `feat/372-gsd-pi-go-shepherd` to `main` at exact head
+`d72e597e35b5104cf58936612053705c280fc2b1`. Pre-squash head
+`c539b49bd767b0839f0989d52bd69da80c30843e` is a Slice G ancestor; its tree and the squashed parent
+tree are both `9c9ffd9a0e0f6d76955cd048978662d57e888291`. The guarded `-s ours` merge
+`17ca31f6d04def71d55137d25d8194feaea10829` repairs ancestry with no diff from accepted Slice G.
+This planning reconciliation is intentionally separate and phase-directory-only.
+
+Fresh full verification and exact-head GPT-5.6 Sol/high review follow this checkpoint. Only after they
+pass may this branch be pushed and a draft stacked PR be opened. Execution remains
+`local_critical_path`; canaries, cleanup/migration, every PR merge, and all `main` mutation remain
+blocked.

@@ -376,7 +376,7 @@ promotion-decision resolution, exact-head final-gate proof under repository lock
 repair, mandatory execution fences, bounded secret scanning, and old-generation uncertainty settlement
 before manual resume.
 
-## Slice G — Real supervise integration coverage — GREEN / REVIEW IN PROGRESS
+## Slice G — Real supervise integration coverage — COMPLETE / GREEN at `ee474811`
 
 Base: accepted Slice F checkpoint `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`.
 Orchestration: `local_critical_path`; one sequential harness/command/storage trust boundary, no
@@ -456,12 +456,32 @@ Refactor evidence:
 - exact-head review at `3542ee007df66648c1f1292e2f0d58d04a8dada5` found explicit errored
   implementation/validator `agent_end` statuses were ignored; both paths now reject every explicit
   non-success terminal status with process-level regressions;
-- final post-fix GPT-5.6 Sol/xhigh correctness/security working-tree closure reports no unresolved Slice G
-  finding. The next exact-head pass follows checkpoint amendment because its future SHA cannot be recorded.
+- final immutable exact-head GPT-5.6 Sol/high correctness/security/restart/verification/test-realism
+  review at `ee474811378edd604e1e86e413f0bcafeced452b` reports no findings; local/remote equality,
+  cleanliness, and generated-binary absence were confirmed before parent synchronization.
+
+## Post-Slice-G parent synchronization
+
+No behavior change or new production TDD slice is introduced. This stage repairs Git ancestry and
+canonicalizes accepted evidence only.
+
+- [x] Start state was clean on `fix/389-shepherd-proof-recovery` at accepted/local/remote Slice G head
+      `ee474811378edd604e1e86e413f0bcafeced452b`, with no generated `pm` or `shepherd` binary.
+- [x] Repo-local GSD adapter doctor/list/source checks and the programming-loop prompt passed.
+- [x] Parent PR #390 remained open/draft from `feat/372-gsd-pi-go-shepherd` to `main` at exact head
+      `d72e597e35b5104cf58936612053705c280fc2b1`.
+- [x] Pre-squash head `c539b49bd767b0839f0989d52bd69da80c30843e` is an ancestor of Slice G.
+- [x] Pre-squash and squashed-parent tree IDs are both
+      `9c9ffd9a0e0f6d76955cd048978662d57e888291`.
+- [x] Guarded ancestry-only merge `17ca31f6d04def71d55137d25d8194feaea10829` has parents Slice G
+      and exact parent head; `git diff ee474811... HEAD` is empty immediately after the merge.
+- [ ] Fresh full synchronization verification and exact-head GPT-5.6 Sol/high review after this separate
+      planning checkpoint.
+- [ ] Authorized branch push, exact local/remote equality, draft stacked PR, and CI monitoring.
 
 ## Verification log
 
-Slices A-F remain accepted at their exact checkpoints. Slice G is GREEN, working-tree reviewed with no
-findings, and checkpoint-ready on immutable base `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`;
-checkpoint creation followed by immutable exact-head review, push, and equality confirmation remain.
-No live GitHub/API mutation, connector access, canary, cleanup/migration, PR creation, or parent merge ran.
+Slices A-G remain accepted at their exact checkpoints. Slice G is accepted at
+`ee474811378edd604e1e86e413f0bcafeced452b`; parent ancestry is reconciled without altering that
+checkpoint's content. No credential access, connector operation, canary, cleanup/migration, PR merge,
+or `main` mutation ran. The only GitHub access in this stage so far was read-only parent-PR metadata.

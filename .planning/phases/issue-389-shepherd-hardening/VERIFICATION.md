@@ -197,7 +197,7 @@ Gates and review:
       actionable findings.
 - [x] No live GitHub mutation occurred.
 
-### G. Real supervise integration coverage — GREEN / EXACT-HEAD REVIEW PENDING
+### G. Real supervise integration coverage — COMPLETE / GREEN `ee474811`
 
 Harness integrity:
 - [x] `//go:build integration` tests build a temporary Shepherd executable and invoke actual
@@ -232,7 +232,23 @@ Required gates:
 - [x] Focused component regression command passes.
 - [x] Full nested tests/race/vet/build/`make verify`, root `make verify`, boundary, diff, and root list pass.
 - [x] Default and integration-tagged lint remain exactly 28 accepted findings with zero Slice G differential.
-- [ ] Exact-head GPT-5.6 Sol/high correctness/restart/security/test-realism review has no unresolved finding.
+- [x] Exact-head GPT-5.6 Sol/high correctness/restart/security/test-realism review at
+      `ee474811378edd604e1e86e413f0bcafeced452b` has no findings.
+
+### Post-Slice-G parent synchronization and stacked-PR preparation
+
+- [x] Clean local/remote Slice G equality and generated-binary absence confirmed before synchronization.
+- [x] Parent PR #390 is open/draft from `feat/372-gsd-pi-go-shepherd` to `main` at exact expected head
+      `d72e597e35b5104cf58936612053705c280fc2b1`.
+- [x] `c539b49bd767b0839f0989d52bd69da80c30843e` is a Slice G ancestor.
+- [x] Pre-squash and squashed-parent tree IDs are exactly equal:
+      `9c9ffd9a0e0f6d76955cd048978662d57e888291`.
+- [x] Ancestry-only merge `17ca31f6d04def71d55137d25d8194feaea10829` has the required two parents.
+- [x] The ancestry merge has zero diff from accepted Slice G and leaves a clean worktree.
+- [x] Planning reconciliation touches only `.planning/phases/issue-389-shepherd-hardening/`.
+- [ ] Fresh full normal/race/integration/vet/build/verify/lint/hygiene gates pass after planning commit.
+- [ ] Fresh exact-head GPT-5.6 Sol/high correctness/security/recovery/test-realism review has no findings.
+- [ ] Branch push, exact local/remote equality, clean tree, draft stacked PR, and required CI checks pass.
 
 ## Required command gates after each coherent slice
 
@@ -259,6 +275,8 @@ go list ./...
 - [ ] Merge-disabled Asana canary to `final_human_gate` — deferred until exact candidate head has
       independent Sol/high validation and human approval.
 - [ ] Parent PR #390 merge — human-only, not executable by this agent.
+- [ ] Any issue-389 stacked PR merge or ready-for-review transition — human-only for this stage.
+- [ ] Cleanup/migration and all `main` mutation — blocked.
 
 ## Current verification status
 
@@ -331,5 +349,12 @@ go list ./...
   and zero/missing/failed validator-tool negatives now pass focused review with no findings.
 - Exact-head review at `3542ee007df66648c1f1292e2f0d58d04a8dada5`: implementation and validator
   explicit errored `agent_end` statuses now fail closed with process regressions; RUN-STATE uses the required
-  auditable orchestration/verification schema. Next immutable exact-head closure follows amendment.
-- Canaries, PR creation, live GitHub mutation, cleanup/migration, later slices, and parent PR #390 merge remain blocked.
+  auditable orchestration/verification schema.
+- Final Slice G exact-head GPT-5.6 Sol/high correctness/security/restart/verification/test-realism review:
+  PASS at `ee474811378edd604e1e86e413f0bcafeced452b` with no findings.
+- Slice G checkpoint push/equality/cleanliness: PASS before synchronization.
+- Parent synchronization guards: PASS; PR #390 metadata/head, pre-squash ancestry, exact tree identity,
+  two-parent `ours` merge, and zero Slice G content diff were verified.
+- Fresh post-planning synchronization gates and exact-head review remain pending.
+- Draft stacked PR creation is authorized only after those gates pass. Canaries, cleanup/migration,
+  ready-for-review transition, every PR merge, and `main` mutation remain blocked.

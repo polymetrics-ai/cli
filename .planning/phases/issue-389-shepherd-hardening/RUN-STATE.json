@@ -1,12 +1,12 @@
 {
   "phase": "issue-389-shepherd-hardening",
   "branch": "fix/389-shepherd-proof-recovery",
-  "base_head": "ea88c92f5f3c0b1c5f3f434fa52efba24624f803",
+  "base_head": "ee474811378edd604e1e86e413f0bcafeced452b",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "slice_g_green_reviewed_checkpoint_ready",
+  "state": "stacked_pr_preparation",
   "verificationPassed": true,
-  "current_slice": "G_real_supervise_integration_coverage",
+  "current_slice": "post_slice_g_parent_sync_and_stacked_pr_preparation",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "completed_slices": [
     {
@@ -37,6 +37,11 @@
     {
       "slice": "F_authority_gated_external_effects",
       "head": "ea88c92f5f3c0b1c5f3f434fa52efba24624f803",
+      "status": "green_accepted"
+    },
+    {
+      "slice": "G_real_supervise_integration_coverage",
+      "head": "ee474811378edd604e1e86e413f0bcafeced452b",
       "status": "green_accepted"
     }
   ],
@@ -236,6 +241,11 @@
       "cycle": "cycle-32-slice-g-audit-normalization",
       "decision": "local_critical_path",
       "reason": "Normalize the complete cycles 0-31 orchestration audit under the required schema before final exact-head verification."
+    },
+    {
+      "cycle": "cycle-33-post-slice-g-parent-sync",
+      "decision": "local_critical_path",
+      "reason": "Accept Slice G at ee474811378edd604e1e86e413f0bcafeced452b, revalidate open draft parent PR #390 at d72e597e35b5104cf58936612053705c280fc2b1, prove pre-squash ancestry and exact tree equality, and record ancestry-only merge 17ca31f6d04def71d55137d25d8194feaea10829 with zero Slice G content diff; fresh full gates and exact-head review precede the authorized branch push and draft stacked PR."
     }
   ],
   "slice_b_checkpoint": {
@@ -244,16 +254,17 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Run final immutable exact-head GPT-5.6 Sol/high correctness/restart/security/test-realism review",
+    "Commit the phase-directory-only planning reconciliation separately",
+    "Run full post-synchronization normal/race/integration/vet/build/verify/lint/hygiene gates",
+    "Run fresh exact-head GPT-5.6 Sol/high correctness/security/recovery/test-realism review over d72e597e35b5104cf58936612053705c280fc2b1..HEAD",
     "Push only fix/389-shepherd-proof-recovery and confirm exact local/remote equality and cleanliness",
-    "Stop before canaries, PR creation, live mutation, cleanup/migration, or parent merge"
+    "Open and monitor the authorized draft stacked PR into feat/372-gsd-pi-go-shepherd, then stop"
   ],
   "blocked": [
-    "Slices after G",
-    "PR creation",
-    "live GitHub mutation",
-    "Twenty/Asana canaries",
+    "Twenty/Asana canaries without separate explicit approval",
     "cleanup or migration",
-    "Parent PR #390 merge"
+    "ready-for-review transition or any PR merge",
+    "Parent PR #390 merge",
+    "all main mutation"
   ]
 }

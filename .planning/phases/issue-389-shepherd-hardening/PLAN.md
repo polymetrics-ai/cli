@@ -2,11 +2,11 @@
 
 ## Current objective
 
-Repair the existing Shepherd implementation on `fix/389-shepherd-proof-recovery` so completion proof,
-recovery, promotion, registry loading, and external effects are real, durable, restart-safe, and
-authority gated. This branch is stacked under parent branch `feat/372-gsd-pi-go-shepherd` / parent PR
-#390. Do not merge PR #390, do not push to `main`, and do not run live Twenty/Asana canaries until the
-exact candidate head has been independently validated by GPT-5.6 Sol/high.
+Slices A-G of the Shepherd proof/recovery repair are accepted through exact Slice G checkpoint
+`ee474811378edd604e1e86e413f0bcafeced452b`. The active stage is post-Slice-G parent ancestry
+synchronization, fresh exact-head verification/review, and preparation of a draft stacked PR into
+`feat/372-gsd-pi-go-shepherd` / parent PR #390. Do not merge any PR, push to `main`, or run live
+Twenty/Asana canaries without separate explicit approval.
 
 ## Required workflow and skills loaded
 
@@ -27,6 +27,9 @@ exact candidate head has been independently validated by GPT-5.6 Sol/high.
 - Immutable Slice G base / accepted Slice F checkpoint:
   `ea88c92f5f3c0b1c5f3f434fa52efba24624f803`; local and remote heads matched and the worktree was
   clean before Slice G planning edits.
+- Accepted Slice G checkpoint: `ee474811378edd604e1e86e413f0bcafeced452b`; exact-head
+  correctness/security/verification review passed with no findings, local and remote heads matched,
+  the worktree was clean, and no generated binary remained before parent synchronization.
 
 ## Reconciled status at start of proof-recovery
 
@@ -81,6 +84,14 @@ status is therefore **not validated, not ratified, not canary-ready**.
     crash synchronization share one test trust boundary. Read-only recon/review sidecars may overlap;
     no mutating worker may share this checkout. PR creation, live GitHub mutation, canaries,
     cleanup/migration, and parent PR #390 merge remain blocked.
+14. `cycle-33/post-slice-g-parent-sync`: Slice G is accepted GREEN at
+    `ee474811378edd604e1e86e413f0bcafeced452b`. Parent PR #390 was revalidated open from
+    `feat/372-gsd-pi-go-shepherd` to `main` at expected head
+    `d72e597e35b5104cf58936612053705c280fc2b1`. Pre-squash head
+    `c539b49bd767b0839f0989d52bd69da80c30843e` is a Slice G ancestor and has the same tree as the
+    squashed parent. The guarded `-s ours` merge `17ca31f6d04def71d55137d25d8194feaea10829`
+    repairs ancestry with zero content diff from Slice G. Fresh full verification and exact-head
+    GPT-5.6 Sol/high review are required before the authorized branch push and draft stacked PR.
 
 ## Ordered implementation slices
 
@@ -312,7 +323,7 @@ fully dispositioned, including final exact-head correctness/restart closure with
 No live GitHub mutation occurred. The coherent checkpoint is ready; push only this branch, confirm
 local/remote equality and cleanliness, then stop before Slice G.
 
-### G. Real supervise integration coverage — GREEN / CHECKPOINT READY
+### G. Real supervise integration coverage — COMPLETE / GREEN at `ee474811`
 
 Orchestration: `local_critical_path`; no overlapping mutating worker. Build-tagged integration tests
 invoke the built `shepherd supervise` executable with isolated real Git repositories and SQLite
@@ -360,16 +371,21 @@ standard for implementation turns, durable final-stop evidence, duplicate/case-f
 assistant-row provenance, and bounded detached-child output drains. Exact-head review at
 `ee8f1fa785a8a44295d839b3bac9c970a81f37cd` then required positive provenance for every official
 required workflow transition and explicit successful validator evidence-gathering tools; both are now
-hashed into proof or fail closed. Final GPT-5.6 Sol/xhigh correctness/security working-tree closure reports
-no unresolved Slice G finding. The next immutable exact-head pass follows checkpoint
-amendment; that future SHA cannot be recorded here. Live
-canaries stay deferred.
+hashed into proof or fail closed. Final immutable exact-head GPT-5.6 Sol/high correctness, security, restart, verification, and
+integration-realism reviews at `ee474811378edd604e1e86e413f0bcafeced452b` report no findings.
+Local/remote equality, a clean worktree, and generated-binary absence were confirmed. Live canaries
+stay deferred pending separate explicit approval.
 
-## Checkpoints
+## Post-Slice-G synchronization checkpoint
 
-- Do not checkpoint Slice G planning-only activation separately; capture process-level RED first.
-- Commit/push one coherent GREEN Slice G checkpoint after focused/full gates and exact-head independent
-  review pass. Preferred test-only subject: `test(shepherd): exercise supervise lifecycle end to end`;
-  use an accurate `fix(shepherd): ...` subject if production defects require correction.
-- Confirm exact local/remote branch equality, clean worktree, and no generated binaries, then stop before
-  canaries, PR creation, live GitHub mutation, cleanup/migration, or parent PR #390 merge.
+- Slice G is accepted at `ee474811378edd604e1e86e413f0bcafeced452b`; its content is immutable.
+- Parent PR #390/head and pre-squash tree identity passed before the ancestry-only merge.
+- `17ca31f6d04def71d55137d25d8194feaea10829` is an `ours` merge whose first parent is Slice G and
+  second parent is `d72e597e35b5104cf58936612053705c280fc2b1`; it changes no Slice G content.
+- This planning reconciliation is a separate docs-only checkpoint under this phase directory.
+- After committing it, rerun all required normal/race/integration/vet/build/verify/lint/hygiene gates,
+  then run fresh exact-head GPT-5.6 Sol/high correctness/security/recovery/test-realism review over
+  `d72e597e35b5104cf58936612053705c280fc2b1..HEAD`.
+- Only after those gates pass: push `fix/389-shepherd-proof-recovery`, confirm exact local/remote
+  equality and cleanliness, open the authorized draft stacked PR with `Refs #389` and `Refs #372`,
+  monitor CI, and stop. Do not run canaries, cleanup/migration, merge any PR, or mutate `main`.
