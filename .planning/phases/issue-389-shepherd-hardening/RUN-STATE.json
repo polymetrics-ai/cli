@@ -4,9 +4,9 @@
   "base_head": "ee474811378edd604e1e86e413f0bcafeced452b",
   "parent_branch": "feat/372-gsd-pi-go-shepherd",
   "parent_pr": 390,
-  "state": "stacked_pr_ci_fix_verified_review_pending",
+  "state": "stacked_pr_ci_fix_review_evidence_pending_replacement",
   "verificationPassed": true,
-  "current_slice": "draft_pr_456_nested_module_test_infrastructure_fix_local_green",
+  "current_slice": "draft_pr_456_nested_module_test_infrastructure_fix_reviewed",
   "gsd_command": "scripts/gsd prompt programming-loop run --phase issue-389-shepherd-hardening --mode auto",
   "authorized_review_fix": {
     "authorization": "Production changes are limited to the two confirmed exact-head findings and minimum schema/test propagation.",
@@ -62,7 +62,11 @@
     "targeted_stress": "pass",
     "full_local_verification": "pass",
     "lint": "25 errcheck, 2 staticcheck, 1 unused; zero changed-file findings",
-    "exact_head_review": "pending",
+    "reviewed_candidate": "2b0c5ea75686d1f5c4891c00d592f4aea4bca0ae",
+    "review_model": "openai-codex/gpt-5.6-sol",
+    "review_thinking": "high",
+    "review_result": "pass_no_findings_all_six_confirmations",
+    "replacement_review_after_evidence_commit": "pending",
     "fresh_pr_ci": "pending",
     "production_change_authorized": false,
     "production_files_changed": false,
@@ -356,6 +360,11 @@
       "cycle": "cycle-43-draft-pr-456-nested-module-ci-fix-verify",
       "decision": "local_critical_path",
       "reason": "Coordinator targeted count-10, internal GSD race count-3/normal count-5, full nested normal/race/integration/race-integration/vet/build/make, root make/boundary/list/diff/JSON/hygiene, binary absence, and exact 25 errcheck/2 staticcheck/1 unused zero-differential lint gates pass. verificationPassed is true; exact-head Sol/high review and fresh PR CI remain."
+    },
+    {
+      "cycle": "cycle-44-draft-pr-456-nested-module-ci-fix-review",
+      "decision": "read_only_spawned",
+      "reason": "Fresh independent openai-codex/gpt-5.6-sol high review of 7432f0a5da90f255b74307d12c26863b61c1a16f...2b0c5ea75686d1f5c4891c00d592f4aea4bca0ae passes with no findings and confirms test/planning-only scope, unchanged production symlink security, deterministic canonical fixtures, strict bounded live-process rejection, truthful evidence, and unchanged quality gates. The evidence-only commit receives replacement exact-head review before push."
     }
   ],
   "slice_b_checkpoint": {
@@ -364,7 +373,7 @@
     "lint": "exact 30-finding baseline with zero differential findings"
   },
   "next_actions": [
-    "Commit local GREEN evidence and run fresh exact-head GPT-5.6 Sol/high review over 7432f0a5da90f255b74307d12c26863b61c1a16f...HEAD",
+    "Commit review evidence and run replacement exact-head GPT-5.6 Sol/high review over 7432f0a5da90f255b74307d12c26863b61c1a16f...HEAD",
     "Push normally, confirm local/remote equality, update draft PR #456 evidence, and monitor fresh CI",
     "If CI is green, commit final stacked_pr_green_awaiting_canary_approval evidence, review/push that exact head, monitor final CI, and stop before canaries"
   ],
