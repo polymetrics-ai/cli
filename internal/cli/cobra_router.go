@@ -73,6 +73,7 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	cmd.AddCommand(newConnectionsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
+	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
 	return cmd
 }
 
@@ -99,6 +100,12 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 	if len(args) >= 2 && args[0] == "query" && args[1] == "run" {
 		return normalizeStringArraySpaceValues(args, 2, queryRunFlagNames)
 	}
+	if len(args) >= 2 && args[0] == "perf" && args[1] == "compare" {
+		return normalizeStringArraySpaceValues(args, 2, perfCompareFlagNames)
+	}
+	if len(args) >= 2 && args[0] == "perf" && args[1] == "sync-modes" {
+		return normalizeStringArraySpaceValues(args, 2, perfSyncModesFlagNames)
+	}
 	return args
 }
 
@@ -121,6 +128,15 @@ var queryRunFlagNames = map[string]struct{}{
 	"fields":     {},
 	"agent-mode": {},
 	"sample":     {},
+}
+
+var perfCompareFlagNames = map[string]struct{}{
+	"iterations": {},
+	"runtime":    {},
+}
+
+var perfSyncModesFlagNames = map[string]struct{}{
+	"records": {},
 }
 
 func normalizeStringArraySpaceValues(args []string, start int, flagNames map[string]struct{}) []string {
@@ -181,9 +197,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "extract", hidden: true, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
-		}},
-		{name: "perf", handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runPerf(ctx, cfg, args, stdout, jsonOut)
 		}},
 		{name: "docs", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, _ bool) error {
 			return runDocs(args, stdout)
@@ -363,6 +376,98 @@ func addQueryStringArrayFlag(cmd *cobra.Command, target *[]string, name string, 
 
 func completeNoFile(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 	return nil, cobra.ShellCompDirectiveNoFileComp
+}
+
+type perfCompareFlags struct {
+	Iterations []string
+	Runtime    []string
+}
+
+func (f perfCompareFlags) parsed() parsedFlags {
+	values := map[string][]string{}
+	if len(f.Iterations) > 0 {
+		values["iterations"] = append([]string(nil), f.Iterations...)
+	}
+	if len(f.Runtime) > 0 {
+		values["runtime"] = append([]string(nil), f.Runtime...)
+	}
+	return parsedFlags{values: values}
+}
+
+type perfSyncModesFlags struct {
+	Records []string
+}
+
+func (f perfSyncModesFlags) parsed() parsedFlags {
+	values := map[string][]string{}
+	if len(f.Records) > 0 {
+		values["records"] = append([]string(nil), f.Records...)
+	}
+	return parsedFlags{values: values}
+}
+
+func newPerfCobraCommand(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "perf",
+		Args:          cobra.NoArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("perf", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "perf", stdout, jsonOut)
+	cmd.AddCommand(newPerfCompareCobraCommand(ctx, cfg, stdout, jsonOut))
+	cmd.AddCommand(newPerfSyncModesCobraCommand(ctx, stdout, jsonOut))
+	return cmd
+}
+
+func newPerfCompareCobraCommand(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) *cobra.Command {
+	var flags perfCompareFlags
+	cmd := &cobra.Command{
+		Use:           "compare",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(runPerfCompare(ctx, cfg, flags.parsed(), stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "perf", stdout, jsonOut)
+	addPerfStringArrayFlag(cmd, &flags.Iterations, "iterations", "number of benchmark iterations")
+	addPerfStringArrayFlag(cmd, &flags.Runtime, "runtime", "also compare runtime-backed checks")
+	return cmd
+}
+
+func newPerfSyncModesCobraCommand(ctx context.Context, stdout io.Writer, jsonOut bool) *cobra.Command {
+	var flags perfSyncModesFlags
+	cmd := &cobra.Command{
+		Use:           "sync-modes",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(runPerfSyncModes(ctx, flags.parsed(), stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "perf", stdout, jsonOut)
+	addPerfStringArrayFlag(cmd, &flags.Records, "records", "number of synthetic records")
+	return cmd
+}
+
+func addPerfStringArrayFlag(cmd *cobra.Command, target *[]string, name string, usage string) {
+	cmd.Flags().StringArrayVar(target, name, nil, usage)
+	if flag := cmd.Flags().Lookup(name); flag != nil {
+		flag.NoOptDefVal = "true"
+	}
 }
 
 func newCatalogCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {

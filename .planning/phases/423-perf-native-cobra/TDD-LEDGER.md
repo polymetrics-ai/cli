@@ -39,8 +39,8 @@ Result:
 | Step | Kind | Command / test | Result | Notes |
 |---:|---|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS | Green | Pre-production artifact checkpoint; no production code touched. |
-| 1 | Red | `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `perf` remains legacy; behavior tests already preserve current flag semantics. || 2 | Green | Pending | Pending | Implement minimal native perf Cobra subtree. |
-| 3 | Refactor | Pending | Pending | Run focused/golden gates. |
+| 1 | Red | `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1` | Fail | Native-subtree tests fail because `perf` remains legacy; behavior tests already preserve current flag semantics. || 2 | Green | `gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/perf_cli_test.go`; `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1` | Pass | Native perf parser green; flag semantics, runtime config use, bare help, and invalid action preserved. |
+| 3 | Refactor | `gofmt -w cmd internal`; `go test ./internal/cli/... -run 'Perf|CobraRouterShell|Golden' -count=1`; `go test ./internal/cli/ -run Certify -count=1`; `go vet ./...`; `go build ./cmd/pm` | Pass | Golden-focused gate, certify re-entrancy smoke, vet, and build preserved. |
 | 4 | Full gate | Pending | Pending | Run full local gates and CLI parity checks. |
 
 ## Planned red tests
@@ -78,4 +78,31 @@ Red note: loopback runtime-check connection-refused messages are expected from `
 
 ## Exact green outputs
 
-Pending.
+```bash
+gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/perf_cli_test.go
+go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	13.101s
+```
+
+```bash
+gofmt -w cmd internal
+go test ./internal/cli/... -run 'Perf|CobraRouterShell|Golden' -count=1
+go vet ./...
+go build ./cmd/pm
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	18.543s
+# go vet and go build emitted no output and exited 0
+```
+
+```bash
+go test ./internal/cli/ -run Certify -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	91.433s
+```

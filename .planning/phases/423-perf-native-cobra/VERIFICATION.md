@@ -2,11 +2,12 @@
 
 ## Required gate checklist
 
-- [ ] `gofmt -w cmd internal`
-- [ ] `go test ./internal/cli/... -run 'Perf|CobraRouterShell|Golden' -count=1`
-- [ ] `go vet ./...`
+- [x] `gofmt -w cmd internal`
+- [x] `go test ./internal/cli/... -run 'Perf|CobraRouterShell|Golden' -count=1`
+- [x] `go test ./internal/cli/ -run Certify -count=1`
+- [x] `go vet ./...`
 - [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
+- [x] `go build ./cmd/pm`
 - [ ] `make verify`
 - [ ] `git diff --check origin/feat/cli-architecture-v2...HEAD`
 - [ ] `git diff -- go.mod go.sum`
@@ -36,4 +37,32 @@
 
 ## Results
 
-Pending.
+```bash
+go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1
+```
+
+Result: red as expected before implementation. Failed because `perf` was still a legacy wrapper and native perf subcommands/flags were missing.
+
+```bash
+gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/perf_cli_test.go
+go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1
+```
+
+Result: pass (`ok  	polymetrics.ai/internal/cli	13.101s`).
+
+```bash
+gofmt -w cmd internal
+go test ./internal/cli/... -run 'Perf|CobraRouterShell|Golden' -count=1
+go vet ./...
+go build ./cmd/pm
+```
+
+Result: focused/golden test pass (`ok  	polymetrics.ai/internal/cli	18.543s`); `go vet` and `go build` exited 0 with no output.
+
+```bash
+go test ./internal/cli/ -run Certify -count=1
+```
+
+Result: pass (`ok  	polymetrics.ai/internal/cli	91.433s`).
+
+Full gate, runtime help/docs/website parity, and diff guards pending.

@@ -1218,62 +1218,54 @@ func runRuntime(ctx context.Context, cfg config.Config, args []string, stdout io
 	return nil
 }
 
-func runPerf(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
+func runPerfCompare(ctx context.Context, cfg config.Config, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+	iterations, err := parseIntFlag("iterations", valueOr(flags.first("iterations"), "25"), 25)
+	if err != nil {
+		return err
 	}
-	switch args[0] {
-	case "compare":
-		flags := parseFlags(args[1:])
-		iterations, err := parseIntFlag("iterations", valueOr(flags.first("iterations"), "25"), 25)
-		if err != nil {
-			return err
-		}
-		comparison, err := perf.Compare(ctx, perf.CompareRequest{
-			Iterations:    iterations,
-			Runtime:       flags.first("runtime") == "true",
-			RuntimeConfig: runtimecheck.FromConfig(cfg),
-		})
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "PerformanceComparison", "comparison": comparison})
-		}
-		printPerfResult(stdout, comparison.DependencyFree)
-		if comparison.RuntimeBacked != nil {
-			printPerfResult(stdout, *comparison.RuntimeBacked)
-		}
-		fmt.Fprintf(stdout, "\nDependency-free: %s\n", comparison.Explanation["dependency_free"])
-		fmt.Fprintf(stdout, "Runtime-backed: %s\n", comparison.Explanation["runtime_backed"])
-		return nil
-	case "sync-modes":
-		flags := parseFlags(args[1:])
-		records, err := parseIntFlag("records", valueOr(flags.first("records"), "1000"), 1000)
-		if err != nil {
-			return err
-		}
-		benchmark, err := perf.CompareSyncModes(ctx, perf.SyncModeBenchmarkRequest{
-			Records: records,
-		})
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "SyncModeBenchmark", "benchmark": benchmark})
-		}
-		for _, result := range benchmark.Results {
-			fmt.Fprintf(stdout, "%s\trecords=%d\tduration=%s\trecords_per_sec=%.2f", result.Mode, result.Records, result.Duration, result.RecordsPerSec)
-			if result.Error != "" {
-				fmt.Fprintf(stdout, "\terror=%s", result.Error)
-			}
-			fmt.Fprintln(stdout)
-		}
-		fmt.Fprintln(stdout, benchmark.Explanation)
-		return nil
-	default:
-		return errUsage
+	comparison, err := perf.Compare(ctx, perf.CompareRequest{
+		Iterations:    iterations,
+		Runtime:       flags.first("runtime") == "true",
+		RuntimeConfig: runtimecheck.FromConfig(cfg),
+	})
+	if err != nil {
+		return err
 	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "PerformanceComparison", "comparison": comparison})
+	}
+	printPerfResult(stdout, comparison.DependencyFree)
+	if comparison.RuntimeBacked != nil {
+		printPerfResult(stdout, *comparison.RuntimeBacked)
+	}
+	fmt.Fprintf(stdout, "\nDependency-free: %s\n", comparison.Explanation["dependency_free"])
+	fmt.Fprintf(stdout, "Runtime-backed: %s\n", comparison.Explanation["runtime_backed"])
+	return nil
+}
+
+func runPerfSyncModes(ctx context.Context, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+	records, err := parseIntFlag("records", valueOr(flags.first("records"), "1000"), 1000)
+	if err != nil {
+		return err
+	}
+	benchmark, err := perf.CompareSyncModes(ctx, perf.SyncModeBenchmarkRequest{
+		Records: records,
+	})
+	if err != nil {
+		return err
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "SyncModeBenchmark", "benchmark": benchmark})
+	}
+	for _, result := range benchmark.Results {
+		fmt.Fprintf(stdout, "%s\trecords=%d\tduration=%s\trecords_per_sec=%.2f", result.Mode, result.Records, result.Duration, result.RecordsPerSec)
+		if result.Error != "" {
+			fmt.Fprintf(stdout, "\terror=%s", result.Error)
+		}
+		fmt.Fprintln(stdout)
+	}
+	fmt.Fprintln(stdout, benchmark.Explanation)
+	return nil
 }
 
 func printPerfResult(stdout io.Writer, result perf.Result) {

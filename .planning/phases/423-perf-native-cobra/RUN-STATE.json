@@ -8,7 +8,7 @@
   "baseHeadAtDispatch": "6fbff849932e891a8184000fb677e1b6fca7f6d4",
   "baseHeadAtPlanning": "6fbff849932e891a8184000fb677e1b6fca7f6d4",
   "verificationPassed": false,
-  "status": "red_tests_captured",
+  "status": "green_implementation_focused_gates_passed",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-423.prompt",
@@ -26,6 +26,11 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "red tests added inline for native perf subtree, flag semantics, runtime config use, bare help, and invalid action usage; no subagent available"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native perf Cobra subtree implemented in allowed internal/cli scope; focused perf/golden gate, certify smoke, vet, and build passed"
     }
   ],
   "pullRequest": null,

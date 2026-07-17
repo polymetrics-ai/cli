@@ -1,6 +1,6 @@
 # Phase 423 Summary
 
-Status: red tests captured; production code not touched yet.
+Status: native perf implementation complete; focused/golden gates, certify smoke, vet, and build passed; full gates pending.
 
 ## Current state
 
@@ -10,16 +10,20 @@ Status: red tests captured; production code not touched yet.
 - Required reading and skills loaded. Repo-specific `.pi/skills/go-implementation/SKILL.md` is missing; global Go skills loaded.
 - Scope limited to native `perf` Cobra node/handler/tests, directly applicable perf docs/help/generated artifacts, and issue-local phase artifacts.
 
-## Planned delivery
+## Delivered
 
-- Promote `pm perf` from legacy wrapper to native Cobra subtree.
-- Add native `perf compare` and `perf sync-modes` with declared `StringArray` flags, `NoOptDefVal="true"`, unknown-flag whitelist, optional-value normalization, docs-map help/usage, and no-file completion seams.
-- Remove `perf` namespace legacy wrapper and its `parseFlags` call sites.
-- Preserve perf output envelopes, repeated flags, bare bool/value sentinels, unknown flag/extra arg tolerance, late global flags, bare namespace help, invalid action usage mapping, config-backed runtime endpoints, and fresh-tree re-entrancy.
+- Promoted `pm perf` from legacy wrapper to native Cobra subtree.
+- Added native `perf compare` and `perf sync-modes` with declared `StringArray` flags, `NoOptDefVal="true"`, unknown-flag whitelist, optional-value normalization, docs-map help/usage, and no-file completion seams.
+- Removed `perf` namespace legacy wrapper and its `parseFlags` call sites.
+- Preserved perf output envelopes, repeated flags, bare bool/value sentinels, unknown flag/extra arg tolerance, late global flags, bare namespace help, invalid action usage mapping, config-backed runtime endpoints, and fresh-tree re-entrancy.
 
 ## Verification state
 
-Red test captured: `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1` fails because `perf` remains a legacy wrapper and native perf subcommands/flags are missing. Pending green implementation, full local gates, CLI parity checks, PR, and review-route recording.
+Red test captured: `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1` failed because `perf` remained a legacy wrapper and native perf subcommands/flags were missing.
+
+Focused green gates passed: `go test ./internal/cli/ -run 'Perf|CobraRouterShell' -count=1`, `go test ./internal/cli/... -run 'Perf|CobraRouterShell|Golden' -count=1`, `go test ./internal/cli/ -run Certify -count=1`, `gofmt -w cmd internal`, `go vet ./...`, and `go build ./cmd/pm`.
+
+Pending full local gates, CLI parity checks, PR, and review-route recording.
 
 ## Safety
 
