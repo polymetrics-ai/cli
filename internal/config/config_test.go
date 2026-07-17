@@ -35,6 +35,11 @@ var allBoundEnvVars = []string{
 	"POLYMETRICS_LLM_BASE_URL", "PM_LLM_BASE_URL",
 	"POLYMETRICS_LLM_MODEL", "PM_LLM_MODEL",
 	"POLYMETRICS_CRONTAB_FILE", "PM_CRONTAB_FILE",
+	"POLYMETRICS_TELEMETRY", "PM_TELEMETRY",
+	"POLYMETRICS_TELEMETRY_ENDPOINT", "PM_TELEMETRY_ENDPOINT",
+	"POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT", "OTEL_EXPORTER_OTLP_ENDPOINT",
+	"POLYMETRICS_TELEMETRY_DIR", "PM_TELEMETRY_DIR",
+	"POLYMETRICS_TELEMETRY_CAPTURE", "PM_TELEMETRY_CAPTURE",
 }
 
 func TestLoadDefaultsAndMissingFile(t *testing.T) {
@@ -76,6 +81,9 @@ func TestLoadDefaultsAndMissingFile(t *testing.T) {
 	if cfg.Schedule.CrontabFile != "" {
 		t.Fatalf("Schedule.CrontabFile = %q, want empty", cfg.Schedule.CrontabFile)
 	}
+	if cfg.Telemetry.Exporter != "none" || cfg.Telemetry.Directory != ".polymetrics/telemetry" || cfg.Telemetry.Capture != "default" || cfg.Telemetry.Endpoint != "" {
+		t.Fatalf("Telemetry defaults = %#v", cfg.Telemetry)
+	}
 	if cfg.ConfigFile != filepath.Join(root, ".polymetrics", "config.yaml") {
 		t.Fatalf("ConfigFile = %q, want invocation-root config path", cfg.ConfigFile)
 	}
@@ -100,6 +108,10 @@ func TestLoadFileEnvAndAliasPrecedence(t *testing.T) {
 		{name: "rlm.llm.base_url", fileYAML: "rlm:\n  llm:\n    base_url: http://file-llm/v1\n", primaryEnv: "POLYMETRICS_LLM_BASE_URL", aliasEnv: "PM_LLM_BASE_URL", envValue: "http://env-llm/v1", fileWant: "http://file-llm/v1", envWant: "http://env-llm/v1", get: func(c Config) any { return c.RLM.LLM.BaseURL }},
 		{name: "rlm.llm.model", fileYAML: "rlm:\n  llm:\n    model: file-model\n", primaryEnv: "POLYMETRICS_LLM_MODEL", aliasEnv: "PM_LLM_MODEL", envValue: "env-model", fileWant: "file-model", envWant: "env-model", get: func(c Config) any { return c.RLM.LLM.Model }},
 		{name: "schedule.crontab_file", fileYAML: "schedule:\n  crontab_file: file-crontab\n", primaryEnv: "POLYMETRICS_CRONTAB_FILE", aliasEnv: "PM_CRONTAB_FILE", envValue: "env-crontab", fileWant: "file-crontab", envWant: "env-crontab", get: func(c Config) any { return c.Schedule.CrontabFile }},
+		{name: "telemetry.exporter", fileYAML: "telemetry:\n  exporter: file\n", primaryEnv: "POLYMETRICS_TELEMETRY", aliasEnv: "PM_TELEMETRY", envValue: "otlp", fileWant: "file", envWant: "otlp", get: func(c Config) any { return c.Telemetry.Exporter }},
+		{name: "telemetry.endpoint", fileYAML: "telemetry:\n  endpoint: https://file-collector.example.test/v1/traces\n", primaryEnv: "POLYMETRICS_TELEMETRY_ENDPOINT", aliasEnv: "PM_TELEMETRY_ENDPOINT", envValue: "https://env-collector.example.test/v1/traces", fileWant: "https://file-collector.example.test/v1/traces", envWant: "https://env-collector.example.test/v1/traces", get: func(c Config) any { return c.Telemetry.Endpoint }},
+		{name: "telemetry.directory", fileYAML: "telemetry:\n  directory: file-telemetry\n", primaryEnv: "POLYMETRICS_TELEMETRY_DIR", aliasEnv: "PM_TELEMETRY_DIR", envValue: "env-telemetry", fileWant: "file-telemetry", envWant: "env-telemetry", get: func(c Config) any { return c.Telemetry.Directory }},
+		{name: "telemetry.capture", fileYAML: "telemetry:\n  capture: minimal\n", primaryEnv: "POLYMETRICS_TELEMETRY_CAPTURE", aliasEnv: "PM_TELEMETRY_CAPTURE", envValue: "default", fileWant: "minimal", envWant: "default", get: func(c Config) any { return c.Telemetry.Capture }},
 	}
 
 	for _, tt := range cases {

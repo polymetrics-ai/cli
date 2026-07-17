@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: planned; production implementation not started.
+Status: implementation green on focused/full Go gates; `make verify` rerun pending after green-slice commit.
 
 ## Current state
 
@@ -12,17 +12,23 @@ Status: planned; production implementation not started.
 
 ## Delivered so far
 
-- Created issue-local GSD artifacts:
-  - `.planning/phases/410-otel-tracing/PLAN.md`
-  - `.planning/phases/410-otel-tracing/TDD-LEDGER.md`
-  - `.planning/phases/410-otel-tracing/VERIFICATION.md`
-  - `.planning/phases/410-otel-tracing/RUN-STATE.json`
-  - `.planning/phases/410-otel-tracing/SUMMARY.md`
-  - `.planning/phases/410-otel-tracing/PROMPTS.md`
+- Created issue-local GSD artifacts.
+- Added `internal/telemetry` with default-off file/OTLP tracing, bounded shutdown, warning-only failures, allowlisted attributes, and `OTEL_SDK_DISABLED` override.
+- Added config/env support: `PM_TELEMETRY`, `PM_TELEMETRY_DIR`, `PM_TELEMETRY_CAPTURE`, `OTEL_EXPORTER_OTLP_ENDPOINT` aliases.
+- Instrumented `pm.command`, `pm.etl.run`, `pm.flow.run`, `pm.flow.step`, `pm.certify.connector`, `pm.certify.batch`, and `pm.connector.http`.
+- Connector HTTP spans record method/scheme/host/path/status/attempt metadata only; tests assert no query/body/header/full URL/token leakage.
+- Updated embedded help, `docs/cli/config.md`, website CLI reference, generated website docs data, and golden transcripts.
+
+## Verification so far
+
+- Red tests captured before production edits.
+- Focused telemetry/config/CLI/connsdk/app/flow tests passed.
+- File/off/secret smoke passed with synthetic marker.
+- `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm` passed.
+- First `make verify` run failed at `tidy-check` because go.mod/go.sum dependency changes were uncommitted; rerun after commit.
 
 ## Next
 
-1. Add red tests for disabled/file/allowlist/operation/neutrality behavior.
-2. Add ADR-approved OTel dependencies only.
-3. Implement minimal green tracing core and instrumentation.
-4. Run focused gates, docs parity, full gates, commit/push slices, open stacked PR.
+1. Commit and push green implementation slice.
+2. Rerun `make verify` from clean dependency diff.
+3. Open stacked PR and record automated review route.

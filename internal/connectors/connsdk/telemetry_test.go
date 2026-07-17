@@ -14,7 +14,7 @@ import (
 	"polymetrics.ai/internal/telemetry"
 )
 
-func TestRequesterDoEmitsSecretSafeHTTPSpan(t *testing.T) {
+func TestRequesterDoEmitsSecretSafeHTTPSpanTelemetry(t *testing.T) {
 	const marker = "pm_test_secret_token_http_span"
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got := r.URL.Query().Get("api_key"); got != marker {

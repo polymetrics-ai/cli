@@ -17,12 +17,15 @@ This page is the public website contract for the `pm` CLI. Command/help, checked
 | `--plain` | Forces the plain non-TTY path even when stdout is a terminal. |
 | `--no-input` | Disables prompting and TTY UI. |
 | `--progress ndjson` | Streams sanitized progress events to stderr as NDJSON; stdout remains the final output or single JSON envelope. On failures, stderr may also include the final error diagnostic. |
+| `PM_TELEMETRY=file\|otlp` | Opts into secret-safe OpenTelemetry tracing. Default `none` constructs no SDK and creates no telemetry directory. |
 
 <Callout type="info">
   `--json` is the agent path for operational commands. A few developer-facing commands, such as `pm help`, are intentionally plain text because they return human manuals.
 </Callout>
 
 Future TTY renderers are eligible only when stdout is a TTY and `--json`, `--plain`, `--no-input`, non-empty `PM_NO_TUI`, non-empty `CI`, and `TERM=dumb` do not force the plain path. The current `cmd/pm` entrypoint keeps the plain path until a TTY renderer is wired intentionally. Use `--progress ndjson` on long-running commands when agents need live progress without polling checkpoint files.
+
+OpenTelemetry tracing is default-off. Use `PM_TELEMETRY=file` to write stdouttrace JSONL spans under `.polymetrics/telemetry`, or `PM_TELEMETRY=otlp` with `OTEL_EXPORTER_OTLP_ENDPOINT` for an OTLP HTTP/protobuf collector. Telemetry warnings go to stderr and never change command exit codes or stdout JSON envelopes. Connector HTTP spans record only method, scheme, host, path, status, and retry/attempt metadata -- no request or response bodies, headers, query strings, raw argv, or credential values.
 
 ## Configuration
 
@@ -36,7 +39,7 @@ Future TTY renderers are eligible only when stdout is a TTY and `--json`, `--pla
 
 Missing config files are allowed. Malformed YAML and invalid UI/progress flag values are validation errors (exit `3`). The `root` key in a file does not relocate config discovery for the same invocation; use `--root`, `POLYMETRICS_ROOT`, or `PM_ROOT` before loading another project. For malformed files, `--json`, `POLYMETRICS_JSON=true`, or `PM_JSON=true` selects the same single JSON `Error` envelope on stdout used by other validation errors.
 
-Root and `json` affect invocation bootstrap. Runtime, RLM, and schedule keys are consumed by migrated runtime, worker, agent image, schedule, and RLM non-secret call sites. Worker/RLM agent Temporal execution remains opt-in: `runtime.temporal_addr` must be explicitly set by env or config file for those paths, while runtime doctor keeps local Compose defaults.
+Root and `json` affect invocation bootstrap. Runtime, RLM, schedule, and telemetry keys are consumed by migrated non-secret call sites. Worker/RLM agent Temporal execution remains opt-in: `runtime.temporal_addr` must be explicitly set by env or config file for those paths, while runtime doctor keeps local Compose defaults. OpenTelemetry tracing remains opt-in and exit-code neutral.
 
 | Config key | Default | Primary env | Legacy alias |
 |---|---|---|---|
@@ -57,6 +60,10 @@ Root and `json` affect invocation bootstrap. Runtime, RLM, and schedule keys are
 | `rlm.llm.base_url` | `https://openrouter.ai/api/v1` | `POLYMETRICS_LLM_BASE_URL` | `PM_LLM_BASE_URL` |
 | `rlm.llm.model` | empty | `POLYMETRICS_LLM_MODEL` | `PM_LLM_MODEL` |
 | `schedule.crontab_file` | empty | `POLYMETRICS_CRONTAB_FILE` | `PM_CRONTAB_FILE` |
+| `telemetry.exporter` | `none` | `POLYMETRICS_TELEMETRY` | `PM_TELEMETRY` |
+| `telemetry.endpoint` | empty | `POLYMETRICS_TELEMETRY_ENDPOINT` | `PM_TELEMETRY_ENDPOINT`, `POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_ENDPOINT` |
+| `telemetry.directory` | `.polymetrics/telemetry` | `POLYMETRICS_TELEMETRY_DIR` | `PM_TELEMETRY_DIR` |
+| `telemetry.capture` | `default` | `POLYMETRICS_TELEMETRY_CAPTURE` | `PM_TELEMETRY_CAPTURE` |
 
 ```yaml
 version: 1
@@ -79,10 +86,17 @@ rlm:
     model: ""
 schedule:
   crontab_file: ""
+telemetry:
+  exporter: none
+  endpoint: ""
+  directory: .polymetrics/telemetry
+  capture: default
 ```
 
+Telemetry values are non-secret configuration. `OTEL_SDK_DISABLED=true` always disables tracing. Set `telemetry.capture` to `minimal` to keep span names while stripping span attributes.
+
 <Callout type="warning">
-  Configuration is not a secret store. User-named credential variables passed to `--from-env`, connector certification credsfile entries, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat.
+  Configuration is not a secret store. User-named credential variables passed to `--from-env`, connector certification credsfile entries, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat. Telemetry endpoint URLs should not contain credentials; emitted spans still drop userinfo, query strings, headers, bodies, raw argv, and credential values.
 </Callout>
 
 ## Command map

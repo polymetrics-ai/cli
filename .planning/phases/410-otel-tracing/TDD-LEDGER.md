@@ -36,8 +36,11 @@ Result:
 | 1 | plan | Planning | Create phase artifacts before production edits | Pass | `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.json`, `SUMMARY.md`, `PROMPTS.md` created. |
 | 2 | red | Test | `go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/app ./internal/flow -run 'Telemetry|TestLoadTelemetry' -count=1` | Fail | Disabled mode no SDK/dir, file exporter, allowlist, command/certify, ETL/flow, HTTP spans, and neutral failure tests added before production code. |
 | 3 | red | Output | `internal/telemetry/telemetry_test.go:18:17: undefined: Init`; `internal/config/telemetry_config_test.go:15:9: cfg.Telemetry undefined`; CLI telemetry dir missing and warning absent; connsdk/app/flow build failed pending telemetry package | Fail | Expected red: telemetry package/config/instrumentation not implemented yet. |
-| 4 | green | Implementation | Pending | Pending | Minimal tracing core/instrumentation. |
-| 5 | refactor | Verification | Pending | Pending | Docs/help parity and full gates. |
+| 4 | green | Implementation | `go test ./internal/telemetry ./internal/config ./internal/cli ./internal/connectors/connsdk ./internal/app ./internal/flow -run 'Telemetry|TestLoadTelemetry|Golden|Config' -count=1` | Pass | Telemetry core, config, command/certify, ETL, flow, and connsdk HTTP span tests green. |
+| 5 | green | Smoke | File/off/secret smoke script with `PM_TELEMETRY=file`, `PM_CERT_SAMPLE_TOKEN=<synthetic marker>`, and `rg` forbidden-pattern scan | Pass | Off mode no dir; file mode command/certify spans; stdout JSON parse ok; no synthetic marker/headers/body/full-url/query tokens in telemetry. |
+| 6 | green | Gates | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm` | Pass | Full Go tests passed; CLI package ~208s, certify package ~352s. |
+| 7 | parity | Help/docs/website | `./pm --help`; `./pm help config`; `./pm etl`; `./pm flow`; `./pm connectors`; invalid `./pm connectors bogus --json` exit 2; docs generate/diff; `npm --prefix website run gen:docs` | Pass | Runtime help/docs/website parity updated for telemetry config. |
+| 8 | gate | `make verify` before commit | Fail | Expected tidy-check failure because go.mod/go.sum dependency changes were uncommitted; rerun after green-slice commit. |
 
 ## Red-test requirements
 

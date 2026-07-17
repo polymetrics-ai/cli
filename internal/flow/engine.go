@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/events"
+	"polymetrics.ai/internal/telemetry"
 )
 
 // ETLResult is the result of a sync run.
@@ -129,10 +130,20 @@ func (e *Engine) appendLedger(ctx context.Context, op, status, errMsg string) {
 }
 
 // Run executes the flow and returns a RunResult.
-func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
-	result := RunResult{
+func (e *Engine) Run(ctx context.Context, opts RunOptions) (result RunResult, err error) {
+	result = RunResult{
 		FlowName: e.Manifest.Name,
 	}
+	ctx, flowSpan := telemetry.StartSpan(ctx, "pm.flow.run", telemetry.StringAttr("pm.flow.name", e.Manifest.Name))
+	defer func() {
+		if err != nil {
+			flowSpan.RecordError(err)
+			flowSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", "failed"))
+		} else {
+			flowSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", result.Status))
+		}
+		flowSpan.End()
+	}()
 
 	// Acquire lease.
 	if err := e.acquireLease(); err != nil {
@@ -190,6 +201,11 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	for _, id := range order {
 		s := stepByID[id]
 		sr := StepResult{ID: id, Kind: string(s.Kind)}
+		stepCtx, stepSpan := telemetry.StartSpan(ctx, "pm.flow.step",
+			telemetry.StringAttr("pm.flow.name", e.Manifest.Name),
+			telemetry.StringAttr("pm.flow.step_id", id),
+			telemetry.StringAttr("pm.flow.step_kind", string(s.Kind)),
+		)
 
 		// Check checkpoint.
 		if e.Checkpoint != nil {
@@ -198,13 +214,15 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 				sr.Status = "skipped"
 				result.Steps = append(result.Steps, sr)
 				e.emitStepEvent(ctx, events.KindSkipped, "skipped", sr, "")
+				stepSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", "skipped"))
+				stepSpan.End()
 				continue
 			}
 		}
 
 		op := e.Manifest.Name + "/" + id
-		e.appendLedger(ctx, op, "running", "")
-		e.emitStepEvent(ctx, events.KindStarted, "running", sr, "")
+		e.appendLedger(stepCtx, op, "running", "")
+		e.emitStepEvent(stepCtx, events.KindStarted, "running", sr, "")
 
 		start := time.Now()
 		var stepErr error
@@ -212,14 +230,14 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 
 		switch s.Kind {
 		case KindSync:
-			etlRes, stepErr = e.App.ETLRun(ctx, s.Connection, s.Streams)
+			etlRes, stepErr = e.App.ETLRun(stepCtx, s.Connection, s.Streams)
 			sr.RecordsRead = etlRes.RecordsRead
 			sr.RecordsWritten = etlRes.RecordsWritten
 		case KindQuery:
-			_, stepErr = e.App.QuerySQL(ctx, s.SQL, 0)
+			_, stepErr = e.App.QuerySQL(stepCtx, s.SQL, 0)
 		case KindRLM:
 			var rlmRes RLMResult
-			rlmRes, stepErr = e.App.RLMRun(ctx, RLMRunRequest{
+			rlmRes, stepErr = e.App.RLMRun(stepCtx, RLMRunRequest{
 				Spec:     s.Spec,
 				Mode:     s.Mode,
 				InTable:  firstTable(s.In),
@@ -236,14 +254,14 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			// Fetch source records from the warehouse for this action step.
 			var sourceRecords []map[string]any
 			if s.ActionCfg != nil && s.ActionCfg.SourceTable != "" {
-				sourceRecords, stepErr = e.App.QuerySQL(ctx, "SELECT * FROM "+s.ActionCfg.SourceTable, 0)
+				sourceRecords, stepErr = e.App.QuerySQL(stepCtx, "SELECT * FROM "+s.ActionCfg.SourceTable, 0)
 				if stepErr != nil {
 					break
 				}
 			}
 			runID := fmt.Sprintf("run-%d", start.UnixNano())
 			var actionRes ActionResult
-			actionRes, stepErr = e.ActionRunner.ExecuteStep(ctx, s, sourceRecords, opts.ApprovalToken, runID)
+			actionRes, stepErr = e.ActionRunner.ExecuteStep(stepCtx, s, sourceRecords, opts.ApprovalToken, runID)
 			sr.RecordsRead = actionRes.RecordsAttempted
 			sr.RecordsWritten = actionRes.RecordsSucceeded
 			sr.RecordsFailed = actionRes.RecordsFailed
@@ -257,16 +275,21 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 		if stepErr != nil {
 			sr.Status = "failed"
 			sr.Error = stepErr.Error()
-			e.appendLedger(ctx, op, "failed", stepErr.Error())
-			e.emitStepEvent(ctx, events.KindFailed, "failed", sr, stepErr.Error())
+			e.appendLedger(stepCtx, op, "failed", stepErr.Error())
+			e.emitStepEvent(stepCtx, events.KindFailed, "failed", sr, stepErr.Error())
 			result.Steps = append(result.Steps, sr)
+			stepSpan.RecordError(stepErr)
+			stepSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", "failed"))
+			stepSpan.End()
 			runErr = fmt.Errorf("%w: step %s: %v", ErrStepFailed, id, stepErr)
 			break
 		}
 
 		sr.Status = "ok"
-		e.appendLedger(ctx, op, "success", "")
-		e.emitStepEvent(ctx, events.KindCompleted, "success", sr, "")
+		e.appendLedger(stepCtx, op, "success", "")
+		e.emitStepEvent(stepCtx, events.KindCompleted, "success", sr, "")
+		stepSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", "ok"))
+		stepSpan.End()
 		if e.Checkpoint != nil {
 			_ = e.Checkpoint.Set(e.Manifest.Name, id, "success")
 		}

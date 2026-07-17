@@ -61,6 +61,13 @@ TTY GATE
   path. The current cmd/pm entrypoint keeps the plain path until a TTY
   renderer is wired intentionally.
 
+OBSERVABILITY
+  OpenTelemetry tracing is default-off. Set PM_TELEMETRY=file to write
+  secret-safe spans under .polymetrics/telemetry, or PM_TELEMETRY=otlp with
+  OTEL_EXPORTER_OTLP_ENDPOINT for an OTLP HTTP/protobuf collector. Telemetry
+  warnings go to stderr and never change command exit codes or stdout JSON
+  envelopes. HTTP spans record only scheme, host, and path metadata.
+
 HUMAN QUICK START
   pm init
   pm credentials add sample-local --connector sample
@@ -122,12 +129,12 @@ DESCRIPTION
   pm resolves typed invocation configuration once per CLI run. The loader uses a
   fresh Viper instance for each invocation and never uses the package-level Viper
   singleton, AutomaticEnv, or file watching. Root and json affect invocation
-  bootstrap. Runtime, RLM, and schedule keys are consumed by migrated runtime,
-  worker, agent image, schedule, and RLM non-secret call sites. Worker/RLM agent
-  Temporal execution remains opt-in: runtime.temporal_addr must be explicitly
-  set by env or config file for those paths, while runtime doctor keeps local
-  Compose defaults. Malformed .polymetrics/config.yaml files fail as validation
-  errors.
+  bootstrap. Runtime, RLM, schedule, and telemetry keys are consumed by migrated
+  non-secret call sites. Worker/RLM agent Temporal execution remains opt-in:
+  runtime.temporal_addr must be explicitly set by env or config file for those
+  paths, while runtime doctor keeps local Compose defaults. OpenTelemetry
+  tracing is default-off and exit-code neutral. Malformed
+  .polymetrics/config.yaml files fail as validation errors.
 
 PRECEDENCE
   1. Bound global config flags: --root and --json.
@@ -155,6 +162,21 @@ UI AND PROGRESS FLAGS
   Future TTY renderers are eligible only when stdout is a TTY. --json,
   --plain, --no-input, non-empty PM_NO_TUI, non-empty CI, TERM=dumb, and
   non-TTY stdout force the plain path.
+
+TELEMETRY
+  telemetry.exporter defaults to none/off. No SDK is constructed and no
+  .polymetrics/telemetry directory is created while disabled. Set
+  PM_TELEMETRY=file or POLYMETRICS_TELEMETRY=file to write stdouttrace JSONL
+  spans under telemetry.directory. Set PM_TELEMETRY=otlp and configure
+  telemetry.endpoint or OTEL_EXPORTER_OTLP_ENDPOINT for OTLP HTTP/protobuf.
+  OTEL_SDK_DISABLED=true always disables tracing.
+
+  Telemetry failures are warnings on stderr, not command failures. Stdout keeps
+  the command's normal human output or single JSON envelope. Span attributes are
+  allowlisted; connector HTTP spans record method, scheme, host, path, status,
+  and retry/attempt metadata only. Query strings, request/response bodies,
+  headers, raw argv, and credential values are never recorded. Set
+  telemetry.capture=minimal to strip span attributes while keeping span names.
 
 CONFIG FILE
   The config file path is <project-root>/.polymetrics/config.yaml. Missing files
@@ -186,6 +208,11 @@ CONFIG FILE
         model: ""
     schedule:
       crontab_file: ""
+    telemetry:
+      exporter: none
+      endpoint: ""
+      directory: .polymetrics/telemetry
+      capture: default
 
 KEYS
   root
@@ -253,13 +280,32 @@ KEYS
     Default: empty. Primary env: POLYMETRICS_CRONTAB_FILE. Alias:
     PM_CRONTAB_FILE. Intended for local scheduler redirection and tests.
 
+  telemetry.exporter
+    Default: none. Primary env: POLYMETRICS_TELEMETRY. Alias: PM_TELEMETRY.
+    Supported values: none, file, otlp.
+
+  telemetry.endpoint
+    Default: empty. Primary env: POLYMETRICS_TELEMETRY_ENDPOINT. Aliases:
+    PM_TELEMETRY_ENDPOINT, POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT, and
+    standard OTEL_EXPORTER_OTLP_ENDPOINT.
+
+  telemetry.directory
+    Default: .polymetrics/telemetry. Primary env: POLYMETRICS_TELEMETRY_DIR.
+    Alias: PM_TELEMETRY_DIR. Relative paths are resolved under --root.
+
+  telemetry.capture
+    Default: default. Primary env: POLYMETRICS_TELEMETRY_CAPTURE. Alias:
+    PM_TELEMETRY_CAPTURE. Supported values: default, minimal.
+
 SECURITY
   Configuration is an allowlist. pm does not ingest arbitrary POLYMETRICS_* or
   PM_* variables. User-named credential env vars supplied to --from-env and
   connector certification credsfile entries are credential data, not app config.
   Do not store secret values in config.yaml or examples. LLM API keys such as
   PM_LLM_API_KEY and provider-specific keys remain environment-only secret
-  inputs and are not documented with values.
+  inputs and are not documented with values. Telemetry endpoint URLs should not
+  contain credentials; emitted spans still drop userinfo, query strings,
+  headers, bodies, raw argv, and credential values.
 
 EXIT STATUS
   0 success

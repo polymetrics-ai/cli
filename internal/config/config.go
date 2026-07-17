@@ -12,18 +12,21 @@ import (
 )
 
 const (
-	defaultProject          = "polymetrics-local"
-	defaultWarehouse        = "warehouse"
-	defaultWarehousePath    = ".polymetrics/warehouse"
-	defaultPostgresURL      = "postgres://polymetrics:polymetrics@localhost:15433/polymetrics?sslmode=disable"
-	defaultDragonflyAddr    = "localhost:6379"
-	defaultTemporalAddr     = "localhost:7233"
-	defaultRLMImage         = "ghcr.io/polymetrics/rlm-agent:latest"
-	defaultPodmanBin        = "podman"
-	defaultLLMProvider      = "openrouter"
-	defaultOpenRouterBase   = "https://openrouter.ai/api/v1"
-	configRelativeDirectory = ".polymetrics"
-	configFileName          = "config.yaml"
+	defaultProject            = "polymetrics-local"
+	defaultWarehouse          = "warehouse"
+	defaultWarehousePath      = ".polymetrics/warehouse"
+	defaultPostgresURL        = "postgres://polymetrics:polymetrics@localhost:15433/polymetrics?sslmode=disable"
+	defaultDragonflyAddr      = "localhost:6379"
+	defaultTemporalAddr       = "localhost:7233"
+	defaultRLMImage           = "ghcr.io/polymetrics/rlm-agent:latest"
+	defaultPodmanBin          = "podman"
+	defaultLLMProvider        = "openrouter"
+	defaultOpenRouterBase     = "https://openrouter.ai/api/v1"
+	defaultTelemetryExporter  = "none"
+	defaultTelemetryDirectory = ".polymetrics/telemetry"
+	defaultTelemetryCapture   = "default"
+	configRelativeDirectory   = ".polymetrics"
+	configFileName            = "config.yaml"
 )
 
 // Options controls one invocation-scoped config load.
@@ -73,6 +76,7 @@ type Config struct {
 	Runtime      RuntimeConfig   `json:"runtime" mapstructure:"runtime"`
 	RLM          RLMConfig       `json:"rlm" mapstructure:"rlm"`
 	Schedule     ScheduleConfig  `json:"schedule" mapstructure:"schedule"`
+	Telemetry    TelemetryConfig `json:"telemetry" mapstructure:"telemetry"`
 	ConfigFile   string          `json:"config_file" mapstructure:"-"`
 	ExplicitKeys map[string]bool `json:"-" mapstructure:"-"`
 }
@@ -109,6 +113,14 @@ type LLMConfig struct {
 // ScheduleConfig configures local schedule installation seams.
 type ScheduleConfig struct {
 	CrontabFile string `json:"crontab_file" mapstructure:"crontab_file"`
+}
+
+// TelemetryConfig configures opt-in OpenTelemetry tracing. It contains no secrets.
+type TelemetryConfig struct {
+	Exporter  string `json:"exporter" mapstructure:"exporter"`
+	Endpoint  string `json:"endpoint" mapstructure:"endpoint"`
+	Directory string `json:"directory" mapstructure:"directory"`
+	Capture   string `json:"capture" mapstructure:"capture"`
 }
 
 // IsExplicit reports whether a config key was provided by a bound flag,
@@ -221,6 +233,10 @@ func setDefaults(v *viper.Viper, bootstrap Bootstrap) {
 	v.SetDefault("rlm.llm.base_url", defaultOpenRouterBase)
 	v.SetDefault("rlm.llm.model", "")
 	v.SetDefault("schedule.crontab_file", "")
+	v.SetDefault("telemetry.exporter", defaultTelemetryExporter)
+	v.SetDefault("telemetry.endpoint", "")
+	v.SetDefault("telemetry.directory", defaultTelemetryDirectory)
+	v.SetDefault("telemetry.capture", defaultTelemetryCapture)
 }
 
 type envBinding struct {
@@ -247,6 +263,10 @@ func allEnvBindings() []envBinding {
 		{key: "rlm.llm.base_url", names: []string{"POLYMETRICS_LLM_BASE_URL", "PM_LLM_BASE_URL"}},
 		{key: "rlm.llm.model", names: []string{"POLYMETRICS_LLM_MODEL", "PM_LLM_MODEL"}},
 		{key: "schedule.crontab_file", names: []string{"POLYMETRICS_CRONTAB_FILE", "PM_CRONTAB_FILE"}},
+		{key: "telemetry.exporter", names: []string{"POLYMETRICS_TELEMETRY", "PM_TELEMETRY"}},
+		{key: "telemetry.endpoint", names: []string{"POLYMETRICS_TELEMETRY_ENDPOINT", "PM_TELEMETRY_ENDPOINT", "POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT", "OTEL_EXPORTER_OTLP_ENDPOINT"}},
+		{key: "telemetry.directory", names: []string{"POLYMETRICS_TELEMETRY_DIR", "PM_TELEMETRY_DIR"}},
+		{key: "telemetry.capture", names: []string{"POLYMETRICS_TELEMETRY_CAPTURE", "PM_TELEMETRY_CAPTURE"}},
 	}
 }
 

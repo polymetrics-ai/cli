@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"golang.org/x/term"
 
@@ -23,6 +24,7 @@ import (
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
+	"polymetrics.ai/internal/telemetry"
 	pmui "polymetrics.ai/internal/ui"
 )
 
@@ -71,16 +73,65 @@ func RunWithOptions(args []string, stdout, stderr io.Writer, runOpts RunOptions)
 	defer func() { _ = closeLogs() }()
 	ctx = pmlogging.WithLogger(ctx, logger)
 
+	ctx, telemetryHandle := telemetry.Init(ctx, telemetryConfig(cfg), telemetryWarning(ctx, stderr))
 	_ = detectInvocationUI(globals, runOpts, stdout, cfg.JSON)
 	if globals.progress == "ndjson" {
 		ctx = events.WithEmitter(ctx, events.NewNDJSON(stderr))
 	}
 
+	ctx, commandSpan := telemetry.StartSpan(ctx, "pm.command", telemetry.StringAttr("pm.command.name", commandSpanName(globals.clean)))
 	cmd := newRootCmd(ctx, cfg, stdout, stderr)
+	exitCode := 0
 	if err := executeRootCmd(cmd, globals.clean); err != nil {
-		return writeError(ctx, stdout, stderr, mapCobraErr(err), cfg.JSON)
+		mapped := mapCobraErr(err)
+		commandSpan.RecordError(mapped)
+		exitCode = writeError(ctx, stdout, stderr, mapped, cfg.JSON)
+		commandSpan.SetAttributes(telemetry.StringAttr("pm.command.status", "error"), telemetry.IntAttr("pm.command.exit_code", exitCode))
+	} else {
+		commandSpan.SetAttributes(telemetry.StringAttr("pm.command.status", "ok"), telemetry.IntAttr("pm.command.exit_code", 0))
 	}
-	return 0
+	commandSpan.End()
+	telemetry.Shutdown(ctx, telemetryHandle, telemetryWarning(ctx, stderr))
+	return exitCode
+}
+
+func telemetryConfig(cfg config.Config) telemetry.Config {
+	dir := cfg.Telemetry.Directory
+	if dir == "" {
+		dir = filepath.Join(".polymetrics", "telemetry")
+	}
+	if !filepath.IsAbs(dir) {
+		dir = filepath.Join(cfg.Root, dir)
+	}
+	return telemetry.Config{
+		Exporter:    telemetry.Exporter(cfg.Telemetry.Exporter),
+		Endpoint:    cfg.Telemetry.Endpoint,
+		Directory:   dir,
+		Capture:     cfg.Telemetry.Capture,
+		RunID:       commandRunID(),
+		ServiceName: "pm",
+	}
+}
+
+func telemetryWarning(ctx context.Context, stderr io.Writer) telemetry.WarningFunc {
+	return func(msg string) {
+		fmt.Fprintf(stderr, "warning: telemetry: %s\n", pmlogging.RedactLine(ctx, msg))
+	}
+}
+
+func commandRunID() string {
+	return "trace-" + time.Now().UTC().Format("20060102T150405.000000000Z")
+}
+
+func commandSpanName(args []string) string {
+	if len(args) == 0 {
+		return "pm"
+	}
+	name := args[0]
+	if name == "help" || name == "man" || name == "init" || name == "version" || name == "connectors" || name == "credentials" || name == "connections" || name == "catalog" || name == "etl" || name == "reverse" || name == "flow" || name == "query" || name == "runtime" || name == "perf" || name == "agent" || name == "rlm" || name == "schedule" || name == "docs" || name == "skills" || name == "worker" || name == "extract" {
+		return name
+	}
+	return "connector"
 }
 
 func detectInvocationUI(globals globalOptions, runOpts RunOptions, stdout io.Writer, jsonOut bool) pmui.Detection {
