@@ -17,6 +17,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/events"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/vault"
@@ -412,14 +413,15 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
 	a.state.Runs = append(a.state.Runs, run)
 	_ = a.save()
+	a.emitETLEvent(ctx, events.KindStarted, runID, req.Stream, "running", etlExecutionResult{}, "")
 
 	source, sourceRuntime, err := a.resolveEndpoint(ctx, conn.Source)
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
 	batchSize := req.BatchSize
 	if batchSize <= 0 {
@@ -427,11 +429,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	}
 	mode, err := ParseSyncMode(stream.SyncMode)
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
 	stream.SyncMode = mode.Name
 	if err := ValidateStreamSyncConfig(stream); err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
@@ -440,9 +442,9 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, req.Stream, stream, mode, batchSize)
 	}
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
-	return a.completeRun(runID, result)
+	return a.completeRun(ctx, runID, result)
 }
 
 func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
@@ -495,6 +497,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		result.RecordsLoaded += writeResult.RecordsWritten
 		result.RecordsFailed += writeResult.RecordsFailed
 		result.BatchCount++
+		a.emitETLEvent(ctx, events.KindProgress, runID, streamName, "batch", result, "")
 		batch = batch[:0]
 		return nil
 	}
@@ -558,7 +561,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	return result, nil
 }
 
-func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
+func (a *App) completeRun(ctx context.Context, runID string, result etlExecutionResult) (Run, error) {
 	run := Run{}
 	for i := range a.state.Runs {
 		if a.state.Runs[i].ID == runID {
@@ -581,6 +584,7 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 	if err := a.save(); err != nil {
 		return Run{}, err
 	}
+	a.emitETLEvent(ctx, events.KindCompleted, runID, run.Stream, "success", result, "")
 	return run, nil
 }
 
@@ -1087,6 +1091,24 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	return cred, connectors.RuntimeConfig{ProjectDir: a.projectDir, Config: config, Secrets: secrets}, nil
 }
 
+func (a *App) emitETLEvent(ctx context.Context, kind events.Kind, runID, streamName, status string, result etlExecutionResult, message string) {
+	events.Emit(ctx, events.Event{
+		Kind:    kind,
+		Scope:   events.ScopeETL,
+		RunID:   runID,
+		StepID:  streamName,
+		Status:  status,
+		Message: message,
+		Counters: events.Counters{
+			RecordsRead:        int64(result.RecordsRead),
+			RecordsTransformed: int64(result.RecordsTransformed),
+			RecordsWritten:     int64(result.RecordsLoaded),
+			RecordsFailed:      int64(result.RecordsFailed),
+			Batches:            int64(result.BatchCount),
+		},
+	})
+}
+
 func (a *App) findCredential(name string) (CredentialMeta, bool) {
 	for _, cred := range a.state.Credentials {
 		if cred.Name == name || cred.ID == name {
@@ -1105,7 +1127,7 @@ func (a *App) findConnection(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
-func (a *App) failRun(runID string, err error) (Run, error) {
+func (a *App) failRun(ctx context.Context, runID string, err error) (Run, error) {
 	for i := range a.state.Runs {
 		if a.state.Runs[i].ID == runID {
 			a.state.Runs[i].Status = "failed"
@@ -1113,9 +1135,11 @@ func (a *App) failRun(runID string, err error) (Run, error) {
 			a.state.Runs[i].CompletedAt = time.Now().UTC()
 			run := a.state.Runs[i]
 			_ = a.save()
+			a.emitETLEvent(ctx, events.KindFailed, runID, run.Stream, "failed", etlExecutionResult{}, run.Error)
 			return run, err
 		}
 	}
+	a.emitETLEvent(ctx, events.KindFailed, runID, "", "failed", etlExecutionResult{}, safety.RedactErrorText(err.Error()))
 	return Run{}, err
 }
 

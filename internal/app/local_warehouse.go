@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/events"
 )
 
 type etlExecutionResult struct {
@@ -136,6 +137,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			}
 		}
 		result.BatchCount++
+		a.emitETLEvent(ctx, events.KindProgress, runID, streamName, "batch", result, "")
 		rawBatch = rawBatch[:0]
 		recordBatch = recordBatch[:0]
 		return nil

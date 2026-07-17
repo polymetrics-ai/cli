@@ -16,7 +16,10 @@ import (
 	"path/filepath"
 	"sort"
 	"sync"
+	"sync/atomic"
 	"time"
+
+	"polymetrics.ai/internal/events"
 )
 
 // Runnable is the subset of *Runner's behavior batch mode depends on,
@@ -222,48 +225,77 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 	if parallel < 1 {
 		parallel = 1
 	}
+	emitBatchEvent(ctx, events.KindStarted, runID, "", "running", len(names), 0, "")
 
 	results := make([]BatchConnectorResult, len(names))
-	sem := make(chan struct{}, parallel)
-	var wg sync.WaitGroup
+	var completed atomic.Int64
+	type batchJob struct {
+		index int
+		name  string
+		entry ConnectorCredsEntry
+	}
+	jobs := make([]batchJob, 0, len(names))
 
 	for i, name := range names {
 		entry := opts.CredsFile.Connectors[name]
 
 		if entry.Skip {
 			results[i] = BatchConnectorResult{Connector: name, Skipped: true, SkipReason: entry.Reason}
+			done := int(completed.Add(1))
+			emitBatchEvent(ctx, events.KindSkipped, runID, name, "skipped", len(names), done, entry.Reason)
 			continue
 		}
 
 		if opts.Resume && hasFreshReport(opts.BatchDir, name, batch.StartedAt) {
 			results[i] = BatchConnectorResult{Connector: name, Resumed: true}
+			done := int(completed.Add(1))
+			emitBatchEvent(ctx, events.KindResumed, runID, name, "resumed", len(names), done, "")
 			continue
 		}
 
+		emitBatchEvent(ctx, events.KindQueued, runID, name, "queued", len(names), int(completed.Load()), "")
+		jobs = append(jobs, batchJob{index: i, name: name, entry: entry})
+	}
+
+	jobCh := make(chan batchJob)
+	var wg sync.WaitGroup
+	for workerID := 0; workerID < parallel; workerID++ {
 		wg.Add(1)
-		go func(i int, name string, entry ConnectorCredsEntry) {
+		go func() {
 			defer wg.Done()
-			sem <- struct{}{}
-			defer func() { <-sem }()
+			for job := range jobCh {
+				emitBatchEvent(ctx, events.KindStarted, runID, job.name, "running", len(names), int(completed.Load()), "")
+				runnerOpts := optionsFromCredsEntry(job.name, opts.CredsFile, job.entry)
+				runner := opts.RunnerFactory(job.name, runnerOpts)
+				rep, runErr := runner.Run(ctx)
 
-			runnerOpts := optionsFromCredsEntry(name, opts.CredsFile, entry)
-			runner := opts.RunnerFactory(name, runnerOpts)
-			rep, runErr := runner.Run(ctx)
-
-			result := BatchConnectorResult{Connector: name, Report: rep}
-			if runErr != nil {
-				result.Error = runErr.Error()
-				result.ExitCode = 2
-			} else {
+				result := BatchConnectorResult{Connector: job.name, Report: rep}
+				if runErr != nil {
+					result.Error = runErr.Error()
+					result.ExitCode = 2
+					results[job.index] = result
+					done := int(completed.Add(1))
+					emitBatchEvent(ctx, events.KindFailed, runID, job.name, "failed", len(names), done, result.Error)
+					continue
+				}
 				result.ExitCode = ExitCodeFor(rep)
 				if opts.BatchDir != "" && rep.Connector != "" {
 					_ = rep.Save(opts.BatchDir)
 				}
+				results[job.index] = result
+				done := int(completed.Add(1))
+				if result.ExitCode == 0 {
+					emitBatchEvent(ctx, events.KindCompleted, runID, job.name, "success", len(names), done, "")
+				} else {
+					emitBatchEvent(ctx, events.KindFailed, runID, job.name, "failed", len(names), done, result.Error)
+				}
 			}
-			results[i] = result
-		}(i, name, entry)
+		}()
 	}
-
+	for _, job := range jobs {
+		jobCh <- job
+	}
+	close(jobCh)
 	wg.Wait()
 
 	batch.Results = results
@@ -271,11 +303,32 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 
 	if opts.BatchDir != "" {
 		if err := writeBatchProgress(opts.BatchDir, batch); err != nil {
+			emitBatchEvent(ctx, events.KindFailed, runID, "", "failed", len(names), int(completed.Load()), err.Error())
 			return batch, err
 		}
 	}
 
+	if batch.ExitCode == 0 {
+		emitBatchEvent(ctx, events.KindCompleted, runID, "", "success", len(names), int(completed.Load()), "")
+	} else {
+		emitBatchEvent(ctx, events.KindFailed, runID, "", "failed", len(names), int(completed.Load()), "")
+	}
 	return batch, nil
+}
+
+func emitBatchEvent(ctx context.Context, kind events.Kind, runID, connector, status string, total, completed int, message string) {
+	events.Emit(ctx, events.Event{
+		Kind:    kind,
+		Scope:   events.ScopeCertify,
+		RunID:   runID,
+		StepID:  connector,
+		Status:  status,
+		Message: message,
+		Counters: events.Counters{
+			Completed: int64(completed),
+			Total:     int64(total),
+		},
+	})
 }
 
 // optionsFromCredsEntry derives per-connector certify.Options from a

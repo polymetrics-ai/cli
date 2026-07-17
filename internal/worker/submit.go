@@ -4,18 +4,24 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"fmt"
+	"time"
 
 	enumspb "go.temporal.io/api/enums/v1"
+	workflowservice "go.temporal.io/api/workflowservice/v1"
 	"go.temporal.io/sdk/client"
 	tlog "go.temporal.io/sdk/log"
 	"go.temporal.io/sdk/worker"
 
+	"polymetrics.ai/internal/events"
 	"polymetrics.ai/internal/rlm"
 )
 
 // TaskQueue is the shared queue served by the `pm worker serve` daemon.
 const TaskQueue = "polymetrics-rlm"
+
+var workflowPollInterval = time.Second
 
 // DefaultEnvPass is the set of LLM env vars forwarded into the agent container.
 var DefaultEnvPass = []string{"PM_LLM_BASE_URL", "PM_LLM_API_KEY", "PM_LLM_MODEL", "OPENROUTER_API_KEY", "PM_LLM_PROVIDER"}
@@ -49,7 +55,39 @@ func SubmitterForActivities(addr string, embedded bool, acts *PodmanActivities) 
 		}
 	}
 
-	submit := func(ctx context.Context, req rlm.AgentRequest) (rlm.AgentResult, error) {
+	submit := submitterForWorkflowClient(temporalWorkflowClient{Client: c}, taskQueue)
+
+	closer := func() error {
+		if w != nil {
+			w.Stop()
+		}
+		c.Close()
+		return nil
+	}
+	return submit, closer, nil
+}
+
+type workflowRun interface {
+	Get(context.Context, any) error
+	GetID() string
+	GetRunID() string
+}
+
+type workflowClient interface {
+	ExecuteWorkflow(context.Context, client.StartWorkflowOptions, any, ...any) (workflowRun, error)
+	DescribeWorkflowExecution(context.Context, string, string) (*workflowservice.DescribeWorkflowExecutionResponse, error)
+}
+
+type temporalWorkflowClient struct {
+	client.Client
+}
+
+func (c temporalWorkflowClient) ExecuteWorkflow(ctx context.Context, opts client.StartWorkflowOptions, workflow any, args ...any) (workflowRun, error) {
+	return c.Client.ExecuteWorkflow(ctx, opts, workflow, args...)
+}
+
+func submitterForWorkflowClient(c workflowClient, taskQueue string) rlm.SubmitFunc {
+	return func(ctx context.Context, req rlm.AgentRequest) (rlm.AgentResult, error) {
 		opts := client.StartWorkflowOptions{
 			ID:                       "rlm-" + req.Fingerprint,
 			TaskQueue:                taskQueue,
@@ -60,21 +98,69 @@ func SubmitterForActivities(addr string, embedded bool, acts *PodmanActivities) 
 		if err != nil {
 			return rlm.AgentResult{}, fmt.Errorf("worker: start workflow: %w", err)
 		}
-		var res rlm.AgentResult
-		if err := run.Get(ctx, &res); err != nil {
-			return rlm.AgentResult{}, err
+		workflowID := run.GetID()
+		if workflowID == "" {
+			workflowID = opts.ID
 		}
-		return res, nil
-	}
+		runID := run.GetRunID()
+		events.Emit(ctx, workerEvent(events.KindStarted, workflowID, runID, "submitted", ""))
 
-	closer := func() error {
-		if w != nil {
-			w.Stop()
+		getCtx, cancel := context.WithCancel(ctx)
+		defer cancel()
+		type workflowResult struct {
+			result rlm.AgentResult
+			err    error
 		}
-		c.Close()
-		return nil
+		resultCh := make(chan workflowResult, 1)
+		go func() {
+			var res rlm.AgentResult
+			err := run.Get(getCtx, &res)
+			resultCh <- workflowResult{result: res, err: err}
+		}()
+
+		ticker := time.NewTicker(workflowPollInterval)
+		defer ticker.Stop()
+		for {
+			select {
+			case out := <-resultCh:
+				if out.err != nil {
+					status := "failed"
+					if errors.Is(out.err, context.Canceled) {
+						status = "canceled"
+					}
+					events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, status, out.err.Error()))
+					return rlm.AgentResult{}, out.err
+				}
+				events.Emit(ctx, workerEvent(events.KindCompleted, workflowID, runID, "success", ""))
+				return out.result, nil
+			case <-ticker.C:
+				_, describeErr := c.DescribeWorkflowExecution(ctx, workflowID, runID)
+				message := ""
+				if describeErr != nil && ctx.Err() == nil {
+					message = describeErr.Error()
+				}
+				events.Emit(ctx, workerEvent(events.KindProgress, workflowID, runID, "polling", message))
+			case <-ctx.Done():
+				cancel()
+				events.Emit(ctx, workerEvent(events.KindFailed, workflowID, runID, "canceled", ctx.Err().Error()))
+				return rlm.AgentResult{}, ctx.Err()
+			}
+		}
 	}
-	return submit, closer, nil
+}
+
+func workerEvent(kind events.Kind, workflowID, runID, status, message string) events.Event {
+	return events.Event{
+		Kind:    kind,
+		Scope:   events.ScopeWorker,
+		RunID:   workflowID,
+		Status:  status,
+		Message: message,
+		Attrs: map[string]string{
+			"workflow_id": workflowID,
+			"run_id":      runID,
+		},
+	}
 }
 
 // registerWorker registers the workflow and podman activities on a worker.
