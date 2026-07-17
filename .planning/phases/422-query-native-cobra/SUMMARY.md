@@ -1,10 +1,10 @@
 # Phase 422 Summary
 
-Status: native query implementation complete; full local verification and parity checks passed; PR pending.
+Status: PR #452 open against `feat/cli-architecture-v2`; native query implementation complete; full local verification and parity checks passed; remote checks pending.
 
 ## Current state
 
-- Worker branch: `refactor/422-query-native-cobra`.
+- Worker branch: `refactor/422-query-native-cobra`; sub-PR: https://github.com/polymetrics-ai/cli/pull/452.
 - Base branch: `feat/cli-architecture-v2`; branch rebased from dispatch base `e6faecfb` to parent ledger checkpoint `f12d573b` before edits.
 - GSD adapter doctor passed; `programming-loop` prompt command missing, so manual GSD fallback recorded.
 - Required reading and skills loaded. Repo-specific `.pi/skills/go-implementation/SKILL.md` is missing; global Go skills loaded.
@@ -38,6 +38,8 @@ Runtime help parity checked: `./pm help query`, `./pm query`, `./pm query --help
 Docs/website/generated checks passed: `./pm docs generate` diff against `docs/cli`, `./pm docs validate`, and `npm --prefix website run gen:docs`; no tracked docs/website/golden changes.
 
 Diff guards passed: `git diff --check origin/feat/cli-architecture-v2...HEAD`; `git diff -- go.mod go.sum` empty.
+
+Remote PR checks after open: branch-name, pr-title, Dependency Review, GSD workflow evidence, require-linked-issue, and govulncheck passed; verify and CodeQL still in progress when recorded. Final artifact-only push will retrigger remote checks.
 
 ## Safety
 

@@ -102,3 +102,5 @@ git diff -- go.mod go.sum
 ```
 
 Result: pass / no output.
+
+Remote PR checks after PR #452 open: branch-name, pr-title, Dependency Review, GSD workflow evidence, require-linked-issue, and govulncheck passed; verify and CodeQL still in progress when recorded. Final artifact-only push will retrigger remote checks.

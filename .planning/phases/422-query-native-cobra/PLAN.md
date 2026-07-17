@@ -92,11 +92,12 @@ Excluded:
    - Verified runtime help: `pm help query`, bare `pm query`, `pm query --help`, JSON manual, invalid action JSON usage error, representative query run JSON, and read-only rejection.
    - Verified generated docs/manual and website docs generator/diff.
 
-5. Full verification / PR
+5. Full verification / PR ✅
    - Required focused and full gates passed.
    - `git diff --check origin/feat/cli-architecture-v2...HEAD` passed and `go.mod`/`go.sum` diff empty.
-   - Commit/push checkpoints completed: planning, red tests, green implementation. PR still pending.
-   - Do not request Claude/Copilot; record human/parent fallback pending per dispatch instruction.
+   - Commit/push checkpoints completed: planning, red tests, green implementation, verification/PR artifacts.
+   - Opened non-draft stacked PR #452 against `feat/cli-architecture-v2` with `Refs #422`, `Refs #407`, `Refs #397`.
+   - Claude/Copilot not requested; human/parent fallback pending per dispatch instruction.
 
 ## Planned tests / validations
 
