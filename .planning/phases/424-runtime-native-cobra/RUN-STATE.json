@@ -7,8 +7,8 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "baseHeadAtPlanning": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "verificationPassed": false,
-  "status": "green_runtime_native_slice_focused_gates_passed",
+  "verificationPassed": true,
+  "status": "local_verification_passed_pr_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-424-runtime-native-cobra.prompt",
@@ -31,6 +31,11 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "native runtime Cobra subtree implemented in allowed internal/cli scope; focused runtime/router/golden gate, full internal CLI tests, vet, and build passed"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "full local gates, runtime help/docs/website parity checks, runtime doctor loopback JSON checks, and diff guards completed inline in isolated worker cwd"
     }
   ],
   "pullRequest": null,

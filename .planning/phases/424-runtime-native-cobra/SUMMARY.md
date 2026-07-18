@@ -1,6 +1,6 @@
 # Phase 424 Summary
 
-Status: native runtime implementation green on focused/internal gates; full verification pending.
+Status: local verification passed; stacked PR pending/open.
 
 ## Current state
 
@@ -24,7 +24,15 @@ Red test captured: `go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -cou
 
 Focused green gates passed: `go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -count=1`, `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1`, `go test ./internal/cli/...`, `go vet ./...`, and `go build ./cmd/pm`.
 
-Pending: full `go test ./...`, `make verify`, CLI parity command checks, docs/website generator checks, diff guards, PR creation, and automated review route.
+Full gates passed: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify`.
+
+Runtime help parity checked: `./pm help runtime`, `./pm runtime`, `./pm runtime --help`, `./pm runtime --json`, invalid action JSON usage error, and loopback-only `runtime doctor` JSON with unknown flag/extra arg tolerance.
+
+Docs/website/generated checks passed: `./pm docs generate` temp diff against `docs/cli`, `./pm docs validate`, and `npm --prefix website run gen:docs`; no tracked docs/website/golden changes.
+
+Diff guards passed: `git diff --check origin/feat/cli-architecture-v2...HEAD`; `git diff -- go.mod go.sum` empty.
+
+Pending: verification artifact commit/push, PR creation/update, and automated review route.
 
 ## Safety
 

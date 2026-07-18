@@ -44,6 +44,7 @@ Result:
 | 1 | Red | `go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -count=1` | Fail | `runtime` remains a legacy wrapper and native `doctor` subcommand is missing. |
 | 2 | Green | `gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/runtime_cli_test.go`; `go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -count=1` | Pass | Native runtime parser green; bare help, JSON manual, invalid action category, unknown flags, extra args, config endpoints, and redaction preserved. |
 | 3 | Refactor | `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1`; `go test ./internal/cli/...`; `go vet ./...`; `go build ./cmd/pm` | Pass | Focused/golden, full internal CLI package, vet, and build green. |
+| 4 | Full gate | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; runtime help/docs/website/diff checks | Pass | Full local gates, CLI parity checks, docs generator diff, website docs generator, and go.mod/go.sum diff guard passed. |
 
 ## Planned red tests
 
@@ -95,4 +96,53 @@ go build ./cmd/pm
 ```text
 ok  	polymetrics.ai/internal/cli	195.015s
 # go vet and go build emitted no output and exited 0
+```
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+```
+
+```text
+go test ./... pass; slow packages included internal/cli (cached) and internal/connectors/certify 342.381s.
+make verify pass; tail included:
+0 issues.
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 547 connector(s) checked, 0 findings
+# gofmt, go vet, and go build emitted no output and exited 0
+```
+
+```bash
+./pm help runtime
+./pm runtime
+./pm runtime --help
+./pm runtime --json
+./pm runtime bogus --json
+./pm runtime doctor --unknown ignored extra --root "$root" --json
+```
+
+```text
+manual kind=CommandManual command=runtime bytes=600
+invalid action category=usage code=usage_error stderr='error: unknown command "bogus" for "pm runtime"'
+doctor kind=RuntimeDoctor statuses={'postgres': 'error', 'dragonfly': 'error', 'temporal': 'error'} stderr_bytes=0 secret_leak=0
+help bytes=     470
+```
+
+```bash
+./pm docs generate --dir "$TMP_DOCS/cli" --connectors-dir "$TMP_DOCS/connectors"
+diff -ru docs/cli "$TMP_DOCS/cli"
+./pm docs validate --connectors-dir docs/connectors
+npm --prefix website run gen:docs
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+```text
+Generated docs in <tmp>/cli and connector docs in <tmp>/connectors
+Validated connector docs in docs/connectors
+Wrote 11 docs pages to lib/docs.generated.ts.
+# diff -ru, git diff --check, and go.mod/go.sum diff emitted no output
 ```

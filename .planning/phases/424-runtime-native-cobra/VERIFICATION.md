@@ -2,38 +2,38 @@
 
 ## Required gate checklist
 
-- [ ] `gofmt -w cmd internal`
+- [x] `gofmt -w cmd internal`
 - [x] `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1`
 - [x] `go test ./internal/cli/...`
 - [x] `go vet ./...`
-- [ ] `go test ./...`
+- [x] `go test ./...`
 - [x] `go build ./cmd/pm`
-- [ ] `make verify`
-- [ ] `git diff --check origin/feat/cli-architecture-v2...HEAD`
-- [ ] `git diff -- go.mod go.sum`
+- [x] `make verify`
+- [x] `git diff --check origin/feat/cli-architecture-v2...HEAD`
+- [x] `git diff -- go.mod go.sum`
 
 ## CLI parity checklist
 
-- [ ] Golden transcript diff empty, or any fixture change explicitly reviewed.
-- [ ] `./pm help runtime` checked: exit 0, docs-map canonical help.
-- [ ] Bare `./pm runtime` checked: exit 0, same canonical help as `pm help runtime`.
-- [ ] `./pm runtime --help` checked: exit 0, docs-map canonical help.
-- [ ] JSON manual checked: `./pm runtime --json` exit 0 with `CommandManual` envelope.
-- [ ] Invalid action checked: `./pm runtime bogus --json` exit 2, JSON category `usage`.
-- [ ] Native doctor semantics checked: `doctor --json`, unknown flags ignored, extra args ignored, late `--json`, late `--root`, and config-file endpoints.
-- [ ] Runtime service optionality checked: tests use loopback/config-only endpoints; no Podman/PostgreSQL/DragonflyDB/Temporal startup.
-- [ ] Completion metadata/no-file fallback seam preserved; Phase 15 completion implementation explicitly not included.
-- [ ] `docs/cli/runtime.md` parity checked by docs-generate-diff/golden docs test; update only if help/output intentionally changes.
-- [ ] Website docs/source/generated data checked under `website/**`; update only if user-facing docs intentionally change.
-- [ ] Generated help/manual artifacts checked via existing generator/docs validation.
+- [x] Golden transcript diff empty; no fixture changes.
+- [x] `./pm help runtime` checked: exit 0, docs-map canonical help.
+- [x] Bare `./pm runtime` checked: exit 0, same canonical help as `pm help runtime`.
+- [x] `./pm runtime --help` checked: exit 0, docs-map canonical help.
+- [x] JSON manual checked: `./pm runtime --json` exit 0 with `CommandManual` envelope.
+- [x] Invalid action checked: `./pm runtime bogus --json` exit 2, JSON category `usage`.
+- [x] Native doctor semantics checked: `doctor --json`, unknown flags ignored, extra args ignored, late `--json`, late `--root`, and config-file endpoints.
+- [x] Runtime service optionality checked: tests use loopback/config-only endpoints; no Podman/PostgreSQL/DragonflyDB/Temporal startup.
+- [x] Completion metadata/no-file fallback seam preserved; Phase 15 completion implementation explicitly not included.
+- [x] `docs/cli/runtime.md` parity checked by docs-generate-diff; no update needed because help unchanged.
+- [x] Website docs/source/generated data checked under `website/**`; no update needed because generated docs unchanged.
+- [x] Generated help/manual artifacts checked via existing generator/docs validation.
 
 ## Optional / safety-limited
 
-- [ ] Runtime-backed integration tests not run unless explicitly requested.
-- [ ] No credentialed connector checks.
-- [ ] No external services started.
-- [ ] No reverse ETL execution beyond repository local temp-dir smoke inside `make verify`.
-- [ ] No new dependencies.
+- [x] Runtime-backed integration tests not run; no services started.
+- [x] No credentialed connector checks.
+- [x] No external services started.
+- [x] No reverse ETL execution beyond repository local temp-dir smoke inside `make verify`.
+- [x] No new dependencies.
 
 ## Results
 
@@ -52,3 +52,35 @@ go build ./cmd/pm
 ```
 
 Result: pass. Focused/golden passed (`ok  \tpolymetrics.ai/internal/cli\t17.329s`); full internal CLI package passed (`ok  \tpolymetrics.ai/internal/cli\t195.015s`); `go vet` and `go build` emitted no output.
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+```
+
+Result: pass. `go test ./...` passed; slow packages included `internal/connectors/certify 342.381s`. `make verify` passed and ended with `connectorgen validate: 547 connector(s) checked, 0 findings`; `gofmt`, `go vet`, and `go build` emitted no output.
+
+```bash
+./pm help runtime
+./pm runtime
+./pm runtime --help
+./pm runtime --json
+./pm runtime bogus --json
+./pm runtime doctor --unknown ignored extra --root "$root" --json
+```
+
+Result: pass. Help/bare/`--help` byte-identical (`help bytes=470`); JSON manual emitted `CommandManual` for `runtime` (`600` bytes); invalid action exited 2 with usage JSON and stderr `error: unknown command "bogus" for "pm runtime"`; loopback doctor emitted `RuntimeDoctor`, redacted PostgreSQL endpoint, Dragonfly/Temporal topology endpoints, all statuses `error`, stderr_bytes=0, and secret_leak=0.
+
+```bash
+./pm docs generate --dir "$TMP_DOCS/cli" --connectors-dir "$TMP_DOCS/connectors"
+diff -ru docs/cli "$TMP_DOCS/cli"
+./pm docs validate --connectors-dir docs/connectors
+npm --prefix website run gen:docs
+git diff --check origin/feat/cli-architecture-v2...HEAD
+git diff -- go.mod go.sum
+```
+
+Result: pass. Docs generated to temp dir; docs diff emitted no output; docs validate passed; website docs generator wrote 11 docs pages; diff-check and go.mod/go.sum diff emitted no output.
