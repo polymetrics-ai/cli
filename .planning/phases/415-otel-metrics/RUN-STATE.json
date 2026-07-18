@@ -1,0 +1,25 @@
+{
+  "phase": "415-otel-metrics",
+  "issue": 415,
+  "parentIssue": 397,
+  "branch": "feat/415-otel-metrics",
+  "baseBranch": "feat/cli-architecture-v2",
+  "baseHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "status": "planning",
+  "verificationPassed": false,
+  "manualGsdFallback": true,
+  "fallbackReason": "scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run returned: scripts/gsd: unknown GSD command: programming-loop",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single Pi mutating worker owns isolated issue worktree/branch; no subagent tool available"
+    }
+  ],
+  "gates": {
+    "redTestsCaptured": false,
+    "focusedTestsPassed": false,
+    "fullTestsPassed": false,
+    "makeVerifyPassed": false
+  }
+}
