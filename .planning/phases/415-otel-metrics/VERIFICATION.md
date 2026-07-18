@@ -15,10 +15,10 @@ Correction worker: session `153cfaabe3df4733a85717da46513786`; model `openai-cod
 - [x] Existing Temporal tracing/metrics gating remains green without runtime services.
 - [x] Focused `-race` telemetry/app/connsdk/flow/worker tests pass.
 - [x] `BenchmarkEmit` disabled/enabled paths remain 0 allocs/op; no material hot-loop regression.
-- [ ] `git diff --check 56a7ecb08f755184af7b55318c3285582d5adfb7..HEAD` passes after correction commit.
+- [x] `git diff --check 56a7ecb08f755184af7b55318c3285582d5adfb7..HEAD` passes after correction commit.
 - [x] `gofmt -w cmd internal`, relevant/full `go vet`, `go mod verify`, and `go mod tidy -diff` pass with no dependency changes.
 - [x] Full package tests, build, and `make verify` pass.
-- [ ] Existing branch pushed; no new PR and no external review request.
+- [x] Correction commit pushed to existing branch; no new PR and no external review request.
 
 CLI help/manual/website parity: not applicable to this correction because it changes internal metrics completeness and exporter behavior only; no command, flag, config key, output envelope, help topic, or docs promise changes.
 
@@ -130,3 +130,5 @@ git diff -- go.mod go.sum
 | Correction modules/static | pass | Relevant and full vet passed; `go mod verify` passed; `go mod tidy -diff` and dependency diff empty. |
 | Correction full Go gates | pass | `gofmt -w cmd internal`, `go vet ./...`, `go test -timeout 20m ./...`, and `go build ./cmd/pm` passed. |
 | Correction `make verify` | pass | Full gate passed, including docs validate, smoke, connector lint, and 547-bundle validation. |
+| Correction reviewed-range whitespace | pass | `git diff --check 56a7ecb08f755184af7b55318c3285582d5adfb7..HEAD` and `git diff --check c6138292cfcc7205f7968a54b57a65f933a3c1fa..HEAD` passed after commit. |
+| Correction commit/push | pass | `ceb3a35ce13642a0d8c8ea0010272582202f8afd` pushed to `origin/feat/415-otel-metrics`; local/remote heads matched. No new PR or external review request. |

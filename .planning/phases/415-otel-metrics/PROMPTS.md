@@ -43,7 +43,7 @@ scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run
 ```
 
 Downstream artifacts: correction sections in `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, and `RUN-STATE.json`.
-Verification result: local correction verified; exact RED captured before production edits; focused race/live-export/endpoint/reconciliation/Temporal tests, 5-run benchmark, full Go gates, module checks, and `make verify` passed. Programming-loop command remains unavailable, so manual fallback remains recorded. Commit/range whitespace check/push pending.
+Verification result: correction verified and pushed; exact RED captured before production edits; focused race/live-export/endpoint/reconciliation/Temporal tests, 5-run benchmark, full Go gates, module checks, `make verify`, and reviewed-range whitespace checks passed. Implementation commit `ceb3a35ce13642a0d8c8ea0010272582202f8afd` is on the existing remote PR branch. Programming-loop command remains unavailable, so manual fallback remains recorded.
 
 ## Manual fallback prompt source
 

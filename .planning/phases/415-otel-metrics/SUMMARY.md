@@ -45,7 +45,8 @@ Status: independent-review correction verified locally for PR #461; manual GSD/T
 - App/CLI reconciliation and Temporal gating: pass under race.
 - Benchmark (5 runs): disabled `1.998–2.024 ns/op`; enabled file `1.996–2.042 ns/op`; both `0 B/op`, `0 allocs/op`.
 - `gofmt -w cmd internal`, full vet, full tests, build, module verify/tidy-diff, dependency diff, and `make verify`: pass.
-- Post-commit reviewed-range whitespace check and push: pending correction commit.
+- Correction commit `ceb3a35ce13642a0d8c8ea0010272582202f8afd` pushed to `origin/feat/415-otel-metrics`; local/remote heads matched.
+- Reviewed-range whitespace checks passed from parent base and exact correction starting HEAD. No new PR or external review request.
 
 ## Prior verification snapshot
 

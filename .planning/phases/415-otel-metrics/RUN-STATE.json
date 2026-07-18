@@ -5,7 +5,7 @@
   "branch": "feat/415-otel-metrics",
   "baseBranch": "feat/cli-architecture-v2",
   "baseHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "status": "independent-correction-verified",
+  "status": "independent-correction-pushed",
   "verificationPassed": true,
   "correction": {
     "sessionId": "153cfaabe3df4733a85717da46513786",
@@ -14,7 +14,10 @@
     "thinking": "high",
     "startingHead": "c6138292cfcc7205f7968a54b57a65f933a3c1fa",
     "reviewLog": "/tmp/pm-397-review-415.log",
-    "acceptedFindings": 4
+    "acceptedFindings": 4,
+    "implementationCommit": "ceb3a35ce13642a0d8c8ea0010272582202f8afd",
+    "implementationPushed": true,
+    "reviewedRangeWhitespacePassed": true
   },
   "manualGsdFallback": true,
   "fallbackReason": "scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run returned: scripts/gsd: unknown GSD command: programming-loop",
@@ -88,6 +91,11 @@
       "cycle": "independent-correction-verify",
       "decision": "local_critical_path",
       "reason": "focused race and reconciliation tests, repeated live-export/endpoint tests, benchmarks, full Go gates, module checks, and make verify passed"
+    },
+    {
+      "cycle": "independent-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "correction commit pushed to the existing issue branch; reviewed-range whitespace checks passed; final artifacts updated without external review requests"
     }
   ],
   "gates": {
