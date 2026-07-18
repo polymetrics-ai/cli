@@ -1,0 +1,118 @@
+# Phase 428 Plan — Agent native Cobra namespace
+
+Issue: polymetrics-ai/cli#428
+Umbrella: #407
+Parent: #397 / draft parent PR #438
+Branch: `refactor/428-agent-native-cobra`
+Base branch: `feat/cli-architecture-v2`
+Exact starting parent HEAD: `235233f7cfde4a24612be6b0f95fb37a412d388a`
+Invocation session: `issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z`
+Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
+Execution decision: `local_critical_path` — eighth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, the runtime exposes no subagent tool, and the user bounded this run to #428 with no PR or external review.
+
+## Second bounded correction invocation
+
+- Session: `issue-428-second-correction-pi-20260718T140317Z`; runtime model identity is not exposed.
+- Exact invocation: `Second bounded correction for #428 at start af604d7178c83d21d77abedfa3c4dee29f94c089` with the accepted Medium from `/tmp/pm-397-rereview-428.log`.
+- Exact start: `af604d7178c83d21d77abedfa3c4dee29f94c089`; started at `20260718T140317Z` UTC.
+- Accepted Medium: valid `agent plan` and `agent image build|pull|ensure` calls with clustered short tails containing `h` (including `-hx`, `-xh`, `-hh`, and representative longer clusters) must execute exactly as the legacy parser did instead of Cobra intercepting help, printing the agent manual, and returning false success.
+- Smallest slice: extend only agent-tail compatibility normalization so single-dash short clusters containing `h` are ignored after an exact valid action. Do not alter root/other namespaces, action discovery, ordinary exact `agent -h` help, exact invalid-head behavior, or long help semantics.
+- TDD: before production edits, add table-driven plan-output and fake-image-runtime tests for plan/build/pull/ensure clustered tails. Assert expected output/runtime calls, zero unexpected agent help, and no suppression. Capture focused RED on the current head.
+- Verification: focused and repeated tests, focused race, adversarial nearby short-token/help cases, and exact differential against legacy base `235233f7cfde4a24612be6b0f95fb37a412d388a`; run full CLI only if focused evidence warrants it; then gofmt, vet, build, diff/scope/dependency guards.
+- CLI parity: no command, flag, manual, website, completion, or generated-help contract changes; ordinary exact `-h` remains help and clustered valid-action tails remain legacy ignored inputs. Checked-in docs/website/generated artifacts are not applicable unless verification finds a delta.
+- Delivery: planning, RED, GREEN, and final evidence checkpoints committed and pushed to `origin/refactor/428-agent-native-cobra`; no PR, external review, containers/services, image execution, dependencies, credentials, or secrets.
+- GSD: `scripts/gsd doctor` passed; exact preferred invocation `scripts/gsd prompt programming-loop init --phase 428 --dry-run` failed with `unknown GSD command`, so the manual universal-runtime-loop fallback is active.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, and `golang-safety`; runtime/RLM and CLI parity references were read.
+- Execution decision: `local_critical_path` — one bounded parser defect in the isolated agent/router scope; this runtime has no subagent tool and the user prohibited external review.
+
+## High-finding correction invocation
+
+- Review-fix session: `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z`.
+- Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`.
+- Exact correction start: `746b2a98b01ba1e119974e31569fc8deb06cd897`.
+- Accepted finding: leading unknown, short, help-like assigned, or literal-boundary tokens at `agent`/`agent image` must not let Cobra discover or execute a later `image build|pull|ensure` action.
+- Smallest slice: add an agent-scoped pre-Cobra action boundary for non-exact action heads and reject positional image-parent tails before runtime lookup. Preserve exact `plan`, `image`, `build`, `pull`, `ensure`, agent help routes, valid action-tail unknown/help compatibility, and literal `--` continuation after an exact action.
+- TDD: first add a fake-runtime table crossing agent/image levels, assigned unknown, bare unknown, short unknown, assigned help-like, literal-boundary, and build/pull/ensure; require usage errors and zero lookups/files/runs. Capture focused RED before production edits.
+- Verification: focused and race agent tests; exact base differential from `235233f7cfde4a24612be6b0f95fb37a412d388a` for the corrected invalid heads plus preserved valid/help/literal routes; full CLI only if focused evidence indicates; gofmt, vet, build, `git diff --check`, scope/dependency guards.
+- Delivery: planning, RED, and green verification checkpoints committed/pushed to the active issue branch; no container/services, dependencies, PR, external review, or secrets.
+- GSD: doctor/list passed; `scripts/gsd prompt programming-loop init --phase 428-agent-native-cobra --dry-run` remains unavailable (`unknown GSD command`), so the recorded manual universal-loop fallback continues.
+- Execution decision: `local_critical_path` — one urgent bounded accepted finding in the already-isolated serialized worktree; no subagent tool and external review is prohibited.
+
+## Required reading complete
+
+- Issue #428 via `gh`; parent #397; umbrella #407; adjacent #426/#427 native Cobra implementation and artifact patterns.
+- `AGENTS.md`; issue-agent contract; worker handoff; GSD Pi adapter and universal/manual programming loop.
+- `.planning/config.json`, `PROJECT.md`, `ROADMAP.md`, `STATE.md`; universal programming-loop PRD/prompt library.
+- Required-skills routing; runtime/RLM integration reference; CLI help/docs/website parity.
+- CLI Architecture v2 improvement plan §5/§9; execution prompt Stage 9; ADR 0002.
+- Canonical runtime dependencies/setup, agent CLI manual, website architecture/CLI reference, current agent/image handlers, router/global parser, golden and adjacent focused tests.
+
+## GSD adapter and fallback
+
+- `scripts/gsd doctor` — pass.
+- `scripts/gsd list` — pass; 69 commands listed.
+- `scripts/gsd sources programming-loop` — unavailable because the registry has no `programming-loop` command.
+- `scripts/gsd prompt plan-phase 428 --skip-research` — generated a 10668-byte prompt and executed inline.
+- `scripts/gsd prompt programming-loop init --phase 428 --dry-run` — unavailable: `scripts/gsd: unknown GSD command: programming-loop` (exit 1).
+- Manual fallback: execute `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` inline with strict RED → GREEN → refactor evidence and all six issue-local artifacts.
+
+## Required skills loaded
+
+- `gsd-core`.
+- `golang-how-to` first, then `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-documentation`, and `golang-spf13-cobra`.
+- Applied constraints: fresh Cobra trees; typed repeated pflags; `RunE`; stable exit/stdout/stderr contracts; context propagation; injected image-runtime fakes; control/path/image validation; no shell concatenation, secrets, dependencies, services, credentials, image pull/build, or worker behavior changes.
+
+## Scope and exclusions
+
+Allowed:
+
+- Register native `agent`, `agent plan`, `agent image`, `agent image build|pull|ensure`, and positional `agent help` nodes.
+- Declare current `plan --request` flag with legacy repeated/bare/unknown semantics; adapt only the agent handler away from `parseFlags`.
+- Add an injected image-runtime seam so every image action is tested without Podman/Docker or external execution.
+- Add bounded request, build-path, Podman-bin, and image-reference validation at the agent CLI boundary.
+- Preserve agent-scoped trailing help and literal `--` behavior required by the legacy dispatcher.
+- Focused agent/router tests and issue-local phase artifacts.
+
+Excluded:
+
+- Worker/RLM behavior; Temporal/Podman/Docker execution; image pulls/builds/publishing; credentials; other namespaces; dynamic connector parsing; connector bundles; dependencies; Phase 15 completion implementation; Phase 19 focused-help/man churn; shared parent artifacts; PR or external review.
+
+## Existing contract to preserve
+
+- Bare `pm agent`, `pm help agent`, `pm agent --help`, `pm agent -h`, and positional `pm agent help` return the canonical manual; JSON routes return `CommandManual/agent`.
+- `plan` accepts spaced/assigned/repeated-last-wins/bare `--request`, unknown flags, extra positional values, and deterministic text/JSON output.
+- `image` actions are `build`, `pull`, and `ensure`; build uses `<root>/build/agent/Containerfile`; pull/ensure use configured `rlm.image` and `rlm.podman_bin`; output kinds/status remain unchanged.
+- Invalid actions remain usage errors. Global `--root`, `--json`, `--plain`, and `--no-input` work before/after the namespace in spaced/assigned forms, including configured JSON overridden by `--json=false`.
+- Agent action-tail `--help`/`-h` remain ordinary ignored legacy inputs rather than Phase 19 focused help. Literal `--` does not stop later legacy flag parsing where the prior `parseFlags` continued.
+
+## TDD slices and checkpoints
+
+1. **Planning checkpoint** — create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY before production edits; commit and push.
+2. **RED tests first** — specify native registration/tree/flags/completion seam; all plan forms and deterministic output; all image actions through injected fakes; ensure present/pull branches; bare/text/JSON/positional help; unknown/invalid/global assigned booleans; request/path/image validation; trailing help/literal separator compatibility. Capture exact RED before production edits; commit/push.
+3. **Smallest GREEN** — remove `agent` from `cobraLegacyCommands`; add native nodes; typed `StringArray --request` with `NoOptDefVal=true`, unknown whitelist, no-file completion; agent-only pre-Cobra normalizer; typed plan handler; injected image runtime; bounded validation.
+4. **Refactor/parity** — focused agent/router/golden/full CLI; base-vs-head differential matrix for preserved legacy cases; built binary help/plan/error/global checks only (never image actions); docs temp generation/diff, website generator/diff, runtime dependency-free tests.
+5. **Full gates/delivery** — `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`; scope/dependency/diff guards; finalize artifacts; coherent commits/push, no PR.
+
+## CLI help/docs/website parity stance
+
+Parser ownership changes but command names, flags, output envelopes, canonical manuals, checked-in `docs/cli/agent.md`, website command map/examples, generated help, and goldens should remain unchanged. Runtime/bare/text/JSON/positional help, temporary docs generation diff, website generation diff, and golden tests prove parity. Focused action help remains intentionally deferred to Phase 19; completion implementation remains Phase 15.
+
+## Safety
+
+No secrets, credentials, services, dependencies, generic write tools, destructive/admin actions, production deployment, image pull/build, Podman/Docker invocation, quality-gate reduction, external review, PR, or merge. Image tests use injected fakes and temporary directories only. Worker/RLM execution is untouched. The required `make verify` may run only its existing dependency-free/local sample smoke under its established safety gates.
+
+## Second bounded correction completion
+
+The accepted Medium is fixed from exact start `af604d7178c83d21d77abedfa3c4dee29f94c089`; verified implementation head is `7f23901bf08fd11ac1384509396ca1a46c9d16ff`; verification ended `20260718T141424Z` UTC. The only production change extends agent valid-action tail normalization to discard clustered single-dash tokens containing lowercase `h`, matching the legacy parser before Cobra can intercept help. Ordinary exact `pm agent -h`, invalid clustered action heads, root help, and other namespaces remain unchanged.
+
+Strict RED preceded production edits: all 20 plan/build/pull/ensure cluster cases rendered false-success agent help and suppressed image calls. GREEN passes 20/20 with exact plan output and fake-runtime lookup/file/run traces. Repeated, adversarial, focused race, 32/32 exact legacy differential (including fake-runtime traces), full CLI, gofmt, vet, build, diff, scope, and dependency gates pass. No real image/runtime/container/service action, dependency, docs/website/generated change, secret, PR, or external review occurred.
+
+## High-finding correction completion
+
+The accepted High is fixed from exact correction start `746b2a98b01ba1e119974e31569fc8deb06cd897`. A pre-Cobra agent-only boundary now inserts a literal separator before every non-exact agent/image action head, including an existing literal `--`; the image parent rejects the preserved invalid head with the legacy-specific usage error before any runtime lookup. Exact actions/help and post-action unknown/help/literal behavior remain unchanged. Thirty fake-runtime cross-product cases pass with zero lookups/files/runs, focused and race gates pass, and a 35-case base differential matches exact exit/stdout/stderr. Full CLI, gofmt, vet, build, diff, scope, and dependency gates pass. No container/service, dependency, docs/website/golden, secret, PR, or external review activity occurred.
+
+## Completion note
+
+The bounded slice completed within scope. Native Cobra owns `agent`, `plan`, `image`, all three image actions, and positional help; `plan --request` is typed and only the agent handler's `parseFlags` call is removed. A context-aware injected runtime covers build/pull/ensure without executing Podman/Docker, while bounded request/root/Podman-bin/image validation runs before external lookup/execution. Agent-scoped trailing-help and literal-separator compatibility remains exact.
+
+Focused RED preceded production edits. Focused/router/golden/full CLI and repository tests, a 25-case exact legacy differential, built-binary help/plan/error checks, runtime dependency-free tests, docs/website/generated parity, gofmt, vet, build, and `make verify` passed. No dependency, worker/RLM, connector, checked-in docs/website/golden, or unrelated namespace delta exists. Coherent checkpoints were pushed without PR or external review.
