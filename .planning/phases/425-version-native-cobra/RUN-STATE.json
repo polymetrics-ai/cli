@@ -10,8 +10,36 @@
   "invocationSession": "issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "complete_pushed",
+  "status": "review_fix_verified_pending_push",
   "verificationPassed": true,
+  "reviewFix": {
+    "source": "/tmp/pm-397-review-425.log",
+    "finding": "accepted-but-disconnected --json=<bool> on native version command",
+    "invocationSession": "issue-425-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T102328Z",
+    "model": "openai-codex/gpt-5.6-sol",
+    "thinking": "high",
+    "startingHead": "975cb21b55a32574ef754b8a0a0f0635125fb0e0",
+    "status": "verified_pending_push",
+    "red": "go test ./internal/cli/ -run '^TestVersionJSONBooleanAssignmentsStayConnected$' -count=1 failed as expected in 0.568s; all three subtests exposed disconnected output mode",
+    "green": "focused 0.562s; version/router/golden 8.829s; global flags 2.574s; deterministic/help/unknown 0.579s; full internal/cli 196.764s",
+    "verification": "gofmt, go vet ./..., build, binary assignment/config/help/runtime/error checks, docs generation/validation, diff and scope checks passed",
+    "architectureDecision": "parse --json=<bool> in parseGlobal with existing parseGlobalBool and propagate explicit false/true through config flag precedence",
+    "gsdProgrammingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "files": [
+      "internal/cli/parse.go",
+      "internal/cli/cli.go",
+      "internal/cli/version_cli_test.go",
+      ".planning/phases/425-version-native-cobra/PLAN.md",
+      ".planning/phases/425-version-native-cobra/TDD-LEDGER.md",
+      ".planning/phases/425-version-native-cobra/VERIFICATION.md",
+      ".planning/phases/425-version-native-cobra/RUN-STATE.json"
+    ],
+    "risks": [
+      "--json=<bool> is now accepted globally rather than only reaching native pflag; this matches existing parseGlobal boolean assignment conventions",
+      "malformed --json assignments use validation exit 3, consistent with other global boolean assignments"
+    ]
+  },
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",

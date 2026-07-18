@@ -5,6 +5,40 @@ Invocation session: `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z
 Model: `openai-codex/gpt-5.6-sol`; thinking: `high`
 Starting HEAD: `479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc`
 
+## Independent-review correction (in progress)
+
+Invocation session: `issue-425-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T102328Z`
+Model: `openai-codex/gpt-5.6-sol`; thinking: `high`
+Exact correction start HEAD: `975cb21b55a32574ef754b8a0a0f0635125fb0e0`
+Finding source: `/tmp/pm-397-review-425.log` — native pflag accepts `--json=true`, but the captured output mode remains false.
+
+Correction RED command (after test-only edits, before production edits):
+
+```bash
+go test ./internal/cli/ -run '^TestVersionJSONBooleanAssignmentsStayConnected$' -count=1
+```
+
+Expected failure captured (`0.568s`): all three focused subtests failed. `--json=true` emitted plain version output, `--json=false` failed to override configured JSON and emitted a `Version` envelope, and `--help --json=true` emitted text help. This proves both boolean values and JSON help were accepted by pflag but disconnected from the pre-parsing output mode.
+
+Planned GREEN: parse `--json=<bool>` in `parseGlobal` via the existing `parseGlobalBool` and propagate the explicit false/true value through config flag precedence, then verify ordinary `--json`, malformed/unknown flags, deterministic output, router/goldens, global placement, and another namespace.
+
+GSD correction evidence: doctor/list passed; `scripts/gsd prompt programming-loop init --phase 425-version-native-cobra --dry-run` failed because the command is absent, so the recorded manual GSD fallback is active. Required skills reloaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-spf13-cobra`, `golang-documentation`, `golang-lint`, `golang-safety`.
+
+### Correction GREEN and verification
+
+| Kind | Command | Result |
+|---|---|---|
+| GREEN | `go test ./internal/cli/ -run '^TestVersionJSONBooleanAssignmentsStayConnected$' -count=1` | Pass (`0.562s`) |
+| Focused | `go test ./internal/cli/... -run 'Version|CobraRouterShell|Golden' -count=1` | Pass (`8.829s`) |
+| Global flags | `go test ./internal/cli/... -run 'Global|ConfigJSON|RootHelpJSON|RunWithOptionsPlain' -count=1` | Pass (`2.574s`) |
+| Regression focus | version deterministic/help/unknown tests | Pass (`0.579s`) |
+| Full CLI | `go test ./internal/cli/... -count=1` | Pass (`196.764s`) |
+| Static/build | `gofmt -w cmd internal`; `go vet ./...`; `go build -o /tmp/pm-425-review-fix ./cmd/pm` | Pass |
+| Binary behavior | ordinary/assigned JSON parity; false override; JSON help; runtime namespace; malformed/unknown exits | Pass (`invalid=3`, `unknown=2`) |
+| Docs/scope | temp docs generation diff, docs validation, `git diff --check`, dependency/connector/docs/website/golden scope diffs | Pass |
+
+Implementation: `parseGlobal` now consumes and validates `--json=<bool>` with `parseGlobalBool`. `globalConfigFlags` records an explicitly assigned false as a changed canonical boolean flag, preserving flag-over-env/file precedence. No new dependency or output/help schema was introduced.
+
 ## GSD and skills
 
 ```bash

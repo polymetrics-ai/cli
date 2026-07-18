@@ -2,6 +2,21 @@
 
 Session `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc`.
 
+## Independent-review correction checklist
+
+Correction session `issue-425-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T102328Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact correction start `975cb21b55a32574ef754b8a0a0f0635125fb0e0`.
+
+- [x] Focused tests added before production edits for `version --json=true`, `version --json=false`, and JSON help assignment syntax.
+- [x] Exact focused RED captured at correction start (`0.568s`; all three assignment/help subtests failed as expected).
+- [x] No accepted-but-disconnected `--json=<bool>` behavior remains.
+- [x] Ordinary `--json`, help, unknown flags, malformed boolean assignments, deterministic output, and other namespaces do not regress.
+- [x] Focused version/router/golden (`8.829s`) and global flag (`2.574s`) tests pass.
+- [x] Broader `internal/cli` passed (`196.764s`).
+- [x] gofmt, full vet, build, `git diff --check`, scope/dependency checks pass.
+- [x] Existing branch prepared for commit/push; no PR or external review requested.
+
+Correction result: focused GREEN passed in `0.562s`; deterministic/help/unknown regression focus passed in `0.579s`. Built-binary checks proved ordinary `--json` and `--json=true` byte parity, configured JSON overridden by `--json=false`, assigned JSON help, and assigned JSON on the `runtime` namespace. `--json=maybe` returned validation exit 3; an unknown version flag remained usage exit 2. Temp CLI docs generation and validation passed with no checked-in docs/website/golden delta.
+
 ## TDD and behavior
 
 - [x] All six planning artifacts existed before production edits.

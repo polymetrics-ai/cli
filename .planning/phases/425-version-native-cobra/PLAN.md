@@ -93,6 +93,29 @@ Parser ownership changes only. Runtime help text, plain/JSON outputs, checked-in
 
 No secrets, credentials, services, dependencies, generic write tools, destructive/admin actions, quality-gate reductions, external review requests, PR, or merge. Commands use only local source/tests/build/docs generation and non-credentialed GitHub metadata reads. The explicitly required `make verify` gate may exercise its existing temporary sample reverse-ETL smoke only when it follows plan → preview → approval → run; no external write is allowed.
 
-## Completion note
+## Bounded independent-review correction
 
-The planned slice completed as designed: exact RED, smallest native registration, unchanged golden/help/docs/website outputs, full local gates, local diff review, coherent commits, and branch pushes. No scope deviation or new dependency occurred. Invalid-action diagnostic wording is now Cobra/pflag-owned as anticipated by ADR 0002; established category, JSON envelope, stdout/stderr, and exit behavior remain intact.
+Review-fix invocation session: `issue-425-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T102328Z`
+Explicit profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
+Exact correction start HEAD: `975cb21b55a32574ef754b8a0a0f0635125fb0e0`
+Review source: `/tmp/pm-397-review-425.log` (one actionable MEDIUM finding).
+
+The correction addresses native pflag accepting `version --json=true` while the pre-Cobra global parser left `jsonOut` false. The smallest architecture-consistent choice is to extend `parseGlobal` with boolean assignment parsing for `--json=<bool>`, matching existing `--plain=<bool>` and `--no-input=<bool>` handling. This preserves ordinary `--json`, global placement compatibility, and pflag boolean semantics instead of rejecting syntax already supported safely by the global parser's boolean helper.
+
+Correction TDD slices:
+
+1. Add focused observable tests first for `version --json=true`, `version --json=false`, and JSON help with assignment syntax; assert exact `Version`/plain/`CommandManual` behavior so no accepted flag can be disconnected.
+2. Capture RED at exact correction start before editing production code.
+3. Add only the `--json=` branch to `parseGlobal`, using `parseGlobalBool`; malformed assignments remain explicit nonzero validation errors.
+4. Run focused version/router/golden and global-flag tests, then broader `internal/cli` if needed; verify ordinary `--json`, help, unknown flags, deterministic output, and another namespace.
+5. Run gofmt, vet, build, diff/scope checks; update artifacts; commit and push the existing branch. No PR, external review, dependencies, secrets, or services.
+
+GSD correction probe: `scripts/gsd doctor` passed; `scripts/gsd list` passed; required `scripts/gsd prompt programming-loop init --phase 425-version-native-cobra --dry-run` remained unavailable with `unknown GSD command: programming-loop`, so the existing manual universal-loop fallback continues with strict RED → GREEN evidence.
+
+## Correction completion note
+
+The bounded correction completed with exact three-case RED, then the smallest global-parser/config-precedence propagation. `--json=true`, `--json=false`, and JSON help now drive the output mode actually used by native Cobra handlers. Ordinary `--json`, deterministic output, help, unknown flags, malformed assignments, another native namespace, goldens, generated docs, and full `internal/cli` remained green. No help/manual/website text changed, so docs/website content updates are not applicable; generated CLI docs diffed clean.
+
+## Original completion note
+
+The initial slice completed as designed: exact RED, smallest native registration, unchanged golden/help/docs/website outputs, full local gates, local diff review, coherent commits, and branch pushes. No scope deviation or new dependency occurred. The independent finding is resolved by the bounded correction above.

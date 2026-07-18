@@ -56,6 +56,60 @@ func TestVersionDeterministicPlainAndJSONOutput(t *testing.T) {
 	}
 }
 
+func TestVersionJSONBooleanAssignmentsStayConnected(t *testing.T) {
+	const wantPlain = "pm dev\ncommit: none\nbuilt: unknown\n"
+
+	t.Run("true selects JSON", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		if code := Run([]string{"version", "--json=true"}, &stdout, &stderr); code != 0 {
+			t.Fatalf("version --json=true exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		}
+		if stderr.Len() != 0 {
+			t.Fatalf("version --json=true stderr = %q, want empty", stderr.String())
+		}
+		var env struct {
+			Kind string `json:"kind"`
+		}
+		if err := json.Unmarshal(stdout.Bytes(), &env); err != nil {
+			t.Fatalf("version --json=true stdout not JSON: %v\n%s", err, stdout.String())
+		}
+		if env.Kind != "Version" {
+			t.Fatalf("version --json=true kind = %q, want Version", env.Kind)
+		}
+	})
+
+	t.Run("false overrides configured JSON", func(t *testing.T) {
+		t.Setenv("POLYMETRICS_JSON", "true")
+		var stdout, stderr bytes.Buffer
+		if code := Run([]string{"version", "--json=false"}, &stdout, &stderr); code != 0 {
+			t.Fatalf("version --json=false exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		}
+		if stdout.String() != wantPlain || stderr.Len() != 0 {
+			t.Fatalf("version --json=false output mismatch:\nstdout=%q\nstderr=%q", stdout.String(), stderr.String())
+		}
+	})
+
+	t.Run("true selects JSON help", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		if code := Run([]string{"version", "--help", "--json=true"}, &stdout, &stderr); code != 0 {
+			t.Fatalf("version --help --json=true exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		}
+		if stderr.Len() != 0 {
+			t.Fatalf("version --help --json=true stderr = %q, want empty", stderr.String())
+		}
+		var manual struct {
+			Kind    string `json:"kind"`
+			Command string `json:"command"`
+		}
+		if err := json.Unmarshal(stdout.Bytes(), &manual); err != nil {
+			t.Fatalf("version --help --json=true stdout not JSON: %v\n%s", err, stdout.String())
+		}
+		if manual.Kind != "CommandManual" || manual.Command != "version" {
+			t.Fatalf("version --help --json=true manual = %+v, want version CommandManual", manual)
+		}
+	})
+}
+
 func TestVersionFlagAndPositionalHelpCompatibility(t *testing.T) {
 	var canonicalOut, canonicalErr bytes.Buffer
 	if code := Run([]string{"help", "version"}, &canonicalOut, &canonicalErr); code != 0 {

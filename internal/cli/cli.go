@@ -195,11 +195,12 @@ func invocationEnv(override map[string]string) map[string]string {
 
 func globalConfigFlags(args []string, root string, jsonOut bool) map[string]config.FlagValue {
 	flags := map[string]config.FlagValue{}
+	jsonChanged := false
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		switch {
-		case arg == "--json":
-			flags["json"] = config.StaticFlag{FlagName: "json", Value: "true", Type: "bool", Changed: true}
+		case arg == "--json" || strings.HasPrefix(arg, "--json="):
+			jsonChanged = true
 		case arg == "--root" && i+1 < len(args):
 			flags["root"] = config.StaticFlag{FlagName: "root", Value: root, Type: "string", Changed: true}
 			i++
@@ -207,8 +208,12 @@ func globalConfigFlags(args []string, root string, jsonOut bool) map[string]conf
 			flags["root"] = config.StaticFlag{FlagName: "root", Value: root, Type: "string", Changed: true}
 		}
 	}
-	if jsonOut {
-		flags["json"] = config.StaticFlag{FlagName: "json", Value: "true", Type: "bool", Changed: true}
+	if jsonChanged {
+		value := "false"
+		if jsonOut {
+			value = "true"
+		}
+		flags["json"] = config.StaticFlag{FlagName: "json", Value: value, Type: "bool", Changed: true}
 	}
 	return flags
 }
