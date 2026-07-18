@@ -11,7 +11,7 @@
   "startedAt": "20260718T225346Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "correction_red_captured",
+  "status": "correction_green",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -40,11 +40,16 @@
       "cycle": "correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "local behavior review found invalid ETL actions followed by long or short help could render namespace help and exit zero; the focused action-discovery test failed before correction production edits"
+    },
+    {
+      "cycle": "correction-green",
+      "decision": "local_critical_path",
+      "reason": "unrecognized ETL actions are bounded behind Cobra's literal separator before help parsing; focused, repeated, race, and router/golden/help preservation gates pass"
     }
   ],
   "red": "focused CLI build failed before production edits: internal/cli/etl_cli_test.go:22:9 undefined newETLCobraCommand",
   "green": "focused contract passed in 13.396s; broader ETL/router focused suite passed in 27.999s",
-  "verification": "pending full declared gate including make verify",
+  "verification": "focused/repeated/race/router/golden/full CLI/app and pre-correction full repository gates passed; final post-correction full declared gate including make verify remains pending",
   "files": [
     ".planning/phases/430-etl-native-cobra/PLAN.md",
     ".planning/phases/430-etl-native-cobra/TDD-LEDGER.md",

@@ -64,4 +64,4 @@ A local behavior review found that an invalid action followed by `--help` or `-h
 FAIL polymetrics.ai/internal/cli
 ```
 
-The correction must bound invalid ETL actions before Cobra parses trailing help, while preserving valid namespace/action help and literal compatibility.
+The correction bounds every unrecognized ETL action behind Cobra's literal separator before flag parsing. Valid namespace/action help and known-action legacy-tail handling remain unchanged. Focused correction GREEN passed in `0.558s`; the complete focused contract passed in `13.397s`; correction repeated ×5 and race passed in `1.061s`/`1.668s`; router/golden/help preservation passed in `6.749s`.

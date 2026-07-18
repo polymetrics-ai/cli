@@ -10,7 +10,7 @@ Invocation session: `issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z
 - [x] All current flags typed with repeated/bare/assigned compatibility.
 - [x] Bare/text/JSON/long/short/positional help parity in focused tests.
 - [x] Trailing help and literal `--` compatibility in focused tests.
-- [ ] Unknown flags, invalid actions, global assigned booleans, and no action-discovery bypass: local review RED exposed invalid-action trailing-help bypass; correction pending.
+- [x] Unknown flags, invalid actions, global assigned booleans, and no action-discovery bypass; test-first invalid-action trailing-help correction passes focused/repeated/race.
 - [x] Batch-size parse/default/bounded flush behavior and configured sync validation in focused tests.
 - [x] Cancellation, events, stdout/stderr, and one-envelope semantics in focused tests; broader telemetry gate pending.
 - [x] Only ETL `parseFlags` call sites removed; dynamic connector parser remains.
@@ -18,9 +18,9 @@ Invocation session: `issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z
 ## Gates
 
 - [x] Focused native ETL/router tests (`13.396s`; broader ETL/router `27.999s`).
-- [ ] Focused repeated tests (`-count=5`).
-- [ ] Focused race tests.
-- [ ] Router and golden transcript tests; fixture unchanged or explicitly reviewed.
+- [x] Focused repeated tests (`-count=5`: initial full contract `65.438s`; correction `1.061s`).
+- [x] Focused race tests (initial full contract `146.473s`; correction `1.668s`).
+- [x] Router and golden transcript tests; fixture unchanged (`21.327s`, correction preservation `6.749s`).
 - [ ] Full `go test ./internal/cli/...`.
 - [ ] Full app tests and ETL event/telemetry contracts.
 - [ ] `gofmt -w cmd internal`.

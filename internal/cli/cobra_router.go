@@ -142,6 +142,11 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 		case "check", "catalog", "read", "run", "status":
 			args = normalizeStringArraySpaceValues(args, 2, etlFlagNames)
 			return normalizeETLLegacyActionArgs(args, 2)
+		default:
+			out := make([]string, 0, len(args)+1)
+			out = append(out, args[0], "--")
+			out = append(out, args[1:]...)
+			return out
 		}
 	}
 	if len(args) >= 2 && args[0] == "credentials" {

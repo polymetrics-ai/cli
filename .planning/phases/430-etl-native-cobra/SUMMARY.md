@@ -1,6 +1,6 @@
 # Phase 430 Summary
 
-Status: local review correction RED captured after initial focused GREEN; invalid-action trailing-help bypass correction pending.
+Status: local review correction GREEN; broad final verification pending.
 
 ## Identity
 
@@ -27,7 +27,7 @@ Strict focused test compilation failed as required on the missing `newETLCobraCo
 
 ## Local review correction
 
-Local review found that `etl bogus --help|-h` rendered the namespace manual and exited 0 instead of retaining an invalid-action usage error. A focused correction test failed as required before correction production edits. The action boundary must be fixed before final verification.
+Local review found that `etl bogus --help|-h` rendered the namespace manual and exited 0 instead of retaining an invalid-action usage error. A focused correction test failed as required before correction production edits. Unrecognized actions are now bounded behind Cobra's literal separator before flag parsing. Focused, repeated ×5, race, and router/golden/help preservation gates pass.
 
 ## Verification
 
