@@ -52,6 +52,11 @@
       "cycle": "review-correction-plan",
       "decision": "local_critical_path",
       "reason": "bounded docs-only correction on the existing isolated branch; runtime exposes no subagent tool and user prohibited PR/external review"
+    },
+    {
+      "cycle": "review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused test-only differential cases reproduced all accepted action-help and literal-separator regressions before production edits"
     }
   ],
   "red": "go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed as expected in 11.332s on native registration count and DisableFlagParsing ownership",
@@ -82,7 +87,7 @@
   "correction": {
     "findingsAccepted": 2,
     "planUpdatedBeforeProduction": true,
-    "red": "pending",
+    "red": "focused correction test failed as expected in 0.570s: 10 action-help subtests returned CommandManual and literal-separator generation reported missing --dir",
     "green": "pending",
     "verification": "pending"
   },

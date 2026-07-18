@@ -61,8 +61,8 @@ Session `issue-427-review-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T1
 
 - [x] Accept and scope both medium findings from `/tmp/pm-397-review-427.log`.
 - [x] Update correction plan/TDD/checklist/run-state before production edits.
-- [ ] Capture focused RED for generate/validate/bogus trailing `--help` and `-h`, with missing/supplied directory flags.
-- [ ] Capture focused RED for generate/validate continuation after literal `--`.
+- [x] Capture focused RED for generate/validate/bogus trailing `--help` and `-h`, with missing/supplied directory flags (`0.570s`; 10 help-interception failures).
+- [x] Capture focused RED for generate/validate continuation after literal `--` (generation failed `missing --dir`).
 - [ ] Preserve native Cobra ownership and typed docs flags; no legacy-wrapper reversion.
 - [ ] Keep namespace help, other namespaces, exact outputs/error categories, and deferred Phase 14/19 behavior unchanged.
 - [ ] Focused docs/router/golden tests pass.

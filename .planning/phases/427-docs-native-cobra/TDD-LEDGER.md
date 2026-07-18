@@ -93,9 +93,11 @@ GSD evidence: `scripts/gsd doctor` and `scripts/gsd list` passed. `scripts/gsd p
 | Step | Kind | Planned command / evidence | Status |
 |---:|---|---|---|
 | C0 | Planning | Update correction plan, ledger, checklist, and run state before production edits | Complete |
-| C1 | RED | Focused docs differential tests: generate/validate/bogus trailing `--help`/`-h`, required/missing flags, literal `--` continuation | Pending |
+| C1 | RED | `go test ./internal/cli/ -run 'TestDocsActions(PreserveLegacyTrailingHelpBehavior|ContinueParsingAfterLiteralSeparator)$' -count=1` | Failed as expected (`0.570s`) |
 | C2 | GREEN | Smallest docs-only native Cobra compatibility seam | Pending |
 | C3 | Refactor/parity | Focused docs/router/golden plus base-vs-head binary matrix | Pending |
 | C4 | Gates | docs generation/validation/website parity, gofmt, vet, build, full CLI if indicated | Pending |
 
-No production file has been edited in this correction session at C0.
+No production file was edited before C1.
+
+Exact correction RED: all 10 generate/validate/bogus `--help`/`-h` subtests failed because Cobra returned the docs `CommandManual` with exit 0 instead of running the legacy action/error path. Literal-separator generation failed with exit 1 and `error: missing --dir`, proving pflag stopped before the supplied typed flags. These failures match both accepted medium findings and occurred after test-only edits.

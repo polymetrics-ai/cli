@@ -39,6 +39,101 @@ func TestDocsGeneratePreservesNativeFlagFormsAndArtifactBytes(t *testing.T) {
 	assertGeneratedConnectorDocsLocal(t, connectorsDir)
 }
 
+func TestDocsActionsPreserveLegacyTrailingHelpBehavior(t *testing.T) {
+	repoRoot, err := repoRootFromWorkingDir()
+	if err != nil {
+		t.Fatalf("locate repository root: %v", err)
+	}
+	t.Chdir(repoRoot)
+
+	for _, helpArg := range []string{"--help", "-h"} {
+		t.Run("generate missing dir "+helpArg, func(t *testing.T) {
+			stdout, stderr, code := runDocsCLI(t, []string{"docs", "generate", helpArg, "--json"})
+			if code != 1 || stderr == "" {
+				t.Fatalf("exit = %d, stderr = %q, want internal error; stdout=%q", code, stderr, stdout)
+			}
+			var result struct {
+				Kind  string `json:"kind"`
+				Error struct {
+					Category string `json:"category"`
+				} `json:"error"`
+			}
+			if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+				t.Fatalf("stdout not JSON: %v\n%s", err, stdout)
+			}
+			if result.Kind != "Error" || result.Error.Category != "internal" || strings.Contains(stdout, `"kind": "CommandManual"`) {
+				t.Fatalf("result = %+v, want unmasked internal error; stdout=%q", result, stdout)
+			}
+		})
+
+		t.Run("generate with dirs "+helpArg, func(t *testing.T) {
+			root := t.TempDir()
+			cliDir := filepath.Join(root, "cli")
+			connectorsDir := filepath.Join(root, "connectors")
+			stdout, stderr, code := runDocsCLI(t, []string{
+				"docs", "generate", "--dir=" + cliDir, "--connectors-dir=" + connectorsDir, helpArg,
+			})
+			if code != 0 || stderr != "" {
+				t.Fatalf("exit = %d, stderr = %q, want success; stdout=%q", code, stderr, stdout)
+			}
+			if want := "Generated docs in " + cliDir + " and connector docs in " + connectorsDir + "\n"; stdout != want {
+				t.Fatalf("stdout = %q, want %q", stdout, want)
+			}
+			assertGeneratedCLIManualBytes(t, cliDir)
+			assertGeneratedConnectorDocsLocal(t, connectorsDir)
+		})
+
+		t.Run("validate default "+helpArg, func(t *testing.T) {
+			stdout, stderr, code := runDocsCLI(t, []string{"docs", "validate", helpArg})
+			if code != 0 || stderr != "" || stdout != "Validated connector docs in docs/connectors\n" {
+				t.Fatalf("exit = %d, stdout = %q, stderr = %q, want default validation", code, stdout, stderr)
+			}
+		})
+
+		t.Run("validate with dir "+helpArg, func(t *testing.T) {
+			connectorsDir := filepath.Join(repoRoot, "docs", "connectors")
+			stdout, stderr, code := runDocsCLI(t, []string{
+				"docs", "validate", "--connectors-dir=" + connectorsDir, helpArg,
+			})
+			if code != 0 || stderr != "" || stdout != "Validated connector docs in "+connectorsDir+"\n" {
+				t.Fatalf("exit = %d, stdout = %q, stderr = %q, want explicit validation", code, stdout, stderr)
+			}
+		})
+
+		t.Run("bogus action "+helpArg, func(t *testing.T) {
+			stdout, stderr, code := runDocsCLI(t, []string{"docs", "bogus", helpArg})
+			if code != 2 || stdout != "" || stderr == "" {
+				t.Fatalf("exit = %d, stdout = %q, stderr = %q, want usage error", code, stdout, stderr)
+			}
+		})
+	}
+}
+
+func TestDocsActionsContinueParsingAfterLiteralSeparator(t *testing.T) {
+	root := t.TempDir()
+	cliDir := filepath.Join(root, "cli")
+	connectorsDir := filepath.Join(root, "connectors")
+
+	stdout, stderr, code := runDocsCLI(t, []string{
+		"docs", "generate", "--", "--dir=" + cliDir, "--connectors-dir=" + connectorsDir,
+	})
+	if code != 0 || stderr != "" {
+		t.Fatalf("generate exit = %d, stderr = %q, want success; stdout=%q", code, stderr, stdout)
+	}
+	if want := "Generated docs in " + cliDir + " and connector docs in " + connectorsDir + "\n"; stdout != want {
+		t.Fatalf("generate stdout = %q, want %q", stdout, want)
+	}
+	assertGeneratedCLIManualBytes(t, cliDir)
+	assertGeneratedConnectorDocsLocal(t, connectorsDir)
+
+	stdout, stderr, code = runDocsCLI(t, []string{
+		"docs", "validate", "--", "--connectors-dir=" + connectorsDir,
+	})
+	if code != 0 || stderr != "" || stdout != "Validated connector docs in "+connectorsDir+"\n" {
+		t.Fatalf("validate exit = %d, stdout = %q, stderr = %q, want explicit validation", code, stdout, stderr)
+	}
+}
+
 func TestDocsGenerateAndValidatePreserveBareAndFallbackDirectoryForms(t *testing.T) {
 	root := chdirDocsTempRoot(t)
 
