@@ -20,9 +20,19 @@ Session `issue-429-normalization-order-correction-pi-openai-20260718T215811Z`; e
 | N0 | Review/plan | Record the normalization-order finding, metadata-only RED matrix, capture → normalize → filter design, protection gates, differential, and checkpoint sequence before production edits | Complete |
 | N1 | RED | `go test ./internal/cli -run 'TestCredentials(KnownAddFlagNamesPreserveSingleHyphenSpacedValues|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1` | Failed as required in `18.206s` (wall `20.584s`): all four known-flag-shaped names rejected the metadata-only spaced-value case; raw-carrier and invalid action/name ownership protections stayed green |
 | N2 | GREEN | Capture/remove the private first name without tail filtering; normalize StringArray spaced values; then filter the legacy tail | Pass: focused metadata/protection gate `20.167s` (wall `22.347s`); all four known-flag-shaped names preserve connector, config-key, and secret-field metadata while raw-carrier and invalid action/name ownership remain green |
-| N3 | Verify | Focused/protection/repeated/race CLI, exact parent-base/start/head differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pending |
+| N3 | Verify | Focused/protection/repeated/race CLI, exact parent-base/start/head differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pass: focused `85.690s`; repeated ×5 `100.438s`; race `223.261s`; differential base/head 4/4 metadata, start 4/4 mismatch, eight exact output pairs; full CLI `343.447s`; remaining gates clean |
 
-Tests use temporary roots and synthetic environment/stdin inputs. Assertions inspect metadata structure only and must not print, summarize, or persist input values.
+Tests use temporary roots and synthetic environment/stdin inputs. Assertions inspect metadata structure only and do not print, summarize, or persist input values.
+
+### Normalization-order final evidence
+
+- RED: focused package failed in `18.206s` (wall `20.584s`) for exactly the four new metadata cases; raw-carrier and invalid action/name ownership protections stayed green.
+- GREEN: focused metadata/protection passed in `20.167s` (wall `22.347s`).
+- Stability: broader focused/protection passed in `85.690s`; the correction/protection matrix repeated five times in `100.438s`; focused race passed in `223.261s`.
+- Differential: exact parent base and final head preserved single-hyphen secret-field metadata for four known-flag-shaped names; exact correction start mismatched all four; eight base/head add/remove stdout/stderr pairs matched exactly.
+- Full CLI: `go test -timeout 20m ./internal/cli/... -count=1` passed in `343.447s` (wall `345.648s`).
+- `gofmt -w cmd internal`, help parity, `go vet ./...` (`2.623s`), `go build ./cmd/pm` (`4.349s`), current/start diff, scope, dependency, and clean-worktree gates passed.
+- Checkpoints: `adabce05` planning, `20370fda` RED, `2df70e29` GREEN; final evidence checkpoint prepared for push.
 
 ## Targeted parser-order correction ledger
 

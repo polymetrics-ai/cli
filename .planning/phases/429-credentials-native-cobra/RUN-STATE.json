@@ -78,8 +78,11 @@
   "normalizationOrderCorrectionFindingsAccepted": ["MEDIUM_spaced_string_array_value_filtered_before_binding"],
   "normalizationOrderCorrectionRed": "focused pre-production CLI failed as required in 18.206s (wall 20.584s): all four known-flag-shaped credential names rejected the metadata-only single-hyphen spaced-value case while raw-carrier and invalid action/name ownership protections remained green",
   "normalizationOrderCorrectionGreen": "private first-name capture/removal now precedes StringArray normalization and legacy-tail filtering; focused metadata/protection gate passed in 20.167s (wall 22.347s) for all four known-flag-shaped names",
-  "status": "normalization_order_correction_in_progress",
-  "verificationPassed": false,
+  "normalizationOrderCorrectionEndedAt": "20260718T221709Z",
+  "normalizationOrderCorrectionEndingImplementationHead": "2df70e29c7e924eec1404eb0d208ff3a41320ed0",
+  "normalizationOrderCorrectionVerification": "pass: focused 85.690s; repeated x5 100.438s; race 223.261s; differential base/head 4/4 metadata, start 4/4 mismatch, 8 exact output pairs; full CLI 343.447s; help, gofmt, vet, build, diff, scope, and dependency gates clean",
+  "status": "complete_verified_pushed_no_pr_no_review",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -90,6 +93,16 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "normalization-order-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "the accepted normalization-order finding is closed, exact evidence is finalized, coherent checkpoints are pushed, and the user prohibited private output, services, dependencies, PR, and review"
+    },
+    {
+      "cycle": "normalization-order-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused, repeated, race, exact parent-base/start/head differential, full CLI, help parity, gofmt, vet, build, diff, scope, and dependency gates passed"
+    },
     {
       "cycle": "normalization-order-correction-green",
       "decision": "local_critical_path",
@@ -372,9 +385,12 @@
     "199b802c fix(credentials): restore safety-valid legacy names",
     "adb0eab9 docs(planning): plan final parser-order correction",
     "7f0357a9 test(credentials): expose parser-order regression",
-    "9e87a007 fix(credentials): preserve name before tail normalization"
+    "9e87a007 fix(credentials): preserve name before tail normalization",
+    "adabce05 docs(planning): plan normalization-order correction",
+    "20370fda test(credentials): expose spaced value filtering",
+    "2df70e29 fix(credentials): preserve spaced hyphen values"
   ],
-  "push": "all original and six correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
+  "push": "all original and seven correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
   "secondCorrectionReviewRoute": "not_run_user_prohibited_review",

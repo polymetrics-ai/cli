@@ -35,7 +35,7 @@ Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`
 
 Downstream artifact: metadata-only RED coverage for single-hyphen spaced StringArray values after known-flag-shaped names; capture → normalize → filter correction; preserved parser/security protections; finalized phase evidence.
 
-Verification result: pending strict RED, GREEN, focused/protection/repeated/race, exact parent-base/start/head differential, full CLI, gofmt, vet, build, and diff/scope/dependency gates.
+Verification result: pass. Strict metadata-only RED failed all four new cases while protections stayed green; focused GREEN passed after capture → normalize → filter ordering. Focused/protection (`85.690s`), repeated ×5 (`100.438s`), race (`223.261s`), exact parent-base/start/head differential, full CLI (`343.447s`), help parity, gofmt, vet, build, diff/scope/dependency gates passed. No private value output, services, dependencies, PR, or review.
 
 ## Targeted final parser-order correction snapshot
 

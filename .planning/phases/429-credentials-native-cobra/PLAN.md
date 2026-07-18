@@ -19,6 +19,12 @@ Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace
 - Smallest implementation: reject raw carriers; privately capture/remove the first required name without filtering its tail; normalize spaced StringArray values on that tail; only then apply legacy-tail filtering. Preserve private validation, first-name ownership, ignored positionals, bare/assigned/repeated flags, raw-carrier rejection, action discovery boundaries, help/global behavior, and output redaction.
 - Verification: focused RED/GREEN; protection matrix; repeated and race CLI; exact parent-base/correction-start/head differential; full CLI; `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, and diff/scope/dependency guards. Commit and push coherent planning, RED, GREEN, and final evidence checkpoints. No private value output, services, dependencies, PR, or review.
 
+### Normalization-order correction completion
+
+Completed at implementation head `2df70e29c7e924eec1404eb0d208ff3a41320ed0` on `20260718T221709Z`. Metadata-only RED failed all four known-flag-shaped name cases while parser/security protections stayed green. The router now captures/removes the private first name, normalizes spaced StringArray values on the intact tail, and then applies legacy-tail filtering.
+
+Focused/protection (`85.690s`), repeated ×5 (`100.438s`), race (`223.261s`), exact parent-base/start/head differential, full CLI (`343.447s`), help parity, gofmt, vet, build, diff, scope, and dependency gates passed. Differential covered four names: base/head preserved the single-hyphen secret-field metadata 4/4, exact start mismatched 4/4, and eight base/head add/remove output pairs matched. No private value output, services, dependencies, checked-in docs/website delta, PR, or review.
+
 ## Targeted final parser-order correction from exact head 4870f53b
 
 - Session: `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`.

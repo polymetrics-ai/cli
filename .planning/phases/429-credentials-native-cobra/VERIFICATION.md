@@ -11,11 +11,12 @@ Invocation `issue-429-normalization-order-correction-pi-openai-20260718T215811Z`
 - [x] RED: every known add-flag-shaped credential name rejected spaced StringArray data beginning with one hyphen (`18.206s`, wall `20.584s`); assertions inspected metadata structure and printed no values.
 - [x] RED preservation gate: raw internal-carrier rejection and invalid action/name ownership remained green in the same focused run.
 - [x] GREEN: capture/remove the private first name, normalize spaced StringArray values, then apply legacy-tail filtering; focused metadata/protection gate passed in `20.167s` (wall `22.347s`).
-- [ ] Focused, repeated, race, exact parent-base/correction-start/head differential, and full CLI pass without private value output.
-- [ ] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified.
-- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, diff/scope/dependency guards, coherent commits, and push pass. No services, dependencies, PR, or review.
+- [x] Focused (`85.690s`), repeated ×5 (`100.438s`), race (`223.261s`), exact parent-base/correction-start/head differential, and full CLI (`343.447s`) pass without private value output.
+- [x] Differential: parent base/head preserved the single-hyphen secret-field metadata for all four names; exact correction start mismatched all four; eight base/head add/remove output pairs matched exactly.
+- [x] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified: topic/bare/long-help match exactly, invalid action exits 2, and checked-in docs/website scope is clean.
+- [x] `gofmt -w cmd internal`, `go vet ./...` (`2.623s`), `go build ./cmd/pm` (`4.349s`), diff/scope/dependency guards, coherent commits, and push pass. No services, dependencies, PR, or review.
 
-Result: in progress; `verificationPassed=false` until the full user-declared gate set passes.
+Result: pass; `verificationPassed=true` for the full user-declared normalization-order correction gate set.
 
 ## Targeted parser-order correction checklist
 

@@ -1,10 +1,12 @@
 # Phase 429 Summary
 
-Status: normalization-order correction in progress from exact head `2013d361c949395f41bb6a30209d65cbec4a62c2`; MEDIUM spaced StringArray value finding accepted; verification pending; no private output, services, dependencies, PR, or review.
+Status: normalization-order correction complete and verified from exact head `2013d361c949395f41bb6a30209d65cbec4a62c2`; MEDIUM spaced StringArray value finding closed; no private output, services, dependencies, PR, or review.
 
 ## Normalization-order correction
 
-Planning, TDD, verification, prompt, summary, and run-state artifacts were reopened before test or production edits. Strict RED then failed all four known add-flag-shaped name cases in `18.206s` (wall `20.584s`) while raw-carrier and invalid action/name ownership protections stayed green; assertions inspected metadata structure and printed no values. The router now rejects raw carriers, privately captures/removes the first name without filtering, normalizes spaced StringArray values, and only then filters the legacy tail. Focused GREEN passed in `20.167s` (wall `22.347s`). All first-name, action-discovery, carrier, help/global, compatibility, and redaction protections remain mandatory.
+Planning, TDD, verification, prompt, summary, and run-state artifacts were reopened before test or production edits. Strict RED then failed all four known add-flag-shaped name cases in `18.206s` (wall `20.584s`) while raw-carrier and invalid action/name ownership protections stayed green; assertions inspected metadata structure and printed no values. The router now rejects raw carriers, privately captures/removes the first name without filtering, normalizes spaced StringArray values, and only then filters the legacy tail. Focused GREEN passed in `20.167s` (wall `22.347s`).
+
+Focused/protection (`85.690s`), repeated ×5 (`100.438s`), race (`223.261s`), exact parent-base/start/head differential, full CLI (`343.447s`), help parity, gofmt, vet, build, diff, scope, and dependency gates passed. Parent base/head preserved metadata 4/4, exact start mismatched 4/4, and eight base/head output pairs matched exactly. Implementation head: `2df70e29c7e924eec1404eb0d208ff3a41320ed0`. All first-name, action-discovery, carrier, help/global, compatibility, and redaction protections remain intact.
 
 ## Targeted final parser-order correction
 
