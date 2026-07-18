@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -15,6 +16,7 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/safety"
 )
 
 // This compile-time reference is intentional TDD evidence: the focused test
@@ -381,6 +383,62 @@ func TestCredentialsTestRejectsSymlinkEscapeBeforeLocalConnectorEffects(t *testi
 	}
 }
 
+func TestCredentialsSafetyValidPrivateNamesSupportAddInspectRemove(t *testing.T) {
+	names := []string{
+		"-", "-a", "-A", "-0", "-_", "-.",
+		"--", "---", "--a", "--A", "--0", "--_", "--.", "--legacy",
+	}
+	for _, name := range names {
+		t.Run(name, func(t *testing.T) {
+			if err := safety.ValidateIdentifier(name, "credential"); err != nil {
+				t.Fatalf("test name must satisfy ordinary identifier validation: %v", err)
+			}
+
+			root := initCredentialsProject(t)
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+				"credentials", "add", "ownership-decoy", "--connector=sample"); err != nil {
+				t.Fatalf("seed ownership decoy: %v", err)
+			}
+
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+				"credentials", "add", name, "ownership-decoy", "--connector=sample"); err != nil {
+				t.Fatalf("add safety-valid credential name: %v", err)
+			}
+			a, err := app.Open(root)
+			if err != nil {
+				t.Fatalf("open temporary project after add: %v", err)
+			}
+			if _, err := a.InspectCredential(name); err != nil {
+				t.Fatalf("add did not preserve first-token ownership: %v", err)
+			}
+
+			stdout, err := executeCredentialsCommand(t, root, true, strings.NewReader(""),
+				"credentials", "inspect", name, "ownership-decoy")
+			if err != nil {
+				t.Fatalf("inspect safety-valid credential name: %v", err)
+			}
+			if !strings.Contains(stdout, `"name": `+strconv.Quote(name)) {
+				t.Fatal("inspect did not preserve first-token ownership")
+			}
+
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+				"credentials", "remove", name, "ownership-decoy"); err != nil {
+				t.Fatalf("remove safety-valid credential name: %v", err)
+			}
+			a, err = app.Open(root)
+			if err != nil {
+				t.Fatalf("open temporary project after remove: %v", err)
+			}
+			if _, err := a.InspectCredential(name); err == nil {
+				t.Fatal("remove left the first-token credential in place")
+			}
+			if _, err := a.InspectCredential("ownership-decoy"); err != nil {
+				t.Fatalf("remove discovered the later credential name: %v", err)
+			}
+		})
+	}
+}
+
 func TestCredentialsLegacyValidateIdentifierNamesRemainInspectableAndRemovable(t *testing.T) {
 	for _, name := range []string{"_legacy", ".legacy", "-legacy"} {
 		t.Run(name, func(t *testing.T) {
@@ -647,10 +705,9 @@ func TestCredentialsLeadingInvalidTokensCannotDiscoverActions(t *testing.T) {
 func TestCredentialsLeadingInvalidNameTokensCannotDiscoverLaterNames(t *testing.T) {
 	leading := [][]string{
 		{"--unknown=x"},
-		{"--unknown"},
-		{"-x"},
+		{"-?"},
 		{"--help=false"},
-		{"--"},
+		{"--bad/name"},
 	}
 	for _, head := range leading {
 		name := strings.NewReplacer("-", "dash", "=", "eq").Replace(strings.Join(head, "_"))

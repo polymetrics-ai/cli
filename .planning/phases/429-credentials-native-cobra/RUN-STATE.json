@@ -72,6 +72,11 @@
   },
   "orchestrationDecisions": [
     {
+      "cycle": "compatibility-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "strict pre-production tests failed as required: all 14 safety-valid short or double-hyphen add cases were rejected while raw internal-carrier and invalid action/name ownership guards stayed green"
+    },
+    {
       "cycle": "compatibility-correction-plan",
       "decision": "local_critical_path",
       "reason": "one bounded credentials validation correction shares the router and test critical path; this runtime exposes no subagent tool, and the user prohibited services, PR, and review"
@@ -237,6 +242,7 @@
       "reason": "issue-local artifacts finalized with exact TDD, safety, parity, verification, commit, and push evidence; post-fix local review was clean and user prohibited PR/external review"
     }
   ],
+  "compatibilityCorrectionRed": "focused pre-production CLI failed as required in 23.030s: all 14 safety-valid short or double-hyphen compatibility subtests were rejected by private validation while raw internal-carrier and invalid action/name ownership guards remained green",
   "finalCorrectionRed": "focused pre-production CLI failed with leading-hyphen add exit 1 while raw-carrier/no-discovery guards stayed green; focused app failed because truncate and truncate-create final-temp rejection left the already-open overwrite raw temp; CLI 23.649s, app 3.576s",
   "finalCorrectionGreen": "focused CLI/app/safety passed in 19.187s/3.362s/0.473s; repeated x5 CLI/app passed in 97.954s/16.976s; race CLI/app/localwrite passed in 214.993s/34.800s/1.406s",
   "finalCorrectionVerification": "pass: connector writes x5/race 0.471s/1.364s; exact parent-base/start/head exits 0/1/0 with byte-identical base/head output; full relevant CLI/app/safety/connectors 289.768s/30.339s/0.320s/0.474s; help routes exact and invalid action 2; gofmt, vet, build, diff, scope, and dependency gates clean",

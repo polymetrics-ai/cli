@@ -18,7 +18,7 @@ Session `issue-429-compatibility-correction-pi-openai-20260718T202616Z`; exact c
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | K0 | Review/plan | Record the accepted compatibility finding, complete safety-valid name matrix, ordinary-validation design, adversarial preservation gates, differential, and checkpoint sequence before production edits | Complete |
-| K1 | RED | Add config-only `add` → `inspect` → `remove` cases for `-`, `-a`, `--`, and `--legacy`; run them with existing raw-carrier and leading-invalid/action-ownership guards | Pending |
+| K1 | RED | `go test ./internal/cli -run 'TestCredentials(SafetyValidPrivateNamesSupportAddInspectRemove|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1` | Failed as required in `23.030s`: all 14 safety-valid short/double-hyphen add cases were rejected by private validation; raw-carrier rejection and invalid action/name ownership guards stayed green |
 | K2 | GREEN | Remove unnecessary private-name length/double-hyphen restrictions and use ordinary credential identifier validation without changing discovery | Pending |
 | K3 | Verify | Focused/adversarial/repeated/race CLI, exact-start differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pending |
 
