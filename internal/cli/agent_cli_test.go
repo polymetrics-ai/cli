@@ -344,6 +344,87 @@ func TestAgentLeadingInvalidActionTokensCannotReachImageRuntime(t *testing.T) {
 	}
 }
 
+func TestAgentClusteredShortHelpTailsPreserveValidActions(t *testing.T) {
+	root := t.TempDir()
+	containerfile := filepath.Join(root, "build", "agent", "Containerfile")
+	clusters := []string{"-hx", "-xh", "-hh", "-xhy", "-zzhzz"}
+	actions := []struct {
+		name       string
+		args       []string
+		wantOutput string
+		wantFiles  []string
+		wantCalls  []agentImageRuntimeCall
+	}{
+		{
+			name:       "plan",
+			args:       []string{"agent", "plan", "--request", "sample customers"},
+			wantOutput: sampleAgentPlanText(),
+		},
+		{
+			name:       "build",
+			args:       []string{"agent", "image", "build"},
+			wantOutput: "AgentImageBuild ok: ghcr.io/example/agent:test\n",
+			wantFiles:  []string{containerfile},
+			wantCalls: []agentImageRuntimeCall{{
+				bin:  "fake-podman",
+				args: []string{"build", "-f", containerfile, "-t", "ghcr.io/example/agent:test", filepath.Dir(containerfile)},
+			}},
+		},
+		{
+			name:       "pull",
+			args:       []string{"agent", "image", "pull"},
+			wantOutput: "AgentImagePull ok: ghcr.io/example/agent:test\n",
+			wantCalls: []agentImageRuntimeCall{{
+				bin:  "fake-podman",
+				args: []string{"pull", "ghcr.io/example/agent:test"},
+			}},
+		},
+		{
+			name:       "ensure",
+			args:       []string{"agent", "image", "ensure"},
+			wantOutput: "agent image present: ghcr.io/example/agent:test\n",
+			wantCalls: []agentImageRuntimeCall{{
+				bin:  "fake-podman",
+				args: []string{"image", "exists", "ghcr.io/example/agent:test"},
+			}},
+		},
+	}
+
+	for _, action := range actions {
+		for _, cluster := range clusters {
+			t.Run(action.name+"/"+cluster, func(t *testing.T) {
+				fake := &fakeAgentImageRuntime{}
+				var stdout, stderr bytes.Buffer
+				cmd := newRootCmdWithAgentImageRuntime(context.Background(), agentTestConfig(root, false), &stdout, &stderr, fake)
+				args := append(append([]string(nil), action.args...), cluster)
+
+				if err := executeRootCmd(cmd, args); err != nil {
+					t.Fatalf("executeRootCmd(%v): %v", args, err)
+				}
+				if got := stdout.String(); got != action.wantOutput {
+					t.Fatalf("stdout = %q, want %q", got, action.wantOutput)
+				}
+				if strings.Contains(stdout.String(), "pm agent - produce typed command plans") {
+					t.Fatalf("clustered valid-action tail rendered unexpected help: %q", stdout.String())
+				}
+				if !reflect.DeepEqual(fake.files, action.wantFiles) {
+					t.Fatalf("file checks = %#v, want %#v", fake.files, action.wantFiles)
+				}
+				if !reflect.DeepEqual(fake.calls, action.wantCalls) {
+					t.Fatalf("runtime calls = %#v, want %#v", fake.calls, action.wantCalls)
+				}
+				if action.name == "plan" {
+					if len(fake.lookups) != 0 {
+						t.Fatalf("plan unexpectedly reached image runtime lookup: %v", fake.lookups)
+					}
+				} else if !reflect.DeepEqual(fake.lookups, []string{"fake-podman"}) {
+					t.Fatalf("runtime lookups = %#v, want fake-podman", fake.lookups)
+				}
+			})
+		}
+	}
+}
+
 func TestAgentImageNativeActionsPreserveUnknownFlagsHelpAndSeparator(t *testing.T) {
 	root := t.TempDir()
 	for _, args := range [][]string{

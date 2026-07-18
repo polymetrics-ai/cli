@@ -19,7 +19,7 @@
   "secondCorrectionStartedAt": "20260718T140317Z",
   "secondCorrectionStartingHead": "af604d7178c83d21d77abedfa3c4dee29f94c089",
   "secondCorrectionModel": "not_exposed_by_runtime",
-  "status": "second_correction_planned",
+  "status": "second_correction_red",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -35,7 +35,7 @@
   "secondCorrection": {
     "finding": "accepted Medium: clustered single-dash tails containing h suppress valid plan/build/pull/ensure execution through Cobra help",
     "scope": "agent valid-action tail normalization and focused tests only",
-    "red": "pending",
+    "red": "TestAgentClusteredShortHelpTailsPreserveValidActions failed before production edits: all 20 plan/build/pull/ensure by clustered-tail cases rendered agent help and suppressed expected image runtime calls; package 0.582s, wall 5.302s",
     "green": "pending",
     "verification": "pending",
     "endedAt": null,
@@ -96,6 +96,11 @@
       "cycle": "second-correction-plan",
       "decision": "local_critical_path",
       "reason": "one bounded agent-tail parser defect shares the isolated router/test scope; no subagent tool is available and the user prohibited external review"
+    },
+    {
+      "cycle": "second-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "the focused pre-production test deterministically reproduced false-success help suppression in all 20 plan and fake image-runtime cluster-tail cases"
     }
   ],
   "red": "initial focused agent/router build RED plus correction RED: TestAgentLeadingInvalidActionTokensCannotReachImageRuntime failed before correction production edits in 0.587s because assigned unknown/help-like and image literal heads reached later actions or runtime lookup",

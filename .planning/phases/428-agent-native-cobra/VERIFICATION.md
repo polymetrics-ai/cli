@@ -10,7 +10,7 @@ Second-correction session `issue-428-second-correction-pi-20260718T140317Z`; run
 - [x] GSD doctor passed; exact programming-loop prompt invocation failed because the command is absent; manual universal-loop fallback recorded.
 - [x] Required GSD, CLI/Cobra, testing/troubleshooting, error, security, and safety skills loaded; runtime/RLM and CLI parity references read.
 - [x] PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE updated before test or production edits.
-- [ ] Clustered-tail plan/output and fake-runtime tests fail before production edits, including no unexpected help and expected build/pull/ensure calls.
+- [x] Clustered-tail plan/output and fake-runtime tests failed before production edits: all 20 plan/build/pull/ensure × `-hx`/`-xh`/`-hh`/`-xhy`/`-zzhzz` cases rendered the agent manual and suppressed expected image runtime calls (`0.582s`; wall `5.302s`).
 - [ ] Smallest agent-scoped normalization passes without changing root/other namespaces or ordinary exact `agent -h` help.
 - [ ] Focused, repeated, race, adversarial, and exact legacy-base differential gates pass.
 - [ ] Full CLI test is run if focused evidence indicates it is needed.
