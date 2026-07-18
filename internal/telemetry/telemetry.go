@@ -171,7 +171,7 @@ func Init(ctx context.Context, cfg Config, warn WarningFunc) (context.Context, *
 		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
 	}
 
-	provider, err := newTracerProvider(ctx, exporter, cfg, warn)
+	provider, starter, err := newTracerProvider(ctx, exporter, cfg, warn)
 	if err != nil {
 		_ = exporter.Shutdown(ctx)
 		if file != nil {
@@ -199,29 +199,6 @@ func Init(ctx context.Context, cfg Config, warn WarningFunc) (context.Context, *
 		return errors.Join(errs...)
 	}
 
-	tracer := provider.Tracer("polymetrics.ai/pm")
-	starter := startFunc(func(parent context.Context, name string, attrs []attribute.KeyValue) (context.Context, Span) {
-		spanCtx, span := tracer.Start(parent, name)
-		if len(attrs) > 0 {
-			span.SetAttributes(attrs...)
-		}
-		return spanCtx, otelSpan{
-			ctx: spanCtx,
-			end: func() {
-				span.End()
-			},
-			addEvent: func(name string, attrs []attribute.KeyValue) {
-				if len(attrs) == 0 {
-					span.AddEvent(name)
-					return
-				}
-				span.AddEvent(name, trace.WithAttributes(attrs...))
-			},
-			setAttributes: span.SetAttributes,
-			setStatus:     span.SetStatus,
-			isRecording:   span.IsRecording,
-		}
-	})
 	ctx = context.WithValue(ctx, tracerContextKey{}, starter)
 	ctx = context.WithValue(ctx, captureContextKey{}, normalizeCapture(cfg.Capture))
 	return ctx, handle
@@ -270,9 +247,10 @@ func HTTPAttrs(method, rawURL string) []Attr {
 	}
 }
 
-func newTracerProvider(ctx context.Context, exporter sdktrace.SpanExporter, cfg Config, warn WarningFunc) (*sdktrace.TracerProvider, error) {
+func newTracerProvider(ctx context.Context, exporter sdktrace.SpanExporter, cfg Config, warn WarningFunc) (*sdktrace.TracerProvider, startFunc, error) {
 	warnUnsupportedSDKEnv(ctx, warn)
 	var provider *sdktrace.TracerProvider
+	var tracer trace.Tracer
 	err := withSanitizedSDKEnv(func() error {
 		provider = sdktrace.NewTracerProvider(
 			sdktrace.WithSyncer(exporter),
@@ -280,12 +258,38 @@ func newTracerProvider(ctx context.Context, exporter sdktrace.SpanExporter, cfg 
 			sdktrace.WithResource(safeResource(cfg)),
 			sdktrace.WithRawSpanLimits(defaultSpanLimits()),
 		)
+		tracer = provider.Tracer("polymetrics.ai/pm")
 		return nil
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return provider, nil
+	return provider, startFuncForTracer(tracer), nil
+}
+
+func startFuncForTracer(tracer trace.Tracer) startFunc {
+	return func(parent context.Context, name string, attrs []attribute.KeyValue) (context.Context, Span) {
+		spanCtx, span := tracer.Start(parent, name)
+		if len(attrs) > 0 {
+			span.SetAttributes(attrs...)
+		}
+		return spanCtx, otelSpan{
+			ctx: spanCtx,
+			end: func() {
+				span.End()
+			},
+			addEvent: func(name string, attrs []attribute.KeyValue) {
+				if len(attrs) == 0 {
+					span.AddEvent(name)
+					return
+				}
+				span.AddEvent(name, trace.WithAttributes(attrs...))
+			},
+			setAttributes: span.SetAttributes,
+			setStatus:     span.SetStatus,
+			isRecording:   span.IsRecording,
+		}
+	}
 }
 
 func safeResource(cfg Config) *resource.Resource {
@@ -512,6 +516,7 @@ var (
 		"OTEL_BSP_MAX_EXPORT_BATCH_SIZE",
 		"OTEL_GO_X_RESOURCE",
 		"OTEL_GO_X_OBSERVABILITY",
+		"OTEL_GO_X_SELF_OBSERVABILITY",
 	}
 
 	unsupportedOTLPEnv = []string{

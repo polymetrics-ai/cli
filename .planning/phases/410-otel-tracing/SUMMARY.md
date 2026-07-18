@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: final SDK-level env hardening verified, PR body updated, and branch pushed for PR #459.
+Status: narrow final alias/tracer-closure fix verified locally and PR #459 body updated; branch push pending.
 
 ## Current state
 
@@ -52,6 +52,13 @@ Current execution decision: `local_critical_path`. This worker stayed on `feat/4
 - Covered env includes `OTEL_RESOURCE_ATTRIBUTES`, `OTEL_SERVICE_NAME`, `OTEL_TRACES_SAMPLER(_ARG)`, span/attribute/link/event limits, BSP limits, and experimental Go OTel toggles.
 - File exporter and OTLP regressions prove synthetic `api_key` resource attrs/service markers do not export; invalid sampler args no longer hit raw process stderr.
 - `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` is in config test env cleanup/list.
+- No Claude/Copilot request.
+
+## Narrow final alias/tracer-closure delivered
+
+- Added `OTEL_GO_X_SELF_OBSERVABILITY` to unsupported SDK env handling alongside `OTEL_GO_X_OBSERVABILITY`.
+- Moved `provider.Tracer("polymetrics.ai/pm")` creation inside the SDK-env sanitized closure with `sdktrace.NewTracerProvider`.
+- Added focused CLI coverage for both env names: project warnings by env name only, no raw process stderr, and no synthetic/self-observability leakage in exported telemetry.
 - No Claude/Copilot request.
 
 ## Verification final

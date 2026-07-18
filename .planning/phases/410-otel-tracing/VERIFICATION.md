@@ -1,5 +1,14 @@
 # Verification — Phase 410 OpenTelemetry tracing
 
+## Narrow final alias/tracer-closure checklist (PR #459 head `0fc39148004d699f35239a17418cd095bdd4a1ed`)
+
+- [x] Red tests captured before production edits for both `OTEL_GO_X_OBSERVABILITY` and `OTEL_GO_X_SELF_OBSERVABILITY`.
+- [x] Both env names are in unsupported SDK env handling and warn through project stderr by env name only.
+- [x] `provider.Tracer("polymetrics.ai/pm")` is created while SDK env remains sanitized, not after restore.
+- [x] Raw process stderr remains empty when either env is set.
+- [x] Exported telemetry contains no synthetic env values, no `self_observability`, and no SDK self-observability metric names.
+- [x] Focused tests, full gates when feasible, `git diff --check`, and `git diff -- go.mod go.sum` complete. Note: exact `go test ./...` hit default 10m package timeout twice in slow pre-existing packages; verify-equivalent `go test -timeout 20m ./...` and `make verify` passed.
+
 ## Final security hardening checklist (PR #459 head `216b5e076d82302621574a9fb4fa71c8acb79204`)
 
 - [x] Red tests captured before production edits for SDK/provider/resource ambient OTel env bypass.
@@ -102,6 +111,12 @@ go test ./internal/cli -run 'TestTelemetrySanitizesSDKResourceEnvForFileExporter
 go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry|TestLoadTelemetry|Config' -count=1
 ```
 
+## Narrow final alias/tracer-closure focused gates to run
+
+```bash
+go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X' -count=1
+```
+
 ## Review-fix final gates to rerun
 
 ```bash
@@ -169,3 +184,13 @@ Additional smoke/parity:
 | `make verify` (SDK-env final) | pass | fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, lint, and connectorgen validate passed. |
 | Temp docs generation + diff | pass | `go run ./cmd/pm docs generate --dir "$TMP_DOCS/cli" --connectors-dir "$TMP_DOCS/connectors"`; `diff -ru docs/cli "$TMP_DOCS/cli"` clean. |
 | `git diff --check`; `git diff -- go.mod go.sum` (SDK-env final) | pass | No output. |
+| `scripts/gsd doctor` (final alias/tracer-closure rerun) | pass | Adapter checks all `ok`; 69 commands. |
+| `scripts/gsd prompt plan-phase 410 --skip-research` (final alias/tracer-closure rerun) | pass | Prompt regenerated to `/tmp/gsd-plan-phase-410-final-alias.txt`. |
+| `scripts/gsd prompt programming-loop init --phase 410 --dry-run` (final alias/tracer-closure rerun) | fail/fallback | `unknown GSD command: programming-loop`; manual GSD fallback remains active. |
+| `go test ./internal/cli ./internal/telemetry -run 'Telemetry\|OTEL_GO_X' -count=1` (final alias red) | fail | Expected red: `TestTelemetryOTEL_GO_XSelfObservabilityEnvWarningIsProjectOnly` missing `OTEL_GO_X_SELF_OBSERVABILITY` warning; `internal/telemetry` passed. |
+| `go test ./internal/cli ./internal/telemetry -run 'Telemetry\|OTEL_GO_X' -count=1` (final alias green) | pass | Focused env alias tests passed. |
+| `gofmt -w cmd internal`; `go vet ./...` | pass | No output. |
+| `go test ./...` | fail | Repeated default 10m package timeouts in slow `internal/cli` and `internal/connectors/certify` tests while loading connector bundles; reran with 20m timeout. |
+| `go test -timeout 20m ./internal/cli ./internal/connectors/certify -count=1`; `go test -timeout 20m ./...` | pass | Slow package reruns and full 20m suite passed. |
+| `go build ./cmd/pm`; `make verify` | pass | Build produced no output; `make verify` passed fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, connectorgen validate. |
+| `git diff --check`; `git diff -- go.mod go.sum` (final alias) | pass | No output. |

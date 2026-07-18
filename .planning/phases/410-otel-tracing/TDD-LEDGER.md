@@ -38,6 +38,8 @@ scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-final
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-final-reviewfix.txt
 scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-final-sdk-env.txt
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-final-sdk-env.txt
+scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-final-alias.txt
+scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-final-alias.txt
 ```
 
 Result:
@@ -48,6 +50,7 @@ Result:
 - Review-fix rerun in this Pi worker: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 - Final focused review-fix rerun at PR #459 head `75433cefa9a00671b06c6c3e83bcde1e4730211c`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 - Final SDK-env hardening rerun at PR #459 head `216b5e076d82302621574a9fb4fa71c8acb79204`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
+- Narrow final alias/tracer-closure rerun at PR #459 head `0fc39148004d699f35239a17418cd095bdd4a1ed`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 
 ## Review-fix accepted findings
 
@@ -79,6 +82,12 @@ Result:
 | MED SDK/provider/resource OpenTelemetry env bypass can read `OTEL_RESOURCE_ATTRIBUTES`, `OTEL_SERVICE_NAME`, `OTEL_TRACES_SAMPLER(_ARG)`, span limits, BSP limits, and experimental OTel env during resource/provider construction | Accepted | File and OTLP regression tests assert synthetic `api_key` resource attrs/service name never export and warnings name env only |
 | MED invalid sampler args may hit raw process stderr before project warning/redaction | Accepted | CLI test captures raw process stderr while invalid sampler env is set; expects empty process stderr and project warning only by env name |
 | LOW config test isolation missing traces endpoint cleanup/list if needed | Accepted | `clearBoundEnv`/env list includes `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` |
+
+## Narrow final alias/tracer-closure accepted finding
+
+| Finding | Disposition | Planned red evidence |
+|---|---|---|
+| MED `OTEL_GO_X_SELF_OBSERVABILITY` alias omitted and `provider.Tracer("polymetrics.ai/pm")` created after SDK env restore | Accepted | Focused CLI tests for `OTEL_GO_X_OBSERVABILITY` and `OTEL_GO_X_SELF_OBSERVABILITY` assert project warnings by env name only, no raw process stderr, and no self-observability/secret marker leakage from exported telemetry. |
 
 ## Ledger
 
@@ -112,6 +121,12 @@ Result:
 | 26 | sdk-env final hardening green | Test | `go test ./internal/cli ./internal/config -run 'TestTelemetrySanitizesSDKResourceEnvForFileExporter|TestTelemetrySanitizesSDKResourceEnvForOTLPExporter|TestTelemetrySanitizesInvalidSamplerEnvBeforeProvider|TestAllBoundEnvVarsIncludesOTLPTracesEndpoint' -count=1`; `go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry|TestLoadTelemetry|Config' -count=1` | Pass | SDK resource/service/sampler env now warned by name only and unset around explicit safe resource/provider construction; file and OTLP payloads omit synthetic `api_key` markers; process stderr remains empty. |
 | 27 | sdk-env final hardening gates | Focused/full Go gates | `gofmt -w cmd internal`; `go vet ./...`; `go build ./cmd/pm`; `go test ./...` | Pass | `go test ./...` first two cold-cache attempts hit harness timeouts at 20m/30m before all packages printed; package segment rerun and final full rerun passed with cached packages. |
 | 28 | sdk-env final hardening verify | Full verify/docs/diff | `make verify`; temp `go run ./cmd/pm docs generate --dir "$TMP_DOCS/cli" --connectors-dir "$TMP_DOCS/connectors"` + `diff -ru docs/cli "$TMP_DOCS/cli"`; `git diff --check`; `git diff -- go.mod go.sum` | Pass | `make verify` passed: fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, lint, connectorgen validate. Docs generation diff clean; no go.mod/go.sum diff. |
+| 29 | final alias/tracer-closure plan | Planning | Phase artifacts updated before tests/production edits; `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 410 --skip-research`; `scripts/gsd prompt programming-loop init --phase 410 --dry-run` | Pass/fallback | Doctor passed; plan prompt regenerated; programming-loop still unavailable (`scripts/gsd: unknown GSD command: programming-loop`). Continuing local-critical-path manual GSD/TDD. |
+| 30 | final alias/tracer-closure red | Test | `go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X' -count=1` | Fail | Expected red before production edits. First 120s run hit harness timeout; 600s rerun failed as expected: `TestTelemetryOTEL_GO_XSelfObservabilityEnvWarningIsProjectOnly`: `project stderr missing OTEL_GO_X_SELF_OBSERVABILITY warning by env name: "warning: telemetry: unsupported OpenTelemetry SDK environment variable OTEL_RESOURCE_ATTRIBUTES ignored; configure telemetry only through trusted pm env/flag\n"`; `internal/telemetry` passed. |
+| 31 | final alias/tracer-closure green | Test | `gofmt -w internal/cli/telemetry_cli_test.go internal/telemetry/telemetry.go && go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X' -count=1` | Pass | `OTEL_GO_X_OBSERVABILITY` and `OTEL_GO_X_SELF_OBSERVABILITY` focused tests passed; warnings project-only, no raw process stderr, exported telemetry leak checks clean. |
+| 32 | final alias/tracer-closure broad gate | Test | `go vet ./...`; `go test ./...` (twice) | Mixed | `go vet ./...` passed. `go test ./...` hit Go default 10m package timeout twice in pre-existing slow `internal/cli`/`internal/connectors/certify` tests while loading connector bundles (`TestGoldenTranscripts`/`TestGitHubDestructiveCommandRequiresTypedConfirmation`; certify sabotage/secret-leak stages). Reran with verify-equivalent 20m timeout. |
+| 33 | final alias/tracer-closure timeout-adjusted broad gate | Test | `go test -timeout 20m ./internal/cli ./internal/connectors/certify -count=1`; `go test -timeout 20m ./...` | Pass | Slow packages passed with 20m timeout (`internal/cli` 651s, `internal/connectors/certify` 1109s for package rerun); full 20m suite passed. |
+| 34 | final alias/tracer-closure verify | Full verify/diff | `go build ./cmd/pm`; `make verify`; `git diff --check`; `git diff -- go.mod go.sum` | Pass | `make verify` passed: fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, lint, connectorgen validate. No go.mod/go.sum diff. |
 
 ## Red-test requirements
 

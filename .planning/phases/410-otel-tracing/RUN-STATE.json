@@ -7,12 +7,12 @@
   "branch": "feat/410-otel-tracing",
   "baseBranch": "feat/cli-architecture-v2",
   "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing",
-  "status": "sdk_env_hardening_pushed",
+  "status": "final_alias_tracer_closure_verified_pr_body_updated",
   "gsd": {
     "doctorPassed": true,
     "planPhasePromptGenerated": true,
     "programmingLoopAvailable": false,
-    "manualFallback": "scripts/gsd prompt programming-loop init --phase 410 --dry-run returned unknown GSD command; manual GSD/TDD fallback recorded. Review-fix rerun on 2026-07-18 confirmed same fallback."
+    "manualFallback": "scripts/gsd prompt programming-loop init --phase 410 --dry-run returned unknown GSD command; manual GSD/TDD fallback recorded. Final alias/tracer-closure rerun on 2026-07-18 confirmed same fallback."
   },
   "verificationPassed": true,
   "verificationBlocker": "",
@@ -91,6 +91,21 @@
       "cycle": "sdk-env-final-hardening-push",
       "decision": "local_critical_path",
       "reason": "Committed and pushed final SDK-env hardening to PR #459 branch; PR body updated without requesting Claude/Copilot."
+    },
+    {
+      "cycle": "final-alias-tracer-closure-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 residual accepted at head 0fc39148004d699f35239a17418cd095bdd4a1ed; same isolated worker/branch, no subagent tool, no Claude/Copilot request."
+    },
+    {
+      "cycle": "final-alias-tracer-closure-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Red tests captured before production edits for OTEL_GO_X_OBSERVABILITY and OTEL_GO_X_SELF_OBSERVABILITY warning/stderr/leak behavior."
+    },
+    {
+      "cycle": "final-alias-tracer-closure-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused tests, go vet, go build, make verify, verify-equivalent 20m full test suite, and diff checks passed locally; default go test ./... hit pre-existing 10m package timeouts and is recorded."
     }
   ],
   "dependenciesApproved": [
@@ -112,7 +127,8 @@
     "ADR 0004 superseding trusted-env OTLP behavior note",
     "root help/goldens full telemetry exporter values none/off/file/otlp",
     "config docs/website require OTLP exporter and endpoint from trusted env/flag",
-    "SDK/resource/provider ambient OTel env neutralized before tracer provider construction"
+    "SDK/resource/provider ambient OTel env neutralized before tracer provider construction",
+    "OTEL_GO_X_SELF_OBSERVABILITY alias and tracer creation env window accepted for final fix"
   ],
   "humanGatesTriggered": [],
   "updatedAt": "2026-07-18T00:00:00Z"

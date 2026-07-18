@@ -357,6 +357,62 @@ func TestTelemetrySanitizesInvalidSamplerEnvBeforeProvider(t *testing.T) {
 	}
 }
 
+func TestTelemetryOTEL_GO_XObservabilityEnvWarningIsProjectOnly(t *testing.T) {
+	assertTelemetryGoXObservabilityEnvProjectOnly(t, "OTEL_GO_X_OBSERVABILITY")
+}
+
+func TestTelemetryOTEL_GO_XSelfObservabilityEnvWarningIsProjectOnly(t *testing.T) {
+	assertTelemetryGoXObservabilityEnvProjectOnly(t, "OTEL_GO_X_SELF_OBSERVABILITY")
+}
+
+func assertTelemetryGoXObservabilityEnvProjectOnly(t *testing.T, envName string) {
+	t.Helper()
+	const marker = "pm_go_x_observability_marker"
+	root := t.TempDir()
+	t.Setenv("PM_TELEMETRY", "file")
+	t.Setenv(envName, "true")
+	t.Setenv("OTEL_RESOURCE_ATTRIBUTES", "api_key="+marker)
+	var stdout, stderr bytes.Buffer
+	var code int
+
+	processStderr := captureProcessStderr(t, func() {
+		code = cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+	})
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s processStderr=%s", code, stdout.String(), stderr.String(), processStderr)
+	}
+	if !strings.Contains(stdout.String(), `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout.String())
+	}
+	if processStderr != "" {
+		t.Fatalf("process stderr = %q, want empty", processStderr)
+	}
+	if !strings.Contains(stderr.String(), "warning: telemetry:") || !strings.Contains(stderr.String(), envName) {
+		t.Fatalf("project stderr missing %s warning by env name: %q", envName, stderr.String())
+	}
+	for _, forbidden := range []string{marker, "api_key=", "=true"} {
+		if strings.Contains(stderr.String(), forbidden) || strings.Contains(processStderr, forbidden) {
+			t.Fatalf("stderr leaked %q: project=%q process=%q", forbidden, stderr.String(), processStderr)
+		}
+	}
+
+	data := readCLITelemetry(t, filepath.Join(root, ".polymetrics", "telemetry"))
+	assertCLIContains(t, data, "pm.command")
+	for _, forbidden := range []string{
+		marker,
+		"api_key",
+		envName,
+		"self_observability",
+		"self-observability",
+		"otel.sdk",
+		"sdk.span",
+		"go.opentelemetry.io/otel/sdk/trace",
+	} {
+		assertCLINotContains(t, data, forbidden)
+	}
+}
+
 func TestTelemetryOTLPExportFailureUsesProjectWarningAndKeepsStdout(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "collector failed", http.StatusInternalServerError)

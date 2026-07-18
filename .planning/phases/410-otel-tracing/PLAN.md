@@ -176,9 +176,29 @@ Planned red tests before production edits:
 - `internal/cli`: invalid `OTEL_TRACES_SAMPLER=traceidratio` + `OTEL_TRACES_SAMPLER_ARG=<synthetic-invalid>` emits only project `warning: telemetry:` by env name and nothing to raw process stderr.
 - `internal/config`: env cleanup includes `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`.
 
+## Narrow final alias/tracer-closure plan — PR #459 residual at head `0fc39148004d699f35239a17418cd095bdd4a1ed`
+
+Execution decision: `local_critical_path` — same isolated issue worktree/branch, no subagent tool, no Claude/Copilot request per user instruction.
+
+Accepted residual and slice:
+
+1. OTel Go self-observability alias gap: include both `OTEL_GO_X_OBSERVABILITY` and legacy/alias `OTEL_GO_X_SELF_OBSERVABILITY` in unsupported SDK env handling; warnings must name only the env var, never values.
+2. Tracer creation env window: keep SDK env sanitized through `provider.Tracer("polymetrics.ai/pm")` creation, not only through `sdktrace.NewTracerProvider`.
+3. Focused tests: for both env names, prove warnings are project `warning: telemetry:` messages by env name only, raw process stderr stays empty, file/OTLP exports omit synthetic self-observability markers, and no self-observability/secret terms leak.
+
+Planned red tests before production edits:
+
+- `internal/cli`: file exporter with `OTEL_GO_X_OBSERVABILITY=<synthetic>` warns by name only, writes no raw process stderr, and exported telemetry omits the env value, `self_observability`, and SDK self-observability metric names.
+- `internal/cli`: file exporter with `OTEL_GO_X_SELF_OBSERVABILITY=<synthetic>` has the same warning/stderr/leak constraints and fails until the alias is added to unsupported SDK env handling.
+- Focused gate: `go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X' -count=1`.
+
 ## Commit/push checkpoints
 
-1. SDK env final hardening planning artifact checkpoint.
+1. Final alias/tracer-closure planning artifact checkpoint.
+2. Final alias/tracer-closure red-test checkpoint with exact failing output recorded.
+3. Final alias/tracer-closure implementation checkpoint.
+4. Focused/full verification + PR body update checkpoint.
+5. SDK env final hardening planning artifact checkpoint.
 2. SDK env red-test checkpoint with exact failing output recorded.
 3. SDK env implementation checkpoint.
 4. Focused/full verification + PR body update checkpoint.
