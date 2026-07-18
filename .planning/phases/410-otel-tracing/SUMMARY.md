@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: final SDK-level env hardening verified locally for PR #459; PR body update/push pending.
+Status: final SDK-level env hardening verified, PR body updated, and branch pushed for PR #459.
 
 ## Current state
 
