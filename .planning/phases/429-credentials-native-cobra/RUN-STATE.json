@@ -65,6 +65,11 @@
   },
   "orchestrationDecisions": [
     {
+      "cycle": "final-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "strict pre-production tests failed as required: leading-hyphen add with a later ignored positional exited 1, and overwrite final-temp rejection left the already-open raw temp in both non-deduped overwrite cases"
+    },
+    {
       "cycle": "final-correction-plan",
       "decision": "local_critical_path",
       "reason": "two bounded corrections share credentials and app critical paths; this runtime exposes no subagent tool, and the user prohibited services, PR, and external review"
@@ -205,6 +210,7 @@
       "reason": "issue-local artifacts finalized with exact TDD, safety, parity, verification, commit, and push evidence; post-fix local review was clean and user prohibited PR/external review"
     }
   ],
+  "finalCorrectionRed": "focused pre-production CLI failed with leading-hyphen add exit 1 while raw-carrier/no-discovery guards stayed green; focused app failed because truncate and truncate-create final-temp rejection left the already-open overwrite raw temp; CLI 23.649s, app 3.576s",
   "red": "go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed before production edits: internal/cli/credentials_cli_test.go:22:9 undefined newCredentialsCobraCommand",
   "green": "focused credentials/router passed in 25.475s; focused race subset passed in 111.267s; golden passed in 5.513s; exact legacy differential matched 28/28 preserved cases",
   "verification": "post-correction focused 40.299s, repeated 62.622s, race 248.367s, golden 5.602s, full CLI 275.269s, exact preserved differential 28/28, built help/docs and website parity, gofmt, vet, build, full repository tests, and make verify passed; final make verify CLI 278.385s, certify 342.715s, lint 0, connector validation 547/0",

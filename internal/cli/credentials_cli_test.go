@@ -179,7 +179,7 @@ func TestCredentialsAddBareFlagCompatibility(t *testing.T) {
 	})
 }
 
-func TestCredentialsAddLeadingHyphenNameParsesLaterSourceFlags(t *testing.T) {
+func TestCredentialsAddLeadingHyphenNameParsesLaterSourceFlagsAndIgnoresExtraPositionals(t *testing.T) {
 	root := initCredentialsProject(t)
 	t.Setenv("PM_TEST_LEADING_NAME_SOURCE", "synthetic-test-input")
 
@@ -187,6 +187,7 @@ func TestCredentialsAddLeadingHyphenNameParsesLaterSourceFlags(t *testing.T) {
 	code := Run([]string{
 		"credentials", "add", "-legacy",
 		"--connector", "sample",
+		"extra-positional",
 		"--from-env", "token=PM_TEST_LEADING_NAME_SOURCE",
 		"--root=" + root,
 		"--json",

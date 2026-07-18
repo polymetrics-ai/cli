@@ -8,8 +8,8 @@ Invocation `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`; exac
 
 - [x] Read `/tmp/pm-397-rereview4-429.log` and accept the MEDIUM leading-hyphen compatibility and LOW overwrite-temp cleanup findings.
 - [x] Run GSD doctor/list, record missing programming-loop/manual fallback, load required skills/policies, and update issue plan/TDD/verification artifacts before production edits.
-- [ ] RED: leading-hyphen add with later connector/global flags and an ignored extra positional fails at current head but exact base succeeds.
-- [ ] RED: overwrite final-temp open rejection leaves the already-open raw temp at current head.
+- [x] RED: leading-hyphen add with later connector/source/global flags and an ignored extra positional exited 1 at current head, while the focused raw-carrier and no-later-name-discovery guards remained green (CLI package `23.649s`); exact-base success remains the differential target.
+- [x] RED: overwrite final-temp open rejection left the already-open raw temp in truncate and truncate-create cases (app package `3.576s`).
 - [ ] GREEN: every leading-hyphen first required-name token is privately owned and validated before action execution; later flags/ignored positionals work, raw carrier remains usage-rejected, and later names are never discovered.
 - [ ] GREEN: overwrite cleanup is active immediately after raw-temp open and removes it when final-temp open fails.
 - [ ] Focused/repeated/race CLI/app/localwrite and exact-start differential pass without private data output.

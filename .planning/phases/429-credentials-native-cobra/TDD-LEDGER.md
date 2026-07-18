@@ -18,7 +18,7 @@ Session `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`; exact c
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | X0 | Review/plan | Record both accepted findings, first-token ownership and early-validation design, overwrite raw-temp cleanup lifetime, RED cases, differential, and verification/checkpoint sequence before production edits | Complete |
-| X1 | RED | Focused credentials leading-hyphen/extra-positional and overwrite final-open cleanup tests, followed by existing raw-carrier/no-discovery guards | Pending |
+| X1 | RED | `go test ./internal/cli -run 'TestCredentials(AddLeadingHyphenNameParsesLaterSourceFlagsAndIgnoresExtraPositionals|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1`; `go test ./internal/app -run '^TestWarehouseMaterializationRejectsFinalFileSymlinkEscape$' -count=1` | Failed as required: leading-hyphen add exited 1 while raw-carrier/no-discovery guards stayed green (CLI package `23.649s`); overwrite truncate and truncate-create left the opened raw temp (app package `3.576s`) |
 | X2 | GREEN | Carry every leading-hyphen first name privately, validate it before action execution, and register overwrite cleanup immediately after raw-temp open | Pending |
 | X3 | Verify | Focused/repeated/race CLI/app/localwrite, exact-base differential, broader relevant packages, gofmt/vet/build/diff/scope/dependency guards | Pending |
 

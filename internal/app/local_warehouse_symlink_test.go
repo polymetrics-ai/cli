@@ -88,6 +88,12 @@ func TestWarehouseMaterializationRejectsFinalFileSymlinkEscape(t *testing.T) {
 				t.Fatal("warehouse materialization followed a final-file symlink outside the local-write root")
 			}
 			assertMaterializationExternalTargetUnchanged(t, external, before, tt.externalExists)
+			if mode.IsOverwrite() {
+				rawTemp := localRawPath(dir, "synthetic_connection", "records", "records") + "." + runID + ".tmp"
+				if _, statErr := os.Stat(rawTemp); !errors.Is(statErr, os.ErrNotExist) {
+					t.Fatalf("failed final-temp open left overwrite raw temp: %v", statErr)
+				}
+			}
 		})
 	}
 }
