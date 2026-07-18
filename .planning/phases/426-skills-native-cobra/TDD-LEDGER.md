@@ -18,9 +18,9 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 0 | Planning | Create all six phase artifacts before production edits | Complete |
 | 1 | RED | `go test ./internal/cli/ -run 'Skills|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected (`29.549s`) |
 | 2 | GREEN | Native namespace/action/typed flags and legacy parser removal | Pass (`29.454s`) |
-| 3 | Refactor | Focused skills/router/golden tests | Pass (`37.019s`); full CLI pending |
-| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
-| 5 | Parity/safety | built binary, docs/website/generated/golden/dependency/scope checks | Pending |
+| 3 | Refactor | Focused skills/router/golden + full CLI tests | Pass (`37.019s`; full CLI `223.229s`) |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pass |
+| 5 | Parity/safety | built binary, docs/website/generated/golden/dependency/scope checks | Pass |
 
 ## Planned RED coverage
 
@@ -58,3 +58,19 @@ ok  \tpolymetrics.ai/internal/cli\t37.019s
 ```
 
 Implementation: `skills` and `skills generate` are native Cobra nodes; `--dir` is a `StringArray` with legacy bare-flag behavior and spaced-value normalization; unknown action flags remain whitelisted; positional help is a hidden compatibility node. `runSkills` accepts the typed last directory directly, so the skills-only `parseFlags` call and legacy wrapper are removed. All focused output/help/global-config/filesystem tests and unchanged goldens pass.
+
+## Full GREEN and parity
+
+| Command / gate | Result |
+|---|---|
+| `go test ./internal/cli/... -count=1` | Pass (`223.229s`) |
+| `go test ./internal/cli/ -run '^TestGoldenTranscripts$' -count=1` | Pass (`5.902s`) |
+| `gofmt -w cmd internal`; `go vet ./...`; `go build -o /tmp/pm-426 ./cmd/pm` | Pass, no diagnostics |
+| `go test -timeout 20m ./...` | Pass (`real 351.94s`; CLI `227.351s`, certify `347.262s`) |
+| `make verify` | Pass (`real 27.70s`; lint `0 issues`; 547 connectors, 0 findings) |
+| built binary help/generation/error/config/global matrix | Pass: `help_bytes=716`, 12 generated skills, exits invalid=2/missing=3/unknown=2 |
+| temp docs generation + `diff -ru docs/cli`; docs validation | Pass, no diff |
+| `npm --prefix website run gen:docs`; website diff | Pass, 11 pages, no diff |
+| start-HEAD dependency/docs/website/golden/connector-def and `git diff --check` guards | Pass |
+
+`make verify` used only its existing local temporary sample smoke. Its reverse ETL step followed plan → preview → approval → run; no external service or credentialed connector check was used. The generated skills checks wrote only beneath temporary directories and confirmed canonical metadata files remained local and contained no token-shaped values.

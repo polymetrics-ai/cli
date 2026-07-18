@@ -70,3 +70,7 @@ This changes parser ownership only. Embedded help, `docs/cli/skills.md`, website
 ## Safety
 
 No secrets, credentials, services, dependencies, generic write tools, destructive/admin actions, quality-gate reductions, external reviews, PR, or merge. Tests write only to `t.TempDir`; no broad or traversal paths are introduced. The required `make verify` may run its existing local sample reverse-ETL smoke only under plan → preview → approval → execute and without external writes.
+
+## Completion note
+
+The bounded slice completed exactly within scope. Native Cobra now owns `skills`, `skills generate`, positional help, and typed/repeated/bare `--dir`; the skills legacy wrapper and handler `parseFlags` call are gone. Exact RED preceded production edits. Focused/router/golden/full CLI and repository gates passed, including `make verify`; built-binary help/output/error/config/global forms, generated CLI docs, website generation, dependencies, connector definitions, and golden fixtures remained in parity. Coherent plan, RED, implementation, and verification checkpoints were pushed. No PR or external review was created.

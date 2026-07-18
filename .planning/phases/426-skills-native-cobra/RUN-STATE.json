@@ -10,14 +10,15 @@
   "invocationSession": "issue-426-pi-openai-codex-gpt-5.6-sol-high-20260718T104457Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "focused_green",
-  "verificationPassed": false,
+  "status": "complete_verified_pushed",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
     "planPhase": "passed",
     "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
-    "fallback": "manual_gsd_universal_runtime_loop"
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "verifyWorkPrompt": "passed_7141_bytes"
   },
   "orchestrationDecisions": [
     {
@@ -28,20 +29,50 @@
     {
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
-      "reason": "focused test-only edits captured exact RED for skills native registration before production edits; observable legacy behavior tests already pass"
+      "reason": "focused test-only edits captured exact RED for skills native registration before production edits; observable legacy behavior tests already passed"
     },
     {
       "cycle": "green-implementation",
       "decision": "local_critical_path",
-      "reason": "native skills namespace, generate action, typed dir flag, positional help alias, normalization, and legacy-parser removal pass focused router and golden tests"
+      "reason": "native skills namespace, generate action, typed dir flag, positional help alias, normalization, and legacy-parser removal passed focused router and golden tests"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused and full CLI/repository tests, gofmt, vet, build, make verify, binary parity, docs/website/golden, dependency, and scope checks passed"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "issue-local artifacts finalized with exact TDD, parity, safety, commit, and verification evidence; user prohibited PR and external review"
     }
   ],
-  "commits": [],
-  "push": "pending",
+  "red": "go test ./internal/cli/ -run 'Skills|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed as expected in 29.549s on native registration count and DisableFlagParsing ownership",
+  "green": "focused 29.454s; skills/router/golden 37.019s; standalone golden 5.902s; full internal/cli 223.229s",
+  "verification": "gofmt, go vet ./..., go test -timeout 20m ./..., build, make verify, built-binary parity, docs generation/validation, website generation, and all diff/scope guards passed",
+  "files": [
+    "internal/cli/cobra_router.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/skills.go",
+    "internal/cli/skills_cli_test.go",
+    ".planning/phases/426-skills-native-cobra/PLAN.md",
+    ".planning/phases/426-skills-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/426-skills-native-cobra/VERIFICATION.md",
+    ".planning/phases/426-skills-native-cobra/PROMPTS.md",
+    ".planning/phases/426-skills-native-cobra/RUN-STATE.json",
+    ".planning/phases/426-skills-native-cobra/SUMMARY.md"
+  ],
+  "commits": [
+    "0cadac23 docs(planning): plan skills native cobra slice",
+    "a7289b30 test(cli): specify native cobra skills contract",
+    "24abfcaa refactor(cli): nativize skills namespace",
+    "docs(planning): record skills cobra verification (final handoff commit)"
+  ],
+  "push": "all planning, red, implementation, and final verification checkpoints pushed to origin/refactor/426-skills-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
-  "reviewRoute": "external_review_prohibited",
+  "reviewRoute": "local_verification_only_external_review_prohibited",
   "risks": [
-    "pflag StringArray plus NoOptDefVal requires explicit normalization to preserve legacy spaced and bare --dir forms",
-    "filesystem generation must remain metadata-only and retain existing path/error behavior"
+    "Cobra/pflag supplies invalid-action diagnostics while preserving usage category, JSON shape, stdout/stderr placement, and exit 2",
+    "completion additions and help-tree deepening remain deferred to planned later phases"
   ]
 }
