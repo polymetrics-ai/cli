@@ -13,15 +13,15 @@ import (
 func TestDocsGeneratePreservesNativeFlagFormsAndArtifactBytes(t *testing.T) {
 	root := t.TempDir()
 	firstCLI := filepath.Join(root, "first-cli")
-	cliDir := filepath.Join(root, "cli,assigned")
+	cliDir := filepath.Join(root, "cli output,spaced")
 	firstConnectors := filepath.Join(root, "first-connectors")
-	connectorsDir := filepath.Join(root, "connectors,assigned")
+	connectorsDir := filepath.Join(root, "connector output,spaced")
 
 	stdout, stderr, code := runDocsCLI(t, []string{
 		"docs", "generate", "ignored-positional",
 		"--unknown", "ignored-value",
-		"--dir", firstCLI, "--dir=" + cliDir,
-		"--connectors-dir", firstConnectors, "--connectors-dir=" + connectorsDir,
+		"--dir=" + firstCLI, "--dir", cliDir,
+		"--connectors-dir=" + firstConnectors, "--connectors-dir", connectorsDir,
 		"--json=true",
 	})
 	if code != 0 || stderr != "" {
@@ -55,6 +55,23 @@ func TestDocsGenerateAndValidatePreserveBareAndFallbackDirectoryForms(t *testing
 		}
 		assertGeneratedCLIManualBytes(t, filepath.Join(root, "true"))
 		assertGeneratedConnectorDocsLocal(t, connectorsDir)
+	})
+
+	t.Run("default connector sibling and validation dir", func(t *testing.T) {
+		stdout, stderr, code := runDocsCLI(t, []string{"docs", "generate", "--dir", filepath.Join("docs", "cli")})
+		if code != 0 || stderr != "" {
+			t.Fatalf("generate exit = %d, stderr = %q, want success", code, stderr)
+		}
+		if want := "Generated docs in docs/cli and connector docs in docs/connectors\n"; stdout != want {
+			t.Fatalf("stdout = %q, want %q", stdout, want)
+		}
+		assertGeneratedCLIManualBytes(t, filepath.Join(root, "docs", "cli"))
+		assertGeneratedConnectorDocsLocal(t, filepath.Join(root, "docs", "connectors"))
+
+		stdout, stderr, code = runDocsCLI(t, []string{"docs", "validate"})
+		if code != 0 || stderr != "" || stdout != "Validated connector docs in docs/connectors\n" {
+			t.Fatalf("default validate exit = %d, stdout = %q, stderr = %q", code, stdout, stderr)
+		}
 	})
 
 	t.Run("bare connector dir and validate fallbacks", func(t *testing.T) {
