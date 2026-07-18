@@ -5,25 +5,25 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 ## TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.
-- [ ] Exact focused RED captured before production edits.
-- [ ] Native credentials/add/list/inspect/test/remove/help tree; legacy wrapper removed.
-- [ ] Typed repeated/bare current flags; spaced/assigned/unknown/extra positional forms compatible.
-- [ ] Bare/text/JSON/long/short/positional help parity.
-- [ ] Invalid action/global assigned boolean behavior preserved.
-- [ ] Strict identifiers and existing write-path containment covered.
-- [ ] Env/stdin-only secret intake and source-selection rules covered with controlled opaque fixtures.
-- [ ] Stdout/stderr/state metadata redaction covered without logging fixture values.
-- [ ] Leading invalid tokens cannot discover or execute later actions.
-- [ ] Credentials action-tail help and literal `--` compatibility preserved.
-- [ ] Only the credentials `parseFlags` call removed; dynamic/shared parser remains.
+- [x] Exact focused RED captured before production edits (`undefined: newCredentialsCobraCommand`).
+- [x] Native credentials/add/list/inspect/test/remove/help tree; legacy wrapper removed.
+- [x] Typed repeated/bare current flags; spaced/assigned/unknown/extra positional forms compatible.
+- [x] Bare/text/JSON/long/short/positional help parity in focused tests.
+- [x] Invalid action/global assigned boolean behavior preserved in focused tests.
+- [x] Strict identifiers and existing write-path containment covered.
+- [x] Env/stdin-only secret intake and source-selection rules covered with controlled opaque fixtures.
+- [x] Stdout/stderr/state/project-file redaction covered without logging fixture values.
+- [x] Leading invalid tokens cannot discover or execute later actions.
+- [x] Credentials action-tail help and literal `--` compatibility preserved.
+- [x] Only the credentials `parseFlags` call removed; dynamic/shared parser remains.
 
 ## Gates
 
-- [ ] Focused credentials/router tests.
+- [x] Focused credentials/router tests (`25.475s`).
 - [ ] Focused repeated tests.
-- [ ] Focused `-race` credentials tests.
-- [ ] Security/redaction/path/action-boundary tests.
-- [ ] Golden transcript test and fixture diff review.
+- [x] Focused `-race` credentials subset (`111.267s`).
+- [x] Security/redaction/path/action-boundary tests.
+- [x] Golden transcript test (`5.513s`) and fixture unchanged.
 - [ ] Full `internal/cli/...`.
 - [ ] Full repository tests in temporary roots where applicable.
 - [ ] `gofmt -w cmd internal`.

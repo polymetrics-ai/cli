@@ -12,7 +12,7 @@
   "endedAt": null,
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "red_tests_committed_pending_implementation",
+  "status": "focused_green_pending_full_verification",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -31,18 +31,28 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "all focused credentials tree, operation, help, global, validation, source, redaction, compatibility, and action-boundary tests were added before production edits; the focused build failed on the intentionally missing native credentials constructor"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native credentials tree, typed current flags, controlled Cobra stdin, pre-read validation, credentials-only action boundary, and metadata-only output passed focused and race tests without credentialed checks"
     }
   ],
   "red": "go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed before production edits: internal/cli/credentials_cli_test.go:22:9 undefined newCredentialsCobraCommand",
-  "green": "pending",
-  "verification": "pending",
+  "green": "focused credentials/router passed in 25.475s; focused race subset passed in 111.267s; golden passed in 5.513s; exact legacy differential matched 28/28 preserved cases",
+  "verification": "full verification pending",
   "files": [
     ".planning/phases/429-credentials-native-cobra/PLAN.md",
     ".planning/phases/429-credentials-native-cobra/TDD-LEDGER.md",
     ".planning/phases/429-credentials-native-cobra/VERIFICATION.md",
     ".planning/phases/429-credentials-native-cobra/PROMPTS.md",
     ".planning/phases/429-credentials-native-cobra/SUMMARY.md",
-    ".planning/phases/429-credentials-native-cobra/RUN-STATE.json"
+    ".planning/phases/429-credentials-native-cobra/RUN-STATE.json",
+    "internal/cli/cli.go",
+    "internal/cli/cobra_router.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/credentials_cli.go",
+    "internal/cli/credentials_cli_test.go"
   ],
   "commits": [],
   "push": "pending",

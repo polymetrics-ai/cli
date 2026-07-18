@@ -21,6 +21,6 @@ Required skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `g
 
 Safety prompt: Never request, read, print, summarize, store, or log real secret values. Tests may use opaque synthetic redaction fixtures only and must not include fixture content in diagnostics. Do not add interactive secret entry, dependencies, credentialed checks, external services, or unrelated changes. Preserve env/stdin-only intake, path containment, error/output contracts, action boundaries, and legacy help/literal compatibility.
 
-Downstream artifact: pending test-only RED checkpoint, native credentials implementation, parity verification, and finalized six issue-local phase artifacts.
+Downstream artifact: test-only RED checkpoint, `internal/cli/credentials_cli.go`, credentials router/legacy-handler adaptation, focused security tests, and six issue-local phase artifacts. Full parity verification remains pending.
 
-Verification result: pending.
+Verification result: focused GREEN. Credentials/router passed in `25.475s`; focused race subset in `111.267s`; golden in `5.513s`; exact preserved start differential 28/28. Full repository/parity gates pending.

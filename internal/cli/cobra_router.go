@@ -74,6 +74,7 @@ func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, std
 	for _, spec := range cobraLegacyCommands(cfg) {
 		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec))
 	}
+	cmd.AddCommand(newCredentialsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newConnectionsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
@@ -118,6 +119,19 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 	if len(args) >= 2 && args[0] == "skills" && args[1] == "generate" {
 		return normalizeStringArraySpaceValues(args, 2, skillsGenerateFlagNames)
 	}
+	if len(args) >= 2 && args[0] == "credentials" {
+		var bounded bool
+		args, bounded = normalizeCredentialsActionBoundary(args)
+		if bounded {
+			return args
+		}
+		if args[1] == "add" {
+			args = normalizeStringArraySpaceValues(args, 2, credentialsAddFlagNames)
+		}
+		if args[1] != "help" && !isHelpArg(args[1]) {
+			return normalizeCredentialsLegacyActionArgs(args, 2)
+		}
+	}
 	if len(args) >= 2 && args[0] == "agent" {
 		var bounded bool
 		args, bounded = normalizeAgentActionBoundary(args)
@@ -153,6 +167,32 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 		}
 	}
 	return args
+}
+
+func normalizeCredentialsActionBoundary(args []string) ([]string, bool) {
+	switch args[1] {
+	case "add", "list", "inspect", "test", "remove", "help", "-h", "--help":
+		return args, false
+	}
+
+	out := make([]string, 0, len(args)+1)
+	out = append(out, args[0], "--")
+	out = append(out, args[1:]...)
+	return out, true
+}
+
+// normalizeCredentialsLegacyActionArgs keeps tokens ignored by the old credentials parser from becoming Cobra controls.
+func normalizeCredentialsLegacyActionArgs(args []string, start int) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	for _, arg := range args[start:] {
+		if arg == "--" || arg == "-h" || arg == "--help" || strings.HasPrefix(arg, "--help=") ||
+			(strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--")) {
+			continue
+		}
+		out = append(out, arg)
+	}
+	return out
 }
 
 func normalizeAgentActionBoundary(args []string) ([]string, bool) {
@@ -242,6 +282,13 @@ var skillsGenerateFlagNames = map[string]struct{}{
 	"dir": {},
 }
 
+var credentialsAddFlagNames = map[string]struct{}{
+	"connector":   {},
+	"from-env":    {},
+	"value-stdin": {},
+	"config":      {},
+}
+
 var agentPlanFlagNames = map[string]struct{}{
 	"request": {},
 }
@@ -288,9 +335,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		{name: "man", handler: runManualAlias},
 		{name: "connectors", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runConnectors(ctx, root, args, stdout, jsonOut)
-		}},
-		{name: "credentials", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runCredentials(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "etl", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })

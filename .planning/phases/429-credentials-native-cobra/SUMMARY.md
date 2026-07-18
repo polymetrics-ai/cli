@@ -1,6 +1,6 @@
 # Phase 429 Summary
 
-Status: planned; implementation not started.
+Status: focused GREEN complete; full verification pending.
 
 ## Identity
 
@@ -10,13 +10,13 @@ Status: planned; implementation not started.
 - Exact start: `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`
 - Parent: #397; umbrella: #407; draft parent PR #438
 
-## Planned delivery
+## Delivered in focused GREEN
 
-- Native Cobra ownership for credentials add/list/inspect/test/remove/help.
+- Native Cobra ownership for credentials add/list/inspect/test/remove/help; only the credentials legacy parser call is removed.
 - Typed repeated current flags with exact legacy bare/assigned/unknown/trailing-help/literal behavior.
-- Controlled env/stdin-only secret intake; no interactive entry.
-- Strict identifiers, existing path-containment behavior, output redaction, and action-discovery fail-closed coverage.
-- Focused/race/security/router/golden/full CLI, docs/website/generated parity, and full local gates.
+- Controlled env/stdin-only secret intake through Cobra input; no interactive entry.
+- Strict identifiers, pre-read source/config validation, existing path-containment behavior, output redaction, and fail-closed action discovery.
+- Focused credentials/router and focused race tests pass; golden passes; 28/28 preserved differential cases match exact start behavior. Full verification remains pending.
 
 ## Workflow
 

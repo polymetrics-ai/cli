@@ -17,8 +17,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create all six issue-local phase artifacts before test or production edits | Complete |
 | 1 | RED | Add focused credentials tree/operation/help/security tests; run `go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected before production edits: `undefined: newCredentialsCobraCommand`; package build failed |
-| 2 | GREEN | Native tree, typed flags/handler, controlled input, action boundary, strict validation | Pending |
-| 3 | Refactor | Focused/repeated/race/security/router/golden/full CLI and exact legacy differential | Pending |
+| 2 | GREEN | Native tree, typed flags/handler, controlled input, action boundary, strict validation | Pass: focused credentials/router `25.475s`; focused race subset `111.267s` |
+| 3 | Refactor | Focused/repeated/race/security/router/golden/full CLI and exact legacy differential | In progress: golden pass `5.513s`; exact start differential 28/28; full CLI pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Parity/delivery | Built help/list/error checks, docs/website/generated diff, scope/dependency guards, commit/push | Pending |
 
@@ -47,6 +47,18 @@ FAIL
 ```
 
 The missing native constructor is intentional. The same test-only checkpoint specifies native ownership/flags, list/add/remove, help/global behavior, strict identifiers/path containment, controlled env/stdin source handling, redaction, legacy action-tail compatibility, and fail-closed action discovery. No test executed and no stdin/environment credential fixture was read during this RED build failure.
+
+## Focused GREEN
+
+```text
+$ go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1
+ok  \tpolymetrics.ai/internal/cli\t25.475s
+
+$ go test -race ./internal/cli -run 'CredentialsCommandIsNative|CredentialsSecretSources|CredentialsOutputsAndErrors|CredentialsLeadingInvalid' -count=1
+ok  \tpolymetrics.ai/internal/cli\t111.267s
+```
+
+Native Cobra now owns the complete credentials subtree. Current flags are typed `StringArray` values with bare compatibility, stdin comes only from `cmd.InOrStdin`, invalid action heads are bounded before Cobra discovery, and all identifier/config/path checks run before named environment or stdin values are read. Opaque fixture tests pass without emitting fixture content. The golden transcript test passes and a 28-case start-vs-head differential matches exact exit/stdout/stderr for preserved help, list, add flag forms, unknown/extra/tail/literal inputs, invalid heads, and globals.
 
 ## Evidence policy
 

@@ -77,6 +77,10 @@ func TestCredentialsCommandIsNativeCobraSubtree(t *testing.T) {
 		})
 	}
 
+	if add.Flags().Lookup("interactive") != nil {
+		t.Fatal("credentials add must not expose interactive secret entry")
+	}
+
 	help := findCobraCommand(credentials, "help")
 	if help == nil || !help.Hidden {
 		t.Fatal("credentials must preserve hidden positional help until Phase 19")
@@ -124,7 +128,7 @@ func TestCredentialsAddListRemovePreserveCurrentFlagForms(t *testing.T) {
 	if err != nil {
 		t.Fatalf("empty credentials list error = %v", err)
 	}
-	if !strings.Contains(stdout, `"kind": "CredentialList"`) || !strings.Contains(stdout, `"credentials": []`) {
+	if !strings.Contains(stdout, `"kind": "CredentialList"`) || !strings.Contains(stdout, `"credentials": null`) {
 		t.Fatalf("empty credentials list JSON mismatch: %q", stdout)
 	}
 }
@@ -292,6 +296,15 @@ func TestCredentialsOutputsAndErrorsNeverExposeOpaqueSecretFixtures(t *testing.T
 	}
 	assertOpaqueFixtureAbsent(t, stdout.String(), stderr.String())
 	assertStateDoesNotContainFixtures(t, root)
+	assertProjectFilesDoNotContainFixtures(t, root)
+
+	stdout.Reset()
+	stderr.Reset()
+	code = Run([]string{"credentials", "inspect", "redacted-env", "--root", root, "--json"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatal("credentials inspect of redacted metadata failed")
+	}
+	assertOpaqueFixtureAbsent(t, stdout.String(), stderr.String())
 
 	stdout.Reset()
 	stderr.Reset()
@@ -490,6 +503,29 @@ func assertOpaqueFixtureAbsent(t *testing.T, stdout, stderr string) {
 	if strings.Contains(stdout, opaqueEnvFixture) || strings.Contains(stdout, opaqueStdinFixture) ||
 		strings.Contains(stderr, opaqueEnvFixture) || strings.Contains(stderr, opaqueStdinFixture) {
 		t.Fatal("opaque credential fixture appeared in command output")
+	}
+}
+
+func assertProjectFilesDoNotContainFixtures(t *testing.T, root string) {
+	t.Helper()
+	err := filepath.Walk(filepath.Join(root, ".polymetrics"), func(path string, info os.FileInfo, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if info.IsDir() {
+			return nil
+		}
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		if bytes.Contains(content, []byte(opaqueEnvFixture)) || bytes.Contains(content, []byte(opaqueStdinFixture)) {
+			return errors.New("opaque credential fixture found in project file")
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("scan temporary project for plaintext fixture: %v", err)
 	}
 }
 
