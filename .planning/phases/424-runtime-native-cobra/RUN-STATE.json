@@ -16,7 +16,9 @@
     "independentReviewLog": "/tmp/pm-397-review-424.log"
   },
   "verificationPassed": true,
-  "status": "positional_help_correction_local_verified_pending_commit_push",
+  "status": "positional_help_correction_committed_pushed",
+  "positionalHelpCorrectionCommit": "345399166711e6e733d8f0c84e17db55a2d90a2a",
+  "positionalHelpCorrectionPush": "origin/refactor/424-runtime-native-cobra advanced from 8d696cd4c27fad6840e905917e7658e785fa5436 to 345399166711e6e733d8f0c84e17db55a2d90a2a",
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",

@@ -19,7 +19,7 @@ Worker: session `7050f706-72d2-47df-ac13-0b08979cc1ae`; model `openai-codex/gpt-
 - [x] `git diff --check` — pass, no output.
 - [x] `git diff -- go.mod go.sum` empty; no new dependencies.
 - [x] Runtime-backed checks not run; no services or credentials used. `make verify` used only its existing local temp-dir smoke.
-- [ ] Coherent green correction committed and existing branch pushed; no new PR/review request.
+- [x] Coherent green correction committed as `345399166711e6e733d8f0c84e17db55a2d90a2a` and pushed to the existing branch; no new PR/review request.
 
 Correction result: the hidden native positional alias restores canonical runtime text/JSON help. Built-binary output reported `text_alias_match=true`, `json_alias=CommandManual/runtime`, and `invalid_action_exit=2 category=usage command_manual=False`. Full `make verify` passed with `connectorgen validate: 547 connector(s) checked, 0 findings`. No runtime-backed integration test was run.
 

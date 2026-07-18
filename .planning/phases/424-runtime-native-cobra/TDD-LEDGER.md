@@ -81,6 +81,7 @@ Result: doctor/list pass with 69 commands; plan prompt written (10739 bytes); pr
 | 10 | Positional-help correction red | `go test ./internal/cli/ -run '^TestRuntimeBareHelpAndInvalidActionSemantics$' -count=1` | Fail as expected | Both `runtime help` and `runtime help --json` exit 2 as unknown commands before production edits; existing assertions continue to protect invalid-action usage behavior. |
 | 11 | Positional-help correction green | Add hidden native `runtime help` alias; run focused test and runtime/router/golden/runtimecheck checks | Pass | Positional text help is byte-identical to canonical help; JSON returns runtime `CommandManual`; invalid actions remain usage errors. |
 | 12 | Positional-help correction full gate | `gofmt -w cmd internal`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `make verify`; binary parity and diff guards | Pass | Full repository gates passed; no runtime services, credentials, dependencies, docs, website, or golden deltas. |
+| 13 | Positional-help correction delivery | Commit `345399166711e6e733d8f0c84e17db55a2d90a2a`; push `refactor/424-runtime-native-cobra` | Pass | Existing PR #460 branch advanced from exact starting HEAD; no new PR or external review request. |
 
 ## Planned red tests
 

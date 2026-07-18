@@ -1,6 +1,6 @@
 # Phase 424 Summary
 
-Status: PR #460 review-fix local verification passed on `refactor/424-runtime-native-cobra`; no Claude/Copilot requested.
+Status: PR #460 positional-help correction verified and pushed on `refactor/424-runtime-native-cobra`; no Claude/Copilot requested.
 
 ## Current state
 
@@ -45,7 +45,7 @@ Sub-PR #460 opened non-draft against `feat/cli-architecture-v2`; remote checks a
 
 Independent review found that native Cobra routing had dropped the legacy positional aliases `pm runtime help` and `pm runtime help --json`. Session `7050f706-72d2-47df-ac13-0b08979cc1ae` (`openai-codex/gpt-5.6-sol`, thinking `high`) started from exact HEAD `8d696cd4c27fad6840e905917e7658e785fa5436`, captured focused RED failures for both aliases, and added one hidden native `runtime help` command that delegates to the canonical runtime manual.
 
-Focused runtime/router/golden and runtimecheck tests passed. Built-binary checks confirmed positional text help matches `pm help runtime`, positional JSON help returns `CommandManual/runtime`, and `runtime bogus --json` still exits 2 with usage and no manual envelope. Full gofmt, vet, repository tests, build, and `make verify` passed. Canonical help, docs, website, goldens, and dependencies have no delta. No new PR or external review request was made.
+Focused runtime/router/golden and runtimecheck tests passed. Built-binary checks confirmed positional text help matches `pm help runtime`, positional JSON help returns `CommandManual/runtime`, and `runtime bogus --json` still exits 2 with usage and no manual envelope. Full gofmt, vet, repository tests, build, and `make verify` passed. Canonical help, docs, website, goldens, and dependencies have no delta. Correction commit `345399166711e6e733d8f0c84e17db55a2d90a2a` was pushed to the existing PR #460 branch; no new PR or external review request was made.
 
 ## Safety
 
