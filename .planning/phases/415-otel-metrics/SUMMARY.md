@@ -1,6 +1,6 @@
 # Summary — Phase 415 OpenTelemetry metrics
 
-Status: implementation green pre-commit; manual GSD/TDD fallback active because `scripts/gsd prompt programming-loop` is unavailable.
+Status: verified; manual GSD/TDD fallback active because `scripts/gsd prompt programming-loop` is unavailable.
 
 ## Current state
 
@@ -29,4 +29,4 @@ Status: implementation green pre-commit; manual GSD/TDD fallback active because 
 - `go test -timeout 20m ./...`: pass.
 - `go build ./cmd/pm`: pass.
 - `git diff --check`: pass.
-- `make verify`: pre-commit run stopped at `tidy-check` because go.mod/go.sum dependency delta is intentionally uncommitted; rerun after commit.
+- `make verify`: pass after implementation commit `9894e6ef` (fmt, tidy-check, vet, full tests, build, docs validate, smoke, connector lint, connectorgen validate).

@@ -63,3 +63,4 @@ Use synthetic non-secret markers only. Never use real credentials.
 | 5 | green | Benchmark | `go test -bench BenchmarkEmit -benchmem ./internal/app` | Pass | `BenchmarkEmit-12 592256128 2.040 ns/op 0 B/op 0 allocs/op`; enabled/disabled hot-path allocation tests also assert 0 allocs. |
 | 6 | verify | Gate | `gofmt -w cmd internal`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `git diff --check` | Pass | Full package suite green; build and whitespace gates green. |
 | 7 | verify | Gate | `make verify` before dependency commit | Fail/expected | Stopped at `tidy-check` because ADR-approved go.mod/go.sum dependency delta was intentionally uncommitted; rerun after commit. |
+| 8 | verify | Gate | `make verify` after `9894e6ef` | Pass | Full verify green, including smoke, connector lint, and `connectorgen validate`. |

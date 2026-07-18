@@ -16,7 +16,7 @@
 - [x] Focused package tests: `go test ./internal/telemetry ./internal/app ./internal/cli ./internal/worker -run 'Metric|Telemetry|BenchmarkEmit|Temporal' -count=1` (adjust regex to actual tests).
 - [x] `go test ./...` or honest extended timeout if default hits existing slow tests.
 - [x] `go build ./cmd/pm`.
-- [ ] `make verify` when feasible (pre-commit run reached tidy-check and stopped on expected uncommitted go.mod/go.sum dependency diff; rerun after commit required).
+- [x] `make verify` when feasible (post-commit rerun passed).
 - [x] `git diff --check`.
 - [x] Dependency diff review: `git diff -- go.mod go.sum`; only ADR 0004 metrics/contrib modules and OTel metric API promotion at v1.44.0 plus OTel metric/x v0.66.0 indirect checksum.
 
@@ -74,3 +74,4 @@ git diff -- go.mod go.sum
 | `git diff --check` | pass | No whitespace errors. |
 | `git diff -- go.mod go.sum`; `go list -m all | grep -E '^(go\\.opentelemetry\\.io/otel|go\\.temporal\\.io/sdk/contrib/opentelemetry)( |/)'` | pass | Direct additions: `go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp@v1.44.0`, `go.opentelemetry.io/otel/exporters/stdout/stdoutmetric@v1.44.0`, `go.opentelemetry.io/otel/sdk/metric@v1.44.0`, `go.temporal.io/sdk/contrib/opentelemetry@v0.7.0`; `go.opentelemetry.io/otel/metric@v1.44.0` promoted from indirect due API import; `go.opentelemetry.io/otel/metric/x@v0.66.0` checksum added transitively. |
 | `make verify` before commit | fail/expected | Stopped at `tidy-check` because dependency diff was intentionally uncommitted; rerun after committing dependency delta. |
+| `make verify` after `9894e6ef` | pass | Full verify passed: fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, golangci-lint connector subset (`0 issues`), and `connectorgen validate` (`547 connector(s) checked, 0 findings`). |
