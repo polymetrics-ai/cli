@@ -11,6 +11,7 @@ import (
 
 	"polymetrics.ai/internal/connectors/certify"
 	"polymetrics.ai/internal/safety"
+	"polymetrics.ai/internal/telemetry"
 )
 
 // runCertify dispatches `pm connectors certify ...` (certification design §A
@@ -37,7 +38,21 @@ func runCertify(ctx context.Context, root string, args []string, stdout io.Write
 
 // --- single-connector mode ---
 
-func runCertifySingle(ctx context.Context, root, connector string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+func runCertifySingle(ctx context.Context, root, connector string, flags parsedFlags, stdout io.Writer, jsonOut bool) (err error) {
+	ctx, span := telemetry.StartSpan(ctx, "pm.certify.connector",
+		telemetry.StringAttr("pm.certify.connector", connector),
+		telemetry.StringAttr("pm.certify.mode", "single"),
+	)
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetAttributes(telemetry.StringAttr("pm.certify.status", "failed"))
+		} else {
+			span.SetAttributes(telemetry.StringAttr("pm.certify.status", "ok"))
+		}
+		span.End()
+	}()
+
 	if err := safety.ValidateIdentifier(connector, "connector"); err != nil {
 		return validationErrorf("%v", err)
 	}
@@ -112,7 +127,18 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 
 // --- batch mode (--all --credentials-file) ---
 
-func runCertifyBatch(ctx context.Context, root string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+func runCertifyBatch(ctx context.Context, root string, flags parsedFlags, stdout io.Writer, jsonOut bool) (err error) {
+	ctx, span := telemetry.StartSpan(ctx, "pm.certify.batch", telemetry.StringAttr("pm.certify.mode", "batch"))
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetAttributes(telemetry.StringAttr("pm.certify.status", "failed"))
+		} else {
+			span.SetAttributes(telemetry.StringAttr("pm.certify.status", "ok"))
+		}
+		span.End()
+	}()
+
 	credsPath := flags.first("credentials-file")
 	if credsPath == "" {
 		return usageErrorf("pm connectors certify --all requires --credentials-file <file>")

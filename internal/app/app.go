@@ -21,6 +21,7 @@ import (
 	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
+	"polymetrics.ai/internal/telemetry"
 	"polymetrics.ai/internal/vault"
 )
 
@@ -399,7 +400,25 @@ func (a *App) ShowCatalog(ctx context.Context, connectionName string) (CatalogSn
 	return a.RefreshCatalog(ctx, connectionName)
 }
 
-func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
+func (a *App) RunETL(ctx context.Context, req RunETLRequest) (run Run, err error) {
+	ctx, span := telemetry.StartSpan(ctx, "pm.etl.run",
+		telemetry.StringAttr("pm.etl.connection", req.Connection),
+		telemetry.StringAttr("pm.etl.stream", req.Stream),
+	)
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetAttributes(telemetry.StringAttr("pm.etl.status", "failed"))
+		} else {
+			span.SetAttributes(
+				telemetry.StringAttr("pm.etl.status", "ok"),
+				telemetry.IntAttr("pm.etl.records_read", run.RecordsRead),
+				telemetry.IntAttr("pm.etl.records_loaded", run.RecordsLoaded),
+			)
+		}
+		span.End()
+	}()
+
 	conn, ok := a.findConnection(req.Connection)
 	if !ok {
 		return Run{}, fmt.Errorf("connection %q not found", req.Connection)
@@ -413,7 +432,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return Run{}, err
 	}
 	ctx = pmlogging.WithRunID(ctx, runID)
-	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
+	run = Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
 	a.state.Runs = append(a.state.Runs, run)
 	_ = a.save()
 	pmlogging.FromContext(ctx).InfoContext(ctx, "etl run started", "run_id", runID, "connection", req.Connection, "stream", req.Stream)
