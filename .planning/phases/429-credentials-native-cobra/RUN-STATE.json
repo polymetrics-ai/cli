@@ -38,8 +38,10 @@
   "thirdCorrectionStartingHead": "6158cdc92d5df01cbaa577ceeb5a870ddcb8f685",
   "thirdCorrectionSource": "/tmp/pm-397-rereview2-429.log",
   "thirdCorrectionFindingsAccepted": ["MEDIUM_raw_internal_carrier_override"],
-  "status": "third_correction_planned_tdd_pending",
-  "verificationPassed": false,
+  "thirdCorrectionEndedAt": "20260718T182200Z",
+  "thirdCorrectionEndingImplementationHead": "30875076c7cdb172727ffb506c10fb628dd3007c",
+  "status": "complete_verified_pushed_no_pr_no_review",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -64,6 +66,16 @@
       "cycle": "third-correction-green",
       "decision": "local_critical_path",
       "reason": "the hidden pflag is removed; private command-context state preserves leading-hyphen names, raw carrier spellings fail closed, and focused, repeated, adversarial, and race tests pass without value output or record mutation"
+    },
+    {
+      "cycle": "third-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "seven unaffected exact-base cases matched byte-for-byte; all 12 current raw cases exited usage 2; full CLI, gofmt, vet, build, diff, scope, and dependency gates passed"
+    },
+    {
+      "cycle": "third-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "the accepted finding is closed, exact evidence is recorded, coherent checkpoints are pushed, and the user prohibited PR and external review"
     },
     {
       "cycle": "second-correction-plan",
@@ -185,7 +197,7 @@
     "6c36ecd2 test(cli): expose second credentials regressions",
     "ec7064a8 fix(cli): enforce local credential effect boundaries"
   ],
-  "push": "all original, first-review, and second-correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
+  "push": "all original, first-review, second-correction, and third-correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
   "secondCorrectionReviewRoute": "not_run_user_prohibited_review",
@@ -194,6 +206,7 @@
   "reviewCorrectionVerification": "pass: repeated correction 49.385s; repeated safety 0.560s; full CLI 282.493s; full repository CLI 284.380s and certify 340.838s; exact base help 2/2; golden/manual 6.146s; gofmt, vet, build, and make verify passed; lint 0 and connector validation 547/0",
   "thirdCorrectionRed": "12-case add/inspect/test/remove by assigned/bare/spaced raw-carrier matrix failed before production edits in 11.651s; assigned/spaced forms overrode every action and add/bare returned runtime code 3 instead of usage 2",
   "thirdCorrectionGreen": "hidden pflag removed; private command-context carriage and raw-carrier rejection passed focused/adversarial in 34.099s, repeated five times in 56.733s, and focused race in 273.254s",
+  "thirdCorrectionVerification": "pass: seven preserved exact-base cases matched exit/stdout/stderr byte-for-byte; all 12 current raw-carrier cases exited usage 2; full CLI passed in 332.836s; gofmt, vet, build, diff, scope, and dependency gates passed",
   "secondCorrectionRed": "focused app and CLI tests failed before production edits: selected-root relative effects missed the selected root, denied post-resolution retargets reached external effects, and leading-hyphen add exited 1; actual state helper corrected test-first",
   "secondCorrectionGreen": "focused app 3.512s, CLI 16.112s, connectors 0.355s, safety 0.340s; repeated app 14.917s and CLI 79.908s; focused race app 34.593s and CLI 180.125s; all credentials 48.502s",
   "secondCorrectionVerification": "pass: app 25.808s, CLI 280.439s, connectors certify 337.004s; exact-start differential preserved 5/5 with corrected leading-name base/head exits 1/0; full repository app 27.976s, CLI 285.504s, certify 340.518s; gofmt, vet, build, and make verify passed; lint 0 and connector validation 547/0",

@@ -21,6 +21,12 @@ Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace
 - Smallest implementation: remove the user-addressable hidden pflag carrier and carry the normalized leading-hyphen positional name in inaccessible command-local state, while rejecting every raw internal-carrier spelling before ordinary normalization. Preserve safety-valid leading-hyphen names and all normal current/global flags.
 - Verification: focused RED/GREEN; repeated/race/adversarial credentials tests; exact-start differential for normal help/flags and corrected raw-carrier cases; full CLI; gofmt, vet, build, full tests/declared full gate, and diff/scope guards. Commit/push coherent planning, RED, GREEN, and final evidence checkpoints. No private data display, real credentials, services, dependencies, PR, or external review.
 
+### Third correction completion
+
+Completed at implementation head `30875076c7cdb172727ffb506c10fb628dd3007c` on `20260718T182200Z`. The hidden carrier pflag no longer exists. Exact raw carrier tokens are rejected before command execution, while an unexported command-context state preserves normalized leading-hyphen positional names. The 12-case matrix now fails closed with usage for every action/form, does not access or remove the target record, and emits no synthetic value.
+
+Focused/adversarial, repeated, race, seven-case exact-base preserved differential, 12-case corrected raw differential, full CLI, gofmt, vet, build, diff, scope, and dependency gates passed. Full CLI completed in `332.836s`; normal differential was byte-identical 7/7 and all 12 head raw cases exited 2. No private data display, service, dependency, checked-in docs/website change, PR, or review occurred.
+
 ## Second bounded correction
 
 - Session: `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; explicit profile `Sol/high`.

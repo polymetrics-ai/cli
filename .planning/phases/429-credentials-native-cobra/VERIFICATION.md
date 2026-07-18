@@ -11,11 +11,11 @@ Invocation `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`; exac
 - [x] RED: the 12-case `add|inspect|test|remove` × assigned/bare/spaced matrix failed before production edits (`11.651s`): 9 contract violations, including successful assigned/spaced ownership overrides for every action and add/bare runtime code 3 instead of usage 2.
 - [x] GREEN: all raw internal-carrier spellings return usage/fail closed; no positional ownership override, wrong record access/removal, or synthetic value output occurs (`34.099s`; repeated ×5 `56.733s`).
 - [x] GREEN: safety-valid leading-hyphen credential names and normal current/global flags remain supported without a user-addressable pflag; focused race passed in `273.254s`.
-- [ ] Focused, repeated, race, adversarial, exact-start differential, full CLI, gofmt, vet, build, full declared gate, and diff/scope guards pass.
-- [ ] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified.
-- [ ] Planning, RED, GREEN, and final evidence checkpoints committed and pushed; no private data display, real credentials, services, dependencies, PR, or review.
+- [x] Focused, repeated, race, adversarial, exact-start differential, full CLI, gofmt, vet, build, and diff/scope guards pass. Full CLI: `332.836s`; normal differential byte-identical 7/7; all 12 current raw cases exit 2.
+- [x] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified by exact help differential and clean checked-in docs/website scope.
+- [x] Planning, RED, GREEN, and final evidence checkpoints committed and pushed; no private data display, real credentials, services, dependencies, PR, or review.
 
-Result: reopened; `verificationPassed=false` until the declared third-correction gates complete.
+Result: pass; `verificationPassed=true` for the user-declared third-correction gate set.
 
 ## Second bounded correction checklist
 

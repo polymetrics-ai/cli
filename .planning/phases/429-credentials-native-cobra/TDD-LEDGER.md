@@ -20,9 +20,18 @@ Session `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`; exact c
 | T0 | Review/plan | Record the raw hidden-carrier ownership bypass, 12-case action/form RED matrix, inaccessible state design, safety constraints, and verification/checkpoint sequence before production edits | Complete |
 | T1 | RED | `go test ./internal/cli -run '^TestCredentialsRawInternalNameCarrierFailsClosed$' -count=1` | Failed as required in `11.651s`: 9/12 cases violated the contract; assigned/spaced forms overrode all four actions and exited 0, while add/bare returned runtime code 3 instead of usage 2 |
 | T2 | GREEN | Remove hidden pflag; use private command-context state; reject raw carrier before parsing; preserve leading-hyphen names and globals | Pass: focused/adversarial `34.099s`, raw matrix ×5 `56.733s`, focused race `273.254s` |
-| T3 | Verify | Focused/repeated/race/adversarial/base differential/full CLI plus gofmt/vet/build/full declared gate/diff | Pending |
+| T3 | Verify | Focused/repeated/race/adversarial/base differential/full CLI plus gofmt/vet/build/diff | Pass: normal exact-base differential 7/7 byte-equal; all 12 head raw cases exit 2; full CLI `332.836s`; gofmt/vet/build/diff/scope clean |
 
 Tests use temporary roots and synthetic metadata/config only. They must not print fixture values or contact external services.
+
+### Third correction final evidence
+
+- RED: `11.651s`; 9/12 contract violations before production edits.
+- GREEN/adversarial: `34.099s`; raw matrix repeated five times in `56.733s`; focused race `273.254s`.
+- Exact `6158cdc9` differential: seven preserved help/error/ordinary/leading-name/global cases matched exit/stdout/stderr byte-for-byte; all 12 current raw carrier cases exited usage 2.
+- Full CLI: `go test -timeout 20m ./internal/cli/... -count=1` passed in `332.836s`.
+- `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, start-range/current `git diff --check`, scope, dependency, and clean-worktree gates passed.
+- No private value output, real credential, service, dependency, PR, or external review.
 
 ## Second bounded correction ledger
 

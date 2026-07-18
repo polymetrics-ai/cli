@@ -1,10 +1,12 @@
 # Phase 429 Summary
 
-Status: third bounded correction reopened at exact head `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`; MEDIUM raw internal-carrier ownership finding accepted; verification pending; no PR or review.
+Status: third bounded correction complete, verified, and pushed from exact head `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`; MEDIUM raw internal-carrier ownership finding closed; no PR or review.
 
 ## Third bounded correction
 
-The hidden `--pm-internal-credentials-name` pflag was raw-user-addressable and could supersede the required first positional credential name. The 12-case add/inspect/test/remove × assigned/bare/spaced RED matrix failed before production edits in `11.651s`: assigned/spaced raw forms overrode every action and exited 0, while add/bare returned runtime code 3 rather than usage 2. The hidden pflag is now removed. A private command-context value carries normalized leading-hyphen names, while exact raw carrier spellings are rejected before Cobra parsing. Focused/adversarial (`34.099s`), repeated ×5 (`56.733s`), and focused race (`273.254s`) tests prove fail-closed behavior, unchanged records, no synthetic value output, and preservation of leading-hyphen names plus normal flags. Broader verification remains pending.
+The hidden `--pm-internal-credentials-name` pflag was raw-user-addressable and could supersede the required first positional credential name. The 12-case add/inspect/test/remove × assigned/bare/spaced RED matrix failed before production edits in `11.651s`: assigned/spaced raw forms overrode every action and exited 0, while add/bare returned runtime code 3 rather than usage 2. The hidden pflag is now removed. A private command-context value carries normalized leading-hyphen names, while exact raw carrier spellings are rejected before Cobra parsing. Focused/adversarial (`34.099s`), repeated ×5 (`56.733s`), and focused race (`273.254s`) tests prove fail-closed behavior, unchanged records, no synthetic value output, and preservation of leading-hyphen names plus normal flags.
+
+Seven unaffected exact-base cases matched exit/stdout/stderr byte-for-byte; every one of the 12 current raw carrier differential cases exited usage 2. Full CLI passed in `332.836s`; gofmt, vet, build, diff, scope, and dependency checks passed. Implementation head: `30875076c7cdb172727ffb506c10fb628dd3007c`. No private data display, service, dependency, checked-in docs/website delta, PR, or review.
 
 ## Second bounded correction
 

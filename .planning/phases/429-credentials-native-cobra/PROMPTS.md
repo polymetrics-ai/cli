@@ -57,7 +57,7 @@ Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`
 
 Downstream artifact: strict 12-case RED matrix for raw assigned/bare/spaced internal carrier use across add/inspect/test/remove; inaccessible command-local leading-name carriage; raw-carrier fail-closed guard; finalized phase evidence.
 
-Verification result: pending. No production edit has started. No private data display, real credential, service, dependency, PR, or review is permitted.
+Verification result: pass. RED failed 9/12 contract cases before production edits (`11.651s`). Focused/adversarial (`34.099s`), repeated ×5 (`56.733s`), race (`273.254s`), seven-case exact preserved differential, 12-case corrected raw differential, full CLI (`332.836s`), gofmt, vet, build, diff, scope, and dependency gates passed. No private data display, real credential, service, dependency, checked-in docs/website delta, PR, or review occurred.
 
 ## Verification and local review snapshot
 
