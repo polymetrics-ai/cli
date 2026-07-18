@@ -88,7 +88,16 @@ func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, std
 }
 
 func executeRootCmd(cmd *cobra.Command, args []string) error {
-	args = normalizeNativeStringArrayArgs(args)
+	var credentialsState credentialsCommandState
+	args = normalizeNativeStringArrayArgs(args, &credentialsState)
+	ctx := cmd.Context()
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	cmd.SetContext(context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState))
+	if credentialsState.rawCarrier {
+		return errUsage
+	}
 	if len(args) > 0 && lookupTopLevelCommand(cmd, args[0]) == nil {
 		return cmd.RunE(cmd, args)
 	}
@@ -100,7 +109,7 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	return err
 }
 
-func normalizeNativeStringArrayArgs(args []string) []string {
+func normalizeNativeStringArrayArgs(args []string, credentialsState *credentialsCommandState) []string {
 	if len(args) >= 3 && args[0] == "catalog" && (args[1] == "refresh" || args[1] == "show") {
 		return normalizeStringArraySpaceValues(args, 2, map[string]struct{}{"connection": {}})
 	}
@@ -120,6 +129,10 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 		return normalizeStringArraySpaceValues(args, 2, skillsGenerateFlagNames)
 	}
 	if len(args) >= 2 && args[0] == "credentials" {
+		if credentialsActionTakesName(args[1]) && credentialsArgsContainRawCarrier(args[2:]) {
+			credentialsState.rawCarrier = true
+			return args
+		}
 		if isHelpArg(args[1]) {
 			return append([]string(nil), args[:2]...)
 		}
@@ -127,7 +140,7 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 			args = normalizeStringArraySpaceValues(args, 2, credentialsAddFlagNames)
 		}
 		var bounded bool
-		args, bounded = normalizeCredentialsActionBoundary(args)
+		args, bounded = normalizeCredentialsActionBoundary(args, credentialsState)
 		if bounded {
 			return args
 		}
@@ -172,14 +185,14 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 	return args
 }
 
-func normalizeCredentialsActionBoundary(args []string) ([]string, bool) {
+func normalizeCredentialsActionBoundary(args []string, state *credentialsCommandState) ([]string, bool) {
 	switch args[1] {
 	case "add", "inspect", "test", "remove":
 		if len(args) >= 3 && strings.HasPrefix(args[2], "-") {
 			if credentialsTailContainsOnlyFlags(args[3:]) {
-				out := make([]string, 0, len(args))
+				state.boundedName = args[2]
+				out := make([]string, 0, len(args)-1)
 				out = append(out, args[:2]...)
-				out = append(out, "--"+credentialsBoundedNameFlag+"="+args[2])
 				out = append(out, args[3:]...)
 				return normalizeCredentialsLegacyActionArgs(out, 2), true
 			}
@@ -198,6 +211,25 @@ func normalizeCredentialsActionBoundary(args []string) ([]string, bool) {
 	out = append(out, args[0], "--")
 	out = append(out, args[1:]...)
 	return out, true
+}
+
+func credentialsActionTakesName(action string) bool {
+	switch action {
+	case "add", "inspect", "test", "remove":
+		return true
+	default:
+		return false
+	}
+}
+
+func credentialsArgsContainRawCarrier(args []string) bool {
+	const rawCarrier = "--pm-internal-credentials-name"
+	for _, arg := range args {
+		if arg == rawCarrier || strings.HasPrefix(arg, rawCarrier+"=") {
+			return true
+		}
+	}
+	return false
 }
 
 func credentialsTailContainsOnlyFlags(args []string) bool {

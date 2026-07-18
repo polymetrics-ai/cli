@@ -16,7 +16,12 @@ import (
 	"polymetrics.ai/internal/safety"
 )
 
-const credentialsBoundedNameFlag = "pm-internal-credentials-name"
+type credentialsCommandStateKey struct{}
+
+type credentialsCommandState struct {
+	boundedName string
+	rawCarrier  bool
+}
 
 type credentialsAddFlags struct {
 	Connectors []string
@@ -56,9 +61,8 @@ func newCredentialsCobraCommand(ctx context.Context, root string, stdout io.Writ
 
 func newCredentialsAddCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
 	var flags credentialsAddFlags
-	var boundedName string
 	cmd := newCredentialsActionCobraCommand("add <name>", func(cmd *cobra.Command, args []string) error {
-		name, ok := credentialsActionName(args, boundedName)
+		name, ok := credentialsActionName(cmd, args)
 		if !ok {
 			return errUsage
 		}
@@ -66,7 +70,6 @@ func newCredentialsAddCobraCommand(ctx context.Context, root string, stdout io.W
 			return runCredentialsAdd(ctx, a, name, flags, cmd.InOrStdin(), stdout, jsonOut)
 		}))
 	})
-	addCredentialsBoundedNameFlag(cmd, &boundedName)
 	setManualHelp(cmd, "credentials", stdout, jsonOut)
 	addCredentialsStringArrayFlag(cmd, &flags.Connectors, "connector", "connector that owns the credential")
 	addCredentialsStringArrayFlag(cmd, &flags.FromEnv, "from-env", "secret source field=ENV")
@@ -86,9 +89,8 @@ func newCredentialsListCobraCommand(root string, stdout io.Writer, jsonOut bool)
 }
 
 func newCredentialsInspectCobraCommand(root string, stdout io.Writer, jsonOut bool) *cobra.Command {
-	var boundedName string
-	cmd := newCredentialsActionCobraCommand("inspect <name>", func(_ *cobra.Command, args []string) error {
-		name, ok := credentialsActionName(args, boundedName)
+	cmd := newCredentialsActionCobraCommand("inspect <name>", func(cmd *cobra.Command, args []string) error {
+		name, ok := credentialsActionName(cmd, args)
 		if !ok {
 			return errUsage
 		}
@@ -96,15 +98,13 @@ func newCredentialsInspectCobraCommand(root string, stdout io.Writer, jsonOut bo
 			return runCredentialsInspect(a, name, stdout, jsonOut)
 		}))
 	})
-	addCredentialsBoundedNameFlag(cmd, &boundedName)
 	setManualHelp(cmd, "credentials", stdout, jsonOut)
 	return cmd
 }
 
 func newCredentialsTestCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
-	var boundedName string
-	cmd := newCredentialsActionCobraCommand("test <name>", func(_ *cobra.Command, args []string) error {
-		name, ok := credentialsActionName(args, boundedName)
+	cmd := newCredentialsActionCobraCommand("test <name>", func(cmd *cobra.Command, args []string) error {
+		name, ok := credentialsActionName(cmd, args)
 		if !ok {
 			return errUsage
 		}
@@ -112,15 +112,13 @@ func newCredentialsTestCobraCommand(ctx context.Context, root string, stdout io.
 			return runCredentialsTest(ctx, a, name, stdout, jsonOut)
 		}))
 	})
-	addCredentialsBoundedNameFlag(cmd, &boundedName)
 	setManualHelp(cmd, "credentials", stdout, jsonOut)
 	return cmd
 }
 
 func newCredentialsRemoveCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
-	var boundedName string
-	cmd := newCredentialsActionCobraCommand("remove <name>", func(_ *cobra.Command, args []string) error {
-		name, ok := credentialsActionName(args, boundedName)
+	cmd := newCredentialsActionCobraCommand("remove <name>", func(cmd *cobra.Command, args []string) error {
+		name, ok := credentialsActionName(cmd, args)
 		if !ok {
 			return errUsage
 		}
@@ -128,7 +126,6 @@ func newCredentialsRemoveCobraCommand(ctx context.Context, root string, stdout i
 			return runCredentialsRemove(ctx, a, name, stdout)
 		}))
 	})
-	addCredentialsBoundedNameFlag(cmd, &boundedName)
 	setManualHelp(cmd, "credentials", stdout, jsonOut)
 	return cmd
 }
@@ -163,16 +160,9 @@ func addCredentialsStringArrayFlag(cmd *cobra.Command, target *[]string, name, u
 	}
 }
 
-func addCredentialsBoundedNameFlag(cmd *cobra.Command, target *string) {
-	cmd.Flags().StringVar(target, credentialsBoundedNameFlag, "", "")
-	if flag := cmd.Flags().Lookup(credentialsBoundedNameFlag); flag != nil {
-		flag.Hidden = true
-	}
-}
-
-func credentialsActionName(args []string, boundedName string) (string, bool) {
-	if boundedName != "" {
-		return boundedName, true
+func credentialsActionName(cmd *cobra.Command, args []string) (string, bool) {
+	if state, ok := cmd.Context().Value(credentialsCommandStateKey{}).(credentialsCommandState); ok && state.boundedName != "" {
+		return state.boundedName, true
 	}
 	if len(args) == 0 {
 		return "", false

@@ -55,6 +55,9 @@ func TestCredentialsCommandIsNativeCobraSubtree(t *testing.T) {
 			if !action.FParseErrWhitelist.UnknownFlags {
 				t.Fatalf("credentials %s must preserve unknown-flag tolerance", name)
 			}
+			if action.Flags().Lookup("pm-internal-credentials-name") != nil {
+				t.Fatalf("credentials %s exposes the internal name carrier as a user flag", name)
+			}
 			if action.ValidArgsFunction == nil {
 				t.Fatalf("credentials %s missing no-file completion seam", name)
 			}

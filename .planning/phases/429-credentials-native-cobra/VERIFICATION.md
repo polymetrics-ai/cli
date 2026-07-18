@@ -9,8 +9,8 @@ Invocation `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`; exac
 - [x] Read `/tmp/pm-397-rereview2-429.log` and accept the MEDIUM raw internal-carrier ownership finding.
 - [x] Run GSD doctor/list, record missing programming-loop/manual fallback, load required skills/policies, and update issue artifacts before production edits.
 - [x] RED: the 12-case `add|inspect|test|remove` × assigned/bare/spaced matrix failed before production edits (`11.651s`): 9 contract violations, including successful assigned/spaced ownership overrides for every action and add/bare runtime code 3 instead of usage 2.
-- [ ] GREEN: raw internal-carrier spellings return usage/fail closed; no positional ownership override, wrong record access/removal, or value output occurs.
-- [ ] GREEN: safety-valid leading-hyphen credential names and all normal current/global flags remain supported without a user-addressable carrier.
+- [x] GREEN: all raw internal-carrier spellings return usage/fail closed; no positional ownership override, wrong record access/removal, or synthetic value output occurs (`34.099s`; repeated ×5 `56.733s`).
+- [x] GREEN: safety-valid leading-hyphen credential names and normal current/global flags remain supported without a user-addressable pflag; focused race passed in `273.254s`.
 - [ ] Focused, repeated, race, adversarial, exact-start differential, full CLI, gofmt, vet, build, full declared gate, and diff/scope guards pass.
 - [ ] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified.
 - [ ] Planning, RED, GREEN, and final evidence checkpoints committed and pushed; no private data display, real credentials, services, dependencies, PR, or review.
