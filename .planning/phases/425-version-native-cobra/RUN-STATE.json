@@ -10,7 +10,7 @@
   "invocationSession": "issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "planned",
+  "status": "red_captured",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -24,6 +24,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "fifth serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later namespace units and user restricted the run to issue 425"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused test-only changes captured exact RED for version native registration before production edits; behavior compatibility tests pass under the legacy wrapper"
     }
   ],
   "commits": [],

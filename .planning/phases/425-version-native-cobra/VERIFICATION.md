@@ -5,7 +5,7 @@ Invocation session: `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z
 ## TDD checklist
 
 - [x] Planning artifacts created before production edits.
-- [ ] Exact focused RED captured before production edits.
+- [x] Exact focused RED captured before production edits (`0.612s`; native registration assertions failed as intended).
 - [ ] Smallest native Cobra version implementation green.
 - [ ] Refactor/focused/golden tests green.
 
