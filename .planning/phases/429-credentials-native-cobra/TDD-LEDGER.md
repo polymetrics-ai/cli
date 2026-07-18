@@ -20,9 +20,20 @@ Session `issue-429-compatibility-correction-pi-openai-20260718T202616Z`; exact c
 | K0 | Review/plan | Record the accepted compatibility finding, complete safety-valid name matrix, ordinary-validation design, adversarial preservation gates, differential, and checkpoint sequence before production edits | Complete |
 | K1 | RED | `go test ./internal/cli -run 'TestCredentials(SafetyValidPrivateNamesSupportAddInspectRemove|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1` | Failed as required in `23.030s`: all 14 safety-valid short/double-hyphen add cases were rejected by private validation; raw-carrier rejection and invalid action/name ownership guards stayed green |
 | K2 | GREEN | Remove the private validator and validate privately carried names through `validateCredentialIdentifier(..., "credential")`; rerun compatibility plus raw-carrier and invalid ownership guards | Pass: focused compatibility/adversarial gate `56.416s`; all 14 names complete add/inspect/remove and first-token ownership, while raw-carrier and invalid ownership guards remain green |
-| K3 | Verify | Focused/adversarial/repeated/race CLI, exact-start differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pending |
+| K3 | Verify | Focused/adversarial/repeated/race CLI, exact parent-base/start/head differential, full CLI, help parity, gofmt/vet/build/diff/scope/dependency guards | Pass: repeated ×5 `352.467s`; aggregate race timed out at 600s, then compatibility/adversarial partitions passed in `457.137s`/`262.781s`; differential 14 names and 42 lifecycle ops per base/head with 42 start rejections; full CLI `333.259s`; remaining gates clean |
 
-Tests use temporary roots and config-only credentials. They must not read, print, summarize, or store private values or contact services.
+Tests use temporary roots and config-only credentials. They did not read, print, summarize, or store private values or contact services.
+
+### Compatibility correction final evidence
+
+- RED: all 14 compatibility subtests failed only at private validation in `23.030s`; raw-carrier and invalid action/name ownership guards stayed green.
+- GREEN: focused compatibility/adversarial `56.416s`; repeated ×5 `352.467s`.
+- Race: the aggregate command exceeded 600 seconds without a test failure; exact compatibility and adversarial partitions then passed in `457.137s` and `262.781s`.
+- Differential: original parent base and final head each passed 42 add/inspect/remove operations for 14 names; correction start rejected all 42 corresponding operations; 28 base/head add/remove stdout/stderr pairs were byte-identical and inspect metadata named the owned first token.
+- Full CLI: `go test -timeout 20m ./internal/cli/... -count=1` passed in `333.259s`.
+- Runtime help topic/bare/long-help were byte-identical at 1252 bytes with empty stderr; invalid action exited 2.
+- `gofmt -w cmd internal`, clean format diff, `go vet ./...`, `go build ./cmd/pm`, readonly module graph, start-range `git diff --check`, scope, dependency, and clean-worktree gates passed. An initial shell-only scope assertion used the wrong lexical filename order; the corrected exact file-list assertion passed.
+- Checkpoints: `d8aec609` planning, `a3752713` RED, `199b802c` GREEN; final evidence checkpoint prepared for push.
 
 ## Final bounded correction ledger
 

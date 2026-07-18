@@ -59,8 +59,10 @@
   "compatibilityCorrectionStartingHead": "7497483de2187b3117c32b9cafb3db54ebac792f",
   "compatibilityCorrectionSource": "/tmp/pm-397-rereview5-429.log",
   "compatibilityCorrectionFindingsAccepted": ["MEDIUM_safety_valid_legacy_names"],
-  "status": "compatibility_correction_in_progress",
-  "verificationPassed": false,
+  "compatibilityCorrectionEndedAt": "20260718T211055Z",
+  "compatibilityCorrectionEndingImplementationHead": "199b802c4d2be7e62e335549a8c56dc0804c909b",
+  "status": "complete_verified_pushed_no_pr_no_review",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -71,6 +73,16 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "compatibility-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "the accepted compatibility finding is closed, exact evidence is finalized, coherent checkpoints are pushed, and the user prohibited services, PR, and review"
+    },
+    {
+      "cycle": "compatibility-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused, repeated, partitioned race, exact parent-base/start/head differential, full CLI, help parity, gofmt, vet, build, diff, scope, and dependency gates passed"
+    },
     {
       "cycle": "compatibility-correction-green",
       "decision": "local_critical_path",
@@ -249,6 +261,7 @@
   ],
   "compatibilityCorrectionRed": "focused pre-production CLI failed as required in 23.030s: all 14 safety-valid short or double-hyphen compatibility subtests were rejected by private validation while raw internal-carrier and invalid action/name ownership guards remained green",
   "compatibilityCorrectionGreen": "private validator removed; ordinary credential identifier validation passed the 14-name add/inspect/remove and first-token ownership matrix plus raw-carrier and invalid ownership guards in 56.416s",
+  "compatibilityCorrectionVerification": "pass: repeated x5 352.467s; aggregate race timed out at 600s without failure, then compatibility/adversarial partitions passed 457.137s/262.781s; differential 14 names with base/head 42 lifecycle ops each, start 42 rejections, and 28 exact output pairs; full CLI 333.259s; help, gofmt, vet, build, diff, scope, and dependency gates clean",
   "finalCorrectionRed": "focused pre-production CLI failed with leading-hyphen add exit 1 while raw-carrier/no-discovery guards stayed green; focused app failed because truncate and truncate-create final-temp rejection left the already-open overwrite raw temp; CLI 23.649s, app 3.576s",
   "finalCorrectionGreen": "focused CLI/app/safety passed in 19.187s/3.362s/0.473s; repeated x5 CLI/app passed in 97.954s/16.976s; race CLI/app/localwrite passed in 214.993s/34.800s/1.406s",
   "finalCorrectionVerification": "pass: connector writes x5/race 0.471s/1.364s; exact parent-base/start/head exits 0/1/0 with byte-identical base/head output; full relevant CLI/app/safety/connectors 289.768s/30.339s/0.320s/0.474s; help routes exact and invalid action 2; gofmt, vet, build, diff, scope, and dependency gates clean",
@@ -296,7 +309,10 @@
     "bc13b768 fix(filesystem): confine local write effects",
     "a717fb6d docs(planning): plan final credentials correction",
     "fc49483d test(credentials): expose final correction regressions",
-    "74e8cffe fix(credentials): preserve bounded legacy behavior"
+    "74e8cffe fix(credentials): preserve bounded legacy behavior",
+    "d8aec609 docs(planning): plan credential compatibility correction",
+    "a3752713 test(credentials): expose safety-valid legacy name regression",
+    "199b802c fix(credentials): restore safety-valid legacy names"
   ],
   "push": "all original and five correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",

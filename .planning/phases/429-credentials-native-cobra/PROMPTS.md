@@ -57,7 +57,7 @@ Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`
 
 Downstream artifact: strict add/inspect/remove RED coverage for every requested class of safety-valid short leading-hyphen and double-hyphen names; preserved raw-carrier rejection and action/name ownership; ordinary credential validation for private carriage; finalized phase evidence.
 
-Verification result: strict RED failed as required in `23.030s`: all 14 safety-valid short/double-hyphen compatibility cases were rejected, while raw-carrier and invalid action/name ownership guards remained green. Focused compatibility/adversarial GREEN passed in `56.416s` after switching private carriage to ordinary credential validation. Repeated/race/base-differential/full CLI, gofmt, vet, build, diff, scope, and dependency gates remain pending.
+Verification result: pass. Strict RED failed as required in `23.030s`; focused GREEN passed in `56.416s`; repeated ×5 passed in `352.467s`; split compatibility/adversarial race passed in `457.137s`/`262.781s` after the aggregate command timed out at 600 seconds without a failure. Parent-base/start/head differential covered 14 names and 42 operations per lifecycle, full CLI passed in `333.259s`, and help parity, gofmt, vet, build, diff, scope, and dependency gates passed. No private data output, service, dependency, PR, or review.
 
 ## Final bounded correction snapshot
 

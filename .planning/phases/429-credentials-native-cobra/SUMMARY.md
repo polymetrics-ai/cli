@@ -1,10 +1,12 @@
 # Phase 429 Summary
 
-Status: compatibility correction in progress from exact head `7497483de2187b3117c32b9cafb3db54ebac792f`; MEDIUM safety-valid short/double-hyphen legacy-name finding accepted; no services, PR, or review.
+Status: compatibility correction complete and verified from exact head `7497483de2187b3117c32b9cafb3db54ebac792f`; MEDIUM safety-valid short/double-hyphen legacy-name finding closed; no services, PR, or review.
 
 ## Compatibility correction
 
-Planning completed before production edits. Strict RED covered 14 safety-valid short/double-hyphen names through config-only add/inspect/remove: all were rejected by private validation in `23.030s`, while raw internal-carrier rejection and invalid action/name ownership stayed green. The private validator is now removed; privately carried names use ordinary credential identifier validation. Focused compatibility/adversarial GREEN passed in `56.416s` with first-token ownership intact. Broader verification remains pending.
+Planning completed before production edits. Strict RED covered 14 safety-valid short/double-hyphen names through config-only add/inspect/remove: all were rejected by private validation in `23.030s`, while raw internal-carrier rejection and invalid action/name ownership stayed green. The private validator is removed; privately carried names use ordinary credential identifier validation. Discovery and normalization are unchanged.
+
+Focused GREEN (`56.416s`), repeated ×5 (`352.467s`), split race compatibility/adversarial (`457.137s`/`262.781s`), exact parent-base/start/head differential, full CLI (`333.259s`), help parity, gofmt, vet, build, diff, scope, and dependency gates passed. The aggregate race command timed out at 600 seconds without a failure before both exact partitions passed. Differential covered 14 names: base/head each passed 42 lifecycle operations, correction start rejected 42 operations, and 28 base/head add/remove outputs matched exactly. Implementation head: `199b802c4d2be7e62e335549a8c56dc0804c909b`. No private data output, service, dependency, checked-in docs/website delta, PR, or review.
 
 ## Final bounded correction
 

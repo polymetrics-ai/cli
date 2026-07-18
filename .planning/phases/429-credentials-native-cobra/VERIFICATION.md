@@ -11,11 +11,13 @@ Invocation `issue-429-compatibility-correction-pi-openai-20260718T202616Z`; exac
 - [x] RED: 14 `safety.ValidateIdentifier`-valid short leading-hyphen and double-hyphen representatives cover allowed suffix classes across config-only add/inspect/remove; all were rejected by private validation at exact correction start (`23.030s`).
 - [x] RED preservation gate: raw internal-carrier rejection and invalid action/name ownership remained green; the only failures were the 14 compatibility subtests.
 - [x] GREEN: private name carriage uses ordinary credential identifier validation with no private length/double-hyphen restrictions and no action-discovery changes; focused compatibility/adversarial gate passed in `56.416s`.
-- [ ] Focused, adversarial, repeated, race, exact-start differential, and full CLI pass without private data output.
-- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, current/start diff, scope, dependency, and clean-worktree gates pass.
-- [ ] Exact evidence committed and pushed; no service, dependency, PR, or review.
+- [x] Focused (`56.416s`), adversarial, repeated ×5 (`352.467s`), split race (`457.137s`/`262.781s`), exact parent-base/start/head differential, and full CLI (`333.259s`) pass without private data output. The aggregate race command timed out at 600 seconds without a failure before exact partitions passed.
+- [x] Differential: 14 names; parent base and head each passed 42 lifecycle operations; exact correction start rejected 42 add/inspect/remove operations; 28 base/head add/remove output pairs matched exactly.
+- [x] Runtime help/manual/website/generated parity remains unchanged: topic/bare/long-help are byte-identical at 1252 bytes with empty stderr, invalid action exits 2, and checked-in docs/website scope is clean.
+- [x] `gofmt -w cmd internal`, clean format diff, `go vet ./...`, `go build ./cmd/pm`, readonly module graph, current/start diff, scope, dependency, and clean-worktree gates pass. The first shell-only scope assertion had a lexical-order typo; the corrected exact assertion passed.
+- [x] Planning, RED, and GREEN checkpoints committed and pushed; final evidence checkpoint prepared for push. No service, dependency, PR, or review.
 
-Result: in progress; `verificationPassed=false` until all declared correction gates pass.
+Result: pass; `verificationPassed=true` for the full user-declared compatibility-correction gate set.
 
 ## Final bounded correction checklist
 
