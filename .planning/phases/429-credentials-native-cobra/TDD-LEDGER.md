@@ -19,7 +19,7 @@ Session `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`; exact 
 |---:|---|---|---|
 | F0 | Review/plan | Record the final-file symlink escape, effect-time `os.Root` design, temp-only RED matrix, shared-seam gates, and commit/push checkpoints before production edits | Complete |
 | F1 | RED | `go test ./internal/connectors -run 'Test(Warehouse|Outbox)WriteRejectsFinalFileSymlinkEscape$' -count=1`; `go test ./internal/app -run '^TestWarehouseMaterializationRejectsFinalFileSymlinkEscape$' -count=1` | Failed as required: all 5 connector and all 6 app append/truncate/create cases followed final-file links outside the root; connectors `0.317s` (wall `0.97s`), app `3.359s` (wall `6.31s`) |
-| F2 | GREEN | Introduce the standard-library rooted local-write effect helper and route every relevant final open/rename through it while preserving explicit external and nil-policy behavior | Pending |
+| F2 | GREEN | Add `safety.LocalWriteFS` over Go 1.25 `os.Root`; route Warehouse/Outbox Check+Write and app raw/final mkdir/open/read/remove/rename effects through one held scope | Pass: focused safety/connectors/app `7.73s` wall; repeated ×5 `18.12s`; focused race passed (app `33.985s`); broader safety/connectors/app `32.24s` wall; explicit external, nil-policy, modes, in-root symlink/nonexisting, and rename-replacement coverage green |
 | F3 | Verify | Focused/repeated/race safety/connectors/app/CLI; full repository; gofmt/vet/build/`make verify`; scope/dependency guards | Pending |
 
 Tests use only `t.TempDir`, synthetic records, and non-sensitive sentinel bytes. They do not display fixture contents or contact services.

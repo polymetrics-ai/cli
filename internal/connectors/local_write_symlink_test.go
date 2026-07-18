@@ -95,6 +95,37 @@ func TestOutboxWriteRejectsFinalFileSymlinkEscape(t *testing.T) {
 	}
 }
 
+func TestWarehouseWriteExplicitExternalPolicyFollowsFinalFileSymlink(t *testing.T) {
+	root := t.TempDir()
+	dir := filepath.Join(root, "warehouse")
+	if err := os.Mkdir(dir, 0o700); err != nil {
+		t.Fatalf("create warehouse directory: %v", err)
+	}
+	external := filepath.Join(t.TempDir(), "outside.jsonl")
+	if err := os.Symlink(external, filepath.Join(dir, "records.jsonl")); err != nil {
+		t.Skipf("symlinks unavailable on this platform: %v", err)
+	}
+	result, err := (Warehouse{}).Write(context.Background(), WriteRequest{
+		Table: "records",
+		Config: RuntimeConfig{
+			Config: map[string]string{"path": dir},
+			LocalWritePolicy: &LocalWritePolicy{
+				ProjectRoot:   root,
+				AllowExternal: true,
+			},
+		},
+	}, []Record{{"id": "synthetic"}})
+	if err != nil {
+		t.Fatalf("Warehouse.Write(explicit external) error = %v", err)
+	}
+	if result.RecordsWritten != 1 {
+		t.Fatalf("RecordsWritten = %d, want 1", result.RecordsWritten)
+	}
+	if _, err := os.Stat(external); err != nil {
+		t.Fatalf("explicit external target missing: %v", err)
+	}
+}
+
 func assertExternalTargetUnchanged(t *testing.T, path string, before []byte, existed bool) {
 	t.Helper()
 	after, err := os.ReadFile(path)

@@ -92,6 +92,64 @@ func TestWarehouseMaterializationRejectsFinalFileSymlinkEscape(t *testing.T) {
 	}
 }
 
+func TestWarehouseOverwriteReplacesFinalSymlinkWithoutExternalEffect(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	dir := filepath.Join(root, ".polymetrics", "warehouse")
+	if err := os.MkdirAll(dir, 0o700); err != nil {
+		t.Fatalf("create warehouse directory: %v", err)
+	}
+	external := filepath.Join(t.TempDir(), "outside.jsonl")
+	before := []byte("outside-sentinel\n")
+	if err := os.WriteFile(external, before, 0o600); err != nil {
+		t.Fatalf("create external target: %v", err)
+	}
+	finalPath := filepath.Join(dir, "records.jsonl")
+	if err := os.Symlink(external, finalPath); err != nil {
+		t.Skipf("symlinks unavailable on this platform: %v", err)
+	}
+	mode, err := ParseSyncMode("full_refresh_overwrite")
+	if err != nil {
+		t.Fatalf("ParseSyncMode() error = %v", err)
+	}
+	source := newScriptedSyncSource("symlink_rename_source", []connectors.Record{{"id": "synthetic"}})
+	_, err = a.runWarehouseETL(
+		ctx,
+		"bounded-rename-run",
+		Connection{Name: "synthetic_connection"},
+		source,
+		connectors.RuntimeConfig{},
+		connectors.RuntimeConfig{
+			Config: map[string]string{"path": dir},
+			LocalWritePolicy: &connectors.LocalWritePolicy{
+				ProjectRoot: root,
+			},
+		},
+		"records",
+		StreamConfig{DestinationTable: "records"},
+		mode,
+		1,
+	)
+	if err != nil {
+		t.Fatalf("runWarehouseETL() error = %v", err)
+	}
+	assertMaterializationExternalTargetUnchanged(t, external, before, true)
+	info, err := os.Lstat(finalPath)
+	if err != nil {
+		t.Fatalf("lstat final table: %v", err)
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		t.Fatal("overwrite left the final table as a symlink")
+	}
+}
+
 func assertMaterializationExternalTargetUnchanged(t *testing.T, path string, before []byte, existed bool) {
 	t.Helper()
 	after, err := os.ReadFile(path)

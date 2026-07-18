@@ -11,8 +11,8 @@ Invocation `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`; exa
 - [x] RED: temp-only Warehouse append/truncate/create final-link cases failed before production edits; all 3 followed the link (`internal/connectors`, package `0.317s`) without printing target contents.
 - [x] RED: temp-only Outbox append/create final-link cases failed before production edits; both followed the link (same focused connectors run) without printing target contents.
 - [x] RED: temp-only app append/truncate/create and deduped truncate/create materialization final-link cases failed before production edits; all 6 followed the link (`internal/app`, package `3.359s`) without printing target contents.
-- [ ] GREEN: confined local writes use effect-time rooted standard-library operations for all relevant directory, open, cleanup, and rename effects.
-- [ ] GREEN: explicit `allow_external_path=true`, nil-policy compatibility, file modes, append/overwrite semantics, in-root symlinks, and nonexisting paths remain supported.
+- [x] GREEN: confined local writes use one held Go 1.25 `os.Root` for all relevant Warehouse/Outbox and app directory, open/read, cleanup, and rename effects; focused tests passed in `7.73s` wall and repeated ×5 in `18.12s`.
+- [x] GREEN: explicit `allow_external_path=true`, nil-policy compatibility, `0700`/`0600` modes, append/overwrite semantics, in-root relative symlinks, nonexisting paths, and final-symlink rename replacement remain supported; focused race passed (app `33.985s`).
 - [ ] Focused/repeated/race safety/connectors/app/CLI, broader package gates, full repository, gofmt, vet, build, and `make verify` pass.
 - [ ] Dependency/scope/help-doc parity guards pass; no private data display, service, dependency, PR, or external review.
 - [ ] Planning, RED, GREEN, and final evidence checkpoints committed and pushed.

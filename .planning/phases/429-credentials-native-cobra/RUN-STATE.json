@@ -45,7 +45,8 @@
   "fourthCorrectionStartingHead": "0d70335f37456f42432b3c502860f7b43231ed98",
   "fourthCorrectionSource": "/tmp/pm-397-rereview3-429.log",
   "fourthCorrectionFindingsAccepted": ["HIGH_final_file_symlink_escape"],
-  "status": "fourth_correction_red_captured",
+  "fourthCorrectionEndingImplementationHead": "pending_green_commit",
+  "status": "fourth_correction_green_focused",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -57,6 +58,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "fourth-correction-green",
+      "decision": "local_critical_path",
+      "reason": "Go 1.25 os.Root now confines every relevant Warehouse/Outbox and app local-warehouse effect; focused, repeated, race, modes, external-policy, in-root, and rename tests pass"
+    },
     {
       "cycle": "fourth-correction-tdd-gate",
       "decision": "local_critical_path",
@@ -220,6 +226,7 @@
   "reviewCorrectionGreen": "focused safety and CLI passed in 8.257s; full credentials in 46.463s; safety and app in 23.300s; focused race safety and CLI in 109.283s",
   "reviewCorrectionVerification": "pass: repeated correction 49.385s; repeated safety 0.560s; full CLI 282.493s; full repository CLI 284.380s and certify 340.838s; exact base help 2/2; golden/manual 6.146s; gofmt, vet, build, and make verify passed; lint 0 and connector validation 547/0",
   "fourthCorrectionRed": "focused temp-only tests failed before production edits: all 5 Warehouse/Outbox and all 6 app append/truncate/create final-file symlink cases followed links outside the selected root; connectors 0.317s and app 3.359s",
+  "fourthCorrectionGreen": "Go 1.25 os.Root-backed LocalWriteFS routes all relevant Warehouse/Outbox and app raw/final effects through one held root; focused 7.73s, repeated x5 18.12s, focused race passed with app 33.985s, broader safety/connectors/app 32.24s",
   "thirdCorrectionRed": "12-case add/inspect/test/remove by assigned/bare/spaced raw-carrier matrix failed before production edits in 11.651s; assigned/spaced forms overrode every action and add/bare returned runtime code 3 instead of usage 2",
   "thirdCorrectionGreen": "hidden pflag removed; private command-context carriage and raw-carrier rejection passed focused/adversarial in 34.099s, repeated five times in 56.733s, and focused race in 273.254s",
   "thirdCorrectionVerification": "pass: seven preserved exact-base cases matched exit/stdout/stderr byte-for-byte; all 12 current raw-carrier cases exited usage 2; full CLI passed in 332.836s; gofmt, vet, build, diff, scope, and dependency gates passed",
