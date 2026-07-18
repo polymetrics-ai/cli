@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "active",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "e68ccdf7d24066729adb95388446706ccfe2597b",
+  "currentHead": "569536d15e9d390dd9b3bda5a1dbd86e719846f6",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -80,6 +80,13 @@
       "decision": "spawned",
       "issues": [427],
       "reason": "Sol/high implementation/correction workers plus independent Sol/xhigh re-review completed docs nativization with legacy parsing compatibility; exact head promoted."
+    },
+    {
+      "cycle": "unit_428_execute_review_promote",
+      "timestamp": "2026-07-18T14:29:59Z",
+      "decision": "spawned",
+      "issues": [428],
+      "reason": "Sol/high implementation and two correction cycles closed effect-dispatch bypasses; independent Sol/xhigh security re-review was clean and exact head promoted."
     }
   ],
   "units": [
@@ -136,6 +143,17 @@
       "implementationSession": "c791a5f6-231f-44b8-a2f1-e4e65e3b2dba",
       "correctionSession": "808093c7-0289-4a61-933f-7273ee9998f2",
       "reviewSession": "ef326655-bbd1-4c08-92c6-d160ef91b536"
+    },
+    {
+      "issue": 428,
+      "branch": "refactor/428-agent-native-cobra",
+      "startingHead": "235233f7cfde4a24612be6b0f95fb37a412d388a",
+      "endingHead": "924ebfe016143504502ffeebcee7002f6d520c6f",
+      "parentIntegrationHead": "569536d15e9d390dd9b3bda5a1dbd86e719846f6",
+      "status": "provisionally_integrated",
+      "implementationSession": "0f75ba03-8d80-4af6-b2d8-5d262e896b54",
+      "correctionSessions": ["56018ad9-a6f6-486c-8b95-3fd6206d3945", "d253f76f-872f-4c54-af8c-8d8b12de7ad2"],
+      "reviewSession": "e18a80dd-5de2-4d3d-8458-1f99f0f98397"
     }
   ],
   "humanGates": [
@@ -149,5 +167,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-18T12:46:31Z"
+  "updatedAt": "2026-07-18T14:29:59Z"
 }

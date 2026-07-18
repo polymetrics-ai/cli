@@ -18,12 +18,12 @@ orchestrator:
   runtime: pi
   status: running
 ready_queue:
-  - number: 428
+  - number: 429
     status: worker_ready
-    dependencies: [427]
-    write_scope: "agent Cobra namespace node, handler adaptation, focused tests, and parity docs"
+    dependencies: [428]
+    write_scope: "credentials Cobra namespace node, handler adaptation, focused tests, and parity docs"
     decision: local_critical_path
-    reason: "#427 is independently reviewed and provisionally integrated at parent head e68ccdf7; the serialized Phase 9 chain advances to #428."
+    reason: "#428 is independently reviewed and provisionally integrated at parent head 569536d1; the serialized Phase 9 chain advances to #429."
   - number: 408
     status: worker_ready_deferred
     dependencies: [405]
@@ -227,6 +227,10 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [427]
     reason: "Sol/high implementation/correction plus independent Sol/xhigh exact-head re-review completed #427; parent promoted exact head aacb1536 at merge e68ccdf7."
+  - timestamp: 2026-07-18T14:29:59Z
+    decision: spawned
+    issue_numbers: [428]
+    reason: "Sol/high implementation/two correction cycles plus independent Sol/xhigh security re-review completed #428; parent promoted exact head 924ebfe0 at merge 569536d1."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -528,6 +532,16 @@ subissues:
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-427-docs-native-cobra
     verification: "Focused/full/make-verify/differential/parity gates passed at aacb1536; exact head promoted at parent merge e68ccdf7."
     automated_review: {primary_route: human, status: clean, head_sha: aacb15361b9f42a381442f79b9ca50e56b482205, reviewed_range: "ab847da2..aacb1536", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head re-review ef326655 was clean after docs compatibility correction; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 428
+    url: https://github.com/polymetrics-ai/cli/issues/428
+    branch: refactor/428-agent-native-cobra
+    pr_url: ""
+    worker: "Sol/high sessions 0f75ba03, 56018ad9, d253f76f"
+    status: provisionally_integrated
+    write_scope: "agent Cobra namespace node/handler/fake-runtime tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-428-agent-native-cobra
+    verification: "Fake-only focused/race/full/make-verify/differential/parity gates passed at 924ebfe0; exact head promoted at parent merge 569536d1."
+    automated_review: {primary_route: human, status: clean, head_sha: 924ebfe016143504502ffeebcee7002f6d520c6f, reviewed_range: "235233f7..924ebfe0", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Final independent Sol/xhigh exact-head security review e18a80dd was clean after action-discovery corrections; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
   - number: 453
     url: https://github.com/polymetrics-ai/cli/issues/453
     branch: fix/453-reverse-smoke-preview
@@ -548,4 +562,4 @@ human_gates:
   - production deploys
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
-updated_at: 2026-07-18T12:46:31Z
+updated_at: 2026-07-18T14:29:59Z

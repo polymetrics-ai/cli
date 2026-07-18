@@ -14,4 +14,6 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #427 nativized the docs namespace while preserving legacy trailing-help and literal-`--` behavior, passed exact-head independent review, and was promoted at parent merge `e68ccdf7`.
 
-The next serialized ready unit is #428. Final verification and final parent review have not run; `verificationPassed` remains false.
+#428 nativized the agent namespace with fake-only container runtime tests, closed action-discovery and clustered-help effect bypasses, passed final exact-head security review, and was promoted at parent merge `569536d1`.
+
+The next serialized ready unit is #429. Final verification and final parent review have not run; `verificationPassed` remains false.
