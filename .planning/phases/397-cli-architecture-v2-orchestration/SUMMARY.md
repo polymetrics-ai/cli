@@ -10,4 +10,6 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #425 nativized the version namespace, corrected assigned global JSON boolean handling, passed exact-head independent review, and was promoted at parent merge `0c57ec39`.
 
-The next serialized ready unit is #426. Final verification and final parent review have not run; `verificationPassed` remains false.
+#426 nativized the skills namespace, passed exact-head independent review, and was promoted at parent merge `bb12f265`.
+
+The next serialized ready unit is #427. Final verification and final parent review have not run; `verificationPassed` remains false.

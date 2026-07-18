@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "active",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "0c57ec396f12e9b0233af8899cc7ff8acc9eca7d",
+  "currentHead": "bb12f265db4ef2023f98b05080cac7a36dab8e54",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -66,6 +66,13 @@
       "decision": "spawned",
       "issues": [425],
       "reason": "Sol/high implementation and correction workers plus independent Sol/xhigh review completed the version namespace; exact reviewed head was promoted without conflict."
+    },
+    {
+      "cycle": "unit_426_execute_review_promote",
+      "timestamp": "2026-07-18T11:22:31Z",
+      "decision": "spawned",
+      "issues": [426],
+      "reason": "Sol/high worker and independent Sol/xhigh exact-head review completed the skills namespace; exact reviewed head was promoted without conflict."
     }
   ],
   "units": [
@@ -101,6 +108,16 @@
       "implementationSession": "e3c96736-08cc-4467-9fac-5394d2581eb1",
       "correctionSession": "7ceb8ecd-6c7f-406e-acdb-45f97ad88368",
       "reviewSession": "905f2b84-2325-451d-bda9-ec4b08983307"
+    },
+    {
+      "issue": 426,
+      "branch": "refactor/426-skills-native-cobra",
+      "startingHead": "54bfcbab5a997c81676b286fe78de00a109f5fba",
+      "endingHead": "fe2a937b5809ee53518549d6148d41879b6a8c2d",
+      "parentIntegrationHead": "bb12f265db4ef2023f98b05080cac7a36dab8e54",
+      "status": "provisionally_integrated",
+      "implementationSession": "e83aba7c-6961-4c70-abcb-9dcfaa2960e1",
+      "reviewSession": "60adcff2-041f-40fa-9ec9-2d6ae6837a3e"
     }
   ],
   "humanGates": [
@@ -114,5 +131,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-18T10:41:06Z"
+  "updatedAt": "2026-07-18T11:22:31Z"
 }
