@@ -16,4 +16,6 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #428 nativized the agent namespace with fake-only container runtime tests, closed action-discovery and clustered-help effect bypasses, passed final exact-head security review, and was promoted at parent merge `569536d1`.
 
-The next serialized ready unit is #429. Final verification and final parent review have not run; `verificationPassed` remains false.
+#429 nativized credentials, preserved env/stdin-only intake and legacy identifiers, hardened parser ownership, and added rooted local-write effect confinement. After iterative exact-head corrections, final independent review was clean and parent merge `a490eeba` passed bounded integration suites.
+
+The next serialized ready unit is #430. Final verification and final parent review have not run; `verificationPassed` remains false.
