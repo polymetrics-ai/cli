@@ -47,6 +47,18 @@ Downstream artifact: strict RED tests, actual-state assertion, runtime-only loca
 
 Verification result: pass. Focused, repeated, race, all-credentials, app, connectors, CLI, exact-start differential, full repository, gofmt, vet, build, and `make verify` passed. Full repository app/CLI/certify timings were `27.976s`/`285.504s`/`340.518s`; lint 0 and connector validation 547/0. No real credential, private fixture output, external service, dependency, PR, or review.
 
+## Fourth bounded correction snapshot
+
+Task: Accept the HIGH finding in `/tmp/pm-397-rereview3-429.log` from exact start `0d70335f37456f42432b3c502860f7b43231ed98`. Session `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`.
+
+GSD route: doctor/list passed; `programming-loop` remains unavailable, so the manual universal runtime loop is active. Execution decision: `local_critical_path` because this is one shared local-write effect seam, this runtime exposes no subagent tool, and PR/external review are prohibited.
+
+Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`. CLI help/docs/website parity policy is active.
+
+Downstream artifact: temp-only Warehouse/Outbox/app final-link RED tests; an `os.Root`-backed local-write effect helper; all relevant final opens/renames migrated to the helper; finalized phase evidence.
+
+Verification result: pending strict RED, GREEN, focused/repeated/race/full gates, and commit/push checkpoints. No private data display, services, dependencies, PR, or external review.
+
 ## Third bounded correction snapshot
 
 Task: Accept the MEDIUM finding in `/tmp/pm-397-rereview2-429.log` from exact start `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`. Session `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`.

@@ -2,6 +2,23 @@
 
 Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`.
 
+## Fourth bounded correction checklist
+
+Invocation `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`; exact start `0d70335f37456f42432b3c502860f7b43231ed98`.
+
+- [x] Read `/tmp/pm-397-rereview3-429.log` and accept the HIGH final-file symlink finding.
+- [x] Run GSD doctor/list, record missing programming-loop/manual fallback, load required skills/policies, inspect Go 1.25 `os.Root`, and update issue artifacts before production edits.
+- [ ] RED: temp-only Warehouse append/truncate/create final-link cases fail before production edits without printing target contents.
+- [ ] RED: temp-only Outbox append/create final-link cases fail before production edits without printing target contents.
+- [ ] RED: temp-only app append/truncate/create materialization final-link cases fail before production edits without printing target contents.
+- [ ] GREEN: confined local writes use effect-time rooted standard-library operations for all relevant directory, open, cleanup, and rename effects.
+- [ ] GREEN: explicit `allow_external_path=true`, nil-policy compatibility, file modes, append/overwrite semantics, in-root symlinks, and nonexisting paths remain supported.
+- [ ] Focused/repeated/race safety/connectors/app/CLI, broader package gates, full repository, gofmt, vet, build, and `make verify` pass.
+- [ ] Dependency/scope/help-doc parity guards pass; no private data display, service, dependency, PR, or external review.
+- [ ] Planning, RED, GREEN, and final evidence checkpoints committed and pushed.
+
+Result: pending; `verificationPassed=false` until the full declared gate set exits 0.
+
 ## Third bounded correction checklist
 
 Invocation `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`; exact start `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`.

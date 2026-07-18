@@ -1,6 +1,10 @@
 # Phase 429 Summary
 
-Status: third bounded correction complete, verified, and pushed from exact head `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`; MEDIUM raw internal-carrier ownership finding closed; no PR or review.
+Status: fourth bounded correction in progress from exact head `0d70335f37456f42432b3c502860f7b43231ed98`; HIGH final-file symlink finding accepted; verification pending; no PR or review.
+
+## Fourth bounded correction
+
+The accepted finding shows that directory-only validation does not confine a final `os.OpenFile`: existing or dangling final JSONL symlinks can append, truncate, or create outside the selected local-write root. The planned correction adds temp-only RED coverage across Warehouse.Write, Outbox.Write, and app materialization, then replaces validation-followed-by-ordinary-effects with a reusable Go standard-library `os.Root` effect helper. Explicit external opt-in and nil-policy compatibility remain unconfined by design. Final evidence is pending.
 
 ## Third bounded correction
 

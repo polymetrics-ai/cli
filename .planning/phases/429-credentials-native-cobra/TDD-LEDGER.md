@@ -11,6 +11,19 @@ Doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-research` generate
 
 Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-documentation`, `golang-spf13-cobra`.
 
+## Fourth bounded correction ledger
+
+Session `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`; exact correction start `0d70335f37456f42432b3c502860f7b43231ed98`. Rereview `/tmp/pm-397-rereview3-429.log` accepted. GSD doctor/list passed; the adapter still lacks `programming-loop`, so the manual universal-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`.
+
+| Step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| F0 | Review/plan | Record the final-file symlink escape, effect-time `os.Root` design, temp-only RED matrix, shared-seam gates, and commit/push checkpoints before production edits | Complete |
+| F1 | RED | Add focused Warehouse/Outbox/app append/truncate/create final-link tests; external targets must remain absent or byte-unchanged | Pending |
+| F2 | GREEN | Introduce the standard-library rooted local-write effect helper and route every relevant final open/rename through it while preserving explicit external and nil-policy behavior | Pending |
+| F3 | Verify | Focused/repeated/race safety/connectors/app/CLI; full repository; gofmt/vet/build/`make verify`; scope/dependency guards | Pending |
+
+Tests use only `t.TempDir`, synthetic records, and non-sensitive sentinel bytes. They do not display fixture contents or contact services.
+
 ## Third bounded correction ledger
 
 Session `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`; exact correction start `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`. Rereview `/tmp/pm-397-rereview2-429.log` accepted. GSD doctor/list passed; the adapter still lacks `programming-loop`, so manual universal-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, and `golang-safety`.

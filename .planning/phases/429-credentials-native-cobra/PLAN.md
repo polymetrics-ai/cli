@@ -10,6 +10,17 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, this session exposes no subagent tool, and the user bounded delivery to #429 with no PR or external review.
 
+## Fourth bounded correction
+
+- Session: `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`.
+- Exact correction start: `0d70335f37456f42432b3c502860f7b43231ed98`; rereview source: `/tmp/pm-397-rereview3-429.log`; HIGH final-file symlink finding accepted.
+- GSD: doctor/list pass; `scripts/gsd prompt programming-loop ...` remains unavailable, so the manual universal-runtime-loop fallback is active. Execution decision: `local_critical_path` — one shared filesystem-effect correction, no subagent tool is exposed, and the user prohibited PR/external review.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`; CLI help/docs/website parity policy loaded.
+- RED before production edits: temp-only symlink tests cover Warehouse append, Warehouse overwrite/truncate, Warehouse dangling-create, Outbox append, Outbox dangling-create, and app final-table append/truncate/create materialization. Every denied case must return an error and leave the external target absent or byte-unchanged.
+- Smallest implementation: add a standard-library `os.Root`-backed local-write effect helper under `internal/safety`; confined mode resolves effect paths relative to the selected policy root and performs directory creation, final opens, cleanup, and renames through one held root. Explicit `allow_external_path=true` and nil-policy direct connector behavior retain ordinary `os` effects. Apply the helper to Warehouse/Outbox writes and all app local-warehouse raw/final temp opens and renames, including deduped materialization.
+- Preserve modes (`0700` directories, `0600` files), append/overwrite behavior, failure-safe renames, in-root symlinks, and in-root nonexisting paths. Avoid validation-then-ordinary-open at final effects.
+- Verification: focused RED/GREEN; repeated and race safety/connectors/app/CLI; broader connectors/app/CLI; full repository; gofmt, vet, build, and `make verify` because this is a shared filesystem seam. Commit/push planning, RED, GREEN, and final evidence checkpoints. No private fixture output, services, dependencies, PR, or external review.
+
 ## Third bounded correction
 
 - Session: `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`.

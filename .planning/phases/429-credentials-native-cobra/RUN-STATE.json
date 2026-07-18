@@ -40,8 +40,13 @@
   "thirdCorrectionFindingsAccepted": ["MEDIUM_raw_internal_carrier_override"],
   "thirdCorrectionEndedAt": "20260718T182200Z",
   "thirdCorrectionEndingImplementationHead": "30875076c7cdb172727ffb506c10fb628dd3007c",
-  "status": "complete_verified_pushed_no_pr_no_review",
-  "verificationPassed": true,
+  "fourthCorrectionInvocationSession": "issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z",
+  "fourthCorrectionStartedAt": "20260718T185126Z",
+  "fourthCorrectionStartingHead": "0d70335f37456f42432b3c502860f7b43231ed98",
+  "fourthCorrectionSource": "/tmp/pm-397-rereview3-429.log",
+  "fourthCorrectionFindingsAccepted": ["HIGH_final_file_symlink_escape"],
+  "status": "fourth_correction_planned_tdd_pending",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -52,6 +57,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "fourth-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "one shared local-write filesystem-effect correction; this runtime exposes no subagent tool, and the user prohibited PR and external review"
+    },
     {
       "cycle": "third-correction-plan",
       "decision": "local_critical_path",
