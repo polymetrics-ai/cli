@@ -113,10 +113,28 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 	if len(args) >= 2 && args[0] == "skills" && args[1] == "generate" {
 		return normalizeStringArraySpaceValues(args, 2, skillsGenerateFlagNames)
 	}
-	if len(args) >= 2 && args[0] == "docs" && (args[1] == "generate" || args[1] == "validate") {
-		return normalizeStringArraySpaceValues(args, 2, docsFlagNames)
+	if len(args) >= 2 && args[0] == "docs" {
+		if args[1] == "generate" || args[1] == "validate" {
+			args = normalizeStringArraySpaceValues(args, 2, docsFlagNames)
+		}
+		if args[1] != "help" && !isHelpArg(args[1]) {
+			return normalizeDocsLegacyActionArgs(args, 2)
+		}
 	}
 	return args
+}
+
+// normalizeDocsLegacyActionArgs keeps tokens ignored by the old docs parser from becoming Cobra control flags.
+func normalizeDocsLegacyActionArgs(args []string, start int) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	for _, arg := range args[start:] {
+		if arg == "--" || arg == "-h" || arg == "--help" || strings.HasPrefix(arg, "--help=") {
+			continue
+		}
+		out = append(out, arg)
+	}
+	return out
 }
 
 var connectionsCreateFlagNames = map[string]struct{}{

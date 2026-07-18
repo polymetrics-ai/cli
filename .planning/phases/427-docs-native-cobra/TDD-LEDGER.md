@@ -94,10 +94,12 @@ GSD evidence: `scripts/gsd doctor` and `scripts/gsd list` passed. `scripts/gsd p
 |---:|---|---|---|
 | C0 | Planning | Update correction plan, ledger, checklist, and run state before production edits | Complete |
 | C1 | RED | `go test ./internal/cli/ -run 'TestDocsActions(PreserveLegacyTrailingHelpBehavior|ContinueParsingAfterLiteralSeparator)$' -count=1` | Failed as expected (`0.570s`) |
-| C2 | GREEN | Smallest docs-only native Cobra compatibility seam | Pending |
-| C3 | Refactor/parity | Focused docs/router/golden plus base-vs-head binary matrix | Pending |
+| C2 | GREEN | Docs-only pre-Cobra normalization seam; focused correction test `7.487s`, post-comment rerun `7.596s` | Pass |
+| C3 | Refactor/parity | Focused docs/router/golden plus base-vs-head binary matrix | In progress |
 | C4 | Gates | docs generation/validation/website parity, gofmt, vet, build, full CLI if indicated | Pending |
 
 No production file was edited before C1.
 
 Exact correction RED: all 10 generate/validate/bogus `--help`/`-h` subtests failed because Cobra returned the docs `CommandManual` with exit 0 instead of running the legacy action/error path. Literal-separator generation failed with exit 1 and `error: missing --dir`, proving pflag stopped before the supplied typed flags. These failures match both accepted medium findings and occurred after test-only edits.
+
+Correction GREEN: `normalizeNativeStringArrayArgs` now invokes a docs-only action-tail seam. It first preserves typed spaced-value normalization for generate/validate, then removes only literal `--`, action-tail `--help`/assigned help, and `-h` tokens that legacy `parseFlags` recorded but docs handlers ignored. Namespace `docs --help`/`-h` and positional `docs help` bypass the seam; no other namespace is touched. Native command nodes and typed pflags remain intact.

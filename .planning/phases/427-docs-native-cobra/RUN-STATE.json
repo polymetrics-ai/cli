@@ -57,6 +57,11 @@
       "cycle": "review-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "focused test-only differential cases reproduced all accepted action-help and literal-separator regressions before production edits"
+    },
+    {
+      "cycle": "review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "smallest docs-only argument-normalization seam restored legacy ignored-token behavior while retaining native Cobra nodes and typed flags"
     }
   ],
   "red": "go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed as expected in 11.332s on native registration count and DisableFlagParsing ownership",
@@ -88,7 +93,7 @@
     "findingsAccepted": 2,
     "planUpdatedBeforeProduction": true,
     "red": "focused correction test failed as expected in 0.570s: 10 action-help subtests returned CommandManual and literal-separator generation reported missing --dir",
-    "green": "pending",
+    "green": "focused correction test passed in 7.487s and 7.596s after the docs-only seam/comment; broader docs-focused test passed in 20.032s",
     "verification": "pending"
   },
   "risks": [
