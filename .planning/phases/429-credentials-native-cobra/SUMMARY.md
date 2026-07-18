@@ -4,7 +4,7 @@ Status: second bounded correction in progress from exact head `fae7d599668637bea
 
 ## Second bounded correction
 
-All three findings from `/tmp/pm-397-rereview-429.log` are accepted. Plan/TDD/verification/run-state artifacts were reopened before production edits. Pending strict RED covers selected-root relative effects, post-resolution path retargeting at Warehouse/Outbox `Check`, leading-hyphen add names with later flags and no later-name discovery, and required parsing of the actual state file. The intended fix is runtime-only path normalization, explicit non-secret local-write policy at the effect seam, a bounded Cobra name carrier, and the corrected state helper. Full shared-seam verification, commit, and push evidence remains pending.
+All three findings from `/tmp/pm-397-rereview-429.log` are accepted. Plan/TDD/verification/run-state artifacts were reopened before production edits. Strict RED reproduced selected-root relative misses, post-resolution Warehouse/Outbox external effects, and leading-hyphen add failure; the state helper now requires the actual state file. Runtime-only path normalization, explicit non-secret local-write policy at each local effect seam, and a bounded Cobra name carrier are GREEN under focused, repeated, race, all-credentials, app, connectors, safety, and focused vet gates. Full shared-seam differential/repository verification and final evidence remain pending.
 
 ## Bounded review correction
 

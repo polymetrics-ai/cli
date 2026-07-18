@@ -123,13 +123,13 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 		if isHelpArg(args[1]) {
 			return append([]string(nil), args[:2]...)
 		}
+		if args[1] == "add" {
+			args = normalizeStringArraySpaceValues(args, 2, credentialsAddFlagNames)
+		}
 		var bounded bool
 		args, bounded = normalizeCredentialsActionBoundary(args)
 		if bounded {
 			return args
-		}
-		if args[1] == "add" {
-			args = normalizeStringArraySpaceValues(args, 2, credentialsAddFlagNames)
 		}
 		if args[1] != "help" && !isHelpArg(args[1]) {
 			return normalizeCredentialsLegacyActionArgs(args, 2)
@@ -176,6 +176,13 @@ func normalizeCredentialsActionBoundary(args []string) ([]string, bool) {
 	switch args[1] {
 	case "add", "inspect", "test", "remove":
 		if len(args) >= 3 && strings.HasPrefix(args[2], "-") {
+			if credentialsTailContainsOnlyFlags(args[3:]) {
+				out := make([]string, 0, len(args))
+				out = append(out, args[:2]...)
+				out = append(out, "--"+credentialsBoundedNameFlag+"="+args[2])
+				out = append(out, args[3:]...)
+				return normalizeCredentialsLegacyActionArgs(out, 2), true
+			}
 			out := make([]string, 0, len(args)+1)
 			out = append(out, args[:2]...)
 			out = append(out, "--")
@@ -191,6 +198,15 @@ func normalizeCredentialsActionBoundary(args []string) ([]string, bool) {
 	out = append(out, args[0], "--")
 	out = append(out, args[1:]...)
 	return out, true
+}
+
+func credentialsTailContainsOnlyFlags(args []string) bool {
+	for _, arg := range args {
+		if !strings.HasPrefix(arg, "-") {
+			return false
+		}
+	}
+	return true
 }
 
 // normalizeCredentialsLegacyActionArgs keeps tokens ignored by the old credentials parser from becoming Cobra controls.
@@ -299,6 +315,8 @@ var credentialsAddFlagNames = map[string]struct{}{
 	"from-env":    {},
 	"value-stdin": {},
 	"config":      {},
+	"root":        {},
+	"progress":    {},
 }
 
 var agentPlanFlagNames = map[string]struct{}{

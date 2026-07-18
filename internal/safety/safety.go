@@ -156,15 +156,20 @@ func ValidateRelativePath(value, field string) error {
 }
 
 func ValidateLocalWritePath(projectRoot, value, field string, allowExternal bool) error {
+	_, err := ResolveLocalWritePath(projectRoot, value, field, allowExternal)
+	return err
+}
+
+func ResolveLocalWritePath(projectRoot, value, field string, allowExternal bool) (string, error) {
 	if strings.TrimSpace(value) == "" {
-		return nil
+		return "", nil
 	}
 	if err := RejectDangerousChars(value, field); err != nil {
-		return err
+		return "", err
 	}
 	rootAbs, err := filepath.Abs(projectRoot)
 	if err != nil {
-		return fmt.Errorf("resolve project root: %w", err)
+		return "", fmt.Errorf("resolve project root: %w", err)
 	}
 	var pathAbs string
 	if filepath.IsAbs(value) {
@@ -172,40 +177,40 @@ func ValidateLocalWritePath(projectRoot, value, field string, allowExternal bool
 	} else {
 		clean := filepath.Clean(value)
 		if clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) {
-			return fmt.Errorf("%s must not escape the project root", field)
+			return "", fmt.Errorf("%s must not escape the project root", field)
 		}
 		pathAbs = filepath.Join(rootAbs, clean)
 	}
 	insideProject, err := pathWithin(rootAbs, pathAbs)
 	if err != nil {
-		return fmt.Errorf("compare %s to project root: %w", field, err)
+		return "", fmt.Errorf("compare %s to project root: %w", field, err)
 	}
 	if !insideProject {
 		if allowExternal {
-			return nil
+			return pathAbs, nil
 		}
-		return fmt.Errorf("%s outside the project root requires allow_external_path=true", field)
+		return "", fmt.Errorf("%s outside the project root requires allow_external_path=true", field)
 	}
 	if allowExternal {
-		return nil
+		return pathAbs, nil
 	}
 
 	resolvedRoot, err := resolveThroughNearestExistingAncestor(rootAbs)
 	if err != nil {
-		return fmt.Errorf("resolve project root: %w", err)
+		return "", fmt.Errorf("resolve project root: %w", err)
 	}
 	resolvedPath, err := resolveThroughNearestExistingAncestor(pathAbs)
 	if err != nil {
-		return fmt.Errorf("resolve %s: %w", field, err)
+		return "", fmt.Errorf("resolve %s: %w", field, err)
 	}
 	insideProject, err = pathWithin(resolvedRoot, resolvedPath)
 	if err != nil {
-		return fmt.Errorf("compare resolved %s to project root: %w", field, err)
+		return "", fmt.Errorf("compare resolved %s to project root: %w", field, err)
 	}
 	if !insideProject {
-		return fmt.Errorf("%s resolves outside the project root and requires allow_external_path=true", field)
+		return "", fmt.Errorf("%s resolves outside the project root and requires allow_external_path=true", field)
 	}
-	return nil
+	return pathAbs, nil
 }
 
 func pathWithin(root, path string) (bool, error) {

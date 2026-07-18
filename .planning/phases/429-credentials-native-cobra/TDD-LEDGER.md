@@ -19,8 +19,8 @@ Session `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; profil
 |---:|---|---|---|
 | S0 | Review/plan | Record all three findings, effect-boundary design, RED cases, broad shared-seam verification, and checkpoint sequence before production edits | Complete |
 | S1 | RED | `go test ./internal/app -run 'Test(ResolvedLocalConnectorRelativePathUsesSelectedProjectRoot|LocalConnectorCheckRevalidatesPathAfterCredentialResolution)$' -count=1`; focused CLI source/redaction command | Failed as required: both relative paths missed the selected root; both denied post-resolution retargets reached external effects; leading-hyphen add exited 1. App `3.539s`, CLI `3.554s`, combined wall `13s` |
-| S2 | GREEN | Runtime-only path normalization, explicit non-secret local-write policy, Warehouse/Outbox effect-boundary validation, bounded Cobra name carrier, and required actual state file | Pending |
-| S3 | Verify | Focused/repeated/race/app/connectors/CLI/base differential/full repository plus gofmt/vet/build/`make verify` | Pending |
+| S2 | GREEN | Runtime-only path normalization, explicit non-secret local-write policy, Warehouse/Outbox effect-boundary validation, bounded Cobra name carrier, and required actual state file | Pass: focused app `3.512s`, CLI `16.112s`, connectors `0.355s`, safety `0.340s`; all credentials `48.502s`; app/connectors/safety `26.557s`/`0.789s`/`0.454s` |
+| S3 | Verify | Focused/repeated/race/app/connectors/CLI/base differential/full repository plus gofmt/vet/build/`make verify` | In progress: repeated app `14.917s`, CLI `79.908s`, connectors/safety `0.277s`/`0.411s`; focused race app `34.593s`, CLI `180.125s`, connectors/safety pass; focused vet pass |
 
 Tests use temporary roots and synthetic inputs only. They must not print fixture values or contact external services. The corrected state helper now requires and decodes the actual state file; this test-only correction is exercised alongside the failing behavior cases. `verificationPassed` remains false until the complete declared gate exits 0.
 

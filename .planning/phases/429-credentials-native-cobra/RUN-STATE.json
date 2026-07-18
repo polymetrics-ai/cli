@@ -54,6 +54,11 @@
       "reason": "focused pre-production tests failed as required: selected-root relative effects resolved under cwd, denied post-resolution retargets reached external effects, and leading-hyphen add could not parse later flags; the actual state helper now requires the real state file"
     },
     {
+      "cycle": "second-correction-green",
+      "decision": "local_critical_path",
+      "reason": "runtime-only local path normalization, explicit non-secret effect policy, Warehouse/Outbox revalidation, and bounded Cobra name carriage pass focused, repeated, race, all-credentials, app, connectors, safety, and focused vet gates"
+    },
+    {
       "cycle": "bounded-review-correction-plan",
       "decision": "local_critical_path",
       "reason": "one bounded correction in the assigned isolated worktree; this Pi session exposes no subagent tool, all accepted findings share credentials/router safety boundaries, and the user prohibited PR and external review"

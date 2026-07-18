@@ -12,9 +12,9 @@ Invocation `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; pro
 - [x] RED: both denied post-resolution retarget cases reached external effects while explicit opt-in remained allowed (`internal/app`, same run).
 - [x] RED: safety-valid leading-hyphen add with later connector/source flags exited 1 (`internal/cli`, `3.554s`); existing no-discovery cases remain in the focused suite.
 - [x] Test helper correction: state-redaction helper now requires and parses `.polymetrics/state/state.json` and is exercised by the focused CLI run.
-- [ ] GREEN: runtime path normalization and explicit non-secret effect policy preserve persisted config, ordinary paths, defaults, and direct-call compatibility.
-- [ ] GREEN: Cobra name/flag boundary preserves exact first-token ownership and later flags.
-- [ ] Focused, repeated, race, app, connectors, CLI, exact-base differential, full repository, gofmt, vet, build, and `make verify` pass.
+- [x] GREEN: runtime-only path normalization and explicit non-secret effect policy pass focused app/connectors/safety tests; nil-policy direct connector compatibility remains green.
+- [x] GREEN: bounded Cobra name carrier preserves the first token, parses later connector/source/global flags, and keeps later-name discovery tests green.
+- [ ] Focused, repeated, race, app, connectors, CLI, exact-base differential, full repository, gofmt, vet, build, and `make verify` pass. Focused/repeated/race/app/connectors/credentials and focused vet currently pass; broad gates remain pending.
 - [ ] Runtime help/manual/website/golden surfaces are unchanged or parity-verified.
 - [ ] Commit and push all coherent checkpoints; no real credentials, private fixture output, external services, dependencies, PR, or external review.
 

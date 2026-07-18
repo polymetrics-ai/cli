@@ -52,6 +52,9 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 
 	dir := localWarehouseDir(destRuntime)
+	if err := validateLocalWriteRuntimeEffect(destRuntime, dir, "warehouse path"); err != nil {
+		return etlExecutionResult{}, err
+	}
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
