@@ -12,4 +12,6 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #426 nativized the skills namespace, passed exact-head independent review, and was promoted at parent merge `bb12f265`.
 
-The next serialized ready unit is #427. Final verification and final parent review have not run; `verificationPassed` remains false.
+#427 nativized the docs namespace while preserving legacy trailing-help and literal-`--` behavior, passed exact-head independent review, and was promoted at parent merge `e68ccdf7`.
+
+The next serialized ready unit is #428. Final verification and final parent review have not run; `verificationPassed` remains false.

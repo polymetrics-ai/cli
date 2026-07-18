@@ -12,6 +12,7 @@ Status: not yet run at final HEAD
 - [x] #415 corrected at `6cf5c48f1b2cf218ed35c15ba77096db89969575`; exact-head Sol/xhigh re-review `933b6246-2377-4c5d-8d9d-9e9af2ce159d` clean; CI green; combined conflict-resolution review `4ec8f305-9f7f-40c4-97c2-68c2e01c0d36` clean; ancestry preserved in parent `1f5bd80f`.
 - [x] #425 implemented/corrected at `784153c7ed7cbb94360601b84c40c821eec21823`; exact-head Sol/xhigh re-review `905f2b84-2325-451d-bda9-ec4b08983307` clean; promoted in parent `0c57ec39`.
 - [x] #426 implemented at `fe2a937b5809ee53518549d6148d41879b6a8c2d`; exact-head Sol/xhigh review `60adcff2-041f-40fa-9ec9-2d6ae6837a3e` clean; promoted in parent `bb12f265`.
+- [x] #427 implemented/corrected at `aacb15361b9f42a381442f79b9ca50e56b482205`; exact-head Sol/xhigh re-review `ef326655-bbd1-4c08-92c6-d160ef91b536` clean; promoted in parent `e68ccdf7`.
 
 ## Per-unit gate
 
