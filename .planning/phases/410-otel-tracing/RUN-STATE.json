@@ -7,12 +7,12 @@
   "branch": "feat/410-otel-tracing",
   "baseBranch": "feat/cli-architecture-v2",
   "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing",
-  "status": "final_alias_tracer_closure_pushed",
+  "status": "exporter_self_observability_verified",
   "gsd": {
     "doctorPassed": true,
     "planPhasePromptGenerated": true,
     "programmingLoopAvailable": false,
-    "manualFallback": "scripts/gsd prompt programming-loop init --phase 410 --dry-run returned unknown GSD command; manual GSD/TDD fallback recorded. Final alias/tracer-closure rerun on 2026-07-18 confirmed same fallback."
+    "manualFallback": "scripts/gsd prompt programming-loop init --phase 410 --dry-run returned unknown GSD command; manual GSD/TDD fallback recorded. Final alias/tracer-closure rerun on 2026-07-18 confirmed same fallback. Last exporter-constructor self-observability rerun on 2026-07-18 confirmed same fallback."
   },
   "verificationPassed": true,
   "verificationBlocker": "",
@@ -111,6 +111,26 @@
       "cycle": "final-alias-tracer-closure-push",
       "decision": "local_critical_path",
       "reason": "Committed and pushed final alias/tracer-closure fix to PR #459 branch; PR body updated without requesting Claude/Copilot."
+    },
+    {
+      "cycle": "exporter-self-observability-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 final adversarial finding accepted at head 46c5c1667c9b4ba2d9e97b086ab11c6c08c80990; same isolated worker/branch, no subagent tool, no Claude/Copilot request."
+    },
+    {
+      "cycle": "exporter-self-observability-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Red tests captured before production edits for file/OTLP exporter-stage self-observability env warnings and leakage behavior."
+    },
+    {
+      "cycle": "exporter-self-observability-execute",
+      "decision": "local_critical_path",
+      "reason": "Implemented narrow exporter-constructor env sanitizer fix inline in same isolated worktree."
+    },
+    {
+      "cycle": "exporter-self-observability-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused tests, go vet, 20m full test suite, go build, make verify, and diff checks passed locally."
     }
   ],
   "dependenciesApproved": [
@@ -133,7 +153,8 @@
     "root help/goldens full telemetry exporter values none/off/file/otlp",
     "config docs/website require OTLP exporter and endpoint from trusted env/flag",
     "SDK/resource/provider ambient OTel env neutralized before tracer provider construction",
-    "OTEL_GO_X_SELF_OBSERVABILITY alias and tracer creation env window accepted for final fix"
+    "OTEL_GO_X_SELF_OBSERVABILITY alias and tracer creation env window accepted for final fix",
+    "exporter constructors sanitized against OTEL_GO_X self-observability env aliases"
   ],
   "humanGatesTriggered": [],
   "updatedAt": "2026-07-18T00:00:00Z"

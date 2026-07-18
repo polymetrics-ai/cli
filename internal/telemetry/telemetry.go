@@ -165,13 +165,14 @@ func Init(ctx context.Context, cfg Config, warn WarningFunc) (context.Context, *
 		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
 	}
 
+	warnUnsupportedSDKEnv(ctx, warn)
 	exporter, file, err := newExporter(ctx, cfg, warn)
 	if err != nil {
 		warnf(ctx, warn, "initialize telemetry exporter: %v", err)
 		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
 	}
 
-	provider, starter, err := newTracerProvider(ctx, exporter, cfg, warn)
+	provider, starter, err := newTracerProvider(ctx, exporter, cfg)
 	if err != nil {
 		_ = exporter.Shutdown(ctx)
 		if file != nil {
@@ -247,8 +248,7 @@ func HTTPAttrs(method, rawURL string) []Attr {
 	}
 }
 
-func newTracerProvider(ctx context.Context, exporter sdktrace.SpanExporter, cfg Config, warn WarningFunc) (*sdktrace.TracerProvider, startFunc, error) {
-	warnUnsupportedSDKEnv(ctx, warn)
+func newTracerProvider(ctx context.Context, exporter sdktrace.SpanExporter, cfg Config) (*sdktrace.TracerProvider, startFunc, error) {
 	var provider *sdktrace.TracerProvider
 	var tracer trace.Tracer
 	err := withSanitizedSDKEnv(func() error {
@@ -370,7 +370,12 @@ func newFileExporter(cfg Config) (sdktrace.SpanExporter, io.Closer, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	exporter, err := stdouttrace.New(stdouttrace.WithWriter(file), stdouttrace.WithoutTimestamps())
+	var exporter sdktrace.SpanExporter
+	err = withSanitizedSDKEnv(func() error {
+		var newErr error
+		exporter, newErr = stdouttrace.New(stdouttrace.WithWriter(file), stdouttrace.WithoutTimestamps())
+		return newErr
+	})
 	if err != nil {
 		_ = file.Close()
 		return nil, nil, err
@@ -567,6 +572,7 @@ func withSanitizedSDKEnv(fn func() error) error {
 func withSanitizedOTLPEnv(fn func() (sdktrace.SpanExporter, error)) (sdktrace.SpanExporter, error) {
 	all := append([]string{}, supportedOTLPEndpointEnv...)
 	all = append(all, unsupportedOTLPEnv...)
+	all = append(all, unsupportedSDKEnv...)
 	var exporter sdktrace.SpanExporter
 	err := withSanitizedEnv(all, func() error {
 		var err error

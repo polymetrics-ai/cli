@@ -4,7 +4,7 @@
 
 - Source: user task for Issue #410 worker handoff.
 - Downstream artifact: `.planning/phases/410-otel-tracing/PLAN.md`.
-- Verification result: `make verify` passed after implementation commit, after PR #459 review-fix commit, and after final focused residual review-fix.
+- Verification result: last exporter-constructor self-observability focused/full gates passed; PR body/push pending. Prior `make verify` passed after implementation, review-fix, final residual, SDK-env, and alias/tracer-closure commits.
 
 ## GSD prompt command
 
@@ -48,3 +48,7 @@ Stay on `feat/410-otel-tracing`; do not reset/discard/recreate; push same PR. Be
 ## Final focused review-fix prompt digest — PR #459 head `75433cefa9a00671b06c6c3e83bcde1e4730211c`
 
 Stay on same branch/PR; do not reset/discard/recreate; do not request Claude/Copilot. Before production edits, update phase artifacts/TDD ledger and add red tests. Fix accepted residuals: own/sanitize ambient OTLP env (`OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`, `OTEL_EXPORTER_OTLP_HEADERS`, etc.) before exporter construction; add redacted project warnings and no raw process stderr; update ADR 0004 superseding note; root help/goldens exporter values; config docs/website wording requiring both exporter and endpoint from trusted env/flag.
+
+## Last exporter-constructor self-observability prompt digest — PR #459 head `46c5c1667c9b4ba2d9e97b086ab11c6c08c80990`
+
+Stay on same branch/PR; do not reset/discard/recreate; no Claude/Copilot. Before production edits, update PLAN/TDD/VERIFICATION and add red tests. Fix only remaining finding: sanitize `unsupportedSDKEnv` around `stdouttrace.New` and OTLP HTTP exporter construction too; avoid nested sanitizer mutex deadlocks by combining OTLP and SDK env names in one constructor sanitizer. Add file + OTLP regressions for `OTEL_GO_X_OBSERVABILITY` and `OTEL_GO_X_SELF_OBSERVABILITY`: project warnings by env name only, no raw process stderr, no synthetic marker/self-observability leakage, no live collector.

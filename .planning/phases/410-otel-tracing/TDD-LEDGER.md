@@ -40,6 +40,8 @@ scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-final
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-final-sdk-env.txt
 scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-final-alias.txt
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-final-alias.txt
+scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-exporter-selfobs.txt
+scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-exporter-selfobs.txt
 ```
 
 Result:
@@ -51,6 +53,7 @@ Result:
 - Final focused review-fix rerun at PR #459 head `75433cefa9a00671b06c6c3e83bcde1e4730211c`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 - Final SDK-env hardening rerun at PR #459 head `216b5e076d82302621574a9fb4fa71c8acb79204`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 - Narrow final alias/tracer-closure rerun at PR #459 head `0fc39148004d699f35239a17418cd095bdd4a1ed`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
+- Last exporter-constructor self-observability rerun at PR #459 head `46c5c1667c9b4ba2d9e97b086ab11c6c08c80990`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 
 ## Review-fix accepted findings
 
@@ -88,6 +91,12 @@ Result:
 | Finding | Disposition | Planned red evidence |
 |---|---|---|
 | MED `OTEL_GO_X_SELF_OBSERVABILITY` alias omitted and `provider.Tracer("polymetrics.ai/pm")` created after SDK env restore | Accepted | Focused CLI tests for `OTEL_GO_X_OBSERVABILITY` and `OTEL_GO_X_SELF_OBSERVABILITY` assert project warnings by env name only, no raw process stderr, and no self-observability/secret marker leakage from exported telemetry. |
+
+## Last exporter-constructor self-observability accepted finding
+
+| Finding | Disposition | Planned red evidence |
+|---|---|---|
+| MED exporter constructors can still see `OTEL_GO_X_OBSERVABILITY` / `OTEL_GO_X_SELF_OBSERVABILITY` before SDK self-observability env is sanitized | Accepted | Focused CLI tests for file and OTLP paths assert warnings by env name only, raw process stderr empty, synthetic marker/self-observability leakage absent, and exporter-stage warnings emitted even when exporter init fails before provider construction. |
 
 ## Ledger
 
@@ -128,6 +137,9 @@ Result:
 | 33 | final alias/tracer-closure timeout-adjusted broad gate | Test | `go test -timeout 20m ./internal/cli ./internal/connectors/certify -count=1`; `go test -timeout 20m ./...` | Pass | Slow packages passed with 20m timeout (`internal/cli` 651s, `internal/connectors/certify` 1109s for package rerun); full 20m suite passed. |
 | 34 | final alias/tracer-closure verify | Full verify/diff | `go build ./cmd/pm`; `make verify`; `git diff --check`; `git diff -- go.mod go.sum` | Pass | `make verify` passed: fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, lint, connectorgen validate. No go.mod/go.sum diff. |
 | 35 | final alias/tracer-closure push | PR update | PR body update via GitHub API; `git push origin feat/410-otel-tracing` | Pass | PR #459 body updated without Claude/Copilot; branch pushed to origin. |
+| 36 | exporter-self-observability red | Test | `go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X|SelfObservability' -count=1` | Fail | Expected red before production edits. Exact key output: `TestTelemetrySelfObservabilityEnvWarnsBeforeFileExporterFailure`: `project stderr missing self-observability warning before file exporter failure: "warning: telemetry: initialize telemetry exporter: telemetry directory path contains a non-directory\n"`; `TestTelemetrySelfObservabilityEnvWarnsBeforeOTLPExporterFailure`: `project stderr missing self-observability warning before OTLP exporter failure: "warning: telemetry: initialize telemetry exporter: invalid OTLP endpoint: endpoint must be an http or https URL without credentials, query, or fragment\n"`; `internal/telemetry` passed; exit code 1. |
+| 37 | exporter-self-observability green | Test | `gofmt -w internal/telemetry/telemetry.go internal/cli/telemetry_cli_test.go && go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X|SelfObservability' -count=1` | Pass | `stdouttrace.New` and OTLP exporter construction now run with SDK self-observability env sanitized; file/OTLP warning/stderr/leak regressions pass. |
+| 38 | exporter-self-observability gates | Verification | `gofmt -w cmd internal`; `go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X|SelfObservability' -count=1`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `make verify`; `git diff --check`; `git diff -- go.mod go.sum` | Pass | Focused tests, full 20m suite, build, verify, and diff checks passed; no go.mod/go.sum diff. |
 
 ## Red-test requirements
 

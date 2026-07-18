@@ -192,6 +192,23 @@ Planned red tests before production edits:
 - `internal/cli`: file exporter with `OTEL_GO_X_SELF_OBSERVABILITY=<synthetic>` has the same warning/stderr/leak constraints and fails until the alias is added to unsupported SDK env handling.
 - Focused gate: `go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X' -count=1`.
 
+## Last exporter-constructor self-observability fix plan — PR #459 residual at head `46c5c1667c9b4ba2d9e97b086ab11c6c08c80990`
+
+Execution decision: `local_critical_path` — same isolated issue worktree/branch, no subagent tool, no Claude/Copilot request per user instruction.
+
+Accepted residual and slice:
+
+1. Exporter constructor env window: sanitize `unsupportedSDKEnv` around `stdouttrace.New` and OTLP HTTP exporter construction, not only resource/provider/tracer construction. Avoid nested sanitizer mutex deadlocks by using one sanitizer pass for OTLP constructor env (`supportedOTLPEndpointEnv` + `unsupportedOTLPEnv` + `unsupportedSDKEnv`).
+2. Warning timing: warn by unsupported SDK env name before exporter construction too, so exporter init failures cannot skip self-observability env warnings. Warnings must never include env values.
+3. Focused tests: file and OTLP paths with `OTEL_GO_X_OBSERVABILITY` / `OTEL_GO_X_SELF_OBSERVABILITY` assert project warnings by env name only, no raw process stderr, no synthetic marker/self-observability leakage, and no untrusted collector/header behavior. Add red failure-path coverage proving exporter-stage warnings are emitted before provider construction.
+
+Planned red tests before production edits:
+
+- `internal/cli`: file exporter failure with `OTEL_GO_X_SELF_OBSERVABILITY=<synthetic>` warns by env name only before exporter init returns disabled; stdout remains the Version envelope, process stderr stays empty, and no env value leaks.
+- `internal/cli`: OTLP invalid endpoint with `OTEL_GO_X_OBSERVABILITY=<synthetic>` warns by env name only before exporter init returns disabled; stdout remains the Version envelope, process stderr stays empty, no env value leaks, and no collector is contacted.
+- `internal/cli`: OTLP enabled against an `httptest` collector with both self-observability aliases proves exported payload/stderr omit synthetic values, self-observability terms, and SDK self-instrumentation markers.
+- Focused gate: `go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X|SelfObservability' -count=1`.
+
 ## Commit/push checkpoints
 
 1. Final alias/tracer-closure planning artifact checkpoint.

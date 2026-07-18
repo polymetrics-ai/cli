@@ -413,6 +413,144 @@ func assertTelemetryGoXObservabilityEnvProjectOnly(t *testing.T, envName string)
 	}
 }
 
+func TestTelemetrySelfObservabilityEnvWarnsBeforeFileExporterFailure(t *testing.T) {
+	const marker = "pm_file_exporter_selfobs_marker"
+	root := t.TempDir()
+	notDir := filepath.Join(root, "not-dir")
+	if err := os.WriteFile(notDir, []byte("not a directory"), 0o600); err != nil {
+		t.Fatalf("write not-dir: %v", err)
+	}
+	t.Setenv("PM_TELEMETRY", "file")
+	t.Setenv("PM_TELEMETRY_DIR", filepath.Join("not-dir", "telemetry"))
+	t.Setenv("OTEL_GO_X_SELF_OBSERVABILITY", marker)
+	var stdout, stderr bytes.Buffer
+	var code int
+
+	processStderr := captureProcessStderr(t, func() {
+		code = cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+	})
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s processStderr=%s", code, stdout.String(), stderr.String(), processStderr)
+	}
+	if !strings.Contains(stdout.String(), `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout.String())
+	}
+	if processStderr != "" {
+		t.Fatalf("process stderr = %q, want empty", processStderr)
+	}
+	if !strings.Contains(stderr.String(), "warning: telemetry:") || !strings.Contains(stderr.String(), "OTEL_GO_X_SELF_OBSERVABILITY") {
+		t.Fatalf("project stderr missing self-observability warning before file exporter failure: %q", stderr.String())
+	}
+	for _, forbidden := range []string{marker, "selfobs_marker", "=true"} {
+		if strings.Contains(stderr.String(), forbidden) || strings.Contains(processStderr, forbidden) || strings.Contains(stdout.String(), forbidden) {
+			t.Fatalf("output leaked %q: stdout=%q project=%q process=%q", forbidden, stdout.String(), stderr.String(), processStderr)
+		}
+	}
+}
+
+func TestTelemetrySelfObservabilityEnvWarnsBeforeOTLPExporterFailure(t *testing.T) {
+	const marker = "pm_otlp_exporter_selfobs_marker"
+	root := t.TempDir()
+	t.Setenv("PM_TELEMETRY", "otlp")
+	t.Setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "https://collector.example.test/v1/traces?token="+marker)
+	t.Setenv("OTEL_GO_X_OBSERVABILITY", marker)
+	var stdout, stderr bytes.Buffer
+	var code int
+
+	processStderr := captureProcessStderr(t, func() {
+		code = cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+	})
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s processStderr=%s", code, stdout.String(), stderr.String(), processStderr)
+	}
+	if !strings.Contains(stdout.String(), `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout.String())
+	}
+	if processStderr != "" {
+		t.Fatalf("process stderr = %q, want empty", processStderr)
+	}
+	if !strings.Contains(stderr.String(), "warning: telemetry:") || !strings.Contains(stderr.String(), "OTEL_GO_X_OBSERVABILITY") {
+		t.Fatalf("project stderr missing self-observability warning before OTLP exporter failure: %q", stderr.String())
+	}
+	if !strings.Contains(stderr.String(), "invalid OTLP endpoint") {
+		t.Fatalf("project stderr missing invalid endpoint warning: %q", stderr.String())
+	}
+	for _, forbidden := range []string{marker, "token=", "selfobs_marker", "=true"} {
+		if strings.Contains(stderr.String(), forbidden) || strings.Contains(processStderr, forbidden) || strings.Contains(stdout.String(), forbidden) {
+			t.Fatalf("output leaked %q: stdout=%q project=%q process=%q", forbidden, stdout.String(), stderr.String(), processStderr)
+		}
+	}
+}
+
+func TestTelemetryOTLPSelfObservabilityEnvWarningIsProjectOnly(t *testing.T) {
+	for _, envName := range []string{"OTEL_GO_X_OBSERVABILITY", "OTEL_GO_X_SELF_OBSERVABILITY"} {
+		t.Run(envName, func(t *testing.T) {
+			const marker = "pm_otlp_self_observability_marker"
+			bodyCh := make(chan []byte, 1)
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				body, _ := io.ReadAll(r.Body)
+				select {
+				case bodyCh <- body:
+				default:
+				}
+				w.WriteHeader(http.StatusNoContent)
+			}))
+			defer server.Close()
+			root := t.TempDir()
+			t.Setenv("PM_TELEMETRY", "otlp")
+			t.Setenv("OTEL_EXPORTER_OTLP_ENDPOINT", server.URL)
+			t.Setenv(envName, marker)
+			t.Setenv("OTEL_RESOURCE_ATTRIBUTES", "api_key="+marker)
+			var stdout, stderr bytes.Buffer
+			var code int
+
+			processStderr := captureProcessStderr(t, func() {
+				code = cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+			})
+
+			if code != 0 {
+				t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s processStderr=%s", code, stdout.String(), stderr.String(), processStderr)
+			}
+			if !strings.Contains(stdout.String(), `"kind": "Version"`) {
+				t.Fatalf("stdout missing Version envelope: %s", stdout.String())
+			}
+			if processStderr != "" {
+				t.Fatalf("process stderr = %q, want empty", processStderr)
+			}
+			if !strings.Contains(stderr.String(), "warning: telemetry:") || !strings.Contains(stderr.String(), envName) {
+				t.Fatalf("project stderr missing %s warning by env name: %q", envName, stderr.String())
+			}
+			for _, forbidden := range []string{marker, "api_key=", "=true"} {
+				if strings.Contains(stderr.String(), forbidden) || strings.Contains(processStderr, forbidden) || strings.Contains(stdout.String(), forbidden) {
+					t.Fatalf("output leaked %q: stdout=%q project=%q process=%q", forbidden, stdout.String(), stderr.String(), processStderr)
+				}
+			}
+
+			select {
+			case body := <-bodyCh:
+				for _, forbidden := range []string{
+					marker,
+					"api_key",
+					envName,
+					"self_observability",
+					"self-observability",
+					"otel.sdk",
+					"sdk.span",
+					"go.opentelemetry.io/otel/sdk/trace",
+				} {
+					if bytes.Contains(body, []byte(forbidden)) {
+						t.Fatalf("OTLP payload leaked %q: %q", forbidden, string(body))
+					}
+				}
+			default:
+				t.Fatal("collector did not receive OTLP export")
+			}
+		})
+	}
+}
+
 func TestTelemetryOTLPExportFailureUsesProjectWarningAndKeepsStdout(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "collector failed", http.StatusInternalServerError)

@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: narrow final alias/tracer-closure fix verified locally, PR #459 body updated, and branch pushed.
+Status: last exporter-constructor self-observability fix verified locally on PR #459 branch; PR body/push pending. No Claude/Copilot requested.
 
 ## Current state
 
@@ -61,8 +61,17 @@ Current execution decision: `local_critical_path`. This worker stayed on `feat/4
 - Added focused CLI coverage for both env names: project warnings by env name only, no raw process stderr, and no synthetic/self-observability leakage in exported telemetry.
 - No Claude/Copilot request.
 
+## Last exporter-constructor self-observability delivered
+
+- Sanitized `unsupportedSDKEnv` around `stdouttrace.New` and OTLP HTTP exporter construction.
+- OTLP constructor uses one combined sanitizer for endpoint aliases, unsupported OTLP env, and unsupported SDK env to avoid nested mutex deadlocks.
+- Unsupported SDK env warnings now emit before exporter construction, so exporter init failures cannot skip `OTEL_GO_X_*` warnings.
+- Added file and OTLP regressions for `OTEL_GO_X_OBSERVABILITY` / `OTEL_GO_X_SELF_OBSERVABILITY`: project warnings by env name only, raw process stderr empty, stdout clean, OTLP payload/exported telemetry omit synthetic marker/self-observability/SDK terms.
+
 ## Verification final
 
 Focused tests, docs/golden/website generation, file/off/secret smoke, OTLP endpoint smoke, `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` passed after the previous review-fix commit. Final focused review-fix verification also passed: focused ambient env tests, docs generation/diff, website data generation, runtime help parity, full Go gates, `make verify`, `git diff --check`, and `git diff -- go.mod go.sum`.
 
 SDK-level env hardening verification also passed: new focused red/green tests, `go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry|TestLoadTelemetry|Config' -count=1`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, temp docs generation/diff, `git diff --check`, and `git diff -- go.mod go.sum`.
+
+Exporter-constructor self-observability verification passed: red focused test captured before production edits; green focused `go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X|SelfObservability' -count=1`; `gofmt -w cmd internal`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `make verify`; `git diff --check`; `git diff -- go.mod go.sum`.

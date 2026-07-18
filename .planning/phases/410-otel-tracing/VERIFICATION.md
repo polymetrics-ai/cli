@@ -1,5 +1,14 @@
 # Verification — Phase 410 OpenTelemetry tracing
 
+## Last exporter-constructor self-observability checklist (PR #459 head `46c5c1667c9b4ba2d9e97b086ab11c6c08c80990`)
+
+- [x] Red tests captured before production edits for exporter-stage self-observability env warnings and file/OTLP leakage behavior.
+- [x] `stdouttrace.New` is called with `unsupportedSDKEnv` sanitized, including `OTEL_GO_X_OBSERVABILITY` and `OTEL_GO_X_SELF_OBSERVABILITY`.
+- [x] OTLP HTTP exporter construction is called with one combined env sanitizer (`supportedOTLPEndpointEnv` + `unsupportedOTLPEnv` + `unsupportedSDKEnv`) to avoid nested mutex deadlocks.
+- [x] File exporter path: self-observability aliases warn through project stderr by env name only, raw process stderr stays empty, stdout envelope remains clean, exported telemetry omits synthetic values and self-observability/SDK markers.
+- [x] OTLP path: self-observability aliases warn through project stderr by env name only, raw process stderr stays empty, no untrusted collector/header behavior, OTLP payload omits synthetic values and self-observability/SDK markers.
+- [x] Focused tests, `go vet ./...`, `go test -timeout 20m ./...` or default full tests when feasible, `go build ./cmd/pm`, `make verify`, `git diff --check`, and `git diff -- go.mod go.sum` complete.
+
 ## Narrow final alias/tracer-closure checklist (PR #459 head `0fc39148004d699f35239a17418cd095bdd4a1ed`)
 
 - [x] Red tests captured before production edits for both `OTEL_GO_X_OBSERVABILITY` and `OTEL_GO_X_SELF_OBSERVABILITY`.
@@ -111,6 +120,12 @@ go test ./internal/cli -run 'TestTelemetrySanitizesSDKResourceEnvForFileExporter
 go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry|TestLoadTelemetry|Config' -count=1
 ```
 
+## Last exporter-constructor self-observability focused gates to run
+
+```bash
+go test ./internal/cli ./internal/telemetry -run 'Telemetry|OTEL_GO_X|SelfObservability' -count=1
+```
+
 ## Narrow final alias/tracer-closure focused gates to run
 
 ```bash
@@ -195,3 +210,6 @@ Additional smoke/parity:
 | `go build ./cmd/pm`; `make verify` | pass | Build produced no output; `make verify` passed fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, connectorgen validate. |
 | `git diff --check`; `git diff -- go.mod go.sum` (final alias) | pass | No output. |
 | PR body update + branch push | pass | PR #459 body updated via GitHub API after `gh pr edit` hit the classic Projects GraphQL deprecation error; `git push origin feat/410-otel-tracing` succeeded. |
+| `go test ./internal/cli ./internal/telemetry -run 'Telemetry\|OTEL_GO_X\|SelfObservability' -count=1` (exporter self-observability red) | fail | Expected red: file and OTLP exporter failure tests missed self-observability env warnings before provider construction. |
+| `go test ./internal/cli ./internal/telemetry -run 'Telemetry\|OTEL_GO_X\|SelfObservability' -count=1` (exporter self-observability green) | pass | Focused file/OTLP self-observability warning/stderr/leak regressions passed. |
+| `gofmt -w cmd internal`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `make verify`; `git diff --check`; `git diff -- go.mod go.sum` (exporter self-observability final) | pass | Full 20m suite, build, verify, and diff checks passed; no go.mod/go.sum diff. |
