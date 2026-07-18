@@ -20,10 +20,12 @@ Session: `issue-428-second-correction-pi-20260718T140317Z`; runtime model identi
 | M0 | Planning | Read `/tmp/pm-397-rereview-428.log`; accept Medium; update PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE before production edits; record GSD fallback and required skills | Complete before test/production edits |
 | M1 | RED | `go test ./internal/cli -run '^TestAgentClusteredShortHelpTailsPreserveValidActions$' -count=1` after adding plan-output/fake-runtime table for `-hx`, `-xh`, `-hh`, `-xhy`, `-zzhzz` across plan/build/pull/ensure | Failed as expected before production edits: 20/20 cases returned agent help, all image runtime calls were suppressed; package `0.582s`, wall `5.302s` |
 | M2 | GREEN | Agent-only tail normalizer ignores single-dash clusters containing `h` after an exact valid action while ordinary exact `agent -h` remains help | Pass: 20/20 cluster-tail cases (`0.561s`; wall `3.408s`); focused agent/router pass (`4.462s`; wall `6.079s`) |
-| M3 | Refactor/adversarial | Focused/repeated/race tests plus exact/assigned help, no-`h` short clusters, invalid heads, root/other namespace isolation, and base differential | Pending |
-| M4 | Verify/deliver | gofmt, vet, build, diff/scope/dependency checks; full CLI only if indicated; finalize exact end/head/evidence; commit/push without PR | Pending |
+| M3 | Refactor/adversarial | Focused/repeated/race tests plus exact/assigned help, no-`h` short clusters, invalid heads, root/other namespace isolation, and base differential | Pass: repeated `-count=10` (`0.579s`); adversarial (`0.584s`); race (`1.715s`); exact base differential 32/32 exit/stdout/stderr/fake-runtime traces |
+| M4 | Verify/deliver | gofmt, vet, build, diff/scope/dependency checks; full CLI; finalize exact end/head/evidence; commit/push without PR | Pass: full CLI `239.818s`; gofmt, vet `3s`, build `2s`, diff/scope/dependencies clean; verified implementation head `7f23901bf08fd11ac1384509396ca1a46c9d16ff`; end `20260718T141424Z` UTC |
 
-RED contract: each valid plan invocation must emit the exact legacy plan output and not `agentHelp`; each valid image invocation must perform the expected fake lookup/file/run sequence and not emit `agentHelp`. Tests execute no Podman/Docker or service. The production hypothesis is one scoped predicate change in `isLegacyHelpFlag`; no broader pflag/Cobra behavior change is planned.
+RED contract: each valid plan invocation must emit the exact legacy plan output and not `agentHelp`; each valid image invocation must perform the expected fake lookup/file/run sequence and not emit `agentHelp`. Tests execute no Podman/Docker or service. The production hypothesis was confirmed with one scoped predicate change in `isLegacyHelpFlag`; no broader pflag/Cobra behavior changed.
+
+Second-correction commits: `d5183180b440bdd405032ae23618d6621ae9f43e` planning, `baae3933c1a859dd94f551ee4ff56298ba930347` RED, and `7f23901bf08fd11ac1384509396ca1a46c9d16ff` GREEN. Final evidence is an artifact-only checkpoint.
 
 ## High-finding correction ledger
 

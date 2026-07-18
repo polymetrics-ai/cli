@@ -12,11 +12,12 @@ Second-correction session `issue-428-second-correction-pi-20260718T140317Z`; run
 - [x] PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE updated before test or production edits.
 - [x] Clustered-tail plan/output and fake-runtime tests failed before production edits: all 20 plan/build/pull/ensure × `-hx`/`-xh`/`-hh`/`-xhy`/`-zzhzz` cases rendered the agent manual and suppressed expected image runtime calls (`0.582s`; wall `5.302s`).
 - [x] Smallest agent-scoped normalization passes all 20 cluster-tail cases (`0.561s`; wall `3.408s`) and focused agent/router tests (`4.462s`; wall `6.079s`); ordinary exact `agent -h` coverage remains green.
-- [ ] Focused, repeated, race, adversarial, and exact legacy-base differential gates pass.
-- [ ] Full CLI test is run if focused evidence indicates it is needed.
-- [ ] `gofmt`, `go vet ./...`, `go build ./cmd/pm`, `git diff --check`, scope, and dependency guards pass.
-- [ ] Exact end time/head, RED/GREEN evidence, commits, and push are recorded; no PR or external review.
-- [ ] No container/service, Podman/Docker, image operation, dependency, credential, secret, or unrelated namespace/docs/website/generated change.
+- [x] Repeated cluster gate (`-count=10`, `0.579s`), adversarial boundary/help/isolation gate (`0.584s`), and focused race gate (`1.715s`) pass.
+- [x] Exact differential against legacy base `235233f7cfde4a24612be6b0f95fb37a412d388a` matches 32/32 exit/stdout/stderr/fake-runtime-call traces, covering all 20 clustered valid actions plus exact help, root/other namespace, nearby no-`h`/assigned/exact help tails, and invalid clustered heads.
+- [x] Full CLI passes (`go test ./internal/cli -count=1`: package `239.818s`; wall `241.501s`).
+- [x] `gofmt -w cmd internal`, `go vet ./...` (`3s`), `go build ./cmd/pm` (`2s`), `git diff --check`, scope, and dependency guards pass.
+- [x] Exact verification end `20260718T141424Z` UTC and verified implementation head `7f23901bf08fd11ac1384509396ca1a46c9d16ff` recorded; planning/RED/GREEN commits pushed and final artifact checkpoint prepared without PR/external review.
+- [x] No container/service, Podman/Docker, real image operation, dependency, credential, secret, or unrelated namespace/docs/website/generated change.
 
 CLI parity stance: no user-facing command/flag/manual contract changes. Ordinary exact `pm agent -h` remains canonical help; valid action-tail short clusters retain legacy execution. Docs/website/generated changes are not applicable unless a verification delta appears.
 

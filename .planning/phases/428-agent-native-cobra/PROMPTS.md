@@ -1,5 +1,17 @@
 # Phase 428 Prompts
 
+## Accepted Medium second correction kickoff snapshot
+
+Task: From exact start `af604d7178c83d21d77abedfa3c4dee29f94c089`, accept `/tmp/pm-397-rereview-428.log` Medium and preserve exact legacy plan/build/pull/ensure execution for clustered short tails containing `h`, with test-first plan outputs and fake runtime calls, no unexpected help, no root/other namespace or exact `-h` change, and no PR/external/runtime activity.
+
+Identity: session `issue-428-second-correction-pi-20260718T140317Z`; runtime model identity not exposed; start `20260718T140317Z`; verification end `20260718T141424Z` UTC; verified implementation head `7f23901bf08fd11ac1384509396ca1a46c9d16ff`.
+
+Exact GSD invocation: `scripts/gsd prompt programming-loop init --phase 428 --dry-run`; doctor passed, but the prompt command failed with `unknown GSD command`, so the manual universal-runtime-loop fallback ran. Execution decision: `local_critical_path` for one bounded isolated parser defect; no subagent tool and external review prohibited.
+
+Downstream artifact: `internal/cli/agent_cli_test.go`, `internal/cli/cobra_router.go`, and all six issue-local phase artifacts. Planning, RED, and GREEN checkpoints were committed/pushed; final evidence is an artifact-only checkpoint.
+
+Verification result: pass. RED failed all 20 cases before production edits (`0.582s`); GREEN passes exact plan output and fake lookup/file/run calls (`0.561s`). Focused agent/router (`4.462s`), repeated (`0.579s`), adversarial (`0.584s`), race (`1.715s`), 32/32 exact base differential, full CLI (`239.818s`), gofmt, vet, build, diff, scope, and dependency gates pass. No real Podman/Docker/image/container/service/dependency/secret operation occurred.
+
 ## Accepted High correction kickoff snapshot
 
 Task: From exact correction start `746b2a98b01ba1e119974e31569fc8deb06cd897`, prevent leading invalid agent/image action heads from allowing Cobra to discover or execute later image build/pull/ensure actions. Add fake-runtime RED first; preserve exact actions, agent help, and literal/action-tail compatibility; run bounded local gates only.

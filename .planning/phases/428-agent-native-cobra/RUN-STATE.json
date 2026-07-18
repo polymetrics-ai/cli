@@ -19,8 +19,8 @@
   "secondCorrectionStartedAt": "20260718T140317Z",
   "secondCorrectionStartingHead": "af604d7178c83d21d77abedfa3c4dee29f94c089",
   "secondCorrectionModel": "not_exposed_by_runtime",
-  "status": "second_correction_green",
-  "verificationPassed": false,
+  "status": "second_correction_complete_verified_pushed",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -37,9 +37,9 @@
     "scope": "agent valid-action tail normalization and focused tests only",
     "red": "TestAgentClusteredShortHelpTailsPreserveValidActions failed before production edits: all 20 plan/build/pull/ensure by clustered-tail cases rendered agent help and suppressed expected image runtime calls; package 0.582s, wall 5.302s",
     "green": "one agent-tail predicate change passes 20/20 cluster cases in 0.561s (wall 3.408s) and focused agent/router tests in 4.462s (wall 6.079s)",
-    "verification": "pending",
-    "endedAt": null,
-    "endingHead": null
+    "verification": "repeated count=10 package 0.579s; adversarial 0.584s; focused race 1.715s; exact legacy differential 32/32; full CLI package 239.818s; gofmt, vet, build, diff, scope, and dependency guards passed",
+    "endedAt": "20260718T141424Z",
+    "endingHead": "7f23901bf08fd11ac1384509396ca1a46c9d16ff"
   },
   "orchestrationDecisions": [
     {
@@ -106,11 +106,21 @@
       "cycle": "second-correction-green",
       "decision": "local_critical_path",
       "reason": "one agent-tail help predicate now removes clustered short h tails after exact actions; all plan outputs and fake image runtime calls execute as expected"
+    },
+    {
+      "cycle": "second-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "repeated, adversarial, race, 32-case exact legacy differential, full CLI, gofmt, vet, build, diff, scope, and dependency gates passed without real runtime operations"
+    },
+    {
+      "cycle": "second-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "exact invocation/start/end, strict RED-GREEN evidence, verified implementation head, safety, and pushed checkpoints were recorded; no PR or external review was requested"
     }
   ],
-  "red": "initial focused agent/router build RED plus correction RED: TestAgentLeadingInvalidActionTokensCannotReachImageRuntime failed before correction production edits in 0.587s because assigned unknown/help-like and image literal heads reached later actions or runtime lookup",
-  "green": "initial focused 4.408s/4.480s/4.386s plus correction focused 4.446s, correction race 1.679s, repeated boundary 0.582s; all 30 correction fake-runtime cases pass with zero lookups/files/runs",
-  "verification": "initial full gates plus correction 35-case exact base differential, full CLI 234.335s, gofmt, vet, build, diff, scope, and dependency guards passed",
+  "red": "initial and first-correction RED evidence retained; second correction TestAgentClusteredShortHelpTailsPreserveValidActions failed before production edits in all 20 cases because Cobra rendered help and suppressed expected plan/image execution",
+  "green": "initial and first-correction GREEN evidence retained; second correction one-line agent-tail predicate passes 20/20 plan and fake-runtime cases plus focused agent/router tests",
+  "verification": "initial and first-correction full gates retained; second correction repeated/adversarial/race, 32-case exact base differential, full CLI 239.818s, gofmt, vet, build, diff, scope, and dependency guards passed",
   "files": [
     "internal/cli/cobra_router.go",
     "internal/cli/cobra_router_test.go",
@@ -133,9 +143,13 @@
     "46556e9d docs(planning): plan agent action boundary fix",
     "5cc5fa40 test(cli): expose agent action discovery bypass",
     "7ff7debf fix(cli): guard agent action discovery boundary",
-    "docs(planning): record agent action boundary correction (final handoff commit)"
+    "docs(planning): record agent action boundary correction (final handoff commit)",
+    "d5183180 docs(planning): plan agent short-cluster correction",
+    "baae3933 test(cli): expose agent clustered-help suppression",
+    "7f23901b fix(cli): preserve agent clustered short tails",
+    "docs(planning): record second agent correction evidence (final artifact checkpoint)"
   ],
-  "push": "all initial and correction planning, red, implementation, hardening, and final verification checkpoints pushed to origin/refactor/428-agent-native-cobra",
+  "push": "all initial, first-correction, and second-correction planning, RED, implementation, hardening, and final verification checkpoints pushed to origin/refactor/428-agent-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
   "safety": "no secrets, credentials, optional services, Podman/Docker execution, image operations, worker behavior changes, dependencies, or external writes; make verify local smoke followed plan-preview-approval-run",

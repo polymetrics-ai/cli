@@ -101,6 +101,12 @@ Parser ownership changes but command names, flags, output envelopes, canonical m
 
 No secrets, credentials, services, dependencies, generic write tools, destructive/admin actions, production deployment, image pull/build, Podman/Docker invocation, quality-gate reduction, external review, PR, or merge. Image tests use injected fakes and temporary directories only. Worker/RLM execution is untouched. The required `make verify` may run only its existing dependency-free/local sample smoke under its established safety gates.
 
+## Second bounded correction completion
+
+The accepted Medium is fixed from exact start `af604d7178c83d21d77abedfa3c4dee29f94c089`; verified implementation head is `7f23901bf08fd11ac1384509396ca1a46c9d16ff`; verification ended `20260718T141424Z` UTC. The only production change extends agent valid-action tail normalization to discard clustered single-dash tokens containing lowercase `h`, matching the legacy parser before Cobra can intercept help. Ordinary exact `pm agent -h`, invalid clustered action heads, root help, and other namespaces remain unchanged.
+
+Strict RED preceded production edits: all 20 plan/build/pull/ensure cluster cases rendered false-success agent help and suppressed image calls. GREEN passes 20/20 with exact plan output and fake-runtime lookup/file/run traces. Repeated, adversarial, focused race, 32/32 exact legacy differential (including fake-runtime traces), full CLI, gofmt, vet, build, diff, scope, and dependency gates pass. No real image/runtime/container/service action, dependency, docs/website/generated change, secret, PR, or external review occurred.
+
 ## High-finding correction completion
 
 The accepted High is fixed from exact correction start `746b2a98b01ba1e119974e31569fc8deb06cd897`. A pre-Cobra agent-only boundary now inserts a literal separator before every non-exact agent/image action head, including an existing literal `--`; the image parent rejects the preserved invalid head with the legacy-specific usage error before any runtime lookup. Exact actions/help and post-action unknown/help/literal behavior remain unchanged. Thirty fake-runtime cross-product cases pass with zero lookups/files/runs, focused and race gates pass, and a 35-case base differential matches exact exit/stdout/stderr. Full CLI, gofmt, vet, build, diff, scope, and dependency gates pass. No container/service, dependency, docs/website/golden, secret, PR, or external review activity occurred.

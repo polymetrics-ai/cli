@@ -1,6 +1,15 @@
 # Phase 428 Summary
 
-Status: implementation complete, accepted High correction fully verified and pushed; no PR created.
+Status: implementation complete, accepted Medium second correction and prior High correction fully verified and pushed; no PR created.
+
+## Accepted Medium second correction
+
+- Invocation/session: `Second bounded correction for #428 at start af604d7178c83d21d77abedfa3c4dee29f94c089`; `issue-428-second-correction-pi-20260718T140317Z`; runtime model identity not exposed.
+- Exact start/end: `af604d7178c83d21d77abedfa3c4dee29f94c089` at `20260718T140317Z`; verified implementation head `7f23901bf08fd11ac1384509396ca1a46c9d16ff`; verification end `20260718T141424Z` UTC.
+- Accepted `/tmp/pm-397-rereview-428.log` Medium. A one-line agent-only tail predicate now strips clustered single-dash tokens containing lowercase `h` after exact plan/build/pull/ensure actions, preventing Cobra help interception while leaving ordinary exact `agent -h`, invalid heads, root, and other namespaces unchanged.
+- RED first: all 20 `-hx`/`-xh`/`-hh`/`-xhy`/`-zzhzz` × plan/build/pull/ensure cases rendered agent help and suppressed expected actions (`0.582s`). GREEN passes exact plan output and fake runtime lookup/file/run traces (`0.561s`).
+- Focused agent/router (`4.462s`), repeated (`0.579s`), adversarial (`0.584s`), race (`1.715s`), 32/32 exact base exit/stdout/stderr/fake-runtime differential, full CLI (`239.818s`), gofmt, vet, build, diff, scope, and dependency gates pass.
+- Commits: `d5183180` planning, `baae3933` RED, `7f23901b` GREEN, plus final artifact checkpoint. All checkpoints pushed; no PR/external review, container/service, real image operation, dependency, credential, secret, or docs/website/generated change.
 
 ## Accepted High correction
 
