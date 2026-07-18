@@ -2,6 +2,21 @@
 
 Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`.
 
+## Third bounded correction checklist
+
+Invocation `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`; exact start `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`.
+
+- [x] Read `/tmp/pm-397-rereview2-429.log` and accept the MEDIUM raw internal-carrier ownership finding.
+- [x] Run GSD doctor/list, record missing programming-loop/manual fallback, load required skills/policies, and update issue artifacts before production edits.
+- [ ] RED: all 12 `add|inspect|test|remove` × assigned/bare/spaced raw carrier variants fail the new contract before production edits.
+- [ ] GREEN: raw internal-carrier spellings return usage/fail closed; no positional ownership override, wrong record access/removal, or value output occurs.
+- [ ] GREEN: safety-valid leading-hyphen credential names and all normal current/global flags remain supported without a user-addressable carrier.
+- [ ] Focused, repeated, race, adversarial, exact-start differential, full CLI, gofmt, vet, build, full declared gate, and diff/scope guards pass.
+- [ ] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified.
+- [ ] Planning, RED, GREEN, and final evidence checkpoints committed and pushed; no private data display, real credentials, services, dependencies, PR, or review.
+
+Result: reopened; `verificationPassed=false` until the declared third-correction gates complete.
+
 ## Second bounded correction checklist
 
 Invocation `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; profile `Sol/high`; exact start `fae7d599668637bea345fe76877dd75e31dd2ad8`.

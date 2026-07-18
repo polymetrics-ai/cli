@@ -10,6 +10,17 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, this session exposes no subagent tool, and the user bounded delivery to #429 with no PR or external review.
 
+## Third bounded correction
+
+- Session: `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`.
+- Exact correction start: `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`; rereview source: `/tmp/pm-397-rereview2-429.log`; MEDIUM finding accepted.
+- GSD: doctor/list pass; the documented `programming-loop` command remains unavailable, so the manual universal-runtime-loop fallback is active.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, and `golang-safety`; CLI help/docs/website parity policy loaded.
+- Execution decision: `local_critical_path` — one bounded credentials/router trust-boundary correction; this runtime exposes no subagent tool and the user prohibited PR/external review.
+- RED matrix before production edits: for `add`, `inspect`, `test`, and `remove`, invoke raw `--pm-internal-credentials-name` in assigned (`=target`), bare, and spaced forms. Require usage/fail-closed behavior; prove no decoy-to-target ownership override, no wrong record access/removal, and no synthetic value output.
+- Smallest implementation: remove the user-addressable hidden pflag carrier and carry the normalized leading-hyphen positional name in inaccessible command-local state, while rejecting every raw internal-carrier spelling before ordinary normalization. Preserve safety-valid leading-hyphen names and all normal current/global flags.
+- Verification: focused RED/GREEN; repeated/race/adversarial credentials tests; exact-start differential for normal help/flags and corrected raw-carrier cases; full CLI; gofmt, vet, build, full tests/declared full gate, and diff/scope guards. Commit/push coherent planning, RED, GREEN, and final evidence checkpoints. No private data display, real credentials, services, dependencies, PR, or external review.
+
 ## Second bounded correction
 
 - Session: `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; explicit profile `Sol/high`.

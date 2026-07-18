@@ -1,6 +1,10 @@
 # Phase 429 Summary
 
-Status: second bounded correction complete, verified, and pushed from exact head `fae7d599668637bea345fe76877dd75e31dd2ad8`; no PR or review.
+Status: third bounded correction reopened at exact head `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`; MEDIUM raw internal-carrier ownership finding accepted; verification pending; no PR or review.
+
+## Third bounded correction
+
+The hidden `--pm-internal-credentials-name` pflag is raw-user-addressable and can supersede the required first positional credential name. The correction is planned test-first across add/inspect/test/remove and assigned/bare/spaced raw spellings. It will fail closed without accessing/removing the wrong record or emitting synthetic values, replace pflag carriage with inaccessible command-local state, and preserve leading-hyphen names plus normal flags. No production edit has started.
 
 ## Second bounded correction
 

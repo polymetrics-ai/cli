@@ -11,6 +11,19 @@ Doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-research` generate
 
 Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-documentation`, `golang-spf13-cobra`.
 
+## Third bounded correction ledger
+
+Session `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`; exact correction start `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`. Rereview `/tmp/pm-397-rereview2-429.log` accepted. GSD doctor/list passed; the adapter still lacks `programming-loop`, so manual universal-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, and `golang-safety`.
+
+| Step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| T0 | Review/plan | Record the raw hidden-carrier ownership bypass, 12-case action/form RED matrix, inaccessible state design, safety constraints, and verification/checkpoint sequence before production edits | Complete |
+| T1 | RED | Add `add|inspect|test|remove` raw-carrier tests for assigned, bare, and spaced forms; assert usage/fail closed, no wrong record access/removal, and no synthetic value output | Pending |
+| T2 | GREEN | Replace hidden pflag carriage with inaccessible command-local state and reject raw carrier spellings while preserving normalized leading-hyphen names and normal flags | Pending |
+| T3 | Verify | Focused/repeated/race/adversarial/base differential/full CLI plus gofmt/vet/build/full declared gate/diff | Pending |
+
+Tests use temporary roots and synthetic metadata/config only. They must not print fixture values or contact external services.
+
 ## Second bounded correction ledger
 
 Session `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; profile `Sol/high`; exact correction start `fae7d599668637bea345fe76877dd75e31dd2ad8`. Rereview `/tmp/pm-397-rereview-429.log` accepted in full. GSD doctor/list passed and the plan prompt generated; the adapter still lacks `programming-loop`, so manual universal-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`.

@@ -47,6 +47,18 @@ Downstream artifact: strict RED tests, actual-state assertion, runtime-only loca
 
 Verification result: pass. Focused, repeated, race, all-credentials, app, connectors, CLI, exact-start differential, full repository, gofmt, vet, build, and `make verify` passed. Full repository app/CLI/certify timings were `27.976s`/`285.504s`/`340.518s`; lint 0 and connector validation 547/0. No real credential, private fixture output, external service, dependency, PR, or review.
 
+## Third bounded correction snapshot
+
+Task: Accept the MEDIUM finding in `/tmp/pm-397-rereview2-429.log` from exact start `6158cdc92d5df01cbaa577ceeb5a870ddcb8f685`. Session `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`.
+
+GSD route: doctor/list passed; `programming-loop` remains unavailable, so the manual universal runtime loop is active. Execution decision: `local_critical_path` because this is one credentials/router trust-boundary correction, this runtime exposes no subagent tool, and PR/external review are prohibited.
+
+Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, and `golang-safety`. CLI help/docs/website parity policy is active.
+
+Downstream artifact: strict 12-case RED matrix for raw assigned/bare/spaced internal carrier use across add/inspect/test/remove; inaccessible command-local leading-name carriage; raw-carrier fail-closed guard; finalized phase evidence.
+
+Verification result: pending. No production edit has started. No private data display, real credential, service, dependency, PR, or review is permitted.
+
 ## Verification and local review snapshot
 
 ```bash

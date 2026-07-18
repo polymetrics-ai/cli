@@ -33,8 +33,13 @@
   "secondCorrectionFindingsAccepted": ["HIGH_effect_path_containment", "MEDIUM_leading_hyphen_add", "LOW_actual_state_path"],
   "secondCorrectionEndedAt": "20260718T174213Z",
   "secondCorrectionEndingImplementationHead": "ec7064a851e572feb8cffdde2c394917ad38662c",
-  "status": "complete_verified_pushed_no_pr_no_review",
-  "verificationPassed": true,
+  "thirdCorrectionInvocationSession": "issue-429-third-bounded-correction-pi-openai-20260718T180016Z",
+  "thirdCorrectionStartedAt": "20260718T180016Z",
+  "thirdCorrectionStartingHead": "6158cdc92d5df01cbaa577ceeb5a870ddcb8f685",
+  "thirdCorrectionSource": "/tmp/pm-397-rereview2-429.log",
+  "thirdCorrectionFindingsAccepted": ["MEDIUM_raw_internal_carrier_override"],
+  "status": "third_correction_planned_tdd_pending",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -45,6 +50,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "third-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "one bounded credentials/router trust-boundary correction; this runtime exposes no subagent tool, and the user prohibited PR and external review"
+    },
     {
       "cycle": "second-correction-plan",
       "decision": "local_critical_path",
