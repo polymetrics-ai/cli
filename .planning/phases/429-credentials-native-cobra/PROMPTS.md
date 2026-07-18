@@ -21,6 +21,15 @@ Required skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `g
 
 Safety prompt: Never request, read, print, summarize, store, or log real secret values. Tests may use opaque synthetic redaction fixtures only and must not include fixture content in diagnostics. Do not add interactive secret entry, dependencies, credentialed checks, external services, or unrelated changes. Preserve env/stdin-only intake, path containment, error/output contracts, action boundaries, and legacy help/literal compatibility.
 
-Downstream artifact: test-only RED checkpoint, `internal/cli/credentials_cli.go`, credentials router/legacy-handler adaptation, focused security tests, and six issue-local phase artifacts. Full parity verification remains pending.
+Downstream artifact: test-only initial and correction RED checkpoints, `internal/cli/credentials_cli.go`, credentials router/legacy-handler adaptation, focused security tests, and finalized six issue-local phase artifacts.
 
-Verification result: focused GREEN. Credentials/router passed in `25.475s`; focused race subset in `111.267s`; golden in `5.513s`; exact preserved start differential 28/28. Full repository/parity gates pending.
+Verification result: pass. Initial focused GREEN passed. Local review then exposed a post-action name-discovery bypass; correction RED failed 8/10 cases before the fix, and corrected focused/repeated/race tests pass. Final full CLI (`275.269s`), preserved differential 28/28, built help/docs parity, website generation, gofmt, vet, build, full repository tests, and `make verify` pass. No real secret, credentialed external check, service, dependency, PR, or external review occurred.
+
+## Verification and local review snapshot
+
+```bash
+scripts/gsd prompt verify-work 429 > /tmp/gsd-verify-work-429.prompt
+scripts/gsd prompt code-review 429 > /tmp/gsd-code-review-429.prompt
+```
+
+Prompt generation passed (7161 and 6027 bytes). Both were executed inline under the manual universal loop. The first local security review produced the action-name boundary correction described in PLAN/TDD-LEDGER; the post-fix diff/error/security/safety review found no remaining actionable issue. External review was prohibited.

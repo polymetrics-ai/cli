@@ -20,7 +20,7 @@ Session `issue-429-action-name-boundary-fix-pi-openai-codex-gpt-5.6-sol-high-202
 | C0 | Review/plan | Identify post-action positional-name discovery bypass; update phase artifacts before correction production edit | Complete |
 | C1 | RED | `go test ./internal/cli -run '^TestCredentialsLeadingInvalidNameTokensCannotDiscoverLaterNames$' -count=1` | Failed before correction: 8/10 assigned-unknown, short, assigned-help-like, and literal add/remove cases executed later names; package `7.940s` |
 | C2 | GREEN | Insert required-name boundary and strict credential/connector leading-character validation | Pass: correction+strict names `18.166s`; full focused `40.299s` |
-| C3 | Verify | Focused/repeated/race, exact differential, full CLI if warranted, formatting/static/build/scope | In progress: repeated `62.622s`; race `248.367s`; golden `5.602s`; full post-correction gates pending |
+| C3 | Verify | Focused/repeated/race, exact differential, full CLI, formatting/static/build/scope | Pass: full CLI `275.269s`; differential 28/28; docs/website clean; gofmt/vet/build/`make verify` pass |
 
 The correction tests use config-only temporary credentials and no secret source. Bare unknown cases already failed closed; the eight failing cases prove Cobra consumed an invalid first name token and discovered a later name.
 
@@ -33,9 +33,9 @@ GREEN inserts a literal boundary immediately after exact name-taking actions whe
 | 0 | Planning | Create all six issue-local phase artifacts before test or production edits | Complete |
 | 1 | RED | Add focused credentials tree/operation/help/security tests; run `go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected before production edits: `undefined: newCredentialsCobraCommand`; package build failed |
 | 2 | GREEN | Native tree, typed flags/handler, controlled input, action boundary, strict validation | Pass: focused credentials/router `25.475s`; focused race subset `111.267s` |
-| 3 | Refactor | Focused/repeated/race/security/router/golden/full CLI and exact legacy differential | In progress: golden pass `5.513s`; exact start differential 28/28; full CLI pending |
-| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
-| 5 | Parity/delivery | Built help/list/error checks, docs/website/generated diff, scope/dependency guards, commit/push | Pending |
+| 3 | Refactor | Focused/repeated/race/security/router/golden/full CLI and exact legacy differential | Pass; final full CLI `275.269s`, preserved differential 28/28 exact |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pass; final `make verify` CLI `278.385s`, certify `342.715s`, lint 0, 547 connectors/0 findings |
+| 5 | Parity/delivery | Built help/list/error checks, docs/website/generated diff, scope/dependency guards, commit/push | Pass; final artifact commit/push pending |
 
 ## Planned RED coverage
 
@@ -75,6 +75,19 @@ ok  \tpolymetrics.ai/internal/cli\t111.267s
 
 Native Cobra now owns the complete credentials subtree. Current flags are typed `StringArray` values with bare compatibility, stdin comes only from `cmd.InOrStdin`, invalid action heads are bounded before Cobra discovery, and all identifier/config/path checks run before named environment or stdin values are read. Opaque fixture tests pass without emitting fixture content. The golden transcript test passes and a 28-case start-vs-head differential matches exact exit/stdout/stderr for preserved help, list, add flag forms, unknown/extra/tail/literal inputs, invalid heads, and globals.
 
-## Evidence policy
+## Final GREEN / refactor evidence
 
-GREEN evidence must include exact command/result and no secret material. `verificationPassed` remains false until the complete declared verification including `make verify` exits 0.
+- Focused credentials/router: pass (`40.299s` after correction).
+- Repeated action-name boundary: pass five times (`62.622s`).
+- Focused race/security boundary: pass (`248.367s`).
+- Golden transcripts: pass (`5.602s` final); generated CLI manual parity test also passed (`6.437s` before correction, unchanged by correction).
+- Full `internal/cli/...`: pass (`275.269s` final).
+- Exact preserved start differential: 28/28 exit/stdout/stderr matches after correction.
+- Built binary in a temporary root: help topic/bare/long byte-equal; JSON manual/list kinds present; invalid action exit 2.
+- Temporary CLI/connector docs generation and validation: pass; `docs/cli` byte diff clean.
+- Website `gen:docs`: 11 pages generated; tracked website diff clean.
+- `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, `git diff --check`: pass.
+- Full `go test -timeout 20m ./...`: pass before correction; final `make verify` reran the full suite after correction (CLI `278.385s`, certify `342.715s`), docs validation, local smoke, lint (`0 issues`), and connector validation (547/0).
+- Scope/dependency guards: no `go.mod`, `go.sum`, connector definition, checked-in CLI docs, website, or golden delta.
+
+No focused or full command printed or logged opaque credential fixture content. No external connector, optional service, or credentialed external check ran.

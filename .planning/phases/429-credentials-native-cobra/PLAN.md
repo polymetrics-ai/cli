@@ -81,3 +81,9 @@ Parser ownership changes but command names, flags, output envelopes, canonical m
 ## Safety
 
 No real secret values, credentialed checks, interactive secret entry, optional services, dependencies, destructive/admin actions, generic write tools, production deployment, PR, external review, or merge. Tests use opaque synthetic redaction fixtures only, never include fixture content in failure output, and run in temporary project roots. No `credentials test` invocation may contact an external endpoint. The required existing local verification gates run without credentialed external checks.
+
+## Completion note
+
+Implementation and the local security correction are complete at verified implementation head `92284dd2e55e250031389ce3673a9a6909253341`; verification ended `20260718T153350Z` UTC. Native Cobra owns credentials add/list/inspect/test/remove/help, current repeated/bare/assigned flags, controlled stdin, named environment intake, strict identifiers/path checks, and fail-closed namespace/action-name boundaries. Only the credentials `parseFlags` call was removed.
+
+Strict RED preceded initial production edits. Local review then found and reproduced a post-action name-discovery bypass before its correction. Focused, repeated, race, security, router, golden, full CLI/repository, 28-case exact preserved differential, built help/docs parity, website generation, gofmt, vet, build, and `make verify` pass. No checked-in docs/website/golden delta, dependency, credentialed external check, interactive entry, real secret, PR, or external review occurred.
