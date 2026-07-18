@@ -35,7 +35,7 @@ Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`
 
 Downstream artifact: strict four-name lifecycle RED coverage with later real flags and ignored positionals; preserved raw-carrier/action protections; required-name capture before tail normalization; finalized phase evidence.
 
-Verification result: strict RED captured in `18.545s` (wall `21.75s`): all four known-flag name adds failed after pre-ownership StringArray normalization while raw-carrier and invalid action/name ownership stayed green. GREEN, focused/adversarial/base differential/race/full CLI, gofmt/vet/build/diff gates, and delivery remain pending.
+Verification result: strict RED captured in `18.545s` (wall `21.75s`): all four known-flag name adds failed after pre-ownership StringArray normalization while raw-carrier and invalid action/name ownership stayed green. Focused GREEN passed in `28.076s` (wall `30.55s`) after first-name capture moved before tail normalization. Broader adversarial/base differential/race/full CLI, gofmt/vet/build/diff gates, and final delivery remain pending.
 
 ## Bounded review correction snapshot
 

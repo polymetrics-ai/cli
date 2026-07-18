@@ -67,7 +67,8 @@
   "targetedParserCorrectionSource": "/tmp/pm-397-rereview6-429.log",
   "targetedParserCorrectionFindingsAccepted": ["MEDIUM_add_name_normalized_before_ownership"],
   "targetedParserCorrectionRed": "focused pre-production CLI failed as required in 18.545s (wall 21.75s): all four known add-flag name cases captured an invalid normalized name=ignored token while raw-carrier and invalid action/name ownership guards remained green",
-  "status": "targeted_parser_correction_red_captured",
+  "targetedParserCorrectionGreen": "required add name captured and removed before tail StringArray normalization; focused lifecycle/raw-carrier/invalid-ownership gate passed in 28.076s (wall 30.55s)",
+  "status": "targeted_parser_correction_green",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -88,6 +89,11 @@
       "cycle": "targeted-parser-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "strict pre-production tests failed as required for all four safety-valid known add-flag names while raw-carrier rejection and invalid action/name ownership protections remained green"
+    },
+    {
+      "cycle": "targeted-parser-correction-green",
+      "decision": "local_critical_path",
+      "reason": "first required add name is privately captured before StringArray normalization; only the remaining tail is normalized, and focused lifecycle plus raw-carrier/action protections pass"
     },
     {
       "cycle": "compatibility-correction-summary",

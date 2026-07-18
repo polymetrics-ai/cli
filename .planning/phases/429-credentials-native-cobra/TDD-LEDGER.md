@@ -19,7 +19,7 @@ Session `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`;
 |---:|---|---|---|
 | P0 | Review/plan | Record the accepted parser-order finding, four known-flag lifecycle matrix, first-token-before-tail design, adversarial preservation gates, differential, and checkpoint sequence before production edits | Complete |
 | P1 | RED | `go test ./internal/cli -run 'TestCredentials(KnownAddFlagNamesPreserveLifecycleAndTailFlags|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1` | Failed as required in `18.545s` (wall `21.75s`): all four known-flag name adds captured an invalid normalized `name=ignored` token; raw-carrier and invalid action/name ownership guards stayed green |
-| P2 | GREEN | Capture/remove the required add name before StringArray normalization; normalize only the remaining tail | Pending |
+| P2 | GREEN | Capture/remove the required add name before StringArray normalization; normalize only the remaining tail | Pass: focused lifecycle/raw-carrier/invalid-ownership gate `28.076s` (wall `30.55s`); all four names complete lifecycle with later spaced connector/config flags and ignored positionals |
 | P3 | Verify | Focused/adversarial/repeated/race CLI, exact parent-base/start/head differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pending |
 
 Tests use temporary roots and config-only credentials. They must not read, print, summarize, or store private values or contact services.

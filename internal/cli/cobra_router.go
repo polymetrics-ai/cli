@@ -141,11 +141,13 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 		if isHelpArg(args[1]) {
 			return append([]string(nil), args[:2]...)
 		}
-		if args[1] == "add" {
-			args = normalizeStringArraySpaceValues(args, 2, credentialsAddFlagNames)
-		}
 		var bounded bool
-		args, bounded = normalizeCredentialsActionBoundary(args, credentialsState)
+		if args[1] == "add" {
+			args, bounded = normalizeCredentialsActionBoundary(args, credentialsState)
+			args = normalizeStringArraySpaceValues(args, 2, credentialsAddFlagNames)
+		} else {
+			args, bounded = normalizeCredentialsActionBoundary(args, credentialsState)
+		}
 		if bounded {
 			return args
 		}

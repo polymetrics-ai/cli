@@ -4,7 +4,7 @@ Status: targeted final parser-order correction in progress from exact head `4870
 
 ## Targeted final parser-order correction
 
-Planning was updated before test or production edits. Strict RED exercised safety-valid names equal to all known add flags (`--connector`, `--from-env`, `--value-stdin`, `--config`) with an immediately following ignored positional and later real spaced flags through add/inspect/remove. All four adds failed because StringArray normalization changed the required name into an invalid `name=ignored` token (`18.545s`, wall `21.75s`), while raw-carrier rejection and invalid action/name ownership stayed green. The planned implementation captures/removes the required add name before StringArray space-value normalization and normalizes only the tail. GREEN verification and delivery are pending.
+Planning was updated before test or production edits. Strict RED exercised safety-valid names equal to all known add flags (`--connector`, `--from-env`, `--value-stdin`, `--config`) with an immediately following ignored positional and later real spaced flags through add/inspect/remove. All four adds failed because StringArray normalization changed the required name into an invalid `name=ignored` token (`18.545s`, wall `21.75s`), while raw-carrier rejection and invalid action/name ownership stayed green. The implementation now captures/removes the required add name before StringArray space-value normalization and normalizes only the tail. Focused lifecycle/raw-carrier/invalid-ownership GREEN passed in `28.076s` (wall `30.55s`); broader verification and delivery are pending.
 
 ## Compatibility correction
 
