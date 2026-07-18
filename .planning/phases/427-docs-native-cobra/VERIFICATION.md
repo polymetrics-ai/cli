@@ -63,15 +63,16 @@ Session `issue-427-review-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T1
 - [x] Update correction plan/TDD/checklist/run-state before production edits.
 - [x] Capture focused RED for generate/validate/bogus trailing `--help` and `-h`, with missing/supplied directory flags (`0.570s`; 10 help-interception failures).
 - [x] Capture focused RED for generate/validate continuation after literal `--` (generation failed `missing --dir`).
-- [ ] Preserve native Cobra ownership and typed docs flags; no legacy-wrapper reversion.
-- [ ] Keep namespace help, other namespaces, exact outputs/error categories, and deferred Phase 14/19 behavior unchanged.
-- [ ] Focused docs/router/golden tests pass.
-- [ ] Base-vs-head differential binary matrix matches on accepted correction cases.
-- [ ] Temp CLI docs generation byte-diff and connector docs validation pass.
-- [ ] Website docs generation leaves no tracked diff.
-- [ ] `gofmt -w cmd internal`, `go vet ./...`, and `go build ./cmd/pm` pass.
-- [ ] Full CLI test if focused/router/golden or differential evidence indicates it; otherwise record rationale.
-- [ ] Scope, dependency, connector-definition, docs/website/golden, and whitespace guards pass.
-- [ ] Correction artifacts finalized; coherent commits pushed to existing branch; no PR/external review.
+- [x] Preserve native Cobra ownership and typed docs flags; no legacy-wrapper reversion.
+- [x] Keep namespace help, other namespaces, exact outputs/error categories, and deferred Phase 14/19 behavior unchanged.
+- [x] Focused docs/router/golden tests pass (`26.541s`; all docs/router also `20.032s`).
+- [x] Base-vs-head differential binary matrix matches on accepted correction cases (12 cases, 0 differences, legacy base `ab847da2`).
+- [x] Temp CLI docs generation byte-diff and generated/tracked connector docs validation pass; help routes remain byte-identical (`818` bytes).
+- [x] Website docs generation writes 11 pages and leaves no tracked diff.
+- [x] `gofmt -w cmd internal`, `go vet ./...`, and `go build ./cmd/pm` pass.
+- [x] Full CLI test passed (`238.822s`); full repository test passed (CLI `238.885s`, certify `340.747s`).
+- [x] Full `make verify` passed: docs validation, local smoke, lint `0 issues`, 547 connector definitions / 0 findings.
+- [x] Scope, dependency, connector-definition, docs/website/golden, and whitespace guards pass.
+- [x] Correction artifacts finalized; coherent commits pushed to existing branch; no PR/external review.
 
-Correction verification is incomplete until all applicable items above pass.
+Correction result: all applicable local verification passed. The only production delta is the docs-scoped native Cobra compatibility seam; test and issue-local artifact deltas are intentional.

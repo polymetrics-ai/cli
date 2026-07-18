@@ -31,3 +31,15 @@ GSD doctor/list/plan-phase passed. Programming-loop is absent (`scripts/gsd: unk
 No secrets, external services, credentialed checks, dependencies, unrelated namespace changes, Phase 14/19 churn, external review, PR, or merge. Focused writes stayed in temporary roots. `make verify` used only its existing local temporary smoke and followed reverse ETL plan → preview → approval → run.
 
 Planning, RED, implementation, test-hardening, and final verification checkpoints are pushed to `origin/refactor/427-docs-native-cobra`; the final state-recording commit is the handoff HEAD.
+
+## Bounded review correction
+
+- Identity: `issue-427-review-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T121208Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; start `ea93b4bb7a7eb09236ad829d5ad6055b0c00c30d`; verification end `20260718T122957Z`.
+- Accepted findings: action/trailing `--help`/`-h` must remain ordinary ignored legacy docs input, and literal `--` must not stop later docs flag parsing.
+- RED: focused test failed in `0.570s`; 10 help cases leaked `CommandManual`/exit 0 and separator generation failed `missing --dir`.
+- GREEN: added one docs-only pre-Cobra normalizer; focused test passed in `7.487s` (`7.596s` after comment). Native docs nodes and typed flags remain.
+- Verification: docs/router/golden `26.541s`; full CLI `238.822s`; 12-case exact base/head matrix, 0 differences; docs generation/validation/help and website parity clean; gofmt/vet/build pass; full repository tests pass; `make verify` pass.
+- Correction files: `internal/cli/cobra_router.go`, `internal/cli/docs_cli_test.go`, and the six issue-local phase artifacts. No checked-in docs, website, golden, connector-definition, dependency, or other namespace delta.
+- Correction commits: `1dab824f`, `f5d37156`, `bc993a04`, plus the final artifact commit.
+- Residual risks: the seam intentionally encodes legacy docs-only ignored-token behavior until Phase 19 deliberately introduces focused action help; tests pin that boundary. Phase 14 viewer remains deferred.
+- Delivery: all coherent correction checkpoints pushed to the existing branch; no PR, external review, dependency, secret, credential, or service used.

@@ -94,4 +94,4 @@ Execution decision: `local_critical_path` — one bounded correction in the exis
 
 ## Completion note
 
-The original slice reached verified HEAD `ea93b4bb7a7eb09236ad829d5ad6055b0c00c30d`. The accepted bounded review correction above is now in progress; its verification state supersedes the original terminal claim until the new gates pass.
+The original slice reached verified HEAD `ea93b4bb7a7eb09236ad829d5ad6055b0c00c30d`. The bounded review correction then completed from that exact start with both medium findings fixed by one docs-only pre-Cobra normalization seam. Native docs nodes/typed flags, namespace help, outputs, generated docs, website, goldens, dependencies, other namespaces, and deferred Phase 14/19 scope remained unchanged. Focused RED preceded production edits; focused/full tests, a 12-case legacy differential matrix, docs/website parity, gofmt, vet, build, full repository tests, and `make verify` passed. Planning, RED, GREEN, and final verification checkpoints were committed/pushed without PR or external review.

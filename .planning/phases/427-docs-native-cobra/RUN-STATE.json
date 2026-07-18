@@ -10,10 +10,11 @@
   "invocationSession": "issue-427-pi-openai-codex-gpt-5.6-sol-high-20260718T112639Z",
   "correctionStartingHead": "ea93b4bb7a7eb09236ad829d5ad6055b0c00c30d",
   "correctionInvocationSession": "issue-427-review-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T121208Z",
+  "correctionEndedAt": "20260718T122957Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "review_correction_planned",
-  "verificationPassed": false,
+  "status": "complete_verified_pushed",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -62,11 +63,21 @@
       "cycle": "review-correction-green",
       "decision": "local_critical_path",
       "reason": "smallest docs-only argument-normalization seam restored legacy ignored-token behavior while retaining native Cobra nodes and typed flags"
+    },
+    {
+      "cycle": "review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused/full tests, 12-case legacy differential, docs/website parity, gofmt, vet, build, full repository tests, make verify, and scope guards passed"
+    },
+    {
+      "cycle": "review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "bounded correction artifacts finalized and coherent checkpoints pushed; user prohibited PR/external review"
     }
   ],
   "red": "go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed as expected in 11.332s on native registration count and DisableFlagParsing ownership",
   "green": "focused 11.462s; docs/router/golden 18.453s; standalone golden 5.470s; full internal/cli 227.224s",
-  "verification": "gofmt, go vet ./..., go test -timeout 20m ./..., build, final make verify, built-binary parity, docs generation and validation, website generation, and all diff/scope guards passed",
+  "verification": "original gates plus correction focused/full tests, 12-case exact legacy differential, docs generation/validation/help parity, website generation, gofmt, vet, build, full repository tests, make verify, and all diff/scope guards passed",
   "files": [
     "internal/cli/cli.go",
     "internal/cli/cobra_router.go",
@@ -84,7 +95,11 @@
     "a68ab241 test(cli): specify native cobra docs contract",
     "f320de3e refactor(cli): nativize docs namespace",
     "e3d61104 test(cli): cover docs default output paths",
-    "docs(planning): record docs cobra verification (final handoff commit)"
+    "ea93b4bb docs(planning): record docs cobra verification",
+    "1dab824f docs(planning): plan docs review correction",
+    "f5d37156 test(cli): reproduce docs cobra parity regressions",
+    "bc993a04 fix(cli): preserve legacy docs action parsing",
+    "docs(planning): record bounded docs correction verification (final handoff commit)"
   ],
   "push": "all planning, red, implementation, test-hardening, and final verification checkpoints pushed to origin/refactor/427-docs-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
@@ -94,7 +109,7 @@
     "planUpdatedBeforeProduction": true,
     "red": "focused correction test failed as expected in 0.570s: 10 action-help subtests returned CommandManual and literal-separator generation reported missing --dir",
     "green": "focused correction test passed in 7.487s and 7.596s after the docs-only seam/comment; broader docs-focused test passed in 20.032s",
-    "verification": "pending"
+    "verification": "docs/router/golden 26.541s; full CLI 238.822s; 12-case differential 0 differences; docs/website parity, gofmt, vet, build, full repository tests, make verify, and scope guards passed"
   },
   "risks": [
     "Cobra/pflag path and unknown-flag semantics must remain byte-compatible with the docs generator and validator",
