@@ -54,4 +54,8 @@ The command names, flags, canonical manual text, output envelopes, docs, website
 
 ## Safety
 
-No secrets, external connector checks, optional runtime services, dependency additions, reverse execution, destructive/admin actions, generic write tools, production deployment, or broad generated churn. Tests use only built-in sample/local connectors and `t.TempDir`; `--runtime` parsing is exercised without crossing into service-backed recording.
+No secrets, external connector checks, optional runtime services, dependency additions, standalone reverse execution, destructive/admin actions, generic write tools, production deployment, or broad generated churn. Tests use only built-in sample/local connectors and `t.TempDir`; `--runtime` parsing is exercised without crossing into service-backed recording. The required `make verify` gate ran its existing temporary-root local smoke, including its built-in approval-gated reverse step; no external or user-data reverse operation ran.
+
+## Completion
+
+Completed and verified at implementation head `fc88f1694ee73593f1130f866bd6166be18eb661`. Strict initial RED and a test-first local-review correction preceded production fixes. Focused/repeated/race/router/golden/full CLI/app/repository, 20-case exact-start differential, runtime help, generated docs/website parity, gofmt, vet, build, scope/dependency guards, and `make verify` passed. No PR or external review was created.

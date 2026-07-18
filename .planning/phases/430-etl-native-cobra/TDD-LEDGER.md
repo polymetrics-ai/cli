@@ -18,9 +18,9 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before test/production edits | Complete |
 | 1 | RED | `go test ./internal/cli -run 'TestETL(Command|Direct|RunStatus|BatchSize|HelpRoutes|UnknownInvalid|BareFlag|Cancellation|Progress)' -count=1` | Failed as required before production edits: `internal/cli/etl_cli_test.go:22:9: undefined: newETLCobraCommand` |
 | 2 | GREEN | Native ETL tree + typed handlers + ETL-only normalization; remove ETL wrapper/parser use | Pass: focused contract `13.396s`; ETL/router focused suite `27.999s` |
-| 3 | Refactor | Focused/repeated/race/router/golden/full CLI/app and exact-start differential | Pending |
-| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
-| 5 | Parity/delivery | Runtime help, temporary docs/website/generated checks, scope/dependency guards, commit/push | Pending |
+| 3 | Refactor | Focused/repeated/race/router/golden/full CLI/app and exact-start differential | Pass |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pass |
+| 5 | Parity/delivery | Runtime help, temporary docs/website/generated checks, scope/dependency guards, commit/push | Pass; final evidence push pending |
 
 ## RED contract
 
@@ -65,3 +65,18 @@ FAIL polymetrics.ai/internal/cli
 ```
 
 The correction bounds every unrecognized ETL action behind Cobra's literal separator before flag parsing. Valid namespace/action help and known-action legacy-tail handling remain unchanged. Focused correction GREEN passed in `0.558s`; the complete focused contract passed in `13.397s`; correction repeated ×5 and race passed in `1.061s`/`1.668s`; router/golden/help preservation passed in `6.749s`.
+
+## Final GREEN / refactor evidence
+
+- Initial focused contract `13.396s`; broader ETL/router `27.999s`; post-correction focused contract `13.397s`.
+- Full focused repeated ×5 `65.438s`; full focused race `146.473s`; correction repeated/race `1.061s`/`1.668s`.
+- Router/golden/generated manual gate `21.327s`; final golden/manual gate `7.125s`; no fixture or generated manual delta.
+- ETL telemetry/progress contract `4.042s`; app ETL/sync-mode race `178.516s`.
+- Full CLI `359.902s`; full app `29.499s`; full repository before final correction passed (CLI `360.105s`, certify `340.043s`).
+- Exact start-vs-head differential: 20/20 exit/stdout/stderr matches for help, JSON manual, direct fixture actions, read, batch validation, missing run, trailing help/literal, invalid actions including trailing help, and global booleans.
+- Runtime help topic/bare/long-help are byte-identical (4223 bytes; SHA-256 `23d099f62e2e5183b1dd01c0b47d75e3f3711907eca00196813a19748d112191`); JSON manual and invalid action usage pass.
+- Website docs generation wrote 11 pages with no tracked delta; docs/CLI/golden generation and connector docs validation pass.
+- `gofmt -w cmd internal`, `go vet ./...`, `go test -timeout 20m ./...`, `go build ./cmd/pm`, and final `make verify` pass. Final `make verify`: CLI `356.154s`, certify `335.400s`, lint 0 issues, 547 connector definitions/0 findings.
+- Scope/dependency guards pass: no `go.mod`, `go.sum`, connector definition, `docs/cli`, website, or unrelated namespace delta.
+
+No external connector, optional runtime service, secret input, dependency, standalone reverse operation, PR, or review was used. The required final `make verify` ran its existing temporary-root local smoke, including the repository's built-in plan → preview → approval → run check.

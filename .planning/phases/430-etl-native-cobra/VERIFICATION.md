@@ -12,7 +12,7 @@ Invocation session: `issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z
 - [x] Trailing help and literal `--` compatibility in focused tests.
 - [x] Unknown flags, invalid actions, global assigned booleans, and no action-discovery bypass; test-first invalid-action trailing-help correction passes focused/repeated/race.
 - [x] Batch-size parse/default/bounded flush behavior and configured sync validation in focused tests.
-- [x] Cancellation, events, stdout/stderr, and one-envelope semantics in focused tests; broader telemetry gate pending.
+- [x] Cancellation, events, telemetry, stdout/stderr, and one-envelope semantics pass focused and broader contract gates.
 - [x] Only ETL `parseFlags` call sites removed; dynamic connector parser remains.
 
 ## Gates
@@ -21,37 +21,37 @@ Invocation session: `issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z
 - [x] Focused repeated tests (`-count=5`: initial full contract `65.438s`; correction `1.061s`).
 - [x] Focused race tests (initial full contract `146.473s`; correction `1.668s`).
 - [x] Router and golden transcript tests; fixture unchanged (`21.327s`, correction preservation `6.749s`).
-- [ ] Full `go test ./internal/cli/...`.
-- [ ] Full app tests and ETL event/telemetry contracts.
-- [ ] `gofmt -w cmd internal`.
-- [ ] `go vet ./...`.
-- [ ] `go test ./...`.
-- [ ] `go build ./cmd/pm`.
-- [ ] `make verify`.
-- [ ] `git diff --check`; no dependency/unrelated/connector-def delta.
+- [x] Full `go test ./internal/cli/...` (`359.902s`; final post-correction run in `make verify` `356.154s`).
+- [x] Full app (`29.499s`) and ETL event/telemetry contracts (`4.042s`; race ETL/sync mode `178.516s`).
+- [x] `gofmt -w cmd internal`.
+- [x] `go vet ./...`.
+- [x] `go test -timeout 20m ./...` (final post-correction run included in `make verify`).
+- [x] `go build ./cmd/pm`.
+- [x] `make verify` (CLI `356.154s`; certify `335.400s`; lint 0; connector validation 547/0).
+- [x] `git diff --check`; no dependency/unrelated/connector-def delta.
 
 ## CLI help/manual/website parity
 
-- [ ] `pm help etl`.
-- [ ] Bare `pm etl` exits 0 with contextual manual.
-- [ ] `pm etl --help`, `-h`, positional `help`, and JSON manual routes.
-- [ ] Invalid action remains usage error.
-- [ ] `docs/cli/etl.md`: temporary generated diff clean or intentional update recorded.
-- [ ] `website/content/docs/etl.mdx`: unchanged when no user-visible contract changed; generator/check recorded.
-- [ ] Generated/golden help artifacts unchanged or explicitly reviewed.
-- [ ] Completion discovery seam present; Phase 15 values remain deferred.
-- [ ] Focused per-subcommand help/man churn remains deferred to Phase 19.
+- [x] `pm help etl`.
+- [x] Bare `pm etl` exits 0 with contextual manual.
+- [x] `pm etl --help`, `-h`, positional `help`, and JSON manual routes.
+- [x] Invalid action, including trailing long/short help, remains usage error.
+- [x] `docs/cli/etl.md`: no update applicable; generated manual/golden tests are clean.
+- [x] `website/content/docs/etl.mdx`: no update applicable; generator wrote 11 pages with no tracked delta.
+- [x] Generated/golden help artifacts unchanged; final gate `7.125s`.
+- [x] Completion discovery seam present; Phase 15 values remain deferred.
+- [x] Focused per-subcommand help/man churn remains deferred to Phase 19.
 
 ## Safety/scope/delivery
 
 - [x] Exact branch/start and parent draft PR confirmed.
-- [x] GSD doctor/list passed; unavailable programming-loop/manual fallback recorded.
+- [x] GSD doctor/list passed; unavailable programming-loop/manual fallback recorded; verify-work prompt generated (7129 bytes) and executed inline.
 - [x] Required Go CLI/testing/error/security/safety/context/concurrency/docs/Cobra skills loaded.
-- [ ] Fixture/local temporary connectors only; no credentialed external checks.
-- [ ] No optional services or service-backed runtime recording.
-- [ ] No secret values requested, printed, summarized, stored, or logged.
-- [ ] No dependencies, reverse execution, unrelated namespaces, or broad generated churn.
-- [ ] Coherent planning, RED, GREEN, and final evidence commits pushed.
-- [ ] No PR or review created.
+- [x] Fixture/local temporary connectors only; no credentialed external checks.
+- [x] No optional services or service-backed runtime recording.
+- [x] No secret values requested, printed, summarized, stored, or logged.
+- [x] No dependencies, standalone reverse execution, unrelated namespaces, or broad generated churn. Required `make verify` ran only its existing temporary-root approval-gated smoke.
+- [x] Planning, RED, GREEN, and correction checkpoints pushed; final evidence push pending.
+- [x] No PR or review created.
 
-Result: pending. `verificationPassed=false` until the complete declared gate set, including `make verify`, exits 0.
+Result: pass at implementation head `fc88f1694ee73593f1130f866bd6166be18eb661`; `verificationPassed=true` for the complete declared gate set.
