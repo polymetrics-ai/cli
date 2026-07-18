@@ -49,6 +49,7 @@ Session `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z`; model `op
 - [x] No secrets requested, read, printed, summarized, or stored.
 - [x] No runtime services, credentialed connector checks, destructive/admin actions, or production deploys.
 - [x] Required `make verify` local temp smoke followed plan → preview → approval → run and used only sample fixtures.
+- [x] Coherent planning, RED, implementation, and verification checkpoints committed and pushed to `origin/refactor/425-version-native-cobra`.
 - [x] No external review request and no PR created.
 - [x] `scripts/gsd prompt verify-work ...` and local code-review prompt generated; manual review found no actionable issue in the scoped diff.
 

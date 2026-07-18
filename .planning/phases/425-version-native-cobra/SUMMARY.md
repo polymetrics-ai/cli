@@ -1,6 +1,6 @@
 # Phase 425 Summary
 
-Status: implementation and full verification passed; verification artifact checkpoint pending commit/push.
+Status: implementation complete, fully verified, and pushed; no PR created.
 
 ## Identity
 
@@ -29,5 +29,7 @@ Built-binary parity: `plain_bytes=35 help_bytes=350 version=Version/dev manuals=
 GSD doctor/list/plan-phase passed with explicit model/thinking arguments. Programming-loop is known absent (`scripts/gsd: unknown GSD command: programming-loop`), so the recorded manual universal-loop fallback enforced strict TDD. Verify-work/code-review prompts generated and were executed locally; no actionable scoped review issue found.
 
 No secrets, external services, credentialed checks, dependencies, unrelated namespaces, external review requests, PR, or merge. The required `make verify` used only its existing local temp sample smoke and followed reverse ETL plan → preview → approval → run.
+
+Checkpoint commits through verification artifact `3fcd344c` are pushed to `origin/refactor/425-version-native-cobra`; the final state-recording commit is the handoff HEAD.
 
 Risk: invalid argument diagnostics now originate from Cobra/pflag, as ADR 0002 permits during native promotion; usage category, JSON error shape, stdout/stderr placement, and exit 2 remain preserved. Completion implementation and help-tree deepening remain deferred to their planned phases.
