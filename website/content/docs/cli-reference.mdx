@@ -274,7 +274,7 @@ pm perf compare --iterations 25 --runtime --json
 pm perf sync-modes --records 1000 --json
 ```
 
-Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The dependency-free path is the default. `pm perf compare --runtime --json` includes a `runtime_report` with check names, status, latency, redacted error text, a redacted PostgreSQL endpoint, and DragonflyDB/Temporal topology endpoints. Those endpoints are not credentials, and decrypted secrets are not printed. Perf workload flags are bounded: `--iterations` accepts 1 through 1000 and `--records` accepts 1 through 100000; invalid values exit `3` (`validation_error`).
+`pm runtime doctor` requires no live services or credentials. It reports absent optional PostgreSQL, DragonflyDB, and Temporal services as per-check `error` status and degraded mode while still exiting 0 when the report is emitted. Runtime-backed operations such as `pm perf compare --runtime` do require healthy services. `pm perf compare --runtime --json` includes a `runtime_report` with check names, status, latency, redacted error text, and sanitized endpoints. PostgreSQL, DragonflyDB, and Temporal endpoint output removes userinfo, query strings, fragments, and control characters; decrypted secrets are not printed. Perf workload flags are bounded: `--iterations` accepts 1 through 1000 and `--records` accepts 1 through 100000; invalid values exit `3` (`validation_error`).
 
 ```bash
 pm docs generate --dir docs/cli --connectors-dir docs/connectors
@@ -294,6 +294,6 @@ Runtime help, embedded command manuals, checked-in CLI markdown, and website MDX
 | `3` | validation | Fix argument values, including invalid UI/progress flag values. |
 | `4` | auth | Add or rotate credentials. |
 | `5` | connector | Inspect connector-specific failure. |
-| `6` | runtime | Start required runtime service. |
+| `6` | runtime | Start a service required by the selected runtime-backed operation. `pm runtime doctor` itself reports absent optional services in output and exits 0 when the report is emitted. |
 | `7` | policy | Obtain approval or satisfy policy. |
 | `1` | internal | Treat as a bug. |

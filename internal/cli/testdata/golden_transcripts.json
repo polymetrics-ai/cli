@@ -200,7 +200,7 @@
       "runtime"
     ],
     "exit_code": 0,
-    "stdout": "NAME\n  pm runtime - inspect external runtime dependencies\n\nSYNOPSIS\n  pm runtime doctor [--json]\n\nDESCRIPTION\n  Checks PostgreSQL, DragonflyDB, and Temporal using the configured endpoints.\n  Defaults match the local Compose stack in deploy/compose.\n\nENVIRONMENT\n  POLYMETRICS_POSTGRES_URL\n  POLYMETRICS_DRAGONFLY_ADDR\n  POLYMETRICS_TEMPORAL_ADDR\n\nSECURITY\n  PostgreSQL passwords are redacted in command output.\n\nEXIT STATUS\n  0 success\n  1 runtime error\n  2 usage error\n",
+    "stdout": "NAME\n  pm runtime - inspect external runtime dependencies\n\nSYNOPSIS\n  pm runtime doctor [--json]\n\nDESCRIPTION\n  Checks PostgreSQL, DragonflyDB, and Temporal using the configured endpoints.\n  Defaults match the local Compose stack in deploy/compose. Runtime doctor does\n  not require live services or credentials; unavailable optional services are\n  reported as per-check error status and degraded mode in the output.\n\nENVIRONMENT\n  POLYMETRICS_POSTGRES_URL\n  POLYMETRICS_DRAGONFLY_ADDR\n  POLYMETRICS_TEMPORAL_ADDR\n\nSECURITY\n  Reported endpoints are sanitized before command output. Userinfo, query\n  strings, fragments, and control characters are removed from PostgreSQL,\n  DragonflyDB, and Temporal endpoints.\n\nEXIT STATUS\n  0 report emitted, including degraded or absent optional services\n  2 usage error\n",
     "stderr": ""
   },
   {
@@ -348,7 +348,7 @@
       "runtime"
     ],
     "exit_code": 0,
-    "stdout": "NAME\n  pm runtime - inspect external runtime dependencies\n\nSYNOPSIS\n  pm runtime doctor [--json]\n\nDESCRIPTION\n  Checks PostgreSQL, DragonflyDB, and Temporal using the configured endpoints.\n  Defaults match the local Compose stack in deploy/compose.\n\nENVIRONMENT\n  POLYMETRICS_POSTGRES_URL\n  POLYMETRICS_DRAGONFLY_ADDR\n  POLYMETRICS_TEMPORAL_ADDR\n\nSECURITY\n  PostgreSQL passwords are redacted in command output.\n\nEXIT STATUS\n  0 success\n  1 runtime error\n  2 usage error\n",
+    "stdout": "NAME\n  pm runtime - inspect external runtime dependencies\n\nSYNOPSIS\n  pm runtime doctor [--json]\n\nDESCRIPTION\n  Checks PostgreSQL, DragonflyDB, and Temporal using the configured endpoints.\n  Defaults match the local Compose stack in deploy/compose. Runtime doctor does\n  not require live services or credentials; unavailable optional services are\n  reported as per-check error status and degraded mode in the output.\n\nENVIRONMENT\n  POLYMETRICS_POSTGRES_URL\n  POLYMETRICS_DRAGONFLY_ADDR\n  POLYMETRICS_TEMPORAL_ADDR\n\nSECURITY\n  Reported endpoints are sanitized before command output. Userinfo, query\n  strings, fragments, and control characters are removed from PostgreSQL,\n  DragonflyDB, and Temporal endpoints.\n\nEXIT STATUS\n  0 report emitted, including degraded or absent optional services\n  2 usage error\n",
     "stderr": ""
   },
   {
@@ -495,7 +495,7 @@
       "--json"
     ],
     "exit_code": 0,
-    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"command\": \"runtime\",\n  \"kind\": \"CommandManual\",\n  \"manual\": \"NAME\\n  pm runtime - inspect external runtime dependencies\\n\\nSYNOPSIS\\n  pm runtime doctor [--json]\\n\\nDESCRIPTION\\n  Checks PostgreSQL, DragonflyDB, and Temporal using the configured endpoints.\\n  Defaults match the local Compose stack in deploy/compose.\\n\\nENVIRONMENT\\n  POLYMETRICS_POSTGRES_URL\\n  POLYMETRICS_DRAGONFLY_ADDR\\n  POLYMETRICS_TEMPORAL_ADDR\\n\\nSECURITY\\n  PostgreSQL passwords are redacted in command output.\\n\\nEXIT STATUS\\n  0 success\\n  1 runtime error\\n  2 usage error\\n\"\n}\n",
+    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"command\": \"runtime\",\n  \"kind\": \"CommandManual\",\n  \"manual\": \"NAME\\n  pm runtime - inspect external runtime dependencies\\n\\nSYNOPSIS\\n  pm runtime doctor [--json]\\n\\nDESCRIPTION\\n  Checks PostgreSQL, DragonflyDB, and Temporal using the configured endpoints.\\n  Defaults match the local Compose stack in deploy/compose. Runtime doctor does\\n  not require live services or credentials; unavailable optional services are\\n  reported as per-check error status and degraded mode in the output.\\n\\nENVIRONMENT\\n  POLYMETRICS_POSTGRES_URL\\n  POLYMETRICS_DRAGONFLY_ADDR\\n  POLYMETRICS_TEMPORAL_ADDR\\n\\nSECURITY\\n  Reported endpoints are sanitized before command output. Userinfo, query\\n  strings, fragments, and control characters are removed from PostgreSQL,\\n  DragonflyDB, and Temporal endpoints.\\n\\nEXIT STATUS\\n  0 report emitted, including degraded or absent optional services\\n  2 usage error\\n\"\n}\n",
     "stderr": ""
   },
   {

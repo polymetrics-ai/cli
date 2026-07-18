@@ -1,0 +1,99 @@
+{
+  "phase": 424,
+  "issue": 424,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "branch": "refactor/424-runtime-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "baseHeadAtDispatch": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "baseHeadAtPlanning": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "headAtReviewFixStart": "3ed74ba63ae25e069689da72c6d53ef374ebcbfe",
+  "headAtPositionalHelpCorrectionStart": "8d696cd4c27fad6840e905917e7658e785fa5436",
+  "positionalHelpCorrectionWorker": {
+    "sessionId": "7050f706-72d2-47df-ac13-0b08979cc1ae",
+    "model": "openai-codex/gpt-5.6-sol",
+    "thinking": "high",
+    "independentReviewLog": "/tmp/pm-397-review-424.log"
+  },
+  "verificationPassed": true,
+  "status": "positional_help_correction_committed_pushed",
+  "positionalHelpCorrectionCommit": "345399166711e6e733d8f0c84e17db55a2d90a2a",
+  "positionalHelpCorrectionPush": "origin/refactor/424-runtime-native-cobra advanced from 8d696cd4c27fad6840e905917e7658e785fa5436 to 345399166711e6e733d8f0c84e17db55a2d90a2a",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-424-runtime-native-cobra-review-fix.prompt",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop_plus_pi_pm_gsd_loop_prompt",
+    "skillGap": ".pi/skills/go-implementation/SKILL.md missing; global Go skills loaded"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "fourth serialized Phase 9 namespace worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for native runtime subtree, doctor compatibility, bare help, JSON manual, invalid action usage, config endpoint use, and unknown-flag tolerance; no subagent available"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native runtime Cobra subtree implemented in allowed internal/cli scope; focused runtime/router/golden gate, full internal CLI tests, vet, and build passed"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "full local gates, runtime help/docs/website parity checks, runtime doctor loopback JSON checks, and diff guards completed inline in isolated worker cwd"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #460 review-fix is scoped to the assigned branch/cwd; worker has no subagent tool and user requested no Claude/Copilot"
+    },
+    {
+      "cycle": "review-fix-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused red tests added inline for Cobra/pflag parse mapping and runtime endpoint sanitization before production edits"
+    },
+    {
+      "cycle": "review-fix-green",
+      "decision": "local_critical_path",
+      "reason": "Cobra/pflag parse errors now map to usage; runtime doctor config/report endpoints sanitize PostgreSQL, DragonflyDB, and Temporal output"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "focused gates, gofmt, vet, full tests, build, make verify, docs/website/golden parity, diff-check, and go.mod/go.sum guard passed inline"
+    },
+    {
+      "cycle": "positional-help-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "single bounded independent-review correction in the assigned isolated issue worktree; no independent subtask or subagent needed"
+    },
+    {
+      "cycle": "positional-help-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused tests prove positional runtime text and JSON help aliases fail as unknown commands before production edits while retaining invalid-action usage assertions"
+    },
+    {
+      "cycle": "positional-help-correction-green",
+      "decision": "local_critical_path",
+      "reason": "small hidden native runtime help alias restores canonical text and JSON manual output; focused runtime, router, golden, runtimecheck, and invalid-action checks pass"
+    },
+    {
+      "cycle": "positional-help-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full gofmt, vet, repository tests, build, make verify, built-binary parity, and diff/dependency/docs guards passed without runtime services"
+    }
+  ],
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/460",
+  "reviewRoute": {
+    "claude": "not_requested_user_disallowed",
+    "copilot": "not_requested_user_disallowed",
+    "fallback": "human_or_parent_orchestrator_review_only",
+    "coverageStatus": "review_fix_local_verified_no_bot_review"
+  }
+}

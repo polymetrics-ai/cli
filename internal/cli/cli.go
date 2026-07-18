@@ -1265,10 +1265,7 @@ func runDocs(args []string, stdout io.Writer) error {
 	}
 }
 
-func runRuntime(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 || args[0] != "doctor" {
-		return errUsage
-	}
+func runRuntimeDoctor(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) error {
 	runtimeCfg := runtimecheck.FromConfig(cfg)
 	report := runtimecheck.Doctor(ctx, runtimeCfg)
 	if jsonOut {

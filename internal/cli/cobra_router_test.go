@@ -50,7 +50,7 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 	for _, spec := range cobraLegacyCommands(config.Config{}) {
 		legacyCommands[spec.name] = struct{}{}
 	}
-	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}}
+	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}, "runtime": {}}
 	if len(expectedHidden) != len(legacyCommands)+len(nativeCommands) {
 		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native commands registers %d", len(expectedHidden), len(legacyCommands)+len(nativeCommands))
 	}
@@ -168,6 +168,38 @@ func TestQueryCommandIsNativeCobraSubtree(t *testing.T) {
 				t.Fatalf("query run --%s NoOptDefVal = %q, want %q", name, got, want)
 			}
 		})
+	}
+}
+
+func TestRuntimeCommandIsNativeCobraSubtree(t *testing.T) {
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	runtimeCmd := findCobraCommand(root, "runtime")
+	if runtimeCmd == nil {
+		t.Fatal("missing runtime command")
+	}
+	if runtimeCmd.DisableFlagParsing {
+		t.Fatal("runtime command must use native Cobra flag parsing")
+	}
+
+	doctor := findCobraCommand(runtimeCmd, "doctor")
+	if doctor == nil {
+		t.Fatal("missing runtime doctor subcommand")
+	}
+	if doctor.DisableFlagParsing {
+		t.Fatal("runtime doctor must use native Cobra flag parsing")
+	}
+	if !doctor.FParseErrWhitelist.UnknownFlags {
+		t.Fatal("runtime doctor must preserve legacy unknown-flag tolerance")
+	}
+	if doctor.ValidArgsFunction == nil {
+		t.Fatal("runtime doctor must suppress file completion fallback until Phase 15 completions")
+	}
+	completions, directive := doctor.ValidArgsFunction(doctor, nil, "")
+	if len(completions) != 0 {
+		t.Fatalf("runtime doctor completion seam returned %v, want no Phase 15 completions", completions)
+	}
+	if directive != cobra.ShellCompDirectiveNoFileComp {
+		t.Fatalf("runtime doctor completion directive = %v, want NoFileComp", directive)
 	}
 }
 
@@ -385,28 +417,57 @@ func TestCobraRouterShellDoesNotReclassifyLegacyHandlerErrors(t *testing.T) {
 }
 
 func TestCobraRouterShellMapsGenuineCobraParseErrorsToUsage(t *testing.T) {
-	cmd := &cobra.Command{
-		Use:           "pm",
-		SilenceUsage:  true,
-		SilenceErrors: true,
-		RunE: func(*cobra.Command, []string) error {
-			return nil
+	tests := []struct {
+		name      string
+		args      []string
+		configure func(*cobra.Command)
+	}{
+		{name: "unknown flag", args: []string{"--definitely-unknown"}},
+		{
+			name: "missing known flag value",
+			args: []string{"--root"},
+			configure: func(cmd *cobra.Command) {
+				cmd.Flags().String("root", ".", "project root")
+			},
+		},
+		{
+			name: "invalid bool value",
+			args: []string{"--json=maybe"},
+			configure: func(cmd *cobra.Command) {
+				cmd.Flags().Bool("json", false, "write JSON")
+			},
 		},
 	}
-	cmd.SetOut(io.Discard)
-	cmd.SetErr(io.Discard)
-	cmd.SetArgs([]string{"--definitely-unknown"})
 
-	_, err := cmd.ExecuteC()
-	if err == nil {
-		t.Fatal("ExecuteC returned nil, want Cobra parse error")
-	}
-	classified := classifyError(mapCobraErr(err))
-	if classified.category != categoryUsage {
-		t.Fatalf("category = %s, want %s for genuine Cobra parse error %q", classified.category, categoryUsage, err.Error())
-	}
-	if code := exitCodeFor(classified); code != 2 {
-		t.Fatalf("exit code = %d, want 2 for Cobra parse error", code)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cmd := &cobra.Command{
+				Use:           "pm",
+				SilenceUsage:  true,
+				SilenceErrors: true,
+				RunE: func(*cobra.Command, []string) error {
+					return nil
+				},
+			}
+			cmd.SetOut(io.Discard)
+			cmd.SetErr(io.Discard)
+			if tt.configure != nil {
+				tt.configure(cmd)
+			}
+			cmd.SetArgs(tt.args)
+
+			_, err := cmd.ExecuteC()
+			if err == nil {
+				t.Fatal("ExecuteC returned nil, want Cobra parse error")
+			}
+			classified := classifyError(mapCobraErr(err))
+			if classified.category != categoryUsage {
+				t.Fatalf("category = %s, want %s for genuine Cobra parse error %q", classified.category, categoryUsage, err.Error())
+			}
+			if code := exitCodeFor(classified); code != 2 {
+				t.Fatalf("exit code = %d, want 2 for Cobra parse error", code)
+			}
+		})
 	}
 }
 

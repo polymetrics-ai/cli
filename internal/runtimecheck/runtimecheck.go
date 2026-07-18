@@ -14,6 +14,7 @@ import (
 
 	pmconfig "polymetrics.ai/internal/config"
 	pmlogging "polymetrics.ai/internal/logging"
+	"polymetrics.ai/internal/safety"
 )
 
 type Config struct {
@@ -95,6 +96,8 @@ func Healthy(report Report) bool {
 
 func RedactedConfig(cfg Config) Config {
 	cfg.PostgresURL = redactPostgresURL(cfg.PostgresURL)
+	cfg.DragonflyAddr = redactTopologyEndpoint(cfg.DragonflyAddr)
+	cfg.TemporalAddr = redactTopologyEndpoint(cfg.TemporalAddr)
 	return cfg
 }
 
@@ -111,7 +114,7 @@ func checkPostgres(ctx context.Context, cfg Config) CheckResult {
 	result.Latency = time.Since(start)
 	if err != nil {
 		result.Status = "error"
-		result.Error = pmlogging.RedactText(ctx, err.Error())
+		result.Error = redactRuntimeCheckError(ctx, err, cfg.PostgresURL, result.Endpoint)
 		return result
 	}
 	result.Status = "ok"
@@ -120,7 +123,7 @@ func checkPostgres(ctx context.Context, cfg Config) CheckResult {
 
 func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 	start := time.Now()
-	result := CheckResult{Name: "dragonfly", Endpoint: cfg.DragonflyAddr}
+	result := CheckResult{Name: "dragonfly", Endpoint: redactTopologyEndpoint(cfg.DragonflyAddr)}
 	checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
 	defer cancel()
 	client := redis.NewClient(&redis.Options{Addr: cfg.DragonflyAddr})
@@ -129,7 +132,7 @@ func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 	result.Latency = time.Since(start)
 	if err != nil {
 		result.Status = "error"
-		result.Error = pmlogging.RedactText(ctx, err.Error())
+		result.Error = redactRuntimeCheckError(ctx, err, cfg.DragonflyAddr, result.Endpoint)
 		return result
 	}
 	result.Status = "ok"
@@ -138,7 +141,7 @@ func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 
 func checkTemporal(ctx context.Context, cfg Config) CheckResult {
 	start := time.Now()
-	result := CheckResult{Name: "temporal", Endpoint: cfg.TemporalAddr}
+	result := CheckResult{Name: "temporal", Endpoint: redactTopologyEndpoint(cfg.TemporalAddr)}
 	checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
 	defer cancel()
 	c, err := client.DialContext(checkCtx, client.Options{HostPort: cfg.TemporalAddr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(checkCtx)), ConnectionOptions: client.ConnectionOptions{GetSystemInfoTimeout: cfg.Timeout}})
@@ -149,7 +152,7 @@ func checkTemporal(ctx context.Context, cfg Config) CheckResult {
 	result.Latency = time.Since(start)
 	if err != nil {
 		result.Status = "error"
-		result.Error = pmlogging.RedactText(ctx, err.Error())
+		result.Error = redactRuntimeCheckError(ctx, err, cfg.TemporalAddr, result.Endpoint)
 		return result
 	}
 	result.Status = "ok"
@@ -167,6 +170,7 @@ func redactPostgresURL(raw string) string {
 	if raw == "" {
 		return raw
 	}
+	raw = safety.SanitizeTerminalLine(raw)
 	parsed, err := url.Parse(raw)
 	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
 		return "[redacted-url]"
@@ -182,4 +186,48 @@ func redactPostgresURL(raw string) string {
 		redacted = strings.Replace(redacted, "://", "://***@", 1)
 	}
 	return redacted
+}
+
+func redactTopologyEndpoint(raw string) string {
+	if raw == "" {
+		return raw
+	}
+	raw = safety.SanitizeTerminalLine(raw)
+	if raw == "" {
+		return "[redacted-endpoint]"
+	}
+	if parsed, err := url.Parse(raw); err == nil && parsed.Scheme != "" && parsed.Host != "" {
+		return nonEmptyEndpoint(parsed.Host)
+	}
+	endpoint := raw
+	if idx := strings.IndexAny(endpoint, "?#"); idx >= 0 {
+		endpoint = endpoint[:idx]
+	}
+	if idx := strings.Index(endpoint, "/"); idx >= 0 {
+		endpoint = endpoint[:idx]
+	}
+	if idx := strings.LastIndex(endpoint, "@"); idx >= 0 {
+		endpoint = endpoint[idx+1:]
+	}
+	return nonEmptyEndpoint(endpoint)
+}
+
+func nonEmptyEndpoint(endpoint string) string {
+	endpoint = safety.SanitizeTerminalLine(endpoint)
+	if endpoint == "" {
+		return "[redacted-endpoint]"
+	}
+	return endpoint
+}
+
+func redactRuntimeCheckError(ctx context.Context, err error, rawEndpoint, safeEndpoint string) string {
+	if err == nil {
+		return ""
+	}
+	message := pmlogging.RedactLine(ctx, err.Error())
+	rawEndpoint = safety.SanitizeTerminalLine(rawEndpoint)
+	if rawEndpoint != "" && safeEndpoint != "" && rawEndpoint != safeEndpoint {
+		message = strings.ReplaceAll(message, rawEndpoint, safeEndpoint)
+	}
+	return message
 }
