@@ -158,9 +158,31 @@ Planned red tests before production edits:
 - `internal/cli`: unsupported `OTEL_EXPORTER_OTLP_HEADERS` is ignored with redacted project warning; no raw process stderr and no Authorization header reaches the collector.
 - Docs/help focused checks fail until root/config help, ADR, docs/CLI, website source, generated website data, and goldens match trusted-env wording.
 
+## Final security hardening plan — PR #459 residual at head `216b5e076d82302621574a9fb4fa71c8acb79204`
+
+Execution decision: `local_critical_path` — same isolated issue worktree/branch, no subagent tool, no Claude/Copilot request per user instruction.
+
+Accepted residuals and slices:
+
+1. SDK/provider/resource env bypass (MED): sanitize or temporarily unset unsupported SDK-level OpenTelemetry environment while constructing the explicit resource and `sdktrace.NewTracerProvider`; warn by environment variable name only. Cover `OTEL_RESOURCE_ATTRIBUTES`, `OTEL_SERVICE_NAME`, `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG`, span/attribute/link/event limit env, BSP env, and experimental Go OTel env that can alter SDK behavior or log parse errors.
+2. Safe resource: pass an explicit project-controlled resource while SDK env is unset so ambient resource attributes cannot export secrets.
+3. Regression tests: prove `OTEL_RESOURCE_ATTRIBUTES=api_key=...` does not appear in file exporter output or OTLP payloads; prove invalid sampler args do not reach raw process stderr.
+4. Config test isolation: include `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` in config env cleanup/list if not already covered.
+
+Planned red tests before production edits:
+
+- `internal/cli`: file exporter with ambient `OTEL_RESOURCE_ATTRIBUTES=api_key=<synthetic>`/`OTEL_SERVICE_NAME=<synthetic>` exports spans without those markers, warns only by env name, and emits no raw process stderr.
+- `internal/cli`: OTLP exporter with ambient `OTEL_RESOURCE_ATTRIBUTES=api_key=<synthetic>` does not send that marker to the collector payload.
+- `internal/cli`: invalid `OTEL_TRACES_SAMPLER=traceidratio` + `OTEL_TRACES_SAMPLER_ARG=<synthetic-invalid>` emits only project `warning: telemetry:` by env name and nothing to raw process stderr.
+- `internal/config`: env cleanup includes `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`.
+
 ## Commit/push checkpoints
 
-1. Final residual planning artifact checkpoint.
+1. SDK env final hardening planning artifact checkpoint.
+2. SDK env red-test checkpoint with exact failing output recorded.
+3. SDK env implementation checkpoint.
+4. Focused/full verification + PR body update checkpoint.
+5. Final residual planning artifact checkpoint.
 2. Final residual red-test checkpoint with exact failing output recorded.
 3. Ambient OTel env hardening implementation checkpoint.
 4. Docs/help/golden/website checkpoint.

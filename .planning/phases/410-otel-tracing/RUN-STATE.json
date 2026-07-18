@@ -7,7 +7,7 @@
   "branch": "feat/410-otel-tracing",
   "baseBranch": "feat/cli-architecture-v2",
   "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing",
-  "status": "final_review_fix_verified",
+  "status": "sdk_env_hardening_verified",
   "gsd": {
     "doctorPassed": true,
     "planPhasePromptGenerated": true,
@@ -71,6 +71,21 @@
       "cycle": "final-review-fix-verify",
       "decision": "local_critical_path",
       "reason": "Final focused residual fix verified locally with focused tests, docs generation, full Go gates, make verify, and diff checks."
+    },
+    {
+      "cycle": "sdk-env-final-hardening-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 residual accepted at head 216b5e076d82302621574a9fb4fa71c8acb79204; same isolated worker/branch, no subagent tool, no Claude/Copilot request."
+    },
+    {
+      "cycle": "sdk-env-final-hardening-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Red tests captured before production edits for SDK/resource/sampler ambient OTel env bypass."
+    },
+    {
+      "cycle": "sdk-env-final-hardening-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused tests, full Go gates, make verify, docs generation diff, and diff checks passed locally."
     }
   ],
   "dependenciesApproved": [
@@ -91,7 +106,8 @@
     "ambient OTel env bypass neutralized before OTLP exporter construction",
     "ADR 0004 superseding trusted-env OTLP behavior note",
     "root help/goldens full telemetry exporter values none/off/file/otlp",
-    "config docs/website require OTLP exporter and endpoint from trusted env/flag"
+    "config docs/website require OTLP exporter and endpoint from trusted env/flag",
+    "SDK/resource/provider ambient OTel env neutralized before tracer provider construction"
   ],
   "humanGatesTriggered": [],
   "updatedAt": "2026-07-18T00:00:00Z"

@@ -18,6 +18,7 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	"go.opentelemetry.io/otel/trace"
 
@@ -170,10 +171,15 @@ func Init(ctx context.Context, cfg Config, warn WarningFunc) (context.Context, *
 		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
 	}
 
-	provider := sdktrace.NewTracerProvider(
-		sdktrace.WithSyncer(exporter),
-		sdktrace.WithSampler(sdktrace.AlwaysSample()),
-	)
+	provider, err := newTracerProvider(ctx, exporter, cfg, warn)
+	if err != nil {
+		_ = exporter.Shutdown(ctx)
+		if file != nil {
+			_ = file.Close()
+		}
+		warnf(ctx, warn, "initialize telemetry provider: %v", err)
+		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
+	}
 	handle := &Handle{
 		enabled:  true,
 		provider: provider,
@@ -261,6 +267,43 @@ func HTTPAttrs(method, rawURL string) []Attr {
 		StringAttr("pm.http.scheme", parsed.Scheme),
 		StringAttr("pm.http.host", parsed.Host),
 		StringAttr("pm.http.path", parsed.EscapedPath()),
+	}
+}
+
+func newTracerProvider(ctx context.Context, exporter sdktrace.SpanExporter, cfg Config, warn WarningFunc) (*sdktrace.TracerProvider, error) {
+	warnUnsupportedSDKEnv(ctx, warn)
+	var provider *sdktrace.TracerProvider
+	err := withSanitizedSDKEnv(func() error {
+		provider = sdktrace.NewTracerProvider(
+			sdktrace.WithSyncer(exporter),
+			sdktrace.WithSampler(sdktrace.AlwaysSample()),
+			sdktrace.WithResource(safeResource(cfg)),
+			sdktrace.WithRawSpanLimits(defaultSpanLimits()),
+		)
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return provider, nil
+}
+
+func safeResource(cfg Config) *resource.Resource {
+	serviceName := safeFileName(cfg.ServiceName)
+	if serviceName == "" {
+		serviceName = "pm"
+	}
+	return resource.NewSchemaless(attribute.String("service.name", serviceName))
+}
+
+func defaultSpanLimits() sdktrace.SpanLimits {
+	return sdktrace.SpanLimits{
+		AttributeValueLengthLimit:   sdktrace.DefaultAttributeValueLengthLimit,
+		AttributeCountLimit:         sdktrace.DefaultAttributeCountLimit,
+		EventCountLimit:             sdktrace.DefaultEventCountLimit,
+		LinkCountLimit:              sdktrace.DefaultLinkCountLimit,
+		AttributePerEventCountLimit: sdktrace.DefaultAttributePerEventCountLimit,
+		AttributePerLinkCountLimit:  sdktrace.DefaultAttributePerLinkCountLimit,
 	}
 }
 
@@ -450,6 +493,27 @@ var (
 		"OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
 	}
 
+	unsupportedSDKEnv = []string{
+		"OTEL_RESOURCE_ATTRIBUTES",
+		"OTEL_SERVICE_NAME",
+		"OTEL_TRACES_SAMPLER",
+		"OTEL_TRACES_SAMPLER_ARG",
+		"OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT",
+		"OTEL_ATTRIBUTE_COUNT_LIMIT",
+		"OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT",
+		"OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT",
+		"OTEL_SPAN_EVENT_COUNT_LIMIT",
+		"OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT",
+		"OTEL_SPAN_LINK_COUNT_LIMIT",
+		"OTEL_LINK_ATTRIBUTE_COUNT_LIMIT",
+		"OTEL_BSP_SCHEDULE_DELAY",
+		"OTEL_BSP_EXPORT_TIMEOUT",
+		"OTEL_BSP_MAX_QUEUE_SIZE",
+		"OTEL_BSP_MAX_EXPORT_BATCH_SIZE",
+		"OTEL_GO_X_RESOURCE",
+		"OTEL_GO_X_OBSERVABILITY",
+	}
+
 	unsupportedOTLPEnv = []string{
 		"OTEL_EXPORTER_OTLP_HEADERS",
 		"OTEL_EXPORTER_OTLP_TRACES_HEADERS",
@@ -483,22 +547,43 @@ func warnUnsupportedOTLPEnv(ctx context.Context, warn WarningFunc) {
 	}
 }
 
+func warnUnsupportedSDKEnv(ctx context.Context, warn WarningFunc) {
+	for _, name := range unsupportedSDKEnv {
+		if _, ok := os.LookupEnv(name); ok {
+			warnf(ctx, warn, "unsupported OpenTelemetry SDK environment variable %s ignored; configure telemetry only through trusted pm env/flag", name)
+		}
+	}
+}
+
+func withSanitizedSDKEnv(fn func() error) error {
+	return withSanitizedEnv(unsupportedSDKEnv, fn)
+}
+
 func withSanitizedOTLPEnv(fn func() (sdktrace.SpanExporter, error)) (sdktrace.SpanExporter, error) {
+	all := append([]string{}, supportedOTLPEndpointEnv...)
+	all = append(all, unsupportedOTLPEnv...)
+	var exporter sdktrace.SpanExporter
+	err := withSanitizedEnv(all, func() error {
+		var err error
+		exporter, err = fn()
+		return err
+	})
+	return exporter, err
+}
+
+func withSanitizedEnv(names []string, fn func() error) error {
 	otlpEnvMu.Lock()
 	defer otlpEnvMu.Unlock()
 
-	all := append([]string{}, supportedOTLPEndpointEnv...)
-	all = append(all, unsupportedOTLPEnv...)
-	saved := make(map[string]savedEnvValue, len(all))
+	saved := make(map[string]savedEnvValue, len(names))
 	defer restoreEnv(saved)
-	for _, name := range all {
+	for _, name := range names {
 		value, ok := os.LookupEnv(name)
 		saved[name] = savedEnvValue{value: value, ok: ok}
 		if err := os.Unsetenv(name); err != nil {
-			return nil, fmt.Errorf("sanitize OTLP environment: %w", err)
+			return fmt.Errorf("sanitize OpenTelemetry environment: %w", err)
 		}
 	}
-
 	return fn()
 }
 

@@ -36,6 +36,8 @@ scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-revie
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-reviewfix-rerun.txt
 scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-final-reviewfix.txt
 scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-final-reviewfix.txt
+scripts/gsd prompt plan-phase 410 --skip-research >/tmp/gsd-plan-phase-410-final-sdk-env.txt
+scripts/gsd prompt programming-loop init --phase 410 --dry-run >/tmp/gsd-programming-loop-410-final-sdk-env.txt
 ```
 
 Result:
@@ -45,6 +47,7 @@ Result:
 - `programming-loop`: failed with `scripts/gsd: unknown GSD command: programming-loop`; manual GSD/TDD fallback recorded in PLAN/RUN-STATE.
 - Review-fix rerun in this Pi worker: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 - Final focused review-fix rerun at PR #459 head `75433cefa9a00671b06c6c3e83bcde1e4730211c`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
+- Final SDK-env hardening rerun at PR #459 head `216b5e076d82302621574a9fb4fa71c8acb79204`: `scripts/gsd doctor` passed; `plan-phase` prompt regenerated; `programming-loop` still unavailable, so manual GSD/TDD fallback remains active.
 
 ## Review-fix accepted findings
 
@@ -68,6 +71,14 @@ Result:
 | LOW ADR 0004 says OTLP endpoint via config | Accepted | ADR docs updated with superseding trusted-env/flag note |
 | LOW root help/goldens omit full exporter values | Accepted | Golden/root help asserts `none`, `off`, `file`, `otlp` |
 | LOW config docs/website imply config endpoint works when network telemetry env-enabled | Accepted | Reword docs/website to require both exporter and endpoint from trusted env/flag; config-file endpoint alone ignored |
+
+## Final SDK-level env hardening accepted findings
+
+| Finding | Disposition | Planned red evidence |
+|---|---|---|
+| MED SDK/provider/resource OpenTelemetry env bypass can read `OTEL_RESOURCE_ATTRIBUTES`, `OTEL_SERVICE_NAME`, `OTEL_TRACES_SAMPLER(_ARG)`, span limits, BSP limits, and experimental OTel env during resource/provider construction | Accepted | File and OTLP regression tests assert synthetic `api_key` resource attrs/service name never export and warnings name env only |
+| MED invalid sampler args may hit raw process stderr before project warning/redaction | Accepted | CLI test captures raw process stderr while invalid sampler env is set; expects empty process stderr and project warning only by env name |
+| LOW config test isolation missing traces endpoint cleanup/list if needed | Accepted | `clearBoundEnv`/env list includes `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` |
 
 ## Ledger
 
@@ -96,6 +107,11 @@ Result:
 | 21 | final residual green | Test | `go test ./internal/cli -run 'TestTelemetryRejectsUnsafeAmbientOTLPTracesEndpointBeforeExporter|TestTelemetryNeutralizesUnsupportedAmbientOTLPHeaders' -count=1` | Pass | Unsafe traces endpoint now rejected before exporter construction; unsupported OTLP headers warned/neutralized with no raw process stderr or Authorization header. |
 | 22 | final residual green | Focused tests/docs | `go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry|TestLoadTelemetry|Golden|Config' -count=1`; `go test ./internal/telemetry -count=1`; `go test ./internal/connectors/connsdk -run Telemetry -count=1`; `go test ./internal/app -run Telemetry -count=1`; `go test ./internal/flow -run Telemetry -count=1` | Pass | Ambient env hardening, config alias, golden transcripts, generated docs drift, and affected telemetry consumers green after docs/golden/website regeneration. |
 | 23 | final residual verify | Broad gates/parity | `gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; runtime help/docs parity; `git diff --check`; `git diff -- go.mod go.sum` | Pass | Full final gates passed; no go.mod/go.sum diff; docs generation and website data clean. |
+| 24 | sdk-env final hardening plan | Planning | Phase artifacts updated before test/production edits; `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 410 --skip-research`; `scripts/gsd prompt programming-loop init --phase 410 --dry-run` | Pass/fallback | Doctor passed; plan prompt regenerated; programming-loop still unavailable (`scripts/gsd: unknown GSD command: programming-loop`). Continuing local-critical-path manual GSD/TDD. |
+| 25 | sdk-env final hardening red | Test | `go test ./internal/cli ./internal/config -run 'TestTelemetrySanitizesSDKResourceEnvForFileExporter|TestTelemetrySanitizesSDKResourceEnvForOTLPExporter|TestTelemetrySanitizesInvalidSamplerEnvBeforeProvider|TestAllBoundEnvVarsIncludesOTLPTracesEndpoint' -count=1` | Fail | Expected red before production edits. Exact key output: `stderr missing SDK env warnings by name: ""`; `stderr missing resource env warning by name: ""`; `process stderr = "2026/07/18 04:46:28 parsing sampler argument: strconv.ParseFloat: parsing \"invalid-pm_invalid_sampler_marker\": invalid syntax\n", want empty`; `allBoundEnvVars missing OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`; exit code 1. |
+| 26 | sdk-env final hardening green | Test | `go test ./internal/cli ./internal/config -run 'TestTelemetrySanitizesSDKResourceEnvForFileExporter|TestTelemetrySanitizesSDKResourceEnvForOTLPExporter|TestTelemetrySanitizesInvalidSamplerEnvBeforeProvider|TestAllBoundEnvVarsIncludesOTLPTracesEndpoint' -count=1`; `go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry|TestLoadTelemetry|Config' -count=1` | Pass | SDK resource/service/sampler env now warned by name only and unset around explicit safe resource/provider construction; file and OTLP payloads omit synthetic `api_key` markers; process stderr remains empty. |
+| 27 | sdk-env final hardening gates | Focused/full Go gates | `gofmt -w cmd internal`; `go vet ./...`; `go build ./cmd/pm`; `go test ./...` | Pass | `go test ./...` first two cold-cache attempts hit harness timeouts at 20m/30m before all packages printed; package segment rerun and final full rerun passed with cached packages. |
+| 28 | sdk-env final hardening verify | Full verify/docs/diff | `make verify`; temp `go run ./cmd/pm docs generate --dir "$TMP_DOCS/cli" --connectors-dir "$TMP_DOCS/connectors"` + `diff -ru docs/cli "$TMP_DOCS/cli"`; `git diff --check`; `git diff -- go.mod go.sum` | Pass | `make verify` passed: fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, lint, connectorgen validate. Docs generation diff clean; no go.mod/go.sum diff. |
 
 ## Red-test requirements
 

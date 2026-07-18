@@ -1,5 +1,15 @@
 # Verification — Phase 410 OpenTelemetry tracing
 
+## Final security hardening checklist (PR #459 head `216b5e076d82302621574a9fb4fa71c8acb79204`)
+
+- [x] Red tests captured before production edits for SDK/provider/resource ambient OTel env bypass.
+- [x] `OTEL_RESOURCE_ATTRIBUTES=api_key=<synthetic>` and `OTEL_SERVICE_NAME=<synthetic>` are sanitized/unset during resource/provider construction and never appear in file exporter spans.
+- [x] Same resource attr marker never appears in OTLP HTTP payloads.
+- [x] Invalid `OTEL_TRACES_SAMPLER(_ARG)` cannot write raw SDK parse errors to process stderr; project warning names env vars only and omits values.
+- [x] Unsupported SDK env names around `sdktrace.NewTracerProvider` are warned by name only and temporarily unset while building explicit safe resource/provider.
+- [x] `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` remains in config test env cleanup/list.
+- [x] Focused telemetry/config/cli tests, full gates (`go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`), docs generation if artifacts changed, `git diff --check`, and `git diff -- go.mod go.sum` complete.
+
 ## Final focused review-fix checklist (PR #459 head `75433cefa9a00671b06c6c3e83bcde1e4730211c`)
 
 - [x] Red tests captured before production edits for ambient OTel env bypass and docs/help wording residuals.
@@ -85,6 +95,13 @@ go test ./internal/app -run Telemetry -count=1
 go test ./internal/flow -run Telemetry -count=1
 ```
 
+## Final SDK-env hardening focused gates to run
+
+```bash
+go test ./internal/cli -run 'TestTelemetrySanitizesSDKResourceEnvForFileExporter|TestTelemetrySanitizesSDKResourceEnvForOTLPExporter|TestTelemetrySanitizesInvalidSamplerEnvBeforeProvider' -count=1
+go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry|TestLoadTelemetry|Config' -count=1
+```
+
 ## Review-fix final gates to rerun
 
 ```bash
@@ -145,3 +162,10 @@ Additional smoke/parity:
 | `make verify` (final residual) | pass | fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, and connectorgen validate passed. |
 | Runtime help/docs parity final | pass | `./pm --help`; `./pm help config`; `./pm etl`; `./pm flow`; `./pm connectors`; invalid `./pm connectors bogus --json` exit 2; generated docs diff clean; `npm --prefix website run gen:docs` passed. |
 | `git diff --check`; `git diff -- go.mod go.sum` (final residual) | pass | No output. |
+| `go test ./internal/cli ./internal/config -run 'TestTelemetrySanitizesSDKResourceEnvForFileExporter\|TestTelemetrySanitizesSDKResourceEnvForOTLPExporter\|TestTelemetrySanitizesInvalidSamplerEnvBeforeProvider\|TestAllBoundEnvVarsIncludesOTLPTracesEndpoint' -count=1` (SDK-env red) | fail | Expected red: missing SDK/resource warnings, invalid sampler wrote raw process stderr, config env list missing traces endpoint. |
+| `go test ./internal/cli ./internal/config -run 'TestTelemetrySanitizesSDKResourceEnvForFileExporter\|TestTelemetrySanitizesSDKResourceEnvForOTLPExporter\|TestTelemetrySanitizesInvalidSamplerEnvBeforeProvider\|TestAllBoundEnvVarsIncludesOTLPTracesEndpoint' -count=1` | pass | SDK resource/service/sampler env sanitized around provider/resource construction; file/OTLP synthetic markers absent; process stderr empty. |
+| `go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry\|TestLoadTelemetry\|Config' -count=1` | pass | Focused telemetry/config/CLI regression set passed. |
+| `gofmt -w cmd internal`; `go vet ./...`; `go build ./cmd/pm`; `go test ./...` (SDK-env final) | pass | Final full `go test ./...` passed after earlier cold-cache harness timeouts and package segment rerun. |
+| `make verify` (SDK-env final) | pass | fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, lint, and connectorgen validate passed. |
+| Temp docs generation + diff | pass | `go run ./cmd/pm docs generate --dir "$TMP_DOCS/cli" --connectors-dir "$TMP_DOCS/connectors"`; `diff -ru docs/cli "$TMP_DOCS/cli"` clean. |
+| `git diff --check`; `git diff -- go.mod go.sum` (SDK-env final) | pass | No output. |

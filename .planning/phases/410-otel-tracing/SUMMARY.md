@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: final focused review-fix verified locally for PR #459; push/PR body update pending.
+Status: final SDK-level env hardening verified locally for PR #459; PR body update/push pending.
 
 ## Current state
 
@@ -46,6 +46,16 @@ Current execution decision: `local_critical_path`. This worker stayed on `feat/4
 - Docs residuals fixed: ADR 0004 superseding note, root help/goldens exporter values `none/off/file/otlp`, config docs/website trusted-env endpoint wording, generated website data.
 - Red tests captured before production edits; no Claude/Copilot request.
 
+## Final SDK-level env hardening delivered
+
+- SDK/provider/resource ambient OTel env is warned by name only and temporarily unset around explicit safe resource plus `sdktrace.NewTracerProvider` construction.
+- Covered env includes `OTEL_RESOURCE_ATTRIBUTES`, `OTEL_SERVICE_NAME`, `OTEL_TRACES_SAMPLER(_ARG)`, span/attribute/link/event limits, BSP limits, and experimental Go OTel toggles.
+- File exporter and OTLP regressions prove synthetic `api_key` resource attrs/service markers do not export; invalid sampler args no longer hit raw process stderr.
+- `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` is in config test env cleanup/list.
+- No Claude/Copilot request.
+
 ## Verification final
 
 Focused tests, docs/golden/website generation, file/off/secret smoke, OTLP endpoint smoke, `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` passed after the previous review-fix commit. Final focused review-fix verification also passed: focused ambient env tests, docs generation/diff, website data generation, runtime help parity, full Go gates, `make verify`, `git diff --check`, and `git diff -- go.mod go.sum`.
+
+SDK-level env hardening verification also passed: new focused red/green tests, `go test ./internal/telemetry ./internal/config ./internal/cli -run 'Telemetry|TestLoadTelemetry|Config' -count=1`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, temp docs generation/diff, `git diff --check`, and `git diff -- go.mod go.sum`.

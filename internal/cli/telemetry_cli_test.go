@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"syscall"
@@ -242,6 +243,120 @@ func TestTelemetryNeutralizesUnsupportedAmbientOTLPHeaders(t *testing.T) {
 	}
 }
 
+func TestTelemetrySanitizesSDKResourceEnvForFileExporter(t *testing.T) {
+	const (
+		marker        = "pm_sdk_resource_marker_file"
+		serviceMarker = "pm_sdk_service_marker_file"
+	)
+	root := t.TempDir()
+
+	stdout, stderr, code := runTelemetryVersionSubprocess(
+		t,
+		root,
+		"PM_TELEMETRY=file",
+		"OTEL_RESOURCE_ATTRIBUTES=api_key="+marker,
+		"OTEL_SERVICE_NAME="+serviceMarker,
+	)
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s", code, stdout, stderr)
+	}
+	if !strings.Contains(stdout, `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout)
+	}
+	if !strings.Contains(stderr, "warning: telemetry:") || !strings.Contains(stderr, "OTEL_RESOURCE_ATTRIBUTES") || !strings.Contains(stderr, "OTEL_SERVICE_NAME") {
+		t.Fatalf("stderr missing SDK env warnings by name: %q", stderr)
+	}
+	for _, forbidden := range []string{marker, serviceMarker, "api_key="} {
+		if strings.Contains(stderr, forbidden) {
+			t.Fatalf("stderr leaked %q: %q", forbidden, stderr)
+		}
+	}
+
+	data := readCLITelemetry(t, filepath.Join(root, ".polymetrics", "telemetry"))
+	assertCLIContains(t, data, "pm.command")
+	for _, forbidden := range []string{marker, serviceMarker, "api_key"} {
+		assertCLINotContains(t, data, forbidden)
+	}
+}
+
+func TestTelemetrySanitizesSDKResourceEnvForOTLPExporter(t *testing.T) {
+	const marker = "pm_sdk_resource_marker_otlp"
+	bodyCh := make(chan []byte, 1)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, _ := io.ReadAll(r.Body)
+		select {
+		case bodyCh <- body:
+		default:
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+	root := t.TempDir()
+
+	stdout, stderr, code := runTelemetryVersionSubprocess(
+		t,
+		root,
+		"PM_TELEMETRY=otlp",
+		"OTEL_EXPORTER_OTLP_ENDPOINT="+server.URL,
+		"OTEL_RESOURCE_ATTRIBUTES=api_key="+marker,
+	)
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s", code, stdout, stderr)
+	}
+	if !strings.Contains(stdout, `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout)
+	}
+	if !strings.Contains(stderr, "warning: telemetry:") || !strings.Contains(stderr, "OTEL_RESOURCE_ATTRIBUTES") {
+		t.Fatalf("stderr missing resource env warning by name: %q", stderr)
+	}
+	if strings.Contains(stderr, marker) || strings.Contains(stderr, "api_key=") {
+		t.Fatalf("stderr leaked resource env value: %q", stderr)
+	}
+
+	select {
+	case body := <-bodyCh:
+		if bytes.Contains(body, []byte(marker)) || bytes.Contains(body, []byte("api_key")) {
+			t.Fatalf("OTLP payload leaked ambient resource attr: %q", string(body))
+		}
+	default:
+		t.Fatal("collector did not receive OTLP export")
+	}
+}
+
+func TestTelemetrySanitizesInvalidSamplerEnvBeforeProvider(t *testing.T) {
+	const marker = "pm_invalid_sampler_marker"
+	root := t.TempDir()
+	t.Setenv("PM_TELEMETRY", "file")
+	t.Setenv("OTEL_TRACES_SAMPLER", "traceidratio")
+	t.Setenv("OTEL_TRACES_SAMPLER_ARG", "invalid-"+marker)
+	var stdout, stderr bytes.Buffer
+	var code int
+
+	processStderr := captureProcessStderr(t, func() {
+		code = cli.Run([]string{"--root", root, "version", "--json"}, &stdout, &stderr)
+	})
+
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s processStderr=%s", code, stdout.String(), stderr.String(), processStderr)
+	}
+	if !strings.Contains(stdout.String(), `"kind": "Version"`) {
+		t.Fatalf("stdout missing Version envelope: %s", stdout.String())
+	}
+	if processStderr != "" {
+		t.Fatalf("process stderr = %q, want empty", processStderr)
+	}
+	if !strings.Contains(stderr.String(), "warning: telemetry:") || !strings.Contains(stderr.String(), "OTEL_TRACES_SAMPLER") || !strings.Contains(stderr.String(), "OTEL_TRACES_SAMPLER_ARG") {
+		t.Fatalf("project stderr missing sampler env warnings by name: %q", stderr.String())
+	}
+	for _, forbidden := range []string{marker, "invalid-"} {
+		if strings.Contains(stderr.String(), forbidden) || strings.Contains(processStderr, forbidden) {
+			t.Fatalf("stderr leaked %q: project=%q process=%q", forbidden, stderr.String(), processStderr)
+		}
+	}
+}
+
 func TestTelemetryOTLPExportFailureUsesProjectWarningAndKeepsStdout(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "collector failed", http.StatusInternalServerError)
@@ -282,6 +397,57 @@ func TestTelemetryCertifyConnectorSpan(t *testing.T) {
 	assertCLIContains(t, data, "pm.certify.connector")
 	assertCLINotContains(t, data, "sample-cli-token")
 	assertCLINotContains(t, data, "PM_CERT_SAMPLE_TOKEN")
+}
+
+func TestTelemetrySubprocessHelper(t *testing.T) {
+	if os.Getenv("PM_TELEMETRY_TEST_HELPER") != "1" {
+		return
+	}
+	root := os.Getenv("PM_TELEMETRY_TEST_ROOT")
+	if root == "" {
+		_, _ = os.Stderr.WriteString("missing PM_TELEMETRY_TEST_ROOT")
+		os.Exit(2)
+	}
+	code := cli.Run([]string{"--root", root, "version", "--json"}, os.Stdout, os.Stderr)
+	os.Exit(code)
+}
+
+func runTelemetryVersionSubprocess(t *testing.T, root string, env ...string) (string, string, int) {
+	t.Helper()
+	exe, err := os.Executable()
+	if err != nil {
+		t.Fatalf("resolve test executable: %v", err)
+	}
+	cmd := exec.Command(exe, "-test.run=TestTelemetrySubprocessHelper")
+	cmd.Env = filteredTelemetrySubprocessEnv(append([]string{
+		"PM_TELEMETRY_TEST_HELPER=1",
+		"PM_TELEMETRY_TEST_ROOT=" + root,
+	}, env...)...)
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	code := 0
+	if err != nil {
+		exitErr, ok := err.(*exec.ExitError)
+		if !ok {
+			t.Fatalf("run telemetry helper: %v", err)
+		}
+		code = exitErr.ExitCode()
+	}
+	return stdout.String(), stderr.String(), code
+}
+
+func filteredTelemetrySubprocessEnv(extra ...string) []string {
+	env := []string{}
+	for _, item := range os.Environ() {
+		name, _, _ := strings.Cut(item, "=")
+		if strings.HasPrefix(name, "OTEL_") || strings.HasPrefix(name, "PM_TELEMETRY") || strings.HasPrefix(name, "POLYMETRICS_TELEMETRY") || name == "POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT" {
+			continue
+		}
+		env = append(env, item)
+	}
+	return append(env, extra...)
 }
 
 func captureProcessStderr(t *testing.T, fn func()) string {
