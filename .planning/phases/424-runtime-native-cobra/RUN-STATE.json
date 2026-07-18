@@ -7,11 +7,13 @@
   "baseBranch": "feat/cli-architecture-v2",
   "baseHeadAtDispatch": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "baseHeadAtPlanning": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "headAtReviewFixStart": "3ed74ba63ae25e069689da72c6d53ef374ebcbfe",
   "verificationPassed": true,
-  "status": "sub_pr_open_local_verified_remote_checks_pending",
+  "status": "review_fix_local_verified_no_bot_review",
   "gsdAdapter": {
     "doctor": "passed",
-    "planPhasePrompt": "/tmp/gsd-plan-phase-424-runtime-native-cobra.prompt",
+    "list": "passed_69_commands",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-424-runtime-native-cobra-review-fix.prompt",
     "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
     "fallback": "manual_gsd_universal_runtime_loop_plus_pi_pm_gsd_loop_prompt",
     "skillGap": ".pi/skills/go-implementation/SKILL.md missing; global Go skills loaded"
@@ -36,13 +38,33 @@
       "cycle": "verify",
       "decision": "local_critical_path",
       "reason": "full local gates, runtime help/docs/website parity checks, runtime doctor loopback JSON checks, and diff guards completed inline in isolated worker cwd"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #460 review-fix is scoped to the assigned branch/cwd; worker has no subagent tool and user requested no Claude/Copilot"
+    },
+    {
+      "cycle": "review-fix-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused red tests added inline for Cobra/pflag parse mapping and runtime endpoint sanitization before production edits"
+    },
+    {
+      "cycle": "review-fix-green",
+      "decision": "local_critical_path",
+      "reason": "Cobra/pflag parse errors now map to usage; runtime doctor config/report endpoints sanitize PostgreSQL, DragonflyDB, and Temporal output"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "focused gates, gofmt, vet, full tests, build, make verify, docs/website/golden parity, diff-check, and go.mod/go.sum guard passed inline"
     }
   ],
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/460",
   "reviewRoute": {
-    "claude": "claude_auto_expected_if_author_trust_gate_permits",
-    "copilot": "not_requested",
-    "fallback": "parent_pr_or_human_review_pending_if_sub_pr_auto_review_skips",
-    "coverageStatus": "sub_pr_open_remote_checks_pending"
+    "claude": "not_requested_user_disallowed",
+    "copilot": "not_requested_user_disallowed",
+    "fallback": "human_or_parent_orchestrator_review_only",
+    "coverageStatus": "review_fix_local_verified_no_bot_review"
   }
 }

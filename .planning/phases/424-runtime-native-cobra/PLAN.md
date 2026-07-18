@@ -102,3 +102,48 @@ Excluded:
 ## Parity stance
 
 This phase changes parser ownership only. Help text, docs, website, generated manuals, golden stdout/stderr/exit, JSON envelopes, stdout/stderr discipline, global late flags, fresh-tree re-entrancy, completion metadata, runtime service optionality, endpoint redaction, and runtime doctor behavior should remain byte-identical unless an intentional reviewed change is recorded. No intentional user-facing output change is planned.
+
+## Review-fix plan — PR #460 / issue #424
+
+Task head at review-fix start: `3ed74ba63ae25e069689da72c6d53ef374ebcbfe` on `refactor/424-runtime-native-cobra`.
+Execution decision: `local_critical_path` — review-fix is in the assigned isolated cwd/branch; worker has no `subagent` tool and user disallowed Claude/Copilot.
+
+GSD adapter evidence for this run:
+
+- `scripts/gsd doctor && scripts/gsd list` — pass; registry lists 69 commands.
+- `scripts/gsd prompt plan-phase 424-runtime-native-cobra --skip-research >/tmp/gsd-plan-phase-424-runtime-native-cobra-review-fix.prompt` — pass (10739 bytes).
+- `scripts/gsd prompt programming-loop init --phase 424-runtime-native-cobra --dry-run >/tmp/gsd-programming-loop-424-runtime-native-cobra-review-fix.prompt` — blocked: `scripts/gsd: unknown GSD command: programming-loop`; manual GSD fallback remains active.
+
+Additional required reading loaded for review-fix: issue #424 body/AC, PR #460 body, phase artifacts, runtime architecture/setup/CLI/website docs, worker handoff template, and review-fix prompt. Repo-local `.pi/skills/go-implementation/SKILL.md` is still missing (`ENOENT`); global Go skills remain loaded.
+
+Review findings in scope:
+
+1. Cobra/pflag parse errors for native commands: malformed known flags such as `pm runtime --root` and `pm runtime doctor --root` must map to usage exit 2, not internal exit 1. Add run-level runtime tests and a mapper unit that covers missing flag values / invalid pflag values while preserving legacy handler error classification.
+2. Runtime optional-service docs: clarify `runtime doctor` requires no live services or credentials; absent services are reported per-check in output status/degraded mode and do not create runtime-error exits. Update embedded help, `docs/cli/runtime.md`, website MDX, generated docs data, and golden transcripts as needed.
+3. Runtime endpoint hardening: sanitize/redact DragonflyDB and Temporal endpoints in `runtime doctor` config/report output (userinfo, query, fragment, and control chars removed), not only PostgreSQL. Add `internal/runtimecheck` tests and keep CLI JSON/text output sanitized.
+4. Out-of-scope high finding disposition: `internal/worker/podman_cmd.go` and `internal/worker/submit.go` are not changed by `origin/feat/cli-architecture-v2...HEAD`; record adjacent/pre-existing secret-in-argv finding as deferred follow-up in artifacts/PR body, no code fix in this scoped PR.
+
+Review-fix slices:
+
+1. Update phase artifacts before production edits (this section, TDD ledger, verification checklist, RUN-STATE).
+2. Add red tests only:
+   - `runtime --root` / `runtime doctor --root` with `--json` prefix exit 2 and JSON category `usage`.
+   - `mapCobraErr` maps all genuine non-legacy Cobra/pflag parse errors to usage, including missing known flag value and invalid bool value.
+   - `runtimecheck` redaction tests prove DragonflyDB/Temporal reported endpoints and error strings do not leak userinfo/query/fragment/control chars.
+   Capture failing output before production edits.
+3. Green code:
+   - Broaden `mapCobraErr` fallback for non-legacy Cobra errors to `usageErrorf`.
+   - Add runtime endpoint sanitizer helpers; use them in `RedactedConfig`, `checkDragonfly`, `checkTemporal`, and runtime-check error messages.
+   - Refresh runtime help/docs/website wording and generated/golden outputs.
+4. Focused gates:
+   - `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1`
+   - `go test ./internal/runtimecheck/... -count=1`
+5. Full feasible gates after gofmt:
+   - `gofmt -w cmd internal`
+   - `go vet ./...`
+   - `go test -timeout 20m ./...`
+   - `go build ./cmd/pm`
+   - `make verify`
+   - `git diff --check`
+   - `git diff -- go.mod go.sum`
+6. Push review-fix commit(s) to `refactor/424-runtime-native-cobra`; update PR #460 body with review disposition and no Claude/Copilot route.

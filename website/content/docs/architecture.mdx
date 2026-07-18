@@ -161,7 +161,7 @@ pm perf compare --iterations 25 --runtime --json
 pm perf sync-modes --records 1000 --json
 ```
 
-`pm runtime doctor` checks PostgreSQL, DragonflyDB, and Temporal endpoints. `pm perf compare --runtime` uses those services after the local ETL completes and, with `--json`, includes a `runtime_report` with check status, latency, redacted error text, a redacted PostgreSQL endpoint, and DragonflyDB/Temporal topology endpoints. Those endpoints are not credentials, and decrypted secrets are not printed. `pm perf sync-modes` benchmarks the supported local sync modes. Perf workload flags are bounded: `--iterations` accepts 1 through 1000 and `--records` accepts 1 through 100000; invalid values exit `3` (`validation_error`).
+`pm runtime doctor` checks PostgreSQL, DragonflyDB, and Temporal endpoints without requiring live services or credentials. If optional services are absent, the command emits a report with per-check `error` status and degraded mode rather than treating absence as a runtime-error exit. `pm perf compare --runtime` uses those services after the local ETL completes and, with `--json`, includes a `runtime_report` with check status, latency, redacted error text, and sanitized endpoints. Reported PostgreSQL, DragonflyDB, and Temporal endpoints remove userinfo, query strings, fragments, and control characters; decrypted secrets are not printed. `pm perf sync-modes` benchmarks the supported local sync modes. Perf workload flags are bounded: `--iterations` accepts 1 through 1000 and `--records` accepts 1 through 100000; invalid values exit `3` (`validation_error`).
 
 ## Documentation gate
 

@@ -12,6 +12,18 @@
 - [x] `git diff --check origin/feat/cli-architecture-v2...HEAD`
 - [x] `git diff -- go.mod go.sum`
 
+## Review-fix gate checklist
+
+- [x] `gofmt -w cmd internal`
+- [x] `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1`
+- [x] `go test ./internal/runtimecheck/... -count=1`
+- [x] `go vet ./...`
+- [x] `go test -timeout 20m ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
+- [x] `git diff --check`
+- [x] `git diff -- go.mod go.sum`
+
 ## CLI parity checklist
 
 - [x] Golden transcript diff empty; no fixture changes.
@@ -26,6 +38,17 @@
 - [x] `docs/cli/runtime.md` parity checked by docs-generate-diff; no update needed because help unchanged.
 - [x] Website docs/source/generated data checked under `website/**`; no update needed because generated docs unchanged.
 - [x] Generated help/manual artifacts checked via existing generator/docs validation.
+
+## Review-fix CLI/docs/security checklist
+
+- [x] `runtime doctor` help clarifies no live services or credentials are required.
+- [x] `runtime doctor` help/docs clarify absent optional services are reported in output status/degraded mode and do not cause runtime-error exit.
+- [x] `docs/cli/runtime.md` regenerated/updated with embedded help text.
+- [x] `website/content/docs/architecture.mdx` and `website/content/docs/cli-reference.mdx` updated for runtime doctor optional-service semantics.
+- [x] Website generated docs data refreshed if generator output changes.
+- [x] Golden transcripts updated/reviewed for intentional runtime help wording change.
+- [x] DragonflyDB and Temporal reported endpoints are sanitized/redacted for userinfo/query/fragment/control chars.
+- [x] PR body records `internal/worker/podman_cmd.go` / `internal/worker/submit.go` high finding as out-of-scope because PR #460 does not change those files.
 
 ## Optional / safety-limited
 
@@ -86,3 +109,43 @@ git diff -- go.mod go.sum
 Result: pass. Docs generated to temp dir; docs diff emitted no output; docs validate passed; website docs generator wrote 11 docs pages; diff-check and go.mod/go.sum diff emitted no output.
 
 Sub-PR opened: https://github.com/polymetrics-ai/cli/pull/460. Remote checks/review pending at artifact update.
+
+## Review-fix results
+
+```bash
+go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1
+go test ./internal/runtimecheck/... -count=1
+```
+
+Result: pass (`ok  \tpolymetrics.ai/internal/cli\t17.208s`; `ok  \tpolymetrics.ai/internal/runtimecheck\t0.364s`).
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test -timeout 20m ./...
+go build ./cmd/pm
+make verify
+```
+
+Result: pass. `go test -timeout 20m ./...` passed; slow packages included `internal/cli 222.610s`, `internal/connectors/certify 369.637s`, and `internal/runtimecheck 2.323s`. `make verify` passed and ended with `connectorgen validate: 547 connector(s) checked, 0 findings`; `gofmt`, `go vet`, and `go build` emitted no output.
+
+```bash
+npm --prefix website run gen:docs
+TMP_DOCS=$(mktemp -d); ./pm docs generate --dir "$TMP_DOCS/cli" --connectors-dir "$TMP_DOCS/connectors"; diff -ru docs/cli "$TMP_DOCS/cli"; ./pm docs validate --connectors-dir docs/connectors
+git diff --check
+git diff -- go.mod go.sum
+```
+
+Result: pass. Website generator wrote 11 docs pages; docs generate/validate passed; `diff -ru`, `git diff --check`, and go.mod/go.sum diff emitted no output.
+
+```bash
+./pm runtime --root
+./pm runtime doctor --root
+./pm --json runtime --root
+./pm --root "$ROOT" --json runtime doctor
+./pm help runtime
+./pm runtime
+./pm runtime --help
+```
+
+Result: pass. Malformed known `--root` flags exited 2 with usage JSON when JSON was requested; runtime doctor with absent services emitted degraded status and sanitized endpoints; help/bare/`--help` stayed in parity and documented optional-service semantics.

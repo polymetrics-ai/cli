@@ -623,8 +623,8 @@ func mapCobraErr(err error) error {
 	if message == "" {
 		return err
 	}
-	if strings.Contains(message, "unknown command") || strings.Contains(message, "unknown flag") || strings.Contains(message, "unknown shorthand flag") {
-		return usageErrorf("%s", message)
-	}
-	return err
+	// Non-legacy errors reaching this shim are produced by Cobra/pflag before a
+	// command RunE handler starts. Treat all such parse/selection failures as
+	// usage errors so native commands keep the CLI exit-code taxonomy.
+	return usageErrorf("%s", message)
 }

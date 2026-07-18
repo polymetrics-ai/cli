@@ -20,6 +20,6 @@ Result:
 
 Downstream artifact: `.planning/phases/424-runtime-native-cobra/PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, `RUN-STATE.json`.
 
-Verification result: pass — red runtime/router tests captured; focused runtime/golden, full internal CLI, `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, runtime help/docs/website parity, and diff guards passed. Sub-PR: https://github.com/polymetrics-ai/cli/pull/460; remote checks/review pending.
+Verification result: pass — PR #460 review-fix command refresh used `scripts/gsd doctor && scripts/gsd list`, `scripts/gsd prompt plan-phase 424-runtime-native-cobra --skip-research >/tmp/gsd-plan-phase-424-runtime-native-cobra-review-fix.prompt`, and the same blocked `programming-loop` prompt path (`scripts/gsd: unknown GSD command: programming-loop`). Fixed Cobra/pflag parse usage mapping, runtime optional-service docs, and DragonflyDB/Temporal endpoint sanitization. Focused tests, full gates, docs/website/golden parity, and diff guards passed. User disallowed Claude/Copilot.
 
 Execution decision: `local_critical_path` — worker cwd/branch isolated; no subagent tool available; no delegation.

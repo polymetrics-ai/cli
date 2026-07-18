@@ -30,6 +30,60 @@ func TestRedactedConfigHidesPostgresPassword(t *testing.T) {
 	}
 }
 
+func TestRedactedConfigSanitizesAllRuntimeEndpoints(t *testing.T) {
+	marker := "pm-review-fix-endpoint-secret"
+	cfg := Config{
+		PostgresURL:   "postgres://user:" + marker + "@postgres.local:5432/db?password=" + marker + "#frag" + marker,
+		DragonflyAddr: "redis://user:" + marker + "@dragonfly.local:6379/0?token=" + marker + "#frag" + marker,
+		TemporalAddr:  "temporal://user:" + marker + "@temporal.local:7233/ns?token=" + marker + "#frag" + marker + "\nINJECT",
+	}
+
+	got := RedactedConfig(cfg)
+	assertRuntimeEndpointSafe(t, "postgres_url", got.PostgresURL, marker)
+	assertRuntimeEndpointSafe(t, "dragonfly_addr", got.DragonflyAddr, marker)
+	assertRuntimeEndpointSafe(t, "temporal_addr", got.TemporalAddr, marker)
+	if got.PostgresURL != "postgres://***@postgres.local:5432/db" {
+		t.Fatalf("PostgresURL = %q, want redacted URL without query/fragment", got.PostgresURL)
+	}
+	if got.DragonflyAddr != "dragonfly.local:6379" {
+		t.Fatalf("DragonflyAddr = %q, want sanitized topology endpoint", got.DragonflyAddr)
+	}
+	if got.TemporalAddr != "temporal.local:7233" {
+		t.Fatalf("TemporalAddr = %q, want sanitized topology endpoint", got.TemporalAddr)
+	}
+}
+
+func TestRuntimeCheckResultsSanitizeServiceEndpointsAndErrors(t *testing.T) {
+	marker := "pm-review-fix-check-secret"
+	cfg := Config{
+		DragonflyAddr: "redis://user:" + marker + "@127.0.0.1:2/0?token=" + marker + "#frag" + marker,
+		TemporalAddr:  "temporal://user:" + marker + "@127.0.0.1:3/ns?token=" + marker + "#frag" + marker + "\nINJECT",
+		Timeout:       20 * time.Millisecond,
+	}
+
+	dragonfly := checkDragonfly(context.Background(), cfg)
+	temporal := checkTemporal(context.Background(), cfg)
+	if dragonfly.Endpoint != "127.0.0.1:2" {
+		t.Fatalf("dragonfly endpoint = %q, want sanitized topology endpoint", dragonfly.Endpoint)
+	}
+	if temporal.Endpoint != "127.0.0.1:3" {
+		t.Fatalf("temporal endpoint = %q, want sanitized topology endpoint", temporal.Endpoint)
+	}
+	assertRuntimeEndpointSafe(t, "dragonfly endpoint", dragonfly.Endpoint, marker)
+	assertRuntimeEndpointSafe(t, "dragonfly error", dragonfly.Error, marker)
+	assertRuntimeEndpointSafe(t, "temporal endpoint", temporal.Endpoint, marker)
+	assertRuntimeEndpointSafe(t, "temporal error", temporal.Error, marker)
+}
+
+func assertRuntimeEndpointSafe(t *testing.T, label, value, marker string) {
+	t.Helper()
+	for _, forbidden := range []string{marker, "user:", "token=", "password=", "#frag", "\n", "\r", "\t", "\x1b"} {
+		if strings.Contains(value, forbidden) {
+			t.Fatalf("%s leaked %q in %q", label, forbidden, value)
+		}
+	}
+}
+
 func TestRedactedConfigScrubsPostgresQuerySecretsAndMalformedDSNs(t *testing.T) {
 	cases := []struct {
 		name string

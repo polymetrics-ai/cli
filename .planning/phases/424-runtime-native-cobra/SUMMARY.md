@@ -1,6 +1,6 @@
 # Phase 424 Summary
 
-Status: PR #460 open against `feat/cli-architecture-v2`; local verification passed; remote checks/review pending.
+Status: PR #460 review-fix local verification passed on `refactor/424-runtime-native-cobra`; no Claude/Copilot requested.
 
 ## Current state
 
@@ -33,6 +33,13 @@ Docs/website/generated checks passed: `./pm docs generate` temp diff against `do
 Diff guards passed: `git diff --check origin/feat/cli-architecture-v2...HEAD`; `git diff -- go.mod go.sum` empty.
 
 Sub-PR #460 opened non-draft against `feat/cli-architecture-v2`; remote checks and Claude auto-review coverage pending. Claude/Copilot not manually requested.
+
+## Review-fix status
+
+- Fixed in scope: Cobra/pflag parse-error usage mapping, runtime optional-service docs, DragonflyDB/Temporal endpoint sanitization.
+- Red/green/full-gate evidence tracked in `TDD-LEDGER.md` and `VERIFICATION.md`.
+- High security finding against `internal/worker/podman_cmd.go` / `internal/worker/submit.go` checked against PR diff: not changed by PR #460; disposition recorded as out-of-scope follow-up, no code fix here.
+- User disallowed Claude/Copilot; review route is human/parent-orchestrator only.
 
 ## Safety
 

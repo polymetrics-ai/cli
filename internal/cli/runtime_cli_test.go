@@ -7,6 +7,35 @@ import (
 	"testing"
 )
 
+func TestRuntimeMalformedKnownGlobalFlagsAreUsageErrors(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "runtime missing root value", args: []string{"--json", "runtime", "--root"}},
+		{name: "runtime doctor missing root value", args: []string{"--json", "runtime", "doctor", "--root"}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := Run(tt.args, &stdout, &stderr)
+			if code != 2 {
+				t.Fatalf("Run(%v) exit = %d, want 2; stdout=%s stderr=%s", tt.args, code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(stdout.String(), `"category": "usage"`) {
+				t.Fatalf("Run(%v) stdout missing usage JSON:\n%s", tt.args, stdout.String())
+			}
+			if strings.Contains(stdout.String(), `"category": "internal"`) {
+				t.Fatalf("Run(%v) misclassified Cobra parse error as internal:\n%s", tt.args, stdout.String())
+			}
+			if !strings.Contains(stderr.String(), "flag needs an argument") {
+				t.Fatalf("Run(%v) stderr missing pflag parse diagnostic:\n%s", tt.args, stderr.String())
+			}
+		})
+	}
+}
+
 func TestRuntimeBareHelpAndInvalidActionSemantics(t *testing.T) {
 	var helpOut, helpErr bytes.Buffer
 	if code := Run([]string{"help", "runtime"}, &helpOut, &helpErr); code != 0 {
