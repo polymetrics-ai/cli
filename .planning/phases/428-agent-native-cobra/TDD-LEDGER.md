@@ -18,12 +18,14 @@ Session: `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | C0 | Planning | Update PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE with accepted High, Sol/high identity, exact start, bounded slice, and gates | Complete before test/production edits |
-| C1 | RED | Add fake-runtime action-boundary table for both levels and build/pull/ensure; run focused agent test | Pending |
+| C1 | RED | Add fake-runtime action-boundary table for both levels and build/pull/ensure; `go test ./internal/cli -run '^TestAgentLeadingInvalidActionTokensCannotReachImageRuntime$' -count=1` | Failed as expected before production edits (`0.587s`) |
 | C2 | GREEN | Agent-scoped pre-Cobra exact-action boundary plus image-parent positional rejection before runtime lookup | Pending |
 | C3 | Refactor | Focused/race agent tests and base differential for invalid heads plus preserved valid/help/literal routes | Pending |
 | C4 | Verify | gofmt, vet, build, diff/scope/dependency checks; full CLI only if needed | Pending |
 
 Correction RED cases cross `build`, `pull`, and `ensure` with these leading forms at both `agent` and `agent image`: `--unknown=x`, bare `--unknown`, short `-x`, assigned help-like `--help=false`, and literal `--`. Every case must return usage and leave fake runtime lookups, file checks, and runs empty. Exact agent help and exact actions remain valid; unknown/help/literal tokens after an exact action retain the established compatibility contract.
+
+Exact correction RED was captured before production edits. All agent-level assigned unknown/help-like cases returned success and reached later actions; all image-level assigned unknown cases returned success and reached later actions; image-level assigned help-like cases performed a runtime lookup; image-level literal-boundary cases returned success and reached later actions. Bare/short cases already failed closed. The focused command exited 1 with package failure in `0.587s`.
 
 ## Planned red / green / refactor log
 

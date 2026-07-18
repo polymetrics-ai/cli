@@ -293,6 +293,57 @@ func TestAgentImageActionsUseInjectedRuntime(t *testing.T) {
 	}
 }
 
+func TestAgentLeadingInvalidActionTokensCannotReachImageRuntime(t *testing.T) {
+	root := t.TempDir()
+	levels := []struct {
+		name   string
+		prefix []string
+	}{
+		{name: "agent", prefix: []string{"agent"}},
+		{name: "image", prefix: []string{"agent", "image"}},
+	}
+	leadingTokens := []struct {
+		name string
+		args []string
+	}{
+		{name: "assigned unknown", args: []string{"--unknown=x"}},
+		{name: "bare unknown", args: []string{"--unknown"}},
+		{name: "short unknown", args: []string{"-x"}},
+		{name: "assigned help-like", args: []string{"--help=false"}},
+		{name: "literal boundary", args: []string{"--"}},
+	}
+
+	for _, level := range levels {
+		for _, leading := range leadingTokens {
+			for _, action := range []string{"build", "pull", "ensure"} {
+				name := strings.Join([]string{level.name, leading.name, action}, "/")
+				t.Run(name, func(t *testing.T) {
+					args := append([]string(nil), level.prefix...)
+					args = append(args, leading.args...)
+					if level.name == "agent" {
+						args = append(args, "image")
+					}
+					args = append(args, action)
+
+					fake := &fakeAgentImageRuntime{}
+					var stdout, stderr bytes.Buffer
+					cmd := newRootCmdWithAgentImageRuntime(context.Background(), agentTestConfig(root, false), &stdout, &stderr, fake)
+					err := executeRootCmd(cmd, args)
+					if err == nil || exitCodeFor(classifyError(mapCobraErr(err))) != 2 {
+						t.Fatalf("executeRootCmd(%v) err=%v, want usage error", args, err)
+					}
+					if len(fake.lookups) != 0 || len(fake.files) != 0 || len(fake.calls) != 0 {
+						t.Fatalf("invalid action head reached runtime: lookups=%v files=%v calls=%v", fake.lookups, fake.files, fake.calls)
+					}
+					if stdout.Len() != 0 {
+						t.Fatalf("invalid action head leaked output: %q", stdout.String())
+					}
+				})
+			}
+		}
+	}
+}
+
 func TestAgentImageNativeActionsPreserveUnknownFlagsHelpAndSeparator(t *testing.T) {
 	root := t.TempDir()
 	for _, args := range [][]string{

@@ -9,7 +9,7 @@ Correction session `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-202607
 - [x] Review log read and High finding accepted.
 - [x] GSD doctor/list passed; programming-loop adapter command retried and manual fallback recorded.
 - [x] Required GSD, CLI/Cobra, testing, error, security, safety, and lint skills loaded.
-- [ ] Focused fake-runtime tests fail before production edits for agent/image leading assigned/bare/short/help-like/literal heads followed by build/pull/ensure.
+- [x] Focused fake-runtime tests failed before production edits for agent/image leading assigned/bare/short/help-like/literal heads followed by build/pull/ensure (`0.587s`; assigned unknown/help-like and image literal cases exposed the defect).
 - [ ] Corrected cases return usage with zero runtime lookups, file checks, or runs.
 - [ ] Exact agent/image actions, agent help, valid action-tail help/unknown tokens, and literal `--` after exact actions remain compatible.
 - [ ] Focused agent tests pass.

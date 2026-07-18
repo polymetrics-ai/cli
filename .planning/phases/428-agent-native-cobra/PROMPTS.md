@@ -10,9 +10,9 @@ GSD doctor/list passed. `scripts/gsd prompt programming-loop init --phase 428-ag
 
 Execution decision: `local_critical_path` — urgent accepted finding in the isolated serialized router scope; no subagent tool, container/services, PR, or external review.
 
-Downstream artifact: pending focused RED, smallest agent-scoped router compatibility fix, local verification, commit, and push.
+Downstream artifact: focused fake-runtime RED added in `internal/cli/agent_cli_test.go`; smallest agent-scoped router compatibility fix and local verification remain pending.
 
-Verification result: pending.
+Verification result: focused RED failed as expected before production edits (`0.587s`): assigned unknown/help-like and image literal heads reached later actions or runtime lookup; bare/short forms already failed closed.
 
 ## Kickoff snapshot
 

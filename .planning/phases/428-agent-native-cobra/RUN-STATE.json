@@ -56,9 +56,14 @@
       "cycle": "high-finding-correction-plan",
       "decision": "local_critical_path",
       "reason": "accepted one urgent bounded security/compatibility finding in the already-isolated serialized worktree; tests and router normalization share one scope, no subagent tool is available, and PR/external review are prohibited"
+    },
+    {
+      "cycle": "high-finding-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "the focused fake-runtime table failed before production edits: assigned unknown/help-like heads and image literal boundaries reached later actions or runtime lookup while bare and short forms already failed closed"
     }
   ],
-  "red": "focused agent/router test build failed as expected before production edits: runAgentImageAction and newRootCmdWithAgentImageRuntime were undefined",
+  "red": "initial focused agent/router build RED plus correction RED: TestAgentLeadingInvalidActionTokensCannotReachImageRuntime failed before correction production edits in 0.587s because assigned unknown/help-like and image literal heads reached later actions or runtime lookup",
   "green": "focused 4.408s; expanded 4.480s; final 4.386s; agent/router/golden 11.408s; full CLI 235.686s",
   "verification": "focused race, final golden, runtime dependency-free tests, 25-case exact legacy differential, built help/plan/error checks, docs generation/validation, website generation, gofmt, vet, build, full repository tests, make verify, and dependency/scope guards passed",
   "files": [
