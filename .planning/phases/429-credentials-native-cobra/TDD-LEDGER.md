@@ -18,7 +18,7 @@ Session `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`; exact 
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | F0 | Review/plan | Record the final-file symlink escape, effect-time `os.Root` design, temp-only RED matrix, shared-seam gates, and commit/push checkpoints before production edits | Complete |
-| F1 | RED | Add focused Warehouse/Outbox/app append/truncate/create final-link tests; external targets must remain absent or byte-unchanged | Pending |
+| F1 | RED | `go test ./internal/connectors -run 'Test(Warehouse|Outbox)WriteRejectsFinalFileSymlinkEscape$' -count=1`; `go test ./internal/app -run '^TestWarehouseMaterializationRejectsFinalFileSymlinkEscape$' -count=1` | Failed as required: all 5 connector and all 6 app append/truncate/create cases followed final-file links outside the root; connectors `0.317s` (wall `0.97s`), app `3.359s` (wall `6.31s`) |
 | F2 | GREEN | Introduce the standard-library rooted local-write effect helper and route every relevant final open/rename through it while preserving explicit external and nil-policy behavior | Pending |
 | F3 | Verify | Focused/repeated/race safety/connectors/app/CLI; full repository; gofmt/vet/build/`make verify`; scope/dependency guards | Pending |
 

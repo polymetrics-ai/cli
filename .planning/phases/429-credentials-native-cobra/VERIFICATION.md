@@ -8,9 +8,9 @@ Invocation `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`; exa
 
 - [x] Read `/tmp/pm-397-rereview3-429.log` and accept the HIGH final-file symlink finding.
 - [x] Run GSD doctor/list, record missing programming-loop/manual fallback, load required skills/policies, inspect Go 1.25 `os.Root`, and update issue artifacts before production edits.
-- [ ] RED: temp-only Warehouse append/truncate/create final-link cases fail before production edits without printing target contents.
-- [ ] RED: temp-only Outbox append/create final-link cases fail before production edits without printing target contents.
-- [ ] RED: temp-only app append/truncate/create materialization final-link cases fail before production edits without printing target contents.
+- [x] RED: temp-only Warehouse append/truncate/create final-link cases failed before production edits; all 3 followed the link (`internal/connectors`, package `0.317s`) without printing target contents.
+- [x] RED: temp-only Outbox append/create final-link cases failed before production edits; both followed the link (same focused connectors run) without printing target contents.
+- [x] RED: temp-only app append/truncate/create and deduped truncate/create materialization final-link cases failed before production edits; all 6 followed the link (`internal/app`, package `3.359s`) without printing target contents.
 - [ ] GREEN: confined local writes use effect-time rooted standard-library operations for all relevant directory, open, cleanup, and rename effects.
 - [ ] GREEN: explicit `allow_external_path=true`, nil-policy compatibility, file modes, append/overwrite semantics, in-root symlinks, and nonexisting paths remain supported.
 - [ ] Focused/repeated/race safety/connectors/app/CLI, broader package gates, full repository, gofmt, vet, build, and `make verify` pass.

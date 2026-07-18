@@ -45,7 +45,7 @@
   "fourthCorrectionStartingHead": "0d70335f37456f42432b3c502860f7b43231ed98",
   "fourthCorrectionSource": "/tmp/pm-397-rereview3-429.log",
   "fourthCorrectionFindingsAccepted": ["HIGH_final_file_symlink_escape"],
-  "status": "fourth_correction_planned_tdd_pending",
+  "status": "fourth_correction_red_captured",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -57,6 +57,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "fourth-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "all five Warehouse/Outbox and all six app append/truncate/create final-link cases failed before production edits by reaching external targets"
+    },
     {
       "cycle": "fourth-correction-plan",
       "decision": "local_critical_path",
@@ -214,6 +219,7 @@
   "reviewCorrectionRed": "focused internal/cli test failed in 6.546s before production edits and reproduced all accepted findings without secret material or external services",
   "reviewCorrectionGreen": "focused safety and CLI passed in 8.257s; full credentials in 46.463s; safety and app in 23.300s; focused race safety and CLI in 109.283s",
   "reviewCorrectionVerification": "pass: repeated correction 49.385s; repeated safety 0.560s; full CLI 282.493s; full repository CLI 284.380s and certify 340.838s; exact base help 2/2; golden/manual 6.146s; gofmt, vet, build, and make verify passed; lint 0 and connector validation 547/0",
+  "fourthCorrectionRed": "focused temp-only tests failed before production edits: all 5 Warehouse/Outbox and all 6 app append/truncate/create final-file symlink cases followed links outside the selected root; connectors 0.317s and app 3.359s",
   "thirdCorrectionRed": "12-case add/inspect/test/remove by assigned/bare/spaced raw-carrier matrix failed before production edits in 11.651s; assigned/spaced forms overrode every action and add/bare returned runtime code 3 instead of usage 2",
   "thirdCorrectionGreen": "hidden pflag removed; private command-context carriage and raw-carrier rejection passed focused/adversarial in 34.099s, repeated five times in 56.733s, and focused race in 273.254s",
   "thirdCorrectionVerification": "pass: seven preserved exact-base cases matched exit/stdout/stderr byte-for-byte; all 12 current raw-carrier cases exited usage 2; full CLI passed in 332.836s; gofmt, vet, build, diff, scope, and dependency gates passed",
