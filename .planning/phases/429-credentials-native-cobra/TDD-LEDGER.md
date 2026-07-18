@@ -19,10 +19,12 @@ Session `issue-429-action-name-boundary-fix-pi-openai-codex-gpt-5.6-sol-high-202
 |---:|---|---|---|
 | C0 | Review/plan | Identify post-action positional-name discovery bypass; update phase artifacts before correction production edit | Complete |
 | C1 | RED | `go test ./internal/cli -run '^TestCredentialsLeadingInvalidNameTokensCannotDiscoverLaterNames$' -count=1` | Failed before correction: 8/10 assigned-unknown, short, assigned-help-like, and literal add/remove cases executed later names; package `7.940s` |
-| C2 | GREEN | Insert required-name boundary and strict credential/connector leading-character validation | Pending |
-| C3 | Verify | Focused/repeated/race, exact differential, full CLI if warranted, formatting/static/build/scope | Pending |
+| C2 | GREEN | Insert required-name boundary and strict credential/connector leading-character validation | Pass: correction+strict names `18.166s`; full focused `40.299s` |
+| C3 | Verify | Focused/repeated/race, exact differential, full CLI if warranted, formatting/static/build/scope | In progress: repeated `62.622s`; race `248.367s`; golden `5.602s`; full post-correction gates pending |
 
 The correction tests use config-only temporary credentials and no secret source. Bare unknown cases already failed closed; the eight failing cases prove Cobra consumed an invalid first name token and discovered a later name.
+
+GREEN inserts a literal boundary immediately after exact name-taking actions when the legacy first-name token begins with `-`. The child receives that token as the name and rejects it before connector/source lookup; Cobra cannot consume it and discover a later name. Credential and connector names now require an ASCII alphanumeric first character after the existing identifier/path-traversal checks. Ten add/remove boundary cases pass, full focused tests pass, repeated correction tests pass five times, focused race passes, and goldens remain unchanged.
 
 ## Planned red / green / refactor log
 

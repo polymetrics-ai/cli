@@ -304,6 +304,12 @@ func validateCredentialIdentifier(value, field string) error {
 	if err := safety.ValidateIdentifier(value, field); err != nil {
 		return validationErrorf("%v", err)
 	}
+	if field == "credential" || field == "connector" {
+		first := value[0]
+		if !((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z') || (first >= '0' && first <= '9')) {
+			return validationErrorf("%s must start with an ASCII letter or digit", field)
+		}
+	}
 	return nil
 }
 

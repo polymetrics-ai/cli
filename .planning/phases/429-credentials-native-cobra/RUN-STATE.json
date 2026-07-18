@@ -15,7 +15,7 @@
   "correctionInvocationSession": "issue-429-action-name-boundary-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T151236Z",
   "correctionStartedAt": "20260718T151236Z",
   "correctionStartingHead": "36b2e388d78aea5e79dac63b10f6310d25002198",
-  "status": "correction_red_pending_fix",
+  "status": "correction_green_pending_final_verification",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -44,11 +44,16 @@
       "cycle": "correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "local security review found post-action positional-name discovery; focused add/remove state tests failed before correction production edits in eight assigned-unknown, short, assigned-help-like, and literal cases"
+    },
+    {
+      "cycle": "correction-green",
+      "decision": "local_critical_path",
+      "reason": "required-name literal boundary and strict credential/connector leading-character validation make all ten add/remove cases fail closed; focused, repeated, race, and golden tests pass"
     }
   ],
   "red": "go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed before production edits: internal/cli/credentials_cli_test.go:22:9 undefined newCredentialsCobraCommand",
   "green": "focused credentials/router passed in 25.475s; focused race subset passed in 111.267s; golden passed in 5.513s; exact legacy differential matched 28/28 preserved cases",
-  "verification": "full verification pending",
+  "verification": "initial full gates passed before correction; post-correction focused 40.299s, repeated 62.622s, race 248.367s, and golden 5.602s pass; final full rerun pending",
   "files": [
     ".planning/phases/429-credentials-native-cobra/PLAN.md",
     ".planning/phases/429-credentials-native-cobra/TDD-LEDGER.md",

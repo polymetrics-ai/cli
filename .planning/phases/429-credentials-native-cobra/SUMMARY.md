@@ -1,6 +1,6 @@
 # Phase 429 Summary
 
-Status: focused GREEN complete; full verification pending.
+Status: native implementation and local security correction GREEN; final post-correction verification pending.
 
 ## Identity
 
@@ -9,6 +9,10 @@ Status: focused GREEN complete; full verification pending.
 - Branch: `refactor/429-credentials-native-cobra`
 - Exact start: `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`
 - Parent: #397; umbrella: #407; draft parent PR #438
+
+## Local security correction
+
+A post-implementation local review found that Cobra could consume an invalid first name token after an exact add/remove action and discover a later name. Test-first correction reproduced eight bypasses. A required-name literal boundary now preserves the first token as the name, and credential/connector names must begin with an ASCII alphanumeric character. Focused, repeated, race, and golden correction gates pass; no secret source or external action was used.
 
 ## Delivered in focused GREEN
 

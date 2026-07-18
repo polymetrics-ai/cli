@@ -171,7 +171,16 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 
 func normalizeCredentialsActionBoundary(args []string) ([]string, bool) {
 	switch args[1] {
-	case "add", "list", "inspect", "test", "remove", "help", "-h", "--help":
+	case "add", "inspect", "test", "remove":
+		if len(args) >= 3 && strings.HasPrefix(args[2], "-") {
+			out := make([]string, 0, len(args)+1)
+			out = append(out, args[:2]...)
+			out = append(out, "--")
+			out = append(out, args[2:]...)
+			return out, true
+		}
+		return args, false
+	case "list", "help", "-h", "--help":
 		return args, false
 	}
 

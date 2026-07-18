@@ -238,7 +238,10 @@ func TestCredentialsStrictNamesAndPathContainment(t *testing.T) {
 		args []string
 	}{
 		{name: "add credential traversal", args: []string{"add", "../credential", "--connector=sample"}},
+		{name: "add credential leading hyphen", args: []string{"add", "-credential", "--connector=sample"}},
+		{name: "add credential leading underscore", args: []string{"add", "_credential", "--connector=sample"}},
 		{name: "add connector traversal", args: []string{"add", "credential", "--connector=../sample"}},
+		{name: "add connector leading hyphen", args: []string{"add", "credential", "--connector=-sample"}},
 		{name: "inspect traversal", args: []string{"inspect", "../credential"}},
 		{name: "test traversal", args: []string{"test", "../credential"}},
 		{name: "remove traversal", args: []string{"remove", "../credential"}},
