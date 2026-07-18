@@ -1,0 +1,47 @@
+{
+  "phase": 429,
+  "issue": 429,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/429-credentials-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "0f1ec1e89cdae761e9da06ab9906fcc641b38e0a",
+  "invocationSession": "issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z",
+  "startedAt": "20260718T143346Z",
+  "endedAt": null,
+  "model": "openai-codex/gpt-5.6-sol",
+  "thinking": "high",
+  "status": "planned",
+  "verificationPassed": false,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "ninth serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later units, the session exposes no subagent tool, and the user restricted work to issue 429 with no PR or external review"
+    }
+  ],
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "files": [
+    ".planning/phases/429-credentials-native-cobra/PLAN.md",
+    ".planning/phases/429-credentials-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/429-credentials-native-cobra/VERIFICATION.md",
+    ".planning/phases/429-credentials-native-cobra/PROMPTS.md",
+    ".planning/phases/429-credentials-native-cobra/SUMMARY.md",
+    ".planning/phases/429-credentials-native-cobra/RUN-STATE.json"
+  ],
+  "commits": [],
+  "push": "pending",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "external_review_prohibited",
+  "safety": "no real secrets, interactive secret entry, credentialed checks, optional services, dependencies, destructive actions, or unrelated writes; tests use opaque synthetic fixtures without logging"
+}
