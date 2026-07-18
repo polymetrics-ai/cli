@@ -75,6 +75,7 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
+	cmd.AddCommand(newSkillsCobraCommand(stdout, jsonOut))
 	cmd.AddCommand(newVersionCobraCommand(stdout, jsonOut))
 	return cmd
 }
@@ -108,6 +109,9 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 	if len(args) >= 2 && args[0] == "perf" && args[1] == "sync-modes" {
 		return normalizeStringArraySpaceValues(args, 2, perfSyncModesFlagNames)
 	}
+	if len(args) >= 2 && args[0] == "skills" && args[1] == "generate" {
+		return normalizeStringArraySpaceValues(args, 2, skillsGenerateFlagNames)
+	}
 	return args
 }
 
@@ -139,6 +143,10 @@ var perfCompareFlagNames = map[string]struct{}{
 
 var perfSyncModesFlagNames = map[string]struct{}{
 	"records": {},
+}
+
+var skillsGenerateFlagNames = map[string]struct{}{
+	"dir": {},
 }
 
 func normalizeStringArraySpaceValues(args []string, start int, flagNames map[string]struct{}) []string {
@@ -199,9 +207,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "docs", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, _ bool) error {
 			return runDocs(args, stdout)
-		}},
-		{name: "skills", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runSkills(args, stdout, jsonOut)
 		}},
 		{name: "rlm", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runRLM(ctx, cfg, root, args, stdout, jsonOut)
@@ -424,6 +429,68 @@ func newRuntimeDoctorCobraCommand(ctx context.Context, cfg config.Config, stdout
 		},
 	}
 	setManualHelp(cmd, "runtime", stdout, jsonOut)
+	return cmd
+}
+
+func newSkillsCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "skills",
+		Args:          cobra.NoArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("skills", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "skills", stdout, jsonOut)
+	cmd.AddCommand(newSkillsGenerateCobraCommand(stdout, jsonOut))
+	cmd.AddCommand(newSkillsHelpCobraCommand(stdout, jsonOut))
+	return cmd
+}
+
+func newSkillsGenerateCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	var dirs []string
+	cmd := &cobra.Command{
+		Use:           "generate",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			dir := ""
+			if len(dirs) > 0 {
+				dir = dirs[len(dirs)-1]
+			}
+			return markCobraLegacyError(runSkills(dir, stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "skills", stdout, jsonOut)
+	cmd.Flags().StringArrayVar(&dirs, "dir", nil, "destination directory for generated skills")
+	if flag := cmd.Flags().Lookup("dir"); flag != nil {
+		flag.NoOptDefVal = "true"
+	}
+	return cmd
+}
+
+func newSkillsHelpCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "help",
+		Hidden:        true,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("skills", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "skills", stdout, jsonOut)
 	return cmd
 }
 

@@ -6,18 +6,18 @@ Session `issue-426-pi-openai-codex-gpt-5.6-sol-high-20260718T104457Z`; model `op
 
 - [x] Six phase artifacts created before production edits.
 - [x] Exact focused RED captured before production edits (`29.549s`; native count/ownership failures).
-- [ ] Native `skills` namespace and `generate` action; legacy wrapper removed.
-- [ ] Native `--dir` preserves spaced, assigned, repeated, bare, comma/path forms.
-- [ ] Unknown flags and extra action args retain legacy compatibility.
-- [ ] Bare/text/JSON/flag/short/positional help parity.
-- [ ] Missing dir validation and invalid action usage categories preserved.
-- [ ] Global/config `--root`/`--json` forms, including assigned booleans, preserved.
-- [ ] Existing skill generation files, metadata-only security, and output envelopes preserved.
+- [x] Native `skills` namespace and `generate` action; legacy wrapper removed.
+- [x] Native `--dir` preserves spaced, assigned, repeated, bare, comma/path forms.
+- [x] Unknown flags and extra action args retain legacy compatibility.
+- [x] Bare/text/JSON/flag/short/positional help parity.
+- [x] Missing dir validation and invalid action usage categories preserved.
+- [x] Global/config `--root`/`--json` forms, including assigned booleans, preserved.
+- [x] Existing skill generation files, metadata-only security, and output envelopes preserved.
 
 ## Gates
 
-- [ ] Focused skills/router tests.
-- [ ] Focused skills/router/golden tests.
+- [x] Focused skills/router tests (`29.454s`).
+- [x] Focused skills/router/golden tests (`37.019s`).
 - [ ] Full `internal/cli` tests.
 - [ ] `gofmt -w cmd internal`.
 - [ ] `go vet ./...`.

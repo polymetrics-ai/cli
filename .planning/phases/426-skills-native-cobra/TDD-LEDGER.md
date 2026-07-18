@@ -17,8 +17,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create all six phase artifacts before production edits | Complete |
 | 1 | RED | `go test ./internal/cli/ -run 'Skills|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected (`29.549s`) |
-| 2 | GREEN | Native namespace/action/typed flags and legacy parser removal | Pending |
-| 3 | Refactor | Focused router/golden/full CLI tests | Pending |
+| 2 | GREEN | Native namespace/action/typed flags and legacy parser removal | Pass (`29.454s`) |
+| 3 | Refactor | Focused skills/router/golden tests | Pass (`37.019s`); full CLI pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Parity/safety | built binary, docs/website/generated/golden/dependency/scope checks | Pending |
 
@@ -45,4 +45,16 @@ FAIL\tpolymetrics.ai/internal/cli\t29.549s
 FAIL
 ```
 
-All observable skills behavior tests passed through the legacy wrapper. RED isolates the required parser ownership and registration change. Production files remain untouched at this checkpoint.
+All observable skills behavior tests passed through the legacy wrapper. RED isolates the required parser ownership and registration change. Production files remained untouched at this checkpoint.
+
+## Focused GREEN
+
+```text
+$ go test ./internal/cli/ -run 'Skills|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1
+ok  \tpolymetrics.ai/internal/cli\t29.454s
+
+$ go test ./internal/cli/... -run 'Skills|CobraRouterShell|Golden' -count=1
+ok  \tpolymetrics.ai/internal/cli\t37.019s
+```
+
+Implementation: `skills` and `skills generate` are native Cobra nodes; `--dir` is a `StringArray` with legacy bare-flag behavior and spaced-value normalization; unknown action flags remain whitelisted; positional help is a hidden compatibility node. `runSkills` accepts the typed last directory directly, so the skills-only `parseFlags` call and legacy wrapper are removed. All focused output/help/global-config/filesystem tests and unchanged goldens pass.

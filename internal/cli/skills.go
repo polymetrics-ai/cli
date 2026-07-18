@@ -17,12 +17,7 @@ type skillDoc struct {
 	Body        string
 }
 
-func runSkills(args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 || args[0] != "generate" {
-		return errUsage
-	}
-	flags := parseFlags(args[1:])
-	dir := flags.first("dir")
+func runSkills(dir string, stdout io.Writer, jsonOut bool) error {
 	if dir == "" {
 		return validationErrorf("missing --dir")
 	}

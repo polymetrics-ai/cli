@@ -10,7 +10,7 @@
   "invocationSession": "issue-426-pi-openai-codex-gpt-5.6-sol-high-20260718T104457Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "red_captured",
+  "status": "focused_green",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -29,6 +29,11 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "focused test-only edits captured exact RED for skills native registration before production edits; observable legacy behavior tests already pass"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native skills namespace, generate action, typed dir flag, positional help alias, normalization, and legacy-parser removal pass focused router and golden tests"
     }
   ],
   "commits": [],
