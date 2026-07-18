@@ -1,6 +1,6 @@
 # Phase 430 Summary
 
-Status: focused GREEN complete after strict RED from exact head `6c94754c58185df5aac53bd97587603c3154b1d5`; broad verification pending.
+Status: local review correction RED captured after initial focused GREEN; invalid-action trailing-help bypass correction pending.
 
 ## Identity
 
@@ -25,6 +25,10 @@ Fixture/local temporary connectors only. No secrets, credentialed external check
 
 Strict focused test compilation failed as required on the missing `newETLCobraCommand` constructor before production edits. Native Cobra now owns ETL check/catalog/read/run/status/help and every current typed flag. ETL-only normalization preserves repeated/bare/assigned, action-tail help, literal separator, and unknown tolerance; only ETL legacy parser calls were removed. Focused GREEN passed in `13.396s`; broader ETL/router focused tests passed in `27.999s`.
 
+## Local review correction
+
+Local review found that `etl bogus --help|-h` rendered the namespace manual and exited 0 instead of retaining an invalid-action usage error. A focused correction test failed as required before correction production edits. The action boundary must be fixed before final verification.
+
 ## Verification
 
-Refactor, parity, repeated, race, full repository, build, and `make verify` gates remain pending. No completion claim is made.
+Refactor, parity, repeated, race, full repository, build, and `make verify` gates remain pending after the correction. No completion claim is made.

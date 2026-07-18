@@ -10,7 +10,7 @@ Invocation session: `issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z
 - [x] All current flags typed with repeated/bare/assigned compatibility.
 - [x] Bare/text/JSON/long/short/positional help parity in focused tests.
 - [x] Trailing help and literal `--` compatibility in focused tests.
-- [x] Unknown flags, invalid actions, global assigned booleans, and no action-discovery bypass in focused tests.
+- [ ] Unknown flags, invalid actions, global assigned booleans, and no action-discovery bypass: local review RED exposed invalid-action trailing-help bypass; correction pending.
 - [x] Batch-size parse/default/bounded flush behavior and configured sync validation in focused tests.
 - [x] Cancellation, events, stdout/stderr, and one-envelope semantics in focused tests; broader telemetry gate pending.
 - [x] Only ETL `parseFlags` call sites removed; dynamic connector parser remains.

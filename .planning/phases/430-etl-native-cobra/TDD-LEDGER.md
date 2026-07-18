@@ -53,3 +53,15 @@ The missing native constructor is intentional. The test-only checkpoint specifie
 ## Focused GREEN
 
 `newETLCobraCommand` now owns check/catalog/read/run/status/help with typed `StringArray` flags, unknown tolerance, no-file completion seams, ETL-only spaced-value and legacy-tail normalization, and typed handlers. ETL is absent from legacy wrappers; `runETL`, `directConnector`, and their ETL `parseFlags` calls are removed. The focused contract passed in `13.396s`; the broader ETL/router focused suite passed in `27.999s`. No optional runtime service was contacted; repeated `--runtime=false` proves dependency-free default behavior.
+
+## Local review correction
+
+A local behavior review found that an invalid action followed by `--help` or `-h` was consumed by Cobra's namespace help flag and exited 0, bypassing the required invalid-action usage error. A focused test was added before correction production edits. Exact RED:
+
+```text
+--- FAIL: TestETLUnknownInvalidActionsGlobalsAndNoDiscoveryBypass
+    error code=0, want 2; stdout={"kind":"CommandManual", ...}
+FAIL polymetrics.ai/internal/cli
+```
+
+The correction must bound invalid ETL actions before Cobra parses trailing help, while preserving valid namespace/action help and literal compatibility.

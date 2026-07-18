@@ -11,7 +11,7 @@
   "startedAt": "20260718T225346Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "focused_green",
+  "status": "correction_red_captured",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -35,6 +35,11 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "native ETL actions and typed current flags, ETL-only legacy-tail normalization, bounded local runs, sync validation, cancellation, progress, output contracts, and ETL-only parser removal pass focused and broader ETL/router tests without services"
+    },
+    {
+      "cycle": "correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "local behavior review found invalid ETL actions followed by long or short help could render namespace help and exit zero; the focused action-discovery test failed before correction production edits"
     }
   ],
   "red": "focused CLI build failed before production edits: internal/cli/etl_cli_test.go:22:9 undefined newETLCobraCommand",
@@ -54,7 +59,9 @@
     "internal/cli/cli.go"
   ],
   "commits": [
-    "00963f53 docs(planning): plan etl native cobra slice"
+    "00963f53 docs(planning): plan etl native cobra slice",
+    "cdbf5b63 test(cli): specify native cobra etl contract",
+    "35c811fb refactor(cli): nativize etl namespace"
   ],
   "push": "pending",
   "pullRequest": "not_created_user_requested_no_pr",

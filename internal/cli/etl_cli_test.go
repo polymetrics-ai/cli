@@ -256,10 +256,13 @@ func TestETLHelpRoutesAndLegacyActionTailCompatibility(t *testing.T) {
 }
 
 func TestETLUnknownInvalidActionsGlobalsAndNoDiscoveryBypass(t *testing.T) {
+	root := initETLProject(t)
 	for _, args := range [][]string{
-		{"etl", "bogus", "run", "--json"},
-		{"etl", "--unknown", "run", "--connection", "missing", "--stream", "customers", "--json"},
-		{"etl", "--", "run", "--connection", "missing", "--stream", "customers", "--json"},
+		{"etl", "bogus", "run", "--root", root, "--json"},
+		{"etl", "bogus", "--help", "--root", root, "--json"},
+		{"etl", "bogus", "-h", "--root", root, "--json"},
+		{"etl", "--unknown", "run", "--connection", "missing", "--stream", "customers", "--root", root, "--json"},
+		{"etl", "--", "run", "--connection", "missing", "--stream", "customers", "--root", root, "--json"},
 	} {
 		stdout, stderr, code := runETLCLI(args...)
 		assertCLIError(t, code, stdout, stderr, 2, "usage", "")
