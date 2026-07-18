@@ -41,9 +41,9 @@ Result:
 | Step | Kind | Command / test | Result | Notes |
 |---:|---|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS | Green | Pre-production artifact checkpoint; no production code touched. |
-| 1 | Red | Planned: `go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -count=1` | Pending | Should fail because `runtime` remains a legacy wrapper and native `doctor` subcommand is missing. |
-| 2 | Green | Pending | Pending | Native runtime parser slice. |
-| 3 | Refactor | Pending | Pending | Focused/full gates and parity checks. |
+| 1 | Red | `go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -count=1` | Fail | `runtime` remains a legacy wrapper and native `doctor` subcommand is missing. |
+| 2 | Green | `gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/runtime_cli_test.go`; `go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -count=1` | Pass | Native runtime parser green; bare help, JSON manual, invalid action category, unknown flags, extra args, config endpoints, and redaction preserved. |
+| 3 | Refactor | `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1`; `go test ./internal/cli/...`; `go vet ./...`; `go build ./cmd/pm` | Pass | Focused/golden, full internal CLI package, vet, and build green. |
 
 ## Planned red tests
 
@@ -53,8 +53,46 @@ Result:
 
 ## Exact red outputs
 
-Pending — capture before production code edits.
+```bash
+go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -count=1
+```
+
+```text
+--- FAIL: TestCobraRouterShellBuildsFreshHiddenWrapperTree (0.00s)
+    cobra_router_test.go:55: expectedHidden covers 21 commands, legacy commands plus native commands registers 22
+--- FAIL: TestRuntimeCommandIsNativeCobraSubtree (0.00s)
+    cobra_router_test.go:181: runtime command must use native Cobra flag parsing
+FAIL
+FAIL	polymetrics.ai/internal/cli	11.563s
+FAIL
+```
 
 ## Exact green outputs
 
-Pending.
+```bash
+gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/runtime_cli_test.go
+go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	11.749s
+```
+
+```bash
+go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	17.329s
+```
+
+```bash
+go test ./internal/cli/...
+go vet ./...
+go build ./cmd/pm
+```
+
+```text
+ok  	polymetrics.ai/internal/cli	195.015s
+# go vet and go build emitted no output and exited 0
+```

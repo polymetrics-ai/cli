@@ -8,7 +8,7 @@
   "baseHeadAtDispatch": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "baseHeadAtPlanning": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "verificationPassed": false,
-  "status": "planning_checkpoint_created_pre_production",
+  "status": "green_runtime_native_slice_focused_gates_passed",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-424-runtime-native-cobra.prompt",
@@ -21,6 +21,16 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "fourth serialized Phase 9 namespace worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for native runtime subtree, doctor compatibility, bare help, JSON manual, invalid action usage, config endpoint use, and unknown-flag tolerance; no subagent available"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native runtime Cobra subtree implemented in allowed internal/cli scope; focused runtime/router/golden gate, full internal CLI tests, vet, and build passed"
     }
   ],
   "pullRequest": null,

@@ -50,7 +50,7 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 	for _, spec := range cobraLegacyCommands(config.Config{}) {
 		legacyCommands[spec.name] = struct{}{}
 	}
-	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}}
+	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}, "runtime": {}}
 	if len(expectedHidden) != len(legacyCommands)+len(nativeCommands) {
 		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native commands registers %d", len(expectedHidden), len(legacyCommands)+len(nativeCommands))
 	}
@@ -168,6 +168,38 @@ func TestQueryCommandIsNativeCobraSubtree(t *testing.T) {
 				t.Fatalf("query run --%s NoOptDefVal = %q, want %q", name, got, want)
 			}
 		})
+	}
+}
+
+func TestRuntimeCommandIsNativeCobraSubtree(t *testing.T) {
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	runtimeCmd := findCobraCommand(root, "runtime")
+	if runtimeCmd == nil {
+		t.Fatal("missing runtime command")
+	}
+	if runtimeCmd.DisableFlagParsing {
+		t.Fatal("runtime command must use native Cobra flag parsing")
+	}
+
+	doctor := findCobraCommand(runtimeCmd, "doctor")
+	if doctor == nil {
+		t.Fatal("missing runtime doctor subcommand")
+	}
+	if doctor.DisableFlagParsing {
+		t.Fatal("runtime doctor must use native Cobra flag parsing")
+	}
+	if !doctor.FParseErrWhitelist.UnknownFlags {
+		t.Fatal("runtime doctor must preserve legacy unknown-flag tolerance")
+	}
+	if doctor.ValidArgsFunction == nil {
+		t.Fatal("runtime doctor must suppress file completion fallback until Phase 15 completions")
+	}
+	completions, directive := doctor.ValidArgsFunction(doctor, nil, "")
+	if len(completions) != 0 {
+		t.Fatalf("runtime doctor completion seam returned %v, want no Phase 15 completions", completions)
+	}
+	if directive != cobra.ShellCompDirectiveNoFileComp {
+		t.Fatalf("runtime doctor completion directive = %v, want NoFileComp", directive)
 	}
 }
 

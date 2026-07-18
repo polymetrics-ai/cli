@@ -3,11 +3,11 @@
 ## Required gate checklist
 
 - [ ] `gofmt -w cmd internal`
-- [ ] `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1`
-- [ ] `go test ./internal/cli/...`
-- [ ] `go vet ./...`
+- [x] `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1`
+- [x] `go test ./internal/cli/...`
+- [x] `go vet ./...`
 - [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
+- [x] `go build ./cmd/pm`
 - [ ] `make verify`
 - [ ] `git diff --check origin/feat/cli-architecture-v2...HEAD`
 - [ ] `git diff -- go.mod go.sum`
@@ -37,4 +37,18 @@
 
 ## Results
 
-Pending.
+```bash
+gofmt -w internal/cli/cobra_router.go internal/cli/cli.go internal/cli/cobra_router_test.go internal/cli/runtime_cli_test.go
+go test ./internal/cli/ -run 'Runtime|CobraRouterShell' -count=1
+```
+
+Result: pass (`ok  \tpolymetrics.ai/internal/cli\t11.749s`).
+
+```bash
+go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1
+go test ./internal/cli/...
+go vet ./...
+go build ./cmd/pm
+```
+
+Result: pass. Focused/golden passed (`ok  \tpolymetrics.ai/internal/cli\t17.329s`); full internal CLI package passed (`ok  \tpolymetrics.ai/internal/cli\t195.015s`); `go vet` and `go build` emitted no output.

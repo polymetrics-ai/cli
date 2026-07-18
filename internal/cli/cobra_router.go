@@ -73,6 +73,7 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	cmd.AddCommand(newConnectionsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
+	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
 	return cmd
 }
@@ -188,9 +189,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "agent", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runAgent(ctx, cfg, root, args, stdout, jsonOut)
-		}},
-		{name: "runtime", handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runRuntime(ctx, cfg, args, stdout, jsonOut)
 		}},
 		{name: "flow", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runFlow(ctx, cfg, a, args, stdout, jsonOut) })
@@ -376,6 +374,39 @@ func addQueryStringArrayFlag(cmd *cobra.Command, target *[]string, name string, 
 
 func completeNoFile(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 	return nil, cobra.ShellCompDirectiveNoFileComp
+}
+
+func newRuntimeCobraCommand(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "runtime",
+		Args:          cobra.NoArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("runtime", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "runtime", stdout, jsonOut)
+	cmd.AddCommand(newRuntimeDoctorCobraCommand(ctx, cfg, stdout, jsonOut))
+	return cmd
+}
+
+func newRuntimeDoctorCobraCommand(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "doctor",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(runRuntimeDoctor(ctx, cfg, stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "runtime", stdout, jsonOut)
+	return cmd
 }
 
 type perfCompareFlags struct {
