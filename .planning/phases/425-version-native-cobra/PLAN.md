@@ -91,4 +91,8 @@ Parser ownership changes only. Runtime help text, plain/JSON outputs, checked-in
 
 ## Safety
 
-No secrets, credentials, services, reverse ETL, dependencies, generic write tools, destructive/admin actions, quality-gate reductions, external review requests, PR, or merge. Commands use only local source/tests/build/docs generation and non-credentialed GitHub metadata reads.
+No secrets, credentials, services, dependencies, generic write tools, destructive/admin actions, quality-gate reductions, external review requests, PR, or merge. Commands use only local source/tests/build/docs generation and non-credentialed GitHub metadata reads. The explicitly required `make verify` gate may exercise its existing temporary sample reverse-ETL smoke only when it follows plan → preview → approval → run; no external write is allowed.
+
+## Completion note
+
+The planned slice completed as designed: exact RED, smallest native registration, unchanged golden/help/docs/website outputs, full local gates, local diff review, coherent commits, and branch pushes. No scope deviation or new dependency occurred. Invalid-action diagnostic wording is now Cobra/pflag-owned as anticipated by ADR 0002; established category, JSON envelope, stdout/stderr, and exit behavior remain intact.

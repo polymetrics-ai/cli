@@ -1,13 +1,11 @@
 # Phase 425 TDD Ledger
 
 Issue: #425 — nativize version namespace.
-
-Invocation session: `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z`  
-Model: `openai-codex/gpt-5.6-sol`  
-Thinking: `high`  
+Invocation session: `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z`
+Model: `openai-codex/gpt-5.6-sol`; thinking: `high`
 Starting HEAD: `479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc`
 
-## GSD command evidence
+## GSD and skills
 
 ```bash
 scripts/gsd doctor
@@ -16,40 +14,25 @@ scripts/gsd prompt plan-phase 425 --skip-research --model=openai-codex/gpt-5.6-s
 scripts/gsd prompt programming-loop init --phase 425 --dry-run --model=openai-codex/gpt-5.6-sol --thinking=high
 ```
 
-Results: doctor/list passed (69 commands); plan-phase prompt generated; programming-loop failed with exact stderr `scripts/gsd: unknown GSD command: programming-loop` and exit 1. Manual universal-loop fallback is active.
+Doctor/list passed (69 commands); plan-phase generated its prompt. Programming-loop returned exact error `scripts/gsd: unknown GSD command: programming-loop` (exit 1), so the manual universal-loop fallback was used without weakening TDD. Final local prompt generation also passed for `verify-work` (7292 bytes) and `code-review` (6158 bytes); no external review was requested.
 
-## Skills loaded
-
-`gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`.
+Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`.
 
 ## Red / green / refactor log
 
-| Step | Kind | Command | Result | Evidence |
-|---:|---|---|---|---|
-| 0 | Planning | Create all six issue-local phase artifacts | Pass | Completed before production edits. |
-| 1 | RED | `go test ./internal/cli/ -run 'Version|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Fail as expected | Legacy/native registration count mismatched and `version` retained `DisableFlagParsing`. |
-| 2 | GREEN | Native Cobra registration + minimal handler adaptation; focused version/router test | Pass | `ok  \tpolymetrics.ai/internal/cli\t0.553s`. |
-| 3 | Refactor | `go test ./internal/cli/... -run 'Version|CobraRouterShell|Golden' -count=1` | Pass | `ok  \tpolymetrics.ai/internal/cli\t7.814s`; golden output unchanged. |
-| 4 | Full gate | gofmt/vet/tests/build/`make verify` + parity/safety checks | Pending | Not started. |
-| 5 | Delivery | coherent commits and branch push, no PR | Pending | Not started. |
+| Step | Kind | Command | Result |
+|---:|---|---|---|
+| 0 | Planning | Create all six issue-local phase artifacts before production edits | Pass |
+| 1 | RED | `go test ./internal/cli/ -run 'Version|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected (`0.612s`) |
+| 2 | GREEN | Native leaf registration, hidden positional help alias, legacy wrapper removal, focused tests | Pass (`0.553s`) |
+| 3 | Refactor | `go test ./internal/cli/... -run 'Version|CobraRouterShell|Golden' -count=1` | Pass (`7.814s`) |
+| 4 | Broader CLI | `go test ./internal/cli/... -count=1` | Pass (`195.315s`) |
+| 5 | Full gate | gofmt, vet, full test, build, `make verify` | Pass |
+| 6 | Parity/safety | built-binary help/output/error checks, docs/website/golden/dependency/scope diffs | Pass |
 
-## Planned RED coverage
-
-- Native Cobra registration and removal from `cobraLegacyCommands`.
-- Bare deterministic version output.
-- Flag help (`--help`, `-h`) and positional `help` compatibility.
-- JSON version output and JSON manual output.
-- Unknown flag rejection remains usage exit 2.
-- Invalid action remains usage exit 2 and does not render `CommandManual`.
-
-## Exact RED output
+## Exact RED
 
 Captured after test-only edits and before any production-code edit:
-
-```bash
-gofmt -w internal/cli/cobra_router_test.go internal/cli/version_cli_test.go
-go test ./internal/cli/ -run 'Version|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1
-```
 
 ```text
 --- FAIL: TestCobraRouterShellBuildsFreshHiddenWrapperTree (0.00s)
@@ -61,25 +44,43 @@ FAIL\tpolymetrics.ai/internal/cli\t0.612s
 FAIL
 ```
 
-The behavior-focused tests passed under the legacy wrapper; the RED is specifically the intended parser-ownership/registration gap.
+Behavior-focused tests already passed under the legacy wrapper; the RED isolated parser ownership/registration.
 
-## Exact focused GREEN output
-
-```bash
-gofmt -w internal/cli/cobra_router.go internal/cli/version.go
-go test ./internal/cli/ -run 'Version|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1
-```
+## Exact focused GREEN
 
 ```text
+$ go test ./internal/cli/ -run 'Version|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1
 ok  \tpolymetrics.ai/internal/cli\t0.553s
+
+$ go test ./internal/cli/... -run 'Version|CobraRouterShell|Golden' -count=1
+ok  \tpolymetrics.ai/internal/cli\t7.814s
+
+$ go test ./internal/cli/... -count=1
+ok  \tpolymetrics.ai/internal/cli\t195.315s
 ```
+
+Covered native registration, deterministic plain/JSON metadata, flag and positional help, JSON manual, unknown-flag usage mapping, invalid-action usage, no-file completion seam, fresh tree, and unchanged goldens.
+
+## Full GREEN
 
 ```bash
-go test ./internal/cli/... -run 'Version|CobraRouterShell|Golden' -count=1
+gofmt -w cmd internal
+go vet ./...
+go test -timeout 20m ./...
+go build ./cmd/pm
+make verify
 ```
+
+Results: gofmt/vet/build passed without diagnostics; full tests passed (`internal/cli 203.747s`, `internal/connectors/certify 355.702s` among the slow packages). `make verify` passed through fmt, tidy-check, vet, tests, build, docs validation, local temp-dir smoke, lint (`0 issues.`), and `connectorgen validate: 547 connector(s) checked, 0 findings`.
+
+The required `make verify` smoke used only its existing temporary sample fixtures and followed reverse ETL plan → preview → approval → run; no external service or credentialed connector check was used.
+
+## Parity GREEN
+
+Built binary summary:
 
 ```text
-ok  \tpolymetrics.ai/internal/cli\t7.814s
+plain_bytes=35 help_bytes=350 version=Version/dev manuals=CommandManual/version unknown_exit=2 invalid_exit=2
 ```
 
-Implementation is the smallest slice: native leaf registration, hidden positional help alias, legacy-wrapper removal, and removal of the now-unused handler argument parser.
+`pm help version`, `pm version --help`, `pm version -h`, and `pm version help` were byte-identical. JSON flag/positional help both returned `CommandManual/version`. Unknown flag and invalid action both returned usage exit 2 and no manual. CLI docs temp generation/diff and validation passed; website generator wrote 11 pages with no tracked delta; help, docs, website, goldens, dependencies, and connector defs remained unchanged.

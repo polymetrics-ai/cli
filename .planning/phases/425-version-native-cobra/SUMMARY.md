@@ -1,9 +1,33 @@
 # Phase 425 Summary
 
-Status: native version implementation focused-green; broad verification pending.
+Status: implementation and full verification passed; verification artifact checkpoint pending commit/push.
 
-Invocation session `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z` explicitly uses `openai-codex/gpt-5.6-sol` with `thinking=high` from exact starting HEAD `479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc` on `refactor/425-version-native-cobra`.
+## Identity
 
-The repo-local GSD adapter is healthy (`doctor` and 69-command `list` passed); explicit plan-phase prompt generation passed. The required programming-loop command is absent with exact error `scripts/gsd: unknown GSD command: programming-loop`, so the manual universal-loop fallback is recorded and strict TDD remains required.
+- Session: `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z`
+- Model/thinking: `openai-codex/gpt-5.6-sol`, `high`
+- Branch: `refactor/425-version-native-cobra`
+- Exact start: `479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc`
+- Parent: #397; umbrella: #407; draft parent PR #438
 
-Focused tests cover native registration, deterministic plain/JSON output, flag and positional help, JSON manual, unknown flags, and invalid actions. Exact RED proved the router registration mismatch and `DisableFlagParsing=true`. The smallest implementation now registers a native version leaf, preserves hidden positional help, removes the legacy wrapper, and removes the obsolete handler argument check. Focused version/router/golden tests pass with no fixture delta; broad parity and repository gates remain pending. Help text, version output, JSON envelopes, docs, website, generated artifacts, and golden fixtures are expected unchanged and will be proven by tests/diffs. No secrets, services, reverse ETL, dependencies, unrelated namespaces, external review requests, or PR creation are allowed.
+## Delivered
+
+- Registered `version` as a native Cobra leaf with `cobra.NoArgs` and no-file completion fallback.
+- Preserved hidden positional `pm version help` and JSON help compatibility.
+- Removed version from `cobraLegacyCommands` and deleted the obsolete residual-argument check from `runVersion`.
+- Added focused tests for registration, deterministic plain/JSON output, all help routes, JSON manual, unknown flags, invalid actions, and usage mapping.
+- Kept `cli.Run`, canonical help, golden fixtures, docs, website, dependencies, stdout/stderr, JSON envelopes, and exit semantics unchanged.
+
+## TDD and gates
+
+RED (`0.612s`): registration count mismatch and version still used `DisableFlagParsing`. GREEN: focused `0.553s`; router/golden `7.814s`; full CLI `195.315s`. Full gofmt, vet, tests, build, and `make verify` passed. Full tests included CLI `203.747s` and certify `355.702s`; verify ended with lint `0 issues` and `connectorgen validate: 547 connector(s) checked, 0 findings`.
+
+Built-binary parity: `plain_bytes=35 help_bytes=350 version=Version/dev manuals=CommandManual/version unknown_exit=2 invalid_exit=2`. Docs temp generation/diff, docs validation, website generation/diff, golden diff, dependency diff, connector-def scope, and `git diff --check` passed.
+
+## Workflow and safety
+
+GSD doctor/list/plan-phase passed with explicit model/thinking arguments. Programming-loop is known absent (`scripts/gsd: unknown GSD command: programming-loop`), so the recorded manual universal-loop fallback enforced strict TDD. Verify-work/code-review prompts generated and were executed locally; no actionable scoped review issue found.
+
+No secrets, external services, credentialed checks, dependencies, unrelated namespaces, external review requests, PR, or merge. The required `make verify` used only its existing local temp sample smoke and followed reverse ETL plan → preview → approval → run.
+
+Risk: invalid argument diagnostics now originate from Cobra/pflag, as ADR 0002 permits during native promotion; usage category, JSON error shape, stdout/stderr placement, and exit 2 remain preserved. Completion implementation and help-tree deepening remain deferred to their planned phases.

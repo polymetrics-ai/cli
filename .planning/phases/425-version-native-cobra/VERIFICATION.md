@@ -1,57 +1,55 @@
 # Phase 425 Verification
 
-Invocation session: `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc`.
+Session `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc`.
 
-## TDD checklist
+## TDD and behavior
 
-- [x] Planning artifacts created before production edits.
-- [x] Exact focused RED captured before production edits (`0.612s`; native registration assertions failed as intended).
-- [x] Smallest native Cobra version implementation green (`0.553s`).
-- [x] Focused version/router/golden tests green (`7.814s`); no golden fixture delta.
+- [x] All six planning artifacts existed before production edits.
+- [x] Exact RED captured (`0.612s`) before production edits.
+- [x] Native `version` Cobra leaf; removed from legacy wrapper registry.
+- [x] Removed obsolete version handler residual-argument parser.
+- [x] Deterministic `pm version` plain output (`pm dev`, `none`, `unknown`).
+- [x] Deterministic `Version` JSON envelope.
+- [x] `pm help version`, `pm version --help`, `pm version -h`, and `pm version help` canonical parity.
+- [x] Flag and positional JSON help return `CommandManual/version`.
+- [x] Unknown flag and invalid action remain usage exit 2 and never render a manual.
+- [x] No local repeated/bare-boolean version flags exist; ADR flag conventions are N/A. Global `--json` remains accepted before/after the command.
+- [x] `cli.Run` signature, stdout/stderr discipline, JSON envelope, fresh-tree behavior, and golden contract preserved.
 
-## Focused behavior checklist
+## Gates
 
-- [x] Version is a native Cobra top-level command and absent from legacy wrappers.
-- [x] `pm version` deterministic plain output and exit 0 (in-process focused test).
-- [x] `pm version --json` deterministic `Version` envelope and exit 0 (in-process focused test).
-- [x] `pm help version`, `pm version --help`, and `pm version -h` match canonical manual (in-process focused test).
-- [x] `pm version help` and `pm version help --json` preserve positional help compatibility (in-process focused test).
-- [x] JSON flag help returns `CommandManual/version` (in-process focused test).
-- [x] Unknown version flag remains usage exit 2 (in-process focused test).
-- [x] Invalid version action remains usage exit 2 and not a manual (in-process focused test).
-- [x] `cli.Run` signature/stdout/stderr/JSON/exit semantics unchanged in focused/golden tests; broader gates pending.
+- [x] Focused version/router: `0.553s`.
+- [x] Focused version/router/golden: `7.814s`.
+- [x] Full `internal/cli`: `195.315s`.
+- [x] `gofmt -w cmd internal`.
+- [x] `go vet ./...` (no output).
+- [x] `go test -timeout 20m ./...` (pass; CLI `203.747s`, certify `355.702s`).
+- [x] `go build ./cmd/pm` (no output).
+- [x] `make verify` (pass; lint `0 issues`; 547 connector definitions, 0 findings).
+- [x] `git diff --check`.
 
-## CLI parity checklist
+## CLI help/manual/website parity
 
-- [ ] Runtime help checked using built binary.
-- [ ] Bare leaf behavior checked (version metadata, not group help).
-- [ ] Flag and positional help checked.
-- [ ] `docs/cli/version.md` updated or N/A with docs-generator diff proof.
-- [ ] `website/**` updated or N/A with source/generated diff proof.
-- [ ] Golden/generated help artifacts updated or N/A with golden test/diff proof.
-- [ ] Completion/discovery metadata updated or N/A; top-level command name unchanged and Phase 15 completion remains out of scope.
+- [x] Runtime help: all four text routes byte-identical; `help_bytes=350`.
+- [x] Bare leaf: deterministic metadata, `plain_bytes=35`, exit 0.
+- [x] JSON operation: `Version/dev`, exact fields, exit 0.
+- [x] JSON manual: flag and positional forms return `CommandManual/version`.
+- [x] Invalid action and unknown flag: usage exit 2; no help masking.
+- [x] `docs/cli/version.md`: N/A/no update; temp `pm docs generate` + `diff -ru docs/cli` produced no diff.
+- [x] Connector docs validation passed.
+- [x] `website/**`: N/A/no update; `npm --prefix website run gen:docs` wrote 11 pages and `git diff --exit-code -- website` passed.
+- [x] Golden/generated help: N/A/no update; focused Golden test passed and golden/docs help files have no diff.
+- [x] Completion/discovery: command name unchanged; native no-file completion seam tested; Phase 15 completion additions are out of scope.
 
-## Required gates
+## Safety/scope
 
-- [ ] `gofmt -w cmd internal`
-- [x] focused version/router/golden tests (`7.814s`)
-- [ ] `go test ./internal/cli/...`
-- [ ] `go vet ./...`
-- [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make verify`
-- [ ] docs generate temp diff + docs validate
-- [ ] website docs generator and tracked diff check
-- [ ] `git diff --check`
-- [ ] no `go.mod`/`go.sum` delta
-- [ ] no connector definitions or unrelated namespaces changed
+- [x] No `go.mod`/`go.sum` delta; no dependency additions.
+- [x] No connector definition delta.
+- [x] No unrelated namespace production files changed.
+- [x] No secrets requested, read, printed, summarized, or stored.
+- [x] No runtime services, credentialed connector checks, destructive/admin actions, or production deploys.
+- [x] Required `make verify` local temp smoke followed plan → preview → approval → run and used only sample fixtures.
+- [x] No external review request and no PR created.
+- [x] `scripts/gsd prompt verify-work ...` and local code-review prompt generated; manual review found no actionable issue in the scoped diff.
 
-## Safety-limited / N/A
-
-- Runtime-backed checks: N/A; version parsing has no service dependency.
-- Credentialed checks: prohibited/not run.
-- Reverse ETL: not in scope/not run outside existing local repository smoke gates.
-- Dependencies: prohibited/not changed.
-- External review and PR: explicitly prohibited by user for this run.
-
-`verificationPassed` remains false until the complete `make verify` exits 0.
+Result: full declared verification passed. Parser nativization intentionally allows Cobra/pflag diagnostics for invalid arguments while preserving usage category, JSON error shape, stdout/stderr placement, and exit 2.
