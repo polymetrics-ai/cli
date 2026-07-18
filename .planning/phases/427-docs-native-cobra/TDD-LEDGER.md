@@ -17,8 +17,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create all six phase artifacts before production edits | Complete |
 | 1 | RED | `go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected (`11.332s`) |
-| 2 | GREEN | Native namespace/actions/typed flags and docs-only legacy parser removal | Pending |
-| 3 | Refactor | Focused docs/router/golden + full CLI tests | Pending |
+| 2 | GREEN | Native namespace/actions/typed flags and docs-only legacy parser removal | Pass (`11.462s`) |
+| 3 | Refactor | Focused docs/router/golden + full CLI tests | Pass (`18.453s`; golden `5.470s`; full CLI `227.224s`) |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Parity/safety | built binary, docs/website/generated/golden/dependency/scope checks | Pending |
 
@@ -50,7 +50,21 @@ All observable docs behavior, byte-parity, action/flag, error, global/config, an
 
 ## Focused GREEN
 
-Pending.
+```text
+$ go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1
+ok  \tpolymetrics.ai/internal/cli\t11.462s
+
+$ go test ./internal/cli/... -run 'Docs|CobraRouterShell|Golden' -count=1
+ok  \tpolymetrics.ai/internal/cli\t18.453s
+
+$ go test ./internal/cli/ -run '^TestGoldenTranscripts$' -count=1
+ok  \tpolymetrics.ai/internal/cli\t5.470s
+
+$ go test ./internal/cli/... -count=1
+ok  \tpolymetrics.ai/internal/cli\t227.224s
+```
+
+Implementation: `docs`, `docs generate`, and `docs validate` are native Cobra nodes; `--dir` and `--connectors-dir` are `StringArray` flags with legacy bare-flag behavior and spaced-value normalization; unknown action flags remain whitelisted; positional help is a hidden compatibility node. `runDocs` accepts typed action flags directly, so the docs-only `parseFlags` call and legacy wrapper are removed. Focused byte/output/help/global-config/filesystem tests and unchanged goldens pass.
 
 ## Full GREEN and parity
 

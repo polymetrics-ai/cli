@@ -10,7 +10,7 @@
   "invocationSession": "issue-427-pi-openai-codex-gpt-5.6-sol-high-20260718T112639Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "red_tests_recorded",
+  "status": "green_implementation",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -30,10 +30,15 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "focused test-only edits captured exact RED for docs native registration before production edits; observable legacy behavior, artifact bytes, actions, flags, globals, errors, and safe temp-root tests passed"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native docs namespace, generate and validate actions, typed output-directory flags, positional help alias, normalization, and docs-only legacy-parser removal passed focused router, golden, and full CLI tests"
     }
   ],
   "red": "go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed as expected in 11.332s on native registration count and DisableFlagParsing ownership",
-  "green": "pending",
+  "green": "focused 11.462s; docs/router/golden 18.453s; standalone golden 5.470s; full internal/cli 227.224s",
   "verification": "pending",
   "files": [
     ".planning/phases/427-docs-native-cobra/PLAN.md",

@@ -6,21 +6,21 @@ Session `issue-427-pi-openai-codex-gpt-5.6-sol-high-20260718T112639Z`; model `op
 
 - [x] Six phase artifacts created before production edits.
 - [x] Exact focused RED captured before production edits (`11.332s`; native count/ownership failures only).
-- [ ] Native `docs` namespace plus `generate` and `validate`; legacy wrapper removed.
-- [ ] Native `--dir`/`--connectors-dir` preserve applicable spaced, assigned, repeated-last-wins, bare `true`, comma/path forms.
-- [ ] Unknown flags and extra action arguments retain legacy compatibility.
-- [ ] Bare/text/JSON/flag/short/positional help parity.
-- [ ] Missing/empty output path and invalid action/error categories preserved.
-- [ ] Global/config root and assigned boolean forms preserved.
-- [ ] Generated CLI bytes, connector docs/catalog/icons, validation behavior, filesystem containment, and output text preserved.
-- [ ] Docs-only `parseFlags` call removed; shared parser remains for unrelated legacy/dynamic namespaces.
+- [x] Native `docs` namespace plus `generate` and `validate`; legacy wrapper removed.
+- [x] Native `--dir`/`--connectors-dir` preserve applicable spaced, assigned, repeated-last-wins, bare `true`, comma/path forms.
+- [x] Unknown flags and extra action arguments retain legacy compatibility.
+- [x] Bare/text/JSON/flag/short/positional help parity.
+- [x] Missing/empty output path and invalid action/error categories preserved.
+- [x] Global/config root and assigned boolean forms preserved.
+- [x] Generated CLI bytes, connector docs/catalog/icons, validation behavior, filesystem containment, and output text preserved.
+- [x] Docs-only `parseFlags` call removed; shared parser remains for unrelated legacy/dynamic namespaces.
 
 ## Gates
 
-- [ ] Focused docs/router tests.
-- [ ] Focused docs/router/golden tests.
-- [ ] Golden transcript test.
-- [ ] Full `internal/cli`.
+- [x] Focused docs/router tests (`11.462s`).
+- [x] Focused docs/router/golden tests (`18.453s`).
+- [x] Golden transcript test (`5.470s`).
+- [x] Full `internal/cli` (`227.224s`).
 - [ ] `gofmt -w cmd internal`.
 - [ ] `go vet ./...`.
 - [ ] `go test -timeout 20m ./...`.
