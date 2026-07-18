@@ -1,0 +1,57 @@
+# Phase 430 Verification
+
+Invocation session: `issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `6c94754c58185df5aac53bd97587603c3154b1d5`.
+
+## TDD and behavior
+
+- [x] Six phase artifacts created before test or production edits.
+- [ ] Focused RED captured before production edits.
+- [ ] Native ETL/check/catalog/read/run/status/help tree; ETL legacy wrapper removed.
+- [ ] All current flags typed with repeated/bare/assigned compatibility.
+- [ ] Bare/text/JSON/long/short/positional help parity.
+- [ ] Trailing help and literal `--` compatibility.
+- [ ] Unknown flags, invalid actions, global assigned booleans, and no action-discovery bypass.
+- [ ] Batch-size parse/default/bounded flush behavior and configured sync validation.
+- [ ] Cancellation, events, telemetry, stdout/stderr, and one-envelope semantics.
+- [ ] Only ETL `parseFlags` call sites removed; dynamic connector parser remains.
+
+## Gates
+
+- [ ] Focused native ETL/router tests.
+- [ ] Focused repeated tests (`-count=5`).
+- [ ] Focused race tests.
+- [ ] Router and golden transcript tests; fixture unchanged or explicitly reviewed.
+- [ ] Full `go test ./internal/cli/...`.
+- [ ] Full app tests and ETL event/telemetry contracts.
+- [ ] `gofmt -w cmd internal`.
+- [ ] `go vet ./...`.
+- [ ] `go test ./...`.
+- [ ] `go build ./cmd/pm`.
+- [ ] `make verify`.
+- [ ] `git diff --check`; no dependency/unrelated/connector-def delta.
+
+## CLI help/manual/website parity
+
+- [ ] `pm help etl`.
+- [ ] Bare `pm etl` exits 0 with contextual manual.
+- [ ] `pm etl --help`, `-h`, positional `help`, and JSON manual routes.
+- [ ] Invalid action remains usage error.
+- [ ] `docs/cli/etl.md`: temporary generated diff clean or intentional update recorded.
+- [ ] `website/content/docs/etl.mdx`: unchanged when no user-visible contract changed; generator/check recorded.
+- [ ] Generated/golden help artifacts unchanged or explicitly reviewed.
+- [ ] Completion discovery seam present; Phase 15 values remain deferred.
+- [ ] Focused per-subcommand help/man churn remains deferred to Phase 19.
+
+## Safety/scope/delivery
+
+- [x] Exact branch/start and parent draft PR confirmed.
+- [x] GSD doctor/list passed; unavailable programming-loop/manual fallback recorded.
+- [x] Required Go CLI/testing/error/security/safety/context/concurrency/docs/Cobra skills loaded.
+- [ ] Fixture/local temporary connectors only; no credentialed external checks.
+- [ ] No optional services or service-backed runtime recording.
+- [ ] No secret values requested, printed, summarized, stored, or logged.
+- [ ] No dependencies, reverse execution, unrelated namespaces, or broad generated churn.
+- [ ] Coherent planning, RED, GREEN, and final evidence commits pushed.
+- [ ] No PR or review created.
+
+Result: pending. `verificationPassed=false` until the complete declared gate set, including `make verify`, exits 0.
