@@ -49,6 +49,11 @@
       "reason": "one serialized correction shares app/connectors/router safety seams; this runtime exposes no subagent tool, and the user prohibited PR and external review"
     },
     {
+      "cycle": "second-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused pre-production tests failed as required: selected-root relative effects resolved under cwd, denied post-resolution retargets reached external effects, and leading-hyphen add could not parse later flags; the actual state helper now requires the real state file"
+    },
+    {
       "cycle": "bounded-review-correction-plan",
       "decision": "local_critical_path",
       "reason": "one bounded correction in the assigned isolated worktree; this Pi session exposes no subagent tool, all accepted findings share credentials/router safety boundaries, and the user prohibited PR and external review"

@@ -43,9 +43,9 @@ GSD route: doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-researc
 
 Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`. CLI help/docs/website parity policy is active.
 
-Downstream artifact: pending strict RED tests, runtime-only local-path normalization and explicit effect policy, Warehouse/Outbox boundary validation, Cobra leading-hyphen name/flag correction, actual state-file assertion, then full declared verification and committed/pushed evidence.
+Downstream artifact: strict RED tests and corrected actual-state assertion are complete; runtime-only local-path normalization and explicit effect policy, Warehouse/Outbox boundary validation, Cobra leading-hyphen name/flag correction, then full declared verification remain pending.
 
-Verification result: pending. No production edit may precede issue-artifact update and focused RED capture. No real credential, private fixture output, external service, dependency, PR, or external review.
+Verification result: RED captured before production edits. Both selected-root relative cases, both denied post-resolution retarget cases, and the leading-hyphen add case failed as required (app `3.539s`, CLI `3.554s`, wall `13s`). No real credential, private fixture output, external service, dependency, PR, or external review.
 
 ## Verification and local review snapshot
 

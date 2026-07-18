@@ -176,6 +176,42 @@ func TestCredentialsAddBareFlagCompatibility(t *testing.T) {
 	})
 }
 
+func TestCredentialsAddLeadingHyphenNameParsesLaterSourceFlags(t *testing.T) {
+	root := initCredentialsProject(t)
+	t.Setenv("PM_TEST_LEADING_NAME_SOURCE", "synthetic-test-input")
+
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{
+		"credentials", "add", "-legacy",
+		"--connector", "sample",
+		"--from-env", "token=PM_TEST_LEADING_NAME_SOURCE",
+		"--root=" + root,
+		"--json",
+	}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("leading-hyphen add code = %d, want 0", code)
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("leading-hyphen add wrote stderr: %q", stderr.String())
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("open temporary project: %v", err)
+	}
+	cred, err := a.InspectCredential("-legacy")
+	if err != nil {
+		t.Fatalf("inspect leading-hyphen credential: %v", err)
+	}
+	if cred.Name != "-legacy" || cred.Connector != "sample" {
+		t.Fatal("leading-hyphen add did not preserve the first name token")
+	}
+	if got := credentialCount(t, root); got != 1 {
+		t.Fatalf("credential count = %d, want 1", got)
+	}
+	assertOpaqueFixtureAbsent(t, stdout.String(), stderr.String())
+	assertStateDoesNotContainFixtures(t, root)
+}
+
 func TestCredentialsSecretSourcesUseOnlyNamedEnvironmentAndControlledStdin(t *testing.T) {
 	t.Setenv("PM_TEST_CREDENTIAL_A", opaqueEnvFixture)
 	t.Setenv("PM_TEST_CREDENTIAL_B", opaqueEnvFixture)
@@ -683,9 +719,9 @@ func assertProjectFilesDoNotContainFixtures(t *testing.T, root string) {
 
 func assertStateDoesNotContainFixtures(t *testing.T, root string) {
 	t.Helper()
-	state, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state.json"))
-	if err != nil && !errors.Is(err, os.ErrNotExist) {
-		t.Fatalf("read state metadata: %v", err)
+	state, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read required state metadata: %v", err)
 	}
 	if bytes.Contains(state, []byte(opaqueEnvFixture)) || bytes.Contains(state, []byte(opaqueStdinFixture)) {
 		t.Fatal("opaque credential fixture appeared in state metadata")

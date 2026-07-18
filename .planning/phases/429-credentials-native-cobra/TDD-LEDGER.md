@@ -18,11 +18,11 @@ Session `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; profil
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | S0 | Review/plan | Record all three findings, effect-boundary design, RED cases, broad shared-seam verification, and checkpoint sequence before production edits | Complete |
-| S1 | RED | Focused app/connectors/CLI tests for selected-root relative effects, post-resolution retargeting, leading-hyphen add flags/no discovery, and actual state-file assertions | Pending |
+| S1 | RED | `go test ./internal/app -run 'Test(ResolvedLocalConnectorRelativePathUsesSelectedProjectRoot|LocalConnectorCheckRevalidatesPathAfterCredentialResolution)$' -count=1`; focused CLI source/redaction command | Failed as required: both relative paths missed the selected root; both denied post-resolution retargets reached external effects; leading-hyphen add exited 1. App `3.539s`, CLI `3.554s`, combined wall `13s` |
 | S2 | GREEN | Runtime-only path normalization, explicit non-secret local-write policy, Warehouse/Outbox effect-boundary validation, bounded Cobra name carrier, and required actual state file | Pending |
 | S3 | Verify | Focused/repeated/race/app/connectors/CLI/base differential/full repository plus gofmt/vet/build/`make verify` | Pending |
 
-Tests use temporary roots and synthetic inputs only. They must not print fixture values or contact external services. `verificationPassed` remains false until the complete declared gate exits 0.
+Tests use temporary roots and synthetic inputs only. They must not print fixture values or contact external services. The corrected state helper now requires and decodes the actual state file; this test-only correction is exercised alongside the failing behavior cases. `verificationPassed` remains false until the complete declared gate exits 0.
 
 ## Bounded independent review correction ledger
 

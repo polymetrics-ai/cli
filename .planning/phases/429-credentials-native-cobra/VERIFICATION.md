@@ -8,10 +8,10 @@ Invocation `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; pro
 
 - [x] Read `/tmp/pm-397-rereview-429.log` and accept all three HIGH/MEDIUM/LOW findings.
 - [x] Run GSD doctor/list, generate the phase plan prompt, record missing programming-loop/manual fallback, and update issue artifacts before production edits.
-- [ ] RED: selected-root relative warehouse/outbox path effects occur under the selected root rather than cwd.
-- [ ] RED: path retargeting after credential resolution is rejected immediately at Warehouse/Outbox `Check`, with no external effect; explicit allow-external policy remains effective.
-- [ ] RED: safety-valid leading-hyphen add names parse later connector/source flags and cannot discover a later positional name.
-- [ ] RED: state-redaction helper requires and parses `.polymetrics/state/state.json`.
+- [x] RED: selected-root relative warehouse/outbox path effects missed the selected root (`internal/app`, `3.539s`).
+- [x] RED: both denied post-resolution retarget cases reached external effects while explicit opt-in remained allowed (`internal/app`, same run).
+- [x] RED: safety-valid leading-hyphen add with later connector/source flags exited 1 (`internal/cli`, `3.554s`); existing no-discovery cases remain in the focused suite.
+- [x] Test helper correction: state-redaction helper now requires and parses `.polymetrics/state/state.json` and is exercised by the focused CLI run.
 - [ ] GREEN: runtime path normalization and explicit non-secret effect policy preserve persisted config, ordinary paths, defaults, and direct-call compatibility.
 - [ ] GREEN: Cobra name/flag boundary preserves exact first-token ownership and later flags.
 - [ ] Focused, repeated, race, app, connectors, CLI, exact-base differential, full repository, gofmt, vet, build, and `make verify` pass.
