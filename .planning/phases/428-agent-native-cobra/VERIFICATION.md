@@ -2,6 +2,24 @@
 
 Session `issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `235233f7cfde4a24612be6b0f95fb37a412d388a`; verification end `20260718T131634Z`.
 
+## Accepted Medium second correction — verification checklist
+
+Second-correction session `issue-428-second-correction-pi-20260718T140317Z`; runtime model identity not exposed; exact start `af604d7178c83d21d77abedfa3c4dee29f94c089`; started `20260718T140317Z` UTC.
+
+- [x] `/tmp/pm-397-rereview-428.log` read and Medium accepted.
+- [x] GSD doctor passed; exact programming-loop prompt invocation failed because the command is absent; manual universal-loop fallback recorded.
+- [x] Required GSD, CLI/Cobra, testing/troubleshooting, error, security, and safety skills loaded; runtime/RLM and CLI parity references read.
+- [x] PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE updated before test or production edits.
+- [ ] Clustered-tail plan/output and fake-runtime tests fail before production edits, including no unexpected help and expected build/pull/ensure calls.
+- [ ] Smallest agent-scoped normalization passes without changing root/other namespaces or ordinary exact `agent -h` help.
+- [ ] Focused, repeated, race, adversarial, and exact legacy-base differential gates pass.
+- [ ] Full CLI test is run if focused evidence indicates it is needed.
+- [ ] `gofmt`, `go vet ./...`, `go build ./cmd/pm`, `git diff --check`, scope, and dependency guards pass.
+- [ ] Exact end time/head, RED/GREEN evidence, commits, and push are recorded; no PR or external review.
+- [ ] No container/service, Podman/Docker, image operation, dependency, credential, secret, or unrelated namespace/docs/website/generated change.
+
+CLI parity stance: no user-facing command/flag/manual contract changes. Ordinary exact `pm agent -h` remains canonical help; valid action-tail short clusters retain legacy execution. Docs/website/generated changes are not applicable unless a verification delta appears.
+
 ## Accepted High correction — verification checklist
 
 Correction session `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `746b2a98b01ba1e119974e31569fc8deb06cd897`.

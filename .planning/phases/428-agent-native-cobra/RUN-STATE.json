@@ -15,8 +15,12 @@
   "correctionInvocationSession": "issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z",
   "correctionStartedAt": "20260718T132841Z",
   "correctionStartingHead": "746b2a98b01ba1e119974e31569fc8deb06cd897",
-  "status": "complete_verified_pushed",
-  "verificationPassed": true,
+  "secondCorrectionInvocationSession": "issue-428-second-correction-pi-20260718T140317Z",
+  "secondCorrectionStartedAt": "20260718T140317Z",
+  "secondCorrectionStartingHead": "af604d7178c83d21d77abedfa3c4dee29f94c089",
+  "secondCorrectionModel": "not_exposed_by_runtime",
+  "status": "second_correction_planned",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -24,7 +28,18 @@
     "programmingLoop": "blocked on initial and correction invocations: scripts/gsd: unknown GSD command: programming-loop",
     "fallback": "manual_gsd_universal_runtime_loop",
     "verifyWorkPrompt": "passed_7137_bytes_executed_inline",
-    "codeReviewPrompt": "passed_6003_bytes_executed_inline_local_review_clean"
+    "codeReviewPrompt": "passed_6003_bytes_executed_inline_local_review_clean",
+    "secondCorrectionProgrammingLoop": "blocked: scripts/gsd prompt programming-loop init --phase 428 --dry-run returned unknown GSD command",
+    "secondCorrectionFallback": "manual_gsd_universal_runtime_loop"
+  },
+  "secondCorrection": {
+    "finding": "accepted Medium: clustered single-dash tails containing h suppress valid plan/build/pull/ensure execution through Cobra help",
+    "scope": "agent valid-action tail normalization and focused tests only",
+    "red": "pending",
+    "green": "pending",
+    "verification": "pending",
+    "endedAt": null,
+    "endingHead": null
   },
   "orchestrationDecisions": [
     {
@@ -76,6 +91,11 @@
       "cycle": "high-finding-correction-summary",
       "decision": "local_critical_path",
       "reason": "accepted High correction and exact local evidence were recorded; implementation checkpoints were pushed and the user prohibited PR and external review"
+    },
+    {
+      "cycle": "second-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "one bounded agent-tail parser defect shares the isolated router/test scope; no subagent tool is available and the user prohibited external review"
     }
   ],
   "red": "initial focused agent/router build RED plus correction RED: TestAgentLeadingInvalidActionTokensCannotReachImageRuntime failed before correction production edits in 0.587s because assigned unknown/help-like and image literal heads reached later actions or runtime lookup",

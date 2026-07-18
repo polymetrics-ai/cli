@@ -11,6 +11,20 @@ Doctor/list passed; `scripts/gsd prompt plan-phase 428 --skip-research` generate
 
 Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-documentation`, `golang-spf13-cobra`.
 
+## Second bounded correction ledger
+
+Session: `issue-428-second-correction-pi-20260718T140317Z`; runtime model identity not exposed; exact start `af604d7178c83d21d77abedfa3c4dee29f94c089`; started `20260718T140317Z` UTC.
+
+| Step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| M0 | Planning | Read `/tmp/pm-397-rereview-428.log`; accept Medium; update PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE before production edits; record GSD fallback and required skills | Complete before test/production edits |
+| M1 | RED | Add plan-output and fake-runtime cluster-tail table covering `-hx`, `-xh`, `-hh`, and representative longer clusters across plan/build/pull/ensure; assert no agent manual and expected runtime calls; run focused test | Pending |
+| M2 | GREEN | Agent-only tail normalizer ignores single-dash clusters containing `h` after an exact valid action while ordinary exact `agent -h` remains help | Pending |
+| M3 | Refactor/adversarial | Focused/repeated/race tests plus exact/assigned help, no-`h` short clusters, invalid heads, root/other namespace isolation, and base differential | Pending |
+| M4 | Verify/deliver | gofmt, vet, build, diff/scope/dependency checks; full CLI only if indicated; finalize exact end/head/evidence; commit/push without PR | Pending |
+
+RED contract: each valid plan invocation must emit the exact legacy plan output and not `agentHelp`; each valid image invocation must perform the expected fake lookup/file/run sequence and not emit `agentHelp`. Tests execute no Podman/Docker or service. The production hypothesis is one scoped predicate change in `isLegacyHelpFlag`; no broader pflag/Cobra behavior change is planned.
+
 ## High-finding correction ledger
 
 Session: `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `746b2a98b01ba1e119974e31569fc8deb06cd897`.

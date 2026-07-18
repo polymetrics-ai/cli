@@ -10,6 +10,21 @@ Invocation session: `issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — eighth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, the runtime exposes no subagent tool, and the user bounded this run to #428 with no PR or external review.
 
+## Second bounded correction invocation
+
+- Session: `issue-428-second-correction-pi-20260718T140317Z`; runtime model identity is not exposed.
+- Exact invocation: `Second bounded correction for #428 at start af604d7178c83d21d77abedfa3c4dee29f94c089` with the accepted Medium from `/tmp/pm-397-rereview-428.log`.
+- Exact start: `af604d7178c83d21d77abedfa3c4dee29f94c089`; started at `20260718T140317Z` UTC.
+- Accepted Medium: valid `agent plan` and `agent image build|pull|ensure` calls with clustered short tails containing `h` (including `-hx`, `-xh`, `-hh`, and representative longer clusters) must execute exactly as the legacy parser did instead of Cobra intercepting help, printing the agent manual, and returning false success.
+- Smallest slice: extend only agent-tail compatibility normalization so single-dash short clusters containing `h` are ignored after an exact valid action. Do not alter root/other namespaces, action discovery, ordinary exact `agent -h` help, exact invalid-head behavior, or long help semantics.
+- TDD: before production edits, add table-driven plan-output and fake-image-runtime tests for plan/build/pull/ensure clustered tails. Assert expected output/runtime calls, zero unexpected agent help, and no suppression. Capture focused RED on the current head.
+- Verification: focused and repeated tests, focused race, adversarial nearby short-token/help cases, and exact differential against legacy base `235233f7cfde4a24612be6b0f95fb37a412d388a`; run full CLI only if focused evidence warrants it; then gofmt, vet, build, diff/scope/dependency guards.
+- CLI parity: no command, flag, manual, website, completion, or generated-help contract changes; ordinary exact `-h` remains help and clustered valid-action tails remain legacy ignored inputs. Checked-in docs/website/generated artifacts are not applicable unless verification finds a delta.
+- Delivery: planning, RED, GREEN, and final evidence checkpoints committed and pushed to `origin/refactor/428-agent-native-cobra`; no PR, external review, containers/services, image execution, dependencies, credentials, or secrets.
+- GSD: `scripts/gsd doctor` passed; exact preferred invocation `scripts/gsd prompt programming-loop init --phase 428 --dry-run` failed with `unknown GSD command`, so the manual universal-runtime-loop fallback is active.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, and `golang-safety`; runtime/RLM and CLI parity references were read.
+- Execution decision: `local_critical_path` — one bounded parser defect in the isolated agent/router scope; this runtime has no subagent tool and the user prohibited external review.
+
 ## High-finding correction invocation
 
 - Review-fix session: `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z`.
