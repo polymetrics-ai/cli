@@ -4,7 +4,7 @@
 
 - Source: user task for Issue #410 worker handoff.
 - Downstream artifact: `.planning/phases/410-otel-tracing/PLAN.md`.
-- Verification result: last exporter-constructor self-observability focused/full gates passed; PR body/push pending. Prior `make verify` passed after implementation, review-fix, final residual, SDK-env, and alias/tracer-closure commits.
+- Verification result: last exporter-constructor self-observability focused/full gates passed; PR #459 body updated and branch pushed. Prior `make verify` passed after implementation, review-fix, final residual, SDK-env, and alias/tracer-closure commits.
 
 ## GSD prompt command
 

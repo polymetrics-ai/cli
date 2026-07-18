@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: last exporter-constructor self-observability fix verified locally on PR #459 branch; PR body/push pending. No Claude/Copilot requested.
+Status: last exporter-constructor self-observability fix verified, PR #459 body updated, and branch pushed. No Claude/Copilot requested.
 
 ## Current state
 
