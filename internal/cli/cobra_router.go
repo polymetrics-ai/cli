@@ -192,7 +192,8 @@ func normalizeAgentLegacyActionArgs(args []string, start int) []string {
 }
 
 func isLegacyHelpFlag(arg string) bool {
-	return arg == "-h" || arg == "--help" || strings.HasPrefix(arg, "--help=")
+	return arg == "-h" || arg == "--help" || strings.HasPrefix(arg, "--help=") ||
+		(len(arg) > 2 && arg[0] == '-' && arg[1] != '-' && strings.ContainsRune(arg[1:], 'h'))
 }
 
 func normalizeDocsLegacyActionArgs(args []string, start int) []string {

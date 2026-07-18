@@ -19,7 +19,7 @@ Session: `issue-428-second-correction-pi-20260718T140317Z`; runtime model identi
 |---:|---|---|---|
 | M0 | Planning | Read `/tmp/pm-397-rereview-428.log`; accept Medium; update PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE before production edits; record GSD fallback and required skills | Complete before test/production edits |
 | M1 | RED | `go test ./internal/cli -run '^TestAgentClusteredShortHelpTailsPreserveValidActions$' -count=1` after adding plan-output/fake-runtime table for `-hx`, `-xh`, `-hh`, `-xhy`, `-zzhzz` across plan/build/pull/ensure | Failed as expected before production edits: 20/20 cases returned agent help, all image runtime calls were suppressed; package `0.582s`, wall `5.302s` |
-| M2 | GREEN | Agent-only tail normalizer ignores single-dash clusters containing `h` after an exact valid action while ordinary exact `agent -h` remains help | Pending |
+| M2 | GREEN | Agent-only tail normalizer ignores single-dash clusters containing `h` after an exact valid action while ordinary exact `agent -h` remains help | Pass: 20/20 cluster-tail cases (`0.561s`; wall `3.408s`); focused agent/router pass (`4.462s`; wall `6.079s`) |
 | M3 | Refactor/adversarial | Focused/repeated/race tests plus exact/assigned help, no-`h` short clusters, invalid heads, root/other namespace isolation, and base differential | Pending |
 | M4 | Verify/deliver | gofmt, vet, build, diff/scope/dependency checks; full CLI only if indicated; finalize exact end/head/evidence; commit/push without PR | Pending |
 

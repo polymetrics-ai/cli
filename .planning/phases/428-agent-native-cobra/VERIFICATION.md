@@ -11,7 +11,7 @@ Second-correction session `issue-428-second-correction-pi-20260718T140317Z`; run
 - [x] Required GSD, CLI/Cobra, testing/troubleshooting, error, security, and safety skills loaded; runtime/RLM and CLI parity references read.
 - [x] PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE updated before test or production edits.
 - [x] Clustered-tail plan/output and fake-runtime tests failed before production edits: all 20 plan/build/pull/ensure × `-hx`/`-xh`/`-hh`/`-xhy`/`-zzhzz` cases rendered the agent manual and suppressed expected image runtime calls (`0.582s`; wall `5.302s`).
-- [ ] Smallest agent-scoped normalization passes without changing root/other namespaces or ordinary exact `agent -h` help.
+- [x] Smallest agent-scoped normalization passes all 20 cluster-tail cases (`0.561s`; wall `3.408s`) and focused agent/router tests (`4.462s`; wall `6.079s`); ordinary exact `agent -h` coverage remains green.
 - [ ] Focused, repeated, race, adversarial, and exact legacy-base differential gates pass.
 - [ ] Full CLI test is run if focused evidence indicates it is needed.
 - [ ] `gofmt`, `go vet ./...`, `go build ./cmd/pm`, `git diff --check`, scope, and dependency guards pass.
