@@ -5,7 +5,7 @@ Session `issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z`; model `op
 ## TDD and behavior
 
 - [x] Six phase artifacts created before production edits.
-- [ ] Exact focused RED captured before production edits.
+- [x] Exact focused RED captured before production edits (missing native injected-runtime/action seams; build failed as expected).
 - [ ] Native agent/plan/image/build/pull/ensure/help tree; legacy wrapper removed.
 - [ ] Typed repeated/bare `--request`; unknown flags and extra args compatible.
 - [ ] Bare/text/JSON/long/short/positional help parity.

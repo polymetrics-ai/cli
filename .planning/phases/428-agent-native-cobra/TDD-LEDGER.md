@@ -16,7 +16,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create all six phase artifacts before production edits | Complete |
-| 1 | RED | Focused agent/router tests after test-only edits | Pending |
+| 1 | RED | `go test ./internal/cli/ -run 'Agent|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` after test-only edits | Failed as expected (build gate) |
 | 2 | GREEN | Native tree, typed request, agent-only compatibility, injected image runtime, validation | Pending |
 | 3 | Refactor | Focused router/golden/full CLI and legacy differential | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
@@ -35,4 +35,17 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 
 ## Exact RED
 
-Pending test-only checkpoint. No production file will be edited before this section records the focused failure.
+Captured after all focused test-only edits and before any production-code edit:
+
+```text
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/agent_cli_test.go:276:11: undefined: runAgentImageAction
+internal/cli/agent_cli_test.go:307:11: undefined: newRootCmdWithAgentImageRuntime
+internal/cli/agent_cli_test.go:340:11: undefined: runAgentImageAction
+internal/cli/agent_cli_test.go:359:9: undefined: runAgentImageAction
+internal/cli/agent_cli_test.go:365:8: undefined: runAgentImageAction
+FAIL\tpolymetrics.ai/internal/cli [build failed]
+FAIL
+```
+
+The missing injected-runtime/action seams are intentional RED. The same test-only checkpoint also specifies native tree ownership, plan/help/global/compatibility behavior, unsafe-input rejection, deterministic output, and every image action without invoking Podman or Docker.

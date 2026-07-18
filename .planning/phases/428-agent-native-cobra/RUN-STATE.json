@@ -11,7 +11,7 @@
   "startedAt": "20260718T124925Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "planned",
+  "status": "red_captured",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -25,9 +25,14 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "eighth serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later units, the session exposes no subagent tool, and the user restricted work to issue 428"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "all focused agent tree, plan, image fake, help/global, compatibility, validation, and determinism tests were added before production edits; the focused build failed on the intentionally missing injected runtime and native action seams"
     }
   ],
-  "red": "pending",
+  "red": "focused agent/router test build failed as expected before production edits: runAgentImageAction and newRootCmdWithAgentImageRuntime were undefined",
   "green": "pending",
   "verification": "pending",
   "files": [
