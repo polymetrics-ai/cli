@@ -18,7 +18,7 @@ Session `issue-429-normalization-order-correction-pi-openai-20260718T215811Z`; e
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | N0 | Review/plan | Record the normalization-order finding, metadata-only RED matrix, capture → normalize → filter design, protection gates, differential, and checkpoint sequence before production edits | Complete |
-| N1 | RED | Focused known-flag-shaped-name × single-hyphen spaced-value metadata test plus raw-carrier and invalid action/name ownership protections | Pending |
+| N1 | RED | `go test ./internal/cli -run 'TestCredentials(KnownAddFlagNamesPreserveSingleHyphenSpacedValues|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1` | Failed as required in `18.206s` (wall `20.584s`): all four known-flag-shaped names rejected the metadata-only spaced-value case; raw-carrier and invalid action/name ownership protections stayed green |
 | N2 | GREEN | Capture/remove the private first name without tail filtering; normalize StringArray spaced values; then filter the legacy tail | Pending |
 | N3 | Verify | Focused/protection/repeated/race CLI, exact parent-base/start/head differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pending |
 

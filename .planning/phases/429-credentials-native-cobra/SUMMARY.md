@@ -4,7 +4,7 @@ Status: normalization-order correction in progress from exact head `2013d361c949
 
 ## Normalization-order correction
 
-Planning, TDD, verification, prompt, summary, and run-state artifacts were reopened before test or production edits. The correction will cover spaced StringArray data beginning with one hyphen after every known add-flag-shaped credential name, asserting metadata structure only. Planned order is raw-carrier rejection, private first-name capture/removal, StringArray normalization, then legacy-tail filtering. All first-name, action-discovery, carrier, help/global, compatibility, and redaction protections remain mandatory.
+Planning, TDD, verification, prompt, summary, and run-state artifacts were reopened before test or production edits. Strict RED then failed all four known add-flag-shaped name cases in `18.206s` (wall `20.584s`) while raw-carrier and invalid action/name ownership protections stayed green; assertions inspected metadata structure and printed no values. Planned order is raw-carrier rejection, private first-name capture/removal, StringArray normalization, then legacy-tail filtering. All first-name, action-discovery, carrier, help/global, compatibility, and redaction protections remain mandatory.
 
 ## Targeted final parser-order correction
 

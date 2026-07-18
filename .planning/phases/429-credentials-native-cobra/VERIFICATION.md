@@ -8,8 +8,8 @@ Invocation `issue-429-normalization-order-correction-pi-openai-20260718T215811Z`
 
 - [x] Read `/tmp/pm-397-rereview7-429.log` and accept the MEDIUM spaced StringArray value finding.
 - [x] Run GSD doctor/list, record unavailable programming-loop/manual fallback, load required skills/policies, and update issue artifacts before production edits.
-- [ ] RED: every known add-flag-shaped credential name preserves spaced StringArray data beginning with one hyphen; assert metadata structure without printing values.
-- [ ] RED preservation gate: raw internal-carrier rejection and invalid action/name ownership remain green.
+- [x] RED: every known add-flag-shaped credential name rejected spaced StringArray data beginning with one hyphen (`18.206s`, wall `20.584s`); assertions inspected metadata structure and printed no values.
+- [x] RED preservation gate: raw internal-carrier rejection and invalid action/name ownership remained green in the same focused run.
 - [ ] GREEN: capture/remove the private first name, normalize spaced StringArray values, then apply legacy-tail filtering; preserve all existing protections.
 - [ ] Focused, repeated, race, exact parent-base/correction-start/head differential, and full CLI pass without private value output.
 - [ ] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified.

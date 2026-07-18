@@ -496,6 +496,48 @@ func TestCredentialsKnownAddFlagNamesPreserveLifecycleAndTailFlags(t *testing.T)
 	}
 }
 
+func TestCredentialsKnownAddFlagNamesPreserveSingleHyphenSpacedValues(t *testing.T) {
+	const envName = "PM_TEST_CREDENTIAL_SPACED_VALUE"
+	t.Setenv(envName, opaqueEnvFixture)
+
+	for _, name := range []string{"--connector", "--from-env", "--value-stdin", "--config"} {
+		t.Run(name, func(t *testing.T) {
+			root := initCredentialsProject(t)
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(opaqueStdinFixture),
+				"credentials", "add", name, "ownership-decoy",
+				"--connector", "sample",
+				"--from-env", "-env-field="+envName,
+				"--value-stdin", "-stdin-field",
+				"--config", "-mode=normalization-order",
+				"tail-ignored"); err != nil {
+				t.Fatal("add rejected a safety-valid spaced StringArray value")
+			}
+
+			a, err := app.Open(root)
+			if err != nil {
+				t.Fatal("open temporary project after add")
+			}
+			cred, err := a.InspectCredential(name)
+			if err != nil {
+				t.Fatal("inspect credential metadata after add")
+			}
+			if cred.Name != name || cred.Connector != "sample" {
+				t.Fatal("credential identity metadata structure mismatch")
+			}
+			if len(cred.Config) != 1 {
+				t.Fatal("credential config metadata structure mismatch")
+			}
+			if _, ok := cred.Config["-mode"]; !ok {
+				t.Fatal("credential config key metadata missing")
+			}
+			if len(cred.SecretFields) != 2 || cred.SecretFields[0] != "-env-field" || cred.SecretFields[1] != "-stdin-field" {
+				t.Fatal("credential secret-field metadata structure mismatch")
+			}
+			assertStateDoesNotContainFixtures(t, root)
+		})
+	}
+}
+
 func TestCredentialsLegacyValidateIdentifierNamesRemainInspectableAndRemovable(t *testing.T) {
 	for _, name := range []string{"_legacy", ".legacy", "-legacy"} {
 		t.Run(name, func(t *testing.T) {

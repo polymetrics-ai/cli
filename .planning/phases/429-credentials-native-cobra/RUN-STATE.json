@@ -76,6 +76,7 @@
   "normalizationOrderCorrectionStartingHead": "2013d361c949395f41bb6a30209d65cbec4a62c2",
   "normalizationOrderCorrectionSource": "/tmp/pm-397-rereview7-429.log",
   "normalizationOrderCorrectionFindingsAccepted": ["MEDIUM_spaced_string_array_value_filtered_before_binding"],
+  "normalizationOrderCorrectionRed": "focused pre-production CLI failed as required in 18.206s (wall 20.584s): all four known-flag-shaped credential names rejected the metadata-only single-hyphen spaced-value case while raw-carrier and invalid action/name ownership protections remained green",
   "status": "normalization_order_correction_in_progress",
   "verificationPassed": false,
   "gsdAdapter": {
@@ -88,6 +89,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "normalization-order-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "strict metadata-only pre-production tests failed as required for all four known-flag-shaped credential names while raw-carrier and invalid action/name ownership protections remained green"
+    },
     {
       "cycle": "normalization-order-correction-plan",
       "decision": "local_critical_path",
