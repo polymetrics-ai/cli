@@ -17,7 +17,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create all six phase artifacts before production edits | Complete |
 | 1 | RED | `go test ./internal/cli/ -run 'Agent|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` after test-only edits | Failed as expected (build gate) |
-| 2 | GREEN | Native tree, typed request, agent-only compatibility, injected image runtime, validation | Pending |
+| 2 | GREEN | Native tree, typed request, agent-only compatibility, injected image runtime, validation | Pass (`4.408s`; expanded invalid-help rerun `4.480s`) |
 | 3 | Refactor | Focused router/golden/full CLI and legacy differential | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Parity/safety | built binary help/plan only; docs/website/generated/runtime dependency-free/scope guards | Pending |
@@ -49,3 +49,15 @@ FAIL
 ```
 
 The missing injected-runtime/action seams are intentional RED. The same test-only checkpoint also specifies native tree ownership, plan/help/global/compatibility behavior, unsafe-input rejection, deterministic output, and every image action without invoking Podman or Docker.
+
+## Focused GREEN
+
+```text
+$ go test ./internal/cli/ -run 'Agent|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1
+ok  \tpolymetrics.ai/internal/cli\t4.408s
+
+$ go test ./internal/cli/ -run 'Agent|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1
+ok  \tpolymetrics.ai/internal/cli\t4.480s
+```
+
+The second run includes expanded invalid image-action trailing-help coverage. Native `agent`, `plan`, `image`, `build`, `pull`, `ensure`, and hidden positional `help` nodes now own routing. `plan --request` is typed and the agent-only `parseFlags` call is removed. Image operations use an injected context-aware runtime seam; all success/error/ensure branches run against fakes. Agent-scoped normalization preserves legacy trailing help and literal separator behavior. Request, build root, Podman binary, and image references are validated before any runtime lookup or execution.

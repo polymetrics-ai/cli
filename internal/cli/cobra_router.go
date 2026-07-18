@@ -40,6 +40,10 @@ func markCobraLegacyError(err error) error {
 }
 
 func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer) *cobra.Command {
+	return newRootCmdWithAgentImageRuntime(ctx, cfg, stdout, stderr, osAgentImageRuntime{})
+}
+
+func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, imageRuntime agentImageRuntime) *cobra.Command {
 	root := cfg.Root
 	jsonOut := cfg.JSON
 	cmd := &cobra.Command{
@@ -75,6 +79,7 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
+	cmd.AddCommand(newAgentCobraCommand(ctx, cfg, root, stdout, jsonOut, imageRuntime))
 	cmd.AddCommand(newDocsCobraCommand(stdout, jsonOut))
 	cmd.AddCommand(newSkillsCobraCommand(stdout, jsonOut))
 	cmd.AddCommand(newVersionCobraCommand(stdout, jsonOut))
@@ -113,6 +118,27 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 	if len(args) >= 2 && args[0] == "skills" && args[1] == "generate" {
 		return normalizeStringArraySpaceValues(args, 2, skillsGenerateFlagNames)
 	}
+	if len(args) >= 2 && args[0] == "agent" {
+		switch args[1] {
+		case "plan":
+			args = normalizeStringArraySpaceValues(args, 2, agentPlanFlagNames)
+			return normalizeAgentLegacyActionArgs(args, 2)
+		case "image":
+			if len(args) >= 3 && isLegacyHelpFlag(args[2]) {
+				out := append([]string(nil), args[:2]...)
+				out = append(out, "--")
+				out = append(out, args[2:]...)
+				return out
+			}
+			if len(args) >= 3 {
+				return normalizeAgentLegacyActionArgs(args, 3)
+			}
+		default:
+			if !isHelpArg(args[1]) {
+				return normalizeAgentLegacyActionArgs(args, 2)
+			}
+		}
+	}
 	if len(args) >= 2 && args[0] == "docs" {
 		if args[1] == "generate" || args[1] == "validate" {
 			args = normalizeStringArraySpaceValues(args, 2, docsFlagNames)
@@ -124,7 +150,23 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 	return args
 }
 
-// normalizeDocsLegacyActionArgs keeps tokens ignored by the old docs parser from becoming Cobra control flags.
+// normalizeAgentLegacyActionArgs keeps tokens ignored by the old agent parser from becoming Cobra control flags.
+func normalizeAgentLegacyActionArgs(args []string, start int) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	for _, arg := range args[start:] {
+		if arg == "--" || isLegacyHelpFlag(arg) {
+			continue
+		}
+		out = append(out, arg)
+	}
+	return out
+}
+
+func isLegacyHelpFlag(arg string) bool {
+	return arg == "-h" || arg == "--help" || strings.HasPrefix(arg, "--help=")
+}
+
 func normalizeDocsLegacyActionArgs(args []string, start int) []string {
 	out := make([]string, 0, len(args))
 	out = append(out, args[:start]...)
@@ -169,6 +211,10 @@ var perfSyncModesFlagNames = map[string]struct{}{
 
 var skillsGenerateFlagNames = map[string]struct{}{
 	"dir": {},
+}
+
+var agentPlanFlagNames = map[string]struct{}{
+	"request": {},
 }
 
 var docsFlagNames = map[string]struct{}{
@@ -222,9 +268,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "reverse", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, stdout, jsonOut) })
-		}},
-		{name: "agent", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runAgent(ctx, cfg, root, args, stdout, jsonOut)
 		}},
 		{name: "flow", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runFlow(ctx, cfg, a, args, stdout, jsonOut) })
@@ -453,6 +496,111 @@ func newRuntimeDoctorCobraCommand(ctx context.Context, cfg config.Config, stdout
 		},
 	}
 	setManualHelp(cmd, "runtime", stdout, jsonOut)
+	return cmd
+}
+
+type agentPlanFlags struct {
+	Requests []string
+}
+
+func newAgentCobraCommand(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool, imageRuntime agentImageRuntime) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "agent",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		RunE: func(_ *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				return errUsage
+			}
+			return markCobraLegacyError(writeManual("agent", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "agent", stdout, jsonOut)
+	cmd.AddCommand(newAgentPlanCobraCommand(stdout, jsonOut))
+	cmd.AddCommand(newAgentImageCobraCommand(ctx, cfg, root, stdout, jsonOut, imageRuntime))
+	cmd.AddCommand(newAgentHelpCobraCommand(stdout, jsonOut))
+	return cmd
+}
+
+func newAgentPlanCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	var flags agentPlanFlags
+	cmd := &cobra.Command{
+		Use:           "plan",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(runAgentPlan(lastString(flags.Requests), stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "agent", stdout, jsonOut)
+	cmd.Flags().StringArrayVar(&flags.Requests, "request", nil, "natural-language planning request")
+	if flag := cmd.Flags().Lookup("request"); flag != nil {
+		flag.NoOptDefVal = "true"
+	}
+	return cmd
+}
+
+func newAgentImageCobraCommand(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool, imageRuntime agentImageRuntime) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "image",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, args []string) error {
+			return markCobraLegacyError(runAgentImage(ctx, cfg, root, args, stdout, jsonOut, imageRuntime))
+		},
+	}
+	setManualHelp(cmd, "agent", stdout, jsonOut)
+	for _, action := range []string{"build", "pull", "ensure"} {
+		cmd.AddCommand(newAgentImageActionCobraCommand(ctx, cfg, root, stdout, jsonOut, action, imageRuntime))
+	}
+	return cmd
+}
+
+func newAgentImageActionCobraCommand(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool, action string, imageRuntime agentImageRuntime) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           action,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(runAgentImageAction(ctx, cfg, root, action, stdout, jsonOut, imageRuntime))
+		},
+	}
+	setManualHelp(cmd, "agent", stdout, jsonOut)
+	return cmd
+}
+
+func newAgentHelpCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "help",
+		Hidden:        true,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("agent", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "agent", stdout, jsonOut)
 	return cmd
 }
 

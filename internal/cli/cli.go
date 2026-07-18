@@ -1198,18 +1198,11 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 	}
 }
 
-func runAgent(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
+func runAgentPlan(request string, stdout io.Writer, jsonOut bool) error {
+	if err := safety.RejectDangerousChars(request, "agent request"); err != nil {
+		return validationErrorf("%v", err)
 	}
-	if args[0] == "image" {
-		return runAgentImage(ctx, cfg, root, args[1:], stdout, jsonOut)
-	}
-	if args[0] != "plan" {
-		return errUsage
-	}
-	flags := parseFlags(args[1:])
-	req := strings.ToLower(flags.first("request"))
+	req := strings.ToLower(request)
 	steps := []string{"pm connectors list --json", "pm help etl"}
 	if strings.Contains(req, "sample") && strings.Contains(req, "customers") {
 		steps = []string{

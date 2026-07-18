@@ -6,19 +6,19 @@ Session `issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z`; model `op
 
 - [x] Six phase artifacts created before production edits.
 - [x] Exact focused RED captured before production edits (missing native injected-runtime/action seams; build failed as expected).
-- [ ] Native agent/plan/image/build/pull/ensure/help tree; legacy wrapper removed.
-- [ ] Typed repeated/bare `--request`; unknown flags and extra args compatible.
-- [ ] Bare/text/JSON/long/short/positional help parity.
-- [ ] Invalid actions and global assigned booleans preserve categories/output.
-- [ ] Request/path/Podman-bin/image-reference validation covered.
-- [ ] All image actions covered through injected fakes/temp dirs; no Podman/Docker or image operation executed.
-- [ ] Agent trailing help and literal `--` compatibility preserved.
-- [ ] Only the agent `parseFlags` call removed; shared/dynamic parser remains.
-- [ ] Deterministic output verified.
+- [x] Native agent/plan/image/build/pull/ensure/help tree; legacy wrapper removed.
+- [x] Typed repeated/bare `--request`; unknown flags and extra args compatible.
+- [x] Bare/text/JSON/long/short/positional help parity in focused tests.
+- [x] Invalid actions and global assigned booleans preserve categories/output in focused tests.
+- [x] Request/path/Podman-bin/image-reference validation covered.
+- [x] All image actions covered through injected fakes/temp dirs; no Podman/Docker or image operation executed.
+- [x] Agent trailing help and literal `--` compatibility preserved in focused tests.
+- [x] Only the agent `parseFlags` call removed; shared/dynamic parser remains.
+- [x] Deterministic output verified in focused tests.
 
 ## Gates
 
-- [ ] Focused agent/router tests.
+- [x] Focused agent/router tests (`4.408s`; expanded rerun `4.480s`).
 - [ ] Focused agent/router/golden tests.
 - [ ] Golden transcript test.
 - [ ] Full `internal/cli/...`.
