@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"unicode"
 
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/safety"
@@ -165,13 +164,15 @@ func validateAgentImageReference(image string) error {
 		return fmt.Errorf("agent image reference contains an invalid path separator")
 	}
 	for _, segment := range strings.Split(image, "/") {
-		if segment == "" || segment == "." || segment == ".." || strings.Contains(segment, "..") {
+		if segment == "" || segment == "." || segment == ".." {
 			return fmt.Errorf("agent image reference contains invalid path traversal")
 		}
 	}
 	for _, r := range image {
 		switch {
-		case unicode.IsLetter(r), unicode.IsDigit(r):
+		case r >= 'a' && r <= 'z':
+		case r >= 'A' && r <= 'Z':
+		case r >= '0' && r <= '9':
 		case strings.ContainsRune("._-/:@+", r):
 		default:
 			return fmt.Errorf("agent image reference contains invalid character %q", r)

@@ -358,6 +358,11 @@ func TestAgentImageValidationPreventsRuntimeExecution(t *testing.T) {
 			c.RLM.Image = "registry/../agent:tag"
 			return c
 		}(), root: root, action: "build"},
+		{name: "unicode image", cfg: func() config.Config {
+			c := agentTestConfig(root, false)
+			c.RLM.Image = "registry/ågent:tag"
+			return c
+		}(), root: root, action: "pull"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
