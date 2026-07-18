@@ -11,10 +11,7 @@ var (
 	buildDate = "unknown"
 )
 
-func runVersion(args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) > 0 {
-		return usageErrorf("usage: pm version [--json]")
-	}
+func runVersion(stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{
 			"kind":    "Version",

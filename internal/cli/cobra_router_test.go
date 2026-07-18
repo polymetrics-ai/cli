@@ -50,7 +50,7 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 	for _, spec := range cobraLegacyCommands(config.Config{}) {
 		legacyCommands[spec.name] = struct{}{}
 	}
-	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}, "runtime": {}}
+	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}, "runtime": {}, "version": {}}
 	if len(expectedHidden) != len(legacyCommands)+len(nativeCommands) {
 		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native commands registers %d", len(expectedHidden), len(legacyCommands)+len(nativeCommands))
 	}
@@ -200,6 +200,38 @@ func TestRuntimeCommandIsNativeCobraSubtree(t *testing.T) {
 	}
 	if directive != cobra.ShellCompDirectiveNoFileComp {
 		t.Fatalf("runtime doctor completion directive = %v, want NoFileComp", directive)
+	}
+}
+
+func TestVersionCommandIsNativeCobraLeaf(t *testing.T) {
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	versionCmd := findCobraCommand(root, "version")
+	if versionCmd == nil {
+		t.Fatal("missing version command")
+	}
+	if versionCmd.DisableFlagParsing {
+		t.Fatal("version command must use native Cobra flag parsing")
+	}
+	if versionCmd.FParseErrWhitelist.UnknownFlags {
+		t.Fatal("version command must preserve legacy rejection of unknown flags")
+	}
+	if versionCmd.ValidArgsFunction == nil {
+		t.Fatal("version command must suppress file completion fallback until Phase 15 completions")
+	}
+	completions, directive := versionCmd.ValidArgsFunction(versionCmd, nil, "")
+	if len(completions) != 0 {
+		t.Fatalf("version completion seam returned %v, want no Phase 15 completions", completions)
+	}
+	if directive != cobra.ShellCompDirectiveNoFileComp {
+		t.Fatalf("version completion directive = %v, want NoFileComp", directive)
+	}
+
+	help := findCobraCommand(versionCmd, "help")
+	if help == nil {
+		t.Fatal("version command must preserve positional help compatibility")
+	}
+	if !help.Hidden {
+		t.Fatal("version positional help alias must stay hidden until Phase 19 help-tree work")
 	}
 }
 

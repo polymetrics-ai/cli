@@ -41,6 +41,13 @@ func parseGlobal(args []string) (globalOptions, error) {
 		switch {
 		case arg == "--json":
 			out.jsonOut = true
+		case strings.HasPrefix(arg, "--json="):
+			value := strings.TrimPrefix(arg, "--json=")
+			parsed, err := parseGlobalBool("--json", value)
+			if err != nil {
+				return out, err
+			}
+			out.jsonOut = parsed
 		case arg == "--plain":
 			out.plain = true
 		case strings.HasPrefix(arg, "--plain="):
