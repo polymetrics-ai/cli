@@ -20,9 +20,20 @@ Session `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; profil
 | S0 | Review/plan | Record all three findings, effect-boundary design, RED cases, broad shared-seam verification, and checkpoint sequence before production edits | Complete |
 | S1 | RED | `go test ./internal/app -run 'Test(ResolvedLocalConnectorRelativePathUsesSelectedProjectRoot|LocalConnectorCheckRevalidatesPathAfterCredentialResolution)$' -count=1`; focused CLI source/redaction command | Failed as required: both relative paths missed the selected root; both denied post-resolution retargets reached external effects; leading-hyphen add exited 1. App `3.539s`, CLI `3.554s`, combined wall `13s` |
 | S2 | GREEN | Runtime-only path normalization, explicit non-secret local-write policy, Warehouse/Outbox effect-boundary validation, bounded Cobra name carrier, and required actual state file | Pass: focused app `3.512s`, CLI `16.112s`, connectors `0.355s`, safety `0.340s`; all credentials `48.502s`; app/connectors/safety `26.557s`/`0.789s`/`0.454s` |
-| S3 | Verify | Focused/repeated/race/app/connectors/CLI/base differential/full repository plus gofmt/vet/build/`make verify` | In progress: repeated app `14.917s`, CLI `79.908s`, connectors/safety `0.277s`/`0.411s`; focused race app `34.593s`, CLI `180.125s`, connectors/safety pass; focused vet pass |
+| S3 | Verify | Focused/repeated/race/app/connectors/CLI/base differential/full repository plus gofmt/vet/build/`make verify` | Complete: full app `25.808s`, CLI `280.439s`, connectors certify `337.004s`; exact-start differential preserved 5/5 and corrected leading-name base/head exits 1/0; full repo app `27.976s`, CLI `285.504s`, certify `340.518s`; gofmt/vet/build and `make verify` pass |
 
-Tests use temporary roots and synthetic inputs only. They must not print fixture values or contact external services. The corrected state helper now requires and decodes the actual state file; this test-only correction is exercised alongside the failing behavior cases. `verificationPassed` remains false until the complete declared gate exits 0.
+Tests use temporary roots and synthetic inputs only. They did not print fixture values or contact external services. The corrected state helper requires and decodes the actual state file. Full verification passed, including local smoke through the existing reverse ETL plan → preview → approval → execute flow; no external runtime service was used.
+
+### Second correction final evidence
+
+- Focused GREEN: app `3.512s`, CLI `16.112s`, connectors `0.355s`, safety `0.340s`.
+- Stability: repeated app `14.917s`, CLI `79.908s`, connectors/safety `0.277s`/`0.411s`; focused race app `34.593s`, CLI `180.125s`, connectors/safety pass.
+- Broader packages: all credentials `48.502s`; app `25.808s`; CLI `280.439s`; connectors tree passed with certify `337.004s`.
+- Exact `fae7d599` differential: five preserved help/error/ordinary-add cases matched exit/stdout/stderr; corrected leading-hyphen add changed from base exit 1 to head exit 0.
+- Full repository: app `27.976s`, CLI `285.504s`, certify `340.518s`; all packages passed.
+- `make verify`: pass; docs validation and local smoke passed, lint reported 0 issues, connector validation checked 547 definitions with 0 findings.
+- Built help: topic/bare/long-help exits 0, stderr empty, 1252 identical bytes, SHA-256 `dbe21fc0c6a594046611ad51c5a4119f8c82aa8a30879425bbb74485ea6fd949`.
+- No dependency, checked-in docs/website, private fixture output, external service, real credential, PR, or review.
 
 ## Bounded independent review correction ledger
 

@@ -1,10 +1,14 @@
 # Phase 429 Summary
 
-Status: second bounded correction in progress from exact head `fae7d599668637bea345fe76877dd75e31dd2ad8`; no PR or external review.
+Status: second bounded correction complete, verified, and pushed from exact head `fae7d599668637bea345fe76877dd75e31dd2ad8`; no PR or review.
 
 ## Second bounded correction
 
-All three findings from `/tmp/pm-397-rereview-429.log` are accepted. Plan/TDD/verification/run-state artifacts were reopened before production edits. Strict RED reproduced selected-root relative misses, post-resolution Warehouse/Outbox external effects, and leading-hyphen add failure; the state helper now requires the actual state file. Runtime-only path normalization, explicit non-secret local-write policy at each local effect seam, and a bounded Cobra name carrier are GREEN under focused, repeated, race, all-credentials, app, connectors, safety, and focused vet gates. Full shared-seam differential/repository verification and final evidence remain pending.
+All three findings from `/tmp/pm-397-rereview-429.log` are closed. Plan/TDD/verification/run-state artifacts were reopened before production edits. Strict RED reproduced selected-root relative misses, post-resolution Warehouse/Outbox external effects, and leading-hyphen add failure; the state helper now requires the actual state file.
+
+Relative local runtime paths now resolve beneath the selected root without changing persisted credential config. An optional non-secret runtime policy carries the selected root and explicit external opt-in; Warehouse/Outbox `Check` and `Write` plus app warehouse materialization validate it immediately before directory effects. Nil-policy direct connector calls retain compatibility. A hidden internal Cobra carrier preserves a safety-valid leading-hyphen first name while parsing later flags; suspicious later positional names remain fail-closed.
+
+Focused, repeated, race, app, connectors, CLI, five-case exact-start preserved differential, full repository, gofmt, vet, build, and `make verify` passed. Full repository app/CLI/certify timings were `27.976s`/`285.504s`/`340.518s`; lint 0, connector validation 547/0, and built credentials help remained byte-identical. Implementation head: `ec7064a851e572feb8cffdde2c394917ad38662c`.
 
 ## Bounded review correction
 

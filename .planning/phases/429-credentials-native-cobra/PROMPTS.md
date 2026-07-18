@@ -43,9 +43,9 @@ GSD route: doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-researc
 
 Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`. CLI help/docs/website parity policy is active.
 
-Downstream artifact: strict RED tests, actual-state assertion, runtime-only local-path normalization and non-secret effect policy, Warehouse/Outbox effect validation, and bounded Cobra name carrier are complete. Broad differential/full-repository verification remains pending.
+Downstream artifact: strict RED tests, actual-state assertion, runtime-only local-path normalization and non-secret effect policy, Warehouse/Outbox/app effect validation, bounded Cobra name carrier, and finalized phase evidence.
 
-Verification result: focused GREEN, repeated, focused race, all credentials, app/connectors/safety, and focused vet pass. RED had reproduced both selected-root misses, both denied post-resolution external effects, and leading-hyphen add failure before production edits. No real credential, private fixture output, external service, dependency, PR, or external review.
+Verification result: pass. Focused, repeated, race, all-credentials, app, connectors, CLI, exact-start differential, full repository, gofmt, vet, build, and `make verify` passed. Full repository app/CLI/certify timings were `27.976s`/`285.504s`/`340.518s`; lint 0 and connector validation 547/0. No real credential, private fixture output, external service, dependency, PR, or review.
 
 ## Verification and local review snapshot
 

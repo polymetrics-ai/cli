@@ -25,6 +25,12 @@ Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace
 - Smallest implementation: normalize only project-relative local runtime paths in the cloned runtime config; carry an explicit non-secret local-write policy in `connectors.RuntimeConfig`; revalidate immediately before Warehouse/Outbox `Check` filesystem effects; replace the Cobra `--` tail boundary with an internal bounded-name carrier that keeps later flags parseable while preserving first-name ownership; correct the state helper path and existence requirement. Persisted credential config and ordinary/direct connector paths remain compatible.
 - Verification: focused RED/GREEN; repeated and race safety/app/connectors/CLI tests; built CLI and exact-base differential; full repository tests; gofmt, vet, build, and `make verify` because the shared safety/effect seam changes. Commit and push coherent plan, RED, GREEN, and final evidence checkpoints. No real credentials, private fixture output, external services, dependencies, PR, or external review.
 
+### Second correction completion
+
+Completed at implementation head `ec7064a851e572feb8cffdde2c394917ad38662c` on `20260718T174213Z`. Relative local runtime paths are absolute beneath the selected root; the persisted config remains unchanged. `RuntimeConfig` carries an explicit non-secret optional local-write policy, and Warehouse/Outbox `Check` and `Write` plus app warehouse materialization revalidate immediately before directory effects. Direct connector callers without policy preserve compatibility. Cobra carries a leading-hyphen first name through a hidden internal boundary only when its remaining tail is flags, while suspicious later positional names retain the fail-closed literal boundary. The state helper requires and parses the actual state file.
+
+All focused, repeated, race, app, connectors, CLI, exact-start differential, full repository, gofmt, vet, build, and `make verify` gates passed. Full repository timings included app `27.976s`, CLI `285.504s`, and certify `340.518s`; lint reported 0 issues and connector validation 547/0. No dependency, checked-in docs/website, real credential, private fixture output, external service, PR, or review was used.
+
 ## Bounded independent review correction
 
 - Session: `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`.

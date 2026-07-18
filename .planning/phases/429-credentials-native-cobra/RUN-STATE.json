@@ -31,8 +31,10 @@
   "secondCorrectionProfile": "Sol/high",
   "secondCorrectionSource": "/tmp/pm-397-rereview-429.log",
   "secondCorrectionFindingsAccepted": ["HIGH_effect_path_containment", "MEDIUM_leading_hyphen_add", "LOW_actual_state_path"],
-  "status": "second_correction_in_progress",
-  "verificationPassed": false,
+  "secondCorrectionEndedAt": "20260718T174213Z",
+  "secondCorrectionEndingImplementationHead": "ec7064a851e572feb8cffdde2c394917ad38662c",
+  "status": "complete_verified_pushed_no_pr_no_review",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -57,6 +59,16 @@
       "cycle": "second-correction-green",
       "decision": "local_critical_path",
       "reason": "runtime-only local path normalization, explicit non-secret effect policy, Warehouse/Outbox revalidation, and bounded Cobra name carriage pass focused, repeated, race, all-credentials, app, connectors, safety, and focused vet gates"
+    },
+    {
+      "cycle": "second-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full app, connectors, CLI, exact-start differential, full repository, gofmt, vet, build, and make verify passed; help parity, dependency scope, lint, and connector validation are clean"
+    },
+    {
+      "cycle": "second-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "all three findings are closed, final evidence is recorded, coherent checkpoints are pushed, and the user prohibited PR and review"
     },
     {
       "cycle": "bounded-review-correction-plan",
@@ -148,13 +160,20 @@
     "c2dedfc8 docs(planning): plan credentials review corrections",
     "9781659c test(cli): expose credentials review regressions",
     "7970896c fix(cli): close credentials review findings",
-    "docs(planning): finalize credentials review correction evidence"
+    "docs(planning): finalize credentials review correction evidence",
+    "b9a4c775 docs(planning): plan second credentials correction",
+    "6c36ecd2 test(cli): expose second credentials regressions",
+    "ec7064a8 fix(cli): enforce local credential effect boundaries"
   ],
-  "push": "all original and bounded-review planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
+  "push": "all original, first-review, and second-correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
+  "secondCorrectionReviewRoute": "not_run_user_prohibited_review",
   "reviewCorrectionRed": "focused internal/cli test failed in 6.546s before production edits and reproduced all accepted findings without secret material or external services",
   "reviewCorrectionGreen": "focused safety and CLI passed in 8.257s; full credentials in 46.463s; safety and app in 23.300s; focused race safety and CLI in 109.283s",
   "reviewCorrectionVerification": "pass: repeated correction 49.385s; repeated safety 0.560s; full CLI 282.493s; full repository CLI 284.380s and certify 340.838s; exact base help 2/2; golden/manual 6.146s; gofmt, vet, build, and make verify passed; lint 0 and connector validation 547/0",
-  "safety": "no real secrets, interactive secret entry, credentialed external checks, optional services, dependencies, destructive external actions, or unrelated writes; correction tests use temp paths and inspect filesystem existence only"
+  "secondCorrectionRed": "focused app and CLI tests failed before production edits: selected-root relative effects missed the selected root, denied post-resolution retargets reached external effects, and leading-hyphen add exited 1; actual state helper corrected test-first",
+  "secondCorrectionGreen": "focused app 3.512s, CLI 16.112s, connectors 0.355s, safety 0.340s; repeated app 14.917s and CLI 79.908s; focused race app 34.593s and CLI 180.125s; all credentials 48.502s",
+  "secondCorrectionVerification": "pass: app 25.808s, CLI 280.439s, connectors certify 337.004s; exact-start differential preserved 5/5 with corrected leading-name base/head exits 1/0; full repository app 27.976s, CLI 285.504s, certify 340.518s; gofmt, vet, build, and make verify passed; lint 0 and connector validation 547/0",
+  "safety": "no real secrets, private fixture output, interactive secret entry, credentialed external checks, optional services, dependencies, destructive external actions, PR, review, or unrelated writes; correction tests use temporary paths and synthetic inputs only"
 }

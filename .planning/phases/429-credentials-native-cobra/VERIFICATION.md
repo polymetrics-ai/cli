@@ -14,11 +14,11 @@ Invocation `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; pro
 - [x] Test helper correction: state-redaction helper now requires and parses `.polymetrics/state/state.json` and is exercised by the focused CLI run.
 - [x] GREEN: runtime-only path normalization and explicit non-secret effect policy pass focused app/connectors/safety tests; nil-policy direct connector compatibility remains green.
 - [x] GREEN: bounded Cobra name carrier preserves the first token, parses later connector/source/global flags, and keeps later-name discovery tests green.
-- [ ] Focused, repeated, race, app, connectors, CLI, exact-base differential, full repository, gofmt, vet, build, and `make verify` pass. Focused/repeated/race/app/connectors/credentials and focused vet currently pass; broad gates remain pending.
-- [ ] Runtime help/manual/website/golden surfaces are unchanged or parity-verified.
-- [ ] Commit and push all coherent checkpoints; no real credentials, private fixture output, external services, dependencies, PR, or external review.
+- [x] Focused, repeated, race, app, connectors, CLI, exact-start differential, full repository, gofmt, vet, build, and `make verify` pass.
+- [x] Runtime help/manual/website/golden surfaces are unchanged or parity-verified: topic/bare/long-help are byte-identical; no checked-in docs/website delta.
+- [x] Plan, RED, and GREEN checkpoints committed and pushed; final evidence checkpoint prepared for push. No real credentials, private fixture output, external services, dependencies, PR, or review.
 
-Result: in progress; `verificationPassed=false` until every declared gate passes.
+Result: pass; `verificationPassed=true`. Full repository tests passed (app `27.976s`, CLI `285.504s`, certify `340.518s`), and `make verify` passed with lint 0 and connector validation 547/0.
 
 ## Bounded review correction checklist
 
