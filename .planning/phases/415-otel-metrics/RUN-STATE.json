@@ -34,6 +34,16 @@
       "cycle": "verify-postcommit",
       "decision": "local_critical_path",
       "reason": "make verify passed after implementation/dependency commit in isolated worker branch"
+    },
+    {
+      "cycle": "ci-website-generated-data-fix",
+      "decision": "local_critical_path",
+      "reason": "Website checks CI reported docs generated-data drift; generated website docs data inline in same issue branch"
+    },
+    {
+      "cycle": "final-verify-after-generated-data",
+      "decision": "local_critical_path",
+      "reason": "make verify and website generated-data/typecheck gates passed after generated-data fix"
     }
   ],
   "gates": {

@@ -30,7 +30,7 @@ Applies because telemetry config/help/docs change.
 - [x] Invalid actions still usage errors: `./pm connectors bogus --json` exits 2.
 - [x] `docs/cli/config.md` generated/updated from embedded docs.
 - [x] Website docs under `website/content/docs/cli-reference.mdx` updated.
-- [x] Generated website data updated if generator requires (not required; MDX-only text change, docs data generator not part of this CLI reference update).
+- [x] Generated website data updated if generator requires (`website/lib/docs.generated.ts`).
 - [x] Completion metadata: not applicable unless command/flag completion changes.
 
 ## Focused commands to run
@@ -75,3 +75,6 @@ git diff -- go.mod go.sum
 | `git diff -- go.mod go.sum`; `go list -m all | grep -E '^(go\\.opentelemetry\\.io/otel|go\\.temporal\\.io/sdk/contrib/opentelemetry)( |/)'` | pass | Direct additions: `go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp@v1.44.0`, `go.opentelemetry.io/otel/exporters/stdout/stdoutmetric@v1.44.0`, `go.opentelemetry.io/otel/sdk/metric@v1.44.0`, `go.temporal.io/sdk/contrib/opentelemetry@v0.7.0`; `go.opentelemetry.io/otel/metric@v1.44.0` promoted from indirect due API import; `go.opentelemetry.io/otel/metric/x@v0.66.0` checksum added transitively. |
 | `make verify` before commit | fail/expected | Stopped at `tidy-check` because dependency diff was intentionally uncommitted; rerun after committing dependency delta. |
 | `make verify` after `9894e6ef` | pass | Full verify passed: fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, golangci-lint connector subset (`0 issues`), and `connectorgen validate` (`547 connector(s) checked, 0 findings`). |
+| `cd website && pnpm run gen:website-data` | pass | Regenerated `website/lib/docs.generated.ts` after Website checks CI reported docs data drift. |
+| `cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 install --frozen-lockfile --reporter=silent && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run typecheck` | pass | Website dependencies installed with CI pnpm version; `tsc --noEmit` passed. Local pnpm 9.15.4 frozen install fails on lockfile override mismatch, so CI-matched corepack pnpm 11.7.0 was used. |
+| Final post-generated-data gates | pass | `make verify` passed; `COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run gen:website-data` produced no tracked generated-data diff; `COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run typecheck` passed; `git diff --check` passed. |

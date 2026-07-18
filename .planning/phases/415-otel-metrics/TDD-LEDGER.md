@@ -17,9 +17,11 @@
 - `golang-dependency-management` — ADR-only exact dependency additions.
 - `golang-cli` — stdout/stderr/exit-code/config docs parity.
 - `golang-documentation` — concise CLI docs and website parity.
+- `vercel-react-best-practices` — loaded for website generated-data parity after CI required `website/lib/docs.generated.ts`; no React code changed.
+- `vercel-composition-patterns` — loaded for website TS awareness; no component API/composition changes.
 - `caveman` — final compact handoff only.
 
-Missing repo stack skill note: `.pi/skills/go-implementation/SKILL.md` is absent; `.pi/skills` contains only `gsd-core`.
+Missing repo stack skill note: `.pi/skills/go-implementation/SKILL.md` and `.pi/skills/ts-website/SKILL.md` are absent; `.pi/skills` contains only `gsd-core`.
 
 ## GSD command evidence
 
@@ -64,3 +66,5 @@ Use synthetic non-secret markers only. Never use real credentials.
 | 6 | verify | Gate | `gofmt -w cmd internal`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `git diff --check` | Pass | Full package suite green; build and whitespace gates green. |
 | 7 | verify | Gate | `make verify` before dependency commit | Fail/expected | Stopped at `tidy-check` because ADR-approved go.mod/go.sum dependency delta was intentionally uncommitted; rerun after commit. |
 | 8 | verify | Gate | `make verify` after `9894e6ef` | Pass | Full verify green, including smoke, connector lint, and `connectorgen validate`. |
+| 9 | ci-fix | Generated parity | `cd website && pnpm run gen:website-data`; `cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 install --frozen-lockfile --reporter=silent && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run typecheck` | Pass | Website checks CI required `website/lib/docs.generated.ts`; regenerated docs data and typechecked with CI pnpm 11.7.0 because local pnpm 9.15.4 rejects the lockfile override config. |
+| 10 | verify | Gate | `make verify`; `(cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run gen:website-data)` with generated-data status check; `(cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run typecheck)`; `git diff --check` | Pass | Final post-generated-data gates green; generated-data check has no tracked diff. |

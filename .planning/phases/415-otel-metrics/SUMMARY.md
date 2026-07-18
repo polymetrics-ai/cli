@@ -17,7 +17,7 @@ Status: verified; manual GSD/TDD fallback active because `scripts/gsd prompt pro
 - Batched ETL `RunCounters` with local hot-path increments and batch-boundary metric flushes for connector and warehouse ETL paths.
 - CLI/file-export contract test reconciling `pm.records.*` and `pm.batches.flushed` with final `ETLRun` envelope counts.
 - Temporal client options gated on telemetry enablement with contrib tracing interceptor and metrics handler; contrib metrics `OnError` logs redacted warnings instead of panicking.
-- Docs/help parity updates for tracing+metrics, env-only metrics endpoint, warning behavior, and batched metrics.
+- Docs/help parity updates for tracing+metrics, env-only metrics endpoint, warning behavior, and batched metrics, including generated website docs data.
 - ADR-approved dependency delta only: OTel metric exporters/SDK at v1.44.0 and Temporal contrib v0.7.0; `go.opentelemetry.io/otel/metric` promoted from existing indirect to direct at v1.44.0.
 
 ## Verification snapshot
@@ -29,4 +29,6 @@ Status: verified; manual GSD/TDD fallback active because `scripts/gsd prompt pro
 - `go test -timeout 20m ./...`: pass.
 - `go build ./cmd/pm`: pass.
 - `git diff --check`: pass.
-- `make verify`: pass after implementation commit `9894e6ef` (fmt, tidy-check, vet, full tests, build, docs validate, smoke, connector lint, connectorgen validate).
+- `make verify`: pass after implementation commit, artifact commit, and generated-data fix (fmt, tidy-check, vet, full tests, build, docs validate, smoke, connector lint, connectorgen validate).
+- `cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run gen:website-data`: pass with no generated-data diff after generated-data fix.
+- `cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run typecheck`: pass after generated docs data fix.
