@@ -531,6 +531,71 @@ func TestCredentialsActionTailHelpAndLiteralSeparatorRemainLegacyInputs(t *testi
 	}
 }
 
+func TestCredentialsRawInternalNameCarrierFailsClosed(t *testing.T) {
+	carrierForms := []struct {
+		name string
+		args []string
+	}{
+		{name: "assigned", args: []string{"--pm-internal-credentials-name=carrier-target"}},
+		{name: "bare", args: []string{"--pm-internal-credentials-name"}},
+		{name: "spaced", args: []string{"--pm-internal-credentials-name", "carrier-target"}},
+	}
+	for _, action := range []string{"add", "inspect", "test", "remove"} {
+		for _, form := range carrierForms {
+			t.Run(action+"_"+form.name, func(t *testing.T) {
+				root := initCredentialsProject(t)
+				if action != "add" {
+					a, err := app.Open(root)
+					if err != nil {
+						t.Fatalf("open temporary project: %v", err)
+					}
+					for _, name := range []string{"carrier-decoy", "carrier-target"} {
+						if _, err := a.AddCredential(context.Background(), app.AddCredentialRequest{
+							Name:      name,
+							Connector: "sample",
+							Secrets:   map[string]string{"token": opaqueEnvFixture},
+							Config:    map[string]string{"owner": name},
+						}); err != nil {
+							t.Fatalf("seed synthetic credential metadata: %v", err)
+						}
+					}
+				}
+
+				args := []string{"credentials", action, "carrier-decoy"}
+				args = append(args, form.args...)
+				if action == "add" {
+					args = append(args, "--connector=sample")
+				}
+				args = append(args, "--root="+root, "--json")
+				var stdout, stderr bytes.Buffer
+				if code := Run(args, &stdout, &stderr); code != 2 {
+					t.Fatalf("raw internal carrier code = %d, want usage 2", code)
+				}
+				assertOpaqueFixtureAbsent(t, stdout.String(), stderr.String())
+				if strings.Contains(stdout.String(), "carrier-target") {
+					t.Fatal("raw internal carrier exposed the non-positional credential record")
+				}
+
+				a, err := app.Open(root)
+				if err != nil {
+					t.Fatalf("reopen temporary project: %v", err)
+				}
+				if action == "add" {
+					if got := len(a.ListCredentials()); got != 0 {
+						t.Fatalf("raw internal carrier created %d credential records, want 0", got)
+					}
+					return
+				}
+				for _, name := range []string{"carrier-decoy", "carrier-target"} {
+					if _, err := a.InspectCredential(name); err != nil {
+						t.Fatalf("raw internal carrier changed credential ownership: %s", name)
+					}
+				}
+			})
+		}
+	}
+}
+
 func TestCredentialsLeadingInvalidTokensCannotDiscoverActions(t *testing.T) {
 	leading := [][]string{
 		{"--unknown=x"},

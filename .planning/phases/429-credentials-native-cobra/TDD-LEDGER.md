@@ -18,7 +18,7 @@ Session `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`; exact c
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | T0 | Review/plan | Record the raw hidden-carrier ownership bypass, 12-case action/form RED matrix, inaccessible state design, safety constraints, and verification/checkpoint sequence before production edits | Complete |
-| T1 | RED | Add `add|inspect|test|remove` raw-carrier tests for assigned, bare, and spaced forms; assert usage/fail closed, no wrong record access/removal, and no synthetic value output | Pending |
+| T1 | RED | `go test ./internal/cli -run '^TestCredentialsRawInternalNameCarrierFailsClosed$' -count=1` | Failed as required in `11.651s`: 9/12 cases violated the contract; assigned/spaced forms overrode all four actions and exited 0, while add/bare returned runtime code 3 instead of usage 2 |
 | T2 | GREEN | Replace hidden pflag carriage with inaccessible command-local state and reject raw carrier spellings while preserving normalized leading-hyphen names and normal flags | Pending |
 | T3 | Verify | Focused/repeated/race/adversarial/base differential/full CLI plus gofmt/vet/build/full declared gate/diff | Pending |
 

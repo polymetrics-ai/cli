@@ -56,6 +56,11 @@
       "reason": "one bounded credentials/router trust-boundary correction; this runtime exposes no subagent tool, and the user prohibited PR and external review"
     },
     {
+      "cycle": "third-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "the pre-production 12-case raw-carrier matrix failed as required: assigned and spaced forms overrode add, inspect, test, and remove, while add bare returned runtime rather than usage failure"
+    },
+    {
       "cycle": "second-correction-plan",
       "decision": "local_critical_path",
       "reason": "one serialized correction shares app/connectors/router safety seams; this runtime exposes no subagent tool, and the user prohibited PR and external review"

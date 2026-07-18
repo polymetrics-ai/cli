@@ -4,7 +4,7 @@ Status: third bounded correction reopened at exact head `6158cdc92d5df01cbaa577c
 
 ## Third bounded correction
 
-The hidden `--pm-internal-credentials-name` pflag is raw-user-addressable and can supersede the required first positional credential name. The correction is planned test-first across add/inspect/test/remove and assigned/bare/spaced raw spellings. It will fail closed without accessing/removing the wrong record or emitting synthetic values, replace pflag carriage with inaccessible command-local state, and preserve leading-hyphen names plus normal flags. No production edit has started.
+The hidden `--pm-internal-credentials-name` pflag is raw-user-addressable and can supersede the required first positional credential name. The 12-case add/inspect/test/remove × assigned/bare/spaced RED matrix failed before production edits in `11.651s`: assigned/spaced raw forms overrode every action and exited 0, while add/bare returned runtime code 3 rather than usage 2. Assertions require fail-closed behavior, unchanged records, and no synthetic value output. The implementation will replace pflag carriage with inaccessible command-local state and preserve leading-hyphen names plus normal flags. No production edit has started.
 
 ## Second bounded correction
 
