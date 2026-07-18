@@ -11,11 +11,12 @@ Invocation `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111
 - [x] RED: lifecycle tests for `--connector`, `--from-env`, `--value-stdin`, and `--config` as safety-valid names failed at exact correction start when followed by an ignored positional and later real flags; all four add cases captured an invalid normalized `name=ignored` token (`18.545s`, wall `21.75s`).
 - [x] RED preservation gate: raw-carrier rejection and invalid action/name ownership remained green in the same focused run.
 - [x] GREEN: capture/remove the required add name before StringArray space normalization and normalize only the remaining tail, without weakening private validation or action protections; focused lifecycle/adversarial gate passed in `28.076s` (wall `30.55s`).
-- [ ] Focused, adversarial, repeated, race, exact parent-base/start/head differential, and full CLI pass without private output.
-- [ ] Runtime help/manual/website/generated parity remains unchanged or explicitly verified not applicable.
-- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, diff/scope/dependency guards, coherent commits, and push pass. No services, dependencies, PR, or review.
+- [x] Focused (`79.397s`), adversarial repeated ×5 (`176.825s`), race (`392.438s`), exact parent-base/start/head differential, and full CLI (`340.707s`) pass without private output.
+- [x] Differential: parent base/head passed 12 lifecycle operations each; correction start rejected four adds; base-seeded start/head passed eight inspect/remove operations each; eight base/head add/remove output pairs matched exactly. Two initial differential harness attempts had temporary Python setup errors before the corrected harness passed in `73.03s`.
+- [x] Runtime help/manual/website/generated parity remains unchanged: topic/bare/long-help are byte-identical at 1252 bytes with empty stderr, invalid action exits 2, and checked-in docs/website scope is clean.
+- [x] `gofmt -w cmd internal`, clean worktree diff, `go vet ./...` (`2.31s`), readonly `go build ./cmd/pm` (`3.85s`), start-range diff/scope/dependency guards, coherent commits, and push pass. No services, dependencies, PR, or review.
 
-Result: pending; `verificationPassed=false` until the full declared correction gate set passes.
+Result: pass; `verificationPassed=true` for the full user-declared targeted parser-order correction gate set.
 
 ## Compatibility correction checklist
 

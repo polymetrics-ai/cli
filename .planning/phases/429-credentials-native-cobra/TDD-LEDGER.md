@@ -20,9 +20,19 @@ Session `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`;
 | P0 | Review/plan | Record the accepted parser-order finding, four known-flag lifecycle matrix, first-token-before-tail design, adversarial preservation gates, differential, and checkpoint sequence before production edits | Complete |
 | P1 | RED | `go test ./internal/cli -run 'TestCredentials(KnownAddFlagNamesPreserveLifecycleAndTailFlags|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1` | Failed as required in `18.545s` (wall `21.75s`): all four known-flag name adds captured an invalid normalized `name=ignored` token; raw-carrier and invalid action/name ownership guards stayed green |
 | P2 | GREEN | Capture/remove the required add name before StringArray normalization; normalize only the remaining tail | Pass: focused lifecycle/raw-carrier/invalid-ownership gate `28.076s` (wall `30.55s`); all four names complete lifecycle with later spaced connector/config flags and ignored positionals |
-| P3 | Verify | Focused/adversarial/repeated/race CLI, exact parent-base/start/head differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pending |
+| P3 | Verify | Focused/adversarial/repeated/race CLI, exact parent-base/start/head differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pass: focused `79.397s`; repeated ×5 `176.825s`; race `392.438s`; differential base/head `12/12`, start add rejections `4`, base-seeded start/head `8/8`, exact output pairs `8`; full CLI `340.707s`; remaining gates clean |
 
-Tests use temporary roots and config-only credentials. They must not read, print, summarize, or store private values or contact services.
+Tests use temporary roots and config-only credentials. They did not read, print, summarize, or store private values or contact services.
+
+### Targeted parser-order final evidence
+
+- RED: focused package failed in `18.545s` (wall `21.75s`), with exactly the four known-flag-name add failures and all preservation guards green.
+- GREEN: focused lifecycle/raw-carrier/invalid-ownership passed in `28.076s` (wall `30.55s`).
+- Stability: broader focused/adversarial passed in `79.397s`; exact adversarial matrix repeated five times in `176.825s`; focused race passed in `392.438s`.
+- Differential: exact parent base and final head each passed 12 add/inspect/remove operations; exact correction start rejected all four adds; base-seeded start/head each passed eight inspect/remove operations; eight base/head add/remove output pairs matched exactly. The first two differential harness attempts failed only in temporary Python setup (missing destination directory, then an unsupported Python 3.10 tar filter argument); the corrected harness passed in `73.03s`.
+- Full CLI: `go test -timeout 20m ./internal/cli/... -count=1` passed in `340.707s` (wall `343.08s`).
+- `gofmt -w cmd internal`, clean worktree diff, `go vet ./...` (`2.31s`), readonly build (`3.85s`), start-range diff/scope/dependency guards, and runtime help parity passed; help routes were byte-identical at 1252 bytes and invalid action exited 2.
+- Checkpoints: `adb0eab9` planning, `7f0357a9` RED, `9e87a007` GREEN; final evidence checkpoint prepared for push.
 
 ## Compatibility correction ledger
 

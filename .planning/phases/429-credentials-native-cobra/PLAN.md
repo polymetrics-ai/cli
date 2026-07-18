@@ -20,6 +20,12 @@ Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace
 - Smallest implementation: for `credentials add`, reject raw carriers first, privately capture/remove the required first-name token before StringArray space-value normalization, then normalize only the remaining tail. Preserve private validation, action discovery, ignored positional behavior, later native/global flags, and every raw-carrier/action protection.
 - Verification: focused RED/GREEN; adversarial raw-carrier/action/name matrix; repeated and race CLI; exact parent-base/correction-start/head differential; full CLI; `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, and diff/scope/dependency guards. Commit and push planning, RED, GREEN, and final evidence checkpoints. No private output, services, dependencies, PR, or review.
 
+### Targeted parser-order correction completion
+
+Completed at implementation head `9e87a007e4331d1afee7c66b4b079eb3694f3d8d` on `20260718T214736Z`. Strict RED rejected all four known-flag names while raw-carrier and invalid action/name ownership stayed green. The add path now privately captures/removes the required first name before StringArray normalization and normalizes only the remaining tail.
+
+Focused/adversarial (`79.397s`), repeated adversarial ×5 (`176.825s`), race (`392.438s`), exact parent-base/start/head differential, full CLI (`340.707s`), help parity, gofmt, vet, build, diff, scope, and dependency gates passed. Differential covered four names: parent base/head each passed 12 lifecycle operations, exact correction start rejected four adds, start/head each passed eight inspect/remove operations on base-seeded records, and eight base/head add/remove output pairs matched exactly. No private output, services, dependencies, checked-in docs/website delta, PR, or review.
+
 ## Compatibility correction from exact head 7497483d
 
 - Session: `issue-429-compatibility-correction-pi-openai-20260718T202616Z`.

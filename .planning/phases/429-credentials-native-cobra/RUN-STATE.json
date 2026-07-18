@@ -68,8 +68,11 @@
   "targetedParserCorrectionFindingsAccepted": ["MEDIUM_add_name_normalized_before_ownership"],
   "targetedParserCorrectionRed": "focused pre-production CLI failed as required in 18.545s (wall 21.75s): all four known add-flag name cases captured an invalid normalized name=ignored token while raw-carrier and invalid action/name ownership guards remained green",
   "targetedParserCorrectionGreen": "required add name captured and removed before tail StringArray normalization; focused lifecycle/raw-carrier/invalid-ownership gate passed in 28.076s (wall 30.55s)",
-  "status": "targeted_parser_correction_green",
-  "verificationPassed": false,
+  "targetedParserCorrectionEndedAt": "20260718T214736Z",
+  "targetedParserCorrectionEndingImplementationHead": "9e87a007e4331d1afee7c66b4b079eb3694f3d8d",
+  "targetedParserCorrectionVerification": "pass: focused 79.397s; repeated x5 176.825s; race 392.438s; differential base/head 12/12 lifecycle, start 4 add rejections, base-seeded start/head 8/8 inspect-remove, 8 exact output pairs; full CLI 340.707s; help, gofmt, vet, readonly build, diff, scope, and dependency gates clean",
+  "status": "complete_verified_pushed_no_pr_no_review",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -94,6 +97,16 @@
       "cycle": "targeted-parser-correction-green",
       "decision": "local_critical_path",
       "reason": "first required add name is privately captured before StringArray normalization; only the remaining tail is normalized, and focused lifecycle plus raw-carrier/action protections pass"
+    },
+    {
+      "cycle": "targeted-parser-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused, repeated, race, exact parent-base/start/head differential, full CLI, help parity, gofmt, vet, readonly build, diff, scope, and dependency gates passed"
+    },
+    {
+      "cycle": "targeted-parser-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "the accepted parser-order finding is closed, exact evidence is finalized, coherent checkpoints are pushed, and the user prohibited private output, services, dependencies, PR, and review"
     },
     {
       "cycle": "compatibility-correction-summary",
@@ -334,9 +347,12 @@
     "74e8cffe fix(credentials): preserve bounded legacy behavior",
     "d8aec609 docs(planning): plan credential compatibility correction",
     "a3752713 test(credentials): expose safety-valid legacy name regression",
-    "199b802c fix(credentials): restore safety-valid legacy names"
+    "199b802c fix(credentials): restore safety-valid legacy names",
+    "adb0eab9 docs(planning): plan final parser-order correction",
+    "7f0357a9 test(credentials): expose parser-order regression",
+    "9e87a007 fix(credentials): preserve name before tail normalization"
   ],
-  "push": "all original and five correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
+  "push": "all original and six correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
   "secondCorrectionReviewRoute": "not_run_user_prohibited_review",
