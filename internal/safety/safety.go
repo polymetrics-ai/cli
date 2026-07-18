@@ -1,8 +1,10 @@
 package safety
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
+	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -174,13 +176,69 @@ func ValidateLocalWritePath(projectRoot, value, field string, allowExternal bool
 		}
 		pathAbs = filepath.Join(rootAbs, clean)
 	}
-	rel, err := filepath.Rel(rootAbs, pathAbs)
+	insideProject, err := pathWithin(rootAbs, pathAbs)
 	if err != nil {
 		return fmt.Errorf("compare %s to project root: %w", field, err)
 	}
-	insideProject := rel == "." || (rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && !filepath.IsAbs(rel))
-	if !insideProject && !allowExternal {
+	if !insideProject {
+		if allowExternal {
+			return nil
+		}
 		return fmt.Errorf("%s outside the project root requires allow_external_path=true", field)
 	}
+	if allowExternal {
+		return nil
+	}
+
+	resolvedRoot, err := resolveThroughNearestExistingAncestor(rootAbs)
+	if err != nil {
+		return fmt.Errorf("resolve project root: %w", err)
+	}
+	resolvedPath, err := resolveThroughNearestExistingAncestor(pathAbs)
+	if err != nil {
+		return fmt.Errorf("resolve %s: %w", field, err)
+	}
+	insideProject, err = pathWithin(resolvedRoot, resolvedPath)
+	if err != nil {
+		return fmt.Errorf("compare resolved %s to project root: %w", field, err)
+	}
+	if !insideProject {
+		return fmt.Errorf("%s resolves outside the project root and requires allow_external_path=true", field)
+	}
 	return nil
+}
+
+func pathWithin(root, path string) (bool, error) {
+	rel, err := filepath.Rel(root, path)
+	if err != nil {
+		return false, err
+	}
+	return rel == "." || (rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && !filepath.IsAbs(rel)), nil
+}
+
+func resolveThroughNearestExistingAncestor(path string) (string, error) {
+	current := filepath.Clean(path)
+	var missing []string
+	for {
+		_, err := os.Lstat(current)
+		if err == nil {
+			resolved, err := filepath.EvalSymlinks(current)
+			if err != nil {
+				return "", err
+			}
+			parts := make([]string, 0, len(missing)+1)
+			parts = append(parts, resolved)
+			parts = append(parts, missing...)
+			return filepath.Join(parts...), nil
+		}
+		if !errors.Is(err, os.ErrNotExist) {
+			return "", err
+		}
+		parent := filepath.Dir(current)
+		if parent == current {
+			return "", err
+		}
+		missing = append([]string{filepath.Base(current)}, missing...)
+		current = parent
+	}
 }

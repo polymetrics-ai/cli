@@ -23,7 +23,7 @@
   "reviewCorrectionThinking": "high",
   "reviewCorrectionSource": "/tmp/pm-397-review-429.log",
   "reviewCorrectionFindingsAccepted": ["HIGH_symlink_escape", "MEDIUM_legacy_names", "LOW_namespace_help_tail"],
-  "status": "review_correction_red_captured",
+  "status": "review_correction_green_verification_pending",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -44,6 +44,11 @@
       "cycle": "bounded-review-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "focused temp-only tests failed before production edits: denied warehouse/outbox symlink paths created external directories, legacy underscore/dot names could not be inspected, and namespace help with trailing unknown flags exited 2"
+    },
+    {
+      "cycle": "bounded-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "realpath and nearest-existing-ancestor containment plus runtime revalidation blocks warehouse/outbox symlink effects; explicit external policy, legacy safety-valid names, and namespace help-tail compatibility pass focused and race tests"
     },
     {
       "cycle": "plan",
@@ -109,6 +114,7 @@
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
   "reviewCorrectionRed": "focused internal/cli test failed in 6.546s before production edits and reproduced all accepted findings without secret material or external services",
-  "reviewCorrectionVerification": "pending GREEN and verification",
+  "reviewCorrectionGreen": "focused safety and CLI passed in 8.257s; full credentials in 46.463s; safety and app in 23.300s; focused race safety and CLI in 109.283s",
+  "reviewCorrectionVerification": "pending base differential, full CLI, and repository gates",
   "safety": "no real secrets, interactive secret entry, credentialed external checks, optional services, dependencies, destructive external actions, or unrelated writes; correction tests use temp paths and inspect filesystem existence only"
 }

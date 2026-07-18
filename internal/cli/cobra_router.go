@@ -120,6 +120,9 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 		return normalizeStringArraySpaceValues(args, 2, skillsGenerateFlagNames)
 	}
 	if len(args) >= 2 && args[0] == "credentials" {
+		if isHelpArg(args[1]) {
+			return append([]string(nil), args[:2]...)
+		}
 		var bounded bool
 		args, bounded = normalizeCredentialsActionBoundary(args)
 		if bounded {

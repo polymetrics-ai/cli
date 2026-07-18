@@ -19,7 +19,7 @@ Session `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-so
 |---:|---|---|---|
 | R0 | Review/plan | Record HIGH symlink escape, MEDIUM legacy-name stranding, LOW help-tail incompatibility and verification plan before production edits | Complete |
 | R1 | RED | `go test ./internal/cli -run 'TestCredentials(TestRejectsSymlinkEscapeBeforeLocalConnectorEffects|LegacyValidateIdentifierNamesRemainInspectableAndRemovable|NamespaceHelpIgnoresTrailingUnknownFlags)$' -count=1` | Failed as required in `6.546s`: warehouse/outbox denied cases created external effects; `_legacy`/`.legacy` inspect rejected; long/short namespace help tails exited 2 |
-| R2 | GREEN | Reusable realpath/nearest-existing-ancestor containment; restore `ValidateIdentifier` credential-name compatibility; namespace-help tail normalization | Pending |
+| R2 | GREEN | Reusable realpath/nearest-existing-ancestor containment in `ValidateLocalWritePath`, revalidation in `resolveCredential` immediately before runtime use, restored credential-name compatibility, namespace-help tail normalization | Pass: focused safety+CLI `8.257s`; full credentials `46.463s`; safety+app `23.300s`; focused race safety+CLI `109.283s` |
 | R3 | Verify | Focused/repeated/race/security/base differential/full CLI/path tests plus gofmt/vet/full tests/build/`make verify` | Pending |
 
 Tests must not use, inspect, print, summarize, or store secret content and must not contact services. The path test checks only filesystem existence outside the project.

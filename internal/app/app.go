@@ -1116,14 +1116,17 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	if !ok {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q not found", name)
 	}
+	config := cloneStringMap(cred.Config)
+	for k, v := range overlay {
+		config[k] = v
+	}
+	if err := a.validateCredentialConfig(cred.Connector, config); err != nil {
+		return CredentialMeta{}, connectors.RuntimeConfig{}, err
+	}
 	registerCredentialSecretFields(cred.SecretFields)
 	secrets, err := a.vault.Get(ctx, cred.ID)
 	if err != nil {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, err
-	}
-	config := cloneStringMap(cred.Config)
-	for k, v := range overlay {
-		config[k] = v
 	}
 	return cred, connectors.RuntimeConfig{ProjectDir: a.projectDir, Config: config, Secrets: secrets}, nil
 }

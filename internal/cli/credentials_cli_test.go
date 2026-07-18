@@ -238,7 +238,6 @@ func TestCredentialsStrictNamesAndPathContainment(t *testing.T) {
 		args []string
 	}{
 		{name: "add credential traversal", args: []string{"add", "../credential", "--connector=sample"}},
-		{name: "add credential leading hyphen", args: []string{"add", "-credential", "--connector=sample"}},
 		{name: "add connector traversal", args: []string{"add", "credential", "--connector=../sample"}},
 		{name: "add connector leading hyphen", args: []string{"add", "credential", "--connector=-sample"}},
 		{name: "inspect traversal", args: []string{"inspect", "../credential"}},
@@ -343,7 +342,7 @@ func TestCredentialsTestRejectsSymlinkEscapeBeforeLocalConnectorEffects(t *testi
 }
 
 func TestCredentialsLegacyValidateIdentifierNamesRemainInspectableAndRemovable(t *testing.T) {
-	for _, name := range []string{"_legacy", ".legacy"} {
+	for _, name := range []string{"_legacy", ".legacy", "-legacy"} {
 		t.Run(name, func(t *testing.T) {
 			root := initCredentialsProject(t)
 			a, err := app.Open(root)
