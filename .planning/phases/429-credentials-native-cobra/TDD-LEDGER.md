@@ -16,7 +16,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create all six issue-local phase artifacts before test or production edits | Complete |
-| 1 | RED | Add focused credentials tree/operation/help/security tests; run `go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Pending |
+| 1 | RED | Add focused credentials tree/operation/help/security tests; run `go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected before production edits: `undefined: newCredentialsCobraCommand`; package build failed |
 | 2 | GREEN | Native tree, typed flags/handler, controlled input, action boundary, strict validation | Pending |
 | 3 | Refactor | Focused/repeated/race/security/router/golden/full CLI and exact legacy differential | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
@@ -35,6 +35,19 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 - Opaque synthetic env/stdin fixtures are absent from stdout, stderr, and state metadata after success and error paths; tests never log fixture content.
 - Leading unknown, short, assigned help-like, and literal-boundary tokens cannot discover or execute later add/remove actions; temporary state remains unchanged.
 
+## Exact RED
+
+Captured after the complete focused test-only edit and before any production edit:
+
+```text
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/credentials_cli_test.go:22:9: undefined: newCredentialsCobraCommand
+FAIL\tpolymetrics.ai/internal/cli [build failed]
+FAIL
+```
+
+The missing native constructor is intentional. The same test-only checkpoint specifies native ownership/flags, list/add/remove, help/global behavior, strict identifiers/path containment, controlled env/stdin source handling, redaction, legacy action-tail compatibility, and fail-closed action discovery. No test executed and no stdin/environment credential fixture was read during this RED build failure.
+
 ## Evidence policy
 
-RED must be captured after test-only edits and before any production edit. GREEN evidence must include exact command/result and no secret material. `verificationPassed` remains false until the complete declared verification including `make verify` exits 0.
+GREEN evidence must include exact command/result and no secret material. `verificationPassed` remains false until the complete declared verification including `make verify` exits 0.

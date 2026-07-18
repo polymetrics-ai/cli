@@ -12,7 +12,7 @@
   "endedAt": null,
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "planned",
+  "status": "red_tests_committed_pending_implementation",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -26,9 +26,14 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "ninth serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later units, the session exposes no subagent tool, and the user restricted work to issue 429 with no PR or external review"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "all focused credentials tree, operation, help, global, validation, source, redaction, compatibility, and action-boundary tests were added before production edits; the focused build failed on the intentionally missing native credentials constructor"
     }
   ],
-  "red": "pending",
+  "red": "go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed before production edits: internal/cli/credentials_cli_test.go:22:9 undefined newCredentialsCobraCommand",
   "green": "pending",
   "verification": "pending",
   "files": [
