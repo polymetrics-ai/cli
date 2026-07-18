@@ -119,6 +119,11 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 		return normalizeStringArraySpaceValues(args, 2, skillsGenerateFlagNames)
 	}
 	if len(args) >= 2 && args[0] == "agent" {
+		var bounded bool
+		args, bounded = normalizeAgentActionBoundary(args)
+		if bounded {
+			return args
+		}
 		switch args[1] {
 		case "plan":
 			args = normalizeStringArraySpaceValues(args, 2, agentPlanFlagNames)
@@ -148,6 +153,29 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 		}
 	}
 	return args
+}
+
+func normalizeAgentActionBoundary(args []string) ([]string, bool) {
+	boundary := 1
+	switch args[1] {
+	case "plan", "help", "-h", "--help":
+		return args, false
+	case "image":
+		if len(args) < 3 {
+			return args, false
+		}
+		boundary = 2
+		switch args[2] {
+		case "build", "pull", "ensure":
+			return args, false
+		}
+	}
+
+	out := make([]string, 0, len(args)+1)
+	out = append(out, args[:boundary]...)
+	out = append(out, "--")
+	out = append(out, args[boundary:]...)
+	return out, true
 }
 
 // normalizeAgentLegacyActionArgs keeps tokens ignored by the old agent parser from becoming Cobra control flags.
@@ -557,6 +585,9 @@ func newAgentImageCobraCommand(ctx context.Context, cfg config.Config, root stri
 		},
 		ValidArgsFunction: completeNoFile,
 		RunE: func(_ *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				return usageErrorf("agent image: unknown subcommand %q (want build|pull|ensure)", args[0])
+			}
 			return markCobraLegacyError(runAgentImage(ctx, cfg, root, args, stdout, jsonOut, imageRuntime))
 		},
 	}

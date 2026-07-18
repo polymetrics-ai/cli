@@ -366,7 +366,7 @@ func TestAgentImageNativeActionsPreserveUnknownFlagsHelpAndSeparator(t *testing.
 	}
 }
 
-func TestAgentImageInvalidActionsPreserveLegacyHelpTreatment(t *testing.T) {
+func TestAgentImageInvalidActionsFailBeforeRuntimeLookup(t *testing.T) {
 	root := t.TempDir()
 	for _, args := range [][]string{
 		{"agent", "image", "--help"},
@@ -381,8 +381,8 @@ func TestAgentImageInvalidActionsPreserveLegacyHelpTreatment(t *testing.T) {
 			if err == nil || exitCodeFor(classifyError(mapCobraErr(err))) != 2 {
 				t.Fatalf("executeRootCmd(%v) err=%v, want usage error", args, err)
 			}
-			if !reflect.DeepEqual(fake.lookups, []string{"fake-podman"}) || len(fake.calls) != 0 {
-				t.Fatalf("legacy invalid action order changed: lookups=%v calls=%v", fake.lookups, fake.calls)
+			if len(fake.lookups) != 0 || len(fake.files) != 0 || len(fake.calls) != 0 {
+				t.Fatalf("invalid action reached runtime: lookups=%v files=%v calls=%v", fake.lookups, fake.files, fake.calls)
 			}
 			if stdout.Len() != 0 {
 				t.Fatalf("invalid action leaked help/output: %q", stdout.String())
