@@ -18,12 +18,24 @@ orchestrator:
   runtime: pi
   status: running
 ready_queue:
-  - number: 410
-    status: in_progress
-    dependencies: [402, 404, 405, 423]
-    write_scope: "telemetry package, config/docs, CLI/app/flow/certify/connsdk/worker spans"
+  - number: 424
+    status: worker_in_progress
+    dependencies: [407, 423]
+    write_scope: "runtime Cobra namespace node, handler adaptation, focused tests, and parity docs"
     decision: spawned
-    reason: "Dispatched in isolated worktree ../wt-410-otel-tracing from parent head dd23054d after #423 integration."
+    reason: "Dispatched in isolated worktree ../wt-424-runtime-native-cobra from parent head efb98bf3; serialized Phase 9 namespace chain continues after #423."
+  - number: 415
+    status: worker_in_progress
+    dependencies: [410]
+    write_scope: "OpenTelemetry metrics package/exporters, batched counters, Temporal integration, and benchmark/contract tests"
+    decision: spawned
+    reason: "Dispatched in isolated worktree ../wt-415-otel-metrics from parent head efb98bf3; scout found low collision with #424 when telemetry-focused."
+  - number: 408
+    status: worker_ready_deferred
+    dependencies: [405]
+    write_scope: "flow and ETL run dashboards, event bridge, TUI tests, and parity docs"
+    decision: not_spawned_write_scope_collision
+    reason: "Unblocked by #405, but deferred while #424 owns central CLI routing/help/goldens and #415 may touch app/flow metrics paths."
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -181,6 +193,22 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [410]
     reason: "pm-gsd-worker dispatched in isolated worktree ../wt-410-otel-tracing from parent head dd23054d407071f8b1afa271dd717e1cf6b9ba0f."
+  - timestamp: 2026-07-18T05:02:32Z
+    decision: local_critical_path
+    issue_numbers: [410]
+    reason: "Coordinator provisionally integrated PR #459 after exporter self-observability fix, local full gates, clean pm-reviewer/security-auditor sidecars, and remote checks; parent squash efb98bf3de4d72c9defe5629b055ae4845506cf8."
+  - timestamp: 2026-07-18T05:08:00Z
+    decision: read_only_spawned
+    issue_numbers: [408, 424, 415]
+    reason: "Three pm-scout sidecars mapped post-#410 write sets: #408 conflicts with #424 central CLI/help/goldens and has medium app/flow risk with #415; #424 and #415 can run together with scope discipline."
+  - timestamp: 2026-07-18T05:12:30Z
+    decision: not_spawned_write_scope_collision
+    issue_numbers: [408]
+    reason: "Flow/ETL dashboards are source-unblocked but deferred to avoid concurrent edits with active #424 CLI routing/help and #415 app/flow metric paths."
+  - timestamp: 2026-07-18T05:12:30Z
+    decision: spawned
+    issue_numbers: [424, 415]
+    reason: "Created isolated worktrees ../wt-424-runtime-native-cobra and ../wt-415-otel-metrics from parent head efb98bf3 and queued workers in parallel."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -277,21 +305,21 @@ subissues:
     branch: pending
     pr_url: ""
     worker: parent_orchestrator
-    status: in_progress
+    status: worker_in_progress
     write_scope: "Serialized namespace migration umbrella; grandchildren #421-#437"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-cli-architectur-improvement
-    verification: "#421 and #422 provisionally integrated; #423 ready but safety-held; remaining grandchildren stay serialized."
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #406 and serialized grandchild chain.", disposition_url: ""}
+    verification: "#421, #422, and #423 provisionally integrated; #424 runtime namespace dispatched; remaining grandchildren stay serialized."
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Human parent coverage pending; serialized grandchild chain continues with #424.", disposition_url: ""}
   - number: 408
     url: https://github.com/polymetrics-ai/cli/issues/408
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: planned
+    status: worker_ready
     write_scope: "flow and ETL dashboard models and command wiring"
     worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #405.", disposition_url: ""}
+    verification: not_run_write_scope_deferred
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Source-unblocked by #405; deferred while #424 owns CLI routing/help/goldens and #415 may touch app/flow metrics.", disposition_url: ""}
   - number: 409
     url: https://github.com/polymetrics-ai/cli/issues/409
     branch: pending
@@ -305,13 +333,13 @@ subissues:
   - number: 410
     url: https://github.com/polymetrics-ai/cli/issues/410
     branch: feat/410-otel-tracing
-    pr_url: ""
+    pr_url: https://github.com/polymetrics-ai/cli/pull/459
     worker: pm-gsd-worker
-    status: in_progress
+    status: provisionally_integrated
     write_scope: "internal/telemetry, config/docs, CLI/app/flow/certify/connsdk/worker spans"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing
-    verification: in_progress
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched after #423; stacked PR/review pending.", disposition_url: ""}
+    verification: "Local full gates, remote PR checks, and final pm-reviewer/security-auditor re-reviews passed at 2c9f56a0; parent squash efb98bf3de4d72c9defe5629b055ae4845506cf8."
+    automated_review: {primary_route: human, status: blocked, head_sha: 2c9f56a03f6c39a1ea22ef41cf38f00b9d27c4ad, reviewed_range: "03dc5d95..efb98bf3", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled/no run; Copilot quota exhausted; OTel env/security/docs findings fixed; final pm-reviewer and security-auditor sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/459"}
   - number: 411
     url: https://github.com/polymetrics-ai/cli/issues/411
     branch: pending
@@ -354,14 +382,14 @@ subissues:
     automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #407 and #408.", disposition_url: ""}
   - number: 415
     url: https://github.com/polymetrics-ai/cli/issues/415
-    branch: pending
+    branch: feat/415-otel-metrics
     pr_url: ""
-    worker: unassigned
-    status: planned
+    worker: pm-gsd-worker
+    status: worker_in_progress
     write_scope: "OpenTelemetry metrics, exporters, and benchmarks"
-    worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #410.", disposition_url: ""}
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-415-otel-metrics
+    verification: worker_dispatched
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched after #410 integration; stacked PR/review pending.", disposition_url: ""}
   - number: 416
     url: https://github.com/polymetrics-ai/cli/issues/416
     branch: pending
@@ -442,6 +470,16 @@ subissues:
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-423-perf-native-cobra
     verification: "Local full gates, remote PR checks, and final targeted/security/docs re-reviews passed at 09630ac7; parent squash 03dc5d9518c25e9bc6ced281f70c25fbc51bd198."
     automated_review: {primary_route: human, status: blocked, head_sha: 09630ac7c486c47d969ca018c9ddeb142204669c, reviewed_range: "087ec03c..03dc5d95", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled/no run; Copilot quota exhausted; pm-reviewer/security-auditor/docs-writer findings fixed and final sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/458"}
+  - number: 424
+    url: https://github.com/polymetrics-ai/cli/issues/424
+    branch: refactor/424-runtime-native-cobra
+    pr_url: ""
+    worker: pm-gsd-worker
+    status: worker_in_progress
+    write_scope: "runtime Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-424-runtime-native-cobra
+    verification: worker_dispatched
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched after #423/#410 parent head; stacked PR/review pending.", disposition_url: ""}
   - number: 453
     url: https://github.com/polymetrics-ai/cli/issues/453
     branch: fix/453-reverse-smoke-preview
@@ -462,4 +500,4 @@ human_gates:
   - production deploys
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
-updated_at: 2026-07-17T13:36:28Z
+updated_at: 2026-07-18T05:12:30Z
