@@ -19,8 +19,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 1 | RED | `go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected (`11.332s`) |
 | 2 | GREEN | Native namespace/actions/typed flags and docs-only legacy parser removal | Pass (`11.462s`) |
 | 3 | Refactor | Focused docs/router/golden + full CLI tests | Pass (`18.453s`; golden `5.470s`; full CLI `227.224s`) |
-| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
-| 5 | Parity/safety | built binary, docs/website/generated/golden/dependency/scope checks | Pending |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pass |
+| 5 | Parity/safety | built binary, docs/website/generated/golden/dependency/scope checks | Pass |
 
 ## Planned RED coverage
 
@@ -68,4 +68,18 @@ Implementation: `docs`, `docs generate`, and `docs validate` are native Cobra no
 
 ## Full GREEN and parity
 
-Pending.
+| Command / gate | Result |
+|---|---|
+| Final focused docs/router tests after default-path hardening | Pass (`13.710s`) |
+| Final docs/router/golden subset | Pass (`20.158s`) |
+| `go test ./internal/cli/... -count=1` | Pass (`227.224s`) |
+| `go test ./internal/cli/ -run '^TestGoldenTranscripts$' -count=1` | Pass (`5.470s`) |
+| `gofmt -w cmd internal`; `go vet ./...`; `go build -o /tmp/pm-427 ./cmd/pm` | Pass, no diagnostics |
+| `go test -timeout 20m ./...` | Pass (`real 347.167s`; CLI `229.851s`, certify `342.890s`) |
+| final `make verify` | Pass (`real 249.846s`; CLI `229.679s`, smoke OK, lint `0 issues`, 547 connectors / 0 findings) |
+| built binary help/generation/validation/error/config/global matrix | Pass: `help_bytes=818`, exits invalid=`2`, missing=`1`, plain override=`2` |
+| temp docs generation + `diff -ru docs/cli`; temp and tracked docs validation | Pass, no diff |
+| `npm --prefix website run gen:docs`; website diff | Pass, 11 pages, no diff |
+| start-HEAD dependency/docs/website/golden/connector-def and `git diff --check` guards | Pass |
+
+`make verify` used only its existing local temporary sample smoke. Its reverse ETL step followed plan → preview → approval → run; no external service or credentialed connector check was used. Focused generation wrote only beneath temporary roots, compared every generated CLI manual byte-for-byte, asserted generated relative paths stayed local, and validated connector catalog/manual/icon artifacts without reading credentials.

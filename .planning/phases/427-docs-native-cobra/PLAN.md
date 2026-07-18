@@ -71,3 +71,7 @@ This changes parser ownership only. Embedded help, `docs/cli/docs.md`, website r
 ## Safety
 
 No secrets, credentials, services, dependencies, generic write tools, destructive/admin actions, quality-gate reductions, external reviews, PR, or merge. All focused generation/validation tests and manual parity checks write only beneath `t.TempDir` or command-created temporary roots and assert generated paths stay local. The required `make verify` may run its existing local sample reverse-ETL smoke only under plan → preview → approval → execute and without external writes.
+
+## Completion note
+
+The bounded slice completed exactly within scope. Native Cobra now owns `docs`, `docs generate`, `docs validate`, positional help, and typed/repeated/bare `--dir`/`--connectors-dir`; the docs legacy wrapper and handler `parseFlags` call are gone. Exact RED preceded production edits. Focused/router/golden/full CLI and repository gates passed, including final `make verify`; built-binary help/output/error/config/global forms, generated CLI bytes, connector validation, website generation, dependencies, connector definitions, and golden fixtures remained in parity. Phase 14 viewer and Phase 19 help/man churn were untouched. Coherent plan, RED, implementation, test-hardening, and verification checkpoints were pushed. No PR or external review was created.

@@ -21,35 +21,36 @@ Session `issue-427-pi-openai-codex-gpt-5.6-sol-high-20260718T112639Z`; model `op
 - [x] Focused docs/router/golden tests (`18.453s`).
 - [x] Golden transcript test (`5.470s`).
 - [x] Full `internal/cli` (`227.224s`).
-- [ ] `gofmt -w cmd internal`.
-- [ ] `go vet ./...`.
-- [ ] `go test -timeout 20m ./...`.
-- [ ] `go build ./cmd/pm`.
-- [ ] `make verify`.
-- [ ] `git diff --check`.
+- [x] `gofmt -w cmd internal`.
+- [x] `go vet ./...` (no diagnostics; `3.483s`).
+- [x] `go test -timeout 20m ./...` (pass; real `347.167s`, CLI `229.851s`, certify `342.890s`).
+- [x] `go build ./cmd/pm` and `/tmp/pm-427` build (no diagnostics).
+- [x] Final `make verify` (pass; real `249.846s`, smoke OK, lint `0 issues`, 547 connector definitions / 0 findings).
+- [x] `git diff --check`.
 
 ## CLI help/manual/website parity
 
-- [ ] `pm help docs`, bare `pm docs`, `pm docs --help`, `pm docs -h`, and `pm docs help` byte-identical, exit 0.
-- [ ] Bare, flag, assigned-boolean, and positional JSON help return canonical `CommandManual/docs`.
-- [ ] Built operation checks cover generate/validate, both output-directory flags and applicable forms, unknown flags, configured JSON, assigned true/false JSON, and spaced/assigned/late root/global forms.
-- [ ] Invalid actions remain usage exit 2 and real failures are not masked by help.
-- [ ] `docs/cli/docs.md`: update or record no-update byte-parity evidence.
-- [ ] Connector docs generation and validation pass from a safe temp root.
-- [ ] `website/**`: update or record no-update website-generator diff evidence.
-- [ ] Generated/golden help: update or record no-update golden/diff evidence.
-- [ ] Completion/discovery: action names unchanged; no-file completion seam tested; Phase 15 implementation deferred.
-- [ ] Phase 14 viewer and Phase 19 focused help/man churn remain untouched.
+- [x] `pm help docs`, bare `pm docs`, `pm docs --help`, `pm docs -h`, and `pm docs help` byte-identical (`818` bytes), exit 0.
+- [x] Bare, flag, assigned-boolean, and positional JSON help return canonical `CommandManual/docs`.
+- [x] Built operation checks cover generate/validate, both output-directory flags and applicable spaced/assigned/repeated/bare/default/comma/space forms, unknown flags, configured JSON, assigned true/false JSON, and spaced/assigned/late root/global forms.
+- [x] Invalid actions remain usage exit 2; missing generate dir remains internal exit 1; errors are not masked by help.
+- [x] `docs/cli/docs.md`: no update applicable; temp `pm docs generate` + `diff -ru docs/cli` clean and focused tests compare every manual byte.
+- [x] Connector docs generation and validation passed from safe temp roots; tracked default validation passed read-only.
+- [x] `website/**`: no update applicable; `npm --prefix website run gen:docs` wrote 11 pages and start-HEAD diff stayed clean.
+- [x] Generated/golden help: no update applicable; golden test and start-HEAD fixture diff clean.
+- [x] Completion/discovery: command/action names unchanged; native no-file completion seams tested; Phase 15 implementation deferred.
+- [x] Phase 14 viewer and Phase 19 focused help/man churn remain untouched.
 
 ## Safety/scope/delivery
 
-- [ ] No secrets/credentials requested, read, printed, summarized, or stored.
-- [ ] Filesystem checks use temporary roots and validate generated paths stay local.
-- [ ] No services, credentialed connector checks, destructive/admin actions, or production deploys.
-- [ ] No dependency or `go.mod`/`go.sum` delta.
-- [ ] No connector-def, unrelated namespace, Phase 14 viewer, or Phase 19 help/man production delta.
-- [ ] Required `make verify` local sample smoke, if run, follows reverse ETL plan → preview → approval → run.
-- [ ] Planning, RED, implementation, and verification checkpoints committed and pushed to `origin/refactor/427-docs-native-cobra`.
-- [ ] No PR or external review requested.
+- [x] No secrets/credentials requested, read, printed, summarized, or stored; docs generation remains metadata-only.
+- [x] Filesystem checks use temporary roots, validate generated paths stay local, and leave no repository output delta.
+- [x] No services, credentialed connector checks, destructive/admin actions, or production deploys.
+- [x] No dependency or `go.mod`/`go.sum` delta.
+- [x] No connector-def, unrelated namespace, Phase 14 viewer, or Phase 19 help/man production delta.
+- [x] Required `make verify` local sample smoke followed reverse ETL plan → preview → approval → run.
+- [x] Planning, RED, implementation, test-hardening, and verification checkpoints committed and pushed to `origin/refactor/427-docs-native-cobra`.
+- [x] No PR or external review requested.
+- [x] `scripts/gsd prompt verify-work 427` generated a 7133-byte local verification prompt; manual fallback evidence above satisfies it.
 
-Result: in progress.
+Result: all declared local verification passed.

@@ -18,10 +18,16 @@ Doctor/list passed and the plan prompt generated/executed inline. Programming-lo
 
 Execution decision: `local_critical_path` — assigned isolated serialized namespace worktree; central router scope collides with later units; this session has no subagent tool; user restricted the invocation to #427 and prohibited PR/external review.
 
-Downstream artifact: pending all six phase files plus focused tests and the smallest docs/Cobra handler changes.
+Downstream artifact: all six phase files plus `internal/cli/cobra_router.go`, `cobra_router_test.go`, `cli.go`, and `docs_cli_test.go`.
 
-Verification result: pending strict RED before production edits, focused/router/golden/full CLI, docs and website generation diffs, gofmt, vet, full repository tests, build, and `make verify`.
+Verification result: pass — exact RED preceded production edits; focused/router/golden/full CLI, gofmt, vet, full repository tests, build, final `make verify`, built-binary help/output/error/config/global forms, temp docs generation/validation, website generation, and generated/golden/dependency/scope checks all passed.
 
 ## Verification snapshot
 
-Pending `scripts/gsd prompt verify-work 427` after GREEN implementation.
+```bash
+scripts/gsd prompt verify-work 427 > /tmp/gsd-verify-work-427.prompt
+```
+
+Prompt generation passed (7133 bytes) and was executed locally through the recorded manual loop. No Claude, Copilot, PR, or other external review was requested.
+
+Execution decision: `local_critical_path` — local verification of one bounded already-isolated diff.

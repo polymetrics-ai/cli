@@ -10,15 +10,15 @@
   "invocationSession": "issue-427-pi-openai-codex-gpt-5.6-sol-high-20260718T112639Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "green_implementation",
-  "verificationPassed": false,
+  "status": "complete_verified_pushed",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
     "planPhase": "passed_prompt_generated_and_executed_inline",
     "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
     "fallback": "manual_gsd_universal_runtime_loop",
-    "verifyWorkPrompt": "pending"
+    "verifyWorkPrompt": "passed_7133_bytes"
   },
   "orchestrationDecisions": [
     {
@@ -35,12 +35,26 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "native docs namespace, generate and validate actions, typed output-directory flags, positional help alias, normalization, and docs-only legacy-parser removal passed focused router, golden, and full CLI tests"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused and full CLI/repository tests, gofmt, vet, build, final make verify, binary parity, docs generation and validation, website generation, golden, dependency, filesystem, and scope checks passed"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "issue-local artifacts finalized with exact TDD, parity, safety, commit, and verification evidence; user prohibited PR and external review"
     }
   ],
   "red": "go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed as expected in 11.332s on native registration count and DisableFlagParsing ownership",
   "green": "focused 11.462s; docs/router/golden 18.453s; standalone golden 5.470s; full internal/cli 227.224s",
-  "verification": "pending",
+  "verification": "gofmt, go vet ./..., go test -timeout 20m ./..., build, final make verify, built-binary parity, docs generation and validation, website generation, and all diff/scope guards passed",
   "files": [
+    "internal/cli/cli.go",
+    "internal/cli/cobra_router.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/docs_cli_test.go",
     ".planning/phases/427-docs-native-cobra/PLAN.md",
     ".planning/phases/427-docs-native-cobra/TDD-LEDGER.md",
     ".planning/phases/427-docs-native-cobra/VERIFICATION.md",
@@ -48,8 +62,14 @@
     ".planning/phases/427-docs-native-cobra/RUN-STATE.json",
     ".planning/phases/427-docs-native-cobra/SUMMARY.md"
   ],
-  "commits": [],
-  "push": "pending",
+  "commits": [
+    "e9373393 docs(planning): plan docs native cobra slice",
+    "a68ab241 test(cli): specify native cobra docs contract",
+    "f320de3e refactor(cli): nativize docs namespace",
+    "e3d61104 test(cli): cover docs default output paths",
+    "docs(planning): record docs cobra verification (final handoff commit)"
+  ],
+  "push": "all planning, red, implementation, test-hardening, and final verification checkpoints pushed to origin/refactor/427-docs-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "local_verification_only_external_review_prohibited",
   "risks": [
