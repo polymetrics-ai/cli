@@ -2,6 +2,21 @@
 
 Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`.
 
+## Compatibility correction checklist
+
+Invocation `issue-429-compatibility-correction-pi-openai-20260718T202616Z`; exact start `7497483de2187b3117c32b9cafb3db54ebac792f`.
+
+- [x] Read `/tmp/pm-397-rereview5-429.log` and accept the MEDIUM safety-valid legacy-name compatibility finding.
+- [x] Run GSD doctor/list, record unavailable programming-loop/manual fallback, load required skills/policies, and update issue artifacts before production edits.
+- [ ] RED: all `safety.ValidateIdentifier`-valid short leading-hyphen and double-hyphen representatives (`-`, `-a`, `--`, `--legacy`) are covered across config-only add/inspect/remove and fail at exact correction start as reported.
+- [ ] Preservation gate: raw internal-carrier rejection and leading-invalid/action-name ownership remain green during RED and GREEN.
+- [ ] GREEN: private name carriage uses ordinary credential identifier validation with no private length/double-hyphen restrictions and no action-discovery weakening.
+- [ ] Focused, adversarial, repeated, race, exact-start differential, and full CLI pass without private data output.
+- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, current/start diff, scope, dependency, and clean-worktree gates pass.
+- [ ] Exact evidence committed and pushed; no service, dependency, PR, or review.
+
+Result: in progress; `verificationPassed=false` until all declared correction gates pass.
+
 ## Final bounded correction checklist
 
 Invocation `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`; exact start `80246e42f508f685d281fecbcc3735eadcf271a9`.

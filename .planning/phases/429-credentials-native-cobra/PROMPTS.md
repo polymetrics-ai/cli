@@ -47,6 +47,18 @@ Downstream artifact: strict RED tests, actual-state assertion, runtime-only loca
 
 Verification result: pass. Focused, repeated, race, all-credentials, app, connectors, CLI, exact-start differential, full repository, gofmt, vet, build, and `make verify` passed. Full repository app/CLI/certify timings were `27.976s`/`285.504s`/`340.518s`; lint 0 and connector validation 547/0. No real credential, private fixture output, external service, dependency, PR, or review.
 
+## Compatibility correction snapshot
+
+Task: Accept the MEDIUM finding in `/tmp/pm-397-rereview5-429.log` from exact start `7497483de2187b3117c32b9cafb3db54ebac792f`. Session `issue-429-compatibility-correction-pi-openai-20260718T202616Z`.
+
+GSD route: doctor/list passed; `scripts/gsd prompt programming-loop init --phase issue-429 --dry-run` remains unavailable, so the manual universal runtime loop is active. Execution decision: `local_critical_path` because this is one credentials validation/router correction, this runtime exposes no subagent tool, and services, PR, and review are prohibited.
+
+Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, and `golang-safety`. CLI help/docs/website parity policy is active.
+
+Downstream artifact: strict add/inspect/remove RED coverage for every requested class of safety-valid short leading-hyphen and double-hyphen names; preserved raw-carrier rejection and action/name ownership; ordinary credential validation for private carriage; finalized phase evidence.
+
+Verification result: pending strict RED, GREEN, focused/adversarial/repeated/race/base-differential/full CLI, gofmt, vet, build, diff, scope, and dependency gates.
+
 ## Final bounded correction snapshot
 
 Task: Accept the MEDIUM and LOW findings in `/tmp/pm-397-rereview4-429.log` from exact start `80246e42f508f685d281fecbcc3735eadcf271a9`. Session `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`.

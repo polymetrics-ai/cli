@@ -10,6 +10,16 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, this session exposes no subagent tool, and the user bounded delivery to #429 with no PR or external review.
 
+## Compatibility correction from exact head 7497483d
+
+- Session: `issue-429-compatibility-correction-pi-openai-20260718T202616Z`.
+- Exact correction start: `7497483de2187b3117c32b9cafb3db54ebac792f`; rereview source: `/tmp/pm-397-rereview5-429.log`; MEDIUM safety-valid legacy-name finding accepted.
+- GSD: doctor/list pass; `scripts/gsd prompt programming-loop init --phase issue-429 --dry-run` is unavailable, so the manual universal-runtime-loop fallback is active. Execution decision: `local_critical_path` — one bounded credentials validation correction shares the router/test critical path, this runtime exposes no subagent tool, and the user prohibited services, PR, and review.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, and `golang-safety`; CLI help/docs/website parity policy loaded.
+- RED before production edits: table-drive every `safety.ValidateIdentifier`-valid short leading-hyphen and double-hyphen representative (`-`, `-a`, `--`, `--legacy`) through config-only `add`, then `inspect`, then `remove`. Require all three actions to succeed without private values. Run the existing raw internal-carrier matrix and leading-invalid/action-name ownership matrix in the same RED gate; they must remain green.
+- Smallest implementation: remove private-only length and double-hyphen restrictions. Validate privately carried names with the ordinary credential identifier validator already used by add/inspect/remove. Do not alter raw-carrier rejection, action discovery, first-token ownership, connector validation, or Cobra tail normalization.
+- Verification: focused RED/GREEN; adversarial action/carrier tests; repeated and race CLI; exact-start base differential for the compatibility matrix and preserved adversarial cases; full CLI; gofmt, vet, build, and diff/scope/dependency guards. Commit and push exact planning, RED, GREEN, and final evidence checkpoints. No private data output, services, dependencies, PR, or review.
+
 ## Final bounded correction
 
 - Session: `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`.

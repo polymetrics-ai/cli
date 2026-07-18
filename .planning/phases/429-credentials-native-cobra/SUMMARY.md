@@ -1,6 +1,10 @@
 # Phase 429 Summary
 
-Status: final bounded correction complete and verified from exact head `80246e42f508f685d281fecbcc3735eadcf271a9`; MEDIUM leading-hyphen compatibility and LOW overwrite-temp cleanup findings closed; no services, PR, or review.
+Status: compatibility correction in progress from exact head `7497483de2187b3117c32b9cafb3db54ebac792f`; MEDIUM safety-valid short/double-hyphen legacy-name finding accepted; no services, PR, or review.
+
+## Compatibility correction
+
+Planning is complete before production edits. Strict RED will cover `-`, `-a`, `--`, and `--legacy` through config-only add/inspect/remove while the raw internal-carrier and leading-invalid/action-name ownership guards stay green. The intended smallest fix is ordinary credential identifier validation for privately carried names, with no action-discovery changes. Verification and delivery evidence are pending.
 
 ## Final bounded correction
 

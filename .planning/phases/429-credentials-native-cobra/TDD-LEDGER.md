@@ -11,6 +11,19 @@ Doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-research` generate
 
 Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-documentation`, `golang-spf13-cobra`.
 
+## Compatibility correction ledger
+
+Session `issue-429-compatibility-correction-pi-openai-20260718T202616Z`; exact correction start `7497483de2187b3117c32b9cafb3db54ebac792f`. Rereview `/tmp/pm-397-rereview5-429.log` accepted. GSD doctor/list passed; the adapter still lacks `programming-loop`, so the manual universal-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, and `golang-safety`.
+
+| Step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| K0 | Review/plan | Record the accepted compatibility finding, complete safety-valid name matrix, ordinary-validation design, adversarial preservation gates, differential, and checkpoint sequence before production edits | Complete |
+| K1 | RED | Add config-only `add` → `inspect` → `remove` cases for `-`, `-a`, `--`, and `--legacy`; run them with existing raw-carrier and leading-invalid/action-ownership guards | Pending |
+| K2 | GREEN | Remove unnecessary private-name length/double-hyphen restrictions and use ordinary credential identifier validation without changing discovery | Pending |
+| K3 | Verify | Focused/adversarial/repeated/race CLI, exact-start differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pending |
+
+Tests use temporary roots and config-only credentials. They must not read, print, summarize, or store private values or contact services.
+
 ## Final bounded correction ledger
 
 Session `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`; exact correction start `80246e42f508f685d281fecbcc3735eadcf271a9`. Rereview `/tmp/pm-397-rereview4-429.log` accepted. GSD doctor/list passed; the adapter still lacks `programming-loop`, so the manual universal-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, and `golang-safety`.

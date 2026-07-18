@@ -54,8 +54,13 @@
   "finalCorrectionFindingsAccepted": ["MEDIUM_leading_hyphen_extra_positional", "LOW_overwrite_raw_temp_cleanup"],
   "finalCorrectionEndedAt": "20260718T200436Z",
   "finalCorrectionEndingImplementationHead": "74e8cffe477ce713526963c6fd4cb37dcc973b84",
-  "status": "complete_verified_pushed_no_pr_no_review",
-  "verificationPassed": true,
+  "compatibilityCorrectionInvocationSession": "issue-429-compatibility-correction-pi-openai-20260718T202616Z",
+  "compatibilityCorrectionStartedAt": "20260718T202616Z",
+  "compatibilityCorrectionStartingHead": "7497483de2187b3117c32b9cafb3db54ebac792f",
+  "compatibilityCorrectionSource": "/tmp/pm-397-rereview5-429.log",
+  "compatibilityCorrectionFindingsAccepted": ["MEDIUM_safety_valid_legacy_names"],
+  "status": "compatibility_correction_in_progress",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -66,6 +71,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "compatibility-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "one bounded credentials validation correction shares the router and test critical path; this runtime exposes no subagent tool, and the user prohibited services, PR, and review"
+    },
     {
       "cycle": "final-correction-summary",
       "decision": "local_critical_path",
