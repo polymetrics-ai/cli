@@ -10,7 +10,7 @@
   "invocationSession": "issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "red_captured",
+  "status": "focused_green",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -29,6 +29,11 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "focused test-only changes captured exact RED for version native registration before production edits; behavior compatibility tests pass under the legacy wrapper"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native version leaf, positional help alias, legacy-wrapper removal, and handler simplification implemented; focused version/router/golden tests pass without fixture changes"
     }
   ],
   "commits": [],

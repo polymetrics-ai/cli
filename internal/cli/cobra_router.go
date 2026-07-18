@@ -75,6 +75,7 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
+	cmd.AddCommand(newVersionCobraCommand(stdout, jsonOut))
 	return cmd
 }
 
@@ -201,9 +202,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "skills", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runSkills(args, stdout, jsonOut)
-		}},
-		{name: "version", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runVersion(args, stdout, jsonOut)
 		}},
 		{name: "rlm", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runRLM(ctx, cfg, root, args, stdout, jsonOut)
@@ -426,6 +424,41 @@ func newRuntimeDoctorCobraCommand(ctx context.Context, cfg config.Config, stdout
 		},
 	}
 	setManualHelp(cmd, "runtime", stdout, jsonOut)
+	return cmd
+}
+
+func newVersionCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:               "version",
+		Args:              cobra.NoArgs,
+		SilenceErrors:     true,
+		SilenceUsage:      true,
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(runVersion(stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "version", stdout, jsonOut)
+	cmd.AddCommand(newVersionHelpCobraCommand(stdout, jsonOut))
+	return cmd
+}
+
+func newVersionHelpCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "help",
+		Hidden:        true,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("version", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "version", stdout, jsonOut)
 	return cmd
 }
 

@@ -28,8 +28,8 @@ Results: doctor/list passed (69 commands); plan-phase prompt generated; programm
 |---:|---|---|---|---|
 | 0 | Planning | Create all six issue-local phase artifacts | Pass | Completed before production edits. |
 | 1 | RED | `go test ./internal/cli/ -run 'Version|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Fail as expected | Legacy/native registration count mismatched and `version` retained `DisableFlagParsing`. |
-| 2 | GREEN | Native Cobra registration + minimal handler adaptation | Pending | Not started. |
-| 3 | Refactor | Focused version/router/golden and full internal CLI | Pending | Not started. |
+| 2 | GREEN | Native Cobra registration + minimal handler adaptation; focused version/router test | Pass | `ok  \tpolymetrics.ai/internal/cli\t0.553s`. |
+| 3 | Refactor | `go test ./internal/cli/... -run 'Version|CobraRouterShell|Golden' -count=1` | Pass | `ok  \tpolymetrics.ai/internal/cli\t7.814s`; golden output unchanged. |
 | 4 | Full gate | gofmt/vet/tests/build/`make verify` + parity/safety checks | Pending | Not started. |
 | 5 | Delivery | coherent commits and branch push, no PR | Pending | Not started. |
 
@@ -62,3 +62,24 @@ FAIL
 ```
 
 The behavior-focused tests passed under the legacy wrapper; the RED is specifically the intended parser-ownership/registration gap.
+
+## Exact focused GREEN output
+
+```bash
+gofmt -w internal/cli/cobra_router.go internal/cli/version.go
+go test ./internal/cli/ -run 'Version|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1
+```
+
+```text
+ok  \tpolymetrics.ai/internal/cli\t0.553s
+```
+
+```bash
+go test ./internal/cli/... -run 'Version|CobraRouterShell|Golden' -count=1
+```
+
+```text
+ok  \tpolymetrics.ai/internal/cli\t7.814s
+```
+
+Implementation is the smallest slice: native leaf registration, hidden positional help alias, legacy-wrapper removal, and removal of the now-unused handler argument parser.

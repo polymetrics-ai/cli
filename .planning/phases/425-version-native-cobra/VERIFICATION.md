@@ -6,20 +6,20 @@ Invocation session: `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z
 
 - [x] Planning artifacts created before production edits.
 - [x] Exact focused RED captured before production edits (`0.612s`; native registration assertions failed as intended).
-- [ ] Smallest native Cobra version implementation green.
-- [ ] Refactor/focused/golden tests green.
+- [x] Smallest native Cobra version implementation green (`0.553s`).
+- [x] Focused version/router/golden tests green (`7.814s`); no golden fixture delta.
 
 ## Focused behavior checklist
 
-- [ ] Version is a native Cobra top-level command and absent from legacy wrappers.
-- [ ] `pm version` deterministic plain output and exit 0.
-- [ ] `pm version --json` deterministic `Version` envelope and exit 0.
-- [ ] `pm help version`, `pm version --help`, and `pm version -h` match canonical manual.
-- [ ] `pm version help` and `pm version help --json` preserve positional help compatibility.
-- [ ] JSON flag help returns `CommandManual/version`.
-- [ ] Unknown version flag remains usage exit 2.
-- [ ] Invalid version action remains usage exit 2 and not a manual.
-- [ ] `cli.Run` signature/stdout/stderr/JSON/exit semantics unchanged.
+- [x] Version is a native Cobra top-level command and absent from legacy wrappers.
+- [x] `pm version` deterministic plain output and exit 0 (in-process focused test).
+- [x] `pm version --json` deterministic `Version` envelope and exit 0 (in-process focused test).
+- [x] `pm help version`, `pm version --help`, and `pm version -h` match canonical manual (in-process focused test).
+- [x] `pm version help` and `pm version help --json` preserve positional help compatibility (in-process focused test).
+- [x] JSON flag help returns `CommandManual/version` (in-process focused test).
+- [x] Unknown version flag remains usage exit 2 (in-process focused test).
+- [x] Invalid version action remains usage exit 2 and not a manual (in-process focused test).
+- [x] `cli.Run` signature/stdout/stderr/JSON/exit semantics unchanged in focused/golden tests; broader gates pending.
 
 ## CLI parity checklist
 
@@ -34,7 +34,7 @@ Invocation session: `issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z
 ## Required gates
 
 - [ ] `gofmt -w cmd internal`
-- [ ] focused version/router/golden tests
+- [x] focused version/router/golden tests (`7.814s`)
 - [ ] `go test ./internal/cli/...`
 - [ ] `go vet ./...`
 - [ ] `go test ./...`
