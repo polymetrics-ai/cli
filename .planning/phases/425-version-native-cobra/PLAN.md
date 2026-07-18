@@ -114,7 +114,7 @@ GSD correction probe: `scripts/gsd doctor` passed; `scripts/gsd list` passed; re
 
 ## Correction completion note
 
-The bounded correction completed with exact three-case RED, then the smallest global-parser/config-precedence propagation. `--json=true`, `--json=false`, and JSON help now drive the output mode actually used by native Cobra handlers. Ordinary `--json`, deterministic output, help, unknown flags, malformed assignments, another native namespace, goldens, generated docs, and full `internal/cli` remained green. No help/manual/website text changed, so docs/website content updates are not applicable; generated CLI docs diffed clean.
+The bounded correction completed with exact three-case RED, then the smallest global-parser/config-precedence propagation. `--json=true`, `--json=false`, and JSON help now drive the output mode actually used by native Cobra handlers. Ordinary `--json`, deterministic output, help, unknown flags, malformed assignments, another native namespace, goldens, generated docs, and full `internal/cli` remained green. No help/manual/website text changed, so docs/website content updates are not applicable; generated CLI docs diffed clean. Implementation commit `fe2451cf` was pushed to the existing issue branch; no PR or external review was created.
 
 ## Original completion note
 

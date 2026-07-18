@@ -10,7 +10,7 @@
   "invocationSession": "issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "review_fix_verified_pending_push",
+  "status": "review_fix_complete_pushed",
   "verificationPassed": true,
   "reviewFix": {
     "source": "/tmp/pm-397-review-425.log",
@@ -19,7 +19,9 @@
     "model": "openai-codex/gpt-5.6-sol",
     "thinking": "high",
     "startingHead": "975cb21b55a32574ef754b8a0a0f0635125fb0e0",
-    "status": "verified_pending_push",
+    "status": "complete_pushed",
+    "implementationCommit": "fe2451cf fix(cli): propagate json boolean assignments",
+    "push": "pushed to origin/refactor/425-version-native-cobra",
     "red": "go test ./internal/cli/ -run '^TestVersionJSONBooleanAssignmentsStayConnected$' -count=1 failed as expected in 0.568s; all three subtests exposed disconnected output mode",
     "green": "focused 0.562s; version/router/golden 8.829s; global flags 2.574s; deterministic/help/unknown 0.579s; full internal/cli 196.764s",
     "verification": "gofmt, go vet ./..., build, binary assignment/config/help/runtime/error checks, docs generation/validation, diff and scope checks passed",
@@ -80,7 +82,8 @@
     "8fa737b8 docs(planning): plan version native cobra slice",
     "c6541529 test(cli): specify native cobra version contract",
     "cb8d4e70 refactor(cli): nativize version namespace",
-    "3fcd344c docs(planning): record version cobra verification"
+    "3fcd344c docs(planning): record version cobra verification",
+    "fe2451cf fix(cli): propagate json boolean assignments"
   ],
   "push": "all planned, red, implementation, and verification checkpoints pushed to origin/refactor/425-version-native-cobra; final state-recording commit is the handoff HEAD",
   "pullRequest": "not_created_user_requested_no_new_pr",

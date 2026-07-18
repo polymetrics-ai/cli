@@ -13,7 +13,7 @@ Correction session `issue-425-review-fix-pi-openai-codex-gpt-5.6-sol-high-202607
 - [x] Focused version/router/golden (`8.829s`) and global flag (`2.574s`) tests pass.
 - [x] Broader `internal/cli` passed (`196.764s`).
 - [x] gofmt, full vet, build, `git diff --check`, scope/dependency checks pass.
-- [x] Existing branch prepared for commit/push; no PR or external review requested.
+- [x] Implementation commit `fe2451cf` pushed to the existing branch; no PR or external review requested.
 
 Correction result: focused GREEN passed in `0.562s`; deterministic/help/unknown regression focus passed in `0.579s`. Built-binary checks proved ordinary `--json` and `--json=true` byte parity, configured JSON overridden by `--json=false`, assigned JSON help, and assigned JSON on the `runtime` namespace. `--json=maybe` returned validation exit 3; an unknown version flag remained usage exit 2. Temp CLI docs generation and validation passed with no checked-in docs/website/golden delta.
 

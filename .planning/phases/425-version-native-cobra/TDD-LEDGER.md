@@ -37,7 +37,7 @@ GSD correction evidence: doctor/list passed; `scripts/gsd prompt programming-loo
 | Binary behavior | ordinary/assigned JSON parity; false override; JSON help; runtime namespace; malformed/unknown exits | Pass (`invalid=3`, `unknown=2`) |
 | Docs/scope | temp docs generation diff, docs validation, `git diff --check`, dependency/connector/docs/website/golden scope diffs | Pass |
 
-Implementation: `parseGlobal` now consumes and validates `--json=<bool>` with `parseGlobalBool`. `globalConfigFlags` records an explicitly assigned false as a changed canonical boolean flag, preserving flag-over-env/file precedence. No new dependency or output/help schema was introduced.
+Implementation: `parseGlobal` now consumes and validates `--json=<bool>` with `parseGlobalBool`. `globalConfigFlags` records an explicitly assigned false as a changed canonical boolean flag, preserving flag-over-env/file precedence. No new dependency or output/help schema was introduced. Commit `fe2451cf` (`fix(cli): propagate json boolean assignments`) was pushed to `origin/refactor/425-version-native-cobra`.
 
 ## GSD and skills
 
