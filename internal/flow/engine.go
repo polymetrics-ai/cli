@@ -270,7 +270,9 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (result RunResult, er
 			stepErr = fmt.Errorf("%w: %s", ErrUnknownStepKind, s.Kind)
 		}
 
-		sr.DurationNs = time.Since(start).Nanoseconds()
+		stepDuration := time.Since(start)
+		sr.DurationNs = stepDuration.Nanoseconds()
+		telemetry.RecordStageDuration(stepCtx, string(s.Kind), stepDuration)
 
 		if stepErr != nil {
 			sr.Status = "failed"

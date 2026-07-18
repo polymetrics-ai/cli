@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
 	otelmetric "go.opentelemetry.io/otel/metric"
@@ -18,7 +19,10 @@ import (
 	"go.opentelemetry.io/otel/sdk/metric/metricdata"
 )
 
-const defaultOTLPMetricEndpointURL = "http://localhost:4318/v1/metrics"
+const (
+	defaultOTLPMetricEndpointURL = "http://localhost:4318/v1/metrics"
+	defaultMetricExportInterval  = 30 * time.Second
+)
 
 type metricContextKey struct{}
 
@@ -28,10 +32,12 @@ type metricHandle struct {
 	exporter sdkmetric.Exporter
 	file     io.Closer
 	meter    otelmetric.Meter
+	inst     metricInstruments
 }
 
 type metricState struct {
 	meter otelmetric.Meter
+	inst  metricInstruments
 }
 
 // Enabled reports whether telemetry is active for ctx.
@@ -61,7 +67,7 @@ func withMetricState(ctx context.Context, metrics *metricHandle) context.Context
 	if metrics == nil || metrics.meter == nil {
 		return ctx
 	}
-	return context.WithValue(ctx, metricContextKey{}, metricState{meter: metrics.meter})
+	return context.WithValue(ctx, metricContextKey{}, metricState{meter: metrics.meter, inst: metrics.inst})
 }
 
 func newMetricHandle(ctx context.Context, cfg Config, warn WarningFunc) (*metricHandle, error) {
@@ -69,11 +75,26 @@ func newMetricHandle(ctx context.Context, cfg Config, warn WarningFunc) (*metric
 	if err != nil {
 		return nil, err
 	}
-	reader := sdkmetric.NewManualReader(
-		sdkmetric.WithTemporalitySelector(func(sdkmetric.InstrumentKind) metricdata.Temporality {
-			return metricdata.CumulativeTemporality
-		}),
-	)
+	warningExporter := metricWarningExporter{ctx: ctx, warn: warn, next: exporter}
+	var manualReader *sdkmetric.ManualReader
+	var reader sdkmetric.Reader
+	manualExport := false
+	if normalizeExporter(cfg.Exporter) == ExporterFile {
+		manualReader = sdkmetric.NewManualReader(
+			sdkmetric.WithTemporalitySelector(func(sdkmetric.InstrumentKind) metricdata.Temporality {
+				return metricdata.CumulativeTemporality
+			}),
+		)
+		reader = manualReader
+		manualExport = true
+	} else {
+		reader = sdkmetric.NewPeriodicReader(
+			warningExporter,
+			sdkmetric.WithInterval(metricExportIntervalOrDefault(cfg.MetricExportInterval)),
+			sdkmetric.WithTimeout(timeoutOrDefault(cfg.ShutdownTimeout)),
+		)
+	}
+
 	var provider *sdkmetric.MeterProvider
 	var meter otelmetric.Meter
 	err = withSanitizedSDKEnv(func() error {
@@ -91,13 +112,35 @@ func newMetricHandle(ctx context.Context, cfg Config, warn WarningFunc) (*metric
 		}
 		return nil, err
 	}
-	return &metricHandle{
+	inst, err := newMetricInstruments(meter)
+	if err != nil {
+		_ = provider.Shutdown(ctx)
+		if manualExport {
+			_ = exporter.Shutdown(ctx)
+		}
+		if file != nil {
+			_ = file.Close()
+		}
+		return nil, err
+	}
+	handle := &metricHandle{
 		provider: provider,
-		reader:   reader,
-		exporter: metricWarningExporter{ctx: ctx, warn: warn, next: exporter},
+		reader:   manualReader,
 		file:     file,
 		meter:    meter,
-	}, nil
+		inst:     inst,
+	}
+	if manualExport {
+		handle.exporter = warningExporter
+	}
+	return handle, nil
+}
+
+func metricExportIntervalOrDefault(interval time.Duration) time.Duration {
+	if interval > 0 {
+		return interval
+	}
+	return defaultMetricExportInterval
 }
 
 func (h *metricHandle) shutdown(ctx context.Context) error {
@@ -238,8 +281,14 @@ func metricEndpointFromTraceEndpoint(endpoint string) string {
 	if err != nil {
 		return endpoint
 	}
-	if strings.HasSuffix(parsed.Path, "/v1/traces") {
-		parsed.Path = strings.TrimSuffix(parsed.Path, "/v1/traces") + "/v1/metrics"
+	path := strings.TrimSuffix(parsed.Path, "/")
+	switch {
+	case strings.HasSuffix(path, "/v1/traces"):
+		parsed.Path = strings.TrimSuffix(path, "/v1/traces") + "/v1/metrics"
+	case strings.HasSuffix(path, "/v1/metrics"):
+		parsed.Path = path
+	default:
+		parsed.Path = path + "/v1/metrics"
 	}
 	return parsed.String()
 }
@@ -307,11 +356,22 @@ func withSanitizedOTLPMetricEnv(fn func() (sdkmetric.Exporter, error)) (sdkmetri
 }
 
 type metricInstruments struct {
-	recordsRead        otelmetric.Int64Counter
-	recordsTransformed otelmetric.Int64Counter
-	recordsLoaded      otelmetric.Int64Counter
-	recordsFailed      otelmetric.Int64Counter
-	batchesFlushed     otelmetric.Int64Counter
+	recordsRead               otelmetric.Int64Counter
+	recordsTransformed        otelmetric.Int64Counter
+	recordsLoaded             otelmetric.Int64Counter
+	recordsFailed             otelmetric.Int64Counter
+	batchesCreated            otelmetric.Int64Counter
+	batchesRetried            otelmetric.Int64Counter
+	batchesSkipped            otelmetric.Int64Counter
+	batchesFlushed            otelmetric.Int64Counter
+	apiCalls                  otelmetric.Int64Counter
+	apiRetries                otelmetric.Int64Counter
+	apiRateLimitWaits         otelmetric.Int64Counter
+	bytesRead                 otelmetric.Int64Counter
+	bytesWritten              otelmetric.Int64Counter
+	connectorOperationSeconds otelmetric.Float64Histogram
+	apiRateLimitWaitSeconds   otelmetric.Float64Histogram
+	stageSeconds              otelmetric.Float64Histogram
 }
 
 // RunCounters accumulates ETL counters locally and flushes OTel instruments at batch boundaries.
@@ -323,26 +383,28 @@ type RunCounters struct {
 	recordsTransformed int64
 	recordsLoaded      int64
 	recordsFailed      int64
+	batchesCreated     int64
+	batchesRetried     int64
+	batchesSkipped     int64
 	batchesFlushed     int64
 
-	flushedRead        int64
-	flushedTransformed int64
-	flushedLoaded      int64
-	flushedFailed      int64
-	flushedBatches     int64
+	flushedRead           int64
+	flushedTransformed    int64
+	flushedLoaded         int64
+	flushedFailed         int64
+	flushedBatchesCreated int64
+	flushedBatchesRetried int64
+	flushedBatchesSkipped int64
+	flushedBatches        int64
 }
 
 // NewRunCounters creates local run counters. Disabled telemetry returns counters whose hot path only increments fields.
 func NewRunCounters(ctx context.Context) *RunCounters {
-	meter, ok := Meter(ctx)
+	state, ok := metricStateFromContext(ctx)
 	if !ok {
 		return &RunCounters{}
 	}
-	inst, err := newMetricInstruments(meter)
-	if err != nil {
-		return &RunCounters{}
-	}
-	return &RunCounters{enabled: true, inst: inst}
+	return &RunCounters{enabled: true, inst: state.inst}
 }
 
 func newMetricInstruments(meter otelmetric.Meter) (metricInstruments, error) {
@@ -360,7 +422,40 @@ func newMetricInstruments(meter otelmetric.Meter) (metricInstruments, error) {
 	if inst.recordsFailed, err = meter.Int64Counter("pm.records.failed", otelmetric.WithDescription("Records failed during ETL.")); err != nil {
 		return metricInstruments{}, err
 	}
+	if inst.batchesCreated, err = meter.Int64Counter("pm.batches.created", otelmetric.WithDescription("ETL batches created at bounded flush seams.")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.batchesRetried, err = meter.Int64Counter("pm.batches.retried", otelmetric.WithDescription("ETL batches retried.")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.batchesSkipped, err = meter.Int64Counter("pm.batches.skipped", otelmetric.WithDescription("ETL batches skipped.")); err != nil {
+		return metricInstruments{}, err
+	}
 	if inst.batchesFlushed, err = meter.Int64Counter("pm.batches.flushed", otelmetric.WithDescription("ETL batches flushed to destination sinks.")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.apiCalls, err = meter.Int64Counter("pm.api.calls", otelmetric.WithDescription("Connector API request attempts.")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.apiRetries, err = meter.Int64Counter("pm.api.retries", otelmetric.WithDescription("Connector API retries.")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.apiRateLimitWaits, err = meter.Int64Counter("pm.api.rate_limit_waits", otelmetric.WithDescription("Connector API rate-limit waits.")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.bytesRead, err = meter.Int64Counter("pm.bytes.read", otelmetric.WithDescription("Bytes read from connector API responses."), otelmetric.WithUnit("By")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.bytesWritten, err = meter.Int64Counter("pm.bytes.written", otelmetric.WithDescription("Bytes written to connector API requests."), otelmetric.WithUnit("By")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.connectorOperationSeconds, err = meter.Float64Histogram("pm.connector.operation.duration", otelmetric.WithDescription("Connector operation latency."), otelmetric.WithUnit("s")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.apiRateLimitWaitSeconds, err = meter.Float64Histogram("pm.api.rate_limit_wait.duration", otelmetric.WithDescription("Connector API rate-limit wait duration."), otelmetric.WithUnit("s")); err != nil {
+		return metricInstruments{}, err
+	}
+	if inst.stageSeconds, err = meter.Float64Histogram("pm.stage.duration", otelmetric.WithDescription("Run duration by bounded stage."), otelmetric.WithUnit("s")); err != nil {
 		return metricInstruments{}, err
 	}
 	return inst, nil
@@ -394,11 +489,39 @@ func (c *RunCounters) RecordFailed(n int) {
 	}
 }
 
-// RecordBatch increments the local batch counter without emitting OTel metrics.
-func (c *RunCounters) RecordBatch() {
+// RecordBatchCreated increments the local batch-created counter without emitting OTel metrics.
+func (c *RunCounters) RecordBatchCreated() {
+	if c != nil {
+		c.batchesCreated++
+	}
+}
+
+// RecordBatchRetried increments the local batch-retried counter without emitting OTel metrics.
+func (c *RunCounters) RecordBatchRetried() {
+	if c != nil {
+		c.batchesRetried++
+	}
+}
+
+// RecordBatchSkipped increments the local batch-skipped counter without emitting OTel metrics.
+func (c *RunCounters) RecordBatchSkipped() {
+	if c != nil {
+		c.batchesSkipped++
+	}
+}
+
+// RecordBatchFlushed increments the local batch-flushed reconciliation counter without emitting OTel metrics.
+func (c *RunCounters) RecordBatchFlushed() {
 	if c != nil {
 		c.batchesFlushed++
 	}
+}
+
+// RecordBatch preserves the original successful-batch behavior for callers that
+// have not split the created and flushed seams yet.
+func (c *RunCounters) RecordBatch() {
+	c.RecordBatchCreated()
+	c.RecordBatchFlushed()
 }
 
 // Flush emits deltas since the previous flush. Call from batch boundaries, not per record.
@@ -422,8 +545,103 @@ func (c *RunCounters) Flush(ctx context.Context) {
 		c.inst.recordsFailed.Add(ctx, delta)
 		c.flushedFailed = c.recordsFailed
 	}
+	if delta := c.batchesCreated - c.flushedBatchesCreated; delta != 0 {
+		c.inst.batchesCreated.Add(ctx, delta)
+		c.flushedBatchesCreated = c.batchesCreated
+	}
+	if delta := c.batchesRetried - c.flushedBatchesRetried; delta != 0 {
+		c.inst.batchesRetried.Add(ctx, delta)
+		c.flushedBatchesRetried = c.batchesRetried
+	}
+	if delta := c.batchesSkipped - c.flushedBatchesSkipped; delta != 0 {
+		c.inst.batchesSkipped.Add(ctx, delta)
+		c.flushedBatchesSkipped = c.batchesSkipped
+	}
 	if delta := c.batchesFlushed - c.flushedBatches; delta != 0 {
 		c.inst.batchesFlushed.Add(ctx, delta)
 		c.flushedBatches = c.batchesFlushed
+	}
+}
+
+// RecordAPICall records one HTTP attempt and its encoded request bytes.
+func RecordAPICall(ctx context.Context, operation string, bytesWritten int) {
+	state, ok := metricStateFromContext(ctx)
+	if !ok {
+		return
+	}
+	opts := otelmetric.WithAttributes(attribute.String("pm.operation", boundedOperation(operation)))
+	state.inst.apiCalls.Add(ctx, 1, opts)
+	if bytesWritten > 0 {
+		state.inst.bytesWritten.Add(ctx, int64(bytesWritten), opts)
+	}
+}
+
+// RecordAPIRetry records a retry decision at the existing HTTP retry seam.
+func RecordAPIRetry(ctx context.Context, operation string) {
+	state, ok := metricStateFromContext(ctx)
+	if !ok {
+		return
+	}
+	state.inst.apiRetries.Add(ctx, 1, otelmetric.WithAttributes(attribute.String("pm.operation", boundedOperation(operation))))
+}
+
+// RecordRateLimitWait records one 429 wait and its bounded duration.
+func RecordRateLimitWait(ctx context.Context, operation string, wait time.Duration) {
+	state, ok := metricStateFromContext(ctx)
+	if !ok {
+		return
+	}
+	if wait < 0 {
+		wait = 0
+	}
+	opts := otelmetric.WithAttributes(attribute.String("pm.operation", boundedOperation(operation)))
+	state.inst.apiRateLimitWaits.Add(ctx, 1, opts)
+	state.inst.apiRateLimitWaitSeconds.Record(ctx, wait.Seconds(), opts)
+}
+
+// RecordConnectorOperation records one logical connector operation and all
+// response bytes captured across its attempts.
+func RecordConnectorOperation(ctx context.Context, operation string, duration time.Duration, bytesRead int) {
+	state, ok := metricStateFromContext(ctx)
+	if !ok {
+		return
+	}
+	if duration < 0 {
+		duration = 0
+	}
+	opts := otelmetric.WithAttributes(attribute.String("pm.operation", boundedOperation(operation)))
+	state.inst.connectorOperationSeconds.Record(ctx, duration.Seconds(), opts)
+	if bytesRead > 0 {
+		state.inst.bytesRead.Add(ctx, int64(bytesRead), opts)
+	}
+}
+
+// RecordStageDuration records one bounded run-stage duration.
+func RecordStageDuration(ctx context.Context, stage string, duration time.Duration) {
+	state, ok := metricStateFromContext(ctx)
+	if !ok {
+		return
+	}
+	if duration < 0 {
+		duration = 0
+	}
+	state.inst.stageSeconds.Record(ctx, duration.Seconds(), otelmetric.WithAttributes(attribute.String("pm.stage", boundedStage(stage))))
+}
+
+func boundedOperation(operation string) string {
+	switch strings.ToUpper(strings.TrimSpace(operation)) {
+	case "GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS":
+		return strings.ToUpper(strings.TrimSpace(operation))
+	default:
+		return "OTHER"
+	}
+}
+
+func boundedStage(stage string) string {
+	switch strings.ToLower(strings.TrimSpace(stage)) {
+	case "etl", "sync", "query", "rlm", "action", "extract", "transform", "load", "write":
+		return strings.ToLower(strings.TrimSpace(stage))
+	default:
+		return "other"
 	}
 }

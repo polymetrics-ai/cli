@@ -1,9 +1,9 @@
 # Phase 415 — OpenTelemetry metrics
 
-Issue: #415 `feat(obs): add OpenTelemetry metrics`  
-Parent: #397 / parent branch `feat/cli-architecture-v2`  
-Worker branch: `feat/415-otel-metrics`  
-Worker dir: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-415-otel-metrics`  
+Issue: #415 `feat(obs): add OpenTelemetry metrics`<br>
+Parent: #397 / parent branch `feat/cli-architecture-v2`<br>
+Worker branch: `feat/415-otel-metrics`<br>
+Worker dir: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-415-otel-metrics`<br>
 Base parent head: `56a7ecb08f755184af7b55318c3285582d5adfb7`
 
 ## GSD adapter and execution mode
@@ -164,6 +164,26 @@ Required artifact checkpoint before production edits:
 - `internal/worker`: add tests for `temporalWorkerOptions` disabled/enabled behavior and verify worker constructors consume it rather than `worker.Options{}`.
 - `internal/app`: split `BenchmarkEmit` into `disabled` and `enabled_file` sub-benchmarks with `b.ReportAllocs()` and setup outside the loop.
 
+## Independent-review correction cycle — PR #461
+
+Date: 2026-07-18.<br>
+Correction worker session: `153cfaabe3df4733a85717da46513786` (`WARP_TERMINAL_SESSION_UUID`).<br>
+Model: `openai-codex/gpt-5.6-sol`.<br>
+Thinking: `high`.<br>
+Exact starting HEAD: `c6138292cfcc7205f7968a54b57a65f933a3c1fa`.
+
+Independent review source: `/tmp/pm-397-review-415.log`. The four findings are accepted and bounded; accepted work must not be reimplemented. `scripts/gsd doctor` and `scripts/gsd list` pass, while `scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run` remains unavailable with `unknown GSD command: programming-loop`; manual GSD/TDD fallback through `.pi/prompts/pm-gsd-loop.md` remains active. Execution decision: `local_critical_path` because this bounded mutating worker already owns the isolated issue worktree and no subagent tool is available.
+
+### Correction slices
+
+1. **Contract RED:** enumerate every PRD §15.2 low-cardinality metric family and require the correct counter/histogram kind; add representative batch/HTTP/retry/stage tests that assert values and secret-safe bounded attributes.
+2. **Live-export/endpoint RED:** use an `httptest` OTLP collector and a short test interval to require export before shutdown; assert disabled mode starts no exporter; assert generic OTLP endpoint appends `/v1/metrics` while metrics-specific endpoint remains exact.
+3. **Smallest GREEN metrics slice:** add missing batch/API/rate-limit/connector-latency/bytes/stage instruments at existing boundaries. Per-record paths continue to update only local fields; OTel calls remain at batch, HTTP attempt/retry, operation completion, and stage completion seams.
+4. **Smallest GREEN provider slice:** keep file mode on a cumulative manual reader for one shutdown reconciliation snapshot; use a bounded periodic reader only for OTLP, with final provider shutdown under the existing timeout and warning-only behavior.
+5. **Cleanup and verify:** remove committed trailing whitespace; run focused race tests, metric reconciliation, live-export/endpoint tests, Temporal telemetry gating, benchmarks, gofmt, range/worktree diff checks, relevant vet, module verify/tidy-diff, broader package tests, build, and `make verify` as feasible.
+
+No new dependencies, runtime services, credentialed checks, generic write surfaces, external review requests, or CLI-visible behavior changes. Default-off, secret-safe, stdout-stable, warning-only, and exit-neutral behavior remains mandatory.
+
 ## PR plan
 
-Open/update stacked PR to base `feat/cli-architecture-v2`, title `feat(obs): add OpenTelemetry metrics`, body includes `Refs #415`, `Refs #397`, GSD/TDD evidence, skills loaded, dependency justification, safety notes, parity checklist, gates, review-fix disposition, and no Claude/Copilot route for this cycle.
+Update existing stacked PR #461 only. Commit and push coherent green correction slices to `feat/415-otel-metrics`; do not open another PR or request external review.

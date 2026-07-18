@@ -12,7 +12,7 @@ import (
 	"polymetrics.ai/internal/telemetry"
 )
 
-func TestEngineRunEmitsFlowAndStepTelemetrySpans(t *testing.T) {
+func TestEngineEmitsStageDurationMetricAndFlowSpans(t *testing.T) {
 	root := t.TempDir()
 	dir := filepath.Join(root, ".polymetrics", "telemetry")
 	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "flow-span"}, func(string) {})
@@ -44,6 +44,8 @@ func TestEngineRunEmitsFlowAndStepTelemetrySpans(t *testing.T) {
 	assertFlowTelemetryContains(t, data, "pm.flow.step_id")
 	assertFlowTelemetryContains(t, data, "sync_accounts")
 	assertFlowTelemetryContains(t, data, "pm.flow.step_kind")
+	assertFlowTelemetryContains(t, data, "pm.stage.duration")
+	assertFlowTelemetryContains(t, data, "pm.stage")
 	assertFlowTelemetryContains(t, data, "sync")
 }
 

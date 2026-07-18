@@ -1,5 +1,27 @@
 # Verification — Phase 415 OpenTelemetry metrics
 
+## Independent-review correction gates
+
+Correction worker: session `153cfaabe3df4733a85717da46513786`; model `openai-codex/gpt-5.6-sol`; thinking `high`; starting HEAD `c6138292cfcc7205f7968a54b57a65f933a3c1fa`.
+
+- [x] Exact focused RED evidence captured before correction production edits (`/tmp/pm-415-correction-red.txt`).
+- [x] PRD §15.2 contract enumerates every required metric name and counter/histogram kind.
+- [x] Batch created/retried/skipped methods stay local until batch `Flush`; representative ETL/action batch values reconcile without per-record OTel calls.
+- [x] HTTP calls/retries/rate-limit waits, connector-operation duration, and bytes read/written emit at existing bounded seams with secret-safe low-cardinality attributes.
+- [x] Stage duration emits at existing ETL/flow stage completion seams with bounded stage labels.
+- [x] OTLP metrics export periodically before worker shutdown; disabled mode starts no exporter.
+- [x] File metrics remain one cumulative shutdown snapshot and reconcile with final ETL envelope counts.
+- [x] Generic OTLP endpoint path appends `/v1/metrics`; trace-signal endpoint rewrites to metrics; metric-specific endpoint remains exact.
+- [x] Existing Temporal tracing/metrics gating remains green without runtime services.
+- [x] Focused `-race` telemetry/app/connsdk/flow/worker tests pass.
+- [x] `BenchmarkEmit` disabled/enabled paths remain 0 allocs/op; no material hot-loop regression.
+- [ ] `git diff --check 56a7ecb08f755184af7b55318c3285582d5adfb7..HEAD` passes after correction commit.
+- [x] `gofmt -w cmd internal`, relevant/full `go vet`, `go mod verify`, and `go mod tidy -diff` pass with no dependency changes.
+- [x] Full package tests, build, and `make verify` pass.
+- [ ] Existing branch pushed; no new PR and no external review request.
+
+CLI help/manual/website parity: not applicable to this correction because it changes internal metrics completeness and exporter behavior only; no command, flag, config key, output envelope, help topic, or docs promise changes.
+
 ## Required gates
 
 - [x] Red tests captured before original production edits.
@@ -98,3 +120,13 @@ git diff -- go.mod go.sum
 | Review-fix full Go gates | pass | `gofmt -w cmd internal && go vet ./... && go test -timeout 20m ./... && go build ./cmd/pm` passed. |
 | Review-fix make verify | pass | `make verify` passed: fmt, tidy-check, vet, full tests, build, docs validate, smoke, golangci-lint connector subset (`0 issues`), and `connectorgen validate` (`547 connector(s) checked, 0 findings`). |
 | Review-fix diff/dependency checks | pass | `git diff --check` passed; `git diff -- go.mod go.sum` produced no output, so review-fix dependency delta is empty. |
+| Independent correction preflight | pass/fallback | Exact starting HEAD confirmed; worktree initially clean; `scripts/gsd doctor`/`list` pass; `programming-loop` command unavailable; correction verification pending and therefore not yet passed. |
+| Independent correction focused RED | fail/expected | Exact command failed before production edits with missing PRD metric APIs, all-zero HTTP metric values, absent ETL batch-created metric, and absent flow stage-duration metric. Full output: `/tmp/pm-415-correction-red.txt`. |
+| Independent correction batch RED | fail/expected | Action batch retry/idempotent-skip test produced no metric JSONL before `internal/flow/action.go` edits. Full output: `/tmp/pm-415-correction-batch-red.txt`. |
+| Correction focused GREEN | pass | PRD contract, HTTP/batch/stage behavior, periodic export, disabled exporter, and endpoint path tests passed. |
+| Correction focused race | pass | `go test -race` passed for telemetry, connsdk, app, flow, and worker telemetry tests; OTLP live/path/disabled tests also passed `-race -count=10`. |
+| Correction reconciliation/Temporal | pass | App+CLI metric/deduped tests passed under race; Temporal client/worker options and OnError gating passed under race without services. |
+| Correction benchmark | pass | 5 runs: disabled `1.998–2.024 ns/op`; enabled file `1.996–2.042 ns/op`; all `0 B/op`, `0 allocs/op`. |
+| Correction modules/static | pass | Relevant and full vet passed; `go mod verify` passed; `go mod tidy -diff` and dependency diff empty. |
+| Correction full Go gates | pass | `gofmt -w cmd internal`, `go vet ./...`, `go test -timeout 20m ./...`, and `go build ./cmd/pm` passed. |
+| Correction `make verify` | pass | Full gate passed, including docs validate, smoke, connector lint, and 547-bundle validation. |

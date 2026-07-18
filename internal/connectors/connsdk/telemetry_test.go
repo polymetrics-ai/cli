@@ -112,6 +112,65 @@ func TestRequesterDoFailedHTTPSpanHasSafeErrorAndEventAttrs(t *testing.T) {
 	}
 }
 
+func TestRequesterDoEmitsPRDMetricsAtHTTPRetrySeams(t *testing.T) {
+	const marker = "pm_http_metric_secret_marker"
+	var calls int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		if calls == 1 {
+			w.Header().Set("Retry-After", "0")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte("wait"))
+			return
+		}
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer server.Close()
+
+	root := t.TempDir()
+	dir := filepath.Join(root, ".polymetrics", "telemetry")
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "http-prd-metrics"}, func(string) {})
+	requester := &Requester{
+		Client:      server.Client(),
+		BaseURL:     server.URL,
+		MaxRetries:  1,
+		BaseBackoff: time.Nanosecond,
+		Sleep:       noSleep,
+	}
+	body := map[string]string{"secret": marker}
+	payload, err := json.Marshal(body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := requester.Do(ctx, http.MethodPost, "/v1/accounts", url.Values{"token": []string{marker}}, body); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	telemetry.Shutdown(context.Background(), handle, func(string) {})
+
+	data := readConnSDKTelemetry(t, dir)
+	for name, want := range map[string]int{
+		"pm.api.calls":            2,
+		"pm.api.retries":          1,
+		"pm.api.rate_limit_waits": 1,
+		"pm.bytes.read":           len("wait") + len(`{"ok":true}`),
+		"pm.bytes.written":        2 * len(payload),
+	} {
+		if got := connSDKMetricSum(t, data, name); got != want {
+			t.Errorf("metric %s sum = %d, want %d\n%s", name, got, want, data)
+		}
+	}
+	for _, name := range []string{"pm.connector.operation.duration", "pm.api.rate_limit_wait.duration"} {
+		if got := connSDKHistogramCount(t, data, name); got != 1 {
+			t.Errorf("histogram %s count = %d, want 1\n%s", name, got, data)
+		}
+	}
+	assertConnSDKContains(t, data, "pm.operation")
+	assertConnSDKContains(t, data, "POST")
+	assertConnSDKNotContains(t, data, marker)
+	assertConnSDKNotContains(t, data, "token=")
+	assertConnSDKNotContains(t, data, "request.body")
+}
+
 func readConnSDKTelemetry(t *testing.T, dir string) []byte {
 	t.Helper()
 	entries, err := os.ReadDir(dir)
@@ -163,6 +222,50 @@ func connSDKSpanEventHasAttr(t *testing.T, data []byte, eventName, attrKey strin
 		}
 	}
 	return false
+}
+
+func connSDKMetricSum(t *testing.T, data []byte, name string) int {
+	t.Helper()
+	return connSDKMetricPointValue(t, data, name, "Value")
+}
+
+func connSDKHistogramCount(t *testing.T, data []byte, name string) int {
+	t.Helper()
+	return connSDKMetricPointValue(t, data, name, "Count")
+}
+
+func connSDKMetricPointValue(t *testing.T, data []byte, name, field string) int {
+	t.Helper()
+	dec := json.NewDecoder(bytes.NewReader(data))
+	total := 0
+	for {
+		var obj map[string]any
+		err := dec.Decode(&obj)
+		if errors.Is(err, io.EOF) {
+			return total
+		}
+		if err != nil {
+			t.Fatalf("decode metric JSON: %v\n%s", err, data)
+		}
+		scopeMetrics, _ := obj["ScopeMetrics"].([]any)
+		for _, rawScope := range scopeMetrics {
+			scope, _ := rawScope.(map[string]any)
+			metrics, _ := scope["Metrics"].([]any)
+			for _, rawMetric := range metrics {
+				metric, _ := rawMetric.(map[string]any)
+				if metric["Name"] != name {
+					continue
+				}
+				metricData, _ := metric["Data"].(map[string]any)
+				points, _ := metricData["DataPoints"].([]any)
+				for _, rawPoint := range points {
+					point, _ := rawPoint.(map[string]any)
+					value, _ := point[field].(float64)
+					total += int(value)
+				}
+			}
+		}
+	}
 }
 
 func assertConnSDKContains(t *testing.T, data []byte, needle string) {

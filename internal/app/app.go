@@ -401,6 +401,7 @@ func (a *App) ShowCatalog(ctx context.Context, connectionName string) (CatalogSn
 }
 
 func (a *App) RunETL(ctx context.Context, req RunETLRequest) (run Run, err error) {
+	started := time.Now()
 	ctx, span := telemetry.StartSpan(ctx, "pm.etl.run",
 		telemetry.StringAttr("pm.etl.connection", req.Connection),
 		telemetry.StringAttr("pm.etl.stream", req.Stream),
@@ -417,6 +418,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (run Run, err error
 			)
 		}
 		span.End()
+		telemetry.RecordStageDuration(ctx, "etl", time.Since(started))
 	}()
 
 	conn, ok := a.findConnection(req.Connection)
@@ -506,6 +508,8 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			}
 			return nil
 		}
+		metrics.RecordBatchCreated()
+		metrics.Flush(ctx)
 		writeResult, err := destination.Write(ctx, connectors.WriteRequest{
 			Stream:     streamName,
 			Table:      stream.DestinationTable,
@@ -523,7 +527,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		result.RecordsFailed += writeResult.RecordsFailed
 		metrics.RecordFailed(writeResult.RecordsFailed)
 		result.BatchCount++
-		metrics.RecordBatch()
+		metrics.RecordBatchFlushed()
 		metrics.Flush(ctx)
 		a.emitETLEvent(ctx, events.KindProgress, runID, streamName, "batch", result, "")
 		batch = batch[:0]

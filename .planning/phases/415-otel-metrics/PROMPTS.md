@@ -30,6 +30,21 @@ scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run >/tm
 Downstream artifact: `.planning/phases/415-otel-metrics/PLAN.md` review-fix section.
 Verification result: review-fix verified; focused tests, benchmark, full Go gates, `make verify`, `git diff --check`, and dependency diff review passed; programming-loop command unavailable, manual fallback remains active.
 
+## Independent-review correction snapshot
+
+Task: bounded correction for accepted findings in `/tmp/pm-397-review-415.log` on PR #461 / issue #415, starting HEAD `c6138292cfcc7205f7968a54b57a65f933a3c1fa`; session `153cfaabe3df4733a85717da46513786`; model `openai-codex/gpt-5.6-sol`; thinking `high`.
+
+GSD commands attempted:
+
+```bash
+scripts/gsd doctor
+scripts/gsd list
+scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run
+```
+
+Downstream artifacts: correction sections in `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, and `RUN-STATE.json`.
+Verification result: local correction verified; exact RED captured before production edits; focused race/live-export/endpoint/reconciliation/Temporal tests, 5-run benchmark, full Go gates, module checks, and `make verify` passed. Programming-loop command remains unavailable, so manual fallback remains recorded. Commit/range whitespace check/push pending.
+
 ## Manual fallback prompt source
 
 `.pi/prompts/pm-gsd-loop.md` loaded because `scripts/gsd` does not expose `programming-loop` in this checkout.

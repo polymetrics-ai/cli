@@ -120,6 +120,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		if len(rawBatch) == 0 {
 			return nil
 		}
+		metrics.RecordBatchCreated()
+		metrics.Flush(ctx)
 		for _, raw := range rawBatch {
 			if err := ctx.Err(); err != nil {
 				return err
@@ -139,7 +141,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			}
 		}
 		result.BatchCount++
-		metrics.RecordBatch()
+		metrics.RecordBatchFlushed()
 		metrics.Flush(ctx)
 		a.emitETLEvent(ctx, events.KindProgress, runID, streamName, "batch", result, "")
 		rawBatch = rawBatch[:0]

@@ -64,6 +64,25 @@ Tests to add before production fixes:
 - `internal/worker` gated worker-options tests: disabled worker options are empty; enabled worker options include contrib `WorkerInterceptor` while preserving no default-on behavior.
 - `internal/app` benchmark split into disabled/enabled sub-benchmarks with enabled telemetry setup outside the hot loop and `b.ReportAllocs()` inside both sub-benchmarks.
 
+## Independent-review correction RED plan
+
+Session `153cfaabe3df4733a85717da46513786`; model `openai-codex/gpt-5.6-sol`; thinking `high`; starting HEAD `c6138292cfcc7205f7968a54b57a65f933a3c1fa`.
+
+Accepted bounded findings from `/tmp/pm-397-review-415.log`:
+
+- Contract test must require counters `pm.records.{read,transformed,loaded,failed}`, `pm.batches.{created,retried,skipped}`, `pm.api.{calls,retries,rate_limit_waits}`, and `pm.bytes.{read,written}`, plus histograms `pm.connector.operation.duration`, `pm.api.rate_limit_wait.duration`, and `pm.stage.duration`. Existing `pm.batches.flushed` remains a reconciliation metric.
+- Batch methods remain local-only until `Flush`; HTTP and stage metrics emit only at existing operation/attempt/retry/completion seams. Test attributes must be bounded and must exclude synthetic secret markers, query strings, bodies, and headers.
+- OTLP mode must export before `Shutdown` at a short configured test interval; disabled mode must create neither SDK nor collector traffic; file mode must retain one cumulative shutdown snapshot.
+- Generic `OTEL_EXPORTER_OTLP_ENDPOINT=<collector>/prefix` must post metrics to `/prefix/v1/metrics`; `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=<collector>/custom` must post exactly to `/custom`.
+
+Planned focused RED command (run after tests are added and before production edits):
+
+```bash
+go test ./internal/telemetry ./internal/connectors/connsdk ./internal/app ./internal/flow -run 'TestPRDMetricContract|TestOTLPMetricsExportBeforeShutdown|TestOTLPMetricEndpointPathSemantics|TestRequesterDoEmitsPRDMetrics|TestRunETLBatchMetricFamilies|TestEngineEmitsStageDurationMetric' -count=1
+```
+
+Expected RED at starting HEAD: missing metric APIs/families, OTLP collection only on shutdown, and generic endpoint posting to `/prefix` instead of `/prefix/v1/metrics`. Exact output will be captured before production changes.
+
 ## Ledger
 
 | # | Cycle | Type | Command / evidence | Result | Notes |
@@ -85,3 +104,13 @@ Tests to add before production fixes:
 | 15 | review-fix-focused | Test | `go test ./internal/telemetry ./internal/app ./internal/cli ./internal/worker -run 'Metric\|Telemetry\|Temporal\|Golden\|Config\|RunCounter\|Deduped' -count=1` | Pass | Focused telemetry/app/CLI/worker regression suite green after review fixes. |
 | 16 | review-fix-full | Gate | `gofmt -w cmd internal && go vet ./... && go test -timeout 20m ./... && go build ./cmd/pm` | Pass | Full Go gates green; slow packages included `internal/cli` and `internal/connectors/certify`. |
 | 17 | review-fix-verify | Gate | `make verify`; `git diff --check`; `git diff -- go.mod go.sum` | Pass | `make verify` passed including fmt/tidy-check/vet/full tests/build/docs validate/smoke/golangci-lint connector subset/connectorgen validate. `git diff --check` passed. Dependency diff empty for review-fix (no go.mod/go.sum changes). |
+| 18 | independent-correction-plan | Planning | Read issue/PR, ADR 0004, PRD §15.2, phase artifacts, GSD fallback policy, required skills, and `/tmp/pm-397-review-415.log`; update correction artifacts | Pass/fallback | Session/model/thinking/starting HEAD recorded before production edits. GSD doctor/list pass; programming-loop command remains unavailable, so recorded manual fallback continues. Decision: `local_critical_path`. |
+| 19 | independent-correction-red | Test | `go test ./internal/telemetry ./internal/connectors/connsdk ./internal/app ./internal/flow -run 'TestPRDMetricContract\|TestOTLPMetricsExportBeforeShutdown\|TestOTLPMetricEndpointPathSemantics\|TestRequesterDoEmitsPRDMetrics\|TestRunETLBatchMetricFamilies\|TestEngineEmitsStageDurationMetric' -count=1` | Fail/red | Exact RED captured in `/tmp/pm-415-correction-red.txt` before production edits. Telemetry build failed on missing batch methods, API/retry/rate-limit/latency/stage metric functions; connsdk values were all 0; ETL lacked `pm.batches.created`; flow lacked `pm.stage.duration`. Endpoint/live-export tests also require the missing `MetricExportInterval` field after the initial compile-error limit. |
+| 20 | independent-correction-batch-red | Test | `go test ./internal/flow -run '^TestActionBatchRetryAndSkipMetrics$' -count=1` | Fail/red | Exact output in `/tmp/pm-415-correction-batch-red.txt`: no telemetry metric JSONL was produced for the existing action batch create/retry/idempotent-skip seams. Added before editing `internal/flow/action.go`. |
+| 21 | independent-correction-green | Test | `go test ./internal/telemetry ./internal/connectors/connsdk ./internal/app ./internal/flow -run 'TestPRDMetricContract\|TestOTLPMetricsExportBeforeShutdown\|TestOTLPMetricEndpointPathSemantics\|TestDisabledMetricsStartsNoExporter\|TestRequesterDoEmitsPRDMetrics\|TestRunETLBatchMetricFamilies\|TestEngineEmitsStageDurationMetric\|TestActionBatchRetryAndSkipMetrics' -count=1` | Pass | Complete PRD metric contract, file snapshot, periodic OTLP, endpoint semantics, HTTP values, batch seams, and stage seam green. |
+| 22 | independent-correction-race | Test | `go test -race ./internal/telemetry ./internal/connectors/connsdk ./internal/app ./internal/flow ./internal/worker -run 'Metric\|Telemetry\|Temporal\|RunCounter\|BatchRetry\|StageDuration\|OTLP' -count=1` | Pass | Focused race suite passed across all changed seams and Temporal gating. |
+| 23 | independent-correction-benchmark | Benchmark | `go test -bench '^BenchmarkEmit$' -benchmem -count=5 ./internal/app` | Pass | Disabled `1.998–2.024 ns/op`, enabled file `1.996–2.042 ns/op`; both `0 B/op`, `0 allocs/op` in every run. No material regression versus reviewed `2.023–2.081 ns/op`. |
+| 24 | independent-correction-focused | Test | OTLP live/path/disabled tests under `-race -count=10`; app+CLI metric reconciliation under `-race`; worker Temporal options/OnError under `-race` | Pass | OTLP tests stable across 10 runs; file/envelope and deduped reconciliation green; Temporal enablement gate remains default-off. |
+| 25 | independent-correction-static-modules | Gate | relevant package `go vet`; `go mod verify`; `go mod tidy -diff`; `git diff --exit-code -- go.mod go.sum`; `git diff --check` | Pass | No vet findings, modules verified, tidy diff empty, dependency files unchanged, worktree whitespace clean. |
+| 26 | independent-correction-full-go | Gate | `gofmt -w cmd internal`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm` | Pass | Full Go suite passed, including slow CLI/certify packages; build passed. |
+| 27 | independent-correction-verify | Gate | `make verify` | Pass | Full repository gate passed: fmt, tidy-check, vet, full tests, build, docs validate, smoke, connector lint, and 547-bundle validation. |

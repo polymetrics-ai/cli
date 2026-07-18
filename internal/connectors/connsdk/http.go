@@ -238,6 +238,11 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 	attrs := append(telemetry.HTTPAttrs(method, fullURL), telemetry.IntAttr("pm.http.max_attempts", attempts))
 	ctx, span := telemetry.StartSpan(ctx, "pm.connector.http", attrs...)
 	defer span.End()
+	started := time.Now()
+	responseBytes := 0
+	defer func() {
+		telemetry.RecordConnectorOperation(ctx, method, time.Since(started), responseBytes)
+	}()
 	var lastErr error
 	for attempt := 0; attempt < attempts; attempt++ {
 		attemptAttr := telemetry.IntAttr("pm.http.attempt", attempt+1)
@@ -262,11 +267,13 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 			}
 		}
 
+		telemetry.RecordAPICall(ctx, method, len(payload))
 		resp, err := r.client().Do(req)
 		if err != nil {
 			lastErr = fmt.Errorf("send request: %w", err)
 			span.AddEvent("pm.connector.http.error", attemptAttr)
 			if attempt < attempts-1 {
+				telemetry.RecordAPIRetry(ctx, method)
 				if werr := r.sleep(ctx, r.backoff(attempt, "")); werr != nil {
 					return nil, werr
 				}
@@ -278,11 +285,17 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		resp.Body.Close()
+		responseBytes += len(respBody)
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			lastErr = &HTTPError{Status: resp.StatusCode, URL: safeErrorURL(fullURL), Body: truncate(respBody)}
 			span.AddEvent("pm.connector.http.retry", attemptAttr, telemetry.IntAttr("pm.http.status_code", resp.StatusCode), telemetry.BoolAttr("pm.http.retry", true))
-			if werr := r.sleep(ctx, r.backoff(attempt, resp.Header.Get("Retry-After"))); werr != nil {
+			telemetry.RecordAPIRetry(ctx, method)
+			wait := r.backoff(attempt, resp.Header.Get("Retry-After"))
+			if resp.StatusCode == http.StatusTooManyRequests {
+				telemetry.RecordRateLimitWait(ctx, method, wait)
+			}
+			if werr := r.sleep(ctx, wait); werr != nil {
 				return nil, werr
 			}
 			continue

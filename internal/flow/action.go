@@ -17,6 +17,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"polymetrics.ai/internal/telemetry"
 )
 
 // ---------------------------------------------------------------------------
@@ -376,16 +378,24 @@ type writeResponse struct {
 
 // sendBatch POSTs records to DestURL with retry on 429/5xx.
 // Returns (response, retryAfter, statusCode, error).
-func (r *HTTPActionRunner) sendBatch(ctx context.Context, records []map[string]any) (writeResponse, error) {
+func (r *HTTPActionRunner) sendBatch(ctx context.Context, records []map[string]any, metrics *telemetry.RunCounters) (writeResponse, error) {
 	payload, err := json.Marshal(records)
 	if err != nil {
 		return writeResponse{}, fmt.Errorf("marshal batch: %w", err)
 	}
 
 	maxAttempts := r.maxRetries() + 1
+	started := time.Now()
+	responseBytes := 0
+	defer func() {
+		telemetry.RecordConnectorOperation(ctx, http.MethodPost, time.Since(started), responseBytes)
+	}()
 	var lastErr error
 	for attempt := 0; attempt < maxAttempts; attempt++ {
 		if attempt > 0 {
+			metrics.RecordBatchRetried()
+			metrics.Flush(ctx)
+			telemetry.RecordAPIRetry(ctx, http.MethodPost)
 			wait := backoffDuration(attempt - 1)
 			if err := r.sleep(ctx, wait); err != nil {
 				return writeResponse{}, err
@@ -397,6 +407,7 @@ func (r *HTTPActionRunner) sendBatch(ctx context.Context, records []map[string]a
 		}
 		req.Header.Set("Content-Type", "application/json")
 
+		telemetry.RecordAPICall(ctx, http.MethodPost, len(payload))
 		resp, err := r.client().Do(req)
 		if err != nil {
 			lastErr = err
@@ -405,12 +416,15 @@ func (r *HTTPActionRunner) sendBatch(ctx context.Context, records []map[string]a
 
 		body, _ := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
 		resp.Body.Close()
+		responseBytes += len(body)
 
 		if resp.StatusCode == http.StatusTooManyRequests {
 			// Honor Retry-After if present.
 			if ra := resp.Header.Get("Retry-After"); ra != "" {
 				if secs, err := strconv.Atoi(ra); err == nil && secs > 0 {
-					if sleepErr := r.sleep(ctx, time.Duration(secs)*time.Second); sleepErr != nil {
+					wait := time.Duration(secs) * time.Second
+					telemetry.RecordRateLimitWait(ctx, http.MethodPost, wait)
+					if sleepErr := r.sleep(ctx, wait); sleepErr != nil {
 						return writeResponse{}, sleepErr
 					}
 				}
@@ -509,6 +523,11 @@ func (r *HTTPActionRunner) Execute(ctx context.Context, records []map[string]any
 
 	result := ActionResult{RecordsAttempted: len(records)}
 	var dlqEntries []dlqEntry
+	metrics := telemetry.NewRunCounters(ctx)
+	if len(records) > 0 && len(toSend) == 0 {
+		metrics.RecordBatchSkipped()
+		metrics.Flush(ctx)
+	}
 
 	// 5. Send in batches.
 	bsz := r.batchSize()
@@ -518,8 +537,10 @@ func (r *HTTPActionRunner) Execute(ctx context.Context, records []map[string]any
 			end = len(toSend)
 		}
 		batch := toSend[i:end]
+		metrics.RecordBatchCreated()
+		metrics.Flush(ctx)
 
-		wr, err := r.sendBatch(ctx, batch)
+		wr, err := r.sendBatch(ctx, batch, metrics)
 		if err != nil {
 			// Batch-level failure (permanent error or context cancelled).
 			// Quarantine the whole batch.
@@ -535,6 +556,8 @@ func (r *HTTPActionRunner) Execute(ctx context.Context, records []map[string]any
 			}
 			continue
 		}
+		metrics.RecordBatchFlushed()
+		metrics.Flush(ctx)
 
 		// Mark accepted records.
 		acceptedSet := map[string]bool{}

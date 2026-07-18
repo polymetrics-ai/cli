@@ -15,7 +15,7 @@ import (
 	"polymetrics.ai/internal/telemetry"
 )
 
-func TestRunETLMetricsAccumulateAndFlushByBatch(t *testing.T) {
+func TestRunETLBatchMetricFamiliesAccumulateAndFlush(t *testing.T) {
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
 		t.Fatal(err)
@@ -62,9 +62,13 @@ func TestRunETLMetricsAccumulateAndFlushByBatch(t *testing.T) {
 	assertMetricSum(t, data, "pm.records.transformed", run.RecordsTransformed)
 	assertMetricSum(t, data, "pm.records.loaded", run.RecordsLoaded)
 	assertMetricSum(t, data, "pm.records.failed", run.RecordsFailed)
+	assertMetricSum(t, data, "pm.batches.created", run.BatchCount)
 	assertMetricSum(t, data, "pm.batches.flushed", run.BatchCount)
 	if got := intMetricSum(t, data, "pm.batches.flushed"); got != 3 {
 		t.Fatalf("pm.batches.flushed = %d, want 3 flushes for 5 records with batch size 2", got)
+	}
+	if got := metricPointTotal(t, data, "pm.stage.duration", "Count"); got != 1 {
+		t.Fatalf("pm.stage.duration count = %d, want 1 ETL stage observation", got)
 	}
 }
 
@@ -237,6 +241,11 @@ func assertMetricSum(t *testing.T, data []byte, name string, want int) {
 
 func intMetricSum(t *testing.T, data []byte, name string) int {
 	t.Helper()
+	return metricPointTotal(t, data, name, "Value")
+}
+
+func metricPointTotal(t *testing.T, data []byte, name, field string) int {
+	t.Helper()
 	dec := json.NewDecoder(bytes.NewReader(data))
 	total := 0
 	for {
@@ -260,7 +269,8 @@ func intMetricSum(t *testing.T, data []byte, name string) int {
 				points, _ := dataObj["DataPoints"].([]any)
 				for _, point := range points {
 					dp, _ := point.(map[string]any)
-					total += int(dp["Value"].(float64))
+					value, _ := dp[field].(float64)
+					total += int(value)
 				}
 			}
 		}

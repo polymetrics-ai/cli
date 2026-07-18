@@ -49,14 +49,15 @@ type WarningFunc func(msg string)
 
 // Config controls one invocation-scoped telemetry initialization.
 type Config struct {
-	Exporter        Exporter
-	Endpoint        string
-	Directory       string
-	ProjectRoot     string
-	Capture         string
-	RunID           string
-	ServiceName     string
-	ShutdownTimeout time.Duration
+	Exporter             Exporter
+	Endpoint             string
+	Directory            string
+	ProjectRoot          string
+	Capture              string
+	RunID                string
+	ServiceName          string
+	ShutdownTimeout      time.Duration
+	MetricExportInterval time.Duration
 }
 
 // Attr is a telemetry attribute candidate. Only an internal allowlist reaches exporters.

@@ -1,6 +1,6 @@
 # Summary — Phase 415 OpenTelemetry metrics
 
-Status: review-fix verified for PR #461 pm-reviewer findings; manual GSD/TDD fallback active because `scripts/gsd prompt programming-loop` is unavailable.
+Status: independent-review correction verified locally for PR #461; manual GSD/TDD fallback remains active because `scripts/gsd prompt programming-loop` is unavailable.
 
 ## Current state
 
@@ -27,7 +27,27 @@ Status: review-fix verified for PR #461 pm-reviewer findings; manual GSD/TDD fal
 - Split `BenchmarkEmit` into enabled/disabled hot-path sub-benchmarks with allocation reporting.
 - No Claude/Copilot for this cycle per user instruction.
 
-## Verification snapshot
+## Independent-review correction (2026-07-18)
+
+- Session `153cfaabe3df4733a85717da46513786`; model `openai-codex/gpt-5.6-sol`; thinking `high`; starting HEAD `c6138292cfcc7205f7968a54b57a65f933a3c1fa`.
+- Completed PRD §15.2 low-cardinality metric families: records; batch created/retried/skipped/flushed; API calls/retries/rate-limit waits; bytes read/written; connector-operation, rate-limit-wait, and stage-duration histograms.
+- Record counters remain local in per-record loops. Instrument calls occur at existing batch create/retry/skip/flush, HTTP attempt/retry/operation completion, and ETL/flow stage completion seams.
+- File mode retains one cumulative manual-reader snapshot on bounded shutdown. OTLP mode now uses a 30-second default periodic reader (short override only for tests) and exports before long-lived workers stop.
+- Generic OTLP endpoints append `/v1/metrics`, trace endpoints rewrite `/v1/traces` to `/v1/metrics`, and `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` remains exact.
+- Attributes are restricted to bounded `pm.operation` HTTP-method values and bounded `pm.stage` values; synthetic markers, URLs, query strings, bodies, and headers are not emitted.
+- Removed committed Markdown trailing whitespace. No dependency, CLI/help/docs/website, runtime-service, or external-review changes.
+
+## Correction verification snapshot
+
+- Exact RED: `/tmp/pm-415-correction-red.txt`; action-batch RED: `/tmp/pm-415-correction-batch-red.txt`.
+- Focused race suite: pass across telemetry, connsdk, app, flow, worker.
+- OTLP live/path/disabled tests: pass under race for 10 runs.
+- App/CLI reconciliation and Temporal gating: pass under race.
+- Benchmark (5 runs): disabled `1.998–2.024 ns/op`; enabled file `1.996–2.042 ns/op`; both `0 B/op`, `0 allocs/op`.
+- `gofmt -w cmd internal`, full vet, full tests, build, module verify/tidy-diff, dependency diff, and `make verify`: pass.
+- Post-commit reviewed-range whitespace check and push: pending correction commit.
+
+## Prior verification snapshot
 
 - Review-fix focused tests: pass.
 - Review-fix benchmark: `BenchmarkEmit/disabled-12 591002476 2.038 ns/op 0 B/op 0 allocs/op`; `BenchmarkEmit/enabled_file-12 589499779 2.036 ns/op 0 B/op 0 allocs/op`.
