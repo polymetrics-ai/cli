@@ -8,4 +8,6 @@ The continuation run reconciled the repository, issue hierarchy, parent/child PR
 
 PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and promoted with ancestry preserved. PR #461 / #415 was corrected at `6cf5c48f`, independently re-reviewed clean, integrated after regenerating the sole website-data conflict, and independently reviewed clean in combination. Parent integration head is `1f5bd80f77ab267901be730f855728cf00120874`.
 
-The next serialized ready unit is #425. Final verification and final parent review have not run; `verificationPassed` remains false.
+#425 nativized the version namespace, corrected assigned global JSON boolean handling, passed exact-head independent review, and was promoted at parent merge `0c57ec39`.
+
+The next serialized ready unit is #426. Final verification and final parent review have not run; `verificationPassed` remains false.

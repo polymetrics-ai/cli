@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "active",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "1f5bd80f77ab267901be730f855728cf00120874",
+  "currentHead": "0c57ec396f12e9b0233af8899cc7ff8acc9eca7d",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -59,6 +59,13 @@
       "decision": "spawned",
       "issues": [424, 415],
       "reason": "#424 merged without conflicts; isolated Sol/high integration worker resolved the sole #415 generated website-data conflict by regeneration. Independent Sol/xhigh combined review was clean."
+    },
+    {
+      "cycle": "unit_425_execute_review_promote",
+      "timestamp": "2026-07-18T10:41:06Z",
+      "decision": "spawned",
+      "issues": [425],
+      "reason": "Sol/high implementation and correction workers plus independent Sol/xhigh review completed the version namespace; exact reviewed head was promoted without conflict."
     }
   ],
   "units": [
@@ -83,6 +90,17 @@
       "reviewSession": "933b6246-2377-4c5d-8d9d-9e9af2ce159d",
       "integrationSession": "2a30f9bc-ba69-4fa4-9185-647e20d5bc96",
       "integrationReviewSession": "4ec8f305-9f7f-40c4-97c2-68c2e01c0d36"
+    },
+    {
+      "issue": 425,
+      "branch": "refactor/425-version-native-cobra",
+      "startingHead": "479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc",
+      "endingHead": "784153c7ed7cbb94360601b84c40c821eec21823",
+      "parentIntegrationHead": "0c57ec396f12e9b0233af8899cc7ff8acc9eca7d",
+      "status": "provisionally_integrated",
+      "implementationSession": "e3c96736-08cc-4467-9fac-5394d2581eb1",
+      "correctionSession": "7ceb8ecd-6c7f-406e-acdb-45f97ad88368",
+      "reviewSession": "905f2b84-2325-451d-bda9-ec4b08983307"
     }
   ],
   "humanGates": [
@@ -96,5 +114,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-18T09:47:56Z"
+  "updatedAt": "2026-07-18T10:41:06Z"
 }
