@@ -1,0 +1,55 @@
+# Phase 428 Verification
+
+Session `issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `235233f7cfde4a24612be6b0f95fb37a412d388a`.
+
+## TDD and behavior
+
+- [x] Six phase artifacts created before production edits.
+- [ ] Exact focused RED captured before production edits.
+- [ ] Native agent/plan/image/build/pull/ensure/help tree; legacy wrapper removed.
+- [ ] Typed repeated/bare `--request`; unknown flags and extra args compatible.
+- [ ] Bare/text/JSON/long/short/positional help parity.
+- [ ] Invalid actions and global assigned booleans preserve categories/output.
+- [ ] Request/path/Podman-bin/image-reference validation covered.
+- [ ] All image actions covered through injected fakes/temp dirs; no Podman/Docker or image operation executed.
+- [ ] Agent trailing help and literal `--` compatibility preserved.
+- [ ] Only the agent `parseFlags` call removed; shared/dynamic parser remains.
+- [ ] Deterministic output verified.
+
+## Gates
+
+- [ ] Focused agent/router tests.
+- [ ] Focused agent/router/golden tests.
+- [ ] Golden transcript test.
+- [ ] Full `internal/cli/...`.
+- [ ] Runtime dependency-free tests; optional services not started.
+- [ ] `gofmt -w cmd internal`.
+- [ ] `go vet ./...`.
+- [ ] `go test ./...`.
+- [ ] `go build ./cmd/pm`.
+- [ ] `make verify`.
+- [ ] `git diff --check`.
+
+## CLI help/manual/website parity
+
+- [ ] `pm help agent`, bare `pm agent`, `pm agent --help`, `pm agent -h`, `pm agent help` text parity.
+- [ ] JSON help routes emit canonical `CommandManual/agent`.
+- [ ] Built-binary plan output/error/global matrix passes; no image action invoked.
+- [ ] `docs/cli/agent.md` update or no-change exemption proven by temp docs diff.
+- [ ] `website/**` update or no-change exemption proven by generator/diff.
+- [ ] Golden/generated help update or no-change exemption proven.
+- [ ] Completion/discovery names unchanged; no-file seam tested; Phase 15 remains deferred.
+- [ ] Focused subcommand help/man churn remains deferred to Phase 19.
+
+## Safety/scope/delivery
+
+- [ ] No secrets/credentials requested, read, printed, summarized, or stored.
+- [ ] No Podman/Docker command, image build, image pull, publish, Temporal, PostgreSQL, or Dragonfly service executed.
+- [ ] Image behavior tested only with injected fakes and temporary directories.
+- [ ] Worker/RLM behavior unchanged.
+- [ ] No dependency or `go.mod`/`go.sum` delta.
+- [ ] No connector-def, unrelated namespace, or Phase 19 production delta.
+- [ ] Coherent planning/RED/GREEN/verification commits pushed.
+- [ ] No PR or external review requested.
+
+Result: pending implementation and verification.

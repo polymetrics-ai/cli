@@ -1,0 +1,50 @@
+{
+  "phase": 428,
+  "issue": 428,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/428-agent-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "235233f7cfde4a24612be6b0f95fb37a412d388a",
+  "invocationSession": "issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z",
+  "startedAt": "20260718T124925Z",
+  "model": "openai-codex/gpt-5.6-sol",
+  "thinking": "high",
+  "status": "planned",
+  "verificationPassed": false,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_10668_bytes_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "eighth serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later units, the session exposes no subagent tool, and the user restricted work to issue 428"
+    }
+  ],
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "files": [
+    ".planning/phases/428-agent-native-cobra/PLAN.md",
+    ".planning/phases/428-agent-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/428-agent-native-cobra/VERIFICATION.md",
+    ".planning/phases/428-agent-native-cobra/PROMPTS.md",
+    ".planning/phases/428-agent-native-cobra/RUN-STATE.json",
+    ".planning/phases/428-agent-native-cobra/SUMMARY.md"
+  ],
+  "commits": [],
+  "push": "pending",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "external_review_prohibited_by_user",
+  "risks": [
+    "pflag action/help/separator behavior can diverge from the legacy agent parser",
+    "image tests must not execute a container runtime or perform image operations",
+    "worker and RLM behavior are explicitly outside scope"
+  ]
+}
