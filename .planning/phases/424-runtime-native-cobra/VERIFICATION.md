@@ -84,3 +84,5 @@ git diff -- go.mod go.sum
 ```
 
 Result: pass. Docs generated to temp dir; docs diff emitted no output; docs validate passed; website docs generator wrote 11 docs pages; diff-check and go.mod/go.sum diff emitted no output.
+
+Sub-PR opened: https://github.com/polymetrics-ai/cli/pull/460. Remote checks/review pending at artifact update.

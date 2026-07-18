@@ -8,7 +8,7 @@
   "baseHeadAtDispatch": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "baseHeadAtPlanning": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "verificationPassed": true,
-  "status": "local_verification_passed_pr_pending",
+  "status": "sub_pr_open_local_verified_remote_checks_pending",
   "gsdAdapter": {
     "doctor": "passed",
     "planPhasePrompt": "/tmp/gsd-plan-phase-424-runtime-native-cobra.prompt",
@@ -38,11 +38,11 @@
       "reason": "full local gates, runtime help/docs/website parity checks, runtime doctor loopback JSON checks, and diff guards completed inline in isolated worker cwd"
     }
   ],
-  "pullRequest": null,
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/460",
   "reviewRoute": {
-    "claude": "pending_sub_pr_creation",
+    "claude": "claude_auto_expected_if_author_trust_gate_permits",
     "copilot": "not_requested",
-    "fallback": "none",
-    "coverageStatus": "pending"
+    "fallback": "parent_pr_or_human_review_pending_if_sub_pr_auto_review_skips",
+    "coverageStatus": "sub_pr_open_remote_checks_pending"
   }
 }

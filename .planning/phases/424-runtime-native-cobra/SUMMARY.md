@@ -1,10 +1,10 @@
 # Phase 424 Summary
 
-Status: local verification passed; stacked PR pending/open.
+Status: PR #460 open against `feat/cli-architecture-v2`; local verification passed; remote checks/review pending.
 
 ## Current state
 
-- Worker branch: `refactor/424-runtime-native-cobra`.
+- Worker branch: `refactor/424-runtime-native-cobra`; sub-PR: https://github.com/polymetrics-ai/cli/pull/460.
 - Base branch: `feat/cli-architecture-v2`; dispatch/planning head `56a7ecb08f755184af7b55318c3285582d5adfb7`.
 - Parent PR: https://github.com/polymetrics-ai/cli/pull/438 (draft).
 - GSD adapter doctor passed; `programming-loop` prompt command missing, so manual GSD fallback recorded.
@@ -32,7 +32,7 @@ Docs/website/generated checks passed: `./pm docs generate` temp diff against `do
 
 Diff guards passed: `git diff --check origin/feat/cli-architecture-v2...HEAD`; `git diff -- go.mod go.sum` empty.
 
-Pending: verification artifact commit/push, PR creation/update, and automated review route.
+Sub-PR #460 opened non-draft against `feat/cli-architecture-v2`; remote checks and Claude auto-review coverage pending. Claude/Copilot not manually requested.
 
 ## Safety
 

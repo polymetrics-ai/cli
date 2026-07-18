@@ -20,6 +20,6 @@ Result:
 
 Downstream artifact: `.planning/phases/424-runtime-native-cobra/PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, `RUN-STATE.json`.
 
-Verification result: pass — red runtime/router tests captured; focused runtime/golden, full internal CLI, `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, runtime help/docs/website parity, and diff guards passed.
+Verification result: pass — red runtime/router tests captured; focused runtime/golden, full internal CLI, `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, runtime help/docs/website parity, and diff guards passed. Sub-PR: https://github.com/polymetrics-ai/cli/pull/460; remote checks/review pending.
 
 Execution decision: `local_critical_path` — worker cwd/branch isolated; no subagent tool available; no delegation.
