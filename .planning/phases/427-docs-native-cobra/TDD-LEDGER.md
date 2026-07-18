@@ -83,3 +83,19 @@ Implementation: `docs`, `docs generate`, and `docs validate` are native Cobra no
 | start-HEAD dependency/docs/website/golden/connector-def and `git diff --check` guards | Pass |
 
 `make verify` used only its existing local temporary sample smoke. Its reverse ETL step followed plan → preview → approval → run; no external service or credentialed connector check was used. Focused generation wrote only beneath temporary roots, compared every generated CLI manual byte-for-byte, asserted generated relative paths stayed local, and validated connector catalog/manual/icon artifacts without reading credentials.
+
+## Bounded review correction ledger
+
+Correction session: `issue-427-review-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T121208Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `ea93b4bb7a7eb09236ad829d5ad6055b0c00c30d`.
+
+GSD evidence: `scripts/gsd doctor` and `scripts/gsd list` passed. `scripts/gsd prompt programming-loop "Issue #427 bounded correction: preserve legacy docs trailing help and literal separator parsing"` failed because the healthy adapter still has no `programming-loop` command, so the previously documented manual universal-runtime-loop fallback remains active. Required skills reloaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-documentation`, and `golang-spf13-cobra`.
+
+| Step | Kind | Planned command / evidence | Status |
+|---:|---|---|---|
+| C0 | Planning | Update correction plan, ledger, checklist, and run state before production edits | Complete |
+| C1 | RED | Focused docs differential tests: generate/validate/bogus trailing `--help`/`-h`, required/missing flags, literal `--` continuation | Pending |
+| C2 | GREEN | Smallest docs-only native Cobra compatibility seam | Pending |
+| C3 | Refactor/parity | Focused docs/router/golden plus base-vs-head binary matrix | Pending |
+| C4 | Gates | docs generation/validation/website parity, gofmt, vet, build, full CLI if indicated | Pending |
+
+No production file has been edited in this correction session at C0.

@@ -8,10 +8,12 @@
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "ab847da28ebf78e5732ac1edcde8e39f92dc2656",
   "invocationSession": "issue-427-pi-openai-codex-gpt-5.6-sol-high-20260718T112639Z",
+  "correctionStartingHead": "ea93b4bb7a7eb09236ad829d5ad6055b0c00c30d",
+  "correctionInvocationSession": "issue-427-review-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T121208Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "complete_verified_pushed",
-  "verificationPassed": true,
+  "status": "review_correction_planned",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -45,6 +47,11 @@
       "cycle": "summary",
       "decision": "local_critical_path",
       "reason": "issue-local artifacts finalized with exact TDD, parity, safety, commit, and verification evidence; user prohibited PR and external review"
+    },
+    {
+      "cycle": "review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "bounded docs-only correction on the existing isolated branch; runtime exposes no subagent tool and user prohibited PR/external review"
     }
   ],
   "red": "go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed as expected in 11.332s on native registration count and DisableFlagParsing ownership",
@@ -71,7 +78,14 @@
   ],
   "push": "all planning, red, implementation, test-hardening, and final verification checkpoints pushed to origin/refactor/427-docs-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
-  "reviewRoute": "local_verification_only_external_review_prohibited",
+  "reviewRoute": "accepted_two_medium_findings_local_correction_only_external_review_prohibited",
+  "correction": {
+    "findingsAccepted": 2,
+    "planUpdatedBeforeProduction": true,
+    "red": "pending",
+    "green": "pending",
+    "verification": "pending"
+  },
   "risks": [
     "Cobra/pflag path and unknown-flag semantics must remain byte-compatible with the docs generator and validator",
     "docs view and focused help/man generation remain deferred to planned later phases"
