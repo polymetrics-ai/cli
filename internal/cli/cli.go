@@ -1229,14 +1229,30 @@ func runAgent(ctx context.Context, cfg config.Config, root string, args []string
 	return nil
 }
 
-func runDocs(args []string, stdout io.Writer) error {
-	if len(args) == 0 {
-		return errUsage
+type docsCommandFlags struct {
+	Dirs           []string
+	ConnectorsDirs []string
+}
+
+func (f docsCommandFlags) dir() string {
+	return lastDocsFlag(f.Dirs)
+}
+
+func (f docsCommandFlags) connectorsDir() string {
+	return lastDocsFlag(f.ConnectorsDirs)
+}
+
+func lastDocsFlag(values []string) string {
+	if len(values) == 0 {
+		return ""
 	}
-	flags := parseFlags(args[1:])
-	switch args[0] {
+	return values[len(values)-1]
+}
+
+func runDocs(action string, flags docsCommandFlags, stdout io.Writer) error {
+	switch action {
 	case "generate":
-		dir := flags.first("dir")
+		dir := flags.dir()
 		if dir == "" {
 			return errors.New("missing --dir")
 		}
@@ -1252,14 +1268,14 @@ func runDocs(args []string, stdout io.Writer) error {
 				return err
 			}
 		}
-		connectorsDir := valueOr(flags.first("connectors-dir"), filepath.Join(filepath.Dir(dir), "connectors"))
+		connectorsDir := valueOr(flags.connectorsDir(), filepath.Join(filepath.Dir(dir), "connectors"))
 		if err := writeConnectorDocs(connectorsDir, appRegistry()); err != nil {
 			return err
 		}
 		fmt.Fprintf(stdout, "Generated docs in %s and connector docs in %s\n", dir, connectorsDir)
 		return nil
 	case "validate":
-		dir := valueOr(flags.first("connectors-dir"), valueOr(flags.first("dir"), "docs/connectors"))
+		dir := valueOr(flags.connectorsDir(), valueOr(flags.dir(), "docs/connectors"))
 		if err := validateConnectorDocs(dir, appRegistry()); err != nil {
 			return err
 		}

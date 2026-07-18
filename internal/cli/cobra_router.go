@@ -75,6 +75,7 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
+	cmd.AddCommand(newDocsCobraCommand(stdout, jsonOut))
 	cmd.AddCommand(newSkillsCobraCommand(stdout, jsonOut))
 	cmd.AddCommand(newVersionCobraCommand(stdout, jsonOut))
 	return cmd
@@ -112,7 +113,28 @@ func normalizeNativeStringArrayArgs(args []string) []string {
 	if len(args) >= 2 && args[0] == "skills" && args[1] == "generate" {
 		return normalizeStringArraySpaceValues(args, 2, skillsGenerateFlagNames)
 	}
+	if len(args) >= 2 && args[0] == "docs" {
+		if args[1] == "generate" || args[1] == "validate" {
+			args = normalizeStringArraySpaceValues(args, 2, docsFlagNames)
+		}
+		if args[1] != "help" && !isHelpArg(args[1]) {
+			return normalizeDocsLegacyActionArgs(args, 2)
+		}
+	}
 	return args
+}
+
+// normalizeDocsLegacyActionArgs keeps tokens ignored by the old docs parser from becoming Cobra control flags.
+func normalizeDocsLegacyActionArgs(args []string, start int) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	for _, arg := range args[start:] {
+		if arg == "--" || arg == "-h" || arg == "--help" || strings.HasPrefix(arg, "--help=") {
+			continue
+		}
+		out = append(out, arg)
+	}
+	return out
 }
 
 var connectionsCreateFlagNames = map[string]struct{}{
@@ -147,6 +169,11 @@ var perfSyncModesFlagNames = map[string]struct{}{
 
 var skillsGenerateFlagNames = map[string]struct{}{
 	"dir": {},
+}
+
+var docsFlagNames = map[string]struct{}{
+	"dir":            {},
+	"connectors-dir": {},
 }
 
 func normalizeStringArraySpaceValues(args []string, start int, flagNames map[string]struct{}) []string {
@@ -204,9 +231,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "extract", hidden: true, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
-		}},
-		{name: "docs", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, _ bool) error {
-			return runDocs(args, stdout)
 		}},
 		{name: "rlm", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runRLM(ctx, cfg, root, args, stdout, jsonOut)
@@ -429,6 +453,73 @@ func newRuntimeDoctorCobraCommand(ctx context.Context, cfg config.Config, stdout
 		},
 	}
 	setManualHelp(cmd, "runtime", stdout, jsonOut)
+	return cmd
+}
+
+func newDocsCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "docs",
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		RunE: func(_ *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				return errUsage
+			}
+			return markCobraLegacyError(writeManual("docs", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "docs", stdout, jsonOut)
+	cmd.AddCommand(newDocsActionCobraCommand(stdout, jsonOut, "generate"))
+	cmd.AddCommand(newDocsActionCobraCommand(stdout, jsonOut, "validate"))
+	cmd.AddCommand(newDocsHelpCobraCommand(stdout, jsonOut))
+	return cmd
+}
+
+func newDocsActionCobraCommand(stdout io.Writer, jsonOut bool, action string) *cobra.Command {
+	var flags docsCommandFlags
+	cmd := &cobra.Command{
+		Use:           action,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(runDocs(action, flags, stdout))
+		},
+	}
+	setManualHelp(cmd, "docs", stdout, jsonOut)
+	addDocsStringArrayFlag(cmd, &flags.Dirs, "dir", "command or connector docs output directory")
+	addDocsStringArrayFlag(cmd, &flags.ConnectorsDirs, "connectors-dir", "connector docs output directory")
+	return cmd
+}
+
+func addDocsStringArrayFlag(cmd *cobra.Command, target *[]string, name, usage string) {
+	cmd.Flags().StringArrayVar(target, name, nil, usage)
+	if flag := cmd.Flags().Lookup(name); flag != nil {
+		flag.NoOptDefVal = "true"
+	}
+}
+
+func newDocsHelpCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "help",
+		Hidden:        true,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("docs", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "docs", stdout, jsonOut)
 	return cmd
 }
 

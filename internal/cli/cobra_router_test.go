@@ -50,7 +50,7 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 	for _, spec := range cobraLegacyCommands(config.Config{}) {
 		legacyCommands[spec.name] = struct{}{}
 	}
-	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}, "runtime": {}, "skills": {}, "version": {}}
+	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "docs": {}, "query": {}, "perf": {}, "runtime": {}, "skills": {}, "version": {}}
 	if len(expectedHidden) != len(legacyCommands)+len(nativeCommands) {
 		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native commands registers %d", len(expectedHidden), len(legacyCommands)+len(nativeCommands))
 	}
@@ -200,6 +200,65 @@ func TestRuntimeCommandIsNativeCobraSubtree(t *testing.T) {
 	}
 	if directive != cobra.ShellCompDirectiveNoFileComp {
 		t.Fatalf("runtime doctor completion directive = %v, want NoFileComp", directive)
+	}
+}
+
+func TestDocsCommandIsNativeCobraSubtree(t *testing.T) {
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	docsCmd := findCobraCommand(root, "docs")
+	if docsCmd == nil {
+		t.Fatal("missing docs command")
+	}
+	if docsCmd.DisableFlagParsing {
+		t.Fatal("docs command must use native Cobra flag parsing")
+	}
+
+	for _, tt := range []struct {
+		name  string
+		flags []string
+	}{
+		{name: "generate", flags: []string{"dir", "connectors-dir"}},
+		{name: "validate", flags: []string{"dir", "connectors-dir"}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			action := findCobraCommand(docsCmd, tt.name)
+			if action == nil {
+				t.Fatalf("missing docs %s subcommand", tt.name)
+			}
+			if action.DisableFlagParsing {
+				t.Fatalf("docs %s must use native Cobra flag parsing", tt.name)
+			}
+			if !action.FParseErrWhitelist.UnknownFlags {
+				t.Fatalf("docs %s must preserve legacy unknown-flag tolerance", tt.name)
+			}
+			if action.ValidArgsFunction == nil {
+				t.Fatalf("docs %s must suppress file completion fallback until Phase 15 completions", tt.name)
+			}
+			completions, directive := action.ValidArgsFunction(action, nil, "")
+			if len(completions) != 0 {
+				t.Fatalf("docs %s completion seam returned %v, want no Phase 15 completions", tt.name, completions)
+			}
+			if directive != cobra.ShellCompDirectiveNoFileComp {
+				t.Fatalf("docs %s completion directive = %v, want NoFileComp", tt.name, directive)
+			}
+			for _, name := range tt.flags {
+				flag := action.Flags().Lookup(name)
+				if flag == nil {
+					t.Fatalf("docs %s missing native --%s flag", tt.name, name)
+				}
+				if got, want := flag.Value.Type(), "stringArray"; got != want {
+					t.Fatalf("docs %s --%s flag type = %q, want %q", tt.name, name, got, want)
+				}
+				if got, want := flag.NoOptDefVal, "true"; got != want {
+					t.Fatalf("docs %s --%s NoOptDefVal = %q, want %q", tt.name, name, got, want)
+				}
+			}
+		})
+	}
+
+	help := findCobraCommand(docsCmd, "help")
+	if help == nil || !help.Hidden {
+		t.Fatal("docs must preserve a hidden positional help alias until Phase 19")
 	}
 }
 
