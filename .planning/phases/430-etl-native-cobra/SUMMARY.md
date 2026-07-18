@@ -1,6 +1,6 @@
 # Phase 430 Summary
 
-Status: strict focused RED captured from exact head `6c94754c58185df5aac53bd97587603c3154b1d5`; no production edits yet.
+Status: focused GREEN complete after strict RED from exact head `6c94754c58185df5aac53bd97587603c3154b1d5`; broad verification pending.
 
 ## Identity
 
@@ -21,6 +21,10 @@ GSD doctor/list passed and plan-phase generated. The adapter lacks `programming-
 
 Fixture/local temporary connectors only. No secrets, credentialed external checks, optional services, reverse execution, dependencies, unrelated writes, PR, or review.
 
+## Focused delivery
+
+Strict focused test compilation failed as required on the missing `newETLCobraCommand` constructor before production edits. Native Cobra now owns ETL check/catalog/read/run/status/help and every current typed flag. ETL-only normalization preserves repeated/bare/assigned, action-tail help, literal separator, and unknown tolerance; only ETL legacy parser calls were removed. Focused GREEN passed in `13.396s`; broader ETL/router focused tests passed in `27.999s`.
+
 ## Verification
 
-Strict focused test compilation failed as required on the missing `newETLCobraCommand` constructor before production edits. GREEN, refactor, parity, race, full repository, build, and `make verify` gates remain pending. No completion claim is made.
+Refactor, parity, repeated, race, full repository, build, and `make verify` gates remain pending. No completion claim is made.

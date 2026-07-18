@@ -77,6 +77,7 @@ func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, std
 	cmd.AddCommand(newCredentialsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newConnectionsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
+	cmd.AddCommand(newETLCobraCommand(ctx, cfg, root, stdout, jsonOut))
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
@@ -132,6 +133,16 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 	}
 	if len(args) >= 2 && args[0] == "skills" && args[1] == "generate" {
 		return normalizeStringArraySpaceValues(args, 2, skillsGenerateFlagNames)
+	}
+	if len(args) >= 2 && args[0] == "etl" {
+		if isHelpArg(args[1]) {
+			return append([]string(nil), args[:2]...)
+		}
+		switch args[1] {
+		case "check", "catalog", "read", "run", "status":
+			args = normalizeStringArraySpaceValues(args, 2, etlFlagNames)
+			return normalizeETLLegacyActionArgs(args, 2)
+		}
 	}
 	if len(args) >= 2 && args[0] == "credentials" {
 		if credentialsActionTakesName(args[1]) && credentialsArgsContainRawCarrier(args[2:]) {
@@ -190,6 +201,19 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 		}
 	}
 	return args
+}
+
+// normalizeETLLegacyActionArgs keeps tokens ignored by the old ETL parser from becoming Cobra controls.
+func normalizeETLLegacyActionArgs(args []string, start int) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	for _, arg := range args[start:] {
+		if arg == "--" || isLegacyHelpFlag(arg) || (strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--")) {
+			continue
+		}
+		out = append(out, arg)
+	}
+	return out
 }
 
 func normalizeCredentialsActionBoundary(args []string, state *credentialsCommandState) ([]string, bool) {
@@ -299,6 +323,18 @@ func normalizeDocsLegacyActionArgs(args []string, start int) []string {
 	return out
 }
 
+var etlFlagNames = map[string]struct{}{
+	"connector":  {},
+	"config":     {},
+	"stream":     {},
+	"limit":      {},
+	"connection": {},
+	"batch-size": {},
+	"runtime":    {},
+	"root":       {},
+	"progress":   {},
+}
+
 var connectionsCreateFlagNames = map[string]struct{}{
 	"source":             {},
 	"destination":        {},
@@ -388,9 +424,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		{name: "man", handler: runManualAlias},
 		{name: "connectors", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runConnectors(ctx, root, args, stdout, jsonOut)
-		}},
-		{name: "etl", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
 		}},
 		{name: "reverse", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, stdout, jsonOut) })

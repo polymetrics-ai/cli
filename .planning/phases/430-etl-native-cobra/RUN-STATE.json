@@ -11,7 +11,7 @@
   "startedAt": "20260718T225346Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "red_captured",
+  "status": "focused_green",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -30,10 +30,15 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "the complete focused ETL tree, flags, operations, validation, help, compatibility, action-boundary, cancellation, progress, and output tests were added before production edits; compilation failed on the intentionally missing native constructor"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native ETL actions and typed current flags, ETL-only legacy-tail normalization, bounded local runs, sync validation, cancellation, progress, output contracts, and ETL-only parser removal pass focused and broader ETL/router tests without services"
     }
   ],
   "red": "focused CLI build failed before production edits: internal/cli/etl_cli_test.go:22:9 undefined newETLCobraCommand",
-  "green": "pending",
+  "green": "focused contract passed in 13.396s; broader ETL/router focused suite passed in 27.999s",
   "verification": "pending full declared gate including make verify",
   "files": [
     ".planning/phases/430-etl-native-cobra/PLAN.md",
@@ -42,7 +47,11 @@
     ".planning/phases/430-etl-native-cobra/PROMPTS.md",
     ".planning/phases/430-etl-native-cobra/SUMMARY.md",
     ".planning/phases/430-etl-native-cobra/RUN-STATE.json",
-    "internal/cli/etl_cli_test.go"
+    "internal/cli/etl_cli_test.go",
+    "internal/cli/etl_cli.go",
+    "internal/cli/cobra_router.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/cli.go"
   ],
   "commits": [
     "00963f53 docs(planning): plan etl native cobra slice"

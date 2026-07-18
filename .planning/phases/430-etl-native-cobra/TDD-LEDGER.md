@@ -17,7 +17,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before test/production edits | Complete |
 | 1 | RED | `go test ./internal/cli -run 'TestETL(Command|Direct|RunStatus|BatchSize|HelpRoutes|UnknownInvalid|BareFlag|Cancellation|Progress)' -count=1` | Failed as required before production edits: `internal/cli/etl_cli_test.go:22:9: undefined: newETLCobraCommand` |
-| 2 | GREEN | Native ETL tree + typed handlers + ETL-only normalization; remove ETL wrapper/parser use | Pending |
+| 2 | GREEN | Native ETL tree + typed handlers + ETL-only normalization; remove ETL wrapper/parser use | Pass: focused contract `13.396s`; ETL/router focused suite `27.999s` |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI/app and exact-start differential | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Parity/delivery | Runtime help, temporary docs/website/generated checks, scope/dependency guards, commit/push | Pending |
@@ -49,3 +49,7 @@ FAIL
 ```
 
 The missing native constructor is intentional. The test-only checkpoint specifies native ownership and every current flag, repeated/bare/assigned forms, direct fixture actions, configured run/status, batch bounds/default and sync validation, all manual routes, action-tail/literal compatibility, unknown/invalid/global inputs, action-discovery boundaries, cancellation, progress events, stdout/stderr separation, and one JSON envelope. No external connector, optional service, secret fixture, or reverse operation ran.
+
+## Focused GREEN
+
+`newETLCobraCommand` now owns check/catalog/read/run/status/help with typed `StringArray` flags, unknown tolerance, no-file completion seams, ETL-only spaced-value and legacy-tail normalization, and typed handlers. ETL is absent from legacy wrappers; `runETL`, `directConnector`, and their ETL `parseFlags` calls are removed. The focused contract passed in `13.396s`; the broader ETL/router focused suite passed in `27.999s`. No optional runtime service was contacted; repeated `--runtime=false` proves dependency-free default behavior.

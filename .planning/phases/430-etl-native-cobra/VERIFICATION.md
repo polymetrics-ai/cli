@@ -6,18 +6,18 @@ Invocation session: `issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z
 
 - [x] Six phase artifacts created before test or production edits.
 - [x] Focused RED captured before production edits (`undefined: newETLCobraCommand`).
-- [ ] Native ETL/check/catalog/read/run/status/help tree; ETL legacy wrapper removed.
-- [ ] All current flags typed with repeated/bare/assigned compatibility.
-- [ ] Bare/text/JSON/long/short/positional help parity.
-- [ ] Trailing help and literal `--` compatibility.
-- [ ] Unknown flags, invalid actions, global assigned booleans, and no action-discovery bypass.
-- [ ] Batch-size parse/default/bounded flush behavior and configured sync validation.
-- [ ] Cancellation, events, telemetry, stdout/stderr, and one-envelope semantics.
-- [ ] Only ETL `parseFlags` call sites removed; dynamic connector parser remains.
+- [x] Native ETL/check/catalog/read/run/status/help tree; ETL legacy wrapper removed.
+- [x] All current flags typed with repeated/bare/assigned compatibility.
+- [x] Bare/text/JSON/long/short/positional help parity in focused tests.
+- [x] Trailing help and literal `--` compatibility in focused tests.
+- [x] Unknown flags, invalid actions, global assigned booleans, and no action-discovery bypass in focused tests.
+- [x] Batch-size parse/default/bounded flush behavior and configured sync validation in focused tests.
+- [x] Cancellation, events, stdout/stderr, and one-envelope semantics in focused tests; broader telemetry gate pending.
+- [x] Only ETL `parseFlags` call sites removed; dynamic connector parser remains.
 
 ## Gates
 
-- [ ] Focused native ETL/router tests.
+- [x] Focused native ETL/router tests (`13.396s`; broader ETL/router `27.999s`).
 - [ ] Focused repeated tests (`-count=5`).
 - [ ] Focused race tests.
 - [ ] Router and golden transcript tests; fixture unchanged or explicitly reviewed.

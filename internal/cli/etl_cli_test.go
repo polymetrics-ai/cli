@@ -244,10 +244,11 @@ func TestETLHelpRoutesAndLegacyActionTailCompatibility(t *testing.T) {
 		t.Fatalf("JSON manual = kind %q command %q", manual.Kind, manual.Command)
 	}
 
+	root := initETLProject(t)
 	for _, args := range [][]string{
-		{"etl", "run", "--help", "--json"},
-		{"etl", "run", "-h", "--json"},
-		{"etl", "run", "--", "--json"},
+		{"etl", "run", "--help", "--root", root, "--json"},
+		{"etl", "run", "-h", "--root", root, "--json"},
+		{"etl", "run", "--", "--root", root, "--json"},
 	} {
 		stdout, stderr, code = runETLCLI(args...)
 		assertCLIError(t, code, stdout, stderr, 1, "internal", `connection "" not found`)
@@ -267,7 +268,7 @@ func TestETLUnknownInvalidActionsGlobalsAndNoDiscoveryBypass(t *testing.T) {
 		}
 	}
 
-	stdout, stderr, code := runETLCLI("--json=maybe", "etl")
+	stdout, stderr, code := runETLCLI("--json", "--json=maybe", "etl")
 	assertCLIError(t, code, stdout, stderr, 3, "validation", "invalid --json")
 
 	stdout, stderr, code = runETLCLI("--json=false", "--plain=true", "--no-input=on", "etl")

@@ -21,6 +21,6 @@ Required skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `g
 
 Safety prompt: use only fixture/local temporary connectors and roots. Never request, print, summarize, or store secrets. Do not contact external connectors or optional runtime services; do not execute reverse ETL; do not add dependencies or unrelated changes. Preserve bounded batches, dependency-free default, cancellation, event/telemetry context, output/error taxonomy, and legacy help/literal compatibility.
 
-Downstream artifact: focused test-only RED checkpoint captured; ETL native Cobra command/typed handler adaptation, ETL-only parser removal, and finalized six issue-local phase artifacts remain downstream.
+Downstream artifact: focused test-only RED checkpoint and ETL native Cobra command/typed handler adaptation are complete; broad refactor/parity verification and finalized six issue-local phase artifacts remain downstream.
 
-Verification result: focused RED failed before production edits at `internal/cli/etl_cli_test.go:22:9: undefined: newETLCobraCommand`, as required. `RUN-STATE.json` remains non-terminal with `verificationPassed=false` until GREEN and the complete declared gates pass.
+Verification result: focused RED failed before production edits at `internal/cli/etl_cli_test.go:22:9: undefined: newETLCobraCommand`, as required. Focused GREEN then passed in `13.396s`, and the broader ETL/router focused suite passed in `27.999s`. `RUN-STATE.json` remains non-terminal with `verificationPassed=false` until the complete declared gates pass.
