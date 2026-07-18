@@ -13,11 +13,13 @@ Invocation `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`; exa
 - [x] RED: temp-only app append/truncate/create and deduped truncate/create materialization final-link cases failed before production edits; all 6 followed the link (`internal/app`, package `3.359s`) without printing target contents.
 - [x] GREEN: confined local writes use one held Go 1.25 `os.Root` for all relevant Warehouse/Outbox and app directory, open/read, cleanup, and rename effects; focused tests passed in `7.73s` wall and repeated ×5 in `18.12s`.
 - [x] GREEN: explicit `allow_external_path=true`, nil-policy compatibility, `0700`/`0600` modes, append/overwrite semantics, in-root relative symlinks, nonexisting paths, and final-symlink rename replacement remain supported; focused race passed (app `33.985s`).
-- [ ] Focused/repeated/race safety/connectors/app/CLI, broader package gates, full repository, gofmt, vet, build, and `make verify` pass.
-- [ ] Dependency/scope/help-doc parity guards pass; no private data display, service, dependency, PR, or external review.
-- [ ] Planning, RED, GREEN, and final evidence checkpoints committed and pushed.
+- [x] Focused/repeated/race safety/connectors/app/CLI passed (×5 `42.12s`; race `84.54s`); broader package gate passed in `350.01s`.
+- [x] Full repository passed in `347.88s`; `gofmt -w cmd internal`, `go vet ./...` (`3.22s`), Go 1.25.12 build (`1.81s`), and `make verify` (`374.34s`) passed.
+- [x] Dependency/scope/help-doc parity guards pass: readonly unchanged module graph, no connector-def/docs/website delta, full CLI plus local smoke green; no CLI surface change required help/manual/website edits.
+- [x] No private data display, external service, dependency, PR, or external review. Existing `make verify` local smoke followed plan → preview → approval → execute.
+- [x] Planning, RED, and GREEN checkpoints committed and pushed; final evidence checkpoint prepared for push.
 
-Result: pending; `verificationPassed=false` until the full declared gate set exits 0.
+Result: pass; `verificationPassed=true` for the full user-declared fourth-correction gate set.
 
 ## Third bounded correction checklist
 

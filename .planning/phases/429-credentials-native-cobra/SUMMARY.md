@@ -1,10 +1,12 @@
 # Phase 429 Summary
 
-Status: fourth bounded correction in progress from exact head `0d70335f37456f42432b3c502860f7b43231ed98`; HIGH final-file symlink finding accepted; verification pending; no PR or review.
+Status: fourth bounded correction complete, verified, and pushed from exact head `0d70335f37456f42432b3c502860f7b43231ed98`; HIGH final-file symlink finding closed; no PR or review.
 
 ## Fourth bounded correction
 
-The accepted finding shows that directory-only validation does not confine a final `os.OpenFile`: existing or dangling final JSONL symlinks can append, truncate, or create outside the selected local-write root. The planned correction adds temp-only RED coverage across Warehouse.Write, Outbox.Write, and app materialization, then replaces validation-followed-by-ordinary-effects with a reusable Go standard-library `os.Root` effect helper. Explicit external opt-in and nil-policy compatibility remain unconfined by design. Final evidence is pending.
+Directory-only validation did not confine a final `os.OpenFile`: existing or dangling final JSONL symlinks could append, truncate, or create outside the selected local-write root. All 5 Warehouse/Outbox and all 6 app temp-only cases failed before production edits. `safety.LocalWriteFS` now holds a Go 1.25 `os.Root` and performs confined directory creation, final opens, app raw reads/cleanup, and raw/final renames beneath the selected root at effect time. Explicit external opt-in and nil-policy compatibility remain ordinary OS effects by design.
+
+Focused ×5 (`42.12s`), race (`84.54s`), broader connectors/app/CLI (`350.01s`), full repository (`347.88s`), gofmt, vet (`3.22s`), Go 1.25 build (`1.81s`), and `make verify` (`374.34s`) passed. Lint reported 0 issues and connector validation 547/0. Modes, append/overwrite, nonexisting paths, in-root relative symlinks, safe rename replacement, and explicit external behavior are covered. Implementation head: `bc13b768d03f27f87f1f6bc262edf890925d58a7`. No private fixture display, service, dependency, checked-in CLI docs/website delta, PR, or external review.
 
 ## Third bounded correction
 

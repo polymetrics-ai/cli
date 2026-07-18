@@ -21,6 +21,12 @@ Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace
 - Preserve modes (`0700` directories, `0600` files), append/overwrite behavior, failure-safe renames, in-root symlinks, and in-root nonexisting paths. Avoid validation-then-ordinary-open at final effects.
 - Verification: focused RED/GREEN; repeated and race safety/connectors/app/CLI; broader connectors/app/CLI; full repository; gofmt, vet, build, and `make verify` because this is a shared filesystem seam. Commit/push planning, RED, GREEN, and final evidence checkpoints. No private fixture output, services, dependencies, PR, or external review.
 
+### Fourth correction completion
+
+Completed at implementation head `bc13b768d03f27f87f1f6bc262edf890925d58a7` on `20260718T192338Z`. `safety.LocalWriteFS` now holds an `os.Root` for confined policy and performs Warehouse/Outbox directory and final-file effects plus app raw/final open/read/remove/rename effects beneath that root at effect time. Nil policy and explicit external opt-in use ordinary OS behavior by design. Modes, append/overwrite, nonexisting paths, in-root relative symlinks, and safe rename-over-final-symlink behavior are covered.
+
+All 11 temp-only RED cases failed before production edits and pass after the correction. Focused ×5 and race safety/connectors/app/CLI, broader connectors/app/CLI, full repository, gofmt, vet, Go 1.25 build, and `make verify` passed. `make verify` reported lint 0 and 547 connector definitions with 0 findings; its local smoke retained plan → preview → approval → execute. No dependency, service, private fixture display, checked-in CLI docs/website delta, PR, or external review occurred.
+
 ## Third bounded correction
 
 - Session: `issue-429-third-bounded-correction-pi-openai-20260718T180016Z`.

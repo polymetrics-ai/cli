@@ -20,9 +20,20 @@ Session `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`; exact 
 | F0 | Review/plan | Record the final-file symlink escape, effect-time `os.Root` design, temp-only RED matrix, shared-seam gates, and commit/push checkpoints before production edits | Complete |
 | F1 | RED | `go test ./internal/connectors -run 'Test(Warehouse|Outbox)WriteRejectsFinalFileSymlinkEscape$' -count=1`; `go test ./internal/app -run '^TestWarehouseMaterializationRejectsFinalFileSymlinkEscape$' -count=1` | Failed as required: all 5 connector and all 6 app append/truncate/create cases followed final-file links outside the root; connectors `0.317s` (wall `0.97s`), app `3.359s` (wall `6.31s`) |
 | F2 | GREEN | Add `safety.LocalWriteFS` over Go 1.25 `os.Root`; route Warehouse/Outbox Check+Write and app raw/final mkdir/open/read/remove/rename effects through one held scope | Pass: focused safety/connectors/app `7.73s` wall; repeated ×5 `18.12s`; focused race passed (app `33.985s`); broader safety/connectors/app `32.24s` wall; explicit external, nil-policy, modes, in-root symlink/nonexisting, and rename-replacement coverage green |
-| F3 | Verify | Focused/repeated/race safety/connectors/app/CLI; full repository; gofmt/vet/build/`make verify`; scope/dependency guards | Pending |
+| F3 | Verify | Focused/repeated/race safety/connectors/app/CLI; broader packages; full repository; gofmt/vet/build/`make verify`; scope/dependency guards | Pass: comprehensive focused ×5 `42.12s`; race `84.54s`; broader packages `350.01s`; full repo `347.88s`; vet `3.22s`; build `1.81s`; `make verify` `374.34s`, lint 0, connector validation 547/0 |
 
-Tests use only `t.TempDir`, synthetic records, and non-sensitive sentinel bytes. They do not display fixture contents or contact services.
+Tests use only `t.TempDir`, synthetic records, and non-sensitive sentinel bytes. They did not display fixture contents or contact services.
+
+### Fourth correction final evidence
+
+- RED: connectors package `0.317s` and app package `3.359s`; all 11 append/truncate/create final-link cases reached external targets before production edits.
+- GREEN: held Go 1.25 `os.Root` scope covers every relevant directory/final open/read/remove/rename effect; comprehensive focused ×5 passed in `42.12s`, and focused `-race` passed in `84.54s`.
+- Broader safety/connectors/app/CLI passed in `350.01s` (app `33.320s`, CLI `300.061s`, certify `341.868s`).
+- Full repository passed in `347.88s` (app `32.492s`, CLI `296.796s`, certify `341.340s`).
+- `gofmt -w cmd internal`, `go vet ./...` (`3.22s`), and Go 1.25.12 build (`1.81s`) passed.
+- `GOTOOLCHAIN=go1.25.12 make verify` passed in `374.34s`; lint 0, connector validation 547/0, docs validation and dependency-free local smoke passed.
+- Scope/dependency guards: readonly module graph; no `go.mod`, `go.sum`, connector definition, checked-in CLI docs, or website delta; final local write files contain no ordinary `os.OpenFile`/`os.Rename` effects.
+- Checkpoints: `810a35d6` planning, `f6a15a83` RED, `bc13b768` GREEN; final evidence checkpoint prepared for push.
 
 ## Third bounded correction ledger
 

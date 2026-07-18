@@ -45,9 +45,10 @@
   "fourthCorrectionStartingHead": "0d70335f37456f42432b3c502860f7b43231ed98",
   "fourthCorrectionSource": "/tmp/pm-397-rereview3-429.log",
   "fourthCorrectionFindingsAccepted": ["HIGH_final_file_symlink_escape"],
-  "fourthCorrectionEndingImplementationHead": "pending_green_commit",
-  "status": "fourth_correction_green_focused",
-  "verificationPassed": false,
+  "fourthCorrectionEndedAt": "20260718T192338Z",
+  "fourthCorrectionEndingImplementationHead": "bc13b768d03f27f87f1f6bc262edf890925d58a7",
+  "status": "complete_verified_pushed_no_pr_no_review",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -58,6 +59,16 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "fourth-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "the HIGH finding is closed, exact GSD/TDD/verification evidence is finalized, coherent checkpoints are pushed, and the user prohibited PR and external review"
+    },
+    {
+      "cycle": "fourth-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused x5 and race safety/connectors/app/CLI, broader packages, full repository, gofmt, vet, Go 1.25 build, make verify, scope, and dependency gates all passed"
+    },
     {
       "cycle": "fourth-correction-green",
       "decision": "local_critical_path",
@@ -200,8 +211,14 @@
     "internal/cli/credentials_cli.go",
     "internal/cli/credentials_cli_test.go",
     "internal/app/app.go",
+    "internal/app/local_warehouse.go",
+    "internal/app/local_warehouse_symlink_test.go",
+    "internal/connectors/connectors.go",
+    "internal/connectors/local_write_symlink_test.go",
     "internal/safety/safety.go",
-    "internal/safety/safety_test.go"
+    "internal/safety/safety_test.go",
+    "internal/safety/localwrite.go",
+    "internal/safety/localwrite_test.go"
   ],
   "commits": [
     "cc1c13c5 docs(planning): plan credentials native cobra slice",
@@ -216,17 +233,22 @@
     "docs(planning): finalize credentials review correction evidence",
     "b9a4c775 docs(planning): plan second credentials correction",
     "6c36ecd2 test(cli): expose second credentials regressions",
-    "ec7064a8 fix(cli): enforce local credential effect boundaries"
+    "ec7064a8 fix(cli): enforce local credential effect boundaries",
+    "810a35d6 docs(planning): plan fourth credentials correction",
+    "f6a15a83 test(filesystem): expose final symlink escapes",
+    "bc13b768 fix(filesystem): confine local write effects"
   ],
-  "push": "all original, first-review, second-correction, and third-correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
+  "push": "all original and four correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
   "secondCorrectionReviewRoute": "not_run_user_prohibited_review",
+  "fourthCorrectionReviewRoute": "not_run_user_prohibited_external_review_local_diff_review_clean",
   "reviewCorrectionRed": "focused internal/cli test failed in 6.546s before production edits and reproduced all accepted findings without secret material or external services",
   "reviewCorrectionGreen": "focused safety and CLI passed in 8.257s; full credentials in 46.463s; safety and app in 23.300s; focused race safety and CLI in 109.283s",
   "reviewCorrectionVerification": "pass: repeated correction 49.385s; repeated safety 0.560s; full CLI 282.493s; full repository CLI 284.380s and certify 340.838s; exact base help 2/2; golden/manual 6.146s; gofmt, vet, build, and make verify passed; lint 0 and connector validation 547/0",
   "fourthCorrectionRed": "focused temp-only tests failed before production edits: all 5 Warehouse/Outbox and all 6 app append/truncate/create final-file symlink cases followed links outside the selected root; connectors 0.317s and app 3.359s",
-  "fourthCorrectionGreen": "Go 1.25 os.Root-backed LocalWriteFS routes all relevant Warehouse/Outbox and app raw/final effects through one held root; focused 7.73s, repeated x5 18.12s, focused race passed with app 33.985s, broader safety/connectors/app 32.24s",
+  "fourthCorrectionGreen": "Go 1.25 os.Root-backed LocalWriteFS routes all relevant Warehouse/Outbox and app raw/final effects through one held root; comprehensive focused x5 passed in 42.12s and focused race passed in 84.54s",
+  "fourthCorrectionVerification": "pass: broader safety/connectors/app/CLI 350.01s; full repository 347.88s; gofmt, vet 3.22s, Go 1.25 build 1.81s, and make verify 374.34s; lint 0, connector validation 547/0, readonly unchanged module graph and clean scope",
   "thirdCorrectionRed": "12-case add/inspect/test/remove by assigned/bare/spaced raw-carrier matrix failed before production edits in 11.651s; assigned/spaced forms overrode every action and add/bare returned runtime code 3 instead of usage 2",
   "thirdCorrectionGreen": "hidden pflag removed; private command-context carriage and raw-carrier rejection passed focused/adversarial in 34.099s, repeated five times in 56.733s, and focused race in 273.254s",
   "thirdCorrectionVerification": "pass: seven preserved exact-base cases matched exit/stdout/stderr byte-for-byte; all 12 current raw-carrier cases exited usage 2; full CLI passed in 332.836s; gofmt, vet, build, diff, scope, and dependency gates passed",
