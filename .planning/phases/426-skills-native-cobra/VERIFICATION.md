@@ -5,7 +5,7 @@ Session `issue-426-pi-openai-codex-gpt-5.6-sol-high-20260718T104457Z`; model `op
 ## TDD and behavior checklist
 
 - [x] Six phase artifacts created before production edits.
-- [ ] Exact focused RED captured before production edits.
+- [x] Exact focused RED captured before production edits (`29.549s`; native count/ownership failures).
 - [ ] Native `skills` namespace and `generate` action; legacy wrapper removed.
 - [ ] Native `--dir` preserves spaced, assigned, repeated, bare, comma/path forms.
 - [ ] Unknown flags and extra action args retain legacy compatibility.

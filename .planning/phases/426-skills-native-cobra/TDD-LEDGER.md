@@ -16,7 +16,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create all six phase artifacts before production edits | Complete |
-| 1 | RED | Focused native skills/router tests | Pending |
+| 1 | RED | `go test ./internal/cli/ -run 'Skills|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected (`29.549s`) |
 | 2 | GREEN | Native namespace/action/typed flags and legacy parser removal | Pending |
 | 3 | Refactor | Focused router/golden/full CLI tests | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
@@ -31,4 +31,18 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 - Global/config forms cover `--root value`, `--root=value`, late placement, `--json`, `--json=true`, and `--json=false` overriding config/env JSON.
 - Existing generation contract writes only expected metadata skill files under test temp directories and contains no secret values.
 
-Exact RED and GREEN outputs will be appended after execution; no production file will be edited before RED is captured.
+## Exact RED
+
+Captured after test-only edits and before any production-code edit:
+
+```text
+--- FAIL: TestCobraRouterShellBuildsFreshHiddenWrapperTree (0.00s)
+    cobra_router_test.go:55: expectedHidden covers 21 commands, legacy commands plus native commands registers 22
+--- FAIL: TestSkillsCommandIsNativeCobraSubtree (0.00s)
+    cobra_router_test.go:213: skills command must use native Cobra flag parsing
+FAIL
+FAIL\tpolymetrics.ai/internal/cli\t29.549s
+FAIL
+```
+
+All observable skills behavior tests passed through the legacy wrapper. RED isolates the required parser ownership and registration change. Production files remain untouched at this checkpoint.

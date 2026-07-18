@@ -50,7 +50,7 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 	for _, spec := range cobraLegacyCommands(config.Config{}) {
 		legacyCommands[spec.name] = struct{}{}
 	}
-	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}, "runtime": {}, "version": {}}
+	nativeCommands := map[string]struct{}{"catalog": {}, "connections": {}, "query": {}, "perf": {}, "runtime": {}, "skills": {}, "version": {}}
 	if len(expectedHidden) != len(legacyCommands)+len(nativeCommands) {
 		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native commands registers %d", len(expectedHidden), len(legacyCommands)+len(nativeCommands))
 	}
@@ -200,6 +200,53 @@ func TestRuntimeCommandIsNativeCobraSubtree(t *testing.T) {
 	}
 	if directive != cobra.ShellCompDirectiveNoFileComp {
 		t.Fatalf("runtime doctor completion directive = %v, want NoFileComp", directive)
+	}
+}
+
+func TestSkillsCommandIsNativeCobraSubtree(t *testing.T) {
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	skills := findCobraCommand(root, "skills")
+	if skills == nil {
+		t.Fatal("missing skills command")
+	}
+	if skills.DisableFlagParsing {
+		t.Fatal("skills command must use native Cobra flag parsing")
+	}
+
+	generate := findCobraCommand(skills, "generate")
+	if generate == nil {
+		t.Fatal("missing skills generate subcommand")
+	}
+	if generate.DisableFlagParsing {
+		t.Fatal("skills generate must use native Cobra flag parsing")
+	}
+	if !generate.FParseErrWhitelist.UnknownFlags {
+		t.Fatal("skills generate must preserve legacy unknown-flag tolerance")
+	}
+	if generate.ValidArgsFunction == nil {
+		t.Fatal("skills generate must suppress file completion fallback until Phase 15 completions")
+	}
+	completions, directive := generate.ValidArgsFunction(generate, nil, "")
+	if len(completions) != 0 {
+		t.Fatalf("skills generate completion seam returned %v, want no Phase 15 completions", completions)
+	}
+	if directive != cobra.ShellCompDirectiveNoFileComp {
+		t.Fatalf("skills generate completion directive = %v, want NoFileComp", directive)
+	}
+	flag := generate.Flags().Lookup("dir")
+	if flag == nil {
+		t.Fatal("skills generate missing native --dir flag")
+	}
+	if got, want := flag.Value.Type(), "stringArray"; got != want {
+		t.Fatalf("skills generate --dir flag type = %q, want %q", got, want)
+	}
+	if got, want := flag.NoOptDefVal, "true"; got != want {
+		t.Fatalf("skills generate --dir NoOptDefVal = %q, want %q", got, want)
+	}
+
+	help := findCobraCommand(skills, "help")
+	if help == nil || !help.Hidden {
+		t.Fatal("skills must preserve a hidden positional help alias until Phase 19")
 	}
 }
 

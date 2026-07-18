@@ -10,7 +10,7 @@
   "invocationSession": "issue-426-pi-openai-codex-gpt-5.6-sol-high-20260718T104457Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "planned",
+  "status": "red_captured",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -24,6 +24,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "sixth serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later units and user restricted work to issue 426"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused test-only edits captured exact RED for skills native registration before production edits; observable legacy behavior tests already pass"
     }
   ],
   "commits": [],
