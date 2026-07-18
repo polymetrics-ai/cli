@@ -29,8 +29,9 @@ func ServeWithActivitiesReady(ctx context.Context, addr string, acts *PodmanActi
 		return fmt.Errorf("worker serve: dial temporal: %w", err)
 	}
 	defer c.Close()
+	logger := temporalLogger(ctx)
 
-	w := worker.New(c, TaskQueue, worker.Options{})
+	w := worker.New(c, TaskQueue, temporalWorkerOptions(ctx, logger))
 	registerWorker(w, acts)
 	if err := w.Start(); err != nil {
 		return fmt.Errorf("worker serve: start: %w", err)

@@ -401,6 +401,7 @@ func (a *App) ShowCatalog(ctx context.Context, connectionName string) (CatalogSn
 }
 
 func (a *App) RunETL(ctx context.Context, req RunETLRequest) (run Run, err error) {
+	started := time.Now()
 	ctx, span := telemetry.StartSpan(ctx, "pm.etl.run",
 		telemetry.StringAttr("pm.etl.connection", req.Connection),
 		telemetry.StringAttr("pm.etl.stream", req.Stream),
@@ -417,6 +418,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (run Run, err error
 			)
 		}
 		span.End()
+		telemetry.RecordStageDuration(ctx, "etl", time.Since(started))
 	}()
 
 	conn, ok := a.findConnection(req.Connection)
@@ -485,6 +487,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	}
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
+	metrics := telemetry.NewRunCounters(ctx)
 	batch := make([]connectors.Record, 0, batchSize)
 	firstWrite := true
 	nextCursor := prior.Cursor
@@ -505,6 +508,8 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			}
 			return nil
 		}
+		metrics.RecordBatchCreated()
+		metrics.Flush(ctx)
 		writeResult, err := destination.Write(ctx, connectors.WriteRequest{
 			Stream:     streamName,
 			Table:      stream.DestinationTable,
@@ -518,8 +523,12 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			return err
 		}
 		result.RecordsLoaded += writeResult.RecordsWritten
+		metrics.RecordLoaded(writeResult.RecordsWritten)
 		result.RecordsFailed += writeResult.RecordsFailed
+		metrics.RecordFailed(writeResult.RecordsFailed)
 		result.BatchCount++
+		metrics.RecordBatchFlushed()
+		metrics.Flush(ctx)
 		a.emitETLEvent(ctx, events.KindProgress, runID, streamName, "batch", result, "")
 		batch = batch[:0]
 		return nil
@@ -536,6 +545,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
+		metrics.RecordRead()
 		cursor := ""
 		if stream.CursorField != "" {
 			var err error
@@ -558,6 +568,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			r["_polymetrics_cursor"] = cursor
 		}
 		result.RecordsTransformed++
+		metrics.RecordTransformed()
 		batch = append(batch, r)
 		if len(batch) >= batchSize {
 			return flush(false)

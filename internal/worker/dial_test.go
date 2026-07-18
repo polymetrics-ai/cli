@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"go.temporal.io/sdk/client"
-	tlog "go.temporal.io/sdk/log"
 )
 
 func TestSubmitterForActivitiesContextUsesBoundedContextDial(t *testing.T) {
@@ -14,8 +13,11 @@ func TestSubmitterForActivitiesContextUsesBoundedContextDial(t *testing.T) {
 	t.Cleanup(func() { temporalClientDial = oldDial })
 
 	called := false
-	temporalClientDial = func(ctx context.Context, _ string, _ tlog.Logger) (client.Client, error) {
+	temporalClientDial = func(ctx context.Context, opts client.Options) (client.Client, error) {
 		called = true
+		if opts.HostPort != "temporal.invalid:7233" {
+			t.Fatalf("HostPort = %q, want temporal.invalid:7233", opts.HostPort)
+		}
 		if _, ok := ctx.Deadline(); !ok {
 			t.Fatal("dial context missing deadline")
 		}
@@ -37,7 +39,7 @@ func TestServeWithActivitiesUsesCancelableDialContext(t *testing.T) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
-	temporalClientDial = func(ctx context.Context, _ string, _ tlog.Logger) (client.Client, error) {
+	temporalClientDial = func(ctx context.Context, _ client.Options) (client.Client, error) {
 		if err := ctx.Err(); err == nil {
 			t.Fatal("dial context was not canceled")
 		}
