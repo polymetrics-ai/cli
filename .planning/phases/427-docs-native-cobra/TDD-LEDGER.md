@@ -16,7 +16,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create all six phase artifacts before production edits | Complete |
-| 1 | RED | Focused docs/router tests after test-only edits | Pending |
+| 1 | RED | `go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` | Failed as expected (`11.332s`) |
 | 2 | GREEN | Native namespace/actions/typed flags and docs-only legacy parser removal | Pending |
 | 3 | Refactor | Focused docs/router/golden + full CLI tests | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
@@ -34,7 +34,19 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 
 ## Exact RED
 
-Pending test-only checkpoint. Production files remain untouched until this section records the failing focused command and output.
+Captured after test-only edits and before any production-code edit:
+
+```text
+--- FAIL: TestCobraRouterShellBuildsFreshHiddenWrapperTree (0.00s)
+    cobra_router_test.go:55: expectedHidden covers 21 commands, legacy commands plus native commands registers 22
+--- FAIL: TestDocsCommandIsNativeCobraSubtree (0.00s)
+    cobra_router_test.go:213: docs command must use native Cobra flag parsing
+FAIL
+FAIL\tpolymetrics.ai/internal/cli\t11.332s
+FAIL
+```
+
+All observable docs behavior, byte-parity, action/flag, error, global/config, and safe temp-root filesystem tests passed through the legacy wrapper. RED isolates the required parser ownership and registration change. Production files remained untouched at this checkpoint.
 
 ## Focused GREEN
 
