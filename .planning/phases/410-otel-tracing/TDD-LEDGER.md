@@ -127,6 +127,7 @@ Result:
 | 32 | final alias/tracer-closure broad gate | Test | `go vet ./...`; `go test ./...` (twice) | Mixed | `go vet ./...` passed. `go test ./...` hit Go default 10m package timeout twice in pre-existing slow `internal/cli`/`internal/connectors/certify` tests while loading connector bundles (`TestGoldenTranscripts`/`TestGitHubDestructiveCommandRequiresTypedConfirmation`; certify sabotage/secret-leak stages). Reran with verify-equivalent 20m timeout. |
 | 33 | final alias/tracer-closure timeout-adjusted broad gate | Test | `go test -timeout 20m ./internal/cli ./internal/connectors/certify -count=1`; `go test -timeout 20m ./...` | Pass | Slow packages passed with 20m timeout (`internal/cli` 651s, `internal/connectors/certify` 1109s for package rerun); full 20m suite passed. |
 | 34 | final alias/tracer-closure verify | Full verify/diff | `go build ./cmd/pm`; `make verify`; `git diff --check`; `git diff -- go.mod go.sum` | Pass | `make verify` passed: fmt, tidy-check, vet, `go test -timeout 20m ./...`, build, docs validate, smoke, lint, connectorgen validate. No go.mod/go.sum diff. |
+| 35 | final alias/tracer-closure push | PR update | PR body update via GitHub API; `git push origin feat/410-otel-tracing` | Pass | PR #459 body updated without Claude/Copilot; branch pushed to origin. |
 
 ## Red-test requirements
 

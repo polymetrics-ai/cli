@@ -1,6 +1,6 @@
 # Summary — Phase 410 OpenTelemetry tracing
 
-Status: narrow final alias/tracer-closure fix verified locally and PR #459 body updated; branch push pending.
+Status: narrow final alias/tracer-closure fix verified locally, PR #459 body updated, and branch pushed.
 
 ## Current state
 

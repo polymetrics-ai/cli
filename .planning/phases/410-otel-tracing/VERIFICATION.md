@@ -194,3 +194,4 @@ Additional smoke/parity:
 | `go test -timeout 20m ./internal/cli ./internal/connectors/certify -count=1`; `go test -timeout 20m ./...` | pass | Slow package reruns and full 20m suite passed. |
 | `go build ./cmd/pm`; `make verify` | pass | Build produced no output; `make verify` passed fmt, tidy-check, vet, 20m tests, build, docs validate, smoke, lint, connectorgen validate. |
 | `git diff --check`; `git diff -- go.mod go.sum` (final alias) | pass | No output. |
+| PR body update + branch push | pass | PR #459 body updated via GitHub API after `gh pr edit` hit the classic Projects GraphQL deprecation error; `git push origin feat/410-otel-tracing` succeeded. |
