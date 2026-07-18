@@ -4,7 +4,7 @@ Status: compatibility correction in progress from exact head `7497483de2187b3117
 
 ## Compatibility correction
 
-Planning completed before production edits. Strict RED covered 14 safety-valid short/double-hyphen names through config-only add/inspect/remove: all were rejected by private validation in `23.030s`, while raw internal-carrier rejection and invalid action/name ownership stayed green. The intended smallest fix is ordinary credential identifier validation for privately carried names, with no action-discovery changes. GREEN and broader verification remain pending.
+Planning completed before production edits. Strict RED covered 14 safety-valid short/double-hyphen names through config-only add/inspect/remove: all were rejected by private validation in `23.030s`, while raw internal-carrier rejection and invalid action/name ownership stayed green. The private validator is now removed; privately carried names use ordinary credential identifier validation. Focused compatibility/adversarial GREEN passed in `56.416s` with first-token ownership intact. Broader verification remains pending.
 
 ## Final bounded correction
 

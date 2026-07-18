@@ -10,7 +10,7 @@ Invocation `issue-429-compatibility-correction-pi-openai-20260718T202616Z`; exac
 - [x] Run GSD doctor/list, record unavailable programming-loop/manual fallback, load required skills/policies, and update issue artifacts before production edits.
 - [x] RED: 14 `safety.ValidateIdentifier`-valid short leading-hyphen and double-hyphen representatives cover allowed suffix classes across config-only add/inspect/remove; all were rejected by private validation at exact correction start (`23.030s`).
 - [x] RED preservation gate: raw internal-carrier rejection and invalid action/name ownership remained green; the only failures were the 14 compatibility subtests.
-- [ ] GREEN: private name carriage uses ordinary credential identifier validation with no private length/double-hyphen restrictions and no action-discovery weakening.
+- [x] GREEN: private name carriage uses ordinary credential identifier validation with no private length/double-hyphen restrictions and no action-discovery changes; focused compatibility/adversarial gate passed in `56.416s`.
 - [ ] Focused, adversarial, repeated, race, exact-start differential, and full CLI pass without private data output.
 - [ ] `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, current/start diff, scope, dependency, and clean-worktree gates pass.
 - [ ] Exact evidence committed and pushed; no service, dependency, PR, or review.

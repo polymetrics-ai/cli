@@ -19,7 +19,7 @@ Session `issue-429-compatibility-correction-pi-openai-20260718T202616Z`; exact c
 |---:|---|---|---|
 | K0 | Review/plan | Record the accepted compatibility finding, complete safety-valid name matrix, ordinary-validation design, adversarial preservation gates, differential, and checkpoint sequence before production edits | Complete |
 | K1 | RED | `go test ./internal/cli -run 'TestCredentials(SafetyValidPrivateNamesSupportAddInspectRemove|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1` | Failed as required in `23.030s`: all 14 safety-valid short/double-hyphen add cases were rejected by private validation; raw-carrier rejection and invalid action/name ownership guards stayed green |
-| K2 | GREEN | Remove unnecessary private-name length/double-hyphen restrictions and use ordinary credential identifier validation without changing discovery | Pending |
+| K2 | GREEN | Remove the private validator and validate privately carried names through `validateCredentialIdentifier(..., "credential")`; rerun compatibility plus raw-carrier and invalid ownership guards | Pass: focused compatibility/adversarial gate `56.416s`; all 14 names complete add/inspect/remove and first-token ownership, while raw-carrier and invalid ownership guards remain green |
 | K3 | Verify | Focused/adversarial/repeated/race CLI, exact-start differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pending |
 
 Tests use temporary roots and config-only credentials. They must not read, print, summarize, or store private values or contact services.

@@ -94,7 +94,7 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 		return errUsage
 	}
 	if credentialsState.boundedName != "" {
-		if err := validatePrivateCredentialName(credentialsState.boundedName); err != nil {
+		if err := validateCredentialIdentifier(credentialsState.boundedName, "credential"); err != nil {
 			return err
 		}
 	}

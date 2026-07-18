@@ -321,13 +321,6 @@ func parseCredentialConfig(values []string) (map[string]string, error) {
 	return out, nil
 }
 
-func validatePrivateCredentialName(value string) error {
-	if strings.HasPrefix(value, "--") || len(value) <= 2 {
-		return validationErrorf("credential name is not a valid leading-hyphen name")
-	}
-	return validateCredentialIdentifier(value, "credential")
-}
-
 func validateCredentialIdentifier(value, field string) error {
 	if err := safety.ValidateIdentifier(value, field); err != nil {
 		return validationErrorf("%v", err)
