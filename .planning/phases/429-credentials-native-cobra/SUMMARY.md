@@ -1,6 +1,10 @@
 # Phase 429 Summary
 
-Status: targeted final parser-order correction complete and verified from exact head `4870f53b028613fbc3632a404e9a382419d87f8a`; MEDIUM first-token ownership finding closed; no private output, services, dependencies, PR, or review.
+Status: normalization-order correction in progress from exact head `2013d361c949395f41bb6a30209d65cbec4a62c2`; MEDIUM spaced StringArray value finding accepted; verification pending; no private output, services, dependencies, PR, or review.
+
+## Normalization-order correction
+
+Planning, TDD, verification, prompt, summary, and run-state artifacts were reopened before test or production edits. The correction will cover spaced StringArray data beginning with one hyphen after every known add-flag-shaped credential name, asserting metadata structure only. Planned order is raw-carrier rejection, private first-name capture/removal, StringArray normalization, then legacy-tail filtering. All first-name, action-discovery, carrier, help/global, compatibility, and redaction protections remain mandatory.
 
 ## Targeted final parser-order correction
 

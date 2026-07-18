@@ -10,6 +10,15 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, this session exposes no subagent tool, and the user bounded delivery to #429 with no PR or external review.
 
+## Normalization-order correction from exact head 2013d361
+
+- Session: `issue-429-normalization-order-correction-pi-openai-20260718T215811Z`; exact correction start `2013d361c949395f41bb6a30209d65cbec4a62c2`; rereview source `/tmp/pm-397-rereview7-429.log`; MEDIUM spaced StringArray value finding accepted.
+- GSD doctor/list passed; the documented `programming-loop` command remains unavailable, so the manual universal-runtime-loop fallback is active. Execution decision: `local_critical_path` — one bounded credentials router/test correction, no subagent tool is exposed, and the user prohibited services, dependencies, PR, and review.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, and `golang-safety`; CLI help/docs/website parity policy loaded.
+- RED before production edits: for every known add-flag-shaped credential name, pass spaced StringArray values whose data begins with one hyphen. Inspect only `CredentialMeta` structure (connector, config keys, and secret-field names), never value content or command output. Run raw-carrier and invalid action/name ownership protections in the same gate.
+- Smallest implementation: reject raw carriers; privately capture/remove the first required name without filtering its tail; normalize spaced StringArray values on that tail; only then apply legacy-tail filtering. Preserve private validation, first-name ownership, ignored positionals, bare/assigned/repeated flags, raw-carrier rejection, action discovery boundaries, help/global behavior, and output redaction.
+- Verification: focused RED/GREEN; protection matrix; repeated and race CLI; exact parent-base/correction-start/head differential; full CLI; `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, and diff/scope/dependency guards. Commit and push coherent planning, RED, GREEN, and final evidence checkpoints. No private value output, services, dependencies, PR, or review.
+
 ## Targeted final parser-order correction from exact head 4870f53b
 
 - Session: `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`.

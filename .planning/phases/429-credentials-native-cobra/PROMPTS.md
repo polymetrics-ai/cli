@@ -25,6 +25,18 @@ Downstream artifact: test-only initial and correction RED checkpoints, `internal
 
 Verification result: pass. Initial focused GREEN passed. Local review then exposed a post-action name-discovery bypass; correction RED failed 8/10 cases before the fix, and corrected focused/repeated/race tests pass. Final full CLI (`275.269s`), preserved differential 28/28, built help/docs parity, website generation, gofmt, vet, build, full repository tests, and `make verify` pass. No real secret, credentialed external check, service, dependency, PR, or external review occurred.
 
+## Normalization-order correction snapshot
+
+Task: Accept the MEDIUM finding in `/tmp/pm-397-rereview7-429.log` from exact start `2013d361c949395f41bb6a30209d65cbec4a62c2`. Session `issue-429-normalization-order-correction-pi-openai-20260718T215811Z`.
+
+GSD route: doctor/list passed; `programming-loop` remains unavailable, so the manual universal runtime loop is active. Execution decision: `local_critical_path` because this is one credentials normalization-order correction, no subagent tool is exposed, and the user prohibited services, dependencies, PR, and review.
+
+Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, and `golang-safety`. CLI help/docs/website parity policy is active.
+
+Downstream artifact: metadata-only RED coverage for single-hyphen spaced StringArray values after known-flag-shaped names; capture → normalize → filter correction; preserved parser/security protections; finalized phase evidence.
+
+Verification result: pending strict RED, GREEN, focused/protection/repeated/race, exact parent-base/start/head differential, full CLI, gofmt, vet, build, and diff/scope/dependency gates.
+
 ## Targeted final parser-order correction snapshot
 
 Task: Accept the MEDIUM finding in `/tmp/pm-397-rereview6-429.log` from exact start `4870f53b028613fbc3632a404e9a382419d87f8a`. Session `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`.

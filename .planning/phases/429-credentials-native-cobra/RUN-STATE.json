@@ -71,8 +71,13 @@
   "targetedParserCorrectionEndedAt": "20260718T214736Z",
   "targetedParserCorrectionEndingImplementationHead": "9e87a007e4331d1afee7c66b4b079eb3694f3d8d",
   "targetedParserCorrectionVerification": "pass: focused 79.397s; repeated x5 176.825s; race 392.438s; differential base/head 12/12 lifecycle, start 4 add rejections, base-seeded start/head 8/8 inspect-remove, 8 exact output pairs; full CLI 340.707s; help, gofmt, vet, readonly build, diff, scope, and dependency gates clean",
-  "status": "complete_verified_pushed_no_pr_no_review",
-  "verificationPassed": true,
+  "normalizationOrderCorrectionInvocationSession": "issue-429-normalization-order-correction-pi-openai-20260718T215811Z",
+  "normalizationOrderCorrectionStartedAt": "20260718T215811Z",
+  "normalizationOrderCorrectionStartingHead": "2013d361c949395f41bb6a30209d65cbec4a62c2",
+  "normalizationOrderCorrectionSource": "/tmp/pm-397-rereview7-429.log",
+  "normalizationOrderCorrectionFindingsAccepted": ["MEDIUM_spaced_string_array_value_filtered_before_binding"],
+  "status": "normalization_order_correction_in_progress",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -83,6 +88,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "normalization-order-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "one bounded credentials router/test correction shares the parser critical path; no subagent tool is exposed, and the user prohibited private output, services, dependencies, PR, and review"
+    },
     {
       "cycle": "targeted-parser-correction-plan",
       "decision": "local_critical_path",

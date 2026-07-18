@@ -2,6 +2,21 @@
 
 Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`.
 
+## Normalization-order correction checklist
+
+Invocation `issue-429-normalization-order-correction-pi-openai-20260718T215811Z`; exact start `2013d361c949395f41bb6a30209d65cbec4a62c2`.
+
+- [x] Read `/tmp/pm-397-rereview7-429.log` and accept the MEDIUM spaced StringArray value finding.
+- [x] Run GSD doctor/list, record unavailable programming-loop/manual fallback, load required skills/policies, and update issue artifacts before production edits.
+- [ ] RED: every known add-flag-shaped credential name preserves spaced StringArray data beginning with one hyphen; assert metadata structure without printing values.
+- [ ] RED preservation gate: raw internal-carrier rejection and invalid action/name ownership remain green.
+- [ ] GREEN: capture/remove the private first name, normalize spaced StringArray values, then apply legacy-tail filtering; preserve all existing protections.
+- [ ] Focused, repeated, race, exact parent-base/correction-start/head differential, and full CLI pass without private value output.
+- [ ] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified.
+- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, diff/scope/dependency guards, coherent commits, and push pass. No services, dependencies, PR, or review.
+
+Result: in progress; `verificationPassed=false` until the full user-declared gate set passes.
+
 ## Targeted parser-order correction checklist
 
 Invocation `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`; exact start `4870f53b028613fbc3632a404e9a382419d87f8a`.
