@@ -10,9 +10,9 @@ Invocation `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`; exac
 - [x] Run GSD doctor/list, record missing programming-loop/manual fallback, load required skills/policies, and update issue plan/TDD/verification artifacts before production edits.
 - [x] RED: leading-hyphen add with later connector/source/global flags and an ignored extra positional exited 1 at current head, while the focused raw-carrier and no-later-name-discovery guards remained green (CLI package `23.649s`); exact-base success remains the differential target.
 - [x] RED: overwrite final-temp open rejection left the already-open raw temp in truncate and truncate-create cases (app package `3.576s`).
-- [ ] GREEN: every leading-hyphen first required-name token is privately owned and validated before action execution; later flags/ignored positionals work, raw carrier remains usage-rejected, and later names are never discovered.
-- [ ] GREEN: overwrite cleanup is active immediately after raw-temp open and removes it when final-temp open fails.
-- [ ] Focused/repeated/race CLI/app/localwrite and exact-start differential pass without private data output.
+- [x] GREEN: every leading-hyphen first required-name token is privately owned and validated before action execution; later flags/ignored positionals work, raw carrier remains usage-rejected, and later names are never discovered. Focused and repeated ×5 CLI passed (`19.187s`/`97.954s`).
+- [x] GREEN: overwrite cleanup is active immediately after raw-temp open and removes it when final-temp open fails. Focused and repeated ×5 app passed (`3.362s`/`16.976s`).
+- [ ] Focused/repeated/race CLI/app/localwrite and exact-start differential pass without private data output. Focused/repeated and race are green (race CLI/app/localwrite `214.993s`/`34.800s`/`1.406s`); differential pending.
 - [ ] Broader relevant packages, gofmt, vet, build, diff/scope/dependency guards pass.
 - [ ] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified; no checked-in docs/website delta.
 - [ ] Planning, RED, GREEN, and final evidence checkpoints committed and pushed; no service, dependency, PR, or external review.

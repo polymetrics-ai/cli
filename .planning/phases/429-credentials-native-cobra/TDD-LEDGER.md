@@ -19,7 +19,7 @@ Session `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`; exact c
 |---:|---|---|---|
 | X0 | Review/plan | Record both accepted findings, first-token ownership and early-validation design, overwrite raw-temp cleanup lifetime, RED cases, differential, and verification/checkpoint sequence before production edits | Complete |
 | X1 | RED | `go test ./internal/cli -run 'TestCredentials(AddLeadingHyphenNameParsesLaterSourceFlagsAndIgnoresExtraPositionals|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1`; `go test ./internal/app -run '^TestWarehouseMaterializationRejectsFinalFileSymlinkEscape$' -count=1` | Failed as required: leading-hyphen add exited 1 while raw-carrier/no-discovery guards stayed green (CLI package `23.649s`); overwrite truncate and truncate-create left the opened raw temp (app package `3.576s`) |
-| X2 | GREEN | Carry every leading-hyphen first name privately, validate it before action execution, and register overwrite cleanup immediately after raw-temp open | Pending |
+| X2 | GREEN | Carry every leading-hyphen first name privately, validate it before action execution, and register overwrite cleanup immediately after raw-temp open | Pass: focused CLI/app/safety green (`19.187s`/`3.362s`/`0.473s`); repeated ×5 CLI/app green (`97.954s`/`16.976s`); race CLI/app/localwrite green (`214.993s`/`34.800s`/`1.406s`) |
 | X3 | Verify | Focused/repeated/race CLI/app/localwrite, exact-base differential, broader relevant packages, gofmt/vet/build/diff/scope/dependency guards | Pending |
 
 Tests use temporary roots, config-only credentials, synthetic records, and non-sensitive sentinel bytes. They must not print private fixture content or contact services.

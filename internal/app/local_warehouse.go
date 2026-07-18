@@ -86,25 +86,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err != nil {
 		return etlExecutionResult{}, fmt.Errorf("open raw table: %w", err)
 	}
-	rawEncoder := json.NewEncoder(rawFile)
-
 	var finalFile *os.File
-	var finalEncoder *json.Encoder
-	if !mode.IsDeduped() {
-		finalTarget := finalPath
-		finalFlags := os.O_CREATE | os.O_WRONLY | os.O_APPEND
-		if mode.IsOverwrite() {
-			finalTarget = tmpFinalPath
-			finalFlags = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
-		}
-		finalFile, err = effects.OpenFile(finalTarget, finalFlags, 0o600)
-		if err != nil {
-			_ = rawFile.Close()
-			return etlExecutionResult{}, fmt.Errorf("open final table: %w", err)
-		}
-		finalEncoder = json.NewEncoder(finalFile)
-	}
-
 	success := false
 	defer func() {
 		_ = rawFile.Close()
@@ -116,6 +98,22 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			_ = effects.Remove(tmpFinalPath)
 		}
 	}()
+
+	rawEncoder := json.NewEncoder(rawFile)
+	var finalEncoder *json.Encoder
+	if !mode.IsDeduped() {
+		finalTarget := finalPath
+		finalFlags := os.O_CREATE | os.O_WRONLY | os.O_APPEND
+		if mode.IsOverwrite() {
+			finalTarget = tmpFinalPath
+			finalFlags = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
+		}
+		finalFile, err = effects.OpenFile(finalTarget, finalFlags, 0o600)
+		if err != nil {
+			return etlExecutionResult{}, fmt.Errorf("open final table: %w", err)
+		}
+		finalEncoder = json.NewEncoder(finalFile)
+	}
 
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}

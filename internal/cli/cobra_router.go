@@ -90,14 +90,19 @@ func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, std
 func executeRootCmd(cmd *cobra.Command, args []string) error {
 	var credentialsState credentialsCommandState
 	args = normalizeNativeStringArrayArgs(args, &credentialsState)
+	if credentialsState.rawCarrier {
+		return errUsage
+	}
+	if credentialsState.boundedName != "" {
+		if err := validatePrivateCredentialName(credentialsState.boundedName); err != nil {
+			return err
+		}
+	}
 	ctx := cmd.Context()
 	if ctx == nil {
 		ctx = context.Background()
 	}
 	cmd.SetContext(context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState))
-	if credentialsState.rawCarrier {
-		return errUsage
-	}
 	if len(args) > 0 && lookupTopLevelCommand(cmd, args[0]) == nil {
 		return cmd.RunE(cmd, args)
 	}
@@ -189,18 +194,11 @@ func normalizeCredentialsActionBoundary(args []string, state *credentialsCommand
 	switch args[1] {
 	case "add", "inspect", "test", "remove":
 		if len(args) >= 3 && strings.HasPrefix(args[2], "-") {
-			if credentialsTailContainsOnlyFlags(args[3:]) {
-				state.boundedName = args[2]
-				out := make([]string, 0, len(args)-1)
-				out = append(out, args[:2]...)
-				out = append(out, args[3:]...)
-				return normalizeCredentialsLegacyActionArgs(out, 2), true
-			}
-			out := make([]string, 0, len(args)+1)
+			state.boundedName = args[2]
+			out := make([]string, 0, len(args)-1)
 			out = append(out, args[:2]...)
-			out = append(out, "--")
-			out = append(out, args[2:]...)
-			return out, true
+			out = append(out, args[3:]...)
+			return normalizeCredentialsLegacyActionArgs(out, 2), true
 		}
 		return args, false
 	case "list", "help", "-h", "--help":
@@ -230,15 +228,6 @@ func credentialsArgsContainRawCarrier(args []string) bool {
 		}
 	}
 	return false
-}
-
-func credentialsTailContainsOnlyFlags(args []string) bool {
-	for _, arg := range args {
-		if !strings.HasPrefix(arg, "-") {
-			return false
-		}
-	}
-	return true
 }
 
 // normalizeCredentialsLegacyActionArgs keeps tokens ignored by the old credentials parser from becoming Cobra controls.
