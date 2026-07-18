@@ -11,6 +11,19 @@ Doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-research` generate
 
 Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-documentation`, `golang-spf13-cobra`.
 
+## Targeted parser-order correction ledger
+
+Session `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`; exact correction start `4870f53b028613fbc3632a404e9a382419d87f8a`. Rereview `/tmp/pm-397-rereview6-429.log` accepted. GSD doctor/list passed; the adapter still lacks `programming-loop`, so the manual universal-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, and `golang-safety`.
+
+| Step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| P0 | Review/plan | Record the accepted parser-order finding, four known-flag lifecycle matrix, first-token-before-tail design, adversarial preservation gates, differential, and checkpoint sequence before production edits | Complete |
+| P1 | RED | Focused known-flag-name lifecycle plus raw-carrier and invalid action/name ownership tests | Pending |
+| P2 | GREEN | Capture/remove the required add name before StringArray normalization; normalize only the remaining tail | Pending |
+| P3 | Verify | Focused/adversarial/repeated/race CLI, exact parent-base/start/head differential, full CLI, gofmt/vet/build/diff/scope/dependency guards | Pending |
+
+Tests use temporary roots and config-only credentials. They must not read, print, summarize, or store private values or contact services.
+
 ## Compatibility correction ledger
 
 Session `issue-429-compatibility-correction-pi-openai-20260718T202616Z`; exact correction start `7497483de2187b3117c32b9cafb3db54ebac792f`. Rereview `/tmp/pm-397-rereview5-429.log` accepted. GSD doctor/list passed; the adapter still lacks `programming-loop`, so the manual universal-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, and `golang-safety`.

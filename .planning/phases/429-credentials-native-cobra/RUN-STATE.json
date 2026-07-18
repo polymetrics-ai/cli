@@ -61,8 +61,13 @@
   "compatibilityCorrectionFindingsAccepted": ["MEDIUM_safety_valid_legacy_names"],
   "compatibilityCorrectionEndedAt": "20260718T211055Z",
   "compatibilityCorrectionEndingImplementationHead": "199b802c4d2be7e62e335549a8c56dc0804c909b",
-  "status": "complete_verified_pushed_no_pr_no_review",
-  "verificationPassed": true,
+  "targetedParserCorrectionInvocationSession": "issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z",
+  "targetedParserCorrectionStartedAt": "20260718T212111Z",
+  "targetedParserCorrectionStartingHead": "4870f53b028613fbc3632a404e9a382419d87f8a",
+  "targetedParserCorrectionSource": "/tmp/pm-397-rereview6-429.log",
+  "targetedParserCorrectionFindingsAccepted": ["MEDIUM_add_name_normalized_before_ownership"],
+  "status": "targeted_parser_correction_in_progress",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -73,6 +78,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "targeted-parser-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "one bounded credentials parser-order correction shares the router and test critical path; this runtime exposes no subagent tool, and the user prohibited private output, services, dependencies, PR, and review"
+    },
     {
       "cycle": "compatibility-correction-summary",
       "decision": "local_critical_path",

@@ -10,6 +10,16 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, this session exposes no subagent tool, and the user bounded delivery to #429 with no PR or external review.
 
+## Targeted final parser-order correction from exact head 4870f53b
+
+- Session: `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`.
+- Exact correction start: `4870f53b028613fbc3632a404e9a382419d87f8a`; rereview source: `/tmp/pm-397-rereview6-429.log`; MEDIUM first-token ownership finding accepted.
+- GSD: doctor/list pass; both documented `programming-loop` command spellings remain unavailable, so the manual universal-runtime-loop fallback is active. Execution decision: `local_critical_path` — one bounded credentials parser-order correction shares the router/test critical path, this runtime exposes no subagent tool, and the user prohibited services, dependencies, PR, and review.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, and `golang-safety`; CLI help/docs/website parity policy loaded.
+- RED before production edits: table-drive safety-valid names equal to every known add flag (`--connector`, `--from-env`, `--value-stdin`, `--config`) through config-only add, inspect, and remove. Place an ignored positional immediately after the required name and real assigned flags later. Require exact first-token ownership and lifecycle success. Run raw-carrier and invalid action/name ownership tests in the same gate; they must remain green.
+- Smallest implementation: for `credentials add`, reject raw carriers first, privately capture/remove the required first-name token before StringArray space-value normalization, then normalize only the remaining tail. Preserve private validation, action discovery, ignored positional behavior, later native/global flags, and every raw-carrier/action protection.
+- Verification: focused RED/GREEN; adversarial raw-carrier/action/name matrix; repeated and race CLI; exact parent-base/correction-start/head differential; full CLI; `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, and diff/scope/dependency guards. Commit and push planning, RED, GREEN, and final evidence checkpoints. No private output, services, dependencies, PR, or review.
+
 ## Compatibility correction from exact head 7497483d
 
 - Session: `issue-429-compatibility-correction-pi-openai-20260718T202616Z`.

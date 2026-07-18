@@ -1,6 +1,10 @@
 # Phase 429 Summary
 
-Status: compatibility correction complete and verified from exact head `7497483de2187b3117c32b9cafb3db54ebac792f`; MEDIUM safety-valid short/double-hyphen legacy-name finding closed; no services, PR, or review.
+Status: targeted final parser-order correction in progress from exact head `4870f53b028613fbc3632a404e9a382419d87f8a`; MEDIUM first-token ownership finding accepted; verification pending; no services, dependencies, PR, or review.
+
+## Targeted final parser-order correction
+
+Planning was updated before test or production edits. The required RED matrix will exercise safety-valid names equal to all known add flags (`--connector`, `--from-env`, `--value-stdin`, `--config`) with an immediately following ignored positional and later real flags through add/inspect/remove. Raw-carrier rejection and invalid action/name ownership remain mandatory preservation gates. The planned implementation captures/removes the required add name before StringArray space-value normalization and normalizes only the tail. Verification and delivery are pending.
 
 ## Compatibility correction
 

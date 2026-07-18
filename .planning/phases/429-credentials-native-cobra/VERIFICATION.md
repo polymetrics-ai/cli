@@ -2,6 +2,21 @@
 
 Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`.
 
+## Targeted parser-order correction checklist
+
+Invocation `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`; exact start `4870f53b028613fbc3632a404e9a382419d87f8a`.
+
+- [x] Read `/tmp/pm-397-rereview6-429.log` and accept the MEDIUM first-token ownership finding.
+- [x] Run GSD doctor/list, record unavailable programming-loop/manual fallback, load required skills/policies, and update issue artifacts before production edits.
+- [ ] RED: lifecycle tests for `--connector`, `--from-env`, `--value-stdin`, and `--config` as safety-valid names fail at exact correction start when followed by an ignored positional and later real flags.
+- [ ] RED preservation gate: raw-carrier rejection and invalid action/name ownership remain green.
+- [ ] GREEN: capture/remove the required add name before StringArray space normalization and normalize only the remaining tail, without weakening private validation or action protections.
+- [ ] Focused, adversarial, repeated, race, exact parent-base/start/head differential, and full CLI pass without private output.
+- [ ] Runtime help/manual/website/generated parity remains unchanged or explicitly verified not applicable.
+- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, diff/scope/dependency guards, coherent commits, and push pass. No services, dependencies, PR, or review.
+
+Result: pending; `verificationPassed=false` until the full declared correction gate set passes.
+
 ## Compatibility correction checklist
 
 Invocation `issue-429-compatibility-correction-pi-openai-20260718T202616Z`; exact start `7497483de2187b3117c32b9cafb3db54ebac792f`.

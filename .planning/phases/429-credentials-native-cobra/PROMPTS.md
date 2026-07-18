@@ -25,6 +25,18 @@ Downstream artifact: test-only initial and correction RED checkpoints, `internal
 
 Verification result: pass. Initial focused GREEN passed. Local review then exposed a post-action name-discovery bypass; correction RED failed 8/10 cases before the fix, and corrected focused/repeated/race tests pass. Final full CLI (`275.269s`), preserved differential 28/28, built help/docs parity, website generation, gofmt, vet, build, full repository tests, and `make verify` pass. No real secret, credentialed external check, service, dependency, PR, or external review occurred.
 
+## Targeted final parser-order correction snapshot
+
+Task: Accept the MEDIUM finding in `/tmp/pm-397-rereview6-429.log` from exact start `4870f53b028613fbc3632a404e9a382419d87f8a`. Session `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111Z`.
+
+GSD route: doctor/list passed; `programming-loop` remains unavailable, so the manual universal runtime loop is active. Execution decision: `local_critical_path` because this is one credentials parser-order correction, this runtime exposes no subagent tool, and the user prohibited private output, services, dependencies, PR, and review.
+
+Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, and `golang-safety`. CLI help/docs/website parity policy is active.
+
+Downstream artifact: strict four-name lifecycle RED coverage with later real flags and ignored positionals; preserved raw-carrier/action protections; required-name capture before tail normalization; finalized phase evidence.
+
+Verification result: pending strict RED, GREEN, focused/adversarial/base differential/race/full CLI, gofmt/vet/build/diff gates, commits, and push.
+
 ## Bounded review correction snapshot
 
 Task: Accept all findings in `/tmp/pm-397-review-429.log` from exact start `758b059bbeb54032dbcd1b9a2a540ca83058861b`. Session `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`.
