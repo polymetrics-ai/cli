@@ -141,14 +141,14 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 		if isHelpArg(args[1]) {
 			return append([]string(nil), args[:2]...)
 		}
-		var bounded bool
+		args, bounded := normalizeCredentialsActionBoundary(args, credentialsState)
 		if args[1] == "add" {
-			args, bounded = normalizeCredentialsActionBoundary(args, credentialsState)
 			args = normalizeStringArraySpaceValues(args, 2, credentialsAddFlagNames)
-		} else {
-			args, bounded = normalizeCredentialsActionBoundary(args, credentialsState)
 		}
 		if bounded {
+			if credentialsActionTakesName(args[1]) {
+				return normalizeCredentialsLegacyActionArgs(args, 2)
+			}
 			return args
 		}
 		if args[1] != "help" && !isHelpArg(args[1]) {
@@ -200,7 +200,7 @@ func normalizeCredentialsActionBoundary(args []string, state *credentialsCommand
 			out := make([]string, 0, len(args)-1)
 			out = append(out, args[:2]...)
 			out = append(out, args[3:]...)
-			return normalizeCredentialsLegacyActionArgs(out, 2), true
+			return out, true
 		}
 		return args, false
 	case "list", "help", "-h", "--help":

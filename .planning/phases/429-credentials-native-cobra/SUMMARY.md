@@ -4,7 +4,7 @@ Status: normalization-order correction in progress from exact head `2013d361c949
 
 ## Normalization-order correction
 
-Planning, TDD, verification, prompt, summary, and run-state artifacts were reopened before test or production edits. Strict RED then failed all four known add-flag-shaped name cases in `18.206s` (wall `20.584s`) while raw-carrier and invalid action/name ownership protections stayed green; assertions inspected metadata structure and printed no values. Planned order is raw-carrier rejection, private first-name capture/removal, StringArray normalization, then legacy-tail filtering. All first-name, action-discovery, carrier, help/global, compatibility, and redaction protections remain mandatory.
+Planning, TDD, verification, prompt, summary, and run-state artifacts were reopened before test or production edits. Strict RED then failed all four known add-flag-shaped name cases in `18.206s` (wall `20.584s`) while raw-carrier and invalid action/name ownership protections stayed green; assertions inspected metadata structure and printed no values. The router now rejects raw carriers, privately captures/removes the first name without filtering, normalizes spaced StringArray values, and only then filters the legacy tail. Focused GREEN passed in `20.167s` (wall `22.347s`). All first-name, action-discovery, carrier, help/global, compatibility, and redaction protections remain mandatory.
 
 ## Targeted final parser-order correction
 

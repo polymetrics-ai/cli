@@ -77,6 +77,7 @@
   "normalizationOrderCorrectionSource": "/tmp/pm-397-rereview7-429.log",
   "normalizationOrderCorrectionFindingsAccepted": ["MEDIUM_spaced_string_array_value_filtered_before_binding"],
   "normalizationOrderCorrectionRed": "focused pre-production CLI failed as required in 18.206s (wall 20.584s): all four known-flag-shaped credential names rejected the metadata-only single-hyphen spaced-value case while raw-carrier and invalid action/name ownership protections remained green",
+  "normalizationOrderCorrectionGreen": "private first-name capture/removal now precedes StringArray normalization and legacy-tail filtering; focused metadata/protection gate passed in 20.167s (wall 22.347s) for all four known-flag-shaped names",
   "status": "normalization_order_correction_in_progress",
   "verificationPassed": false,
   "gsdAdapter": {
@@ -89,6 +90,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "normalization-order-correction-green",
+      "decision": "local_critical_path",
+      "reason": "private first-name capture/removal now leaves the tail intact for StringArray spaced-value normalization before legacy filtering; metadata-only cases and focused parser/security protections pass"
+    },
     {
       "cycle": "normalization-order-correction-tdd-gate",
       "decision": "local_critical_path",
