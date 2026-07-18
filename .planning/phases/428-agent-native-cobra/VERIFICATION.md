@@ -2,6 +2,24 @@
 
 Session `issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `235233f7cfde4a24612be6b0f95fb37a412d388a`; verification end `20260718T131634Z`.
 
+## Accepted High correction — verification checklist
+
+Correction session `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `746b2a98b01ba1e119974e31569fc8deb06cd897`.
+
+- [x] Review log read and High finding accepted.
+- [x] GSD doctor/list passed; programming-loop adapter command retried and manual fallback recorded.
+- [x] Required GSD, CLI/Cobra, testing, error, security, safety, and lint skills loaded.
+- [ ] Focused fake-runtime tests fail before production edits for agent/image leading assigned/bare/short/help-like/literal heads followed by build/pull/ensure.
+- [ ] Corrected cases return usage with zero runtime lookups, file checks, or runs.
+- [ ] Exact agent/image actions, agent help, valid action-tail help/unknown tokens, and literal `--` after exact actions remain compatible.
+- [ ] Focused agent tests pass.
+- [ ] Focused agent race tests pass.
+- [ ] Base differential confirms corrected invalid-head legacy exit/stdout/stderr and preserved valid/help/literal routes.
+- [ ] `gofmt`, `go vet ./...`, `go build ./cmd/pm`, and `git diff --check` pass.
+- [ ] Full CLI test decision recorded with evidence.
+- [ ] No dependency, container/service, docs/website/golden, unrelated namespace, secret, PR, or external-review activity.
+- [ ] Correction commits pushed to `origin/refactor/428-agent-native-cobra`.
+
 ## TDD and behavior
 
 - [x] Six phase artifacts created before production edits.

@@ -1,5 +1,19 @@
 # Phase 428 Prompts
 
+## Accepted High correction kickoff snapshot
+
+Task: From exact correction start `746b2a98b01ba1e119974e31569fc8deb06cd897`, prevent leading invalid agent/image action heads from allowing Cobra to discover or execute later image build/pull/ensure actions. Add fake-runtime RED first; preserve exact actions, agent help, and literal/action-tail compatibility; run bounded local gates only.
+
+Identity: session `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z`; explicit model `openai-codex/gpt-5.6-sol`; explicit thinking `high`.
+
+GSD doctor/list passed. `scripts/gsd prompt programming-loop init --phase 428-agent-native-cobra --dry-run` again failed because the registry has no `programming-loop` command, so the manual universal-runtime-loop fallback remains active.
+
+Execution decision: `local_critical_path` — urgent accepted finding in the isolated serialized router scope; no subagent tool, container/services, PR, or external review.
+
+Downstream artifact: pending focused RED, smallest agent-scoped router compatibility fix, local verification, commit, and push.
+
+Verification result: pending.
+
 ## Kickoff snapshot
 
 Task: Implement polymetrics-ai/cli#428 as the eighth serialized Phase 9 unit under #407/#397 from exact parent HEAD `235233f7cfde4a24612be6b0f95fb37a412d388a`, using isolated branch `refactor/428-agent-native-cobra`, with no PR or external review.

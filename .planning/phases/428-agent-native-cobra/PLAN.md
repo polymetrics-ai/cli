@@ -10,6 +10,19 @@ Invocation session: `issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — eighth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, the runtime exposes no subagent tool, and the user bounded this run to #428 with no PR or external review.
 
+## High-finding correction invocation
+
+- Review-fix session: `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z`.
+- Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`.
+- Exact correction start: `746b2a98b01ba1e119974e31569fc8deb06cd897`.
+- Accepted finding: leading unknown, short, help-like assigned, or literal-boundary tokens at `agent`/`agent image` must not let Cobra discover or execute a later `image build|pull|ensure` action.
+- Smallest slice: add an agent-scoped pre-Cobra action boundary for non-exact action heads and reject positional image-parent tails before runtime lookup. Preserve exact `plan`, `image`, `build`, `pull`, `ensure`, agent help routes, valid action-tail unknown/help compatibility, and literal `--` continuation after an exact action.
+- TDD: first add a fake-runtime table crossing agent/image levels, assigned unknown, bare unknown, short unknown, assigned help-like, literal-boundary, and build/pull/ensure; require usage errors and zero lookups/files/runs. Capture focused RED before production edits.
+- Verification: focused and race agent tests; exact base differential from `235233f7cfde4a24612be6b0f95fb37a412d388a` for the corrected invalid heads plus preserved valid/help/literal routes; full CLI only if focused evidence indicates; gofmt, vet, build, `git diff --check`, scope/dependency guards.
+- Delivery: planning, RED, and green verification checkpoints committed/pushed to the active issue branch; no container/services, dependencies, PR, external review, or secrets.
+- GSD: doctor/list passed; `scripts/gsd prompt programming-loop init --phase 428-agent-native-cobra --dry-run` remains unavailable (`unknown GSD command`), so the recorded manual universal-loop fallback continues.
+- Execution decision: `local_critical_path` — one urgent bounded accepted finding in the already-isolated serialized worktree; no subagent tool and external review is prohibited.
+
 ## Required reading complete
 
 - Issue #428 via `gh`; parent #397; umbrella #407; adjacent #426/#427 native Cobra implementation and artifact patterns.

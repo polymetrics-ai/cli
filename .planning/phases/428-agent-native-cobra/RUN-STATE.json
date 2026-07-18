@@ -9,16 +9,19 @@
   "startingHead": "235233f7cfde4a24612be6b0f95fb37a412d388a",
   "invocationSession": "issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z",
   "startedAt": "20260718T124925Z",
-  "endedAt": "20260718T131634Z",
+  "endedAt": null,
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "complete_verified_pushed",
-  "verificationPassed": true,
+  "correctionInvocationSession": "issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z",
+  "correctionStartedAt": "20260718T132841Z",
+  "correctionStartingHead": "746b2a98b01ba1e119974e31569fc8deb06cd897",
+  "status": "high_finding_correction_in_progress",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
     "planPhase": "passed_10668_bytes_executed_inline",
-    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "programmingLoop": "blocked on initial and correction invocations: scripts/gsd: unknown GSD command: programming-loop",
     "fallback": "manual_gsd_universal_runtime_loop",
     "verifyWorkPrompt": "passed_7137_bytes_executed_inline",
     "codeReviewPrompt": "passed_6003_bytes_executed_inline_local_review_clean"
@@ -48,6 +51,11 @@
       "cycle": "summary",
       "decision": "local_critical_path",
       "reason": "issue-local artifacts finalized with exact TDD, safety, parity, verification, and commit evidence; local inline review was clean and user prohibited PR/external review"
+    },
+    {
+      "cycle": "high-finding-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "accepted one urgent bounded security/compatibility finding in the already-isolated serialized worktree; tests and router normalization share one scope, no subagent tool is available, and PR/external review are prohibited"
     }
   ],
   "red": "focused agent/router test build failed as expected before production edits: runAgentImageAction and newRootCmdWithAgentImageRuntime were undefined",
