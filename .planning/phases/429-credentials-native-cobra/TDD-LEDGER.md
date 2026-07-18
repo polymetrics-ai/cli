@@ -18,7 +18,7 @@ Session `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-so
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | R0 | Review/plan | Record HIGH symlink escape, MEDIUM legacy-name stranding, LOW help-tail incompatibility and verification plan before production edits | Complete |
-| R1 | RED | Focused temp-only tests: symlink escape has no external warehouse/outbox effect unless explicit opt-in; `_`/`.` legacy names inspect/remove; namespace help ignores trailing unknown flags | Pending |
+| R1 | RED | `go test ./internal/cli -run 'TestCredentials(TestRejectsSymlinkEscapeBeforeLocalConnectorEffects|LegacyValidateIdentifierNamesRemainInspectableAndRemovable|NamespaceHelpIgnoresTrailingUnknownFlags)$' -count=1` | Failed as required in `6.546s`: warehouse/outbox denied cases created external effects; `_legacy`/`.legacy` inspect rejected; long/short namespace help tails exited 2 |
 | R2 | GREEN | Reusable realpath/nearest-existing-ancestor containment; restore `ValidateIdentifier` credential-name compatibility; namespace-help tail normalization | Pending |
 | R3 | Verify | Focused/repeated/race/security/base differential/full CLI/path tests plus gofmt/vet/full tests/build/`make verify` | Pending |
 

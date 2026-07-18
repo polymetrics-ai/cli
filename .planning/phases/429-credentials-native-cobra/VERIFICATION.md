@@ -8,7 +8,7 @@ Invocation `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6
 
 - [x] Read `/tmp/pm-397-review-429.log` and accept all HIGH/MEDIUM/LOW findings.
 - [x] Update PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE before production edits.
-- [ ] Focused RED proves symlink escape, legacy leading `_`/`.` inspect/remove regression, and namespace help-tail regression.
+- [x] Focused RED proves symlink escape, legacy leading `_`/`.` inspect/remove regression, and namespace help-tail regression (`6.546s`, all three findings reproduced).
 - [ ] Symlink-resolved warehouse/outbox escape fails before any external filesystem effect without opt-in.
 - [ ] Explicit `allow_external_path=true` semantics and platform behavior remain supported.
 - [ ] Legacy names accepted by `safety.ValidateIdentifier`, including leading `_` and `.`, remain inspectable/removable.

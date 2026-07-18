@@ -239,7 +239,6 @@ func TestCredentialsStrictNamesAndPathContainment(t *testing.T) {
 	}{
 		{name: "add credential traversal", args: []string{"add", "../credential", "--connector=sample"}},
 		{name: "add credential leading hyphen", args: []string{"add", "-credential", "--connector=sample"}},
-		{name: "add credential leading underscore", args: []string{"add", "_credential", "--connector=sample"}},
 		{name: "add connector traversal", args: []string{"add", "credential", "--connector=../sample"}},
 		{name: "add connector leading hyphen", args: []string{"add", "credential", "--connector=-sample"}},
 		{name: "inspect traversal", args: []string{"inspect", "../credential"}},
@@ -283,6 +282,111 @@ func TestCredentialsStrictNamesAndPathContainment(t *testing.T) {
 			t.Fatalf("explicit external warehouse path error = %v", err)
 		}
 	})
+}
+
+func TestCredentialsTestRejectsSymlinkEscapeBeforeLocalConnectorEffects(t *testing.T) {
+	for _, connector := range []string{"warehouse", "outbox"} {
+		for _, allowExternal := range []bool{false, true} {
+			name := connector + "_denied"
+			if allowExternal {
+				name = connector + "_allowed"
+			}
+			t.Run(name, func(t *testing.T) {
+				root := initCredentialsProject(t)
+				external := t.TempDir()
+				redirect := filepath.Join(root, "redirect")
+				if err := os.Mkdir(redirect, 0o700); err != nil {
+					t.Fatalf("create initial in-project directory: %v", err)
+				}
+				effectPath := filepath.Join(redirect, "connector-effect")
+
+				args := []string{
+					"credentials", "add", name,
+					"--connector=" + connector,
+					"--config=path=" + effectPath,
+				}
+				if allowExternal {
+					args = append(args, "--config=allow_external_path=true")
+				}
+				if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""), args...); err != nil {
+					t.Fatalf("seed local-path credential: %v", err)
+				}
+
+				if err := os.Remove(redirect); err != nil {
+					t.Fatalf("remove initial in-project directory: %v", err)
+				}
+				if err := os.Symlink(external, redirect); err != nil {
+					t.Skipf("symlinks unavailable on this platform: %v", err)
+				}
+
+				_, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+					"credentials", "test", name)
+				externalEffect := filepath.Join(external, "connector-effect")
+				if allowExternal {
+					if err != nil {
+						t.Fatalf("explicit external-path policy rejected test: %v", err)
+					}
+					if _, statErr := os.Stat(externalEffect); statErr != nil {
+						t.Fatalf("explicit external-path policy did not permit connector effect: %v", statErr)
+					}
+					return
+				}
+				if err == nil {
+					t.Fatal("symlink escape test succeeded without explicit external-path policy")
+				}
+				if _, statErr := os.Stat(externalEffect); !errors.Is(statErr, os.ErrNotExist) {
+					t.Fatalf("denied credential test created an external connector effect: %v", statErr)
+				}
+			})
+		}
+	}
+}
+
+func TestCredentialsLegacyValidateIdentifierNamesRemainInspectableAndRemovable(t *testing.T) {
+	for _, name := range []string{"_legacy", ".legacy"} {
+		t.Run(name, func(t *testing.T) {
+			root := initCredentialsProject(t)
+			a, err := app.Open(root)
+			if err != nil {
+				t.Fatalf("open temporary project: %v", err)
+			}
+			if _, err := a.AddCredential(context.Background(), app.AddCredentialRequest{
+				Name:      name,
+				Connector: "sample",
+			}); err != nil {
+				t.Fatalf("seed legacy credential name: %v", err)
+			}
+
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+				"credentials", "inspect", name); err != nil {
+				t.Fatalf("inspect legacy credential name: %v", err)
+			}
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+				"credentials", "remove", name); err != nil {
+				t.Fatalf("remove legacy credential name: %v", err)
+			}
+			if got := credentialCount(t, root); got != 0 {
+				t.Fatalf("legacy credential remained after removal; count = %d", got)
+			}
+		})
+	}
+}
+
+func TestCredentialsNamespaceHelpIgnoresTrailingUnknownFlags(t *testing.T) {
+	for _, help := range []string{"--help", "-h"} {
+		t.Run(help, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			if code := Run([]string{"credentials", help, "--unknown"}, &stdout, &stderr); code != 0 {
+				t.Fatalf("namespace help code = %d, want 0", code)
+			}
+			if stderr.Len() != 0 {
+				t.Fatalf("namespace help wrote stderr: %q", stderr.String())
+			}
+			if !strings.Contains(stdout.String(), "pm credentials - manage encrypted connector credentials") {
+				t.Fatal("namespace help did not render the credentials manual")
+			}
+		})
+	}
 }
 
 func TestCredentialsOutputsAndErrorsNeverExposeOpaqueSecretFixtures(t *testing.T) {
