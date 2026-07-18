@@ -1,0 +1,33 @@
+{
+  "phase": 425,
+  "issue": 425,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/425-version-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc",
+  "invocationSession": "issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z",
+  "model": "openai-codex/gpt-5.6-sol",
+  "thinking": "high",
+  "status": "planned",
+  "verificationPassed": false,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_explicit_model_thinking_args",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "fifth serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later namespace units and user restricted the run to issue 425"
+    }
+  ],
+  "commits": [],
+  "push": "pending",
+  "pullRequest": "not_created_user_requested_no_new_pr",
+  "reviewRoute": "not_requested_user_prohibited_external_review"
+}
