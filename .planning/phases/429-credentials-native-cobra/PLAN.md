@@ -10,7 +10,21 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, this session exposes no subagent tool, and the user bounded delivery to #429 with no PR or external review.
 
-## Local security review correction
+## Bounded independent review correction
+
+- Session: `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`.
+- Exact correction start: `758b059bbeb54032dbcd1b9a2a540ca83058861b`; review source: `/tmp/pm-397-review-429.log`; all HIGH/MEDIUM/LOW findings accepted.
+- GSD adapter: doctor/list pass; documented programming-loop command remains absent, so the existing recorded manual universal-runtime-loop fallback is active.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-lint`; CLI help/docs/website parity policy loaded.
+- Execution decision: `local_critical_path` — one bounded correction in the assigned isolated worktree; this Pi session exposes no subagent tool, findings share credentials/router boundaries, and the user prohibited PR/external review.
+- TDD slices before production edits:
+  1. Prove a warehouse/outbox path beneath an in-project symlink resolving outside fails before `credentials test` creates any external directory/effect, while `allow_external_path=true` preserves explicit external access. Use temp directories only and no secret source/content.
+  2. Prove existing `safety.ValidateIdentifier` legacy credential names beginning `_` or `.` remain inspectable and removable.
+  3. Prove namespace `credentials --help`/`-h` ignores unknown trailing flags like the exact base.
+- Smallest implementation: add reusable realpath/nearest-existing-ancestor containment to `safety.ValidateLocalWritePath` at the app credential validation effect boundary; preserve lexical platform checks and explicit `allow_external_path`. Remove the new ASCII-leading restriction for credential/connector identifiers. Normalize credentials namespace help before Cobra parses its tail.
+- Verification: focused RED/GREEN, repeated and race credentials/security tests, safety path unit tests, exact base differential, full `internal/cli/...`, security/path suites, gofmt, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` because shared safety changes. Commit/push coherent checkpoints; no real credentials/services, dependencies, PR, or external review.
+
+## Prior local security review correction
 
 - Session: `issue-429-action-name-boundary-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T151236Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`.
 - Exact correction start: `36b2e388d78aea5e79dac63b10f6310d25002198`.

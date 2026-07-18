@@ -2,6 +2,20 @@
 
 Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`.
 
+## Bounded review correction checklist
+
+Invocation `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `758b059bbeb54032dbcd1b9a2a540ca83058861b`.
+
+- [x] Read `/tmp/pm-397-review-429.log` and accept all HIGH/MEDIUM/LOW findings.
+- [x] Update PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE before production edits.
+- [ ] Focused RED proves symlink escape, legacy leading `_`/`.` inspect/remove regression, and namespace help-tail regression.
+- [ ] Symlink-resolved warehouse/outbox escape fails before any external filesystem effect without opt-in.
+- [ ] Explicit `allow_external_path=true` semantics and platform behavior remain supported.
+- [ ] Legacy names accepted by `safety.ValidateIdentifier`, including leading `_` and `.`, remain inspectable/removable.
+- [ ] `credentials --help` and `-h` ignore unknown trailing flags like exact base.
+- [ ] Focused, repeated, race, security, exact base differential, full CLI, safety path, gofmt, vet, full tests, build, and `make verify` pass.
+- [ ] No secret material, real credentials/services, dependencies, PR, or external review.
+
 ## TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.

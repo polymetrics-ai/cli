@@ -16,8 +16,15 @@
   "correctionInvocationSession": "issue-429-action-name-boundary-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T151236Z",
   "correctionStartedAt": "20260718T151236Z",
   "correctionStartingHead": "36b2e388d78aea5e79dac63b10f6310d25002198",
-  "status": "complete_verified_pushed_no_pr",
-  "verificationPassed": true,
+  "reviewCorrectionInvocationSession": "issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z",
+  "reviewCorrectionStartedAt": "20260718T155702Z",
+  "reviewCorrectionStartingHead": "758b059bbeb54032dbcd1b9a2a540ca83058861b",
+  "reviewCorrectionModel": "openai-codex/gpt-5.6-sol",
+  "reviewCorrectionThinking": "high",
+  "reviewCorrectionSource": "/tmp/pm-397-review-429.log",
+  "reviewCorrectionFindingsAccepted": ["HIGH_symlink_escape", "MEDIUM_legacy_names", "LOW_namespace_help_tail"],
+  "status": "review_correction_tdd_pending",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -28,6 +35,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "bounded-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "one bounded correction in the assigned isolated worktree; this Pi session exposes no subagent tool, all accepted findings share credentials/router safety boundaries, and the user prohibited PR and external review"
+    },
     {
       "cycle": "plan",
       "decision": "local_critical_path",
@@ -91,5 +103,6 @@
   "push": "all planning, RED, implementation, correction, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
-  "safety": "no real secrets, interactive secret entry, credentialed external checks, optional services, dependencies, destructive external actions, or unrelated writes; tests use opaque synthetic fixtures without logging"
+  "reviewCorrectionVerification": "pending focused RED before production edits",
+  "safety": "no real secrets, interactive secret entry, credentialed external checks, optional services, dependencies, destructive external actions, or unrelated writes; correction tests use temp paths and inspect filesystem existence only"
 }

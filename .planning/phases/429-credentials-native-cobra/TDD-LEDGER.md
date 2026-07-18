@@ -11,7 +11,20 @@ Doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-research` generate
 
 Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-documentation`, `golang-spf13-cobra`.
 
-## Local security review correction ledger
+## Bounded independent review correction ledger
+
+Session `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact correction start `758b059bbeb54032dbcd1b9a2a540ca83058861b`. Review `/tmp/pm-397-review-429.log` accepted in full. GSD doctor/list passed; the adapter still lacks the documented programming-loop command, so manual universal-loop fallback remains active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-lint`.
+
+| Step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| R0 | Review/plan | Record HIGH symlink escape, MEDIUM legacy-name stranding, LOW help-tail incompatibility and verification plan before production edits | Complete |
+| R1 | RED | Focused temp-only tests: symlink escape has no external warehouse/outbox effect unless explicit opt-in; `_`/`.` legacy names inspect/remove; namespace help ignores trailing unknown flags | Pending |
+| R2 | GREEN | Reusable realpath/nearest-existing-ancestor containment; restore `ValidateIdentifier` credential-name compatibility; namespace-help tail normalization | Pending |
+| R3 | Verify | Focused/repeated/race/security/base differential/full CLI/path tests plus gofmt/vet/full tests/build/`make verify` | Pending |
+
+Tests must not use, inspect, print, summarize, or store secret content and must not contact services. The path test checks only filesystem existence outside the project.
+
+## Prior local security review correction ledger
 
 Session `issue-429-action-name-boundary-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T151236Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact correction start `36b2e388d78aea5e79dac63b10f6310d25002198`.
 
