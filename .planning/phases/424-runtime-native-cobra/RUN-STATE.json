@@ -1,0 +1,33 @@
+{
+  "phase": 424,
+  "issue": 424,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "branch": "refactor/424-runtime-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "baseHeadAtDispatch": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "baseHeadAtPlanning": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "verificationPassed": false,
+  "status": "planning_checkpoint_created_pre_production",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-424-runtime-native-cobra.prompt",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop_plus_pi_pm_gsd_loop_prompt",
+    "skillGap": ".pi/skills/go-implementation/SKILL.md missing; global Go skills loaded"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "fourth serialized Phase 9 namespace worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    }
+  ],
+  "pullRequest": null,
+  "reviewRoute": {
+    "claude": "pending_sub_pr_creation",
+    "copilot": "not_requested",
+    "fallback": "none",
+    "coverageStatus": "pending"
+  }
+}
