@@ -1,6 +1,10 @@
 # Phase 429 Summary
 
-Status: fourth bounded correction complete, verified, and pushed from exact head `0d70335f37456f42432b3c502860f7b43231ed98`; HIGH final-file symlink finding closed; no PR or review.
+Status: final bounded correction in progress from exact head `80246e42f508f685d281fecbcc3735eadcf271a9`; MEDIUM leading-hyphen compatibility and LOW overwrite-temp cleanup findings accepted; no services, PR, or review.
+
+## Final bounded correction
+
+Planning is complete before production edits. Strict RED will cover exact-base-compatible `credentials add -legacy --connector sample extra-positional` behavior while retaining raw-carrier rejection and no later name discovery, plus cleanup of an already-open overwrite raw temp when the final temp open is rejected. The smallest planned changes are unconditional private ownership and pre-action validation of a leading-hyphen first name, and immediate overwrite cleanup registration after raw-temp open. Verification remains pending.
 
 ## Fourth bounded correction
 

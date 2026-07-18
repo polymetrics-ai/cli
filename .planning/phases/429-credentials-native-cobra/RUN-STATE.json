@@ -47,8 +47,13 @@
   "fourthCorrectionFindingsAccepted": ["HIGH_final_file_symlink_escape"],
   "fourthCorrectionEndedAt": "20260718T192338Z",
   "fourthCorrectionEndingImplementationHead": "bc13b768d03f27f87f1f6bc262edf890925d58a7",
-  "status": "complete_verified_pushed_no_pr_no_review",
-  "verificationPassed": true,
+  "finalCorrectionInvocationSession": "issue-429-final-bounded-correction-pi-openai-20260718T194756Z",
+  "finalCorrectionStartedAt": "20260718T194756Z",
+  "finalCorrectionStartingHead": "80246e42f508f685d281fecbcc3735eadcf271a9",
+  "finalCorrectionSource": "/tmp/pm-397-rereview4-429.log",
+  "finalCorrectionFindingsAccepted": ["MEDIUM_leading_hyphen_extra_positional", "LOW_overwrite_raw_temp_cleanup"],
+  "status": "final_correction_in_progress",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -59,6 +64,11 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "final-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "two bounded corrections share credentials and app critical paths; this runtime exposes no subagent tool, and the user prohibited services, PR, and external review"
+    },
     {
       "cycle": "fourth-correction-summary",
       "decision": "local_critical_path",

@@ -2,6 +2,23 @@
 
 Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`.
 
+## Final bounded correction checklist
+
+Invocation `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`; exact start `80246e42f508f685d281fecbcc3735eadcf271a9`.
+
+- [x] Read `/tmp/pm-397-rereview4-429.log` and accept the MEDIUM leading-hyphen compatibility and LOW overwrite-temp cleanup findings.
+- [x] Run GSD doctor/list, record missing programming-loop/manual fallback, load required skills/policies, and update issue plan/TDD/verification artifacts before production edits.
+- [ ] RED: leading-hyphen add with later connector/global flags and an ignored extra positional fails at current head but exact base succeeds.
+- [ ] RED: overwrite final-temp open rejection leaves the already-open raw temp at current head.
+- [ ] GREEN: every leading-hyphen first required-name token is privately owned and validated before action execution; later flags/ignored positionals work, raw carrier remains usage-rejected, and later names are never discovered.
+- [ ] GREEN: overwrite cleanup is active immediately after raw-temp open and removes it when final-temp open fails.
+- [ ] Focused/repeated/race CLI/app/localwrite and exact-start differential pass without private data output.
+- [ ] Broader relevant packages, gofmt, vet, build, diff/scope/dependency guards pass.
+- [ ] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified; no checked-in docs/website delta.
+- [ ] Planning, RED, GREEN, and final evidence checkpoints committed and pushed; no service, dependency, PR, or external review.
+
+Result: in progress; `verificationPassed=false` until every declared final-correction gate passes.
+
 ## Fourth bounded correction checklist
 
 Invocation `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`; exact start `0d70335f37456f42432b3c502860f7b43231ed98`.

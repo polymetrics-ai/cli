@@ -10,6 +10,19 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, this session exposes no subagent tool, and the user bounded delivery to #429 with no PR or external review.
 
+## Final bounded correction
+
+- Session: `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`.
+- Exact correction start: `80246e42f508f685d281fecbcc3735eadcf271a9`; rereview source: `/tmp/pm-397-rereview4-429.log`; MEDIUM leading-hyphen compatibility and LOW overwrite-temp cleanup findings accepted.
+- GSD: doctor/list pass; `scripts/gsd prompt programming-loop init --phase 429 --dry-run` remains unavailable, so the manual universal-runtime-loop fallback is active. Execution decision: `local_critical_path` — two bounded corrections share the credentials/app critical path, this runtime exposes no subagent tool, and the user prohibited services, PR, and external review.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, and `golang-safety`; CLI help/docs/website parity policy loaded.
+- RED before production edits:
+  1. `credentials add -legacy --connector sample extra-positional` with later global flags must preserve exact-base success and first-token ownership; existing raw-carrier and invalid-first-token matrices must continue to prove fail-closed rejection and no later positional-name discovery.
+  2. An overwrite run that opens its raw temp and then fails to open a symlinked final temp must leave neither an external effect nor the already-opened raw temp.
+- Smallest implementation: privately carry every leading-hyphen first required-name token regardless of later positionals, remove only that first token before ordinary legacy-tail normalization, reject raw carrier spellings first, and validate the private first token before Cobra executes an action. Register overwrite cleanup immediately after the raw temp opens so every later open failure removes it.
+- Preserve ignored extra positionals, later native/global flags, leading-hyphen legacy names, raw-carrier rejection, no later name discovery, modes, rooted symlink confinement, and existing nil-policy/external-policy behavior.
+- Verification: private focused RED/GREEN first; repeated and race CLI/app/localwrite; exact-start base differential; broader CLI/app/safety; full relevant packages; gofmt, vet, build, diff/scope/dependency guards. Commit/push planning, RED, GREEN, and final evidence checkpoints. No private data display, services, dependencies, PR, or review.
+
 ## Fourth bounded correction
 
 - Session: `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`.
