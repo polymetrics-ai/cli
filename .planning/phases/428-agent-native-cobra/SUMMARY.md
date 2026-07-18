@@ -1,6 +1,14 @@
 # Phase 428 Summary
 
-Status: implementation complete, fully verified, and pushed; no PR created.
+Status: implementation complete, accepted High correction fully verified and pushed; no PR created.
+
+## Accepted High correction
+
+- Correction session: `issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z`; model/thinking `openai-codex/gpt-5.6-sol`/`high`; exact start `746b2a98b01ba1e119974e31569fc8deb06cd897`; end `20260718T134141Z`.
+- Added an agent-only pre-Cobra action boundary: non-exact agent/image action heads are preserved behind `--`, so Cobra cannot discover later `image build|pull|ensure` nodes.
+- Image-parent invalid tails now return the exact legacy unknown-subcommand usage error before runtime lookup. Exact `plan`, `image`, `build`, `pull`, `ensure`, agent help, and post-action unknown/help/literal behavior remain intact.
+- Test-first RED (`0.587s`) exposed assigned unknown/help-like and image literal bypasses. GREEN passes 30 fake-runtime cases with zero lookups/files/runs; focused (`4.446s`), race (`1.679s`), repeated (`0.582s`), 35/35 exact base differential, full CLI (`234.335s`), gofmt, vet, build, diff, scope, and dependency gates pass.
+- Correction commits: `46556e9d` planning, `5cc5fa40` RED, `7ff7debf` implementation, plus final artifact checkpoint. No containers/services, dependencies, secrets, image actions, docs/website/golden changes, PR, or external review.
 
 ## Identity
 

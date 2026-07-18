@@ -9,14 +9,14 @@
   "startingHead": "235233f7cfde4a24612be6b0f95fb37a412d388a",
   "invocationSession": "issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z",
   "startedAt": "20260718T124925Z",
-  "endedAt": null,
+  "endedAt": "20260718T134141Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
   "correctionInvocationSession": "issue-428-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T132841Z",
   "correctionStartedAt": "20260718T132841Z",
   "correctionStartingHead": "746b2a98b01ba1e119974e31569fc8deb06cd897",
-  "status": "high_finding_correction_in_progress",
-  "verificationPassed": false,
+  "status": "complete_verified_pushed",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -61,11 +61,26 @@
       "cycle": "high-finding-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "the focused fake-runtime table failed before production edits: assigned unknown/help-like heads and image literal boundaries reached later actions or runtime lookup while bare and short forms already failed closed"
+    },
+    {
+      "cycle": "high-finding-correction-green",
+      "decision": "local_critical_path",
+      "reason": "the agent-scoped pre-Cobra exact-action boundary and image-parent pre-runtime rejection made all 30 fake-runtime cases fail closed while preserving exact actions, help, and post-action compatibility"
+    },
+    {
+      "cycle": "high-finding-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused and race agent tests, repeated boundary tests, 35-case exact base differential, full CLI, gofmt, vet, build, diff, scope, and dependency gates passed without containers or services"
+    },
+    {
+      "cycle": "high-finding-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "accepted High correction and exact local evidence were recorded; implementation checkpoints were pushed and the user prohibited PR and external review"
     }
   ],
   "red": "initial focused agent/router build RED plus correction RED: TestAgentLeadingInvalidActionTokensCannotReachImageRuntime failed before correction production edits in 0.587s because assigned unknown/help-like and image literal heads reached later actions or runtime lookup",
-  "green": "focused 4.408s; expanded 4.480s; final 4.386s; agent/router/golden 11.408s; full CLI 235.686s",
-  "verification": "focused race, final golden, runtime dependency-free tests, 25-case exact legacy differential, built help/plan/error checks, docs generation/validation, website generation, gofmt, vet, build, full repository tests, make verify, and dependency/scope guards passed",
+  "green": "initial focused 4.408s/4.480s/4.386s plus correction focused 4.446s, correction race 1.679s, repeated boundary 0.582s; all 30 correction fake-runtime cases pass with zero lookups/files/runs",
+  "verification": "initial full gates plus correction 35-case exact base differential, full CLI 234.335s, gofmt, vet, build, diff, scope, and dependency guards passed",
   "files": [
     "internal/cli/cobra_router.go",
     "internal/cli/cobra_router_test.go",
@@ -84,9 +99,13 @@
     "6cdaea60 test(cli): specify native cobra agent contract",
     "4e1b20f3 refactor(cli): nativize agent namespace",
     "75e0d732 test(cli): harden agent image validation",
-    "docs(planning): record agent cobra verification (final handoff commit)"
+    "docs(planning): record agent cobra verification (initial final handoff commit)",
+    "46556e9d docs(planning): plan agent action boundary fix",
+    "5cc5fa40 test(cli): expose agent action discovery bypass",
+    "7ff7debf fix(cli): guard agent action discovery boundary",
+    "docs(planning): record agent action boundary correction (final handoff commit)"
   ],
-  "push": "all planning, red, implementation, hardening, and final verification checkpoints pushed to origin/refactor/428-agent-native-cobra",
+  "push": "all initial and correction planning, red, implementation, hardening, and final verification checkpoints pushed to origin/refactor/428-agent-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
   "safety": "no secrets, credentials, optional services, Podman/Docker execution, image operations, worker behavior changes, dependencies, or external writes; make verify local smoke followed plan-preview-approval-run",

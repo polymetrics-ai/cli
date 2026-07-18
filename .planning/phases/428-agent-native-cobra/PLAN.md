@@ -86,6 +86,10 @@ Parser ownership changes but command names, flags, output envelopes, canonical m
 
 No secrets, credentials, services, dependencies, generic write tools, destructive/admin actions, production deployment, image pull/build, Podman/Docker invocation, quality-gate reduction, external review, PR, or merge. Image tests use injected fakes and temporary directories only. Worker/RLM execution is untouched. The required `make verify` may run only its existing dependency-free/local sample smoke under its established safety gates.
 
+## High-finding correction completion
+
+The accepted High is fixed from exact correction start `746b2a98b01ba1e119974e31569fc8deb06cd897`. A pre-Cobra agent-only boundary now inserts a literal separator before every non-exact agent/image action head, including an existing literal `--`; the image parent rejects the preserved invalid head with the legacy-specific usage error before any runtime lookup. Exact actions/help and post-action unknown/help/literal behavior remain unchanged. Thirty fake-runtime cross-product cases pass with zero lookups/files/runs, focused and race gates pass, and a 35-case base differential matches exact exit/stdout/stderr. Full CLI, gofmt, vet, build, diff, scope, and dependency gates pass. No container/service, dependency, docs/website/golden, secret, PR, or external review activity occurred.
+
 ## Completion note
 
 The bounded slice completed within scope. Native Cobra owns `agent`, `plan`, `image`, all three image actions, and positional help; `plan --request` is typed and only the agent handler's `parseFlags` call is removed. A context-aware injected runtime covers build/pull/ensure without executing Podman/Docker, while bounded request/root/Podman-bin/image validation runs before external lookup/execution. Agent-scoped trailing-help and literal-separator compatibility remains exact.
