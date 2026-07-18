@@ -12,12 +12,12 @@ Invocation `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`; exac
 - [x] RED: overwrite final-temp open rejection left the already-open raw temp in truncate and truncate-create cases (app package `3.576s`).
 - [x] GREEN: every leading-hyphen first required-name token is privately owned and validated before action execution; later flags/ignored positionals work, raw carrier remains usage-rejected, and later names are never discovered. Focused and repeated ×5 CLI passed (`19.187s`/`97.954s`).
 - [x] GREEN: overwrite cleanup is active immediately after raw-temp open and removes it when final-temp open fails. Focused and repeated ×5 app passed (`3.362s`/`16.976s`).
-- [ ] Focused/repeated/race CLI/app/localwrite and exact-start differential pass without private data output. Focused/repeated and race are green (race CLI/app/localwrite `214.993s`/`34.800s`/`1.406s`); differential pending.
-- [ ] Broader relevant packages, gofmt, vet, build, diff/scope/dependency guards pass.
-- [ ] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified; no checked-in docs/website delta.
-- [ ] Planning, RED, GREEN, and final evidence checkpoints committed and pushed; no service, dependency, PR, or external review.
+- [x] Focused/repeated/race CLI/app/localwrite and exact-start differential pass without private data output. Race CLI/app/localwrite passed (`214.993s`/`34.800s`/`1.406s`); connector writes ×5/race passed (`0.471s`/`1.364s`); exact parent-base/start/head exits were `0/1/0`, with base/head stdout and stderr byte-identical.
+- [x] Broader relevant packages passed: CLI `289.768s`, app `30.339s`, safety `0.320s`, connectors `0.474s`; gofmt, `go vet ./...`, `go build ./cmd/pm`, diff/scope/dependency guards passed.
+- [x] Runtime help/manual/website/generated surfaces remain unchanged or parity-verified: topic/bare/long-help were byte-identical at 1252 bytes with empty stderr, invalid action exited 2, and checked-in docs/website scope is clean.
+- [x] Planning, RED, and GREEN checkpoints committed and pushed; final evidence checkpoint prepared for push. No service, dependency, PR, or external review.
 
-Result: in progress; `verificationPassed=false` until every declared final-correction gate passes.
+Result: pass; `verificationPassed=true` for the full user-declared final-correction gate set.
 
 ## Fourth bounded correction checklist
 

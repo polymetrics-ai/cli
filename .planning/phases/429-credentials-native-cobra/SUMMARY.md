@@ -1,10 +1,12 @@
 # Phase 429 Summary
 
-Status: final bounded correction in progress from exact head `80246e42f508f685d281fecbcc3735eadcf271a9`; MEDIUM leading-hyphen compatibility and LOW overwrite-temp cleanup findings accepted; no services, PR, or review.
+Status: final bounded correction complete and verified from exact head `80246e42f508f685d281fecbcc3735eadcf271a9`; MEDIUM leading-hyphen compatibility and LOW overwrite-temp cleanup findings closed; no services, PR, or review.
 
 ## Final bounded correction
 
-Planning is complete before production edits. Strict RED will cover exact-base-compatible `credentials add -legacy --connector sample extra-positional` behavior while retaining raw-carrier rejection and no later name discovery, plus cleanup of an already-open overwrite raw temp when the final temp open is rejected. The smallest planned changes are unconditional private ownership and pre-action validation of a leading-hyphen first name, and immediate overwrite cleanup registration after raw-temp open. Verification remains pending.
+Strict RED first showed the leading-hyphen add compatibility case exiting 1 and both non-deduped overwrite final-open failures leaving raw temps. The router now privately owns every leading-hyphen first required-name token independent of later positionals, rejects raw carriers first, and validates that private token before action execution. Valid legacy `-legacy` names preserve later typed/global flags and ignored positionals; invalid flag-like first tokens cannot discover later names. App overwrite cleanup now starts immediately after raw-temp open, covering final-temp open failure.
+
+Focused, repeated ×5, race CLI/app/localwrite/connectors, exact base/start/head differential, full relevant packages, help parity, gofmt, vet, build, diff, scope, and dependency checks passed. Differential exits were parent base `0`, correction start `1`, final head `0`, with byte-identical base/head output. Implementation head: `74e8cffe477ce713526963c6fd4cb37dcc973b84`. No private data display, service, dependency, checked-in docs/website delta, PR, or external review.
 
 ## Fourth bounded correction
 

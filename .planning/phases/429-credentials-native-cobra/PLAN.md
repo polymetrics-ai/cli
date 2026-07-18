@@ -23,6 +23,12 @@ Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace
 - Preserve ignored extra positionals, later native/global flags, leading-hyphen legacy names, raw-carrier rejection, no later name discovery, modes, rooted symlink confinement, and existing nil-policy/external-policy behavior.
 - Verification: private focused RED/GREEN first; repeated and race CLI/app/localwrite; exact-start base differential; broader CLI/app/safety; full relevant packages; gofmt, vet, build, diff/scope/dependency guards. Commit/push planning, RED, GREEN, and final evidence checkpoints. No private data display, services, dependencies, PR, or review.
 
+### Final correction completion
+
+Completed at implementation head `74e8cffe477ce713526963c6fd4cb37dcc973b84` on `20260718T200436Z`. Every leading-hyphen first required-name token is privately owned independent of later positionals, with raw carrier rejection and private-name validation before Cobra action execution. Valid `-legacy` names preserve later typed/global flags and ignored extra positionals; flag-like invalid first tokens remain rejected without later-name discovery. Overwrite cleanup is registered immediately after raw-temp open, so final-temp open rejection closes and removes the raw temp.
+
+Strict RED reproduced both findings. Focused, repeated ×5, race CLI/app/localwrite/connectors, exact parent-base/start/head differential, full relevant packages, help parity, gofmt, vet, build, diff, scope, and dependency gates passed. The exact differential was base `0`, correction start `1`, final head `0`, with byte-identical base/head stdout and stderr. No private data display, service, dependency, checked-in CLI docs/website delta, PR, or external review occurred.
+
 ## Fourth bounded correction
 
 - Session: `issue-429-fourth-bounded-correction-pi-openai-20260718T185126Z`.

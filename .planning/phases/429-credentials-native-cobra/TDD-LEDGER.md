@@ -20,9 +20,19 @@ Session `issue-429-final-bounded-correction-pi-openai-20260718T194756Z`; exact c
 | X0 | Review/plan | Record both accepted findings, first-token ownership and early-validation design, overwrite raw-temp cleanup lifetime, RED cases, differential, and verification/checkpoint sequence before production edits | Complete |
 | X1 | RED | `go test ./internal/cli -run 'TestCredentials(AddLeadingHyphenNameParsesLaterSourceFlagsAndIgnoresExtraPositionals|RawInternalNameCarrierFailsClosed|LeadingInvalidNameTokensCannotDiscoverLaterNames)$' -count=1`; `go test ./internal/app -run '^TestWarehouseMaterializationRejectsFinalFileSymlinkEscape$' -count=1` | Failed as required: leading-hyphen add exited 1 while raw-carrier/no-discovery guards stayed green (CLI package `23.649s`); overwrite truncate and truncate-create left the opened raw temp (app package `3.576s`) |
 | X2 | GREEN | Carry every leading-hyphen first name privately, validate it before action execution, and register overwrite cleanup immediately after raw-temp open | Pass: focused CLI/app/safety green (`19.187s`/`3.362s`/`0.473s`); repeated ×5 CLI/app green (`97.954s`/`16.976s`); race CLI/app/localwrite green (`214.993s`/`34.800s`/`1.406s`) |
-| X3 | Verify | Focused/repeated/race CLI/app/localwrite, exact-base differential, broader relevant packages, gofmt/vet/build/diff/scope/dependency guards | Pending |
+| X3 | Verify | Focused/repeated/race CLI/app/localwrite, exact-base differential, broader relevant packages, gofmt/vet/build/diff/scope/dependency guards | Pass: connector local-write ×5/race `0.471s`/`1.364s`; differential base/start/head `0/1/0` and base/head byte-identical; full relevant CLI/app/safety/connectors `289.768s`/`30.339s`/`0.320s`/`0.474s`; help 3/3 exact, invalid 2; gofmt/vet/build/diff/scope/dependency clean |
 
-Tests use temporary roots, config-only credentials, synthetic records, and non-sensitive sentinel bytes. They must not print private fixture content or contact services.
+Tests use temporary roots, config-only credentials, synthetic records, and non-sensitive sentinel bytes. They did not print private fixture content or contact services.
+
+### Final correction evidence
+
+- RED: CLI `23.649s`, with the compatibility case exiting 1 and raw/no-discovery guards green; app `3.576s`, with both non-deduped overwrite final-open failures leaving raw temps.
+- GREEN: focused CLI/app/safety `19.187s`/`3.362s`/`0.473s`; repeated ×5 CLI/app `97.954s`/`16.976s`; race CLI/app/localwrite `214.993s`/`34.800s`/`1.406s`; connector write ×5/race `0.471s`/`1.364s`.
+- Differential: exact parent base `0f1ec1e8` exit 0, correction start `80246e42` exit 1, final head exit 0; base/head stdout and stderr byte-identical, 46/0 bytes; resulting `-legacy` metadata inspect succeeded without private values.
+- Full relevant packages: CLI `289.768s`, app `30.339s`, safety `0.320s`, connectors `0.474s`.
+- Gofmt, `go vet ./...`, `go build ./cmd/pm`, start-range/current diff checks, unchanged dependency graph, and clean connector-def/docs/website scope passed.
+- Runtime help topic/bare/long-help were byte-identical at 1252 bytes with empty stderr; invalid action exited 2.
+- Checkpoints: `a717fb6d` planning, `fc49483d` RED, `74e8cffe` GREEN; final evidence checkpoint prepared for push.
 
 ## Fourth bounded correction ledger
 

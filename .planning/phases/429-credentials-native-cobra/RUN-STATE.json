@@ -52,8 +52,10 @@
   "finalCorrectionStartingHead": "80246e42f508f685d281fecbcc3735eadcf271a9",
   "finalCorrectionSource": "/tmp/pm-397-rereview4-429.log",
   "finalCorrectionFindingsAccepted": ["MEDIUM_leading_hyphen_extra_positional", "LOW_overwrite_raw_temp_cleanup"],
-  "status": "final_correction_in_progress",
-  "verificationPassed": false,
+  "finalCorrectionEndedAt": "20260718T200436Z",
+  "finalCorrectionEndingImplementationHead": "74e8cffe477ce713526963c6fd4cb37dcc973b84",
+  "status": "complete_verified_pushed_no_pr_no_review",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -64,6 +66,16 @@
     "codeReviewPrompt": "passed_6027_bytes_executed_inline_boundary_finding_fixed_post_fix_clean"
   },
   "orchestrationDecisions": [
+    {
+      "cycle": "final-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "both accepted findings are closed, exact evidence is finalized, coherent checkpoints are pushed, and the user prohibited services, PR, and external review"
+    },
+    {
+      "cycle": "final-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused, repeated, race CLI/app/localwrite/connectors, exact base differential, full relevant packages, help parity, gofmt, vet, build, diff, scope, and dependency gates passed"
+    },
     {
       "cycle": "final-correction-green",
       "decision": "local_critical_path",
@@ -217,6 +229,7 @@
   ],
   "finalCorrectionRed": "focused pre-production CLI failed with leading-hyphen add exit 1 while raw-carrier/no-discovery guards stayed green; focused app failed because truncate and truncate-create final-temp rejection left the already-open overwrite raw temp; CLI 23.649s, app 3.576s",
   "finalCorrectionGreen": "focused CLI/app/safety passed in 19.187s/3.362s/0.473s; repeated x5 CLI/app passed in 97.954s/16.976s; race CLI/app/localwrite passed in 214.993s/34.800s/1.406s",
+  "finalCorrectionVerification": "pass: connector writes x5/race 0.471s/1.364s; exact parent-base/start/head exits 0/1/0 with byte-identical base/head output; full relevant CLI/app/safety/connectors 289.768s/30.339s/0.320s/0.474s; help routes exact and invalid action 2; gofmt, vet, build, diff, scope, and dependency gates clean",
   "red": "go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed before production edits: internal/cli/credentials_cli_test.go:22:9 undefined newCredentialsCobraCommand",
   "green": "focused credentials/router passed in 25.475s; focused race subset passed in 111.267s; golden passed in 5.513s; exact legacy differential matched 28/28 preserved cases",
   "verification": "post-correction focused 40.299s, repeated 62.622s, race 248.367s, golden 5.602s, full CLI 275.269s, exact preserved differential 28/28, built help/docs and website parity, gofmt, vet, build, full repository tests, and make verify passed; final make verify CLI 278.385s, certify 342.715s, lint 0, connector validation 547/0",
@@ -258,9 +271,12 @@
     "ec7064a8 fix(cli): enforce local credential effect boundaries",
     "810a35d6 docs(planning): plan fourth credentials correction",
     "f6a15a83 test(filesystem): expose final symlink escapes",
-    "bc13b768 fix(filesystem): confine local write effects"
+    "bc13b768 fix(filesystem): confine local write effects",
+    "a717fb6d docs(planning): plan final credentials correction",
+    "fc49483d test(credentials): expose final correction regressions",
+    "74e8cffe fix(credentials): preserve bounded legacy behavior"
   ],
-  "push": "all original and four correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
+  "push": "all original and five correction planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
   "secondCorrectionReviewRoute": "not_run_user_prohibited_review",
