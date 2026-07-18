@@ -66,7 +66,8 @@
   "targetedParserCorrectionStartingHead": "4870f53b028613fbc3632a404e9a382419d87f8a",
   "targetedParserCorrectionSource": "/tmp/pm-397-rereview6-429.log",
   "targetedParserCorrectionFindingsAccepted": ["MEDIUM_add_name_normalized_before_ownership"],
-  "status": "targeted_parser_correction_in_progress",
+  "targetedParserCorrectionRed": "focused pre-production CLI failed as required in 18.545s (wall 21.75s): all four known add-flag name cases captured an invalid normalized name=ignored token while raw-carrier and invalid action/name ownership guards remained green",
+  "status": "targeted_parser_correction_red_captured",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -82,6 +83,11 @@
       "cycle": "targeted-parser-correction-plan",
       "decision": "local_critical_path",
       "reason": "one bounded credentials parser-order correction shares the router and test critical path; this runtime exposes no subagent tool, and the user prohibited private output, services, dependencies, PR, and review"
+    },
+    {
+      "cycle": "targeted-parser-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "strict pre-production tests failed as required for all four safety-valid known add-flag names while raw-carrier rejection and invalid action/name ownership protections remained green"
     },
     {
       "cycle": "compatibility-correction-summary",

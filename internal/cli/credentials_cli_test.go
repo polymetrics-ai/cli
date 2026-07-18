@@ -439,6 +439,63 @@ func TestCredentialsSafetyValidPrivateNamesSupportAddInspectRemove(t *testing.T)
 	}
 }
 
+func TestCredentialsKnownAddFlagNamesPreserveLifecycleAndTailFlags(t *testing.T) {
+	for _, name := range []string{"--connector", "--from-env", "--value-stdin", "--config"} {
+		t.Run(name, func(t *testing.T) {
+			if err := safety.ValidateIdentifier(name, "credential"); err != nil {
+				t.Fatalf("test name must satisfy ordinary identifier validation: %v", err)
+			}
+
+			root := initCredentialsProject(t)
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+				"credentials", "add", "ownership-decoy", "--connector=sample"); err != nil {
+				t.Fatalf("seed ownership decoy: %v", err)
+			}
+
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+				"credentials", "add", name, "ownership-decoy",
+				"--connector", "sample", "--config", "mode=parser-order", "tail-ignored"); err != nil {
+				t.Fatalf("add known-flag credential name: %v", err)
+			}
+			a, err := app.Open(root)
+			if err != nil {
+				t.Fatalf("open temporary project after add: %v", err)
+			}
+			cred, err := a.InspectCredential(name)
+			if err != nil {
+				t.Fatalf("add did not preserve first-token ownership: %v", err)
+			}
+			if cred.Connector != "sample" || cred.Config["mode"] != "parser-order" {
+				t.Fatal("add did not parse the actual flags after the ignored positional")
+			}
+
+			stdout, err := executeCredentialsCommand(t, root, true, strings.NewReader(""),
+				"credentials", "inspect", name, "ownership-decoy")
+			if err != nil {
+				t.Fatalf("inspect known-flag credential name: %v", err)
+			}
+			if !strings.Contains(stdout, `"name": `+strconv.Quote(name)) {
+				t.Fatal("inspect did not preserve first-token ownership")
+			}
+
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+				"credentials", "remove", name, "ownership-decoy"); err != nil {
+				t.Fatalf("remove known-flag credential name: %v", err)
+			}
+			a, err = app.Open(root)
+			if err != nil {
+				t.Fatalf("open temporary project after remove: %v", err)
+			}
+			if _, err := a.InspectCredential(name); err == nil {
+				t.Fatal("remove left the first-token credential in place")
+			}
+			if _, err := a.InspectCredential("ownership-decoy"); err != nil {
+				t.Fatalf("remove discovered the ignored positional name: %v", err)
+			}
+		})
+	}
+}
+
 func TestCredentialsLegacyValidateIdentifierNamesRemainInspectableAndRemovable(t *testing.T) {
 	for _, name := range []string{"_legacy", ".legacy", "-legacy"} {
 		t.Run(name, func(t *testing.T) {

@@ -8,8 +8,8 @@ Invocation `issue-429-targeted-parser-order-correction-pi-openai-20260718T212111
 
 - [x] Read `/tmp/pm-397-rereview6-429.log` and accept the MEDIUM first-token ownership finding.
 - [x] Run GSD doctor/list, record unavailable programming-loop/manual fallback, load required skills/policies, and update issue artifacts before production edits.
-- [ ] RED: lifecycle tests for `--connector`, `--from-env`, `--value-stdin`, and `--config` as safety-valid names fail at exact correction start when followed by an ignored positional and later real flags.
-- [ ] RED preservation gate: raw-carrier rejection and invalid action/name ownership remain green.
+- [x] RED: lifecycle tests for `--connector`, `--from-env`, `--value-stdin`, and `--config` as safety-valid names failed at exact correction start when followed by an ignored positional and later real flags; all four add cases captured an invalid normalized `name=ignored` token (`18.545s`, wall `21.75s`).
+- [x] RED preservation gate: raw-carrier rejection and invalid action/name ownership remained green in the same focused run.
 - [ ] GREEN: capture/remove the required add name before StringArray space normalization and normalize only the remaining tail, without weakening private validation or action protections.
 - [ ] Focused, adversarial, repeated, race, exact parent-base/start/head differential, and full CLI pass without private output.
 - [ ] Runtime help/manual/website/generated parity remains unchanged or explicitly verified not applicable.
