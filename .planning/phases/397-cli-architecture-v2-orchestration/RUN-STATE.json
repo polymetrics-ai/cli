@@ -1,0 +1,71 @@
+{
+  "phase": "397-cli-architecture-v2-orchestration",
+  "parentIssue": 397,
+  "parentBranch": "feat/cli-architecture-v2",
+  "parentPR": 438,
+  "status": "active",
+  "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "currentHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "verificationPassed": false,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "programmingLoop": "blocked_unknown_command",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrator": {
+    "model": "openai-codex/gpt-5.6-sol",
+    "thinking": "xhigh",
+    "session": "4e6d3ae8-19fc-4c5a-8135-a3e6e4fa1cfc",
+    "runtime": "pi",
+    "mode": "active_owner"
+  },
+  "modelPolicy": {
+    "planningReviewVerification": {"model": "openai-codex/gpt-5.6-sol", "thinking": "xhigh"},
+    "implementationCorrection": {"model": "openai-codex/gpt-5.6-sol", "thinking": "high"}
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "continuation_recon",
+      "timestamp": "2026-07-18T08:39:06Z",
+      "decision": "read_only_spawned",
+      "issues": [424, 415],
+      "reason": "Independent Sol/xhigh exact-head reviewers reconciled existing PR #460 and #461 heads, evidence, focused checks, and actionable gaps before integration."
+    },
+    {
+      "cycle": "continuation_plan",
+      "timestamp": "2026-07-18T08:39:06Z",
+      "decision": "local_critical_path",
+      "issues": [397],
+      "reason": "Parent orchestrator owns shared plan, TDD ledger, verification checklist, run state, dependency queue, and promotion policy."
+    }
+  ],
+  "units": [
+    {
+      "issue": 424,
+      "branch": "refactor/424-runtime-native-cobra",
+      "startingHead": "8d696cd4c27fad6840e905917e7658e785fa5436",
+      "status": "correction_required",
+      "reviewSession": "0c6c0095-8c61-4498-8da9-0a775a6f2074"
+    },
+    {
+      "issue": 415,
+      "branch": "feat/415-otel-metrics",
+      "startingHead": "c6138292cfcc7205f7968a54b57a65f933a3c1fa",
+      "status": "correction_required",
+      "reviewSession": "ae95aa24-93a9-48e0-b69d-e31dd9e19891"
+    }
+  ],
+  "humanGates": [
+    "parent PR merge to main",
+    "issue 419 explicit optional beta dependency inclusion",
+    "new unapproved dependencies",
+    "auth scope changes",
+    "secrets or credential values",
+    "credentialed connector checks",
+    "destructive or production actions",
+    "quality gate reductions",
+    "reverse ETL execution outside plan-preview-approval-execute"
+  ],
+  "updatedAt": "2026-07-18T08:39:06Z"
+}
