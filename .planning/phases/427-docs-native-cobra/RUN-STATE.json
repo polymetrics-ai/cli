@@ -1,0 +1,49 @@
+{
+  "phase": 427,
+  "issue": 427,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/427-docs-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "ab847da28ebf78e5732ac1edcde8e39f92dc2656",
+  "invocationSession": "issue-427-pi-openai-codex-gpt-5.6-sol-high-20260718T112639Z",
+  "model": "openai-codex/gpt-5.6-sol",
+  "thinking": "high",
+  "status": "planned",
+  "verificationPassed": false,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_prompt_generated_and_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "verifyWorkPrompt": "pending"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "seventh serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later units, the session exposes no subagent tool, and the user restricted work to issue 427"
+    }
+  ],
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "files": [
+    ".planning/phases/427-docs-native-cobra/PLAN.md",
+    ".planning/phases/427-docs-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/427-docs-native-cobra/VERIFICATION.md",
+    ".planning/phases/427-docs-native-cobra/PROMPTS.md",
+    ".planning/phases/427-docs-native-cobra/RUN-STATE.json",
+    ".planning/phases/427-docs-native-cobra/SUMMARY.md"
+  ],
+  "commits": [],
+  "push": "pending",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "local_verification_only_external_review_prohibited",
+  "risks": [
+    "Cobra/pflag path and unknown-flag semantics must remain byte-compatible with the docs generator and validator",
+    "docs view and focused help/man generation remain deferred to planned later phases"
+  ]
+}
