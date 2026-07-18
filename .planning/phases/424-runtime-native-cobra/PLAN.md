@@ -147,3 +147,32 @@ Review-fix slices:
    - `git diff --check`
    - `git diff -- go.mod go.sum`
 6. Push review-fix commit(s) to `refactor/424-runtime-native-cobra`; update PR #460 body with review disposition and no Claude/Copilot route.
+
+## Positional-help correction — independent review finding
+
+Worker identity:
+
+- Session: `7050f706-72d2-47df-ac13-0b08979cc1ae`
+- Model: `openai-codex/gpt-5.6-sol`
+- Thinking: `high`
+- Starting HEAD: `8d696cd4c27fad6840e905917e7658e785fa5436`
+- Independent review: `/tmp/pm-397-review-424.log`
+- Execution decision: `local_critical_path` — bounded correction in the assigned isolated issue worktree; no independent subtask or subagent is needed for this single known regression.
+
+GSD evidence:
+
+- `scripts/gsd doctor` and `scripts/gsd list` passed; registry lists 69 commands.
+- `scripts/gsd prompt plan-phase 424-runtime-native-cobra --skip-research > /tmp/gsd-plan-phase-424-runtime-native-cobra-positional-help-correction.prompt` passed (10739 bytes).
+- `scripts/gsd prompt programming-loop init --phase 424-runtime-native-cobra --dry-run > /tmp/gsd-424-correction-programming-loop.prompt` remains unavailable: `scripts/gsd: unknown GSD command: programming-loop`; manual fallback uses `.pi/prompts/pm-gsd-loop.md` and `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`.
+
+Required skills loaded for this correction: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, and `golang-troubleshooting`.
+
+Correction scope and sequence:
+
+1. Extend `TestRuntimeBareHelpAndInvalidActionSemantics` first to prove `pm runtime help` matches canonical text help and `pm runtime help --json` returns the runtime `CommandManual`; retain the invalid-action usage assertion.
+2. Run the focused test before production edits and record the exact RED output.
+3. Add the smallest native hidden `runtime help` alias that renders the canonical runtime manual and preserves JSON behavior. Do not change accepted runtime doctor, endpoint sanitization, docs wording, or other namespace work.
+4. Run focused runtime/router/golden tests, runtimecheck package tests, built-binary text/JSON/help/invalid-action parity, docs/golden diff guards, and broader package checks needed by the changed CLI router.
+5. Update phase artifacts honestly, commit one coherent green correction, and push the existing `refactor/424-runtime-native-cobra` branch. Do not open another PR or request external review.
+
+Parity stance: runtime help text, manual docs, website docs, generated docs, and existing goldens are unchanged; only the previously accepted positional `help` alias is restored. Invalid runtime actions must continue to exit 2 with usage classification.

@@ -23,6 +23,7 @@ Rule anchors:
 - `golang-database`: runtime PostgreSQL docs/checks use parameterized/runtime-gated defaults; no schema or live credential changes.
 - `golang-lint`: run `go vet ./...` and avoid suppressions/quality-gate reduction.
 - `golang-code-style`: early returns, clear small helpers, semantic line breaks.
+- Positional-help correction additionally loads `golang-troubleshooting` to reproduce and isolate the known native-Cobra regression before fixing it.
 
 ## GSD command evidence
 
@@ -52,6 +53,17 @@ Result:
 - `plan-phase`: prompt written to `/tmp/gsd-plan-phase-424-runtime-native-cobra-review-fix.prompt` (10739 bytes).
 - `programming-loop`: still blocked by adapter registry (`scripts/gsd: unknown GSD command: programming-loop`); manual GSD fallback continues.
 
+Positional-help correction command refresh (session `7050f706-72d2-47df-ac13-0b08979cc1ae`, model `openai-codex/gpt-5.6-sol`, thinking `high`, starting HEAD `8d696cd4c27fad6840e905917e7658e785fa5436`):
+
+```bash
+scripts/gsd doctor
+scripts/gsd list
+scripts/gsd prompt plan-phase 424-runtime-native-cobra --skip-research > /tmp/gsd-plan-phase-424-runtime-native-cobra-positional-help-correction.prompt
+scripts/gsd prompt programming-loop init --phase 424-runtime-native-cobra --dry-run > /tmp/gsd-424-correction-programming-loop.prompt
+```
+
+Result: doctor/list pass with 69 commands; plan prompt written (10739 bytes); programming-loop remains unavailable (`scripts/gsd: unknown GSD command: programming-loop`), so the recorded manual GSD fallback continues.
+
 ## Red / green / refactor log
 
 | Step | Kind | Command / test | Result | Notes |
@@ -65,6 +77,10 @@ Result:
 | 6 | Review-fix red | `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1`; `go test ./internal/runtimecheck/... -count=1` | Fail | Missing-value pflag errors mapped to internal exit 1; DragonflyDB/Temporal endpoints reported raw userinfo/query/fragment. |
 | 7 | Review-fix green | `gofmt -w ...`; focused CLI/runtimecheck tests; golden refresh; website docs gen | Pass | Cobra parse errors now usage; endpoint sanitizer green; runtime help/docs/website/goldens intentionally updated. |
 | 8 | Review-fix full gate | `gofmt -w cmd internal`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `make verify`; diff/docs/runtime CLI checks | Pass | Full local gates, docs-generate diff, website generator, malformed flag smoke, and endpoint sanitizer smoke passed. |
+| 9 | Positional-help correction planning | Update PLAN/TDD-LEDGER/VERIFICATION/RUN-STATE before test or production edits | Green | Independent review finding, worker identity, scope, TDD sequence, parity stance, and verification plan recorded. |
+| 10 | Positional-help correction red | `go test ./internal/cli/ -run '^TestRuntimeBareHelpAndInvalidActionSemantics$' -count=1` | Fail as expected | Both `runtime help` and `runtime help --json` exit 2 as unknown commands before production edits; existing assertions continue to protect invalid-action usage behavior. |
+| 11 | Positional-help correction green | Add hidden native `runtime help` alias; run focused test and runtime/router/golden/runtimecheck checks | Pass | Positional text help is byte-identical to canonical help; JSON returns runtime `CommandManual`; invalid actions remain usage errors. |
+| 12 | Positional-help correction full gate | `gofmt -w cmd internal`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `make verify`; binary parity and diff guards | Pass | Full repository gates passed; no runtime services, credentials, dependencies, docs, website, or golden deltas. |
 
 ## Planned red tests
 
@@ -78,6 +94,33 @@ Result:
 - Extend `TestCobraRouterShellMapsGenuineCobraParseErrorsToUsage`: genuine Cobra/pflag parse errors (unknown flag, missing required flag value, invalid bool value) classify as usage while `cobraLegacyError` remains internal when a legacy handler returns matching text.
 - `TestRedactedConfigSanitizesAllRuntimeEndpoints`: `RedactedConfig` strips PostgreSQL userinfo/query/fragment and also strips DragonflyDB/Temporal userinfo/query/fragment/control chars.
 - `TestRuntimeCheckResultsSanitizeServiceEndpointsAndErrors`: DragonflyDB/Temporal `CheckResult.Endpoint` and `Error` fields do not leak userinfo/query/fragment/control chars from configured endpoints.
+
+## Positional-help correction planned red tests
+
+Extend `TestRuntimeBareHelpAndInvalidActionSemantics` with:
+
+- `Run([]string{"runtime", "help"}, ...)` exits 0 with empty stderr and output byte-identical to `pm help runtime`.
+- `Run([]string{"runtime", "help", "--json"}, ...)` exits 0 with empty stderr and a `CommandManual` envelope for command `runtime`.
+- Existing `Run([]string{"runtime", "bogus", "--json"}, ...)` continues to exit 2 with usage output and must not render a `CommandManual`.
+
+## Positional-help correction exact RED output
+
+```bash
+go test ./internal/cli/ -run '^TestRuntimeBareHelpAndInvalidActionSemantics$' -count=1
+```
+
+```text
+--- FAIL: TestRuntimeBareHelpAndInvalidActionSemantics (0.00s)
+    --- FAIL: TestRuntimeBareHelpAndInvalidActionSemantics/runtime_help (0.00s)
+        runtime_cli_test.go:55: Run([runtime help]) exit = 2, stderr = error: unknown command "help" for "pm runtime"
+    --- FAIL: TestRuntimeBareHelpAndInvalidActionSemantics/runtime_help_--json (0.00s)
+        runtime_cli_test.go:70: Run([runtime help --json]) exit = 2, stderr = error: unknown command "help" for "pm runtime"
+FAIL
+FAIL\tpolymetrics.ai/internal/cli\t0.538s
+FAIL
+```
+
+This RED was captured after test edits and before any production-code edit.
 
 ## Exact red outputs
 
@@ -130,6 +173,66 @@ FAIL
 FAIL	polymetrics.ai/internal/runtimecheck	0.449s
 FAIL
 ```
+
+## Positional-help correction exact GREEN outputs
+
+```bash
+gofmt -w internal/cli/cobra_router.go internal/cli/runtime_cli_test.go
+go test ./internal/cli/ -run '^TestRuntimeBareHelpAndInvalidActionSemantics$' -count=1
+```
+
+```text
+ok  \tpolymetrics.ai/internal/cli\t0.573s
+```
+
+```bash
+go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1
+go test ./internal/runtimecheck/... -count=1
+go test ./internal/cli/... -count=1
+go vet ./internal/cli/... ./internal/runtimecheck/...
+```
+
+```text
+ok  \tpolymetrics.ai/internal/cli\t17.302s
+ok  \tpolymetrics.ai/internal/runtimecheck\t0.445s
+ok  \tpolymetrics.ai/internal/cli\t192.383s
+# focused go vet emitted no output and exited 0
+```
+
+Built-binary parity script exercised `./pm help runtime`, `./pm runtime help`, `./pm runtime help --json`, `./pm runtime`, `./pm runtime --help`, `./pm runtime --json`, and `./pm runtime bogus --json`:
+
+```text
+text_help_bytes=807 text_alias_match=true bare_match=true flag_help_match=true
+json_alias=CommandManual/runtime bare_json=CommandManual/runtime
+invalid_action_exit=2 category=usage command_manual=False
+invalid_action_stderr='error: unknown command "bogus" for "pm runtime"'
+```
+
+The first parity-script attempt used the wrong JSON assertion path (`category` instead of `error.category`) and failed in the verification script only; the command output itself already contained the correct nested usage category. The corrected script above passed without a product-code change.
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test -timeout 20m ./...
+go build ./cmd/pm
+make verify
+```
+
+```text
+go test -timeout 20m ./... passed; notable packages included internal/cli 195.604s and internal/connectors/certify 345.354s.
+make verify passed; tail included:
+0 issues.
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 547 connector(s) checked, 0 findings
+```
+
+```bash
+git diff --check
+git diff -- go.mod go.sum
+git diff --name-only -- docs/cli website internal/cli/docs.go internal/cli/testdata/golden_transcripts.json
+```
+
+Result: all emitted no output; no dependency, docs, website, embedded-help, or golden delta.
 
 ## Exact green outputs
 

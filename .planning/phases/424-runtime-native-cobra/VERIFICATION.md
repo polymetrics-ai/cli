@@ -1,5 +1,30 @@
 # Phase 424 Verification
 
+## Positional-help correction checklist
+
+Worker: session `7050f706-72d2-47df-ac13-0b08979cc1ae`; model `openai-codex/gpt-5.6-sol`; thinking `high`; starting HEAD `8d696cd4c27fad6840e905917e7658e785fa5436`.
+
+- [x] Focused RED captured for `runtime help` and `runtime help --json` before production edits: both exited 2 as unknown commands (`go test ./internal/cli/ -run '^TestRuntimeBareHelpAndInvalidActionSemantics$' -count=1`, expected failure).
+- [x] `gofmt -w internal/cli/cobra_router.go internal/cli/runtime_cli_test.go`
+- [x] `go test ./internal/cli/... -run 'Runtime|CobraRouterShell|Golden' -count=1` — pass (`17.302s`).
+- [x] `go test ./internal/runtimecheck/... -count=1` — pass (`0.445s`).
+- [x] Built binary: `pm help runtime`, `pm runtime help`, `pm runtime help --json`, and invalid `pm runtime bogus --json` parity passed.
+- [x] Existing bare namespace and flag help remain green: `pm runtime`, `pm runtime --help`, `pm runtime --json`.
+- [x] Invalid runtime action exits 2 with nested usage category and no `CommandManual`.
+- [x] Golden/docs/manual/website artifacts unchanged; no delta applicable because canonical help content did not change.
+- [x] `go test ./internal/cli/... -count=1` — pass (`192.383s`).
+- [x] `go vet ./internal/cli/... ./internal/runtimecheck/...` — pass, no output.
+- [x] `go build ./cmd/pm` — pass, no output.
+- [x] Full gates: `gofmt -w cmd internal`; `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `make verify` — pass.
+- [x] `git diff --check` — pass, no output.
+- [x] `git diff -- go.mod go.sum` empty; no new dependencies.
+- [x] Runtime-backed checks not run; no services or credentials used. `make verify` used only its existing local temp-dir smoke.
+- [ ] Coherent green correction committed and existing branch pushed; no new PR/review request.
+
+Correction result: the hidden native positional alias restores canonical runtime text/JSON help. Built-binary output reported `text_alias_match=true`, `json_alias=CommandManual/runtime`, and `invalid_action_exit=2 category=usage command_manual=False`. Full `make verify` passed with `connectorgen validate: 547 connector(s) checked, 0 findings`. No runtime-backed integration test was run.
+
+One verification-script-only attempt initially asserted the JSON usage category at the top level; it failed because the established envelope stores it under `error.category`. The corrected parity script passed, and no product change was needed for that script correction.
+
 ## Required gate checklist
 
 - [x] `gofmt -w cmd internal`

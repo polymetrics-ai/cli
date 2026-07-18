@@ -48,7 +48,7 @@ func TestRuntimeBareHelpAndInvalidActionSemantics(t *testing.T) {
 		t.Fatalf("help runtime output missing runtime manual:\n%s", helpOut.String())
 	}
 
-	for _, args := range [][]string{{"runtime"}, {"runtime", "--help"}} {
+	for _, args := range [][]string{{"runtime"}, {"runtime", "--help"}, {"runtime", "help"}} {
 		t.Run(strings.Join(args, " "), func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
 			if code := Run(args, &stdout, &stderr); code != 0 {
@@ -63,22 +63,26 @@ func TestRuntimeBareHelpAndInvalidActionSemantics(t *testing.T) {
 		})
 	}
 
-	var manualOut, manualErr bytes.Buffer
-	if code := Run([]string{"runtime", "--json"}, &manualOut, &manualErr); code != 0 {
-		t.Fatalf("runtime --json exit = %d, stderr = %s", code, manualErr.String())
-	}
-	if manualErr.Len() != 0 {
-		t.Fatalf("runtime --json stderr = %q, want empty", manualErr.String())
-	}
-	var manual struct {
-		Kind    string `json:"kind"`
-		Command string `json:"command"`
-	}
-	if err := json.Unmarshal(manualOut.Bytes(), &manual); err != nil {
-		t.Fatalf("runtime --json stdout not JSON: %v — %s", err, manualOut.String())
-	}
-	if manual.Kind != "CommandManual" || manual.Command != "runtime" {
-		t.Fatalf("manual envelope = %+v, want runtime CommandManual", manual)
+	for _, args := range [][]string{{"runtime", "--json"}, {"runtime", "help", "--json"}} {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			if code := Run(args, &stdout, &stderr); code != 0 {
+				t.Fatalf("Run(%v) exit = %d, stderr = %s", args, code, stderr.String())
+			}
+			if stderr.Len() != 0 {
+				t.Fatalf("Run(%v) stderr = %q, want empty", args, stderr.String())
+			}
+			var manual struct {
+				Kind    string `json:"kind"`
+				Command string `json:"command"`
+			}
+			if err := json.Unmarshal(stdout.Bytes(), &manual); err != nil {
+				t.Fatalf("Run(%v) stdout not JSON: %v — %s", args, err, stdout.String())
+			}
+			if manual.Kind != "CommandManual" || manual.Command != "runtime" {
+				t.Fatalf("Run(%v) manual envelope = %+v, want runtime CommandManual", args, manual)
+			}
+		})
 	}
 
 	var badOut, badErr bytes.Buffer
@@ -87,6 +91,9 @@ func TestRuntimeBareHelpAndInvalidActionSemantics(t *testing.T) {
 	}
 	if !strings.Contains(badOut.String(), `"category": "usage"`) {
 		t.Fatalf("runtime bogus stdout missing usage JSON:\n%s", badOut.String())
+	}
+	if strings.Contains(badOut.String(), `"kind": "CommandManual"`) {
+		t.Fatalf("runtime bogus rendered contextual help instead of usage error:\n%s", badOut.String())
 	}
 }
 

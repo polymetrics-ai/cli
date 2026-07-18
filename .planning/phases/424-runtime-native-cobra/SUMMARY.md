@@ -41,6 +41,12 @@ Sub-PR #460 opened non-draft against `feat/cli-architecture-v2`; remote checks a
 - High security finding against `internal/worker/podman_cmd.go` / `internal/worker/submit.go` checked against PR diff: not changed by PR #460; disposition recorded as out-of-scope follow-up, no code fix here.
 - User disallowed Claude/Copilot; review route is human/parent-orchestrator only.
 
+## Positional-help correction
+
+Independent review found that native Cobra routing had dropped the legacy positional aliases `pm runtime help` and `pm runtime help --json`. Session `7050f706-72d2-47df-ac13-0b08979cc1ae` (`openai-codex/gpt-5.6-sol`, thinking `high`) started from exact HEAD `8d696cd4c27fad6840e905917e7658e785fa5436`, captured focused RED failures for both aliases, and added one hidden native `runtime help` command that delegates to the canonical runtime manual.
+
+Focused runtime/router/golden and runtimecheck tests passed. Built-binary checks confirmed positional text help matches `pm help runtime`, positional JSON help returns `CommandManual/runtime`, and `runtime bogus --json` still exits 2 with usage and no manual envelope. Full gofmt, vet, repository tests, build, and `make verify` passed. Canonical help, docs, website, goldens, and dependencies have no delta. No new PR or external review request was made.
+
 ## Safety
 
 No secrets requested or printed. No credentialed checks. No runtime services started. No dependency changes. No parent/shared orchestration edits. No merge.

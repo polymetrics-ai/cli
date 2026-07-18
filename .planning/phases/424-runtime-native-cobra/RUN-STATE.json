@@ -8,8 +8,15 @@
   "baseHeadAtDispatch": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "baseHeadAtPlanning": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "headAtReviewFixStart": "3ed74ba63ae25e069689da72c6d53ef374ebcbfe",
+  "headAtPositionalHelpCorrectionStart": "8d696cd4c27fad6840e905917e7658e785fa5436",
+  "positionalHelpCorrectionWorker": {
+    "sessionId": "7050f706-72d2-47df-ac13-0b08979cc1ae",
+    "model": "openai-codex/gpt-5.6-sol",
+    "thinking": "high",
+    "independentReviewLog": "/tmp/pm-397-review-424.log"
+  },
   "verificationPassed": true,
-  "status": "review_fix_local_verified_no_bot_review",
+  "status": "positional_help_correction_local_verified_pending_commit_push",
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -58,6 +65,26 @@
       "cycle": "review-fix-verify",
       "decision": "local_critical_path",
       "reason": "focused gates, gofmt, vet, full tests, build, make verify, docs/website/golden parity, diff-check, and go.mod/go.sum guard passed inline"
+    },
+    {
+      "cycle": "positional-help-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "single bounded independent-review correction in the assigned isolated issue worktree; no independent subtask or subagent needed"
+    },
+    {
+      "cycle": "positional-help-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused tests prove positional runtime text and JSON help aliases fail as unknown commands before production edits while retaining invalid-action usage assertions"
+    },
+    {
+      "cycle": "positional-help-correction-green",
+      "decision": "local_critical_path",
+      "reason": "small hidden native runtime help alias restores canonical text and JSON manual output; focused runtime, router, golden, runtimecheck, and invalid-action checks pass"
+    },
+    {
+      "cycle": "positional-help-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full gofmt, vet, repository tests, build, make verify, built-binary parity, and diff/dependency/docs guards passed without runtime services"
     }
   ],
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/460",

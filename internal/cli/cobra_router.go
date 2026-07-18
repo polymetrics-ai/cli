@@ -388,6 +388,26 @@ func newRuntimeCobraCommand(ctx context.Context, cfg config.Config, stdout io.Wr
 	}
 	setManualHelp(cmd, "runtime", stdout, jsonOut)
 	cmd.AddCommand(newRuntimeDoctorCobraCommand(ctx, cfg, stdout, jsonOut))
+	cmd.AddCommand(newRuntimeHelpCobraCommand(stdout, jsonOut))
+	return cmd
+}
+
+func newRuntimeHelpCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "help",
+		Hidden:        true,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return markCobraLegacyError(writeManual("runtime", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "runtime", stdout, jsonOut)
 	return cmd
 }
 
