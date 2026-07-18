@@ -35,6 +35,18 @@ Downstream artifact: test-first symlink-effect, legacy-name, and help-tail corre
 
 Verification result: pass. RED reproduced all findings in `6.546s`. Focused, repeated, race, security/path, exact base differential, full CLI/repository, built help, golden/manual, gofmt, vet, build, and `make verify` pass. No secret material, real credential/service, dependency, PR, or external review.
 
+## Second bounded correction snapshot
+
+Task: Accept all three findings in `/tmp/pm-397-rereview-429.log` from exact start `fae7d599668637bea345fe76877dd75e31dd2ad8`. Session `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; profile `Sol/high`.
+
+GSD route: doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-research` generated 10692 bytes; `programming-loop` remains unavailable, so the manual universal runtime loop is active. Execution decision: `local_critical_path` because the correction shares app/connectors/router safety seams, this runtime exposes no subagent tool, and PR/external review are prohibited.
+
+Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`. CLI help/docs/website parity policy is active.
+
+Downstream artifact: pending strict RED tests, runtime-only local-path normalization and explicit effect policy, Warehouse/Outbox boundary validation, Cobra leading-hyphen name/flag correction, actual state-file assertion, then full declared verification and committed/pushed evidence.
+
+Verification result: pending. No production edit may precede issue-artifact update and focused RED capture. No real credential, private fixture output, external service, dependency, PR, or external review.
+
 ## Verification and local review snapshot
 
 ```bash

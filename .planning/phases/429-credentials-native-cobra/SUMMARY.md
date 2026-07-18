@@ -1,6 +1,10 @@
 # Phase 429 Summary
 
-Status: complete, verified, and pushed; no PR created.
+Status: second bounded correction in progress from exact head `fae7d599668637bea345fe76877dd75e31dd2ad8`; no PR or external review.
+
+## Second bounded correction
+
+All three findings from `/tmp/pm-397-rereview-429.log` are accepted. Plan/TDD/verification/run-state artifacts were reopened before production edits. Pending strict RED covers selected-root relative effects, post-resolution path retargeting at Warehouse/Outbox `Check`, leading-hyphen add names with later flags and no later-name discovery, and required parsing of the actual state file. The intended fix is runtime-only path normalization, explicit non-secret local-write policy at the effect seam, a bounded Cobra name carrier, and the corrected state helper. Full shared-seam verification, commit, and push evidence remains pending.
 
 ## Bounded review correction
 

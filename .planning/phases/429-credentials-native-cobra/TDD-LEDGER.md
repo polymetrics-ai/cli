@@ -11,6 +11,19 @@ Doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-research` generate
 
 Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-documentation`, `golang-spf13-cobra`.
 
+## Second bounded correction ledger
+
+Session `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; profile `Sol/high`; exact correction start `fae7d599668637bea345fe76877dd75e31dd2ad8`. Rereview `/tmp/pm-397-rereview-429.log` accepted in full. GSD doctor/list passed and the plan prompt generated; the adapter still lacks `programming-loop`, so manual universal-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`.
+
+| Step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| S0 | Review/plan | Record all three findings, effect-boundary design, RED cases, broad shared-seam verification, and checkpoint sequence before production edits | Complete |
+| S1 | RED | Focused app/connectors/CLI tests for selected-root relative effects, post-resolution retargeting, leading-hyphen add flags/no discovery, and actual state-file assertions | Pending |
+| S2 | GREEN | Runtime-only path normalization, explicit non-secret local-write policy, Warehouse/Outbox effect-boundary validation, bounded Cobra name carrier, and required actual state file | Pending |
+| S3 | Verify | Focused/repeated/race/app/connectors/CLI/base differential/full repository plus gofmt/vet/build/`make verify` | Pending |
+
+Tests use temporary roots and synthetic inputs only. They must not print fixture values or contact external services. `verificationPassed` remains false until the complete declared gate exits 0.
+
 ## Bounded independent review correction ledger
 
 Session `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact correction start `758b059bbeb54032dbcd1b9a2a540ca83058861b`. Review `/tmp/pm-397-review-429.log` accepted in full. GSD doctor/list passed; the adapter still lacks the documented programming-loop command, so manual universal-loop fallback remains active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-lint`.

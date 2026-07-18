@@ -2,6 +2,24 @@
 
 Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `0f1ec1e89cdae761e9da06ab9906fcc641b38e0a`.
 
+## Second bounded correction checklist
+
+Invocation `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; profile `Sol/high`; exact start `fae7d599668637bea345fe76877dd75e31dd2ad8`.
+
+- [x] Read `/tmp/pm-397-rereview-429.log` and accept all three HIGH/MEDIUM/LOW findings.
+- [x] Run GSD doctor/list, generate the phase plan prompt, record missing programming-loop/manual fallback, and update issue artifacts before production edits.
+- [ ] RED: selected-root relative warehouse/outbox path effects occur under the selected root rather than cwd.
+- [ ] RED: path retargeting after credential resolution is rejected immediately at Warehouse/Outbox `Check`, with no external effect; explicit allow-external policy remains effective.
+- [ ] RED: safety-valid leading-hyphen add names parse later connector/source flags and cannot discover a later positional name.
+- [ ] RED: state-redaction helper requires and parses `.polymetrics/state/state.json`.
+- [ ] GREEN: runtime path normalization and explicit non-secret effect policy preserve persisted config, ordinary paths, defaults, and direct-call compatibility.
+- [ ] GREEN: Cobra name/flag boundary preserves exact first-token ownership and later flags.
+- [ ] Focused, repeated, race, app, connectors, CLI, exact-base differential, full repository, gofmt, vet, build, and `make verify` pass.
+- [ ] Runtime help/manual/website/golden surfaces are unchanged or parity-verified.
+- [ ] Commit and push all coherent checkpoints; no real credentials, private fixture output, external services, dependencies, PR, or external review.
+
+Result: in progress; `verificationPassed=false` until every declared gate passes.
+
 ## Bounded review correction checklist
 
 Invocation `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact start `758b059bbeb54032dbcd1b9a2a540ca83058861b`.

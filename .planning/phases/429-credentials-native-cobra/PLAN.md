@@ -10,6 +10,21 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, this session exposes no subagent tool, and the user bounded delivery to #429 with no PR or external review.
 
+## Second bounded correction
+
+- Session: `issue-429-second-bounded-correction-pi-openai-20260718T170705Z`; explicit profile `Sol/high`.
+- Exact correction start: `fae7d599668637bea345fe76877dd75e31dd2ad8`; rereview source: `/tmp/pm-397-rereview-429.log`; all three HIGH/MEDIUM/LOW findings accepted.
+- GSD: doctor/list pass and `plan-phase 429 --skip-research` generated 10692 bytes; the documented `programming-loop` command is still absent, so the manual universal-runtime-loop fallback remains active.
+- Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-troubleshooting`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`; CLI help/docs/website parity policy loaded.
+- Execution decision: `local_critical_path` — this is one serialized correction with shared app/connectors/router safety seams; no subagent tool is exposed, and the user prohibited PR/external review.
+- RED slices before production edits:
+  1. Selected project root differs from cwd: relative warehouse/outbox runtime paths must resolve and create effects beneath the selected root, never cwd.
+  2. Resolve a credential, retarget an in-project path before connector `Check`, then prove Warehouse/Outbox revalidate at the effect boundary and create no external effect unless explicit external access is carried.
+  3. Add a safety-valid leading-hyphen credential name with later connector/source flags while proving the first token remains the name and no later positional name can be discovered.
+  4. Require and parse the actual `.polymetrics/state/state.json` in the state-redaction helper.
+- Smallest implementation: normalize only project-relative local runtime paths in the cloned runtime config; carry an explicit non-secret local-write policy in `connectors.RuntimeConfig`; revalidate immediately before Warehouse/Outbox `Check` filesystem effects; replace the Cobra `--` tail boundary with an internal bounded-name carrier that keeps later flags parseable while preserving first-name ownership; correct the state helper path and existence requirement. Persisted credential config and ordinary/direct connector paths remain compatible.
+- Verification: focused RED/GREEN; repeated and race safety/app/connectors/CLI tests; built CLI and exact-base differential; full repository tests; gofmt, vet, build, and `make verify` because the shared safety/effect seam changes. Commit and push coherent plan, RED, GREEN, and final evidence checkpoints. No real credentials, private fixture output, external services, dependencies, PR, or external review.
+
 ## Bounded independent review correction
 
 - Session: `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`.
