@@ -25,6 +25,16 @@ Downstream artifact: test-only initial and correction RED checkpoints, `internal
 
 Verification result: pass. Initial focused GREEN passed. Local review then exposed a post-action name-discovery bypass; correction RED failed 8/10 cases before the fix, and corrected focused/repeated/race tests pass. Final full CLI (`275.269s`), preserved differential 28/28, built help/docs parity, website generation, gofmt, vet, build, full repository tests, and `make verify` pass. No real secret, credentialed external check, service, dependency, PR, or external review occurred.
 
+## Bounded review correction snapshot
+
+Task: Accept all findings in `/tmp/pm-397-review-429.log` from exact start `758b059bbeb54032dbcd1b9a2a540ca83058861b`. Session `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`.
+
+Execution: `local_critical_path`; this Pi runtime exposed no subagent tool, the accepted findings shared credentials/router boundaries, and the user prohibited PR/external review. GSD doctor/list passed; the adapter's documented programming-loop command remained absent, so the existing manual universal-loop fallback was used. Skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`.
+
+Downstream artifact: test-first symlink-effect, legacy-name, and help-tail corrections in `internal/safety`, `internal/app`, and `internal/cli`, plus finalized issue-local phase evidence.
+
+Verification result: pass. RED reproduced all findings in `6.546s`. Focused, repeated, race, security/path, exact base differential, full CLI/repository, built help, golden/manual, gofmt, vet, build, and `make verify` pass. No secret material, real credential/service, dependency, PR, or external review.
+
 ## Verification and local review snapshot
 
 ```bash

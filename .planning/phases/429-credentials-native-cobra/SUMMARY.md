@@ -2,6 +2,16 @@
 
 Status: complete, verified, and pushed; no PR created.
 
+## Bounded review correction
+
+From exact correction start `758b059bbeb54032dbcd1b9a2a540ca83058861b`, session `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T155702Z` (`openai-codex/gpt-5.6-sol`, high) accepted all findings from `/tmp/pm-397-review-429.log`.
+
+- Symlink-resolved local write paths now use nearest-existing-ancestor realpath containment and are revalidated immediately before resolved credentials reach connector effects. Warehouse/outbox tests prove no external directory appears without opt-in; `allow_external_path=true` remains effective.
+- Safety-valid legacy credential names beginning `_`, `.`, or `-` remain inspectable/removable. Connector-name hardening remains.
+- Long/short credentials namespace help ignores trailing unknown flags and byte-matches exact base `0f1ec1e8`; correction start exited 2.
+- Strict RED preceded production edits. Focused/repeated/race/path/security/full CLI and repository, help/manual, gofmt/vet/build, and `make verify` pass. Implementation head: `7970896ca7f75a6976a2a6d2d3621c45bd3338f1`.
+- No real credential, secret material, service, dependency, PR, or external review.
+
 ## Identity
 
 - Session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z`

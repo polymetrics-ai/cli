@@ -20,9 +20,20 @@ Session `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6-so
 | R0 | Review/plan | Record HIGH symlink escape, MEDIUM legacy-name stranding, LOW help-tail incompatibility and verification plan before production edits | Complete |
 | R1 | RED | `go test ./internal/cli -run 'TestCredentials(TestRejectsSymlinkEscapeBeforeLocalConnectorEffects|LegacyValidateIdentifierNamesRemainInspectableAndRemovable|NamespaceHelpIgnoresTrailingUnknownFlags)$' -count=1` | Failed as required in `6.546s`: warehouse/outbox denied cases created external effects; `_legacy`/`.legacy` inspect rejected; long/short namespace help tails exited 2 |
 | R2 | GREEN | Reusable realpath/nearest-existing-ancestor containment in `ValidateLocalWritePath`, revalidation in `resolveCredential` immediately before runtime use, restored credential-name compatibility, namespace-help tail normalization | Pass: focused safety+CLI `8.257s`; full credentials `46.463s`; safety+app `23.300s`; focused race safety+CLI `109.283s` |
-| R3 | Verify | Focused/repeated/race/security/base differential/full CLI/path tests plus gofmt/vet/full tests/build/`make verify` | Pending |
+| R3 | Verify | Focused/repeated/race/security/base differential/full CLI/path tests plus gofmt/vet/full tests/build/`make verify` | Pass: repeated correction `49.385s`; repeated safety `0.560s`; full CLI `282.493s`; full repo CLI `284.380s`/certify `340.838s`; exact base help 2/2; gofmt/vet/build/`make verify` pass |
 
 Tests must not use, inspect, print, summarize, or store secret content and must not contact services. The path test checks only filesystem existence outside the project.
+
+### Bounded correction final evidence
+
+- Focused RED: failed in `6.546s`; both denied local connectors created external directories, both requested legacy names were stranded, and both namespace help forms exited 2.
+- Focused GREEN: safety+CLI `8.257s`; all credentials `46.463s`; safety+app `23.300s`; focused race safety+CLI `109.283s`.
+- Stability: correction tests five times `49.385s`; safety identifier/path tests twenty times `0.560s`.
+- Full CLI: `go test ./internal/cli/... -count=1` passed in `282.493s`.
+- Exact differential: current long/short trailing-unknown help exits 0, emits 0 stderr bytes, hashes to `dbe21fc0c6a594046611ad51c5a4119f8c82aa8a30879425bbb74485ea6fd949`, and byte-matches `0f1ec1e8`; correction start `758b059b` exits 2.
+- Full repository: `go test -timeout 20m ./...` passed (CLI `284.380s`, certify `340.838s`); gofmt, `go vet ./...`, `go build ./cmd/pm`, and `make verify` passed; lint 0, 547 connector definitions/0 findings.
+- Runtime help: help topic, bare namespace, and trailing-unknown long help exit 0 and are byte-equal. Golden transcripts and generated manuals pass in `6.146s`.
+- Scope: no `go.mod`, `go.sum`, connector definition, checked-in CLI docs, or website delta. No real credential, secret material, service, dependency, PR, or external review.
 
 ## Prior local security review correction ledger
 

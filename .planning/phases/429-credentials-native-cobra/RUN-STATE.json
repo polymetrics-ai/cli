@@ -23,8 +23,10 @@
   "reviewCorrectionThinking": "high",
   "reviewCorrectionSource": "/tmp/pm-397-review-429.log",
   "reviewCorrectionFindingsAccepted": ["HIGH_symlink_escape", "MEDIUM_legacy_names", "LOW_namespace_help_tail"],
-  "status": "review_correction_green_verification_pending",
-  "verificationPassed": false,
+  "reviewCorrectionEndedAt": "20260718T162155Z",
+  "reviewCorrectionEndingImplementationHead": "7970896ca7f75a6976a2a6d2d3621c45bd3338f1",
+  "status": "complete_verified_pushed_no_pr",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -49,6 +51,16 @@
       "cycle": "bounded-review-correction-green",
       "decision": "local_critical_path",
       "reason": "realpath and nearest-existing-ancestor containment plus runtime revalidation blocks warehouse/outbox symlink effects; explicit external policy, legacy safety-valid names, and namespace help-tail compatibility pass focused and race tests"
+    },
+    {
+      "cycle": "bounded-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused, repeated, race, security/path, exact base differential, full CLI and repository, help/manual, gofmt, vet, build, and make verify gates passed without real credentials or services"
+    },
+    {
+      "cycle": "bounded-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "all accepted findings are closed, phase evidence is finalized, coherent checkpoints are pushed, and the user prohibited PR and external review"
     },
     {
       "cycle": "plan",
@@ -100,7 +112,10 @@
     "internal/cli/cobra_router.go",
     "internal/cli/cobra_router_test.go",
     "internal/cli/credentials_cli.go",
-    "internal/cli/credentials_cli_test.go"
+    "internal/cli/credentials_cli_test.go",
+    "internal/app/app.go",
+    "internal/safety/safety.go",
+    "internal/safety/safety_test.go"
   ],
   "commits": [
     "cc1c13c5 docs(planning): plan credentials native cobra slice",
@@ -108,13 +123,17 @@
     "36b2e388 refactor(cli): nativize credentials namespace",
     "3a5bdd25 test(cli): expose credentials name discovery bypass",
     "92284dd2 fix(cli): guard credentials name discovery boundary",
-    "docs(planning): record credentials cobra verification (final artifact checkpoint)"
+    "758b059b docs(planning): record credentials cobra verification",
+    "c2dedfc8 docs(planning): plan credentials review corrections",
+    "9781659c test(cli): expose credentials review regressions",
+    "7970896c fix(cli): close credentials review findings",
+    "docs(planning): finalize credentials review correction evidence"
   ],
-  "push": "all planning, RED, implementation, correction, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
+  "push": "all original and bounded-review planning, RED, implementation, and final verification checkpoints pushed to origin/refactor/429-credentials-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "inline_local_review_clean_external_review_prohibited",
   "reviewCorrectionRed": "focused internal/cli test failed in 6.546s before production edits and reproduced all accepted findings without secret material or external services",
   "reviewCorrectionGreen": "focused safety and CLI passed in 8.257s; full credentials in 46.463s; safety and app in 23.300s; focused race safety and CLI in 109.283s",
-  "reviewCorrectionVerification": "pending base differential, full CLI, and repository gates",
+  "reviewCorrectionVerification": "pass: repeated correction 49.385s; repeated safety 0.560s; full CLI 282.493s; full repository CLI 284.380s and certify 340.838s; exact base help 2/2; golden/manual 6.146s; gofmt, vet, build, and make verify passed; lint 0 and connector validation 547/0",
   "safety": "no real secrets, interactive secret entry, credentialed external checks, optional services, dependencies, destructive external actions, or unrelated writes; correction tests use temp paths and inspect filesystem existence only"
 }

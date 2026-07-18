@@ -13,8 +13,8 @@ Invocation `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6
 - [x] Explicit `allow_external_path=true` semantics and platform behavior remain supported; symlink tests skip only when the platform cannot create symlinks.
 - [x] Legacy names accepted by `safety.ValidateIdentifier`, including leading `_`, `.`, and `-`, remain inspectable/removable.
 - [x] `credentials --help` and `-h` ignore unknown trailing flags like exact base.
-- [ ] Focused, repeated, race, security, exact base differential, full CLI, safety path, gofmt, vet, full tests, build, and `make verify` pass.
-- [ ] No secret material, real credentials/services, dependencies, PR, or external review.
+- [x] Focused, repeated, race, security, exact base differential, full CLI, safety path, gofmt, vet, full tests, build, and `make verify` pass.
+- [x] No secret material, real credentials/services, dependencies, PR, or external review.
 
 ## TDD and behavior
 
@@ -73,4 +73,4 @@ Invocation `issue-429-bounded-security-compat-correction-pi-openai-codex-gpt-5.6
 - [x] `scripts/gsd prompt verify-work 429` generated 7161 bytes and was executed inline.
 - [x] `scripts/gsd prompt code-review 429` generated 6027 bytes; local review found and fixed the action-name boundary issue, then found no remaining actionable item.
 
-Result: all applicable local verification passed at implementation head `92284dd2e55e250031389ce3673a9a6909253341`.
+Result: all applicable original verification passed at implementation head `92284dd2e55e250031389ce3673a9a6909253341`. The accepted bounded review correction also passed all declared local gates at implementation head `7970896ca7f75a6976a2a6d2d3621c45bd3338f1`; exact correction start was `758b059bbeb54032dbcd1b9a2a540ca83058861b`.

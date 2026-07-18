@@ -96,7 +96,13 @@ Parser ownership changes but command names, flags, output envelopes, canonical m
 
 No real secret values, credentialed checks, interactive secret entry, optional services, dependencies, destructive/admin actions, generic write tools, production deployment, PR, external review, or merge. Tests use opaque synthetic redaction fixtures only, never include fixture content in failure output, and run in temporary project roots. No `credentials test` invocation may contact an external endpoint. The required existing local verification gates run without credentialed external checks.
 
-## Completion note
+## Bounded review correction completion
+
+The correction completed at implementation head `7970896ca7f75a6976a2a6d2d3621c45bd3338f1` on `20260718T162155Z`. `ValidateLocalWritePath` now compares lexical and symlink-resolved paths using the nearest existing ancestor; `resolveCredential` revalidates merged local connector config immediately before runtime use, so retargeted in-project symlinks fail before warehouse/outbox effects. Explicit `allow_external_path=true` still permits the effect. Credential identifiers again follow `safety.ValidateIdentifier`, preserving inspect/remove for leading `_`, `.`, and `-`; connector-name hardening remains. Credentials namespace help discards its trailing tail before Cobra parsing and is byte-identical to base help.
+
+Focused RED reproduced every accepted finding before production edits. GREEN passed focused safety/CLI (`8.257s`), all credentials (`46.463s`), safety/app (`23.300s`), focused race (`109.283s`), repeated correction tests (`49.385s`), repeated safety paths (`0.560s`), full CLI (`282.493s`), full repository tests (CLI `284.380s`, certify `340.838s`), exact `0f1ec1e8` base differential for long/short help, built help parity, gofmt, vet, build, and `make verify` (lint 0; 547 connector definitions/0 findings). No real credential, secret material, external service, dependency, checked-in docs/website delta, PR, or external review was used.
+
+## Prior completion note
 
 Implementation and the local security correction are complete at verified implementation head `92284dd2e55e250031389ce3673a9a6909253341`; verification ended `20260718T153350Z` UTC. Native Cobra owns credentials add/list/inspect/test/remove/help, current repeated/bare/assigned flags, controlled stdin, named environment intake, strict identifiers/path checks, and fail-closed namespace/action-name boundaries. Only the credentials `parseFlags` call was removed.
 
