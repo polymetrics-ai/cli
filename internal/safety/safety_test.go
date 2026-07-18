@@ -1,6 +1,8 @@
 package safety_test
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -43,6 +45,26 @@ func TestValidateIdentifierAcceptsExpectedNames(t *testing.T) {
 		if err := safety.ValidateIdentifier(in, "test"); err != nil {
 			t.Fatalf("ValidateIdentifier(%q) error = %v", in, err)
 		}
+	}
+}
+
+func TestValidateLocalWritePathResolvesSymlinksThroughNearestExistingAncestor(t *testing.T) {
+	root := t.TempDir()
+	external := t.TempDir()
+	redirect := filepath.Join(root, "redirect")
+	if err := os.Symlink(external, redirect); err != nil {
+		t.Skipf("symlinks unavailable on this platform: %v", err)
+	}
+	path := filepath.Join(redirect, "not-created", "warehouse")
+
+	if err := safety.ValidateLocalWritePath(root, path, "warehouse path", false); err == nil {
+		t.Fatal("symlink-resolved external path succeeded without explicit policy")
+	}
+	if err := safety.ValidateLocalWritePath(root, path, "warehouse path", true); err != nil {
+		t.Fatalf("explicit external-path policy rejected symlink-resolved path: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(external, "not-created")); !os.IsNotExist(err) {
+		t.Fatalf("path validation created an external filesystem effect: %v", err)
 	}
 }
 

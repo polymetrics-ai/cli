@@ -15,6 +15,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/events"
+	"polymetrics.ai/internal/safety"
 	"polymetrics.ai/internal/telemetry"
 )
 
@@ -52,7 +53,15 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 
 	dir := localWarehouseDir(destRuntime)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := validateLocalWriteRuntimeEffect(destRuntime, dir, "warehouse path"); err != nil {
+		return etlExecutionResult{}, err
+	}
+	effects, err := openLocalWriteFS(destRuntime)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	defer func() { _ = effects.Close() }()
+	if err := effects.MkdirAll(dir, 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
 	table := stream.DestinationTable
@@ -63,7 +72,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	tmpFinalPath := finalPath + "." + runID + ".tmp"
 	rawPath := localRawPath(dir, conn.Name, streamName, table)
 	tmpRawPath := rawPath + "." + runID + ".tmp"
-	if err := os.MkdirAll(filepath.Dir(rawPath), 0o700); err != nil {
+	if err := effects.MkdirAll(filepath.Dir(rawPath), 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create raw directory: %w", err)
 	}
 
@@ -73,13 +82,24 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		rawTarget = tmpRawPath
 		rawFlags = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
 	}
-	rawFile, err := os.OpenFile(rawTarget, rawFlags, 0o600)
+	rawFile, err := effects.OpenFile(rawTarget, rawFlags, 0o600)
 	if err != nil {
 		return etlExecutionResult{}, fmt.Errorf("open raw table: %w", err)
 	}
-	rawEncoder := json.NewEncoder(rawFile)
-
 	var finalFile *os.File
+	success := false
+	defer func() {
+		_ = rawFile.Close()
+		if finalFile != nil {
+			_ = finalFile.Close()
+		}
+		if !success && mode.IsOverwrite() {
+			_ = effects.Remove(tmpRawPath)
+			_ = effects.Remove(tmpFinalPath)
+		}
+	}()
+
+	rawEncoder := json.NewEncoder(rawFile)
 	var finalEncoder *json.Encoder
 	if !mode.IsDeduped() {
 		finalTarget := finalPath
@@ -88,25 +108,12 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			finalTarget = tmpFinalPath
 			finalFlags = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
 		}
-		finalFile, err = os.OpenFile(finalTarget, finalFlags, 0o600)
+		finalFile, err = effects.OpenFile(finalTarget, finalFlags, 0o600)
 		if err != nil {
-			_ = rawFile.Close()
 			return etlExecutionResult{}, fmt.Errorf("open final table: %w", err)
 		}
 		finalEncoder = json.NewEncoder(finalFile)
 	}
-
-	success := false
-	defer func() {
-		_ = rawFile.Close()
-		if finalFile != nil {
-			_ = finalFile.Close()
-		}
-		if !success && mode.IsOverwrite() {
-			_ = os.Remove(tmpRawPath)
-			_ = os.Remove(tmpFinalPath)
-		}
-	}()
 
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
@@ -238,7 +245,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		if mode.IsOverwrite() {
 			readRawPath = tmpRawPath
 		}
-		finalCount, err := materializeDedupedFinal(ctx, readRawPath, tmpFinalPath)
+		finalCount, err := materializeDedupedFinal(ctx, effects, readRawPath, tmpFinalPath)
 		if err != nil {
 			return result, err
 		}
@@ -248,12 +255,12 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 
 	if mode.IsOverwrite() {
-		if err := os.Rename(tmpRawPath, rawPath); err != nil {
+		if err := effects.Rename(tmpRawPath, rawPath); err != nil {
 			return result, fmt.Errorf("replace raw table: %w", err)
 		}
 	}
 	if mode.IsOverwrite() || mode.IsDeduped() {
-		if err := os.Rename(tmpFinalPath, finalPath); err != nil {
+		if err := effects.Rename(tmpFinalPath, finalPath); err != nil {
 			return result, fmt.Errorf("replace final table: %w", err)
 		}
 	}
@@ -290,8 +297,8 @@ func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey stri
 	return checkpoint
 }
 
-func materializeDedupedFinal(ctx context.Context, rawPath, finalPath string) (int, error) {
-	best, err := readBestLocalRawRecords(ctx, rawPath)
+func materializeDedupedFinal(ctx context.Context, effects *safety.LocalWriteFS, rawPath, finalPath string) (int, error) {
+	best, err := readBestLocalRawRecords(ctx, effects, rawPath)
 	if err != nil {
 		return 0, err
 	}
@@ -303,7 +310,7 @@ func materializeDedupedFinal(ctx context.Context, rawPath, finalPath string) (in
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
-	file, err := os.OpenFile(finalPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
+	file, err := effects.OpenFile(finalPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
 	if err != nil {
 		return 0, fmt.Errorf("open deduped final table: %w", err)
 	}
@@ -332,8 +339,8 @@ func rawRecordNewer(candidate, current localRawRecord) bool {
 	return candidate.RawID > current.RawID
 }
 
-func readBestLocalRawRecords(ctx context.Context, path string) (map[string]localRawRecord, error) {
-	file, err := os.Open(path)
+func readBestLocalRawRecords(ctx context.Context, effects *safety.LocalWriteFS, path string) (map[string]localRawRecord, error) {
+	file, err := effects.Open(path)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return map[string]localRawRecord{}, nil
@@ -390,6 +397,16 @@ func isDeletedRecord(record connectors.Record) bool {
 		}
 	}
 	return false
+}
+
+func openLocalWriteFS(cfg connectors.RuntimeConfig) (*safety.LocalWriteFS, error) {
+	if cfg.LocalWritePolicy == nil {
+		return safety.OpenLocalWriteFS("", true)
+	}
+	return safety.OpenLocalWriteFS(
+		cfg.LocalWritePolicy.ProjectRoot,
+		cfg.LocalWritePolicy.AllowExternal,
+	)
 }
 
 func localWarehouseDir(cfg connectors.RuntimeConfig) string {

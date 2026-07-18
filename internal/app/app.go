@@ -247,6 +247,40 @@ func (a *App) validateCredentialConfig(connector string, config map[string]strin
 	}
 }
 
+func (a *App) normalizeLocalWriteRuntime(connector string, config map[string]string) (*connectors.LocalWritePolicy, error) {
+	if connector != "warehouse" && connector != "outbox" {
+		return nil, nil
+	}
+	allowExternal := strings.EqualFold(config["allow_external_path"], "true")
+	projectRoot, err := filepath.Abs(a.projectRoot())
+	if err != nil {
+		return nil, fmt.Errorf("resolve project root: %w", err)
+	}
+	if path := config["path"]; path != "" {
+		normalized, err := safety.ResolveLocalWritePath(projectRoot, path, connector+" path", allowExternal)
+		if err != nil {
+			return nil, err
+		}
+		config["path"] = normalized
+	}
+	return &connectors.LocalWritePolicy{
+		ProjectRoot:   projectRoot,
+		AllowExternal: allowExternal,
+	}, nil
+}
+
+func validateLocalWriteRuntimeEffect(runtime connectors.RuntimeConfig, path, field string) error {
+	if runtime.LocalWritePolicy == nil {
+		return nil
+	}
+	return safety.ValidateLocalWritePath(
+		runtime.LocalWritePolicy.ProjectRoot,
+		path,
+		field,
+		runtime.LocalWritePolicy.AllowExternal,
+	)
+}
+
 func (a *App) InspectCredential(name string) (CredentialMeta, error) {
 	cred, ok := a.findCredential(name)
 	if !ok {
@@ -1116,16 +1150,35 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	if !ok {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q not found", name)
 	}
+	config := cloneStringMap(cred.Config)
+	for k, v := range overlay {
+		config[k] = v
+	}
+	if err := a.validateCredentialConfig(cred.Connector, config); err != nil {
+		return CredentialMeta{}, connectors.RuntimeConfig{}, err
+	}
+	localWritePolicy, err := a.normalizeLocalWriteRuntime(cred.Connector, config)
+	if err != nil {
+		return CredentialMeta{}, connectors.RuntimeConfig{}, err
+	}
 	registerCredentialSecretFields(cred.SecretFields)
 	secrets, err := a.vault.Get(ctx, cred.ID)
 	if err != nil {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
-	config := cloneStringMap(cred.Config)
-	for k, v := range overlay {
-		config[k] = v
+	runtimeProjectDir := a.projectDir
+	if localWritePolicy != nil {
+		runtimeProjectDir, err = filepath.Abs(a.projectDir)
+		if err != nil {
+			return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("resolve project directory: %w", err)
+		}
 	}
-	return cred, connectors.RuntimeConfig{ProjectDir: a.projectDir, Config: config, Secrets: secrets}, nil
+	return cred, connectors.RuntimeConfig{
+		ProjectDir:       runtimeProjectDir,
+		Config:           config,
+		Secrets:          secrets,
+		LocalWritePolicy: localWritePolicy,
+	}, nil
 }
 
 func registerCredentialSecretFields(fields []string) {
