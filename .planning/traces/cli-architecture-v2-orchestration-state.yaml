@@ -18,24 +18,18 @@ orchestrator:
   runtime: pi
   status: running
 ready_queue:
-  - number: 424
-    status: worker_in_progress
-    dependencies: [407, 423]
-    write_scope: "runtime Cobra namespace node, handler adaptation, focused tests, and parity docs"
-    decision: spawned
-    reason: "Dispatched in isolated worktree ../wt-424-runtime-native-cobra from parent head efb98bf3; serialized Phase 9 namespace chain continues after #423."
-  - number: 415
-    status: worker_in_progress
-    dependencies: [410]
-    write_scope: "OpenTelemetry metrics package/exporters, batched counters, Temporal integration, and benchmark/contract tests"
-    decision: spawned
-    reason: "Dispatched in isolated worktree ../wt-415-otel-metrics from parent head efb98bf3; scout found low collision with #424 when telemetry-focused."
+  - number: 425
+    status: worker_ready
+    dependencies: [424]
+    write_scope: "version Cobra namespace node, handler adaptation, focused tests, and parity docs"
+    decision: local_critical_path
+    reason: "#424 and #415 are independently reviewed and provisionally integrated at parent head 1f5bd80f; the serialized Phase 9 chain advances to #425."
   - number: 408
     status: worker_ready_deferred
     dependencies: [405]
     write_scope: "flow and ETL run dashboards, event bridge, TUI tests, and parity docs"
     decision: not_spawned_write_scope_collision
-    reason: "Unblocked by #405, but deferred while #424 owns central CLI routing/help/goldens and #415 may touch app/flow metrics paths."
+    reason: "Source-unblocked, but central CLI/help/golden collisions require Phase 9 namespace serialization through #437 before dashboard promotion."
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -209,6 +203,18 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [424, 415]
     reason: "Created isolated worktrees ../wt-424-runtime-native-cobra and ../wt-415-otel-metrics from parent head efb98bf3 and queued workers in parallel."
+  - timestamp: 2026-07-18T09:47:56Z
+    decision: spawned
+    issue_numbers: [424, 415]
+    reason: "Sol/high correction workers addressed independent exact-head findings on existing PRs #460 and #461 without creating more PRs."
+  - timestamp: 2026-07-18T09:47:56Z
+    decision: read_only_spawned
+    issue_numbers: [424, 415]
+    reason: "Independent Sol/xhigh exact-head re-reviews were clean; both child CIs passed."
+  - timestamp: 2026-07-18T09:47:56Z
+    decision: spawned
+    issue_numbers: [415]
+    reason: "Isolated Sol/high integration worker regenerated the sole website data conflict after #424 integration; combined Sol/xhigh review was clean at 1f5bd80f."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -383,13 +389,13 @@ subissues:
   - number: 415
     url: https://github.com/polymetrics-ai/cli/issues/415
     branch: feat/415-otel-metrics
-    pr_url: ""
-    worker: pm-gsd-worker
-    status: worker_in_progress
-    write_scope: "OpenTelemetry metrics, exporters, and benchmarks"
+    pr_url: https://github.com/polymetrics-ai/cli/pull/461
+    worker: "Sol/high session 324e9db6-21d8-4027-b4cb-3cc0040774af"
+    status: provisionally_integrated
+    write_scope: "OpenTelemetry metrics, exporters, batch/API/stage instrumentation, Temporal gating, and benchmarks"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-415-otel-metrics
-    verification: worker_dispatched
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched after #410 integration; stacked PR/review pending.", disposition_url: ""}
+    verification: "Focused/race/full/benchmark/module/make-verify gates and remote CI passed at 6cf5c48f; isolated integration and generated-docs checks passed; parent merge 1f5bd80f."
+    automated_review: {primary_route: human, status: clean, head_sha: 6cf5c48f1b2cf218ed35c15ba77096db89969575, reviewed_range: "56a7ecb0..6cf5c48f", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 933b6246 and combined integration review 4ec8f305 were clean; GitHub bot coverage remains parent/human fallback.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/461"}
   - number: 416
     url: https://github.com/polymetrics-ai/cli/issues/416
     branch: pending
@@ -473,13 +479,13 @@ subissues:
   - number: 424
     url: https://github.com/polymetrics-ai/cli/issues/424
     branch: refactor/424-runtime-native-cobra
-    pr_url: ""
-    worker: pm-gsd-worker
-    status: worker_in_progress
+    pr_url: https://github.com/polymetrics-ai/cli/pull/460
+    worker: "Sol/high session 7050f706-72d2-47df-ac13-0b08979cc1ae"
+    status: provisionally_integrated
     write_scope: "runtime Cobra namespace node/handler/tests/parity only"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-424-runtime-native-cobra
-    verification: worker_dispatched
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Worker dispatched after #423/#410 parent head; stacked PR/review pending.", disposition_url: ""}
+    verification: "Focused/full/make-verify gates and remote CI passed at 323d4a91; parent merge 35262537 and combined parent head 1f5bd80f preserve ancestry."
+    automated_review: {primary_route: human, status: clean, head_sha: 323d4a91b465cdee5fdb94ea338f4272b76de781, reviewed_range: "56a7ecb0..323d4a91", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 05a92a52 was clean; GitHub bot coverage remains parent/human fallback.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/460"}
   - number: 453
     url: https://github.com/polymetrics-ai/cli/issues/453
     branch: fix/453-reverse-smoke-preview
@@ -500,4 +506,4 @@ human_gates:
   - production deploys
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
-updated_at: 2026-07-18T05:12:30Z
+updated_at: 2026-07-18T09:47:56Z

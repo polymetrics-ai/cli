@@ -8,8 +8,8 @@ Status: not yet run at final HEAD
 - [x] Parent checkout and remote parent head matched at `56a7ecb08f755184af7b55318c3285582d5adfb7`.
 - [x] PR #460 local/remote/PR head continuity confirmed at `8d696cd4c27fad6840e905917e7658e785fa5436`; remote checks green.
 - [x] PR #461 local/remote/PR head continuity confirmed at `c6138292cfcc7205f7968a54b57a65f933a3c1fa`; final verify check was still pending at initial inspection.
-- [ ] #424 independent review finding corrected and exact-head re-review clean.
-- [ ] #415 independent review findings corrected and exact-head re-review clean.
+- [x] #424 corrected at `323d4a91b465cdee5fdb94ea338f4272b76de781`; exact-head Sol/xhigh re-review `05a92a52-3893-4eb9-855e-1a5b001ab64e` clean; CI green; ancestry preserved in parent `1f5bd80f`.
+- [x] #415 corrected at `6cf5c48f1b2cf218ed35c15ba77096db89969575`; exact-head Sol/xhigh re-review `933b6246-2377-4c5d-8d9d-9e9af2ce159d` clean; CI green; combined conflict-resolution review `4ec8f305-9f7f-40c4-97c2-68c2e01c0d36` clean; ancestry preserved in parent `1f5bd80f`.
 
 ## Per-unit gate
 
