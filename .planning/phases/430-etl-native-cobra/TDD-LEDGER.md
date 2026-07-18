@@ -16,7 +16,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before test/production edits | Complete |
-| 1 | RED | Add focused native ETL tree, flags, compatibility, validation, cancellation, event/output tests; run focused CLI tests | Pending |
+| 1 | RED | `go test ./internal/cli -run 'TestETL(Command|Direct|RunStatus|BatchSize|HelpRoutes|UnknownInvalid|BareFlag|Cancellation|Progress)' -count=1` | Failed as required before production edits: `internal/cli/etl_cli_test.go:22:9: undefined: newETLCobraCommand` |
 | 2 | GREEN | Native ETL tree + typed handlers + ETL-only normalization; remove ETL wrapper/parser use | Pending |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI/app and exact-start differential | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
@@ -39,4 +39,13 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 
 ## Exact RED
 
-Pending test-only checkpoint. It must fail before any production edit and will be recorded verbatim here.
+Captured after the complete focused test-only edit and before any production edit:
+
+```text
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/etl_cli_test.go:22:9: undefined: newETLCobraCommand
+FAIL\tpolymetrics.ai/internal/cli [build failed]
+FAIL
+```
+
+The missing native constructor is intentional. The test-only checkpoint specifies native ownership and every current flag, repeated/bare/assigned forms, direct fixture actions, configured run/status, batch bounds/default and sync validation, all manual routes, action-tail/literal compatibility, unknown/invalid/global inputs, action-discovery boundaries, cancellation, progress events, stdout/stderr separation, and one JSON envelope. No external connector, optional service, secret fixture, or reverse operation ran.

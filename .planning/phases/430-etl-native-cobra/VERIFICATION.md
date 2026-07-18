@@ -5,7 +5,7 @@ Invocation session: `issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z
 ## TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.
-- [ ] Focused RED captured before production edits.
+- [x] Focused RED captured before production edits (`undefined: newETLCobraCommand`).
 - [ ] Native ETL/check/catalog/read/run/status/help tree; ETL legacy wrapper removed.
 - [ ] All current flags typed with repeated/bare/assigned compatibility.
 - [ ] Bare/text/JSON/long/short/positional help parity.
