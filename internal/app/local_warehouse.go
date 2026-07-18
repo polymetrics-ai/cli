@@ -208,7 +208,9 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		result.RecordsTransformed++
 		metrics.RecordTransformed()
 		result.RecordsLoaded++
-		metrics.RecordLoaded(1)
+		if !mode.IsDeduped() {
+			metrics.RecordLoaded(1)
+		}
 		if len(rawBatch) >= batchSize {
 			return flush()
 		}
@@ -239,6 +241,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			return result, err
 		}
 		result.RecordsLoaded = finalCount
+		metrics.RecordLoaded(finalCount)
+		metrics.Flush(ctx)
 	}
 
 	if mode.IsOverwrite() {

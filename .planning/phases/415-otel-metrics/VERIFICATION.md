@@ -2,7 +2,11 @@
 
 ## Required gates
 
-- [x] Red tests captured before production edits.
+- [x] Red tests captured before original production edits.
+- [x] Review-fix red tests captured before production edits for PR #461 findings.
+- [x] Deduped warehouse ETL file metrics reconcile `pm.records.loaded` with final envelope counts after overwrite/incremental/delete materialization.
+- [x] Temporal worker constructors use telemetry-gated worker options; disabled path remains empty/default and enabled path includes contrib worker interceptor.
+- [x] `BenchmarkEmit` has enabled and disabled sub-benchmarks with enabled setup outside the hot loop and allocation reporting.
 - [x] Metrics disabled/default mode constructs no metric SDK and creates no `.polymetrics/telemetry` directory.
 - [x] File exporter metrics reconcile with final `ETLRun` envelope counts.
 - [x] Local counters accumulate in hot paths and flush by batch; no per-record OTel instrument calls.
@@ -43,6 +47,14 @@ go test ./internal/worker -run 'Metric|Telemetry|Temporal' -count=1
 go test -bench BenchmarkEmit -benchmem ./internal/app
 ```
 
+## Review-fix focused commands
+
+```bash
+go test ./internal/app -run 'TestRunETLDedupedMetrics|TestRunETLMetricsAccumulateAndFlushByBatch|TestRunCounterHotPathAllocations' -count=1
+go test ./internal/worker -run 'TestTemporal.*Options|TestTemporalMetricsOnErrorWarnsWithoutPanic' -count=1
+go test -bench BenchmarkEmit -benchmem ./internal/app
+```
+
 ## Full gates to run
 
 ```bash
@@ -78,3 +90,11 @@ git diff -- go.mod go.sum
 | `cd website && pnpm run gen:website-data` | pass | Regenerated `website/lib/docs.generated.ts` after Website checks CI reported docs data drift. |
 | `cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 install --frozen-lockfile --reporter=silent && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run typecheck` | pass | Website dependencies installed with CI pnpm version; `tsc --noEmit` passed. Local pnpm 9.15.4 frozen install fails on lockfile override mismatch, so CI-matched corepack pnpm 11.7.0 was used. |
 | Final post-generated-data gates | pass | `make verify` passed; `COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run gen:website-data` produced no tracked generated-data diff; `COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run typecheck` passed; `git diff --check` passed. |
+| Review-fix preflight and artifacts | pass/fallback | `scripts/gsd doctor` and `scripts/gsd list` passed; `scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run >/tmp/gsd-loop-415-review-fix.txt` failed with `scripts/gsd: unknown GSD command: programming-loop`; plan/TDD/verification artifacts updated before production edits. |
+| Review-fix red tests | fail/red | `go test ./internal/app ./internal/worker -run 'TestRunETLDedupedMetrics\|TestTemporalWorker\|TestRunCounterHotPathAllocations' -count=1 > /tmp/pm-415-review-fix-red.txt 2>&1` failed as expected: missing `temporalWorkerOptions`; `pm.records.loaded` sums `3 want 2`, `1 want 2`, `1 want 2` for deduped overwrite/incremental/delete cases. |
+| Review-fix focused tests | pass | `gofmt -w internal/app/local_warehouse.go internal/app/metrics_test.go internal/worker/submit.go internal/worker/serve.go internal/worker/telemetry_test.go && go test ./internal/app ./internal/worker -run 'TestRunETLDedupedMetrics\|TestTemporalWorker\|TestRunCounterHotPathAllocations\|TestTemporalClientOptionsTelemetryGated\|TestTemporalMetricsOnErrorWarnsWithoutPanic' -count=1` passed. |
+| Review-fix benchmark | pass | `go test -bench BenchmarkEmit -benchmem ./internal/app`: `BenchmarkEmit/disabled-12 591002476 2.038 ns/op 0 B/op 0 allocs/op`; `BenchmarkEmit/enabled_file-12 589499779 2.036 ns/op 0 B/op 0 allocs/op`. |
+| Review-fix broader focused tests | pass | `go test ./internal/telemetry ./internal/app ./internal/cli ./internal/worker -run 'Metric\|Telemetry\|Temporal\|Golden\|Config\|RunCounter\|Deduped' -count=1` passed. |
+| Review-fix full Go gates | pass | `gofmt -w cmd internal && go vet ./... && go test -timeout 20m ./... && go build ./cmd/pm` passed. |
+| Review-fix make verify | pass | `make verify` passed: fmt, tidy-check, vet, full tests, build, docs validate, smoke, golangci-lint connector subset (`0 issues`), and `connectorgen validate` (`547 connector(s) checked, 0 findings`). |
+| Review-fix diff/dependency checks | pass | `git diff --check` passed; `git diff -- go.mod go.sum` produced no output, so review-fix dependency delta is empty. |

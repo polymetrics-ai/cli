@@ -54,6 +54,16 @@ Required failing evidence before production edits:
 
 Use synthetic non-secret markers only. Never use real credentials.
 
+## Review-fix red-test plan — PR #461
+
+Starting head: `8748a03ba60042bdc29bd9cce1acf7c3d0b286a3`. User-directed review route: no Claude/Copilot. Current run loaded the same Go/review-fix skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-testing`, `golang-performance`, `golang-benchmark`, `golang-observability`, `golang-context`, `golang-concurrency`, `golang-security`, `golang-error-handling`, `golang-safety`, `golang-lint`, `golang-cli`, `golang-dependency-management`, `golang-documentation`. `.pi/skills/go-implementation/SKILL.md` remains absent (`.pi/skills` contains only `gsd-core`).
+
+Tests to add before production fixes:
+
+- `internal/app` file-metrics reconciliation tests for deduped warehouse ETL: overwrite duplicate collapse, incremental append-dedup final count, and tombstone delete final count. Expected red at starting head: `pm.records.loaded` metric sum follows raw loaded records and exceeds final envelope/materialized counts.
+- `internal/worker` gated worker-options tests: disabled worker options are empty; enabled worker options include contrib `WorkerInterceptor` while preserving no default-on behavior.
+- `internal/app` benchmark split into disabled/enabled sub-benchmarks with enabled telemetry setup outside the hot loop and `b.ReportAllocs()` inside both sub-benchmarks.
+
 ## Ledger
 
 | # | Cycle | Type | Command / evidence | Result | Notes |
@@ -68,3 +78,10 @@ Use synthetic non-secret markers only. Never use real credentials.
 | 8 | verify | Gate | `make verify` after `9894e6ef` | Pass | Full verify green, including smoke, connector lint, and `connectorgen validate`. |
 | 9 | ci-fix | Generated parity | `cd website && pnpm run gen:website-data`; `cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 install --frozen-lockfile --reporter=silent && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run typecheck` | Pass | Website checks CI required `website/lib/docs.generated.ts`; regenerated docs data and typechecked with CI pnpm 11.7.0 because local pnpm 9.15.4 rejects the lockfile override config. |
 | 10 | verify | Gate | `make verify`; `(cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run gen:website-data)` with generated-data status check; `(cd website && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack pnpm@11.7.0 run typecheck)`; `git diff --check` | Pass | Final post-generated-data gates green; generated-data check has no tracked diff. |
+| 11 | review-fix-plan | Planning | `scripts/gsd doctor`; `scripts/gsd list`; `scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run >/tmp/gsd-loop-415-review-fix.txt`; artifact updates | Pass/fallback | Doctor/list pass; `programming-loop` still unavailable (`scripts/gsd: unknown GSD command: programming-loop`). Review-fix plan/TDD/verification artifacts updated before production edits. Execution decision: `local_critical_path`. |
+| 12 | review-fix-red | Test | `go test ./internal/app ./internal/worker -run 'TestRunETLDedupedMetrics\|TestTemporalWorker\|TestRunCounterHotPathAllocations' -count=1 > /tmp/pm-415-review-fix-red.txt 2>&1` | Fail/red | Expected red before production edits. Key exact output: `internal/worker/telemetry_test.go:37:14: undefined: temporalWorkerOptions`; `internal/worker/telemetry_test.go:43:13: undefined: temporalWorkerOptions`; `metrics_test.go:144: metric pm.records.loaded sum = 3, want 2`; `metrics_test.go:144: metric pm.records.loaded sum = 1, want 2` for incremental rematerialize; `metrics_test.go:144: metric pm.records.loaded sum = 1, want 2` for tombstone delete. Full red output stored at `/tmp/pm-415-review-fix-red.txt`. |
+| 13 | review-fix-green | Test | `gofmt -w internal/app/local_warehouse.go internal/app/metrics_test.go internal/worker/submit.go internal/worker/serve.go internal/worker/telemetry_test.go && go test ./internal/app ./internal/worker -run 'TestRunETLDedupedMetrics\|TestTemporalWorker\|TestRunCounterHotPathAllocations\|TestTemporalClientOptionsTelemetryGated\|TestTemporalMetricsOnErrorWarnsWithoutPanic' -count=1` | Pass | Deduped loaded metrics now emit final materialized counts; worker telemetry options helper enabled/disabled tests pass. |
+| 14 | review-fix-bench | Benchmark | `go test -bench BenchmarkEmit -benchmem ./internal/app` | Pass | `BenchmarkEmit/disabled-12 591002476 2.038 ns/op 0 B/op 0 allocs/op`; `BenchmarkEmit/enabled_file-12 589499779 2.036 ns/op 0 B/op 0 allocs/op`. Enabled telemetry setup happens outside hot loop; benchmark only supports measured hot-path allocation claim. |
+| 15 | review-fix-focused | Test | `go test ./internal/telemetry ./internal/app ./internal/cli ./internal/worker -run 'Metric\|Telemetry\|Temporal\|Golden\|Config\|RunCounter\|Deduped' -count=1` | Pass | Focused telemetry/app/CLI/worker regression suite green after review fixes. |
+| 16 | review-fix-full | Gate | `gofmt -w cmd internal && go vet ./... && go test -timeout 20m ./... && go build ./cmd/pm` | Pass | Full Go gates green; slow packages included `internal/cli` and `internal/connectors/certify`. |
+| 17 | review-fix-verify | Gate | `make verify`; `git diff --check`; `git diff -- go.mod go.sum` | Pass | `make verify` passed including fmt/tidy-check/vet/full tests/build/docs validate/smoke/golangci-lint connector subset/connectorgen validate. `git diff --check` passed. Dependency diff empty for review-fix (no go.mod/go.sum changes). |

@@ -143,6 +143,27 @@ Excluded:
 4. Temporal integration + docs parity checkpoint after focused gates.
 5. Full verification checkpoint and stacked PR to `feat/cli-architecture-v2`.
 
+## Review-fix cycle — PR #461 pm-reviewer findings
+
+Date: 2026-07-18. Starting head: `8748a03ba60042bdc29bd9cce1acf7c3d0b286a3` on `feat/415-otel-metrics`. Do not reset/discard/recreate. Execution decision: `local_critical_path` — single isolated Pi worker, no subagent tool, review-fix is on the active issue branch.
+
+Required artifact checkpoint before production edits:
+
+1. Update `PLAN.md`, `TDD-LEDGER.md`, and `VERIFICATION.md` with this review-fix plan before production code edits.
+2. Add/adjust tests first and capture focused red output before production fixes.
+3. Implement only the pm-reviewer findings:
+   - High: deduped warehouse ETL must emit `pm.records.loaded` after `finalCount`/materialization so file metrics reconcile with final envelope counts for overwrite, incremental, and delete/tombstone cases.
+   - Medium: Temporal `worker.New` calls must use telemetry-gated `worker.Options` with contrib worker interceptor; disabled path remains empty/default.
+   - Low: `BenchmarkEmit` must include enabled and disabled sub-benchmarks; enabled telemetry setup occurs outside the hot loop and allocation claims stay scoped to measured hot path.
+4. Run focused tests/benchmarks after the red test goes green, then full feasible gates: `gofmt -w cmd internal`, `go vet ./...`, `go test -timeout 20m ./...`, `go build ./cmd/pm`, `make verify`, `git diff --check`, dependency diff review.
+5. Commit/push one review-fix slice to `feat/415-otel-metrics`; update PR #461 body. No Claude/Copilot route for this cycle per user instruction.
+
+### Review-fix TDD targets
+
+- `internal/app`: add file-exported metrics tests for `full_refresh_overwrite_deduped`, `incremental_append_deduped`, and tombstone/delete materialization; expected red at starting head is `pm.records.loaded` sum greater than final `RecordsLoaded`.
+- `internal/worker`: add tests for `temporalWorkerOptions` disabled/enabled behavior and verify worker constructors consume it rather than `worker.Options{}`.
+- `internal/app`: split `BenchmarkEmit` into `disabled` and `enabled_file` sub-benchmarks with `b.ReportAllocs()` and setup outside the loop.
+
 ## PR plan
 
-Open stacked PR to base `feat/cli-architecture-v2`, title `feat(obs): add OpenTelemetry metrics`, body includes `Refs #415`, `Refs #397`, GSD/TDD evidence, skills loaded, dependency justification, safety notes, parity checklist, gates, and review route status.
+Open/update stacked PR to base `feat/cli-architecture-v2`, title `feat(obs): add OpenTelemetry metrics`, body includes `Refs #415`, `Refs #397`, GSD/TDD evidence, skills loaded, dependency justification, safety notes, parity checklist, gates, review-fix disposition, and no Claude/Copilot route for this cycle.

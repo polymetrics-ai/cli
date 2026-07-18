@@ -1,6 +1,6 @@
 # Summary — Phase 415 OpenTelemetry metrics
 
-Status: verified; manual GSD/TDD fallback active because `scripts/gsd prompt programming-loop` is unavailable.
+Status: review-fix verified for PR #461 pm-reviewer findings; manual GSD/TDD fallback active because `scripts/gsd prompt programming-loop` is unavailable.
 
 ## Current state
 
@@ -20,9 +20,25 @@ Status: verified; manual GSD/TDD fallback active because `scripts/gsd prompt pro
 - Docs/help parity updates for tracing+metrics, env-only metrics endpoint, warning behavior, and batched metrics, including generated website docs data.
 - ADR-approved dependency delta only: OTel metric exporters/SDK at v1.44.0 and Temporal contrib v0.7.0; `go.opentelemetry.io/otel/metric` promoted from existing indirect to direct at v1.44.0.
 
+## Review-fix scope (2026-07-18)
+
+- Fix metrics reconciliation for deduped warehouse ETL so `pm.records.loaded` emits final materialized counts, not raw pre-dedupe records.
+- Wire Temporal contrib worker telemetry into both `worker.New` call sites through telemetry-gated worker options.
+- Split `BenchmarkEmit` into enabled/disabled hot-path sub-benchmarks with allocation reporting.
+- No Claude/Copilot for this cycle per user instruction.
+
 ## Verification snapshot
 
-- Focused tests: pass.
+- Review-fix focused tests: pass.
+- Review-fix benchmark: `BenchmarkEmit/disabled-12 591002476 2.038 ns/op 0 B/op 0 allocs/op`; `BenchmarkEmit/enabled_file-12 589499779 2.036 ns/op 0 B/op 0 allocs/op`.
+- `gofmt -w cmd internal`: pass.
+- `go vet ./...`: pass.
+- `go test -timeout 20m ./...`: pass.
+- `go build ./cmd/pm`: pass.
+- `make verify`: pass after review-fix.
+- `git diff --check`: pass.
+- Dependency diff: empty for review-fix (`git diff -- go.mod go.sum` produced no output).
+- Focused tests: pass before review-fix.
 - Benchmark: `BenchmarkEmit-12 592256128 2.040 ns/op 0 B/op 0 allocs/op`.
 - `gofmt -w cmd internal`: pass.
 - `go vet ./...`: pass.

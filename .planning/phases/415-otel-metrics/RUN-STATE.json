@@ -5,7 +5,7 @@
   "branch": "feat/415-otel-metrics",
   "baseBranch": "feat/cli-architecture-v2",
   "baseHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "status": "verified",
+  "status": "review-fix-verified",
   "verificationPassed": true,
   "manualGsdFallback": true,
   "fallbackReason": "scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run returned: scripts/gsd: unknown GSD command: programming-loop",
@@ -44,6 +44,21 @@
       "cycle": "final-verify-after-generated-data",
       "decision": "local_critical_path",
       "reason": "make verify and website generated-data/typecheck gates passed after generated-data fix"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "pm-reviewer findings assigned to the same isolated issue branch/worktree; no subagent tool; artifacts updated before production edits"
+    },
+    {
+      "cycle": "review-fix-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests captured and focused review-fix tests plus benchmark passed inline in isolated worker branch"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "focused tests, benchmark, full Go gates, make verify, diff check, and dependency diff review passed inline"
     }
   ],
   "gates": {

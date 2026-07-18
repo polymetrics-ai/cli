@@ -68,26 +68,141 @@ func TestRunETLMetricsAccumulateAndFlushByBatch(t *testing.T) {
 	}
 }
 
+func TestRunETLDedupedMetricsReconcileWithFinalCounts(t *testing.T) {
+	tests := []struct {
+		name      string
+		mode      string
+		seed      []connectors.Record
+		records   []connectors.Record
+		batchSize int
+	}{
+		{
+			name: "overwrite deduped collapses duplicates",
+			mode: "full_refresh_overwrite_deduped",
+			records: []connectors.Record{
+				{"id": "a", "name": "Ada old", "updated_at": "2026-01-01T00:00:00Z"},
+				{"id": "a", "name": "Ada latest", "updated_at": "2026-01-03T00:00:00Z"},
+				{"id": "g", "name": "Grace", "updated_at": "2026-01-02T00:00:00Z"},
+			},
+			batchSize: 2,
+		},
+		{
+			name: "incremental deduped rematerializes prior raw rows",
+			mode: "incremental_append_deduped",
+			seed: []connectors.Record{
+				{"id": "a", "name": "Ada", "updated_at": "2026-01-01T00:00:00Z"},
+				{"id": "g", "name": "Grace", "updated_at": "2026-01-02T00:00:00Z"},
+			},
+			records: []connectors.Record{
+				{"id": "a", "name": "Ada latest", "updated_at": "2026-01-03T00:00:00Z"},
+			},
+			batchSize: 1,
+		},
+		{
+			name: "incremental deduped delete emits remaining final rows",
+			mode: "incremental_append_deduped",
+			seed: []connectors.Record{
+				{"id": "a", "name": "Ada", "updated_at": "2026-01-01T00:00:00Z"},
+				{"id": "g", "name": "Grace", "updated_at": "2026-01-02T00:00:00Z"},
+				{"id": "k", "name": "Katherine", "updated_at": "2026-01-03T00:00:00Z"},
+			},
+			records: []connectors.Record{
+				{"id": "g", "name": "Grace deleted", "updated_at": "2026-01-04T00:00:00Z", "_polymetrics_deleted": true},
+			},
+			batchSize: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := context.Background()
+			source := newScriptedSyncSource("scripted_metrics_"+strings.ReplaceAll(tt.name, " ", "_"), tt.seed)
+			a, connection := setupSyncModeApp(t, source, tt.mode)
+			if len(tt.seed) > 0 {
+				if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: tt.batchSize}); err != nil {
+					t.Fatalf("seed RunETL: %v", err)
+				}
+			}
+
+			source.records = tt.records
+			telemetryDir := filepath.Join(a.root, ".polymetrics", "telemetry")
+			runCtx, handle := telemetry.Init(ctx, telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: a.root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "deduped-" + strings.ReplaceAll(tt.name, " ", "-")}, func(string) {})
+			run, err := a.RunETL(runCtx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: tt.batchSize})
+			if err != nil {
+				t.Fatalf("RunETL: %v", err)
+			}
+			telemetry.Shutdown(context.Background(), handle, func(string) {})
+
+			rows, err := a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
+			if err != nil {
+				t.Fatalf("QueryTable: %v", err)
+			}
+			if run.RecordsLoaded != len(rows) {
+				t.Fatalf("RecordsLoaded = %d, materialized rows = %d", run.RecordsLoaded, len(rows))
+			}
+			data := readMetricTelemetry(t, telemetryDir)
+			assertMetricSum(t, data, "pm.records.loaded", run.RecordsLoaded)
+		})
+	}
+}
+
 func TestRunCounterHotPathAllocations(t *testing.T) {
-	counters := telemetry.NewRunCounters(context.Background())
-	allocs := testing.AllocsPerRun(1000, func() {
-		counters.RecordRead()
-		counters.RecordTransformed()
-		counters.RecordLoaded(1)
-	})
-	if allocs != 0 {
-		t.Fatalf("hot-path counter increments allocated %.2f times per run, want 0", allocs)
+	tests := []struct {
+		name string
+		ctx  context.Context
+	}{
+		{name: "disabled", ctx: context.Background()},
+		{name: "enabled", ctx: enabledTelemetryContextForTest(t, "allocs")},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			counters := telemetry.NewRunCounters(tt.ctx)
+			allocs := testing.AllocsPerRun(1000, func() {
+				counters.RecordRead()
+				counters.RecordTransformed()
+				counters.RecordLoaded(1)
+			})
+			if allocs != 0 {
+				t.Fatalf("hot-path counter increments allocated %.2f times per run, want 0", allocs)
+			}
+		})
 	}
 }
 
 func BenchmarkEmit(b *testing.B) {
-	counters := telemetry.NewRunCounters(context.Background())
-	b.ReportAllocs()
-	for b.Loop() {
-		counters.RecordRead()
-		counters.RecordTransformed()
-		counters.RecordLoaded(1)
-	}
+	b.Run("disabled", func(b *testing.B) {
+		counters := telemetry.NewRunCounters(context.Background())
+		b.ReportAllocs()
+		for b.Loop() {
+			counters.RecordRead()
+			counters.RecordTransformed()
+			counters.RecordLoaded(1)
+		}
+	})
+	b.Run("enabled_file", func(b *testing.B) {
+		ctx := enabledTelemetryContextForBenchmark(b, "benchmark-emit-enabled")
+		counters := telemetry.NewRunCounters(ctx)
+		b.ReportAllocs()
+		for b.Loop() {
+			counters.RecordRead()
+			counters.RecordTransformed()
+			counters.RecordLoaded(1)
+		}
+	})
+}
+
+func enabledTelemetryContextForTest(t *testing.T, runID string) context.Context {
+	t.Helper()
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: t.TempDir(), Directory: filepath.Join(".polymetrics", "telemetry"), RunID: runID}, func(string) {})
+	t.Cleanup(func() { telemetry.Shutdown(context.Background(), handle, func(string) {}) })
+	return ctx
+}
+
+func enabledTelemetryContextForBenchmark(b *testing.B, runID string) context.Context {
+	b.Helper()
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: b.TempDir(), Directory: filepath.Join(".polymetrics", "telemetry"), RunID: runID}, func(string) {})
+	b.Cleanup(func() { telemetry.Shutdown(context.Background(), handle, func(string) {}) })
+	return ctx
 }
 
 func readMetricTelemetry(t *testing.T, dir string) []byte {

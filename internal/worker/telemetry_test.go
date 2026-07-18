@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"go.temporal.io/sdk/client"
 	tlog "go.temporal.io/sdk/log"
+	temporalworker "go.temporal.io/sdk/worker"
 
 	"polymetrics.ai/internal/telemetry"
 )
@@ -28,6 +30,37 @@ func TestTemporalClientOptionsTelemetryGated(t *testing.T) {
 	}
 	if enabled.MetricsHandler == nil {
 		t.Fatal("telemetry-enabled Temporal options missing metrics handler")
+	}
+}
+
+func TestTemporalWorkerOptionsTelemetryGated(t *testing.T) {
+	disabled := temporalWorkerOptions(context.Background(), testTemporalLogger())
+	assertTemporalWorkerTelemetryDisabled(t, disabled)
+
+	root := t.TempDir()
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "temporal-worker-options"}, func(string) {})
+	defer telemetry.Shutdown(context.Background(), handle, func(string) {})
+	enabled := temporalWorkerOptions(ctx, testTemporalLogger())
+	if len(enabled.Interceptors) == 0 {
+		t.Fatal("telemetry-enabled Temporal worker options missing tracing interceptor")
+	}
+}
+
+func TestTemporalWorkerConstructorsUseTelemetryOptions(t *testing.T) {
+	for _, path := range []string{"serve.go", "submit.go"} {
+		t.Run(path, func(t *testing.T) {
+			data, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			src := string(data)
+			if strings.Contains(src, "worker.Options{}") {
+				t.Fatalf("%s still constructs Temporal worker with empty worker.Options{}", path)
+			}
+			if !strings.Contains(src, "temporalWorkerOptions(") {
+				t.Fatalf("%s does not wire temporalWorkerOptions into worker.New", path)
+			}
+		})
 	}
 }
 
@@ -78,5 +111,12 @@ func assertTemporalTelemetryDisabled(t *testing.T, opts client.Options) {
 	}
 	if opts.MetricsHandler != nil {
 		t.Fatal("disabled Temporal options have metrics handler, want nil")
+	}
+}
+
+func assertTemporalWorkerTelemetryDisabled(t *testing.T, opts temporalworker.Options) {
+	t.Helper()
+	if len(opts.Interceptors) != 0 {
+		t.Fatalf("disabled Temporal worker options have %d interceptors, want 0", len(opts.Interceptors))
 	}
 }

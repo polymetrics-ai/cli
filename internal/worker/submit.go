@@ -55,12 +55,13 @@ func SubmitterForActivitiesContext(ctx context.Context, addr string, embedded bo
 	if err != nil {
 		return nil, nil, fmt.Errorf("worker: dial temporal: %w", err)
 	}
+	logger := temporalLogger(ctx)
 
 	taskQueue := TaskQueue
 	var w worker.Worker
 	if embedded {
 		taskQueue = TaskQueue + "-embedded-" + randSuffix()
-		w = worker.New(c, taskQueue, worker.Options{})
+		w = worker.New(c, taskQueue, temporalWorkerOptions(ctx, logger))
 		registerWorker(w, acts)
 		if err := w.Start(); err != nil {
 			c.Close()
@@ -86,8 +87,12 @@ func dialTemporalClient(ctx context.Context, addr string) (client.Client, error)
 	}
 	dialCtx, cancel := context.WithTimeout(ctx, temporalDialTimeout)
 	defer cancel()
-	logger := tlog.NewStructuredLogger(pmlogging.FromContext(dialCtx))
+	logger := temporalLogger(dialCtx)
 	return temporalClientDial(dialCtx, temporalClientOptions(dialCtx, addr, logger))
+}
+
+func temporalLogger(ctx context.Context) tlog.Logger {
+	return tlog.NewStructuredLogger(pmlogging.FromContext(ctx))
 }
 
 func temporalClientOptions(ctx context.Context, addr string, logger tlog.Logger) client.Options {
@@ -114,6 +119,22 @@ func temporalClientOptions(ctx context.Context, addr string, logger tlog.Logger)
 			Meter:   meter,
 			OnError: temporalTelemetryOnError(ctx, logger),
 		})
+	}
+	return opts
+}
+
+func temporalWorkerOptions(ctx context.Context, logger tlog.Logger) worker.Options {
+	var opts worker.Options
+	if !telemetry.Enabled(ctx) {
+		return opts
+	}
+	if tracer, ok := telemetry.Tracer(ctx); ok {
+		tracingInterceptor, err := temporalotel.NewTracingInterceptor(temporalotel.TracerOptions{Tracer: tracer})
+		if err != nil {
+			warnTemporalTelemetry(ctx, logger, "temporal telemetry worker tracing interceptor disabled", err)
+		} else if workerInterceptor, ok := tracingInterceptor.(interceptor.WorkerInterceptor); ok {
+			opts.Interceptors = append(opts.Interceptors, workerInterceptor)
+		}
 	}
 	return opts
 }
