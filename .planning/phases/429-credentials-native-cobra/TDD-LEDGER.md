@@ -11,6 +11,19 @@ Doctor/list passed; `scripts/gsd prompt plan-phase 429 --skip-research` generate
 
 Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-documentation`, `golang-spf13-cobra`.
 
+## Local security review correction ledger
+
+Session `issue-429-action-name-boundary-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T151236Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`; exact correction start `36b2e388d78aea5e79dac63b10f6310d25002198`.
+
+| Step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| C0 | Review/plan | Identify post-action positional-name discovery bypass; update phase artifacts before correction production edit | Complete |
+| C1 | RED | `go test ./internal/cli -run '^TestCredentialsLeadingInvalidNameTokensCannotDiscoverLaterNames$' -count=1` | Failed before correction: 8/10 assigned-unknown, short, assigned-help-like, and literal add/remove cases executed later names; package `7.940s` |
+| C2 | GREEN | Insert required-name boundary and strict credential/connector leading-character validation | Pending |
+| C3 | Verify | Focused/repeated/race, exact differential, full CLI if warranted, formatting/static/build/scope | Pending |
+
+The correction tests use config-only temporary credentials and no secret source. Bare unknown cases already failed closed; the eight failing cases prove Cobra consumed an invalid first name token and discovered a later name.
+
 ## Planned red / green / refactor log
 
 | Step | Kind | Command / evidence | Status |

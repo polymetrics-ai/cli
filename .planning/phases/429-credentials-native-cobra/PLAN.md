@@ -10,6 +10,15 @@ Invocation session: `issue-429-pi-openai-codex-gpt-5.6-sol-high-20260718T143346Z
 Explicit invocation profile: `model=openai-codex/gpt-5.6-sol`, `thinking=high`
 Execution decision: `local_critical_path` — ninth serialized Phase 9 namespace unit is assigned to this isolated branch/worktree. Central router files collide with later units, this session exposes no subagent tool, and the user bounded delivery to #429 with no PR or external review.
 
+## Local security review correction
+
+- Session: `issue-429-action-name-boundary-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T151236Z`; model `openai-codex/gpt-5.6-sol`; thinking `high`.
+- Exact correction start: `36b2e388d78aea5e79dac63b10f6310d25002198`.
+- Finding: after an exact `credentials add|inspect|test|remove` action, a leading assigned unknown, short, assigned help-like, or literal-boundary token can be consumed by Cobra, allowing a later positional name to be discovered and a mutating add/remove action to execute. Bare unknown already fails closed.
+- Smallest slice: add an action-name boundary before pflag parsing when the first required-name token begins with `-`; preserve valid exact names, flag tails after a valid name, namespace-level boundaries, help, globals, and list behavior. Strengthen credential/connector names to start with an ASCII alphanumeric character.
+- TDD: focused add/remove state tests were added first and failed in 8/10 cases before the correction; no secret source was used. Run focused/repeated/race tests and extend the exact differential with valid preserved and invalid corrected cases.
+- Delivery: commit/push correction RED and GREEN checkpoints; no PR, external review, dependency, service, credentialed check, or secret material.
+
 ## Required reading complete
 
 - Issue #429 via `gh`; parent #397; umbrella #407; draft parent PR #438; prior native Cobra patterns through #428.

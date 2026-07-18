@@ -12,7 +12,10 @@
   "endedAt": null,
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "focused_green_pending_full_verification",
+  "correctionInvocationSession": "issue-429-action-name-boundary-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T151236Z",
+  "correctionStartedAt": "20260718T151236Z",
+  "correctionStartingHead": "36b2e388d78aea5e79dac63b10f6310d25002198",
+  "status": "correction_red_pending_fix",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -36,6 +39,11 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "native credentials tree, typed current flags, controlled Cobra stdin, pre-read validation, credentials-only action boundary, and metadata-only output passed focused and race tests without credentialed checks"
+    },
+    {
+      "cycle": "correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "local security review found post-action positional-name discovery; focused add/remove state tests failed before correction production edits in eight assigned-unknown, short, assigned-help-like, and literal cases"
     }
   ],
   "red": "go test ./internal/cli -run 'Credentials|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed before production edits: internal/cli/credentials_cli_test.go:22:9 undefined newCredentialsCobraCommand",

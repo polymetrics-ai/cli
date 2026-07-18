@@ -433,6 +433,52 @@ func TestCredentialsLeadingInvalidTokensCannotDiscoverActions(t *testing.T) {
 	}
 }
 
+func TestCredentialsLeadingInvalidNameTokensCannotDiscoverLaterNames(t *testing.T) {
+	leading := [][]string{
+		{"--unknown=x"},
+		{"--unknown"},
+		{"-x"},
+		{"--help=false"},
+		{"--"},
+	}
+	for _, head := range leading {
+		name := strings.NewReplacer("-", "dash", "=", "eq").Replace(strings.Join(head, "_"))
+		t.Run("add_"+name, func(t *testing.T) {
+			root := initCredentialsProject(t)
+			args := []string{"credentials", "add"}
+			args = append(args, head...)
+			args = append(args, "must-not-exist", "--connector=sample")
+			var stdout, stderr bytes.Buffer
+			code := Run(append(args, "--root", root, "--json"), &stdout, &stderr)
+			if code == 0 {
+				t.Fatal("invalid leading credential-name token discovered and executed later add name")
+			}
+			if got := credentialCount(t, root); got != 0 {
+				t.Fatalf("invalid leading credential-name token executed add; credential count = %d", got)
+			}
+		})
+
+		t.Run("remove_"+name, func(t *testing.T) {
+			root := initCredentialsProject(t)
+			if _, err := executeCredentialsCommand(t, root, false, strings.NewReader(""),
+				"credentials", "add", "must-remain", "--connector=sample"); err != nil {
+				t.Fatalf("seed credential: %v", err)
+			}
+			args := []string{"credentials", "remove"}
+			args = append(args, head...)
+			args = append(args, "must-remain")
+			var stdout, stderr bytes.Buffer
+			code := Run(append(args, "--root", root, "--json"), &stdout, &stderr)
+			if code == 0 {
+				t.Fatal("invalid leading credential-name token discovered and executed later remove name")
+			}
+			if got := credentialCount(t, root); got != 1 {
+				t.Fatalf("invalid leading credential-name token executed remove; credential count = %d", got)
+			}
+		})
+	}
+}
+
 func TestCredentialsInvalidActionsAndGlobalBooleans(t *testing.T) {
 	root := initCredentialsProject(t)
 	for _, args := range [][]string{
