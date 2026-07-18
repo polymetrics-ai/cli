@@ -11,8 +11,10 @@ Base parent head: `56a7ecb08f755184af7b55318c3285582d5adfb7`
 - `scripts/gsd doctor` passed on 2026-07-18; adapter reported 69 commands.
 - `scripts/gsd prompt plan-phase 415-otel-metrics --skip-research` generated `/tmp/gsd-plan-415.txt`.
 - `scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run` failed with `scripts/gsd: unknown GSD command: programming-loop`.
+- 2026-07-18 continuation after previous worker output truncation: dirty worktree inspected first and preserved; no reset/discard/recreate performed.
+- Continuation reran `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run >/tmp/gsd-loop-415-continuation.txt`; doctor/list passed, programming-loop remains unavailable with the same unknown-command error.
 - Manual programming-loop fallback active via `.pi/prompts/pm-gsd-loop.md`; GSD/TDD order remains mandatory.
-- Universal-loop execution decision for planning cycle: `local_critical_path` — this Pi worker owns one isolated issue worktree/branch and has no subagent tool.
+- Universal-loop execution decision for planning/continuation cycles: `local_critical_path` — this Pi worker owns one isolated issue worktree/branch and has no subagent tool.
 
 ## Required reading completed
 

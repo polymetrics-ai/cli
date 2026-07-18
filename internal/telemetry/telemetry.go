@@ -81,6 +81,7 @@ func BoolAttr(key string, value bool) Attr { return Attr{Key: key, Value: value}
 type Handle struct {
 	enabled  bool
 	provider *sdktrace.TracerProvider
+	metrics  *metricHandle
 	file     io.Closer
 	shutdown func(context.Context) error
 	timeout  time.Duration
@@ -90,6 +91,7 @@ type Handle struct {
 func (h *Handle) Enabled() bool { return h != nil && h.enabled }
 
 type tracerContextKey struct{}
+type tracerValueContextKey struct{}
 type captureContextKey struct{}
 type startFunc func(context.Context, string, []attribute.KeyValue) (context.Context, Span)
 
@@ -172,7 +174,7 @@ func Init(ctx context.Context, cfg Config, warn WarningFunc) (context.Context, *
 		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
 	}
 
-	provider, starter, err := newTracerProvider(ctx, exporter, cfg)
+	provider, tracer, starter, err := newTracerProvider(ctx, exporter, cfg)
 	if err != nil {
 		_ = exporter.Shutdown(ctx)
 		if file != nil {
@@ -181,14 +183,30 @@ func Init(ctx context.Context, cfg Config, warn WarningFunc) (context.Context, *
 		warnf(ctx, warn, "initialize telemetry provider: %v", err)
 		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
 	}
+	metrics, err := newMetricHandle(ctx, cfg, warn)
+	if err != nil {
+		_ = provider.Shutdown(ctx)
+		_ = exporter.Shutdown(ctx)
+		if file != nil {
+			_ = file.Close()
+		}
+		warnf(ctx, warn, "initialize telemetry metrics exporter: %v", err)
+		return ctx, &Handle{timeout: timeoutOrDefault(cfg.ShutdownTimeout)}
+	}
 	handle := &Handle{
 		enabled:  true,
 		provider: provider,
+		metrics:  metrics,
 		file:     file,
 		timeout:  timeoutOrDefault(cfg.ShutdownTimeout),
 	}
 	handle.shutdown = func(shutdownCtx context.Context) error {
 		var errs []error
+		if metrics != nil {
+			if err := metrics.shutdown(shutdownCtx); err != nil {
+				errs = append(errs, err)
+			}
+		}
 		if err := provider.Shutdown(shutdownCtx); err != nil {
 			errs = append(errs, err)
 		}
@@ -201,6 +219,8 @@ func Init(ctx context.Context, cfg Config, warn WarningFunc) (context.Context, *
 	}
 
 	ctx = context.WithValue(ctx, tracerContextKey{}, starter)
+	ctx = context.WithValue(ctx, tracerValueContextKey{}, tracer)
+	ctx = withMetricState(ctx, metrics)
 	ctx = context.WithValue(ctx, captureContextKey{}, normalizeCapture(cfg.Capture))
 	return ctx, handle
 }
@@ -233,6 +253,15 @@ func StartSpan(ctx context.Context, name string, attrs ...Attr) (context.Context
 	return starter(ctx, name, filterAttrs(ctx, attrs))
 }
 
+// Tracer returns the invocation-scoped OpenTelemetry tracer when telemetry is enabled.
+func Tracer(ctx context.Context) (trace.Tracer, bool) {
+	if ctx == nil {
+		return nil, false
+	}
+	tracer, ok := ctx.Value(tracerValueContextKey{}).(trace.Tracer)
+	return tracer, ok && tracer != nil
+}
+
 // HTTPAttrs returns allowlisted HTTP metadata with query strings, userinfo,
 // fragments, bodies, and headers deliberately omitted.
 func HTTPAttrs(method, rawURL string) []Attr {
@@ -248,7 +277,7 @@ func HTTPAttrs(method, rawURL string) []Attr {
 	}
 }
 
-func newTracerProvider(ctx context.Context, exporter sdktrace.SpanExporter, cfg Config) (*sdktrace.TracerProvider, startFunc, error) {
+func newTracerProvider(ctx context.Context, exporter sdktrace.SpanExporter, cfg Config) (*sdktrace.TracerProvider, trace.Tracer, startFunc, error) {
 	var provider *sdktrace.TracerProvider
 	var tracer trace.Tracer
 	err := withSanitizedSDKEnv(func() error {
@@ -262,9 +291,9 @@ func newTracerProvider(ctx context.Context, exporter sdktrace.SpanExporter, cfg 
 		return nil
 	})
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
-	return provider, startFuncForTracer(tracer), nil
+	return provider, tracer, startFuncForTracer(tracer), nil
 }
 
 func startFuncForTracer(tracer trace.Tracer) startFunc {
@@ -502,11 +531,19 @@ var (
 		"OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
 	}
 
+	supportedOTLPMetricEndpointEnv = []string{
+		"OTEL_EXPORTER_OTLP_METRICS_ENDPOINT",
+	}
+
 	unsupportedSDKEnv = []string{
 		"OTEL_RESOURCE_ATTRIBUTES",
 		"OTEL_SERVICE_NAME",
 		"OTEL_TRACES_SAMPLER",
 		"OTEL_TRACES_SAMPLER_ARG",
+		"OTEL_METRICS_EXPORTER",
+		"OTEL_METRICS_EXEMPLAR_FILTER",
+		"OTEL_METRIC_EXPORT_INTERVAL",
+		"OTEL_METRIC_EXPORT_TIMEOUT",
 		"OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT",
 		"OTEL_ATTRIBUTE_COUNT_LIMIT",
 		"OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT",
@@ -541,6 +578,15 @@ var (
 		"OTEL_EXPORTER_OTLP_TRACES_PROTOCOL",
 		"OTEL_EXPORTER_OTLP_TIMEOUT",
 		"OTEL_EXPORTER_OTLP_TRACES_TIMEOUT",
+		"OTEL_EXPORTER_OTLP_METRICS_HEADERS",
+		"OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE",
+		"OTEL_EXPORTER_OTLP_METRICS_CLIENT_CERTIFICATE",
+		"OTEL_EXPORTER_OTLP_METRICS_CLIENT_KEY",
+		"OTEL_EXPORTER_OTLP_METRICS_INSECURE",
+		"OTEL_EXPORTER_OTLP_METRICS_COMPRESSION",
+		"OTEL_EXPORTER_OTLP_METRICS_PROTOCOL",
+		"OTEL_EXPORTER_OTLP_METRICS_TIMEOUT",
+		"OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE",
 	}
 )
 
@@ -571,6 +617,7 @@ func withSanitizedSDKEnv(fn func() error) error {
 
 func withSanitizedOTLPEnv(fn func() (sdktrace.SpanExporter, error)) (sdktrace.SpanExporter, error) {
 	all := append([]string{}, supportedOTLPEndpointEnv...)
+	all = append(all, supportedOTLPMetricEndpointEnv...)
 	all = append(all, unsupportedOTLPEnv...)
 	all = append(all, unsupportedSDKEnv...)
 	var exporter sdktrace.SpanExporter

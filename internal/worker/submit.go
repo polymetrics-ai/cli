@@ -11,12 +11,15 @@ import (
 	enumspb "go.temporal.io/api/enums/v1"
 	workflowservice "go.temporal.io/api/workflowservice/v1"
 	"go.temporal.io/sdk/client"
+	temporalotel "go.temporal.io/sdk/contrib/opentelemetry"
+	"go.temporal.io/sdk/interceptor"
 	tlog "go.temporal.io/sdk/log"
 	"go.temporal.io/sdk/worker"
 
 	"polymetrics.ai/internal/events"
 	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/rlm"
+	"polymetrics.ai/internal/telemetry"
 )
 
 // TaskQueue is the shared queue served by the `pm worker serve` daemon.
@@ -25,14 +28,8 @@ const TaskQueue = "polymetrics-rlm"
 var workflowPollInterval = time.Second
 var temporalDialTimeout = 3 * time.Second
 
-var temporalClientDial = func(ctx context.Context, addr string, logger tlog.Logger) (client.Client, error) {
-	return client.DialContext(ctx, client.Options{
-		HostPort: addr,
-		Logger:   logger,
-		ConnectionOptions: client.ConnectionOptions{
-			GetSystemInfoTimeout: temporalDialTimeout,
-		},
-	})
+var temporalClientDial = func(ctx context.Context, opts client.Options) (client.Client, error) {
+	return client.DialContext(ctx, opts)
 }
 
 // DefaultEnvPass is the set of LLM env vars forwarded into the agent container.
@@ -89,7 +86,49 @@ func dialTemporalClient(ctx context.Context, addr string) (client.Client, error)
 	}
 	dialCtx, cancel := context.WithTimeout(ctx, temporalDialTimeout)
 	defer cancel()
-	return temporalClientDial(dialCtx, addr, tlog.NewStructuredLogger(pmlogging.FromContext(dialCtx)))
+	logger := tlog.NewStructuredLogger(pmlogging.FromContext(dialCtx))
+	return temporalClientDial(dialCtx, temporalClientOptions(dialCtx, addr, logger))
+}
+
+func temporalClientOptions(ctx context.Context, addr string, logger tlog.Logger) client.Options {
+	opts := client.Options{
+		HostPort: addr,
+		Logger:   logger,
+		ConnectionOptions: client.ConnectionOptions{
+			GetSystemInfoTimeout: temporalDialTimeout,
+		},
+	}
+	if !telemetry.Enabled(ctx) {
+		return opts
+	}
+	if tracer, ok := telemetry.Tracer(ctx); ok {
+		tracingInterceptor, err := temporalotel.NewTracingInterceptor(temporalotel.TracerOptions{Tracer: tracer})
+		if err != nil {
+			warnTemporalTelemetry(ctx, logger, "temporal telemetry tracing interceptor disabled", err)
+		} else if clientInterceptor, ok := tracingInterceptor.(interceptor.ClientInterceptor); ok {
+			opts.Interceptors = append(opts.Interceptors, clientInterceptor)
+		}
+	}
+	if meter, ok := telemetry.Meter(ctx); ok {
+		opts.MetricsHandler = temporalotel.NewMetricsHandler(temporalotel.MetricsHandlerOptions{
+			Meter:   meter,
+			OnError: temporalTelemetryOnError(ctx, logger),
+		})
+	}
+	return opts
+}
+
+func temporalTelemetryOnError(ctx context.Context, logger tlog.Logger) func(error) {
+	return func(err error) {
+		warnTemporalTelemetry(ctx, logger, "temporal telemetry metrics handler error", err)
+	}
+}
+
+func warnTemporalTelemetry(ctx context.Context, logger tlog.Logger, msg string, err error) {
+	if err == nil || logger == nil {
+		return
+	}
+	logger.Warn(msg, "error", pmlogging.RedactText(ctx, err.Error()))
 }
 
 type workflowRun interface {

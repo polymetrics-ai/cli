@@ -15,6 +15,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/events"
+	"polymetrics.ai/internal/telemetry"
 )
 
 type etlExecutionResult struct {
@@ -109,6 +110,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
+	metrics := telemetry.NewRunCounters(ctx)
 	recordBatch := make([]connectors.Record, 0, batchSize)
 	rawBatch := make([]localRawRecord, 0, batchSize)
 	nextCursor := prior.Cursor
@@ -137,6 +139,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			}
 		}
 		result.BatchCount++
+		metrics.RecordBatch()
+		metrics.Flush(ctx)
 		a.emitETLEvent(ctx, events.KindProgress, runID, streamName, "batch", result, "")
 		rawBatch = rawBatch[:0]
 		recordBatch = recordBatch[:0]
@@ -154,6 +158,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
+		metrics.RecordRead()
 		cursor := ""
 		if stream.CursorField != "" {
 			var err error
@@ -201,7 +206,9 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		rawBatch = append(rawBatch, raw)
 		recordBatch = append(recordBatch, enriched)
 		result.RecordsTransformed++
+		metrics.RecordTransformed()
 		result.RecordsLoaded++
+		metrics.RecordLoaded(1)
 		if len(rawBatch) >= batchSize {
 			return flush()
 		}

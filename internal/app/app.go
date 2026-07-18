@@ -485,6 +485,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	}
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
+	metrics := telemetry.NewRunCounters(ctx)
 	batch := make([]connectors.Record, 0, batchSize)
 	firstWrite := true
 	nextCursor := prior.Cursor
@@ -518,8 +519,12 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			return err
 		}
 		result.RecordsLoaded += writeResult.RecordsWritten
+		metrics.RecordLoaded(writeResult.RecordsWritten)
 		result.RecordsFailed += writeResult.RecordsFailed
+		metrics.RecordFailed(writeResult.RecordsFailed)
 		result.BatchCount++
+		metrics.RecordBatch()
+		metrics.Flush(ctx)
 		a.emitETLEvent(ctx, events.KindProgress, runID, streamName, "batch", result, "")
 		batch = batch[:0]
 		return nil
@@ -536,6 +541,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
+		metrics.RecordRead()
 		cursor := ""
 		if stream.CursorField != "" {
 			var err error
@@ -558,6 +564,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			r["_polymetrics_cursor"] = cursor
 		}
 		result.RecordsTransformed++
+		metrics.RecordTransformed()
 		batch = append(batch, r)
 		if len(batch) >= batchSize {
 			return flush(false)

@@ -1,6 +1,6 @@
 # Summary — Phase 415 OpenTelemetry metrics
 
-Status: planning artifacts created; manual GSD/TDD fallback active because `scripts/gsd prompt programming-loop` is unavailable.
+Status: implementation green pre-commit; manual GSD/TDD fallback active because `scripts/gsd prompt programming-loop` is unavailable.
 
 ## Current state
 
@@ -9,15 +9,24 @@ Status: planning artifacts created; manual GSD/TDD fallback active because `scri
 - Parent issue: #397; sub-issue: #415.
 - Worker directory: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-415-otel-metrics`.
 - Execution decision: `local_critical_path`.
+- Continuation note: previous worker output truncated; dirty worktree was inspected first and preserved with no reset/discard/recreate.
 
-## Delivered so far
+## Delivered
 
-- Read issue body/AC, repo rules, GSD contracts/workflows, CLI architecture v2 docs, ADR 0004, runtime docs, and prior #410 telemetry artifacts.
-- Loaded required Go/GSD skills and recorded missing `.pi/skills/go-implementation/SKILL.md`.
-- Created issue-local GSD artifacts before tests/production edits.
+- File and OTLP OpenTelemetry metrics exporters under `internal/telemetry`, sharing the default-off telemetry gate and safe resource/env handling.
+- Batched ETL `RunCounters` with local hot-path increments and batch-boundary metric flushes for connector and warehouse ETL paths.
+- CLI/file-export contract test reconciling `pm.records.*` and `pm.batches.flushed` with final `ETLRun` envelope counts.
+- Temporal client options gated on telemetry enablement with contrib tracing interceptor and metrics handler; contrib metrics `OnError` logs redacted warnings instead of panicking.
+- Docs/help parity updates for tracing+metrics, env-only metrics endpoint, warning behavior, and batched metrics.
+- ADR-approved dependency delta only: OTel metric exporters/SDK at v1.44.0 and Temporal contrib v0.7.0; `go.opentelemetry.io/otel/metric` promoted from existing indirect to direct at v1.44.0.
 
-## Next
+## Verification snapshot
 
-1. Add red tests for file metrics reconciliation, batched counters/allocation guard, Temporal gating, and OTLP metrics env hardening.
-2. Record exact red output in `TDD-LEDGER.md`.
-3. Implement smallest green slice with exact ADR-approved metrics/contrib dependencies only if imports require them.
+- Focused tests: pass.
+- Benchmark: `BenchmarkEmit-12 592256128 2.040 ns/op 0 B/op 0 allocs/op`.
+- `gofmt -w cmd internal`: pass.
+- `go vet ./...`: pass.
+- `go test -timeout 20m ./...`: pass.
+- `go build ./cmd/pm`: pass.
+- `git diff --check`: pass.
+- `make verify`: pre-commit run stopped at `tidy-check` because go.mod/go.sum dependency delta is intentionally uncommitted; rerun after commit.
