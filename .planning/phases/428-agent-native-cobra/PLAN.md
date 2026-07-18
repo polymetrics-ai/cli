@@ -72,3 +72,9 @@ Parser ownership changes but command names, flags, output envelopes, canonical m
 ## Safety
 
 No secrets, credentials, services, dependencies, generic write tools, destructive/admin actions, production deployment, image pull/build, Podman/Docker invocation, quality-gate reduction, external review, PR, or merge. Image tests use injected fakes and temporary directories only. Worker/RLM execution is untouched. The required `make verify` may run only its existing dependency-free/local sample smoke under its established safety gates.
+
+## Completion note
+
+The bounded slice completed within scope. Native Cobra owns `agent`, `plan`, `image`, all three image actions, and positional help; `plan --request` is typed and only the agent handler's `parseFlags` call is removed. A context-aware injected runtime covers build/pull/ensure without executing Podman/Docker, while bounded request/root/Podman-bin/image validation runs before external lookup/execution. Agent-scoped trailing-help and literal-separator compatibility remains exact.
+
+Focused RED preceded production edits. Focused/router/golden/full CLI and repository tests, a 25-case exact legacy differential, built-binary help/plan/error checks, runtime dependency-free tests, docs/website/generated parity, gofmt, vet, build, and `make verify` passed. No dependency, worker/RLM, connector, checked-in docs/website/golden, or unrelated namespace delta exists. Coherent checkpoints were pushed without PR or external review.

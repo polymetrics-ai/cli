@@ -18,9 +18,9 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 0 | Planning | Create all six phase artifacts before production edits | Complete |
 | 1 | RED | `go test ./internal/cli/ -run 'Agent|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1` after test-only edits | Failed as expected (build gate) |
 | 2 | GREEN | Native tree, typed request, agent-only compatibility, injected image runtime, validation | Pass (`4.408s`; expanded invalid-help rerun `4.480s`) |
-| 3 | Refactor | Focused router/golden/full CLI and legacy differential | Pending |
-| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
-| 5 | Parity/safety | built binary help/plan only; docs/website/generated/runtime dependency-free/scope guards | Pending |
+| 3 | Refactor | Focused router/golden/full CLI and legacy differential | Pass |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pass |
+| 5 | Parity/safety | built binary help/plan only; docs/website/generated/runtime dependency-free/scope guards | Pass |
 
 ## Planned RED coverage
 
@@ -61,3 +61,24 @@ ok  \tpolymetrics.ai/internal/cli\t4.480s
 ```
 
 The second run includes expanded invalid image-action trailing-help coverage. Native `agent`, `plan`, `image`, `build`, `pull`, `ensure`, and hidden positional `help` nodes now own routing. `plan --request` is typed and the agent-only `parseFlags` call is removed. Image operations use an injected context-aware runtime seam; all success/error/ensure branches run against fakes. Agent-scoped normalization preserves legacy trailing help and literal separator behavior. Request, build root, Podman binary, and image references are validated before any runtime lookup or execution.
+
+## Refactor, full GREEN, and parity
+
+| Command / gate | Result |
+|---|---|
+| Final focused agent/router | Pass (`4.386s`) |
+| Focused agent/router/golden | Pass (`11.408s`) |
+| Standalone golden | Pass (`5.816s`; final rerun `6.054s`) |
+| Full `internal/cli/...` | Pass (`235.686s`) |
+| Runtime dependency-free config/RLM/worker packages | Pass; final config `0.411s`, RLM `0.553s`, router `0.864s`, worker `1.204s` |
+| Focused race gate | Pass (`1.751s`) |
+| Legacy differential | 25/25 exact exit/stdout/stderr matches: 20 help/plan/global/compatibility cases plus 5 missing/invalid image-action help cases |
+| Built binary | Help routes byte-identical (`450` bytes); deterministic plan; invalid action exit `2`; invalid assigned boolean and unsafe request exit `3` |
+| Docs/manual parity | Temp CLI docs byte diff clean; temp and tracked connector docs validation pass |
+| Website parity | `npm --prefix website run gen:docs` wrote 11 pages; tracked diff clean |
+| Formatting/static/build | `gofmt -w cmd internal`, `go vet ./...` (`4.162s`), `go build ./cmd/pm` (`3.829s`) pass |
+| Full repository tests | Pass (`real 345.240s`; CLI `238.990s`, certify `341.079s`) |
+| `make verify` | Pass (`real 25.853s`, cached tests; smoke OK; lint `0 issues`; 547 connectors / 0 findings) |
+| Scope/dependency guards | No go.mod/go.sum, connector-def, docs, website, golden, or unrelated namespace delta; `git diff --check` pass |
+
+All image-action success/error/ensure branches were exercised only through injected fakes and temporary roots. No Podman/Docker command, image build, image pull, publish, Temporal, PostgreSQL, or Dragonfly service was invoked. Invalid image-action differential checks performed executable lookup only and never executed the configured binary. The required `make verify` local sample smoke followed reverse ETL plan → preview → approval → run without external writes.

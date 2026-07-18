@@ -9,16 +9,19 @@
   "startingHead": "235233f7cfde4a24612be6b0f95fb37a412d388a",
   "invocationSession": "issue-428-pi-openai-codex-gpt-5.6-sol-high-20260718T124925Z",
   "startedAt": "20260718T124925Z",
+  "endedAt": "20260718T131634Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "green_focused",
-  "verificationPassed": false,
+  "status": "complete_verified_pushed",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
     "planPhase": "passed_10668_bytes_executed_inline",
     "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
-    "fallback": "manual_gsd_universal_runtime_loop"
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "verifyWorkPrompt": "passed_7137_bytes_executed_inline",
+    "codeReviewPrompt": "passed_6003_bytes_executed_inline_local_review_clean"
   },
   "orchestrationDecisions": [
     {
@@ -35,12 +38,27 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "native agent tree, typed request flag, agent-only compatibility normalization, injected context-aware image runtime, and bounded request/path/image validation passed focused tests without executing Podman or Docker"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused, golden, full CLI/repository, race, runtime dependency-free, 25-case differential, built help/plan, docs/website parity, gofmt, vet, build, make verify, and scope gates passed"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "issue-local artifacts finalized with exact TDD, safety, parity, verification, and commit evidence; local inline review was clean and user prohibited PR/external review"
     }
   ],
   "red": "focused agent/router test build failed as expected before production edits: runAgentImageAction and newRootCmdWithAgentImageRuntime were undefined",
-  "green": "focused agent/router pass 4.408s; expanded invalid-image-help rerun pass 4.480s",
-  "verification": "pending",
+  "green": "focused 4.408s; expanded 4.480s; final 4.386s; agent/router/golden 11.408s; full CLI 235.686s",
+  "verification": "focused race, final golden, runtime dependency-free tests, 25-case exact legacy differential, built help/plan/error checks, docs generation/validation, website generation, gofmt, vet, build, full repository tests, make verify, and dependency/scope guards passed",
   "files": [
+    "internal/cli/cobra_router.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/cli.go",
+    "internal/cli/agent_image_cli.go",
+    "internal/cli/agent_cli_test.go",
     ".planning/phases/428-agent-native-cobra/PLAN.md",
     ".planning/phases/428-agent-native-cobra/TDD-LEDGER.md",
     ".planning/phases/428-agent-native-cobra/VERIFICATION.md",
@@ -48,13 +66,19 @@
     ".planning/phases/428-agent-native-cobra/RUN-STATE.json",
     ".planning/phases/428-agent-native-cobra/SUMMARY.md"
   ],
-  "commits": [],
-  "push": "pending",
+  "commits": [
+    "a37719a7 docs(planning): plan agent native cobra slice",
+    "6cdaea60 test(cli): specify native cobra agent contract",
+    "4e1b20f3 refactor(cli): nativize agent namespace",
+    "75e0d732 test(cli): harden agent image validation",
+    "docs(planning): record agent cobra verification (final handoff commit)"
+  ],
+  "push": "all planning, red, implementation, hardening, and final verification checkpoints pushed to origin/refactor/428-agent-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
-  "reviewRoute": "external_review_prohibited_by_user",
+  "reviewRoute": "inline_local_review_clean_external_review_prohibited",
+  "safety": "no secrets, credentials, optional services, Podman/Docker execution, image operations, worker behavior changes, dependencies, or external writes; make verify local smoke followed plan-preview-approval-run",
   "risks": [
-    "pflag action/help/separator behavior can diverge from the legacy agent parser",
-    "image tests must not execute a container runtime or perform image operations",
-    "worker and RLM behavior are explicitly outside scope"
+    "agent-only help/separator compatibility normalization remains until deliberate Phase 19 help churn",
+    "completion implementation remains deferred to Phase 15"
   ]
 }
