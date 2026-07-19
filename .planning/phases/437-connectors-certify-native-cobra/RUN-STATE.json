@@ -25,9 +25,14 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "final assigned serialized Phase 9 namespace in isolated worktree; central router writes collide, no subagent tool is exposed, and user requested implementation/commit/push without PR/review"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "complete native connectors/certify tree, parsing, help, output, exit, cancellation, re-entrancy, and credential-output contract was added before production; focused build fails on the intentionally absent native constructors"
     }
   ],
-  "red": "pending",
+  "red": "focused CLI build failed before production edits because newConnectorsCobraCommand and newConnectorsCobraCommandWithRuntime are undefined",
   "green": "pending",
   "verification": "pending",
   "files": [
