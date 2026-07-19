@@ -25,4 +25,14 @@ Downstream artifact: complete. Native hidden worker owns status/serve/help with 
 
 Verification route: `scripts/gsd prompt verify-work 435` generated 106 lines and was executed inline under the manual universal loop.
 
-Verification result: pass at implementation head `2fcee762d0842f9fe8f8014526fe5e298f755023`. Focused/repeated/race/worker-fake/router/golden/full CLI, exact-start differential, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency guards, and default-only `make verify` pass. No Temporal, listener, Podman, database, runtime service, credential, dependency, generic runner, PR, or review was used.
+Historical verification result: the listed gates passed at implementation head `2fcee762d0842f9fe8f8014526fe5e298f755023`, but the no-Temporal-dial/fake-only claim was inaccurate because a config-migration worker status test called `Run` and reached production `temporalprobe.Probe`.
+
+## P2 correction snapshot
+
+Task: At exact HEAD `f692225ab53a3c0467d42c0ac3e9810107d73a82`, accept P2 from `/tmp/pm-397-review-435.log`. Before test or production edits, reset verification and record the correction plan. Add a fake assertion that fails if the injected status seam is bypassed, then route `TestWorkerStatusUsesExplicitConfigFileTemporalAddr` through `runWorkerInvocation` while preserving config precedence/address and unavailable status assertions. Run focused/repeated/race worker/config tests, audit the focused tests for production network dial calls, run full CLI only if needed, and run diff/gofmt/vet. No services, dependencies, production changes, PR, or review.
+
+Execution decision: `local_critical_path` — bounded accepted review correction in the existing isolated issue worktree; no independent worker scope or subagent tool is available.
+
+Downstream artifact: pending.
+
+Verification result: pending; `verificationPassed=false`.

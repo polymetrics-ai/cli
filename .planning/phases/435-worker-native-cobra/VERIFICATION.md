@@ -48,10 +48,13 @@ Invocation: `issue-435-pi-sol-high-20260719T064417Z`; profile `Sol`; thinking `h
 - [x] Exact branch/start and parent draft PR confirmed.
 - [x] GSD doctor/list passed; unavailable programming-loop/manual fallback recorded.
 - [x] Required CLI/testing/error/security/safety/context/concurrency/docs/Cobra skills loaded.
-- [x] Invocation-local fake status/serve only; no Temporal dial/worker or listener.
+- [ ] P2 accepted: the original claim was false because `config_migration_test.go` invoked production `temporalprobe.Probe` through `Run` and attempted a loopback Temporal dial.
+- [ ] Route that config-migration status case through the invocation-local fake and assert exactly one fake status call with the configured address.
+- [ ] Focused/repeated/race worker/config tests pass with no production network dial path in the audited test set.
 - [x] No Podman, database, runtime service, credential, secret/config-canary disclosure, or generic runner.
 - [x] No dependencies, unrelated namespaces, or broad generated churn.
-- [x] Planning, RED, GREEN/refactor, and terminal handoff checkpoints committed/pushed.
+- [x] Original planning, RED, GREEN/refactor, and terminal handoff checkpoints committed/pushed.
+- [ ] P2 test/evidence correction committed and pushed.
 - [x] No PR/review will be created per user instruction.
 
-Result: pass at implementation head `2fcee762d0842f9fe8f8014526fe5e298f755023`; `verificationPassed=true` because full default-only `make verify` exited 0.
+Correction result: pending from exact correction HEAD `f692225ab53a3c0467d42c0ac3e9810107d73a82`. `verificationPassed=false` until the fake-seam assertion, focused/repeated/race worker/config gates, network-dial audit, diff/gofmt/vet, and any necessary broader CLI check pass. The historical full `make verify` result remains valid for that commit but did not prove the prior fake-only claim.
