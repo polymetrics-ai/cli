@@ -11,12 +11,12 @@
   "startedAt": "20260719T010451Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "endedAt": null,
-  "endingImplementationHead": "f5aeafb7bb7a6702077382e98acb790d3865073f",
+  "endedAt": "20260719T025212Z",
+  "endingImplementationHead": "bbe9bb9c",
   "correctionStartHead": "c8f5b9e97a2f71f25cdb362af0055c1c31dc8420",
   "correctionSession": "issue-431-parser-compat-20260719T022304Z",
-  "status": "parser_compatibility_correction_in_progress",
-  "verificationPassed": false,
+  "status": "parser_compatibility_correction_complete_verified",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -59,12 +59,27 @@
     {
       "cycle": "parser-compatibility-correction-tdd-gate",
       "decision": "local_critical_path",
-      "reason": "test-only differential reproduced all 50 malformed-token/action mismatches before production edits while asserting unchanged state, absent outbox effects, and no approval output"
+      "reason": "test-only differential reproduced all 50 malformed-token/action mismatches before production edits; committed GREEN guards later verified unchanged state, empty outbox, and no approval output"
+    },
+    {
+      "cycle": "parser-compatibility-correction-green",
+      "decision": "local_critical_path",
+      "reason": "malformed-only synthetic unknown normalization passes the 50-case differential and normalizer-order test without changing ordinary flags, operands, legal unknowns, approvals, or confirmation ordering"
+    },
+    {
+      "cycle": "parser-compatibility-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused reverse, focused race, full CLI, 324-case exact-start differential, no-approval-output/state/outbox, gofmt, vet, build, diff, scope, and dependency gates passed"
+    },
+    {
+      "cycle": "parser-compatibility-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "bounded correction is complete and verified; RED and GREEN commits are pushed, terminal artifacts are ready for commit/push, and no PR or review was created"
     }
   ],
   "red": "original focused compile RED plus correction RED: 50/50 malformed unknown/action combinations returned premature pflag usage exit 2 before any correction production edit; state and outbox guards remained clean",
-  "green": "focused native reverse contract passed in 28.527s; existing reverse/router/validation safety suite passed in 62.562s; only temporary local fake write after preview, approval, and typed confirmation",
-  "verification": "correction pending: malformed-unknown RED, GREEN, 324-case differential, focused/race/full CLI, no-approval-output, gofmt/vet/build/diff",
+  "green": "correction focused pass 26.289s; complete reverse focus 63.513s; malformed-only normalization preserves valid flags, operands, legal unknowns, approvals, and confirmation ordering",
+  "verification": "pass: focused correction 26.289s; reverse focus 63.513s; race 295.302s; full CLI 417.589s; exact-start differential 324/324 with unchanged state/outbox and no approval output; gofmt, vet, build, diff, scope, dependency clean",
   "files": [
     ".planning/phases/431-reverse-native-cobra/PLAN.md",
     ".planning/phases/431-reverse-native-cobra/TDD-LEDGER.md",
@@ -81,9 +96,11 @@
   "commits": [
     "4d90b60b docs(planning): plan reverse native cobra slice",
     "378b9190 test(cli): specify native cobra reverse contract",
-    "f5aeafb7 refactor(cli): nativize reverse namespace"
+    "f5aeafb7 refactor(cli): nativize reverse namespace",
+    "c98e4dad test(cli): reproduce malformed reverse unknown flags",
+    "bbe9bb9c fix(cli): tolerate malformed reverse unknown flags"
   ],
-  "push": "original implementation checkpoints pushed; parser compatibility correction pending commit and push",
+  "push": "RED and GREEN correction checkpoints pushed; terminal artifact checkpoint prepared for push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "local fakes and temporary state only; no approval or secret values in artifacts/handoff, no external writes, live credentials, optional services, dependencies, unrelated changes, PR, or review; established ordered reverse smoke allowed only in final make verify"

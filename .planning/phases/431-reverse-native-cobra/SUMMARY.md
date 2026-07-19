@@ -1,10 +1,12 @@
 # Phase 431 Summary
 
-Status: parser compatibility correction in progress from exact review head `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420`; prior native implementation remains complete, but correction verification is reopened.
+Status: parser compatibility correction complete and verified from exact review head `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420` through implementation head `bbe9bb9c`; RED and GREEN commits are pushed, and this terminal artifact checkpoint completes delivery on push.
 
 ## Review correction
 
-`/tmp/pm-397-review-431.log` reports 50/324 parser mismatches because pflag rejects malformed legacy-accepted unknown forms such as `--=x` and `---x` before Cobra's unknown-flag whitelist applies. RED now reproduces all 50 combinations across list/plan/preview/run/status: malformed forms return usage exit 2 instead of baseline outcomes, while test guards confirm unchanged state, no outbox, and no approval output. Production remains unedited at this checkpoint. The remaining correction is malformed-only token normalization and focused/race/full CLI plus 324-case differential verification. Public flags/help/docs, ordinary unknown behavior, first operands, approvals, confirmation, and plan → preview → approval → execute ordering must not change. No approval value, external write/service, dependency, PR, or review is permitted.
+`/tmp/pm-397-review-431.log` reported 50/324 parser mismatches because pflag rejected malformed legacy-accepted unknown forms such as `--=x` and `---x` before Cobra's unknown-flag whitelist applied. Test-only RED reproduced all 50 combinations across list/plan/preview/run/status before production edits. The fix maps only pflag-invalid empty/extra-dash long names to a legal synthetic unknown flag, preserving assigned versus unassigned form; ordinary flags, legal unknowns, operands, approvals, confirmation, and ordering remain unchanged.
+
+Focused correction/reverse tests, focused race, full CLI, and a 324-case exact-start binary differential pass. The differential matches every exit/stdout/stderr transcript, retains pre/post state hashes and outbox listings, and emits no approval output. Gofmt, full vet, build, diff/scope/dependency checks pass. Public flags/help/docs are unchanged, so manual/website edits are not applicable. No approval value, external write/service, credentialed check, dependency, PR, or review was used.
 
 ## Identity
 

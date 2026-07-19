@@ -79,10 +79,23 @@ Execution decision: `local_critical_path` — this is a single bounded parser co
 |---:|---|---|---|
 | C0 | Planning | Reopen PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY at exact correction start before test or production edits | Complete |
 | C1 | RED | `go test ./internal/cli -run '^TestReverseMalformedUnknownFlagsPreserveLegacyActionOutcomesAndNoEffects$' -count=1` before production edit | Failed as required: all 50 malformed/action combinations returned pflag usage exit 2 instead of baseline action outcomes (list 0, plan validation 3, preview/run/status missing-object 1); no state/outbox effect or approval output |
-| C2 | GREEN | Normalize only malformed unknown reverse tail tokens before pflag; preserve known flags, operands, approvals, and legal unknown behavior | Pending |
-| C3 | Verify | 324-case exact-start differential; focused/reverse/race/full CLI; no approval output; gofmt/vet/build/diff | Pending |
-| C4 | Delivery | Finalize artifacts, commit, and push; no PR/review | Pending |
+| C2 | GREEN | Normalize only malformed unknown reverse tail tokens before pflag; preserve known flags, operands, approvals, and legal unknown behavior | Pass: focused correction `26.289s`; complete reverse focus `63.513s` |
+| C3 | Verify | 324-case exact-start differential; focused/reverse/race/full CLI; no approval output; gofmt/vet/build/diff | Pass: 324/324 exact with unchanged state/outbox and no approval output; race `295.302s`; full CLI `417.589s`; formatting/vet/build/diff/scope/dependency clean |
+| C4 | Delivery | Finalize artifacts, commit, and push; no PR/review | RED `c98e4dad` and GREEN `bbe9bb9c` pushed; this terminal artifact checkpoint completes delivery on push |
 
 ### Correction RED evidence
 
-The table-driven differential covers five reverse actions × ten malformed unknown forms: `--=x`, `--=`, `--==x`, `---x`, `---x=y`, `---`, `----x`, `----x=y`, `----`, and `-----x`. Every one of the 50 subtests failed at the exact differential assertion before any production edit: pflag returned usage exit 2 with different stdout/stderr, while the corresponding no-tail baseline retained the legacy action outcome. State bytes remained unchanged, no outbox appeared, and no approval output was emitted. This directly reproduces the 50 mismatches reported in `/tmp/pm-397-review-431.log`.
+The table-driven differential covers five reverse actions × ten malformed unknown forms: `--=x`, `--=`, `--==x`, `---x`, `---x=y`, `---`, `----x`, `----x=y`, `----`, and `-----x`. Every one of the 50 subtests failed at the exact differential assertion before any production edit: pflag returned usage exit 2 with different stdout/stderr, while the corresponding no-tail baseline retained the legacy action outcome. The initial RED stopped each subtest at that required mismatch assertion; the same committed test's state/outbox/no-approval guards executed and passed after GREEN. This directly reproduces and closes the 50 mismatches reported in `/tmp/pm-397-review-431.log`.
+
+### Correction GREEN and refactor evidence
+
+`normalizeReverseMalformedUnknown` leaves ordinary flags, operands, legal unknowns, approval/confirmation values, and ordering byte-for-byte unchanged. Only pflag-invalid long forms whose post-`--` name begins with `=` or `-` become the legal unknown name `--pm-legacy-malformed-unknown`; assigned values remain assigned and unassigned forms remain unassigned so pflag's unknown whitelist preserves legacy value consumption.
+
+- Focused normalizer + 50-case action differential: pass in `26.289s`.
+- Complete `TestReverse*` plus normalizer focus: pass in `63.513s`.
+- Focused race: pass in `295.302s`.
+- Full `go test ./internal/cli/... -count=1`: pass in `417.589s`.
+- Exact-start binary differential against `0b03361e3ec5082d54c416a31715851f71e845fa`: 324/324 exit/stdout/stderr transcripts exact across five actions × 60 tails plus 24 namespace/manual/action cases. Both roots retained identical pre/post state hashes and outbox listings; no approval field or human approval line appeared.
+- `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, `git diff --check`, dependency freeze, and correction scope checks: pass.
+
+No approval value was printed or copied into artifacts. No external write/service, credentialed connector, dependency, PR, or review was used.

@@ -67,17 +67,17 @@ Correction start: `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420`.
 - [x] Correction plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state reopened before production edits.
 - [x] RED differential tests cover every reverse action and malformed legacy-accepted `--=x`, `---x`, plus representative variants (50 combinations).
 - [x] RED proves pflag rejects every malformed form with usage exit 2 before baseline action behavior (list 0, plan validation 3, preview/run/status missing-object 1).
-- [x] RED test assertions verify unchanged state bytes, absent local outbox, and no approval output; these assertions remain part of GREEN.
-- [ ] Production normalization changes only malformed unknown reverse-tail tokens.
-- [ ] Ordinary known flags, legal unknown flags, first operands, approval/confirmation ordering, and action outcomes remain unchanged.
-- [ ] Focused correction and complete reverse native suites pass.
-- [ ] Focused race gate passes.
-- [ ] 324/324 exact-start parser differential matches.
-- [ ] Full CLI suite passes.
-- [ ] No approval value appears in command output, artifacts, logs, or diagnostics.
-- [ ] `gofmt`, `go vet`, `go build`, `git diff --check`, scope, and dependency checks pass.
+- [x] Committed differential includes unchanged-state, empty-outbox, and no-approval-output assertions; RED stopped at the expected outcome mismatch, and all effect guards executed and passed after GREEN.
+- [x] Production normalization changes only pflag-invalid reverse-tail names beginning with `=` or an extra `-` after `--`.
+- [x] Unit and workflow tests preserve ordinary known flags, legal unknown flags, first operands, approval/confirmation ordering, and action outcomes.
+- [x] Focused correction (`26.289s`) and complete reverse native (`63.513s`) suites pass.
+- [x] Focused race gate passes (`295.302s`).
+- [x] 324/324 exact-start parser differential matches exit/stdout/stderr; state hashes and outbox listings remain unchanged.
+- [x] Full CLI suite passes (`417.589s`).
+- [x] No approval field/value or human approval line appears in differential output, focused output, artifacts, logs, or diagnostics.
+- [x] `gofmt`, `go vet ./...`, `go build ./cmd/pm`, `git diff --check`, scope, and dependency checks pass.
 - [x] Help/manual/docs/website changes not applicable: no public command/flag/help/output change.
 - [x] No external write/service/credential/dependency/PR/review is used.
-- [ ] Correction committed and pushed.
+- [x] RED commit `c98e4dad` and GREEN commit `bbe9bb9c` pushed; this terminal artifact checkpoint completes requested delivery on push.
 
-Correction result: pending; `verificationPassed=false` until every declared correction gate exits 0.
+Correction result: pass at implementation head `bbe9bb9c`; `verificationPassed=true` because every user-declared bounded correction gate exited 0. No full repository or `make verify` rerun was declared for this review correction; the original implementation's full repository and `make verify` gates remain recorded above.

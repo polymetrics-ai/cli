@@ -37,6 +37,6 @@ GSD route: `scripts/gsd doctor` and `scripts/gsd list` passed. `scripts/gsd prom
 
 Skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `golang-error-handling`; `golang-security`; `golang-safety`; `golang-design-patterns`; `golang-structs-interfaces`; `golang-spf13-cobra`. CLI help/docs parity reviewed: no public-surface change, so docs/website edits are not applicable.
 
-Downstream artifact: pending RED, GREEN, 324-case differential, focused/race/full CLI, no-approval-output, gofmt/vet/build/diff evidence, final artifact update, commit, and push. No external write/service/dependency/PR/review.
+Downstream artifact: complete. Test-only RED reproduced all 50 malformed/action mismatches before production edits. Malformed-only normalization, focused and complete reverse tests, focused race, full CLI, 324-case exact-start differential, no-approval-output/state/outbox checks, and gofmt/vet/build/diff/scope/dependency gates pass. RED `c98e4dad` and GREEN `bbe9bb9c` are pushed; this terminal artifact checkpoint completes delivery on push. No external write/service/dependency/PR/review.
 
-Verification result: pending.
+Verification result: pass at implementation head `bbe9bb9c`. Parser differential is 324/324 exact with unchanged state/outbox and no approval output; focused correction `26.289s`, reverse focus `63.513s`, race `295.302s`, full CLI `417.589s`; gofmt, full vet, build, and diff checks pass.

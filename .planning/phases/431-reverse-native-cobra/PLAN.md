@@ -73,4 +73,4 @@ CLI help/manual/website artifacts remain not applicable because no command, flag
 
 ## Completion
 
-Original implementation completed and verified at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`. Correction verification is now reopened from exact review head `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420`; terminal correction evidence is pending.
+Original implementation completed and verified at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`. The bounded correction from exact review head `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420` is complete at implementation head `bbe9bb9c`: 50 malformed/action RED cases preceded production edits; malformed-only normalization passed focused, race, full CLI, and 324/324 exact-start differential gates with unchanged state/outbox and no approval output. Gofmt, vet, build, diff/scope/dependency checks passed. No public help/docs surface changed; no external write/service/dependency/PR/review was used.
