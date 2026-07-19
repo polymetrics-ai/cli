@@ -11,7 +11,7 @@
   "startedAt": "20260719T074902Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "accepted_review_correction_red",
+  "status": "accepted_review_correction_green",
   "correctionStartingHead": "748f6bdbf754840912796d8f7ff8aee9b8fbc00a",
   "verificationPassed": false,
   "gsdAdapter": {
@@ -71,10 +71,15 @@
       "cycle": "accepted-review-correction-red",
       "decision": "local_critical_path",
       "reason": "focused temp/fake tests failed on all four accepted findings before production edits, including deterministic external read/output replacement after a controlled analyzer-factory mutation"
+    },
+    {
+      "cycle": "accepted-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "held project-root warehouse scope, parser ownership state/normalization, exact-bare detection, and full RLM table validation pass focused, repeated, race, adversarial, and exact-base differential gates"
     }
   ],
   "red": "original native RED plus correction RED: controlled pre-analyzer warehouse replacement re-rooted deterministic input/output externally; literal/assigned/malformed help-like tails rendered CommandManual; unknown-only forms rendered bare help; dot input/output reached analyzer factory",
-  "green": "focused CLI/RLM passed; extract x10 and race passed; RLM/safety repeated and race passed; exact-start 8/8 preserved plus 5/5 intentional contextual help",
+  "green": "prior green plus correction green: focused extract/router/golden 11.271s; RLM/safety; extract x10 43.889s and race 50.339s; exact-base 11/11; adversarial 37 matched plus 17 intentional help and 0 mismatches; package vet/build/module guards pass",
   "verification": "reset: accepted review correction RED/GREEN and full focused/repeated/race/adversarial/base differential/CLI/RLM/safety/docs/gofmt/vet/build/make verify rerun pending; prior pass is historical",
   "files": [
     ".planning/phases/436-extract-native-cobra/PLAN.md",
@@ -92,7 +97,7 @@
     "37e3e1b2 test(cli): expose extract warehouse root escape",
     "15417f95 fix(cli): confine extract warehouse root"
   ],
-  "push": "accepted correction plan pushed; correction RED checkpoint pending commit/push",
+  "push": "accepted correction plan and RED pushed; correction GREEN checkpoint pending commit/push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "owned temporary roots/sentinels and injected/hermetic fakes only; no broad paths or external final-link effects; no external user files/services, credentials, dependencies, generic tools, PR, or review; make verify used only its ordered local reverse plan-preview-approval-run smoke"

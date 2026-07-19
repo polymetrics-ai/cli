@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/safety"
 )
 
 // DeterministicAnalyzer scores records using pure Go weighted-feature scoring.
@@ -30,9 +29,17 @@ func (d *DeterministicAnalyzer) Run(ctx context.Context, req RunRequest) (RunRes
 		DryRun:   req.DryRun,
 	}
 
+	warehouse, closeWarehouse, err := req.warehouseScope()
+	if err != nil {
+		return result, fmt.Errorf("rlm: open warehouse: %w", err)
+	}
+	if closeWarehouse {
+		defer warehouse.Close()
+	}
+
 	// Read InTable beneath the held warehouse root, preserving the envelope's
 	// _polymetrics_raw_id for stable sorting and reference checks.
-	records, err := readWarehouseRecords(req.WarehouseDir, req.InTable)
+	records, err := readWarehouseRecordsInScope(warehouse, req.InTable)
 	if err != nil {
 		return result, fmt.Errorf("rlm: read InTable %q: %w", req.InTable, err)
 	}
@@ -49,7 +56,7 @@ func (d *DeterministicAnalyzer) Run(ctx context.Context, req RunRequest) (RunRes
 			return result, err
 		}
 		now := time.Now().UTC().Format(time.RFC3339)
-		if err := writeOutTable(req.WarehouseDir, req.OutTable, scored, d.Mode(), req.Spec.Name, now); err != nil {
+		if err := writeOutTableInScope(warehouse, req.OutTable, scored, d.Mode(), req.Spec.Name, now); err != nil {
 			return result, fmt.Errorf("rlm: write OutTable: %w", err)
 		}
 	}
@@ -60,23 +67,21 @@ func (d *DeterministicAnalyzer) Run(ctx context.Context, req RunRequest) (RunRes
 
 // writeOutTable atomically writes scored records to OutTable NDJSON.
 func writeOutTable(dir, table string, records []connectors.Record, mode, specName, scoredAt string) error {
-	if err := validateOutTable(table); err != nil {
-		return err
-	}
-	fs, err := safety.OpenLocalWriteFS(dir, false)
+	warehouse, err := openWarehouseScope(dir, dir)
 	if err != nil {
 		return err
 	}
-	defer fs.Close()
+	defer warehouse.Close()
+	return writeOutTableInScope(warehouse, table, records, mode, specName, scoredAt)
+}
 
-	outPath := table + ".ndjson"
-	tmpPath := outPath + ".tmp"
-	f, err := fs.OpenFile(tmpPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
+func writeOutTableInScope(warehouse *WarehouseScope, table string, records []connectors.Record, mode, specName, scoredAt string) error {
+	f, tmpPath, outPath, err := warehouse.openOutputTemp(table)
 	if err != nil {
 		return err
 	}
 	removeTemp := func() error {
-		err := fs.Remove(tmpPath)
+		err := warehouse.remove(tmpPath)
 		if errors.Is(err, os.ErrNotExist) {
 			return nil
 		}
@@ -101,7 +106,7 @@ func writeOutTable(dir, table string, records []connectors.Record, mode, specNam
 	if err := f.Close(); err != nil {
 		return errors.Join(err, removeTemp())
 	}
-	if err := fs.Rename(tmpPath, outPath); err != nil {
+	if err := warehouse.commitOutput(tmpPath, outPath); err != nil {
 		return errors.Join(err, removeTemp())
 	}
 	return nil

@@ -51,7 +51,8 @@ func validateInTable(table string) error {
 	return validateTableName(table, "InTable")
 }
 
-func validateTableName(table, field string) error {
+// ValidateTableName enforces the RLM contract for bare local warehouse tables.
+func ValidateTableName(table, field string) error {
 	if table == "" {
 		return fmt.Errorf("rlm: empty %s name", field)
 	}
@@ -61,4 +62,8 @@ func validateTableName(table, field string) error {
 		return fmt.Errorf("rlm: invalid %s name %q (must be a bare name)", field, table)
 	}
 	return nil
+}
+
+func validateTableName(table, field string) error {
+	return ValidateTableName(table, field)
 }

@@ -44,8 +44,15 @@ func (f *FixtureAnalyzer) Run(_ context.Context, req RunRequest) (RunResult, err
 	result.RecordsScored = len(scored)
 
 	if !req.DryRun {
+		warehouse, closeWarehouse, err := req.warehouseScope()
+		if err != nil {
+			return result, fmt.Errorf("rlm: fixture open warehouse: %w", err)
+		}
+		if closeWarehouse {
+			defer warehouse.Close()
+		}
 		now := time.Now().UTC().Format(time.RFC3339)
-		if err := writeOutTable(req.WarehouseDir, req.OutTable, scored, f.Mode(), req.Spec.Name, now); err != nil {
+		if err := writeOutTableInScope(warehouse, req.OutTable, scored, f.Mode(), req.Spec.Name, now); err != nil {
 			return result, fmt.Errorf("rlm: fixture write OutTable: %w", err)
 		}
 	}

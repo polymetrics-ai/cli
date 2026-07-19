@@ -9,7 +9,6 @@ import (
 	"os"
 
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/safety"
 )
 
 // readEnvelopedRecords reads a local warehouse NDJSON file and returns each
@@ -30,21 +29,37 @@ func readEnvelopedRecords(path string) ([]connectors.Record, error) {
 }
 
 func readWarehouseRecords(dir, table string) ([]connectors.Record, error) {
-	fs, f, err := openWarehouseTable(dir, table)
+	scope, err := openWarehouseScope(dir, dir)
 	if err != nil {
 		return nil, err
 	}
-	defer fs.Close()
+	defer scope.Close()
+	return readWarehouseRecordsInScope(scope, table)
+}
+
+func readWarehouseRecordsInScope(scope *WarehouseScope, table string) ([]connectors.Record, error) {
+	f, err := scope.openTable(table)
+	if err != nil {
+		return nil, err
+	}
 	defer f.Close()
 	return readEnvelopedRecordsFrom(f)
 }
 
 func readWarehouseTable(dir, table string) ([]byte, []connectors.Record, error) {
-	fs, f, err := openWarehouseTable(dir, table)
+	scope, err := openWarehouseScope(dir, dir)
 	if err != nil {
 		return nil, nil, err
 	}
-	defer fs.Close()
+	defer scope.Close()
+	return readWarehouseTableInScope(scope, table)
+}
+
+func readWarehouseTableInScope(scope *WarehouseScope, table string) ([]byte, []connectors.Record, error) {
+	f, err := scope.openTable(table)
+	if err != nil {
+		return nil, nil, err
+	}
 	data, err := io.ReadAll(f)
 	closeErr := f.Close()
 	if err != nil {
@@ -58,22 +73,6 @@ func readWarehouseTable(dir, table string) ([]byte, []connectors.Record, error) 
 		return nil, nil, err
 	}
 	return data, records, nil
-}
-
-func openWarehouseTable(dir, table string) (*safety.LocalWriteFS, *os.File, error) {
-	if err := validateInTable(table); err != nil {
-		return nil, nil, err
-	}
-	fs, err := safety.OpenLocalWriteFS(dir, false)
-	if err != nil {
-		return nil, nil, err
-	}
-	f, err := fs.Open(table + ".ndjson")
-	if err != nil {
-		_ = fs.Close()
-		return nil, nil, err
-	}
-	return fs, f, nil
 }
 
 func readEnvelopedRecordsFrom(r io.Reader) ([]connectors.Record, error) {

@@ -73,8 +73,9 @@ func newExtractCobraCommandWithRuntime(ctx context.Context, cfg config.Config, r
 			UnknownFlags: true,
 		},
 		ValidArgsFunction: completeNoFile,
-		RunE: func(_ *cobra.Command, args []string) error {
-			if len(args) == 0 && flags.empty() {
+		RunE: func(cmd *cobra.Command, args []string) error {
+			state, _ := cmd.Context().Value(extractCommandStateKey{}).(extractCommandState)
+			if state.bareInvocation {
 				return markCobraLegacyError(writeManual("extract", stdout, jsonOut))
 			}
 			if len(args) > 0 && isHelpArg(args[0]) {
@@ -121,12 +122,6 @@ func addExtractStringArrayFlag(cmd *cobra.Command, target *[]string, name, usage
 	if flag := cmd.Flags().Lookup(name); flag != nil {
 		flag.NoOptDefVal = "true"
 	}
-}
-
-func (f extractFlags) empty() bool {
-	return len(f.Requests) == 0 && len(f.SQLs) == 0 && len(f.Limits) == 0 &&
-		len(f.Providers) == 0 && len(f.Models) == 0 && len(f.LLMBaseURLs) == 0 &&
-		len(f.Inputs) == 0 && len(f.Outputs) == 0 && len(f.SpecNames) == 0
 }
 
 func (f extractFlags) last(values []string) string {
@@ -190,10 +185,11 @@ func runExtract(ctx context.Context, cfg config.Config, root string, flags extra
 			if err := validateExtractTable(outTable, "output table"); err != nil {
 				return err
 			}
-			warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
-			if err := safety.ValidateLocalWritePath(root, warehouseDir, "extract warehouse path", false); err != nil {
+			warehouse, err := rlm.OpenProjectWarehouse(root)
+			if err != nil {
 				return validationErrorf("extract: %v", err)
 			}
+			defer func() { _ = warehouse.Close() }()
 			if runtime.analyzer == nil {
 				return errors.New("extract: analyzer runtime is not configured")
 			}
@@ -211,7 +207,8 @@ func runExtract(ctx context.Context, cfg config.Config, root string, flags extra
 					Spec:         &rlm.Spec{Name: valueOr(flags.last(flags.SpecNames), "extract")},
 					InTable:      inTable,
 					OutTable:     outTable,
-					WarehouseDir: warehouseDir,
+					WarehouseDir: filepath.Join(root, ".polymetrics", "warehouse"),
+					Warehouse:    warehouse,
 				}
 				res, runErr := analyzer.Run(ctx, runRequest)
 				if runErr != nil {
@@ -234,6 +231,9 @@ func runExtract(ctx context.Context, cfg config.Config, root string, flags extra
 
 func validateExtractTable(table, field string) error {
 	if err := safety.ValidateIdentifier(table, field); err != nil {
+		return validationErrorf("extract: %v", err)
+	}
+	if err := rlm.ValidateTableName(table, field); err != nil {
 		return validationErrorf("extract: %v", err)
 	}
 	return nil

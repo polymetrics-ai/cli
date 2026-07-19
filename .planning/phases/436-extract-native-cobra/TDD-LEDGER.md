@@ -22,7 +22,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 6 | Delivery | Re-run affected/full gates; finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Prior implementation complete at `748f6bdb`; correction reopened |
 | 7 | Accepted review correction plan | Accept all four findings; reset terminal verification; plan held project-root effect scope, parser-ownership repairs, unknown-only usage behavior, and full RLM table validation | Complete before correction tests/production edits |
 | 8 | Correction RED | `go test ./internal/cli -run 'TestExtract(HeldProjectRootRejectsWarehouseReplacementBeforeAnalyzerEffects|RejectsUnsafeTablesBeforeAnalyzer|LiteralUnknownOperandsGlobalsAndOutputCompatibility)$' -count=1` | Failed as required before production edits: directory replacement re-rooted deterministic input/output externally; literal/assigned/malformed tails rendered `CommandManual`; unknown-only rendered bare help; both dot-table cases reached the fake analyzer |
-| 9 | Correction GREEN/refactor | Implement the narrow rooted effect seam and parser/validation fixes; run focused/repeated/race/adversarial/base differential/full gates | Pending |
+| 9 | Correction GREEN/refactor | Narrow held warehouse scope, exact-bare state, tail ownership normalization, and full RLM table validation | GREEN: focused extract/router/golden `11.271s`; RLM/safety green; extract ×10 `43.889s`; extract race `50.339s`; RLM/safety repeated/race green; exact-base 11/11 and adversarial 37 matched + 17 intentional help / 0 mismatches |
 | 10 | Correction delivery | Finalize artifacts with exact evidence; commit/push; no PR/review | Pending |
 
 ## RED contract
@@ -70,6 +70,10 @@ The first implementation roots individual RLM table effects, but extract still n
 ## Correction RED evidence
 
 The focused test exited 1 before production edits. The controlled analyzer-factory hook renamed the in-project warehouse and replaced it with an external symlink; the deterministic analyzer then read one external row and atomically replaced the external output sentinel, returning a successful `ExtractResult`. Literal `-- --help`, assigned unknown plus positional `help`, and malformed assigned unknown plus positional `help` all returned `CommandManual` instead of the base `ExtractResult`. `--unknown`, `--unknown=ignored`, `--help=true`, and `--=help` returned bare help instead of a usage error. Both `--in=.` and `--out=.` constructed and ran the fake analyzer. All files and symlinks were owned by `t.TempDir`; no external user file or service was touched.
+
+## Correction GREEN/refactor evidence
+
+`rlm.OpenProjectWarehouse` now opens the selected project root before analyzer construction and passes an RLM-only `WarehouseScope` through `RunRequest`; the scope exposes no generic file API, and deterministic, fixture, and agent input/output helpers reuse it for the whole run. The controlled mutation test now fails closed without changing the external sentinel. Extract records exact bare invocation before pflag discards unknowns, normalizes parser-owned help-like tails to inert legacy tokens, preserves direct/trailing help, and applies exported RLM bare-table validation after identifier validation. Focused extract/router/golden, full RLM/safety, package vet, build, module tidy/verify, repeated/race, 11-case exact-base differential, and 54-case adversarial differential all pass.
 
 ## Evidence log
 

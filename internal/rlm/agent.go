@@ -127,8 +127,15 @@ func (a *AgentAnalyzer) Run(ctx context.Context, req RunRequest) (RunResult, err
 	if err := validateOutTable(req.OutTable); err != nil {
 		return result, err
 	}
+	warehouse, closeWarehouse, err := req.warehouseScope()
+	if err != nil {
+		return result, fmt.Errorf("rlm: open warehouse: %w", err)
+	}
+	if closeWarehouse {
+		defer warehouse.Close()
+	}
 
-	jobDir, fingerprint, recordsRead, err := a.stage(req)
+	jobDir, fingerprint, recordsRead, err := a.stage(req, warehouse)
 	if err != nil {
 		return result, err
 	}
@@ -157,7 +164,7 @@ func (a *AgentAnalyzer) Run(ctx context.Context, req RunRequest) (RunResult, err
 	if !req.DryRun {
 		sortScored(records)
 		now := time.Now().UTC().Format(time.RFC3339)
-		if err := writeOutTable(req.WarehouseDir, req.OutTable, records, a.Mode(), specName(req.Spec), now); err != nil {
+		if err := writeOutTableInScope(warehouse, req.OutTable, records, a.Mode(), specName(req.Spec), now); err != nil {
 			return result, fmt.Errorf("rlm: write OutTable: %w", err)
 		}
 	}
@@ -169,8 +176,8 @@ func (a *AgentAnalyzer) Run(ctx context.Context, req RunRequest) (RunResult, err
 // stage copies the InTable into a fresh JobDir's in/ directory, writes the
 // request descriptor, and returns the JobDir, a content fingerprint, and the
 // input record count.
-func (a *AgentAnalyzer) stage(req RunRequest) (jobDir, fingerprint string, recordsRead int, err error) {
-	inBytes, records, err := readWarehouseTable(req.WarehouseDir, req.InTable)
+func (a *AgentAnalyzer) stage(req RunRequest, warehouse *WarehouseScope) (jobDir, fingerprint string, recordsRead int, err error) {
+	inBytes, records, err := readWarehouseTableInScope(warehouse, req.InTable)
 	if err != nil {
 		return "", "", 0, fmt.Errorf("rlm: read InTable %q: %w", req.InTable, err)
 	}

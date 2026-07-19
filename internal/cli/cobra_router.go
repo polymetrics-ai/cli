@@ -53,6 +53,12 @@ type scheduleCommandState struct {
 	operandSet bool
 }
 
+type extractCommandStateKey struct{}
+
+type extractCommandState struct {
+	bareInvocation bool
+}
+
 func (e *cobraLegacyError) Error() string { return e.err.Error() }
 
 func (e *cobraLegacyError) Unwrap() error { return e.err }
@@ -144,6 +150,9 @@ func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stde
 }
 
 func executeRootCmd(cmd *cobra.Command, args []string) error {
+	extractState := extractCommandState{
+		bareInvocation: len(args) == 1 && args[0] == "extract",
+	}
 	var etlState etlCommandState
 	args = captureETLPrivateOperands(args, &etlState)
 	var reverseState reverseCommandState
@@ -169,6 +178,7 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 		ctx = context.Background()
 	}
 	ctx = context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState)
+	ctx = context.WithValue(ctx, extractCommandStateKey{}, extractState)
 	ctx = context.WithValue(ctx, etlCommandStateKey{}, etlState)
 	ctx = context.WithValue(ctx, reverseCommandStateKey{}, reverseState)
 	ctx = context.WithValue(ctx, flowCommandStateKey{}, flowState)
@@ -284,8 +294,11 @@ func normalizeExtractArgs(args []string) []string {
 		if arg == "--" {
 			break
 		}
-		if arg == "--help" || arg == "-h" {
+		if arg == "--help" {
 			return []string{args[0], arg}
+		}
+		if arg == "-h" {
+			return []string{args[0], "--help"}
 		}
 	}
 	return args
@@ -543,8 +556,26 @@ func normalizeScheduleLegacyActionArgs(args []string, start int) []string {
 func normalizeExtractLegacyArgs(args []string, start int) []string {
 	out := make([]string, 0, len(args))
 	out = append(out, args[:start]...)
-	for _, arg := range args[start:] {
-		if arg == "--" || (strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--")) {
+	afterSeparator := false
+	for i := start; i < len(args); i++ {
+		arg := args[i]
+		if arg == "--" {
+			afterSeparator = true
+			continue
+		}
+		if strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--") {
+			continue
+		}
+		if strings.HasPrefix(arg, "--help=") || (afterSeparator && arg == "--help") {
+			_, value, assigned := strings.Cut(strings.TrimPrefix(arg, "--"), "=")
+			if !assigned {
+				value = "true"
+			}
+			out = append(out, "--pm-legacy-extract-help="+value)
+			continue
+		}
+		if arg == "help" && (afterSeparator || i != start) {
+			out = append(out, "pm-legacy-extract-help")
 			continue
 		}
 		out = append(out, normalizeReverseMalformedUnknown(arg))

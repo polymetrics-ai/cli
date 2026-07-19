@@ -358,23 +358,23 @@ func TestExtractRejectsUnsafeTablesBeforeAnalyzer(t *testing.T) {
 type extractNativeContextKey struct{}
 
 type fakeExtractRuntime struct {
-	queryCalls           int
-	querySQL             string
-	queryLimit           int
-	queryContextValue    any
-	queryErr             error
-	analyzerFactoryCalls int
-	factoryRequest       string
-	factoryContextValue  any
-	factoryErr           error
+	queryCalls            int
+	querySQL              string
+	queryLimit            int
+	queryContextValue     any
+	queryErr              error
+	analyzerFactoryCalls  int
+	factoryRequest        string
+	factoryContextValue   any
+	factoryErr            error
 	beforeAnalyzerFactory func() error
-	analyzer             rlm.Analyzer
-	analyzerCalls        int
-	analyzerContextValue any
-	analyzerErr          error
-	request              rlm.RunRequest
-	closeCalls           int
-	closeErr             error
+	analyzer              rlm.Analyzer
+	analyzerCalls         int
+	analyzerContextValue  any
+	analyzerErr           error
+	request               rlm.RunRequest
+	closeCalls            int
+	closeErr              error
 }
 
 func newFakeExtractRuntime() *fakeExtractRuntime { return &fakeExtractRuntime{} }
