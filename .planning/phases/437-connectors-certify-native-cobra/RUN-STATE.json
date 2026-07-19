@@ -21,8 +21,11 @@
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "review_correction_complete",
-  "verificationPassed": true,
+  "status": "continuation_in_progress",
+  "verificationPassed": false,
+  "continuationSession": "issue-437-continuation-20260719T211738Z",
+  "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
+  "latestParentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -186,11 +189,21 @@
       "cycle": "fifth-review-correction-summary",
       "decision": "local_critical_path",
       "reason": "truthful terminal evidence is finalized for active-branch commit/push only; no PR, parent, integration, or main mutation"
+    },
+    {
+      "cycle": "continuation-plan",
+      "decision": "local_critical_path",
+      "reason": "single issue branch in isolated cwd; no subagent tool; remaining work is parent reconcile, diff audit, verification, stacked PR, and review-route handoff"
+    },
+    {
+      "cycle": "continuation-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "no new behavior edit is planned; existing RED evidence remains valid and any new behavior fix requires a fresh failing test before production"
     }
   ],
   "red": "captured: certify focus 1.374s showed premature cleaned state, forged numeric effects, unbounded/reflected ledgers, four invalid resume forms, and dropped batch persistence; CLI focus 14.764s showed seven accepted sweep constraints, silent single save failures, telemetry files on invalid flags, and late malformed parallel validation",
   "green": "complete: cleanup ledger changes only after exact absence; sweep verifies and denies numeric IDs; ledger 1 MiB/10000-entry bounds with opaque parse errors; sweep constraints before telemetry/workspace; report/history failures surfaced with leak dominance; complete pre-telemetry certify parsing; strict structural resume evidence and recomputed outcome/leak consistency",
-  "verification": "passed: focused/repeated/race; full CLI 443.427s and certify 327.840s; schedule/safety; help/bare/invalid/JSON; docs/goldens 16.600s; website drift-free; connectorgen 547/0; fmt/diff/vet; go test ./... real 7m34.316s; build; final make verify exit 0 real 7m52.496s (CLI 449.572s, certify 332.793s, lint 0)",
+  "verification": "pending continuation gates; prior fifth-cycle gate passed (make verify exit 0 real 7m52.496s), but fresh parent-reconcile verification is required",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",
@@ -213,8 +226,8 @@
     "terminal fifth-cycle evidence artifact: this commit"
   ],
   "push": "fifth-cycle planning, RED, supplemental RED, and GREEN checkpoints pushed; terminal evidence commit is this artifact delivery and will be pushed immediately",
-  "pullRequest": "not_created_user_requested_no_pr",
-  "reviewRoute": "not_run_user_prohibited_review",
+  "pullRequest": "pending_non_draft_stacked_pr_to_feat_cli_architecture_v2",
+  "reviewRoute": "pending_human_parent_fallback_claude_disabled_copilot_quota_exhausted",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, PR, integration, parent mutation, or main mutation",
   "preTerminalEvidenceHead": "e9ce945e56413dbb60f5eeec2f1d6e5df688a249"
 }

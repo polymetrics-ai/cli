@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: true — fifth correction full `make verify` exited 0.
+`verificationPassed`: false — continuation reopened for parent reconcile, full local gates, stacked PR creation, and review-route recording. Prior fifth correction full `make verify` exited 0; current continuation remains pending until a fresh complete gate exits 0.
 
 ## TDD / behavior
 
@@ -191,3 +191,28 @@ Exact start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; identity `issue-437-fift
 - [x] Full `make verify` exits 0 in real `7m52.496s` (CLI `449.572s`, certify `332.793s`, docs/smoke/lint/connectorgen green).
 - [x] No go.mod/go.sum delta, connector defs, credentials, services, system crontab, external writes/sweeps, generic write tools, dependencies, PR, parent, integration, or main mutation.
 - [x] GREEN `e9ce945e` pushed; truthful terminal artifact commit/push follows and must finish clean/remote-matched.
+
+## Continuation checklist — parent reconcile and stacked PR
+
+Exact start: `86eea0f966814e6848e5a52143eea15dd46ff801`; parent target: `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`.
+
+- [x] Reread required issue/contract/GSD/parity/ADR/phase/skill context before mutation.
+- [x] Run `scripts/gsd doctor` and `scripts/gsd prompt plan-phase 437 --skip-research`.
+- [x] Confirm `scripts/gsd prompt programming-loop init --phase 437 --dry-run` is unavailable and record manual fallback.
+- [x] Record actual skills loaded and `.pi/skills/go-implementation/SKILL.md` absence/path mismatch.
+- [x] Refresh PLAN/TDD/VERIFICATION before parent merge or production edits.
+- [ ] Audit the existing 42-file issue diff against #437 and justify certify safety correction scope.
+- [ ] Merge latest parent `origin/feat/cli-architecture-v2` without losing #437 commits or #462 design-doc additions.
+- [ ] Focused CLI/connectors/certify tests pass.
+- [ ] Runtime help checks pass: `pm help connectors`; bare `pm connectors`; `pm connectors --help`.
+- [ ] Golden/docs/website parity checks pass or are explicitly marked not applicable with reason.
+- [ ] Safe fixture-only certify smoke passes without credentials/live services/external writes.
+- [ ] `gofmt -w cmd internal` produces no unintended drift.
+- [ ] `go vet ./...` passes.
+- [ ] `go test ./...` passes.
+- [ ] `go build ./cmd/pm` passes.
+- [ ] `make verify` passes.
+- [ ] Connector validation remains green when run.
+- [ ] No go.mod/go.sum delta, connector defs, credentials, live checks, destructive cleanup, external writes/sweeps, generic write tools, or main/parent merge.
+- [ ] Branch pushed and non-draft stacked PR opened to `feat/cli-architecture-v2` with exactly `Refs #437`, `Refs #407`, and `Refs #397`.
+- [ ] Automated external review route recorded: Claude disabled, Copilot quota exhausted, human/parent fallback pending; no bot retries.

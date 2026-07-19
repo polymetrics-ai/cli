@@ -86,3 +86,17 @@ Recovery-budget exception: unresolved P1 destructive cleanup authority and unrec
 Downstream artifact: complete at implementation head `e9ce945e56413dbb60f5eeec2f1d6e5df688a249`. Planning `8acf62a9`, RED `e2559f64`/`3d69b7a4`, and GREEN `e9ce945e` are pushed. Cleanup retryability/authority, bounded opaque ledgers, pre-effect sweep constraints, durable persistence precedence, pre-telemetry parsing, and strict recomputed resume evidence are corrected.
 
 Verification result: pass. Focused final `7.288s` certify / `8.389s` CLI; ×10 `48.652s` / `77.313s`; race `51.469s` / `89.921s`; full package checkpoints certify `327.840s`, CLI `443.427s`; schedule/safety and vet; help/bare/invalid/JSON; docs/golden `16.600s`; website drift-free; connectorgen 547/0; explicit `go test ./...` real `7m34.316s`; build; final `make verify` exit 0 real `7m52.496s` (CLI `449.572s`, certify `332.793s`, lint 0). No credentials, live services/connectors, system crontab, external writes/sweeps, dependencies, PR, parent, integration, or main mutation.
+
+## Continuation kickoff snapshot
+
+Identity: `issue-437-continuation-20260719T211738Z`; exact clean start `86eea0f966814e6848e5a52143eea15dd46ff801`; latest parent `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`; worker branch `refactor/437-connectors-certify-native-cobra`; base branch `feat/cli-architecture-v2`; no subagents.
+
+Task: reconcile latest parent, audit existing 42-file #437 diff, justify directly applicable certify safety corrections, run full local gates and safe fixture-only certify smoke, push continuation commits, and open non-draft stacked PR to parent with exactly `Refs #437`, `Refs #407`, `Refs #397`. Claude disabled and Copilot quota exhausted; record human/parent fallback pending without bot retries.
+
+Commands refreshed before production edits: `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 437 --skip-research`; `scripts/gsd prompt programming-loop init --phase 437 --dry-run` (unavailable: `unknown GSD command`). Execution decision: `local_critical_path`.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, and connector/certify support skills `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`. `.pi/skills/go-implementation/SKILL.md` is missing; global cc-skills files are the actual Go implementation evidence.
+
+Downstream artifact: pending.
+
+Verification result: pending fresh continuation gates.

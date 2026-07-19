@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: fifth bounded review-correction cycle complete; full verification passed.
+Status: continuation reopened for latest parent reconcile, verification, stacked PR, and review-route handoff; fresh verification pending.
 
 ## Identity
 
@@ -63,4 +63,10 @@ Recovery-budget exception: unresolved P1 destructive authority and retryability 
 
 Planning `8acf62a9`, RED `e2559f64`/`3d69b7a4`, and GREEN `e9ce945e` are pushed. Focused RED captured every accepted finding before production: premature cleaned state, numeric-resource effects, unbounded/reflected ledgers, ignored sweep constraints, silent persistence failure, invalid-flag telemetry creation, and trusted minimal/edited resume artifacts. GREEN defers ledger cleaning until exact verification, verifies sweep absence and denies numeric authority, bounds/sanitizes ledgers, validates sweep constraints before telemetry/workspace, surfaces persistence failure with leak dominance, prevalidates complete certify syntax before effects, and accepts only structurally complete outcome/leak-consistent resume evidence.
 
-Verification passed: focused/repeated/race; full CLI `443.427s` and certify `327.840s`; schedule/safety; runtime help/bare/invalid/JSON; docs/goldens `16.600s`; website drift-free; connectorgen 547/0; gofmt/diff/vet; explicit `go test ./...` real `7m34.316s`; build; and final `make verify` exit 0 real `7m52.496s` (CLI `449.572s`, certify `332.793s`, lint 0). Terminal artifact commit/push and clean remote-match check follow. Safety remained fake/temp/effect-recorder and existing ordered local smoke only, with no credentials, live services/connectors, system crontab, external credential commands/writes/sweeps, connector defs, dependencies, generic write tools, PR, parent, integration, or main mutation.
+Verification passed for the prior fifth cycle: focused/repeated/race; full CLI `443.427s` and certify `327.840s`; schedule/safety; runtime help/bare/invalid/JSON; docs/goldens `16.600s`; website drift-free; connectorgen 547/0; gofmt/diff/vet; explicit `go test ./...` real `7m34.316s`; build; and final `make verify` exit 0 real `7m52.496s` (CLI `449.572s`, certify `332.793s`, lint 0). Safety remained fake/temp/effect-recorder and existing ordered local smoke only, with no credentials, live services/connectors, system crontab, external credential commands/writes/sweeps, connector defs, dependencies, generic write tools, PR, parent, integration, or main mutation.
+
+## Continuation — parent reconcile and stacked PR
+
+Session `issue-437-continuation-20260719T211738Z`; exact start `86eea0f966814e6848e5a52143eea15dd46ff801`; latest parent `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`. `scripts/gsd doctor` passed, `scripts/gsd prompt plan-phase 437 --skip-research` generated the official prompt, and `programming-loop` remains unavailable (`unknown GSD command`), so manual universal-loop fallback applies.
+
+Plan/TDD/verification are refreshed before parent merge or production edits. Scope is audit of the existing 42-file #437 diff, parent merge of disjoint #462 design docs, full local gates, safe fixture-only certify smoke, branch push, non-draft stacked PR to `feat/cli-architecture-v2`, and review-route recording. No new behavior edit is planned; existing RED evidence remains valid and any new behavior fix requires a new failing test first.

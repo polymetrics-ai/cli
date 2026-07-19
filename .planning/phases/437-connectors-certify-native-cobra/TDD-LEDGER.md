@@ -112,3 +112,18 @@ Identity `issue-437-fifth-review-correction-20260720`; exact start `05d9c6658f52
 | R5-7 | Delivery | Coherent planning/RED/GREEN/evidence commits pushed only to active issue branch; clean and remote-matched; no PR/parent/integration/main mutation | Complete after this terminal artifact commit/push; implementation head `e9ce945e` already pushed |
 
 Strict TDD gate: R5-1 through R5-4 failures must be captured and committed/pushed before any production edit. Tests use only deterministic fakes, temporary paths, synthetic non-secret markers, and effect recorders; raw malformed lines/report bodies/credential values must never be printed.
+
+## Continuation ledger — parent reconcile, verification, stacked PR
+
+Identity `issue-437-continuation-20260719T211738Z`; exact start `86eea0f966814e6848e5a52143eea15dd46ff801`; latest parent `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`. `scripts/gsd doctor` and `scripts/gsd prompt plan-phase 437 --skip-research` ran; `programming-loop` remains unavailable, so manual universal-loop fallback applies. Execution decision: `local_critical_path`.
+
+Loaded skills: `.pi/skills/gsd-core/SKILL.md`, `.agents/skills/caveman/SKILL.md`, and global cc-skills paths for `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, and `golang-concurrency`. `.pi/skills/go-implementation/SKILL.md` is absent; global Go skill files are the actual evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| C6-0 | Planning | Refresh PLAN/TDD/VERIFICATION before parent merge or production edits; record GSD route, skills, mismatch, safety, and no-new-behavior TDD stance | Complete in this artifact edit |
+| C6-1 | Diff audit | Inspect existing 42-file diff against #437; justify directly applicable certify safety corrections; block unrelated changes | Pending before merge/PR |
+| C6-2 | Parent reconcile | Merge latest `origin/feat/cli-architecture-v2` (`a5474bcb`) without dropping #437 commits; resolve only real conflicts | Pending |
+| C6-3 | RED gate | No new behavior edit planned; do not fabricate RED. Existing RED remains valid. Any new behavior fix requires a failing test first or a stop | Pending/conditional |
+| C6-4 | Verification | Focused CLI/connectors/certify, runtime help, docs/golden/website parity, safe fixture smoke, gofmt, vet, full tests, build, `make verify`, connector validation | Pending |
+| C6-5 | Delivery | Commit/push coherent continuation evidence and open non-draft stacked PR to parent; record Claude disabled and Copilot quota exhausted with human/parent fallback pending | Pending |
