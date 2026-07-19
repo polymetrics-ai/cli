@@ -11,8 +11,10 @@
   "startedAt": "20260719T074902Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "containment_correction_green",
-  "verificationPassed": false,
+  "endedAt": "20260719T084855Z",
+  "endingImplementationHead": "15417f956f428c73159b3bb8824eb55cf3d44d36",
+  "status": "complete_verified",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -50,11 +52,21 @@
       "cycle": "containment-correction-green",
       "decision": "local_critical_path",
       "reason": "extract now validates its fixed warehouse directory beneath the selected project root before analyzer construction; focused, repeated x10, and race extract tests pass"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "final focused/repeated/race, full CLI/repository, exact-start differential, runtime help/output/hidden, docs/manual/website generation, module/scope, gofmt, vet, build, and make verify gates passed; website typecheck was not applicable without prohibited dependency installation"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "terminal issue-local evidence and no-PR/no-review worker handoff finalized for commit and immediate push"
     }
   ],
   "red": "focused CLI compile failure on absent newExtractCobraCommand/extractCommandRuntime/newRootCmdWithExtractRuntime; RLM traversal input, external input final link, and external temporary output final link all succeeded before production edits",
   "green": "focused CLI/RLM passed; extract x10 and race passed; RLM/safety repeated and race passed; exact-start 8/8 preserved plus 5/5 intentional contextual help",
-  "verification": "initial full CLI/repository/vet/build/make verify passed; verification reset pending warehouse-root containment correction and rerun",
+  "verification": "pass: final full CLI 429.304s; extract x10 43.880s; extract race 50.303s; RLM/safety repeated and race; exact-start 8/8 preserved plus 5/5 help; final make verify exit 0 with CLI 433.681s, certify 337.079s, docs/smoke/lint/connectors green; website docs generation clean; TypeScript typecheck N/A because tsc/node_modules absent and install prohibited",
   "files": [
     ".planning/phases/436-extract-native-cobra/PLAN.md",
     ".planning/phases/436-extract-native-cobra/TDD-LEDGER.md",
@@ -63,9 +75,16 @@
     ".planning/phases/436-extract-native-cobra/SUMMARY.md",
     ".planning/phases/436-extract-native-cobra/RUN-STATE.json"
   ],
-  "commits": [],
-  "push": "pending",
+  "commits": [
+    "9b71fdfd docs(planning): plan extract native cobra slice",
+    "45129942 test(cli): specify native extract contract",
+    "92935855 refactor(cli): nativize hidden extract command",
+    "b7e9063e docs(planning): add extract containment correction",
+    "37e3e1b2 test(cli): expose extract warehouse root escape",
+    "15417f95 fix(cli): confine extract warehouse root"
+  ],
+  "push": "all implementation checkpoints pushed; terminal artifact commit is committed and pushed immediately after this state is written",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
-  "safety": "temporary roots and injected/hermetic fakes only; no broad paths, external effects, services, credentials, dependencies, generic tools, reverse ETL, PR, or review"
+  "safety": "owned temporary roots/sentinels and injected/hermetic fakes only; no broad paths or external final-link effects; no external user files/services, credentials, dependencies, generic tools, PR, or review; make verify used only its ordered local reverse plan-preview-approval-run smoke"
 }

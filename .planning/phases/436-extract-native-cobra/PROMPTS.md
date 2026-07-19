@@ -23,4 +23,4 @@ Safety prompt: keep extract hidden and dependency-free. Inject local fakes for q
 
 Downstream artifact: hidden native extract with typed current flags, injected query/analyzer seams, bounded table validation, rooted RLM warehouse input/output effects, canonical manual/docs/website/golden parity, and extract-only legacy/parser removal.
 
-Verification result: focused/repeated/race extract/RLM/safety, router/golden, and exact-start 8/8 preserved plus 5/5 intentional-help checks pass. Full verification pending.
+Verification result: complete. Focused/repeated/race extract/RLM/safety, post-GREEN warehouse-root containment RED/GREEN, router/golden, exact-start 8/8 preserved plus 5/5 intentional help, full CLI/repository, runtime help/output/hidden, docs/manual/website generation, gofmt/vet/build/module/scope guards, and final `make verify` pass. Website TypeScript typecheck is not applicable because `tsc`/existing `node_modules` is absent and dependency installation was prohibited.

@@ -2,7 +2,7 @@
 
 Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `high`; exact start `eec03373dcc581c7f5c3331fe63287519b317f53`.
 
-`verificationPassed`: false (post-GREEN warehouse-root containment correction pending)
+`verificationPassed`: true
 
 ## TDD and behavior
 
@@ -30,8 +30,8 @@ Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `h
 - [x] Initial `go test ./...`.
 - [x] Initial `go build ./cmd/pm`.
 - [x] Initial `make verify` dependency-free/default-only (exit 0).
-- [ ] Post-GREEN warehouse-root containment RED/GREEN and affected/full rerun.
-- [ ] No dependency, connector-definition, unrelated namespace, or broad generated delta.
+- [x] Post-GREEN warehouse-root containment RED (`0.569s`) / GREEN (`0.560s`) and affected/full rerun.
+- [x] No dependency, connector-definition, unrelated namespace, or broad generated delta.
 
 ## CLI help/manual/website parity
 
@@ -50,9 +50,13 @@ Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `h
 - [x] Exact branch/start confirmed.
 - [x] GSD doctor/list and plan-phase passed; unavailable programming-loop/manual fallback recorded.
 - [x] Required CLI/testing/error/security/safety/path/docs/Cobra skills loaded.
-- [ ] Temp-root tests use only synthetic local records and sentinel files.
-- [ ] No broad input/output paths or final-link external effects.
-- [ ] No external files/services, model, Temporal, Podman, worker, listener, database service, credentials, or connector checks.
-- [ ] No dependencies, generic shell/HTTP/SQL write surface, destructive/admin action, production action, or quality-gate reduction.
-- [ ] Planning, RED, GREEN/refactor, and terminal checkpoints committed/pushed.
-- [ ] No PR/review created per user instruction.
+- [x] Temp-root tests use only synthetic local records and sentinel files.
+- [x] No broad input/output paths, escaped warehouse root, or final-link external effects.
+- [x] No external user files/services, model, Temporal, Podman, worker, listener, database service, credentials, or connector checks.
+- [x] No dependencies, generic shell/HTTP/SQL write surface, destructive/admin action, production action, or quality-gate reduction.
+- [x] Planning, RED, GREEN/refactor, containment-correction, and terminal checkpoints committed/pushed.
+- [x] No PR/review created per user instruction.
+
+## Final result
+
+Final full CLI passed in `429.304s`; final `make verify` exited 0 with CLI `433.681s`, certify `337.079s`, docs validation, ordered temporary-root smoke, lint 0, and connector validation 547/0. Website docs data regenerated cleanly; TypeScript typecheck is explicitly not applicable in this checkout because `tsc`/existing `node_modules` is absent and installing dependencies was prohibited. Runtime help/output/hidden checks, exact-start 8/8 preserved plus 5/5 intentional help, RLM/safety repeated/race, module/scope/parser-removal guards, gofmt, vet, full tests, and build all pass.

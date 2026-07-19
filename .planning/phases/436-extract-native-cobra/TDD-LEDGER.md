@@ -16,10 +16,10 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
 | 1 | RED | `go test ./internal/cli ./internal/rlm -run 'TestExtract|TestDeterministicRunRejectsWarehouseInputPathEscape|TestDeterministicRunRejectsExternalInputFinalLink|TestWriteOutTable' -count=1` | Failed as required before production edits: CLI lacks `newExtractCobraCommand`, `extractCommandRuntime`, and `newRootCmdWithExtractRuntime`; RLM traversal input, external input final link, and external temporary output final link all succeeded |
 | 2 | GREEN | Hidden native extract command, typed flags/runtime, bounded table checks, rooted RLM warehouse I/O, and extract-only legacy/parser removal | Pass: focused CLI/RLM `1.752s`/`0.227s`; existing extract request test updated only for intentional bare-help behavior |
-| 3 | Refactor | Focused/repeated/race extract/RLM/safety, router/golden/full CLI, exact-start differential, and parity checks | In progress: extract ×10 `10.607s`, extract race `12.937s`, RLM/safety normal/repeated/race green, router/golden focus green, exact-start 8/8 preserved plus 5/5 intentional help |
-| 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Initial pass: full CLI `434.874s`, full repo green (CLI `436.578s`, certify `342.464s`), vet/build/`make verify` exit 0 |
+| 3 | Refactor | Focused/repeated/race extract/RLM/safety, router/golden/full CLI, exact-start differential, and parity checks | Pass: final extract ×10 `43.880s`, extract race `50.303s`, RLM/safety ×10/race green, router/golden green, final full CLI `429.304s`, exact-start 8/8 preserved plus 5/5 intentional help |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Final pass: `make verify` exit 0; CLI `433.681s`, certify `337.079s`, docs/smoke/lint/connectors green |
 | 5 | Containment correction RED/GREEN | Reject a warehouse-directory symlink escaping the selected extract project root before analyzer effects | RED failed in `0.569s`; GREEN passes in `0.560s`, extract ×10 `43.880s`, extract race `50.303s` after project-root validation before analyzer construction |
-| 6 | Delivery | Re-run affected/full gates; finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
+| 6 | Delivery | Re-run affected/full gates; finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Complete after terminal artifact commit/push |
 
 ## RED contract
 
@@ -47,6 +47,14 @@ Focused, repeated, and race suites pass. The original input traversal, external 
 ## Post-GREEN containment correction
 
 The first implementation roots individual RLM table effects, but extract still needs to prove its fixed warehouse directory is within the selected project root before treating that directory as the held root. Temp-only RED linked `.polymetrics/warehouse` to an external directory and failed in `0.569s`: extract constructed and ran the injected analyzer, returning an ExtractResult instead of a validation error. The external directory remained empty because the fake analyzer has no file effect. GREEN validates the fixed warehouse directory against the selected project root before analyzer construction and RLM request creation. The focused test passes in `0.560s`; all extract tests repeated ×10 pass in `43.880s`; extract race passes in `50.303s`.
+
+## Final verification evidence
+
+- Final full CLI passed in `429.304s`; final full `make verify` passed with CLI `433.681s`, certify `337.079s`, docs validation, ordered temp-root smoke, lint 0, and 547 connector bundles / 0 findings.
+- RLM/safety repeated ×10 and focused race passed after the correction. Exact-start binaries matched 8/8 preserved parser/output cases; 5/5 intentional contextual-help routes passed.
+- Runtime topic/bare/direct/positional/trailing help, JSON ExtractResult, usage error, and hidden root discovery checks passed.
+- Generated CLI manual/golden and website docs-data checks passed with no unexpected delta. Website TypeScript typecheck could not run because `tsc`/existing `node_modules` is absent; no install was attempted because dependencies/external acquisition were prohibited.
+- `go mod tidy -diff`, `go mod verify`, dependency/scope/parser-removal checks, gofmt, diff check, vet, full tests, and build passed.
 
 ## Evidence log
 
