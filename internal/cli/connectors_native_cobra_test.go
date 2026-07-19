@@ -183,6 +183,8 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 		{name: "positional", args: []string{"connectors", "help"}},
 		{name: "list trailing long", args: []string{"connectors", "list", "--help"}},
 		{name: "catalog trailing positional", args: []string{"connectors", "catalog", "help"}},
+		{name: "inspect direct long", args: []string{"connectors", "inspect", "--help"}},
+		{name: "inspect direct positional", args: []string{"connectors", "inspect", "help"}},
 		{name: "inspect trailing long", args: []string{"connectors", "inspect", "sample", "--help"}},
 		{name: "certify trailing positional", args: []string{"connectors", "certify", "sample", "help"}},
 		{name: "JSON trailing", args: []string{"connectors", "certify", "sample", "--help"}, json: true},

@@ -11,6 +11,7 @@ GSD doctor/list and plan-phase prompt passed. Adapter has no `programming-loop`;
 | 2 | GREEN | Native connectors/certify subtree, typed flags/runtime seam, compatibility normalization, and namespace-only parser removal | Pass: focused `3.876s`; focused router/golden/certify/telemetry `111.507s`; repeated ×10 `34.915s`; race `40.844s`; certify package `336.422s` |
 | 3 | Help-refactor RED | Focused trailing action/nested certify help contract | Failed before the final help production edit: list/catalog/inspect returned operation output, certify positional help was usage 2, and certify JSON trailing help returned a certification envelope |
 | 4 | Help-refactor GREEN | Normalize direct/trailing action help before effects and render canonical connectors manual | Pass focused `3.884s`; broader rerun pending |
+| 5 | Operand-help RED | Direct `connectors inspect --help|help` before operand capture | Failed before production correction: both tokens were captured as connector names and returned internal connector-not-found errors |
 | 5 | Delivery | Finalize, commit/push, no PR/review | Pending |
 
 ## RED contract
