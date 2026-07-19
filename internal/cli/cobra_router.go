@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"strconv"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -45,6 +46,13 @@ type flowCommandState struct {
 	operandSet bool
 }
 
+type scheduleCommandStateKey struct{}
+
+type scheduleCommandState struct {
+	operand    string
+	operandSet bool
+}
+
 func (e *cobraLegacyError) Error() string { return e.err.Error() }
 
 func (e *cobraLegacyError) Unwrap() error { return e.err }
@@ -61,10 +69,18 @@ func markCobraLegacyError(err error) error {
 }
 
 func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer) *cobra.Command {
-	return newRootCmdWithAgentImageRuntime(ctx, cfg, stdout, stderr, osAgentImageRuntime{})
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime())
 }
 
 func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, imageRuntime agentImageRuntime) *cobra.Command {
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, imageRuntime, defaultScheduleCommandRuntime())
+}
+
+func newRootCmdWithScheduleRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, scheduleRuntime scheduleCommandRuntime) *cobra.Command {
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, scheduleRuntime)
+}
+
+func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, imageRuntime agentImageRuntime, scheduleRuntime scheduleCommandRuntime) *cobra.Command {
 	root := cfg.Root
 	jsonOut := cfg.JSON
 	cmd := &cobra.Command{
@@ -101,6 +117,7 @@ func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, std
 	cmd.AddCommand(newETLCobraCommand(ctx, cfg, root, stdout, jsonOut))
 	cmd.AddCommand(newReverseCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newFlowCobraCommand(ctx, cfg, root, stdout, jsonOut))
+	cmd.AddCommand(newScheduleCobraCommandWithRuntime(ctx, cfg, root, stdout, jsonOut, scheduleRuntime))
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
@@ -118,6 +135,8 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	args = captureReversePrivateOperand(args, &reverseState)
 	var flowState flowCommandState
 	args = captureFlowPrivateOperand(args, &flowState)
+	var scheduleState scheduleCommandState
+	args = captureSchedulePrivateOperand(args, &scheduleState)
 	var credentialsState credentialsCommandState
 	args = normalizeNativeStringArrayArgs(args, &credentialsState)
 	if credentialsState.rawCarrier {
@@ -135,7 +154,8 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	ctx = context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState)
 	ctx = context.WithValue(ctx, etlCommandStateKey{}, etlState)
 	ctx = context.WithValue(ctx, reverseCommandStateKey{}, reverseState)
-	cmd.SetContext(context.WithValue(ctx, flowCommandStateKey{}, flowState))
+	ctx = context.WithValue(ctx, flowCommandStateKey{}, flowState)
+	cmd.SetContext(context.WithValue(ctx, scheduleCommandStateKey{}, scheduleState))
 	if len(args) > 0 && lookupTopLevelCommand(cmd, args[0]) == nil {
 		return cmd.RunE(cmd, args)
 	}
@@ -210,6 +230,35 @@ func captureFlowPrivateOperand(args []string, state *flowCommandState) []string 
 	return out
 }
 
+// captureSchedulePrivateOperand preserves the first positional selected by the
+// old schedule parser before pflag can consume it as a help flag or separator.
+func captureSchedulePrivateOperand(args []string, state *scheduleCommandState) []string {
+	if len(args) < 3 || args[0] != "schedule" || (args[1] != "install" && args[1] != "remove") {
+		return args
+	}
+	operandIndex := -1
+	for i := 2; i < len(args); i++ {
+		arg := args[i]
+		if strings.HasPrefix(arg, "--") {
+			if !strings.Contains(arg, "=") && i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
+				i++
+			}
+			continue
+		}
+		operandIndex = i
+		break
+	}
+	if operandIndex < 0 {
+		return args
+	}
+	state.operand = args[operandIndex]
+	state.operandSet = true
+	out := make([]string, 0, len(args)-1)
+	out = append(out, args[:operandIndex]...)
+	out = append(out, args[operandIndex+1:]...)
+	return out
+}
+
 func normalizeNativeStringArrayArgs(args []string, credentialsState *credentialsCommandState) []string {
 	if len(args) >= 3 && args[0] == "catalog" && (args[1] == "refresh" || args[1] == "show") {
 		return normalizeStringArraySpaceValues(args, 2, map[string]struct{}{"connection": {}})
@@ -266,6 +315,21 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 		switch args[1] {
 		case "plan", "preview", "run", "status", "list":
 			return normalizeFlowLegacyActionArgs(args, 2)
+		default:
+			out := make([]string, 0, len(args)+1)
+			out = append(out, args[0], "--")
+			out = append(out, args[1:]...)
+			return out
+		}
+	}
+	if len(args) >= 2 && args[0] == "schedule" {
+		if isHelpArg(args[1]) {
+			return append([]string(nil), args[:2]...)
+		}
+		switch args[1] {
+		case "create", "list", "install", "remove":
+			args = normalizeStringArraySpaceValues(args, 2, scheduleFlagNames)
+			return normalizeScheduleLegacyActionArgs(args, 2)
 		default:
 			out := make([]string, 0, len(args)+1)
 			out = append(out, args[0], "--")
@@ -379,6 +443,23 @@ func normalizeFlowLegacyActionArgs(args []string, start int) []string {
 			(args[1] == "run" && strings.HasPrefix(arg, "--force=")) {
 			_, value, _ := strings.Cut(arg, "=")
 			out = append(out, "--pm-legacy-flow-assigned="+value)
+			continue
+		}
+		out = append(out, normalizeReverseMalformedUnknown(arg))
+	}
+	return out
+}
+
+func normalizeScheduleLegacyActionArgs(args []string, start int) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	for _, arg := range args[start:] {
+		if arg == "--" || isLegacyHelpFlag(arg) {
+			continue
+		}
+		if strings.HasPrefix(arg, "--crontab=") {
+			_, value, _ := strings.Cut(arg, "=")
+			out = append(out, "--crontab="+strconv.FormatBool(value == "true"))
 			continue
 		}
 		out = append(out, normalizeReverseMalformedUnknown(arg))
@@ -523,6 +604,13 @@ var etlFlagNames = map[string]struct{}{
 	"progress":   {},
 }
 
+var scheduleFlagNames = map[string]struct{}{
+	"name":    {},
+	"cron":    {},
+	"flow":    {},
+	"crontab": {},
+}
+
 var reverseFlagNames = map[string]struct{}{
 	"source-table": {},
 	"destination":  {},
@@ -630,9 +718,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "rlm", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runRLM(ctx, cfg, root, args, stdout, jsonOut)
-		}},
-		{name: "schedule", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runSchedule(ctx, cfg, root, args, stdout, jsonOut)
 		}},
 		{name: "worker", hidden: true, handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runWorker(ctx, cfg, args, stdout, jsonOut)

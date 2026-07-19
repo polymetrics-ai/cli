@@ -11,7 +11,7 @@
   "startedAt": "20260719T044819Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "red_tests_committed_pending",
+  "status": "green_implementation_pending_commit",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -31,10 +31,15 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "the complete native schedule tree, flags, parser/output, help, validation, context, fake backend, cleanup, and invalid-action tests were added before production edits; CLI compilation failed on three intentionally missing native schedule symbols"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native schedule actions and typed flags, schedule-only legacy normalization/private operand capture, injected fake backend seams, and schedule-only parser removal pass focused, repeated, race, router, golden-focused, schedule-package, and 104/104 exact-start differential gates"
     }
   ],
   "red": "focused CLI compile RED: undefined newScheduleCobraCommand, scheduleCommandRuntime, and newRootCmdWithScheduleRuntime",
-  "green": "pending",
+  "green": "focused schedule CLI 0.595s; schedule package 0.598s; repeated x5 0.655s; focused race CLI 55.681s; router/golden/schedule 6.728s; exact-start differential 104/104",
   "verification": "pending",
   "files": [
     ".planning/phases/433-schedule-native-cobra/PLAN.md",

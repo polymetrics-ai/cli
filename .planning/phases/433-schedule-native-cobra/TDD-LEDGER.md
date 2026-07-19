@@ -17,7 +17,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
 | 1 | RED | `go test ./internal/cli -run 'TestSchedule(Command|Create|Install|Help|Backend)' -count=1` | Failed as required before production edits: undefined `newScheduleCobraCommand`, `scheduleCommandRuntime`, and `newRootCmdWithScheduleRuntime` |
-| 2 | GREEN | Native schedule subtree + typed handlers + schedule-only normalization; remove legacy wrapper/parser | Pending |
+| 2 | GREEN | Native schedule subtree + typed handlers + injected runtime seam + schedule-only normalization; remove legacy wrapper/parser | Pass: focused all-schedule CLI `0.595s`; schedule package `0.598s`; repeated ×5 `0.655s`; focused race CLI `55.681s`; router/golden/schedule `6.728s`; exact-start differential 104/104 |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI and schedule package gates, parity/differential checks | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
@@ -52,7 +52,11 @@ The intentionally missing constructors/runtime prove the native tree and injecte
 
 ## Focused GREEN
 
-Pending.
+`newScheduleCobraCommand` now owns create/list/install/remove/help with typed string arrays, a native boolean `--crontab`, unknown tolerance, and no-file completion seams. Typed handlers retain current cron/name/conflict validation, manifest format/timestamps, root-bearing scheduler payload, typed config selection, context propagation, install wrapping, best-effort removal plus crontab fallback, and text/JSON output. An invocation-local runtime seam injects fixed clocks, executable paths, selectors, and fake backends in tests; production defaults still use the existing backend selector and implementations.
+
+Schedule-only first-operand capture and normalization preserve the legacy parser's space/assigned/repeated flag behavior, arbitrary false `--crontab` values, help/literal/malformed unknown tails, strict first operand, and invalid action ownership. Schedule is absent from `cobraLegacyCommands`; `runSchedule` and schedule `parseFlags` call sites are removed; dynamic connector `parseFlags` remains.
+
+All schedule CLI tests passed in `0.595s`; schedule package tests passed in `0.598s`; repeated schedule CLI ×5 passed in `0.655s`; focused race passed for CLI in `55.681s`; router/golden/schedule focus passed in `6.728s`. A 104-case exact-start differential across create/list/install/remove and 26 action tails matched exit/stdout/stderr exactly after timestamp normalization. No real scheduler command, service, credential, or dependency was used.
 
 ## Final refactor and verification evidence
 
