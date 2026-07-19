@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "active",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "a490eeba1d32619484b59f8a72948dfc624b99de",
+  "currentHead": "4a9fa0fb0e3b72ee2c5e864c1778c7acf8da06c5",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -94,6 +94,13 @@
       "decision": "spawned",
       "issues": [429],
       "reason": "Sol/high implementation and bounded correction sessions addressed parser, compatibility, state-evidence, and local-write findings; final Sol/xhigh exact-head review was clean and bounded integration tests passed."
+    },
+    {
+      "cycle": "unit_430_execute_review_promote",
+      "timestamp": "2026-07-19T01:01:33Z",
+      "decision": "spawned",
+      "issues": [430],
+      "reason": "Sol/high implementation/correction and independent Sol/xhigh re-review completed ETL nativization; exact reviewed head promoted and parent race checks passed."
     }
   ],
   "units": [
@@ -172,6 +179,17 @@
       "implementationSession": "b20c6483-c828-495a-93aa-5f393f0c1712",
       "correctionSessions": ["cee2448f-c3ab-424e-aa83-3a96445b6e6f", "fb3e3022-c664-4f17-8819-c1010dbbc269", "4780796d-1884-40d2-a6e1-d43d71a4b987", "56efdaf6-aa8b-42e9-a0cd-367b49acfaa0", "26a5e339-b410-4253-848b-6a6b2e943f71", "c2ac3e52-0ba2-4c77-9470-3f04f2afb72f", "863c9a7c-f3d1-4013-b283-cc301922e266", "f540a391-bd9b-41d5-876f-914e5cb6c353"],
       "reviewSession": "1b30b51b-73a3-4c2d-90da-bf5161d36a8f"
+    },
+    {
+      "issue": 430,
+      "branch": "refactor/430-etl-native-cobra",
+      "startingHead": "6c94754c58185df5aac53bd97587603c3154b1d5",
+      "endingHead": "ad0f23bbe6b9fc71713d651d0b25ff6c42d43a06",
+      "parentIntegrationHead": "4a9fa0fb0e3b72ee2c5e864c1778c7acf8da06c5",
+      "status": "provisionally_integrated",
+      "implementationSession": "8d48e651-ff7a-42af-aa60-57551df1dcae",
+      "correctionSession": "9751766b-3d79-4f36-9b93-4e39ec165fa8",
+      "reviewSession": "6049b205-ccea-4d8d-ba25-3046a865c19c"
     }
   ],
   "humanGates": [
@@ -185,5 +203,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-18T22:50:26Z"
+  "updatedAt": "2026-07-19T01:01:33Z"
 }

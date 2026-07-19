@@ -18,4 +18,6 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #429 nativized credentials, preserved env/stdin-only intake and legacy identifiers, hardened parser ownership, and added rooted local-write effect confinement. After iterative exact-head corrections, final independent review was clean and parent merge `a490eeba` passed bounded integration suites.
 
-The next serialized ready unit is #430. Final verification and final parent review have not run; `verificationPassed` remains false.
+#430 nativized ETL with bounded batch/sync/output semantics preserved and fail-closed status operand ownership, passed exact-head independent review and parent integration race checks.
+
+The next serialized ready unit is #431. Final verification and final parent review have not run; `verificationPassed` remains false.
