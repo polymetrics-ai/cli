@@ -72,3 +72,17 @@ Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testi
 Downstream artifact: complete. Planning `07d0b5a4`, RED `43acd262`, GREEN `2c0a550c`, and lint/resource-fix `b06816ad` are pushed. The implementation provides successful-preview mutation gates; opaque and semantic redaction; strict private artifacts and credential references; invocation-local crontab selection; durable provenance-bound ledgers with fresh sweep workspaces; context cancellation with bounded post-mutation cleanup; strict controls/resources/prerequisites; exact identity-bound resume; and temporary test roots.
 
 Verification result: pass. Focused/repeated/race matrices, full CLI/certify/schedule, runtime help/bare/invalid/JSON and credential-free sample, temporary CLI docs/goldens/website drift, docs and connector validation, gofmt/diff/vet, explicit full tests/build, and final `make verify` exit 0 (`464.41s`) pass. An initial verify run correctly stopped at lint on unchecked synthetic fixture writes; `b06816ad` fixed the resource handling and the complete gate reran successfully. No credentials, live services, system crontab, external writes/sweeps, dependencies, PR, integration, parent mutation, or main mutation occurred.
+
+## Fifth bounded review-correction kickoff snapshot
+
+Identity: `issue-437-fifth-review-correction-20260720`; exact clean/matched start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; launcher `openai-codex/gpt-5.6-sol`, thinking `high`; no subagents. Correct seven consolidated rereview findings: defer ledger cleaning until exact absence; deny forged numeric-resource sweep authority; bound and sanitize ledger loading; reject all unsupported sweep credential constraints before effects; propagate report/history persistence with leak-dominant precedence; reject malformed/unknown certify flags before logger/telemetry/files/network; and structurally validate/recompute resume evidence or rerun.
+
+Commands: `scripts/gsd doctor` and `scripts/gsd list` passed; programming-loop remains unavailable; `scripts/gsd prompt audit-fix --phase 437-connectors-certify-native-cobra --dry-run` generated the applicable correction prompt; manual universal-loop fallback recorded. Execution decision: `local_critical_path` because the user prohibited subagents and all parent/PR/integration mutation while assigning the isolated issue worktree.
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-documentation`, `golang-spf13-cobra`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`.
+
+Recovery-budget exception: unresolved P1 destructive cleanup authority and unrecoverable-ledger findings require this extra bounded correction rather than stopping after four cycles.
+
+Downstream artifact: pending RED/GREEN. Planning checkpoint precedes RED; RED precedes production; terminal verification remains pending.
+
+Verification result: pending. `verificationPassed` must remain false until full `make verify` exits 0.

@@ -95,3 +95,20 @@ Session `issue-437-sol-high-review-correction-20260719`; exact start `1e27b14012
 The first full `make verify` ran all tests but failed at lint on four unchecked `fmt.Fprint/Fprintf` fixture writes. The resource-handling correction was committed as `b06816ad`; focused tests and certify lint passed, then the entire `make verify` gate was rerun and exited 0. Final verification also includes help/bare/flag-help byte parity, invalid action exit 2, JSON manual kind, credential-free sample pass, temporary CLI-doc generation diff, golden pass, website regeneration with no drift, docs validation, and connectorgen 547/0.
 
 Strict TDD gate: R4-1 through R4-3 exact failing outputs must be captured before any production edit. Tests use fixtures, fake runners/backends, in-process seams, synthetic markers, and temporary roots only; they must assert marker absence without printing report bodies.
+
+## Fifth bounded review-correction ledger
+
+Identity `issue-437-fifth-review-correction-20260720`; exact start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; both rereviews traced and consolidated into seven accepted findings in PLAN.md. The explicit recovery-budget exception applies because unresolved P1 security risks require another correction. Programming-loop remains unavailable; applicable `audit-fix --dry-run` prompt plus manual universal loop applies. No subagents by user order; execution is `local_critical_path`.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R5-0 | Planning | Reopen all six artifacts with exact identity, findings/dispositions, skills, recovery exception, RED/GREEN/gates/checkpoints; commit/push before tests or production | In progress |
+| R5-1 | RED cleanup/authority | Cleanup execute success + verify failure remains uncleaned; sweep verify failure remains retryable; forged issue/milestone ledger entries produce zero plan/preview/run/cleanup effects | Pending; must fail before production |
+| R5-2 | RED inputs/constraints | Oversized, too-many-entry, and malformed-marker ledgers fail before effects without marker output; sweep effective default/per-connector rate/budget/limit/other constraints fail before workspace/telemetry/harness/cleanup | Pending; must fail before production |
+| R5-3 | RED persistence/prevalidation | Current/history symlink or unwritable report save surfaces deterministically with leak exit 3 dominant; assigned/space/unknown malformed certify flags produce no logger/telemetry files or runtime effects | Pending; must fail before production |
+| R5-4 | RED resume | Minimal, duplicate-stage, edited outcome/leaks, future, and incompatible reports rerun; valid complete evidence resumes with recomputed result | Pending; must fail before production |
+| R5-5 | GREEN | Smallest fail-closed implementation satisfies R5-1 through R5-4 while preserving plan → preview → approval → execute, context, crontab isolation, dynamic dispatch, re-entrancy, outputs/exits, docs, and no dependencies | Pending |
+| R5-6 | Verify | Focused/repeated/race; CLI/certify/schedule/safety; help/bare/invalid/JSON; docs/goldens/website; connector validation; fmt/diff/vet/full tests/build/`make verify`; no module delta | Pending; `verificationPassed=false` |
+| R5-7 | Delivery | Coherent planning/RED/GREEN/evidence commits pushed only to active issue branch; clean and remote-matched; no PR/parent/integration/main mutation | Pending |
+
+Strict TDD gate: R5-1 through R5-4 failures must be captured and committed/pushed before any production edit. Tests use only deterministic fakes, temporary paths, synthetic non-secret markers, and effect recorders; raw malformed lines/report bodies/credential values must never be printed.

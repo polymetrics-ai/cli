@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: fourth bounded review-correction cycle complete; full verification passed.
+Status: fifth bounded review-correction cycle in progress; verification reopened and pending.
 
 ## Identity
 
@@ -52,3 +52,13 @@ All accepted groups are corrected: every reverse mutation now requires a success
 Verification passed: focused ×10 and race matrices; standalone CLI/certify checkpoints and schedule tests; runtime help/bare/flag-help parity, invalid exit 2, JSON manual, credential-free sample; temporary CLI docs generation, goldens, website drift, docs validation; connectorgen 547/0; gofmt/diff/vet; explicit final-code `go test ./...` in real `456.93s` (CLI `452.912s`, certify `346.633s`); build; and final `make verify` exit 0 in real `464.41s` (CLI `439.981s`, certify `330.355s`, lint 0). The first verify attempt exposed unchecked fixture writes at lint; `b06816ad` corrected them and the entire gate was rerun successfully.
 
 Safety remained fixture/fake/in-process/temp-only plus the repository's existing local smoke. No credential values, credentialed/live checks, external credential commands, system crontab, external writes/sweeps, services, connector-def changes, dependencies, generic write tools, reverse execution outside fake/temp/local smoke, PR, integration, parent mutation, or main merge occurred.
+
+## Fifth bounded review-correction cycle — reopened
+
+Status: in progress; verification pending and `verificationPassed=false`.
+
+Identity: `issue-437-fifth-review-correction-20260720`; exact clean/matched start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; launcher `openai-codex/gpt-5.6-sol`, thinking `high`; no subagents. The correctness/security rereviews were consolidated into seven accepted findings: post-verification cleanup ledger mutation; tag-safe sweep authority with numeric GitHub resources denied; bounded secret-safe ledger loading; pre-effect sweep credential-constraint validation; surfaced current/history report persistence with leak-dominant precedence; pre-logger/telemetry certify syntax validation; and structurally complete outcome-recomputed resume evidence.
+
+Recovery-budget exception: unresolved P1 destructive authority and retryability findings justify this additional narrowly bounded correction cycle. GSD doctor/list passed, the required programming-loop is still absent, the applicable audit-fix dry-run prompt was generated, and the manual universal loop remains the fallback. Execution is `local_critical_path` because the user prohibited subagents and parent/PR/integration work.
+
+Planning checkpoint, RED, GREEN, full verification, terminal commit/push, and clean remote-matched ending are pending. Safety remains fake/temp/effect-recorder only with no credentials, live services/connectors, system crontab, external writes/sweeps, credential commands, connector defs, dependencies, generic write tools, PR, parent, integration, or main mutation.

@@ -12,19 +12,23 @@
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "thirdCorrectionStartingHead": "437d13cf",
   "fourthCorrectionStartingHead": "1e27b14012f65ffa24c01ed855d0405c24401eee",
+  "fifthCorrectionStartingHead": "05d9c6658f52e542b6a74e87e29bdcad7275ea9d",
+  "fifthCorrectionSession": "issue-437-fifth-review-correction-20260720",
+  "recoveryBudgetException": "unresolved P1 destructive cleanup authority and cleanup-ledger retryability findings require one additional bounded correction cycle",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
   "endedAt": "20260719T184343Z",
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "review_correction_complete",
-  "verificationPassed": true,
+  "status": "review_correction_in_progress",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
     "planPhase": "passed_generated_and_executed_inline",
     "programmingLoop": "blocked_unknown_command",
+    "applicablePrompt": "audit-fix_dry-run_generated",
     "fallback": "manual_gsd_universal_runtime_loop"
   },
   "orchestrationDecisions": [
@@ -157,11 +161,16 @@
       "cycle": "fourth-review-correction-summary",
       "decision": "local_critical_path",
       "reason": "terminal artifacts truthfully record the successful gate for active-branch commit/push only; no PR, integration, parent, or main mutation"
+    },
+    {
+      "cycle": "fifth-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "user prohibited subagents and bounded work to the existing isolated #437 branch; unresolved P1 security findings trigger the recorded recovery-budget exception"
     }
   ],
-  "red": "captured: certify focus failed in 16.755s (preview create/cleanup/sweep, opaque hits, report mode, strict YAML/symlink, ledger layout/authority, concurrent crontab, cancellation, prerequisite, resume); CLI focus failed in 1.051s (malformed booleans, parallel 0/-1/33, secret config, source-root helper)",
-  "green": "complete: preview-success gates; opaque/semantic redaction; strict private atomic artifacts and credential references; invocation-local crontab; durable provenance-bound ledgers/fresh sweep workspaces; context cancellation and bounded cleanup; strict controls/resources/prerequisites; exact schema/manifest/effective-options resume identity; temp-only tests",
-  "verification": "passed: focused x10/race; CLI 442.615s; certify 328.909s; schedule; help/bare/invalid/JSON/sample; CLI docs/goldens/website drift; connectorgen 547/0; fmt/diff/vet; go test ./... real 456.93s; build; final make verify exit 0 real 464.41s (CLI 439.981s, certify 330.355s, lint 0)",
+  "red": "pending fifth-cycle focused tests before production edits",
+  "green": "pending fifth-cycle implementation",
+  "verification": "pending; verificationPassed remains false until full make verify exits 0",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",

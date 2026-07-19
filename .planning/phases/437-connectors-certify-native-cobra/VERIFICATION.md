@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: true
+`verificationPassed`: false — fifth correction cycle pending full `make verify`.
 
 ## TDD / behavior
 
@@ -160,3 +160,34 @@ Exact start `1e27b14012f65ffa24c01ed855d0405c24401eee`; launcher `openai-codex/g
 - [x] Final commits pushed only to active branch; terminal artifact commit follows; no PR/integration/parent/main mutation.
 
 The first `make verify` attempt failed only at lint after tests because four new fixture writes did not check `fmt` return values. Commit `b06816ad` fixed all 17 fixture writes consistently; focused tests and targeted certify lint passed before the complete successful rerun. All runtime checks used temporary roots and the dependency-free sample/local smoke only.
+
+## Fifth bounded review-correction checklist
+
+Exact start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; identity `issue-437-fifth-review-correction-20260720`; launcher `openai-codex/gpt-5.6-sol` / `high`.
+
+`verificationPassed`: false — reopened for unresolved P1/P2 rereview findings; full gate not yet run.
+
+- [x] Confirm isolated branch, clean exact start, and matching local/remote branch head.
+- [x] Read issues #437/#397/#407, required contracts/workflows, CLI parity, ADR/design/migration context, all required skills, all six artifacts, and both rereview files.
+- [x] Run GSD doctor/list; capture missing programming-loop; generate applicable `audit-fix --dry-run` prompt; record manual fallback and `local_critical_path` no-subagent decision.
+- [x] Record explicit recovery-budget exception for unresolved P1 security findings.
+- [x] Consolidate overlaps and accept all seven findings with root-cause dispositions.
+- [ ] Commit/push planning before RED.
+- [ ] RED: normal cleanup and sweep execute-success/verify-failure remain uncleaned and retryable.
+- [ ] RED: forged GitHub issue/milestone ledger entries have zero effects; only safe tag-addressable authority is allowed.
+- [ ] RED: oversized/many/malformed ledgers fail before accumulation/effects and never echo planted marker content.
+- [ ] RED: sweep rejects effective default/per-connector unsupported rate/budget/limit and all constraints before workspace/telemetry/harness/cleanup effects.
+- [ ] RED: current/history save symlink/unwritable failures surface; leak exit 3 remains dominant; no false success without durable evidence.
+- [ ] RED: unknown/malformed assigned and space-value certify flags reject before logger/telemetry/files/network/effects while valid global/late flags remain supported.
+- [ ] RED: minimal/edited/duplicate/future/incompatible resume artifacts rerun; complete valid evidence is recomputed and may resume.
+- [ ] Commit/push coherent RED before production.
+- [ ] GREEN accepted corrections with focused tests.
+- [ ] Focused tests repeated and under `-race` for cleanup/sweep/concurrency/prevalidation.
+- [ ] Affected `internal/cli`, `internal/connectors/certify`, schedule, and safety tests pass.
+- [ ] Runtime `pm help connectors`, bare `pm connectors`, `pm connectors --help`, certify help/JSON, and invalid exit behavior pass.
+- [ ] CLI docs/goldens/website generation and drift checks pass or are explicitly unchanged/not applicable.
+- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` passes.
+- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm` pass.
+- [ ] Full `make verify` exits 0; only then set `verificationPassed=true`.
+- [ ] No go.mod/go.sum delta, connector defs, credentials, services, system crontab, external writes/sweeps, generic write tools, dependencies, PR, parent, integration, or main mutation.
+- [ ] Commit/push GREEN and truthful terminal evidence; finish clean and remote-matched.
