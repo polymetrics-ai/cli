@@ -60,3 +60,15 @@ Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testi
 Downstream artifact: complete at implementation head `f56bc825`; strict certify parsing, bounded sweep age, prohibited-exec rejection/removal, completed-report resume reuse, incomplete-report rerun, and corrected generated docs are committed and pushed. Terminal verification artifact `3854295b` is also pushed.
 
 Verification result: pass. Focused/repeated/race/resume/sweep/no-effect/audit tests, runtime help, docs/goldens, hash-stable website generation, credential-free local sample smoke, full CLI (`446.382s`), full certify (`350.637s`), gofmt/vet/full tests/build, `make verify` (exit 0 in `14m58.384s`), and connectorgen 547/0 pass. No external credential command, live credential, service, dependency, PR, or review was used.
+
+## Fourth bounded review-correction kickoff snapshot
+
+Task: at exact clean/matched HEAD `1e27b14012f65ffa24c01ed855d0405c24401eee`, trace and disposition both independent review outputs, consolidate overlaps, commit/push planning, capture and commit RED before production, then correct preview/approval ordering, secret rendering/config/report modes, crontab concurrency confinement, durable provenance-bound ledger/sweep, context cancellation, strict bounded credentials and safety controls, prerequisite gating, resume compatibility, and test artifact pollution. Preserve dynamic dispatch, `cli.Run`, exits 0/1/2/3, output/docs parity, and valid noncredentialed behavior.
+
+Commands: `scripts/gsd doctor`, `scripts/gsd list`, `scripts/gsd prompt plan-phase 437 --skip-research`, and `scripts/gsd sources plan-phase` pass. `scripts/gsd prompt programming-loop init --phase 437 --dry-run` returns `unknown GSD command`; manual universal-loop fallback recorded. Execution decision: `local_critical_path` because user explicitly prohibited subagents and any work outside the isolated issue branch.
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-documentation`, `golang-spf13-cobra`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`; added `golang-spf13-viper`, `golang-troubleshooting`.
+
+Downstream artifact: pending. RED/GREEN/terminal commits and pushes will be recorded after actual execution.
+
+Verification result: pending; `verificationPassed=false` until full `make verify` exits 0.

@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: true
+`verificationPassed`: false
 
 ## TDD / behavior
 
@@ -128,3 +128,33 @@ Third-correction start: `437d13cf`; session `issue-437-third-safety-correction-2
 - [x] Explicit `go run ./cmd/connectorgen validate internal/connectors/defs` reports 547 checked, zero findings.
 - [x] Final artifacts record only actual terminal evidence and align `verificationPassed` with the full gate.
 - [x] Commit/push the final truthful verification artifacts only to the active issue branch (`3854295b`); no credentials, external credential commands, services, dependencies, PR, or review.
+
+## Fourth bounded review-correction checklist
+
+Exact start `1e27b14012f65ffa24c01ed855d0405c24401eee`; launcher `openai-codex/gpt-5.6-sol` / `high`.
+
+- [x] Confirm isolated worktree, active branch, clean tree, exact HEAD, and matching local/remote branch heads.
+- [x] Read full issues #437/#397/#407, contracts, GSD/manual loop, CLI parity/runtime references, ADR-0002, certification design, CLI Architecture v2 sources, migration context, all phase artifacts, both review outputs, and required skills.
+- [x] Run GSD doctor/list/plan prompt; record unavailable programming-loop and manual fallback.
+- [x] Consolidate every overlapping correctness/security finding into F1–F10 with accepted reasoned dispositions.
+- [ ] Commit/push planning checkpoint before tests or production edits.
+- [ ] Capture focused RED for every accepted finding before production changes; commit/push coherent RED checkpoints.
+- [ ] Failed/mismatched/leaky preview blocks execution and ledger in initial write, both cleanup paths, and both sweep paths.
+- [ ] Secret detector returns opaque metadata; approval/config secrets never enter argv/reasons/serialized reports; secret-schema config injection rejects; reports/history/progress/ledgers use restrictive atomic/no-follow writes as applicable.
+- [ ] Parallel certification uses invocation-local crontab confinement; deterministic concurrent and race tests prove system backend unreachable.
+- [ ] Durable per-connector ledger is directly consumed after process restart; workspace/ledger roots are separate; connector/run/tag/action/cleanup provenance and containment reject forged entries.
+- [ ] Caller context reaches in-process CLI stages; pre/mid-cancel stops later effects; already-started successful mutation gets bounded cleanup only.
+- [ ] Credential files are size-bounded, strict-known-field, supported-version, nonempty, count-bounded, registry/local-identifier and env-reference validated, secret-config rejecting, regular/no-symlink inputs.
+- [ ] Every boolean/safety control strictly parses; explicit parallel is positive/bounded, workers capped by jobs; sweep age remains bounded; failures occur before telemetry/credentials/runners/sweep/writes.
+- [ ] Structural/preflight/credential prerequisite failures prevent later live reads/writes.
+- [ ] Resume requires exact schema, connector/manifest identity, and secret-free options/reference fingerprint.
+- [ ] Native test helpers use `t.TempDir()` and assert no source-tree artifacts.
+- [ ] Focused tests repeated and `-race` for context/concurrency/crontab.
+- [ ] Affected `internal/cli`, `internal/connectors/certify`, schedule/safety package tests pass.
+- [ ] Runtime `pm help connectors`, bare `pm connectors`, `pm connectors --help`, certify help/invalid/JSON checks pass.
+- [ ] CLI docs/goldens/website generation and drift checks pass or are accurately not applicable.
+- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` passes.
+- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm` pass.
+- [ ] Full `make verify` exits 0; only then restore `verificationPassed=true`.
+- [ ] No go.mod/go.sum delta and no unjustified files outside #437 correction scope.
+- [ ] Final commits pushed only to active branch; clean tree; no PR/integration/parent/main mutation.

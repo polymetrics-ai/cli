@@ -77,3 +77,19 @@ Session `issue-437-third-safety-correction-20260719`; exact start `437d13cf`; al
 | T5 | Delivery | Truthful final artifacts, coherent commits, active-branch push; no credentials/external credential commands/services/dependencies/PR/review | Complete: terminal verification artifact `3854295b` pushed; final delivery marker records closure |
 
 Strict TDD gate: T1 failures and effect-recorder observations must be captured and committed before production edits. Tests use only fixtures, synthetic references, in-process fakes, and `t.TempDir`; no test may invoke an external credential command.
+
+## Fourth bounded review-correction ledger
+
+Session `issue-437-sol-high-review-correction-20260719`; exact start `1e27b14012f65ffa24c01ed855d0405c24401eee`; model `openai-codex/gpt-5.6-sol`, thinking `high`. Both independent review files were read and traced. Consolidated dispositions F1–F10 in PLAN.md are accepted. Programming-loop is absent; manual universal-loop fallback applies. Required and added skills are recorded in PLAN.md.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R4-0 | Planning | Six artifacts reopened before tests/production; exact branch/head/remote/clean checks, reviews, dispositions, GSD route, skills, safety scope, RED/GREEN plan, gates, checkpoints, and execution decision recorded | Complete; planning commit/push pending |
+| R4-1 | RED preview/security | Focused effects prove failed initial/cleanup/sweep preview cannot run or ledger; opaque secret hits and semantic argv/config/report nondisclosure fail on current code | Pending |
+| R4-2 | RED confinement/context | Deterministic concurrent crontab test proves current global env race; pre/mid-cancel tests prove context is dropped and later effects continue | Pending |
+| R4-3 | RED durability/input | Fresh-process durable sweep/layout/provenance, strict YAML/version/jobs/identifier/env/secret-config/path/symlink/atomic-mode, boolean/parallel/age/prerequisite/resume compatibility, and source-tree pollution tests fail on current code | Pending |
+| R4-4 | GREEN | Smallest context-aware, invocation-local, durable, strict, fail-closed implementation passes every focused test | Pending |
+| R4-5 | Refactor/verify | Repeated/race variants, affected packages, CLI parity, docs/goldens/website drift, connector validation, fmt/diff/vet/test/build/`make verify` | Pending; `verificationPassed=false` until full verify exits 0 |
+| R4-6 | Delivery | Truthful terminal artifacts, coherent GREEN/evidence commits and active-branch pushes; clean worktree | Pending |
+
+Strict TDD gate: R4-1 through R4-3 exact failing outputs must be captured before any production edit. Tests use fixtures, fake runners/backends, in-process seams, synthetic markers, and temporary roots only; they must assert marker absence without printing report bodies.
