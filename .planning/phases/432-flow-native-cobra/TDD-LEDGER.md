@@ -17,8 +17,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
 | 1 | RED | `go test ./internal/cli ./internal/flow -run 'TestFlow(Command|Plan|Help|Exact)|TestEngineCancellationPreserves' -count=1` | Failed as required before production edits: `internal/cli/flow_native_cobra_test.go:20:9: undefined: newFlowCobraCommand`; flow cancellation/events/telemetry/checkpoint/ledger contract passed in `0.394s` |
-| 2 | GREEN | Native flow subtree + typed handlers + flow-only normalization/state; remove legacy wrapper/parser | Pending |
-| 3 | Refactor | Focused/repeated/race/router/golden/full CLI and flow package gates, parity/differential checks | Pending |
+| 2 | GREEN | Native flow subtree + typed handlers + flow-only normalization; remove legacy wrapper/parser | Pass: focused native contract and cancellation package `5.002s`; all `TestFlow*` CLI `5.742s`; flow package `0.301s` |
+| 3 | Refactor | Focused/repeated/race/router/golden/full CLI and flow package gates, parity/differential checks | In progress: router/golden/flow `13.293s`; repeated ×5 `27.066s`; focused race CLI `60.885s`, flow `1.348s` |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
 
@@ -50,4 +50,10 @@ FAIL
 
 The intentionally missing constructor proves the native tree does not yet exist. The committed tests cover all current actions/flags and first operands; bare/text/JSON/positional help; trailing help/literal/malformed unknown/action discovery/global booleans; local temp plan/preview/run/list/status; deterministic output and exact exits; and cancellation with lifecycle events, redacted telemetry, checkpoint absence, ledger ordering, lease release, and no later-step execution. No production file, external write, action step, credential, service, or dependency was used.
 
-GREEN, refactor, parity, and final gate evidence remain pending.
+## Focused GREEN
+
+`newFlowCobraCommand` now owns plan/preview/run/status/list/help with typed file/directory arrays, a native bare boolean force flag, unknown tolerance, no-file completion seams, and flow-only legacy control/malformed normalization. Typed handlers retain current manifest, DAG, relative-spec, named-run, directory, checkpoint, event, telemetry, and output behavior. Flow is absent from `cobraLegacyCommands`; `runFlow` and `parseFlowFlags` are removed; dynamic connector `parseFlags` remains.
+
+Focused native/cancellation tests passed in `5.002s`; every `TestFlow*` CLI test passed in `5.742s`; all flow package tests passed in `0.301s`. Repeated ×5 passed in `27.066s`; focused race passed for CLI in `60.885s` and flow in `1.348s`; router/golden/flow focus passed in `13.293s`. No action step, external write, service, credential, or dependency was used.
+
+Broader differential, parity, full CLI/repository, formatting, vet, build, and final verification remain pending.

@@ -93,6 +93,7 @@ func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, std
 	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newETLCobraCommand(ctx, cfg, root, stdout, jsonOut))
 	cmd.AddCommand(newReverseCobraCommand(ctx, root, stdout, jsonOut))
+	cmd.AddCommand(newFlowCobraCommand(ctx, cfg, root, stdout, jsonOut))
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
@@ -214,6 +215,21 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 			return out
 		}
 	}
+	if len(args) >= 2 && args[0] == "flow" {
+		if isHelpArg(args[1]) {
+			return append([]string(nil), args[:2]...)
+		}
+		switch args[1] {
+		case "plan", "preview", "run", "status", "list":
+			args = normalizeStringArraySpaceValues(args, 2, flowStringFlagNames)
+			return normalizeFlowLegacyActionArgs(args, 2)
+		default:
+			out := make([]string, 0, len(args)+1)
+			out = append(out, args[0], "--")
+			out = append(out, args[1:]...)
+			return out
+		}
+	}
 	if len(args) >= 2 && args[0] == "credentials" {
 		if credentialsActionTakesName(args[1]) && credentialsArgsContainRawCarrier(args[2:]) {
 			credentialsState.rawCarrier = true
@@ -291,6 +307,20 @@ func normalizeReverseLegacyActionArgs(args []string, start int) []string {
 	out = append(out, args[:start]...)
 	for _, arg := range args[start:] {
 		if arg == "--" || isLegacyHelpFlag(arg) || (strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--")) {
+			continue
+		}
+		out = append(out, normalizeReverseMalformedUnknown(arg))
+	}
+	return out
+}
+
+// normalizeFlowLegacyActionArgs keeps tokens ignored by the old flow parser
+// from becoming Cobra controls while retaining ordinary positional operands.
+func normalizeFlowLegacyActionArgs(args []string, start int) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	for _, arg := range args[start:] {
+		if arg == "--" || isLegacyHelpFlag(arg) {
 			continue
 		}
 		out = append(out, normalizeReverseMalformedUnknown(arg))
@@ -447,6 +477,11 @@ var reverseFlagNames = map[string]struct{}{
 	"progress":     {},
 }
 
+var flowStringFlagNames = map[string]struct{}{
+	"file":      {},
+	"flows-dir": {},
+}
+
 var connectionsCreateFlagNames = map[string]struct{}{
 	"source":             {},
 	"destination":        {},
@@ -536,9 +571,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		{name: "man", handler: runManualAlias},
 		{name: "connectors", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runConnectors(ctx, root, args, stdout, jsonOut)
-		}},
-		{name: "flow", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runFlow(ctx, cfg, a, args, stdout, jsonOut) })
 		}},
 		{name: "extract", hidden: true, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })

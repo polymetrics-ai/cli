@@ -12,7 +12,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -81,7 +80,7 @@ func writeManifestFile(t *testing.T, content string) string {
 func TestFlowList(t *testing.T) {
 	dir := t.TempDir()
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), config.Config{}, nil, []string{"list", "--flows-dir", dir}, &out, true)
+	err := flowList(dir, &out, true)
 	require.NoError(t, err)
 
 	var result map[string]any
@@ -97,7 +96,7 @@ func TestFlowList(t *testing.T) {
 func TestFlowPlanValid(t *testing.T) {
 	path := writeManifestFile(t, validFlowManifestJSON)
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), config.Config{}, nil, []string{"plan", "--file", path}, &out, true)
+	err := flowPlan(testCtx(t), path, &out, true, false)
 	require.NoError(t, err)
 
 	var result map[string]any
@@ -126,13 +125,13 @@ func TestFlowPlanSanitizesUnsafeStepIDsInHumanOutput(t *testing.T) {
 	path := writeManifestFile(t, string(data))
 
 	var human bytes.Buffer
-	err = runFlow(testCtx(t), config.Config{}, nil, []string{"plan", "--file", path}, &human, false)
+	err = flowPlan(testCtx(t), path, &human, false, false)
 	require.NoError(t, err)
 	assertNoUnsafeTerminalControls(t, human.String())
 	assert.NotContains(t, human.String(), unsafeID)
 
 	var machine bytes.Buffer
-	err = runFlow(testCtx(t), config.Config{}, nil, []string{"plan", "--file", path}, &machine, true)
+	err = flowPlan(testCtx(t), path, &machine, true, false)
 	require.NoError(t, err)
 	var out struct {
 		Order []string `json:"order"`
@@ -148,13 +147,13 @@ func TestFlowListSanitizesUnsafeFilenamesInHumanOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	var human bytes.Buffer
-	err = runFlow(testCtx(t), config.Config{}, nil, []string{"list", "--flows-dir", dir}, &human, false)
+	err = flowList(dir, &human, false)
 	require.NoError(t, err)
 	assertNoUnsafeTerminalControls(t, human.String())
 	assert.NotContains(t, human.String(), unsafeName)
 
 	var machine bytes.Buffer
-	err = runFlow(testCtx(t), config.Config{}, nil, []string{"list", "--flows-dir", dir}, &machine, true)
+	err = flowList(dir, &machine, true)
 	require.NoError(t, err)
 	var out struct {
 		Flows []string `json:"flows"`
@@ -179,7 +178,7 @@ func assertNoUnsafeTerminalControls(t *testing.T, text string) {
 func TestFlowPlanCyclic(t *testing.T) {
 	path := writeManifestFile(t, cyclicFlowManifestJSON)
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), config.Config{}, nil, []string{"plan", "--file", path}, &out, true)
+	err := flowPlan(testCtx(t), path, &out, true, false)
 	require.Error(t, err, "cyclic manifest should produce an error")
 	assert.True(t, strings.Contains(err.Error(), "cyclic") || strings.Contains(err.Error(), "flow:"),
 		"error should mention cycle: %v", err)
@@ -189,7 +188,7 @@ func TestFlowPlanCyclic(t *testing.T) {
 func TestFlowStatusMissing(t *testing.T) {
 	dir := t.TempDir()
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), config.Config{}, nil, []string{"status", "nonexistent", "--flows-dir", dir}, &out, true)
+	err := flowStatus(dir, []string{"nonexistent"}, &out, true)
 	require.Error(t, err)
 }
 
@@ -197,7 +196,7 @@ func TestFlowStatusMissing(t *testing.T) {
 func TestFlowPreviewValid(t *testing.T) {
 	path := writeManifestFile(t, validFlowManifestJSON)
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), config.Config{}, nil, []string{"preview", "--file", path}, &out, true)
+	err := flowPlan(testCtx(t), path, &out, true, true)
 	require.NoError(t, err)
 
 	var result map[string]any

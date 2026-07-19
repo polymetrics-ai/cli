@@ -6,22 +6,22 @@ Invocation: `issue-432-pi-openai-codex-gpt-5.6-sol-high-20260719T034344Z`; model
 
 - [x] Six phase artifacts created before test or production edits.
 - [x] Focused RED captured before production edits (`undefined: newFlowCobraCommand`; flow cancellation contract independently passed).
-- [ ] Native flow plan/preview/run/list/status/help tree; legacy wrapper removed.
-- [ ] All current local flags typed with legacy repeated/bare/assigned compatibility where applicable.
+- [x] Native flow plan/preview/run/list/status/help tree; legacy wrapper removed.
+- [x] All current local flags typed with repeated/bare/assigned behavior preserved where applicable.
 - [ ] Bare/text/JSON/long/short/positional help parity.
 - [ ] Trailing help, literal `--`, malformed/legal unknowns, invalid actions, and no action-discovery bypass.
 - [ ] Named-run/status first-operand ownership and unchanged directory semantics.
 - [ ] Exact exit taxonomy, deterministic output, terminal sanitation, and one-envelope stdout/stderr behavior.
-- [ ] Cancellation, events, telemetry, checkpoint, and ledger contracts preserved.
-- [ ] Only flow parser/dispatcher removed; dynamic connector parser remains.
+- [x] Cancellation, events, telemetry, checkpoint, and ledger contracts preserved in focused tests.
+- [x] Only flow parser/dispatcher removed; dynamic connector parser remains.
 
 ## Gates
 
-- [ ] Focused native flow/router tests.
-- [ ] Focused tests repeated (`-count=5`).
-- [ ] Focused flow/router race tests.
-- [ ] Existing flow CLI and flow engine/action/checkpoint/event/telemetry tests.
-- [ ] Router and golden transcript tests; fixture unchanged unless explicitly reviewed.
+- [x] Focused native flow/router tests (`5.002s`; all flow CLI `5.742s`).
+- [x] Focused tests repeated (`-count=5`: `27.066s`).
+- [x] Focused flow/router race tests (CLI `60.885s`; flow `1.348s`).
+- [x] Existing flow CLI and flow engine/action/checkpoint/event/telemetry tests (`0.301s`).
+- [x] Router and golden transcript focus (`13.293s`); fixture unchanged.
 - [ ] Exact-start differential for parser/output edge cases.
 - [ ] Full `go test ./internal/cli/...`.
 - [ ] Full `go test ./internal/flow/...` and relevant event/telemetry packages.

@@ -1,6 +1,6 @@
 # Phase 432 Summary
 
-Status: planning and focused test-only RED complete before production edits.
+Status: focused GREEN implementation complete; broader verification pending.
 
 ## Identity
 
@@ -24,4 +24,6 @@ Temporary manifests/roots and fakes only. No action flow execution, reverse ETL,
 
 ## TDD and verification
 
-The complete test-only contract failed before production edits at `internal/cli/flow_native_cobra_test.go:20:9: undefined: newFlowCobraCommand`, as required. The direct flow cancellation/events/telemetry/checkpoint/ledger contract passed independently in `0.394s`. GREEN, refactor, parity, and final gates remain pending.
+The complete test-only contract failed before production edits at `internal/cli/flow_native_cobra_test.go:20:9: undefined: newFlowCobraCommand`, as required. The direct flow cancellation/events/telemetry/checkpoint/ledger contract passed independently in `0.394s`.
+
+Native Cobra now owns plan/preview/run/status/list/help and every current flow flag. Typed handlers preserve current directory, manifest/DAG, relative spec, named run, checkpoint, event, telemetry, and deterministic output behavior; only the flow legacy wrapper/parser was removed. Focused, all-flow, repeated, race, router, and golden-focused gates pass. Broader differential/parity/full gates remain pending.

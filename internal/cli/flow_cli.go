@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/spf13/cobra"
+
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/flow"
@@ -16,54 +18,126 @@ import (
 	"polymetrics.ai/internal/safety"
 )
 
-// runFlow dispatches pm flow subcommands: plan | preview | run | status | list.
-func runFlow(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return usageErrorf("flow: subcommand required (plan|preview|run|status|list)")
+type flowFileFlags struct {
+	Files []string
+}
+
+type flowRunFlags struct {
+	Files     []string
+	FlowsDirs []string
+	Force     bool
+}
+
+type flowDirFlags struct {
+	FlowsDirs []string
+}
+
+func newFlowCobraCommand(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:               "flow",
+		Args:              cobra.ArbitraryArgs,
+		SilenceErrors:     true,
+		SilenceUsage:      true,
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				return errUsage
+			}
+			return markCobraLegacyError(writeManual("flow", stdout, jsonOut))
+		},
 	}
+	setManualHelp(cmd, "flow", stdout, jsonOut)
+	cmd.AddCommand(newFlowPlanCobraCommand(ctx, root, stdout, jsonOut, false))
+	cmd.AddCommand(newFlowPlanCobraCommand(ctx, root, stdout, jsonOut, true))
+	cmd.AddCommand(newFlowRunCobraCommand(ctx, cfg, root, stdout, jsonOut))
+	cmd.AddCommand(newFlowStatusCobraCommand(root, stdout, jsonOut))
+	cmd.AddCommand(newFlowListCobraCommand(root, stdout, jsonOut))
+	cmd.AddCommand(newFlowHelpCobraCommand(stdout, jsonOut))
+	return cmd
+}
 
-	sub := args[0]
-	rest := args[1:]
+func newFlowPlanCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut, dryRun bool) *cobra.Command {
+	var flags flowFileFlags
+	name := "plan"
+	if dryRun {
+		name = "preview"
+	}
+	cmd := newFlowActionCobraCommand(name, func(_ *cobra.Command, _ []string) error {
+		return markCobraLegacyError(withApp(root, func(_ *app.App) error {
+			return flowPlan(ctx, lastString(flags.Files), stdout, jsonOut, dryRun)
+		}))
+	})
+	setManualHelp(cmd, "flow", stdout, jsonOut)
+	addFlowStringArrayFlag(cmd, &flags.Files, "file", "flow manifest path")
+	return cmd
+}
 
-	switch sub {
-	case "plan":
-		return flowPlan(ctx, rest, stdout, jsonOut, false)
-	case "preview":
-		return flowPlan(ctx, rest, stdout, jsonOut, true)
-	case "run":
-		return flowRun(ctx, cfg, a, rest, stdout, jsonOut)
-	case "status":
-		return flowStatus(rest, stdout, jsonOut)
-	case "list":
-		return flowList(rest, stdout, jsonOut)
-	default:
-		return usageErrorf("flow: unknown subcommand %q", sub)
+func newFlowRunCobraCommand(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	var flags flowRunFlags
+	cmd := newFlowActionCobraCommand("run", func(_ *cobra.Command, args []string) error {
+		return markCobraLegacyError(withApp(root, func(a *app.App) error {
+			return flowRun(ctx, cfg, a, flags, args, stdout, jsonOut)
+		}))
+	})
+	setManualHelp(cmd, "flow", stdout, jsonOut)
+	addFlowStringArrayFlag(cmd, &flags.Files, "file", "flow manifest path")
+	addFlowStringArrayFlag(cmd, &flags.FlowsDirs, "flows-dir", "directory containing named flow manifests")
+	cmd.Flags().BoolVar(&flags.Force, "force", false, "clear checkpoints before running")
+	return cmd
+}
+
+func newFlowStatusCobraCommand(root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	var flags flowDirFlags
+	cmd := newFlowActionCobraCommand("status", func(_ *cobra.Command, args []string) error {
+		return markCobraLegacyError(withApp(root, func(_ *app.App) error {
+			return flowStatus(lastString(flags.FlowsDirs), args, stdout, jsonOut)
+		}))
+	})
+	setManualHelp(cmd, "flow", stdout, jsonOut)
+	addFlowStringArrayFlag(cmd, &flags.FlowsDirs, "flows-dir", "directory containing the flow manifest and checkpoints")
+	return cmd
+}
+
+func newFlowListCobraCommand(root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	var flags flowDirFlags
+	cmd := newFlowActionCobraCommand("list", func(_ *cobra.Command, _ []string) error {
+		return markCobraLegacyError(withApp(root, func(_ *app.App) error {
+			return flowList(lastString(flags.FlowsDirs), stdout, jsonOut)
+		}))
+	})
+	setManualHelp(cmd, "flow", stdout, jsonOut)
+	addFlowStringArrayFlag(cmd, &flags.FlowsDirs, "flows-dir", "directory containing flow manifests")
+	return cmd
+}
+
+func newFlowHelpCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := newFlowActionCobraCommand("help", func(_ *cobra.Command, _ []string) error {
+		return markCobraLegacyError(writeManual("flow", stdout, jsonOut))
+	})
+	cmd.Hidden = true
+	setManualHelp(cmd, "flow", stdout, jsonOut)
+	return cmd
+}
+
+func newFlowActionCobraCommand(use string, run func(*cobra.Command, []string) error) *cobra.Command {
+	return &cobra.Command{
+		Use:           use,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE:              run,
 	}
 }
 
-// parseFlowFlags extracts --file, --force, --flows-dir from args.
-func parseFlowFlags(args []string) (file, flowsDir string, force bool, positional []string) {
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--file":
-			if i+1 < len(args) {
-				i++
-				file = args[i]
-			}
-		case "--flows-dir":
-			if i+1 < len(args) {
-				i++
-				flowsDir = args[i]
-			}
-		case "--force":
-			force = true
-		default:
-			if !strings.HasPrefix(args[i], "--") {
-				positional = append(positional, args[i])
-			}
-		}
+func addFlowStringArrayFlag(cmd *cobra.Command, target *[]string, name, usage string) {
+	cmd.Flags().StringArrayVar(target, name, nil, usage)
+	if flag := cmd.Flags().Lookup(name); flag != nil {
+		flag.NoOptDefVal = "true"
 	}
-	return
 }
 
 func readManifestFile(path string) (flow.FlowManifest, error) {
@@ -101,8 +175,7 @@ func resolveManifestPaths(baseDir string, m *flow.FlowManifest) {
 
 // flowPlan parses + validates the manifest and prints the DAG order.
 // dryRun=true makes it behave as "preview".
-func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, dryRun bool) error {
-	file, _, _, _ := parseFlowFlags(args)
+func flowPlan(_ context.Context, file string, stdout io.Writer, jsonOut bool, dryRun bool) error {
 	if file == "" {
 		return usageErrorf("flow plan: --file <path> is required")
 	}
@@ -137,8 +210,9 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 }
 
 // flowRun executes the flow.
-func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	file, flowsDir, force, positional := parseFlowFlags(args)
+func flowRun(ctx context.Context, cfg config.Config, a *app.App, flags flowRunFlags, positional []string, stdout io.Writer, jsonOut bool) error {
+	file := lastString(flags.Files)
+	flowsDir := lastString(flags.FlowsDirs)
 	if file == "" {
 		if len(positional) == 0 {
 			return usageErrorf("flow run: --file <path> or <flow-name> is required")
@@ -182,7 +256,7 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 		LockDir:    dir,
 	}
 
-	result, err := e.Run(ctx, flow.RunOptions{Force: force})
+	result, err := e.Run(ctx, flow.RunOptions{Force: flags.Force})
 	if err != nil {
 		return err
 	}
@@ -195,8 +269,7 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 }
 
 // flowStatus returns last checkpoint info for a named flow.
-func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
-	_, flowsDir, _, positional := parseFlowFlags(args)
+func flowStatus(flowsDir string, positional []string, stdout io.Writer, jsonOut bool) error {
 	if len(positional) == 0 {
 		return usageErrorf("flow status: flow name required")
 	}
@@ -241,8 +314,7 @@ func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
 }
 
 // flowList lists flow manifest files in the flows directory.
-func flowList(args []string, stdout io.Writer, jsonOut bool) error {
-	_, flowsDir, _, _ := parseFlowFlags(args)
+func flowList(flowsDir string, stdout io.Writer, jsonOut bool) error {
 	if flowsDir == "" {
 		flowsDir = ".polymetrics/flows"
 	}
