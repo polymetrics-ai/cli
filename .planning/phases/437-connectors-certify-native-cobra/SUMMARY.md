@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: accepted safety-critical correction complete, verified, committed, and pushed.
+Status: second accepted safety correction in progress; verification reset pending strict RED → GREEN and full gates.
 
 ## Identity
 
@@ -38,3 +38,9 @@ Verification used fixture/replay/local sample paths and temporary roots only. No
 At exact HEAD `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`, all five findings from `/tmp/pm-397-review-437.log` were accepted. Implementation head `a67d2ff9de84a2fabcd3b66097bf49518c1fa124` hides and rejects six unsupported controls before runner invocation, so replay is credential-free by refusal and cannot enter live/write stages. It restores exactly one single-certify span with connector validation before option parsing, credential-file load before batch parallel parsing with legacy error bytes/wrappers, and exact-only connectors help normalization. Canonical/generated/website docs now separate CLI pre-report exits (usage 2, validation 3, setup/runtime 1) from completed report outcomes (pass 0, failure 2, leaks 3).
 
 RED reproduced all findings. GREEN passed focused `3.004s`, native/certify/telemetry `108.532s`, base/current differential 5/5 byte-identical, race `29.046s`, ×10 `24.991s`, certify redaction/replay/concurrency race `349.263s`, exit focus `21.618s`, local sample exit 0/pass/redacted, docs/golden `24.275s`, and hash-stable website generation. Full CLI passed `435.572s`, certify `338.846s`, connector validation 547/0, and final `make verify` exited 0 in `468.36s` with CLI `444.436s`, certify `346.018s`, docs, smoke, lint, build, vet, and validation green. No live credentials/writes, services, dependencies, PR, or review.
+
+## Second correction in progress
+
+At exact HEAD `0d743e54e06c9e27e550eacce9be7899a9e23d19`, every finding in `/tmp/pm-397-rereview-437.log` is accepted. The prior implementation still lets batch `--write=false` and `--skip=write` lose to credential-file `write: true`, discards credential-file sandbox/rate/budget constraints, accepts unsupported single credential/limit/modes controls, and ignores flow/schedule skip values. Architecture/PRD and connectors-help claims are also stale.
+
+The phase is reopened before tests or production. Next checkpoints are planning commit/push, failing effect-recorder and docs tests committed/pushed, smallest fail-closed production correction, generated docs/website parity, focused/repeated/race/no-op/sample/full verification, then final artifact commit/push. Verification uses only fixtures, synthetic references, and temporary roots; no credentials, live services, external writes, dependencies, PR, or review.

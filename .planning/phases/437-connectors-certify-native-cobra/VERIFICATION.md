@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: true
+`verificationPassed`: false
 
 ## TDD / behavior
 
@@ -83,3 +83,23 @@ Correction start: `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`; session `issue-437
 ## Correction result
 
 Implementation head `a67d2ff9de84a2fabcd3b66097bf49518c1fa124`. Exact-base differential matched stdout, stderr, and exit codes in all five reviewed precedence/help cases. Unsupported replay and the other five controls return usage errors without any runtime call; no credential resolution, live stage, or write stage occurs. All verification used temporary roots, local sample behavior, synthetic planted redaction values, and existing replay fixtures only.
+
+## Second accepted safety correction checklist
+
+Second-correction start: `0d743e54e06c9e27e550eacce9be7899a9e23d19`; session `issue-437-second-safety-correction-20260719`.
+
+- [x] Read and accept every P1/P2/P3 finding in `/tmp/pm-397-rereview-437.log`.
+- [x] Reopen plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state before tests or production edits.
+- [ ] Commit/push the planning checkpoint before RED tests.
+- [ ] RED effect-recorder tests prove `--write=false` and `--skip=write` override credential-file `write: true`.
+- [ ] RED proves configured credential-file sandbox/rate/budget and any other unsupported accepted setting fail before runner effects rather than being discarded.
+- [ ] RED proves hidden/rejected `--credential`, `--limit`, and `--modes`; only implemented skip values accepted; flow/schedule/unknown skips and mode-inapplicable controls reject before effects.
+- [ ] Complete audit maps every declared certify flag to an effect or explicit fail-closed rejection.
+- [ ] P3 stale certification architecture/PRD examples and claims removed; connector-help name claim made accurate.
+- [ ] Runtime help, bare namespace, action help, invalid action, CLI docs, goldens, website docs, and generated data are in parity.
+- [ ] Focused effect/no-op audit tests pass repeatedly and under race.
+- [ ] Certify exit/redaction/dynamic-dispatch regressions remain green.
+- [ ] Local sample smoke uses only a temporary root and no credentials/services.
+- [ ] Full CLI/certify/docs/website generators and drift checks pass.
+- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate` pass.
+- [ ] Final artifacts committed and active issue branch pushed; no dependencies/services/credentials/PR/review.

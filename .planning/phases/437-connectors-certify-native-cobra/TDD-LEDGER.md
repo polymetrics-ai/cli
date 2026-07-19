@@ -47,3 +47,18 @@ Session `issue-437-review-correction-20260719T113319Z`; exact correction start `
 | C5 | Delivery | Finalize artifacts, commit/push, no services/credentials/PR/review | Complete: terminal verification artifact commit `2987f21b` pushed; final delivery marker follows |
 
 Correction RED must be captured and committed before any production edit. Fixture/temp data only; no live credentials, HTTP writes, reverse ETL execution, or external sweep.
+
+## Second accepted safety correction ledger
+
+Session `issue-437-second-safety-correction-20260719`; exact start `0d743e54e06c9e27e550eacce9be7899a9e23d19`; all P1/P2/P3 findings in `/tmp/pm-397-rereview-437.log` accepted.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| S0 | Planning | Six artifacts reopened with verification false, accepted findings, GSD fallback, skills, safety scope, flag audit, and checkpoint plan | Complete; commit/push pending |
+| S1 | RED | Effect recorder: batch write-disable dominance; credential constraint fail-closed; unsupported/mode-inapplicable controls and skip values rejected before effects; docs/help claims fail | Pending; must be committed/pushed before production |
+| S2 | GREEN P1/P2 | Batch safe overrides; no discarded credential constraints; every declared certify flag used or fail-closed; only implemented skip values accepted | Pending |
+| S3 | GREEN P3 | Architecture/PRD/help claims corrected; CLI and website artifacts regenerated | Pending |
+| S4 | Verify | Focused/repeated/race/no-op audit/sample smoke/full CLI+certify/docs+website/gofmt+vet+test+build+make verify+connectorgen | Pending |
+| S5 | Delivery | Finalize artifacts and commit/push; no credentials/services/dependencies/PR/review | Pending |
+
+Strict TDD gate: S1 failing tests and observed failures must be captured and committed before any production edit. All data remains fixture/synthetic-reference/temp-only; no secret values, credential resolution, live checks, external writes, services, dependency changes, PR, or review.

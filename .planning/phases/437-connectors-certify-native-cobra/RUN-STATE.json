@@ -9,14 +9,15 @@
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
   "endingImplementationHead": "a67d2ff9de84a2fabcd3b66097bf49518c1fa124",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
+  "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
   "endedAt": "20260719T121234Z",
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "complete_verified",
-  "verificationPassed": true,
+  "status": "second_correction_in_progress",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -79,11 +80,16 @@
       "cycle": "accepted-review-correction-summary",
       "decision": "local_critical_path",
       "reason": "terminal verification artifacts committed and pushed; final no-PR/no-review delivery marker closes the bounded correction"
+    },
+    {
+      "cycle": "second-accepted-safety-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "all rereview P1/P2/P3 findings accepted at exact head; bounded safety-critical correction in the existing isolated issue worktree; no subagent tool, credentials, services, dependencies, PR, or review"
     }
   ],
-  "red": "captured: unsupported controls invoked runner and were advertised; broad help normalization hijacked false/malformed/clusters; invalid options bypassed certify span and beat connector validation; parallel beat missing creds and load error gained wrapper; docs conflated exit phases",
-  "green": "unsupported controls hidden and rejected before runner; single and batch legacy ordering/wrappers restored; connectors help exact-only; canonical/generated/website exit docs corrected",
-  "verification": "pass: differential 5/5 byte-identical; focused/repeated/race and redaction/replay/exit green; sample exit 0/pass; full CLI 435.572s; certify 338.846s; make verify exit 0 in 468.36s; connector validation 547/0",
+  "red": "pending second-correction effect-recorder and docs tests; prior correction RED remains recorded in TDD-LEDGER.md",
+  "green": "pending second-correction implementation",
+  "verification": "pending: verification reset false until focused/repeated/race/no-op/sample/full CLI/certify/docs/website/gofmt/vet/test/build/make verify/connectorgen gates complete",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",
     ".planning/phases/437-connectors-certify-native-cobra/TDD-LEDGER.md",
@@ -102,7 +108,7 @@
     "445ad06c fix(cli): route direct connectors action help",
     "55e32402 docs(planning): complete connectors certify native handoff"
   ],
-  "push": "correction planning, RED, GREEN, and terminal verification checkpoint 2987f21b pushed; final delivery marker follows",
+  "push": "prior correction checkpoints pushed; second-correction planning checkpoint pending commit/push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"

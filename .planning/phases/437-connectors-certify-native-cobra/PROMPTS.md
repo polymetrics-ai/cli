@@ -36,3 +36,15 @@ Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testi
 Downstream artifact: complete at implementation head `a67d2ff9de84a2fabcd3b66097bf49518c1fa124`; terminal verification artifact `2987f21b` is pushed and this final delivery marker closes the phase.
 
 Verification result: pass. GREEN evidence: focused `3.004s`; native/certify/telemetry `108.532s`; base/current differential 5/5 byte-identical; focused race `29.046s`; ×10 `24.991s`; certify redaction/replay/concurrency race `349.263s`; exit focus `21.618s`; local sample exit 0/pass/redacted; docs/golden `24.275s`; website regeneration hash-stable; full CLI `435.572s`; certify `338.846s`; validation 547/0; final `make verify` exit 0 in `468.36s`. No live credentials/writes, services, dependencies, PR, or review.
+
+## Second accepted safety correction kickoff snapshot
+
+Task: at exact HEAD `0d743e54e06c9e27e550eacce9be7899a9e23d19`, accept every finding in `/tmp/pm-397-rereview-437.log`; update and push artifacts, then add/commit/push RED effect-recorder tests before production. P1: batch write-disable controls dominate credential-file writes and credential constraints are never discarded. P2: reject/hide unsupported single controls, constrain skip, reject mode no-ops, and audit every flag. P3: remove stale architecture/PRD claims, correct connector help naming, regenerate CLI/website data. Preserve base behavior, dynamic dispatch, exits, and redaction. Fixture/temp only; no credentials/services/dependencies/PR/review.
+
+Commands: `scripts/gsd doctor` and `scripts/gsd prompt plan-phase 437 --skip-research` passed; `scripts/gsd prompt programming-loop ...` returned `unknown GSD command`, so the manual universal runtime loop applies. Execution decision: `local_critical_path` (bounded correction, existing isolated issue worktree, no subagent tool).
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-spf13-cobra`.
+
+Downstream artifact: pending strict RED → GREEN → verify checkpoints and active-branch push.
+
+Verification result: pending; `verificationPassed` is false until the declared full `make verify` gate exits 0.
