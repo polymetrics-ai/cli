@@ -28,7 +28,7 @@ func TestReviewCorrectionPreviewFailureBlocksCreateAndLedger(t *testing.T) {
 	cliRun = func(args []string, stdout, _ io.Writer) int {
 		if hasArgs(args, "reverse", "run") {
 			runs.Add(1)
-			fmt.Fprint(stdout, `{"kind":"ReverseRun","run":{"records_succeeded":1,"records_failed":0}}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"ReverseRun","run":{"records_succeeded":1,"records_failed":0}}`)
 		}
 		return 0
 	}
@@ -81,15 +81,15 @@ func TestReviewCorrectionCleanupAndSweepRequirePreviewBeforeRun(t *testing.T) {
 		switch {
 		case hasArgs(args, "reverse", "plan"):
 			calls = append(calls, "plan")
-			fmt.Fprint(stdout, "Created reverse plan cleanup-plan\nApproval token: approval-marker\n")
+			_, _ = fmt.Fprint(stdout, "Created reverse plan cleanup-plan\nApproval token: approval-marker\n")
 		case hasArgs(args, "reverse", "preview"):
 			calls = append(calls, "preview")
-			fmt.Fprint(stdout, `{"kind":"ReversePlanPreview","plan":{}}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"ReversePlanPreview","plan":{}}`)
 		case hasArgs(args, "reverse", "run"):
 			calls = append(calls, "run")
-			fmt.Fprint(stdout, `{"kind":"ReverseRun","run":{"records_succeeded":1,"records_failed":0}}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"ReverseRun","run":{"records_succeeded":1,"records_failed":0}}`)
 		default:
-			fmt.Fprint(stdout, `{"kind":"Credential"}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"Credential"}`)
 		}
 		return 0
 	}
@@ -139,14 +139,14 @@ func TestReviewCorrectionFailedSweepPreviewBlocksRun(t *testing.T) {
 	cliRun = func(args []string, stdout, _ io.Writer) int {
 		switch {
 		case hasArgs(args, "reverse", "plan"):
-			fmt.Fprint(stdout, "Created reverse plan cleanup-plan\nApproval token: approval-marker\n")
+			_, _ = fmt.Fprint(stdout, "Created reverse plan cleanup-plan\nApproval token: approval-marker\n")
 		case hasArgs(args, "reverse", "preview"):
-			fmt.Fprint(stdout, `{"kind":"WrongPreview"}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"WrongPreview"}`)
 		case hasArgs(args, "reverse", "run"):
 			runCalls.Add(1)
-			fmt.Fprint(stdout, `{"kind":"ReverseRun"}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"ReverseRun"}`)
 		default:
-			fmt.Fprint(stdout, `{"kind":"Credential"}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"Credential"}`)
 		}
 		return 0
 	}
@@ -179,7 +179,7 @@ func TestReviewCorrectionSweepPreparationFailureBlocksPlanning(t *testing.T) {
 			planCalls.Add(1)
 		}
 		if hasArgs(args, "credentials", "add") && flagValue(args, "--connector") == "outbox" {
-			fmt.Fprint(stdout, `{"kind":"Credential"}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"Credential"}`)
 			return 0
 		}
 		return 1
@@ -406,14 +406,14 @@ func TestReviewCorrectionParallelSchedulesUseInvocationLocalCrontabs(t *testing.
 				close(aCreate)
 				<-releaseA
 			}
-			fmt.Fprint(stdout, `{"kind":"Schedule"}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"Schedule"}`)
 			return 0
 		}
 		if hasArgs(args, "schedule", "list") {
 			mu.Lock()
 			name := names[root]
 			mu.Unlock()
-			fmt.Fprintf(stdout, `{"kind":"ScheduleList","schedules":[{"name":%q}]}`, name)
+			_, _ = fmt.Fprintf(stdout, `{"kind":"ScheduleList","schedules":[{"name":%q}]}`, name)
 			return 0
 		}
 		if hasArgs(args, "schedule", "install") {
@@ -423,12 +423,12 @@ func TestReviewCorrectionParallelSchedulesUseInvocationLocalCrontabs(t *testing.
 			}
 			name := args[2]
 			_ = os.WriteFile(expected, []byte("0 3 * * * pm # pm-schedule-"+name+"\n"), 0o600)
-			fmt.Fprint(stdout, `{"kind":"ScheduleInstall","backend":"crontab"}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"ScheduleInstall","backend":"crontab"}`)
 			return 0
 		}
 		if hasArgs(args, "schedule", "remove") {
 			_ = os.WriteFile(expected, nil, 0o600)
-			fmt.Fprint(stdout, `{"kind":"ScheduleRemove"}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"ScheduleRemove"}`)
 			return 0
 		}
 		return 1
@@ -514,13 +514,13 @@ func TestReviewCorrectionBoundedCleanupUsesPlanPreviewRunAfterCancellation(t *te
 		switch {
 		case hasArgs(args, "reverse", "plan"):
 			calls = append(calls, "plan")
-			fmt.Fprint(stdout, "Created reverse plan cleanup-plan\nApproval token: approval-marker\n")
+			_, _ = fmt.Fprint(stdout, "Created reverse plan cleanup-plan\nApproval token: approval-marker\n")
 		case hasArgs(args, "reverse", "preview"):
 			calls = append(calls, "preview")
-			fmt.Fprint(stdout, `{"kind":"ReversePlanPreview","plan":{}}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"ReversePlanPreview","plan":{}}`)
 		case hasArgs(args, "reverse", "run"):
 			calls = append(calls, "run")
-			fmt.Fprint(stdout, `{"kind":"ReverseRun"}`)
+			_, _ = fmt.Fprint(stdout, `{"kind":"ReverseRun"}`)
 		}
 		return 0
 	}
