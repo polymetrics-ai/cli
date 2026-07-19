@@ -7,16 +7,16 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": null,
+  "endingImplementationHead": "a67d2ff9de84a2fabcd3b66097bf49518c1fa124",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
-  "endedAt": null,
+  "endedAt": "20260719T121234Z",
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "correction_in_progress",
-  "verificationPassed": false,
+  "status": "complete_verified",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -69,11 +69,16 @@
       "cycle": "accepted-review-correction-green",
       "decision": "local_critical_path",
       "reason": "smallest fail-closed correction passes focused, exact-base differential, repeated/race, exit/redaction/replay, and docs/golden/website gates"
+    },
+    {
+      "cycle": "accepted-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "local sample, full CLI/certify, gofmt/vet/test/build, make verify, and connector validation all passed without credentials, writes, services, dependencies, PR, or review"
     }
   ],
   "red": "captured: unsupported controls invoked runner and were advertised; broad help normalization hijacked false/malformed/clusters; invalid options bypassed certify span and beat connector validation; parallel beat missing creds and load error gained wrapper; docs conflated exit phases",
   "green": "unsupported controls hidden and rejected before runner; single and batch legacy ordering/wrappers restored; connectors help exact-only; canonical/generated/website exit docs corrected",
-  "verification": "pending; prior verification superseded by accepted findings",
+  "verification": "pass: differential 5/5 byte-identical; focused/repeated/race and redaction/replay/exit green; sample exit 0/pass; full CLI 435.572s; certify 338.846s; make verify exit 0 in 468.36s; connector validation 547/0",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",
     ".planning/phases/437-connectors-certify-native-cobra/TDD-LEDGER.md",
@@ -92,7 +97,7 @@
     "445ad06c fix(cli): route direct connectors action help",
     "55e32402 docs(planning): complete connectors certify native handoff"
   ],
-  "push": "correction planning and RED checkpoints pushed; GREEN checkpoint pending commit/push",
+  "push": "correction planning, RED, and GREEN checkpoints pushed; terminal artifact checkpoint pending commit/push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"

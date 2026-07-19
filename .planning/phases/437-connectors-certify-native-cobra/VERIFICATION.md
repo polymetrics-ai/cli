@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: false
+`verificationPassed`: true
 
 ## TDD / behavior
 
@@ -73,9 +73,13 @@ Correction start: `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`; session `issue-437
 - [x] RED: CLI and website docs separate pre-report usage/validation/runtime exits from completed report outcomes.
 - [x] Focused differential and repeated/race tests: base/current 5/5 exact; race `29.046s`; ×10 `24.991s`.
 - [x] Certify exits, redaction, and unsupported replay no-live/no-write runner test: package race `349.263s`; exit focus `21.618s`.
-- [ ] Local sample fixture smoke with temp root only.
+- [x] Local sample fixture smoke with temp root only: exit 0, `ConnectorCertification`, sample passed, stderr empty, planted value absent.
 - [x] Runtime help, golden, generated CLI docs, website generation/parity: CLI docs/golden `24.275s`; website regeneration hash-stable.
-- [ ] Full CLI and certify packages.
-- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`.
-- [ ] `go run ./cmd/connectorgen validate` reports zero findings.
+- [x] Full CLI and certify packages: CLI `435.572s`; certify `338.846s`.
+- [x] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`: final verify exit 0, real `468.36s`.
+- [x] `go run ./cmd/connectorgen validate` reports 547 checked, zero findings.
 - [ ] Final artifacts committed and pushed; no dependencies/services/credentials/PR/review.
+
+## Correction result
+
+Implementation head `a67d2ff9de84a2fabcd3b66097bf49518c1fa124`. Exact-base differential matched stdout, stderr, and exit codes in all five reviewed precedence/help cases. Unsupported replay and the other five controls return usage errors without any runtime call; no credential resolution, live stage, or write stage occurs. All verification used temporary roots, local sample behavior, synthetic planted redaction values, and existing replay fixtures only.
