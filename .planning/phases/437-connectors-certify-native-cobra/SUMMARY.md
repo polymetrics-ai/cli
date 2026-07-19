@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: continuation verified; stacked PR open; human/parent review fallback pending.
+Status: seventh bounded correction reopened; verification false until new RED/GREEN/full gates pass; stacked PR #466 remains open with human/parent review fallback pending.
 
 ## Identity
 
@@ -121,3 +121,15 @@ Verification commands/results:
 - `make verify`: first attempt failed only at certify lint (`errcheck` on `f.Close` in the new replay fixture helper); `791b1a1d` fixed it. Complete rerun passed: CLI `453.202s`, certify `357.136s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen `547 connector(s) checked, 0 findings`.
 
 Safety: no credentials, live certification, services, system crontab, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction. The only reverse ETL execution was the repository's local fixture/temp smoke path (plan → preview → approval → execute) inside `make verify` and the explicit sample/outbox certification smoke.
+
+## Seventh bounded correction — reopened
+
+Status: planning checkpoint in progress; `verificationPassed=false` until seventh full gates pass.
+
+Identity: `issue-437-seventh-bounded-correction-20260720`; exact clean/matched start `6e9e7d9422050a609306d8900d6a06c8bb1fc223` on branch `refactor/437-connectors-certify-native-cobra`, PR #466. Local branch, remote branch, and PR head were confirmed equal. Sixth-cycle stale pending fields are corrected: PR #466 body already records head `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; seventh terminal evidence is not claimed yet.
+
+Accepted findings: `validResumeEvidence` rejects the no-leak cleanup-failure/absence-proof shape introduced by the sixth cleanup fix, causing `--resume` to rerun and repeat effects; certify prevalidation lets bare value-required flags become `true`, so single/batch/sweep paths can reach runner, credential loading, telemetry, or wrong validation category before usage rejection. Recovery-budget exception: unresolved effect-before-usage and resume-replay risks justify this additional bounded cycle.
+
+GSD: `scripts/gsd doctor` passed; `scripts/gsd prompt plan-phase 437 --skip-research` generated; `scripts/gsd prompt programming-loop init --phase 437 --dry-run` remains unavailable, so the manual universal-loop fallback applies. Execution decision: `local_critical_path`; parent records this worker as spawned.
+
+Plan: commit/push planning first; add RED tests for the exact resume absence-proof case and bare required-value no-effect/exit-2 cases; implement minimal fixes in `internal/connectors/certify/batch.go` and `internal/cli/certify_cli.go`; run focused/repeated/race, full affected packages, runtime help/no-effect/sample smoke, docs/website if needed, gofmt/diff/vet/full tests/build/`make verify`, and connectorgen; update PR #466 body with final head. No bot review request or merge.

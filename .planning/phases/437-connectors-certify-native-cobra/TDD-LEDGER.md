@@ -137,13 +137,13 @@ Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-tes
 
 | Step | Kind | Required evidence | Status |
 |---:|---|---|---|
-| R6-0 | Planning | Reopen all six artifacts with exact start/head/PR, recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, and `local_critical_path`; commit/push before RED or production | In progress |
-| R6-1 | RED approval cleanup authority | Deterministically prove unexpected approval replay success after cleanup can leave a post-cleanup resource with no leak/exit 3 | Pending |
-| R6-2 | RED leak-dominant errors | Prove batch runner report+error with leaks and CLI progress persistence failure with existing leaks mask exit 3 or skip safe report output | Pending |
-| R6-3 | RED stale leak consistency | Prove cleanup call failure + exact absence verification leaves stale `Report.Leaks` and dishonest write action state | Pending |
-| R6-4 | GREEN | Minimal ordering/consistency/leak-dominance fixes pass focused tests | Pending |
-| R6-5 | Verify | Focused repeated/race, full affected packages, help/docs parity if applicable, sample smoke, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Pending |
-| R6-6 | Delivery | Coherent commits pushed, PR body updated with final head/gates, no bot review, clean/remote-matched branch | Pending |
+| R6-0 | Planning | Reopen all six artifacts with exact start/head/PR, recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, and `local_critical_path`; commit/push before RED or production | Complete |
+| R6-1 | RED approval cleanup authority | Deterministically prove unexpected approval replay success after cleanup can leave a post-cleanup resource with no leak/exit 3 | Complete |
+| R6-2 | RED leak-dominant errors | Prove batch runner report+error with leaks and CLI progress persistence failure with existing leaks mask exit 3 or skip safe report output | Complete |
+| R6-3 | RED stale leak consistency | Prove cleanup call failure + exact absence verification leaves stale `Report.Leaks` and dishonest write action state | Complete |
+| R6-4 | GREEN | Minimal ordering/consistency/leak-dominance fixes pass focused tests | Complete |
+| R6-5 | Verify | Focused repeated/race, full affected packages, help/docs parity if applicable, sample smoke, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Complete |
+| R6-6 | Delivery | Coherent commits pushed, PR body updated with final head/gates, no bot review, clean/remote-matched branch | Complete at exact PR head `6e9e7d9422050a609306d8900d6a06c8bb1fc223` |
 
 Strict TDD gate: R6-1 through R6-3 failing evidence must be captured and committed before production edits. Tests use only fakes, temporary roots, synthetic non-secret markers, and the local sample/outbox fixture path.
 
@@ -184,3 +184,20 @@ Verification commands/results:
 - `make verify`: first attempt failed only at certify lint (`errcheck` on `f.Close` in the new replay fixture helper); `791b1a1d` fixed it. Complete rerun passed: CLI `453.202s`, certify `357.136s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen `547 connector(s) checked, 0 findings`.
 
 Safety: no credentials, live certification, services, system crontab, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction. The only reverse ETL execution was the repository's local fixture/temp smoke path (plan → preview → approval → execute) inside `make verify` and the explicit sample/outbox certification smoke.
+
+## Seventh bounded exact-head review-correction ledger
+
+Identity `issue-437-seventh-bounded-correction-20260720`; exact start `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; accepted findings: Medium resume reruns an absence-proven cleanup-failure report, Medium bare required-value certify flags can reach effects or wrong validation category, Low stale sixth artifact/PR status. Recovery-budget exception applies because unresolved effect-before-usage and resume-replay risks require a bounded correction. Programming-loop remains unavailable; manual universal loop fallback applies. Execution decision: `local_critical_path`; parent records the worker invocation as spawned.
+
+Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-code-style`, and `golang-naming`. `.pi/skills/go-implementation/SKILL.md` is absent; global cc-skills files are the actual implementation evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R7-0 | Planning | Reopen all six artifacts with exact start/head/PR, seventh recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, finalized sixth statuses, and `local_critical_path`; commit/push before RED or production | In progress |
+| R7-1 | RED resume absence proof | Seed completed no-leak report with failed `write_cleanup`, passed `cleanup_verify`, failed/non-leaked write action, valid tag/provenance; prove `--resume` reruns today | Pending |
+| R7-2 | RED value-required no-effect | Bare `--from-env`, `--config`, `--stream`, `--credentials-file`, `--parallel`, and `--older-than` reject as usage exit 2 before logger/telemetry/credential/runner/workspace/sweep effects in applicable modes | Pending |
+| R7-3 | GREEN | Minimal resume-evidence and certify prevalidation/native validation fixes pass focused tests without weakening existing invalid-report or flag behavior | Pending |
+| R7-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Pending |
+| R7-5 | Delivery | Coherent commits pushed, PR #466 body updated with final seventh head/gates, no bot review, clean/remote-matched branch | Pending |
+
+Strict TDD gate: R7-1/R7-2 failing evidence must be captured and committed before production edits. Tests use only deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.

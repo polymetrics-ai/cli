@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: true — continuation full local gates passed after parent reconcile; stacked PR/review-route recording remains delivery work, not verification failure.
+`verificationPassed`: false — seventh bounded correction reopened at exact head `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; sixth-cycle verification/PR-body status is finalized, but seventh RED/GREEN/full gates are pending until a complete `make verify` exits 0 at the new final head.
 
 ## TDD / behavior
 
@@ -239,5 +239,30 @@ Exact start: `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; identity `issue-437-six
 - [x] Runtime help/docs/golden/website parity: help byte-identical `8391` bytes; focused docs/golden `11.149s`; website generation drift-free; no canonical text update required.
 - [x] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke: exit 0, `ConnectorCertification`, sample, passed true, stderr bytes 0.
 - [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` (CLI `445.908s`, certify `350.792s`); `go build ./cmd/pm`; final `make verify` (CLI `453.202s`, certify `357.136s`, lint 0, smoke ok); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => 547/0.
-- [ ] PR #466 body update follows after terminal artifact commit so the final exact head is known.
+- [x] PR #466 body update completed for sixth cycle and records exact head `6e9e7d9422050a609306d8900d6a06c8bb1fc223`.
 - [x] No credentials, live certification, services, external writes/sweeps, dependencies, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
+
+## Seventh bounded exact-head correction checklist
+
+Exact start: `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; identity `issue-437-seventh-bounded-correction-20260720`.
+
+`verificationPassed`: false — new behavior tests and full gates pending.
+
+- [x] Confirm clean branch, local head, remote head, and PR #466 head all equal `6e9e7d9422050a609306d8900d6a06c8bb1fc223` before edits.
+- [x] Reread required issue, contracts, GSD/manual loop, skill routing, CLI parity, ADR/design/migration context, and all phase artifacts.
+- [x] Run `scripts/gsd doctor`; capture missing `programming-loop`; generate/read `scripts/gsd prompt plan-phase 437 --skip-research`; record manual fallback.
+- [x] Record execution decision `local_critical_path` and parent-spawn note.
+- [x] Record recovery-budget exception for unresolved effect-before-usage and resume-replay findings.
+- [ ] Planning checkpoint committed and pushed before RED tests or production edits.
+- [ ] RED: absence-proven cleanup-failure report resumes without rerunning; current code should fail by invoking runner.
+- [ ] RED: bare value-required flags reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects.
+- [ ] GREEN: strict value-required validation preserves `--flag=value` and `--flag value`, boolean bare flags, fail-closed unsupported controls, and mode-specific no-effect behavior.
+- [ ] GREEN: resume accepts only structurally complete provenance-consistent cleanup-failure absence proof; incomplete/edited/leaky/unproven reports still rerun.
+- [ ] Focused repeated and race variants pass where relevant.
+- [ ] Full `go test ./internal/connectors/certify -count=1` and `go test ./internal/cli -count=1` pass.
+- [ ] Runtime help/no-effect/exit checks pass: `./pm help connectors`, bare `./pm connectors`, `./pm connectors --help`, and bare value-required usage exits.
+- [ ] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke passes without credentials/live services/external writes.
+- [ ] Docs/golden/website parity checked or marked not applicable if no help/docs text changed.
+- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; final `make verify`; explicit `go run ./cmd/connectorgen validate internal/connectors/defs` all pass.
+- [ ] PR #466 body updated with seventh-cycle evidence and final exact head after terminal artifact commit.
+- [ ] No credentials, live certification, services, external writes/sweeps, dependencies, generic write tools, bot review request, parent/main merge, or quality-gate reduction.

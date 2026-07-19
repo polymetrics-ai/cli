@@ -7,22 +7,22 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": "791b1a1d",
+  "endingImplementationHead": "pending_seventh_correction",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "thirdCorrectionStartingHead": "437d13cf",
   "fourthCorrectionStartingHead": "1e27b14012f65ffa24c01ed855d0405c24401eee",
   "fifthCorrectionStartingHead": "05d9c6658f52e542b6a74e87e29bdcad7275ea9d",
   "fifthCorrectionSession": "issue-437-fifth-review-correction-20260720",
-  "recoveryBudgetException": "unresolved High leak-dominance/resource-authority findings require correction; sixth bounded cycle authorized",
+  "recoveryBudgetException": "unresolved effect-before-usage and resume-replay findings require correction; seventh bounded cycle authorized",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
   "endedAt": "20260719T201832Z",
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "sixth_review_correction_verified_pr_update_pending",
-  "verificationPassed": true,
+  "status": "seventh_review_correction_planning",
+  "verificationPassed": false,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
   "latestParentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
@@ -249,11 +249,21 @@
       "cycle": "sixth-review-correction-summary",
       "decision": "local_critical_path",
       "reason": "terminal artifacts record successful verification; PR body update and final push remain local worker delivery actions, no bot review requested"
+    },
+    {
+      "cycle": "seventh-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "worker has one isolated #437 branch/cwd and no subagent tool; accepted effect-before-usage and resume-replay findings trigger recorded seventh recovery-budget exception; parent records this worker as spawned"
+    },
+    {
+      "cycle": "seventh-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "RED tests pending; no production edits until deterministic failures are captured and committed"
     }
   ],
-  "red": "captured sixth RED: certify focus 25.435s showed approval replay post-cleanup outbox create, stale leak after absence proof, and runner report+error exit 2; CLI focus 0.572s showed progress persistence error with leaks returned exit 1 and Error envelope instead of safe batch report/exit 3",
-  "green": "complete sixth GREEN focus: idempotency before cleanup with createPassed gate; stale leak cleared after exact absence while cleanup stage remains failed; runner report+error leaks exit 3; CLI writes leaked batch evidence on progress error and returns exit 3; focused/repeated/race/vet/build pass",
-  "verification": "passed sixth correction gates: focused package tests, repeated/race, full affected packages, help/docs/website, fixture sample smoke, fmt/diff/vet/full tests/build, final make verify, and connectorgen 547/0; first make verify failed only on errcheck for new fixture close and rerun passed after 791b1a1d",
+  "red": "pending seventh RED: cleanup-failure absence-proof resume case and bare value-required certify flags before effects",
+  "green": "pending seventh GREEN",
+  "verification": "pending seventh full gates; verificationPassed false until complete make verify exits 0",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",
@@ -273,13 +283,17 @@
     "e2559f64 test(certify): expose fifth review regressions",
     "3d69b7a4 test(certify): require pre-telemetry sweep validation",
     "e9ce945e fix(certify): close rereview safety gaps",
-    "terminal fifth-cycle evidence artifact: this commit"
+    "terminal fifth-cycle evidence artifact: this commit",
+    "pending seventh-cycle planning/RED/GREEN/evidence commits"
   ],
   "push": "continuation planning, parent merge, verification, and PR artifact commits pushed to refactor/437-connectors-certify-native-cobra",
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
-  "reviewRoute": "human_parent_fallback_pending_claude_disabled_copilot_quota_exhausted_no_bot_retry",
+  "reviewRoute": "human_parent_fallback_pending_no_claude_copilot_retry_requested",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, PR, integration, parent mutation, or main mutation",
-  "preTerminalEvidenceHead": "8e7e2533c75451114c4d6ae38f89b7fd1ede6c34",
+  "preTerminalEvidenceHead": "6e9e7d9422050a609306d8900d6a06c8bb1fc223",
   "sixthCorrectionStartingHead": "8e7e2533c75451114c4d6ae38f89b7fd1ede6c34",
-  "sixthCorrectionSession": "issue-437-sixth-review-correction-20260719T220843Z"
+  "sixthCorrectionSession": "issue-437-sixth-review-correction-20260719T220843Z",
+  "sixthCorrectionFinalHead": "6e9e7d9422050a609306d8900d6a06c8bb1fc223",
+  "seventhCorrectionStartingHead": "6e9e7d9422050a609306d8900d6a06c8bb1fc223",
+  "seventhCorrectionSession": "issue-437-seventh-bounded-correction-20260720"
 }

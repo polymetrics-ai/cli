@@ -120,9 +120,9 @@ Execution decision: `local_critical_path` — worker owns one isolated issue bra
 
 Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`; `.pi/skills/go-implementation/SKILL.md` absent, global cc-skills paths are actual Go evidence.
 
-Downstream artifact: pending. RED tests must be committed before production edits; GREEN and terminal gate evidence must update this snapshot from pending to actual results.
+Downstream artifact: complete at exact PR head `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; RED/GREEN/terminal gate evidence is recorded below and PR #466 body was updated for the sixth cycle.
 
-Verification result: pending / `verificationPassed=false` until full `make verify` exits 0.
+Verification result: pass for sixth cycle. Seventh bounded correction reopens verification separately below.
 
 
 ### Sixth-cycle RED evidence captured
@@ -161,3 +161,27 @@ Verification commands/results:
 - `make verify`: first attempt failed only at certify lint (`errcheck` on `f.Close` in the new replay fixture helper); `791b1a1d` fixed it. Complete rerun passed: CLI `453.202s`, certify `357.136s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen `547 connector(s) checked, 0 findings`.
 
 Safety: no credentials, live certification, services, system crontab, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction. The only reverse ETL execution was the repository's local fixture/temp smoke path (plan → preview → approval → execute) inside `make verify` and the explicit sample/outbox certification smoke.
+
+## Seventh bounded correction kickoff snapshot
+
+Identity: `issue-437-seventh-bounded-correction-20260720`; exact start `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; PR #466 on `refactor/437-connectors-certify-native-cobra`; parent #397 / umbrella #407. Task: correct accepted exact-head findings for resume replay after cleanup-failure absence proof and effect-before-usage validation for bare value-required certify flags; finalize stale sixth artifact/PR status honesty.
+
+Commands refreshed before production edits:
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt plan-phase 437 --skip-research
+scripts/gsd prompt programming-loop init --phase 437 --dry-run
+```
+
+Doctor passed; plan prompt generated; programming-loop returned `scripts/gsd: unknown GSD command: programming-loop`, so the manual universal runtime loop is the recorded fallback.
+
+Execution decision: `local_critical_path` — worker owns one isolated issue branch/cwd, no subagent tool exposed, correction is the local critical path. Parent coordinator records this invocation as spawned.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-code-style`, `golang-naming`; `.pi/skills/go-implementation/SKILL.md` absent, global cc-skills paths are actual Go evidence.
+
+Recovery-budget exception: unresolved effect-before-usage and resume-replay findings require this extra bounded correction rather than stopping on prior cycle count.
+
+Downstream artifact: pending. RED tests must be committed/pushed before production edits; GREEN and terminal gate evidence must update this snapshot from pending to actual results.
+
+Verification result: pending / `verificationPassed=false` until full `make verify` exits 0 at the seventh final head.
