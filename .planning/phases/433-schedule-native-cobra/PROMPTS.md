@@ -23,6 +23,8 @@ Safety prompt: use only temporary schedule roots, redirected temporary crontab f
 
 Contract clarification: the current issue/repository exposes `remove`, not `uninstall`, and has no `schedule run` or `schedule history`. Preserve that contract: focused tests cover `uninstall`, `run`, and `history` as invalid action heads with zero backend calls rather than adding out-of-scope commands.
 
-Downstream artifact: pending.
+Downstream artifact: complete. Test-only RED preceded the native schedule Cobra tree, typed handlers, invocation-private operand capture, schedule-only normalization, and injected runtime seam. Only the schedule wrapper and schedule `parseFlags` call sites were removed. Current `remove` behavior remains the uninstall operation; out-of-scope `uninstall`, `run`, and `history` action heads remain effect-free usage errors.
 
-Verification result: pending.
+Verification route: `scripts/gsd prompt verify-work 433` generated 106 lines and was executed inline under the manual universal loop.
+
+Verification result: pass at implementation head `7b20f9fe`. Two exact-start differentials matched 248/248 cases. Focused/repeated/race/router/golden/full CLI and schedule packages, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency guards, and `make verify` pass. No real scheduler, service, live credential, dependency, PR, or review was used.

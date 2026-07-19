@@ -43,7 +43,7 @@ Excluded: new schedule actions or aliases; Phase 11 wizard/cron presets/flow val
    - native schedule ownership for create/list/install/remove/help, all native flag types/NoOpt behavior/unknown tolerance/completion seams, and absence from legacy wrappers;
    - every current flag and operand form, repeated last-value behavior, bare/assigned flags, strict first positional ownership, and unchanged project-root payload semantics;
    - bare/text/JSON/long/short/positional help; trailing help; literal `--`; malformed/legal unknown flags; invalid action heads including `uninstall`, `run`, and `history`; no later-action discovery; assigned global booleans;
-   - cron/name/not-found/backend validation, context propagation, exact error categories, one-envelope JSON, and deterministic create/list/install/remove outputs;
+   - cron/not-found validation, preserved invalid-name/backend error classification, context propagation, exact error categories, one-envelope JSON, and deterministic create/list/install/remove outputs;
    - fake install/remove backend calls, non-crontab cleanup fallback, and no backend call on invalid input/action.
    Capture focused failure before any production edit; commit/push tests.
 3. **GREEN checkpoint** — add the smallest native schedule command and typed handlers; add only schedule-specific normalization/private operand state needed for exact compatibility; remove schedule from `cobraLegacyCommands`; delete only `runSchedule` and its schedule `parseFlags` uses once unused.
@@ -60,4 +60,4 @@ No secrets or approval values, external connectors, credentialed checks, optiona
 
 ## Completion
 
-DRAFT — production code has not been edited. The RED, GREEN, parser differential, parity, full verification, commit, and push evidence will be appended as executed.
+Completed at implementation head `7b20f9fe`. Native schedule owns create/list/install/remove/help and every existing local flag; only the schedule wrapper/parser call sites were removed. Injected fixed clocks, executable stubs, selectors, and fake backends verify context, root payloads, backend selection, install/remove, and cleanup without touching a real scheduler. Two exact-start differentials match 248/248 cases. Focused/repeated/race/router/golden/full CLI/schedule, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency guards, and `make verify` pass. No public help/docs artifact changed, no external scheduler/service ran, and Phase 11 wizard work remains deferred.
