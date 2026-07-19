@@ -112,7 +112,7 @@ var goldenTranscriptInputs = []struct {
 	{Name: "docs_unknown_subcommand", Args: []string{"docs", "bogus"}},
 	{Name: "docs_generate_missing_dir", Args: []string{"docs", "generate"}},
 	{Name: "skills_missing_subcommand", Args: []string{"skills"}},
-	{Name: "worker_missing_subcommand", Args: []string{"worker"}},
+	{Name: "worker_bare_manual", Args: []string{"worker"}},
 	{Name: "worker_unknown_subcommand_json", Args: []string{"worker", "bogus", "--json"}},
 	{Name: "worker_status_json_no_env", Args: []string{"worker", "status", "--json"}},
 	{Name: "worker_serve_missing_env_json", Args: []string{"worker", "serve", "--json"}},
@@ -122,7 +122,7 @@ var goldenTranscriptInputs = []struct {
 	{Name: "dynamic_connector_missing_path_json", Args: []string{"github", "--json"}},
 	{Name: "dynamic_connector_unknown_path_json", Args: []string{"github", "definitely-not-command", "--json"}},
 	{Name: "hidden_extract_help_json", Args: []string{"extract", "--help", "--json"}},
-	{Name: "hidden_worker_help_json", Args: []string{"worker", "--help", "--json"}},
+	{Name: "hidden_worker_direct_help_json", Args: []string{"worker", "--help", "--json"}},
 }
 
 func TestGoldenTranscripts(t *testing.T) {

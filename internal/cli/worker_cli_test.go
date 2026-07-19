@@ -8,82 +8,66 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics.ai/internal/worker"
+	"polymetrics.ai/internal/config"
 )
 
 func TestWorkerServeJSONStartupFailureEmitsOnlyError(t *testing.T) {
-	root := writeMigrationConfig(t, `runtime:
-  temporal_addr: 127.0.0.1:7233
-`)
-	origServe := workerServe
-	workerServe = func(_ context.Context, _ string, _ *worker.PodmanActivities, _ func()) error {
-		return errors.New("startup failed")
-	}
-	t.Cleanup(func() { workerServe = origServe })
+	cfg := workerTestConfig(t.TempDir(), true, "127.0.0.1:7233")
+	runtime := newFakeWorkerRuntime()
+	runtime.serveErr = errors.New("startup failed")
 
-	var stdout, stderr bytes.Buffer
-	code := Run([]string{"--root", root, "--json", "worker", "serve"}, &stdout, &stderr)
+	stdout, _, code := runWorkerCommand(ctxForWorkerTest(), cfg, runtime, "worker", "serve")
 	if code == 0 {
 		t.Fatal("worker serve startup failure exit = 0, want non-zero")
 	}
-	if strings.Contains(stdout.String(), "WorkerServe") {
+	if strings.Contains(stdout, "WorkerServe") {
 		t.Fatalf("worker serve emitted start envelope before readiness")
 	}
-	assertSingleWorkerJSONEnvelopeKind(t, stdout.String(), "Error")
+	assertSingleWorkerJSONEnvelopeKind(t, stdout, "Error")
 }
 
 func TestWorkerServeJSONStartsOnlyAfterReady(t *testing.T) {
-	root := writeMigrationConfig(t, `runtime:
-  temporal_addr: 127.0.0.1:7233
-`)
-	origServe := workerServe
-	var stdout bytes.Buffer
-	workerServe = func(ctx context.Context, _ string, _ *worker.PodmanActivities, ready func()) error {
-		if ctx == nil {
-			t.Fatal("worker serve got nil context")
-		}
-		if stdout.Len() != 0 {
-			t.Fatal("worker serve wrote stdout before readiness callback")
-		}
-		ready()
-		if stdout.Len() == 0 {
-			t.Fatal("worker serve did not emit start envelope after readiness callback")
-		}
-		return nil
-	}
-	t.Cleanup(func() { workerServe = origServe })
+	cfg := workerTestConfig(t.TempDir(), true, "127.0.0.1:7233")
+	runtime := newFakeWorkerRuntime()
 
-	var stderr bytes.Buffer
-	code := Run([]string{"--root", root, "--json", "worker", "serve"}, &stdout, &stderr)
+	stdout, stderr, code := runWorkerCommand(ctxForWorkerTest(), cfg, runtime, "worker", "serve")
 	if code != 0 {
-		t.Fatalf("exit = %d, stderr = %s", code, stderr.String())
+		t.Fatalf("exit = %d, stderr = %s", code, stderr)
 	}
-	assertSingleWorkerJSONEnvelopeKind(t, stdout.String(), "WorkerServe")
+	if runtime.readyCalls != 1 {
+		t.Fatalf("ready calls = %d, want 1", runtime.readyCalls)
+	}
+	assertSingleWorkerJSONEnvelopeKind(t, stdout, "WorkerServe")
 }
 
 func TestWorkerServePlainStartsOnlyAfterReady(t *testing.T) {
-	root := writeMigrationConfig(t, `runtime:
-  temporal_addr: 127.0.0.1:7233
-`)
-	origServe := workerServe
-	var stdout bytes.Buffer
-	workerServe = func(_ context.Context, _ string, _ *worker.PodmanActivities, ready func()) error {
-		if stdout.Len() != 0 {
-			t.Fatal("worker serve wrote plain stdout before readiness callback")
-		}
-		ready()
-		return nil
-	}
-	t.Cleanup(func() { workerServe = origServe })
+	cfg := workerTestConfig(t.TempDir(), false, "127.0.0.1:7233")
+	runtime := newFakeWorkerRuntime()
 
-	var stderr bytes.Buffer
-	code := Run([]string{"--root", root, "worker", "serve"}, &stdout, &stderr)
+	stdout, stderr, code := runWorkerCommand(ctxForWorkerTest(), cfg, runtime, "worker", "serve")
 	if code != 0 {
-		t.Fatalf("exit = %d, stderr = %s", code, stderr.String())
+		t.Fatalf("exit = %d, stderr = %s", code, stderr)
 	}
-	if !strings.Contains(stdout.String(), "pm worker serving") {
+	if runtime.readyCalls != 1 {
+		t.Fatalf("ready calls = %d, want 1", runtime.readyCalls)
+	}
+	if !strings.Contains(stdout, "pm worker serving") {
 		t.Fatalf("plain worker serve missing ready output")
 	}
+}
+
+func ctxForWorkerTest() context.Context {
+	return context.Background()
+}
+
+func runWorkerCommand(ctx context.Context, cfg config.Config, runtime *fakeWorkerRuntime, args ...string) (string, string, int) {
+	var stdout, stderr bytes.Buffer
+	cmd := newRootCmdWithWorkerRuntime(ctx, cfg, &stdout, &stderr, runtime.runtime())
+	if err := executeRootCmd(cmd, args); err != nil {
+		code := writeError(ctx, &stdout, &stderr, mapCobraErr(err), cfg.JSON)
+		return stdout.String(), stderr.String(), code
+	}
+	return stdout.String(), stderr.String(), 0
 }
 
 func assertSingleWorkerJSONEnvelopeKind(t *testing.T, stdout, wantKind string) {

@@ -793,13 +793,13 @@
     "stderr": ""
   },
   {
-    "name": "worker_missing_subcommand",
+    "name": "worker_bare_manual",
     "args": [
       "worker"
     ],
-    "exit_code": 2,
-    "stdout": "",
-    "stderr": "error: worker: missing subcommand (serve|status)\n"
+    "exit_code": 0,
+    "stdout": "NAME\n  pm worker - serve and inspect the optional RLM Temporal worker\n\nSYNOPSIS\n  pm worker status [--json]\n  pm worker serve [--json]\n\nDESCRIPTION\n  The worker serves the typed RLM Temporal workflow and its Podman activity on\n  the polymetrics-rlm task queue. It is optional and used only by RLM agent\n  mode; dependency-free CLI and RLM modes do not require it.\n\n  status reports whether the explicitly configured Temporal endpoint is\n  reachable. serve starts the long-lived worker and reports readiness only\n  after the Temporal client and worker have started successfully.\n\nCONFIGURATION\n  Set POLYMETRICS_TEMPORAL_ADDR or its legacy PM_TEMPORAL_ADDR alias, or set\n  runtime.temporal_addr in .polymetrics/config.yaml. Worker execution also uses\n  rlm.image and rlm.podman_bin from typed configuration.\n\nSECURITY\n  This is not a generic remote command runner. It registers only the typed RLM\n  workflow and activity. Output includes status and endpoint metadata, never\n  credential values or workflow payloads.\n\nEXIT STATUS\n  0 success\n  1 runtime error\n  2 usage error\n  3 validation error when no Temporal endpoint is explicitly configured\n",
+    "stderr": ""
   },
   {
     "name": "worker_unknown_subcommand_json",
@@ -896,14 +896,14 @@
     "stderr": "error: help topic \"extract\" not found\n"
   },
   {
-    "name": "hidden_worker_help_json",
+    "name": "hidden_worker_direct_help_json",
     "args": [
       "worker",
       "--help",
       "--json"
     ],
-    "exit_code": 1,
-    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"help topic \\\"worker\\\" not found\"\n  },\n  \"kind\": \"Error\"\n}\n",
-    "stderr": "error: help topic \"worker\" not found\n"
+    "exit_code": 0,
+    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"command\": \"worker\",\n  \"kind\": \"CommandManual\",\n  \"manual\": \"NAME\\n  pm worker - serve and inspect the optional RLM Temporal worker\\n\\nSYNOPSIS\\n  pm worker status [--json]\\n  pm worker serve [--json]\\n\\nDESCRIPTION\\n  The worker serves the typed RLM Temporal workflow and its Podman activity on\\n  the polymetrics-rlm task queue. It is optional and used only by RLM agent\\n  mode; dependency-free CLI and RLM modes do not require it.\\n\\n  status reports whether the explicitly configured Temporal endpoint is\\n  reachable. serve starts the long-lived worker and reports readiness only\\n  after the Temporal client and worker have started successfully.\\n\\nCONFIGURATION\\n  Set POLYMETRICS_TEMPORAL_ADDR or its legacy PM_TEMPORAL_ADDR alias, or set\\n  runtime.temporal_addr in .polymetrics/config.yaml. Worker execution also uses\\n  rlm.image and rlm.podman_bin from typed configuration.\\n\\nSECURITY\\n  This is not a generic remote command runner. It registers only the typed RLM\\n  workflow and activity. Output includes status and endpoint metadata, never\\n  credential values or workflow payloads.\\n\\nEXIT STATUS\\n  0 success\\n  1 runtime error\\n  2 usage error\\n  3 validation error when no Temporal endpoint is explicitly configured\\n\"\n}\n",
+    "stderr": ""
   }
 ]
