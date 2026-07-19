@@ -18,7 +18,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 2 | GREEN | Hidden native extract command, typed flags/runtime, bounded table checks, rooted RLM warehouse I/O, and extract-only legacy/parser removal | Pass: focused CLI/RLM `1.752s`/`0.227s`; existing extract request test updated only for intentional bare-help behavior |
 | 3 | Refactor | Focused/repeated/race extract/RLM/safety, router/golden/full CLI, exact-start differential, and parity checks | In progress: extract ×10 `10.607s`, extract race `12.937s`, RLM/safety normal/repeated/race green, router/golden focus green, exact-start 8/8 preserved plus 5/5 intentional help |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Initial pass: full CLI `434.874s`, full repo green (CLI `436.578s`, certify `342.464s`), vet/build/`make verify` exit 0 |
-| 5 | Containment correction RED/GREEN | Reject a warehouse-directory symlink escaping the selected extract project root before analyzer effects | Planned before correction test/production edit |
+| 5 | Containment correction RED/GREEN | Reject a warehouse-directory symlink escaping the selected extract project root before analyzer effects | RED failed as required in `0.569s`: injected analyzer ran and returned ExtractResult through the external warehouse-root link; GREEN pending |
 | 6 | Delivery | Re-run affected/full gates; finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
 
 ## RED contract
@@ -46,7 +46,7 @@ Focused, repeated, and race suites pass. The original input traversal, external 
 
 ## Post-GREEN containment correction
 
-The first implementation roots individual RLM table effects, but extract still needs to prove its fixed warehouse directory is within the selected project root before treating that directory as the held root. A temp-only RED will link `.polymetrics/warehouse` to an external directory and require failure before analyzer construction. The smallest GREEN is project-root path validation in extract before creating the RLM request.
+The first implementation roots individual RLM table effects, but extract still needs to prove its fixed warehouse directory is within the selected project root before treating that directory as the held root. Temp-only RED linked `.polymetrics/warehouse` to an external directory and failed in `0.569s`: extract constructed and ran the injected analyzer, returning an ExtractResult instead of a validation error. The external directory remained empty because the fake analyzer has no file effect. The smallest GREEN is project-root path validation in extract before analyzer construction and RLM request creation.
 
 ## Evidence log
 

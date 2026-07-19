@@ -5,6 +5,8 @@ import (
 	"context"
 	"errors"
 	"io"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -224,6 +226,37 @@ func TestExtractLiteralUnknownOperandsGlobalsAndOutputCompatibility(t *testing.T
 		if env["kind"] != "ExtractResult" || env["api_version"] != apiVersion {
 			t.Fatalf("global output = %#v", env)
 		}
+	}
+}
+
+func TestExtractRejectsWarehouseRootSymlinkBeforeAnalyzer(t *testing.T) {
+	root := t.TempDir()
+	projectDir := filepath.Join(root, ".polymetrics")
+	if err := os.Mkdir(projectDir, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	external := t.TempDir()
+	if err := os.Symlink(external, filepath.Join(projectDir, "warehouse")); err != nil {
+		t.Skipf("symlinks unavailable: %v", err)
+	}
+
+	runtime := newFakeExtractRuntime()
+	stdout, _, err := executeNativeExtract(context.Background(), testRouterConfig(root, true), runtime,
+		"extract", "--request=predict churn", "--in=contacts", "--out=scores",
+	)
+	if err == nil {
+		t.Fatalf("external warehouse-root link succeeded: stdout=%q", stdout)
+	}
+	if got := classifyError(mapCobraErr(err)).category; got != categoryValidation {
+		t.Fatalf("error category = %s, want validation: %v", got, err)
+	}
+	assertExtractRuntimeNotCalled(t, runtime)
+	entries, readErr := os.ReadDir(external)
+	if readErr != nil {
+		t.Fatal(readErr)
+	}
+	if len(entries) != 0 {
+		t.Fatalf("external warehouse received effects: %v", entries)
 	}
 }
 
