@@ -38,6 +38,13 @@ type reverseCommandState struct {
 	operandSet bool
 }
 
+type flowCommandStateKey struct{}
+
+type flowCommandState struct {
+	operand    string
+	operandSet bool
+}
+
 func (e *cobraLegacyError) Error() string { return e.err.Error() }
 
 func (e *cobraLegacyError) Unwrap() error { return e.err }
@@ -109,6 +116,8 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	args = captureETLPrivateOperands(args, &etlState)
 	var reverseState reverseCommandState
 	args = captureReversePrivateOperand(args, &reverseState)
+	var flowState flowCommandState
+	args = captureFlowPrivateOperand(args, &flowState)
 	var credentialsState credentialsCommandState
 	args = normalizeNativeStringArrayArgs(args, &credentialsState)
 	if credentialsState.rawCarrier {
@@ -125,7 +134,8 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	}
 	ctx = context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState)
 	ctx = context.WithValue(ctx, etlCommandStateKey{}, etlState)
-	cmd.SetContext(context.WithValue(ctx, reverseCommandStateKey{}, reverseState))
+	ctx = context.WithValue(ctx, reverseCommandStateKey{}, reverseState)
+	cmd.SetContext(context.WithValue(ctx, flowCommandStateKey{}, flowState))
 	if len(args) > 0 && lookupTopLevelCommand(cmd, args[0]) == nil {
 		return cmd.RunE(cmd, args)
 	}
@@ -163,6 +173,40 @@ func captureReversePrivateOperand(args []string, state *reverseCommandState) []s
 	out := make([]string, 0, len(args)-1)
 	out = append(out, args[:2]...)
 	out = append(out, args[3:]...)
+	return out
+}
+
+// captureFlowPrivateOperand preserves the first positional selected by the old
+// flow parser before pflag can consume it as an unknown flag value or help flag.
+func captureFlowPrivateOperand(args []string, state *flowCommandState) []string {
+	if len(args) < 3 || args[0] != "flow" || (args[1] != "run" && args[1] != "status") {
+		return args
+	}
+	operandIndex := -1
+	for i := 2; i < len(args); i++ {
+		switch args[i] {
+		case "--file", "--flows-dir":
+			if i+1 < len(args) {
+				i++
+			}
+		case "--force":
+		default:
+			if !strings.HasPrefix(args[i], "--") {
+				operandIndex = i
+			}
+		}
+		if operandIndex >= 0 {
+			break
+		}
+	}
+	if operandIndex < 0 {
+		return args
+	}
+	state.operand = args[operandIndex]
+	state.operandSet = true
+	out := make([]string, 0, len(args)-1)
+	out = append(out, args[:operandIndex]...)
+	out = append(out, args[operandIndex+1:]...)
 	return out
 }
 
@@ -221,7 +265,6 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 		}
 		switch args[1] {
 		case "plan", "preview", "run", "status", "list":
-			args = normalizeStringArraySpaceValues(args, 2, flowStringFlagNames)
 			return normalizeFlowLegacyActionArgs(args, 2)
 		default:
 			out := make([]string, 0, len(args)+1)
@@ -315,12 +358,27 @@ func normalizeReverseLegacyActionArgs(args []string, start int) []string {
 }
 
 // normalizeFlowLegacyActionArgs keeps tokens ignored by the old flow parser
-// from becoming Cobra controls while retaining ordinary positional operands.
+// from becoming Cobra controls. Unlike parseFlags, the old flow parser did not
+// accept assigned string flags and consumed flag-looking space values.
 func normalizeFlowLegacyActionArgs(args []string, start int) []string {
 	out := make([]string, 0, len(args))
 	out = append(out, args[:start]...)
-	for _, arg := range args[start:] {
+	for i := start; i < len(args); i++ {
+		arg := args[i]
 		if arg == "--" || isLegacyHelpFlag(arg) {
+			continue
+		}
+		if arg == "--file" || arg == "--flows-dir" {
+			if i+1 < len(args) {
+				out = append(out, arg+"="+args[i+1])
+				i++
+			}
+			continue
+		}
+		if strings.HasPrefix(arg, "--file=") || strings.HasPrefix(arg, "--flows-dir=") ||
+			(args[1] == "run" && strings.HasPrefix(arg, "--force=")) {
+			_, value, _ := strings.Cut(arg, "=")
+			out = append(out, "--pm-legacy-flow-assigned="+value)
 			continue
 		}
 		out = append(out, normalizeReverseMalformedUnknown(arg))
@@ -475,11 +533,6 @@ var reverseFlagNames = map[string]struct{}{
 	"confirm":      {},
 	"root":         {},
 	"progress":     {},
-}
-
-var flowStringFlagNames = map[string]struct{}{
-	"file":      {},
-	"flows-dir": {},
 }
 
 var connectionsCreateFlagNames = map[string]struct{}{

@@ -1,6 +1,6 @@
 # Phase 432 Summary
 
-Status: focused GREEN implementation complete; broader verification pending.
+Status: focused GREEN and exact-parser compatibility correction complete; broader verification pending.
 
 ## Identity
 
@@ -26,4 +26,6 @@ Temporary manifests/roots and fakes only. No action flow execution, reverse ETL,
 
 The complete test-only contract failed before production edits at `internal/cli/flow_native_cobra_test.go:20:9: undefined: newFlowCobraCommand`, as required. The direct flow cancellation/events/telemetry/checkpoint/ledger contract passed independently in `0.394s`.
 
-Native Cobra now owns plan/preview/run/status/list/help and every current flow flag. Typed handlers preserve current directory, manifest/DAG, relative spec, named run, checkpoint, event, telemetry, and deterministic output behavior; only the flow legacy wrapper/parser was removed. Focused, all-flow, repeated, race, router, and golden-focused gates pass. Broader differential/parity/full gates remain pending.
+Native Cobra now owns plan/preview/run/status/list/help and every current flow flag. Typed handlers preserve current directory, manifest/DAG, relative spec, named run, checkpoint, event, telemetry, and deterministic output behavior; only the flow legacy wrapper/parser was removed. Focused, all-flow, repeated, race, router, and golden-focused gates pass.
+
+An initial exact-start action-tail differential found 20/200 pflag edge mismatches. An eight-case RED reproduced them before the correction. Invocation-private operand capture and flow-only flag normalization now preserve bare/assigned/flag-looking string values, short/unknown run/status operands, and bare directory defaults. The differential is 200/200 exact. Broader parity/full gates remain pending.

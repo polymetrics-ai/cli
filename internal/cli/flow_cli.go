@@ -41,7 +41,7 @@ func newFlowCobraCommand(ctx context.Context, cfg config.Config, root string, st
 		ValidArgsFunction: completeNoFile,
 		RunE: func(_ *cobra.Command, args []string) error {
 			if len(args) > 0 {
-				return errUsage
+				return markCobraLegacyError(usageErrorf("flow: unknown subcommand %q", args[0]))
 			}
 			return markCobraLegacyError(writeManual("flow", stdout, jsonOut))
 		},
@@ -74,7 +74,10 @@ func newFlowPlanCobraCommand(ctx context.Context, root string, stdout io.Writer,
 
 func newFlowRunCobraCommand(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
 	var flags flowRunFlags
-	cmd := newFlowActionCobraCommand("run", func(_ *cobra.Command, args []string) error {
+	cmd := newFlowActionCobraCommand("run", func(cmd *cobra.Command, args []string) error {
+		if operand, ok := flowOperand(cmd); ok {
+			args = []string{operand}
+		}
 		return markCobraLegacyError(withApp(root, func(a *app.App) error {
 			return flowRun(ctx, cfg, a, flags, args, stdout, jsonOut)
 		}))
@@ -88,7 +91,10 @@ func newFlowRunCobraCommand(ctx context.Context, cfg config.Config, root string,
 
 func newFlowStatusCobraCommand(root string, stdout io.Writer, jsonOut bool) *cobra.Command {
 	var flags flowDirFlags
-	cmd := newFlowActionCobraCommand("status", func(_ *cobra.Command, args []string) error {
+	cmd := newFlowActionCobraCommand("status", func(cmd *cobra.Command, args []string) error {
+		if operand, ok := flowOperand(cmd); ok {
+			args = []string{operand}
+		}
 		return markCobraLegacyError(withApp(root, func(_ *app.App) error {
 			return flowStatus(lastString(flags.FlowsDirs), args, stdout, jsonOut)
 		}))
@@ -138,6 +144,14 @@ func addFlowStringArrayFlag(cmd *cobra.Command, target *[]string, name, usage st
 	if flag := cmd.Flags().Lookup(name); flag != nil {
 		flag.NoOptDefVal = "true"
 	}
+}
+
+func flowOperand(cmd *cobra.Command) (string, bool) {
+	state, ok := cmd.Context().Value(flowCommandStateKey{}).(flowCommandState)
+	if !ok || !state.operandSet {
+		return "", false
+	}
+	return state.operand, true
 }
 
 func readManifestFile(path string) (flow.FlowManifest, error) {

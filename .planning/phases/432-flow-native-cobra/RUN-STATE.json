@@ -11,7 +11,7 @@
   "startedAt": "20260719T034344Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "parser_compatibility_correction_red",
+  "status": "parser_compatibility_correction_green_verification_pending",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -40,11 +40,16 @@
       "cycle": "parser-compatibility-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "the initial 200-case exact-start differential exposed 20 bounded pflag gaps; an eight-outcome focused test reproduced bare/assigned/flag-looking string values, short/unknown run-status operands, and bare flows-dir mismatches before correction production edits"
+    },
+    {
+      "cycle": "parser-compatibility-correction-green",
+      "decision": "local_critical_path",
+      "reason": "invocation-private first-operand capture and flow-only local-flag normalization pass the focused correction, all flow CLI/package tests, and 200/200 exact-start exit/stdout/stderr differential without changing normal flags, globals, directories, or other namespaces"
     }
   ],
   "red": "focused CLI compile RED: internal/cli/flow_native_cobra_test.go:20:9 undefined newFlowCobraCommand; direct flow cancellation/events/telemetry/checkpoint/ledger contract passed in 0.394s",
   "green": "focused native/cancellation pass 5.002s; all flow CLI 5.742s; flow package 0.301s; repeated x5 27.066s; focused race CLI 60.885s and flow 1.348s; router/golden/flow focus 13.293s",
-  "verification": "pending",
+  "verification": "focused correction 4.347s; all flow CLI 9.494s; flow package 0.480s; exact-start parser differential 200/200; broader parity/full gates pending",
   "files": [
     ".planning/phases/432-flow-native-cobra/PLAN.md",
     ".planning/phases/432-flow-native-cobra/TDD-LEDGER.md",

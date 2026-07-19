@@ -20,6 +20,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 2 | GREEN | Native flow subtree + typed handlers + flow-only normalization; remove legacy wrapper/parser | Pass: focused native contract and cancellation package `5.002s`; all `TestFlow*` CLI `5.742s`; flow package `0.301s` |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI and flow package gates, parity/differential checks | In progress: router/golden/flow `13.293s`; repeated ×5 `27.066s`; focused race CLI `60.885s`, flow `1.348s` |
 | C1 | Correction RED | `go test ./internal/cli -run '^TestFlowLegacyParserEdgesKeepExactOutcomes$' -count=1` after the 200-case differential exposed 20 mismatches | Failed as required before correction production edits: 8/8 assertions failed across bare/assigned/flag-looking file values, short/unknown run/status operands, and bare flows-dir |
+| C2 | Correction GREEN | Invocation-private legacy operand capture plus flow-only local-flag normalization | Pass: focused correction `4.347s`; all flow CLI `9.494s`; flow package `0.480s`; exact-start differential 200/200 |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
 
@@ -61,4 +62,8 @@ Focused native/cancellation tests passed in `5.002s`; every `TestFlow*` CLI test
 
 A 200-case exact-start differential (five actions × 40 tails) matched 180/200 and exposed only bounded pflag compatibility gaps. Before correction production edits, `TestFlowLegacyParserEdgesKeepExactOutcomes` failed all eight assertions: bare `--file` became `"true"`; assigned `--file=...` became active; `--file --force` lost the flag-looking value; run/status lost short and unknown-following positional operands; and bare `--flows-dir` stopped using the legacy default. The failures had exact exit/stdout/stderr evidence and no external effects.
 
-Correction GREEN and broader parity/full gates remain pending in the durable ledger at this checkpoint.
+## Exact-parser correction GREEN
+
+Invocation-private operand capture now reproduces the old flow parser's first positional choice for run/status before pflag can consume short or unknown-following values. Flow-only normalization preserves missing bare string flags, ignores assigned string/force forms, consumes flag-looking string values, strips only legacy control tokens, and legalizes malformed unknowns. It does not expose an argv carrier or change normal flags, global parsing, action discovery, directory defaults, or other namespaces.
+
+The focused correction passed in `4.347s`; every flow CLI test passed in `9.494s`; all flow package tests passed in `0.480s`; the exact-start differential now matches 200/200 exit/stdout/stderr cases across five actions and 40 tails. Broader parity/full gates remain pending.

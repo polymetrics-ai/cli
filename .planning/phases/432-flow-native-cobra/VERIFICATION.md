@@ -22,7 +22,7 @@ Invocation: `issue-432-pi-openai-codex-gpt-5.6-sol-high-20260719T034344Z`; model
 - [x] Focused flow/router race tests (CLI `60.885s`; flow `1.348s`).
 - [x] Existing flow CLI and flow engine/action/checkpoint/event/telemetry tests (`0.301s`).
 - [x] Router and golden transcript focus (`13.293s`); fixture unchanged.
-- [ ] Exact-start differential for parser/output edge cases (initial 180/200 exposed 20 bounded gaps; focused 8-case correction RED captured).
+- [x] Exact-start differential for parser/output edge cases (initial 180/200; focused 8-case RED; corrected 200/200 exact).
 - [ ] Full `go test ./internal/cli/...`.
 - [ ] Full `go test ./internal/flow/...` and relevant event/telemetry packages.
 - [ ] `gofmt -w cmd internal`.
