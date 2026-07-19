@@ -1,0 +1,46 @@
+{
+  "phase": 434,
+  "issue": 434,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/434-rlm-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "2ac457a163cbd7bc9a3708da88b03d375ec5e952",
+  "invocationSession": "issue-434-pi-sol-high-20260719T053630Z",
+  "startedAt": "20260719T053630Z",
+  "modelProfile": "Sol",
+  "thinking": "high",
+  "status": "planned",
+  "verificationPassed": false,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "next serialized Phase 9 RLM namespace is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited PR, review, dependencies, credentials, model calls, Temporal, Podman, and services"
+    }
+  ],
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "files": [
+    ".planning/phases/434-rlm-native-cobra/PLAN.md",
+    ".planning/phases/434-rlm-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/434-rlm-native-cobra/VERIFICATION.md",
+    ".planning/phases/434-rlm-native-cobra/PROMPTS.md",
+    ".planning/phases/434-rlm-native-cobra/SUMMARY.md",
+    ".planning/phases/434-rlm-native-cobra/RUN-STATE.json"
+  ],
+  "commits": [],
+  "push": "pending",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "not_run_user_prohibited_review",
+  "safety": "temporary specs/warehouses and injected analyzers/hermetic fake runner only; no model, Temporal, Podman, services, credentials, secrets/request leakage, dependencies, generic runner, PR, or review"
+}

@@ -1,0 +1,61 @@
+# Phase 434 Plan — RLM native Cobra namespace
+
+Issue: polymetrics-ai/cli#434
+Umbrella: #407
+Parent: #397 / draft parent PR #438
+Branch: `refactor/434-rlm-native-cobra`
+Base branch: `feat/cli-architecture-v2`
+Exact starting HEAD: `2ac457a163cbd7bc9a3708da88b03d375ec5e952`
+Invocation session: `issue-434-pi-sol-high-20260719T053630Z`
+Explicit invocation profile: `Sol`, `high`
+Execution decision: `local_critical_path` — #434 is the assigned next serialized Phase 9 unit in an isolated worktree. Its router scope collides with sibling migrations, this Pi session exposes no subagent tool, and the user bounded delivery to implementation/commit/push with no PR or review.
+
+## GSD route
+
+- `scripts/gsd doctor` and `scripts/gsd list`: passed (69 commands).
+- `scripts/gsd prompt plan-phase 434 --skip-research`: generated and executed inline.
+- `scripts/gsd prompt programming-loop init --phase issue-434 --dry-run`: unavailable because the adapter registry has no `programming-loop` command.
+- Manual fallback: `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`, with six issue-local artifacts and strict RED → GREEN → refactor evidence.
+
+## Required reading and skills
+
+Read issues #434/#407/#397; `AGENTS.md`; GSD adapter/core/manual universal loop and active parent-orchestration contracts; issue contract; CLI help/docs/website parity; runtime-RLM integration reference and all canonical runtime/RLM/website docs; architecture plan §5/§9; execution prompt Stage 9; ADR-0002; current RLM CLI/analyzers/spec/fixture/model/agent/worker tests; typed RLM/runtime config; golden transcripts; and adjacent native flow/schedule patterns.
+
+Loaded: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `golang-error-handling`; `golang-security`; `golang-safety`; `golang-context`; `golang-concurrency`; `golang-documentation`; `golang-spf13-cobra`.
+
+## Scope
+
+- Replace only the `rlm` legacy wrapper with a native Cobra subtree for the current public `run` action and hidden positional `help` compatibility.
+- Declare the complete current local flag surface: `--spec`, `--in`, `--out`, `--mode`, `--dry-run`, and `--request`; preserve repeated last-value, bare value `true`, assigned/space values, ignored unknown flags, ignored operands, and invocation-global `--root`, `--json`, `--plain`, `--no-input`, and `--progress` placement/assignment behavior.
+- Adapt RLM execution to typed flag values and remove only RLM's `parseFlags` call site plus `runRLM` dispatcher. Dynamic connector dispatch and other namespace parsers remain untouched.
+- Preserve deterministic, fixture, model-stub, and optional agent routing; spec parsing; warehouse path selection; dry-run behavior; exact text/JSON result shapes; error categories; stdout/stderr discipline; context propagation; and optional runtime configuration aliases.
+- Add an invocation-local RLM analyzer factory seam so tests inject deterministic fakes for all four routes. Tests may use only `t.TempDir` specs/warehouses and existing hermetic fake runner paths. They must never call a model, Temporal, Podman, a worker service, or another external service.
+- Assert the request string is routed only to the agent factory and is absent from output/errors used by the success contract. Preserve the typed RLM analyzer boundary; do not add a generic command/model/shell runner.
+
+Excluded: Phase 16 RLM viewer/dashboard; worker/extract/connector migrations; new RLM modes/actions; model implementation; Temporal/Podman/service invocation; generic runner surfaces; connector bundles; dependencies; credentials; broad generated churn; Phase 19 focused help/man changes; PR/review.
+
+## TDD slices and checkpoints
+
+1. **Planning checkpoint** — commit/push these six artifacts before test or production edits.
+2. **RED checkpoint** — add focused tests that specify:
+   - native `rlm` ownership for run/help, all current pflags/NoOpt behavior/completion seams, and absence from legacy wrappers;
+   - repeated/bare/assigned/space forms for every current flag, ignored operands, and unchanged request/mode selection;
+   - deterministic/fixture/model/agent factory routing with injected fakes, context propagation, close behavior, spec/warehouse request contents, and no model/Temporal/Podman/service calls;
+   - bare/text/JSON/long/short/positional help; trailing help; literal `--`; malformed/legal unknown flags; invalid action heads; no later-action or operand discovery; and assigned/late global flags;
+   - exact usage/internal error mapping, stdout/stderr and one-envelope JSON behavior, no request leakage, and no generic runner/viewer action.
+   Capture focused failure before any production edit; commit/push tests.
+3. **GREEN checkpoint** — add the smallest native RLM command, typed flags, bounded RLM-only normalization, injected runtime seam, and typed run handler; remove RLM from `cobraLegacyCommands`; delete only `runRLM` and RLM's `parseFlags` use.
+4. **Refactor/parity checkpoint** — run focused/repeated/race RLM, analyzer/router/golden/full CLI, worker fake, exact-start parser/output differential, runtime help, generated docs/website, formatting, vet, build, and scope/dependency guards.
+5. **Final checkpoint** — run dependency-free full `make verify`; finalize all six artifacts; commit/push; no PR or review.
+
+## CLI parity stance
+
+Public command names, flags, manuals, result schemas, docs, website content, generated artifacts, and golden fixtures should remain unchanged. Checked-in docs/website/golden edits are not applicable unless verification finds an actual mismatch. Phase 16 owns the RLM viewer; Phase 19 owns deliberate focused-help/man churn. Verify `pm help rlm`, bare `pm rlm`, `pm rlm --help`, short/positional/JSON routes, invalid actions, `docs/cli/rlm.md`, website CLI-reference/architecture pages, generated docs, completion discovery, and golden transcripts.
+
+## Safety
+
+No secrets/request leakage, model calls, Temporal, Podman, optional services, worker daemon, credentials, dependencies, external connectors, generic execution surfaces, unrestricted writes, destructive/admin actions, reverse ETL, or production deployment. Tests use only temp specs/warehouses and injected analyzers/hermetic fakes. Context cancellation remains propagated. Agent mode stays opt-in; the default deterministic/fixture paths stay dependency-free.
+
+## Completion
+
+Pending strict RED → GREEN → refactor, parity, full dependency-free verification, coherent commits, and push. No PR or review will be created per user instruction.
