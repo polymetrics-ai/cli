@@ -1,0 +1,48 @@
+# Phase 433 TDD Ledger
+
+Issue: #433 — nativize schedule namespace.
+Invocation: `issue-433-pi-sol-high-20260719T044819Z`
+Model/thinking profile: `Sol` / `high`
+Starting HEAD: `ab1c79eede67fa87e1c6b808d6ddba0b27fcf00d`
+
+## GSD and skills
+
+Doctor/list passed; `plan-phase 433 --skip-research` generated and is executed inline. The adapter lacks `programming-loop`, so the recorded manual universal-runtime-loop fallback is active.
+
+Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-documentation`, `golang-spf13-cobra`.
+
+## RED / GREEN / refactor log
+
+| Step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
+| 1 | RED | Focused native schedule tree/flags/parser/output/backend-fake tests | Pending |
+| 2 | GREEN | Native schedule subtree + typed handlers + schedule-only normalization; remove legacy wrapper/parser | Pending |
+| 3 | Refactor | Focused/repeated/race/router/golden/full CLI and schedule package gates, parity/differential checks | Pending |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
+| 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
+
+## RED contract
+
+- Native `schedule` owns current create/list/install/remove and hidden positional help; no schedule legacy wrapper remains.
+- Native definitions cover all current local flags (`name`, `cron`, `flow`, `crontab`) with exact repeated/bare/assigned and ignored-unknown behavior where applicable, while global root/json/plain/no-input/progress placement and assigned booleans remain unchanged.
+- Bare namespace and `pm help schedule`, `schedule --help`, `schedule -h`, `schedule help`, and JSON manual routes preserve the canonical schedule manual and exit 0.
+- Trailing help, literal `--`, short flags, malformed unknown flags, and legal unknown flags preserve legacy outcomes rather than becoming accidental Cobra controls.
+- Invalid actions remain exit-2 usage errors. `uninstall`, `run`, and `history` remain invalid under the current contract and cannot reach an install/remove backend. Leading unknown/help-like/literal tokens cannot discover or execute a later valid action.
+- Install/remove preserve first positional ownership, bare/assigned/repeated `--crontab`, schedule-not-found behavior, root in rendered payload, context propagation, default backend selection inputs, non-crontab crontab-cleanup fallback, and best-effort backend removal before manifest deletion.
+- Create preserves last-value flag selection, cron and manifest-name validation, conflict validation, persisted manifest timestamps, exact text/JSON shapes, and no backend calls.
+- List preserves ignored tails, empty JSON slice, lexicographic manifest order, text/JSON determinism, and no backend calls.
+- Usage errors remain exit 2; invalid cron/name/not-found remain validation exit 3; install failures retain internal/runtime legacy classification and wrapping.
+- Tests use temporary roots, redirected temporary crontab files, fixed clocks, executable stubs, and fake backends only; no real crontab/launchd/systemd/Temporal command or scheduler service executes.
+
+## Exact RED evidence
+
+Pending. Must be captured after the complete test-only edit and before any production edit.
+
+## Focused GREEN
+
+Pending.
+
+## Final refactor and verification evidence
+
+Pending.
