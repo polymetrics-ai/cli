@@ -97,6 +97,6 @@ Commands refreshed before production edits: `scripts/gsd doctor`; `scripts/gsd p
 
 Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, and connector/certify support skills `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`. `.pi/skills/go-implementation/SKILL.md` is missing; global cc-skills files are the actual Go implementation evidence.
 
-Downstream artifact: parent `a5474bcb` merged cleanly at `dc4aed23`; 42-file #437 diff audited as scoped; continuation artifacts updated; verification passed; PR/review-route delivery pending.
+Downstream artifact: parent `a5474bcb` merged cleanly at `dc4aed23`; 42-file #437 diff audited as scoped; continuation artifacts updated; verification passed; non-draft stacked PR opened at https://github.com/polymetrics-ai/cli/pull/466; human/parent review fallback pending.
 
 Verification result: pass. Focused CLI `119.151s`, certify `7.344s`; connectors help byte-equal `8391` bytes; docs/golden `10.347s`; website docs generation drift-free; fixture-only sample certify exit 0/pass/stderr 0; gofmt/diff/vet/full tests/build; `make verify` exit 0; connectorgen 547/0.

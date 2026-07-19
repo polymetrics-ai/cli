@@ -21,7 +21,7 @@
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "continuation_verified_pr_pending",
+  "status": "continuation_pr_open_review_pending",
   "verificationPassed": true,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
@@ -214,6 +214,11 @@
       "cycle": "continuation-verify",
       "decision": "local_critical_path",
       "reason": "focused CLI/certify, help parity, docs/golden/website, fixture-only sample certify, gofmt/diff/vet/full tests/build, make verify, and connectorgen all passed"
+    },
+    {
+      "cycle": "continuation-delivery",
+      "decision": "local_critical_path",
+      "reason": "branch pushed and non-draft stacked PR #466 opened to feat/cli-architecture-v2; Claude disabled and Copilot quota exhausted, so human/parent review fallback remains pending"
     }
   ],
   "red": "captured: certify focus 1.374s showed premature cleaned state, forged numeric effects, unbounded/reflected ledgers, four invalid resume forms, and dropped batch persistence; CLI focus 14.764s showed seven accepted sweep constraints, silent single save failures, telemetry files on invalid flags, and late malformed parallel validation",
@@ -240,9 +245,9 @@
     "e9ce945e fix(certify): close rereview safety gaps",
     "terminal fifth-cycle evidence artifact: this commit"
   ],
-  "push": "fifth-cycle planning, RED, supplemental RED, and GREEN checkpoints pushed; terminal evidence commit is this artifact delivery and will be pushed immediately",
-  "pullRequest": "pending_non_draft_stacked_pr_to_feat_cli_architecture_v2",
-  "reviewRoute": "pending_human_parent_fallback_claude_disabled_copilot_quota_exhausted",
+  "push": "continuation planning, parent merge, verification, and PR artifact commits pushed to refactor/437-connectors-certify-native-cobra",
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
+  "reviewRoute": "human_parent_fallback_pending_claude_disabled_copilot_quota_exhausted_no_bot_retry",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, PR, integration, parent mutation, or main mutation",
   "preTerminalEvidenceHead": "e9ce945e56413dbb60f5eeec2f1d6e5df688a249"
 }

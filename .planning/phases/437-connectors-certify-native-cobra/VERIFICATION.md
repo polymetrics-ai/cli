@@ -214,5 +214,5 @@ Exact start: `86eea0f966814e6848e5a52143eea15dd46ff801`; parent target: `a5474bc
 - [x] `make verify` passes; full CLI package `461.542s`, docs validate, local Makefile smoke passed, lint `0 issues`, connectorgen validation green.
 - [x] Connector validation remains green when run: `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
 - [x] No go.mod/go.sum delta, connector defs, credentials, live checks, destructive cleanup, external writes/sweeps, generic write tools, or main/parent merge.
-- [ ] Branch pushed and non-draft stacked PR opened to `feat/cli-architecture-v2` with exactly `Refs #437`, `Refs #407`, and `Refs #397`.
-- [ ] Automated external review route recorded: Claude disabled, Copilot quota exhausted, human/parent fallback pending; no bot retries.
+- [x] Branch pushed and non-draft stacked PR opened to `feat/cli-architecture-v2` with exactly `Refs #437`, `Refs #407`, and `Refs #397`: https://github.com/polymetrics-ai/cli/pull/466.
+- [x] Automated external review route recorded: Claude disabled, Copilot quota exhausted, human/parent fallback pending; no bot retries.
