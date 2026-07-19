@@ -45,6 +45,6 @@ Commands: `scripts/gsd doctor` and `scripts/gsd prompt plan-phase 437 --skip-res
 
 Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-spf13-cobra`.
 
-Downstream artifact: planning `aa39fd9d`, RED `9a47ff3d`, and GREEN `7b6eaa58` checkpoints pushed. Terminal verification artifact commit/push remains.
+Downstream artifact: planning `aa39fd9d`, RED `9a47ff3d`, GREEN `7b6eaa58`, and verification `974495d5` checkpoints pushed; this final delivery marker closes the correction.
 
 Verification result: pass. Focus/effect/no-op, repeated ×10 (`0.661s`), race (CLI `1.726s`, certify `2.535s`), full CLI (`440.910s`), full certify (`346.271s`), runtime help/no-effect/sample smoke, CLI docs/goldens, website full-data regeneration, gofmt/vet/test/build, `make verify` (`7m36.852s`), and connectorgen 547/0 pass. No credentials, services, dependencies, PR, or review.

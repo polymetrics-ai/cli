@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: second accepted safety correction in progress; verification reset pending strict RED → GREEN and full gates.
+Status: second accepted safety correction complete, verified, committed, and pushed.
 
 ## Identity
 
@@ -39,7 +39,7 @@ At exact HEAD `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`, all five findings from
 
 RED reproduced all findings. GREEN passed focused `3.004s`, native/certify/telemetry `108.532s`, base/current differential 5/5 byte-identical, race `29.046s`, ×10 `24.991s`, certify redaction/replay/concurrency race `349.263s`, exit focus `21.618s`, local sample exit 0/pass/redacted, docs/golden `24.275s`, and hash-stable website generation. Full CLI passed `435.572s`, certify `338.846s`, connector validation 547/0, and final `make verify` exited 0 in `468.36s` with CLI `444.436s`, certify `346.018s`, docs, smoke, lint, build, vet, and validation green. No live credentials/writes, services, dependencies, PR, or review.
 
-## Second correction in progress
+## Second correction complete
 
 At exact HEAD `0d743e54e06c9e27e550eacce9be7899a9e23d19`, every finding in `/tmp/pm-397-rereview-437.log` is accepted. The prior implementation still lets batch `--write=false` and `--skip=write` lose to credential-file `write: true`, discards credential-file sandbox/rate/budget constraints, accepts unsupported single credential/limit/modes controls, and ignores flow/schedule skip values. Architecture/PRD and connectors-help claims are also stale.
 
@@ -49,4 +49,4 @@ The GREEN correction now hides/rejects unsupported single controls, allowlists o
 
 Focused and effect-recorder tests pass, including repeated ×10 (`0.661s`) and race (`1.726s` CLI, `2.535s` certify). Full CLI passed `440.910s`; full certify passed `346.271s`. Runtime topic/bare/flag help parity, invalid action exit 2, no-effect invalid controls, credential-free local sample smoke, CLI docs/goldens, and hash-stable website full-data regeneration passed.
 
-Final `make verify` exited 0 in `7m36.852s`: CLI `434.190s`, certify `337.470s`, gofmt, tidy-check, vet, full tests, build, docs validation, ordered smoke, lint 0, and connector validation all passed. Explicit connectorgen rerun checked 547 bundles with zero findings. Website typecheck was not applicable because the existing tool is absent; no dependency installation was attempted. Verification remained fixture/synthetic-reference/temp-only, with no credentials, live services, external writes, dependencies, PR, or review. Terminal artifact commit/push remains.
+Final `make verify` exited 0 in `7m36.852s`: CLI `434.190s`, certify `337.470s`, gofmt, tidy-check, vet, full tests, build, docs validation, ordered smoke, lint 0, and connector validation all passed. Explicit connectorgen rerun checked 547 bundles with zero findings. Website typecheck was not applicable because the existing tool is absent; no dependency installation was attempted. Verification remained fixture/synthetic-reference/temp-only, with no credentials, live services, external writes, dependencies, PR, or review. Verification artifact `974495d5` is pushed; this final delivery marker closes the correction.

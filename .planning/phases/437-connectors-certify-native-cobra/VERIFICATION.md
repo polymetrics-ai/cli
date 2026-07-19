@@ -103,4 +103,4 @@ Second-correction start: `0d743e54e06c9e27e550eacce9be7899a9e23d19`; session `is
 - [x] Runtime topic/bare/flag help byte parity, certify help, invalid action exit 2, CLI docs/goldens, website full data regeneration, and drift checks pass; website typecheck tool is absent and no dependency install was attempted.
 - [x] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` pass; verify exit 0 in `7m36.852s` (CLI `434.190s`, certify `337.470s`, smoke/lint/docs/build/vet green).
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs` reports 547 checked, zero findings (both verify and explicit rerun).
-- [ ] Final artifacts committed and active issue branch pushed; no dependencies/services/credentials/PR/review.
+- [x] Final verification artifacts committed and active issue branch pushed (`974495d5`); no dependencies/services/credentials/PR/review.
