@@ -104,7 +104,7 @@ Telemetry values are non-secret configuration. Supported exporters are `none`, `
 | Command | Subcommands | Primary docs |
 |---|---|---|
 | `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
-| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help` | [/docs/connectors](/docs/connectors) |
+| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors inspect`, `pm connectors help`, `pm connectors certify` | [/docs/connectors](/docs/connectors) |
 | `pm credentials` | `pm credentials add`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
@@ -190,13 +190,18 @@ pm connectors list --json
 pm connectors list --all --json
 pm connectors catalog --capability read --json
 pm connectors catalog --stage generally_available --json
-pm connectors port-plan --all --json
-pm connectors port-plan postgres --json
 pm connectors inspect 100ms --json
 pm connectors help 100ms
+
+# Fixture/replay/local certification does not require live credentials.
+pm connectors certify sample --json
+pm connectors certify --all --credentials-file certify/creds.yaml --replay --json
+pm connectors certify --sweep --credentials-file certify/creds.yaml --older-than 24h --json
 ```
 
 `pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
+
+Certification returns `ConnectorCertification`, `ConnectorCertificationBatch`, or `ConnectorCertificationSweep` JSON. Its exit contract is `0` pass, `1` usage/internal, `2` certification failure, and `3` leaked resource. Credential files and `--from-env field=ENV` carry references only; credential values are excluded from command output, events, telemetry, and certification reports. Live checks and writes are opt-in and cleanup-gated; documentation and fixture/replay verification do not perform them.
 
 ## Extract, query, and write
 

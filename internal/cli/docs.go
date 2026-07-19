@@ -445,6 +445,9 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
+  pm connectors certify <name> [--from-env field=ENV] [--config key=value] [--json]
+  pm connectors certify --all --credentials-file <file> [--parallel n] [--resume] [--json]
+  pm connectors certify --sweep [--credentials-file <file>] [--older-than 24h] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -534,6 +537,22 @@ ACTIONS
   help <name>
     Alias for the human connector manual.
 
+  certify
+    Runs the connector certification harness through the in-process CLI. A
+    single run can use fixture/replay inputs or user-named credential variable
+    references. Batch mode requires --all and --credentials-file. Sweep mode
+    retries cleanup recorded in the local certification ledger.
+
+    Certification preserves its own exit contract: 0 pass, 1 usage/internal,
+    2 certification failure, and 3 leaked resource (dominates all other
+    outcomes). JSON emits one ConnectorCertification,
+    ConnectorCertificationBatch, or ConnectorCertificationSweep envelope.
+
+    Credential values must come from environment references or the credential
+    file resolver; they are never command operands, output, events, telemetry,
+    or report fields. Live checks and writes are opt-in harness behavior, not
+    performed by connector inspection or help.
+
 EXAMPLES
   pm connectors
   pm connectors --json
@@ -542,17 +561,23 @@ EXAMPLES
   pm connectors catalog --capability write --stage generally_available --json
   pm connectors inspect github
   pm connectors inspect github --json
+  pm connectors certify sample --json
+  pm connectors certify --all --credentials-file certify/creds.yaml --replay --json
+  pm connectors certify --sweep --credentials-file certify/creds.yaml --older-than 24h --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem
 
 SECURITY
-  Connector inspection never reads credentials.
+  Connector inspection never reads credentials. Certification accepts only
+  credential references; secret values are excluded from output and reports.
+  Live certification writes remain explicitly opt-in and cleanup-gated.
 
 EXIT STATUS
-  0 success
-  1 runtime error
-  2 usage error
+  0 success or certification pass
+  1 runtime error or certification usage/internal error
+  2 usage error or certification failure
+  3 certification leaked resource
 `
 
 const connectionsHelp = `NAME

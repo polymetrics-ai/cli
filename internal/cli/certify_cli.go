@@ -9,38 +9,133 @@ import (
 	"strings"
 	"time"
 
+	"github.com/spf13/cobra"
+
 	"polymetrics.ai/internal/connectors/certify"
 	"polymetrics.ai/internal/safety"
 	"polymetrics.ai/internal/telemetry"
 )
 
-// runCertify dispatches `pm connectors certify ...` (certification design §A
-// command spec): a single connector by name, `--all --credentials-file`
-// batch mode (§B), or `--sweep` orphan cleanup (§C). Purely additive to the
-// existing `connectors` subcommand family in cli.go — no other connectors
-// subcommand's behavior changes.
-func runCertify(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-	flags := parseFlags(args)
-	positionals := flags.values["_"]
+type certifyCommandRuntime interface {
+	RunSingle(ctx context.Context, root string, opts certify.Options) (certify.Report, error)
+	RunBatch(ctx context.Context, root, credsPath string, parallel int, resume bool) (certify.BatchReport, error)
+	Sweep(ctx context.Context, root, credsPath string, olderThan time.Duration) (map[string]certify.SweepResult, error)
+}
 
-	switch {
-	case flags.first("sweep") == "true":
-		return runCertifySweep(ctx, root, flags, stdout, jsonOut)
-	case flags.first("all") == "true":
-		return runCertifyBatch(ctx, root, flags, stdout, jsonOut)
-	default:
-		if len(positionals) != 1 {
-			return usageErrorf("pm connectors certify <connector> | --all --credentials-file <file> | --sweep")
+type defaultCertifyCommandRuntime struct{}
+
+type certifyCommandFlags struct {
+	Credentials          []string
+	FromEnv              []string
+	Configs              []string
+	Streams              []string
+	Limits               []string
+	Modes                []string
+	Skips                []string
+	RateLimits           []string
+	Budgets              []string
+	Records              []string
+	Replays              []string
+	LiveAllModes         []string
+	AllowProductionWrite []string
+	KeepWorkdirs         []string
+	Writes               []string
+	Fulls                []string
+	Alls                 []string
+	CredentialsFiles     []string
+	Parallels            []string
+	Resumes              []string
+	Sweeps               []string
+	OlderThans           []string
+}
+
+func (defaultCertifyCommandRuntime) RunSingle(ctx context.Context, _ string, opts certify.Options) (certify.Report, error) {
+	return certify.NewRunner(opts).Run(ctx)
+}
+
+func (defaultCertifyCommandRuntime) RunBatch(ctx context.Context, root, credsPath string, parallel int, resume bool) (certify.BatchReport, error) {
+	cf, err := certify.LoadCredsFile(credsPath)
+	if err != nil {
+		return certify.BatchReport{}, err
+	}
+	if parallel > 0 {
+		cf.Defaults.Parallel = parallel
+	}
+	return certify.RunBatch(ctx, certify.BatchOptions{
+		CredsFile:     cf,
+		RunnerFactory: certify.DefaultRunnerFactory,
+		BatchDir:      filepath.Join(root, ".polymetrics"),
+		Resume:        resume,
+	})
+}
+
+func (defaultCertifyCommandRuntime) Sweep(ctx context.Context, root, credsPath string, olderThan time.Duration) (map[string]certify.SweepResult, error) {
+	connectors, err := sweepTargetConnectors(root, credsPath)
+	if err != nil {
+		return nil, err
+	}
+	if len(connectors) == 0 {
+		return nil, usageErrorf("pm connectors certify --sweep found no ledger to sweep under %s (pass --credentials-file, or run a live/batch certify first)", root)
+	}
+	results := make(map[string]certify.SweepResult, len(connectors))
+	for _, name := range connectors {
+		ledgerRoot := filepath.Join(root, ".polymetrics", "certifications", "ledger", name)
+		result, err := certify.NewSweeper(certify.SweeperOptions{Root: ledgerRoot, OlderThan: olderThan}).Sweep(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("certify: sweep %s: %w", name, err)
 		}
-		return runCertifySingle(ctx, root, positionals[0], flags, stdout, jsonOut)
+		results[name] = result
+	}
+	return results, nil
+}
+
+func newCertifyCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) *cobra.Command {
+	var flags certifyCommandFlags
+	cmd := newConnectorsActionCobraCommand("certify [connector]", func(_ *cobra.Command, args []string) error {
+		switch {
+		case lastString(flags.Sweeps) == "true":
+			return markCobraLegacyError(runCertifySweep(ctx, root, flags, stdout, jsonOut, runtime))
+		case lastString(flags.Alls) == "true":
+			return markCobraLegacyError(runCertifyBatch(ctx, root, flags, stdout, jsonOut, runtime))
+		default:
+			if len(args) != 1 {
+				return usageErrorf("pm connectors certify <connector> | --all --credentials-file <file> | --sweep")
+			}
+			opts, err := certifyOptionsFromFlags(args[0], flags)
+			if err != nil {
+				return err
+			}
+			return markCobraLegacyError(runCertifySingle(ctx, root, opts, stdout, jsonOut, runtime))
+		}
+	})
+	setManualHelp(cmd, "connectors", stdout, jsonOut)
+	addCertifyFlags(cmd, &flags)
+	return cmd
+}
+
+func addCertifyFlags(cmd *cobra.Command, flags *certifyCommandFlags) {
+	for _, spec := range []struct {
+		name   string
+		target *[]string
+	}{
+		{"credential", &flags.Credentials}, {"from-env", &flags.FromEnv}, {"config", &flags.Configs},
+		{"stream", &flags.Streams}, {"limit", &flags.Limits}, {"modes", &flags.Modes},
+		{"skip", &flags.Skips}, {"rate-limit", &flags.RateLimits}, {"budget", &flags.Budgets},
+		{"record", &flags.Records}, {"replay", &flags.Replays}, {"live-all-modes", &flags.LiveAllModes},
+		{"allow-production-writes", &flags.AllowProductionWrite}, {"keep-workdir", &flags.KeepWorkdirs},
+		{"write", &flags.Writes}, {"full", &flags.Fulls}, {"all", &flags.Alls},
+		{"credentials-file", &flags.CredentialsFiles}, {"parallel", &flags.Parallels}, {"resume", &flags.Resumes},
+		{"sweep", &flags.Sweeps}, {"older-than", &flags.OlderThans},
+	} {
+		addConnectorsStringArrayFlag(cmd, spec.target, spec.name, "connector certification option")
 	}
 }
 
 // --- single-connector mode ---
 
-func runCertifySingle(ctx context.Context, root, connector string, flags parsedFlags, stdout io.Writer, jsonOut bool) (err error) {
+func runCertifySingle(ctx context.Context, root string, opts certify.Options, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) (err error) {
 	ctx, span := telemetry.StartSpan(ctx, "pm.certify.connector",
-		telemetry.StringAttr("pm.certify.connector", connector),
+		telemetry.StringAttr("pm.certify.connector", opts.Connector),
 		telemetry.StringAttr("pm.certify.mode", "single"),
 	)
 	defer func() {
@@ -53,17 +148,11 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		span.End()
 	}()
 
-	if err := safety.ValidateIdentifier(connector, "connector"); err != nil {
+	if err := safety.ValidateIdentifier(opts.Connector, "connector"); err != nil {
 		return validationErrorf("%v", err)
 	}
 
-	opts, err := certifyOptionsFromFlags(connector, flags)
-	if err != nil {
-		return err
-	}
-
-	runner := certify.NewRunner(opts)
-	rep, err := runner.Run(ctx)
+	rep, err := runtime.RunSingle(ctx, root, opts)
 	if err != nil {
 		return fmt.Errorf("certify: %w", err)
 	}
@@ -83,14 +172,14 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 // <connector>` flags: --stream, --limit, --modes, --skip, --keep-workdir,
 // --from-env (repeatable field=ENV), --config (repeatable key=value), --write
 // (certification design §A command spec).
-func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Options, error) {
-	limit, err := parseIntFlag("limit", flags.first("limit"), 50)
+func certifyOptionsFromFlags(connector string, flags certifyCommandFlags) (certify.Options, error) {
+	limit, err := parseIntFlag("limit", lastString(flags.Limits), 50)
 	if err != nil {
 		return certify.Options{}, err
 	}
 
 	secretEnv := map[string]string{}
-	for _, spec := range flags.values["from-env"] {
+	for _, spec := range flags.FromEnv {
 		field, env, ok := strings.Cut(spec, "=")
 		if !ok || field == "" || env == "" {
 			return certify.Options{}, usageErrorf("invalid --from-env %q, want field=ENV", spec)
@@ -98,14 +187,14 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 		secretEnv[field] = env
 	}
 
-	config, err := keyValues(flags.values["config"])
+	config, err := keyValues(flags.Configs)
 	if err != nil {
 		return certify.Options{}, err
 	}
 
-	skip := parseCSVFlags(flags.values["skip"])
-	write := flags.first("write") == "true"
-	full := flags.first("full") == "true"
+	skip := parseCSVFlags(flags.Skips)
+	write := lastString(flags.Writes) == "true"
+	full := lastString(flags.Fulls) == "true"
 	for _, s := range skip {
 		if s == "write" {
 			write = false
@@ -114,12 +203,12 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 
 	return certify.Options{
 		Connector: connector,
-		Stream:    flags.first("stream"),
+		Stream:    lastString(flags.Streams),
 		Limit:     limit,
-		Modes:     parseCSVFlags(flags.values["modes"]),
+		Modes:     parseCSVFlags(flags.Modes),
 		Config:    config,
 		SecretEnv: secretEnv,
-		KeepWork:  flags.first("keep-workdir") == "true",
+		KeepWork:  lastString(flags.KeepWorkdirs) == "true",
 		Write:     write,
 		Full:      full,
 	}, nil
@@ -127,7 +216,7 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 
 // --- batch mode (--all --credentials-file) ---
 
-func runCertifyBatch(ctx context.Context, root string, flags parsedFlags, stdout io.Writer, jsonOut bool) (err error) {
+func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) (err error) {
 	ctx, span := telemetry.StartSpan(ctx, "pm.certify.batch", telemetry.StringAttr("pm.certify.mode", "batch"))
 	defer func() {
 		if err != nil {
@@ -139,29 +228,17 @@ func runCertifyBatch(ctx context.Context, root string, flags parsedFlags, stdout
 		span.End()
 	}()
 
-	credsPath := flags.first("credentials-file")
+	credsPath := lastString(flags.CredentialsFiles)
 	if credsPath == "" {
 		return usageErrorf("pm connectors certify --all requires --credentials-file <file>")
 	}
 
-	cf, err := certify.LoadCredsFile(credsPath)
+	parallel, err := parseIntFlag("parallel", lastString(flags.Parallels), 0)
 	if err != nil {
 		return err
 	}
 
-	if parallel, perr := parseIntFlag("parallel", flags.first("parallel"), 0); perr != nil {
-		return perr
-	} else if parallel > 0 {
-		cf.Defaults.Parallel = parallel
-	}
-
-	batchDir := filepath.Join(root, ".polymetrics")
-	batch, err := certify.RunBatch(ctx, certify.BatchOptions{
-		CredsFile:     cf,
-		RunnerFactory: certify.DefaultRunnerFactory,
-		BatchDir:      batchDir,
-		Resume:        flags.first("resume") == "true",
-	})
+	batch, err := runtime.RunBatch(ctx, root, credsPath, parallel, lastString(flags.Resumes) == "true")
 	if err != nil {
 		return fmt.Errorf("certify: batch run failed: %w", err)
 	}
@@ -175,9 +252,9 @@ func runCertifyBatch(ctx context.Context, root string, flags parsedFlags, stdout
 
 // --- sweep mode (--sweep) ---
 
-func runCertifySweep(ctx context.Context, root string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+func runCertifySweep(ctx context.Context, root string, flags certifyCommandFlags, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) error {
 	olderThan := 24 * time.Hour
-	if raw := flags.first("older-than"); raw != "" {
+	if raw := lastString(flags.OlderThans); raw != "" {
 		d, err := time.ParseDuration(raw)
 		if err != nil {
 			return usageErrorf("invalid --older-than %q: %v", raw, err)
@@ -185,23 +262,9 @@ func runCertifySweep(ctx context.Context, root string, flags parsedFlags, stdout
 		olderThan = d
 	}
 
-	connectors, err := sweepTargetConnectors(root, flags.first("credentials-file"))
+	results, err := runtime.Sweep(ctx, root, lastString(flags.CredentialsFiles), olderThan)
 	if err != nil {
 		return err
-	}
-	if len(connectors) == 0 {
-		return usageErrorf("pm connectors certify --sweep found no ledger to sweep under %s (pass --credentials-file, or run a live/batch certify first)", root)
-	}
-
-	results := make(map[string]certify.SweepResult, len(connectors))
-	for _, name := range connectors {
-		ledgerRoot := filepath.Join(root, ".polymetrics", "certifications", "ledger", name)
-		sweeper := certify.NewSweeper(certify.SweeperOptions{Root: ledgerRoot, OlderThan: olderThan})
-		res, err := sweeper.Sweep(ctx)
-		if err != nil {
-			return fmt.Errorf("certify: sweep %s: %w", name, err)
-		}
-		results[name] = res
 	}
 
 	if err := writeCertifySweepReport(stdout, jsonOut, results); err != nil {

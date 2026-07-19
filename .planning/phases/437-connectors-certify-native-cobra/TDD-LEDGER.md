@@ -8,7 +8,7 @@ GSD doctor/list and plan-phase prompt passed. Adapter has no `programming-loop`;
 |---:|---|---|---|
 | 0 | Planning | Six issue-local artifacts written before tests/production | Complete |
 | 1 | RED | `go test ./internal/cli -run 'TestConnectorsCommandIsNativeCobraSubtree|TestNativeConnectors|TestNativeCertify' -count=1` | Failed as required before production edits: `newConnectorsCobraCommand` and `newConnectorsCobraCommandWithRuntime` are undefined |
-| 2 | GREEN | Typed native constructors/flags/runtime adaptation; connectors/certify parser removal only | Pending |
+| 2 | GREEN | Native connectors/certify subtree, typed flags/runtime seam, compatibility normalization, and namespace-only parser removal | Pass: focused `3.876s`; focused router/golden/certify/telemetry `111.507s`; repeated ×10 `34.915s`; race `40.844s`; certify package `336.422s` |
 | 3 | Refactor | Focused ×10/race, router/golden/full CLI/certify, differential/parity | Pending |
 | 4 | Full gate | connector validation, docs/website, gofmt/vet/test/build/make verify, certify smoke | Pending |
 | 5 | Delivery | Finalize, commit/push, no PR/review | Pending |

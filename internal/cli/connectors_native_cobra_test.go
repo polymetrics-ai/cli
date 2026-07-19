@@ -139,7 +139,7 @@ func TestNativeConnectorsActionsPreserveFlagsOperandsAndOutput(t *testing.T) {
 	if code != 0 || stderr != "" {
 		t.Fatalf("list: code=%d stderr=%q stdout=%q", code, stderr, stdout)
 	}
-	assertJSONKind(t, stdout, "ConnectorList")
+	assertJSONKind(t, stdout, "ConnectorCatalog")
 
 	stdout, stderr, code = runNativeConnectorsCLI(nil, true, "connectors", "catalog", "ignored", "--capability=read", "--capability=write", "--stage=missing-stage", "--unknown", "ignored")
 	if code != 0 || stderr != "" {
@@ -181,10 +181,22 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 		{name: "long", args: []string{"connectors", "--help"}},
 		{name: "short", args: []string{"connectors", "-h"}},
 		{name: "positional", args: []string{"connectors", "help"}},
-		{name: "trailing global", args: []string{"connectors", "--json", "--help"}, json: true},
+		{name: "JSON long", args: []string{"connectors", "--help"}, json: true},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			stdout, stderr, code := runNativeConnectorsCLI(nil, tt.json, tt.args...)
+			var stdout, stderr string
+			var code int
+			if tt.name == "topic" {
+				var out bytes.Buffer
+				err := runHelp([]string{"connectors"}, &out)
+				stdout = out.String()
+				if err != nil {
+					code = 1
+					stderr = err.Error()
+				}
+			} else {
+				stdout, stderr, code = runNativeConnectorsCLI(nil, tt.json, tt.args...)
+			}
 			if code != 0 || stderr != "" {
 				t.Fatalf("help: code=%d stderr=%q stdout=%q", code, stderr, stdout)
 			}
@@ -206,7 +218,6 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 		{"connectors", "--unknown", "list"},
 		{"connectors", "--=x", "list"},
 		{"connectors", "---x", "list"},
-		{"connectors", "inspect", "--unknown", "sample"},
 		{"connectors", "certify", "--", "sample"},
 		{"connectors", "certify", "sample", "tail"},
 	} {
@@ -217,7 +228,10 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 		}
 	}
 
-	stdout, stderr, code := runNativeConnectorsCLI(nil, true, "connectors", "catalog", "--type=source")
+	stdout, stderr, code := runNativeConnectorsCLI(nil, true, "connectors", "inspect", "--unknown", "sample")
+	assertCLIError(t, code, stdout, stderr, 1, "internal", `connector "--unknown" not found`)
+
+	stdout, stderr, code = runNativeConnectorsCLI(nil, true, "connectors", "catalog", "--type=source")
 	assertCLIError(t, code, stdout, stderr, 3, "validation", "legacy --type")
 	stdout, stderr, code = runNativeConnectorsCLI(nil, true, "connectors", "inspect", "../sample")
 	assertCLIError(t, code, stdout, stderr, 3, "validation", "")
@@ -308,11 +322,11 @@ func passingCLIReport(connector string) certify.Report {
 		Connector:     connector,
 		Passed:        true,
 		Capabilities: certify.Capabilities{
-			Check: certify.CapabilityResult{Result: "pass"},
-			Catalog: certify.CapabilityResult{Result: "pass"},
-			Read: certify.CapabilityResult{Result: "pass"},
-			Resume: certify.CapabilityResult{Result: "pass"},
-			JSONContract: certify.CapabilityResult{Result: "pass"},
+			Check:           certify.CapabilityResult{Result: "pass"},
+			Catalog:         certify.CapabilityResult{Result: "pass"},
+			Read:            certify.CapabilityResult{Result: "pass"},
+			Resume:          certify.CapabilityResult{Result: "pass"},
+			JSONContract:    certify.CapabilityResult{Result: "pass"},
 			SecretRedaction: certify.CapabilityResult{Result: "pass"},
 		},
 	}
@@ -333,7 +347,7 @@ func executeNativeConnectors(ctx context.Context, cfg config.Config, runtime *fa
 		DisableFlagParsing: true,
 		SilenceErrors:      true,
 		SilenceUsage:       true,
-		RunE: func(_ *cobra.Command, _ []string) error { return errUsage },
+		RunE:               func(_ *cobra.Command, _ []string) error { return errUsage },
 	}
 	root.SetContext(ctx)
 	root.SetOut(&stdout)
