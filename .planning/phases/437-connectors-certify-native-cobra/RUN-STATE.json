@@ -10,14 +10,15 @@
   "endingImplementationHead": "7b6eaa58",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
+  "thirdCorrectionStartingHead": "437d13cf",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
   "endedAt": "20260719T121234Z",
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "complete_verified",
-  "verificationPassed": true,
+  "status": "in_progress",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -105,11 +106,16 @@
       "cycle": "second-accepted-safety-correction-summary",
       "decision": "local_critical_path",
       "reason": "terminal verification artifacts finalized for commit and active-branch push; no PR or review per user instruction"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "all rereview2 findings accepted at exact head; bounded safety/correctness correction in the existing isolated issue worktree; no subagent tool, external commands, credentials, services, dependencies, PR, or review"
     }
   ],
-  "red": "captured before production: unsupported single flags visible and ran; 18 skip/mode no-ops recorded effects; batch write-disable controls preserved credential write=true; sandbox/rate/budget/limit constraints reached batch/runner; stale architecture/PRD/help claims failed assertions",
-  "green": "batch write-disable overrides dominate credential entries; sandbox gates enabled writes; unsupported rate/budget/limit fail before runner; unsupported single and mode-inapplicable controls reject before effects; skip allowlisted to write; architecture/PRD/help and generated CLI/website artifacts corrected",
-  "verification": "pass: focused/repeated/race/no-op/help/sample/docs/website green; full CLI 440.910s and certify 346.271s; make verify exit 0 in 7m36.852s with CLI 434.190s and certify 337.470s; connectorgen 547/0",
+  "red": "pending: unknown certify flags/write-like typos, invalid sweep ages, ordinary two-run resume behavior, incomplete-report rerun, and credential-file exec no-effect rejection",
+  "green": "pending",
+  "verification": "pending full declared phase gate",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",
     ".planning/phases/437-connectors-certify-native-cobra/TDD-LEDGER.md",
@@ -128,7 +134,7 @@
     "445ad06c fix(cli): route direct connectors action help",
     "55e32402 docs(planning): complete connectors certify native handoff"
   ],
-  "push": "second-correction planning aa39fd9d, RED 9a47ff3d, GREEN 7b6eaa58, and verification 974495d5 pushed; final delivery marker follows",
+  "push": "third-correction planning checkpoint pending; prior second-correction checkpoints remain pushed",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"

@@ -1,52 +1,40 @@
 # Phase 437 Summary
 
-Status: second accepted safety correction complete, verified, committed, and pushed.
+Status: third accepted safety/correctness correction in progress; verification pending.
 
 ## Identity
 
-- Session: `issue-437-pi-sol-high-20260719T095145Z`
+- Session: `issue-437-third-safety-correction-20260719`
 - Profile: Sol/high
 - Branch: `refactor/437-connectors-certify-native-cobra`
-- Exact start/base: `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b` / `feat/cli-architecture-v2`
-- Implementation head: `445ad06c`
+- Original exact start/base: `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b` / `feat/cli-architecture-v2`
+- Third-correction exact start: `437d13cf`
 - Parent #397, umbrella #407, draft parent PR #438
 
-## Delivered
+## Delivered before this correction
 
-`connectors` is now a native Cobra subtree with declared `list`, `catalog`, `inspect`, `man`, `docs`, hidden positional help, and nested `certify`. Certify declares the complete current command-contract flag set and adapts single, batch, and sweep execution through an invocation-local runtime interface. The existing in-process runner, report rendering, telemetry spans, context propagation, bounded batch workers, events, and exit 0/1/2/3 contract remain intact.
+`connectors` is a native Cobra subtree with `list`, `catalog`, `inspect`, `man`, `docs`, hidden positional help, and nested `certify`. Single, batch, and sweep certification use invocation-local runtime seams while preserving in-process execution, report rendering, telemetry, cancellation, bounded workers, events, and exit mapping. Canonical help, generated CLI docs, golden transcripts, and website data describe the bounded certification surface.
 
-Compatibility normalization preserves repeated/bare/assigned/space flags, legacy ignored operands and unknown flags, literal separators, malformed command heads, action/operand ownership, and invocation globals. Direct and trailing action help now intentionally renders the canonical connectors manual without running an operation. Invalid actions still exit 2. Only connectors/certify parser calls and connectors' legacy wrapper were removed; `internal/cli/parse.go` and both sanctioned dynamic `pm <connector> <path>` parser call sites are unchanged.
+Two prior review corrections were completed, verified, committed, and pushed. They made unsupported controls fail closed, restored execution ordering and help behavior, made batch write-disable controls dominate credential-file writes, gated writes on sandbox, rejected unsupported credential-file limits, constrained skip values, and corrected stale docs. Their recorded full gates passed at their respective heads.
 
-The canonical manual, generated `docs/cli/connectors.md`, golden transcript manual content, website CLI reference, and generated website data now document certify modes, JSON envelopes, credential-reference safety, and certification exits.
+## Third accepted correction
 
-## GSD / TDD
+All findings in `/tmp/pm-397-rereview2-437.log` are accepted:
 
-Doctor/list and plan-phase prompt generation passed. The adapter lacks `programming-loop`, so the manual universal loop was used. Six artifacts preceded production. Initial RED failed on absent native constructors. Two later focused RED checkpoints exposed operation output/usage on trailing help and connector-name capture on direct inspect help; both corrections were test-first and committed separately.
+- certify subtrees must reject every unknown flag before credential loading, runners, sweep, or effects, including write-like typos;
+- sweep age must be strictly positive and reasonably bounded;
+- ordinary completed prior reports must be reusable with `--resume`, without fabricated future timestamps, while incomplete reports rerun;
+- credential-file `exec` must remain prohibited and reject before effects; generic external execution code and claims must be removed;
+- usage exit docs, release-stage token examples (`ga`), flag/docs audit, and terminal planning state must be accurate.
 
-## Verification
+The plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state are reopened before RED tests or production changes. Full verification is intentionally marked pending until `make verify` and the declared phase gates actually pass.
 
-Final focused native tests passed (`3.989s`), repeated ×10 (`34.833s`), race (`40.842s`), router/golden/certify/telemetry (`111.919s`), and certify concurrency/event race (`2.395s`). The exact-start operational differential matched 21/21 unchanged cases; contextual action help is intentional. Runtime topic/bare/direct/positional/trailing text and JSON help passed. Connector validation checked 547 bundles with 0 findings. The explicit sample certify smoke returned exit 0, `ConnectorCertification`, pass, with empty stderr.
+## GSD / skills / execution decision
 
-Final `make verify` exited 0: CLI `431.305s`, certify `337.280s`, full vet/tests/build, docs validation, ordered local smoke, lint 0, and connector validation green. Website docs generation is drift-free. Website typecheck was not applicable because no existing TypeScript tool installation is present; no dependency install was attempted.
+`scripts/gsd doctor` and `scripts/gsd list` passed. `scripts/gsd prompt programming-loop ...` is absent from the adapter registry, so the manual universal runtime loop is the recorded fallback. Execution decision is `local_critical_path`: one bounded correction in the existing isolated issue worktree, no subagent tool, and no credentials, external commands, services, dependencies, PR, or review.
 
-## Safety / handoff
+Loaded skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-concurrency`, `golang-context`, `golang-code-style`, `golang-naming`, `golang-documentation`, `golang-spf13-cobra`, and `golang-lint`.
 
-Verification used fixture/replay/local sample paths and temporary roots only. No live credential checks, external writes/sweeps, connector definitions, dependencies, services, real credential values, generic tools, destructive/admin/production operations, PR, or review. Parent-orchestrator integration/review coverage remains intentionally pending.
+## Safety
 
-## Correction in progress
-
-At exact HEAD `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`, all five findings from `/tmp/pm-397-review-437.log` were accepted. Implementation head `a67d2ff9de84a2fabcd3b66097bf49518c1fa124` hides and rejects six unsupported controls before runner invocation, so replay is credential-free by refusal and cannot enter live/write stages. It restores exactly one single-certify span with connector validation before option parsing, credential-file load before batch parallel parsing with legacy error bytes/wrappers, and exact-only connectors help normalization. Canonical/generated/website docs now separate CLI pre-report exits (usage 2, validation 3, setup/runtime 1) from completed report outcomes (pass 0, failure 2, leaks 3).
-
-RED reproduced all findings. GREEN passed focused `3.004s`, native/certify/telemetry `108.532s`, base/current differential 5/5 byte-identical, race `29.046s`, ×10 `24.991s`, certify redaction/replay/concurrency race `349.263s`, exit focus `21.618s`, local sample exit 0/pass/redacted, docs/golden `24.275s`, and hash-stable website generation. Full CLI passed `435.572s`, certify `338.846s`, connector validation 547/0, and final `make verify` exited 0 in `468.36s` with CLI `444.436s`, certify `346.018s`, docs, smoke, lint, build, vet, and validation green. No live credentials/writes, services, dependencies, PR, or review.
-
-## Second correction complete
-
-At exact HEAD `0d743e54e06c9e27e550eacce9be7899a9e23d19`, every finding in `/tmp/pm-397-rereview-437.log` is accepted. The prior implementation still lets batch `--write=false` and `--skip=write` lose to credential-file `write: true`, discards credential-file sandbox/rate/budget constraints, accepts unsupported single credential/limit/modes controls, and ignores flow/schedule skip values. Architecture/PRD and connectors-help claims are also stale.
-
-Planning commit `aa39fd9d` is pushed. Focused RED now records the defects before production: unsupported single flags remained visible and invoked the runtime; 18 skip/mode-inapplicable cases performed effects; both batch write-disable forms preserved credential-file `write:true`; configured sandbox/rate/budget/limit constraints reached batch/runner; and stale architecture/PRD/help claims remained. The failing tests and updated RED ledger are the next commit/push checkpoint.
-
-The GREEN correction now hides/rejects unsupported single controls, allowlists only `--skip=write`, rejects mode-inapplicable inputs before runtime effects, applies batch write-disable overrides before credential validation, enforces sandbox for enabled batch writes, and rejects unsupported rate/budget/limit constraints before constructing runners. Architecture/PRD/help claims are corrected; CLI docs/goldens and website docs data are regenerated.
-
-Focused and effect-recorder tests pass, including repeated ×10 (`0.661s`) and race (`1.726s` CLI, `2.535s` certify). Full CLI passed `440.910s`; full certify passed `346.271s`. Runtime topic/bare/flag help parity, invalid action exit 2, no-effect invalid controls, credential-free local sample smoke, CLI docs/goldens, and hash-stable website full-data regeneration passed.
-
-Final `make verify` exited 0 in `7m36.852s`: CLI `434.190s`, certify `337.470s`, gofmt, tidy-check, vet, full tests, build, docs validation, ordered smoke, lint 0, and connector validation all passed. Explicit connectorgen rerun checked 547 bundles with zero findings. Website typecheck was not applicable because the existing tool is absent; no dependency installation was attempted. Verification remained fixture/synthetic-reference/temp-only, with no credentials, live services, external writes, dependencies, PR, or review. Verification artifact `974495d5` is pushed; this final delivery marker closes the correction.
+Implementation and verification are fixture/temp/in-process only. No credential values, credentialed connector checks, external credential commands, live services, external writes or sweeps, new dependencies, generic tools, destructive/admin actions, production changes, PR, or review are permitted.

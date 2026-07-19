@@ -62,3 +62,18 @@ Session `issue-437-second-safety-correction-20260719`; exact start `0d743e54e06c
 | S5 | Delivery | Finalize artifacts and commit/push; no credentials/services/dependencies/PR/review | Complete: verification artifact `974495d5` pushed; final delivery marker follows |
 
 Strict TDD gate: S1 failing tests and observed failures must be captured and committed before any production edit. All data remains fixture/synthetic-reference/temp-only; no secret values, credential resolution, live checks, external writes, services, dependency changes, PR, or review.
+
+## Third accepted safety/correctness correction ledger
+
+Session `issue-437-third-safety-correction-20260719`; exact start `437d13cf`; all findings in `/tmp/pm-397-rereview2-437.log` accepted. The adapter's programming-loop command is unavailable, so the recorded fallback is the manual universal runtime loop.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| T0 | Planning | Six artifacts reopened with verification false, accepted findings, GSD fallback, skills, safety scope, flag/docs audit, RED/GREEN plan, and checkpoints | Complete; commit/push pending |
+| T1 | RED | Unknown certify flags and write-like typos reject before credential load/runner/sweep; non-positive and excessive sweep age reject before effects; credential-file exec rejects before effects; ordinary two-run resume skips completed reports and reruns incomplete reports | Pending |
+| T2 | GREEN safety | Strict certify flag parsing; bounded positive sweep age; exec removed/rejected; no generic external execution path | Pending |
+| T3 | GREEN correctness/docs | Completed-report resume semantics; incomplete reports rerun; usage exit, `ga`, resume/sweep/exec docs and generated artifacts corrected | Pending |
+| T4 | Verify | Focused/repeated/race/resume/sweep/no-effect/audit/docs generation/local smoke/full CLI/certify/gofmt/vet/test/build/make verify/connectorgen | Pending |
+| T5 | Delivery | Truthful final artifacts, coherent commits, active-branch push; no credentials/external commands/services/dependencies/PR/review | Pending |
+
+Strict TDD gate: T1 failures and effect-recorder observations must be captured and committed before production edits. Tests use only fixtures, synthetic references, in-process fakes, and `t.TempDir`; no test may invoke an external credential command.

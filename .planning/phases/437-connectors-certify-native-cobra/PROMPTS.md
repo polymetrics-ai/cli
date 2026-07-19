@@ -48,3 +48,15 @@ Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testi
 Downstream artifact: planning `aa39fd9d`, RED `9a47ff3d`, GREEN `7b6eaa58`, and verification `974495d5` checkpoints pushed; this final delivery marker closes the correction.
 
 Verification result: pass. Focus/effect/no-op, repeated ×10 (`0.661s`), race (CLI `1.726s`, certify `2.535s`), full CLI (`440.910s`), full certify (`346.271s`), runtime help/no-effect/sample smoke, CLI docs/goldens, website full-data regeneration, gofmt/vet/test/build, `make verify` (`7m36.852s`), and connectorgen 547/0 pass. No credentials, services, dependencies, PR, or review.
+
+## Third accepted safety/correctness correction kickoff snapshot
+
+Task: at exact HEAD `437d13cf`, accept every finding in `/tmp/pm-397-rereview2-437.log`; update and push artifacts, then add/commit/push RED tests before production. Reject every unknown certify flag and write-like typo before effects; require a positive, reasonably bounded sweep age; make ordinary completed reports reusable by `--resume` while rerunning incomplete reports; reject credential-file `exec` before effects and remove generic external execution code/docs; correct usage exits, release-stage token `ga`, flags/docs audit, and terminal artifact honesty. Fixture/temp and in-process fakes only; no external commands, credentials, services, dependencies, PR, or review.
+
+Commands: `scripts/gsd doctor` and `scripts/gsd list` passed; `scripts/gsd prompt programming-loop ...` returned `unknown GSD command`, so the manual universal runtime loop applies. Execution decision: `local_critical_path` (bounded correction, existing isolated issue worktree, no subagent tool).
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-concurrency`, `golang-context`, `golang-code-style`, `golang-naming`, `golang-documentation`, `golang-spf13-cobra`, and `golang-lint`.
+
+Downstream artifact: pending strict RED → GREEN → verify execution.
+
+Verification result: pending; `RUN-STATE.json.verificationPassed` and `VERIFICATION.md` remain false until the declared full gate exits 0.

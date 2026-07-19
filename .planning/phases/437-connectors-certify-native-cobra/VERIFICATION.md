@@ -104,3 +104,26 @@ Second-correction start: `0d743e54e06c9e27e550eacce9be7899a9e23d19`; session `is
 - [x] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` pass; verify exit 0 in `7m36.852s` (CLI `434.190s`, certify `337.470s`, smoke/lint/docs/build/vet green).
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs` reports 547 checked, zero findings (both verify and explicit rerun).
 - [x] Final verification artifacts committed and active issue branch pushed (`974495d5`); no dependencies/services/credentials/PR/review.
+
+## Third accepted safety/correctness correction checklist
+
+Third-correction start: `437d13cf`; session `issue-437-third-safety-correction-20260719`.
+
+- [x] Read and accept every finding in `/tmp/pm-397-rereview2-437.log`.
+- [x] Reopen plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state before tests or production edits.
+- [ ] Commit/push the planning checkpoint before RED tests.
+- [ ] RED: every unknown certify flag, including write-like typos, rejects before credential loading, runner, sweep, or other effects.
+- [ ] RED: `--older-than` rejects zero, negative, and unreasonably large values before sweep.
+- [ ] RED: ordinary two-run `--resume` reuses completed prior reports without future timestamps; incomplete reports rerun.
+- [ ] RED: any credential-file `exec` entry rejects before runner effects; no test executes an external command.
+- [ ] Remove external credential execution code and all docs/examples/claims.
+- [ ] Re-audit every certify flag across modes and every CLI/manual/website claim.
+- [ ] Correct usage exit documentation and release-stage token examples to `ga`.
+- [ ] Focused and repeated unknown-flag/no-effect/exec/resume/sweep tests pass under race.
+- [ ] Runtime topic/bare/flag help, invalid-action exit, docs/golden generation, website generation/drift, and manual parity pass.
+- [ ] Credential-free local sample smoke passes under a temporary root.
+- [ ] Full CLI and certify suites pass.
+- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` pass.
+- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` reports zero findings.
+- [ ] Final artifacts record only actual terminal evidence and align `verificationPassed` with the full gate.
+- [ ] Commit/push only the active issue branch; no credentials, external commands, services, dependencies, PR, or review.
