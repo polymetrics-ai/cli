@@ -74,8 +74,18 @@ func TestRLMCommandIsNativeCobraSubtree(t *testing.T) {
 }
 
 func TestRLMRunRoutesModesThroughInjectedAnalyzers(t *testing.T) {
-	for _, mode := range []string{"deterministic", "fixture", "model", "agent"} {
-		t.Run(mode, func(t *testing.T) {
+	const request = "factory-request-content"
+	tests := []struct {
+		mode               string
+		wantFactoryRequest bool
+	}{
+		{mode: "deterministic"},
+		{mode: "fixture"},
+		{mode: "model"},
+		{mode: "agent", wantFactoryRequest: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.mode, func(t *testing.T) {
 			root := t.TempDir()
 			specPath := writeRLMNativeSpec(t)
 			ctxKey := rlmNativeContextKey{}
@@ -88,21 +98,27 @@ func TestRLMRunRoutesModesThroughInjectedAnalyzers(t *testing.T) {
 				"--spec", "ignored", "--spec="+specPath,
 				"--in", "ignored-in", "--in=contacts",
 				"--out", "ignored-out", "--out=scores",
-				"--mode", "ignored-mode", "--mode="+mode,
-				"--request", "ignored request", "--request=private request",
+				"--mode", "ignored-mode", "--mode="+tt.mode,
+				"--request", "ignored request", "--request="+request,
 				"--dry-run=false", "--dry-run",
 				"--unknown", "ignored", "--unknown=ignored", "--=x", "---x",
 				"--help", "help", "--", "ignored-after-literal", "-h",
 			)
 			if err != nil {
-				t.Fatalf("execute: %v; stdout=%s", err, stdout)
+				t.Fatalf("execute failed: %T", err)
 			}
 			if len(harness.factoryCalls) != 1 {
-				t.Fatalf("factory calls = %#v", harness.factoryCalls)
+				t.Fatalf("factory call count = %d, want 1", len(harness.factoryCalls))
 			}
 			call := harness.factoryCalls[0]
-			if call.mode != mode || call.request != "private request" {
-				t.Fatalf("factory call = %#v, want mode=%q request routed", call, mode)
+			if call.mode != tt.mode {
+				t.Fatalf("factory mode = %q, want %q", call.mode, tt.mode)
+			}
+			if tt.wantFactoryRequest && call.request != request {
+				t.Fatal("agent factory did not receive request content")
+			}
+			if !tt.wantFactoryRequest && call.request != "" {
+				t.Fatal("non-agent factory received request content")
 			}
 			if call.contextValue != "kept" {
 				t.Fatalf("factory context value = %v, want kept", call.contextValue)
@@ -123,12 +139,12 @@ func TestRLMRunRoutesModesThroughInjectedAnalyzers(t *testing.T) {
 			if harness.closeCalls != 1 {
 				t.Fatalf("close calls = %d, want 1", harness.closeCalls)
 			}
-			if strings.Contains(stdout, "private request") {
-				t.Fatalf("request leaked to output: %s", stdout)
+			if strings.Contains(stdout, request) {
+				t.Fatal("request leaked to output")
 			}
 			var result rlm.RunResult
 			decodeOneJSON(t, stdout, &result)
-			if result.Mode != mode || result.InTable != "contacts" || result.OutTable != "scores" || !result.DryRun {
+			if result.Mode != tt.mode || result.InTable != "contacts" || result.OutTable != "scores" || !result.DryRun {
 				t.Fatalf("result = %#v", result)
 			}
 		})
@@ -156,8 +172,27 @@ func TestRLMRunPreservesFlagAndOutputForms(t *testing.T) {
 	if text != want {
 		t.Fatalf("text output = %q, want %q", text, want)
 	}
+	if harness.factoryCalls[0].request != "" {
+		t.Fatal("fixture factory received bare request content")
+	}
+
+	harness = newRLMNativeHarness(root)
+	agentText, err := harness.execute(false,
+		"rlm", "run",
+		"--spec="+specPath,
+		"--in=contacts",
+		"--out=scores",
+		"--mode=agent",
+		"--request",
+	)
+	if err != nil {
+		t.Fatalf("agent text run failed: %T", err)
+	}
+	if agentText != strings.Replace(want, "mode=fixture", "mode=agent", 1) {
+		t.Fatal("agent text output changed")
+	}
 	if harness.factoryCalls[0].request != "true" {
-		t.Fatalf("bare --request = %q, want true", harness.factoryCalls[0].request)
+		t.Fatal("agent factory did not receive bare request content")
 	}
 
 	harness = newRLMNativeHarness(root)

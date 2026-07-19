@@ -10,9 +10,9 @@ GSD route: `scripts/gsd doctor` and `scripts/gsd list` pass; `scripts/gsd prompt
 
 Safety prompt: never print request values in test diagnostics or command output. Do not call a model, Temporal, Podman, worker service, runtime service, connector, or credential. Do not add dependencies, generic execution surfaces, docs/website/golden churn, PR, or review. Implement only the mode-gated factory seam after focused RED evidence.
 
-Downstream artifact: pending.
+Downstream artifact: correction RED complete. The focused mode-routing test failed before production edits for deterministic, fixture, and model because non-agent factories received request content; agent passed. Failure output contained no request value.
 
-Verification result: pending focused/race/1,984-case differential/full RLM/full CLI/request non-disclosure/gofmt/vet/build/diff gates.
+Verification result: RED expected failure captured in `0.562s`; GREEN and focused/race/1,984-case differential/full RLM/full CLI/request non-disclosure/gofmt/vet/build/diff gates remain pending.
 
 ## Original kickoff snapshot
 

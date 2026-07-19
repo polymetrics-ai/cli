@@ -1,12 +1,12 @@
 # Phase 434 Summary
 
-Status: review correction active from exact clean head `92f265875e304feda57eef88b599ef8d2e9928da`; correction verification is pending.
+Status: correction RED captured from exact clean head `92f265875e304feda57eef88b599ef8d2e9928da`; production correction and verification are pending.
 
 ## Review correction
 
 The review found that request content crosses the injected analyzer-factory seam for deterministic, fixture, and model modes, despite the phase contract limiting it to agent mode. Built-in non-agent analyzers ignore the argument, so no public output change or observed leak occurred. The bounded correction will first add a failing factory-boundary test, then gate the factory request on `mode == "agent"` without changing parsing, output, analyzers, services, dependencies, docs, website, or goldens.
 
-Correction session: `issue-434-review-correction-20260719T061313Z`. Execution decision: `local_critical_path`. GSD doctor/list pass; the adapter still lacks `programming-loop`, so the manual universal runtime loop is recorded. No request values may appear in diagnostics or verification output. No model, Temporal, Podman, worker service, dependency, PR, or review is permitted.
+Correction session: `issue-434-review-correction-20260719T061313Z`. Execution decision: `local_critical_path`. GSD doctor/list pass; the adapter still lacks `programming-loop`, so the manual universal runtime loop is recorded. The focused test-only change failed before production edits for deterministic, fixture, and model while agent passed; diagnostics contained no request value. No model, Temporal, Podman, worker service, dependency, PR, or review is permitted.
 
 ## Original identity
 

@@ -7,8 +7,8 @@ Invocation: `issue-434-pi-sol-high-20260719T053630Z`; profile `Sol`; thinking `h
 - [x] Review log read; six artifacts updated before correction test/production edits.
 - [x] GSD doctor/list rerun; missing `programming-loop` command and manual fallback recorded.
 - [x] Required GSD/Go/CLI/RLM skills and canonical runtime/CLI parity docs reloaded.
-- [ ] RED proves deterministic/fixture/model factory request is empty and agent factory receives request content.
-- [ ] Test failures and verification output do not print request values.
+- [x] RED proves deterministic/fixture/model factory request is empty and agent factory receives request content (`0.562s`, three expected non-agent failures before production edits).
+- [x] RED diagnostics do not print request values; final verification output guard remains pending.
 - [ ] Smallest agent-only factory seam implemented; no service/model implementation call.
 - [ ] Focused RLM CLI tests pass.
 - [ ] Focused race tests pass.

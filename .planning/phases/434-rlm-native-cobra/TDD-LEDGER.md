@@ -28,10 +28,14 @@ Correction TDD contract:
 | Correction step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | C0 | Planning | Update PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY at exact correction start before tests or production edits | Complete |
-| C1 | RED | Update injected-factory expectations, then run focused mode-routing test before production edits | Pending |
+| C1 | RED | `go test ./internal/cli -run '^TestRLMRunRoutesModesThroughInjectedAnalyzers$' -count=1` | Failed as required in `0.562s`: deterministic, fixture, and model each reported `non-agent factory received request content`; agent passed; no request value was printed |
 | C2 | GREEN | Add smallest agent-only request gate and rerun focused tests | Pending |
 | C3 | Refactor/verify | Focused, race, 1,984 differential, full RLM/CLI, request non-disclosure, gofmt/vet/build/diff | Pending |
 | C4 | Delivery | Finalize six artifacts, commit, push; no PR/review | Pending |
+
+### Correction RED evidence
+
+The complete test-only change preceded production edits. The focused mode-routing test failed for exactly the three non-agent modes because the factory seam received non-empty request content; the agent-mode subtest passed. Diagnostics name only the affected boundary and never print the request value. The same tests retain context, analyzer request, closer, JSON result, dry-run, and request non-disclosure assertions. A companion flag/output test now requires fixture's factory request to remain empty while an injected agent fake still receives bare `--request` as the legacy `true` value.
 
 ## Original RED / GREEN / refactor log
 
