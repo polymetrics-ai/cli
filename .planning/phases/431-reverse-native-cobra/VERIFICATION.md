@@ -5,7 +5,7 @@ Invocation session: `issue-431-pi-openai-codex-gpt-5.6-sol-high-20260719T010451Z
 ## TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.
-- [ ] Focused RED captured before production edits.
+- [x] Focused RED captured before production edits (`undefined: newReverseCobraCommand`).
 - [ ] Native reverse list/plan/preview/approval-bearing run/status/help tree; legacy wrapper removed.
 - [ ] All current flags typed with repeated/bare/assigned compatibility.
 - [ ] Bare/text/JSON/long/short/positional help parity.

@@ -16,7 +16,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity/exact start before test or production edits | Complete |
-| 1 | RED | Focused native reverse tree, parser parity, exit, redaction, typed-confirmation, and ordering tests | Pending |
+| 1 | RED | `go test ./internal/cli -run 'TestReverse(Command|Local|PlanJSON|FirstOperand|HelpTrailing|ExactExit|Cancellation)' -count=1` | Failed as required before production edits: `internal/cli/reverse_native_cobra_test.go:23:9: undefined: newReverseCobraCommand` |
 | 2 | GREEN | Native reverse tree + typed handlers + reverse-only normalization/private operands; remove wrapper/parser use | Pending |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI/reverse app and exact-start differential | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, established ordered `make verify` | Pending |
@@ -36,6 +36,17 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 - Local fake execution cannot occur before plan creation, explicit preview, valid approval, and required typed confirmation. Invalid/missing approval and confirmation produce zero writer calls. Confirmed execution produces exactly one local fake/temp-state write, then replay is rejected.
 - No external HTTP, SQL, connector, runtime, credential, or destructive write is performed.
 
-## Evidence
+## Exact RED
 
-Exact RED, GREEN, refactor, parity, and final gate output will be appended as commands run. Token values must never be copied into this ledger.
+Captured after the complete focused test-only edit and before any production edit:
+
+```text
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/reverse_native_cobra_test.go:23:9: undefined: newReverseCobraCommand
+FAIL\tpolymetrics.ai/internal/cli [build failed]
+FAIL
+```
+
+The missing native constructor is intentional. The tests specify native ownership and every current flag; local plan/preview/approval-bearing run/status/list; all manual routes; trailing help/literal/unknown/action-discovery behavior; strict first-operand ownership; exact exit taxonomy; token nondisclosure; typed confirmation; single-use approval; cancellation; and no local fake writer invocation before all gates pass. Tests use only built-in local connectors and temporary state. No external write, service, credential, dependency, or token value entered the evidence.
+
+Exact GREEN, refactor, parity, and final gate output will be appended as commands run. Token values must never be copied into this ledger.
