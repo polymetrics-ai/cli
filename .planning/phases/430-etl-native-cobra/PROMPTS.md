@@ -26,3 +26,17 @@ Downstream artifact: focused test-only RED, ETL native Cobra command/typed handl
 Verification route: `scripts/gsd prompt verify-work 430` generated 7129 bytes and was executed inline under the manual universal loop.
 
 Verification result: pass. Initial focused RED failed before production edits at `internal/cli/etl_cli_test.go:22:9: undefined: newETLCobraCommand`, as required. Focused GREEN passed, then local review's invalid-action trailing-help test failed before its correction. Focused/repeated/race/router/golden/full CLI/app/repository, 20-case exact-start differential, runtime help, generated docs/website, gofmt, vet, build, scope/dependency guards, and final `make verify` pass. No external connector/service, secret, dependency, standalone reverse operation, PR, or review occurred; final `make verify` used its existing temporary-root local approval-gated smoke.
+
+## Bounded correction snapshot
+
+Task: Correct #430 from exact start `9b0020abde7cd7e007412a0294db6e4cb576f5f3` using `/tmp/pm-397-review-430.log`: preserve the exact legacy first run-ID operand for `etl status` before shared normalization, including `--help`, `-h`, literal `--`, and unknown flag-shaped values followed by a valid ID.
+
+GSD route: doctor/list passed. `scripts/gsd prompt programming-loop 430-etl-status-operand-correction` failed because the registered adapter still lacks that command; manual universal-loop fallback recorded. `scripts/gsd prompt quick "Issue 430 bounded correction ..."` generated 5778 bytes and is executed inline.
+
+Execution decision: `local_critical_path` — coupled status/router/test correction in the assigned isolated worktree; no disjoint worker scope and no subagent tool. Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-spf13-cobra`.
+
+Safety: temporary local project/run only; no secrets, credentials, optional services, external connectors, dependencies, reverse operation, PR, or review. Preserve all non-status ETL/help behavior and byte-identical docs/manual surfaces.
+
+Downstream artifact: correction planning complete before tests/production; differential RED, private capture GREEN, verification, commit, and push pending.
+
+Verification result: pending; `verificationPassed=false` until focused/adversarial/race/base differential/full CLI/repository, gofmt/vet/build/diff, help/docs parity, and `make verify` pass.

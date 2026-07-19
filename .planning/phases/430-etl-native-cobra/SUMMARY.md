@@ -1,6 +1,6 @@
 # Phase 430 Summary
 
-Status: complete, verified, and pushed through implementation head `fc88f1694ee73593f1130f866bd6166be18eb661`; final evidence checkpoint pending.
+Status: bounded correction active from exact head `9b0020abde7cd7e007412a0294db6e4cb576f5f3`; planning artifacts updated, correction RED pending, verification non-terminal.
 
 ## Identity
 
@@ -34,3 +34,7 @@ Local review found that `etl bogus --help|-h` rendered the namespace manual and 
 Focused/repeated/race/router/golden/full CLI/app/repository gates pass. Exact start-vs-head differential matched 20/20 preserved cases. Runtime help topic/bare/long-help is byte-identical; JSON/manual/invalid-action checks pass. Generated CLI docs and website generation are clean with no tracked docs delta. Gofmt, vet, build, dependency/scope guards, and final `make verify` pass (CLI `356.154s`, certify `335.400s`, lint 0, connector validation 547/0).
 
 No `go.mod`, `go.sum`, connector definition, docs/website, golden, or unrelated namespace delta exists. No PR or external review was created.
+
+## Bounded correction
+
+`/tmp/pm-397-review-430.log` found that shared normalization can discard the first `etl status` operand when it looks like help, literal separation, or an unknown flag, then query a later valid ID. Exact legacy behavior owns the first post-action token and fails closed. The correction will add differential RED coverage, capture that operand into invocation-private context state before normalization, expose no argv/internal carrier, preserve all other ETL/help behavior, and rerun the complete declared gates. No completion claim is made until `make verify`, commit, and push succeed.

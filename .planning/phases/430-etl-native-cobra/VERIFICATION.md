@@ -54,4 +54,31 @@ Invocation session: `issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z
 - [x] Planning, RED, GREEN, and correction checkpoints pushed; final evidence push pending.
 - [x] No PR or review created.
 
-Result: pass at implementation head `fc88f1694ee73593f1130f866bd6166be18eb661`; `verificationPassed=true` for the complete declared gate set.
+Historical result: pass at implementation head `fc88f1694ee73593f1130f866bd6166be18eb661`; superseded by the bounded correction below.
+
+## Bounded correction from `9b0020ab`
+
+### TDD/behavior
+
+- [x] Review log read and all issue-local artifacts updated before correction production edits.
+- [ ] RED differential proves exact-base first-operand ownership for `--help`, `-h`, literal `--`, and unknown flag followed by a valid run ID.
+- [ ] Adversarial test proves internal-carrier-shaped argv cannot set or override the private status operand.
+- [ ] Capture occurs before shared normalization and is scoped only to `etl status`.
+- [ ] Status reads invocation-private state; no hidden flag, argv carrier, exported key, or shared mutable state exists.
+- [ ] Other ETL actions and namespace/action help remain unchanged.
+
+### Gates
+
+- [ ] Focused correction RED then GREEN.
+- [ ] Adversarial/internal-carrier tests.
+- [ ] Focused repeated and `-race`.
+- [ ] Exact legacy-base differential for the four operand classes.
+- [ ] Existing ETL/router/golden/manual tests.
+- [ ] Full `go test ./internal/cli/...` and `go test ./...`.
+- [ ] `gofmt -w cmd internal`; `go vet ./...`; `go build ./cmd/pm`.
+- [ ] Runtime `pm help etl`, bare `pm etl`, and `pm etl --help`; generated docs/website/golden diff clean or N/A.
+- [ ] `make verify`.
+- [ ] `git diff --check`; no dependency, connector-definition, docs/website, unrelated namespace, or generated churn.
+- [ ] Exact evidence committed and pushed; no services, credentials, dependencies, PR, or review.
+
+Result: pending from correction start `9b0020abde7cd7e007412a0294db6e4cb576f5f3`; `verificationPassed=false` until every declared correction gate, including `make verify`, exits 0.

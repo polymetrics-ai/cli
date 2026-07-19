@@ -59,3 +59,17 @@ No secrets, external connector checks, optional runtime services, dependency add
 ## Completion
 
 Completed and verified at implementation head `fc88f1694ee73593f1130f866bd6166be18eb661`. Strict initial RED and a test-first local-review correction preceded production fixes. Focused/repeated/race/router/golden/full CLI/app/repository, 20-case exact-start differential, runtime help, generated docs/website parity, gofmt, vet, build, scope/dependency guards, and `make verify` passed. No PR or external review was created.
+
+## Bounded correction from `9b0020ab`
+
+Review evidence in `/tmp/pm-397-review-430.log` identifies one fail-open parity gap: shared ETL normalization consumes the first `status` run-ID operand when that exact operand is `--help`, `-h`, literal `--`, or an unknown flag, allowing a later valid ID to be queried. The exact legacy base owns the first post-action token unconditionally and must fail closed on that token.
+
+Correction plan:
+
+1. Update all issue-local planning/TDD/verification artifacts before production edits and set verification non-terminal.
+2. Add a focused table-driven RED differential test that creates a valid local run, compares native output against a legacy first-operand oracle for `--help`, `-h`, `--`, and an unknown flag followed by the valid ID, and proves argv cannot override private capture through an internal-carrier-shaped token.
+3. Before shared ETL normalization, capture only `etl status`'s first operand into invocation-private context state and remove that operand from Cobra-visible argv. The status action reads only this private state. Introduce no hidden/internal argv flag or carrier; all argv tokens remain user operands/flags and cannot set or override state.
+4. Preserve every other ETL action, namespace/action help path, globals, unknown-tail tolerance, output/error taxonomy, docs/manual bytes, and dependency-free behavior.
+5. Run focused, adversarial, repeated/race, exact-base differential, full CLI/repository, gofmt/vet/build/diff, and `make verify`; update artifacts, commit, and push. No services, credentials, dependencies, PR, or review.
+
+Execution decision: `local_critical_path` — one coupled router/status/test correction in the existing isolated issue worktree; no independent mutable scope exists and the user prohibited review/PR work.

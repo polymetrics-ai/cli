@@ -20,7 +20,11 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 2 | GREEN | Native ETL tree + typed handlers + ETL-only normalization; remove ETL wrapper/parser use | Pass: focused contract `13.396s`; ETL/router focused suite `27.999s` |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI/app and exact-start differential | Pass |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pass |
-| 5 | Parity/delivery | Runtime help, temporary docs/website/generated checks, scope/dependency guards, commit/push | Pass; final evidence push pending |
+| 5 | Parity/delivery | Runtime help, temporary docs/website/generated checks, scope/dependency guards, commit/push | Pass; final evidence pushed at `9b0020ab` |
+| 6 | Correction planning | Read `/tmp/pm-397-review-430.log`; update six artifacts from exact correction start `9b0020ab` before production edits | Complete |
+| 7 | Correction RED | Differential table for status operands `--help`, `-h`, `--`, unknown flag + valid ID; adversarial argv/internal-carrier override case | Pending |
+| 8 | Correction GREEN | Private action-specific operand capture before shared normalization; status consumes context-only state | Pending |
+| 9 | Correction verification | Focused/adversarial/repeated/race/base differential/full CLI/repository, help parity, gofmt/vet/build/diff, `make verify`, commit/push | Pending |
 
 ## RED contract
 
@@ -80,3 +84,13 @@ The correction bounds every unrecognized ETL action behind Cobra's literal separ
 - Scope/dependency guards pass: no `go.mod`, `go.sum`, connector definition, `docs/cli`, website, or unrelated namespace delta.
 
 No external connector, optional runtime service, secret input, dependency, standalone reverse operation, PR, or review was used. The required final `make verify` ran its existing temporary-root local smoke, including the repository's built-in plan → preview → approval → run check.
+
+## Bounded status-operand correction contract
+
+Correction start: `9b0020abde7cd7e007412a0294db6e4cb576f5f3`.
+
+The first token after legacy `etl status` is always the run ID, including `--help`, `-h`, literal `--`, and unknown flag-shaped strings. A later valid run ID must never replace it. RED will compare native CLI transcripts with a local oracle that executes the exact legacy ownership rule (`args[1]`) against the same temporary project/run. It must fail on current code because normalization removes or Cobra consumes the first operand and reaches the valid ID.
+
+The implementation seam is invocation-private state captured before `normalizeNativeStringArrayArgs`. It is action-specific to `etl status`, is not represented by a hidden flag or argv carrier, and cannot be supplied or overridden by internal-carrier-shaped argv. The status handler must use only the captured value; missing capture remains usage. Other ETL actions/help and all public output remain unchanged.
+
+GSD evidence: `scripts/gsd doctor` and `scripts/gsd list` passed; mandatory `scripts/gsd prompt programming-loop ...` remains unavailable (`unknown GSD command`), so the documented manual universal-loop fallback remains active. `scripts/gsd prompt quick "Issue 430 bounded correction ..."` generated 5778 bytes and is executed inline. Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-spf13-cobra`.

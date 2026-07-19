@@ -13,15 +13,18 @@
   "thinking": "high",
   "endedAt": "20260718T233741Z",
   "endingImplementationHead": "fc88f1694ee73593f1130f866bd6166be18eb661",
-  "status": "complete_verified_final_evidence_prepared",
-  "verificationPassed": true,
+  "correctionStartingHead": "9b0020abde7cd7e007412a0294db6e4cb576f5f3",
+  "correctionStartedAt": "20260718T235826Z",
+  "status": "correction_planned_red_pending",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
     "planPhase": "passed_generated_and_executed_inline",
     "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
     "fallback": "manual_gsd_universal_runtime_loop",
-    "verifyWorkPrompt": "passed_7129_bytes_executed_inline"
+    "verifyWorkPrompt": "passed_7129_bytes_executed_inline",
+    "correctionQuickPrompt": "passed_5778_bytes_executed_inline"
   },
   "orchestrationDecisions": [
     {
@@ -58,11 +61,16 @@
       "cycle": "summary",
       "decision": "local_critical_path",
       "reason": "issue-local evidence is finalized for commit and push; no PR or review was created as requested"
+    },
+    {
+      "cycle": "bounded-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "review log identifies one coupled ETL status/router normalization gap; this isolated worktree owns the scope, no disjoint mutable worker scope exists, and the user prohibited PR and review"
     }
   ],
   "red": "focused CLI build failed before production edits: internal/cli/etl_cli_test.go:22:9 undefined newETLCobraCommand",
-  "green": "focused contract passed in 13.396s; broader ETL/router focused suite passed in 27.999s; post-review correction focused contract passed in 13.397s",
-  "verification": "pass: focused/repeated/race/router/golden/full CLI/app/repository; exact differential 20/20; runtime help/docs/website parity; gofmt, vet, build, scope/dependency; make verify CLI 356.154s, certify 335.400s, lint 0, connector validation 547/0",
+  "green": "historical pass through 9b0020ab; bounded status-operand correction RED/GREEN pending",
+  "verification": "pending bounded correction gates from 9b0020ab, including make verify",
   "files": [
     ".planning/phases/430-etl-native-cobra/PLAN.md",
     ".planning/phases/430-etl-native-cobra/TDD-LEDGER.md",
@@ -83,7 +91,7 @@
     "1f2d1b74 test(cli): expose etl invalid action help bypass",
     "fc88f169 fix(cli): guard etl invalid action help boundary"
   ],
-  "push": "planning, initial RED/GREEN, and correction RED/GREEN checkpoints pushed; final evidence checkpoint prepared for push",
+  "push": "historical checkpoints pushed through 9b0020ab; bounded correction plan/test/implementation/final evidence checkpoints pending",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture and local temporary connectors only; no secrets, external credential checks, optional services, dependencies, standalone reverse execution, unrelated writes, PR, or review; required make verify used its existing temporary-root approval-gated smoke"
