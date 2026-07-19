@@ -1,0 +1,123 @@
+{
+  "phase": 430,
+  "issue": 430,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/430-etl-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "6c94754c58185df5aac53bd97587603c3154b1d5",
+  "invocationSession": "issue-430-pi-openai-codex-gpt-5.6-sol-high-20260718T225346Z",
+  "startedAt": "20260718T225346Z",
+  "model": "openai-codex/gpt-5.6-sol",
+  "thinking": "high",
+  "endedAt": "20260718T233741Z",
+  "endingImplementationHead": "fc88f1694ee73593f1130f866bd6166be18eb661",
+  "correctionStartingHead": "9b0020abde7cd7e007412a0294db6e4cb576f5f3",
+  "correctionStartedAt": "20260718T235826Z",
+  "correctionEndedAt": "20260719T003454Z",
+  "correctionImplementationHead": "a55ca720c862682423abacdffb073675529bd14b",
+  "status": "correction_complete_verified_final_evidence_prepared",
+  "verificationPassed": true,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "verifyWorkPrompt": "passed_7129_bytes_executed_inline",
+    "correctionQuickPrompt": "passed_5778_bytes_executed_inline"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "next serialized Phase 9 ETL namespace is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited PR, review, services, dependencies, and reverse execution"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "the complete focused ETL tree, flags, operations, validation, help, compatibility, action-boundary, cancellation, progress, and output tests were added before production edits; compilation failed on the intentionally missing native constructor"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native ETL actions and typed current flags, ETL-only legacy-tail normalization, bounded local runs, sync validation, cancellation, progress, output contracts, and ETL-only parser removal pass focused and broader ETL/router tests without services"
+    },
+    {
+      "cycle": "correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "local behavior review found invalid ETL actions followed by long or short help could render namespace help and exit zero; the focused action-discovery test failed before correction production edits"
+    },
+    {
+      "cycle": "correction-green",
+      "decision": "local_critical_path",
+      "reason": "unrecognized ETL actions are bounded behind Cobra's literal separator before help parsing; focused, repeated, race, and router/golden/help preservation gates pass"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused, repeated, race, router, golden, full CLI/app/repository, 20-case differential, help/docs/website, gofmt, vet, build, scope, dependency, and make verify gates passed"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "issue-local evidence is finalized for commit and push; no PR or review was created as requested"
+    },
+    {
+      "cycle": "bounded-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "review log identifies one coupled ETL status/router normalization gap; this isolated worktree owns the scope, no disjoint mutable worker scope exists, and the user prohibited PR and review"
+    },
+    {
+      "cycle": "bounded-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "the focused differential table and argv-carrier adversarial test were added in the coupled ETL test file; all requested first-operand classes diverged before any correction production edit"
+    },
+    {
+      "cycle": "bounded-correction-green",
+      "decision": "local_critical_path",
+      "reason": "action-specific capture now owns the first etl status operand before shared normalization through unexported invocation context state; differential/adversarial and all ETL tests pass"
+    },
+    {
+      "cycle": "bounded-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused, adversarial, repeated, race, actual legacy-base 5/5 differential, router/golden/manual, full CLI/repository, runtime help/docs, gofmt, vet, build, diff, scope, dependency, and make verify gates passed"
+    },
+    {
+      "cycle": "bounded-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "correction evidence is terminal and prepared for final commit/push; no PR or review route was invoked"
+    }
+  ],
+  "red": "historical constructor RED plus bounded correction RED: all five status first-operand differential cases diverged before correction production edits (help, short help, literal separator, unknown flag, internal-carrier-shaped token)",
+  "green": "bounded correction differential/adversarial passed in 10.113s; all ETL tests passed in 24.512s; repeated 48.220s; focused race 110.257s; all ETL race 276.643s",
+  "verification": "pass: exact legacy-base binary differential 5/5 fail-closed; router/golden/manual 7.683s; full CLI 363.755s; full repository 372.77s wall; runtime help/docs clean; gofmt/vet/build/diff/scope/dependency clean; make verify 389.90s wall with CLI 366.499s, certify 335.927s, lint 0, connectors 547/0",
+  "files": [
+    ".planning/phases/430-etl-native-cobra/PLAN.md",
+    ".planning/phases/430-etl-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/430-etl-native-cobra/VERIFICATION.md",
+    ".planning/phases/430-etl-native-cobra/PROMPTS.md",
+    ".planning/phases/430-etl-native-cobra/SUMMARY.md",
+    ".planning/phases/430-etl-native-cobra/RUN-STATE.json",
+    "internal/cli/etl_cli_test.go",
+    "internal/cli/etl_cli.go",
+    "internal/cli/cobra_router.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/cli.go"
+  ],
+  "commits": [
+    "00963f53 docs(planning): plan etl native cobra slice",
+    "cdbf5b63 test(cli): specify native cobra etl contract",
+    "35c811fb refactor(cli): nativize etl namespace",
+    "1f2d1b74 test(cli): expose etl invalid action help bypass",
+    "fc88f169 fix(cli): guard etl invalid action help boundary",
+    "05a441f7 docs(planning): plan etl status operand correction",
+    "4f760cab test(cli): expose etl status operand normalization gap",
+    "a55ca720 fix(cli): preserve etl status first operand"
+  ],
+  "push": "bounded correction planning, RED, and GREEN checkpoints pushed; final evidence checkpoint prepared for immediate push",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "not_run_user_prohibited_review",
+  "safety": "fixture and local temporary connectors only; no secrets, live/user credentials, external credential checks, optional services, dependencies, standalone reverse execution, unrelated writes, PR, or review; required make verify used its existing temporary-root fixture and approval-gated reverse smoke"
+}
