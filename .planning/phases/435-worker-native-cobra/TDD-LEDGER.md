@@ -17,8 +17,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 1 | RED | `go test ./internal/cli -run 'TestWorker(Command|Status|Help|Invalid|Config|Context)' -count=1` | Failed as required before production edits: undefined `newWorkerCobraCommand`, `workerCommandRuntime`, and `newRootCmdWithWorkerRuntime` |
 | 2 | GREEN | Native hidden worker subtree + invocation-local fake runtime + worker-only dispatcher removal | Pass: focused `0.569s`; repeated ×5 `0.738s`; focused race `1.690s` |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI, worker fake, config/parity/differential checks | Pass: full CLI `427.774s`; worker/config fakes pass; exact-start 6/6 compatible plus 2/2 intentional help changes |
-| 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Pending |
-| 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Pass: full repository CLI `435.094s`, certify `344.412s`; `make verify` exited 0 with docs/smoke/lint/connectors green |
+| 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Verified implementation pushed; terminal artifact commit/push follows |
 
 ## RED contract
 
@@ -53,3 +53,14 @@ Native Cobra now owns hidden `worker`, `status`, `serve`, and positional help. W
 Focused tests passed in `0.569s`; repeated ×5 in `0.738s`; focused race in `1.690s`; worker package tests/race in `0.614s`/`1.580s`; config tests in `0.649s`. Router/golden/docs focus passed in `6.115s`; full CLI passed in `427.774s`. Exact-start binary differential matched 6/6 unchanged status/serve-error/invalid/operand cases and confirmed 2/2 intentional contextual-help changes. Runtime help/topic/bare/direct routes match, worker remains hidden from root help, generated `docs/cli/worker.md` is present, and website docs generation has no tracked delta.
 
 No Temporal dial/worker, listener, Podman command, database, runtime service, credential, connector, or external call was used.
+
+## Final verification evidence
+
+- `gofmt -w cmd internal`, `go vet ./...`, and `go build ./cmd/pm` passed.
+- `go test -timeout 20m ./...` passed; CLI `435.094s`, certify `344.412s`, all packages green.
+- Default-only `make verify` exited 0: tidy diff clean, vet/full tests/build/docs validation passed, established temporary-root smoke passed, lint reported 0 issues, and connector validation checked 547 bundles with 0 findings.
+- Runtime help topic/bare/direct and status/no-config checks passed; hidden worker did not appear in root help.
+- Generated CLI manual parity passes; website docs generation produced no tracked delta.
+- Scope/dependency guards pass: no go.mod/go.sum, connector definition, unrelated namespace, or broad website delta; worker dispatcher and worker `parseFlags` call sites are absent; dynamic connector parsing remains.
+
+No optional integration mode was enabled. `make verify` ran only its established dependency-free temporary-root smoke and retained reverse ETL plan → preview → approval → execute order.

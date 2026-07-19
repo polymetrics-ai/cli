@@ -24,12 +24,12 @@ Invocation: `issue-435-pi-sol-high-20260719T064417Z`; profile `Sol`; thinking `h
 - [x] Router and golden transcript focus; two contextual-help fixture deltas reviewed.
 - [x] Exact-start parser/output differential (6/6 compatible; 2/2 intentional help changes).
 - [x] Full `go test -timeout 15m ./internal/cli/... -count=1` (`427.774s`).
-- [ ] `gofmt -w cmd internal`.
-- [ ] `go vet ./...`.
-- [ ] `go test -timeout 20m ./...`.
-- [ ] `go build ./cmd/pm`.
-- [ ] `make verify` dependency-free/default-only.
-- [ ] `git diff --check`; no dependency/connector-definition/unrelated delta.
+- [x] `gofmt -w cmd internal`.
+- [x] `go vet ./...`.
+- [x] `go test -timeout 20m ./...` (CLI `435.094s`; certify `344.412s`; all green).
+- [x] `go build ./cmd/pm`.
+- [x] `make verify` dependency-free/default-only (exit 0; lint 0; connectors 547/0).
+- [x] `git diff --check`; no dependency/connector-definition/unrelated delta.
 
 ## CLI help/manual/website parity
 
@@ -50,8 +50,8 @@ Invocation: `issue-435-pi-sol-high-20260719T064417Z`; profile `Sol`; thinking `h
 - [x] Required CLI/testing/error/security/safety/context/concurrency/docs/Cobra skills loaded.
 - [x] Invocation-local fake status/serve only; no Temporal dial/worker or listener.
 - [x] No Podman, database, runtime service, credential, secret/config-canary disclosure, or generic runner.
-- [ ] No dependencies, unrelated namespaces, or broad generated churn.
-- [ ] Planning, RED, GREEN/refactor, and final checkpoints committed/pushed.
+- [x] No dependencies, unrelated namespaces, or broad generated churn.
+- [x] Planning, RED, and GREEN/refactor checkpoints committed/pushed; terminal artifact push follows.
 - [x] No PR/review will be created per user instruction.
 
-Result: pending; `verificationPassed=false` until full `make verify` exits 0.
+Result: pass at implementation head `2fcee762d0842f9fe8f8014526fe5e298f755023`; `verificationPassed=true` because full default-only `make verify` exited 0.

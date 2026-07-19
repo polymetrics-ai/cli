@@ -21,6 +21,8 @@ Required skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `g
 
 Safety prompt: inject invocation-local fake status/probe and serve seams. Never dial Temporal, start a Temporal worker or listener, invoke Podman, access a database, or start runtime services. Assert no fake starts on bare/help/invalid/malformed-config paths. Never print config canaries. Keep the worker hidden and typed to the RLM Temporal workflow only; never add a generic runner.
 
-Downstream artifact: RED and GREEN/refactor complete. Native hidden worker owns status/serve/help with invocation-local fakes, strict action parsing, contextual help, config/cancellation/nondisclosure coverage, and no generic runner. Full default-only gates and handoff remain pending.
+Downstream artifact: complete. Native hidden worker owns status/serve/help with invocation-local fakes, strict action parsing, contextual help, config/cancellation/nondisclosure coverage, and no generic runner. Only the worker legacy dispatcher was removed; worker manual/golden parity is updated.
 
-Verification result: focused/repeated/race/worker-fake/router/golden/full CLI, exact-start differential, runtime help, and docs/website checks pass; `RUN-STATE.json` remains non-terminal with `verificationPassed=false` until full `make verify` exits 0.
+Verification route: `scripts/gsd prompt verify-work 435` generated 106 lines and was executed inline under the manual universal loop.
+
+Verification result: pass at implementation head `2fcee762d0842f9fe8f8014526fe5e298f755023`. Focused/repeated/race/worker-fake/router/golden/full CLI, exact-start differential, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency guards, and default-only `make verify` pass. No Temporal, listener, Podman, database, runtime service, credential, dependency, generic runner, PR, or review was used.

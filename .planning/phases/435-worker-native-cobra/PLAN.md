@@ -59,3 +59,7 @@ The command stays hidden from root discovery and completion metadata. Direct wor
 ## Safety
 
 No secrets or config canaries in diagnostics; no Temporal dial/worker, network listener, Podman command, database, runtime service, credential, external connector, dependency, generic execution surface, destructive/admin action, reverse ETL, or production deployment. Tests use only invocation-local fakes and temp config roots. Cancellation remains propagated. The worker continues to serve only the typed RLM Temporal workflow and Podman activity.
+
+## Completion
+
+Completed and verified at implementation head `2fcee762d0842f9fe8f8014526fe5e298f755023`. Native hidden worker owns status/serve/help with invocation-local fake seams; only the worker legacy dispatcher was removed. Focused/repeated/race/router/golden/full CLI, worker/config fakes, exact-start differential, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency guards, and default-only `make verify` pass. Six of six exact-start non-help cases remain compatible; bare/direct worker help are the two intentional contextual-help changes required by #435. No Temporal, listener, Podman, database, runtime service, credential, dependency, generic runner, PR, or review was used. Implementation is pushed; terminal artifact delivery follows.
