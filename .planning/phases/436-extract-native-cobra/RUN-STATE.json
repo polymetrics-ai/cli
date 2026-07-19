@@ -11,7 +11,7 @@
   "startedAt": "20260719T074902Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "planned",
+  "status": "red_tests_captured",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -25,9 +25,14 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "next serialized Phase 9 hidden extract command is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited external files/services/credentials/dependencies/PR/review"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "complete hidden native extract, flags, routing/output/help, parser compatibility, globals, temp-root containment, and input/output final-link tests preceded production edits; CLI symbols were absent and all three expected RLM path escapes reproduced"
     }
   ],
-  "red": "pending",
+  "red": "focused CLI compile failure on absent newExtractCobraCommand/extractCommandRuntime/newRootCmdWithExtractRuntime; RLM traversal input, external input final link, and external temporary output final link all succeeded before production edits",
   "green": "pending",
   "verification": "pending",
   "files": [

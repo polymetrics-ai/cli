@@ -7,7 +7,7 @@ Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `h
 ## TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.
-- [ ] Focused RED captured before production edits.
+- [x] Focused RED captured before production edits: absent native extract symbols plus reproduced traversal/input-link/output-temp-link escapes.
 - [ ] Hidden native extract command; legacy wrapper/parser call removed only for extract.
 - [ ] Every current extract flag and legacy repeated/bare/assigned/space/operand behavior covered.
 - [ ] Bare/text/JSON/long/short/topic/positional/trailing help is contextual and side-effect free.

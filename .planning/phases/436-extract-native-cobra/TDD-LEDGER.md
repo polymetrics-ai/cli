@@ -14,7 +14,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
-| 1 | RED | Focused native extract, parsing/help/output, and rooted input/output final-link tests | Pending |
+| 1 | RED | `go test ./internal/cli ./internal/rlm -run 'TestExtract|TestDeterministicRunRejectsWarehouseInputPathEscape|TestDeterministicRunRejectsExternalInputFinalLink|TestWriteOutTable' -count=1` | Failed as required before production edits: CLI lacks `newExtractCobraCommand`, `extractCommandRuntime`, and `newRootCmdWithExtractRuntime`; RLM traversal input, external input final link, and external temporary output final link all succeeded |
 | 2 | GREEN | Hidden native extract command, typed flags/runtime, bounded table checks, rooted RLM warehouse I/O, and extract-only legacy/parser removal | Pending |
 | 3 | Refactor | Focused/repeated/race extract/RLM/safety, router/golden/full CLI, exact-start differential, and parity checks | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Pending |
@@ -30,6 +30,12 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 - Simple-query and RLM routes preserve exact output and error categories through injected dependency-free fakes; no model, Temporal, Podman, worker, service, credential, or network call occurs.
 - Extract RLM input/output table names cannot escape the selected warehouse root. Rooted input opens reject final links escaping the root. Rooted output temporary creation and atomic final replacement do not follow an external final link; external sentinel files remain unchanged. Valid local names and in-root paths still work.
 - Only extract's legacy registration/parser call is removed. Dynamic connector and other namespace parser behavior remains.
+
+## RED evidence
+
+The complete test-only contract preceded production edits. Focused CLI compilation failed on the intentionally absent native constructor/runtime seam. Independently, all three expected RLM safety failures reproduced: `../outside` input escaped the warehouse, an input final symlink reached an external file, and `scores.ndjson.tmp` followed and changed an external target. The final-output symlink replacement control already passed, proving atomic rename itself replaces rather than follows the final link.
+
+No external user file or service was used: all roots, symlinks, records, and sentinels were created under `t.TempDir`.
 
 ## Evidence log
 
