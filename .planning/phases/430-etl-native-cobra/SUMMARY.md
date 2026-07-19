@@ -1,6 +1,6 @@
 # Phase 430 Summary
 
-Status: bounded correction active from exact head `9b0020abde7cd7e007412a0294db6e4cb576f5f3`; focused differential RED and private-capture GREEN complete, broad verification pending and non-terminal.
+Status: bounded correction complete and verified from exact start `9b0020abde7cd7e007412a0294db6e4cb576f5f3` through implementation head `a55ca720c862682423abacdffb073675529bd14b`; final evidence checkpoint prepared for push.
 
 ## Identity
 
@@ -37,4 +37,6 @@ No `go.mod`, `go.sum`, connector definition, docs/website, golden, or unrelated 
 
 ## Bounded correction
 
-`/tmp/pm-397-review-430.log` found that shared normalization can discard the first `etl status` operand when it looks like help, literal separation, or an unknown flag, then query a later valid ID. Exact legacy behavior owns the first post-action token and fails closed. The focused differential test failed as required for all four requested operand classes plus an internal-carrier-shaped adversarial operand. GREEN now captures only that operand before shared normalization into invocation-private context state with no argv carrier; exact differential/adversarial tests and all ETL tests pass. No completion claim is made until broad verification, `make verify`, commit, and push succeed.
+`/tmp/pm-397-review-430.log` found that shared normalization could discard the first `etl status` operand when it looked like help, literal separation, or an unknown flag, then query a later valid ID. Exact legacy behavior owns the first post-action token and fails closed. The focused differential test failed as required for all four requested operand classes plus an internal-carrier-shaped adversarial operand. GREEN captures only that operand before shared normalization into invocation-private context state with no argv carrier.
+
+Focused/adversarial/repeated/race and all ETL tests pass. Actual binary comparison with exact legacy base matches 5/5 fail-closed exit/stdout/stderr transcripts. Router/golden/manual, full CLI/repository, runtime help/docs generation, gofmt/vet/build/diff, scope/dependency guards, and `make verify` pass. No public help/docs output changed; no service, live credential, dependency, PR, or review was used.

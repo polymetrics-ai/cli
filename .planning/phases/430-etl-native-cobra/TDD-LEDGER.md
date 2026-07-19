@@ -24,7 +24,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 6 | Correction planning | Read `/tmp/pm-397-review-430.log`; update six artifacts from exact correction start `9b0020ab` before production edits | Complete |
 | 7 | Correction RED | Differential table for status operands `--help`, `-h`, `--`, unknown flag + valid ID; adversarial argv/internal-carrier override case | Failed as required before production edits: all five first-operand differential cases diverged |
 | 8 | Correction GREEN | Private action-specific operand capture before shared normalization; status consumes context-only state | Pass: differential/adversarial `10.113s`; all ETL tests `24.512s` |
-| 9 | Correction verification | Focused/adversarial/repeated/race/base differential/full CLI/repository, help parity, gofmt/vet/build/diff, `make verify`, commit/push | Pending |
+| 9 | Correction verification | Focused/adversarial/repeated/race/base differential/full CLI/repository, help parity, gofmt/vet/build/diff, `make verify`, commit/push | Pass; final evidence checkpoint prepared for push |
 
 ## RED contract
 
@@ -115,4 +115,17 @@ Command: `go test ./internal/cli -run 'TestETLStatus(DifferentialPreservesLegacy
 
 `executeRootCmd` now captures only `etl status`'s first post-global operand before `normalizeNativeStringArrayArgs`, removes it from Cobra-visible argv, and stores the value plus an explicit presence bit under an unexported context key. The status handler consumes only that invocation state. There is no hidden pflag, internal argv name, exported accessor, package mutable state, or string carrier to set/override; carrier-shaped argv remains literal user input. Other ETL actions and help continue through the prior normalization paths.
 
-Focused differential/adversarial GREEN passed in `10.113s`; all `TestETL*` tests passed in `24.512s`. Broader repeated/race/base/full gates remain pending.
+Focused differential/adversarial GREEN passed in `10.113s`; all `TestETL*` tests passed in `24.512s`.
+
+## Correction verification evidence
+
+- Differential/adversarial repeated ×5: `48.220s`; focused `-race`: `110.257s`; all `TestETL* -race`: `276.643s`.
+- Actual binary differential against exact legacy base `6c94754c58185df5aac53bd97587603c3154b1d5`: 5/5 exit/stdout/stderr matches and all fail closed for `--help`, `-h`, literal `--`, unknown flag, and internal-carrier-shaped first operands followed by a valid ID.
+- Router/golden/generated manual/help gate: `7.683s`; tracked golden/manual files unchanged.
+- `gofmt -w cmd internal`; `go vet ./...` (`2.13s` wall); `go build ./cmd/pm` (`1.66s` wall); `git diff --check` pass.
+- Runtime `pm help etl`, bare `pm etl`, and `pm etl --help` are byte-identical with empty stderr. Website generator wrote 11 pages with no tracked delta.
+- Full CLI: `363.755s`; full repository: `372.77s` wall (`internal/cli 368.138s`, certify `338.900s`).
+- Final `make verify`: `389.90s` wall; CLI `366.499s`, certify `335.927s`, lint 0 issues, connector definitions 547/0 findings, local temporary-root smoke passed its existing approval-gated reverse sequence.
+- Scope/dependency guards: only six issue artifacts plus `internal/cli/{cobra_router.go,etl_cli.go,etl_cli_test.go}` differ from correction start; no `go.mod`, `go.sum`, connector definition, docs/website/golden, generated, or unrelated namespace delta. Production grep finds no internal status argv carrier.
+
+Correction commits: `05a441f7` planning, `4f760cab` RED tests/evidence, `a55ca720` GREEN implementation/evidence, followed by this final evidence checkpoint. The first three are pushed; final evidence is prepared for immediate push on `refactor/430-etl-native-cobra`. No PR or review route was invoked.

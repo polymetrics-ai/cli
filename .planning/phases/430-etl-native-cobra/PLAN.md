@@ -73,3 +73,5 @@ Correction plan:
 5. Run focused, adversarial, repeated/race, exact-base differential, full CLI/repository, gofmt/vet/build/diff, and `make verify`; update artifacts, commit, and push. No services, credentials, dependencies, PR, or review.
 
 Execution decision: `local_critical_path` — one coupled router/status/test correction in the existing isolated issue worktree; no independent mutable scope exists and the user prohibited review/PR work.
+
+Correction completed at implementation head `a55ca720c862682423abacdffb073675529bd14b`. The differential RED failed for all requested operand classes before production edits. Invocation-private pre-normalization capture then passed focused/adversarial/repeated/race, all ETL, actual legacy-base 5/5 differential, router/golden/manual, full CLI/repository, runtime help/docs generation, gofmt/vet/build/diff, and `make verify` gates. No public command/help/docs contract changed; no service, live credential, dependency, PR, or review was used.

@@ -71,14 +71,14 @@ Historical result: pass at implementation head `fc88f1694ee73593f1130f866bd6166b
 
 - [x] Focused correction RED then GREEN (`10.113s` GREEN).
 - [x] Adversarial/internal-carrier tests.
-- [ ] Focused repeated and `-race`.
-- [ ] Exact legacy-base differential for the four operand classes.
-- [ ] Existing ETL/router/golden/manual tests.
-- [ ] Full `go test ./internal/cli/...` and `go test ./...`.
-- [ ] `gofmt -w cmd internal`; `go vet ./...`; `go build ./cmd/pm`.
-- [ ] Runtime `pm help etl`, bare `pm etl`, and `pm etl --help`; generated docs/website/golden diff clean or N/A.
-- [ ] `make verify`.
-- [ ] `git diff --check`; no dependency, connector-definition, docs/website, unrelated namespace, or generated churn.
-- [ ] Exact evidence committed and pushed; no services, credentials, dependencies, PR, or review.
+- [x] Focused repeated ×5 (`48.220s`) and focused/all-ETL `-race` (`110.257s`/`276.643s`).
+- [x] Exact legacy-base binary differential: 5/5 fail-closed transcript matches for requested classes plus carrier-shaped adversarial case.
+- [x] Existing ETL/router/golden/manual tests (`24.512s`/`7.683s`).
+- [x] Full `go test ./internal/cli/...` (`363.755s`) and `go test ./...` (`372.77s` wall).
+- [x] `gofmt -w cmd internal`; `go vet ./...`; `go build ./cmd/pm`.
+- [x] Runtime `pm help etl`, bare `pm etl`, and `pm etl --help` byte-identical; generated docs/website/golden diff clean.
+- [x] `make verify` (`389.90s` wall; CLI `366.499s`, certify `335.927s`, lint 0, connectors 547/0).
+- [x] `git diff --check`; no dependency, connector-definition, docs/website, unrelated namespace, or generated churn.
+- [x] Planning/RED/GREEN evidence committed and pushed; final evidence prepared for commit/push; no services, live credentials, dependencies, PR, or review.
 
-Result: pending from correction start `9b0020abde7cd7e007412a0294db6e4cb576f5f3`; `verificationPassed=false` until every declared correction gate, including `make verify`, exits 0.
+Result: pass at correction implementation head `a55ca720c862682423abacdffb073675529bd14b`; `verificationPassed=true` after every declared correction gate, including `make verify`, exited 0.

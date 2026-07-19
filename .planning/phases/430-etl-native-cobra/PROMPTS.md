@@ -37,6 +37,6 @@ Execution decision: `local_critical_path` — coupled status/router/test correct
 
 Safety: temporary local project/run only; no secrets, credentials, optional services, external connectors, dependencies, reverse operation, PR, or review. Preserve all non-status ETL/help behavior and byte-identical docs/manual surfaces.
 
-Downstream artifact: correction planning, focused differential RED, and private context capture GREEN are complete; broad verification and final delivery remain pending.
+Downstream artifact: correction planning, differential RED, private context capture GREEN, complete verification, and final evidence are complete.
 
-Verification result: focused GREEN. All five differential/adversarial cases now exactly match the legacy first-token oracle (`10.113s`), and all ETL tests pass (`24.512s`). `verificationPassed=false` until repeated/race/base differential/full CLI/repository, gofmt/vet/build/diff, help/docs parity, and `make verify` pass.
+Verification result: pass at implementation head `a55ca720c862682423abacdffb073675529bd14b`. Focused/adversarial/repeated/race and all ETL gates pass; actual exact-base binary differential matches 5/5 fail-closed transcripts; router/golden/manual, full CLI/repository, runtime help/docs generation, gofmt/vet/build/diff, scope/dependency guards, and final `make verify` pass. No service, live credential, dependency, PR, or review occurred; `verificationPassed=true`.

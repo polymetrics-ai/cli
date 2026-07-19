@@ -15,8 +15,10 @@
   "endingImplementationHead": "fc88f1694ee73593f1130f866bd6166be18eb661",
   "correctionStartingHead": "9b0020abde7cd7e007412a0294db6e4cb576f5f3",
   "correctionStartedAt": "20260718T235826Z",
-  "status": "correction_green_broad_verification_pending",
-  "verificationPassed": false,
+  "correctionEndedAt": "20260719T003454Z",
+  "correctionImplementationHead": "a55ca720c862682423abacdffb073675529bd14b",
+  "status": "correction_complete_verified_final_evidence_prepared",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -76,11 +78,21 @@
       "cycle": "bounded-correction-green",
       "decision": "local_critical_path",
       "reason": "action-specific capture now owns the first etl status operand before shared normalization through unexported invocation context state; differential/adversarial and all ETL tests pass"
+    },
+    {
+      "cycle": "bounded-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused, adversarial, repeated, race, actual legacy-base 5/5 differential, router/golden/manual, full CLI/repository, runtime help/docs, gofmt, vet, build, diff, scope, dependency, and make verify gates passed"
+    },
+    {
+      "cycle": "bounded-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "correction evidence is terminal and prepared for final commit/push; no PR or review route was invoked"
     }
   ],
   "red": "historical constructor RED plus bounded correction RED: all five status first-operand differential cases diverged before correction production edits (help, short help, literal separator, unknown flag, internal-carrier-shaped token)",
-  "green": "bounded correction differential/adversarial passed in 10.113s; all ETL tests passed in 24.512s; broad verification pending",
-  "verification": "pending bounded correction gates from 9b0020ab, including make verify",
+  "green": "bounded correction differential/adversarial passed in 10.113s; all ETL tests passed in 24.512s; repeated 48.220s; focused race 110.257s; all ETL race 276.643s",
+  "verification": "pass: exact legacy-base binary differential 5/5 fail-closed; router/golden/manual 7.683s; full CLI 363.755s; full repository 372.77s wall; runtime help/docs clean; gofmt/vet/build/diff/scope/dependency clean; make verify 389.90s wall with CLI 366.499s, certify 335.927s, lint 0, connectors 547/0",
   "files": [
     ".planning/phases/430-etl-native-cobra/PLAN.md",
     ".planning/phases/430-etl-native-cobra/TDD-LEDGER.md",
@@ -99,10 +111,13 @@
     "cdbf5b63 test(cli): specify native cobra etl contract",
     "35c811fb refactor(cli): nativize etl namespace",
     "1f2d1b74 test(cli): expose etl invalid action help bypass",
-    "fc88f169 fix(cli): guard etl invalid action help boundary"
+    "fc88f169 fix(cli): guard etl invalid action help boundary",
+    "05a441f7 docs(planning): plan etl status operand correction",
+    "4f760cab test(cli): expose etl status operand normalization gap",
+    "a55ca720 fix(cli): preserve etl status first operand"
   ],
-  "push": "historical checkpoints pushed through 9b0020ab; bounded correction plan/test/implementation/final evidence checkpoints pending",
+  "push": "bounded correction planning, RED, and GREEN checkpoints pushed; final evidence checkpoint prepared for immediate push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
-  "safety": "fixture and local temporary connectors only; no secrets, external credential checks, optional services, dependencies, standalone reverse execution, unrelated writes, PR, or review; required make verify used its existing temporary-root approval-gated smoke"
+  "safety": "fixture and local temporary connectors only; no secrets, live/user credentials, external credential checks, optional services, dependencies, standalone reverse execution, unrelated writes, PR, or review; required make verify used its existing temporary-root fixture and approval-gated reverse smoke"
 }
