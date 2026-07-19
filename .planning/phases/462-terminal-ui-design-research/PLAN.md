@@ -2,7 +2,7 @@
 
 Issue: #462
 Parent: #397
-Branch: `codex/462-terminal-ui-design-research`
+Branch: `docs/462-terminal-ui-design-research`
 Starting commit: `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`
 Classification: documentation, planning, and repo-local skill only; no production Go behavior.
 
@@ -76,4 +76,4 @@ definition, credential, remote write, or production TUI implementation is in sco
 - [x] GSD roadmap/backlog/execution/Pi prompts require the design gate and skill.
 - [x] Live production UI issues point to the contract, skill, and exact RED matrix.
 - [x] Targeted documentation, skill, GSD, and scope verification passes.
-- [ ] Changes are committed, pushed, and opened as a stacked PR to the parent branch.
+- [x] Changes are committed, pushed, and opened as stacked PR #465 to the parent branch.

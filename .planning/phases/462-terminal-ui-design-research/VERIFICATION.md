@@ -27,7 +27,7 @@
 - [x] link/reference and affected-issue grep
 - [x] `git diff --exit-code <start> -- go.mod go.sum cmd internal docs/cli website internal/connectors/defs`
 - [x] `make docs-check` — build and connector-doc validation pass
-- [ ] branch committed/pushed and stacked PR opened to `feat/cli-architecture-v2`
+- [x] branch committed/pushed and stacked PR #465 opened to `feat/cli-architecture-v2`
 
 ## CLI parity applicability
 

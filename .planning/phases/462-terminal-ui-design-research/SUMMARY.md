@@ -1,6 +1,6 @@
 # Phase 462 Summary
 
-Status: verified; delivery pending.
+Status: delivered in stacked PR #465; CI and automated review pending.
 
 The requested reference applications have been exercised in an isolated local lab and distilled
 into a Polymetrics-specific terminal design system. The chosen structural direction is a quiet
@@ -20,3 +20,8 @@ Pre-delivery verification passes: GSD doctor/provenance, skill validation, `git 
 exact no-production/dependency scope, and `make docs-check`. Live markers are present on all seven
 affected UI issues; #462 is nested under #397 and #463 is nested under #411. The isolated tmux lab
 was stopped after screenshots so no monitoring/audio processes remain running.
+
+Delivery: branch `docs/462-terminal-ui-design-research`, stacked PR #465 targeting
+`feat/cli-architecture-v2`. PR #464 was closed as superseded because its original `codex/` branch
+prefix failed the repository's explicit `<type>/<description>` naming gate; the corrected `docs/`
+branch preserves the verified content. Merge and parent integration remain orchestrator-owned.
