@@ -54,7 +54,7 @@ Invocation: `issue-435-pi-sol-high-20260719T064417Z`; profile `Sol`; thinking `h
 - [x] No Podman, database, runtime service, credential, secret/config-canary disclosure, or generic runner.
 - [x] No dependencies, unrelated namespaces, or broad generated churn.
 - [x] Original planning, RED, GREEN/refactor, and terminal handoff checkpoints committed/pushed.
-- [x] P2 planning correction `534f4e1f` and test correction `01d70f55` committed/pushed.
+- [x] P2 planning `534f4e1f`, test `01d70f55`, and evidence `3981c94b` commits pushed.
 - [x] No PR/review will be created per user instruction.
 
 Correction result: pass at test commit `01d70f55e755bd57b31662ccd333f34916de0563`. CLI worker/config focus passed (`0.566s`), repeated ×10 (`0.588s`), and race (`1.682s`); `internal/worker`/`internal/config` normal, repeated ×10, and race runs passed; source audit found no production `Run`/probe/dial path in the corrected status case or worker CLI tests; gofmt, diff check, and `go vet ./...` passed. Full CLI was not needed for this test-only correction; unrelated runtime doctor/perf tests are not claimed dial-free. `verificationPassed=true` for the declared bounded correction gates. Historical full `make verify` evidence remains recorded separately.

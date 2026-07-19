@@ -13,9 +13,10 @@
   "thinking": "high",
   "endedAt": "20260719T071539Z",
   "correctionStartedAt": "20260719T072946Z",
-  "correctionEndedAt": "20260719T073453Z",
+  "correctionEndedAt": "20260719T073744Z",
   "correctionStartingHead": "f692225ab53a3c0467d42c0ac3e9810107d73a82",
   "correctionTestHead": "01d70f55e755bd57b31662ccd333f34916de0563",
+  "correctionEvidenceHead": "3981c94b9f7d77bc85b6961c091b43cf2db9fb2f",
   "endingImplementationHead": "2fcee762d0842f9fe8f8014526fe5e298f755023",
   "status": "complete_verified_pushed",
   "verificationPassed": true,
@@ -105,9 +106,10 @@
     "2fcee762 refactor(cli): nativize worker namespace",
     "8ecaa268 docs(planning): complete worker native cobra handoff",
     "534f4e1f docs(planning): accept worker isolation correction",
-    "01d70f55 test(cli): isolate worker config status probe"
+    "01d70f55 test(cli): isolate worker config status probe",
+    "3981c94b docs(planning): verify worker isolation correction"
   ],
-  "push": "original checkpoints plus P2 planning and test correction pushed to origin/refactor/435-worker-native-cobra; final evidence commit pending",
+  "push": "original checkpoints plus P2 planning, test correction, and verified evidence commit pushed to origin/refactor/435-worker-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "P2 accepted and fixed: corrected worker config status uses the invocation-local fake; RED failed before old Run so no dial occurred; no service, dependency, production change, credential, generic runner, PR, or review was used; unrelated runtime doctor/perf tests are not claimed dial-free"
