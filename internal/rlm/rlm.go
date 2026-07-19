@@ -25,11 +25,12 @@ type Analyzer interface {
 
 // RunRequest carries all inputs for a single RLM scoring run.
 type RunRequest struct {
-	Spec         *Spec  // parsed scoring spec
-	InTable      string // source warehouse table name (no path — resolved via WarehouseDir)
-	OutTable     string // destination warehouse table name
-	WarehouseDir string // resolved from app runtime config
-	DryRun       bool   // if true, compute scores but do not write OutTable
+	Spec         *Spec           // parsed scoring spec
+	InTable      string          // source warehouse table name (no path — resolved via WarehouseDir)
+	OutTable     string          // destination warehouse table name
+	WarehouseDir string          // resolved from app runtime config
+	Warehouse    *WarehouseScope // optional held project-root scope for all table effects
+	DryRun       bool            // if true, compute scores but do not write OutTable
 }
 
 // RunResult is the machine-readable result of a scoring run.

@@ -53,6 +53,12 @@ type scheduleCommandState struct {
 	operandSet bool
 }
 
+type extractCommandStateKey struct{}
+
+type extractCommandState struct {
+	bareInvocation bool
+}
+
 func (e *cobraLegacyError) Error() string { return e.err.Error() }
 
 func (e *cobraLegacyError) Unwrap() error { return e.err }
@@ -69,26 +75,30 @@ func markCobraLegacyError(err error) error {
 }
 
 func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer) *cobra.Command {
-	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), defaultWorkerCommandRuntime())
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), defaultWorkerCommandRuntime(), defaultExtractCommandRuntime())
 }
 
 func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, imageRuntime agentImageRuntime) *cobra.Command {
-	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, imageRuntime, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), defaultWorkerCommandRuntime())
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, imageRuntime, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), defaultWorkerCommandRuntime(), defaultExtractCommandRuntime())
 }
 
 func newRootCmdWithScheduleRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, scheduleRuntime scheduleCommandRuntime) *cobra.Command {
-	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, scheduleRuntime, defaultRLMCommandRuntime(), defaultWorkerCommandRuntime())
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, scheduleRuntime, defaultRLMCommandRuntime(), defaultWorkerCommandRuntime(), defaultExtractCommandRuntime())
 }
 
 func newRootCmdWithRLMRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, rlmRuntime rlmCommandRuntime) *cobra.Command {
-	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), rlmRuntime, defaultWorkerCommandRuntime())
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), rlmRuntime, defaultWorkerCommandRuntime(), defaultExtractCommandRuntime())
 }
 
 func newRootCmdWithWorkerRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, workerRuntime workerCommandRuntime) *cobra.Command {
-	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), workerRuntime)
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), workerRuntime, defaultExtractCommandRuntime())
 }
 
-func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, imageRuntime agentImageRuntime, scheduleRuntime scheduleCommandRuntime, rlmRuntime rlmCommandRuntime, workerRuntime workerCommandRuntime) *cobra.Command {
+func newRootCmdWithExtractRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, extractRuntime extractCommandRuntime) *cobra.Command {
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), defaultWorkerCommandRuntime(), extractRuntime)
+}
+
+func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, imageRuntime agentImageRuntime, scheduleRuntime scheduleCommandRuntime, rlmRuntime rlmCommandRuntime, workerRuntime workerCommandRuntime, extractRuntime extractCommandRuntime) *cobra.Command {
 	root := cfg.Root
 	jsonOut := cfg.JSON
 	cmd := &cobra.Command{
@@ -128,6 +138,7 @@ func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stde
 	cmd.AddCommand(newScheduleCobraCommandWithRuntime(ctx, cfg, root, stdout, jsonOut, scheduleRuntime))
 	cmd.AddCommand(newRLMCobraCommandWithRuntime(ctx, cfg, root, stdout, jsonOut, rlmRuntime))
 	cmd.AddCommand(newWorkerCobraCommandWithRuntime(ctx, cfg, stdout, jsonOut, workerRuntime))
+	cmd.AddCommand(newExtractCobraCommandWithRuntime(ctx, cfg, root, stdout, jsonOut, extractRuntime))
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
@@ -139,6 +150,9 @@ func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stde
 }
 
 func executeRootCmd(cmd *cobra.Command, args []string) error {
+	extractState := extractCommandState{
+		bareInvocation: len(args) == 1 && args[0] == "extract",
+	}
 	var etlState etlCommandState
 	args = captureETLPrivateOperands(args, &etlState)
 	var reverseState reverseCommandState
@@ -148,6 +162,7 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	var scheduleState scheduleCommandState
 	args = captureSchedulePrivateOperand(args, &scheduleState)
 	args = normalizeWorkerActionArgs(args)
+	args = normalizeExtractArgs(args)
 	var credentialsState credentialsCommandState
 	args = normalizeNativeStringArrayArgs(args, &credentialsState)
 	if credentialsState.rawCarrier {
@@ -163,6 +178,7 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 		ctx = context.Background()
 	}
 	ctx = context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState)
+	ctx = context.WithValue(ctx, extractCommandStateKey{}, extractState)
 	ctx = context.WithValue(ctx, etlCommandStateKey{}, etlState)
 	ctx = context.WithValue(ctx, reverseCommandStateKey{}, reverseState)
 	ctx = context.WithValue(ctx, flowCommandStateKey{}, flowState)
@@ -268,6 +284,24 @@ func captureSchedulePrivateOperand(args []string, state *scheduleCommandState) [
 	out = append(out, args[:operandIndex]...)
 	out = append(out, args[operandIndex+1:]...)
 	return out
+}
+
+func normalizeExtractArgs(args []string) []string {
+	if len(args) < 2 || args[0] != "extract" {
+		return args
+	}
+	for _, arg := range args[1:] {
+		if arg == "--" {
+			break
+		}
+		if arg == "--help" {
+			return []string{args[0], arg}
+		}
+		if arg == "-h" {
+			return []string{args[0], "--help"}
+		}
+	}
+	return args
 }
 
 func normalizeWorkerActionArgs(args []string) []string {
@@ -384,6 +418,10 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 		out = append(out, args[0], "--")
 		out = append(out, args[1:]...)
 		return out
+	}
+	if len(args) >= 2 && args[0] == "extract" {
+		args = normalizeStringArraySpaceValues(args, 1, extractFlagNames)
+		return normalizeExtractLegacyArgs(args, 1)
 	}
 	if len(args) >= 2 && args[0] == "credentials" {
 		if credentialsActionTakesName(args[1]) && credentialsArgsContainRawCarrier(args[2:]) {
@@ -508,6 +546,36 @@ func normalizeScheduleLegacyActionArgs(args []string, start int) []string {
 		if strings.HasPrefix(arg, "--crontab=") {
 			_, value, _ := strings.Cut(arg, "=")
 			out = append(out, "--crontab="+strconv.FormatBool(value == "true"))
+			continue
+		}
+		out = append(out, normalizeReverseMalformedUnknown(arg))
+	}
+	return out
+}
+
+func normalizeExtractLegacyArgs(args []string, start int) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	afterSeparator := false
+	for i := start; i < len(args); i++ {
+		arg := args[i]
+		if arg == "--" {
+			afterSeparator = true
+			continue
+		}
+		if strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--") {
+			continue
+		}
+		if strings.HasPrefix(arg, "--help=") || (afterSeparator && arg == "--help") {
+			_, value, assigned := strings.Cut(strings.TrimPrefix(arg, "--"), "=")
+			if !assigned {
+				value = "true"
+			}
+			out = append(out, "--pm-legacy-extract-help="+value)
+			continue
+		}
+		if arg == "help" && (afterSeparator || i != start) {
+			out = append(out, "pm-legacy-extract-help")
 			continue
 		}
 		out = append(out, normalizeReverseMalformedUnknown(arg))
@@ -739,6 +807,18 @@ var agentPlanFlagNames = map[string]struct{}{
 	"request": {},
 }
 
+var extractFlagNames = map[string]struct{}{
+	"request":      {},
+	"sql":          {},
+	"limit":        {},
+	"provider":     {},
+	"model":        {},
+	"llm-base-url": {},
+	"in":           {},
+	"out":          {},
+	"spec-name":    {},
+}
+
 var docsFlagNames = map[string]struct{}{
 	"dir":            {},
 	"connectors-dir": {},
@@ -781,9 +861,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		{name: "man", handler: runManualAlias},
 		{name: "connectors", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runConnectors(ctx, root, args, stdout, jsonOut)
-		}},
-		{name: "extract", hidden: true, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
 		}},
 	}
 }

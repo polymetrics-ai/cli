@@ -237,7 +237,7 @@ pm extract --request "show active customers" --sql "SELECT * FROM customers LIMI
 pm skills generate --dir docs/skills --json
 ```
 
-`pm agent plan` returns typed command suggestions. `pm extract` classifies natural-language requests and routes simple requests to query or RLM analysis. `pm skills generate` writes agent skill files from the command and connector metadata.
+`pm agent plan` returns typed command suggestions. Hidden `pm extract` classifies natural-language requests and routes simple requests to read-only query or typed RLM analysis; `pm help extract` shows its direct manual, and `--in`/`--out` accept bare local warehouse table names rather than paths. `pm skills generate` writes agent skill files from the command and connector metadata.
 
 ```bash
 pm agent image build --json

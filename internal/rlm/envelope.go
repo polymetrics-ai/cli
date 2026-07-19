@@ -2,8 +2,10 @@ package rlm
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 
 	"polymetrics.ai/internal/connectors"
@@ -23,9 +25,59 @@ func readEnvelopedRecords(path string) ([]connectors.Record, error) {
 		return nil, err
 	}
 	defer f.Close()
+	return readEnvelopedRecordsFrom(f)
+}
 
+func readWarehouseRecords(dir, table string) ([]connectors.Record, error) {
+	scope, err := openWarehouseScope(dir, dir)
+	if err != nil {
+		return nil, err
+	}
+	defer scope.Close()
+	return readWarehouseRecordsInScope(scope, table)
+}
+
+func readWarehouseRecordsInScope(scope *WarehouseScope, table string) ([]connectors.Record, error) {
+	f, err := scope.openTable(table)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return readEnvelopedRecordsFrom(f)
+}
+
+func readWarehouseTable(dir, table string) ([]byte, []connectors.Record, error) {
+	scope, err := openWarehouseScope(dir, dir)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer scope.Close()
+	return readWarehouseTableInScope(scope, table)
+}
+
+func readWarehouseTableInScope(scope *WarehouseScope, table string) ([]byte, []connectors.Record, error) {
+	f, err := scope.openTable(table)
+	if err != nil {
+		return nil, nil, err
+	}
+	data, err := io.ReadAll(f)
+	closeErr := f.Close()
+	if err != nil {
+		return nil, nil, err
+	}
+	if closeErr != nil {
+		return nil, nil, closeErr
+	}
+	records, err := readEnvelopedRecordsFrom(bytes.NewReader(data))
+	if err != nil {
+		return nil, nil, err
+	}
+	return data, records, nil
+}
+
+func readEnvelopedRecordsFrom(r io.Reader) ([]connectors.Record, error) {
 	var records []connectors.Record
-	sc := bufio.NewScanner(f)
+	sc := bufio.NewScanner(r)
 	sc.Buffer(make([]byte, 0, 64*1024), 16*1024*1024)
 	for sc.Scan() {
 		line := sc.Bytes()
