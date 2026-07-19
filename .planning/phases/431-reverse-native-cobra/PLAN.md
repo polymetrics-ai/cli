@@ -58,6 +58,19 @@ Command names, flags, manual bytes, JSON envelopes, docs, website content, gener
 
 No secret values, external connectors, credentialed checks, optional services, dependency changes, unrestricted writes, destructive/admin actions, or production deploys. New tests may execute only local fake writers or temporary local outbox state and must prove no execution before plan, preview, approval, and any required typed confirmation. Approval values stay in memory and are never included in committed artifacts, failure messages, JSON, or logs. The only allowed broader smoke is the repository's already-established ordered reverse gate inside final `make verify`.
 
+## Compatibility correction from review head `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420`
+
+Review log `/tmp/pm-397-review-431.log` identified 50 malformed-unknown mismatches in the 324-case parser differential: pflag rejects legacy-accepted `--=x` and `---x` forms before `UnknownFlags` applies. This bounded correction keeps the completed native subtree and changes only reverse action-tail normalization.
+
+Correction lifecycle:
+
+1. Add table-driven RED differential tests across `list`, `plan`, `preview`, `run`, and `status` for `--=x`, `---x`, and representative empty/extra-dash/assigned variants. Compare each malformed-tail result with the same action baseline, assert exact action validation/outcome, assert no local outbox/run/state effects, and never expose approval material.
+2. Before production edits, capture focused RED showing pflag usage failures for malformed unknown forms while baseline outcomes remain stable.
+3. Normalize only syntactically malformed unknown tokens into collision-resistant legal unknown long flags before Cobra/pflag parsing. Do not rewrite known flags, ordinary legal unknown flags, captured first operands, approval/confirmation values, or their ordering.
+4. Run the focused correction tests, all reverse native tests, the 324-case exact-start differential, focused race tests, full CLI tests, `gofmt`, `go vet`, `go build`, and diff/scope/dependency checks. No external services, writes, dependencies, PR, or review; commit and push the correction.
+
+CLI help/manual/website artifacts remain not applicable because no command, flag, help text, output schema, or documented behavior changes. Approval ordering and plan → preview → approval → execute remain unchanged; tests use temporary local state and must prove malformed unknown tails create no effects.
+
 ## Completion
 
-Completed and verified at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`. Strict RED preceded production edits. Native reverse list/plan/preview/run/status/help, all current flags, invocation-private operand ownership, exact error/output behavior, token nondisclosure, typed confirmation, and ordered local fake execution pass focused, repeated, race, router, golden, reverse-app, full CLI/repository, 21-case exact-start differential, runtime help, generated docs/website, gofmt, vet, build, scope/dependency, and `make verify` gates. Only reverse parser calls were removed. No external write, service, live credential, dependency, unrelated change, PR, or review was used.
+Original implementation completed and verified at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`. Correction verification is now reopened from exact review head `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420`; terminal correction evidence is pending.

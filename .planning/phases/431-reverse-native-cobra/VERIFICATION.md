@@ -56,4 +56,28 @@ Invocation session: `issue-431-pi-openai-codex-gpt-5.6-sol-high-20260719T010451Z
 - [x] Planning, RED, and GREEN checkpoints committed/pushed; final evidence prepared for commit/push.
 - [x] No PR/review created per user instruction.
 
-Result: pass at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`; `verificationPassed=true` after every declared gate, including `make verify`, exited 0.
+Original result: pass at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`.
+
+## Parser compatibility correction checklist
+
+Correction start: `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420`.
+
+- [x] Review log read; exact clean start/upstream confirmed.
+- [x] GSD doctor/list run; unavailable programming-loop/manual fallback recorded.
+- [x] Correction plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state reopened before production edits.
+- [x] RED differential tests cover every reverse action and malformed legacy-accepted `--=x`, `---x`, plus representative variants (50 combinations).
+- [x] RED proves pflag rejects every malformed form with usage exit 2 before baseline action behavior (list 0, plan validation 3, preview/run/status missing-object 1).
+- [x] RED test assertions verify unchanged state bytes, absent local outbox, and no approval output; these assertions remain part of GREEN.
+- [ ] Production normalization changes only malformed unknown reverse-tail tokens.
+- [ ] Ordinary known flags, legal unknown flags, first operands, approval/confirmation ordering, and action outcomes remain unchanged.
+- [ ] Focused correction and complete reverse native suites pass.
+- [ ] Focused race gate passes.
+- [ ] 324/324 exact-start parser differential matches.
+- [ ] Full CLI suite passes.
+- [ ] No approval value appears in command output, artifacts, logs, or diagnostics.
+- [ ] `gofmt`, `go vet`, `go build`, `git diff --check`, scope, and dependency checks pass.
+- [x] Help/manual/docs/website changes not applicable: no public command/flag/help/output change.
+- [x] No external write/service/credential/dependency/PR/review is used.
+- [ ] Correction committed and pushed.
+
+Correction result: pending; `verificationPassed=false` until every declared correction gate exits 0.

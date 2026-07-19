@@ -1,6 +1,10 @@
 # Phase 431 Summary
 
-Status: complete and verified from exact start `0b03361e3ec5082d54c416a31715851f71e845fa` through implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`; final evidence checkpoint prepared for push.
+Status: parser compatibility correction in progress from exact review head `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420`; prior native implementation remains complete, but correction verification is reopened.
+
+## Review correction
+
+`/tmp/pm-397-review-431.log` reports 50/324 parser mismatches because pflag rejects malformed legacy-accepted unknown forms such as `--=x` and `---x` before Cobra's unknown-flag whitelist applies. RED now reproduces all 50 combinations across list/plan/preview/run/status: malformed forms return usage exit 2 instead of baseline outcomes, while test guards confirm unchanged state, no outbox, and no approval output. Production remains unedited at this checkpoint. The remaining correction is malformed-only token normalization and focused/race/full CLI plus 324-case differential verification. Public flags/help/docs, ordinary unknown behavior, first operands, approvals, confirmation, and plan → preview → approval → execute ordering must not change. No approval value, external write/service, dependency, PR, or review is permitted.
 
 ## Identity
 

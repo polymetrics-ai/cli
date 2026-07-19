@@ -354,6 +354,68 @@ func TestReverseHelpTrailingLiteralUnknownActionsAndGlobals(t *testing.T) {
 	}
 }
 
+func TestReverseMalformedUnknownFlagsPreserveLegacyActionOutcomesAndNoEffects(t *testing.T) {
+	root := initNativeReverseProject(t)
+	statePath := filepath.Join(root, ".polymetrics", "state", "state.json")
+	stateBefore, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read initial reverse state: %v", err)
+	}
+
+	actions := []struct {
+		name string
+		args []string
+	}{
+		{name: "list", args: []string{"reverse", "list"}},
+		{name: "plan validation", args: []string{"reverse", "plan", "malformed-unknown-must-not-plan"}},
+		{name: "preview missing plan", args: []string{"reverse", "preview", "missing-plan"}},
+		{name: "run missing plan", args: []string{"reverse", "run", "missing-plan"}},
+		{name: "status missing run", args: []string{"reverse", "status", "missing-run"}},
+	}
+	malformedUnknowns := []string{
+		"--=x",
+		"--=",
+		"--==x",
+		"---x",
+		"---x=y",
+		"---",
+		"----x",
+		"----x=y",
+		"----",
+		"-----x",
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			baselineArgs := append(append([]string(nil), action.args...), "--root", root, "--json")
+			wantStdout, wantStderr, wantCode := runNativeReverseCLI(baselineArgs...)
+
+			for _, malformed := range malformedUnknowns {
+				t.Run(malformed, func(t *testing.T) {
+					args := append(append([]string(nil), action.args...), malformed, "--root", root, "--json")
+					stdout, stderr, code := runNativeReverseCLI(args...)
+					if code != wantCode || stdout != wantStdout || stderr != wantStderr {
+						t.Fatalf("malformed unknown changed action outcome: code=%d want=%d stdout-match=%t stderr-match=%t", code, wantCode, stdout == wantStdout, stderr == wantStderr)
+					}
+					if strings.Contains(stdout+stderr, "Approval token:") {
+						t.Fatal("malformed unknown action disclosed approval output")
+					}
+					stateAfter, err := os.ReadFile(statePath)
+					if err != nil {
+						t.Fatalf("read reverse state after malformed unknown: %v", err)
+					}
+					if !bytes.Equal(stateAfter, stateBefore) {
+						t.Fatal("malformed unknown action changed reverse state")
+					}
+					if _, err := os.Stat(filepath.Join(root, ".polymetrics", "outbox")); !errors.Is(err, os.ErrNotExist) {
+						t.Fatalf("malformed unknown action created an outbox effect: %v", err)
+					}
+				})
+			}
+		})
+	}
+}
+
 func TestReverseExactExitTaxonomyAndBareFlags(t *testing.T) {
 	root := setupNativeReverseProject(t)
 	for _, tt := range []struct {

@@ -25,4 +25,18 @@ Downstream artifact: focused test-only RED, native reverse Cobra command/typed h
 
 Verification route: `scripts/gsd prompt verify-work 431` generated 106 lines and was executed inline under the manual universal loop.
 
-Verification result: pass at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`. Focused/repeated/race/router/golden/reverse-app/full CLI/repository, 21-case exact-start differential, runtime help, generated docs/website, gofmt, vet, build, scope/dependency guards, and final `make verify` pass. No approval value, external write, connector/service, live credential, dependency, unrelated change, PR, or review occurred; final `make verify` used only its established temporary-root ordered reverse smoke.
+Original verification result: pass at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`. Focused/repeated/race/router/golden/reverse-app/full CLI/repository, 21-case exact-start differential, runtime help, generated docs/website, gofmt, vet, build, scope/dependency guards, and final `make verify` passed.
+
+## Parser compatibility correction snapshot
+
+Task: From exact clean/upstream head `c8f5b9e97a2f71f25cdb362af0055c1c31dc8420`, read `/tmp/pm-397-review-431.log`; add RED differential tests across every reverse action for malformed legacy-accepted unknown `--=x`, `---x`, and representative variants; prove preserved outcomes and no effects; then normalize only malformed unknown tail tokens before pflag. Preserve valid flags, first operands, legal unknown behavior, approval/confirmation ordering, and strict plan → preview → approval → execute.
+
+Identity: session `issue-431-parser-compat-20260719T022304Z`; correction start `20260719T022304Z` UTC.
+
+GSD route: `scripts/gsd doctor` and `scripts/gsd list` passed. `scripts/gsd prompt programming-loop init --phase 431 --dry-run` failed because the adapter registry has no `programming-loop`; manual universal-runtime-loop fallback is active. Execution decision: `local_critical_path` for the bounded correction in this isolated worktree; no subagent tool is exposed.
+
+Skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `golang-error-handling`; `golang-security`; `golang-safety`; `golang-design-patterns`; `golang-structs-interfaces`; `golang-spf13-cobra`. CLI help/docs parity reviewed: no public-surface change, so docs/website edits are not applicable.
+
+Downstream artifact: pending RED, GREEN, 324-case differential, focused/race/full CLI, no-approval-output, gofmt/vet/build/diff evidence, final artifact update, commit, and push. No external write/service/dependency/PR/review.
+
+Verification result: pending.
