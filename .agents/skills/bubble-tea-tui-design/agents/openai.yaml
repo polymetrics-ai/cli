@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bubble Tea TUI Design"
+  short_description: "Design safe, accessible Bubble Tea terminal UIs"
+  default_prompt: "Use $bubble-tea-tui-design to design or review a safe, accessible Bubble Tea terminal interface."

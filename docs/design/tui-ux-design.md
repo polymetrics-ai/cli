@@ -1,7 +1,8 @@
 # pm Terminal UX/UI Design — the Interactive Layer
 
-Status: DESIGN — companion to `docs/plans/cli-architecture-v2-improvement-plan.md` (Pillar B)
-and `docs/adr/0003-interactive-tui-layer.md`. Library facts verified July 2026 against the
+Status: DESIGN — companion to `docs/plans/cli-architecture-v2-improvement-plan.md` (Pillar B),
+`docs/adr/0003-interactive-tui-layer.md`, and the evidence-backed cross-surface contract in
+`docs/design/terminal-ui-research-and-design-system.md`. Library facts verified July 2026 against the
 charm.land v2 line (bubbletea v2.0.8, bubbles v2.1.1, lipgloss v2.0.5, huh v2.0.3,
 glamour v2.0.1, colorprofile v0.4.3, Evertras/bubble-table v0.22.3).
 
@@ -102,13 +103,15 @@ No braille spinners (they confuse screen readers — gh's finding); the spinner 
   the human summary; no alt-screen, so a `pm flow run` in a CI-attached TTY still leaves a
   readable transcript. Alt-screen is reserved for browsers and pagers (connectors browse,
   docs view, query grid) where the user expects to "enter" and "leave" a place.
-- **Help footer on every screen** (`bubbles/help` + `bubbles/key`): short help always
-  visible, `?` toggles full help. Keys work in both dialects — arrows *and* vim
-  (`j/k/g/G/ctrl+d/ctrl+u`), `tab`/`shift+tab` between panes, `enter` confirms, `esc` steps
-  back one level, `q` quits a browser, `ctrl+c` always force-quits.
-- **Minimum size guard**: below 80×24, render
-  `Please enlarge the terminal to at least 80×24 (now 62×18).` instead of a broken layout;
-  between 80 and 110 columns, split panes stack vertically before truncating.
+- **Help footer on every screen** (`bubbles/help` + `bubbles/key`): short, current-mode
+  help always visible; `?` toggles the complete binding list. Keys work in both dialects —
+  arrows *and* Vim (`j/k/gg/G/ctrl+d/ctrl+u`), `tab`/`shift+tab` between panes,
+  `enter` activates, `esc` steps back one layer, `q` quits only in Normal mode, and
+  `ctrl+c` requests cancellation while allowing a truthful final frame.
+- **Responsive classes**: wide (120+ columns), standard (80–119), compact (60–79), and a
+  measured size guard below 60×18. Feature layouts may require 80×24 for enhancement, but
+  compact terminals receive a one-pane view or useful guard rather than a broken layout.
+  Standard layouts stack detail before truncating identifiers.
 - Wide layouts use `lipgloss.JoinHorizontal`; every pane owns its width from
   `tea.WindowSizeMsg` minus frame sizes — no hardcoded widths.
 
@@ -125,6 +128,26 @@ Words are design material (they make the interface usable, nothing else):
 - Empty states are invitations: `No flows yet. Create one: pm flow create`.
 - Every wizard's final frame teaches the flag door:
   `Next: pm flow run likely-customers` plus the full equivalent command.
+
+### 1.8 Interaction modes and focus
+
+The primary structural reference is LazyGit's operator workspace, combined with fzf's
+filter/list/preview interaction, bpytop's exact telemetry density, and Gum's focused wizard
+cadence. Polymetrics keeps its own restrained palette, pipeline rail, safety gates, and
+plain/JSON contract.
+
+- Surfaces start in **NORMAL** mode. `/` enters **FILTER**; `i`/`e` or a focused form field
+  enters **EDIT**. Mutations enter an explicitly labelled **CONFIRM** view only after
+  preview. `?` opens **HELP** for the current mode.
+- The footer displays mode and focus (`NORMAL · results`). One accent treatment identifies
+  focus in addition to text; color alone is insufficient.
+- Printable keys belong to focused Filter/Edit inputs. In those modes `j`, `q`, `/`, and
+  `?` insert text or perform the input component's documented edit behavior; they are not
+  stolen by global navigation.
+- `esc` unwinds exactly one layer: Help/Edit/Filter → Normal → prior surface. `q` quits only
+  in Normal. `ctrl+c` requests cancellation everywhere and does not bypass cleanup.
+- Vim familiarity stops at navigation. Do not implement registers, macros, operator grammar,
+  or command-line mode. Every Vim key has an arrow/home/page/tab alternative.
 
 ---
 
@@ -277,6 +300,21 @@ This closes the "users must guess `--table`" gap for everyone, not just the TUI.
   at `query run`); accessible mode offers a sequential prompt for SQL then prints plain rows.
 - Agent parity: `pm query run` untouched; `query tables` is plain/JSON first.
 
+**Query charts (dependency-gated child issue #463):** after #411 lands the result grid may
+toggle (`v`) between
+the exact table and one selected visualization over the already-returned, read-only result.
+The chart setup chooses type, X, Y, aggregation, unit, and sort from validated result
+metadata; it does not synthesize or execute SQL. Initial grammar: time series, sparkline,
+sorted horizontal bars, histogram, scatter, and heatmap only when the data/question fits.
+Every chart shows axes/units and selected exact values, retains the table/text summary,
+bounds and deterministically downsamples points, and discloses sampling/missing values.
+No pie charts, 3D effects, dual axes, decorative waveforms, or color-only meaning.
+
+`github.com/NimbleMarkets/ntcharts/v2` is the leading Bubble Tea v2-compatible candidate,
+but its own API is still described by its maintainers as subject to change. Adding it to
+`go.mod` in #463 requires the isolated spike evidence, exact pin, local wrapper, and explicit human
+dependency approval. A minimal internal sparkline/horizontal-bar renderer is the fallback.
+
 ### 2.5 `pm connectors browse` — the 551-connector browser
 
 TTY-enhanced replacement for reading a 551-row dump. Alt-screen, split view.
@@ -406,7 +444,7 @@ connector/field *names*, but values arrive only via `--from-env`/`--value-stdin`
 |---|---|---|
 | Run dashboards (2.1, 2.7, 2.8) | events bus, pipeline rail, spinner, progress, help/key | bubbletea/bubbles/lipgloss v2 |
 | Wizards (2.2, 2.3, 2.10) | huh v2 groups (embedded as `tea.Model`), rail preview | huh v2 |
-| Query grid (2.4) | textinput+autocomplete, bubble-table, viewport | evertras/bubble-table |
+| Query grid + charts (2.4) | textinput+autocomplete, bubble-table, viewport; dependency-gated chart renderer | evertras/bubble-table; proposed ntcharts/v2 requires separate human approval |
 | Connectors browser (2.5) | list (custom delegate), viewport preview, OSC52 copy | — |
 | Docs pager (2.6) | glamour TermRenderer in viewport | glamour v2 |
 | Gate & styles | `ui.Detect` (x/term), `ui/styles` tokens, colorprofile | golang.org/x/term |
@@ -420,7 +458,8 @@ command layer; only the command layer branches plain-vs-TUI.
 Testing:
 
 - **Models**: teatest/v2 golden frames per model (happy path, failure, cancel, narrow
-  terminal), driven headlessly — no TTY in CI.
+  terminal), driven headlessly — no TTY in CI. Cover 160×45, 100×30, 80×24, compact, and
+  below-minimum frames plus Normal/Filter/Edit mode conflicts and one-layer `esc` behavior.
 - **Gate**: `ui.Detect` table tests (pipes are non-TTY by construction; env/flag matrix).
 - **Contract**: existing agentic contract suite runs unchanged (plain path is the default
   of the untouched `cli.Run`); one added test per TUI-enabled command asserting
@@ -428,5 +467,8 @@ Testing:
   to stdout beyond the single envelope.
 - **Wizard outputs**: round-trip written manifests through the same parser `run` uses
   (`flow.ParseManifest`) — the wizard cannot produce a manifest the engine rejects.
+- **Charts**: chart selection/units, bounded data, deterministic bucketing, missing values,
+  exact selected-value text, table fallback, no-color/ASCII/accessibility transcripts, and
+  resize behavior are test contracts before a renderer is wired.
 - **View hygiene**: red tests feeding `\x1b[31m` and `token=…` strings through step
   names/errors into views, asserting sanitized/redacted rendering.
