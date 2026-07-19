@@ -15,8 +15,9 @@
   "endingImplementationHead": "633f1e219591c890831c9894a90fc55eb1dc9ebd",
   "correctionStartingHead": "92f265875e304feda57eef88b599ef8d2e9928da",
   "correctionSession": "issue-434-review-correction-20260719T061313Z",
-  "status": "correction_red",
-  "verificationPassed": false,
+  "correctionImplementationHead": "pending_green_commit",
+  "status": "correction_verified_pending_delivery",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -60,11 +61,21 @@
       "cycle": "correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "test-only factory-boundary expectations fail for deterministic, fixture, and model before production edits while agent passes; diagnostics contain no request value"
+    },
+    {
+      "cycle": "correction-green",
+      "decision": "local_critical_path",
+      "reason": "smallest seam defaults the analyzer-factory request to empty and assigns parsed content only for agent mode; focused injected-fake routing and output tests pass"
+    },
+    {
+      "cycle": "correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused/race/full RLM/full CLI, exact-start 1984-case differential, request-output guard, gofmt, vet, build, and exact scope/dependency diff pass without model or service calls"
     }
   ],
   "red": "original focused CLI compile RED plus correction RED: deterministic, fixture, and model factory-boundary subtests fail before production edits because request content is non-empty; agent passes; no request value printed",
-  "green": "focused RLM/build-agent 0.582s; repeated x5 8.317s; CLI race 1.681s; RLM packages 0.750s/router 0.389s; worker fakes 0.572s; router/golden 7.918s; fake CLI 1.891s; package race 1.718s; exact-start differential 24/24",
-  "verification": "pass: full CLI 424.801s; final RLM/router/worker 0.242s/0.358s/0.645s; golden/router/help 7.235s; parity pass; gofmt/vet/build pass; full repository CLI 431.499s/certify 339.553s; make verify 24.201s cached full gate",
+  "green": "original GREEN evidence retained; correction GREEN focused routing/output 0.555s with empty deterministic/fixture/model factory requests and agent-only content",
+  "verification": "correction pass: focused 1.278s; race 1.706s; full RLM/router/worker 0.856s/0.401s/1.025s and race 1.874s/1.506s/2.775s; full CLI 438.966s; exact-start differential 1984/1984 with zero request disclosures; output guard/gofmt/vet/build/diff pass; original full make verify evidence retained",
   "files": [
     ".planning/phases/434-rlm-native-cobra/PLAN.md",
     ".planning/phases/434-rlm-native-cobra/TDD-LEDGER.md",
@@ -80,9 +91,11 @@
   "commits": [
     "4782def0 docs(planning): plan rlm native cobra slice",
     "38df736c test(cli): specify native cobra rlm contract",
-    "633f1e21 refactor(cli): nativize rlm namespace"
+    "633f1e21 refactor(cli): nativize rlm namespace",
+    "45b90b68 docs(planning): plan rlm request isolation correction",
+    "13902cea test(cli): isolate rlm factory request by mode"
   ],
-  "push": "prior implementation checkpoints are pushed; review correction commit/push pending",
+  "push": "correction planning and RED checkpoints are pushed; verified GREEN and terminal artifact pushes pending",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "temporary specs/warehouses and injected analyzers/hermetic fake paths only; no model, Temporal, Podman, worker service, optional services, credentials, secrets/request leakage, dependencies, generic runner, PR, or review"

@@ -8,19 +8,19 @@ Invocation: `issue-434-pi-sol-high-20260719T053630Z`; profile `Sol`; thinking `h
 - [x] GSD doctor/list rerun; missing `programming-loop` command and manual fallback recorded.
 - [x] Required GSD/Go/CLI/RLM skills and canonical runtime/CLI parity docs reloaded.
 - [x] RED proves deterministic/fixture/model factory request is empty and agent factory receives request content (`0.562s`, three expected non-agent failures before production edits).
-- [x] RED diagnostics do not print request values; final verification output guard remains pending.
-- [ ] Smallest agent-only factory seam implemented; no service/model implementation call.
-- [ ] Focused RLM CLI tests pass.
-- [ ] Focused race tests pass.
-- [ ] Exact-start 1,984-case parser/output differential passes.
-- [ ] Full RLM tests pass.
-- [ ] Full CLI tests pass.
-- [ ] CLI help/output/golden compatibility remains unchanged.
-- [ ] `gofmt`, `go vet`, and `go build ./cmd/pm` pass.
-- [ ] Diff/scope/dependency/request-disclosure guards pass.
-- [ ] Artifacts finalized; correction committed and pushed; no PR/review.
+- [x] RED diagnostics and final verification output do not print request values.
+- [x] Smallest agent-only factory seam implemented; no service/model implementation call.
+- [x] Focused RLM CLI tests pass (`1.278s`; GREEN subset `0.555s`).
+- [x] Focused race tests pass (`1.706s`).
+- [x] Exact-start 1,984-case parser/output differential passes; request disclosures `0`.
+- [x] Full RLM/router/worker tests pass (`0.856s` / `0.401s` / `1.025s`) and race pass (`1.874s` / `1.506s` / `2.775s`).
+- [x] Full CLI tests pass (`438.966s`).
+- [x] CLI help/output/golden compatibility remains unchanged through the exact-start differential and zero public-surface diff.
+- [x] `gofmt`, `go vet`, and `go build ./cmd/pm` pass.
+- [x] Diff/scope/dependency/request-disclosure guards pass; exactly six phase artifacts plus two RLM CLI files changed from correction start.
+- [ ] Correction commits pushed; terminal artifacts finalized; no PR/review.
 
-Correction result: pending. `verificationPassed=false` until all declared correction gates complete.
+Correction result: declared correction verification equivalent passed; delivery checkpoint pending. Original full `make verify` remains recorded below and was not rerun because the user bounded this correction to focused/race/differential/full RLM/full CLI plus format/vet/build/diff.
 
 ## Original TDD and behavior
 

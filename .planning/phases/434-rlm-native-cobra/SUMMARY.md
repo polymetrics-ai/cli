@@ -1,12 +1,16 @@
 # Phase 434 Summary
 
-Status: correction RED captured from exact clean head `92f265875e304feda57eef88b599ef8d2e9928da`; production correction and verification are pending.
+Status: correction implemented and verified from exact clean head `92f265875e304feda57eef88b599ef8d2e9928da`; commit/push checkpoint pending.
 
 ## Review correction
 
 The review found that request content crosses the injected analyzer-factory seam for deterministic, fixture, and model modes, despite the phase contract limiting it to agent mode. Built-in non-agent analyzers ignore the argument, so no public output change or observed leak occurred. The bounded correction will first add a failing factory-boundary test, then gate the factory request on `mode == "agent"` without changing parsing, output, analyzers, services, dependencies, docs, website, or goldens.
 
-Correction session: `issue-434-review-correction-20260719T061313Z`. Execution decision: `local_critical_path`. GSD doctor/list pass; the adapter still lacks `programming-loop`, so the manual universal runtime loop is recorded. The focused test-only change failed before production edits for deterministic, fixture, and model while agent passed; diagnostics contained no request value. No model, Temporal, Podman, worker service, dependency, PR, or review is permitted.
+Correction session: `issue-434-review-correction-20260719T061313Z`. Execution decision: `local_critical_path`. GSD doctor/list pass; the adapter still lacks `programming-loop`, so the manual universal runtime loop is recorded. The focused test-only change failed before production edits for deterministic, fixture, and model while agent passed; diagnostics contained no request value.
+
+The smallest production seam now initializes the factory request to empty and assigns parsed request content only for agent mode. Injected fakes confirm non-agent isolation while retaining agent assigned/bare request parsing, context, close behavior, analyzer run requests, and exact text/JSON result behavior.
+
+Verification passed: focused (`1.278s`), race (`1.706s`), full RLM/router/worker plus race, full CLI (`438.966s`), exact-start 1,984/1,984 differential with zero request disclosures, verbose output disclosure guard, gofmt, vet, build, and exact eight-file scope/dependency diff. No public help/output/golden/docs/website bytes changed. No model, Temporal, Podman, worker service, optional service, credential, connector, dependency, PR, or review was used.
 
 ## Original identity
 

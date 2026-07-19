@@ -162,7 +162,11 @@ func runRLMRun(ctx context.Context, cfg config.Config, root string, flags rlmRun
 		return errors.New("rlm: analyzer factory is not configured")
 	}
 
-	analyzer, closer, err := runtime.analyzer(ctx, cfg, mode, lastString(flags.Requests))
+	factoryRequest := ""
+	if mode == "agent" {
+		factoryRequest = lastString(flags.Requests)
+	}
+	analyzer, closer, err := runtime.analyzer(ctx, cfg, mode, factoryRequest)
 	if err != nil {
 		return err
 	}

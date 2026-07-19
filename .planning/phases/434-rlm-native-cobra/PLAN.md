@@ -70,6 +70,8 @@ Correction slice:
 
 Correction execution decision: `local_critical_path` — one bounded test/seam correction in the existing isolated issue worktree; no subagent tool is exposed and the user prohibited PR/review/services/dependencies.
 
+Correction outcome: the test-only contract failed first for deterministic, fixture, and model while agent passed. The implementation now derives an empty factory request by default and assigns the parsed request only for agent mode. Focused and race tests, full RLM packages, full CLI, the exact-start 1,984-case differential, request-output guards, gofmt, vet, build, and scope/dependency diff checks pass. Public CLI output/help remains unchanged; no docs/website/golden update applies.
+
 ## Completion
 
 Completed and verified at implementation head `633f1e21`. Native RLM owns run/help and every current local flag; only the RLM wrapper/dispatcher/`parseFlags` call were removed. Injected analyzer factories verify deterministic/fixture/model/agent routing, context, closure, request isolation, spec/warehouse mapping, and outputs without model, Temporal, Podman, worker service, or other external calls. Exact-start differential matched 24/24 cases. Focused/repeated/race/router/golden/full CLI, RLM, worker-fake, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency guards, and `make verify` pass. Public help/docs/website/golden bytes are unchanged; Phase 16 viewer work remains deferred. Implementation and planning checkpoints are pushed; no PR or review was created.

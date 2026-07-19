@@ -29,13 +29,25 @@ Correction TDD contract:
 |---:|---|---|---|
 | C0 | Planning | Update PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY at exact correction start before tests or production edits | Complete |
 | C1 | RED | `go test ./internal/cli -run '^TestRLMRunRoutesModesThroughInjectedAnalyzers$' -count=1` | Failed as required in `0.562s`: deterministic, fixture, and model each reported `non-agent factory received request content`; agent passed; no request value was printed |
-| C2 | GREEN | Add smallest agent-only request gate and rerun focused tests | Pending |
-| C3 | Refactor/verify | Focused, race, 1,984 differential, full RLM/CLI, request non-disclosure, gofmt/vet/build/diff | Pending |
+| C2 | GREEN | Empty factory request by default; assign parsed request only when `mode == "agent"`; focused routing/output tests | Pass in `0.555s` |
+| C3 | Refactor/verify | Focused, race, 1,984 differential, full RLM/CLI, request non-disclosure, gofmt/vet/build/diff | Pass |
 | C4 | Delivery | Finalize six artifacts, commit, push; no PR/review | Pending |
 
 ### Correction RED evidence
 
 The complete test-only change preceded production edits. The focused mode-routing test failed for exactly the three non-agent modes because the factory seam received non-empty request content; the agent-mode subtest passed. Diagnostics name only the affected boundary and never print the request value. The same tests retain context, analyzer request, closer, JSON result, dry-run, and request non-disclosure assertions. A companion flag/output test now requires fixture's factory request to remain empty while an injected agent fake still receives bare `--request` as the legacy `true` value.
+
+### Correction GREEN and verification evidence
+
+- GREEN focused routing/output tests: `0.555s`.
+- Focused RLM CLI: `1.278s`; focused CLI race: `1.706s`.
+- Full RLM/router/worker: `0.856s` / `0.401s` / `1.025s`; full race: `1.874s` / `1.506s` / `2.775s`.
+- Exact correction-start binary differential: 31 parser/output scenarios × 64 argument variants = 1,984/1,984 matched after duration normalization; zero request disclosures. Scenarios used only help/usage and deterministic/fixture paths.
+- Full CLI: `438.966s`.
+- Verbose focused-output guard: zero request disclosures.
+- `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, `git diff --check`, and exact eight-file correction scope/dependency guard pass.
+
+No model, Temporal, Podman, worker service, runtime service, credential, connector, dependency, PR, or review was used. The temporary exact-start worktree, binaries, script, and logs were removed after verification.
 
 ## Original RED / GREEN / refactor log
 
