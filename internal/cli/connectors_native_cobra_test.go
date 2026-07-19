@@ -155,7 +155,7 @@ func TestNativeConnectorsActionsPreserveFlagsOperandsAndOutput(t *testing.T) {
 		t.Fatalf("catalog output=%+v", catalog)
 	}
 
-	stdout, stderr, code = runNativeConnectorsCLI(nil, true, "connectors", "inspect", "sample", "ignored", "--unknown", "ignored", "--help")
+	stdout, stderr, code = runNativeConnectorsCLI(nil, true, "connectors", "inspect", "sample", "ignored", "--unknown", "ignored")
 	if code != 0 || stderr != "" {
 		t.Fatalf("inspect: code=%d stderr=%q stdout=%q", code, stderr, stdout)
 	}
@@ -181,6 +181,11 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 		{name: "long", args: []string{"connectors", "--help"}},
 		{name: "short", args: []string{"connectors", "-h"}},
 		{name: "positional", args: []string{"connectors", "help"}},
+		{name: "list trailing long", args: []string{"connectors", "list", "--help"}},
+		{name: "catalog trailing positional", args: []string{"connectors", "catalog", "help"}},
+		{name: "inspect trailing long", args: []string{"connectors", "inspect", "sample", "--help"}},
+		{name: "certify trailing positional", args: []string{"connectors", "certify", "sample", "help"}},
+		{name: "JSON trailing", args: []string{"connectors", "certify", "sample", "--help"}, json: true},
 		{name: "JSON long", args: []string{"connectors", "--help"}, json: true},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
