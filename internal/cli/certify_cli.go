@@ -92,6 +92,9 @@ func (defaultCertifyCommandRuntime) Sweep(ctx context.Context, root, credsPath s
 func newCertifyCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) *cobra.Command {
 	var flags certifyCommandFlags
 	cmd := newConnectorsActionCobraCommand("certify [connector]", func(_ *cobra.Command, args []string) error {
+		if firstArgIsHelp(args) {
+			return markCobraLegacyError(writeManual("connectors", stdout, jsonOut))
+		}
 		switch {
 		case lastString(flags.Sweeps) == "true":
 			return markCobraLegacyError(runCertifySweep(ctx, root, flags, stdout, jsonOut, runtime))

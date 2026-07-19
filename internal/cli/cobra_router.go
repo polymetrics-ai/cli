@@ -534,19 +534,28 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 func normalizeConnectorsLegacyActionArgs(args []string, start int, certifyAction bool) []string {
 	out := make([]string, 0, len(args))
 	out = append(out, args[:start]...)
+	afterSeparator := false
 	for i := start; i < len(args); i++ {
 		arg := args[i]
 		if arg == "--" {
+			afterSeparator = true
 			if certifyAction && i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
 				i++
 			}
 			continue
 		}
 		if isLegacyHelpFlag(arg) {
-			if certifyAction && strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--") {
-				out = append(out, "pm-legacy-certify-short-help")
+			if afterSeparator {
+				continue
 			}
-			continue
+			return append(out, "--help")
+		}
+		if arg == "help" {
+			if afterSeparator {
+				out = append(out, "pm-legacy-connectors-help")
+				continue
+			}
+			return append(out, "--help")
 		}
 		out = append(out, normalizeReverseMalformedUnknown(arg))
 	}

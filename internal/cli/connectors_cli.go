@@ -53,7 +53,10 @@ func newConnectorsCobraCommandWithRuntime(ctx context.Context, root string, stdo
 
 func newConnectorsListCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
 	var flags connectorsListFlags
-	cmd := newConnectorsActionCobraCommand("list", func(_ *cobra.Command, _ []string) error {
+	cmd := newConnectorsActionCobraCommand("list", func(_ *cobra.Command, args []string) error {
+		if firstArgIsHelp(args) {
+			return markCobraLegacyError(writeManual("connectors", stdout, jsonOut))
+		}
 		registry := appRegistry()
 		if lastString(flags.All) != "" {
 			defs, err := connectorCatalogEntries(registry, "", "", "")
@@ -84,7 +87,10 @@ func newConnectorsListCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Comman
 
 func newConnectorsCatalogCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
 	var flags connectorsCatalogFlags
-	cmd := newConnectorsActionCobraCommand("catalog", func(_ *cobra.Command, _ []string) error {
+	cmd := newConnectorsActionCobraCommand("catalog", func(_ *cobra.Command, args []string) error {
+		if firstArgIsHelp(args) {
+			return markCobraLegacyError(writeManual("connectors", stdout, jsonOut))
+		}
 		registry := appRegistry()
 		defs, err := connectorCatalogEntries(registry, lastString(flags.Capabilities), lastString(flags.Stages), lastString(flags.Types))
 		if err != nil {
@@ -106,7 +112,10 @@ func newConnectorsCatalogCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Com
 }
 
 func newConnectorsInspectCobraCommand(stdout io.Writer, jsonOut bool, action string) *cobra.Command {
-	cmd := newConnectorsActionCobraCommand(action+" <name>", func(cmd *cobra.Command, _ []string) error {
+	cmd := newConnectorsActionCobraCommand(action+" <name>", func(cmd *cobra.Command, args []string) error {
+		if firstArgIsHelp(args) {
+			return markCobraLegacyError(writeManual("connectors", stdout, jsonOut))
+		}
 		state, ok := cmd.Context().Value(connectorsCommandStateKey{}).(connectorsCommandState)
 		if !ok || !state.operandSet {
 			return errUsage
@@ -153,6 +162,10 @@ func newConnectorsActionCobraCommand(use string, run func(*cobra.Command, []stri
 		ValidArgsFunction: completeNoFile,
 		RunE:              run,
 	}
+}
+
+func firstArgIsHelp(args []string) bool {
+	return len(args) > 0 && isHelpArg(args[0])
 }
 
 func addConnectorsStringArrayFlag(cmd *cobra.Command, target *[]string, name, usage string) {
