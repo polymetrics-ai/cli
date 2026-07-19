@@ -30,4 +30,6 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #435 nativized the hidden typed worker namespace with invocation-local fake status/serve seams and accurate no-dial evidence. Exact-head review and parent integration race checks passed.
 
-The next serialized ready unit is #436. Final verification and final parent review have not run; `verificationPassed` remains false.
+#436 nativized hidden extract, added project-rooted RLM warehouse scope, and preserved parser/help/output behavior with generated docs parity. Exact-head review and integration race checks passed.
+
+The final serialized Phase 9 unit is #437. Final verification and final parent review have not run; `verificationPassed` remains false.
