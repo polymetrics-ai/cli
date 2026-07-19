@@ -119,7 +119,7 @@ func TestScheduleCLI_Remove_CleansCrontabInstall(t *testing.T) {
 		t.Fatalf("expected crontab sentinel after install, got %q", string(data))
 	}
 
-	_, stderr, code = scheduleRun(t, root, "schedule", "remove", "nightly-leads")
+	_, stderr, code = scheduleRun(t, root, "schedule", "remove", "nightly-leads", "--crontab")
 	if code != 0 {
 		t.Fatalf("remove: exit %d, stderr=%q", code, stderr)
 	}
@@ -146,7 +146,7 @@ func TestScheduleCLI_Remove(t *testing.T) {
 
 	t.Setenv("PM_CRONTAB_FILE", t.TempDir()+"/crontab")
 
-	_, stderr, code := scheduleRun(t, root, "schedule", "remove", "nightly-leads")
+	_, stderr, code := scheduleRun(t, root, "schedule", "remove", "nightly-leads", "--crontab")
 	if code != 0 {
 		t.Fatalf("remove: exit %d, stderr=%q", code, stderr)
 	}

@@ -5,7 +5,7 @@ Invocation: `issue-433-pi-sol-high-20260719T044819Z`; profile `Sol`; thinking `h
 ## TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.
-- [ ] Focused RED captured before production edits.
+- [x] Focused RED captured before production edits (three intentionally undefined native schedule symbols).
 - [ ] Native schedule create/list/install/remove/help tree; legacy wrapper removed.
 - [ ] All current local flags typed with repeated/bare/assigned behavior preserved where applicable.
 - [ ] Bare/text/JSON/long/short/positional help parity.

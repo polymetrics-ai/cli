@@ -11,7 +11,7 @@
   "startedAt": "20260719T044819Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "planned",
+  "status": "red_tests_committed_pending",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -26,9 +26,14 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "next serialized Phase 9 schedule namespace is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited PR, review, services, dependencies, credentials, and real scheduler effects"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "the complete native schedule tree, flags, parser/output, help, validation, context, fake backend, cleanup, and invalid-action tests were added before production edits; CLI compilation failed on three intentionally missing native schedule symbols"
     }
   ],
-  "red": "pending",
+  "red": "focused CLI compile RED: undefined newScheduleCobraCommand, scheduleCommandRuntime, and newRootCmdWithScheduleRuntime",
   "green": "pending",
   "verification": "pending",
   "files": [

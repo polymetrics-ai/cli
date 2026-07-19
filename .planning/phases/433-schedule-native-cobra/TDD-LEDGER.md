@@ -16,7 +16,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
-| 1 | RED | Focused native schedule tree/flags/parser/output/backend-fake tests | Pending |
+| 1 | RED | `go test ./internal/cli -run 'TestSchedule(Command|Create|Install|Help|Backend)' -count=1` | Failed as required before production edits: undefined `newScheduleCobraCommand`, `scheduleCommandRuntime`, and `newRootCmdWithScheduleRuntime` |
 | 2 | GREEN | Native schedule subtree + typed handlers + schedule-only normalization; remove legacy wrapper/parser | Pending |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI and schedule package gates, parity/differential checks | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
@@ -37,7 +37,18 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 
 ## Exact RED evidence
 
-Pending. Must be captured after the complete test-only edit and before any production edit.
+Captured after the complete test-only edit and before any production edit:
+
+```text
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/schedule_native_cobra_test.go:23:9: undefined: newScheduleCobraCommand
+internal/cli/schedule_native_cobra_test.go:441:13: undefined: scheduleCommandRuntime
+internal/cli/schedule_native_cobra_test.go:450:9: undefined: newRootCmdWithScheduleRuntime
+FAIL\tpolymetrics.ai/internal/cli [build failed]
+FAIL
+```
+
+The intentionally missing constructors/runtime prove the native tree and injected scheduler seam do not yet exist. The committed tests cover current create/list/install/remove/help, every current local flag and first operand, invalid `uninstall`/`run`/`history`, bare/text/JSON/positional/trailing help, literal/malformed unknown/action discovery/global booleans, fixed-time deterministic output, cron/name/not-found classification, context/root/backend behavior, and effect-free fake install/remove cleanup. Existing schedule removal tests were tightened to force the redirected temporary crontab backend so no platform scheduler can execute.
 
 ## Focused GREEN
 
