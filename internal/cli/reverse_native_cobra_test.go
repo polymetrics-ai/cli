@@ -354,6 +354,38 @@ func TestReverseHelpTrailingLiteralUnknownActionsAndGlobals(t *testing.T) {
 	}
 }
 
+func TestNormalizeReverseLegacyActionArgsRewritesOnlyMalformedUnknowns(t *testing.T) {
+	args := []string{
+		"reverse", "run",
+		"--approve=first",
+		"--ordinary-unknown=value",
+		"--=x",
+		"---x",
+		"ignored-unknown-value",
+		"--confirm=typed",
+		"--approve=last",
+	}
+	want := []string{
+		"reverse", "run",
+		"--approve=first",
+		"--ordinary-unknown=value",
+		"--pm-legacy-malformed-unknown=x",
+		"--pm-legacy-malformed-unknown",
+		"ignored-unknown-value",
+		"--confirm=typed",
+		"--approve=last",
+	}
+	got := normalizeReverseLegacyActionArgs(args, 2)
+	if len(got) != len(want) {
+		t.Fatalf("normalized args length=%d, want %d: %q", len(got), len(want), got)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("normalized arg[%d]=%q, want %q; all args=%q", i, got[i], want[i], got)
+		}
+	}
+}
+
 func TestReverseMalformedUnknownFlagsPreserveLegacyActionOutcomesAndNoEffects(t *testing.T) {
 	root := initNativeReverseProject(t)
 	statePath := filepath.Join(root, ".polymetrics", "state", "state.json")
@@ -407,8 +439,12 @@ func TestReverseMalformedUnknownFlagsPreserveLegacyActionOutcomesAndNoEffects(t 
 					if !bytes.Equal(stateAfter, stateBefore) {
 						t.Fatal("malformed unknown action changed reverse state")
 					}
-					if _, err := os.Stat(filepath.Join(root, ".polymetrics", "outbox")); !errors.Is(err, os.ErrNotExist) {
-						t.Fatalf("malformed unknown action created an outbox effect: %v", err)
+					outboxEntries, err := os.ReadDir(filepath.Join(root, ".polymetrics", "outbox"))
+					if err != nil && !errors.Is(err, os.ErrNotExist) {
+						t.Fatalf("read local outbox after malformed unknown: %v", err)
+					}
+					if len(outboxEntries) != 0 {
+						t.Fatalf("malformed unknown action created %d outbox effects", len(outboxEntries))
 					}
 				})
 			}

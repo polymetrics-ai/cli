@@ -293,9 +293,27 @@ func normalizeReverseLegacyActionArgs(args []string, start int) []string {
 		if arg == "--" || isLegacyHelpFlag(arg) || (strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--")) {
 			continue
 		}
-		out = append(out, arg)
+		out = append(out, normalizeReverseMalformedUnknown(arg))
 	}
 	return out
+}
+
+// normalizeReverseMalformedUnknown gives pflag a legal unknown long flag while
+// preserving whether the legacy parser saw an assigned or space-separated value.
+func normalizeReverseMalformedUnknown(arg string) string {
+	if !strings.HasPrefix(arg, "--") {
+		return arg
+	}
+	raw := strings.TrimPrefix(arg, "--")
+	if raw == "" || (raw[0] != '=' && raw[0] != '-') {
+		return arg
+	}
+	_, value, assigned := strings.Cut(raw, "=")
+	const normalized = "--pm-legacy-malformed-unknown"
+	if assigned {
+		return normalized + "=" + value
+	}
+	return normalized
 }
 
 func normalizeCredentialsActionBoundary(args []string, state *credentialsCommandState) ([]string, bool) {
