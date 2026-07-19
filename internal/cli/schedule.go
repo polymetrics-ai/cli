@@ -8,33 +8,159 @@ import (
 	"os"
 	"time"
 
+	"github.com/spf13/cobra"
+
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/schedule"
 )
 
-func runSchedule(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return usageErrorf("usage: pm schedule <create|list|install|remove>")
-	}
-	switch args[0] {
-	case "create":
-		return runScheduleCreate(root, args[1:], stdout, jsonOut)
-	case "list":
-		return runScheduleList(root, args[1:], stdout, jsonOut)
-	case "install":
-		return runScheduleInstall(ctx, cfg, root, args[1:], stdout, jsonOut)
-	case "remove":
-		return runScheduleRemove(ctx, cfg, root, args[1:], stdout, jsonOut)
-	default:
-		return usageErrorf("unknown schedule subcommand %q", args[0])
+type scheduleCreateFlags struct {
+	Names []string
+	Crons []string
+	Flows []string
+}
+
+type scheduleBackendFlags struct {
+	Crontab bool
+}
+
+type scheduleCommandRuntime struct {
+	now            func() time.Time
+	executable     func() (string, error)
+	selectBackend  func(context.Context, bool, schedule.BackendConfig) schedule.Backend
+	crontabBackend func(string) schedule.Backend
+}
+
+func defaultScheduleCommandRuntime() scheduleCommandRuntime {
+	return scheduleCommandRuntime{
+		now:        func() time.Time { return time.Now().UTC() },
+		executable: os.Executable,
+		selectBackend: func(ctx context.Context, forceCrontab bool, cfg schedule.BackendConfig) schedule.Backend {
+			return schedule.SelectBackendFromConfig(ctx, forceCrontab, nil, cfg)
+		},
+		crontabBackend: func(file string) schedule.Backend {
+			return schedule.CrontabBackend{File: file}
+		},
 	}
 }
 
-func runScheduleCreate(root string, args []string, stdout io.Writer, jsonOut bool) error {
-	flags := parseFlags(args)
-	name := flags.first("name")
-	cron := flags.first("cron")
-	flow := flags.first("flow")
+func newScheduleCobraCommand(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	return newScheduleCobraCommandWithRuntime(ctx, cfg, root, stdout, jsonOut, defaultScheduleCommandRuntime())
+}
+
+func newScheduleCobraCommandWithRuntime(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool, runtime scheduleCommandRuntime) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:               "schedule",
+		Args:              cobra.ArbitraryArgs,
+		SilenceErrors:     true,
+		SilenceUsage:      true,
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				return markCobraLegacyError(usageErrorf("unknown schedule subcommand %q", args[0]))
+			}
+			return markCobraLegacyError(writeManual("schedule", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "schedule", stdout, jsonOut)
+	cmd.AddCommand(newScheduleCreateCobraCommand(root, stdout, jsonOut, runtime))
+	cmd.AddCommand(newScheduleListCobraCommand(root, stdout, jsonOut))
+	cmd.AddCommand(newScheduleInstallCobraCommand(ctx, cfg, root, stdout, jsonOut, runtime))
+	cmd.AddCommand(newScheduleRemoveCobraCommand(ctx, cfg, root, stdout, jsonOut, runtime))
+	cmd.AddCommand(newScheduleHelpCobraCommand(stdout, jsonOut))
+	return cmd
+}
+
+func newScheduleCreateCobraCommand(root string, stdout io.Writer, jsonOut bool, runtime scheduleCommandRuntime) *cobra.Command {
+	var flags scheduleCreateFlags
+	cmd := newScheduleActionCobraCommand("create", func(_ *cobra.Command, _ []string) error {
+		return markCobraLegacyError(runScheduleCreate(root, flags, stdout, jsonOut, runtime.now))
+	})
+	setManualHelp(cmd, "schedule", stdout, jsonOut)
+	addScheduleStringArrayFlag(cmd, &flags.Names, "name", "schedule name")
+	addScheduleStringArrayFlag(cmd, &flags.Crons, "cron", "five-field cron expression")
+	addScheduleStringArrayFlag(cmd, &flags.Flows, "flow", "named flow to run")
+	return cmd
+}
+
+func newScheduleListCobraCommand(root string, stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := newScheduleActionCobraCommand("list", func(_ *cobra.Command, _ []string) error {
+		return markCobraLegacyError(runScheduleList(root, stdout, jsonOut))
+	})
+	setManualHelp(cmd, "schedule", stdout, jsonOut)
+	return cmd
+}
+
+func newScheduleInstallCobraCommand(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool, runtime scheduleCommandRuntime) *cobra.Command {
+	var flags scheduleBackendFlags
+	cmd := newScheduleActionCobraCommand("install", func(cmd *cobra.Command, _ []string) error {
+		name, ok := scheduleOperand(cmd)
+		if !ok {
+			return markCobraLegacyError(usageErrorf("pm schedule install <name> [--crontab]"))
+		}
+		return markCobraLegacyError(runScheduleInstall(ctx, cfg, root, name, flags, stdout, jsonOut, runtime))
+	})
+	setManualHelp(cmd, "schedule", stdout, jsonOut)
+	cmd.Flags().BoolVar(&flags.Crontab, "crontab", false, "force the crontab backend")
+	return cmd
+}
+
+func newScheduleRemoveCobraCommand(ctx context.Context, cfg config.Config, root string, stdout io.Writer, jsonOut bool, runtime scheduleCommandRuntime) *cobra.Command {
+	var flags scheduleBackendFlags
+	cmd := newScheduleActionCobraCommand("remove", func(cmd *cobra.Command, _ []string) error {
+		name, ok := scheduleOperand(cmd)
+		if !ok {
+			return markCobraLegacyError(usageErrorf("pm schedule remove <name> [--crontab]"))
+		}
+		return markCobraLegacyError(runScheduleRemove(ctx, cfg, root, name, flags, stdout, jsonOut, runtime))
+	})
+	setManualHelp(cmd, "schedule", stdout, jsonOut)
+	cmd.Flags().BoolVar(&flags.Crontab, "crontab", false, "force the crontab backend")
+	return cmd
+}
+
+func newScheduleHelpCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := newScheduleActionCobraCommand("help", func(_ *cobra.Command, _ []string) error {
+		return markCobraLegacyError(writeManual("schedule", stdout, jsonOut))
+	})
+	cmd.Hidden = true
+	setManualHelp(cmd, "schedule", stdout, jsonOut)
+	return cmd
+}
+
+func newScheduleActionCobraCommand(use string, run func(*cobra.Command, []string) error) *cobra.Command {
+	return &cobra.Command{
+		Use:           use,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE:              run,
+	}
+}
+
+func addScheduleStringArrayFlag(cmd *cobra.Command, target *[]string, name, usage string) {
+	cmd.Flags().StringArrayVar(target, name, nil, usage)
+	if flag := cmd.Flags().Lookup(name); flag != nil {
+		flag.NoOptDefVal = "true"
+	}
+}
+
+func scheduleOperand(cmd *cobra.Command) (string, bool) {
+	state, ok := cmd.Context().Value(scheduleCommandStateKey{}).(scheduleCommandState)
+	if !ok || !state.operandSet {
+		return "", false
+	}
+	return state.operand, true
+}
+
+func runScheduleCreate(root string, flags scheduleCreateFlags, stdout io.Writer, jsonOut bool, now func() time.Time) error {
+	name := lastString(flags.Names)
+	cron := lastString(flags.Crons)
+	flow := lastString(flags.Flows)
 
 	if name == "" || cron == "" || flow == "" {
 		return usageErrorf("pm schedule create requires --name, --cron, --flow")
@@ -44,16 +170,16 @@ func runScheduleCreate(root string, args []string, stdout io.Writer, jsonOut boo
 		return validationErrorf("invalid --cron: %v", err)
 	}
 
-	now := time.Now().UTC()
-	m := schedule.Manifest{
+	createdAt := now().UTC()
+	manifest := schedule.Manifest{
 		Name:      name,
 		Cron:      cron,
 		Flow:      flow,
-		CreatedAt: now,
-		UpdatedAt: now,
+		CreatedAt: createdAt,
+		UpdatedAt: createdAt,
 	}
 
-	if err := schedule.Save(root, m, false); err != nil {
+	if err := schedule.Save(root, manifest, false); err != nil {
 		if isAlreadyExists(err) {
 			return validationErrorf("%v", err)
 		}
@@ -61,13 +187,13 @@ func runScheduleCreate(root string, args []string, stdout io.Writer, jsonOut boo
 	}
 
 	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "Schedule", "ok": true, "schedule": m})
+		return writeJSON(stdout, envelope{"kind": "Schedule", "ok": true, "schedule": manifest})
 	}
-	fmt.Fprintf(stdout, "Created schedule %s (cron: %s, flow: %s)\n", m.Name, m.Cron, m.Flow)
+	fmt.Fprintf(stdout, "Created schedule %s (cron: %s, flow: %s)\n", manifest.Name, manifest.Cron, manifest.Flow)
 	return nil
 }
 
-func runScheduleList(root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runScheduleList(root string, stdout io.Writer, jsonOut bool) error {
 	manifests, err := schedule.List(root)
 	if err != nil {
 		return err
@@ -79,53 +205,36 @@ func runScheduleList(root string, args []string, stdout io.Writer, jsonOut bool)
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ScheduleList", "schedules": manifests})
 	}
-	for _, m := range manifests {
-		fmt.Fprintf(stdout, "%s\t%s\t%s\n", m.Name, m.Cron, m.Flow)
+	for _, manifest := range manifests {
+		fmt.Fprintf(stdout, "%s\t%s\t%s\n", manifest.Name, manifest.Cron, manifest.Flow)
 	}
 	return nil
 }
 
-func runScheduleInstall(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
-	flags := parseFlags(args)
-	positionals := flags.values["_"]
-	if len(positionals) == 0 {
-		return usageErrorf("pm schedule install <name> [--crontab]")
-	}
-	name := positionals[0]
-	forceCrontab := flags.first("crontab") == "true"
-
-	m, err := schedule.Load(root, name)
+func runScheduleInstall(ctx context.Context, cfg config.Config, root, name string, flags scheduleBackendFlags, stdout io.Writer, jsonOut bool, runtime scheduleCommandRuntime) error {
+	manifest, err := schedule.Load(root, name)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return validationErrorf("schedule %q not found", name)
 		}
 		return err
 	}
-	m.Root = root
+	manifest.Root = root
 
-	pmBin, _ := os.Executable()
-	backend := schedule.SelectBackendFromConfig(ctx, forceCrontab, nil, scheduleConfig(cfg))
-
-	if err := backend.Install(ctx, m, pmBin); err != nil {
+	pmBin, _ := runtime.executable()
+	backend := runtime.selectBackend(ctx, flags.Crontab, scheduleConfig(cfg))
+	if err := backend.Install(ctx, manifest, pmBin); err != nil {
 		return fmt.Errorf("install failed: %w", err)
 	}
 
 	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "ScheduleInstall", "ok": true, "schedule": m, "backend": string(backend.Kind())})
+		return writeJSON(stdout, envelope{"kind": "ScheduleInstall", "ok": true, "schedule": manifest, "backend": string(backend.Kind())})
 	}
-	fmt.Fprintf(stdout, "Installed schedule %s via %s\n", m.Name, backend.Kind())
+	fmt.Fprintf(stdout, "Installed schedule %s via %s\n", manifest.Name, backend.Kind())
 	return nil
 }
 
-func runScheduleRemove(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
-	flags := parseFlags(args)
-	positionals := flags.values["_"]
-	if len(positionals) == 0 {
-		return usageErrorf("pm schedule remove <name> [--crontab]")
-	}
-	name := positionals[0]
-	forceCrontab := flags.first("crontab") == "true"
-
+func runScheduleRemove(ctx context.Context, cfg config.Config, root, name string, flags scheduleBackendFlags, stdout io.Writer, jsonOut bool, runtime scheduleCommandRuntime) error {
 	if _, err := schedule.Load(root, name); err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return validationErrorf("schedule %q not found", name)
@@ -133,12 +242,11 @@ func runScheduleRemove(ctx context.Context, cfg config.Config, root string, args
 		return err
 	}
 
-	// Best-effort backend removal (ignores errors if backend binary absent).
 	backendCfg := scheduleConfig(cfg)
-	backend := schedule.SelectBackendFromConfig(ctx, forceCrontab, nil, backendCfg)
+	backend := runtime.selectBackend(ctx, flags.Crontab, backendCfg)
 	_ = backend.Remove(ctx, name)
 	if backend.Kind() != schedule.KindCrontab {
-		_ = (schedule.CrontabBackend{File: backendCfg.CrontabFile}).Remove(ctx, name)
+		_ = runtime.crontabBackend(backendCfg.CrontabFile).Remove(ctx, name)
 	}
 
 	if err := schedule.Delete(root, name); err != nil {

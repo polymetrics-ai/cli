@@ -1,0 +1,79 @@
+{
+  "phase": 433,
+  "issue": 433,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/433-schedule-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "ab1c79eede67fa87e1c6b808d6ddba0b27fcf00d",
+  "invocationSession": "issue-433-pi-sol-high-20260719T044819Z",
+  "startedAt": "20260719T044819Z",
+  "modelProfile": "Sol",
+  "thinking": "high",
+  "endedAt": "20260719T052010Z",
+  "endingImplementationHead": "7b20f9fefcf204b9a9e65e35185de81ee811b489",
+  "status": "complete_verified_pushed",
+  "verificationPassed": true,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command or prompt: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "verifyWorkPrompt": "passed_106_lines_executed_inline"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "next serialized Phase 9 schedule namespace is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited PR, review, services, dependencies, credentials, and real scheduler effects"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "the complete native schedule tree, flags, parser/output, help, validation, context, fake backend, cleanup, and invalid-action tests were added before production edits; CLI compilation failed on three intentionally missing native schedule symbols"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native schedule actions and typed flags, schedule-only legacy normalization/private operand capture, injected fake backend seams, and schedule-only parser removal pass focused, repeated, race, router, golden-focused, schedule-package, and 104/104 initial exact-start differential gates"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "expanded exact-start differential, full CLI/schedule, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency, and make verify gates passed without real scheduler effects"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "issue-local handoff and terminal evidence are finalized for commit/push; no PR or review was created as requested"
+    }
+  ],
+  "red": "focused CLI compile RED: undefined newScheduleCobraCommand, scheduleCommandRuntime, and newRootCmdWithScheduleRuntime",
+  "green": "focused schedule CLI 0.595s; schedule package 0.598s; repeated x5 0.655s; focused race CLI 55.681s; router/golden/schedule 6.728s; initial exact-start differential 104/104",
+  "verification": "pass: exact-start differentials 248/248; full CLI 428.355s; schedule 0.400s; parity pass; gofmt/vet/build pass; full repository 440.32s; make verify 25.01s cached full gate",
+  "files": [
+    ".planning/phases/433-schedule-native-cobra/PLAN.md",
+    ".planning/phases/433-schedule-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/433-schedule-native-cobra/VERIFICATION.md",
+    ".planning/phases/433-schedule-native-cobra/PROMPTS.md",
+    ".planning/phases/433-schedule-native-cobra/SUMMARY.md",
+    ".planning/phases/433-schedule-native-cobra/RUN-STATE.json",
+    "internal/cli/schedule_native_cobra_test.go",
+    "internal/cli/schedule.go",
+    "internal/cli/schedule_test.go",
+    "internal/cli/cobra_router.go",
+    "internal/cli/cobra_router_test.go"
+  ],
+  "commits": [
+    "e4bf64bd docs(planning): plan schedule native cobra slice",
+    "ebe4bae3 test(cli): specify native cobra schedule contract",
+    "7b20f9fe refactor(cli): nativize schedule namespace",
+    "5a552bc7 docs(planning): complete schedule native cobra handoff"
+  ],
+  "push": "all implementation and terminal artifact checkpoints pushed to origin/refactor/433-schedule-native-cobra",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "not_run_user_prohibited_review",
+  "safety": "temporary roots, redirected temporary crontab files, fixed clocks, executable stubs, selectors, and fake backends only; no real crontab, launchd, systemd, Temporal, external scheduler, credentials, services, dependencies, PR, or review"
+}
