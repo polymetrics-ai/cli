@@ -2,6 +2,7 @@ package cli_test
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -118,6 +119,32 @@ func TestCertifyCLIUnknownConnectorFails(t *testing.T) {
 // TestCertifyCLIAllRequiresCredentialsFile proves --all without
 // --credentials-file is a clear usage error (certification design §A
 // command spec: "pm connectors certify --all --credentials-file creds.yaml").
+func TestCertifyCLIBatchLoadsCredentialsBeforeValidatingParallelAndPreservesErrorBytes(t *testing.T) {
+	root := t.TempDir()
+	missing := filepath.Join(root, "missing-creds.yaml")
+	_, readErr := os.ReadFile(missing)
+	if readErr == nil {
+		t.Fatal("missing credential fixture unexpectedly exists")
+	}
+	wantStderr := fmt.Sprintf("error: certify: read creds file %s: %v\n", missing, readErr)
+
+	for _, args := range [][]string{
+		{"connectors", "certify", "--all", "--credentials-file", missing},
+		{"connectors", "certify", "--all", "--credentials-file", missing, "--parallel", "invalid"},
+	} {
+		stdout, stderr, code := certifyRun(t, root, args...)
+		if code != 1 {
+			t.Errorf("args=%v exit=%d, want 1; stdout=%q stderr=%q", args, code, stdout, stderr)
+		}
+		if stdout != "" {
+			t.Errorf("args=%v stdout=%q, want empty", args, stdout)
+		}
+		if stderr != wantStderr {
+			t.Errorf("args=%v stderr mismatch\n got: %q\nwant: %q", args, stderr, wantStderr)
+		}
+	}
+}
+
 func TestCertifyCLIAllRequiresCredentialsFile(t *testing.T) {
 	root := t.TempDir()
 

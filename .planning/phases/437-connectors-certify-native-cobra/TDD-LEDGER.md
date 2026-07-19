@@ -40,7 +40,7 @@ Session `issue-437-review-correction-20260719T113319Z`; exact correction start `
 | Step | Kind | Required evidence | Status |
 |---:|---|---|---|
 | C0 | Planning | Six artifacts reopened before tests/production; GSD manual fallback, skills, safety scope, and verification commands recorded | Complete |
-| C1 | RED | Unsupported safety/mode controls fail closed without invoking runner; single span/validation/option precedence; batch credential-file/parallel and exact wrapper bytes; exact-only help forms; docs exit contract | Pending |
+| C1 | RED | `go test ./internal/cli -run 'TestNativeCertifyRejectsUnsupportedSafetyAndModeControls|TestNativeConnectorsOnlyExactHelpFormsRenderManual|TestConnectorsManualSeparatesCLIAndCompletedCertificationExits|TestCertifyCLIBatchLoadsCredentialsBeforeValidatingParallelAndPreservesErrorBytes|TestTelemetryCertifyInvalidOptionsPreserveSingleSpanAndConnectorValidationPrecedence' -count=1` | Complete: unsupported controls invoked runtime and were visible; false/malformed/cluster help rendered manuals; docs phrases absent; missing creds gained batch wrapper and invalid parallel won; invalid connector lost to option usage and emitted no certify span |
 | C2 | GREEN | Smallest production correction preserving all safety gates and rejecting/unadvertising unimplemented controls | Pending |
 | C3 | Refactor | Focused differential/repeated/race, certify exit/redaction/replay-no-live, local sample smoke, docs/golden/website parity | Pending |
 | C4 | Full gate | gofmt, vet, full tests, build, `make verify`, connector validation | Pending |

@@ -82,12 +82,10 @@ func TestConnectorsCommandIsNativeCobraSubtree(t *testing.T) {
 		"certify": {
 			"credential": "stringArray", "from-env": "stringArray", "config": "stringArray",
 			"stream": "stringArray", "limit": "stringArray", "modes": "stringArray",
-			"skip": "stringArray", "rate-limit": "stringArray", "budget": "stringArray",
-			"record": "stringArray", "replay": "stringArray", "live-all-modes": "stringArray",
-			"allow-production-writes": "stringArray", "keep-workdir": "stringArray",
-			"write": "stringArray", "full": "stringArray", "all": "stringArray",
-			"credentials-file": "stringArray", "parallel": "stringArray", "resume": "stringArray",
-			"sweep": "stringArray", "older-than": "stringArray",
+			"skip": "stringArray", "keep-workdir": "stringArray", "write": "stringArray",
+			"full": "stringArray", "all": "stringArray", "credentials-file": "stringArray",
+			"parallel": "stringArray", "resume": "stringArray", "sweep": "stringArray",
+			"older-than": "stringArray",
 		},
 	}
 	for actionName, expectedFlags := range flagsByAction {
@@ -244,6 +242,92 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 	assertCLIError(t, code, stdout, stderr, 3, "validation", "")
 }
 
+func TestNativeCertifyRejectsUnsupportedSafetyAndModeControls(t *testing.T) {
+	unsupported := []string{
+		"record",
+		"replay",
+		"allow-production-writes",
+		"rate-limit",
+		"budget",
+		"live-all-modes",
+	}
+
+	root := newRootCmd(context.Background(), testRouterConfig(".", false), io.Discard, io.Discard)
+	connectorsCmd := findCobraCommand(root, "connectors")
+	if connectorsCmd == nil {
+		t.Fatal("missing connectors command")
+	}
+	certifyCmd := findCobraCommand(connectorsCmd, "certify")
+	if certifyCmd == nil {
+		t.Fatal("missing connectors certify command")
+	}
+	for _, name := range unsupported {
+		flag := certifyCmd.Flags().Lookup(name)
+		if flag == nil {
+			t.Fatalf("unsupported --%s must remain an explicit fail-closed parser control", name)
+		}
+		if !flag.Hidden {
+			t.Errorf("unsupported --%s is advertised in Cobra help", name)
+		}
+	}
+
+	for _, tt := range []struct {
+		name string
+		arg  string
+	}{
+		{name: "record", arg: "--record"},
+		{name: "replay", arg: "--replay"},
+		{name: "replay false", arg: "--replay=false"},
+		{name: "production write allow", arg: "--allow-production-writes"},
+		{name: "production write allow false", arg: "--allow-production-writes=false"},
+		{name: "rate limit", arg: "--rate-limit=2"},
+		{name: "budget", arg: "--budget=50"},
+		{name: "live all modes", arg: "--live-all-modes"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			runtime := &fakeCertifyCommandRuntime{singleReport: passingCLIReport("sample")}
+			stdout, stderr, code := runNativeConnectorsCLI(runtime, true, "connectors", "certify", "sample", tt.arg)
+			assertCLIError(t, code, stdout, stderr, 2, "usage", "not supported")
+			if runtime.singleCalls != 0 || runtime.batchCalls != 0 || runtime.sweepCalls != 0 {
+				t.Fatalf("unsupported control invoked runtime: single=%d batch=%d sweep=%d", runtime.singleCalls, runtime.batchCalls, runtime.sweepCalls)
+			}
+		})
+	}
+}
+
+func TestNativeConnectorsOnlyExactHelpFormsRenderManual(t *testing.T) {
+	for _, arg := range []string{"--help=false", "--help=true", "--help=malformed", "-xh", "-hx"} {
+		t.Run(arg, func(t *testing.T) {
+			stdout, stderr, code := runNativeConnectorsCLI(nil, true, "connectors", "list", arg)
+			if code != 0 || stderr != "" {
+				t.Fatalf("code=%d stderr=%q stdout=%q", code, stderr, stdout)
+			}
+			assertJSONKind(t, stdout, "ConnectorList")
+			if strings.Contains(stdout, `"kind": "CommandManual"`) {
+				t.Fatalf("non-exact help form rendered manual: %s", stdout)
+			}
+		})
+	}
+}
+
+func TestConnectorsManualSeparatesCLIAndCompletedCertificationExits(t *testing.T) {
+	manual := docs["connectors"]
+	for _, required := range []string{
+		"Before a certification report is completed",
+		"usage errors exit 2",
+		"validation errors exit 3",
+		"A completed certification report exits 0 for pass, 2 for certification",
+		"failure, or 3 for leaked resources",
+	} {
+		if !strings.Contains(manual, required) {
+			t.Errorf("connectors manual missing %q", required)
+		}
+	}
+	if strings.Contains(manual, "1 usage/internal") {
+		t.Error("connectors manual still conflates CLI usage and internal exits")
+	}
+}
+
 func TestNativeCertifyModesCurrentFlagsAndExitContract(t *testing.T) {
 	secretValue := "planted-native-certify-secret"
 	t.Setenv("PM_CERT_NATIVE_TOKEN", secretValue)
@@ -256,9 +340,7 @@ func TestNativeCertifyModesCurrentFlagsAndExitContract(t *testing.T) {
 		"--modes=full_refresh_append", "--modes=incremental_append,incremental_append_deduped",
 		"--skip=flow", "--skip=schedule,write", "--from-env=token=PM_CERT_NATIVE_TOKEN",
 		"--config=base_url=https://example.invalid", "--config=account=fixture",
-		"--keep-workdir", "--write", "--full", "--credential=ignored",
-		"--rate-limit=2", "--budget=50", "--record", "--replay=false",
-		"--live-all-modes=false", "--allow-production-writes=false", "--unknown=ignored",
+		"--keep-workdir", "--write", "--full", "--credential=ignored", "--unknown=ignored",
 	)
 	if code != 0 || stderr != "" {
 		t.Fatalf("single: code=%d stderr=%q stdout=%q", code, stderr, stdout)

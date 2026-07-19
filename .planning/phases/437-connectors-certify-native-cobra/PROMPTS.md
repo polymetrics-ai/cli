@@ -33,6 +33,6 @@ Commands: `scripts/gsd doctor` passed; both `scripts/gsd prompt programming-loop
 
 Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-spf13-cobra`.
 
-Downstream artifact: pending RED tests, smallest fail-closed correction, regenerated docs/goldens/website data, focused/full evidence, final commit/push.
+Downstream artifact: focused RED tests now capture all five findings; smallest fail-closed correction, regenerated docs/goldens/website data, focused/full evidence, and final commit/push remain pending.
 
-Verification result: pending.
+Verification result: pending. RED command failed as required: unsupported controls remained visible and invoked the runner; false/malformed/cluster help rendered manuals; connector validation/span ordering, batch load/parallel/error bytes, and docs exit separation all failed their new assertions.

@@ -577,6 +577,24 @@ func TestTelemetryOTLPExportFailureUsesProjectWarningAndKeepsStdout(t *testing.T
 	}
 }
 
+func TestTelemetryCertifyInvalidOptionsPreserveSingleSpanAndConnectorValidationPrecedence(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("PM_TELEMETRY", "file")
+
+	stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "../sample", "--from-env=bad", "--json")
+	if code != 3 {
+		t.Fatalf("exit code = %d, want connector validation exit 3; stdout=%s stderr=%s", code, stdout, stderr)
+	}
+	if !strings.Contains(stdout, `"category": "validation"`) {
+		t.Fatalf("stdout missing validation envelope: %s", stdout)
+	}
+	data := readCLITelemetry(t, filepath.Join(root, ".polymetrics", "telemetry"))
+	const spanName = `"Name": "pm.certify.connector"`
+	if got := bytes.Count(data, []byte(spanName)); got != 1 {
+		t.Fatalf("certify connector span count = %d, want 1:\n%s", got, data)
+	}
+}
+
 func TestTelemetryCertifyConnectorSpan(t *testing.T) {
 	root := t.TempDir()
 	t.Setenv("PM_TELEMETRY", "file")

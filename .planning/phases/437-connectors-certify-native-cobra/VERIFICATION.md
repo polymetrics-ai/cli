@@ -66,11 +66,11 @@ Correction start: `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`; session `issue-437
 
 - [x] Read and accept all five findings in `/tmp/pm-397-review-437.log`.
 - [x] Reopen all phase artifacts before test or production edits.
-- [ ] RED: unsupported `record`/`replay`/production-write/rate-limit/budget/live-all-modes controls reject before runner invocation.
-- [ ] RED: single certify emits exactly one connector span and preserves connector-validation-before-options precedence.
-- [ ] RED: batch credential-file load precedes parallel parsing and preserves exact load/run error wrappers and bytes.
-- [ ] RED: only `--help`, `-h`, and intentional positional `help` render connectors manuals; false/assigned malformed/unknown short clusters do not.
-- [ ] RED: CLI and website docs separate pre-report usage/validation/runtime exits from completed report outcomes.
+- [x] RED: unsupported `record`/`replay`/production-write/rate-limit/budget/live-all-modes controls reject before runner invocation.
+- [x] RED: single certify emits exactly one connector span and preserves connector-validation-before-options precedence.
+- [x] RED: batch credential-file load precedes parallel parsing and preserves exact load/run error wrappers and bytes.
+- [x] RED: only `--help`, `-h`, and intentional positional `help` render connectors manuals; false/assigned malformed/unknown short clusters do not.
+- [x] RED: CLI and website docs separate pre-report usage/validation/runtime exits from completed report outcomes.
 - [ ] Focused differential and repeated/race tests.
 - [ ] Certify exits, redaction, and unsupported replay no-live/no-write runner test.
 - [ ] Local sample fixture smoke with temp root only.

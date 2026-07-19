@@ -59,9 +59,14 @@
       "cycle": "accepted-review-correction-plan",
       "decision": "local_critical_path",
       "reason": "all five findings accepted at exact head; bounded safety-critical correction in existing isolated issue worktree; no subagent tool, services, credentials, PR, or review"
+    },
+    {
+      "cycle": "accepted-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused RED reproduced all findings: no-op controls, help over-normalization, single span/precedence, batch ordering/wrappers, and inaccurate exit docs"
     }
   ],
-  "red": "correction RED pending: unsupported controls, single span/precedence, batch file/parallel/error bytes, exact-only help, and exit docs",
+  "red": "captured: unsupported controls invoked runner and were advertised; broad help normalization hijacked false/malformed/clusters; invalid options bypassed certify span and beat connector validation; parallel beat missing creds and load error gained wrapper; docs conflated exit phases",
   "green": "pending accepted correction implementation",
   "verification": "pending; prior verification superseded by accepted findings",
   "files": [
@@ -82,7 +87,7 @@
     "445ad06c fix(cli): route direct connectors action help",
     "55e32402 docs(planning): complete connectors certify native handoff"
   ],
-  "push": "prior checkpoints pushed; correction planning checkpoint pending commit/push",
+  "push": "correction planning checkpoint pushed; RED checkpoint pending commit/push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"
