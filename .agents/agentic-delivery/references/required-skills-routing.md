@@ -62,6 +62,25 @@ For doc comments, README/manual docs, CLI docs, generated docs, examples, or doc
 
 ## Design and website skill routing
 
+### Terminal UI and interactive CLI design
+
+For Bubble Tea, Bubbles, Lip Gloss, Huh, Glamour, terminal charts, dashboards, wizards,
+browsers, query grids, pagers, keymaps, focus, responsive terminal layouts, or TUI
+accessibility work, load the repo-local skill:
+
+- `bubble-tea-tui-design`
+
+Also read:
+
+- `docs/design/tui-ux-design.md`
+- `docs/design/terminal-ui-research-and-design-system.md`
+- `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`
+
+Combine it with `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`,
+`golang-safety`, `golang-context`, `golang-concurrency`, and `golang-documentation` as the
+surface requires. The existing `opentui` skill targets a different Bun/Zig/React/Solid
+stack and is not implementation authority for this Go/Bubble Tea program.
+
 For website docs, React/Next pages, UI components, documentation UX, accessibility, visual presentation, or docs preview work, load:
 
 - `frontend-design` for production-grade UI/design implementation or visual polish

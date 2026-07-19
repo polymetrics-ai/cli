@@ -37,6 +37,7 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 - `docs/plans/cli-architecture-v2-improvement-plan.md`
 - `docs/prompts/cli-architecture-v2-gsd-execution-prompt.md`
 - `docs/design/tui-ux-design.md`
+- `docs/design/terminal-ui-research-and-design-system.md`
 - `docs/adr/0002-cobra-viper-cli-framework.md`
 - `docs/adr/0003-interactive-tui-layer.md`
 - `docs/adr/0004-opentelemetry-observability.md`
@@ -57,17 +58,19 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 | 7 | #405 | B | TTY gate, `--plain`/`--no-input`, and `--progress ndjson` | #403 |
 | 8 | #406 | A | Nativize pilot `catalog` namespace | #402 |
 | 9 | #407 | A | Nativize remaining namespaces through serialized grandchildren #421–#437 | #406, #437 |
+| Design gate | #462 | B | Freeze Bubble Tea interaction, responsive layout, chart grammar, design skill, and TUI worker prompts | #405; before #408/#409/#411/#412/#414/#416/#418 |
 | 10 | #408 | B | Flow and ETL run dashboards | #405 |
 | 11 | #409 | B | Flow and schedule creation wizards | #408 |
 | 12 | #410 | C | Opt-in OpenTelemetry tracing | #402 |
 | 13 | #411 | B | Connector browser, `query tables`, and interactive query grid | #409 |
+| 13b | #463 | B | Read-only query charts and reusable terminal dashboard compositions | #462, #411; renderer dependency requires explicit human approval |
 | 14 | #412 | B | Terminal docs viewer | #409 |
 | 15 | #413 | A | Connector-aware shell completion | #407 |
 | 16 | #414 | B | Certify batch table and RLM agent dashboards | #407, #408 |
 | 17 | #415 | C | OpenTelemetry metrics | #410 |
 | 18 | #416 | B | Guided reverse ETL and connection prompts | #409 |
 | 19 | #417 | A | Help tree deepening and generated man pages | #411, #412, #413, #414, #416 |
-| 20 | #418 | B | Accessibility audit and `pm a11y` topic | #411, #412, #414, #416 |
+| 20 | #418 | B | Accessibility audit and `pm a11y` topic | #411, #412, #414, #416, #463 when chart slice is included |
 | 21 | #419 | C | Optional OpenTelemetry log bridge, human-skippable | #404, #410 |
 | 22 | #420 | A | Architecture v2 cleanup, docs updates, final verification | #415, #417, #418 |
 
@@ -76,7 +79,9 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 1. Bootstrap serial chain: #398 → #399 → #400 → #401 → #402.
 2. First parallel fan-out after #402: #403, #404, #406, and #410 may run concurrently in isolated worktrees after write-scope collision checks.
 3. Phase 9 namespace grandchildren #421–#437 are serialized because they share central CLI routing/help files.
-4. UX fan-out after #409: #411, #412, and #416 may run concurrently; #414 waits for #407 and #408.
+4. TUI design issue #462 must integrate before production UI work starts. UX fan-out after
+   #409: #411, #412, and #416 may run concurrently; #414 waits for #407 and #408. Chart
+   child #463 follows #411 and joins the #418 accessibility convergence when included.
 5. Convergence: #413 after #407; #417 and #418 after their UI/CLI dependencies; #420 last. Phase #419 is optional and requires an explicit human decision if skipped or if dependency budget changes.
 
 #### CLI Architecture v2 gates
@@ -84,6 +89,10 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 - Every behavior-changing issue must use repo-local GSD/TDD, record red → green → refactor evidence, and keep issue-specific plan/TDD/verification artifacts current.
 - CLI-visible work must keep runtime help, bare namespace behavior, `docs/cli/**`, website docs, generated help/manual artifacts, completion metadata, and tests in parity.
 - Dependency additions are allowed only in the phase/version lines approved by ADRs 0002–0004; any deviation is a human gate.
+- TUI workers must load `bubble-tea-tui-design`, cite both design documents, and record
+  modal-key, responsive-layout, accessibility/plain fallback, sanitation, cancellation,
+  and JSON/stdout/stderr parity evidence. `ntcharts/v2` remains unapproved until a dedicated
+  chart child issue #463 receives an explicit human dependency decision.
 - Parent PR to `main` remains draft until all required sub-issues are integrated, final verification passes, automated review coverage is recorded, and a human is asked for final approval.
 
 ### 0. GSD Runtime and Agent Enablement
