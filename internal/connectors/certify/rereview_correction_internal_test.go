@@ -315,9 +315,11 @@ func appendOutboxAction(root, tag, action string) error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-	_, err = fmt.Fprintf(f, `{"external_id":%q,"tag":%q,"_outbox_action":%q}`+"\n", tag, tag, action)
-	return err
+	if _, err := fmt.Fprintf(f, `{"external_id":%q,"tag":%q,"_outbox_action":%q}`+"\n", tag, tag, action); err != nil {
+		_ = f.Close()
+		return err
+	}
+	return f.Close()
 }
 
 func lastStage(stages []StageResult, name string) *StageResult {
