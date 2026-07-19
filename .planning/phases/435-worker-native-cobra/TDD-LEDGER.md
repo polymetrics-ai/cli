@@ -18,7 +18,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 2 | GREEN | Native hidden worker subtree + invocation-local fake runtime + worker-only dispatcher removal | Pass: focused `0.569s`; repeated ×5 `0.738s`; focused race `1.690s` |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI, worker fake, config/parity/differential checks | Pass: full CLI `427.774s`; worker/config fakes pass; exact-start 6/6 compatible plus 2/2 intentional help changes |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Pass: full repository CLI `435.094s`, certify `344.412s`; `make verify` exited 0 with docs/smoke/lint/connectors green |
-| 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Verified implementation pushed; terminal artifact commit/push follows |
+| 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Complete: planning, RED, GREEN, and terminal handoff checkpoints pushed |
 
 ## RED contract
 
