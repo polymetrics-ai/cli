@@ -13,8 +13,10 @@
   "thinking": "high",
   "endedAt": "20260719T060324Z",
   "endingImplementationHead": "633f1e219591c890831c9894a90fc55eb1dc9ebd",
-  "status": "complete_verified_pushed",
-  "verificationPassed": true,
+  "correctionStartingHead": "92f265875e304feda57eef88b599ef8d2e9928da",
+  "correctionSession": "issue-434-review-correction-20260719T061313Z",
+  "status": "correction_planned",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -48,6 +50,11 @@
       "cycle": "summary",
       "decision": "local_critical_path",
       "reason": "issue-local handoff and terminal evidence are finalized for commit/push; no PR or review was created as requested"
+    },
+    {
+      "cycle": "correction-plan",
+      "decision": "local_critical_path",
+      "reason": "bounded analyzer-factory request correction in the existing isolated worktree; artifacts precede RED and production edits, no subagent tool is exposed, and services, dependencies, PR, and review are prohibited"
     }
   ],
   "red": "focused CLI compile RED: undefined newRLMCobraCommand, rlmCommandRuntime, and newRootCmdWithRLMRuntime",
@@ -70,7 +77,7 @@
     "38df736c test(cli): specify native cobra rlm contract",
     "633f1e21 refactor(cli): nativize rlm namespace"
   ],
-  "push": "all implementation and terminal artifact checkpoints committed and pushed to origin/refactor/434-rlm-native-cobra",
+  "push": "prior implementation checkpoints are pushed; review correction commit/push pending",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "temporary specs/warehouses and injected analyzers/hermetic fake paths only; no model, Temporal, Podman, worker service, optional services, credentials, secrets/request leakage, dependencies, generic runner, PR, or review"

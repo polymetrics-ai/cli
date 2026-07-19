@@ -2,7 +2,27 @@
 
 Invocation: `issue-434-pi-sol-high-20260719T053630Z`; profile `Sol`; thinking `high`; exact start `2ac457a163cbd7bc9a3708da88b03d375ec5e952`.
 
-## TDD and behavior
+## Review correction checklist — start `92f26587`
+
+- [x] Review log read; six artifacts updated before correction test/production edits.
+- [x] GSD doctor/list rerun; missing `programming-loop` command and manual fallback recorded.
+- [x] Required GSD/Go/CLI/RLM skills and canonical runtime/CLI parity docs reloaded.
+- [ ] RED proves deterministic/fixture/model factory request is empty and agent factory receives request content.
+- [ ] Test failures and verification output do not print request values.
+- [ ] Smallest agent-only factory seam implemented; no service/model implementation call.
+- [ ] Focused RLM CLI tests pass.
+- [ ] Focused race tests pass.
+- [ ] Exact-start 1,984-case parser/output differential passes.
+- [ ] Full RLM tests pass.
+- [ ] Full CLI tests pass.
+- [ ] CLI help/output/golden compatibility remains unchanged.
+- [ ] `gofmt`, `go vet`, and `go build ./cmd/pm` pass.
+- [ ] Diff/scope/dependency/request-disclosure guards pass.
+- [ ] Artifacts finalized; correction committed and pushed; no PR/review.
+
+Correction result: pending. `verificationPassed=false` until all declared correction gates complete.
+
+## Original TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.
 - [x] Focused RED captured before production edits (four intentionally undefined native RLM symbols).

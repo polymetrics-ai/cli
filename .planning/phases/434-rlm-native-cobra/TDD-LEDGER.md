@@ -11,7 +11,29 @@ Doctor/list passed; `plan-phase 434 --skip-research` generated and is executed i
 
 Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`, `golang-documentation`, `golang-spf13-cobra`.
 
-## RED / GREEN / refactor log
+## Review correction — start `92f26587`
+
+Session: `issue-434-review-correction-20260719T061313Z`.
+
+The adapter doctor/list pass, but `scripts/gsd prompt programming-loop 434-rlm-native-cobra-correction` fails because `programming-loop` is not registered. The existing manual universal-runtime-loop fallback remains active. Required skills were reloaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`, `golang-documentation`, and `golang-spf13-cobra`.
+
+Correction TDD contract:
+
+- RED must prove analyzer factories receive request content only for `agent`; `deterministic`, `fixture`, and `model` must receive an empty request even when `--request` is supplied.
+- Test diagnostics must not print request values.
+- Existing flag parsing, mode selection, text/JSON output, error behavior, context propagation, and closer behavior remain unchanged through injected fakes.
+- GREEN is limited to a mode gate at the analyzer-factory seam; no analyzer/service/model implementation changes.
+- Verification must include focused/race/full RLM and CLI tests plus the 1,984-case exact-start differential, formatting, vet, build, request non-disclosure, and diff/scope checks.
+
+| Correction step | Kind | Command / evidence | Status |
+|---:|---|---|---|
+| C0 | Planning | Update PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY at exact correction start before tests or production edits | Complete |
+| C1 | RED | Update injected-factory expectations, then run focused mode-routing test before production edits | Pending |
+| C2 | GREEN | Add smallest agent-only request gate and rerun focused tests | Pending |
+| C3 | Refactor/verify | Focused, race, 1,984 differential, full RLM/CLI, request non-disclosure, gofmt/vet/build/diff | Pending |
+| C4 | Delivery | Finalize six artifacts, commit, push; no PR/review | Pending |
+
+## Original RED / GREEN / refactor log
 
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|

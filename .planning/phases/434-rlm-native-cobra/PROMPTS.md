@@ -1,6 +1,20 @@
 # Phase 434 Prompts
 
-## Kickoff snapshot
+## Review-correction snapshot
+
+Task: from exact clean head `92f265875e304feda57eef88b599ef8d2e9928da`, correct the bounded review finding that non-agent analyzer factories receive `--request`. Add RED tests before production edits proving deterministic/fixture/model receive an empty factory request and agent receives request content; preserve all CLI parsing/output compatibility with injected fakes only.
+
+Session: `issue-434-review-correction-20260719T061313Z`.
+
+GSD route: `scripts/gsd doctor` and `scripts/gsd list` pass; `scripts/gsd prompt programming-loop 434-rlm-native-cobra-correction` fails because the command is absent, so the manual universal-runtime-loop fallback applies. Execution decision: `local_critical_path` for this single bounded correction in the existing isolated worktree.
+
+Safety prompt: never print request values in test diagnostics or command output. Do not call a model, Temporal, Podman, worker service, runtime service, connector, or credential. Do not add dependencies, generic execution surfaces, docs/website/golden churn, PR, or review. Implement only the mode-gated factory seam after focused RED evidence.
+
+Downstream artifact: pending.
+
+Verification result: pending focused/race/1,984-case differential/full RLM/full CLI/request non-disclosure/gofmt/vet/build/diff gates.
+
+## Original kickoff snapshot
 
 Task: Implement polymetrics-ai/cli#434 as the next serialized Phase 9 unit under #407/#397 from exact parent HEAD `2ac457a163cbd7bc9a3708da88b03d375ec5e952`, using isolated branch `refactor/434-rlm-native-cobra`, Sol/high explicit, no dependencies/credentials/services/model/Temporal/Podman/PR/review.
 

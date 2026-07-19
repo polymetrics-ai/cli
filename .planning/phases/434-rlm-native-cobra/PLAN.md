@@ -56,6 +56,20 @@ Public command names, flags, manuals, result schemas, docs, website content, gen
 
 No secrets/request leakage, model calls, Temporal, Podman, optional services, worker daemon, credentials, dependencies, external connectors, generic execution surfaces, unrestricted writes, destructive/admin actions, reverse ETL, or production deployment. Tests use only temp specs/warehouses and injected analyzers/hermetic fakes. Context cancellation remains propagated. Agent mode stays opt-in; the default deterministic/fixture paths stay dependency-free.
 
+## Review correction at `92f26587`
+
+Review finding: `runRLMRun` currently forwards `--request` to every analyzer factory even though the phase contract permits request content only at the agent-mode factory boundary. The built-in deterministic, fixture, and model factories ignore it, so public CLI output and mode behavior are unchanged; the seam is nevertheless broader than required.
+
+Correction slice:
+
+1. Update all six phase artifacts before tests or production edits; record manual GSD fallback because `scripts/gsd prompt programming-loop ...` remains absent from the adapter registry.
+2. RED first: change the injected-factory contract so deterministic, fixture, and model receive an empty request while agent receives the parsed request. Keep request values out of test diagnostics and verify text/JSON output compatibility through hermetic fakes only.
+3. GREEN: add the smallest mode gate at the analyzer-factory call site. Do not alter analyzer implementations, mode selection, pflags, help, output, errors, service wiring, dependencies, docs, website, or golden fixtures.
+4. Verify focused and race tests, the reviewer's 1,984-case exact-start parser/output differential, full RLM and CLI suites, request non-disclosure, gofmt, vet, build, and diff/scope guards. Do not call a model, Temporal, Podman, worker service, or another optional service.
+5. Finalize artifacts, commit, and push to the existing issue branch. No PR or review.
+
+Correction execution decision: `local_critical_path` — one bounded test/seam correction in the existing isolated issue worktree; no subagent tool is exposed and the user prohibited PR/review/services/dependencies.
+
 ## Completion
 
 Completed and verified at implementation head `633f1e21`. Native RLM owns run/help and every current local flag; only the RLM wrapper/dispatcher/`parseFlags` call were removed. Injected analyzer factories verify deterministic/fixture/model/agent routing, context, closure, request isolation, spec/warehouse mapping, and outputs without model, Temporal, Podman, worker service, or other external calls. Exact-start differential matched 24/24 cases. Focused/repeated/race/router/golden/full CLI, RLM, worker-fake, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency guards, and `make verify` pass. Public help/docs/website/golden bytes are unchanged; Phase 16 viewer work remains deferred. Implementation and planning checkpoints are pushed; no PR or review was created.
