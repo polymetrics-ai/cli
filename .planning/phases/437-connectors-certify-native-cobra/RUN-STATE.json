@@ -7,7 +7,7 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": "2c0a550c2a57439bc9e1640fcf33e95bd1265983",
+  "endingImplementationHead": "e9ce945e56413dbb60f5eeec2f1d6e5df688a249",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "thirdCorrectionStartingHead": "437d13cf",
@@ -17,12 +17,12 @@
   "recoveryBudgetException": "unresolved P1 destructive cleanup authority and cleanup-ledger retryability findings require one additional bounded correction cycle",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
-  "endedAt": "20260719T184343Z",
+  "endedAt": "20260719T201832Z",
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "review_correction_in_progress",
-  "verificationPassed": false,
+  "status": "review_correction_complete",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -176,11 +176,21 @@
       "cycle": "fifth-review-correction-green",
       "decision": "local_critical_path",
       "reason": "post-verification ledger mutation, tag-safe sweep authority, bounded nondisclosing ledger load, pre-effect constraints, durable report errors, pre-telemetry flag validation, and evidence-validated resume pass focused/repeated/race and full package gates"
+    },
+    {
+      "cycle": "fifth-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full package, help/docs/website, connector validation, fmt/diff/vet, explicit full tests/build, and complete make verify all exited successfully without external credentials or services"
+    },
+    {
+      "cycle": "fifth-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "truthful terminal evidence is finalized for active-branch commit/push only; no PR, parent, integration, or main mutation"
     }
   ],
   "red": "captured: certify focus 1.374s showed premature cleaned state, forged numeric effects, unbounded/reflected ledgers, four invalid resume forms, and dropped batch persistence; CLI focus 14.764s showed seven accepted sweep constraints, silent single save failures, telemetry files on invalid flags, and late malformed parallel validation",
   "green": "complete: cleanup ledger changes only after exact absence; sweep verifies and denies numeric IDs; ledger 1 MiB/10000-entry bounds with opaque parse errors; sweep constraints before telemetry/workspace; report/history failures surfaced with leak dominance; complete pre-telemetry certify parsing; strict structural resume evidence and recomputed outcome/leak consistency",
-  "verification": "pending; verificationPassed remains false until full make verify exits 0",
+  "verification": "passed: focused/repeated/race; full CLI 443.427s and certify 327.840s; schedule/safety; help/bare/invalid/JSON; docs/goldens 16.600s; website drift-free; connectorgen 547/0; fmt/diff/vet; go test ./... real 7m34.316s; build; final make verify exit 0 real 7m52.496s (CLI 449.572s, certify 332.793s, lint 0)",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",
@@ -196,11 +206,15 @@
     "43acd262 test(certify): expose fourth review regressions",
     "2c0a550c fix(certify): harden certification safety boundaries",
     "b06816ad test(certify): check correction fixture writes",
-    "terminal evidence artifact: this commit"
+    "8acf62a9 docs(planning): plan fifth certify correction",
+    "e2559f64 test(certify): expose fifth review regressions",
+    "3d69b7a4 test(certify): require pre-telemetry sweep validation",
+    "e9ce945e fix(certify): close rereview safety gaps",
+    "terminal fifth-cycle evidence artifact: this commit"
   ],
-  "push": "planning, RED, GREEN, and lint/resource-fix checkpoints pushed; terminal evidence commit is this artifact delivery and will be pushed immediately",
+  "push": "fifth-cycle planning, RED, supplemental RED, and GREEN checkpoints pushed; terminal evidence commit is this artifact delivery and will be pushed immediately",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, PR, integration, parent mutation, or main mutation",
-  "preTerminalEvidenceHead": "b06816addf3619c3c4547bbdb569f0e6b8263711"
+  "preTerminalEvidenceHead": "e9ce945e56413dbb60f5eeec2f1d6e5df688a249"
 }

@@ -83,6 +83,6 @@ Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testi
 
 Recovery-budget exception: unresolved P1 destructive cleanup authority and unrecoverable-ledger findings require this extra bounded correction rather than stopping after four cycles.
 
-Downstream artifact: pending RED/GREEN. Planning checkpoint precedes RED; RED precedes production; terminal verification remains pending.
+Downstream artifact: complete at implementation head `e9ce945e56413dbb60f5eeec2f1d6e5df688a249`. Planning `8acf62a9`, RED `e2559f64`/`3d69b7a4`, and GREEN `e9ce945e` are pushed. Cleanup retryability/authority, bounded opaque ledgers, pre-effect sweep constraints, durable persistence precedence, pre-telemetry parsing, and strict recomputed resume evidence are corrected.
 
-Verification result: pending. `verificationPassed` must remain false until full `make verify` exits 0.
+Verification result: pass. Focused final `7.288s` certify / `8.389s` CLI; ×10 `48.652s` / `77.313s`; race `51.469s` / `89.921s`; full package checkpoints certify `327.840s`, CLI `443.427s`; schedule/safety and vet; help/bare/invalid/JSON; docs/golden `16.600s`; website drift-free; connectorgen 547/0; explicit `go test ./...` real `7m34.316s`; build; final `make verify` exit 0 real `7m52.496s` (CLI `449.572s`, certify `332.793s`, lint 0). No credentials, live services/connectors, system crontab, external writes/sweeps, dependencies, PR, parent, integration, or main mutation.

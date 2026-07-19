@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: false — fifth correction cycle pending full `make verify`.
+`verificationPassed`: true — fifth correction full `make verify` exited 0.
 
 ## TDD / behavior
 
@@ -165,7 +165,7 @@ The first `make verify` attempt failed only at lint after tests because four new
 
 Exact start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; identity `issue-437-fifth-review-correction-20260720`; launcher `openai-codex/gpt-5.6-sol` / `high`.
 
-`verificationPassed`: false — reopened for unresolved P1/P2 rereview findings; full gate not yet run.
+`verificationPassed`: true — complete final gate exited 0.
 
 - [x] Confirm isolated branch, clean exact start, and matching local/remote branch head.
 - [x] Read issues #437/#397/#407, required contracts/workflows, CLI parity, ADR/design/migration context, all required skills, all six artifacts, and both rereview files.
@@ -184,10 +184,10 @@ Exact start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; identity `issue-437-fift
 - [x] GREEN accepted corrections with focused tests.
 - [x] Focused tests repeated ×10 and under `-race` for cleanup/sweep/concurrency/prevalidation.
 - [x] Affected full CLI (`443.427s`), full certify (`327.840s`), schedule, safety, and scoped vet pass.
-- [ ] Runtime `pm help connectors`, bare `pm connectors`, `pm connectors --help`, certify help/JSON, and invalid exit behavior pass.
-- [ ] CLI docs/goldens/website generation and drift checks pass or are explicitly unchanged/not applicable.
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` passes.
-- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm` pass.
-- [ ] Full `make verify` exits 0; only then set `verificationPassed=true`.
-- [ ] No go.mod/go.sum delta, connector defs, credentials, services, system crontab, external writes/sweeps, generic write tools, dependencies, PR, parent, integration, or main mutation.
-- [ ] Commit/push GREEN and truthful terminal evidence; finish clean and remote-matched.
+- [x] Runtime `pm help connectors`, bare `pm connectors`, and `pm connectors --help` are byte-equal; certify help/JSON and invalid usage exit 2 pass.
+- [x] CLI docs/goldens pass (`16.600s`); website regeneration is drift-free; no canonical docs change was needed.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` reports 547 checked, zero findings.
+- [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; explicit `go test ./...` real `7m34.316s`; `go build ./cmd/pm` pass.
+- [x] Full `make verify` exits 0 in real `7m52.496s` (CLI `449.572s`, certify `332.793s`, docs/smoke/lint/connectorgen green).
+- [x] No go.mod/go.sum delta, connector defs, credentials, services, system crontab, external writes/sweeps, generic write tools, dependencies, PR, parent, integration, or main mutation.
+- [x] GREEN `e9ce945e` pushed; truthful terminal artifact commit/push follows and must finish clean/remote-matched.
