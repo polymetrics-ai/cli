@@ -31,7 +31,7 @@ Correction TDD contract:
 | C1 | RED | `go test ./internal/cli -run '^TestRLMRunRoutesModesThroughInjectedAnalyzers$' -count=1` | Failed as required in `0.562s`: deterministic, fixture, and model each reported `non-agent factory received request content`; agent passed; no request value was printed |
 | C2 | GREEN | Empty factory request by default; assign parsed request only when `mode == "agent"`; focused routing/output tests | Pass in `0.555s` |
 | C3 | Refactor/verify | Focused, race, 1,984 differential, full RLM/CLI, request non-disclosure, gofmt/vet/build/diff | Pass |
-| C4 | Delivery | Finalize six artifacts, commit, push; no PR/review | Pending |
+| C4 | Delivery | Planning `45b90b68`, RED `13902cea`, and verified GREEN `66c4a52f` committed/pushed; terminal artifact commit follows; no PR/review | Complete |
 
 ### Correction RED evidence
 

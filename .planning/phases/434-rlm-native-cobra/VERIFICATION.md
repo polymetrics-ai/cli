@@ -18,9 +18,9 @@ Invocation: `issue-434-pi-sol-high-20260719T053630Z`; profile `Sol`; thinking `h
 - [x] CLI help/output/golden compatibility remains unchanged through the exact-start differential and zero public-surface diff.
 - [x] `gofmt`, `go vet`, and `go build ./cmd/pm` pass.
 - [x] Diff/scope/dependency/request-disclosure guards pass; exactly six phase artifacts plus two RLM CLI files changed from correction start.
-- [ ] Correction commits pushed; terminal artifacts finalized; no PR/review.
+- [x] Correction planning, RED, and verified GREEN commits pushed; terminal artifacts finalized for the final push; no PR/review.
 
-Correction result: declared correction verification equivalent passed; delivery checkpoint pending. Original full `make verify` remains recorded below and was not rerun because the user bounded this correction to focused/race/differential/full RLM/full CLI plus format/vet/build/diff.
+Correction result: pass at implementation head `66c4a52f`; declared correction verification equivalent and delivery checkpoints complete. Original full `make verify` remains recorded below and was not rerun because the user bounded this correction to focused/race/differential/full RLM/full CLI plus format/vet/build/diff.
 
 ## Original TDD and behavior
 

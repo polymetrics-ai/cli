@@ -1,6 +1,6 @@
 # Phase 434 Summary
 
-Status: correction implemented and verified from exact clean head `92f265875e304feda57eef88b599ef8d2e9928da`; commit/push checkpoint pending.
+Status: correction complete and verified at implementation head `66c4a52f`; planning, RED, and GREEN checkpoints pushed to `origin/refactor/434-rlm-native-cobra`; terminal artifact push follows.
 
 ## Review correction
 
@@ -11,6 +11,8 @@ Correction session: `issue-434-review-correction-20260719T061313Z`. Execution de
 The smallest production seam now initializes the factory request to empty and assigns parsed request content only for agent mode. Injected fakes confirm non-agent isolation while retaining agent assigned/bare request parsing, context, close behavior, analyzer run requests, and exact text/JSON result behavior.
 
 Verification passed: focused (`1.278s`), race (`1.706s`), full RLM/router/worker plus race, full CLI (`438.966s`), exact-start 1,984/1,984 differential with zero request disclosures, verbose output disclosure guard, gofmt, vet, build, and exact eight-file scope/dependency diff. No public help/output/golden/docs/website bytes changed. No model, Temporal, Podman, worker service, optional service, credential, connector, dependency, PR, or review was used.
+
+Correction commits: `45b90b68` planning, `13902cea` RED tests, `66c4a52f` verified GREEN. Parent integration and review remain intentionally out of scope.
 
 ## Original identity
 

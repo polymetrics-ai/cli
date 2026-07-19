@@ -70,7 +70,7 @@ Correction slice:
 
 Correction execution decision: `local_critical_path` — one bounded test/seam correction in the existing isolated issue worktree; no subagent tool is exposed and the user prohibited PR/review/services/dependencies.
 
-Correction outcome: the test-only contract failed first for deterministic, fixture, and model while agent passed. The implementation now derives an empty factory request by default and assigns the parsed request only for agent mode. Focused and race tests, full RLM packages, full CLI, the exact-start 1,984-case differential, request-output guards, gofmt, vet, build, and scope/dependency diff checks pass. Public CLI output/help remains unchanged; no docs/website/golden update applies.
+Correction outcome at implementation head `66c4a52f`: the test-only contract failed first for deterministic, fixture, and model while agent passed. The implementation now derives an empty factory request by default and assigns the parsed request only for agent mode. Focused and race tests, full RLM packages, full CLI, the exact-start 1,984-case differential, request-output guards, gofmt, vet, build, and scope/dependency diff checks pass. Public CLI output/help remains unchanged; no docs/website/golden update applies. Planning, RED, and GREEN checkpoints are pushed; the terminal artifact checkpoint follows with no PR or review.
 
 ## Completion
 

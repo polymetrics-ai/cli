@@ -15,8 +15,9 @@
   "endingImplementationHead": "633f1e219591c890831c9894a90fc55eb1dc9ebd",
   "correctionStartingHead": "92f265875e304feda57eef88b599ef8d2e9928da",
   "correctionSession": "issue-434-review-correction-20260719T061313Z",
-  "correctionImplementationHead": "pending_green_commit",
-  "status": "correction_verified_pending_delivery",
+  "correctionImplementationHead": "66c4a52ffe54aecb37d229c16b636f7eb68d199c",
+  "correctionEndedAt": "20260719T063242Z",
+  "status": "correction_complete_verified_pushed",
   "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
@@ -71,6 +72,11 @@
       "cycle": "correction-verify",
       "decision": "local_critical_path",
       "reason": "focused/race/full RLM/full CLI, exact-start 1984-case differential, request-output guard, gofmt, vet, build, and exact scope/dependency diff pass without model or service calls"
+    },
+    {
+      "cycle": "correction-summary",
+      "decision": "local_critical_path",
+      "reason": "bounded correction evidence and handoff are finalized for the terminal artifact commit/push; no PR or review was created as requested"
     }
   ],
   "red": "original focused CLI compile RED plus correction RED: deterministic, fixture, and model factory-boundary subtests fail before production edits because request content is non-empty; agent passes; no request value printed",
@@ -93,9 +99,10 @@
     "38df736c test(cli): specify native cobra rlm contract",
     "633f1e21 refactor(cli): nativize rlm namespace",
     "45b90b68 docs(planning): plan rlm request isolation correction",
-    "13902cea test(cli): isolate rlm factory request by mode"
+    "13902cea test(cli): isolate rlm factory request by mode",
+    "66c4a52f fix(cli): isolate rlm request to agent factory"
   ],
-  "push": "correction planning and RED checkpoints are pushed; verified GREEN and terminal artifact pushes pending",
+  "push": "correction planning, RED, verified GREEN, and terminal artifact checkpoints pushed to origin/refactor/434-rlm-native-cobra",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "temporary specs/warehouses and injected analyzers/hermetic fake paths only; no model, Temporal, Podman, worker service, optional services, credentials, secrets/request leakage, dependencies, generic runner, PR, or review"
