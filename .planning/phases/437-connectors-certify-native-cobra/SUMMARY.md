@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: continuation reopened for latest parent reconcile, verification, stacked PR, and review-route handoff; fresh verification pending.
+Status: continuation verified after latest parent reconcile; stacked PR and review-route handoff pending.
 
 ## Identity
 
@@ -69,4 +69,4 @@ Verification passed for the prior fifth cycle: focused/repeated/race; full CLI `
 
 Session `issue-437-continuation-20260719T211738Z`; exact start `86eea0f966814e6848e5a52143eea15dd46ff801`; latest parent `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`. `scripts/gsd doctor` passed, `scripts/gsd prompt plan-phase 437 --skip-research` generated the official prompt, and `programming-loop` remains unavailable (`unknown GSD command`), so manual universal-loop fallback applies.
 
-Plan/TDD/verification are refreshed before parent merge or production edits. Scope is audit of the existing 42-file #437 diff, parent merge of disjoint #462 design docs, full local gates, safe fixture-only certify smoke, branch push, non-draft stacked PR to `feat/cli-architecture-v2`, and review-route recording. No new behavior edit is planned; existing RED evidence remains valid and any new behavior fix requires a new failing test first.
+Plan/TDD/verification were refreshed before parent merge or production edits. Diff audit is clean: 42 files are limited to #437 phase artifacts, native connectors/certify CLI code/tests/goldens, certify safety code/tests, the `cmd/pm` in-process harness seam, and required docs/website parity; no dependency or connector-def delta. Certify safety corrections are directly applicable to the native Cobra certify surface because declared flags, credential files, reports, ledgers, sweep, resume, and cleanup authority must fail closed before effects. Latest parent `a5474bcb` merged cleanly into `dc4aed23`; #462 design docs/skills/traces retained and not in the stacked PR diff. Verification passed: focused CLI `119.151s`, certify `7.344s`; runtime help byte-equal (`8391` bytes); docs/golden `10.347s`; website docs data regenerated with no drift; credential-free `./pm connectors certify sample --root <tmp> --json` exit 0/pass/stderr 0; gofmt/diff/vet/full tests/build; `make verify` exit 0 with local Makefile smoke, lint `0 issues`, and connectorgen green; explicit connectorgen validation 547/0. Remaining scope: branch push, non-draft stacked PR to `feat/cli-architecture-v2`, and review-route recording. No new behavior edit was needed; existing RED evidence remains valid.

@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: false — continuation reopened for parent reconcile, full local gates, stacked PR creation, and review-route recording. Prior fifth correction full `make verify` exited 0; current continuation remains pending until a fresh complete gate exits 0.
+`verificationPassed`: true — continuation full local gates passed after parent reconcile; stacked PR/review-route recording remains delivery work, not verification failure.
 
 ## TDD / behavior
 
@@ -201,18 +201,18 @@ Exact start: `86eea0f966814e6848e5a52143eea15dd46ff801`; parent target: `a5474bc
 - [x] Confirm `scripts/gsd prompt programming-loop init --phase 437 --dry-run` is unavailable and record manual fallback.
 - [x] Record actual skills loaded and `.pi/skills/go-implementation/SKILL.md` absence/path mismatch.
 - [x] Refresh PLAN/TDD/VERIFICATION before parent merge or production edits.
-- [ ] Audit the existing 42-file issue diff against #437 and justify certify safety correction scope.
-- [ ] Merge latest parent `origin/feat/cli-architecture-v2` without losing #437 commits or #462 design-doc additions.
-- [ ] Focused CLI/connectors/certify tests pass.
-- [ ] Runtime help checks pass: `pm help connectors`; bare `pm connectors`; `pm connectors --help`.
-- [ ] Golden/docs/website parity checks pass or are explicitly marked not applicable with reason.
-- [ ] Safe fixture-only certify smoke passes without credentials/live services/external writes.
-- [ ] `gofmt -w cmd internal` produces no unintended drift.
-- [ ] `go vet ./...` passes.
-- [ ] `go test ./...` passes.
-- [ ] `go build ./cmd/pm` passes.
-- [ ] `make verify` passes.
-- [ ] Connector validation remains green when run.
-- [ ] No go.mod/go.sum delta, connector defs, credentials, live checks, destructive cleanup, external writes/sweeps, generic write tools, or main/parent merge.
+- [x] Audit the existing 42-file issue diff against #437 and justify certify safety correction scope: all files are phase artifacts, native connectors/certify CLI code/tests/goldens, certify safety code/tests, command harness seam, or required docs/website parity; no unrelated file, dependency, or connector-def delta.
+- [x] Merge latest parent `origin/feat/cli-architecture-v2` without losing #437 commits or #462 design-doc additions: clean merge commit `dc4aed23dcc42878f48da62fe7f1a236e2103ed1`, no conflicts.
+- [x] Focused CLI/connectors/certify tests pass: `go test ./internal/cli -run 'TestConnectorsCommandIsNativeCobraSubtree|TestNativeConnectors|TestNativeCertify|TestConnectorsManual|TestCertifyCLI|TestTelemetryCertify' -count=1` => `ok ... 119.151s`; `go test ./internal/connectors/certify -run 'TestRereview|TestReviewCorrection|TestBatch|TestCredsFile|TestLedger|TestReport|TestSweeper|TestStage' -count=1` => `ok ... 7.344s`.
+- [x] Runtime help checks pass: built `./pm`; `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` are byte-identical (`8391` bytes).
+- [x] Golden/docs/website parity checks pass: focused CLI docs/golden tests `ok ... 10.347s`; `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages; tracked docs/website diff clean.
+- [x] Safe fixture-only certify smoke passes without credentials/live services/external writes: `./pm connectors certify sample --root $(mktemp -d) --json` exit 0, `kind=ConnectorCertification`, report connector `sample`, passed `true`, stderr bytes `0`.
+- [x] `gofmt -w cmd internal` produces no unintended drift; `git diff --check` passes.
+- [x] `go vet ./...` passes.
+- [x] `go test ./...` passes; full CLI package `457.441s`.
+- [x] `go build ./cmd/pm` passes.
+- [x] `make verify` passes; full CLI package `461.542s`, docs validate, local Makefile smoke passed, lint `0 issues`, connectorgen validation green.
+- [x] Connector validation remains green when run: `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
+- [x] No go.mod/go.sum delta, connector defs, credentials, live checks, destructive cleanup, external writes/sweeps, generic write tools, or main/parent merge.
 - [ ] Branch pushed and non-draft stacked PR opened to `feat/cli-architecture-v2` with exactly `Refs #437`, `Refs #407`, and `Refs #397`.
 - [ ] Automated external review route recorded: Claude disabled, Copilot quota exhausted, human/parent fallback pending; no bot retries.

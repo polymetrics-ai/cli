@@ -21,8 +21,8 @@
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "continuation_in_progress",
-  "verificationPassed": false,
+  "status": "continuation_verified_pr_pending",
+  "verificationPassed": true,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
   "latestParentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
@@ -199,11 +199,26 @@
       "cycle": "continuation-tdd-gate",
       "decision": "local_critical_path",
       "reason": "no new behavior edit is planned; existing RED evidence remains valid and any new behavior fix requires a fresh failing test before production"
+    },
+    {
+      "cycle": "continuation-diff-audit",
+      "decision": "local_critical_path",
+      "reason": "42-file diff is confined to #437 phase artifacts, native connectors/certify CLI, certify safety code/tests, harness seam, and required docs/website parity; no unrelated dependency, connector-def, sibling namespace, or parent-owned diff kept"
+    },
+    {
+      "cycle": "continuation-parent-reconcile",
+      "decision": "local_critical_path",
+      "reason": "origin/feat/cli-architecture-v2 at a5474bcb merged cleanly with no conflicts; #462 design docs retained and branch is behind 0 versus parent"
+    },
+    {
+      "cycle": "continuation-verify",
+      "decision": "local_critical_path",
+      "reason": "focused CLI/certify, help parity, docs/golden/website, fixture-only sample certify, gofmt/diff/vet/full tests/build, make verify, and connectorgen all passed"
     }
   ],
   "red": "captured: certify focus 1.374s showed premature cleaned state, forged numeric effects, unbounded/reflected ledgers, four invalid resume forms, and dropped batch persistence; CLI focus 14.764s showed seven accepted sweep constraints, silent single save failures, telemetry files on invalid flags, and late malformed parallel validation",
   "green": "complete: cleanup ledger changes only after exact absence; sweep verifies and denies numeric IDs; ledger 1 MiB/10000-entry bounds with opaque parse errors; sweep constraints before telemetry/workspace; report/history failures surfaced with leak dominance; complete pre-telemetry certify parsing; strict structural resume evidence and recomputed outcome/leak consistency",
-  "verification": "pending continuation gates; prior fifth-cycle gate passed (make verify exit 0 real 7m52.496s), but fresh parent-reconcile verification is required",
+  "verification": "passed continuation gates: focused CLI 119.151s and certify 7.344s; help byte-equal 8391 bytes; docs/golden 10.347s; website drift-free; sample certify exit 0/pass/stderr 0; gofmt/diff/vet/go test ./... (CLI 457.441s)/build; make verify exit 0 (CLI 461.542s, lint 0, smoke ok, connectorgen green); explicit connectorgen 547/0",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",
