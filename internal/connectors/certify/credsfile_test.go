@@ -139,10 +139,8 @@ connectors:
 	}
 }
 
-// TestCredsFileResolveSecretsFromEnv proves ResolveSecrets reads the
-// referenced ENV VARIABLE NAMES (never literal secret values in the file
-// itself — certification-design §B: "env/exec references only, safe to
-// commit; never secret values").
+// TestCredsFileResolveSecretsFromEnv proves ResolveSecrets reads referenced
+// environment-variable names, never literal secret values from the file.
 func TestCredsFileResolveSecretsFromEnv(t *testing.T) {
 	t.Setenv("PM_CERT_GITHUB_TOKEN", "ghp_topsecret123")
 

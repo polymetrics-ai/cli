@@ -555,12 +555,14 @@ func TestConnectorsCertificationDocsUseActualExitAndStageTokens(t *testing.T) {
 	if strings.Contains(manual, "generally_available") {
 		t.Fatal("connectors manual advertises stale release-stage token generally_available")
 	}
+	if !strings.Contains(strings.ToLower(manual), "credential-file exec entries are rejected") {
+		t.Fatal("connectors manual does not document credential-file exec rejection")
+	}
 	for _, required := range []string{
 		"--stage ga",
 		"usage errors exit 2",
 		"--older-than must be greater than zero and no more than 8760h",
 		"--resume reuses completed prior reports",
-		"credential-file exec entries are rejected",
 	} {
 		if !strings.Contains(manual, required) {
 			t.Errorf("connectors manual missing %q", required)

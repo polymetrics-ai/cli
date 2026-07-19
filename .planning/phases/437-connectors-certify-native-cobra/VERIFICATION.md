@@ -116,11 +116,11 @@ Third-correction start: `437d13cf`; session `issue-437-third-safety-correction-2
 - [x] RED: `--older-than` rejects zero, negative, and unreasonably large values before sweep.
 - [x] RED: ordinary two-run `--resume` reuses completed prior reports without future timestamps; incomplete reports rerun.
 - [x] RED: any credential-file `exec` entry rejects before runner effects; no test executes an external command.
-- [ ] Remove external credential execution code and all docs/examples/claims.
-- [ ] Re-audit every certify flag across modes and every CLI/manual/website claim.
-- [ ] Correct usage exit documentation and release-stage token examples to `ga`.
-- [ ] Focused and repeated unknown-flag/no-effect/exec/resume/sweep tests pass under race.
-- [ ] Runtime topic/bare/flag help, invalid-action exit, docs/golden generation, website generation/drift, and manual parity pass.
+- [x] Remove external credential execution code and all docs/examples/claims.
+- [x] Re-audit every certify flag across modes and every CLI/manual/website claim.
+- [x] Correct usage exit documentation and release-stage token examples to `ga`.
+- [x] Focused and repeated unknown-flag/no-effect/exec/resume/sweep tests pass under race (CLI ×10 `1.283s`, certify ×10 `1.393s`, CLI race `1.713s`, certify race `2.261s`).
+- [ ] Runtime topic/bare/flag help and invalid-action exit remain pending; docs/golden generation and manual parity pass (`7.055s`), website generation completed once and drift rerun remains pending.
 - [ ] Credential-free local sample smoke passes under a temporary root.
 - [ ] Full CLI and certify suites pass.
 - [ ] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` pass.

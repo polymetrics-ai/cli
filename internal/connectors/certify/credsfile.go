@@ -1,27 +1,22 @@
 package certify
 
 import (
-	"bytes"
 	"fmt"
 	"os"
-	"os/exec"
 	"sort"
-	"strings"
 
 	"gopkg.in/yaml.v3"
 )
 
-// CredentialRef is the "credential" block of a creds.yaml connector entry
-// (certification design §B): env/exec SECRET REFERENCES only — never a
-// literal secret value — plus plain (non-secret) config key/values. Safe to
-// commit to source control.
+// CredentialRef is the "credential" block of a creds.yaml connector entry:
+// environment-variable references only, never literal secret values, plus
+// plain non-secret config values.
 type CredentialRef struct {
 	// FromEnv maps a credential field name to the ENV VARIABLE NAME that
 	// holds its value at run time (e.g. {"token": "PM_CERT_GITHUB_TOKEN"}).
 	FromEnv map[string]string `yaml:"from_env"`
-	// Exec maps a credential field name to an argv slice; ResolveSecrets
-	// runs it and captures trimmed stdout as the field's value (e.g. a
-	// password-manager CLI: {"api_key": ["op", "read", "op://..."]}).
+	// Exec is retained only so the loader can detect and reject the prohibited
+	// credential-file key. Certification never executes external commands.
 	Exec map[string][]string `yaml:"exec"`
 	// Config carries non-secret connector config (e.g. repository, base_url).
 	Config map[string]string `yaml:"config"`
@@ -49,8 +44,8 @@ type CredsDefaults struct {
 }
 
 // CredsFile is the parsed shape of certification design §B's creds.yaml:
-// env/exec secret REFERENCES only (never secret values) plus per-connector
-// sandbox/write/rate_limit/skip flags, safe to commit.
+// environment-variable references only (never secret values) plus
+// per-connector sandbox/write/rate_limit/skip flags.
 type CredsFile struct {
 	Version    int                            `yaml:"version"`
 	Defaults   CredsDefaults                  `yaml:"defaults"`
@@ -66,6 +61,9 @@ func LoadCredsFile(path string) (CredsFile, error) {
 	var cf CredsFile
 	if err := yaml.Unmarshal(raw, &cf); err != nil {
 		return CredsFile{}, fmt.Errorf("certify: parse creds file %s: %w", path, err)
+	}
+	if err := rejectCredentialExec(cf); err != nil {
+		return CredsFile{}, err
 	}
 	return cf, nil
 }
@@ -98,15 +96,15 @@ func (cf CredsFile) EffectiveOptions(name string) ConnectorCredsEntry {
 	return entry
 }
 
-// ResolveSecrets resolves every field in entry.Credential (FromEnv + Exec)
-// to its actual secret value. Values are NEVER read from the creds file
-// itself (certification design §B) — FromEnv reads the referenced
-// environment variable, Exec runs the referenced command and captures its
-// trimmed stdout. An unset env var or a failing/empty exec command is a
-// hard error: certify must never silently proceed with an empty secret.
+// ResolveSecrets resolves environment-variable references to secret values.
+// Credential-file exec references are rejected before any environment lookup;
+// certification never executes external commands.
 func ResolveSecrets(entry ConnectorCredsEntry) (map[string]string, error) {
-	secrets := make(map[string]string, len(entry.Credential.FromEnv)+len(entry.Credential.Exec))
+	if len(entry.Credential.Exec) != 0 {
+		return nil, fmt.Errorf("certify: credential-file exec entries are not supported")
+	}
 
+	secrets := make(map[string]string, len(entry.Credential.FromEnv))
 	for field, envName := range entry.Credential.FromEnv {
 		v, ok := os.LookupEnv(envName)
 		if !ok || v == "" {
@@ -114,34 +112,14 @@ func ResolveSecrets(entry ConnectorCredsEntry) (map[string]string, error) {
 		}
 		secrets[field] = v
 	}
-
-	for field, argv := range entry.Credential.Exec {
-		v, err := runExecSecret(argv)
-		if err != nil {
-			return nil, fmt.Errorf("certify: credential field %q exec resolution failed: %w", field, err)
-		}
-		secrets[field] = v
-	}
-
 	return secrets, nil
 }
 
-// runExecSecret runs argv and returns its trimmed stdout, per certification
-// design §B's exec form: {api_key: ["op", "read", "op://..."]}.
-func runExecSecret(argv []string) (string, error) {
-	if len(argv) == 0 {
-		return "", fmt.Errorf("empty exec command")
+func rejectCredentialExec(cf CredsFile) error {
+	for _, name := range cf.ConnectorNames() {
+		if len(cf.Connectors[name].Credential.Exec) != 0 {
+			return fmt.Errorf("certify: connector %q credential-file exec entries are not supported", name)
+		}
 	}
-	cmd := exec.Command(argv[0], argv[1:]...)
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-	if err := cmd.Run(); err != nil {
-		return "", fmt.Errorf("exec %q: %w (stderr: %s)", strings.Join(argv, " "), err, strings.TrimSpace(stderr.String()))
-	}
-	value := strings.TrimSpace(stdout.String())
-	if value == "" {
-		return "", fmt.Errorf("exec %q produced empty output", strings.Join(argv, " "))
-	}
-	return value, nil
+	return nil
 }

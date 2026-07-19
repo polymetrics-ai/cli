@@ -189,7 +189,7 @@ Catalog commands discover and cache stream metadata. Catalog output includes sch
 pm connectors list --json
 pm connectors list --all --json
 pm connectors catalog --capability read --json
-pm connectors catalog --stage generally_available --json
+pm connectors catalog --stage ga --json
 pm connectors inspect 100ms --json
 pm connectors help
 
@@ -201,7 +201,7 @@ pm connectors certify --sweep --credentials-file certify/creds.yaml --older-than
 
 `pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
 
-Before a certification report completes, normal CLI parsing and setup rules apply: usage errors exit `2`, typed validation errors exit `3`, and setup/runtime errors exit `1`, with the normal `Error` envelope. A completed `ConnectorCertification`, `ConnectorCertificationBatch`, or `ConnectorCertificationSweep` report exits `0` for pass, `2` for certification failure, or `3` for leaked resources. Credential files and `--from-env field=ENV` carry references only; credential values are excluded from command output, events, telemetry, and certification reports. Batch `--write=false` and `--skip=write` override credential-file write settings; batch writes require `sandbox: true`. Unsupported or mode-inapplicable controls fail before runner effects. Live checks and writes are opt-in and cleanup-gated; documentation and local sample verification do not perform them.
+Before a certification report completes, normal CLI parsing and setup rules apply: usage errors exit `2`, typed validation errors exit `3`, and setup/runtime errors exit `1`, with the normal `Error` envelope. A completed `ConnectorCertification`, `ConnectorCertificationBatch`, or `ConnectorCertificationSweep` report exits `0` for pass, `2` for certification failure, or `3` for leaked resources. Credential files and `--from-env field=ENV` carry environment-variable references only; credential-file `exec` entries are rejected and no external credential command runs. Credential values are excluded from command output, events, telemetry, and certification reports. Batch `--write=false` and `--skip=write` override credential-file write settings; batch writes require `sandbox: true`. `--resume` reuses valid completed prior reports and reruns incomplete reports. Sweep `--older-than` must be greater than zero and no more than `8760h`. Unsupported, mode-inapplicable, or unknown controls fail before credential loading or runner/sweep effects. Live checks and writes are opt-in and cleanup-gated; documentation and local sample verification do not perform them.
 
 ## Extract, query, and write
 

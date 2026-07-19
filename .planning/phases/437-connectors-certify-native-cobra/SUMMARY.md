@@ -27,7 +27,7 @@ All findings in `/tmp/pm-397-rereview2-437.log` are accepted:
 - credential-file `exec` must remain prohibited and reject before effects; generic external execution code and claims must be removed;
 - usage exit docs, release-stage token examples (`ga`), flag/docs audit, and terminal planning state must be accurate.
 
-The plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state are reopened before RED tests or production changes. Full verification is intentionally marked pending until `make verify` and the declared phase gates actually pass.
+The plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state were reopened before RED tests or production changes. RED reproduced every finding. GREEN now rejects unknown certify flags and unsafe ages before effects, rejects credential-file exec with no external execution path, reuses valid completed reports on ordinary resume runs while rerunning incomplete reports, and corrects canonical/generated/golden/website docs. Focused, repeated, race, and docs/golden gates pass. Full verification is intentionally still pending until `make verify` and the remaining declared phase gates actually pass.
 
 ## GSD / skills / execution decision
 

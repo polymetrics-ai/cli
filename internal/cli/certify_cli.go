@@ -107,6 +107,10 @@ func newCertifyCobraCommand(ctx context.Context, root string, stdout io.Writer, 
 			return markCobraLegacyError(runCertifySingle(ctx, root, args[0], flags, stdout, jsonOut, runtime))
 		}
 	})
+	// Certification can load credentials and perform writes. Unlike the legacy
+	// connector inspection actions, it must fail closed on every unknown flag
+	// so a typo cannot silently bypass a safety control.
+	cmd.FParseErrWhitelist.UnknownFlags = false
 	setManualHelp(cmd, "connectors", stdout, jsonOut)
 	addCertifyFlags(cmd, &flags)
 	return cmd
@@ -399,6 +403,8 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 
 // --- sweep mode (--sweep) ---
 
+const maxCertifySweepAge = 365 * 24 * time.Hour
+
 func runCertifySweep(ctx context.Context, root string, flags certifyCommandFlags, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) error {
 	if err := validateCertifySweepFlags(flags); err != nil {
 		return err
@@ -411,6 +417,9 @@ func runCertifySweep(ctx context.Context, root string, flags certifyCommandFlags
 			return usageErrorf("invalid --older-than %q: %v", raw, err)
 		}
 		olderThan = d
+	}
+	if olderThan <= 0 || olderThan > maxCertifySweepAge {
+		return usageErrorf("--older-than must be greater than zero and no more than 8760h")
 	}
 
 	results, err := runtime.Sweep(ctx, root, lastString(flags.CredentialsFiles), olderThan)

@@ -116,10 +116,15 @@
       "cycle": "third-accepted-safety-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "focused RED reproduced unknown-flag effects, unsafe sweep ages, ordinary resume rerun, accepted credential-file exec, and stale stage/docs claims before production edits"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-green",
+      "decision": "local_critical_path",
+      "reason": "strict certify parsing, bounded sweep age, prohibited-exec rejection/removal, completed-report resume reuse, incomplete rerun, and generated docs passed focused, repeated, and race gates"
     }
   ],
   "red": "captured before production: seven certify typo/unknown cases reached mode handling or runtime; five non-positive/excessive sweep ages ran; credential-file exec parsed and reached batch/runner; ordinary second resume reran; stale stage/docs claims failed",
-  "green": "pending",
+  "green": "strict certify unknown-flag rejection; sweep age limited to (0,8760h]; credential-file exec rejected with no external execution path; completed prior reports reused with original outcomes; incomplete reports rerun; exit/stage/resume/sweep docs regenerated",
   "verification": "pending full declared phase gate",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",

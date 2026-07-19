@@ -64,10 +64,13 @@ pm connectors certify --sweep [--credentials-file creds.yaml] [--older-than 24h]
 ```
 
 Controls not implemented by the runner are hidden and rejected before effects rather than accepted
-as no-ops. Mode-specific controls are likewise rejected outside their applicable mode.
+as no-ops. Mode-specific and unknown controls are likewise rejected before credential loading or
+runner/sweep effects. Sweep `--older-than` must be greater than zero and no more than 8760h.
 
-**Exit codes**: 0 pass · 1 usage/internal · 2 certification failures · **3 leaked resources**
-(dominates everything). Wire via typed `certify.ExitError` in `internal/cli/errors.go`.
+**Exit codes before a report completes**: 1 setup/runtime error · 2 usage error · 3 validation
+error. **Completed report exits**: 0 pass · 2 certification failure · **3 leaked resources**
+(dominates everything). Wire completed outcomes via typed `certify.ExitError` in
+`internal/cli/errors.go`.
 
 **Execution model**: `os.MkdirTemp` root → `pm init --root <dir>` → every stage is an in-process
 `cli.Run([..., "--root", dir, "--json"], &out, &err)` whose exit code and envelope `kind` are
@@ -156,7 +159,7 @@ History appends to `.polymetrics/certifications/history/<connector>/<timestamp>.
 
 ## B) Batch mode
 
-`creds.yaml` (env/exec references only — safe to commit; never secret values):
+`creds.yaml` (environment-variable references only; never secret values):
 
 ```yaml
 version: 1
@@ -170,18 +173,20 @@ connectors:
     write: true
   stripe:
     credential:
-      exec: {api_key: ["op", "read", "op://certs/stripe-test/api_key"]}
+      from_env: {api_key: PM_CERT_STRIPE_API_KEY}
     write: false
   salesforce:
     skip: true
     reason: "no sandbox tenant yet"
 ```
 
-Worker pool over connectors (default 4), one ephemeral root each; stages within a connector
-strictly serial. Resumability: `certifications/batch-<runid>/
-progress.json`; `--resume` skips connectors whose report is newer than batch start. Summary
-matrix: rows = connectors; columns = check/catalog/read/5 modes/resume/write/flow/schedule/
-redaction/**leaks**; any leak row printed first and forces exit 3.
+Credential-file `exec` entries are rejected before runner effects; certification never executes an
+external credential command. Worker pool concurrency is across connectors (default 4), while stages
+within one connector remain strictly serial. Resumability markers are written to
+`certifications/batch-<runid>/progress.json`; `--resume` reuses valid completed prior reports and
+reruns missing, malformed, or incomplete reports. Summary matrix rows are connectors; columns are
+check/catalog/read/5 modes/resume/write/flow/schedule/redaction/**leaks**; any leak row prints first
+and forces exit 3.
 
 ## C) Create-then-cleanup write protocol
 
@@ -247,7 +252,7 @@ internal/connectors/certify/
   ledger.go         # write-ahead leak ledger
   sweeper.go        # --sweep
   report.go         # CertificationReport schema, save/load, history, matrix rendering
-  credsfile.go      # creds.yaml parsing, env/exec secret resolution
+  credsfile.go      # creds.yaml parsing, env references, prohibited-exec rejection
   record.go         # Tier-1 recording RoundTripper + sanitizer
   replay.go         # Tier-1 replay transport + cassette store
 internal/cli/certify_cli.go   # wire `certify` into runConnectors

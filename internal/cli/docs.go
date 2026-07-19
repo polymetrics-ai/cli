@@ -527,7 +527,7 @@ ACTIONS
 
   catalog
     Prints connector catalog metadata, optionally filtered by --capability and
-    --stage. Example stages include alpha, beta, and generally_available.
+    --stage. Example stages include alpha, beta, and ga.
 
   inspect <name>
     Prints a man-style connector manual for a bare connector name. Use --json
@@ -543,9 +543,12 @@ ACTIONS
     single run can use local connector behavior or user-named credential
     variable references. Batch mode requires --all and --credentials-file;
     --write=false or --skip=write overrides every credential-file write entry.
-    Only --skip=write is implemented. Sweep mode retries cleanup recorded in
-    the local certification ledger. Unsupported or mode-inapplicable controls
-    fail before runner effects instead of being accepted as no-ops.
+    Only --skip=write is implemented. --resume reuses completed prior reports;
+    missing, malformed, or incomplete reports rerun. Sweep mode retries cleanup
+    recorded in the local certification ledger.
+    --older-than must be greater than zero and no more than 8760h. Unsupported,
+    mode-inapplicable, and unknown controls fail before credential loading or
+    runner/sweep effects instead of being accepted as no-ops.
 
     Before a certification report is completed, CLI usage errors exit 2,
     validation errors exit 3, and setup or runtime errors exit 1. These errors
@@ -555,8 +558,9 @@ ACTIONS
     JSON reports use ConnectorCertification, ConnectorCertificationBatch, or
     ConnectorCertificationSweep envelopes.
 
-    Credential values must come from environment references or the credential
-    file resolver; they are never command operands, output, events, telemetry,
+    Credential values must come from environment references.
+    Credential-file exec entries are rejected; no external credential command
+    is run. Secret values are never command operands, output, events, telemetry,
     or report fields. Live checks and writes are opt-in harness behavior, not
     performed by connector inspection or help.
 
@@ -565,7 +569,7 @@ EXAMPLES
   pm connectors --json
   pm connectors list
   pm connectors list --all --json
-  pm connectors catalog --capability write --stage generally_available --json
+  pm connectors catalog --capability write --stage ga --json
   pm connectors inspect github
   pm connectors inspect github --json
   pm connectors certify sample --json
@@ -577,7 +581,8 @@ EXAMPLES
 
 SECURITY
   Connector inspection never reads credentials. Certification accepts only
-  credential references; secret values are excluded from output and reports.
+  environment-variable credential references; credential-file exec is rejected.
+  Secret values are excluded from output and reports.
   Live certification writes remain explicitly opt-in and cleanup-gated;
   credential-file writes additionally require sandbox=true.
 

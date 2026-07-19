@@ -47,10 +47,9 @@ type BatchOptions struct {
 	// (Report.Save's <dir>/certifications/<connector>.json) and this
 	// batch's progress.json are written.
 	BatchDir string
-	// Resume skips any connector whose existing
-	// <BatchDir>/certifications/<connector>.json report completed after
-	// this RunBatch call's start time (certification design §B: "--resume
-	// skips connectors whose report is newer than batch start").
+	// Resume reuses any valid, completed existing report at
+	// <BatchDir>/certifications/<connector>.json. Missing, malformed, or
+	// incomplete reports are rerun.
 	Resume bool
 }
 
@@ -248,11 +247,18 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 			continue
 		}
 
-		if opts.Resume && hasFreshReport(opts.BatchDir, name, batch.StartedAt) {
-			results[i] = BatchConnectorResult{Connector: name, Resumed: true}
-			done := int(completed.Add(1))
-			emitBatchEvent(ctx, events.KindResumed, runID, name, "resumed", len(names), done, "")
-			continue
+		if opts.Resume {
+			if rep, ok := completedReport(opts.BatchDir, name); ok {
+				results[i] = BatchConnectorResult{
+					Connector: name,
+					Report:    rep,
+					Resumed:   true,
+					ExitCode:  ExitCodeFor(rep),
+				}
+				done := int(completed.Add(1))
+				emitBatchEvent(ctx, events.KindResumed, runID, name, "resumed", len(names), done, "")
+				continue
+			}
 		}
 
 		emitBatchEvent(ctx, events.KindQueued, runID, name, "queued", len(names), int(completed.Load()), "")
@@ -340,6 +346,9 @@ func emitBatchEvent(ctx context.Context, kind events.Kind, runID, connector, sta
 func ValidateBatchConstraints(cf CredsFile) error {
 	for _, name := range cf.ConnectorNames() {
 		entry := cf.Connectors[name]
+		if len(entry.Credential.Exec) != 0 {
+			return fmt.Errorf("certify: connector %q credential-file exec entries are not supported", name)
+		}
 		if entry.Skip {
 			continue
 		}
@@ -381,19 +390,25 @@ func aggregateExitCode(results []BatchConnectorResult) int {
 	return worst
 }
 
-// hasFreshReport reports whether <dir>/certifications/<connector>.json
-// exists and its CompletedAt is at or after since (certification design §B
-// --resume semantics).
-func hasFreshReport(dir, connector string, since time.Time) bool {
+// completedReport loads a prior report eligible for --resume. It rejects
+// malformed identity/timestamps and zero completion times so interrupted or
+// partial artifacts are rerun rather than treated as completed.
+func completedReport(dir, connector string) (Report, bool) {
 	if dir == "" {
-		return false
+		return Report{}, false
 	}
 	path := filepath.Join(dir, certificationsDirName, connector+".json")
 	rep, err := LoadReport(path)
 	if err != nil {
-		return false
+		return Report{}, false
 	}
-	return !rep.CompletedAt.Before(since)
+	if rep.Kind != "ConnectorCertification" || rep.SchemaVersion < 1 || rep.Connector != connector {
+		return Report{}, false
+	}
+	if rep.StartedAt.IsZero() || rep.CompletedAt.IsZero() || rep.CompletedAt.Before(rep.StartedAt) {
+		return Report{}, false
+	}
+	return rep, true
 }
 
 // writeBatchProgress persists <dir>/certifications/batch-<runid>/
