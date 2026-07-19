@@ -11,7 +11,7 @@
   "startedAt": "20260719T074902Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "green_refactor_in_progress",
+  "status": "containment_correction_planned",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -35,11 +35,16 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "hidden native extract with nine typed flags, invocation-local query/analyzer seams, extract table validation, rooted RLM input/output effects, direct manual, and extract-only legacy/parser removal passes focused, repeated, race, router/golden, path-safety, and exact-start differential gates"
+    },
+    {
+      "cycle": "containment-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "self-inspection found that extract must validate its fixed warehouse directory beneath the selected project root before shared RLM treats that directory as a held root; bounded temp-only RED/GREEN is coupled to extract path safety"
     }
   ],
   "red": "focused CLI compile failure on absent newExtractCobraCommand/extractCommandRuntime/newRootCmdWithExtractRuntime; RLM traversal input, external input final link, and external temporary output final link all succeeded before production edits",
   "green": "focused CLI/RLM passed; extract x10 and race passed; RLM/safety repeated and race passed; exact-start 8/8 preserved plus 5/5 intentional contextual help",
-  "verification": "pending",
+  "verification": "initial full CLI/repository/vet/build/make verify passed; verification reset pending warehouse-root containment correction and rerun",
   "files": [
     ".planning/phases/436-extract-native-cobra/PLAN.md",
     ".planning/phases/436-extract-native-cobra/TDD-LEDGER.md",

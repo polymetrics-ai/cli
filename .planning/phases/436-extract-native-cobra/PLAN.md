@@ -58,3 +58,9 @@ Hidden status is invariant: extract remains absent from root discovery/completio
 ## Safety
 
 All tests use `t.TempDir` project/warehouse roots, local synthetic records, injected query/analyzer fakes, or the existing hermetic fake runner. No model, Temporal, Podman, worker, network listener, database service, external file, credential, connector check, generic execution surface, destructive/admin action, production deployment, or standalone reverse ETL is permitted. Input and output names cannot select broad paths. Rooted effects must reject symlink escapes at effect time and preserve external sentinel content. No dependency or quality-gate change.
+
+## Post-GREEN containment correction
+
+Self-inspection after the first full gate identified one remaining extract boundary: shared RLM table opens are rooted beneath the supplied warehouse directory, but extract had not first proved that `<root>/.polymetrics/warehouse` itself resolves beneath the selected project root. A pre-existing warehouse-directory symlink could therefore redefine the held root outside the project.
+
+Before the correction production edit: reset terminal verification, add a temp-root test with `.polymetrics/warehouse` linked to an external sentinel directory, and require validation failure before the injected analyzer is constructed. Then validate the fixed extract warehouse directory with `safety.ValidateLocalWritePath(root, warehouseDir, ..., false)` before analyzer effects. Preserve normal nonexisting/in-root warehouse paths, table validation, help, output, and shared RLM behavior. Run focused/repeated/race containment tests and all declared broader gates; commit/push without PR/review/services/dependencies.

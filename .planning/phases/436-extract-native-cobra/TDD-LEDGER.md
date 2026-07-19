@@ -17,8 +17,9 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 1 | RED | `go test ./internal/cli ./internal/rlm -run 'TestExtract|TestDeterministicRunRejectsWarehouseInputPathEscape|TestDeterministicRunRejectsExternalInputFinalLink|TestWriteOutTable' -count=1` | Failed as required before production edits: CLI lacks `newExtractCobraCommand`, `extractCommandRuntime`, and `newRootCmdWithExtractRuntime`; RLM traversal input, external input final link, and external temporary output final link all succeeded |
 | 2 | GREEN | Hidden native extract command, typed flags/runtime, bounded table checks, rooted RLM warehouse I/O, and extract-only legacy/parser removal | Pass: focused CLI/RLM `1.752s`/`0.227s`; existing extract request test updated only for intentional bare-help behavior |
 | 3 | Refactor | Focused/repeated/race extract/RLM/safety, router/golden/full CLI, exact-start differential, and parity checks | In progress: extract ×10 `10.607s`, extract race `12.937s`, RLM/safety normal/repeated/race green, router/golden focus green, exact-start 8/8 preserved plus 5/5 intentional help |
-| 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Pending |
-| 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Initial pass: full CLI `434.874s`, full repo green (CLI `436.578s`, certify `342.464s`), vet/build/`make verify` exit 0 |
+| 5 | Containment correction RED/GREEN | Reject a warehouse-directory symlink escaping the selected extract project root before analyzer effects | Planned before correction test/production edit |
+| 6 | Delivery | Re-run affected/full gates; finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
 
 ## RED contract
 
@@ -42,6 +43,10 @@ No external user file or service was used: all roots, symlinks, records, and sen
 Native Cobra now owns hidden extract and its nine current local flags. An invocation-local runtime isolates query and analyzer effects; production retains the old project-open gate, heuristic/optional classifier, read-only query engine, and typed agent analyzer. Extract validates both table names before analyzer construction. Shared RLM input opens and output temp/create/rename effects now run through a held `os.Root`-backed local filesystem scope; deterministic reads remain streaming while agent staging retains its required byte copy.
 
 Focused, repeated, and race suites pass. The original input traversal, external input final-link, and external output-temp final-link tests are green; atomic replacement preserves the external final-target sentinel and replaces the link. Router/golden/docs focus passes after the one reviewed extract-help fixture change and generated `docs/cli/extract.md`. An exact-start built-binary differential matched 8/8 preserved parser/output cases; 5/5 intentional bare/topic/positional/trailing help routes pass.
+
+## Post-GREEN containment correction
+
+The first implementation roots individual RLM table effects, but extract still needs to prove its fixed warehouse directory is within the selected project root before treating that directory as the held root. A temp-only RED will link `.polymetrics/warehouse` to an external directory and require failure before analyzer construction. The smallest GREEN is project-root path validation in extract before creating the RLM request.
 
 ## Evidence log
 

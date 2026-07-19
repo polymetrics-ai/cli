@@ -2,7 +2,7 @@
 
 Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `high`; exact start `eec03373dcc581c7f5c3331fe63287519b317f53`.
 
-`verificationPassed`: false
+`verificationPassed`: false (post-GREEN warehouse-root containment correction pending)
 
 ## TDD and behavior
 
@@ -24,12 +24,13 @@ Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `h
 - [x] Focused extract/RLM/safety race tests (extract `12.937s`; RLM/safety green).
 - [x] Router and golden transcript focus (`10.220s`).
 - [x] Exact-start parser/output differential (8/8 preserved; 5/5 intentional contextual help).
-- [ ] Full CLI/extract/RLM/safety tests.
-- [ ] `gofmt -w cmd internal` and clean diff check.
-- [ ] `go vet ./...`.
-- [ ] `go test ./...`.
-- [ ] `go build ./cmd/pm`.
-- [ ] `make verify` dependency-free/default-only.
+- [x] Initial full CLI/extract/RLM/safety tests (full CLI `434.874s`; full repo CLI `436.578s`, certify `342.464s`).
+- [x] Initial `gofmt -w cmd internal` and clean diff check.
+- [x] Initial `go vet ./...`.
+- [x] Initial `go test ./...`.
+- [x] Initial `go build ./cmd/pm`.
+- [x] Initial `make verify` dependency-free/default-only (exit 0).
+- [ ] Post-GREEN warehouse-root containment RED/GREEN and affected/full rerun.
 - [ ] No dependency, connector-definition, unrelated namespace, or broad generated delta.
 
 ## CLI help/manual/website parity
