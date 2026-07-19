@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "active",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "573d6222e1cb98f8cdb980a571e6925310855e59",
+  "currentHead": "ad6e43313376cfc2c4e4ed98079c14931b932b9a",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -108,6 +108,13 @@
       "decision": "spawned",
       "issues": [431],
       "reason": "Sol/high implementation/correction and independent Sol/xhigh review completed reverse nativization; actual CLI/app/safety race gates passed after correcting one nonexistent package path in the integration command."
+    },
+    {
+      "cycle": "unit_432_execute_review_promote",
+      "timestamp": "2026-07-19T04:44:27Z",
+      "decision": "spawned",
+      "issues": [432],
+      "reason": "Sol/high implementation and independent Sol/xhigh exact-head review completed flow nativization; exact head promoted and parent race checks passed."
     }
   ],
   "units": [
@@ -208,6 +215,16 @@
       "implementationSession": "1e9e3b7f-1228-4d2c-8bc4-c3babdb82bf2",
       "correctionSession": "ae7bde80-fd8b-4595-a969-79a72c2d3d29",
       "reviewSession": "6ea302fa-ce00-42f0-a7e5-ed4b2282bce5"
+    },
+    {
+      "issue": 432,
+      "branch": "refactor/432-flow-native-cobra",
+      "startingHead": "ec12c1729e0aaf233a853eff5c6291885f910b15",
+      "endingHead": "b8377b7b200e50ccb5ec164670fed4f78a5c486a",
+      "parentIntegrationHead": "ad6e43313376cfc2c4e4ed98079c14931b932b9a",
+      "status": "provisionally_integrated",
+      "implementationSession": "f6cbbbfa-f48f-4abb-a0f1-91f1c0f61e48",
+      "reviewSession": "9dbfa83b-6355-4e9c-9a68-5ae39a7aabe9"
     }
   ],
   "humanGates": [
@@ -221,5 +238,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-19T03:40:11Z"
+  "updatedAt": "2026-07-19T04:44:27Z"
 }
