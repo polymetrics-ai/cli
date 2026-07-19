@@ -7,7 +7,7 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": "e9ce945e56413dbb60f5eeec2f1d6e5df688a249",
+  "endingImplementationHead": "791b1a1d",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "thirdCorrectionStartingHead": "437d13cf",
@@ -21,8 +21,8 @@
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "sixth_review_correction_in_progress",
-  "verificationPassed": false,
+  "status": "sixth_review_correction_verified_pr_update_pending",
+  "verificationPassed": true,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
   "latestParentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
@@ -239,11 +239,21 @@
       "cycle": "sixth-review-correction-green",
       "decision": "local_critical_path",
       "reason": "minimal leak-authority and leak-dominance fixes passed focused, repeated, race, vet, and build gates; broader verification remains pending"
+    },
+    {
+      "cycle": "sixth-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full affected packages, parity checks, sample smoke, fmt/diff/vet/full tests/build, final make verify, and connectorgen all passed after lint fixture close fix"
+    },
+    {
+      "cycle": "sixth-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts record successful verification; PR body update and final push remain local worker delivery actions, no bot review requested"
     }
   ],
   "red": "captured sixth RED: certify focus 25.435s showed approval replay post-cleanup outbox create, stale leak after absence proof, and runner report+error exit 2; CLI focus 0.572s showed progress persistence error with leaks returned exit 1 and Error envelope instead of safe batch report/exit 3",
   "green": "complete sixth GREEN focus: idempotency before cleanup with createPassed gate; stale leak cleared after exact absence while cleanup stage remains failed; runner report+error leaks exit 3; CLI writes leaked batch evidence on progress error and returns exit 3; focused/repeated/race/vet/build pass",
-  "verification": "pending sixth exact-head correction; full make verify not yet rerun",
+  "verification": "passed sixth correction gates: focused package tests, repeated/race, full affected packages, help/docs/website, fixture sample smoke, fmt/diff/vet/full tests/build, final make verify, and connectorgen 547/0; first make verify failed only on errcheck for new fixture close and rerun passed after 791b1a1d",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",

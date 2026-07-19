@@ -228,3 +228,20 @@ A sixth bounded correction cycle is explicitly authorized because unresolved acc
 3. Implement minimal corrections in `internal/connectors/certify/stages_source.go`, `stages_write.go`, `batch.go`, and `internal/cli/certify_cli.go` only if tests require. Preserve `cli.Run` re-entrancy, stdout/stderr/JSON, dynamic connector dispatch, plan → preview → approval → execute, durable ledger provenance, and exits 0/1/2/3 with leak dominance.
 4. Run focused new tests RED then GREEN, repeated and `-race` variants where applicable; affected full `internal/connectors/certify` and `internal/cli` tests; runtime help/docs/website/golden parity if semantics surface changes; connector validation; gofmt/diff/vet/full test/build/`make verify`; fixture-only sample smoke. No credentialed/live checks, services, external writes/sweeps, dependencies, PR merge, or bot review requests.
 5. Commit/push GREEN/refactor and terminal evidence checkpoints; update PR #466 body with correction/TDD/gate evidence and final exact head.
+
+
+### Sixth-cycle terminal verification evidence
+
+Implementation head before terminal artifacts: `791b1a1d` (`52cd1e05` GREEN plus `791b1a1d` lint/test close fix). All accepted findings are corrected.
+
+Verification commands/results:
+
+- Focused affected packages: `go test ./internal/connectors/certify -count=1` => pass (`351.189s`); `go test ./internal/cli -count=1` => pass (`445.489s`).
+- Formatting/full gates: `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` => pass (CLI `445.908s`, certify `350.792s`); `go build ./cmd/pm` => pass.
+- Runtime help parity: `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` byte-identical (`8391` bytes).
+- Docs/golden/website parity: `go test ./internal/cli -run 'TestConnectorsManual|TestNativeConnectors|TestNativeCertify' -count=1` => pass (`11.149s`); `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages; tracked docs/website/golden diff clean. No canonical help/manual/website text change was required by this fix.
+- Fixture-only sample smoke: `./pm connectors certify sample --root <temp> --json` => exit `0`, kind `ConnectorCertification`, connector `sample`, passed `true`, stderr bytes `0`.
+- Connector validation: `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
+- `make verify`: first attempt failed only at certify lint (`errcheck` on `f.Close` in the new replay fixture helper); `791b1a1d` fixed it. Complete rerun passed: CLI `453.202s`, certify `357.136s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen `547 connector(s) checked, 0 findings`.
+
+Safety: no credentials, live certification, services, system crontab, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction. The only reverse ETL execution was the repository's local fixture/temp smoke path (plan → preview → approval → execute) inside `make verify` and the explicit sample/outbox certification smoke.

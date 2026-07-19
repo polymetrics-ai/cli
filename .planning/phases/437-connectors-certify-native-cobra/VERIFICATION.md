@@ -222,7 +222,7 @@ Exact start: `86eea0f966814e6848e5a52143eea15dd46ff801`; parent target: `a5474bc
 
 Exact start: `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; identity `issue-437-sixth-review-correction-20260719T220843Z`.
 
-`verificationPassed`: false — reopened for accepted High/Medium review findings; remains false until complete `make verify` exits 0 after fixes.
+`verificationPassed`: true — complete final `make verify` rerun exited 0 after the lint correction.
 
 - [x] Confirm clean branch, local head, remote head, and PR #466 head all equal `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34` before edits.
 - [x] Reread required issue, contracts, GSD/manual loop, skill routing, CLI parity, review routing, ADR/design/migration context, and all phase artifacts.
@@ -235,9 +235,9 @@ Exact start: `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; identity `issue-437-six
 - [x] RED: cleanup call failure followed by exact absence proof clears stale top-level leak without marking the stage honestly passing — failed with stale `Report.Leaks`.
 - [x] GREEN: minimal fixes pass focused new tests (`certify` 21.288s; `cli` 0.565s).
 - [x] Repeated focused tests and race variants pass (`certify` count=3 62.605s, `cli` count=3 0.567s, `certify -race` 229.386s, `cli -race` 1.666s).
-- [ ] Affected full `go test ./internal/connectors/certify` and `go test ./internal/cli`.
-- [ ] Runtime help/docs/golden/website parity if output semantics change; otherwise record not applicable.
-- [ ] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke.
-- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; explicit `go run ./cmd/connectorgen validate internal/connectors/defs`.
-- [ ] PR #466 body updated with correction evidence and final exact head.
-- [ ] No credentials, live certification, services, external writes/sweeps, dependencies, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
+- [x] Affected full `go test ./internal/connectors/certify` (`351.189s`) and `go test ./internal/cli` (`445.489s`).
+- [x] Runtime help/docs/golden/website parity: help byte-identical `8391` bytes; focused docs/golden `11.149s`; website generation drift-free; no canonical text update required.
+- [x] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke: exit 0, `ConnectorCertification`, sample, passed true, stderr bytes 0.
+- [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` (CLI `445.908s`, certify `350.792s`); `go build ./cmd/pm`; final `make verify` (CLI `453.202s`, certify `357.136s`, lint 0, smoke ok); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => 547/0.
+- [ ] PR #466 body update follows after terminal artifact commit so the final exact head is known.
+- [x] No credentials, live certification, services, external writes/sweeps, dependencies, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
