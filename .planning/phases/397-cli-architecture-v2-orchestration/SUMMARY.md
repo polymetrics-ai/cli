@@ -26,4 +26,6 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #433 nativized schedule with fake-only backend/runtime seams and preserved no-effect behavior for unsupported actions. Exact-head review and parent integration race checks passed.
 
-The next serialized ready unit is #434. Final verification and final parent review have not run; `verificationPassed` remains false.
+#434 nativized RLM with fake-only analyzer seams, mode-gated request forwarding, and no runtime/model effects. Exact-head review and parent integration race checks passed.
+
+The next serialized ready unit is #435. Final verification and final parent review have not run; `verificationPassed` remains false.
