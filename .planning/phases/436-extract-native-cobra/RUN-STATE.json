@@ -11,9 +11,11 @@
   "startedAt": "20260719T074902Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "accepted_review_correction_green",
+  "endedAt": "20260719T093539Z",
+  "endingImplementationHead": "28393538",
+  "status": "complete_verified",
   "correctionStartingHead": "748f6bdbf754840912796d8f7ff8aee9b8fbc00a",
-  "verificationPassed": false,
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -76,11 +78,21 @@
       "cycle": "accepted-review-correction-green",
       "decision": "local_critical_path",
       "reason": "held project-root warehouse scope, parser ownership state/normalization, exact-bare detection, and full RLM table validation pass focused, repeated, race, adversarial, and exact-base differential gates"
+    },
+    {
+      "cycle": "accepted-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full CLI/RLM/safety, runtime parity, docs/manual/website drift, gofmt, vet, build, module/scope guards, and make verify passed without external services or dependencies"
+    },
+    {
+      "cycle": "accepted-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "all six terminal artifacts finalized for the user-requested commit/push with no PR or review"
     }
   ],
   "red": "original native RED plus correction RED: controlled pre-analyzer warehouse replacement re-rooted deterministic input/output externally; literal/assigned/malformed help-like tails rendered CommandManual; unknown-only forms rendered bare help; dot input/output reached analyzer factory",
   "green": "prior green plus correction green: focused extract/router/golden 11.271s; RLM/safety; extract x10 43.889s and race 50.339s; exact-base 11/11; adversarial 37 matched plus 17 intentional help and 0 mismatches; package vet/build/module guards pass",
-  "verification": "reset: accepted review correction RED/GREEN and full focused/repeated/race/adversarial/base differential/CLI/RLM/safety/docs/gofmt/vet/build/make verify rerun pending; prior pass is historical",
+  "verification": "pass: focused extract/router/golden 11.271s; extract x10 43.889s and race 50.339s; RLM/safety repeated/race; exact-base 11/11; adversarial 37 matched + 17 intentional help / 0 mismatches; full CLI 426.582s; docs focus 30.291s; final make verify exit 0 with CLI 433.304s, certify 336.725s, RLM 1.780s, docs/smoke/lint/connectors green",
   "files": [
     ".planning/phases/436-extract-native-cobra/PLAN.md",
     ".planning/phases/436-extract-native-cobra/TDD-LEDGER.md",
@@ -95,9 +107,13 @@
     "92935855 refactor(cli): nativize hidden extract command",
     "b7e9063e docs(planning): add extract containment correction",
     "37e3e1b2 test(cli): expose extract warehouse root escape",
-    "15417f95 fix(cli): confine extract warehouse root"
+    "15417f95 fix(cli): confine extract warehouse root",
+    "748f6bdb docs(planning): complete extract native cobra handoff",
+    "7c929d4a docs(planning): reopen extract review corrections",
+    "cddffc45 test(cli): expose extract review regressions",
+    "28393538 fix(cli): preserve extract parser and warehouse roots"
   ],
-  "push": "accepted correction plan and RED pushed; correction GREEN checkpoint pending commit/push",
+  "push": "accepted correction plan, RED, and GREEN checkpoints pushed; terminal artifact commit is committed and pushed immediately after this state is written",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "owned temporary roots/sentinels and injected/hermetic fakes only; no broad paths or external final-link effects; no external user files/services, credentials, dependencies, generic tools, PR, or review; make verify used only its ordered local reverse plan-preview-approval-run smoke"

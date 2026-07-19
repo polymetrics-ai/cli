@@ -9,7 +9,7 @@ Starting HEAD: `eec03373dcc581c7f5c3331fe63287519b317f53`
 
 Doctor/list passed; `plan-phase 436 --skip-research` generated and is executed inline. The adapter lacks `programming-loop`, so the recorded manual universal-runtime-loop fallback is active.
 
-Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-project-layout`, `golang-documentation`, `golang-spf13-cobra`.
+Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-project-layout`, `golang-documentation`, `golang-spf13-cobra`; correction hardening additionally loaded `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-database`, and `golang-lint`.
 
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
@@ -23,7 +23,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 7 | Accepted review correction plan | Accept all four findings; reset terminal verification; plan held project-root effect scope, parser-ownership repairs, unknown-only usage behavior, and full RLM table validation | Complete before correction tests/production edits |
 | 8 | Correction RED | `go test ./internal/cli -run 'TestExtract(HeldProjectRootRejectsWarehouseReplacementBeforeAnalyzerEffects|RejectsUnsafeTablesBeforeAnalyzer|LiteralUnknownOperandsGlobalsAndOutputCompatibility)$' -count=1` | Failed as required before production edits: directory replacement re-rooted deterministic input/output externally; literal/assigned/malformed tails rendered `CommandManual`; unknown-only rendered bare help; both dot-table cases reached the fake analyzer |
 | 9 | Correction GREEN/refactor | Narrow held warehouse scope, exact-bare state, tail ownership normalization, and full RLM table validation | GREEN: focused extract/router/golden `11.271s`; RLM/safety green; extract ×10 `43.889s`; extract race `50.339s`; RLM/safety repeated/race green; exact-base 11/11 and adversarial 37 matched + 17 intentional help / 0 mismatches |
-| 10 | Correction delivery | Finalize artifacts with exact evidence; commit/push; no PR/review | Pending |
+| 10 | Correction delivery | Full CLI `426.582s`; docs focus `30.291s`; final `make verify` exit 0 (CLI `433.304s`, certify `336.725s`, RLM `1.780s`); finalize artifacts/commit/push | Complete after terminal artifact commit/push; no PR/review |
 
 ## RED contract
 
@@ -74,6 +74,14 @@ The focused test exited 1 before production edits. The controlled analyzer-facto
 ## Correction GREEN/refactor evidence
 
 `rlm.OpenProjectWarehouse` now opens the selected project root before analyzer construction and passes an RLM-only `WarehouseScope` through `RunRequest`; the scope exposes no generic file API, and deterministic, fixture, and agent input/output helpers reuse it for the whole run. The controlled mutation test now fails closed without changing the external sentinel. Extract records exact bare invocation before pflag discards unknowns, normalizes parser-owned help-like tails to inert legacy tokens, preserves direct/trailing help, and applies exported RLM bare-table validation after identifier validation. Focused extract/router/golden, full RLM/safety, package vet, build, module tidy/verify, repeated/race, 11-case exact-base differential, and 54-case adversarial differential all pass.
+
+## Correction final verification
+
+- Full CLI passed in `426.582s`; full standalone RLM/safety passed.
+- Final `make verify` exited 0: gofmt/module drift, vet, all tests, build, docs validation, ordered temp-root smoke, lint 0, and 547 connector definitions / 0 findings. CLI took `433.304s`, certify `336.725s`, and RLM `1.780s`.
+- Runtime direct/topic/bare/long/short/positional/trailing help, unknown-only usage JSON, literal-separator `ExtractResult`, hidden root discovery, docs grep, generated manuals, and website data generation passed. `git diff --exit-code -- docs/cli website` stayed clean.
+- `go mod tidy -diff`, `go mod verify`, package/full vet/build, gofmt/diff, dependency/scope/parser-removal guards, focused/repeated/race/adversarial tests, 11/11 exact-base differential, and 54-case adversarial differential passed.
+- Correction commits: `7c929d4a` plan reset, `cddffc45` RED tests, `28393538` GREEN implementation. Each checkpoint was pushed before the next lifecycle boundary.
 
 ## Evidence log
 

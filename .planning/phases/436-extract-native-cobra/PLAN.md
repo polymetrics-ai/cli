@@ -23,7 +23,7 @@ The direct issue task requires the next serialized #397/#407 Phase 9 unit: prese
 
 Read: `AGENTS.md`; local #397/#407 orchestration artifacts; GSD core/adapter/manual loop; issue contract; CLI parity policy; ADR-0002; CLI Architecture v2 plan; current extract/router/golden/manual/website code; adjacent native RLM/worker commands; RLM warehouse read/write code; and `internal/safety` rooted filesystem helpers.
 
-Loaded: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `golang-error-handling`; `golang-security`; `golang-safety`; `golang-project-layout`; `golang-documentation`; `golang-spf13-cobra`.
+Loaded: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `golang-error-handling`; `golang-security`; `golang-safety`; `golang-project-layout`; `golang-documentation`; `golang-spf13-cobra`. Correction hardening also loaded `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-database`, and `golang-lint` per RLM/filesystem/review routing.
 
 ## Scope
 
@@ -75,3 +75,7 @@ All four findings in `/tmp/pm-397-review-436.log` are accepted. Terminal verific
 4. Reuse the full RLM bare-table validation contract before analyzer construction, including rejection of `.` for either table.
 
 RED tests and artifact checkpoint precede production edits. GREEN is limited to the extract router/handler, a narrow held warehouse scope in `internal/rlm`, and deterministic tests. Preserve ordinary extract/RLM behavior and intentional help/docs. Run focused, repeated, race, adversarial, exact-base differential, full CLI/RLM/safety, docs parity, gofmt, vet, build, and `make verify`; then finalize artifacts, commit, and push. No external user files/services, dependencies, credentials, PR, or review.
+
+## Correction completion
+
+All four findings are fixed at implementation head `28393538`. The plan and complete failing test contract were committed/pushed before production edits. The held project-root scope, parser ownership, exact-bare state, and complete RLM table validation pass focused, repeated, race, adversarial, 11/11 exact-base differential, full CLI/RLM/safety, runtime help/output/hidden, docs/manual/website generation, gofmt, vet, build, module/scope guards, and final `make verify`. No user-facing help/docs content changed because intentional help remained accurate and generation was drift-free.

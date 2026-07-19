@@ -2,7 +2,7 @@
 
 Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `high`; exact start `eec03373dcc581c7f5c3331fe63287519b317f53`.
 
-`verificationPassed`: false (accepted four-finding correction planned; RED/GREEN and full rerun pending)
+`verificationPassed`: true
 
 ## TDD and behavior
 
@@ -61,15 +61,15 @@ Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `h
 
 - [x] Review log read; all four findings accepted at exact correction start `748f6bdbf754840912796d8f7ff8aee9b8fbc00a`.
 - [x] Plan, TDD ledger, verification checklist, summary, prompt snapshot, and run state reset before production edits.
-- [ ] RED: controlled pre-analyzer warehouse replacement proves path re-rooting.
-- [ ] RED: literal separator and malformed/help-like tails retain base parser ownership.
-- [ ] RED: unknown-only/help-like invocations are usage errors, not bare help.
-- [ ] RED: `.` input/output tables reject before analyzer factory.
-- [ ] GREEN: narrow project-rooted warehouse scope spans RLM read/write effects without exposing generic file operations.
-- [ ] Focused/repeated/race/adversarial and exact-base differential gates pass.
-- [ ] Full CLI/RLM/safety, docs parity, gofmt, vet, build, and `make verify` pass.
-- [ ] No dependencies, external user files/services, credentials, PR, or review.
+- [x] RED: controlled pre-analyzer warehouse replacement proves path re-rooting.
+- [x] RED: literal separator and malformed/help-like tails retain base parser ownership.
+- [x] RED: unknown-only/help-like invocations are usage errors, not bare help.
+- [x] RED: `.` input/output tables reject before analyzer factory.
+- [x] GREEN: narrow project-rooted warehouse scope spans RLM read/write effects without exposing generic file operations.
+- [x] Focused/repeated/race/adversarial and exact-base differential gates pass.
+- [x] Full CLI/RLM/safety, docs parity, gofmt, vet, build, and `make verify` pass.
+- [x] No dependencies, external user files/services, credentials, PR, or review.
 
-## Prior result (superseded pending correction)
+## Correction final result
 
-At `748f6bdb`, full CLI and `make verify` passed as previously recorded. Those results are historical only; `verificationPassed` remains false until the accepted correction and complete rerun finish.
+Implementation head `28393538` passes extract ×10 (`43.889s`), extract race (`50.339s`), RLM/safety repeated/race, focused extract/router/golden (`11.271s`), exact-base 11/11, adversarial 37 matched + 17 intentional help / 0 mismatches, full CLI (`426.582s`), docs focus (`30.291s`), runtime parity, gofmt, vet, build, module/scope guards, and final `make verify` (CLI `433.304s`, certify `336.725s`, RLM `1.780s`, connector validation 547/0). Website data generation and docs/manual drift checks passed without content changes.

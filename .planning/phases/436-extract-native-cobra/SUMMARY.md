@@ -1,6 +1,6 @@
 # Phase 436 Summary
 
-Status: reopened at `748f6bdb` for four accepted review corrections; verification reset before production edits.
+Status: four accepted review corrections complete and verified; terminal artifact commit/push pending.
 
 ## Identity
 
@@ -8,7 +8,9 @@ Status: reopened at `748f6bdb` for four accepted review corrections; verificatio
 - Model/thinking profile: `Sol`, `high`
 - Branch: `refactor/436-extract-native-cobra`
 - Exact start: `eec03373dcc581c7f5c3331fe63287519b317f53`
-- Implementation head: `15417f956f428c73159b3bb8824eb55cf3d44d36`
+- Original implementation head: `15417f956f428c73159b3bb8824eb55cf3d44d36`
+- Correction start: `748f6bdbf754840912796d8f7ff8aee9b8fbc00a`
+- Correction implementation head: `28393538`
 - Parent: #397; umbrella: #407; draft parent PR #438
 
 ## Delivered
@@ -37,7 +39,9 @@ No external user file/service, model, Temporal, Podman, worker, listener, databa
 
 ## Accepted correction
 
-The review identified a warehouse-root TOCTOU, two parser-ownership regressions, and incomplete pre-factory table validation. The bounded correction will hold a project-rooted RLM warehouse scope across analyzer input/output effects, preserve literal/malformed/help-like tail ownership, distinguish exact bare extract from unknown-only invocations, and reject the full RLM bare-table contract (including `.`) before analyzer construction. Temp/fake RED tests, including a controlled analyzer-factory directory replacement, precede production edits. Prior green evidence remains historical until all focused and full gates rerun.
+The review identified a warehouse-root TOCTOU, two parser-ownership regressions, and incomplete pre-factory table validation. The correction now opens a narrow RLM warehouse scope from the held project root before analyzer construction and reuses it for deterministic, fixture, and agent input/output effects. A controlled factory hook proves replacing the warehouse with an external symlink fails closed and preserves the external output sentinel.
+
+Exact bare invocation is captured before pflag discards unknown flags. Literal separators, assigned/malformed unknowns, and help-like tails remain parser-owned, while intentional direct/trailing help is unchanged. Extract applies the complete RLM bare-table contract before analyzer construction, rejecting `.` for either table. Focused/repeated/race/adversarial, exact-base 11/11, full CLI/RLM/safety, docs parity, gofmt/vet/build, and `make verify` all pass.
 
 ## Worker handoff
 
@@ -46,5 +50,5 @@ The review identified a warehouse-root TOCTOU, two parser-ownership regressions,
 - Branch: `refactor/436-extract-native-cobra`
 - Base: `feat/cli-architecture-v2`
 - Sub-PR/review: not created or run per user instruction
-- Implementation head: `15417f956f428c73159b3bb8824eb55cf3d44d36`
+- Correction implementation head: `28393538`
 - Review/integration coverage: intentionally pending parent-orchestrator handling; do not infer approval
