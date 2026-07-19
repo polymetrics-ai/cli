@@ -90,11 +90,11 @@ Second-correction start: `0d743e54e06c9e27e550eacce9be7899a9e23d19`; session `is
 
 - [x] Read and accept every P1/P2/P3 finding in `/tmp/pm-397-rereview-437.log`.
 - [x] Reopen plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state before tests or production edits.
-- [ ] Commit/push the planning checkpoint before RED tests.
-- [ ] RED effect-recorder tests prove `--write=false` and `--skip=write` override credential-file `write: true`.
-- [ ] RED proves configured credential-file sandbox/rate/budget and any other unsupported accepted setting fail before runner effects rather than being discarded.
-- [ ] RED proves hidden/rejected `--credential`, `--limit`, and `--modes`; only implemented skip values accepted; flow/schedule/unknown skips and mode-inapplicable controls reject before effects.
-- [ ] Complete audit maps every declared certify flag to an effect or explicit fail-closed rejection.
+- [x] Commit/push the planning checkpoint before RED tests (`aa39fd9d`).
+- [x] RED effect-recorder tests expose that `--write=false` and `--skip=write` do not override credential-file `write: true`.
+- [x] RED exposes configured credential-file sandbox/rate/budget/limit reaching batch/runner rather than failing closed.
+- [x] RED exposes visible/accepted `--credential`, `--limit`, and `--modes`, unrestricted skip values, and mode-inapplicable controls running effects.
+- [x] RED audit enumerates every declared certify flag by supported mode or explicit fail-closed expectation; GREEN mapping pending.
 - [ ] P3 stale certification architecture/PRD examples and claims removed; connector-help name claim made accurate.
 - [ ] Runtime help, bare namespace, action help, invalid action, CLI docs, goldens, website docs, and generated data are in parity.
 - [ ] Focused effect/no-op audit tests pass repeatedly and under race.

@@ -116,6 +116,67 @@ func TestRunBatchRunsEveryConnectorAndAggregatesExitCode(t *testing.T) {
 	}
 }
 
+func TestRunBatchEffectRecorderRejectsUnsupportedCredentialsConstraintsBeforeRunner(t *testing.T) {
+	tests := []struct {
+		name  string
+		entry certify.ConnectorCredsEntry
+		defs  certify.CredsDefaults
+	}{
+		{name: "write without sandbox", entry: certify.ConnectorCredsEntry{Write: true}},
+		{name: "rate limit", entry: certify.ConnectorCredsEntry{RateLimitRPS: 2}},
+		{name: "budget", entry: certify.ConnectorCredsEntry{BudgetCalls: 50}},
+		{name: "limit", entry: certify.ConnectorCredsEntry{Limit: 10}},
+		{name: "default rate limit", defs: certify.CredsDefaults{RateLimitRPS: 2}},
+		{name: "default budget", defs: certify.CredsDefaults{BudgetCalls: 50}},
+		{name: "default limit", defs: certify.CredsDefaults{Limit: 10}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var effects []string
+			_, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+				CredsFile: certify.CredsFile{
+					Defaults: tt.defs,
+					Connectors: map[string]certify.ConnectorCredsEntry{
+						"sample": tt.entry,
+					},
+				},
+				RunnerFactory: func(name string, _ certify.Options) certify.Runnable {
+					effects = append(effects, "runner:"+name)
+					return &fakeRunnable{rep: passingReport(name)}
+				},
+				BatchDir: t.TempDir(),
+			})
+			if err == nil {
+				t.Fatal("RunBatch() error = nil, want fail-closed unsupported constraint")
+			}
+			if len(effects) != 0 {
+				t.Fatalf("runner effects=%v, want none", effects)
+			}
+		})
+	}
+}
+
+func TestRunBatchAllowsSandboxGatedWrites(t *testing.T) {
+	var got certify.Options
+	_, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+		CredsFile: certify.CredsFile{Connectors: map[string]certify.ConnectorCredsEntry{
+			"sample": {Write: true, Sandbox: true},
+		}},
+		RunnerFactory: func(name string, opts certify.Options) certify.Runnable {
+			got = opts
+			return &fakeRunnable{rep: passingReport(name)}
+		},
+		BatchDir: t.TempDir(),
+	})
+	if err != nil {
+		t.Fatalf("RunBatch() error = %v", err)
+	}
+	if !got.Write {
+		t.Fatal("sandbox-gated write setting was not propagated to runner options")
+	}
+}
+
 // TestRunBatchExitCodeReflectsWorstConnector proves a single failing
 // connector forces exit 2 even when others pass.
 func TestRunBatchExitCodeReflectsWorstConnector(t *testing.T) {

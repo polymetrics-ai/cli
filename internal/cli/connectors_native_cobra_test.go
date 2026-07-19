@@ -5,6 +5,8 @@ import (
 	"context"
 	"errors"
 	"io"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -28,9 +30,11 @@ type fakeCertifyCommandRuntime struct {
 	singleOpts certify.Options
 	batchRoot  string
 	credsPath  string
+	batchCreds certify.CredsFile
 	parallel   int
 	resume     bool
 	olderThan  time.Duration
+	effects    []string
 
 	singleReport certify.Report
 	singleErr    error
@@ -43,6 +47,7 @@ type fakeCertifyCommandRuntime struct {
 }
 
 func (f *fakeCertifyCommandRuntime) RunSingle(_ context.Context, root string, opts certify.Options) (certify.Report, error) {
+	f.effects = append(f.effects, "single")
 	f.singleCalls++
 	f.singleRoot = root
 	f.singleOpts = opts
@@ -50,19 +55,23 @@ func (f *fakeCertifyCommandRuntime) RunSingle(_ context.Context, root string, op
 }
 
 func (f *fakeCertifyCommandRuntime) LoadCredsFile(path string) (certify.CredsFile, error) {
+	f.effects = append(f.effects, "load_credentials_file")
 	f.credsPath = path
 	return f.credsFile, f.loadCredsErr
 }
 
 func (f *fakeCertifyCommandRuntime) RunBatch(_ context.Context, root string, credsFile certify.CredsFile, resume bool) (certify.BatchReport, error) {
+	f.effects = append(f.effects, "batch")
 	f.batchCalls++
 	f.batchRoot = root
+	f.batchCreds = credsFile
 	f.parallel = credsFile.Defaults.Parallel
 	f.resume = resume
 	return f.batchReport, f.batchErr
 }
 
 func (f *fakeCertifyCommandRuntime) Sweep(_ context.Context, root, credsPath string, olderThan time.Duration) (map[string]certify.SweepResult, error) {
+	f.effects = append(f.effects, "sweep")
 	f.sweepCalls++
 	f.batchRoot = root
 	f.credsPath = credsPath
@@ -250,6 +259,9 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 
 func TestNativeCertifyRejectsUnsupportedSafetyAndModeControls(t *testing.T) {
 	unsupported := []string{
+		"credential",
+		"limit",
+		"modes",
 		"record",
 		"replay",
 		"allow-production-writes",
@@ -281,6 +293,9 @@ func TestNativeCertifyRejectsUnsupportedSafetyAndModeControls(t *testing.T) {
 		name string
 		arg  string
 	}{
+		{name: "credential", arg: "--credential=fixture-reference"},
+		{name: "limit", arg: "--limit=7"},
+		{name: "modes", arg: "--modes=full_refresh_append"},
 		{name: "record", arg: "--record"},
 		{name: "replay", arg: "--replay"},
 		{name: "replay false", arg: "--replay=false"},
@@ -296,6 +311,110 @@ func TestNativeCertifyRejectsUnsupportedSafetyAndModeControls(t *testing.T) {
 			assertCLIError(t, code, stdout, stderr, 2, "usage", "not supported")
 			if runtime.singleCalls != 0 || runtime.batchCalls != 0 || runtime.sweepCalls != 0 {
 				t.Fatalf("unsupported control invoked runtime: single=%d batch=%d sweep=%d", runtime.singleCalls, runtime.batchCalls, runtime.sweepCalls)
+			}
+		})
+	}
+}
+
+func TestNativeCertifyEffectRecorderRejectsNoOpControlsBeforeEffects(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "single skip flow", args: []string{"connectors", "certify", "sample", "--skip=flow"}},
+		{name: "single skip schedule", args: []string{"connectors", "certify", "sample", "--skip=schedule"}},
+		{name: "single skip unknown", args: []string{"connectors", "certify", "sample", "--skip=unknown"}},
+		{name: "single batch-only credentials file", args: []string{"connectors", "certify", "sample", "--credentials-file=fixture.yaml"}},
+		{name: "single batch-only parallel", args: []string{"connectors", "certify", "sample", "--parallel=2"}},
+		{name: "single batch-only resume", args: []string{"connectors", "certify", "sample", "--resume"}},
+		{name: "single sweep-only older than", args: []string{"connectors", "certify", "sample", "--older-than=2h"}},
+		{name: "batch skip flow", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--skip=flow"}},
+		{name: "batch skip schedule", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--skip=schedule"}},
+		{name: "batch single-only stream", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--stream=customers"}},
+		{name: "batch single-only config", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--config=mode=fixture"}},
+		{name: "batch single-only full", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--full"}},
+		{name: "batch sweep-only older than", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--older-than=2h"}},
+		{name: "batch write enable", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--write=true"}},
+		{name: "sweep batch-only parallel", args: []string{"connectors", "certify", "--sweep", "--credentials-file=fixture.yaml", "--parallel=2"}},
+		{name: "sweep batch-only resume", args: []string{"connectors", "certify", "--sweep", "--credentials-file=fixture.yaml", "--resume"}},
+		{name: "sweep single-only stream", args: []string{"connectors", "certify", "--sweep", "--credentials-file=fixture.yaml", "--stream=customers"}},
+		{name: "conflicting modes", args: []string{"connectors", "certify", "--all", "--sweep", "--credentials-file=fixture.yaml"}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			runtime := &fakeCertifyCommandRuntime{
+				singleReport: passingCLIReport("sample"),
+				credsFile: certify.CredsFile{Connectors: map[string]certify.ConnectorCredsEntry{
+					"sample": {},
+				}},
+			}
+			stdout, stderr, code := runNativeConnectorsCLI(runtime, true, tt.args...)
+			assertCLIError(t, code, stdout, stderr, 2, "usage", "not supported")
+			if len(runtime.effects) != 0 {
+				t.Fatalf("mode-inapplicable control recorded effects %v", runtime.effects)
+			}
+		})
+	}
+}
+
+func TestNativeCertifyBatchWriteDisableOverridesCredentialEntry(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		arg  string
+	}{
+		{name: "explicit false", arg: "--write=false"},
+		{name: "skip write", arg: "--skip=write"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			runtime := &fakeCertifyCommandRuntime{
+				credsFile: certify.CredsFile{Connectors: map[string]certify.ConnectorCredsEntry{
+					"sample": {Write: true},
+				}},
+			}
+			stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
+				"connectors", "certify", "--all", "--credentials-file=fixture.yaml", tt.arg)
+			if code != 0 || stderr != "" {
+				t.Fatalf("code=%d stderr=%q stdout=%q", code, stderr, stdout)
+			}
+			if got := runtime.effects; strings.Join(got, ",") != "load_credentials_file,batch" {
+				t.Fatalf("effects=%v", got)
+			}
+			if runtime.batchCreds.Connectors["sample"].Write {
+				t.Fatal("credential-file write=true reached batch despite user write-disable control")
+			}
+		})
+	}
+}
+
+func TestNativeCertifyCredentialsFileConstraintsNeverReachRunnerAsNoOps(t *testing.T) {
+	tests := []struct {
+		name  string
+		entry certify.ConnectorCredsEntry
+		defs  certify.CredsDefaults
+	}{
+		{name: "write without sandbox", entry: certify.ConnectorCredsEntry{Write: true}},
+		{name: "rate limit", entry: certify.ConnectorCredsEntry{RateLimitRPS: 2}},
+		{name: "budget", entry: certify.ConnectorCredsEntry{BudgetCalls: 50}},
+		{name: "limit", entry: certify.ConnectorCredsEntry{Limit: 10}},
+		{name: "default rate limit", defs: certify.CredsDefaults{RateLimitRPS: 2}},
+		{name: "default budget", defs: certify.CredsDefaults{BudgetCalls: 50}},
+		{name: "default limit", defs: certify.CredsDefaults{Limit: 10}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			runtime := &fakeCertifyCommandRuntime{credsFile: certify.CredsFile{
+				Defaults: tt.defs,
+				Connectors: map[string]certify.ConnectorCredsEntry{
+					"sample": tt.entry,
+				},
+			}}
+			stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
+				"connectors", "certify", "--all", "--credentials-file=fixture.yaml")
+			assertCLIError(t, code, stdout, stderr, 2, "usage", "not supported")
+			if got := strings.Join(runtime.effects, ","); got != "load_credentials_file" {
+				t.Fatalf("effects=%v, want only credential-file load before fail-closed validation", runtime.effects)
 			}
 		})
 	}
@@ -334,7 +453,39 @@ func TestConnectorsManualSeparatesCLIAndCompletedCertificationExits(t *testing.T
 	}
 }
 
-func TestNativeCertifyModesCurrentFlagsAndExitContract(t *testing.T) {
+func TestConnectorsCertificationDocsDoNotAdvertiseRejectedControlsOrNameScopedHelp(t *testing.T) {
+	manual := docs["connectors"]
+	if strings.Contains(manual, "help <name>") || strings.Contains(manual, "Alias for the human connector manual") {
+		t.Fatalf("connectors manual still claims name-scoped help:\n%s", manual)
+	}
+	if !strings.Contains(manual, "namespace manual") {
+		t.Fatalf("connectors manual does not explain actual help behavior:\n%s", manual)
+	}
+
+	repoRoot, err := repoRootFromWorkingDir()
+	if err != nil {
+		t.Fatalf("locate repository root: %v", err)
+	}
+	for _, path := range []string{
+		filepath.Join(repoRoot, "docs", "architecture", "connector-certification-design.md"),
+		filepath.Join(repoRoot, "docs", "plans", "universal-programming-loop-prd.md"),
+	} {
+		raw, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read %s: %v", path, err)
+		}
+		for _, rejected := range []string{
+			"--credential", "--limit", "--modes", "--record", "--replay",
+			"--rate-limit", "--budget", "--live-all-modes", "--allow-production-writes",
+		} {
+			if strings.Contains(string(raw), rejected) {
+				t.Errorf("%s still advertises rejected control %s", path, rejected)
+			}
+		}
+	}
+}
+
+func TestNativeCertifySupportedSingleFlagsAndExitContract(t *testing.T) {
 	secretValue := "planted-native-certify-secret"
 	t.Setenv("PM_CERT_NATIVE_TOKEN", secretValue)
 	passing := passingCLIReport("sample")
@@ -342,11 +493,9 @@ func TestNativeCertifyModesCurrentFlagsAndExitContract(t *testing.T) {
 
 	stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
 		"connectors", "certify", "sample",
-		"--stream=ignored", "--stream=customers", "--limit=4", "--limit=7",
-		"--modes=full_refresh_append", "--modes=incremental_append,incremental_append_deduped",
-		"--skip=flow", "--skip=schedule,write", "--from-env=token=PM_CERT_NATIVE_TOKEN",
+		"--stream=ignored", "--stream=customers", "--skip=write", "--from-env=token=PM_CERT_NATIVE_TOKEN",
 		"--config=base_url=https://example.invalid", "--config=account=fixture",
-		"--keep-workdir", "--write", "--full", "--credential=ignored", "--unknown=ignored",
+		"--keep-workdir", "--write", "--full", "--unknown=ignored",
 	)
 	if code != 0 || stderr != "" {
 		t.Fatalf("single: code=%d stderr=%q stdout=%q", code, stderr, stdout)
@@ -355,11 +504,11 @@ func TestNativeCertifyModesCurrentFlagsAndExitContract(t *testing.T) {
 	if runtime.singleCalls != 1 || runtime.batchCalls != 0 || runtime.sweepCalls != 0 {
 		t.Fatalf("mode calls single=%d batch=%d sweep=%d", runtime.singleCalls, runtime.batchCalls, runtime.sweepCalls)
 	}
-	if got := runtime.singleOpts; got.Connector != "sample" || got.Stream != "customers" || got.Limit != 7 || !got.KeepWork || got.Write || !got.Full {
+	if got := runtime.singleOpts; got.Connector != "sample" || got.Stream != "customers" || got.Limit != 50 || !got.KeepWork || got.Write || !got.Full {
 		t.Fatalf("single options=%+v", got)
 	}
-	if strings.Join(runtime.singleOpts.Modes, ",") != "full_refresh_append,incremental_append,incremental_append_deduped" {
-		t.Fatalf("modes=%v", runtime.singleOpts.Modes)
+	if len(runtime.singleOpts.Modes) != 0 {
+		t.Fatalf("modes=%v, want none from the supported CLI surface", runtime.singleOpts.Modes)
 	}
 	if runtime.singleOpts.SecretEnv["token"] != "PM_CERT_NATIVE_TOKEN" || runtime.singleOpts.Config["account"] != "fixture" {
 		t.Fatalf("secret/config refs=%+v/%+v", runtime.singleOpts.SecretEnv, runtime.singleOpts.Config)
@@ -406,7 +555,7 @@ func TestNativeCertifyFreshTreesPreserveContextCancellationAndNoCredentialOutput
 
 	for i := 0; i < 2; i++ {
 		runtime = &fakeCertifyCommandRuntime{singleReport: passingCLIReport("sample")}
-		stdout, stderr, code = executeNativeConnectors(context.Background(), testRouterConfig(t.TempDir(), true), runtime, "connectors", "certify", "sample", "--limit="+string(rune('1'+i)))
+		stdout, stderr, code = executeNativeConnectors(context.Background(), testRouterConfig(t.TempDir(), true), runtime, "connectors", "certify", "sample", "--stream=customers", "--config=iteration="+string(rune('1'+i)))
 		if code != 0 || stderr != "" || runtime.singleCalls != 1 {
 			t.Fatalf("fresh invocation %d: code=%d stderr=%q stdout=%q calls=%d", i, code, stderr, stdout, runtime.singleCalls)
 		}

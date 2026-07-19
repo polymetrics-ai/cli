@@ -85,9 +85,14 @@
       "cycle": "second-accepted-safety-correction-plan",
       "decision": "local_critical_path",
       "reason": "all rereview P1/P2/P3 findings accepted at exact head; bounded safety-critical correction in the existing isolated issue worktree; no subagent tool, credentials, services, dependencies, PR, or review"
+    },
+    {
+      "cycle": "second-accepted-safety-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused RED effect recorder reproduced unsafe batch write precedence, discarded credential constraints, unsupported and mode-inapplicable flag effects, unrestricted skip values, and stale architecture/PRD/help claims before production edits"
     }
   ],
-  "red": "pending second-correction effect-recorder and docs tests; prior correction RED remains recorded in TDD-LEDGER.md",
+  "red": "captured before production: unsupported single flags visible and ran; 18 skip/mode no-ops recorded effects; batch write-disable controls preserved credential write=true; sandbox/rate/budget/limit constraints reached batch/runner; stale architecture/PRD/help claims failed assertions",
   "green": "pending second-correction implementation",
   "verification": "pending: verification reset false until focused/repeated/race/no-op/sample/full CLI/certify/docs/website/gofmt/vet/test/build/make verify/connectorgen gates complete",
   "files": [
@@ -108,7 +113,7 @@
     "445ad06c fix(cli): route direct connectors action help",
     "55e32402 docs(planning): complete connectors certify native handoff"
   ],
-  "push": "prior correction checkpoints pushed; second-correction planning checkpoint pending commit/push",
+  "push": "second-correction planning checkpoint aa39fd9d pushed; RED checkpoint pending commit/push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"
