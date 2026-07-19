@@ -172,8 +172,11 @@ func TestExtractLiteralUnknownOperandsGlobalsAndOutputCompatibility(t *testing.T
 		args []string
 	}{
 		{name: "literal does not terminate legacy parsing", args: []string{"extract", "--", "--request=show customers"}},
+		{name: "literal owns later help", args: []string{"extract", "--", "--help", "--request=show customers"}},
 		{name: "legal unknown", args: []string{"extract", "--unknown", "ignored", "--request=show customers"}},
+		{name: "assigned unknown owns positional help", args: []string{"extract", "--unknown=ignored", "help", "--request=show customers"}},
 		{name: "malformed assigned unknown", args: []string{"extract", "--=ignored", "---bad=ignored", "--request=show customers"}},
+		{name: "malformed assigned unknown owns positional help", args: []string{"extract", "--=ignored", "help", "--request=show customers"}},
 		{name: "ignored operands", args: []string{"extract", "operand", "--request=show customers", "tail"}},
 	}
 	for _, tt := range tests {
@@ -198,6 +201,20 @@ func TestExtractLiteralUnknownOperandsGlobalsAndOutputCompatibility(t *testing.T
 		t.Fatalf("operand-only invocation: err=%v stdout=%q", err, stdout)
 	}
 	assertExtractRuntimeNotCalled(t, runtime)
+
+	for _, args := range [][]string{
+		{"extract", "--unknown"},
+		{"extract", "--unknown=ignored"},
+		{"extract", "--help=true"},
+		{"extract", "--=help"},
+	} {
+		runtime = newFakeExtractRuntime()
+		stdout, _, err = executeNativeExtract(context.Background(), testRouterConfig(t.TempDir(), true), runtime, args...)
+		if err == nil || classifyError(mapCobraErr(err)).category != categoryUsage || stdout != "" {
+			t.Fatalf("unknown-only invocation %q: err=%v stdout=%q", args, err, stdout)
+		}
+		assertExtractRuntimeNotCalled(t, runtime)
+	}
 
 	for _, args := range [][]string{
 		{"--unknown", "extract", "--request=show customers"},
@@ -260,6 +277,55 @@ func TestExtractRejectsWarehouseRootSymlinkBeforeAnalyzer(t *testing.T) {
 	}
 }
 
+func TestExtractHeldProjectRootRejectsWarehouseReplacementBeforeAnalyzerEffects(t *testing.T) {
+	root := t.TempDir()
+	warehouse := filepath.Join(root, ".polymetrics", "warehouse")
+	if err := os.MkdirAll(warehouse, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(warehouse, "contacts.ndjson"), []byte("{\"_polymetrics_raw_id\":\"local\",\"record\":{\"id\":\"local\"}}\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	external := t.TempDir()
+	if err := os.WriteFile(filepath.Join(external, "contacts.ndjson"), []byte("{\"_polymetrics_raw_id\":\"external\",\"record\":{\"id\":\"external\"}}\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	externalOutput := filepath.Join(external, "scores.ndjson")
+	sentinel := []byte("external-output-sentinel\n")
+	if err := os.WriteFile(externalOutput, sentinel, 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	runtime := newFakeExtractRuntime()
+	runtime.analyzer = &rlm.DeterministicAnalyzer{}
+	runtime.beforeAnalyzerFactory = func() error {
+		if err := os.Rename(warehouse, warehouse+".original"); err != nil {
+			return err
+		}
+		return os.Symlink(external, warehouse)
+	}
+	stdout, _, err := executeNativeExtract(context.Background(), testRouterConfig(root, true), runtime,
+		"extract", "--request=predict churn", "--in=contacts", "--out=scores",
+	)
+	if err == nil {
+		t.Fatalf("warehouse replacement re-rooted analyzer effects: stdout=%q", stdout)
+	}
+	if runtime.analyzerFactoryCalls != 1 {
+		t.Fatalf("analyzer factory calls = %d, want 1", runtime.analyzerFactoryCalls)
+	}
+	after, readErr := os.ReadFile(externalOutput)
+	if readErr != nil {
+		t.Fatal(readErr)
+	}
+	if !bytes.Equal(after, sentinel) {
+		t.Fatalf("external output changed through replaced warehouse: got %q want %q", after, sentinel)
+	}
+	if _, statErr := os.Stat(filepath.Join(external, "scores.ndjson.tmp")); !errors.Is(statErr, os.ErrNotExist) {
+		t.Fatalf("external temporary output exists: %v", statErr)
+	}
+}
+
 func TestExtractRejectsUnsafeTablesBeforeAnalyzer(t *testing.T) {
 	for _, tt := range []struct {
 		name string
@@ -268,8 +334,10 @@ func TestExtractRejectsUnsafeTablesBeforeAnalyzer(t *testing.T) {
 	}{
 		{name: "input traversal", in: "../outside", out: "scores"},
 		{name: "input absolute", in: "/tmp/outside", out: "scores"},
+		{name: "input dot", in: ".", out: "scores"},
 		{name: "output traversal", in: "contacts", out: "../outside"},
 		{name: "output separator", in: "contacts", out: "nested/scores"},
+		{name: "output dot", in: "contacts", out: "."},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			runtime := newFakeExtractRuntime()
@@ -299,6 +367,8 @@ type fakeExtractRuntime struct {
 	factoryRequest       string
 	factoryContextValue  any
 	factoryErr           error
+	beforeAnalyzerFactory func() error
+	analyzer             rlm.Analyzer
 	analyzerCalls        int
 	analyzerContextValue any
 	analyzerErr          error
@@ -325,10 +395,19 @@ func (f *fakeExtractRuntime) runtime() extractCommandRuntime {
 			f.analyzerFactoryCalls++
 			f.factoryRequest = request
 			f.factoryContextValue = ctx.Value(extractNativeContextKey{})
+			if f.beforeAnalyzerFactory != nil {
+				if err := f.beforeAnalyzerFactory(); err != nil {
+					return nil, nil, err
+				}
+			}
 			if f.factoryErr != nil {
 				return nil, nil, f.factoryErr
 			}
-			return fakeExtractAnalyzer{parent: f}, func() error {
+			analyzer := f.analyzer
+			if analyzer == nil {
+				analyzer = fakeExtractAnalyzer{parent: f}
+			}
+			return analyzer, func() error {
 				f.closeCalls++
 				return f.closeErr
 			}, nil

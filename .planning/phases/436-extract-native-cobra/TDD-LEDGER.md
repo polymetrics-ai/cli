@@ -21,7 +21,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 5 | Containment correction RED/GREEN | Reject a warehouse-directory symlink escaping the selected extract project root before analyzer effects | RED failed in `0.569s`; GREEN passes in `0.560s`, extract ×10 `43.880s`, extract race `50.303s` after project-root validation before analyzer construction |
 | 6 | Delivery | Re-run affected/full gates; finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Prior implementation complete at `748f6bdb`; correction reopened |
 | 7 | Accepted review correction plan | Accept all four findings; reset terminal verification; plan held project-root effect scope, parser-ownership repairs, unknown-only usage behavior, and full RLM table validation | Complete before correction tests/production edits |
-| 8 | Correction RED | Add deterministic temp/fake tests, including analyzer-factory warehouse replacement; run focused tests and capture all four failures | Pending |
+| 8 | Correction RED | `go test ./internal/cli -run 'TestExtract(HeldProjectRootRejectsWarehouseReplacementBeforeAnalyzerEffects|RejectsUnsafeTablesBeforeAnalyzer|LiteralUnknownOperandsGlobalsAndOutputCompatibility)$' -count=1` | Failed as required before production edits: directory replacement re-rooted deterministic input/output externally; literal/assigned/malformed tails rendered `CommandManual`; unknown-only rendered bare help; both dot-table cases reached the fake analyzer |
 | 9 | Correction GREEN/refactor | Implement the narrow rooted effect seam and parser/validation fixes; run focused/repeated/race/adversarial/base differential/full gates | Pending |
 | 10 | Correction delivery | Finalize artifacts with exact evidence; commit/push; no PR/review | Pending |
 
@@ -66,6 +66,10 @@ The first implementation roots individual RLM table effects, but extract still n
 - Literal `--` and assigned/malformed unknown tokens retain legacy parser ownership; later `--help` or positional `help` cannot be rediscovered as Cobra help, while intentional direct and trailing help remains unchanged.
 - Exact bare `extract` alone renders help. `--unknown`, `--unknown=ignored`, `--help=true`, and `--=help` remain usage errors with no effects.
 - Both `--in=.` and `--out=.` fail validation before analyzer factory construction using the complete RLM bare-table contract.
+
+## Correction RED evidence
+
+The focused test exited 1 before production edits. The controlled analyzer-factory hook renamed the in-project warehouse and replaced it with an external symlink; the deterministic analyzer then read one external row and atomically replaced the external output sentinel, returning a successful `ExtractResult`. Literal `-- --help`, assigned unknown plus positional `help`, and malformed assigned unknown plus positional `help` all returned `CommandManual` instead of the base `ExtractResult`. `--unknown`, `--unknown=ignored`, `--help=true`, and `--=help` returned bare help instead of a usage error. Both `--in=.` and `--out=.` constructed and ran the fake analyzer. All files and symlinks were owned by `t.TempDir`; no external user file or service was touched.
 
 ## Evidence log
 
