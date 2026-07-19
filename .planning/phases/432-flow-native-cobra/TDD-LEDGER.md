@@ -16,7 +16,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
-| 1 | RED | Add focused native flow tree, parser/output, cancellation/events/telemetry/checkpoint/ledger tests; run focused command and capture exact failure | Pending |
+| 1 | RED | `go test ./internal/cli ./internal/flow -run 'TestFlow(Command|Plan|Help|Exact)|TestEngineCancellationPreserves' -count=1` | Failed as required before production edits: `internal/cli/flow_native_cobra_test.go:20:9: undefined: newFlowCobraCommand`; flow cancellation/events/telemetry/checkpoint/ledger contract passed in `0.394s` |
 | 2 | GREEN | Native flow subtree + typed handlers + flow-only normalization/state; remove legacy wrapper/parser | Pending |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI and flow package gates, parity/differential checks | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
@@ -36,6 +36,18 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 - Successful and resumed runs retain deterministic events, telemetry spans/metrics, checkpoint skip/force behavior, and ledger running/success ordering.
 - Tests use temporary manifests/project roots and in-memory fakes only; no action step, external write, credential, service, or connector request is executed.
 
-## Evidence
+## Exact RED evidence
 
-RED, GREEN, refactor, parity, and final gate evidence will be appended as commands execute. No production edit is allowed before the focused RED is captured.
+Captured after the complete test-only edit and before any production edit:
+
+```text
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/flow_native_cobra_test.go:20:9: undefined: newFlowCobraCommand
+FAIL\tpolymetrics.ai/internal/cli [build failed]
+ok  \tpolymetrics.ai/internal/flow\t0.394s
+FAIL
+```
+
+The intentionally missing constructor proves the native tree does not yet exist. The committed tests cover all current actions/flags and first operands; bare/text/JSON/positional help; trailing help/literal/malformed unknown/action discovery/global booleans; local temp plan/preview/run/list/status; deterministic output and exact exits; and cancellation with lifecycle events, redacted telemetry, checkpoint absence, ledger ordering, lease release, and no later-step execution. No production file, external write, action step, credential, service, or dependency was used.
+
+GREEN, refactor, parity, and final gate evidence remain pending.

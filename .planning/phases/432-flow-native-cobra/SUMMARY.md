@@ -1,6 +1,6 @@
 # Phase 432 Summary
 
-Status: planning initialized before tests or production edits.
+Status: planning and focused test-only RED complete before production edits.
 
 ## Identity
 
@@ -24,4 +24,4 @@ Temporary manifests/roots and fakes only. No action flow execution, reverse ETL,
 
 ## TDD and verification
 
-Pending RED → GREEN → refactor and final gates.
+The complete test-only contract failed before production edits at `internal/cli/flow_native_cobra_test.go:20:9: undefined: newFlowCobraCommand`, as required. The direct flow cancellation/events/telemetry/checkpoint/ledger contract passed independently in `0.394s`. GREEN, refactor, parity, and final gates remain pending.

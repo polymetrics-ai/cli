@@ -5,7 +5,7 @@ Invocation: `issue-432-pi-openai-codex-gpt-5.6-sol-high-20260719T034344Z`; model
 ## TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.
-- [ ] Focused RED captured before production edits.
+- [x] Focused RED captured before production edits (`undefined: newFlowCobraCommand`; flow cancellation contract independently passed).
 - [ ] Native flow plan/preview/run/list/status/help tree; legacy wrapper removed.
 - [ ] All current local flags typed with legacy repeated/bare/assigned compatibility where applicable.
 - [ ] Bare/text/JSON/long/short/positional help parity.
