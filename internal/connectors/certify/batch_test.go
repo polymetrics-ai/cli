@@ -2,6 +2,7 @@ package certify_test
 
 import (
 	"context"
+	"errors"
 	"os"
 	"path/filepath"
 	"sort"
@@ -252,6 +253,37 @@ func TestRunBatchLeakDominatesExitCode(t *testing.T) {
 	}
 	if len(batch.Leaks()) != 1 {
 		t.Fatalf("len(Leaks()) = %d, want 1", len(batch.Leaks()))
+	}
+}
+
+func TestRunBatchRunnerErrorWithLeakedReportKeepsExit3(t *testing.T) {
+	cf := certify.CredsFile{
+		Defaults: certify.CredsDefaults{Parallel: 1},
+		Connectors: map[string]certify.ConnectorCredsEntry{
+			"stripe": {},
+		},
+	}
+	batch, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+		CredsFile: cf,
+		RunnerFactory: func(name string, _ certify.Options) certify.Runnable {
+			return &fakeRunnable{rep: leakedReport(name), err: errors.New("runner returned report plus ancillary error")}
+		},
+		BatchDir: t.TempDir(),
+	})
+	if err != nil {
+		t.Fatalf("RunBatch() error = %v, want per-connector error recorded in batch result", err)
+	}
+	if batch.ExitCode != 3 {
+		t.Fatalf("Batch ExitCode = %d, want 3 when returned report contains leaks", batch.ExitCode)
+	}
+	if len(batch.Results) != 1 || batch.Results[0].ExitCode != 3 {
+		t.Fatalf("Batch results = %+v, want connector exit 3", batch.Results)
+	}
+	if len(batch.Leaks()) != 1 {
+		t.Fatalf("Batch leaks = %+v, want returned leaked report preserved", batch.Leaks())
+	}
+	if batch.Results[0].Error == "" {
+		t.Fatal("runner ancillary error was not recorded")
 	}
 }
 

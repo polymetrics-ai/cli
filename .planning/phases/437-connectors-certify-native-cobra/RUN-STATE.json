@@ -229,9 +229,14 @@
       "cycle": "sixth-review-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "RED tests pending; no production edits until deterministic failures are captured and committed"
+    },
+    {
+      "cycle": "sixth-review-correction-red",
+      "decision": "local_critical_path",
+      "reason": "deterministic focused RED tests captured all accepted sixth-cycle findings before production edits; tests ready for commit/push"
     }
   ],
-  "red": "pending sixth RED: approval replay success, leak-dominant runner/progress errors, stale leak after absence proof",
+  "red": "captured sixth RED: certify focus 25.435s showed approval replay post-cleanup outbox create, stale leak after absence proof, and runner report+error exit 2; CLI focus 0.572s showed progress persistence error with leaks returned exit 1 and Error envelope instead of safe batch report/exit 3",
   "green": "pending sixth GREEN",
   "verification": "pending sixth exact-head correction; full make verify not yet rerun",
   "files": [

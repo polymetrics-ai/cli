@@ -83,3 +83,9 @@ Planned fixes: move approval idempotency before final cleanup or otherwise make 
 GSD: `scripts/gsd doctor` passed; plan-phase prompt generated; `programming-loop` remains absent, so manual universal-loop fallback applies. Execution decision is `local_critical_path`; this worker has no subagent tool. Parent orchestrator records the invocation as spawned.
 
 Safety: tests/fixes limited to local fakes, temp roots, sample/outbox fixture path, and existing CLI/certify code. No credentials, live connector checks, services, external writes/sweeps, dependencies, generic write tools, bot review requests, PR merge, parent mutation, or main merge.
+
+
+### Sixth-cycle RED evidence captured
+
+- `go test ./internal/connectors/certify -run 'TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup|TestRereviewCleanupFailureThenAbsenceProofClearsStaleLeak|TestRunBatchRunnerErrorWithLeakedReportKeepsExit3' -count=1` failed as intended in `25.435s`: approval replay success left final outbox action `"create"`; cleanup absence proof left stale top-level `Report.Leaks`; runner report+error with a leaked report produced batch exit `2` instead of `3`.
+- `go test ./internal/cli -run 'TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3' -count=1` failed as intended in `0.572s`: progress persistence error with leaked batch returned exit `1` and emitted an `Error` envelope instead of the safe `ConnectorCertificationBatch` evidence with leak-dominant exit `3`.

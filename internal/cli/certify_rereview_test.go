@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"context"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -159,6 +160,33 @@ func TestRereviewSingleReportPersistenceFailureIsNotSuccess(t *testing.T) {
 				t.Fatal("report persistence failure was not surfaced")
 			}
 		})
+	}
+}
+
+func TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3(t *testing.T) {
+	rep := passingCLIReport("sample")
+	rep.Passed = false
+	rep.Leaks = []certify.Leak{{
+		Tag: "pm-cert-sample-12345678-1700000000", Connector: "sample", Action: "create", Reason: "cleanup verification failed",
+	}}
+	batch := certify.BatchReport{
+		RunID:    "batch-progress-error",
+		Results:  []certify.BatchConnectorResult{{Connector: "sample", Report: rep, ExitCode: 3}},
+		ExitCode: 3,
+	}
+	runtime := &fakeCertifyCommandRuntime{
+		credsFile:   certify.CredsFile{Version: 1, Connectors: map[string]certify.ConnectorCredsEntry{"sample": {}}},
+		batchReport: batch,
+		batchErr:    errors.New("persist batch progress: permission denied"),
+	}
+	stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true,
+		"connectors", "certify", "--all", "--credentials-file=fixture.yaml")
+	if code != 3 {
+		t.Fatalf("batch progress error with leaks exit=%d, want leak-dominant 3; stdout=%q stderr=%q", code, stdout, stderr)
+	}
+	assertJSONKind(t, stdout, "ConnectorCertificationBatch")
+	if !strings.Contains(stdout, "pm-cert-sample-12345678-1700000000") {
+		t.Fatal("leaked batch report evidence was not written to stdout")
 	}
 }
 

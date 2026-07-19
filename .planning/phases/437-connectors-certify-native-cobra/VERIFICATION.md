@@ -229,10 +229,10 @@ Exact start: `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; identity `issue-437-six
 - [x] Run `scripts/gsd doctor`; capture missing `programming-loop`; generate/read `scripts/gsd prompt plan-phase 437 --skip-research`; record manual fallback.
 - [x] Record actual execution decision `local_critical_path` and parent-spawn note.
 - [x] Record recovery-budget exception for unresolved High leak-dominance/resource-authority risks.
-- [ ] RED: approval replay success cannot leave a post-cleanup untracked resource.
-- [ ] RED: runner report+error with leaks remains exit 3 and preserves report evidence.
-- [ ] RED: progress persistence failure with existing leaks remains exit 3 and preserves safe batch report output.
-- [ ] RED: cleanup call failure followed by exact absence proof clears stale top-level leak without marking the stage honestly passing.
+- [x] RED: approval replay success cannot leave a post-cleanup untracked resource — failed with final outbox action `"create"` after replay success.
+- [x] RED: runner report+error with leaks remains exit 3 and preserves report evidence — failed with batch exit `2`.
+- [x] RED: progress persistence failure with existing leaks remains exit 3 and preserves safe batch report output — failed with exit `1` and Error envelope.
+- [x] RED: cleanup call failure followed by exact absence proof clears stale top-level leak without marking the stage honestly passing — failed with stale `Report.Leaks`.
 - [ ] GREEN: implement minimal fixes and run focused new tests.
 - [ ] Repeated focused tests and race variants where applicable.
 - [ ] Affected full `go test ./internal/connectors/certify` and `go test ./internal/cli`.

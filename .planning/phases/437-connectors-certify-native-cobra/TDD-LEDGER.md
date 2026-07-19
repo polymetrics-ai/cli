@@ -146,3 +146,9 @@ Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-tes
 | R6-6 | Delivery | Coherent commits pushed, PR body updated with final head/gates, no bot review, clean/remote-matched branch | Pending |
 
 Strict TDD gate: R6-1 through R6-3 failing evidence must be captured and committed before production edits. Tests use only fakes, temporary roots, synthetic non-secret markers, and the local sample/outbox fixture path.
+
+
+### Sixth-cycle RED evidence captured
+
+- `go test ./internal/connectors/certify -run 'TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup|TestRereviewCleanupFailureThenAbsenceProofClearsStaleLeak|TestRunBatchRunnerErrorWithLeakedReportKeepsExit3' -count=1` failed as intended in `25.435s`: approval replay success left final outbox action `"create"`; cleanup absence proof left stale top-level `Report.Leaks`; runner report+error with a leaked report produced batch exit `2` instead of `3`.
+- `go test ./internal/cli -run 'TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3' -count=1` failed as intended in `0.572s`: progress persistence error with leaked batch returned exit `1` and emitted an `Error` envelope instead of the safe `ConnectorCertificationBatch` evidence with leak-dominant exit `3`.

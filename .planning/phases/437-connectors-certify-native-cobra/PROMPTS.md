@@ -123,3 +123,9 @@ Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `g
 Downstream artifact: pending. RED tests must be committed before production edits; GREEN and terminal gate evidence must update this snapshot from pending to actual results.
 
 Verification result: pending / `verificationPassed=false` until full `make verify` exits 0.
+
+
+### Sixth-cycle RED evidence captured
+
+- `go test ./internal/connectors/certify -run 'TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup|TestRereviewCleanupFailureThenAbsenceProofClearsStaleLeak|TestRunBatchRunnerErrorWithLeakedReportKeepsExit3' -count=1` failed as intended in `25.435s`: approval replay success left final outbox action `"create"`; cleanup absence proof left stale top-level `Report.Leaks`; runner report+error with a leaked report produced batch exit `2` instead of `3`.
+- `go test ./internal/cli -run 'TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3' -count=1` failed as intended in `0.572s`: progress persistence error with leaked batch returned exit `1` and emitted an `Error` envelope instead of the safe `ConnectorCertificationBatch` evidence with leak-dominant exit `3`.
