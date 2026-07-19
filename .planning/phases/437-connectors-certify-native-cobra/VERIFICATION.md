@@ -127,4 +127,4 @@ Third-correction start: `437d13cf`; session `issue-437-third-safety-correction-2
 - [x] `make verify` exits 0 in real `14m58.384s`; full tests, docs validation, ordered local smoke, lint 0, build/vet/tidy checks, and connector validation pass.
 - [x] Explicit `go run ./cmd/connectorgen validate internal/connectors/defs` reports 547 checked, zero findings.
 - [x] Final artifacts record only actual terminal evidence and align `verificationPassed` with the full gate.
-- [ ] Commit/push the final truthful verification artifacts only to the active issue branch; no credentials, external credential commands, services, dependencies, PR, or review.
+- [x] Commit/push the final truthful verification artifacts only to the active issue branch (`3854295b`); no credentials, external credential commands, services, dependencies, PR, or review.

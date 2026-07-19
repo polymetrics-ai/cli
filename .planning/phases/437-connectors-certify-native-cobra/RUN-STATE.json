@@ -155,9 +155,10 @@
     "55e32402 docs(planning): complete connectors certify native handoff",
     "766e2d9d docs(planning): reopen third certify correction",
     "97816a99 test(cli): expose third certify safety regressions",
-    "f56bc825 fix(cli): fail closed certify safety controls"
+    "f56bc825 fix(cli): fail closed certify safety controls",
+    "3854295b docs(planning): verify third certify correction"
   ],
-  "push": "third-correction planning 766e2d9d, RED 97816a99, and GREEN f56bc825 pushed; terminal verification artifact push pending",
+  "push": "third-correction planning 766e2d9d, RED 97816a99, GREEN f56bc825, and terminal verification 3854295b pushed; final delivery marker records closure",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"
