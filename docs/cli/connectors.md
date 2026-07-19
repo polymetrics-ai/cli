@@ -101,14 +101,17 @@ ACTIONS
 
   certify
     Runs the connector certification harness through the in-process CLI. A
-    single run can use fixture/replay inputs or user-named credential variable
-    references. Batch mode requires --all and --credentials-file. Sweep mode
-    retries cleanup recorded in the local certification ledger.
+    single run can use local connector behavior or user-named credential
+    variable references. Batch mode requires --all and --credentials-file.
+    Sweep mode retries cleanup recorded in the local certification ledger.
 
-    Certification preserves its own exit contract: 0 pass, 1 usage/internal,
-    2 certification failure, and 3 leaked resource (dominates all other
-    outcomes). JSON emits one ConnectorCertification,
-    ConnectorCertificationBatch, or ConnectorCertificationSweep envelope.
+    Before a certification report is completed, CLI usage errors exit 2,
+    validation errors exit 3, and setup or runtime errors exit 1. These errors
+    emit the normal CLI Error envelope, not a completed certification report.
+    A completed certification report exits 0 for pass, 2 for certification
+    failure, or 3 for leaked resources (which dominate other report outcomes).
+    JSON reports use ConnectorCertification, ConnectorCertificationBatch, or
+    ConnectorCertificationSweep envelopes.
 
     Credential values must come from environment references or the credential
     file resolver; they are never command operands, output, events, telemetry,
@@ -124,7 +127,7 @@ EXAMPLES
   pm connectors inspect github
   pm connectors inspect github --json
   pm connectors certify sample --json
-  pm connectors certify --all --credentials-file certify/creds.yaml --replay --json
+  pm connectors certify --all --credentials-file certify/creds.yaml --json
   pm connectors certify --sweep --credentials-file certify/creds.yaml --older-than 24h --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
@@ -136,9 +139,9 @@ SECURITY
   Live certification writes remain explicitly opt-in and cleanup-gated.
 
 EXIT STATUS
-  0 success or certification pass
-  1 runtime error or certification usage/internal error
-  2 usage error or certification failure
-  3 certification leaked resource
+  0 command success or completed certification pass
+  1 setup/runtime error before a certification report completes
+  2 CLI usage error or completed certification failure
+  3 CLI validation error or leaked resource in a completed certification
 
 ```

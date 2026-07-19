@@ -34,6 +34,8 @@ type fakeCertifyCommandRuntime struct {
 
 	singleReport certify.Report
 	singleErr    error
+	credsFile    certify.CredsFile
+	loadCredsErr error
 	batchReport  certify.BatchReport
 	batchErr     error
 	sweepResult  map[string]certify.SweepResult
@@ -47,11 +49,15 @@ func (f *fakeCertifyCommandRuntime) RunSingle(_ context.Context, root string, op
 	return f.singleReport, f.singleErr
 }
 
-func (f *fakeCertifyCommandRuntime) RunBatch(_ context.Context, root, credsPath string, parallel int, resume bool) (certify.BatchReport, error) {
+func (f *fakeCertifyCommandRuntime) LoadCredsFile(path string) (certify.CredsFile, error) {
+	f.credsPath = path
+	return f.credsFile, f.loadCredsErr
+}
+
+func (f *fakeCertifyCommandRuntime) RunBatch(_ context.Context, root string, credsFile certify.CredsFile, resume bool) (certify.BatchReport, error) {
 	f.batchCalls++
 	f.batchRoot = root
-	f.credsPath = credsPath
-	f.parallel = parallel
+	f.parallel = credsFile.Defaults.Parallel
 	f.resume = resume
 	return f.batchReport, f.batchErr
 }
@@ -371,6 +377,10 @@ func TestNativeCertifyModesCurrentFlagsAndExitContract(t *testing.T) {
 	if runtime.batchCalls != 1 || runtime.credsPath != "fixture.yaml" || runtime.parallel != 4 || !runtime.resume {
 		t.Fatalf("batch call=%+v", runtime)
 	}
+
+	runtime = &fakeCertifyCommandRuntime{batchErr: errors.New("fixture batch failure")}
+	stdout, stderr, code = runNativeConnectorsCLI(runtime, true, "connectors", "certify", "--all", "--credentials-file=fixture.yaml")
+	assertCLIError(t, code, stdout, stderr, 1, "internal", "certify: batch run failed: fixture batch failure")
 
 	runtime = &fakeCertifyCommandRuntime{sweepResult: map[string]certify.SweepResult{"sample": {Failed: map[string]string{"fixture-tag": "cleanup failed"}}}}
 	stdout, stderr, code = runNativeConnectorsCLI(runtime, true, "connectors", "certify", "--sweep", "--credentials-file=fixture.yaml", "--older-than=2h")

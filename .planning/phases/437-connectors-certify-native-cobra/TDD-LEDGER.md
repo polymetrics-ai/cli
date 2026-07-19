@@ -41,8 +41,8 @@ Session `issue-437-review-correction-20260719T113319Z`; exact correction start `
 |---:|---|---|---|
 | C0 | Planning | Six artifacts reopened before tests/production; GSD manual fallback, skills, safety scope, and verification commands recorded | Complete |
 | C1 | RED | `go test ./internal/cli -run 'TestNativeCertifyRejectsUnsupportedSafetyAndModeControls|TestNativeConnectorsOnlyExactHelpFormsRenderManual|TestConnectorsManualSeparatesCLIAndCompletedCertificationExits|TestCertifyCLIBatchLoadsCredentialsBeforeValidatingParallelAndPreservesErrorBytes|TestTelemetryCertifyInvalidOptionsPreserveSingleSpanAndConnectorValidationPrecedence' -count=1` | Complete: unsupported controls invoked runtime and were visible; false/malformed/cluster help rendered manuals; docs phrases absent; missing creds gained batch wrapper and invalid parallel won; invalid connector lost to option usage and emitted no certify span |
-| C2 | GREEN | Smallest production correction preserving all safety gates and rejecting/unadvertising unimplemented controls | Pending |
-| C3 | Refactor | Focused differential/repeated/race, certify exit/redaction/replay-no-live, local sample smoke, docs/golden/website parity | Pending |
+| C2 | GREEN | Hidden fail-closed controls; single connector span/validation/options ordering; batch injected load then parallel then wrapped run; exact-only connectors help normalization; canonical/generated/website docs | Complete: focused `3.004s`; native/certify/telemetry `108.532s` |
+| C3 | Refactor | Base/current differential; repeated/race; certify exit/redaction/replay-no-live; docs/golden/website parity | In progress: differential 5/5 byte-identical; focused race `29.046s`; ×10 `24.991s`; certify redaction/replay/concurrency race `349.263s`; exit focus `21.618s`; docs/golden `24.275s`; website regeneration stable |
 | C4 | Full gate | gofmt, vet, full tests, build, `make verify`, connector validation | Pending |
 | C5 | Delivery | Finalize artifacts, commit/push, no services/credentials/PR/review | Pending |
 

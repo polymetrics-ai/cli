@@ -18,7 +18,8 @@ import (
 
 type certifyCommandRuntime interface {
 	RunSingle(ctx context.Context, root string, opts certify.Options) (certify.Report, error)
-	RunBatch(ctx context.Context, root, credsPath string, parallel int, resume bool) (certify.BatchReport, error)
+	LoadCredsFile(path string) (certify.CredsFile, error)
+	RunBatch(ctx context.Context, root string, credsFile certify.CredsFile, resume bool) (certify.BatchReport, error)
 	Sweep(ctx context.Context, root, credsPath string, olderThan time.Duration) (map[string]certify.SweepResult, error)
 }
 
@@ -53,16 +54,13 @@ func (defaultCertifyCommandRuntime) RunSingle(ctx context.Context, _ string, opt
 	return certify.NewRunner(opts).Run(ctx)
 }
 
-func (defaultCertifyCommandRuntime) RunBatch(ctx context.Context, root, credsPath string, parallel int, resume bool) (certify.BatchReport, error) {
-	cf, err := certify.LoadCredsFile(credsPath)
-	if err != nil {
-		return certify.BatchReport{}, err
-	}
-	if parallel > 0 {
-		cf.Defaults.Parallel = parallel
-	}
+func (defaultCertifyCommandRuntime) LoadCredsFile(path string) (certify.CredsFile, error) {
+	return certify.LoadCredsFile(path)
+}
+
+func (defaultCertifyCommandRuntime) RunBatch(ctx context.Context, root string, credsFile certify.CredsFile, resume bool) (certify.BatchReport, error) {
 	return certify.RunBatch(ctx, certify.BatchOptions{
-		CredsFile:     cf,
+		CredsFile:     credsFile,
 		RunnerFactory: certify.DefaultRunnerFactory,
 		BatchDir:      filepath.Join(root, ".polymetrics"),
 		Resume:        resume,
@@ -104,11 +102,7 @@ func newCertifyCobraCommand(ctx context.Context, root string, stdout io.Writer, 
 			if len(args) != 1 {
 				return usageErrorf("pm connectors certify <connector> | --all --credentials-file <file> | --sweep")
 			}
-			opts, err := certifyOptionsFromFlags(args[0], flags)
-			if err != nil {
-				return err
-			}
-			return markCobraLegacyError(runCertifySingle(ctx, root, opts, stdout, jsonOut, runtime))
+			return markCobraLegacyError(runCertifySingle(ctx, root, args[0], flags, stdout, jsonOut, runtime))
 		}
 	})
 	setManualHelp(cmd, "connectors", stdout, jsonOut)
@@ -123,22 +117,33 @@ func addCertifyFlags(cmd *cobra.Command, flags *certifyCommandFlags) {
 	}{
 		{"credential", &flags.Credentials}, {"from-env", &flags.FromEnv}, {"config", &flags.Configs},
 		{"stream", &flags.Streams}, {"limit", &flags.Limits}, {"modes", &flags.Modes},
-		{"skip", &flags.Skips}, {"rate-limit", &flags.RateLimits}, {"budget", &flags.Budgets},
-		{"record", &flags.Records}, {"replay", &flags.Replays}, {"live-all-modes", &flags.LiveAllModes},
-		{"allow-production-writes", &flags.AllowProductionWrite}, {"keep-workdir", &flags.KeepWorkdirs},
-		{"write", &flags.Writes}, {"full", &flags.Fulls}, {"all", &flags.Alls},
-		{"credentials-file", &flags.CredentialsFiles}, {"parallel", &flags.Parallels}, {"resume", &flags.Resumes},
-		{"sweep", &flags.Sweeps}, {"older-than", &flags.OlderThans},
+		{"skip", &flags.Skips}, {"keep-workdir", &flags.KeepWorkdirs}, {"write", &flags.Writes},
+		{"full", &flags.Fulls}, {"all", &flags.Alls}, {"credentials-file", &flags.CredentialsFiles},
+		{"parallel", &flags.Parallels}, {"resume", &flags.Resumes}, {"sweep", &flags.Sweeps},
+		{"older-than", &flags.OlderThans},
 	} {
 		addConnectorsStringArrayFlag(cmd, spec.target, spec.name, "connector certification option")
+	}
+	for _, spec := range []struct {
+		name   string
+		target *[]string
+	}{
+		{"record", &flags.Records}, {"replay", &flags.Replays},
+		{"allow-production-writes", &flags.AllowProductionWrite}, {"rate-limit", &flags.RateLimits},
+		{"budget", &flags.Budgets}, {"live-all-modes", &flags.LiveAllModes},
+	} {
+		addConnectorsStringArrayFlag(cmd, spec.target, spec.name, "unsupported connector certification option")
+		if flag := cmd.Flags().Lookup(spec.name); flag != nil {
+			flag.Hidden = true
+		}
 	}
 }
 
 // --- single-connector mode ---
 
-func runCertifySingle(ctx context.Context, root string, opts certify.Options, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) (err error) {
+func runCertifySingle(ctx context.Context, root, connector string, flags certifyCommandFlags, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) (err error) {
 	ctx, span := telemetry.StartSpan(ctx, "pm.certify.connector",
-		telemetry.StringAttr("pm.certify.connector", opts.Connector),
+		telemetry.StringAttr("pm.certify.connector", connector),
 		telemetry.StringAttr("pm.certify.mode", "single"),
 	)
 	defer func() {
@@ -151,8 +156,13 @@ func runCertifySingle(ctx context.Context, root string, opts certify.Options, st
 		span.End()
 	}()
 
-	if err := safety.ValidateIdentifier(opts.Connector, "connector"); err != nil {
+	if err := safety.ValidateIdentifier(connector, "connector"); err != nil {
 		return validationErrorf("%v", err)
+	}
+
+	opts, err := certifyOptionsFromFlags(connector, flags)
+	if err != nil {
+		return err
 	}
 
 	rep, err := runtime.RunSingle(ctx, root, opts)
@@ -176,6 +186,10 @@ func runCertifySingle(ctx context.Context, root string, opts certify.Options, st
 // --from-env (repeatable field=ENV), --config (repeatable key=value), --write
 // (certification design §A command spec).
 func certifyOptionsFromFlags(connector string, flags certifyCommandFlags) (certify.Options, error) {
+	if err := rejectUnsupportedCertifyControls(flags); err != nil {
+		return certify.Options{}, err
+	}
+
 	limit, err := parseIntFlag("limit", lastString(flags.Limits), 50)
 	if err != nil {
 		return certify.Options{}, err
@@ -217,6 +231,25 @@ func certifyOptionsFromFlags(connector string, flags certifyCommandFlags) (certi
 	}, nil
 }
 
+func rejectUnsupportedCertifyControls(flags certifyCommandFlags) error {
+	for _, control := range []struct {
+		name   string
+		values []string
+	}{
+		{"record", flags.Records},
+		{"replay", flags.Replays},
+		{"allow-production-writes", flags.AllowProductionWrite},
+		{"rate-limit", flags.RateLimits},
+		{"budget", flags.Budgets},
+		{"live-all-modes", flags.LiveAllModes},
+	} {
+		if len(control.values) != 0 {
+			return usageErrorf("--%s is not supported; refusing to run certification with a no-op control", control.name)
+		}
+	}
+	return nil
+}
+
 // --- batch mode (--all --credentials-file) ---
 
 func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) (err error) {
@@ -231,17 +264,29 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 		span.End()
 	}()
 
+	if err := rejectUnsupportedCertifyControls(flags); err != nil {
+		return err
+	}
+
 	credsPath := lastString(flags.CredentialsFiles)
 	if credsPath == "" {
 		return usageErrorf("pm connectors certify --all requires --credentials-file <file>")
+	}
+
+	credsFile, err := runtime.LoadCredsFile(credsPath)
+	if err != nil {
+		return err
 	}
 
 	parallel, err := parseIntFlag("parallel", lastString(flags.Parallels), 0)
 	if err != nil {
 		return err
 	}
+	if parallel > 0 {
+		credsFile.Defaults.Parallel = parallel
+	}
 
-	batch, err := runtime.RunBatch(ctx, root, credsPath, parallel, lastString(flags.Resumes) == "true")
+	batch, err := runtime.RunBatch(ctx, root, credsFile, lastString(flags.Resumes) == "true")
 	if err != nil {
 		return fmt.Errorf("certify: batch run failed: %w", err)
 	}
@@ -256,6 +301,10 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 // --- sweep mode (--sweep) ---
 
 func runCertifySweep(ctx context.Context, root string, flags certifyCommandFlags, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) error {
+	if err := rejectUnsupportedCertifyControls(flags); err != nil {
+		return err
+	}
+
 	olderThan := 24 * time.Hour
 	if raw := lastString(flags.OlderThans); raw != "" {
 		d, err := time.ParseDuration(raw)

@@ -547,11 +547,19 @@ func normalizeConnectorsLegacyActionArgs(args []string, start int, certifyAction
 			}
 			continue
 		}
-		if isLegacyHelpFlag(arg) {
+		if arg == "-h" || arg == "--help" {
 			if afterSeparator {
 				continue
 			}
 			return append(out, "--help")
+		}
+		if strings.HasPrefix(arg, "--help=") {
+			out = append(out, "--pm-legacy-connectors-help-assignment="+strings.TrimPrefix(arg, "--help="))
+			continue
+		}
+		if len(arg) > 2 && arg[0] == '-' && arg[1] != '-' && strings.ContainsRune(arg[1:], 'h') {
+			out = append(out, "--pm-legacy-connectors-short="+strings.TrimPrefix(arg, "-"))
+			continue
 		}
 		if arg == "help" {
 			if afterSeparator {

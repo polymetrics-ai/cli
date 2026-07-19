@@ -71,10 +71,10 @@ Correction start: `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`; session `issue-437
 - [x] RED: batch credential-file load precedes parallel parsing and preserves exact load/run error wrappers and bytes.
 - [x] RED: only `--help`, `-h`, and intentional positional `help` render connectors manuals; false/assigned malformed/unknown short clusters do not.
 - [x] RED: CLI and website docs separate pre-report usage/validation/runtime exits from completed report outcomes.
-- [ ] Focused differential and repeated/race tests.
-- [ ] Certify exits, redaction, and unsupported replay no-live/no-write runner test.
+- [x] Focused differential and repeated/race tests: base/current 5/5 exact; race `29.046s`; ×10 `24.991s`.
+- [x] Certify exits, redaction, and unsupported replay no-live/no-write runner test: package race `349.263s`; exit focus `21.618s`.
 - [ ] Local sample fixture smoke with temp root only.
-- [ ] Runtime help, golden, generated CLI docs, website generation/parity.
+- [x] Runtime help, golden, generated CLI docs, website generation/parity: CLI docs/golden `24.275s`; website regeneration hash-stable.
 - [ ] Full CLI and certify packages.
 - [ ] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`.
 - [ ] `go run ./cmd/connectorgen validate` reports zero findings.

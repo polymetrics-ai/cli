@@ -64,10 +64,15 @@
       "cycle": "accepted-review-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "focused RED reproduced all findings: no-op controls, help over-normalization, single span/precedence, batch ordering/wrappers, and inaccurate exit docs"
+    },
+    {
+      "cycle": "accepted-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "smallest fail-closed correction passes focused, exact-base differential, repeated/race, exit/redaction/replay, and docs/golden/website gates"
     }
   ],
   "red": "captured: unsupported controls invoked runner and were advertised; broad help normalization hijacked false/malformed/clusters; invalid options bypassed certify span and beat connector validation; parallel beat missing creds and load error gained wrapper; docs conflated exit phases",
-  "green": "pending accepted correction implementation",
+  "green": "unsupported controls hidden and rejected before runner; single and batch legacy ordering/wrappers restored; connectors help exact-only; canonical/generated/website exit docs corrected",
   "verification": "pending; prior verification superseded by accepted findings",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",
@@ -87,7 +92,7 @@
     "445ad06c fix(cli): route direct connectors action help",
     "55e32402 docs(planning): complete connectors certify native handoff"
   ],
-  "push": "correction planning checkpoint pushed; RED checkpoint pending commit/push",
+  "push": "correction planning and RED checkpoints pushed; GREEN checkpoint pending commit/push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"

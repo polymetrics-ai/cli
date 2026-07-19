@@ -589,7 +589,7 @@ func TestTelemetryCertifyInvalidOptionsPreserveSingleSpanAndConnectorValidationP
 		t.Fatalf("stdout missing validation envelope: %s", stdout)
 	}
 	data := readCLITelemetry(t, filepath.Join(root, ".polymetrics", "telemetry"))
-	const spanName = `"Name": "pm.certify.connector"`
+	const spanName = `"Name":"pm.certify.connector"`
 	if got := bytes.Count(data, []byte(spanName)); got != 1 {
 		t.Fatalf("certify connector span count = %d, want 1:\n%s", got, data)
 	}
