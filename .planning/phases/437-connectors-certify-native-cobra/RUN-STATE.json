@@ -74,6 +74,11 @@
       "cycle": "accepted-review-correction-verify",
       "decision": "local_critical_path",
       "reason": "local sample, full CLI/certify, gofmt/vet/test/build, make verify, and connector validation all passed without credentials, writes, services, dependencies, PR, or review"
+    },
+    {
+      "cycle": "accepted-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal verification artifacts committed and pushed; final no-PR/no-review delivery marker closes the bounded correction"
     }
   ],
   "red": "captured: unsupported controls invoked runner and were advertised; broad help normalization hijacked false/malformed/clusters; invalid options bypassed certify span and beat connector validation; parallel beat missing creds and load error gained wrapper; docs conflated exit phases",
@@ -97,7 +102,7 @@
     "445ad06c fix(cli): route direct connectors action help",
     "55e32402 docs(planning): complete connectors certify native handoff"
   ],
-  "push": "correction planning, RED, and GREEN checkpoints pushed; terminal artifact checkpoint pending commit/push",
+  "push": "correction planning, RED, GREEN, and terminal verification checkpoint 2987f21b pushed; final delivery marker follows",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"

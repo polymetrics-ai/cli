@@ -44,6 +44,6 @@ Session `issue-437-review-correction-20260719T113319Z`; exact correction start `
 | C2 | GREEN | Hidden fail-closed controls; single connector span/validation/options ordering; batch injected load then parallel then wrapped run; exact-only connectors help normalization; canonical/generated/website docs | Complete: focused `3.004s`; native/certify/telemetry `108.532s` |
 | C3 | Refactor | Base/current differential; repeated/race; certify exit/redaction/replay-no-live; local sample; docs/golden/website parity | Complete: differential 5/5 byte-identical; focused race `29.046s`; ×10 `24.991s`; certify redaction/replay/concurrency race `349.263s`; exit focus `21.618s`; sample exit 0/pass/redacted; docs/golden `24.275s`; website regeneration hash-stable |
 | C4 | Full gate | gofmt, vet, full tests, build, `make verify`, connector validation | Complete: full CLI `435.572s`; certify `338.846s`; vet/build pass; validation 547/0; `make verify` exit 0 (`468.36s`, CLI `444.436s`, certify `346.018s`, smoke/lint/docs/validation green) |
-| C5 | Delivery | Finalize artifacts, commit/push, no services/credentials/PR/review | Pending terminal artifact commit/push |
+| C5 | Delivery | Finalize artifacts, commit/push, no services/credentials/PR/review | Complete: terminal verification artifact commit `2987f21b` pushed; final delivery marker follows |
 
 Correction RED must be captured and committed before any production edit. Fixture/temp data only; no live credentials, HTTP writes, reverse ETL execution, or external sweep.

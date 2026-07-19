@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: accepted safety-critical correction complete and verified; terminal artifact push pending.
+Status: accepted safety-critical correction complete, verified, committed, and pushed.
 
 ## Identity
 

@@ -33,6 +33,6 @@ Commands: `scripts/gsd doctor` passed; both `scripts/gsd prompt programming-loop
 
 Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-spf13-cobra`.
 
-Downstream artifact: complete at implementation head `a67d2ff9de84a2fabcd3b66097bf49518c1fa124`; terminal artifact commit/push remains.
+Downstream artifact: complete at implementation head `a67d2ff9de84a2fabcd3b66097bf49518c1fa124`; terminal verification artifact `2987f21b` is pushed and this final delivery marker closes the phase.
 
 Verification result: pass. GREEN evidence: focused `3.004s`; native/certify/telemetry `108.532s`; base/current differential 5/5 byte-identical; focused race `29.046s`; ×10 `24.991s`; certify redaction/replay/concurrency race `349.263s`; exit focus `21.618s`; local sample exit 0/pass/redacted; docs/golden `24.275s`; website regeneration hash-stable; full CLI `435.572s`; certify `338.846s`; validation 547/0; final `make verify` exit 0 in `468.36s`. No live credentials/writes, services, dependencies, PR, or review.

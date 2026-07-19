@@ -78,7 +78,7 @@ Correction start: `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`; session `issue-437
 - [x] Full CLI and certify packages: CLI `435.572s`; certify `338.846s`.
 - [x] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`: final verify exit 0, real `468.36s`.
 - [x] `go run ./cmd/connectorgen validate` reports 547 checked, zero findings.
-- [ ] Final artifacts committed and pushed; no dependencies/services/credentials/PR/review.
+- [x] Final artifacts committed and pushed (`2987f21b`); no dependencies/services/credentials/PR/review.
 
 ## Correction result
 
