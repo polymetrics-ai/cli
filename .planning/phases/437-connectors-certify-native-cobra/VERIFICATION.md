@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: false
+`verificationPassed`: true
 
 ## TDD / behavior
 
@@ -120,10 +120,11 @@ Third-correction start: `437d13cf`; session `issue-437-third-safety-correction-2
 - [x] Re-audit every certify flag across modes and every CLI/manual/website claim.
 - [x] Correct usage exit documentation and release-stage token examples to `ga`.
 - [x] Focused and repeated unknown-flag/no-effect/exec/resume/sweep tests pass under race (CLI ×10 `1.283s`, certify ×10 `1.393s`, CLI race `1.713s`, certify race `2.261s`).
-- [ ] Runtime topic/bare/flag help and invalid-action exit remain pending; docs/golden generation and manual parity pass (`7.055s`), website generation completed once and drift rerun remains pending.
-- [ ] Credential-free local sample smoke passes under a temporary root.
-- [ ] Full CLI and certify suites pass.
-- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` pass.
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` reports zero findings.
-- [ ] Final artifacts record only actual terminal evidence and align `verificationPassed` with the full gate.
-- [ ] Commit/push only the active issue branch; no credentials, external commands, services, dependencies, PR, or review.
+- [x] Runtime topic/bare/flag/certify help is byte-equal, invalid action and unknown typo exit 2, docs generation matches tracked CLI manuals, golden transcripts pass, and website docs regeneration is hash-stable.
+- [x] Credential-free local sample smoke passed under a temporary root; `ConnectorCertification`, connector `sample`, pass, and empty stderr asserted without printing report data.
+- [x] Full CLI (`446.382s`, real `7m49.747s`) and certify (`350.637s`, real `6m13.463s`) suites pass.
+- [x] `gofmt -w cmd internal`, clean diff, `go vet ./...`, `go test ./...`, and `go build ./cmd/pm` pass.
+- [x] `make verify` exits 0 in real `14m58.384s`; full tests, docs validation, ordered local smoke, lint 0, build/vet/tidy checks, and connector validation pass.
+- [x] Explicit `go run ./cmd/connectorgen validate internal/connectors/defs` reports 547 checked, zero findings.
+- [x] Final artifacts record only actual terminal evidence and align `verificationPassed` with the full gate.
+- [ ] Commit/push the final truthful verification artifacts only to the active issue branch; no credentials, external credential commands, services, dependencies, PR, or review.

@@ -7,7 +7,7 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": "7b6eaa58",
+  "endingImplementationHead": "f56bc825",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "thirdCorrectionStartingHead": "437d13cf",
@@ -17,8 +17,8 @@
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "in_progress",
-  "verificationPassed": false,
+  "status": "complete_verified",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -121,11 +121,21 @@
       "cycle": "third-accepted-safety-correction-green",
       "decision": "local_critical_path",
       "reason": "strict certify parsing, bounded sweep age, prohibited-exec rejection/removal, completed-report resume reuse, incomplete rerun, and generated docs passed focused, repeated, and race gates"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "runtime help, docs/goldens/website drift, credential-free sample, full CLI/certify, gofmt/vet/full tests/build, make verify, and connectorgen all passed"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "truthful terminal evidence finalized for active-branch artifact commit/push; no credentials, external credential commands, services, dependencies, PR, or review"
     }
   ],
   "red": "captured before production: seven certify typo/unknown cases reached mode handling or runtime; five non-positive/excessive sweep ages ran; credential-file exec parsed and reached batch/runner; ordinary second resume reran; stale stage/docs claims failed",
   "green": "strict certify unknown-flag rejection; sweep age limited to (0,8760h]; credential-file exec rejected with no external execution path; completed prior reports reused with original outcomes; incomplete reports rerun; exit/stage/resume/sweep docs regenerated",
-  "verification": "pending full declared phase gate",
+  "verification": "pass: focused/repeated/race/resume/sweep/no-effect/audit/docs/help/sample green; full CLI 446.382s and certify 350.637s; make verify exit 0 in 14m58.384s; connectorgen 547/0",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",
     ".planning/phases/437-connectors-certify-native-cobra/TDD-LEDGER.md",
@@ -142,9 +152,12 @@
     "6f248f1d fix(cli): preserve connectors contextual trailing help",
     "9ab1fa41 test(cli): expose connectors direct action help gap",
     "445ad06c fix(cli): route direct connectors action help",
-    "55e32402 docs(planning): complete connectors certify native handoff"
+    "55e32402 docs(planning): complete connectors certify native handoff",
+    "766e2d9d docs(planning): reopen third certify correction",
+    "97816a99 test(cli): expose third certify safety regressions",
+    "f56bc825 fix(cli): fail closed certify safety controls"
   ],
-  "push": "third-correction planning checkpoint pending; prior second-correction checkpoints remain pushed",
+  "push": "third-correction planning 766e2d9d, RED 97816a99, and GREEN f56bc825 pushed; terminal verification artifact push pending",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"

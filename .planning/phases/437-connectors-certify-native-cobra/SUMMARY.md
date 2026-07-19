@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: third accepted safety/correctness correction in progress; verification pending.
+Status: third accepted safety/correctness correction complete and verified; final artifact push pending.
 
 ## Identity
 
@@ -27,7 +27,9 @@ All findings in `/tmp/pm-397-rereview2-437.log` are accepted:
 - credential-file `exec` must remain prohibited and reject before effects; generic external execution code and claims must be removed;
 - usage exit docs, release-stage token examples (`ga`), flag/docs audit, and terminal planning state must be accurate.
 
-The plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state were reopened before RED tests or production changes. RED reproduced every finding. GREEN now rejects unknown certify flags and unsafe ages before effects, rejects credential-file exec with no external execution path, reuses valid completed reports on ordinary resume runs while rerunning incomplete reports, and corrects canonical/generated/golden/website docs. Focused, repeated, race, and docs/golden gates pass. Full verification is intentionally still pending until `make verify` and the remaining declared phase gates actually pass.
+The plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state were reopened before RED tests or production changes. RED reproduced every finding. GREEN rejects unknown certify flags and unsafe ages before effects, rejects credential-file exec with no external execution path, reuses valid completed reports on ordinary resume runs while rerunning incomplete reports, and corrects canonical/generated/golden/website docs.
+
+Focused, repeated, race, resume/sweep/no-effect, and flag/docs audit tests pass. Runtime help parity, invalid-action/typo exits, docs generation, golden transcripts, website hash-stable regeneration, and credential-free local sample certification pass. Full CLI passed in `446.382s`; full certify passed in `350.637s`; gofmt, clean diff, vet, full tests, and build pass. `make verify` exited 0 in `14m58.384s`, and explicit connectorgen validation checked 547 bundles with zero findings.
 
 ## GSD / skills / execution decision
 
@@ -37,4 +39,4 @@ Loaded skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `gol
 
 ## Safety
 
-Implementation and verification are fixture/temp/in-process only. No credential values, credentialed connector checks, external credential commands, live services, external writes or sweeps, new dependencies, generic tools, destructive/admin actions, production changes, PR, or review are permitted.
+Implementation and verification used fixture/temp/in-process paths and the repository's existing ordered local smoke only. No credential values, credentialed connector checks, external credential commands, live services, external writes or sweeps, new dependencies, generic tools, destructive/admin actions, production changes, PR, or review were used.

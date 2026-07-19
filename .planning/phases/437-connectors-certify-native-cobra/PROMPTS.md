@@ -57,6 +57,6 @@ Commands: `scripts/gsd doctor` and `scripts/gsd list` passed; `scripts/gsd promp
 
 Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-concurrency`, `golang-context`, `golang-code-style`, `golang-naming`, `golang-documentation`, `golang-spf13-cobra`, and `golang-lint`.
 
-Downstream artifact: pending strict RED → GREEN → verify execution.
+Downstream artifact: complete at implementation head `f56bc825`; strict certify parsing, bounded sweep age, prohibited-exec rejection/removal, completed-report resume reuse, incomplete-report rerun, and corrected generated docs are committed and pushed.
 
-Verification result: pending; `RUN-STATE.json.verificationPassed` and `VERIFICATION.md` remain false until the declared full gate exits 0.
+Verification result: pass. Focused/repeated/race/resume/sweep/no-effect/audit tests, runtime help, docs/goldens, hash-stable website generation, credential-free local sample smoke, full CLI (`446.382s`), full certify (`350.637s`), gofmt/vet/full tests/build, `make verify` (exit 0 in `14m58.384s`), and connectorgen 547/0 pass. No external credential command, live credential, service, dependency, PR, or review was used.
