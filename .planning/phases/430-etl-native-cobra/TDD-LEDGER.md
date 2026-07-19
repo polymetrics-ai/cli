@@ -22,7 +22,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pass |
 | 5 | Parity/delivery | Runtime help, temporary docs/website/generated checks, scope/dependency guards, commit/push | Pass; final evidence pushed at `9b0020ab` |
 | 6 | Correction planning | Read `/tmp/pm-397-review-430.log`; update six artifacts from exact correction start `9b0020ab` before production edits | Complete |
-| 7 | Correction RED | Differential table for status operands `--help`, `-h`, `--`, unknown flag + valid ID; adversarial argv/internal-carrier override case | Pending |
+| 7 | Correction RED | Differential table for status operands `--help`, `-h`, `--`, unknown flag + valid ID; adversarial argv/internal-carrier override case | Failed as required before production edits: all five first-operand differential cases diverged |
 | 8 | Correction GREEN | Private action-specific operand capture before shared normalization; status consumes context-only state | Pending |
 | 9 | Correction verification | Focused/adversarial/repeated/race/base differential/full CLI/repository, help parity, gofmt/vet/build/diff, `make verify`, commit/push | Pending |
 
@@ -94,3 +94,19 @@ The first token after legacy `etl status` is always the run ID, including `--hel
 The implementation seam is invocation-private state captured before `normalizeNativeStringArrayArgs`. It is action-specific to `etl status`, is not represented by a hidden flag or argv carrier, and cannot be supplied or overridden by internal-carrier-shaped argv. The status handler must use only the captured value; missing capture remains usage. Other ETL actions/help and all public output remain unchanged.
 
 GSD evidence: `scripts/gsd doctor` and `scripts/gsd list` passed; mandatory `scripts/gsd prompt programming-loop ...` remains unavailable (`unknown GSD command`), so the documented manual universal-loop fallback remains active. `scripts/gsd prompt quick "Issue 430 bounded correction ..."` generated 5778 bytes and is executed inline. Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-spf13-cobra`.
+
+## Exact correction RED
+
+Before any correction production edit:
+
+```text
+--- FAIL: TestETLStatusDifferentialPreservesLegacyFirstOperandOwnership
+    long_help: got success for later valid ID; want run "--help" not found
+    short_help: got success for later valid ID; want run "-h" not found
+    literal_separator: got success for later valid ID; want run "--" not found
+    unknown_flag: got usage invalid usage; want run "--unknown-status-id" not found
+    internal_carrier_shaped: got success for later valid ID; want literal carrier-shaped run not found
+FAIL polymetrics.ai/internal/cli
+```
+
+Command: `go test ./internal/cli -run 'TestETLStatus(DifferentialPreservesLegacyFirstOperandOwnership|PrivateOperandCannotBeOverriddenFromArgv)$' -count=1`. The test uses one temporary local ETL run and compares exit/stdout/stderr against a legacy first-token oracle. No service, credential, secret, dependency, or production code was touched.

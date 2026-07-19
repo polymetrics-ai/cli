@@ -186,6 +186,71 @@ func TestETLRunStatusBatchBoundsAndRepeatedFlags(t *testing.T) {
 	}
 }
 
+func TestETLStatusDifferentialPreservesLegacyFirstOperandOwnership(t *testing.T) {
+	root := setupETLProject(t, "full_refresh_overwrite")
+	stdout, stderr, code := runETLCLI(
+		"etl", "run", "--connection", "sample-to-warehouse", "--stream", "customers", "--root", root, "--json",
+	)
+	if code != 0 || stderr != "" {
+		t.Fatalf("seed ETL run code=%d stdout=%s stderr=%s", code, stdout, stderr)
+	}
+	var runEnv struct {
+		Run app.Run `json:"run"`
+	}
+	decodeOneJSON(t, stdout, &runEnv)
+	if runEnv.Run.ID == "" {
+		t.Fatal("seed ETL run returned an empty ID")
+	}
+
+	for _, tt := range []struct {
+		name    string
+		operand string
+	}{
+		{name: "long help", operand: "--help"},
+		{name: "short help", operand: "-h"},
+		{name: "literal separator", operand: "--"},
+		{name: "unknown flag", operand: "--unknown-status-id"},
+		{name: "internal carrier shaped", operand: "--pm-internal-etl-status-run-id=" + runEnv.Run.ID},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			wantStdout, wantStderr, wantCode := runLegacyETLStatusOracle(root, tt.operand, runEnv.Run.ID)
+			gotStdout, gotStderr, gotCode := runETLCLI(
+				"etl", "status", tt.operand, runEnv.Run.ID, "--root", root, "--json",
+			)
+			if gotCode != wantCode || gotStdout != wantStdout || gotStderr != wantStderr {
+				t.Fatalf("native status differs from exact legacy first-operand ownership\noperand: %q\ncode: got %d want %d\nstdout:\ngot  %s\nwant %s\nstderr:\ngot  %s\nwant %s", tt.operand, gotCode, wantCode, gotStdout, wantStdout, gotStderr, wantStderr)
+			}
+			if gotCode == 0 || strings.Contains(gotStdout, `"id": "`+runEnv.Run.ID+`"`) {
+				t.Fatalf("status failed open to later valid run ID for first operand %q: code=%d stdout=%s", tt.operand, gotCode, gotStdout)
+			}
+		})
+	}
+}
+
+func TestETLStatusPrivateOperandCannotBeOverriddenFromArgv(t *testing.T) {
+	root := setupETLProject(t, "full_refresh_overwrite")
+	stdout, stderr, code := runETLCLI(
+		"etl", "run", "--connection", "sample-to-warehouse", "--stream", "customers", "--root", root, "--json",
+	)
+	if code != 0 || stderr != "" {
+		t.Fatalf("seed ETL run code=%d stdout=%s stderr=%s", code, stdout, stderr)
+	}
+	var runEnv struct {
+		Run app.Run `json:"run"`
+	}
+	decodeOneJSON(t, stdout, &runEnv)
+
+	const firstOperand = "missing-first-owned-run"
+	carrier := "--pm-internal-etl-status-run-id=" + runEnv.Run.ID
+	wantStdout, wantStderr, wantCode := runLegacyETLStatusOracle(root, firstOperand, carrier, runEnv.Run.ID)
+	gotStdout, gotStderr, gotCode := runETLCLI(
+		"etl", "status", firstOperand, carrier, runEnv.Run.ID, "--root", root, "--json",
+	)
+	if gotCode != wantCode || gotStdout != wantStdout || gotStderr != wantStderr {
+		t.Fatalf("argv carrier overrode exact legacy operand ownership\ncode: got %d want %d\nstdout:\ngot  %s\nwant %s\nstderr:\ngot  %s\nwant %s", gotCode, wantCode, gotStdout, wantStdout, gotStderr, wantStderr)
+	}
+}
+
 func TestETLBatchSizeAndConfiguredSyncValidation(t *testing.T) {
 	root := setupETLProject(t, "full_refresh_overwrite")
 
@@ -427,6 +492,20 @@ func setETLStreamConfig(t *testing.T, root string, stream app.StreamConfig) {
 func runETLCLI(args ...string) (string, string, int) {
 	var stdout, stderr bytes.Buffer
 	code := Run(args, &stdout, &stderr)
+	return stdout.String(), stderr.String(), code
+}
+
+func runLegacyETLStatusOracle(root string, args ...string) (string, string, int) {
+	var stdout, stderr bytes.Buffer
+	var err error
+	if len(args) < 1 {
+		err = errUsage
+	} else {
+		err = withApp(root, func(a *app.App) error {
+			return runETLStatus(a, args[0], &stdout, true)
+		})
+	}
+	code := writeError(context.Background(), &stdout, &stderr, err, true)
 	return stdout.String(), stderr.String(), code
 }
 

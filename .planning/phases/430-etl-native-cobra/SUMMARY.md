@@ -1,6 +1,6 @@
 # Phase 430 Summary
 
-Status: bounded correction active from exact head `9b0020abde7cd7e007412a0294db6e4cb576f5f3`; planning artifacts updated, correction RED pending, verification non-terminal.
+Status: bounded correction active from exact head `9b0020abde7cd7e007412a0294db6e4cb576f5f3`; focused differential RED captured before production edits, GREEN pending, verification non-terminal.
 
 ## Identity
 
@@ -37,4 +37,4 @@ No `go.mod`, `go.sum`, connector definition, docs/website, golden, or unrelated 
 
 ## Bounded correction
 
-`/tmp/pm-397-review-430.log` found that shared normalization can discard the first `etl status` operand when it looks like help, literal separation, or an unknown flag, then query a later valid ID. Exact legacy behavior owns the first post-action token and fails closed. The correction will add differential RED coverage, capture that operand into invocation-private context state before normalization, expose no argv/internal carrier, preserve all other ETL/help behavior, and rerun the complete declared gates. No completion claim is made until `make verify`, commit, and push succeed.
+`/tmp/pm-397-review-430.log` found that shared normalization can discard the first `etl status` operand when it looks like help, literal separation, or an unknown flag, then query a later valid ID. Exact legacy behavior owns the first post-action token and fails closed. The focused differential test now fails as required for all four requested operand classes plus an internal-carrier-shaped adversarial operand; no correction production edit has occurred. GREEN will capture that operand into invocation-private context state before normalization, expose no argv/internal carrier, preserve all other ETL/help behavior, and rerun the complete declared gates. No completion claim is made until `make verify`, commit, and push succeed.

@@ -61,7 +61,7 @@ Historical result: pass at implementation head `fc88f1694ee73593f1130f866bd6166b
 ### TDD/behavior
 
 - [x] Review log read and all issue-local artifacts updated before correction production edits.
-- [ ] RED differential proves exact-base first-operand ownership for `--help`, `-h`, literal `--`, and unknown flag followed by a valid run ID.
+- [x] RED differential proves exact-base first-operand ownership for `--help`, `-h`, literal `--`, and unknown flag followed by a valid run ID (failed as required before production edits).
 - [ ] Adversarial test proves internal-carrier-shaped argv cannot set or override the private status operand.
 - [ ] Capture occurs before shared normalization and is scoped only to `etl status`.
 - [ ] Status reads invocation-private state; no hidden flag, argv carrier, exported key, or shared mutable state exists.
@@ -69,7 +69,7 @@ Historical result: pass at implementation head `fc88f1694ee73593f1130f866bd6166b
 
 ### Gates
 
-- [ ] Focused correction RED then GREEN.
+- [x] Focused correction RED captured before production edits; GREEN pending.
 - [ ] Adversarial/internal-carrier tests.
 - [ ] Focused repeated and `-race`.
 - [ ] Exact legacy-base differential for the four operand classes.

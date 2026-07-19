@@ -37,6 +37,6 @@ Execution decision: `local_critical_path` — coupled status/router/test correct
 
 Safety: temporary local project/run only; no secrets, credentials, optional services, external connectors, dependencies, reverse operation, PR, or review. Preserve all non-status ETL/help behavior and byte-identical docs/manual surfaces.
 
-Downstream artifact: correction planning complete before tests/production; differential RED, private capture GREEN, verification, commit, and push pending.
+Downstream artifact: correction planning and focused differential RED are complete before production edits; private capture GREEN, verification, and final delivery remain pending.
 
-Verification result: pending; `verificationPassed=false` until focused/adversarial/race/base differential/full CLI/repository, gofmt/vet/build/diff, help/docs parity, and `make verify` pass.
+Verification result: RED captured. All five differential first-operand cases diverged as expected: help/short/literal/internal-carrier-shaped operands reached the later valid ID, while unknown-flag returned usage instead of the exact base lookup error. `verificationPassed=false` until focused/adversarial/race/base differential/full CLI/repository, gofmt/vet/build/diff, help/docs parity, and `make verify` pass.
