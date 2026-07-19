@@ -138,7 +138,7 @@ Exact start `1e27b14012f65ffa24c01ed855d0405c24401eee`; launcher `openai-codex/g
 - [x] Run GSD doctor/list/plan prompt; record unavailable programming-loop and manual fallback.
 - [x] Consolidate every overlapping correctness/security finding into F1–F10 with accepted reasoned dispositions.
 - [ ] Commit/push planning checkpoint before tests or production edits.
-- [ ] Capture focused RED for every accepted finding before production changes; commit/push coherent RED checkpoints.
+- [x] Capture focused RED for every accepted finding before production changes; certify focus failed in `16.755s` across preview, secret, report, YAML, ledger, crontab, context, prerequisite, and resume tests; CLI focus failed in `1.051s` across booleans, parallel, secret config, and source-root isolation. Commit/push pending.
 - [ ] Failed/mismatched/leaky preview blocks execution and ledger in initial write, both cleanup paths, and both sweep paths.
 - [ ] Secret detector returns opaque metadata; approval/config secrets never enter argv/reasons/serialized reports; secret-schema config injection rejects; reports/history/progress/ledgers use restrictive atomic/no-follow writes as applicable.
 - [ ] Parallel certification uses invocation-local crontab confinement; deterministic concurrent and race tests prove system backend unreachable.

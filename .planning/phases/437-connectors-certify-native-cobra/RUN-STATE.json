@@ -137,9 +137,14 @@
       "cycle": "fourth-review-correction-plan",
       "decision": "local_critical_path",
       "reason": "user prohibited subagents and bounded correction to the existing isolated issue branch; exact-head independent findings were consolidated into one safety-critical TDD cycle"
+    },
+    {
+      "cycle": "fourth-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused RED deterministically reproduced F1-F10 before production edits: unsafe preview execution, secret copying, permissive files/controls, global crontab interference, dropped cancellation, ungated prerequisites, stale resume, and source-root pollution"
     }
   ],
-  "red": "pending: focused failing tests for consolidated accepted findings F1-F10 must be captured and committed before production edits",
+  "red": "captured: certify focus failed in 16.755s (preview create/cleanup/sweep, opaque hits, report mode, strict YAML/symlink, ledger layout/authority, concurrent crontab, cancellation, prerequisite, resume); CLI focus failed in 1.051s (malformed booleans, parallel 0/-1/33, secret config, source-root helper)",
   "green": "pending",
   "verification": "pending; verificationPassed remains false until the full required make verify exits 0",
   "files": [
@@ -164,7 +169,7 @@
     "f56bc825 fix(cli): fail closed certify safety controls",
     "3854295b docs(planning): verify third certify correction"
   ],
-  "push": "fourth correction planning checkpoint pending; no fourth-cycle test or production commits yet",
+  "push": "planning checkpoint 07d0b5a4 pushed; fourth-cycle RED checkpoint pending",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"

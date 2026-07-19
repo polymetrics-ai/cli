@@ -681,6 +681,48 @@ func passingCLIReport(connector string) certify.Report {
 	}
 }
 
+func TestReviewCorrectionCertifyStrictBooleansParallelAndSecretConfig(t *testing.T) {
+	validCreds := certify.CredsFile{
+		Version: 1,
+		Connectors: map[string]certify.ConnectorCredsEntry{
+			"sample": {},
+		},
+	}
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "malformed write", args: []string{"connectors", "certify", "sample", "--write=tru"}},
+		{name: "malformed full", args: []string{"connectors", "certify", "sample", "--full=1"}},
+		{name: "malformed keep workdir", args: []string{"connectors", "certify", "sample", "--keep-workdir=yes"}},
+		{name: "malformed resume", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--resume=tru"}},
+		{name: "parallel zero", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--parallel=0"}},
+		{name: "parallel negative", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--parallel=-1"}},
+		{name: "parallel oversized", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--parallel=33"}},
+		{name: "secret schema config", args: []string{"connectors", "certify", "github", "--config=token=planted-marker"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			runtime := &fakeCertifyCommandRuntime{credsFile: validCreds, singleReport: passingCLIReport("sample")}
+			_, _, code := runNativeConnectorsCLI(runtime, true, tt.args...)
+			if code != 2 {
+				t.Fatalf("exit=%d, want usage exit 2", code)
+			}
+			if runtime.singleCalls != 0 || runtime.batchCalls != 0 || runtime.sweepCalls != 0 {
+				t.Fatalf("invalid safety control reached effects: single=%d batch=%d sweep=%d", runtime.singleCalls, runtime.batchCalls, runtime.sweepCalls)
+			}
+		})
+	}
+}
+
+func TestReviewCorrectionNativeHelperDoesNotUseSourceTreeRoot(t *testing.T) {
+	runtime := &fakeCertifyCommandRuntime{singleReport: certify.Report{}}
+	_, _, _ = runNativeConnectorsCLI(runtime, true, "connectors", "certify", "sample")
+	if runtime.singleRoot == "." || runtime.singleRoot == "" {
+		t.Fatalf("native test helper root=%q, want an isolated temporary root", runtime.singleRoot)
+	}
+}
+
 func runNativeConnectorsCLI(runtime *fakeCertifyCommandRuntime, jsonOut bool, args ...string) (string, string, int) {
 	return executeNativeConnectors(context.Background(), testRouterConfig(".", jsonOut), runtime, args...)
 }
