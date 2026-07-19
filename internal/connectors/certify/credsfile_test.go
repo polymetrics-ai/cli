@@ -24,7 +24,7 @@ connectors:
     write: true
   stripe:
     credential:
-      exec: {api_key: ["op", "read", "op://certs/stripe-test/api_key"]}
+      from_env: {api_key: PM_CERT_STRIPE_API_KEY}
     write: false
     rate_limit_rps: 1
   salesforce:
@@ -84,11 +84,8 @@ connectors:
 	if !ok {
 		t.Fatalf("Connectors missing stripe entry")
 	}
-	if len(stripe.Credential.Exec["api_key"]) != 3 {
-		t.Fatalf("stripe Credential.Exec[api_key] = %v, want 3 elements", stripe.Credential.Exec["api_key"])
-	}
-	if stripe.Credential.Exec["api_key"][0] != "op" {
-		t.Errorf("stripe Credential.Exec[api_key][0] = %q, want op", stripe.Credential.Exec["api_key"][0])
+	if stripe.Credential.FromEnv["api_key"] != "PM_CERT_STRIPE_API_KEY" {
+		t.Errorf("stripe Credential.FromEnv[api_key] = %q", stripe.Credential.FromEnv["api_key"])
 	}
 	if stripe.Write {
 		t.Errorf("stripe Write = true, want false")
@@ -127,6 +124,21 @@ func TestParseCredsFileInvalidYAML(t *testing.T) {
 	}
 }
 
+func TestParseCredsFileRejectsExecWithoutExecutingIt(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "creds.yaml")
+	writeFile(t, path, `
+version: 1
+connectors:
+  sample:
+    credential:
+      exec: {token: ["must-not-run"]}
+`)
+
+	if _, err := certify.LoadCredsFile(path); err == nil {
+		t.Fatal("LoadCredsFile() error = nil, want prohibited exec rejection")
+	}
+}
+
 // TestCredsFileResolveSecretsFromEnv proves ResolveSecrets reads the
 // referenced ENV VARIABLE NAMES (never literal secret values in the file
 // itself — certification-design §B: "env/exec references only, safe to
@@ -161,53 +173,6 @@ func TestCredsFileResolveSecretsFromEnvMissingVarErrors(t *testing.T) {
 
 	if _, err := certify.ResolveSecrets(entry); err == nil {
 		t.Fatalf("ResolveSecrets() error = nil, want error for unset env var")
-	}
-}
-
-// TestCredsFileResolveSecretsFromExec runs the referenced command and
-// captures its stdout (trimmed) as the secret value, per certification-design
-// §B exec form: {api_key: ["op", "read", "op://..."]}.
-func TestCredsFileResolveSecretsFromExec(t *testing.T) {
-	entry := certify.ConnectorCredsEntry{
-		Credential: certify.CredentialRef{
-			Exec: map[string][]string{"api_key": {"printf", "sk_test_execsecret"}},
-		},
-	}
-
-	secrets, err := certify.ResolveSecrets(entry)
-	if err != nil {
-		t.Fatalf("ResolveSecrets() error = %v", err)
-	}
-	if secrets["api_key"] != "sk_test_execsecret" {
-		t.Errorf("secrets[api_key] = %q, want sk_test_execsecret", secrets["api_key"])
-	}
-}
-
-// TestCredsFileResolveSecretsFromExecFailureErrors surfaces a failing exec
-// command as an error rather than silently yielding an empty secret.
-func TestCredsFileResolveSecretsFromExecFailureErrors(t *testing.T) {
-	entry := certify.ConnectorCredsEntry{
-		Credential: certify.CredentialRef{
-			Exec: map[string][]string{"api_key": {"false"}},
-		},
-	}
-
-	if _, err := certify.ResolveSecrets(entry); err == nil {
-		t.Fatalf("ResolveSecrets() error = nil, want error for failing exec command")
-	}
-}
-
-// TestCredsFileResolveSecretsFromExecEmptyCommandErrors guards against a
-// malformed exec entry with zero argv elements.
-func TestCredsFileResolveSecretsFromExecEmptyCommandErrors(t *testing.T) {
-	entry := certify.ConnectorCredsEntry{
-		Credential: certify.CredentialRef{
-			Exec: map[string][]string{"api_key": {}},
-		},
-	}
-
-	if _, err := certify.ResolveSecrets(entry); err == nil {
-		t.Fatalf("ResolveSecrets() error = nil, want error for empty exec argv")
 	}
 }
 

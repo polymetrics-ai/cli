@@ -111,11 +111,11 @@ Third-correction start: `437d13cf`; session `issue-437-third-safety-correction-2
 
 - [x] Read and accept every finding in `/tmp/pm-397-rereview2-437.log`.
 - [x] Reopen plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state before tests or production edits.
-- [ ] Commit/push the planning checkpoint before RED tests.
-- [ ] RED: every unknown certify flag, including write-like typos, rejects before credential loading, runner, sweep, or other effects.
-- [ ] RED: `--older-than` rejects zero, negative, and unreasonably large values before sweep.
-- [ ] RED: ordinary two-run `--resume` reuses completed prior reports without future timestamps; incomplete reports rerun.
-- [ ] RED: any credential-file `exec` entry rejects before runner effects; no test executes an external command.
+- [x] Commit/push the planning checkpoint before RED tests (`766e2d9d`).
+- [x] RED: every unknown certify flag, including write-like typos, rejects before credential loading, runner, sweep, or other effects.
+- [x] RED: `--older-than` rejects zero, negative, and unreasonably large values before sweep.
+- [x] RED: ordinary two-run `--resume` reuses completed prior reports without future timestamps; incomplete reports rerun.
+- [x] RED: any credential-file `exec` entry rejects before runner effects; no test executes an external command.
 - [ ] Remove external credential execution code and all docs/examples/claims.
 - [ ] Re-audit every certify flag across modes and every CLI/manual/website claim.
 - [ ] Correct usage exit documentation and release-stage token examples to `ga`.

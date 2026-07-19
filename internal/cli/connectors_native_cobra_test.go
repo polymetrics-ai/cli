@@ -112,7 +112,11 @@ func TestConnectorsCommandIsNativeCobraSubtree(t *testing.T) {
 			if action.DisableFlagParsing {
 				t.Fatalf("connectors %s must be native", actionName)
 			}
-			if !action.FParseErrWhitelist.UnknownFlags {
+			if actionName == "certify" {
+				if action.FParseErrWhitelist.UnknownFlags {
+					t.Fatal("connectors certify must reject unknown flags before effects")
+				}
+			} else if !action.FParseErrWhitelist.UnknownFlags {
 				t.Fatalf("connectors %s must preserve unknown flags", actionName)
 			}
 			assertNoFileCompletion(t, action)
@@ -316,6 +320,62 @@ func TestNativeCertifyRejectsUnsupportedSafetyAndModeControls(t *testing.T) {
 	}
 }
 
+func TestNativeCertifyRejectsUnknownFlagsBeforeAnyEffects(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "single write typo assigned", args: []string{"connectors", "certify", "sample", "--writ=false"}},
+		{name: "single write typo bare", args: []string{"connectors", "certify", "sample", "--wirte"}},
+		{name: "single credential typo", args: []string{"connectors", "certify", "sample", "--from-emv=token=IGNORED"}},
+		{name: "batch credential file typo", args: []string{"connectors", "certify", "--all", "--credentials-fle=fixture.yaml"}},
+		{name: "batch parallel typo", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--paralel=2"}},
+		{name: "sweep age typo", args: []string{"connectors", "certify", "--sweep", "--credentials-file=fixture.yaml", "--older-then=2h"}},
+		{name: "arbitrary unknown", args: []string{"connectors", "certify", "sample", "--definitely-unknown=value"}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			runtime := &fakeCertifyCommandRuntime{singleReport: passingCLIReport("sample")}
+			stdout, stderr, code := runNativeConnectorsCLI(runtime, true, tt.args...)
+			assertCLIError(t, code, stdout, stderr, 2, "usage", "unknown flag")
+			if len(runtime.effects) != 0 {
+				t.Fatalf("unknown flag recorded effects %v", runtime.effects)
+			}
+		})
+	}
+}
+
+func TestNativeCertifyRejectsUnsafeSweepAgesBeforeEffects(t *testing.T) {
+	for _, raw := range []string{"0", "0s", "-1ns", "-1h", "8761h"} {
+		t.Run(raw, func(t *testing.T) {
+			runtime := &fakeCertifyCommandRuntime{}
+			stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
+				"connectors", "certify", "--sweep", "--credentials-file=fixture.yaml", "--older-than="+raw)
+			assertCLIError(t, code, stdout, stderr, 2, "usage", "--older-than")
+			if len(runtime.effects) != 0 {
+				t.Fatalf("unsafe sweep age recorded effects %v", runtime.effects)
+			}
+		})
+	}
+}
+
+func TestNativeCertifyRejectsCredentialFileExecBeforeRunnerEffects(t *testing.T) {
+	runtime := &fakeCertifyCommandRuntime{credsFile: certify.CredsFile{
+		Connectors: map[string]certify.ConnectorCredsEntry{
+			"sample": {
+				Credential: certify.CredentialRef{Exec: map[string][]string{"token": {"must-not-run"}}},
+			},
+		},
+	}}
+	stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
+		"connectors", "certify", "--all", "--credentials-file=fixture.yaml")
+	assertCLIError(t, code, stdout, stderr, 2, "usage", "exec")
+	if got := strings.Join(runtime.effects, ","); got != "load_credentials_file" {
+		t.Fatalf("credential-file exec effects=%v, want only effect-free file load", runtime.effects)
+	}
+}
+
 func TestNativeCertifyEffectRecorderRejectsNoOpControlsBeforeEffects(t *testing.T) {
 	tests := []struct {
 		name string
@@ -476,7 +536,7 @@ func TestConnectorsCertificationDocsDoNotAdvertiseRejectedControlsOrNameScopedHe
 		}
 		for _, rejected := range []string{
 			"--record", "--replay", "--rate-limit", "--budget",
-			"--live-all-modes", "--allow-production-writes",
+			"--live-all-modes", "--allow-production-writes", "exec:", "env/exec",
 		} {
 			if strings.Contains(string(raw), rejected) {
 				t.Errorf("%s still advertises rejected control %s", path, rejected)
@@ -486,6 +546,40 @@ func TestConnectorsCertificationDocsDoNotAdvertiseRejectedControlsOrNameScopedHe
 			strings.Contains(string(raw), "[--limit") ||
 			strings.Contains(string(raw), "[--modes") {
 			t.Errorf("%s still advertises unsupported single-certify credential/limit/modes controls", path)
+		}
+	}
+}
+
+func TestConnectorsCertificationDocsUseActualExitAndStageTokens(t *testing.T) {
+	manual := docs["connectors"]
+	if strings.Contains(manual, "generally_available") {
+		t.Fatal("connectors manual advertises stale release-stage token generally_available")
+	}
+	for _, required := range []string{
+		"--stage ga",
+		"usage errors exit 2",
+		"--older-than must be greater than zero and no more than 8760h",
+		"--resume reuses completed prior reports",
+		"credential-file exec entries are rejected",
+	} {
+		if !strings.Contains(manual, required) {
+			t.Errorf("connectors manual missing %q", required)
+		}
+	}
+
+	repoRoot, err := repoRootFromWorkingDir()
+	if err != nil {
+		t.Fatalf("locate repository root: %v", err)
+	}
+	architecturePath := filepath.Join(repoRoot, "docs", "architecture", "connector-certification-design.md")
+	raw, err := os.ReadFile(architecturePath)
+	if err != nil {
+		t.Fatalf("read %s: %v", architecturePath, err)
+	}
+	text := string(raw)
+	for _, stale := range []string{"1 usage/internal", "env/exec", "exec:"} {
+		if strings.Contains(text, stale) {
+			t.Errorf("%s retains stale claim %q", architecturePath, stale)
 		}
 	}
 }
@@ -500,7 +594,7 @@ func TestNativeCertifySupportedSingleFlagsAndExitContract(t *testing.T) {
 		"connectors", "certify", "sample",
 		"--stream=ignored", "--stream=customers", "--skip=write", "--from-env=token=PM_CERT_NATIVE_TOKEN",
 		"--config=base_url=https://example.invalid", "--config=account=fixture",
-		"--keep-workdir", "--write", "--full", "--unknown=ignored",
+		"--keep-workdir", "--write", "--full",
 	)
 	if code != 0 || stderr != "" {
 		t.Fatalf("single: code=%d stderr=%q stdout=%q", code, stderr, stdout)

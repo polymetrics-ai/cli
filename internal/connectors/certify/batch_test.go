@@ -45,8 +45,8 @@ func passingReport(connector string) certify.Report {
 		Connector:     connector,
 		Mode:          "live",
 		Passed:        true,
-		StartedAt:     now,
-		CompletedAt:   now.Add(time.Second),
+		StartedAt:     now.Add(-time.Second),
+		CompletedAt:   now,
 		Capabilities: certify.Capabilities{
 			Check:   certify.CapabilityResult{Result: "pass"},
 			Catalog: certify.CapabilityResult{Result: "pass", Streams: 1},
@@ -123,6 +123,7 @@ func TestRunBatchEffectRecorderRejectsUnsupportedCredentialsConstraintsBeforeRun
 		defs  certify.CredsDefaults
 	}{
 		{name: "write without sandbox", entry: certify.ConnectorCredsEntry{Write: true}},
+		{name: "credential exec", entry: certify.ConnectorCredsEntry{Credential: certify.CredentialRef{Exec: map[string][]string{"token": {"must-not-run"}}}}},
 		{name: "rate limit", entry: certify.ConnectorCredsEntry{RateLimitRPS: 2}},
 		{name: "budget", entry: certify.ConnectorCredsEntry{BudgetCalls: 50}},
 		{name: "limit", entry: certify.ConnectorCredsEntry{Limit: 10}},
@@ -389,60 +390,83 @@ func TestRunBatchWritesProgressFile(t *testing.T) {
 	}
 }
 
-// TestRunBatchResumeSkipsConnectorsWithFreshReport proves --resume skips a
-// connector whose <dir>/certifications/<name>.json report is newer than the
-// batch start time (certification-design §B: "--resume skips connectors
-// whose report is newer than batch start").
-func TestRunBatchResumeSkipsConnectorsWithFreshReport(t *testing.T) {
+// TestRunBatchResumeReusesCompletedReportAcrossOrdinaryRuns proves a normal
+// second --resume invocation reuses the completed report persisted by the
+// first invocation. No artificial timestamp newer than the second batch start
+// is required, and the resumed result retains the prior report and exit code.
+func TestRunBatchResumeReusesCompletedReportAcrossOrdinaryRuns(t *testing.T) {
 	cf := certify.CredsFile{
-		Connectors: map[string]certify.ConnectorCredsEntry{
-			"github": {},
-			"stripe": {},
-		},
+		Connectors: map[string]certify.ConnectorCredsEntry{"github": {}},
 	}
 	batchDir := t.TempDir()
-
-	// Pre-seed a fresh report for github (as if a prior batch run already
-	// certified it), timestamped after "batch start" from RunBatch's
-	// perspective (we set StartedAt/CompletedAt to now, then wait long
-	// enough that a fresh RunBatch call's own start time is strictly later
-	// -- resume compares report CompletedAt against batch start).
-	existing := passingReport("github")
-	if err := existing.Save(batchDir); err != nil {
-		t.Fatalf("seed report Save() error = %v", err)
-	}
-
-	time.Sleep(10 * time.Millisecond)
-
-	invoked := map[string]bool{}
-	var mu sync.Mutex
+	var effects []string
 	factory := func(name string, _ certify.Options) certify.Runnable {
-		mu.Lock()
-		invoked[name] = true
-		mu.Unlock()
+		effects = append(effects, "run:"+name)
 		return &fakeRunnable{rep: passingReport(name)}
 	}
 
-	batch, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+	first, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+		CredsFile:     cf,
+		RunnerFactory: factory,
+		BatchDir:      batchDir,
+	})
+	if err != nil {
+		t.Fatalf("first RunBatch() error = %v", err)
+	}
+	if findResult(t, first, "github").Resumed {
+		t.Fatal("first run unexpectedly resumed")
+	}
+
+	second, err := certify.RunBatch(context.Background(), certify.BatchOptions{
 		CredsFile:     cf,
 		RunnerFactory: factory,
 		BatchDir:      batchDir,
 		Resume:        true,
 	})
 	if err != nil {
+		t.Fatalf("second RunBatch() error = %v", err)
+	}
+	if len(effects) != 1 {
+		t.Fatalf("runner effects=%v, want one effect across two runs", effects)
+	}
+	result := findResult(t, second, "github")
+	if !result.Resumed {
+		t.Fatal("second run result.Resumed = false, want true")
+	}
+	if result.Report.Connector != "github" || !result.Report.Passed || result.ExitCode != 0 {
+		t.Fatalf("resumed result did not reuse completed report: %+v", result)
+	}
+}
+
+func TestRunBatchResumeRerunsIncompleteReport(t *testing.T) {
+	cf := certify.CredsFile{
+		Connectors: map[string]certify.ConnectorCredsEntry{"github": {}},
+	}
+	batchDir := t.TempDir()
+	incomplete := passingReport("github")
+	incomplete.CompletedAt = time.Time{}
+	if err := incomplete.Save(batchDir); err != nil {
+		t.Fatalf("seed incomplete report: %v", err)
+	}
+
+	invoked := false
+	batch, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+		CredsFile: cf,
+		RunnerFactory: func(name string, _ certify.Options) certify.Runnable {
+			invoked = true
+			return &fakeRunnable{rep: passingReport(name)}
+		},
+		BatchDir: batchDir,
+		Resume:   true,
+	})
+	if err != nil {
 		t.Fatalf("RunBatch() error = %v", err)
 	}
-	mu.Lock()
-	defer mu.Unlock()
-	if invoked["github"] {
-		t.Errorf("RunnerFactory invoked for github, want skipped via --resume (fresh existing report)")
+	if !invoked {
+		t.Fatal("RunnerFactory not invoked for incomplete prior report")
 	}
-	if !invoked["stripe"] {
-		t.Errorf("RunnerFactory not invoked for stripe, want a fresh run (no existing report)")
-	}
-	result := findResult(t, batch, "github")
-	if !result.Resumed {
-		t.Errorf("github result.Resumed = false, want true")
+	if findResult(t, batch, "github").Resumed {
+		t.Fatal("incomplete prior report was marked resumed")
 	}
 }
 

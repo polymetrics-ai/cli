@@ -69,8 +69,8 @@ Session `issue-437-third-safety-correction-20260719`; exact start `437d13cf`; al
 
 | Step | Kind | Required evidence | Status |
 |---:|---|---|---|
-| T0 | Planning | Six artifacts reopened with verification false, accepted findings, GSD fallback, skills, safety scope, flag/docs audit, RED/GREEN plan, and checkpoints | Complete; commit/push pending |
-| T1 | RED | Unknown certify flags and write-like typos reject before credential load/runner/sweep; non-positive and excessive sweep age reject before effects; credential-file exec rejects before effects; ordinary two-run resume skips completed reports and reruns incomplete reports | Pending |
+| T0 | Planning | Six artifacts reopened with verification false, accepted findings, GSD fallback, skills, safety scope, flag/docs audit, RED/GREEN plan, and checkpoints | Complete: commit `766e2d9d` pushed |
+| T1 | RED | Unknown certify flags and write-like typos reject before credential load/runner/sweep; non-positive and excessive sweep age reject before effects; credential-file exec rejects before effects; ordinary two-run resume skips completed reports and reruns incomplete reports | Complete: focused test failed as required—certify retained unknown-flag whitelist and all seven typo cases reached mode handling/runtime; five unsafe ages swept; exec reached batch and parsed from file; second ordinary resume reran; direct exec constraint reached runner; stale `generally_available` docs remained |
 | T2 | GREEN safety | Strict certify flag parsing; bounded positive sweep age; exec removed/rejected; no generic external execution path | Pending |
 | T3 | GREEN correctness/docs | Completed-report resume semantics; incomplete reports rerun; usage exit, `ga`, resume/sweep/exec docs and generated artifacts corrected | Pending |
 | T4 | Verify | Focused/repeated/race/resume/sweep/no-effect/audit/docs generation/local smoke/full CLI/certify/gofmt/vet/test/build/make verify/connectorgen | Pending |

@@ -111,9 +111,14 @@
       "cycle": "third-accepted-safety-correction-plan",
       "decision": "local_critical_path",
       "reason": "all rereview2 findings accepted at exact head; bounded safety/correctness correction in the existing isolated issue worktree; no subagent tool, external commands, credentials, services, dependencies, PR, or review"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused RED reproduced unknown-flag effects, unsafe sweep ages, ordinary resume rerun, accepted credential-file exec, and stale stage/docs claims before production edits"
     }
   ],
-  "red": "pending: unknown certify flags/write-like typos, invalid sweep ages, ordinary two-run resume behavior, incomplete-report rerun, and credential-file exec no-effect rejection",
+  "red": "captured before production: seven certify typo/unknown cases reached mode handling or runtime; five non-positive/excessive sweep ages ran; credential-file exec parsed and reached batch/runner; ordinary second resume reran; stale stage/docs claims failed",
   "green": "pending",
   "verification": "pending full declared phase gate",
   "files": [
