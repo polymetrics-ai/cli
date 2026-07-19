@@ -1,6 +1,6 @@
 # Phase 431 Summary
 
-Status: focused GREEN complete from exact start `0b03361e3ec5082d54c416a31715851f71e845fa`; broad verification pending.
+Status: complete and verified from exact start `0b03361e3ec5082d54c416a31715851f71e845fa` through implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`; final evidence checkpoint prepared for push.
 
 ## Identity
 
@@ -33,4 +33,6 @@ The safety workflow uses only temporary local state. Plan and preview caused no 
 
 ## Verification
 
-RED and focused GREEN complete. Repeated/race, exact-start differential, golden/full CLI/repository, parity, final gates, and final delivery remain pending.
+Focused/repeated/race, existing reverse/router/safety, reverse app, router/golden/manual, full CLI/app/repository, and 21-case exact-start binary differential gates pass. Runtime help topic/bare/long/short/positional/JSON routes are byte-compatible. Generated CLI docs and website docs are clean with no tracked delta. Gofmt, vet, build, dependency/scope guards, and final `make verify` pass (`6m56.086s`; CLI `388.922s`, lint 0, connector validation 547/0).
+
+No `go.mod`, `go.sum`, connector definition, docs/website, golden, generated, or unrelated namespace delta exists. No external write, service, live credential, dependency, PR, or review was used. Planning, RED, and GREEN checkpoints are pushed; this terminal evidence is prepared for final commit/push.

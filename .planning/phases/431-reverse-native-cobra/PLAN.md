@@ -57,3 +57,7 @@ Command names, flags, manual bytes, JSON envelopes, docs, website content, gener
 ## Safety
 
 No secret values, external connectors, credentialed checks, optional services, dependency changes, unrestricted writes, destructive/admin actions, or production deploys. New tests may execute only local fake writers or temporary local outbox state and must prove no execution before plan, preview, approval, and any required typed confirmation. Approval values stay in memory and are never included in committed artifacts, failure messages, JSON, or logs. The only allowed broader smoke is the repository's already-established ordered reverse gate inside final `make verify`.
+
+## Completion
+
+Completed and verified at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`. Strict RED preceded production edits. Native reverse list/plan/preview/run/status/help, all current flags, invocation-private operand ownership, exact error/output behavior, token nondisclosure, typed confirmation, and ordered local fake execution pass focused, repeated, race, router, golden, reverse-app, full CLI/repository, 21-case exact-start differential, runtime help, generated docs/website, gofmt, vet, build, scope/dependency, and `make verify` gates. Only reverse parser calls were removed. No external write, service, live credential, dependency, unrelated change, PR, or review was used.

@@ -18,9 +18,9 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity/exact start before test or production edits | Complete |
 | 1 | RED | `go test ./internal/cli -run 'TestReverse(Command|Local|PlanJSON|FirstOperand|HelpTrailing|ExactExit|Cancellation)' -count=1` | Failed as required before production edits: `internal/cli/reverse_native_cobra_test.go:23:9: undefined: newReverseCobraCommand` |
 | 2 | GREEN | Native reverse tree + typed handlers + reverse-only normalization/private operands; remove wrapper/parser use | Pass: focused contract `28.527s`; existing reverse/router safety suite `62.562s` |
-| 3 | Refactor | Focused/repeated/race/router/golden/full CLI/reverse app and exact-start differential | Pending |
-| 4 | Full gate | gofmt, vet, full tests, build, established ordered `make verify` | Pending |
-| 5 | Parity/delivery | Runtime help, generated docs/website/golden checks, scope/dependency guards, commit/push | Pending |
+| 3 | Refactor | Focused/repeated/race/router/golden/full CLI/reverse app and exact-start differential | Pass |
+| 4 | Full gate | gofmt, vet, full tests, build, established ordered `make verify` | Pass |
+| 5 | Parity/delivery | Runtime help, generated docs/website/golden checks, scope/dependency guards, commit/push | Pass; final evidence prepared for commit/push |
 
 ## RED contract
 
@@ -53,4 +53,16 @@ The missing native constructor is intentional. The tests specify native ownershi
 
 `newReverseCobraCommand` now owns list/plan/preview/run/status/help with typed `StringArray` flags, unknown tolerance, no-file completion seams, invocation-private first-operand capture, and reverse-only legacy-tail normalization. Typed handlers preserve output and safety gates; reverse is absent from legacy wrappers and its two `parseFlags` calls are removed. The focused contract passed in `28.527s`; existing reverse/router/validation safety tests passed in `62.562s`. The ordering test performed only a temporary local outbox fake write after preview, valid approval, and typed confirmation; all earlier attempts produced zero writes. No external request or token value entered test output or artifacts.
 
-Refactor, parity, and final gate output will be appended as commands run. Token values must never be copied into this ledger.
+## Final GREEN / refactor evidence
+
+- Focused contract `28.527s`; repeated ×5 `143.255s`; focused `-race` `322.315s`.
+- Existing reverse/router/validation safety suite `62.562s`; router/golden/manual gate `7.754s`; tracked fixture unchanged.
+- Reverse app tests `4.615s`; reverse app `-race` `29.405s`; smoke-order safety test `0.390s` and full safety package `0.411s`.
+- Full CLI `396.560s`; full app `29.601s`.
+- Exact-start binary differential against `0b03361e3ec5082d54c416a31715851f71e845fa`: 21/21 exit/stdout/stderr transcripts match across manual routes, invalid/action-discovery cases, list tails, help-like operands, missing objects, malformed flags, and global booleans.
+- Runtime `pm help reverse`, bare `pm reverse`, long/short help are byte-identical with empty stderr. JSON manual, invalid-action usage, generated `docs/cli/reverse.md`, and website docs generation pass with no tracked delta.
+- `gofmt -w cmd internal`, `go vet ./...` (`3.104s`), `go test -timeout 20m ./...` (`6m44.294s`; CLI `399.524s`, certify `340.870s`), and `go build ./cmd/pm` (`1.865s`) pass.
+- Final `make verify` passed in `6m56.086s`: CLI `388.922s`, lint 0 issues, 547 connector definitions/0 findings, and only its established temporary-root plan → preview → approval → run smoke.
+- Scope/dependency guards pass: no `go.mod`, `go.sum`, connector definition, docs/website/golden, generated, or unrelated namespace delta; production has no reverse internal argv carrier; dynamic connector `parseFlags` remains.
+
+No approval value was copied into this ledger, artifacts, JSON, diagnostics, logs, or handoff. No external write, service, live credential, dependency, PR, or review was used.

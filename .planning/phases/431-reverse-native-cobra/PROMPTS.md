@@ -21,6 +21,8 @@ Required skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `g
 
 Safety prompt: use only local fakes, built-in local connectors, and temporary roots. Never request, print, summarize, store, or log secret/approval values. Do not contact external connectors or optional runtime services. Do not execute any external write. Preserve strict plan → preview → approval → execute, typed confirmation, single-use approval, exact error taxonomy, output contracts, and legacy help/literal/operand compatibility. The repository's existing ordered reverse smoke may run only inside final `make verify`.
 
-Downstream artifact: pending focused test-only RED, native reverse Cobra command/typed handler adaptation, broad verification, and finalized six issue-local artifacts.
+Downstream artifact: focused test-only RED, native reverse Cobra command/typed handler adaptation, private operand ownership, reverse-only parser removal, broad verification, and finalized six issue-local artifacts are complete.
 
-Verification result: pending. Update this snapshot when `RUN-STATE.json` becomes terminal; it must not remain pending at completion.
+Verification route: `scripts/gsd prompt verify-work 431` generated 106 lines and was executed inline under the manual universal loop.
+
+Verification result: pass at implementation head `f5aeafb7bb7a6702077382e98acb790d3865073f`. Focused/repeated/race/router/golden/reverse-app/full CLI/repository, 21-case exact-start differential, runtime help, generated docs/website, gofmt, vet, build, scope/dependency guards, and final `make verify` pass. No approval value, external write, connector/service, live credential, dependency, unrelated change, PR, or review occurred; final `make verify` used only its established temporary-root ordered reverse smoke.
