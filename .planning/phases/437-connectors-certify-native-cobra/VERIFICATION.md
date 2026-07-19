@@ -233,8 +233,8 @@ Exact start: `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; identity `issue-437-six
 - [x] RED: runner report+error with leaks remains exit 3 and preserves report evidence — failed with batch exit `2`.
 - [x] RED: progress persistence failure with existing leaks remains exit 3 and preserves safe batch report output — failed with exit `1` and Error envelope.
 - [x] RED: cleanup call failure followed by exact absence proof clears stale top-level leak without marking the stage honestly passing — failed with stale `Report.Leaks`.
-- [ ] GREEN: implement minimal fixes and run focused new tests.
-- [ ] Repeated focused tests and race variants where applicable.
+- [x] GREEN: minimal fixes pass focused new tests (`certify` 21.288s; `cli` 0.565s).
+- [x] Repeated focused tests and race variants pass (`certify` count=3 62.605s, `cli` count=3 0.567s, `certify -race` 229.386s, `cli -race` 1.666s).
 - [ ] Affected full `go test ./internal/connectors/certify` and `go test ./internal/cli`.
 - [ ] Runtime help/docs/golden/website parity if output semantics change; otherwise record not applicable.
 - [ ] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke.

@@ -609,6 +609,12 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 
 	batch, err := runtime.RunBatch(ctx, root, credsFile, lastString(flags.Resumes) == "true")
 	if err != nil {
+		if len(batch.Results) > 0 && batch.ExitCode != 0 {
+			if err := writeCertifyBatchReport(stdout, jsonOut, batch); err != nil {
+				return err
+			}
+			return exitForBatch(batch)
+		}
 		return fmt.Errorf("certify: batch run failed: %w", err)
 	}
 

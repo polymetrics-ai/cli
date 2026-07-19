@@ -234,10 +234,15 @@
       "cycle": "sixth-review-correction-red",
       "decision": "local_critical_path",
       "reason": "deterministic focused RED tests captured all accepted sixth-cycle findings before production edits; tests ready for commit/push"
+    },
+    {
+      "cycle": "sixth-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "minimal leak-authority and leak-dominance fixes passed focused, repeated, race, vet, and build gates; broader verification remains pending"
     }
   ],
   "red": "captured sixth RED: certify focus 25.435s showed approval replay post-cleanup outbox create, stale leak after absence proof, and runner report+error exit 2; CLI focus 0.572s showed progress persistence error with leaks returned exit 1 and Error envelope instead of safe batch report/exit 3",
-  "green": "pending sixth GREEN",
+  "green": "complete sixth GREEN focus: idempotency before cleanup with createPassed gate; stale leak cleared after exact absence while cleanup stage remains failed; runner report+error leaks exit 3; CLI writes leaked batch evidence on progress error and returns exit 3; focused/repeated/race/vet/build pass",
   "verification": "pending sixth exact-head correction; full make verify not yet rerun",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",

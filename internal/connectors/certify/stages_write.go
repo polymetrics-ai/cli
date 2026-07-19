@@ -745,6 +745,16 @@ func stageCleanupVerify(rc *runContext, rep *Report) error {
 		return nil
 	}
 
+	cleanupCallFailed := latestStageFailed(rep.Stages, "write_cleanup")
+	if cleanupCallFailed {
+		removeLeakForWrite(rep, wc)
+		if entry, ok := rep.Capabilities.WriteActions[wc.pairing.Create]; ok {
+			entry.Result = "fail"
+			entry.Reason = "write_cleanup failed, but cleanup_verify proved the entity absent"
+			rep.Capabilities.WriteActions[wc.pairing.Create] = entry
+		}
+	}
+
 	if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
 		recordStage(rc, rep, "cleanup_verify_ledger", tierFor(wc), func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, fmt.Sprintf("cleanup_verify: record verified cleanup in ledger: %v", err)
@@ -753,9 +763,14 @@ func stageCleanupVerify(rc *runContext, rep *Report) error {
 	}
 
 	if entry, ok := rep.Capabilities.WriteActions[wc.pairing.Create]; ok {
-		entry.Result = "pass"
-		if entry.Verify == "" {
-			entry.Verify = "read_back"
+		if cleanupCallFailed {
+			entry.Result = "fail"
+			entry.Reason = "write_cleanup failed, but cleanup_verify proved the entity absent"
+		} else {
+			entry.Result = "pass"
+			if entry.Verify == "" {
+				entry.Verify = "read_back"
+			}
 		}
 		rep.Capabilities.WriteActions[wc.pairing.Create] = entry
 	}
@@ -824,11 +839,31 @@ func recordLeak(rep *Report, wc *writeContext, reason string) {
 	rep.Capabilities.WriteActions[wc.pairing.Create] = entry
 }
 
+func removeLeakForWrite(rep *Report, wc *writeContext) {
+	kept := rep.Leaks[:0]
+	for _, leak := range rep.Leaks {
+		if leak.Tag == wc.tag && leak.Connector == wc.connector && leak.Action == wc.pairing.Create {
+			continue
+		}
+		kept = append(kept, leak)
+	}
+	rep.Leaks = kept
+}
+
+func latestStageFailed(stages []StageResult, name string) bool {
+	for i := len(stages) - 1; i >= 0; i-- {
+		if stages[i].Name == name {
+			return !stages[i].Passed
+		}
+	}
+	return false
+}
+
 // --- stage 17: approval_idempotency ---
 
 func stageApprovalIdempotency(rc *runContext, rep *Report) error {
 	wc := rc.write
-	if wc == nil || wc.planID == "" || wc.approvalToken == "" {
+	if wc == nil || !wc.createPassed || wc.planID == "" || wc.approvalToken == "" {
 		skipStage(rc, rep, "approval_idempotency", "skipped: no consumed plan/token available to replay")
 		return nil
 	}

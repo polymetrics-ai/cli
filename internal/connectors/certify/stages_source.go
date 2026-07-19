@@ -268,9 +268,9 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 		stageWritePlanPreview,
 		stageWriteCreate,
 		stageWriteVerify,
+		stageApprovalIdempotency,
 		stageWriteCleanup,
 		stageCleanupVerify,
-		stageApprovalIdempotency,
 	}
 	if !r.opts.Full {
 		tailStages = append(tailStages, stageFlowRoundtrip, stageScheduleRoundtrip)

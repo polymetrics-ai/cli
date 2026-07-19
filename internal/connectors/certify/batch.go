@@ -298,7 +298,10 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 				result := BatchConnectorResult{Connector: job.name, Report: rep}
 				if runErr != nil {
 					result.Error = runErr.Error()
-					result.ExitCode = 2
+					result.ExitCode = ExitCodeFor(rep)
+					if result.ExitCode == 0 {
+						result.ExitCode = 2
+					}
 					results[job.index] = result
 					done := int(completed.Add(1))
 					emitBatchEvent(ctx, events.KindFailed, runID, job.name, "failed", len(names), done, result.Error)

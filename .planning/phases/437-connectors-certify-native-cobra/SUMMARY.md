@@ -89,3 +89,18 @@ Safety: tests/fixes limited to local fakes, temp roots, sample/outbox fixture pa
 
 - `go test ./internal/connectors/certify -run 'TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup|TestRereviewCleanupFailureThenAbsenceProofClearsStaleLeak|TestRunBatchRunnerErrorWithLeakedReportKeepsExit3' -count=1` failed as intended in `25.435s`: approval replay success left final outbox action `"create"`; cleanup absence proof left stale top-level `Report.Leaks`; runner report+error with a leaked report produced batch exit `2` instead of `3`.
 - `go test ./internal/cli -run 'TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3' -count=1` failed as intended in `0.572s`: progress persistence error with leaked batch returned exit `1` and emitted an `Error` envelope instead of the safe `ConnectorCertificationBatch` evidence with leak-dominant exit `3`.
+
+
+### Sixth-cycle GREEN focused evidence
+
+Implementation reorders approval idempotency before final cleanup, skips replay checks unless `write_create` actually consumed the plan, removes stale leak records when exact cleanup verification proves absence, preserves the cleanup stage failure as a non-leaked write-action failure, and lets leaked runner reports dominate ancillary runner/progress errors.
+
+Focused GREEN commands:
+
+- `go test ./internal/connectors/certify -run 'TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup|TestRereviewCleanupFailureThenAbsenceProofClearsStaleLeak|TestRunBatchRunnerErrorWithLeakedReportKeepsExit3' -count=1` => pass (`21.288s`).
+- `go test ./internal/cli -run 'TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3' -count=1` => pass (`0.565s`).
+- Repeated: same certify focus `-count=3` => pass (`62.605s`); same CLI focus `-count=3` => pass (`0.567s`).
+- Race: same certify focus with `-race` => pass (`229.386s`); same CLI focus with `-race` => pass (`1.666s`).
+- Coherent-slice gates: `go vet ./...` => pass; `go build ./cmd/pm` => pass.
+
+A prior repeated attempt timed out before the approval-replay test preserved invocation-local crontab options in its wrapper; the wrapper was corrected and the focused, repeated, and race gates above reran successfully.

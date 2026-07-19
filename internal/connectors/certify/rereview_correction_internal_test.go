@@ -145,10 +145,16 @@ func TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup(t *testing.T) {
 	var originalToken string
 	var createApproved bool
 	var replaySucceeded atomic.Bool
-	cliRun = func(args []string, stdout, stderr io.Writer) int {
+	runOriginal := func(ctx context.Context, args []string, stdout, stderr io.Writer, opts CLIInvocationOptions) int {
+		if oldRunContext != nil {
+			return oldRunContext(ctx, args, stdout, stderr, opts)
+		}
+		return oldRun(args, stdout, stderr)
+	}
+	runIntercepted := func(ctx context.Context, args []string, stdout, stderr io.Writer, opts CLIInvocationOptions) int {
 		if hasArgs(args, "reverse", "plan") && flagValue(args, "--action") == "create" && originalToken == "" {
 			var captured bytes.Buffer
-			code := oldRun(args, &captured, stderr)
+			code := runOriginal(ctx, args, &captured, stderr, opts)
 			out := captured.String()
 			_, _ = io.WriteString(stdout, out)
 			originalToken = firstMatch(approvalTokenLinePattern, out)
@@ -157,7 +163,7 @@ func TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup(t *testing.T) {
 		if hasArgs(args, "reverse", "run") && originalToken != "" && flagValue(args, "--approve") == originalToken {
 			if !createApproved {
 				createApproved = true
-				return oldRun(args, stdout, stderr)
+				return runOriginal(ctx, args, stdout, stderr, opts)
 			}
 			root := flagValue(args, "--root")
 			tag, err := firstOutboxTag(root)
@@ -173,10 +179,13 @@ func TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup(t *testing.T) {
 			_, _ = fmt.Fprint(stdout, `{"kind":"ReverseRun","run":{"records_succeeded":1,"records_failed":0}}`)
 			return 0
 		}
-		return oldRun(args, stdout, stderr)
+		return runOriginal(ctx, args, stdout, stderr, opts)
 	}
-	cliRunContext = func(_ context.Context, args []string, stdout, stderr io.Writer, _ CLIInvocationOptions) int {
-		return cliRun(args, stdout, stderr)
+	cliRun = func(args []string, stdout, stderr io.Writer) int {
+		return runIntercepted(context.Background(), args, stdout, stderr, CLIInvocationOptions{})
+	}
+	cliRunContext = func(ctx context.Context, args []string, stdout, stderr io.Writer, opts CLIInvocationOptions) int {
+		return runIntercepted(ctx, args, stdout, stderr, opts)
 	}
 
 	r := NewRunner(Options{
