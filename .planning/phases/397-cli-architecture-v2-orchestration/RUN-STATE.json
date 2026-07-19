@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "active",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "4a9fa0fb0e3b72ee2c5e864c1778c7acf8da06c5",
+  "currentHead": "573d6222e1cb98f8cdb980a571e6925310855e59",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -101,6 +101,13 @@
       "decision": "spawned",
       "issues": [430],
       "reason": "Sol/high implementation/correction and independent Sol/xhigh re-review completed ETL nativization; exact reviewed head promoted and parent race checks passed."
+    },
+    {
+      "cycle": "unit_431_execute_review_promote",
+      "timestamp": "2026-07-19T03:40:11Z",
+      "decision": "spawned",
+      "issues": [431],
+      "reason": "Sol/high implementation/correction and independent Sol/xhigh review completed reverse nativization; actual CLI/app/safety race gates passed after correcting one nonexistent package path in the integration command."
     }
   ],
   "units": [
@@ -190,6 +197,17 @@
       "implementationSession": "8d48e651-ff7a-42af-aa60-57551df1dcae",
       "correctionSession": "9751766b-3d79-4f36-9b93-4e39ec165fa8",
       "reviewSession": "6049b205-ccea-4d8d-ba25-3046a865c19c"
+    },
+    {
+      "issue": 431,
+      "branch": "refactor/431-reverse-native-cobra",
+      "startingHead": "0b03361e3ec5082d54c416a31715851f71e845fa",
+      "endingHead": "d628fce2916c390f51c8e7e519d481c2cc9f51fe",
+      "parentIntegrationHead": "573d6222e1cb98f8cdb980a571e6925310855e59",
+      "status": "provisionally_integrated",
+      "implementationSession": "1e9e3b7f-1228-4d2c-8bc4-c3babdb82bf2",
+      "correctionSession": "ae7bde80-fd8b-4595-a969-79a72c2d3d29",
+      "reviewSession": "6ea302fa-ce00-42f0-a7e5-ed4b2282bce5"
     }
   ],
   "humanGates": [
@@ -203,5 +221,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-19T01:01:33Z"
+  "updatedAt": "2026-07-19T03:40:11Z"
 }

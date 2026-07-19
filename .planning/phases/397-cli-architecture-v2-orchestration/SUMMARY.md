@@ -20,4 +20,6 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #430 nativized ETL with bounded batch/sync/output semantics preserved and fail-closed status operand ownership, passed exact-head independent review and parent integration race checks.
 
-The next serialized ready unit is #431. Final verification and final parent review have not run; `verificationPassed` remains false.
+#431 nativized reverse ETL while preserving ordered plan → preview → approval → execute, token nondisclosure, and fail-closed parser compatibility. Exact-head review and parent integration race checks passed.
+
+The next serialized ready unit is #432. Final verification and final parent review have not run; `verificationPassed` remains false.
