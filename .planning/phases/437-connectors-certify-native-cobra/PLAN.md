@@ -81,3 +81,5 @@ Second-correction slices, in order:
 6. **DELIVER:** finalize all six artifacts, commit coherent green/verification checkpoints, and push only the active issue branch. No PR or review.
 
 Loaded for this cycle: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, and `golang-spf13-cobra`.
+
+Second correction completed at implementation head `7b6eaa58`. Batch write-disable controls now dominate credential-file write settings; sandbox gates enabled batch writes; unsupported rate, budget, and read-limit constraints fail before runner construction. Unsupported single controls are hidden/rejected, skip is allowlisted to write, and every mode rejects inapplicable declared controls before runtime effects. Architecture/PRD/help claims and generated CLI/website data are accurate. Focused, repeated, race, no-op/effect, local sample, full CLI/certify, docs/website, gofmt/vet/test/build, `make verify`, and connectorgen gates pass without credentials, services, dependencies, PR, or review.

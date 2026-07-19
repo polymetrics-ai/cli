@@ -99,7 +99,8 @@ Second-correction start: `0d743e54e06c9e27e550eacce9be7899a9e23d19`; session `is
 - [x] Runtime help source, CLI docs, goldens, website docs, and generated data updated; final binary help checks remain in full verification.
 - [x] Focused effect/no-op audit tests pass, repeated ×10, and under race (CLI `1.726s`, certify `2.535s`).
 - [x] Full CLI (`440.910s`) and certify (`346.271s`) package suites preserve exits, redaction, dynamic dispatch, and valid base behavior.
-- [ ] Local sample smoke uses only a temporary root and no credentials/services.
-- [ ] Full CLI/certify/docs/website generators and drift checks pass.
-- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate` pass.
+- [x] Local sample smoke passed under a temporary root with no credentials/services; JSON kind, connector, and pass status asserted without printing report data.
+- [x] Runtime topic/bare/flag help byte parity, certify help, invalid action exit 2, CLI docs/goldens, website full data regeneration, and drift checks pass; website typecheck tool is absent and no dependency install was attempted.
+- [x] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` pass; verify exit 0 in `7m36.852s` (CLI `434.190s`, certify `337.470s`, smoke/lint/docs/build/vet green).
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` reports 547 checked, zero findings (both verify and explicit rerun).
 - [ ] Final artifacts committed and active issue branch pushed; no dependencies/services/credentials/PR/review.
