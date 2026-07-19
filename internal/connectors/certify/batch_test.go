@@ -39,6 +39,16 @@ func (f *fakeRunnable) Run(ctx context.Context) (certify.Report, error) {
 
 func passingReport(connector string) certify.Report {
 	now := time.Now().UTC()
+	stageNames := []string{
+		"init", "preflight", "manual_json", "credentials_add", "warehouse_credentials_add",
+		"credentials_test", "connection_create", "catalog", "etl_full_refresh_append",
+		"etl_full_refresh_overwrite", "etl_full_refresh_overwrite_deduped", "etl_incremental_append",
+		"resume", "etl_incremental_append_deduped", "query_contract",
+	}
+	stages := make([]certify.StageResult, 0, len(stageNames))
+	for _, name := range stageNames {
+		stages = append(stages, certify.StageResult{Name: name, Tier: 2, Passed: true})
+	}
 	return certify.Report{
 		Kind:          "ConnectorCertification",
 		SchemaVersion: 1,
@@ -52,12 +62,17 @@ func passingReport(connector string) certify.Report {
 			Catalog: certify.CapabilityResult{Result: "pass", Streams: 1},
 			Read:    certify.CapabilityResult{Result: "pass", Stream: "customers", Records: 3},
 			SyncModes: map[string]certify.SyncModeResult{
-				"full_refresh_append": {Result: "pass", DataSource: "live"},
+				"full_refresh_append":            {Result: "pass", DataSource: "live"},
+				"full_refresh_overwrite":         {Result: "pass", DataSource: "capture"},
+				"full_refresh_overwrite_deduped": {Result: "pass", DataSource: "capture"},
+				"incremental_append":             {Result: "pass", DataSource: "live", CursorAdvanced: true},
+				"incremental_append_deduped":     {Result: "pass", DataSource: "capture"},
 			},
 			Resume:          certify.CapabilityResult{Result: "pass"},
-			JSONContract:    certify.CapabilityResult{Result: "pass", StagesChecked: 12},
+			JSONContract:    certify.CapabilityResult{Result: "pass", StagesChecked: len(stages)},
 			SecretRedaction: certify.CapabilityResult{Result: "pass"},
 		},
+		Stages: stages,
 	}
 }
 
@@ -619,6 +634,121 @@ func TestRunBatchConnectorRunnableErrorRecordedAsFailure(t *testing.T) {
 	result := findResult(t, batch, "github")
 	if result.Error == "" {
 		t.Errorf("github result.Error is empty, want the runner error message recorded")
+	}
+}
+
+func TestRunBatchResumeRerunsMinimalAndEditedReports(t *testing.T) {
+	cases := []struct {
+		name   string
+		mutate func(*certify.Report)
+	}{
+		{
+			name: "minimal",
+			mutate: func(rep *certify.Report) {
+				rep.Stages = nil
+				rep.Capabilities = certify.Capabilities{}
+			},
+		},
+		{
+			name: "edited passed outcome",
+			mutate: func(rep *certify.Report) {
+				rep.Passed = true
+				rep.Stages[8].Passed = false
+				rep.Stages[8].Error = "fixture stage failure"
+			},
+		},
+		{
+			name: "edited leaks",
+			mutate: func(rep *certify.Report) {
+				rep.Passed = true
+				rep.Leaks = nil
+				rep.Capabilities.WriteActions = map[string]certify.WriteActionResult{
+					"create_label": {
+						Result: "leaked_resource", Cleanup: "delete_label", Verify: "read_back",
+						Tag: "pm-cert-github-12345678-1700000000", Reason: "cleanup verification failed",
+					},
+				}
+			},
+		},
+		{
+			name: "duplicate required stage",
+			mutate: func(rep *certify.Report) {
+				rep.Stages = append(rep.Stages, rep.Stages[0])
+			},
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			cf := certify.CredsFile{Connectors: map[string]certify.ConnectorCredsEntry{"github": {}}}
+			batchDir := t.TempDir()
+			first, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+				CredsFile: cf,
+				RunnerFactory: func(name string, _ certify.Options) certify.Runnable {
+					return &fakeRunnable{rep: passingReport(name)}
+				},
+				BatchDir: batchDir,
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			seed := findResult(t, first, "github").Report
+			tc.mutate(&seed)
+			if err := seed.Save(batchDir); err != nil {
+				t.Fatal(err)
+			}
+
+			invoked := false
+			batch, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+				CredsFile: cf,
+				RunnerFactory: func(name string, _ certify.Options) certify.Runnable {
+					invoked = true
+					return &fakeRunnable{rep: passingReport(name)}
+				},
+				BatchDir: batchDir,
+				Resume:   true,
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !invoked || findResult(t, batch, "github").Resumed {
+				t.Fatal("invalid or edited report was trusted instead of rerun")
+			}
+		})
+	}
+}
+
+func TestRunBatchReportPersistenceFailureIsSurfacedWithLeakPrecedence(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		report func(string) certify.Report
+		code   int
+	}{
+		{name: "passing report", report: passingReport, code: 1},
+		{name: "leaked report", report: leakedReport, code: 3},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			batchDir := t.TempDir()
+			certDir := filepath.Join(batchDir, "certifications")
+			if err := os.MkdirAll(certDir, 0o700); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.Symlink(filepath.Join(t.TempDir(), "outside.json"), filepath.Join(certDir, "github.json")); err != nil {
+				t.Fatal(err)
+			}
+			batch, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+				CredsFile: certify.CredsFile{Connectors: map[string]certify.ConnectorCredsEntry{"github": {}}},
+				RunnerFactory: func(name string, _ certify.Options) certify.Runnable {
+					return &fakeRunnable{rep: tc.report(name)}
+				},
+				BatchDir: batchDir,
+			})
+			if err == nil {
+				t.Fatal("RunBatch discarded report persistence failure")
+			}
+			if batch.ExitCode != tc.code {
+				t.Fatalf("batch exit=%d, want %d after persistence failure", batch.ExitCode, tc.code)
+			}
+		})
 	}
 }
 

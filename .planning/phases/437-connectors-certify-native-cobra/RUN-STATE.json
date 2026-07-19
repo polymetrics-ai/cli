@@ -166,9 +166,14 @@
       "cycle": "fifth-review-correction-plan",
       "decision": "local_critical_path",
       "reason": "user prohibited subagents and bounded work to the existing isolated #437 branch; unresolved P1 security findings trigger the recorded recovery-budget exception"
+    },
+    {
+      "cycle": "fifth-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused deterministic RED reproduced all seven accepted findings before production edits; no subagents or external effects"
     }
   ],
-  "red": "pending fifth-cycle focused tests before production edits",
+  "red": "captured: certify focus 1.374s showed premature cleaned state, forged numeric effects, unbounded/reflected ledgers, four invalid resume forms, and dropped batch persistence; CLI focus 14.764s showed seven accepted sweep constraints, silent single save failures, telemetry files on invalid flags, and late malformed parallel validation",
   "green": "pending fifth-cycle implementation",
   "verification": "pending; verificationPassed remains false until full make verify exits 0",
   "files": [

@@ -172,14 +172,14 @@ Exact start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; identity `issue-437-fift
 - [x] Run GSD doctor/list; capture missing programming-loop; generate applicable `audit-fix --dry-run` prompt; record manual fallback and `local_critical_path` no-subagent decision.
 - [x] Record explicit recovery-budget exception for unresolved P1 security findings.
 - [x] Consolidate overlaps and accept all seven findings with root-cause dispositions.
-- [ ] Commit/push planning before RED.
-- [ ] RED: normal cleanup and sweep execute-success/verify-failure remain uncleaned and retryable.
-- [ ] RED: forged GitHub issue/milestone ledger entries have zero effects; only safe tag-addressable authority is allowed.
-- [ ] RED: oversized/many/malformed ledgers fail before accumulation/effects and never echo planted marker content.
-- [ ] RED: sweep rejects effective default/per-connector unsupported rate/budget/limit and all constraints before workspace/telemetry/harness/cleanup effects.
-- [ ] RED: current/history save symlink/unwritable failures surface; leak exit 3 remains dominant; no false success without durable evidence.
-- [ ] RED: unknown/malformed assigned and space-value certify flags reject before logger/telemetry/files/network/effects while valid global/late flags remain supported.
-- [ ] RED: minimal/edited/duplicate/future/incompatible resume artifacts rerun; complete valid evidence is recomputed and may resume.
+- [x] Commit/push planning before RED (`8acf62a9`).
+- [x] RED: normal cleanup and sweep execute-success/verify-failure became cleaned/non-retryable.
+- [x] RED: validly shaped forged GitHub issue/milestone ledger entries each reached a CLI effect.
+- [x] RED: oversized/many ledgers lacked total/count bounds and malformed input reflected the planted marker.
+- [x] RED: seven effective sweep constraints returned nil and created project state.
+- [x] RED: current/history symlink/unwritable save failures produced false success; leak exit remained 3 but persistence failure was silent.
+- [x] RED: unknown/malformed assigned and space-value certify flags created telemetry; malformed space parallel was late validation.
+- [x] RED: minimal/edited/duplicate resume artifacts were trusted without rerun.
 - [ ] Commit/push coherent RED before production.
 - [ ] GREEN accepted corrections with focused tests.
 - [ ] Focused tests repeated and under `-race` for cleanup/sweep/concurrency/prevalidation.
