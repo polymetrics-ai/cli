@@ -742,11 +742,24 @@ func TestRunBatchReportPersistenceFailureIsSurfacedWithLeakPrecedence(t *testing
 				},
 				BatchDir: batchDir,
 			})
-			if err == nil {
-				t.Fatal("RunBatch discarded report persistence failure")
+			if err != nil {
+				t.Fatalf("RunBatch persistence failure should be represented in the batch result: %v", err)
 			}
 			if batch.ExitCode != tc.code {
 				t.Fatalf("batch exit=%d, want %d after persistence failure", batch.ExitCode, tc.code)
+			}
+			result := findResult(t, batch, "github")
+			if result.Error == "" {
+				t.Fatal("batch result discarded report persistence failure")
+			}
+			if tc.code == 3 {
+				found := false
+				for _, stage := range result.Report.Stages {
+					found = found || stage.Name == "report_persistence"
+				}
+				if !found {
+					t.Fatal("leak-dominant batch result did not record report persistence failure")
+				}
 			}
 		})
 	}

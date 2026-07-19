@@ -49,6 +49,29 @@ func TestRereviewSweepCredentialConstraintsRejectBeforeProjectEffects(t *testing
 	}
 }
 
+func TestRereviewSweepConstraintsHaveNoTelemetryEffects(t *testing.T) {
+	root := t.TempDir()
+	credsPath := filepath.Join(t.TempDir(), "creds.yaml")
+	raw := "version: 1\ndefaults:\n  rate_limit_rps: 2\nconnectors:\n  sample: {}\n"
+	if err := os.WriteFile(credsPath, []byte(raw), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("PM_TELEMETRY", "file")
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{
+		"connectors", "certify", "--sweep", "--credentials-file", credsPath,
+		"--root", root, "--json",
+	}, &stdout, &stderr)
+	if code != 2 {
+		t.Fatalf("invalid sweep constraint exit=%d, want usage 2", code)
+	}
+	if entries, err := os.ReadDir(filepath.Join(root, ".polymetrics", "telemetry")); err == nil && len(entries) != 0 {
+		t.Fatal("invalid sweep constraint initialized telemetry")
+	} else if err != nil && !os.IsNotExist(err) {
+		t.Fatal(err)
+	}
+}
+
 func TestRereviewSingleReportPersistenceFailureIsNotSuccess(t *testing.T) {
 	for _, tc := range []struct {
 		name  string
@@ -124,8 +147,8 @@ func TestRereviewSingleReportPersistenceFailureIsNotSuccess(t *testing.T) {
 				if code != 3 {
 					t.Fatalf("leaked report persistence exit=%d, want leak-dominant 3; stdout=%q stderr=%q", code, stdout, stderr)
 				}
-				if !strings.Contains(stderr, "persist") && !strings.Contains(stderr, "write") {
-					t.Fatal("leak-dominant result did not surface report persistence failure")
+				if !strings.Contains(stdout, "report_persistence") {
+					t.Fatal("leak-dominant result did not record report persistence failure")
 				}
 				return
 			}
