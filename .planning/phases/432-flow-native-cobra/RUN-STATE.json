@@ -1,0 +1,46 @@
+{
+  "phase": 432,
+  "issue": 432,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/432-flow-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "ec12c1729e0aaf233a853eff5c6291885f910b15",
+  "invocationSession": "issue-432-pi-openai-codex-gpt-5.6-sol-high-20260719T034344Z",
+  "startedAt": "20260719T034344Z",
+  "model": "openai-codex/gpt-5.6-sol",
+  "thinking": "high",
+  "status": "planned",
+  "verificationPassed": false,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command or prompt: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "next serialized Phase 9 flow namespace is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited PR, review, services, dependencies, and external writes"
+    }
+  ],
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "files": [
+    ".planning/phases/432-flow-native-cobra/PLAN.md",
+    ".planning/phases/432-flow-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/432-flow-native-cobra/VERIFICATION.md",
+    ".planning/phases/432-flow-native-cobra/PROMPTS.md",
+    ".planning/phases/432-flow-native-cobra/SUMMARY.md",
+    ".planning/phases/432-flow-native-cobra/RUN-STATE.json"
+  ],
+  "commits": [],
+  "push": "pending",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "not_run_user_prohibited_review",
+  "safety": "temporary manifests, roots, and fakes only; no action execution, external writes, live credentials, optional services, dependencies, unrelated changes, PR, or review"
+}
