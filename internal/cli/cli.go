@@ -71,6 +71,9 @@ func RunWithContext(parent context.Context, args []string, stdout, stderr io.Wri
 	if parseErr != nil {
 		return writeError(ctx, stdout, stderr, parseErr, globals.jsonOut)
 	}
+	if err := prevalidateCertifySafetyArgs(globals.clean); err != nil {
+		return writeError(ctx, stdout, stderr, err, globals.jsonOut)
+	}
 	opts := config.Options{Root: globals.root, Flags: globalConfigFlags(args, globals.root, globals.jsonOut)}
 	bootstrap, err := config.ResolveBootstrap(opts)
 	if err != nil {
@@ -82,9 +85,6 @@ func RunWithContext(parent context.Context, args []string, stdout, stderr io.Wri
 	}
 	if runOpts.ScheduleCrontabFile != "" {
 		cfg.Schedule.CrontabFile = runOpts.ScheduleCrontabFile
-	}
-	if err := prevalidateCertifySafetyArgs(globals.clean); err != nil {
-		return writeError(ctx, stdout, stderr, err, cfg.JSON)
 	}
 	logger, closeLogs := pmlogging.NewLogger(filepath.Join(cfg.Root, ".polymetrics"), stderr, pmlogging.LoggerOptions{Registry: pmlogging.RegistryFromContext(ctx)})
 	defer func() { _ = closeLogs() }()

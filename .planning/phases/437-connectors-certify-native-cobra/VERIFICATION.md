@@ -180,10 +180,10 @@ Exact start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; identity `issue-437-fift
 - [x] RED: current/history symlink/unwritable save failures produced false success; leak exit remained 3 but persistence failure was silent.
 - [x] RED: unknown/malformed assigned and space-value certify flags created telemetry; malformed space parallel was late validation.
 - [x] RED: minimal/edited/duplicate resume artifacts were trusted without rerun.
-- [ ] Commit/push coherent RED before production.
-- [ ] GREEN accepted corrections with focused tests.
-- [ ] Focused tests repeated and under `-race` for cleanup/sweep/concurrency/prevalidation.
-- [ ] Affected `internal/cli`, `internal/connectors/certify`, schedule, and safety tests pass.
+- [x] Commit/push coherent RED before production (`e2559f64`, supplemental pre-telemetry RED `3d69b7a4`).
+- [x] GREEN accepted corrections with focused tests.
+- [x] Focused tests repeated ×10 and under `-race` for cleanup/sweep/concurrency/prevalidation.
+- [x] Affected full CLI (`443.427s`), full certify (`327.840s`), schedule, safety, and scoped vet pass.
 - [ ] Runtime `pm help connectors`, bare `pm connectors`, `pm connectors --help`, certify help/JSON, and invalid exit behavior pass.
 - [ ] CLI docs/goldens/website generation and drift checks pass or are explicitly unchanged/not applicable.
 - [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` passes.

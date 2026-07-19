@@ -164,13 +164,14 @@ func TestRereviewSingleReportPersistenceFailureIsNotSuccess(t *testing.T) {
 
 func TestRereviewInvalidCertifyArgsHaveNoLoggerOrTelemetryEffects(t *testing.T) {
 	cases := []struct {
-		name string
-		args []string
+		name     string
+		args     []string
+		wantCode int
 	}{
-		{name: "unknown assigned", args: []string{"connectors", "certify", "sample", "--writ=false"}},
-		{name: "unknown space value", args: []string{"connectors", "certify", "sample", "--writ", "false"}},
-		{name: "malformed boolean space value", args: []string{"connectors", "certify", "sample", "--write", "maybe"}},
-		{name: "malformed parallel space value", args: []string{"connectors", "certify", "--all", "--credentials-file", "unused.yaml", "--parallel", "nope"}},
+		{name: "unknown assigned", args: []string{"connectors", "certify", "sample", "--writ=false"}, wantCode: 2},
+		{name: "unknown space value", args: []string{"connectors", "certify", "sample", "--writ", "false"}, wantCode: 2},
+		{name: "malformed boolean space value", args: []string{"connectors", "certify", "sample", "--write", "maybe"}, wantCode: 2},
+		{name: "malformed parallel space value", args: []string{"connectors", "certify", "--all", "--credentials-file", "unused.yaml", "--parallel", "nope"}, wantCode: 3},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -178,8 +179,8 @@ func TestRereviewInvalidCertifyArgsHaveNoLoggerOrTelemetryEffects(t *testing.T) 
 			t.Setenv("PM_TELEMETRY", "file")
 			args := append(append([]string{}, tc.args...), "--root", root, "--json")
 			var stdout, stderr bytes.Buffer
-			if code := Run(args, &stdout, &stderr); code != 2 {
-				t.Fatalf("invalid args exit=%d, want usage 2; stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+			if code := Run(args, &stdout, &stderr); code != tc.wantCode {
+				t.Fatalf("invalid args exit=%d, want %d; stdout=%q stderr=%q", code, tc.wantCode, stdout.String(), stderr.String())
 			}
 			for _, effectPath := range []string{
 				filepath.Join(root, ".polymetrics", "telemetry"),

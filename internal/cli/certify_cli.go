@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -69,19 +70,28 @@ func (defaultCertifyCommandRuntime) RunBatch(ctx context.Context, root string, c
 }
 
 func (defaultCertifyCommandRuntime) Sweep(ctx context.Context, root, credsPath string, olderThan time.Duration) (map[string]certify.SweepResult, error) {
-	names, err := sweepTargetConnectors(root, credsPath)
-	if err != nil {
-		return nil, err
-	}
-	if len(names) == 0 {
-		return nil, usageErrorf("pm connectors certify --sweep found no ledger to sweep under %s (pass --credentials-file, or run a live/batch certify first)", root)
-	}
-	var creds certify.CredsFile
+	var (
+		creds certify.CredsFile
+		names []string
+		err   error
+	)
 	if credsPath != "" {
 		creds, err = certify.LoadCredsFile(credsPath)
 		if err != nil {
 			return nil, err
 		}
+		if err := certify.ValidateBatchConstraints(creds); err != nil {
+			return nil, usageErrorf("%v", err)
+		}
+		names = creds.ConnectorNames()
+	} else {
+		names, err = sweepTargetConnectors(root, "")
+		if err != nil {
+			return nil, err
+		}
+	}
+	if len(names) == 0 {
+		return nil, usageErrorf("pm connectors certify --sweep found no ledger to sweep under %s (pass --credentials-file, or run a live/batch certify first)", root)
 	}
 	results := make(map[string]certify.SweepResult, len(names))
 	for _, name := range names {
@@ -235,7 +245,17 @@ func runCertifySingle(ctx context.Context, root, connector string, flags certify
 
 	rep.PMVersion = version
 	saveDir := filepath.Join(root, ".polymetrics")
-	_ = rep.Save(saveDir) // best-effort: a report-persistence failure must not mask the certification result itself.
+	if saveErr := rep.Save(saveDir); saveErr != nil {
+		if certify.ExitCodeFor(rep) != 3 {
+			return fmt.Errorf("certify: persist certification report: %w", saveErr)
+		}
+		rep.Stages = append(rep.Stages, certify.StageResult{
+			Name:   "report_persistence",
+			Tier:   0,
+			Passed: false,
+			Error:  "report persistence failed; leaked resources still require cleanup",
+		})
+	}
 
 	if err := writeCertifyReport(stdout, jsonOut, rep); err != nil {
 		return err
@@ -285,41 +305,86 @@ func prevalidateCertifySafetyArgs(args []string) error {
 	if len(args) < 2 || args[0] != "connectors" || args[1] != "certify" {
 		return nil
 	}
+
+	args = normalizeStringArraySpaceValues(args, 2, certifyFlagNames)
 	boolNames := map[string]bool{
 		"keep-workdir": true, "write": true, "full": true,
 		"all": true, "resume": true, "sweep": true,
+	}
+	known := map[string]bool{
+		"from-env": true, "config": true, "stream": true, "skip": true,
+		"keep-workdir": true, "write": true, "full": true, "all": true,
+		"credentials-file": true, "parallel": true, "resume": true,
+		"sweep": true, "older-than": true, "help": true,
 	}
 	unsupported := map[string]bool{
 		"credential": true, "limit": true, "modes": true, "record": true,
 		"replay": true, "allow-production-writes": true, "rate-limit": true,
 		"budget": true, "live-all-modes": true,
 	}
+
+	var (
+		sweepEnabled bool
+		credsPath    string
+	)
 	for _, arg := range args[2:] {
-		if !strings.HasPrefix(arg, "--") {
+		if arg == "--" {
+			break
+		}
+		if arg == "-h" {
 			continue
+		}
+		if !strings.HasPrefix(arg, "-") {
+			continue
+		}
+		if !strings.HasPrefix(arg, "--") || arg == "--" {
+			return usageErrorf("unknown shorthand flag: %s", arg)
 		}
 		nameValue := strings.TrimPrefix(arg, "--")
 		name, value, assigned := strings.Cut(nameValue, "=")
+		if name == "" || strings.HasPrefix(name, "-") {
+			return usageErrorf("unknown flag: %s", arg)
+		}
 		if unsupported[name] {
 			return usageErrorf("--%s is not supported; refusing to run certification with a no-op control", name)
 		}
-		if boolNames[name] && assigned && value != "true" && value != "false" {
+		if !known[name] {
+			return usageErrorf("unknown flag: --%s", name)
+		}
+		if !assigned {
+			value = "true"
+		}
+		if boolNames[name] && value != "true" && value != "false" {
 			return usageErrorf("--%s must be true or false, got %q", name, value)
 		}
-		if name == "parallel" && assigned {
-			parallel, err := parseIntFlag("parallel", value, 0)
+		switch name {
+		case "parallel":
+			parallel, err := strconv.Atoi(value)
 			if err != nil {
-				return err
+				return validationErrorf("invalid --parallel %q, want integer", value)
 			}
 			if parallel < 1 || parallel > certify.MaxParallel {
 				return usageErrorf("--parallel must be between 1 and %d", certify.MaxParallel)
 			}
-		}
-		if name == "older-than" && assigned {
+		case "older-than":
 			age, err := time.ParseDuration(value)
 			if err != nil || age <= 0 || age > maxCertifySweepAge {
 				return usageErrorf("--older-than must be greater than zero and no more than 8760h")
 			}
+		case "sweep":
+			sweepEnabled = value == "true"
+		case "credentials-file":
+			credsPath = value
+		}
+	}
+
+	if sweepEnabled && credsPath != "" && credsPath != "true" {
+		creds, err := certify.LoadCredsFile(credsPath)
+		if err != nil {
+			return usageErrorf("%v", err)
+		}
+		if err := certify.ValidateBatchConstraints(creds); err != nil {
+			return usageErrorf("%v", err)
 		}
 	}
 	return nil

@@ -645,13 +645,6 @@ func stageWriteCleanupSelfTest(rc *runContext, rep *Report, wc *writeContext) bo
 		return runApprovedReverse(rc, "write_cleanup", planID, token)
 	})
 
-	if stage.Passed {
-		if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
-			recordStage(rc, rep, "write_cleanup_ledger", 1, func() (bool, CLIStageInfo, string) {
-				return false, CLIStageInfo{}, fmt.Sprintf("write_cleanup: record cleaned in ledger: %v", err)
-			})
-		}
-	}
 	return stage.Passed
 }
 
@@ -704,13 +697,6 @@ func stageWriteCleanupLive(rc *runContext, rep *Report, wc *writeContext) bool {
 		return runApprovedReverse(rc, "write_cleanup", planID, token)
 	})
 
-	if stage.Passed {
-		if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
-			recordStage(rc, rep, "write_cleanup_ledger", 2, func() (bool, CLIStageInfo, string) {
-				return false, CLIStageInfo{}, fmt.Sprintf("write_cleanup: record cleaned in ledger: %v", err)
-			})
-		}
-	}
 	return stage.Passed
 }
 
@@ -756,6 +742,13 @@ func stageCleanupVerify(rc *runContext, rep *Report) error {
 
 	if !gone {
 		recordLeak(rep, wc, "cleanup_verify: entity still present after cleanup")
+		return nil
+	}
+
+	if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
+		recordStage(rc, rep, "cleanup_verify_ledger", tierFor(wc), func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, fmt.Sprintf("cleanup_verify: record verified cleanup in ledger: %v", err)
+		})
 		return nil
 	}
 

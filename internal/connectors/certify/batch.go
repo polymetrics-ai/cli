@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"sort"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -317,8 +318,21 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 					result.Report = rep
 				}
 				if opts.BatchDir != "" && rep.Connector != "" {
-					_ = rep.Save(opts.BatchDir)
+					if saveErr := rep.Save(opts.BatchDir); saveErr != nil {
+						result.Error = "report persistence failed"
+						if result.ExitCode == 3 {
+							rep.Stages = append(rep.Stages, StageResult{
+								Name:   "report_persistence",
+								Tier:   0,
+								Passed: false,
+								Error:  "report persistence failed; leaked resources still require cleanup",
+							})
+						} else {
+							result.ExitCode = 1
+						}
+					}
 				}
+				result.Report = rep
 				results[job.index] = result
 				done := int(completed.Add(1))
 				if result.ExitCode == 0 {
@@ -444,7 +458,124 @@ func completedReport(dir, connector string, identities ...resumeIdentity) (Repor
 	if rep.StartedAt.IsZero() || rep.CompletedAt.IsZero() || rep.CompletedAt.Before(rep.StartedAt) {
 		return Report{}, false
 	}
+	if !validResumeEvidence(rep) {
+		return Report{}, false
+	}
 	return rep, true
+}
+
+func validResumeEvidence(rep Report) bool {
+	if rep.Mode != "live" || len(rep.Stages) == 0 {
+		return false
+	}
+	for _, capability := range []CapabilityResult{
+		rep.Capabilities.Check,
+		rep.Capabilities.Catalog,
+		rep.Capabilities.Read,
+		rep.Capabilities.Resume,
+		rep.Capabilities.JSONContract,
+		rep.Capabilities.SecretRedaction,
+	} {
+		if capability.Result != "pass" && capability.Result != "fail" {
+			return false
+		}
+	}
+
+	requiredModes := map[string]string{
+		"full_refresh_append":            "live",
+		"full_refresh_overwrite":         "capture",
+		"full_refresh_overwrite_deduped": "capture",
+		"incremental_append":             "live",
+		"incremental_append_deduped":     "capture",
+	}
+	if len(rep.Capabilities.SyncModes) != len(requiredModes) {
+		return false
+	}
+	for name, dataSource := range requiredModes {
+		mode, ok := rep.Capabilities.SyncModes[name]
+		if !ok || mode.DataSource != dataSource {
+			return false
+		}
+		switch mode.Result {
+		case "pass", "fail", "passed_empty", "passed_no_cursor":
+		default:
+			return false
+		}
+	}
+
+	singularRequired := map[string]bool{
+		"init": true, "preflight": true, "manual_json": true,
+		"credentials_add": true, "warehouse_credentials_add": true,
+		"credentials_test": true, "connection_create": true,
+		"catalog": true,
+	}
+	modeStages := map[string]bool{
+		"etl_full_refresh_append":            true,
+		"etl_full_refresh_overwrite":         true,
+		"etl_full_refresh_overwrite_deduped": true,
+		"etl_incremental_append":             true,
+		"resume":                             true,
+		"etl_incremental_append_deduped":     true,
+		"query_contract":                     true,
+	}
+	counts := make(map[string]int, len(singularRequired)+len(modeStages))
+	cleanupFailed := false
+	for _, stage := range rep.Stages {
+		if stage.Name == "" || stage.Tier < 0 || stage.Tier > 2 {
+			return false
+		}
+		if singularRequired[stage.Name] || modeStages[stage.Name] {
+			counts[stage.Name]++
+		}
+		if (stage.Name == "write_cleanup" || stage.Name == "cleanup_verify") &&
+			!stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
+			cleanupFailed = true
+		}
+	}
+	for name := range singularRequired {
+		if counts[name] != 1 {
+			return false
+		}
+	}
+	for name := range modeStages {
+		if counts[name] == 0 {
+			return false
+		}
+	}
+
+	if cleanupFailed && len(rep.Leaks) == 0 {
+		return false
+	}
+	for _, leak := range rep.Leaks {
+		result, ok := rep.Capabilities.WriteActions[leak.Action]
+		if !ok || leak.Connector != rep.Connector || leak.Tag == "" || leak.Reason == "" ||
+			result.Result != "leaked_resource" || result.Tag != leak.Tag {
+			return false
+		}
+		runID := runIDFromTag(leak.Connector, leak.Tag)
+		if !validLedgerTag(leak.Connector, runID, leak.Tag) {
+			return false
+		}
+	}
+	for action, result := range rep.Capabilities.WriteActions {
+		if result.Result != "leaked_resource" {
+			continue
+		}
+		matched := false
+		for _, leak := range rep.Leaks {
+			if leak.Connector == rep.Connector && leak.Action == action && leak.Tag == result.Tag {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			return false
+		}
+	}
+
+	recomputedPassed := allStagesPassed(rep.Stages) &&
+		rep.Capabilities.SecretRedaction.Result != "fail" && len(rep.Leaks) == 0
+	return rep.Passed == recomputedPassed
 }
 
 // writeBatchProgress persists <dir>/certifications/batch-<runid>/

@@ -171,10 +171,15 @@
       "cycle": "fifth-review-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "focused deterministic RED reproduced all seven accepted findings before production edits; no subagents or external effects"
+    },
+    {
+      "cycle": "fifth-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "post-verification ledger mutation, tag-safe sweep authority, bounded nondisclosing ledger load, pre-effect constraints, durable report errors, pre-telemetry flag validation, and evidence-validated resume pass focused/repeated/race and full package gates"
     }
   ],
   "red": "captured: certify focus 1.374s showed premature cleaned state, forged numeric effects, unbounded/reflected ledgers, four invalid resume forms, and dropped batch persistence; CLI focus 14.764s showed seven accepted sweep constraints, silent single save failures, telemetry files on invalid flags, and late malformed parallel validation",
-  "green": "pending fifth-cycle implementation",
+  "green": "complete: cleanup ledger changes only after exact absence; sweep verifies and denies numeric IDs; ledger 1 MiB/10000-entry bounds with opaque parse errors; sweep constraints before telemetry/workspace; report/history failures surfaced with leak dominance; complete pre-telemetry certify parsing; strict structural resume evidence and recomputed outcome/leak consistency",
   "verification": "pending; verificationPassed remains false until full make verify exits 0",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",

@@ -138,6 +138,11 @@ func (s *Sweeper) Sweep(ctx context.Context) (SweepResult, error) {
 			result.Failed[status.Tag] = reason
 			continue
 		}
+		verified, reason := sweepVerifyCleaned(harness, status)
+		if !verified {
+			result.Failed[status.Tag] = reason
+			continue
+		}
 		if err := ledger.RecordCleaned(status.Tag); err != nil {
 			result.Failed[status.Tag] = fmt.Sprintf("cleaned but failed to record in ledger: %v", err)
 			continue
@@ -187,7 +192,68 @@ func sweepCleanTag(h *Harness, status LedgerStatus) (bool, string) {
 	if status.EntityHint != pairing.VerifyStream || (status.VerifyField != "" && status.VerifyField != pairing.VerifyField) {
 		return false, "ledger verification provenance does not match the curated pairing"
 	}
+	if !sweepPairingTagAddressable(pairing) {
+		return false, "cleanup pairing requires a verified server-issued identifier and is not sweep-authorized"
+	}
 	return sweepCleanViaPairing(h, status, pairing)
+}
+
+func sweepPairingTagAddressable(pairing WritePairing) bool {
+	return pairing.IDField != "" && pairing.IDField == pairing.VerifyField
+}
+
+func sweepVerifyCleaned(h *Harness, status LedgerStatus) (bool, string) {
+	if status.EntityHint == "outbox_record" {
+		lastAction, err := outboxLastActionForTag(h.root, status.Tag)
+		if err != nil {
+			return false, fmt.Sprintf("sweep cleanup verification: %v", err)
+		}
+		if lastAction != "delete" {
+			return false, "sweep cleanup verification: outbox tombstone is absent"
+		}
+		return true, ""
+	}
+
+	pairing, ok := matchPairingForAction(status.Connector, status.Action)
+	if !ok || !sweepPairingTagAddressable(pairing) {
+		return false, "sweep cleanup verification has no tag-addressable curated pairing"
+	}
+	return sweepVerifyPairingAbsent(h, status, pairing)
+}
+
+func sweepVerifyPairingAbsent(h *Harness, status LedgerStatus, pairing WritePairing) (bool, string) {
+	table := "cert_sweep_verify_" + status.RunID
+	connection := "cert_sweep_verify_conn_" + status.RunID
+	create := h.Run("connections", "create", connection,
+		"--source", status.Connector+":"+sourceCredentialName,
+		"--destination", "warehouse:cert-sweep-warehouse",
+		"--stream", pairing.VerifyStream,
+		"--primary-key", pairing.IDField,
+		"--sync-mode", "full_refresh_overwrite",
+		"--table", table,
+		"--json")
+	if create.ExitCode != 0 || create.Kind != "Connection" {
+		return false, fmt.Sprintf("sweep cleanup verification connection: exit=%d kind=%q", create.ExitCode, create.Kind)
+	}
+	run := h.Run("etl", "run", "--connection", connection, "--stream", pairing.VerifyStream, "--json")
+	if run.ExitCode != 0 || run.Kind != "ETLRun" {
+		return false, fmt.Sprintf("sweep cleanup verification read: exit=%d kind=%q", run.ExitCode, run.Kind)
+	}
+	query := h.Run("query", "run", "--table", table, "--json")
+	if query.ExitCode != 0 || query.Kind != "QueryResult" {
+		return false, fmt.Sprintf("sweep cleanup verification query: exit=%d kind=%q", query.ExitCode, query.Kind)
+	}
+	rows, _ := query.Envelope["rows"].([]any)
+	for _, row := range rows {
+		record, ok := row.(map[string]any)
+		if !ok {
+			continue
+		}
+		if value, _ := record[pairing.VerifyField].(string); value == status.Tag {
+			return false, "sweep cleanup verification: tagged entity is still present"
+		}
+	}
+	return true, ""
 }
 
 func validateSweepStatus(status LedgerStatus) string {

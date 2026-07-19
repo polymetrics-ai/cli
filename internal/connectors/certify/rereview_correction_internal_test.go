@@ -3,7 +3,6 @@ package certify
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -189,18 +188,8 @@ func TestRereviewLedgerInputIsBoundedAndSecretSafe(t *testing.T) {
 	t.Run("entry count", func(t *testing.T) {
 		root := t.TempDir()
 		var raw bytes.Buffer
-		planned := time.Now().Add(-48 * time.Hour).UTC()
 		for i := 0; i < 10001; i++ {
-			entry := LedgerEntry{
-				Connector: "sample", Action: "create", CleanupAction: "delete", RunID: "12345678",
-				Tag: fmt.Sprintf("pm-cert-sample-12345678-%d", 1700000000+i), EntityHint: "outbox_record", PlannedAt: planned,
-			}
-			line, err := json.Marshal(entry)
-			if err != nil {
-				t.Fatal(err)
-			}
-			raw.Write(line)
-			raw.WriteByte('\n')
+			raw.WriteString("{\"tag\":\"duplicate\"}\n")
 		}
 		if err := os.WriteFile(filepath.Join(root, ledgerFileName), raw.Bytes(), 0o600); err != nil {
 			t.Fatal(err)

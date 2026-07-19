@@ -8,6 +8,7 @@
 package certify
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -182,11 +183,6 @@ func (rep *Report) Save(dir string) error {
 		return fmt.Errorf("certify: marshal report: %w", err)
 	}
 
-	connectorName := rep.Connector + ".json"
-	if err := atomicWritePrivate(certDir, connectorName, raw); err != nil {
-		return fmt.Errorf("certify: write %s: %w", filepath.Join(certDir, connectorName), err)
-	}
-
 	historyDir, err := secureDir(certDir, historyDirName, rep.Connector)
 	if err != nil {
 		return fmt.Errorf("certify: create history dir: %w", err)
@@ -194,6 +190,14 @@ func (rep *Report) Save(dir string) error {
 	historyName := rep.StartedAt.UTC().Format(historyTimestampFormat) + ".json"
 	if err := atomicWritePrivate(historyDir, historyName, raw); err != nil {
 		return fmt.Errorf("certify: write %s: %w", filepath.Join(historyDir, historyName), err)
+	}
+
+	// Publish the resumable current report only after its history evidence is
+	// durable. A history failure must never leave a current file that a later
+	// --resume run could mistake for a completely persisted report.
+	connectorName := rep.Connector + ".json"
+	if err := atomicWritePrivate(certDir, connectorName, raw); err != nil {
+		return fmt.Errorf("certify: write %s: %w", filepath.Join(certDir, connectorName), err)
 	}
 
 	return nil
@@ -232,8 +236,14 @@ func LoadReport(path string) (Report, error) {
 		return Report{}, fmt.Errorf("certify: report exceeds %d bytes", maxReportBytes)
 	}
 	var rep Report
-	if err := json.Unmarshal(raw, &rep); err != nil {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&rep); err != nil {
 		return Report{}, fmt.Errorf("certify: unmarshal %s: %w", path, err)
+	}
+	var extra any
+	if err := decoder.Decode(&extra); !errors.Is(err, io.EOF) {
+		return Report{}, fmt.Errorf("certify: report contains trailing JSON content")
 	}
 	return rep, nil
 }

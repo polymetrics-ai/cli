@@ -9,8 +9,10 @@ package certify
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -21,7 +23,11 @@ import (
 
 // ledgerFileName is the fixed on-disk name for each per-connector durable
 // write-ahead ledger (design §C "certify-ledger.jsonl").
-const ledgerFileName = "certify-ledger.jsonl"
+const (
+	ledgerFileName   = "certify-ledger.jsonl"
+	maxLedgerBytes   = 1 << 20
+	maxLedgerEntries = 10000
+)
 
 var (
 	ledgerRunIDPattern     = regexp.MustCompile(`^[a-z0-9]{8}$`)
@@ -282,6 +288,9 @@ func LoadLedger(root string) (LedgerEntries, error) {
 	if info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
 		return LedgerEntries{}, fmt.Errorf("certify: ledger path must be a regular non-symlink file")
 	}
+	if info.Size() > maxLedgerBytes {
+		return LedgerEntries{}, fmt.Errorf("certify: ledger exceeds %d bytes", maxLedgerBytes)
+	}
 	f, err := os.Open(path)
 	if err != nil {
 		return LedgerEntries{}, fmt.Errorf("certify: open ledger %s: %w", path, err)
@@ -294,18 +303,35 @@ func LoadLedger(root string) (LedgerEntries, error) {
 	if !os.SameFile(info, openedInfo) {
 		return LedgerEntries{}, fmt.Errorf("certify: ledger path changed while opening")
 	}
+	if openedInfo.Size() > maxLedgerBytes {
+		return LedgerEntries{}, fmt.Errorf("certify: ledger exceeds %d bytes", maxLedgerBytes)
+	}
+	raw, err := io.ReadAll(io.LimitReader(f, maxLedgerBytes+1))
+	if err != nil {
+		return LedgerEntries{}, fmt.Errorf("certify: read ledger %s: %w", path, err)
+	}
+	if len(raw) > maxLedgerBytes {
+		return LedgerEntries{}, fmt.Errorf("certify: ledger exceeds %d bytes", maxLedgerBytes)
+	}
 
 	entries := LedgerEntries{byTag: map[string]*LedgerStatus{}}
-	scanner := bufio.NewScanner(f)
-	scanner.Buffer(make([]byte, 0, 64*1024), 4*1024*1024)
+	scanner := bufio.NewScanner(bytes.NewReader(raw))
+	scanner.Buffer(make([]byte, 0, 64*1024), maxLedgerBytes)
+	lineNumber := 0
+	entryCount := 0
 	for scanner.Scan() {
+		lineNumber++
 		line := scanner.Text()
 		if line == "" {
 			continue
 		}
+		entryCount++
+		if entryCount > maxLedgerEntries {
+			return LedgerEntries{}, fmt.Errorf("certify: ledger exceeds %d entries", maxLedgerEntries)
+		}
 		var entry LedgerEntry
 		if err := json.Unmarshal([]byte(line), &entry); err != nil {
-			return LedgerEntries{}, fmt.Errorf("certify: parse ledger line %q: %w", line, err)
+			return LedgerEntries{}, fmt.Errorf("certify: parse ledger line %d: invalid JSON", lineNumber)
 		}
 		status, ok := entries.byTag[entry.Tag]
 		if !ok {
