@@ -11,7 +11,7 @@
   "startedAt": "20260719T074902Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "containment_correction_red_captured",
+  "status": "containment_correction_green",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -45,6 +45,11 @@
       "cycle": "containment-correction-red",
       "decision": "local_critical_path",
       "reason": "temp-only warehouse-root symlink test failed before production correction because extract constructed and ran the injected analyzer through a warehouse directory resolving outside the selected project root"
+    },
+    {
+      "cycle": "containment-correction-green",
+      "decision": "local_critical_path",
+      "reason": "extract now validates its fixed warehouse directory beneath the selected project root before analyzer construction; focused, repeated x10, and race extract tests pass"
     }
   ],
   "red": "focused CLI compile failure on absent newExtractCobraCommand/extractCommandRuntime/newRootCmdWithExtractRuntime; RLM traversal input, external input final link, and external temporary output final link all succeeded before production edits",

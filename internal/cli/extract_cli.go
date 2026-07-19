@@ -190,6 +190,10 @@ func runExtract(ctx context.Context, cfg config.Config, root string, flags extra
 			if err := validateExtractTable(outTable, "output table"); err != nil {
 				return err
 			}
+			warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+			if err := safety.ValidateLocalWritePath(root, warehouseDir, "extract warehouse path", false); err != nil {
+				return validationErrorf("extract: %v", err)
+			}
 			if runtime.analyzer == nil {
 				return errors.New("extract: analyzer runtime is not configured")
 			}
@@ -207,7 +211,7 @@ func runExtract(ctx context.Context, cfg config.Config, root string, flags extra
 					Spec:         &rlm.Spec{Name: valueOr(flags.last(flags.SpecNames), "extract")},
 					InTable:      inTable,
 					OutTable:     outTable,
-					WarehouseDir: filepath.Join(root, ".polymetrics", "warehouse"),
+					WarehouseDir: warehouseDir,
 				}
 				res, runErr := analyzer.Run(ctx, runRequest)
 				if runErr != nil {
