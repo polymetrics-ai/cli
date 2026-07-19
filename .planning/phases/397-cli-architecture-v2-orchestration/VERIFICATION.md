@@ -20,6 +20,7 @@ Status: not yet run at final HEAD
 - [x] #432 implemented at `b8377b7b200e50ccb5ec164670fed4f78a5c486a`; exact-head Sol/xhigh review `9dbfa83b-6355-4e9c-9a68-5ae39a7aabe9` clean; integration race passed; promoted in parent `ad6e4331`.
 - [x] #433 implemented at `701569ee985f7c87f011d8a1cfab39afcc3cc8c2`; exact-head Sol/xhigh review `1a49a57e-51dc-4abc-ae4b-fda7152a416d` clean; fake-only integration race passed; promoted in parent `990b8f60`.
 - [x] #434 implemented/corrected at `8177e342ad03b5fbf3750f2c0ecf9aa11f695f92`; exact-head Sol/xhigh re-review `65f48296-b24a-498a-8b25-6c4a3143d9c9` clean; fake-only integration race passed; promoted in parent `96680756`.
+- [x] #435 implemented/evidence-corrected at `f712e696e075792492397ab1d556d1dfceadba04`; exact-head Sol/xhigh re-review `d549e7cf-50bc-4d9d-94ff-04734f048d3b` clean; fake-only integration race passed; promoted in parent `afd765e9`.
 
 ## Per-unit gate
 

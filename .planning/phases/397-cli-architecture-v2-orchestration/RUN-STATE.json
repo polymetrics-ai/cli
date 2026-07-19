@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "active",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "96680756cf6d1faba13ed211974bc26422e5db75",
+  "currentHead": "afd765e9e9b53fa3250c2ba05686af81d74d2f94",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -129,6 +129,13 @@
       "decision": "spawned",
       "issues": [434],
       "reason": "Sol/high implementation/correction and independent Sol/xhigh review completed RLM nativization with mode-gated fake seams; exact head promoted and parent race checks passed."
+    },
+    {
+      "cycle": "unit_435_execute_review_promote",
+      "timestamp": "2026-07-19T07:45:07Z",
+      "decision": "spawned",
+      "issues": [435],
+      "reason": "Sol/high implementation/evidence correction and independent Sol/xhigh review completed hidden worker nativization with fake-only status/serve seams; exact head promoted."
     }
   ],
   "units": [
@@ -260,6 +267,17 @@
       "implementationSession": "11225914-01eb-4d05-a4f2-907178102e93",
       "correctionSession": "2fcfbbc6-810a-448e-ab85-be2c5e81be5b",
       "reviewSession": "65f48296-b24a-498a-8b25-6c4a3143d9c9"
+    },
+    {
+      "issue": 435,
+      "branch": "refactor/435-worker-native-cobra",
+      "startingHead": "14c02d295065c3bf33c65eaac5f8d36642798f81",
+      "endingHead": "f712e696e075792492397ab1d556d1dfceadba04",
+      "parentIntegrationHead": "afd765e9e9b53fa3250c2ba05686af81d74d2f94",
+      "status": "provisionally_integrated",
+      "implementationSession": "72824844-2597-4d86-a33f-27ba2c68256c",
+      "correctionSession": "c11cab42-76e8-4d6c-a06b-ee692085cab0",
+      "reviewSession": "d549e7cf-50bc-4d9d-94ff-04734f048d3b"
     }
   ],
   "humanGates": [
@@ -273,5 +291,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-19T06:40:21Z"
+  "updatedAt": "2026-07-19T07:45:07Z"
 }
