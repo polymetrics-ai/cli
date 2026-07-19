@@ -24,6 +24,13 @@ type cobraLegacyError struct {
 	err error
 }
 
+type etlCommandStateKey struct{}
+
+type etlCommandState struct {
+	statusRunID    string
+	statusRunIDSet bool
+}
+
 func (e *cobraLegacyError) Error() string { return e.err.Error() }
 
 func (e *cobraLegacyError) Unwrap() error { return e.err }
@@ -89,6 +96,8 @@ func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, std
 }
 
 func executeRootCmd(cmd *cobra.Command, args []string) error {
+	var etlState etlCommandState
+	args = captureETLPrivateOperands(args, &etlState)
 	var credentialsState credentialsCommandState
 	args = normalizeNativeStringArrayArgs(args, &credentialsState)
 	if credentialsState.rawCarrier {
@@ -103,7 +112,8 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	cmd.SetContext(context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState))
+	ctx = context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState)
+	cmd.SetContext(context.WithValue(ctx, etlCommandStateKey{}, etlState))
 	if len(args) > 0 && lookupTopLevelCommand(cmd, args[0]) == nil {
 		return cmd.RunE(cmd, args)
 	}
@@ -113,6 +123,18 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	}
 	_, err := cmd.ExecuteC()
 	return err
+}
+
+func captureETLPrivateOperands(args []string, state *etlCommandState) []string {
+	if len(args) < 3 || args[0] != "etl" || args[1] != "status" {
+		return args
+	}
+	state.statusRunID = args[2]
+	state.statusRunIDSet = true
+	out := make([]string, 0, len(args)-1)
+	out = append(out, args[:2]...)
+	out = append(out, args[3:]...)
+	return out
 }
 
 func normalizeNativeStringArrayArgs(args []string, credentialsState *credentialsCommandState) []string {

@@ -115,12 +115,13 @@ func newETLRunCobraCommand(ctx context.Context, cfg config.Config, root string, 
 }
 
 func newETLStatusCobraCommand(root string, stdout io.Writer, jsonOut bool) *cobra.Command {
-	cmd := newETLActionCobraCommand("status <run-id>", func(_ *cobra.Command, args []string) error {
-		if len(args) < 1 {
+	cmd := newETLActionCobraCommand("status <run-id>", func(cmd *cobra.Command, _ []string) error {
+		state, ok := cmd.Context().Value(etlCommandStateKey{}).(etlCommandState)
+		if !ok || !state.statusRunIDSet {
 			return errUsage
 		}
 		return markCobraLegacyError(withApp(root, func(a *app.App) error {
-			return runETLStatus(a, args[0], stdout, jsonOut)
+			return runETLStatus(a, state.statusRunID, stdout, jsonOut)
 		}))
 	})
 	setManualHelp(cmd, "etl", stdout, jsonOut)

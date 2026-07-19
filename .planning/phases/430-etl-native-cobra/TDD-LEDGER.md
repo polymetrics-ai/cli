@@ -23,7 +23,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 5 | Parity/delivery | Runtime help, temporary docs/website/generated checks, scope/dependency guards, commit/push | Pass; final evidence pushed at `9b0020ab` |
 | 6 | Correction planning | Read `/tmp/pm-397-review-430.log`; update six artifacts from exact correction start `9b0020ab` before production edits | Complete |
 | 7 | Correction RED | Differential table for status operands `--help`, `-h`, `--`, unknown flag + valid ID; adversarial argv/internal-carrier override case | Failed as required before production edits: all five first-operand differential cases diverged |
-| 8 | Correction GREEN | Private action-specific operand capture before shared normalization; status consumes context-only state | Pending |
+| 8 | Correction GREEN | Private action-specific operand capture before shared normalization; status consumes context-only state | Pass: differential/adversarial `10.113s`; all ETL tests `24.512s` |
 | 9 | Correction verification | Focused/adversarial/repeated/race/base differential/full CLI/repository, help parity, gofmt/vet/build/diff, `make verify`, commit/push | Pending |
 
 ## RED contract
@@ -110,3 +110,9 @@ FAIL polymetrics.ai/internal/cli
 ```
 
 Command: `go test ./internal/cli -run 'TestETLStatus(DifferentialPreservesLegacyFirstOperandOwnership|PrivateOperandCannotBeOverriddenFromArgv)$' -count=1`. The test uses one temporary local ETL run and compares exit/stdout/stderr against a legacy first-token oracle. No service, credential, secret, dependency, or production code was touched.
+
+## Correction GREEN
+
+`executeRootCmd` now captures only `etl status`'s first post-global operand before `normalizeNativeStringArrayArgs`, removes it from Cobra-visible argv, and stores the value plus an explicit presence bit under an unexported context key. The status handler consumes only that invocation state. There is no hidden pflag, internal argv name, exported accessor, package mutable state, or string carrier to set/override; carrier-shaped argv remains literal user input. Other ETL actions and help continue through the prior normalization paths.
+
+Focused differential/adversarial GREEN passed in `10.113s`; all `TestETL*` tests passed in `24.512s`. Broader repeated/race/base/full gates remain pending.

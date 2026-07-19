@@ -62,15 +62,15 @@ Historical result: pass at implementation head `fc88f1694ee73593f1130f866bd6166b
 
 - [x] Review log read and all issue-local artifacts updated before correction production edits.
 - [x] RED differential proves exact-base first-operand ownership for `--help`, `-h`, literal `--`, and unknown flag followed by a valid run ID (failed as required before production edits).
-- [ ] Adversarial test proves internal-carrier-shaped argv cannot set or override the private status operand.
-- [ ] Capture occurs before shared normalization and is scoped only to `etl status`.
-- [ ] Status reads invocation-private state; no hidden flag, argv carrier, exported key, or shared mutable state exists.
-- [ ] Other ETL actions and namespace/action help remain unchanged.
+- [x] Adversarial test proves internal-carrier-shaped argv cannot set or override the private status operand.
+- [x] Capture occurs before shared normalization and is scoped only to `etl status`.
+- [x] Status reads invocation-private state; no hidden flag, argv carrier, exported key, or shared mutable state exists.
+- [x] Other ETL actions and namespace/action help remain unchanged in all `TestETL*` tests (`24.512s`).
 
 ### Gates
 
-- [x] Focused correction RED captured before production edits; GREEN pending.
-- [ ] Adversarial/internal-carrier tests.
+- [x] Focused correction RED then GREEN (`10.113s` GREEN).
+- [x] Adversarial/internal-carrier tests.
 - [ ] Focused repeated and `-race`.
 - [ ] Exact legacy-base differential for the four operand classes.
 - [ ] Existing ETL/router/golden/manual tests.

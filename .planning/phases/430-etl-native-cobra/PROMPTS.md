@@ -37,6 +37,6 @@ Execution decision: `local_critical_path` — coupled status/router/test correct
 
 Safety: temporary local project/run only; no secrets, credentials, optional services, external connectors, dependencies, reverse operation, PR, or review. Preserve all non-status ETL/help behavior and byte-identical docs/manual surfaces.
 
-Downstream artifact: correction planning and focused differential RED are complete before production edits; private capture GREEN, verification, and final delivery remain pending.
+Downstream artifact: correction planning, focused differential RED, and private context capture GREEN are complete; broad verification and final delivery remain pending.
 
-Verification result: RED captured. All five differential first-operand cases diverged as expected: help/short/literal/internal-carrier-shaped operands reached the later valid ID, while unknown-flag returned usage instead of the exact base lookup error. `verificationPassed=false` until focused/adversarial/race/base differential/full CLI/repository, gofmt/vet/build/diff, help/docs parity, and `make verify` pass.
+Verification result: focused GREEN. All five differential/adversarial cases now exactly match the legacy first-token oracle (`10.113s`), and all ETL tests pass (`24.512s`). `verificationPassed=false` until repeated/race/base differential/full CLI/repository, gofmt/vet/build/diff, help/docs parity, and `make verify` pass.

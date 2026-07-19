@@ -15,7 +15,7 @@
   "endingImplementationHead": "fc88f1694ee73593f1130f866bd6166be18eb661",
   "correctionStartingHead": "9b0020abde7cd7e007412a0294db6e4cb576f5f3",
   "correctionStartedAt": "20260718T235826Z",
-  "status": "correction_red_captured_green_pending",
+  "status": "correction_green_broad_verification_pending",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -71,10 +71,15 @@
       "cycle": "bounded-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "the focused differential table and argv-carrier adversarial test were added in the coupled ETL test file; all requested first-operand classes diverged before any correction production edit"
+    },
+    {
+      "cycle": "bounded-correction-green",
+      "decision": "local_critical_path",
+      "reason": "action-specific capture now owns the first etl status operand before shared normalization through unexported invocation context state; differential/adversarial and all ETL tests pass"
     }
   ],
   "red": "historical constructor RED plus bounded correction RED: all five status first-operand differential cases diverged before correction production edits (help, short help, literal separator, unknown flag, internal-carrier-shaped token)",
-  "green": "historical pass through 9b0020ab; bounded status-operand correction RED/GREEN pending",
+  "green": "bounded correction differential/adversarial passed in 10.113s; all ETL tests passed in 24.512s; broad verification pending",
   "verification": "pending bounded correction gates from 9b0020ab, including make verify",
   "files": [
     ".planning/phases/430-etl-native-cobra/PLAN.md",
