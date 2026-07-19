@@ -1,0 +1,46 @@
+{
+  "phase": 437,
+  "issue": 437,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/437-connectors-certify-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
+  "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
+  "startedAt": "20260719T095145Z",
+  "modelProfile": "Sol",
+  "thinking": "high",
+  "status": "planned",
+  "verificationPassed": false,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked_unknown_command",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "final assigned serialized Phase 9 namespace in isolated worktree; central router writes collide, no subagent tool is exposed, and user requested implementation/commit/push without PR/review"
+    }
+  ],
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "files": [
+    ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",
+    ".planning/phases/437-connectors-certify-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/437-connectors-certify-native-cobra/VERIFICATION.md",
+    ".planning/phases/437-connectors-certify-native-cobra/PROMPTS.md",
+    ".planning/phases/437-connectors-certify-native-cobra/SUMMARY.md",
+    ".planning/phases/437-connectors-certify-native-cobra/RUN-STATE.json"
+  ],
+  "commits": [],
+  "push": "pending",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "not_run_user_prohibited_review",
+  "safety": "fixture/replay/local temp roots only; no defs, credentials, live checks/writes, dependencies, services, PR, or review"
+}
