@@ -98,7 +98,7 @@ func TestReverseLocalWorkflowPreservesFlagsRedactionConfirmationAndOrder(t *test
 		"--action", "ignored", "--action=upsert",
 		"--map", "id:wrong", "--map=id:external_id",
 		"--map", "name:full_name", "--map=email:email",
-		"--limit", "1", "--limit=2", "--unknown", "ignored",
+		"--limit", "1", "--limit=3", "--unknown", "ignored",
 		"--root", root,
 	)
 	if code != 0 || planStderr != "" {
@@ -122,7 +122,7 @@ func TestReverseLocalWorkflowPreservesFlagsRedactionConfirmationAndOrder(t *test
 		Plan app.ReversePlan `json:"plan"`
 	}
 	decodeOneJSON(t, previewStdout, &preview)
-	if preview.Kind != "ReversePlanPreview" || preview.Plan.ID != planID || preview.Plan.RecordCount != 2 || preview.Plan.ConfirmationChallenge != "destructive" {
+	if preview.Kind != "ReversePlanPreview" || preview.Plan.ID != planID || preview.Plan.RecordCount != 3 || preview.Plan.ConfirmationChallenge != "destructive" {
 		t.Fatalf("preview metadata mismatch: kind=%q id-match=%t records=%d confirmation=%q", preview.Kind, preview.Plan.ID == planID, preview.Plan.RecordCount, preview.Plan.ConfirmationChallenge)
 	}
 	assertApprovalAbsent(t, approval, previewStdout, previewStderr)
@@ -168,7 +168,7 @@ func TestReverseLocalWorkflowPreservesFlagsRedactionConfirmationAndOrder(t *test
 		Run  app.ReverseRun `json:"run"`
 	}
 	decodeOneJSON(t, runStdout, &runEnv)
-	if runEnv.Kind != "ReverseRun" || runEnv.Run.Status != "completed" || runEnv.Run.RecordsSucceeded != 2 {
+	if runEnv.Kind != "ReverseRun" || runEnv.Run.Status != "completed" || runEnv.Run.RecordsSucceeded != 3 {
 		t.Fatalf("local run result mismatch: kind=%q status=%q succeeded=%d", runEnv.Kind, runEnv.Run.Status, runEnv.Run.RecordsSucceeded)
 	}
 	assertApprovalAbsent(t, approval, runStdout, runStderr)
@@ -176,8 +176,8 @@ func TestReverseLocalWorkflowPreservesFlagsRedactionConfirmationAndOrder(t *test
 	if err != nil {
 		t.Fatalf("read local fake outbox: %v", err)
 	}
-	if got := len(strings.Split(strings.TrimSpace(string(data)), "\n")); got != 2 {
-		t.Fatalf("local fake write count=%d, want 2", got)
+	if got := len(strings.Split(strings.TrimSpace(string(data)), "\n")); got != 3 {
+		t.Fatalf("local fake write count=%d, want 3", got)
 	}
 
 	statusStdout, statusStderr, code := runNativeReverseCLI("reverse", "status", runEnv.Run.ID, "ignored", "--root", root, "--json")

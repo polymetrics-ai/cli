@@ -11,7 +11,7 @@
   "startedAt": "20260719T010451Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "red_complete",
+  "status": "green_complete_verification_pending",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -30,10 +30,15 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "the complete focused reverse tree, flags, local gated workflow, parser compatibility, operand ownership, exit taxonomy, redaction, typed confirmation, ordering, and cancellation tests were added before production edits; compilation failed on the intentionally missing native constructor"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native reverse actions and typed flags, invocation-private first-operand capture, reverse-only legacy-tail normalization, exact exits, token nondisclosure, typed confirmation, ordered local fake execution, and reverse-only parser removal pass focused and existing reverse/router safety tests"
     }
   ],
   "red": "focused compile failed before production edits at reverse_native_cobra_test.go:23:9: undefined newReverseCobraCommand",
-  "green": "pending",
+  "green": "focused native reverse contract passed in 28.527s; existing reverse/router/validation safety suite passed in 62.562s; only temporary local fake write after preview, approval, and typed confirmation",
   "verification": "pending",
   "files": [
     ".planning/phases/431-reverse-native-cobra/PLAN.md",
@@ -42,7 +47,11 @@
     ".planning/phases/431-reverse-native-cobra/PROMPTS.md",
     ".planning/phases/431-reverse-native-cobra/SUMMARY.md",
     ".planning/phases/431-reverse-native-cobra/RUN-STATE.json",
-    "internal/cli/reverse_native_cobra_test.go"
+    "internal/cli/reverse_native_cobra_test.go",
+    "internal/cli/reverse_cli.go",
+    "internal/cli/cobra_router.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/cli.go"
   ],
   "commits": [],
   "push": "pending",

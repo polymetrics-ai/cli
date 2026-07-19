@@ -17,7 +17,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity/exact start before test or production edits | Complete |
 | 1 | RED | `go test ./internal/cli -run 'TestReverse(Command|Local|PlanJSON|FirstOperand|HelpTrailing|ExactExit|Cancellation)' -count=1` | Failed as required before production edits: `internal/cli/reverse_native_cobra_test.go:23:9: undefined: newReverseCobraCommand` |
-| 2 | GREEN | Native reverse tree + typed handlers + reverse-only normalization/private operands; remove wrapper/parser use | Pending |
+| 2 | GREEN | Native reverse tree + typed handlers + reverse-only normalization/private operands; remove wrapper/parser use | Pass: focused contract `28.527s`; existing reverse/router safety suite `62.562s` |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI/reverse app and exact-start differential | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, established ordered `make verify` | Pending |
 | 5 | Parity/delivery | Runtime help, generated docs/website/golden checks, scope/dependency guards, commit/push | Pending |
@@ -49,4 +49,8 @@ FAIL
 
 The missing native constructor is intentional. The tests specify native ownership and every current flag; local plan/preview/approval-bearing run/status/list; all manual routes; trailing help/literal/unknown/action-discovery behavior; strict first-operand ownership; exact exit taxonomy; token nondisclosure; typed confirmation; single-use approval; cancellation; and no local fake writer invocation before all gates pass. Tests use only built-in local connectors and temporary state. No external write, service, credential, dependency, or token value entered the evidence.
 
-Exact GREEN, refactor, parity, and final gate output will be appended as commands run. Token values must never be copied into this ledger.
+## Focused GREEN
+
+`newReverseCobraCommand` now owns list/plan/preview/run/status/help with typed `StringArray` flags, unknown tolerance, no-file completion seams, invocation-private first-operand capture, and reverse-only legacy-tail normalization. Typed handlers preserve output and safety gates; reverse is absent from legacy wrappers and its two `parseFlags` calls are removed. The focused contract passed in `28.527s`; existing reverse/router/validation safety tests passed in `62.562s`. The ordering test performed only a temporary local outbox fake write after preview, valid approval, and typed confirmation; all earlier attempts produced zero writes. No external request or token value entered test output or artifacts.
+
+Refactor, parity, and final gate output will be appended as commands run. Token values must never be copied into this ledger.

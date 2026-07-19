@@ -1,6 +1,6 @@
 # Phase 431 Summary
 
-Status: strict focused RED captured from exact start `0b03361e3ec5082d54c416a31715851f71e845fa`; production implementation not started.
+Status: focused GREEN complete from exact start `0b03361e3ec5082d54c416a31715851f71e845fa`; broad verification pending.
 
 ## Identity
 
@@ -25,6 +25,12 @@ Local fakes and temporary state only. No approval/secret values in artifacts or 
 
 The complete focused test-only contract failed before production edits at `internal/cli/reverse_native_cobra_test.go:23:9: undefined: newReverseCobraCommand`, as required. It covers native tree/flags, local gated workflow, help and parser edges, first-operand ownership, exact exits, token nondisclosure, typed confirmation, cancellation, and no fake write before every gate.
 
+## Focused delivery
+
+Native Cobra now owns reverse list/plan/preview/run/status/help and every current typed flag. Invocation-private first-operand state and reverse-only normalization preserve fail-closed help-like/literal/unknown operand ownership without an argv carrier. Reverse's legacy wrapper and parser calls are removed. Focused GREEN passed in `28.527s`; existing reverse/router/validation safety tests passed in `62.562s`.
+
+The safety workflow uses only temporary local state. Plan and preview caused no write; missing/wrong approval and missing typed confirmation caused no write; valid approval plus confirmation caused exactly one bounded local fake write; replay failed. Approval material stayed out of JSON, diagnostics, logs, and artifacts.
+
 ## Verification
 
-RED complete. GREEN, refactor, parity, full gates, and final delivery remain pending.
+RED and focused GREEN complete. Repeated/race, exact-start differential, golden/full CLI/repository, parity, final gates, and final delivery remain pending.

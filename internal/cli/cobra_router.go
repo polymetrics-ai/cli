@@ -31,6 +31,13 @@ type etlCommandState struct {
 	statusRunIDSet bool
 }
 
+type reverseCommandStateKey struct{}
+
+type reverseCommandState struct {
+	operand    string
+	operandSet bool
+}
+
 func (e *cobraLegacyError) Error() string { return e.err.Error() }
 
 func (e *cobraLegacyError) Unwrap() error { return e.err }
@@ -85,6 +92,7 @@ func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, std
 	cmd.AddCommand(newConnectionsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newETLCobraCommand(ctx, cfg, root, stdout, jsonOut))
+	cmd.AddCommand(newReverseCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
@@ -98,6 +106,8 @@ func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, std
 func executeRootCmd(cmd *cobra.Command, args []string) error {
 	var etlState etlCommandState
 	args = captureETLPrivateOperands(args, &etlState)
+	var reverseState reverseCommandState
+	args = captureReversePrivateOperand(args, &reverseState)
 	var credentialsState credentialsCommandState
 	args = normalizeNativeStringArrayArgs(args, &credentialsState)
 	if credentialsState.rawCarrier {
@@ -113,7 +123,8 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 		ctx = context.Background()
 	}
 	ctx = context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState)
-	cmd.SetContext(context.WithValue(ctx, etlCommandStateKey{}, etlState))
+	ctx = context.WithValue(ctx, etlCommandStateKey{}, etlState)
+	cmd.SetContext(context.WithValue(ctx, reverseCommandStateKey{}, reverseState))
 	if len(args) > 0 && lookupTopLevelCommand(cmd, args[0]) == nil {
 		return cmd.RunE(cmd, args)
 	}
@@ -131,6 +142,23 @@ func captureETLPrivateOperands(args []string, state *etlCommandState) []string {
 	}
 	state.statusRunID = args[2]
 	state.statusRunIDSet = true
+	out := make([]string, 0, len(args)-1)
+	out = append(out, args[:2]...)
+	out = append(out, args[3:]...)
+	return out
+}
+
+func captureReversePrivateOperand(args []string, state *reverseCommandState) []string {
+	if len(args) < 3 || args[0] != "reverse" {
+		return args
+	}
+	switch args[1] {
+	case "plan", "preview", "run", "status":
+	default:
+		return args
+	}
+	state.operand = args[2]
+	state.operandSet = true
 	out := make([]string, 0, len(args)-1)
 	out = append(out, args[:2]...)
 	out = append(out, args[3:]...)
@@ -164,6 +192,21 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 		case "check", "catalog", "read", "run", "status":
 			args = normalizeStringArraySpaceValues(args, 2, etlFlagNames)
 			return normalizeETLLegacyActionArgs(args, 2)
+		default:
+			out := make([]string, 0, len(args)+1)
+			out = append(out, args[0], "--")
+			out = append(out, args[1:]...)
+			return out
+		}
+	}
+	if len(args) >= 2 && args[0] == "reverse" {
+		if isHelpArg(args[1]) {
+			return append([]string(nil), args[:2]...)
+		}
+		switch args[1] {
+		case "list", "plan", "preview", "run", "status":
+			args = normalizeStringArraySpaceValues(args, 2, reverseFlagNames)
+			return normalizeReverseLegacyActionArgs(args, 2)
 		default:
 			out := make([]string, 0, len(args)+1)
 			out = append(out, args[0], "--")
@@ -232,6 +275,18 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 
 // normalizeETLLegacyActionArgs keeps tokens ignored by the old ETL parser from becoming Cobra controls.
 func normalizeETLLegacyActionArgs(args []string, start int) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	for _, arg := range args[start:] {
+		if arg == "--" || isLegacyHelpFlag(arg) || (strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--")) {
+			continue
+		}
+		out = append(out, arg)
+	}
+	return out
+}
+
+func normalizeReverseLegacyActionArgs(args []string, start int) []string {
 	out := make([]string, 0, len(args))
 	out = append(out, args[:start]...)
 	for _, arg := range args[start:] {
@@ -362,6 +417,18 @@ var etlFlagNames = map[string]struct{}{
 	"progress":   {},
 }
 
+var reverseFlagNames = map[string]struct{}{
+	"source-table": {},
+	"destination":  {},
+	"map":          {},
+	"action":       {},
+	"limit":        {},
+	"approve":      {},
+	"confirm":      {},
+	"root":         {},
+	"progress":     {},
+}
+
 var connectionsCreateFlagNames = map[string]struct{}{
 	"source":             {},
 	"destination":        {},
@@ -451,9 +518,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		{name: "man", handler: runManualAlias},
 		{name: "connectors", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runConnectors(ctx, root, args, stdout, jsonOut)
-		}},
-		{name: "reverse", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "flow", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runFlow(ctx, cfg, a, args, stdout, jsonOut) })

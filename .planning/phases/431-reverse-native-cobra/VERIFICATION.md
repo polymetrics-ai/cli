@@ -6,19 +6,19 @@ Invocation session: `issue-431-pi-openai-codex-gpt-5.6-sol-high-20260719T010451Z
 
 - [x] Six phase artifacts created before test or production edits.
 - [x] Focused RED captured before production edits (`undefined: newReverseCobraCommand`).
-- [ ] Native reverse list/plan/preview/approval-bearing run/status/help tree; legacy wrapper removed.
-- [ ] All current flags typed with repeated/bare/assigned compatibility.
+- [x] Native reverse list/plan/preview/approval-bearing run/status/help tree; legacy wrapper removed.
+- [x] All current flags typed with repeated/bare/assigned compatibility.
 - [ ] Bare/text/JSON/long/short/positional help parity.
-- [ ] Trailing help, literal `--`, strict first-operand ownership, and no carrier override.
-- [ ] Unknown flags/actions, global assigned booleans, and no action-discovery bypass.
-- [ ] Exact exit taxonomy and one-envelope stdout/stderr behavior.
-- [ ] Approval value absent from JSON, diagnostics, errors, and local logs.
-- [ ] Typed confirmation and strict plan → preview → approval → execute ordering with no pre-gate writer invocation.
-- [ ] Only reverse `parseFlags` call sites removed; dynamic connector parser remains.
+- [x] Trailing help, literal `--`, strict first-operand ownership, and no carrier override.
+- [x] Unknown flags/actions, global assigned booleans, and no action-discovery bypass.
+- [x] Exact exit taxonomy and one-envelope stdout/stderr behavior in focused tests.
+- [x] Approval value absent from JSON, diagnostics, errors, and local logs in focused tests.
+- [x] Typed confirmation and strict plan → preview → approval → execute ordering with no pre-gate writer invocation.
+- [x] Only reverse `parseFlags` call sites removed; dynamic connector parser remains.
 
 ## Gates
 
-- [ ] Focused native reverse/router tests.
+- [x] Focused native reverse/router tests (`28.527s`; broader reverse/router safety suite `62.562s`).
 - [ ] Focused repeated tests (`-count=5`).
 - [ ] Focused race tests (`-race`).
 - [ ] Existing reverse app/CLI safety tests.
