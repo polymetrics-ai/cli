@@ -46,3 +46,7 @@ Excluded: connector defs, connector runtime behavior, new certify semantics/flag
 Bare `pm connectors` must render the canonical manual and exit 0; invalid actions remain usage exit 2. Update the canonical connectors manual to document certify commands and 0/1/2/3 exits, regenerate `docs/cli/connectors.md`, and mirror the bounded surface in `website/content/docs/cli-reference.mdx`; generated website data follows existing scripts. Completion registration is unchanged and Phase 15/19 work is not pulled forward.
 
 All certify command tests use sample fixtures, replay/local fakes, `t.TempDir`, injected runner/sweeper seams, synthetic credential variable names, and planted non-secret sentinel values solely to assert absence. Never print, summarize, or persist a credential value. No real env-secret resolution, live connector check, write, sweep against external systems, reverse ETL execution, model/runtime service, dependency, or broad path.
+
+## Completion
+
+Implemented through three test-first slices: absent native constructors, contextual trailing action help, and direct inspect help before private operand capture. Final implementation keeps dynamic connector parsing unchanged, passes exact-start operations 21/21, focused/repeated/race/router/golden/full CLI/certify gates, runtime help/docs/website parity, explicit local sample certify smoke, connector validation 547/0, and final `make verify`. Delivery remains commit/push only with no PR/review.

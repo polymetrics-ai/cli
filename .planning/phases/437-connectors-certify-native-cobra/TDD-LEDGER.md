@@ -2,29 +2,33 @@
 
 Issue #437; invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-GSD doctor/list and plan-phase prompt passed. Adapter has no `programming-loop`; manual universal-runtime-loop fallback is active. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`, `golang-documentation`, `golang-spf13-cobra`.
+GSD doctor/list and plan-phase prompt passed. Adapter has no `programming-loop`; manual universal-runtime-loop fallback was used. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`, `golang-documentation`, `golang-spf13-cobra`.
 
 | Step | Kind | Evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Six issue-local artifacts written before tests/production | Complete |
-| 1 | RED | `go test ./internal/cli -run 'TestConnectorsCommandIsNativeCobraSubtree|TestNativeConnectors|TestNativeCertify' -count=1` | Failed as required before production edits: `newConnectorsCobraCommand` and `newConnectorsCobraCommandWithRuntime` are undefined |
-| 2 | GREEN | Native connectors/certify subtree, typed flags/runtime seam, compatibility normalization, and namespace-only parser removal | Pass: focused `3.876s`; focused router/golden/certify/telemetry `111.507s`; repeated ×10 `34.915s`; race `40.844s`; certify package `336.422s` |
-| 3 | Help-refactor RED | Focused trailing action/nested certify help contract | Failed before the final help production edit: list/catalog/inspect returned operation output, certify positional help was usage 2, and certify JSON trailing help returned a certification envelope |
-| 4 | Help-refactor GREEN | Normalize direct/trailing action help before effects and render canonical connectors manual | Pass focused `3.884s`; broader rerun pending |
-| 5 | Operand-help RED/GREEN | Direct `connectors inspect --help|help` before operand capture | RED: both tokens were captured as connector names and returned internal connector-not-found errors; GREEN: focused help/action tests pass `3.989s` after help-aware capture |
-| 5 | Delivery | Finalize, commit/push, no PR/review | Pending |
+| 1 | Initial RED | `go test ./internal/cli -run 'TestConnectorsCommandIsNativeCobraSubtree|TestNativeConnectors|TestNativeCertify' -count=1` | Failed before production: `newConnectorsCobraCommand` and `newConnectorsCobraCommandWithRuntime` undefined |
+| 2 | GREEN | Native subtree, typed flags/runtime seam, compatibility normalization, namespace-only parser removal | Focused `3.876s`; router/golden/certify/telemetry `111.507s`; repeated ×10 `34.915s`; race `40.844s`; certify package `336.422s` |
+| 3 | Help RED | Trailing list/catalog/inspect/certify help contract | Failed before final help edit: operations ran, certify positional help returned usage 2, JSON trailing help returned certification output |
+| 4 | Help GREEN | Contextual direct/trailing help before effects | Focused `3.884s` |
+| 5 | Operand-help RED | Direct `connectors inspect --help|help` | Failed before correction: help token captured as connector name and returned internal connector-not-found |
+| 6 | Operand-help GREEN | Help-aware private operand capture | Focused `3.989s` |
+| 7 | Refactor | Repeated/race/router/golden/differential/parity | Final native ×10 `34.833s`; native race `40.842s`; router/golden/certify/telemetry `111.919s`; exact-start operations 21/21 |
+| 8 | Full gate | certify smoke, connector validation, docs/website, gofmt/vet/test/build/make verify | Complete: smoke exit 0/pass; validation 547/0; final `make verify` exit 0 |
+| 9 | Delivery | Finalize six artifacts, commit/push, no PR/review | Pending terminal artifact commit |
 
-## RED contract
+## Contract proven
 
-- `connectors` is native Cobra, absent from legacy wrappers, with native `list`, `catalog`, `inspect`, hidden positional help and existing manual aliases.
-- `certify` is a native nested command supporting single connector, `--all`, and `--sweep`, with all currently consumed flags represented as StringArray flags with `NoOptDefVal=true` to preserve parser semantics.
-- Repeated flags are last-wins where handlers currently use `first`; bare/assigned/space forms, positional connector selection, ignored tails, literal `--`, malformed/legal unknowns, invalid actions/operands, no later action discovery, and globals preserve the exact contract.
-- Bare/topic/long/short/positional/trailing help is canonical in text/JSON and side-effect-free. Invalid actions remain usage errors.
-- Certify reports retain exits 0 pass, 1 internal, 2 certification failure, 3 leak dominance and one-envelope behavior.
-- Fresh trees remain re-entrant. Batch context cancellation terminates workers; parallel limit, event sequence, and telemetry names/status remain intact.
-- No credential value reaches stdout, stderr, report JSON, events, telemetry, or parser errors.
-- Dynamic connector dispatch stays on legacy parsing exactly; no connector defs or live checks/writes.
+- `connectors` is native Cobra and absent from legacy wrappers; native list/catalog/inspect/manual aliases/help/certify are declared.
+- Certify supports single connector, `--all`, and `--sweep`, with the current command-contract flags represented as repeatable `StringArray` flags with `NoOptDefVal=true`.
+- Repeated values, bare/assigned/space forms, positional connector selection, ignored tails, unknowns, literal `--`, malformed action heads, no later discovery, and globals retain compatibility.
+- Bare/topic/direct/long/short/positional/trailing help is canonical text/JSON and side-effect free; invalid actions remain usage errors.
+- Certification reports retain exits 0 pass, 1 internal, 2 certification failure, 3 leak dominance and one-envelope output.
+- Fresh command trees, context cancellation, bounded batch concurrency, event sequence, telemetry spans, and credential-value exclusion remain covered.
+- Dynamic connector dispatch remains the only CLI `parseFlags` consumer pair; `parse.go` is unchanged.
 
-## Evidence log
+## Final evidence
 
-Append actual failing/passing commands and results only; do not backfill.
+- Full `make verify`: CLI `431.305s`, certify `337.280s`, docs, ordered local smoke, lint 0, connector validation 547/0.
+- Required explicit local certify smoke: exit 0, sample `ConnectorCertification`, passed, empty stderr.
+- No live credential check/write/sweep, service, dependency, connector definition, or private material used.

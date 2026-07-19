@@ -7,12 +7,14 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
+  "endingImplementationHead": "445ad06c",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
+  "endedAt": "20260719T104934Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "planned",
-  "verificationPassed": false,
+  "status": "complete_verified",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -29,17 +31,32 @@
     {
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
-      "reason": "complete native connectors/certify tree, parsing, help, output, exit, cancellation, re-entrancy, and credential-output contract was added before production; focused build fails on the intentionally absent native constructors"
+      "reason": "complete native connectors/certify tree, parsing, help, output, exit, cancellation, re-entrancy, and credential-output contract failed on intentionally absent native constructors before production"
     },
     {
       "cycle": "green-implementation",
       "decision": "local_critical_path",
-      "reason": "native connectors and nested certify commands with typed current flags, injected runtime, compatibility normalization, namespace-only parser removal, manual parity, and credential-value exclusion pass focused, repeated, race, router/golden, telemetry, and full certify package tests"
+      "reason": "native connectors and nested certify commands with typed flags, injected runtime, compatibility normalization, namespace-only parser removal, manual parity, and credential-value exclusion passed focused, repeated, race, router/golden, telemetry, and certify tests"
+    },
+    {
+      "cycle": "help-refactor-red-green",
+      "decision": "local_critical_path",
+      "reason": "two committed test-first corrections established contextual trailing/direct action help without operation effects or connector-name capture"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused/repeated/race, router/golden, exact-start operational differential, full CLI/certify, context/concurrency/events/telemetry/nondisclosure, runtime help, docs/website, connector validation, explicit certify smoke, and make verify all passed"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "terminal issue-local evidence and no-PR/no-review handoff finalized for commit and immediate push"
     }
   ],
-  "red": "focused CLI build failed before production edits because newConnectorsCobraCommand and newConnectorsCobraCommandWithRuntime are undefined",
-  "green": "focused 3.876s; router/golden/certify/telemetry 111.507s; repeated x10 34.915s; race 40.844s; certify package 336.422s; exact-base 26/26 differential",
-  "verification": "pending",
+  "red": "initial native constructors undefined; trailing action help ran operations or returned certify usage/output; direct inspect help was captured as a connector operand",
+  "green": "native subtree and all three test-first slices pass; final focused 3.989s, x10 34.833s, race 40.842s, router/golden/certify/telemetry 111.919s, exact-start operations 21/21",
+  "verification": "pass: final make verify exit 0 with CLI 431.305s, certify 337.280s, docs/smoke/lint/connectors green; explicit certify sample smoke exit 0/pass; connector validation 547/0",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",
     ".planning/phases/437-connectors-certify-native-cobra/TDD-LEDGER.md",
@@ -48,9 +65,17 @@
     ".planning/phases/437-connectors-certify-native-cobra/SUMMARY.md",
     ".planning/phases/437-connectors-certify-native-cobra/RUN-STATE.json"
   ],
-  "commits": [],
-  "push": "pending",
+  "commits": [
+    "ed0263c1 docs(planning): plan connectors certify native cobra slice",
+    "90443232 test(cli): specify native connectors certify contract",
+    "47bb321b refactor(cli): nativize connectors and certify namespace",
+    "5da474a2 test(cli): expose connectors trailing help gaps",
+    "6f248f1d fix(cli): preserve connectors contextual trailing help",
+    "9ab1fa41 test(cli): expose connectors direct action help gap",
+    "445ad06c fix(cli): route direct connectors action help"
+  ],
+  "push": "all planning, RED, GREEN, and help-correction checkpoints pushed; terminal artifact commit is pushed immediately after this state is written",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
-  "safety": "fixture/replay/local temp roots only; no defs, credentials, live checks/writes, dependencies, services, PR, or review"
+  "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"
 }
