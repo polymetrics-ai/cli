@@ -1,6 +1,6 @@
 # Phase 435 Summary
 
-Status: RED captured from exact start `14c02d295065c3bf33c65eaac5f8d36642798f81`; test-only contract committed next, no production edits yet.
+Status: GREEN/refactor complete; full default-only repository gates remain before terminal delivery.
 
 ## Identity
 
@@ -10,11 +10,13 @@ Status: RED captured from exact start `14c02d295065c3bf33c65eaac5f8d36642798f81`
 - Base: `feat/cli-architecture-v2`
 - Parent: #397; umbrella: #407; draft parent PR #438
 
-## Planned delivery
+## Delivered
 
-Nativize only the hidden `worker` namespace with native Cobra `status`, `serve`, and direct help behavior. Add invocation-local status/serve fakes so all CLI tests remain hermetic and prove help/invalid/config paths start no probe or worker. Preserve typed config precedence, cancellation, readiness, status/serve text and JSON contracts, and the worker's typed RLM-workflow-only boundary. Remove only the worker legacy dispatcher.
+Native Cobra owns hidden `worker`, `status`, `serve`, and positional help. The command remains absent from root discovery, declares no local flags, and uses worker-only normalization for strict first-action ownership, ignored selected-action operands, literal/malformed/unknown behavior, and side-effect-free direct/trailing help.
 
-Direct hidden worker help and bare invocation will follow #435's contextual-help acceptance while the command stays absent from root discovery. Any worker-only golden/manual update will be reviewed and generated parity checked; broad Phase 19 help churn remains excluded.
+An invocation-local runtime seam injects status/probe and serve functions without mutable package globals. Typed handlers preserve explicit Temporal config, RLM Podman/image activity settings, cancellation, readiness ordering, task queue, text/JSON envelopes, and errors. Help/config/invalid tests assert zero status/serve calls and config canaries remain undisclosed. The production runtime still registers only the typed RLM Temporal workflow/activity; no generic runner exists.
+
+Bare and direct hidden help now return a dedicated worker manual per #435 acceptance. The two intentional golden changes are reviewed, `docs/cli/worker.md` is generated, website worker docs already match, and worker stays hidden.
 
 ## Workflow
 
@@ -28,4 +30,6 @@ No Temporal worker/dial, network listener, Podman command, database, runtime ser
 
 RED: focused CLI compilation failed before production edits on undefined `newWorkerCobraCommand`, `workerCommandRuntime`, and `newRootCmdWithWorkerRuntime`. The complete tests specify the hidden native tree, fake-only status/serve behavior, help/no-side-effect routes, action parsing, globals/config precedence, cancellation, nondisclosure, and typed non-generic boundary.
 
-GREEN/refactor remains pending. Full verification will include focused/repeated/race worker and CLI tests, worker fake tests, router/goldens, exact-start differential, config precedence/nondisclosure, help/docs/website parity, gofmt, vet, full tests, build, and default-only `make verify`.
+GREEN/refactor passed: focused `0.569s`, repeated ×5 `0.738s`, focused race `1.690s`, worker fake/race `0.614s`/`1.580s`, router/golden/docs `6.115s`, and full CLI `427.774s`. Exact-start differential matched 6/6 unchanged cases and 2/2 intentional contextual-help changes. Runtime help and generated docs/website checks pass.
+
+Remaining: gofmt final check, vet, full repository tests, build, default-only `make verify`, scope guards, terminal artifacts, commit/push.

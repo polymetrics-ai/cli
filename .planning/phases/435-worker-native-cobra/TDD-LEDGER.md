@@ -15,8 +15,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
 | 1 | RED | `go test ./internal/cli -run 'TestWorker(Command|Status|Help|Invalid|Config|Context)' -count=1` | Failed as required before production edits: undefined `newWorkerCobraCommand`, `workerCommandRuntime`, and `newRootCmdWithWorkerRuntime` |
-| 2 | GREEN | Native hidden worker subtree + invocation-local fake runtime + worker-only dispatcher removal | Pending |
-| 3 | Refactor | Focused/repeated/race/router/golden/full CLI, worker fake, config/parity/differential checks | Pending |
+| 2 | GREEN | Native hidden worker subtree + invocation-local fake runtime + worker-only dispatcher removal | Pass: focused `0.569s`; repeated ×5 `0.738s`; focused race `1.690s` |
+| 3 | Refactor | Focused/repeated/race/router/golden/full CLI, worker fake, config/parity/differential checks | Pass: full CLI `427.774s`; worker/config fakes pass; exact-start 6/6 compatible plus 2/2 intentional help changes |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Pending |
 | 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
 
@@ -48,4 +48,8 @@ The tests cover the hidden native tree, no local flag surface, status/serve fake
 
 ## GREEN / refactor evidence
 
-Pending.
+Native Cobra now owns hidden `worker`, `status`, `serve`, and positional help. Worker has no local pflags; worker-only normalization preserves strict first-action ownership, ignored selected-action operands, literals, malformed/unknown tokens, and makes direct/trailing help side-effect free. An invocation-local runtime carries probe and serve functions; no mutable global seam remains. Typed handlers preserve explicit Temporal config, Podman activity settings, readiness, status/serve text and JSON, task queue, error mapping, and cancellation.
+
+Focused tests passed in `0.569s`; repeated ×5 in `0.738s`; focused race in `1.690s`; worker package tests/race in `0.614s`/`1.580s`; config tests in `0.649s`. Router/golden/docs focus passed in `6.115s`; full CLI passed in `427.774s`. Exact-start binary differential matched 6/6 unchanged status/serve-error/invalid/operand cases and confirmed 2/2 intentional contextual-help changes. Runtime help/topic/bare/direct routes match, worker remains hidden from root help, generated `docs/cli/worker.md` is present, and website docs generation has no tracked delta.
+
+No Temporal dial/worker, listener, Podman command, database, runtime service, credential, connector, or external call was used.

@@ -69,22 +69,26 @@ func markCobraLegacyError(err error) error {
 }
 
 func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer) *cobra.Command {
-	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime())
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), defaultWorkerCommandRuntime())
 }
 
 func newRootCmdWithAgentImageRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, imageRuntime agentImageRuntime) *cobra.Command {
-	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, imageRuntime, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime())
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, imageRuntime, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), defaultWorkerCommandRuntime())
 }
 
 func newRootCmdWithScheduleRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, scheduleRuntime scheduleCommandRuntime) *cobra.Command {
-	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, scheduleRuntime, defaultRLMCommandRuntime())
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, scheduleRuntime, defaultRLMCommandRuntime(), defaultWorkerCommandRuntime())
 }
 
 func newRootCmdWithRLMRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, rlmRuntime rlmCommandRuntime) *cobra.Command {
-	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), rlmRuntime)
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), rlmRuntime, defaultWorkerCommandRuntime())
 }
 
-func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, imageRuntime agentImageRuntime, scheduleRuntime scheduleCommandRuntime, rlmRuntime rlmCommandRuntime) *cobra.Command {
+func newRootCmdWithWorkerRuntime(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, workerRuntime workerCommandRuntime) *cobra.Command {
+	return newRootCmdWithRuntimes(ctx, cfg, stdout, stderr, osAgentImageRuntime{}, defaultScheduleCommandRuntime(), defaultRLMCommandRuntime(), workerRuntime)
+}
+
+func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, imageRuntime agentImageRuntime, scheduleRuntime scheduleCommandRuntime, rlmRuntime rlmCommandRuntime, workerRuntime workerCommandRuntime) *cobra.Command {
 	root := cfg.Root
 	jsonOut := cfg.JSON
 	cmd := &cobra.Command{
@@ -123,6 +127,7 @@ func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stde
 	cmd.AddCommand(newFlowCobraCommand(ctx, cfg, root, stdout, jsonOut))
 	cmd.AddCommand(newScheduleCobraCommandWithRuntime(ctx, cfg, root, stdout, jsonOut, scheduleRuntime))
 	cmd.AddCommand(newRLMCobraCommandWithRuntime(ctx, cfg, root, stdout, jsonOut, rlmRuntime))
+	cmd.AddCommand(newWorkerCobraCommandWithRuntime(ctx, cfg, stdout, jsonOut, workerRuntime))
 	cmd.AddCommand(newQueryCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newRuntimeCobraCommand(ctx, cfg, stdout, jsonOut))
 	cmd.AddCommand(newPerfCobraCommand(ctx, cfg, stdout, jsonOut))
@@ -142,6 +147,7 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	args = captureFlowPrivateOperand(args, &flowState)
 	var scheduleState scheduleCommandState
 	args = captureSchedulePrivateOperand(args, &scheduleState)
+	args = normalizeWorkerActionArgs(args)
 	var credentialsState credentialsCommandState
 	args = normalizeNativeStringArrayArgs(args, &credentialsState)
 	if credentialsState.rawCarrier {
@@ -262,6 +268,30 @@ func captureSchedulePrivateOperand(args []string, state *scheduleCommandState) [
 	out = append(out, args[:operandIndex]...)
 	out = append(out, args[operandIndex+1:]...)
 	return out
+}
+
+func normalizeWorkerActionArgs(args []string) []string {
+	if len(args) < 2 || args[0] != "worker" {
+		return args
+	}
+	switch args[1] {
+	case "status", "serve":
+		for _, arg := range args[2:] {
+			if arg == "--" {
+				break
+			}
+			if isHelpArg(arg) {
+				return []string{args[0], args[1], arg}
+			}
+		}
+		return append([]string(nil), args[:2]...)
+	case "help", "--help", "-h":
+		return append([]string(nil), args[:2]...)
+	default:
+		out := make([]string, 0, len(args)+1)
+		out = append(out, args[0], "--")
+		return append(out, args[1:]...)
+	}
 }
 
 func normalizeNativeStringArrayArgs(args []string, credentialsState *credentialsCommandState) []string {
@@ -754,9 +784,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "extract", hidden: true, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
-		}},
-		{name: "worker", hidden: true, handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runWorker(ctx, cfg, args, stdout, jsonOut)
 		}},
 	}
 }

@@ -11,7 +11,7 @@
   "startedAt": "20260719T064417Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "planned",
+  "status": "green_refactor_complete",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -30,11 +30,16 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "complete hidden native worker tree, fake status/serve, help/no-side-effect, action parsing, globals/config precedence, cancellation, nondisclosure, and non-generic boundary tests were added before production edits; focused CLI compilation failed on the intentionally absent native constructor/runtime symbols"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native hidden worker status/serve/help, worker-only action normalization, invocation-local fakes, config and cancellation handling, dedicated manual, and worker-only legacy removal pass focused, repeated, race, worker-fake, router/golden, full CLI, and exact-start differential gates without service calls"
     }
   ],
   "red": "focused CLI compile failure before production edits: undefined newWorkerCobraCommand, workerCommandRuntime, and newRootCmdWithWorkerRuntime",
-  "green": "pending",
-  "verification": "pending full default-only make verify",
+  "green": "focused 0.569s; repeated x5 0.738s; race 1.690s; worker fake/race 0.614s/1.580s; router/golden/docs 6.115s; full CLI 427.774s; exact-start 6/6 compatible plus 2/2 intentional help changes",
+  "verification": "focused and full CLI pass; pending vet/full repository/build/default-only make verify",
   "files": [
     ".planning/phases/435-worker-native-cobra/PLAN.md",
     ".planning/phases/435-worker-native-cobra/TDD-LEDGER.md",
@@ -43,7 +48,14 @@
     ".planning/phases/435-worker-native-cobra/SUMMARY.md",
     ".planning/phases/435-worker-native-cobra/RUN-STATE.json",
     "internal/cli/worker_native_cobra_test.go",
-    "internal/cli/cobra_router_test.go"
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/worker_cli.go",
+    "internal/cli/worker_cli_test.go",
+    "internal/cli/config_migration_test.go",
+    "internal/cli/docs.go",
+    "internal/cli/golden_transcript_test.go",
+    "internal/cli/testdata/golden_transcripts.json",
+    "docs/cli/worker.md"
   ],
   "commits": [],
   "push": "pending",

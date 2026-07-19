@@ -135,8 +135,8 @@ func TestWorkerHelpRoutesAreContextualHiddenAndSideEffectFree(t *testing.T) {
 		{name: "status positional", args: []string{"worker", "status", "help"}},
 		{name: "serve short", args: []string{"worker", "serve", "-h"}},
 		{name: "serve positional", args: []string{"worker", "serve", "help"}},
-		{name: "JSON bare", args: []string{"worker", "--json"}, json: true},
-		{name: "JSON trailing", args: []string{"worker", "status", "--help", "--json"}, json: true},
+		{name: "JSON bare", args: []string{"worker"}, json: true},
+		{name: "JSON trailing", args: []string{"worker", "status", "--help"}, json: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -220,7 +220,7 @@ func TestWorkerConfigPrecedenceGlobalsAndNondisclosure(t *testing.T) {
 		wantJSON   bool
 		wantSource string
 	}{
-		{name: "file", args: []string{"--root", root, "worker", "status"}, wantAddr: fileAddr, wantSource: "file"},
+		{name: "file", args: []string{"--root", root, "worker", "status"}, wantAddr: fileAddr, wantSource: "config"},
 		{name: "legacy alias", alias: aliasAddr, args: []string{"worker", "status", "--root=" + root, "--json"}, wantAddr: aliasAddr, wantJSON: true, wantSource: "env"},
 		{name: "primary over alias", primary: primaryAddr, alias: aliasAddr, args: []string{"--json=false", "--plain=true", "worker", "status", "--json", "--root", root}, wantAddr: primaryAddr, wantJSON: true, wantSource: "env"},
 	}
@@ -248,6 +248,9 @@ func TestWorkerConfigPrecedenceGlobalsAndNondisclosure(t *testing.T) {
 			if strings.Contains(stdout+stderr, imageCanary) || strings.Contains(stdout+stderr, podmanCanary) {
 				t.Fatal("unrelated worker configuration leaked")
 			}
+			if tt.primary != "" && tt.alias != "" && strings.Contains(stdout+stderr, tt.alias) {
+				t.Fatal("lower-precedence worker configuration leaked")
+			}
 		})
 	}
 
@@ -257,6 +260,25 @@ func TestWorkerConfigPrecedenceGlobalsAndNondisclosure(t *testing.T) {
 	stdout, stderr, code, _ := runWorkerInvocation(t, runtime, "--root", t.TempDir(), "--json", "worker", "serve")
 	if code != 3 || !strings.Contains(stdout, `"code": "validation_error"`) || !strings.Contains(stderr, "POLYMETRICS_TEMPORAL_ADDR is not set") {
 		t.Fatalf("missing explicit config: code=%d stdout=%q stderr=%q", code, stdout, stderr)
+	}
+	assertWorkerRuntimeNotCalled(t, runtime)
+
+	const malformedCanary = "malformed-config-canary"
+	malformedRoot := writeWorkerConfig(t, "runtime:\n  temporal_addr: ["+malformedCanary+"\n")
+	runtime = newFakeWorkerRuntime()
+	stdout, stderr, code, _ = runWorkerInvocation(t, runtime, "--root", malformedRoot, "--json", "worker", "status")
+	if code != 3 {
+		t.Fatalf("malformed config code=%d, want 3", code)
+	}
+	if strings.Contains(stdout+stderr, malformedCanary) {
+		t.Fatal("malformed configuration value leaked")
+	}
+	assertWorkerRuntimeNotCalled(t, runtime)
+
+	runtime = newFakeWorkerRuntime()
+	_, _, code, _ = runWorkerInvocation(t, runtime, "--json=maybe", "worker", "status")
+	if code != 3 {
+		t.Fatalf("invalid global code=%d, want 3", code)
 	}
 	assertWorkerRuntimeNotCalled(t, runtime)
 }

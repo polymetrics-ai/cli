@@ -2,13 +2,11 @@ package cli
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
-
-	"polymetrics.ai/internal/worker"
 )
 
 func TestRuntimeDoctorUsesConfigFile(t *testing.T) {
@@ -69,36 +67,27 @@ rlm:
   podman_bin: /tmp/custom-podman-from-config
 `)
 
-	origServe := workerServe
-	var capturedAddr string
-	var capturedActivities *worker.PodmanActivities
-	workerServe = func(ctx context.Context, addr string, acts *worker.PodmanActivities, ready func()) error {
-		if ctx == nil {
-			t.Fatal("worker serve got nil context")
-		}
-		capturedAddr = addr
-		capturedActivities = acts
-		ready()
-		return nil
-	}
-	t.Cleanup(func() { workerServe = origServe })
-
-	var stdout, stderr bytes.Buffer
-	code := Run([]string{"--root", root, "--json", "worker", "serve"}, &stdout, &stderr)
+	t.Setenv("POLYMETRICS_TEMPORAL_ADDR", "")
+	t.Setenv("PM_TEMPORAL_ADDR", "")
+	runtime := newFakeWorkerRuntime()
+	stdout, stderr, code, _ := runWorkerInvocation(t, runtime, "--root", root, "--json", "worker", "serve")
 	if code != 0 {
-		t.Fatalf("exit = %d, stderr = %s", code, stderr.String())
+		t.Fatalf("exit = %d, stderr = %s", code, stderr)
 	}
-	if capturedAddr != "127.0.0.1:7233" {
-		t.Fatalf("addr = %q, want config-file temporal addr", capturedAddr)
+	if runtime.serveAddr != "127.0.0.1:7233" {
+		t.Fatalf("addr = %q, want config-file temporal addr", runtime.serveAddr)
 	}
-	if capturedActivities == nil {
+	if runtime.activities == nil {
 		t.Fatal("worker serve did not receive activities")
 	}
-	if capturedActivities.PodmanBin != "/tmp/custom-podman-from-config" {
-		t.Fatalf("PodmanBin = %q, want config-file podman bin", capturedActivities.PodmanBin)
+	if runtime.activities.PodmanBin != "/tmp/custom-podman-from-config" {
+		t.Fatalf("PodmanBin = %q, want config-file podman bin", runtime.activities.PodmanBin)
 	}
-	if capturedActivities.Image != "ghcr.io/example/custom-rlm-agent:test" {
-		t.Fatalf("Image = %q, want config-file image", capturedActivities.Image)
+	if runtime.activities.Image != "ghcr.io/example/custom-rlm-agent:test" {
+		t.Fatalf("Image = %q, want config-file image", runtime.activities.Image)
+	}
+	if !strings.Contains(stdout, `"kind": "WorkerServe"`) {
+		t.Fatalf("worker serve output = %q", stdout)
 	}
 }
 
