@@ -48,13 +48,13 @@ Invocation: `issue-435-pi-sol-high-20260719T064417Z`; profile `Sol`; thinking `h
 - [x] Exact branch/start and parent draft PR confirmed.
 - [x] GSD doctor/list passed; unavailable programming-loop/manual fallback recorded.
 - [x] Required CLI/testing/error/security/safety/context/concurrency/docs/Cobra skills loaded.
-- [ ] P2 accepted: the original claim was false because `config_migration_test.go` invoked production `temporalprobe.Probe` through `Run` and attempted a loopback Temporal dial.
-- [ ] Route that config-migration status case through the invocation-local fake and assert exactly one fake status call with the configured address.
-- [ ] Focused/repeated/race worker/config tests pass with no production network dial path in the audited test set.
+- [x] P2 accepted: the original claim was false because `config_migration_test.go` invoked production `temporalprobe.Probe` through `Run` and attempted a loopback Temporal dial.
+- [x] Config-migration status now uses the invocation-local fake and asserts exactly one fake call, configured address, and config-file source.
+- [x] Focused/repeated/race worker/config tests pass with no production network dial path in the audited worker test set.
 - [x] No Podman, database, runtime service, credential, secret/config-canary disclosure, or generic runner.
 - [x] No dependencies, unrelated namespaces, or broad generated churn.
 - [x] Original planning, RED, GREEN/refactor, and terminal handoff checkpoints committed/pushed.
-- [ ] P2 test/evidence correction committed and pushed.
+- [x] P2 planning correction `534f4e1f` and test correction `01d70f55` committed/pushed.
 - [x] No PR/review will be created per user instruction.
 
-Correction result: pending from exact correction HEAD `f692225ab53a3c0467d42c0ac3e9810107d73a82`. `verificationPassed=false` until the fake-seam assertion, focused/repeated/race worker/config gates, network-dial audit, diff/gofmt/vet, and any necessary broader CLI check pass. The historical full `make verify` result remains valid for that commit but did not prove the prior fake-only claim.
+Correction result: pass at test commit `01d70f55e755bd57b31662ccd333f34916de0563`. CLI worker/config focus passed (`0.566s`), repeated ×10 (`0.588s`), and race (`1.682s`); `internal/worker`/`internal/config` normal, repeated ×10, and race runs passed; source audit found no production `Run`/probe/dial path in the corrected status case or worker CLI tests; gofmt, diff check, and `go vet ./...` passed. Full CLI was not needed for this test-only correction; unrelated runtime doctor/perf tests are not claimed dial-free. `verificationPassed=true` for the declared bounded correction gates. Historical full `make verify` evidence remains recorded separately.

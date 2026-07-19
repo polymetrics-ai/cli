@@ -19,10 +19,10 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI, worker fake, config/parity/differential checks | Pass: full CLI `427.774s`; worker/config fakes pass; exact-start 6/6 compatible plus 2/2 intentional help changes |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Pass: full repository CLI `435.094s`, certify `344.412s`; `make verify` exited 0 with docs/smoke/lint/connectors green |
 | 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Original delivery completed, but P2 invalidated the fake-only evidence claim |
-| 6 | P2 correction plan | At exact HEAD `f692225ab53a3c0467d42c0ac3e9810107d73a82`, accept `/tmp/pm-397-review-435.log`: config-migration worker status used `Run` and production `temporalprobe.Probe` | In progress; verification reset pending before test edits |
-| 7 | Correction RED | Add a fake status call/address assertion while retaining `Run`; it must fail because the injected seam is bypassed | Pending |
-| 8 | Correction GREEN | Route the config-migration case through `runWorkerInvocation`; preserve config/address/status assertions | Pending |
-| 9 | Correction gates | Focused/repeated/race worker/config tests, network-dial audit, conditional full CLI, diff/gofmt/vet | Pending |
+| 6 | P2 correction plan | At exact HEAD `f692225ab53a3c0467d42c0ac3e9810107d73a82`, accept `/tmp/pm-397-review-435.log`: config-migration worker status used `Run` and production `temporalprobe.Probe` | Complete before test edits; verification reset pending in `534f4e1f` |
+| 7 | Correction RED | Add the fake-call assertion before the legacy `Run` invocation so failure occurs before any dial | Failed as required in `0.556s`: `injected status calls = 0, want 1; direct Run bypasses the fake status seam` |
+| 8 | Correction GREEN | Route the config-migration case through `runWorkerInvocation`; preserve config/address/status assertions | Pass in `0.574s`; committed/pushed as `01d70f55` |
+| 9 | Correction gates | Focused/repeated/race worker/config tests, network-dial audit, conditional full CLI, diff/gofmt/vet | Pass; full CLI not needed for the test-only correction |
 
 ## RED contract
 
@@ -58,6 +58,20 @@ Focused tests passed in `0.569s`; repeated ×5 in `0.738s`; focused race in `1.6
 
 Correction: the preceding no-dial statement was false at the original verified head. `TestWorkerStatusUsesExplicitConfigFileTemporalAddr` reached production `temporalprobe.Probe` through `Run` and attempted a loopback Temporal dial. P2 is accepted; final evidence will distinguish the corrected fake-only worker/config tests from intentional Temporal dial unit tests outside that focused set.
 
+## P2 correction evidence
+
+RED was captured without a network attempt: the new fake-call assertion executed before the old `Run` call and failed with zero fake calls. GREEN replaced `Run` with `runWorkerInvocation`; the final assertion requires exactly one fake status call and checks `runtime.statusAddr == "127.0.0.1:1"` plus config source `config`, so bypassing the seam fails the test. The original JSON address and `status == "unavailable"` assertions remain.
+
+Correction gates:
+
+- CLI worker/config focus: `0.566s`; repeated ×10: `0.588s`; race: `1.682s`.
+- `internal/worker` + `internal/config`: worker/config `0.973s`/`0.403s`; repeated ×10 `1.629s`/`0.984s`; race `1.685s`/`1.898s`.
+- Source audit passed: the corrected function requires the injected helper/assertions and contains no production `Run`, `temporalprobe.Probe`, `client.DialContext`, or `net.Dial`; worker CLI test files contain no direct production `Run`/probe/dial calls.
+- `gofmt`, `git diff --check`, and `go vet ./...` passed.
+- Full CLI was not needed for this test-only correction. Other pre-existing config-migration runtime doctor/perf cases still intentionally enter runtime-check paths, so evidence is limited to the corrected worker/config scope rather than claiming all CLI tests are dial-free.
+
+No service or dependency was used, and no production file changed.
+
 ## Final verification evidence
 
 - `gofmt -w cmd internal`, `go vet ./...`, and `go build ./cmd/pm` passed.
@@ -67,4 +81,4 @@ Correction: the preceding no-dial statement was false at the original verified h
 - Generated CLI manual parity passes; website docs generation produced no tracked delta.
 - Scope/dependency guards pass: no go.mod/go.sum, connector definition, unrelated namespace, or broad website delta; worker dispatcher and worker `parseFlags` call sites are absent; dynamic connector parsing remains.
 
-No optional integration mode was enabled. `make verify` ran only its established dependency-free temporary-root smoke and retained reverse ETL plan → preview → approval → execute order. This historical full-gate result does not satisfy the pending P2 correction verification.
+No optional integration mode was enabled. `make verify` ran only its established dependency-free temporary-root smoke and retained reverse ETL plan → preview → approval → execute order. This historical full-gate result did not satisfy P2 by itself; the bounded correction gates above now do.

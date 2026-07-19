@@ -68,4 +68,4 @@ Before any production edit, reset phase verification to pending. This bounded co
 
 ## Completion
 
-Correction in progress. The earlier implementation remains complete, but `verificationPassed` is false until the accepted P2 is fixed and the declared correction gates pass.
+Correction complete at test commit `01d70f55e755bd57b31662ccd333f34916de0563`. `TestWorkerStatusUsesExplicitConfigFileTemporalAddr` now invokes the native worker through `runWorkerInvocation`, asserts exactly one fake status call, the configured address, and config-file source, and retains the unavailable JSON assertions. Focused/repeated/race CLI worker/config and `internal/worker`/`internal/config` tests passed; source audits found no production `Run`/probe/dial path in worker CLI tests or the corrected status case; diff, gofmt, and `go vet ./...` passed. Full CLI was not needed for this test-only correction and would include unrelated runtime-probe tests, so no broader no-dial claim is made. No production file, service, dependency, PR, or review was used.

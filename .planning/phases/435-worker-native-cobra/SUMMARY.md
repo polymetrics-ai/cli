@@ -1,6 +1,6 @@
 # Phase 435 Summary
 
-Status: P2 test/evidence correction in progress from exact HEAD `f692225ab53a3c0467d42c0ac3e9810107d73a82`; original implementation head `2fcee762d0842f9fe8f8014526fe5e298f755023`.
+Status: P2 test/evidence correction complete and pushed at `01d70f55e755bd57b31662ccd333f34916de0563`; correction started from exact HEAD `f692225ab53a3c0467d42c0ac3e9810107d73a82`; original implementation head `2fcee762d0842f9fe8f8014526fe5e298f755023`.
 
 ## Identity
 
@@ -24,11 +24,11 @@ GSD doctor/list and plan-phase prompt generation passed. `programming-loop` is a
 
 ## P2 correction
 
-Accepted `/tmp/pm-397-review-435.log`: the original no-dial claim was inaccurate. `TestWorkerStatusUsesExplicitConfigFileTemporalAddr` called `Run`, bypassed the injected worker runtime seam, and attempted a loopback Temporal dial through production `temporalprobe.Probe`. Verification is reset to pending before test edits. The bounded fix will add an assertion that fails when the fake seam is bypassed, route the case through `runWorkerInvocation`, preserve config-file address/status assertions, and rerun focused isolation gates.
+Accepted `/tmp/pm-397-review-435.log`: the original no-dial claim was inaccurate. `TestWorkerStatusUsesExplicitConfigFileTemporalAddr` called `Run`, bypassed the injected worker runtime seam, and attempted a loopback Temporal dial through production `temporalprobe.Probe`. Verification was reset before test edits in `534f4e1f`. RED failed before the old `Run` call with zero fake calls, avoiding a dial. GREEN routes through `runWorkerInvocation` and requires exactly one fake status call, the config-file address/source, and the original unavailable JSON envelope.
 
 ## Safety
 
-No service will be started. The corrected worker/config status tests must use only invocation-local fakes and temporary config roots. No production behavior, listener, Podman command, database, runtime service, credential, connector, secret, dependency, generic runner, PR, or review is in scope.
+No service was started. The corrected worker/config status tests use only invocation-local fakes and temporary config roots. No production behavior/file, listener, Podman command, database, runtime service, credential, connector, secret, dependency, generic runner, PR, or review was used.
 
 ## TDD and verification
 
@@ -36,7 +36,9 @@ RED: focused CLI compilation failed before production edits on undefined `newWor
 
 GREEN/refactor passed: focused `0.569s`, repeated ×5 `0.738s`, focused race `1.690s`, worker fake/race `0.614s`/`1.580s`, router/golden/docs `6.115s`, and full CLI `427.774s`. Exact-start differential matched 6/6 unchanged cases and 2/2 intentional contextual-help changes. Runtime help and generated docs/website checks pass.
 
-Historical final gates passed: gofmt, vet, full repository tests (CLI `435.094s`; certify `344.412s`), build, and default-only `make verify` with docs validation, established local smoke, lint 0, and connector validation 547/0. Those gates did not validate the false fake-only claim; correction verification is pending.
+Historical final gates passed: gofmt, vet, full repository tests (CLI `435.094s`; certify `344.412s`), build, and default-only `make verify` with docs validation, established local smoke, lint 0, and connector validation 547/0. Those gates did not validate the false fake-only claim.
+
+P2 correction gates passed: CLI worker/config focus `0.566s`, repeated ×10 `0.588s`, race `1.682s`; `internal/worker`/`internal/config` normal, repeated ×10, and race runs; worker test network-path source audit; gofmt; diff check; and `go vet ./...`. Full CLI was not needed for this test-only correction, and no claim is made that unrelated runtime doctor/perf tests are dial-free.
 
 ## Worker handoff
 

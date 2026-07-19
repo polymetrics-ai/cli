@@ -33,6 +33,6 @@ Task: At exact HEAD `f692225ab53a3c0467d42c0ac3e9810107d73a82`, accept P2 from `
 
 Execution decision: `local_critical_path` — bounded accepted review correction in the existing isolated issue worktree; no independent worker scope or subagent tool is available.
 
-Downstream artifact: pending.
+Downstream artifact: complete. The config-migration worker status test uses `runWorkerInvocation`, requires one fake status call, checks configured address/source propagation, and retains the unavailable JSON contract. Test-only change; no production files.
 
-Verification result: pending; `verificationPassed=false`.
+Verification result: pass at `01d70f55e755bd57b31662ccd333f34916de0563`. RED failed before the old `Run` call, so no dial occurred. Focused/repeated ×10/race CLI worker/config tests and `internal/worker`/`internal/config` tests passed; worker test source audits found no production Run/probe/dial path; gofmt, diff check, and vet passed. Full CLI was not needed, and unrelated runtime doctor/perf tests are not claimed dial-free. `verificationPassed=true` for the bounded correction gates.
