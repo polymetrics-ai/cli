@@ -214,6 +214,9 @@ func captureConnectorsPrivateOperand(args []string, state *connectorsCommandStat
 	default:
 		return args
 	}
+	if isHelpArg(args[2]) {
+		return args
+	}
 	state.operand = args[2]
 	state.operandSet = true
 	out := make([]string, 0, len(args)-1)
