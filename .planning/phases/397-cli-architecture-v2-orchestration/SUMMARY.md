@@ -24,4 +24,6 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #432 nativized flow while preserving manifest/directory, checkpoint, ledger, event, telemetry, cancellation, and output contracts. Exact-head review and parent integration race checks passed.
 
-The next serialized ready unit is #433. Final verification and final parent review have not run; `verificationPassed` remains false.
+#433 nativized schedule with fake-only backend/runtime seams and preserved no-effect behavior for unsupported actions. Exact-head review and parent integration race checks passed.
+
+The next serialized ready unit is #434. Final verification and final parent review have not run; `verificationPassed` remains false.

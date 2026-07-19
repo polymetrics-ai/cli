@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "active",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "ad6e43313376cfc2c4e4ed98079c14931b932b9a",
+  "currentHead": "990b8f603d0fa2e1e8876bbe52c0cae8512a84df",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -115,6 +115,13 @@
       "decision": "spawned",
       "issues": [432],
       "reason": "Sol/high implementation and independent Sol/xhigh exact-head review completed flow nativization; exact head promoted and parent race checks passed."
+    },
+    {
+      "cycle": "unit_433_execute_review_promote",
+      "timestamp": "2026-07-19T05:33:11Z",
+      "decision": "spawned",
+      "issues": [433],
+      "reason": "Sol/high implementation and independent Sol/xhigh review completed schedule nativization with fake-only external-effect seams; exact head promoted and parent race checks passed."
     }
   ],
   "units": [
@@ -225,6 +232,16 @@
       "status": "provisionally_integrated",
       "implementationSession": "f6cbbbfa-f48f-4abb-a0f1-91f1c0f61e48",
       "reviewSession": "9dbfa83b-6355-4e9c-9a68-5ae39a7aabe9"
+    },
+    {
+      "issue": 433,
+      "branch": "refactor/433-schedule-native-cobra",
+      "startingHead": "ab1c79eede67fa87e1c6b808d6ddba0b27fcf00d",
+      "endingHead": "701569ee985f7c87f011d8a1cfab39afcc3cc8c2",
+      "parentIntegrationHead": "990b8f603d0fa2e1e8876bbe52c0cae8512a84df",
+      "status": "provisionally_integrated",
+      "implementationSession": "e1009583-e898-4de6-b4dd-0b0ef1e2b5cd",
+      "reviewSession": "1a49a57e-51dc-4abc-ae4b-fda7152a416d"
     }
   ],
   "humanGates": [
@@ -238,5 +255,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-19T04:44:27Z"
+  "updatedAt": "2026-07-19T05:33:11Z"
 }
