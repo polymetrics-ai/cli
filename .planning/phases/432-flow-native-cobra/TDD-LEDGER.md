@@ -18,11 +18,11 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
 | 1 | RED | `go test ./internal/cli ./internal/flow -run 'TestFlow(Command|Plan|Help|Exact)|TestEngineCancellationPreserves' -count=1` | Failed as required before production edits: `internal/cli/flow_native_cobra_test.go:20:9: undefined: newFlowCobraCommand`; flow cancellation/events/telemetry/checkpoint/ledger contract passed in `0.394s` |
 | 2 | GREEN | Native flow subtree + typed handlers + flow-only normalization; remove legacy wrapper/parser | Pass: focused native contract and cancellation package `5.002s`; all `TestFlow*` CLI `5.742s`; flow package `0.301s` |
-| 3 | Refactor | Focused/repeated/race/router/golden/full CLI and flow package gates, parity/differential checks | In progress: router/golden/flow `13.293s`; repeated ×5 `27.066s`; focused race CLI `60.885s`, flow `1.348s` |
+| 3 | Refactor | Focused/repeated/race/router/golden/full CLI and flow package gates, parity/differential checks | Pass: post-correction race CLI `184.256s`, flow `1.395s`, events `1.740s`, telemetry `2.034s`; router/golden/flow ×5 `82.184s`; full CLI `430.094s`; flow/events/telemetry `0.666s`/`0.506s`/`0.418s`; parity and 200/200 differential pass |
 | C1 | Correction RED | `go test ./internal/cli -run '^TestFlowLegacyParserEdgesKeepExactOutcomes$' -count=1` after the 200-case differential exposed 20 mismatches | Failed as required before correction production edits: 8/8 assertions failed across bare/assigned/flag-looking file values, short/unknown run/status operands, and bare flows-dir |
 | C2 | Correction GREEN | Invocation-private legacy operand capture plus flow-only local-flag normalization | Pass: focused correction `4.347s`; all flow CLI `9.494s`; flow package `0.480s`; exact-start differential 200/200 |
-| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
-| 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
+| 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pass: vet `3.109s`; build `1.704s`; repository tests `7m16.265s`; `make verify` `24.598s` cached full gate |
+| 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Complete after this terminal artifact commit/push |
 
 ## RED contract
 
@@ -66,4 +66,16 @@ A 200-case exact-start differential (five actions × 40 tails) matched 180/200 a
 
 Invocation-private operand capture now reproduces the old flow parser's first positional choice for run/status before pflag can consume short or unknown-following values. Flow-only normalization preserves missing bare string flags, ignores assigned string/force forms, consumes flag-looking string values, strips only legacy control tokens, and legalizes malformed unknowns. It does not expose an argv carrier or change normal flags, global parsing, action discovery, directory defaults, or other namespaces.
 
-The focused correction passed in `4.347s`; every flow CLI test passed in `9.494s`; all flow package tests passed in `0.480s`; the exact-start differential now matches 200/200 exit/stdout/stderr cases across five actions and 40 tails. Broader parity/full gates remain pending.
+The focused correction passed in `4.347s`; every flow CLI test passed in `9.494s`; all flow package tests passed in `0.480s`; the exact-start differential now matches 200/200 exit/stdout/stderr cases across five actions and 40 tails.
+
+## Final refactor and verification evidence
+
+- Post-correction race command passed: CLI `184.256s`, flow `1.395s`, events `1.740s`, telemetry `2.034s`.
+- Router/golden/flow focus repeated ×5 passed in `82.184s`; full CLI passed in `430.094s`; flow/events/telemetry packages passed in `0.666s`/`0.506s`/`0.418s`.
+- Runtime help topic/bare/long/short/positional routes are byte-equal; JSON manual matches canonical text; invalid action remains exit 2 with the exact legacy message.
+- Generated `docs/cli/flow.md` matches a temp generation; website docs generation produced no tracked delta; golden fixture is unchanged.
+- `gofmt -w cmd internal`, `go vet ./...` (`3.109s`), `go test -timeout 20m ./...` (`7m16.265s`, CLI `431.217s`, certify `338.825s`), and `go build ./cmd/pm` (`1.704s`) pass.
+- `make verify` passed in `24.598s` with cached full tests, docs validation, the established temporary-root local smoke, lint 0 issues, and connector validation 547/0.
+- Scope/dependency guards pass: no `go.mod`, `go.sum`, connector definition, docs/website/golden, generated, or unrelated namespace delta; no `runFlow`/`parseFlowFlags` remains; dynamic connector `parseFlags` remains.
+
+No action flow step, external write/service, live credential, dependency, PR, or review was used. The required `make verify` smoke used only its established temporary local sample/outbox path and no external reverse operation.

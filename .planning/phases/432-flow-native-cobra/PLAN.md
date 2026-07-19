@@ -58,3 +58,7 @@ The first 200-case exact-start action-tail differential found 20 pflag mismatche
 ## Safety
 
 No secrets or approval values, external connectors, credentialed checks, optional services, dependencies, unrestricted writes, destructive/admin actions, reverse ETL, or production deploys. Tests use temp manifests and temp roots only. Action-step execution is excluded; no generic HTTP/SQL write path is exercised or added. Context cancellation must remain propagated, event/telemetry values sanitized, and all state effects bounded to temporary directories.
+
+## Completion
+
+Completed at implementation head `e61cae17`. Native flow owns plan/preview/run/status/list/help and every existing local flag; only the flow wrapper/parser was removed. The correction differential is 200/200 exact. Focused/repeated/race/router/golden/full CLI/flow/events/telemetry, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency guards, and `make verify` pass. No public help/docs artifact changed, no action step or external service/write ran, and Phase 10/11/19 work remains deferred.
