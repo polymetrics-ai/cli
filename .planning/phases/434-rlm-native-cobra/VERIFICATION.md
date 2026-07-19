@@ -5,7 +5,7 @@ Invocation: `issue-434-pi-sol-high-20260719T053630Z`; profile `Sol`; thinking `h
 ## TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.
-- [ ] Focused RED captured before production edits.
+- [x] Focused RED captured before production edits (four intentionally undefined native RLM symbols).
 - [ ] Native RLM run/help tree; legacy wrapper removed.
 - [ ] All current local flags typed with repeated/bare/assigned/space behavior preserved.
 - [ ] Deterministic/fixture/model/agent routing verified with injected fakes only.

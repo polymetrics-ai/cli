@@ -16,7 +16,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
-| 1 | RED | Focused native RLM tree/routing/parser/output tests | Pending |
+| 1 | RED | `go test ./internal/cli -run 'TestRLM(Command|Run|Help)' -count=1` | Failed as required before production edits: undefined `newRLMCobraCommand`, `rlmCommandRuntime`, and `newRootCmdWithRLMRuntime` |
 | 2 | GREEN | Native RLM subtree + typed handler + injected analyzer factory + RLM-only normalization; remove legacy wrapper/parser | Pending |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI, RLM, worker fake, parity and differential checks | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
@@ -34,4 +34,16 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 
 ## Exact RED evidence
 
-Pending test-only edit and focused failure before production changes.
+Captured after the complete test-only edit and before any production change:
+
+```text
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/rlm_native_cobra_test.go:23:9: undefined: newRLMCobraCommand
+internal/cli/rlm_native_cobra_test.go:434:38: undefined: rlmCommandRuntime
+internal/cli/rlm_native_cobra_test.go:435:9: undefined: rlmCommandRuntime
+internal/cli/rlm_native_cobra_test.go:457:9: undefined: newRootCmdWithRLMRuntime
+FAIL\tpolymetrics.ai/internal/cli [build failed]
+FAIL
+```
+
+The missing constructor/runtime symbols prove the native RLM tree and injected analyzer seam do not exist. The tests cover every current local flag; all four mode routes through fakes; context/closer/spec/warehouse mapping; bare/text/JSON/positional/trailing help; literal/malformed/unknown/action/operand discovery; globals; stdout/stderr; request non-leakage; invalid generic/viewer actions; and malformed spec/error paths without any model, Temporal, Podman, or service call.

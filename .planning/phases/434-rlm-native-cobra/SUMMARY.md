@@ -24,4 +24,4 @@ Only temp specs/warehouses and injected analyzer fakes or existing hermetic fake
 
 ## TDD and verification
 
-Pending RED → GREEN → refactor and full dependency-free gates.
+Focused test-only RED is captured before production edits: CLI test compilation fails on the intentionally missing native RLM constructor/runtime seam. GREEN → refactor and full dependency-free gates remain pending.

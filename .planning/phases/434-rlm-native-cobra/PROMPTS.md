@@ -21,6 +21,6 @@ Required skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `g
 
 Safety prompt: use only temporary spec/warehouse paths and injected analyzer/factory fakes or existing hermetic fake runner paths. Never request, print, summarize, store, or log secrets or request contents. Never call a model, Temporal, Podman, worker service, or another external service. Preserve dependency-free deterministic/fixture behavior and optional agent configuration. Do not expose a generic runner and do not implement Phase 16's RLM viewer.
 
-Downstream artifact: pending strict TDD implementation and verification.
+Downstream artifact: focused test-only RED captured before production edits on undefined `newRLMCobraCommand`, `rlmCommandRuntime`, and `newRootCmdWithRLMRuntime`; GREEN/refactor and verification remain pending.
 
 Verification result: pending.
