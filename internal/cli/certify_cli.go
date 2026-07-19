@@ -50,7 +50,8 @@ type certifyCommandFlags struct {
 	OlderThans           []string
 }
 
-func (defaultCertifyCommandRuntime) RunSingle(ctx context.Context, _ string, opts certify.Options) (certify.Report, error) {
+func (defaultCertifyCommandRuntime) RunSingle(ctx context.Context, root string, opts certify.Options) (certify.Report, error) {
+	opts.ArtifactDir = filepath.Join(root, ".polymetrics")
 	return certify.NewRunner(opts).Run(ctx)
 }
 
@@ -68,19 +69,46 @@ func (defaultCertifyCommandRuntime) RunBatch(ctx context.Context, root string, c
 }
 
 func (defaultCertifyCommandRuntime) Sweep(ctx context.Context, root, credsPath string, olderThan time.Duration) (map[string]certify.SweepResult, error) {
-	connectors, err := sweepTargetConnectors(root, credsPath)
+	names, err := sweepTargetConnectors(root, credsPath)
 	if err != nil {
 		return nil, err
 	}
-	if len(connectors) == 0 {
+	if len(names) == 0 {
 		return nil, usageErrorf("pm connectors certify --sweep found no ledger to sweep under %s (pass --credentials-file, or run a live/batch certify first)", root)
 	}
-	results := make(map[string]certify.SweepResult, len(connectors))
-	for _, name := range connectors {
-		ledgerRoot := filepath.Join(root, ".polymetrics", "certifications", "ledger", name)
-		result, err := certify.NewSweeper(certify.SweeperOptions{Root: ledgerRoot, OlderThan: olderThan}).Sweep(ctx)
+	var creds certify.CredsFile
+	if credsPath != "" {
+		creds, err = certify.LoadCredsFile(credsPath)
 		if err != nil {
-			return nil, fmt.Errorf("certify: sweep %s: %w", name, err)
+			return nil, err
+		}
+	}
+	results := make(map[string]certify.SweepResult, len(names))
+	for _, name := range names {
+		workspace, err := os.MkdirTemp("", "pm-certify-sweep-"+name+"-")
+		if err != nil {
+			return nil, fmt.Errorf("certify: create sweep workspace: %w", err)
+		}
+		ledgerRoot, err := certify.DurableLedgerRoot(root, name)
+		if err != nil {
+			_ = os.RemoveAll(workspace)
+			return nil, fmt.Errorf("certify: validate sweep ledger root: %w", err)
+		}
+		var credential *certify.CredentialRef
+		if entry, ok := creds.Connectors[name]; ok {
+			ref := entry.Credential
+			credential = &ref
+		}
+		result, sweepErr := certify.NewSweeper(certify.SweeperOptions{
+			LedgerRoot:    ledgerRoot,
+			WorkspaceRoot: workspace,
+			Connector:     name,
+			Credential:    credential,
+			OlderThan:     olderThan,
+		}).Sweep(ctx)
+		_ = os.RemoveAll(workspace)
+		if sweepErr != nil {
+			return nil, fmt.Errorf("certify: sweep %s: %w", name, sweepErr)
 		}
 		results[name] = result
 	}
@@ -90,6 +118,9 @@ func (defaultCertifyCommandRuntime) Sweep(ctx context.Context, root, credsPath s
 func newCertifyCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) *cobra.Command {
 	var flags certifyCommandFlags
 	cmd := newConnectorsActionCobraCommand("certify [connector]", func(_ *cobra.Command, args []string) error {
+		if err := validateCertifyBooleanFlags(flags); err != nil {
+			return markCobraLegacyError(err)
+		}
 		if firstArgIsHelp(args) {
 			return markCobraLegacyError(writeManual("connectors", stdout, jsonOut))
 		}
@@ -97,12 +128,34 @@ func newCertifyCobraCommand(ctx context.Context, root string, stdout io.Writer, 
 		case lastString(flags.Sweeps) == "true" && lastString(flags.Alls) == "true":
 			return usageErrorf("--all and --sweep are not supported together")
 		case lastString(flags.Sweeps) == "true":
+			if err := validateCertifySweepFlags(flags); err != nil {
+				return markCobraLegacyError(err)
+			}
+			if err := validateCertifySweepAgeFlag(flags); err != nil {
+				return markCobraLegacyError(err)
+			}
 			return markCobraLegacyError(runCertifySweep(ctx, root, flags, stdout, jsonOut, runtime))
 		case lastString(flags.Alls) == "true":
+			if err := validateCertifyBatchFlags(flags); err != nil {
+				return markCobraLegacyError(err)
+			}
+			if err := validateCertifyParallelFlag(flags); err != nil {
+				return markCobraLegacyError(err)
+			}
 			return markCobraLegacyError(runCertifyBatch(ctx, root, flags, stdout, jsonOut, runtime))
 		default:
 			if len(args) != 1 {
 				return usageErrorf("pm connectors certify <connector> | --all --credentials-file <file> | --sweep")
+			}
+			if err := validateCertifySingleFlags(flags); err != nil {
+				return markCobraLegacyError(err)
+			}
+			// Preserve connector-validation precedence (and its existing span)
+			// while keeping valid-connector credential controls ahead of telemetry.
+			if safety.ValidateIdentifier(args[0], "connector") == nil {
+				if _, err := certifyOptionsFromFlags(args[0], flags); err != nil {
+					return markCobraLegacyError(err)
+				}
 			}
 			return markCobraLegacyError(runCertifySingle(ctx, root, args[0], flags, stdout, jsonOut, runtime))
 		}
@@ -208,6 +261,9 @@ func certifyOptionsFromFlags(connector string, flags certifyCommandFlags) (certi
 	if err != nil {
 		return certify.Options{}, err
 	}
+	if err := certify.ValidateCredentialReference(connector, certify.CredentialRef{FromEnv: secretEnv, Config: config}); err != nil {
+		return certify.Options{}, usageErrorf("%v", err)
+	}
 
 	write := lastString(flags.Writes) == "true"
 	if skipWrite(flags) {
@@ -223,6 +279,100 @@ func certifyOptionsFromFlags(connector string, flags certifyCommandFlags) (certi
 		Write:     write,
 		Full:      lastString(flags.Fulls) == "true",
 	}, nil
+}
+
+func prevalidateCertifySafetyArgs(args []string) error {
+	if len(args) < 2 || args[0] != "connectors" || args[1] != "certify" {
+		return nil
+	}
+	boolNames := map[string]bool{
+		"keep-workdir": true, "write": true, "full": true,
+		"all": true, "resume": true, "sweep": true,
+	}
+	unsupported := map[string]bool{
+		"credential": true, "limit": true, "modes": true, "record": true,
+		"replay": true, "allow-production-writes": true, "rate-limit": true,
+		"budget": true, "live-all-modes": true,
+	}
+	for _, arg := range args[2:] {
+		if !strings.HasPrefix(arg, "--") {
+			continue
+		}
+		nameValue := strings.TrimPrefix(arg, "--")
+		name, value, assigned := strings.Cut(nameValue, "=")
+		if unsupported[name] {
+			return usageErrorf("--%s is not supported; refusing to run certification with a no-op control", name)
+		}
+		if boolNames[name] && assigned && value != "true" && value != "false" {
+			return usageErrorf("--%s must be true or false, got %q", name, value)
+		}
+		if name == "parallel" && assigned {
+			parallel, err := parseIntFlag("parallel", value, 0)
+			if err != nil {
+				return err
+			}
+			if parallel < 1 || parallel > certify.MaxParallel {
+				return usageErrorf("--parallel must be between 1 and %d", certify.MaxParallel)
+			}
+		}
+		if name == "older-than" && assigned {
+			age, err := time.ParseDuration(value)
+			if err != nil || age <= 0 || age > maxCertifySweepAge {
+				return usageErrorf("--older-than must be greater than zero and no more than 8760h")
+			}
+		}
+	}
+	return nil
+}
+
+func validateCertifyParallelFlag(flags certifyCommandFlags) error {
+	if len(flags.Parallels) == 0 {
+		return nil
+	}
+	parallel, err := parseIntFlag("parallel", lastString(flags.Parallels), 0)
+	if err != nil {
+		return err
+	}
+	if parallel < 1 || parallel > certify.MaxParallel {
+		return usageErrorf("--parallel must be between 1 and %d", certify.MaxParallel)
+	}
+	return nil
+}
+
+func validateCertifySweepAgeFlag(flags certifyCommandFlags) error {
+	raw := lastString(flags.OlderThans)
+	if raw == "" {
+		return nil
+	}
+	age, err := time.ParseDuration(raw)
+	if err != nil {
+		return usageErrorf("invalid --older-than %q: %v", raw, err)
+	}
+	if age <= 0 || age > maxCertifySweepAge {
+		return usageErrorf("--older-than must be greater than zero and no more than 8760h")
+	}
+	return nil
+}
+
+func validateCertifyBooleanFlags(flags certifyCommandFlags) error {
+	for _, control := range []struct {
+		name   string
+		values []string
+	}{
+		{"keep-workdir", flags.KeepWorkdirs},
+		{"write", flags.Writes},
+		{"full", flags.Fulls},
+		{"all", flags.Alls},
+		{"resume", flags.Resumes},
+		{"sweep", flags.Sweeps},
+	} {
+		for _, value := range control.values {
+			if value != "true" && value != "false" {
+				return usageErrorf("--%s must be true or false, got %q", control.name, value)
+			}
+		}
+	}
+	return nil
 }
 
 func rejectUnsupportedCertifyControls(flags certifyCommandFlags) error {
@@ -370,6 +520,14 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 		return usageErrorf("pm connectors certify --all requires --credentials-file <file>")
 	}
 
+	if err := validateCertifyParallelFlag(flags); err != nil {
+		return err
+	}
+	parallel, err := parseIntFlag("parallel", lastString(flags.Parallels), 0)
+	if err != nil {
+		return err
+	}
+
 	credsFile, err := runtime.LoadCredsFile(credsPath)
 	if err != nil {
 		return err
@@ -380,12 +538,7 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 	if err := certify.ValidateBatchConstraints(credsFile); err != nil {
 		return usageErrorf("%v", err)
 	}
-
-	parallel, err := parseIntFlag("parallel", lastString(flags.Parallels), 0)
-	if err != nil {
-		return err
-	}
-	if parallel > 0 {
+	if len(flags.Parallels) > 0 {
 		credsFile.Defaults.Parallel = parallel
 	}
 
@@ -403,20 +556,19 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 
 // --- sweep mode (--sweep) ---
 
-const maxCertifySweepAge = 365 * 24 * time.Hour
+const maxCertifySweepAge = certify.MaxSweepAge
 
 func runCertifySweep(ctx context.Context, root string, flags certifyCommandFlags, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) error {
 	if err := validateCertifySweepFlags(flags); err != nil {
 		return err
 	}
 
+	if err := validateCertifySweepAgeFlag(flags); err != nil {
+		return err
+	}
 	olderThan := 24 * time.Hour
 	if raw := lastString(flags.OlderThans); raw != "" {
-		d, err := time.ParseDuration(raw)
-		if err != nil {
-			return usageErrorf("invalid --older-than %q: %v", raw, err)
-		}
-		olderThan = d
+		olderThan, _ = time.ParseDuration(raw) // validated above
 	}
 	if olderThan <= 0 || olderThan > maxCertifySweepAge {
 		return usageErrorf("--older-than must be greater than zero and no more than 8760h")
@@ -446,25 +598,47 @@ func sweepTargetConnectors(root, credsPath string) ([]string, error) {
 		}
 		return cf.ConnectorNames(), nil
 	}
-	ledgerRoot := filepath.Join(root, ".polymetrics", "certifications", "ledger")
-	return listSubdirNames(ledgerRoot), nil
+	ledgerRoot, err := certify.DurableLedgerBase(root)
+	if err != nil {
+		return nil, fmt.Errorf("certify: validate sweep ledger base: %w", err)
+	}
+	names, err := listSubdirNames(ledgerRoot)
+	if err != nil {
+		return nil, err
+	}
+	registry := appRegistry()
+	for _, name := range names {
+		if err := safety.ValidateIdentifier(name, "connector"); err != nil {
+			return nil, validationErrorf("invalid durable ledger connector: %v", err)
+		}
+		if _, ok := registry.Get(name); !ok {
+			return nil, validationErrorf("durable ledger connector %q is not registered locally", name)
+		}
+	}
+	return names, nil
 }
 
 // listSubdirNames returns the names of dir's immediate subdirectories, or an
 // empty slice if dir doesn't exist (never an error — an absent ledger root
 // just means "nothing to sweep yet").
-func listSubdirNames(dir string) []string {
+func listSubdirNames(dir string) ([]string, error) {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
-		return nil
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("certify: read durable ledger base: %w", err)
 	}
 	var names []string
-	for _, e := range entries {
-		if e.IsDir() {
-			names = append(names, e.Name())
+	for _, entry := range entries {
+		if entry.Type()&os.ModeSymlink != 0 {
+			return nil, fmt.Errorf("certify: durable ledger connector %q must not be a symlink", entry.Name())
+		}
+		if entry.IsDir() {
+			names = append(names, entry.Name())
 		}
 	}
-	return names
+	return names, nil
 }
 
 // --- output rendering ---

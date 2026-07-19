@@ -36,7 +36,7 @@ func stageBinaryDownloadSweep(rc *runContext, rep *Report) error {
 		}
 		blocked := strings.Contains(res.Stderr, "operation") && strings.Contains(res.Stderr, "executor is not implemented")
 		if !blocked {
-			errMsg := fmt.Sprintf("%s: binary command failed for an unexpected reason: %s", candidate.StageName, res.Stderr)
+			errMsg := redactSecretsInText(fmt.Sprintf("%s: binary command failed for an unexpected reason: %s", candidate.StageName, res.Stderr), secretValuesFromEnv(rc.opts.SecretEnv))
 			rep.Capabilities.Binary = &CapabilityResult{Result: "fail", Stream: candidate.Command, Reason: errMsg}
 			return false, cliInfoFrom(res), errMsg
 		}

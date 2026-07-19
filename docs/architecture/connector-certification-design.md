@@ -110,9 +110,10 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
   "connector": "github",
   "pm_version": "v0.x.y",
   "connector_manifest_hash": "sha256:...",
+  "effective_options_fingerprint": "sha256:...",
   "started_at": "...", "completed_at": "...",
   "mode": "live",
-  "credential_ref": "cert-github",
+  "credential_ref": "cert-source",
   "passed": true,
   "leaks": [],
   "fixture": { "...embedded conformance report...": true },
@@ -180,11 +181,14 @@ connectors:
     reason: "no sandbox tenant yet"
 ```
 
-Credential-file `exec` entries are rejected before runner effects; certification never executes an
-external credential command. Worker pool concurrency is across connectors (default 4), while stages
-within one connector remain strictly serial. Resumability markers are written to
-`certifications/batch-<runid>/progress.json`; `--resume` reuses valid completed prior reports and
-reruns missing, malformed, or incomplete reports. Summary matrix rows are connectors; columns are
+Credential files are bounded to 1 MiB, decoded with known fields only, require version 1 and at
+least one locally registered connector, validate connector/environment references, reject symlinks
+and secret-schema values under `config`, and reject `exec` before runner effects; certification never
+executes an external credential command. Worker pool concurrency is across connectors, is limited to
+1–32 when explicit, and never exceeds queued connectors; stages within one connector remain strictly
+serial. Resumability markers are written to `certifications/batch-<runid>/progress.json`;
+`--resume` reuses a completed prior report only when its exact schema, connector manifest, and
+secret-free effective-options/environment-reference fingerprint match. Summary matrix rows are connectors; columns are
 check/catalog/read/5 modes/resume/write/flow/schedule/redaction/**leaks**; any leak row prints first
 and forces exit 3.
 
@@ -213,20 +217,24 @@ Default pairing inference: `create_X ↔ delete_X | close_X | archive_X`. **Unpa
 actions are never executed live** (`skipped: no cleanup pairing`) unless a profile supplies one.
 
 **Mechanics per pair** (all via public CLI): write tagged record to local JSONL → file→warehouse
-ETL → `pm reverse plan --limit 1` → token from text output → `preview --json` → `run --approve` →
-verify → cleanup plan → verify again.
+ETL → `pm reverse plan --limit 1` → token from text output → successful `preview --json` →
+`run --approve` → verify → cleanup plan → successful cleanup preview → approval/run → verify again.
 
-**Write-ahead leak ledger**: before any live write, append `{action, tag, connector, entity_hint,
-planned_at}` to `certify-ledger.jsonl`; after verified cleanup append `{tag, cleaned_at}`. Ledger
-copied into `.polymetrics/certifications/ledger/` even on crash.
+**Write-ahead leak ledger**: before any live write, append connector/run/tag plus curated create,
+cleanup, verification, and timestamp provenance directly to
+`.polymetrics/certifications/ledger/<connector>/certify-ledger.jsonl`; after verified cleanup append
+`{tag, cleaned_at}`. Appends are synced before mutation. The durable layout is the exact layout a
+fresh-process sweeper consumes; ephemeral workdir deletion cannot disconnect recovery authority.
 
 **Failure semantics**: create fails ⇒ stage fail, no leak. Create ok + cleanup/verify fails ⇒
 `leaked_resource`: top-level `leaks[]`, `passed=false`, exit 3, LEAKED block printed first.
 Cleanup ok but unverifiable ⇒ `leak_unverified` warning.
 
 **Orphan sweeper** (`--sweep`): ledger entries without `cleaned_at` + optional live scan of
-VerifyStreams for aged `pm-cert-<slug>-*` tags; cleanup through the same plan/approve/run path.
-CI batch jobs always run `--sweep` as a trailing step; nightly sweep job backs it up.
+VerifyStreams for aged `pm-cert-<slug>-*` tags. It rejects connector/run/tag/action provenance that
+does not match a curated pairing, provisions only validated environment references in a fresh
+temporary workspace, and cleans through plan → successful preview → approval → run. CI batch jobs
+always run `--sweep` as a trailing step; nightly sweep backs it up.
 
 ## D) Flow + schedule stages
 
@@ -234,10 +242,11 @@ Flow manifest (`<workdir>/.polymetrics/flows/cert_<slug>.json`): etl step (captu
 connection) + dependent query step; assert plan order, preview `dry_run` with zero side effects,
 run completed, status shows both steps done.
 
-Schedule: snapshot `crontab -l` → create (cron `0 3 * * *`) → list contains → install `--crontab`
-(skip-with-reason if no crontab binary) → sentinel present → remove → sentinel absent AND crontab
-byte-identical to snapshot AND manifest file deleted. Residue ⇒ `leaked_schedule` (same severity
-class as leaked_resource).
+Schedule: bind every in-process invocation to an invocation-local temporary crontab file → snapshot
+that file → create (cron `0 3 * * *`) → list contains → install `--crontab` → sentinel present →
+remove → sentinel absent AND the file byte-identical to its snapshot AND manifest deleted. The
+system crontab backend is unreachable, including during parallel certification. Residue ⇒
+`leaked_schedule` (same severity class as leaked_resource).
 
 ## E) Package layout & integration
 

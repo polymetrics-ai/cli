@@ -341,24 +341,12 @@ const scheduleCrontabFileName = "cert-crontab"
 func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 	crontabPath := filepath.Join(rc.root, scheduleCrontabFileName)
 
-	// PM_CRONTAB_FILE redirects internal/schedule's CrontabBackend to this
-	// ephemeral file for the duration of this stage, so the real operator
-	// crontab is never read or written (schedule_test.go uses the identical
-	// seam). Restored unconditionally via defer, including on early return.
-	prevCrontabFile, hadPrevCrontabFile := os.LookupEnv("PM_CRONTAB_FILE")
-	if err := os.Setenv("PM_CRONTAB_FILE", crontabPath); err != nil {
-		recordStage(rc, rep, "schedule_roundtrip", 2, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, fmt.Sprintf("schedule_roundtrip: set PM_CRONTAB_FILE: %v", err)
-		})
-		return nil
-	}
-	defer func() {
-		if hadPrevCrontabFile {
-			_ = os.Setenv("PM_CRONTAB_FILE", prevCrontabFile)
-		} else {
-			_ = os.Unsetenv("PM_CRONTAB_FILE")
-		}
-	}()
+	// Crontab confinement is invocation-local. The harness carries this path
+	// into cli.RunWithContext; no process-global environment is mutated, so
+	// parallel certification cannot fall through to the system backend.
+	previousCrontabFile := rc.crontabFile
+	rc.crontabFile = crontabPath
+	defer func() { rc.crontabFile = previousCrontabFile }()
 
 	// Snapshot BEFORE any create/install activity (design §D "snapshot
 	// crontab -l"). The file may not exist yet — that is a valid, empty

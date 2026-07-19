@@ -105,12 +105,17 @@ ACTIONS
     single run can use local connector behavior or user-named credential
     variable references. Batch mode requires --all and --credentials-file;
     --write=false or --skip=write overrides every credential-file write entry.
-    Only --skip=write is implemented. --resume reuses completed prior reports;
-    missing, malformed, or incomplete reports rerun. Sweep mode retries cleanup
-    recorded in the local certification ledger.
+    Only --skip=write is implemented. Boolean controls accept only true or
+    false. Explicit --parallel must be from 1 through 32 and workers are capped
+    by queued connectors. --resume reuses completed prior reports only when
+    its exact schema, connector manifest, effective non-secret options, and
+    environment-reference fingerprint match; other reports rerun. Sweep mode
+    retries cleanup from the durable per-connector ledger in a fresh temporary
+    workspace and requires plan, successful preview, approval, then execute.
     --older-than must be greater than zero and no more than 8760h. Unsupported,
-    mode-inapplicable, and unknown controls fail before credential loading or
-    runner/sweep effects instead of being accepted as no-ops.
+    mode-inapplicable, malformed, and unknown controls fail before credential
+    loading, telemetry, runner, sweep, or write effects instead of becoming
+    no-ops.
 
     Before a certification report is completed, CLI usage errors exit 2,
     validation errors exit 3, and setup or runtime errors exit 1. These errors
@@ -120,11 +125,16 @@ ACTIONS
     JSON reports use ConnectorCertification, ConnectorCertificationBatch, or
     ConnectorCertificationSweep envelopes.
 
-    Credential values must come from environment references.
-    Credential-file exec entries are rejected; no external credential command
-    is run. Secret values are never command operands, output, events, telemetry,
-    or report fields. Live checks and writes are opt-in harness behavior, not
-    performed by connector inspection or help.
+    Credential values must come from environment references. Credential files
+    are regular non-symlink YAML files no larger than 1 MiB, use version 1 and
+    known fields, name at least one locally registered connector, and carry
+    valid environment-variable references. Secret-schema fields are rejected
+    from config and must use from_env. Credential-file exec entries are rejected;
+    no external credential command is run. Secret values and approval
+    tokens are never command operands, output, events, telemetry, or report
+    fields. Reports, history, progress, and ledgers use restrictive local files.
+    Live checks and writes are opt-in harness behavior, not performed by
+    connector inspection or help.
 
 EXAMPLES
   pm connectors

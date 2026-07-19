@@ -16,7 +16,14 @@ import (
 
 func TestReviewCorrectionPreviewFailureBlocksCreateAndLedger(t *testing.T) {
 	oldRun := cliRun
-	t.Cleanup(func() { cliRun = oldRun })
+	oldRunContext := cliRunContext
+	cliRunContext = func(_ context.Context, args []string, stdout, stderr io.Writer, _ CLIInvocationOptions) int {
+		return cliRun(args, stdout, stderr)
+	}
+	t.Cleanup(func() {
+		cliRun = oldRun
+		cliRunContext = oldRunContext
+	})
 	var runs atomic.Int64
 	cliRun = func(args []string, stdout, _ io.Writer) int {
 		if hasArgs(args, "reverse", "run") {
@@ -61,7 +68,14 @@ func TestReviewCorrectionPreviewFailureBlocksCreateAndLedger(t *testing.T) {
 
 func TestReviewCorrectionCleanupAndSweepRequirePreviewBeforeRun(t *testing.T) {
 	oldRun := cliRun
-	t.Cleanup(func() { cliRun = oldRun })
+	oldRunContext := cliRunContext
+	cliRunContext = func(_ context.Context, args []string, stdout, stderr io.Writer, _ CLIInvocationOptions) int {
+		return cliRun(args, stdout, stderr)
+	}
+	t.Cleanup(func() {
+		cliRun = oldRun
+		cliRunContext = oldRunContext
+	})
 	var calls []string
 	cliRun = func(args []string, stdout, _ io.Writer) int {
 		switch {
@@ -111,6 +125,80 @@ func TestReviewCorrectionCleanupAndSweepRequirePreviewBeforeRun(t *testing.T) {
 	assertPlanPreviewRunOrder(t, calls)
 }
 
+func TestReviewCorrectionFailedSweepPreviewBlocksRun(t *testing.T) {
+	oldRun := cliRun
+	oldRunContext := cliRunContext
+	var runCalls atomic.Int64
+	cliRunContext = func(_ context.Context, args []string, stdout, stderr io.Writer, _ CLIInvocationOptions) int {
+		return cliRun(args, stdout, stderr)
+	}
+	t.Cleanup(func() {
+		cliRun = oldRun
+		cliRunContext = oldRunContext
+	})
+	cliRun = func(args []string, stdout, _ io.Writer) int {
+		switch {
+		case hasArgs(args, "reverse", "plan"):
+			fmt.Fprint(stdout, "Created reverse plan cleanup-plan\nApproval token: approval-marker\n")
+		case hasArgs(args, "reverse", "preview"):
+			fmt.Fprint(stdout, `{"kind":"WrongPreview"}`)
+		case hasArgs(args, "reverse", "run"):
+			runCalls.Add(1)
+			fmt.Fprint(stdout, `{"kind":"ReverseRun"}`)
+		default:
+			fmt.Fprint(stdout, `{"kind":"Credential"}`)
+		}
+		return 0
+	}
+	status := LedgerStatus{
+		Tag:        "pm-cert-sample-87654321-1700000000",
+		Connector:  "sample",
+		Action:     "create",
+		RunID:      "87654321",
+		EntityHint: "outbox_record",
+		PlannedAt:  time.Now().Add(-48 * time.Hour),
+	}
+	if ok, _ := sweepCleanOutboxRecord(NewHarness(t.TempDir()), status); ok {
+		t.Fatal("sweep succeeded after a mismatched preview")
+	}
+	if runCalls.Load() != 0 {
+		t.Fatalf("failed sweep preview reached reverse execution %d times", runCalls.Load())
+	}
+}
+
+func TestReviewCorrectionSweepPreparationFailureBlocksPlanning(t *testing.T) {
+	oldRun := cliRun
+	oldRunContext := cliRunContext
+	t.Cleanup(func() {
+		cliRun = oldRun
+		cliRunContext = oldRunContext
+	})
+	var planCalls atomic.Int64
+	cliRun = func(args []string, stdout, _ io.Writer) int {
+		if hasArgs(args, "reverse", "plan") {
+			planCalls.Add(1)
+		}
+		if hasArgs(args, "credentials", "add") && flagValue(args, "--connector") == "outbox" {
+			fmt.Fprint(stdout, `{"kind":"Credential"}`)
+			return 0
+		}
+		return 1
+	}
+	cliRunContext = func(_ context.Context, args []string, stdout, stderr io.Writer, _ CLIInvocationOptions) int {
+		return cliRun(args, stdout, stderr)
+	}
+	status := LedgerStatus{
+		Tag: "pm-cert-sample-87654321-1700000000", Connector: "sample", Action: "create", CleanupAction: "delete",
+		RunID: "87654321", EntityHint: "outbox_record", PlannedAt: time.Now().Add(-48 * time.Hour),
+	}
+	if ok, _ := sweepCleanOutboxRecord(NewHarness(t.TempDir()), status); ok {
+		t.Fatal("sweep succeeded after source preparation failure")
+	}
+	if planCalls.Load() != 0 {
+		t.Fatalf("source preparation failure reached reverse planning %d times", planCalls.Load())
+	}
+}
+
 func TestReviewCorrectionSecretHitsAndArgvAreOpaque(t *testing.T) {
 	marker := "approval-and-credential-marker"
 	hits := ScanForSecrets("prefix "+marker+" suffix", []string{marker})
@@ -123,6 +211,22 @@ func TestReviewCorrectionSecretHitsAndArgvAreOpaque(t *testing.T) {
 	argv := redactArgv([]string{"reverse", "run", "plan", "--approve", marker, "--json"}, nil)
 	if strings.Contains(argv, marker) || !strings.Contains(argv, "--approve ***") {
 		t.Fatalf("approval argv was not semantically redacted: %q", argv)
+	}
+	configArgv := redactArgv([]string{"credentials", "add", "x", "--config", "api_token=" + marker}, nil)
+	if strings.Contains(configArgv, marker) || !strings.Contains(configArgv, "api_token=***") {
+		t.Fatalf("secret-bearing config argv was not semantically redacted: %q", configArgv)
+	}
+
+	reason := redactSecretsInText("encoded marker: "+secretForms(marker)[1], []string{marker})
+	rep := Report{Stages: []StageResult{{Error: reason, CLI: CLIStageInfo{ArgvRedacted: argv + " " + configArgv}}}}
+	raw, err := json.Marshal(rep)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, form := range secretForms(marker) {
+		if form != "" && strings.Contains(string(raw), form) {
+			t.Fatal("serialized report retained planted sensitive material")
+		}
 	}
 }
 
@@ -163,6 +267,9 @@ func TestReviewCorrectionReportWritesAreRestrictiveAndNoFollow(t *testing.T) {
 	if string(raw) != "unchanged" {
 		t.Fatal("Save modified symlink target")
 	}
+	if _, err := LoadReport(filepath.Join(certDir, "sample.json")); err == nil {
+		t.Fatal("LoadReport followed a symlink")
+	}
 }
 
 func TestReviewCorrectionCredsFileStrictBoundary(t *testing.T) {
@@ -177,6 +284,7 @@ func TestReviewCorrectionCredsFileStrictBoundary(t *testing.T) {
 		{"traversal connector", "version: 1\nconnectors:\n  ../sample: {}\n"},
 		{"invalid env reference", strings.Replace(validHeader, "PM_CERT_SAMPLE_TOKEN", "bad-env-name", 1)},
 		{"secret config injection", "version: 1\nconnectors:\n  github:\n    credential:\n      config:\n        token: planted-marker\n"},
+		{"explicit parallel zero", "version: 1\ndefaults:\n  parallel: 0\nconnectors:\n  sample: {}\n"},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -234,18 +342,47 @@ func TestReviewCorrectionLedgerLayoutAndAuthority(t *testing.T) {
 	}
 
 	oldRun := cliRun
-	t.Cleanup(func() { cliRun = oldRun })
+	oldRunContext := cliRunContext
+	cliRunContext = func(_ context.Context, args []string, stdout, stderr io.Writer, _ CLIInvocationOptions) int {
+		return cliRun(args, stdout, stderr)
+	}
+	t.Cleanup(func() {
+		cliRun = oldRun
+		cliRunContext = oldRunContext
+	})
 	var calls atomic.Int64
 	cliRun = func(_ []string, _, _ io.Writer) int { calls.Add(1); return 1 }
 	forged := LedgerStatus{Tag: "forged-tag", Connector: "github", Action: "create_label", EntityHint: "labels", PlannedAt: time.Now().Add(-48 * time.Hour)}
 	if ok, _ := sweepCleanTag(NewHarness(t.TempDir()), forged); ok || calls.Load() != 0 {
 		t.Fatalf("forged ledger cleanup reached effects: ok=%v calls=%d", ok, calls.Load())
 	}
+
+	linkRoot := t.TempDir()
+	target := filepath.Join(t.TempDir(), ledgerFileName)
+	if err := os.WriteFile(target, nil, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(target, filepath.Join(linkRoot, ledgerFileName)); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := NewLedger(linkRoot); err == nil {
+		t.Fatal("NewLedger followed a symlink")
+	}
+	if _, err := LoadLedger(linkRoot); err == nil {
+		t.Fatal("LoadLedger followed a symlink")
+	}
 }
 
 func TestReviewCorrectionParallelSchedulesUseInvocationLocalCrontabs(t *testing.T) {
 	oldRun := cliRun
-	t.Cleanup(func() { cliRun = oldRun })
+	oldRunContext := cliRunContext
+	cliRunContext = func(_ context.Context, args []string, stdout, stderr io.Writer, _ CLIInvocationOptions) int {
+		return cliRun(args, stdout, stderr)
+	}
+	t.Cleanup(func() {
+		cliRun = oldRun
+		cliRunContext = oldRunContext
+	})
 	t.Setenv("PM_CRONTAB_FILE", "operator-crontab")
 
 	rootA := t.TempDir()
@@ -260,9 +397,6 @@ func TestReviewCorrectionParallelSchedulesUseInvocationLocalCrontabs(t *testing.
 	cliRun = func(args []string, stdout, _ io.Writer) int {
 		root := flagValue(args, "--root")
 		expected := filepath.Join(root, scheduleCrontabFileName)
-		if observed := os.Getenv("PM_CRONTAB_FILE"); observed != expected {
-			mismatch.Add(1)
-		}
 		if hasArgs(args, "schedule", "create") {
 			name := flagValue(args, "--name")
 			mu.Lock()
@@ -299,6 +433,13 @@ func TestReviewCorrectionParallelSchedulesUseInvocationLocalCrontabs(t *testing.
 		}
 		return 1
 	}
+	cliRunContext = func(_ context.Context, args []string, stdout, stderr io.Writer, opts CLIInvocationOptions) int {
+		root := flagValue(args, "--root")
+		if opts.CrontabFile != filepath.Join(root, scheduleCrontabFileName) {
+			mismatch.Add(1)
+		}
+		return cliRun(args, stdout, stderr)
+	}
 
 	run := func(root string, done chan<- struct{}) {
 		rc := &runContext{ctx: context.Background(), harness: NewHarness(root), root: root, opts: Options{Connector: "sample"}}
@@ -326,7 +467,14 @@ func TestReviewCorrectionParallelSchedulesUseInvocationLocalCrontabs(t *testing.
 
 func TestReviewCorrectionCancelledRunnerHasNoEffects(t *testing.T) {
 	oldRun := cliRun
-	t.Cleanup(func() { cliRun = oldRun })
+	oldRunContext := cliRunContext
+	cliRunContext = func(_ context.Context, args []string, stdout, stderr io.Writer, _ CLIInvocationOptions) int {
+		return cliRun(args, stdout, stderr)
+	}
+	t.Cleanup(func() {
+		cliRun = oldRun
+		cliRunContext = oldRunContext
+	})
 	var calls atomic.Int64
 	cliRun = func(_ []string, _, _ io.Writer) int { calls.Add(1); return 1 }
 	ctx, cancel := context.WithCancel(context.Background())
@@ -354,6 +502,64 @@ func TestReviewCorrectionFailedPreflightGatesLaterStages(t *testing.T) {
 	}
 }
 
+func TestReviewCorrectionBoundedCleanupUsesPlanPreviewRunAfterCancellation(t *testing.T) {
+	oldRun := cliRun
+	oldRunContext := cliRunContext
+	t.Cleanup(func() {
+		cliRun = oldRun
+		cliRunContext = oldRunContext
+	})
+	var calls []string
+	cliRun = func(args []string, stdout, _ io.Writer) int {
+		switch {
+		case hasArgs(args, "reverse", "plan"):
+			calls = append(calls, "plan")
+			fmt.Fprint(stdout, "Created reverse plan cleanup-plan\nApproval token: approval-marker\n")
+		case hasArgs(args, "reverse", "preview"):
+			calls = append(calls, "preview")
+			fmt.Fprint(stdout, `{"kind":"ReversePlanPreview","plan":{}}`)
+		case hasArgs(args, "reverse", "run"):
+			calls = append(calls, "run")
+			fmt.Fprint(stdout, `{"kind":"ReverseRun"}`)
+		}
+		return 0
+	}
+	cliRunContext = func(ctx context.Context, args []string, stdout, stderr io.Writer, _ CLIInvocationOptions) int {
+		if err := ctx.Err(); err != nil {
+			t.Errorf("bounded cleanup received canceled context: %v", err)
+			return 1
+		}
+		return cliRun(args, stdout, stderr)
+	}
+	ledger, err := NewLedger(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	cancelled, cancel := context.WithCancel(context.Background())
+	cancel()
+	harness := NewHarness(t.TempDir(), WithContext(cancelled))
+	rc := &runContext{
+		ctx:     cancelled,
+		harness: harness,
+		root:    t.TempDir(),
+		opts:    Options{Connector: "sample"},
+		write: &writeContext{
+			pairing:      WritePairing{Create: "create", Cleanup: "delete"},
+			tag:          "pm-cert-sample-12345678-1700000000",
+			runID8:       "12345678",
+			selfTest:     true,
+			createPassed: true,
+			ledger:       ledger,
+		},
+	}
+	var rep Report
+	runBoundedCancellationCleanup(rc, &rep)
+	assertPlanPreviewRunOrder(t, calls)
+	if !rc.write.cleanupAttempted {
+		t.Fatal("bounded cleanup was not marked attempted")
+	}
+}
+
 func TestReviewCorrectionResumeRejectsFutureSchemaAndIdentityMismatch(t *testing.T) {
 	dir := t.TempDir()
 	certDir := filepath.Join(dir, certificationsDirName)
@@ -375,6 +581,15 @@ func TestReviewCorrectionResumeRejectsFutureSchemaAndIdentityMismatch(t *testing
 	}
 	if _, ok := completedReport(dir, "sample"); ok {
 		t.Fatal("resume accepted a future-schema, identity-incompatible report")
+	}
+
+	base["schema_version"] = ReportSchemaVersion
+	raw, _ = json.Marshal(base)
+	if err := os.WriteFile(filepath.Join(certDir, "sample.json"), raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := completedReport(dir, "sample", resumeIdentity{ManifestHash: "sha256:current", Fingerprint: "sha256:current"}); ok {
+		t.Fatal("resume accepted mismatched manifest/options identity")
 	}
 }
 

@@ -11,27 +11,35 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 	"sync"
 	"time"
 )
 
-// ledgerFileName is the fixed on-disk name for the write-ahead ledger,
-// living at the root of the ephemeral certify workdir (design §C
-// "certify-ledger.jsonl").
+// ledgerFileName is the fixed on-disk name for each per-connector durable
+// write-ahead ledger (design §C "certify-ledger.jsonl").
 const ledgerFileName = "certify-ledger.jsonl"
+
+var (
+	ledgerRunIDPattern     = regexp.MustCompile(`^[a-z0-9]{8}$`)
+	ledgerTimestampPattern = regexp.MustCompile(`^[0-9]{1,20}$`)
+)
 
 // LedgerEntry is one line of certify-ledger.jsonl. A "planned" entry has
 // PlannedAt set and CleanedAt zero; a "cleaned" entry (recorded by
 // RecordCleaned) carries only Tag and CleanedAt — LoadLedger folds the two
 // together per-tag via LedgerEntries.StatusFor.
 type LedgerEntry struct {
-	Action     string `json:"action,omitempty"`
-	Tag        string `json:"tag"`
-	Connector  string `json:"connector,omitempty"`
-	EntityHint string `json:"entity_hint,omitempty"`
+	Action        string `json:"action,omitempty"`
+	CleanupAction string `json:"cleanup_action,omitempty"`
+	Tag           string `json:"tag"`
+	Connector     string `json:"connector,omitempty"`
+	RunID         string `json:"run_id,omitempty"`
+	EntityHint    string `json:"entity_hint,omitempty"`
+	VerifyField   string `json:"verify_field,omitempty"`
 	// PlannedAt/CleanedAt use "omitzero" (not "omitempty": time.Time is a
 	// struct, so encoding/json's omitempty never treats it as empty) so a
 	// planned-only entry never serializes a spurious zero-value
@@ -41,9 +49,9 @@ type LedgerEntry struct {
 	CleanedAt time.Time `json:"cleaned_at,omitzero"`
 }
 
-// Ledger is a write-ahead JSONL ledger rooted at a certify ephemeral workdir
-// (or, for --sweep, a batch/creds root). All writes are append-only and
-// fsync'd via os.File.Sync so a process crash immediately after a write
+// Ledger is a write-ahead JSONL ledger rooted at a durable per-connector
+// artifact directory (or a temporary fixture root in tests). All writes are
+// append-only and fsync'd via os.File.Sync so a process crash after a write
 // still leaves the entry durable on disk.
 type Ledger struct {
 	mu   sync.Mutex
@@ -53,15 +61,20 @@ type Ledger struct {
 // NewLedger opens (creating if necessary) the ledger file at
 // <root>/certify-ledger.jsonl.
 func NewLedger(root string) (*Ledger, error) {
-	if err := os.MkdirAll(root, 0o755); err != nil {
+	secureRoot, err := secureDir(root)
+	if err != nil {
 		return nil, fmt.Errorf("certify: create ledger root %s: %w", root, err)
 	}
-	path := filepath.Join(root, ledgerFileName)
+	path := filepath.Join(secureRoot, ledgerFileName)
 	// Touch the file so callers can always os.Stat/os.ReadFile it even
 	// before the first entry is appended.
-	f, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o600)
+	f, err := openLedgerAppend(path)
 	if err != nil {
 		return nil, fmt.Errorf("certify: open ledger %s: %w", path, err)
+	}
+	if err := f.Chmod(0o600); err != nil {
+		_ = f.Close()
+		return nil, fmt.Errorf("certify: restrict ledger %s: %w", path, err)
 	}
 	_ = f.Close()
 	return &Ledger{path: path}, nil
@@ -76,13 +89,39 @@ func (l *Ledger) Path() string { return l.path }
 // remember to stamp it themselves; tests may pre-set it (e.g. to simulate
 // an aged entry for the sweeper).
 func (l *Ledger) RecordPlanned(entry LedgerEntry) error {
-	if entry.Tag == "" {
-		return fmt.Errorf("certify: ledger entry requires a Tag")
+	if entry.Tag == "" || entry.Connector == "" || entry.Action == "" {
+		return fmt.Errorf("certify: ledger entry requires tag, connector, and action")
+	}
+	if entry.RunID == "" {
+		entry.RunID = runIDFromTag(entry.Connector, entry.Tag)
+	}
+	if !validLedgerTag(entry.Connector, entry.RunID, entry.Tag) {
+		return fmt.Errorf("certify: ledger tag is not bound to connector/run provenance")
 	}
 	if entry.PlannedAt.IsZero() {
 		entry.PlannedAt = time.Now().UTC()
 	}
 	return l.append(entry)
+}
+
+func validLedgerTag(connector, runID, tag string) bool {
+	if !connectorNamePattern.MatchString(connector) || !ledgerRunIDPattern.MatchString(runID) {
+		return false
+	}
+	stamp := strings.TrimPrefix(tag, tagPrefix+connector+"-"+runID+"-")
+	return stamp != tag && ledgerTimestampPattern.MatchString(stamp)
+}
+
+func runIDFromTag(connector, tag string) string {
+	rest := strings.TrimPrefix(tag, tagPrefix+connector+"-")
+	if rest == tag {
+		return ""
+	}
+	runID, _, ok := strings.Cut(rest, "-")
+	if !ok {
+		return ""
+	}
+	return runID
 }
 
 // RecordCleaned appends a {tag, cleaned_at} entry after a cleanup has been
@@ -98,9 +137,13 @@ func (l *Ledger) append(entry LedgerEntry) error {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
-	f, err := os.OpenFile(l.path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o600)
+	f, err := openLedgerAppend(l.path)
 	if err != nil {
 		return fmt.Errorf("certify: open ledger %s: %w", l.path, err)
+	}
+	if err := f.Chmod(0o600); err != nil {
+		_ = f.Close()
+		return fmt.Errorf("certify: restrict ledger %s: %w", l.path, err)
 	}
 	defer func() { _ = f.Close() }()
 
@@ -119,44 +162,71 @@ func (l *Ledger) append(entry LedgerEntry) error {
 	return nil
 }
 
-// CopyTo copies the ledger file to
-// <reportDir>/certifications/ledger/<connector>.jsonl (design §C "Ledger
-// copied into .polymetrics/certifications/ledger/ even on crash"). Safe to
-// call even when the ledger has zero entries (an empty/touched file is
-// still copied).
+func openLedgerAppend(path string) (*os.File, error) {
+	for range 3 {
+		info, err := os.Lstat(path)
+		if os.IsNotExist(err) {
+			f, createErr := os.OpenFile(path, os.O_CREATE|os.O_EXCL|os.O_APPEND|os.O_WRONLY, 0o600)
+			if os.IsExist(createErr) {
+				continue
+			}
+			return f, createErr
+		}
+		if err != nil {
+			return nil, err
+		}
+		if info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
+			return nil, fmt.Errorf("certify: ledger path must be a regular non-symlink file")
+		}
+		f, openErr := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0o600)
+		if openErr != nil {
+			return nil, openErr
+		}
+		openedInfo, statErr := f.Stat()
+		if statErr != nil || !os.SameFile(info, openedInfo) {
+			_ = f.Close()
+			if statErr != nil {
+				return nil, statErr
+			}
+			continue
+		}
+		return f, nil
+	}
+	return nil, fmt.Errorf("certify: ledger path changed while opening")
+}
+
+// CopyTo copies the ledger into the exact durable layout consumed by sweep:
+// <reportDir>/certifications/ledger/<connector>/certify-ledger.jsonl.
 func (l *Ledger) CopyTo(reportDir, connector string) error {
-	destDir := filepath.Join(reportDir, certificationsDirName, "ledger")
-	if err := os.MkdirAll(destDir, 0o755); err != nil {
+	if !connectorNamePattern.MatchString(connector) {
+		return fmt.Errorf("certify: invalid ledger connector %q", connector)
+	}
+	destDir, err := secureDir(reportDir, certificationsDirName, "ledger", connector)
+	if err != nil {
 		return fmt.Errorf("certify: create ledger copy dir: %w", err)
 	}
-	src, err := os.Open(l.path)
+	raw, err := os.ReadFile(l.path)
 	if err != nil {
-		return fmt.Errorf("certify: open ledger for copy %s: %w", l.path, err)
+		return fmt.Errorf("certify: read ledger for copy %s: %w", l.path, err)
 	}
-	defer func() { _ = src.Close() }()
-
-	destPath := filepath.Join(destDir, connector+".jsonl")
-	dst, err := os.OpenFile(destPath, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o644)
-	if err != nil {
-		return fmt.Errorf("certify: create ledger copy %s: %w", destPath, err)
-	}
-	defer func() { _ = dst.Close() }()
-
-	if _, err := io.Copy(dst, src); err != nil {
-		return fmt.Errorf("certify: copy ledger to %s: %w", destPath, err)
+	if err := atomicWritePrivate(destDir, ledgerFileName, raw); err != nil {
+		return fmt.Errorf("certify: copy ledger: %w", err)
 	}
 	return nil
 }
 
 // LedgerStatus is the folded planned/cleaned state for one tag.
 type LedgerStatus struct {
-	Tag        string
-	Connector  string
-	Action     string
-	EntityHint string
-	PlannedAt  time.Time
-	Cleaned    bool
-	CleanedAt  time.Time
+	Tag           string
+	Connector     string
+	Action        string
+	CleanupAction string
+	RunID         string
+	EntityHint    string
+	VerifyField   string
+	PlannedAt     time.Time
+	Cleaned       bool
+	CleanedAt     time.Time
 }
 
 // LedgerEntries is the fully-loaded, per-tag-folded view of a ledger file
@@ -202,14 +272,28 @@ func (e LedgerEntries) Uncleaned() []LedgerStatus {
 // certify run that never attempted a write leaves no ledger at all).
 func LoadLedger(root string) (LedgerEntries, error) {
 	path := filepath.Join(root, ledgerFileName)
+	info, err := os.Lstat(path)
+	if os.IsNotExist(err) {
+		return LedgerEntries{byTag: map[string]*LedgerStatus{}}, nil
+	}
+	if err != nil {
+		return LedgerEntries{}, fmt.Errorf("certify: inspect ledger %s: %w", path, err)
+	}
+	if info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
+		return LedgerEntries{}, fmt.Errorf("certify: ledger path must be a regular non-symlink file")
+	}
 	f, err := os.Open(path)
 	if err != nil {
-		if os.IsNotExist(err) {
-			return LedgerEntries{byTag: map[string]*LedgerStatus{}}, nil
-		}
 		return LedgerEntries{}, fmt.Errorf("certify: open ledger %s: %w", path, err)
 	}
 	defer func() { _ = f.Close() }()
+	openedInfo, err := f.Stat()
+	if err != nil {
+		return LedgerEntries{}, fmt.Errorf("certify: stat opened ledger %s: %w", path, err)
+	}
+	if !os.SameFile(info, openedInfo) {
+		return LedgerEntries{}, fmt.Errorf("certify: ledger path changed while opening")
+	}
 
 	entries := LedgerEntries{byTag: map[string]*LedgerStatus{}}
 	scanner := bufio.NewScanner(f)
@@ -233,7 +317,10 @@ func LoadLedger(root string) (LedgerEntries, error) {
 			status.PlannedAt = entry.PlannedAt
 			status.Connector = entry.Connector
 			status.Action = entry.Action
+			status.CleanupAction = entry.CleanupAction
+			status.RunID = entry.RunID
 			status.EntityHint = entry.EntityHint
+			status.VerifyField = entry.VerifyField
 		}
 		if !entry.CleanedAt.IsZero() {
 			status.Cleaned = true

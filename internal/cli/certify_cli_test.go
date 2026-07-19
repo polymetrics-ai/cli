@@ -2,7 +2,9 @@ package cli_test
 
 import (
 	"bytes"
+	"context"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,6 +21,9 @@ import (
 // internal/connectors/certify/cliharness.go SetCLIRunFunc).
 func TestMain(m *testing.M) {
 	certify.SetCLIRunFunc(cli.Run)
+	certify.SetCLIRunContextFunc(func(ctx context.Context, args []string, stdout, stderr io.Writer, opts certify.CLIInvocationOptions) int {
+		return cli.RunWithContext(ctx, args, stdout, stderr, cli.RunOptions{Mode: cli.ModePlain, ScheduleCrontabFile: opts.CrontabFile})
+	})
 	os.Exit(m.Run())
 }
 
@@ -119,30 +124,28 @@ func TestCertifyCLIUnknownConnectorFails(t *testing.T) {
 // TestCertifyCLIAllRequiresCredentialsFile proves --all without
 // --credentials-file is a clear usage error (certification design §A
 // command spec: "pm connectors certify --all --credentials-file creds.yaml").
-func TestCertifyCLIBatchLoadsCredentialsBeforeValidatingParallelAndPreservesErrorBytes(t *testing.T) {
+func TestCertifyCLIBatchValidatesSafetyControlsBeforeCredentialLoading(t *testing.T) {
 	root := t.TempDir()
 	missing := filepath.Join(root, "missing-creds.yaml")
 	_, readErr := os.ReadFile(missing)
 	if readErr == nil {
 		t.Fatal("missing credential fixture unexpectedly exists")
 	}
-	wantStderr := fmt.Sprintf("error: certify: read creds file %s: %v\n", missing, readErr)
 
-	for _, args := range [][]string{
-		{"connectors", "certify", "--all", "--credentials-file", missing},
-		{"connectors", "certify", "--all", "--credentials-file", missing, "--parallel", "invalid"},
-	} {
-		stdout, stderr, code := certifyRun(t, root, args...)
-		if code != 1 {
-			t.Errorf("args=%v exit=%d, want 1; stdout=%q stderr=%q", args, code, stdout, stderr)
+	t.Run("valid controls preserve credential read error bytes", func(t *testing.T) {
+		wantStderr := fmt.Sprintf("error: certify: read creds file %s: %v\n", missing, readErr)
+		stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "--all", "--credentials-file", missing)
+		if code != 1 || stdout != "" || stderr != wantStderr {
+			t.Fatalf("exit=%d stdout=%q stderr=%q, want exit 1, empty stdout, stderr %q", code, stdout, stderr, wantStderr)
 		}
-		if stdout != "" {
-			t.Errorf("args=%v stdout=%q, want empty", args, stdout)
+	})
+
+	t.Run("invalid parallel wins before credential loading", func(t *testing.T) {
+		stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "--all", "--credentials-file", missing, "--parallel", "invalid")
+		if code != 3 || stdout != "" || stderr != "error: invalid --parallel \"invalid\", want integer\n" {
+			t.Fatalf("exit=%d stdout=%q stderr=%q, want validation before credential read", code, stdout, stderr)
 		}
-		if stderr != wantStderr {
-			t.Errorf("args=%v stderr mismatch\n got: %q\nwant: %q", args, stderr, wantStderr)
-		}
-	}
+	})
 }
 
 func TestCertifyCLIAllRequiresCredentialsFile(t *testing.T) {

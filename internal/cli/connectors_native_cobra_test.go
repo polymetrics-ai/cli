@@ -152,13 +152,13 @@ func TestConnectorsCommandIsNativeCobraSubtree(t *testing.T) {
 }
 
 func TestNativeConnectorsActionsPreserveFlagsOperandsAndOutput(t *testing.T) {
-	stdout, stderr, code := runNativeConnectorsCLI(nil, true, "connectors", "list", "ignored", "--all=true", "--all=false", "--unknown=ignored")
+	stdout, stderr, code := runNativeConnectorsCLI(t, nil, true, "connectors", "list", "ignored", "--all=true", "--all=false", "--unknown=ignored")
 	if code != 0 || stderr != "" {
 		t.Fatalf("list: code=%d stderr=%q stdout=%q", code, stderr, stdout)
 	}
 	assertJSONKind(t, stdout, "ConnectorCatalog")
 
-	stdout, stderr, code = runNativeConnectorsCLI(nil, true, "connectors", "catalog", "ignored", "--capability=read", "--capability=write", "--stage=missing-stage", "--unknown", "ignored")
+	stdout, stderr, code = runNativeConnectorsCLI(t, nil, true, "connectors", "catalog", "ignored", "--capability=read", "--capability=write", "--stage=missing-stage", "--unknown", "ignored")
 	if code != 0 || stderr != "" {
 		t.Fatalf("catalog: code=%d stderr=%q stdout=%q", code, stderr, stdout)
 	}
@@ -172,14 +172,14 @@ func TestNativeConnectorsActionsPreserveFlagsOperandsAndOutput(t *testing.T) {
 		t.Fatalf("catalog output=%+v", catalog)
 	}
 
-	stdout, stderr, code = runNativeConnectorsCLI(nil, true, "connectors", "inspect", "sample", "ignored", "--unknown", "ignored")
+	stdout, stderr, code = runNativeConnectorsCLI(t, nil, true, "connectors", "inspect", "sample", "ignored", "--unknown", "ignored")
 	if code != 0 || stderr != "" {
 		t.Fatalf("inspect: code=%d stderr=%q stdout=%q", code, stderr, stdout)
 	}
 	assertJSONKind(t, stdout, "Connector")
 
 	for _, action := range []string{"man", "docs"} {
-		stdout, stderr, code = runNativeConnectorsCLI(nil, false, "connectors", action, "sample", "ignored")
+		stdout, stderr, code = runNativeConnectorsCLI(t, nil, false, "connectors", action, "sample", "ignored")
 		if code != 0 || stderr != "" || !strings.Contains(stdout, "pm connectors inspect sample") {
 			t.Fatalf("%s alias: code=%d stderr=%q stdout=%q", action, code, stderr, stdout)
 		}
@@ -219,7 +219,7 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 					stderr = err.Error()
 				}
 			} else {
-				stdout, stderr, code = runNativeConnectorsCLI(nil, tt.json, tt.args...)
+				stdout, stderr, code = runNativeConnectorsCLI(t, nil, tt.json, tt.args...)
 			}
 			if code != 0 || stderr != "" {
 				t.Fatalf("help: code=%d stderr=%q stdout=%q", code, stderr, stdout)
@@ -245,19 +245,19 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 		{"connectors", "certify", "--", "sample"},
 		{"connectors", "certify", "sample", "tail"},
 	} {
-		stdout, stderr, code := runNativeConnectorsCLI(nil, true, args...)
+		stdout, stderr, code := runNativeConnectorsCLI(t, nil, true, args...)
 		assertCLIError(t, code, stdout, stderr, 2, "usage", "")
 		if strings.Contains(stdout, "ConnectorList") || strings.Contains(stdout, "ConnectorCertification") {
 			t.Fatalf("invalid input discovered later action: %v", args)
 		}
 	}
 
-	stdout, stderr, code := runNativeConnectorsCLI(nil, true, "connectors", "inspect", "--unknown", "sample")
+	stdout, stderr, code := runNativeConnectorsCLI(t, nil, true, "connectors", "inspect", "--unknown", "sample")
 	assertCLIError(t, code, stdout, stderr, 1, "internal", `connector "--unknown" not found`)
 
-	stdout, stderr, code = runNativeConnectorsCLI(nil, true, "connectors", "catalog", "--type=source")
+	stdout, stderr, code = runNativeConnectorsCLI(t, nil, true, "connectors", "catalog", "--type=source")
 	assertCLIError(t, code, stdout, stderr, 3, "validation", "legacy --type")
-	stdout, stderr, code = runNativeConnectorsCLI(nil, true, "connectors", "inspect", "../sample")
+	stdout, stderr, code = runNativeConnectorsCLI(t, nil, true, "connectors", "inspect", "../sample")
 	assertCLIError(t, code, stdout, stderr, 3, "validation", "")
 }
 
@@ -311,7 +311,7 @@ func TestNativeCertifyRejectsUnsupportedSafetyAndModeControls(t *testing.T) {
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			runtime := &fakeCertifyCommandRuntime{singleReport: passingCLIReport("sample")}
-			stdout, stderr, code := runNativeConnectorsCLI(runtime, true, "connectors", "certify", "sample", tt.arg)
+			stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true, "connectors", "certify", "sample", tt.arg)
 			assertCLIError(t, code, stdout, stderr, 2, "usage", "not supported")
 			if runtime.singleCalls != 0 || runtime.batchCalls != 0 || runtime.sweepCalls != 0 {
 				t.Fatalf("unsupported control invoked runtime: single=%d batch=%d sweep=%d", runtime.singleCalls, runtime.batchCalls, runtime.sweepCalls)
@@ -337,7 +337,7 @@ func TestNativeCertifyRejectsUnknownFlagsBeforeAnyEffects(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			runtime := &fakeCertifyCommandRuntime{singleReport: passingCLIReport("sample")}
-			stdout, stderr, code := runNativeConnectorsCLI(runtime, true, tt.args...)
+			stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true, tt.args...)
 			assertCLIError(t, code, stdout, stderr, 2, "usage", "unknown flag")
 			if len(runtime.effects) != 0 {
 				t.Fatalf("unknown flag recorded effects %v", runtime.effects)
@@ -350,7 +350,7 @@ func TestNativeCertifyRejectsUnsafeSweepAgesBeforeEffects(t *testing.T) {
 	for _, raw := range []string{"0", "0s", "-1ns", "-1h", "8761h"} {
 		t.Run(raw, func(t *testing.T) {
 			runtime := &fakeCertifyCommandRuntime{}
-			stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
+			stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true,
 				"connectors", "certify", "--sweep", "--credentials-file=fixture.yaml", "--older-than="+raw)
 			assertCLIError(t, code, stdout, stderr, 2, "usage", "--older-than")
 			if len(runtime.effects) != 0 {
@@ -368,7 +368,7 @@ func TestNativeCertifyRejectsCredentialFileExecBeforeRunnerEffects(t *testing.T)
 			},
 		},
 	}}
-	stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
+	stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true,
 		"connectors", "certify", "--all", "--credentials-file=fixture.yaml")
 	assertCLIError(t, code, stdout, stderr, 2, "usage", "exec")
 	if got := strings.Join(runtime.effects, ","); got != "load_credentials_file" {
@@ -409,7 +409,7 @@ func TestNativeCertifyEffectRecorderRejectsNoOpControlsBeforeEffects(t *testing.
 					"sample": {},
 				}},
 			}
-			stdout, stderr, code := runNativeConnectorsCLI(runtime, true, tt.args...)
+			stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true, tt.args...)
 			assertCLIError(t, code, stdout, stderr, 2, "usage", "not supported")
 			if len(runtime.effects) != 0 {
 				t.Fatalf("mode-inapplicable control recorded effects %v", runtime.effects)
@@ -432,7 +432,7 @@ func TestNativeCertifyBatchWriteDisableOverridesCredentialEntry(t *testing.T) {
 					"sample": {Write: true},
 				}},
 			}
-			stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
+			stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true,
 				"connectors", "certify", "--all", "--credentials-file=fixture.yaml", tt.arg)
 			if code != 0 || stderr != "" {
 				t.Fatalf("code=%d stderr=%q stdout=%q", code, stderr, stdout)
@@ -470,7 +470,7 @@ func TestNativeCertifyCredentialsFileConstraintsNeverReachRunnerAsNoOps(t *testi
 					"sample": tt.entry,
 				},
 			}}
-			stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
+			stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true,
 				"connectors", "certify", "--all", "--credentials-file=fixture.yaml")
 			assertCLIError(t, code, stdout, stderr, 2, "usage", "not supported")
 			if got := strings.Join(runtime.effects, ","); got != "load_credentials_file" {
@@ -483,7 +483,7 @@ func TestNativeCertifyCredentialsFileConstraintsNeverReachRunnerAsNoOps(t *testi
 func TestNativeConnectorsOnlyExactHelpFormsRenderManual(t *testing.T) {
 	for _, arg := range []string{"--help=false", "--help=true", "--help=malformed", "-xh", "-hx"} {
 		t.Run(arg, func(t *testing.T) {
-			stdout, stderr, code := runNativeConnectorsCLI(nil, true, "connectors", "list", arg)
+			stdout, stderr, code := runNativeConnectorsCLI(t, nil, true, "connectors", "list", arg)
 			if code != 0 || stderr != "" {
 				t.Fatalf("code=%d stderr=%q stdout=%q", code, stderr, stdout)
 			}
@@ -592,7 +592,7 @@ func TestNativeCertifySupportedSingleFlagsAndExitContract(t *testing.T) {
 	passing := passingCLIReport("sample")
 	runtime := &fakeCertifyCommandRuntime{singleReport: passing}
 
-	stdout, stderr, code := runNativeConnectorsCLI(runtime, true,
+	stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true,
 		"connectors", "certify", "sample",
 		"--stream=ignored", "--stream=customers", "--skip=write", "--from-env=token=PM_CERT_NATIVE_TOKEN",
 		"--config=base_url=https://example.invalid", "--config=account=fixture",
@@ -619,7 +619,7 @@ func TestNativeCertifySupportedSingleFlagsAndExitContract(t *testing.T) {
 	}
 
 	runtime = &fakeCertifyCommandRuntime{batchReport: certify.BatchReport{ExitCode: 2}}
-	stdout, stderr, code = runNativeConnectorsCLI(runtime, true, "connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--parallel=2", "--parallel=4", "--resume")
+	stdout, stderr, code = runNativeConnectorsCLI(t, runtime, true, "connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--parallel=2", "--parallel=4", "--resume")
 	if code != 2 || stderr != "" {
 		t.Fatalf("batch exit 2: code=%d stderr=%q stdout=%q", code, stderr, stdout)
 	}
@@ -629,11 +629,11 @@ func TestNativeCertifySupportedSingleFlagsAndExitContract(t *testing.T) {
 	}
 
 	runtime = &fakeCertifyCommandRuntime{batchErr: errors.New("fixture batch failure")}
-	stdout, stderr, code = runNativeConnectorsCLI(runtime, true, "connectors", "certify", "--all", "--credentials-file=fixture.yaml")
+	stdout, stderr, code = runNativeConnectorsCLI(t, runtime, true, "connectors", "certify", "--all", "--credentials-file=fixture.yaml")
 	assertCLIError(t, code, stdout, stderr, 1, "internal", "certify: batch run failed: fixture batch failure")
 
 	runtime = &fakeCertifyCommandRuntime{sweepResult: map[string]certify.SweepResult{"sample": {Failed: map[string]string{"fixture-tag": "cleanup failed"}}}}
-	stdout, stderr, code = runNativeConnectorsCLI(runtime, true, "connectors", "certify", "--sweep", "--credentials-file=fixture.yaml", "--older-than=2h")
+	stdout, stderr, code = runNativeConnectorsCLI(t, runtime, true, "connectors", "certify", "--sweep", "--credentials-file=fixture.yaml", "--older-than=2h")
 	if code != 3 || stderr != "" {
 		t.Fatalf("sweep exit 3: code=%d stderr=%q stdout=%q", code, stderr, stdout)
 	}
@@ -643,7 +643,7 @@ func TestNativeCertifySupportedSingleFlagsAndExitContract(t *testing.T) {
 	}
 
 	runtime = &fakeCertifyCommandRuntime{singleErr: errors.New("fixture internal failure")}
-	stdout, stderr, code = runNativeConnectorsCLI(runtime, true, "connectors", "certify", "sample")
+	stdout, stderr, code = runNativeConnectorsCLI(t, runtime, true, "connectors", "certify", "sample")
 	assertCLIError(t, code, stdout, stderr, 1, "internal", "fixture internal failure")
 }
 
@@ -704,27 +704,42 @@ func TestReviewCorrectionCertifyStrictBooleansParallelAndSecretConfig(t *testing
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			runtime := &fakeCertifyCommandRuntime{credsFile: validCreds, singleReport: passingCLIReport("sample")}
-			_, _, code := runNativeConnectorsCLI(runtime, true, tt.args...)
+			_, _, code := runNativeConnectorsCLI(t, runtime, true, tt.args...)
 			if code != 2 {
 				t.Fatalf("exit=%d, want usage exit 2", code)
 			}
-			if runtime.singleCalls != 0 || runtime.batchCalls != 0 || runtime.sweepCalls != 0 {
-				t.Fatalf("invalid safety control reached effects: single=%d batch=%d sweep=%d", runtime.singleCalls, runtime.batchCalls, runtime.sweepCalls)
+			if len(runtime.effects) != 0 {
+				t.Fatalf("invalid safety control reached effects: %v", runtime.effects)
 			}
 		})
 	}
 }
 
+func TestReviewCorrectionSweepRejectsSymlinkedDurableLedgerConnector(t *testing.T) {
+	root := t.TempDir()
+	ledgerBase := filepath.Join(root, ".polymetrics", "certifications", "ledger")
+	if err := os.MkdirAll(ledgerBase, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(t.TempDir(), filepath.Join(ledgerBase, "sample")); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := sweepTargetConnectors(root, ""); err == nil {
+		t.Fatal("sweep target discovery accepted a symlinked connector ledger")
+	}
+}
+
 func TestReviewCorrectionNativeHelperDoesNotUseSourceTreeRoot(t *testing.T) {
 	runtime := &fakeCertifyCommandRuntime{singleReport: certify.Report{}}
-	_, _, _ = runNativeConnectorsCLI(runtime, true, "connectors", "certify", "sample")
+	_, _, _ = runNativeConnectorsCLI(t, runtime, true, "connectors", "certify", "sample")
 	if runtime.singleRoot == "." || runtime.singleRoot == "" {
 		t.Fatalf("native test helper root=%q, want an isolated temporary root", runtime.singleRoot)
 	}
 }
 
-func runNativeConnectorsCLI(runtime *fakeCertifyCommandRuntime, jsonOut bool, args ...string) (string, string, int) {
-	return executeNativeConnectors(context.Background(), testRouterConfig(".", jsonOut), runtime, args...)
+func runNativeConnectorsCLI(t *testing.T, runtime *fakeCertifyCommandRuntime, jsonOut bool, args ...string) (string, string, int) {
+	t.Helper()
+	return executeNativeConnectors(context.Background(), testRouterConfig(t.TempDir(), jsonOut), runtime, args...)
 }
 
 func executeNativeConnectors(ctx context.Context, cfg config.Config, runtime *fakeCertifyCommandRuntime, args ...string) (string, string, int) {

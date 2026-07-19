@@ -1,6 +1,7 @@
 package certify_test
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -122,7 +123,7 @@ func TestLedgerCopyToReportDir(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewLedger() error = %v", err)
 	}
-	if err := ledger.RecordPlanned(certify.LedgerEntry{Action: "create_label", Tag: "pm-cert-x", Connector: "github"}); err != nil {
+	if err := ledger.RecordPlanned(certify.LedgerEntry{Action: "create_label", Tag: "pm-cert-github-copy0001-1751450000", Connector: "github"}); err != nil {
 		t.Fatalf("RecordPlanned() error = %v", err)
 	}
 
@@ -130,7 +131,7 @@ func TestLedgerCopyToReportDir(t *testing.T) {
 		t.Fatalf("CopyTo() error = %v", err)
 	}
 
-	copied := filepath.Join(reportDir, "certifications", "ledger", "github.jsonl")
+	copied := filepath.Join(reportDir, "certifications", "ledger", "github", "certify-ledger.jsonl")
 	if _, err := os.Stat(copied); err != nil {
 		t.Fatalf("expected copied ledger at %s: %v", copied, err)
 	}
@@ -146,7 +147,9 @@ func TestLedgerRecordPlannedIsAppendOnly(t *testing.T) {
 		t.Fatalf("NewLedger() error = %v", err)
 	}
 	for i := 0; i < 3; i++ {
-		if err := ledger.RecordPlanned(certify.LedgerEntry{Action: "create_label", Tag: "pm-cert-tag-" + string(rune('a'+i)), Connector: "github"}); err != nil {
+		runID := fmt.Sprintf("append%02d", i)
+		tag := fmt.Sprintf("pm-cert-github-%s-%d", runID, 1751450000+i)
+		if err := ledger.RecordPlanned(certify.LedgerEntry{Action: "create_label", Tag: tag, Connector: "github"}); err != nil {
 			t.Fatalf("RecordPlanned() call %d error = %v", i, err)
 		}
 	}

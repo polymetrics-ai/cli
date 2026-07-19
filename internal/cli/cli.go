@@ -45,17 +45,28 @@ const (
 // RunOptions carries invocation-scoped UI detection facts for tests and future
 // TTY renderers. Nil StdoutIsTerminal falls back to os.File + x/term detection.
 type RunOptions struct {
-	Mode             RunMode
-	StdoutIsTerminal *bool
-	Env              map[string]string
+	Mode                RunMode
+	StdoutIsTerminal    *bool
+	Env                 map[string]string
+	ScheduleCrontabFile string
 }
 
 func Run(args []string, stdout, stderr io.Writer) int {
-	return RunWithOptions(args, stdout, stderr, RunOptions{Mode: ModePlain})
+	return RunWithContext(context.Background(), args, stdout, stderr, RunOptions{Mode: ModePlain})
 }
 
 func RunWithOptions(args []string, stdout, stderr io.Writer, runOpts RunOptions) int {
-	ctx := pmlogging.WithRegistry(context.Background(), pmlogging.NewValueRegistry())
+	return RunWithContext(context.Background(), args, stdout, stderr, runOpts)
+}
+
+// RunWithContext preserves caller cancellation through the complete
+// in-process command path. Run remains the compatibility wrapper for callers
+// that do not have a context.
+func RunWithContext(parent context.Context, args []string, stdout, stderr io.Writer, runOpts RunOptions) int {
+	if parent == nil {
+		parent = context.Background()
+	}
+	ctx := pmlogging.WithRegistry(parent, pmlogging.NewValueRegistry())
 	globals, parseErr := parseGlobal(args)
 	if parseErr != nil {
 		return writeError(ctx, stdout, stderr, parseErr, globals.jsonOut)
@@ -68,6 +79,12 @@ func RunWithOptions(args []string, stdout, stderr io.Writer, runOpts RunOptions)
 	cfg, err := config.Load(opts)
 	if err != nil {
 		return writeError(ctx, stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
+	}
+	if runOpts.ScheduleCrontabFile != "" {
+		cfg.Schedule.CrontabFile = runOpts.ScheduleCrontabFile
+	}
+	if err := prevalidateCertifySafetyArgs(globals.clean); err != nil {
+		return writeError(ctx, stdout, stderr, err, cfg.JSON)
 	}
 	logger, closeLogs := pmlogging.NewLogger(filepath.Join(cfg.Root, ".polymetrics"), stderr, pmlogging.LoggerOptions{Registry: pmlogging.RegistryFromContext(ctx)})
 	defer func() { _ = closeLogs() }()

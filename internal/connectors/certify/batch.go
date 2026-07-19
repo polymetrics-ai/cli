@@ -12,7 +12,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"os"
 	"path/filepath"
 	"sort"
 	"sync"
@@ -34,6 +33,9 @@ type Runnable interface {
 // Production callers pass a factory that wraps NewRunner; tests substitute
 // their own for isolation from the real CLI/network.
 type RunnerFactory func(connector string, opts Options) Runnable
+
+// MaxParallel bounds connector workers regardless of CLI or file input.
+const MaxParallel = 32
 
 // BatchOptions configures RunBatch (certification design §B).
 type BatchOptions struct {
@@ -223,17 +225,21 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 
 	names := opts.CredsFile.ConnectorNames()
 	parallel := opts.CredsFile.Defaults.Parallel
-	if parallel < 1 {
+	if parallel == 0 {
 		parallel = 1
+	}
+	if parallel < 0 || parallel > MaxParallel {
+		return BatchReport{}, fmt.Errorf("certify: parallel must be between 1 and %d", MaxParallel)
 	}
 	emitBatchEvent(ctx, events.KindStarted, runID, "", "running", len(names), 0, "")
 
 	results := make([]BatchConnectorResult, len(names))
 	var completed atomic.Int64
 	type batchJob struct {
-		index int
-		name  string
-		entry ConnectorCredsEntry
+		index    int
+		name     string
+		opts     Options
+		identity *resumeIdentity
 	}
 	jobs := make([]batchJob, 0, len(names))
 
@@ -247,8 +253,15 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 			continue
 		}
 
-		if opts.Resume {
-			if rep, ok := completedReport(opts.BatchDir, name); ok {
+		runnerOpts := optionsFromCredsEntry(name, opts.CredsFile, entry)
+		runnerOpts.ArtifactDir = opts.BatchDir
+		identity, identityErr := reportIdentity(runnerOpts)
+		if identityErr != nil && opts.Resume {
+			return BatchReport{}, identityErr
+		}
+
+		if opts.Resume && identityErr == nil {
+			if rep, ok := completedReport(opts.BatchDir, name, identity); ok {
 				results[i] = BatchConnectorResult{
 					Connector: name,
 					Report:    rep,
@@ -262,19 +275,23 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 		}
 
 		emitBatchEvent(ctx, events.KindQueued, runID, name, "queued", len(names), int(completed.Load()), "")
-		jobs = append(jobs, batchJob{index: i, name: name, entry: entry})
+		job := batchJob{index: i, name: name, opts: runnerOpts}
+		if identityErr == nil {
+			job.identity = &identity
+		}
+		jobs = append(jobs, job)
 	}
 
 	jobCh := make(chan batchJob)
 	var wg sync.WaitGroup
-	for workerID := 0; workerID < parallel; workerID++ {
+	workerCount := min(parallel, len(jobs))
+	for workerID := 0; workerID < workerCount; workerID++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
 			for job := range jobCh {
 				emitBatchEvent(ctx, events.KindStarted, runID, job.name, "running", len(names), int(completed.Load()), "")
-				runnerOpts := optionsFromCredsEntry(job.name, opts.CredsFile, job.entry)
-				runner := opts.RunnerFactory(job.name, runnerOpts)
+				runner := opts.RunnerFactory(job.name, job.opts)
 				rep, runErr := runner.Run(ctx)
 
 				result := BatchConnectorResult{Connector: job.name, Report: rep}
@@ -287,6 +304,18 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 					continue
 				}
 				result.ExitCode = ExitCodeFor(rep)
+				if job.identity != nil {
+					if rep.SchemaVersion == 0 {
+						rep.SchemaVersion = ReportSchemaVersion
+					}
+					if rep.ConnectorManifestHash == "" {
+						rep.ConnectorManifestHash = job.identity.ManifestHash
+					}
+					if rep.EffectiveOptionsFingerprint == "" {
+						rep.EffectiveOptionsFingerprint = job.identity.Fingerprint
+					}
+					result.Report = rep
+				}
 				if opts.BatchDir != "" && rep.Connector != "" {
 					_ = rep.Save(opts.BatchDir)
 				}
@@ -393,7 +422,7 @@ func aggregateExitCode(results []BatchConnectorResult) int {
 // completedReport loads a prior report eligible for --resume. It rejects
 // malformed identity/timestamps and zero completion times so interrupted or
 // partial artifacts are rerun rather than treated as completed.
-func completedReport(dir, connector string) (Report, bool) {
+func completedReport(dir, connector string, identities ...resumeIdentity) (Report, bool) {
 	if dir == "" {
 		return Report{}, false
 	}
@@ -402,8 +431,15 @@ func completedReport(dir, connector string) (Report, bool) {
 	if err != nil {
 		return Report{}, false
 	}
-	if rep.Kind != "ConnectorCertification" || rep.SchemaVersion < 1 || rep.Connector != connector {
+	if rep.Kind != "ConnectorCertification" || rep.SchemaVersion != ReportSchemaVersion || rep.Connector != connector {
 		return Report{}, false
+	}
+	if len(identities) > 0 {
+		identity := identities[0]
+		if rep.ConnectorManifestHash == "" || rep.ConnectorManifestHash != identity.ManifestHash ||
+			rep.EffectiveOptionsFingerprint == "" || rep.EffectiveOptionsFingerprint != identity.Fingerprint {
+			return Report{}, false
+		}
 	}
 	if rep.StartedAt.IsZero() || rep.CompletedAt.IsZero() || rep.CompletedAt.Before(rep.StartedAt) {
 		return Report{}, false
@@ -414,8 +450,8 @@ func completedReport(dir, connector string) (Report, bool) {
 // writeBatchProgress persists <dir>/certifications/batch-<runid>/
 // progress.json (certification design §B resumability marker).
 func writeBatchProgress(dir string, batch BatchReport) error {
-	progressDir := filepath.Join(dir, certificationsDirName, "batch-"+batch.RunID)
-	if err := os.MkdirAll(progressDir, 0o755); err != nil {
+	progressDir, err := secureDir(dir, certificationsDirName, "batch-"+batch.RunID)
+	if err != nil {
 		return fmt.Errorf("certify: create batch progress dir: %w", err)
 	}
 	raw, err := json.MarshalIndent(batch, "", "  ")
@@ -423,7 +459,7 @@ func writeBatchProgress(dir string, batch BatchReport) error {
 		return fmt.Errorf("certify: marshal batch progress: %w", err)
 	}
 	path := filepath.Join(progressDir, "progress.json")
-	if err := os.WriteFile(path, raw, 0o644); err != nil {
+	if err := atomicWritePrivate(progressDir, "progress.json", raw); err != nil {
 		return fmt.Errorf("certify: write %s: %w", path, err)
 	}
 	return nil
