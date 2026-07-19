@@ -127,3 +127,22 @@ Loaded skills: `.pi/skills/gsd-core/SKILL.md`, `.agents/skills/caveman/SKILL.md`
 | C6-3 | RED gate | No new behavior edit planned; do not fabricate RED. Existing RED remains valid. Any new behavior fix requires a failing test first or a stop | Complete: no new behavior defect or production edit was introduced in continuation; no new RED fabricated |
 | C6-4 | Verification | Focused CLI/connectors/certify, runtime help, docs/golden/website parity, safe fixture smoke, gofmt, vet, full tests, build, `make verify`, connector validation | Complete: focused CLI `119.151s`, certify `7.344s`; help byte-equal `8391` bytes; docs/golden `10.347s`; website gen clean; certify sample exit 0/pass; gofmt/diff/vet/full tests/build; `make verify` exit 0; connectorgen 547/0 |
 | C6-5 | Delivery | Commit/push coherent continuation evidence and open non-draft stacked PR to parent; record Claude disabled and Copilot quota exhausted with human/parent fallback pending | Complete: branch pushed; non-draft stacked PR https://github.com/polymetrics-ai/cli/pull/466 opened to `feat/cli-architecture-v2`; CI queued; review coverage human/parent fallback pending |
+
+
+## Sixth bounded exact-head review-correction ledger
+
+Identity `issue-437-sixth-review-correction-20260719T220843Z`; exact start `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; accepted exact-head findings: High approval replay after cleanup, High leak dominance under runner/progress errors, Medium stale leak after absence proof. Recovery-budget exception applies because unresolved High leak/resource-authority risks require correction. Programming-loop remains unavailable; manual universal loop fallback applies. Execution decision: `local_critical_path`.
+
+Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, and `golang-concurrency`. `.pi/skills/go-implementation/SKILL.md` is absent; global cc-skills files are the actual implementation evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R6-0 | Planning | Reopen all six artifacts with exact start/head/PR, recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, and `local_critical_path`; commit/push before RED or production | In progress |
+| R6-1 | RED approval cleanup authority | Deterministically prove unexpected approval replay success after cleanup can leave a post-cleanup resource with no leak/exit 3 | Pending |
+| R6-2 | RED leak-dominant errors | Prove batch runner report+error with leaks and CLI progress persistence failure with existing leaks mask exit 3 or skip safe report output | Pending |
+| R6-3 | RED stale leak consistency | Prove cleanup call failure + exact absence verification leaves stale `Report.Leaks` and dishonest write action state | Pending |
+| R6-4 | GREEN | Minimal ordering/consistency/leak-dominance fixes pass focused tests | Pending |
+| R6-5 | Verify | Focused repeated/race, full affected packages, help/docs parity if applicable, sample smoke, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Pending |
+| R6-6 | Delivery | Coherent commits pushed, PR body updated with final head/gates, no bot review, clean/remote-matched branch | Pending |
+
+Strict TDD gate: R6-1 through R6-3 failing evidence must be captured and committed before production edits. Tests use only fakes, temporary roots, synthetic non-secret markers, and the local sample/outbox fixture path.

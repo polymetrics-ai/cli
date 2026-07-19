@@ -14,15 +14,15 @@
   "fourthCorrectionStartingHead": "1e27b14012f65ffa24c01ed855d0405c24401eee",
   "fifthCorrectionStartingHead": "05d9c6658f52e542b6a74e87e29bdcad7275ea9d",
   "fifthCorrectionSession": "issue-437-fifth-review-correction-20260720",
-  "recoveryBudgetException": "unresolved P1 destructive cleanup authority and cleanup-ledger retryability findings require one additional bounded correction cycle",
+  "recoveryBudgetException": "unresolved High leak-dominance/resource-authority findings require correction; sixth bounded cycle authorized",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
   "endedAt": "20260719T201832Z",
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "continuation_pr_open_review_pending",
-  "verificationPassed": true,
+  "status": "sixth_review_correction_in_progress",
+  "verificationPassed": false,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
   "latestParentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
@@ -219,11 +219,21 @@
       "cycle": "continuation-delivery",
       "decision": "local_critical_path",
       "reason": "branch pushed and non-draft stacked PR #466 opened to feat/cli-architecture-v2; Claude disabled and Copilot quota exhausted, so human/parent review fallback remains pending"
+    },
+    {
+      "cycle": "sixth-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "worker has one isolated #437 branch/cwd and no subagent tool; accepted High leak-dominance/resource-authority findings trigger recorded recovery-budget exception"
+    },
+    {
+      "cycle": "sixth-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "RED tests pending; no production edits until deterministic failures are captured and committed"
     }
   ],
-  "red": "captured: certify focus 1.374s showed premature cleaned state, forged numeric effects, unbounded/reflected ledgers, four invalid resume forms, and dropped batch persistence; CLI focus 14.764s showed seven accepted sweep constraints, silent single save failures, telemetry files on invalid flags, and late malformed parallel validation",
-  "green": "complete: cleanup ledger changes only after exact absence; sweep verifies and denies numeric IDs; ledger 1 MiB/10000-entry bounds with opaque parse errors; sweep constraints before telemetry/workspace; report/history failures surfaced with leak dominance; complete pre-telemetry certify parsing; strict structural resume evidence and recomputed outcome/leak consistency",
-  "verification": "passed continuation gates: focused CLI 119.151s and certify 7.344s; help byte-equal 8391 bytes; docs/golden 10.347s; website drift-free; sample certify exit 0/pass/stderr 0; gofmt/diff/vet/go test ./... (CLI 457.441s)/build; make verify exit 0 (CLI 461.542s, lint 0, smoke ok, connectorgen green); explicit connectorgen 547/0",
+  "red": "pending sixth RED: approval replay success, leak-dominant runner/progress errors, stale leak after absence proof",
+  "green": "pending sixth GREEN",
+  "verification": "pending sixth exact-head correction; full make verify not yet rerun",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",
@@ -249,5 +259,7 @@
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
   "reviewRoute": "human_parent_fallback_pending_claude_disabled_copilot_quota_exhausted_no_bot_retry",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, PR, integration, parent mutation, or main mutation",
-  "preTerminalEvidenceHead": "e9ce945e56413dbb60f5eeec2f1d6e5df688a249"
+  "preTerminalEvidenceHead": "8e7e2533c75451114c4d6ae38f89b7fd1ede6c34",
+  "sixthCorrectionStartingHead": "8e7e2533c75451114c4d6ae38f89b7fd1ede6c34",
+  "sixthCorrectionSession": "issue-437-sixth-review-correction-20260719T220843Z"
 }

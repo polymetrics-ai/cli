@@ -216,3 +216,28 @@ Exact start: `86eea0f966814e6848e5a52143eea15dd46ff801`; parent target: `a5474bc
 - [x] No go.mod/go.sum delta, connector defs, credentials, live checks, destructive cleanup, external writes/sweeps, generic write tools, or main/parent merge.
 - [x] Branch pushed and non-draft stacked PR opened to `feat/cli-architecture-v2` with exactly `Refs #437`, `Refs #407`, and `Refs #397`: https://github.com/polymetrics-ai/cli/pull/466.
 - [x] Automated external review route recorded: Claude disabled, Copilot quota exhausted, human/parent fallback pending; no bot retries.
+
+
+## Sixth bounded exact-head review-correction checklist
+
+Exact start: `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; identity `issue-437-sixth-review-correction-20260719T220843Z`.
+
+`verificationPassed`: false — reopened for accepted High/Medium review findings; remains false until complete `make verify` exits 0 after fixes.
+
+- [x] Confirm clean branch, local head, remote head, and PR #466 head all equal `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34` before edits.
+- [x] Reread required issue, contracts, GSD/manual loop, skill routing, CLI parity, review routing, ADR/design/migration context, and all phase artifacts.
+- [x] Run `scripts/gsd doctor`; capture missing `programming-loop`; generate/read `scripts/gsd prompt plan-phase 437 --skip-research`; record manual fallback.
+- [x] Record actual execution decision `local_critical_path` and parent-spawn note.
+- [x] Record recovery-budget exception for unresolved High leak-dominance/resource-authority risks.
+- [ ] RED: approval replay success cannot leave a post-cleanup untracked resource.
+- [ ] RED: runner report+error with leaks remains exit 3 and preserves report evidence.
+- [ ] RED: progress persistence failure with existing leaks remains exit 3 and preserves safe batch report output.
+- [ ] RED: cleanup call failure followed by exact absence proof clears stale top-level leak without marking the stage honestly passing.
+- [ ] GREEN: implement minimal fixes and run focused new tests.
+- [ ] Repeated focused tests and race variants where applicable.
+- [ ] Affected full `go test ./internal/connectors/certify` and `go test ./internal/cli`.
+- [ ] Runtime help/docs/golden/website parity if output semantics change; otherwise record not applicable.
+- [ ] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke.
+- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `make verify`; explicit `go run ./cmd/connectorgen validate internal/connectors/defs`.
+- [ ] PR #466 body updated with correction evidence and final exact head.
+- [ ] No credentials, live certification, services, external writes/sweeps, dependencies, generic write tools, bot review request, parent/main merge, or quality-gate reduction.

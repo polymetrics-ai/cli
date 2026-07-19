@@ -100,3 +100,26 @@ Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `g
 Downstream artifact: parent `a5474bcb` merged cleanly at `dc4aed23`; 42-file #437 diff audited as scoped; continuation artifacts updated; verification passed; non-draft stacked PR opened at https://github.com/polymetrics-ai/cli/pull/466; human/parent review fallback pending.
 
 Verification result: pass. Focused CLI `119.151s`, certify `7.344s`; connectors help byte-equal `8391` bytes; docs/golden `10.347s`; website docs generation drift-free; fixture-only sample certify exit 0/pass/stderr 0; gofmt/diff/vet/full tests/build; `make verify` exit 0; connectorgen 547/0.
+
+
+## Sixth bounded exact-head review-correction kickoff snapshot
+
+Identity: `issue-437-sixth-review-correction-20260719T220843Z`; exact start `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; PR #466 on `refactor/437-connectors-certify-native-cobra`; parent #397 / umbrella #407. Task: correct accepted exact-head findings for approval idempotency cleanup authority, leak-dominant runner/progress error handling, and stale leak consistency.
+
+Commands refreshed before production edits:
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt plan-phase 437 --skip-research
+scripts/gsd prompt programming-loop init --phase 437 --dry-run
+```
+
+Doctor passed; plan prompt generated; programming-loop returned `scripts/gsd: unknown GSD command: programming-loop`, so the manual universal runtime loop is the recorded fallback.
+
+Execution decision: `local_critical_path` — worker owns one isolated issue branch/cwd, no subagent tool exposed, correction is the local critical path. Parent coordinator records this invocation as spawned.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`; `.pi/skills/go-implementation/SKILL.md` absent, global cc-skills paths are actual Go evidence.
+
+Downstream artifact: pending. RED tests must be committed before production edits; GREEN and terminal gate evidence must update this snapshot from pending to actual results.
+
+Verification result: pending / `verificationPassed=false` until full `make verify` exits 0.
