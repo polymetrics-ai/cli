@@ -7,19 +7,19 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": "f56bc825",
+  "endingImplementationHead": "2c0a550c2a57439bc9e1640fcf33e95bd1265983",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "thirdCorrectionStartingHead": "437d13cf",
   "fourthCorrectionStartingHead": "1e27b14012f65ffa24c01ed855d0405c24401eee",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
-  "endedAt": "20260719T121234Z",
+  "endedAt": "20260719T184343Z",
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "review_correction_in_progress",
-  "verificationPassed": false,
+  "status": "review_correction_complete",
+  "verificationPassed": true,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -142,35 +142,46 @@
       "cycle": "fourth-review-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "focused RED deterministically reproduced F1-F10 before production edits: unsafe preview execution, secret copying, permissive files/controls, global crontab interference, dropped cancellation, ungated prerequisites, stale resume, and source-root pollution"
+    },
+    {
+      "cycle": "fourth-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "accepted F1-F10 corrections passed focused, repeated, race, full CLI/certify, schedule, parity, and local-only safety tests; no subagents or external operations"
+    },
+    {
+      "cycle": "fourth-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "first verify exposed fixture errcheck findings; resource handling was corrected and the complete make verify gate reran to exit 0 with full tests, lint, docs, smoke, and connector validation green"
+    },
+    {
+      "cycle": "fourth-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts truthfully record the successful gate for active-branch commit/push only; no PR, integration, parent, or main mutation"
     }
   ],
   "red": "captured: certify focus failed in 16.755s (preview create/cleanup/sweep, opaque hits, report mode, strict YAML/symlink, ledger layout/authority, concurrent crontab, cancellation, prerequisite, resume); CLI focus failed in 1.051s (malformed booleans, parallel 0/-1/33, secret config, source-root helper)",
-  "green": "pending",
-  "verification": "pending; verificationPassed remains false until the full required make verify exits 0",
+  "green": "complete: preview-success gates; opaque/semantic redaction; strict private atomic artifacts and credential references; invocation-local crontab; durable provenance-bound ledgers/fresh sweep workspaces; context cancellation and bounded cleanup; strict controls/resources/prerequisites; exact schema/manifest/effective-options resume identity; temp-only tests",
+  "verification": "passed: focused x10/race; CLI 442.615s; certify 328.909s; schedule; help/bare/invalid/JSON/sample; CLI docs/goldens/website drift; connectorgen 547/0; fmt/diff/vet; go test ./... real 456.93s; build; final make verify exit 0 real 464.41s (CLI 439.981s, certify 330.355s, lint 0)",
   "files": [
-    ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",
-    ".planning/phases/437-connectors-certify-native-cobra/TDD-LEDGER.md",
-    ".planning/phases/437-connectors-certify-native-cobra/VERIFICATION.md",
-    ".planning/phases/437-connectors-certify-native-cobra/PROMPTS.md",
-    ".planning/phases/437-connectors-certify-native-cobra/SUMMARY.md",
-    ".planning/phases/437-connectors-certify-native-cobra/RUN-STATE.json"
+    ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
+    "cmd/pm/main.go",
+    "internal/cli/{cli.go,certify_cli.go,tests,docs.go,testdata/golden_transcripts.json}",
+    "internal/connectors/certify/{batch,certify,cliharness,credsfile,identity,ledger,report,securefs,stages_*,sweeper,tests}.go",
+    "docs/architecture/connector-certification-design.md",
+    "docs/cli/connectors.md",
+    "website/content/docs/cli-reference.mdx",
+    "website/lib/docs.generated.ts"
   ],
   "commits": [
-    "ed0263c1 docs(planning): plan connectors certify native cobra slice",
-    "90443232 test(cli): specify native connectors certify contract",
-    "47bb321b refactor(cli): nativize connectors and certify namespace",
-    "5da474a2 test(cli): expose connectors trailing help gaps",
-    "6f248f1d fix(cli): preserve connectors contextual trailing help",
-    "9ab1fa41 test(cli): expose connectors direct action help gap",
-    "445ad06c fix(cli): route direct connectors action help",
-    "55e32402 docs(planning): complete connectors certify native handoff",
-    "766e2d9d docs(planning): reopen third certify correction",
-    "97816a99 test(cli): expose third certify safety regressions",
-    "f56bc825 fix(cli): fail closed certify safety controls",
-    "3854295b docs(planning): verify third certify correction"
+    "07d0b5a4 docs(planning): plan fourth certify correction",
+    "43acd262 test(certify): expose fourth review regressions",
+    "2c0a550c fix(certify): harden certification safety boundaries",
+    "b06816ad test(certify): check correction fixture writes",
+    "terminal evidence artifact: this commit"
   ],
-  "push": "planning checkpoint 07d0b5a4 pushed; fourth-cycle RED checkpoint pending",
+  "push": "planning, RED, GREEN, and lint/resource-fix checkpoints pushed; terminal evidence commit is this artifact delivery and will be pushed immediately",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
-  "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"
+  "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, PR, integration, parent mutation, or main mutation",
+  "preTerminalEvidenceHead": "b06816addf3619c3c4547bbdb569f0e6b8263711"
 }

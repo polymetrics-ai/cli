@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: false
+`verificationPassed`: true
 
 ## TDD / behavior
 
@@ -137,24 +137,26 @@ Exact start `1e27b14012f65ffa24c01ed855d0405c24401eee`; launcher `openai-codex/g
 - [x] Read full issues #437/#397/#407, contracts, GSD/manual loop, CLI parity/runtime references, ADR-0002, certification design, CLI Architecture v2 sources, migration context, all phase artifacts, both review outputs, and required skills.
 - [x] Run GSD doctor/list/plan prompt; record unavailable programming-loop and manual fallback.
 - [x] Consolidate every overlapping correctness/security finding into F1–F10 with accepted reasoned dispositions.
-- [ ] Commit/push planning checkpoint before tests or production edits.
-- [x] Capture focused RED for every accepted finding before production changes; certify focus failed in `16.755s` across preview, secret, report, YAML, ledger, crontab, context, prerequisite, and resume tests; CLI focus failed in `1.051s` across booleans, parallel, secret config, and source-root isolation. Commit/push pending.
-- [ ] Failed/mismatched/leaky preview blocks execution and ledger in initial write, both cleanup paths, and both sweep paths.
-- [ ] Secret detector returns opaque metadata; approval/config secrets never enter argv/reasons/serialized reports; secret-schema config injection rejects; reports/history/progress/ledgers use restrictive atomic/no-follow writes as applicable.
-- [ ] Parallel certification uses invocation-local crontab confinement; deterministic concurrent and race tests prove system backend unreachable.
-- [ ] Durable per-connector ledger is directly consumed after process restart; workspace/ledger roots are separate; connector/run/tag/action/cleanup provenance and containment reject forged entries.
-- [ ] Caller context reaches in-process CLI stages; pre/mid-cancel stops later effects; already-started successful mutation gets bounded cleanup only.
-- [ ] Credential files are size-bounded, strict-known-field, supported-version, nonempty, count-bounded, registry/local-identifier and env-reference validated, secret-config rejecting, regular/no-symlink inputs.
-- [ ] Every boolean/safety control strictly parses; explicit parallel is positive/bounded, workers capped by jobs; sweep age remains bounded; failures occur before telemetry/credentials/runners/sweep/writes.
-- [ ] Structural/preflight/credential prerequisite failures prevent later live reads/writes.
-- [ ] Resume requires exact schema, connector/manifest identity, and secret-free options/reference fingerprint.
-- [ ] Native test helpers use `t.TempDir()` and assert no source-tree artifacts.
-- [ ] Focused tests repeated and `-race` for context/concurrency/crontab.
-- [ ] Affected `internal/cli`, `internal/connectors/certify`, schedule/safety package tests pass.
-- [ ] Runtime `pm help connectors`, bare `pm connectors`, `pm connectors --help`, certify help/invalid/JSON checks pass.
-- [ ] CLI docs/goldens/website generation and drift checks pass or are accurately not applicable.
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` passes.
-- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm` pass.
-- [ ] Full `make verify` exits 0; only then restore `verificationPassed=true`.
-- [ ] No go.mod/go.sum delta and no unjustified files outside #437 correction scope.
-- [ ] Final commits pushed only to active branch; clean tree; no PR/integration/parent/main mutation.
+- [x] Commit/push planning checkpoint before tests or production edits (`07d0b5a4`).
+- [x] Capture focused RED for every accepted finding before production changes; certify focus failed in `16.755s` across preview, secret, report, YAML, ledger, crontab, context, prerequisite, and resume tests; CLI focus failed in `1.051s` across booleans, parallel, secret config, and source-root isolation; RED `43acd262` pushed.
+- [x] Failed/mismatched/leaky preview blocks execution and ledger in initial write, both cleanup paths, and both sweep paths.
+- [x] Secret detector returns opaque metadata; approval/config secrets never enter argv/reasons/serialized reports; secret-schema config injection rejects; reports/history/progress/ledgers use restrictive atomic/no-follow writes as applicable.
+- [x] Parallel certification uses invocation-local crontab confinement; deterministic concurrent and race tests prove system backend unreachable.
+- [x] Durable per-connector ledger is directly consumed after process restart; workspace/ledger roots are separate; connector/run/tag/action/cleanup provenance and containment reject forged entries.
+- [x] Caller context reaches in-process CLI stages; pre/mid-cancel stops later effects; already-started successful mutation gets bounded cleanup only.
+- [x] Credential files are size-bounded, strict-known-field, supported-version, nonempty, count-bounded, registry/local-identifier and env-reference validated, secret-config rejecting, regular/no-symlink inputs.
+- [x] Every boolean/safety control strictly parses; explicit parallel is positive/bounded, workers capped by jobs; sweep age remains bounded; failures occur before telemetry/credentials/runners/sweep/writes.
+- [x] Structural/preflight/credential prerequisite failures prevent later live reads/writes.
+- [x] Resume requires exact schema, connector/manifest identity, and secret-free options/reference fingerprint.
+- [x] Native test helpers use `t.TempDir()` and assert no source-tree artifacts.
+- [x] Focused tests repeated and `-race` for context/concurrency/crontab: certify ×10 `20.504s`, CLI ×10 `15.659s`, context/crontab race `1.743s`, batch race `4.216s`, CLI race `165.608s`.
+- [x] Affected `internal/cli`, `internal/connectors/certify`, and schedule packages pass; standalone checkpoints were CLI `442.615s` and certify `328.909s`, and final-code package results were CLI `452.912s` / certify `346.633s` in explicit full tests and CLI `439.981s` / certify `330.355s` in verify.
+- [x] Runtime `pm help connectors`, bare `pm connectors`, and `pm connectors --help` are byte-equal; certify help/JSON pass and invalid action exits 2.
+- [x] CLI docs generated into a temporary root match `docs/cli`; goldens pass; website full-data regeneration is drift-free; docs validation passes.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` reports 547 checked, zero findings.
+- [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; explicit `go test ./...` (real `456.93s`); and `go build ./cmd/pm` pass.
+- [x] Full `make verify` exits 0 on the required complete rerun (real `464.41s`; CLI `439.981s`, certify `330.355s`, lint 0, docs/smoke/connectorgen green).
+- [x] No go.mod/go.sum delta and no unjustified files outside #437 correction scope.
+- [x] Final commits pushed only to active branch; terminal artifact commit follows; no PR/integration/parent/main mutation.
+
+The first `make verify` attempt failed only at lint after tests because four new fixture writes did not check `fmt` return values. Commit `b06816ad` fixed all 17 fixture writes consistently; focused tests and targeted certify lint passed before the complete successful rerun. All runtime checks used temporary roots and the dependency-free sample/local smoke only.
