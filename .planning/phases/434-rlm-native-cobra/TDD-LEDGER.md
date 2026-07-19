@@ -17,7 +17,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
 | 1 | RED | `go test ./internal/cli -run 'TestRLM(Command|Run|Help)' -count=1` | Failed as required before production edits: undefined `newRLMCobraCommand`, `rlmCommandRuntime`, and `newRootCmdWithRLMRuntime` |
-| 2 | GREEN | Native RLM subtree + typed handler + injected analyzer factory + RLM-only normalization; remove legacy wrapper/parser | Pending |
+| 2 | GREEN | Native RLM subtree + typed handler + injected analyzer factory + RLM-only normalization; remove legacy wrapper/parser | Pass: focused RLM/build-agent `0.582s`; repeated ×5 `8.317s`; focused CLI race `1.681s`; RLM packages `0.750s`/router `0.389s`; worker fakes `0.572s`; router/golden focus `7.918s`; RLM/worker fake CLI `1.891s`; RLM+worker race `1.718s`; exact-start differential 24/24 |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI, RLM, worker fake, parity and differential checks | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
@@ -47,3 +47,9 @@ FAIL
 ```
 
 The missing constructor/runtime symbols prove the native RLM tree and injected analyzer seam do not exist. The tests cover every current local flag; all four mode routes through fakes; context/closer/spec/warehouse mapping; bare/text/JSON/positional/trailing help; literal/malformed/unknown/action/operand discovery; globals; stdout/stderr; request non-leakage; invalid generic/viewer actions; and malformed spec/error paths without any model, Temporal, Podman, or service call.
+
+## Focused GREEN
+
+Native Cobra now owns `rlm run` and hidden positional help. Six current flags are `StringArrayVar` definitions with `NoOptDefVal=true`; RLM-only normalization retains the old parser's repeated/space/assigned/bare, unknown, malformed, literal, help, short-token, operand, and strict first-action behavior. A typed run handler preserves validation/spec parsing/warehouse/dry-run/output/error behavior. An invocation-local analyzer factory routes deterministic, fixture, model, and agent modes; tests inject fakes for every route and verify context/closer/request handling without external calls. Only the RLM legacy wrapper, dispatcher, and `parseFlags` use were removed.
+
+Focused RLM/build-agent tests passed in `0.582s`; repeated ×5 in `8.317s`; focused CLI race in `1.681s`; RLM packages in `0.750s` plus router `0.389s`; worker fake focus in `0.572s`; router/golden focus in `7.918s`; RLM/worker fake CLI in `1.891s`; RLM+worker package race in `1.718s`. An exact-start binary differential matched 24/24 help, required/unknown mode, model stub, deterministic/fixture dry-run, repeated/space/assigned/bare, unknown/malformed/literal/trailing-help, invalid-action, and global-flag cases after normalizing duration only.

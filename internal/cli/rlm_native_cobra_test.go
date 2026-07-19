@@ -327,18 +327,23 @@ func TestRLMRunStdoutStderrAndRequestRedaction(t *testing.T) {
 	t.Run("JSON usage", func(t *testing.T) {
 		var stdout, stderr bytes.Buffer
 		code := Run([]string{"--root", root, "rlm", "run", "--request", request, "--json=true"}, &stdout, &stderr)
-		if code != 2 || stderr.Len() != 0 {
+		if code != 2 || stderr.Len() == 0 {
 			t.Fatalf("exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
 		}
-		if strings.Contains(stdout.String(), request) {
+		if strings.Contains(stdout.String()+stderr.String(), request) {
 			t.Fatal("request leaked through JSON error")
 		}
-		var env map[string]any
+		var env struct {
+			Kind  string `json:"kind"`
+			Error struct {
+				Code string `json:"code"`
+			} `json:"error"`
+		}
 		dec := json.NewDecoder(strings.NewReader(stdout.String()))
 		if err := dec.Decode(&env); err != nil {
 			t.Fatalf("decode JSON error: %v — %s", err, stdout.String())
 		}
-		if env["kind"] != "Error" || env["category"] != "usage_error" {
+		if env.Kind != "Error" || env.Error.Code != "usage_error" {
 			t.Fatalf("error envelope = %#v", env)
 		}
 		if dec.Decode(&map[string]any{}) == nil {

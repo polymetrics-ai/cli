@@ -30,10 +30,15 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "the complete native RLM tree, flags, parser/output, fake analyzer routing, help, globals, errors, request non-leakage, and invalid generic/viewer action tests were added before production edits; CLI compilation failed on the intentionally missing native RLM constructor/runtime symbols"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native RLM run/help and all six typed flags, RLM-only legacy normalization, injected fake analyzer routing, and RLM-only parser removal pass focused, repeated, race, analyzer, worker-fake, router/golden, and 24/24 exact-start differential gates without external calls"
     }
   ],
   "red": "focused CLI compile RED: undefined newRLMCobraCommand, rlmCommandRuntime, and newRootCmdWithRLMRuntime",
-  "green": "pending",
+  "green": "focused RLM/build-agent 0.582s; repeated x5 8.317s; CLI race 1.681s; RLM packages 0.750s/router 0.389s; worker fakes 0.572s; router/golden 7.918s; fake CLI 1.891s; package race 1.718s; exact-start differential 24/24",
   "verification": "pending",
   "files": [
     ".planning/phases/434-rlm-native-cobra/PLAN.md",
@@ -43,7 +48,9 @@
     ".planning/phases/434-rlm-native-cobra/SUMMARY.md",
     ".planning/phases/434-rlm-native-cobra/RUN-STATE.json",
     "internal/cli/rlm_native_cobra_test.go",
-    "internal/cli/cobra_router_test.go"
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/rlm_cli.go",
+    "internal/cli/cobra_router.go"
   ],
   "commits": [],
   "push": "pending",

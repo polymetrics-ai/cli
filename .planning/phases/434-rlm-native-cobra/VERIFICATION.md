@@ -6,23 +6,23 @@ Invocation: `issue-434-pi-sol-high-20260719T053630Z`; profile `Sol`; thinking `h
 
 - [x] Six phase artifacts created before test or production edits.
 - [x] Focused RED captured before production edits (four intentionally undefined native RLM symbols).
-- [ ] Native RLM run/help tree; legacy wrapper removed.
-- [ ] All current local flags typed with repeated/bare/assigned/space behavior preserved.
-- [ ] Deterministic/fixture/model/agent routing verified with injected fakes only.
-- [ ] Bare/text/JSON/long/short/positional/trailing help parity.
-- [ ] Literal `--`, malformed/legal unknowns, invalid actions, no action/operand discovery bypass, and globals.
-- [ ] Exact error taxonomy, stdout/stderr, one-envelope JSON, request non-leakage, and no generic runner.
-- [ ] Only RLM parser/dispatcher removed; dynamic connector parser remains.
+- [x] Native RLM run/help tree; legacy wrapper removed.
+- [x] All current local flags typed with repeated/bare/assigned/space behavior preserved.
+- [x] Deterministic/fixture/model/agent routing verified with injected fakes only.
+- [x] Bare/text/JSON/long/short/positional/trailing help parity.
+- [x] Literal `--`, malformed/legal unknowns, invalid actions, no action/operand discovery bypass, and globals.
+- [x] Exact error taxonomy, stdout/stderr, one-envelope JSON, request non-leakage, and no generic runner.
+- [x] Only RLM parser/dispatcher removed; dynamic connector parser remains.
 
 ## Gates
 
-- [ ] Focused native RLM/router tests.
-- [ ] Focused tests repeated.
-- [ ] Focused race tests.
-- [ ] Existing RLM analyzers/spec/fixture/model/agent tests.
-- [ ] Worker fake/workflow tests that require no service.
-- [ ] Router and golden transcript focus; fixture unchanged or explicitly reviewed.
-- [ ] Exact-start parser/output differential.
+- [x] Focused native RLM/router tests (`0.582s`; router/golden focus `7.918s`).
+- [x] Focused tests repeated (`-count=5`: `8.317s`).
+- [x] Focused race tests (CLI `1.681s`; RLM/worker packages `1.718s`).
+- [x] Existing RLM analyzers/spec/fixture/model/agent tests (`0.750s`; router `0.389s`).
+- [x] Worker fake/workflow tests that require no service (`0.572s`; CLI fake focus `1.891s`).
+- [x] Router and golden transcript focus; fixture unchanged.
+- [x] Exact-start parser/output differential (24/24 matched after duration normalization).
 - [ ] Full `go test ./internal/cli/...`.
 - [ ] `gofmt -w cmd internal`.
 - [ ] `go vet ./...`.
