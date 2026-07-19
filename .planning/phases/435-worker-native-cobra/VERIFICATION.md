@@ -5,7 +5,7 @@ Invocation: `issue-435-pi-sol-high-20260719T064417Z`; profile `Sol`; thinking `h
 ## TDD and behavior
 
 - [x] Six phase artifacts created before test or production edits.
-- [ ] Focused RED captured before production edits.
+- [x] Focused RED captured before production edits (five intentionally undefined native worker symbols).
 - [ ] Hidden native worker status/serve/help tree; legacy wrapper removed.
 - [ ] No local worker flags; current globals/operands preserved.
 - [ ] Bare/text/JSON/long/short/positional/trailing help is contextual and side-effect free.

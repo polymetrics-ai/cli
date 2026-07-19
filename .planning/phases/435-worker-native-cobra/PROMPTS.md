@@ -21,6 +21,6 @@ Required skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `g
 
 Safety prompt: inject invocation-local fake status/probe and serve seams. Never dial Temporal, start a Temporal worker or listener, invoke Podman, access a database, or start runtime services. Assert no fake starts on bare/help/invalid/malformed-config paths. Never print config canaries. Keep the worker hidden and typed to the RLM Temporal workflow only; never add a generic runner.
 
-Downstream artifact: pending RED tests, implementation, verification, and handoff.
+Downstream artifact: complete test-only contract. Focused compilation failed before production edits on the intentionally missing native worker constructor/runtime seam. Implementation, verification, and handoff remain pending.
 
-Verification result: pending; `RUN-STATE.json` remains non-terminal with `verificationPassed=false`.
+Verification result: RED confirmed; `RUN-STATE.json` remains non-terminal with `verificationPassed=false`.

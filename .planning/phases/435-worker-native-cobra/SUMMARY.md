@@ -1,6 +1,6 @@
 # Phase 435 Summary
 
-Status: planned at exact start `14c02d295065c3bf33c65eaac5f8d36642798f81`; no test or production edits yet.
+Status: RED captured from exact start `14c02d295065c3bf33c65eaac5f8d36642798f81`; test-only contract committed next, no production edits yet.
 
 ## Identity
 
@@ -26,4 +26,6 @@ No Temporal worker/dial, network listener, Podman command, database, runtime ser
 
 ## TDD and verification
 
-Pending RED → GREEN → refactor. Full verification will include focused/repeated/race worker and CLI tests, worker fake tests, router/goldens, exact-start differential, config precedence/nondisclosure, help/docs/website parity, gofmt, vet, full tests, build, and default-only `make verify`.
+RED: focused CLI compilation failed before production edits on undefined `newWorkerCobraCommand`, `workerCommandRuntime`, and `newRootCmdWithWorkerRuntime`. The complete tests specify the hidden native tree, fake-only status/serve behavior, help/no-side-effect routes, action parsing, globals/config precedence, cancellation, nondisclosure, and typed non-generic boundary.
+
+GREEN/refactor remains pending. Full verification will include focused/repeated/race worker and CLI tests, worker fake tests, router/goldens, exact-start differential, config precedence/nondisclosure, help/docs/website parity, gofmt, vet, full tests, build, and default-only `make verify`.

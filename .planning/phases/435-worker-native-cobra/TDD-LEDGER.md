@@ -14,7 +14,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | Step | Kind | Command / evidence | Status |
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
-| 1 | RED | Focused native worker tree/help/action/runtime/config/cancellation/nondisclosure tests | Pending |
+| 1 | RED | `go test ./internal/cli -run 'TestWorker(Command|Status|Help|Invalid|Config|Context)' -count=1` | Failed as required before production edits: undefined `newWorkerCobraCommand`, `workerCommandRuntime`, and `newRootCmdWithWorkerRuntime` |
 | 2 | GREEN | Native hidden worker subtree + invocation-local fake runtime + worker-only dispatcher removal | Pending |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI, worker fake, config/parity/differential checks | Pending |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Pending |
@@ -33,7 +33,18 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 
 ## RED evidence
 
-Pending test-only checkpoint. Production code must not change until the focused test command fails for the intentionally absent native worker constructor/runtime seam.
+The complete test-only contract preceded production edits. Focused CLI compilation failed on the intentionally absent native worker constructor and invocation-local runtime seam:
+
+```text
+internal/cli/worker_native_cobra_test.go:22:9: undefined: newWorkerCobraCommand
+internal/cli/worker_native_cobra_test.go:311:39: undefined: workerCommandRuntime
+internal/cli/worker_native_cobra_test.go:312:9: undefined: workerCommandRuntime
+internal/cli/worker_native_cobra_test.go:348:9: undefined: newRootCmdWithWorkerRuntime
+internal/cli/worker_native_cobra_test.go:372:9: undefined: newRootCmdWithWorkerRuntime
+FAIL\tpolymetrics.ai/internal/cli [build failed]
+```
+
+The tests cover the hidden native tree, no local flag surface, status/serve fakes, bare/text/JSON/positional/trailing help, literals, malformed and legal unknown flags, strict action discovery, globals, config precedence and nondisclosure, context cancellation, output contracts, and the typed non-generic worker boundary. No production code or service was invoked.
 
 ## GREEN / refactor evidence
 

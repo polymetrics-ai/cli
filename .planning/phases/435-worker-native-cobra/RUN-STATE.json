@@ -25,9 +25,14 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "next serialized Phase 9 hidden worker namespace is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited PR, review, dependencies, credentials, Temporal, Podman, databases, listeners, and runtime services"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "complete hidden native worker tree, fake status/serve, help/no-side-effect, action parsing, globals/config precedence, cancellation, nondisclosure, and non-generic boundary tests were added before production edits; focused CLI compilation failed on the intentionally absent native constructor/runtime symbols"
     }
   ],
-  "red": "pending",
+  "red": "focused CLI compile failure before production edits: undefined newWorkerCobraCommand, workerCommandRuntime, and newRootCmdWithWorkerRuntime",
   "green": "pending",
   "verification": "pending full default-only make verify",
   "files": [
@@ -36,7 +41,9 @@
     ".planning/phases/435-worker-native-cobra/VERIFICATION.md",
     ".planning/phases/435-worker-native-cobra/PROMPTS.md",
     ".planning/phases/435-worker-native-cobra/SUMMARY.md",
-    ".planning/phases/435-worker-native-cobra/RUN-STATE.json"
+    ".planning/phases/435-worker-native-cobra/RUN-STATE.json",
+    "internal/cli/worker_native_cobra_test.go",
+    "internal/cli/cobra_router_test.go"
   ],
   "commits": [],
   "push": "pending",
