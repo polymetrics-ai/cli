@@ -1,6 +1,6 @@
 # Phase 436 Summary
 
-Status: complete, verified, and ready for terminal artifact commit/push.
+Status: reopened at `748f6bdb` for four accepted review corrections; verification reset before production edits.
 
 ## Identity
 
@@ -34,6 +34,10 @@ Website TypeScript typecheck could not run because `tsc` and an existing `node_m
 ## Safety
 
 No external user file/service, model, Temporal, Podman, worker, listener, database service, credential, credentialed connector check, dependency, generic shell/HTTP/SQL write tool, destructive/admin action, or production operation was used. Tests used only owned temporary roots, synthetic records, symlinks, sentinels, and injected/hermetic fakes. `make verify` ran its established local temporary-root smoke in the required reverse plan → preview → approval → run order.
+
+## Accepted correction
+
+The review identified a warehouse-root TOCTOU, two parser-ownership regressions, and incomplete pre-factory table validation. The bounded correction will hold a project-rooted RLM warehouse scope across analyzer input/output effects, preserve literal/malformed/help-like tail ownership, distinguish exact bare extract from unknown-only invocations, and reject the full RLM bare-table contract (including `.`) before analyzer construction. Temp/fake RED tests, including a controlled analyzer-factory directory replacement, precede production edits. Prior green evidence remains historical until all focused and full gates rerun.
 
 ## Worker handoff
 

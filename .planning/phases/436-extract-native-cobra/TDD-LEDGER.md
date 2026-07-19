@@ -19,7 +19,11 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 3 | Refactor | Focused/repeated/race extract/RLM/safety, router/golden/full CLI, exact-start differential, and parity checks | Pass: final extract ×10 `43.880s`, extract race `50.303s`, RLM/safety ×10/race green, router/golden green, final full CLI `429.304s`, exact-start 8/8 preserved plus 5/5 intentional help |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Final pass: `make verify` exit 0; CLI `433.681s`, certify `337.079s`, docs/smoke/lint/connectors green |
 | 5 | Containment correction RED/GREEN | Reject a warehouse-directory symlink escaping the selected extract project root before analyzer effects | RED failed in `0.569s`; GREEN passes in `0.560s`, extract ×10 `43.880s`, extract race `50.303s` after project-root validation before analyzer construction |
-| 6 | Delivery | Re-run affected/full gates; finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Complete after terminal artifact commit/push |
+| 6 | Delivery | Re-run affected/full gates; finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Prior implementation complete at `748f6bdb`; correction reopened |
+| 7 | Accepted review correction plan | Accept all four findings; reset terminal verification; plan held project-root effect scope, parser-ownership repairs, unknown-only usage behavior, and full RLM table validation | Complete before correction tests/production edits |
+| 8 | Correction RED | Add deterministic temp/fake tests, including analyzer-factory warehouse replacement; run focused tests and capture all four failures | Pending |
+| 9 | Correction GREEN/refactor | Implement the narrow rooted effect seam and parser/validation fixes; run focused/repeated/race/adversarial/base differential/full gates | Pending |
+| 10 | Correction delivery | Finalize artifacts with exact evidence; commit/push; no PR/review | Pending |
 
 ## RED contract
 
@@ -55,6 +59,13 @@ The first implementation roots individual RLM table effects, but extract still n
 - Runtime topic/bare/direct/positional/trailing help, JSON ExtractResult, usage error, and hidden root discovery checks passed.
 - Generated CLI manual/golden and website docs-data checks passed with no unexpected delta. Website TypeScript typecheck could not run because `tsc`/existing `node_modules` is absent; no install was attempted because dependencies/external acquisition were prohibited.
 - `go mod tidy -diff`, `go mod verify`, dependency/scope/parser-removal checks, gofmt, diff check, vet, full tests, and build passed.
+
+## Accepted correction RED contract
+
+- A held project-root handle must exist before the analyzer factory can mutate `.polymetrics/warehouse`; all analyzer input/output effects remain rooted to that handle and cannot follow the replacement into an external directory.
+- Literal `--` and assigned/malformed unknown tokens retain legacy parser ownership; later `--help` or positional `help` cannot be rediscovered as Cobra help, while intentional direct and trailing help remains unchanged.
+- Exact bare `extract` alone renders help. `--unknown`, `--unknown=ignored`, `--help=true`, and `--=help` remain usage errors with no effects.
+- Both `--in=.` and `--out=.` fail validation before analyzer factory construction using the complete RLM bare-table contract.
 
 ## Evidence log
 

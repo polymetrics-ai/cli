@@ -11,10 +11,9 @@
   "startedAt": "20260719T074902Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "endedAt": "20260719T084855Z",
-  "endingImplementationHead": "15417f956f428c73159b3bb8824eb55cf3d44d36",
-  "status": "complete_verified",
-  "verificationPassed": true,
+  "status": "accepted_review_correction_planned",
+  "correctionStartingHead": "748f6bdbf754840912796d8f7ff8aee9b8fbc00a",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -62,11 +61,16 @@
       "cycle": "summary",
       "decision": "local_critical_path",
       "reason": "terminal issue-local evidence and no-PR/no-review worker handoff finalized for commit and immediate push"
+    },
+    {
+      "cycle": "accepted-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "all four bounded #436 findings are accepted; central extract/router/RLM scope is coupled, no subagent tool is exposed, and deterministic RED tests plus artifact reset precede production edits"
     }
   ],
   "red": "focused CLI compile failure on absent newExtractCobraCommand/extractCommandRuntime/newRootCmdWithExtractRuntime; RLM traversal input, external input final link, and external temporary output final link all succeeded before production edits",
   "green": "focused CLI/RLM passed; extract x10 and race passed; RLM/safety repeated and race passed; exact-start 8/8 preserved plus 5/5 intentional contextual help",
-  "verification": "pass: final full CLI 429.304s; extract x10 43.880s; extract race 50.303s; RLM/safety repeated and race; exact-start 8/8 preserved plus 5/5 help; final make verify exit 0 with CLI 433.681s, certify 337.079s, docs/smoke/lint/connectors green; website docs generation clean; TypeScript typecheck N/A because tsc/node_modules absent and install prohibited",
+  "verification": "reset: accepted review correction RED/GREEN and full focused/repeated/race/adversarial/base differential/CLI/RLM/safety/docs/gofmt/vet/build/make verify rerun pending; prior pass is historical",
   "files": [
     ".planning/phases/436-extract-native-cobra/PLAN.md",
     ".planning/phases/436-extract-native-cobra/TDD-LEDGER.md",
@@ -83,7 +87,7 @@
     "37e3e1b2 test(cli): expose extract warehouse root escape",
     "15417f95 fix(cli): confine extract warehouse root"
   ],
-  "push": "all implementation checkpoints pushed; terminal artifact commit is committed and pushed immediately after this state is written",
+  "push": "prior checkpoints pushed; accepted correction plan checkpoint pending commit/push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "owned temporary roots/sentinels and injected/hermetic fakes only; no broad paths or external final-link effects; no external user files/services, credentials, dependencies, generic tools, PR, or review; make verify used only its ordered local reverse plan-preview-approval-run smoke"

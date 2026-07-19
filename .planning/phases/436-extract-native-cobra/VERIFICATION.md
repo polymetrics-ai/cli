@@ -2,7 +2,7 @@
 
 Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `high`; exact start `eec03373dcc581c7f5c3331fe63287519b317f53`.
 
-`verificationPassed`: true
+`verificationPassed`: false (accepted four-finding correction planned; RED/GREEN and full rerun pending)
 
 ## TDD and behavior
 
@@ -57,6 +57,19 @@ Invocation: `issue-436-pi-sol-high-20260719T074902Z`; profile `Sol`; thinking `h
 - [x] Planning, RED, GREEN/refactor, containment-correction, and terminal checkpoints committed/pushed.
 - [x] No PR/review created per user instruction.
 
-## Final result
+## Accepted four-finding correction checklist
 
-Final full CLI passed in `429.304s`; final `make verify` exited 0 with CLI `433.681s`, certify `337.079s`, docs validation, ordered temporary-root smoke, lint 0, and connector validation 547/0. Website docs data regenerated cleanly; TypeScript typecheck is explicitly not applicable in this checkout because `tsc`/existing `node_modules` is absent and installing dependencies was prohibited. Runtime help/output/hidden checks, exact-start 8/8 preserved plus 5/5 intentional help, RLM/safety repeated/race, module/scope/parser-removal guards, gofmt, vet, full tests, and build all pass.
+- [x] Review log read; all four findings accepted at exact correction start `748f6bdbf754840912796d8f7ff8aee9b8fbc00a`.
+- [x] Plan, TDD ledger, verification checklist, summary, prompt snapshot, and run state reset before production edits.
+- [ ] RED: controlled pre-analyzer warehouse replacement proves path re-rooting.
+- [ ] RED: literal separator and malformed/help-like tails retain base parser ownership.
+- [ ] RED: unknown-only/help-like invocations are usage errors, not bare help.
+- [ ] RED: `.` input/output tables reject before analyzer factory.
+- [ ] GREEN: narrow project-rooted warehouse scope spans RLM read/write effects without exposing generic file operations.
+- [ ] Focused/repeated/race/adversarial and exact-base differential gates pass.
+- [ ] Full CLI/RLM/safety, docs parity, gofmt, vet, build, and `make verify` pass.
+- [ ] No dependencies, external user files/services, credentials, PR, or review.
+
+## Prior result (superseded pending correction)
+
+At `748f6bdb`, full CLI and `make verify` passed as previously recorded. Those results are historical only; `verificationPassed` remains false until the accepted correction and complete rerun finish.
