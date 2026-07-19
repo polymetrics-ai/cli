@@ -6,9 +6,12 @@ package certify
 // ConnectorCredsEntry.Write equivalent).
 type Options struct {
 	Connector string
-	Stream    string            // default: first cursor stream, else first
-	Limit     int               // default 50
-	Modes     []string          // default: all 5 sync modes
+	Stream    string // default: first cursor stream, else first
+	// Limit and Modes are reserved legacy fields. Runner does not enforce
+	// them, so the CLI and batch credential validation reject attempts to set
+	// them rather than silently accepting no-op controls.
+	Limit     int
+	Modes     []string
 	Config    map[string]string // connector config for credentials add
 	SecretEnv map[string]string // field -> ENV name
 	KeepWork  bool

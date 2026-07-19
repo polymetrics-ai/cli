@@ -70,7 +70,7 @@ See `.planning/ROADMAP.md` (milestone `connector-architecture-v2`, phases `wave0
 
 - All non-quarantined connectors load from defs bundles; `go build ./... && go test ./... &&
   golangci-lint run` green; full fixture conformance passes.
-- `pm connectors certify --all --replay` green in CI without secrets.
+- `pm connectors certify sample --json` green in CI without secrets; batch live certification remains credential-file gated.
 - Live certification passes for every connector with available credentials, including
   create-then-cleanup writes with zero leaked resources.
 - Legacy machinery (slug.go, catalog_data.json, registryset, native_port/conformance v1,

@@ -95,10 +95,10 @@ Second-correction start: `0d743e54e06c9e27e550eacce9be7899a9e23d19`; session `is
 - [x] RED exposes configured credential-file sandbox/rate/budget/limit reaching batch/runner rather than failing closed.
 - [x] RED exposes visible/accepted `--credential`, `--limit`, and `--modes`, unrestricted skip values, and mode-inapplicable controls running effects.
 - [x] RED audit enumerates every declared certify flag by supported mode or explicit fail-closed expectation; GREEN mapping pending.
-- [ ] P3 stale certification architecture/PRD examples and claims removed; connector-help name claim made accurate.
-- [ ] Runtime help, bare namespace, action help, invalid action, CLI docs, goldens, website docs, and generated data are in parity.
-- [ ] Focused effect/no-op audit tests pass repeatedly and under race.
-- [ ] Certify exit/redaction/dynamic-dispatch regressions remain green.
+- [x] P3 stale certification architecture/PRD examples and claims removed; connector-help name claim made accurate.
+- [x] Runtime help source, CLI docs, goldens, website docs, and generated data updated; final binary help checks remain in full verification.
+- [x] Focused effect/no-op audit tests pass, repeated ×10, and under race (CLI `1.726s`, certify `2.535s`).
+- [x] Full CLI (`440.910s`) and certify (`346.271s`) package suites preserve exits, redaction, dynamic dispatch, and valid base behavior.
 - [ ] Local sample smoke uses only a temporary root and no credentials/services.
 - [ ] Full CLI/certify/docs/website generators and drift checks pass.
 - [ ] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate` pass.

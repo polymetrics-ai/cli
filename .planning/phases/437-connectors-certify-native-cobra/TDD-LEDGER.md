@@ -56,8 +56,8 @@ Session `issue-437-second-safety-correction-20260719`; exact start `0d743e54e06c
 |---:|---|---|---|
 | S0 | Planning | Six artifacts reopened with verification false, accepted findings, GSD fallback, skills, safety scope, flag audit, and checkpoint plan | Complete: commit `aa39fd9d` pushed |
 | S1 | RED | Effect recorder: batch write-disable dominance; credential constraint fail-closed; unsupported/mode-inapplicable controls and skip values rejected before effects; docs/help claims fail | Complete: focused command failed as required—unsupported single flags visible and ran; 18 skip/mode no-ops recorded runtime effects; both write-disable forms preserved entry `write:true`; seven credential constraints reached batch/runner; sandbox/rate/budget/limit direct batch cases invoked factory; stale docs/help claims remained |
-| S2 | GREEN P1/P2 | Batch safe overrides; no discarded credential constraints; every declared certify flag used or fail-closed; only implemented skip values accepted | Pending |
-| S3 | GREEN P3 | Architecture/PRD/help claims corrected; CLI and website artifacts regenerated | Pending |
+| S2 | GREEN P1/P2 | Batch safe overrides; no discarded credential constraints; every declared certify flag used or fail-closed; only implemented skip values accepted | Complete: effect/no-op focus passed; unsupported single controls hidden/rejected; mode validation runs before runtime effects; batch disable overrides precede credential validation; sandbox gates writes; unsupported rate/budget/limit fail before factory |
+| S3 | GREEN P3 | Architecture/PRD/help claims corrected; CLI and website artifacts regenerated | Complete: stale rejected controls removed; help accurately names namespace manual; CLI docs/goldens and website docs data regenerated |
 | S4 | Verify | Focused/repeated/race/no-op audit/sample smoke/full CLI+certify/docs+website/gofmt+vet+test+build+make verify+connectorgen | Pending |
 | S5 | Delivery | Finalize artifacts and commit/push; no credentials/services/dependencies/PR/review | Pending |
 

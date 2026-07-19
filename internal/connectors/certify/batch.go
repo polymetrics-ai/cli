@@ -29,9 +29,8 @@ type Runnable interface {
 	Run(ctx context.Context) (Report, error)
 }
 
-// RunnerFactory builds a Runnable for one connector, given its name and the
-// Options batch mode derived for it from the CredsFile (credential
-// resolution, sandbox/write flags, per-connector rate limit/budget/limit).
+// RunnerFactory builds a Runnable for one connector from settings that passed
+// credential-file constraint validation.
 // Production callers pass a factory that wraps NewRunner; tests substitute
 // their own for isolation from the real CLI/network.
 type RunnerFactory func(connector string, opts Options) Runnable
@@ -212,6 +211,9 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 	if opts.RunnerFactory == nil {
 		return BatchReport{}, fmt.Errorf("certify: BatchOptions.RunnerFactory is required")
 	}
+	if err := ValidateBatchConstraints(opts.CredsFile); err != nil {
+		return BatchReport{}, err
+	}
 
 	runID, err := newRunID()
 	if err != nil {
@@ -331,14 +333,36 @@ func emitBatchEvent(ctx context.Context, kind events.Kind, runID, connector, sta
 	})
 }
 
-// optionsFromCredsEntry derives per-connector certify.Options from a
-// CredsFile entry (certification design §B: credential from_env/exec +
-// sandbox/write flags + effective rate_limit/budget/limit).
-func optionsFromCredsEntry(name string, cf CredsFile, entry ConnectorCredsEntry) Options {
-	effective := cf.EffectiveOptions(name)
+// ValidateBatchConstraints rejects credential-file settings that the current
+// Runner cannot enforce. Sandbox is enforced here as a mandatory gate for
+// writes; rate, budget, and limit settings fail closed before any runner is
+// constructed instead of being silently discarded.
+func ValidateBatchConstraints(cf CredsFile) error {
+	for _, name := range cf.ConnectorNames() {
+		entry := cf.Connectors[name]
+		if entry.Skip {
+			continue
+		}
+		effective := cf.EffectiveOptions(name)
+		switch {
+		case effective.Write && !effective.Sandbox:
+			return fmt.Errorf("certify: connector %q write=true without sandbox is not supported", name)
+		case effective.RateLimitRPS != 0:
+			return fmt.Errorf("certify: connector %q rate_limit_rps is not supported by the certification runner", name)
+		case effective.BudgetCalls != 0:
+			return fmt.Errorf("certify: connector %q budget_calls is not supported by the certification runner", name)
+		case effective.Limit != 0:
+			return fmt.Errorf("certify: connector %q limit is not supported by the certification runner", name)
+		}
+	}
+	return nil
+}
+
+// optionsFromCredsEntry derives only settings the current Runner enforces.
+// ValidateBatchConstraints must run before this conversion.
+func optionsFromCredsEntry(name string, _ CredsFile, entry ConnectorCredsEntry) Options {
 	return Options{
 		Connector: name,
-		Limit:     effective.Limit,
 		Config:    entry.Credential.Config,
 		SecretEnv: entry.Credential.FromEnv,
 		Write:     entry.Write,

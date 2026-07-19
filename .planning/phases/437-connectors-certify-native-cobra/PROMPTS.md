@@ -45,6 +45,6 @@ Commands: `scripts/gsd doctor` and `scripts/gsd prompt plan-phase 437 --skip-res
 
 Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-spf13-cobra`.
 
-Downstream artifact: planning checkpoint `aa39fd9d` pushed; focused RED effect-recorder/docs tests captured and pending their own commit/push before production.
+Downstream artifact: planning `aa39fd9d` and RED `9a47ff3d` checkpoints pushed. GREEN P1/P2/P3 implementation and generated docs are focused-green and pending their coherent commit/push.
 
-Verification result: RED as expected. Unsupported single flags ran; 18 no-op/mode-inapplicable inputs recorded effects; two batch write-disable inputs preserved `write:true`; credential constraints reached batch/runner; stale docs/help assertions failed. `verificationPassed` remains false until GREEN and the declared full `make verify` gate exit 0.
+Verification result: partial GREEN. Focus/effect/no-op tests, repeated ×10, race, full CLI (`440.910s`), full certify (`346.271s`), CLI docs/goldens, and website docs generation pass. `verificationPassed` remains false until local smoke and the declared full `make verify`/connectorgen gates exit 0.

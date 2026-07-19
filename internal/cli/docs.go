@@ -444,9 +444,9 @@ SYNOPSIS
   pm connectors list [--all] [--json]
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
-  pm connectors help <name>
-  pm connectors certify <name> [--from-env field=ENV] [--config key=value] [--json]
-  pm connectors certify --all --credentials-file <file> [--parallel n] [--resume] [--json]
+  pm connectors help
+  pm connectors certify <name> [--from-env field=ENV] [--config key=value] [--stream name] [--skip write] [--write] [--full] [--keep-workdir] [--json]
+  pm connectors certify --all --credentials-file <file> [--parallel n] [--resume] [--write=false | --skip=write] [--json]
   pm connectors certify --sweep [--credentials-file <file>] [--older-than 24h] [--json]
 
 DESCRIPTION
@@ -534,14 +534,18 @@ ACTIONS
     to print structured metadata for agents. Inspection is metadata-only and
     does not resolve credentials.
 
-  help <name>
-    Alias for the human connector manual.
+  help
+    Prints this connectors namespace manual. Use inspect <name> for a
+    connector-specific manual or structured metadata.
 
   certify
     Runs the connector certification harness through the in-process CLI. A
     single run can use local connector behavior or user-named credential
-    variable references. Batch mode requires --all and --credentials-file.
-    Sweep mode retries cleanup recorded in the local certification ledger.
+    variable references. Batch mode requires --all and --credentials-file;
+    --write=false or --skip=write overrides every credential-file write entry.
+    Only --skip=write is implemented. Sweep mode retries cleanup recorded in
+    the local certification ledger. Unsupported or mode-inapplicable controls
+    fail before runner effects instead of being accepted as no-ops.
 
     Before a certification report is completed, CLI usage errors exit 2,
     validation errors exit 3, and setup or runtime errors exit 1. These errors
@@ -574,7 +578,8 @@ EXAMPLES
 SECURITY
   Connector inspection never reads credentials. Certification accepts only
   credential references; secret values are excluded from output and reports.
-  Live certification writes remain explicitly opt-in and cleanup-gated.
+  Live certification writes remain explicitly opt-in and cleanup-gated;
+  credential-file writes additionally require sandbox=true.
 
 EXIT STATUS
   0 command success or completed certification pass

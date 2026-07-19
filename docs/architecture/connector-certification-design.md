@@ -15,12 +15,11 @@ Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-lo
    the local warehouse, not in any connector.
 4. **`connectors.LiveConformanceProvider` exists with zero implementations** — it is the intended
    live hook; certify gives it purpose.
-5. **Gotchas**: `directConnector` (`cli.go:591`) builds RuntimeConfig from `--config` only — `pm
-   etl check/read --connector` never resolves credential Secrets. Live check must go through `pm
-   credentials test` (vault-resolved secrets), and `--credential` is added to `etl check/read` as a
-   prerequisite fix. `pm reverse plan --json` deliberately strips the approval token — the harness
-   parses the token from text output and separately asserts the JSON path keeps hiding it
-   (redaction gate).
+5. **Gotchas**: `directConnector` builds RuntimeConfig from `--config` only — `pm etl check/read
+   --connector` never resolves credential Secrets. Live certification creates an isolated
+   credential from `--from-env` references and tests it through the vault-backed public commands.
+   `pm reverse plan --json` deliberately strips the approval token — the harness parses the token
+   from text output and separately asserts the JSON path keeps hiding it (redaction gate).
 6. Crontab entries carry a `# pm-schedule-<name>` sentinel (`internal/schedule/crontab.go:88,100`)
    — a verifiable roundtrip marker. `runScheduleRemove` ignores backend removal errors — certify
    verifies independently.
@@ -34,14 +33,15 @@ specific, MUST be live-tested: pagination, cursors, rate limits, auth) and **des
 connector** but only 2 live API reads (full_refresh_append + incremental_append, plus a resume
 re-read); the 3 destination variants replay the captured JSONL through the real pipeline via the
 built-in `file` connector (still exercising ParseSyncMode, generation IDs, truncation, PK dedup).
-Each mode's report entry records `data_source: live | capture`. A `--live-all-modes` escape hatch
-exists.
+Each mode's report entry records `data_source: live | capture`. The current runner executes this
+fixed matrix; it does not expose a mode-selection control.
 
 Constraints: writes/deletes only via create-then-cleanup with tagged ephemeral records + mandatory
-cleanup verification + orphan sweeper; sandbox strongly recommended (`sandbox: true` in creds file
-or `--allow-production-writes`); token-bucket per connector (default 2 rps, 500-call budget;
-exhaustion = `skipped: budget_exhausted`); parallelism across connectors only (default 4);
-no credential → `uncertified`, never `failed`.
+cleanup verification + orphan sweeper. Single-connector writes require explicit `--write`; batch
+writes require both a credential-file `write: true` entry and `sandbox: true`. User
+`--write=false` or `--skip=write` always disables batch writes. Credential-file rate, budget, and
+read-limit settings are rejected before a runner starts because the current runner cannot enforce
+them. Parallelism is across connectors only; no credential means `uncertified`, never `failed`.
 
 ### Tiers
 
@@ -55,18 +55,16 @@ no credential → `uncertified`, never `failed`.
 
 ```
 pm connectors certify <connector>
-    [--credential <existing-name> | --from-env field=ENV ... --config k=v ...]
-    [--stream <name>]            # default: first stream with a cursor field, else first
-    [--limit N]                  # per-read record cap (default 50)
-    [--modes m1,m2,...]          # default: all 5
-    [--skip write,flow,schedule]
-    [--rate-limit RPS] [--budget N]
-    [--record | --replay]        # Tier-1 capture / replay
-    [--live-all-modes] [--allow-production-writes]
-    [--keep-workdir] [--json]
-pm connectors certify --all --credentials-file creds.yaml [--parallel N] [--resume] [--json]
+    [--from-env field=ENV ...] [--config k=v ...]
+    [--stream <name>]            # default: first cursor stream, else first
+    [--skip write] [--write] [--full] [--keep-workdir] [--json]
+pm connectors certify --all --credentials-file creds.yaml
+    [--parallel N] [--resume] [--write=false | --skip=write] [--json]
 pm connectors certify --sweep [--credentials-file creds.yaml] [--older-than 24h] [--json]
 ```
+
+Controls not implemented by the runner are hidden and rejected before effects rather than accepted
+as no-ops. Mode-specific controls are likewise rejected outside their applicable mode.
 
 **Exit codes**: 0 pass · 1 usage/internal · 2 certification failures · **3 leaked resources**
 (dominates everything). Wire via typed `certify.ExitError` in `internal/cli/errors.go`.
@@ -77,14 +75,14 @@ asserted → leak verification → report written → workdir deleted.
 
 ### Stage list
 
-Source stages: 0 preflight (registry, secrets present, budget armed) · 1 fixture_conformance
+Source stages: 0 preflight (registry, secrets present, write gates armed) · 1 fixture_conformance
 (Tier-0 embedded) · 2 manual_json (`connectors inspect --json`, no secret values) · 3
 credentials_add/test (LIVE check via vault) · 4 catalog_live (≥1 stream; PK/cursor recorded) · 5
 etl_full_refresh_append (LIVE; records_read>0 or `passed_empty` warning; output JSONL = capture) ·
 6 etl_full_refresh_overwrite (capture; run twice; truncate semantics via `pm query`) · 7
 etl_full_refresh_overwrite_deduped (capture; no duplicate PK tuples) · 8 etl_incremental_append
 (LIVE; cursor set) · 9 resume (LIVE run 2; records_read(run2) ≤ run1; cursor monotonic; no row
-below run-1 checkpoint; in --record mode assert outbound request carried the cursor param) · 10
+below run-1 checkpoint; assert the captured outbound request carried the cursor param) · 10
 etl_incremental_append_deduped (capture) · 11 query_contract.
 
 Write stages: 12 write_plan_preview (text yields plan id + token; `--json` contains NO token) · 13
@@ -114,7 +112,6 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
   "credential_ref": "cert-github",
   "passed": true,
   "leaks": [],
-  "budget": {"calls_used": 143, "calls_budget": 500, "rate_limit_rps": 2},
   "fixture": { "...embedded conformance report...": true },
   "capabilities": {
     "check":   {"live": "pass"},
@@ -163,7 +160,7 @@ History appends to `.polymetrics/certifications/history/<connector>/<timestamp>.
 
 ```yaml
 version: 1
-defaults: {limit: 50, rate_limit_rps: 2, budget_calls: 500, parallel: 4}
+defaults: {parallel: 4}
 connectors:
   github:
     credential:
@@ -175,14 +172,13 @@ connectors:
     credential:
       exec: {api_key: ["op", "read", "op://certs/stripe-test/api_key"]}
     write: false
-    rate_limit_rps: 1
   salesforce:
     skip: true
     reason: "no sandbox tenant yet"
 ```
 
 Worker pool over connectors (default 4), one ephemeral root each; stages within a connector
-strictly serial; per-connector token bucket. Resumability: `certifications/batch-<runid>/
+strictly serial. Resumability: `certifications/batch-<runid>/
 progress.json`; `--resume` skips connectors whose report is newer than batch start. Summary
 matrix: rows = connectors; columns = check/catalog/read/5 modes/resume/write/flow/schedule/
 redaction/**leaks**; any leak row printed first and forces exit 3.
@@ -250,7 +246,6 @@ internal/connectors/certify/
   pairing.go        # WritePairing tables + data generation
   ledger.go         # write-ahead leak ledger
   sweeper.go        # --sweep
-  budget.go         # token bucket + call budget (transport wrapper)
   report.go         # CertificationReport schema, save/load, history, matrix rendering
   credsfile.go      # creds.yaml parsing, env/exec secret resolution
   record.go         # Tier-1 recording RoundTripper + sanitizer
@@ -259,34 +254,28 @@ internal/cli/certify_cli.go   # wire `certify` into runConnectors
 cmd/certstatus/               # enablement generator from artifacts
 ```
 
-**Tier-1 record/replay**: a tiny `internal/connectors/httpx` package —
-`httpx.Client(cfg RuntimeConfig) *http.Client` honoring `base_url` plus a process-global
-`httpx.SetTransport(rt)` hook (safe: certify runs in-process; `--record` forces `--parallel 1`).
-Cassettes at `internal/connectors/<pkg>/testdata/golden/<stage>/<seq>.json`; matched by (method,
-path, per-stage sequence); unmatched request in replay ⇒ failure (catches drift). Sanitizer runs
-at record time: secret values (exact/base64/URL-encoded), Authorization/Cookie/X-Api-Key-class
-headers, manifest secret fields; tags/emails normalized for deterministic replay. Write stages
-replay too — Tier-1 CI exercises the write protocol with zero leak risk.
+**Tier-1 record/replay internals**: `record.go` and `replay.go` provide sanitized cassette
+primitives for tests and internal harness use. They are not exposed as public certify controls.
+Sanitization removes secret values (exact/base64/URL-encoded), credential-class headers, and
+manifest secret fields; unmatched replay requests fail closed.
 
-**Makefile/CI**:
+**Local and CI invocation**:
 
-```make
-certify-replay: build   # ./pm connectors certify --all --replay --json
-certify-live: build     # ./pm connectors certify --all --credentials-file certify/creds.yaml --json
-certify-sweep: build    # ./pm connectors certify --sweep --credentials-file certify/creds.yaml
-verify: fmt tidy-check vet test build docs-check smoke certify-replay
+```bash
+./pm connectors certify sample --json
+./pm connectors certify --all --credentials-file certify/creds.yaml --json
+./pm connectors certify --sweep --credentials-file certify/creds.yaml
 ```
 
-Nightly `certify-live.yml` GitHub Action: matrix over connectors with repo secrets, `--parallel 2`,
-always-run sweep step, uploads report artifacts; green runs open a PR refreshing
-`internal/connectors/certifications/` + regenerated statuses.
+The dependency-free sample command is suitable for local/CI verification. Credential-file batch
+and sweep commands remain explicit, credential-gated operations and are not part of the default
+verification target.
 
 ## Implementation order
 
 1. `report.go` + `cliharness.go`; prove against `sample` connector end-to-end.
 2. Source stages (5-mode matrix, capture replay, resume) against sample/smoke-test/e2e-test +
-   github/httptest. Prerequisite fix: `--credential` on `pm etl check/read` (or live check
-   exclusively via `credentials test`).
+   github/httptest. Live checks go through the isolated credential lifecycle and `credentials test`.
 3. Write protocol + ledger + sweeper, github pairing table first.
 4. Flow + schedule stages.
 5. CLI wiring (single, `--all`, `--sweep`), exit-code mapping.

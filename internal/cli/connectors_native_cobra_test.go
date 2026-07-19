@@ -475,12 +475,17 @@ func TestConnectorsCertificationDocsDoNotAdvertiseRejectedControlsOrNameScopedHe
 			t.Fatalf("read %s: %v", path, err)
 		}
 		for _, rejected := range []string{
-			"--credential", "--limit", "--modes", "--record", "--replay",
-			"--rate-limit", "--budget", "--live-all-modes", "--allow-production-writes",
+			"--record", "--replay", "--rate-limit", "--budget",
+			"--live-all-modes", "--allow-production-writes",
 		} {
 			if strings.Contains(string(raw), rejected) {
 				t.Errorf("%s still advertises rejected control %s", path, rejected)
 			}
+		}
+		if strings.Contains(string(raw), "[--credential <") ||
+			strings.Contains(string(raw), "[--limit") ||
+			strings.Contains(string(raw), "[--modes") {
+			t.Errorf("%s still advertises unsupported single-certify credential/limit/modes controls", path)
 		}
 	}
 }
@@ -504,7 +509,7 @@ func TestNativeCertifySupportedSingleFlagsAndExitContract(t *testing.T) {
 	if runtime.singleCalls != 1 || runtime.batchCalls != 0 || runtime.sweepCalls != 0 {
 		t.Fatalf("mode calls single=%d batch=%d sweep=%d", runtime.singleCalls, runtime.batchCalls, runtime.sweepCalls)
 	}
-	if got := runtime.singleOpts; got.Connector != "sample" || got.Stream != "customers" || got.Limit != 50 || !got.KeepWork || got.Write || !got.Full {
+	if got := runtime.singleOpts; got.Connector != "sample" || got.Stream != "customers" || got.Limit != 0 || !got.KeepWork || got.Write || !got.Full {
 		t.Fatalf("single options=%+v", got)
 	}
 	if len(runtime.singleOpts.Modes) != 0 {

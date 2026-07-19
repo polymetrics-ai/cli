@@ -94,6 +94,8 @@ func newCertifyCobraCommand(ctx context.Context, root string, stdout io.Writer, 
 			return markCobraLegacyError(writeManual("connectors", stdout, jsonOut))
 		}
 		switch {
+		case lastString(flags.Sweeps) == "true" && lastString(flags.Alls) == "true":
+			return usageErrorf("--all and --sweep are not supported together")
 		case lastString(flags.Sweeps) == "true":
 			return markCobraLegacyError(runCertifySweep(ctx, root, flags, stdout, jsonOut, runtime))
 		case lastString(flags.Alls) == "true":
@@ -115,8 +117,7 @@ func addCertifyFlags(cmd *cobra.Command, flags *certifyCommandFlags) {
 		name   string
 		target *[]string
 	}{
-		{"credential", &flags.Credentials}, {"from-env", &flags.FromEnv}, {"config", &flags.Configs},
-		{"stream", &flags.Streams}, {"limit", &flags.Limits}, {"modes", &flags.Modes},
+		{"from-env", &flags.FromEnv}, {"config", &flags.Configs}, {"stream", &flags.Streams},
 		{"skip", &flags.Skips}, {"keep-workdir", &flags.KeepWorkdirs}, {"write", &flags.Writes},
 		{"full", &flags.Fulls}, {"all", &flags.Alls}, {"credentials-file", &flags.CredentialsFiles},
 		{"parallel", &flags.Parallels}, {"resume", &flags.Resumes}, {"sweep", &flags.Sweeps},
@@ -128,6 +129,7 @@ func addCertifyFlags(cmd *cobra.Command, flags *certifyCommandFlags) {
 		name   string
 		target *[]string
 	}{
+		{"credential", &flags.Credentials}, {"limit", &flags.Limits}, {"modes", &flags.Modes},
 		{"record", &flags.Records}, {"replay", &flags.Replays},
 		{"allow-production-writes", &flags.AllowProductionWrite}, {"rate-limit", &flags.RateLimits},
 		{"budget", &flags.Budgets}, {"live-all-modes", &flags.LiveAllModes},
@@ -160,6 +162,10 @@ func runCertifySingle(ctx context.Context, root, connector string, flags certify
 		return validationErrorf("%v", err)
 	}
 
+	if err := validateCertifySingleFlags(flags); err != nil {
+		return err
+	}
+
 	opts, err := certifyOptionsFromFlags(connector, flags)
 	if err != nil {
 		return err
@@ -181,20 +187,10 @@ func runCertifySingle(ctx context.Context, root, connector string, flags certify
 	return exitForReport(rep)
 }
 
-// certifyOptionsFromFlags builds certify.Options from `pm connectors certify
-// <connector>` flags: --stream, --limit, --modes, --skip, --keep-workdir,
-// --from-env (repeatable field=ENV), --config (repeatable key=value), --write
-// (certification design §A command spec).
+// certifyOptionsFromFlags builds certify.Options from the implemented
+// single-connector controls. validateCertifySingleFlags must run first so no
+// declared-but-unimplemented option can reach the runner as a no-op.
 func certifyOptionsFromFlags(connector string, flags certifyCommandFlags) (certify.Options, error) {
-	if err := rejectUnsupportedCertifyControls(flags); err != nil {
-		return certify.Options{}, err
-	}
-
-	limit, err := parseIntFlag("limit", lastString(flags.Limits), 50)
-	if err != nil {
-		return certify.Options{}, err
-	}
-
 	secretEnv := map[string]string{}
 	for _, spec := range flags.FromEnv {
 		field, env, ok := strings.Cut(spec, "=")
@@ -209,25 +205,19 @@ func certifyOptionsFromFlags(connector string, flags certifyCommandFlags) (certi
 		return certify.Options{}, err
 	}
 
-	skip := parseCSVFlags(flags.Skips)
 	write := lastString(flags.Writes) == "true"
-	full := lastString(flags.Fulls) == "true"
-	for _, s := range skip {
-		if s == "write" {
-			write = false
-		}
+	if skipWrite(flags) {
+		write = false
 	}
 
 	return certify.Options{
 		Connector: connector,
 		Stream:    lastString(flags.Streams),
-		Limit:     limit,
-		Modes:     parseCSVFlags(flags.Modes),
 		Config:    config,
 		SecretEnv: secretEnv,
 		KeepWork:  lastString(flags.KeepWorkdirs) == "true",
 		Write:     write,
-		Full:      full,
+		Full:      lastString(flags.Fulls) == "true",
 	}, nil
 }
 
@@ -236,6 +226,9 @@ func rejectUnsupportedCertifyControls(flags certifyCommandFlags) error {
 		name   string
 		values []string
 	}{
+		{"credential", flags.Credentials},
+		{"limit", flags.Limits},
+		{"modes", flags.Modes},
 		{"record", flags.Records},
 		{"replay", flags.Replays},
 		{"allow-production-writes", flags.AllowProductionWrite},
@@ -248,6 +241,106 @@ func rejectUnsupportedCertifyControls(flags certifyCommandFlags) error {
 		}
 	}
 	return nil
+}
+
+func validateCertifySingleFlags(flags certifyCommandFlags) error {
+	if err := rejectUnsupportedCertifyControls(flags); err != nil {
+		return err
+	}
+	if err := validateCertifySkips(flags.Skips); err != nil {
+		return err
+	}
+	return rejectCertifyModeControls("single", []certifyModeControl{
+		{"credentials-file", flags.CredentialsFiles},
+		{"parallel", flags.Parallels},
+		{"resume", flags.Resumes},
+		{"older-than", flags.OlderThans},
+	})
+}
+
+func validateCertifyBatchFlags(flags certifyCommandFlags) error {
+	if err := rejectUnsupportedCertifyControls(flags); err != nil {
+		return err
+	}
+	if err := validateCertifySkips(flags.Skips); err != nil {
+		return err
+	}
+	if err := rejectCertifyModeControls("batch", []certifyModeControl{
+		{"from-env", flags.FromEnv},
+		{"config", flags.Configs},
+		{"stream", flags.Streams},
+		{"keep-workdir", flags.KeepWorkdirs},
+		{"full", flags.Fulls},
+		{"older-than", flags.OlderThans},
+	}); err != nil {
+		return err
+	}
+	if len(flags.Writes) > 0 && lastString(flags.Writes) != "false" {
+		return usageErrorf("--write=%s is not supported in batch mode; only --write=false may override credential-file writes", lastString(flags.Writes))
+	}
+	return nil
+}
+
+func validateCertifySweepFlags(flags certifyCommandFlags) error {
+	if err := rejectUnsupportedCertifyControls(flags); err != nil {
+		return err
+	}
+	if len(flags.Skips) > 0 {
+		return usageErrorf("--skip is not supported in sweep mode")
+	}
+	return rejectCertifyModeControls("sweep", []certifyModeControl{
+		{"from-env", flags.FromEnv},
+		{"config", flags.Configs},
+		{"stream", flags.Streams},
+		{"keep-workdir", flags.KeepWorkdirs},
+		{"write", flags.Writes},
+		{"full", flags.Fulls},
+		{"parallel", flags.Parallels},
+		{"resume", flags.Resumes},
+	})
+}
+
+type certifyModeControl struct {
+	name   string
+	values []string
+}
+
+func rejectCertifyModeControls(mode string, controls []certifyModeControl) error {
+	for _, control := range controls {
+		if len(control.values) > 0 {
+			return usageErrorf("--%s is not supported in %s certification mode", control.name, mode)
+		}
+	}
+	return nil
+}
+
+func validateCertifySkips(values []string) error {
+	for _, skip := range parseCSVFlags(values) {
+		if skip != "write" {
+			return usageErrorf("--skip=%s is not supported; only --skip=write is implemented", skip)
+		}
+	}
+	return nil
+}
+
+func skipWrite(flags certifyCommandFlags) bool {
+	for _, skip := range parseCSVFlags(flags.Skips) {
+		if skip == "write" {
+			return true
+		}
+	}
+	return false
+}
+
+func batchWriteDisabled(flags certifyCommandFlags) bool {
+	return (len(flags.Writes) > 0 && lastString(flags.Writes) == "false") || skipWrite(flags)
+}
+
+func disableCredentialFileWrites(credsFile *certify.CredsFile) {
+	for name, entry := range credsFile.Connectors {
+		entry.Write = false
+		credsFile.Connectors[name] = entry
+	}
 }
 
 // --- batch mode (--all --credentials-file) ---
@@ -264,7 +357,7 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 		span.End()
 	}()
 
-	if err := rejectUnsupportedCertifyControls(flags); err != nil {
+	if err := validateCertifyBatchFlags(flags); err != nil {
 		return err
 	}
 
@@ -276,6 +369,12 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 	credsFile, err := runtime.LoadCredsFile(credsPath)
 	if err != nil {
 		return err
+	}
+	if batchWriteDisabled(flags) {
+		disableCredentialFileWrites(&credsFile)
+	}
+	if err := certify.ValidateBatchConstraints(credsFile); err != nil {
+		return usageErrorf("%v", err)
 	}
 
 	parallel, err := parseIntFlag("parallel", lastString(flags.Parallels), 0)
@@ -301,7 +400,7 @@ func runCertifyBatch(ctx context.Context, root string, flags certifyCommandFlags
 // --- sweep mode (--sweep) ---
 
 func runCertifySweep(ctx context.Context, root string, flags certifyCommandFlags, stdout io.Writer, jsonOut bool, runtime certifyCommandRuntime) error {
-	if err := rejectUnsupportedCertifyControls(flags); err != nil {
+	if err := validateCertifySweepFlags(flags); err != nil {
 		return err
 	}
 
