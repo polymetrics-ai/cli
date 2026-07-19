@@ -15,8 +15,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 |---:|---|---|---|
 | 0 | Planning | Create PLAN/TDD-LEDGER/VERIFICATION/PROMPTS/RUN-STATE/SUMMARY with identity and exact start before tests or production edits | Complete |
 | 1 | RED | `go test ./internal/cli ./internal/rlm -run 'TestExtract|TestDeterministicRunRejectsWarehouseInputPathEscape|TestDeterministicRunRejectsExternalInputFinalLink|TestWriteOutTable' -count=1` | Failed as required before production edits: CLI lacks `newExtractCobraCommand`, `extractCommandRuntime`, and `newRootCmdWithExtractRuntime`; RLM traversal input, external input final link, and external temporary output final link all succeeded |
-| 2 | GREEN | Hidden native extract command, typed flags/runtime, bounded table checks, rooted RLM warehouse I/O, and extract-only legacy/parser removal | Pending |
-| 3 | Refactor | Focused/repeated/race extract/RLM/safety, router/golden/full CLI, exact-start differential, and parity checks | Pending |
+| 2 | GREEN | Hidden native extract command, typed flags/runtime, bounded table checks, rooted RLM warehouse I/O, and extract-only legacy/parser removal | Pass: focused CLI/RLM `1.752s`/`0.227s`; existing extract request test updated only for intentional bare-help behavior |
+| 3 | Refactor | Focused/repeated/race extract/RLM/safety, router/golden/full CLI, exact-start differential, and parity checks | In progress: extract ×10 `10.607s`, extract race `12.937s`, RLM/safety normal/repeated/race green, router/golden focus green, exact-start 8/8 preserved plus 5/5 intentional help |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` default-only | Pending |
 | 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
 
@@ -36,6 +36,12 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 The complete test-only contract preceded production edits. Focused CLI compilation failed on the intentionally absent native constructor/runtime seam. Independently, all three expected RLM safety failures reproduced: `../outside` input escaped the warehouse, an input final symlink reached an external file, and `scores.ndjson.tmp` followed and changed an external target. The final-output symlink replacement control already passed, proving atomic rename itself replaces rather than follows the final link.
 
 No external user file or service was used: all roots, symlinks, records, and sentinels were created under `t.TempDir`.
+
+## GREEN / refactor evidence
+
+Native Cobra now owns hidden extract and its nine current local flags. An invocation-local runtime isolates query and analyzer effects; production retains the old project-open gate, heuristic/optional classifier, read-only query engine, and typed agent analyzer. Extract validates both table names before analyzer construction. Shared RLM input opens and output temp/create/rename effects now run through a held `os.Root`-backed local filesystem scope; deterministic reads remain streaming while agent staging retains its required byte copy.
+
+Focused, repeated, and race suites pass. The original input traversal, external input final-link, and external output-temp final-link tests are green; atomic replacement preserves the external final-target sentinel and replaces the link. Router/golden/docs focus passes after the one reviewed extract-help fixture change and generated `docs/cli/extract.md`. An exact-start built-binary differential matched 8/8 preserved parser/output cases; 5/5 intentional bare/topic/positional/trailing help routes pass.
 
 ## Evidence log
 

@@ -209,9 +209,11 @@ func TestExtractLiteralUnknownOperandsGlobalsAndOutputCompatibility(t *testing.T
 		}
 	}
 
+	globalRoot := t.TempDir()
+	initProject(t, globalRoot)
 	for _, args := range [][]string{
-		{"--root", t.TempDir(), "--json", "extract", "--request=show customers"},
-		{"extract", "--request=show customers", "--json=true", "--plain=true", "--no-input=true"},
+		{"--root", globalRoot, "--json", "extract", "--request=show customers"},
+		{"extract", "--request=show customers", "--json=true", "--plain=true", "--no-input=true", "--root=" + globalRoot},
 	} {
 		var out, stderr bytes.Buffer
 		if code := Run(args, &out, &stderr); code != 0 || stderr.Len() != 0 {

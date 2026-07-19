@@ -1,6 +1,6 @@
 # Phase 436 Summary
 
-Status: planned; production work not started.
+Status: native implementation green; broad/final verification pending.
 
 ## Identity
 
@@ -10,9 +10,11 @@ Status: planned; production work not started.
 - Exact start: `eec03373dcc581c7f5c3331fe63287519b317f53`
 - Parent: #397; umbrella: #407; draft parent PR #438
 
-## Planned delivery
+## Delivered
 
-Nativize only the hidden extract command and its current flags while preserving dependency-free routing, globals, operands, text/JSON output, error behavior, and hidden discovery. Add contextual direct/topic/positional/trailing help parity. Add temporary-root containment and effect-time final-link safety for extract's RLM warehouse input/output path without allowing broad paths or external effects. Remove only extract's legacy wrapper/parser call.
+Native Cobra owns hidden extract, positional help, and all nine current flags while preserving dependency-free routing, globals, ignored operands/unknowns, literal separators, text/JSON output, errors, and hidden discovery. An invocation-local query/analyzer runtime seam makes effect routing testable without optional services. Direct/topic/positional/trailing help now uses a dedicated canonical manual.
+
+Extract validates RLM input/output as bare table names before analyzer effects. Shared RLM warehouse reads and atomic writes use the existing `os.Root`-backed local filesystem scope, preventing traversal, external input-link reads, and external output-temp link writes while safely replacing a final link without changing its external target. Only extract's legacy registration and `parseFlags` call were removed.
 
 ## Workflow
 
@@ -24,4 +26,4 @@ No external files/services, credentials, dependencies, model, Temporal, Podman, 
 
 ## TDD and verification
 
-Pending. Exact RED/GREEN/refactor and gate evidence will be appended without backfilling.
+RED preceded production edits: native extract symbols were absent, and traversal input, external input final-link, and external output-temp final-link effects all reproduced under temporary roots. GREEN focused/repeated/race extract/RLM/safety and router/golden checks pass. Exact-start differential matched 8/8 preserved cases; 5/5 intentional contextual-help routes pass. Full CLI/repository/vet/build/`make verify` remain pending.

@@ -170,14 +170,9 @@ func (a *AgentAnalyzer) Run(ctx context.Context, req RunRequest) (RunResult, err
 // request descriptor, and returns the JobDir, a content fingerprint, and the
 // input record count.
 func (a *AgentAnalyzer) stage(req RunRequest) (jobDir, fingerprint string, recordsRead int, err error) {
-	inPath := filepath.Join(req.WarehouseDir, req.InTable+".ndjson")
-	inBytes, err := os.ReadFile(inPath)
+	inBytes, records, err := readWarehouseTable(req.WarehouseDir, req.InTable)
 	if err != nil {
-		return "", "", 0, fmt.Errorf("rlm: read InTable %q: %w", inPath, err)
-	}
-	records, err := readEnvelopedRecords(inPath)
-	if err != nil {
-		return "", "", 0, fmt.Errorf("rlm: parse InTable %q: %w", inPath, err)
+		return "", "", 0, fmt.Errorf("rlm: read InTable %q: %w", req.InTable, err)
 	}
 
 	specBytes, _ := json.Marshal(req.Spec)

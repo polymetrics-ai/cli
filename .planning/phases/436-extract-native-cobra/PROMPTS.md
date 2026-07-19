@@ -21,6 +21,6 @@ Required skills: `gsd-core`; `golang-how-to`; `golang-cli`; `golang-testing`; `g
 
 Safety prompt: keep extract hidden and dependency-free. Inject local fakes for query/analyzer behavior. Use only temporary project/warehouse roots and synthetic records. Reject broad input/output names and effect-time symlink escapes; preserve external sentinel files. Never call a model, Temporal, Podman, worker, network listener, database service, credentialed connector, generic shell/HTTP/SQL write tool, destructive/admin action, production operation, or reverse ETL. Remove only extract's parser registration/call.
 
-Downstream artifact: pending.
+Downstream artifact: hidden native extract with typed current flags, injected query/analyzer seams, bounded table validation, rooted RLM warehouse input/output effects, canonical manual/docs/website/golden parity, and extract-only legacy/parser removal.
 
-Verification result: pending.
+Verification result: focused/repeated/race extract/RLM/safety, router/golden, and exact-start 8/8 preserved plus 5/5 intentional-help checks pass. Full verification pending.

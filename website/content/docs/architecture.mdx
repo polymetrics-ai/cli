@@ -129,7 +129,7 @@ pm rlm run --spec churn.json --in customers --out churn_scores --mode model --js
 pm rlm run --spec churn.json --in customers --out churn_scores --mode agent --request "score churn" --json
 ```
 
-`pm extract` classifies a natural-language request and routes it to either query execution or RLM analysis. RLM supports deterministic, fixture, model, and agent modes. Agent mode needs the optional Temporal worker and Podman image.
+Hidden `pm extract` classifies a natural-language request and routes it to either read-only query execution or typed RLM analysis. Its `--in` and `--out` values are bare local warehouse table names; rooted reads and atomic writes reject traversal and external final-link effects. RLM supports deterministic, fixture, model, and agent modes. Agent mode needs the optional Temporal worker and Podman image.
 
 ```bash
 pm agent image build --json

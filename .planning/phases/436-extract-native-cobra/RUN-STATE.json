@@ -11,7 +11,7 @@
   "startedAt": "20260719T074902Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "red_tests_captured",
+  "status": "green_refactor_in_progress",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -30,10 +30,15 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "complete hidden native extract, flags, routing/output/help, parser compatibility, globals, temp-root containment, and input/output final-link tests preceded production edits; CLI symbols were absent and all three expected RLM path escapes reproduced"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "hidden native extract with nine typed flags, invocation-local query/analyzer seams, extract table validation, rooted RLM input/output effects, direct manual, and extract-only legacy/parser removal passes focused, repeated, race, router/golden, path-safety, and exact-start differential gates"
     }
   ],
   "red": "focused CLI compile failure on absent newExtractCobraCommand/extractCommandRuntime/newRootCmdWithExtractRuntime; RLM traversal input, external input final link, and external temporary output final link all succeeded before production edits",
-  "green": "pending",
+  "green": "focused CLI/RLM passed; extract x10 and race passed; RLM/safety repeated and race passed; exact-start 8/8 preserved plus 5/5 intentional contextual help",
   "verification": "pending",
   "files": [
     ".planning/phases/436-extract-native-cobra/PLAN.md",

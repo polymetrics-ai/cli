@@ -3,12 +3,13 @@ package rlm
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/safety"
 )
 
 // DeterministicAnalyzer scores records using pure Go weighted-feature scoring.
@@ -29,12 +30,11 @@ func (d *DeterministicAnalyzer) Run(ctx context.Context, req RunRequest) (RunRes
 		DryRun:   req.DryRun,
 	}
 
-	// Read InTable NDJSON, preserving the envelope's _polymetrics_raw_id so the
-	// sort tie-break and any reference-integrity checks have a stable identity.
-	inPath := filepath.Join(req.WarehouseDir, req.InTable+".ndjson")
-	records, err := readEnvelopedRecords(inPath)
+	// Read InTable beneath the held warehouse root, preserving the envelope's
+	// _polymetrics_raw_id for stable sorting and reference checks.
+	records, err := readWarehouseRecords(req.WarehouseDir, req.InTable)
 	if err != nil {
-		return result, fmt.Errorf("rlm: read InTable %q: %w", inPath, err)
+		return result, fmt.Errorf("rlm: read InTable %q: %w", req.InTable, err)
 	}
 	result.RecordsRead = len(records)
 
@@ -60,11 +60,26 @@ func (d *DeterministicAnalyzer) Run(ctx context.Context, req RunRequest) (RunRes
 
 // writeOutTable atomically writes scored records to OutTable NDJSON.
 func writeOutTable(dir, table string, records []connectors.Record, mode, specName, scoredAt string) error {
-	outPath := filepath.Join(dir, table+".ndjson")
-	tmpPath := outPath + ".tmp"
-
-	f, err := os.Create(tmpPath)
+	if err := validateOutTable(table); err != nil {
+		return err
+	}
+	fs, err := safety.OpenLocalWriteFS(dir, false)
 	if err != nil {
+		return err
+	}
+	defer fs.Close()
+
+	outPath := table + ".ndjson"
+	tmpPath := outPath + ".tmp"
+	f, err := fs.OpenFile(tmpPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
+	if err != nil {
+		return err
+	}
+	removeTemp := func() error {
+		err := fs.Remove(tmpPath)
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
 		return err
 	}
 
@@ -79,18 +94,17 @@ func writeOutTable(dir, table string, records []connectors.Record, mode, specNam
 		out["_rlm_spec"] = specName
 		out["_rlm_scored_at"] = scoredAt
 		if err := enc.Encode(out); err != nil {
-			f.Close()
-			os.Remove(tmpPath)
-			return err
+			return errors.Join(err, f.Close(), removeTemp())
 		}
 	}
 
 	if err := f.Close(); err != nil {
-		os.Remove(tmpPath)
-		return err
+		return errors.Join(err, removeTemp())
 	}
-
-	return os.Rename(tmpPath, outPath)
+	if err := fs.Rename(tmpPath, outPath); err != nil {
+		return errors.Join(err, removeTemp())
+	}
+	return nil
 }
 
 // scoreRecords applies spec feature scoring to a slice of records and returns

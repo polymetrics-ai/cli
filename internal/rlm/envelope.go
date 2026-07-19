@@ -2,11 +2,14 @@ package rlm
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/safety"
 )
 
 // readEnvelopedRecords reads a local warehouse NDJSON file and returns each
@@ -23,9 +26,59 @@ func readEnvelopedRecords(path string) ([]connectors.Record, error) {
 		return nil, err
 	}
 	defer f.Close()
+	return readEnvelopedRecordsFrom(f)
+}
 
+func readWarehouseRecords(dir, table string) ([]connectors.Record, error) {
+	fs, f, err := openWarehouseTable(dir, table)
+	if err != nil {
+		return nil, err
+	}
+	defer fs.Close()
+	defer f.Close()
+	return readEnvelopedRecordsFrom(f)
+}
+
+func readWarehouseTable(dir, table string) ([]byte, []connectors.Record, error) {
+	fs, f, err := openWarehouseTable(dir, table)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer fs.Close()
+	data, err := io.ReadAll(f)
+	closeErr := f.Close()
+	if err != nil {
+		return nil, nil, err
+	}
+	if closeErr != nil {
+		return nil, nil, closeErr
+	}
+	records, err := readEnvelopedRecordsFrom(bytes.NewReader(data))
+	if err != nil {
+		return nil, nil, err
+	}
+	return data, records, nil
+}
+
+func openWarehouseTable(dir, table string) (*safety.LocalWriteFS, *os.File, error) {
+	if err := validateInTable(table); err != nil {
+		return nil, nil, err
+	}
+	fs, err := safety.OpenLocalWriteFS(dir, false)
+	if err != nil {
+		return nil, nil, err
+	}
+	f, err := fs.Open(table + ".ndjson")
+	if err != nil {
+		_ = fs.Close()
+		return nil, nil, err
+	}
+	return fs, f, nil
+}
+
+func readEnvelopedRecordsFrom(r io.Reader) ([]connectors.Record, error) {
 	var records []connectors.Record
-	sc := bufio.NewScanner(f)
+	sc := bufio.NewScanner(r)
 	sc.Buffer(make([]byte, 0, 64*1024), 16*1024*1024)
 	for sc.Scan() {
 		line := sc.Bytes()
