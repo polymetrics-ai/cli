@@ -23,35 +23,35 @@ Invocation: `issue-434-pi-sol-high-20260719T053630Z`; profile `Sol`; thinking `h
 - [x] Worker fake/workflow tests that require no service (`0.572s`; CLI fake focus `1.891s`).
 - [x] Router and golden transcript focus; fixture unchanged.
 - [x] Exact-start parser/output differential (24/24 matched after duration normalization).
-- [ ] Full `go test ./internal/cli/...`.
-- [ ] `gofmt -w cmd internal`.
-- [ ] `go vet ./...`.
-- [ ] `go test -timeout 20m ./...`.
-- [ ] `go build ./cmd/pm`.
-- [ ] `make verify` dependency-free.
-- [ ] `git diff --check`; no dependency/connector-definition/unrelated delta.
+- [x] Full `go test -timeout 15m ./internal/cli/... -count=1` (`424.801s`).
+- [x] `gofmt -w cmd internal`.
+- [x] `go vet ./...`.
+- [x] `go test -timeout 20m ./...` (CLI `431.499s`; certify `339.553s`).
+- [x] `go build ./cmd/pm`.
+- [x] `make verify` dependency-free (`24.201s`, cached full gate; lint 0; connectors 547/0).
+- [x] `git diff --check`; no dependency/connector-definition/unrelated delta.
 
 ## CLI help/manual/website parity
 
-- [ ] `pm help rlm`.
-- [ ] Bare `pm rlm` exits 0 with contextual manual.
-- [ ] `pm rlm --help`, `-h`, positional help, and JSON manual routes.
-- [ ] Invalid action remains a usage error.
-- [ ] `docs/cli/rlm.md` generated parity; update or mark unchanged with evidence.
-- [ ] Website CLI-reference/architecture RLM docs checked/generated; update or mark unchanged.
-- [ ] Generated/golden help artifacts checked.
-- [ ] Completion discovery seam present; Phase 15 values remain deferred.
-- [ ] Phase 16 RLM viewer and Phase 19 focused help/man work remain deferred.
+- [x] `pm help rlm`.
+- [x] Bare `pm rlm` exits 0 with contextual manual.
+- [x] `pm rlm --help`, `-h`, positional help, and JSON manual routes.
+- [x] Invalid action remains a usage error.
+- [x] `docs/cli/rlm.md` generated parity; unchanged because public bytes did not change.
+- [x] Website CLI-reference/architecture RLM docs checked/generated; no tracked delta.
+- [x] Generated/golden help artifacts checked and unchanged.
+- [x] Completion discovery seam present; Phase 15 values remain deferred.
+- [x] Phase 16 RLM viewer and Phase 19 focused help/man work remain deferred.
 
 ## Safety/scope/delivery
 
 - [x] Exact branch/start and parent draft PR confirmed.
 - [x] GSD doctor/list passed; unavailable programming-loop/manual fallback recorded.
 - [x] Required CLI/testing/error/security/safety/context/concurrency/docs/Cobra skills loaded.
-- [ ] Temp specs/warehouses and injected analyzers/hermetic fake runner only.
-- [ ] No model, Temporal, Podman, worker service, credential, secret/request leakage, or generic runner.
-- [ ] No optional services, dependencies, unrelated namespaces, or broad generated churn.
-- [ ] Planning, RED, GREEN/refactor, and final checkpoints committed/pushed.
-- [x] No PR/review planned per user instruction.
+- [x] Temp specs/warehouses and injected analyzers/hermetic fake runner only.
+- [x] No model, Temporal, Podman, worker service, credential, secret/request leakage, or generic runner.
+- [x] No optional services, dependencies, unrelated namespaces, or broad generated churn.
+- [x] Planning, RED, GREEN/refactor, and final checkpoints committed/pushed after terminal commit.
+- [x] No PR/review created per user instruction.
 
-Result: pending.
+Result: pass at implementation head `633f1e21`; `verificationPassed=true` because full `make verify` exited 0.
