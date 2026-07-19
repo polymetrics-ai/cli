@@ -72,9 +72,10 @@
     "5da474a2 test(cli): expose connectors trailing help gaps",
     "6f248f1d fix(cli): preserve connectors contextual trailing help",
     "9ab1fa41 test(cli): expose connectors direct action help gap",
-    "445ad06c fix(cli): route direct connectors action help"
+    "445ad06c fix(cli): route direct connectors action help",
+    "55e32402 docs(planning): complete connectors certify native handoff"
   ],
-  "push": "all planning, RED, GREEN, and help-correction checkpoints pushed; terminal artifact commit is pushed immediately after this state is written",
+  "push": "all planning, RED, GREEN, help-correction, and terminal artifact checkpoints committed and pushed",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"

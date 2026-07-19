@@ -15,7 +15,7 @@ GSD doctor/list and plan-phase prompt passed. Adapter has no `programming-loop`;
 | 6 | Operand-help GREEN | Help-aware private operand capture | Focused `3.989s` |
 | 7 | Refactor | Repeated/race/router/golden/differential/parity | Final native ×10 `34.833s`; native race `40.842s`; router/golden/certify/telemetry `111.919s`; exact-start operations 21/21 |
 | 8 | Full gate | certify smoke, connector validation, docs/website, gofmt/vet/test/build/make verify | Complete: smoke exit 0/pass; validation 547/0; final `make verify` exit 0 |
-| 9 | Delivery | Finalize six artifacts, commit/push, no PR/review | Pending terminal artifact commit |
+| 9 | Delivery | Finalize six artifacts, commit/push, no PR/review | Complete |
 
 ## Contract proven
 
