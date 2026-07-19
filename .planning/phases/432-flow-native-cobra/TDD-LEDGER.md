@@ -19,6 +19,7 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 | 1 | RED | `go test ./internal/cli ./internal/flow -run 'TestFlow(Command|Plan|Help|Exact)|TestEngineCancellationPreserves' -count=1` | Failed as required before production edits: `internal/cli/flow_native_cobra_test.go:20:9: undefined: newFlowCobraCommand`; flow cancellation/events/telemetry/checkpoint/ledger contract passed in `0.394s` |
 | 2 | GREEN | Native flow subtree + typed handlers + flow-only normalization; remove legacy wrapper/parser | Pass: focused native contract and cancellation package `5.002s`; all `TestFlow*` CLI `5.742s`; flow package `0.301s` |
 | 3 | Refactor | Focused/repeated/race/router/golden/full CLI and flow package gates, parity/differential checks | In progress: router/golden/flow `13.293s`; repeated ×5 `27.066s`; focused race CLI `60.885s`, flow `1.348s` |
+| C1 | Correction RED | `go test ./internal/cli -run '^TestFlowLegacyParserEdgesKeepExactOutcomes$' -count=1` after the 200-case differential exposed 20 mismatches | Failed as required before correction production edits: 8/8 assertions failed across bare/assigned/flag-looking file values, short/unknown run/status operands, and bare flows-dir |
 | 4 | Full gate | gofmt, vet, full tests, build, `make verify` | Pending |
 | 5 | Delivery | Finalize six artifacts, scope/dependency checks, commit/push; no PR/review | Pending |
 
@@ -56,4 +57,8 @@ The intentionally missing constructor proves the native tree does not yet exist.
 
 Focused native/cancellation tests passed in `5.002s`; every `TestFlow*` CLI test passed in `5.742s`; all flow package tests passed in `0.301s`. Repeated ×5 passed in `27.066s`; focused race passed for CLI in `60.885s` and flow in `1.348s`; router/golden/flow focus passed in `13.293s`. No action step, external write, service, credential, or dependency was used.
 
-Broader differential, parity, full CLI/repository, formatting, vet, build, and final verification remain pending.
+## Exact-parser correction RED
+
+A 200-case exact-start differential (five actions × 40 tails) matched 180/200 and exposed only bounded pflag compatibility gaps. Before correction production edits, `TestFlowLegacyParserEdgesKeepExactOutcomes` failed all eight assertions: bare `--file` became `"true"`; assigned `--file=...` became active; `--file --force` lost the flag-looking value; run/status lost short and unknown-following positional operands; and bare `--flows-dir` stopped using the legacy default. The failures had exact exit/stdout/stderr evidence and no external effects.
+
+Correction GREEN and broader parity/full gates remain pending in the durable ledger at this checkpoint.

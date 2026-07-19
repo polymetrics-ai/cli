@@ -225,6 +225,42 @@ func TestFlowHelpMalformedUnknownActionsAndGlobalBooleans(t *testing.T) {
 	}
 }
 
+func TestFlowLegacyParserEdgesKeepExactOutcomes(t *testing.T) {
+	root := t.TempDir()
+	initProject(t, root)
+	flowDir := filepath.Join(root, ".polymetrics", "flows")
+	writeNativeFlowFixture(t, flowDir, "stable")
+	path := filepath.Join(flowDir, "stable.json")
+
+	for _, tt := range []struct {
+		name     string
+		args     []string
+		wantCode int
+		wantText string
+	}{
+		{name: "bare file remains missing", args: []string{"flow", "plan", "--file", "--root", root, "--json"}, wantCode: 2, wantText: "--file <path> is required"},
+		{name: "assigned file remains unknown", args: []string{"flow", "plan", "--file=" + path, "--root", root, "--json"}, wantCode: 2, wantText: "--file <path> is required"},
+		{name: "file consumes flag-like operand", args: []string{"flow", "plan", "--file", "--force", "--root", root, "--json"}, wantCode: 1, wantText: `manifest "--force"`},
+		{name: "run short operand", args: []string{"flow", "run", "-h", "--root", root, "--json"}, wantCode: 1, wantText: "/-h.json"},
+		{name: "run unknown value operand", args: []string{"flow", "run", "--unknown", "operand", "--root", root, "--json"}, wantCode: 1, wantText: "/operand.json"},
+		{name: "status short operand", args: []string{"flow", "status", "-h", "--root", root, "--json"}, wantCode: 1, wantText: `flow \"-h\" not found`},
+		{name: "status unknown value operand", args: []string{"flow", "status", "--unknown", "operand", "--root", root, "--json"}, wantCode: 1, wantText: `flow \"operand\" not found`},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			stdout, stderr, code := runNativeFlowCLI(tt.args...)
+			if code != tt.wantCode || !strings.Contains(stdout+stderr, tt.wantText) {
+				t.Fatalf("edge outcome: code=%d want=%d text=%q\nstdout=%s\nstderr=%s", code, tt.wantCode, tt.wantText, stdout, stderr)
+			}
+		})
+	}
+
+	t.Chdir(root)
+	stdout, stderr, code := runNativeFlowCLI("flow", "list", "--flows-dir", "--root", root, "--json")
+	if code != 0 || stderr != "" || !strings.Contains(stdout, `"stable"`) {
+		t.Fatalf("bare flows-dir changed default directory: code=%d stdout=%s stderr=%s", code, stdout, stderr)
+	}
+}
+
 func TestFlowExactErrorTaxonomyAndDeterministicTextOutput(t *testing.T) {
 	root := t.TempDir()
 	initProject(t, root)

@@ -51,6 +51,10 @@ Excluded: other namespaces; connector bundles; dynamic connector parser; new dep
 
 Public command names, flags, manual bytes, output schemas, docs, website content, generated artifacts, and golden fixtures should remain unchanged. Checked-in docs/website/golden edits are not applicable unless verification finds a real mismatch. Phase 10 owns dashboards, Phase 11 owns `flow create`, and Phase 19 owns deliberate focused-help/man churn. Verify `pm help flow`, bare `pm flow`, `pm flow --help`, short/positional/JSON manual routes, invalid actions, `docs/cli/flow.md`, website CLI-reference/architecture pages, generated docs, completion discovery, and golden transcripts.
 
+## Exact-parser compatibility correction
+
+The first 200-case exact-start action-tail differential found 20 pflag mismatches after the initial focused GREEN: bare/assigned string flags, string values beginning with `--`, short or unknown-value run/status operands, and bare `--flows-dir`. Before correcting production code, add a focused RED table for those exact legacy outcomes. Then preserve the old flow parser's first positional selection in invocation-private state and normalize only flow local flags before pflag: bare missing string flags stay missing, assigned string/force forms remain ignored, string flags consume flag-looking space values, and malformed unknowns remain tolerated. Do not alter normal current flags, directory defaults, action discovery, global parsing, or dynamic connector parsing. Re-run the 200-case differential plus all declared gates.
+
 ## Safety
 
 No secrets or approval values, external connectors, credentialed checks, optional services, dependencies, unrestricted writes, destructive/admin actions, reverse ETL, or production deploys. Tests use temp manifests and temp roots only. Action-step execution is excluded; no generic HTTP/SQL write path is exercised or added. Context cancellation must remain propagated, event/telemetry values sanitized, and all state effects bounded to temporary directories.

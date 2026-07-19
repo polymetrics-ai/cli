@@ -11,7 +11,7 @@
   "startedAt": "20260719T034344Z",
   "model": "openai-codex/gpt-5.6-sol",
   "thinking": "high",
-  "status": "green_implementation_complete_verification_pending",
+  "status": "parser_compatibility_correction_red",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -35,6 +35,11 @@
       "cycle": "green-implementation",
       "decision": "local_critical_path",
       "reason": "native flow actions and typed flags, flow-only legacy normalization, directory and operand behavior, cancellation/events/telemetry/checkpoint/ledger preservation, and flow-only parser removal pass focused, repeated, race, router, golden-focused, and full flow package tests"
+    },
+    {
+      "cycle": "parser-compatibility-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "the initial 200-case exact-start differential exposed 20 bounded pflag gaps; an eight-outcome focused test reproduced bare/assigned/flag-looking string values, short/unknown run-status operands, and bare flows-dir mismatches before correction production edits"
     }
   ],
   "red": "focused CLI compile RED: internal/cli/flow_native_cobra_test.go:20:9 undefined newFlowCobraCommand; direct flow cancellation/events/telemetry/checkpoint/ledger contract passed in 0.394s",
