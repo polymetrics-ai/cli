@@ -42,14 +42,20 @@ func TestWorkerStatusUsesExplicitConfigFileTemporalAddr(t *testing.T) {
   temporal_addr: 127.0.0.1:1
 `)
 
-	var stdout, stderr bytes.Buffer
-	code := Run([]string{"--root", root, "--json", "worker", "status"}, &stdout, &stderr)
+	runtime := newFakeWorkerRuntime()
+	stdout, stderr, code, cfg := runWorkerInvocation(t, runtime, "--root", root, "--json", "worker", "status")
 	if code != 0 {
-		t.Fatalf("exit = %d, stderr = %s", code, stderr.String())
+		t.Fatalf("exit = %d, stderr = %s", code, stderr)
+	}
+	if runtime.statusCalls != 1 {
+		t.Fatalf("injected status calls = %d, want 1", runtime.statusCalls)
+	}
+	if runtime.statusAddr != "127.0.0.1:1" || cfg.Source("runtime.temporal_addr") != "config" {
+		t.Fatalf("status addr/source = %q/%q, want config-file address", runtime.statusAddr, cfg.Source("runtime.temporal_addr"))
 	}
 	var env map[string]any
-	if err := json.Unmarshal(stdout.Bytes(), &env); err != nil {
-		t.Fatalf("stdout not JSON: %v — %s", err, stdout.String())
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("stdout not JSON: %v — %s", err, stdout)
 	}
 	if env["addr"] != "127.0.0.1:1" {
 		t.Fatalf("addr = %v, want explicit config-file temporal addr", env["addr"])
