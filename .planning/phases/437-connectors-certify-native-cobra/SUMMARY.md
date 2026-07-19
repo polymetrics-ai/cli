@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: complete, verified, committed, and pushed.
+Status: reopened for accepted safety-critical review correction; verification pending.
 
 ## Identity
 
@@ -32,3 +32,7 @@ Final `make verify` exited 0: CLI `431.305s`, certify `337.280s`, full vet/tests
 ## Safety / handoff
 
 Verification used fixture/replay/local sample paths and temporary roots only. No live credential checks, external writes/sweeps, connector definitions, dependencies, services, real credential values, generic tools, destructive/admin/production operations, PR, or review. Parent-orchestrator integration/review coverage remains intentionally pending.
+
+## Correction in progress
+
+At exact HEAD `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`, all five findings from `/tmp/pm-397-review-437.log` were accepted. The correction will fail closed on six unsupported advertised controls, restore single telemetry/validation/option ordering, restore batch credential-file/parallel precedence and exact error wrappers, limit connectors help normalization to exact forms, and correct CLI/website/generated exit semantics. Phase verification is false until the new RED → GREEN cycle and all focused/full gates complete. Safety remains fixture/temp-only with no live credentials, writes, services, dependencies, PR, or review.

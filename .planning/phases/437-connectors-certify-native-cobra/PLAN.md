@@ -50,3 +50,17 @@ All certify command tests use sample fixtures, replay/local fakes, `t.TempDir`, 
 ## Completion
 
 Implemented through three test-first slices: absent native constructors, contextual trailing action help, and direct inspect help before private operand capture. Final implementation keeps dynamic connector parsing unchanged, passes exact-start operations 21/21, focused/repeated/race/router/golden/full CLI/certify gates, runtime help/docs/website parity, explicit local sample certify smoke, connector validation 547/0, and final `make verify`. Delivery remains commit/push only with no PR/review.
+
+## Accepted review correction — exact HEAD `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`
+
+Session `issue-437-review-correction-20260719T113319Z` reopens the phase for all five findings in `/tmp/pm-397-review-437.log`. The adapter still lacks `programming-loop`; `scripts/gsd doctor` passed and the manual universal runtime loop remains the recorded fallback. Execution decision is `local_critical_path`: one bounded safety-critical correction in the existing isolated issue worktree, no subagent capability, no services/credentials/PR/review.
+
+Correction slices, in order:
+
+1. **Artifacts/checkpoint:** mark verification false and record the accepted findings, skills, commands, and safety scope; commit and push before tests or production.
+2. **RED:** add differential tests proving unsupported safety/mode controls cannot run as no-ops; single certify starts exactly one span before connector validation and option parsing, with connector validation precedence; batch loads the credential file before parsing `--parallel` and preserves byte-exact load/run wrappers; only exact connectors help tokens render manuals; docs distinguish CLI pre-report exits from completed-report exits. Commit/push failing tests before production.
+3. **GREEN:** reject and unadvertise controls with no existing typed runner/stage support (`record`, `replay`, `allow-production-writes`, `rate-limit`, `budget`, `live-all-modes`); restore the legacy single and batch execution ordering/wrappers; tighten connectors-only help normalization; correct canonical/generated/website docs. Preserve write opt-in/cleanup gates and all existing redaction behavior.
+4. **VERIFY:** focused differential, repeated/race, certify exits/redaction, unsupported replay no-live/runtime-call test, local sample smoke, docs/golden/website generation, full CLI/certify, gofmt/vet/test/build/`make verify`, and connector validation. Use fixture/temp inputs only.
+5. **DELIVER:** finalize all six artifacts, coherent commits and pushes only; no PR or automated review per user instruction.
+
+Loaded for the correction: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, and `golang-spf13-cobra`.

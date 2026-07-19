@@ -7,14 +7,16 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": "445ad06c",
+  "endingImplementationHead": null,
+  "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
-  "endedAt": "20260719T104934Z",
+  "endedAt": null,
+  "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "complete_verified",
-  "verificationPassed": true,
+  "status": "correction_in_progress",
+  "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -52,11 +54,16 @@
       "cycle": "summary",
       "decision": "local_critical_path",
       "reason": "terminal issue-local evidence and no-PR/no-review handoff finalized for commit and immediate push"
+    },
+    {
+      "cycle": "accepted-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "all five findings accepted at exact head; bounded safety-critical correction in existing isolated issue worktree; no subagent tool, services, credentials, PR, or review"
     }
   ],
-  "red": "initial native constructors undefined; trailing action help ran operations or returned certify usage/output; direct inspect help was captured as a connector operand",
-  "green": "native subtree and all three test-first slices pass; final focused 3.989s, x10 34.833s, race 40.842s, router/golden/certify/telemetry 111.919s, exact-start operations 21/21",
-  "verification": "pass: final make verify exit 0 with CLI 431.305s, certify 337.280s, docs/smoke/lint/connectors green; explicit certify sample smoke exit 0/pass; connector validation 547/0",
+  "red": "correction RED pending: unsupported controls, single span/precedence, batch file/parallel/error bytes, exact-only help, and exit docs",
+  "green": "pending accepted correction implementation",
+  "verification": "pending; prior verification superseded by accepted findings",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/PLAN.md",
     ".planning/phases/437-connectors-certify-native-cobra/TDD-LEDGER.md",
@@ -75,7 +82,7 @@
     "445ad06c fix(cli): route direct connectors action help",
     "55e32402 docs(planning): complete connectors certify native handoff"
   ],
-  "push": "all planning, RED, GREEN, help-correction, and terminal artifact checkpoints committed and pushed",
+  "push": "prior checkpoints pushed; correction planning checkpoint pending commit/push",
   "pullRequest": "not_created_user_requested_no_pr",
   "reviewRoute": "not_run_user_prohibited_review",
   "safety": "fixture/replay/local temp roots and fakes only; no connector defs, real credential values, live checks/external writes, dependencies, services, generic tools, PR, or review; established make smoke retained ordered reverse plan-preview-approval-run"

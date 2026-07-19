@@ -23,4 +23,16 @@ Safety prompt: preserve `cli.Run`, dynamic connector dispatch, exits 0/1/2/3, co
 
 Downstream artifact: native connectors/certify subtree, declared current flags and runtime seam, compatibility normalization, contextual direct/trailing help, focused parity tests, and canonical manual/docs/website updates.
 
-Verification result: complete at implementation head `445ad06c`. Initial and two help-correction RED checkpoints preceded final production states. Focused/repeated/race, router/golden, full CLI/certify, exact-start operational differential 21/21, context/concurrency/events/telemetry/nondisclosure, runtime help, docs/website generation, connector validation 547/0, local certify smoke, gofmt/vet/build, and final `make verify` all pass. No defs, dependency, dynamic parser, live credential/write, service, PR, or review change.
+Verification result: superseded by the accepted correction cycle below; current phase verification is pending.
+
+## Accepted correction kickoff snapshot
+
+Task: at exact HEAD `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`, accept all five findings in `/tmp/pm-397-review-437.log`; update artifacts and commit/push them, then add/commit RED tests before production. Fail closed on unsupported safety/mode flags; restore legacy single span/validation/options and batch file/parallel/error precedence; exact-only connectors help; accurate pre-report versus completed-report exits across canonical/generated/website docs. Sol/high; fixture/temp only; no dependencies/services/credentials/writes/PR/review.
+
+Commands: `scripts/gsd doctor` passed; both `scripts/gsd prompt programming-loop ...` forms returned `unknown GSD command`, so the manual universal runtime loop applies. Execution decision: `local_critical_path` (bounded correction, isolated worktree, no subagent tool).
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-spf13-cobra`.
+
+Downstream artifact: pending RED tests, smallest fail-closed correction, regenerated docs/goldens/website data, focused/full evidence, final commit/push.
+
+Verification result: pending.

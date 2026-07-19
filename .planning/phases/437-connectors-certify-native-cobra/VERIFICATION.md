@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: true
+`verificationPassed`: false
 
 ## TDD / behavior
 
@@ -59,3 +59,23 @@ Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab
 - [x] No services, generic tools, destructive/admin/production action, or quality-gate reduction.
 - [x] Planning, RED, GREEN, help-correction, and direct-help checkpoints committed/pushed.
 - [x] No PR/review per user instruction.
+
+## Accepted review correction checklist
+
+Correction start: `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`; session `issue-437-review-correction-20260719T113319Z`.
+
+- [x] Read and accept all five findings in `/tmp/pm-397-review-437.log`.
+- [x] Reopen all phase artifacts before test or production edits.
+- [ ] RED: unsupported `record`/`replay`/production-write/rate-limit/budget/live-all-modes controls reject before runner invocation.
+- [ ] RED: single certify emits exactly one connector span and preserves connector-validation-before-options precedence.
+- [ ] RED: batch credential-file load precedes parallel parsing and preserves exact load/run error wrappers and bytes.
+- [ ] RED: only `--help`, `-h`, and intentional positional `help` render connectors manuals; false/assigned malformed/unknown short clusters do not.
+- [ ] RED: CLI and website docs separate pre-report usage/validation/runtime exits from completed report outcomes.
+- [ ] Focused differential and repeated/race tests.
+- [ ] Certify exits, redaction, and unsupported replay no-live/no-write runner test.
+- [ ] Local sample fixture smoke with temp root only.
+- [ ] Runtime help, golden, generated CLI docs, website generation/parity.
+- [ ] Full CLI and certify packages.
+- [ ] `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`.
+- [ ] `go run ./cmd/connectorgen validate` reports zero findings.
+- [ ] Final artifacts committed and pushed; no dependencies/services/credentials/PR/review.

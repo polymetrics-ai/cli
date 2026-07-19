@@ -32,3 +32,18 @@ GSD doctor/list and plan-phase prompt passed. Adapter has no `programming-loop`;
 - Full `make verify`: CLI `431.305s`, certify `337.280s`, docs, ordered local smoke, lint 0, connector validation 547/0.
 - Required explicit local certify smoke: exit 0, sample `ConnectorCertification`, passed, empty stderr.
 - No live credential check/write/sweep, service, dependency, connector definition, or private material used.
+
+## Accepted review correction ledger
+
+Session `issue-437-review-correction-20260719T113319Z`; exact correction start `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`; all five findings in `/tmp/pm-397-review-437.log` accepted.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| C0 | Planning | Six artifacts reopened before tests/production; GSD manual fallback, skills, safety scope, and verification commands recorded | Complete |
+| C1 | RED | Unsupported safety/mode controls fail closed without invoking runner; single span/validation/option precedence; batch credential-file/parallel and exact wrapper bytes; exact-only help forms; docs exit contract | Pending |
+| C2 | GREEN | Smallest production correction preserving all safety gates and rejecting/unadvertising unimplemented controls | Pending |
+| C3 | Refactor | Focused differential/repeated/race, certify exit/redaction/replay-no-live, local sample smoke, docs/golden/website parity | Pending |
+| C4 | Full gate | gofmt, vet, full tests, build, `make verify`, connector validation | Pending |
+| C5 | Delivery | Finalize artifacts, commit/push, no services/credentials/PR/review | Pending |
+
+Correction RED must be captured and committed before any production edit. Fixture/temp data only; no live credentials, HTTP writes, reverse ETL execution, or external sweep.
