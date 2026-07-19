@@ -190,6 +190,43 @@ func TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3(t *testing.T) {
 	}
 }
 
+func TestSeventhCertifyValueRequiredFlagsRejectBeforeLoggerTelemetry(t *testing.T) {
+	credsPath := filepath.Join(t.TempDir(), "creds.yaml")
+	if err := os.WriteFile(credsPath, []byte("version: 1\nconnectors:\n  sample: {}\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	cases := []struct {
+		name string
+		args []string
+	}{
+		{name: "single from-env", args: []string{"connectors", "certify", "sample", "--from-env"}},
+		{name: "single config", args: []string{"connectors", "certify", "sample", "--config"}},
+		{name: "single stream", args: []string{"connectors", "certify", "sample", "--stream"}},
+		{name: "batch credentials file", args: []string{"connectors", "certify", "--all", "--credentials-file"}},
+		{name: "batch credentials file before another flag", args: []string{"connectors", "certify", "--all", "--credentials-file", "--parallel=2"}},
+		{name: "batch parallel", args: []string{"connectors", "certify", "--all", "--credentials-file", credsPath, "--parallel"}},
+		{name: "sweep credentials file", args: []string{"connectors", "certify", "--sweep", "--credentials-file"}},
+		{name: "sweep older than", args: []string{"connectors", "certify", "--sweep", "--older-than"}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			t.Setenv("PM_TELEMETRY", "file")
+			args := append(append([]string{}, tc.args...), "--root", root, "--json")
+			var stdout, stderr bytes.Buffer
+			if code := Run(args, &stdout, &stderr); code != 2 {
+				t.Fatalf("bare required-value flag exit=%d, want usage 2; stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(stdout.String()+stderr.String(), "requires a value") {
+				t.Fatalf("bare required-value error missing value-required message; stdout=%q stderr=%q", stdout.String(), stderr.String())
+			}
+			if _, err := os.Stat(filepath.Join(root, ".polymetrics")); !os.IsNotExist(err) {
+				t.Fatalf("bare required-value flag created project effects under .polymetrics: %v", err)
+			}
+		})
+	}
+}
+
 func TestRereviewInvalidCertifyArgsHaveNoLoggerOrTelemetryEffects(t *testing.T) {
 	cases := []struct {
 		name     string

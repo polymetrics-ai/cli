@@ -586,6 +586,32 @@ func TestConnectorsCertificationDocsUseActualExitAndStageTokens(t *testing.T) {
 	}
 }
 
+func TestNativeCertifyValueRequiredFlagsRejectBeforeRuntimeEffects(t *testing.T) {
+	validCreds := certify.CredsFile{Version: 1, Connectors: map[string]certify.ConnectorCredsEntry{"sample": {}}}
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "single from-env", args: []string{"connectors", "certify", "sample", "--from-env"}},
+		{name: "single config", args: []string{"connectors", "certify", "sample", "--config"}},
+		{name: "single stream", args: []string{"connectors", "certify", "sample", "--stream"}},
+		{name: "batch credentials file", args: []string{"connectors", "certify", "--all", "--credentials-file"}},
+		{name: "batch parallel", args: []string{"connectors", "certify", "--all", "--credentials-file=fixture.yaml", "--parallel"}},
+		{name: "sweep credentials file", args: []string{"connectors", "certify", "--sweep", "--credentials-file"}},
+		{name: "sweep older than", args: []string{"connectors", "certify", "--sweep", "--older-than"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			runtime := &fakeCertifyCommandRuntime{credsFile: validCreds, singleReport: passingCLIReport("sample")}
+			stdout, stderr, code := runNativeConnectorsCLI(t, runtime, true, tt.args...)
+			assertCLIError(t, code, stdout, stderr, 2, "usage", "requires a value")
+			if len(runtime.effects) != 0 {
+				t.Fatalf("bare required-value flag recorded effects %v", runtime.effects)
+			}
+		})
+	}
+}
+
 func TestNativeCertifySupportedSingleFlagsAndExitContract(t *testing.T) {
 	secretValue := "planted-native-certify-secret"
 	t.Setenv("PM_CERT_NATIVE_TOKEN", secretValue)
