@@ -9,11 +9,15 @@ progress is never lost, deterministic gates between stages. cwd = repo root. Do 
 `main` — work on feature branches per phase with Conventional Commit titles and `Refs #N`
 / `Closes #N` in PR bodies. Dependency additions to go.mod are a human gate: the approvals
 are recorded in `docs/adr/0002…0004`; add ONLY the modules named in the phase you are
-executing, nothing else, and `make tidy-check` freezes go.mod again after each phase.
+executing and approved by the relevant ADR/human decision, nothing else, and `make tidy-check`
+freezes go.mod again after each phase. `ntcharts/v2` is researched but NOT approved by
+ADR-0003; do not add it in #463 without explicit human approval.
 
 SOURCE-OF-TRUTH DOCUMENTS (read before starting, cite in plans):
 - `docs/plans/cli-architecture-v2-improvement-plan.md` — the program: gaps, pillars, roadmap, risks.
 - `docs/design/tui-ux-design.md` — the UX contract for every interactive surface (Pillar B).
+- `docs/design/terminal-ui-research-and-design-system.md` — normative modes, responsive
+  layout, chart grammar, reference decisions, and TUI verification matrix.
 - `docs/adr/0002-cobra-viper-cli-framework.md`, `docs/adr/0003-interactive-tui-layer.md`,
   `docs/adr/0004-opentelemetry-observability.md` — decisions and their discipline rules.
 
@@ -49,6 +53,14 @@ PER-PHASE LOOP (applies to every stage below): run `/gsd plan-phase <N>` (resear
 PLAN.md with TDD-ordered tasks) → `/gsd execute-phase <N>` → `/gsd verify-work`. Every
 phase ends with `make verify` green plus the phase GATE. If a gate cannot pass, stop and
 flag it loudly in SUMMARY.md — never fake or skip a gate.
+
+TUI-PHASE PREFLIGHT (stages 10, 11, 13, chart child #463, 14, 16, 18, and 20): issue #462 must be integrated
+into the active parent branch. Load the repo-local `bubble-tea-tui-design` skill plus the
+routed Go CLI/testing/security/safety/context/concurrency/documentation skills. The RED
+contract must cover Normal/Filter/Edit mode conflicts, arrows+Vim equivalence, contextual
+help, wide/standard/compact/guard layouts, accessible/plain fallback, sanitation/redaction,
+cancellation, and unchanged JSON/stdout/stderr/exit semantics. Record the skill and evidence
+in PLAN/TDD-LEDGER/VERIFICATION and the PR body.
 
 STAGE 1 — GOLDEN SAFETY NET (track A, no deps)
 Record ~80 golden transcripts (exit code + stdout + stderr) against the CURRENT dispatcher:
@@ -136,7 +148,9 @@ certify smoke. Commits "refactor(cli): nativize <ns> namespace (arch-v2)".
 STAGE 10 — RUN DASHBOARDS (track B; deps: charm.land bubbletea/bubbles/lipgloss v2, teatest test-only)
 Flagship per design doc §2.1: pipeline-rail model for flow run + etl run; inline mode;
 ctrl+c → engine ctx cancel → DoneMsg → truthful final frame; exit codes identical to plain.
-teatest goldens (happy/fail/cancel/narrow); command wiring with Chan + runner goroutine.
+teatest goldens (happy/fail/cancel at 160×45, 100×30, 80×24, compact, size guard); command
+wiring with Chan + runner goroutine. Use the operator-workspace hierarchy and persistent
+mode/focus/help contract; throttle redraws without dropping lifecycle events.
 GATE 10: `go test -race ./...`; goldens; manual TTY check; `pm flow run x | cat` byte-equal
 to pre-TUI golden; CI=1 plain. Commit "feat(ui): live run dashboards for flow/etl (arch-v2)".
 
@@ -146,7 +160,9 @@ pickers, rail preview, manifest round-trips flow.ParseManifest, prints scripted
 equivalent) and `pm schedule create` interactive per §2.3 (flow existence validation, cron
 presets + next-3-fire-times via schedule.Next, backend select, optional install).
 WithAccessible wired to --accessible/PM_ACCESSIBLE_PROMPTER/ACCESSIBLE from day one.
-Parity: new command docs (docs map, docs/cli, website, help tests).
+Parity: new command docs (docs map, docs/cli, website, help tests). Printable Vim letters
+must remain input while a field is focused; each step uses Gum-like focus and retains the
+growing pipeline preview.
 GATE 11: wizard-written manifests pass `pm flow plan`; accessible-mode transcript test;
 --no-input errors name the flag; `make verify`. Commit "feat(ui): flow create + schedule create wizards (arch-v2)".
 
@@ -163,12 +179,20 @@ STAGE 13 — BROWSE WAVE (track B; deps: evertras/bubble-table)
 `pm query tables` (plain/JSON warehouse enumerator — lands FIRST), connectors browser per
 design doc §2.5 (fuzzy list + manual preview + pager; fix the %+v dump on the plain path),
 interactive query grid per §2.4 (LIMIT/OFFSET paging through existing QuerySQL guard).
+Use fzf's filter/list/preview interaction without shell-backed preview execution. A query
+chart is separate dependency-gated child issue #463 after #411: it may visualize only the returned
+read-only rows; must preserve table/text access, axes/units/exact values, bounded deterministic
+sampling, no-color/accessibility fallbacks; and may use `ntcharts/v2` only after explicit
+human approval and an exact pinned wrapper. Otherwise use the minimal internal renderer.
 GATE 13: query tables golden + JSON envelope; browser teatest goldens; read-only guard
-tests unchanged; `make verify`. Commit "feat(ui): query tables, connectors browser, query grid (arch-v2)".
+tests unchanged; modal-key/resize/chart-bounds tests as applicable; `make verify`. Commit
+"feat(ui): query tables, connectors browser, query grid (arch-v2)".
 
 STAGE 14 — DOCS VIEWER (track B; deps: glamour v2)
 `pm docs view [topic|connector]` per design doc §2.6: glamour in viewport, auto light/dark,
-piped → plain text identical to `pm help`. Parity checklist for the new subcommand.
+piped → plain text identical to `pm help`. Use Normal/Search/Help modes; `/`, `n/N`,
+`ctrl+u/d`, `gg/G`, arrows, and one-layer `esc` follow the shared contract. Parity checklist
+for the new subcommand.
 GATE 14: teatest goldens; piped-output golden equals help text; `make verify`.
 Commit "feat(ui): glamour docs viewer (arch-v2)".
 
@@ -182,7 +206,9 @@ Commit "feat(cli): shell completion + connector command registration (arch-v2)".
 
 STAGE 16 — CERTIFY + RLM DASHBOARDS (track B)
 Certify batch table per design doc §2.7 (concurrent row updates from events; exit contract
-0/1/2/3 untouched); RLM viewer per §2.8 (heartbeat age from the Temporal poller).
+0/1/2/3 untouched); RLM viewer per §2.8 (heartbeat age from the Temporal poller). Pair
+bpytop-style exact metrics with any small graph, disclose units/ranges, throttle redraws,
+and preserve text-only/reduced-motion frames.
 GATE 16: teatest goldens; certify exit tests green; `make verify` + certify smoke.
 Commit "feat(ui): certify batch table + rlm agent viewer (arch-v2)".
 
@@ -198,7 +224,8 @@ STAGE 18 — WIZARDS WAVE 2 (track B)
 Guided reverse-ETL session per design doc §2.9 (existing gate untouched; tokens relayed
 in-session; typed confirmation preserved) + connections create missing-input prompting per
 §2.10. credentials add stays non-interactive for secret values (non-goal — do not add
-interactive secret entry).
+interactive secret entry). Use explicit Normal/Edit/Confirm state; no unlabelled single-key
+write action and no generic shell/HTTP/SQL write escape hatch.
 GATE 18: session test proves identical plan/approve semantics as the flag flow; approval
 token still never in --json output; `make verify`.
 Commit "feat(ui): guided reverse-etl session + connections prompting (arch-v2)".
@@ -213,7 +240,8 @@ Commit "feat(cli): help tree deepening + generated man pages (arch-v2)".
 STAGE 20 — ACCESSIBILITY AUDIT (track B)
 `pm a11y` help topic per design doc §3; audit pass: every TUI surface against the
 checklist (accessible mode, reduced motion, NO_COLOR, glyph+word pairing, min-size,
-keyboard nav); fix findings.
+keyboard nav, modal printable-key conflicts, arrows+Vim equivalence, chart text/table
+fallback, wide/standard/compact/guard layouts); fix findings.
 GATE 20: a11y topic in docs map + docs/cli + website; checklist items each have a test or
 a recorded manual verification; `make verify`. Commit "feat(ui): a11y topic + accessibility audit (arch-v2)".
 

@@ -229,7 +229,9 @@ Key mechanics (full detail in ADR-0002):
 ### Pillar B — Interactive UX layer: events bus + Bubble Tea v2 (fixes 3.3, 3.4)
 
 Full design with wireframes, palette, keybindings, and accessibility spec in
-`docs/design/tui-ux-design.md`; decision record in ADR-0003. Summary:
+`docs/design/tui-ux-design.md`; evidence-backed interaction/chart system in
+`docs/design/terminal-ui-research-and-design-system.md`; decision record in ADR-0003.
+Every TUI plan/worker must load the repo-local `bubble-tea-tui-design` skill. Summary:
 
 - **`internal/events` first** (stdlib + `internal/safety` only): typed `Event`
   (kind/scope/run/step/status/counters), `Emitter` via context
@@ -254,6 +256,14 @@ Full design with wireframes, palette, keybindings, and accessibility spec in
   + interactive query grid (bubble-table), connectors browser (551-row fuzzy list + manual
   preview pane), docs viewer (glamour pager over existing manual text), certify batch
   table, RLM viewer, guided reverse-ETL session (token relay handled in-session).
+- **Interaction system:** a LazyGit-shaped operator workspace with fzf-style
+  filter/list/preview, exact bpytop-style metrics, and Gum-style focused wizard steps.
+  Normal/Filter/Edit modes keep Vim navigation predictable without stealing printable keys;
+  all Vim bindings have arrow/home/page/tab equivalents.
+- **Charts and dashboards:** the query grid may gain a dependency-gated visualization child
+  slice #463 over existing read-only rows after #411. Charts keep axes, units, exact selected values,
+  bounded/downsampled data, and text/table fallbacks. `ntcharts/v2` is a proposed renderer,
+  not approved by this plan; it needs a separate human dependency decision and local wrapper.
 - **Accessibility from day one** (D): huh `WithAccessible` wired to `--accessible` +
   `PM_ACCESSIBLE_PROMPTER`/`ACCESSIBLE`; spinner-disable; 4-bit accessible palette option;
   color always paired with glyph+word; min-size guard; `pm a11y` help topic.
@@ -289,7 +299,9 @@ Decision record in ADR-0004. Summary:
 ## 5. Consolidated roadmap (one GSD loop per phase)
 
 Tracks interleave after phase 2; A3/A4 unblock C-track config keys; B-track needs phase 7
-before any TUI phase.
+before any TUI phase. Planning/design issue #462 is a non-production gate before phase 10:
+it freezes the interaction system, chart grammar, repo-local design skill, and worker prompt
+requirements without changing the 22 production-phase numbers.
 
 | # | Phase | Track | New go.mod deps (human gate) |
 |---|-------|-------|------------------------------|
@@ -305,7 +317,7 @@ before any TUI phase.
 | 10 | Flagship run dashboards: `flow run` + `etl run` | B | bubbletea/bubbles/lipgloss v2, teatest (test-only) |
 | 11 | Wizards wave 1: `pm flow create` + `pm schedule create` (+ accessible mode) | B | huh v2 |
 | 12 | Traces: command→operation→connector HTTP + file/OTLP exporters | C | otel api/sdk/trace exporters |
-| 13 | Browse wave: connectors browser, `pm query tables`, interactive query grid | B | evertras/bubble-table |
+| 13 | Browse wave: connectors browser, `pm query tables`, interactive query grid; dependency-gated query chart child #463 | B | evertras/bubble-table; proposed ntcharts/v2 needs separate human approval |
 | 14 | Docs viewer: glamour pager for command + connector manuals | B | glamour v2 |
 | 15 | Connector command registration + shell completion | A | — |
 | 16 | Certify batch table + RLM agent viewer dashboards | B | — |
@@ -331,7 +343,7 @@ secret greps, `git diff go.mod` expectations) — encoded per stage in the execu
 | Agent-contract regression from the TUI | Plain path is the compile-time default of untouched `cli.Run`; gate can never be satisfied by pipes/CI; NDJSON confined to stderr; import-direction CI check (`internal/ui` never imported by business packages); one contract test per TUI-enabled command |
 | Dependency weight vs "dependency-free" tenet | Phases 5–6 (events, slog) ship value with zero new deps; heavy gates isolated to phases 10/11/12/13/14; default runtime behavior unchanged (telemetry off, TUI TTY-only); tenet interpretation recorded in ADR-0004 |
 | Hot-loop overhead (per-record paths) | No per-record spans/logs/instrument calls anywhere; counters accumulate locally and flush per batch; benchmark guard in phase 17 |
-| Bubble Tea v2 / otel-logs beta churn | v2 core is stable (powers charm's own apps); teatest pinned pseudo-version, test-only; otel log bridge confined to one file, pinned, explicitly droppable (phase 21) |
+| Bubble Tea v2 / terminal chart / otel-logs beta churn | v2 core is stable (powers charm's own apps); teatest pinned pseudo-version, test-only; a chart renderer stays behind a local interface and requires a separate approval because NTCharts warns that its API may change; otel log bridge confined to one file, pinned, explicitly droppable (phase 21) |
 | Windows terminals | Inline mode (no alt screen) for run commands; ASCII glyph fallbacks; colorprofile degradation; `PM_NO_TUI` universal escape hatch |
 | Event-bus backpressure stalls engine | Buffered `Chan` with bounded-timeout fallback + `Dropped()` accounting; runner goroutine always closes bus + sends `DoneMsg` (deferred) |
 | Flush latency added to command exit | Disabled telemetry constructs no SDK and skips shutdown; enabled path bounded at 3s warn-and-continue |

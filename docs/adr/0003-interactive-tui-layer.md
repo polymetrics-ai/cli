@@ -4,6 +4,7 @@
 - Deciders: user (approved plan; explicitly expanded scope to wizards, browsers, docs
   viewer, and accessibility for humans and agents)
 - Context docs: `docs/design/tui-ux-design.md` (full UX design),
+  `docs/design/terminal-ui-research-and-design-system.md` (interaction/chart evidence),
   `docs/plans/cli-architecture-v2-improvement-plan.md` (Pillar B),
   `CONTEXT.md` (agentic contract), `internal/cli/agentic_contract_test.go`
 
@@ -62,6 +63,12 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
    plain-vs-TUI.
 7. **No interactive secret entry.** `credentials add` keeps env/stdin intake only; wizard
    assistance is limited to non-secret names and fields.
+8. **Terminal charts are not approved by this ADR.** `ntcharts/v2` is the leading
+   Bubble Tea v2-compatible candidate after the issue #462 isolated spike, but its
+   maintainers state that its API may still change. Production chart issue #463 requires a
+   reviewed exact pin, a small local abstraction, accessibility/
+   bounds tests, and a separate human dependency decision. Without that approval, use a
+   minimal internal sparkline/horizontal-bar renderer plus the mandatory text/table view.
 
 ## Alternatives considered
 

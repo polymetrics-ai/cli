@@ -9,6 +9,7 @@
 - `docs/plans/cli-architecture-v2-improvement-plan.md`
 - `docs/prompts/cli-architecture-v2-gsd-execution-prompt.md`
 - `docs/design/tui-ux-design.md`
+- `docs/design/terminal-ui-research-and-design-system.md`
 - `docs/adr/0002-cobra-viper-cli-framework.md`
 - `docs/adr/0003-interactive-tui-layer.md`
 - `docs/adr/0004-opentelemetry-observability.md`
@@ -45,17 +46,19 @@ Workers must not edit these shared artifacts unless the orchestrator explicitly 
 | P07 | `feat(ui): add TTY gate and NDJSON progress` | B | P05 | CLI run options, global flags, `internal/ui/styles/**` |
 | P08 | `refactor(cli): nativize catalog namespace` | A | P04 | catalog command node/tests/docs only |
 | P09 | `epic(cli): nativize remaining namespaces` | A | P08 | orchestration-only umbrella; implementation in grandchildren |
+| D-TUI | `docs(ui): codify Bubble Tea terminal design research and interaction system` (#462) | B design gate | P07 | design docs, repo-local TUI skill, GSD/UI issue prompts; no production Go |
 | P10 | `feat(ui): add flow and ETL run dashboards` | B | P07 | flow/ETL dashboard models and command wiring |
 | P11 | `feat(ui): add flow and schedule creation wizards` | B | P10 | flow/schedule wizard commands, tests, parity docs |
 | P12 | `feat(obs): add opt-in OpenTelemetry tracing` | C | P04 | `internal/telemetry/**` and allowlisted span call sites |
-| P13 | `feat(ui): add connector browser and query grid` | B | P11 | query tables/browser/grid surfaces and parity docs |
+| P13 | `feat(ui): add connector browser and query grid` | B | P11, D-TUI | query tables/browser/grid surfaces and parity docs |
+| P13C | `feat(ui): add read-only query charts and terminal dashboard compositions` (#463) | B | P13, D-TUI | bounded read-only chart models; renderer dependency remains human-gated |
 | P14 | `feat(ui): add terminal docs viewer` | B | P11 | docs viewer/pager and parity docs |
 | P15 | `feat(cli): add connector-aware shell completion` | A | P09 | command registration/completion/tests/docs |
 | P16 | `feat(ui): add certify and RLM dashboards` | B | P09, P10 | certify/RLM dashboard models and command wiring |
 | P17 | `feat(obs): add OpenTelemetry metrics` | C | P12 | metrics instruments/exporters/benchmarks |
 | P18 | `feat(ui): add guided reverse ETL and connection prompts` | B | P11 | reverse/connection prompting; no secret prompts |
 | P19 | `feat(cli): deepen help tree and generate man pages` | A | P13, P14, P15, P16, P18 | help tree, generated manuals, docs/website/goldens |
-| P20 | `feat(ui): complete accessibility audit and a11y topic` | B | P13, P14, P16, P18 | all TUI accessibility fixes and parity docs |
+| P20 | `feat(ui): complete accessibility audit and a11y topic` | B | P13, P13C when included, P14, P16, P18 | all TUI accessibility fixes and parity docs |
 | P21 | `feat(obs): add optional OpenTelemetry log bridge` | C | P06, P12 | optional pinned beta log bridge only |
 | P22 | `chore(cli): complete Architecture v2 cleanup` | A | P17, P19, P20 | dead parser cleanup, `AGENTS.md`, `CONTEXT.md`, final verification |
 
@@ -82,8 +85,11 @@ docs. Connector dynamic dispatch remains on the legacy parser; certify migrates 
 1. **Bootstrap:** S0 → P01 → P02 → P03 → P04 (strictly serial).
 2. **Foundation fan-out after P04:** P05, P06, P08, and P12 may run in separate worktrees.
 3. **Track fan-out:** P07 follows P05; P09 follows P08; P10 follows P07; P17 follows P12; P21 follows P06+P12.
-4. **UX fan-out:** after P11, P13, P14, and P18 may run in separate worktrees. P16 can run after P09+P10.
-5. **Convergence:** P15 after P09; P19 and P20 after their listed UI/CLI dependencies; P22 last.
+4. **TUI design gate:** integrate D-TUI/#462 before P10, P11, P13, P14, P16, P18, or P20
+   starts production UI work.
+5. **UX fan-out:** after P11 and D-TUI, P13, P14, and P18 may run in separate worktrees.
+   P16 can run after P09+P10+D-TUI.
+6. **Convergence:** P15 after P09; P19 and P20 after their listed UI/CLI dependencies; P22 last.
 
 ## Required worker prompt contract
 
@@ -102,8 +108,9 @@ write scope, dependencies, and these commands:
 The worker must start with `golang-how-to`, then load the issue-specific Go skills listed in the
 issue. CLI-visible work must include `golang-cli`, `golang-testing`, `golang-error-handling`,
 `golang-documentation`, and `golang-security` when arguments, paths, credentials, or external I/O
-are involved. TUI/website work also loads the applicable design and React skills available in the
-runtime. Every behavior change records red evidence before production edits.
+are involved. Every TUI worker must load the repo-local `bubble-tea-tui-design` skill and cite both
+terminal design documents. Website work loads the applicable web/React skills. Every behavior
+change records red evidence before production edits.
 
 ## Common verification and safety contract
 
@@ -114,6 +121,9 @@ runtime. Every behavior change records red evidence before production edits.
 - Sub-PRs target `feat/cli-architecture-v2` and use `Refs #<sub-issue>` plus `Refs #<parent>`.
 - Dependency additions are allowed only in the phases and version lines approved by ADRs 0002–0004;
   any deviation is a fresh human gate.
+- `ntcharts/v2` is a researched candidate, not an approved dependency. Chart child #463 must
+  receive explicit human approval, pin/wrap the renderer, preserve table/text fallbacks, and test
+  bounded data, axes/units, resize, no-color/ASCII, and accessibility before it enters `go.mod`.
 - No secrets, interactive secret entry, generic shell, generic HTTP write, generic SQL write,
   destructive/admin execution, quality-gate reduction, production deployment, or merge to `main`.
 - Reverse ETL retains plan → preview → approval → execute, and automated tests must not execute an
@@ -126,5 +136,7 @@ runtime. Every behavior change records red evidence before production edits.
   [#420](https://github.com/polymetrics-ai/cli/issues/420)
 - Phase 9 namespace grandchildren: [#421](https://github.com/polymetrics-ai/cli/issues/421)
   through [#437](https://github.com/polymetrics-ai/cli/issues/437)
+- Terminal design gate: [#462](https://github.com/polymetrics-ai/cli/issues/462)
+- Query chart child: [#463](https://github.com/polymetrics-ai/cli/issues/463)
 - Parent PR: intentionally absent until Stage 0 #398 creates the parent branch and deliberate seed;
   no implementation issue is `worker_ready` before that draft PR exists.
