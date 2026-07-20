@@ -5,5 +5,11 @@ Polymetrics, Polymetrics CLI, and the Polymetrics logos are trademarks or
 service marks of Polymetrics AI. Use of these marks is subject to applicable
 law and does not imply endorsement.
 
-This repository is made available under the Elastic License 2.0. See LICENSE
-for the full license terms.
+The default license for this repository is GNU Affero General Public License
+version 3.0 only (AGPL-3.0-only). See LICENSE for the full terms.
+
+Files under internal/connectors/defs/ are licensed under the MIT License. See
+internal/connectors/defs/LICENSE and LICENSING.md for the path boundary.
+
+Third-party and vendored material remains under its original license and
+attribution notices.

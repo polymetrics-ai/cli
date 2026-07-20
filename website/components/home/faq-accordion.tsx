@@ -23,8 +23,8 @@ const faqs = [
     a: 'Developers and data engineers who want local-first data pipelines without infrastructure overhead. AI agents that need a stable, structured interface to extract data, query it, and act on it. Teams who want Fivetran-class connector quality without the cloud dependency.',
   },
   {
-    q: 'Is pm public source?',
-    a: 'Yes. pm is public source under Elastic License 2.0. The connector catalog, the DuckDB integration, and the CLI are public, with managed-service restrictions in the license. Contributions welcome.',
+    q: 'Is pm open source?',
+    a: 'Yes. The pm core is AGPL-3.0-only, and the declarative connector definitions are MIT licensed. That keeps the runtime improvements open while making connector catalog contributions and reuse straightforward.',
   },
 ];
 

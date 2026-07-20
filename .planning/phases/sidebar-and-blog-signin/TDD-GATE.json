@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "sidebar-and-blog-signin",
+  "planRefs": [
+    ".planning/phases/sidebar-and-blog-signin/EVAL-PLAN.md",
+    ".planning/phases/sidebar-and-blog-signin/PLAN.md",
+    ".planning/phases/sidebar-and-blog-signin/TEST-PLAN.md"
+  ],
+  "ledgerRef": ".planning/phases/sidebar-and-blog-signin/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [],
+  "behaviorTasks": [],
+  "failures": [],
+  "updatedAt": "2026-07-11T11:35:47.637Z"
+}

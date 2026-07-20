@@ -33,6 +33,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
+import { PmLogoMark } from '@/components/brand/pm-logo-mark';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.generated';
 
 /* ─── Product dropdown items ──────────────────────────────────────────── */
@@ -46,7 +47,7 @@ const PRODUCT_ITEMS = [
 
 /* ─── Exact nav-trigger typography (from Langfuse NavLinks.tsx) ─────── */
 const navTriggerCls =
-  'flex items-center gap-1 py-1.5 whitespace-nowrap font-sans text-[13px] font-[430] leading-[1.2] tracking-[-0.26px] text-text-tertiary hover:text-text-secondary transition-colors focus:outline-none';
+  'flex items-center gap-1 py-1.5 whitespace-nowrap font-sans text-[13px] font-[430] leading-[1.2] tracking-[-0.26px] text-text-tertiary hover:text-text-secondary transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta';
 
 /* ─── Hover corner brackets (from Langfuse corner-box.tsx) ──────────── */
 function HoverCorners() {
@@ -71,7 +72,7 @@ function Kbd({ k, variant }: { k: string; variant: 'primary' | 'secondary' }) {
 
 /* ─── CTA button — exact Langfuse button.tsx structure ───────────────── */
 const btnBase =
-  'inline-flex w-full min-w-0 max-w-full items-center justify-start no-underline gap-[6px] overflow-hidden py-0.5 shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] rounded-[2px] border transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer font-sans text-[12px] font-[450] leading-[150%] tracking-[-0.06px] whitespace-nowrap';
+  'inline-flex w-full min-w-0 max-w-full items-center justify-start no-underline gap-[6px] overflow-hidden py-0.5 shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] rounded-[2px] border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-cta disabled:pointer-events-none disabled:opacity-50 cursor-pointer font-sans text-[12px] font-[450] leading-[150%] tracking-[-0.06px] whitespace-nowrap';
 
 const btnVariants = {
   primary:   'border-emerald-900 bg-emerald-800 text-white h-[26px] pl-[8px] pr-[3px]',
@@ -134,16 +135,6 @@ function NavBtn({
         </Link>
       )}
     </div>
-  );
-}
-
-/* ─── Logo mark — terminal CLI: PM_ (blinking cursor) on emerald square ── */
-function PmLogoMark() {
-  return (
-    <span className="flex items-center justify-center h-[26px] min-w-[26px] px-1 bg-emerald-800 select-none">
-      <span className="font-mono font-bold text-[13px] leading-none text-white tracking-tight">PM</span>
-      <span aria-hidden className="font-mono font-bold text-[13px] leading-none text-white cursor-blink">_</span>
-    </span>
   );
 }
 
@@ -277,6 +268,9 @@ function MobileMenu({ open, onOpenChange }: { open: boolean; onOpenChange: (open
             <Link href="/docs" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Docs</Link>
           </SheetClose>
           <SheetClose asChild>
+            <Link href="/blog" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Blog</Link>
+          </SheetClose>
+          <SheetClose asChild>
             <Link href="/changelog" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Changelog</Link>
           </SheetClose>
           <a href="https://github.com/polymetrics-ai/cli" target="_blank" rel="noreferrer" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">GitHub</a>
@@ -290,6 +284,14 @@ function MobileMenu({ open, onOpenChange }: { open: boolean; onOpenChange: (open
               Get Started
             </Link>
           </SheetClose>
+          <a
+            href="https://github.com/polymetrics-ai/cli"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-center border border-line-structure bg-surface-bg px-4 py-2.5 font-sans text-[13px] font-medium text-text-secondary transition-colors hover:border-line-cta hover:bg-surface-1 hover:text-text-primary"
+          >
+            Get Demo
+          </a>
         </div>
       </div>
       </SheetContent>
@@ -308,9 +310,15 @@ const innerPanel = 'flex items-center w-full bg-surface-1 pl-3 pr-2.5';
 
 export function SiteNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => setHydrated(true), []);
 
   return (
-    <header className="sticky top-0 z-50 h-[60px] bg-surface-1 border-b border-line-structure">
+    <header
+      data-navbar-hydrated={hydrated ? 'true' : 'false'}
+      className="sticky top-0 z-50 h-[60px] bg-surface-1 border-b border-line-structure"
+    >
       <nav className="flex h-full w-full max-w-[95rem] mx-auto">
 
         {/* ── LEFT BOX: logo + "by Polymetrics" ── */}
@@ -321,7 +329,7 @@ export function SiteNavbar() {
               className="flex items-center gap-2 group/logo shrink-0"
               aria-label="PM homepage"
             >
-              <PmLogoMark />
+              <PmLogoMark decorative className="h-[26px] w-[26px] shrink-0 select-none" />
               <span className="navbar-by-tag font-square text-[11px] font-light uppercase tracking-[0.14em] leading-none text-text-tertiary/70 whitespace-nowrap hover:text-text-tertiary transition-colors">
                 command line interface
               </span>
@@ -331,15 +339,15 @@ export function SiteNavbar() {
 
         {/* ── CENTER: navigation links ── */}
         <div className={`${outerPanel} navbar-desktop-nav flex-1 px-0`}>
-          <div className="grid flex-1 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-2.5 rounded-none bg-surface-1">
-            <span aria-hidden="true" />
-            <div className="flex items-center justify-center gap-4">
+          <div className="flex min-w-0 flex-1 items-center justify-between gap-4 bg-surface-1 px-2.5">
+            <div data-navbar-links className="flex shrink-0 items-center gap-4">
               <ProductDropdown />
               <NavLink href="/docs">Docs</NavLink>
+              <NavLink href="/blog">Blog</NavLink>
               <NavLink href="/changelog">Changelog</NavLink>
               <NavLink href="https://github.com/polymetrics-ai/cli" external>GitHub</NavLink>
             </div>
-            <div className="navbar-desktop-search min-w-0 justify-self-end">
+            <div className="navbar-desktop-search min-w-0 flex-1 justify-end">
               <DocsSearch variant="navbar" />
             </div>
           </div>

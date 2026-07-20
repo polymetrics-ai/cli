@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "issue-392-github-only-auth",
+  "status": "completed_with_warnings",
+  "reason": "GitHub-only implementation and declared local verification passed; real-account OAuth, automated review coverage, and production deployment remain human-gated.",
+  "details": {
+    "agentMode": "inline",
+    "adapter": "manual_fallback",
+    "adapterReason": "scripts/gsd prompt programming-loop returned unknown GSD command",
+    "coveragePassed": true,
+    "tddGatePassed": true,
+    "verificationPassed": true,
+    "orchestrationDecisions": [
+      {
+        "cycle": "plan",
+        "decision": "local_critical_path",
+        "reason": "The scoped provider contract is a tightly coupled single-component change in an isolated issue worktree."
+      },
+      {
+        "cycle": "tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "The targeted provider test failed on the pre-change three-provider contract as expected."
+      },
+      {
+        "cycle": "parent-coordination",
+        "decision": "read_only_spawned",
+        "reason": "A live parent issue orchestrator audited parent PR status, checks, review coverage, and human gates without mutating files or GitHub state."
+      },
+      {
+        "cycle": "execute",
+        "decision": "local_critical_path",
+        "reason": "The UI, auth configuration, tests, and runbook form one tightly coupled provider-contract slice."
+      },
+      {
+        "cycle": "verify",
+        "decision": "local_critical_path",
+        "reason": "CI-equivalent typecheck, unit tests, production build, focused browser smoke, and OAuth initiation all passed locally."
+      },
+      {
+        "cycle": "summary",
+        "decision": "local_critical_path",
+        "reason": "Implementation is locally complete; external OAuth consent, review, and production deployment remain explicit human gates."
+      }
+    ],
+    "warnings": [
+      "frontend-design and web-design-guidelines are named by repository policy but their SKILL.md files are not installed in this checkout",
+      "Claude review is disabled and Copilot quota is exhausted; current-head human review fallback is required",
+      "A real GitHub account authorization round trip was not automated"
+    ]
+  },
+  "updatedAt": "2026-07-15T13:46:04.000Z"
+}

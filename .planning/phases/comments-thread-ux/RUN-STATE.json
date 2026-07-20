@@ -1,0 +1,12 @@
+{
+  "phase": "comments-thread-ux",
+  "state": "completed",
+  "gsdPath": "manual-fallback",
+  "reason": "The repo-local scripts/gsd adapter did not register programming-loop.",
+  "verification": {
+    "typecheck": "passed",
+    "unitTests": "63 passed",
+    "browserTests": "14 passed",
+    "build": "passed"
+  }
+}

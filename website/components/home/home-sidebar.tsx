@@ -6,13 +6,16 @@ import {
   GitBranch as Github,
   HardDrive,
   Lock,
+  Newspaper,
   PackageCheck,
   Scale,
   Sparkles,
   Star,
 } from 'lucide-react';
+import { PmLogoMark } from '@/components/brand/pm-logo-mark';
 import { SidebarLink } from '@/components/home/sidebar-link';
 import { DOCUMENTATION_NAV } from '@/components/docs/doc-nav';
+import { BLOG_POSTS, blogUrl } from '@/lib/blog';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.generated';
 import {
   Sidebar,
@@ -45,9 +48,9 @@ const stats = [
   },
   {
     label: 'License',
-    value: 'Elastic-2.0',
+    value: 'AGPL-3.0',
     href: 'https://github.com/polymetrics-ai/cli/blob/main/LICENSE',
-    tooltip: 'Elastic License 2.0',
+    tooltip: 'AGPL core, MIT connector definitions',
     icon: Scale,
   },
   {
@@ -66,7 +69,13 @@ const changelog = [
   { version: 'v0.1.0', label: 'Local AES-GCM vault', icon: Lock },
 ];
 
-export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: string }) {
+const latestBlogPosts = BLOG_POSTS.slice(0, 3);
+
+export function HomeSidebar({
+  className = 'home-sidebar-panel',
+}: {
+  className?: string;
+}) {
   return (
     <Sidebar className={className}>
       <SidebarInner>
@@ -120,6 +129,34 @@ export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: 
 
           <SidebarGroup>
             <SidebarGroupHeader>
+              <SidebarGroupLabel>Blog</SidebarGroupLabel>
+              <Newspaper className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
+            </SidebarGroupHeader>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {latestBlogPosts.map((post) => (
+                  <SidebarLink key={post.slug} href={blogUrl(post.slug)}>
+                    <span className="flex min-w-0 items-start gap-2">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border border-transparent transition-colors group-hover:border-line-structure group-hover:bg-surface-1">
+                        <Newspaper className="h-3.5 w-3.5 text-text-disabled transition-colors group-hover:text-line-cta" aria-hidden="true" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-[13px] leading-snug text-text-tertiary transition-colors group-hover:text-text-secondary">
+                          {post.title}
+                        </span>
+                        <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-wider text-text-disabled">
+                          {post.readingTime}
+                        </span>
+                      </span>
+                    </span>
+                  </SidebarLink>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          <SidebarGroup>
+            <SidebarGroupHeader>
               <SidebarGroupLabel>What&rsquo;s new</SidebarGroupLabel>
               <a
                 href="https://github.com/polymetrics-ai/cli/releases"
@@ -159,9 +196,7 @@ export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: 
             className="link-box group relative grid min-w-0 grid-cols-[2rem_minmax(0,1fr)] items-center gap-2 px-4 py-3 text-[12px] text-text-tertiary transition-colors hover:bg-surface-bg hover:text-text-secondary"
           >
             <span aria-hidden className="corner-box-hover-child" />
-            <span className="flex h-8 w-8 items-center justify-center bg-emerald-800 font-mono text-[13px] font-bold leading-none text-white">
-              PM<span aria-hidden className="cursor-blink">_</span>
-            </span>
+            <PmLogoMark decorative className="h-8 w-8 shrink-0 select-none" />
             <span className="min-w-0">
               <span className="block font-square text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
                 pm CLI

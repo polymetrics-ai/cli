@@ -30,6 +30,22 @@ jobs:
     defaults:
       run:
         working-directory: website
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: website
+          POSTGRES_USER: website
+          POSTGRES_PASSWORD: website
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U website"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://website:website@127.0.0.1:5432/website
 
     steps:
       - name: Configure git defaults

@@ -1,0 +1,12 @@
+# Shared rootless-podman network so the website container can reach the
+# Postgres sidecar by DNS name. Install once on the origin host:
+#   cp cli-polymetrics.network ~/.config/containers/systemd/
+#   systemctl --user daemon-reload
+[Unit]
+Description=Private network for the cli.polymetrics.ai website stack
+
+[Network]
+NetworkName=cli-polymetrics
+
+[Install]
+WantedBy=default.target
