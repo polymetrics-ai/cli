@@ -10,7 +10,7 @@ parent_pr:
   url: https://github.com/polymetrics-ai/cli/pull/438
   base: main
   head: feat/cli-architecture-v2
-  head_sha: __FINAL_STATE_COMMIT__
+  head_sha: 6a3087d8b7d8b81f13742d67005233f030c0a03c
   draft: true
   state: open
 default_branch: main

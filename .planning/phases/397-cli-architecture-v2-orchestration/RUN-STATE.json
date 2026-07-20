@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "waiting_for_review",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "__FINAL_STATE_COMMIT__",
+  "currentHead": "6a3087d8b7d8b81f13742d67005233f030c0a03c",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
