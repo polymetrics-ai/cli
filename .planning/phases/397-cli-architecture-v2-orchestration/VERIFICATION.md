@@ -74,7 +74,8 @@ Status: not yet run at final HEAD
 - [x] #462 accepted design/safety findings corrected in isolated stacked PRs #467/#468 and integrated into parent.
 - [ ] #462 external review coverage recorded; local `pm-reviewer` is not substitute coverage.
 - [x] #437 external/human review coverage recorded and PR #466 integrated.
-- [ ] #408 TUI worker launch/spawn from the post-#437 parent head.
+- [x] #408 exactly-one TUI worker resume in the preserved worktree; implementation/artifact heads pushed through `ff7be3bd`.
+- [ ] #408 evidence correction and unresolved full-race timeout disposition before `SUB_PR_OPEN`/independent VERIFY.
 - [x] #419 explicit optional dependency decision: human chose SKIP/DEFER; no beta dependency or implementation is authorized.
 
 ## #419 operator decision — 2026-07-21
@@ -83,6 +84,17 @@ Status: not yet run at final HEAD
 - [x] No beta dependency was added and no #419 implementation worker was dispatched.
 - [x] The decision grants no approval for any other dependency.
 - [x] Issue #419 and parent phase ledgers contain the durable decision record.
+
+## #408 EXECUTE resume — 2026-07-21
+
+- [x] No live #408 process owned the cwd before dispatch; exactly one Sol/high `pm-gsd-worker` was resumed.
+- [x] Existing committed and dirty work was preserved; no reset, clean, stash, rebase, overwrite, or worktree recreation.
+- [x] Branch and remote match at `ff7be3bd8509684257f7d7a73e6fb9735f4baf80`; worker tree clean; no sub-PR opened in EXECUTE.
+- [x] Focused RED/GREEN/refactor, focused race, full non-race, vet, build, parity, manual local dual-TTY fixtures, and `make verify` recorded.
+- [ ] Full `go test -race ./...`: 10m timeout; `go test -race -timeout 20m ./internal/cli`: timeout; no race finding emitted. Independent VERIFY must disposition or shard this gate.
+- [ ] Correct stale/contradictory #408 phase evidence before advancing.
+- [x] No dependency delta; no beta OTel bridge or NTCharts added.
+- [x] `make verify` reverse smoke used a local temporary fixture and the required plan → preview → approval → execute order; narrower dispatch-boundary deviation recorded for Shepherd review.
 
 ## Pi 5.6 Sol routing correction — 2026-07-21
 

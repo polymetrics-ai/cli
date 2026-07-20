@@ -66,6 +66,12 @@ PR #466 was merged only into the parent branch at `1008f75ff8fe7d43a0a67a802ccf0
 
 Human explicitly chose SKIP/DEFER for the optional OpenTelemetry beta log bridge from parent campaign #397. No #419 implementation worker will run and no beta dependency is authorized. This satisfies the parent inclusion-or-skip acceptance criterion while granting no approval for any other dependency; issue #419 may remain open for future separately authorized work.
 
+## #408 EXECUTE resume — 2026-07-21
+
+No live process owned the preserved #408 worktree, so exactly one Sol/high `pm-gsd-worker` resumed its existing committed plan and 19 dirty entries. The worker preserved all work, delivered the flow/ETL dashboard slice, and pushed clean synchronized heads `eb3c84cb` and `ff7be3bd`. Focused RED/GREEN/refactor, focused race, full non-race, vet, build, parity, local dual-TTY fixture, and `make verify` evidence is recorded with no dependency delta.
+
+The 10-minute full race and 20-minute CLI race retry timed out without race findings. The worker also left stale/contradictory phase evidence and reported that mandatory `make verify` ran its local temporary reverse smoke in plan → preview → approval → execute order despite the narrower no-execution dispatch boundary. These are correction/verification blockers; no PR was opened and #413 remains collision-deferred.
+
 ## Pi 5.6 Sol routing and Shepherd hardening — 2026-07-21
 
 Active Pi and GSD routing now uses `openai-codex/gpt-5.6-sol` exclusively. Mutating implementation

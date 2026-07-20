@@ -143,6 +143,15 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 - This decision satisfies the parent campaign's required #419 inclusion-or-skip record. Issue #419 may remain open for future separately authorized work.
 - This is not approval for any other dependency. All other dependency additions remain human-gated.
 
+## 2026-07-21 #408 EXECUTE resume
+
+- Live process ownership check found no worker using the preserved #408 cwd, so exactly one `pm-gsd-worker` was resumed there with Sol/high routing.
+- Adopted branch `feat/408-flow-etl-dashboards` at plan head `361a6bec` plus 19 dirty entries without reset, clean, stash, rebase, overwrite, or worktree recreation.
+- Worker pushed implementation/artifact commits `eb3c84cb` and `ff7be3bd`; worker tree and remote head now match and no sub-PR exists.
+- Focused RED/GREEN/refactor, focused race, full non-race, vet, build, CLI parity, and `make verify` are recorded green. Full `go test -race ./...` timed out at 10m and the `internal/cli` retry timed out at 20m without a race finding.
+- Correction remains before `SUB_PR_OPEN`: synchronize stale/contradictory phase evidence, preserve the race timeout as an unresolved verification gate, and record that `make verify` invoked its local temporary reverse smoke in the required plan → preview → approval → execute order despite the narrower worker boundary.
+- #413 remains deferred for write-scope collision. No other mutating worker was dispatched.
+
 ## 2026-07-21 Pi model-routing correction
 
 - User directive: route all active Pi/GSD roles through `openai-codex/gpt-5.6-sol`.

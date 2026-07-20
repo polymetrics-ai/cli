@@ -10,21 +10,21 @@ parent_pr:
   url: https://github.com/polymetrics-ai/cli/pull/438
   base: main
   head: feat/cli-architecture-v2
-  head_sha: 78cbe6409a61d65eab0d150fd79d78600636bf10
+  head_sha: 74c1766de7bc369905a1ea3e25e3bd983e3b3ac6
   draft: true
   state: open
 default_branch: main
 orchestrator:
   mode: active_owner
   runtime: pi
-  status: waiting_for_workers
+  status: running
 ready_queue:
   - number: 408
-    status: worker_in_progress
+    status: correction_pending
     dependencies: [405, 462]
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity"
     decision: spawned
-    reason: "pm-gsd-worker dispatched in isolated worktree wt-408-flow-etl-dashboards on branch feat/408-flow-etl-dashboards."
+    reason: "Exactly one Sol/high worker resumed the preserved cwd and pushed ff7be3bd. EXECUTE is delivered; phase-evidence defects, full-race timeouts, and the recorded make-verify reverse-smoke boundary deviation require separate correction/verification before SUB_PR_OPEN."
   - number: 413
     status: worker_ready_deferred
     dependencies: [407]
@@ -355,6 +355,10 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [408]
     reason: "Created isolated worktree /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards on branch feat/408-flow-etl-dashboards from parent head 5b603788 and dispatched pm-gsd-worker for #408; #413 deferred for write-scope collision."
+  - timestamp: 2026-07-20T23:17:08Z
+    decision: spawned
+    issue_numbers: [408]
+    reason: "No live process owned the preserved cwd; exactly one Sol/high pm-gsd-worker adopted head 361a6bec plus 19 dirty entries and pushed clean synchronized head ff7be3bd. No sub-PR was opened; correction/verification blockers remain."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -464,8 +468,8 @@ subissues:
     status: worker_in_progress
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, generated docs/goldens/website parity"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards
-    verification: "Focused RED and GREEN are recorded; broader/race/full gates, coherent implementation commit, push, and handoff remain pending."
-    automated_review: {primary_route: blocked, status: pending, head_sha: "361a6bec0af1ed9cf84d5bdfdd10f16458d9da4d", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "No review yet; EXECUTE stage remains active and #413 is deferred for collision.", disposition_url: ""}
+    verification: "Implementation and artifacts pushed at ff7be3bd; focused race, full non-race, vet, build, parity, local dual-TTY fixtures, and make verify pass. Full race timed out at 10m and CLI race retry at 20m without findings; phase evidence correction remains."
+    automated_review: {primary_route: blocked, status: pending, head_sha: "ff7be3bd8509684257f7d7a73e6fb9735f4baf80", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "No review yet; correction is required before SUB_PR_OPEN and #413 remains collision-deferred.", disposition_url: ""}
   - number: 409
     url: https://github.com/polymetrics-ai/cli/issues/409
     branch: pending
@@ -798,4 +802,4 @@ human_gates:
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
   - Phase 437 pending intake implementation or GitHub issue edits without explicit authorization
-updated_at: 2026-07-20T21:55:12Z
+updated_at: 2026-07-20T23:17:08Z

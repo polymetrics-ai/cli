@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "worker_in_progress",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "78cbe6409a61d65eab0d150fd79d78600636bf10",
+  "currentHead": "74c1766de7bc369905a1ea3e25e3bd983e3b3ac6",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -444,6 +444,15 @@
         397
       ],
       "reason": "Human explicitly chose SKIP/DEFER for the optional OpenTelemetry beta log bridge from parent campaign #397. No #419 worker or beta dependency is authorized; this grants no approval for any other dependency."
+    },
+    {
+      "cycle": "resume_408_execute_20260721",
+      "timestamp": "2026-07-20T23:17:08Z",
+      "decision": "spawned",
+      "issues": [
+        408
+      ],
+      "reason": "After confirming no live process owned the preserved cwd, exactly one Sol/high pm-gsd-worker adopted the existing plan commit plus 19 dirty entries and pushed clean synchronized head ff7be3bd. Full-race timeouts and phase-evidence defects require a separate correction/verification stage; #413 remains collision-deferred."
     }
   ],
   "units": [
@@ -678,16 +687,17 @@
   "readyQueue": [
     {
       "issue": 408,
-      "status": "worker_in_progress",
+      "status": "correction_pending",
       "dependencies": [
         405,
         462
       ],
       "writeScope": "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity",
       "decision": "spawned",
-      "reason": "pm-gsd-worker dispatched in isolated worktree for critical-path #408.",
+      "reason": "Exactly one Sol/high worker resumed the preserved cwd and pushed ff7be3bd. EXECUTE implementation is complete; stale/contradictory phase evidence, unresolved full-race timeouts, and the recorded make-verify reverse-smoke boundary deviation require a separate correction/verification stage before SUB_PR_OPEN.",
       "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards",
-      "branch": "feat/408-flow-etl-dashboards"
+      "branch": "feat/408-flow-etl-dashboards",
+      "head": "ff7be3bd8509684257f7d7a73e6fb9735f4baf80"
     },
     {
       "issue": 413,
@@ -825,7 +835,7 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T21:55:12Z",
+  "updatedAt": "2026-07-20T23:17:08Z",
   "mainSync": {
     "baseBeforeSync": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
     "originMain": "74ab381eb8236305170ffd44d5aed74f8d0d2936",

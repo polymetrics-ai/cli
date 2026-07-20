@@ -62,6 +62,13 @@ Do not backfill evidence. Append exact commands/results and worker session/head 
 - GREEN: operator explicitly chose SKIP/DEFER from parent campaign #397; no worker, code, branch, PR, or dependency addition is authorized.
 - REFACTOR: treat the parent acceptance criterion as satisfied by a durable defer record while keeping every other new dependency human-gated.
 
+## #408 EXECUTE resume — 2026-07-21
+
+- RED: existing issue ledger captured missing dashboard/session APIs; resumed worker added focused failing tests for session output, live updates, cancellation, navigation, resize, and truthful final frames before additional production edits.
+- GREEN: pushed heads `eb3c84cb` and `ff7be3bd`; focused UI/CLI tests and races, full non-race tests, vet, build, parity checks, manual dual-TTY local fixtures, and `make verify` passed with no dependency delta.
+- REFACTOR: worker tree is clean and remote-synchronized. Full race remains unresolved because the 10m full command and 20m CLI retry timed out without race findings. Phase evidence needs a separate correction stage before `SUB_PR_OPEN`.
+- Safety evidence: `make verify` ran the repository's local temporary reverse smoke in plan → preview → approval → execute order. No credentialed, remote, production, or persistent-project write occurred, but the narrower dispatch boundary had forbidden reverse execution and the deviation is recorded for Shepherd disposition.
+
 ## Pi 5.6 Sol role routing — 2026-07-21
 
 - RED command: `scripts/tests/pi-model-routing.sh` must fail against the existing active policy
