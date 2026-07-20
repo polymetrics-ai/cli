@@ -120,6 +120,9 @@ exit 0, approval token nondisclosure, direct dependencies, path-safe typed expor
 update PR #468 body. No bots and no merge.
 ```
 
-Downstream artifact: planning/RED evidence recorded on branch
-`docs/462-terminal-ui-tty-gate-follow-up`; delegated docs correction and final verification pending.
-Verification result: pending until green docs and evidence slice completes.
+Downstream artifact: planning/RED, delegated docs correction, and final evidence recorded on branch
+`docs/462-terminal-ui-tty-gate-follow-up`; PR #468 remains open for human review. Git/GitHub are the
+live source for branch/PR head after the starting snapshot.
+Verification result: contradiction grep, marker matrix, JSON parse, skill validation, direct
+state/token/export/accessibility marker checks, exact scope, `git diff --check`, `scripts/gsd
+doctor`, and `make docs-check` pass.

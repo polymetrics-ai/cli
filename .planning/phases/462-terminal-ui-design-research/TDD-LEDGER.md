@@ -268,3 +268,23 @@ matrix before code.
   old head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`; #468 open at starting head
   `fd122c52458a6ef0db12f60f303c261ed2e63d4c` with human review pending; GitHub live source and
   local-sidecar-not-external-coverage caveats present; no invented final head.
+
+## Follow-up PR #468 GREEN ledger — 2026-07-20
+
+| Check | Evidence | Status |
+|---|---|---|
+| Prompt bypass contract | Docs-contract grep over delegated docs/skill/prompt sources printed `PASS docs-contract contradiction grep: prompt bypass and shared/Stage16 matrix aligned` | Pass |
+| Query grid `--plain` correction | Old `pm query grid --plain` sequential-prompt wording absent; bypass docs now require deterministic table/summary output or exact required-flag errors only | Pass |
+| Explicit accessible mode | Sequential prompt wording is limited to explicit accessible mode after stdin+stdout TTY gate and no `--plain`/`--json`/`--no-input` bypass flag | Pass |
+| Shared + Stage 16 matrix | Execution prompt TUI preflight and Stage 16 gate both include stdin+stdout TTY activation, `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input` | Pass |
+| Prior corrections preserved | Marker check confirmed `pm query grid`, `pm reverse guide`, bare contextual help, approval-token nondisclosure, typed read-only query export, direct `#462`/`D-TUI`, and no `/dev/tty` bypass remain present | Pass |
+| Artifact state honesty | RUN-STATE/SUMMARY record PR #467 merged at parent commit `93a117100c6421955262aa32794a91a158d267e1` from old head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, PR #468 open at starting head `fd122c52458a6ef0db12f60f303c261ed2e63d4c`, human review pending, GitHub as live source, local sidecar not external coverage, and no final-head claim | Pass |
+| Skill validation | frontmatter/reference validation printed `Skill is valid!` | Pass |
+| JSON syntax | `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` | Pass |
+| Scope | Exact scope check passed; no `cmd/**`, `internal/**`, `go.mod`, `go.sum`, `website/**`, `docs/cli/**`, parent #397 artifacts, or nondelegated docs changed | Pass |
+| Whitespace | `git diff --check` | Pass |
+| GSD health | `scripts/gsd doctor` printed `ok commands 69` | Pass |
+| Docs gate | `make docs-check` built `./cmd/pm` and printed `Validated connector docs in docs/connectors` | Pass |
+
+No production behavior test was required; this correction is docs/planning/skill/prompt only. Full
+`make verify` was not run because scope stayed docs-only and the issue requested `make docs-check`.

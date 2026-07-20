@@ -90,6 +90,8 @@ must name the same matrix explicitly: stdin+stdout TTY activation, `stdin-piped+
 explicit `pm query grid` and `pm reverse guide`, bare namespace help exit 0, approval-token
 nondisclosure, direct dependencies, path-safe typed export, and no `/dev/tty` bypass.
 
-Planning/RED evidence is captured on branch `docs/462-terminal-ui-tty-gate-follow-up`; final
-green verification and PR #468 body update are pending in this slice. No bot retry or merge is
-requested.
+Planning/RED and green evidence are captured on branch `docs/462-terminal-ui-tty-gate-follow-up`.
+Verification passes: contradiction grep, marker matrix, JSON parse, skill validation, direct
+state/token/export/accessibility marker checks, exact scope, `git diff --check`, `scripts/gsd
+doctor`, and `make docs-check`. PR #468 body update is part of the final handoff slice. No bot
+retry or merge is requested.

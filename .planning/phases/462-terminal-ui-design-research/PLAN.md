@@ -235,3 +235,13 @@ final-head claims. Local review sidecars are local evidence only, not external r
    validation, direct dependency/token/export/accessibility checks, exact scope check,
    `git diff --check`, `scripts/gsd doctor`, and `make docs-check`; then commit/push
    planning/docs/evidence and update PR #468 body. No bots and no merge.
+
+### Follow-up completion status
+
+- Planning and RED checkpoint committed/pushed.
+- Delegated docs/skill/prompt correction committed/pushed.
+- Final evidence checkpoint records passing contradiction grep, marker matrix, JSON parse, skill
+  validation, state/token/export/accessibility markers, exact scope, `git diff --check`,
+  `scripts/gsd doctor`, and `make docs-check`.
+- Remaining gate: PR #468 human review / parent integration. Local sidecar review is not external
+  coverage.
