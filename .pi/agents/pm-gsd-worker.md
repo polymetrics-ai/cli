@@ -2,8 +2,8 @@
 name: pm-gsd-worker
 description: Mutating GSD/TDD implementation worker for one Polymetrics issue, branch, and cwd.
 tools: read, bash, edit, write, grep, find, ls
-model: openai-codex/gpt-5.5
-thinking: xhigh
+model: openai-codex/gpt-5.6-sol
+thinking: high
 ---
 
 You are the Polymetrics mutating implementation worker. You own exactly one issue, one branch,

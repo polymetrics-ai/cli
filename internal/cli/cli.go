@@ -9,99 +9,230 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
+
+	"golang.org/x/term"
 
 	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/events"
+	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
+	"polymetrics.ai/internal/telemetry"
+	pmui "polymetrics.ai/internal/ui"
 )
 
 type envelope map[string]any
 
 const maxConnectorCommandLimit = 10000
 
+// RunMode controls how RunWithOptions evaluates the TTY gate.
+type RunMode string
+
+const (
+	// ModeAuto evaluates the deterministic TTY gate.
+	ModeAuto RunMode = "auto"
+	// ModePlain forces the legacy plain path.
+	ModePlain RunMode = "plain"
+)
+
+// RunOptions carries invocation-scoped UI detection facts for tests and future
+// TTY renderers. Nil StdoutIsTerminal falls back to os.File + x/term detection.
+type RunOptions struct {
+	Mode                RunMode
+	StdoutIsTerminal    *bool
+	Env                 map[string]string
+	ScheduleCrontabFile string
+}
+
 func Run(args []string, stdout, stderr io.Writer) int {
-	ctx := context.Background()
-	root, jsonOut, cleanArgs := parseGlobal(args)
-	if len(cleanArgs) == 0 {
-		if err := writeRootManual(stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
+	return RunWithContext(context.Background(), args, stdout, stderr, RunOptions{Mode: ModePlain})
+}
+
+func RunWithOptions(args []string, stdout, stderr io.Writer, runOpts RunOptions) int {
+	return RunWithContext(context.Background(), args, stdout, stderr, runOpts)
+}
+
+// RunWithContext preserves caller cancellation through the complete
+// in-process command path. Run remains the compatibility wrapper for callers
+// that do not have a context.
+func RunWithContext(parent context.Context, args []string, stdout, stderr io.Writer, runOpts RunOptions) int {
+	if parent == nil {
+		parent = context.Background()
 	}
-	cmd := cleanArgs[0]
-	rest := cleanArgs[1:]
-	if cmd == "--help" || cmd == "-h" || (cmd == "help" && len(rest) == 0) || cmd == "man" && len(rest) == 0 {
-		if err := writeRootManual(stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
+	ctx := pmlogging.WithRegistry(parent, pmlogging.NewValueRegistry())
+	globals, parseErr := parseGlobal(args)
+	if parseErr != nil {
+		return writeError(ctx, stdout, stderr, parseErr, globals.jsonOut)
 	}
-	if len(rest) > 0 && (rest[0] == "--help" || rest[0] == "-h" || rest[0] == "help") {
-		if err := writeManual(cmd, stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
+	if err := prevalidateCertifySafetyArgs(globals.clean); err != nil {
+		return writeError(ctx, stdout, stderr, err, globals.jsonOut)
 	}
-	if len(rest) == 0 && isManualCommand(cmd) {
-		if err := writeManual(cmd, stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
-	}
-	var err error
-	switch cmd {
-	case "init":
-		err = runInit(root, stdout, jsonOut)
-	case "help", "man":
-		err = runHelp(rest, stdout)
-	case "connectors":
-		err = runConnectors(ctx, root, rest, stdout, jsonOut)
-	case "credentials":
-		err = withApp(root, func(a *app.App) error { return runCredentials(ctx, a, rest, stdout, jsonOut) })
-	case "connections":
-		err = withApp(root, func(a *app.App) error { return runConnections(ctx, a, rest, stdout, jsonOut) })
-	case "catalog":
-		err = withApp(root, func(a *app.App) error { return runCatalog(ctx, a, rest, stdout, jsonOut) })
-	case "etl":
-		err = withApp(root, func(a *app.App) error { return runETL(ctx, a, rest, stdout, jsonOut) })
-	case "query":
-		err = withApp(root, func(a *app.App) error { return runQuery(ctx, a, rest, stdout, jsonOut) })
-	case "reverse":
-		err = withApp(root, func(a *app.App) error { return runReverse(ctx, a, rest, stdout, jsonOut) })
-	case "agent":
-		err = runAgent(ctx, root, rest, stdout, jsonOut)
-	case "runtime":
-		err = runRuntime(ctx, rest, stdout, jsonOut)
-	case "flow":
-		err = withApp(root, func(a *app.App) error { return runFlow(ctx, a, rest, stdout, jsonOut) })
-	case "extract":
-		err = withApp(root, func(a *app.App) error { return runExtract(ctx, a, root, rest, stdout, jsonOut) })
-	case "perf":
-		err = runPerf(ctx, rest, stdout, jsonOut)
-	case "docs":
-		err = runDocs(rest, stdout)
-	case "skills":
-		err = runSkills(rest, stdout, jsonOut)
-	case "version":
-		err = runVersion(rest, stdout, jsonOut)
-	case "rlm":
-		err = runRLM(ctx, root, rest, stdout, jsonOut)
-	case "schedule":
-		err = runSchedule(ctx, root, rest, stdout, jsonOut)
-	case "worker":
-		err = runWorker(ctx, rest, stdout, jsonOut)
-	default:
-		err = runMaybeConnectorCommand(ctx, root, cmd, rest, stdout, jsonOut)
-	}
+	opts := config.Options{Root: globals.root, Flags: globalConfigFlags(args, globals.root, globals.jsonOut)}
+	bootstrap, err := config.ResolveBootstrap(opts)
 	if err != nil {
-		return writeError(stdout, stderr, err, jsonOut)
+		return writeError(ctx, stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
 	}
-	return 0
+	cfg, err := config.Load(opts)
+	if err != nil {
+		return writeError(ctx, stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
+	}
+	if runOpts.ScheduleCrontabFile != "" {
+		cfg.Schedule.CrontabFile = runOpts.ScheduleCrontabFile
+	}
+	logger, closeLogs := pmlogging.NewLogger(filepath.Join(cfg.Root, ".polymetrics"), stderr, pmlogging.LoggerOptions{Registry: pmlogging.RegistryFromContext(ctx)})
+	defer func() { _ = closeLogs() }()
+	ctx = pmlogging.WithLogger(ctx, logger)
+
+	warnTelemetry := telemetryWarning(ctx, stderr)
+	telemetryCfg, telemetryWarnings := telemetryConfig(cfg)
+	for _, warning := range telemetryWarnings {
+		warnTelemetry(warning)
+	}
+	ctx, telemetryHandle := telemetry.Init(ctx, telemetryCfg, warnTelemetry)
+	_ = detectInvocationUI(globals, runOpts, stdout, cfg.JSON)
+	if globals.progress == "ndjson" {
+		ctx = events.WithEmitter(ctx, events.NewNDJSON(stderr))
+	}
+
+	ctx, commandSpan := telemetry.StartSpan(ctx, "pm.command", telemetry.StringAttr("pm.command.name", commandSpanName(globals.clean)))
+	cmd := newRootCmd(ctx, cfg, stdout, stderr)
+	exitCode := 0
+	if err := executeRootCmd(cmd, globals.clean); err != nil {
+		mapped := mapCobraErr(err)
+		commandSpan.RecordError(classifyError(mapped))
+		exitCode = writeError(ctx, stdout, stderr, mapped, cfg.JSON)
+		commandSpan.SetAttributes(telemetry.StringAttr("pm.command.status", "error"), telemetry.IntAttr("pm.command.exit_code", exitCode))
+	} else {
+		commandSpan.SetAttributes(telemetry.StringAttr("pm.command.status", "ok"), telemetry.IntAttr("pm.command.exit_code", 0))
+	}
+	commandSpan.End()
+	telemetry.Shutdown(ctx, telemetryHandle, warnTelemetry)
+	return exitCode
+}
+
+func telemetryConfig(cfg config.Config) (telemetry.Config, []string) {
+	dir := cfg.Telemetry.Directory
+	if dir == "" {
+		dir = filepath.Join(".polymetrics", "telemetry")
+	}
+	exporter := strings.TrimSpace(cfg.Telemetry.Exporter)
+	endpoint := strings.TrimSpace(cfg.Telemetry.Endpoint)
+	var warnings []string
+	if strings.EqualFold(exporter, "otlp") {
+		if !trustedTelemetrySource(cfg.Source("telemetry.exporter")) {
+			exporter = string(telemetry.ExporterNone)
+			endpoint = ""
+			warnings = append(warnings, "config-sourced OTLP telemetry exporter ignored; set PM_TELEMETRY=otlp or POLYMETRICS_TELEMETRY=otlp to enable network telemetry")
+		} else if endpoint != "" && !trustedTelemetrySource(cfg.Source("telemetry.endpoint")) {
+			endpoint = ""
+			warnings = append(warnings, "config-sourced OTLP telemetry endpoint ignored; set OTEL_EXPORTER_OTLP_ENDPOINT or PM_TELEMETRY_ENDPOINT to choose a collector")
+		}
+	}
+	return telemetry.Config{
+		Exporter:    telemetry.Exporter(exporter),
+		Endpoint:    endpoint,
+		Directory:   dir,
+		ProjectRoot: cfg.Root,
+		Capture:     cfg.Telemetry.Capture,
+		RunID:       commandRunID(),
+		ServiceName: "pm",
+	}, warnings
+}
+
+func trustedTelemetrySource(source string) bool {
+	return source == "env" || source == "flag"
+}
+
+func telemetryWarning(ctx context.Context, stderr io.Writer) telemetry.WarningFunc {
+	return func(msg string) {
+		fmt.Fprintf(stderr, "warning: telemetry: %s\n", pmlogging.RedactLine(ctx, msg))
+	}
+}
+
+func commandRunID() string {
+	return "trace-" + time.Now().UTC().Format("20060102T150405.000000000Z")
+}
+
+func commandSpanName(args []string) string {
+	if len(args) == 0 {
+		return "pm"
+	}
+	name := args[0]
+	if name == "help" || name == "man" || name == "init" || name == "version" || name == "connectors" || name == "credentials" || name == "connections" || name == "catalog" || name == "etl" || name == "reverse" || name == "flow" || name == "query" || name == "runtime" || name == "perf" || name == "agent" || name == "rlm" || name == "schedule" || name == "docs" || name == "skills" || name == "worker" || name == "extract" {
+		return name
+	}
+	return "connector"
+}
+
+func detectInvocationUI(globals globalOptions, runOpts RunOptions, stdout io.Writer, jsonOut bool) pmui.Detection {
+	mode := runOpts.Mode
+	if mode == "" {
+		mode = ModeAuto
+	}
+	plain := globals.plain || mode == ModePlain
+	return pmui.Detect(pmui.DetectOptions{
+		StdoutTTY: stdoutIsTerminal(stdout, runOpts.StdoutIsTerminal),
+		JSON:      jsonOut,
+		Plain:     plain,
+		NoInput:   globals.noInput,
+		Env:       invocationEnv(runOpts.Env),
+	})
+}
+
+func stdoutIsTerminal(stdout io.Writer, override *bool) bool {
+	if override != nil {
+		return *override
+	}
+	file, ok := stdout.(*os.File)
+	if !ok || file == nil {
+		return false
+	}
+	return term.IsTerminal(int(file.Fd()))
+}
+
+func invocationEnv(override map[string]string) map[string]string {
+	keys := []string{"TERM", "PM_NO_TUI", "CI", "NO_COLOR", "CLICOLOR", "PM_ASCII"}
+	out := make(map[string]string, len(keys))
+	for _, key := range keys {
+		if override != nil {
+			out[key] = override[key]
+			continue
+		}
+		out[key] = os.Getenv(key)
+	}
+	return out
+}
+
+func globalConfigFlags(args []string, root string, jsonOut bool) map[string]config.FlagValue {
+	flags := map[string]config.FlagValue{}
+	jsonChanged := false
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		switch {
+		case arg == "--json" || strings.HasPrefix(arg, "--json="):
+			jsonChanged = true
+		case arg == "--root" && i+1 < len(args):
+			flags["root"] = config.StaticFlag{FlagName: "root", Value: root, Type: "string", Changed: true}
+			i++
+		case strings.HasPrefix(arg, "--root="):
+			flags["root"] = config.StaticFlag{FlagName: "root", Value: root, Type: "string", Changed: true}
+		}
+	}
+	if jsonChanged {
+		value := "false"
+		if jsonOut {
+			value = "true"
+		}
+		flags["json"] = config.StaticFlag{FlagName: "json", Value: value, Type: "bool", Changed: true}
+	}
+	return flags
 }
 
 func writeRootManual(stdout io.Writer, jsonOut bool) error {
@@ -156,98 +287,6 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	return nil
 }
 
-func runConnectors(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-	registry := appRegistry()
-	if len(args) == 0 {
-		return errUsage
-	}
-	switch args[0] {
-	case "certify":
-		return runCertify(ctx, root, args[1:], stdout, jsonOut)
-	case "list":
-		flags := parseFlags(args[1:])
-		if flags.first("all") != "" {
-			defs, err := connectorCatalogEntries(registry, flags)
-			if err != nil {
-				return err
-			}
-			if jsonOut {
-				return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
-			}
-			for _, item := range defs {
-				fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
-			}
-			return nil
-		}
-		list := registry.List()
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ConnectorList", "connectors": list})
-		}
-		for _, item := range list {
-			fmt.Fprintf(stdout, "%s\t%s\t%+v\n", item.Name, item.IntegrationType, item.Capabilities)
-		}
-		return nil
-	case "catalog":
-		flags := parseFlags(args[1:])
-		defs, err := connectorCatalogEntries(registry, flags)
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
-		}
-		for _, item := range defs {
-			fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
-		}
-		return nil
-	case "inspect", "help", "man", "docs":
-		if len(args) < 2 {
-			return errUsage
-		}
-		if err := safety.ValidateIdentifier(args[1], "connector"); err != nil {
-			return validationErrorf("%v", err)
-		}
-		if err := connectors.RejectLegacyConnectorName(args[1]); err != nil {
-			return err
-		}
-		if c, ok := registry.Get(args[1]); ok {
-			if jsonOut {
-				return writeJSON(stdout, envelope{"kind": "Connector", "connector": connectors.MetadataWithIcon(c.Metadata()), "manifest": connectors.ManifestOf(c)})
-			}
-			fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
-			return nil
-		}
-		return fmt.Errorf("connector %q not found", args[1])
-	default:
-		return errUsage
-	}
-}
-
-func connectorCatalogEntries(registry *connectors.Registry, flags parsedFlags) ([]connectors.Definition, error) {
-	if flags.first("type") != "" {
-		return nil, validationErrorf("legacy --type source|destination was removed; use --capability read|write|cdc|query")
-	}
-	capability := strings.TrimSpace(strings.ToLower(flags.first("capability")))
-	switch capability {
-	case "", "read", "write", "cdc", "query":
-	default:
-		return nil, validationErrorf("invalid --capability %q, want read|write|cdc|query", capability)
-	}
-	stage := strings.TrimSpace(flags.first("stage"))
-	defs := registry.CatalogEntries()
-	out := make([]connectors.Definition, 0, len(defs))
-	for _, def := range defs {
-		if stage != "" && def.ReleaseStage != stage {
-			continue
-		}
-		if !definitionHasCapability(registry, def, capability) {
-			continue
-		}
-		out = append(out, def)
-	}
-	return out, nil
-}
-
 func definitionHasCapability(registry *connectors.Registry, def connectors.Definition, capability string) bool {
 	switch capability {
 	case "":
@@ -270,196 +309,88 @@ func definitionHasCapability(registry *connectors.Registry, def connectors.Defin
 	}
 }
 
-func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
-	}
-	switch args[0] {
-	case "add":
-		if len(args) < 2 {
-			return errUsage
-		}
-		flags := parseFlags(args[2:])
-		connector := flags.first("connector")
-		if connector == "" {
-			return errors.New("missing --connector")
-		}
-		if err := safety.ValidateIdentifier(args[1], "credential"); err != nil {
-			return validationErrorf("%v", err)
-		}
-		if err := safety.ValidateIdentifier(connector, "connector"); err != nil {
-			return validationErrorf("%v", err)
-		}
-		if err := connectors.RejectLegacyConnectorName(connector); err != nil {
-			return err
-		}
-		secrets := map[string]string{}
-		for _, spec := range flags.values["from-env"] {
-			key, env, ok := strings.Cut(spec, "=")
-			if !ok || key == "" || env == "" {
-				return fmt.Errorf("invalid --from-env %q, want field=ENV", spec)
-			}
-			secrets[key] = os.Getenv(env)
-			if secrets[key] == "" {
-				return fmt.Errorf("environment variable %s is empty", env)
-			}
-		}
-		if field := flags.first("value-stdin"); field != "" {
-			b, err := io.ReadAll(os.Stdin)
-			if err != nil {
-				return fmt.Errorf("read stdin secret: %w", err)
-			}
-			secrets[field] = strings.TrimRight(string(b), "\r\n")
-		}
-		config, err := keyValues(flags.values["config"])
-		if err != nil {
-			return err
-		}
-		if err := validateCredentialConfig(a, connector, config); err != nil {
-			return err
-		}
-		cred, err := a.AddCredential(ctx, app.AddCredentialRequest{
-			Name:      args[1],
-			Connector: connector,
-			Config:    config,
-			Secrets:   secrets,
-		})
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
-		}
-		fmt.Fprintf(stdout, "Saved credential %s for connector %s\n", cred.Name, cred.Connector)
-		return nil
-	case "list":
-		creds := a.ListCredentials()
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "CredentialList", "credentials": creds})
-		}
-		for _, cred := range creds {
-			fmt.Fprintf(stdout, "%s\t%s\t%s\n", cred.Name, cred.ID, cred.Connector)
-		}
-		return nil
-	case "inspect":
-		if len(args) < 2 {
-			return errUsage
-		}
-		cred, err := a.InspectCredential(args[1])
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
-		}
-		b, _ := json.MarshalIndent(cred, "", "  ")
-		fmt.Fprintln(stdout, string(b))
-		return nil
-	case "test":
-		if len(args) < 2 {
-			return errUsage
-		}
-		cred, err := a.TestCredential(ctx, args[1])
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "CredentialTest", "status": "ok", "credential": cred})
-		}
-		fmt.Fprintf(stdout, "Credential %s validated\n", cred.Name)
-		return nil
-	case "remove":
-		if len(args) < 2 {
-			return errUsage
-		}
-		if err := a.RemoveCredential(ctx, args[1]); err != nil {
-			return err
-		}
-		fmt.Fprintf(stdout, "Removed credential %s\n", args[1])
-		return nil
-	default:
-		return errUsage
-	}
+type connectionsCreateFlags struct {
+	Sources            []string
+	Destinations       []string
+	Streams            []string
+	SyncModes          []string
+	Cursors            []string
+	PrimaryKeys        []string
+	Tables             []string
+	SourceConfigs      []string
+	DestinationConfigs []string
 }
 
-func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
+func runConnectionsCreate(ctx context.Context, a *app.App, name string, flags connectionsCreateFlags, stdout io.Writer, jsonOut bool) error {
+	source, err := parseEndpoint(lastString(flags.Sources))
+	if err != nil {
+		return err
 	}
-	switch args[0] {
-	case "create":
-		if len(args) < 2 {
-			return errUsage
-		}
-		flags := parseFlags(args[2:])
-		source, err := parseEndpoint(flags.first("source"))
-		if err != nil {
-			return err
-		}
-		dest, err := parseEndpoint(flags.first("destination"))
-		if err != nil {
-			return err
-		}
-		stream := flags.first("stream")
-		if stream == "" {
-			return errors.New("missing --stream")
-		}
-		sourceConfig, err := keyValues(flags.values["source-config"])
-		if err != nil {
-			return err
-		}
-		destConfig, err := keyValues(flags.values["destination-config"])
-		if err != nil {
-			return err
-		}
-		source.Config = sourceConfig
-		dest.Config = destConfig
-		streamCfg := app.StreamConfig{
-			SyncMode:         valueOr(flags.first("sync-mode"), "full_refresh_overwrite"),
-			CursorField:      flags.first("cursor"),
-			PrimaryKey:       flags.values["primary-key"],
-			DestinationTable: valueOr(flags.first("table"), stream),
-		}
-		conn, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
-			Name:        args[1],
-			Source:      source,
-			Destination: dest,
-			Streams:     map[string]app.StreamConfig{stream: streamCfg},
-		})
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "Connection", "connection": conn})
-		}
-		fmt.Fprintf(stdout, "Created connection %s\n", conn.Name)
-		return nil
-	case "list":
-		conns := a.ListConnections()
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ConnectionList", "connections": conns})
-		}
-		for _, conn := range conns {
-			fmt.Fprintf(stdout, "%s\t%s:%s -> %s:%s\n", conn.Name, conn.Source.Connector, conn.Source.Credential, conn.Destination.Connector, conn.Destination.Credential)
-		}
-		return nil
-	default:
-		return errUsage
+	dest, err := parseEndpoint(lastString(flags.Destinations))
+	if err != nil {
+		return err
 	}
+	stream := lastString(flags.Streams)
+	if stream == "" {
+		return errors.New("missing --stream")
+	}
+	sourceConfig, err := keyValues(flags.SourceConfigs)
+	if err != nil {
+		return err
+	}
+	destConfig, err := keyValues(flags.DestinationConfigs)
+	if err != nil {
+		return err
+	}
+	source.Config = sourceConfig
+	dest.Config = destConfig
+	streamCfg := app.StreamConfig{
+		SyncMode:         valueOr(lastString(flags.SyncModes), "full_refresh_overwrite"),
+		CursorField:      lastString(flags.Cursors),
+		PrimaryKey:       flags.PrimaryKeys,
+		DestinationTable: valueOr(lastString(flags.Tables), stream),
+	}
+	conn, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
+		Name:        name,
+		Source:      source,
+		Destination: dest,
+		Streams:     map[string]app.StreamConfig{stream: streamCfg},
+	})
+	if err != nil {
+		return err
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "Connection", "connection": conn})
+	}
+	fmt.Fprintf(stdout, "Created connection %s\n", conn.Name)
+	return nil
 }
 
-func runCatalog(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
+func runConnectionsList(a *app.App, stdout io.Writer, jsonOut bool) error {
+	conns := a.ListConnections()
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "ConnectionList", "connections": conns})
 	}
-	flags := parseFlags(args[1:])
-	connection := flags.first("connection")
+	for _, conn := range conns {
+		fmt.Fprintf(stdout, "%s\t%s:%s -> %s:%s\n", conn.Name, conn.Source.Connector, conn.Source.Credential, conn.Destination.Connector, conn.Destination.Credential)
+	}
+	return nil
+}
+
+func lastString(values []string) string {
+	if len(values) == 0 {
+		return ""
+	}
+	return values[len(values)-1]
+}
+
+func runCatalogAction(ctx context.Context, a *app.App, action string, connection string, stdout io.Writer, jsonOut bool) error {
 	if connection == "" {
 		return errors.New("missing --connection")
 	}
 	var snapshot app.CatalogSnapshot
 	var err error
-	switch args[0] {
+	switch action {
 	case "refresh":
 		snapshot, err = a.RefreshCatalog(ctx, connection)
 	case "show":
@@ -477,118 +408,6 @@ func runCatalog(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		fmt.Fprintf(stdout, "%s\t%s\n", stream.Name, stream.Description)
 	}
 	return nil
-}
-
-func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
-	}
-	switch args[0] {
-	case "check":
-		connector, cfg, err := directConnector(a, args[1:])
-		if err != nil {
-			return err
-		}
-		if err := connector.Check(ctx, cfg); err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ETLCheck", "connector": connector.Name(), "status": "ok"})
-		}
-		fmt.Fprintf(stdout, "Connector %s check ok\n", connector.Name())
-		return nil
-	case "catalog":
-		connector, cfg, err := directConnector(a, args[1:])
-		if err != nil {
-			return err
-		}
-		catalog, err := connector.Catalog(ctx, cfg)
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ETLCatalog", "connector": connector.Name(), "catalog": catalog})
-		}
-		for _, stream := range catalog.Streams {
-			fmt.Fprintf(stdout, "%s\t%s\n", stream.Name, stream.Description)
-		}
-		return nil
-	case "read":
-		flags := parseFlags(args[1:])
-		connector, cfg, err := directConnector(a, args[1:])
-		if err != nil {
-			return err
-		}
-		stream := flags.first("stream")
-		limit, err := parseIntFlag("limit", valueOr(flags.first("limit"), "100"), 100)
-		if err != nil {
-			return err
-		}
-		if limit <= 0 {
-			limit = 100
-		}
-		rows := make([]connectors.Record, 0, limit)
-		err = connector.Read(ctx, connectors.ReadRequest{Stream: stream, Config: cfg, Limit: limit}, connectors.LimitEmitter(limit, func(record connectors.Record) error {
-			rows = append(rows, record)
-			return nil
-		}))
-		if err := connectors.IgnoreReadLimit(err); err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ETLRead", "connector": connector.Name(), "stream": stream, "count": len(rows), "records": rows})
-		}
-		for _, row := range rows {
-			b, _ := json.Marshal(row)
-			fmt.Fprintln(stdout, string(b))
-		}
-		return nil
-	case "run":
-		flags := parseFlags(args[1:])
-		batchSize, err := parseIntFlag("batch-size", flags.first("batch-size"), 0)
-		if err != nil {
-			return err
-		}
-		run, err := a.RunETL(ctx, app.RunETLRequest{
-			Connection: flags.first("connection"),
-			Stream:     flags.first("stream"),
-			BatchSize:  batchSize,
-		})
-		if err != nil {
-			return err
-		}
-		runtimeRecorded := false
-		if flags.first("runtime") == "true" {
-			if err := recordRuntimeETL(ctx, run); err != nil {
-				return err
-			}
-			runtimeRecorded = true
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": runtimeRecorded})
-		}
-		if runtimeRecorded {
-			fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d runtime_recorded=true\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
-			return nil
-		}
-		fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
-		return nil
-	case "status":
-		if len(args) < 2 {
-			return errUsage
-		}
-		run, err := a.GetRun(args[1])
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run})
-		}
-		fmt.Fprintf(stdout, "%s\t%s\tread=%d loaded=%d failed=%d\n", run.ID, run.Status, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
-		return nil
-	default:
-		return errUsage
-	}
 }
 
 func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -874,37 +693,7 @@ func sameStringSlice(a, b []string) bool {
 	return true
 }
 
-func directConnector(a *app.App, args []string) (connectors.Connector, connectors.RuntimeConfig, error) {
-	flags := parseFlags(args)
-	name := flags.first("connector")
-	if name == "" {
-		return nil, connectors.RuntimeConfig{}, errors.New("missing --connector")
-	}
-	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
-		return nil, connectors.RuntimeConfig{}, validationErrorf("%v", err)
-	}
-	if err := connectors.RejectLegacyConnectorName(name); err != nil {
-		return nil, connectors.RuntimeConfig{}, err
-	}
-	connector, ok := a.Registry().Get(name)
-	if !ok {
-		return nil, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", name)
-	}
-	config, err := keyValues(flags.values["config"])
-	if err != nil {
-		return nil, connectors.RuntimeConfig{}, err
-	}
-	return connector, connectors.RuntimeConfig{
-		ProjectDir: a.ProjectDir(),
-		Config:     config,
-	}, nil
-}
-
-func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 || args[0] != "run" {
-		return errUsage
-	}
-	flags := parseFlags(args[1:])
+func runQueryRun(ctx context.Context, a *app.App, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
 	limit, err := parseIntFlag("limit", valueOr(flags.first("limit"), "100"), 100)
 	if err != nil {
 		return err
@@ -970,132 +759,11 @@ func writeAgentModeQuery(stdout io.Writer, rows []connectors.Record, mode string
 	}
 }
 
-func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
+func runAgentPlan(request string, stdout io.Writer, jsonOut bool) error {
+	if err := safety.RejectDangerousChars(request, "agent request"); err != nil {
+		return validationErrorf("%v", err)
 	}
-	switch args[0] {
-	case "list":
-		plans := a.ListReversePlans()
-		runs := a.ListReverseRuns()
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReversePlanList", "plans": safeReversePlansForOutput(plans), "runs": runs})
-		}
-		for _, plan := range plans {
-			fmt.Fprintf(stdout, "%s\t%s\t%s\trecords=%d\n", plan.ID, plan.Status, plan.Name, plan.RecordCount)
-		}
-		if len(runs) > 0 {
-			fmt.Fprintln(stdout, "\nRUNS")
-			for _, run := range runs {
-				fmt.Fprintf(stdout, "%s\t%s\tplan=%s\tsucceeded=%d failed=%d\n", run.ID, run.Status, run.PlanID, run.RecordsSucceeded, run.RecordsFailed)
-			}
-		}
-		return nil
-	case "plan":
-		if len(args) < 2 {
-			return errUsage
-		}
-		flags := parseFlags(args[2:])
-		dest, err := parseEndpoint(flags.first("destination"))
-		if err != nil {
-			return err
-		}
-		mappings, err := colonValues(flags.values["map"])
-		if err != nil {
-			return err
-		}
-		limit, err := parseIntFlag("limit", flags.first("limit"), 0)
-		if err != nil {
-			return err
-		}
-		plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
-			Name:                  args[1],
-			SourceTable:           flags.first("source-table"),
-			DestinationConnector:  dest.Connector,
-			DestinationCredential: dest.Credential,
-			DestinationConfig:     dest.Config,
-			Action:                valueOr(flags.first("action"), "upsert"),
-			Mappings:              mappings,
-			Limit:                 limit,
-		})
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReversePlan", "plan": safeReversePlanForOutput(plan), "approval_required": true})
-		}
-		fmt.Fprintf(stdout, "Created reverse plan %s with %d records\nApproval token: %s\n", plan.ID, plan.RecordCount, plan.ApprovalToken)
-		if plan.ConfirmationChallenge != "" {
-			fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
-		}
-		return nil
-	case "preview":
-		if len(args) < 2 {
-			return errUsage
-		}
-		plan, err := a.GetReversePlan(args[1])
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			env := envelope{"kind": "ReversePlanPreview", "plan": safeReversePlanForOutput(plan)}
-			if plan.ConnectorCommand != "" {
-				safePlan, writePreview, err := a.PreviewConnectorCommandPlan(ctx, args[1])
-				if err != nil {
-					return err
-				}
-				env["plan"] = safeReversePlanForOutput(safePlan)
-				env["write_preview"] = writePreview
-			}
-			return writeJSON(stdout, env)
-		}
-		b, _ := json.MarshalIndent(safeReversePlanForOutput(plan), "", "  ")
-		fmt.Fprintln(stdout, string(b))
-		return nil
-	case "run":
-		if len(args) < 2 {
-			return errUsage
-		}
-		flags := parseFlags(args[2:])
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: flags.first("confirm")})
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
-		}
-		fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
-		return nil
-	case "status":
-		if len(args) < 2 {
-			return errUsage
-		}
-		run, err := a.GetReverseRun(args[1])
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
-		}
-		fmt.Fprintf(stdout, "%s\t%s\tplan=%s\tstaged=%d succeeded=%d failed=%d\n", run.ID, run.Status, run.PlanID, run.RecordsStaged, run.RecordsSucceeded, run.RecordsFailed)
-		return nil
-	default:
-		return errUsage
-	}
-}
-
-func runAgent(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
-	}
-	if args[0] == "image" {
-		return runAgentImage(ctx, root, args[1:], stdout, jsonOut)
-	}
-	if args[0] != "plan" {
-		return errUsage
-	}
-	flags := parseFlags(args[1:])
-	req := strings.ToLower(flags.first("request"))
+	req := strings.ToLower(request)
 	steps := []string{"pm connectors list --json", "pm help etl"}
 	if strings.Contains(req, "sample") && strings.Contains(req, "customers") {
 		steps = []string{
@@ -1115,14 +783,30 @@ func runAgent(ctx context.Context, root string, args []string, stdout io.Writer,
 	return nil
 }
 
-func runDocs(args []string, stdout io.Writer) error {
-	if len(args) == 0 {
-		return errUsage
+type docsCommandFlags struct {
+	Dirs           []string
+	ConnectorsDirs []string
+}
+
+func (f docsCommandFlags) dir() string {
+	return lastDocsFlag(f.Dirs)
+}
+
+func (f docsCommandFlags) connectorsDir() string {
+	return lastDocsFlag(f.ConnectorsDirs)
+}
+
+func lastDocsFlag(values []string) string {
+	if len(values) == 0 {
+		return ""
 	}
-	flags := parseFlags(args[1:])
-	switch args[0] {
+	return values[len(values)-1]
+}
+
+func runDocs(action string, flags docsCommandFlags, stdout io.Writer) error {
+	switch action {
 	case "generate":
-		dir := flags.first("dir")
+		dir := flags.dir()
 		if dir == "" {
 			return errors.New("missing --dir")
 		}
@@ -1138,14 +822,14 @@ func runDocs(args []string, stdout io.Writer) error {
 				return err
 			}
 		}
-		connectorsDir := valueOr(flags.first("connectors-dir"), filepath.Join(filepath.Dir(dir), "connectors"))
+		connectorsDir := valueOr(flags.connectorsDir(), filepath.Join(filepath.Dir(dir), "connectors"))
 		if err := writeConnectorDocs(connectorsDir, appRegistry()); err != nil {
 			return err
 		}
 		fmt.Fprintf(stdout, "Generated docs in %s and connector docs in %s\n", dir, connectorsDir)
 		return nil
 	case "validate":
-		dir := valueOr(flags.first("connectors-dir"), valueOr(flags.first("dir"), "docs/connectors"))
+		dir := valueOr(flags.connectorsDir(), valueOr(flags.dir(), "docs/connectors"))
 		if err := validateConnectorDocs(dir, appRegistry()); err != nil {
 			return err
 		}
@@ -1156,16 +840,13 @@ func runDocs(args []string, stdout io.Writer) error {
 	}
 }
 
-func runRuntime(ctx context.Context, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 || args[0] != "doctor" {
-		return errUsage
-	}
-	cfg := runtimecheck.FromEnv()
-	report := runtimecheck.Doctor(ctx, cfg)
+func runRuntimeDoctor(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) error {
+	runtimeCfg := runtimecheck.FromConfig(cfg)
+	report := runtimecheck.Doctor(ctx, runtimeCfg)
 	if jsonOut {
 		return writeJSON(stdout, envelope{
 			"kind":   "RuntimeDoctor",
-			"config": runtimecheck.RedactedConfig(cfg),
+			"config": runtimecheck.RedactedConfig(runtimeCfg),
 			"report": report,
 		})
 	}
@@ -1180,61 +861,54 @@ func runRuntime(ctx context.Context, args []string, stdout io.Writer, jsonOut bo
 	return nil
 }
 
-func runPerf(ctx context.Context, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return errUsage
+func runPerfCompare(ctx context.Context, cfg config.Config, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+	iterations, err := parsePositiveIntFlag("iterations", flags.first("iterations"), perf.DefaultCompareIterations, perf.MaxCompareIterations)
+	if err != nil {
+		return err
 	}
-	switch args[0] {
-	case "compare":
-		flags := parseFlags(args[1:])
-		iterations, err := parseIntFlag("iterations", valueOr(flags.first("iterations"), "25"), 25)
-		if err != nil {
-			return err
-		}
-		comparison, err := perf.Compare(ctx, perf.CompareRequest{
-			Iterations: iterations,
-			Runtime:    flags.first("runtime") == "true",
-		})
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "PerformanceComparison", "comparison": comparison})
-		}
-		printPerfResult(stdout, comparison.DependencyFree)
-		if comparison.RuntimeBacked != nil {
-			printPerfResult(stdout, *comparison.RuntimeBacked)
-		}
-		fmt.Fprintf(stdout, "\nDependency-free: %s\n", comparison.Explanation["dependency_free"])
-		fmt.Fprintf(stdout, "Runtime-backed: %s\n", comparison.Explanation["runtime_backed"])
-		return nil
-	case "sync-modes":
-		flags := parseFlags(args[1:])
-		records, err := parseIntFlag("records", valueOr(flags.first("records"), "1000"), 1000)
-		if err != nil {
-			return err
-		}
-		benchmark, err := perf.CompareSyncModes(ctx, perf.SyncModeBenchmarkRequest{
-			Records: records,
-		})
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "SyncModeBenchmark", "benchmark": benchmark})
-		}
-		for _, result := range benchmark.Results {
-			fmt.Fprintf(stdout, "%s\trecords=%d\tduration=%s\trecords_per_sec=%.2f", result.Mode, result.Records, result.Duration, result.RecordsPerSec)
-			if result.Error != "" {
-				fmt.Fprintf(stdout, "\terror=%s", result.Error)
-			}
-			fmt.Fprintln(stdout)
-		}
-		fmt.Fprintln(stdout, benchmark.Explanation)
-		return nil
-	default:
-		return errUsage
+	comparison, err := perf.Compare(ctx, perf.CompareRequest{
+		Iterations:    iterations,
+		Runtime:       flags.first("runtime") == "true",
+		RuntimeConfig: runtimecheck.FromConfig(cfg),
+	})
+	if err != nil {
+		return err
 	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "PerformanceComparison", "comparison": comparison})
+	}
+	printPerfResult(stdout, comparison.DependencyFree)
+	if comparison.RuntimeBacked != nil {
+		printPerfResult(stdout, *comparison.RuntimeBacked)
+	}
+	fmt.Fprintf(stdout, "\nDependency-free: %s\n", comparison.Explanation["dependency_free"])
+	fmt.Fprintf(stdout, "Runtime-backed: %s\n", comparison.Explanation["runtime_backed"])
+	return nil
+}
+
+func runPerfSyncModes(ctx context.Context, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+	records, err := parsePositiveIntFlag("records", flags.first("records"), perf.DefaultSyncModeRecords, perf.MaxSyncModeRecords)
+	if err != nil {
+		return err
+	}
+	benchmark, err := perf.CompareSyncModes(ctx, perf.SyncModeBenchmarkRequest{
+		Records: records,
+	})
+	if err != nil {
+		return err
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "SyncModeBenchmark", "benchmark": benchmark})
+	}
+	for _, result := range benchmark.Results {
+		fmt.Fprintf(stdout, "%s\trecords=%d\tduration=%s\trecords_per_sec=%.2f", result.Mode, result.Records, result.Duration, result.RecordsPerSec)
+		if result.Error != "" {
+			fmt.Fprintf(stdout, "\terror=%s", result.Error)
+		}
+		fmt.Fprintln(stdout)
+	}
+	fmt.Fprintln(stdout, benchmark.Explanation)
+	return nil
 }
 
 func printPerfResult(stdout io.Writer, result perf.Result) {

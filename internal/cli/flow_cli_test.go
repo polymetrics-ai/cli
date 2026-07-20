@@ -11,6 +11,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"polymetrics.ai/internal/safety"
 )
 
 func testCtx(t *testing.T) context.Context {
@@ -78,7 +80,7 @@ func writeManifestFile(t *testing.T, content string) string {
 func TestFlowList(t *testing.T) {
 	dir := t.TempDir()
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"list", "--flows-dir", dir}, &out, true)
+	err := flowList(dir, &out, true)
 	require.NoError(t, err)
 
 	var result map[string]any
@@ -94,7 +96,7 @@ func TestFlowList(t *testing.T) {
 func TestFlowPlanValid(t *testing.T) {
 	path := writeManifestFile(t, validFlowManifestJSON)
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"plan", "--file", path}, &out, true)
+	err := flowPlan(testCtx(t), path, &out, true, false)
 	require.NoError(t, err)
 
 	var result map[string]any
@@ -102,11 +104,81 @@ func TestFlowPlanValid(t *testing.T) {
 	assert.Equal(t, "ok", result["status"])
 }
 
+// TestFlowPlanSanitizesUnsafeStepIDsInHumanOutput keeps human flow output terminal-safe without changing JSON.
+func TestFlowPlanSanitizesUnsafeStepIDsInHumanOutput(t *testing.T) {
+	unsafeID := "score\x1b]0;owned\x07\u202Edone"
+	manifest := map[string]any{
+		"version": 1,
+		"name":    "unsafe-flow",
+		"steps": []map[string]any{
+			{
+				"id":   unsafeID,
+				"kind": "query",
+				"sql":  "SELECT * FROM customers",
+				"in":   []string{},
+				"out":  []string{"scored_customers"},
+			},
+		},
+	}
+	data, err := json.Marshal(manifest)
+	require.NoError(t, err)
+	path := writeManifestFile(t, string(data))
+
+	var human bytes.Buffer
+	err = flowPlan(testCtx(t), path, &human, false, false)
+	require.NoError(t, err)
+	assertNoUnsafeTerminalControls(t, human.String())
+	assert.NotContains(t, human.String(), unsafeID)
+
+	var machine bytes.Buffer
+	err = flowPlan(testCtx(t), path, &machine, true, false)
+	require.NoError(t, err)
+	var out struct {
+		Order []string `json:"order"`
+	}
+	require.NoError(t, json.Unmarshal(machine.Bytes(), &out))
+	require.Equal(t, []string{unsafeID}, out.Order)
+}
+
+func TestFlowListSanitizesUnsafeFilenamesInHumanOutput(t *testing.T) {
+	dir := t.TempDir()
+	unsafeName := "nightly\x1b]2;owned\x07\u202Eflow"
+	err := os.WriteFile(filepath.Join(dir, unsafeName+".json"), []byte(`{"version":1}`), 0o644)
+	require.NoError(t, err)
+
+	var human bytes.Buffer
+	err = flowList(dir, &human, false)
+	require.NoError(t, err)
+	assertNoUnsafeTerminalControls(t, human.String())
+	assert.NotContains(t, human.String(), unsafeName)
+
+	var machine bytes.Buffer
+	err = flowList(dir, &machine, true)
+	require.NoError(t, err)
+	var out struct {
+		Flows []string `json:"flows"`
+	}
+	require.NoError(t, json.Unmarshal(machine.Bytes(), &out))
+	require.Equal(t, []string{unsafeName}, out.Flows)
+}
+
+func assertNoUnsafeTerminalControls(t *testing.T, text string) {
+	t.Helper()
+	for _, r := range text {
+		if r == '\n' || r == '\t' {
+			continue
+		}
+		if r < 0x20 || r == 0x7f || (r >= 0x80 && r <= 0x9f) || safety.IsDangerousUnicode(r) {
+			t.Fatalf("human output contains unsafe terminal rune %U in %q", r, text)
+		}
+	}
+}
+
 // TestFlowPlanCyclic checks that `pm flow plan --file cyclic.json` returns a non-nil error.
 func TestFlowPlanCyclic(t *testing.T) {
 	path := writeManifestFile(t, cyclicFlowManifestJSON)
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"plan", "--file", path}, &out, true)
+	err := flowPlan(testCtx(t), path, &out, true, false)
 	require.Error(t, err, "cyclic manifest should produce an error")
 	assert.True(t, strings.Contains(err.Error(), "cyclic") || strings.Contains(err.Error(), "flow:"),
 		"error should mention cycle: %v", err)
@@ -116,7 +188,7 @@ func TestFlowPlanCyclic(t *testing.T) {
 func TestFlowStatusMissing(t *testing.T) {
 	dir := t.TempDir()
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"status", "nonexistent", "--flows-dir", dir}, &out, true)
+	err := flowStatus(dir, []string{"nonexistent"}, &out, true)
 	require.Error(t, err)
 }
 
@@ -124,7 +196,7 @@ func TestFlowStatusMissing(t *testing.T) {
 func TestFlowPreviewValid(t *testing.T) {
 	path := writeManifestFile(t, validFlowManifestJSON)
 	var out bytes.Buffer
-	err := runFlow(testCtx(t), nil, []string{"preview", "--file", path}, &out, true)
+	err := flowPlan(testCtx(t), path, &out, true, true)
 	require.NoError(t, err)
 
 	var result map[string]any

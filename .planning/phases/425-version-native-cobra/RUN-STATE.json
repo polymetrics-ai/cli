@@ -1,0 +1,95 @@
+{
+  "phase": 425,
+  "issue": 425,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/425-version-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc",
+  "invocationSession": "issue-425-pi-openai-codex-gpt-5.6-sol-high-20260718T095316Z",
+  "model": "openai-codex/gpt-5.6-sol",
+  "thinking": "high",
+  "status": "review_fix_complete_pushed",
+  "verificationPassed": true,
+  "reviewFix": {
+    "source": "/tmp/pm-397-review-425.log",
+    "finding": "accepted-but-disconnected --json=<bool> on native version command",
+    "invocationSession": "issue-425-review-fix-pi-openai-codex-gpt-5.6-sol-high-20260718T102328Z",
+    "model": "openai-codex/gpt-5.6-sol",
+    "thinking": "high",
+    "startingHead": "975cb21b55a32574ef754b8a0a0f0635125fb0e0",
+    "status": "complete_pushed",
+    "implementationCommit": "fe2451cf fix(cli): propagate json boolean assignments",
+    "push": "pushed to origin/refactor/425-version-native-cobra",
+    "red": "go test ./internal/cli/ -run '^TestVersionJSONBooleanAssignmentsStayConnected$' -count=1 failed as expected in 0.568s; all three subtests exposed disconnected output mode",
+    "green": "focused 0.562s; version/router/golden 8.829s; global flags 2.574s; deterministic/help/unknown 0.579s; full internal/cli 196.764s",
+    "verification": "gofmt, go vet ./..., build, binary assignment/config/help/runtime/error checks, docs generation/validation, diff and scope checks passed",
+    "architectureDecision": "parse --json=<bool> in parseGlobal with existing parseGlobalBool and propagate explicit false/true through config flag precedence",
+    "gsdProgrammingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "files": [
+      "internal/cli/parse.go",
+      "internal/cli/cli.go",
+      "internal/cli/version_cli_test.go",
+      ".planning/phases/425-version-native-cobra/PLAN.md",
+      ".planning/phases/425-version-native-cobra/TDD-LEDGER.md",
+      ".planning/phases/425-version-native-cobra/VERIFICATION.md",
+      ".planning/phases/425-version-native-cobra/RUN-STATE.json"
+    ],
+    "risks": [
+      "--json=<bool> is now accepted globally rather than only reaching native pflag; this matches existing parseGlobal boolean assignment conventions",
+      "malformed --json assignments use validation exit 3, consistent with other global boolean assignments"
+    ]
+  },
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_explicit_model_thinking_args",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "verifyWorkPrompt": "passed_7292_bytes",
+    "codeReviewPrompt": "passed_6158_bytes"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "fifth serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later namespace units and user restricted the run to issue 425"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused test-only changes captured exact RED for native version registration before production edits"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native version leaf, positional help alias, legacy-wrapper removal, and handler simplification passed focused router and golden tests"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "full CLI and repository tests, gofmt, vet, build, make verify, built-binary parity, docs/website/golden, dependency, and scope checks passed"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "phase artifacts finalized locally with exact TDD, parity, safety, commit, and verification evidence; no external review or PR permitted"
+    }
+  ],
+  "commits": [
+    "8fa737b8 docs(planning): plan version native cobra slice",
+    "c6541529 test(cli): specify native cobra version contract",
+    "cb8d4e70 refactor(cli): nativize version namespace",
+    "3fcd344c docs(planning): record version cobra verification",
+    "fe2451cf fix(cli): propagate json boolean assignments"
+  ],
+  "push": "all planned, red, implementation, and verification checkpoints pushed to origin/refactor/425-version-native-cobra; final state-recording commit is the handoff HEAD",
+  "pullRequest": "not_created_user_requested_no_new_pr",
+  "reviewRoute": "local_manual_review_only_external_review_prohibited",
+  "risks": [
+    "Cobra/pflag now supplies invalid-argument diagnostic wording; usage category, JSON shape, stdout/stderr placement, and exit 2 are preserved",
+    "completion additions and help-tree deepening remain deferred to planned later phases"
+  ]
+}

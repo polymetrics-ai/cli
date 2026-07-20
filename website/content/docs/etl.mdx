@@ -43,8 +43,8 @@ A **connection** is the named pairing of a connector credential and a storage cr
 
 ```bash
 pm connections create <name> \
-  --source <credential>:<credential-name> \
-  --destination <credential>:<credential-name> \
+  --source <connector>:<credential> \
+  --destination <connector>:<credential> \
   --stream <stream-name> \
   --primary-key <field> \
   --cursor <field> \
@@ -65,7 +65,7 @@ pm connections create <name> \
 ## Running an extraction
 
 ```bash
-pm etl run --connection <name> --stream <stream> [--batch-size <n>] [--json]
+pm etl run --connection <name> --stream <stream> [--batch-size <n>] [--json] [--progress ndjson]
 ```
 
 ### Flags
@@ -77,11 +77,12 @@ pm etl run --connection <name> --stream <stream> [--batch-size <n>] [--json]
 | `--batch-size` | No | Records per write batch. Default is 1000. |
 | `--runtime` | No | After local ETL completes, record the run through optional PostgreSQL, DragonflyDB, and Temporal runtime checks. |
 | `--json` | No | Emit structured JSON to stdout instead of human-readable text. |
+| `--progress ndjson` | No | Stream sanitized progress events to stderr as NDJSON while stdout stays the final human line or single JSON envelope. On failures, stderr may also include the final error diagnostic. |
 
 ### Example
 
 ```bash
-pm etl run --connection my-github --stream issues --json
+pm etl run --connection my-github --stream issues --json --progress ndjson
 ```
 
 For tighter memory bounds on large streams:
@@ -150,7 +151,7 @@ Agents and scripts should branch on exit codes, not parse stderr text.
 |---:|---|---|
 | `0` | Success | Continue. |
 | `2` | Usage error | Fix the command invocation -- do not retry. |
-| `3` | Validation error | Fix the argument values -- do not retry. |
+| `3` | Validation error | Fix argument values, including invalid UI/progress flag values -- do not retry. |
 | `4` | Auth error | Surface to a human to add or update credentials. |
 | `5` | Connector error | Inspect the error detail; may be retryable. |
 | `6` | Runtime unavailable | Start the required dependency (DuckDB, Postgres, etc.). |

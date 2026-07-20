@@ -25,6 +25,94 @@ Deliver connector parity that is:
 
 ## Workstreams
 
+### Active Sibling Milestone: CLI Architecture v2
+
+**Parent issue:** [#397](https://github.com/polymetrics-ai/cli/issues/397)
+**Stage 0:** [#398](https://github.com/polymetrics-ai/cli/issues/398)
+**Parent branch:** `feat/cli-architecture-v2`
+**Parent PR:** draft PR to `main`; merge remains human-gated.
+
+CLI Architecture v2 is a sibling program that preserves the connector-parity roadmap while improving the CLI substrate. Source-of-truth documents:
+
+- `docs/plans/cli-architecture-v2-improvement-plan.md`
+- `docs/prompts/cli-architecture-v2-gsd-execution-prompt.md`
+- `docs/design/tui-ux-design.md`
+- `docs/design/terminal-ui-research-and-design-system.md`
+- `docs/adr/0002-cobra-viper-cli-framework.md`
+- `docs/adr/0003-interactive-tui-layer.md`
+- `docs/adr/0004-opentelemetry-observability.md`
+- `.planning/traces/cli-architecture-v2-issue-backlog.md`
+- `.planning/traces/cli-architecture-v2-pi-prompts.md`
+
+#### CLI Architecture v2 phase roster
+
+| Phase | Issue | Track | Summary | Dependency gate |
+|---:|---|---|---|---|
+| 0 | #398 | planning | Register active GSD milestone, source docs, parent branch, and draft parent PR | none |
+| 1 | #399 | A | Golden transcript safety net + docs-generate-diff test | #398 |
+| 2 | #400 | A | Cobra router shell strangler, byte-identical dispatcher | #399 |
+| 3 | #401 | A | Typed Viper configuration with explicit precedence | #400 |
+| 4 | #402 | A | Migrate scattered environment reads onto config | #401 |
+| 5 | #403 | B | Dependency-free progress event bus and instrumentation | #402 |
+| 6 | #404 | C | Redacted per-run `slog` foundation and Temporal logger bridge | #402 |
+| 7 | #405 | B | stdin+stdout TTY gate, `--plain`/`--no-input`, and `--progress ndjson` | #403 |
+| 8 | #406 | A | Nativize pilot `catalog` namespace | #402 |
+| 9 | #407 | A | Nativize remaining namespaces through serialized grandchildren #421–#437 | #406, #437 |
+| Design gate | #462 | B | Freeze Bubble Tea interaction, responsive layout, chart grammar, design skill, and TUI worker prompts | #405; before #408/#409/#411/#412/#414/#416/#418/#463/#469 |
+| 10 | #408 | B | Flow and ETL run dashboards | #405, #462/D-TUI |
+| 11 | #409 | B | Flow and schedule creation wizards | #408, #462/D-TUI |
+| 12 | #410 | C | Opt-in OpenTelemetry tracing | #402 |
+| 13 | #411 | B | Connector browser, `query tables`, and human-first `pm query` workspace with `pm query grid` alias | #409, #462/D-TUI |
+| 13b | #463 | B | Read-only query charts and reusable terminal dashboard compositions | #411, #462/D-TUI; renderer dependency requires explicit human approval |
+| 14 | #412 | B | Terminal docs viewer | #409, #462/D-TUI |
+| 15 | #413 | A | Connector-aware shell completion | #407 |
+| 16 | #414 | B | Certify batch table and RLM agent dashboards | #407, #408, #462/D-TUI |
+| 17 | #415 | C | OpenTelemetry metrics | #410 |
+| 18 | #416 | B | Human-first `pm reverse` guided session with `pm reverse guide` alias | #409, #462/D-TUI |
+| 18b | #469 | B | TTY-progressive credential and connection setup | #409, #462/D-TUI; child of #416 |
+| 19 | #417 | A | Help tree deepening and generated man pages | #411, #412, #413, #414, #416, #469 |
+| 20 | #418 | B | Accessibility audit and `pm a11y` topic | #411, #412, #414, #416, #469, #462/D-TUI; #463 after #411 when chart slice is included |
+| 21 | #419 | C | Optional OpenTelemetry log bridge, human-skippable | #404, #410 |
+| 22 | #420 | A | Architecture v2 cleanup, docs updates, final verification | #415, #417, #418 |
+
+#### CLI Architecture v2 dependency waves
+
+1. Bootstrap serial chain: #398 → #399 → #400 → #401 → #402.
+2. First parallel fan-out after #402: #403, #404, #406, and #410 may run concurrently in isolated worktrees after write-scope collision checks.
+3. Phase 9 namespace grandchildren #421–#437 are serialized because they share central CLI routing/help files.
+4. TUI design issue #462/D-TUI must integrate before production UI work starts. UX fan-out after
+   #409: #411, #412, #416, and #469 may run in isolated worktrees after write-scope collision
+   checks; #414 waits for #407, #408, and #462/D-TUI. #411 owns the human-first `pm query`
+   workspace and its `pm query grid` alias; #416 owns the human-first `pm reverse` workspace and
+   its `pm reverse guide` alias; #469 owns
+   credential and connection setup. Chart child #463 follows #411 and #462/D-TUI, then joins the
+   #418 accessibility convergence when included. Parent orchestrator must update GitHub blocked-by
+   metadata; worker docs do not mutate issue metadata.
+5. Convergence: #413 after #407; #417 and #418 after their UI/CLI dependencies; #420 last. Phase #419 is optional and requires an explicit human decision if skipped or if dependency budget changes.
+
+#### CLI Architecture v2 gates
+
+- Every behavior-changing issue must use repo-local GSD/TDD, record red → green → refactor evidence, and keep issue-specific plan/TDD/verification artifacts current.
+- CLI-visible work must keep runtime help, bare namespace behavior, `docs/cli/**`, website docs, generated help/manual artifacts, completion metadata, and tests in parity.
+- Dependency additions are allowed only in the phase/version lines approved by ADRs 0002–0004; any deviation is a human gate.
+- TUI workers must load `bubble-tea-tui-design`, cite both design documents, and record
+  stdin+stdout TTY activation, `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`, `--json`,
+  `--plain`, `--no-input`, modal-key, responsive-layout, accessibility/plain fallback, sanitation,
+  cancellation, and JSON/stdout/stderr parity evidence. `--plain`, `--json`, and `--no-input` must
+  bypass Bubble Tea, Huh, and all prompts; sequential prompts are allowed only in explicit
+  accessible mode after the stdin+stdout TTY gate passes and no bypass flag is set. Piped/non-TTY
+  stdin must not be consumed, hang, or be bypassed through `/dev/tty`. `ntcharts/v2` remains
+  unapproved until a dedicated chart child issue #463 receives an explicit human dependency
+  decision.
+- TTY-progressive action commands prompt only for missing fields. Fully specified invocations run
+  directly and complete-but-invalid invocations return ordinary validation errors. Ordinary bare
+  namespaces remain contextual help; eligible dual-TTY bare `pm query` and bare `pm reverse` are
+  the narrow human-first workspace exception, with deterministic help on every bypass path. Agent
+  documentation uses `--json --no-input`; long-running commands may
+  add `--progress ndjson`. Do not introduce a global `--agent-mode`, because that name already has
+  query-specific result-shaping semantics.
+- Parent PR to `main` remains draft until all required sub-issues are integrated, final verification passes, automated review coverage is recorded, and a human is asked for final approval.
+
 ### 0. GSD Runtime and Agent Enablement
 
 **Goal:** Make the official GSD command surface the default for humans, Pi sessions, and reusable agents.

@@ -6,6 +6,9 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	"polymetrics.ai/internal/events"
+	"polymetrics.ai/internal/telemetry"
 )
 
 // ETLResult is the result of a sync run.
@@ -127,10 +130,20 @@ func (e *Engine) appendLedger(ctx context.Context, op, status, errMsg string) {
 }
 
 // Run executes the flow and returns a RunResult.
-func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
-	result := RunResult{
+func (e *Engine) Run(ctx context.Context, opts RunOptions) (result RunResult, err error) {
+	result = RunResult{
 		FlowName: e.Manifest.Name,
 	}
+	ctx, flowSpan := telemetry.StartSpan(ctx, "pm.flow.run", telemetry.StringAttr("pm.flow.name", e.Manifest.Name))
+	defer func() {
+		if err != nil {
+			flowSpan.RecordError(err)
+			flowSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", "failed"))
+		} else {
+			flowSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", result.Status))
+		}
+		flowSpan.End()
+	}()
 
 	// Acquire lease.
 	if err := e.acquireLease(); err != nil {
@@ -167,6 +180,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	}
 
 	flowOp := e.Manifest.Name
+	e.emitFlowEvent(ctx, events.KindStarted, "running", "", StepResult{}, "")
 
 	if opts.DryRun {
 		for _, id := range order {
@@ -179,6 +193,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 		}
 		result.Status = "dry_run"
 		e.appendLedger(ctx, flowOp, "dry_run", "")
+		e.emitFlowEvent(ctx, events.KindCompleted, "dry_run", "", StepResult{}, "")
 		return result, nil
 	}
 
@@ -186,6 +201,11 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	for _, id := range order {
 		s := stepByID[id]
 		sr := StepResult{ID: id, Kind: string(s.Kind)}
+		stepCtx, stepSpan := telemetry.StartSpan(ctx, "pm.flow.step",
+			telemetry.StringAttr("pm.flow.name", e.Manifest.Name),
+			telemetry.StringAttr("pm.flow.step_id", id),
+			telemetry.StringAttr("pm.flow.step_kind", string(s.Kind)),
+		)
 
 		// Check checkpoint.
 		if e.Checkpoint != nil {
@@ -193,12 +213,16 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			if chk == "success" {
 				sr.Status = "skipped"
 				result.Steps = append(result.Steps, sr)
+				e.emitStepEvent(ctx, events.KindSkipped, "skipped", sr, "")
+				stepSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", "skipped"))
+				stepSpan.End()
 				continue
 			}
 		}
 
 		op := e.Manifest.Name + "/" + id
-		e.appendLedger(ctx, op, "running", "")
+		e.appendLedger(stepCtx, op, "running", "")
+		e.emitStepEvent(stepCtx, events.KindStarted, "running", sr, "")
 
 		start := time.Now()
 		var stepErr error
@@ -206,14 +230,14 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 
 		switch s.Kind {
 		case KindSync:
-			etlRes, stepErr = e.App.ETLRun(ctx, s.Connection, s.Streams)
+			etlRes, stepErr = e.App.ETLRun(stepCtx, s.Connection, s.Streams)
 			sr.RecordsRead = etlRes.RecordsRead
 			sr.RecordsWritten = etlRes.RecordsWritten
 		case KindQuery:
-			_, stepErr = e.App.QuerySQL(ctx, s.SQL, 0)
+			_, stepErr = e.App.QuerySQL(stepCtx, s.SQL, 0)
 		case KindRLM:
 			var rlmRes RLMResult
-			rlmRes, stepErr = e.App.RLMRun(ctx, RLMRunRequest{
+			rlmRes, stepErr = e.App.RLMRun(stepCtx, RLMRunRequest{
 				Spec:     s.Spec,
 				Mode:     s.Mode,
 				InTable:  firstTable(s.In),
@@ -230,14 +254,14 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			// Fetch source records from the warehouse for this action step.
 			var sourceRecords []map[string]any
 			if s.ActionCfg != nil && s.ActionCfg.SourceTable != "" {
-				sourceRecords, stepErr = e.App.QuerySQL(ctx, "SELECT * FROM "+s.ActionCfg.SourceTable, 0)
+				sourceRecords, stepErr = e.App.QuerySQL(stepCtx, "SELECT * FROM "+s.ActionCfg.SourceTable, 0)
 				if stepErr != nil {
 					break
 				}
 			}
 			runID := fmt.Sprintf("run-%d", start.UnixNano())
 			var actionRes ActionResult
-			actionRes, stepErr = e.ActionRunner.ExecuteStep(ctx, s, sourceRecords, opts.ApprovalToken, runID)
+			actionRes, stepErr = e.ActionRunner.ExecuteStep(stepCtx, s, sourceRecords, opts.ApprovalToken, runID)
 			sr.RecordsRead = actionRes.RecordsAttempted
 			sr.RecordsWritten = actionRes.RecordsSucceeded
 			sr.RecordsFailed = actionRes.RecordsFailed
@@ -246,19 +270,28 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			stepErr = fmt.Errorf("%w: %s", ErrUnknownStepKind, s.Kind)
 		}
 
-		sr.DurationNs = time.Since(start).Nanoseconds()
+		stepDuration := time.Since(start)
+		sr.DurationNs = stepDuration.Nanoseconds()
+		telemetry.RecordStageDuration(stepCtx, string(s.Kind), stepDuration)
 
 		if stepErr != nil {
 			sr.Status = "failed"
 			sr.Error = stepErr.Error()
-			e.appendLedger(ctx, op, "failed", stepErr.Error())
+			e.appendLedger(stepCtx, op, "failed", stepErr.Error())
+			e.emitStepEvent(stepCtx, events.KindFailed, "failed", sr, stepErr.Error())
 			result.Steps = append(result.Steps, sr)
+			stepSpan.RecordError(stepErr)
+			stepSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", "failed"))
+			stepSpan.End()
 			runErr = fmt.Errorf("%w: step %s: %v", ErrStepFailed, id, stepErr)
 			break
 		}
 
 		sr.Status = "ok"
-		e.appendLedger(ctx, op, "success", "")
+		e.appendLedger(stepCtx, op, "success", "")
+		e.emitStepEvent(stepCtx, events.KindCompleted, "success", sr, "")
+		stepSpan.SetAttributes(telemetry.StringAttr("pm.flow.status", "ok"))
+		stepSpan.End()
 		if e.Checkpoint != nil {
 			_ = e.Checkpoint.Set(e.Manifest.Name, id, "success")
 		}
@@ -268,12 +301,34 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	if runErr != nil {
 		result.Status = "failed"
 		e.appendLedger(ctx, flowOp, "failed", runErr.Error())
+		e.emitFlowEvent(ctx, events.KindFailed, "failed", "", StepResult{}, runErr.Error())
 		return result, runErr
 	}
 
 	result.Status = "ok"
 	e.appendLedger(ctx, flowOp, "success", "")
+	e.emitFlowEvent(ctx, events.KindCompleted, "success", "", StepResult{}, "")
 	return result, nil
+}
+
+func (e *Engine) emitFlowEvent(ctx context.Context, kind events.Kind, status, stepID string, result StepResult, message string) {
+	events.Emit(ctx, events.Event{
+		Kind:    kind,
+		Scope:   events.ScopeFlow,
+		RunID:   e.Manifest.Name,
+		StepID:  stepID,
+		Status:  status,
+		Message: message,
+		Counters: events.Counters{
+			RecordsRead:    int64(result.RecordsRead),
+			RecordsWritten: int64(result.RecordsWritten),
+			RecordsFailed:  int64(result.RecordsFailed),
+		},
+	})
+}
+
+func (e *Engine) emitStepEvent(ctx context.Context, kind events.Kind, status string, result StepResult, message string) {
+	e.emitFlowEvent(ctx, kind, status, result.ID, result, message)
 }
 
 func firstTable(tables []string) string {

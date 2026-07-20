@@ -1,0 +1,865 @@
+{
+  "phase": "397-cli-architecture-v2-orchestration",
+  "parentIssue": 397,
+  "parentBranch": "feat/cli-architecture-v2",
+  "parentPR": 438,
+  "status": "worker_in_progress",
+  "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "currentHead": "74c1766de7bc369905a1ea3e25e3bd983e3b3ac6",
+  "verificationPassed": false,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase397": "passed_prompt_generated_10688_bytes",
+    "programmingLoop": "blocked_unknown_command",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrator": {
+    "model": "openai-codex/gpt-5.6-sol",
+    "thinking": "xhigh",
+    "session": "4e6d3ae8-19fc-4c5a-8135-a3e6e4fa1cfc",
+    "runtime": "pi",
+    "mode": "active_owner"
+  },
+  "modelPolicy": {
+    "planningReviewVerification": {
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh"
+    },
+    "implementationCorrection": {
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "high"
+    }
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "continuation_recon",
+      "timestamp": "2026-07-18T08:39:06Z",
+      "decision": "read_only_spawned",
+      "issues": [
+        424,
+        415
+      ],
+      "reason": "Independent Sol/xhigh exact-head reviewers reconciled existing PR #460 and #461 heads, evidence, focused checks, and actionable gaps before integration."
+    },
+    {
+      "cycle": "continuation_plan",
+      "timestamp": "2026-07-18T08:39:06Z",
+      "decision": "local_critical_path",
+      "issues": [
+        397
+      ],
+      "reason": "Parent orchestrator owns shared plan, TDD ledger, verification checklist, run state, dependency queue, and promotion policy."
+    },
+    {
+      "cycle": "existing_child_corrections",
+      "timestamp": "2026-07-18T09:47:56Z",
+      "decision": "spawned",
+      "issues": [
+        424,
+        415
+      ],
+      "reason": "Isolated Sol/high workers corrected exact-head review findings and pushed the existing child branches; no new child PRs were created."
+    },
+    {
+      "cycle": "existing_child_rereview",
+      "timestamp": "2026-07-18T09:47:56Z",
+      "decision": "read_only_spawned",
+      "issues": [
+        424,
+        415
+      ],
+      "reason": "Independent Sol/xhigh exact-head re-reviews returned clean and remote CI passed."
+    },
+    {
+      "cycle": "existing_child_promotion",
+      "timestamp": "2026-07-18T09:47:56Z",
+      "decision": "spawned",
+      "issues": [
+        424,
+        415
+      ],
+      "reason": "#424 merged without conflicts; isolated Sol/high integration worker resolved the sole #415 generated website-data conflict by regeneration. Independent Sol/xhigh combined review was clean."
+    },
+    {
+      "cycle": "unit_425_execute_review_promote",
+      "timestamp": "2026-07-18T10:41:06Z",
+      "decision": "spawned",
+      "issues": [
+        425
+      ],
+      "reason": "Sol/high implementation and correction workers plus independent Sol/xhigh review completed the version namespace; exact reviewed head was promoted without conflict."
+    },
+    {
+      "cycle": "unit_426_execute_review_promote",
+      "timestamp": "2026-07-18T11:22:31Z",
+      "decision": "spawned",
+      "issues": [
+        426
+      ],
+      "reason": "Sol/high worker and independent Sol/xhigh exact-head review completed the skills namespace; exact reviewed head was promoted without conflict."
+    },
+    {
+      "cycle": "unit_427_execute_review_promote",
+      "timestamp": "2026-07-18T12:46:31Z",
+      "decision": "spawned",
+      "issues": [
+        427
+      ],
+      "reason": "Sol/high implementation/correction workers plus independent Sol/xhigh re-review completed docs nativization with legacy parsing compatibility; exact head promoted."
+    },
+    {
+      "cycle": "unit_428_execute_review_promote",
+      "timestamp": "2026-07-18T14:29:59Z",
+      "decision": "spawned",
+      "issues": [
+        428
+      ],
+      "reason": "Sol/high implementation and two correction cycles closed effect-dispatch bypasses; independent Sol/xhigh security re-review was clean and exact head promoted."
+    },
+    {
+      "cycle": "unit_429_execute_review_promote",
+      "timestamp": "2026-07-18T22:50:26Z",
+      "decision": "spawned",
+      "issues": [
+        429
+      ],
+      "reason": "Sol/high implementation and bounded correction sessions addressed parser, compatibility, state-evidence, and local-write findings; final Sol/xhigh exact-head review was clean and bounded integration tests passed."
+    },
+    {
+      "cycle": "unit_430_execute_review_promote",
+      "timestamp": "2026-07-19T01:01:33Z",
+      "decision": "spawned",
+      "issues": [
+        430
+      ],
+      "reason": "Sol/high implementation/correction and independent Sol/xhigh re-review completed ETL nativization; exact reviewed head promoted and parent race checks passed."
+    },
+    {
+      "cycle": "unit_431_execute_review_promote",
+      "timestamp": "2026-07-19T03:40:11Z",
+      "decision": "spawned",
+      "issues": [
+        431
+      ],
+      "reason": "Sol/high implementation/correction and independent Sol/xhigh review completed reverse nativization; actual CLI/app/safety race gates passed after correcting one nonexistent package path in the integration command."
+    },
+    {
+      "cycle": "unit_432_execute_review_promote",
+      "timestamp": "2026-07-19T04:44:27Z",
+      "decision": "spawned",
+      "issues": [
+        432
+      ],
+      "reason": "Sol/high implementation and independent Sol/xhigh exact-head review completed flow nativization; exact head promoted and parent race checks passed."
+    },
+    {
+      "cycle": "unit_433_execute_review_promote",
+      "timestamp": "2026-07-19T05:33:11Z",
+      "decision": "spawned",
+      "issues": [
+        433
+      ],
+      "reason": "Sol/high implementation and independent Sol/xhigh review completed schedule nativization with fake-only external-effect seams; exact head promoted and parent race checks passed."
+    },
+    {
+      "cycle": "unit_434_execute_review_promote",
+      "timestamp": "2026-07-19T06:40:21Z",
+      "decision": "spawned",
+      "issues": [
+        434
+      ],
+      "reason": "Sol/high implementation/correction and independent Sol/xhigh review completed RLM nativization with mode-gated fake seams; exact head promoted and parent race checks passed."
+    },
+    {
+      "cycle": "unit_435_execute_review_promote",
+      "timestamp": "2026-07-19T07:45:07Z",
+      "decision": "spawned",
+      "issues": [
+        435
+      ],
+      "reason": "Sol/high implementation/evidence correction and independent Sol/xhigh review completed hidden worker nativization with fake-only status/serve seams; exact head promoted."
+    },
+    {
+      "cycle": "unit_436_execute_review_promote",
+      "timestamp": "2026-07-19T09:48:26Z",
+      "decision": "spawned",
+      "issues": [
+        436
+      ],
+      "reason": "Sol/high implementation/correction and independent Sol/xhigh review completed hidden extract nativization and rooted RLM warehouse scope; exact head promoted."
+    },
+    {
+      "cycle": "pi_live_recon_20260720",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "read_only_spawned",
+      "issues": [
+        397,
+        437,
+        462
+      ],
+      "reason": "Project pm-scout reconciled parent files and ready candidates. Coordinator also confirmed GitHub issue, PR, branch, worktree, dependency, CI, and review state."
+    },
+    {
+      "cycle": "unit_437_continue_open_review",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "spawned",
+      "issues": [
+        437
+      ],
+      "reason": "Project pm-gsd-worker ran in isolated worktree wt-437-connectors-certify-native-cobra, reconciled parent, opened PR #466, and completed accepted test-first correction cycles. Actual runtime was openai-codex/gpt-5.5:xhigh because project agent config does not expose a per-call high override."
+    },
+    {
+      "cycle": "unit_437_local_review_loops",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "read_only_spawned",
+      "issues": [
+        437
+      ],
+      "reason": "Project pm-reviewer exact-file sidecars found safety/correctness gaps; spawned worker corrections captured fresh RED and passed full local gates. Final runtime/code review was clean. Discovery-based review first hit not_spawned_runtime_capability_missing because parent tools omitted grep/find/ls; exact-file read fallback succeeded."
+    },
+    {
+      "cycle": "unit_462_integrated_review_audit",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "read_only_spawned",
+      "issues": [
+        462
+      ],
+      "reason": "Project pm-reviewer audited integrated PR #465 and found five accepted design/safety corrections. Local sidecar does not satisfy external coverage."
+    },
+    {
+      "cycle": "current_queue_20260720",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "not_spawned_review_blocked",
+      "issues": [
+        437,
+        407,
+        408,
+        413
+      ],
+      "reason": "PR #466 current-head CI and human/parent fallback are pending; #407/#413 depend on #437 integration; #408 is blocked by unresolved #462 corrections and human review coverage. #462 corrections are the next isolated worker-ready slice."
+    },
+    {
+      "cycle": "unit_462_correction_delivery",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "spawned",
+      "issues": [
+        462
+      ],
+      "reason": "Project pm-gsd-worker delivered accepted design/safety corrections in isolated worktrees. PR #467 was merged externally at its earlier head; post-merge TTY-gate corrections were recovered onto clean follow-up PR #468."
+    },
+    {
+      "cycle": "unit_462_review_loops",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "read_only_spawned",
+      "issues": [
+        462
+      ],
+      "reason": "Project pm-reviewer exact-file sidecars found stdin/stdout TTY, prompt bypass, fallback test-matrix, and evidence-state gaps. Accepted corrections were applied; final runtime/design review was clean aside from evidence-only closure, which was fixed."
+    },
+    {
+      "cycle": "unit_437_ci_flake_fix",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "spawned",
+      "issues": [
+        437
+      ],
+      "reason": "PR #466 remote verify exposed a wall-clock concurrency test flake. Isolated worker replaced elapsed-time timing with deterministic concurrency evidence, reran full gates, and current GitHub checks pass."
+    },
+    {
+      "cycle": "github_dependency_metadata",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "local_critical_path",
+      "issues": [
+        408,
+        409,
+        411,
+        412,
+        414,
+        416,
+        418,
+        463
+      ],
+      "reason": "Parent orchestrator added direct GitHub blocked-by #462 edges to all affected TUI issues and verified each edge."
+    },
+    {
+      "cycle": "review_wait_20260720T050556Z",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "not_spawned_review_blocked",
+      "issues": [
+        437,
+        462,
+        407,
+        408,
+        413
+      ],
+      "reason": "PR #466 is green but lacks human/parent fallback review; PR #468 has local closure but CI/human review is pending. Downstream #407/#408/#413 remain blocked. #419 remains a separate human dependency-decision gate."
+    },
+    {
+      "cycle": "review_wait_after_ci_20260720T052105Z",
+      "timestamp": "2026-07-20T05:21:05Z",
+      "decision": "not_spawned_review_blocked",
+      "issues": [
+        437,
+        462,
+        407,
+        408,
+        413
+      ],
+      "reason": "PR #466 and PR #468 current-head checks are green. Both lack required human/parent fallback review because Claude is disabled and Copilot quota is exhausted; downstream work remains blocked."
+    },
+    {
+      "cycle": "live_reconcile_20260720T192858Z",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "read_only_spawned",
+      "issues": [
+        397,
+        437,
+        408
+      ],
+      "reason": "Project pm-scout/pm-reviewer sidecars audited stale parent artifacts, Phase 437 untracked intake, and #408/#437 write-scope collision. Coordinator reconciled GitHub live state: PR #467/#468 merged, PR #466 green/no reviews, Claude disabled, Copilot unavailable."
+    },
+    {
+      "cycle": "phase437_pending_intake_preservation",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "local_critical_path",
+      "issues": [
+        437,
+        411,
+        417
+      ],
+      "reason": "Copied untracked Phase 437 pending-request/research/debug intake from the #466 worktree to .planning/traces/phase-437-pending-intake/ without editing PR #466, implementing requests, or updating referenced GitHub issues."
+    },
+    {
+      "cycle": "parent_main_sync_safe_checkpoint",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "local_critical_path",
+      "issues": [
+        397
+      ],
+      "reason": "Merged origin/main into feat/cli-architecture-v2 with an ordinary no-ff merge commit 19fe02ec after a clean merge-tree dry run; no force push and no parent PR merge to main."
+    },
+    {
+      "cycle": "ready_queue_rebuild_20260720T192858Z",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "not_spawned_write_scope_collision",
+      "issues": [
+        408
+      ],
+      "reason": "#408 source dependencies are satisfied after #468 integration, but it likely collides with open #437/PR #466 central CLI/help/golden/docs/website files; defer mutating worker until #466 is reviewed/integrated or a disjoint slice is proven."
+    },
+    {
+      "cycle": "review_wait_pr466_20260720T192858Z",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "not_spawned_review_blocked",
+      "issues": [
+        437
+      ],
+      "reason": "PR #466 is open at 26f98a72 with all current checks green but no recorded human/Claude/Copilot review; integration is blocked on human or enabled automation review coverage."
+    },
+    {
+      "cycle": "downstream_dependency_wait_20260720T192858Z",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "not_spawned_dependency_blocked",
+      "issues": [
+        407,
+        413,
+        409,
+        416,
+        469
+      ],
+      "reason": "#407/#413 depend on #437 integration; #409 depends on #408; #416/#469 depend on #409. #462 design gate is integrated."
+    },
+    {
+      "cycle": "optional_dependency_gate_20260720T192858Z",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "not_spawned_human_gate",
+      "issues": [
+        419
+      ],
+      "reason": "#419 requires explicit optional beta dependency inclusion or a recorded skip decision before implementation."
+    },
+    {
+      "cycle": "pr466_preintegration_gate_20260720T200635Z",
+      "timestamp": "2026-07-20T20:06:35Z",
+      "decision": "local_critical_path",
+      "issues": [
+        437
+      ],
+      "reason": "Verified PR #466 head unchanged at 26f98a72, required checks green, and active review threads empty; recorded explicit human fallback review coverage."
+    },
+    {
+      "cycle": "unit_437_human_review_integration",
+      "timestamp": "2026-07-20T20:06:35Z",
+      "decision": "local_critical_path",
+      "issues": [
+        437,
+        407
+      ],
+      "reason": "Integrated PR #466 into feat/cli-architecture-v2 only via local no-ff merge commit 1008f75f after human fallback review; parent PR #438 remains draft/unmerged."
+    },
+    {
+      "cycle": "post_437_ready_queue_rebuild",
+      "timestamp": "2026-07-20T20:06:35Z",
+      "decision": "read_only_spawned",
+      "issues": [
+        408,
+        413
+      ],
+      "reason": "Project pm-scout and pm-reviewer sidecars mapped #408 and #413 write scopes after #437 integration; recommendation is spawn #408 and defer #413 for CLI/help/docs/golden collision."
+    },
+    {
+      "cycle": "post_437_queue_decision_408_413",
+      "timestamp": "2026-07-20T20:06:35Z",
+      "decision": "not_spawned_write_scope_collision",
+      "issues": [
+        413
+      ],
+      "reason": "#413 is dependency-ready but collides with #408 on command tree, completion/help/docs/golden/website surfaces; serialize after #408."
+    },
+    {
+      "cycle": "spawn_408_flow_etl_dashboards",
+      "timestamp": "2026-07-20T20:15:00Z",
+      "decision": "spawned",
+      "issues": [
+        408
+      ],
+      "reason": "Created isolated worktree /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards on branch feat/408-flow-etl-dashboards from parent head 5b603788 and dispatched pm-gsd-worker for #408. #413 deferred for write-scope collision; #419 remains human-gated."
+    },
+    {
+      "cycle": "pi_56_sol_routing_and_shepherd_hardening",
+      "timestamp": "2026-07-20T21:23:21Z",
+      "decision": "local_critical_path",
+      "issues": [
+        397
+      ],
+      "reason": "Routed Pi implementation workers to openai-codex/gpt-5.6-sol high and all planning, orchestration, review, and verification roles to openai-codex/gpt-5.6-sol xhigh; raised safe parallel capacity to four; hardened Shepherd against stale or failed-process validator verdicts and premature terminal acceptance; full make verify passed. Existing #408 worktree state was preserved and no duplicate worker was spawned."
+    },
+    {
+      "cycle": "operator_defer_419_20260721",
+      "timestamp": "2026-07-20T21:55:12Z",
+      "decision": "local_critical_path",
+      "issues": [
+        419,
+        397
+      ],
+      "reason": "Human explicitly chose SKIP/DEFER for the optional OpenTelemetry beta log bridge from parent campaign #397. No #419 worker or beta dependency is authorized; this grants no approval for any other dependency."
+    },
+    {
+      "cycle": "resume_408_execute_20260721",
+      "timestamp": "2026-07-20T23:17:08Z",
+      "decision": "spawned",
+      "issues": [
+        408
+      ],
+      "reason": "After confirming no live process owned the preserved cwd, exactly one Sol/high pm-gsd-worker adopted the existing plan commit plus 19 dirty entries and pushed clean synchronized head ff7be3bd. Full-race timeouts and phase-evidence defects require a separate correction/verification stage; #413 remains collision-deferred."
+    }
+  ],
+  "units": [
+    {
+      "issue": 424,
+      "branch": "refactor/424-runtime-native-cobra",
+      "startingHead": "8d696cd4c27fad6840e905917e7658e785fa5436",
+      "endingHead": "323d4a91b465cdee5fdb94ea338f4272b76de781",
+      "parentIntegrationHead": "1f5bd80f77ab267901be730f855728cf00120874",
+      "status": "provisionally_integrated",
+      "implementationSession": "7050f706-72d2-47df-ac13-0b08979cc1ae",
+      "reviewSession": "05a92a52-3893-4eb9-855e-1a5b001ab64e"
+    },
+    {
+      "issue": 415,
+      "branch": "feat/415-otel-metrics",
+      "startingHead": "c6138292cfcc7205f7968a54b57a65f933a3c1fa",
+      "endingHead": "6cf5c48f1b2cf218ed35c15ba77096db89969575",
+      "parentIntegrationHead": "1f5bd80f77ab267901be730f855728cf00120874",
+      "status": "provisionally_integrated",
+      "implementationSession": "324e9db6-21d8-4027-b4cb-3cc0040774af",
+      "reviewSession": "933b6246-2377-4c5d-8d9d-9e9af2ce159d",
+      "integrationSession": "2a30f9bc-ba69-4fa4-9185-647e20d5bc96",
+      "integrationReviewSession": "4ec8f305-9f7f-40c4-97c2-68c2e01c0d36"
+    },
+    {
+      "issue": 425,
+      "branch": "refactor/425-version-native-cobra",
+      "startingHead": "479a62f930e7c8a9a51ba0b3deb088bf3aad3ecc",
+      "endingHead": "784153c7ed7cbb94360601b84c40c821eec21823",
+      "parentIntegrationHead": "0c57ec396f12e9b0233af8899cc7ff8acc9eca7d",
+      "status": "provisionally_integrated",
+      "implementationSession": "e3c96736-08cc-4467-9fac-5394d2581eb1",
+      "correctionSession": "7ceb8ecd-6c7f-406e-acdb-45f97ad88368",
+      "reviewSession": "905f2b84-2325-451d-bda9-ec4b08983307"
+    },
+    {
+      "issue": 426,
+      "branch": "refactor/426-skills-native-cobra",
+      "startingHead": "54bfcbab5a997c81676b286fe78de00a109f5fba",
+      "endingHead": "fe2a937b5809ee53518549d6148d41879b6a8c2d",
+      "parentIntegrationHead": "bb12f265db4ef2023f98b05080cac7a36dab8e54",
+      "status": "provisionally_integrated",
+      "implementationSession": "e83aba7c-6961-4c70-abcb-9dcfaa2960e1",
+      "reviewSession": "60adcff2-041f-40fa-9ec9-2d6ae6837a3e"
+    },
+    {
+      "issue": 427,
+      "branch": "refactor/427-docs-native-cobra",
+      "startingHead": "ab847da28ebf78e5732ac1edcde8e39f92dc2656",
+      "endingHead": "aacb15361b9f42a381442f79b9ca50e56b482205",
+      "parentIntegrationHead": "e68ccdf7d24066729adb95388446706ccfe2597b",
+      "status": "provisionally_integrated",
+      "implementationSession": "c791a5f6-231f-44b8-a2f1-e4e65e3b2dba",
+      "correctionSession": "808093c7-0289-4a61-933f-7273ee9998f2",
+      "reviewSession": "ef326655-bbd1-4c08-92c6-d160ef91b536"
+    },
+    {
+      "issue": 428,
+      "branch": "refactor/428-agent-native-cobra",
+      "startingHead": "235233f7cfde4a24612be6b0f95fb37a412d388a",
+      "endingHead": "924ebfe016143504502ffeebcee7002f6d520c6f",
+      "parentIntegrationHead": "569536d15e9d390dd9b3bda5a1dbd86e719846f6",
+      "status": "provisionally_integrated",
+      "implementationSession": "0f75ba03-8d80-4af6-b2d8-5d262e896b54",
+      "correctionSessions": [
+        "56018ad9-a6f6-486c-8b95-3fd6206d3945",
+        "d253f76f-872f-4c54-af8c-8d8b12de7ad2"
+      ],
+      "reviewSession": "e18a80dd-5de2-4d3d-8458-1f99f0f98397"
+    },
+    {
+      "issue": 429,
+      "branch": "refactor/429-credentials-native-cobra",
+      "startingHead": "0f1ec1e89cdae761e9da06ab9906fcc641b38e0a",
+      "endingHead": "9e966e85868aedb0ddfd79ca0de8556ed78345c5",
+      "parentIntegrationHead": "a490eeba1d32619484b59f8a72948dfc624b99de",
+      "status": "provisionally_integrated",
+      "implementationSession": "b20c6483-c828-495a-93aa-5f393f0c1712",
+      "correctionSessions": [
+        "cee2448f-c3ab-424e-aa83-3a96445b6e6f",
+        "fb3e3022-c664-4f17-8819-c1010dbbc269",
+        "4780796d-1884-40d2-a6e1-d43d71a4b987",
+        "56efdaf6-aa8b-42e9-a0cd-367b49acfaa0",
+        "26a5e339-b410-4253-848b-6a6b2e943f71",
+        "c2ac3e52-0ba2-4c77-9470-3f04f2afb72f",
+        "863c9a7c-f3d1-4013-b283-cc301922e266",
+        "f540a391-bd9b-41d5-876f-914e5cb6c353"
+      ],
+      "reviewSession": "1b30b51b-73a3-4c2d-90da-bf5161d36a8f"
+    },
+    {
+      "issue": 430,
+      "branch": "refactor/430-etl-native-cobra",
+      "startingHead": "6c94754c58185df5aac53bd97587603c3154b1d5",
+      "endingHead": "ad0f23bbe6b9fc71713d651d0b25ff6c42d43a06",
+      "parentIntegrationHead": "4a9fa0fb0e3b72ee2c5e864c1778c7acf8da06c5",
+      "status": "provisionally_integrated",
+      "implementationSession": "8d48e651-ff7a-42af-aa60-57551df1dcae",
+      "correctionSession": "9751766b-3d79-4f36-9b93-4e39ec165fa8",
+      "reviewSession": "6049b205-ccea-4d8d-ba25-3046a865c19c"
+    },
+    {
+      "issue": 431,
+      "branch": "refactor/431-reverse-native-cobra",
+      "startingHead": "0b03361e3ec5082d54c416a31715851f71e845fa",
+      "endingHead": "d628fce2916c390f51c8e7e519d481c2cc9f51fe",
+      "parentIntegrationHead": "573d6222e1cb98f8cdb980a571e6925310855e59",
+      "status": "provisionally_integrated",
+      "implementationSession": "1e9e3b7f-1228-4d2c-8bc4-c3babdb82bf2",
+      "correctionSession": "ae7bde80-fd8b-4595-a969-79a72c2d3d29",
+      "reviewSession": "6ea302fa-ce00-42f0-a7e5-ed4b2282bce5"
+    },
+    {
+      "issue": 432,
+      "branch": "refactor/432-flow-native-cobra",
+      "startingHead": "ec12c1729e0aaf233a853eff5c6291885f910b15",
+      "endingHead": "b8377b7b200e50ccb5ec164670fed4f78a5c486a",
+      "parentIntegrationHead": "ad6e43313376cfc2c4e4ed98079c14931b932b9a",
+      "status": "provisionally_integrated",
+      "implementationSession": "f6cbbbfa-f48f-4abb-a0f1-91f1c0f61e48",
+      "reviewSession": "9dbfa83b-6355-4e9c-9a68-5ae39a7aabe9"
+    },
+    {
+      "issue": 433,
+      "branch": "refactor/433-schedule-native-cobra",
+      "startingHead": "ab1c79eede67fa87e1c6b808d6ddba0b27fcf00d",
+      "endingHead": "701569ee985f7c87f011d8a1cfab39afcc3cc8c2",
+      "parentIntegrationHead": "990b8f603d0fa2e1e8876bbe52c0cae8512a84df",
+      "status": "provisionally_integrated",
+      "implementationSession": "e1009583-e898-4de6-b4dd-0b0ef1e2b5cd",
+      "reviewSession": "1a49a57e-51dc-4abc-ae4b-fda7152a416d"
+    },
+    {
+      "issue": 434,
+      "branch": "refactor/434-rlm-native-cobra",
+      "startingHead": "2ac457a163cbd7bc9a3708da88b03d375ec5e952",
+      "endingHead": "8177e342ad03b5fbf3750f2c0ecf9aa11f695f92",
+      "parentIntegrationHead": "96680756cf6d1faba13ed211974bc26422e5db75",
+      "status": "provisionally_integrated",
+      "implementationSession": "11225914-01eb-4d05-a4f2-907178102e93",
+      "correctionSession": "2fcfbbc6-810a-448e-ab85-be2c5e81be5b",
+      "reviewSession": "65f48296-b24a-498a-8b25-6c4a3143d9c9"
+    },
+    {
+      "issue": 435,
+      "branch": "refactor/435-worker-native-cobra",
+      "startingHead": "14c02d295065c3bf33c65eaac5f8d36642798f81",
+      "endingHead": "f712e696e075792492397ab1d556d1dfceadba04",
+      "parentIntegrationHead": "afd765e9e9b53fa3250c2ba05686af81d74d2f94",
+      "status": "provisionally_integrated",
+      "implementationSession": "72824844-2597-4d86-a33f-27ba2c68256c",
+      "correctionSession": "c11cab42-76e8-4d6c-a06b-ee692085cab0",
+      "reviewSession": "d549e7cf-50bc-4d9d-94ff-04734f048d3b"
+    },
+    {
+      "issue": 436,
+      "branch": "refactor/436-extract-native-cobra",
+      "startingHead": "eec03373dcc581c7f5c3331fe63287519b317f53",
+      "endingHead": "7da245b8da2b8590766d99ca9e967d366e50cfcc",
+      "parentIntegrationHead": "b28e67fb2432f48b6909a2103a0b3e3fa4e9f461",
+      "status": "provisionally_integrated",
+      "implementationSession": "cbcc7097-7302-4dd3-930a-104ffd5ae2e9",
+      "correctionSession": "5344f0f4-1026-43a7-b114-518dce07d7fd",
+      "reviewSession": "19fd2452-9b9b-4479-bbba-2bf9f13a1bbb"
+    },
+    {
+      "issue": 462,
+      "branch": "docs/462-terminal-ui-tty-gate-follow-up",
+      "originalHead": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
+      "firstCorrectionHead": "e8286ea83a76ac2c6f6257c6e2d40fd21af81640",
+      "parentIntegrationHead": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
+      "pullRequests": [
+        465,
+        467,
+        468
+      ],
+      "pullRequestHead": "a4ca9813d44c79bbbc0a8c499b74253f38265aa8",
+      "status": "provisionally_integrated",
+      "verification": "pr_467_ci_green_pr_468_ci_green_parent_pr_438_ci_green_at_c3d8a757_before_main_sync",
+      "automatedReview": {
+        "primaryRoute": "blocked",
+        "status": "pending",
+        "headSha": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
+        "reviewedRange": "PR #467/#468 local sidecars only; no Claude/Copilot/human review record",
+        "coverageRoute": "parent_pr_fallback",
+        "fallbackRoute": "human",
+        "dispositionSummary": "accepted design and TTY-gate findings corrected and merged; external review coverage still absent",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/468"
+      }
+    },
+    {
+      "issue": 437,
+      "branch": "refactor/437-connectors-certify-native-cobra",
+      "startingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
+      "pullRequestHead": "26f98a72419010b961b5b8378ef4a695b0c0a06f",
+      "pullRequest": 466,
+      "status": "provisionally_integrated",
+      "worker": "pm-gsd-worker",
+      "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-437-connectors-certify-native-cobra",
+      "verification": "PR #466 head unchanged; required checks green; unresolved review threads empty; post-merge git diff --check, focused internal/cli native connectors/goldens, and certify concurrency test passed.",
+      "automatedReview": {
+        "primaryRoute": "human",
+        "status": "clean",
+        "headSha": "26f98a72419010b961b5b8378ef4a695b0c0a06f",
+        "reviewedRange": "PR #466 exact head 26f98a72419010b961b5b8378ef4a695b0c0a06f",
+        "coverageRoute": "sub_pr",
+        "fallbackRoute": "none",
+        "dispositionSummary": "Human coordinator explicitly reviewed/tested and approved exact head for integration; no unresolved review findings.",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"
+      },
+      "parentIntegrationHead": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f"
+    },
+    {
+      "issue": 407,
+      "branch": "feat/cli-architecture-v2",
+      "status": "provisionally_integrated",
+      "parentIntegrationHead": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f",
+      "verification": "All Phase 9 namespace grandchildren #421-#437 are provisionally integrated; #437 merged via PR #466 at parent merge 1008f75f.",
+      "automatedReview": {
+        "primaryRoute": "human",
+        "status": "clean",
+        "headSha": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f",
+        "reviewedRange": "#421-#437 provisionally integrated range; #437 covered by human fallback at exact head",
+        "coverageRoute": "parent_pr_fallback",
+        "fallbackRoute": "human",
+        "dispositionSummary": "Umbrella dependency state complete on parent branch; final parent/main review still pending.",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"
+      }
+    }
+  ],
+  "readyQueue": [
+    {
+      "issue": 408,
+      "status": "correction_pending",
+      "dependencies": [
+        405,
+        462
+      ],
+      "writeScope": "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity",
+      "decision": "spawned",
+      "reason": "Exactly one Sol/high worker resumed the preserved cwd and pushed ff7be3bd. EXECUTE implementation is complete; stale/contradictory phase evidence, unresolved full-race timeouts, and the recorded make-verify reverse-smoke boundary deviation require a separate correction/verification stage before SUB_PR_OPEN.",
+      "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards",
+      "branch": "feat/408-flow-etl-dashboards",
+      "head": "ff7be3bd8509684257f7d7a73e6fb9735f4baf80"
+    },
+    {
+      "issue": 413,
+      "status": "worker_ready_deferred",
+      "dependencies": [
+        407
+      ],
+      "writeScope": "connector-aware shell completion, command callbacks, docs/tests",
+      "decision": "not_spawned_write_scope_collision",
+      "reason": "Collides with #408 central command tree/help/docs/goldens/website surfaces."
+    },
+    {
+      "issue": 409,
+      "status": "blocked",
+      "dependencies": [
+        408
+      ],
+      "writeScope": "flow and schedule creation wizards",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by #408."
+    },
+    {
+      "issue": 414,
+      "status": "blocked",
+      "dependencies": [
+        407,
+        408
+      ],
+      "writeScope": "certify and RLM dashboards",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "#407 satisfied; still blocked by #408."
+    },
+    {
+      "issue": 411,
+      "status": "blocked",
+      "dependencies": [
+        409
+      ],
+      "writeScope": "human-first query workspace, query grid, connector browser",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by #409."
+    },
+    {
+      "issue": 412,
+      "status": "blocked",
+      "dependencies": [
+        409
+      ],
+      "writeScope": "terminal docs viewer",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by #409."
+    },
+    {
+      "issue": 416,
+      "status": "blocked",
+      "dependencies": [
+        409
+      ],
+      "writeScope": "human-first reverse workspace and reverse guide alias",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by #409."
+    },
+    {
+      "issue": 469,
+      "status": "blocked",
+      "dependencies": [
+        409
+      ],
+      "writeScope": "TTY-progressive credential and connection setup",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by #409."
+    },
+    {
+      "issue": 417,
+      "status": "blocked",
+      "dependencies": [
+        411,
+        412,
+        413,
+        414,
+        416,
+        469
+      ],
+      "writeScope": "help tree, generated man pages, website/docs/golden parity",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by downstream UI/completion issues."
+    },
+    {
+      "issue": 418,
+      "status": "blocked",
+      "dependencies": [
+        411,
+        412,
+        414,
+        416,
+        463,
+        469
+      ],
+      "writeScope": "accessibility audit and a11y topic",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by downstream UI/chart/setup issues."
+    },
+    {
+      "issue": 419,
+      "status": "complete",
+      "dependencies": [
+        404,
+        410
+      ],
+      "writeScope": "optional OTel log bridge",
+      "decision": "not_spawned_human_gate",
+      "reason": "Human explicitly chose SKIP/DEFER from parent campaign #397; no worker or beta dependency is authorized, and no other dependency is approved.",
+      "deferred": true
+    },
+    {
+      "issue": 420,
+      "status": "blocked",
+      "dependencies": [
+        415,
+        417,
+        418
+      ],
+      "writeScope": "architecture cleanup and final verification",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by #417/#418 and #419 decision record."
+    }
+  ],
+  "humanGates": [
+    "parent PR merge to main",
+    "new unapproved dependencies",
+    "auth scope changes",
+    "secrets or credential values",
+    "credentialed connector checks",
+    "destructive or production actions",
+    "quality gate reductions",
+    "reverse ETL execution outside plan-preview-approval-execute"
+  ],
+  "updatedAt": "2026-07-20T23:17:08Z",
+  "mainSync": {
+    "baseBeforeSync": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
+    "originMain": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
+    "mergeCommit": "19fe02ec900aba548a997165014624197b451a33",
+    "strategy": "git merge --no-ff origin/main",
+    "forcePush": "not_used",
+    "status": "local_merge_complete_state_commit_push_pending_at_artifact_time"
+  },
+  "automatedReviewAvailability": {
+    "claudeWorkflow": "disabled_manually",
+    "claudeWorkflowId": 310534134,
+    "latestClaudeRuns": "last runs from 2026-07-11 only; no completed review for PR #438/#466/#468 current ranges",
+    "copilotProbe": "unavailable: gh collaborator probe for @copilot returned HTTP 404; no backup review requested",
+    "pr466Reviews": "none",
+    "pr438Reviews": "none",
+    "reviewDecision": "blocked_human_or_enabled_automation_required"
+  },
+  "lastIntegration": {
+    "issue": 437,
+    "pr": 466,
+    "head": "26f98a72419010b961b5b8378ef4a695b0c0a06f",
+    "mergeCommit": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f",
+    "route": "local_merge_to_parent_after_human_fallback_review",
+    "verification": "PR head unchanged; check rollup green; unresolved review threads empty; focused local post-merge checks passed",
+    "humanReviewUrl": "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"
+  }
+}

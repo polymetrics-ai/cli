@@ -8,9 +8,11 @@
 package certify
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -124,15 +126,20 @@ func ExitCodeFor(rep Report) int {
 // .polymetrics/certifications/<connector>.json (certification design §A).
 // Budget remains empty/absent until a later certify phase (DATA-MODEL.md
 // §6).
+const ReportSchemaVersion = 1
+
 type Report struct {
-	Kind          string    `json:"kind"`
-	SchemaVersion int       `json:"schema_version"`
-	Connector     string    `json:"connector"`
-	PMVersion     string    `json:"pm_version"`
-	StartedAt     time.Time `json:"started_at"`
-	CompletedAt   time.Time `json:"completed_at"`
-	Mode          string    `json:"mode"`
-	Passed        bool      `json:"passed"`
+	Kind                        string    `json:"kind"`
+	SchemaVersion               int       `json:"schema_version"`
+	Connector                   string    `json:"connector"`
+	PMVersion                   string    `json:"pm_version"`
+	ConnectorManifestHash       string    `json:"connector_manifest_hash,omitempty"`
+	EffectiveOptionsFingerprint string    `json:"effective_options_fingerprint,omitempty"`
+	CredentialRef               string    `json:"credential_ref,omitempty"`
+	StartedAt                   time.Time `json:"started_at"`
+	CompletedAt                 time.Time `json:"completed_at"`
+	Mode                        string    `json:"mode"`
+	Passed                      bool      `json:"passed"`
 
 	Capabilities Capabilities  `json:"capabilities"`
 	Stages       []StageResult `json:"stages"`
@@ -152,6 +159,8 @@ const (
 // UTC timestamp: 20060102T150405Z.
 const historyTimestampFormat = "20060102T150405Z"
 
+const maxReportBytes = 16 << 20
+
 // Save writes the report to <dir>/certifications/<connector>.json and
 // appends a copy to <dir>/certifications/history/<connector>/<timestamp>.json,
 // per certification design §A ("History appends to
@@ -161,8 +170,11 @@ func (rep *Report) Save(dir string) error {
 		return errors.New("certify: report.Connector is required")
 	}
 
-	certDir := filepath.Join(dir, certificationsDirName)
-	if err := os.MkdirAll(certDir, 0o755); err != nil {
+	if !connectorNamePattern.MatchString(rep.Connector) {
+		return fmt.Errorf("certify: invalid report connector %q", rep.Connector)
+	}
+	certDir, err := secureDir(dir, certificationsDirName)
+	if err != nil {
 		return fmt.Errorf("certify: create certifications dir: %w", err)
 	}
 
@@ -171,18 +183,21 @@ func (rep *Report) Save(dir string) error {
 		return fmt.Errorf("certify: marshal report: %w", err)
 	}
 
-	connectorPath := filepath.Join(certDir, rep.Connector+".json")
-	if err := os.WriteFile(connectorPath, raw, 0o644); err != nil {
-		return fmt.Errorf("certify: write %s: %w", connectorPath, err)
-	}
-
-	historyDir := filepath.Join(certDir, historyDirName, rep.Connector)
-	if err := os.MkdirAll(historyDir, 0o755); err != nil {
+	historyDir, err := secureDir(certDir, historyDirName, rep.Connector)
+	if err != nil {
 		return fmt.Errorf("certify: create history dir: %w", err)
 	}
-	historyPath := filepath.Join(historyDir, rep.StartedAt.UTC().Format(historyTimestampFormat)+".json")
-	if err := os.WriteFile(historyPath, raw, 0o644); err != nil {
-		return fmt.Errorf("certify: write %s: %w", historyPath, err)
+	historyName := rep.StartedAt.UTC().Format(historyTimestampFormat) + ".json"
+	if err := atomicWritePrivate(historyDir, historyName, raw); err != nil {
+		return fmt.Errorf("certify: write %s: %w", filepath.Join(historyDir, historyName), err)
+	}
+
+	// Publish the resumable current report only after its history evidence is
+	// durable. A history failure must never leave a current file that a later
+	// --resume run could mistake for a completely persisted report.
+	connectorName := rep.Connector + ".json"
+	if err := atomicWritePrivate(certDir, connectorName, raw); err != nil {
+		return fmt.Errorf("certify: write %s: %w", filepath.Join(certDir, connectorName), err)
 	}
 
 	return nil
@@ -191,13 +206,44 @@ func (rep *Report) Save(dir string) error {
 // LoadReport reads a Report previously written by Save from an exact file
 // path (typically <dir>/certifications/<connector>.json or a history entry).
 func LoadReport(path string) (Report, error) {
-	raw, err := os.ReadFile(path)
+	info, err := os.Lstat(path)
 	if err != nil {
 		return Report{}, fmt.Errorf("certify: read %s: %w", path, err)
 	}
+	if info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
+		return Report{}, fmt.Errorf("certify: report must be a regular non-symlink file")
+	}
+	if info.Size() > maxReportBytes {
+		return Report{}, fmt.Errorf("certify: report exceeds %d bytes", maxReportBytes)
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return Report{}, fmt.Errorf("certify: read %s: %w", path, err)
+	}
+	defer func() { _ = f.Close() }()
+	openedInfo, err := f.Stat()
+	if err != nil {
+		return Report{}, fmt.Errorf("certify: stat opened report %s: %w", path, err)
+	}
+	if !os.SameFile(info, openedInfo) {
+		return Report{}, fmt.Errorf("certify: report path changed while opening")
+	}
+	raw, err := io.ReadAll(io.LimitReader(f, maxReportBytes+1))
+	if err != nil {
+		return Report{}, fmt.Errorf("certify: read %s: %w", path, err)
+	}
+	if len(raw) > maxReportBytes {
+		return Report{}, fmt.Errorf("certify: report exceeds %d bytes", maxReportBytes)
+	}
 	var rep Report
-	if err := json.Unmarshal(raw, &rep); err != nil {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&rep); err != nil {
 		return Report{}, fmt.Errorf("certify: unmarshal %s: %w", path, err)
+	}
+	var extra any
+	if err := decoder.Decode(&extra); !errors.Is(err, io.EOF) {
+		return Report{}, fmt.Errorf("certify: report contains trailing JSON content")
 	}
 	return rep, nil
 }

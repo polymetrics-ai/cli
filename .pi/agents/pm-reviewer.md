@@ -2,7 +2,7 @@
 name: pm-reviewer
 description: Read-only adversarial code review for correctness, safety, tests, and maintainability.
 tools: read, grep, find, ls
-model: openai-codex/gpt-5.5
+model: openai-codex/gpt-5.6-sol
 thinking: xhigh
 ---
 

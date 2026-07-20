@@ -3,7 +3,7 @@ title: CLI Reference
 description: Complete command surface for the pm binary, including docs coverage, safety boundaries, and JSON envelopes.
 ---
 
-This page is the public website contract for the `pm` CLI. When a command is added to the Go dispatcher, `pm docs validate` requires the command to appear here, in the embedded manual, and in `docs/cli`.
+This page is the public website contract for the `pm` CLI. Command/help, checked-in `docs/cli/**`, and website parity is enforced by focused tests, docs generators, and `make verify` where applicable. `pm docs validate` separately validates generated connector docs.
 
 ## Global contract
 
@@ -14,9 +14,89 @@ This page is the public website contract for the `pm` CLI. When a command is add
 | `pm <command> --help` | Prints that command group's embedded manual. |
 | `--json` | Emits a structured envelope for commands that support machine output. |
 | `--root <path>` | Selects the project root containing `.polymetrics`. |
+| `--plain` | Forces the plain non-TTY path even when stdout is a terminal. |
+| `--no-input` | Disables prompting and TTY UI. |
+| `--progress ndjson` | Streams sanitized progress events to stderr as NDJSON; stdout remains the final output or single JSON envelope. On failures, stderr may also include the final error diagnostic. |
+| `PM_TELEMETRY=none\|off\|file\|otlp` | Controls secret-safe OpenTelemetry tracing and metrics. Default `none` and alias `off` construct no SDK and create no telemetry directory. |
 
 <Callout type="info">
   `--json` is the agent path for operational commands. A few developer-facing commands, such as `pm help`, are intentionally plain text because they return human manuals.
+</Callout>
+
+Future TTY renderers are eligible only when stdout is a TTY and `--json`, `--plain`, `--no-input`, non-empty `PM_NO_TUI`, non-empty `CI`, and `TERM=dumb` do not force the plain path. The current `cmd/pm` entrypoint keeps the plain path until a TTY renderer is wired intentionally. Use `--progress ndjson` on long-running commands when agents need live progress without polling checkpoint files.
+
+OpenTelemetry tracing and metrics are default-off. Supported exporters are `none`, `off`, `file`, and `otlp`. Use `PM_TELEMETRY=file` to write stdouttrace JSONL spans and stdoutmetric JSONL metrics under `.polymetrics/telemetry`, or set `PM_TELEMETRY=otlp` with a trusted env/flag endpoint such as `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`, `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`, or `PM_TELEMETRY_ENDPOINT` for an OTLP HTTP/protobuf collector. Config-file OTLP exporter or endpoint values are ignored; any custom collector endpoint must come from trusted env/flag. Telemetry warnings go to stderr and never change command exit codes or stdout JSON envelopes. Connector HTTP spans record only method, scheme, host, path, status, and retry/attempt metadata; metrics use batched counters such as `pm.records.*` and `pm.batches.flushed` -- no request or response bodies, headers, query strings, raw argv, or credential values.
+
+## Configuration
+
+`pm` resolves typed invocation configuration once per run from a bounded allowlist. Precedence is:
+
+1. Bound global flags (`--root`, `--json`).
+2. Explicit `POLYMETRICS_*` environment variables.
+3. Documented `PM_*` legacy aliases when the primary variable is absent.
+4. `<project-root>/.polymetrics/config.yaml`.
+5. Built-in defaults.
+
+Missing config files are allowed. Malformed YAML and invalid UI/progress flag values are validation errors (exit `3`). The `root` key in a file does not relocate config discovery for the same invocation; use `--root`, `POLYMETRICS_ROOT`, or `PM_ROOT` before loading another project. For malformed files, `--json`, `POLYMETRICS_JSON=true`, or `PM_JSON=true` selects the same single JSON `Error` envelope on stdout used by other validation errors.
+
+Root and `json` affect invocation bootstrap. Runtime, RLM, schedule, and telemetry keys are consumed by migrated non-secret call sites. Worker/RLM agent Temporal execution remains opt-in: `runtime.temporal_addr` must be explicitly set by env or config file for those paths, while runtime doctor keeps local Compose defaults. OpenTelemetry tracing and metrics remain opt-in and exit-code neutral.
+
+| Config key | Default | Primary env | Legacy alias |
+|---|---|---|---|
+| `root` | invocation root (`.`) | `POLYMETRICS_ROOT` | `PM_ROOT` |
+| `json` | `false` | `POLYMETRICS_JSON` | `PM_JSON` |
+| `version` | `1` | `POLYMETRICS_VERSION` | `PM_VERSION` |
+| `project` | `polymetrics-local` | `POLYMETRICS_PROJECT` | `PM_PROJECT` |
+| `warehouse.connector` | `warehouse` | `POLYMETRICS_WAREHOUSE_CONNECTOR` | `PM_WAREHOUSE_CONNECTOR` |
+| `warehouse.path` | `.polymetrics/warehouse` | `POLYMETRICS_WAREHOUSE_PATH` | `PM_WAREHOUSE_PATH` |
+| `runtime.postgres_url` | local Compose PostgreSQL DSN | `POLYMETRICS_POSTGRES_URL` | `PM_POSTGRES_URL` |
+| `runtime.dragonfly_addr` | `localhost:6379` | `POLYMETRICS_DRAGONFLY_ADDR` | `PM_DRAGONFLY_ADDR` |
+| `runtime.temporal_addr` | `localhost:7233` | `POLYMETRICS_TEMPORAL_ADDR` | `PM_TEMPORAL_ADDR` |
+| `rlm.image` | `ghcr.io/polymetrics/rlm-agent:latest` | `POLYMETRICS_RLM_IMAGE` | `PM_RLM_IMAGE` |
+| `rlm.podman_bin` | `podman` | `POLYMETRICS_PODMAN_BIN` | `PM_PODMAN_BIN` |
+| `rlm.fake_runner` | `false` | `POLYMETRICS_RLM_FAKE_RUNNER` | `PM_RLM_FAKE_RUNNER` |
+| `rlm.embedded_worker` | `false` | `POLYMETRICS_RLM_EMBEDDED_WORKER` | `PM_RLM_EMBEDDED_WORKER` |
+| `rlm.llm.provider` | `openrouter` | `POLYMETRICS_LLM_PROVIDER` | `PM_LLM_PROVIDER` |
+| `rlm.llm.base_url` | `https://openrouter.ai/api/v1` | `POLYMETRICS_LLM_BASE_URL` | `PM_LLM_BASE_URL` |
+| `rlm.llm.model` | empty | `POLYMETRICS_LLM_MODEL` | `PM_LLM_MODEL` |
+| `schedule.crontab_file` | empty | `POLYMETRICS_CRONTAB_FILE` | `PM_CRONTAB_FILE` |
+| `telemetry.exporter` | `none` | `POLYMETRICS_TELEMETRY` | `PM_TELEMETRY` |
+| `telemetry.endpoint` | empty | `POLYMETRICS_TELEMETRY_ENDPOINT` | `PM_TELEMETRY_ENDPOINT`, `POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` |
+| `telemetry.directory` | `.polymetrics/telemetry` | `POLYMETRICS_TELEMETRY_DIR` | `PM_TELEMETRY_DIR` |
+| `telemetry.capture` | `default` | `POLYMETRICS_TELEMETRY_CAPTURE` | `PM_TELEMETRY_CAPTURE` |
+
+```yaml
+version: 1
+project: polymetrics-local
+warehouse:
+  connector: warehouse
+  path: .polymetrics/warehouse
+runtime:
+  postgres_url: postgres://localhost:15433/polymetrics?sslmode=disable
+  dragonfly_addr: localhost:6379
+  temporal_addr: localhost:7233
+rlm:
+  image: ghcr.io/polymetrics/rlm-agent:latest
+  podman_bin: podman
+  fake_runner: false
+  embedded_worker: false
+  llm:
+    provider: openrouter
+    base_url: https://openrouter.ai/api/v1
+    model: ""
+schedule:
+  crontab_file: ""
+telemetry:
+  exporter: none
+  endpoint: ""
+  directory: .polymetrics/telemetry
+  capture: default
+```
+
+Telemetry values are non-secret configuration. Supported exporters are `none`, `off`, `file`, and `otlp`; `off` is a disabled alias. `OTEL_SDK_DISABLED=true` always disables tracing and metrics. Custom OTLP endpoints must come from a trusted env/flag source; config-file endpoint values alone are ignored, and OTLP otherwise uses local default collector endpoints. OTLP endpoints must be `http` or `https` URLs without userinfo, query strings, or fragments. Set the env-only `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` when metrics need a collector path different from tracing; it is never read from `config.yaml`. `telemetry.directory` must be relative, stay under `--root`, and avoid symlinked telemetry directories or files. Set `telemetry.capture` to `minimal` to keep span names while stripping span attributes.
+
+<Callout type="warning">
+  Configuration is not a secret store. User-named credential variables passed to `--from-env`, connector certification credsfile entries, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat. OTLP endpoint URLs with credentials, query strings, or fragments are rejected; ambient OTLP header/TLS/compression env vars are warned and neutralized before exporter construction. Emitted spans and metrics drop userinfo, query strings, headers, bodies, raw argv, and credential values.
 </Callout>
 
 ## Command map
@@ -24,7 +104,7 @@ This page is the public website contract for the `pm` CLI. When a command is add
 | Command | Subcommands | Primary docs |
 |---|---|---|
 | `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
-| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help` | [/docs/connectors](/docs/connectors) |
+| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors inspect`, `pm connectors help`, `pm connectors certify` | [/docs/connectors](/docs/connectors) |
 | `pm credentials` | `pm credentials add`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
@@ -109,14 +189,19 @@ Catalog commands discover and cache stream metadata. Catalog output includes sch
 pm connectors list --json
 pm connectors list --all --json
 pm connectors catalog --capability read --json
-pm connectors catalog --stage generally_available --json
-pm connectors port-plan --all --json
-pm connectors port-plan postgres --json
+pm connectors catalog --stage ga --json
 pm connectors inspect 100ms --json
-pm connectors help 100ms
+pm connectors help
+
+# The local sample certification does not require live credentials.
+pm connectors certify sample --json
+pm connectors certify --all --credentials-file certify/creds.yaml --json
+pm connectors certify --sweep --credentials-file certify/creds.yaml --older-than 24h --json
 ```
 
 `pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
+
+Before a certification report completes, normal CLI parsing and setup rules apply: usage errors exit `2`, typed validation errors exit `3`, and setup/runtime errors exit `1`, with the normal `Error` envelope. A completed `ConnectorCertification`, `ConnectorCertificationBatch`, or `ConnectorCertificationSweep` report exits `0` for pass, `2` for certification failure, or `3` for leaked resources. Boolean controls accept only `true` or `false`; explicit `--parallel` is limited to 1–32 and workers are capped by queued connectors. Credential files are regular non-symlink version-1 YAML files no larger than 1 MiB, use known fields, name locally registered connectors, and carry valid environment-variable references only. Secret-schema config and credential-file `exec` entries are rejected; no external credential command runs. Credential values and approval tokens are excluded from command output, argv reports, events, telemetry, and certification reports, which use restrictive local files. Batch `--write=false` and `--skip=write` override credential-file write settings; batch writes require `sandbox: true`. `--resume` reuses reports only when schema, connector manifest, non-secret effective options, and environment-reference fingerprints match. Sweep reads the durable per-connector ledger into a fresh temporary workspace, uses plan → successful preview → approval → execute, and limits `--older-than` to `(0, 8760h]`. Unsupported, mode-inapplicable, malformed, or unknown controls fail before credential loading, telemetry, runner, sweep, or write effects. Live checks and writes are opt-in and cleanup-gated; documentation and local sample verification do not perform them.
 
 ## Extract, query, and write
 
@@ -124,11 +209,11 @@ pm connectors help 100ms
 pm etl check --connector github --config repository=OWNER/REPO --json
 pm etl catalog --connector github --config repository=OWNER/REPO --json
 pm etl read --connector github --stream issues --limit 10 --config repository=OWNER/REPO --json
-pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 500 --json
+pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 500 --json --progress ndjson
 pm etl status <run-id> --json
 ```
 
-Use direct `check`, `catalog`, and `read` while developing a connector or testing credentials. Use `pm etl run` for configured syncs.
+Use direct `check`, `catalog`, and `read` while developing a connector or testing credentials. Use `pm etl run` for configured syncs. `--progress ndjson` writes progress events to stderr; stdout stays the final human line or one JSON envelope. On failures, stderr may also include the final error diagnostic.
 
 ```bash
 pm query run --table github_pull_requests --limit 20 --json
@@ -157,7 +242,7 @@ pm extract --request "show active customers" --sql "SELECT * FROM customers LIMI
 pm skills generate --dir docs/skills --json
 ```
 
-`pm agent plan` returns typed command suggestions. `pm extract` classifies natural-language requests and routes simple requests to query or RLM analysis. `pm skills generate` writes agent skill files from the command and connector metadata.
+`pm agent plan` returns typed command suggestions. Hidden `pm extract` classifies natural-language requests and routes simple requests to read-only query or typed RLM analysis; `pm help extract` shows its direct manual, and `--in`/`--out` accept bare local warehouse table names rather than paths. `pm skills generate` writes agent skill files from the command and connector metadata.
 
 ```bash
 pm agent image build --json
@@ -173,7 +258,7 @@ RLM agent mode is optional and runtime-backed. It uses Temporal plus a Podman-ma
 ```bash
 pm flow plan --file flow.json --json
 pm flow preview --file flow.json --json
-pm flow run --file flow.json --force --json
+pm flow run --file flow.json --force --json --progress ndjson
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 
@@ -183,7 +268,7 @@ pm schedule install nightly --crontab --json
 pm schedule remove nightly --crontab --json
 ```
 
-Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. Schedules install named flows into the local scheduler backend.
+Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. `--progress ndjson` streams flow progress events to stderr; on failures, stderr may also include the final error diagnostic. Schedules install named flows into the local scheduler backend.
 
 ## Operational commands
 
@@ -194,14 +279,16 @@ pm perf compare --iterations 25 --runtime --json
 pm perf sync-modes --records 1000 --json
 ```
 
-Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The dependency-free path is the default.
+`pm runtime doctor` requires no live services or credentials. It reports absent optional PostgreSQL, DragonflyDB, and Temporal services as per-check `error` status and degraded mode while still exiting 0 when the report is emitted. Runtime-backed operations such as `pm perf compare --runtime` do require healthy services. `pm perf compare --runtime --json` includes a `runtime_report` with check names, status, latency, redacted error text, and sanitized endpoints. PostgreSQL, DragonflyDB, and Temporal endpoint output removes userinfo, query strings, fragments, and control characters; decrypted secrets are not printed. Perf workload flags are bounded: `--iterations` accepts 1 through 1000 and `--records` accepts 1 through 100000; invalid values exit `3` (`validation_error`).
 
 ```bash
 pm docs generate --dir docs/cli --connectors-dir docs/connectors
-pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs
+pm docs validate --connectors-dir docs/connectors
 ```
 
-`pm docs validate` is a release gate. It fails when a public command or subcommand is missing from embedded help, checked-in CLI markdown, website MDX, or connector docs.
+`pm docs validate` validates generated connector manuals under the connector docs directory.
+
+Runtime help, embedded command manuals, checked-in CLI markdown, and website MDX parity are covered by focused tests, generator drift checks, website docs data generation, and `make verify` where applicable.
 
 ## Exit codes
 
@@ -209,9 +296,9 @@ pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir w
 |---:|---|---|
 | `0` | success | Continue. |
 | `2` | usage | Fix command shape. |
-| `3` | validation | Fix argument values. |
+| `3` | validation | Fix argument values, including invalid UI/progress flag values. |
 | `4` | auth | Add or rotate credentials. |
 | `5` | connector | Inspect connector-specific failure. |
-| `6` | runtime | Start required runtime service. |
+| `6` | runtime | Start a service required by the selected runtime-backed operation. `pm runtime doctor` itself reports absent optional services in output and exits 0 when the report is emitted. |
 | `7` | policy | Obtain approval or satisfy policy. |
 | `1` | internal | Treat as a bug. |

@@ -1,0 +1,166 @@
+{
+  "phase": "410-otel-tracing",
+  "issue": 410,
+  "parentIssue": 397,
+  "parentPR": 438,
+  "pr": 459,
+  "branch": "feat/410-otel-tracing",
+  "baseBranch": "feat/cli-architecture-v2",
+  "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing",
+  "status": "exporter_self_observability_pushed",
+  "gsd": {
+    "doctorPassed": true,
+    "planPhasePromptGenerated": true,
+    "programmingLoopAvailable": false,
+    "manualFallback": "scripts/gsd prompt programming-loop init --phase 410 --dry-run returned unknown GSD command; manual GSD/TDD fallback recorded. Final alias/tracer-closure rerun on 2026-07-18 confirmed same fallback. Last exporter-constructor self-observability rerun on 2026-07-18 confirmed same fallback."
+  },
+  "verificationPassed": true,
+  "verificationBlocker": "",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Pi worker owns one isolated issue worktree and has no subagent tool; inline worker execution required."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Red tests added and failing as expected before production edits."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Telemetry core, config, command/operation/connsdk instrumentation, and docs parity implemented inline in the isolated issue worktree."
+    },
+    {
+      "cycle": "verify",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "make verify first run stopped at tidy-check because go.mod/go.sum dependency diff was uncommitted; green-slice commit then rerun required."
+    },
+    {
+      "cycle": "verify-rerun",
+      "decision": "local_critical_path",
+      "reason": "After committing dependency diff, make verify passed in the isolated issue worktree."
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 review findings accepted; this isolated worker must add red tests and fixes inline. Coordinator sidecars/human fallback own review coverage; no Claude/Copilot request."
+    },
+    {
+      "cycle": "review-fix-resume",
+      "decision": "local_critical_path",
+      "reason": "Pi worker resumed same issue branch/worktree with red evidence captured; no subagent tool available and no new review request allowed."
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "First review-fix make verify stopped at tidy-check because event attrs require existing go.opentelemetry.io/otel/trace to move from indirect to direct; rerun after accepting tidy diff."
+    },
+    {
+      "cycle": "review-fix-verify-rerun",
+      "decision": "local_critical_path",
+      "reason": "After committing the review-fix slice, make verify passed in the isolated issue worktree."
+    },
+    {
+      "cycle": "final-review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 residuals accepted at head 75433cefa9a00671b06c6c3e83bcde1e4730211c; same isolated worker/branch, no subagent tool, no Claude/Copilot request."
+    },
+    {
+      "cycle": "final-review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "Final focused residual fix verified locally with focused tests, docs generation, full Go gates, make verify, and diff checks."
+    },
+    {
+      "cycle": "sdk-env-final-hardening-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 residual accepted at head 216b5e076d82302621574a9fb4fa71c8acb79204; same isolated worker/branch, no subagent tool, no Claude/Copilot request."
+    },
+    {
+      "cycle": "sdk-env-final-hardening-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Red tests captured before production edits for SDK/resource/sampler ambient OTel env bypass."
+    },
+    {
+      "cycle": "sdk-env-final-hardening-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused tests, full Go gates, make verify, docs generation diff, and diff checks passed locally."
+    },
+    {
+      "cycle": "sdk-env-final-hardening-push",
+      "decision": "local_critical_path",
+      "reason": "Committed and pushed final SDK-env hardening to PR #459 branch; PR body updated without requesting Claude/Copilot."
+    },
+    {
+      "cycle": "final-alias-tracer-closure-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 residual accepted at head 0fc39148004d699f35239a17418cd095bdd4a1ed; same isolated worker/branch, no subagent tool, no Claude/Copilot request."
+    },
+    {
+      "cycle": "final-alias-tracer-closure-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Red tests captured before production edits for OTEL_GO_X_OBSERVABILITY and OTEL_GO_X_SELF_OBSERVABILITY warning/stderr/leak behavior."
+    },
+    {
+      "cycle": "final-alias-tracer-closure-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused tests, go vet, go build, make verify, verify-equivalent 20m full test suite, and diff checks passed locally; default go test ./... hit pre-existing 10m package timeouts and is recorded."
+    },
+    {
+      "cycle": "final-alias-tracer-closure-push",
+      "decision": "local_critical_path",
+      "reason": "Committed and pushed final alias/tracer-closure fix to PR #459 branch; PR body updated without requesting Claude/Copilot."
+    },
+    {
+      "cycle": "exporter-self-observability-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #459 final adversarial finding accepted at head 46c5c1667c9b4ba2d9e97b086ab11c6c08c80990; same isolated worker/branch, no subagent tool, no Claude/Copilot request."
+    },
+    {
+      "cycle": "exporter-self-observability-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Red tests captured before production edits for file/OTLP exporter-stage self-observability env warnings and leakage behavior."
+    },
+    {
+      "cycle": "exporter-self-observability-execute",
+      "decision": "local_critical_path",
+      "reason": "Implemented narrow exporter-constructor env sanitizer fix inline in same isolated worktree."
+    },
+    {
+      "cycle": "exporter-self-observability-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused tests, go vet, 20m full test suite, go build, make verify, and diff checks passed locally."
+    },
+    {
+      "cycle": "exporter-self-observability-push",
+      "decision": "local_critical_path",
+      "reason": "Committed and pushed exporter self-observability fix to PR #459 branch; PR body updated without requesting Claude/Copilot."
+    }
+  ],
+  "dependenciesApproved": [
+    "go.opentelemetry.io/otel@v1.44.0",
+    "go.opentelemetry.io/otel/sdk@v1.44.0",
+    "go.opentelemetry.io/otel/exporters/stdout/stdouttrace@v1.44.0",
+    "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.44.0"
+  ],
+  "reviewFindingsAccepted": [
+    "error telemetry avoids SDK exception.* raw RecordError leakage",
+    "config-sourced OTLP network telemetry rejected without trusted env/CLI opt-in",
+    "file exporter path traversal and symlink hardening",
+    "event attrs attached to events",
+    "OTLP failure warning/exit neutrality",
+    "OTLP endpoint validation",
+    "help/docs exporter and HTTP attr wording parity",
+    "warning redaction/stdout discipline",
+    "ambient OTel env bypass neutralized before OTLP exporter construction",
+    "ADR 0004 superseding trusted-env OTLP behavior note",
+    "root help/goldens full telemetry exporter values none/off/file/otlp",
+    "config docs/website require OTLP exporter and endpoint from trusted env/flag",
+    "SDK/resource/provider ambient OTel env neutralized before tracer provider construction",
+    "OTEL_GO_X_SELF_OBSERVABILITY alias and tracer creation env window accepted for final fix",
+    "exporter constructors sanitized against OTEL_GO_X self-observability env aliases"
+  ],
+  "humanGatesTriggered": [],
+  "updatedAt": "2026-07-18T00:00:00Z"
+}

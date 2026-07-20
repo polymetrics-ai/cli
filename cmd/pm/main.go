@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"io"
 	"os"
 
@@ -20,5 +21,11 @@ func run(args []string, stdout, stderr io.Writer) int {
 	// certify's harness before any command runs (see
 	// internal/connectors/certify/cliharness.go SetCLIRunFunc).
 	certify.SetCLIRunFunc(cli.Run)
+	certify.SetCLIRunContextFunc(func(ctx context.Context, args []string, stdout, stderr io.Writer, opts certify.CLIInvocationOptions) int {
+		return cli.RunWithContext(ctx, args, stdout, stderr, cli.RunOptions{
+			Mode:                cli.ModePlain,
+			ScheduleCrontabFile: opts.CrontabFile,
+		})
+	})
 	return cli.Run(args, stdout, stderr)
 }

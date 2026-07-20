@@ -1,0 +1,805 @@
+apiVersion: polymetrics.ai/orchestration-state/v1
+kind: OrchestrationState
+parent_issue:
+  number: 397
+  url: https://github.com/polymetrics-ai/cli/issues/397
+  title: "epic(cli): deliver CLI Architecture v2"
+  state: open
+parent_branch: feat/cli-architecture-v2
+parent_pr:
+  url: https://github.com/polymetrics-ai/cli/pull/438
+  base: main
+  head: feat/cli-architecture-v2
+  head_sha: 74c1766de7bc369905a1ea3e25e3bd983e3b3ac6
+  draft: true
+  state: open
+default_branch: main
+orchestrator:
+  mode: active_owner
+  runtime: pi
+  status: running
+ready_queue:
+  - number: 408
+    status: correction_pending
+    dependencies: [405, 462]
+    write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity"
+    decision: spawned
+    reason: "Exactly one Sol/high worker resumed the preserved cwd and pushed ff7be3bd. EXECUTE is delivered; phase-evidence defects, full-race timeouts, and the recorded make-verify reverse-smoke boundary deviation require separate correction/verification before SUB_PR_OPEN."
+  - number: 413
+    status: worker_ready_deferred
+    dependencies: [407]
+    write_scope: "connector-aware shell completion, command callbacks, docs/tests"
+    decision: not_spawned_write_scope_collision
+    reason: "Collides with #408 command tree/help/docs/golden/website surfaces; serialize after #408."
+  - number: 409
+    status: blocked
+    dependencies: [408]
+    write_scope: "flow and schedule creation wizards"
+    decision: not_spawned_dependency_blocked
+    reason: "Blocked by #408."
+  - number: 414
+    status: blocked
+    dependencies: [407, 408]
+    write_scope: "certify and RLM dashboards"
+    decision: not_spawned_dependency_blocked
+    reason: "#407 satisfied; still blocked by #408."
+  - number: 411
+    status: blocked
+    dependencies: [409]
+    write_scope: "human-first query workspace, query grid, connector browser"
+    decision: not_spawned_dependency_blocked
+    reason: "Blocked by #409."
+  - number: 412
+    status: blocked
+    dependencies: [409]
+    write_scope: "terminal docs viewer"
+    decision: not_spawned_dependency_blocked
+    reason: "Blocked by #409."
+  - number: 416
+    status: blocked
+    dependencies: [409]
+    write_scope: "human-first reverse workspace and reverse guide alias"
+    decision: not_spawned_dependency_blocked
+    reason: "Blocked by #409."
+  - number: 469
+    status: blocked
+    dependencies: [409]
+    write_scope: "TTY-progressive credential and connection setup"
+    decision: not_spawned_dependency_blocked
+    reason: "Blocked by #409."
+  - number: 419
+    status: complete
+    dependencies: [404, 410]
+    write_scope: "optional OTel log bridge"
+    decision: not_spawned_human_gate
+    reason: "Human explicitly chose SKIP/DEFER from parent campaign #397; no worker or beta dependency is authorized, and no other dependency is approved."
+    deferred: true
+spawn_decisions:
+  - timestamp: 2026-07-16T09:05:00Z
+    decision: local_critical_path
+    issue_numbers: [398]
+    reason: "Stage 0 owned shared planning artifacts plus parent branch and parent PR."
+  - timestamp: 2026-07-16T09:16:00Z
+    decision: spawned
+    issue_numbers: [399]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-399-golden-transcript-safety-net; subagent wrapper did not expose a separate agent id."
+  - timestamp: 2026-07-16T10:02:00Z
+    decision: read_only_spawned
+    issue_numbers: [399]
+    reason: "pm-reviewer adversarial sidecar inspected PR #439 in the isolated worker worktree."
+  - timestamp: 2026-07-16T10:04:00Z
+    decision: spawned
+    issue_numbers: [399]
+    reason: "pm-gsd-worker review-fix cycle accepted or dispositioned three sidecar findings."
+  - timestamp: 2026-07-16T10:22:00Z
+    decision: spawned
+    issue_numbers: [399]
+    reason: "pm-gsd-worker corrected committed trailing whitespace found by commit-range verification."
+  - timestamp: 2026-07-16T10:33:00Z
+    decision: not_spawned_review_blocked
+    issue_numbers: [400]
+    reason: "PR #439 CI and Copilot backup review are pending; #400 depends on parent integration of #399."
+  - timestamp: 2026-07-16T10:45:10Z
+    decision: spawned
+    issue_numbers: [400]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-400-cobra-router-shell after provisional #399 integration."
+  - timestamp: 2026-07-16T12:15:00Z
+    decision: read_only_spawned
+    issue_numbers: [400]
+    reason: "pm-reviewer found two router defects; worker fixed both and targeted re-review was clean."
+  - timestamp: 2026-07-16T13:09:10Z
+    decision: spawned
+    issue_numbers: [401]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-401-typed-viper-config after provisional #400 integration."
+  - timestamp: 2026-07-16T13:55:00Z
+    decision: read_only_spawned
+    issue_numbers: [401]
+    reason: "pm-reviewer config/security/parity sidecars drove bootstrap and docs fixes; final sidecar was clean."
+  - timestamp: 2026-07-16T15:40:57Z
+    decision: local_critical_path
+    issue_numbers: [402]
+    reason: "Coordinator updates parent integration ledger before creating and dispatching isolated #402 worktree."
+  - timestamp: 2026-07-16T15:42:00Z
+    decision: spawned
+    issue_numbers: [402]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-402-config-env-migration."
+  - timestamp: 2026-07-16T16:35:00Z
+    decision: read_only_spawned
+    issue_numbers: [402]
+    reason: "pm-reviewer found worker-serve and perf ambient config reloads; worker fixed both and targeted re-review was clean."
+  - timestamp: 2026-07-16T17:27:41Z
+    decision: not_spawned_verification_blocked
+    issue_numbers: [403, 404, 406, 410]
+    reason: "First parallel fan-out depends on #402 integration; PR #448 latest CI is pending."
+  - timestamp: 2026-07-16T17:45:00Z
+    decision: read_only_spawned
+    issue_numbers: [403, 404, 406, 410]
+    reason: "Four pm-scout sidecars mapped exact expected write sets and collisions after #402 integration."
+  - timestamp: 2026-07-16T17:52:48Z
+    decision: spawned
+    issue_numbers: [403, 406]
+    reason: "Only events and catalog scopes are disjoint; #404/#410 deferred for documented shared-file collisions."
+  - timestamp: 2026-07-16T17:52:48Z
+    decision: not_spawned_write_scope_collision
+    issue_numbers: [404, 410]
+    reason: "#404 overlaps #403 worker/submit; #410 overlaps #403 app/flow/certify/worker and #404 CLI/config/worker."
+  - timestamp: 2026-07-16T20:37:26Z
+    decision: local_critical_path
+    issue_numbers: [406]
+    reason: "Coordinator provisionally integrated PR #449 after local/remote gates and clean adversarial review; parent human coverage pending."
+  - timestamp: 2026-07-16T20:52:10Z
+    decision: local_critical_path
+    issue_numbers: [403]
+    reason: "Coordinator runs strict full-repo race gate after three suspect certify tests matched parent and worker timings."
+  - timestamp: 2026-07-16T20:52:10Z
+    decision: spawned
+    issue_numbers: [421]
+    reason: "First serialized Phase 9 namespace worker is disjoint from #403 event instrumentation."
+  - timestamp: 2026-07-17T03:23:26Z
+    decision: local_critical_path
+    issue_numbers: [421]
+    reason: "Coordinator provisionally integrated PR #450 after local/remote gates, accepted website parity fix, and clean targeted re-review."
+  - timestamp: 2026-07-17T03:39:24Z
+    decision: read_only_spawned
+    issue_numbers: [403]
+    reason: "Two adversarial review-fix cycles hardened Chan/Throttle behavior; final targeted review at 60a1d232 was clean."
+  - timestamp: 2026-07-17T03:44:48Z
+    decision: spawned
+    issue_numbers: [422]
+    reason: "Second serialized Phase 9 namespace worker starts from parent squash e6faecfb and is disjoint from #403."
+  - timestamp: 2026-07-17T05:24:33Z
+    decision: local_critical_path
+    issue_numbers: [403]
+    reason: "Coordinator provisionally integrated PR #451 after strict 120m race, final local/remote gates, and clean adversarial review."
+  - timestamp: 2026-07-17T05:24:55Z
+    decision: local_critical_path
+    issue_numbers: [422]
+    reason: "Coordinator provisionally integrated PR #452 after local/remote gates and clean SQL-safety/CLI adversarial review."
+  - timestamp: 2026-07-17T05:25:38Z
+    decision: spawned
+    issue_numbers: [453]
+    reason: "Pre-existing reverse smoke skipped preview; safety interlock holds all further worker dispatch and make verify until bounded fix integrates."
+  - timestamp: 2026-07-17T06:20:42Z
+    decision: local_critical_path
+    issue_numbers: [453]
+    reason: "Coordinator provisionally integrated PR #454 after hardened ordering regression, safe local smoke, remote gates, and clean targeted review."
+  - timestamp: 2026-07-17T08:55:00Z
+    decision: read_only_spawned
+    issue_numbers: [404, 405, 410, 423]
+    reason: "Four pm-scout collision-map sidecars failed with transport fetch errors and produced no findings; direct issue/source fallback used without retry loop."
+  - timestamp: 2026-07-17T09:05:47Z
+    decision: spawned
+    issue_numbers: [404]
+    reason: "Direct fallback map serialized Phase 6 logging before #405/#423 and kept #410 deferred across logging/CLI/worker overlaps."
+  - timestamp: 2026-07-17T13:36:28Z
+    decision: local_critical_path
+    issue_numbers: [404]
+    reason: "Recovered after power outage without resetting worker worktree; dirty second security review-fix changes preserved and green/verification resumes from T14."
+  - timestamp: 2026-07-17T15:35:40Z
+    decision: local_critical_path
+    issue_numbers: [404]
+    reason: "Coordinator provisionally integrated PR #455 after final clean targeted/security re-reviews, remote checks, and extended CLI race; parent squash 30de49776bae98f3408e7b62041a5da042dd3a1e."
+  - timestamp: 2026-07-17T15:36:16Z
+    decision: next_dispatch_candidate
+    issue_numbers: [405]
+    reason: "Queue rebuilt after #404 integration: #405 now owns central CLI/global options before #423 perf namespace and #410 telemetry spans."
+  - timestamp: 2026-07-17T15:37:34Z
+    decision: spawned
+    issue_numbers: [405]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-405-tty-ndjson-progress from parent head 7910d5293372452f9eb014efbac42c0c5260f5ff."
+  - timestamp: 2026-07-17T18:47:28Z
+    decision: local_critical_path
+    issue_numbers: [405]
+    reason: "Coordinator provisionally integrated PR #457 after final clean targeted/security/docs re-reviews and remote checks; parent squash 087ec03c395eaef9d3eecbd88eb0d28c012d8f00."
+  - timestamp: 2026-07-17T18:47:51Z
+    decision: next_dispatch_candidate
+    issue_numbers: [423]
+    reason: "Queue rebuilt after #405 integration: #423 perf namespace is the next serialized Phase 9 command before #410 telemetry."
+  - timestamp: 2026-07-17T18:49:42Z
+    decision: spawned
+    issue_numbers: [423]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-423-perf-native-cobra from parent head 3f92f8ef44bc39fe104f3f11c3eac324b6f222bb."
+  - timestamp: 2026-07-17T20:21:21Z
+    decision: local_critical_path
+    issue_numbers: [423]
+    reason: "Coordinator provisionally integrated PR #458 after final clean targeted/security/docs re-reviews and remote checks; parent squash 03dc5d9518c25e9bc6ced281f70c25fbc51bd198."
+  - timestamp: 2026-07-17T20:21:41Z
+    decision: next_dispatch_candidate
+    issue_numbers: [410]
+    reason: "Queue rebuilt after #423 integration: #410 telemetry spans are now unblocked from #404/#405/#423 shared surfaces."
+  - timestamp: 2026-07-17T20:22:53Z
+    decision: spawned
+    issue_numbers: [410]
+    reason: "pm-gsd-worker dispatched in isolated worktree ../wt-410-otel-tracing from parent head dd23054d407071f8b1afa271dd717e1cf6b9ba0f."
+  - timestamp: 2026-07-18T05:02:32Z
+    decision: local_critical_path
+    issue_numbers: [410]
+    reason: "Coordinator provisionally integrated PR #459 after exporter self-observability fix, local full gates, clean pm-reviewer/security-auditor sidecars, and remote checks; parent squash efb98bf3de4d72c9defe5629b055ae4845506cf8."
+  - timestamp: 2026-07-18T05:08:00Z
+    decision: read_only_spawned
+    issue_numbers: [408, 424, 415]
+    reason: "Three pm-scout sidecars mapped post-#410 write sets: #408 conflicts with #424 central CLI/help/goldens and has medium app/flow risk with #415; #424 and #415 can run together with scope discipline."
+  - timestamp: 2026-07-18T05:12:30Z
+    decision: not_spawned_write_scope_collision
+    issue_numbers: [408]
+    reason: "Flow/ETL dashboards are source-unblocked but deferred to avoid concurrent edits with active #424 CLI routing/help and #415 app/flow metric paths."
+  - timestamp: 2026-07-18T05:12:30Z
+    decision: spawned
+    issue_numbers: [424, 415]
+    reason: "Created isolated worktrees ../wt-424-runtime-native-cobra and ../wt-415-otel-metrics from parent head efb98bf3 and queued workers in parallel."
+  - timestamp: 2026-07-18T09:47:56Z
+    decision: spawned
+    issue_numbers: [424, 415]
+    reason: "Sol/high correction workers addressed independent exact-head findings on existing PRs #460 and #461 without creating more PRs."
+  - timestamp: 2026-07-18T09:47:56Z
+    decision: read_only_spawned
+    issue_numbers: [424, 415]
+    reason: "Independent Sol/xhigh exact-head re-reviews were clean; both child CIs passed."
+  - timestamp: 2026-07-18T09:47:56Z
+    decision: spawned
+    issue_numbers: [415]
+    reason: "Isolated Sol/high integration worker regenerated the sole website data conflict after #424 integration; combined Sol/xhigh review was clean at 1f5bd80f."
+  - timestamp: 2026-07-18T10:41:06Z
+    decision: spawned
+    issue_numbers: [425]
+    reason: "Sol/high implementation and correction sessions plus independent Sol/xhigh exact-head re-review completed #425; parent promoted exact head 784153c7 at merge 0c57ec39."
+  - timestamp: 2026-07-18T11:22:31Z
+    decision: spawned
+    issue_numbers: [426]
+    reason: "Sol/high implementation plus independent Sol/xhigh exact-head review completed #426; parent promoted exact head fe2a937b at merge bb12f265."
+  - timestamp: 2026-07-18T12:46:31Z
+    decision: spawned
+    issue_numbers: [427]
+    reason: "Sol/high implementation/correction plus independent Sol/xhigh exact-head re-review completed #427; parent promoted exact head aacb1536 at merge e68ccdf7."
+  - timestamp: 2026-07-18T14:29:59Z
+    decision: spawned
+    issue_numbers: [428]
+    reason: "Sol/high implementation/two correction cycles plus independent Sol/xhigh security re-review completed #428; parent promoted exact head 924ebfe0 at merge 569536d1."
+  - timestamp: 2026-07-18T22:50:26Z
+    decision: spawned
+    issue_numbers: [429]
+    reason: "Sol/high implementation/correction sessions plus independent Sol/xhigh exact-head reviews completed #429; parent promoted exact head 9e966e85 at merge a490eeba."
+  - timestamp: 2026-07-19T01:01:33Z
+    decision: spawned
+    issue_numbers: [430]
+    reason: "Sol/high implementation/correction plus independent Sol/xhigh exact-head re-review completed #430; parent promoted exact head ad0f23bb at merge 4a9fa0fb."
+  - timestamp: 2026-07-19T03:40:11Z
+    decision: spawned
+    issue_numbers: [431]
+    reason: "Sol/high implementation/correction plus independent Sol/xhigh exact-head review completed #431; parent promoted exact head d628fce2 at merge 573d6222."
+  - timestamp: 2026-07-19T04:44:27Z
+    decision: spawned
+    issue_numbers: [432]
+    reason: "Sol/high implementation plus independent Sol/xhigh exact-head review completed #432; parent promoted exact head b8377b7b at merge ad6e4331."
+  - timestamp: 2026-07-19T05:33:11Z
+    decision: spawned
+    issue_numbers: [433]
+    reason: "Sol/high implementation plus independent Sol/xhigh exact-head review completed #433; parent promoted exact head 701569ee at merge 990b8f60."
+  - timestamp: 2026-07-19T06:40:21Z
+    decision: spawned
+    issue_numbers: [434]
+    reason: "Sol/high implementation/correction plus independent Sol/xhigh exact-head review completed #434; parent promoted exact head 8177e342 at merge 96680756."
+  - timestamp: 2026-07-19T07:45:07Z
+    decision: spawned
+    issue_numbers: [435]
+    reason: "Sol/high implementation/evidence correction plus independent Sol/xhigh exact-head review completed #435; parent promoted exact head f712e696 at merge afd765e9."
+  - timestamp: 2026-07-19T09:48:26Z
+    decision: spawned
+    issue_numbers: [436]
+    reason: "Sol/high implementation/correction plus independent Sol/xhigh exact-head review completed #436; parent promoted exact head 7da245b8 at merge b28e67fb."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: read_only_spawned
+    issue_numbers: [397, 437, 408]
+    reason: "Project pm-scout/pm-reviewer sidecars audited stale parent artifacts, Phase 437 untracked intake, and #408/#437 write-scope collision."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: local_critical_path
+    issue_numbers: [437, 411, 417]
+    reason: "Copied untracked Phase 437 pending-request/research/debug intake to .planning/traces/phase-437-pending-intake/ without changing PR #466's tested head or editing referenced GitHub issues."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: local_critical_path
+    issue_numbers: [397]
+    reason: "Merged origin/main into feat/cli-architecture-v2 using a normal no-ff merge commit; no force push and no parent PR merge to main."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: not_spawned_write_scope_collision
+    issue_numbers: [408]
+    reason: "#408 is source-ready after #468 integration, but open PR #466 owns central CLI/help/golden/docs/website files; defer mutating launch until the collision clears or a disjoint slice is proven."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: not_spawned_review_blocked
+    issue_numbers: [437]
+    reason: "PR #466 is open at 26f98a72 with current checks green but no recorded human/Claude/Copilot review; integration is blocked on review coverage."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: not_spawned_dependency_blocked
+    issue_numbers: [407, 413, 409, 416, 469]
+    reason: "#407/#413 depend on #437 integration; #409 depends on #408; #416/#469 depend on #409. #462 design gate is integrated."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: not_spawned_human_gate
+    issue_numbers: [419]
+    reason: "#419 requires explicit optional beta dependency inclusion or a recorded skip decision before implementation."
+  - timestamp: 2026-07-20T20:06:35Z
+    decision: local_critical_path
+    issue_numbers: [437]
+    reason: "Verified PR #466 head unchanged at 26f98a72, check rollup green, active review threads empty, and recorded explicit human fallback review coverage."
+  - timestamp: 2026-07-20T20:06:35Z
+    decision: local_critical_path
+    issue_numbers: [437, 407]
+    reason: "Merged PR #466 only into feat/cli-architecture-v2 at parent commit 1008f75ff8fe7d43a0a67a802ccf05ef296eae7f; #437 provisionally integrated and #407 umbrella dependency state complete."
+  - timestamp: 2026-07-20T20:06:35Z
+    decision: read_only_spawned
+    issue_numbers: [408, 413]
+    reason: "Project pm-scout/pm-reviewer sidecars mapped post-#437 write scopes; recommendation is spawn #408 and defer #413 for collision."
+  - timestamp: 2026-07-20T20:06:35Z
+    decision: not_spawned_write_scope_collision
+    issue_numbers: [413]
+    reason: "#413 is dependency-ready but collides with #408 command tree/help/docs/golden/website surfaces."
+  - timestamp: 2026-07-20T20:15:00Z
+    decision: spawned
+    issue_numbers: [408]
+    reason: "Created isolated worktree /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards on branch feat/408-flow-etl-dashboards from parent head 5b603788 and dispatched pm-gsd-worker for #408; #413 deferred for write-scope collision."
+  - timestamp: 2026-07-20T23:17:08Z
+    decision: spawned
+    issue_numbers: [408]
+    reason: "No live process owned the preserved cwd; exactly one Sol/high pm-gsd-worker adopted head 361a6bec plus 19 dirty entries and pushed clean synchronized head ff7be3bd. No sub-PR was opened; correction/verification blockers remain."
+subissues:
+  - number: 398
+    url: https://github.com/polymetrics-ai/cli/issues/398
+    branch: feat/cli-architecture-v2
+    pr_url: https://github.com/polymetrics-ai/cli/pull/438
+    worker: main_pi_orchestrator
+    status: provisionally_integrated
+    write_scope: ".planning parent bootstrap and CLI Architecture v2 source docs"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-cli-architectur-improvement
+    verification: "Stage 0 planning gates passed; no cmd/** or internal/** changes."
+    automated_review: {primary_route: blocked, status: pending, head_sha: 2f012400632ad64b1c0c3e2ba98d8bd98999b25d, reviewed_range: "", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Draft parent PR review pending.", disposition_url: ""}
+  - number: 399
+    url: https://github.com/polymetrics-ai/cli/issues/399
+    branch: test/399-golden-transcript-safety-net
+    pr_url: https://github.com/polymetrics-ai/cli/pull/439
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "internal/cli golden transcript harness, fixtures, docs/cli diff test, issue-local GSD artifacts"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-399-golden-transcript-safety-net
+    verification: "Local and remote gates passed; parent squash commit 379cb5015335ff7c9b20e5bb780952ead22c53b2."
+    automated_review: {primary_route: human, status: blocked, head_sha: c2d2b5da6c94ba09599b777ae9f3515cae2c0729, reviewed_range: "2f012400..379cb501", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled; Copilot quota exhausted; local sidecar findings dispositioned; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/439#issuecomment-4990871082"}
+  - number: 400
+    url: https://github.com/polymetrics-ai/cli/issues/400
+    branch: refactor/400-cobra-router-shell
+    pr_url: https://github.com/polymetrics-ai/cli/pull/440
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "Cobra root router shell, wrappers, focused tests, ADR-approved dependency delta"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-400-cobra-router-shell
+    verification: "Local and remote gates passed; parent squash commit 8900db141cc289b65491365d2ebcab490af57789."
+    automated_review: {primary_route: human, status: blocked, head_sha: cf9aed57183d91611c84352db2546365bcdcc807, reviewed_range: "379cb501..8900db14", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Two pm-reviewer findings fixed; targeted sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/440"}
+  - number: 401
+    url: https://github.com/polymetrics-ai/cli/issues/401
+    branch: feat/401-typed-viper-config
+    pr_url: https://github.com/polymetrics-ai/cli/pull/441
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "internal/config, CLI config integration/tests, docs/website parity, ADR-approved dependency delta"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-401-typed-viper-config
+    verification: "Local and remote Go/website gates passed; parent squash commit 7683087d41646c92b2bd7f677f47cf2bc9d88462."
+    automated_review: {primary_route: human, status: blocked, head_sha: 28af02a5f26426f4845a796733dff075a1cb26a2, reviewed_range: "8900db14..7683087d", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Config/bootstrap/docs findings fixed; final sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/441"}
+  - number: 402
+    url: https://github.com/polymetrics-ai/cli/issues/402
+    branch: refactor/402-config-env-migration
+    pr_url: https://github.com/polymetrics-ai/cli/pull/448
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "runtimecheck, worker, schedule, agent-image, perf, RLM config call sites, tests, docs parity"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-402-config-env-migration
+    verification: "Local and remote Go/website gates passed; parent squash commit cc2a90e918b2814a64516d6bad6d14462b3ac079."
+    automated_review: {primary_route: human, status: blocked, head_sha: 0d7c87e8d963ea841101def68b264b2f976d4381, reviewed_range: "7683087d..cc2a90e9", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "High/medium sidecar findings fixed; targeted re-review clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/448"}
+  - number: 403
+    url: https://github.com/polymetrics-ai/cli/issues/403
+    branch: feat/403-progress-event-bus
+    pr_url: https://github.com/polymetrics-ai/cli/pull/451
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "internal/events plus flow/ETL/certify/worker instrumentation and focused tests"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-403-progress-event-bus
+    verification: "Strict race at production head f1620797 passed in 3809.60s; final local/remote gates passed; parent squash 5474d0f443a162c30ebdb20716eb6e45f3ffdc64."
+    automated_review: {primary_route: human, status: blocked, head_sha: f57d80329fc0a5ba2d084b39f811631f26e7418a, reviewed_range: "f12d573b..5474d0f4", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Chan/Throttle/accounting findings fixed; final pm-reviewer sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/451"}
+  - number: 404
+    url: https://github.com/polymetrics-ai/cli/issues/404
+    branch: feat/404-redacted-slog
+    pr_url: https://github.com/polymetrics-ai/cli/pull/455
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "logging/redaction packages, vault registration, retention, Temporal logger bridge"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-404-redacted-slog
+    verification: "Second review-fix and final residual gates passed; final clean targeted/security re-reviews; PR checks passed at 06ed082c; coordinator extended race `go test -race ./internal/cli/... -count=1 -timeout 45m` passed on production head 7bd3cfae in 1786.300s; parent squash 30de49776bae98f3408e7b62041a5da042dd3a1e."
+    automated_review: {primary_route: human, status: blocked, head_sha: 06ed082ca8fd34c1b74696d23f358c154cf4e55e, reviewed_range: "20475ddf..30de4977", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled; Copilot quota exhausted; second-review and final residual findings fixed; final pm-reviewer and security-auditor sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/455"}
+  - number: 405
+    url: https://github.com/polymetrics-ai/cli/issues/405
+    branch: feat/405-tty-ndjson-progress
+    pr_url: https://github.com/polymetrics-ai/cli/pull/457
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "CLI run options, global flags, and internal/ui styles foundation"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-405-tty-ndjson-progress
+    verification: "Local full gates, website docs checks, remote PR checks, and final targeted/security/docs re-reviews passed at ca827fef; parent squash 087ec03c395eaef9d3eecbd88eb0d28c012d8f00."
+    automated_review: {primary_route: human, status: blocked, head_sha: ca827fef1e5e302b15fa198f9bfefe674c5455cf, reviewed_range: "30de4977..087ec03c", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled/no run; Copilot quota exhausted; pm-reviewer/security-auditor/docs-writer findings fixed and final sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/457"}
+  - number: 406
+    url: https://github.com/polymetrics-ai/cli/issues/406
+    branch: refactor/406-catalog-native-cobra
+    pr_url: https://github.com/polymetrics-ai/cli/pull/449
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "catalog Cobra node/flags/help/tests and parity docs only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-406-catalog-native-cobra
+    verification: "Local and remote gates passed; parent squash commit d3d04fff585faa91a8188bccd108ac1400f042ba."
+    automated_review: {primary_route: human, status: blocked, head_sha: 0f676bdd8da295ddd1f8522627a3d25c90495ca9, reviewed_range: "e5ee4075..d3d04fff", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Read-only adversarial review clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/449"}
+  - number: 407
+    url: https://github.com/polymetrics-ai/cli/issues/407
+    branch: feat/cli-architecture-v2
+    pr_url: https://github.com/polymetrics-ai/cli/pull/438
+    worker: parent_orchestrator
+    status: provisionally_integrated
+    write_scope: "Serialized namespace migration umbrella; grandchildren #421-#437"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-cli-architectur-improvement
+    verification: "All Phase 9 namespace grandchildren #421-#437 are provisionally integrated; #437 merged through PR #466 at parent commit 1008f75f."
+    automated_review: {primary_route: human, status: clean, head_sha: 1008f75ff8fe7d43a0a67a802ccf05ef296eae7f, reviewed_range: "#421-#437 parent range; #437 exact head covered by human fallback", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Umbrella dependency complete on parent; final parent/main review still pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"}
+  - number: 408
+    url: https://github.com/polymetrics-ai/cli/issues/408
+    branch: feat/408-flow-etl-dashboards
+    pr_url: ""
+    worker: pm-gsd-worker
+    status: worker_in_progress
+    write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, generated docs/goldens/website parity"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards
+    verification: "Implementation and artifacts pushed at ff7be3bd; focused race, full non-race, vet, build, parity, local dual-TTY fixtures, and make verify pass. Full race timed out at 10m and CLI race retry at 20m without findings; phase evidence correction remains."
+    automated_review: {primary_route: blocked, status: pending, head_sha: "ff7be3bd8509684257f7d7a73e6fb9735f4baf80", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "No review yet; correction is required before SUB_PR_OPEN and #413 remains collision-deferred.", disposition_url: ""}
+  - number: 409
+    url: https://github.com/polymetrics-ai/cli/issues/409
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "flow and schedule wizard commands, tests, and parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #408.", disposition_url: ""}
+  - number: 410
+    url: https://github.com/polymetrics-ai/cli/issues/410
+    branch: feat/410-otel-tracing
+    pr_url: https://github.com/polymetrics-ai/cli/pull/459
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "internal/telemetry, config/docs, CLI/app/flow/certify/connsdk/worker spans"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-410-otel-tracing
+    verification: "Local full gates, remote PR checks, and final pm-reviewer/security-auditor re-reviews passed at 2c9f56a0; parent squash efb98bf3de4d72c9defe5629b055ae4845506cf8."
+    automated_review: {primary_route: human, status: blocked, head_sha: 2c9f56a03f6c39a1ea22ef41cf38f00b9d27c4ad, reviewed_range: "03dc5d95..efb98bf3", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled/no run; Copilot quota exhausted; OTel env/security/docs findings fixed; final pm-reviewer and security-auditor sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/459"}
+  - number: 411
+    url: https://github.com/polymetrics-ai/cli/issues/411
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "human-first bare query workspace, query grid alias, query tables, connector browser, and parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409.", disposition_url: ""}
+  - number: 412
+    url: https://github.com/polymetrics-ai/cli/issues/412
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "docs viewer, pager, tests, and parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409.", disposition_url: ""}
+  - number: 413
+    url: https://github.com/polymetrics-ai/cli/issues/413
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "connector registration, shell completion, tests, and docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #407.", disposition_url: ""}
+  - number: 414
+    url: https://github.com/polymetrics-ai/cli/issues/414
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "certify and RLM dashboard models and command wiring"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #407 and #408.", disposition_url: ""}
+  - number: 415
+    url: https://github.com/polymetrics-ai/cli/issues/415
+    branch: feat/415-otel-metrics
+    pr_url: https://github.com/polymetrics-ai/cli/pull/461
+    worker: "Sol/high session 324e9db6-21d8-4027-b4cb-3cc0040774af"
+    status: provisionally_integrated
+    write_scope: "OpenTelemetry metrics, exporters, batch/API/stage instrumentation, Temporal gating, and benchmarks"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-415-otel-metrics
+    verification: "Focused/race/full/benchmark/module/make-verify gates and remote CI passed at 6cf5c48f; isolated integration and generated-docs checks passed; parent merge 1f5bd80f."
+    automated_review: {primary_route: human, status: clean, head_sha: 6cf5c48f1b2cf218ed35c15ba77096db89969575, reviewed_range: "56a7ecb0..6cf5c48f", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 933b6246 and combined integration review 4ec8f305 were clean; GitHub bot coverage remains parent/human fallback.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/461"}
+  - number: 416
+    url: https://github.com/polymetrics-ai/cli/issues/416
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "human-first bare reverse workspace plus reverse guide alias; existing plan-preview-approval-execute path only"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409; #462/PR #468 is integrated.", disposition_url: ""}
+  - number: 469
+    url: https://github.com/polymetrics-ai/cli/issues/469
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "TTY-progressive credential and connection setup; secret-source metadata only"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409; #462/PR #468 is integrated; child of #416.", disposition_url: ""}
+  - number: 417
+    url: https://github.com/polymetrics-ai/cli/issues/417
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "help tree, generated man pages, website/docs/golden parity"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #411, #412, #413, #414, #416, and #469; includes #399 legacy connector-help follow-up.", disposition_url: ""}
+  - number: 418
+    url: https://github.com/polymetrics-ai/cli/issues/418
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "TUI accessibility fixes and a11y parity docs"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #411, #412, #414, #416, #463, and #469.", disposition_url: ""}
+  - number: 419
+    url: https://github.com/polymetrics-ai/cli/issues/419
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: complete
+    write_scope: "optional pinned OpenTelemetry log bridge"
+    worker_directory: ""
+    verification: "Human explicitly chose SKIP/DEFER for parent campaign #397; no beta dependency or implementation is authorized."
+    automated_review: {primary_route: human, status: clean, head_sha: "", reviewed_range: "not implemented; explicitly human-deferred", coverage_route: blocked, fallback_route: none, disposition_summary: "Decision-only coverage; grants no approval for any other dependency.", disposition_url: "https://github.com/polymetrics-ai/cli/issues/419"}
+    deferred: true
+  - number: 420
+    url: https://github.com/polymetrics-ai/cli/issues/420
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "dead parser cleanup, AGENTS.md/CONTEXT.md, and final verification"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #415, #417, and #418.", disposition_url: ""}
+  - number: 421
+    url: https://github.com/polymetrics-ai/cli/issues/421
+    branch: refactor/421-connections-native-cobra
+    pr_url: https://github.com/polymetrics-ai/cli/pull/450
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "connections Cobra namespace node/handler/tests and directly applicable website parity"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-421-connections-native-cobra
+    verification: "Local/remote Go, website, security, and verify gates passed; parent squash commit e6faecfbe62f7b9f67156c40a8ad8600d8da4ac1."
+    automated_review: {primary_route: human, status: blocked, head_sha: e5eb4af4a479e1da968dddb48055019a8875f58a, reviewed_range: "1678f9ab..e6faecfb", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Website endpoint placeholder finding fixed; targeted sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/450"}
+  - number: 422
+    url: https://github.com/polymetrics-ai/cli/issues/422
+    branch: refactor/422-query-native-cobra
+    pr_url: https://github.com/polymetrics-ai/cli/pull/452
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "query Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-422-query-native-cobra
+    verification: "Local/remote Go/security gates passed; SQL safety sidecar clean; parent squash 5680debbaddd4fe8cbc6346a80dfef7910d8287d."
+    automated_review: {primary_route: human, status: blocked, head_sha: af785a371e156dbc19d334798c101fffa1365f60, reviewed_range: "5474d0f4..5680debb", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Adversarial query/SQL-safety review clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/452"}
+  - number: 423
+    url: https://github.com/polymetrics-ai/cli/issues/423
+    branch: refactor/423-perf-native-cobra
+    pr_url: https://github.com/polymetrics-ai/cli/pull/458
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "perf Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-423-perf-native-cobra
+    verification: "Local full gates, remote PR checks, and final targeted/security/docs re-reviews passed at 09630ac7; parent squash 03dc5d9518c25e9bc6ced281f70c25fbc51bd198."
+    automated_review: {primary_route: human, status: blocked, head_sha: 09630ac7c486c47d969ca018c9ddeb142204669c, reviewed_range: "087ec03c..03dc5d95", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Claude disabled/no run; Copilot quota exhausted; pm-reviewer/security-auditor/docs-writer findings fixed and final sidecars clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/458"}
+  - number: 424
+    url: https://github.com/polymetrics-ai/cli/issues/424
+    branch: refactor/424-runtime-native-cobra
+    pr_url: https://github.com/polymetrics-ai/cli/pull/460
+    worker: "Sol/high session 7050f706-72d2-47df-ac13-0b08979cc1ae"
+    status: provisionally_integrated
+    write_scope: "runtime Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-424-runtime-native-cobra
+    verification: "Focused/full/make-verify gates and remote CI passed at 323d4a91; parent merge 35262537 and combined parent head 1f5bd80f preserve ancestry."
+    automated_review: {primary_route: human, status: clean, head_sha: 323d4a91b465cdee5fdb94ea338f4272b76de781, reviewed_range: "56a7ecb0..323d4a91", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 05a92a52 was clean; GitHub bot coverage remains parent/human fallback.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/460"}
+  - number: 425
+    url: https://github.com/polymetrics-ai/cli/issues/425
+    branch: refactor/425-version-native-cobra
+    pr_url: ""
+    worker: "Sol/high sessions e3c96736 and 7ceb8ecd"
+    status: provisionally_integrated
+    write_scope: "version Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-425-version-native-cobra
+    verification: "Focused/full/make-verify/parity gates passed at 784153c7; exact head promoted at parent merge 0c57ec39."
+    automated_review: {primary_route: human, status: clean, head_sha: 784153c7ed7cbb94360601b84c40c821eec21823, reviewed_range: "479a62f9..784153c7", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 905f2b84 was clean after assigned-boolean correction; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 426
+    url: https://github.com/polymetrics-ai/cli/issues/426
+    branch: refactor/426-skills-native-cobra
+    pr_url: ""
+    worker: "Sol/high session e83aba7c-6961-4c70-abcb-9dcfaa2960e1"
+    status: provisionally_integrated
+    write_scope: "skills Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-426-skills-native-cobra
+    verification: "Focused/full/make-verify/parity gates passed at fe2a937b; exact head promoted at parent merge bb12f265."
+    automated_review: {primary_route: human, status: clean, head_sha: fe2a937b5809ee53518549d6148d41879b6a8c2d, reviewed_range: "54bfcbab..fe2a937b", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 60adcff2 was clean; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 427
+    url: https://github.com/polymetrics-ai/cli/issues/427
+    branch: refactor/427-docs-native-cobra
+    pr_url: ""
+    worker: "Sol/high sessions c791a5f6 and 808093c7"
+    status: provisionally_integrated
+    write_scope: "docs Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-427-docs-native-cobra
+    verification: "Focused/full/make-verify/differential/parity gates passed at aacb1536; exact head promoted at parent merge e68ccdf7."
+    automated_review: {primary_route: human, status: clean, head_sha: aacb15361b9f42a381442f79b9ca50e56b482205, reviewed_range: "ab847da2..aacb1536", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head re-review ef326655 was clean after docs compatibility correction; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 428
+    url: https://github.com/polymetrics-ai/cli/issues/428
+    branch: refactor/428-agent-native-cobra
+    pr_url: ""
+    worker: "Sol/high sessions 0f75ba03, 56018ad9, d253f76f"
+    status: provisionally_integrated
+    write_scope: "agent Cobra namespace node/handler/fake-runtime tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-428-agent-native-cobra
+    verification: "Fake-only focused/race/full/make-verify/differential/parity gates passed at 924ebfe0; exact head promoted at parent merge 569536d1."
+    automated_review: {primary_route: human, status: clean, head_sha: 924ebfe016143504502ffeebcee7002f6d520c6f, reviewed_range: "235233f7..924ebfe0", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Final independent Sol/xhigh exact-head security review e18a80dd was clean after action-discovery corrections; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 429
+    url: https://github.com/polymetrics-ai/cli/issues/429
+    branch: refactor/429-credentials-native-cobra
+    pr_url: ""
+    worker: "Sol/high implementation plus bounded correction sessions; see parent RUN-STATE"
+    status: provisionally_integrated
+    write_scope: "credentials Cobra namespace, rooted local-write effects, tests, and parity"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-429-credentials-native-cobra
+    verification: "Focused/repeated/race/full/make-verify/base-differential/parity gates passed at 9e966e85; bounded parent integration suites passed after one over-broad timeout; merge a490eeba."
+    automated_review: {primary_route: human, status: clean, head_sha: 9e966e85868aedb0ddfd79ca0de8556ed78345c5, reviewed_range: "0f1ec1e8..9e966e85", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Final independent Sol/xhigh exact-head review 1b30b51b was clean after parser and local-write corrections; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 430
+    url: https://github.com/polymetrics-ai/cli/issues/430
+    branch: refactor/430-etl-native-cobra
+    pr_url: ""
+    worker: "Sol/high sessions 8d48e651 and 9751766b"
+    status: provisionally_integrated
+    write_scope: "ETL Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-430-etl-native-cobra
+    verification: "Focused/repeated/race/full/make-verify/base-differential/parity gates passed at ad0f23bb; parent integration race passed; merge 4a9fa0fb."
+    automated_review: {primary_route: human, status: clean, head_sha: ad0f23bbe6b9fc71713d651d0b25ff6c42d43a06, reviewed_range: "6c94754c..ad0f23bb", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 6049b205 was clean after status operand correction; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 431
+    url: https://github.com/polymetrics-ai/cli/issues/431
+    branch: refactor/431-reverse-native-cobra
+    pr_url: ""
+    worker: "Sol/high sessions 1e9e3b7f and ae7bde80"
+    status: provisionally_integrated
+    write_scope: "reverse ETL Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-431-reverse-native-cobra
+    verification: "Focused/race/full/make-verify/324-case differential/parity gates passed at d628fce2; parent integration CLI/app/safety race passed; merge 573d6222."
+    automated_review: {primary_route: human, status: clean, head_sha: d628fce2916c390f51c8e7e519d481c2cc9f51fe, reviewed_range: "0b03361e..d628fce2", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 6ea302fa was clean after malformed unknown correction; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 432
+    url: https://github.com/polymetrics-ai/cli/issues/432
+    branch: refactor/432-flow-native-cobra
+    pr_url: ""
+    worker: "Sol/high session f6cbbbfa-f48f-4abb-a0f1-91f1c0f61e48"
+    status: provisionally_integrated
+    write_scope: "flow Cobra namespace node/handler/tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-432-flow-native-cobra
+    verification: "Focused/race/full/make-verify/200-case differential/parity gates passed at b8377b7b; parent integration race passed; merge ad6e4331."
+    automated_review: {primary_route: human, status: clean, head_sha: b8377b7b200e50ccb5ec164670fed4f78a5c486a, reviewed_range: "ec12c172..b8377b7b", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 9dbfa83b was clean; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 433
+    url: https://github.com/polymetrics-ai/cli/issues/433
+    branch: refactor/433-schedule-native-cobra
+    pr_url: ""
+    worker: "Sol/high session e1009583-e898-4de6-b4dd-0b0ef1e2b5cd"
+    status: provisionally_integrated
+    write_scope: "schedule Cobra namespace node/handler/fake-runtime tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-433-schedule-native-cobra
+    verification: "Fake-only focused/race/full/make-verify/248-case differential/parity gates passed at 701569ee; parent integration race passed; merge 990b8f60."
+    automated_review: {primary_route: human, status: clean, head_sha: 701569ee985f7c87f011d8a1cfab39afcc3cc8c2, reviewed_range: "ab1c79ee..701569ee", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 1a49a57e was clean; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 434
+    url: https://github.com/polymetrics-ai/cli/issues/434
+    branch: refactor/434-rlm-native-cobra
+    pr_url: ""
+    worker: "Sol/high sessions 11225914 and 2fcfbbc6"
+    status: provisionally_integrated
+    write_scope: "RLM Cobra namespace node/handler/fake analyzer tests/parity only"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-434-rlm-native-cobra
+    verification: "Fake-only focused/race/full/make-verify/1984-case differential/parity gates passed at 8177e342; parent integration race passed; merge 96680756."
+    automated_review: {primary_route: human, status: clean, head_sha: 8177e342ad03b5fbf3750f2c0ecf9aa11f695f92, reviewed_range: "2ac457a1..8177e342", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 65f48296 was clean after mode-gated request correction; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 435
+    url: https://github.com/polymetrics-ai/cli/issues/435
+    branch: refactor/435-worker-native-cobra
+    pr_url: ""
+    worker: "Sol/high sessions 72824844 and c11cab42"
+    status: provisionally_integrated
+    write_scope: "hidden worker Cobra namespace node/handler/fake status-serve tests/parity"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-435-worker-native-cobra
+    verification: "Fake-only focused/race/full/make-verify/parity gates passed at f712e696; parent integration race passed; merge afd765e9."
+    automated_review: {primary_route: human, status: clean, head_sha: f712e696e075792492397ab1d556d1dfceadba04, reviewed_range: "14c02d29..f712e696", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review d549e7cf was clean after no-dial evidence correction; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 436
+    url: https://github.com/polymetrics-ai/cli/issues/436
+    branch: refactor/436-extract-native-cobra
+    pr_url: ""
+    worker: "Sol/high sessions cbcc7097 and 5344f0f4"
+    status: provisionally_integrated
+    write_scope: "hidden extract Cobra namespace, rooted RLM warehouse scope, tests, and parity"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-436-extract-native-cobra
+    verification: "Temp-only focused/race/full/make-verify/base-differential/parity gates passed at 7da245b8; parent integration race passed; merge b28e67fb."
+    automated_review: {primary_route: human, status: clean, head_sha: 7da245b8da2b8590766d99ca9e967d366e50cfcc, reviewed_range: "eec03373..7da245b8", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Independent Sol/xhigh exact-head review 19fd2452 was clean after rooted-scope and parser corrections; GitHub bot coverage remains parent/human fallback.", disposition_url: ""}
+  - number: 437
+    url: https://github.com/polymetrics-ai/cli/issues/437
+    branch: refactor/437-connectors-certify-native-cobra
+    pr_url: https://github.com/polymetrics-ai/cli/pull/466
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "connectors and certify Cobra namespace, certify safety, tests, docs/goldens/website parity"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-437-connectors-certify-native-cobra
+    verification: "PR #466 head unchanged, required checks green, unresolved threads empty; post-merge focused checks passed; parent merge 1008f75f."
+    automated_review: {primary_route: human, status: clean, head_sha: 26f98a72419010b961b5b8378ef4a695b0c0a06f, reviewed_range: "PR #466 exact head", coverage_route: sub_pr, fallback_route: none, disposition_summary: "Human coordinator explicitly reviewed/tested and approved integration; no unresolved findings.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"}
+  - number: 462
+    url: https://github.com/polymetrics-ai/cli/issues/462
+    branch: docs/462-terminal-ui-tty-gate-follow-up
+    pr_url: https://github.com/polymetrics-ai/cli/pull/468
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "terminal UI design skill, docs, planning, and interaction contract"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-462-terminal-ui-tty-gate-follow-up
+    verification: "PR #467 and #468 merged; parent contains c3d8a757 before main sync; PR #438 checks were green at c3d8a757."
+    automated_review: {primary_route: blocked, status: pending, head_sha: c3d8a7573bfaf661bdcab737db84e3497929cdff, reviewed_range: "local sidecar only; no Claude/Copilot/human review record", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Design findings corrected and merged; external review coverage still absent.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/468"}
+  - number: 453
+    url: https://github.com/polymetrics-ai/cli/issues/453
+    branch: fix/453-reverse-smoke-preview
+    pr_url: https://github.com/polymetrics-ai/cli/pull/454
+    worker: pm-gsd-worker
+    status: provisionally_integrated
+    write_scope: "Makefile reverse smoke preview ordering, durable regression, issue-local GSD artifacts"
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-453-reverse-smoke-preview
+    verification: "Local/remote full gates and safe smoke passed; matcher review fix clean; parent squash 20475ddf8ae3486282ead4fc7d2129f2bd1129b3."
+    automated_review: {primary_route: human, status: blocked, head_sha: aa6a8485aa1ad3391c33d8422bf332db8dc6c06e, reviewed_range: "bbc91df4..20475ddf", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Matcher false-positive finding fixed; targeted sidecar clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/454"}
+human_gates:
+  - parent PR merge to main
+  - dependency additions outside ADR 0002-0004 phase budgets
+  - auth scope changes
+  - secrets or credential values
+  - credentialed connector checks
+  - destructive/admin actions
+  - production deploys
+  - reverse ETL execution outside plan, preview, approval, execute
+  - quality-gate reductions
+  - Phase 437 pending intake implementation or GitHub issue edits without explicit authorization
+updated_at: 2026-07-20T23:17:08Z

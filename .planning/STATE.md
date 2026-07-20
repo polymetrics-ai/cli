@@ -5,7 +5,8 @@
 
 ## Current State
 
-- Issue #122 is active on branch `chore/122-upstream-gsd-rebootstrap` with PR #123 open.
+- Issue #397 is active as the CLI Architecture v2 parent orchestration program. Stage 0 issue #398 creates branch `feat/cli-architecture-v2`, records the 22-phase source plan, and opens the draft parent PR to `main`; merge to `main` remains human-gated.
+- Issue #122 remains active on branch `chore/122-upstream-gsd-rebootstrap` with PR #123 open.
 - Active `.planning/` replaces a legacy/custom tree; previous active planning is archived outside the current tree.
 - Official `open-gsd/gsd-core@next` docs are pinned in `.gsd/upstream.lock.json` and adapted for Pi through `scripts/gsd` plus `.pi/` resources.
 - `.gsd/commands.json` exposes 69 official GSD commands generated from official `docs/COMMANDS.md`.

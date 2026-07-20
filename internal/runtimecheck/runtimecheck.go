@@ -3,13 +3,18 @@ package runtimecheck
 import (
 	"context"
 	"fmt"
-	"os"
+	"net/url"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 	"go.temporal.io/sdk/client"
 	tlog "go.temporal.io/sdk/log"
+
+	pmconfig "polymetrics.ai/internal/config"
+	pmlogging "polymetrics.ai/internal/logging"
+	"polymetrics.ai/internal/safety"
 )
 
 type Config struct {
@@ -33,13 +38,31 @@ type Report struct {
 	Checks   []CheckResult `json:"checks"`
 }
 
-func FromEnv() Config {
+func init() {
+	redis.SetLogger(redisLogAdapter{})
+}
+
+type redisLogAdapter struct{}
+
+func (redisLogAdapter) Printf(ctx context.Context, format string, v ...interface{}) {
+	pmlogging.FromContext(ctx).DebugContext(ctx, "redis diagnostic", "message", fmt.Sprintf(format, v...))
+}
+
+func FromConfig(cfg pmconfig.Config) Config {
 	return Config{
-		PostgresURL:   envOr("POLYMETRICS_POSTGRES_URL", "postgres://polymetrics:polymetrics@localhost:15433/polymetrics?sslmode=disable"),
-		DragonflyAddr: envOr("POLYMETRICS_DRAGONFLY_ADDR", "localhost:6379"),
-		TemporalAddr:  envOr("POLYMETRICS_TEMPORAL_ADDR", "localhost:7233"),
+		PostgresURL:   stringOr(cfg.Runtime.PostgresURL, "postgres://polymetrics:polymetrics@localhost:15433/polymetrics?sslmode=disable"),
+		DragonflyAddr: stringOr(cfg.Runtime.DragonflyAddr, "localhost:6379"),
+		TemporalAddr:  stringOr(cfg.Runtime.TemporalAddr, "localhost:7233"),
 		Timeout:       3 * time.Second,
 	}
+}
+
+func FromEnv() Config {
+	cfg, err := pmconfig.Load(pmconfig.Options{})
+	if err != nil {
+		return FromConfig(pmconfig.Config{})
+	}
+	return FromConfig(cfg)
 }
 
 func Doctor(ctx context.Context, cfg Config) Report {
@@ -73,6 +96,8 @@ func Healthy(report Report) bool {
 
 func RedactedConfig(cfg Config) Config {
 	cfg.PostgresURL = redactPostgresURL(cfg.PostgresURL)
+	cfg.DragonflyAddr = redactTopologyEndpoint(cfg.DragonflyAddr)
+	cfg.TemporalAddr = redactTopologyEndpoint(cfg.TemporalAddr)
 	return cfg
 }
 
@@ -89,7 +114,7 @@ func checkPostgres(ctx context.Context, cfg Config) CheckResult {
 	result.Latency = time.Since(start)
 	if err != nil {
 		result.Status = "error"
-		result.Error = err.Error()
+		result.Error = redactRuntimeCheckError(ctx, err, cfg.PostgresURL, result.Endpoint)
 		return result
 	}
 	result.Status = "ok"
@@ -98,7 +123,7 @@ func checkPostgres(ctx context.Context, cfg Config) CheckResult {
 
 func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 	start := time.Now()
-	result := CheckResult{Name: "dragonfly", Endpoint: cfg.DragonflyAddr}
+	result := CheckResult{Name: "dragonfly", Endpoint: redactTopologyEndpoint(cfg.DragonflyAddr)}
 	checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
 	defer cancel()
 	client := redis.NewClient(&redis.Options{Addr: cfg.DragonflyAddr})
@@ -107,7 +132,7 @@ func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 	result.Latency = time.Since(start)
 	if err != nil {
 		result.Status = "error"
-		result.Error = err.Error()
+		result.Error = redactRuntimeCheckError(ctx, err, cfg.DragonflyAddr, result.Endpoint)
 		return result
 	}
 	result.Status = "ok"
@@ -116,35 +141,26 @@ func checkDragonfly(ctx context.Context, cfg Config) CheckResult {
 
 func checkTemporal(ctx context.Context, cfg Config) CheckResult {
 	start := time.Now()
-	result := CheckResult{Name: "temporal", Endpoint: cfg.TemporalAddr}
-	c, err := client.Dial(client.Options{HostPort: cfg.TemporalAddr, Logger: noopLogger{}})
+	result := CheckResult{Name: "temporal", Endpoint: redactTopologyEndpoint(cfg.TemporalAddr)}
+	checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
+	defer cancel()
+	c, err := client.DialContext(checkCtx, client.Options{HostPort: cfg.TemporalAddr, Logger: tlog.NewStructuredLogger(pmlogging.FromContext(checkCtx)), ConnectionOptions: client.ConnectionOptions{GetSystemInfoTimeout: cfg.Timeout}})
 	if err == nil {
 		defer c.Close()
-		checkCtx, cancel := context.WithTimeout(ctx, cfg.Timeout)
-		defer cancel()
 		_, err = c.CheckHealth(checkCtx, &client.CheckHealthRequest{})
 	}
 	result.Latency = time.Since(start)
 	if err != nil {
 		result.Status = "error"
-		result.Error = err.Error()
+		result.Error = redactRuntimeCheckError(ctx, err, cfg.TemporalAddr, result.Endpoint)
 		return result
 	}
 	result.Status = "ok"
 	return result
 }
 
-type noopLogger struct{}
-
-func (noopLogger) Debug(string, ...interface{}) {}
-func (noopLogger) Info(string, ...interface{})  {}
-func (noopLogger) Warn(string, ...interface{})  {}
-func (noopLogger) Error(string, ...interface{}) {}
-
-var _ tlog.Logger = noopLogger{}
-
-func envOr(name, fallback string) string {
-	if value := os.Getenv(name); value != "" {
+func stringOr(value, fallback string) string {
+	if value != "" {
 		return value
 	}
 	return fallback
@@ -154,24 +170,64 @@ func redactPostgresURL(raw string) string {
 	if raw == "" {
 		return raw
 	}
-	// Avoid importing net/url just for display; this keeps malformed DSNs redacted too.
-	for _, marker := range []string{"://"} {
-		if i := index(raw, marker); i >= 0 {
-			prefix := raw[:i+len(marker)]
-			rest := raw[i+len(marker):]
-			if at := index(rest, "@"); at >= 0 {
-				return prefix + "***@" + rest[at+1:]
-			}
-		}
+	raw = safety.SanitizeTerminalLine(raw)
+	parsed, err := url.Parse(raw)
+	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
+		return "[redacted-url]"
 	}
-	return fmt.Sprintf("%s", raw)
+	hadUser := parsed.User != nil
+	parsed.User = nil
+	parsed.RawQuery = ""
+	parsed.ForceQuery = false
+	parsed.Fragment = ""
+	parsed.RawPath = ""
+	redacted := parsed.String()
+	if hadUser {
+		redacted = strings.Replace(redacted, "://", "://***@", 1)
+	}
+	return redacted
 }
 
-func index(s, substr string) int {
-	for i := 0; i+len(substr) <= len(s); i++ {
-		if s[i:i+len(substr)] == substr {
-			return i
-		}
+func redactTopologyEndpoint(raw string) string {
+	if raw == "" {
+		return raw
 	}
-	return -1
+	raw = safety.SanitizeTerminalLine(raw)
+	if raw == "" {
+		return "[redacted-endpoint]"
+	}
+	if parsed, err := url.Parse(raw); err == nil && parsed.Scheme != "" && parsed.Host != "" {
+		return nonEmptyEndpoint(parsed.Host)
+	}
+	endpoint := raw
+	if idx := strings.IndexAny(endpoint, "?#"); idx >= 0 {
+		endpoint = endpoint[:idx]
+	}
+	if idx := strings.Index(endpoint, "/"); idx >= 0 {
+		endpoint = endpoint[:idx]
+	}
+	if idx := strings.LastIndex(endpoint, "@"); idx >= 0 {
+		endpoint = endpoint[idx+1:]
+	}
+	return nonEmptyEndpoint(endpoint)
+}
+
+func nonEmptyEndpoint(endpoint string) string {
+	endpoint = safety.SanitizeTerminalLine(endpoint)
+	if endpoint == "" {
+		return "[redacted-endpoint]"
+	}
+	return endpoint
+}
+
+func redactRuntimeCheckError(ctx context.Context, err error, rawEndpoint, safeEndpoint string) string {
+	if err == nil {
+		return ""
+	}
+	message := pmlogging.RedactLine(ctx, err.Error())
+	rawEndpoint = safety.SanitizeTerminalLine(rawEndpoint)
+	if rawEndpoint != "" && safeEndpoint != "" && rawEndpoint != safeEndpoint {
+		message = strings.ReplaceAll(message, rawEndpoint, safeEndpoint)
+	}
+	return message
 }

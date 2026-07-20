@@ -1,0 +1,107 @@
+{
+  "phase": "415-otel-metrics",
+  "issue": 415,
+  "parentIssue": 397,
+  "branch": "feat/415-otel-metrics",
+  "baseBranch": "feat/cli-architecture-v2",
+  "baseHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
+  "status": "independent-correction-pushed",
+  "verificationPassed": true,
+  "correction": {
+    "sessionId": "153cfaabe3df4733a85717da46513786",
+    "sessionIdSource": "WARP_TERMINAL_SESSION_UUID",
+    "model": "openai-codex/gpt-5.6-sol",
+    "thinking": "high",
+    "startingHead": "c6138292cfcc7205f7968a54b57a65f933a3c1fa",
+    "reviewLog": "/tmp/pm-397-review-415.log",
+    "acceptedFindings": 4,
+    "implementationCommit": "ceb3a35ce13642a0d8c8ea0010272582202f8afd",
+    "implementationPushed": true,
+    "reviewedRangeWhitespacePassed": true
+  },
+  "manualGsdFallback": true,
+  "fallbackReason": "scripts/gsd prompt programming-loop init --phase 415-otel-metrics --dry-run returned: scripts/gsd: unknown GSD command: programming-loop",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single Pi mutating worker owns isolated issue worktree/branch; no subagent tool available"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests captured inline in isolated worker; production implementation follows"
+    },
+    {
+      "cycle": "continuation",
+      "decision": "local_critical_path",
+      "reason": "previous worker output truncated; dirty worktree inspected and preserved in isolated issue branch; no subagent tool available"
+    },
+    {
+      "cycle": "verify-precommit",
+      "decision": "local_critical_path",
+      "reason": "focused/full gates green inline; make verify must be rerun after committing ADR-approved dependency diff because tidy-check compares go.mod/go.sum to HEAD"
+    },
+    {
+      "cycle": "verify-postcommit",
+      "decision": "local_critical_path",
+      "reason": "make verify passed after implementation/dependency commit in isolated worker branch"
+    },
+    {
+      "cycle": "ci-website-generated-data-fix",
+      "decision": "local_critical_path",
+      "reason": "Website checks CI reported docs generated-data drift; generated website docs data inline in same issue branch"
+    },
+    {
+      "cycle": "final-verify-after-generated-data",
+      "decision": "local_critical_path",
+      "reason": "make verify and website generated-data/typecheck gates passed after generated-data fix"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "pm-reviewer findings assigned to the same isolated issue branch/worktree; no subagent tool; artifacts updated before production edits"
+    },
+    {
+      "cycle": "review-fix-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests captured and focused review-fix tests plus benchmark passed inline in isolated worker branch"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "focused tests, benchmark, full Go gates, make verify, diff check, and dependency diff review passed inline"
+    },
+    {
+      "cycle": "independent-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "bounded mutating correction worker owns the existing isolated issue worktree; no subagent tool is available; artifacts updated before test and production edits"
+    },
+    {
+      "cycle": "independent-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused contract and behavior RED was captured inline before production edits in the isolated worker"
+    },
+    {
+      "cycle": "independent-correction-execute",
+      "decision": "local_critical_path",
+      "reason": "small green slices completed at telemetry provider, HTTP, ETL batch, action batch retry/skip, and stage seams without new dependencies"
+    },
+    {
+      "cycle": "independent-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused race and reconciliation tests, repeated live-export/endpoint tests, benchmarks, full Go gates, module checks, and make verify passed"
+    },
+    {
+      "cycle": "independent-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "correction commit pushed to the existing issue branch; reviewed-range whitespace checks passed; final artifacts updated without external review requests"
+    }
+  ],
+  "gates": {
+    "redTestsCaptured": true,
+    "focusedTestsPassed": true,
+    "fullTestsPassed": true,
+    "makeVerifyPassed": true
+  }
+}

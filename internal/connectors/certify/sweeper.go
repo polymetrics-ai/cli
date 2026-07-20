@@ -10,15 +10,23 @@ import (
 	"context"
 	"fmt"
 	"path/filepath"
+	"sort"
+	"strings"
 	"time"
 )
 
+// MaxSweepAge is the largest orphan age accepted by any sweep entrypoint.
+const MaxSweepAge = 365 * 24 * time.Hour
+
 // SweeperOptions configures a Sweeper.
 type SweeperOptions struct {
-	// Root is the project root (an existing `pm init`-ed directory) whose
-	// certify-ledger.jsonl the sweeper scans and whose CLI surface it drives
-	// to perform cleanup.
-	Root string
+	// Root is the legacy combined root. New callers set LedgerRoot and
+	// WorkspaceRoot separately so durable authority never doubles as CLI state.
+	Root          string
+	LedgerRoot    string
+	WorkspaceRoot string
+	Connector     string
+	Credential    *CredentialRef
 	// OlderThan is the minimum age (measured from LedgerEntry.PlannedAt) an
 	// uncleaned entry must have before the sweeper will touch it
 	// (certification design §A/§B "--older-than 24h" default), so an
@@ -59,12 +67,35 @@ func NewSweeper(opts SweeperOptions) *Sweeper {
 // CLI-driven mechanics the write stages use, and records success back into
 // the ledger.
 func (s *Sweeper) Sweep(ctx context.Context) (SweepResult, error) {
-	entries, err := LoadLedger(s.opts.Root)
+	if s.opts.OlderThan <= 0 || s.opts.OlderThan > MaxSweepAge {
+		return SweepResult{}, fmt.Errorf("certify: sweep age must be greater than zero and no more than 8760h")
+	}
+	if s.opts.Credential != nil && s.opts.Connector == "" {
+		return SweepResult{}, fmt.Errorf("certify: sweep credential reference requires a selected connector")
+	}
+	if s.opts.Connector != "" {
+		ref := CredentialRef{}
+		if s.opts.Credential != nil {
+			ref = *s.opts.Credential
+		}
+		if err := ValidateCredentialReference(s.opts.Connector, ref); err != nil {
+			return SweepResult{}, err
+		}
+	}
+	ledgerRoot := s.opts.LedgerRoot
+	if ledgerRoot == "" {
+		ledgerRoot = s.opts.Root
+	}
+	workspaceRoot := s.opts.WorkspaceRoot
+	if workspaceRoot == "" {
+		workspaceRoot = s.opts.Root
+	}
+	entries, err := LoadLedger(ledgerRoot)
 	if err != nil {
 		return SweepResult{}, fmt.Errorf("certify: sweeper load ledger: %w", err)
 	}
 
-	ledger, err := NewLedger(s.opts.Root)
+	ledger, err := NewLedger(ledgerRoot)
 	if err != nil {
 		return SweepResult{}, fmt.Errorf("certify: sweeper open ledger: %w", err)
 	}
@@ -76,7 +107,8 @@ func (s *Sweeper) Sweep(ctx context.Context) (SweepResult, error) {
 	}
 
 	threshold := time.Now().UTC().Add(-s.opts.OlderThan)
-	harness := NewHarness(s.opts.Root)
+	harness := NewHarness(workspaceRoot, WithContext(ctx))
+	prepared := false
 
 	for _, status := range entries.Uncleaned() {
 		if status.PlannedAt.After(threshold) {
@@ -86,9 +118,28 @@ func (s *Sweeper) Sweep(ctx context.Context) (SweepResult, error) {
 		if err := ctx.Err(); err != nil {
 			return result, err
 		}
+		if s.opts.Connector != "" && status.Connector != s.opts.Connector {
+			result.Failed[status.Tag] = "ledger connector does not match selected sweep connector"
+			continue
+		}
+		if reason := validateSweepStatus(status); reason != "" {
+			result.Failed[status.Tag] = reason
+			continue
+		}
+		if !prepared {
+			if err := prepareSweepWorkspace(harness, status.Connector, s.opts.Credential); err != nil {
+				return result, err
+			}
+			prepared = true
+		}
 
 		ok, reason := sweepCleanTag(harness, status)
 		if !ok {
+			result.Failed[status.Tag] = reason
+			continue
+		}
+		verified, reason := sweepVerifyCleaned(harness, status)
+		if !verified {
 			result.Failed[status.Tag] = reason
 			continue
 		}
@@ -121,7 +172,13 @@ func (s *Sweeper) Sweep(ctx context.Context) (SweepResult, error) {
 // result.Skipped/Failed by the caller, since certify must never guess at an
 // unsafe cleanup mechanism for an unrecognized entry.
 func sweepCleanTag(h *Harness, status LedgerStatus) (bool, string) {
+	if reason := validateSweepStatus(status); reason != "" {
+		return false, reason
+	}
 	if status.EntityHint == "outbox_record" {
+		if status.Action != "create" {
+			return false, "outbox cleanup authority does not match the recorded action"
+		}
 		return sweepCleanOutboxRecord(h, status)
 	}
 
@@ -129,7 +186,116 @@ func sweepCleanTag(h *Harness, status LedgerStatus) (bool, string) {
 	if !ok {
 		return false, fmt.Sprintf("no known cleanup mechanism for connector %q action %q", status.Connector, status.Action)
 	}
+	if status.CleanupAction != "" && status.CleanupAction != pairing.Cleanup {
+		return false, "ledger cleanup action does not match the curated pairing"
+	}
+	if status.EntityHint != pairing.VerifyStream || (status.VerifyField != "" && status.VerifyField != pairing.VerifyField) {
+		return false, "ledger verification provenance does not match the curated pairing"
+	}
+	if !sweepPairingTagAddressable(pairing) {
+		return false, "cleanup pairing requires a verified server-issued identifier and is not sweep-authorized"
+	}
 	return sweepCleanViaPairing(h, status, pairing)
+}
+
+func sweepPairingTagAddressable(pairing WritePairing) bool {
+	return pairing.IDField != "" && pairing.IDField == pairing.VerifyField
+}
+
+func sweepVerifyCleaned(h *Harness, status LedgerStatus) (bool, string) {
+	if status.EntityHint == "outbox_record" {
+		lastAction, err := outboxLastActionForTag(h.root, status.Tag)
+		if err != nil {
+			return false, fmt.Sprintf("sweep cleanup verification: %v", err)
+		}
+		if lastAction != "delete" {
+			return false, "sweep cleanup verification: outbox tombstone is absent"
+		}
+		return true, ""
+	}
+
+	pairing, ok := matchPairingForAction(status.Connector, status.Action)
+	if !ok || !sweepPairingTagAddressable(pairing) {
+		return false, "sweep cleanup verification has no tag-addressable curated pairing"
+	}
+	return sweepVerifyPairingAbsent(h, status, pairing)
+}
+
+func sweepVerifyPairingAbsent(h *Harness, status LedgerStatus, pairing WritePairing) (bool, string) {
+	table := "cert_sweep_verify_" + status.RunID
+	connection := "cert_sweep_verify_conn_" + status.RunID
+	create := h.Run("connections", "create", connection,
+		"--source", status.Connector+":"+sourceCredentialName,
+		"--destination", "warehouse:cert-sweep-warehouse",
+		"--stream", pairing.VerifyStream,
+		"--primary-key", pairing.IDField,
+		"--sync-mode", "full_refresh_overwrite",
+		"--table", table,
+		"--json")
+	if create.ExitCode != 0 || create.Kind != "Connection" {
+		return false, fmt.Sprintf("sweep cleanup verification connection: exit=%d kind=%q", create.ExitCode, create.Kind)
+	}
+	run := h.Run("etl", "run", "--connection", connection, "--stream", pairing.VerifyStream, "--json")
+	if run.ExitCode != 0 || run.Kind != "ETLRun" {
+		return false, fmt.Sprintf("sweep cleanup verification read: exit=%d kind=%q", run.ExitCode, run.Kind)
+	}
+	query := h.Run("query", "run", "--table", table, "--json")
+	if query.ExitCode != 0 || query.Kind != "QueryResult" {
+		return false, fmt.Sprintf("sweep cleanup verification query: exit=%d kind=%q", query.ExitCode, query.Kind)
+	}
+	rows, _ := query.Envelope["rows"].([]any)
+	for _, row := range rows {
+		record, ok := row.(map[string]any)
+		if !ok {
+			continue
+		}
+		if value, _ := record[pairing.VerifyField].(string); value == status.Tag {
+			return false, "sweep cleanup verification: tagged entity is still present"
+		}
+	}
+	return true, ""
+}
+
+func validateSweepStatus(status LedgerStatus) string {
+	if status.Connector == "" || status.Action == "" || status.Tag == "" || status.RunID == "" || status.PlannedAt.IsZero() {
+		return "ledger entry is missing required cleanup provenance"
+	}
+	if !validLedgerTag(status.Connector, status.RunID, status.Tag) {
+		return "ledger tag is not bound to the recorded connector"
+	}
+	return ""
+}
+
+func prepareSweepWorkspace(h *Harness, connector string, credential *CredentialRef) error {
+	initRes := h.Run("init", "--json")
+	if initRes.ExitCode != 0 || initRes.Kind != "InitResult" {
+		return fmt.Errorf("certify: initialize sweep workspace: exit=%d kind=%q", initRes.ExitCode, initRes.Kind)
+	}
+	if credential == nil || connector == "sample" {
+		return nil
+	}
+	args := []string{"credentials", "add", sourceCredentialName, "--connector", connector, "--json"}
+	fields := make([]string, 0, len(credential.FromEnv))
+	for field := range credential.FromEnv {
+		fields = append(fields, field)
+	}
+	sort.Strings(fields)
+	for _, field := range fields {
+		args = append(args, "--from-env", field+"="+credential.FromEnv[field])
+	}
+	keys := make([]string, 0, len(credential.Config))
+	for key := range credential.Config {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		args = append(args, "--config", key+"="+credential.Config[key])
+	}
+	res := h.Run(args...)
+	if res.ExitCode != 0 || res.Kind != "Credential" {
+		return fmt.Errorf("certify: provision sweep credential reference: exit=%d kind=%q", res.ExitCode, res.Kind)
+	}
+	return nil
 }
 
 func matchPairingForAction(connector, action string) (WritePairing, bool) {
@@ -150,7 +316,7 @@ func sweepCleanOutboxRecord(h *Harness, status LedgerStatus) (bool, string) {
 	credRes := h.Run("credentials", "add", writeOutboxCredentialName, "--connector", "outbox",
 		"--config", "path="+outboxDir, "--json")
 	if credRes.ExitCode != 0 && credRes.Kind != "Credential" {
-		return false, fmt.Sprintf("provision outbox credential: exit=%d stderr=%s", credRes.ExitCode, credRes.Stderr)
+		return false, fmt.Sprintf("provision outbox credential: exit=%d kind=%q", credRes.ExitCode, credRes.Kind)
 	}
 
 	// A sweeper run has no live source table to plan a reverse ETL from (the
@@ -163,18 +329,25 @@ func sweepCleanOutboxRecord(h *Harness, status LedgerStatus) (bool, string) {
 	// (app.RunReverseETL: Write{Table: plan.Name}) — this is the same table
 	// stages_write.go's write_create/write_cleanup wrote the original
 	// create/cleanup records into.
+	sourceTable, err := tombstoneSourceTable(h, status)
+	if err != nil {
+		return false, fmt.Sprintf("prepare sweep tombstone source: %v", err)
+	}
 	planRes := h.Run("reverse", "plan", writeReverseSelfTestName,
-		"--source-table", tombstoneSourceTable(h, status),
+		"--source-table", sourceTable,
 		"--destination", "outbox:"+writeOutboxCredentialName,
 		"--map", "tag:tag",
 		"--action", "delete")
 	if planRes.ExitCode != 0 {
-		return false, fmt.Sprintf("sweep plan: exit=%d stderr=%s", planRes.ExitCode, planRes.Stderr)
+		return false, fmt.Sprintf("sweep plan: exit=%d kind=%q", planRes.ExitCode, planRes.Kind)
 	}
 	planID := firstMatch(planIDLinePattern, planRes.Stdout)
 	token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
 	if planID == "" || token == "" {
 		return false, "sweep: could not parse plan id/approval token"
+	}
+	if ok, reason := sweepPreviewPlan(h, planID, token); !ok {
+		return false, reason
 	}
 	runRes := h.Run("reverse", "run", planID, "--approve", token, "--json")
 	if runRes.ExitCode != 0 || runRes.Kind != "ReverseRun" {
@@ -188,26 +361,25 @@ func sweepCleanOutboxRecord(h *Harness, status LedgerStatus) (bool, string) {
 // returning its name. This keeps the sweeper self-contained: it never
 // depends on the original certify run's ephemeral capture files still
 // existing on disk.
-func tombstoneSourceTable(h *Harness, status LedgerStatus) string {
+func tombstoneSourceTable(h *Harness, status LedgerStatus) (string, error) {
 	table := "cert_sweep_source"
-	_ = h.Run("credentials", "add", "cert-sweep-warehouse", "--connector", "warehouse",
-		"--config", "path="+filepath.Join(h.root, ".polymetrics", "warehouse"), "--json")
-	// Seed the row via the file connector so the write goes through the
-	// normal ETL path rather than hand-writing warehouse JSONL directly.
 	seedPath := filepath.Join(h.root, "cert_sweep_seed.jsonl")
-	_ = writeSweepSeedFile(seedPath, status.Tag)
-	_ = h.Run("credentials", "add", "cert-sweep-seed-file", "--connector", "file",
-		"--config", "path="+seedPath, "--json")
-	_ = h.Run("connections", "create", "cert_sweep_seed_conn",
-		"--source", "file:cert-sweep-seed-file",
-		"--destination", "warehouse:cert-sweep-warehouse",
-		"--stream", "cert_sweep_seed",
-		"--primary-key", "tag",
-		"--sync-mode", "full_refresh_overwrite",
-		"--table", table,
-		"--json")
-	_ = h.Run("etl", "run", "--connection", "cert_sweep_seed_conn", "--stream", "cert_sweep_seed", "--json")
-	return table
+	if err := writeSweepSeedFile(seedPath, status.Tag); err != nil {
+		return "", err
+	}
+	invocations := [][]string{
+		{"credentials", "add", "cert-sweep-warehouse", "--connector", "warehouse", "--config", "path=" + filepath.Join(h.root, ".polymetrics", "warehouse"), "--json"},
+		{"credentials", "add", "cert-sweep-seed-file", "--connector", "file", "--config", "path=" + seedPath, "--json"},
+		{"connections", "create", "cert_sweep_seed_conn", "--source", "file:cert-sweep-seed-file", "--destination", "warehouse:cert-sweep-warehouse", "--stream", "cert_sweep_seed", "--primary-key", "tag", "--sync-mode", "full_refresh_overwrite", "--table", table, "--json"},
+		{"etl", "run", "--connection", "cert_sweep_seed_conn", "--stream", "cert_sweep_seed", "--json"},
+	}
+	for _, invocation := range invocations {
+		res := h.Run(invocation...)
+		if res.ExitCode != 0 {
+			return "", fmt.Errorf("%s: exit=%d kind=%q", strings.Join(invocation[:2], " "), res.ExitCode, res.Kind)
+		}
+	}
+	return table, nil
 }
 
 func writeSweepSeedFile(path, tag string) error {
@@ -219,22 +391,71 @@ func writeSweepSeedFile(path, tag string) error {
 // project (sourceCredentialName), mirroring stageWriteCleanupLive.
 func sweepCleanViaPairing(h *Harness, status LedgerStatus, pairing WritePairing) (bool, string) {
 	table := "cert_sweep_" + status.Connector
-	planRes := h.Run("reverse", "plan", "cert_sweep_cleanup_"+status.Tag,
+	fields, err := seedSweepCleanupTable(h, table, status, pairing)
+	if err != nil {
+		return false, fmt.Sprintf("sweep seed cleanup table: %v", err)
+	}
+	planArgs := []string{"reverse", "plan", "cert_sweep_cleanup_" + status.RunID,
 		"--source-table", table,
-		"--destination", status.Connector+":"+sourceCredentialName,
-		"--map", pairing.IDField+":"+pairing.IDField,
-		"--action", pairing.Cleanup)
+		"--destination", status.Connector + ":" + sourceCredentialName,
+		"--action", pairing.Cleanup}
+	for _, field := range fields {
+		planArgs = append(planArgs, "--map", field+":"+field)
+	}
+	planRes := h.Run(planArgs...)
 	if planRes.ExitCode != 0 {
-		return false, fmt.Sprintf("sweep plan: exit=%d stderr=%s", planRes.ExitCode, planRes.Stderr)
+		return false, fmt.Sprintf("sweep plan: exit=%d kind=%q", planRes.ExitCode, planRes.Kind)
 	}
 	planID := firstMatch(planIDLinePattern, planRes.Stdout)
 	token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
 	if planID == "" || token == "" {
 		return false, "sweep: could not parse plan id/approval token"
 	}
+	if ok, reason := sweepPreviewPlan(h, planID, token); !ok {
+		return false, reason
+	}
 	runRes := h.Run("reverse", "run", planID, "--approve", token, "--json")
 	if runRes.ExitCode != 0 || runRes.Kind != "ReverseRun" {
 		return false, fmt.Sprintf("sweep cleanup run: exit=%d kind=%q", runRes.ExitCode, runRes.Kind)
+	}
+	return true, ""
+}
+
+func seedSweepCleanupTable(h *Harness, table string, status LedgerStatus, pairing WritePairing) ([]string, error) {
+	record := map[string]any{pairing.IDField: status.Tag}
+	if schema, err := writeActionRecordSchema(status.Connector, pairing.Cleanup); err == nil {
+		if generated, err := GenerateRecordWithOverrides(schema, status.Tag, status.RunID, pairing.Overrides); err == nil {
+			for key, value := range generated {
+				record[key] = value
+			}
+		}
+	}
+	seedPath := filepath.Join(h.root, table+".jsonl")
+	if err := writeCaptureFile(seedPath, []any{record}); err != nil {
+		return nil, err
+	}
+	warehouse := filepath.Join(h.root, ".polymetrics", "warehouse")
+	for _, invocation := range [][]string{
+		{"credentials", "add", "cert-sweep-warehouse", "--connector", "warehouse", "--config", "path=" + warehouse, "--json"},
+		{"credentials", "add", "cert-sweep-file", "--connector", "file", "--config", "path=" + seedPath, "--json"},
+		{"connections", "create", "cert_sweep_cleanup_conn", "--source", "file:cert-sweep-file", "--destination", "warehouse:cert-sweep-warehouse", "--stream", table, "--primary-key", pairing.IDField, "--sync-mode", "full_refresh_overwrite", "--table", table, "--json"},
+		{"etl", "run", "--connection", "cert_sweep_cleanup_conn", "--stream", table, "--json"},
+	} {
+		res := h.Run(invocation...)
+		if res.ExitCode != 0 {
+			return nil, fmt.Errorf("%s: exit=%d", strings.Join(invocation[:2], " "), res.ExitCode)
+		}
+	}
+	return fieldNames(record), nil
+}
+
+func sweepPreviewPlan(h *Harness, planID, token string) (bool, string) {
+	previewRes := h.Run("reverse", "preview", planID, "--json")
+	if err := h.MustKind(previewRes, "ReversePlanPreview", 0); err != nil {
+		return false, fmt.Sprintf("sweep preview: %v", err)
+	}
+	if hits := ScanForSecrets(previewRes.Stdout+previewRes.Stderr, []string{token}); len(hits) != 0 {
+		return false, fmt.Sprintf("sweep preview contains sensitive material (%d match)", len(hits))
 	}
 	return true, ""
 }

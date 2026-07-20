@@ -17,8 +17,11 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/events"
+	pmlogging "polymetrics.ai/internal/logging"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
+	"polymetrics.ai/internal/telemetry"
 	"polymetrics.ai/internal/vault"
 )
 
@@ -205,6 +208,7 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	fields := make([]string, 0, len(req.Secrets))
 	for k := range req.Secrets {
 		fields = append(fields, k)
+		pmlogging.RegisterSensitiveKey(k)
 	}
 	sort.Strings(fields)
 	meta := CredentialMeta{
@@ -241,6 +245,40 @@ func (a *App) validateCredentialConfig(connector string, config map[string]strin
 	default:
 		return safety.RejectDangerousChars(path, connector+" path")
 	}
+}
+
+func (a *App) normalizeLocalWriteRuntime(connector string, config map[string]string) (*connectors.LocalWritePolicy, error) {
+	if connector != "warehouse" && connector != "outbox" {
+		return nil, nil
+	}
+	allowExternal := strings.EqualFold(config["allow_external_path"], "true")
+	projectRoot, err := filepath.Abs(a.projectRoot())
+	if err != nil {
+		return nil, fmt.Errorf("resolve project root: %w", err)
+	}
+	if path := config["path"]; path != "" {
+		normalized, err := safety.ResolveLocalWritePath(projectRoot, path, connector+" path", allowExternal)
+		if err != nil {
+			return nil, err
+		}
+		config["path"] = normalized
+	}
+	return &connectors.LocalWritePolicy{
+		ProjectRoot:   projectRoot,
+		AllowExternal: allowExternal,
+	}, nil
+}
+
+func validateLocalWriteRuntimeEffect(runtime connectors.RuntimeConfig, path, field string) error {
+	if runtime.LocalWritePolicy == nil {
+		return nil
+	}
+	return safety.ValidateLocalWritePath(
+		runtime.LocalWritePolicy.ProjectRoot,
+		path,
+		field,
+		runtime.LocalWritePolicy.AllowExternal,
+	)
 }
 
 func (a *App) InspectCredential(name string) (CredentialMeta, error) {
@@ -396,7 +434,27 @@ func (a *App) ShowCatalog(ctx context.Context, connectionName string) (CatalogSn
 	return a.RefreshCatalog(ctx, connectionName)
 }
 
-func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
+func (a *App) RunETL(ctx context.Context, req RunETLRequest) (run Run, err error) {
+	started := time.Now()
+	ctx, span := telemetry.StartSpan(ctx, "pm.etl.run",
+		telemetry.StringAttr("pm.etl.connection", req.Connection),
+		telemetry.StringAttr("pm.etl.stream", req.Stream),
+	)
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetAttributes(telemetry.StringAttr("pm.etl.status", "failed"))
+		} else {
+			span.SetAttributes(
+				telemetry.StringAttr("pm.etl.status", "ok"),
+				telemetry.IntAttr("pm.etl.records_read", run.RecordsRead),
+				telemetry.IntAttr("pm.etl.records_loaded", run.RecordsLoaded),
+			)
+		}
+		span.End()
+		telemetry.RecordStageDuration(ctx, "etl", time.Since(started))
+	}()
+
 	conn, ok := a.findConnection(req.Connection)
 	if !ok {
 		return Run{}, fmt.Errorf("connection %q not found", req.Connection)
@@ -409,17 +467,20 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err != nil {
 		return Run{}, err
 	}
-	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
+	ctx = pmlogging.WithRunID(ctx, runID)
+	run = Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
 	a.state.Runs = append(a.state.Runs, run)
 	_ = a.save()
+	pmlogging.FromContext(ctx).InfoContext(ctx, "etl run started", "run_id", runID, "connection", req.Connection, "stream", req.Stream)
+	a.emitETLEvent(ctx, events.KindStarted, runID, req.Stream, "running", etlExecutionResult{}, "")
 
 	source, sourceRuntime, err := a.resolveEndpoint(ctx, conn.Source)
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
 	batchSize := req.BatchSize
 	if batchSize <= 0 {
@@ -427,11 +488,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	}
 	mode, err := ParseSyncMode(stream.SyncMode)
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
 	stream.SyncMode = mode.Name
 	if err := ValidateStreamSyncConfig(stream); err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
@@ -440,9 +501,9 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, req.Stream, stream, mode, batchSize)
 	}
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRun(ctx, runID, err)
 	}
-	return a.completeRun(runID, result)
+	return a.completeRun(ctx, runID, result)
 }
 
 func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
@@ -460,6 +521,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	}
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
+	metrics := telemetry.NewRunCounters(ctx)
 	batch := make([]connectors.Record, 0, batchSize)
 	firstWrite := true
 	nextCursor := prior.Cursor
@@ -480,6 +542,8 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			}
 			return nil
 		}
+		metrics.RecordBatchCreated()
+		metrics.Flush(ctx)
 		writeResult, err := destination.Write(ctx, connectors.WriteRequest{
 			Stream:     streamName,
 			Table:      stream.DestinationTable,
@@ -493,8 +557,13 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			return err
 		}
 		result.RecordsLoaded += writeResult.RecordsWritten
+		metrics.RecordLoaded(writeResult.RecordsWritten)
 		result.RecordsFailed += writeResult.RecordsFailed
+		metrics.RecordFailed(writeResult.RecordsFailed)
 		result.BatchCount++
+		metrics.RecordBatchFlushed()
+		metrics.Flush(ctx)
+		a.emitETLEvent(ctx, events.KindProgress, runID, streamName, "batch", result, "")
 		batch = batch[:0]
 		return nil
 	}
@@ -510,6 +579,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
+		metrics.RecordRead()
 		cursor := ""
 		if stream.CursorField != "" {
 			var err error
@@ -532,6 +602,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			r["_polymetrics_cursor"] = cursor
 		}
 		result.RecordsTransformed++
+		metrics.RecordTransformed()
 		batch = append(batch, r)
 		if len(batch) >= batchSize {
 			return flush(false)
@@ -558,7 +629,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	return result, nil
 }
 
-func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
+func (a *App) completeRun(ctx context.Context, runID string, result etlExecutionResult) (Run, error) {
 	run := Run{}
 	for i := range a.state.Runs {
 		if a.state.Runs[i].ID == runID {
@@ -581,6 +652,8 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 	if err := a.save(); err != nil {
 		return Run{}, err
 	}
+	pmlogging.FromContext(ctx).InfoContext(ctx, "etl run completed", "run_id", runID, "stream", run.Stream, "records_read", result.RecordsRead, "records_loaded", result.RecordsLoaded, "records_failed", result.RecordsFailed, "batches", result.BatchCount)
+	a.emitETLEvent(ctx, events.KindCompleted, runID, run.Stream, "success", result, "")
 	return run, nil
 }
 
@@ -1057,6 +1130,7 @@ func (a *App) resolveEndpoint(ctx context.Context, endpoint EndpointConfig) (con
 	if !ok {
 		return nil, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
 	}
+	registerConnectorSecretFields(connector)
 	return connector, runtime, nil
 }
 
@@ -1076,15 +1150,71 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	if !ok {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q not found", name)
 	}
-	secrets, err := a.vault.Get(ctx, cred.ID)
-	if err != nil {
-		return CredentialMeta{}, connectors.RuntimeConfig{}, err
-	}
 	config := cloneStringMap(cred.Config)
 	for k, v := range overlay {
 		config[k] = v
 	}
-	return cred, connectors.RuntimeConfig{ProjectDir: a.projectDir, Config: config, Secrets: secrets}, nil
+	if err := a.validateCredentialConfig(cred.Connector, config); err != nil {
+		return CredentialMeta{}, connectors.RuntimeConfig{}, err
+	}
+	localWritePolicy, err := a.normalizeLocalWriteRuntime(cred.Connector, config)
+	if err != nil {
+		return CredentialMeta{}, connectors.RuntimeConfig{}, err
+	}
+	registerCredentialSecretFields(cred.SecretFields)
+	secrets, err := a.vault.Get(ctx, cred.ID)
+	if err != nil {
+		return CredentialMeta{}, connectors.RuntimeConfig{}, err
+	}
+	runtimeProjectDir := a.projectDir
+	if localWritePolicy != nil {
+		runtimeProjectDir, err = filepath.Abs(a.projectDir)
+		if err != nil {
+			return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("resolve project directory: %w", err)
+		}
+	}
+	return cred, connectors.RuntimeConfig{
+		ProjectDir:       runtimeProjectDir,
+		Config:           config,
+		Secrets:          secrets,
+		LocalWritePolicy: localWritePolicy,
+	}, nil
+}
+
+func registerCredentialSecretFields(fields []string) {
+	for _, field := range fields {
+		pmlogging.RegisterSensitiveKey(field)
+	}
+}
+
+func registerConnectorSecretFields(connector connectors.Connector) {
+	manifest := connectors.ManifestOf(connector)
+	for _, field := range manifest.SecretFields {
+		pmlogging.RegisterSensitiveKey(field.Name)
+	}
+	for _, mode := range manifest.AuthModes {
+		for _, field := range mode.SecretFields {
+			pmlogging.RegisterSensitiveKey(field)
+		}
+	}
+}
+
+func (a *App) emitETLEvent(ctx context.Context, kind events.Kind, runID, streamName, status string, result etlExecutionResult, message string) {
+	events.Emit(ctx, events.Event{
+		Kind:    kind,
+		Scope:   events.ScopeETL,
+		RunID:   runID,
+		StepID:  streamName,
+		Status:  status,
+		Message: message,
+		Counters: events.Counters{
+			RecordsRead:        int64(result.RecordsRead),
+			RecordsTransformed: int64(result.RecordsTransformed),
+			RecordsWritten:     int64(result.RecordsLoaded),
+			RecordsFailed:      int64(result.RecordsFailed),
+			Batches:            int64(result.BatchCount),
+		},
+	})
 }
 
 func (a *App) findCredential(name string) (CredentialMeta, bool) {
@@ -1105,17 +1235,21 @@ func (a *App) findConnection(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
-func (a *App) failRun(runID string, err error) (Run, error) {
+func (a *App) failRun(ctx context.Context, runID string, err error) (Run, error) {
 	for i := range a.state.Runs {
 		if a.state.Runs[i].ID == runID {
 			a.state.Runs[i].Status = "failed"
-			a.state.Runs[i].Error = safety.RedactErrorText(err.Error())
+			a.state.Runs[i].Error = pmlogging.RedactText(ctx, err.Error())
 			a.state.Runs[i].CompletedAt = time.Now().UTC()
 			run := a.state.Runs[i]
 			_ = a.save()
+			pmlogging.FromContext(ctx).InfoContext(ctx, "etl run failed", "run_id", runID, "stream", run.Stream, "error", err)
+			a.emitETLEvent(ctx, events.KindFailed, runID, run.Stream, "failed", etlExecutionResult{}, run.Error)
 			return run, err
 		}
 	}
+	pmlogging.FromContext(ctx).InfoContext(ctx, "etl run failed", "run_id", runID, "error", err)
+	a.emitETLEvent(ctx, events.KindFailed, runID, "", "failed", etlExecutionResult{}, pmlogging.RedactText(ctx, err.Error()))
 	return Run{}, err
 }
 

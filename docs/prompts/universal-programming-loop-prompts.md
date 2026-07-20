@@ -78,23 +78,23 @@ Canonical prompts for the GSD Universal Programming Loop roles in this milestone
 
 | Role | Model |
 |---|---|
-| all GSD loop roles | `gpt-5.5` with `xhigh` reasoning effort |
+| implementation (`pm-gsd-worker`, issue worker, docs writer) | `openai-codex/gpt-5.6-sol` with `high` reasoning effort |
+| orchestration, planning, research, verification, review, disposition | `openai-codex/gpt-5.6-sol` with `xhigh` reasoning effort |
 
 Overrides live in `.planning/config.json` `model_overrides`.
 
-### Model routing (cost efficiency)
+### Model routing
 
-Not every task needs the most capable model. Prototype on `gpt-5.5:xhigh` to establish a baseline,
-then route cheaper models to recon/classification once evals pass. Pi agent frontmatter sets
-per-agent `model` and `thinking` (see the `pi-sub-agent` README); Codex/OpenCode pick up the
-`model_overrides` entries below:
+Pi agent frontmatter sets per-agent `model` and `thinking` (see the `pi-sub-agent` README), while
+Codex/OpenCode use `.planning/config.json`. Keep the model uniform and vary reasoning effort by
+role so implementation stays fast without reducing review or orchestration depth:
 
 | Pi agent / override key | Model | Rationale |
 |---|---|---|
-| `pm-scout` | `gpt-5.4-mini:high` | Read-only recon is cheap; smaller model is sufficient. |
-| `pm-gsd-worker` | `gpt-5.5:high` | Implementation needs capability but not orchestrator-grade reasoning. |
-| `pm-reviewer` | `gpt-5.5:xhigh` | Adversarial review benefits from deepest reasoning. |
-| orchestrator (`/pm-orchestrate`) | `gpt-5.5:xhigh` (default) | Owns spawn/merge/review decisions; inherit default. |
+| `pm-scout` | `openai-codex/gpt-5.6-sol:xhigh` | Recon informs dependency and write-scope decisions. |
+| `pm-gsd-worker` | `openai-codex/gpt-5.6-sol:high` | Implementation follows an approved, test-first plan. |
+| `pm-reviewer` | `openai-codex/gpt-5.6-sol:xhigh` | Adversarial review uses deepest reasoning. |
+| orchestrator (`/pm-orchestrate`) | `openai-codex/gpt-5.6-sol:xhigh` | Owns spawn, merge, review, and human-gate decisions. |
 
 Record an eval baseline note in the phase `VERIFICATION.md` before downgrading a role further.
 
@@ -126,7 +126,7 @@ Every implementation/test/review prompt MUST name the skills to apply from
 ## Template: migration executor (Pass A bundle agent)
 
 ```text
-ROLE: Connector migration executor (gsd-loop-backend, model=gpt-5.5:xhigh). Migrate the connectors below
+ROLE: Connector migration executor (gsd-loop-backend, model=openai-codex/gpt-5.6-sol:high). Migrate the connectors below
 to the declarative architecture. Follow docs/migration/conventions.md EXACTLY. Deviations are
 defects. Apply cc-skills-golang skills: golang-code-style, golang-naming, golang-error-handling,
 golang-testing.
@@ -162,7 +162,7 @@ REPORT: structured JSON per docs/migration/result.schema.json. Report honestly; 
 ## Template: adversarial reviewer
 
 ```text
-ROLE: Adversarial reviewer (gsd-loop-reviewer, model=gpt-5.5:xhigh). READ-ONLY. Review connectors <list> against docs/migration/conventions.md and each API's
+ROLE: Adversarial reviewer (gsd-loop-reviewer, model=openai-codex/gpt-5.6-sol:xhigh). READ-ONLY. Review connectors <list> against docs/migration/conventions.md and each API's
 documentation_url (fetch it; spot-check 3 streams' schemas and EVERY write action's
 method/path/required fields). Apply cc-skills-golang GOLANG-AI-DRIVEN-REVIEW.md, golang-lint,
 golang-modernize. Check: schema fidelity, write-action correctness, fixture realism (not
@@ -173,7 +173,7 @@ Verdict JSON per docs/migration/review.schema.json.
 ## Template: repair agent
 
 ```text
-ROLE: Repair executor (gsd-loop-backend, model=gpt-5.5:xhigh). The wave gate failed for your bundle.
+ROLE: Repair executor (gsd-loop-backend, model=openai-codex/gpt-5.6-sol:high). The wave gate failed for your bundle.
 Original task: <original prompt>. Gate/review failure log: <log>. Fix root cause; never weaken
 tests or gates. Same FORBIDDEN and SELF-VERIFY rules as the original task.
 ```
@@ -181,7 +181,7 @@ tests or gates. Same FORBIDDEN and SELF-VERIFY rules as the original task.
 ## Template: capability-expansion agent (Pass B)
 
 ```text
-ROLE: Capability expansion executor (gsd-loop-backend, model=gpt-5.5:xhigh). For connector <name>:
+ROLE: Capability expansion executor (gsd-loop-backend, model=openai-codex/gpt-5.6-sol:high). For connector <name>:
 1) From <documentation_url> (+ official application docs), write
    internal/connectors/defs/<name>/api_surface.json — EVERY documented endpoint: method, path,
    covered_by {stream|write} XOR excluded {category, reason} (closed vocabulary in conventions).

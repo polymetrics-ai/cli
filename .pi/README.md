@@ -8,7 +8,8 @@ workflows, skills, and guardrails.
 
 - Pi CLI: `@earendil-works/pi-coding-agent`
 - Project package: `npm:pi-sub-agent@0.1.5`
-- Default Pi model: `openai-codex/gpt-5.5` with `xhigh` thinking
+- Default Pi coordinator model: `openai-codex/gpt-5.6-sol` with `xhigh` thinking
+- Implementation agents: `openai-codex/gpt-5.6-sol` with `high` thinking
 - OpenCode project model: `opencode-go/kimi-k2.7-code`
 - OpenCode small model: `opencode-go/deepseek-v4-flash`
 
@@ -44,7 +45,7 @@ subscription-backed `openai-codex` provider. Use Pi with `openai-codex/*` models
 
 ```bash
 unset OPENAI_API_KEY
-pi --provider openai-codex --model gpt-5.5
+pi --provider openai-codex --model gpt-5.6-sol --thinking xhigh
 ```
 
 ## Usage
@@ -55,7 +56,8 @@ active tool set is only `read,bash,edit,write`; without the flag below, `pm-scou
 cannot use `grep`/`find`/`ls`:
 
 ```bash
-pi --tools read,bash,edit,write,grep,find,ls,subagent --approve
+pi --model openai-codex/gpt-5.6-sol --thinking xhigh \
+  --tools read,bash,edit,write,grep,find,ls,subagent --approve
 ```
 
 Useful prompt templates:
@@ -93,10 +95,26 @@ LOOP_CMD=/pm-connector-loop scripts/pi-auto-loop.sh "twenty (Twenty CRM, https:/
 scripts/pi-auto-loop.sh --resume        # continue the current run after a stop
 ```
 
-### Claude-orchestrated driver + Shepherd validator (recommended)
+### Codex-only driver + Shepherd validator (recommended)
+
+Use this for unattended, independently validated Pi orchestration. The driver advances one durable
+stage per turn, runs a separate Sol/xhigh validator after every turn, replays rejected transitions,
+and stops at the final human gate. Implementation subagents use Sol/high from project frontmatter.
+
+```bash
+scripts/pi-shepherd-loop.sh "<problem or existing parent issue continuation>"
+scripts/pi-shepherd-loop.sh --resume
+```
+
+`--resume` requires an existing run's `.planning/auto-loop/PROMPT.txt`. Environment overrides such
+as `AUTO_LOOP_STATE_DIR`, `ORCH_MODEL`, `ORCH_THINKING`, and `VALIDATOR_ARGS` must be repeated on
+resume because the prompt file does not persist them.
+
+### Claude-orchestrated driver + Shepherd validator (alternative)
 
 Uses the first-party **Claude Code CLI** (`claude -p`, subscription-backed — no third-party "extra
-usage" gate) as the orchestrator and **Codex** (`pi --model openai-codex/gpt-5.5`) for
+usage" gate) as the orchestrator and **Codex**
+(`pi --model openai-codex/gpt-5.6-sol --thinking high`) for
 implementation, with an independent **Shepherd supervisor** scoring every step (revert + replay on a
 bad step). See `.agents/agentic-delivery/workflows/shepherd-validator.md`.
 
@@ -112,11 +130,11 @@ The validator writes `.planning/auto-loop/VALIDATION.jsonl` (per-step scores) an
 `VALIDATOR-VERDICT.json` (the driver acts on `PROCEED`/`RETRY`/`REVERT`/`HALT`). Requires the local
 `claude` CLI to be logged in (`claude -p "ok"` should work).
 
-Model routing is per-agent in `.pi/agents/*.md`; the Codex-only Shepherd profile pins project
-agents to `openai-codex/gpt-5.5` with each agent's declared thinking level, while the Shepherd
-validator defaults to `openai-codex/gpt-5.6-sol --thinking high`. Confirm the exact model IDs your
-subscription exposes with `/model`, then set them once in the agent frontmatter and in the driver
-environment (`ORCH_MODEL` / `VALIDATOR_ARGS`). Connector research uses the repo's `searxng`
+Model routing is per-agent in `.pi/agents/*.md`; every Codex-only Shepherd role uses
+`openai-codex/gpt-5.6-sol`. Implementation agents use `high`; the coordinator, Shepherd validator,
+planning, research, verification, and review agents use `xhigh`. Confirm availability with
+`pi --list-models gpt-5.6-sol`; driver overrides are `ORCH_MODEL`, `ORCH_THINKING`, and
+`VALIDATOR_ARGS`. Connector research uses the repo's `searxng`
 connector through `pm` (audited path); export `SEARXNG_BASE` (+ token if proxied) before launching.
 
 ### Non-interactive (CI / parent-PR review coverage)

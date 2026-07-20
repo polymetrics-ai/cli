@@ -1,0 +1,168 @@
+{
+  "issue": 462,
+  "parentIssue": 397,
+  "originalBranch": "docs/462-terminal-ui-design-research",
+  "correctionBranch": "docs/462-terminal-ui-design-review-fixes",
+  "followupBranch": "docs/462-terminal-ui-tty-gate-follow-up",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startCommit": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
+  "baseParentCommit": "93a117100c6421955262aa32794a91a158d267e1",
+  "correctionStartHead": "e8286ea83a76ac2c6f6257c6e2d40fd21af81640",
+  "followupStartHead": "fd122c52458a6ef0db12f60f303c261ed2e63d4c",
+  "evidenceClosureStartHead": "a8f867ee673f9420ff15ccd51797cba94ed91769",
+  "humanFirstRevisionStartHead": "39a52bf31d618b33372c500bf0508925dd94e134",
+  "originalPr": 465,
+  "originalPrHead": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
+  "correctionPr": 467,
+  "correctionPrStateAtStart": "open",
+  "correctionPrCiAtStart": "green",
+  "correctionPrState": "merged",
+  "correctionPrMergedAt": "2026-07-20T03:36:34Z",
+  "correctionPrMergeCommit": "93a117100c6421955262aa32794a91a158d267e1",
+  "followupPr": 468,
+  "followupPrStateAtStart": "open",
+  "followupPrHeadAtStart": "fd122c52458a6ef0db12f60f303c261ed2e63d4c",
+  "followupPrHeadAtEvidenceClosureStart": "a8f867ee673f9420ff15ccd51797cba94ed91769",
+  "followupPrReviewStatusAtStart": "human_review_pending",
+  "state": "human_first_entry_revision_verified_human_review_pending",
+  "classification": "docs_planning_skill_only",
+  "research": "complete",
+  "localReferenceLab": "complete",
+  "productionGoChanges": false,
+  "dependencyChanges": false,
+  "verificationPassed": true,
+  "verificationStatusReason": "human-first entry revision passed docs, skill, GSD, syntax, scope, contract, and GitHub synchronization checks; full make verify remains docs-only not applicable",
+  "review": {
+    "claude": "disabled_manually_no_retry",
+    "copilot": "quota_exhausted_no_retry",
+    "fallback": "human_parent_review",
+    "status": "human_review_pending",
+    "localSidecarExternalCoverage": false,
+    "acceptedCorrectionPr": {
+      "number": 467,
+      "stateAtStart": "open",
+      "headAtStart": "e8286ea83a76ac2c6f6257c6e2d40fd21af81640",
+      "ciAtStart": "green",
+      "state": "merged",
+      "mergeCommit": "93a117100c6421955262aa32794a91a158d267e1",
+      "reviewStatus": "human_parent_pending_at_merge",
+      "sourceOfTruth": "Git/GitHub current state after the starting snapshot; no invented final-head claim"
+    },
+    "followupCorrectionPr": {
+      "number": 468,
+      "stateAtStart": "open",
+      "headAtStart": "fd122c52458a6ef0db12f60f303c261ed2e63d4c",
+      "headAtEvidenceClosureStart": "a8f867ee673f9420ff15ccd51797cba94ed91769",
+      "ciStatusAtEvidenceClosureStart": "verify_in_progress_at_github; live GitHub checks authoritative after this snapshot",
+      "reviewStatus": "human_review_pending",
+      "sourceOfTruth": "Git/GitHub current state after the starting snapshot; no self-referential final-head claim"
+    }
+  },
+  "humanGates": {
+    "ntchartsV2": "required_before_go_mod",
+    "githubBlockedByMetadata": "parent_orchestrator_follow_up",
+    "parentIntegration": "human_parent_review_pending",
+    "pr468Review": "human_review_pending"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "one assigned worker in isolated cwd; no subagent tool; accepted docs-only corrections"
+    },
+    {
+      "cycle": "programming-loop",
+      "decision": "local_critical_path",
+      "reason": "scripts/gsd programming-loop command absent; manual universal-loop fallback recorded"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "docs-only verification completed inline; no subagent tool available to this worker"
+    },
+    {
+      "cycle": "correction-467-plan",
+      "decision": "local_critical_path",
+      "reason": "accepted review findings require bounded docs correction in the assigned isolated branch/cwd"
+    },
+    {
+      "cycle": "correction-467-red",
+      "decision": "local_critical_path",
+      "reason": "docs-contract grep captured stdin/stdout TTY gate contradictions before delegated docs edits"
+    },
+    {
+      "cycle": "correction-467-green",
+      "decision": "local_critical_path",
+      "reason": "delegated docs/skill/prompt sources aligned locally; no subagent tool available to this worker"
+    },
+    {
+      "cycle": "correction-467-verify",
+      "decision": "local_critical_path",
+      "reason": "docs-only verification completed inline with declared make docs-check equivalent"
+    },
+    {
+      "cycle": "correction-468-plan",
+      "decision": "local_critical_path",
+      "reason": "accepted local review findings require bounded docs correction in the assigned isolated branch/cwd"
+    },
+    {
+      "cycle": "correction-468-red",
+      "decision": "local_critical_path",
+      "reason": "docs-contract grep captured plain-prompt contradiction, missing Stage 16 matrix, and stale artifact state before delegated docs edits"
+    },
+    {
+      "cycle": "correction-468-green",
+      "decision": "local_critical_path",
+      "reason": "delegated docs/skill/prompt sources aligned locally; no subagent tool available to this worker"
+    },
+    {
+      "cycle": "correction-468-verify",
+      "decision": "local_critical_path",
+      "reason": "docs-only verification completed inline with declared make docs-check equivalent"
+    },
+    {
+      "cycle": "correction-468-evidence-closure",
+      "decision": "local_critical_path",
+      "reason": "evidence-only RUN-STATE closure on assigned worker branch; parent records spawned; no subagent tool available to this worker"
+    },
+    {
+      "cycle": "human-first-entry-revision",
+      "decision": "local_critical_path",
+      "reason": "user explicitly locked the query/reverse entry decision; generated GSD UI prompt applied inline and no delegated worker was requested"
+    }
+  ],
+  "next": [
+    "human_review_gate",
+    "parent_integration_gate"
+  ],
+  "verification": {
+    "declaredPhaseEquivalent": "make docs-check",
+    "result": "pass",
+    "fullMakeVerify": "not_run_docs_only_scope",
+    "checks": [
+      "followup_docs_contract_red_captured",
+      "phase_artifacts_reopened",
+      "plain_json_no_input_prompt_bypass_green",
+      "accessible_only_sequential_prompt_green",
+      "shared_and_stage16_tty_matrix_green",
+      "pr467_pr468_state_honesty_green",
+      "dependency_roster_check_unchanged",
+      "query_export_token_accessibility_marker_check_pass",
+      "skill_validation_pass",
+      "json_syntax_pass",
+      "scope_check_pass",
+      "git_diff_check_pass",
+      "gsd_doctor_pass_69_commands",
+      "docs_check_pass",
+      "human_first_entry_red_captured",
+      "human_first_entry_green_docs_and_issue_contracts_updated",
+      "human_first_entry_file_matrix_pass",
+      "human_first_entry_github_matrix_pass",
+      "phase18_six_dimension_ui_check_pass"
+    ],
+    "docsCheckOutput": [
+      "go build ./cmd/pm",
+      "Validated connector docs in docs/connectors"
+    ]
+  }
+}

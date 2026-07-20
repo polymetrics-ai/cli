@@ -1,0 +1,109 @@
+{
+  "phase": 434,
+  "issue": 434,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/434-rlm-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "2ac457a163cbd7bc9a3708da88b03d375ec5e952",
+  "invocationSession": "issue-434-pi-sol-high-20260719T053630Z",
+  "startedAt": "20260719T053630Z",
+  "modelProfile": "Sol",
+  "thinking": "high",
+  "endedAt": "20260719T060324Z",
+  "endingImplementationHead": "633f1e219591c890831c9894a90fc55eb1dc9ebd",
+  "correctionStartingHead": "92f265875e304feda57eef88b599ef8d2e9928da",
+  "correctionSession": "issue-434-review-correction-20260719T061313Z",
+  "correctionImplementationHead": "66c4a52ffe54aecb37d229c16b636f7eb68d199c",
+  "correctionEndedAt": "20260719T063242Z",
+  "status": "correction_complete_verified_pushed",
+  "verificationPassed": true,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "verifyWorkPrompt": "passed_106_lines_executed_inline"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "next serialized Phase 9 RLM namespace is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited PR, review, dependencies, credentials, model calls, Temporal, Podman, and services"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "the complete native RLM tree, flags, parser/output, fake analyzer routing, help, globals, errors, request non-leakage, and invalid generic/viewer action tests were added before production edits; CLI compilation failed on the intentionally missing native RLM constructor/runtime symbols"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native RLM run/help and all six typed flags, RLM-only legacy normalization, injected fake analyzer routing, and RLM-only parser removal pass focused, repeated, race, analyzer, worker-fake, router/golden, and 24/24 exact-start differential gates without external calls"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "full CLI, RLM, worker-fake, runtime help, generated docs/website, gofmt, vet, full repository tests, build, scope/dependency, and make verify gates passed without model, Temporal, Podman, worker service, or optional runtime service calls"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "issue-local handoff and terminal evidence are finalized for commit/push; no PR or review was created as requested"
+    },
+    {
+      "cycle": "correction-plan",
+      "decision": "local_critical_path",
+      "reason": "bounded analyzer-factory request correction in the existing isolated worktree; artifacts precede RED and production edits, no subagent tool is exposed, and services, dependencies, PR, and review are prohibited"
+    },
+    {
+      "cycle": "correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "test-only factory-boundary expectations fail for deterministic, fixture, and model before production edits while agent passes; diagnostics contain no request value"
+    },
+    {
+      "cycle": "correction-green",
+      "decision": "local_critical_path",
+      "reason": "smallest seam defaults the analyzer-factory request to empty and assigns parsed content only for agent mode; focused injected-fake routing and output tests pass"
+    },
+    {
+      "cycle": "correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused/race/full RLM/full CLI, exact-start 1984-case differential, request-output guard, gofmt, vet, build, and exact scope/dependency diff pass without model or service calls"
+    },
+    {
+      "cycle": "correction-summary",
+      "decision": "local_critical_path",
+      "reason": "bounded correction evidence and handoff are finalized for the terminal artifact commit/push; no PR or review was created as requested"
+    }
+  ],
+  "red": "original focused CLI compile RED plus correction RED: deterministic, fixture, and model factory-boundary subtests fail before production edits because request content is non-empty; agent passes; no request value printed",
+  "green": "original GREEN evidence retained; correction GREEN focused routing/output 0.555s with empty deterministic/fixture/model factory requests and agent-only content",
+  "verification": "correction pass: focused 1.278s; race 1.706s; full RLM/router/worker 0.856s/0.401s/1.025s and race 1.874s/1.506s/2.775s; full CLI 438.966s; exact-start differential 1984/1984 with zero request disclosures; output guard/gofmt/vet/build/diff pass; original full make verify evidence retained",
+  "files": [
+    ".planning/phases/434-rlm-native-cobra/PLAN.md",
+    ".planning/phases/434-rlm-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/434-rlm-native-cobra/VERIFICATION.md",
+    ".planning/phases/434-rlm-native-cobra/PROMPTS.md",
+    ".planning/phases/434-rlm-native-cobra/SUMMARY.md",
+    ".planning/phases/434-rlm-native-cobra/RUN-STATE.json",
+    "internal/cli/rlm_native_cobra_test.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/rlm_cli.go",
+    "internal/cli/cobra_router.go"
+  ],
+  "commits": [
+    "4782def0 docs(planning): plan rlm native cobra slice",
+    "38df736c test(cli): specify native cobra rlm contract",
+    "633f1e21 refactor(cli): nativize rlm namespace",
+    "45b90b68 docs(planning): plan rlm request isolation correction",
+    "13902cea test(cli): isolate rlm factory request by mode",
+    "66c4a52f fix(cli): isolate rlm request to agent factory"
+  ],
+  "push": "correction planning, RED, verified GREEN, and terminal artifact checkpoints pushed to origin/refactor/434-rlm-native-cobra",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "not_run_user_prohibited_review",
+  "safety": "temporary specs/warehouses and injected analyzers/hermetic fake paths only; no model, Temporal, Podman, worker service, optional services, credentials, secrets/request leakage, dependencies, generic runner, PR, or review"
+}

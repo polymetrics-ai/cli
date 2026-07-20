@@ -21,7 +21,7 @@
     "plan_level": true,
     "task_level": false,
     "skip_checkpoints": false,
-    "max_concurrent_agents": 3,
+    "max_concurrent_agents": 4,
     "min_plans_for_parallel": 2
   },
   "gates": {
@@ -48,17 +48,34 @@
       "main_branch_merge"
     ]
   },
-  "model_profile": "quality",
+  "model_profile": "inherit",
   "model_overrides": {
-    "gsd-loop-coordinator": "fable",
-    "gsd-loop-planner": "fable",
-    "gsd-loop-reviewer": "fable",
-    "gsd-loop-backend": "sonnet",
-    "gsd-loop-tester": "sonnet",
-    "gsd-loop-security": "sonnet",
-    "gsd-loop-reliability-observability": "sonnet",
-    "gsd-planner": "fable",
-    "gsd-plan-checker": "sonnet",
-    "gsd-verifier": "sonnet"
+    "gsd-loop-coordinator": "openai-codex/gpt-5.6-sol",
+    "gsd-loop-planner": "openai-codex/gpt-5.6-sol",
+    "gsd-loop-reviewer": "openai-codex/gpt-5.6-sol",
+    "gsd-loop-backend": "openai-codex/gpt-5.6-sol",
+    "gsd-loop-tester": "openai-codex/gpt-5.6-sol",
+    "gsd-loop-security": "openai-codex/gpt-5.6-sol",
+    "gsd-loop-reliability-observability": "openai-codex/gpt-5.6-sol",
+    "gsd-planner": "openai-codex/gpt-5.6-sol",
+    "gsd-plan-checker": "openai-codex/gpt-5.6-sol",
+    "gsd-verifier": "openai-codex/gpt-5.6-sol",
+    "gsd-executor": "openai-codex/gpt-5.6-sol",
+    "gsd-code-fixer": "openai-codex/gpt-5.6-sol",
+    "gsd-doc-writer": "openai-codex/gpt-5.6-sol"
+  },
+  "effort": {
+    "default": "xhigh",
+    "routing_tier_defaults": {
+      "light": "xhigh",
+      "standard": "xhigh",
+      "heavy": "xhigh"
+    },
+    "agent_overrides": {
+      "gsd-loop-backend": "high",
+      "gsd-executor": "high",
+      "gsd-code-fixer": "high",
+      "gsd-doc-writer": "high"
+    }
   }
 }

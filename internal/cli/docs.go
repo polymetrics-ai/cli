@@ -41,6 +41,38 @@ COMMANDS
   version           print build version metadata
   help, man         show detailed documentation
 
+GLOBAL OPTIONS
+  --json
+    Emit machine-readable output when supported.
+  --root <path>
+    Select the project root containing .polymetrics.
+  --plain
+    Force the plain non-TTY path even when stdout is a terminal.
+  --no-input
+    Disable interactive prompting and TTY UI.
+  --progress ndjson
+    Stream sanitized progress events as newline-delimited JSON on stderr.
+    Stdout remains the command's final output or single JSON envelope.
+    On failures, stderr may also include the final error diagnostic.
+
+TTY GATE
+  Future TTY renderers are eligible only when stdout is a TTY and --json,
+  --plain, --no-input, PM_NO_TUI, CI, and TERM=dumb do not force the plain
+  path. The current cmd/pm entrypoint keeps the plain path until a TTY
+  renderer is wired intentionally.
+
+OBSERVABILITY
+  OpenTelemetry tracing and metrics are default-off. Supported exporters are
+  none, off, file, and otlp. Set PM_TELEMETRY=file to write secret-safe spans
+  and metrics under .polymetrics/telemetry, or set PM_TELEMETRY=otlp with a
+  trusted env/flag endpoint such as OTEL_EXPORTER_OTLP_ENDPOINT,
+  OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, or
+  PM_TELEMETRY_ENDPOINT for an OTLP HTTP/protobuf collector. Telemetry warnings
+  go to stderr and never change command exit codes or stdout JSON envelopes.
+  HTTP spans record method, scheme, host, path, status, attempt, and retry
+  metadata only; metrics use batched counters. Query strings, headers, bodies,
+  argv, and credential values are never recorded.
+
 HUMAN QUICK START
   pm init
   pm credentials add sample-local --connector sample
@@ -66,6 +98,7 @@ EXIT STATUS
   0 success
   1 runtime error
   2 usage error
+  3 validation error, including invalid UI/progress flag
 `
 
 var docs = map[string]string{
@@ -79,15 +112,278 @@ var docs = map[string]string{
 	"catalog":     catalogHelp,
 	"query":       queryHelp,
 	"flow":        flowHelp,
+	"config":      configHelp,
 	"rlm":         rlmHelp,
+	"worker":      workerHelp,
 	"schedule":    scheduleHelp,
 	"agent":       agentHelp,
+	"extract":     extractHelp,
 	"runtime":     runtimeHelp,
 	"perf":        perfHelp,
 	"docs":        docsHelp,
 	"skills":      skillsHelp,
 	"version":     versionHelp,
 }
+
+const extractHelp = `NAME
+  pm extract - classify a narrow natural-language read request
+
+SYNOPSIS
+  pm extract --request <text> [--sql <select>] [--limit <n>] [--json]
+  pm extract --request <text> --in <table> --out <table> [--spec-name <name>] [--json]
+
+DESCRIPTION
+  extract is a hidden, narrow natural-language router for agents. It classifies
+  a request as a simple read-only query or typed RLM analysis. Routing remains
+  dependency-free when no optional LLM provider is configured.
+
+  A simple-query route runs only validated read-only SQL supplied by --sql or
+  suggested by the optional classifier. An RLM route executes only when both
+  --in and --out are provided; otherwise it returns the routing decision and a
+  note. Input and output values are bare warehouse table names, not paths.
+
+OPTIONS
+  --request <text>
+    Natural-language request to classify. Required for execution.
+  --sql <select>
+    Explicit read-only SQL for a simple-query route.
+  --limit <n>
+    Maximum query rows. Default: 100.
+  --in <table>
+    Bare local warehouse input table for RLM analysis.
+  --out <table>
+    Bare local warehouse output table for RLM analysis.
+  --spec-name <name>
+    Result specification name. Default: extract.
+  --provider <name>, --model <name>, --llm-base-url <url>
+    Optional classifier overrides. Without a resolvable provider/model, extract
+    uses its offline heuristic.
+
+OUTPUT
+  --json emits one ExtractResult envelope. Human output contains the same
+  result as indented JSON. Diagnostics and errors remain on stderr.
+
+SECURITY
+  extract does not expose generic shell, HTTP write, SQL write, or unrestricted
+  filesystem access. SQL remains read-only. RLM table reads and writes stay
+  beneath <root>/.polymetrics/warehouse and reject path traversal and external
+  final-link effects. Optional agent execution remains typed and runtime-gated.
+
+EXIT STATUS
+  0 success or contextual help
+  1 runtime error
+  2 usage error
+  3 validation error
+`
+
+const configHelp = `NAME
+  pm help config - configuration reference
+
+SYNOPSIS
+  pm help config
+  pm <command> --root <path> [--json] [--plain] [--no-input] [--progress ndjson]
+
+DESCRIPTION
+  pm resolves typed invocation configuration once per CLI run. The loader uses a
+  fresh Viper instance for each invocation and never uses the package-level Viper
+  singleton, AutomaticEnv, or file watching. Root and json affect invocation
+  bootstrap. Runtime, RLM, schedule, and telemetry keys are consumed by migrated
+  non-secret call sites. Worker/RLM agent Temporal execution remains opt-in:
+  runtime.temporal_addr must be explicitly set by env or config file for those
+  paths, while runtime doctor keeps local Compose defaults. OpenTelemetry
+  tracing and metrics are default-off and exit-code neutral. Malformed
+  .polymetrics/config.yaml files fail as validation errors.
+
+PRECEDENCE
+  1. Bound global config flags: --root and --json.
+  2. Explicit POLYMETRICS_* environment variables.
+  3. Documented PM_* legacy aliases when the primary POLYMETRICS_* variable is
+     not set.
+  4. .polymetrics/config.yaml under the invocation project root.
+  5. Built-in defaults.
+
+UI AND PROGRESS FLAGS
+  --plain
+    Force the plain output path. Use this in scripts, pipes, and tests that
+    need deterministic non-interactive behavior.
+
+  --no-input
+    Disable prompts and TTY UI. Interactive-only paths must fail by naming the
+    flag or file to provide instead of prompting.
+
+  --progress ndjson
+    Stream sanitized progress events to stderr as newline-delimited JSON.
+    Stdout remains reserved for the command's final output or single JSON
+    envelope. Supported value: ndjson. On failures, stderr may also include the
+    final error diagnostic after progress events.
+
+  Future TTY renderers are eligible only when stdout is a TTY. --json,
+  --plain, --no-input, non-empty PM_NO_TUI, non-empty CI, TERM=dumb, and
+  non-TTY stdout force the plain path.
+
+TELEMETRY
+  telemetry.exporter defaults to none (off is accepted as a disabled alias). No
+  SDK is constructed and no .polymetrics/telemetry directory is created while
+  disabled. Set PM_TELEMETRY=file or POLYMETRICS_TELEMETRY=file to write
+  stdouttrace JSONL spans and stdoutmetric JSONL metrics under
+  telemetry.directory. Network OTLP tracing/metrics and any custom collector
+  endpoint must be selected from trusted env/flag sources; config-file OTLP
+  exporter or endpoint values are ignored. Set PM_TELEMETRY=otlp and configure
+  OTEL_EXPORTER_OTLP_ENDPOINT, OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
+  OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, or PM_TELEMETRY_ENDPOINT for OTLP
+  HTTP/protobuf. OTEL_SDK_DISABLED=true always disables tracing and metrics.
+
+  Telemetry failures are warnings on stderr, not command failures. Stdout keeps
+  the command's normal human output or single JSON envelope. Span attributes are
+  allowlisted; connector HTTP spans record method, scheme, host, path, status,
+  and retry/attempt metadata only. Metrics use batched counters such as
+  pm.records.* and pm.batches.flushed, flushed at batch boundaries instead of
+  per record. Query strings, request/response bodies, headers, raw argv, and
+  credential values are never recorded. Set telemetry.capture=minimal to strip
+  span attributes while keeping span names.
+
+CONFIG FILE
+  The config file path is <project-root>/.polymetrics/config.yaml. Missing files
+  are allowed. The root key in a config file does not relocate config-file
+  discovery for the same invocation; use --root, POLYMETRICS_ROOT, or PM_ROOT to
+  select a different project root before the file is read. If a file is
+  malformed, --json, POLYMETRICS_JSON=true, or PM_JSON=true selects the same
+  single JSON Error envelope on stdout used by other validation errors.
+
+  Example:
+
+    version: 1
+    project: polymetrics-local
+    warehouse:
+      connector: warehouse
+      path: .polymetrics/warehouse
+    runtime:
+      postgres_url: postgres://localhost:15433/polymetrics?sslmode=disable
+      dragonfly_addr: localhost:6379
+      temporal_addr: localhost:7233
+    rlm:
+      image: ghcr.io/polymetrics/rlm-agent:latest
+      podman_bin: podman
+      fake_runner: false
+      embedded_worker: false
+      llm:
+        provider: openrouter
+        base_url: https://openrouter.ai/api/v1
+        model: ""
+    schedule:
+      crontab_file: ""
+    telemetry:
+      exporter: none
+      endpoint: ""
+      directory: .polymetrics/telemetry
+      capture: default
+
+KEYS
+  root
+    Default: invocation root (.). Primary env: POLYMETRICS_ROOT. Alias: PM_ROOT.
+    Flag: --root.
+
+  json
+    Default: false. Primary env: POLYMETRICS_JSON. Alias: PM_JSON. Flag: --json.
+
+  version
+    Default: 1. Primary env: POLYMETRICS_VERSION. Alias: PM_VERSION.
+
+  project
+    Default: polymetrics-local. Primary env: POLYMETRICS_PROJECT. Alias:
+    PM_PROJECT.
+
+  warehouse.connector
+    Default: warehouse. Primary env: POLYMETRICS_WAREHOUSE_CONNECTOR. Alias:
+    PM_WAREHOUSE_CONNECTOR.
+
+  warehouse.path
+    Default: .polymetrics/warehouse. Primary env: POLYMETRICS_WAREHOUSE_PATH.
+    Alias: PM_WAREHOUSE_PATH.
+
+  runtime.postgres_url
+    Default: local Compose PostgreSQL DSN. Primary env: POLYMETRICS_POSTGRES_URL.
+    Alias: PM_POSTGRES_URL. Command output redacts PostgreSQL userinfo.
+
+  runtime.dragonfly_addr
+    Default: localhost:6379. Primary env: POLYMETRICS_DRAGONFLY_ADDR. Alias:
+    PM_DRAGONFLY_ADDR.
+
+  runtime.temporal_addr
+    Default: localhost:7233. Primary env: POLYMETRICS_TEMPORAL_ADDR. Alias:
+    PM_TEMPORAL_ADDR.
+
+  rlm.image
+    Default: ghcr.io/polymetrics/rlm-agent:latest. Primary env:
+    POLYMETRICS_RLM_IMAGE. Alias: PM_RLM_IMAGE.
+
+  rlm.podman_bin
+    Default: podman. Primary env: POLYMETRICS_PODMAN_BIN. Alias:
+    PM_PODMAN_BIN.
+
+  rlm.fake_runner
+    Default: false. Primary env: POLYMETRICS_RLM_FAKE_RUNNER. Alias:
+    PM_RLM_FAKE_RUNNER.
+
+  rlm.embedded_worker
+    Default: false. Primary env: POLYMETRICS_RLM_EMBEDDED_WORKER. Alias:
+    PM_RLM_EMBEDDED_WORKER.
+
+  rlm.llm.provider
+    Default: openrouter. Primary env: POLYMETRICS_LLM_PROVIDER. Alias:
+    PM_LLM_PROVIDER.
+
+  rlm.llm.base_url
+    Default: https://openrouter.ai/api/v1. Primary env: POLYMETRICS_LLM_BASE_URL.
+    Alias: PM_LLM_BASE_URL.
+
+  rlm.llm.model
+    Default: empty. Primary env: POLYMETRICS_LLM_MODEL. Alias: PM_LLM_MODEL.
+
+  schedule.crontab_file
+    Default: empty. Primary env: POLYMETRICS_CRONTAB_FILE. Alias:
+    PM_CRONTAB_FILE. Intended for local scheduler redirection and tests.
+
+  telemetry.exporter
+    Default: none. Primary env: POLYMETRICS_TELEMETRY. Alias: PM_TELEMETRY.
+    Supported values: none, off, file, otlp. off is a disabled alias.
+
+  telemetry.endpoint
+    Default: empty. Primary env: POLYMETRICS_TELEMETRY_ENDPOINT. Aliases:
+    PM_TELEMETRY_ENDPOINT, POLYMETRICS_OTEL_EXPORTER_OTLP_ENDPOINT,
+    OTEL_EXPORTER_OTLP_ENDPOINT, and OTEL_EXPORTER_OTLP_TRACES_ENDPOINT. OTLP
+    endpoints must be http/https URLs without userinfo, query strings, or
+    fragments. Custom OTLP endpoints must come from a trusted env/flag source;
+    config-file endpoint values alone are ignored, and OTLP otherwise uses the
+    local default collector endpoints. For a separate metrics endpoint, set the
+    env-only OTEL_EXPORTER_OTLP_METRICS_ENDPOINT; it is validated and sanitized
+    the same way and is never read from config.yaml.
+
+  telemetry.directory
+    Default: .polymetrics/telemetry. Primary env: POLYMETRICS_TELEMETRY_DIR.
+    Alias: PM_TELEMETRY_DIR. Paths must be relative, stay under --root, and must
+    not traverse symlinked telemetry directories or files.
+
+  telemetry.capture
+    Default: default. Primary env: POLYMETRICS_TELEMETRY_CAPTURE. Alias:
+    PM_TELEMETRY_CAPTURE. Supported values: default, minimal.
+
+SECURITY
+  Configuration is an allowlist. pm does not ingest arbitrary POLYMETRICS_* or
+  PM_* variables. User-named credential env vars supplied to --from-env and
+  connector certification credsfile entries are credential data, not app config.
+  Do not store secret values in config.yaml or examples. LLM API keys such as
+  PM_LLM_API_KEY and provider-specific keys remain environment-only secret
+  inputs and are not documented with values. OTLP endpoint URLs with userinfo,
+  query strings, or fragments are rejected; ambient OTLP header/TLS/compression
+  env vars are warned and neutralized before exporter construction. Emitted
+  spans and metrics drop userinfo, query strings, headers, bodies, raw argv, and
+  credential values.
+
+EXIT STATUS
+  0 success
+  3 validation error, including malformed config or invalid UI/progress flag
+`
 
 const versionHelp = `NAME
   pm version - print build version metadata
@@ -148,7 +444,10 @@ SYNOPSIS
   pm connectors list [--all] [--json]
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
-  pm connectors help <name>
+  pm connectors help
+  pm connectors certify <name> [--from-env field=ENV] [--config key=value] [--stream name] [--skip write] [--write] [--full] [--keep-workdir] [--json]
+  pm connectors certify --all --credentials-file <file> [--parallel n] [--resume] [--write=false | --skip=write] [--json]
+  pm connectors certify --sweep [--credentials-file <file>] [--older-than 24h] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -228,35 +527,80 @@ ACTIONS
 
   catalog
     Prints connector catalog metadata, optionally filtered by --capability and
-    --stage. Example stages include alpha, beta, and generally_available.
+    --stage. Example stages include alpha, beta, and ga.
 
   inspect <name>
     Prints a man-style connector manual for a bare connector name. Use --json
     to print structured metadata for agents. Inspection is metadata-only and
     does not resolve credentials.
 
-  help <name>
-    Alias for the human connector manual.
+  help
+    Prints this connectors namespace manual. Use inspect <name> for a
+    connector-specific manual or structured metadata.
+
+  certify
+    Runs the connector certification harness through the in-process CLI. A
+    single run can use local connector behavior or user-named credential
+    variable references. Batch mode requires --all and --credentials-file;
+    --write=false or --skip=write overrides every credential-file write entry.
+    Only --skip=write is implemented. Boolean controls accept only true or
+    false. Explicit --parallel must be from 1 through 32 and workers are capped
+    by queued connectors. --resume reuses completed prior reports only when
+    its exact schema, connector manifest, effective non-secret options, and
+    environment-reference fingerprint match; other reports rerun. Sweep mode
+    retries cleanup from the durable per-connector ledger in a fresh temporary
+    workspace and requires plan, successful preview, approval, then execute.
+    --older-than must be greater than zero and no more than 8760h. Unsupported,
+    mode-inapplicable, malformed, and unknown controls fail before credential
+    loading, telemetry, runner, sweep, or write effects instead of becoming
+    no-ops.
+
+    Before a certification report is completed, CLI usage errors exit 2,
+    validation errors exit 3, and setup or runtime errors exit 1. These errors
+    emit the normal CLI Error envelope, not a completed certification report.
+    A completed certification report exits 0 for pass, 2 for certification
+    failure, or 3 for leaked resources (which dominate other report outcomes).
+    JSON reports use ConnectorCertification, ConnectorCertificationBatch, or
+    ConnectorCertificationSweep envelopes.
+
+    Credential values must come from environment references. Credential files
+    are regular non-symlink YAML files no larger than 1 MiB, use version 1 and
+    known fields, name at least one locally registered connector, and carry
+    valid environment-variable references. Secret-schema fields are rejected
+    from config and must use from_env. Credential-file exec entries are rejected;
+    no external credential command is run. Secret values and approval
+    tokens are never command operands, output, events, telemetry, or report
+    fields. Reports, history, progress, and ledgers use restrictive local files.
+    Live checks and writes are opt-in harness behavior, not performed by
+    connector inspection or help.
 
 EXAMPLES
   pm connectors
   pm connectors --json
   pm connectors list
   pm connectors list --all --json
-  pm connectors catalog --capability write --stage generally_available --json
+  pm connectors catalog --capability write --stage ga --json
   pm connectors inspect github
   pm connectors inspect github --json
+  pm connectors certify sample --json
+  pm connectors certify --all --credentials-file certify/creds.yaml --json
+  pm connectors certify --sweep --credentials-file certify/creds.yaml --older-than 24h --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem
 
 SECURITY
-  Connector inspection never reads credentials.
+  Connector inspection never reads credentials. Certification accepts only
+  environment-variable credential references; credential-file exec is rejected.
+  Secret values are excluded from output and reports.
+  Live certification writes remain explicitly opt-in and cleanup-gated;
+  credential-file writes additionally require sandbox=true.
 
 EXIT STATUS
-  0 success
-  1 runtime error
-  2 usage error
+  0 command success or completed certification pass
+  1 setup/runtime error before a certification report completes
+  2 CLI usage error or completed certification failure
+  3 CLI validation error or leaked resource in a completed certification
 `
 
 const connectionsHelp = `NAME
@@ -316,7 +660,7 @@ SYNOPSIS
   pm etl check --connector <name> [--config key=value] [--json]
   pm etl catalog --connector <name> [--config key=value] [--json]
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
-  pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
+  pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json] [--progress ndjson]
   pm etl status <run-id> [--json]
 
 DESCRIPTION
@@ -344,6 +688,12 @@ DESCRIPTION
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
+
+PROGRESS
+  Add --progress ndjson to stream sanitized ETL progress events to stderr.
+  Stdout remains the final human line or single JSON envelope. On failures,
+  stderr may also include the final error diagnostic after progress events.
+  CI, PM_NO_TUI, --plain, --no-input, pipes, and TERM=dumb keep the plain path.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -408,6 +758,7 @@ EXIT STATUS
   0 success
   1 runtime error
   2 usage error
+  3 validation error, including invalid UI/progress flag
 `
 
 const queryHelp = `NAME
@@ -449,7 +800,7 @@ const flowHelp = `NAME
 SYNOPSIS
   pm flow plan --file flow.json [--json]
   pm flow preview --file flow.json [--json]
-  pm flow run --file flow.json [--force] [--json]
+  pm flow run --file flow.json [--force] [--json] [--progress ndjson]
   pm flow status <name> [--flows-dir .polymetrics/flows] [--json]
   pm flow list [--flows-dir .polymetrics/flows] [--json]
 
@@ -457,6 +808,12 @@ DESCRIPTION
   Flow manifests compose sync, query, rlm, and action steps. Dependencies are
   inferred from in/out warehouse tables. RLM steps reuse pm rlm analyzers and
   may reference a spec path relative to the flow manifest file.
+
+PROGRESS
+  Add --progress ndjson to stream sanitized flow progress events to stderr.
+  Stdout remains the final human line or single JSON envelope. On failures,
+  stderr may also include the final error diagnostic after progress events.
+  CI, PM_NO_TUI, --plain, --no-input, pipes, and TERM=dumb keep the plain path.
 
 RLM STEP EXAMPLE
   {
@@ -476,6 +833,7 @@ EXIT STATUS
   0 success
   1 runtime error
   2 usage error
+  3 validation error, including invalid UI/progress flag
 `
 
 const rlmHelp = `NAME
@@ -498,6 +856,39 @@ EXIT STATUS
   0 success
   1 runtime error
   2 usage error
+`
+
+const workerHelp = `NAME
+  pm worker - serve and inspect the optional RLM Temporal worker
+
+SYNOPSIS
+  pm worker status [--json]
+  pm worker serve [--json]
+
+DESCRIPTION
+  The worker serves the typed RLM Temporal workflow and its Podman activity on
+  the polymetrics-rlm task queue. It is optional and used only by RLM agent
+  mode; dependency-free CLI and RLM modes do not require it.
+
+  status reports whether the explicitly configured Temporal endpoint is
+  reachable. serve starts the long-lived worker and reports readiness only
+  after the Temporal client and worker have started successfully.
+
+CONFIGURATION
+  Set POLYMETRICS_TEMPORAL_ADDR or its legacy PM_TEMPORAL_ADDR alias, or set
+  runtime.temporal_addr in .polymetrics/config.yaml. Worker execution also uses
+  rlm.image and rlm.podman_bin from typed configuration.
+
+SECURITY
+  This is not a generic remote command runner. It registers only the typed RLM
+  workflow and activity. Output includes status and endpoint metadata, never
+  credential values or workflow payloads.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+  3 validation error when no Temporal endpoint is explicitly configured
 `
 
 const scheduleHelp = `NAME
@@ -726,7 +1117,9 @@ SYNOPSIS
 
 DESCRIPTION
   Checks PostgreSQL, DragonflyDB, and Temporal using the configured endpoints.
-  Defaults match the local Compose stack in deploy/compose.
+  Defaults match the local Compose stack in deploy/compose. Runtime doctor does
+  not require live services or credentials; unavailable optional services are
+  reported as per-check error status and degraded mode in the output.
 
 ENVIRONMENT
   POLYMETRICS_POSTGRES_URL
@@ -734,11 +1127,12 @@ ENVIRONMENT
   POLYMETRICS_TEMPORAL_ADDR
 
 SECURITY
-  PostgreSQL passwords are redacted in command output.
+  Reported endpoints are sanitized before command output. Userinfo, query
+  strings, fragments, and control characters are removed from PostgreSQL,
+  DragonflyDB, and Temporal endpoints.
 
 EXIT STATUS
-  0 success
-  1 runtime error
+  0 report emitted, including degraded or absent optional services
   2 usage error
 `
 
@@ -758,13 +1152,23 @@ DESCRIPTION
 
   The sync-modes subcommand runs a synthetic local file-to-warehouse benchmark
   for every supported ETL sync mode and reports each mode's duration and records
-  per second.
+  per second. Workload flags are bounded: --iterations accepts 1 through 1000,
+  and --records accepts 1 through 100000.
+
+  With --runtime --json, output also includes runtime_report with PostgreSQL,
+  DragonflyDB, and Temporal health-check metadata: check name, status, endpoint,
+  latency, and redacted error text when a check fails. PostgreSQL endpoint is redacted
+  and omits query strings. DragonflyDB and Temporal endpoints are topology metadata,
+  not credentials.
 
 SECURITY
-  Performance output contains counts and durations only.
+  Performance output includes counts, durations, and, when --runtime is used,
+  runtime health metadata. No decrypted secrets are printed. Runtime errors use
+  the shared redaction path before JSON or text output.
 
 EXIT STATUS
   0 success
   1 runtime error
   2 usage error
+  3 validation error, including invalid --iterations or --records
 `

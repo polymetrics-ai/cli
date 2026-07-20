@@ -12,6 +12,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	pmlogging "polymetrics.ai/internal/logging"
 )
 
 type Vault struct {
@@ -111,6 +113,9 @@ func (v *Vault) Get(ctx context.Context, id string) (map[string]string, error) {
 	}
 	if out == nil {
 		out = map[string]string{}
+	}
+	for _, value := range out {
+		pmlogging.RegisterValueFromContext(ctx, value)
 	}
 	return out, nil
 }

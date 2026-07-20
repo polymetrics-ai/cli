@@ -63,7 +63,7 @@ func TestExtract_RequiresRequest(t *testing.T) {
 	dir := t.TempDir()
 	initProject(t, dir)
 	var stdout, stderr bytes.Buffer
-	code := Run([]string{"--root", dir, "extract"}, &stdout, &stderr)
+	code := Run([]string{"--root", dir, "extract", "--limit", "1"}, &stdout, &stderr)
 	if code == 0 {
 		t.Fatalf("want non-zero exit for missing --request, got 0")
 	}

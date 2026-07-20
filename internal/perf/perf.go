@@ -9,13 +9,29 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/app"
+	pmlogging "polymetrics.ai/internal/logging"
 	pmruntime "polymetrics.ai/internal/runtime"
 	"polymetrics.ai/internal/runtimecheck"
 )
 
+const (
+	DefaultCompareIterations = 25
+	MaxCompareIterations     = 1000
+
+	DefaultSyncModeRecords = 1000
+	MaxSyncModeRecords     = 100000
+)
+
+var (
+	dependencyFreeRunner = runDependencyFree
+	runtimeBackedRunner  = runRuntimeBacked
+	runtimeDoctor        = runtimecheck.Doctor
+)
+
 type CompareRequest struct {
-	Iterations int  `json:"iterations"`
-	Runtime    bool `json:"runtime"`
+	Iterations    int                 `json:"iterations"`
+	Runtime       bool                `json:"runtime"`
+	RuntimeConfig runtimecheck.Config `json:"-"`
 }
 
 type Result struct {
@@ -55,9 +71,12 @@ type SyncModeBenchmark struct {
 
 func Compare(ctx context.Context, req CompareRequest) (Comparison, error) {
 	if req.Iterations <= 0 {
-		req.Iterations = 25
+		req.Iterations = DefaultCompareIterations
 	}
-	free, err := runDependencyFree(ctx, req.Iterations)
+	if req.Iterations > MaxCompareIterations {
+		return Comparison{}, fmt.Errorf("iterations %d exceeds max %d", req.Iterations, MaxCompareIterations)
+	}
+	free, err := dependencyFreeRunner(ctx, req.Iterations)
 	if err != nil {
 		return Comparison{}, err
 	}
@@ -71,17 +90,17 @@ func Compare(ctx context.Context, req CompareRequest) (Comparison, error) {
 	if !req.Runtime {
 		return comparison, nil
 	}
-	cfg := runtimecheck.FromEnv()
-	report := runtimecheck.Doctor(ctx, cfg)
+	cfg := req.RuntimeConfig
+	report := runtimeDoctor(ctx, cfg)
 	comparison.RuntimeReport = &report
 	if !runtimecheck.Healthy(report) {
 		result := Result{Mode: "runtime-backed", Iterations: req.Iterations, Error: "runtime services are not all healthy"}
 		comparison.RuntimeBacked = &result
 		return comparison, nil
 	}
-	runtimeResult, err := runRuntimeBacked(ctx, req.Iterations, cfg)
+	runtimeResult, err := runtimeBackedRunner(ctx, req.Iterations, cfg)
 	if err != nil {
-		runtimeResult.Error = err.Error()
+		runtimeResult.Error = redactPerfError(ctx, err)
 		comparison.RuntimeBacked = &runtimeResult
 		return comparison, nil
 	}
@@ -91,7 +110,10 @@ func Compare(ctx context.Context, req CompareRequest) (Comparison, error) {
 
 func CompareSyncModes(ctx context.Context, req SyncModeBenchmarkRequest) (SyncModeBenchmark, error) {
 	if req.Records <= 0 {
-		req.Records = 1000
+		req.Records = DefaultSyncModeRecords
+	}
+	if req.Records > MaxSyncModeRecords {
+		return SyncModeBenchmark{}, fmt.Errorf("records %d exceeds max %d", req.Records, MaxSyncModeRecords)
 	}
 	modes := []string{
 		"full_refresh_append",
@@ -115,6 +137,7 @@ func CompareSyncModes(ctx context.Context, req SyncModeBenchmarkRequest) (SyncMo
 
 func runSyncModeBenchmark(ctx context.Context, mode string, records int) SyncModeBenchmarkResult {
 	root := filepath.Join(os.TempDir(), fmt.Sprintf("pm-sync-mode-%s-%d", mode, time.Now().UnixNano()))
+	defer func() { _ = os.RemoveAll(root) }()
 	start := time.Now()
 	loaded, err := runFileToWarehouse(ctx, root, mode, records)
 	duration := time.Since(start)
@@ -123,7 +146,7 @@ func runSyncModeBenchmark(ctx context.Context, mode string, records int) SyncMod
 		result.RecordsPerSec = float64(loaded) / duration.Seconds()
 	}
 	if err != nil {
-		result.Error = err.Error()
+		result.Error = redactPerfError(ctx, err)
 	}
 	return result
 }
@@ -197,6 +220,7 @@ func writeSyntheticSource(path string, records int) error {
 
 func runDependencyFree(ctx context.Context, iterations int) (Result, error) {
 	root := filepath.Join(os.TempDir(), fmt.Sprintf("pm-perf-free-%d", time.Now().UnixNano()))
+	defer func() { _ = os.RemoveAll(root) }()
 	start := time.Now()
 	records, err := runLocalETLLoop(ctx, root, iterations)
 	if err != nil {
@@ -208,6 +232,7 @@ func runDependencyFree(ctx context.Context, iterations int) (Result, error) {
 
 func runRuntimeBacked(ctx context.Context, iterations int, cfg runtimecheck.Config) (Result, error) {
 	root := filepath.Join(os.TempDir(), fmt.Sprintf("pm-perf-runtime-%d", time.Now().UnixNano()))
+	defer func() { _ = os.RemoveAll(root) }()
 	start := time.Now()
 	dragonfly := pmruntime.OpenDragonflyLeaseStore(cfg.DragonflyAddr)
 	defer dragonfly.Close()
@@ -277,6 +302,13 @@ func runLocalETLLoop(ctx context.Context, root string, iterations int) (int, err
 		records += run.RecordsLoaded
 	}
 	return records, nil
+}
+
+func redactPerfError(ctx context.Context, err error) string {
+	if err == nil {
+		return ""
+	}
+	return pmlogging.RedactText(ctx, err.Error())
 }
 
 func summarize(mode string, iterations, records int, duration time.Duration) Result {

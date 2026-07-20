@@ -1,6 +1,8 @@
 package certify_test
 
 import (
+	"context"
+	"io"
 	"os"
 	"testing"
 
@@ -17,5 +19,8 @@ import (
 // depends on this registration having already happened.
 func TestMain(m *testing.M) {
 	certify.SetCLIRunFunc(cli.Run)
+	certify.SetCLIRunContextFunc(func(ctx context.Context, args []string, stdout, stderr io.Writer, opts certify.CLIInvocationOptions) int {
+		return cli.RunWithContext(ctx, args, stdout, stderr, cli.RunOptions{Mode: cli.ModePlain, ScheduleCrontabFile: opts.CrontabFile})
+	})
 	os.Exit(m.Run())
 }

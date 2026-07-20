@@ -1,0 +1,62 @@
+{
+  "phase": 421,
+  "issue": 421,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "branch": "refactor/421-connections-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "baseHeadAtDispatch": "1678f9ab",
+  "verificationPassed": true,
+  "status": "review_fix_verified_pr_body_updated_pushed",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "planPhasePrompt": "/tmp/gsd-plan-phase-421.prompt",
+    "quickPrompt": "scripts/gsd prompt quick Review-fix PR #450 issue #421: correct website ETL connection credential shape and regenerate docs data --dry-run",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop_plus_pi_pm_gsd_loop_prompt",
+    "skillGap": ".pi/skills/go-implementation/SKILL.md and .pi/skills/ts-website/SKILL.md missing; global Go/website skills loaded"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "first serialized Phase 9 namespace worker already isolated in cwd/branch; worker has no subagent tool and must not delegate"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "red tests added inline for native connections subtree, flag semantics, list tolerance, and invalid action usage; no subagent available"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native connections Cobra subtree implemented in allowed internal/cli scope; focused gates, certify smoke, vet, and build passed"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "full local gates, runtime help/docs/website parity checks, and diff guards completed inline in isolated worker cwd"
+    },
+    {
+      "cycle": "review-fix-pr-450",
+      "decision": "local_critical_path",
+      "reason": "accepted website ETL placeholder finding fixed inline in isolated worker cwd; no subagent tool available; requested gates passed"
+    }
+  ],
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/450",
+  "reviewFix": {
+    "finding": "website/content/docs/etl.mdx documented connections create --source/--destination as <credential>:<credential-name> instead of parser-required <connector>:<credential>",
+    "disposition": "accepted_fixed",
+    "files": [
+      "website/content/docs/etl.mdx",
+      "website/lib/docs.generated.ts"
+    ],
+    "verification": "node generator, focused CLI test, gofmt, vet, build, npm gen:docs, make verify, stale-placeholder grep, diff guards all passed; website node_modules absent so no dependency-backed website scripts were run"
+  },
+  "reviewRoute": {
+    "claude": "disabled_not_requested_per_instruction",
+    "copilot": "not_requested_per_instruction",
+    "fallback": "human_parent_review_pending",
+    "coverageStatus": "pr_body_updated_review_fix_pushed_remote_checks_pending"
+  }
+}

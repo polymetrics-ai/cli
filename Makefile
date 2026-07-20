@@ -5,7 +5,7 @@ VERIFY_JOBS ?= 2
 # fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate pi-model-routing-check pi-shepherd-guards-check
 
 # Packages covered by `lint`: the declarative connector architecture packages.
 # Paths are filtered to existing directories so optional local trees do not
@@ -62,6 +62,7 @@ smoke-no-build:
 	./pm etl run --connection sample_to_warehouse --stream customers --root "$$SMOKE_DIR" --json >/dev/null; \
 	PLAN_OUTPUT=$$(./pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map name:full_name --map email:email --root "$$SMOKE_DIR"); \
 	PLAN_ID=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Created reverse plan/ {print $$4}'); \
+	./pm reverse preview "$$PLAN_ID" --root "$$SMOKE_DIR" --json >/dev/null; \
 	APPROVAL=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Approval token:/ {print $$3}'); \
 	./pm reverse run "$$PLAN_ID" --approve "$$APPROVAL" --root "$$SMOKE_DIR" --json >/dev/null; \
 	test -s "$$SMOKE_DIR/.polymetrics/warehouse/sample_customers.jsonl"; \
@@ -75,7 +76,14 @@ lint:
 connectorgen-validate:
 	go run ./cmd/connectorgen validate internal/connectors/defs
 
-verify: fmt tidy-check vet test build docs-check smoke lint connectorgen-validate
+pi-model-routing-check:
+	scripts/tests/pi-model-routing.sh
+
+pi-shepherd-guards-check:
+	scripts/tests/pi-shepherd-loop-stall-guard.sh
+	scripts/tests/pi-shepherd-loop-verdict-guard.sh
+
+verify: fmt tidy-check vet test build docs-check smoke lint connectorgen-validate pi-model-routing-check pi-shepherd-guards-check
 
 # Opt-in local gate that overlaps independent read/build checks after the
 # mutating fmt/tidy steps. CI keeps using serial `verify` for stable logs.

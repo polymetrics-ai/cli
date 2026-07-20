@@ -14,6 +14,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"polymetrics.ai/internal/safety"
 )
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
@@ -76,9 +78,15 @@ type Catalog struct {
 }
 
 type RuntimeConfig struct {
-	ProjectDir string            `json:"-"`
-	Config     map[string]string `json:"config"`
-	Secrets    map[string]string `json:"-"`
+	ProjectDir       string            `json:"-"`
+	Config           map[string]string `json:"config"`
+	Secrets          map[string]string `json:"-"`
+	LocalWritePolicy *LocalWritePolicy `json:"-"`
+}
+
+type LocalWritePolicy struct {
+	ProjectRoot   string
+	AllowExternal bool
 }
 
 type ReadRequest struct {
@@ -487,7 +495,16 @@ func (Warehouse) Check(ctx context.Context, cfg RuntimeConfig) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
-	return os.MkdirAll(warehousePath(cfg), 0o700)
+	dir := warehousePath(cfg)
+	if err := validateLocalWriteEffect(cfg, dir, "warehouse path"); err != nil {
+		return err
+	}
+	effects, err := openLocalWriteFS(cfg)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = effects.Close() }()
+	return effects.MkdirAll(dir, 0o700)
 }
 
 func (w Warehouse) Catalog(ctx context.Context, cfg RuntimeConfig) (Catalog, error) {
@@ -525,7 +542,15 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 		return WriteResult{}, err
 	}
 	dir := warehousePath(req.Config)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := validateLocalWriteEffect(req.Config, dir, "warehouse path"); err != nil {
+		return WriteResult{}, err
+	}
+	effects, err := openLocalWriteFS(req.Config)
+	if err != nil {
+		return WriteResult{}, err
+	}
+	defer func() { _ = effects.Close() }()
+	if err := effects.MkdirAll(dir, 0o700); err != nil {
 		return WriteResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
 	table := req.Table
@@ -536,7 +561,7 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 	if req.Overwrite {
 		flag = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
 	}
-	file, err := os.OpenFile(tablePath(dir, table), flag, 0o600)
+	file, err := effects.OpenFile(tablePath(dir, table), flag, 0o600)
 	if err != nil {
 		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", table, err)
 	}
@@ -566,7 +591,16 @@ func (Outbox) Check(ctx context.Context, cfg RuntimeConfig) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
-	return os.MkdirAll(outboxPath(cfg), 0o700)
+	dir := outboxPath(cfg)
+	if err := validateLocalWriteEffect(cfg, dir, "outbox path"); err != nil {
+		return err
+	}
+	effects, err := openLocalWriteFS(cfg)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = effects.Close() }()
+	return effects.MkdirAll(dir, 0o700)
 }
 
 func (o Outbox) Catalog(ctx context.Context, cfg RuntimeConfig) (Catalog, error) {
@@ -585,7 +619,15 @@ func (Outbox) Write(ctx context.Context, req WriteRequest, records []Record) (Wr
 		return WriteResult{}, err
 	}
 	dir := outboxPath(req.Config)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := validateLocalWriteEffect(req.Config, dir, "outbox path"); err != nil {
+		return WriteResult{}, err
+	}
+	effects, err := openLocalWriteFS(req.Config)
+	if err != nil {
+		return WriteResult{}, err
+	}
+	defer func() { _ = effects.Close() }()
+	if err := effects.MkdirAll(dir, 0o700); err != nil {
 		return WriteResult{}, fmt.Errorf("create outbox directory: %w", err)
 	}
 	name := req.Table
@@ -600,7 +642,7 @@ func (Outbox) Write(ctx context.Context, req WriteRequest, records []Record) (Wr
 		r["_outbox_written_at"] = now
 		enriched = append(enriched, r)
 	}
-	file, err := os.OpenFile(tablePath(dir, name), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
+	file, err := effects.OpenFile(tablePath(dir, name), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
 	if err != nil {
 		return WriteResult{}, fmt.Errorf("open outbox %s: %w", name, err)
 	}
@@ -677,6 +719,28 @@ func writeJSONL(ctx context.Context, w io.Writer, records []Record) (int, error)
 		}
 	}
 	return len(records), nil
+}
+
+func validateLocalWriteEffect(cfg RuntimeConfig, path, field string) error {
+	if cfg.LocalWritePolicy == nil {
+		return nil
+	}
+	return safety.ValidateLocalWritePath(
+		cfg.LocalWritePolicy.ProjectRoot,
+		path,
+		field,
+		cfg.LocalWritePolicy.AllowExternal,
+	)
+}
+
+func openLocalWriteFS(cfg RuntimeConfig) (*safety.LocalWriteFS, error) {
+	if cfg.LocalWritePolicy == nil {
+		return safety.OpenLocalWriteFS("", true)
+	}
+	return safety.OpenLocalWriteFS(
+		cfg.LocalWritePolicy.ProjectRoot,
+		cfg.LocalWritePolicy.AllowExternal,
+	)
 }
 
 func warehousePath(cfg RuntimeConfig) string {

@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/safety"
+	"polymetrics.ai/internal/telemetry"
 )
 
 // maxErrorBody bounds how much of an error response body is captured in HTTPError.
@@ -37,15 +38,26 @@ type HTTPError struct {
 }
 
 func (e *HTTPError) Error() string {
-	msg := strings.TrimSpace(e.Body)
+	msg := http.StatusText(e.Status)
 	if msg == "" {
-		msg = http.StatusText(e.Status)
+		msg = "http error"
 	}
-	if len(msg) > 512 {
-		msg = msg[:512] + "..."
-	}
-	return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", e.Status, e.URL, msg))
+	return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", e.Status, safeErrorURL(e.URL), msg))
 }
+
+// StatusCode returns the HTTP response status for safe telemetry classification.
+func (e *HTTPError) StatusCode() int {
+	if e == nil {
+		return 0
+	}
+	return e.Status
+}
+
+// TelemetryErrorClass returns a stable error class for secret-safe tracing.
+func (e *HTTPError) TelemetryErrorClass() string { return "http" }
+
+// TelemetryErrorCode returns a stable error code for secret-safe tracing.
+func (e *HTTPError) TelemetryErrorCode() string { return "http_status" }
 
 // Requester performs JSON HTTP requests with auth, retry, and rate-limit handling.
 // The zero value is usable once Client/BaseURL are set; sensible defaults are
@@ -223,9 +235,20 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 	}
 
 	attempts := r.maxRetries() + 1
+	attrs := append(telemetry.HTTPAttrs(method, fullURL), telemetry.IntAttr("pm.http.max_attempts", attempts))
+	ctx, span := telemetry.StartSpan(ctx, "pm.connector.http", attrs...)
+	defer span.End()
+	started := time.Now()
+	responseBytes := 0
+	defer func() {
+		telemetry.RecordConnectorOperation(ctx, method, time.Since(started), responseBytes)
+	}()
 	var lastErr error
 	for attempt := 0; attempt < attempts; attempt++ {
+		attemptAttr := telemetry.IntAttr("pm.http.attempt", attempt+1)
+		span.AddEvent("pm.connector.http.attempt", attemptAttr)
 		if err := ctx.Err(); err != nil {
+			span.RecordError(err)
 			return nil, err
 		}
 
@@ -244,38 +267,54 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 			}
 		}
 
+		telemetry.RecordAPICall(ctx, method, len(payload))
 		resp, err := r.client().Do(req)
 		if err != nil {
 			lastErr = fmt.Errorf("send request: %w", err)
+			span.AddEvent("pm.connector.http.error", attemptAttr)
 			if attempt < attempts-1 {
+				telemetry.RecordAPIRetry(ctx, method)
 				if werr := r.sleep(ctx, r.backoff(attempt, "")); werr != nil {
 					return nil, werr
 				}
 				continue
 			}
+			span.RecordError(lastErr)
 			return nil, lastErr
 		}
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		resp.Body.Close()
+		responseBytes += len(respBody)
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
-			lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
-			if werr := r.sleep(ctx, r.backoff(attempt, resp.Header.Get("Retry-After"))); werr != nil {
+			lastErr = &HTTPError{Status: resp.StatusCode, URL: safeErrorURL(fullURL), Body: truncate(respBody)}
+			span.AddEvent("pm.connector.http.retry", attemptAttr, telemetry.IntAttr("pm.http.status_code", resp.StatusCode), telemetry.BoolAttr("pm.http.retry", true))
+			telemetry.RecordAPIRetry(ctx, method)
+			wait := r.backoff(attempt, resp.Header.Get("Retry-After"))
+			if resp.StatusCode == http.StatusTooManyRequests {
+				telemetry.RecordRateLimitWait(ctx, method, wait)
+			}
+			if werr := r.sleep(ctx, wait); werr != nil {
 				return nil, werr
 			}
 			continue
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+			err := &HTTPError{Status: resp.StatusCode, URL: safeErrorURL(fullURL), Body: truncate(respBody)}
+			span.SetAttributes(attemptAttr, telemetry.IntAttr("pm.http.status_code", resp.StatusCode))
+			span.RecordError(err)
+			return nil, err
 		}
 
+		span.SetAttributes(attemptAttr, telemetry.IntAttr("pm.http.status_code", resp.StatusCode), telemetry.BoolAttr("pm.http.retry", false))
 		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL}, nil
 	}
 	if lastErr == nil {
-		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)
+		lastErr = fmt.Errorf("request to %s failed after %d attempts", safeErrorURL(fullURL), attempts)
 	}
+	span.RecordError(lastErr)
 	return nil, lastErr
 }
 
@@ -356,6 +395,22 @@ func parseRetryAfter(value string) (time.Duration, bool) {
 		return d, true
 	}
 	return 0, false
+}
+
+func safeErrorURL(raw string) string {
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		return safety.RedactErrorText(raw)
+	}
+	parsed.User = nil
+	parsed.RawQuery = ""
+	parsed.ForceQuery = false
+	parsed.Fragment = ""
+	parsed.RawPath = ""
+	parsed.Host = safety.SanitizeTerminalLine(parsed.Host)
+	parsed.Path = safety.SanitizeTerminalLine(parsed.Path)
+	parsed.Opaque = safety.SanitizeTerminalLine(parsed.Opaque)
+	return parsed.String()
 }
 
 func truncate(body []byte) string {

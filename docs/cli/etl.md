@@ -6,7 +6,7 @@ SYNOPSIS
   pm etl check --connector <name> [--config key=value] [--json]
   pm etl catalog --connector <name> [--config key=value] [--json]
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
-  pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
+  pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json] [--progress ndjson]
   pm etl status <run-id> [--json]
 
 DESCRIPTION
@@ -34,6 +34,12 @@ DESCRIPTION
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
+
+PROGRESS
+  Add --progress ndjson to stream sanitized ETL progress events to stderr.
+  Stdout remains the final human line or single JSON envelope. On failures,
+  stderr may also include the final error diagnostic after progress events.
+  CI, PM_NO_TUI, --plain, --no-input, pipes, and TERM=dumb keep the plain path.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -98,5 +104,6 @@ EXIT STATUS
   0 success
   1 runtime error
   2 usage error
+  3 validation error, including invalid UI/progress flag
 
 ```

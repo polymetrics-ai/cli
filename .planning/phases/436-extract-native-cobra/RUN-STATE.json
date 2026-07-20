@@ -1,0 +1,120 @@
+{
+  "phase": 436,
+  "issue": 436,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/436-extract-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "eec03373dcc581c7f5c3331fe63287519b317f53",
+  "invocationSession": "issue-436-pi-sol-high-20260719T074902Z",
+  "startedAt": "20260719T074902Z",
+  "modelProfile": "Sol",
+  "thinking": "high",
+  "endedAt": "20260719T093539Z",
+  "endingImplementationHead": "28393538",
+  "status": "complete_verified",
+  "correctionStartingHead": "748f6bdbf754840912796d8f7ff8aee9b8fbc00a",
+  "verificationPassed": true,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked_unknown_command",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "next serialized Phase 9 hidden extract command is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited external files/services/credentials/dependencies/PR/review"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "complete hidden native extract, flags, routing/output/help, parser compatibility, globals, temp-root containment, and input/output final-link tests preceded production edits; CLI symbols were absent and all three expected RLM path escapes reproduced"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "hidden native extract with nine typed flags, invocation-local query/analyzer seams, extract table validation, rooted RLM input/output effects, direct manual, and extract-only legacy/parser removal passes focused, repeated, race, router/golden, path-safety, and exact-start differential gates"
+    },
+    {
+      "cycle": "containment-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "self-inspection found that extract must validate its fixed warehouse directory beneath the selected project root before shared RLM treats that directory as a held root; bounded temp-only RED/GREEN is coupled to extract path safety"
+    },
+    {
+      "cycle": "containment-correction-red",
+      "decision": "local_critical_path",
+      "reason": "temp-only warehouse-root symlink test failed before production correction because extract constructed and ran the injected analyzer through a warehouse directory resolving outside the selected project root"
+    },
+    {
+      "cycle": "containment-correction-green",
+      "decision": "local_critical_path",
+      "reason": "extract now validates its fixed warehouse directory beneath the selected project root before analyzer construction; focused, repeated x10, and race extract tests pass"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "final focused/repeated/race, full CLI/repository, exact-start differential, runtime help/output/hidden, docs/manual/website generation, module/scope, gofmt, vet, build, and make verify gates passed; website typecheck was not applicable without prohibited dependency installation"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "terminal issue-local evidence and no-PR/no-review worker handoff finalized for commit and immediate push"
+    },
+    {
+      "cycle": "accepted-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "all four bounded #436 findings are accepted; central extract/router/RLM scope is coupled, no subagent tool is exposed, and deterministic RED tests plus artifact reset precede production edits"
+    },
+    {
+      "cycle": "accepted-review-correction-red",
+      "decision": "local_critical_path",
+      "reason": "focused temp/fake tests failed on all four accepted findings before production edits, including deterministic external read/output replacement after a controlled analyzer-factory mutation"
+    },
+    {
+      "cycle": "accepted-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "held project-root warehouse scope, parser ownership state/normalization, exact-bare detection, and full RLM table validation pass focused, repeated, race, adversarial, and exact-base differential gates"
+    },
+    {
+      "cycle": "accepted-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full CLI/RLM/safety, runtime parity, docs/manual/website drift, gofmt, vet, build, module/scope guards, and make verify passed without external services or dependencies"
+    },
+    {
+      "cycle": "accepted-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "all six terminal artifacts finalized for the user-requested commit/push with no PR or review"
+    }
+  ],
+  "red": "original native RED plus correction RED: controlled pre-analyzer warehouse replacement re-rooted deterministic input/output externally; literal/assigned/malformed help-like tails rendered CommandManual; unknown-only forms rendered bare help; dot input/output reached analyzer factory",
+  "green": "prior green plus correction green: focused extract/router/golden 11.271s; RLM/safety; extract x10 43.889s and race 50.339s; exact-base 11/11; adversarial 37 matched plus 17 intentional help and 0 mismatches; package vet/build/module guards pass",
+  "verification": "pass: focused extract/router/golden 11.271s; extract x10 43.889s and race 50.339s; RLM/safety repeated/race; exact-base 11/11; adversarial 37 matched + 17 intentional help / 0 mismatches; full CLI 426.582s; docs focus 30.291s; final make verify exit 0 with CLI 433.304s, certify 336.725s, RLM 1.780s, docs/smoke/lint/connectors green",
+  "files": [
+    ".planning/phases/436-extract-native-cobra/PLAN.md",
+    ".planning/phases/436-extract-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/436-extract-native-cobra/VERIFICATION.md",
+    ".planning/phases/436-extract-native-cobra/PROMPTS.md",
+    ".planning/phases/436-extract-native-cobra/SUMMARY.md",
+    ".planning/phases/436-extract-native-cobra/RUN-STATE.json"
+  ],
+  "commits": [
+    "9b71fdfd docs(planning): plan extract native cobra slice",
+    "45129942 test(cli): specify native extract contract",
+    "92935855 refactor(cli): nativize hidden extract command",
+    "b7e9063e docs(planning): add extract containment correction",
+    "37e3e1b2 test(cli): expose extract warehouse root escape",
+    "15417f95 fix(cli): confine extract warehouse root",
+    "748f6bdb docs(planning): complete extract native cobra handoff",
+    "7c929d4a docs(planning): reopen extract review corrections",
+    "cddffc45 test(cli): expose extract review regressions",
+    "28393538 fix(cli): preserve extract parser and warehouse roots"
+  ],
+  "push": "accepted correction plan, RED, and GREEN checkpoints pushed; terminal artifact commit is committed and pushed immediately after this state is written",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "not_run_user_prohibited_review",
+  "safety": "owned temporary roots/sentinels and injected/hermetic fakes only; no broad paths or external final-link effects; no external user files/services, credentials, dependencies, generic tools, PR, or review; make verify used only its ordered local reverse plan-preview-approval-run smoke"
+}

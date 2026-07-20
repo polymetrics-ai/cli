@@ -1,10 +1,12 @@
 package flow
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -17,6 +19,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"polymetrics.ai/internal/telemetry"
 )
 
 // ---------------------------------------------------------------------------
@@ -345,6 +349,37 @@ func TestAction429BackoffSuccess(t *testing.T) {
 		"server must have been called at least 3 times (2 retries + 1 success)")
 }
 
+func TestActionBatchRetryAndSkipMetrics(t *testing.T) {
+	fd := newFakeDestination(t)
+	fd.fail429For = 2
+	stateDir := t.TempDir()
+	runner := buildRunner(t, fd, stateDir, &stubLedger{})
+	root := t.TempDir()
+	dir := filepath.Join(root, ".polymetrics", "telemetry")
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{Exporter: telemetry.ExporterFile, ProjectRoot: root, Directory: filepath.Join(".polymetrics", "telemetry"), RunID: "action-batches"}, func(string) {})
+
+	records := sampleRecords(1)
+	if _, err := runner.Execute(ctx, records, "run-1"); err != nil {
+		t.Fatalf("first Execute: %v", err)
+	}
+	if _, err := runner.Execute(ctx, records, "run-2"); err != nil {
+		t.Fatalf("idempotent Execute: %v", err)
+	}
+	telemetry.Shutdown(context.Background(), handle, func(string) {})
+
+	data := readFlowTelemetry(t, dir)
+	for name, want := range map[string]int{
+		"pm.batches.created": 1,
+		"pm.batches.retried": 2,
+		"pm.batches.skipped": 1,
+		"pm.batches.flushed": 1,
+	} {
+		if got := flowMetricSum(t, data, name); got != want {
+			t.Errorf("metric %s sum = %d, want %d\n%s", name, got, want, data)
+		}
+	}
+}
+
 func TestAction429ExhaustedGoesToDLQ(t *testing.T) {
 	fd := newFakeDestination(t)
 	fd.fail429For = 999 // always 429
@@ -359,6 +394,40 @@ func TestAction429ExhaustedGoesToDLQ(t *testing.T) {
 	assert.Equal(t, 0, res.RecordsSucceeded)
 	assert.Equal(t, 1, res.RecordsFailed)
 	assert.NotEmpty(t, res.DLQPath)
+}
+
+func flowMetricSum(t *testing.T, data []byte, name string) int {
+	t.Helper()
+	dec := json.NewDecoder(bytes.NewReader(data))
+	total := 0
+	for {
+		var obj map[string]any
+		err := dec.Decode(&obj)
+		if errors.Is(err, io.EOF) {
+			return total
+		}
+		if err != nil {
+			t.Fatalf("decode metric JSON: %v", err)
+		}
+		scopeMetrics, _ := obj["ScopeMetrics"].([]any)
+		for _, rawScope := range scopeMetrics {
+			scope, _ := rawScope.(map[string]any)
+			metrics, _ := scope["Metrics"].([]any)
+			for _, rawMetric := range metrics {
+				metric, _ := rawMetric.(map[string]any)
+				if metric["Name"] != name {
+					continue
+				}
+				metricData, _ := metric["Data"].(map[string]any)
+				points, _ := metricData["DataPoints"].([]any)
+				for _, rawPoint := range points {
+					point, _ := rawPoint.(map[string]any)
+					value, _ := point["Value"].(float64)
+					total += int(value)
+				}
+			}
+		}
+	}
 }
 
 // ---------------------------------------------------------------------------

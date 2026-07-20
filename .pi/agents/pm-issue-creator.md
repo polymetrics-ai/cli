@@ -2,7 +2,7 @@
 name: pm-issue-creator
 description: Codex worker — creates the parent issue and sub-issues on GitHub from an approved plan.
 tools: read, bash, grep, find, ls
-model: openai-codex/gpt-5.5
+model: openai-codex/gpt-5.6-sol
 thinking: xhigh
 ---
 

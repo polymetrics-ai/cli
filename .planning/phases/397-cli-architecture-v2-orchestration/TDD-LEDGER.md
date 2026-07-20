@@ -1,0 +1,102 @@
+# Issue #397 Parent TDD Ledger
+
+## Progressive setup planning slice — 2026-07-20
+
+- RED: combined #416 ownership could not satisfy the one-issue/one-PR contract and left agent-safe
+  invocation and complete/incomplete action behavior ambiguous.
+- GREEN: child #469, direct GitHub dependency edges, a GSD-verified Phase 18 UI contract, and
+  synchronized roadmap/Pi prompts establish bounded reverse/setup work.
+- REFACTOR: PR #468 docs/skill/GSD checks passed and the PR is integrated; external review coverage remains absent, and production Bubble Tea worker launch is now governed by the rebuilt dependency/collision queue.
+
+## Human-first query/reverse entry revision — 2026-07-20
+
+- RED: the design required humans to discover `pm query grid` and `pm reverse guide` even though
+  query and reverse are place-like workflows.
+- GREEN: #411 and #416 now require eligible dual-TTY bare query/reverse entry, same-model explicit
+  aliases, help-only help flags, and deterministic help on every bypass/non-TTY path.
+- REFACTOR: the exception stays limited to query/reverse; credentials, connections, and all other
+  ordinary bare namespaces remain help-first. Production work remains blocked on reviewed #462.
+
+
+## Live reconciliation and queue rebuild — 2026-07-20T19:28Z
+
+- RED: durable state was stale against live GitHub: PR #468 had merged into parent `c3d8a757`, PR #466 was still open/green/no-review, Claude was disabled, parent PR #438 was `BEHIND`, and Phase 437 pending intake was untracked in the worker worktree.
+- GREEN: read-only `pm-scout`/`pm-reviewer` sidecars verified stale artifacts, intake triage, and #408/#437 collision; pending intake was preserved under `.planning/traces/phase-437-pending-intake/`; `origin/main` was merged with no force-push.
+- REFACTOR: ready queue now records #437 `not_spawned_review_blocked`, #408 `not_spawned_write_scope_collision`, downstream dependency blockers, and #419 `not_spawned_human_gate`; no Phase 437 pending request was implemented or assigned to GitHub issues.
+
+Status: active
+Starting parent HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
+
+| Unit | RED evidence | GREEN evidence | Refactor/review evidence | Promotion |
+|---|---|---|---|---|
+| #424 / PR #460 correction | Independent xhigh review `0c6c0095-8c61-4498-8da9-0a775a6f2074` found positional `runtime help` regression at `8d696cd4`; Sol/high worker `7050f706-72d2-47df-ac13-0b08979cc1ae` captured `go test ./internal/cli/ -run '^TestRuntimeBareHelpAndInvalidActionSemantics$' -count=1` failing on text and JSON aliases before production edits. | Same focused test passed; runtime/router/golden, runtimecheck, full CLI, vet, full tests, build, and `make verify` passed at `323d4a91`. | Exact-head Sol/xhigh re-review `05a92a52-3893-4eb9-855e-1a5b001ab64e`: `CLEAN_NO_ACTIONABLE_FINDINGS`; remote CI green. | Exact child head `323d4a91b465cdee5fdb94ea338f4272b76de781` is an ancestor of parent integration `1f5bd80f77ab267901be730f855728cf00120874`. |
+| #415 / PR #461 correction | Independent xhigh review `ae95aa24-93a9-48e0-b69d-e31dd9e19891` found incomplete PRD metrics, no live periodic OTLP export, generic endpoint path error, and committed whitespace at `c6138292`; Sol/high worker invocation `324e9db6-21d8-4027-b4cb-3cc0040774af` captured focused contract/HTTP/ETL/flow tests failing before production edits. | Focused and race suites, reconciliation, live/path/disabled OTLP tests, Temporal gates, full tests, vet, build, `make verify`, module checks, and `BenchmarkEmit` at 0 allocs/op passed at `6cf5c48f`. | Exact-head Sol/xhigh re-review invocation `933b6246-2377-4c5d-8d9d-9e9af2ce159d`: `CLEAN_NO_ACTIONABLE_FINDINGS`. Sol/high integration worker `2a30f9bc-ba69-4fa4-9185-647e20d5bc96` regenerated the sole website data conflict; Sol/xhigh integration review `4ec8f305-9f7f-40c4-97c2-68c2e01c0d36` was clean. | Exact child head `6cf5c48f1b2cf218ed35c15ba77096db89969575` is an ancestor of parent integration `1f5bd80f77ab267901be730f855728cf00120874`; combined runtime/metrics gates passed. |
+| #425 | Sol/high worker invocation `e3c96736-08cc-4467-9fac-5394d2581eb1` captured native-registration tests failing at start `479a62f9`; independent xhigh review `4c6c0bec-8e50-48d2-91d0-3218adc64a65` then found accepted-but-disconnected `--json=true`; Sol/high correction `7ceb8ecd-6c7f-406e-acdb-45f97ad88368` captured assigned-boolean cases failing before production edits. | Native version and global assigned-boolean tests, full CLI, config precedence, help/golden/docs parity, vet/build and `make verify` passed at `784153c7`. | Exact-head Sol/xhigh re-review `905f2b84-2325-451d-bda9-ec4b08983307`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `784153c7ed7cbb94360601b84c40c821eec21823` promoted as ancestor of parent merge `0c57ec396f12e9b0233af8899cc7ff8acc9eca7d`. |
+| #426 | Sol/high worker invocation `e83aba7c-6961-4c70-abcb-9dcfaa2960e1` captured native skills registration/`DisableFlagParsing` tests failing before production edits at start `54bfcbab`. | Focused skills/router/golden, full CLI/full repo, help/docs/website parity, vet/build and `make verify` passed at `fe2a937b`. | Exact-head Sol/xhigh review invocation `60adcff2-041f-40fa-9ec9-2d6ae6837a3e`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `fe2a937b5809ee53518549d6148d41879b6a8c2d` promoted at parent merge `bb12f265db4ef2023f98b05080cac7a36dab8e54`. |
+| #427 | Sol/high worker `c791a5f6-231f-44b8-a2f1-e4e65e3b2dba` captured native docs registration tests failing; xhigh review `fad31108-76a9-4ddc-bfdd-c9d6b99e49da` found trailing-help and literal-`--` compatibility gaps; Sol/high correction `808093c7-0289-4a61-933f-7273ee9998f2` captured 12 differential cases failing before production edits. | Focused/full CLI/full repo, 12/12 differential matrix, generated docs/connector validation/website parity, vet/build and `make verify` passed at `aacb1536`. | Exact-head Sol/xhigh re-review `ef326655-bbd1-4c08-92c6-d160ef91b536`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `aacb15361b9f42a381442f79b9ca50e56b482205` promoted at parent merge `e68ccdf7d24066729adb95388446706ccfe2597b`. |
+| #428 | Sol/high worker `0f75ba03-8d80-4af6-b2d8-5d262e896b54` captured native agent seams failing; xhigh review `9985e988-a36c-44ef-b864-cd92031b0675` found invalid-leading-flag action dispatch; Sol/high fix `56018ad9-a6f6-486c-8b95-3fd6206d3945` captured zero-effect tests failing; xhigh re-review `5ebc3a77-ab14-4f97-a8c8-6ed8442683df` found clustered-help suppression; Sol/high fix `d253f76f-872f-4c54-af8c-8d8b12de7ad2` captured 20 cases failing before edits. | Fake-only focused/race/adversarial tests, 32/32 base differential, full CLI/full repo, parity, vet/build and `make verify` passed at `924ebfe0`. | Final exact-head Sol/xhigh security re-review `e18a80dd-5de2-4d3d-8458-1f99f0f98397`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `924ebfe016143504502ffeebcee7002f6d520c6f` promoted at parent merge `569536d15e9d390dd9b3bda5a1dbd86e719846f6`. |
+| #429 | Sol/high implementation `b20c6483-c828-495a-93aa-5f393f0c1712` and bounded correction sessions `cee2448f`, `fb3e3022`, `4780796d`, `56efdaf6`, `26a5e339`, `c2ac3e52`, `863c9a7c`, and `f540a391` each recorded focused RED before production edits for parser ownership/compatibility, non-vacuous state assertions, and rooted local-write effects. | Credentials/safety/connectors/app focused, repeated and race tests; base differentials; full repo; docs parity; vet/build; and repeated `make verify` passed at `9e966e85`. Parent integration's over-broad credentials race regex timed out at 10m (incomplete, not pass); bounded race partitions then passed in 432.229s and 72.282s, and all credentials passed non-race in 108.102s. | Iterative independent Sol/xhigh reviews drove corrections; final exact-head review `1b30b51b-73a3-4c2d-90da-bf5161d36a8f`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `9e966e85868aedb0ddfd79ca0de8556ed78345c5` promoted at parent merge `a490eeba1d32619484b59f8a72948dfc624b99de`. |
+| #430 | Sol/high worker `8d48e651-ff7a-42af-aa60-57551df1dcae` captured native ETL tests failing; xhigh review `a5f2e799-2bec-4788-8786-91535c2447fb` found status operand normalization; Sol/high correction `9751766b-3d79-4f36-9b93-4e39ec165fa8` captured fail-closed differential cases before edits. | Focused/repeated/race ETL/app, 49/49 base differentials, full repo, parity, vet/build and `make verify` passed at `ad0f23bb`; parent integration race passed. | Exact-head Sol/xhigh re-review `6049b205-ccea-4d8d-ba25-3046a865c19c`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `ad0f23bbe6b9fc71713d651d0b25ff6c42d43a06` promoted at parent merge `4a9fa0fb0e3b72ee2c5e864c1778c7acf8da06c5`. |
+| #431 | Sol/high worker `1e9e3b7f-1228-4d2c-8bc4-c3babdb82bf2` captured missing native reverse tree; xhigh review `8b8161ab-d794-4f1b-99d8-8e5332df1334` found malformed unknown compatibility; Sol/high correction `ae7bde80-fd8b-4595-a969-79a72c2d3d29` captured 50 differential cases before edits. | Focused/repeated/race reverse, 324/324 differentials, full repo, ordered local smoke, parity, vet/build and `make verify` passed at `d628fce2`; parent CLI/app/safety race gates passed. An integration command also named nonexistent `./internal/reverse`, which failed setup and was corrected to actual app/CLI packages; no product failure. | Exact-head Sol/xhigh re-review `6ea302fa-ce00-42f0-a7e5-ed4b2282bce5`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `d628fce2916c390f51c8e7e519d481c2cc9f51fe` promoted at parent merge `573d6222e1cb98f8cdb980a571e6925310855e59`. |
+| #432 | Sol/high worker `f6cbbbfa-f48f-4abb-a0f1-91f1c0f61e48` recorded native flow RED before production edits. | Focused/race flow/CLI, 200/200 base differentials, full repo, parity, vet/build and `make verify` passed at `b8377b7b`; parent integration race passed. | Exact-head Sol/xhigh review `9dbfa83b-6355-4e9c-9a68-5ae39a7aabe9`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `b8377b7b200e50ccb5ec164670fed4f78a5c486a` promoted at parent merge `ad6e43313376cfc2c4e4ed98079c14931b932b9a`. |
+| #433 | Sol/high worker `e1009583-e898-4de6-b4dd-0b0ef1e2b5cd` recorded native schedule RED before production edits. | Fake-only focused/repeated/race schedule/CLI, 248/248 differentials, full repo, parity, vet/build and `make verify` passed at `701569ee`; parent integration race passed. | Exact-head Sol/xhigh review `1a49a57e-51dc-4abc-ae4b-fda7152a416d`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `701569ee985f7c87f011d8a1cfab39afcc3cc8c2` promoted at parent merge `990b8f603d0fa2e1e8876bbe52c0cae8512a84df`. |
+| #434 | Sol/high worker `11225914-01eb-4d05-a4f2-907178102e93` recorded native RLM RED; xhigh review `fecc855b-0850-4a77-8d7b-eeeec3556d27` found request crossing non-agent factory seams; Sol/high correction `2fcfbbc6-810a-448e-ab85-be2c5e81be5b` captured non-agent request failures before edits. | Fake-only focused/race RLM/CLI/worker, 1,984/1,984 differential, full repo, parity, vet/build and `make verify` passed at `8177e342`; parent integration race passed. | Exact-head Sol/xhigh re-review `65f48296-b24a-498a-8b25-6c4a3143d9c9`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `8177e342ad03b5fbf3750f2c0ecf9aa11f695f92` promoted at parent merge `96680756cf6d1faba13ed211974bc26422e5db75`. |
+| #435 | Sol/high worker `72824844-2597-4d86-a33f-27ba2c68256c` recorded native worker RED; xhigh review `87709538-f290-477c-9ed9-be9f6733e9fa` found a loopback dial contradicting fake-only evidence; Sol/high correction `c11cab42-76e8-4d6c-a06b-ee692085cab0` made the config migration test fail before `Run` unless the fake seam was used. | Fake-only focused/repeated/race worker/config/CLI, full repo, parity, vet/build and `make verify` passed at `f712e696`; parent integration race passed. | Exact-head Sol/xhigh re-review `d549e7cf-50bc-4d9d-94ff-04734f048d3b`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `f712e696e075792492397ab1d556d1dfceadba04` promoted at parent merge `afd765e9e9b53fa3250c2ba05686af81d74d2f94`. |
+| #436 | Sol/high worker `cbcc7097-7302-4dd3-930a-104ffd5ae2e9` recorded native extract RED; xhigh review `0c8432b7-006b-4a88-9924-d6b3c5dfee5b` found rooted-scope, parser, unknown-only and pre-factory validation gaps; Sol/high correction `5344f0f4-1026-43a7-b114-518dce07d7fd` captured all four before edits. | Temp-only focused/repeated/race extract/RLM/safety, 16/16 base differentials, full repo, docs parity, vet/build and `make verify` passed at `7da245b8`; parent integration race passed. | Exact-head Sol/xhigh re-review `19fd2452-9b9b-4479-bbba-2bf9f13a1bbb`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `7da245b8da2b8590766d99ca9e967d366e50cfcc` promoted at parent merge `b28e67fb2432f48b6909a2103a0b3e3fa4e9f461`. |
+| #437 / PR #466 | Existing issue branch had recorded native connectors/certify RED plus five prior safety cycles. Spawned continuation/review workers captured fresh RED for leak dominance, cleanup/idempotency, resume authority, required-value parsing, future timestamps, and CI timing fragility. The remote timing failure was recorded exactly; local stress did not fabricate a failure. | Head `26f98a72419010b961b5b8378ef4a695b0c0a06f`: focused/repeated/race, full CLI/certify, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certify, and connectorgen 547/0 passed. CI concurrency proof is deterministic rather than wall-clock based. | Human fallback review approved exact head; pre-integration gate confirmed green checks and no unresolved threads. | PR #466 merged into parent only at `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`; #437 provisionally integrated. |
+| #462 / PR #465/#467/#468 | Docs-only RED identified missing interaction/accessibility contract. The latest RED also identified human discoverability failure when query/reverse required hidden aliases. | PR #468 specifies eligible dual-TTY bare query/reverse entry, same-model grid/guide aliases, token secrecy, path confinement, stdin+stdout TTY gate, and unconditional bypass behavior. PR #468 merged into parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`. | GitHub blocked-by edges include #462 for affected issues. Claude workflow is disabled manually; no external review record exists, so parent/human fallback coverage remains pending. | Provisionally integrated; production TUI remains queued behind #408/#437 collision and downstream dependencies. |
+| #408-#414, #416-#418, #420 | pending per issue | pending | #408 is source-ready after #462 integration, but mutating launch is deferred by `not_spawned_write_scope_collision` with open PR #466 central CLI/help/golden/docs/website files. Downstream issues remain dependency-blocked. | not promoted |
+| #419 decision | Issue requires explicit human inclusion before any beta dependency or production implementation. | No implementation: human explicitly chose SKIP/DEFER for this parent campaign. | Decision recorded in issue #419 and parent phase ledgers; no dependency added. | Explicitly human-deferred; grants no approval for any other dependency. |
+
+Do not backfill evidence. Append exact commands/results and worker session/head identities after each unit.
+
+## #437 human-reviewed integration — 2026-07-20T20:06Z
+
+- RED: #437/PR #466 was green but blocked by missing external/human review coverage and therefore blocked #407/#413 plus #408 collision-free launch.
+- GREEN: human fallback review approved exact head `26f98a72419010b961b5b8378ef4a695b0c0a06f`; pre-integration checks confirmed unchanged head, green checks, and no unresolved threads; local merge landed at `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`.
+- REFACTOR: #407 umbrella dependency state is complete; queue rebuilt with #408 ready/critical path, #413 deferred for collision, and #419 still human-gated.
+
+## #419 explicit human defer — 2026-07-21
+
+- RED: issue #419 requires explicit human inclusion of an optional OpenTelemetry beta dependency before implementation.
+- GREEN: operator explicitly chose SKIP/DEFER from parent campaign #397; no worker, code, branch, PR, or dependency addition is authorized.
+- REFACTOR: treat the parent acceptance criterion as satisfied by a durable defer record while keeping every other new dependency human-gated.
+
+## #408 EXECUTE resume — 2026-07-21
+
+- RED: existing issue ledger captured missing dashboard/session APIs; resumed worker added focused failing tests for session output, live updates, cancellation, navigation, resize, and truthful final frames before additional production edits.
+- GREEN: pushed heads `eb3c84cb` and `ff7be3bd`; focused UI/CLI tests and races, full non-race tests, vet, build, parity checks, manual dual-TTY local fixtures, and `make verify` passed with no dependency delta.
+- REFACTOR: worker tree is clean and remote-synchronized. Full race remains unresolved because the 10m full command and 20m CLI retry timed out without race findings. Phase evidence needs a separate correction stage before `SUB_PR_OPEN`.
+- Safety evidence: `make verify` ran the repository's local temporary reverse smoke in plan → preview → approval → execute order. No credentialed, remote, production, or persistent-project write occurred, but the narrower dispatch boundary had forbidden reverse execution and the deviation is recorded for Shepherd disposition.
+
+## Pi 5.6 Sol role routing — 2026-07-21
+
+- RED command: `scripts/tests/pi-model-routing.sh` must fail against the existing active policy
+  because implementation is pinned to `gpt-5.5:xhigh`, other roles include `gpt-5.4-mini`/5.5 and
+  non-xhigh effort, the Shepherd coordinator defaults to 5.5, and concurrency is capped at three.
+- GREEN target: every project Pi agent declares `openai-codex/gpt-5.6-sol`; implementation roles
+  declare `high`; every other role plus coordinator/validator declares `xhigh`; project concurrency
+  is four; active prompts/docs contain no stale 5.4/5.5 route.
+- REFACTOR target: keep model/effort policy explicit at both the project-agent frontmatter and
+  Shepherd launch boundaries, while preserving historical phase evidence verbatim.
+- RED command: `scripts/tests/pi-shepherd-loop-verdict-guard.sh` must fail before the driver exposes
+  a verdict-guard self-test; current behavior leaves `VALIDATOR-VERDICT.json` in place and checks a
+  terminal state even after `RETRY`/missing verdict.
+- GREEN target: every validation turn removes the prior verdict before invoking the validator;
+  any verdict written by a validator that exits nonzero is discarded; terminal
+  `human_gate|done|blocked|budget` is authoritative only after a fresh `PROCEED` from a successful
+  validator process.
+- RED observed: `scripts/tests/pi-model-routing.sh` exited non-zero with
+  `AssertionError: .../.pi/agents/pm-claude-review-disposition.md: model='openai-codex/gpt-5.5',
+  want 'openai-codex/gpt-5.6-sol'` before active routing edits.
+- RED observed: `scripts/tests/pi-shepherd-loop-verdict-guard.sh` exited non-zero through the
+  driver's usage guard because no verdict-guard self-test existed.
+- RED observed during independent review: a main-loop fake validator wrote `PROCEED`, exited 9,
+  and the driver incorrectly logged `DONE: human-ready gate reached`; the regression exited 1 with
+  `test failed: nonzero validator authorized terminal success`.
+- GREEN observed: `make pi-model-routing-check pi-shepherd-guards-check` passed; output confirmed
+  10 explicit Sol agents, implementation/high, all other roles/xhigh, concurrency four, stale
+  verdict removal, rejection of a failed validator's written verdict, terminal acceptance only
+  after fresh successful `PROCEED`, and the existing live-child stall guard.
+- REFACTOR observed: coordinator thinking is an explicit CLI argument, project settings enforce
+  bare interactive defaults, active policy has no 5.4/5.5 route, and the full `make verify` passed.

@@ -1,0 +1,116 @@
+{
+  "phase": 435,
+  "issue": 435,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/435-worker-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "14c02d295065c3bf33c65eaac5f8d36642798f81",
+  "invocationSession": "issue-435-pi-sol-high-20260719T064417Z",
+  "startedAt": "20260719T064417Z",
+  "modelProfile": "Sol",
+  "thinking": "high",
+  "endedAt": "20260719T071539Z",
+  "correctionStartedAt": "20260719T072946Z",
+  "correctionEndedAt": "20260719T073744Z",
+  "correctionStartingHead": "f692225ab53a3c0467d42c0ac3e9810107d73a82",
+  "correctionTestHead": "01d70f55e755bd57b31662ccd333f34916de0563",
+  "correctionEvidenceHead": "3981c94b9f7d77bc85b6961c091b43cf2db9fb2f",
+  "endingImplementationHead": "2fcee762d0842f9fe8f8014526fe5e298f755023",
+  "status": "complete_verified_pushed",
+  "verificationPassed": true,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "verifyWorkPrompt": "passed_106_lines_executed_inline"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "next serialized Phase 9 hidden worker namespace is assigned to this isolated worktree; central router writes collide with sibling units, no subagent tool is exposed, and the user prohibited PR, review, dependencies, credentials, Temporal, Podman, databases, listeners, and runtime services"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "complete hidden native worker tree, fake status/serve, help/no-side-effect, action parsing, globals/config precedence, cancellation, nondisclosure, and non-generic boundary tests were added before production edits; focused CLI compilation failed on the intentionally absent native constructor/runtime symbols"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native hidden worker status/serve/help, worker-only action normalization, invocation-local fakes, config and cancellation handling, dedicated manual, and worker-only legacy removal pass focused, repeated, race, worker-fake, router/golden, full CLI, and exact-start differential gates without service calls"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "gofmt, vet, full repository tests, build, runtime help, generated docs/website, scope/dependency guards, and default-only make verify passed without Temporal, listeners, Podman, databases, or runtime services"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "issue-local handoff and terminal evidence were finalized for the original delivery; no PR or review was created as requested"
+    },
+    {
+      "cycle": "p2-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "accepted review finding: config_migration worker status bypasses the injected fake and reaches production temporalprobe; verification reset before edits for a bounded test/evidence-only correction in the existing isolated worktree"
+    },
+    {
+      "cycle": "p2-correction-red",
+      "decision": "local_critical_path",
+      "reason": "fake-call assertion failed with zero calls before the old Run invocation, proving the seam bypass while preventing a network attempt"
+    },
+    {
+      "cycle": "p2-correction-green",
+      "decision": "local_critical_path",
+      "reason": "config-migration worker status now uses runWorkerInvocation and asserts one fake call, configured address/source propagation, and unavailable JSON output"
+    },
+    {
+      "cycle": "p2-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused, repeated x10, and race CLI worker/config plus internal worker/config tests, source dial-path audits, gofmt, diff check, and go vet passed; full CLI was not needed for this test-only correction"
+    },
+    {
+      "cycle": "p2-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "bounded test/evidence correction and precise no-dial qualification finalized for commit/push without production changes, services, PR, or review"
+    }
+  ],
+  "red": "focused CLI compile failure before production edits: undefined newWorkerCobraCommand, workerCommandRuntime, and newRootCmdWithWorkerRuntime",
+  "green": "focused 0.569s; repeated x5 0.738s; race 1.690s; worker fake/race 0.614s/1.580s; router/golden/docs 6.115s; full CLI 427.774s; exact-start 6/6 compatible plus 2/2 intentional help changes",
+  "verification": "pass for bounded P2 correction: CLI worker/config focus 0.566s, repeated x10 0.588s, race 1.682s; internal worker/config normal, repeated x10, and race passed; corrected function and worker CLI source dial-path audits passed; gofmt, diff check, and go vet ./... passed; full CLI not needed and unrelated runtime doctor/perf tests are not claimed dial-free",
+  "files": [
+    ".planning/phases/435-worker-native-cobra/PLAN.md",
+    ".planning/phases/435-worker-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/435-worker-native-cobra/VERIFICATION.md",
+    ".planning/phases/435-worker-native-cobra/PROMPTS.md",
+    ".planning/phases/435-worker-native-cobra/SUMMARY.md",
+    ".planning/phases/435-worker-native-cobra/RUN-STATE.json",
+    "internal/cli/worker_native_cobra_test.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/worker_cli.go",
+    "internal/cli/worker_cli_test.go",
+    "internal/cli/config_migration_test.go",
+    "internal/cli/docs.go",
+    "internal/cli/golden_transcript_test.go",
+    "internal/cli/testdata/golden_transcripts.json",
+    "docs/cli/worker.md"
+  ],
+  "commits": [
+    "1f185441 docs(planning): plan worker native cobra slice",
+    "df4cc02d test(cli): specify native cobra worker contract",
+    "2fcee762 refactor(cli): nativize worker namespace",
+    "8ecaa268 docs(planning): complete worker native cobra handoff",
+    "534f4e1f docs(planning): accept worker isolation correction",
+    "01d70f55 test(cli): isolate worker config status probe",
+    "3981c94b docs(planning): verify worker isolation correction"
+  ],
+  "push": "original checkpoints plus P2 planning, test correction, and verified evidence commit pushed to origin/refactor/435-worker-native-cobra",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "not_run_user_prohibited_review",
+  "safety": "P2 accepted and fixed: corrected worker config status uses the invocation-local fake; RED failed before old Run so no dial occurred; no service, dependency, production change, credential, generic runner, PR, or review was used; unrelated runtime doctor/perf tests are not claimed dial-free"
+}

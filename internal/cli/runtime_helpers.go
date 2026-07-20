@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/config"
+	pmlogging "polymetrics.ai/internal/logging"
 	pmruntime "polymetrics.ai/internal/runtime"
 	"polymetrics.ai/internal/runtimecheck"
 )
@@ -27,15 +29,16 @@ func runtimeETLRunRecord(run app.Run) pmruntime.RunRecord {
 	}
 }
 
-func recordRuntimeETL(ctx context.Context, run app.Run) error {
-	cfg := runtimecheck.FromEnv()
-	report := runtimecheck.Doctor(ctx, cfg)
+func recordRuntimeETL(ctx context.Context, run app.Run, cfg config.Config) error {
+	ctx = pmlogging.WithRunID(ctx, run.ID)
+	runtimeCfg := runtimecheck.FromConfig(cfg)
+	report := runtimecheck.Doctor(ctx, runtimeCfg)
 	if !runtimecheck.Healthy(report) {
 		return fmt.Errorf("runtime dependencies are not healthy; run `pm runtime doctor --json` for details")
 	}
-	dragonfly := pmruntime.OpenDragonflyLeaseStore(cfg.DragonflyAddr)
+	dragonfly := pmruntime.OpenDragonflyLeaseStore(runtimeCfg.DragonflyAddr)
 	defer dragonfly.Close()
-	pg, err := pmruntime.OpenPostgresRunLedger(ctx, cfg.PostgresURL)
+	pg, err := pmruntime.OpenPostgresRunLedger(ctx, runtimeCfg.PostgresURL)
 	if err != nil {
 		return err
 	}

@@ -12,11 +12,14 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
+
+	"polymetrics.ai/internal/events"
 )
 
 // Runnable is the subset of *Runner's behavior batch mode depends on,
@@ -26,12 +29,20 @@ type Runnable interface {
 	Run(ctx context.Context) (Report, error)
 }
 
-// RunnerFactory builds a Runnable for one connector, given its name and the
-// Options batch mode derived for it from the CredsFile (credential
-// resolution, sandbox/write flags, per-connector rate limit/budget/limit).
+// RunnerFactory builds a Runnable for one connector from settings that passed
+// credential-file constraint validation.
 // Production callers pass a factory that wraps NewRunner; tests substitute
 // their own for isolation from the real CLI/network.
 type RunnerFactory func(connector string, opts Options) Runnable
+
+// MaxParallel bounds connector workers regardless of CLI or file input.
+const MaxParallel = 32
+
+// resumeReportClockSkewTolerance allows small filesystem/clock skew between a
+// certification writer and a later --resume reader. Reports dated materially
+// beyond this window are treated as future-invalid evidence and rerun instead
+// of trusted.
+const resumeReportClockSkewTolerance = 5 * time.Minute
 
 // BatchOptions configures RunBatch (certification design §B).
 type BatchOptions struct {
@@ -45,10 +56,9 @@ type BatchOptions struct {
 	// (Report.Save's <dir>/certifications/<connector>.json) and this
 	// batch's progress.json are written.
 	BatchDir string
-	// Resume skips any connector whose existing
-	// <BatchDir>/certifications/<connector>.json report completed after
-	// this RunBatch call's start time (certification design §B: "--resume
-	// skips connectors whose report is newer than batch start").
+	// Resume reuses any valid, completed existing report at
+	// <BatchDir>/certifications/<connector>.json. Missing, malformed, or
+	// incomplete reports are rerun.
 	Resume bool
 }
 
@@ -209,6 +219,9 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 	if opts.RunnerFactory == nil {
 		return BatchReport{}, fmt.Errorf("certify: BatchOptions.RunnerFactory is required")
 	}
+	if err := ValidateBatchConstraints(opts.CredsFile); err != nil {
+		return BatchReport{}, err
+	}
 
 	runID, err := newRunID()
 	if err != nil {
@@ -219,51 +232,130 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 
 	names := opts.CredsFile.ConnectorNames()
 	parallel := opts.CredsFile.Defaults.Parallel
-	if parallel < 1 {
+	if parallel == 0 {
 		parallel = 1
 	}
+	if parallel < 0 || parallel > MaxParallel {
+		return BatchReport{}, fmt.Errorf("certify: parallel must be between 1 and %d", MaxParallel)
+	}
+	emitBatchEvent(ctx, events.KindStarted, runID, "", "running", len(names), 0, "")
 
 	results := make([]BatchConnectorResult, len(names))
-	sem := make(chan struct{}, parallel)
-	var wg sync.WaitGroup
+	var completed atomic.Int64
+	type batchJob struct {
+		index    int
+		name     string
+		opts     Options
+		identity *resumeIdentity
+	}
+	jobs := make([]batchJob, 0, len(names))
 
 	for i, name := range names {
 		entry := opts.CredsFile.Connectors[name]
 
 		if entry.Skip {
 			results[i] = BatchConnectorResult{Connector: name, Skipped: true, SkipReason: entry.Reason}
+			done := int(completed.Add(1))
+			emitBatchEvent(ctx, events.KindSkipped, runID, name, "skipped", len(names), done, entry.Reason)
 			continue
 		}
 
-		if opts.Resume && hasFreshReport(opts.BatchDir, name, batch.StartedAt) {
-			results[i] = BatchConnectorResult{Connector: name, Resumed: true}
-			continue
+		runnerOpts := optionsFromCredsEntry(name, opts.CredsFile, entry)
+		runnerOpts.ArtifactDir = opts.BatchDir
+		identity, identityErr := reportIdentity(runnerOpts)
+		if identityErr != nil && opts.Resume {
+			return BatchReport{}, identityErr
 		}
 
-		wg.Add(1)
-		go func(i int, name string, entry ConnectorCredsEntry) {
-			defer wg.Done()
-			sem <- struct{}{}
-			defer func() { <-sem }()
-
-			runnerOpts := optionsFromCredsEntry(name, opts.CredsFile, entry)
-			runner := opts.RunnerFactory(name, runnerOpts)
-			rep, runErr := runner.Run(ctx)
-
-			result := BatchConnectorResult{Connector: name, Report: rep}
-			if runErr != nil {
-				result.Error = runErr.Error()
-				result.ExitCode = 2
-			} else {
-				result.ExitCode = ExitCodeFor(rep)
-				if opts.BatchDir != "" && rep.Connector != "" {
-					_ = rep.Save(opts.BatchDir)
+		if opts.Resume && identityErr == nil {
+			if rep, ok := completedReport(opts.BatchDir, name, identity); ok {
+				results[i] = BatchConnectorResult{
+					Connector: name,
+					Report:    rep,
+					Resumed:   true,
+					ExitCode:  ExitCodeFor(rep),
 				}
+				done := int(completed.Add(1))
+				emitBatchEvent(ctx, events.KindResumed, runID, name, "resumed", len(names), done, "")
+				continue
 			}
-			results[i] = result
-		}(i, name, entry)
+		}
+
+		emitBatchEvent(ctx, events.KindQueued, runID, name, "queued", len(names), int(completed.Load()), "")
+		job := batchJob{index: i, name: name, opts: runnerOpts}
+		if identityErr == nil {
+			job.identity = &identity
+		}
+		jobs = append(jobs, job)
 	}
 
+	jobCh := make(chan batchJob)
+	var wg sync.WaitGroup
+	workerCount := min(parallel, len(jobs))
+	for workerID := 0; workerID < workerCount; workerID++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for job := range jobCh {
+				emitBatchEvent(ctx, events.KindStarted, runID, job.name, "running", len(names), int(completed.Load()), "")
+				runner := opts.RunnerFactory(job.name, job.opts)
+				rep, runErr := runner.Run(ctx)
+
+				result := BatchConnectorResult{Connector: job.name, Report: rep}
+				if runErr != nil {
+					result.Error = runErr.Error()
+					result.ExitCode = ExitCodeFor(rep)
+					if result.ExitCode == 0 {
+						result.ExitCode = 2
+					}
+					results[job.index] = result
+					done := int(completed.Add(1))
+					emitBatchEvent(ctx, events.KindFailed, runID, job.name, "failed", len(names), done, result.Error)
+					continue
+				}
+				result.ExitCode = ExitCodeFor(rep)
+				if job.identity != nil {
+					if rep.SchemaVersion == 0 {
+						rep.SchemaVersion = ReportSchemaVersion
+					}
+					if rep.ConnectorManifestHash == "" {
+						rep.ConnectorManifestHash = job.identity.ManifestHash
+					}
+					if rep.EffectiveOptionsFingerprint == "" {
+						rep.EffectiveOptionsFingerprint = job.identity.Fingerprint
+					}
+					result.Report = rep
+				}
+				if opts.BatchDir != "" && rep.Connector != "" {
+					if saveErr := rep.Save(opts.BatchDir); saveErr != nil {
+						result.Error = "report persistence failed"
+						if result.ExitCode == 3 {
+							rep.Stages = append(rep.Stages, StageResult{
+								Name:   "report_persistence",
+								Tier:   0,
+								Passed: false,
+								Error:  "report persistence failed; leaked resources still require cleanup",
+							})
+						} else {
+							result.ExitCode = 1
+						}
+					}
+				}
+				result.Report = rep
+				results[job.index] = result
+				done := int(completed.Add(1))
+				if result.ExitCode == 0 {
+					emitBatchEvent(ctx, events.KindCompleted, runID, job.name, "success", len(names), done, "")
+				} else {
+					emitBatchEvent(ctx, events.KindFailed, runID, job.name, "failed", len(names), done, result.Error)
+				}
+			}
+		}()
+	}
+	for _, job := range jobs {
+		jobCh <- job
+	}
+	close(jobCh)
 	wg.Wait()
 
 	batch.Results = results
@@ -271,21 +363,67 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 
 	if opts.BatchDir != "" {
 		if err := writeBatchProgress(opts.BatchDir, batch); err != nil {
+			emitBatchEvent(ctx, events.KindFailed, runID, "", "failed", len(names), int(completed.Load()), err.Error())
 			return batch, err
 		}
 	}
 
+	if batch.ExitCode == 0 {
+		emitBatchEvent(ctx, events.KindCompleted, runID, "", "success", len(names), int(completed.Load()), "")
+	} else {
+		emitBatchEvent(ctx, events.KindFailed, runID, "", "failed", len(names), int(completed.Load()), "")
+	}
 	return batch, nil
 }
 
-// optionsFromCredsEntry derives per-connector certify.Options from a
-// CredsFile entry (certification design §B: credential from_env/exec +
-// sandbox/write flags + effective rate_limit/budget/limit).
-func optionsFromCredsEntry(name string, cf CredsFile, entry ConnectorCredsEntry) Options {
-	effective := cf.EffectiveOptions(name)
+func emitBatchEvent(ctx context.Context, kind events.Kind, runID, connector, status string, total, completed int, message string) {
+	events.Emit(ctx, events.Event{
+		Kind:    kind,
+		Scope:   events.ScopeCertify,
+		RunID:   runID,
+		StepID:  connector,
+		Status:  status,
+		Message: message,
+		Counters: events.Counters{
+			Completed: int64(completed),
+			Total:     int64(total),
+		},
+	})
+}
+
+// ValidateBatchConstraints rejects credential-file settings that the current
+// Runner cannot enforce. Sandbox is enforced here as a mandatory gate for
+// writes; rate, budget, and limit settings fail closed before any runner is
+// constructed instead of being silently discarded.
+func ValidateBatchConstraints(cf CredsFile) error {
+	for _, name := range cf.ConnectorNames() {
+		entry := cf.Connectors[name]
+		if len(entry.Credential.Exec) != 0 {
+			return fmt.Errorf("certify: connector %q credential-file exec entries are not supported", name)
+		}
+		if entry.Skip {
+			continue
+		}
+		effective := cf.EffectiveOptions(name)
+		switch {
+		case effective.Write && !effective.Sandbox:
+			return fmt.Errorf("certify: connector %q write=true without sandbox is not supported", name)
+		case effective.RateLimitRPS != 0:
+			return fmt.Errorf("certify: connector %q rate_limit_rps is not supported by the certification runner", name)
+		case effective.BudgetCalls != 0:
+			return fmt.Errorf("certify: connector %q budget_calls is not supported by the certification runner", name)
+		case effective.Limit != 0:
+			return fmt.Errorf("certify: connector %q limit is not supported by the certification runner", name)
+		}
+	}
+	return nil
+}
+
+// optionsFromCredsEntry derives only settings the current Runner enforces.
+// ValidateBatchConstraints must run before this conversion.
+func optionsFromCredsEntry(name string, _ CredsFile, entry ConnectorCredsEntry) Options {
 	return Options{
 		Connector: name,
-		Limit:     effective.Limit,
 		Config:    entry.Credential.Config,
 		SecretEnv: entry.Credential.FromEnv,
 		Write:     entry.Write,
@@ -304,26 +442,223 @@ func aggregateExitCode(results []BatchConnectorResult) int {
 	return worst
 }
 
-// hasFreshReport reports whether <dir>/certifications/<connector>.json
-// exists and its CompletedAt is at or after since (certification design §B
-// --resume semantics).
-func hasFreshReport(dir, connector string, since time.Time) bool {
+// completedReport loads a prior report eligible for --resume. It rejects
+// malformed identity/timestamps and zero completion times so interrupted or
+// partial artifacts are rerun rather than treated as completed.
+func completedReport(dir, connector string, identities ...resumeIdentity) (Report, bool) {
 	if dir == "" {
-		return false
+		return Report{}, false
 	}
 	path := filepath.Join(dir, certificationsDirName, connector+".json")
 	rep, err := LoadReport(path)
 	if err != nil {
+		return Report{}, false
+	}
+	if rep.Kind != "ConnectorCertification" || rep.SchemaVersion != ReportSchemaVersion || rep.Connector != connector {
+		return Report{}, false
+	}
+	if len(identities) > 0 {
+		identity := identities[0]
+		if rep.ConnectorManifestHash == "" || rep.ConnectorManifestHash != identity.ManifestHash ||
+			rep.EffectiveOptionsFingerprint == "" || rep.EffectiveOptionsFingerprint != identity.Fingerprint {
+			return Report{}, false
+		}
+	}
+	if rep.StartedAt.IsZero() || rep.CompletedAt.IsZero() || rep.CompletedAt.Before(rep.StartedAt) {
+		return Report{}, false
+	}
+	now := time.Now().UTC()
+	if rep.StartedAt.After(now.Add(resumeReportClockSkewTolerance)) || rep.CompletedAt.After(now.Add(resumeReportClockSkewTolerance)) {
+		return Report{}, false
+	}
+	if !validResumeEvidence(rep) {
+		return Report{}, false
+	}
+	return rep, true
+}
+
+func validResumeEvidence(rep Report) bool {
+	if rep.Mode != "live" || len(rep.Stages) == 0 {
 		return false
 	}
-	return !rep.CompletedAt.Before(since)
+	for _, capability := range []CapabilityResult{
+		rep.Capabilities.Check,
+		rep.Capabilities.Catalog,
+		rep.Capabilities.Read,
+		rep.Capabilities.Resume,
+		rep.Capabilities.JSONContract,
+		rep.Capabilities.SecretRedaction,
+	} {
+		if capability.Result != "pass" && capability.Result != "fail" {
+			return false
+		}
+	}
+
+	requiredModes := map[string]string{
+		"full_refresh_append":            "live",
+		"full_refresh_overwrite":         "capture",
+		"full_refresh_overwrite_deduped": "capture",
+		"incremental_append":             "live",
+		"incremental_append_deduped":     "capture",
+	}
+	if len(rep.Capabilities.SyncModes) != len(requiredModes) {
+		return false
+	}
+	for name, dataSource := range requiredModes {
+		mode, ok := rep.Capabilities.SyncModes[name]
+		if !ok || mode.DataSource != dataSource {
+			return false
+		}
+		switch mode.Result {
+		case "pass", "fail", "passed_empty", "passed_no_cursor":
+		default:
+			return false
+		}
+	}
+
+	singularRequired := map[string]bool{
+		"init": true, "preflight": true, "manual_json": true,
+		"credentials_add": true, "warehouse_credentials_add": true,
+		"credentials_test": true, "connection_create": true,
+		"catalog": true,
+	}
+	modeStages := map[string]bool{
+		"etl_full_refresh_append":            true,
+		"etl_full_refresh_overwrite":         true,
+		"etl_full_refresh_overwrite_deduped": true,
+		"etl_incremental_append":             true,
+		"resume":                             true,
+		"etl_incremental_append_deduped":     true,
+		"query_contract":                     true,
+	}
+	counts := make(map[string]int, len(singularRequired)+len(modeStages))
+	cleanupFailed := false
+	cleanupVerifyFailed := false
+	for _, stage := range rep.Stages {
+		if stage.Name == "" || stage.Tier < 0 || stage.Tier > 2 {
+			return false
+		}
+		if singularRequired[stage.Name] || modeStages[stage.Name] {
+			counts[stage.Name]++
+		}
+		if stage.Name == "write_cleanup" && !stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
+			cleanupFailed = true
+		}
+		if stage.Name == "cleanup_verify" && !stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
+			cleanupVerifyFailed = true
+		}
+	}
+	for name := range singularRequired {
+		if counts[name] != 1 {
+			return false
+		}
+	}
+	for name := range modeStages {
+		if counts[name] == 0 {
+			return false
+		}
+	}
+
+	if len(rep.Leaks) == 0 {
+		if cleanupVerifyFailed {
+			return false
+		}
+		if cleanupFailed && !validCleanupFailureAbsenceProof(rep) {
+			return false
+		}
+	}
+	for _, leak := range rep.Leaks {
+		result, ok := rep.Capabilities.WriteActions[leak.Action]
+		if !ok || leak.Connector != rep.Connector || leak.Tag == "" || leak.Reason == "" ||
+			result.Result != "leaked_resource" || result.Tag != leak.Tag {
+			return false
+		}
+		runID := runIDFromTag(leak.Connector, leak.Tag)
+		if !validLedgerTag(leak.Connector, runID, leak.Tag) {
+			return false
+		}
+	}
+	for action, result := range rep.Capabilities.WriteActions {
+		if result.Result != "leaked_resource" {
+			continue
+		}
+		matched := false
+		for _, leak := range rep.Leaks {
+			if leak.Connector == rep.Connector && leak.Action == action && leak.Tag == result.Tag {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			return false
+		}
+	}
+
+	recomputedPassed := allStagesPassed(rep.Stages) &&
+		rep.Capabilities.SecretRedaction.Result != "fail" && len(rep.Leaks) == 0
+	return rep.Passed == recomputedPassed
+}
+
+const cleanupAbsenceProofReason = "write_cleanup failed, but cleanup_verify proved the entity absent"
+
+func validCleanupFailureAbsenceProof(rep Report) bool {
+	var (
+		writePlanPassed    bool
+		writeCreatePassed  bool
+		cleanupFailedIndex = -1
+		cleanupVerifyAfter bool
+	)
+	for i, stage := range rep.Stages {
+		switch stage.Name {
+		case "write_plan_preview":
+			writePlanPassed = writePlanPassed || stage.Passed
+		case "write_create":
+			writeCreatePassed = writeCreatePassed || stage.Passed
+		case "write_cleanup":
+			if !stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
+				if cleanupFailedIndex != -1 {
+					return false
+				}
+				cleanupFailedIndex = i
+			}
+		case "cleanup_verify":
+			if !stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
+				return false
+			}
+			if stage.Passed && cleanupFailedIndex != -1 && i > cleanupFailedIndex {
+				cleanupVerifyAfter = true
+			}
+		}
+	}
+	if !writePlanPassed || !writeCreatePassed || cleanupFailedIndex == -1 || !cleanupVerifyAfter {
+		return false
+	}
+
+	matches := 0
+	for action, result := range rep.Capabilities.WriteActions {
+		if result.Result == "leaked_resource" {
+			return false
+		}
+		if result.Result != "fail" || result.Reason != cleanupAbsenceProofReason {
+			continue
+		}
+		if action == "" || result.Tag == "" || result.Cleanup == "" || result.Verify == "" {
+			return false
+		}
+		runID := runIDFromTag(rep.Connector, result.Tag)
+		if !validLedgerTag(rep.Connector, runID, result.Tag) {
+			return false
+		}
+		matches++
+	}
+	return matches == 1
 }
 
 // writeBatchProgress persists <dir>/certifications/batch-<runid>/
 // progress.json (certification design §B resumability marker).
 func writeBatchProgress(dir string, batch BatchReport) error {
-	progressDir := filepath.Join(dir, certificationsDirName, "batch-"+batch.RunID)
-	if err := os.MkdirAll(progressDir, 0o755); err != nil {
+	progressDir, err := secureDir(dir, certificationsDirName, "batch-"+batch.RunID)
+	if err != nil {
 		return fmt.Errorf("certify: create batch progress dir: %w", err)
 	}
 	raw, err := json.MarshalIndent(batch, "", "  ")
@@ -331,7 +666,7 @@ func writeBatchProgress(dir string, batch BatchReport) error {
 		return fmt.Errorf("certify: marshal batch progress: %w", err)
 	}
 	path := filepath.Join(progressDir, "progress.json")
-	if err := os.WriteFile(path, raw, 0o644); err != nil {
+	if err := atomicWritePrivate(progressDir, "progress.json", raw); err != nil {
 		return fmt.Errorf("certify: write %s: %w", path, err)
 	}
 	return nil

@@ -1,0 +1,118 @@
+{
+  "phase": 427,
+  "issue": 427,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/427-docs-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "ab847da28ebf78e5732ac1edcde8e39f92dc2656",
+  "invocationSession": "issue-427-pi-openai-codex-gpt-5.6-sol-high-20260718T112639Z",
+  "correctionStartingHead": "ea93b4bb7a7eb09236ad829d5ad6055b0c00c30d",
+  "correctionInvocationSession": "issue-427-review-correction-pi-openai-codex-gpt-5.6-sol-high-20260718T121208Z",
+  "correctionEndedAt": "20260718T122957Z",
+  "model": "openai-codex/gpt-5.6-sol",
+  "thinking": "high",
+  "status": "complete_verified_pushed",
+  "verificationPassed": true,
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_prompt_generated_and_executed_inline",
+    "programmingLoop": "blocked: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual_gsd_universal_runtime_loop",
+    "verifyWorkPrompt": "passed_7133_bytes"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "seventh serialized Phase 9 namespace unit is assigned to this isolated worktree; central router writes collide with later units, the session exposes no subagent tool, and the user restricted work to issue 427"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused test-only edits captured exact RED for docs native registration before production edits; observable legacy behavior, artifact bytes, actions, flags, globals, errors, and safe temp-root tests passed"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native docs namespace, generate and validate actions, typed output-directory flags, positional help alias, normalization, and docs-only legacy-parser removal passed focused router, golden, and full CLI tests"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused and full CLI/repository tests, gofmt, vet, build, final make verify, binary parity, docs generation and validation, website generation, golden, dependency, filesystem, and scope checks passed"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "issue-local artifacts finalized with exact TDD, parity, safety, commit, and verification evidence; user prohibited PR and external review"
+    },
+    {
+      "cycle": "review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "bounded docs-only correction on the existing isolated branch; runtime exposes no subagent tool and user prohibited PR/external review"
+    },
+    {
+      "cycle": "review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused test-only differential cases reproduced all accepted action-help and literal-separator regressions before production edits"
+    },
+    {
+      "cycle": "review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "smallest docs-only argument-normalization seam restored legacy ignored-token behavior while retaining native Cobra nodes and typed flags"
+    },
+    {
+      "cycle": "review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "focused/full tests, 12-case legacy differential, docs/website parity, gofmt, vet, build, full repository tests, make verify, and scope guards passed"
+    },
+    {
+      "cycle": "review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "bounded correction artifacts finalized and coherent checkpoints pushed; user prohibited PR/external review"
+    }
+  ],
+  "red": "go test ./internal/cli/ -run 'Docs|CobraRouterShellBuildsFreshHiddenWrapperTree' -count=1 failed as expected in 11.332s on native registration count and DisableFlagParsing ownership",
+  "green": "focused 11.462s; docs/router/golden 18.453s; standalone golden 5.470s; full internal/cli 227.224s",
+  "verification": "original gates plus correction focused/full tests, 12-case exact legacy differential, docs generation/validation/help parity, website generation, gofmt, vet, build, full repository tests, make verify, and all diff/scope guards passed",
+  "files": [
+    "internal/cli/cli.go",
+    "internal/cli/cobra_router.go",
+    "internal/cli/cobra_router_test.go",
+    "internal/cli/docs_cli_test.go",
+    ".planning/phases/427-docs-native-cobra/PLAN.md",
+    ".planning/phases/427-docs-native-cobra/TDD-LEDGER.md",
+    ".planning/phases/427-docs-native-cobra/VERIFICATION.md",
+    ".planning/phases/427-docs-native-cobra/PROMPTS.md",
+    ".planning/phases/427-docs-native-cobra/RUN-STATE.json",
+    ".planning/phases/427-docs-native-cobra/SUMMARY.md"
+  ],
+  "commits": [
+    "e9373393 docs(planning): plan docs native cobra slice",
+    "a68ab241 test(cli): specify native cobra docs contract",
+    "f320de3e refactor(cli): nativize docs namespace",
+    "e3d61104 test(cli): cover docs default output paths",
+    "ea93b4bb docs(planning): record docs cobra verification",
+    "1dab824f docs(planning): plan docs review correction",
+    "f5d37156 test(cli): reproduce docs cobra parity regressions",
+    "bc993a04 fix(cli): preserve legacy docs action parsing",
+    "docs(planning): record bounded docs correction verification (final handoff commit)"
+  ],
+  "push": "all planning, red, implementation, test-hardening, and final verification checkpoints pushed to origin/refactor/427-docs-native-cobra",
+  "pullRequest": "not_created_user_requested_no_pr",
+  "reviewRoute": "accepted_two_medium_findings_local_correction_only_external_review_prohibited",
+  "correction": {
+    "findingsAccepted": 2,
+    "planUpdatedBeforeProduction": true,
+    "red": "focused correction test failed as expected in 0.570s: 10 action-help subtests returned CommandManual and literal-separator generation reported missing --dir",
+    "green": "focused correction test passed in 7.487s and 7.596s after the docs-only seam/comment; broader docs-focused test passed in 20.032s",
+    "verification": "docs/router/golden 26.541s; full CLI 238.822s; 12-case differential 0 differences; docs/website parity, gofmt, vet, build, full repository tests, make verify, and scope guards passed"
+  },
+  "risks": [
+    "Cobra/pflag path and unknown-flag semantics must remain byte-compatible with the docs generator and validator",
+    "docs view and focused help/man generation remain deferred to planned later phases"
+  ]
+}

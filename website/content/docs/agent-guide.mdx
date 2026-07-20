@@ -127,7 +127,7 @@ This produces MDX skill files your agent can load as context, scoped to individu
 
 ## Natural-language routing
 
-`pm extract` is the narrow natural-language entry point. It classifies a request and routes either to a simple query or to RLM analysis.
+`pm extract` is the hidden, narrow natural-language entry point. It classifies a request and routes either to a read-only simple query or to typed RLM analysis. Use `pm help extract` for its direct manual; `--in` and `--out` accept bare local warehouse table names, never paths.
 
 ```bash
 pm extract --request "show active customers" \

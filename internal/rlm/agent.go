@@ -17,9 +17,9 @@ import (
 )
 
 // ErrRemoteUnavailable is returned when the RLM agent backend cannot run because
-// its opt-in dependencies are missing (no Temporal address, Temporal unreachable,
-// or podman absent). Callers should fall back to a deterministic/fixture run.
-var ErrRemoteUnavailable = errors.New("rlm: remote agent backend unavailable (set POLYMETRICS_TEMPORAL_ADDR and install podman, or use --mode deterministic)")
+// its opt-in dependencies are missing (no explicit Temporal address, Temporal
+// unreachable, or podman absent). Callers should fall back to a deterministic/fixture run.
+var ErrRemoteUnavailable = errors.New("rlm: remote agent backend unavailable (set runtime.temporal_addr/POLYMETRICS_TEMPORAL_ADDR and install podman, or use --mode deterministic)")
 
 // AgentRequest is the JSON-safe payload handed to the Temporal worker. It carries
 // only a reference to the staged JobDir and metadata — never warehouse row data,
@@ -127,8 +127,15 @@ func (a *AgentAnalyzer) Run(ctx context.Context, req RunRequest) (RunResult, err
 	if err := validateOutTable(req.OutTable); err != nil {
 		return result, err
 	}
+	warehouse, closeWarehouse, err := req.warehouseScope()
+	if err != nil {
+		return result, fmt.Errorf("rlm: open warehouse: %w", err)
+	}
+	if closeWarehouse {
+		defer warehouse.Close()
+	}
 
-	jobDir, fingerprint, recordsRead, err := a.stage(req)
+	jobDir, fingerprint, recordsRead, err := a.stage(req, warehouse)
 	if err != nil {
 		return result, err
 	}
@@ -157,7 +164,7 @@ func (a *AgentAnalyzer) Run(ctx context.Context, req RunRequest) (RunResult, err
 	if !req.DryRun {
 		sortScored(records)
 		now := time.Now().UTC().Format(time.RFC3339)
-		if err := writeOutTable(req.WarehouseDir, req.OutTable, records, a.Mode(), specName(req.Spec), now); err != nil {
+		if err := writeOutTableInScope(warehouse, req.OutTable, records, a.Mode(), specName(req.Spec), now); err != nil {
 			return result, fmt.Errorf("rlm: write OutTable: %w", err)
 		}
 	}
@@ -169,15 +176,10 @@ func (a *AgentAnalyzer) Run(ctx context.Context, req RunRequest) (RunResult, err
 // stage copies the InTable into a fresh JobDir's in/ directory, writes the
 // request descriptor, and returns the JobDir, a content fingerprint, and the
 // input record count.
-func (a *AgentAnalyzer) stage(req RunRequest) (jobDir, fingerprint string, recordsRead int, err error) {
-	inPath := filepath.Join(req.WarehouseDir, req.InTable+".ndjson")
-	inBytes, err := os.ReadFile(inPath)
+func (a *AgentAnalyzer) stage(req RunRequest, warehouse *WarehouseScope) (jobDir, fingerprint string, recordsRead int, err error) {
+	inBytes, records, err := readWarehouseTableInScope(warehouse, req.InTable)
 	if err != nil {
-		return "", "", 0, fmt.Errorf("rlm: read InTable %q: %w", inPath, err)
-	}
-	records, err := readEnvelopedRecords(inPath)
-	if err != nil {
-		return "", "", 0, fmt.Errorf("rlm: parse InTable %q: %w", inPath, err)
+		return "", "", 0, fmt.Errorf("rlm: read InTable %q: %w", req.InTable, err)
 	}
 
 	specBytes, _ := json.Marshal(req.Spec)

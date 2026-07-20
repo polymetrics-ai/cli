@@ -4,49 +4,129 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"os"
 	"time"
 
+	"github.com/spf13/cobra"
+
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/temporalprobe"
 	"polymetrics.ai/internal/worker"
 )
 
-// runWorker dispatches `pm worker serve|status`. The worker daemon hosts the RLM
-// Temporal workflow + podman activity for `pm rlm run --mode agent`.
-func runWorker(ctx context.Context, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return usageErrorf("worker: missing subcommand (serve|status)")
-	}
-	switch args[0] {
-	case "serve":
-		return runWorkerServe(ctx, stdout, jsonOut)
-	case "status":
-		return runWorkerStatus(ctx, stdout, jsonOut)
-	default:
-		return usageErrorf("worker: unknown subcommand %q (want serve|status)", args[0])
+type workerStatusFunc func(context.Context, string) bool
+type workerServeFunc func(context.Context, string, *worker.PodmanActivities, func()) error
+
+type workerCommandRuntime struct {
+	status workerStatusFunc
+	serve  workerServeFunc
+}
+
+func defaultWorkerCommandRuntime() workerCommandRuntime {
+	return workerCommandRuntime{
+		status: temporalprobe.Probe,
+		serve:  worker.ServeWithActivitiesReady,
 	}
 }
 
-func temporalAddr() string { return os.Getenv("POLYMETRICS_TEMPORAL_ADDR") }
+func newWorkerCobraCommand(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool) *cobra.Command {
+	return newWorkerCobraCommandWithRuntime(ctx, cfg, stdout, jsonOut, defaultWorkerCommandRuntime())
+}
 
-func runWorkerServe(ctx context.Context, stdout io.Writer, jsonOut bool) error {
-	addr := temporalAddr()
+func newWorkerCobraCommandWithRuntime(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool, runtime workerCommandRuntime) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:               "worker",
+		Hidden:            true,
+		Args:              cobra.ArbitraryArgs,
+		SilenceErrors:     true,
+		SilenceUsage:      true,
+		ValidArgsFunction: completeNoFile,
+		RunE: func(_ *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				return markCobraLegacyError(usageErrorf("worker: unknown subcommand %q (want serve|status)", args[0]))
+			}
+			return markCobraLegacyError(writeManual("worker", stdout, jsonOut))
+		},
+	}
+	setManualHelp(cmd, "worker", stdout, jsonOut)
+	cmd.AddCommand(newWorkerStatusCobraCommand(ctx, cfg, stdout, jsonOut, runtime))
+	cmd.AddCommand(newWorkerServeCobraCommand(ctx, cfg, stdout, jsonOut, runtime))
+	cmd.AddCommand(newWorkerHelpCobraCommand(stdout, jsonOut))
+	return cmd
+}
+
+func newWorkerStatusCobraCommand(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool, runtime workerCommandRuntime) *cobra.Command {
+	cmd := newWorkerActionCobraCommand("status", func(_ *cobra.Command, args []string) error {
+		if len(args) > 0 && isHelpArg(args[0]) {
+			return markCobraLegacyError(writeManual("worker", stdout, jsonOut))
+		}
+		return markCobraLegacyError(runWorkerStatus(ctx, cfg, stdout, jsonOut, runtime))
+	})
+	setManualHelp(cmd, "worker", stdout, jsonOut)
+	return cmd
+}
+
+func newWorkerServeCobraCommand(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool, runtime workerCommandRuntime) *cobra.Command {
+	cmd := newWorkerActionCobraCommand("serve", func(_ *cobra.Command, args []string) error {
+		if len(args) > 0 && isHelpArg(args[0]) {
+			return markCobraLegacyError(writeManual("worker", stdout, jsonOut))
+		}
+		return markCobraLegacyError(runWorkerServe(ctx, cfg, stdout, jsonOut, runtime))
+	})
+	setManualHelp(cmd, "worker", stdout, jsonOut)
+	return cmd
+}
+
+func newWorkerHelpCobraCommand(stdout io.Writer, jsonOut bool) *cobra.Command {
+	cmd := newWorkerActionCobraCommand("help", func(_ *cobra.Command, _ []string) error {
+		return markCobraLegacyError(writeManual("worker", stdout, jsonOut))
+	})
+	cmd.Hidden = true
+	setManualHelp(cmd, "worker", stdout, jsonOut)
+	return cmd
+}
+
+func newWorkerActionCobraCommand(use string, run func(*cobra.Command, []string) error) *cobra.Command {
+	return &cobra.Command{
+		Use:           use,
+		Args:          cobra.ArbitraryArgs,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		FParseErrWhitelist: cobra.FParseErrWhitelist{
+			UnknownFlags: true,
+		},
+		ValidArgsFunction: completeNoFile,
+		RunE:              run,
+	}
+}
+
+func explicitTemporalAddr(cfg config.Config) string {
+	if cfg.IsExplicit("runtime.temporal_addr") {
+		return cfg.Runtime.TemporalAddr
+	}
+	return ""
+}
+
+func runWorkerServe(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool, runtime workerCommandRuntime) error {
+	addr := explicitTemporalAddr(cfg)
 	if addr == "" {
 		return validationErrorf("worker serve: POLYMETRICS_TEMPORAL_ADDR is not set")
 	}
-	if jsonOut {
-		_ = writeJSON(stdout, envelope{"kind": "WorkerServe", "status": "starting", "addr": addr, "task_queue": worker.TaskQueue})
-	} else {
-		fmt.Fprintf(stdout, "pm worker serving on task queue %q (temporal=%s); Ctrl-C to stop\n", worker.TaskQueue, addr)
+	ready := func() {
+		if jsonOut {
+			_ = writeJSON(stdout, envelope{"kind": "WorkerServe", "status": "ready", "addr": addr, "task_queue": worker.TaskQueue})
+		} else {
+			fmt.Fprintf(stdout, "pm worker serving on task queue %q (temporal=%s); Ctrl-C to stop\n", worker.TaskQueue, addr)
+		}
 	}
-	return worker.Serve(ctx, addr)
+	activities := worker.NewPodmanActivities(cfg.RLM.PodmanBin, cfg.RLM.Image)
+	return runtime.serve(ctx, addr, activities, ready)
 }
 
-func runWorkerStatus(ctx context.Context, stdout io.Writer, jsonOut bool) error {
-	addr := temporalAddr()
+func runWorkerStatus(ctx context.Context, cfg config.Config, stdout io.Writer, jsonOut bool, runtime workerCommandRuntime) error {
+	addr := explicitTemporalAddr(cfg)
 	probeCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
-	reachable := addr != "" && temporalprobe.Probe(probeCtx, addr)
+	reachable := addr != "" && runtime.status(probeCtx, addr)
 
 	status := "unavailable"
 	if reachable {

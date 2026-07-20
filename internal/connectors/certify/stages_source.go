@@ -120,6 +120,7 @@ type runContext struct {
 	stdoutLeakSabotage    *stdoutLeakSabotage
 	cleanupVerifySabotage bool
 	root                  string
+	crontabFile           string
 
 	// currentStream is set during --full stream sweeps so existing stage
 	// functions can be reused per stream without changing their signatures.
@@ -161,7 +162,7 @@ type runContext struct {
 // rc.run instead of rc.harness.Run directly so finalizeSecretRedaction can
 // see everything a real secret leak could hide in.
 func (rc *runContext) run(args ...string) CLIResult {
-	res := rc.harness.Run(args...)
+	res := rc.harness.RunWithOptions(CLIInvocationOptions{CrontabFile: rc.crontabFile}, args...)
 	stdout := res.Stdout
 	if rc.stdoutLeakSabotage != nil && rc.stdoutLeakSabotage.stage == rc.currentStage {
 		stdout += "\n[sabotage-planted-secret]: " + rc.stdoutLeakSabotage.secret
@@ -192,6 +193,14 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	if ctx == nil {
 		return Report{}, fmt.Errorf("certify: nil context")
 	}
+	if err := ctx.Err(); err != nil {
+		return Report{}, err
+	}
+
+	identity, err := reportIdentity(r.opts)
+	if err != nil {
+		return Report{}, err
+	}
 
 	root, err := os.MkdirTemp("", "pm-certify-"+r.opts.Connector+"-")
 	if err != nil {
@@ -211,7 +220,7 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 
 	rc := &runContext{
 		ctx:                   ctx,
-		harness:               NewHarness(root, WithSecrets(secretValues...)),
+		harness:               NewHarness(root, WithContext(ctx), WithSecrets(secretValues...)),
 		opts:                  r.opts,
 		sabotage:              r.sabotage,
 		stdoutLeakSabotage:    r.stdoutLeakSabotage,
@@ -220,22 +229,28 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	}
 
 	rep := Report{
-		Kind:          "ConnectorCertification",
-		SchemaVersion: 1,
-		Connector:     r.opts.Connector,
-		Mode:          "live",
-		StartedAt:     time.Now().UTC(),
-		Passed:        true,
+		Kind:                        "ConnectorCertification",
+		SchemaVersion:               ReportSchemaVersion,
+		Connector:                   r.opts.Connector,
+		ConnectorManifestHash:       identity.ManifestHash,
+		EffectiveOptionsFingerprint: identity.Fingerprint,
+		CredentialRef:               sourceCredentialName,
+		Mode:                        "live",
+		StartedAt:                   time.Now().UTC(),
+		Passed:                      true,
 	}
 	rep.Capabilities.SyncModes = map[string]SyncModeResult{}
 
-	setupStages := []stageFunc{
-		stagePreflight,
-		stageFixtureConformance,
-		stageManualJSON,
-		stageCredentialsAdd,
-		stageCredentialsTest,
-		stageCatalog,
+	setupStages := []struct {
+		run      stageFunc
+		requires []string
+	}{
+		{run: stagePreflight, requires: []string{"init", "preflight"}},
+		{run: stageFixtureConformance},
+		{run: stageManualJSON, requires: []string{"manual_json"}},
+		{run: stageCredentialsAdd, requires: []string{"credentials_add", "warehouse_credentials_add"}},
+		{run: stageCredentialsTest, requires: []string{"credentials_test"}},
+		{run: stageCatalog, requires: []string{"connection_create", "catalog"}},
 	}
 	readStages := []stageFunc{
 		stageFullRefreshAppend,
@@ -253,43 +268,65 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 		stageWritePlanPreview,
 		stageWriteCreate,
 		stageWriteVerify,
+		stageApprovalIdempotency,
 		stageWriteCleanup,
 		stageCleanupVerify,
-		stageApprovalIdempotency,
 	}
 	if !r.opts.Full {
 		tailStages = append(tailStages, stageFlowRoundtrip, stageScheduleRoundtrip)
 	}
 	tailStages = append(tailStages, stageWriteSweepAllPairings)
 
-	for _, stage := range setupStages {
-		if err := stage(rc, &rep); err != nil {
-			rep.CompletedAt = time.Now().UTC()
+	for _, setup := range setupStages {
+		if err := setup.run(rc, &rep); err != nil {
+			finishReport(rc, &rep, secretValues)
+			return rep, err
+		}
+		if !stagesPassed(rep.Stages, setup.requires...) {
+			finishReport(rc, &rep, secretValues)
+			return rep, nil
+		}
+		if err := ctx.Err(); err != nil {
+			finishReport(rc, &rep, secretValues)
 			return rep, err
 		}
 	}
 	if rc.opts.Full {
 		if err := runFullReadSweep(rc, &rep, readStages); err != nil {
-			rep.CompletedAt = time.Now().UTC()
+			finishReport(rc, &rep, secretValues)
 			return rep, err
 		}
 	} else {
 		for _, stage := range readStages {
 			if err := stage(rc, &rep); err != nil {
-				rep.CompletedAt = time.Now().UTC()
+				finishReport(rc, &rep, secretValues)
+				return rep, err
+			}
+			if err := ctx.Err(); err != nil {
+				finishReport(rc, &rep, secretValues)
 				return rep, err
 			}
 		}
 	}
 	for _, stage := range tailStages {
 		if err := stage(rc, &rep); err != nil {
-			rep.CompletedAt = time.Now().UTC()
+			finishReport(rc, &rep, secretValues)
+			return rep, err
+		}
+		if err := ctx.Err(); err != nil {
+			runBoundedCancellationCleanup(rc, &rep)
+			finishReport(rc, &rep, secretValues)
 			return rep, err
 		}
 	}
 
-	finalizeJSONContract(&rep)
-	finalizeSecretRedaction(rc, &rep, secretValues)
+	finishReport(rc, &rep, secretValues)
+	return rep, nil
+}
+
+func finishReport(rc *runContext, rep *Report, secretValues []string) {
+	finalizeJSONContract(rep)
+	finalizeSecretRedaction(rc, rep, secretValues)
 	rep.CompletedAt = time.Now().UTC()
 	// A secret_redaction failure is a security-relevant fact operators must
 	// not be able to miss by only checking per-stage Passed flags (M2,
@@ -298,7 +335,37 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	// must actually fail the report, since the certification-design's own
 	// enablement gate (cmd/certstatus) keys off Report.Passed).
 	rep.Passed = allStagesPassed(rep.Stages) && rep.Capabilities.SecretRedaction.Result != "fail"
-	return rep, nil
+}
+
+func stagesPassed(stages []StageResult, names ...string) bool {
+	for _, name := range names {
+		found := false
+		for i := len(stages) - 1; i >= 0; i-- {
+			if stages[i].Name == name {
+				found = true
+				if !stages[i].Passed {
+					return false
+				}
+				break
+			}
+		}
+		if !found {
+			return false
+		}
+	}
+	return true
+}
+
+func runBoundedCancellationCleanup(rc *runContext, rep *Report) {
+	if rc.write == nil || !rc.write.createPassed || rc.write.cleanupAttempted {
+		return
+	}
+	cleanupCtx, cancel := context.WithTimeout(context.WithoutCancel(rc.ctx), 30*time.Second)
+	defer cancel()
+	rc.ctx = cleanupCtx
+	rc.harness.ctx = cleanupCtx
+	_ = stageWriteCleanup(rc, rep)
+	_ = stageCleanupVerify(rc, rep)
 }
 
 // recordStage runs body, timing it, and appends a StageResult to rep.Stages.
@@ -315,6 +382,9 @@ func recordStage(rc *runContext, rep *Report, name string, tier int, run func() 
 
 	start := time.Now()
 	passed, cli, errMsg := run()
+	if rc.harness != nil {
+		errMsg = redactSecretsInText(errMsg, rc.harness.secrets)
+	}
 	stage := StageResult{
 		Name:       name,
 		Tier:       tier,
@@ -588,11 +658,14 @@ func stageFullSweepConnectionCreate(rc *runContext, rep *Report) error {
 // --- stage 0: preflight ---
 
 func stagePreflight(rc *runContext, rep *Report) error {
-	recordStage(rc, rep, "init", 2, func() (bool, CLIStageInfo, string) {
+	initStage := recordStage(rc, rep, "init", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("init", "--json")
 		passed, errMsg := assertKind(rc, "init", res, "InitResult", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
+	if !initStage.Passed {
+		return nil
+	}
 
 	recordStage(rc, rep, "preflight", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("connectors", "list", "--json")
@@ -659,7 +732,7 @@ func stageManualJSON(rc *runContext, rep *Report) error {
 // --- stage 3: credentials add/test ---
 
 func stageCredentialsAdd(rc *runContext, rep *Report) error {
-	recordStage(rc, rep, "credentials_add", 2, func() (bool, CLIStageInfo, string) {
+	credentialStage := recordStage(rc, rep, "credentials_add", 2, func() (bool, CLIStageInfo, string) {
 		args := []string{"credentials", "add", sourceCredentialName, "--connector", rc.opts.Connector, "--json"}
 		for field, envName := range rc.opts.SecretEnv {
 			args = append(args, "--from-env", field+"="+envName)
@@ -677,6 +750,9 @@ func stageCredentialsAdd(rc *runContext, rep *Report) error {
 		passed, errMsg := assertKind(rc, "credentials_add", res, "Credential", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
+	if !credentialStage.Passed {
+		return nil
+	}
 
 	recordStage(rc, rep, "warehouse_credentials_add", 2, func() (bool, CLIStageInfo, string) {
 		warehouseDir := filepath.Join(rc.root, ".polymetrics", "warehouse")
@@ -713,7 +789,7 @@ func stageCredentialsTest(rc *runContext, rep *Report) error {
 
 func stageCatalog(rc *runContext, rep *Report) error {
 	stream := rc.streamName()
-	recordStage(rc, rep, "connection_create", 2, func() (bool, CLIStageInfo, string) {
+	connectionStage := recordStage(rc, rep, "connection_create", 2, func() (bool, CLIStageInfo, string) {
 		args := []string{"connections", "create", rc.liveConnectionName(),
 			"--source", rc.opts.Connector + ":" + sourceCredentialName,
 			"--destination", "warehouse:" + warehouseCredentialName,
@@ -731,6 +807,9 @@ func stageCatalog(rc *runContext, rep *Report) error {
 		passed, errMsg := assertKind(rc, "connection_create", res, "Connection", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
+	if !connectionStage.Passed {
+		return nil
+	}
 
 	recordStage(rc, rep, "catalog", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("catalog", "refresh", "--connection", rc.liveConnectionName(), "--json")

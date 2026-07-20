@@ -50,7 +50,11 @@ These are quick map inputs, not certification claims.
 
 **Key safety rule:** Use `pm help <topic>` before unfamiliar commands; prefer `--json` for machine-readable output.
 
-**Help/docs parity rule:** CLI-visible changes must keep runtime help, bare namespace command behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests aligned. Namespace command groups such as `pm connectors` should show contextual help/subcommand summary when invoked without an action.
+**Help/docs parity rule:** CLI-visible changes must keep runtime help, bare namespace command
+behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests aligned. Namespace
+command groups such as `pm connectors` should show contextual help/subcommand summary when invoked
+without an action. The accepted TUI design narrowly allowlists eligible dual-TTY bare `pm query`
+and bare `pm reverse` as human-first workspaces; all bypass paths stay deterministic and help-first.
 
 ### Application Layer
 

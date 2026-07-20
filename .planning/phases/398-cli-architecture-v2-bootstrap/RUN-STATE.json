@@ -1,0 +1,43 @@
+{
+  "phase": "398-cli-architecture-v2-bootstrap",
+  "status": "complete",
+  "issue": 398,
+  "parent_issue": 397,
+  "workflow": "parent-orchestrator-bootstrap",
+  "current_plan": "stage-0-parent-branch-pr-and-planning-seed",
+  "gsd": {
+    "doctor": "passed",
+    "new_milestone_prompt": "scripts/gsd prompt new-milestone \"CLI Architecture v2\"",
+    "plan_phase_prompt": "scripts/gsd prompt plan-phase 398 --skip-research",
+    "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase 398 --dry-run",
+    "programming_loop_result": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "Pi-local /pm-gsd-loop prompt contract used for planning-only TDD discipline"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "stage-0-bootstrap",
+      "decision": "local_critical_path",
+      "reason": "Stage 0 owns shared parent planning artifacts plus parent branch/PR; orchestrator must create them before implementation workers can run."
+    }
+  ],
+  "human_gates": [
+    "new_dependencies",
+    "auth_scope_changes",
+    "destructive_admin_actions",
+    "production_deploys",
+    "credentialed_connector_checks",
+    "reverse_etl_execution",
+    "quality_gate_reductions",
+    "main_branch_merge"
+  ],
+  "scope_guard": {
+    "planning_only": true,
+    "forbidden_paths": ["cmd", "internal"],
+    "no_go_source_changes": true
+  },
+  "verificationPassed": true,
+  "verificationScope": "planning-only declared phase equivalent passed; full make verify not required because no Go source changed",
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/438",
+  "seed_commit": "2f012400632ad64b1c0c3e2ba98d8bd98999b25d",
+  "last_updated": "2026-07-16"
+}

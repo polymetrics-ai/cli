@@ -15,6 +15,20 @@ Connector parity includes REST/JSON, GraphQL, XML/SOAP, CSV/NDJSON/report export
 
 Users and agents can trust `pm` as a connector-complete, safety-gated ETL and reverse ETL interface whose advertised connector capabilities match documented upstream product surfaces without duplicate or unsafe exposure.
 
+## Active Sibling Program: CLI Architecture v2
+
+Issue [#397](https://github.com/polymetrics-ai/cli/issues/397) adds a human-gated parent orchestration program for CLI Architecture v2 on branch `feat/cli-architecture-v2`. This is a sibling milestone, not a replacement for connector parity. It preserves the connector-parity workstreams while delivering a 22-phase Cobra/Viper strangler migration, typed configuration, event-driven TUI, and secret-safe opt-in observability.
+
+Stage 0 [#398](https://github.com/polymetrics-ai/cli/issues/398) is planning-only: it registers the milestone, records the source plan/ADRs/design prompt set, creates the parent branch, and opens a draft parent PR to `main`. Production Go code remains untouched until later sub-issues run through the issue-first GSD/TDD loop.
+
+CLI Architecture v2 hard constraints:
+
+- Preserve `cli.Run(args, stdout, stderr) int`, JSON envelope semantics, stdout/stderr discipline, no-ANSI machine output, stable exit-code taxonomy, and dynamic connector dispatch until deliberately changed by a parity-gated phase.
+- Apply CLI help/manual/website parity to every command, flag, output, help topic, generated manual artifact, completion surface, and website doc change.
+- Keep dependency additions restricted to the exact phase/ADR budgets in `docs/adr/0002-cobra-viper-cli-framework.md`, `docs/adr/0003-interactive-tui-layer.md`, and `docs/adr/0004-opentelemetry-observability.md`; any deviation is a human gate.
+- Do not introduce interactive secret entry, generic shell write, generic HTTP write, generic SQL write, destructive/admin execution, quality-gate reduction, credentialed connector checks, or reverse ETL execution outside plan → preview → approval → execute.
+- Parent PR merge to `main` remains human-gated.
+
 ## Current Repo Snapshot
 
 Generated from the working tree during the GSD Pi refresh:
