@@ -119,7 +119,8 @@ was exhausted. New accepted-correction PR will target the parent branch; do not 
    - encode #462/D-TUI directly in each affected TUI row (#408, #409, #411, #412, #414, #416,
      #418, and #463 where listed) across roadmap/backlog/prompt rosters;
    - state #462 as provisionally integrated / review blocked with PR #465, its head SHA, Claude
-     disabled, Copilot quota exhausted, human fallback, and this accepted-correction PR pending;
+     disabled, Copilot quota exhausted, human fallback, and correction PR #467 starting
+     head/status captured explicitly;
    - add the read-only query export path contract: clean/confined project-scoped paths, reject
      control characters/traversal/broad paths/symlink races, no overwrite by default, TTY
      confirmation, noninteractive `--force`, sanitized command echo, exact `--no-input` guidance,
@@ -133,3 +134,47 @@ was exhausted. New accepted-correction PR will target the parent branch; do not 
 - `docs(gsd): plan terminal ui review corrections` — phase artifact reopen only.
 - `docs(ui): apply terminal design review corrections` — delegated docs/program corrections.
 - `docs(gsd): record terminal ui correction verification` — final verification/status evidence.
+
+## Correction PR #467 accepted review findings — 2026-07-20
+
+Branch remains `docs/462-terminal-ui-design-review-fixes` at start head
+`e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, based on `feat/cli-architecture-v2` at
+`c91b90cf9671b5caabc0ef4ec24d81897f870458`; do not merge. Starting PR state to record in this
+phase: correction PR #467 open at that head with CI green at that head; review status is
+human/parent pending rather than a generic pending placeholder. Git/GitHub remain the current
+source of truth after this starting snapshot, so this run must not invent a self-referential final
+head.
+
+### Loaded skills and routing for this bounded correction
+
+- Re-read `AGENTS.md`, issue #462, GSD runtime contracts, this phase's `PLAN.md`,
+  `TDD-LEDGER.md`, and `VERIFICATION.md` before edits.
+- `gsd-core`, `caveman`, `bubble-tea-tui-design` plus four references.
+- `golang-how-to`, `golang-cli`, `golang-testing`, `golang-documentation`, `golang-security`,
+  `golang-safety`, `golang-context`, `golang-concurrency`, and `golang-error-handling` for CLI/TUI
+  docs that describe stdin/stdout gating, cancellation, secrets, paths, and tests.
+- `.pi/skills/go-implementation/SKILL.md` remains absent; use available repo/global skills and
+  record the mismatch in the ledger/handoff.
+
+### Bounded correction slice
+
+1. **Planning checkpoint** — reopen `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`,
+   `PROMPTS.md`, `RUN-STATE.json`, and `RUN-STATE.md` for accepted PR #467 findings before
+   changing delegated source/design/skill docs.
+2. **RED inventory** — docs-contract grep must fail on stdout-only or ambiguous TUI gates and on
+   missing future RED markers for `stdin-piped+stdout-TTY` and `stdout-piped` fallback.
+3. **GREEN docs correction** — align every delegated source, skill/reference, roadmap, backlog,
+   and worker/execution prompt mention so Bubble Tea/Huh/prompt activation requires **both stdin
+   and stdout TTY** plus the existing `--json`/`--plain`/`--no-input`/`PM_NO_TUI`/`CI`/`TERM=dumb`
+   disables. With piped or non-TTY stdin, fall back to deterministic plain/noninteractive behavior;
+   never consume scripted stdin unexpectedly, hang, or bypass through `/dev/tty`.
+4. **Future RED test contract** — require production TUI issues to add tests for
+   `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`,
+   while preserving explicit `pm query grid`, `pm reverse guide`, read-only query export, reverse
+   approval-token secrecy, and accessibility/plain behavior.
+5. **State honesty** — update run-state/summary/checklists to say #467 was open at the starting
+   head with CI green and human/parent review pending; replace open-PR next steps with local
+   finding disposition, human review, and parent integration gates.
+6. **Verification checkpoint** — rerun contradiction grep, JSON parse, skill validation,
+   direct dependency/token/export contract checks, `git diff --check`, exact scope check,
+   `scripts/gsd doctor`, and `make docs-check`; commit/push planning/docs fix/evidence.

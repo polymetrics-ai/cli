@@ -53,7 +53,7 @@ for the later behavior-changing UI phases.
   #414, #416, #418, and #463 where applicable.
 - [x] #462 status says provisionally integrated / review blocked with PR #465, head
   `6853fee28e0208381b49931fb1f5dfec42ee50ef`, Claude disabled, Copilot quota exhausted,
-  fallback human, accepted correction PR pending.
+  fallback human, and correction PR #467 starting head/status captured explicitly.
 - [x] Query export path contract includes typed read-only export, project-scoped default,
   control-character/traversal/broad-path rejection, clean/confined path, symlink race rejection,
   no overwrite default, TTY confirmation, noninteractive `--force`, sanitized command echo, and
@@ -72,3 +72,40 @@ for the later behavior-changing UI phases.
 Claude review remains unavailable (`disabled_manually` on PR #465 context). Copilot backup already
 reported quota exhausted and must not be retried in this blocker window. Human/parent orchestrator
 review remains pending for the accepted correction PR.
+
+## Correction PR #467 TTY-gate/state checklist — 2026-07-20
+
+### Required checks before handoff
+
+- [ ] Phase artifacts reopened before delegated source/design/skill docs edits.
+- [ ] GSD adapter health recorded: `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 462 --skip-research`.
+- [ ] Manual universal-loop fallback recorded because `scripts/gsd prompt programming-loop ...` is absent.
+- [ ] Loaded skills and missing `.pi/skills/go-implementation` mismatch recorded.
+- [ ] RED docs-contract grep recorded for stdout-only/ambiguous TUI gates and missing
+  `stdin-piped+stdout-TTY` / `stdout-piped` future test markers.
+- [ ] Bubble Tea/Huh/prompt activation contract requires both stdin and stdout TTYs in ADR,
+  design docs, source plan, execution prompt, skill references, roadmap/backlog/Pi prompts, and
+  phase artifacts.
+- [ ] Piped/non-TTY stdin fallback is explicit: deterministic plain/noninteractive behavior, no
+  scripted-stdin consumption, no hang, and no `/dev/tty` bypass.
+- [ ] Future RED test matrix is recorded for `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`,
+  `--json`, `--plain`, and `--no-input`.
+- [ ] Explicit `pm query grid`, `pm reverse guide`, query export, approval-token secrecy, and
+  accessibility/plain fallback contracts remain present.
+- [ ] RUN-STATE.json/RUN-STATE.md/SUMMARY record #467 open at starting head
+  `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, CI green at that head, and human/parent review
+  pending; no generic pending placeholder or invented final-head claim remains.
+- [ ] Contradiction grep passes.
+- [ ] `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` passes.
+- [ ] Skill quick validation passes: `Skill is valid!`.
+- [ ] Direct dependency/token/export contracts unchanged.
+- [ ] `git diff --check` passes.
+- [ ] Exact scope check shows no `cmd/**`, `internal/**`, `go.mod`, `go.sum`, `website/**`,
+  `docs/cli/**`, parent #397 artifacts, or nondelegated docs changes.
+- [ ] `scripts/gsd doctor` passes at final verification (`ok commands 69`).
+- [ ] `make docs-check` passes.
+
+### Review route status
+
+Do not retry Claude or Copilot in this blocker window. Final route remains human/parent review and
+parent integration gates after local finding disposition.
