@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: true — full eighth-cycle local gates and `make verify` passed at reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`; terminal evidence and PR #466 body update were completed at parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. This docs-only evidence closure keeps that truth and intentionally does not embed its own resulting SHA; current live PR head is authoritative from Git/GitHub.
+`verificationPassed`: false — reopened for ninth bounded CI flake correction. PR #466 GitHub Actions run `29711194607` failed at head `9f004ac5d96d84bd1f8b186496e1f594a183a18b` only in `internal/connectors/certify` `TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit`: `elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)`. Keep false until a complete local rerun, including `make verify`, exits 0 after the deterministic concurrency test fix.
 
 ## TDD / behavior
 
@@ -304,3 +304,29 @@ Exact clean local/remote/PR start: `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. N
 - [x] Terminal-evidence parent/previous PR head recorded as `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`.
 - [x] Current live PR head declared authoritative from Git/GitHub and intentionally not embedded self-referentially.
 - [x] JSON parse, stale terminal/PR marker grep, `git diff --check`, and exact diff-scope check only phase artifacts pass.
+
+## Ninth bounded CI flake correction checklist
+
+Exact start: `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; identity `issue-437-ninth-ci-flake-correction-20260720`; parent reconcile target `c91b90cf9671b5caabc0ef4ec24d81897f870458`.
+
+`verificationPassed`: false until full local gates pass.
+
+- [x] Confirm clean branch, local head, remote head, and PR #466 head all equal `9f004ac5d96d84bd1f8b186496e1f594a183a18b` before edits.
+- [x] Capture CI RED from run `29711194607`: `--- FAIL: TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit (0.25s)` and `batch_test.go:372: elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)`; all other reported packages/checks passed.
+- [x] Reread issue #437 acceptance criteria, contracts, GSD/manual loop, phase artifacts, skill routing, CLI parity, ADR/design/migration/certification context, and required skills.
+- [x] Run `scripts/gsd doctor`; `scripts/gsd list`; `scripts/gsd prompt plan-phase 437 --skip-research`; capture missing `programming-loop` command and manual fallback.
+- [x] Record execution decision `local_critical_path` and parent-spawn note.
+- [x] Mark PLAN/TDD/VERIFICATION/SUMMARY/PROMPTS/RUN-STATE as reopened and `verificationPassed=false` before test edits.
+- [ ] Commit/push planning checkpoint before test edits.
+- [ ] Merge/reconcile `origin/feat/cli-architecture-v2` at `c91b90cf9671b5caabc0ef4ec24d81897f870458`; do not edit parent artifacts.
+- [ ] Reproduce/stress current focused test where feasible; record if local stress does not reproduce.
+- [ ] Replace wall-clock assertion with deterministic barrier/active-worker/max-concurrency/order-channel evidence; do not raise/remove threshold.
+- [ ] Focused deterministic test pass repeatedly.
+- [ ] Focused deterministic test pass under `-race`.
+- [ ] Full `go test ./internal/connectors/certify -count=1` pass.
+- [ ] Full CLI package if affected.
+- [ ] Runtime help/docs/website parity if behavior/help changes; expected not applicable for test-only fix.
+- [ ] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke pass.
+- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; final `make verify`; explicit `go run ./cmd/connectorgen validate internal/connectors/defs` all pass.
+- [ ] PR #466 body updated with CI failure disposition and final head.
+- [ ] No credentials, live certification, services, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction.

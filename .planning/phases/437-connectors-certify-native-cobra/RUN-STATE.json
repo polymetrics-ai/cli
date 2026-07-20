@@ -16,18 +16,22 @@
   "fourthCorrectionStartingHead": "1e27b14012f65ffa24c01ed855d0405c24401eee",
   "fifthCorrectionStartingHead": "05d9c6658f52e542b6a74e87e29bdcad7275ea9d",
   "fifthCorrectionSession": "issue-437-fifth-review-correction-20260720",
-  "recoveryBudgetException": "unresolved future-evidence and whitespace effect-before-usage findings require correction; eighth bounded cycle authorized",
+  "recoveryBudgetException": "remote CI timing flake in batch concurrency test requires ninth bounded correction; deterministic concurrency evidence must replace wall-clock assertion",
   "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
   "startedAt": "20260719T095145Z",
   "endedAt": "20260719T201832Z",
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "eighth_review_correction_delivery_complete_docs_closure",
-  "verificationPassed": true,
+  "status": "ninth_ci_flake_correction_planned",
+  "verificationPassed": false,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
-  "latestParentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
+  "latestParentHead": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
+  "ninthCorrectionStartingHead": "9f004ac5d96d84bd1f8b186496e1f594a183a18b",
+  "ninthCorrectionSession": "issue-437-ninth-ci-flake-correction-20260720",
+  "ninthCorrectionParentHead": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
+  "ninthCorrectionCIFailure": "GitHub Actions run 29711194607 failed only internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit: elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)",
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -316,11 +320,21 @@
       "cycle": "docs-only-evidence-closure",
       "decision": "local_critical_path",
       "reason": "accepted Low artifact-honesty finding only; no production edits or behavior RED required; worker owns isolated #437 branch/cwd and parent records this worker as spawned"
+    },
+    {
+      "cycle": "ninth-ci-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "worker has one isolated #437 branch/cwd and no subagent tool; remote CI run 29711194607 exposes a timing-dependent concurrency test flake at exact head 9f004ac5d96d84bd1f8b186496e1f594a183a18b; verification remains false until full rerun passes"
+    },
+    {
+      "cycle": "ninth-ci-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "remote CI failure is captured as RED; local stress and deterministic barrier-based test harness replacement are pending after planning checkpoint and parent reconcile"
     }
   ],
-  "red": "captured eighth RED: certify future-report focus 0.662s resumed ordinary and cleanup-failure/absence-proof future-dated reports; CLI focus 23.561s showed empty/whitespace value-required flags reached later validation, credential paths, fake runtime effects, or full sample certification instead of pre-effect usage",
-  "green": "eighth GREEN: future-dated resume reports beyond 5m skew rerun; empty/whitespace space-form value-required flags reject before effects while valid assigned/space values and boolean bare controls remain supported",
-  "verification": "eighth verification passed: focused/repeated/race, full affected packages, runtime no-effect/help, sample smoke, docs/golden/website drift, gofmt/diff/vet/full tests/build, final make verify, and connectorgen 547/0 all green",
+  "red": "remote CI RED captured: GitHub Actions run 29711194607 at head 9f004ac5d96d84bd1f8b186496e1f594a183a18b failed internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit with elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening); local stress pending and no fabricated local failure",
+  "green": "pending ninth test-only fix: replace wall-clock scheduling assertion with deterministic barrier/active-worker/max-concurrency/order-channel evidence",
+  "verification": "verificationPassed=false: full focused/repeated/race, gofmt, diff, vet, go test ./..., build, make verify, fixture-only sample smoke, and connector validation pending",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",
@@ -350,7 +364,7 @@
     "af0e4dab fix(certify): close eighth review gaps",
     "f211562e docs(planning): record eighth certify evidence"
   ],
-  "push": "planning, RED, GREEN, and eighth terminal evidence commits pushed through f211562ef4fd64ee7d7de4f274a3facf6ff44f51; PR body update for that terminal evidence completed; current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially",
+  "push": "ninth planning/test/evidence commits pending; prior delivery pushed through 9f004ac5d96d84bd1f8b186496e1f594a183a18b and PR #466 body currently reflects that head before CI-flake correction",
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
   "reviewRoute": "human_parent_fallback_pending_no_bot_retry_requested",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, bot review, parent/main merge, or quality-gate reduction",

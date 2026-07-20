@@ -1,6 +1,7 @@
 # Phase 437 Plan — connectors and certify native Cobra
 
-Current status: delivery evidence complete. Reviewed implementation head remains `af0e4dabf5be70237c02403e6ef4f003042667d6`. Terminal evidence parent / previous PR head is `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`, which recorded the eighth terminal artifact and PR #466 body update. This docs-only evidence closure starts from that clean local/remote/PR head, changes only phase artifacts, and intentionally does not embed its own resulting SHA; current live PR head is authoritative from Git/GitHub.
+Current status: reopened for ninth bounded CI flake root-cause correction; `verificationPassed=false` until a complete local rerun passes. PR #466 CI run `29711194607` at exact head `9f004ac5d96d84bd1f8b186496e1f594a183a18b` failed only in `internal/connectors/certify`:
+`--- FAIL: TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit (0.25s)` / `batch_test.go:372: elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)` / `FAIL polymetrics.ai/internal/connectors/certify 638.060s`. Parent base advanced to `c91b90cf9671b5caabc0ef4ec24d81897f870458` with disjoint #397 artifacts; reconcile after this planning checkpoint before test edits.
 
 Issue: #437
 Umbrella: #407
@@ -323,3 +324,35 @@ Terminal evidence and the eighth-cycle PR #466 body update are complete at paren
 ## Docs-only evidence closure — exact start `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`
 
 Accepted Low finding: phase artifacts carried stale terminal-commit/PR-body delivery wording after completion. No behavior RED is required and no production files are edited. Worker decision: `local_critical_path`; parent records this worker invocation as spawned. GSD route refreshed with `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt plan-phase 437 --skip-research`. Loaded skills for this closure: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-documentation`, and `golang-security` per docs/CLI/safety routing. Closure validation is limited to JSON parse, stale terminal/PR marker grep, `git diff --check`, and exact diff-scope check for the six phase artifacts.
+
+## Ninth bounded CI flake root-cause correction — exact HEAD `9f004ac5d96d84bd1f8b186496e1f594a183a18b`
+
+Identity: `issue-437-ninth-ci-flake-correction-20260720`; branch `refactor/437-connectors-certify-native-cobra`; PR #466; parent #397; umbrella #407. Clean local head, remote branch head, and PR #466 head were confirmed equal to `9f004ac5d96d84bd1f8b186496e1f594a183a18b` before planning. No bot review, parent merge-to-main, or broad rewrite is authorized.
+
+GSD route refreshed before test/production edits: `scripts/gsd doctor` passed; `scripts/gsd list` reported 69 commands; `scripts/gsd prompt plan-phase 437 --skip-research` generated `/tmp/pm-437-plan-phase.prompt`; `scripts/gsd prompt programming-loop init --phase 437 --dry-run` remains unavailable (`scripts/gsd: unknown GSD command: programming-loop`), so the manual `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` fallback applies. Execution decision: `local_critical_path` because this worker owns one isolated #437 branch/cwd, no subagent tool is exposed, and the parent coordinator records this worker as spawned.
+
+Loaded skills for this cycle: `.pi/skills/gsd-core/SKILL.md`; `.agents/skills/caveman/SKILL.md`; global `golang-how-to`, `golang-testing`, `golang-concurrency`, `golang-context`, `golang-safety`, `golang-cli`, `golang-error-handling`, `golang-security`, `golang-spf13-cobra`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-lint`, `golang-code-style`, and `golang-naming`. `.pi/skills/go-implementation/SKILL.md` is absent in this checkout and also absent at parent `c91b90cf9671b5caabc0ef4ec24d81897f870458`; global cc-skills files remain the Go implementation evidence per `required-skills-routing.md`.
+
+### Ninth CI failure and root-cause plan
+
+Remote RED from GitHub Actions run `29711194607`, job `verify`, head `9f004ac5d96d84bd1f8b186496e1f594a183a18b`:
+
+```text
+--- FAIL: TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit (0.25s)
+    batch_test.go:372: elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)
+FAIL
+FAIL	polymetrics.ai/internal/connectors/certify	638.060s
+```
+
+All other reported packages/checks in that failed run passed. Root cause is the test's wall-clock scheduling assertion (`elapsed > 200ms`) over three `80ms` fake jobs; loaded CI scheduling produced `252.003235ms`, slightly above 3×80ms, despite the same test already recording overlapping worker starts. The fix must not raise/remove the threshold or retry CI. It must replace wall-clock proof with deterministic bounded-concurrency evidence: barrier-controlled worker start, active-worker/max-concurrency accounting, release channel, result/order channel, and bounded timeout only for deadlock detection.
+
+### Ninth RED → GREEN plan
+
+1. Commit/push this planning checkpoint with `verificationPassed=false` before any test edits.
+2. Reconcile latest parent `origin/feat/cli-architecture-v2` at `c91b90cf9671b5caabc0ef4ec24d81897f870458`; retain disjoint #397 artifacts and do not edit parent artifacts.
+3. Reproduce/stress current focused test where feasible (`go test ./internal/connectors/certify -run TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit -count=N`, optionally `-race`). If local stress does not reproduce, record that honestly; do not fabricate a local failure. The remote CI failure above remains RED evidence.
+4. Test-only GREEN: rewrite `TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit` to prove exactly bounded overlap without timing: three jobs queued, `parallel=3`, each fake runner signals started and blocks on a release channel; assert all three start before release, `maxInFlight==3`, no fourth worker exceeds the limit in a companion `parallel=2`/four-job case if needed, all results complete after release, and channels/timeouts cannot leak goroutines or deadlock.
+5. Run focused new test repeated and under `-race`, full `internal/connectors/certify`, full CLI only if affected, `gofmt -w cmd internal`, `git diff --check`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, fixture-only sample smoke, and `go run ./cmd/connectorgen validate internal/connectors/defs`.
+6. Commit/push coherent test-fix and terminal evidence checkpoints; update PR #466 body with CI failure disposition and final head. Do not request bots or merge.
+
+Safety remains: no secrets, credentialed/live checks, live services, destructive cleanup, external writes/sweeps, new dependencies, connector defs, generic write tools, reverse ETL outside existing ordered local fixture smoke, parent/main merge, or quality-gate reduction.

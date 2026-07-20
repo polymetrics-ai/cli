@@ -271,3 +271,20 @@ Exact clean local/remote/PR start: `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. W
 | D0 | Planning/docs | Read required contracts/artifacts/issue; refreshed `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt plan-phase 437 --skip-research`; loaded `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-documentation`, `golang-security` | Complete before artifact edits |
 | D1 | Closure edit | Clear stale terminal/PR delivery wording; retain reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`; record terminal-evidence parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; state current live PR head comes from Git/GitHub, not self-reference | Complete |
 | D2 | Validation | `python3 -m json.tool .planning/phases/437-connectors-certify-native-cobra/RUN-STATE.json`, stale terminal/PR marker `rg`, `git diff --check`, and exact `git diff --name-only` scope check | Complete: JSON parse ok; stale marker grep returned no matches; diff check passed; diff scope limited to the six phase artifacts |
+
+## Ninth bounded CI flake correction ledger
+
+Identity `issue-437-ninth-ci-flake-correction-20260720`; exact clean/matched start `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; parent base to reconcile after planning `c91b90cf9671b5caabc0ef4ec24d81897f870458`. Programming-loop remains unavailable; manual universal-loop fallback applies. Execution decision: `local_critical_path`; parent records this worker invocation as spawned.
+
+Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-testing`, `golang-concurrency`, `golang-context`, `golang-safety`, `golang-cli`, `golang-error-handling`, `golang-security`, `golang-spf13-cobra`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-lint`, `golang-code-style`, and `golang-naming`. `.pi/skills/go-implementation/SKILL.md` is absent in this checkout and at parent `c91b90cf9671b5caabc0ef4ec24d81897f870458`; global cc-skills files are the actual implementation evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R9-0 | Planning | Reopen all six artifacts with exact CI failure, `verificationPassed=false`, GSD fallback, skills, parent reconcile plan, deterministic concurrency plan, and `local_critical_path`; commit/push before test edits | In progress before test edits |
+| R9-1 | Remote RED | GitHub Actions run `29711194607` at head `9f004ac5d96d84bd1f8b186496e1f594a183a18b` failed only `internal/connectors/certify` `TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit`: `elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)` | Captured from remote CI; local stress pending |
+| R9-2 | Reproduce/stress | Run focused current test repeatedly and under race where feasible; record pass/fail honestly and do not fabricate failure if scheduler flake does not reproduce | Pending after planning commit and parent reconcile |
+| R9-3 | GREEN test harness | Replace wall-clock scheduling assertion with deterministic barrier/active-worker/max-concurrency/order-channel evidence proving workers overlap up to `parallel` and remain bounded; use timeout only as deadlock guard | Pending |
+| R9-4 | Verify | Focused new test repeated and race, full certify, full CLI if affected, gofmt, diff check, vet, full tests, build, `make verify`, fixture sample smoke, connector validation | Pending; `verificationPassed=false` until complete `make verify` exits 0 |
+| R9-5 | Delivery | Commit/push planning, test fix, and terminal evidence; update PR #466 body with CI failure disposition and final head; no bot review or merge | Pending |
+
+Strict TDD note: because the production worker pool already overlaps work and the flake is the test's wall-clock proof, the remote CI failure is the required RED. A local deterministic test that fails before harness adaptation may be added only if it exposes a real harness gap; do not weaken gates or invent local failure. Tests must use fakes, temp dirs, channels, and bounded timeouts only; no credentials, live services, or external writes/sweeps.

@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: delivery evidence complete. Reviewed implementation head remains `af0e4dabf5be70237c02403e6ef4f003042667d6`; terminal evidence parent / previous PR head is `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`, which recorded the eighth terminal artifact and PR #466 body update. The current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially. Stacked PR #466 remains open with human/parent review fallback open.
+Status: reopened for ninth bounded CI flake root-cause correction. `verificationPassed=false` until full local gates rerun. PR #466 CI run `29711194607` failed at exact head `9f004ac5d96d84bd1f8b186496e1f594a183a18b` only in `internal/connectors/certify` `TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit`: `elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)`. Stacked PR #466 remains open with human/parent review fallback open.
 
 ## Identity
 
@@ -153,3 +153,20 @@ Verification: RED failed before production (`certify` 0.662s; `cli` 23.561s). GR
 ## Docs-only evidence closure
 
 Exact clean local/remote/PR start: `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. Scope is artifact honesty only: clear stale terminal/PR delivery wording, preserve `verificationPassed=true`, retain reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`, record `f211562ef4fd64ee7d7de4f274a3facf6ff44f51` as terminal-evidence parent/previous PR head, and state current live PR head is authoritative from Git/GitHub. Worker decision is `local_critical_path`; parent records spawned. No behavior RED, production edits, bot review request, or merge.
+
+## Ninth bounded CI flake correction — reopened
+
+Exact clean/matched start: `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; parent target: `c91b90cf9671b5caabc0ef4ec24d81897f870458`. The failed remote CI run is `29711194607`, job `verify`, head `9f004ac5d96d84bd1f8b186496e1f594a183a18b`. Failure text:
+
+```text
+--- FAIL: TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit (0.25s)
+    batch_test.go:372: elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)
+FAIL
+FAIL	polymetrics.ai/internal/connectors/certify	638.060s
+```
+
+Root cause plan: do not raise/remove the threshold and do not retry CI as a fix. Replace the test's wall-clock scheduling proof with deterministic barrier/active-worker/max-concurrency/order-channel evidence that proves `RunBatch` overlaps connectors up to the `parallel` limit and remains bounded without depending on loaded-runner timing. Use wall time only as a deadlock guard. Existing production semantics are expected correct; keep changes test-only unless a real production defect appears.
+
+GSD route is refreshed (`doctor` pass, `list` 69 commands, plan-phase prompt generated; `programming-loop` still unknown), so manual universal-loop fallback applies. Skills loaded include `gsd-core`, `caveman`, `golang-how-to`, `golang-testing`, `golang-concurrency`, `golang-context`, `golang-safety`, `golang-cli`, and routed Go support skills. `.pi/skills/go-implementation/SKILL.md` remains absent in this checkout and parent target; global cc-skills files are the loaded implementation evidence.
+
+Next: commit/push planning; merge parent `c91b90cf`; stress current focused test; apply deterministic test harness fix; rerun focused/repeated/race, full certify, full gates, `make verify`, fixture-only sample smoke, and connectorgen; update PR #466 body. No credentials, services, external writes/sweeps, dependencies, parent/main merge, bot review request, or gate weakening.

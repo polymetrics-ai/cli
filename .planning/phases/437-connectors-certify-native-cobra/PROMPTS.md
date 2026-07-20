@@ -217,3 +217,24 @@ Identity: docs-only evidence closure for #437 / PR #466; exact clean local/remot
 Commands refreshed before artifact edits: `scripts/gsd doctor`; `scripts/gsd list`; `scripts/gsd prompt plan-phase 437 --skip-research`. Execution decision: `local_critical_path`; parent records spawned. Required skills loaded for closure: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-documentation`, and `golang-security`.
 
 Downstream artifact: six phase artifacts only; no production edit and no behavior RED required. Verification result: JSON parse, stale terminal/PR marker grep, `git diff --check`, and exact diff-scope check are the closure gates.
+
+## Ninth bounded CI flake correction kickoff snapshot
+
+Identity: `issue-437-ninth-ci-flake-correction-20260720`; exact clean local/remote/PR start `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; parent reconcile target `c91b90cf9671b5caabc0ef4ec24d81897f870458`. Task: fix PR #466 CI run `29711194607` failure for issue #437 by replacing the flaky wall-clock concurrency assertion in `internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit` with deterministic concurrency evidence. CI failure: `elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)` at `batch_test.go:372`; all other reported packages/checks passed.
+
+Commands refreshed before test edits:
+
+```bash
+scripts/gsd doctor
+scripts/gsd list
+scripts/gsd prompt plan-phase 437 --skip-research
+scripts/gsd prompt programming-loop init --phase 437 --dry-run
+```
+
+Doctor passed, list reported 69 commands, plan prompt generated to `/tmp/pm-437-plan-phase.prompt`, and programming-loop returned `scripts/gsd: unknown GSD command: programming-loop`; manual universal-loop fallback recorded.
+
+Execution decision: `local_critical_path` — worker owns one isolated #437 branch/cwd, no subagent tool exposed, correction is local critical path. Parent coordinator records this invocation as spawned.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-testing`, `golang-concurrency`, `golang-context`, `golang-safety`, `golang-cli`, `golang-error-handling`, `golang-security`, `golang-spf13-cobra`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-lint`, `golang-code-style`, `golang-naming`; `.pi/skills/go-implementation/SKILL.md` absent in this checkout and at parent `c91b90cf9671b5caabc0ef4ec24d81897f870458`, so global cc-skills paths are actual Go evidence.
+
+Downstream artifact: pending. Planned output is a test-only deterministic concurrency harness using barrier/active-worker/max-concurrency/order channels, not a raised threshold. Parent `c91b90cf` will be merged after planning. Verification result: pending; `verificationPassed=false` until full focused/repeated/race, full local gates, `make verify`, fixture sample smoke, and connectorgen pass. No bot review or merge.
