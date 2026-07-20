@@ -330,51 +330,130 @@ func TestRunBatchSkipsConfiguredConnectors(t *testing.T) {
 }
 
 // TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit proves the worker
-// pool actually overlaps runs (bounded by Defaults.Parallel), not a
-// disguised serial loop, using a barrier: with parallel=3 and delay=50ms for
-// 3 connectors, wall time should be well under 3x50ms.
+// pool actually overlaps runs up to Defaults.Parallel. It uses a release
+// barrier and active-worker accounting instead of wall-clock timing, so a
+// loaded runner cannot turn correct parallelism into a false failure.
 func TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit(t *testing.T) {
 	cf := certify.CredsFile{
 		Defaults: certify.CredsDefaults{Parallel: 3},
 		Connectors: map[string]certify.ConnectorCredsEntry{
-			"a": {}, "b": {}, "c": {},
+			"a": {}, "b": {}, "c": {}, "d": {},
 		},
 	}
+	wantParallel := cf.Defaults.Parallel
+
+	started := make(chan string, len(cf.Connectors))
+	violations := make(chan string, 1)
+	release := make(chan struct{})
+	var releaseOnce sync.Once
+	closeRelease := func() { releaseOnce.Do(func() { close(release) }) }
+
+	type runBatchOutcome struct {
+		batch certify.BatchReport
+		err   error
+	}
+	outcomes := make(chan runBatchOutcome, 1)
+	done := make(chan struct{})
+	t.Cleanup(func() {
+		closeRelease()
+		select {
+		case <-done:
+		case <-time.After(5 * time.Second):
+			t.Errorf("timed out waiting for RunBatch() cleanup after releasing worker barrier")
+		}
+	})
+
 	var mu sync.Mutex
-	inFlight := 0
-	maxInFlight := 0
+	active := 0
+	maxActive := 0
 	factory := func(name string, _ certify.Options) certify.Runnable {
 		return &fakeRunnable{
-			rep:   passingReport(name),
-			delay: 80 * time.Millisecond,
+			rep: passingReport(name),
 			onRun: func() {
 				mu.Lock()
-				inFlight++
-				if inFlight > maxInFlight {
-					maxInFlight = inFlight
+				active++
+				if active > maxActive {
+					maxActive = active
 				}
+				if active > wantParallel {
+					select {
+					case violations <- name:
+					default:
+					}
+				}
+				mu.Unlock()
+
+				started <- name
+				<-release
+
+				mu.Lock()
+				active--
 				mu.Unlock()
 			},
 		}
 	}
 
-	start := time.Now()
-	_, err := certify.RunBatch(context.Background(), certify.BatchOptions{
-		CredsFile:     cf,
-		RunnerFactory: factory,
-		BatchDir:      t.TempDir(),
-	})
-	elapsed := time.Since(start)
-	if err != nil {
-		t.Fatalf("RunBatch() error = %v", err)
+	go func() {
+		batch, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+			CredsFile:     cf,
+			RunnerFactory: factory,
+			BatchDir:      t.TempDir(),
+		})
+		outcomes <- runBatchOutcome{batch: batch, err: err}
+		close(done)
+	}()
+
+	seen := map[string]bool{}
+	for range wantParallel {
+		select {
+		case name := <-started:
+			seen[name] = true
+		case <-time.After(5 * time.Second):
+			t.Fatalf("timed out waiting for %d parallel workers to start; started=%v", wantParallel, seen)
+		}
 	}
-	if elapsed > 200*time.Millisecond {
-		t.Errorf("elapsed = %v, want well under 3x80ms serial time (parallelism not happening)", elapsed)
+
+	mu.Lock()
+	if maxActive != wantParallel {
+		t.Errorf("maxActive = %d, want %d workers active before release", maxActive, wantParallel)
+	}
+	if active != wantParallel {
+		t.Errorf("active = %d, want %d workers blocked on release barrier", active, wantParallel)
+	}
+	mu.Unlock()
+
+	closeRelease()
+	select {
+	case <-done:
+	case <-time.After(5 * time.Second):
+		t.Fatal("timed out waiting for RunBatch() after releasing worker barrier")
+	}
+	outcome := <-outcomes
+	if outcome.err != nil {
+		t.Fatalf("RunBatch() error = %v", outcome.err)
+	}
+	for len(started) > 0 {
+		seen[<-started] = true
+	}
+	if len(seen) != len(cf.Connectors) {
+		t.Fatalf("started connectors = %v, want all %d connectors", seen, len(cf.Connectors))
+	}
+	if len(outcome.batch.Results) != len(cf.Connectors) {
+		t.Fatalf("len(Results) = %d, want %d", len(outcome.batch.Results), len(cf.Connectors))
+	}
+
+	select {
+	case name := <-violations:
+		t.Fatalf("connector %s started while %d workers were already active", name, wantParallel)
+	default:
 	}
 	mu.Lock()
 	defer mu.Unlock()
-	if maxInFlight < 2 {
-		t.Errorf("maxInFlight = %d, want >= 2 (connectors should overlap)", maxInFlight)
+	if active != 0 {
+		t.Errorf("active = %d after RunBatch returned, want 0", active)
+	}
+	if maxActive != wantParallel {
+		t.Errorf("maxActive = %d after RunBatch returned, want %d", maxActive, wantParallel)
 	}
 }
 
