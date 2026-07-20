@@ -25,6 +25,9 @@ accessible, and compatible with its plain/JSON sibling.
 ## Non-negotiable contract
 
 - Flags, plain text, JSON, and NDJSON are the API; the TUI is a TTY-gated projection.
+  Bare namespace commands render contextual help/subcommand summaries and exit 0 rather than
+  launching a TUI. Use explicit interactive subcommands such as `pm query grid` and
+  `pm reverse guide`.
 - Use Bubble Tea's model/update/view architecture. Commands own asynchronous I/O; `Update`
   remains deterministic and never performs blocking work.
 - Default to Normal mode. Enter Filter/Edit mode only when an input owns focus, display the
@@ -34,8 +37,13 @@ accessible, and compatible with its plain/JSON sibling.
 - Keep short contextual help visible. `?` opens the complete keymap for the current mode.
 - Sanitize and redact every dynamic view string before styling. Never render credentials,
   approval tokens, headers, request bodies, query strings, or raw secret-bearing errors.
-- Do not add generic shell, generic HTTP write, or generic SQL write actions. Query charts
-  operate only on the existing read-only result path.
+  Approval tokens are sensitive one-time authorization values; a guided reverse flow may carry
+  them only ephemerally in memory and must never print them in final frames, transcripts, logs,
+  screenshots, accessibility output, JSON, shell-equivalent command text, or fixtures.
+- Do not add generic shell, generic HTTP write, generic SQL write, or generic file-write actions.
+  Query charts operate only on the existing read-only result path. Query export is a typed
+  read-only output path with project confinement, no-overwrite default, confirmation/`--force`,
+  sanitized command echo, and `--no-input` guidance.
 - Mutations require plan/preview/approval/execute. Dangerous actions cannot be unlabelled
   single-key shortcuts.
 - Color is reinforcement only. Pair it with a word and glyph; support `NO_COLOR`, ASCII,

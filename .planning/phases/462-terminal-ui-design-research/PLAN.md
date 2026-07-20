@@ -77,3 +77,59 @@ definition, credential, remote write, or production TUI implementation is in sco
 - [x] Live production UI issues point to the contract, skill, and exact RED matrix.
 - [x] Targeted documentation, skill, GSD, and scope verification passes.
 - [x] Changes are committed, pushed, and opened as stacked PR #465 to the parent branch.
+
+## Review correction plan — 2026-07-20
+
+Branch: `docs/462-terminal-ui-design-review-fixes`
+Base: `feat/cli-architecture-v2` at `c91b90cf9671b5caabc0ef4ec24d81897f870458`
+Prior delivery context: PR #465, head `6853fee28e0208381b49931fb1f5dfec42ee50ef`, squashed into
+parent as `a5474bcb`; review coverage remains blocked because Claude is disabled and Copilot quota
+was exhausted. New accepted-correction PR will target the parent branch; do not merge.
+
+### Loaded skills and routing
+
+- `gsd-core` via `.pi/skills/gsd-core/SKILL.md`.
+- `caveman` via `.agents/skills/caveman/SKILL.md` for compact handoff only.
+- `bubble-tea-tui-design` plus all four references.
+- `golang-how-to`, `golang-cli`, `golang-testing`, `golang-documentation`, `golang-security`.
+- Additional routed context loaded for TUI docs: `golang-safety`, `golang-context`,
+  `golang-concurrency` from required-skills routing.
+- `.pi/skills/go-implementation/SKILL.md` is absent; used available repo/global skill paths and
+  recorded the mismatch here and in the TDD ledger.
+
+### Docs-only correction slices
+
+1. **Planning checkpoint** — reopen this phase's `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`,
+   `SUMMARY.md`, `PROMPTS.md`, `RUN-STATE.md`, and `RUN-STATE.json` with the accepted review
+   corrections, manual universal-loop fallback, scope, checks, and review blocker before editing
+   design/program docs.
+2. **RED inventory** — keep grep evidence for current contradictions:
+   - bare `pm query` wording incorrectly launches a TUI from a bare namespace;
+   - guided reverse text prints/teaches approval tokens;
+   - affected TUI dependency rows omit direct `#462`/`D-TUI` blockers;
+   - phase status claims delivery/automated-review pending instead of provisional/review blocked;
+   - query export lacks the typed path confinement/overwrite/noninteractive contract.
+3. **GREEN docs correction** — update only delegated docs and phase artifacts:
+   - require bare `pm query` and bare `pm reverse` to render contextual help/subcommand summaries
+     and exit 0; interactive surfaces use explicit documented subcommands (`pm query grid`,
+     `pm reverse guide`);
+   - mark approval tokens as sensitive one-time authorization values that may live only
+     ephemerally in memory through plan → preview → approval → execute and are never printed,
+     logged, transcripted, screenshot, accessibility-output, JSON-output, or shell-equivalent text;
+   - encode #462/D-TUI directly in each affected TUI row (#408, #409, #411, #412, #414, #416,
+     #418, and #463 where listed) across roadmap/backlog/prompt rosters;
+   - state #462 as provisionally integrated / review blocked with PR #465, its head SHA, Claude
+     disabled, Copilot quota exhausted, human fallback, and this accepted-correction PR pending;
+   - add the read-only query export path contract: clean/confined project-scoped paths, reject
+     control characters/traversal/broad paths/symlink races, no overwrite by default, TTY
+     confirmation, noninteractive `--force`, sanitized command echo, exact `--no-input` guidance,
+     and no generic file-write/SQL-write boundary change.
+4. **Terminal evidence checkpoint** — run docs-contract greps, link/marker checks,
+   `scripts/gsd doctor`, `git diff --check`, exact no-forbidden-scope diff, skill quick validation,
+   Markdown/YAML/JSON checks, and `make docs-check` if feasible. Commit/push the evidence.
+
+### Commit/push checkpoints
+
+- `docs(gsd): plan terminal ui review corrections` — phase artifact reopen only.
+- `docs(ui): apply terminal design review corrections` — delegated docs/program corrections.
+- `docs(gsd): record terminal ui correction verification` — final verification/status evidence.

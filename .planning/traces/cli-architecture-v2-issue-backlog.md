@@ -47,18 +47,18 @@ Workers must not edit these shared artifacts unless the orchestrator explicitly 
 | P08 | `refactor(cli): nativize catalog namespace` | A | P04 | catalog command node/tests/docs only |
 | P09 | `epic(cli): nativize remaining namespaces` | A | P08 | orchestration-only umbrella; implementation in grandchildren |
 | D-TUI | `docs(ui): codify Bubble Tea terminal design research and interaction system` (#462) | B design gate | P07 | design docs, repo-local TUI skill, GSD/UI issue prompts; no production Go |
-| P10 | `feat(ui): add flow and ETL run dashboards` | B | P07 | flow/ETL dashboard models and command wiring |
-| P11 | `feat(ui): add flow and schedule creation wizards` | B | P10 | flow/schedule wizard commands, tests, parity docs |
+| P10 | `feat(ui): add flow and ETL run dashboards` (#408) | B | P07, D-TUI/#462 | flow/ETL dashboard models and command wiring |
+| P11 | `feat(ui): add flow and schedule creation wizards` (#409) | B | P10, D-TUI/#462 | flow/schedule wizard commands, tests, parity docs |
 | P12 | `feat(obs): add opt-in OpenTelemetry tracing` | C | P04 | `internal/telemetry/**` and allowlisted span call sites |
-| P13 | `feat(ui): add connector browser and query grid` | B | P11, D-TUI | query tables/browser/grid surfaces and parity docs |
-| P13C | `feat(ui): add read-only query charts and terminal dashboard compositions` (#463) | B | P13, D-TUI | bounded read-only chart models; renderer dependency remains human-gated |
-| P14 | `feat(ui): add terminal docs viewer` | B | P11 | docs viewer/pager and parity docs |
+| P13 | `feat(ui): add connector browser and query grid` (#411) | B | P11, D-TUI/#462 | query tables/browser/grid surfaces and parity docs |
+| P13C | `feat(ui): add read-only query charts and terminal dashboard compositions` (#463) | B | P13, D-TUI/#462 | bounded read-only chart models; renderer dependency remains human-gated |
+| P14 | `feat(ui): add terminal docs viewer` (#412) | B | P11, D-TUI/#462 | docs viewer/pager and parity docs |
 | P15 | `feat(cli): add connector-aware shell completion` | A | P09 | command registration/completion/tests/docs |
-| P16 | `feat(ui): add certify and RLM dashboards` | B | P09, P10 | certify/RLM dashboard models and command wiring |
+| P16 | `feat(ui): add certify and RLM dashboards` (#414) | B | P09, P10, D-TUI/#462 | certify/RLM dashboard models and command wiring |
 | P17 | `feat(obs): add OpenTelemetry metrics` | C | P12 | metrics instruments/exporters/benchmarks |
-| P18 | `feat(ui): add guided reverse ETL and connection prompts` | B | P11 | reverse/connection prompting; no secret prompts |
+| P18 | `feat(ui): add guided reverse ETL and connection prompts` (#416) | B | P11, D-TUI/#462 | reverse/connection prompting; no secret prompts |
 | P19 | `feat(cli): deepen help tree and generate man pages` | A | P13, P14, P15, P16, P18 | help tree, generated manuals, docs/website/goldens |
-| P20 | `feat(ui): complete accessibility audit and a11y topic` | B | P13, P13C when included, P14, P16, P18 | all TUI accessibility fixes and parity docs |
+| P20 | `feat(ui): complete accessibility audit and a11y topic` (#418) | B | P13, P13C when included, P14, P16, P18, D-TUI/#462 | all TUI accessibility fixes and parity docs |
 | P21 | `feat(obs): add optional OpenTelemetry log bridge` | C | P06, P12 | optional pinned beta log bridge only |
 | P22 | `chore(cli): complete Architecture v2 cleanup` | A | P17, P19, P20 | dead parser cleanup, `AGENTS.md`, `CONTEXT.md`, final verification |
 
@@ -85,10 +85,12 @@ docs. Connector dynamic dispatch remains on the legacy parser; certify migrates 
 1. **Bootstrap:** S0 → P01 → P02 → P03 → P04 (strictly serial).
 2. **Foundation fan-out after P04:** P05, P06, P08, and P12 may run in separate worktrees.
 3. **Track fan-out:** P07 follows P05; P09 follows P08; P10 follows P07; P17 follows P12; P21 follows P06+P12.
-4. **TUI design gate:** integrate D-TUI/#462 before P10, P11, P13, P14, P16, P18, or P20
-   starts production UI work.
-5. **UX fan-out:** after P11 and D-TUI, P13, P14, and P18 may run in separate worktrees.
-   P16 can run after P09+P10+D-TUI.
+4. **TUI design gate:** integrate D-TUI/#462 before P10/#408, P11/#409, P13/#411,
+   P14/#412, P16/#414, P18/#416, P20/#418, or P13C/#463 starts production UI work.
+   Parent orchestrator must update GitHub blocked-by metadata; this docs worker must not mutate
+   GitHub issue metadata.
+5. **UX fan-out:** after P11 and D-TUI/#462, P13, P14, and P18 may run in separate worktrees.
+   P16 can run after P09+P10+D-TUI/#462.
 6. **Convergence:** P15 after P09; P19 and P20 after their listed UI/CLI dependencies; P22 last.
 
 ## Required worker prompt contract

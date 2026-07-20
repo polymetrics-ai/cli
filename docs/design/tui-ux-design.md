@@ -23,7 +23,8 @@ and a **TTY door** (the experience: interactive, styled, live). The flag door is
 and always exists first. The TTY door opens only when `ui.Detect` says so
 (stdout TTY ∧ ¬`--json` ∧ ¬`--plain` ∧ ¬`--no-input` ∧ `PM_NO_TUI`/`CI` unset ∧ `TERM≠dumb`),
 and everything behind it must degrade back to the flag door's output when piped. A wizard's
-last act is always to print the flag-door equivalent of what it just did.
+last act is always to print the sanitized flag-door equivalent of what it just did, omitting
+secret values and one-time authorization values.
 
 ### 1.2 Signature element: the pipeline rail
 
@@ -272,7 +273,11 @@ exactly as today.
 with row counts and sizes. Plain: `name\trows\tbytes`; `--json`: `{"kind":"WarehouseTables",...}`.
 This closes the "users must guess `--table`" gap for everyone, not just the TUI.
 
-**`pm query` interactive (bare `pm query` on a TTY):** alt-screen browser.
+**Bare namespace:** `pm query` with no action selected renders contextual help and the
+subcommand summary, then exits 0 in both TTY and non-TTY contexts. It never starts the grid.
+Invalid actions still return usage errors.
+
+**`pm query grid` (explicit TTY subcommand):** alt-screen browser.
 
 ```
   Query  warehouse: 4 tables
@@ -293,11 +298,21 @@ This closes the "users must guess `--table`" gap for everyone, not just the TUI.
   **Evertras/bubble-table** grid (pagination via LIMIT/OFFSET re-query, column sort,
   built-in filter), table list pane fed by the `query tables` enumerator.
 - Read-only safety unchanged: everything runs through the existing `QuerySQL` path and its
-  `validateSelectOnly` guard; the TUI adds no write path.
-- Export (`e`): write JSONL/CSV to a chosen path; always echoes
-  `Scripted equivalent: pm query run --sql "…" --limit 500 --json`.
-- Accessible/plain: `pm query` on a non-TTY keeps today's behavior (usage error pointing
-  at `query run`); accessible mode offers a sequential prompt for SQL then prints plain rows.
+  `validateSelectOnly` guard; the TUI adds no SQL write path.
+- Export (`e`): a typed read-only result export, not a generic file-write tool. It writes only
+  JSONL/CSV rows returned by `QuerySQL` to a default project-scoped output directory such as
+  `.polymetrics/query-exports/`. The path validator rejects control characters, traversal,
+  absolute or broad roots, empty/bare directory targets, and paths outside the project after
+  resolve/clean. It must confine the final clean path to the project, reject symlink targets and
+  final-component symlink races, and open with exclusive create so existing files are not
+  overwritten by default. TTY export asks for explicit confirmation before writing; noninteractive
+  export requires both an explicit `--output <project-relative-path>` and `--force`. The scripted
+  equivalent echo is sanitized and project-relative, for example
+  `pm query run --sql "<sanitized select>" --limit 500 --output .polymetrics/query-exports/result.jsonl --format jsonl --force`.
+  With `--no-input` and no preapproved output, fail exactly:
+  `query grid export requires explicit output — pass --output <project-relative-path> and --force, or run without --no-input to confirm interactively`.
+- Accessible/plain: `pm query grid --plain` or accessibility mode offers a sequential prompt for
+  SQL then prints plain rows. Bare `pm query` remains contextual help, not a grid launcher.
 - Agent parity: `pm query run` untouched; `query tables` is plain/JSON first.
 
 **Query charts (dependency-gated child issue #463):** after #411 lands the result grid may
@@ -378,19 +393,28 @@ attempt count, elapsed, and a liveness pulse. `● running · heartbeat 2s ago �
 When later phases add a Temporal Query handler with iteration payloads, the same view gains
 `iteration 3/10` — additive, no redesign.
 
-### 2.9 Guided reverse-ETL session (`pm reverse` on a TTY)
+### 2.9 Guided reverse-ETL session (`pm reverse guide`)
 
-One session walking the existing gate — the gate itself is untouched:
+Bare `pm reverse` renders contextual help and the subcommand summary, then exits 0. It never
+starts the guided session. Invalid reverse actions still return usage errors.
 
-1. **Plan** — pick connection/table/action (huh), runs `reverse plan`, shows plan ID.
+`pm reverse guide` walks the existing gate — the gate itself is untouched:
+
+1. **Plan** — pick connection/table/action (huh), runs `reverse plan`, shows the non-sensitive
+   plan ID.
 2. **Preview** — records table (bubble-table) of what would be written.
-3. **Approve** — the approval token is relayed in-session; destructive actions surface the
-   typed-confirmation challenge exactly as the flag flow does (`--confirm` semantics):
+3. **Approve** — the approval token is a sensitive one-time authorization value. The guided
+   flow may carry it ephemerally in memory only long enough to pass through the existing
+   plan → preview → approval → execute seam. It is never printed in final frames, transcripts,
+   logs, screenshots, accessibility output, JSON, shell-equivalent command text, or phase
+   fixtures. Destructive actions still surface the typed-confirmation challenge exactly as the
+   flag flow does (`--confirm` semantics):
    `Type the table name to approve writing 214 records to hubspot contacts:`.
-4. **Run** — live progress; final frame prints run ID + `reverse status` command.
+4. **Run** — live progress; final frame prints run ID + `reverse status` command, with no token.
 
-Every intermediate ID/token is printed as it's created, so the session is also a teaching
-transcript of the 4-command flag flow, which remains canonical for agents.
+The session teaches the 4-command flag flow with sanitized commands and IDs only. Agents keep the
+canonical plan → preview → approval → execute path; the TUI does not weaken typed approval or expose
+approval tokens.
 
 ### 2.10 `credentials add` / `connections create` prompting
 
@@ -431,8 +455,9 @@ connector/field *names*, but values arrive only via `--from-env`/`--value-stdin`
   agents get what the TUI gets, in their dialect, without polling checkpoint files.
 - Every TUI surface has a plain sibling: browse↔`connectors list`, query grid↔`query run`,
   docs pager↔`help/man`, wizards↔flags+manifest files, `query tables` is plain-first.
-- Wizards emit machine artifacts (manifest JSON at a documented path) and echo the exact
-  scripted equivalent — TTY sessions teach the API.
+- Wizards emit machine artifacts (manifest JSON at a documented path) and echo the sanitized
+  scripted equivalent — TTY sessions teach the API without printing secrets or one-time
+  authorization values.
 - `--no-input` (and `CI` env) hard-disables prompting; an interactive-only path errors by
   naming the flag/file to provide instead (clig.dev rule).
 - New enumerators added for the TUI (`query tables`) land as plain/JSON commands first, so

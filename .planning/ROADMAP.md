@@ -58,19 +58,19 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 | 7 | #405 | B | TTY gate, `--plain`/`--no-input`, and `--progress ndjson` | #403 |
 | 8 | #406 | A | Nativize pilot `catalog` namespace | #402 |
 | 9 | #407 | A | Nativize remaining namespaces through serialized grandchildren #421–#437 | #406, #437 |
-| Design gate | #462 | B | Freeze Bubble Tea interaction, responsive layout, chart grammar, design skill, and TUI worker prompts | #405; before #408/#409/#411/#412/#414/#416/#418 |
-| 10 | #408 | B | Flow and ETL run dashboards | #405 |
-| 11 | #409 | B | Flow and schedule creation wizards | #408 |
+| Design gate | #462 | B | Freeze Bubble Tea interaction, responsive layout, chart grammar, design skill, and TUI worker prompts | #405; before #408/#409/#411/#412/#414/#416/#418/#463 |
+| 10 | #408 | B | Flow and ETL run dashboards | #405, #462/D-TUI |
+| 11 | #409 | B | Flow and schedule creation wizards | #408, #462/D-TUI |
 | 12 | #410 | C | Opt-in OpenTelemetry tracing | #402 |
-| 13 | #411 | B | Connector browser, `query tables`, and interactive query grid | #409 |
-| 13b | #463 | B | Read-only query charts and reusable terminal dashboard compositions | #462, #411; renderer dependency requires explicit human approval |
-| 14 | #412 | B | Terminal docs viewer | #409 |
+| 13 | #411 | B | Connector browser, `query tables`, and interactive query grid | #409, #462/D-TUI |
+| 13b | #463 | B | Read-only query charts and reusable terminal dashboard compositions | #411, #462/D-TUI; renderer dependency requires explicit human approval |
+| 14 | #412 | B | Terminal docs viewer | #409, #462/D-TUI |
 | 15 | #413 | A | Connector-aware shell completion | #407 |
-| 16 | #414 | B | Certify batch table and RLM agent dashboards | #407, #408 |
+| 16 | #414 | B | Certify batch table and RLM agent dashboards | #407, #408, #462/D-TUI |
 | 17 | #415 | C | OpenTelemetry metrics | #410 |
-| 18 | #416 | B | Guided reverse ETL and connection prompts | #409 |
+| 18 | #416 | B | Guided reverse ETL and connection prompts | #409, #462/D-TUI |
 | 19 | #417 | A | Help tree deepening and generated man pages | #411, #412, #413, #414, #416 |
-| 20 | #418 | B | Accessibility audit and `pm a11y` topic | #411, #412, #414, #416, #463 when chart slice is included |
+| 20 | #418 | B | Accessibility audit and `pm a11y` topic | #411, #412, #414, #416, #462/D-TUI; #463 when chart slice is included |
 | 21 | #419 | C | Optional OpenTelemetry log bridge, human-skippable | #404, #410 |
 | 22 | #420 | A | Architecture v2 cleanup, docs updates, final verification | #415, #417, #418 |
 
@@ -79,9 +79,11 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 1. Bootstrap serial chain: #398 → #399 → #400 → #401 → #402.
 2. First parallel fan-out after #402: #403, #404, #406, and #410 may run concurrently in isolated worktrees after write-scope collision checks.
 3. Phase 9 namespace grandchildren #421–#437 are serialized because they share central CLI routing/help files.
-4. TUI design issue #462 must integrate before production UI work starts. UX fan-out after
-   #409: #411, #412, and #416 may run concurrently; #414 waits for #407 and #408. Chart
-   child #463 follows #411 and joins the #418 accessibility convergence when included.
+4. TUI design issue #462/D-TUI must integrate before production UI work starts. UX fan-out after
+   #409: #411, #412, and #416 may run concurrently; #414 waits for #407, #408, and #462/D-TUI.
+   Chart child #463 follows #411 and #462/D-TUI, then joins the #418 accessibility convergence
+   when included. Parent orchestrator must update GitHub blocked-by metadata; worker docs do not
+   mutate issue metadata.
 5. Convergence: #413 after #407; #417 and #418 after their UI/CLI dependencies; #420 last. Phase #419 is optional and requires an explicit human decision if skipped or if dependency budget changes.
 
 #### CLI Architecture v2 gates

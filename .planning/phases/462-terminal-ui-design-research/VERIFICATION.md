@@ -34,3 +34,41 @@
 No runtime command, flag, output, help topic, bare namespace, generated CLI document, or website
 page changes in this issue. The execution and worker prompts strengthen the parity requirements
 for the later behavior-changing UI phases.
+
+## Review correction checklist — 2026-07-20
+
+### Required checks before handoff
+
+- [x] Phase artifacts reopened before delegated docs/design edits.
+- [x] GSD adapter health recorded: `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 462 --skip-research`.
+- [x] Manual universal-loop fallback recorded because `scripts/gsd prompt programming-loop ...` is absent.
+- [x] Loaded skills and missing `.pi/skills/go-implementation` mismatch recorded.
+- [x] RED grep inventory recorded in `TDD-LEDGER.md`.
+- [x] Bare namespace contract grep: no bare `pm query`/bare `pm reverse` TUI-launch wording remains
+  in current docs outside the historical RED ledger.
+- [x] Explicit interactive subcommands are consistent: `pm query grid`, `pm reverse guide`.
+- [x] Approval-token contract grep: no current-doc wording says final frames/transcripts/logs/
+  accessibility/JSON/shell-equivalent text prints tokens.
+- [x] Dependency rows/rosters encode `#462` or `D-TUI` directly for #408, #409, #411, #412,
+  #414, #416, #418, and #463 where applicable.
+- [x] #462 status says provisionally integrated / review blocked with PR #465, head
+  `6853fee28e0208381b49931fb1f5dfec42ee50ef`, Claude disabled, Copilot quota exhausted,
+  fallback human, accepted correction PR pending.
+- [x] Query export path contract includes typed read-only export, project-scoped default,
+  control-character/traversal/broad-path rejection, clean/confined path, symlink race rejection,
+  no overwrite default, TTY confirmation, noninteractive `--force`, sanitized command echo, and
+  exact `--no-input` guidance.
+- [x] Skill quick validation passes: `Skill is valid!`.
+- [x] JSON/YAML/Markdown syntax checks pass as applicable: PyYAML skill frontmatter and
+  `python3 -m json.tool` for `RUN-STATE.json`.
+- [x] `scripts/gsd doctor` passes at final verification (`ok commands 69`).
+- [x] `git diff --check` passes.
+- [x] Exact scope check shows no `cmd/**`, `internal/**`, `go.mod`, `go.sum`, `website/**`,
+  `docs/cli/**`, or nondelegated parent phase artifact changes.
+- [x] `make docs-check` ran: `go build ./cmd/pm`; `Validated connector docs in docs/connectors`.
+
+### Review route status
+
+Claude review remains unavailable (`disabled_manually` on PR #465 context). Copilot backup already
+reported quota exhausted and must not be retried in this blocker window. Human/parent orchestrator
+review remains pending for the accepted correction PR.
