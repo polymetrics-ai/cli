@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "worker_in_progress",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "b77d8f49205aa16944a6148c3640d28899c63a21",
+  "currentHead": "f32fee22e66bae1bbea381b44814aee059029d79",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -815,7 +815,7 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T21:23:21Z",
+  "updatedAt": "2026-07-20T21:39:16Z",
   "mainSync": {
     "baseBeforeSync": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
     "originMain": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
