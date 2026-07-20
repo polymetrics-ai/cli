@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: seventh bounded correction reopened; verification false until new RED/GREEN/full gates pass; stacked PR #466 remains open with human/parent review fallback pending.
+Status: seventh bounded correction verified; terminal artifact commit/PR body update in progress; stacked PR #466 remains open with human/parent review fallback pending.
 
 ## Identity
 
@@ -124,7 +124,7 @@ Safety: no credentials, live certification, services, system crontab, external w
 
 ## Seventh bounded correction — reopened
 
-Status: planning checkpoint in progress; `verificationPassed=false` until seventh full gates pass.
+Status: verified; `verificationPassed=true` after seventh full gates.
 
 Identity: `issue-437-seventh-bounded-correction-20260720`; exact clean/matched start `6e9e7d9422050a609306d8900d6a06c8bb1fc223` on branch `refactor/437-connectors-certify-native-cobra`, PR #466. Local branch, remote branch, and PR head were confirmed equal. Sixth-cycle stale pending fields are corrected: PR #466 body already records head `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; seventh terminal evidence is not claimed yet.
 
@@ -132,4 +132,6 @@ Accepted findings: `validResumeEvidence` rejects the no-leak cleanup-failure/abs
 
 GSD: `scripts/gsd doctor` passed; `scripts/gsd prompt plan-phase 437 --skip-research` generated; `scripts/gsd prompt programming-loop init --phase 437 --dry-run` remains unavailable, so the manual universal-loop fallback applies. Execution decision: `local_critical_path`; parent records this worker as spawned.
 
-Plan: commit/push planning first; add RED tests for the exact resume absence-proof case and bare required-value no-effect/exit-2 cases; implement minimal fixes in `internal/connectors/certify/batch.go` and `internal/cli/certify_cli.go`; run focused/repeated/race, full affected packages, runtime help/no-effect/sample smoke, docs/website if needed, gofmt/diff/vet/full tests/build/`make verify`, and connectorgen; update PR #466 body with final head. No bot review request or merge.
+Delivery: planning `82f59229`, RED `e0fb8c4b`, and GREEN `2ce0e10a` are pushed. RED captured resume rerun and bare required-value effect/category failures before production. GREEN accepts the exact cleanup-failure absence-proof resume shape only, rejects bare value-required certify flags before config/logger/telemetry and direct command effects, preserves assigned/space values and boolean bare controls, and keeps unsupported controls fail-closed.
+
+Verification: focused GREEN, repeated, race, full affected packages, runtime no-effect/help (`8391` bytes), docs/golden/website drift, fixture-only sample smoke, gofmt/diff/vet/full tests/build, final `make verify`, and explicit connectorgen 547/0 all pass. Final `make verify` ran CLI `442.999s`, certify `348.395s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, and connectorgen green. No bot review request or merge.

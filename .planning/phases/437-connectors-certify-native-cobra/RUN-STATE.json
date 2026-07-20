@@ -7,7 +7,7 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": "pending_seventh_correction",
+  "endingImplementationHead": "2ce0e10ad4b092d3c9314bf0e6bd607ecd48b51f",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "thirdCorrectionStartingHead": "437d13cf",
@@ -21,8 +21,8 @@
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "seventh_review_correction_planning",
-  "verificationPassed": false,
+  "status": "seventh_review_correction_verified",
+  "verificationPassed": true,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
   "latestParentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
@@ -259,11 +259,31 @@
       "cycle": "seventh-review-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "RED tests pending; no production edits until deterministic failures are captured and committed"
+    },
+    {
+      "cycle": "seventh-review-correction-red",
+      "decision": "local_critical_path",
+      "reason": "deterministic RED tests captured resume replay and bare value-required effect/category findings before production edits; RED commit pushed"
+    },
+    {
+      "cycle": "seventh-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "minimal resume evidence and certify syntax prevalidation fixes passed focused, broader, repeated, race, vet, build, and full affected package gates"
+    },
+    {
+      "cycle": "seventh-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "runtime no-effect/help, docs/golden/website, fixture-only sample smoke, fmt/diff/vet/full tests/build, final make verify, and connectorgen all passed"
+    },
+    {
+      "cycle": "seventh-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts record successful seventh verification; PR body update and final push remain delivery actions; no bot review requested"
     }
   ],
-  "red": "pending seventh RED: cleanup-failure absence-proof resume case and bare value-required certify flags before effects",
-  "green": "pending seventh GREEN",
-  "verification": "pending seventh full gates; verificationPassed false until complete make verify exits 0",
+  "red": "captured seventh RED: certify resume absence-proof focus 0.698s reran cleanup-failure/absence-proof report; CLI focus 5.853s showed bare value-required flags became true, reached sample stream true/path true/fake effects, or returned validation exit 3",
+  "green": "seventh GREEN: exact cleanup-failure absence-proof reports resume only with valid tag/provenance, passed cleanup_verify after failed write_cleanup, and failed/non-leaked write action reason; raw certify syntax prevalidation rejects bare from-env/config/stream/credentials-file/parallel/older-than before effects while preserving assigned/space values and boolean bare controls",
+  "verification": "passed seventh gates: focused, repeated, race, full affected packages, runtime no-effect/help, docs/golden/website, fixture sample smoke, fmt/diff/vet/full tests/build, final make verify, and connectorgen 547/0",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",
@@ -284,16 +304,20 @@
     "3d69b7a4 test(certify): require pre-telemetry sweep validation",
     "e9ce945e fix(certify): close rereview safety gaps",
     "terminal fifth-cycle evidence artifact: this commit",
-    "pending seventh-cycle planning/RED/GREEN/evidence commits"
+    "82f59229 docs(planning): plan seventh certify correction",
+    "e0fb8c4b test(certify): expose seventh review regressions",
+    "2ce0e10a fix(certify): close seventh review gaps",
+    "terminal seventh-cycle evidence artifact: this commit"
   ],
   "push": "continuation planning, parent merge, verification, and PR artifact commits pushed to refactor/437-connectors-certify-native-cobra",
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
-  "reviewRoute": "human_parent_fallback_pending_no_claude_copilot_retry_requested",
+  "reviewRoute": "human_parent_fallback_pending_no_bot_retry_requested",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, PR, integration, parent mutation, or main mutation",
-  "preTerminalEvidenceHead": "6e9e7d9422050a609306d8900d6a06c8bb1fc223",
+  "preTerminalEvidenceHead": "2ce0e10ad4b092d3c9314bf0e6bd607ecd48b51f",
   "sixthCorrectionStartingHead": "8e7e2533c75451114c4d6ae38f89b7fd1ede6c34",
   "sixthCorrectionSession": "issue-437-sixth-review-correction-20260719T220843Z",
   "sixthCorrectionFinalHead": "6e9e7d9422050a609306d8900d6a06c8bb1fc223",
   "seventhCorrectionStartingHead": "6e9e7d9422050a609306d8900d6a06c8bb1fc223",
-  "seventhCorrectionSession": "issue-437-seventh-bounded-correction-20260720"
+  "seventhCorrectionSession": "issue-437-seventh-bounded-correction-20260720",
+  "seventhCorrectionImplementationHead": "2ce0e10ad4b092d3c9314bf0e6bd607ecd48b51f"
 }

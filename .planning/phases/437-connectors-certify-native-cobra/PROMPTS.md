@@ -182,6 +182,6 @@ Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `g
 
 Recovery-budget exception: unresolved effect-before-usage and resume-replay findings require this extra bounded correction rather than stopping on prior cycle count.
 
-Downstream artifact: pending. RED tests must be committed/pushed before production edits; GREEN and terminal gate evidence must update this snapshot from pending to actual results.
+Downstream artifact: complete. Planning `82f59229`, RED `e0fb8c4b`, and GREEN `2ce0e10a` are pushed; terminal evidence artifact follows. Resume validation accepts only the exact cleanup-failure absence-proof shape, and certify syntax prevalidation rejects bare value-required flags before effects while preserving assigned/space values and boolean bare controls.
 
-Verification result: pending / `verificationPassed=false` until full `make verify` exits 0 at the seventh final head.
+Verification result: pass. RED failed as intended (`certify` 0.698s; `cli` 5.853s). GREEN/final gates pass: focused `0.599s`/`0.566s`; repeated/race `0.660s`/`0.575s` and `1.704s`/`1.729s`; full affected packages `353.654s`/`448.666s`; runtime bare `--stream` exits 2 with no `.polymetrics`; help byte parity `8391` bytes; docs/golden `11.210s`; website drift-free; sample smoke exit 0/pass/stderr 0; `gofmt`, diff, vet, full tests, build, final `make verify` (CLI `442.999s`, certify `348.395s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0 pass.

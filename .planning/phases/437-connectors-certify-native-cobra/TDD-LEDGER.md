@@ -193,11 +193,29 @@ Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-tes
 
 | Step | Kind | Required evidence | Status |
 |---:|---|---|---|
-| R7-0 | Planning | Reopen all six artifacts with exact start/head/PR, seventh recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, finalized sixth statuses, and `local_critical_path`; commit/push before RED or production | In progress |
-| R7-1 | RED resume absence proof | Seed completed no-leak report with failed `write_cleanup`, passed `cleanup_verify`, failed/non-leaked write action, valid tag/provenance; prove `--resume` reruns today | Pending |
-| R7-2 | RED value-required no-effect | Bare `--from-env`, `--config`, `--stream`, `--credentials-file`, `--parallel`, and `--older-than` reject as usage exit 2 before logger/telemetry/credential/runner/workspace/sweep effects in applicable modes | Pending |
-| R7-3 | GREEN | Minimal resume-evidence and certify prevalidation/native validation fixes pass focused tests without weakening existing invalid-report or flag behavior | Pending |
-| R7-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Pending |
-| R7-5 | Delivery | Coherent commits pushed, PR #466 body updated with final seventh head/gates, no bot review, clean/remote-matched branch | Pending |
+| R7-0 | Planning | Reopen all six artifacts with exact start/head/PR, seventh recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, finalized sixth statuses, and `local_critical_path`; commit/push before RED or production | Complete: planning `82f59229` pushed |
+| R7-1 | RED resume absence proof | Seed completed no-leak report with failed `write_cleanup`, passed `cleanup_verify`, failed/non-leaked write action, valid tag/provenance; prove `--resume` reruns today | Complete: failed before production |
+| R7-2 | RED value-required no-effect | Bare `--from-env`, `--config`, `--stream`, `--credentials-file`, `--parallel`, and `--older-than` reject as usage exit 2 before logger/telemetry/credential/runner/workspace/sweep effects in applicable modes | Complete: failed before production |
+| R7-3 | GREEN | Minimal resume-evidence and certify prevalidation/native validation fixes pass focused tests without weakening existing invalid-report or flag behavior | Complete: GREEN `2ce0e10a` pushed |
+| R7-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Complete: all listed gates pass |
+| R7-5 | Delivery | Coherent commits pushed, PR #466 body updated with final seventh head/gates, no bot review, clean/remote-matched branch | In progress: terminal artifact commit and PR body update follow |
 
-Strict TDD gate: R7-1/R7-2 failing evidence must be captured and committed before production edits. Tests use only deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.
+Strict TDD gate: R7-1/R7-2 failing evidence was captured and committed (`e0fb8c4b`) before production edits. Tests use only deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.
+
+### Seventh-cycle RED evidence captured
+
+- `go test ./internal/connectors/certify -run 'TestRunBatchResumeAcceptsCleanupFailureAbsenceProof' -count=1` failed as intended (`0.698s`): `absence-proven cleanup failure was rerun instead of resumed`.
+- `go test ./internal/cli -run 'TestNativeCertifyValueRequiredFlagsRejectBeforeRuntimeEffects|TestSeventhCertifyValueRequiredFlagsRejectBeforeLoggerTelemetry' -count=1` failed as intended (`5.853s`): bare `--from-env`/`--older-than` lacked value-required messages, bare `--config` and `--parallel` returned validation exit 3, bare `--stream` reached sample certification with stream `true`, and bare `--credentials-file` reached path `true`/fake runtime effects.
+
+### Seventh-cycle GREEN and verification evidence
+
+Implementation accepts only the exact cleanup-failure absence-proof resume shape and adds raw certify syntax prevalidation before logger/telemetry/config plus syntax prevalidation in `executeRootCmd` for direct command tests. Value-required controls are `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than`; valid assigned/space values are preserved, boolean bare controls remain valid, and unsupported controls still fail closed.
+
+- Focused GREEN: certify absence-proof resume `0.599s`; CLI value-required no-effect `0.566s`.
+- Broader focused: certify resume/identity cases `0.960s`; CLI native/certify/prevalidation cases `5.851s`.
+- Repeated/race: certify focus `-count=3` `0.660s`; CLI focus `-count=3` `0.575s`; certify `-race` `1.704s`; CLI `-race` `1.729s`.
+- Full affected packages: `go test ./internal/connectors/certify -count=1` pass (`353.654s`); `go test ./internal/cli -count=1` pass (`448.666s`).
+- Runtime no-effect/help: built `./pm`; bare `--stream` exits 2, says `--stream requires a value`, and creates no `.polymetrics`; `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` byte-identical (`8391` bytes).
+- Docs/golden/website: `go test ./internal/cli -run 'TestConnectorsManual|TestNativeConnectors|TestNativeCertify' -count=1` pass (`11.210s`); `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages with no tracked docs/website/golden drift.
+- Fixture-only sample smoke: `./pm connectors certify sample --root <temp> --json` exit `0`, kind `ConnectorCertification`, connector `sample`, passed `true`, stderr bytes `0`.
+- Full gates: `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` pass (CLI `444.782s`, certify `349.644s`); `go build ./cmd/pm`; `make verify` pass (CLI `442.999s`, certify `348.395s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen 547/0); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
