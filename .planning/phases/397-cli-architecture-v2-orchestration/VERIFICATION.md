@@ -1,5 +1,14 @@
 # Issue #397 Parent Verification Checklist
 
+## Progressive setup graph — 2026-07-20
+
+- [x] #416 owns the human-first bare reverse workspace plus `reverse guide` alias; #469 owns
+      credential/connection setup. #411 owns the equivalent bare query workspace plus `query grid`
+      alias.
+- [x] GitHub and local planning encode #409/#462 → #469 → #417/#418 and #411 → #463.
+- [x] Phase 18 UI contract passed the GSD UI checker.
+- [ ] PR #468 human review and parent integration; production TUI workers remain blocked.
+
 Status: not yet run at final HEAD
 `verificationPassed`: false
 

@@ -26,7 +26,10 @@
 For CLI command, subcommand, flag, output, connector surface, or help-topic changes:
 
 - Read `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` before implementation.
-- Namespace command groups with no action selected, such as `pm connectors`, should render contextual help/subcommand summary and exit successfully.
+- Namespace command groups with no action selected, such as `pm connectors`, should render
+  contextual help/subcommand summary and exit successfully. The accepted TUI design narrowly
+  allowlists dual-TTY bare `pm query` and bare `pm reverse` as human-first workspaces, with help on
+  every bypass path.
 - Invalid actions should still return usage errors.
 - Update runtime help, `docs/cli/**`, website docs under `website/**`, generated help/manual artifacts, and tests together.
 - Record parity evidence in the GSD plan, TDD ledger, verification summary, worker handoff, and PR body.

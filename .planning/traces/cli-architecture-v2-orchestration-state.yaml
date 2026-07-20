@@ -400,7 +400,7 @@ subissues:
     pr_url: ""
     worker: unassigned
     status: planned
-    write_scope: "query tables, connector browser, query grid, and parity docs"
+    write_scope: "human-first bare query workspace, query grid alias, query tables, connector browser, and parity docs"
     worker_directory: ""
     verification: not_run_dependency_blocked
     automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409.", disposition_url: ""}
@@ -450,10 +450,20 @@ subissues:
     pr_url: ""
     worker: unassigned
     status: planned
-    write_scope: "guided reverse ETL and connection prompting without secret prompts"
+    write_scope: "human-first bare reverse workspace plus reverse guide alias; existing plan-preview-approval-execute path only"
     worker_directory: ""
     verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409.", disposition_url: ""}
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409 and reviewed integration of #462/PR #468.", disposition_url: ""}
+  - number: 469
+    url: https://github.com/polymetrics-ai/cli/issues/469
+    branch: pending
+    pr_url: ""
+    worker: unassigned
+    status: planned
+    write_scope: "TTY-progressive credential and connection setup; secret-source metadata only"
+    worker_directory: ""
+    verification: not_run_dependency_blocked
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409 and reviewed integration of #462/PR #468; child of #416.", disposition_url: ""}
   - number: 417
     url: https://github.com/polymetrics-ai/cli/issues/417
     branch: pending
@@ -463,7 +473,7 @@ subissues:
     write_scope: "help tree, generated man pages, website/docs/golden parity"
     worker_directory: ""
     verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #411, #412, #413, #414, and #416; includes #399 legacy connector-help follow-up.", disposition_url: ""}
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #411, #412, #413, #414, #416, and #469; includes #399 legacy connector-help follow-up.", disposition_url: ""}
   - number: 418
     url: https://github.com/polymetrics-ai/cli/issues/418
     branch: pending
@@ -473,7 +483,7 @@ subissues:
     write_scope: "TUI accessibility fixes and a11y parity docs"
     worker_directory: ""
     verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #411, #412, #414, and #416.", disposition_url: ""}
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #411, #412, #414, #416, #463, and #469.", disposition_url: ""}
   - number: 419
     url: https://github.com/polymetrics-ai/cli/issues/419
     branch: pending

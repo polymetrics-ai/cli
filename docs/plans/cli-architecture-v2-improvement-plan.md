@@ -45,11 +45,17 @@ Sources reviewed:
 
 ### Distilled best practices (the yardstick)
 
-**A. Flags are the API; prompts are progressive enhancement.** (gh, clig.dev) Bare
-namespace commands show contextual help/subcommand summaries and exit 0; explicit subcommands own
-interactive places. Prompt only when stdout+stdin are TTYs and a required input is missing;
-`--no-input` disables all interactivity and errors must name the exact flag to pass; every wizard
-result is expressible as flags and the wizard teaches sanitized commands without secrets or
+**A. Flags are the API; prompts are progressive enhancement.** (gh, clig.dev) Ordinary bare
+namespace commands show contextual help/subcommand summaries and exit 0. Bare `pm query` and bare
+`pm reverse` are the narrow human-first exception: on an eligible dual-TTY they enter their
+workspaces, while `pm query grid` and `pm reverse guide` remain explicit aliases. Help flags and all
+bypass/non-TTY paths remain deterministic help, never a TUI. Prompt only when stdin and stdout are
+TTYs, no bypass flag is set, and a
+required input is missing; piped/non-TTY stdin selects deterministic plain/noninteractive behavior
+and must not be consumed as interactive input or bypassed through `/dev/tty`. `--plain`, `--json`,
+and `--no-input` disable Bubble Tea, Huh, and all prompts; those paths produce deterministic
+plain/table/JSON output when required flags are present, or exact required-flag errors only. Every
+wizard result is expressible as flags and the wizard teaches sanitized commands without secrets or
 one-time authorization values.
 
 **B. A CLI framework should own routing, help, and completion — not behavior.** (cobra
@@ -60,10 +66,10 @@ thin and replaceable.
 defaults), resolved once per invocation, injected — never ambient globals or file watching
 in a deterministic CLI. (viper used in instance mode)
 
-**D. TUIs must be gated, degradable, and honest.** TTY-only activation; colorprofile
-degradation TrueColor→256→16→none honoring NO_COLOR/CLICOLOR/TERM=dumb; color never the
-only carrier of meaning; accessible (sequential, no-redraw) mode for screen readers;
-final frames tell the truth about cancellation/failure. (charm, gh a11y)
+**D. TUIs must be gated, degradable, and honest.** stdin+stdout TTY activation only;
+colorprofile degradation TrueColor→256→16→none honoring NO_COLOR/CLICOLOR/TERM=dumb; color never
+the only carrier of meaning; accessible (sequential, no-redraw) mode for screen readers; final
+frames tell the truth about cancellation/failure. (charm, gh a11y)
 
 **E. Progress is an event stream, not a poll loop.** Long-running operations emit typed
 events through a dependency-free bus; UI, agents (NDJSON), and files are just sinks.
@@ -244,24 +250,34 @@ Every TUI plan/worker must load the repo-local `bubble-tea-tui-design` skill. Su
   `Throttle`, `Multi`. Instrumentation points: `flow.Engine.Run` beside the existing
   `appendLedger` calls, ETL per-batch `flush()`, certify worker pool, and a Temporal
   `DescribeWorkflowExecution` poller in `worker/submit.go` (no workflow code changes).
-- **TTY gate** `ui.Detect`: TUI only when stdout is a TTY ∧ ¬`--json` ∧ ¬`--plain` ∧
-  ¬`--no-input` ∧ `PM_NO_TUI`/`CI` unset ∧ `TERM≠dumb`. New `cli.RunWithOptions`; existing
-  `Run` delegates with `ModePlain`, so every existing test exercises the plain path by
-  construction. `SanitizeTerminal` continues to guard the plain path; on the TUI path it
-  moves into view-string hygiene (every dynamic string sanitized before styling).
-- **Doctrine (A):** flags stay the API. Bare namespaces stay contextual help; explicit
-  subcommands such as `pm query grid` and `pm reverse guide` own interactive places. Wizards prompt
-  only for missing inputs, print sanitized equivalent non-interactive commands on completion, and
-  `--no-input` errors name the flag.
+- **TTY gate** `ui.Detect`: TUI only when stdin is a TTY ∧ stdout is a TTY ∧ ¬`--json` ∧
+  ¬`--plain` ∧ ¬`--no-input` ∧ `PM_NO_TUI`/`CI` unset ∧ `TERM≠dumb`. Piped/non-TTY stdin always
+  falls back to deterministic plain/noninteractive behavior, must not be consumed by prompts, and
+  must not be bypassed via `/dev/tty`. `--plain`, `--json`, and `--no-input` always bypass Bubble
+  Tea, Huh, and all prompts; sequential prompting is limited to explicit accessible mode after the
+  same gate passes. New `cli.RunWithOptions`; existing `Run` delegates with
+  `ModePlain`, so every existing test exercises the plain path by construction. `SanitizeTerminal`
+  continues to guard the plain path; on the TUI path it moves into view-string hygiene (every
+  dynamic string sanitized before styling).
+- **Doctrine (A):** flags stay the API. Ordinary bare namespaces stay contextual help. Eligible
+  dual-TTY bare `pm query` and bare `pm reverse` own human-first interactive places, with
+  `pm query grid` and `pm reverse guide` retained as explicit aliases. Help flags and bypass paths
+  stay deterministic and prompt-free. Wizards prompt
+  only for missing inputs; fully specified actions execute directly, while complete-but-invalid
+  input returns the same field-specific validation error as the flag path. Wizards print sanitized
+  equivalent non-interactive commands on completion, and `--no-input` errors name the flag. Agent
+  examples use `--json --no-input`, adding `--progress ndjson` only for long-running work; there is
+  no new global `--agent-mode` because query already uses that name for result shaping.
 - **Surfaces** (each with plain/JSON parity): live run dashboards (`flow run`, `etl run` —
   the signature "pipeline rail"), `pm flow create` wizard (huh dynamic forms; `in`/`out`
   wiring becomes structurally correct because pickers only offer tables produced upstream),
   `pm schedule create` interactive (cron presets + next-3-fire-times preview using the
   dead `schedule.Next`), `pm query tables` (plain enumerator — agents and wizard share it)
-  + explicit `pm query grid` (bubble-table), connectors browser (551-row fuzzy list + manual
+  + human-first query workspace (`pm query`; explicit alias `pm query grid`, bubble-table), connectors browser (551-row fuzzy list + manual
   preview pane), docs viewer (glamour pager over existing manual text), certify batch table,
-  RLM viewer, and explicit `pm reverse guide` with any approval token carried ephemerally in
-  memory only.
+  RLM viewer, human-first reverse workspace (`pm reverse`; explicit alias `pm reverse guide`, #416) with any approval token carried ephemerally in
+  memory only, and TTY-progressive credential/connection setup (#469) that handles only non-secret
+  input and secret-source metadata.
 - **Interaction system:** a LazyGit-shaped operator workspace with fzf-style
   filter/list/preview, exact bpytop-style metrics, and Gum-style focused wizard steps.
   Normal/Filter/Edit modes keep Vim navigation predictable without stealing printable keys;
@@ -271,8 +287,9 @@ Every TUI plan/worker must load the repo-local `bubble-tea-tui-design` skill. Su
   bounded/downsampled data, and text/table fallbacks. `ntcharts/v2` is a proposed renderer,
   not approved by this plan; it needs a separate human dependency decision and local wrapper.
 - **Accessibility from day one** (D): huh `WithAccessible` wired to `--accessible` +
-  `PM_ACCESSIBLE_PROMPTER`/`ACCESSIBLE`; spinner-disable; 4-bit accessible palette option;
-  color always paired with glyph+word; min-size guard; `pm a11y` help topic.
+  `PM_ACCESSIBLE_PROMPTER`/`ACCESSIBLE` after the stdin+stdout TTY gate and with no bypass flags;
+  spinner-disable; 4-bit accessible palette option; color always paired with glyph+word; min-size
+  guard; `pm a11y` help topic.
 
 ### Pillar C — Observability: slog first, then OpenTelemetry (fixes 3.5)
 
@@ -317,18 +334,18 @@ requirements without changing the 22 production-phase numbers.
 | 4 | Migrate scattered env reads onto config | A | — |
 | 5 | `internal/events` bus + engine/ETL/certify/worker instrumentation | B | — |
 | 6 | slog foundation + redaction + per-run JSONL logs + Temporal logger | C | — |
-| 7 | TTY gate, `--plain`/`--no-input`/`--progress ndjson`, `internal/ui/styles` foundation | B | golang.org/x/term |
+| 7 | stdin+stdout TTY gate, `--plain`/`--no-input`/`--progress ndjson`, `internal/ui/styles` foundation | B | golang.org/x/term |
 | 8 | Nativize pilot namespace (`catalog`) | A | — |
 | 9 | Nativize remaining namespaces (several loops; certify last) | A | — |
 | 10 | Flagship run dashboards: `flow run` + `etl run` — blocked by #462/D-TUI | B | bubbletea/bubbles/lipgloss v2, teatest (test-only) |
 | 11 | Wizards wave 1: `pm flow create` + `pm schedule create` (+ accessible mode) — blocked by #462/D-TUI | B | huh v2 |
 | 12 | Traces: command→operation→connector HTTP + file/OTLP exporters | C | otel api/sdk/trace exporters |
-| 13 | Browse wave: connectors browser, `pm query tables`, `pm query grid`; dependency-gated query chart child #463 — blocked by #462/D-TUI | B | evertras/bubble-table; proposed ntcharts/v2 needs separate human approval |
+| 13 | Browse wave: connectors browser, `pm query tables`, human-first `pm query` workspace plus `pm query grid` alias; dependency-gated query chart child #463 — blocked by #462/D-TUI | B | evertras/bubble-table; proposed ntcharts/v2 needs separate human approval |
 | 14 | Docs viewer: glamour pager for command + connector manuals — blocked by #462/D-TUI | B | glamour v2 |
 | 15 | Connector command registration + shell completion | A | — |
 | 16 | Certify batch table + RLM agent viewer dashboards — blocked by #462/D-TUI | B | — |
 | 17 | Metrics per PRD §15.2 + Temporal otel contrib | C | sdk/metric, exporters, temporal contrib |
-| 18 | Wizards wave 2: `pm reverse guide` + credentials/connections prompting — blocked by #462/D-TUI | B | — |
+| 18 | Human-first `pm reverse` workspace plus `pm reverse guide` alias (#416), with separately owned TTY-progressive credentials/connections setup (#469) — blocked by #462/D-TUI | B | — |
 | 19 | Help tree deepening + man pages (the deliberate help-churn phase) | A | — |
 | 20 | `pm a11y` topic + accessibility audit pass — blocked by #462/D-TUI | B | — |
 | 21 | OTel log bridge (beta; optional — droppable) | C | otel log (beta, pinned) |
@@ -346,8 +363,8 @@ secret greps, `git diff go.mod` expectations) — encoded per stage in the execu
 | Help-text churn breaks the docs/website parity gate | Docs map stays the single help source through phase 18; custom help/usage funcs everywhere so cobra boilerplate can't leak; all deliberate churn quarantined in phase 19 with regenerated fixtures + website budget |
 | pflag semantic drift (`--flag` w/o value, unknown-flag tolerance, comma-split, error wording, usage-vs-validation category) | Golden edge-case fixtures recorded in phase 1 before opinions form; `StringArrayVar` + `NoOptDefVal` conventions; `FParseErrWhitelist`; `mapCobraErr` pins categories |
 | Certify in-process re-entrancy | Fresh command tree per `Run`; signature frozen; certify subtree on `DisableFlagParsing` until its own loop; `certify_exit_test.go` + smoke in every A-phase gate |
-| Agent-contract regression from the TUI | Plain path is the compile-time default of untouched `cli.Run`; gate can never be satisfied by pipes/CI; NDJSON confined to stderr; import-direction CI check (`internal/ui` never imported by business packages); one contract test per TUI-enabled command |
-| Dependency weight vs "dependency-free" tenet | Phases 5–6 (events, slog) ship value with zero new deps; heavy gates isolated to phases 10/11/12/13/14; default runtime behavior unchanged (telemetry off, TUI TTY-only); tenet interpretation recorded in ADR-0004 |
+| Agent-contract regression from the TUI | Plain path is the compile-time default of untouched `cli.Run`; gate can never be satisfied by stdin/stdout pipes, CI, `--json`, `--plain`, or `--no-input`; fully specified actions run directly; agent docs standardize `--json --no-input` (plus stderr-only `--progress ndjson` for long work); import-direction CI check (`internal/ui` never imported by business packages); one contract test per TUI-enabled command |
+| Dependency weight vs "dependency-free" tenet | Phases 5–6 (events, slog) ship value with zero new deps; heavy gates isolated to phases 10/11/12/13/14; default runtime behavior unchanged (telemetry off, TUI requires stdin+stdout TTY); tenet interpretation recorded in ADR-0004 |
 | Hot-loop overhead (per-record paths) | No per-record spans/logs/instrument calls anywhere; counters accumulate locally and flush per batch; benchmark guard in phase 17 |
 | Bubble Tea v2 / terminal chart / otel-logs beta churn | v2 core is stable (powers charm's own apps); teatest pinned pseudo-version, test-only; a chart renderer stays behind a local interface and requires a separate approval because NTCharts warns that its API may change; otel log bridge confined to one file, pinned, explicitly droppable (phase 21) |
 | Windows terminals | Inline mode (no alt screen) for run commands; ASCII glyph fallbacks; colorprofile degradation; `PM_NO_TUI` universal escape hatch |

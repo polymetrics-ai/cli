@@ -25,9 +25,26 @@ accessible, and compatible with its plain/JSON sibling.
 ## Non-negotiable contract
 
 - Flags, plain text, JSON, and NDJSON are the API; the TUI is a TTY-gated projection.
-  Bare namespace commands render contextual help/subcommand summaries and exit 0 rather than
-  launching a TUI. Use explicit interactive subcommands such as `pm query grid` and
-  `pm reverse guide`.
+  Bubble Tea and Huh prompt activation require both stdin and stdout TTYs, plus no `--json`,
+  `--plain`, `--no-input`, `PM_NO_TUI`, `CI`, or `TERM=dumb`. `--plain`, `--json`, and
+  `--no-input` always bypass Bubble Tea, Huh, and all prompts, producing deterministic output or
+  exact required-flag errors only. Sequential prompts are allowed only in explicit accessible mode
+  after the same stdin+stdout TTY gate passes and no bypass flag is set. Piped or non-TTY stdin
+  always falls back to deterministic plain/noninteractive behavior; never consume scripted stdin
+  unexpectedly, never hang for a prompt, and never open `/dev/tty` to bypass the gate. Ordinary
+  bare namespaces render contextual help/subcommand summaries and exit 0. The human-first
+  allowlist is `pm query` and `pm reverse`: on an eligible dual-TTY they open the same safe
+  workspace as explicit aliases `pm query grid` and `pm reverse guide`; on every bypass path they
+  render contextual help and exit 0. Help flags never launch a TUI, and invalid actions remain
+  usage errors.
+  Action subcommands may progressively prompt for missing fields after the same gate passes; for
+  example, incomplete `pm credentials add [name]` and `pm connections create [name]` invocations
+  may start guidance, while complete invocations execute directly. Invalid supplied values return
+  direct validation errors instead of opening a repair wizard.
+- Treat `--json --no-input` as the documented agent/automation invocation profile and add
+  `--progress ndjson` only to long-running commands. Do not invent a global `--agent-mode`:
+  `pm query run --agent-mode summary|stream` controls query result shape only. Agent paths must
+  return one structured envelope or an actionable required-flag error and must never prompt.
 - Use Bubble Tea's model/update/view architecture. Commands own asynchronous I/O; `Update`
   remains deterministic and never performs blocking work.
 - Default to Normal mode. Enter Filter/Edit mode only when an input owns focus, display the
@@ -91,4 +108,8 @@ Block or correct a TUI change when it:
 - performs I/O in `Update`/`View`, leaks goroutines, ignores cancellation, or floods events;
 - renders unbounded query/result data or misleading charts without axes/units/text values;
 - changes plain/JSON behavior, exit codes, stdout/stderr boundaries, or help parity;
+- makes humans discover `query grid` or `reverse guide` before reaching the default TTY workspace,
+  removes either explicit alias, or launches a bare workspace on a bypass path;
+- launches guidance for a complete action, repairs an invalid supplied value by prompting, or lets
+  an agent/non-TTY invocation prompt or consume unexpected stdin;
 - adds a dependency not named and approved for the phase.

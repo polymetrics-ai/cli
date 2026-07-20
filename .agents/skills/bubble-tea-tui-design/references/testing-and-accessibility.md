@@ -9,8 +9,19 @@
 3. **Headless frame tests:** stable frames at 160×45, 100×30, 80×24, compact, and below
    minimum for success/failure/empty/loading/cancelled states.
 4. **Command integration:** TTY projection uses the same service and exit status as plain;
-   `CI=1`, `PM_NO_TUI=1`, `--plain`, `--json`, and pipes bypass the TUI.
-5. **Manual terminal matrix:** dark/light, 24-bit/256/16/no color, ASCII, resize, paste,
+   Bubble Tea/Huh activate only on stdin+stdout TTY activation and no bypass flag. Add RED tests
+   for `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI=1`, `PM_NO_TUI=1`, `TERM=dumb`,
+   `--json`, `--plain`, and `--no-input`; each must bypass the TUI/prompt path without consuming
+   scripted stdin, without hanging, and without using `/dev/tty`. Sequential prompting is allowed
+   only in explicit accessible mode after the same gate passes.
+   Add allowlist cases proving bare `pm query` and bare `pm reverse` launch their workspace only on
+   the eligible dual-TTY, their explicit aliases reach the same initial model, help flags always
+   render help, and ordinary bare namespaces remain help-first.
+5. **Progressive-action integration:** incomplete dual-TTY action commands ask only for missing
+   fields; complete actions execute directly; complete-but-invalid actions return direct validation
+   errors; duplicate names make no state change. Agent examples use `--json --no-input`, never a
+   global `--agent-mode`.
+6. **Manual terminal matrix:** dark/light, 24-bit/256/16/no color, ASCII, resize, paste,
    narrow Unicode, mouse optional, screen reader/reduced-motion transcript.
 
 Avoid brittle full-frame goldens for timestamps, random IDs, spinners, or live counters.
@@ -25,6 +36,9 @@ Inject a clock/ID source and assert semantic regions when appropriate.
 - resize never panics or produces negative widths;
 - empty, loading, partial, failure, and stale states are distinguishable in words;
 - dynamic control characters and secret-like values are sanitized/redacted before View;
+- credential models contain secret field/source metadata only; controlled stdin is never consumed
+  until every non-secret required field validates;
+- duplicate credential/connection names are actionable validation states and never overwrite;
 - query/chart data is bounded and reports downsampling/missing values;
 - JSON remains one deterministic envelope and NDJSON progress remains on stderr;
 - final inline dashboard output remains useful in scrollback.

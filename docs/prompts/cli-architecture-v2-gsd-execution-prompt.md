@@ -54,15 +54,21 @@ PLAN.md with TDD-ordered tasks) → `/gsd execute-phase <N>` → `/gsd verify-wo
 phase ends with `make verify` green plus the phase GATE. If a gate cannot pass, stop and
 flag it loudly in SUMMARY.md — never fake or skip a gate.
 
-TUI-PHASE PREFLIGHT (stages 10, 11, 13, chart child #463, 14, 16, 18, and 20): issue #462/D-TUI
+TUI-PHASE PREFLIGHT (stages 10, 11, 13, chart child #463, 14, 16, 18A/#416, 18B/#469, and 20): issue #462/D-TUI
 must be integrated into the active parent branch and its accepted correction PR/review blocker must
 be resolved by the parent orchestrator before production UI work starts. Load the repo-local
 `bubble-tea-tui-design` skill plus the routed Go CLI/testing/security/safety/context/concurrency/
-documentation skills. The RED contract must cover bare namespace help-not-TUI behavior,
-Normal/Filter/Edit mode conflicts, arrows+Vim equivalence, contextual help,
-wide/standard/compact/guard layouts, accessible/plain fallback, sanitation/redaction, approval-token
-non-display, cancellation, and unchanged JSON/stdout/stderr/exit semantics. Record the skill and
-evidence in PLAN/TDD-LEDGER/VERIFICATION and the PR body.
+documentation skills. The shared RED contract must cover the TUI fallback matrix for every TUI
+phase: stdin+stdout TTY activation, `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`,
+`--json`, `--plain`, and `--no-input`. `--plain`, `--json`, and `--no-input` must bypass Bubble
+Tea, Huh, and all prompts; sequential prompts are allowed only in explicit accessible mode after the
+same stdin+stdout TTY gate passes and no bypass flag is set. Retain each surface's own RED cases for
+ordinary bare-namespace help behavior and the narrowly allowlisted human-first bare `pm query`/
+`pm reverse` dual-TTY entry behavior, Normal/Filter/Edit mode conflicts, arrows+Vim equivalence,
+contextual help, wide/standard/compact/guard layouts, accessible/plain fallback,
+sanitation/redaction, approval-token non-display, cancellation, and unchanged
+JSON/stdout/stderr/exit semantics. Record the skill and evidence in PLAN/TDD-LEDGER/VERIFICATION
+and the PR body.
 
 STAGE 1 — GOLDEN SAFETY NET (track A, no deps)
 Record ~80 golden transcripts (exit code + stdout + stderr) against the CURRENT dispatcher:
@@ -123,14 +129,18 @@ GATE 6: `make verify`; `test -s .polymetrics/logs/run-*.jsonl` in a smoke dir;
 secret grep clean; stdout envelope unchanged (`--json | jq .kind`). `git diff go.mod` empty.
 Commit "feat(obs): slog foundation with redaction + per-run logs (arch-v2)".
 
-STAGE 7 — TTY GATE + NDJSON PROGRESS (track B; deps: golang.org/x/term)
-ui.Detect per ADR-0003 §2 (TTY ∧ ¬json ∧ ¬plain ∧ ¬no-input ∧ ¬PM_NO_TUI ∧ ¬CI ∧ TERM≠dumb);
+STAGE 7 — STDIN+STDOUT TTY GATE + NDJSON PROGRESS (track B; deps: golang.org/x/term)
+ui.Detect per ADR-0003 §2 (stdin TTY ∧ stdout TTY ∧ ¬json ∧ ¬plain ∧ ¬no-input ∧ ¬PM_NO_TUI ∧
+¬CI ∧ TERM≠dumb); piped/non-TTY stdin always falls back to deterministic plain/noninteractive
+behavior, is never consumed by prompts, and is never bypassed through `/dev/tty`;
 cli.RunWithOptions (Run delegates ModePlain); global --plain/--no-input/--progress flags;
 --progress ndjson wires events.NDJSON to stderr; internal/ui/styles foundation (palette
 tokens, LightDark, glyph vocabulary + ASCII fallbacks per design doc §1).
-GATE 7: Detect table tests; contract tests (CI=1/PM_NO_TUI/--plain force plain; ndjson
-writes nothing to stdout beyond the envelope); `make verify`.
-Commit "feat(ui): TTY gate, plain/no-input flags, ndjson progress (arch-v2)".
+GATE 7: Detect table tests must cover stdin+stdout TTY green path, `stdin-piped+stdout-TTY`
+fallback, `stdout-piped`, `CI=1`, `PM_NO_TUI=1`, `TERM=dumb`, `--json`, `--plain`, and
+`--no-input`; contract tests prove those fallback cases force plain/noninteractive behavior and
+ndjson writes nothing to stdout beyond the envelope; `make verify`. Commit "feat(ui): stdin/stdout
+TTY gate, plain/no-input flags, ndjson progress (arch-v2)".
 
 STAGE 8 — NATIVIZE PILOT: catalog (track A)
 Promote `catalog` to native cobra flags per ADR-0002 §4 conventions (StringArrayVar,
@@ -154,7 +164,9 @@ teatest goldens (happy/fail/cancel at 160×45, 100×30, 80×24, compact, size gu
 wiring with Chan + runner goroutine. Use the operator-workspace hierarchy and persistent
 mode/focus/help contract; throttle redraws without dropping lifecycle events.
 GATE 10: `go test -race ./...`; goldens; manual TTY check; `pm flow run x | cat` byte-equal
-to pre-TUI golden; CI=1 plain. Commit "feat(ui): live run dashboards for flow/etl (arch-v2)".
+to pre-TUI golden; `stdin-piped+stdout-TTY`, `stdout-piped`, `CI=1`, `--json`, `--plain`, and
+`--no-input` all force plain/noninteractive behavior. Commit "feat(ui): live run dashboards for
+flow/etl (arch-v2)".
 
 STAGE 11 — WIZARDS WAVE 1 (track B; blocked by #462/D-TUI; deps: huh v2)
 `pm flow create` per design doc §2.2 (kind-dependent huh groups, upstream-only in/out
@@ -166,7 +178,9 @@ Parity: new command docs (docs map, docs/cli, website, help tests). Printable Vi
 must remain input while a field is focused; each step uses Gum-like focus and retains the
 growing pipeline preview.
 GATE 11: wizard-written manifests pass `pm flow plan`; accessible-mode transcript test;
---no-input errors name the flag; `make verify`. Commit "feat(ui): flow create + schedule create wizards (arch-v2)".
+`stdin-piped+stdout-TTY`, `stdout-piped`, `CI=1`, `--json`, `--plain`, and `--no-input` bypass Huh
+prompts and name required flags/files; `make verify`. Commit "feat(ui): flow create + schedule
+create wizards (arch-v2)".
 
 STAGE 12 — TRACES (track C; deps: otel api/sdk + stdout/otlp trace exporters)
 Per ADR-0004 §2-4: internal/telemetry Init/Shutdown (none/file/otlp; disabled = no SDK),
@@ -180,26 +194,30 @@ Commit "feat(obs): opt-in tracing with file/otlp exporters (arch-v2)".
 STAGE 13 — BROWSE WAVE (track B; blocked by #462/D-TUI; deps: evertras/bubble-table)
 `pm query tables` (plain/JSON warehouse enumerator — lands FIRST), connectors browser per
 design doc §2.5 (fuzzy list + manual preview + pager; fix the %+v dump on the plain path),
-explicit `pm query grid` per §2.4 (LIMIT/OFFSET paging through existing QuerySQL guard). Bare
-`pm query` renders contextual help/subcommand summary and exits 0. Use fzf's filter/list/preview
+the human-first query workspace per §2.4 (LIMIT/OFFSET paging through existing QuerySQL guard).
+Eligible dual-TTY bare `pm query` opens it; `pm query grid` remains an explicit alias. Help flags
+and bypass/non-TTY bare invocations render contextual help and exit 0. Use fzf's filter/list/preview
 interaction without shell-backed preview execution. Query grid export is typed read-only only:
 project-scoped default, clean/confined path, reject control characters/traversal/broad paths/
-symlink races, no overwrite by default, TTY confirmation, noninteractive `--output` plus `--force`,
-sanitized command echo, and exact `--no-input` guidance. A query chart is a separate
+symlink races, no overwrite by default, confirmation only when stdin and stdout are TTYs,
+noninteractive `--output` plus `--force`, sanitized command echo, and exact `--no-input` guidance.
+A query chart is a separate
 dependency-gated child issue #463 after #411 and #462/D-TUI: it may visualize only the returned
 read-only rows; must preserve table/text access, axes/units/exact values, bounded deterministic
 sampling, no-color/accessibility fallbacks; and may use `ntcharts/v2` only after explicit human
 approval and an exact pinned wrapper. Otherwise use the minimal internal renderer.
 GATE 13: query tables golden + JSON envelope; browser/grid teatest goldens; read-only export/path
-guard tests; modal-key/resize/chart-bounds tests as applicable; `make verify`. Commit
-"feat(ui): query tables, connectors browser, query grid (arch-v2)".
+guard tests; modal-key/resize/chart-bounds tests as applicable; `stdin-piped+stdout-TTY`,
+`stdout-piped`, `CI=1`, `--json`, `--plain`, and `--no-input` fall back without consuming scripted
+stdin; `make verify`. Commit "feat(ui): query tables, connectors browser, query grid (arch-v2)".
 
 STAGE 14 — DOCS VIEWER (track B; blocked by #462/D-TUI; deps: glamour v2)
 `pm docs view [topic|connector]` per design doc §2.6: glamour in viewport, auto light/dark,
 piped → plain text identical to `pm help`. Use Normal/Search/Help modes; `/`, `n/N`,
 `ctrl+u/d`, `gg/G`, arrows, and one-layer `esc` follow the shared contract. Parity checklist
 for the new subcommand.
-GATE 14: teatest goldens; piped-output golden equals help text; `make verify`.
+GATE 14: teatest goldens; piped-output golden equals help text; `stdin-piped+stdout-TTY`,
+`stdout-piped`, `CI=1`, `--json`, `--plain`, and `--no-input` bypass the pager; `make verify`.
 Commit "feat(ui): glamour docs viewer (arch-v2)".
 
 STAGE 15 — COMPLETION (track A)
@@ -215,7 +233,9 @@ Certify batch table per design doc §2.7 (concurrent row updates from events; ex
 0/1/2/3 untouched); RLM viewer per §2.8 (heartbeat age from the Temporal poller). Pair
 bpytop-style exact metrics with any small graph, disclose units/ranges, throttle redraws,
 and preserve text-only/reduced-motion frames.
-GATE 16: teatest goldens; certify exit tests green; `make verify` + certify smoke.
+GATE 16: teatest goldens; certify exit tests green; shared TTY fallback RED matrix green for
+stdin+stdout TTY activation, `stdin-piped+stdout-TTY`, `stdout-piped`, `CI=1`, `--json`,
+`--plain`, and `--no-input`; `make verify` + certify smoke.
 Commit "feat(ui): certify batch table + rlm agent viewer (arch-v2)".
 
 STAGE 17 — METRICS (track C; deps: otel sdk/metric + exporters + temporal contrib)
@@ -226,18 +246,31 @@ GATE 17: file-exporter metrics reconcile with envelope counts (jq equality test)
 `go test -bench BenchmarkEmit -benchmem ./internal/app` no regression; `make verify`.
 Commit "feat(obs): metrics per PRD §15.2 + temporal otel contrib (arch-v2)".
 
-STAGE 18 — WIZARDS WAVE 2 (track B; blocked by #462/D-TUI)
-Explicit `pm reverse guide` per design doc §2.9 (existing gate untouched; approval token carried
-only ephemerally in memory; typed confirmation preserved) + connections create missing-input
-prompting per §2.10. Bare `pm reverse` renders contextual help/subcommand summary and exits 0.
-credentials add stays non-interactive for secret values (non-goal — do not add interactive secret
-entry). Use explicit Normal/Edit/Confirm state; no approval-token display in final frames,
-transcripts, logs, screenshots, accessibility output, JSON, shell-equivalent command text, or
-fixtures; no unlabelled single-key write action and no generic shell/HTTP/SQL write escape hatch.
-GATE 18: session test proves identical plan/approve semantics as the flag flow; approval token is
-not displayed in JSON, final frames, accessibility transcript, logs, screenshots/fixtures, or
-scripted-equivalent text; `make verify`.
-Commit "feat(ui): guided reverse-etl session + connections prompting (arch-v2)".
+STAGE 18A — GUIDED REVERSE ETL (#416; track B; blocked by #462/D-TUI)
+Human-first reverse workspace per design doc §2.9: eligible dual-TTY bare `pm reverse` opens it and
+`pm reverse guide` remains an explicit alias. Preserve the existing plan → preview → approval →
+execute seam, typed confirmation, and exit semantics. Carry the approval token only ephemerally in
+memory; never display it in final frames, transcripts, logs, screenshots, accessibility output,
+JSON, shell-equivalent command text, or fixtures. Help flags and bypass/non-TTY bare `pm reverse`
+render contextual help and exit 0. GATE 18A: both entries reach the same model, session tests prove
+parity with the flag flow, and every noninteractive bypass avoids
+prompt initialization and scripted-stdin consumption; secret-marker greps and `make verify` pass.
+Commit "feat(ui): add guided reverse-etl session (arch-v2)".
+
+STAGE 18B — PROGRESSIVE SETUP (#469; track B; blocked by #409 and #462/D-TUI)
+Implement the approved Phase 18 UI contract for `pm credentials add [name]` and
+`pm connections create [name]`. These setup namespaces remain contextual help. Incomplete actions launch
+Bubble Tea/Huh by default only when stdin and stdout are TTYs and no bypass applies; fully specified
+actions run directly; complete-but-invalid input returns the normal field-specific error. Ask only
+for missing fields. Credential setup accepts non-secret config and secret-source metadata only:
+named `--from-env` selections or a sanitized `--value-stdin` handoff, never plaintext secret input.
+Connection setup derives capability-compatible choices, shows a final review, and recovers from a
+duplicate with inspect, rename, or cancel—never overwrite. Agent docs use `--json --no-input` and
+add `--progress ndjson` only for long-running commands; do not add a global `--agent-mode`.
+GATE 18B: RED/GREEN/refactor evidence covers complete/incomplete × dual-TTY/bypass matrices,
+reader-spy non-consumption, schema/placeholders, secret markers, capability choices, duplicate race,
+responsive/accessibility frames, and help/manual/docs/website parity; `make verify` passes. Commit
+"feat(ui): add progressive credential and connection setup (arch-v2)".
 
 STAGE 19 — HELP TREE + MAN PAGES (track A; THE deliberate help-churn phase)
 Per-subcommand focused --help; `pm docs man` via cobra/doc.GenManTree. Regenerate goldens,

@@ -27,9 +27,12 @@ Preserve parent commits through #410 at starting HEAD. Do not reimplement #398-#
 3. Complete serialized namespace chain #425 -> #426 -> #427 -> #428 -> #429 -> #430 -> #431 -> #432 -> #433 -> #434 -> #435 -> #436 -> #437; then ratify umbrella #407.
 4. Complete #408, then #409.
 5. Complete #413 and #414 after #407/#408 prerequisites.
-6. Complete #411, #412, and #416 after #409, serialized where central CLI/help/golden write scopes collide.
-7. Complete #417 after #411/#412/#413/#414/#416.
-8. Complete #418 after #411/#412/#414/#416.
+6. After #409 and reviewed integration of #462/PR #468, complete #411, #412, #416, and #469 in
+   isolated worktrees, serialized wherever central CLI/help/golden write scopes collide. #416 owns
+   the human-first bare reverse workspace plus its `reverse guide` alias; #469 owns credential/
+   connection setup. #411 owns the human-first bare query workspace plus its `query grid` alias.
+7. Complete #417 after #411/#412/#413/#414/#416/#469.
+8. Complete #418 after #411/#412/#414/#416/#469 and #463 when the chart slice is included.
 9. #419 remains human-gated because its issue requires explicit inclusion of an optional beta dependency; if no approval exists, record an explicit skip rather than implementing it.
 10. Complete #420 after #415/#417/#418 and the #419 decision record.
 
@@ -87,9 +90,10 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 |---|---|---|---|
 | #437 | `sub_pr_green` / local clean | #436 provisionally integrated | `not_spawned_review_blocked` until human/parent review fallback clears |
 | #407 | dependency blocked | #437 integration | `not_spawned_dependency_blocked` |
-| #462 follow-up | `sub_pr_green` / local clean | PR #467 integrated | `not_spawned_review_blocked` until human/parent review clears |
+| #462 follow-up | PR #468 updated / local docs gates green | GitHub CI, human review, and parent integration | `not_spawned_review_blocked` |
 | #408 | review blocked | #405 integrated; #462 direct blocker remains open | `not_spawned_review_blocked` |
 | #413 | dependency blocked | #407 | `not_spawned_dependency_blocked` |
+| #469 | dependency blocked | #409 plus reviewed integration of #462/PR #468 | `not_spawned_dependency_blocked`; implement setup separately from #416 |
 | #419 | human-gated | explicit optional beta dependency decision | `not_spawned_human_gate` |
 
 ## Human gates

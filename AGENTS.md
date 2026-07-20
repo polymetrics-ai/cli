@@ -66,7 +66,12 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
   explicitly marked not applicable.
 - Namespace commands with no action selected, such as `pm connectors`, should render contextual
   help/subcommand summary and exit successfully rather than failing with a confusing missing-action
-  error. Invalid actions should still return usage errors.
+  error. The accepted human-first TUI contract narrowly allowlists bare `pm query` and bare
+  `pm reverse`: on an eligible stdin+stdout TTY they open their safe interactive workspace; on
+  non-TTY, CI, `--json`, `--plain`, `--no-input`, `PM_NO_TUI`, or `TERM=dumb` paths they render
+  deterministic contextual help and exit successfully. `pm query grid` and `pm reverse guide`
+  remain explicit aliases. Help flags always render help, and invalid actions still return usage
+  errors.
 - PRs for CLI changes must list help/manual/website parity verification, including `pm help <topic>`,
   `pm <namespace>`, `pm <command> --help`, and docs/website grep or generator checks as applicable.
 

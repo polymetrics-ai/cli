@@ -148,10 +148,11 @@ undocumented key chords. Familiarity is the goal; emulation is not.
 
 - One accent border/title/selection identifies focus. Never make the user infer focus from
   color alone.
-- Bare namespace commands, including `pm query` and `pm reverse`, render contextual help and
-  subcommand summaries and exit 0; they do not launch a TUI. Interactive surfaces use explicit
-  documented subcommands such as `pm query grid` and `pm reverse guide`. Invalid actions remain
-  usage errors.
+- Ordinary bare namespace commands render contextual help and exit 0. On an eligible dual-TTY,
+  bare `pm query` and bare `pm reverse` are the deliberate human-first exceptions and enter the
+  same workspace as `pm query grid` and `pm reverse guide`; those explicit aliases remain supported
+  for documentation, scripts, and direct navigation. Help flags and every bypass/non-TTY path
+  render deterministic contextual help, never a TUI. Invalid actions remain usage errors.
 - The footer is contextual: disabled bindings are absent, and `?` matches actual behavior.
 - Printable keys belong to focused inputs. Global navigation must not steal `j`, `q`, `/`,
   or `?` while Filter/Edit owns focus.
@@ -217,8 +218,9 @@ misleading miniature.
 
 ### Query interaction
 
-Phase #411 delivers the read-only `pm query grid` table first. Bare `pm query` remains contextual
-help/subcommand summary with exit 0. Dedicated child issue #463 may then add:
+Phase #411 delivers the read-only query workspace, entered by bare `pm query` on an eligible
+dual-TTY or by the explicit `pm query grid` alias. On bypass/non-TTY paths, bare `pm query` renders
+contextual help and exits 0. Dedicated child issue #463 may then add:
 
 - `v` toggles Table/Chart without re-running a write or changing the underlying rows;
 - a labelled chart setup view chooses chart type, X, Y, aggregation, unit, and sort from
@@ -230,13 +232,15 @@ help/subcommand summary with exit 0. Dedicated child issue #463 may then add:
 - export defaults to a project-scoped directory such as `.polymetrics/query-exports/`, resolves
   and cleans the requested path, confines it to the project, rejects control characters,
   traversal, absolute or broad paths, symlink targets/final-component races, and overwrites by
-  default, then requires TTY confirmation or noninteractive `--output <project-relative-path>` plus
-  `--force`;
+  default, then requires confirmation only when stdin and stdout are TTYs or noninteractive
+  `--output <project-relative-path>` plus `--force`;
 - `--no-input` without a preapproved export path fails with
   `query grid export requires explicit output — pass --output <project-relative-path> and --force, or run without --no-input to confirm interactively`;
 - scripted command echoes are sanitized and project-relative;
-- non-TTY/`--plain` prints table + numeric summary; any JSON chart-spec requires a separately
-  documented stable schema.
+- `--plain`, non-TTY stdin, or non-TTY stdout prints deterministic table + numeric summary when
+  required flags are present, or the exact required-flag error asserted by the implementation
+  issue. `--json` emits only documented machine data/schema. `--no-input` never prompts; any JSON
+  chart-spec requires a separately documented stable schema.
 
 Rendering is bounded. Cap points, apply deterministic bucketing/downsampling, and disclose it
 (`2,000 rows · 120 plotted · min/max buckets`). Report ignored missing/non-numeric values.
@@ -283,6 +287,27 @@ compatibility evidence, not dependency approval.
 
 ## Bubble Tea implementation rules
 
+### Progressive action commands and agent invocations
+
+Ordinary bare namespaces remain concise help. The human-first query/reverse workspaces use their
+bare commands on eligible dual-TTYs and retain explicit aliases. Action
+commands use the mature CLI pattern of progressively filling missing inputs: after the dual-TTY
+gate passes, incomplete `pm credentials add [name]` and `pm connections create [name]` invocations
+ask only for missing fields, while fully specified invocations execute directly. This matches
+GitHub CLI's interactive-without-arguments/noninteractive-with-flags pattern and the CLI Guidelines'
+rule that prompts must always have a complete flag alternative.
+
+The machine/agent profile is the existing `--json --no-input` pair, with `--progress ndjson` for
+long-running commands. It is intentionally not named `--agent-mode`, because query already owns
+`--agent-mode summary|stream` for result shaping. Missing input under the agent profile is a single
+structured, actionable usage/validation envelope; prompting, ANSI, and unexpected stdin reads are
+forbidden.
+
+Credential guidance handles only non-secret config and secret-source metadata. Environment-backed
+secrets flow through existing `--from-env`; a controlled-stdin choice emits a sanitized
+`--value-stdin` handoff and performs no save. Connection guidance derives choices from service
+metadata and treats duplicate names as no-write recovery states, never implicit updates.
+
 - `Update` is deterministic; blocking I/O and timers return `tea.Cmd`.
 - Root models own mode, focus, layout class, key bindings/help, cancellation, and child models.
 - Send key messages to the focused child; broadcast only resize/theme/event/cancel messages
@@ -294,6 +319,11 @@ compatibility evidence, not dependency approval.
   fixtures.
 - Inline mode is the default for run commands; alt screen is reserved for browsers/grids/
   pagers where entering/leaving a place is expected.
+- The command layer enters Bubble Tea/Huh only when stdin and stdout are TTYs and no `--json`,
+  `--plain`, or `--no-input` bypass flag is set. Piped or non-TTY stdin always takes the
+  deterministic plain/noninteractive path; models/prompts must not consume scripted stdin
+  unexpectedly, must not hang waiting for a user, and must not open `/dev/tty` to bypass the gate.
+  Sequential prompting is allowed only for explicit accessible mode after this same gate passes.
 - Mouse, OSC52, Kitty graphics, and progressive keyboard protocols are optional accelerators.
   Every operation remains possible with basic keyboard input and glyph/text rendering.
 
@@ -308,7 +338,9 @@ Before production edits, the GSD plan must define RED tests for:
 - no-color, ASCII, reduced-motion, and accessible/plain transcripts;
 - control-character sanitation and secret redaction;
 - bounded chart/query data and truthful units/downsampling labels;
-- `CI=1`, `PM_NO_TUI=1`, `--plain`, `--json`, and piped fallback;
+- TUI/prompt gate matrix: stdin+stdout TTY activation, `stdin-piped+stdout-TTY` fallback,
+  `stdout-piped` fallback, `CI=1`, `PM_NO_TUI=1`, `TERM=dumb`, `--json`, `--plain`, and
+  `--no-input`;
 - unchanged exit code/stdout/stderr/one-envelope contracts;
 - cancellation and goroutine cleanup under `-race`.
 
@@ -324,6 +356,10 @@ Screenshots support the visual review; they never replace key/state/accessibilit
   [Lip Gloss](https://github.com/charmbracelet/lipgloss)
 - [GitHub CLI accessibility guide](https://accessibility.github.com/documentation/guide/cli/)
   and [GitHub's CLI accessibility engineering article](https://github.blog/engineering/user-experience/building-a-more-accessible-github-cli/)
+- [GitHub CLI interactive repository creation](https://cli.github.com/manual/gh_repo_create),
+  [prompt-disable environment](https://cli.github.com/manual/gh_help_environment),
+  [Command Line Interface Guidelines](https://clig.dev/), and
+  [Pulumi non-interactive CLI conventions](https://www.pulumi.com/docs/iac/cli/commands/pulumi_do/)
 - [bpytop](https://github.com/aristocratos/bpytop),
   [Conky](https://github.com/brndnmtthws/conky), and
   [CAVA](https://github.com/karlstav/cava)

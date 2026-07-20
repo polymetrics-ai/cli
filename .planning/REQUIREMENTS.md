@@ -27,7 +27,11 @@
 ### CLI Help, Manual, Docs, and Website Parity
 
 - [ ] **CLI-DOC-01**: Every CLI command, subcommand, flag, output, connector surface, or help-topic change updates runtime help, `docs/cli/**`, website docs under `website/**`, generated help/manual artifacts, and tests together or records explicit not-applicable notes.
-- [ ] **CLI-DOC-02**: Namespace command groups with no action selected, such as `pm connectors`, render contextual help/subcommand summaries and exit successfully, while invalid actions still return usage errors.
+- [ ] **CLI-DOC-02**: Namespace command groups with no action selected, such as `pm connectors`,
+      render contextual help/subcommand summaries and exit successfully, while invalid actions
+      still return usage errors. Eligible dual-TTY bare `pm query` and bare `pm reverse` are the
+      documented human-first workspace exceptions and fall back to deterministic help on every
+      bypass/non-TTY path.
 - [ ] **CLI-DOC-03**: Implementation PRs for CLI changes include parity evidence for `pm help <topic>`, `pm <namespace>`, `pm <command> --help`, docs/website search or generator checks, and any golden/help fixture updates.
 - [ ] **CLI-DOC-04**: Agents and subagents follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` for CLI-visible changes.
 
