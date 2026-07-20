@@ -34,7 +34,7 @@ func TestDashboardFramesCoverLifecycleLayoutsAndHygiene(t *testing.T) {
 	model.Apply(events.Event{Kind: events.KindFailed, Scope: events.ScopeFlow, RunID: "likely-customers", StepID: "score-contacts", Status: "failed", Message: "connector failed token=abc123\x1b[31m"})
 	model.Apply(events.Event{Kind: events.KindFailed, Scope: events.ScopeFlow, RunID: "likely-customers", Status: "failed", Message: "connector failed token=abc123\x1b[31m"})
 
-	frame := model.View()
+	frame := model.Frame()
 	for _, want := range []string{
 		"Flow likely-customers",
 		"elapsed 00:51",
@@ -101,7 +101,7 @@ func TestDashboardResponsiveAndAccessibleFrames(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			model := NewModel(tt.cfg)
-			frame := model.View()
+			frame := model.Frame()
 			for _, want := range tt.want {
 				if !strings.Contains(frame, want) {
 					t.Fatalf("frame missing %q:\n%s", want, frame)
@@ -145,16 +145,16 @@ func TestDashboardNavigationHelpAndResize(t *testing.T) {
 		t.Fatalf("G selection = %q, want load", got)
 	}
 	model.HandleKey("?")
-	if frame := model.View(); !strings.Contains(frame, "up/k") || !strings.Contains(frame, "down/j") {
+	if frame := model.Frame(); !strings.Contains(frame, "up/k") || !strings.Contains(frame, "down/j") {
 		t.Fatalf("help frame lacks arrow/Vim equivalents:\n%s", frame)
 	}
 	model.HandleKey("esc")
-	if frame := model.View(); strings.Contains(frame, "up/k") {
+	if frame := model.Frame(); strings.Contains(frame, "up/k") {
 		t.Fatalf("esc did not close one help layer:\n%s", frame)
 	}
 
 	model.Resize(50, 12)
-	if frame := model.View(); !strings.Contains(frame, "Terminal too small: 50x12") {
+	if frame := model.Frame(); !strings.Contains(frame, "Terminal too small: 50x12") {
 		t.Fatalf("resize did not enter guard layout:\n%s", frame)
 	}
 }
@@ -170,7 +170,7 @@ func TestDashboardCancelWaitsForTruthfulFinalFrame(t *testing.T) {
 	if err := ctx.Err(); err != context.Canceled {
 		t.Fatalf("cancel context err = %v, want context.Canceled", err)
 	}
-	beforeFinal := model.View()
+	beforeFinal := model.Frame()
 	if !strings.Contains(beforeFinal, "cancelling") || strings.Contains(beforeFinal, "finished") {
 		t.Fatalf("pre-final cancel frame is not truthful:\n%s", beforeFinal)
 	}
@@ -180,7 +180,7 @@ func TestDashboardCancelWaitsForTruthfulFinalFrame(t *testing.T) {
 	if done := model.Done(); !done {
 		t.Fatal("model not done after terminal cancellation event")
 	}
-	final := model.View()
+	final := model.Frame()
 	for _, want := range []string{"– Cancelled after sync-hubspot", "Resume: pm flow run likely-customers"} {
 		if !strings.Contains(final, want) {
 			t.Fatalf("cancel final frame missing %q:\n%s", want, final)
@@ -252,7 +252,7 @@ func TestSessionCancellationPropagatesAndDrainsFinalLifecycle(t *testing.T) {
 	if !session.Model().Done() {
 		t.Fatal("session returned before final lifecycle reached model")
 	}
-	if frame := session.Model().View(); !strings.Contains(frame, "Cancelled after extract") {
+	if frame := session.Model().Frame(); !strings.Contains(frame, "Cancelled after extract") {
 		t.Fatalf("session final frame is not truthful:\n%s", frame)
 	}
 	got := collector.Events()

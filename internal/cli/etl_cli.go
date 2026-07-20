@@ -281,6 +281,7 @@ func runETLRunDashboard(ctx context.Context, cfg config.Config, a *app.App, flag
 		},
 		Upstream: events.FromContext(ctx),
 		Interval: 100 * time.Millisecond,
+		Input:    uiInputFromContext(ctx),
 		Output:   stdout,
 	})
 	var run app.Run

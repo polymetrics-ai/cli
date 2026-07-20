@@ -7,6 +7,10 @@ import (
 	"strings"
 	"time"
 
+	"charm.land/bubbles/v2/key"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
+
 	"polymetrics.ai/internal/events"
 	"polymetrics.ai/internal/safety"
 	"polymetrics.ai/internal/ui/styles"
@@ -18,6 +22,32 @@ const (
 	layoutCompact  = "compact"
 	layoutGuard    = "guard"
 )
+
+type dashboardKeyMap struct {
+	cancel key.Binding
+	down   key.Binding
+	up     key.Binding
+	first  key.Binding
+	last   key.Binding
+	pageUp key.Binding
+	pageDn key.Binding
+	help   key.Binding
+	back   key.Binding
+	quit   key.Binding
+}
+
+var dashboardKeys = dashboardKeyMap{
+	cancel: key.NewBinding(key.WithKeys("ctrl+c"), key.WithHelp("ctrl+c", "cancel")),
+	down:   key.NewBinding(key.WithKeys("down", "j"), key.WithHelp("↓/j", "next")),
+	up:     key.NewBinding(key.WithKeys("up", "k"), key.WithHelp("↑/k", "previous")),
+	first:  key.NewBinding(key.WithKeys("home", "g"), key.WithHelp("home/gg", "first")),
+	last:   key.NewBinding(key.WithKeys("end", "G"), key.WithHelp("end/G", "last")),
+	pageUp: key.NewBinding(key.WithKeys("pgup", "ctrl+u"), key.WithHelp("pgup/ctrl+u", "page up")),
+	pageDn: key.NewBinding(key.WithKeys("pgdown", "ctrl+d"), key.WithHelp("pgdown/ctrl+d", "page down")),
+	help:   key.NewBinding(key.WithKeys("?"), key.WithHelp("?", "help")),
+	back:   key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", "close help")),
+	quit:   key.NewBinding(key.WithKeys("q"), key.WithHelp("q", "quit")),
+}
 
 // Step is the command-layer view data for one dashboard row.
 type Step struct {
@@ -60,6 +90,13 @@ type Model struct {
 	selected       int
 	helpOpen       bool
 	gPending       bool
+
+	events       <-chan events.Event
+	runCmd       tea.Cmd
+	cancelCmd    tea.Cmd
+	eventsClosed bool
+	runReceived  bool
+	runErr       error
 }
 
 type stepState struct {
@@ -99,6 +136,91 @@ func NewModel(cfg Config) *Model {
 		m.stepIndex[state.ID] = i
 	}
 	return m
+}
+
+// Init starts only Bubble Tea-owned asynchronous work configured by Session.
+func (m *Model) Init() tea.Cmd {
+	if m == nil {
+		return nil
+	}
+	cmds := make([]tea.Cmd, 0, 4)
+	if !m.cfg.NoColor {
+		cmds = append(cmds, tea.RequestBackgroundColor)
+	}
+	if m.runCmd != nil {
+		cmds = append(cmds, m.runCmd)
+	}
+	if m.events != nil {
+		cmds = append(cmds, waitEvent(m.events))
+	}
+	if m.cancelCmd != nil {
+		cmds = append(cmds, m.cancelCmd)
+	}
+	return tea.Batch(cmds...)
+}
+
+// Update deterministically applies terminal, event, completion, and cancellation messages.
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	if m == nil {
+		return m, tea.Quit
+	}
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.Resize(msg.Width, msg.Height)
+	case tea.KeyPressMsg:
+		return m, m.updateKey(msg)
+	case eventMsg:
+		m.Apply(msg.Event)
+		return m, waitEvent(m.events)
+	case eventClosedMsg:
+		m.eventsClosed = true
+		return m, m.finishIfReady()
+	case runResultMsg:
+		m.runReceived = true
+		m.runErr = msg.Err
+		return m, m.finishIfReady()
+	case cancelMsg:
+		m.HandleKey("ctrl+c")
+	}
+	return m, nil
+}
+
+func (m *Model) updateKey(msg tea.KeyPressMsg) tea.Cmd {
+	switch {
+	case key.Matches(msg, dashboardKeys.cancel):
+		m.HandleKey("ctrl+c")
+	case key.Matches(msg, dashboardKeys.down):
+		m.HandleKey(msg.String())
+	case key.Matches(msg, dashboardKeys.up):
+		m.HandleKey(msg.String())
+	case key.Matches(msg, dashboardKeys.first):
+		m.HandleKey(msg.String())
+	case key.Matches(msg, dashboardKeys.last):
+		m.HandleKey(msg.String())
+	case key.Matches(msg, dashboardKeys.pageUp):
+		m.HandleKey("ctrl+u")
+	case key.Matches(msg, dashboardKeys.pageDn):
+		m.HandleKey("ctrl+d")
+	case key.Matches(msg, dashboardKeys.help):
+		m.HandleKey("?")
+	case key.Matches(msg, dashboardKeys.back):
+		m.HandleKey("esc")
+	case key.Matches(msg, dashboardKeys.quit):
+		if m.HandleKey("q") {
+			return tea.Quit
+		}
+	}
+	return nil
+}
+
+func (m *Model) finishIfReady() tea.Cmd {
+	if !m.eventsClosed || !m.runReceived {
+		return nil
+	}
+	if m.runErr != nil || !m.Done() {
+		m.Apply(finalEvent(m.cfg, m.runErr))
+	}
+	return tea.Quit
 }
 
 // Apply applies one lifecycle or progress event to the model.
@@ -189,8 +311,13 @@ func (m *Model) Done() bool {
 	return m == nil || m.terminal
 }
 
-// View renders the current dashboard frame.
-func (m *Model) View() string {
+// View renders the current dashboard as a Bubble Tea v2 inline view.
+func (m *Model) View() tea.View {
+	return tea.NewView(m.Frame())
+}
+
+// Frame renders the current deterministic dashboard content.
+func (m *Model) Frame() string {
 	if m == nil {
 		return ""
 	}
@@ -602,10 +729,13 @@ func rule(width int, ascii bool) string {
 
 func spacesBetween(left string, minimum int) string {
 	count := minimum
-	if len(left) < 42 {
-		count += 42 - len(left)
+	if width := lipgloss.Width(left); width < 42 {
+		count += 42 - width
 	}
 	return strings.Repeat(" ", count)
 }
 
-var _ events.Emitter = (*Bridge)(nil)
+var (
+	_ tea.Model      = (*Model)(nil)
+	_ events.Emitter = (*Bridge)(nil)
+)

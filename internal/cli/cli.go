@@ -46,6 +46,7 @@ const (
 // TTY renderers. Nil StdoutIsTerminal falls back to os.File + x/term detection.
 type RunOptions struct {
 	Mode                RunMode
+	Stdin               io.Reader
 	StdinIsTerminal     *bool
 	StdoutIsTerminal    *bool
 	Env                 map[string]string
@@ -99,6 +100,7 @@ func RunWithContext(parent context.Context, args []string, stdout, stderr io.Wri
 	ctx, telemetryHandle := telemetry.Init(ctx, telemetryCfg, warnTelemetry)
 	detection := detectInvocationUI(globals, runOpts, stdout, cfg.JSON)
 	ctx = context.WithValue(ctx, uiDetectionContextKey{}, detection)
+	ctx = context.WithValue(ctx, uiInputContextKey{}, runOpts.Stdin)
 	if globals.progress == "ndjson" {
 		ctx = events.WithEmitter(ctx, events.NewNDJSON(stderr))
 	}
@@ -190,6 +192,7 @@ func detectInvocationUI(globals globalOptions, runOpts RunOptions, stdout io.Wri
 }
 
 type uiDetectionContextKey struct{}
+type uiInputContextKey struct{}
 
 func uiDetectionFromContext(ctx context.Context) pmui.Detection {
 	if ctx == nil {
@@ -199,6 +202,14 @@ func uiDetectionFromContext(ctx context.Context) pmui.Detection {
 		return detection
 	}
 	return pmui.Detection{Mode: pmui.ModePlain}
+}
+
+func uiInputFromContext(ctx context.Context) io.Reader {
+	if ctx == nil {
+		return nil
+	}
+	input, _ := ctx.Value(uiInputContextKey{}).(io.Reader)
+	return input
 }
 
 func stdinIsTerminal(override *bool) bool {

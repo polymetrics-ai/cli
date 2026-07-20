@@ -307,6 +307,7 @@ func flowRunDashboard(ctx context.Context, engine *flow.Engine, manifest flow.Fl
 		},
 		Upstream: events.FromContext(ctx),
 		Interval: 100 * time.Millisecond,
+		Input:    uiInputFromContext(ctx),
 		Output:   stdout,
 	})
 	err := session.Execute(func(runCtx context.Context) error {

@@ -3,10 +3,11 @@ package run
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"strings"
 	"time"
+
+	tea "charm.land/bubbletea/v2"
 
 	"polymetrics.ai/internal/events"
 )
@@ -18,19 +19,18 @@ type SessionOptions struct {
 	Config   Config
 	Upstream events.Emitter
 	Interval time.Duration
+	Input    io.Reader
 	Output   io.Writer
 }
 
 // Session owns the run context, event bridge, and dashboard model. Execute
 // returns only after all emitted events have reached the model.
 type Session struct {
-	parent    context.Context
-	ctx       context.Context
-	cancel    context.CancelFunc
-	model     *Model
-	opts      SessionOptions
-	renderer  inlineRenderer
-	renderErr error
+	parent context.Context
+	ctx    context.Context
+	cancel context.CancelFunc
+	model  *Model
+	opts   SessionOptions
 }
 
 // NewSession creates a dashboard session whose cancellation is derived from parent.
@@ -41,12 +41,11 @@ func NewSession(parent context.Context, opts SessionOptions) *Session {
 	ctx, cancel := context.WithCancel(parent)
 	opts.Config.Cancel = cancel
 	return &Session{
-		parent:   parent,
-		ctx:      ctx,
-		cancel:   cancel,
-		model:    NewModel(opts.Config),
-		opts:     opts,
-		renderer: inlineRenderer{output: opts.Output},
+		parent: parent,
+		ctx:    ctx,
+		cancel: cancel,
+		model:  NewModel(opts.Config),
+		opts:   opts,
 	}
 }
 
@@ -59,9 +58,9 @@ func (s *Session) Model() *Model {
 	return s.model
 }
 
-// Execute runs work with the session emitter and drains every bridged event
-// before returning. Parent cancellation requests runner cancellation but does
-// not skip terminal event delivery or final-frame construction.
+// Execute runs work as a Bubble Tea command and drains bridged events through
+// Update before the inline program exits. Parent cancellation becomes a Tea
+// message, allowing the runner to flush a truthful terminal lifecycle frame.
 func (s *Session) Execute(work func(context.Context) error) error {
 	if s == nil {
 		return errors.New("dashboard session is nil")
@@ -75,71 +74,75 @@ func (s *Session) Execute(work func(context.Context) error) error {
 	delivery := channelEmitter{events: eventCh}
 	bridge := NewBridge(BridgeOptions{Interval: s.opts.Interval, Sink: delivery})
 	runCtx := events.WithEmitter(s.ctx, events.NewMulti(s.opts.Upstream, bridge))
-	resultCh := make(chan error, 1)
+	watchCtx, stopWatch := context.WithCancel(context.Background())
+	defer stopWatch()
 
-	go func() {
+	s.model.events = eventCh
+	s.model.runCmd = func() tea.Msg {
 		err := work(runCtx)
 		bridge.Flush(runCtx)
 		close(eventCh)
-		resultCh <- err
-	}()
-
-	parentDone := s.parent.Done()
-	for eventCh != nil {
-		select {
-		case event, ok := <-eventCh:
-			if !ok {
-				eventCh = nil
-				continue
-			}
-			s.model.Apply(event)
-			s.render()
-		case <-parentDone:
-			s.model.HandleKey("ctrl+c")
-			s.render()
-			parentDone = nil
-		}
+		return runResultMsg{Err: err}
 	}
+	s.model.cancelCmd = waitCancellation(s.parent.Done(), watchCtx.Done())
 
-	err := <-resultCh
-	if err != nil || !s.model.Done() {
-		s.model.Apply(finalEvent(s.opts.Config, err))
-		s.render()
+	output := s.opts.Output
+	if output == nil {
+		output = io.Discard
 	}
-	return errors.Join(err, s.renderErr)
+	program := tea.NewProgram(
+		s.model,
+		tea.WithInput(s.opts.Input),
+		tea.WithOutput(output),
+		tea.WithWindowSize(s.model.cfg.Width, s.model.cfg.Height),
+		tea.WithFPS(30),
+		tea.WithoutSignalHandler(),
+		tea.WithoutSignals(),
+	)
+	finalModel, programErr := program.Run()
+	if model, ok := finalModel.(*Model); ok {
+		s.model = model
+	}
+	return errors.Join(s.model.runErr, programErr)
 }
 
-func (s *Session) render() {
-	if s.renderErr != nil {
-		return
-	}
-	s.renderErr = s.renderer.Render(s.model.View())
+type eventMsg struct {
+	Event events.Event
 }
 
-type inlineRenderer struct {
-	output io.Writer
-	lines  int
-	drawn  bool
+type eventClosedMsg struct{}
+
+type runResultMsg struct {
+	Err error
 }
 
-func (r *inlineRenderer) Render(frame string) error {
-	if r == nil || r.output == nil {
+type cancelMsg struct{}
+
+func waitEvent(eventCh <-chan events.Event) tea.Cmd {
+	if eventCh == nil {
 		return nil
 	}
-	if r.drawn && r.lines > 0 {
-		if _, err := fmt.Fprintf(r.output, "\x1b[%dA\r\x1b[J", r.lines); err != nil {
-			return fmt.Errorf("refresh dashboard frame: %w", err)
+	return func() tea.Msg {
+		event, ok := <-eventCh
+		if !ok {
+			return eventClosedMsg{}
+		}
+		return eventMsg{Event: event}
+	}
+}
+
+func waitCancellation(parentDone, stop <-chan struct{}) tea.Cmd {
+	if parentDone == nil {
+		return nil
+	}
+	return func() tea.Msg {
+		select {
+		case <-parentDone:
+			return cancelMsg{}
+		case <-stop:
+			return nil
 		}
 	}
-	if _, err := io.WriteString(r.output, frame); err != nil {
-		return fmt.Errorf("write dashboard frame: %w", err)
-	}
-	r.lines = strings.Count(frame, "\n")
-	if !strings.HasSuffix(frame, "\n") {
-		r.lines++
-	}
-	r.drawn = true
-	return nil
 }
 
 type channelEmitter struct {

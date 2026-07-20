@@ -30,5 +30,5 @@ func run(args []string, stdout, stderr io.Writer) int {
 	})
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
-	return cli.RunWithContext(ctx, args, stdout, stderr, cli.RunOptions{Mode: cli.ModeAuto})
+	return cli.RunWithContext(ctx, args, stdout, stderr, cli.RunOptions{Mode: cli.ModeAuto, Stdin: os.Stdin})
 }
