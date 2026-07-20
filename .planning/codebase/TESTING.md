@@ -49,7 +49,9 @@ rg -n "<command>|<flag>|<topic>" docs/cli website
 
 Expected behavior:
 
-- namespace commands such as `pm connectors` render contextual help/subcommand summary and exit 0 when no action is selected;
+- namespace commands such as `pm connectors` render contextual help/subcommand summary and exit 0
+  when no action is selected; future human-first bare `pm query`/`pm reverse` workspaces are the
+  documented dual-TTY exception and must fall back to deterministic help on every bypass path;
 - invalid actions still return usage errors;
 - `docs/cli/**`, `website/**`, generated help/manual artifacts, and golden tests are updated or explicitly marked not applicable.
 

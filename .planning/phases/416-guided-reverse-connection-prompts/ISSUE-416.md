@@ -1,7 +1,8 @@
 ## Objective
 
-Reduce manual token/ID relay through an explicit `pm reverse guide` while preserving the exact
-reverse ETL plan → preview → approval → execute safety gate.
+Reduce manual token/ID relay through a human-first bare `pm reverse` workspace, with
+`pm reverse guide` retained as an explicit alias, while preserving the exact reverse ETL plan →
+preview → approval → execute safety gate.
 
 ## Ownership split
 
@@ -11,7 +12,10 @@ GSD loop, isolated worktree, and stacked PR.
 
 ## Scope
 
-- Add explicit `pm reverse guide`; bare `pm reverse` remains contextual help and exits 0.
+- Make eligible dual-TTY bare `pm reverse` enter the guided workspace; retain `pm reverse guide` as
+  an explicit alias to the same state model.
+- Keep `pm reverse --help` help-only and make bypass/non-TTY bare `pm reverse` render deterministic
+  contextual help and exit 0.
 - Project the existing reverse plan, preview, approval, typed confirmation, execute, and status
   services into the approved Bubble Tea/Huh interaction system.
 - Reduce manual relay inside the session without creating a second mutation path.
@@ -24,8 +28,10 @@ GSD loop, isolated worktree, and stacked PR.
       the existing approval and typed-confirmation gates pass.
 - [ ] Approval tokens live only ephemerally in memory and never appear in final frames, transcripts,
       logs, screenshots, accessibility output, JSON, shell-equivalent commands, or fixtures.
-- [ ] Bare `pm reverse` renders contextual help and exits 0; invalid actions remain usage errors.
-- [ ] `pm reverse guide` activates only when both stdin and stdout are TTYs and no bypass applies.
+- [ ] Eligible dual-TTY bare `pm reverse` and `pm reverse guide` activate the same guided state
+      model; invalid actions remain usage errors.
+- [ ] Help flags always render help. Bypass/non-TTY bare `pm reverse` renders deterministic
+      contextual help and exits 0 without initializing Bubble Tea/Huh.
 - [ ] `--json`, `--plain`, `--no-input`, PM_NO_TUI, CI, TERM=dumb, piped stdin, and piped stdout
       never initialize Bubble Tea/Huh, consume scripted input, hang, or use `/dev/tty`.
 - [ ] Vim/arrows, explicit modes, one-layer escape, Ctrl+C cancellation, responsive layouts,

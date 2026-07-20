@@ -148,10 +148,11 @@ undocumented key chords. Familiarity is the goal; emulation is not.
 
 - One accent border/title/selection identifies focus. Never make the user infer focus from
   color alone.
-- Bare namespace commands, including `pm query` and `pm reverse`, render contextual help and
-  subcommand summaries and exit 0; they do not launch a TUI. Interactive surfaces use explicit
-  documented subcommands such as `pm query grid` and `pm reverse guide`. Invalid actions remain
-  usage errors.
+- Ordinary bare namespace commands render contextual help and exit 0. On an eligible dual-TTY,
+  bare `pm query` and bare `pm reverse` are the deliberate human-first exceptions and enter the
+  same workspace as `pm query grid` and `pm reverse guide`; those explicit aliases remain supported
+  for documentation, scripts, and direct navigation. Help flags and every bypass/non-TTY path
+  render deterministic contextual help, never a TUI. Invalid actions remain usage errors.
 - The footer is contextual: disabled bindings are absent, and `?` matches actual behavior.
 - Printable keys belong to focused inputs. Global navigation must not steal `j`, `q`, `/`,
   or `?` while Filter/Edit owns focus.
@@ -217,8 +218,9 @@ misleading miniature.
 
 ### Query interaction
 
-Phase #411 delivers the read-only `pm query grid` table first. Bare `pm query` remains contextual
-help/subcommand summary with exit 0. Dedicated child issue #463 may then add:
+Phase #411 delivers the read-only query workspace, entered by bare `pm query` on an eligible
+dual-TTY or by the explicit `pm query grid` alias. On bypass/non-TTY paths, bare `pm query` renders
+contextual help and exits 0. Dedicated child issue #463 may then add:
 
 - `v` toggles Table/Chart without re-running a write or changing the underlying rows;
 - a labelled chart setup view chooses chart type, X, Y, aggregation, unit, and sort from
@@ -287,7 +289,8 @@ compatibility evidence, not dependency approval.
 
 ### Progressive action commands and agent invocations
 
-Bare namespaces remain concise help and place-like interfaces retain explicit entrypoints. Action
+Ordinary bare namespaces remain concise help. The human-first query/reverse workspaces use their
+bare commands on eligible dual-TTYs and retain explicit aliases. Action
 commands use the mature CLI pattern of progressively filling missing inputs: after the dual-TTY
 gate passes, incomplete `pm credentials add [name]` and `pm connections create [name]` invocations
 ask only for missing fields, while fully specified invocations execute directly. This matches

@@ -50,13 +50,13 @@ Workers must not edit these shared artifacts unless the orchestrator explicitly 
 | P10 | `feat(ui): add flow and ETL run dashboards` (#408) | B | P07, D-TUI/#462 | flow/ETL dashboard models and command wiring |
 | P11 | `feat(ui): add flow and schedule creation wizards` (#409) | B | P10, D-TUI/#462 | flow/schedule wizard commands, tests, parity docs |
 | P12 | `feat(obs): add opt-in OpenTelemetry tracing` | C | P04 | `internal/telemetry/**` and allowlisted span call sites |
-| P13 | `feat(ui): add connector browser and query grid` (#411) | B | P11, D-TUI/#462 | query tables/browser/grid surfaces and parity docs |
+| P13 | `feat(ui): add connector browser and query grid` (#411) | B | P11, D-TUI/#462 | human-first bare query workspace, grid alias, tables/browser, and parity docs |
 | P13C | `feat(ui): add read-only query charts and terminal dashboard compositions` (#463) | B | P13, D-TUI/#462 | bounded read-only chart models; renderer dependency remains human-gated |
 | P14 | `feat(ui): add terminal docs viewer` (#412) | B | P11, D-TUI/#462 | docs viewer/pager and parity docs |
 | P15 | `feat(cli): add connector-aware shell completion` | A | P09 | command registration/completion/tests/docs |
 | P16 | `feat(ui): add certify and RLM dashboards` (#414) | B | P09, P10, D-TUI/#462 | certify/RLM dashboard models and command wiring |
 | P17 | `feat(obs): add OpenTelemetry metrics` | C | P12 | metrics instruments/exporters/benchmarks |
-| P18 | `feat(ui): add guided reverse ETL session` (#416) | B | P11, D-TUI/#462 | reverse plan/preview/approval/execute projection; approval token stays hidden |
+| P18 | `feat(ui): add guided reverse ETL session` (#416) | B | P11, D-TUI/#462 | human-first bare reverse workspace plus guide alias; approval token stays hidden |
 | P18B | `feat(ui): add TTY-progressive credential and connection setup` (#469) | B | P11, D-TUI/#462 | missing-field setup guidance; secret-source metadata only |
 | P19 | `feat(cli): deepen help tree and generate man pages` (#417) | A | P13, P14, P15, P16, P18, P18B | help tree, generated manuals, docs/website/goldens |
 | P20 | `feat(ui): complete accessibility audit and a11y topic` (#418) | B | P13, P13C after P13 when included, P14, P16, P18, P18B, D-TUI/#462 | all TUI accessibility fixes and parity docs |
@@ -120,7 +120,8 @@ change records red evidence before production edits.
 
 - Targeted tests first, then `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`,
   `go build ./cmd/pm`, and `make verify`.
-- CLI parity covers runtime help, bare namespace exit-0 behavior, `docs/cli/**`, `website/**`,
+- CLI parity covers runtime help, human-first dual-TTY bare query/reverse entry, deterministic
+  bypass help, ordinary bare-namespace exit-0 behavior, `docs/cli/**`, `website/**`,
   generated manuals/help fixtures, completion metadata, and tests.
 - TUI/Huh prompt activation requires both stdin and stdout TTYs and no `--plain`, `--json`, or
   `--no-input` bypass flag; future RED tests must cover `stdin-piped+stdout-TTY`, `stdout-piped`,

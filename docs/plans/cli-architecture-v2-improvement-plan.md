@@ -45,9 +45,12 @@ Sources reviewed:
 
 ### Distilled best practices (the yardstick)
 
-**A. Flags are the API; prompts are progressive enhancement.** (gh, clig.dev) Bare
-namespace commands show contextual help/subcommand summaries and exit 0; explicit subcommands own
-interactive places. Prompt only when stdin and stdout are TTYs, no bypass flag is set, and a
+**A. Flags are the API; prompts are progressive enhancement.** (gh, clig.dev) Ordinary bare
+namespace commands show contextual help/subcommand summaries and exit 0. Bare `pm query` and bare
+`pm reverse` are the narrow human-first exception: on an eligible dual-TTY they enter their
+workspaces, while `pm query grid` and `pm reverse guide` remain explicit aliases. Help flags and all
+bypass/non-TTY paths remain deterministic help, never a TUI. Prompt only when stdin and stdout are
+TTYs, no bypass flag is set, and a
 required input is missing; piped/non-TTY stdin selects deterministic plain/noninteractive behavior
 and must not be consumed as interactive input or bypassed through `/dev/tty`. `--plain`, `--json`,
 and `--no-input` disable Bubble Tea, Huh, and all prompts; those paths produce deterministic
@@ -256,8 +259,10 @@ Every TUI plan/worker must load the repo-local `bubble-tea-tui-design` skill. Su
   `ModePlain`, so every existing test exercises the plain path by construction. `SanitizeTerminal`
   continues to guard the plain path; on the TUI path it moves into view-string hygiene (every
   dynamic string sanitized before styling).
-- **Doctrine (A):** flags stay the API. Bare namespaces stay contextual help; explicit
-  subcommands such as `pm query grid` and `pm reverse guide` own interactive places. Wizards prompt
+- **Doctrine (A):** flags stay the API. Ordinary bare namespaces stay contextual help. Eligible
+  dual-TTY bare `pm query` and bare `pm reverse` own human-first interactive places, with
+  `pm query grid` and `pm reverse guide` retained as explicit aliases. Help flags and bypass paths
+  stay deterministic and prompt-free. Wizards prompt
   only for missing inputs; fully specified actions execute directly, while complete-but-invalid
   input returns the same field-specific validation error as the flag path. Wizards print sanitized
   equivalent non-interactive commands on completion, and `--no-input` errors name the flag. Agent
@@ -268,9 +273,9 @@ Every TUI plan/worker must load the repo-local `bubble-tea-tui-design` skill. Su
   wiring becomes structurally correct because pickers only offer tables produced upstream),
   `pm schedule create` interactive (cron presets + next-3-fire-times preview using the
   dead `schedule.Next`), `pm query tables` (plain enumerator — agents and wizard share it)
-  + explicit `pm query grid` (bubble-table), connectors browser (551-row fuzzy list + manual
+  + human-first query workspace (`pm query`; explicit alias `pm query grid`, bubble-table), connectors browser (551-row fuzzy list + manual
   preview pane), docs viewer (glamour pager over existing manual text), certify batch table,
-  RLM viewer, explicit `pm reverse guide` (#416) with any approval token carried ephemerally in
+  RLM viewer, human-first reverse workspace (`pm reverse`; explicit alias `pm reverse guide`, #416) with any approval token carried ephemerally in
   memory only, and TTY-progressive credential/connection setup (#469) that handles only non-secret
   input and secret-source metadata.
 - **Interaction system:** a LazyGit-shaped operator workspace with fzf-style
@@ -335,12 +340,12 @@ requirements without changing the 22 production-phase numbers.
 | 10 | Flagship run dashboards: `flow run` + `etl run` — blocked by #462/D-TUI | B | bubbletea/bubbles/lipgloss v2, teatest (test-only) |
 | 11 | Wizards wave 1: `pm flow create` + `pm schedule create` (+ accessible mode) — blocked by #462/D-TUI | B | huh v2 |
 | 12 | Traces: command→operation→connector HTTP + file/OTLP exporters | C | otel api/sdk/trace exporters |
-| 13 | Browse wave: connectors browser, `pm query tables`, `pm query grid`; dependency-gated query chart child #463 — blocked by #462/D-TUI | B | evertras/bubble-table; proposed ntcharts/v2 needs separate human approval |
+| 13 | Browse wave: connectors browser, `pm query tables`, human-first `pm query` workspace plus `pm query grid` alias; dependency-gated query chart child #463 — blocked by #462/D-TUI | B | evertras/bubble-table; proposed ntcharts/v2 needs separate human approval |
 | 14 | Docs viewer: glamour pager for command + connector manuals — blocked by #462/D-TUI | B | glamour v2 |
 | 15 | Connector command registration + shell completion | A | — |
 | 16 | Certify batch table + RLM agent viewer dashboards — blocked by #462/D-TUI | B | — |
 | 17 | Metrics per PRD §15.2 + Temporal otel contrib | C | sdk/metric, exporters, temporal contrib |
-| 18 | `pm reverse guide` (#416) plus separately owned TTY-progressive credentials/connections setup (#469) — blocked by #462/D-TUI | B | — |
+| 18 | Human-first `pm reverse` workspace plus `pm reverse guide` alias (#416), with separately owned TTY-progressive credentials/connections setup (#469) — blocked by #462/D-TUI | B | — |
 | 19 | Help tree deepening + man pages (the deliberate help-churn phase) | A | — |
 | 20 | `pm a11y` topic + accessibility audit pass — blocked by #462/D-TUI | B | — |
 | 21 | OTel log bridge (beta; optional — droppable) | C | otel log (beta, pinned) |

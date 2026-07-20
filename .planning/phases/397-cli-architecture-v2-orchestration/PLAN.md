@@ -29,7 +29,8 @@ Preserve parent commits through #410 at starting HEAD. Do not reimplement #398-#
 5. Complete #413 and #414 after #407/#408 prerequisites.
 6. After #409 and reviewed integration of #462/PR #468, complete #411, #412, #416, and #469 in
    isolated worktrees, serialized wherever central CLI/help/golden write scopes collide. #416 owns
-   reverse guidance; #469 owns credential/connection setup.
+   the human-first bare reverse workspace plus its `reverse guide` alias; #469 owns credential/
+   connection setup. #411 owns the human-first bare query workspace plus its `query grid` alias.
 7. Complete #417 after #411/#412/#413/#414/#416/#469.
 8. Complete #418 after #411/#412/#414/#416/#469 and #463 when the chart slice is included.
 9. #419 remains human-gated because its issue requires explicit inclusion of an optional beta dependency; if no approval exists, record an explicit skip rather than implementing it.

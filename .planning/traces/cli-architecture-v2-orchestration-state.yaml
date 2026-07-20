@@ -400,7 +400,7 @@ subissues:
     pr_url: ""
     worker: unassigned
     status: planned
-    write_scope: "query tables, connector browser, query grid, and parity docs"
+    write_scope: "human-first bare query workspace, query grid alias, query tables, connector browser, and parity docs"
     worker_directory: ""
     verification: not_run_dependency_blocked
     automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409.", disposition_url: ""}
@@ -450,7 +450,7 @@ subissues:
     pr_url: ""
     worker: unassigned
     status: planned
-    write_scope: "guided reverse ETL session; existing plan-preview-approval-execute path only"
+    write_scope: "human-first bare reverse workspace plus reverse guide alias; existing plan-preview-approval-execute path only"
     worker_directory: ""
     verification: not_run_dependency_blocked
     automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #409 and reviewed integration of #462/PR #468.", disposition_url: ""}

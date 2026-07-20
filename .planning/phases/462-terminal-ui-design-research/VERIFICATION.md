@@ -1,5 +1,16 @@
 # Phase 462 Verification
 
+## Human-first workspace revision — 2026-07-20
+
+- [x] Eligible dual-TTY bare `pm query` and bare `pm reverse` are the only bare-namespace TUI
+      exceptions and enter the same models as `pm query grid` and `pm reverse guide`.
+- [x] Help flags always render help; non-TTY, CI, `--json`, `--plain`, `--no-input`, PM_NO_TUI,
+      TERM=dumb, piped stdin, and piped stdout never initialize Bubble Tea/Huh.
+- [x] Bare query/reverse bypass paths render deterministic contextual help and exit 0; ordinary
+      bare namespaces remain help-first and invalid actions remain usage errors.
+- [x] Phase 18 UI spec, RED/GREEN/refactor ledger, worker prompts, issue contracts, design skill,
+      ADR, roadmap, and source plan use the revised entry contract.
+
 ## Progressive setup refinement — 2026-07-20
 
 - [x] Phase 18 UI contract passed the GSD UI checker across all six dimensions.
@@ -43,7 +54,7 @@ No runtime command, flag, output, help topic, bare namespace, generated CLI docu
 page changes in this issue. The execution and worker prompts strengthen the parity requirements
 for the later behavior-changing UI phases.
 
-## Review correction checklist — 2026-07-20
+## Historical review correction checklist — 2026-07-20 (entry rule superseded)
 
 ### Required checks before handoff
 
@@ -52,9 +63,9 @@ for the later behavior-changing UI phases.
 - [x] Manual universal-loop fallback recorded because `scripts/gsd prompt programming-loop ...` is absent.
 - [x] Loaded skills and missing `.pi/skills/go-implementation` mismatch recorded.
 - [x] RED grep inventory recorded in `TDD-LEDGER.md`.
-- [x] Bare namespace contract grep: no bare `pm query`/bare `pm reverse` TUI-launch wording remains
-  in current docs outside the historical RED ledger.
-- [x] Explicit interactive subcommands are consistent: `pm query grid`, `pm reverse guide`.
+- [x] The historical help-first query/reverse check passed for that correction run; it is
+  superseded by the human-first workspace revision above.
+- [x] `pm query grid` and `pm reverse guide` remain consistent explicit aliases.
 - [x] Approval-token contract grep: no current-doc wording says final frames/transcripts/logs/
   accessibility/JSON/shell-equivalent text prints tokens.
 - [x] Dependency rows/rosters encode `#462` or `D-TUI` directly for #408, #409, #411, #412,
@@ -98,7 +109,7 @@ review remains pending for the accepted correction PR.
   scripted-stdin consumption, no hang, and no `/dev/tty` bypass.
 - [x] Future RED test matrix is recorded for `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`,
   `--json`, `--plain`, and `--no-input`.
-- [x] Explicit `pm query grid`, `pm reverse guide`, query export, approval-token secrecy, and
+- [x] `pm query grid`/`pm reverse guide` aliases, query export, approval-token secrecy, and
   accessibility/plain fallback contracts remain present.
 - [x] RUN-STATE.json/RUN-STATE.md/SUMMARY record #467 open at starting head
   `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, CI green at that head, and human/parent review
@@ -134,7 +145,7 @@ parent integration gates after local finding disposition.
   are TTYs and none of `--plain`, `--json`, or `--no-input` is set.
 - [x] Shared TUI preflight and Stage 16-specific gate include stdin+stdout TTY activation,
   `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`.
-- [x] Explicit `pm query grid`, `pm reverse guide`, bare help exit 0, query export,
+- [x] `pm query grid`/`pm reverse guide` aliases, bypass help exit 0, query export,
   approval-token secrecy, direct dependencies, and no `/dev/tty` contracts remain present.
 - [x] RUN-STATE.json/RUN-STATE.md/SUMMARY record PR #467 merged at parent commit
   `93a117100c6421955262aa32794a91a158d267e1` from old head

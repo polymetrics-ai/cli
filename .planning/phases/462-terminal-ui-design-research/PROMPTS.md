@@ -1,5 +1,13 @@
 # Phase 462 Prompts
 
+## Human-first entry revision — 2026-07-20
+
+The current implementation prompt supersedes the older review-correction prompt preserved below:
+eligible dual-TTY bare `pm query` and bare `pm reverse` open their human-first workspaces;
+`pm query grid` and `pm reverse guide` remain explicit aliases to the same models. Help flags and
+all bypass/non-TTY bare invocations render deterministic contextual help and exit 0. Ordinary bare
+namespaces remain help-first. Implement both routes test-first and do not remove the aliases.
+
 ## Planning invocation
 
 ```bash
@@ -28,7 +36,7 @@ The canonical paste-ready prompt for UI workers lives in
 `.planning/traces/cli-architecture-v2-pi-prompts.md` under **TUI worker session**. It must be run
 from that issue's isolated worktree after #462 and the issue's blocked-by dependencies integrate.
 
-## Review correction invocation — 2026-07-20
+## Historical review correction invocation — 2026-07-20 (superseded entry rule)
 
 ```bash
 scripts/gsd doctor
@@ -49,6 +57,9 @@ rows, status is review-blocked/provisional, and query export path safety is expl
 RED/GREEN docs greps, skill validation, GSD doctor, diff/scope checks, and docs-check when feasible.
 Open a new stacked PR to `feat/cli-architecture-v2`; do not merge.
 ```
+
+The quoted bare query/reverse rule above records the state of that earlier correction run and is
+not the current implementation instruction; the human-first entry revision at the top governs.
 
 Downstream artifact: branch `docs/462-terminal-ui-design-review-fixes`; planning and docs
 correction commits pushed; terminal evidence recorded in this phase artifact update.

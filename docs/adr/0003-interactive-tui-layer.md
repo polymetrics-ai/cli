@@ -49,9 +49,12 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
    for wizards (embedded as `tea.Model`; accessible mode wired from day one), **glamour v2**
    for the docs pager, **Evertras/bubble-table** for the query grid. Inline mode for run
    commands (final frame persists in scrollback); alt-screen only for browsers/pagers.
-4. **Flags are the API; prompts are progressive enhancement.** Bare namespace commands render
-   contextual help/subcommand summaries and exit 0; they do not launch TUIs. Explicit interactive
-   subcommands such as `pm query grid` and `pm reverse guide` own place-like surfaces. Wizards
+4. **Flags are the API; prompts are progressive enhancement.** Ordinary bare namespace commands
+   render contextual help/subcommand summaries and exit 0. Two human-first, place-like surfaces
+   are deliberately allowlisted: eligible dual-TTY invocations of bare `pm query` and bare
+   `pm reverse` enter the same workspaces as the explicit `pm query grid` and `pm reverse guide`
+   aliases. Help flags always render help, and every bypass/non-TTY path renders deterministic
+   contextual help for those bare commands and exits 0. Wizards
    prompt only for missing inputs after the same stdin-and-stdout TTY gate passes and no `--plain`,
    `--json`, or `--no-input` bypass flag is set, validate with the same code paths the flag door
    uses (e.g. wizard manifests round-trip `flow.ParseManifest`), emit machine artifacts at
@@ -84,7 +87,9 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
    them only ephemerally in memory through the existing plan → preview → approval → execute seam.
    They are never printed in final frames, transcripts, logs, screenshots, accessibility output,
    JSON, shell-equivalent command text, or fixtures; typed approval remains mandatory.
-10. **Progressive setup is action-scoped and automation-safe.** Bare namespaces remain help.
+10. **Progressive setup is action-scoped and automation-safe.** Bare setup namespaces such as
+    `pm credentials` and `pm connections` remain help; the query/reverse workspace exception in
+    decision 4 does not extend to them.
     Incomplete `credentials add` and `connections create` actions may guide only under the exact
     dual-TTY gate; fully specified actions run directly, and complete-but-invalid actions return the
     same field-specific validation error as the flag path. Agent examples standardize

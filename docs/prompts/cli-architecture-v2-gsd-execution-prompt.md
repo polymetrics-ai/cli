@@ -63,7 +63,8 @@ phase: stdin+stdout TTY activation, `stdin-piped+stdout-TTY` fallback, `stdout-p
 `--json`, `--plain`, and `--no-input`. `--plain`, `--json`, and `--no-input` must bypass Bubble
 Tea, Huh, and all prompts; sequential prompts are allowed only in explicit accessible mode after the
 same stdin+stdout TTY gate passes and no bypass flag is set. Retain each surface's own RED cases for
-bare namespace help-not-TUI behavior, Normal/Filter/Edit mode conflicts, arrows+Vim equivalence,
+ordinary bare-namespace help behavior and the narrowly allowlisted human-first bare `pm query`/
+`pm reverse` dual-TTY entry behavior, Normal/Filter/Edit mode conflicts, arrows+Vim equivalence,
 contextual help, wide/standard/compact/guard layouts, accessible/plain fallback,
 sanitation/redaction, approval-token non-display, cancellation, and unchanged
 JSON/stdout/stderr/exit semantics. Record the skill and evidence in PLAN/TDD-LEDGER/VERIFICATION
@@ -193,8 +194,9 @@ Commit "feat(obs): opt-in tracing with file/otlp exporters (arch-v2)".
 STAGE 13 — BROWSE WAVE (track B; blocked by #462/D-TUI; deps: evertras/bubble-table)
 `pm query tables` (plain/JSON warehouse enumerator — lands FIRST), connectors browser per
 design doc §2.5 (fuzzy list + manual preview + pager; fix the %+v dump on the plain path),
-explicit `pm query grid` per §2.4 (LIMIT/OFFSET paging through existing QuerySQL guard). Bare
-`pm query` renders contextual help/subcommand summary and exits 0. Use fzf's filter/list/preview
+the human-first query workspace per §2.4 (LIMIT/OFFSET paging through existing QuerySQL guard).
+Eligible dual-TTY bare `pm query` opens it; `pm query grid` remains an explicit alias. Help flags
+and bypass/non-TTY bare invocations render contextual help and exit 0. Use fzf's filter/list/preview
 interaction without shell-backed preview execution. Query grid export is typed read-only only:
 project-scoped default, clean/confined path, reject control characters/traversal/broad paths/
 symlink races, no overwrite by default, confirmation only when stdin and stdout are TTYs,
@@ -245,17 +247,19 @@ GATE 17: file-exporter metrics reconcile with envelope counts (jq equality test)
 Commit "feat(obs): metrics per PRD §15.2 + temporal otel contrib (arch-v2)".
 
 STAGE 18A — GUIDED REVERSE ETL (#416; track B; blocked by #462/D-TUI)
-Explicit `pm reverse guide` per design doc §2.9. Preserve the existing plan → preview → approval →
+Human-first reverse workspace per design doc §2.9: eligible dual-TTY bare `pm reverse` opens it and
+`pm reverse guide` remains an explicit alias. Preserve the existing plan → preview → approval →
 execute seam, typed confirmation, and exit semantics. Carry the approval token only ephemerally in
 memory; never display it in final frames, transcripts, logs, screenshots, accessibility output,
-JSON, shell-equivalent command text, or fixtures. Bare `pm reverse` remains contextual help and
-exits 0. GATE 18A: session tests prove parity with the flag flow; every noninteractive bypass avoids
+JSON, shell-equivalent command text, or fixtures. Help flags and bypass/non-TTY bare `pm reverse`
+render contextual help and exit 0. GATE 18A: both entries reach the same model, session tests prove
+parity with the flag flow, and every noninteractive bypass avoids
 prompt initialization and scripted-stdin consumption; secret-marker greps and `make verify` pass.
 Commit "feat(ui): add guided reverse-etl session (arch-v2)".
 
 STAGE 18B — PROGRESSIVE SETUP (#469; track B; blocked by #409 and #462/D-TUI)
 Implement the approved Phase 18 UI contract for `pm credentials add [name]` and
-`pm connections create [name]`. Bare namespaces remain contextual help. Incomplete actions launch
+`pm connections create [name]`. These setup namespaces remain contextual help. Incomplete actions launch
 Bubble Tea/Huh by default only when stdin and stdout are TTYs and no bypass applies; fully specified
 actions run directly; complete-but-invalid input returns the normal field-specific error. Ask only
 for missing fields. Credential setup accepts non-secret config and secret-source metadata only:

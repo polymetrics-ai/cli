@@ -6,12 +6,23 @@ Branch: `docs/462-terminal-ui-design-research`
 Starting commit: `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`
 Classification: documentation, planning, and repo-local skill only; no production Go behavior.
 
+## Human-first workspace revision — 2026-07-20
+
+User testing accepted the design and then clarified that the application is human-first. The
+authoritative revised contract is: eligible dual-TTY bare `pm query` and bare `pm reverse` open
+their respective workspaces; `pm query grid` and `pm reverse guide` remain supported explicit
+aliases to the same state models. Help flags and all bypass/non-TTY paths render deterministic
+contextual help and exit 0. Ordinary bare namespaces, including credentials and connections,
+remain help-first. This revision supersedes the earlier review-correction entry rule retained as
+historical execution evidence below.
+
 ## Progressive setup refinement — 2026-07-20
 
 Manual testing showed that credential and connection commands still require users to construct long
 flag sequences and expose configuration/duplicate failures too late. PR #468 therefore also freezes
-the progressive-action contract in the Phase 18 UI spec: bare namespaces stay help; incomplete
-actions guide only under the exact dual-TTY gate; complete actions run directly; invalid actions
+the progressive-action contract in the Phase 18 UI spec: bare credential/connection namespaces
+stay help-first; eligible dual-TTY bare reverse enters its workspace; incomplete setup actions
+guide only under the exact dual-TTY gate; complete actions run directly; invalid actions
 return field-specific errors; agents use `--json --no-input`. Setup is split into child #469 while
 #416 remains reverse-only. This is still docs/design/skill work with no production Go or dependency
 change.
@@ -113,16 +124,17 @@ was exhausted. New accepted-correction PR will target the parent branch; do not 
    `SUMMARY.md`, `PROMPTS.md`, `RUN-STATE.md`, and `RUN-STATE.json` with the accepted review
    corrections, manual universal-loop fallback, scope, checks, and review blocker before editing
    design/program docs.
-2. **RED inventory** — keep grep evidence for current contradictions:
+2. **Historical RED inventory (superseded entry decision)** — keep evidence for contradictions
+   found in that correction run:
    - bare `pm query` wording incorrectly launches a TUI from a bare namespace;
    - guided reverse text prints/teaches approval tokens;
    - affected TUI dependency rows omit direct `#462`/`D-TUI` blockers;
    - phase status claims delivery/automated-review pending instead of provisional/review blocked;
    - query export lacks the typed path confinement/overwrite/noninteractive contract.
-3. **GREEN docs correction** — update only delegated docs and phase artifacts:
-   - require bare `pm query` and bare `pm reverse` to render contextual help/subcommand summaries
-     and exit 0; interactive surfaces use explicit documented subcommands (`pm query grid`,
-     `pm reverse guide`);
+3. **Historical GREEN docs correction (entry rule later superseded)** — update only delegated docs
+   and phase artifacts. That run changed bare query/reverse to help-first and used the explicit
+   `pm query grid`/`pm reverse guide` routes; the current human-first revision at the top now
+   replaces only that entry-routing decision.
    - mark approval tokens as sensitive one-time authorization values that may live only
      ephemerally in memory through plan → preview → approval → execute and are never printed,
      logged, transcripted, screenshot, accessibility-output, JSON-output, or shell-equivalent text;
@@ -180,7 +192,7 @@ head.
    never consume scripted stdin unexpectedly, hang, or bypass through `/dev/tty`.
 4. **Future RED test contract** — require production TUI issues to add tests for
    `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`,
-   while preserving explicit `pm query grid`, `pm reverse guide`, read-only query export, reverse
+   while preserving the `pm query grid` and `pm reverse guide` aliases, read-only query export, reverse
    approval-token secrecy, and accessibility/plain behavior.
 5. **State honesty** — update run-state/summary/checklists to say #467 was open at the starting
    head with CI green and human/parent review pending; replace open-PR next steps with local
@@ -239,7 +251,8 @@ final-head claims. Local review sidecars are local evidence only, not external r
      TTYs and none of the bypass flags are set;
    - the shared and Stage 16-specific TTY fallback RED matrix names stdin+stdout TTY activation,
      `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`;
-   - prior corrections stay intact: explicit `pm query grid`/`pm reverse guide`, bare help exit 0,
+   - prior safety corrections stay intact; the current human-first revision replaces only the
+     query/reverse bare-entry rule while retaining `pm query grid`/`pm reverse guide` aliases,
      approval-token nondisclosure, direct dependencies, path-safe typed export, and no `/dev/tty`.
 4. **Verification checkpoint** — rerun contradiction grep, marker matrix, JSON parse, skill
    validation, direct dependency/token/export/accessibility checks, exact scope check,

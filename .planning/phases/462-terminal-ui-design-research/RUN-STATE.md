@@ -12,6 +12,7 @@ base_parent_commit: 93a117100c6421955262aa32794a91a158d267e1
 correction_start_head: e8286ea83a76ac2c6f6257c6e2d40fd21af81640
 followup_start_head: fd122c52458a6ef0db12f60f303c261ed2e63d4c
 evidence_closure_start_head: a8f867ee673f9420ff15ccd51797cba94ed91769
+human_first_revision_start_head: 39a52bf31d618b33372c500bf0508925dd94e134
 original_pr: 465
 original_pr_head: 6853fee28e0208381b49931fb1f5dfec42ee50ef
 correction_pr: 467
@@ -25,14 +26,14 @@ followup_pr_state_at_start: open
 followup_pr_head_at_start: fd122c52458a6ef0db12f60f303c261ed2e63d4c
 followup_pr_head_at_evidence_closure_start: a8f867ee673f9420ff15ccd51797cba94ed91769
 followup_pr_review_status_at_start: human_review_pending
-state: correction_468_evidence_closure_complete_human_review_pending
+state: human_first_entry_revision_verified_human_review_pending
 classification: docs_planning_skill_only
 research: complete
 local_reference_lab: complete
 production_go_changes: false
 dependency_changes: false
 verification_passed: true
-verification_status_reason: docs-only declared phase equivalent make docs-check passed; full make verify not run by scope
+verification_status_reason: human-first entry revision passed docs, skill, GSD, syntax, scope, contract, and GitHub synchronization checks; full make verify remains docs-only not applicable
 review:
   claude: disabled_manually_no_retry
   copilot: quota_exhausted_no_retry
@@ -75,6 +76,11 @@ verification:
     - git_diff_check_pass
     - gsd_doctor_pass_69_commands
     - docs_check_pass
+    - human_first_entry_red_captured
+    - human_first_entry_green_docs_and_issue_contracts_updated
+    - human_first_entry_file_matrix_pass
+    - human_first_entry_github_matrix_pass
+    - phase18_six_dimension_ui_check_pass
 human_gate:
   ntcharts_v2: required_before_go_mod
   github_blocked_by_metadata: parent_orchestrator_follow_up
@@ -117,6 +123,9 @@ orchestration_decisions:
   - cycle: correction-468-evidence-closure
     decision: local_critical_path
     reason: evidence-only RUN-STATE closure on assigned worker branch; parent records spawned; no subagent tool available to this worker
+  - cycle: human-first-entry-revision
+    decision: local_critical_path
+    reason: user explicitly locked the query/reverse entry decision; generated GSD UI prompt applied inline and no delegated worker was requested
 next:
   - human_review_gate
   - parent_integration_gate

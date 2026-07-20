@@ -104,7 +104,8 @@ Run:
 Load and record `bubble-tea-tui-design`, then `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`,
 `golang-concurrency`, and `golang-documentation` as applicable. Before production edits, put exact
-RED cases in PLAN.md/TDD-LEDGER.md for bare namespace help-not-TUI behavior, TUI/Huh activation
+RED cases in PLAN.md/TDD-LEDGER.md for ordinary bare-namespace help behavior plus the narrow
+human-first query/reverse dual-TTY entry exception, TUI/Huh activation
 requiring both stdin and stdout TTYs, `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`,
 `--json`, `--plain`, `--no-input`, Normal/Filter/Edit printable-key conflicts, arrows+Vim
 equivalence, focus/context help, wide/standard/compact/guard rendering, loading/empty/failure/
@@ -118,9 +119,11 @@ language. Bubble Tea/Huh prompts activate only when stdin and stdout are TTYs an
 `--json`, or `--no-input` bypass flag is set; piped/non-TTY stdin falls back to deterministic
 plain/noninteractive behavior and must never be consumed unexpectedly, hang, or bypass through
 `/dev/tty`. `--plain`, `--json`, and `--no-input` always skip Bubble Tea, Huh, and prompts;
-sequential prompts are allowed only in explicit accessible mode after the same gate passes. Bare
-`pm query` and bare `pm reverse` render contextual help/subcommand summaries and exit 0; explicit
-interactive subcommands are `pm query grid` and `pm reverse guide`. Do not copy generic shell execution, shell-backed previews, unlabelled
+sequential prompts are allowed only in explicit accessible mode after the same gate passes.
+Eligible dual-TTY bare `pm query` and bare `pm reverse` open their human-first workspaces;
+`pm query grid` and `pm reverse guide` remain explicit aliases to those same models. Help flags and
+all bypass/non-TTY bare invocations render deterministic contextual help and exit 0. Do not copy
+generic shell execution, shell-backed previews, unlabelled
 destructive keys, generic HTTP/SQL writes, generic file writes, approval-token display, or
 interactive secret entry. Mouse/OSC52/advanced graphics are optional accelerators only.
 

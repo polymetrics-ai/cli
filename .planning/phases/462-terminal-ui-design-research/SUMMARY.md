@@ -1,10 +1,12 @@
 # Phase 462 Summary
 
 Progressive setup refinement on PR #468 adds an implementation-ready, GSD-verified Phase 18 UI
-contract and child issue #469. It makes incomplete credential/connection actions guided by default
-only on a genuine dual-TTY, preserves bare namespace help and direct fully specified commands, keeps
-plaintext secrets outside the TUI, and documents `--json --no-input` for agents. #416 remains the
-separate reverse-security flow. Final merge remains human-gated.
+contract and child issue #469. The latest human-first revision makes eligible dual-TTY bare
+`pm query` and bare `pm reverse` enter their workspaces while keeping `pm query grid` and
+`pm reverse guide` as explicit aliases. Help flags and every bypass/non-TTY path remain
+deterministic/help-first. Incomplete credential/connection actions are guided only on a genuine
+dual-TTY, their bare namespaces remain help-first, plaintext secrets stay outside the TUI, and
+agents use `--json --no-input`. Final merge remains human-gated.
 
 Status: provisionally integrated / review blocked. PR #465 (`docs/462-terminal-ui-design-research`)
 was merged into the parent branch from head `6853fee28e0208381b49931fb1f5dfec42ee50ef`, but Claude
@@ -40,15 +42,15 @@ prefix failed the repository's explicit `<type>/<description>` naming gate; the 
 branch preserves the verified content. Parent integration is provisional because external review
 coverage is blocked.
 
-## Accepted review corrections — 2026-07-20
+## Historical accepted review corrections — 2026-07-20 (entry rule superseded)
 
 Planned correction branch: `docs/462-terminal-ui-design-review-fixes`.
 
 Accepted findings to fix across delegated docs:
 
-1. Bare namespaces must not launch TUI surfaces. Bare `pm query` and bare `pm reverse` render
-   contextual help/subcommand summaries and exit 0; invalid actions remain usage errors. Explicit
-   interactive subcommands will be named consistently (`pm query grid`, `pm reverse guide`).
+1. This earlier correction made bare query/reverse help-first and named `pm query grid` and
+   `pm reverse guide` as the only interactive entries. The latest human-first revision supersedes
+   only that routing choice: eligible dual-TTY bare entries now open the same models as the aliases.
 2. Approval tokens are sensitive one-time authorization values. Guided reverse may relay them only
    ephemerally in memory through the existing plan → preview → approval → execute path; never print
    them in final frames, transcripts, logs, screenshots, accessibility output, JSON, or
@@ -77,7 +79,7 @@ behavior, never consume scripted stdin unexpectedly, never hang, and never open 
 the gate.
 
 Future production TUI issues must record RED tests for `stdin-piped+stdout-TTY`, `stdout-piped`,
-`CI`, `--json`, `--plain`, and `--no-input`. The explicit `pm query grid`, `pm reverse guide`,
+`CI`, `--json`, `--plain`, and `--no-input`. The `pm query grid`, `pm reverse guide` aliases,
 read-only query export, approval-token secrecy, and accessibility/plain contracts remain preserved.
 Next gates are local finding disposition, human review, and parent integration; no Claude/Copilot
 retry is requested in this blocker window.
@@ -92,8 +94,8 @@ both stdin and stdout are TTYs and none of those bypass flags are set.
 
 The execution prompt must carry a shared TUI fallback RED matrix for all TUI phases, and Stage 16
 must name the same matrix explicitly: stdin+stdout TTY activation, `stdin-piped+stdout-TTY`,
-`stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`. Prior corrections remain preserved:
-explicit `pm query grid` and `pm reverse guide`, bare namespace help exit 0, approval-token
+`stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`. Prior safety corrections remain
+preserved: `pm query grid` and `pm reverse guide` aliases, bypass-path help exit 0, approval-token
 nondisclosure, direct dependencies, path-safe typed export, and no `/dev/tty` bypass.
 
 Planning/RED and green evidence are captured on branch `docs/462-terminal-ui-tty-gate-follow-up`.

@@ -62,13 +62,13 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 | 10 | #408 | B | Flow and ETL run dashboards | #405, #462/D-TUI |
 | 11 | #409 | B | Flow and schedule creation wizards | #408, #462/D-TUI |
 | 12 | #410 | C | Opt-in OpenTelemetry tracing | #402 |
-| 13 | #411 | B | Connector browser, `query tables`, and interactive query grid | #409, #462/D-TUI |
+| 13 | #411 | B | Connector browser, `query tables`, and human-first `pm query` workspace with `pm query grid` alias | #409, #462/D-TUI |
 | 13b | #463 | B | Read-only query charts and reusable terminal dashboard compositions | #411, #462/D-TUI; renderer dependency requires explicit human approval |
 | 14 | #412 | B | Terminal docs viewer | #409, #462/D-TUI |
 | 15 | #413 | A | Connector-aware shell completion | #407 |
 | 16 | #414 | B | Certify batch table and RLM agent dashboards | #407, #408, #462/D-TUI |
 | 17 | #415 | C | OpenTelemetry metrics | #410 |
-| 18 | #416 | B | Guided reverse ETL session | #409, #462/D-TUI |
+| 18 | #416 | B | Human-first `pm reverse` guided session with `pm reverse guide` alias | #409, #462/D-TUI |
 | 18b | #469 | B | TTY-progressive credential and connection setup | #409, #462/D-TUI; child of #416 |
 | 19 | #417 | A | Help tree deepening and generated man pages | #411, #412, #413, #414, #416, #469 |
 | 20 | #418 | B | Accessibility audit and `pm a11y` topic | #411, #412, #414, #416, #469, #462/D-TUI; #463 after #411 when chart slice is included |
@@ -82,7 +82,9 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 3. Phase 9 namespace grandchildren #421–#437 are serialized because they share central CLI routing/help files.
 4. TUI design issue #462/D-TUI must integrate before production UI work starts. UX fan-out after
    #409: #411, #412, #416, and #469 may run in isolated worktrees after write-scope collision
-   checks; #414 waits for #407, #408, and #462/D-TUI. #416 owns only `pm reverse guide`; #469 owns
+   checks; #414 waits for #407, #408, and #462/D-TUI. #411 owns the human-first `pm query`
+   workspace and its `pm query grid` alias; #416 owns the human-first `pm reverse` workspace and
+   its `pm reverse guide` alias; #469 owns
    credential and connection setup. Chart child #463 follows #411 and #462/D-TUI, then joins the
    #418 accessibility convergence when included. Parent orchestrator must update GitHub blocked-by
    metadata; worker docs do not mutate issue metadata.
@@ -103,8 +105,10 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
   unapproved until a dedicated chart child issue #463 receives an explicit human dependency
   decision.
 - TTY-progressive action commands prompt only for missing fields. Fully specified invocations run
-  directly, complete-but-invalid invocations return ordinary validation errors, and bare namespaces
-  remain contextual help. Agent documentation uses `--json --no-input`; long-running commands may
+  directly and complete-but-invalid invocations return ordinary validation errors. Ordinary bare
+  namespaces remain contextual help; eligible dual-TTY bare `pm query` and bare `pm reverse` are
+  the narrow human-first workspace exception, with deterministic help on every bypass path. Agent
+  documentation uses `--json --no-input`; long-running commands may
   add `--progress ndjson`. Do not introduce a global `--agent-mode`, because that name already has
   query-specific result-shaping semantics.
 - Parent PR to `main` remains draft until all required sub-issues are integrated, final verification passes, automated review coverage is recorded, and a human is asked for final approval.

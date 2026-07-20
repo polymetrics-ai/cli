@@ -3,6 +3,19 @@
 Issue: #462
 Starting commit: `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`
 
+## Human-first workspace revision ledger — 2026-07-20
+
+- RED: current normative sources required humans to discover `pm query grid` and
+  `pm reverse guide`, contradicting the user-locked human-first entry decision.
+- GREEN: eligible dual-TTY bare `pm query` and bare `pm reverse` enter their workspaces; the
+  explicit aliases route to the same models; help flags and every bypass/non-TTY path stay
+  deterministic/help-first.
+- REFACTOR: the exception is centralized in AGENTS/parity/design/skill contracts, kept narrow to
+  query/reverse, and paired with route-equivalence, initialization-spy, and help/bypass tests.
+- GSD: `scripts/gsd doctor` passed and `scripts/gsd prompt ui-phase 18 --text` generated the
+  project-local workflow prompt; the six-dimension UI check was rerun inline because no delegated
+  worker was requested for this revision.
+
 ## Progressive setup refinement ledger — 2026-07-20
 
 - RED: Phase 18 combined reverse/setup, lacked complete-vs-incomplete activation semantics, and did
@@ -113,8 +126,8 @@ this correction changes only delegated documentation/planning/skill artifacts.
 
 ### Expected GREEN evidence
 
-- Bare namespace wording removed: no design text claims bare `pm query` or bare `pm reverse` starts
-  a TUI; explicit interactive subcommands are `pm query grid` and `pm reverse guide`.
+- Historical result (superseded by the human-first revision above): that correction removed bare
+  query/reverse TUI entry and used `pm query grid`/`pm reverse guide` only.
 - Approval-token display wording removed and replaced by ephemeral in-memory one-time authorization
   contract with typed approval preserved.
 - Dependency rows directly encode `#462`/`D-TUI` for affected TUI issues.
@@ -127,8 +140,8 @@ this correction changes only delegated documentation/planning/skill artifacts.
 
 | Check | Evidence | Status |
 |---|---|---|
-| Bare namespace contract | contradiction grep for old bare `pm query`/`pm reverse` TUI-launch wording returned no current-doc matches outside the historical RED ledger | Pass |
-| Explicit subcommands | `pm query grid` and `pm reverse guide` markers present in design docs, ADR, plan, prompt, Pi prompt, skill, and phase artifacts | Pass |
+| Historical bare namespace contract | The then-current correction grep passed; its entry decision is superseded by the human-first revision at the top | Historical pass |
+| Workspace entries | Bare query/reverse human-first entries and `query grid`/`reverse guide` aliases are present across design docs, ADR, plan, prompt, Pi prompt, skill, and phase artifacts | Pass |
 | Approval token secrecy | old token-display wording absent from current docs; new contract marks approval tokens sensitive one-time values, ephemeral in-memory only, never rendered in final frames/transcripts/logs/screenshots/accessibility/JSON/shell-equivalent text/fixtures | Pass |
 | Dependency rows | Python roster check confirmed direct `#462`/`D-TUI` markers for #408, #409, #411, #412, #414, #416, #418, and #463 across roadmap, backlog, source plan, and execution prompt | Pass |
 | Query export path | marker check confirmed typed read-only export, project-scoped default, control-character/traversal/broad-path/symlink rejection, no-overwrite default, confirmation only when stdin/stdout are TTYs, noninteractive `--force`, sanitized command echo, and exact `--no-input` guidance | Pass |
@@ -206,7 +219,7 @@ correction, but future TUI implementation issues must start with failing tests f
 | TTY gate alignment | Python docs-contract contradiction grep over ADR, design docs, skill references, roadmap/backlog/Pi prompts, execution prompt, and phase artifacts printed `PASS docs-contract contradiction grep: stdin+stdout TTY gate aligned; future RED matrix present` | Pass |
 | Future RED matrix | Markers present for `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input` in design docs, skill/test reference, execution prompt, Pi prompt, roadmap, and phase artifacts | Pass |
 | Scripted stdin safety | Delegated sources say piped/non-TTY stdin falls back to deterministic plain/noninteractive behavior without consuming scripted stdin, hanging, or using `/dev/tty` | Pass |
-| Query/reverse/accessibility preservation | Marker check confirmed `pm query grid`, bare `pm query` help, `pm reverse guide`, bare `pm reverse` help, accessibility/plain, approval-token secrecy, and typed read-only query export contracts remain present | Pass |
+| Query/reverse/accessibility preservation | Marker check confirms dual-TTY bare query/reverse entry, same-model aliases, bypass help, accessibility/plain, approval-token secrecy, and typed read-only query export contracts | Pass |
 | State honesty | RUN-STATE.json/RUN-STATE.md/SUMMARY record PR #467 open at starting head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, CI green at that head, human/parent review pending, and no invented final-head claim | Pass |
 | Skill validation | PyYAML frontmatter/reference check printed `Skill is valid!` | Pass |
 | JSON syntax | `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` | Pass |
@@ -288,7 +301,7 @@ matrix before code.
 | Query grid `--plain` correction | Old `pm query grid --plain` sequential-prompt wording absent; bypass docs now require deterministic table/summary output or exact required-flag errors only | Pass |
 | Explicit accessible mode | Sequential prompt wording is limited to explicit accessible mode after stdin+stdout TTY gate and no `--plain`/`--json`/`--no-input` bypass flag | Pass |
 | Shared + Stage 16 matrix | Execution prompt TUI preflight and Stage 16 gate both include stdin+stdout TTY activation, `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input` | Pass |
-| Prior corrections preserved | Marker check confirmed `pm query grid`, `pm reverse guide`, bare contextual help, approval-token nondisclosure, typed read-only query export, direct `#462`/`D-TUI`, and no `/dev/tty` bypass remain present | Pass |
+| Prior safety corrections preserved | Marker check confirms `pm query grid`/`pm reverse guide` aliases, bypass contextual help, approval-token nondisclosure, typed read-only query export, direct `#462`/`D-TUI`, and no `/dev/tty` bypass | Pass |
 | Artifact state honesty | RUN-STATE/SUMMARY record PR #467 merged at parent commit `93a117100c6421955262aa32794a91a158d267e1` from old head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, PR #468 open at starting head `fd122c52458a6ef0db12f60f303c261ed2e63d4c`, human review pending, GitHub as live source, local sidecar not external coverage, and no final-head claim | Pass |
 | Skill validation | frontmatter/reference validation printed `Skill is valid!` | Pass |
 | JSON syntax | `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` | Pass |

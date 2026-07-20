@@ -4,7 +4,10 @@
 
 - [x] GSD UI contract defines state, responsive frames, exact copy, errors, accessibility, and tests.
 - [x] GSD UI checker verdict is PASS on all six dimensions.
-- [x] Bare namespaces remain help; only incomplete action commands are eligible for guidance.
+- [x] Bare credentials/connections remain help; eligible dual-TTY bare reverse is the human-first
+      guided-workspace exception and every bypass path stays deterministic/help-first.
+- [x] Bare reverse and the explicit `reverse guide` alias share one state model; help flags never
+      initialize the TUI.
 - [x] Dual-TTY and every bypass path are explicit.
 - [x] Secret-source metadata, local placeholder validation, duplicate recovery, and reverse-token
       boundaries are explicit.

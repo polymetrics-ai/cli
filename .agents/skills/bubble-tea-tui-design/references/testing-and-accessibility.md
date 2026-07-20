@@ -14,6 +14,9 @@
    `--json`, `--plain`, and `--no-input`; each must bypass the TUI/prompt path without consuming
    scripted stdin, without hanging, and without using `/dev/tty`. Sequential prompting is allowed
    only in explicit accessible mode after the same gate passes.
+   Add allowlist cases proving bare `pm query` and bare `pm reverse` launch their workspace only on
+   the eligible dual-TTY, their explicit aliases reach the same initial model, help flags always
+   render help, and ordinary bare namespaces remain help-first.
 5. **Progressive-action integration:** incomplete dual-TTY action commands ask only for missing
    fields; complete actions execute directly; complete-but-invalid actions return direct validation
    errors; duplicate names make no state change. Agent examples use `--json --no-input`, never a

@@ -2,8 +2,9 @@
 
 ## Progressive setup refinement — 2026-07-20
 
-PR #468 now carries the GSD-verified Phase 18 interaction contract. #416 is narrowed to the guided
-reverse security flow; child #469 owns TTY-progressive credential and connection setup. The live
+PR #468 now carries the GSD-verified Phase 18 interaction contract. #416 owns the human-first bare
+reverse workspace and `reverse guide` alias; #411 owns the equivalent bare query workspace and
+`query grid` alias. Child #469 owns TTY-progressive credential and connection setup. The live
 GitHub graph records #409/#462 → #469 → #417/#418, and the missing #411 → #463 edge is restored.
 Neither production issue is ready until PR #468 receives human review and is integrated into the
 parent branch.

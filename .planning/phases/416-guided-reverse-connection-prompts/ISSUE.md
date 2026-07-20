@@ -6,7 +6,8 @@ prompt-free API for agents, scripts, pipes, and CI.
 ## Background
 
 This is a scoped child of #416 (Phase 18 / Track B) under parent program #397. The original Phase
-18 issue combined the security-critical `pm reverse guide` with credential/connection setup. This
+18 issue combined the security-critical human-first `pm reverse` workspace (with
+`pm reverse guide` as its explicit alias) with credential/connection setup. This
 child owns only the setup journey so it can be delivered as one issue and one stacked PR.
 
 The approved interaction contract is being added by PR #468 in
@@ -70,7 +71,7 @@ delegates them.
 
 ## Non-goals
 
-- `pm reverse guide`; that remains owned by #416.
+- the human-first `pm reverse` workspace and `pm reverse guide` alias; those remain owned by #416.
 - Connector list/browser/inspect/capability presentation (#411 and existing connector follow-ups).
 - Help-tree/man-page architecture (#417), except the parity changes required by this issue.
 - Interactive secret entry, masked password prompts, clipboard secret intake, raw secret flags, or
