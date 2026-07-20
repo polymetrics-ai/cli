@@ -47,3 +47,67 @@ The `rg` audits searched the base Pi prompt for `bubble-tea-tui-design`,
 
 No production test was appropriate because this phase changes only documentation, planning,
 agent instructions, and a skill. Production UI issues retain strict test-first behavior.
+
+## Review correction RED ledger — 2026-07-20
+
+GSD/Pi evidence captured before delegated docs/design edits:
+
+```text
+scripts/gsd doctor                         # pass, 69 commands
+scripts/gsd prompt plan-phase 462 --skip-research > /tmp/gsd-plan-462.txt
+wc -c /tmp/gsd-plan-462.txt                 # 10692
+scripts/gsd prompt programming-loop init --phase 462 --dry-run
+# scripts/gsd: unknown GSD command: programming-loop
+.pi/skills/go-implementation/SKILL.md       # absent
+```
+
+Manual universal-loop fallback is active because `programming-loop` is not registered in the
+repo-local GSD adapter. Execution decision for this worker cycle: `local_critical_path` — one
+assigned worker, isolated cwd, no subagent tool, docs-only accepted-review correction.
+
+Loaded skills recorded for this correction: `gsd-core`, `caveman`, `bubble-tea-tui-design`,
+`golang-how-to`, `golang-cli`, `golang-testing`, `golang-documentation`, `golang-security`, plus
+routed `golang-safety`, `golang-context`, and `golang-concurrency`. Skill-route mismatch:
+`.pi/skills/go-implementation/SKILL.md` is absent; used available skill paths.
+
+### Missing-contract inventory
+
+```text
+rg bare namespace / interactive launch:
+docs/design/tui-ux-design.md:275:**`pm query` interactive (bare `pm query` on a TTY):** alt-screen browser.
+
+rg approval token:
+docs/prompts/cli-architecture-v2-gsd-execution-prompt.md:224:Guided reverse-ETL session ... tokens relayed
+docs/plans/cli-architecture-v2-improvement-plan.md:258:guided reverse-ETL session (token relay handled in-session)
+docs/plans/cli-architecture-v2-improvement-plan.md:371-372:No changes ... relays the existing tokens
+docs/design/tui-ux-design.md:387-392:approval token is relayed ... Every intermediate ID/token is printed
+
+rg dependency rows:
+.planning/ROADMAP.md rows for #408/#409/#411/#412/#414/#416 omit direct #462 in Dependency gate;
+.planning/traces/cli-architecture-v2-issue-backlog.md P10/P11/P14/P16/P18/P20 omit direct D-TUI;
+docs/plans/cli-architecture-v2-improvement-plan.md phase table omits explicit design-gate text in rows;
+docs/prompts/cli-architecture-v2-gsd-execution-prompt.md stage headings depend on prose preflight only.
+
+rg status/review:
+.planning/phases/462-terminal-ui-design-research/SUMMARY.md:3:Status: delivered in stacked PR #465; CI and automated review pending.
+.planning/phases/462-terminal-ui-design-research/RUN-STATE.md:9:state: awaiting_ci_and_automated_review
+
+rg query export:
+docs/design/tui-ux-design.md:297-298:Export (`e`): write JSONL/CSV to a chosen path; always echoes ...
+docs/design/terminal-ui-research-and-design-system.md:220:export serializes the underlying rows, never the glyph rendering;
+```
+
+RED status: docs-contract grep inventory failed as expected. No Go behavior test required because
+this correction changes only delegated documentation/planning/skill artifacts.
+
+### Expected GREEN evidence
+
+- Bare namespace wording removed: no design text claims bare `pm query` or bare `pm reverse` starts
+  a TUI; explicit interactive subcommands are `pm query grid` and `pm reverse guide`.
+- Approval-token display wording removed and replaced by ephemeral in-memory one-time authorization
+  contract with typed approval preserved.
+- Dependency rows directly encode `#462`/`D-TUI` for affected TUI issues.
+- Phase status says provisionally integrated / review blocked with PR #465, head
+  `6853fee28e0208381b49931fb1f5dfec42ee50ef`, Claude disabled, Copilot quota exhausted,
+  human fallback, accepted-correction PR pending.
+- Query export path contract is explicit and preserves no generic write-tool boundary.

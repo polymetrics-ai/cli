@@ -1,0 +1,46 @@
+{
+  "issue": 462,
+  "parentIssue": 397,
+  "originalBranch": "docs/462-terminal-ui-design-research",
+  "correctionBranch": "docs/462-terminal-ui-design-review-fixes",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startCommit": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
+  "originalPr": 465,
+  "originalPrHead": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
+  "state": "provisionally_integrated_review_blocked_correction_in_progress",
+  "classification": "docs_planning_skill_only",
+  "research": "complete",
+  "localReferenceLab": "complete",
+  "productionGoChanges": false,
+  "dependencyChanges": false,
+  "verificationPassed": false,
+  "verificationStatusReason": "accepted correction in progress; final docs verification pending",
+  "review": {
+    "claude": "disabled_manually",
+    "copilot": "quota_exhausted",
+    "fallback": "human",
+    "acceptedCorrectionPr": "pending"
+  },
+  "humanGates": {
+    "ntchartsV2": "required_before_go_mod",
+    "githubBlockedByMetadata": "parent_orchestrator_follow_up"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "one assigned worker in isolated cwd; no subagent tool; accepted docs-only corrections"
+    },
+    {
+      "cycle": "programming-loop",
+      "decision": "local_critical_path",
+      "reason": "scripts/gsd programming-loop command absent; manual universal-loop fallback recorded"
+    }
+  ],
+  "next": [
+    "commit_push_planning_checkpoint",
+    "apply_delegated_doc_corrections",
+    "run_docs_verification",
+    "open_correction_pr_to_parent"
+  ]
+}
