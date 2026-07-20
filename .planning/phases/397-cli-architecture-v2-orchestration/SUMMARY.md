@@ -32,4 +32,8 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #436 nativized hidden extract, added project-rooted RLM warehouse scope, and preserved parser/help/output behavior with generated docs parity. Exact-head review and integration race checks passed.
 
-The final serialized Phase 9 unit is #437. Final verification and final parent review have not run; `verificationPassed` remains false.
+#462 / PR #465 added the terminal interaction design system and was provisionally integrated at parent commit `a5474bcb`. CI is green, but Claude is disabled and Copilot quota is exhausted, so required human review coverage is still missing. A local read-only `pm-reviewer` found five actionable design/safety gaps; these are accepted for a new isolated correction PR and block production TUI launch. Local sidecar review is not external coverage.
+
+#437 / PR #466 now contains the final serialized Phase 9 connectors/certify migration. The spawned Pi worker reconciled the latest parent, opened the stacked PR, and completed eight bounded TDD review-correction cycles. Reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6` passed focused/repeated/race tests, full CLI/certify packages, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certification, and connectorgen 547/0. Exact-path local re-review found no remaining actionable runtime/code issue. Evidence wording closed at PR head `9f004ac5d96d84bd1f8b186496e1f594a183a18b`.
+
+#437 is not integrated: current PR CI and human/parent fallback review coverage remain pending. #407, #413, and the TUI chain remain dependency/review blocked. #419 remains an explicit human dependency-decision gate. Final parent verification and final parent review have not run; `verificationPassed` remains false.
