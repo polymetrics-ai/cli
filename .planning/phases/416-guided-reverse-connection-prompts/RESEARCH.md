@@ -1,7 +1,7 @@
 # Phase 18 progressive terminal setup research
 
-Date: 2026-07-20  
-Issues: #416 (reverse), #469 (credentials/connections)  
+Date: 2026-07-20
+Issues: #416 (reverse), #469 (credentials/connections)
 Design gate: #462 / PR #468
 
 ## Question
@@ -68,4 +68,3 @@ shape and must not silently acquire prompt, secret, or output-mode semantics.
 The combined Phase 18 scope was too broad for the one-issue/one-PR delivery contract. #416 now owns
 only `pm reverse guide`; child #469 owns credential and connection setup. Both remain blocked by the
 reviewed #462 design gate, and #469 is also blocked by #409. #417 and #418 explicitly wait for #469.
-

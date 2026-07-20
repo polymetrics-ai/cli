@@ -1,7 +1,7 @@
 # Phase 18 design refinement plan
 
-Issues: #416 and child #469  
-Delivery PR: #468 (docs/design only)  
+Issues: #416 and child #469
+Delivery PR: #468 (docs/design only)
 Implementation: future isolated issue branches; no production Go in this plan
 
 ## Objective
@@ -48,4 +48,3 @@ implementation-ready Bubble Tea contract, one bounded setup issue, and synchroni
   automated issue merge, stacked PR merge, or parent-to-main merge is authorized here.
 - PR #468 requires human review because Claude is disabled and Copilot quota is exhausted for the
   current review window.
-
