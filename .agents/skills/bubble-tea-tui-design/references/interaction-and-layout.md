@@ -2,7 +2,9 @@
 
 ## Modes
 
-Use explicit, shallow modes rather than turning the CLI into a full Vim clone.
+Use explicit, shallow modes rather than turning the CLI into a full Vim clone. Bare namespaces do
+not enter these modes: `pm query` and `pm reverse` render contextual help/subcommand summaries and
+exit 0. Interactive places use explicit subcommands such as `pm query grid` and `pm reverse guide`.
 
 | Mode | Enter | Keys | Exit |
 |---|---|---|---|
@@ -22,6 +24,10 @@ Rules:
 - Use `h/l` for sibling tabs or spatial panes, not for actions. Use `tab/shift+tab` as the
   universal focus fallback.
 - `enter` activates the focused item. Avoid overloaded single-letter mutations.
+- Approval tokens are sensitive one-time authorization values. Guided reverse may carry them only
+  ephemerally in memory through plan → preview → approval → execute; never render them in final
+  frames, transcripts, logs, screenshots, accessibility output, JSON, shell-equivalent command
+  text, or fixtures.
 
 ## Key bindings
 

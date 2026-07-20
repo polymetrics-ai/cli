@@ -45,10 +45,12 @@ Sources reviewed:
 
 ### Distilled best practices (the yardstick)
 
-**A. Flags are the API; prompts are progressive enhancement.** (gh, clig.dev) Prompt only
-when stdout+stdin are TTYs and a required input is missing; `--no-input` disables all
-interactivity and errors must name the exact flag to pass; every wizard result is
-expressible as flags and the wizard teaches them.
+**A. Flags are the API; prompts are progressive enhancement.** (gh, clig.dev) Bare
+namespace commands show contextual help/subcommand summaries and exit 0; explicit subcommands own
+interactive places. Prompt only when stdout+stdin are TTYs and a required input is missing;
+`--no-input` disables all interactivity and errors must name the exact flag to pass; every wizard
+result is expressible as flags and the wizard teaches sanitized commands without secrets or
+one-time authorization values.
 
 **B. A CLI framework should own routing, help, and completion — not behavior.** (cobra
 practice) Behavior stays in testable handlers with injected writers; the framework layer is
@@ -164,15 +166,16 @@ Each gap cites the offending file(s) and the yardstick letter it violates.
   (`internal/cli/cli.go:186-188`) — the largest browse surface in the product, unusable.
 - **Docs are plain text only** — no markdown rendering, no pager; `pm docs` only
   generates/validates files on disk (`internal/cli/cli.go:1118`).
-- **Reverse ETL** requires copy-pasting a plan ID and an approval token across four
-  commands; the JSON output deliberately redacts the token
-  (`safeReversePlanForOutput`, `internal/cli/cli.go:858`) so it can only be lifted from
-  human text output.
+- **Reverse ETL** requires carrying plan/preview/approval/execute state across four commands.
+  Approval tokens are sensitive one-time authorization values; JSON deliberately redacts them
+  (`safeReversePlanForOutput`, `internal/cli/cli.go:858`) and future TUI guidance must not print
+  them in human transcripts, logs, screenshots, accessibility output, JSON, or shell-equivalent
+  command text.
 - **`pm flow status` defaults its flows dir to `os.TempDir()`**
   (`internal/cli/flow_cli.go:204`) while `run` uses `<projectDir>/flows` and `list` uses
   `.polymetrics/flows` — a real inconsistency.
 - **Effect:** the product is agent-first by design but human-hostile by accident; every
-  creation journey is hand-authoring files and relaying IDs between commands.
+  creation journey is hand-authoring files and safely carrying state between commands.
 
 ### 3.5 Zero observability — F, G
 
@@ -246,16 +249,19 @@ Every TUI plan/worker must load the repo-local `bubble-tea-tui-design` skill. Su
   `Run` delegates with `ModePlain`, so every existing test exercises the plain path by
   construction. `SanitizeTerminal` continues to guard the plain path; on the TUI path it
   moves into view-string hygiene (every dynamic string sanitized before styling).
-- **Doctrine (A):** flags stay the API. Wizards prompt only for missing inputs, print the
-  equivalent non-interactive command on completion, and `--no-input` errors name the flag.
+- **Doctrine (A):** flags stay the API. Bare namespaces stay contextual help; explicit
+  subcommands such as `pm query grid` and `pm reverse guide` own interactive places. Wizards prompt
+  only for missing inputs, print sanitized equivalent non-interactive commands on completion, and
+  `--no-input` errors name the flag.
 - **Surfaces** (each with plain/JSON parity): live run dashboards (`flow run`, `etl run` —
   the signature "pipeline rail"), `pm flow create` wizard (huh dynamic forms; `in`/`out`
   wiring becomes structurally correct because pickers only offer tables produced upstream),
   `pm schedule create` interactive (cron presets + next-3-fire-times preview using the
   dead `schedule.Next`), `pm query tables` (plain enumerator — agents and wizard share it)
-  + interactive query grid (bubble-table), connectors browser (551-row fuzzy list + manual
-  preview pane), docs viewer (glamour pager over existing manual text), certify batch
-  table, RLM viewer, guided reverse-ETL session (token relay handled in-session).
+  + explicit `pm query grid` (bubble-table), connectors browser (551-row fuzzy list + manual
+  preview pane), docs viewer (glamour pager over existing manual text), certify batch table,
+  RLM viewer, and explicit `pm reverse guide` with any approval token carried ephemerally in
+  memory only.
 - **Interaction system:** a LazyGit-shaped operator workspace with fzf-style
   filter/list/preview, exact bpytop-style metrics, and Gum-style focused wizard steps.
   Normal/Filter/Edit modes keep Vim navigation predictable without stealing printable keys;
@@ -314,17 +320,17 @@ requirements without changing the 22 production-phase numbers.
 | 7 | TTY gate, `--plain`/`--no-input`/`--progress ndjson`, `internal/ui/styles` foundation | B | golang.org/x/term |
 | 8 | Nativize pilot namespace (`catalog`) | A | — |
 | 9 | Nativize remaining namespaces (several loops; certify last) | A | — |
-| 10 | Flagship run dashboards: `flow run` + `etl run` | B | bubbletea/bubbles/lipgloss v2, teatest (test-only) |
-| 11 | Wizards wave 1: `pm flow create` + `pm schedule create` (+ accessible mode) | B | huh v2 |
+| 10 | Flagship run dashboards: `flow run` + `etl run` — blocked by #462/D-TUI | B | bubbletea/bubbles/lipgloss v2, teatest (test-only) |
+| 11 | Wizards wave 1: `pm flow create` + `pm schedule create` (+ accessible mode) — blocked by #462/D-TUI | B | huh v2 |
 | 12 | Traces: command→operation→connector HTTP + file/OTLP exporters | C | otel api/sdk/trace exporters |
-| 13 | Browse wave: connectors browser, `pm query tables`, interactive query grid; dependency-gated query chart child #463 | B | evertras/bubble-table; proposed ntcharts/v2 needs separate human approval |
-| 14 | Docs viewer: glamour pager for command + connector manuals | B | glamour v2 |
+| 13 | Browse wave: connectors browser, `pm query tables`, `pm query grid`; dependency-gated query chart child #463 — blocked by #462/D-TUI | B | evertras/bubble-table; proposed ntcharts/v2 needs separate human approval |
+| 14 | Docs viewer: glamour pager for command + connector manuals — blocked by #462/D-TUI | B | glamour v2 |
 | 15 | Connector command registration + shell completion | A | — |
-| 16 | Certify batch table + RLM agent viewer dashboards | B | — |
+| 16 | Certify batch table + RLM agent viewer dashboards — blocked by #462/D-TUI | B | — |
 | 17 | Metrics per PRD §15.2 + Temporal otel contrib | C | sdk/metric, exporters, temporal contrib |
-| 18 | Wizards wave 2: guided reverse-ETL session + credentials/connections prompting | B | — |
+| 18 | Wizards wave 2: `pm reverse guide` + credentials/connections prompting — blocked by #462/D-TUI | B | — |
 | 19 | Help tree deepening + man pages (the deliberate help-churn phase) | A | — |
-| 20 | `pm a11y` topic + accessibility audit pass | B | — |
+| 20 | `pm a11y` topic + accessibility audit pass — blocked by #462/D-TUI | B | — |
 | 21 | OTel log bridge (beta; optional — droppable) | C | otel log (beta, pinned) |
 | 22 | Cleanup: dead parse code, AGENTS.md/CONTEXT.md updates | A | — |
 
@@ -368,8 +374,10 @@ place (the interactive layer, where the product currently has nothing).
 - No REPL/shell mode; no daemon UI; no web UI.
 - No prometheus exporter; no otelhttp; no grpc-exporter promotion (http/protobuf default).
 - No renaming of existing flags/env vars — `PM_*` names remain honored as aliases.
-- No changes to the reverse-ETL approval token model — the guided session relays the
-  existing tokens; it does not weaken the plan→preview→approve→run gate.
+- No changes to the reverse-ETL approval token model — approval tokens remain sensitive
+  one-time authorization values carried only ephemerally in memory by the guided session. They are
+  never printed in final frames, transcripts, logs, screenshots, accessibility output, JSON,
+  shell-equivalent command text, or fixtures, and the plan→preview→approve→run gate is not weakened.
 - No connector-bundle changes; no changes to `internal/connectors/defs/**`.
 
 ## 9. Suggested execution order

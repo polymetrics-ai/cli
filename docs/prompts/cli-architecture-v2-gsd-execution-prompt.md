@@ -54,13 +54,15 @@ PLAN.md with TDD-ordered tasks) → `/gsd execute-phase <N>` → `/gsd verify-wo
 phase ends with `make verify` green plus the phase GATE. If a gate cannot pass, stop and
 flag it loudly in SUMMARY.md — never fake or skip a gate.
 
-TUI-PHASE PREFLIGHT (stages 10, 11, 13, chart child #463, 14, 16, 18, and 20): issue #462 must be integrated
-into the active parent branch. Load the repo-local `bubble-tea-tui-design` skill plus the
-routed Go CLI/testing/security/safety/context/concurrency/documentation skills. The RED
-contract must cover Normal/Filter/Edit mode conflicts, arrows+Vim equivalence, contextual
-help, wide/standard/compact/guard layouts, accessible/plain fallback, sanitation/redaction,
-cancellation, and unchanged JSON/stdout/stderr/exit semantics. Record the skill and evidence
-in PLAN/TDD-LEDGER/VERIFICATION and the PR body.
+TUI-PHASE PREFLIGHT (stages 10, 11, 13, chart child #463, 14, 16, 18, and 20): issue #462/D-TUI
+must be integrated into the active parent branch and its accepted correction PR/review blocker must
+be resolved by the parent orchestrator before production UI work starts. Load the repo-local
+`bubble-tea-tui-design` skill plus the routed Go CLI/testing/security/safety/context/concurrency/
+documentation skills. The RED contract must cover bare namespace help-not-TUI behavior,
+Normal/Filter/Edit mode conflicts, arrows+Vim equivalence, contextual help,
+wide/standard/compact/guard layouts, accessible/plain fallback, sanitation/redaction, approval-token
+non-display, cancellation, and unchanged JSON/stdout/stderr/exit semantics. Record the skill and
+evidence in PLAN/TDD-LEDGER/VERIFICATION and the PR body.
 
 STAGE 1 — GOLDEN SAFETY NET (track A, no deps)
 Record ~80 golden transcripts (exit code + stdout + stderr) against the CURRENT dispatcher:
@@ -145,7 +147,7 @@ dynamic dispatch stays on parseFlags forever.
 GATE 9 (per loop): goldens unchanged; `make verify`; certify loop additionally runs the
 certify smoke. Commits "refactor(cli): nativize <ns> namespace (arch-v2)".
 
-STAGE 10 — RUN DASHBOARDS (track B; deps: charm.land bubbletea/bubbles/lipgloss v2, teatest test-only)
+STAGE 10 — RUN DASHBOARDS (track B; blocked by #462/D-TUI; deps: charm.land bubbletea/bubbles/lipgloss v2, teatest test-only)
 Flagship per design doc §2.1: pipeline-rail model for flow run + etl run; inline mode;
 ctrl+c → engine ctx cancel → DoneMsg → truthful final frame; exit codes identical to plain.
 teatest goldens (happy/fail/cancel at 160×45, 100×30, 80×24, compact, size guard); command
@@ -154,9 +156,9 @@ mode/focus/help contract; throttle redraws without dropping lifecycle events.
 GATE 10: `go test -race ./...`; goldens; manual TTY check; `pm flow run x | cat` byte-equal
 to pre-TUI golden; CI=1 plain. Commit "feat(ui): live run dashboards for flow/etl (arch-v2)".
 
-STAGE 11 — WIZARDS WAVE 1 (track B; deps: huh v2)
+STAGE 11 — WIZARDS WAVE 1 (track B; blocked by #462/D-TUI; deps: huh v2)
 `pm flow create` per design doc §2.2 (kind-dependent huh groups, upstream-only in/out
-pickers, rail preview, manifest round-trips flow.ParseManifest, prints scripted
+pickers, rail preview, manifest round-trips flow.ParseManifest, prints sanitized scripted
 equivalent) and `pm schedule create` interactive per §2.3 (flow existence validation, cron
 presets + next-3-fire-times via schedule.Next, backend select, optional install).
 WithAccessible wired to --accessible/PM_ACCESSIBLE_PROMPTER/ACCESSIBLE from day one.
@@ -175,20 +177,24 @@ GATE 12: `PM_TELEMETRY=file` run produces spans JSONL with expected names; secre
 telemetry dir clean; `PM_TELEMETRY=off` → no dir; envelope-only stdout; `make verify`.
 Commit "feat(obs): opt-in tracing with file/otlp exporters (arch-v2)".
 
-STAGE 13 — BROWSE WAVE (track B; deps: evertras/bubble-table)
+STAGE 13 — BROWSE WAVE (track B; blocked by #462/D-TUI; deps: evertras/bubble-table)
 `pm query tables` (plain/JSON warehouse enumerator — lands FIRST), connectors browser per
 design doc §2.5 (fuzzy list + manual preview + pager; fix the %+v dump on the plain path),
-interactive query grid per §2.4 (LIMIT/OFFSET paging through existing QuerySQL guard).
-Use fzf's filter/list/preview interaction without shell-backed preview execution. A query
-chart is separate dependency-gated child issue #463 after #411: it may visualize only the returned
+explicit `pm query grid` per §2.4 (LIMIT/OFFSET paging through existing QuerySQL guard). Bare
+`pm query` renders contextual help/subcommand summary and exits 0. Use fzf's filter/list/preview
+interaction without shell-backed preview execution. Query grid export is typed read-only only:
+project-scoped default, clean/confined path, reject control characters/traversal/broad paths/
+symlink races, no overwrite by default, TTY confirmation, noninteractive `--output` plus `--force`,
+sanitized command echo, and exact `--no-input` guidance. A query chart is a separate
+dependency-gated child issue #463 after #411 and #462/D-TUI: it may visualize only the returned
 read-only rows; must preserve table/text access, axes/units/exact values, bounded deterministic
-sampling, no-color/accessibility fallbacks; and may use `ntcharts/v2` only after explicit
-human approval and an exact pinned wrapper. Otherwise use the minimal internal renderer.
-GATE 13: query tables golden + JSON envelope; browser teatest goldens; read-only guard
-tests unchanged; modal-key/resize/chart-bounds tests as applicable; `make verify`. Commit
+sampling, no-color/accessibility fallbacks; and may use `ntcharts/v2` only after explicit human
+approval and an exact pinned wrapper. Otherwise use the minimal internal renderer.
+GATE 13: query tables golden + JSON envelope; browser/grid teatest goldens; read-only export/path
+guard tests; modal-key/resize/chart-bounds tests as applicable; `make verify`. Commit
 "feat(ui): query tables, connectors browser, query grid (arch-v2)".
 
-STAGE 14 — DOCS VIEWER (track B; deps: glamour v2)
+STAGE 14 — DOCS VIEWER (track B; blocked by #462/D-TUI; deps: glamour v2)
 `pm docs view [topic|connector]` per design doc §2.6: glamour in viewport, auto light/dark,
 piped → plain text identical to `pm help`. Use Normal/Search/Help modes; `/`, `n/N`,
 `ctrl+u/d`, `gg/G`, arrows, and one-layer `esc` follow the shared contract. Parity checklist
@@ -204,7 +210,7 @@ website).
 GATE 15: `pm __complete "" ""` snapshot test; goldens; `make verify`.
 Commit "feat(cli): shell completion + connector command registration (arch-v2)".
 
-STAGE 16 — CERTIFY + RLM DASHBOARDS (track B)
+STAGE 16 — CERTIFY + RLM DASHBOARDS (track B; blocked by #462/D-TUI)
 Certify batch table per design doc §2.7 (concurrent row updates from events; exit contract
 0/1/2/3 untouched); RLM viewer per §2.8 (heartbeat age from the Temporal poller). Pair
 bpytop-style exact metrics with any small graph, disclose units/ranges, throttle redraws,
@@ -220,14 +226,17 @@ GATE 17: file-exporter metrics reconcile with envelope counts (jq equality test)
 `go test -bench BenchmarkEmit -benchmem ./internal/app` no regression; `make verify`.
 Commit "feat(obs): metrics per PRD §15.2 + temporal otel contrib (arch-v2)".
 
-STAGE 18 — WIZARDS WAVE 2 (track B)
-Guided reverse-ETL session per design doc §2.9 (existing gate untouched; tokens relayed
-in-session; typed confirmation preserved) + connections create missing-input prompting per
-§2.10. credentials add stays non-interactive for secret values (non-goal — do not add
-interactive secret entry). Use explicit Normal/Edit/Confirm state; no unlabelled single-key
-write action and no generic shell/HTTP/SQL write escape hatch.
-GATE 18: session test proves identical plan/approve semantics as the flag flow; approval
-token still never in --json output; `make verify`.
+STAGE 18 — WIZARDS WAVE 2 (track B; blocked by #462/D-TUI)
+Explicit `pm reverse guide` per design doc §2.9 (existing gate untouched; approval token carried
+only ephemerally in memory; typed confirmation preserved) + connections create missing-input
+prompting per §2.10. Bare `pm reverse` renders contextual help/subcommand summary and exits 0.
+credentials add stays non-interactive for secret values (non-goal — do not add interactive secret
+entry). Use explicit Normal/Edit/Confirm state; no approval-token display in final frames,
+transcripts, logs, screenshots, accessibility output, JSON, shell-equivalent command text, or
+fixtures; no unlabelled single-key write action and no generic shell/HTTP/SQL write escape hatch.
+GATE 18: session test proves identical plan/approve semantics as the flag flow; approval token is
+not displayed in JSON, final frames, accessibility transcript, logs, screenshots/fixtures, or
+scripted-equivalent text; `make verify`.
 Commit "feat(ui): guided reverse-etl session + connections prompting (arch-v2)".
 
 STAGE 19 — HELP TREE + MAN PAGES (track A; THE deliberate help-churn phase)
@@ -237,7 +246,7 @@ parity checklist in the PR body.
 GATE 19: `make verify`; docs diff reviewed; goldens regenerated deliberately.
 Commit "feat(cli): help tree deepening + generated man pages (arch-v2)".
 
-STAGE 20 — ACCESSIBILITY AUDIT (track B)
+STAGE 20 — ACCESSIBILITY AUDIT (track B; blocked by #462/D-TUI)
 `pm a11y` help topic per design doc §3; audit pass: every TUI surface against the
 checklist (accessible mode, reduced motion, NO_COLOR, glyph+word pairing, min-size,
 keyboard nav, modal printable-key conflicts, arrows+Vim equivalence, chart text/table

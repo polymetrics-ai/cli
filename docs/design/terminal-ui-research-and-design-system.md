@@ -148,12 +148,19 @@ undocumented key chords. Familiarity is the goal; emulation is not.
 
 - One accent border/title/selection identifies focus. Never make the user infer focus from
   color alone.
+- Bare namespace commands, including `pm query` and `pm reverse`, render contextual help and
+  subcommand summaries and exit 0; they do not launch a TUI. Interactive surfaces use explicit
+  documented subcommands such as `pm query grid` and `pm reverse guide`. Invalid actions remain
+  usage errors.
 - The footer is contextual: disabled bindings are absent, and `?` matches actual behavior.
 - Printable keys belong to focused inputs. Global navigation must not steal `j`, `q`, `/`,
   or `?` while Filter/Edit owns focus.
 - Actions open a labelled menu or button row. A mutation states target, record count, and
   reversibility before approval.
 - The existing reverse-ETL plan → preview → approval → execute sequence is preserved exactly.
+  Approval tokens are sensitive one-time authorization values: a guided flow may carry them only
+  ephemerally in memory through that seam and must never render them in final frames, transcripts,
+  logs, screenshots, accessibility output, JSON, shell-equivalent command text, or fixtures.
 
 ## Layout and visual system
 
@@ -210,14 +217,24 @@ misleading miniature.
 
 ### Query interaction
 
-Phase #411 delivers the read-only query table/grid first. Dedicated child issue #463 may then add:
+Phase #411 delivers the read-only `pm query grid` table first. Bare `pm query` remains contextual
+help/subcommand summary with exit 0. Dedicated child issue #463 may then add:
 
 - `v` toggles Table/Chart without re-running a write or changing the underlying rows;
 - a labelled chart setup view chooses chart type, X, Y, aggregation, unit, and sort from
   validated result metadata;
 - selection/crosshair reports exact values in text;
 - the table remains available as the accessible and exact-data representation;
-- export serializes the underlying rows, never the glyph rendering;
+- export serializes the underlying rows, never the glyph rendering, and is a typed read-only
+  export path rather than a generic file writer;
+- export defaults to a project-scoped directory such as `.polymetrics/query-exports/`, resolves
+  and cleans the requested path, confines it to the project, rejects control characters,
+  traversal, absolute or broad paths, symlink targets/final-component races, and overwrites by
+  default, then requires TTY confirmation or noninteractive `--output <project-relative-path>` plus
+  `--force`;
+- `--no-input` without a preapproved export path fails with
+  `query grid export requires explicit output — pass --output <project-relative-path> and --force, or run without --no-input to confirm interactively`;
+- scripted command echoes are sanitized and project-relative;
 - non-TTY/`--plain` prints table + numeric summary; any JSON chart-spec requires a separately
   documented stable schema.
 
@@ -271,7 +288,10 @@ compatibility evidence, not dependency approval.
 - Send key messages to the focused child; broadcast only resize/theme/event/cancel messages
   that truly apply globally.
 - Business packages emit typed events and never import `internal/ui`.
-- Sanitize/redact dynamic data before it reaches styles/View.
+- Sanitize/redact dynamic data before it reaches styles/View; approval tokens, credentials,
+  headers, request bodies, query strings, and secret-bearing errors never reach final frames,
+  transcripts, logs, screenshots, accessibility output, JSON, shell-equivalent command text, or
+  fixtures.
 - Inline mode is the default for run commands; alt screen is reserved for browsers/grids/
   pagers where entering/leaving a place is expected.
 - Mouse, OSC52, Kitty graphics, and progressive keyboard protocols are optional accelerators.

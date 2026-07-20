@@ -45,12 +45,14 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
    for wizards (embedded as `tea.Model`; accessible mode wired from day one), **glamour v2**
    for the docs pager, **Evertras/bubble-table** for the query grid. Inline mode for run
    commands (final frame persists in scrollback); alt-screen only for browsers/pagers.
-4. **Flags are the API; prompts are progressive enhancement.** Wizards prompt only for
-   missing inputs, validate with the same code paths the flag door uses (e.g. wizard
-   manifests round-trip `flow.ParseManifest`), emit machine artifacts at documented paths,
-   and end by printing the scripted equivalent. `--no-input` errors name the exact
-   flag/file to provide. New enumerators required by the TUI (`pm query tables`) ship as
-   plain/JSON commands first.
+4. **Flags are the API; prompts are progressive enhancement.** Bare namespace commands render
+   contextual help/subcommand summaries and exit 0; they do not launch TUIs. Explicit interactive
+   subcommands such as `pm query grid` and `pm reverse guide` own place-like surfaces. Wizards
+   prompt only for missing inputs, validate with the same code paths the flag door uses (e.g.
+   wizard manifests round-trip `flow.ParseManifest`), emit machine artifacts at documented paths,
+   and end by printing sanitized scripted equivalents that omit secrets and one-time authorization
+   values. `--no-input` errors name the exact flag/file to provide. New enumerators required by the
+   TUI (`pm query tables`) ship as plain/JSON commands first.
 5. **Accessibility is a launch requirement, not a follow-up**: huh `WithAccessible` wired
    to `--accessible`/`PM_ACCESSIBLE_PROMPTER`/`ACCESSIBLE`; spinner-disable with static
    status lines; colorprofile degradation honoring NO_COLOR/CLICOLOR/TERM=dumb; a 4-bit
@@ -69,6 +71,10 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
    reviewed exact pin, a small local abstraction, accessibility/
    bounds tests, and a separate human dependency decision. Without that approval, use a
    minimal internal sparkline/horizontal-bar renderer plus the mandatory text/table view.
+9. **Approval tokens are sensitive one-time authorization values.** Guided reverse ETL may carry
+   them only ephemerally in memory through the existing plan → preview → approval → execute seam.
+   They are never printed in final frames, transcripts, logs, screenshots, accessibility output,
+   JSON, shell-equivalent command text, or fixtures; typed approval remains mandatory.
 
 ## Alternatives considered
 
