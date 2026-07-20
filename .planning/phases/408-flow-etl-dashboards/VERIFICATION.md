@@ -4,7 +4,7 @@ Status: CORRECT active; execute completion false pending real Bubble Tea v2/teat
 
 ## Shepherd correction checklist — planned before production edits
 
-- [ ] Exact RED proves current `*Model` is not current Bubble Tea v2 `tea.Model` and current session is not `teatest/v2`-driven.
+- [x] Exact RED proves current `*Model` is not current Bubble Tea v2 `tea.Model` and current session is not `teatest/v2`-driven: setup failed because Bubble Tea v2 was absent; strict test contains the direct v2 interface assertion and `teatest.NewTestModel` invocation.
 - [ ] Direct pins are exactly Bubble Tea `v2.0.8`, Bubbles `v2.1.1`, Lip Gloss `v2.0.5`, and test-only teatest pseudo-version `v2.0.0-20260720091843-3eef36eaaa28`; no other direct dependency.
 - [ ] Model implements v2 `Init() tea.Cmd`, deterministic `Update(tea.Msg) (tea.Model, tea.Cmd)`, and `View() tea.View`.
 - [ ] Event wait, cancellation, and runner completion stay in `tea.Cmd`; Tea receives event/cancel/resize/key messages.

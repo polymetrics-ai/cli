@@ -47,4 +47,4 @@ Downstream artifact:
 - Real Bubble Tea v2 model/program and `teatest/v2` RED→GREEN evidence will be recorded in the issue artifacts.
 - Delegated shared-parent state will be synchronized to live parent head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f` without claiming parent verification or review.
 
-Verification result: correction pending; execute completion false; no CORRECT-stage `make verify`, full race, independent VERIFY, REVIEW, or INTEGRATE.
+Verification result: strict RED captured with `go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1`; setup failed because `charm.land/bubbletea/v2` was not required. Test directly asserts the v2 `tea.Model` interface and invokes `teatest.NewTestModel`. GREEN pending; execute completion false; no CORRECT-stage `make verify`, full race, independent VERIFY, REVIEW, or INTEGRATE.

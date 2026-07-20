@@ -52,7 +52,7 @@ Do not backfill evidence. Append exact commands/results and worker session/head 
 
 ## #408 Shepherd correction dispatch — 2026-07-20T23:36:04Z
 
-- RED planned, not backfilled: strict test must fail at pushed head `ff7be3bd8509684257f7d7a73e6fb9735f4baf80` because the dashboard is not a real Bubble Tea v2 `tea.Model` and is not driven by `teatest/v2`.
+- RED captured, not backfilled: `go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1` failed before dependency/production edits because no required module provided `charm.land/bubbletea/v2`; the strict test directly asserts `tea.Model` and invokes `teatest.NewTestModel`.
 - GREEN pending: exact authorized pins only; real inline Tea program/model with Tea-owned async commands and real teatest success/failure/cancel/responsive evidence.
 - Parent state reconciled to remote head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`; graph 44/43/65 with 0 errors.
 - Decision: #408 `local_critical_path` correction; #413 remains `not_spawned_write_scope_collision`; #419 remains `not_spawned_human_gate`/human-deferred with no beta or other dependency approval; Phase 437 intake remains planning-only.

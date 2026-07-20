@@ -130,6 +130,11 @@
       "command": "scripts/gsd doctor && scripts/gsd prompt programming-loop init --phase 408-flow-etl-dashboards --dry-run",
       "result": "partial",
       "output": "doctor passed; programming-loop unavailable: scripts/gsd: unknown GSD command: programming-loop; recorded manual fallback continues"
+    },
+    {
+      "command": "go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1",
+      "result": "fail",
+      "output": "RED before dependency/production edits: no required module provides package charm.land/bubbletea/v2; strict test asserts tea.Model and invokes teatest.NewTestModel"
     }
   ]
 }

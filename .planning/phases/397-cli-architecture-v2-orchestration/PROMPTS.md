@@ -28,4 +28,4 @@ Downstream artifact:
 - `.planning/phases/397-cli-architecture-v2-orchestration/{PLAN.md,TDD-LEDGER.md,VERIFICATION.md,SUMMARY.md,RUN-STATE.json,PROMPTS.md}`
 - `.planning/traces/cli-architecture-v2-orchestration-state.yaml`
 
-Verification result: correction pending. Parent verification and review not run or claimed.
+Verification result: #408 strict RED captured (`go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1` -> missing Bubble Tea v2 required module before dependency/production edits). GREEN pending. Parent verification and review not run or claimed.

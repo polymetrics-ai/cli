@@ -34,7 +34,25 @@ go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=
 
 Expected: current head fails because `*run.Model` does not implement current v2 `tea.Model`, no real `tea.Program` drives the session, and `teatest/v2` is not in the module. GREEN must use exact authorized pins and real teatest programs for success/failure/cancel and responsive frames.
 
-Correction status: RED pending capture; execute completion false. Decision: `local_critical_path`.
+Correction status: RED captured; execute completion false. Decision: `local_critical_path`.
+
+### Shepherd RED evidence
+
+```bash
+go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1
+```
+
+Result: FAIL at pushed baseline plus plan checkpoint, before dependency or production edits.
+
+```text
+# polymetrics.ai/internal/ui/run
+internal/ui/run/bubbletea_v2_test.go:7:2: no required module provides package charm.land/bubbletea/v2; to add it:
+	go get charm.land/bubbletea/v2
+FAIL	polymetrics.ai/internal/ui/run [setup failed]
+FAIL
+```
+
+The strict test imports current v2 `tea.Model`, asserts `var _ tea.Model = (*Model)(nil)`, and instantiates `teatest.NewTestModel`; current production has neither dependency nor interface/program implementation. Next RED after adding only authorized pins must expose the incompatible `View() string`/missing `Init`/`Update` contract before production edits.
 
 ## RED plan
 
