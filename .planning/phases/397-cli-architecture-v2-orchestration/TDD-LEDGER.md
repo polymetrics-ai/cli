@@ -6,8 +6,7 @@
   invocation and complete/incomplete action behavior ambiguous.
 - GREEN: child #469, direct GitHub dependency edges, a GSD-verified Phase 18 UI contract, and
   synchronized roadmap/Pi prompts establish bounded reverse/setup work.
-- REFACTOR: PR #468 docs/skill/GSD checks and human review are the gate before any production
-  Bubble Tea worker starts.
+- REFACTOR: PR #468 docs/skill/GSD checks passed and the PR is integrated; external review coverage remains absent, and production Bubble Tea worker launch is now governed by the rebuilt dependency/collision queue.
 
 ## Human-first query/reverse entry revision — 2026-07-20
 
@@ -17,6 +16,13 @@
   aliases, help-only help flags, and deterministic help on every bypass/non-TTY path.
 - REFACTOR: the exception stays limited to query/reverse; credentials, connections, and all other
   ordinary bare namespaces remain help-first. Production work remains blocked on reviewed #462.
+
+
+## Live reconciliation and queue rebuild — 2026-07-20T19:28Z
+
+- RED: durable state was stale against live GitHub: PR #468 had merged into parent `c3d8a757`, PR #466 was still open/green/no-review, Claude was disabled, parent PR #438 was `BEHIND`, and Phase 437 pending intake was untracked in the worker worktree.
+- GREEN: read-only `pm-scout`/`pm-reviewer` sidecars verified stale artifacts, intake triage, and #408/#437 collision; pending intake was preserved under `.planning/traces/phase-437-pending-intake/`; `origin/main` was merged with no force-push.
+- REFACTOR: ready queue now records #437 `not_spawned_review_blocked`, #408 `not_spawned_write_scope_collision`, downstream dependency blockers, and #419 `not_spawned_human_gate`; no Phase 437 pending request was implemented or assigned to GitHub issues.
 
 Status: active
 Starting parent HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
@@ -38,8 +44,8 @@ Starting parent HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
 | #435 | Sol/high worker `72824844-2597-4d86-a33f-27ba2c68256c` recorded native worker RED; xhigh review `87709538-f290-477c-9ed9-be9f6733e9fa` found a loopback dial contradicting fake-only evidence; Sol/high correction `c11cab42-76e8-4d6c-a06b-ee692085cab0` made the config migration test fail before `Run` unless the fake seam was used. | Fake-only focused/repeated/race worker/config/CLI, full repo, parity, vet/build and `make verify` passed at `f712e696`; parent integration race passed. | Exact-head Sol/xhigh re-review `d549e7cf-50bc-4d9d-94ff-04734f048d3b`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `f712e696e075792492397ab1d556d1dfceadba04` promoted at parent merge `afd765e9e9b53fa3250c2ba05686af81d74d2f94`. |
 | #436 | Sol/high worker `cbcc7097-7302-4dd3-930a-104ffd5ae2e9` recorded native extract RED; xhigh review `0c8432b7-006b-4a88-9924-d6b3c5dfee5b` found rooted-scope, parser, unknown-only and pre-factory validation gaps; Sol/high correction `5344f0f4-1026-43a7-b114-518dce07d7fd` captured all four before edits. | Temp-only focused/repeated/race extract/RLM/safety, 16/16 base differentials, full repo, docs parity, vet/build and `make verify` passed at `7da245b8`; parent integration race passed. | Exact-head Sol/xhigh re-review `19fd2452-9b9b-4479-bbba-2bf9f13a1bbb`: `CLEAN_NO_ACTIONABLE_FINDINGS`. | Exact head `7da245b8da2b8590766d99ca9e967d366e50cfcc` promoted at parent merge `b28e67fb2432f48b6909a2103a0b3e3fa4e9f461`. |
 | #437 / PR #466 | Existing issue branch had recorded native connectors/certify RED plus five prior safety cycles. Spawned continuation/review workers captured fresh RED for leak dominance, cleanup/idempotency, resume authority, required-value parsing, future timestamps, and CI timing fragility. The remote timing failure was recorded exactly; local stress did not fabricate a failure. | Head `26f98a72419010b961b5b8378ef4a695b0c0a06f`: focused/repeated/race, full CLI/certify, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certify, and connectorgen 547/0 passed. CI concurrency proof is deterministic rather than wall-clock based. | Exact-path `pm-reviewer` closure found no actionable runtime/code regression. All current GitHub checks pass. Local sidecar is not external coverage. | PR #466 remains open; human/parent fallback review pending. No promotion. |
-| #462 / PR #465/#467/#468 | Docs-only RED identified missing interaction/accessibility contract. The latest RED also identified human discoverability failure when query/reverse required hidden aliases. | PR #468 now specifies eligible dual-TTY bare query/reverse entry, same-model grid/guide aliases, token secrecy, path confinement, stdin+stdout TTY gate, and unconditional bypass behavior. | GitHub blocked-by edges include #462 for all eight affected issues. Local/docs checks must pass at the revised exact head; Claude disabled and Copilot quota exhausted. | PR #468 human review pending; production TUI remains blocked. |
-| #408-#414, #416-#418, #420 | pending per issue | pending | #408 and downstream TUI work remain review-blocked on #462 corrections/human coverage. | not promoted |
+| #462 / PR #465/#467/#468 | Docs-only RED identified missing interaction/accessibility contract. The latest RED also identified human discoverability failure when query/reverse required hidden aliases. | PR #468 specifies eligible dual-TTY bare query/reverse entry, same-model grid/guide aliases, token secrecy, path confinement, stdin+stdout TTY gate, and unconditional bypass behavior. PR #468 merged into parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`. | GitHub blocked-by edges include #462 for affected issues. Claude workflow is disabled manually; no external review record exists, so parent/human fallback coverage remains pending. | Provisionally integrated; production TUI remains queued behind #408/#437 collision and downstream dependencies. |
+| #408-#414, #416-#418, #420 | pending per issue | pending | #408 is source-ready after #462 integration, but mutating launch is deferred by `not_spawned_write_scope_collision` with open PR #466 central CLI/help/golden/docs/website files. Downstream issues remain dependency-blocked. | not promoted |
 | #419 decision | no production implementation without explicit beta-dependency inclusion approval | not applicable | decision record pending | skipped or approved implementation pending |
 
 Do not backfill evidence. Append exact commands/results and worker session/head identities after each unit.

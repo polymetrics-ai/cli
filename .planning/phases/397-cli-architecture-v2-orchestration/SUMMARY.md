@@ -6,8 +6,8 @@ PR #468 now carries the GSD-verified Phase 18 interaction contract. #416 owns th
 reverse workspace and `reverse guide` alias; #411 owns the equivalent bare query workspace and
 `query grid` alias. Child #469 owns TTY-progressive credential and connection setup. The live
 GitHub graph records #409/#462 → #469 → #417/#418, and the missing #411 → #463 edge is restored.
-Neither production issue is ready until PR #468 receives human review and is integrated into the
-parent branch.
+PR #468 is now integrated into the parent branch at `c3d8a757`; production TUI work remains
+sequenced behind the rebuilt dependency queue and the open #437/#408 write-scope collision.
 
 Status: ACTIVE — not final
 Starting HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
@@ -41,8 +41,16 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #436 nativized hidden extract, added project-rooted RLM warehouse scope, and preserved parser/help/output behavior with generated docs parity. Exact-head review and integration race checks passed.
 
-#462 / PR #465 added the terminal interaction design system. Five accepted design/safety corrections were integrated through PR #467 at parent commit `93a11710`. A follow-up local review tightened activation to stdin+stdout TTY, made `--plain`/`--json`/`--no-input` unconditional prompt bypasses, and expanded fallback RED coverage. PR #468 at `5092e115` passes local docs checks/review and all GitHub checks, including `verify`; human review remains pending. GitHub blocked-by edges now directly link #462 to all eight affected TUI issues. Local sidecar review is not external coverage.
+#462 / PR #465 added the terminal interaction design system. Five accepted design/safety corrections were integrated through PR #467 at parent commit `93a11710`. A follow-up local review tightened activation to stdin+stdout TTY, made `--plain`/`--json`/`--no-input` unconditional prompt bypasses, and expanded fallback RED coverage. PR #468 was merged into the parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`; its exact-head checks were green before merge. GitHub blocked-by edges now directly link #462 to all affected TUI issues, but local sidecar review is not external coverage.
 
 #437 / PR #466 contains the final serialized Phase 9 connectors/certify migration. After safety/correctness correction cycles, remote CI exposed a wall-clock concurrency-test flake. The worker replaced it with a deterministic barrier/counter proof without raising or removing the gate. Head `26f98a72` passes focused/repeated/race tests, full CLI/certify packages, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certification, connectorgen 547/0, and all current GitHub checks. Exact-path local re-review found no remaining actionable runtime/code issue.
 
-#437 is not integrated because human/parent fallback review coverage remains pending. PR #468 also awaits human review. #407, #408, #413, and the downstream TUI chain remain dependency/review blocked. #419 remains an explicit human dependency-decision gate. Final parent verification and final parent review have not run; `verificationPassed` remains false.
+#437 is not integrated because human/parent fallback review coverage remains pending. #408 is source-ready after #462 integration but is not spawned because it would collide with open PR #466 central CLI/help/golden/docs/website files. #407/#413 remain dependency-blocked on #437; #409/#416/#469 remain downstream; #419 remains an explicit human dependency-decision gate. Final parent verification and final parent review have not run; `verificationPassed` remains false.
+
+## Live reconciliation — 2026-07-20T19:28Z
+
+The parent branch was reconciled against live GitHub: PR #467 and #468 are merged, live parent head was `c3d8a757`, PR #466 remains open at `26f98a72` with green checks and no reviews, Claude review is disabled manually, and Copilot backup is unavailable in this session. Read-only `pm-scout`/`pm-reviewer` sidecars validated stale artifact updates, Phase 437 pending-intake triage, and the #408/#437 write-scope collision.
+
+Untracked Phase 437 pending-request/research/debug files were preserved under `.planning/traces/phase-437-pending-intake/` without changing PR #466's tested head. They are not implementation authorization and their referenced GitHub issues were not edited.
+
+The parent branch was safely synced with `origin/main` using ordinary no-ff merge commit `19fe02ec900aba548a997165014624197b451a33`; no force push was used and parent PR #438 was not merged to `main`.

@@ -27,8 +27,9 @@ Preserve parent commits through #410 at starting HEAD. Do not reimplement #398-#
 3. Complete serialized namespace chain #425 -> #426 -> #427 -> #428 -> #429 -> #430 -> #431 -> #432 -> #433 -> #434 -> #435 -> #436 -> #437; then ratify umbrella #407.
 4. Complete #408, then #409.
 5. Complete #413 and #414 after #407/#408 prerequisites.
-6. After #409 and reviewed integration of #462/PR #468, complete #411, #412, #416, and #469 in
-   isolated worktrees, serialized wherever central CLI/help/golden write scopes collide. #416 owns
+6. After #409, complete #411, #412, #416, and #469 in isolated worktrees, serialized wherever
+   central CLI/help/golden write scopes collide. #462/PR #468 is integrated as a design gate, but
+   external review coverage remains absent and must be recorded as human/enabled-automation fallback. #416 owns
    the human-first bare reverse workspace plus its `reverse guide` alias; #469 owns credential/
    connection setup. #411 owns the human-first bare query workspace plus its `query grid` alias.
 7. Complete #417 after #411/#412/#413/#414/#416/#469.
@@ -77,24 +78,45 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 ## 2026-07-20 Pi active continuation
 
 - GSD evidence: `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt plan-phase 397 --skip-research`; `programming-loop` remains absent from the 69-command registry, so the recorded manual universal-loop fallback continues.
-- Parent branch/PR confirmed at `93a117100c6421955262aa32794a91a158d267e1`; PR #438 remains draft and targets `main`.
-- #462 / PR #465 was provisionally integrated at `a5474bcb`. Accepted design/safety corrections were integrated through PR #467 at parent commit `93a11710`. A later local review found one stdin/stdout TTY-gate contradiction; follow-up PR #468 is green at head `5092e115d4aa35ab4595a9b9537f64d3f63e6406`, with human review pending. Local sidecars are not external review coverage.
+- Parent branch/PR reconciled at live head `c3d8a7573bfaf661bdcab737db84e3497929cdff`, then locally merged `origin/main` at safe checkpoint `19fe02ec900aba548a997165014624197b451a33`; PR #438 remains draft and targets `main`.
+- #462 / PR #465 was provisionally integrated at `a5474bcb`. Accepted design/safety corrections were integrated through PR #467 at `93a11710`; PR #468 was merged into the parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`. Local sidecars are still not external review coverage.
 - #437 / PR #466 is open at head `26f98a72419010b961b5b8378ef4a695b0c0a06f`. Full local gates and all current GitHub checks pass. The CI timing flake was replaced by a deterministic concurrency proof without weakening the parallelism gate. Human/parent fallback review remains pending.
 - GitHub blocked-by metadata now directly encodes #462 for #408, #409, #411, #412, #414, #416, #418, and #463.
 - Actual Pi worker runtime used project `pm-gsd-worker` with `openai-codex/gpt-5.5:xhigh`; the project agent currently declares `thinking: xhigh`, while the requested routing policy says implementation `high`. The subagent API has no per-call model override; this mismatch is recorded rather than hidden.
 - Reviewer discovery attempt was blocked because the parent runtime did not expose `grep/find/ls`; bounded exact-file `read` reviews succeeded. This does not satisfy Claude/Copilot/human coverage.
 
-### Ready queue
+### Ready queue after live reconciliation
 
 | Issue | State | Dependencies | Decision |
 |---|---|---|---|
-| #437 | `sub_pr_green` / local clean | #436 provisionally integrated | `not_spawned_review_blocked` until human/parent review fallback clears |
+| #437 / PR #466 | `sub_pr_green`; checks green; no reviews | #436 provisionally integrated | `not_spawned_review_blocked` until human or enabled automation review clears |
+| #408 | source-ready, launch deferred | #405 and integrated #462 | `not_spawned_write_scope_collision` with open PR #466 central CLI/help/golden/docs/website files |
 | #407 | dependency blocked | #437 integration | `not_spawned_dependency_blocked` |
-| #462 follow-up | PR #468 updated / local docs gates green | GitHub CI, human review, and parent integration | `not_spawned_review_blocked` |
-| #408 | review blocked | #405 integrated; #462 direct blocker remains open | `not_spawned_review_blocked` |
 | #413 | dependency blocked | #407 | `not_spawned_dependency_blocked` |
-| #469 | dependency blocked | #409 plus reviewed integration of #462/PR #468 | `not_spawned_dependency_blocked`; implement setup separately from #416 |
-| #419 | human-gated | explicit optional beta dependency decision | `not_spawned_human_gate` |
+| #409 | dependency blocked | #408 | `not_spawned_dependency_blocked` |
+| #416 | dependency blocked | #409; #462 integrated | `not_spawned_dependency_blocked`; reverse-only ownership remains |
+| #469 | dependency blocked | #409; #462 integrated | `not_spawned_dependency_blocked`; setup remains separate from #416 |
+| #419 | human-gated | #404/#410 complete | `not_spawned_human_gate` for optional beta dependency decision |
+
+### Phase 437 pending intake preservation
+
+- Untracked Phase 437 pending-request/research/debug files from the #466 worktree were copied to
+  `.planning/traces/phase-437-pending-intake/` at parent checkpoint `c3d8a757` without changing
+  PR #466's tested head `26f98a72`.
+- These files are triage only. Do not implement them, regenerate docs, commit to PR #466, or edit
+  their referenced GitHub issues until the human coordinator explicitly authorizes implementation
+  or planning synchronization.
+- Triage owners: #437 for native connectors/certify follow-ups, #411 for connector list/browser/
+  progressive inspect, #412 as full-manual pager consumer, and #417 for hierarchical help/manuals.
+
+### Automated review availability
+
+- `.github/workflows/claude-review.yml` exists but GitHub reports workflow state
+  `disabled_manually` (workflow id `310534134`); no current Claude review covers #438, #466, or
+  the #467/#468 ranges.
+- PR #466 and PR #438 have no GitHub review records and no requested reviewers.
+- Copilot backup was probed non-mutatingly and is unavailable in this session (`@copilot` collaborator
+  probe returned HTTP 404); no Copilot review was requested.
 
 ## Human gates
 

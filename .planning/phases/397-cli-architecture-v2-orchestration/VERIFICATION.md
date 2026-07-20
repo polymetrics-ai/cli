@@ -7,7 +7,7 @@
       alias.
 - [x] GitHub and local planning encode #409/#462 → #469 → #417/#418 and #411 → #463.
 - [x] Phase 18 UI contract passed the GSD UI checker.
-- [ ] PR #468 human review and parent integration; production TUI workers remain blocked.
+- [x] PR #468 parent integration at `c3d8a7573bfaf661bdcab737db84e3497929cdff`; external review coverage remains absent and recorded as human/enabled-automation fallback.
 
 Status: not yet run at final HEAD
 `verificationPassed`: false
@@ -35,8 +35,8 @@ Status: not yet run at final HEAD
 - [x] #462 first accepted correction batch integrated through PR #467 at parent `93a117100c6421955262aa32794a91a158d267e1`.
 - [x] #462 follow-up PR #468 opened at current head `5092e115d4aa35ab4595a9b9537f64d3f63e6406`; local docs checks and exact-file closure review pass.
 - [x] #462 GitHub blocked-by metadata directly updated for #408/#409/#411/#412/#414/#416/#418/#463.
-- [x] #462 PR #468 current-head CI green, including `verify` in 18m19s.
-- [ ] #462 human review coverage; local `pm-reviewer` is not substitute coverage.
+- [x] #462 PR #468 current-head CI green, including `verify` in 18m19s, and merged into parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`.
+- [ ] #462 external review coverage; local `pm-reviewer` is not substitute coverage, and Claude remains disabled.
 - [x] #437 / PR #466 phase planning/TDD/verification refreshed before every correction; current PR head `26f98a72419010b961b5b8378ef4a695b0c0a06f`.
 - [x] #437 local focused, repeated, race, full package, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certify, and connectorgen 547/0 gates passed.
 - [x] #437 remote CI timing failure reproduced as exact evidence and corrected with deterministic concurrency proof; all current GitHub checks pass.
@@ -44,11 +44,26 @@ Status: not yet run at final HEAD
 - [ ] #437 external automated or human/parent fallback review coverage.
 - [ ] #437 promotion into parent branch.
 
+## Live reconciliation — 2026-07-20T19:28:58Z
+
+- [x] `scripts/gsd doctor` passed; `scripts/gsd list` reported 69 commands.
+- [x] `scripts/gsd prompt plan-phase 397 --skip-research` generated 10688 bytes.
+- [x] `scripts/gsd prompt programming-loop init --phase 397-cli-architecture-v2-orchestration --dry-run` failed with `unknown GSD command: programming-loop`; manual universal-loop fallback remains recorded.
+- [x] GitHub live state checked: PR #467 merged at `93a11710`; PR #468 merged at `c3d8a757`; PR #466 open at `26f98a72` with current checks green and no reviews.
+- [x] Claude workflow availability checked: `.github/workflows/claude-review.yml` is `disabled_manually` (id `310534134`).
+- [x] Copilot backup availability probed without requesting review; `@copilot` collaborator probe returned HTTP 404.
+- [x] Project read-only sidecars spawned: `pm-scout` for stale parent artifacts, `pm-scout` for Phase 437 pending intake, and `pm-reviewer` for the #408/#437 collision decision.
+- [x] Phase 437 untracked pending-request/research/debug intake preserved under `.planning/traces/phase-437-pending-intake/` without changing PR #466's tested head.
+- [x] Parent branch synced with `origin/main` via ordinary no-ff merge commit `19fe02ec900aba548a997165014624197b451a33`; no force push.
+- [ ] Full parent verification after the main-sync/state commit.
+- [ ] Parent PR #438 CI at the final pushed head.
+
 ## Current live blockers
 
-- [x] #462 accepted design/safety findings corrected in isolated stacked PRs #467/#468.
-- [ ] #462 PR #468 human review coverage recorded; local `pm-reviewer` is not substitute coverage.
-- [ ] #408 TUI worker launch unblocked only after #462 correction and review gate.
+- [x] #462 accepted design/safety findings corrected in isolated stacked PRs #467/#468 and integrated into parent.
+- [ ] #462 external review coverage recorded; local `pm-reviewer` is not substitute coverage.
+- [ ] #437 external automated or human review coverage recorded.
+- [ ] #408 TUI worker launch unblocked only after #437/PR #466 central CLI/help/golden/docs/website collision clears.
 - [ ] #419 explicit optional dependency decision.
 
 ## Per-unit gate
