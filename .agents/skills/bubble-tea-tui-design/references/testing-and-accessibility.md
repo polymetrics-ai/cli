@@ -9,7 +9,10 @@
 3. **Headless frame tests:** stable frames at 160×45, 100×30, 80×24, compact, and below
    minimum for success/failure/empty/loading/cancelled states.
 4. **Command integration:** TTY projection uses the same service and exit status as plain;
-   `CI=1`, `PM_NO_TUI=1`, `--plain`, `--json`, and pipes bypass the TUI.
+   Bubble Tea/Huh activate only when stdin and stdout are TTYs. Add RED tests for
+   `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI=1`, `PM_NO_TUI=1`, `TERM=dumb`,
+   `--json`, `--plain`, and `--no-input`; each must bypass the TUI/prompt path without consuming
+   scripted stdin, without hanging, and without using `/dev/tty`.
 5. **Manual terminal matrix:** dark/light, 24-bit/256/16/no color, ASCII, resize, paste,
    narrow Unicode, mouse optional, screen reader/reduced-motion transcript.
 

@@ -55,7 +55,7 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 | 4 | #402 | A | Migrate scattered environment reads onto config | #401 |
 | 5 | #403 | B | Dependency-free progress event bus and instrumentation | #402 |
 | 6 | #404 | C | Redacted per-run `slog` foundation and Temporal logger bridge | #402 |
-| 7 | #405 | B | TTY gate, `--plain`/`--no-input`, and `--progress ndjson` | #403 |
+| 7 | #405 | B | stdin+stdout TTY gate, `--plain`/`--no-input`, and `--progress ndjson` | #403 |
 | 8 | #406 | A | Nativize pilot `catalog` namespace | #402 |
 | 9 | #407 | A | Nativize remaining namespaces through serialized grandchildren #421–#437 | #406, #437 |
 | Design gate | #462 | B | Freeze Bubble Tea interaction, responsive layout, chart grammar, design skill, and TUI worker prompts | #405; before #408/#409/#411/#412/#414/#416/#418/#463 |
@@ -92,8 +92,10 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 - CLI-visible work must keep runtime help, bare namespace behavior, `docs/cli/**`, website docs, generated help/manual artifacts, completion metadata, and tests in parity.
 - Dependency additions are allowed only in the phase/version lines approved by ADRs 0002–0004; any deviation is a human gate.
 - TUI workers must load `bubble-tea-tui-design`, cite both design documents, and record
-  modal-key, responsive-layout, accessibility/plain fallback, sanitation, cancellation,
-  and JSON/stdout/stderr parity evidence. `ntcharts/v2` remains unapproved until a dedicated
+  stdin+stdout TTY activation, `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`, `--json`,
+  `--plain`, `--no-input`, modal-key, responsive-layout, accessibility/plain fallback, sanitation,
+  cancellation, and JSON/stdout/stderr parity evidence. Piped/non-TTY stdin must not be consumed,
+  hang, or be bypassed through `/dev/tty`. `ntcharts/v2` remains unapproved until a dedicated
   chart child issue #463 receives an explicit human dependency decision.
 - Parent PR to `main` remains draft until all required sub-issues are integrated, final verification passes, automated review coverage is recorded, and a human is asked for final approval.
 

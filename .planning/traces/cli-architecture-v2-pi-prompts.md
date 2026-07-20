@@ -103,25 +103,30 @@ Run:
 Load and record `bubble-tea-tui-design`, then `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`,
 `golang-concurrency`, and `golang-documentation` as applicable. Before production edits, put exact
-RED cases in PLAN.md/TDD-LEDGER.md for bare namespace help-not-TUI behavior, Normal/Filter/Edit
-printable-key conflicts, arrows+Vim equivalence, focus/context help, wide/standard/compact/guard
-rendering, loading/empty/failure/cancel/final states, no-color/ASCII/reduced-motion/accessibility
-fallback, sanitation/redaction, approval-token non-display, cancellation/race cleanup, and unchanged
-plain/JSON/stdout/stderr/exit semantics.
+RED cases in PLAN.md/TDD-LEDGER.md for bare namespace help-not-TUI behavior, TUI/Huh activation
+requiring both stdin and stdout TTYs, `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`,
+`--json`, `--plain`, `--no-input`, Normal/Filter/Edit printable-key conflicts, arrows+Vim
+equivalence, focus/context help, wide/standard/compact/guard rendering, loading/empty/failure/
+cancel/final states, no-color/ASCII/reduced-motion/accessibility fallback, sanitation/redaction,
+approval-token non-display, cancellation/race cleanup, and unchanged plain/JSON/stdout/stderr/exit
+semantics.
 
 Follow the operator-workspace design: LazyGit panel hierarchy, fzf filter/list/preview behavior,
 bpytop exact metric density, Gum focused wizard cadence, and Polymetrics' quiet pipeline-rail
-language. Bare `pm query` and bare `pm reverse` render contextual help/subcommand summaries and
-exit 0; explicit interactive subcommands are `pm query grid` and `pm reverse guide`. Do not copy
-generic shell execution, shell-backed previews, unlabelled destructive keys, generic HTTP/SQL
-writes, generic file writes, approval-token display, or interactive secret entry. Mouse/OSC52/
-advanced graphics are optional accelerators only.
+language. Bubble Tea/Huh prompts activate only when stdin and stdout are TTYs; piped/non-TTY stdin
+falls back to deterministic plain/noninteractive behavior and must never be consumed unexpectedly,
+hang, or bypass through `/dev/tty`. Bare `pm query` and bare `pm reverse` render contextual
+help/subcommand summaries and exit 0; explicit interactive subcommands are `pm query grid` and
+`pm reverse guide`. Do not copy generic shell execution, shell-backed previews, unlabelled
+destructive keys, generic HTTP/SQL writes, generic file writes, approval-token display, or
+interactive secret entry. Mouse/OSC52/advanced graphics are optional accelerators only.
 
 For #411 query grid and #463 charts, operate only on returned read-only rows. Query export must be a
 typed read-only export with project-scoped default, clean/confined path, control-character/
-traversal/broad-path/symlink race rejection, no overwrite by default, TTY confirmation,
-noninteractive `--output` + `--force`, sanitized command echo, exact `--no-input` guidance, and no
-generic file-write or SQL-write boundary. For query chart issue #463, keep table/text access, axes,
+traversal/broad-path/symlink race rejection, no overwrite by default, confirmation only when stdin
+and stdout are TTYs, noninteractive `--output` + `--force`, sanitized command echo, exact
+`--no-input` guidance, and no generic file-write or SQL-write boundary. For query chart issue #463,
+keep table/text access, axes,
 units,
 exact selected values, deterministic bounds/downsampling disclosure, and accessibility fallback.
 `ntcharts/v2` is not approved: stop at the human dependency gate unless #463 records

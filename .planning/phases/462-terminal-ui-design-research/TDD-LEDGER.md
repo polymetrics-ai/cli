@@ -120,7 +120,7 @@ this correction changes only delegated documentation/planning/skill artifacts.
 | Explicit subcommands | `pm query grid` and `pm reverse guide` markers present in design docs, ADR, plan, prompt, Pi prompt, skill, and phase artifacts | Pass |
 | Approval token secrecy | old token-display wording absent from current docs; new contract marks approval tokens sensitive one-time values, ephemeral in-memory only, never rendered in final frames/transcripts/logs/screenshots/accessibility/JSON/shell-equivalent text/fixtures | Pass |
 | Dependency rows | Python roster check confirmed direct `#462`/`D-TUI` markers for #408, #409, #411, #412, #414, #416, #418, and #463 across roadmap, backlog, source plan, and execution prompt | Pass |
-| Query export path | marker check confirmed typed read-only export, project-scoped default, control-character/traversal/broad-path/symlink rejection, no-overwrite default, TTY confirmation/noninteractive `--force`, sanitized command echo, and exact `--no-input` guidance | Pass |
+| Query export path | marker check confirmed typed read-only export, project-scoped default, control-character/traversal/broad-path/symlink rejection, no-overwrite default, confirmation only when stdin/stdout are TTYs, noninteractive `--force`, sanitized command echo, and exact `--no-input` guidance | Pass |
 | Skill validation | PyYAML frontmatter/reference check printed `Skill is valid!` | Pass |
 | JSON syntax | `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` | Pass |
 | Scope | diff against `c91b90cf9671b5caabc0ef4ec24d81897f870458` contains only delegated docs/skill/#462 phase artifacts and no `go.mod`, `go.sum`, `cmd`, `internal`, `website`, or `docs/cli` changes | Pass |
@@ -187,3 +187,22 @@ correction, but future TUI implementation issues must start with failing tests f
   remain explicit and unchanged.
 - Run state records #467 open at starting head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, CI green
   at that head, and review status human/parent pending; no artifact claims an invented final head.
+
+## Correction PR #467 GREEN ledger — 2026-07-20
+
+| Check | Evidence | Status |
+|---|---|---|
+| TTY gate alignment | Python docs-contract contradiction grep over ADR, design docs, skill references, roadmap/backlog/Pi prompts, execution prompt, and phase artifacts printed `PASS docs-contract contradiction grep: stdin+stdout TTY gate aligned; future RED matrix present` | Pass |
+| Future RED matrix | Markers present for `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input` in design docs, skill/test reference, execution prompt, Pi prompt, roadmap, and phase artifacts | Pass |
+| Scripted stdin safety | Delegated sources say piped/non-TTY stdin falls back to deterministic plain/noninteractive behavior without consuming scripted stdin, hanging, or using `/dev/tty` | Pass |
+| Query/reverse/accessibility preservation | Marker check confirmed `pm query grid`, bare `pm query` help, `pm reverse guide`, bare `pm reverse` help, accessibility/plain, approval-token secrecy, and typed read-only query export contracts remain present | Pass |
+| State honesty | RUN-STATE.json/RUN-STATE.md/SUMMARY record PR #467 open at starting head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, CI green at that head, human/parent review pending, and no invented final-head claim | Pass |
+| Skill validation | PyYAML frontmatter/reference check printed `Skill is valid!` | Pass |
+| JSON syntax | `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` | Pass |
+| Scope | Exact scope check passed; no `cmd/**`, `internal/**`, `go.mod`, `go.sum`, `website/**`, `docs/cli/**`, parent #397 phase artifacts, or nondelegated docs changed | Pass |
+| Whitespace | `git diff --check` | Pass |
+| GSD health | `scripts/gsd doctor` printed `ok commands 69` | Pass |
+| Docs gate | `make docs-check` built `./cmd/pm` and printed `Validated connector docs in docs/connectors` | Pass |
+
+No production behavior test was required; this correction is docs/planning/skill/prompt only. Full
+`make verify` was not run because scope stayed docs-only and the issue requested `make docs-check`.

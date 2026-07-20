@@ -56,8 +56,8 @@ for the later behavior-changing UI phases.
   fallback human, and correction PR #467 starting head/status captured explicitly.
 - [x] Query export path contract includes typed read-only export, project-scoped default,
   control-character/traversal/broad-path rejection, clean/confined path, symlink race rejection,
-  no overwrite default, TTY confirmation, noninteractive `--force`, sanitized command echo, and
-  exact `--no-input` guidance.
+  no overwrite default, confirmation only when stdin/stdout are TTYs, noninteractive `--force`,
+  sanitized command echo, and exact `--no-input` guidance.
 - [x] Skill quick validation passes: `Skill is valid!`.
 - [x] JSON/YAML/Markdown syntax checks pass as applicable: PyYAML skill frontmatter and
   `python3 -m json.tool` for `RUN-STATE.json`.
@@ -77,33 +77,33 @@ review remains pending for the accepted correction PR.
 
 ### Required checks before handoff
 
-- [ ] Phase artifacts reopened before delegated source/design/skill docs edits.
-- [ ] GSD adapter health recorded: `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 462 --skip-research`.
-- [ ] Manual universal-loop fallback recorded because `scripts/gsd prompt programming-loop ...` is absent.
-- [ ] Loaded skills and missing `.pi/skills/go-implementation` mismatch recorded.
-- [ ] RED docs-contract grep recorded for stdout-only/ambiguous TUI gates and missing
+- [x] Phase artifacts reopened before delegated source/design/skill docs edits.
+- [x] GSD adapter health recorded: `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 462 --skip-research`.
+- [x] Manual universal-loop fallback recorded because `scripts/gsd prompt programming-loop ...` is absent.
+- [x] Loaded skills and missing `.pi/skills/go-implementation` mismatch recorded.
+- [x] RED docs-contract grep recorded for stdout-only/ambiguous TUI gates and missing
   `stdin-piped+stdout-TTY` / `stdout-piped` future test markers.
-- [ ] Bubble Tea/Huh/prompt activation contract requires both stdin and stdout TTYs in ADR,
+- [x] Bubble Tea/Huh/prompt activation contract requires both stdin and stdout TTYs in ADR,
   design docs, source plan, execution prompt, skill references, roadmap/backlog/Pi prompts, and
   phase artifacts.
-- [ ] Piped/non-TTY stdin fallback is explicit: deterministic plain/noninteractive behavior, no
+- [x] Piped/non-TTY stdin fallback is explicit: deterministic plain/noninteractive behavior, no
   scripted-stdin consumption, no hang, and no `/dev/tty` bypass.
-- [ ] Future RED test matrix is recorded for `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`,
+- [x] Future RED test matrix is recorded for `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`,
   `--json`, `--plain`, and `--no-input`.
-- [ ] Explicit `pm query grid`, `pm reverse guide`, query export, approval-token secrecy, and
+- [x] Explicit `pm query grid`, `pm reverse guide`, query export, approval-token secrecy, and
   accessibility/plain fallback contracts remain present.
-- [ ] RUN-STATE.json/RUN-STATE.md/SUMMARY record #467 open at starting head
+- [x] RUN-STATE.json/RUN-STATE.md/SUMMARY record #467 open at starting head
   `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, CI green at that head, and human/parent review
   pending; no generic pending placeholder or invented final-head claim remains.
-- [ ] Contradiction grep passes.
-- [ ] `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` passes.
-- [ ] Skill quick validation passes: `Skill is valid!`.
-- [ ] Direct dependency/token/export contracts unchanged.
-- [ ] `git diff --check` passes.
-- [ ] Exact scope check shows no `cmd/**`, `internal/**`, `go.mod`, `go.sum`, `website/**`,
+- [x] Contradiction grep passes.
+- [x] `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` passes.
+- [x] Skill quick validation passes: `Skill is valid!`.
+- [x] Direct dependency/token/export contracts unchanged.
+- [x] `git diff --check` passes.
+- [x] Exact scope check shows no `cmd/**`, `internal/**`, `go.mod`, `go.sum`, `website/**`,
   `docs/cli/**`, parent #397 artifacts, or nondelegated docs changes.
-- [ ] `scripts/gsd doctor` passes at final verification (`ok commands 69`).
-- [ ] `make docs-check` passes.
+- [x] `scripts/gsd doctor` passes at final verification (`ok commands 69`).
+- [x] `make docs-check` passes.
 
 ### Review route status
 

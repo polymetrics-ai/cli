@@ -47,10 +47,11 @@ Sources reviewed:
 
 **A. Flags are the API; prompts are progressive enhancement.** (gh, clig.dev) Bare
 namespace commands show contextual help/subcommand summaries and exit 0; explicit subcommands own
-interactive places. Prompt only when stdout+stdin are TTYs and a required input is missing;
-`--no-input` disables all interactivity and errors must name the exact flag to pass; every wizard
-result is expressible as flags and the wizard teaches sanitized commands without secrets or
-one-time authorization values.
+interactive places. Prompt only when stdin and stdout are TTYs and a required input is missing;
+piped/non-TTY stdin selects deterministic plain/noninteractive behavior and must not be consumed as
+interactive input or bypassed through `/dev/tty`. `--no-input` disables all interactivity and errors
+must name the exact flag to pass; every wizard result is expressible as flags and the wizard teaches
+sanitized commands without secrets or one-time authorization values.
 
 **B. A CLI framework should own routing, help, and completion — not behavior.** (cobra
 practice) Behavior stays in testable handlers with injected writers; the framework layer is
@@ -60,10 +61,10 @@ thin and replaceable.
 defaults), resolved once per invocation, injected — never ambient globals or file watching
 in a deterministic CLI. (viper used in instance mode)
 
-**D. TUIs must be gated, degradable, and honest.** TTY-only activation; colorprofile
-degradation TrueColor→256→16→none honoring NO_COLOR/CLICOLOR/TERM=dumb; color never the
-only carrier of meaning; accessible (sequential, no-redraw) mode for screen readers;
-final frames tell the truth about cancellation/failure. (charm, gh a11y)
+**D. TUIs must be gated, degradable, and honest.** stdin+stdout TTY activation only;
+colorprofile degradation TrueColor→256→16→none honoring NO_COLOR/CLICOLOR/TERM=dumb; color never
+the only carrier of meaning; accessible (sequential, no-redraw) mode for screen readers; final
+frames tell the truth about cancellation/failure. (charm, gh a11y)
 
 **E. Progress is an event stream, not a poll loop.** Long-running operations emit typed
 events through a dependency-free bus; UI, agents (NDJSON), and files are just sinks.
@@ -244,11 +245,13 @@ Every TUI plan/worker must load the repo-local `bubble-tea-tui-design` skill. Su
   `Throttle`, `Multi`. Instrumentation points: `flow.Engine.Run` beside the existing
   `appendLedger` calls, ETL per-batch `flush()`, certify worker pool, and a Temporal
   `DescribeWorkflowExecution` poller in `worker/submit.go` (no workflow code changes).
-- **TTY gate** `ui.Detect`: TUI only when stdout is a TTY ∧ ¬`--json` ∧ ¬`--plain` ∧
-  ¬`--no-input` ∧ `PM_NO_TUI`/`CI` unset ∧ `TERM≠dumb`. New `cli.RunWithOptions`; existing
-  `Run` delegates with `ModePlain`, so every existing test exercises the plain path by
-  construction. `SanitizeTerminal` continues to guard the plain path; on the TUI path it
-  moves into view-string hygiene (every dynamic string sanitized before styling).
+- **TTY gate** `ui.Detect`: TUI only when stdin is a TTY ∧ stdout is a TTY ∧ ¬`--json` ∧
+  ¬`--plain` ∧ ¬`--no-input` ∧ `PM_NO_TUI`/`CI` unset ∧ `TERM≠dumb`. Piped/non-TTY stdin always
+  falls back to deterministic plain/noninteractive behavior, must not be consumed by prompts, and
+  must not be bypassed via `/dev/tty`. New `cli.RunWithOptions`; existing `Run` delegates with
+  `ModePlain`, so every existing test exercises the plain path by construction. `SanitizeTerminal`
+  continues to guard the plain path; on the TUI path it moves into view-string hygiene (every
+  dynamic string sanitized before styling).
 - **Doctrine (A):** flags stay the API. Bare namespaces stay contextual help; explicit
   subcommands such as `pm query grid` and `pm reverse guide` own interactive places. Wizards prompt
   only for missing inputs, print sanitized equivalent non-interactive commands on completion, and
@@ -317,7 +320,7 @@ requirements without changing the 22 production-phase numbers.
 | 4 | Migrate scattered env reads onto config | A | — |
 | 5 | `internal/events` bus + engine/ETL/certify/worker instrumentation | B | — |
 | 6 | slog foundation + redaction + per-run JSONL logs + Temporal logger | C | — |
-| 7 | TTY gate, `--plain`/`--no-input`/`--progress ndjson`, `internal/ui/styles` foundation | B | golang.org/x/term |
+| 7 | stdin+stdout TTY gate, `--plain`/`--no-input`/`--progress ndjson`, `internal/ui/styles` foundation | B | golang.org/x/term |
 | 8 | Nativize pilot namespace (`catalog`) | A | — |
 | 9 | Nativize remaining namespaces (several loops; certify last) | A | — |
 | 10 | Flagship run dashboards: `flow run` + `etl run` — blocked by #462/D-TUI | B | bubbletea/bubbles/lipgloss v2, teatest (test-only) |
@@ -346,8 +349,8 @@ secret greps, `git diff go.mod` expectations) — encoded per stage in the execu
 | Help-text churn breaks the docs/website parity gate | Docs map stays the single help source through phase 18; custom help/usage funcs everywhere so cobra boilerplate can't leak; all deliberate churn quarantined in phase 19 with regenerated fixtures + website budget |
 | pflag semantic drift (`--flag` w/o value, unknown-flag tolerance, comma-split, error wording, usage-vs-validation category) | Golden edge-case fixtures recorded in phase 1 before opinions form; `StringArrayVar` + `NoOptDefVal` conventions; `FParseErrWhitelist`; `mapCobraErr` pins categories |
 | Certify in-process re-entrancy | Fresh command tree per `Run`; signature frozen; certify subtree on `DisableFlagParsing` until its own loop; `certify_exit_test.go` + smoke in every A-phase gate |
-| Agent-contract regression from the TUI | Plain path is the compile-time default of untouched `cli.Run`; gate can never be satisfied by pipes/CI; NDJSON confined to stderr; import-direction CI check (`internal/ui` never imported by business packages); one contract test per TUI-enabled command |
-| Dependency weight vs "dependency-free" tenet | Phases 5–6 (events, slog) ship value with zero new deps; heavy gates isolated to phases 10/11/12/13/14; default runtime behavior unchanged (telemetry off, TUI TTY-only); tenet interpretation recorded in ADR-0004 |
+| Agent-contract regression from the TUI | Plain path is the compile-time default of untouched `cli.Run`; gate can never be satisfied by stdin/stdout pipes, CI, `--json`, `--plain`, or `--no-input`; NDJSON confined to stderr; import-direction CI check (`internal/ui` never imported by business packages); one contract test per TUI-enabled command |
+| Dependency weight vs "dependency-free" tenet | Phases 5–6 (events, slog) ship value with zero new deps; heavy gates isolated to phases 10/11/12/13/14; default runtime behavior unchanged (telemetry off, TUI requires stdin+stdout TTY); tenet interpretation recorded in ADR-0004 |
 | Hot-loop overhead (per-record paths) | No per-record spans/logs/instrument calls anywhere; counters accumulate locally and flush per batch; benchmark guard in phase 17 |
 | Bubble Tea v2 / terminal chart / otel-logs beta churn | v2 core is stable (powers charm's own apps); teatest pinned pseudo-version, test-only; a chart renderer stays behind a local interface and requires a separate approval because NTCharts warns that its API may change; otel log bridge confined to one file, pinned, explicitly droppable (phase 21) |
 | Windows terminals | Inline mode (no alt screen) for run commands; ASCII glyph fallbacks; colorprofile degradation; `PM_NO_TUI` universal escape hatch |

@@ -35,12 +35,15 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
    progress coalescible), `Throttle`, `Multi`. Instrumentation lands beside the existing
    ledger call sites in `flow.Engine.Run`, in ETL batch `flush()`, in the certify worker
    pool, and as a Temporal `DescribeWorkflowExecution` poller (no workflow code changes).
-2. **The TUI is affirmatively gated.** `ui.Detect` enables it only when stdout is a real
-   TTY ∧ ¬`--json` ∧ ¬`--plain` ∧ ¬`--no-input` ∧ `PM_NO_TUI`/`CI` unset ∧ `TERM≠dumb`.
-   `cli.RunWithOptions` carries the mode; the existing `Run` delegates with plain mode, so
-   every existing test exercises the plain path by construction. On the TUI path the
-   sanitizer moves into view-string hygiene (every dynamic string sanitized + redacted
-   before styling); the plain path is untouched.
+2. **The TUI is affirmatively gated.** `ui.Detect` enables it only when stdin and stdout are
+   real TTYs (stdin TTY ∧ stdout TTY ∧ ¬`--json` ∧ ¬`--plain` ∧ ¬`--no-input` ∧
+   `PM_NO_TUI`/`CI` unset ∧ `TERM≠dumb`). Piped or non-TTY stdin always selects deterministic
+   plain/noninteractive behavior; the TUI and Huh prompt layers must not consume scripted stdin,
+   must not hang waiting for interactive input, and must not open `/dev/tty` to bypass the gate.
+   `cli.RunWithOptions`
+   carries the mode; the existing `Run` delegates with plain mode, so every existing test exercises
+   the plain path by construction. On the TUI path the sanitizer moves into view-string hygiene
+   (every dynamic string sanitized + redacted before styling); the plain path is untouched.
 3. **Adopt Bubble Tea v2 + bubbles + lipgloss v2** for dashboards and browsers, **huh v2**
    for wizards (embedded as `tea.Model`; accessible mode wired from day one), **glamour v2**
    for the docs pager, **Evertras/bubble-table** for the query grid. Inline mode for run
@@ -48,8 +51,9 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
 4. **Flags are the API; prompts are progressive enhancement.** Bare namespace commands render
    contextual help/subcommand summaries and exit 0; they do not launch TUIs. Explicit interactive
    subcommands such as `pm query grid` and `pm reverse guide` own place-like surfaces. Wizards
-   prompt only for missing inputs, validate with the same code paths the flag door uses (e.g.
-   wizard manifests round-trip `flow.ParseManifest`), emit machine artifacts at documented paths,
+   prompt only for missing inputs after the same stdin-and-stdout TTY gate passes, validate with
+   the same code paths the flag door uses (e.g. wizard manifests round-trip `flow.ParseManifest`),
+   emit machine artifacts at documented paths,
    and end by printing sanitized scripted equivalents that omit secrets and one-time authorization
    values. `--no-input` errors name the exact flag/file to provide. New enumerators required by the
    TUI (`pm query tables`) ship as plain/JSON commands first.
