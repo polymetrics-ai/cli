@@ -331,7 +331,7 @@
     {
       "cycle": "ninth-ci-correction-tdd-gate",
       "decision": "local_critical_path",
-      "reason": "remote CI failure is captured as RED; local stress and deterministic barrier-based test harness replacement are pending after planning checkpoint and parent reconcile"
+      "reason": "remote CI failure was captured as RED; local stress did not reproduce and no local failure was fabricated before deterministic barrier-based harness replacement"
     },
     {
       "cycle": "ninth-ci-correction-green",
@@ -346,7 +346,7 @@
     {
       "cycle": "ninth-ci-correction-summary",
       "decision": "local_critical_path",
-      "reason": "terminal artifacts record successful ninth verification at implementation head 828be4de4145d1246347b820d433d52bd1e92002; PR body update and final push remain delivery actions; no bot review requested"
+      "reason": "terminal artifacts record successful ninth verification at implementation head 828be4de4145d1246347b820d433d52bd1e92002; PR body update is performed after final push because artifact commits cannot self-reference; no bot review requested"
     }
   ],
   "red": "remote CI RED captured: GitHub Actions run 29711194607 at head 9f004ac5d96d84bd1f8b186496e1f594a183a18b failed internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit with elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening); local stress did not reproduce (count=50 7.601s, race count=10 3.084s) and no local failure was fabricated",
@@ -384,7 +384,7 @@
     "9678d4dd merge(parent): reconcile cli architecture v2",
     "828be4de test(certify): make batch concurrency proof deterministic"
   ],
-  "push": "ninth planning 0398a5d6, parent merge 9678d4dd, and test fix 828be4de pushed; terminal evidence commit and PR #466 body update pending after artifact finalization",
+  "push": "ninth planning 0398a5d6, parent merge 9678d4dd, test fix 828be4de, and terminal evidence commits pushed; PR #466 body update performed after final push with current live head sourced from GitHub/PR body",
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
   "reviewRoute": "human_parent_fallback_pending_no_bot_retry_requested",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, bot review, parent/main merge, or quality-gate reduction",

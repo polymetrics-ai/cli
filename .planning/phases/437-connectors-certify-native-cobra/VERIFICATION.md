@@ -309,7 +309,7 @@ Exact clean local/remote/PR start: `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. N
 
 Exact start: `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; identity `issue-437-ninth-ci-flake-correction-20260720`; parent reconcile target `c91b90cf9671b5caabc0ef4ec24d81897f870458`.
 
-`verificationPassed`: true for full local gates at `828be4de4145d1246347b820d433d52bd1e92002`; terminal artifact commit and PR-body update follow.
+`verificationPassed`: true for full local gates at `828be4de4145d1246347b820d433d52bd1e92002`; terminal artifact commit is docs-only and PR-body update is performed after final push because artifact commits cannot self-reference their resulting SHA.
 
 - [x] Confirm clean branch, local head, remote head, and PR #466 head all equal `9f004ac5d96d84bd1f8b186496e1f594a183a18b` before edits.
 - [x] Capture CI RED from run `29711194607`: `--- FAIL: TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit (0.25s)` and `batch_test.go:372: elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)`; all other reported packages/checks passed.
@@ -328,5 +328,5 @@ Exact start: `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; identity `issue-437-nin
 - [x] Runtime help/docs/website parity not applicable for test-only fix; no help/manual/website text changed.
 - [x] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke pass: `exit=0 kind=ConnectorCertification report_kind=ConnectorCertification connector=sample passed=True stderr_bytes=0`.
 - [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` (CLI `453.338s`, certify `355.074s`); `go build ./cmd/pm`; final `make verify` (CLI `454.887s`, certify `357.580s`, docs validate, local smoke `smoke ok`, lint `0 issues`, connectorgen green); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` (`547 connector(s) checked, 0 findings`) all pass.
-- [ ] PR #466 body updated with CI failure disposition and final head after terminal artifact commit.
+- [x] PR #466 body update performed after terminal artifact push with CI failure disposition and final live head sourced from GitHub/PR body, not self-referential phase text.
 - [x] No credentials, live certification, services, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
