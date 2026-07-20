@@ -158,6 +158,10 @@ func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stde
 }
 
 func executeRootCmd(cmd *cobra.Command, args []string) error {
+	if err := prevalidateCertifySyntaxArgs(args); err != nil {
+		return err
+	}
+
 	var connectorsState connectorsCommandState
 	args = captureConnectorsPrivateOperand(args, &connectorsState)
 	extractState := extractCommandState{

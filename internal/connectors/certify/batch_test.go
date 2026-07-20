@@ -510,25 +510,37 @@ func TestRunBatchResumeAcceptsCleanupFailureAbsenceProof(t *testing.T) {
 		certify.StageResult{Name: "write_cleanup", Tier: 2, Passed: false, Error: "write_cleanup: reverse run exit=1 stderr=fixture cleanup error"},
 		certify.StageResult{Name: "cleanup_verify", Tier: 2, Passed: true},
 	)
-	if err := rep.Save(batchDir); err != nil {
-		t.Fatalf("seed absence-proof report: %v", err)
+	var effects []string
+	factory := func(name string, _ certify.Options) certify.Runnable {
+		effects = append(effects, "run:"+name)
+		if len(effects) == 1 {
+			return &fakeRunnable{rep: rep}
+		}
+		return &fakeRunnable{rep: passingReport(name)}
 	}
-
-	invoked := false
-	batch, err := certify.RunBatch(context.Background(), certify.BatchOptions{
-		CredsFile: cf,
-		RunnerFactory: func(name string, _ certify.Options) certify.Runnable {
-			invoked = true
-			return &fakeRunnable{rep: passingReport(name)}
-		},
-		BatchDir: batchDir,
-		Resume:   true,
+	first, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+		CredsFile:     cf,
+		RunnerFactory: factory,
+		BatchDir:      batchDir,
 	})
 	if err != nil {
-		t.Fatalf("RunBatch() error = %v", err)
+		t.Fatalf("first RunBatch() error = %v", err)
 	}
-	if invoked {
-		t.Fatal("absence-proven cleanup failure was rerun instead of resumed")
+	if findResult(t, first, "github").Resumed {
+		t.Fatal("first run unexpectedly resumed")
+	}
+
+	batch, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+		CredsFile:     cf,
+		RunnerFactory: factory,
+		BatchDir:      batchDir,
+		Resume:        true,
+	})
+	if err != nil {
+		t.Fatalf("second RunBatch() error = %v", err)
+	}
+	if len(effects) != 1 {
+		t.Fatalf("absence-proven cleanup failure reran effects=%v, want only first run", effects)
 	}
 	result := findResult(t, batch, "github")
 	if !result.Resumed {

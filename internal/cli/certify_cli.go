@@ -302,8 +302,20 @@ func certifyOptionsFromFlags(connector string, flags certifyCommandFlags) (certi
 }
 
 func prevalidateCertifySafetyArgs(args []string) error {
+	return prevalidateCertifyArgs(args, true)
+}
+
+func prevalidateCertifySyntaxArgs(args []string) error {
+	return prevalidateCertifyArgs(args, false)
+}
+
+func prevalidateCertifyArgs(args []string, validateSweepCreds bool) error {
 	if len(args) < 2 || args[0] != "connectors" || args[1] != "certify" {
 		return nil
+	}
+
+	if err := validateCertifyRequiredValueArgs(args, 2); err != nil {
+		return err
 	}
 
 	args = normalizeStringArraySpaceValues(args, 2, certifyFlagNames)
@@ -378,7 +390,7 @@ func prevalidateCertifySafetyArgs(args []string) error {
 		}
 	}
 
-	if sweepEnabled && credsPath != "" && credsPath != "true" {
+	if validateSweepCreds && sweepEnabled && credsPath != "" && credsPath != "true" {
 		creds, err := certify.LoadCredsFile(credsPath)
 		if err != nil {
 			return usageErrorf("%v", err)
@@ -388,6 +400,53 @@ func prevalidateCertifySafetyArgs(args []string) error {
 		}
 	}
 	return nil
+}
+
+var certifyRequiredValueFlagNames = map[string]struct{}{
+	"from-env":         {},
+	"config":           {},
+	"stream":           {},
+	"credentials-file": {},
+	"parallel":         {},
+	"older-than":       {},
+}
+
+func validateCertifyRequiredValueArgs(args []string, start int) error {
+	for i := start; i < len(args); i++ {
+		arg := args[i]
+		if arg == "--" {
+			break
+		}
+		if !strings.HasPrefix(arg, "--") || arg == "--" {
+			continue
+		}
+		nameValue := strings.TrimPrefix(arg, "--")
+		name, value, assigned := strings.Cut(nameValue, "=")
+		if _, required := certifyRequiredValueFlagNames[name]; !required {
+			continue
+		}
+		if assigned {
+			if strings.TrimSpace(value) == "" {
+				return usageErrorf("--%s requires a value", name)
+			}
+			continue
+		}
+		if i+1 >= len(args) || certifyValueArgMissing(name, args[i+1]) {
+			return usageErrorf("--%s requires a value", name)
+		}
+		i++
+	}
+	return nil
+}
+
+func certifyValueArgMissing(name, next string) bool {
+	if next == "--" || next == "-h" || strings.HasPrefix(next, "--") {
+		return true
+	}
+	if strings.HasPrefix(next, "-") && name != "parallel" && name != "older-than" {
+		return true
+	}
+	return false
 }
 
 func validateCertifyParallelFlag(flags certifyCommandFlags) error {

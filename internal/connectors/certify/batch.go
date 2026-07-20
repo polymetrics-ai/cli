@@ -523,6 +523,7 @@ func validResumeEvidence(rep Report) bool {
 	}
 	counts := make(map[string]int, len(singularRequired)+len(modeStages))
 	cleanupFailed := false
+	cleanupVerifyFailed := false
 	for _, stage := range rep.Stages {
 		if stage.Name == "" || stage.Tier < 0 || stage.Tier > 2 {
 			return false
@@ -530,9 +531,11 @@ func validResumeEvidence(rep Report) bool {
 		if singularRequired[stage.Name] || modeStages[stage.Name] {
 			counts[stage.Name]++
 		}
-		if (stage.Name == "write_cleanup" || stage.Name == "cleanup_verify") &&
-			!stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
+		if stage.Name == "write_cleanup" && !stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
 			cleanupFailed = true
+		}
+		if stage.Name == "cleanup_verify" && !stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
+			cleanupVerifyFailed = true
 		}
 	}
 	for name := range singularRequired {
@@ -546,8 +549,13 @@ func validResumeEvidence(rep Report) bool {
 		}
 	}
 
-	if cleanupFailed && len(rep.Leaks) == 0 {
-		return false
+	if len(rep.Leaks) == 0 {
+		if cleanupVerifyFailed {
+			return false
+		}
+		if cleanupFailed && !validCleanupFailureAbsenceProof(rep) {
+			return false
+		}
 	}
 	for _, leak := range rep.Leaks {
 		result, ok := rep.Capabilities.WriteActions[leak.Action]
@@ -579,6 +587,61 @@ func validResumeEvidence(rep Report) bool {
 	recomputedPassed := allStagesPassed(rep.Stages) &&
 		rep.Capabilities.SecretRedaction.Result != "fail" && len(rep.Leaks) == 0
 	return rep.Passed == recomputedPassed
+}
+
+const cleanupAbsenceProofReason = "write_cleanup failed, but cleanup_verify proved the entity absent"
+
+func validCleanupFailureAbsenceProof(rep Report) bool {
+	var (
+		writePlanPassed    bool
+		writeCreatePassed  bool
+		cleanupFailedIndex = -1
+		cleanupVerifyAfter bool
+	)
+	for i, stage := range rep.Stages {
+		switch stage.Name {
+		case "write_plan_preview":
+			writePlanPassed = writePlanPassed || stage.Passed
+		case "write_create":
+			writeCreatePassed = writeCreatePassed || stage.Passed
+		case "write_cleanup":
+			if !stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
+				if cleanupFailedIndex != -1 {
+					return false
+				}
+				cleanupFailedIndex = i
+			}
+		case "cleanup_verify":
+			if !stage.Passed && !strings.HasPrefix(stage.Error, "skipped: ") {
+				return false
+			}
+			if stage.Passed && cleanupFailedIndex != -1 && i > cleanupFailedIndex {
+				cleanupVerifyAfter = true
+			}
+		}
+	}
+	if !writePlanPassed || !writeCreatePassed || cleanupFailedIndex == -1 || !cleanupVerifyAfter {
+		return false
+	}
+
+	matches := 0
+	for action, result := range rep.Capabilities.WriteActions {
+		if result.Result == "leaked_resource" {
+			return false
+		}
+		if result.Result != "fail" || result.Reason != cleanupAbsenceProofReason {
+			continue
+		}
+		if action == "" || result.Tag == "" || result.Cleanup == "" || result.Verify == "" {
+			return false
+		}
+		runID := runIDFromTag(rep.Connector, result.Tag)
+		if !validLedgerTag(rep.Connector, runID, result.Tag) {
+			return false
+		}
+		matches++
+	}
+	return matches == 1
 }
 
 // writeBatchProgress persists <dir>/certifications/batch-<runid>/
