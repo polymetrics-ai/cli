@@ -1,5 +1,11 @@
 # Phase 462 Summary
 
+Progressive setup refinement on PR #468 adds an implementation-ready, GSD-verified Phase 18 UI
+contract and child issue #469. It makes incomplete credential/connection actions guided by default
+only on a genuine dual-TTY, preserves bare namespace help and direct fully specified commands, keeps
+plaintext secrets outside the TUI, and documents `--json --no-input` for agents. #416 remains the
+separate reverse-security flow. Final merge remains human-gated.
+
 Status: provisionally integrated / review blocked. PR #465 (`docs/462-terminal-ui-design-research`)
 was merged into the parent branch from head `6853fee28e0208381b49931fb1f5dfec42ee50ef`, but Claude
 review is disabled, Copilot backup exhausted quota, and fallback is human review. Correction PR #467

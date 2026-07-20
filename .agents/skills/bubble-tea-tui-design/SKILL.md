@@ -33,7 +33,15 @@ accessible, and compatible with its plain/JSON sibling.
   always falls back to deterministic plain/noninteractive behavior; never consume scripted stdin
   unexpectedly, never hang for a prompt, and never open `/dev/tty` to bypass the gate. Bare
   namespace commands render contextual help/subcommand summaries and exit 0 rather than launching a
-  TUI. Use explicit interactive subcommands such as `pm query grid` and `pm reverse guide`.
+  TUI. Use explicit place-like subcommands such as `pm query grid` and `pm reverse guide`.
+  Action subcommands may progressively prompt for missing fields after the same gate passes; for
+  example, incomplete `pm credentials add [name]` and `pm connections create [name]` invocations
+  may start guidance, while complete invocations execute directly. Invalid supplied values return
+  direct validation errors instead of opening a repair wizard.
+- Treat `--json --no-input` as the documented agent/automation invocation profile and add
+  `--progress ndjson` only to long-running commands. Do not invent a global `--agent-mode`:
+  `pm query run --agent-mode summary|stream` controls query result shape only. Agent paths must
+  return one structured envelope or an actionable required-flag error and must never prompt.
 - Use Bubble Tea's model/update/view architecture. Commands own asynchronous I/O; `Update`
   remains deterministic and never performs blocking work.
 - Default to Normal mode. Enter Filter/Edit mode only when an input owns focus, display the
@@ -97,4 +105,6 @@ Block or correct a TUI change when it:
 - performs I/O in `Update`/`View`, leaks goroutines, ignores cancellation, or floods events;
 - renders unbounded query/result data or misleading charts without axes/units/text values;
 - changes plain/JSON behavior, exit codes, stdout/stderr boundaries, or help parity;
+- launches guidance for a complete action, repairs an invalid supplied value by prompting, or lets
+  an agent/non-TTY invocation prompt or consume unexpected stdin;
 - adds a dependency not named and approved for the phase.

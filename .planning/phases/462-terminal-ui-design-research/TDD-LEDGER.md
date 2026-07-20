@@ -3,6 +3,17 @@
 Issue: #462
 Starting commit: `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`
 
+## Progressive setup refinement ledger — 2026-07-20
+
+- RED: Phase 18 combined reverse/setup, lacked complete-vs-incomplete activation semantics, and did
+  not give agents one canonical prompt-free profile. The GSD UI checker also rejected four generic
+  action labels.
+- GREEN: `18-UI-SPEC.md` now defines the dual-TTY action matrix, exact action copy, secret-source
+  metadata flow, capability-derived connection review, duplicate recovery, and `--json --no-input`.
+  Child #469 owns setup; #416 owns reverse.
+- REFACTOR: roadmap, prompts, ADR, design docs, skill, issue graph, and PR #468 are synchronized and
+  verified by the final gate recorded in the Phase 18 `VERIFICATION.md`.
+
 ## RED contract inventory
 
 Before this issue's documentation/skill edits, the exact base-commit audit produced:

@@ -56,9 +56,10 @@ Workers must not edit these shared artifacts unless the orchestrator explicitly 
 | P15 | `feat(cli): add connector-aware shell completion` | A | P09 | command registration/completion/tests/docs |
 | P16 | `feat(ui): add certify and RLM dashboards` (#414) | B | P09, P10, D-TUI/#462 | certify/RLM dashboard models and command wiring |
 | P17 | `feat(obs): add OpenTelemetry metrics` | C | P12 | metrics instruments/exporters/benchmarks |
-| P18 | `feat(ui): add guided reverse ETL and connection prompts` (#416) | B | P11, D-TUI/#462 | reverse/connection prompting; no secret prompts |
-| P19 | `feat(cli): deepen help tree and generate man pages` | A | P13, P14, P15, P16, P18 | help tree, generated manuals, docs/website/goldens |
-| P20 | `feat(ui): complete accessibility audit and a11y topic` (#418) | B | P13, P13C when included, P14, P16, P18, D-TUI/#462 | all TUI accessibility fixes and parity docs |
+| P18 | `feat(ui): add guided reverse ETL session` (#416) | B | P11, D-TUI/#462 | reverse plan/preview/approval/execute projection; approval token stays hidden |
+| P18B | `feat(ui): add TTY-progressive credential and connection setup` (#469) | B | P11, D-TUI/#462 | missing-field setup guidance; secret-source metadata only |
+| P19 | `feat(cli): deepen help tree and generate man pages` (#417) | A | P13, P14, P15, P16, P18, P18B | help tree, generated manuals, docs/website/goldens |
+| P20 | `feat(ui): complete accessibility audit and a11y topic` (#418) | B | P13, P13C after P13 when included, P14, P16, P18, P18B, D-TUI/#462 | all TUI accessibility fixes and parity docs |
 | P21 | `feat(obs): add optional OpenTelemetry log bridge` | C | P06, P12 | optional pinned beta log bridge only |
 | P22 | `chore(cli): complete Architecture v2 cleanup` | A | P17, P19, P20 | dead parser cleanup, `AGENTS.md`, `CONTEXT.md`, final verification |
 
@@ -86,11 +87,12 @@ docs. Connector dynamic dispatch remains on the legacy parser; certify migrates 
 2. **Foundation fan-out after P04:** P05, P06, P08, and P12 may run in separate worktrees.
 3. **Track fan-out:** P07 follows P05; P09 follows P08; P10 follows P07; P17 follows P12; P21 follows P06+P12.
 4. **TUI design gate:** integrate D-TUI/#462 before P10/#408, P11/#409, P13/#411,
-   P14/#412, P16/#414, P18/#416, P20/#418, or P13C/#463 starts production UI work.
+   P14/#412, P16/#414, P18/#416, P18B/#469, P20/#418, or P13C/#463 starts production UI work.
    Parent orchestrator must update GitHub blocked-by metadata; this docs worker must not mutate
    GitHub issue metadata.
-5. **UX fan-out:** after P11 and D-TUI/#462, P13, P14, and P18 may run in separate worktrees.
-   P16 can run after P09+P10+D-TUI/#462.
+5. **UX fan-out:** after P11 and D-TUI/#462, P13, P14, P18, and P18B may run in separate worktrees
+   after collision checks. P18 owns reverse only; P18B owns credentials/connections only. P16 can
+   run after P09+P10+D-TUI/#462.
 6. **Convergence:** P15 after P09; P19 and P20 after their listed UI/CLI dependencies; P22 last.
 
 ## Required worker prompt contract

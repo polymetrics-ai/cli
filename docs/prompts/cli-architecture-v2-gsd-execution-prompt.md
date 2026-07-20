@@ -54,7 +54,7 @@ PLAN.md with TDD-ordered tasks) → `/gsd execute-phase <N>` → `/gsd verify-wo
 phase ends with `make verify` green plus the phase GATE. If a gate cannot pass, stop and
 flag it loudly in SUMMARY.md — never fake or skip a gate.
 
-TUI-PHASE PREFLIGHT (stages 10, 11, 13, chart child #463, 14, 16, 18, and 20): issue #462/D-TUI
+TUI-PHASE PREFLIGHT (stages 10, 11, 13, chart child #463, 14, 16, 18A/#416, 18B/#469, and 20): issue #462/D-TUI
 must be integrated into the active parent branch and its accepted correction PR/review blocker must
 be resolved by the parent orchestrator before production UI work starts. Load the repo-local
 `bubble-tea-tui-design` skill plus the routed Go CLI/testing/security/safety/context/concurrency/
@@ -244,19 +244,29 @@ GATE 17: file-exporter metrics reconcile with envelope counts (jq equality test)
 `go test -bench BenchmarkEmit -benchmem ./internal/app` no regression; `make verify`.
 Commit "feat(obs): metrics per PRD §15.2 + temporal otel contrib (arch-v2)".
 
-STAGE 18 — WIZARDS WAVE 2 (track B; blocked by #462/D-TUI)
-Explicit `pm reverse guide` per design doc §2.9 (existing gate untouched; approval token carried
-only ephemerally in memory; typed confirmation preserved) + connections create missing-input
-prompting per §2.10. Bare `pm reverse` renders contextual help/subcommand summary and exits 0.
-credentials add stays non-interactive for secret values (non-goal — do not add interactive secret
-entry). Use explicit Normal/Edit/Confirm state; no approval-token display in final frames,
-transcripts, logs, screenshots, accessibility output, JSON, shell-equivalent command text, or
-fixtures; no unlabelled single-key write action and no generic shell/HTTP/SQL write escape hatch.
-GATE 18: session test proves identical plan/approve semantics as the flag flow;
-`stdin-piped+stdout-TTY`, `stdout-piped`, `CI=1`, `--json`, `--plain`, and `--no-input` bypass the
-guide/prompts without consuming scripted stdin; approval token is not displayed in JSON, final
-frames, accessibility transcript, logs, screenshots/fixtures, or scripted-equivalent text;
-`make verify`. Commit "feat(ui): guided reverse-etl session + connections prompting (arch-v2)".
+STAGE 18A — GUIDED REVERSE ETL (#416; track B; blocked by #462/D-TUI)
+Explicit `pm reverse guide` per design doc §2.9. Preserve the existing plan → preview → approval →
+execute seam, typed confirmation, and exit semantics. Carry the approval token only ephemerally in
+memory; never display it in final frames, transcripts, logs, screenshots, accessibility output,
+JSON, shell-equivalent command text, or fixtures. Bare `pm reverse` remains contextual help and
+exits 0. GATE 18A: session tests prove parity with the flag flow; every noninteractive bypass avoids
+prompt initialization and scripted-stdin consumption; secret-marker greps and `make verify` pass.
+Commit "feat(ui): add guided reverse-etl session (arch-v2)".
+
+STAGE 18B — PROGRESSIVE SETUP (#469; track B; blocked by #409 and #462/D-TUI)
+Implement the approved Phase 18 UI contract for `pm credentials add [name]` and
+`pm connections create [name]`. Bare namespaces remain contextual help. Incomplete actions launch
+Bubble Tea/Huh by default only when stdin and stdout are TTYs and no bypass applies; fully specified
+actions run directly; complete-but-invalid input returns the normal field-specific error. Ask only
+for missing fields. Credential setup accepts non-secret config and secret-source metadata only:
+named `--from-env` selections or a sanitized `--value-stdin` handoff, never plaintext secret input.
+Connection setup derives capability-compatible choices, shows a final review, and recovers from a
+duplicate with inspect, rename, or cancel—never overwrite. Agent docs use `--json --no-input` and
+add `--progress ndjson` only for long-running commands; do not add a global `--agent-mode`.
+GATE 18B: RED/GREEN/refactor evidence covers complete/incomplete × dual-TTY/bypass matrices,
+reader-spy non-consumption, schema/placeholders, secret markers, capability choices, duplicate race,
+responsive/accessibility frames, and help/manual/docs/website parity; `make verify` passes. Commit
+"feat(ui): add progressive credential and connection setup (arch-v2)".
 
 STAGE 19 — HELP TREE + MAN PAGES (track A; THE deliberate help-churn phase)
 Per-subcommand focused --help; `pm docs man` via cobra/doc.GenManTree. Regenerate goldens,

@@ -24,7 +24,8 @@ The first designed parallel fan-out occurs after #402: #403, #404, #406, and #41
 separate worktrees. Keep the parent context open, collect worker handoffs, arbitrate stacked PRs,
 and record review coverage. Integrate terminal-design gate #462/D-TUI and its accepted correction
 PR/review disposition before dispatching production work for #408, #409, #411, #412, #414, #416,
-#418, or chart child #463. Never merge the parent PR into main without human approval.
+#469, #418, or chart child #463. #416 owns reverse guidance; #469 owns credential/connection setup.
+Never merge the parent PR into main without human approval.
 ```
 
 ## Stage 0 session
@@ -80,7 +81,7 @@ remaining blockers. Do not merge the PR and never merge the parent PR to main.
 
 ## TUI worker session
 
-Use this prompt in each isolated Pi session for issues #408, #409, #411, #412, #414, #416,
+Use this prompt in each isolated Pi session for issues #408, #409, #411, #412, #414, #416, #469,
 #418, and #463 after #462/D-TUI plus its accepted correction PR/review blocker are integrated or
 cleared by the parent orchestrator. Replace the placeholders with the assigned issue/worktree.
 
@@ -122,6 +123,17 @@ sequential prompts are allowed only in explicit accessible mode after the same g
 interactive subcommands are `pm query grid` and `pm reverse guide`. Do not copy generic shell execution, shell-backed previews, unlabelled
 destructive keys, generic HTTP/SQL writes, generic file writes, approval-token display, or
 interactive secret entry. Mouse/OSC52/advanced graphics are optional accelerators only.
+
+For #469, bare `pm credentials` and `pm connections` also remain contextual help. An incomplete
+`credentials add [name]` or `connections create [name]` may launch guidance only under the exact
+dual-TTY gate; a fully specified command executes directly, and complete-but-invalid input returns
+the normal field-specific validation error. Credential guidance may choose non-secret config and
+secret-source metadata only (`--from-env` or a sanitized `--value-stdin` handoff); it never accepts
+plaintext secrets. Connection guidance derives capability-compatible choices, reviews the complete
+configuration, and handles duplicates with inspect, rename, or cancel—never overwrite. Document
+`--json --no-input` as the universal agent-safe profile and add `--progress ndjson` only for
+long-running operations. Do not add a global `--agent-mode`; query's existing flag has different
+semantics.
 
 For #411 query grid and #463 charts, operate only on returned read-only rows. Query export must be a
 typed read-only export with project-scoped default, clean/confined path, control-character/

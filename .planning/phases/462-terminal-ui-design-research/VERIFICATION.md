@@ -1,5 +1,13 @@
 # Phase 462 Verification
 
+## Progressive setup refinement — 2026-07-20
+
+- [x] Phase 18 UI contract passed the GSD UI checker across all six dimensions.
+- [x] Setup child #469 was created and linked to #416 with direct blockers and downstream edges.
+- [x] Progressive activation, secret-source, duplicate recovery, and agent-safe invocation rules are
+      present in normative design/ADR/skill sources.
+- [x] Final local PR #468 docs, skill, GSD, scope, and docs checks pass; CI is recorded after push.
+
 ## Research and design
 
 - [x] Every user-requested reference application was installed/built and safely exercised.
@@ -15,7 +23,7 @@
 - [x] Required skill routing names `bubble-tea-tui-design` for every TUI task.
 - [x] Design, ADR, program plan, execution prompt, roadmap, backlog, and Pi prompt agree.
 - [x] GSD phase artifacts are complete and identify the docs-only RED/GREEN/refactor path.
-- [x] Live issues #408, #409, #411, #412, #414, #416, and #418 name the design gate and skill.
+- [x] Live issues #408, #409, #411, #412, #414, #416, #418, #463, and #469 name the design gate and skill.
 - [x] Dedicated chart issue #463 is a child of #411 and records the unapproved dependency status.
 
 ## Gates

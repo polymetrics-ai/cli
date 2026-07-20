@@ -6,10 +6,20 @@ Branch: `docs/462-terminal-ui-design-research`
 Starting commit: `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`
 Classification: documentation, planning, and repo-local skill only; no production Go behavior.
 
+## Progressive setup refinement — 2026-07-20
+
+Manual testing showed that credential and connection commands still require users to construct long
+flag sequences and expose configuration/duplicate failures too late. PR #468 therefore also freezes
+the progressive-action contract in the Phase 18 UI spec: bare namespaces stay help; incomplete
+actions guide only under the exact dual-TTY gate; complete actions run directly; invalid actions
+return field-specific errors; agents use `--json --no-input`. Setup is split into child #469 while
+#416 remains reverse-only. This is still docs/design/skill work with no production Go or dependency
+change.
+
 ## Objective
 
 Freeze an evidence-backed Bubble Tea interaction and visual design contract before production
-work starts in #408, #409, #411, #412, #414, #416, or #418. Give Pi/GSD workers one required
+work starts in #408, #409, #411, #412, #414, #416, #418, #463, or #469. Give Pi/GSD workers one required
 skill and prompt that makes Vim navigation, responsive layout, chart safety, accessibility,
 plain/JSON parity, and dependency gates testable.
 
@@ -37,7 +47,7 @@ Owned files:
 - `.agents/skills/bubble-tea-tui-design/**`
 - `.agents/agentic-delivery/references/required-skills-routing.md`
 - delegated parent planning/traces and this issue's phase artifacts
-- live issue planning sections for #397, #408, #409, #411, #412, #414, #416, and #418
+- live issue planning sections for #397, #408, #409, #411, #412, #414, #416, #418, #463, and #469
 
 No `cmd/**`, `internal/**`, `go.mod`, `go.sum`, generated CLI help, website page, connector
 definition, credential, remote write, or production TUI implementation is in scope.

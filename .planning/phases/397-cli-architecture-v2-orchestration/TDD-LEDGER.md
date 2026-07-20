@@ -1,5 +1,14 @@
 # Issue #397 Parent TDD Ledger
 
+## Progressive setup planning slice — 2026-07-20
+
+- RED: combined #416 ownership could not satisfy the one-issue/one-PR contract and left agent-safe
+  invocation and complete/incomplete action behavior ambiguous.
+- GREEN: child #469, direct GitHub dependency edges, a GSD-verified Phase 18 UI contract, and
+  synchronized roadmap/Pi prompts establish bounded reverse/setup work.
+- REFACTOR: PR #468 docs/skill/GSD checks and human review are the gate before any production
+  Bubble Tea worker starts.
+
 Status: active
 Starting parent HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
 

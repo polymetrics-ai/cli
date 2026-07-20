@@ -431,12 +431,30 @@ approval tokens.
 
 ### 2.10 `credentials add` / `connections create` prompting
 
-`connections create` gains missing-input prompts (source/destination pickers from
-credentials list, stream picker from catalog, sync-mode select where
-`RequiresCursor`/`RequiresPrimaryKey` drive follow-up fields).
-**`credentials add` stays non-interactive for secret values** — pickers may help with
-connector/field *names*, but values arrive only via `--from-env`/`--value-stdin`
-(no interactive secret entry; a second, less-auditable intake path is a non-goal).
+Implementation issue [#469](https://github.com/polymetrics-ai/cli/issues/469) owns the setup journey
+as a scoped child of Phase 18/#416. Bare `pm credentials` and `pm connections` remain contextual
+help. A complete action invocation executes directly. An incomplete `pm credentials add [name]` or
+`pm connections create [name]` enters guidance by default only after the stdin+stdout TTY gate
+passes; all bypass/non-TTY paths return deterministic output or an exact required-flag error.
+
+`credentials add` derives auth mode, required non-secret config, defaults, and secret field names
+from connector metadata. The wizard may collect non-secret values and secret-source metadata such
+as `token <- environment GITHUB_TOKEN`; it never reads a secret value into model state. Environment
+sources save through the existing `--from-env` seam. Controlled stdin produces a sanitized
+`--value-stdin` handoff command and exits without saving. Missing GitHub owner/repo and literal
+documentation placeholders validate before network activity. `Save and test` distinguishes
+`saved and validated` from `saved, but validation failed` without exposing or rolling back secrets.
+
+`connections create` derives eligible source/destination credentials, streams, sync modes,
+cursor/primary-key requirements, defaults, and destination table from the existing service
+metadata. Review shows every resolved value before `Create connection`. Duplicate names are
+checked before metadata loading and immediately before submission; recovery offers only
+`Inspect existing`, `Choose a new name`, or `Cancel connection setup`. No update, replace, remove,
+overwrite, or implicit `--force` behavior is introduced.
+
+The implementation contract, wireframes, exact error copy, activation matrix, and RED/GREEN/
+REFACTOR cases live in
+`.planning/phases/416-guided-reverse-connection-prompts/18-UI-SPEC.md`.
 
 ---
 
@@ -465,6 +483,10 @@ connector/field *names*, but values arrive only via `--from-env`/`--value-stdin`
 
 ## 4. Agent UX parity (first-class, not a footnote)
 
+- The documented agent/automation profile is `--json --no-input`; add `--progress ndjson` only for
+  long-running commands. This is distinct from query-specific
+  `pm query run --agent-mode summary|stream`, which changes result shape only. Do not add or imply a
+  global `--agent-mode`.
 - `--json` envelopes: byte-identical everywhere; one envelope per invocation preserved.
 - `--progress ndjson`: live sanitized events on **stderr** for any long-running command —
   agents get what the TUI gets, in their dialect, without polling checkpoint files.
@@ -510,6 +532,10 @@ Testing:
   beyond the single envelope.
 - **Wizard outputs**: round-trip written manifests through the same parser `run` uses
   (`flow.ParseManifest`) — the wizard cannot produce a manifest the engine rejects.
+- **Setup guidance**: table-driven complete/incomplete/bypass cases, schema-required config and
+  documentation-placeholder rejection before network I/O, secret-source-only model state,
+  reader-spy proof for controlled stdin, duplicate no-overwrite/final-race recovery, and
+  saved-but-test-failed truthfulness.
 - **Charts**: chart selection/units, bounded data, deterministic bucketing, missing values,
   exact selected-value text, table fallback, no-color/ASCII/accessibility transcripts, and
   resize behavior are test contracts before a renderer is wired.

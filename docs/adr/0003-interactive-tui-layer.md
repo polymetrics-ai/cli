@@ -71,7 +71,9 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
    events/safety/charm and never business packages; only the command layer branches
    plain-vs-TUI.
 7. **No interactive secret entry.** `credentials add` keeps env/stdin intake only; wizard
-   assistance is limited to non-secret names and fields.
+   assistance is limited to non-secret names, connector config, and secret-source metadata. An
+   eligible incomplete action may select a named `--from-env` source or print a sanitized
+   `--value-stdin` handoff, but Bubble Tea/Huh never receives plaintext secret material.
 8. **Terminal charts are not approved by this ADR.** `ntcharts/v2` is the leading
    Bubble Tea v2-compatible candidate after the issue #462 isolated spike, but its
    maintainers state that its API may still change. Production chart issue #463 requires a
@@ -82,6 +84,12 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
    them only ephemerally in memory through the existing plan → preview → approval → execute seam.
    They are never printed in final frames, transcripts, logs, screenshots, accessibility output,
    JSON, shell-equivalent command text, or fixtures; typed approval remains mandatory.
+10. **Progressive setup is action-scoped and automation-safe.** Bare namespaces remain help.
+    Incomplete `credentials add` and `connections create` actions may guide only under the exact
+    dual-TTY gate; fully specified actions run directly, and complete-but-invalid actions return the
+    same field-specific validation error as the flag path. Agent examples standardize
+    `--json --no-input`, adding `--progress ndjson` only for long-running work. No global
+    `--agent-mode` is introduced because `query run` already uses that name for result shaping.
 
 ## Alternatives considered
 

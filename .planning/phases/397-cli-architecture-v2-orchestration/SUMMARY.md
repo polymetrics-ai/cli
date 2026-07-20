@@ -1,5 +1,13 @@
 # Issue #397 Parent Orchestration Summary
 
+## Progressive setup refinement — 2026-07-20
+
+PR #468 now carries the GSD-verified Phase 18 interaction contract. #416 is narrowed to the guided
+reverse security flow; child #469 owns TTY-progressive credential and connection setup. The live
+GitHub graph records #409/#462 → #469 → #417/#418, and the missing #411 → #463 edge is restored.
+Neither production issue is ready until PR #468 receives human review and is integrated into the
+parent branch.
+
 Status: ACTIVE — not final
 Starting HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
 Parent PR: #438 (draft)

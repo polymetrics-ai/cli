@@ -285,6 +285,26 @@ compatibility evidence, not dependency approval.
 
 ## Bubble Tea implementation rules
 
+### Progressive action commands and agent invocations
+
+Bare namespaces remain concise help and place-like interfaces retain explicit entrypoints. Action
+commands use the mature CLI pattern of progressively filling missing inputs: after the dual-TTY
+gate passes, incomplete `pm credentials add [name]` and `pm connections create [name]` invocations
+ask only for missing fields, while fully specified invocations execute directly. This matches
+GitHub CLI's interactive-without-arguments/noninteractive-with-flags pattern and the CLI Guidelines'
+rule that prompts must always have a complete flag alternative.
+
+The machine/agent profile is the existing `--json --no-input` pair, with `--progress ndjson` for
+long-running commands. It is intentionally not named `--agent-mode`, because query already owns
+`--agent-mode summary|stream` for result shaping. Missing input under the agent profile is a single
+structured, actionable usage/validation envelope; prompting, ANSI, and unexpected stdin reads are
+forbidden.
+
+Credential guidance handles only non-secret config and secret-source metadata. Environment-backed
+secrets flow through existing `--from-env`; a controlled-stdin choice emits a sanitized
+`--value-stdin` handoff and performs no save. Connection guidance derives choices from service
+metadata and treats duplicate names as no-write recovery states, never implicit updates.
+
 - `Update` is deterministic; blocking I/O and timers return `tea.Cmd`.
 - Root models own mode, focus, layout class, key bindings/help, cancellation, and child models.
 - Send key messages to the focused child; broadcast only resize/theme/event/cancel messages
@@ -333,6 +353,10 @@ Screenshots support the visual review; they never replace key/state/accessibilit
   [Lip Gloss](https://github.com/charmbracelet/lipgloss)
 - [GitHub CLI accessibility guide](https://accessibility.github.com/documentation/guide/cli/)
   and [GitHub's CLI accessibility engineering article](https://github.blog/engineering/user-experience/building-a-more-accessible-github-cli/)
+- [GitHub CLI interactive repository creation](https://cli.github.com/manual/gh_repo_create),
+  [prompt-disable environment](https://cli.github.com/manual/gh_help_environment),
+  [Command Line Interface Guidelines](https://clig.dev/), and
+  [Pulumi non-interactive CLI conventions](https://www.pulumi.com/docs/iac/cli/commands/pulumi_do/)
 - [bpytop](https://github.com/aristocratos/bpytop),
   [Conky](https://github.com/brndnmtthws/conky), and
   [CAVA](https://github.com/karlstav/cava)

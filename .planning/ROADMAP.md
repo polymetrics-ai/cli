@@ -58,7 +58,7 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 | 7 | #405 | B | stdin+stdout TTY gate, `--plain`/`--no-input`, and `--progress ndjson` | #403 |
 | 8 | #406 | A | Nativize pilot `catalog` namespace | #402 |
 | 9 | #407 | A | Nativize remaining namespaces through serialized grandchildren #421–#437 | #406, #437 |
-| Design gate | #462 | B | Freeze Bubble Tea interaction, responsive layout, chart grammar, design skill, and TUI worker prompts | #405; before #408/#409/#411/#412/#414/#416/#418/#463 |
+| Design gate | #462 | B | Freeze Bubble Tea interaction, responsive layout, chart grammar, design skill, and TUI worker prompts | #405; before #408/#409/#411/#412/#414/#416/#418/#463/#469 |
 | 10 | #408 | B | Flow and ETL run dashboards | #405, #462/D-TUI |
 | 11 | #409 | B | Flow and schedule creation wizards | #408, #462/D-TUI |
 | 12 | #410 | C | Opt-in OpenTelemetry tracing | #402 |
@@ -68,9 +68,10 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 | 15 | #413 | A | Connector-aware shell completion | #407 |
 | 16 | #414 | B | Certify batch table and RLM agent dashboards | #407, #408, #462/D-TUI |
 | 17 | #415 | C | OpenTelemetry metrics | #410 |
-| 18 | #416 | B | Guided reverse ETL and connection prompts | #409, #462/D-TUI |
-| 19 | #417 | A | Help tree deepening and generated man pages | #411, #412, #413, #414, #416 |
-| 20 | #418 | B | Accessibility audit and `pm a11y` topic | #411, #412, #414, #416, #462/D-TUI; #463 when chart slice is included |
+| 18 | #416 | B | Guided reverse ETL session | #409, #462/D-TUI |
+| 18b | #469 | B | TTY-progressive credential and connection setup | #409, #462/D-TUI; child of #416 |
+| 19 | #417 | A | Help tree deepening and generated man pages | #411, #412, #413, #414, #416, #469 |
+| 20 | #418 | B | Accessibility audit and `pm a11y` topic | #411, #412, #414, #416, #469, #462/D-TUI; #463 after #411 when chart slice is included |
 | 21 | #419 | C | Optional OpenTelemetry log bridge, human-skippable | #404, #410 |
 | 22 | #420 | A | Architecture v2 cleanup, docs updates, final verification | #415, #417, #418 |
 
@@ -80,10 +81,11 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 2. First parallel fan-out after #402: #403, #404, #406, and #410 may run concurrently in isolated worktrees after write-scope collision checks.
 3. Phase 9 namespace grandchildren #421–#437 are serialized because they share central CLI routing/help files.
 4. TUI design issue #462/D-TUI must integrate before production UI work starts. UX fan-out after
-   #409: #411, #412, and #416 may run concurrently; #414 waits for #407, #408, and #462/D-TUI.
-   Chart child #463 follows #411 and #462/D-TUI, then joins the #418 accessibility convergence
-   when included. Parent orchestrator must update GitHub blocked-by metadata; worker docs do not
-   mutate issue metadata.
+   #409: #411, #412, #416, and #469 may run in isolated worktrees after write-scope collision
+   checks; #414 waits for #407, #408, and #462/D-TUI. #416 owns only `pm reverse guide`; #469 owns
+   credential and connection setup. Chart child #463 follows #411 and #462/D-TUI, then joins the
+   #418 accessibility convergence when included. Parent orchestrator must update GitHub blocked-by
+   metadata; worker docs do not mutate issue metadata.
 5. Convergence: #413 after #407; #417 and #418 after their UI/CLI dependencies; #420 last. Phase #419 is optional and requires an explicit human decision if skipped or if dependency budget changes.
 
 #### CLI Architecture v2 gates
@@ -100,6 +102,11 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
   stdin must not be consumed, hang, or be bypassed through `/dev/tty`. `ntcharts/v2` remains
   unapproved until a dedicated chart child issue #463 receives an explicit human dependency
   decision.
+- TTY-progressive action commands prompt only for missing fields. Fully specified invocations run
+  directly, complete-but-invalid invocations return ordinary validation errors, and bare namespaces
+  remain contextual help. Agent documentation uses `--json --no-input`; long-running commands may
+  add `--progress ndjson`. Do not introduce a global `--agent-mode`, because that name already has
+  query-specific result-shaping semantics.
 - Parent PR to `main` remains draft until all required sub-issues are integrated, final verification passes, automated review coverage is recorded, and a human is asked for final approval.
 
 ### 0. GSD Runtime and Agent Enablement

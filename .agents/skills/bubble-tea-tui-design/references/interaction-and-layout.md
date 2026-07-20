@@ -5,6 +5,9 @@
 Use explicit, shallow modes rather than turning the CLI into a full Vim clone. Bare namespaces do
 not enter these modes: `pm query` and `pm reverse` render contextual help/subcommand summaries and
 exit 0. Interactive places use explicit subcommands such as `pm query grid` and `pm reverse guide`.
+Action commands may use progressive disclosure: after the dual-TTY gate passes, an incomplete
+`credentials add` or `connections create` asks only for missing fields, while a complete action
+executes directly and an invalid supplied value returns its normal validation error.
 
 | Mode | Enter | Keys | Exit |
 |---|---|---|---|
@@ -28,6 +31,9 @@ Rules:
   ephemerally in memory through plan → preview → approval → execute; never render them in final
   frames, transcripts, logs, screenshots, accessibility output, JSON, shell-equivalent command
   text, or fixtures.
+- Credential forms may hold non-secret config and secret-source metadata such as an environment
+  variable name, but never the secret value. A controlled-stdin choice exits to a sanitized
+  `--value-stdin` handoff rather than converting the TTY into a secret prompt.
 
 ## Key bindings
 
