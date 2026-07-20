@@ -50,7 +50,7 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 	for _, spec := range cobraLegacyCommands(config.Config{}) {
 		legacyCommands[spec.name] = struct{}{}
 	}
-	nativeCommands := map[string]struct{}{"agent": {}, "catalog": {}, "connections": {}, "credentials": {}, "docs": {}, "etl": {}, "extract": {}, "flow": {}, "perf": {}, "query": {}, "reverse": {}, "rlm": {}, "runtime": {}, "schedule": {}, "skills": {}, "version": {}, "worker": {}}
+	nativeCommands := map[string]struct{}{"agent": {}, "catalog": {}, "connections": {}, "connectors": {}, "credentials": {}, "docs": {}, "etl": {}, "extract": {}, "flow": {}, "perf": {}, "query": {}, "reverse": {}, "rlm": {}, "runtime": {}, "schedule": {}, "skills": {}, "version": {}, "worker": {}}
 	if len(expectedHidden) != len(legacyCommands)+len(nativeCommands) {
 		t.Fatalf("expectedHidden covers %d commands, legacy commands plus native commands registers %d", len(expectedHidden), len(legacyCommands)+len(nativeCommands))
 	}

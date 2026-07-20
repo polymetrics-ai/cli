@@ -104,7 +104,7 @@ Telemetry values are non-secret configuration. Supported exporters are `none`, `
 | Command | Subcommands | Primary docs |
 |---|---|---|
 | `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
-| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help` | [/docs/connectors](/docs/connectors) |
+| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors inspect`, `pm connectors help`, `pm connectors certify` | [/docs/connectors](/docs/connectors) |
 | `pm credentials` | `pm credentials add`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
@@ -189,14 +189,19 @@ Catalog commands discover and cache stream metadata. Catalog output includes sch
 pm connectors list --json
 pm connectors list --all --json
 pm connectors catalog --capability read --json
-pm connectors catalog --stage generally_available --json
-pm connectors port-plan --all --json
-pm connectors port-plan postgres --json
+pm connectors catalog --stage ga --json
 pm connectors inspect 100ms --json
-pm connectors help 100ms
+pm connectors help
+
+# The local sample certification does not require live credentials.
+pm connectors certify sample --json
+pm connectors certify --all --credentials-file certify/creds.yaml --json
+pm connectors certify --sweep --credentials-file certify/creds.yaml --older-than 24h --json
 ```
 
 `pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
+
+Before a certification report completes, normal CLI parsing and setup rules apply: usage errors exit `2`, typed validation errors exit `3`, and setup/runtime errors exit `1`, with the normal `Error` envelope. A completed `ConnectorCertification`, `ConnectorCertificationBatch`, or `ConnectorCertificationSweep` report exits `0` for pass, `2` for certification failure, or `3` for leaked resources. Boolean controls accept only `true` or `false`; explicit `--parallel` is limited to 1–32 and workers are capped by queued connectors. Credential files are regular non-symlink version-1 YAML files no larger than 1 MiB, use known fields, name locally registered connectors, and carry valid environment-variable references only. Secret-schema config and credential-file `exec` entries are rejected; no external credential command runs. Credential values and approval tokens are excluded from command output, argv reports, events, telemetry, and certification reports, which use restrictive local files. Batch `--write=false` and `--skip=write` override credential-file write settings; batch writes require `sandbox: true`. `--resume` reuses reports only when schema, connector manifest, non-secret effective options, and environment-reference fingerprints match. Sweep reads the durable per-connector ledger into a fresh temporary workspace, uses plan → successful preview → approval → execute, and limits `--older-than` to `(0, 8760h]`. Unsupported, mode-inapplicable, malformed, or unknown controls fail before credential loading, telemetry, runner, sweep, or write effects. Live checks and writes are opt-in and cleanup-gated; documentation and local sample verification do not perform them.
 
 ## Extract, query, and write
 

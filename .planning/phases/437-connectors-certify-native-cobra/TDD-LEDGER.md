@@ -1,0 +1,301 @@
+# Phase 437 TDD Ledger
+
+Issue #437; invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
+
+GSD doctor/list and plan-phase prompt passed. Adapter has no `programming-loop`; manual universal-runtime-loop fallback was used. Loaded `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`, `golang-documentation`, `golang-spf13-cobra`.
+
+| Step | Kind | Evidence | Status |
+|---:|---|---|---|
+| 0 | Planning | Six issue-local artifacts written before tests/production | Complete |
+| 1 | Initial RED | `go test ./internal/cli -run 'TestConnectorsCommandIsNativeCobraSubtree|TestNativeConnectors|TestNativeCertify' -count=1` | Failed before production: `newConnectorsCobraCommand` and `newConnectorsCobraCommandWithRuntime` undefined |
+| 2 | GREEN | Native subtree, typed flags/runtime seam, compatibility normalization, namespace-only parser removal | Focused `3.876s`; router/golden/certify/telemetry `111.507s`; repeated ×10 `34.915s`; race `40.844s`; certify package `336.422s` |
+| 3 | Help RED | Trailing list/catalog/inspect/certify help contract | Failed before final help edit: operations ran, certify positional help returned usage 2, JSON trailing help returned certification output |
+| 4 | Help GREEN | Contextual direct/trailing help before effects | Focused `3.884s` |
+| 5 | Operand-help RED | Direct `connectors inspect --help|help` | Failed before correction: help token captured as connector name and returned internal connector-not-found |
+| 6 | Operand-help GREEN | Help-aware private operand capture | Focused `3.989s` |
+| 7 | Refactor | Repeated/race/router/golden/differential/parity | Final native ×10 `34.833s`; native race `40.842s`; router/golden/certify/telemetry `111.919s`; exact-start operations 21/21 |
+| 8 | Full gate | certify smoke, connector validation, docs/website, gofmt/vet/test/build/make verify | Complete: smoke exit 0/pass; validation 547/0; final `make verify` exit 0 |
+| 9 | Delivery | Finalize six artifacts, commit/push, no PR/review | Complete |
+
+## Contract proven
+
+- `connectors` is native Cobra and absent from legacy wrappers; native list/catalog/inspect/manual aliases/help/certify are declared.
+- Certify supports single connector, `--all`, and `--sweep`, with the current command-contract flags represented as repeatable `StringArray` flags with `NoOptDefVal=true`.
+- Repeated values, bare/assigned/space forms, positional connector selection, ignored tails, unknowns, literal `--`, malformed action heads, no later discovery, and globals retain compatibility.
+- Bare/topic/direct/long/short/positional/trailing help is canonical text/JSON and side-effect free; invalid actions remain usage errors.
+- Certification reports retain exits 0 pass, 1 internal, 2 certification failure, 3 leak dominance and one-envelope output.
+- Fresh command trees, context cancellation, bounded batch concurrency, event sequence, telemetry spans, and credential-value exclusion remain covered.
+- Dynamic connector dispatch remains the only CLI `parseFlags` consumer pair; `parse.go` is unchanged.
+
+## Final evidence
+
+- Full `make verify`: CLI `431.305s`, certify `337.280s`, docs, ordered local smoke, lint 0, connector validation 547/0.
+- Required explicit local certify smoke: exit 0, sample `ConnectorCertification`, passed, empty stderr.
+- No live credential check/write/sweep, service, dependency, connector definition, or private material used.
+
+## Accepted review correction ledger
+
+Session `issue-437-review-correction-20260719T113319Z`; exact correction start `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`; all five findings in `/tmp/pm-397-review-437.log` accepted.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| C0 | Planning | Six artifacts reopened before tests/production; GSD manual fallback, skills, safety scope, and verification commands recorded | Complete |
+| C1 | RED | `go test ./internal/cli -run 'TestNativeCertifyRejectsUnsupportedSafetyAndModeControls|TestNativeConnectorsOnlyExactHelpFormsRenderManual|TestConnectorsManualSeparatesCLIAndCompletedCertificationExits|TestCertifyCLIBatchLoadsCredentialsBeforeValidatingParallelAndPreservesErrorBytes|TestTelemetryCertifyInvalidOptionsPreserveSingleSpanAndConnectorValidationPrecedence' -count=1` | Complete: unsupported controls invoked runtime and were visible; false/malformed/cluster help rendered manuals; docs phrases absent; missing creds gained batch wrapper and invalid parallel won; invalid connector lost to option usage and emitted no certify span |
+| C2 | GREEN | Hidden fail-closed controls; single connector span/validation/options ordering; batch injected load then parallel then wrapped run; exact-only connectors help normalization; canonical/generated/website docs | Complete: focused `3.004s`; native/certify/telemetry `108.532s` |
+| C3 | Refactor | Base/current differential; repeated/race; certify exit/redaction/replay-no-live; local sample; docs/golden/website parity | Complete: differential 5/5 byte-identical; focused race `29.046s`; ×10 `24.991s`; certify redaction/replay/concurrency race `349.263s`; exit focus `21.618s`; sample exit 0/pass/redacted; docs/golden `24.275s`; website regeneration hash-stable |
+| C4 | Full gate | gofmt, vet, full tests, build, `make verify`, connector validation | Complete: full CLI `435.572s`; certify `338.846s`; vet/build pass; validation 547/0; `make verify` exit 0 (`468.36s`, CLI `444.436s`, certify `346.018s`, smoke/lint/docs/validation green) |
+| C5 | Delivery | Finalize artifacts, commit/push, no services/credentials/PR/review | Complete: terminal verification artifact commit `2987f21b` pushed and final delivery marker later completed |
+
+Correction RED must be captured and committed before any production edit. Fixture/temp data only; no live credentials, HTTP writes, reverse ETL execution, or external sweep.
+
+## Second accepted safety correction ledger
+
+Session `issue-437-second-safety-correction-20260719`; exact start `0d743e54e06c9e27e550eacce9be7899a9e23d19`; all P1/P2/P3 findings in `/tmp/pm-397-rereview-437.log` accepted.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| S0 | Planning | Six artifacts reopened with verification false, accepted findings, GSD fallback, skills, safety scope, flag audit, and checkpoint plan | Complete: commit `aa39fd9d` pushed |
+| S1 | RED | Effect recorder: batch write-disable dominance; credential constraint fail-closed; unsupported/mode-inapplicable controls and skip values rejected before effects; docs/help claims fail | Complete: focused command failed as required—unsupported single flags visible and ran; 18 skip/mode no-ops recorded runtime effects; both write-disable forms preserved entry `write:true`; seven credential constraints reached batch/runner; sandbox/rate/budget/limit direct batch cases invoked factory; stale docs/help claims remained |
+| S2 | GREEN P1/P2 | Batch safe overrides; no discarded credential constraints; every declared certify flag used or fail-closed; only implemented skip values accepted | Complete: effect/no-op focus passed; unsupported single controls hidden/rejected; mode validation runs before runtime effects; batch disable overrides precede credential validation; sandbox gates writes; unsupported rate/budget/limit fail before factory |
+| S3 | GREEN P3 | Architecture/PRD/help claims corrected; CLI and website artifacts regenerated | Complete: stale rejected controls removed; help accurately names namespace manual; CLI docs/goldens and website docs data regenerated |
+| S4 | Verify | Focused/repeated/race/no-op audit/sample smoke/full CLI+certify/docs+website/gofmt+vet+test+build+make verify+connectorgen | Complete: repeated `0.661s`; race CLI `1.726s`/certify `2.535s`; full CLI `440.910s` then verify `434.190s`; full certify `346.271s` then verify `337.470s`; no-op/help/sample/docs/website pass; `make verify` exit 0 in `7m36.852s`; connectorgen 547/0 |
+| S5 | Delivery | Finalize artifacts and commit/push; no credentials/services/dependencies/PR/review | Complete: verification artifact `974495d5` pushed and final delivery marker later completed |
+
+Strict TDD gate: S1 failing tests and observed failures must be captured and committed before any production edit. All data remains fixture/synthetic-reference/temp-only; no secret values, credential resolution, live checks, external writes, services, dependency changes, PR, or review.
+
+## Third accepted safety/correctness correction ledger
+
+Session `issue-437-third-safety-correction-20260719`; exact start `437d13cf`; all findings in `/tmp/pm-397-rereview2-437.log` accepted. The adapter's programming-loop command is unavailable, so the recorded fallback is the manual universal runtime loop.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| T0 | Planning | Six artifacts reopened with verification false, accepted findings, GSD fallback, skills, safety scope, flag/docs audit, RED/GREEN plan, and checkpoints | Complete: commit `766e2d9d` pushed |
+| T1 | RED | Unknown certify flags and write-like typos reject before credential load/runner/sweep; non-positive and excessive sweep age reject before effects; credential-file exec rejects before effects; ordinary two-run resume skips completed reports and reruns incomplete reports | Complete: focused test failed as required—certify retained unknown-flag whitelist and all seven typo cases reached mode handling/runtime; five unsafe ages swept; exec reached batch and parsed from file; second ordinary resume reran; direct exec constraint reached runner; stale `generally_available` docs remained |
+| T2 | GREEN safety | Strict certify flag parsing; bounded positive sweep age; exec removed/rejected; no generic external execution path | Complete: certify unknown whitelist disabled; sweep accepts only `(0, 8760h]`; loader, resolver, and batch reject exec; `os/exec` path removed |
+| T3 | GREEN correctness/docs | Completed-report resume semantics; incomplete reports rerun; usage exit, `ga`, resume/sweep/exec docs and generated artifacts corrected | Complete: resumed results reuse prior report/exit; malformed or incomplete artifacts rerun; canonical/generated/golden/website docs corrected |
+| T4 | Verify | Focused/repeated/race/resume/sweep/no-effect/audit/docs generation/local smoke/full CLI/certify/gofmt/vet/test/build/make verify/connectorgen | Complete: focused/repeated/race green; CLI `446.382s`; certify `350.637s`; `make verify` exit 0 in `14m58.384s`; connectorgen 547/0; docs and website drift-free |
+| T5 | Delivery | Truthful final artifacts, coherent commits, active-branch push; no credentials/external credential commands/services/dependencies/PR/review | Complete: terminal verification artifact `3854295b` pushed; final delivery marker records closure |
+
+Strict TDD gate: T1 failures and effect-recorder observations must be captured and committed before production edits. Tests use only fixtures, synthetic references, in-process fakes, and `t.TempDir`; no test may invoke an external credential command.
+
+## Fourth bounded review-correction ledger
+
+Session `issue-437-sol-high-review-correction-20260719`; exact start `1e27b14012f65ffa24c01ed855d0405c24401eee`; model `openai-codex/gpt-5.6-sol`, thinking `high`. Both independent review files were read and traced. Consolidated dispositions F1–F10 in PLAN.md are accepted. Programming-loop is absent; manual universal-loop fallback applies. Required and added skills are recorded in PLAN.md.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R4-0 | Planning | Six artifacts reopened before tests/production; exact branch/head/remote/clean checks, reviews, dispositions, GSD route, skills, safety scope, RED/GREEN plan, gates, checkpoints, and execution decision recorded | Complete; `07d0b5a4` pushed before tests/production |
+| R4-1 | RED preview/security | Focused effects prove failed initial/cleanup/sweep preview cannot run or ledger; opaque secret hits and semantic argv/config/report nondisclosure fail on current code | Captured: create executed once without validated preview; cleanup order was `[plan run]`; detector metadata copied marker; report mode was `0644`; malformed booleans and secret config reached runtime with exit 0 |
+| R4-2 | RED confinement/context | Deterministic concurrent crontab test proves current global env race; pre/mid-cancel tests prove context is dropped and later effects continue | Captured: barrier test observed 4 cross-run/operator crontab selections; pre-cancelled Runner returned nil and invoked CLI |
+| R4-3 | RED durability/input | Fresh-process durable sweep/layout/provenance, strict YAML/version/jobs/identifier/env/secret-config/path/symlink/atomic-mode, boolean/parallel/age/prerequisite/resume compatibility, and source-tree pollution tests fail on current code | Captured: strict YAML cases and symlink accepted; durable expected layout absent; failed preflight reached credentials; future/incompatible resume accepted; explicit parallel 0/-1/33 ran; helper root was `.`; RED `43acd262` pushed |
+| R4-4 | GREEN | Smallest context-aware, invocation-local, durable, strict, fail-closed implementation passes every focused test | Complete: `2c0a550c` pushed; opaque redaction, preview gates, local crontab, durable/provenance ledgers, strict files/controls, cancellation cleanup, prerequisites, identity resume, private atomic artifacts, and temp roots green |
+| R4-5 | Refactor/verify | Repeated/race variants, affected packages, CLI parity, docs/goldens/website drift, connector validation, fmt/diff/vet/test/build/`make verify` | Complete: ×10 certify `20.504s`, CLI `15.659s`; race context/crontab `1.743s`, batch `4.216s`, CLI `165.608s`; standalone package checkpoints CLI `442.615s`, certify `328.909s`; final-code full tests CLI `452.912s`, certify `346.633s`, real `456.93s`; final `make verify` exit 0 real `464.41s` |
+| R4-6 | Delivery | Truthful terminal artifacts, coherent GREEN/evidence commits and active-branch pushes; clean worktree | Complete after terminal artifact commit/push; GREEN `2c0a550c` and lint fix `b06816ad` already pushed |
+
+The first full `make verify` ran all tests but failed at lint on four unchecked `fmt.Fprint/Fprintf` fixture writes. The resource-handling correction was committed as `b06816ad`; focused tests and certify lint passed, then the entire `make verify` gate was rerun and exited 0. Final verification also includes help/bare/flag-help byte parity, invalid action exit 2, JSON manual kind, credential-free sample pass, temporary CLI-doc generation diff, golden pass, website regeneration with no drift, docs validation, and connectorgen 547/0.
+
+Strict TDD gate: R4-1 through R4-3 exact failing outputs must be captured before any production edit. Tests use fixtures, fake runners/backends, in-process seams, synthetic markers, and temporary roots only; they must assert marker absence without printing report bodies.
+
+## Fifth bounded review-correction ledger
+
+Identity `issue-437-fifth-review-correction-20260720`; exact start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; both rereviews traced and consolidated into seven accepted findings in PLAN.md. The explicit recovery-budget exception applies because unresolved P1 security risks require another correction. Programming-loop remains unavailable; applicable `audit-fix --dry-run` prompt plus manual universal loop applies. No subagents by user order; execution is `local_critical_path`.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R5-0 | Planning | Reopen all six artifacts with exact identity, findings/dispositions, skills, recovery exception, RED/GREEN/gates/checkpoints; commit/push before tests or production | Complete: `8acf62a9` pushed before RED |
+| R5-1 | RED cleanup/authority | Cleanup execute success + verify failure remains uncleaned; sweep verify failure remains retryable; forged issue/milestone ledger entries produce zero plan/preview/run/cleanup effects | Captured: normal and sweep marked cleaned; both numeric pairings reached one CLI effect |
+| R5-2 | RED inputs/constraints | Oversized, too-many-entry, and malformed-marker ledgers fail before effects without marker output; sweep effective default/per-connector rate/budget/limit/other constraints fail before workspace/telemetry/harness/cleanup | Captured: 1 MiB input lacked bound error; 10,001 entries accepted; malformed marker reflected; seven sweep constraints returned nil and created project state |
+| R5-3 | RED persistence/prevalidation | Current/history symlink or unwritable report save surfaces deterministically with leak exit 3 dominant; assigned/space/unknown malformed certify flags produce no logger/telemetry files or runtime effects | Captured: three passing save failures exited 0; leaked save failure was silent; invalid assigned/space forms created telemetry; bad space parallel classified validation after effects |
+| R5-4 | RED resume | Minimal, duplicate-stage, edited outcome/leaks, future, and incompatible reports rerun; valid complete evidence resumes with recomputed result | Captured: all four new invalid/edited reports resumed without runner invocation |
+| R5-5 | GREEN | Smallest fail-closed implementation satisfies R5-1 through R5-4 while preserving plan → preview → approval → execute, context, crontab isolation, dynamic dispatch, re-entrancy, outputs/exits, docs, and no dependencies | Complete: focused certify `7.288s`, CLI `8.389s`; ×10 certify `48.652s`, CLI `77.313s`; race certify `51.469s`, CLI `89.921s`; full certify `327.840s`, full CLI final `443.427s`; schedule/safety and scoped vet pass |
+| R5-6 | Verify | Focused/repeated/race; CLI/certify/schedule/safety; help/bare/invalid/JSON; docs/goldens/website; connector validation; fmt/diff/vet/full tests/build/`make verify`; no module delta | Complete: explicit full tests real `7m34.316s`; final `make verify` exit 0 real `7m52.496s`; all listed gates green |
+| R5-7 | Delivery | Coherent planning/RED/GREEN/evidence commits pushed only to active issue branch; clean and remote-matched; no PR/parent/integration/main mutation | Complete after this terminal artifact commit/push; implementation head `e9ce945e` already pushed |
+
+Strict TDD gate: R5-1 through R5-4 failures must be captured and committed/pushed before any production edit. Tests use only deterministic fakes, temporary paths, synthetic non-secret markers, and effect recorders; raw malformed lines/report bodies/credential values must never be printed.
+
+## Continuation ledger — parent reconcile, verification, stacked PR
+
+Identity `issue-437-continuation-20260719T211738Z`; exact start `86eea0f966814e6848e5a52143eea15dd46ff801`; latest parent `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`. `scripts/gsd doctor` and `scripts/gsd prompt plan-phase 437 --skip-research` ran; `programming-loop` remains unavailable, so manual universal-loop fallback applies. Execution decision: `local_critical_path`.
+
+Loaded skills: `.pi/skills/gsd-core/SKILL.md`, `.agents/skills/caveman/SKILL.md`, and global cc-skills paths for `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, and `golang-concurrency`. `.pi/skills/go-implementation/SKILL.md` is absent; global Go skill files are the actual evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| C6-0 | Planning | Refresh PLAN/TDD/VERIFICATION before parent merge or production edits; record GSD route, skills, mismatch, safety, and no-new-behavior TDD stance | Complete in this artifact edit |
+| C6-1 | Diff audit | Inspect existing 42-file diff against #437; justify directly applicable certify safety corrections; block unrelated changes | Complete: 42 files classify as 6 issue phase artifacts, 1 `cmd/pm` certify harness seam, 11 `internal/cli` native connectors/certify files/tests/goldens, 19 `internal/connectors/certify` safety files/tests, and 5 docs/website parity files; no go.mod/go.sum or connector defs delta; no unrelated files kept |
+| C6-2 | Parent reconcile | Merge latest `origin/feat/cli-architecture-v2` (`a5474bcb`) without dropping #437 commits; resolve only real conflicts | Complete: clean `ort` merge, no conflicts; parent #462 design docs/skills/traces retained; post-merge `HEAD=dc4aed23dcc42878f48da62fe7f1a236e2103ed1`, ahead 36 / behind 0 versus parent |
+| C6-3 | RED gate | No new behavior edit planned; do not fabricate RED. Existing RED remains valid. Any new behavior fix requires a failing test first or a stop | Complete: no new behavior defect or production edit was introduced in continuation; no new RED fabricated |
+| C6-4 | Verification | Focused CLI/connectors/certify, runtime help, docs/golden/website parity, safe fixture smoke, gofmt, vet, full tests, build, `make verify`, connector validation | Complete: focused CLI `119.151s`, certify `7.344s`; help byte-equal `8391` bytes; docs/golden `10.347s`; website gen clean; certify sample exit 0/pass; gofmt/diff/vet/full tests/build; `make verify` exit 0; connectorgen 547/0 |
+| C6-5 | Delivery | Commit/push coherent continuation evidence and open non-draft stacked PR to parent; record Claude disabled and Copilot quota exhausted with human/parent fallback pending | Complete: branch pushed; non-draft stacked PR https://github.com/polymetrics-ai/cli/pull/466 opened to `feat/cli-architecture-v2`; CI queued; review coverage human/parent fallback pending |
+
+
+## Sixth bounded exact-head review-correction ledger
+
+Identity `issue-437-sixth-review-correction-20260719T220843Z`; exact start `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; accepted exact-head findings: High approval replay after cleanup, High leak dominance under runner/progress errors, Medium stale leak after absence proof. Recovery-budget exception applies because unresolved High leak/resource-authority risks require correction. Programming-loop remains unavailable; manual universal loop fallback applies. Execution decision: `local_critical_path`.
+
+Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, and `golang-concurrency`. `.pi/skills/go-implementation/SKILL.md` is absent; global cc-skills files are the actual implementation evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R6-0 | Planning | Reopen all six artifacts with exact start/head/PR, recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, and `local_critical_path`; commit/push before RED or production | Complete |
+| R6-1 | RED approval cleanup authority | Deterministically prove unexpected approval replay success after cleanup can leave a post-cleanup resource with no leak/exit 3 | Complete |
+| R6-2 | RED leak-dominant errors | Prove batch runner report+error with leaks and CLI progress persistence failure with existing leaks mask exit 3 or skip safe report output | Complete |
+| R6-3 | RED stale leak consistency | Prove cleanup call failure + exact absence verification leaves stale `Report.Leaks` and dishonest write action state | Complete |
+| R6-4 | GREEN | Minimal ordering/consistency/leak-dominance fixes pass focused tests | Complete |
+| R6-5 | Verify | Focused repeated/race, full affected packages, help/docs parity if applicable, sample smoke, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Complete |
+| R6-6 | Delivery | Coherent commits pushed, PR body updated with final head/gates, no bot review, clean/remote-matched branch | Complete at exact PR head `6e9e7d9422050a609306d8900d6a06c8bb1fc223` |
+
+Strict TDD gate: R6-1 through R6-3 failing evidence must be captured and committed before production edits. Tests use only fakes, temporary roots, synthetic non-secret markers, and the local sample/outbox fixture path.
+
+
+### Sixth-cycle RED evidence captured
+
+- `go test ./internal/connectors/certify -run 'TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup|TestRereviewCleanupFailureThenAbsenceProofClearsStaleLeak|TestRunBatchRunnerErrorWithLeakedReportKeepsExit3' -count=1` failed as intended in `25.435s`: approval replay success left final outbox action `"create"`; cleanup absence proof left stale top-level `Report.Leaks`; runner report+error with a leaked report produced batch exit `2` instead of `3`.
+- `go test ./internal/cli -run 'TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3' -count=1` failed as intended in `0.572s`: progress persistence error with leaked batch returned exit `1` and emitted an `Error` envelope instead of the safe `ConnectorCertificationBatch` evidence with leak-dominant exit `3`.
+
+
+### Sixth-cycle GREEN focused evidence
+
+Implementation reorders approval idempotency before final cleanup, skips replay checks unless `write_create` actually consumed the plan, removes stale leak records when exact cleanup verification proves absence, preserves the cleanup stage failure as a non-leaked write-action failure, and lets leaked runner reports dominate ancillary runner/progress errors.
+
+Focused GREEN commands:
+
+- `go test ./internal/connectors/certify -run 'TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup|TestRereviewCleanupFailureThenAbsenceProofClearsStaleLeak|TestRunBatchRunnerErrorWithLeakedReportKeepsExit3' -count=1` => pass (`21.288s`).
+- `go test ./internal/cli -run 'TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3' -count=1` => pass (`0.565s`).
+- Repeated: same certify focus `-count=3` => pass (`62.605s`); same CLI focus `-count=3` => pass (`0.567s`).
+- Race: same certify focus with `-race` => pass (`229.386s`); same CLI focus with `-race` => pass (`1.666s`).
+- Coherent-slice gates: `go vet ./...` => pass; `go build ./cmd/pm` => pass.
+
+A prior repeated attempt timed out before the approval-replay test preserved invocation-local crontab options in its wrapper; the wrapper was corrected and the focused, repeated, and race gates above reran successfully.
+
+
+### Sixth-cycle terminal verification evidence
+
+Implementation head before terminal artifacts: `791b1a1d` (`52cd1e05` GREEN plus `791b1a1d` lint/test close fix). All accepted findings are corrected.
+
+Verification commands/results:
+
+- Focused affected packages: `go test ./internal/connectors/certify -count=1` => pass (`351.189s`); `go test ./internal/cli -count=1` => pass (`445.489s`).
+- Formatting/full gates: `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` => pass (CLI `445.908s`, certify `350.792s`); `go build ./cmd/pm` => pass.
+- Runtime help parity: `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` byte-identical (`8391` bytes).
+- Docs/golden/website parity: `go test ./internal/cli -run 'TestConnectorsManual|TestNativeConnectors|TestNativeCertify' -count=1` => pass (`11.149s`); `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages; tracked docs/website/golden diff clean. No canonical help/manual/website text change was required by this fix.
+- Fixture-only sample smoke: `./pm connectors certify sample --root <temp> --json` => exit `0`, kind `ConnectorCertification`, connector `sample`, passed `true`, stderr bytes `0`.
+- Connector validation: `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
+- `make verify`: first attempt failed only at certify lint (`errcheck` on `f.Close` in the new replay fixture helper); `791b1a1d` fixed it. Complete rerun passed: CLI `453.202s`, certify `357.136s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen `547 connector(s) checked, 0 findings`.
+
+Safety: no credentials, live certification, services, system crontab, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction. The only reverse ETL execution was the repository's local fixture/temp smoke path (plan → preview → approval → execute) inside `make verify` and the explicit sample/outbox certification smoke.
+
+## Seventh bounded exact-head review-correction ledger
+
+Identity `issue-437-seventh-bounded-correction-20260720`; exact start `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; accepted findings: Medium resume reruns an absence-proven cleanup-failure report, Medium bare required-value certify flags can reach effects or wrong validation category, Low stale sixth artifact/PR status. Recovery-budget exception applies because unresolved effect-before-usage and resume-replay risks require a bounded correction. Programming-loop remains unavailable; manual universal loop fallback applies. Execution decision: `local_critical_path`; parent records the worker invocation as spawned.
+
+Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-code-style`, and `golang-naming`. `.pi/skills/go-implementation/SKILL.md` is absent; global cc-skills files are the actual implementation evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R7-0 | Planning | Reopen all six artifacts with exact start/head/PR, seventh recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, finalized sixth statuses, and `local_critical_path`; commit/push before RED or production | Complete: planning `82f59229` pushed |
+| R7-1 | RED resume absence proof | Seed completed no-leak report with failed `write_cleanup`, passed `cleanup_verify`, failed/non-leaked write action, valid tag/provenance; prove `--resume` reruns today | Complete: failed before production |
+| R7-2 | RED value-required no-effect | Bare `--from-env`, `--config`, `--stream`, `--credentials-file`, `--parallel`, and `--older-than` reject as usage exit 2 before logger/telemetry/credential/runner/workspace/sweep effects in applicable modes | Complete: failed before production |
+| R7-3 | GREEN | Minimal resume-evidence and certify prevalidation/native validation fixes pass focused tests without weakening existing invalid-report or flag behavior | Complete: GREEN `2ce0e10a` pushed |
+| R7-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Complete: all listed gates pass |
+| R7-5 | Delivery | Coherent commits pushed, PR #466 body updated with final seventh head/gates, no bot review, clean/remote-matched branch | Complete: terminal artifact `0d515e6e` pushed and PR #466 body records exact head `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8` |
+
+Strict TDD gate: R7-1/R7-2 failing evidence was captured and committed (`e0fb8c4b`) before production edits. Tests use only deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.
+
+## Eighth bounded correction ledger
+
+Identity `issue-437-eighth-bounded-correction-20260720`; exact start `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; accepted findings: future-dated completed reports trusted by resume, whitespace space-form value-required certify flags reaching effects, and artifact/PR delivery status honesty. Recovery exception applies because unresolved future-evidence and effect-before-usage risks require a bounded correction. Programming-loop remains unavailable; manual universal loop fallback applies. Execution decision: `local_critical_path`; parent records the worker invocation as spawned.
+
+Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-code-style`, and `golang-naming`. `.pi/skills/go-implementation/SKILL.md` is absent; global cc-skills files are the actual implementation evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R8-0 | Planning | Reopen all six artifacts with exact start/head/PR, eighth recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, finalized seventh statuses, no self-reference policy, and `local_critical_path`; commit/push before RED or production | Complete: planning `45f190dc` pushed |
+| R8-1 | RED future reports | Ordinary completed report and cleanup-failure/absence-proof report with materially future timestamps are not resumed; current code should fail by resuming | Complete: failed before production |
+| R8-2 | RED whitespace values | Empty/whitespace space-form `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than` reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects | Complete: failed before production |
+| R8-3 | GREEN | Minimal future-timestamp skew validation and `TrimSpace(next)==""` required-value validation pass focused tests without weakening historical resume or valid value forms | Complete: focused/repeated/race, vet, and build pass |
+| R8-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Complete: full local gates pass |
+| R8-5 | Delivery | Coherent commits pushed, PR #466 body updated with final eighth head/gates, no bot review, clean/remote-matched branch; terminal artifact explains why it cannot contain its own SHA | Complete: terminal evidence and PR body update completed at parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially |
+
+Strict TDD gate: R8-1/R8-2 failing evidence was captured and committed (`ea5e412c`) before production edits. Tests used deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.
+
+### Eighth-cycle RED evidence captured
+
+- `go test ./internal/connectors/certify -run 'TestRunBatchResumeRerunsFutureDatedReports' -count=1` failed as intended (`0.662s`): both ordinary and cleanup-failure/absence-proof future-dated reports resumed with only one runner effect instead of rerunning.
+- `go test ./internal/cli -run 'TestNativeCertifyWhitespaceValueRequiredFlagsRejectBeforeRuntimeEffects|TestEighthCertifyWhitespaceValueRequiredFlagsRejectBeforeLoggerTelemetry' -count=1` failed as intended (`23.561s`): empty/whitespace space-form values reached invalid key-value/parallel validation, credential-file paths, fake runtime effects, or full sample certification instead of the pre-effect `requires a value` usage gate.
+
+### Eighth-cycle GREEN focused evidence
+
+Implementation adds a documented 5-minute resume-report clock-skew tolerance and rejects materially future `StartedAt`/`CompletedAt` timestamps. It also treats `strings.TrimSpace(next)==""` as missing for all value-required certify flags before Cobra normalization or runtime effects.
+
+- `go test ./internal/connectors/certify -run 'TestRunBatchResumeRerunsFutureDatedReports|TestRunBatchResumeReusesCompletedReportAcrossOrdinaryRuns|TestRunBatchResumeAcceptsCleanupFailureAbsenceProof' -count=1` => pass (`0.739s`).
+- `go test ./internal/cli -run 'TestNativeCertifyWhitespaceValueRequiredFlagsRejectBeforeRuntimeEffects|TestEighthCertifyWhitespaceValueRequiredFlagsRejectBeforeLoggerTelemetry|TestNativeCertifyValueRequiredFlagsRejectBeforeRuntimeEffects|TestSeventhCertifyValueRequiredFlagsRejectBeforeLoggerTelemetry|TestNativeCertifySupportedSingleFlagsAndExitContract' -count=1` => pass (`2.559s`).
+- Repeated: certify focus `-count=3` => pass (`1.192s`); CLI focus `-count=3` => pass (`6.887s`).
+- Race: certify focus `-race` => pass (`2.450s`); CLI focus `-race` => pass (`23.441s`).
+- Coherent-slice gates: `go vet ./...` and `go build ./cmd/pm` pass.
+
+### Eighth-cycle terminal verification evidence
+
+Reviewed implementation head remains `af0e4dabf5be70237c02403e6ef4f003042667d6`. Terminal evidence parent / previous PR head is `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; that head recorded the eighth terminal artifact and PR #466 body update. This docs-only closure intentionally avoids embedding its own resulting SHA, so the current live PR head is authoritative from Git/GitHub.
+
+- Full affected packages: `go test ./internal/connectors/certify -count=1` pass (`347.792s`); `go test ./internal/cli -count=1` pass (`443.361s`).
+- Runtime no-effect/help: built `./pm`; whitespace `--stream` exits 2, says `--stream requires a value`, and creates no `.polymetrics`; `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` byte-identical (`8391` bytes).
+- Docs/golden/website: `go test ./internal/cli -run 'TestConnectorsManual|TestNativeConnectors|TestNativeCertify' -count=1` pass (`11.208s`); `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages with no tracked docs/website/golden drift.
+- Fixture-only sample smoke: `./pm connectors certify sample --root <temp> --json` exit `0`, kind `ConnectorCertification`, connector `sample`, passed `true`, stderr bytes `0`.
+- Full gates: `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` pass (CLI `446.588s`, certify `349.095s`); `go build ./cmd/pm`; `make verify` pass (CLI `445.358s`, certify `348.425s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen green); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
+
+### Seventh-cycle RED evidence captured
+
+- `go test ./internal/connectors/certify -run 'TestRunBatchResumeAcceptsCleanupFailureAbsenceProof' -count=1` failed as intended (`0.698s`): `absence-proven cleanup failure was rerun instead of resumed`.
+- `go test ./internal/cli -run 'TestNativeCertifyValueRequiredFlagsRejectBeforeRuntimeEffects|TestSeventhCertifyValueRequiredFlagsRejectBeforeLoggerTelemetry' -count=1` failed as intended (`5.853s`): bare `--from-env`/`--older-than` lacked value-required messages, bare `--config` and `--parallel` returned validation exit 3, bare `--stream` reached sample certification with stream `true`, and bare `--credentials-file` reached path `true`/fake runtime effects.
+
+### Seventh-cycle GREEN and verification evidence
+
+Implementation accepts only the exact cleanup-failure absence-proof resume shape and adds raw certify syntax prevalidation before logger/telemetry/config plus syntax prevalidation in `executeRootCmd` for direct command tests. Value-required controls are `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than`; valid assigned/space values are preserved, boolean bare controls remain valid, and unsupported controls still fail closed.
+
+- Focused GREEN: certify absence-proof resume `0.599s`; CLI value-required no-effect `0.566s`.
+- Broader focused: certify resume/identity cases `0.960s`; CLI native/certify/prevalidation cases `5.851s`.
+- Repeated/race: certify focus `-count=3` `0.660s`; CLI focus `-count=3` `0.575s`; certify `-race` `1.704s`; CLI `-race` `1.729s`.
+- Full affected packages: `go test ./internal/connectors/certify -count=1` pass (`353.654s`); `go test ./internal/cli -count=1` pass (`448.666s`).
+- Runtime no-effect/help: built `./pm`; bare `--stream` exits 2, says `--stream requires a value`, and creates no `.polymetrics`; `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` byte-identical (`8391` bytes).
+- Docs/golden/website: `go test ./internal/cli -run 'TestConnectorsManual|TestNativeConnectors|TestNativeCertify' -count=1` pass (`11.210s`); `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages with no tracked docs/website/golden drift.
+- Fixture-only sample smoke: `./pm connectors certify sample --root <temp> --json` exit `0`, kind `ConnectorCertification`, connector `sample`, passed `true`, stderr bytes `0`.
+- Full gates: `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` pass (CLI `444.782s`, certify `349.644s`); `go build ./cmd/pm`; `make verify` pass (CLI `442.999s`, certify `348.395s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen 547/0); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
+
+## Docs-only evidence closure ledger
+
+Exact clean local/remote/PR start: `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. Worker decision: `local_critical_path`; parent records spawned. No behavior RED required because this is artifact-only evidence correction with no production edits.
+
+| Step | Kind | Evidence | Status |
+|---:|---|---|---|
+| D0 | Planning/docs | Read required contracts/artifacts/issue; refreshed `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt plan-phase 437 --skip-research`; loaded `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-documentation`, `golang-security` | Complete before artifact edits |
+| D1 | Closure edit | Clear stale terminal/PR delivery wording; retain reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`; record terminal-evidence parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; state current live PR head comes from Git/GitHub, not self-reference | Complete |
+| D2 | Validation | `python3 -m json.tool .planning/phases/437-connectors-certify-native-cobra/RUN-STATE.json`, stale terminal/PR marker `rg`, `git diff --check`, and exact `git diff --name-only` scope check | Complete: JSON parse ok; stale marker grep returned no matches; diff check passed; diff scope limited to the six phase artifacts |
+
+## Ninth bounded CI flake correction ledger
+
+Identity `issue-437-ninth-ci-flake-correction-20260720`; exact clean/matched start `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; parent base to reconcile after planning `c91b90cf9671b5caabc0ef4ec24d81897f870458`. Programming-loop remains unavailable; manual universal-loop fallback applies. Execution decision: `local_critical_path`; parent records this worker invocation as spawned.
+
+Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-testing`, `golang-concurrency`, `golang-context`, `golang-safety`, `golang-cli`, `golang-error-handling`, `golang-security`, `golang-spf13-cobra`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-lint`, `golang-code-style`, and `golang-naming`. `.pi/skills/go-implementation/SKILL.md` is absent in this checkout and at parent `c91b90cf9671b5caabc0ef4ec24d81897f870458`; global cc-skills files are the actual implementation evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R9-0 | Planning | Reopen all six artifacts with exact CI failure, `verificationPassed=false`, GSD fallback, skills, parent reconcile plan, deterministic concurrency plan, and `local_critical_path`; commit/push before test edits | Complete: planning `0398a5d6` pushed before test edits |
+| R9-1 | Remote RED | GitHub Actions run `29711194607` at head `9f004ac5d96d84bd1f8b186496e1f594a183a18b` failed only `internal/connectors/certify` `TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit`: `elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)` | Captured from remote CI; all other reported packages/checks passed |
+| R9-2 | Reproduce/stress | Run focused current test repeatedly and under race where feasible; record pass/fail honestly and do not fabricate failure if scheduler flake does not reproduce | Complete: local stress did not reproduce; focused current test `-count=50` passed (`7.601s`) and `-race -count=10` passed (`3.084s`) |
+| R9-3 | GREEN test harness | Replace wall-clock scheduling assertion with deterministic barrier/active-worker/max-concurrency/order-channel evidence proving workers overlap up to `parallel` and remain bounded; use timeout only as deadlock guard | Complete: test-only `828be4de` queues four connectors with `parallel=3`, waits for three active workers blocked on release, rejects limit violations, releases, and proves all results complete |
+| R9-4 | Verify | Focused new test repeated and race, full certify, full CLI if affected, gofmt, diff check, vet, full tests, build, `make verify`, fixture sample smoke, connector validation | Complete: focused `2.051s`; race `2.435s`; certify `358.903s`; full tests CLI `453.338s`/certify `355.074s`; `make verify` CLI `454.887s`/certify `357.580s`; sample smoke exit 0; connectorgen 547/0 |
+| R9-5 | Delivery | Commit/push planning, test fix, and terminal evidence; update PR #466 body with CI failure disposition and final head; no bot review or merge | Complete; terminal artifact commit pushed, and PR #466 body update is performed after final push because artifact commits cannot self-reference their resulting SHA |
+
+Strict TDD note: because the production worker pool already overlaps work and the flake is the test's wall-clock proof, the remote CI failure is the required RED. Local stress did not reproduce and no local failure was fabricated. Tests use fakes, temp dirs, channels, and bounded timeouts only; no credentials, live services, or external writes/sweeps.
+
+### Ninth-cycle GREEN and verification evidence
+
+- Parent reconcile: `git merge --no-ff origin/feat/cli-architecture-v2` => merge `9678d4dda2fcf331b3199f042804001c06eccf64`; no conflicts; parent #397 artifacts retained and not manually edited.
+- Local stress before test edit: `go test ./internal/connectors/certify -run TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit -count=50` => pass (`7.601s`); `go test -race ./internal/connectors/certify -run TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit -count=10` => pass (`3.084s`).
+- Focused GREEN after test edit: `go test ./internal/connectors/certify -run TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit -count=20` => pass (`2.051s`); `go test -race ./internal/connectors/certify -run TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit -count=10` => pass (`2.435s`).
+- Coherent-slice gates before test-fix commit: `gofmt -w internal/connectors/certify/batch_test.go`; `go vet ./...`; `go build ./cmd/pm` pass.
+- Full certify: `go test ./internal/connectors/certify -count=1` => pass (`358.903s`).
+- Full gates: `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` => pass (CLI `453.338s`, certify `355.074s`); `go build ./cmd/pm`; `make verify` => pass (CLI `454.887s`, certify `357.580s`, docs validate, local smoke `smoke ok`, lint `0 issues`, connectorgen green).
+- Fixture-only sample smoke: `./pm connectors certify sample --root <temp> --json` => `exit=0 kind=ConnectorCertification report_kind=ConnectorCertification connector=sample passed=True stderr_bytes=0`.
+- Connector validation: `go run ./cmd/connectorgen validate internal/connectors/defs` => `connectorgen validate: 547 connector(s) checked, 0 findings`.

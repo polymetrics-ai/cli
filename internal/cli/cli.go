@@ -45,20 +45,34 @@ const (
 // RunOptions carries invocation-scoped UI detection facts for tests and future
 // TTY renderers. Nil StdoutIsTerminal falls back to os.File + x/term detection.
 type RunOptions struct {
-	Mode             RunMode
-	StdoutIsTerminal *bool
-	Env              map[string]string
+	Mode                RunMode
+	StdoutIsTerminal    *bool
+	Env                 map[string]string
+	ScheduleCrontabFile string
 }
 
 func Run(args []string, stdout, stderr io.Writer) int {
-	return RunWithOptions(args, stdout, stderr, RunOptions{Mode: ModePlain})
+	return RunWithContext(context.Background(), args, stdout, stderr, RunOptions{Mode: ModePlain})
 }
 
 func RunWithOptions(args []string, stdout, stderr io.Writer, runOpts RunOptions) int {
-	ctx := pmlogging.WithRegistry(context.Background(), pmlogging.NewValueRegistry())
+	return RunWithContext(context.Background(), args, stdout, stderr, runOpts)
+}
+
+// RunWithContext preserves caller cancellation through the complete
+// in-process command path. Run remains the compatibility wrapper for callers
+// that do not have a context.
+func RunWithContext(parent context.Context, args []string, stdout, stderr io.Writer, runOpts RunOptions) int {
+	if parent == nil {
+		parent = context.Background()
+	}
+	ctx := pmlogging.WithRegistry(parent, pmlogging.NewValueRegistry())
 	globals, parseErr := parseGlobal(args)
 	if parseErr != nil {
 		return writeError(ctx, stdout, stderr, parseErr, globals.jsonOut)
+	}
+	if err := prevalidateCertifySafetyArgs(globals.clean); err != nil {
+		return writeError(ctx, stdout, stderr, err, globals.jsonOut)
 	}
 	opts := config.Options{Root: globals.root, Flags: globalConfigFlags(args, globals.root, globals.jsonOut)}
 	bootstrap, err := config.ResolveBootstrap(opts)
@@ -68,6 +82,9 @@ func RunWithOptions(args []string, stdout, stderr io.Writer, runOpts RunOptions)
 	cfg, err := config.Load(opts)
 	if err != nil {
 		return writeError(ctx, stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
+	}
+	if runOpts.ScheduleCrontabFile != "" {
+		cfg.Schedule.CrontabFile = runOpts.ScheduleCrontabFile
 	}
 	logger, closeLogs := pmlogging.NewLogger(filepath.Join(cfg.Root, ".polymetrics"), stderr, pmlogging.LoggerOptions{Registry: pmlogging.RegistryFromContext(ctx)})
 	defer func() { _ = closeLogs() }()
@@ -268,98 +285,6 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	}
 	fmt.Fprint(stdout, text)
 	return nil
-}
-
-func runConnectors(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-	registry := appRegistry()
-	if len(args) == 0 {
-		return errUsage
-	}
-	switch args[0] {
-	case "certify":
-		return runCertify(ctx, root, args[1:], stdout, jsonOut)
-	case "list":
-		flags := parseFlags(args[1:])
-		if flags.first("all") != "" {
-			defs, err := connectorCatalogEntries(registry, flags)
-			if err != nil {
-				return err
-			}
-			if jsonOut {
-				return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
-			}
-			for _, item := range defs {
-				fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
-			}
-			return nil
-		}
-		list := registry.List()
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ConnectorList", "connectors": list})
-		}
-		for _, item := range list {
-			fmt.Fprintf(stdout, "%s\t%s\t%+v\n", item.Name, item.IntegrationType, item.Capabilities)
-		}
-		return nil
-	case "catalog":
-		flags := parseFlags(args[1:])
-		defs, err := connectorCatalogEntries(registry, flags)
-		if err != nil {
-			return err
-		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
-		}
-		for _, item := range defs {
-			fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
-		}
-		return nil
-	case "inspect", "help", "man", "docs":
-		if len(args) < 2 {
-			return errUsage
-		}
-		if err := safety.ValidateIdentifier(args[1], "connector"); err != nil {
-			return validationErrorf("%v", err)
-		}
-		if err := connectors.RejectLegacyConnectorName(args[1]); err != nil {
-			return err
-		}
-		if c, ok := registry.Get(args[1]); ok {
-			if jsonOut {
-				return writeJSON(stdout, envelope{"kind": "Connector", "connector": connectors.MetadataWithIcon(c.Metadata()), "manifest": connectors.ManifestOf(c)})
-			}
-			fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
-			return nil
-		}
-		return fmt.Errorf("connector %q not found", args[1])
-	default:
-		return errUsage
-	}
-}
-
-func connectorCatalogEntries(registry *connectors.Registry, flags parsedFlags) ([]connectors.Definition, error) {
-	if flags.first("type") != "" {
-		return nil, validationErrorf("legacy --type source|destination was removed; use --capability read|write|cdc|query")
-	}
-	capability := strings.TrimSpace(strings.ToLower(flags.first("capability")))
-	switch capability {
-	case "", "read", "write", "cdc", "query":
-	default:
-		return nil, validationErrorf("invalid --capability %q, want read|write|cdc|query", capability)
-	}
-	stage := strings.TrimSpace(flags.first("stage"))
-	defs := registry.CatalogEntries()
-	out := make([]connectors.Definition, 0, len(defs))
-	for _, def := range defs {
-		if stage != "" && def.ReleaseStage != stage {
-			continue
-		}
-		if !definitionHasCapability(registry, def, capability) {
-			continue
-		}
-		out = append(out, def)
-	}
-	return out, nil
 }
 
 func definitionHasCapability(registry *connectors.Registry, def connectors.Definition, capability string) bool {

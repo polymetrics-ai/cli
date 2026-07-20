@@ -38,9 +38,10 @@ const (
 
 // writeContext carries write-stage bookkeeping across stages 12-17.
 type writeContext struct {
-	pairing WritePairing
-	tag     string
-	runID8  string
+	pairing   WritePairing
+	connector string
+	tag       string
+	runID8    string
 
 	planID        string
 	approvalToken string
@@ -58,7 +59,9 @@ type writeContext struct {
 
 	ledger *Ledger
 
-	createPassed bool
+	previewPassed    bool
+	createPassed     bool
+	cleanupAttempted bool
 }
 
 // approvalTokenLinePattern matches the human-readable "Approval token: X"
@@ -75,7 +78,7 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 		return nil
 	}
 
-	wc := &writeContext{runID8: NewRunID8()}
+	wc := &writeContext{connector: rc.opts.Connector, runID8: NewRunID8()}
 	pairings := PairingsFor(rc.opts.Connector)
 	if len(pairings) > 0 {
 		wc.pairing = pairings[0]
@@ -91,7 +94,18 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 	}
 	wc.tag = NewTag(rc.opts.Connector, wc.runID8)
 
-	ledger, err := NewLedger(rc.root)
+	ledgerRoot := rc.root
+	if rc.opts.ArtifactDir != "" {
+		durableRoot, dirErr := secureDir(rc.opts.ArtifactDir, certificationsDirName, "ledger", rc.opts.Connector)
+		if dirErr != nil {
+			recordStage(rc, rep, "write_plan_preview", 2, func() (bool, CLIStageInfo, string) {
+				return false, CLIStageInfo{}, fmt.Sprintf("write_plan_preview: create durable ledger root: %v", dirErr)
+			})
+			return nil
+		}
+		ledgerRoot = durableRoot
+	}
+	ledger, err := NewLedger(ledgerRoot)
 	if err != nil {
 		recordStage(rc, rep, "write_plan_preview", 2, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, fmt.Sprintf("write_plan_preview: create ledger: %v", err)
@@ -147,17 +161,22 @@ func stageWritePlanPreviewSelfTest(rc *runContext, rep *Report, wc *writeContext
 		planID := firstMatch(planIDLinePattern, planRes.Stdout)
 		token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
 		if planID == "" || token == "" {
-			return false, cliInfoFrom(planRes), fmt.Sprintf("write_plan_preview: could not parse plan id/approval token from output: %q", planRes.Stdout)
+			return false, cliInfoFrom(planRes), "write_plan_preview: could not parse plan id/approval token"
 		}
-		wc.planID = planID
-		wc.approvalToken = token
 
 		previewRes := rc.run("reverse", "preview", planID, "--json")
 		passed, errMsg := assertKind(rc, "write_plan_preview", previewRes, "ReversePlanPreview", 0)
 		if !passed {
 			return false, cliInfoFrom(previewRes), errMsg
 		}
-		return checkPlanPreviewRedaction(previewRes, wc.approvalToken)
+		passed, info, reason := checkPlanPreviewRedaction(previewRes, token)
+		if !passed {
+			return false, info, reason
+		}
+		wc.planID = planID
+		wc.approvalToken = token
+		wc.previewPassed = true
+		return true, info, ""
 	})
 	_ = stage
 }
@@ -224,17 +243,22 @@ func stageWritePlanPreviewLive(rc *runContext, rep *Report, wc *writeContext) {
 		planID := firstMatch(planIDLinePattern, planRes.Stdout)
 		token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
 		if planID == "" || token == "" {
-			return false, cliInfoFrom(planRes), fmt.Sprintf("write_plan_preview: could not parse plan id/approval token: %q", planRes.Stdout)
+			return false, cliInfoFrom(planRes), "write_plan_preview: could not parse plan id/approval token"
 		}
-		wc.planID = planID
-		wc.approvalToken = token
 
 		previewRes := rc.run("reverse", "preview", planID, "--json")
 		passed, errMsg := assertKind(rc, "write_plan_preview", previewRes, "ReversePlanPreview", 0)
 		if !passed {
 			return false, cliInfoFrom(previewRes), errMsg
 		}
-		return checkPlanPreviewRedaction(previewRes, wc.approvalToken)
+		passed, info, reason := checkPlanPreviewRedaction(previewRes, token)
+		if !passed {
+			return false, info, reason
+		}
+		wc.planID = planID
+		wc.approvalToken = token
+		wc.previewPassed = true
+		return true, info, ""
 	})
 }
 
@@ -264,7 +288,7 @@ func checkPlanPreviewRedaction(res CLIResult, token string) (bool, CLIStageInfo,
 		}
 	}
 	if hits := ScanForSecrets(res.Stdout, []string{token}); len(hits) != 0 {
-		return false, cliInfoFrom(res), fmt.Sprintf("write_plan_preview: --json preview output contains the approval token value: %v", hits)
+		return false, cliInfoFrom(res), fmt.Sprintf("write_plan_preview: --json preview output contains sensitive material (%d match)", len(hits))
 	}
 	return true, cliInfoFrom(res), ""
 }
@@ -291,21 +315,28 @@ func stageWriteCreate(rc *runContext, rep *Report) error {
 		}
 		return nil
 	}
-	if wc.planID == "" {
-		skipStage(rc, rep, "write_create", "skipped: write_plan_preview failed to produce a plan id")
+	if wc.planID == "" || wc.approvalToken == "" || !wc.previewPassed {
+		wc.planID = ""
+		wc.approvalToken = ""
+		skipStage(rc, rep, "write_create", "skipped: write_plan_preview did not complete successfully")
 		return nil
 	}
 
 	// Write-ahead: record BEFORE any live write is attempted (design §C).
 	entityHint := wc.pairing.VerifyStream
-	if entityHint == "" {
+	if wc.selfTest {
+		entityHint = "outbox_record"
+	} else if entityHint == "" {
 		entityHint = wc.pairing.Create
 	}
 	if err := wc.ledger.RecordPlanned(LedgerEntry{
-		Action:     wc.pairing.Create,
-		Tag:        wc.tag,
-		Connector:  rc.opts.Connector,
-		EntityHint: entityHint,
+		Action:        wc.pairing.Create,
+		CleanupAction: wc.pairing.Cleanup,
+		Tag:           wc.tag,
+		Connector:     rc.opts.Connector,
+		RunID:         wc.runID8,
+		EntityHint:    entityHint,
+		VerifyField:   wc.pairing.VerifyField,
 	}); err != nil {
 		recordStage(rc, rep, "write_create", 2, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, fmt.Sprintf("write_create: write-ahead ledger record: %v", err)
@@ -569,6 +600,7 @@ func stageWriteCleanup(rc *runContext, rep *Report) error {
 		skipStage(rc, rep, "write_cleanup", "skipped: write_create did not succeed, nothing to clean up")
 		return nil
 	}
+	wc.cleanupAttempted = true
 
 	var cleanupPassed bool
 	if wc.selfTest {
@@ -610,18 +642,9 @@ func stageWriteCleanupSelfTest(rc *runContext, rep *Report, wc *writeContext) bo
 		if planID == "" || token == "" {
 			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id/approval token"
 		}
-		runRes := rc.run("reverse", "run", planID, "--approve", token, "--json")
-		passed, errMsg := assertKind(rc, "write_cleanup", runRes, "ReverseRun", 0)
-		return passed, cliInfoFrom(runRes), errMsg
+		return runApprovedReverse(rc, "write_cleanup", planID, token)
 	})
 
-	if stage.Passed {
-		if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
-			recordStage(rc, rep, "write_cleanup_ledger", 1, func() (bool, CLIStageInfo, string) {
-				return false, CLIStageInfo{}, fmt.Sprintf("write_cleanup: record cleaned in ledger: %v", err)
-			})
-		}
-	}
 	return stage.Passed
 }
 
@@ -671,19 +694,25 @@ func stageWriteCleanupLive(rc *runContext, rep *Report, wc *writeContext) bool {
 		if planID == "" || token == "" {
 			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id/approval token"
 		}
-		runRes := rc.run("reverse", "run", planID, "--approve", token, "--json")
-		passed, errMsg := assertKind(rc, "write_cleanup", runRes, "ReverseRun", 0)
-		return passed, cliInfoFrom(runRes), errMsg
+		return runApprovedReverse(rc, "write_cleanup", planID, token)
 	})
 
-	if stage.Passed {
-		if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
-			recordStage(rc, rep, "write_cleanup_ledger", 2, func() (bool, CLIStageInfo, string) {
-				return false, CLIStageInfo{}, fmt.Sprintf("write_cleanup: record cleaned in ledger: %v", err)
-			})
-		}
-	}
 	return stage.Passed
+}
+
+func runApprovedReverse(rc *runContext, stageName, planID, token string) (bool, CLIStageInfo, string) {
+	previewRes := rc.run("reverse", "preview", planID, "--json")
+	passed, errMsg := assertKind(rc, stageName, previewRes, "ReversePlanPreview", 0)
+	if !passed {
+		return false, cliInfoFrom(previewRes), errMsg
+	}
+	passed, info, reason := checkPlanPreviewRedaction(previewRes, token)
+	if !passed {
+		return false, info, reason
+	}
+	runRes := rc.run("reverse", "run", planID, "--approve", token, "--json")
+	passed, errMsg = assertKind(rc, stageName, runRes, "ReverseRun", 0)
+	return passed, cliInfoFrom(runRes), errMsg
 }
 
 // --- stage 16: cleanup_verify ---
@@ -716,10 +745,32 @@ func stageCleanupVerify(rc *runContext, rep *Report) error {
 		return nil
 	}
 
+	cleanupCallFailed := latestStageFailed(rep.Stages, "write_cleanup")
+	if cleanupCallFailed {
+		removeLeakForWrite(rep, wc)
+		if entry, ok := rep.Capabilities.WriteActions[wc.pairing.Create]; ok {
+			entry.Result = "fail"
+			entry.Reason = "write_cleanup failed, but cleanup_verify proved the entity absent"
+			rep.Capabilities.WriteActions[wc.pairing.Create] = entry
+		}
+	}
+
+	if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
+		recordStage(rc, rep, "cleanup_verify_ledger", tierFor(wc), func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, fmt.Sprintf("cleanup_verify: record verified cleanup in ledger: %v", err)
+		})
+		return nil
+	}
+
 	if entry, ok := rep.Capabilities.WriteActions[wc.pairing.Create]; ok {
-		entry.Result = "pass"
-		if entry.Verify == "" {
-			entry.Verify = "read_back"
+		if cleanupCallFailed {
+			entry.Result = "fail"
+			entry.Reason = "write_cleanup failed, but cleanup_verify proved the entity absent"
+		} else {
+			entry.Result = "pass"
+			if entry.Verify == "" {
+				entry.Verify = "read_back"
+			}
 		}
 		rep.Capabilities.WriteActions[wc.pairing.Create] = entry
 	}
@@ -775,7 +826,7 @@ func cleanupEntityGone(rc *runContext, wc *writeContext) (bool, error) {
 func recordLeak(rep *Report, wc *writeContext, reason string) {
 	rep.Leaks = append(rep.Leaks, Leak{
 		Tag:       wc.tag,
-		Connector: wc.pairing.Create,
+		Connector: wc.connector,
 		Action:    wc.pairing.Create,
 		Reason:    reason,
 	})
@@ -788,11 +839,31 @@ func recordLeak(rep *Report, wc *writeContext, reason string) {
 	rep.Capabilities.WriteActions[wc.pairing.Create] = entry
 }
 
+func removeLeakForWrite(rep *Report, wc *writeContext) {
+	kept := rep.Leaks[:0]
+	for _, leak := range rep.Leaks {
+		if leak.Tag == wc.tag && leak.Connector == wc.connector && leak.Action == wc.pairing.Create {
+			continue
+		}
+		kept = append(kept, leak)
+	}
+	rep.Leaks = kept
+}
+
+func latestStageFailed(stages []StageResult, name string) bool {
+	for i := len(stages) - 1; i >= 0; i-- {
+		if stages[i].Name == name {
+			return !stages[i].Passed
+		}
+	}
+	return false
+}
+
 // --- stage 17: approval_idempotency ---
 
 func stageApprovalIdempotency(rc *runContext, rep *Report) error {
 	wc := rc.write
-	if wc == nil || wc.planID == "" || wc.approvalToken == "" {
+	if wc == nil || !wc.createPassed || wc.planID == "" || wc.approvalToken == "" {
 		skipStage(rc, rep, "approval_idempotency", "skipped: no consumed plan/token available to replay")
 		return nil
 	}

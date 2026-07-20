@@ -1,0 +1,242 @@
+# Phase 437 Prompts
+
+## Kickoff snapshot
+
+Task: implement issue #437, final serialized Phase 9 unit under #397/#407, from exact `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b` on isolated `refactor/437-connectors-certify-native-cobra`; Sol/high; no dependencies/services/credentials/PR/review.
+
+Identity: `issue-437-pi-sol-high-20260719T095145Z`.
+
+```bash
+scripts/gsd doctor
+scripts/gsd list
+scripts/gsd prompt plan-phase 437 --skip-research
+scripts/gsd prompt programming-loop init --phase 437 --dry-run
+```
+
+Doctor/list and plan generation passed. `programming-loop` is absent from the adapter registry, so the manual universal-runtime-loop fallback applied.
+
+Execution decision: `local_critical_path` — final assigned serialized namespace; central router scope collides; no subagent tool exposed; user bounded delivery to implementation/commit/push.
+
+Required skills: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`, `golang-documentation`, `golang-spf13-cobra`.
+
+Safety prompt: preserve `cli.Run`, dynamic connector dispatch, exits 0/1/2/3, context/events/telemetry, stdout/stderr, and credential-value exclusion. Use only fixture/replay/local tests and temp roots. Do not touch defs, call live credentials, perform external writes, add dependencies/services, or create PR/review.
+
+Downstream artifact: native connectors/certify subtree, declared current flags and runtime seam, compatibility normalization, contextual direct/trailing help, focused parity tests, and canonical manual/docs/website updates.
+
+Verification result: superseded by accepted correction cycles below; terminal phase verification is complete and `verificationPassed=true` remains tied to the full eighth `make verify` gate.
+
+## Accepted correction kickoff snapshot
+
+Task: at exact HEAD `0d1792cec3ea829ceb6228fc600b6dc7bbd90eee`, accept all five findings in `/tmp/pm-397-review-437.log`; update artifacts and commit/push them, then add/commit RED tests before production. Fail closed on unsupported safety/mode flags; restore legacy single span/validation/options and batch file/parallel/error precedence; exact-only connectors help; accurate pre-report versus completed-report exits across canonical/generated/website docs. Sol/high; fixture/temp only; no dependencies/services/credentials/writes/PR/review.
+
+Commands: `scripts/gsd doctor` passed; both `scripts/gsd prompt programming-loop ...` forms returned `unknown GSD command`, so the manual universal runtime loop applies. Execution decision: `local_critical_path` (bounded correction, isolated worktree, no subagent tool).
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-spf13-cobra`.
+
+Downstream artifact: complete at implementation head `a67d2ff9de84a2fabcd3b66097bf49518c1fa124`; terminal verification artifact `2987f21b` is pushed and this final delivery marker closes the phase.
+
+Verification result: pass. GREEN evidence: focused `3.004s`; native/certify/telemetry `108.532s`; base/current differential 5/5 byte-identical; focused race `29.046s`; ×10 `24.991s`; certify redaction/replay/concurrency race `349.263s`; exit focus `21.618s`; local sample exit 0/pass/redacted; docs/golden `24.275s`; website regeneration hash-stable; full CLI `435.572s`; certify `338.846s`; validation 547/0; final `make verify` exit 0 in `468.36s`. No live credentials/writes, services, dependencies, PR, or review.
+
+## Second accepted safety correction kickoff snapshot
+
+Task: at exact HEAD `0d743e54e06c9e27e550eacce9be7899a9e23d19`, accept every finding in `/tmp/pm-397-rereview-437.log`; update and push artifacts, then add/commit/push RED effect-recorder tests before production. P1: batch write-disable controls dominate credential-file writes and credential constraints are never discarded. P2: reject/hide unsupported single controls, constrain skip, reject mode no-ops, and audit every flag. P3: remove stale architecture/PRD claims, correct connector help naming, regenerate CLI/website data. Preserve base behavior, dynamic dispatch, exits, and redaction. Fixture/temp only; no credentials/services/dependencies/PR/review.
+
+Commands: `scripts/gsd doctor` and `scripts/gsd prompt plan-phase 437 --skip-research` passed; `scripts/gsd prompt programming-loop ...` returned `unknown GSD command`, so the manual universal runtime loop applies. Execution decision: `local_critical_path` (bounded correction, existing isolated issue worktree, no subagent tool).
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-spf13-cobra`.
+
+Downstream artifact: planning `aa39fd9d`, RED `9a47ff3d`, GREEN `7b6eaa58`, and verification `974495d5` checkpoints pushed; this final delivery marker closes the correction.
+
+Verification result: pass. Focus/effect/no-op, repeated ×10 (`0.661s`), race (CLI `1.726s`, certify `2.535s`), full CLI (`440.910s`), full certify (`346.271s`), runtime help/no-effect/sample smoke, CLI docs/goldens, website full-data regeneration, gofmt/vet/test/build, `make verify` (`7m36.852s`), and connectorgen 547/0 pass. No credentials, services, dependencies, PR, or review.
+
+## Third accepted safety/correctness correction kickoff snapshot
+
+Task: at exact HEAD `437d13cf`, accept every finding in `/tmp/pm-397-rereview2-437.log`; update and push artifacts, then add/commit/push RED tests before production. Reject every unknown certify flag and write-like typo before effects; require a positive, reasonably bounded sweep age; make ordinary completed reports reusable by `--resume` while rerunning incomplete reports; reject credential-file `exec` before effects and remove generic external execution code/docs; correct usage exits, release-stage token `ga`, flags/docs audit, and terminal artifact honesty. Fixture/temp and in-process fakes only; no external commands, credentials, services, dependencies, PR, or review.
+
+Commands: `scripts/gsd doctor` and `scripts/gsd list` passed; `scripts/gsd prompt programming-loop ...` returned `unknown GSD command`, so the manual universal runtime loop applies. Execution decision: `local_critical_path` (bounded correction, existing isolated issue worktree, no subagent tool).
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-concurrency`, `golang-context`, `golang-code-style`, `golang-naming`, `golang-documentation`, `golang-spf13-cobra`, and `golang-lint`.
+
+Downstream artifact: complete at implementation head `f56bc825`; strict certify parsing, bounded sweep age, prohibited-exec rejection/removal, completed-report resume reuse, incomplete-report rerun, and corrected generated docs are committed and pushed. Terminal verification artifact `3854295b` is also pushed.
+
+Verification result: pass. Focused/repeated/race/resume/sweep/no-effect/audit tests, runtime help, docs/goldens, hash-stable website generation, credential-free local sample smoke, full CLI (`446.382s`), full certify (`350.637s`), gofmt/vet/full tests/build, `make verify` (exit 0 in `14m58.384s`), and connectorgen 547/0 pass. No external credential command, live credential, service, dependency, PR, or review was used.
+
+## Fourth bounded review-correction kickoff snapshot
+
+Task: at exact clean/matched HEAD `1e27b14012f65ffa24c01ed855d0405c24401eee`, trace and disposition both independent review outputs, consolidate overlaps, commit/push planning, capture and commit RED before production, then correct preview/approval ordering, secret rendering/config/report modes, crontab concurrency confinement, durable provenance-bound ledger/sweep, context cancellation, strict bounded credentials and safety controls, prerequisite gating, resume compatibility, and test artifact pollution. Preserve dynamic dispatch, `cli.Run`, exits 0/1/2/3, output/docs parity, and valid noncredentialed behavior.
+
+Commands: `scripts/gsd doctor`, `scripts/gsd list`, `scripts/gsd prompt plan-phase 437 --skip-research`, and `scripts/gsd sources plan-phase` pass. `scripts/gsd prompt programming-loop init --phase 437 --dry-run` returns `unknown GSD command`; manual universal-loop fallback recorded. Execution decision: `local_critical_path` because user explicitly prohibited subagents and any work outside the isolated issue branch.
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-documentation`, `golang-spf13-cobra`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`; added `golang-spf13-viper`, `golang-troubleshooting`.
+
+Downstream artifact: complete. Planning `07d0b5a4`, RED `43acd262`, GREEN `2c0a550c`, and lint/resource-fix `b06816ad` are pushed. The implementation provides successful-preview mutation gates; opaque and semantic redaction; strict private artifacts and credential references; invocation-local crontab selection; durable provenance-bound ledgers with fresh sweep workspaces; context cancellation with bounded post-mutation cleanup; strict controls/resources/prerequisites; exact identity-bound resume; and temporary test roots.
+
+Verification result: pass. Focused/repeated/race matrices, full CLI/certify/schedule, runtime help/bare/invalid/JSON and credential-free sample, temporary CLI docs/goldens/website drift, docs and connector validation, gofmt/diff/vet, explicit full tests/build, and final `make verify` exit 0 (`464.41s`) pass. An initial verify run correctly stopped at lint on unchecked synthetic fixture writes; `b06816ad` fixed the resource handling and the complete gate reran successfully. No credentials, live services, system crontab, external writes/sweeps, dependencies, PR, integration, parent mutation, or main mutation occurred.
+
+## Fifth bounded review-correction kickoff snapshot
+
+Identity: `issue-437-fifth-review-correction-20260720`; exact clean/matched start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; launcher `openai-codex/gpt-5.6-sol`, thinking `high`; no subagents. Correct seven consolidated rereview findings: defer ledger cleaning until exact absence; deny forged numeric-resource sweep authority; bound and sanitize ledger loading; reject all unsupported sweep credential constraints before effects; propagate report/history persistence with leak-dominant precedence; reject malformed/unknown certify flags before logger/telemetry/files/network; and structurally validate/recompute resume evidence or rerun.
+
+Commands: `scripts/gsd doctor` and `scripts/gsd list` passed; programming-loop remains unavailable; `scripts/gsd prompt audit-fix --phase 437-connectors-certify-native-cobra --dry-run` generated the applicable correction prompt; manual universal-loop fallback recorded. Execution decision: `local_critical_path` because the user prohibited subagents and all parent/PR/integration mutation while assigning the isolated issue worktree.
+
+Required skills loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-documentation`, `golang-spf13-cobra`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`.
+
+Recovery-budget exception: unresolved P1 destructive cleanup authority and unrecoverable-ledger findings require this extra bounded correction rather than stopping after four cycles.
+
+Downstream artifact: complete at implementation head `e9ce945e56413dbb60f5eeec2f1d6e5df688a249`. Planning `8acf62a9`, RED `e2559f64`/`3d69b7a4`, and GREEN `e9ce945e` are pushed. Cleanup retryability/authority, bounded opaque ledgers, pre-effect sweep constraints, durable persistence precedence, pre-telemetry parsing, and strict recomputed resume evidence are corrected.
+
+Verification result: pass. Focused final `7.288s` certify / `8.389s` CLI; ×10 `48.652s` / `77.313s`; race `51.469s` / `89.921s`; full package checkpoints certify `327.840s`, CLI `443.427s`; schedule/safety and vet; help/bare/invalid/JSON; docs/golden `16.600s`; website drift-free; connectorgen 547/0; explicit `go test ./...` real `7m34.316s`; build; final `make verify` exit 0 real `7m52.496s` (CLI `449.572s`, certify `332.793s`, lint 0). No credentials, live services/connectors, system crontab, external writes/sweeps, dependencies, PR, parent, integration, or main mutation.
+
+## Continuation kickoff snapshot
+
+Identity: `issue-437-continuation-20260719T211738Z`; exact clean start `86eea0f966814e6848e5a52143eea15dd46ff801`; latest parent `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`; worker branch `refactor/437-connectors-certify-native-cobra`; base branch `feat/cli-architecture-v2`; no subagents.
+
+Task: reconcile latest parent, audit existing 42-file #437 diff, justify directly applicable certify safety corrections, run full local gates and safe fixture-only certify smoke, push continuation commits, and open non-draft stacked PR to parent with exactly `Refs #437`, `Refs #407`, `Refs #397`. Claude disabled and Copilot quota exhausted; record human/parent fallback pending without bot retries.
+
+Commands refreshed before production edits: `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 437 --skip-research`; `scripts/gsd prompt programming-loop init --phase 437 --dry-run` (unavailable: `unknown GSD command`). Execution decision: `local_critical_path`.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, and connector/certify support skills `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`. `.pi/skills/go-implementation/SKILL.md` is missing; global cc-skills files are the actual Go implementation evidence.
+
+Downstream artifact: parent `a5474bcb` merged cleanly at `dc4aed23`; 42-file #437 diff audited as scoped; continuation artifacts updated; verification passed; non-draft stacked PR opened at https://github.com/polymetrics-ai/cli/pull/466; human/parent review fallback pending.
+
+Verification result: pass. Focused CLI `119.151s`, certify `7.344s`; connectors help byte-equal `8391` bytes; docs/golden `10.347s`; website docs generation drift-free; fixture-only sample certify exit 0/pass/stderr 0; gofmt/diff/vet/full tests/build; `make verify` exit 0; connectorgen 547/0.
+
+
+## Sixth bounded exact-head review-correction kickoff snapshot
+
+Identity: `issue-437-sixth-review-correction-20260719T220843Z`; exact start `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34`; PR #466 on `refactor/437-connectors-certify-native-cobra`; parent #397 / umbrella #407. Task: correct accepted exact-head findings for approval idempotency cleanup authority, leak-dominant runner/progress error handling, and stale leak consistency.
+
+Commands refreshed before production edits:
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt plan-phase 437 --skip-research
+scripts/gsd prompt programming-loop init --phase 437 --dry-run
+```
+
+Doctor passed; plan prompt generated; programming-loop returned `scripts/gsd: unknown GSD command: programming-loop`, so the manual universal runtime loop is the recorded fallback.
+
+Execution decision: `local_critical_path` — worker owns one isolated issue branch/cwd, no subagent tool exposed, correction is the local critical path. Parent coordinator records this invocation as spawned.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`; `.pi/skills/go-implementation/SKILL.md` absent, global cc-skills paths are actual Go evidence.
+
+Downstream artifact: complete at exact PR head `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; RED/GREEN/terminal gate evidence is recorded below and PR #466 body was updated for the sixth cycle.
+
+Verification result: pass for sixth cycle. Seventh bounded correction reopens verification separately below.
+
+
+### Sixth-cycle RED evidence captured
+
+- `go test ./internal/connectors/certify -run 'TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup|TestRereviewCleanupFailureThenAbsenceProofClearsStaleLeak|TestRunBatchRunnerErrorWithLeakedReportKeepsExit3' -count=1` failed as intended in `25.435s`: approval replay success left final outbox action `"create"`; cleanup absence proof left stale top-level `Report.Leaks`; runner report+error with a leaked report produced batch exit `2` instead of `3`.
+- `go test ./internal/cli -run 'TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3' -count=1` failed as intended in `0.572s`: progress persistence error with leaked batch returned exit `1` and emitted an `Error` envelope instead of the safe `ConnectorCertificationBatch` evidence with leak-dominant exit `3`.
+
+
+### Sixth-cycle GREEN focused evidence
+
+Implementation reorders approval idempotency before final cleanup, skips replay checks unless `write_create` actually consumed the plan, removes stale leak records when exact cleanup verification proves absence, preserves the cleanup stage failure as a non-leaked write-action failure, and lets leaked runner reports dominate ancillary runner/progress errors.
+
+Focused GREEN commands:
+
+- `go test ./internal/connectors/certify -run 'TestRereviewApprovalReplaySuccessIsCoveredByFinalCleanup|TestRereviewCleanupFailureThenAbsenceProofClearsStaleLeak|TestRunBatchRunnerErrorWithLeakedReportKeepsExit3' -count=1` => pass (`21.288s`).
+- `go test ./internal/cli -run 'TestRereviewBatchProgressErrorWithLeaksEmitsReportAndExit3' -count=1` => pass (`0.565s`).
+- Repeated: same certify focus `-count=3` => pass (`62.605s`); same CLI focus `-count=3` => pass (`0.567s`).
+- Race: same certify focus with `-race` => pass (`229.386s`); same CLI focus with `-race` => pass (`1.666s`).
+- Coherent-slice gates: `go vet ./...` => pass; `go build ./cmd/pm` => pass.
+
+A prior repeated attempt timed out before the approval-replay test preserved invocation-local crontab options in its wrapper; the wrapper was corrected and the focused, repeated, and race gates above reran successfully.
+
+
+### Sixth-cycle terminal verification evidence
+
+Implementation head before terminal artifacts: `791b1a1d` (`52cd1e05` GREEN plus `791b1a1d` lint/test close fix). All accepted findings are corrected.
+
+Verification commands/results:
+
+- Focused affected packages: `go test ./internal/connectors/certify -count=1` => pass (`351.189s`); `go test ./internal/cli -count=1` => pass (`445.489s`).
+- Formatting/full gates: `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` => pass (CLI `445.908s`, certify `350.792s`); `go build ./cmd/pm` => pass.
+- Runtime help parity: `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` byte-identical (`8391` bytes).
+- Docs/golden/website parity: `go test ./internal/cli -run 'TestConnectorsManual|TestNativeConnectors|TestNativeCertify' -count=1` => pass (`11.149s`); `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages; tracked docs/website/golden diff clean. No canonical help/manual/website text change was required by this fix.
+- Fixture-only sample smoke: `./pm connectors certify sample --root <temp> --json` => exit `0`, kind `ConnectorCertification`, connector `sample`, passed `true`, stderr bytes `0`.
+- Connector validation: `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
+- `make verify`: first attempt failed only at certify lint (`errcheck` on `f.Close` in the new replay fixture helper); `791b1a1d` fixed it. Complete rerun passed: CLI `453.202s`, certify `357.136s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen `547 connector(s) checked, 0 findings`.
+
+Safety: no credentials, live certification, services, system crontab, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction. The only reverse ETL execution was the repository's local fixture/temp smoke path (plan → preview → approval → execute) inside `make verify` and the explicit sample/outbox certification smoke.
+
+## Seventh bounded correction kickoff snapshot
+
+Identity: `issue-437-seventh-bounded-correction-20260720`; exact start `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; PR #466 on `refactor/437-connectors-certify-native-cobra`; parent #397 / umbrella #407. Task: correct accepted exact-head findings for resume replay after cleanup-failure absence proof and effect-before-usage validation for bare value-required certify flags; finalize stale sixth artifact/PR status honesty.
+
+Commands refreshed before production edits:
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt plan-phase 437 --skip-research
+scripts/gsd prompt programming-loop init --phase 437 --dry-run
+```
+
+Doctor passed; plan prompt generated; programming-loop returned `scripts/gsd: unknown GSD command: programming-loop`, so the manual universal runtime loop is the recorded fallback.
+
+Execution decision: `local_critical_path` — worker owns one isolated issue branch/cwd, no subagent tool exposed, correction is the local critical path. Parent coordinator records this invocation as spawned.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-code-style`, `golang-naming`; `.pi/skills/go-implementation/SKILL.md` absent, global cc-skills paths are actual Go evidence.
+
+Recovery-budget exception: unresolved effect-before-usage and resume-replay findings require this extra bounded correction rather than stopping on prior cycle count.
+
+Downstream artifact: complete. Planning `82f59229`, RED `e0fb8c4b`, GREEN `2ce0e10a`, and terminal evidence `0d515e6e` are pushed. Resume validation accepts only the exact cleanup-failure absence-proof shape, and certify syntax prevalidation rejects bare value-required flags before effects while preserving assigned/space values and boolean bare controls.
+
+Verification result: pass. RED failed as intended (`certify` 0.698s; `cli` 5.853s). GREEN/final gates pass: focused `0.599s`/`0.566s`; repeated/race `0.660s`/`0.575s` and `1.704s`/`1.729s`; full affected packages `353.654s`/`448.666s`; runtime bare `--stream` exits 2 with no `.polymetrics`; help byte parity `8391` bytes; docs/golden `11.210s`; website drift-free; sample smoke exit 0/pass/stderr 0; `gofmt`, diff, vet, full tests, build, final `make verify` (CLI `442.999s`, certify `348.395s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0 pass. Terminal evidence `0d515e6e` and PR #466 body update completed seventh delivery.
+
+## Eighth bounded correction kickoff snapshot
+
+Identity: `issue-437-eighth-bounded-correction-20260720`; exact start `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; PR #466 on `refactor/437-connectors-certify-native-cobra`; parent #397 / umbrella #407. Task: correct accepted exact-head findings for future-dated report evidence and whitespace value-required certify flags; finalize delivery artifacts/PR body truthfully without impossible commit self-reference.
+
+Commands refreshed before production edits:
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt plan-phase 437 --skip-research
+scripts/gsd prompt programming-loop init --phase 437 --dry-run
+```
+
+Doctor passed; plan prompt generated; programming-loop returned `scripts/gsd: unknown GSD command: programming-loop`, so the manual universal runtime loop is the recorded fallback.
+
+Execution decision: `local_critical_path` — worker owns one isolated issue branch/cwd, no subagent tool exposed, correction is the local critical path. Parent coordinator records this invocation as spawned.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-code-style`, `golang-naming`; `.pi/skills/go-implementation/SKILL.md` absent, global cc-skills paths are actual Go evidence.
+
+Recovery-budget exception: unresolved future-evidence and whitespace effect-before-usage findings require this extra bounded correction rather than stopping on prior cycle count.
+
+Downstream artifact: complete. Planning `45f190dc`, RED `ea5e412c`, GREEN `af0e4dab`, and terminal evidence parent / previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51` are pushed. Future-dated resume reports beyond a documented five-minute skew rerun; whitespace/empty space-form value-required certify flags fail as usage exit 2 before effects. PR #466 body update for eighth evidence completed at `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially.
+
+Verification result: pass for eighth cycle. RED failed before production (`certify` 0.662s; `cli` 23.561s). GREEN/final gates pass: focused/repeated/race, full affected packages (`347.792s` certify, `443.361s` CLI), runtime no-effect/help parity (`8391` bytes), docs/golden/website drift, sample smoke, gofmt/diff/vet/full tests/build, final `make verify` (CLI `445.358s`, certify `348.425s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0. No credentials, live services, external writes/sweeps, dependencies, bot review, parent/main merge, or quality-gate reduction.
+
+## Docs-only evidence closure kickoff snapshot
+
+Identity: docs-only evidence closure for #437 / PR #466; exact clean local/remote/PR start `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. Task: accepted Low artifact honesty fix only; clear stale terminal-evidence/PR-body delivery wording across the six phase artifacts; retain reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`; record `f211562ef4fd64ee7d7de4f274a3facf6ff44f51` as terminal-evidence parent/previous PR head; state current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially.
+
+Commands refreshed before artifact edits: `scripts/gsd doctor`; `scripts/gsd list`; `scripts/gsd prompt plan-phase 437 --skip-research`. Execution decision: `local_critical_path`; parent records spawned. Required skills loaded for closure: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-documentation`, and `golang-security`.
+
+Downstream artifact: six phase artifacts only; no production edit and no behavior RED required. Verification result: JSON parse, stale terminal/PR marker grep, `git diff --check`, and exact diff-scope check are the closure gates.
+
+## Ninth bounded CI flake correction kickoff snapshot
+
+Identity: `issue-437-ninth-ci-flake-correction-20260720`; exact clean local/remote/PR start `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; parent reconcile target `c91b90cf9671b5caabc0ef4ec24d81897f870458`. Task: fix PR #466 CI run `29711194607` failure for issue #437 by replacing the flaky wall-clock concurrency assertion in `internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit` with deterministic concurrency evidence. CI failure: `elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)` at `batch_test.go:372`; all other reported packages/checks passed.
+
+Commands refreshed before test edits:
+
+```bash
+scripts/gsd doctor
+scripts/gsd list
+scripts/gsd prompt plan-phase 437 --skip-research
+scripts/gsd prompt programming-loop init --phase 437 --dry-run
+```
+
+Doctor passed, list reported 69 commands, plan prompt generated to `/tmp/pm-437-plan-phase.prompt`, and programming-loop returned `scripts/gsd: unknown GSD command: programming-loop`; manual universal-loop fallback recorded.
+
+Execution decision: `local_critical_path` — worker owns one isolated #437 branch/cwd, no subagent tool exposed, correction is local critical path. Parent coordinator records this invocation as spawned.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-testing`, `golang-concurrency`, `golang-context`, `golang-safety`, `golang-cli`, `golang-error-handling`, `golang-security`, `golang-spf13-cobra`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-lint`, `golang-code-style`, `golang-naming`; `.pi/skills/go-implementation/SKILL.md` absent in this checkout and at parent `c91b90cf9671b5caabc0ef4ec24d81897f870458`, so global cc-skills paths are actual Go evidence.
+
+Downstream artifact: complete at test-fix implementation head `828be4de4145d1246347b820d433d52bd1e92002`. Planning `0398a5d6` and parent merge `9678d4dd` were pushed before the test fix. The fix is test-only: deterministic release barrier, active-worker/max-concurrency accounting, violation channel, and order/result channels replace the CI-flaky elapsed-time assertion; the threshold was not raised or removed.
+
+Verification result: pass. Current-test stress did not locally reproduce (`-count=50` `7.601s`; `-race -count=10` `3.084s`), so remote CI run `29711194607` is the RED. GREEN/final gates pass: focused `-count=20` `2.051s`; focused race `2.435s`; full certify `358.903s`; `gofmt`; `git diff --check`; `go vet ./...`; `go test ./...` (CLI `453.338s`, certify `355.074s`); `go build ./cmd/pm`; `make verify` (CLI `454.887s`, certify `357.580s`, docs validate, local smoke `smoke ok`, lint `0 issues`, connectorgen green); fixture-only sample smoke `exit=0 kind=ConnectorCertification report_kind=ConnectorCertification connector=sample passed=True stderr_bytes=0`; explicit connectorgen `547 connector(s) checked, 0 findings`. No bot review or merge.

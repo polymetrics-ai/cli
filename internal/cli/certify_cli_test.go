@@ -2,6 +2,9 @@ package cli_test
 
 import (
 	"bytes"
+	"context"
+	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -18,6 +21,9 @@ import (
 // internal/connectors/certify/cliharness.go SetCLIRunFunc).
 func TestMain(m *testing.M) {
 	certify.SetCLIRunFunc(cli.Run)
+	certify.SetCLIRunContextFunc(func(ctx context.Context, args []string, stdout, stderr io.Writer, opts certify.CLIInvocationOptions) int {
+		return cli.RunWithContext(ctx, args, stdout, stderr, cli.RunOptions{Mode: cli.ModePlain, ScheduleCrontabFile: opts.CrontabFile})
+	})
 	os.Exit(m.Run())
 }
 
@@ -118,6 +124,30 @@ func TestCertifyCLIUnknownConnectorFails(t *testing.T) {
 // TestCertifyCLIAllRequiresCredentialsFile proves --all without
 // --credentials-file is a clear usage error (certification design §A
 // command spec: "pm connectors certify --all --credentials-file creds.yaml").
+func TestCertifyCLIBatchValidatesSafetyControlsBeforeCredentialLoading(t *testing.T) {
+	root := t.TempDir()
+	missing := filepath.Join(root, "missing-creds.yaml")
+	_, readErr := os.ReadFile(missing)
+	if readErr == nil {
+		t.Fatal("missing credential fixture unexpectedly exists")
+	}
+
+	t.Run("valid controls preserve credential read error bytes", func(t *testing.T) {
+		wantStderr := fmt.Sprintf("error: certify: read creds file %s: %v\n", missing, readErr)
+		stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "--all", "--credentials-file", missing)
+		if code != 1 || stdout != "" || stderr != wantStderr {
+			t.Fatalf("exit=%d stdout=%q stderr=%q, want exit 1, empty stdout, stderr %q", code, stdout, stderr, wantStderr)
+		}
+	})
+
+	t.Run("invalid parallel wins before credential loading", func(t *testing.T) {
+		stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "--all", "--credentials-file", missing, "--parallel", "invalid")
+		if code != 3 || stdout != "" || stderr != "error: invalid --parallel \"invalid\", want integer\n" {
+			t.Fatalf("exit=%d stdout=%q stderr=%q, want validation before credential read", code, stdout, stderr)
+		}
+	})
+}
+
 func TestCertifyCLIAllRequiresCredentialsFile(t *testing.T) {
 	root := t.TempDir()
 

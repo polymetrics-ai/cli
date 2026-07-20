@@ -444,7 +444,10 @@ SYNOPSIS
   pm connectors list [--all] [--json]
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
-  pm connectors help <name>
+  pm connectors help
+  pm connectors certify <name> [--from-env field=ENV] [--config key=value] [--stream name] [--skip write] [--write] [--full] [--keep-workdir] [--json]
+  pm connectors certify --all --credentials-file <file> [--parallel n] [--resume] [--write=false | --skip=write] [--json]
+  pm connectors certify --sweep [--credentials-file <file>] [--older-than 24h] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -524,35 +527,80 @@ ACTIONS
 
   catalog
     Prints connector catalog metadata, optionally filtered by --capability and
-    --stage. Example stages include alpha, beta, and generally_available.
+    --stage. Example stages include alpha, beta, and ga.
 
   inspect <name>
     Prints a man-style connector manual for a bare connector name. Use --json
     to print structured metadata for agents. Inspection is metadata-only and
     does not resolve credentials.
 
-  help <name>
-    Alias for the human connector manual.
+  help
+    Prints this connectors namespace manual. Use inspect <name> for a
+    connector-specific manual or structured metadata.
+
+  certify
+    Runs the connector certification harness through the in-process CLI. A
+    single run can use local connector behavior or user-named credential
+    variable references. Batch mode requires --all and --credentials-file;
+    --write=false or --skip=write overrides every credential-file write entry.
+    Only --skip=write is implemented. Boolean controls accept only true or
+    false. Explicit --parallel must be from 1 through 32 and workers are capped
+    by queued connectors. --resume reuses completed prior reports only when
+    its exact schema, connector manifest, effective non-secret options, and
+    environment-reference fingerprint match; other reports rerun. Sweep mode
+    retries cleanup from the durable per-connector ledger in a fresh temporary
+    workspace and requires plan, successful preview, approval, then execute.
+    --older-than must be greater than zero and no more than 8760h. Unsupported,
+    mode-inapplicable, malformed, and unknown controls fail before credential
+    loading, telemetry, runner, sweep, or write effects instead of becoming
+    no-ops.
+
+    Before a certification report is completed, CLI usage errors exit 2,
+    validation errors exit 3, and setup or runtime errors exit 1. These errors
+    emit the normal CLI Error envelope, not a completed certification report.
+    A completed certification report exits 0 for pass, 2 for certification
+    failure, or 3 for leaked resources (which dominate other report outcomes).
+    JSON reports use ConnectorCertification, ConnectorCertificationBatch, or
+    ConnectorCertificationSweep envelopes.
+
+    Credential values must come from environment references. Credential files
+    are regular non-symlink YAML files no larger than 1 MiB, use version 1 and
+    known fields, name at least one locally registered connector, and carry
+    valid environment-variable references. Secret-schema fields are rejected
+    from config and must use from_env. Credential-file exec entries are rejected;
+    no external credential command is run. Secret values and approval
+    tokens are never command operands, output, events, telemetry, or report
+    fields. Reports, history, progress, and ledgers use restrictive local files.
+    Live checks and writes are opt-in harness behavior, not performed by
+    connector inspection or help.
 
 EXAMPLES
   pm connectors
   pm connectors --json
   pm connectors list
   pm connectors list --all --json
-  pm connectors catalog --capability write --stage generally_available --json
+  pm connectors catalog --capability write --stage ga --json
   pm connectors inspect github
   pm connectors inspect github --json
+  pm connectors certify sample --json
+  pm connectors certify --all --credentials-file certify/creds.yaml --json
+  pm connectors certify --sweep --credentials-file certify/creds.yaml --older-than 24h --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem
 
 SECURITY
-  Connector inspection never reads credentials.
+  Connector inspection never reads credentials. Certification accepts only
+  environment-variable credential references; credential-file exec is rejected.
+  Secret values are excluded from output and reports.
+  Live certification writes remain explicitly opt-in and cleanup-gated;
+  credential-file writes additionally require sandbox=true.
 
 EXIT STATUS
-  0 success
-  1 runtime error
-  2 usage error
+  0 command success or completed certification pass
+  1 setup/runtime error before a certification report completes
+  2 CLI usage error or completed certification failure
+  3 CLI validation error or leaked resource in a completed certification
 `
 
 const connectionsHelp = `NAME

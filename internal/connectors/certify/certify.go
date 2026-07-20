@@ -6,12 +6,16 @@ package certify
 // ConnectorCredsEntry.Write equivalent).
 type Options struct {
 	Connector string
-	Stream    string            // default: first cursor stream, else first
-	Limit     int               // default 50
-	Modes     []string          // default: all 5 sync modes
-	Config    map[string]string // connector config for credentials add
-	SecretEnv map[string]string // field -> ENV name
-	KeepWork  bool
+	Stream    string // default: first cursor stream, else first
+	// Limit and Modes are reserved legacy fields. Runner does not enforce
+	// them, so the CLI and batch credential validation reject attempts to set
+	// them rather than silently accepting no-op controls.
+	Limit       int
+	Modes       []string
+	Config      map[string]string // connector config for credentials add
+	SecretEnv   map[string]string // field -> ENV name
+	KeepWork    bool
+	ArtifactDir string // durable outer .polymetrics root for reports/ledgers
 
 	// Write enables the create-then-cleanup write protocol (stages 12-17,
 	// design §C). When false, or when the connector has no available

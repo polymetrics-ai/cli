@@ -59,6 +59,13 @@ type extractCommandState struct {
 	bareInvocation bool
 }
 
+type connectorsCommandStateKey struct{}
+
+type connectorsCommandState struct {
+	operand    string
+	operandSet bool
+}
+
 func (e *cobraLegacyError) Error() string { return e.err.Error() }
 
 func (e *cobraLegacyError) Unwrap() error { return e.err }
@@ -129,6 +136,7 @@ func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stde
 	for _, spec := range cobraLegacyCommands(cfg) {
 		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec))
 	}
+	cmd.AddCommand(newConnectorsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newCredentialsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newConnectionsCobraCommand(ctx, root, stdout, jsonOut))
 	cmd.AddCommand(newCatalogCobraCommand(ctx, root, stdout, jsonOut))
@@ -150,6 +158,12 @@ func newRootCmdWithRuntimes(ctx context.Context, cfg config.Config, stdout, stde
 }
 
 func executeRootCmd(cmd *cobra.Command, args []string) error {
+	if err := prevalidateCertifySyntaxArgs(args); err != nil {
+		return err
+	}
+
+	var connectorsState connectorsCommandState
+	args = captureConnectorsPrivateOperand(args, &connectorsState)
 	extractState := extractCommandState{
 		bareInvocation: len(args) == 1 && args[0] == "extract",
 	}
@@ -178,6 +192,7 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 		ctx = context.Background()
 	}
 	ctx = context.WithValue(ctx, credentialsCommandStateKey{}, credentialsState)
+	ctx = context.WithValue(ctx, connectorsCommandStateKey{}, connectorsState)
 	ctx = context.WithValue(ctx, extractCommandStateKey{}, extractState)
 	ctx = context.WithValue(ctx, etlCommandStateKey{}, etlState)
 	ctx = context.WithValue(ctx, reverseCommandStateKey{}, reverseState)
@@ -192,6 +207,26 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	}
 	_, err := cmd.ExecuteC()
 	return err
+}
+
+func captureConnectorsPrivateOperand(args []string, state *connectorsCommandState) []string {
+	if len(args) < 3 || args[0] != "connectors" {
+		return args
+	}
+	switch args[1] {
+	case "inspect", "man", "docs":
+	default:
+		return args
+	}
+	if isHelpArg(args[2]) {
+		return args
+	}
+	state.operand = args[2]
+	state.operandSet = true
+	out := make([]string, 0, len(args)-1)
+	out = append(out, args[:2]...)
+	out = append(out, args[3:]...)
+	return out
 }
 
 func captureETLPrivateOperands(args []string, state *etlCommandState) []string {
@@ -329,6 +364,25 @@ func normalizeWorkerActionArgs(args []string) []string {
 }
 
 func normalizeNativeStringArrayArgs(args []string, credentialsState *credentialsCommandState) []string {
+	if len(args) >= 2 && args[0] == "connectors" {
+		if isHelpArg(args[1]) {
+			return append([]string(nil), args[:2]...)
+		}
+		switch args[1] {
+		case "list", "catalog", "inspect", "man", "docs", "certify":
+			start := 2
+			flags := connectorsFlagNames
+			if args[1] == "certify" {
+				flags = certifyFlagNames
+			}
+			args = normalizeStringArraySpaceValues(args, start, flags)
+			return normalizeConnectorsLegacyActionArgs(args, start, args[1] == "certify")
+		default:
+			out := make([]string, 0, len(args)+1)
+			out = append(out, args[0], "--")
+			return append(out, args[1:]...)
+		}
+	}
 	if len(args) >= 3 && args[0] == "catalog" && (args[1] == "refresh" || args[1] == "show") {
 		return normalizeStringArraySpaceValues(args, 2, map[string]struct{}{"connection": {}})
 	}
@@ -480,6 +534,47 @@ func normalizeNativeStringArrayArgs(args []string, credentialsState *credentials
 		}
 	}
 	return args
+}
+
+// normalizeConnectorsLegacyActionArgs keeps tokens owned or ignored by the old
+// connectors parser from becoming Cobra controls.
+func normalizeConnectorsLegacyActionArgs(args []string, start int, certifyAction bool) []string {
+	out := make([]string, 0, len(args))
+	out = append(out, args[:start]...)
+	afterSeparator := false
+	for i := start; i < len(args); i++ {
+		arg := args[i]
+		if arg == "--" {
+			afterSeparator = true
+			if certifyAction && i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
+				i++
+			}
+			continue
+		}
+		if arg == "-h" || arg == "--help" {
+			if afterSeparator {
+				continue
+			}
+			return append(out, "--help")
+		}
+		if strings.HasPrefix(arg, "--help=") {
+			out = append(out, "--pm-legacy-connectors-help-assignment="+strings.TrimPrefix(arg, "--help="))
+			continue
+		}
+		if len(arg) > 2 && arg[0] == '-' && arg[1] != '-' && strings.ContainsRune(arg[1:], 'h') {
+			out = append(out, "--pm-legacy-connectors-short="+strings.TrimPrefix(arg, "-"))
+			continue
+		}
+		if arg == "help" {
+			if afterSeparator {
+				out = append(out, "pm-legacy-connectors-help")
+				continue
+			}
+			return append(out, "--help")
+		}
+		out = append(out, normalizeReverseMalformedUnknown(arg))
+	}
+	return out
 }
 
 // normalizeETLLegacyActionArgs keeps tokens ignored by the old ETL parser from becoming Cobra controls.
@@ -720,6 +815,38 @@ func normalizeDocsLegacyActionArgs(args []string, start int) []string {
 	return out
 }
 
+var connectorsFlagNames = map[string]struct{}{
+	"all":        {},
+	"capability": {},
+	"stage":      {},
+	"type":       {},
+}
+
+var certifyFlagNames = map[string]struct{}{
+	"credential":              {},
+	"from-env":                {},
+	"config":                  {},
+	"stream":                  {},
+	"limit":                   {},
+	"modes":                   {},
+	"skip":                    {},
+	"rate-limit":              {},
+	"budget":                  {},
+	"record":                  {},
+	"replay":                  {},
+	"live-all-modes":          {},
+	"allow-production-writes": {},
+	"keep-workdir":            {},
+	"write":                   {},
+	"full":                    {},
+	"all":                     {},
+	"credentials-file":        {},
+	"parallel":                {},
+	"resume":                  {},
+	"sweep":                   {},
+	"older-than":              {},
+}
+
 var etlFlagNames = map[string]struct{}{
 	"connector":  {},
 	"config":     {},
@@ -859,9 +986,6 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		}},
 		{name: "help", handler: runManualAlias},
 		{name: "man", handler: runManualAlias},
-		{name: "connectors", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runConnectors(ctx, root, args, stdout, jsonOut)
-		}},
 	}
 }
 

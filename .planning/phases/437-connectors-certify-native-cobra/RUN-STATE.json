@@ -1,0 +1,406 @@
+{
+  "phase": 437,
+  "issue": 437,
+  "umbrella": 407,
+  "parentIssue": 397,
+  "parentPullRequest": 438,
+  "branch": "refactor/437-connectors-certify-native-cobra",
+  "baseBranch": "feat/cli-architecture-v2",
+  "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
+  "endingImplementationHead": "828be4de4145d1246347b820d433d52bd1e92002",
+  "terminalEvidenceParentHead": "828be4de4145d1246347b820d433d52bd1e92002",
+  "currentLivePRHeadPolicy": "current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially in phase artifacts",
+  "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
+  "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
+  "thirdCorrectionStartingHead": "437d13cf",
+  "fourthCorrectionStartingHead": "1e27b14012f65ffa24c01ed855d0405c24401eee",
+  "fifthCorrectionStartingHead": "05d9c6658f52e542b6a74e87e29bdcad7275ea9d",
+  "fifthCorrectionSession": "issue-437-fifth-review-correction-20260720",
+  "recoveryBudgetException": "remote CI timing flake in batch concurrency test requires ninth bounded correction; deterministic concurrency evidence must replace wall-clock assertion",
+  "invocationSession": "issue-437-pi-sol-high-20260719T095145Z",
+  "startedAt": "20260719T095145Z",
+  "endedAt": "20260719T201832Z",
+  "correctionStartedAt": "20260719T113319Z",
+  "modelProfile": "Sol",
+  "thinking": "high",
+  "status": "ninth_ci_flake_correction_verified",
+  "verificationPassed": true,
+  "continuationSession": "issue-437-continuation-20260719T211738Z",
+  "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
+  "latestParentHead": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
+  "ninthCorrectionStartingHead": "9f004ac5d96d84bd1f8b186496e1f594a183a18b",
+  "ninthCorrectionSession": "issue-437-ninth-ci-flake-correction-20260720",
+  "ninthCorrectionParentHead": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
+  "ninthCorrectionCIFailure": "GitHub Actions run 29711194607 failed only internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit: elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)",
+  "ninthCorrectionParentMergeHead": "9678d4dda2fcf331b3199f042804001c06eccf64",
+  "ninthCorrectionImplementationHead": "828be4de4145d1246347b820d433d52bd1e92002",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "passed_generated_and_executed_inline",
+    "programmingLoop": "blocked_unknown_command",
+    "applicablePrompt": "audit-fix_dry-run_generated",
+    "fallback": "manual_gsd_universal_runtime_loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "final assigned serialized Phase 9 namespace in isolated worktree; central router writes collide, no subagent tool is exposed, and user requested implementation/commit/push without PR/review"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "complete native connectors/certify tree, parsing, help, output, exit, cancellation, re-entrancy, and credential-output contract failed on intentionally absent native constructors before production"
+    },
+    {
+      "cycle": "green-implementation",
+      "decision": "local_critical_path",
+      "reason": "native connectors and nested certify commands with typed flags, injected runtime, compatibility normalization, namespace-only parser removal, manual parity, and credential-value exclusion passed focused, repeated, race, router/golden, telemetry, and certify tests"
+    },
+    {
+      "cycle": "help-refactor-red-green",
+      "decision": "local_critical_path",
+      "reason": "two committed test-first corrections established contextual trailing/direct action help without operation effects or connector-name capture"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused/repeated/race, router/golden, exact-start operational differential, full CLI/certify, context/concurrency/events/telemetry/nondisclosure, runtime help, docs/website, connector validation, explicit certify smoke, and make verify all passed"
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "terminal issue-local evidence and no-PR/no-review handoff finalized for commit and immediate push"
+    },
+    {
+      "cycle": "accepted-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "all five findings accepted at exact head; bounded safety-critical correction in existing isolated issue worktree; no subagent tool, services, credentials, PR, or review"
+    },
+    {
+      "cycle": "accepted-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused RED reproduced all findings: no-op controls, help over-normalization, single span/precedence, batch ordering/wrappers, and inaccurate exit docs"
+    },
+    {
+      "cycle": "accepted-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "smallest fail-closed correction passes focused, exact-base differential, repeated/race, exit/redaction/replay, and docs/golden/website gates"
+    },
+    {
+      "cycle": "accepted-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "local sample, full CLI/certify, gofmt/vet/test/build, make verify, and connector validation all passed without credentials, writes, services, dependencies, PR, or review"
+    },
+    {
+      "cycle": "accepted-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal verification artifacts committed and pushed; final no-PR/no-review delivery marker closes the bounded correction"
+    },
+    {
+      "cycle": "second-accepted-safety-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "all rereview P1/P2/P3 findings accepted at exact head; bounded safety-critical correction in the existing isolated issue worktree; no subagent tool, credentials, services, dependencies, PR, or review"
+    },
+    {
+      "cycle": "second-accepted-safety-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused RED effect recorder reproduced unsafe batch write precedence, discarded credential constraints, unsupported and mode-inapplicable flag effects, unrestricted skip values, and stale architecture/PRD/help claims before production edits"
+    },
+    {
+      "cycle": "second-accepted-safety-correction-green",
+      "decision": "local_critical_path",
+      "reason": "smallest fail-closed flag and credential-constraint correction plus regenerated CLI/website docs passed focused, repeated, race, full CLI, and full certify package gates"
+    },
+    {
+      "cycle": "second-accepted-safety-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "runtime help, no-effect audit, credential-free local sample, CLI docs/goldens, website regeneration, gofmt/vet/test/build, make verify, and explicit connectorgen validation all passed"
+    },
+    {
+      "cycle": "second-accepted-safety-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal verification artifacts finalized for commit and active-branch push; no PR or review per user instruction"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "all rereview2 findings accepted at exact head; bounded safety/correctness correction in the existing isolated issue worktree; no subagent tool, external commands, credentials, services, dependencies, PR, or review"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused RED reproduced unknown-flag effects, unsafe sweep ages, ordinary resume rerun, accepted credential-file exec, and stale stage/docs claims before production edits"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-green",
+      "decision": "local_critical_path",
+      "reason": "strict certify parsing, bounded sweep age, prohibited-exec rejection/removal, completed-report resume reuse, incomplete rerun, and generated docs passed focused, repeated, and race gates"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "runtime help, docs/goldens/website drift, credential-free sample, full CLI/certify, gofmt/vet/full tests/build, make verify, and connectorgen all passed"
+    },
+    {
+      "cycle": "third-accepted-safety-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "truthful terminal evidence finalized for active-branch artifact commit/push; no credentials, external credential commands, services, dependencies, PR, or review"
+    },
+    {
+      "cycle": "fourth-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "user prohibited subagents and bounded correction to the existing isolated issue branch; exact-head independent findings were consolidated into one safety-critical TDD cycle"
+    },
+    {
+      "cycle": "fourth-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused RED deterministically reproduced F1-F10 before production edits: unsafe preview execution, secret copying, permissive files/controls, global crontab interference, dropped cancellation, ungated prerequisites, stale resume, and source-root pollution"
+    },
+    {
+      "cycle": "fourth-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "accepted F1-F10 corrections passed focused, repeated, race, full CLI/certify, schedule, parity, and local-only safety tests; no subagents or external operations"
+    },
+    {
+      "cycle": "fourth-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "first verify exposed fixture errcheck findings; resource handling was corrected and the complete make verify gate reran to exit 0 with full tests, lint, docs, smoke, and connector validation green"
+    },
+    {
+      "cycle": "fourth-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts truthfully record the successful gate for active-branch commit/push only; no PR, integration, parent, or main mutation"
+    },
+    {
+      "cycle": "fifth-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "user prohibited subagents and bounded work to the existing isolated #437 branch; unresolved P1 security findings trigger the recorded recovery-budget exception"
+    },
+    {
+      "cycle": "fifth-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused deterministic RED reproduced all seven accepted findings before production edits; no subagents or external effects"
+    },
+    {
+      "cycle": "fifth-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "post-verification ledger mutation, tag-safe sweep authority, bounded nondisclosing ledger load, pre-effect constraints, durable report errors, pre-telemetry flag validation, and evidence-validated resume pass focused/repeated/race and full package gates"
+    },
+    {
+      "cycle": "fifth-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full package, help/docs/website, connector validation, fmt/diff/vet, explicit full tests/build, and complete make verify all exited successfully without external credentials or services"
+    },
+    {
+      "cycle": "fifth-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "truthful terminal evidence is finalized for active-branch commit/push only; no PR, parent, integration, or main mutation"
+    },
+    {
+      "cycle": "continuation-plan",
+      "decision": "local_critical_path",
+      "reason": "single issue branch in isolated cwd; no subagent tool; remaining work is parent reconcile, diff audit, verification, stacked PR, and review-route handoff"
+    },
+    {
+      "cycle": "continuation-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "no new behavior edit is planned; existing RED evidence remains valid and any new behavior fix requires a fresh failing test before production"
+    },
+    {
+      "cycle": "continuation-diff-audit",
+      "decision": "local_critical_path",
+      "reason": "42-file diff is confined to #437 phase artifacts, native connectors/certify CLI, certify safety code/tests, harness seam, and required docs/website parity; no unrelated dependency, connector-def, sibling namespace, or parent-owned diff kept"
+    },
+    {
+      "cycle": "continuation-parent-reconcile",
+      "decision": "local_critical_path",
+      "reason": "origin/feat/cli-architecture-v2 at a5474bcb merged cleanly with no conflicts; #462 design docs retained and branch is behind 0 versus parent"
+    },
+    {
+      "cycle": "continuation-verify",
+      "decision": "local_critical_path",
+      "reason": "focused CLI/certify, help parity, docs/golden/website, fixture-only sample certify, gofmt/diff/vet/full tests/build, make verify, and connectorgen all passed"
+    },
+    {
+      "cycle": "continuation-delivery",
+      "decision": "local_critical_path",
+      "reason": "branch pushed and non-draft stacked PR #466 opened to feat/cli-architecture-v2; Claude disabled and Copilot quota exhausted, so human/parent review fallback remains pending"
+    },
+    {
+      "cycle": "sixth-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "worker has one isolated #437 branch/cwd and no subagent tool; accepted High leak-dominance/resource-authority findings trigger recorded recovery-budget exception"
+    },
+    {
+      "cycle": "sixth-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "RED tests were not yet captured at this cycle start; no production edits were allowed until deterministic failures were captured and committed"
+    },
+    {
+      "cycle": "sixth-review-correction-red",
+      "decision": "local_critical_path",
+      "reason": "deterministic focused RED tests captured all accepted sixth-cycle findings before production edits; tests ready for commit/push"
+    },
+    {
+      "cycle": "sixth-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "minimal leak-authority and leak-dominance fixes passed focused, repeated, race, vet, and build gates; broader verification later passed in the sixth verify cycle"
+    },
+    {
+      "cycle": "sixth-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full affected packages, parity checks, sample smoke, fmt/diff/vet/full tests/build, final make verify, and connectorgen all passed after lint fixture close fix"
+    },
+    {
+      "cycle": "sixth-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts record successful verification; PR body update and final push remain local worker delivery actions, no bot review requested"
+    },
+    {
+      "cycle": "seventh-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "worker has one isolated #437 branch/cwd and no subagent tool; accepted effect-before-usage and resume-replay findings trigger recorded seventh recovery-budget exception; parent records this worker as spawned"
+    },
+    {
+      "cycle": "seventh-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "RED tests were not yet captured at this cycle start; no production edits were allowed until deterministic failures were captured and committed"
+    },
+    {
+      "cycle": "seventh-review-correction-red",
+      "decision": "local_critical_path",
+      "reason": "deterministic RED tests captured resume replay and bare value-required effect/category findings before production edits; RED commit pushed"
+    },
+    {
+      "cycle": "seventh-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "minimal resume evidence and certify syntax prevalidation fixes passed focused, broader, repeated, race, vet, build, and full affected package gates"
+    },
+    {
+      "cycle": "seventh-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "runtime no-effect/help, docs/golden/website, fixture-only sample smoke, fmt/diff/vet/full tests/build, final make verify, and connectorgen all passed"
+    },
+    {
+      "cycle": "seventh-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts record successful seventh verification; PR body update and final push remain delivery actions; no bot review requested"
+    },
+    {
+      "cycle": "eighth-review-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "worker has one isolated #437 branch/cwd and no subagent tool; accepted future-evidence and whitespace effect-before-usage findings trigger recorded eighth recovery-budget exception; parent records this worker as spawned"
+    },
+    {
+      "cycle": "eighth-review-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "RED tests were not yet captured at this cycle start; no production edits were allowed until deterministic failures were captured and committed"
+    },
+    {
+      "cycle": "eighth-review-correction-red",
+      "decision": "local_critical_path",
+      "reason": "deterministic RED tests captured future-dated report resume and whitespace value-required effect/category findings before production edits; RED commit was pushed before production edits"
+    },
+    {
+      "cycle": "eighth-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "minimal future timestamp and whitespace value-required fixes passed focused, repeated, race, vet, and build gates; broader verification later passed in the eighth verify cycle"
+    },
+    {
+      "cycle": "eighth-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full affected packages, runtime whitespace no-effect/help, docs/golden/website, fixture-only sample smoke, fmt/diff/vet/full tests/build, final make verify, and connectorgen all passed"
+    },
+    {
+      "cycle": "eighth-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts record successful eighth verification and reviewed implementation head; eighth terminal evidence and PR body update are complete at parent/previous PR head f211562ef4fd64ee7d7de4f274a3facf6ff44f51; no bot review requested"
+    },
+    {
+      "cycle": "docs-only-evidence-closure",
+      "decision": "local_critical_path",
+      "reason": "accepted Low artifact-honesty finding only; no production edits or behavior RED required; worker owns isolated #437 branch/cwd and parent records this worker as spawned"
+    },
+    {
+      "cycle": "ninth-ci-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "worker has one isolated #437 branch/cwd and no subagent tool; remote CI run 29711194607 exposes a timing-dependent concurrency test flake at exact head 9f004ac5d96d84bd1f8b186496e1f594a183a18b; verification remains false until full rerun passes"
+    },
+    {
+      "cycle": "ninth-ci-correction-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "remote CI failure was captured as RED; local stress did not reproduce and no local failure was fabricated before deterministic barrier-based harness replacement"
+    },
+    {
+      "cycle": "ninth-ci-correction-green",
+      "decision": "local_critical_path",
+      "reason": "test-only deterministic barrier/active-worker/max-concurrency/order-channel harness replaces wall-clock assertion; focused repeated and race gates passed"
+    },
+    {
+      "cycle": "ninth-ci-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full certify, gofmt, diff, vet, go test ./..., build, make verify, fixture-only sample smoke, and connectorgen validation all passed without credentials, services, dependencies, or gate weakening"
+    },
+    {
+      "cycle": "ninth-ci-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts record successful ninth verification at implementation head 828be4de4145d1246347b820d433d52bd1e92002; PR body update is performed after final push because artifact commits cannot self-reference; no bot review requested"
+    }
+  ],
+  "red": "remote CI RED captured: GitHub Actions run 29711194607 at head 9f004ac5d96d84bd1f8b186496e1f594a183a18b failed internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit with elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening); local stress did not reproduce (count=50 7.601s, race count=10 3.084s) and no local failure was fabricated",
+  "green": "ninth GREEN test-only fix: TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit now uses release barrier, active-worker/max-concurrency accounting, violation channel, and order/result channels over four connectors with parallel=3; no wall-clock threshold remains except deadlock guards",
+  "verification": "ninth verification passed: focused count=20 2.051s, focused race count=10 2.435s, full certify 358.903s, gofmt, diff, vet, go test ./... with CLI 453.338s and certify 355.074s, build, make verify with CLI 454.887s and certify 357.580s, fixture-only sample smoke exit 0, and connectorgen 547/0 all green",
+  "files": [
+    ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
+    "cmd/pm/main.go",
+    "internal/cli/{cli.go,certify_cli.go,tests,docs.go,testdata/golden_transcripts.json}",
+    "internal/connectors/certify/{batch,certify,cliharness,credsfile,identity,ledger,report,securefs,stages_*,sweeper,tests}.go",
+    "docs/architecture/connector-certification-design.md",
+    "docs/cli/connectors.md",
+    "website/content/docs/cli-reference.mdx",
+    "website/lib/docs.generated.ts"
+  ],
+  "commits": [
+    "07d0b5a4 docs(planning): plan fourth certify correction",
+    "43acd262 test(certify): expose fourth review regressions",
+    "2c0a550c fix(certify): harden certification safety boundaries",
+    "b06816ad test(certify): check correction fixture writes",
+    "8acf62a9 docs(planning): plan fifth certify correction",
+    "e2559f64 test(certify): expose fifth review regressions",
+    "3d69b7a4 test(certify): require pre-telemetry sweep validation",
+    "e9ce945e fix(certify): close rereview safety gaps",
+    "0a6a79b5 docs(planning): verify certify continuation (fifth terminal evidence is earlier in history; artifact cannot self-reference)",
+    "82f59229 docs(planning): plan seventh certify correction",
+    "e0fb8c4b test(certify): expose seventh review regressions",
+    "2ce0e10a fix(certify): close seventh review gaps",
+    "0d515e6e docs(planning): record seventh certify evidence",
+    "45f190dc docs(planning): plan eighth certify correction",
+    "ea5e412c test(certify): expose eighth review regressions",
+    "af0e4dab fix(certify): close eighth review gaps",
+    "f211562e docs(planning): record eighth certify evidence",
+    "0398a5d6 docs(planning): plan ninth certify ci flake fix",
+    "9678d4dd merge(parent): reconcile cli architecture v2",
+    "828be4de test(certify): make batch concurrency proof deterministic"
+  ],
+  "push": "ninth planning 0398a5d6, parent merge 9678d4dd, test fix 828be4de, and terminal evidence commits pushed; PR #466 body update performed after final push with current live head sourced from GitHub/PR body",
+  "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
+  "reviewRoute": "human_parent_fallback_pending_no_bot_retry_requested",
+  "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, bot review, parent/main merge, or quality-gate reduction",
+  "preTerminalEvidenceHead": "2ce0e10ad4b092d3c9314bf0e6bd607ecd48b51f",
+  "sixthCorrectionStartingHead": "8e7e2533c75451114c4d6ae38f89b7fd1ede6c34",
+  "sixthCorrectionSession": "issue-437-sixth-review-correction-20260719T220843Z",
+  "sixthCorrectionFinalHead": "6e9e7d9422050a609306d8900d6a06c8bb1fc223",
+  "seventhCorrectionStartingHead": "6e9e7d9422050a609306d8900d6a06c8bb1fc223",
+  "seventhCorrectionSession": "issue-437-seventh-bounded-correction-20260720",
+  "seventhCorrectionImplementationHead": "2ce0e10ad4b092d3c9314bf0e6bd607ecd48b51f",
+  "seventhCorrectionTerminalEvidenceHead": "0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8",
+  "eighthCorrectionStartingHead": "0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8",
+  "eighthCorrectionSession": "issue-437-eighth-bounded-correction-20260720",
+  "eighthCorrectionReviewedCodeHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
+  "eighthCorrectionImplementationHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
+  "eighthCorrectionTerminalEvidenceCommit": "f211562ef4fd64ee7d7de4f274a3facf6ff44f51",
+  "terminalEvidencePreviousPRHead": "828be4de4145d1246347b820d433d52bd1e92002",
+  "terminalEvidenceCommitPolicy": "artifact commits cannot contain their own resulting SHA because Git computes the commit object after file content is fixed; artifacts record reviewedCodeHead/endingImplementationHead and terminalEvidenceParentHead/previous PR head, while the current live PR head is authoritative from Git/GitHub"
+}
