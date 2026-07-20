@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "waiting_for_review",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
+  "currentHead": "93a117100c6421955262aa32794a91a158d267e1",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -179,6 +179,41 @@
       "decision": "not_spawned_review_blocked",
       "issues": [437, 407, 408, 413],
       "reason": "PR #466 current-head CI and human/parent fallback are pending; #407/#413 depend on #437 integration; #408 is blocked by unresolved #462 corrections and human review coverage. #462 corrections are the next isolated worker-ready slice."
+    },
+    {
+      "cycle": "unit_462_correction_delivery",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "spawned",
+      "issues": [462],
+      "reason": "Project pm-gsd-worker delivered accepted design/safety corrections in isolated worktrees. PR #467 was merged externally at its earlier head; post-merge TTY-gate corrections were recovered onto clean follow-up PR #468."
+    },
+    {
+      "cycle": "unit_462_review_loops",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "read_only_spawned",
+      "issues": [462],
+      "reason": "Project pm-reviewer exact-file sidecars found stdin/stdout TTY, prompt bypass, fallback test-matrix, and evidence-state gaps. Accepted corrections were applied; final runtime/design review was clean aside from evidence-only closure, which was fixed."
+    },
+    {
+      "cycle": "unit_437_ci_flake_fix",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "spawned",
+      "issues": [437],
+      "reason": "PR #466 remote verify exposed a wall-clock concurrency test flake. Isolated worker replaced elapsed-time timing with deterministic concurrency evidence, reran full gates, and current GitHub checks pass."
+    },
+    {
+      "cycle": "github_dependency_metadata",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "local_critical_path",
+      "issues": [408, 409, 411, 412, 414, 416, 418, 463],
+      "reason": "Parent orchestrator added direct GitHub blocked-by #462 edges to all affected TUI issues and verified each edge."
+    },
+    {
+      "cycle": "review_wait_20260720T050556Z",
+      "timestamp": "2026-07-20T05:05:56Z",
+      "decision": "not_spawned_review_blocked",
+      "issues": [437, 462, 407, 408, 413],
+      "reason": "PR #466 is green but lacks human/parent fallback review; PR #468 has local closure but CI/human review is pending. Downstream #407/#408/#413 remain blocked. #419 remains a separate human dependency-decision gate."
     }
   ],
   "units": [
@@ -335,50 +370,51 @@
     },
     {
       "issue": 462,
-      "branch": "docs/462-terminal-ui-design-research",
-      "endingHead": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
-      "parentIntegrationHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
-      "pullRequest": 465,
-      "status": "provisionally_integrated",
-      "verification": "remote_ci_green",
+      "branch": "docs/462-terminal-ui-tty-gate-follow-up",
+      "originalHead": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
+      "firstCorrectionHead": "e8286ea83a76ac2c6f6257c6e2d40fd21af81640",
+      "parentIntegrationHead": "93a117100c6421955262aa32794a91a158d267e1",
+      "pullRequests": [465, 467, 468],
+      "pullRequestHead": "5092e115d4aa35ab4595a9b9537f64d3f63e6406",
+      "status": "sub_pr_open",
+      "verification": "pr_467_ci_green_pr_468_local_green_remote_ci_pending",
       "automatedReview": {
         "primaryRoute": "blocked",
-        "status": "blocked",
-        "headSha": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
-        "reviewedRange": "none_external",
-        "coverageRoute": "blocked",
+        "status": "pending",
+        "headSha": "5092e115d4aa35ab4595a9b9537f64d3f63e6406",
+        "reviewedRange": "local_sidecar_only_not_external_coverage",
+        "coverageRoute": "parent_pr_fallback",
         "fallbackRoute": "human",
-        "dispositionSummary": "five local sidecar findings accepted for correction; local review is not coverage",
-        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/465#issuecomment-5015800536"
+        "dispositionSummary": "accepted design and TTY-gate findings corrected; PR #468 CI/human review pending",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/468"
       }
     },
     {
       "issue": 437,
       "branch": "refactor/437-connectors-certify-native-cobra",
       "startingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
-      "reviewedImplementationHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
-      "pullRequestHead": "9f004ac5d96d84bd1f8b186496e1f594a183a18b",
+      "pullRequestHead": "26f98a72419010b961b5b8378ef4a695b0c0a06f",
       "pullRequest": 466,
-      "status": "sub_pr_open",
+      "status": "sub_pr_green",
       "worker": "pm-gsd-worker",
       "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-437-connectors-certify-native-cobra",
-      "verification": "local_full_make_verify_green_remote_ci_pending",
+      "verification": "local_full_make_verify_green_remote_ci_green",
       "automatedReview": {
         "primaryRoute": "blocked",
         "status": "pending",
-        "headSha": "9f004ac5d96d84bd1f8b186496e1f594a183a18b",
-        "reviewedRange": "local_sidecar_code_review_through_af0e4dab_not_external_coverage",
+        "headSha": "26f98a72419010b961b5b8378ef4a695b0c0a06f",
+        "reviewedRange": "local_sidecar_code_review_not_external_coverage",
         "coverageRoute": "parent_pr_fallback",
         "fallbackRoute": "human",
-        "dispositionSummary": "all local actionable code findings corrected; current-head CI and human fallback pending",
+        "dispositionSummary": "all local actionable findings corrected and CI green; human fallback pending",
         "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/466"
       }
     }
   ],
   "readyQueue": [
-    {"issue": 437, "status": "sub_pr_open", "dependencies": [436], "writeScope": "connectors/certify CLI and directly applicable certify safety", "decision": "not_spawned_review_blocked"},
+    {"issue": 437, "status": "sub_pr_green", "dependencies": [436], "writeScope": "connectors/certify CLI and directly applicable certify safety", "decision": "not_spawned_review_blocked"},
     {"issue": 407, "status": "blocked", "dependencies": [437], "writeScope": "umbrella ratification only", "decision": "not_spawned_dependency_blocked"},
-    {"issue": 462, "status": "worker_ready", "dependencies": [], "writeScope": "terminal design/docs/skill/planning corrections", "decision": "local_critical_path_worktree_creation_next"},
+    {"issue": 462, "status": "sub_pr_open", "dependencies": [], "writeScope": "terminal design/docs/skill/planning corrections", "decision": "not_spawned_review_blocked"},
     {"issue": 408, "status": "blocked", "dependencies": [405, 462], "writeScope": "flow and ETL dashboards", "decision": "not_spawned_review_blocked"},
     {"issue": 413, "status": "blocked", "dependencies": [407], "writeScope": "completion", "decision": "not_spawned_dependency_blocked"},
     {"issue": 419, "status": "blocked", "dependencies": [404, 410], "writeScope": "optional OTel log bridge", "decision": "not_spawned_human_gate"}
@@ -394,5 +430,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T01:39:32Z"
+  "updatedAt": "2026-07-20T05:05:56Z"
 }

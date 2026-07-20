@@ -74,9 +74,10 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 ## 2026-07-20 Pi active continuation
 
 - GSD evidence: `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt plan-phase 397 --skip-research`; `programming-loop` remains absent from the 69-command registry, so the recorded manual universal-loop fallback continues.
-- Parent branch/PR confirmed at `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`; PR #438 remains draft and targets `main`.
-- #462 / PR #465 is provisionally integrated at `a5474bcb`, with CI green but Claude disabled and Copilot quota exhausted. Human review coverage remains required. A local `pm-reviewer` sidecar found five accepted design/safety corrections; local sidecars are not external review coverage.
-- #437 / PR #466 is open at head `9f004ac5d96d84bd1f8b186496e1f594a183a18b`. The implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6` passed focused, race, full-package, full-repo, `make verify`, fixture-only certify smoke, help/docs/website parity, and connector validation. Local exact-path re-review found no runtime/code regressions after eight bounded TDD correction cycles; GitHub CI and human/parent fallback remain pending.
+- Parent branch/PR confirmed at `93a117100c6421955262aa32794a91a158d267e1`; PR #438 remains draft and targets `main`.
+- #462 / PR #465 was provisionally integrated at `a5474bcb`. Accepted design/safety corrections were integrated through PR #467 at parent commit `93a11710`. A later local review found one stdin/stdout TTY-gate contradiction; follow-up PR #468 is open at head `5092e115d4aa35ab4595a9b9537f64d3f63e6406`, with CI running and human review pending. Local sidecars are not external review coverage.
+- #437 / PR #466 is open at head `26f98a72419010b961b5b8378ef4a695b0c0a06f`. Full local gates and all current GitHub checks pass. The CI timing flake was replaced by a deterministic concurrency proof without weakening the parallelism gate. Human/parent fallback review remains pending.
+- GitHub blocked-by metadata now directly encodes #462 for #408, #409, #411, #412, #414, #416, #418, and #463.
 - Actual Pi worker runtime used project `pm-gsd-worker` with `openai-codex/gpt-5.5:xhigh`; the project agent currently declares `thinking: xhigh`, while the requested routing policy says implementation `high`. The subagent API has no per-call model override; this mismatch is recorded rather than hidden.
 - Reviewer discovery attempt was blocked because the parent runtime did not expose `grep/find/ls`; bounded exact-file `read` reviews succeeded. This does not satisfy Claude/Copilot/human coverage.
 
@@ -84,10 +85,10 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 
 | Issue | State | Dependencies | Decision |
 |---|---|---|---|
-| #437 | `sub_pr_open` / local clean | #436 provisionally integrated | `not_spawned_review_blocked` until PR #466 CI and human/parent review fallback clear |
+| #437 | `sub_pr_green` / local clean | #436 provisionally integrated | `not_spawned_review_blocked` until human/parent review fallback clears |
 | #407 | dependency blocked | #437 integration | `not_spawned_dependency_blocked` |
-| #462 corrections | worker-ready | isolated design/docs scope; no production dependency | next mutating worker after coordinator creates a new isolated worktree/branch |
-| #408 | review blocked | #405 integrated; #462 design gate lacks required human coverage and has accepted corrections | `not_spawned_review_blocked` |
+| #462 follow-up | `sub_pr_open` / local clean | PR #467 integrated | `not_spawned_review_blocked` until PR #468 CI and human/parent review clear |
+| #408 | review blocked | #405 integrated; #462 direct blocker remains open | `not_spawned_review_blocked` |
 | #413 | dependency blocked | #407 | `not_spawned_dependency_blocked` |
 | #419 | human-gated | explicit optional beta dependency decision | `not_spawned_human_gate` |
 
