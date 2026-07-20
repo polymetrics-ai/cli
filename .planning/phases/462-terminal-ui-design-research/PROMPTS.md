@@ -49,3 +49,8 @@ rows, status is review-blocked/provisional, and query export path safety is expl
 RED/GREEN docs greps, skill validation, GSD doctor, diff/scope checks, and docs-check when feasible.
 Open a new stacked PR to `feat/cli-architecture-v2`; do not merge.
 ```
+
+Downstream artifact: branch `docs/462-terminal-ui-design-review-fixes`; planning and docs
+correction commits pushed; terminal evidence recorded in this phase artifact update.
+Verification result: docs-contract grep, dependency roster check, skill validation, JSON syntax,
+scope check, `git diff --check`, `scripts/gsd doctor`, and `make docs-check` pass.

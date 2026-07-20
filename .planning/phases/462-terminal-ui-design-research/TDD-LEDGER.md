@@ -111,3 +111,21 @@ this correction changes only delegated documentation/planning/skill artifacts.
   `6853fee28e0208381b49931fb1f5dfec42ee50ef`, Claude disabled, Copilot quota exhausted,
   human fallback, accepted-correction PR pending.
 - Query export path contract is explicit and preserves no generic write-tool boundary.
+
+## Review correction GREEN ledger — 2026-07-20
+
+| Check | Evidence | Status |
+|---|---|---|
+| Bare namespace contract | contradiction grep for old bare `pm query`/`pm reverse` TUI-launch wording returned no current-doc matches outside the historical RED ledger | Pass |
+| Explicit subcommands | `pm query grid` and `pm reverse guide` markers present in design docs, ADR, plan, prompt, Pi prompt, skill, and phase artifacts | Pass |
+| Approval token secrecy | old token-display wording absent from current docs; new contract marks approval tokens sensitive one-time values, ephemeral in-memory only, never rendered in final frames/transcripts/logs/screenshots/accessibility/JSON/shell-equivalent text/fixtures | Pass |
+| Dependency rows | Python roster check confirmed direct `#462`/`D-TUI` markers for #408, #409, #411, #412, #414, #416, #418, and #463 across roadmap, backlog, source plan, and execution prompt | Pass |
+| Query export path | marker check confirmed typed read-only export, project-scoped default, control-character/traversal/broad-path/symlink rejection, no-overwrite default, TTY confirmation/noninteractive `--force`, sanitized command echo, and exact `--no-input` guidance | Pass |
+| Skill validation | PyYAML frontmatter/reference check printed `Skill is valid!` | Pass |
+| JSON syntax | `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` | Pass |
+| Scope | diff against `c91b90cf9671b5caabc0ef4ec24d81897f870458` contains only delegated docs/skill/#462 phase artifacts and no `go.mod`, `go.sum`, `cmd`, `internal`, `website`, or `docs/cli` changes | Pass |
+| Whitespace | `git diff --check` | Pass |
+| GSD health | `scripts/gsd doctor` printed `ok commands 69` | Pass |
+| Docs gate | `make docs-check` built `./cmd/pm` and printed `Validated connector docs in docs/connectors` | Pass |
+
+No production behavior test was required; the correction is docs/planning/skill only.

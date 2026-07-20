@@ -39,30 +39,33 @@ for the later behavior-changing UI phases.
 
 ### Required checks before handoff
 
-- [ ] Phase artifacts reopened before delegated docs/design edits.
-- [ ] GSD adapter health recorded: `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 462 --skip-research`.
-- [ ] Manual universal-loop fallback recorded because `scripts/gsd prompt programming-loop ...` is absent.
-- [ ] Loaded skills and missing `.pi/skills/go-implementation` mismatch recorded.
-- [ ] RED grep inventory recorded in `TDD-LEDGER.md`.
-- [ ] Bare namespace contract grep: no bare `pm query`/bare `pm reverse` TUI-launch wording remains.
-- [ ] Explicit interactive subcommands are consistent: `pm query grid`, `pm reverse guide`.
-- [ ] Approval-token contract grep: no wording says final frames/transcripts/logs/accessibility/JSON/shell-equivalent text prints tokens.
-- [ ] Dependency rows/rosters encode `#462` or `D-TUI` directly for #408, #409, #411, #412,
+- [x] Phase artifacts reopened before delegated docs/design edits.
+- [x] GSD adapter health recorded: `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 462 --skip-research`.
+- [x] Manual universal-loop fallback recorded because `scripts/gsd prompt programming-loop ...` is absent.
+- [x] Loaded skills and missing `.pi/skills/go-implementation` mismatch recorded.
+- [x] RED grep inventory recorded in `TDD-LEDGER.md`.
+- [x] Bare namespace contract grep: no bare `pm query`/bare `pm reverse` TUI-launch wording remains
+  in current docs outside the historical RED ledger.
+- [x] Explicit interactive subcommands are consistent: `pm query grid`, `pm reverse guide`.
+- [x] Approval-token contract grep: no current-doc wording says final frames/transcripts/logs/
+  accessibility/JSON/shell-equivalent text prints tokens.
+- [x] Dependency rows/rosters encode `#462` or `D-TUI` directly for #408, #409, #411, #412,
   #414, #416, #418, and #463 where applicable.
-- [ ] #462 status says provisionally integrated / review blocked with PR #465, head
+- [x] #462 status says provisionally integrated / review blocked with PR #465, head
   `6853fee28e0208381b49931fb1f5dfec42ee50ef`, Claude disabled, Copilot quota exhausted,
   fallback human, accepted correction PR pending.
-- [ ] Query export path contract includes typed read-only export, project-scoped default,
+- [x] Query export path contract includes typed read-only export, project-scoped default,
   control-character/traversal/broad-path rejection, clean/confined path, symlink race rejection,
   no overwrite default, TTY confirmation, noninteractive `--force`, sanitized command echo, and
   exact `--no-input` guidance.
-- [ ] Skill quick validation passes.
-- [ ] JSON/YAML/Markdown syntax checks pass as applicable.
-- [ ] `scripts/gsd doctor` passes at final verification.
-- [ ] `git diff --check` passes.
-- [ ] Exact scope check shows no `cmd/**`, `internal/**`, `go.mod`, `go.sum`, `website/**`,
+- [x] Skill quick validation passes: `Skill is valid!`.
+- [x] JSON/YAML/Markdown syntax checks pass as applicable: PyYAML skill frontmatter and
+  `python3 -m json.tool` for `RUN-STATE.json`.
+- [x] `scripts/gsd doctor` passes at final verification (`ok commands 69`).
+- [x] `git diff --check` passes.
+- [x] Exact scope check shows no `cmd/**`, `internal/**`, `go.mod`, `go.sum`, `website/**`,
   `docs/cli/**`, or nondelegated parent phase artifact changes.
-- [ ] `make docs-check` run if safe/feasible; if not, blocker recorded.
+- [x] `make docs-check` ran: `go build ./cmd/pm`; `Validated connector docs in docs/connectors`.
 
 ### Review route status
 

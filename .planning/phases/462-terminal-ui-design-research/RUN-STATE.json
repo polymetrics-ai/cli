@@ -7,14 +7,14 @@
   "startCommit": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
   "originalPr": 465,
   "originalPrHead": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
-  "state": "provisionally_integrated_review_blocked_correction_in_progress",
+  "state": "correction_verified_pr_pending",
   "classification": "docs_planning_skill_only",
   "research": "complete",
   "localReferenceLab": "complete",
   "productionGoChanges": false,
   "dependencyChanges": false,
-  "verificationPassed": false,
-  "verificationStatusReason": "accepted correction in progress; final docs verification pending",
+  "verificationPassed": true,
+  "verificationStatusReason": "docs-only declared phase equivalent make docs-check passed; full make verify not run by scope",
   "review": {
     "claude": "disabled_manually",
     "copilot": "quota_exhausted",
@@ -35,12 +35,34 @@
       "cycle": "programming-loop",
       "decision": "local_critical_path",
       "reason": "scripts/gsd programming-loop command absent; manual universal-loop fallback recorded"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "docs-only verification completed inline; no subagent tool available to this worker"
     }
   ],
   "next": [
-    "commit_push_planning_checkpoint",
-    "apply_delegated_doc_corrections",
-    "run_docs_verification",
+    "commit_push_terminal_evidence",
     "open_correction_pr_to_parent"
-  ]
+  ],
+  "verification": {
+    "declaredPhaseEquivalent": "make docs-check",
+    "result": "pass",
+    "fullMakeVerify": "not_run_docs_only_scope",
+    "checks": [
+      "docs_contract_grep_pass",
+      "dependency_roster_check_pass",
+      "query_export_token_status_marker_check_pass",
+      "skill_validation_pass",
+      "json_syntax_pass",
+      "scope_check_pass",
+      "git_diff_check_pass",
+      "gsd_doctor_pass_69_commands"
+    ],
+    "docsCheckOutput": [
+      "go build ./cmd/pm",
+      "Validated connector docs in docs/connectors"
+    ]
+  }
 }

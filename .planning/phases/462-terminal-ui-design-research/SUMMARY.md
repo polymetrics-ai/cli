@@ -16,8 +16,8 @@ layout classes, accessibility and test matrices, and GSD/Pi routing. NTCharts v2
 in isolation but remains unapproved for `go.mod`; a dedicated issue and human gate are required.
 
 No production Go, CLI behavior, dependency, generated help, website, connector definition, or
-credential data changes are part of this phase. Review correction work is reopening the docs-only
-ledger to resolve accepted findings before the parent orchestrator finalizes the design gate.
+credential data changes are part of this phase. Review correction work reopened the docs-only
+ledger and resolved accepted findings before the parent orchestrator finalizes the design gate.
 
 Pre-delivery verification passes: GSD doctor/provenance, skill validation, `git diff --check`,
 exact no-production/dependency scope, and `make docs-check`. Live markers are present on all seven
@@ -50,3 +50,8 @@ Accepted findings to fix across delegated docs:
 5. Query export must document a typed read-only, path-confined, no-overwrite-by-default contract
    with explicit TTY confirmation/noninteractive `--force`, sanitized command echo, and exact
    `--no-input` guidance.
+
+Correction verification passes: docs-contract contradiction grep, direct #462/D-TUI roster checks,
+approval-token/query-export/status marker checks, skill validation (`Skill is valid!`), JSON syntax,
+exact scope diff, `git diff --check`, `scripts/gsd doctor`, and `make docs-check`. Full `make verify`
+was not run because this issue is docs-only and the task requested `make docs-check` when feasible.
