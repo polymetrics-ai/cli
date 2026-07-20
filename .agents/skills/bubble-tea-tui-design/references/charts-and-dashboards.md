@@ -30,9 +30,10 @@ summary instead.
 - Preserve the data table as a sibling pane/toggle. `v` switches chart/table; export works
   from the underlying rows, not from screen glyphs. Export is a typed read-only path only: default
   to project-scoped output, resolve/clean/confine the path, reject control characters, traversal,
-  broad roots, symlink targets/final-component races, and overwrites by default, require TTY
-  confirmation or noninteractive `--output <project-relative-path> --force`, echo only sanitized
-  commands, and fail `--no-input` without a preapproved path with exact flag guidance.
+  broad roots, symlink targets/final-component races, and overwrites by default, require
+  confirmation only when both stdin and stdout are TTYs or noninteractive
+  `--output <project-relative-path> --force`, echo only sanitized commands, and fail `--no-input`
+  or non-TTY stdin without a preapproved path with exact flag guidance.
 - A `--plain` or non-TTY path prints the numeric summary/table. JSON emits data or a stable
   chart-spec object only when that schema is explicitly designed and documented.
 - Screen-reader/accessibility mode renders the text summary plus ordered values/buckets,

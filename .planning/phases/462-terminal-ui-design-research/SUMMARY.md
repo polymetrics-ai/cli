@@ -51,8 +51,8 @@ Accepted findings to fix across delegated docs:
    human; correction PR #467 started open at `e8286ea83a76ac2c6f6257c6e2d40fd21af81640` with CI
    green and human/parent review pending.
 5. Query export must document a typed read-only, path-confined, no-overwrite-by-default contract
-   with explicit TTY confirmation/noninteractive `--force`, sanitized command echo, and exact
-   `--no-input` guidance.
+   with confirmation only when stdin/stdout are TTYs, noninteractive `--force`, sanitized command
+   echo, and exact `--no-input` guidance.
 
 Correction verification passes: docs-contract contradiction grep, direct #462/D-TUI roster checks,
 approval-token/query-export/status marker checks, skill validation (`Skill is valid!`), JSON syntax,
@@ -65,8 +65,8 @@ This bounded docs correction aligns the normative TUI gate after review found st
 ambiguous TTY wording. Bubble Tea/Huh/prompt activation must require **both stdin and stdout TTYs**
 plus the existing disables (`--json`, `--plain`, `--no-input`, `PM_NO_TUI`, `CI`, `TERM=dumb`).
 With piped or non-TTY stdin, Polymetrics must fall back to deterministic plain/noninteractive
-behavior, never consume scripted stdin unexpectedly, never hang, and never bypass by opening
-`/dev/tty`.
+behavior, never consume scripted stdin unexpectedly, never hang, and never open `/dev/tty` to bypass
+the gate.
 
 Future production TUI issues must record RED tests for `stdin-piped+stdout-TTY`, `stdout-piped`,
 `CI`, `--json`, `--plain`, and `--no-input`. The explicit `pm query grid`, `pm reverse guide`,

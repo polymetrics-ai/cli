@@ -43,7 +43,7 @@ Workers must not edit these shared artifacts unless the orchestrator explicitly 
 | P04 | `refactor(config): migrate scattered environment reads` | A | P03 | runtimecheck, worker/schedule/RLM config call sites |
 | P05 | `feat(events): add progress event bus and instrumentation` | B | P04 | `internal/events/**` and named instrumentation points |
 | P06 | `feat(obs): add redacted per-run slog foundation` | C | P04 | logging/redaction packages and Temporal logger bridge |
-| P07 | `feat(ui): add TTY gate and NDJSON progress` | B | P05 | CLI run options, global flags, `internal/ui/styles/**` |
+| P07 | `feat(ui): add stdin+stdout TTY gate and NDJSON progress` | B | P05 | CLI run options, global flags, `internal/ui/styles/**` |
 | P08 | `refactor(cli): nativize catalog namespace` | A | P04 | catalog command node/tests/docs only |
 | P09 | `epic(cli): nativize remaining namespaces` | A | P08 | orchestration-only umbrella; implementation in grandchildren |
 | D-TUI | `docs(ui): codify Bubble Tea terminal design research and interaction system` (#462) | B design gate | P07 | design docs, repo-local TUI skill, GSD/UI issue prompts; no production Go |
@@ -120,6 +120,9 @@ change records red evidence before production edits.
   `go build ./cmd/pm`, and `make verify`.
 - CLI parity covers runtime help, bare namespace exit-0 behavior, `docs/cli/**`, `website/**`,
   generated manuals/help fixtures, completion metadata, and tests.
+- TUI/Huh prompt activation requires both stdin and stdout TTYs; future RED tests must cover
+  `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input` fallback
+  without scripted-stdin consumption, hangs, or `/dev/tty` bypass.
 - Sub-PRs target `feat/cli-architecture-v2` and use `Refs #<sub-issue>` plus `Refs #<parent>`.
 - Dependency additions are allowed only in the phases and version lines approved by ADRs 0002–0004;
   any deviation is a fresh human gate.

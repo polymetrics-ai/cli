@@ -73,13 +73,16 @@ Execute accepted review findings on correction PR #467 for issue #462 under pare
 `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`. No production Go edits and no merge. Reopen the #462
 phase artifacts first, then minimally update delegated docs/skill/prompt sources so every TUI/Huh
 prompt activation requires both stdin and stdout TTYs; piped/non-TTY stdin falls back to deterministic
-plain/noninteractive behavior without consuming scripted stdin, hanging, or bypassing through
-`/dev/tty`; future TUI workers record RED tests for `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`,
+plain/noninteractive behavior without consuming scripted stdin, without hanging, and without using `/dev/tty`;
+future TUI workers record RED tests for `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`,
 `--json`, `--plain`, and `--no-input`. Update RUN-STATE/SUMMARY to record PR #467 open at the
 starting head with CI green and human/parent review pending, then validate grep, JSON, skill, scope,
 GSD, and docs gates. Do not retry Claude/Copilot.
 ```
 
-Downstream artifact: pending local finding disposition, human review, and parent integration gates;
-Git/GitHub remain the current source of truth for branch/PR head after this starting snapshot.
-Verification result: pending for this correction slice.
+Downstream artifact: local finding disposition recorded on branch `docs/462-terminal-ui-design-review-fixes`;
+human review and parent integration gates remain. Git/GitHub remain the current source of truth for
+branch/PR head after this starting snapshot.
+Verification result: docs-contract contradiction grep, direct dependency/token/export marker check,
+skill validation, JSON syntax, exact scope check, `git diff --check`, `scripts/gsd doctor`, and
+`make docs-check` pass for this correction slice.

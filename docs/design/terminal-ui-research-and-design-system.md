@@ -230,13 +230,13 @@ help/subcommand summary with exit 0. Dedicated child issue #463 may then add:
 - export defaults to a project-scoped directory such as `.polymetrics/query-exports/`, resolves
   and cleans the requested path, confines it to the project, rejects control characters,
   traversal, absolute or broad paths, symlink targets/final-component races, and overwrites by
-  default, then requires TTY confirmation or noninteractive `--output <project-relative-path>` plus
-  `--force`;
+  default, then requires confirmation only when stdin and stdout are TTYs or noninteractive
+  `--output <project-relative-path>` plus `--force`;
 - `--no-input` without a preapproved export path fails with
   `query grid export requires explicit output — pass --output <project-relative-path> and --force, or run without --no-input to confirm interactively`;
 - scripted command echoes are sanitized and project-relative;
-- non-TTY/`--plain` prints table + numeric summary; any JSON chart-spec requires a separately
-  documented stable schema.
+- non-TTY stdin, non-TTY stdout, or `--plain` prints table + numeric summary; any JSON
+  chart-spec requires a separately documented stable schema.
 
 Rendering is bounded. Cap points, apply deterministic bucketing/downsampling, and disclose it
 (`2,000 rows · 120 plotted · min/max buckets`). Report ignored missing/non-numeric values.
@@ -294,6 +294,10 @@ compatibility evidence, not dependency approval.
   fixtures.
 - Inline mode is the default for run commands; alt screen is reserved for browsers/grids/
   pagers where entering/leaving a place is expected.
+- The command layer enters Bubble Tea/Huh only when stdin and stdout are TTYs. Piped or non-TTY
+  stdin always takes the deterministic plain/noninteractive path; models/prompts must not consume
+  scripted stdin unexpectedly, must not hang waiting for a user, and must not open `/dev/tty` to
+  bypass the gate.
 - Mouse, OSC52, Kitty graphics, and progressive keyboard protocols are optional accelerators.
   Every operation remains possible with basic keyboard input and glyph/text rendering.
 
@@ -308,7 +312,9 @@ Before production edits, the GSD plan must define RED tests for:
 - no-color, ASCII, reduced-motion, and accessible/plain transcripts;
 - control-character sanitation and secret redaction;
 - bounded chart/query data and truthful units/downsampling labels;
-- `CI=1`, `PM_NO_TUI=1`, `--plain`, `--json`, and piped fallback;
+- TUI/prompt gate matrix: stdin+stdout TTY green path, `stdin-piped+stdout-TTY` fallback,
+  `stdout-piped` fallback, `CI=1`, `PM_NO_TUI=1`, `TERM=dumb`, `--json`, `--plain`, and
+  `--no-input`;
 - unchanged exit code/stdout/stderr/one-envelope contracts;
 - cancellation and goroutine cleanup under `-race`.
 

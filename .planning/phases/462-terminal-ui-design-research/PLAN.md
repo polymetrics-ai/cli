@@ -122,9 +122,9 @@ was exhausted. New accepted-correction PR will target the parent branch; do not 
      disabled, Copilot quota exhausted, human fallback, and correction PR #467 starting
      head/status captured explicitly;
    - add the read-only query export path contract: clean/confined project-scoped paths, reject
-     control characters/traversal/broad paths/symlink races, no overwrite by default, TTY
-     confirmation, noninteractive `--force`, sanitized command echo, exact `--no-input` guidance,
-     and no generic file-write/SQL-write boundary change.
+     control characters/traversal/broad paths/symlink races, no overwrite by default,
+     confirmation only when stdin/stdout are TTYs, noninteractive `--force`, sanitized command
+     echo, exact `--no-input` guidance, and no generic file-write/SQL-write boundary change.
 4. **Terminal evidence checkpoint** — run docs-contract greps, link/marker checks,
    `scripts/gsd doctor`, `git diff --check`, exact no-forbidden-scope diff, skill quick validation,
    Markdown/YAML/JSON checks, and `make docs-check` if feasible. Commit/push the evidence.

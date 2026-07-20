@@ -13,7 +13,7 @@ original_pr_head: 6853fee28e0208381b49931fb1f5dfec42ee50ef
 correction_pr: 467
 correction_pr_state_at_start: open
 correction_pr_ci_at_start: green
-state: correction_467_tty_gate_state_fix_in_progress
+state: correction_467_local_finding_disposition_complete
 classification: docs_planning_skill_only
 research: complete
 local_reference_lab: complete
@@ -33,17 +33,21 @@ review:
     source_of_truth: Git/GitHub current state after the starting snapshot; no invented final-head claim
 verification:
   declared_phase_equivalent: make docs-check
-  result: pending
+  result: pass
   full_make_verify: not_run_docs_only_scope
   notes:
     - docs_contract_red_captured
     - phase_artifacts_reopened
-    - docs_contract_green_pending
-    - dependency_roster_check_pending
-    - skill_validation_pending
-    - scope_check_pending
-    - git_diff_check_pending
+    - docs_contract_green_pass
+    - future_tty_red_matrix_recorded
+    - dependency_roster_check_unchanged
+    - query_export_token_status_marker_check_pass
+    - skill_validation_pass
+    - json_syntax_pass
+    - scope_check_pass
+    - git_diff_check_pass
     - gsd_doctor_pass_69_commands
+    - docs_check_pass
 human_gate:
   ntcharts_v2: required_before_go_mod
   github_blocked_by_metadata: parent_orchestrator_follow_up
@@ -63,10 +67,14 @@ orchestration_decisions:
     reason: accepted review findings require bounded docs correction in the assigned isolated branch/cwd
   - cycle: correction-467-red
     decision: local_critical_path
-    reason: docs-contract grep captured stdout-only/ambiguous TTY gate contradictions before delegated docs edits
+    reason: docs-contract grep captured stdin/stdout TTY gate contradictions before delegated docs edits
+  - cycle: correction-467-green
+    decision: local_critical_path
+    reason: delegated docs/skill/prompt sources aligned locally; no subagent tool available to this worker
+  - cycle: correction-467-verify
+    decision: local_critical_path
+    reason: docs-only verification completed inline with declared make docs-check equivalent
 next:
-  - apply_local_finding_disposition
-  - run_docs_contract_green_checks
   - human_review_gate
   - parent_integration_gate
 ```
