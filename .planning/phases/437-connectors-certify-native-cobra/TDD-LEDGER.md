@@ -198,9 +198,26 @@ Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-tes
 | R7-2 | RED value-required no-effect | Bare `--from-env`, `--config`, `--stream`, `--credentials-file`, `--parallel`, and `--older-than` reject as usage exit 2 before logger/telemetry/credential/runner/workspace/sweep effects in applicable modes | Complete: failed before production |
 | R7-3 | GREEN | Minimal resume-evidence and certify prevalidation/native validation fixes pass focused tests without weakening existing invalid-report or flag behavior | Complete: GREEN `2ce0e10a` pushed |
 | R7-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Complete: all listed gates pass |
-| R7-5 | Delivery | Coherent commits pushed, PR #466 body updated with final seventh head/gates, no bot review, clean/remote-matched branch | In progress: terminal artifact commit and PR body update follow |
+| R7-5 | Delivery | Coherent commits pushed, PR #466 body updated with final seventh head/gates, no bot review, clean/remote-matched branch | Complete: terminal artifact `0d515e6e` pushed and PR #466 body records exact head `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8` |
 
 Strict TDD gate: R7-1/R7-2 failing evidence was captured and committed (`e0fb8c4b`) before production edits. Tests use only deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.
+
+## Eighth bounded correction ledger
+
+Identity `issue-437-eighth-bounded-correction-20260720`; exact start `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; accepted findings: future-dated completed reports trusted by resume, whitespace space-form value-required certify flags reaching effects, and artifact/PR delivery status honesty. Recovery exception applies because unresolved future-evidence and effect-before-usage risks require a bounded correction. Programming-loop remains unavailable; manual universal loop fallback applies. Execution decision: `local_critical_path`; parent records the worker invocation as spawned.
+
+Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-code-style`, and `golang-naming`. `.pi/skills/go-implementation/SKILL.md` is absent; global cc-skills files are the actual implementation evidence.
+
+| Step | Kind | Required evidence | Status |
+|---:|---|---|---|
+| R8-0 | Planning | Reopen all six artifacts with exact start/head/PR, eighth recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, finalized seventh statuses, no self-reference policy, and `local_critical_path`; commit/push before RED or production | In progress |
+| R8-1 | RED future reports | Ordinary completed report and cleanup-failure/absence-proof report with materially future timestamps are not resumed; current code should fail by resuming | Pending |
+| R8-2 | RED whitespace values | Empty/whitespace space-form `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than` reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects | Pending |
+| R8-3 | GREEN | Minimal future-timestamp skew validation and `TrimSpace(next)==""` required-value validation pass focused tests without weakening historical resume or valid value forms | Pending |
+| R8-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Pending |
+| R8-5 | Delivery | Coherent commits pushed, PR #466 body updated with final eighth head/gates, no bot review, clean/remote-matched branch; terminal artifact explains why it cannot contain its own SHA | Pending |
+
+Strict TDD gate: R8-1/R8-2 failing evidence must be captured and committed before production edits. Tests use deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.
 
 ### Seventh-cycle RED evidence captured
 

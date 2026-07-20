@@ -184,4 +184,28 @@ Recovery-budget exception: unresolved effect-before-usage and resume-replay find
 
 Downstream artifact: complete. Planning `82f59229`, RED `e0fb8c4b`, and GREEN `2ce0e10a` are pushed; terminal evidence artifact follows. Resume validation accepts only the exact cleanup-failure absence-proof shape, and certify syntax prevalidation rejects bare value-required flags before effects while preserving assigned/space values and boolean bare controls.
 
-Verification result: pass. RED failed as intended (`certify` 0.698s; `cli` 5.853s). GREEN/final gates pass: focused `0.599s`/`0.566s`; repeated/race `0.660s`/`0.575s` and `1.704s`/`1.729s`; full affected packages `353.654s`/`448.666s`; runtime bare `--stream` exits 2 with no `.polymetrics`; help byte parity `8391` bytes; docs/golden `11.210s`; website drift-free; sample smoke exit 0/pass/stderr 0; `gofmt`, diff, vet, full tests, build, final `make verify` (CLI `442.999s`, certify `348.395s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0 pass.
+Verification result: pass. RED failed as intended (`certify` 0.698s; `cli` 5.853s). GREEN/final gates pass: focused `0.599s`/`0.566s`; repeated/race `0.660s`/`0.575s` and `1.704s`/`1.729s`; full affected packages `353.654s`/`448.666s`; runtime bare `--stream` exits 2 with no `.polymetrics`; help byte parity `8391` bytes; docs/golden `11.210s`; website drift-free; sample smoke exit 0/pass/stderr 0; `gofmt`, diff, vet, full tests, build, final `make verify` (CLI `442.999s`, certify `348.395s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0 pass. Terminal evidence `0d515e6e` and PR #466 body update completed seventh delivery.
+
+## Eighth bounded correction kickoff snapshot
+
+Identity: `issue-437-eighth-bounded-correction-20260720`; exact start `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; PR #466 on `refactor/437-connectors-certify-native-cobra`; parent #397 / umbrella #407. Task: correct accepted exact-head findings for future-dated report evidence and whitespace value-required certify flags; finalize delivery artifacts/PR body truthfully without impossible commit self-reference.
+
+Commands refreshed before production edits:
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt plan-phase 437 --skip-research
+scripts/gsd prompt programming-loop init --phase 437 --dry-run
+```
+
+Doctor passed; plan prompt generated; programming-loop returned `scripts/gsd: unknown GSD command: programming-loop`, so the manual universal runtime loop is the recorded fallback.
+
+Execution decision: `local_critical_path` — worker owns one isolated issue branch/cwd, no subagent tool exposed, correction is the local critical path. Parent coordinator records this invocation as spawned.
+
+Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-code-style`, `golang-naming`; `.pi/skills/go-implementation/SKILL.md` absent, global cc-skills paths are actual Go evidence.
+
+Recovery-budget exception: unresolved future-evidence and whitespace effect-before-usage findings require this extra bounded correction rather than stopping on prior cycle count.
+
+Downstream artifact: pending. Planning checkpoint must be committed/pushed before RED; RED tests must fail before production; GREEN and terminal evidence follow.
+
+Verification result: pending for eighth cycle. Seventh cycle remains verified at terminal artifact commit `0d515e6e`.

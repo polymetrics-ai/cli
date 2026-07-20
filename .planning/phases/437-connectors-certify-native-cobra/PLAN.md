@@ -1,5 +1,7 @@
 # Phase 437 Plan — connectors and certify native Cobra
 
+Current status: eighth bounded correction reopened at exact clean local/remote/PR head `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; verification is false until fresh RED/GREEN and full gates pass. Seventh delivery is complete at terminal artifact commit `0d515e6e`, and PR #466 body records that head. Terminal artifact commits cannot contain their own resulting SHA because the SHA is computed after the file content is committed; artifact files therefore record the reviewed/implementation head and explain where the terminal evidence commit is discoverable (`git log`/PR head) instead of self-referencing.
+
 Issue: #437
 Umbrella: #407
 Parent: #397 / draft parent PR #438
@@ -276,8 +278,36 @@ Safety remains: no secrets, credentialed/live checks, live services, destructive
 
 ### Seventh-cycle completion
 
-Planning `82f59229`, RED `e0fb8c4b`, and GREEN `2ce0e10a` were committed and pushed. The resume fix now accepts only the exact completed cleanup-failure absence-proof shape: failed `write_cleanup`, later passed `cleanup_verify`, valid tag/run provenance, one failed/non-leaked write action with reason `write_cleanup failed, but cleanup_verify proved the entity absent`, and no leak/action contradictions. Unproven cleanup failures, failed cleanup verification, malformed identity/timestamp/schema, and leak/action mismatches still rerun.
+Planning `82f59229`, RED `e0fb8c4b`, GREEN `2ce0e10a`, and terminal evidence `0d515e6e` were committed and pushed. PR #466 body was updated to latest exact head `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`. The resume fix now accepts only the exact completed cleanup-failure absence-proof shape: failed `write_cleanup`, later passed `cleanup_verify`, valid tag/run provenance, one failed/non-leaked write action with reason `write_cleanup failed, but cleanup_verify proved the entity absent`, and no leak/action contradictions. Unproven cleanup failures, failed cleanup verification, malformed identity/timestamp/schema, and leak/action mismatches still rerun.
 
 The CLI fix validates raw certify value-required syntax before config/logger/telemetry and repeats syntax validation in direct command execution. `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than` require non-empty values; valid `--flag=value` and `--flag value` forms remain valid; boolean controls (`keep-workdir`, `write`, `full`, `all`, `resume`, `sweep`) retain bare semantics; `skip` remains value-checked; unsupported controls remain hidden/fail-closed. Bare value-required controls now exit 2 before telemetry/log files, credential-file reads, runner calls, sweep workspace, or project effects.
 
 Verification passed: focused RED/GREEN, repeated, race, full `internal/connectors/certify` (`353.654s`) and `internal/cli` (`448.666s`), runtime no-effect and help byte parity (`8391` bytes), docs/golden/website drift, fixture-only sample smoke, `gofmt -w cmd internal`, `git diff --check`, `go vet ./...`, `go test ./...` (CLI `444.782s`, certify `349.644s`), `go build ./cmd/pm`, final `make verify` (CLI `442.999s`, certify `348.395s`, smoke/lint/docs/connectorgen green), and explicit connectorgen validation 547/0. No credentials, live services, external writes/sweeps, dependencies, connector defs, bot review, parent/main merge, or quality-gate reduction occurred.
+
+## Eighth bounded correction — exact HEAD `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`
+
+Identity: `issue-437-eighth-bounded-correction-20260720`; branch `refactor/437-connectors-certify-native-cobra`; PR #466; parent #397; umbrella #407; base `feat/cli-architecture-v2`. Clean local head, remote branch head, and PR #466 head were confirmed equal to `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8` before edits. No merges, bot reviews, parent mutation, or main mutation are authorized.
+
+GSD route refreshed before production edits: `scripts/gsd doctor` passed; `scripts/gsd prompt plan-phase 437 --skip-research` generated the official prompt; `scripts/gsd prompt programming-loop init --phase 437 --dry-run` remains unavailable (`scripts/gsd: unknown GSD command: programming-loop`), so the manual `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` fallback applies. Execution decision: `local_critical_path` because this worker owns one isolated #437 branch/cwd, no subagent tool is exposed, and the parent coordinator records this worker as spawned.
+
+Loaded skills for this cycle: `.pi/skills/gsd-core/SKILL.md`; `.agents/skills/caveman/SKILL.md`; global `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-documentation`, `golang-spf13-cobra`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-code-style`, and `golang-naming`. `.pi/skills/go-implementation/SKILL.md` is absent in this checkout; global cc-skills files remain the Go implementation evidence per `required-skills-routing.md`.
+
+### Eighth safety/correctness recovery exception
+
+An eighth bounded correction is explicitly authorized because accepted Medium findings can cause future-forged resume artifacts to suppress runner execution, and whitespace-only value-required flags can reach telemetry, credential-file reads, runner, workspace, or sweep effects. Stopping on recovery budget would knowingly leave correctness and safety risk. Scope is restricted to the two behavior findings plus truthful delivery/PR-body artifact status, strict RED-before-production, and the active PR branch only.
+
+### Accepted findings and planned dispositions
+
+1. **Medium — future-dated completed reports are trusted.** Root cause: `completedReport` rejects zero or `CompletedAt < StartedAt` timestamps but does not reject materially future `StartedAt`/`CompletedAt`. Add deterministic RED for both ordinary completed reports and cleanup-failure/absence-proof reports with timestamps far beyond a documented clock-skew tolerance. Fix by rejecting report timestamps later than `time.Now().UTC()+smallSkew`, while preserving valid historical reports and `CompletedAt >= StartedAt`. Runner must rerun when evidence is future-invalid.
+2. **Medium — space-form empty/whitespace value-required flags pass prevalidation.** Root cause: `validateCertifyRequiredValueArgs` handles assigned empty values but not `strings.TrimSpace(next)==""` for space-form values. Add no-effect RED across applicable single/batch/sweep modes for `--from-env`, `--config`, `--stream`, `--credentials-file`, `--parallel`, and `--older-than` with empty or whitespace next tokens. Fix before config/logger/telemetry, credential-file reads, runner, workspace, or sweep effects; preserve valid assigned/space values and usage exit 2 for missing/blank values.
+3. **Low — artifact/PR status honesty.** Finalize seventh status truthfully and make eighth terminal fields distinguish `reviewedCodeHead`/`endingImplementationHead` from terminal evidence commit. Do not attempt impossible commit self-reference; the terminal artifact cannot include its own resulting SHA because Git computes the SHA after content is committed.
+
+### Eighth RED → GREEN plan
+
+1. Commit/push this planning checkpoint before RED tests or production edits.
+2. RED checkpoint: add focused tests only. Certify package: seed ordinary completed and cleanup-failure/absence-proof reports with future timestamps beyond the skew tolerance and prove `--resume` reruns. CLI package: use fake runtime and full `Run`/`PM_TELEMETRY=file` temp roots to prove empty/whitespace space-form value-required flags reject as usage exit 2 with no telemetry/log/project/credential/runner/sweep effects. Commit/push failing tests before production edits.
+3. GREEN: minimally update `internal/connectors/certify/batch.go` resume timestamp validation and `internal/cli/certify_cli.go` required-value prevalidation. No canonical docs text expected unless runtime help/error contract changes.
+4. Refactor/verify: focused RED/GREEN, repeated and race relevant cases, full `internal/connectors/certify` and `internal/cli`, runtime no-effect/exit/help, fixture-only sample smoke, docs/golden/website drift if applicable, `gofmt -w cmd internal`, `git diff --check`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs`.
+5. Commit/push GREEN/refactor and terminal evidence checkpoints. Update PR #466 body with eighth-cycle evidence and final exact PR head. Do not request Claude/Copilot; human/parent review remains pending. Do not merge.
+
+Safety remains: no secrets, credentialed/live checks, live services, destructive cleanup, external writes/sweeps, new dependencies, connector defs, generic write tools, reverse ETL outside existing ordered local fixture smoke, parent/main merge, or bot review request.

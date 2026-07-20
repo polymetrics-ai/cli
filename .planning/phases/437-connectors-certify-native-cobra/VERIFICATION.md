@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: true — seventh bounded correction full local gates passed; terminal artifact commit and PR body update are delivery steps, not verification failures.
+`verificationPassed`: false — eighth bounded correction reopened at exact head `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; fresh RED, GREEN, and full local gates are pending. Seventh correction remains verified at terminal artifact commit `0d515e6e` and PR #466 body records that head.
 
 ## TDD / behavior
 
@@ -264,5 +264,31 @@ Exact start: `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; identity `issue-437-sev
 - [x] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke passes without credentials/live services/external writes: exit 0, `ConnectorCertification`, sample, passed true, stderr bytes 0.
 - [x] Docs/golden/website parity checked: focused CLI docs/golden `11.210s`; `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages; no tracked drift.
 - [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` (CLI `444.782s`, certify `349.644s`); `go build ./cmd/pm`; final `make verify` (CLI `442.999s`, certify `348.395s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen green); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => 547/0 all pass.
-- [ ] PR #466 body update follows after terminal artifact commit so the final exact head is known.
+- [x] PR #466 body update completed after terminal artifact commit; final seventh exact head is `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`.
+- [x] No credentials, live certification, services, external writes/sweeps, dependencies, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
+
+## Eighth bounded exact-head correction checklist
+
+Exact start: `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; identity `issue-437-eighth-bounded-correction-20260720`.
+
+`verificationPassed`: false — reopened before production edits; complete gates pending.
+
+- [x] Confirm clean branch, local head, remote head, and PR #466 head all equal `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8` before edits.
+- [x] Reread required issue, contracts, GSD/manual loop, skill routing, CLI parity, ADR/design/migration context, and all phase artifacts.
+- [x] Run `scripts/gsd doctor`; capture missing `programming-loop`; generate/read `scripts/gsd prompt plan-phase 437 --skip-research`; record manual fallback.
+- [x] Record execution decision `local_critical_path` and parent-spawn note.
+- [x] Record eighth recovery exception for future-evidence and whitespace effect-before-usage findings.
+- [ ] Planning checkpoint committed and pushed before RED tests or production edits.
+- [ ] RED: future-dated ordinary completed report reruns instead of resuming.
+- [ ] RED: future-dated cleanup-failure absence-proof report reruns instead of resuming.
+- [ ] RED: empty/whitespace space-form value-required flags reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects.
+- [ ] GREEN: report timestamps materially beyond documented skew tolerance are future-invalid, while historical reports and `CompletedAt >= StartedAt` remain valid.
+- [ ] GREEN: `strings.TrimSpace(next)==""` is value-missing for all value-required certify flags; valid assigned/space values still pass and boolean bare flags remain valid.
+- [ ] Focused repeated and race variants pass.
+- [ ] Full `go test ./internal/connectors/certify -count=1` and `go test ./internal/cli -count=1` pass.
+- [ ] Runtime help/no-effect/exit checks pass: `./pm help connectors`, bare `./pm connectors`, `./pm connectors --help`, and blank-value no-effect checks.
+- [ ] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke passes without credentials/live services/external writes.
+- [ ] Docs/golden/website parity checked or explicitly not applicable.
+- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; final `make verify`; explicit `go run ./cmd/connectorgen validate internal/connectors/defs` all pass.
+- [ ] PR #466 body update follows after terminal artifact commit so the final exact PR head is known.
 - [x] No credentials, live certification, services, external writes/sweeps, dependencies, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
