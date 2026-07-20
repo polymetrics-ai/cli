@@ -26,6 +26,6 @@
 - [x] contract marker/contradiction checks
 - [x] exact no-production/dependency scope check
 - [x] `make docs-check` (Go build and connector docs validation)
-- [ ] commit and push to PR #468
+- [x] committed and pushed to PR #468; GitHub CI and human review remain external gates
 
 Human review and merge remain intentionally pending.

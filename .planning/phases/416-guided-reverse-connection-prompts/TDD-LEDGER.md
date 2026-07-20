@@ -33,8 +33,12 @@ labels did not satisfy the requirement for exact consequential CTA copy.
 - [x] `scripts/gsd doctor` passes with 69 commands.
 - [x] `make docs-check` passes.
 - [x] no production Go, dependency, generated CLI help, website, or connector definition changed.
-- [ ] PR #468 is pushed and its GitHub body describes #469, the GSD UI verdict, verification, and
-      remaining human review gate.
+- [x] PR #468 branch is pushed; its GitHub body update describes #469, the GSD UI verdict, local
+      verification, and the remaining human review gate.
+
+The first staged whitespace check correctly found Markdown hard-break/trailing-blank formatting in
+`PLAN.md` and `RESEARCH.md`. A focused refactor commit removed it, and `git diff --check HEAD^`
+passed before the evidence closure.
 
 Production RED/GREEN evidence intentionally remains future work in #416 and #469; this PR changes
 only documentation, planning, worker instructions, and the reusable design skill.
