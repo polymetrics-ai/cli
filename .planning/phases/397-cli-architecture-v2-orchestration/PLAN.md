@@ -124,3 +124,12 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 - No new dependencies beyond an explicit accepted ADR/approval record; #419 still requires its issue-specific explicit inclusion decision.
 - No secrets, auth-scope changes, credentialed connector checks, production operations, destructive actions, quality-gate reductions, or generic write tools.
 - Reverse ETL execution remains plan -> preview -> approval -> execute and is not part of ordinary verification.
+
+## 2026-07-20 #437 integration and post-merge queue
+
+- Human fallback review coverage recorded for PR #466 exact head `26f98a72419010b961b5b8378ef4a695b0c0a06f`: https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557.
+- Pre-integration gate passed: head unchanged, required checks green, active review threads empty.
+- PR #466 merged only into `feat/cli-architecture-v2` at parent merge commit `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`; parent PR #438 remains draft and unmerged to `main`.
+- #437 is provisionally integrated. #407 umbrella dependency state is complete on the parent branch because #421-#437 are now integrated.
+- Rebuilt queue: #408 is the critical-path ready implementation issue; #413 is ready but deferred by write-scope collision with #408; #419 remains human-gated.
+- Phase 437 pending intake remains planning-only under `.planning/traces/phase-437-pending-intake/`; no pending request is authorized for implementation.

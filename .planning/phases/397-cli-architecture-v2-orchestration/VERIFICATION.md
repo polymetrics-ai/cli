@@ -41,8 +41,8 @@ Status: not yet run at final HEAD
 - [x] #437 local focused, repeated, race, full package, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certify, and connectorgen 547/0 gates passed.
 - [x] #437 remote CI timing failure reproduced as exact evidence and corrected with deterministic concurrency proof; all current GitHub checks pass.
 - [x] #437 local exact-path code re-review has no remaining actionable runtime finding.
-- [ ] #437 external automated or human/parent fallback review coverage.
-- [ ] #437 promotion into parent branch.
+- [x] #437 explicit human fallback review coverage recorded at PR #466 exact head `26f98a72419010b961b5b8378ef4a695b0c0a06f`: https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557.
+- [x] #437 promoted into parent branch at merge commit `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`.
 
 ## Live reconciliation — 2026-07-20T19:28:58Z
 
@@ -58,12 +58,23 @@ Status: not yet run at final HEAD
 - [ ] Full parent verification after the main-sync/state commit.
 - [ ] Parent PR #438 CI at the final pushed head.
 
+
+## #437 integration gate — 2026-07-20T20:06:35Z
+
+- [x] PR #466 head unchanged at `26f98a72419010b961b5b8378ef4a695b0c0a06f`.
+- [x] PR #466 check rollup green; `Website deploy` skipped as expected.
+- [x] GitHub reviews before fallback: none; active unresolved review threads: none.
+- [x] Human fallback review coverage recorded: https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557.
+- [x] Local merge into `feat/cli-architecture-v2` only: `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`.
+- [x] Post-merge light/focused gates: `git diff --check`; `go test ./internal/cli -run 'TestNativeConnectors|TestGoldenTranscripts' -count=1`; `go test ./internal/connectors/certify -run TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit -count=1`.
+- [ ] Parent PR #438 CI at the pushed integration head.
+
 ## Current live blockers
 
 - [x] #462 accepted design/safety findings corrected in isolated stacked PRs #467/#468 and integrated into parent.
 - [ ] #462 external review coverage recorded; local `pm-reviewer` is not substitute coverage.
-- [ ] #437 external automated or human review coverage recorded.
-- [ ] #408 TUI worker launch unblocked only after #437/PR #466 central CLI/help/golden/docs/website collision clears.
+- [x] #437 external/human review coverage recorded and PR #466 integrated.
+- [ ] #408 TUI worker launch/spawn from the post-#437 parent head.
 - [ ] #419 explicit optional dependency decision.
 
 ## Per-unit gate

@@ -3,9 +3,9 @@
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "waiting_for_review",
+  "status": "worker_ready",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "6a3087d8b7d8b81f13742d67005233f030c0a03c",
+  "currentHead": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -378,6 +378,44 @@
         419
       ],
       "reason": "#419 requires explicit optional beta dependency inclusion or a recorded skip decision before implementation."
+    },
+    {
+      "cycle": "pr466_preintegration_gate_20260720T200635Z",
+      "timestamp": "2026-07-20T20:06:35Z",
+      "decision": "local_critical_path",
+      "issues": [
+        437
+      ],
+      "reason": "Verified PR #466 head unchanged at 26f98a72, required checks green, and active review threads empty; recorded explicit human fallback review coverage."
+    },
+    {
+      "cycle": "unit_437_human_review_integration",
+      "timestamp": "2026-07-20T20:06:35Z",
+      "decision": "local_critical_path",
+      "issues": [
+        437,
+        407
+      ],
+      "reason": "Integrated PR #466 into feat/cli-architecture-v2 only via local no-ff merge commit 1008f75f after human fallback review; parent PR #438 remains draft/unmerged."
+    },
+    {
+      "cycle": "post_437_ready_queue_rebuild",
+      "timestamp": "2026-07-20T20:06:35Z",
+      "decision": "read_only_spawned",
+      "issues": [
+        408,
+        413
+      ],
+      "reason": "Project pm-scout and pm-reviewer sidecars mapped #408 and #413 write scopes after #437 integration; recommendation is spawn #408 and defer #413 for CLI/help/docs/golden collision."
+    },
+    {
+      "cycle": "post_437_queue_decision_408_413",
+      "timestamp": "2026-07-20T20:06:35Z",
+      "decision": "not_spawned_write_scope_collision",
+      "issues": [
+        413
+      ],
+      "reason": "#413 is dependency-ready but collides with #408 on command tree, completion/help/docs/golden/website surfaces; serialize after #408."
     }
   ],
   "units": [
@@ -575,63 +613,61 @@
       "startingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
       "pullRequestHead": "26f98a72419010b961b5b8378ef4a695b0c0a06f",
       "pullRequest": 466,
-      "status": "sub_pr_green",
+      "status": "provisionally_integrated",
       "worker": "pm-gsd-worker",
       "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-437-connectors-certify-native-cobra",
-      "verification": "local_full_make_verify_green_remote_ci_green",
+      "verification": "PR #466 head unchanged; required checks green; unresolved review threads empty; post-merge git diff --check, focused internal/cli native connectors/goldens, and certify concurrency test passed.",
       "automatedReview": {
-        "primaryRoute": "blocked",
-        "status": "pending",
+        "primaryRoute": "human",
+        "status": "clean",
         "headSha": "26f98a72419010b961b5b8378ef4a695b0c0a06f",
-        "reviewedRange": "local_sidecar_code_review_not_external_coverage",
+        "reviewedRange": "PR #466 exact head 26f98a72419010b961b5b8378ef4a695b0c0a06f",
+        "coverageRoute": "sub_pr",
+        "fallbackRoute": "none",
+        "dispositionSummary": "Human coordinator explicitly reviewed/tested and approved exact head for integration; no unresolved review findings.",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"
+      },
+      "parentIntegrationHead": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f"
+    },
+    {
+      "issue": 407,
+      "branch": "feat/cli-architecture-v2",
+      "status": "provisionally_integrated",
+      "parentIntegrationHead": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f",
+      "verification": "All Phase 9 namespace grandchildren #421-#437 are provisionally integrated; #437 merged via PR #466 at parent merge 1008f75f.",
+      "automatedReview": {
+        "primaryRoute": "human",
+        "status": "clean",
+        "headSha": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f",
+        "reviewedRange": "#421-#437 provisionally integrated range; #437 covered by human fallback at exact head",
         "coverageRoute": "parent_pr_fallback",
         "fallbackRoute": "human",
-        "dispositionSummary": "all local actionable findings corrected and CI green; no GitHub reviews recorded; human/enabled automation required before integration",
-        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/466"
+        "dispositionSummary": "Umbrella dependency state complete on parent branch; final parent/main review still pending.",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"
       }
     }
   ],
   "readyQueue": [
     {
-      "issue": 437,
-      "status": "sub_pr_green",
-      "dependencies": [
-        436
-      ],
-      "writeScope": "connectors/certify native Cobra migration and certify safety",
-      "decision": "not_spawned_review_blocked",
-      "reason": "PR #466 is open at 26f98a72 with all current checks green but no recorded human/Claude/Copilot review."
-    },
-    {
       "issue": 408,
-      "status": "worker_ready_deferred",
+      "status": "worker_ready",
       "dependencies": [
         405,
         462
       ],
-      "writeScope": "flow and ETL dashboards, TUI event bridge, tests, help/docs/website/goldens",
-      "decision": "not_spawned_write_scope_collision",
-      "reason": "#462 is integrated, but mutating #408 would collide with open #437/PR #466 central CLI/help/golden/docs/website files."
-    },
-    {
-      "issue": 407,
-      "status": "blocked",
-      "dependencies": [
-        437
-      ],
-      "writeScope": "Phase 9 umbrella ratification",
-      "decision": "not_spawned_dependency_blocked",
-      "reason": "Cannot ratify #407 until #437/PR #466 is reviewed and integrated."
+      "writeScope": "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity",
+      "decision": "worker_ready",
+      "reason": "#405/#462 satisfied and #437 collision cleared; critical-path candidate to spawn next."
     },
     {
       "issue": 413,
-      "status": "blocked",
+      "status": "worker_ready_deferred",
       "dependencies": [
         407
       ],
-      "writeScope": "connector-aware shell completion",
-      "decision": "not_spawned_dependency_blocked",
-      "reason": "Blocked by #407."
+      "writeScope": "connector-aware shell completion, command callbacks, docs/tests",
+      "decision": "not_spawned_write_scope_collision",
+      "reason": "Collides with #408 central command tree/help/docs/goldens/website surfaces."
     },
     {
       "issue": 409,
@@ -644,14 +680,45 @@
       "reason": "Blocked by #408."
     },
     {
+      "issue": 414,
+      "status": "blocked",
+      "dependencies": [
+        407,
+        408
+      ],
+      "writeScope": "certify and RLM dashboards",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "#407 satisfied; still blocked by #408."
+    },
+    {
+      "issue": 411,
+      "status": "blocked",
+      "dependencies": [
+        409
+      ],
+      "writeScope": "human-first query workspace, query grid, connector browser",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by #409."
+    },
+    {
+      "issue": 412,
+      "status": "blocked",
+      "dependencies": [
+        409
+      ],
+      "writeScope": "terminal docs viewer",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by #409."
+    },
+    {
       "issue": 416,
       "status": "blocked",
       "dependencies": [
         409
       ],
-      "writeScope": "human-first bare reverse workspace and reverse guide alias",
+      "writeScope": "human-first reverse workspace and reverse guide alias",
       "decision": "not_spawned_dependency_blocked",
-      "reason": "Blocked by #409; #462 design gate is integrated."
+      "reason": "Blocked by #409."
     },
     {
       "issue": 469,
@@ -661,7 +728,37 @@
       ],
       "writeScope": "TTY-progressive credential and connection setup",
       "decision": "not_spawned_dependency_blocked",
-      "reason": "Blocked by #409; #462 design gate is integrated."
+      "reason": "Blocked by #409."
+    },
+    {
+      "issue": 417,
+      "status": "blocked",
+      "dependencies": [
+        411,
+        412,
+        413,
+        414,
+        416,
+        469
+      ],
+      "writeScope": "help tree, generated man pages, website/docs/golden parity",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by downstream UI/completion issues."
+    },
+    {
+      "issue": 418,
+      "status": "blocked",
+      "dependencies": [
+        411,
+        412,
+        414,
+        416,
+        463,
+        469
+      ],
+      "writeScope": "accessibility audit and a11y topic",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by downstream UI/chart/setup issues."
     },
     {
       "issue": 419,
@@ -672,7 +769,19 @@
       ],
       "writeScope": "optional OTel log bridge",
       "decision": "not_spawned_human_gate",
-      "reason": "Explicit optional beta dependency inclusion or skip decision remains required."
+      "reason": "Explicit optional beta dependency inclusion or skip decision required."
+    },
+    {
+      "issue": 420,
+      "status": "blocked",
+      "dependencies": [
+        415,
+        417,
+        418
+      ],
+      "writeScope": "architecture cleanup and final verification",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Blocked by #417/#418 and #419 decision record."
     }
   ],
   "humanGates": [
@@ -686,7 +795,7 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T19:28:58Z",
+  "updatedAt": "2026-07-20T20:06:35Z",
   "mainSync": {
     "baseBeforeSync": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
     "originMain": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
@@ -703,5 +812,14 @@
     "pr466Reviews": "none",
     "pr438Reviews": "none",
     "reviewDecision": "blocked_human_or_enabled_automation_required"
+  },
+  "lastIntegration": {
+    "issue": 437,
+    "pr": 466,
+    "head": "26f98a72419010b961b5b8378ef4a695b0c0a06f",
+    "mergeCommit": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f",
+    "route": "local_merge_to_parent_after_human_fallback_review",
+    "verification": "PR head unchanged; check rollup green; unresolved review threads empty; focused local post-merge checks passed",
+    "humanReviewUrl": "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"
   }
 }

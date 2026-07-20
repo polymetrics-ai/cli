@@ -10,7 +10,7 @@ parent_pr:
   url: https://github.com/polymetrics-ai/cli/pull/438
   base: main
   head: feat/cli-architecture-v2
-  head_sha: 6a3087d8b7d8b81f13742d67005233f030c0a03c
+  head_sha: 1008f75ff8fe7d43a0a67a802ccf05ef296eae7f
   draft: true
   state: open
 default_branch: main
@@ -19,48 +19,54 @@ orchestrator:
   runtime: pi
   status: running
 ready_queue:
-  - number: 437
-    status: sub_pr_green
-    dependencies: [436]
-    write_scope: "connectors/certify native Cobra migration and certify safety"
-    decision: not_spawned_review_blocked
-    reason: "PR #466 is open at 26f98a72 with all current checks green but no recorded human/Claude/Copilot review."
   - number: 408
-    status: worker_ready_deferred
+    status: worker_ready
     dependencies: [405, 462]
-    write_scope: "flow and ETL dashboards, TUI event bridge, tests, help/docs/website/goldens"
-    decision: not_spawned_write_scope_collision
-    reason: "#462 is integrated, but mutating #408 would collide with open #437/PR #466 central CLI/help/golden/docs/website files."
-  - number: 407
-    status: blocked
-    dependencies: [437]
-    write_scope: "Phase 9 umbrella ratification"
-    decision: not_spawned_dependency_blocked
-    reason: "Cannot ratify #407 until #437/PR #466 is reviewed and integrated."
+    write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity"
+    decision: worker_ready
+    reason: "#405/#462 satisfied and #437 collision cleared; critical-path ready issue to spawn next."
   - number: 413
-    status: blocked
+    status: worker_ready_deferred
     dependencies: [407]
-    write_scope: "connector-aware shell completion"
-    decision: not_spawned_dependency_blocked
-    reason: "Blocked by #407."
+    write_scope: "connector-aware shell completion, command callbacks, docs/tests"
+    decision: not_spawned_write_scope_collision
+    reason: "Collides with #408 command tree/help/docs/golden/website surfaces; serialize after #408."
   - number: 409
     status: blocked
     dependencies: [408]
     write_scope: "flow and schedule creation wizards"
     decision: not_spawned_dependency_blocked
     reason: "Blocked by #408."
+  - number: 414
+    status: blocked
+    dependencies: [407, 408]
+    write_scope: "certify and RLM dashboards"
+    decision: not_spawned_dependency_blocked
+    reason: "#407 satisfied; still blocked by #408."
+  - number: 411
+    status: blocked
+    dependencies: [409]
+    write_scope: "human-first query workspace, query grid, connector browser"
+    decision: not_spawned_dependency_blocked
+    reason: "Blocked by #409."
+  - number: 412
+    status: blocked
+    dependencies: [409]
+    write_scope: "terminal docs viewer"
+    decision: not_spawned_dependency_blocked
+    reason: "Blocked by #409."
   - number: 416
     status: blocked
     dependencies: [409]
-    write_scope: "human-first bare reverse workspace and reverse guide alias"
+    write_scope: "human-first reverse workspace and reverse guide alias"
     decision: not_spawned_dependency_blocked
-    reason: "Blocked by #409; #462 design gate is integrated."
+    reason: "Blocked by #409."
   - number: 469
     status: blocked
     dependencies: [409]
     write_scope: "TTY-progressive credential and connection setup"
     decision: not_spawned_dependency_blocked
-    reason: "Blocked by #409; #462 design gate is integrated."
+    reason: "Blocked by #409."
   - number: 419
     status: blocked
     dependencies: [404, 410]
@@ -328,6 +334,22 @@ spawn_decisions:
     decision: not_spawned_human_gate
     issue_numbers: [419]
     reason: "#419 requires explicit optional beta dependency inclusion or a recorded skip decision before implementation."
+  - timestamp: 2026-07-20T20:06:35Z
+    decision: local_critical_path
+    issue_numbers: [437]
+    reason: "Verified PR #466 head unchanged at 26f98a72, check rollup green, active review threads empty, and recorded explicit human fallback review coverage."
+  - timestamp: 2026-07-20T20:06:35Z
+    decision: local_critical_path
+    issue_numbers: [437, 407]
+    reason: "Merged PR #466 only into feat/cli-architecture-v2 at parent commit 1008f75ff8fe7d43a0a67a802ccf05ef296eae7f; #437 provisionally integrated and #407 umbrella dependency state complete."
+  - timestamp: 2026-07-20T20:06:35Z
+    decision: read_only_spawned
+    issue_numbers: [408, 413]
+    reason: "Project pm-scout/pm-reviewer sidecars mapped post-#437 write scopes; recommendation is spawn #408 and defer #413 for collision."
+  - timestamp: 2026-07-20T20:06:35Z
+    decision: not_spawned_write_scope_collision
+    issue_numbers: [413]
+    reason: "#413 is dependency-ready but collides with #408 command tree/help/docs/golden/website surfaces."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -421,24 +443,24 @@ subissues:
     automated_review: {primary_route: human, status: blocked, head_sha: 0f676bdd8da295ddd1f8522627a3d25c90495ca9, reviewed_range: "e5ee4075..d3d04fff", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Read-only adversarial review clean; human parent coverage pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/449"}
   - number: 407
     url: https://github.com/polymetrics-ai/cli/issues/407
-    branch: pending
-    pr_url: ""
+    branch: feat/cli-architecture-v2
+    pr_url: https://github.com/polymetrics-ai/cli/pull/438
     worker: parent_orchestrator
-    status: blocked
+    status: provisionally_integrated
     write_scope: "Serialized namespace migration umbrella; grandchildren #421-#437"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-cli-architectur-improvement
-    verification: "#421-#436 provisionally integrated; #437/PR #466 is green but lacks recorded external/human review, so #407 ratification is blocked."
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked on #437 review and integration.", disposition_url: ""}
+    verification: "All Phase 9 namespace grandchildren #421-#437 are provisionally integrated; #437 merged through PR #466 at parent commit 1008f75f."
+    automated_review: {primary_route: human, status: clean, head_sha: 1008f75ff8fe7d43a0a67a802ccf05ef296eae7f, reviewed_range: "#421-#437 parent range; #437 exact head covered by human fallback", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Umbrella dependency complete on parent; final parent/main review still pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"}
   - number: 408
     url: https://github.com/polymetrics-ai/cli/issues/408
     branch: pending
     pr_url: ""
     worker: unassigned
     status: worker_ready
-    write_scope: "flow and ETL dashboard models, event bridge, command wiring, tests, generated docs/goldens/website parity"
+    write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, generated docs/goldens/website parity"
     worker_directory: ""
-    verification: not_run_write_scope_collision
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "#462 is integrated, but mutating launch is deferred until #437/PR #466 central CLI/help/golden/docs/website collision clears.", disposition_url: ""}
+    verification: not_run_spawn_pending
+    automated_review: {primary_route: blocked, status: pending, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Ready to spawn after #437 integration; #413 deferred for collision.", disposition_url: ""}
   - number: 409
     url: https://github.com/polymetrics-ai/cli/issues/409
     branch: pending
@@ -734,11 +756,11 @@ subissues:
     branch: refactor/437-connectors-certify-native-cobra
     pr_url: https://github.com/polymetrics-ai/cli/pull/466
     worker: pm-gsd-worker
-    status: sub_pr_green
+    status: provisionally_integrated
     write_scope: "connectors and certify Cobra namespace, certify safety, tests, docs/goldens/website parity"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-437-connectors-certify-native-cobra
-    verification: "PR #466 head 26f98a72 has full local gates and current GitHub checks green; no recorded reviews."
-    automated_review: {primary_route: blocked, status: pending, head_sha: 26f98a72419010b961b5b8378ef4a695b0c0a06f, reviewed_range: "local sidecar only; no external review coverage", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Human or enabled automation review required before integration.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/466"}
+    verification: "PR #466 head unchanged, required checks green, unresolved threads empty; post-merge focused checks passed; parent merge 1008f75f."
+    automated_review: {primary_route: human, status: clean, head_sha: 26f98a72419010b961b5b8378ef4a695b0c0a06f, reviewed_range: "PR #466 exact head", coverage_route: sub_pr, fallback_route: none, disposition_summary: "Human coordinator explicitly reviewed/tested and approved integration; no unresolved findings.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"}
   - number: 462
     url: https://github.com/polymetrics-ai/cli/issues/462
     branch: docs/462-terminal-ui-tty-gate-follow-up
@@ -770,4 +792,4 @@ human_gates:
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
   - Phase 437 pending intake implementation or GitHub issue edits without explicit authorization
-updated_at: 2026-07-20T19:28:58Z
+updated_at: 2026-07-20T20:06:35Z
