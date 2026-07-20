@@ -294,10 +294,15 @@
       "cycle": "eighth-review-correction-red",
       "decision": "local_critical_path",
       "reason": "deterministic RED tests captured future-dated report resume and whitespace value-required effect/category findings before production edits; RED commit pending"
+    },
+    {
+      "cycle": "eighth-review-correction-green",
+      "decision": "local_critical_path",
+      "reason": "minimal future timestamp and whitespace value-required fixes passed focused, repeated, race, vet, and build gates; broader verification remains pending"
     }
   ],
   "red": "captured eighth RED: certify future-report focus 0.662s resumed ordinary and cleanup-failure/absence-proof future-dated reports; CLI focus 23.561s showed empty/whitespace value-required flags reached later validation, credential paths, fake runtime effects, or full sample certification instead of pre-effect usage",
-  "green": "pending eighth GREEN",
+  "green": "eighth GREEN: future-dated resume reports beyond 5m skew rerun; empty/whitespace space-form value-required flags reject before effects while valid assigned/space values and boolean bare controls remain supported",
   "verification": "pending eighth verification; verificationPassed false until full make verify exits 0",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
@@ -339,7 +344,7 @@
   "eighthCorrectionStartingHead": "0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8",
   "eighthCorrectionSession": "issue-437-eighth-bounded-correction-20260720",
   "eighthCorrectionReviewedCodeHead": "0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8",
-  "eighthCorrectionImplementationHead": null,
+  "eighthCorrectionImplementationHead": "pending_green_commit",
   "eighthCorrectionTerminalEvidenceCommit": null,
   "terminalEvidenceCommitPolicy": "artifact commits cannot contain their own resulting SHA because Git computes the commit object after file content is fixed; artifacts record reviewedCodeHead/endingImplementationHead and the final PR head is recorded in the PR body after push"
 }

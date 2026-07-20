@@ -431,7 +431,7 @@ func validateCertifyRequiredValueArgs(args []string, start int) error {
 			}
 			continue
 		}
-		if i+1 >= len(args) || certifyValueArgMissing(name, args[i+1]) {
+		if i+1 >= len(args) || certifyValueArgMissing(name, args[i+1]) || strings.TrimSpace(args[i+1]) == "" {
 			return usageErrorf("--%s requires a value", name)
 		}
 		i++

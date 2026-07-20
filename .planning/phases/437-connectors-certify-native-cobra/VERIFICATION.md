@@ -282,9 +282,9 @@ Exact start: `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; identity `issue-437-eig
 - [x] RED: future-dated ordinary completed report reruns instead of resuming; current code failed by resuming.
 - [x] RED: future-dated cleanup-failure absence-proof report reruns instead of resuming; current code failed by resuming.
 - [x] RED: empty/whitespace space-form value-required flags reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects; current code failed by reaching later validation/effects.
-- [ ] GREEN: report timestamps materially beyond documented skew tolerance are future-invalid, while historical reports and `CompletedAt >= StartedAt` remain valid.
-- [ ] GREEN: `strings.TrimSpace(next)==""` is value-missing for all value-required certify flags; valid assigned/space values still pass and boolean bare flags remain valid.
-- [ ] Focused repeated and race variants pass.
+- [x] GREEN: report timestamps materially beyond documented skew tolerance are future-invalid, while historical reports and `CompletedAt >= StartedAt` remain valid.
+- [x] GREEN: `strings.TrimSpace(next)==""` is value-missing for all value-required certify flags; valid assigned/space values still pass and boolean bare flags remain valid.
+- [x] Focused repeated and race variants pass: certify count=3 `1.192s`, CLI count=3 `6.887s`, certify race `2.450s`, CLI race `23.441s`.
 - [ ] Full `go test ./internal/connectors/certify -count=1` and `go test ./internal/cli -count=1` pass.
 - [ ] Runtime help/no-effect/exit checks pass: `./pm help connectors`, bare `./pm connectors`, `./pm connectors --help`, and blank-value no-effect checks.
 - [ ] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke passes without credentials/live services/external writes.

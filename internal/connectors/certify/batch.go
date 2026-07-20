@@ -38,6 +38,12 @@ type RunnerFactory func(connector string, opts Options) Runnable
 // MaxParallel bounds connector workers regardless of CLI or file input.
 const MaxParallel = 32
 
+// resumeReportClockSkewTolerance allows small filesystem/clock skew between a
+// certification writer and a later --resume reader. Reports dated materially
+// beyond this window are treated as future-invalid evidence and rerun instead
+// of trusted.
+const resumeReportClockSkewTolerance = 5 * time.Minute
+
 // BatchOptions configures RunBatch (certification design §B).
 type BatchOptions struct {
 	CredsFile CredsFile
@@ -459,6 +465,10 @@ func completedReport(dir, connector string, identities ...resumeIdentity) (Repor
 		}
 	}
 	if rep.StartedAt.IsZero() || rep.CompletedAt.IsZero() || rep.CompletedAt.Before(rep.StartedAt) {
+		return Report{}, false
+	}
+	now := time.Now().UTC()
+	if rep.StartedAt.After(now.Add(resumeReportClockSkewTolerance)) || rep.CompletedAt.After(now.Add(resumeReportClockSkewTolerance)) {
 		return Report{}, false
 	}
 	if !validResumeEvidence(rep) {

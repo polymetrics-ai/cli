@@ -213,7 +213,7 @@ Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-tes
 | R8-0 | Planning | Reopen all six artifacts with exact start/head/PR, eighth recovery exception, GSD fallback, skills, accepted findings, RED/GREEN plan, verification matrix, finalized seventh statuses, no self-reference policy, and `local_critical_path`; commit/push before RED or production | Complete: planning `45f190dc` pushed |
 | R8-1 | RED future reports | Ordinary completed report and cleanup-failure/absence-proof report with materially future timestamps are not resumed; current code should fail by resuming | Complete: failed before production |
 | R8-2 | RED whitespace values | Empty/whitespace space-form `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than` reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects | Complete: failed before production |
-| R8-3 | GREEN | Minimal future-timestamp skew validation and `TrimSpace(next)==""` required-value validation pass focused tests without weakening historical resume or valid value forms | Pending |
+| R8-3 | GREEN | Minimal future-timestamp skew validation and `TrimSpace(next)==""` required-value validation pass focused tests without weakening historical resume or valid value forms | Complete: focused/repeated/race, vet, and build pass |
 | R8-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Pending |
 | R8-5 | Delivery | Coherent commits pushed, PR #466 body updated with final eighth head/gates, no bot review, clean/remote-matched branch; terminal artifact explains why it cannot contain its own SHA | Pending |
 
@@ -223,6 +223,16 @@ Strict TDD gate: R8-1/R8-2 failing evidence must be captured and committed befor
 
 - `go test ./internal/connectors/certify -run 'TestRunBatchResumeRerunsFutureDatedReports' -count=1` failed as intended (`0.662s`): both ordinary and cleanup-failure/absence-proof future-dated reports resumed with only one runner effect instead of rerunning.
 - `go test ./internal/cli -run 'TestNativeCertifyWhitespaceValueRequiredFlagsRejectBeforeRuntimeEffects|TestEighthCertifyWhitespaceValueRequiredFlagsRejectBeforeLoggerTelemetry' -count=1` failed as intended (`23.561s`): empty/whitespace space-form values reached invalid key-value/parallel validation, credential-file paths, fake runtime effects, or full sample certification instead of the pre-effect `requires a value` usage gate.
+
+### Eighth-cycle GREEN focused evidence
+
+Implementation adds a documented 5-minute resume-report clock-skew tolerance and rejects materially future `StartedAt`/`CompletedAt` timestamps. It also treats `strings.TrimSpace(next)==""` as missing for all value-required certify flags before Cobra normalization or runtime effects.
+
+- `go test ./internal/connectors/certify -run 'TestRunBatchResumeRerunsFutureDatedReports|TestRunBatchResumeReusesCompletedReportAcrossOrdinaryRuns|TestRunBatchResumeAcceptsCleanupFailureAbsenceProof' -count=1` => pass (`0.739s`).
+- `go test ./internal/cli -run 'TestNativeCertifyWhitespaceValueRequiredFlagsRejectBeforeRuntimeEffects|TestEighthCertifyWhitespaceValueRequiredFlagsRejectBeforeLoggerTelemetry|TestNativeCertifyValueRequiredFlagsRejectBeforeRuntimeEffects|TestSeventhCertifyValueRequiredFlagsRejectBeforeLoggerTelemetry|TestNativeCertifySupportedSingleFlagsAndExitContract' -count=1` => pass (`2.559s`).
+- Repeated: certify focus `-count=3` => pass (`1.192s`); CLI focus `-count=3` => pass (`6.887s`).
+- Race: certify focus `-race` => pass (`2.450s`); CLI focus `-race` => pass (`23.441s`).
+- Coherent-slice gates: `go vet ./...` and `go build ./cmd/pm` pass.
 
 ### Seventh-cycle RED evidence captured
 
