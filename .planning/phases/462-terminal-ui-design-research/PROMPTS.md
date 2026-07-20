@@ -86,3 +86,40 @@ branch/PR head after this starting snapshot.
 Verification result: docs-contract contradiction grep, direct dependency/token/export marker check,
 skill validation, JSON syntax, exact scope check, `git diff --check`, `scripts/gsd doctor`, and
 `make docs-check` pass for this correction slice.
+
+## Follow-up PR #468 invocation — 2026-07-20
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt plan-phase 462 --skip-research > /tmp/gsd-plan-462-pr468.txt
+scripts/gsd prompt programming-loop init --phase 462 --dry-run
+```
+
+Observed: `scripts/gsd prompt programming-loop ...` returns `scripts/gsd: unknown GSD command:
+programming-loop`; manual universal-loop fallback remains recorded. `/gsd-programming-loop` is not
+available through the shell adapter for this run.
+
+```text
+Execute accepted local review findings on follow-up PR #468 for issue #462 under parent #397 on
+branch `docs/462-terminal-ui-tty-gate-follow-up`, starting from
+`fd122c52458a6ef0db12f60f303c261ed2e63d4c` and base parent commit
+`93a117100c6421955262aa32794a91a158d267e1`. No production Go edits and no merge. Reopen the #462
+phase artifacts first, then minimally update delegated docs/skill/prompt sources so `--plain`,
+`--json`, and `--no-input` always bypass Bubble Tea, Huh, and all prompts; bypass paths produce
+only deterministic table/summary output or exact required-flag errors; sequential prompting is
+allowed only in explicit accessible mode when both stdin and stdout are TTYs and no bypass flags are
+set. Add the shared and Stage 16-specific TTY fallback RED matrix: stdin+stdout TTY activation,
+`stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`. Record PR
+#467 merged at parent commit `93a117100c6421955262aa32794a91a158d267e1` from old head
+`e8286ea83a76ac2c6f6257c6e2d40fd21af81640`; record PR #468 open at starting head
+`fd122c52458a6ef0db12f60f303c261ed2e63d4c` with human review pending; GitHub is live source and
+local sidecars are not external coverage. Preserve explicit query grid/reverse guide, bare help
+exit 0, approval token nondisclosure, direct dependencies, path-safe typed export, and no
+`/dev/tty`. Validate contradiction grep, marker matrix, JSON parse, skill validation, scope,
+`git diff --check`, GSD doctor, and `make docs-check`. Commit/push planning/docs/evidence and
+update PR #468 body. No bots and no merge.
+```
+
+Downstream artifact: planning/RED evidence recorded on branch
+`docs/462-terminal-ui-tty-gate-follow-up`; delegated docs correction and final verification pending.
+Verification result: pending until green docs and evidence slice completes.

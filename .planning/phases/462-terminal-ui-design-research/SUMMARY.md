@@ -3,9 +3,11 @@
 Status: provisionally integrated / review blocked. PR #465 (`docs/462-terminal-ui-design-research`)
 was merged into the parent branch from head `6853fee28e0208381b49931fb1f5dfec42ee50ef`, but Claude
 review is disabled, Copilot backup exhausted quota, and fallback is human review. Correction PR #467
-started open at head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640` with CI green at that head; review
-status is human/parent pending. Git/GitHub remain the current source of truth after that starting
-snapshot.
+merged into the parent branch at parent commit `93a117100c6421955262aa32794a91a158d267e1` from old
+head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`. Follow-up correction PR #468 is open at starting
+head `fd122c52458a6ef0db12f60f303c261ed2e63d4c`; human review is pending. Git/GitHub remain the
+current source of truth after these starting snapshots. Local sidecar review is local evidence only,
+not external review coverage.
 
 The requested reference applications have been exercised in an isolated local lab and distilled
 into a Polymetrics-specific terminal design system. The chosen structural direction is a quiet
@@ -73,3 +75,21 @@ Future production TUI issues must record RED tests for `stdin-piped+stdout-TTY`,
 read-only query export, approval-token secrecy, and accessibility/plain contracts remain preserved.
 Next gates are local finding disposition, human review, and parent integration; no Claude/Copilot
 retry is requested in this blocker window.
+
+## Accepted local review findings on follow-up PR #468 — 2026-07-20
+
+This bounded docs correction fixes the remaining prompt-bypass and evidence-state findings.
+`--plain`, `--json`, and `--no-input` must always bypass Bubble Tea, Huh, and all prompts; those
+paths produce deterministic table/summary output when required flags are present, or exact
+required-flag errors only. Sequential prompting is allowed only in explicit accessible mode when
+both stdin and stdout are TTYs and none of those bypass flags are set.
+
+The execution prompt must carry a shared TUI fallback RED matrix for all TUI phases, and Stage 16
+must name the same matrix explicitly: stdin+stdout TTY activation, `stdin-piped+stdout-TTY`,
+`stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`. Prior corrections remain preserved:
+explicit `pm query grid` and `pm reverse guide`, bare namespace help exit 0, approval-token
+nondisclosure, direct dependencies, path-safe typed export, and no `/dev/tty` bypass.
+
+Planning/RED evidence is captured on branch `docs/462-terminal-ui-tty-gate-follow-up`; final
+green verification and PR #468 body update are pending in this slice. No bot retry or merge is
+requested.

@@ -178,3 +178,60 @@ head.
 6. **Verification checkpoint** — rerun contradiction grep, JSON parse, skill validation,
    direct dependency/token/export contract checks, `git diff --check`, exact scope check,
    `scripts/gsd doctor`, and `make docs-check`; commit/push planning/docs fix/evidence.
+
+## Follow-up PR #468 accepted local review findings — 2026-07-20
+
+Branch: `docs/462-terminal-ui-tty-gate-follow-up`.
+Start head: `fd122c52458a6ef0db12f60f303c261ed2e63d4c`, clean against
+`origin/docs/462-terminal-ui-tty-gate-follow-up`.
+Base parent branch: `feat/cli-architecture-v2` at
+`93a117100c6421955262aa32794a91a158d267e1`.
+Prior correction PR #467: merged at parent commit
+`93a117100c6421955262aa32794a91a158d267e1` from old head
+`e8286ea83a76ac2c6f6257c6e2d40fd21af81640`.
+Current correction PR #468: open at starting head
+`fd122c52458a6ef0db12f60f303c261ed2e63d4c`; human review pending. Git/GitHub remain the
+live source of truth after this starting snapshot; this run must not write self-referential
+final-head claims. Local review sidecars are local evidence only, not external review coverage.
+
+### Loaded skills and routing for this follow-up
+
+- Re-read `AGENTS.md`, issue #462, GSD runtime contracts, this phase's `PLAN.md`,
+  `TDD-LEDGER.md`, and `VERIFICATION.md` before edits.
+- `gsd-core`, `caveman`, `bubble-tea-tui-design` plus references
+  `interaction-and-layout.md`, `testing-and-accessibility.md`, `charts-and-dashboards.md`, and
+  `inspiration-study.md`.
+- `golang-how-to`, `golang-cli`, `golang-testing`, `golang-documentation`, `golang-security`,
+  `golang-safety`, `golang-context`, `golang-concurrency`, and `golang-error-handling` for
+  CLI/TUI docs that describe prompt gates, bypass flags, stdin/stdout behavior, paths, secrets,
+  cancellation, and tests.
+- `.pi/skills/go-implementation/SKILL.md` remains absent; use available repo/global skills and
+  record the mismatch in the ledger/handoff.
+
+### Bounded follow-up slices
+
+1. **Planning checkpoint** — reopen this phase's `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`,
+   `SUMMARY.md`, `PROMPTS.md`, `RUN-STATE.json`, and `RUN-STATE.md` with PR #467/#468 state,
+   manual universal-loop fallback, explicit `local_critical_path` decision, RED evidence, and
+   pending verification before delegated source/design/skill docs edits.
+2. **RED inventory** — capture docs-contract failure for:
+   - query grid `--plain` sequential prompt contradiction;
+   - any delegated docs/skill sequential-prompt wording that does not say explicit accessible mode,
+     both stdin+stdout TTYs, and no `--plain`/`--json`/`--no-input` bypass flags;
+   - Stage 16 lacking the shared TTY fallback RED matrix;
+   - phase artifacts still describing #467 as open and lacking PR #468 starting-state markers.
+3. **GREEN docs correction** — minimally update delegated docs, skill references, source plan,
+   execution prompt, roadmap/backlog/Pi prompt, and phase artifacts so:
+   - `--plain`, `--json`, and `--no-input` always bypass Bubble Tea, Huh, and all prompts;
+   - bypass paths produce deterministic table/summary output when required flags are present, or
+     exact required-flag errors only;
+   - sequential prompting is allowed only in explicit accessible mode when stdin and stdout are
+     TTYs and none of the bypass flags are set;
+   - the shared and Stage 16-specific TTY fallback RED matrix names stdin+stdout TTY activation,
+     `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`;
+   - prior corrections stay intact: explicit `pm query grid`/`pm reverse guide`, bare help exit 0,
+     approval-token nondisclosure, direct dependencies, path-safe typed export, and no `/dev/tty`.
+4. **Verification checkpoint** — rerun contradiction grep, marker matrix, JSON parse, skill
+   validation, direct dependency/token/export/accessibility checks, exact scope check,
+   `git diff --check`, `scripts/gsd doctor`, and `make docs-check`; then commit/push
+   planning/docs/evidence and update PR #468 body. No bots and no merge.

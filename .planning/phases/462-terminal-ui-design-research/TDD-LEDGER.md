@@ -206,3 +206,65 @@ correction, but future TUI implementation issues must start with failing tests f
 
 No production behavior test was required; this correction is docs/planning/skill/prompt only. Full
 `make verify` was not run because scope stayed docs-only and the issue requested `make docs-check`.
+
+## Follow-up PR #468 RED ledger — 2026-07-20
+
+GSD/Pi evidence recaptured before delegated source/design/skill docs edits:
+
+```text
+scripts/gsd doctor                         # pass, ok commands 69
+scripts/gsd prompt plan-phase 462 --skip-research > /tmp/gsd-plan-462-pr468.txt
+wc -c /tmp/gsd-plan-462-pr468.txt          # 10716
+scripts/gsd prompt programming-loop init --phase 462 --dry-run
+# scripts/gsd: unknown GSD command: programming-loop
+```
+
+Manual universal-loop fallback remains active because `programming-loop` is not registered in the
+shell adapter. Execution decision: `local_critical_path` — one assigned worker, isolated cwd/branch,
+no subagent tool, docs-only accepted local review correction. PR state snapshot: PR #467 merged at
+parent commit `93a117100c6421955262aa32794a91a158d267e1` from old head
+`e8286ea83a76ac2c6f6257c6e2d40fd21af81640`; PR #468 open at starting head
+`fd122c52458a6ef0db12f60f303c261ed2e63d4c`, human review pending. Git/GitHub remain the live
+source of truth after that starting snapshot; no self-referential final-head claim is allowed.
+Local sidecar review is local evidence only and does not count as external review coverage.
+
+Loaded skills for this correction: `gsd-core`, `caveman`, `bubble-tea-tui-design`,
+`golang-how-to`, `golang-cli`, `golang-testing`, `golang-documentation`, `golang-security`,
+`golang-safety`, `golang-context`, `golang-concurrency`, and `golang-error-handling`.
+Skill-route mismatch persists: `.pi/skills/go-implementation/SKILL.md` is absent.
+
+### Follow-up missing-contract inventory
+
+```text
+RED: plain prompt contradiction scan (delegated docs/skills)
+docs/design/tui-ux-design.md:317:- Accessible/plain: `pm query grid --plain` or accessibility mode offers a sequential prompt for
+docs/design/tui-ux-design.md:363:- Accessible: browse falls back to a sequential prompt (`filter? capability?`) then plain
+.agents/skills/bubble-tea-tui-design/references/testing-and-accessibility.md:14:   `--json`, `--plain`, and `--no-input`; each must bypass the TUI/prompt path without consuming
+
+RED: Stage 16 shared TTY fallback RED matrix check
+FAIL Stage 16 missing matrix markers: stdin+stdout TTY activation, stdin-piped+stdout-TTY, stdout-piped, CI, --json, --plain, --no-input
+
+RED: stale artifact state check
+FAIL artifacts missing follow-up markers: 93a117100c6421955262aa32794a91a158d267e1, fd122c52458a6ef0db12f60f303c261ed2e63d4c, PR #468
+```
+
+RED status: docs-contract grep failed as expected. The `testing-and-accessibility.md` hit is a
+safe bypass-marker line, not a contradiction; it stays as a required bypass assertion. The defects
+are documentation/prompt/artifact contradictions only, so no production Go behavior test is required
+in this correction. Future TUI implementation issues must add failing tests for the shared fallback
+matrix before code.
+
+### Expected GREEN evidence for PR #468 accepted findings
+
+- Query grid docs no longer state that `--plain` runs a sequential prompt; `--plain`, `--json`,
+  and `--no-input` always bypass Bubble Tea, Huh, and prompts.
+- Delegated docs/skill wording allows sequential prompts only in explicit accessible mode when both
+  stdin and stdout are TTYs and no bypass flag is set.
+- Bypass paths use deterministic table/summary output or exact required-flag errors only.
+- Shared TUI preflight plus Stage 16 gate name stdin+stdout TTY activation,
+  `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`, while
+  surface-specific tests remain intact.
+- Run state records #467 merged at parent commit `93a117100c6421955262aa32794a91a158d267e1` from
+  old head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`; #468 open at starting head
+  `fd122c52458a6ef0db12f60f303c261ed2e63d4c` with human review pending; GitHub live source and
+  local-sidecar-not-external-coverage caveats present; no invented final head.

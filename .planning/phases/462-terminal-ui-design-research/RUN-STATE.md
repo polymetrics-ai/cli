@@ -5,53 +5,67 @@ issue: 462
 parent_issue: 397
 original_branch: docs/462-terminal-ui-design-research
 correction_branch: docs/462-terminal-ui-design-review-fixes
+followup_branch: docs/462-terminal-ui-tty-gate-follow-up
 base_branch: feat/cli-architecture-v2
 start_commit: c91b90cf9671b5caabc0ef4ec24d81897f870458
+base_parent_commit: 93a117100c6421955262aa32794a91a158d267e1
 correction_start_head: e8286ea83a76ac2c6f6257c6e2d40fd21af81640
+followup_start_head: fd122c52458a6ef0db12f60f303c261ed2e63d4c
 original_pr: 465
 original_pr_head: 6853fee28e0208381b49931fb1f5dfec42ee50ef
 correction_pr: 467
 correction_pr_state_at_start: open
 correction_pr_ci_at_start: green
-state: correction_467_local_finding_disposition_complete
+correction_pr_state: merged
+correction_pr_merged_at: 2026-07-20T03:36:34Z
+correction_pr_merge_commit: 93a117100c6421955262aa32794a91a158d267e1
+followup_pr: 468
+followup_pr_state_at_start: open
+followup_pr_head_at_start: fd122c52458a6ef0db12f60f303c261ed2e63d4c
+followup_pr_review_status_at_start: human_review_pending
+state: correction_468_planning_red_captured
 classification: docs_planning_skill_only
 research: complete
 local_reference_lab: complete
 production_go_changes: false
 dependency_changes: false
+verification_passed: false
+verification_status_reason: follow-up correction in progress; final docs-check not run yet after delegated docs edits
 review:
   claude: disabled_manually_no_retry
   copilot: quota_exhausted_no_retry
   fallback: human_parent_review
-  status: human_parent_pending
+  status: human_review_pending
+  local_sidecar_external_coverage: false
   accepted_correction_pr:
     number: 467
     state_at_start: open
     head_at_start: e8286ea83a76ac2c6f6257c6e2d40fd21af81640
     ci_at_start: green
-    review_status: human_parent_pending
+    state: merged
+    merge_commit: 93a117100c6421955262aa32794a91a158d267e1
+    review_status: human_parent_pending_at_merge
     source_of_truth: Git/GitHub current state after the starting snapshot; no invented final-head claim
+  followup_correction_pr:
+    number: 468
+    state_at_start: open
+    head_at_start: fd122c52458a6ef0db12f60f303c261ed2e63d4c
+    review_status: human_review_pending
+    source_of_truth: Git/GitHub current state after the starting snapshot; no self-referential final-head claim
 verification:
   declared_phase_equivalent: make docs-check
-  result: pass
+  result: pending
   full_make_verify: not_run_docs_only_scope
   notes:
-    - docs_contract_red_captured
+    - followup_docs_contract_red_captured
     - phase_artifacts_reopened
-    - docs_contract_green_pass
-    - future_tty_red_matrix_recorded
-    - dependency_roster_check_unchanged
-    - query_export_token_status_marker_check_pass
-    - skill_validation_pass
-    - json_syntax_pass
-    - scope_check_pass
-    - git_diff_check_pass
     - gsd_doctor_pass_69_commands
-    - docs_check_pass
+    - programming_loop_manual_fallback_recorded
 human_gate:
   ntcharts_v2: required_before_go_mod
   github_blocked_by_metadata: parent_orchestrator_follow_up
   parent_integration: human_parent_review_pending
+  pr468_review: human_review_pending
 orchestration_decisions:
   - cycle: review-correction-plan
     decision: local_critical_path
@@ -74,7 +88,16 @@ orchestration_decisions:
   - cycle: correction-467-verify
     decision: local_critical_path
     reason: docs-only verification completed inline with declared make docs-check equivalent
+  - cycle: correction-468-plan
+    decision: local_critical_path
+    reason: accepted local review findings require bounded docs correction in the assigned isolated branch/cwd
+  - cycle: correction-468-red
+    decision: local_critical_path
+    reason: docs-contract grep captured plain-prompt contradiction, missing Stage 16 matrix, and stale artifact state before delegated docs edits
 next:
+  - delegated_docs_green_correction
+  - local_verification
+  - commit_push_planning_docs_evidence
+  - update_pr_468_body
   - human_review_gate
-  - parent_integration_gate
 ```

@@ -109,3 +109,42 @@ review remains pending for the accepted correction PR.
 
 Do not retry Claude or Copilot in this blocker window. Final route remains human/parent review and
 parent integration gates after local finding disposition.
+
+## Follow-up PR #468 checklist — 2026-07-20
+
+### Required checks before handoff
+
+- [x] Phase artifacts reopened before delegated source/design/skill docs edits.
+- [x] GSD adapter health recorded: `scripts/gsd doctor`; `scripts/gsd prompt plan-phase 462 --skip-research`.
+- [x] Manual universal-loop fallback recorded because `scripts/gsd prompt programming-loop ...` is absent.
+- [x] Loaded skills and missing `.pi/skills/go-implementation` mismatch recorded.
+- [x] RED docs-contract grep recorded for query grid `--plain` sequential prompt contradiction,
+  sequential-prompt ambiguity, missing Stage 16 fallback matrix, and stale artifact state.
+- [ ] `--plain`, `--json`, and `--no-input` always bypass Bubble Tea, Huh, and all prompts across
+  delegated docs/skills.
+- [ ] Sequential prompting is allowed only in explicit accessible mode when both stdin and stdout
+  are TTYs and none of `--plain`, `--json`, or `--no-input` is set.
+- [ ] Shared TUI preflight and Stage 16-specific gate include stdin+stdout TTY activation,
+  `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`.
+- [ ] Explicit `pm query grid`, `pm reverse guide`, bare help exit 0, query export,
+  approval-token secrecy, direct dependencies, and no `/dev/tty` contracts remain present.
+- [ ] RUN-STATE.json/RUN-STATE.md/SUMMARY record PR #467 merged at parent commit
+  `93a117100c6421955262aa32794a91a158d267e1` from old head
+  `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, PR #468 open at starting head
+  `fd122c52458a6ef0db12f60f303c261ed2e63d4c` with human review pending, GitHub as live source,
+  local sidecar not external coverage, and no self-referential final-head claim.
+- [ ] Contradiction grep passes.
+- [ ] Marker matrix passes.
+- [ ] `python3 -m json.tool .planning/phases/462-terminal-ui-design-research/RUN-STATE.json` passes.
+- [ ] Skill quick validation passes: `Skill is valid!`.
+- [ ] Direct dependency/token/export/accessibility contracts unchanged.
+- [ ] `git diff --check` passes.
+- [ ] Exact scope check shows no `cmd/**`, `internal/**`, `go.mod`, `go.sum`, `website/**`,
+  `docs/cli/**`, parent #397 artifacts, or nondelegated docs changes.
+- [ ] `scripts/gsd doctor` passes at final verification (`ok commands 69`).
+- [ ] `make docs-check` passes.
+
+### Review route status
+
+Do not request bot review or merge. PR #468 remains human review pending; local sidecar review is
+not external review coverage.
