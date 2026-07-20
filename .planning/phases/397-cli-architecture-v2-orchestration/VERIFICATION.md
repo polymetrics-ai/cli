@@ -22,6 +22,20 @@ Status: not yet run at final HEAD
 - [x] #434 implemented/corrected at `8177e342ad03b5fbf3750f2c0ecf9aa11f695f92`; exact-head Sol/xhigh re-review `65f48296-b24a-498a-8b25-6c4a3143d9c9` clean; fake-only integration race passed; promoted in parent `96680756`.
 - [x] #435 implemented/evidence-corrected at `f712e696e075792492397ab1d556d1dfceadba04`; exact-head Sol/xhigh re-review `d549e7cf-50bc-4d9d-94ff-04734f048d3b` clean; fake-only integration race passed; promoted in parent `afd765e9`.
 - [x] #436 implemented/corrected at `7da245b8da2b8590766d99ca9e967d366e50cfcc`; exact-head Sol/xhigh re-review `19fd2452-9b9b-4479-bbba-2bf9f13a1bbb` clean; temp-only integration race passed; promoted in parent `b28e67fb`.
+- [x] #462 / PR #465 CI green and integrated at `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`; automated review did not complete because Claude is disabled and Copilot quota is exhausted. Human review remains required. Local exact-file sidecar review found five accepted design/safety findings; corrections remain open.
+- [x] #437 / PR #466 phase planning/TDD/verification refreshed before continuation and every accepted correction cycle; current PR head `9f004ac5d96d84bd1f8b186496e1f594a183a18b`, reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`.
+- [x] #437 local focused, repeated, race, full package, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certify, and connectorgen 547/0 gates passed.
+- [x] #437 local exact-path code re-review has no remaining actionable runtime finding.
+- [ ] #437 PR #466 GitHub checks green at current PR head.
+- [ ] #437 external automated or human/parent fallback review coverage.
+- [ ] #437 promotion into parent branch.
+
+## Current live blockers
+
+- [ ] #462 accepted design/safety findings corrected in a new isolated stacked PR.
+- [ ] #462 human review coverage recorded; local `pm-reviewer` is not substitute coverage.
+- [ ] #408 TUI worker launch unblocked only after #462 correction and review gate.
+- [ ] #419 explicit optional dependency decision.
 
 ## Per-unit gate
 

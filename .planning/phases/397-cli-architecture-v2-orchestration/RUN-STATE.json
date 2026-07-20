@@ -3,13 +3,14 @@
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "active",
+  "status": "waiting_for_review",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "b28e67fb2432f48b6909a2103a0b3e3fa4e9f461",
+  "currentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
+    "planPhase397": "passed_prompt_generated_10688_bytes",
     "programmingLoop": "blocked_unknown_command",
     "fallback": "manual_gsd_universal_runtime_loop"
   },
@@ -143,6 +144,41 @@
       "decision": "spawned",
       "issues": [436],
       "reason": "Sol/high implementation/correction and independent Sol/xhigh review completed hidden extract nativization and rooted RLM warehouse scope; exact head promoted."
+    },
+    {
+      "cycle": "pi_live_recon_20260720",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "read_only_spawned",
+      "issues": [397, 437, 462],
+      "reason": "Project pm-scout reconciled parent files and ready candidates. Coordinator also confirmed GitHub issue, PR, branch, worktree, dependency, CI, and review state."
+    },
+    {
+      "cycle": "unit_437_continue_open_review",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "spawned",
+      "issues": [437],
+      "reason": "Project pm-gsd-worker ran in isolated worktree wt-437-connectors-certify-native-cobra, reconciled parent, opened PR #466, and completed accepted test-first correction cycles. Actual runtime was openai-codex/gpt-5.5:xhigh because project agent config does not expose a per-call high override."
+    },
+    {
+      "cycle": "unit_437_local_review_loops",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "read_only_spawned",
+      "issues": [437],
+      "reason": "Project pm-reviewer exact-file sidecars found safety/correctness gaps; spawned worker corrections captured fresh RED and passed full local gates. Final runtime/code review was clean. Discovery-based review first hit not_spawned_runtime_capability_missing because parent tools omitted grep/find/ls; exact-file read fallback succeeded."
+    },
+    {
+      "cycle": "unit_462_integrated_review_audit",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "read_only_spawned",
+      "issues": [462],
+      "reason": "Project pm-reviewer audited integrated PR #465 and found five accepted design/safety corrections. Local sidecar does not satisfy external coverage."
+    },
+    {
+      "cycle": "current_queue_20260720",
+      "timestamp": "2026-07-20T01:39:32Z",
+      "decision": "not_spawned_review_blocked",
+      "issues": [437, 407, 408, 413],
+      "reason": "PR #466 current-head CI and human/parent fallback are pending; #407/#413 depend on #437 integration; #408 is blocked by unresolved #462 corrections and human review coverage. #462 corrections are the next isolated worker-ready slice."
     }
   ],
   "units": [
@@ -296,7 +332,56 @@
       "implementationSession": "cbcc7097-7302-4dd3-930a-104ffd5ae2e9",
       "correctionSession": "5344f0f4-1026-43a7-b114-518dce07d7fd",
       "reviewSession": "19fd2452-9b9b-4479-bbba-2bf9f13a1bbb"
+    },
+    {
+      "issue": 462,
+      "branch": "docs/462-terminal-ui-design-research",
+      "endingHead": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
+      "parentIntegrationHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
+      "pullRequest": 465,
+      "status": "provisionally_integrated",
+      "verification": "remote_ci_green",
+      "automatedReview": {
+        "primaryRoute": "blocked",
+        "status": "blocked",
+        "headSha": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
+        "reviewedRange": "none_external",
+        "coverageRoute": "blocked",
+        "fallbackRoute": "human",
+        "dispositionSummary": "five local sidecar findings accepted for correction; local review is not coverage",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/465#issuecomment-5015800536"
+      }
+    },
+    {
+      "issue": 437,
+      "branch": "refactor/437-connectors-certify-native-cobra",
+      "startingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
+      "reviewedImplementationHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
+      "pullRequestHead": "9f004ac5d96d84bd1f8b186496e1f594a183a18b",
+      "pullRequest": 466,
+      "status": "sub_pr_open",
+      "worker": "pm-gsd-worker",
+      "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-437-connectors-certify-native-cobra",
+      "verification": "local_full_make_verify_green_remote_ci_pending",
+      "automatedReview": {
+        "primaryRoute": "blocked",
+        "status": "pending",
+        "headSha": "9f004ac5d96d84bd1f8b186496e1f594a183a18b",
+        "reviewedRange": "local_sidecar_code_review_through_af0e4dab_not_external_coverage",
+        "coverageRoute": "parent_pr_fallback",
+        "fallbackRoute": "human",
+        "dispositionSummary": "all local actionable code findings corrected; current-head CI and human fallback pending",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/466"
+      }
     }
+  ],
+  "readyQueue": [
+    {"issue": 437, "status": "sub_pr_open", "dependencies": [436], "writeScope": "connectors/certify CLI and directly applicable certify safety", "decision": "not_spawned_review_blocked"},
+    {"issue": 407, "status": "blocked", "dependencies": [437], "writeScope": "umbrella ratification only", "decision": "not_spawned_dependency_blocked"},
+    {"issue": 462, "status": "worker_ready", "dependencies": [], "writeScope": "terminal design/docs/skill/planning corrections", "decision": "local_critical_path_worktree_creation_next"},
+    {"issue": 408, "status": "blocked", "dependencies": [405, 462], "writeScope": "flow and ETL dashboards", "decision": "not_spawned_review_blocked"},
+    {"issue": 413, "status": "blocked", "dependencies": [407], "writeScope": "completion", "decision": "not_spawned_dependency_blocked"},
+    {"issue": 419, "status": "blocked", "dependencies": [404, 410], "writeScope": "optional OTel log bridge", "decision": "not_spawned_human_gate"}
   ],
   "humanGates": [
     "parent PR merge to main",
@@ -309,5 +394,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-19T09:48:26Z"
+  "updatedAt": "2026-07-20T01:39:32Z"
 }
