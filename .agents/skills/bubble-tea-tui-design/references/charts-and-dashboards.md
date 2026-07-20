@@ -31,13 +31,15 @@ summary instead.
   from the underlying rows, not from screen glyphs. Export is a typed read-only path only: default
   to project-scoped output, resolve/clean/confine the path, reject control characters, traversal,
   broad roots, symlink targets/final-component races, and overwrites by default, require
-  confirmation only when both stdin and stdout are TTYs or noninteractive
-  `--output <project-relative-path> --force`, echo only sanitized commands, and fail `--no-input`
-  or non-TTY stdin without a preapproved path with exact flag guidance.
-- A `--plain` or non-TTY path prints the numeric summary/table. JSON emits data or a stable
-  chart-spec object only when that schema is explicitly designed and documented.
-- Screen-reader/accessibility mode renders the text summary plus ordered values/buckets,
-  with no redraw requirement.
+  confirmation only when both stdin and stdout are TTYs and no bypass flag is set, or require
+  noninteractive `--output <project-relative-path> --force`; echo only sanitized commands, and fail
+  `--no-input` or non-TTY stdin without a preapproved path with exact flag guidance.
+- `--plain`, `--json`, and `--no-input` never prompt. A `--plain` or non-TTY path prints the
+  deterministic numeric summary/table when required flags are present, or an exact required-flag
+  error. JSON emits data or a stable chart-spec object only when that schema is explicitly designed
+  and documented.
+- Screen-reader/accessibility mode renders the text summary plus ordered values/buckets with no
+  redraw requirement only after the stdin+stdout TTY gate passes and no bypass flag is set.
 
 ## Dashboard composition
 

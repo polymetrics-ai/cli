@@ -94,9 +94,12 @@ CLI Architecture v2 is a sibling program that preserves the connector-parity roa
 - TUI workers must load `bubble-tea-tui-design`, cite both design documents, and record
   stdin+stdout TTY activation, `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`, `--json`,
   `--plain`, `--no-input`, modal-key, responsive-layout, accessibility/plain fallback, sanitation,
-  cancellation, and JSON/stdout/stderr parity evidence. Piped/non-TTY stdin must not be consumed,
-  hang, or be bypassed through `/dev/tty`. `ntcharts/v2` remains unapproved until a dedicated
-  chart child issue #463 receives an explicit human dependency decision.
+  cancellation, and JSON/stdout/stderr parity evidence. `--plain`, `--json`, and `--no-input` must
+  bypass Bubble Tea, Huh, and all prompts; sequential prompts are allowed only in explicit
+  accessible mode after the stdin+stdout TTY gate passes and no bypass flag is set. Piped/non-TTY
+  stdin must not be consumed, hang, or be bypassed through `/dev/tty`. `ntcharts/v2` remains
+  unapproved until a dedicated chart child issue #463 receives an explicit human dependency
+  decision.
 - Parent PR to `main` remains draft until all required sub-issues are integrated, final verification passes, automated review coverage is recorded, and a human is asked for final approval.
 
 ### 0. GSD Runtime and Agent Enablement

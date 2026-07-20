@@ -47,11 +47,13 @@ Sources reviewed:
 
 **A. Flags are the API; prompts are progressive enhancement.** (gh, clig.dev) Bare
 namespace commands show contextual help/subcommand summaries and exit 0; explicit subcommands own
-interactive places. Prompt only when stdin and stdout are TTYs and a required input is missing;
-piped/non-TTY stdin selects deterministic plain/noninteractive behavior and must not be consumed as
-interactive input or bypassed through `/dev/tty`. `--no-input` disables all interactivity and errors
-must name the exact flag to pass; every wizard result is expressible as flags and the wizard teaches
-sanitized commands without secrets or one-time authorization values.
+interactive places. Prompt only when stdin and stdout are TTYs, no bypass flag is set, and a
+required input is missing; piped/non-TTY stdin selects deterministic plain/noninteractive behavior
+and must not be consumed as interactive input or bypassed through `/dev/tty`. `--plain`, `--json`,
+and `--no-input` disable Bubble Tea, Huh, and all prompts; those paths produce deterministic
+plain/table/JSON output when required flags are present, or exact required-flag errors only. Every
+wizard result is expressible as flags and the wizard teaches sanitized commands without secrets or
+one-time authorization values.
 
 **B. A CLI framework should own routing, help, and completion — not behavior.** (cobra
 practice) Behavior stays in testable handlers with injected writers; the framework layer is
@@ -248,7 +250,9 @@ Every TUI plan/worker must load the repo-local `bubble-tea-tui-design` skill. Su
 - **TTY gate** `ui.Detect`: TUI only when stdin is a TTY ∧ stdout is a TTY ∧ ¬`--json` ∧
   ¬`--plain` ∧ ¬`--no-input` ∧ `PM_NO_TUI`/`CI` unset ∧ `TERM≠dumb`. Piped/non-TTY stdin always
   falls back to deterministic plain/noninteractive behavior, must not be consumed by prompts, and
-  must not be bypassed via `/dev/tty`. New `cli.RunWithOptions`; existing `Run` delegates with
+  must not be bypassed via `/dev/tty`. `--plain`, `--json`, and `--no-input` always bypass Bubble
+  Tea, Huh, and all prompts; sequential prompting is limited to explicit accessible mode after the
+  same gate passes. New `cli.RunWithOptions`; existing `Run` delegates with
   `ModePlain`, so every existing test exercises the plain path by construction. `SanitizeTerminal`
   continues to guard the plain path; on the TUI path it moves into view-string hygiene (every
   dynamic string sanitized before styling).
@@ -274,8 +278,9 @@ Every TUI plan/worker must load the repo-local `bubble-tea-tui-design` skill. Su
   bounded/downsampled data, and text/table fallbacks. `ntcharts/v2` is a proposed renderer,
   not approved by this plan; it needs a separate human dependency decision and local wrapper.
 - **Accessibility from day one** (D): huh `WithAccessible` wired to `--accessible` +
-  `PM_ACCESSIBLE_PROMPTER`/`ACCESSIBLE`; spinner-disable; 4-bit accessible palette option;
-  color always paired with glyph+word; min-size guard; `pm a11y` help topic.
+  `PM_ACCESSIBLE_PROMPTER`/`ACCESSIBLE` after the stdin+stdout TTY gate and with no bypass flags;
+  spinner-disable; 4-bit accessible palette option; color always paired with glyph+word; min-size
+  guard; `pm a11y` help topic.
 
 ### Pillar C — Observability: slog first, then OpenTelemetry (fixes 3.5)
 

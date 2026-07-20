@@ -40,7 +40,8 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
    `PM_NO_TUI`/`CI` unset ∧ `TERM≠dumb`). Piped or non-TTY stdin always selects deterministic
    plain/noninteractive behavior; the TUI and Huh prompt layers must not consume scripted stdin,
    must not hang waiting for interactive input, and must not open `/dev/tty` to bypass the gate.
-   `cli.RunWithOptions`
+   `--plain`, `--json`, and `--no-input` always bypass Bubble Tea, Huh, and all prompts; sequential
+   prompting is limited to explicit accessible mode after the same gate passes. `cli.RunWithOptions`
    carries the mode; the existing `Run` delegates with plain mode, so every existing test exercises
    the plain path by construction. On the TUI path the sanitizer moves into view-string hygiene
    (every dynamic string sanitized + redacted before styling); the plain path is untouched.
@@ -51,15 +52,17 @@ gh CLI's accessible-prompter work provides the proven accessibility blueprint.
 4. **Flags are the API; prompts are progressive enhancement.** Bare namespace commands render
    contextual help/subcommand summaries and exit 0; they do not launch TUIs. Explicit interactive
    subcommands such as `pm query grid` and `pm reverse guide` own place-like surfaces. Wizards
-   prompt only for missing inputs after the same stdin-and-stdout TTY gate passes, validate with
-   the same code paths the flag door uses (e.g. wizard manifests round-trip `flow.ParseManifest`),
-   emit machine artifacts at documented paths,
-   and end by printing sanitized scripted equivalents that omit secrets and one-time authorization
-   values. `--no-input` errors name the exact flag/file to provide. New enumerators required by the
+   prompt only for missing inputs after the same stdin-and-stdout TTY gate passes and no `--plain`,
+   `--json`, or `--no-input` bypass flag is set, validate with the same code paths the flag door
+   uses (e.g. wizard manifests round-trip `flow.ParseManifest`), emit machine artifacts at
+   documented paths, and end by printing sanitized scripted equivalents that omit secrets and
+   one-time authorization values. Bypass paths emit deterministic output or exact required-flag
+   errors only. New enumerators required by the
    TUI (`pm query tables`) ship as plain/JSON commands first.
 5. **Accessibility is a launch requirement, not a follow-up**: huh `WithAccessible` wired
-   to `--accessible`/`PM_ACCESSIBLE_PROMPTER`/`ACCESSIBLE`; spinner-disable with static
-   status lines; colorprofile degradation honoring NO_COLOR/CLICOLOR/TERM=dumb; a 4-bit
+   to `--accessible`/`PM_ACCESSIBLE_PROMPTER`/`ACCESSIBLE` after the stdin+stdout TTY gate and with
+   no `--plain`, `--json`, or `--no-input` bypass flag; spinner-disable with static status lines;
+   colorprofile degradation honoring NO_COLOR/CLICOLOR/TERM=dumb; a 4-bit
    `accessible_colors` mode; color always paired with glyph + word; minimum-size guard;
    a `pm a11y` help topic. Design language, palette tokens, and per-surface specs live in
    `docs/design/tui-ux-design.md`.

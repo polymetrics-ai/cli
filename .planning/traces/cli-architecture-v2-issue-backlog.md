@@ -120,9 +120,11 @@ change records red evidence before production edits.
   `go build ./cmd/pm`, and `make verify`.
 - CLI parity covers runtime help, bare namespace exit-0 behavior, `docs/cli/**`, `website/**`,
   generated manuals/help fixtures, completion metadata, and tests.
-- TUI/Huh prompt activation requires both stdin and stdout TTYs; future RED tests must cover
-  `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input` fallback
-  without scripted-stdin consumption, hangs, or `/dev/tty` bypass.
+- TUI/Huh prompt activation requires both stdin and stdout TTYs and no `--plain`, `--json`, or
+  `--no-input` bypass flag; future RED tests must cover `stdin-piped+stdout-TTY`, `stdout-piped`,
+  `CI`, `--json`, `--plain`, and `--no-input` fallback without scripted-stdin consumption, hangs,
+  or `/dev/tty` bypass. Bypass flags always skip Bubble Tea, Huh, and prompts; sequential prompts
+  are allowed only in explicit accessible mode after the same gate passes.
 - Sub-PRs target `feat/cli-architecture-v2` and use `Refs #<sub-issue>` plus `Refs #<parent>`.
 - Dependency additions are allowed only in the phases and version lines approved by ADRs 0002–0004;
   any deviation is a fresh human gate.

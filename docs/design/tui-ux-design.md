@@ -25,8 +25,11 @@ TTY ∧ ¬`--json` ∧ ¬`--plain` ∧ ¬`--no-input` ∧ `PM_NO_TUI`/`CI` unset
 Everything behind it must degrade back to the flag door's output when stdin or stdout is piped.
 Piped or non-TTY stdin is treated as scripted input for the flag/plain path only; TUI and Huh
 prompt code must not consume it unexpectedly, must not hang waiting for interaction, and must not open `/dev/tty`
-to bypass the gate. A wizard's last act is always to print the sanitized flag-door equivalent of what
-it just did, omitting secret values and one-time authorization values.
+to bypass the gate. `--plain`, `--json`, and `--no-input` always stay on the flag door: no Bubble
+Tea, no Huh, and no prompts. Explicit accessible mode may replace redraws with sequential prompts
+only after the same stdin+stdout TTY gate passes and no bypass flag is set. A wizard's last act is
+always to print the sanitized flag-door equivalent of what it just did, omitting secret values and
+one-time authorization values.
 
 ### 1.2 Signature element: the pipeline rail
 
@@ -314,10 +317,13 @@ Invalid actions still return usage errors.
   `pm query run --sql "<sanitized select>" --limit 500 --output .polymetrics/query-exports/result.jsonl --format jsonl --force`.
   With `--no-input` and no preapproved output, fail exactly:
   `query grid export requires explicit output — pass --output <project-relative-path> and --force, or run without --no-input to confirm interactively`.
-- Accessible/plain: `pm query grid --plain` or accessibility mode offers a sequential prompt for
-  SQL only when stdin and stdout are TTYs; piped/non-TTY stdin uses the deterministic plain path
-  and requires flags rather than consuming scripted input. Bare `pm query` remains contextual help,
-  not a grid launcher.
+- Bypass and accessibility: `pm query grid --plain`, `--json`, and `--no-input` never run a
+  sequential SQL prompt. They bypass Bubble Tea, Huh, and prompts, then produce deterministic
+  table/summary output when required flags such as `--sql` are present, or the exact required-flag
+  error asserted by the implementation issue. Explicit accessible mode may use a sequential SQL
+  prompt only when stdin and stdout are TTYs and none of `--plain`, `--json`, or `--no-input` is
+  set; piped/non-TTY stdin uses the deterministic plain path and requires flags rather than
+  consuming scripted input. Bare `pm query` remains contextual help, not a grid launcher.
 - Agent parity: `pm query run` untouched; `query tables` is plain/JSON first.
 
 **Query charts (dependency-gated child issue #463):** after #411 lands the result grid may
@@ -360,8 +366,10 @@ TTY-enhanced replacement for reading a 551-row dump. Alt-screen, split view.
 - Plain path fix (piped or `--json` unchanged shape, human format improved in the same
   phase): the `%+v` capabilities dump in `pm connectors list` becomes the existing
   `read=… write=… query=…` columns already used by `--all`.
-- Accessible: browse falls back to a sequential prompt (`filter? capability?`) then plain
-  listing — or users simply use `connectors list`, which stays first-class.
+- Accessible: browse may use a sequential `filter? capability?` flow only in explicit accessible
+  mode after the stdin+stdout TTY gate passes and no `--plain`, `--json`, or `--no-input` bypass
+  flag is set. Bypass and piped paths print deterministic plain/list output — or users simply use
+  `connectors list`, which stays first-class.
 - Agent parity: `connectors list/catalog/inspect --json` untouched.
 
 ### 2.6 `pm docs view` — the docs pager
@@ -435,8 +443,9 @@ connector/field *names*, but values arrive only via `--from-env`/`--value-stdin`
 ## 3. Accessibility spec (becomes the `pm a11y` help topic)
 
 1. **Prompt accessibility**: every huh flow honors `--accessible`,
-   `PM_ACCESSIBLE_PROMPTER`, and generic `ACCESSIBLE` → sequential numbered prompts, no
-   redraws (huh `WithAccessible`).
+   `PM_ACCESSIBLE_PROMPTER`, and generic `ACCESSIBLE` only after stdin and stdout are TTYs and no
+   `--plain`, `--json`, or `--no-input` bypass flag is set → sequential numbered prompts, no
+   redraws (huh `WithAccessible`). Bypass flags and non-TTY stdin/stdout never prompt.
 2. **Reduced motion**: `ui.spinner: disabled` config (and implied by accessible mode) →
    static `● running` lines with action-specific text; progress becomes periodic plain
    updates.
@@ -464,8 +473,8 @@ connector/field *names*, but values arrive only via `--from-env`/`--value-stdin`
 - Wizards emit machine artifacts (manifest JSON at a documented path) and echo the sanitized
   scripted equivalent — TTY sessions teach the API without printing secrets or one-time
   authorization values.
-- `--no-input`, `CI`, and non-TTY stdin or stdout hard-disable prompting; an interactive-only path
-  errors by naming the flag/file to provide instead (clig.dev rule).
+- `--json`, `--plain`, `--no-input`, `CI`, and non-TTY stdin or stdout hard-disable prompting; an
+  interactive-only path errors by naming the flag/file to provide instead (clig.dev rule).
 - New enumerators added for the TUI (`query tables`) land as plain/JSON commands first, so
   the agent surface grows with the human one.
 
@@ -491,7 +500,7 @@ Testing:
 - **Models**: teatest/v2 golden frames per model (happy path, failure, cancel, narrow
   terminal), driven headlessly — no TTY in CI. Cover 160×45, 100×30, 80×24, compact, and
   below-minimum frames plus Normal/Filter/Edit mode conflicts and one-layer `esc` behavior.
-- **Gate**: `ui.Detect` table tests for the stdin+stdout TTY green path, `stdin-piped+stdout-TTY`
+- **Gate**: `ui.Detect` table tests for stdin+stdout TTY activation, `stdin-piped+stdout-TTY`
   fallback, `stdout-piped` fallback, `CI`, `PM_NO_TUI`, `TERM=dumb`, `--json`, `--plain`,
   `--no-input`, and proof that no `/dev/tty` bypass is used.
 - **Contract**: existing agentic contract suite runs unchanged (plain path is the default

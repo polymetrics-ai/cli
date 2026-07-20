@@ -58,11 +58,16 @@ TUI-PHASE PREFLIGHT (stages 10, 11, 13, chart child #463, 14, 16, 18, and 20): i
 must be integrated into the active parent branch and its accepted correction PR/review blocker must
 be resolved by the parent orchestrator before production UI work starts. Load the repo-local
 `bubble-tea-tui-design` skill plus the routed Go CLI/testing/security/safety/context/concurrency/
-documentation skills. The RED contract must cover bare namespace help-not-TUI behavior,
-Normal/Filter/Edit mode conflicts, arrows+Vim equivalence, contextual help,
-wide/standard/compact/guard layouts, accessible/plain fallback, sanitation/redaction, approval-token
-non-display, cancellation, and unchanged JSON/stdout/stderr/exit semantics. Record the skill and
-evidence in PLAN/TDD-LEDGER/VERIFICATION and the PR body.
+documentation skills. The shared RED contract must cover the TUI fallback matrix for every TUI
+phase: stdin+stdout TTY activation, `stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`,
+`--json`, `--plain`, and `--no-input`. `--plain`, `--json`, and `--no-input` must bypass Bubble
+Tea, Huh, and all prompts; sequential prompts are allowed only in explicit accessible mode after the
+same stdin+stdout TTY gate passes and no bypass flag is set. Retain each surface's own RED cases for
+bare namespace help-not-TUI behavior, Normal/Filter/Edit mode conflicts, arrows+Vim equivalence,
+contextual help, wide/standard/compact/guard layouts, accessible/plain fallback,
+sanitation/redaction, approval-token non-display, cancellation, and unchanged
+JSON/stdout/stderr/exit semantics. Record the skill and evidence in PLAN/TDD-LEDGER/VERIFICATION
+and the PR body.
 
 STAGE 1 — GOLDEN SAFETY NET (track A, no deps)
 Record ~80 golden transcripts (exit code + stdout + stderr) against the CURRENT dispatcher:
@@ -226,7 +231,9 @@ Certify batch table per design doc §2.7 (concurrent row updates from events; ex
 0/1/2/3 untouched); RLM viewer per §2.8 (heartbeat age from the Temporal poller). Pair
 bpytop-style exact metrics with any small graph, disclose units/ranges, throttle redraws,
 and preserve text-only/reduced-motion frames.
-GATE 16: teatest goldens; certify exit tests green; `make verify` + certify smoke.
+GATE 16: teatest goldens; certify exit tests green; shared TTY fallback RED matrix green for
+stdin+stdout TTY activation, `stdin-piped+stdout-TTY`, `stdout-piped`, `CI=1`, `--json`,
+`--plain`, and `--no-input`; `make verify` + certify smoke.
 Commit "feat(ui): certify batch table + rlm agent viewer (arch-v2)".
 
 STAGE 17 — METRICS (track C; deps: otel sdk/metric + exporters + temporal contrib)

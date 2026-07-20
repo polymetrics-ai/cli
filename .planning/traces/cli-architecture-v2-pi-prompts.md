@@ -113,11 +113,13 @@ semantics.
 
 Follow the operator-workspace design: LazyGit panel hierarchy, fzf filter/list/preview behavior,
 bpytop exact metric density, Gum focused wizard cadence, and Polymetrics' quiet pipeline-rail
-language. Bubble Tea/Huh prompts activate only when stdin and stdout are TTYs; piped/non-TTY stdin
-falls back to deterministic plain/noninteractive behavior and must never be consumed unexpectedly,
-hang, or bypass through `/dev/tty`. Bare `pm query` and bare `pm reverse` render contextual
-help/subcommand summaries and exit 0; explicit interactive subcommands are `pm query grid` and
-`pm reverse guide`. Do not copy generic shell execution, shell-backed previews, unlabelled
+language. Bubble Tea/Huh prompts activate only when stdin and stdout are TTYs and no `--plain`,
+`--json`, or `--no-input` bypass flag is set; piped/non-TTY stdin falls back to deterministic
+plain/noninteractive behavior and must never be consumed unexpectedly, hang, or bypass through
+`/dev/tty`. `--plain`, `--json`, and `--no-input` always skip Bubble Tea, Huh, and prompts;
+sequential prompts are allowed only in explicit accessible mode after the same gate passes. Bare
+`pm query` and bare `pm reverse` render contextual help/subcommand summaries and exit 0; explicit
+interactive subcommands are `pm query grid` and `pm reverse guide`. Do not copy generic shell execution, shell-backed previews, unlabelled
 destructive keys, generic HTTP/SQL writes, generic file writes, approval-token display, or
 interactive secret entry. Mouse/OSC52/advanced graphics are optional accelerators only.
 

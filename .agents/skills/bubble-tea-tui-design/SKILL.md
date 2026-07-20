@@ -26,11 +26,14 @@ accessible, and compatible with its plain/JSON sibling.
 
 - Flags, plain text, JSON, and NDJSON are the API; the TUI is a TTY-gated projection.
   Bubble Tea and Huh prompt activation require both stdin and stdout TTYs, plus no `--json`,
-  `--plain`, `--no-input`, `PM_NO_TUI`, `CI`, or `TERM=dumb`. Piped or non-TTY stdin always falls
-  back to deterministic plain/noninteractive behavior; never consume scripted stdin unexpectedly,
-  never hang for a prompt, and never open `/dev/tty` to bypass the gate. Bare namespace commands render
-  contextual help/subcommand summaries and exit 0 rather than launching a TUI. Use explicit
-  interactive subcommands such as `pm query grid` and `pm reverse guide`.
+  `--plain`, `--no-input`, `PM_NO_TUI`, `CI`, or `TERM=dumb`. `--plain`, `--json`, and
+  `--no-input` always bypass Bubble Tea, Huh, and all prompts, producing deterministic output or
+  exact required-flag errors only. Sequential prompts are allowed only in explicit accessible mode
+  after the same stdin+stdout TTY gate passes and no bypass flag is set. Piped or non-TTY stdin
+  always falls back to deterministic plain/noninteractive behavior; never consume scripted stdin
+  unexpectedly, never hang for a prompt, and never open `/dev/tty` to bypass the gate. Bare
+  namespace commands render contextual help/subcommand summaries and exit 0 rather than launching a
+  TUI. Use explicit interactive subcommands such as `pm query grid` and `pm reverse guide`.
 - Use Bubble Tea's model/update/view architecture. Commands own asynchronous I/O; `Update`
   remains deterministic and never performs blocking work.
 - Default to Normal mode. Enter Filter/Edit mode only when an input owns focus, display the
