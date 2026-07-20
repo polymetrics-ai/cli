@@ -1,0 +1,51 @@
+{
+  "phase": "408-flow-etl-dashboards",
+  "issue": 408,
+  "parentIssue": 397,
+  "branch": "feat/408-flow-etl-dashboards",
+  "baseBranch": "feat/cli-architecture-v2",
+  "status": "in_progress",
+  "currentCycle": "plan",
+  "gsdMode": "scripts/gsd_with_manual_universal_loop_fallback",
+  "manualFallbackReason": "scripts/gsd prompt programming-loop init --phase 408-flow-etl-dashboards --dry-run failed: scripts/gsd: unknown GSD command: programming-loop",
+  "verificationPassed": false,
+  "verificationBlocker": "production edits not started; make verify not yet run for phase",
+  "phaseArtifacts": {
+    "plan": ".planning/phases/408-flow-etl-dashboards/PLAN.md",
+    "tddLedger": ".planning/phases/408-flow-etl-dashboards/TDD-LEDGER.md",
+    "verification": ".planning/phases/408-flow-etl-dashboards/VERIFICATION.md",
+    "summary": ".planning/phases/408-flow-etl-dashboards/SUMMARY.md"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "bounded mutating Pi worker owns exactly one issue/branch/cwd and has no subagent tool; executing issue-local plan inline",
+      "timestamp": "2026-07-21T00:00:00Z"
+    }
+  ],
+  "commands": [
+    {
+      "command": "scripts/gsd doctor",
+      "result": "pass"
+    },
+    {
+      "command": "scripts/gsd list",
+      "result": "pass"
+    },
+    {
+      "command": "scripts/gsd prompt plan-phase 408 --skip-research",
+      "result": "pass"
+    },
+    {
+      "command": "scripts/gsd prompt programming-loop init --phase 408-flow-etl-dashboards --dry-run",
+      "result": "fail",
+      "output": "scripts/gsd: unknown GSD command: programming-loop"
+    },
+    {
+      "command": "git fetch origin feat/cli-architecture-v2 && git merge --ff-only origin/feat/cli-architecture-v2",
+      "result": "pass",
+      "output": "fast-forwarded to b77d8f49"
+    }
+  ]
+}
