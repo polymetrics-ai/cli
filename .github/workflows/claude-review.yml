@@ -70,7 +70,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Go (for read-only inspection / go vet)
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
           cache: true
@@ -118,7 +118,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Go (for read-only inspection / go vet)
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
           cache: true
