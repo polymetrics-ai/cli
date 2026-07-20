@@ -135,3 +135,26 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 - Phase 437 pending intake remains planning-only under `.planning/traces/phase-437-pending-intake/`; no pending request is authorized for implementation.
 
 - #408 dispatch: `pm-gsd-worker` in `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards`, branch `feat/408-flow-etl-dashboards`, from parent head `5b6037880eed78bc8bc276a3ced13302908cac53`; #413 deferred for write-scope collision.
+
+## 2026-07-21 Pi model-routing correction
+
+- User directive: route all active Pi/GSD roles through `openai-codex/gpt-5.6-sol`.
+- Implementation roles (`pm-gsd-worker`, `pm-issue-worker`, and `pm-docs-writer`) use `thinking: high`.
+- Orchestration, planning, research, issue creation, verification, review, review disposition, and
+  Shepherd validation use `thinking: xhigh`.
+- Raise the project parallel worker ceiling from three to the Pi runtime's safe cap of four;
+  dependency order, disjoint write scopes, one issue per worker, and isolated worktrees remain hard
+  prerequisites.
+- Add a deterministic routing regression check before editing active model configuration. Update
+  active Pi agents, prompts, Shepherd defaults, GSD config, and canonical runtime documentation;
+  retain earlier `gpt-5.5` entries in phase/run artifacts as historical evidence.
+- GSD adapter preflight: `scripts/gsd doctor` passes; `scripts/gsd prompt programming-loop init
+  --phase 397 --dry-run` still reports `unknown GSD command: programming-loop`, so the documented
+  manual universal-loop fallback applies for this bounded orchestration configuration correction.
+- This correction changes future dispatch only. An already-running subagent cannot switch model
+  mid-invocation; resume/re-dispatch only after its durable checkpoint.
+- Shepherd hardening discovered during routing review: delete the previous validator verdict before
+  each validation turn, discard any verdict from a validator process that exits nonzero, and honor
+  `RUN.json.terminal` only after a fresh `PROCEED` from a successful validator process. Add a
+  deterministic main-loop regression so validator failure or `RETRY` cannot create false
+  human-readiness.

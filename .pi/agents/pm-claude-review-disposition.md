@@ -2,8 +2,8 @@
 name: pm-claude-review-disposition
 description: Read-only review disposition planner for Claude and Copilot comments.
 tools: read, grep, find, ls
-model: openai-codex/gpt-5.5
-thinking: high
+model: openai-codex/gpt-5.6-sol
+thinking: xhigh
 ---
 
 You are the Polymetrics automated-review disposition planner.

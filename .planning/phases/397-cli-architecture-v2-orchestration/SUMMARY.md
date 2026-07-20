@@ -61,3 +61,19 @@ The parent branch was safely synced with `origin/main` using ordinary no-ff merg
 The human coordinator explicitly reviewed and tested PR #466 at exact head `26f98a72419010b961b5b8378ef4a695b0c0a06f` and approved integration into `feat/cli-architecture-v2`. The orchestrator verified the head was unchanged, checks were green, and active review threads were empty, then recorded human fallback review coverage at https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557.
 
 PR #466 was merged only into the parent branch at `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`. Parent PR #438 remains draft and unmerged to `main`. #437 is provisionally integrated and the #407 umbrella dependency is complete on the parent branch. The ready queue now selects #408 as the critical-path ready implementation issue; #413 is ready but deferred for write-scope collision with #408, downstream UI/help issues remain dependency-blocked, and #419 remains a human dependency gate. Phase 437 pending intake remains planning-only.
+
+## Pi 5.6 Sol routing and Shepherd hardening — 2026-07-21
+
+Active Pi and GSD routing now uses `openai-codex/gpt-5.6-sol` exclusively. Mutating implementation
+roles (`pm-gsd-worker`, `pm-issue-worker`, `pm-docs-writer`) run with `high`; orchestration,
+planning, research, issue creation, verification, review, review disposition, and Shepherd
+validation run with `xhigh`. Project concurrency now matches Pi's safe four-process cap while
+retaining dependency, write-scope, issue, branch, and worktree isolation rules.
+
+The Shepherd driver now deletes the prior validator verdict before every validation turn, discards
+any verdict from a validator process that exits nonzero, accepts a terminal run state only after a
+fresh successful `PROCEED`, passes coordinator thinking explicitly, and uses a 90-minute stall
+window suitable for the long CLI/certification gates. Deterministic model-routing, stale-verdict,
+failed-validator, terminal-authority, and live-child stall regressions are wired into `make verify`.
+The full repository verification gate passed. Earlier 5.5 runtime entries remain unchanged as
+historical evidence.

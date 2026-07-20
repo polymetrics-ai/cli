@@ -77,6 +77,25 @@ Status: not yet run at final HEAD
 - [ ] #408 TUI worker launch/spawn from the post-#437 parent head.
 - [ ] #419 explicit optional dependency decision.
 
+## Pi 5.6 Sol routing correction — 2026-07-21
+
+- [x] `pi --list-models gpt-5.6-sol` exposes `openai-codex/gpt-5.6-sol` with reasoning support.
+- [x] `scripts/tests/pi-model-routing.sh` fails before active routing edits and passes afterward.
+- [x] All `.pi/agents/*.md` files explicitly pin `openai-codex/gpt-5.6-sol`.
+- [x] Implementation agents use `thinking: high`; all non-implementation agents use
+  `thinking: xhigh`.
+- [x] `scripts/pi-shepherd-loop.sh` defaults coordinator and validator to Sol/xhigh and passes an
+  explicit coordinator `--thinking` argument.
+- [x] `.planning/config.json` mirrors Sol routing and permits four concurrent agents.
+- [x] Active Pi/GSD prompts and runtime documentation contain no `gpt-5.4-mini` or `gpt-5.5`
+  routing instructions; historical run evidence is unchanged.
+- [x] Shell syntax checks and existing Shepherd stall-guard regression pass.
+- [x] Shepherd verdict-guard regressions prove stale verdict removal, rejection of a `PROCEED`
+  written by a validator that exits nonzero, and terminal acceptance only after a fresh successful
+  `PROCEED`.
+- [x] Full `make verify`: all Go tests, build, docs validation, smoke, lint, connectorgen 547/0,
+  Pi routing, and Shepherd guard targets passed.
+
 ## Per-unit gate
 
 For every remaining unit:

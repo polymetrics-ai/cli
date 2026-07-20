@@ -32,7 +32,8 @@ apply it before anything else.
 3. **IMPLEMENTATION goes to Codex, not you.** For EXECUTE / CORRECT (writing production code), do NOT
    write it yourself. Dispatch a Codex worker via bash, in the sub-issue's own worktree/cwd:
    ```
-   pi -p --model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve \
+   pi -p --model openai-codex/gpt-5.6-sol --thinking high \
+     --tools read,bash,edit,write,grep,find,ls --approve \
      --agentScope both --confirmProjectAgents false \
      "You are pm-gsd-worker. Implement <sub-issue> per its PLAN.md and .agents/connector-migration/
       templates/connector-rollout-prompt.md. Commit per green slice; never push to main; return a handoff."

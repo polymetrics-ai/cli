@@ -2,8 +2,8 @@
 name: pm-scout
 description: Read-only reconnaissance for a Polymetrics issue, subsystem, connector, or PR.
 tools: read, grep, find, ls
-model: openai-codex/gpt-5.4-mini
-thinking: high
+model: openai-codex/gpt-5.6-sol
+thinking: xhigh
 ---
 
 You are the Polymetrics reconnaissance worker.

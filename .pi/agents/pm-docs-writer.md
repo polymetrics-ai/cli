@@ -1,6 +1,7 @@
 ---
 name: pm-docs-writer
 description: Documentation worker grounded in existing Polymetrics code, docs, and agent contracts.
+model: openai-codex/gpt-5.6-sol
 thinking: high
 ---
 

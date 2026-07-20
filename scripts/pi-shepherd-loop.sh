@@ -33,10 +33,11 @@
 #
 # Config (env; defaults shown):
 #   PI_BIN=pi
-#   ORCH_MODEL=openai-codex/gpt-5.5           # orchestrator model (thinking level via ":<level>")
+#   ORCH_MODEL=openai-codex/gpt-5.6-sol       # orchestrator model
+#   ORCH_THINKING=xhigh                       # orchestrator reasoning effort
 #   PI_TOOLS=read,bash,edit,write,grep,find,ls,subagent
 #   VALIDATOR_BIN=pi                          # Shepherd CLI (cross-model judging is a feature)
-#   VALIDATOR_ARGS="--model openai-codex/gpt-5.6-sol --thinking high --tools read,bash,edit,write,grep,find,ls --approve"
+#   VALIDATOR_ARGS="--model openai-codex/gpt-5.6-sol --thinking xhigh --tools read,bash,edit,write,grep,find,ls --approve"
 #   MAX_ITERATIONS=200                        # hard backstop on orchestrator turns
 #   MAX_REVERTS=6                             # total revert budget per run before HALT
 #   MAX_NO_VERDICT=3                          # consecutive no-verdict turns before HALT
@@ -45,6 +46,8 @@
 #   PI_EXTRA_FLAGS=""                         # extra flags for every orchestrator invocation
 #   LOOP_CMD=/pm-auto-loop                    # /pm-connector-loop for connector runs
 #   AUTO_LOOP_STATE_DIR=.planning/auto-loop   # set to isolate separate Shepherd runs
+#   STALL_MINUTES=90                          # allow full verify/race stages to report progress
+#   WATCHDOG_POLL_SECONDS=60                  # process/session liveness poll interval
 #   NODE_BIN_DIR=~/.nvm/versions/node/v24.13.1/bin  # prepended when present so pi uses current Node
 #   SEARXNG_BASE=                             # research via the audited searxng connector (pm)
 set -euo pipefail
@@ -55,10 +58,11 @@ if [[ -x "$NODE_BIN_DIR/node" ]]; then
 fi
 
 PI_BIN="${PI_BIN:-pi}"
-ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.5}"
+ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.6-sol}"
+ORCH_THINKING="${ORCH_THINKING:-xhigh}"
 PI_TOOLS="${PI_TOOLS:-read,bash,edit,write,grep,find,ls,subagent}"
 VALIDATOR_BIN="${VALIDATOR_BIN:-pi}"
-VALIDATOR_ARGS="${VALIDATOR_ARGS:---model openai-codex/gpt-5.6-sol --thinking high --tools read,bash,edit,write,grep,find,ls --approve}"
+VALIDATOR_ARGS="${VALIDATOR_ARGS:---model openai-codex/gpt-5.6-sol --thinking xhigh --tools read,bash,edit,write,grep,find,ls --approve}"
 MAX_ITERATIONS="${MAX_ITERATIONS:-200}"
 MAX_REVERTS="${MAX_REVERTS:-6}"
 MAX_NO_VERDICT="${MAX_NO_VERDICT:-3}"
@@ -68,8 +72,9 @@ PI_EXTRA_FLAGS="${PI_EXTRA_FLAGS:-}"
 LOOP_CMD="${LOOP_CMD:-/pm-auto-loop}"
 # Research: default SEARXNG_BASE from the shell's SEARXNG_URL (name mismatch guard) and export.
 SEARXNG_BASE="${SEARXNG_BASE:-${SEARXNG_URL:-}}"; export SEARXNG_BASE
-STALL_MINUTES="${STALL_MINUTES:-20}"
+STALL_MINUTES="${STALL_MINUTES:-90}"
 STALL_KILL_LIVE_CHILDREN="${STALL_KILL_LIVE_CHILDREN:-1}"
+WATCHDOG_POLL_SECONDS="${WATCHDOG_POLL_SECONDS:-60}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE_DIR="${AUTO_LOOP_STATE_DIR:-$REPO_ROOT/.planning/auto-loop}"
@@ -107,6 +112,31 @@ try:
 except Exception: print("")
 PY
 }
+
+prepare_validator_turn() {
+  # A validator crash or auth failure must never reuse the previous turn's verdict.
+  rm -f "$VERDICT_JSON"
+}
+
+terminal_is_authoritative() { # $1=validator verdict
+  # Terminal state written by a rejected/unvalidated turn is not a successful outcome.
+  [[ "$1" == "PROCEED" ]]
+}
+
+if [[ "${SHEPHERD_VERDICT_GUARD_SELF_TEST:-}" == "1" ]]; then
+  printf '{"verdict":"PROCEED"}\n' > "$VERDICT_JSON"
+  prepare_validator_turn
+  [[ ! -e "$VERDICT_JSON" ]] || { echo "self-test failed: stale validator verdict survived" >&2; exit 1; }
+  terminal_is_authoritative PROCEED || { echo "self-test failed: PROCEED terminal rejected" >&2; exit 1; }
+  for rejected in RETRY REVERT HALT ""; do
+    if terminal_is_authoritative "$rejected"; then
+      echo "self-test failed: terminal accepted after ${rejected:-missing} verdict" >&2
+      exit 1
+    fi
+  done
+  echo "self-test passed: stale verdict removed; terminal requires fresh PROCEED"
+  exit 0
+fi
 
 latest_session_file() {
   python3 - "$STATE_DIR/sessions" <<'PY'
@@ -296,10 +326,10 @@ fi
 run_orchestrator() { # $1=turn-message — with stall watchdog (session mtime + child liveness)
   local msg="$1" rc=0 pid sess
   # shellcheck disable=SC2086
-  "$PI_BIN" -p --model "$ORCH_MODEL" --tools "$PI_TOOLS" --approve --session-dir "$STATE_DIR/sessions" $PI_EXTRA_FLAGS \
+  "$PI_BIN" -p --model "$ORCH_MODEL" --thinking "$ORCH_THINKING" --tools "$PI_TOOLS" --approve --session-dir "$STATE_DIR/sessions" $PI_EXTRA_FLAGS \
     "$msg" >>"$LOG_FILE" 2>&1 & pid=$!
   while kill -0 "$pid" 2>/dev/null; do
-    sleep 60
+    sleep "$WATCHDOG_POLL_SECONDS"
     sess="$(latest_session_file)"
     if [[ -n "$sess" ]]; then
       if stale_session_requires_kill "$sess" "$pid"; then
@@ -314,6 +344,7 @@ run_orchestrator() { # $1=turn-message — with stall watchdog (session mtime + 
 
 run_validator() {
   local rc=0
+  prepare_validator_turn
   # shellcheck disable=SC2086
   "$VALIDATOR_BIN" -p $VALIDATOR_ARGS --session-dir "$STATE_DIR/sessions" "$(state_root_instruction)
 
@@ -365,7 +396,12 @@ VALIDATOR CORRECTION (apply first): $correction"
   run_orchestrator "$turn_msg" || log "turn $i: orchestrator returned non-zero (validator will assess)"
 
   log "── turn $i: VALIDATOR ──"
-  run_validator || log "turn $i: validator returned non-zero"
+  validator_rc=0
+  run_validator || validator_rc=$?
+  if (( validator_rc != 0 )); then
+    log "turn $i: validator returned non-zero ($validator_rc); discarding its verdict"
+    prepare_validator_turn
+  fi
   AUTO_LOOP_STATE_DIR="$STATE_DIR" "$REPO_ROOT/scripts/loop-trace.sh" distill >/dev/null 2>&1 && log "turn $i: trace digest written (see $STATE_DIR/trace/INDEX.md)" || true
 
   verdict="$(json_field "$VERDICT_JSON" verdict)"
@@ -394,12 +430,16 @@ VALIDATOR CORRECTION (apply first): $correction"
 
   terminal="$(json_field "$RUN_JSON" terminal)"; stage="$(json_field "$RUN_JSON" stage)"
   log "turn $i: stage=${stage:-?} terminal=${terminal:-none}"
-  case "$terminal" in
-    human_gate) log "DONE: human-ready gate reached (human review before merge to main)."; exit 0 ;;
-    done)       log "DONE: all sub-issues complete and verified."; exit 0 ;;
-    blocked)    log "STOP: blocked (see ORCHESTRATION-STATE.json / VALIDATION.jsonl)."; exit 4 ;;
-    budget)     log "STOP: budget ceiling; re-run --resume."; exit 3 ;;
-  esac
+  if terminal_is_authoritative "$verdict"; then
+    case "$terminal" in
+      human_gate) log "DONE: human-ready gate reached (human review before merge to main)."; exit 0 ;;
+      done)       log "DONE: all sub-issues complete and verified."; exit 0 ;;
+      blocked)    log "STOP: blocked (see ORCHESTRATION-STATE.json / VALIDATION.jsonl)."; exit 4 ;;
+      budget)     log "STOP: budget ceiling; re-run --resume."; exit 3 ;;
+    esac
+  elif [[ -n "$terminal" ]]; then
+    log "turn $i: terminal=$terminal ignored until a fresh validator PROCEED verdict"
+  fi
 
   sleep "$COOLDOWN_SECONDS"
 done

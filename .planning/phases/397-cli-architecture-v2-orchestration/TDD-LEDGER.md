@@ -55,3 +55,35 @@ Do not backfill evidence. Append exact commands/results and worker session/head 
 - RED: #437/PR #466 was green but blocked by missing external/human review coverage and therefore blocked #407/#413 plus #408 collision-free launch.
 - GREEN: human fallback review approved exact head `26f98a72419010b961b5b8378ef4a695b0c0a06f`; pre-integration checks confirmed unchanged head, green checks, and no unresolved threads; local merge landed at `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`.
 - REFACTOR: #407 umbrella dependency state is complete; queue rebuilt with #408 ready/critical path, #413 deferred for collision, and #419 still human-gated.
+
+## Pi 5.6 Sol role routing — 2026-07-21
+
+- RED command: `scripts/tests/pi-model-routing.sh` must fail against the existing active policy
+  because implementation is pinned to `gpt-5.5:xhigh`, other roles include `gpt-5.4-mini`/5.5 and
+  non-xhigh effort, the Shepherd coordinator defaults to 5.5, and concurrency is capped at three.
+- GREEN target: every project Pi agent declares `openai-codex/gpt-5.6-sol`; implementation roles
+  declare `high`; every other role plus coordinator/validator declares `xhigh`; project concurrency
+  is four; active prompts/docs contain no stale 5.4/5.5 route.
+- REFACTOR target: keep model/effort policy explicit at both the project-agent frontmatter and
+  Shepherd launch boundaries, while preserving historical phase evidence verbatim.
+- RED command: `scripts/tests/pi-shepherd-loop-verdict-guard.sh` must fail before the driver exposes
+  a verdict-guard self-test; current behavior leaves `VALIDATOR-VERDICT.json` in place and checks a
+  terminal state even after `RETRY`/missing verdict.
+- GREEN target: every validation turn removes the prior verdict before invoking the validator;
+  any verdict written by a validator that exits nonzero is discarded; terminal
+  `human_gate|done|blocked|budget` is authoritative only after a fresh `PROCEED` from a successful
+  validator process.
+- RED observed: `scripts/tests/pi-model-routing.sh` exited non-zero with
+  `AssertionError: .../.pi/agents/pm-claude-review-disposition.md: model='openai-codex/gpt-5.5',
+  want 'openai-codex/gpt-5.6-sol'` before active routing edits.
+- RED observed: `scripts/tests/pi-shepherd-loop-verdict-guard.sh` exited non-zero through the
+  driver's usage guard because no verdict-guard self-test existed.
+- RED observed during independent review: a main-loop fake validator wrote `PROCEED`, exited 9,
+  and the driver incorrectly logged `DONE: human-ready gate reached`; the regression exited 1 with
+  `test failed: nonzero validator authorized terminal success`.
+- GREEN observed: `make pi-model-routing-check pi-shepherd-guards-check` passed; output confirmed
+  10 explicit Sol agents, implementation/high, all other roles/xhigh, concurrency four, stale
+  verdict removal, rejection of a failed validator's written verdict, terminal acceptance only
+  after fresh successful `PROCEED`, and the existing live-child stall guard.
+- REFACTOR observed: coordinator thinking is an explicit CLI argument, project settings enforce
+  bare interactive defaults, active policy has no 5.4/5.5 route, and the full `make verify` passed.

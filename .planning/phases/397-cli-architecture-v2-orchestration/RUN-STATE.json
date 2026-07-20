@@ -5,7 +5,7 @@
   "parentPR": 438,
   "status": "worker_in_progress",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "5b6037880eed78bc8bc276a3ced13302908cac53",
+  "currentHead": "b77d8f49205aa16944a6148c3640d28899c63a21",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -425,6 +425,15 @@
         408
       ],
       "reason": "Created isolated worktree /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards on branch feat/408-flow-etl-dashboards from parent head 5b603788 and dispatched pm-gsd-worker for #408. #413 deferred for write-scope collision; #419 remains human-gated."
+    },
+    {
+      "cycle": "pi_56_sol_routing_and_shepherd_hardening",
+      "timestamp": "2026-07-20T21:23:21Z",
+      "decision": "local_critical_path",
+      "issues": [
+        397
+      ],
+      "reason": "Routed Pi implementation workers to openai-codex/gpt-5.6-sol high and all planning, orchestration, review, and verification roles to openai-codex/gpt-5.6-sol xhigh; raised safe parallel capacity to four; hardened Shepherd against stale or failed-process validator verdicts and premature terminal acceptance; full make verify passed. Existing #408 worktree state was preserved and no duplicate worker was spawned."
     }
   ],
   "units": [
@@ -806,7 +815,7 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T20:15:00Z",
+  "updatedAt": "2026-07-20T21:23:21Z",
   "mainSync": {
     "baseBeforeSync": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
     "originMain": "74ab381eb8236305170ffd44d5aed74f8d0d2936",

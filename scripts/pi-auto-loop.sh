@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Autonomous, resumable Pi orchestration driver.
 #
-# Runs the pm-auto-loop orchestrator (Claude Opus 4.8) headlessly, advancing the
+# Runs the pm-auto-loop orchestrator (Codex Sol/xhigh) headlessly, advancing the
 # stage machine one turn per invocation and re-launching until the run reaches a
 # terminal state. All progress is durable (ORCHESTRATION-STATE.json + GSD
 # artifacts + git + GitHub), so a run killed at any point — including token
@@ -12,10 +12,11 @@
 #   scripts/pi-auto-loop.sh "Add full CLI parity for the Freshservice connector"
 #   scripts/pi-auto-loop.sh --resume        # continue the current run, no new prompt
 #
-# Config (env; defaults shown). Set the model IDs once here to whatever your
-# `/model` list in Pi shows for your logged-in Claude Max + Codex subscriptions.
+# Config (env; defaults shown). The model uses the subscription-backed
+# `openai-codex` provider; verify availability with `pi --list-models gpt-5.6-sol`.
 #   PI_BIN=pi
-#   ORCH_MODEL=anthropic/claude-opus-4-8      # orchestrator (main session) = Claude Opus 4.8
+#   ORCH_MODEL=openai-codex/gpt-5.6-sol       # orchestrator (main session)
+#   ORCH_THINKING=xhigh                       # orchestrator reasoning effort
 #   PI_TOOLS=read,bash,edit,write,grep,find,ls,subagent
 #   MAX_ITERATIONS=200                        # hard backstop on orchestrator turns
 #   MAX_MINUTES=0                             # wall-clock cap (0 = no cap)
@@ -30,7 +31,8 @@
 set -euo pipefail
 
 PI_BIN="${PI_BIN:-pi}"
-ORCH_MODEL="${ORCH_MODEL:-anthropic/claude-opus-4-8}"
+ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.6-sol}"
+ORCH_THINKING="${ORCH_THINKING:-xhigh}"
 PI_TOOLS="${PI_TOOLS:-read,bash,edit,write,grep,find,ls,subagent}"
 MAX_ITERATIONS="${MAX_ITERATIONS:-200}"
 MAX_MINUTES="${MAX_MINUTES:-0}"
@@ -85,7 +87,7 @@ run_pi() { # $1 = "fresh" | "continue"
       >>"$LOG_FILE" 2>&1 || rc=$?
   else
     # shellcheck disable=SC2086
-    "$PI_BIN" -p --model "$ORCH_MODEL" --tools "$PI_TOOLS" --approve $PI_EXTRA_FLAGS \
+    "$PI_BIN" -p --model "$ORCH_MODEL" --thinking "$ORCH_THINKING" --tools "$PI_TOOLS" --approve $PI_EXTRA_FLAGS \
       "$LOOP_CMD $PROBLEM" \
       >>"$LOG_FILE" 2>&1 || rc=$?
   fi

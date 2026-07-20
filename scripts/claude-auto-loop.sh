@@ -13,7 +13,8 @@
 #
 # All progress is durable (git commits + RUN.json/ORCHESTRATION-STATE.json + GitHub), so a run
 # killed anywhere resumes by reconciling. Claude runs on your Max plan via the first-party CLI
-# (no Pi third-party "extra usage" gate); Codex implements via `pi --model openai-codex/gpt-5.5`.
+# (no Pi third-party "extra usage" gate); Codex implements via
+# `pi --model openai-codex/gpt-5.6-sol --thinking high`.
 #
 # Usage:
 #   scripts/claude-auto-loop.sh "twenty (Twenty CRM, https://twenty.com) full all-ops CLI parity"

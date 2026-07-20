@@ -1,9 +1,10 @@
 # Pi Autonomous Orchestration Loop
 
-Fully automated, resumable, multi-model delivery loop. Given one prompt describing any problem
+Fully automated, resumable, role-routed delivery loop. Given one prompt describing any problem
 (connector or implementation), the loop plans, creates issues, implements, verifies, reviews,
-corrects, and integrates — with Claude planning/verifying/reviewing and Codex implementing — and
-can be stopped and resumed at any point (including token exhaustion) without losing work.
+corrects, and integrates. In the Codex-only profile, implementation runs at Sol/high and all
+coordination/research/planning/verification/review roles run at Sol/xhigh. The loop can be stopped
+and resumed at any point (including token exhaustion) without losing work.
 
 This is the runtime-generic contract. The Pi adapter is `pm-auto-loop` (`.pi/prompts/pm-auto-loop.md`)
 driven by `scripts/pi-auto-loop.sh`. It composes the existing
@@ -14,13 +15,13 @@ driven by `scripts/pi-auto-loop.sh`. It composes the existing
 
 | Stage role | Agent | Model | Provider |
 |---|---|---|---|
-| Orchestrator (main session) | — | `openai-codex/gpt-5.5` | Codex |
-| Web / API research | `pm-web-researcher` | `openai-codex/gpt-5.5` | Codex |
-| Parent + task planning | `pm-planner` | `openai-codex/gpt-5.5` | Codex |
-| Issue creation | `pm-issue-creator` | `openai-codex/gpt-5.5` (xhigh) | Codex |
-| Execute / correct | `pm-gsd-worker` | `openai-codex/gpt-5.5` (xhigh) | Codex |
-| Verify | `pm-verifier` | `openai-codex/gpt-5.5` | Codex |
-| Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | `openai-codex/gpt-5.5` | Codex |
+| Orchestrator (main session) | — | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
+| Web / API research | `pm-web-researcher` | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
+| Parent + task planning | `pm-planner` | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
+| Issue creation | `pm-issue-creator` | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
+| Execute / correct | `pm-gsd-worker` | `openai-codex/gpt-5.6-sol` (high) | Codex |
+| Verify | `pm-verifier` | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
+| Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
 
 The orchestrator is the only spawner (recursive `subagent` calls are blocked). The loop is driven
 turn-by-turn by the orchestrator, which persists state after every transition so any turn is a
@@ -152,7 +153,7 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
 - **Claude-orchestrated + Shepherd validator** (`scripts/claude-auto-loop.sh` +
   `.agents/agentic-delivery/prompts/claude-orchestrator.md`): the first-party Claude Code CLI
   (`claude -p`) is the orchestrator, billed to your **Claude subscription** (flat-rate). It
-  dispatches **Codex** (`pi --model openai-codex/gpt-5.5`, your ChatGPT subscription) for
+  dispatches **Codex** (`pi --model openai-codex/gpt-5.6-sol --thinking high`, your ChatGPT subscription) for
   implementation, with the Shepherd supervisor layer below. When this driver is used, the Claude
   roles run **only** on the first-party `claude` CLI — never through a third-party gateway.
 
