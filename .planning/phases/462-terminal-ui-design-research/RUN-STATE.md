@@ -11,6 +11,7 @@ start_commit: c91b90cf9671b5caabc0ef4ec24d81897f870458
 base_parent_commit: 93a117100c6421955262aa32794a91a158d267e1
 correction_start_head: e8286ea83a76ac2c6f6257c6e2d40fd21af81640
 followup_start_head: fd122c52458a6ef0db12f60f303c261ed2e63d4c
+evidence_closure_start_head: a8f867ee673f9420ff15ccd51797cba94ed91769
 original_pr: 465
 original_pr_head: 6853fee28e0208381b49931fb1f5dfec42ee50ef
 correction_pr: 467
@@ -22,8 +23,9 @@ correction_pr_merge_commit: 93a117100c6421955262aa32794a91a158d267e1
 followup_pr: 468
 followup_pr_state_at_start: open
 followup_pr_head_at_start: fd122c52458a6ef0db12f60f303c261ed2e63d4c
+followup_pr_head_at_evidence_closure_start: a8f867ee673f9420ff15ccd51797cba94ed91769
 followup_pr_review_status_at_start: human_review_pending
-state: correction_468_local_finding_disposition_complete
+state: correction_468_evidence_closure_complete_human_review_pending
 classification: docs_planning_skill_only
 research: complete
 local_reference_lab: complete
@@ -50,6 +52,8 @@ review:
     number: 468
     state_at_start: open
     head_at_start: fd122c52458a6ef0db12f60f303c261ed2e63d4c
+    head_at_evidence_closure_start: a8f867ee673f9420ff15ccd51797cba94ed91769
+    ci_status_at_evidence_closure_start: verify_in_progress_at_github; live GitHub checks authoritative after this snapshot
     review_status: human_review_pending
     source_of_truth: Git/GitHub current state after the starting snapshot; no self-referential final-head claim
 verification:
@@ -110,8 +114,10 @@ orchestration_decisions:
   - cycle: correction-468-verify
     decision: local_critical_path
     reason: docs-only verification completed inline with declared make docs-check equivalent
+  - cycle: correction-468-evidence-closure
+    decision: local_critical_path
+    reason: evidence-only RUN-STATE closure on assigned worker branch; parent records spawned; no subagent tool available to this worker
 next:
-  - commit_push_final_evidence
-  - update_pr_468_body
   - human_review_gate
+  - parent_integration_gate
 ```

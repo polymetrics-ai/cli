@@ -9,6 +9,7 @@
   "baseParentCommit": "93a117100c6421955262aa32794a91a158d267e1",
   "correctionStartHead": "e8286ea83a76ac2c6f6257c6e2d40fd21af81640",
   "followupStartHead": "fd122c52458a6ef0db12f60f303c261ed2e63d4c",
+  "evidenceClosureStartHead": "a8f867ee673f9420ff15ccd51797cba94ed91769",
   "originalPr": 465,
   "originalPrHead": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
   "correctionPr": 467,
@@ -20,8 +21,9 @@
   "followupPr": 468,
   "followupPrStateAtStart": "open",
   "followupPrHeadAtStart": "fd122c52458a6ef0db12f60f303c261ed2e63d4c",
+  "followupPrHeadAtEvidenceClosureStart": "a8f867ee673f9420ff15ccd51797cba94ed91769",
   "followupPrReviewStatusAtStart": "human_review_pending",
-  "state": "correction_468_local_finding_disposition_complete",
+  "state": "correction_468_evidence_closure_complete_human_review_pending",
   "classification": "docs_planning_skill_only",
   "research": "complete",
   "localReferenceLab": "complete",
@@ -49,6 +51,8 @@
       "number": 468,
       "stateAtStart": "open",
       "headAtStart": "fd122c52458a6ef0db12f60f303c261ed2e63d4c",
+      "headAtEvidenceClosureStart": "a8f867ee673f9420ff15ccd51797cba94ed91769",
+      "ciStatusAtEvidenceClosureStart": "verify_in_progress_at_github; live GitHub checks authoritative after this snapshot",
       "reviewStatus": "human_review_pending",
       "sourceOfTruth": "Git/GitHub current state after the starting snapshot; no self-referential final-head claim"
     }
@@ -114,12 +118,16 @@
       "cycle": "correction-468-verify",
       "decision": "local_critical_path",
       "reason": "docs-only verification completed inline with declared make docs-check equivalent"
+    },
+    {
+      "cycle": "correction-468-evidence-closure",
+      "decision": "local_critical_path",
+      "reason": "evidence-only RUN-STATE closure on assigned worker branch; parent records spawned; no subagent tool available to this worker"
     }
   ],
   "next": [
-    "commit_push_final_evidence",
-    "update_pr_468_body",
-    "human_review_gate"
+    "human_review_gate",
+    "parent_integration_gate"
   ],
   "verification": {
     "declaredPhaseEquivalent": "make docs-check",
