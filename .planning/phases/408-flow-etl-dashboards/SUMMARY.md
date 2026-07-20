@@ -1,6 +1,6 @@
 # Summary — Phase 408 flow/ETL dashboards
 
-Status: in progress.
+Status: implementation pushed; verification blocked by repeated full-race timeout and human disposition.
 
 ## Current state
 
@@ -10,7 +10,7 @@ Status: in progress.
 - Worker branch fast-forwarded from `5b603788` to parent `b77d8f49` before production edits.
 - Issue-local phase artifacts created.
 - EXECUTE resumed at `361a6bec0af1ed9cf84d5bdfdd10f16458d9da4d`; all 19 existing dirty entries adopted intact.
-- Focused GREEN and focused race gates are recorded; full repository verification remains in progress.
+- Focused GREEN/race, full non-race suite, and `make verify` pass. Full race timed out twice without race findings; hard stop active.
 
 ## Delivered so far
 
@@ -25,9 +25,9 @@ Status: in progress.
 
 ## Next
 
-1. Commit/push the focused green implementation checkpoint.
-2. Run full repository tests, full race, and `make verify`; fix only issue-scoped regressions under RED → GREEN → REFACTOR.
-3. Finalize truthful phase state and push verification checkpoint. Do not open a PR in this EXECUTE stage.
+1. Push the artifact-only verification checkpoint and return control.
+2. Orchestrator/human decides whether focused race coverage is sufficient or schedules a separately approved long-timeout/sharded full-race gate.
+3. Resolve the literal teatest dependency gap only in a dependency-approved stage. Do not open a PR in this EXECUTE stage.
 
 ## Blockers / human gates
 
@@ -35,3 +35,5 @@ Status: in progress.
 - New dependencies beyond ADR-0003 approved phase budget remain a hard stop.
 - NTCharts remains unapproved and forbidden.
 - Bubble Tea/teatest are absent from the live module and this EXECUTE instruction forbids new dependencies; literal teatest coverage remains an explicit verification gap, with deterministic headless model/session coverage used instead.
+- Repeated full-race timeout: default 10m full race and 20m `internal/cli` retry both timed out without race findings; hard stop.
+- `make verify` passed, but its repository smoke recipe executed local temporary fixture reverse ETL. No remote/credentialed/production action occurred; this crossed the user's explicit no-reverse-execution boundary and requires disposition.

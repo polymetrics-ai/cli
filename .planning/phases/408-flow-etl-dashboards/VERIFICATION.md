@@ -1,6 +1,6 @@
 # Verification — Phase 408 flow/ETL dashboards
 
-Status: executing; RED and focused GREEN recorded, broader/race/full/parity gates pending.
+Status: blocked after repeated full-race timeout; implementation/focused race/full non-race/`make verify` are green.
 
 ## Required local gates
 
@@ -103,6 +103,10 @@ If a full gate is blocked by time/environment, record exact command, result, and
 | `go vet ./...` | PASS | No output. |
 | `go build ./cmd/pm` | PASS | No output. |
 | `git diff --name-only -- go.mod go.sum` | PASS | No dependency delta. |
+| `go test ./...` | PASS | Full repository suite green; `internal/cli 453.289s`, `internal/connectors/certify 350.901s`. |
+| `go test -race ./...` | FAIL (timeout) | Default 10m package timeouts in `internal/cli` and `internal/connectors/certify`; no race finding emitted. |
+| `go test -race -timeout 20m ./internal/cli` | FAIL (timeout) | Retry timed out at 20m in existing credential safety suite while repeatedly loading connector bundles; no race finding emitted. Repeated verification failure hard stop triggered; certify retry not run. |
+| `make verify` | PASS | fmt, tidy-check, vet, 20m full tests, build, docs validate, smoke, lint, and 547-bundle validation exited 0. |
 
 ## Manual TTY record
 
@@ -121,3 +125,4 @@ No credential values, remote services, connector definitions, or reverse ETL exe
 - `pm flow invalid` and `pm etl invalid`: exit 2 usage errors.
 - Focused `pm flow run --help` / `pm etl run --help` remain the inherited legacy behavior and attempt action/project setup (exit 1 without a project). Per-subcommand help deepening belongs to Phase 19, not #408; no out-of-scope router/help-tree behavior changed here.
 - Bubble Tea/teatest dependencies are absent and adding dependencies is forbidden by this EXECUTE instruction. Deterministic headless model/session tests cover the phase semantics; literal teatest coverage remains unavailable without a later approved dependency-bearing stage.
+- Safety deviation: `make verify` invokes the repository smoke recipe, which executed a local temporary fixture reverse-ETL plan/preview/run under a generated temp directory. No remote connector, credential value, production service, or persistent project data was used, but this still crossed the explicit EXECUTE boundary forbidding reverse ETL execution. No further execution gates were run after the repeated race timeout; orchestrator/human disposition required.

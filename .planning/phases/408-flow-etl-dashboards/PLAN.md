@@ -1,6 +1,6 @@
 # Phase 408 — Flow/ETL run dashboards
 
-Status: EXECUTING / focused GREEN recorded; broader verification pending
+Status: EXECUTE BLOCKED / implementation pushed; repeated full-race timeout requires orchestrator disposition
 Issue: #408 `feat(ui): add flow and ETL run dashboards`  
 Parent: #397, base `feat/cli-architecture-v2`, parent PR #438  
 Worker branch: `feat/408-flow-etl-dashboards`  

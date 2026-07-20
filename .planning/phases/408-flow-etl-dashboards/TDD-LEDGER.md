@@ -202,3 +202,5 @@ gofmt -w cmd internal && git diff --check && go test ./internal/ui/... -count=1 
 Result: PASS. Focused model/CLI/race coverage green; full repository gates remain tracked in `VERIFICATION.md`.
 
 Dependency note: no `go.mod`/`go.sum` delta. Bubble Tea/teatest are absent from the live module and the EXECUTE instruction forbids new dependencies, so coverage uses deterministic headless semantic/model tests rather than adding teatest.
+
+Broader REFACTOR gates: `go test ./...` PASS; `make verify` PASS. Full `go test -race ./...` timed out in `internal/cli` and `internal/connectors/certify` at the default 10m package limit; focused issue races passed. A targeted `go test -race -timeout 20m ./internal/cli` retry also timed out with no race finding, triggering the repeated-verification-failure hard stop. Exact details are in `VERIFICATION.md`.
