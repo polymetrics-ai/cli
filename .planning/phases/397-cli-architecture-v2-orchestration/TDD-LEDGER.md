@@ -46,7 +46,7 @@ Starting parent HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
 | #437 / PR #466 | Existing issue branch had recorded native connectors/certify RED plus five prior safety cycles. Spawned continuation/review workers captured fresh RED for leak dominance, cleanup/idempotency, resume authority, required-value parsing, future timestamps, and CI timing fragility. The remote timing failure was recorded exactly; local stress did not fabricate a failure. | Head `26f98a72419010b961b5b8378ef4a695b0c0a06f`: focused/repeated/race, full CLI/certify, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certify, and connectorgen 547/0 passed. CI concurrency proof is deterministic rather than wall-clock based. | Human fallback review approved exact head; pre-integration gate confirmed green checks and no unresolved threads. | PR #466 merged into parent only at `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`; #437 provisionally integrated. |
 | #462 / PR #465/#467/#468 | Docs-only RED identified missing interaction/accessibility contract. The latest RED also identified human discoverability failure when query/reverse required hidden aliases. | PR #468 specifies eligible dual-TTY bare query/reverse entry, same-model grid/guide aliases, token secrecy, path confinement, stdin+stdout TTY gate, and unconditional bypass behavior. PR #468 merged into parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`. | GitHub blocked-by edges include #462 for affected issues. Claude workflow is disabled manually; no external review record exists, so parent/human fallback coverage remains pending. | Provisionally integrated; production TUI remains queued behind #408/#437 collision and downstream dependencies. |
 | #408-#414, #416-#418, #420 | pending per issue | pending | #408 is source-ready after #462 integration, but mutating launch is deferred by `not_spawned_write_scope_collision` with open PR #466 central CLI/help/golden/docs/website files. Downstream issues remain dependency-blocked. | not promoted |
-| #419 decision | no production implementation without explicit beta-dependency inclusion approval | not applicable | decision record pending | skipped or approved implementation pending |
+| #419 decision | Issue requires explicit human inclusion before any beta dependency or production implementation. | No implementation: human explicitly chose SKIP/DEFER for this parent campaign. | Decision recorded in issue #419 and parent phase ledgers; no dependency added. | Explicitly human-deferred; grants no approval for any other dependency. |
 
 Do not backfill evidence. Append exact commands/results and worker session/head identities after each unit.
 
@@ -55,6 +55,12 @@ Do not backfill evidence. Append exact commands/results and worker session/head 
 - RED: #437/PR #466 was green but blocked by missing external/human review coverage and therefore blocked #407/#413 plus #408 collision-free launch.
 - GREEN: human fallback review approved exact head `26f98a72419010b961b5b8378ef4a695b0c0a06f`; pre-integration checks confirmed unchanged head, green checks, and no unresolved threads; local merge landed at `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`.
 - REFACTOR: #407 umbrella dependency state is complete; queue rebuilt with #408 ready/critical path, #413 deferred for collision, and #419 still human-gated.
+
+## #419 explicit human defer — 2026-07-21
+
+- RED: issue #419 requires explicit human inclusion of an optional OpenTelemetry beta dependency before implementation.
+- GREEN: operator explicitly chose SKIP/DEFER from parent campaign #397; no worker, code, branch, PR, or dependency addition is authorized.
+- REFACTOR: treat the parent acceptance criterion as satisfied by a durable defer record while keeping every other new dependency human-gated.
 
 ## Pi 5.6 Sol role routing — 2026-07-21
 

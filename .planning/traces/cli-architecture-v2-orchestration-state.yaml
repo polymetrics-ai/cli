@@ -10,7 +10,7 @@ parent_pr:
   url: https://github.com/polymetrics-ai/cli/pull/438
   base: main
   head: feat/cli-architecture-v2
-  head_sha: 1008f75ff8fe7d43a0a67a802ccf05ef296eae7f
+  head_sha: 78cbe6409a61d65eab0d150fd79d78600636bf10
   draft: true
   state: open
 default_branch: main
@@ -68,11 +68,12 @@ ready_queue:
     decision: not_spawned_dependency_blocked
     reason: "Blocked by #409."
   - number: 419
-    status: blocked
+    status: complete
     dependencies: [404, 410]
     write_scope: "optional OTel log bridge"
     decision: not_spawned_human_gate
-    reason: "Explicit optional beta dependency inclusion or skip decision remains required."
+    reason: "Human explicitly chose SKIP/DEFER from parent campaign #397; no worker or beta dependency is authorized, and no other dependency is approved."
+    deferred: true
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -457,14 +458,14 @@ subissues:
     automated_review: {primary_route: human, status: clean, head_sha: 1008f75ff8fe7d43a0a67a802ccf05ef296eae7f, reviewed_range: "#421-#437 parent range; #437 exact head covered by human fallback", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Umbrella dependency complete on parent; final parent/main review still pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"}
   - number: 408
     url: https://github.com/polymetrics-ai/cli/issues/408
-    branch: pending
+    branch: feat/408-flow-etl-dashboards
     pr_url: ""
-    worker: unassigned
-    status: worker_ready
+    worker: pm-gsd-worker
+    status: worker_in_progress
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, generated docs/goldens/website parity"
-    worker_directory: ""
-    verification: not_run_spawn_pending
-    automated_review: {primary_route: blocked, status: pending, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Ready to spawn after #437 integration; #413 deferred for collision.", disposition_url: ""}
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards
+    verification: "Focused RED and GREEN are recorded; broader/race/full gates, coherent implementation commit, push, and handoff remain pending."
+    automated_review: {primary_route: blocked, status: pending, head_sha: "361a6bec0af1ed9cf84d5bdfdd10f16458d9da4d", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "No review yet; EXECUTE stage remains active and #413 is deferred for collision.", disposition_url: ""}
   - number: 409
     url: https://github.com/polymetrics-ai/cli/issues/409
     branch: pending
@@ -580,11 +581,12 @@ subissues:
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: planned
+    status: complete
     write_scope: "optional pinned OpenTelemetry log bridge"
     worker_directory: ""
-    verification: not_run_human_decision_pending
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Optional phase; blocked by #404, #410, and later human decision.", disposition_url: ""}
+    verification: "Human explicitly chose SKIP/DEFER for parent campaign #397; no beta dependency or implementation is authorized."
+    automated_review: {primary_route: human, status: clean, head_sha: "", reviewed_range: "not implemented; explicitly human-deferred", coverage_route: blocked, fallback_route: none, disposition_summary: "Decision-only coverage; grants no approval for any other dependency.", disposition_url: "https://github.com/polymetrics-ai/cli/issues/419"}
+    deferred: true
   - number: 420
     url: https://github.com/polymetrics-ai/cli/issues/420
     branch: pending
@@ -796,4 +798,4 @@ human_gates:
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
   - Phase 437 pending intake implementation or GitHub issue edits without explicit authorization
-updated_at: 2026-07-20T20:15:00Z
+updated_at: 2026-07-20T21:55:12Z

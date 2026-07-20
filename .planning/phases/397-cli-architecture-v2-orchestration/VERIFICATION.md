@@ -75,7 +75,14 @@ Status: not yet run at final HEAD
 - [ ] #462 external review coverage recorded; local `pm-reviewer` is not substitute coverage.
 - [x] #437 external/human review coverage recorded and PR #466 integrated.
 - [ ] #408 TUI worker launch/spawn from the post-#437 parent head.
-- [ ] #419 explicit optional dependency decision.
+- [x] #419 explicit optional dependency decision: human chose SKIP/DEFER; no beta dependency or implementation is authorized.
+
+## #419 operator decision — 2026-07-21
+
+- [x] Human explicitly chose SKIP/DEFER for the optional OpenTelemetry beta log bridge in this parent campaign.
+- [x] No beta dependency was added and no #419 implementation worker was dispatched.
+- [x] The decision grants no approval for any other dependency.
+- [x] Issue #419 and parent phase ledgers contain the durable decision record.
 
 ## Pi 5.6 Sol routing correction — 2026-07-21
 

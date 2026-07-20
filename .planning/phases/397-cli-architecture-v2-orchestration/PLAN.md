@@ -34,8 +34,8 @@ Preserve parent commits through #410 at starting HEAD. Do not reimplement #398-#
    connection setup. #411 owns the human-first bare query workspace plus its `query grid` alias.
 7. Complete #417 after #411/#412/#413/#414/#416/#469.
 8. Complete #418 after #411/#412/#414/#416/#469 and #463 when the chart slice is included.
-9. #419 remains human-gated because its issue requires explicit inclusion of an optional beta dependency; if no approval exists, record an explicit skip rather than implementing it.
-10. Complete #420 after #415/#417/#418 and the #419 decision record.
+9. #419 is explicitly human-deferred from this parent campaign. Do not implement the optional OpenTelemetry beta log bridge and do not add its beta dependency.
+10. Complete #420 after #415/#417/#418; the required #419 decision record is satisfied by the explicit human defer.
 
 ## Per-unit lifecycle
 
@@ -121,7 +121,7 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 ## Human gates
 
 - Never merge PR #438 to `main`.
-- No new dependencies beyond an explicit accepted ADR/approval record; #419 still requires its issue-specific explicit inclusion decision.
+- No new dependencies beyond an explicit accepted ADR/approval record; #419 is explicitly deferred and grants no dependency approval.
 - No secrets, auth-scope changes, credentialed connector checks, production operations, destructive actions, quality-gate reductions, or generic write tools.
 - Reverse ETL execution remains plan -> preview -> approval -> execute and is not part of ordinary verification.
 
@@ -135,6 +135,13 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 - Phase 437 pending intake remains planning-only under `.planning/traces/phase-437-pending-intake/`; no pending request is authorized for implementation.
 
 - #408 dispatch: `pm-gsd-worker` in `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards`, branch `feat/408-flow-etl-dashboards`, from parent head `5b6037880eed78bc8bc276a3ced13302908cac53`; #413 deferred for write-scope collision.
+
+## 2026-07-21 operator decision for #419
+
+- Explicit human decision: SKIP/DEFER the optional OpenTelemetry beta log bridge from parent campaign #397.
+- Do not add the beta dependency and do not dispatch an implementation worker for #419.
+- This decision satisfies the parent campaign's required #419 inclusion-or-skip record. Issue #419 may remain open for future separately authorized work.
+- This is not approval for any other dependency. All other dependency additions remain human-gated.
 
 ## 2026-07-21 Pi model-routing correction
 

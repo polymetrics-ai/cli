@@ -62,6 +62,10 @@ The human coordinator explicitly reviewed and tested PR #466 at exact head `26f9
 
 PR #466 was merged only into the parent branch at `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`. Parent PR #438 remains draft and unmerged to `main`. #437 is provisionally integrated and the #407 umbrella dependency is complete on the parent branch. The ready queue now selects #408 as the critical-path ready implementation issue; #413 is ready but deferred for write-scope collision with #408, downstream UI/help issues remain dependency-blocked, and #419 remains a human dependency gate. Phase 437 pending intake remains planning-only.
 
+## #419 operator decision — 2026-07-21
+
+Human explicitly chose SKIP/DEFER for the optional OpenTelemetry beta log bridge from parent campaign #397. No #419 implementation worker will run and no beta dependency is authorized. This satisfies the parent inclusion-or-skip acceptance criterion while granting no approval for any other dependency; issue #419 may remain open for future separately authorized work.
+
 ## Pi 5.6 Sol routing and Shepherd hardening — 2026-07-21
 
 Active Pi and GSD routing now uses `openai-codex/gpt-5.6-sol` exclusively. Mutating implementation
