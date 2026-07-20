@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: eighth bounded correction reopened at exact head `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; verification false until fresh RED/GREEN/full gates pass. Seventh bounded correction is complete at terminal artifact commit `0d515e6e`, and PR #466 body records that head. Stacked PR #466 remains open with human/parent review fallback pending.
+Status: eighth bounded correction complete through reviewed implementation head `af0e4dab`; terminal artifact commit is pending and PR #466 body update follows after that commit so the final PR head can be named truthfully. Stacked PR #466 remains open with human/parent review fallback pending.
 
 ## Identity
 
@@ -136,12 +136,16 @@ Delivery: planning `82f59229`, RED `e0fb8c4b`, and GREEN `2ce0e10a` are pushed. 
 
 Verification: focused GREEN, repeated, race, full affected packages, runtime no-effect/help (`8391` bytes), docs/golden/website drift, fixture-only sample smoke, gofmt/diff/vet/full tests/build, final `make verify`, and explicit connectorgen 547/0 all pass. Final `make verify` ran CLI `442.999s`, certify `348.395s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, and connectorgen green. Terminal evidence commit `0d515e6e` and PR body update completed the seventh delivery. No bot review request or merge.
 
-## Eighth bounded correction — reopened
+## Eighth bounded correction
 
-Status: planning checkpoint in progress; `verificationPassed=false` until eighth full gates pass.
+Status: verified through reviewed implementation head `af0e4dab`; `verificationPassed=true` for eighth gates. Terminal artifact commit and PR body update follow so the final PR head can be named outside the self-referential artifact.
 
 Identity: `issue-437-eighth-bounded-correction-20260720`; exact clean/matched start `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8` on branch `refactor/437-connectors-certify-native-cobra`, PR #466. Local branch, remote branch, and PR head were confirmed equal. The eighth recovery exception is recorded because accepted Medium findings can cause future-dated reports to suppress reruns and whitespace-only values to reach telemetry/credential/runner/sweep effects.
 
 Accepted corrections: reject materially future `StartedAt`/`CompletedAt` report timestamps using a documented small skew tolerance while preserving historical reports and `CompletedAt >= StartedAt`; reject empty/whitespace space-form values for all value-required certify flags before config/logger/telemetry/credential-file reads/runner/workspace/sweep; finalize artifacts and PR status without impossible commit self-reference. Terminal artifacts can record the reviewed/implementation head, but cannot contain their own commit SHA because Git computes it after the commit content exists.
 
 GSD: `scripts/gsd doctor` passed; `scripts/gsd prompt plan-phase 437 --skip-research` generated; `scripts/gsd prompt programming-loop init --phase 437 --dry-run` remains unavailable, so the manual universal-loop fallback applies. Execution decision: `local_critical_path`; parent records this worker as spawned. No bot review request or merge.
+
+Delivery: planning `45f190dc`, RED `ea5e412c`, and GREEN implementation `af0e4dab` are pushed. Future-dated resume reports beyond the documented five-minute skew rerun instead of suppressing execution; valid historical reports remain usable. Empty/whitespace space-form `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than` now fail as usage exit 2 before logger/telemetry/credential/runner/workspace/sweep effects, while valid assigned/space values and boolean bare controls remain valid.
+
+Verification: RED failed before production (`certify` 0.662s; `cli` 23.561s). GREEN/final gates pass: focused `0.739s`/`2.559s`; repeated/race `1.192s`/`6.887s` and `2.450s`/`23.441s`; full affected packages `347.792s`/`443.361s`; runtime whitespace no-effect plus help parity `8391` bytes; docs/golden `11.208s`; website drift-free; sample smoke exit 0/pass/stderr 0; `gofmt`, diff, vet, full tests, build, final `make verify` (CLI `445.358s`, certify `348.425s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0 pass. No credentials, live services, external writes/sweeps, dependencies, connector defs, bot review, parent/main merge, or quality-gate reduction.

@@ -7,7 +7,7 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": "2ce0e10ad4b092d3c9314bf0e6bd607ecd48b51f",
+  "endingImplementationHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "thirdCorrectionStartingHead": "437d13cf",
@@ -21,8 +21,8 @@
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "eighth_review_correction_planning",
-  "verificationPassed": false,
+  "status": "eighth_review_correction_verified_terminal_artifact_pending",
+  "verificationPassed": true,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
   "latestParentHead": "a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa",
@@ -299,11 +299,21 @@
       "cycle": "eighth-review-correction-green",
       "decision": "local_critical_path",
       "reason": "minimal future timestamp and whitespace value-required fixes passed focused, repeated, race, vet, and build gates; broader verification remains pending"
+    },
+    {
+      "cycle": "eighth-review-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full affected packages, runtime whitespace no-effect/help, docs/golden/website, fixture-only sample smoke, fmt/diff/vet/full tests/build, final make verify, and connectorgen all passed"
+    },
+    {
+      "cycle": "eighth-review-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts record successful eighth verification and reviewed implementation head; PR body update follows after commit so final PR head can be named without self-reference; no bot review requested"
     }
   ],
   "red": "captured eighth RED: certify future-report focus 0.662s resumed ordinary and cleanup-failure/absence-proof future-dated reports; CLI focus 23.561s showed empty/whitespace value-required flags reached later validation, credential paths, fake runtime effects, or full sample certification instead of pre-effect usage",
   "green": "eighth GREEN: future-dated resume reports beyond 5m skew rerun; empty/whitespace space-form value-required flags reject before effects while valid assigned/space values and boolean bare controls remain supported",
-  "verification": "pending eighth verification; verificationPassed false until full make verify exits 0",
+  "verification": "eighth verification passed: focused/repeated/race, full affected packages, runtime no-effect/help, sample smoke, docs/golden/website drift, gofmt/diff/vet/full tests/build, final make verify, and connectorgen 547/0 all green",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",
@@ -327,9 +337,12 @@
     "82f59229 docs(planning): plan seventh certify correction",
     "e0fb8c4b test(certify): expose seventh review regressions",
     "2ce0e10a fix(certify): close seventh review gaps",
-    "0d515e6e docs(planning): record seventh certify evidence"
+    "0d515e6e docs(planning): record seventh certify evidence",
+    "45f190dc docs(planning): plan eighth certify correction",
+    "ea5e412c test(certify): expose eighth review regressions",
+    "af0e4dab fix(certify): close eighth review gaps"
   ],
-  "push": "continuation planning, parent merge, verification, and PR artifact commits pushed to refactor/437-connectors-certify-native-cobra",
+  "push": "planning, RED, GREEN commits pushed; terminal artifact commit and PR body update pending for final head",
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
   "reviewRoute": "human_parent_fallback_pending_no_bot_retry_requested",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, bot review, parent/main merge, or quality-gate reduction",
@@ -344,7 +357,7 @@
   "eighthCorrectionStartingHead": "0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8",
   "eighthCorrectionSession": "issue-437-eighth-bounded-correction-20260720",
   "eighthCorrectionReviewedCodeHead": "0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8",
-  "eighthCorrectionImplementationHead": "pending_green_commit",
-  "eighthCorrectionTerminalEvidenceCommit": null,
+  "eighthCorrectionImplementationHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
+  "eighthCorrectionTerminalEvidenceCommit": "pending_commit_sha_not_self_referencable",
   "terminalEvidenceCommitPolicy": "artifact commits cannot contain their own resulting SHA because Git computes the commit object after file content is fixed; artifacts record reviewedCodeHead/endingImplementationHead and the final PR head is recorded in the PR body after push"
 }

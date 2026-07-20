@@ -206,6 +206,6 @@ Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `g
 
 Recovery-budget exception: unresolved future-evidence and whitespace effect-before-usage findings require this extra bounded correction rather than stopping on prior cycle count.
 
-Downstream artifact: pending. Planning checkpoint must be committed/pushed before RED; RED tests must fail before production; GREEN and terminal evidence follow.
+Downstream artifact: complete through reviewed implementation head `af0e4dab`; terminal artifact commit follows. Planning `45f190dc`, RED `ea5e412c`, and GREEN `af0e4dab` are pushed. Future-dated resume reports beyond a documented five-minute skew rerun; whitespace/empty space-form value-required certify flags fail as usage exit 2 before effects. Final PR body update follows after the terminal artifact commit so it can name the actual PR head without impossible self-reference.
 
-Verification result: pending for eighth cycle. Seventh cycle remains verified at terminal artifact commit `0d515e6e`.
+Verification result: pass for eighth cycle. RED failed before production (`certify` 0.662s; `cli` 23.561s). GREEN/final gates pass: focused/repeated/race, full affected packages (`347.792s` certify, `443.361s` CLI), runtime no-effect/help parity (`8391` bytes), docs/golden/website drift, sample smoke, gofmt/diff/vet/full tests/build, final `make verify` (CLI `445.358s`, certify `348.425s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0. No credentials, live services, external writes/sweeps, dependencies, bot review, parent/main merge, or quality-gate reduction.

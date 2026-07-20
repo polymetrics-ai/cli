@@ -1,6 +1,6 @@
 # Phase 437 Plan — connectors and certify native Cobra
 
-Current status: eighth bounded correction reopened at exact clean local/remote/PR head `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; verification is false until fresh RED/GREEN and full gates pass. Seventh delivery is complete at terminal artifact commit `0d515e6e`, and PR #466 body records that head. Terminal artifact commits cannot contain their own resulting SHA because the SHA is computed after the file content is committed; artifact files therefore record the reviewed/implementation head and explain where the terminal evidence commit is discoverable (`git log`/PR head) instead of self-referencing.
+Current status: eighth bounded correction complete through reviewed implementation head `af0e4dab`; terminal evidence artifact commit is pending. PR #466 body update follows after that commit so it can name the actual PR head. Terminal artifact commits cannot contain their own resulting SHA because the SHA is computed after the file content is committed; artifact files therefore record the reviewed/implementation head and explain where the terminal evidence commit is discoverable (`git log`/PR head) instead of self-referencing.
 
 Issue: #437
 Umbrella: #407
@@ -311,3 +311,11 @@ An eighth bounded correction is explicitly authorized because accepted Medium fi
 5. Commit/push GREEN/refactor and terminal evidence checkpoints. Update PR #466 body with eighth-cycle evidence and final exact PR head. Do not request Claude/Copilot; human/parent review remains pending. Do not merge.
 
 Safety remains: no secrets, credentialed/live checks, live services, destructive cleanup, external writes/sweeps, new dependencies, connector defs, generic write tools, reverse ETL outside existing ordered local fixture smoke, parent/main merge, or bot review request.
+
+### Eighth-cycle completion
+
+Planning `45f190dc`, RED `ea5e412c`, and GREEN implementation `af0e4dab` were committed and pushed. RED failed before production as intended: future-dated ordinary and cleanup-failure/absence-proof reports resumed instead of rerunning, and empty/whitespace space-form value-required flags reached later validation/effects. GREEN adds a documented five-minute resume-report clock-skew tolerance and treats materially future `StartedAt`/`CompletedAt` as future-invalid evidence; valid historical completed reports and `CompletedAt >= StartedAt` remain accepted. GREEN also rejects `strings.TrimSpace(next)==""` for value-required certify flags before config/logger/telemetry, credential-file reads, runner, workspace, or sweep effects while preserving valid assigned/space values and boolean bare controls.
+
+Verification passed: focused GREEN, repeated, race, full `internal/connectors/certify` (`347.792s`) and `internal/cli` (`443.361s`), runtime whitespace no-effect and help byte parity (`8391` bytes), docs/golden/website drift, fixture-only sample smoke, `gofmt -w cmd internal`, `git diff --check`, `go vet ./...`, `go test ./...` (CLI `446.588s`, certify `349.095s`), `go build ./cmd/pm`, final `make verify` (CLI `445.358s`, certify `348.425s`, smoke/lint/docs/connectorgen green), and explicit connectorgen validation 547/0. No credentials, live services, external writes/sweeps, dependencies, connector defs, bot review, parent/main merge, or quality-gate reduction occurred.
+
+Terminal artifacts record reviewed implementation head `af0e4dab`; the terminal artifact commit and final PR-body head are intentionally recorded after commit in PR #466 rather than self-referenced inside this file.

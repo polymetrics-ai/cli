@@ -214,8 +214,8 @@ Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-tes
 | R8-1 | RED future reports | Ordinary completed report and cleanup-failure/absence-proof report with materially future timestamps are not resumed; current code should fail by resuming | Complete: failed before production |
 | R8-2 | RED whitespace values | Empty/whitespace space-form `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than` reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects | Complete: failed before production |
 | R8-3 | GREEN | Minimal future-timestamp skew validation and `TrimSpace(next)==""` required-value validation pass focused tests without weakening historical resume or valid value forms | Complete: focused/repeated/race, vet, and build pass |
-| R8-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Pending |
-| R8-5 | Delivery | Coherent commits pushed, PR #466 body updated with final eighth head/gates, no bot review, clean/remote-matched branch; terminal artifact explains why it cannot contain its own SHA | Pending |
+| R8-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Complete: full local gates pass |
+| R8-5 | Delivery | Coherent commits pushed, PR #466 body updated with final eighth head/gates, no bot review, clean/remote-matched branch; terminal artifact explains why it cannot contain its own SHA | Terminal artifact commit pending; PR body update follows commit |
 
 Strict TDD gate: R8-1/R8-2 failing evidence must be captured and committed before production edits. Tests use deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.
 
@@ -233,6 +233,16 @@ Implementation adds a documented 5-minute resume-report clock-skew tolerance and
 - Repeated: certify focus `-count=3` => pass (`1.192s`); CLI focus `-count=3` => pass (`6.887s`).
 - Race: certify focus `-race` => pass (`2.450s`); CLI focus `-race` => pass (`23.441s`).
 - Coherent-slice gates: `go vet ./...` and `go build ./cmd/pm` pass.
+
+### Eighth-cycle terminal verification evidence
+
+Reviewed implementation head before terminal artifacts: `af0e4dab`. Terminal artifact SHA cannot be recorded inside its own content; after this artifact commit/push, PR #466 body records the actual final PR head.
+
+- Full affected packages: `go test ./internal/connectors/certify -count=1` pass (`347.792s`); `go test ./internal/cli -count=1` pass (`443.361s`).
+- Runtime no-effect/help: built `./pm`; whitespace `--stream` exits 2, says `--stream requires a value`, and creates no `.polymetrics`; `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` byte-identical (`8391` bytes).
+- Docs/golden/website: `go test ./internal/cli -run 'TestConnectorsManual|TestNativeConnectors|TestNativeCertify' -count=1` pass (`11.208s`); `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages with no tracked docs/website/golden drift.
+- Fixture-only sample smoke: `./pm connectors certify sample --root <temp> --json` exit `0`, kind `ConnectorCertification`, connector `sample`, passed `true`, stderr bytes `0`.
+- Full gates: `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` pass (CLI `446.588s`, certify `349.095s`); `go build ./cmd/pm`; `make verify` pass (CLI `445.358s`, certify `348.425s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen green); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
 
 ### Seventh-cycle RED evidence captured
 

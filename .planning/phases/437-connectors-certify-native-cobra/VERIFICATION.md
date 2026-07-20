@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: false — eighth bounded correction reopened at exact head `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; fresh RED, GREEN, and full local gates are pending. Seventh correction remains verified at terminal artifact commit `0d515e6e` and PR #466 body records that head.
+`verificationPassed`: true — eighth bounded correction completed through implementation head `af0e4dab` with terminal artifact commit pending. Terminal artifacts intentionally record the reviewed/implementation head; the artifact commit SHA is discoverable from `git log`/PR #466 after commit because a commit cannot contain its own resulting SHA.
 
 ## TDD / behavior
 
@@ -271,7 +271,7 @@ Exact start: `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; identity `issue-437-sev
 
 Exact start: `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; identity `issue-437-eighth-bounded-correction-20260720`.
 
-`verificationPassed`: false — reopened before production edits; complete gates pending.
+`verificationPassed`: true — complete final local gates passed for the eighth correction.
 
 - [x] Confirm clean branch, local head, remote head, and PR #466 head all equal `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8` before edits.
 - [x] Reread required issue, contracts, GSD/manual loop, skill routing, CLI parity, ADR/design/migration context, and all phase artifacts.
@@ -285,10 +285,10 @@ Exact start: `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; identity `issue-437-eig
 - [x] GREEN: report timestamps materially beyond documented skew tolerance are future-invalid, while historical reports and `CompletedAt >= StartedAt` remain valid.
 - [x] GREEN: `strings.TrimSpace(next)==""` is value-missing for all value-required certify flags; valid assigned/space values still pass and boolean bare flags remain valid.
 - [x] Focused repeated and race variants pass: certify count=3 `1.192s`, CLI count=3 `6.887s`, certify race `2.450s`, CLI race `23.441s`.
-- [ ] Full `go test ./internal/connectors/certify -count=1` and `go test ./internal/cli -count=1` pass.
-- [ ] Runtime help/no-effect/exit checks pass: `./pm help connectors`, bare `./pm connectors`, `./pm connectors --help`, and blank-value no-effect checks.
-- [ ] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke passes without credentials/live services/external writes.
-- [ ] Docs/golden/website parity checked or explicitly not applicable.
-- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; final `make verify`; explicit `go run ./cmd/connectorgen validate internal/connectors/defs` all pass.
+- [x] Full `go test ./internal/connectors/certify -count=1` (`347.792s`) and `go test ./internal/cli -count=1` (`443.361s`) pass.
+- [x] Runtime help/no-effect/exit checks pass: `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` byte-identical (`8391` bytes); whitespace `--stream` exits 2, says `--stream requires a value`, and creates no `.polymetrics`.
+- [x] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke passes without credentials/live services/external writes: exit 0, `ConnectorCertification`, sample, passed true, stderr bytes 0.
+- [x] Docs/golden/website parity checked: focused CLI docs/golden `11.208s`; `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages; tracked docs/website diff clean.
+- [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` (CLI `446.588s`, certify `349.095s`); `go build ./cmd/pm`; final `make verify` (CLI `445.358s`, certify `348.425s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen green); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => 547/0 all pass.
 - [ ] PR #466 body update follows after terminal artifact commit so the final exact PR head is known.
 - [x] No credentials, live certification, services, external writes/sweeps, dependencies, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
