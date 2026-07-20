@@ -490,26 +490,7 @@ func TestRunBatchResumeAcceptsCleanupFailureAbsenceProof(t *testing.T) {
 		Connectors: map[string]certify.ConnectorCredsEntry{"github": {}},
 	}
 	batchDir := t.TempDir()
-	rep := passingReport("github")
-	tag := "pm-cert-github-12345678-1700000000"
-	rep.Passed = false
-	rep.Capabilities.WriteActions = map[string]certify.WriteActionResult{
-		"create_issue": {
-			Result:  "fail",
-			Cleanup: "close_issue",
-			Verify:  "read_back",
-			Tag:     tag,
-			Reason:  "write_cleanup failed, but cleanup_verify proved the entity absent",
-		},
-	}
-	rep.Stages = append(rep.Stages,
-		certify.StageResult{Name: "write_plan_preview", Tier: 2, Passed: true},
-		certify.StageResult{Name: "write_create", Tier: 2, Passed: true},
-		certify.StageResult{Name: "write_verify", Tier: 2, Passed: true},
-		certify.StageResult{Name: "approval_idempotency", Tier: 2, Passed: true},
-		certify.StageResult{Name: "write_cleanup", Tier: 2, Passed: false, Error: "write_cleanup: reverse run exit=1 stderr=fixture cleanup error"},
-		certify.StageResult{Name: "cleanup_verify", Tier: 2, Passed: true},
-	)
+	rep := cleanupFailureAbsenceProofReport("github")
 	var effects []string
 	factory := func(name string, _ certify.Options) certify.Runnable {
 		effects = append(effects, "run:"+name)
@@ -548,6 +529,84 @@ func TestRunBatchResumeAcceptsCleanupFailureAbsenceProof(t *testing.T) {
 	}
 	if result.ExitCode != 2 || result.Report.Passed || len(result.Report.Leaks) != 0 {
 		t.Fatalf("resumed result = %+v, want failed non-leaked report with exit 2", result)
+	}
+}
+
+func cleanupFailureAbsenceProofReport(connector string) certify.Report {
+	rep := passingReport(connector)
+	tag := "pm-cert-" + connector + "-12345678-1700000000"
+	rep.Passed = false
+	rep.Capabilities.WriteActions = map[string]certify.WriteActionResult{
+		"create_issue": {
+			Result:  "fail",
+			Cleanup: "close_issue",
+			Verify:  "read_back",
+			Tag:     tag,
+			Reason:  "write_cleanup failed, but cleanup_verify proved the entity absent",
+		},
+	}
+	rep.Stages = append(rep.Stages,
+		certify.StageResult{Name: "write_plan_preview", Tier: 2, Passed: true},
+		certify.StageResult{Name: "write_create", Tier: 2, Passed: true},
+		certify.StageResult{Name: "write_verify", Tier: 2, Passed: true},
+		certify.StageResult{Name: "approval_idempotency", Tier: 2, Passed: true},
+		certify.StageResult{Name: "write_cleanup", Tier: 2, Passed: false, Error: "write_cleanup: reverse run exit=1 stderr=fixture cleanup error"},
+		certify.StageResult{Name: "cleanup_verify", Tier: 2, Passed: true},
+	)
+	return rep
+}
+
+func futureDatedReport(rep certify.Report) certify.Report {
+	future := time.Now().UTC().Add(24 * time.Hour)
+	rep.StartedAt = future
+	rep.CompletedAt = future.Add(time.Minute)
+	return rep
+}
+
+func TestRunBatchResumeRerunsFutureDatedReports(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		report func(string) certify.Report
+	}{
+		{name: "ordinary completed report", report: passingReport},
+		{name: "cleanup failure absence proof", report: cleanupFailureAbsenceProofReport},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			cf := certify.CredsFile{Connectors: map[string]certify.ConnectorCredsEntry{"github": {}}}
+			batchDir := t.TempDir()
+			var effects []string
+			factory := func(name string, _ certify.Options) certify.Runnable {
+				effects = append(effects, "run:"+name)
+				if len(effects) == 1 {
+					return &fakeRunnable{rep: futureDatedReport(tc.report(name))}
+				}
+				return &fakeRunnable{rep: passingReport(name)}
+			}
+
+			if _, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+				CredsFile:     cf,
+				RunnerFactory: factory,
+				BatchDir:      batchDir,
+			}); err != nil {
+				t.Fatalf("seed RunBatch() error = %v", err)
+			}
+
+			batch, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+				CredsFile:     cf,
+				RunnerFactory: factory,
+				BatchDir:      batchDir,
+				Resume:        true,
+			})
+			if err != nil {
+				t.Fatalf("resume RunBatch() error = %v", err)
+			}
+			if len(effects) != 2 {
+				t.Fatalf("future-dated report effects=%v, want rerun instead of resume", effects)
+			}
+			if findResult(t, batch, "github").Resumed {
+				t.Fatalf("future-dated report was marked resumed: %+v", batch.Results)
+			}
+		})
 	}
 }
 

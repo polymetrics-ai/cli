@@ -278,10 +278,10 @@ Exact start: `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; identity `issue-437-eig
 - [x] Run `scripts/gsd doctor`; capture missing `programming-loop`; generate/read `scripts/gsd prompt plan-phase 437 --skip-research`; record manual fallback.
 - [x] Record execution decision `local_critical_path` and parent-spawn note.
 - [x] Record eighth recovery exception for future-evidence and whitespace effect-before-usage findings.
-- [ ] Planning checkpoint committed and pushed before RED tests or production edits.
-- [ ] RED: future-dated ordinary completed report reruns instead of resuming.
-- [ ] RED: future-dated cleanup-failure absence-proof report reruns instead of resuming.
-- [ ] RED: empty/whitespace space-form value-required flags reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects.
+- [x] Planning checkpoint committed and pushed before RED tests or production edits (`45f190dc`).
+- [x] RED: future-dated ordinary completed report reruns instead of resuming; current code failed by resuming.
+- [x] RED: future-dated cleanup-failure absence-proof report reruns instead of resuming; current code failed by resuming.
+- [x] RED: empty/whitespace space-form value-required flags reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects; current code failed by reaching later validation/effects.
 - [ ] GREEN: report timestamps materially beyond documented skew tolerance are future-invalid, while historical reports and `CompletedAt >= StartedAt` remain valid.
 - [ ] GREEN: `strings.TrimSpace(next)==""` is value-missing for all value-required certify flags; valid assigned/space values still pass and boolean bare flags remain valid.
 - [ ] Focused repeated and race variants pass.
