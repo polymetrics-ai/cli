@@ -25,5 +25,26 @@ Downstream artifact:
 
 Verification result:
 
-- Planning preflight complete.
-- Production verification pending.
+- Original implementation reached focused/full non-race green, but literal Bubble Tea v2/teatest coverage was absent.
+- Preserved: full race timed out at 10m; targeted `internal/cli` race timed out at 20m without race findings.
+- Prior `make verify` passed but crossed the narrower worker dispatch boundary through a local temporary reverse-smoke fixture; sequence remained plan → preview → approval → execute with no credential, remote, production, or persistent write.
+- Shepherd correction active; `execute_complete=false`; independent VERIFY pending.
+
+## Shepherd RETRY snapshot — 2026-07-20
+
+Command path:
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt programming-loop init --phase 408-flow-etl-dashboards --dry-run
+```
+
+Result: doctor passed; adapter still reports `scripts/gsd: unknown GSD command: programming-loop`, so the already-recorded manual universal-loop fallback remains active.
+
+Downstream artifact:
+
+- Correction slice in `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, and `RUN-STATE.json`.
+- Real Bubble Tea v2 model/program and `teatest/v2` RED→GREEN evidence will be recorded in the issue artifacts.
+- Delegated shared-parent state will be synchronized to live parent head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f` without claiming parent verification or review.
+
+Verification result: correction pending; execute completion false; no CORRECT-stage `make verify`, full race, independent VERIFY, REVIEW, or INTEGRATE.

@@ -108,6 +108,17 @@ For every remaining unit:
 - [ ] repository hygiene (clean tree, no unrelated files, no tracked generated binaries)
 - [ ] runtime-backed integration explicitly marked not run unless requested
 
+## Delegated live-state verification — #408 correction
+
+- [x] `git ls-remote origin refs/heads/feat/cli-architecture-v2` reports `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`.
+- [x] Graph evidence synchronized as 44 nodes / 43 subissue edges / 65 dependency edges / 0 errors.
+- [x] #408 correction active and execute completion false pending independent VERIFY.
+- [x] #413 remains `not_spawned_write_scope_collision`.
+- [x] #419 remains human-deferred with no beta dependency and no other dependency approval.
+- [x] Phase 437 pending intake remains planning-only.
+- [ ] Parent final verification: not run.
+- [ ] Parent exact-head review: not run.
+
 ## Final review
 
 - [ ] Correctness review at exact final HEAD: Sol/xhigh, clean.

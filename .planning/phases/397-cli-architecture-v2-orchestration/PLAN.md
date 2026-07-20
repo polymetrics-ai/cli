@@ -118,6 +118,16 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 - Copilot backup was probed non-mutatingly and is unavailable in this session (`@copilot` collaborator
   probe returned HTTP 404); no Copilot review was requested.
 
+## Delegated #408 Shepherd correction evidence — 2026-07-20
+
+- Live parent remote head: `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`.
+- Live graph: 44 nodes, 43 subissue edges, 65 dependency edges, 0 validation errors.
+- #408: Shepherd RETRY active on `feat/408-flow-etl-dashboards`; exact Phase-10 Charm dependency pins authorized by accepted ADR-0003, accepted Stage 10, and issue #408. Parent and #408 execute completion remain false pending correction plus independent VERIFY.
+- #413: `not_spawned_write_scope_collision`; stays serialized behind #408.
+- #419: human-deferred; no beta OTel log dependency and no other dependency approval granted.
+- Phase 437 pending intake: planning-only; no implementation or issue mutation authorized.
+- Scope is evidence synchronization only. No parent verification, review, PR-ready, integration, or merge claim.
+
 ## Human gates
 
 - Never merge PR #438 to `main`.

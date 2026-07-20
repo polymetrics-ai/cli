@@ -3,10 +3,17 @@
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "worker_in_progress",
+  "status": "correction_worker_in_progress",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "5b6037880eed78bc8bc276a3ced13302908cac53",
+  "currentHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+  "executeComplete": false,
   "verificationPassed": false,
+  "liveGraph": {
+    "nodes": 44,
+    "subissueEdges": 43,
+    "dependencyEdges": 65,
+    "errors": 0
+  },
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -425,6 +432,24 @@
         408
       ],
       "reason": "Created isolated worktree /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards on branch feat/408-flow-etl-dashboards from parent head 5b603788 and dispatched pm-gsd-worker for #408. #413 deferred for write-scope collision; #419 remains human-gated."
+    },
+    {
+      "cycle": "unit_408_shepherd_correct",
+      "timestamp": "2026-07-20T23:36:04Z",
+      "decision": "local_critical_path",
+      "issues": [
+        408
+      ],
+      "reason": "Exactly one isolated Sol/high worker is correcting #408 at pushed head ff7be3bd; real Bubble Tea v2/teatest evidence pending; execute completion false until independent VERIFY."
+    },
+    {
+      "cycle": "post_408_correction_collision_and_dependency_gate",
+      "timestamp": "2026-07-20T23:36:04Z",
+      "decision": "not_spawned_write_scope_collision",
+      "issues": [
+        413
+      ],
+      "reason": "#413 still collides with #408 command/help/docs/golden surfaces; #419 remains separately human-deferred with no beta or other dependency approval."
     }
   ],
   "units": [
@@ -659,14 +684,14 @@
   "readyQueue": [
     {
       "issue": 408,
-      "status": "worker_in_progress",
+      "status": "correction_in_progress",
       "dependencies": [
         405,
         462
       ],
       "writeScope": "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity",
-      "decision": "spawned",
-      "reason": "pm-gsd-worker dispatched in isolated worktree for critical-path #408.",
+      "decision": "local_critical_path",
+      "reason": "Shepherd RETRY at ff7be3bd: exact Phase-10 Charm pins approved; real Bubble Tea v2/teatest correction active; execute completion false pending independent VERIFY.",
       "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards",
       "branch": "feat/408-flow-etl-dashboards"
     },
@@ -806,7 +831,7 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T20:15:00Z",
+  "updatedAt": "2026-07-20T23:36:04Z",
   "mainSync": {
     "baseBeforeSync": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
     "originMain": "74ab381eb8236305170ffd44d5aed74f8d0d2936",

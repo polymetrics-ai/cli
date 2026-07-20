@@ -50,6 +50,14 @@ Starting parent HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
 
 Do not backfill evidence. Append exact commands/results and worker session/head identities after each unit.
 
+## #408 Shepherd correction dispatch — 2026-07-20T23:36:04Z
+
+- RED planned, not backfilled: strict test must fail at pushed head `ff7be3bd8509684257f7d7a73e6fb9735f4baf80` because the dashboard is not a real Bubble Tea v2 `tea.Model` and is not driven by `teatest/v2`.
+- GREEN pending: exact authorized pins only; real inline Tea program/model with Tea-owned async commands and real teatest success/failure/cancel/responsive evidence.
+- Parent state reconciled to remote head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`; graph 44/43/65 with 0 errors.
+- Decision: #408 `local_critical_path` correction; #413 remains `not_spawned_write_scope_collision`; #419 remains `not_spawned_human_gate`/human-deferred with no beta or other dependency approval; Phase 437 intake remains planning-only.
+- Parent verification/review not run or claimed. #408 execute completion false pending independent VERIFY.
+
 ## #437 human-reviewed integration — 2026-07-20T20:06Z
 
 - RED: #437/PR #466 was green but blocked by missing external/human review coverage and therefore blocked #407/#413 plus #408 collision-free launch.

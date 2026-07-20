@@ -4,12 +4,13 @@
   "parentIssue": 397,
   "branch": "feat/408-flow-etl-dashboards",
   "baseBranch": "feat/cli-architecture-v2",
-  "status": "blocked",
-  "currentCycle": "gap-loop",
+  "status": "correction_active",
+  "currentCycle": "shepherd-correct-plan",
   "gsdMode": "scripts/gsd_with_manual_universal_loop_fallback",
   "manualFallbackReason": "scripts/gsd prompt programming-loop init --phase 408-flow-etl-dashboards --dry-run failed: scripts/gsd: unknown GSD command: programming-loop",
-  "verificationPassed": true,
-  "verificationBlocker": "make verify passed, but full race timed out at 10m and targeted internal/cli race retry timed out at 20m without race findings; repeated verification failure hard stop; literal teatest unavailable under no-new-dependency instruction",
+  "verificationPassed": false,
+  "executeComplete": false,
+  "verificationBlocker": "Shepherd correction active: real Bubble Tea v2 model/program and teatest/v2 evidence pending; independent VERIFY owns preserved full-race timeout disposition and any bounded make verify rerun",
   "phaseArtifacts": {
     "plan": ".planning/phases/408-flow-etl-dashboards/PLAN.md",
     "tddLedger": ".planning/phases/408-flow-etl-dashboards/TDD-LEDGER.md",
@@ -52,6 +53,12 @@
       "decision": "not_spawned_verification_blocked",
       "reason": "full race timed out at 10m and targeted internal/cli race retry timed out at 20m without race findings; repeated verification failure hard stop requires orchestrator/human disposition",
       "timestamp": "2026-07-21T00:00:05Z"
+    },
+    {
+      "cycle": "shepherd-correct-plan",
+      "decision": "local_critical_path",
+      "reason": "exactly one isolated Sol/high correction worker owns #408; correction artifacts updated before production edits; recursive delegation unavailable by contract",
+      "timestamp": "2026-07-20T23:36:04Z"
     }
   ],
   "commands": [
@@ -117,7 +124,12 @@
     {
       "command": "make verify",
       "result": "pass",
-      "output": "all declared targets exited 0; repository smoke included local temporary fixture reverse ETL, crossing explicit execution boundary"
+      "output": "all declared targets exited 0; prior dispatch-boundary deviation: local temporary fixture reverse ETL preserved plan-preview-approval-execute and used no credential, remote, production, or persistent write"
+    },
+    {
+      "command": "scripts/gsd doctor && scripts/gsd prompt programming-loop init --phase 408-flow-etl-dashboards --dry-run",
+      "result": "partial",
+      "output": "doctor passed; programming-loop unavailable: scripts/gsd: unknown GSD command: programming-loop; recorded manual fallback continues"
     }
   ]
 }

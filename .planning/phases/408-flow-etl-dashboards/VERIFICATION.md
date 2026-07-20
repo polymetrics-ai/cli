@@ -1,6 +1,24 @@
 # Verification — Phase 408 flow/ETL dashboards
 
-Status: blocked after repeated full-race timeout; implementation/focused race/full non-race/`make verify` are green.
+Status: CORRECT active; execute completion false pending real Bubble Tea v2/teatest evidence and independent VERIFY.
+
+## Shepherd correction checklist — planned before production edits
+
+- [ ] Exact RED proves current `*Model` is not current Bubble Tea v2 `tea.Model` and current session is not `teatest/v2`-driven.
+- [ ] Direct pins are exactly Bubble Tea `v2.0.8`, Bubbles `v2.1.1`, Lip Gloss `v2.0.5`, and test-only teatest pseudo-version `v2.0.0-20260720091843-3eef36eaaa28`; no other direct dependency.
+- [ ] Model implements v2 `Init() tea.Cmd`, deterministic `Update(tea.Msg) (tea.Model, tea.Cmd)`, and `View() tea.View`.
+- [ ] Event wait, cancellation, and runner completion stay in `tea.Cmd`; Tea receives event/cancel/resize/key messages.
+- [ ] Real inline `tea.Program` runs flow/ETL TTY paths without alt screen and leaves one truthful final frame in scrollback.
+- [ ] Real `teatest/v2` covers success, failure, cancellation, 160x45, 100x30, 80x24, compact, and guard frames.
+- [ ] Lifecycle events are not lost; updates remain bounded; cleanup passes focused race.
+- [ ] Arrows/Vim/help, sanitation/redaction, accessibility/plain fallbacks, and plain/JSON/non-TTY bypass parity stay green.
+- [ ] `gofmt -w cmd internal`, `git diff --check`, focused tests, `go vet ./...`, `go build ./cmd/pm`, and focused race pass.
+- [ ] #408 PLAN/TDD/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS and delegated parent evidence are synchronized.
+- [ ] Independent VERIFY remains pending; no CORRECT-stage VERIFY/REVIEW/INTEGRATE claim.
+
+Preserved full-race evidence (do not rerun in CORRECT): `go test -race ./...` timed out at 10m; `go test -race -timeout 20m ./internal/cli` timed out without race findings. Independent VERIFY owns disposition.
+
+Reverse-smoke disposition before any repeat: prior `make verify` was a dispatch-boundary deviation against the narrower worker prompt, but its local temporary fixture preserved plan → preview → approval → execute and used no credential, remote, production, or persistent write. It remains a passed repository gate plus a recorded boundary deviation, not a verification failure. CORRECT will not rerun `make verify`; a later independent VERIFY may run it only under explicitly bounded local-temp smoke authority and the required sequence.
 
 ## Required local gates
 

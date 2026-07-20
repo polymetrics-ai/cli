@@ -1,6 +1,13 @@
 # Summary — Phase 408 flow/ETL dashboards
 
-Status: implementation pushed; verification blocked by repeated full-race timeout and human disposition.
+Status: Shepherd CORRECT active; execute completion false pending real Bubble Tea v2/teatest correction and independent VERIFY.
+
+## Shepherd correction state — 2026-07-20
+
+- Retry, not reimplementation: preserve prior behavior/docs and replace the custom headless-only production session substitute where required with a real inline Bubble Tea v2 program.
+- Accepted authority: ADR-0003 + parent Stage 10 + #408 approve exact Bubble Tea `v2.0.8`, Bubbles `v2.1.1`, Lip Gloss `v2.0.5`, and test-only teatest pseudo-version `v2.0.0-20260720091843-3eef36eaaa28`; no other direct modules.
+- Strict RED, GREEN, focused race, and artifacts remain pending. No independent VERIFY/REVIEW/INTEGRATE claim.
+- Preserve race timeouts and prior local-temp reverse-smoke dispatch-boundary deviation exactly; do not rerun full race or `make verify` in CORRECT.
 
 ## Current state
 

@@ -10,21 +10,27 @@ parent_pr:
   url: https://github.com/polymetrics-ai/cli/pull/438
   base: main
   head: feat/cli-architecture-v2
-  head_sha: 1008f75ff8fe7d43a0a67a802ccf05ef296eae7f
+  head_sha: 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f
   draft: true
   state: open
 default_branch: main
 orchestrator:
   mode: active_owner
   runtime: pi
-  status: waiting_for_workers
+  status: correction_worker_in_progress
+live_graph:
+  nodes: 44
+  subissue_edges: 43
+  dependency_edges: 65
+  errors: 0
+execute_complete: false
 ready_queue:
   - number: 408
-    status: worker_in_progress
+    status: correction_in_progress
     dependencies: [405, 462]
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity"
-    decision: spawned
-    reason: "pm-gsd-worker dispatched in isolated worktree wt-408-flow-etl-dashboards on branch feat/408-flow-etl-dashboards."
+    decision: local_critical_path
+    reason: "Exactly one isolated Sol/high worker is applying Shepherd RETRY at ff7be3bd; real Bubble Tea v2/teatest evidence pending; execute completion false until independent VERIFY."
   - number: 413
     status: worker_ready_deferred
     dependencies: [407]
@@ -354,6 +360,14 @@ spawn_decisions:
     decision: spawned
     issue_numbers: [408]
     reason: "Created isolated worktree /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards on branch feat/408-flow-etl-dashboards from parent head 5b603788 and dispatched pm-gsd-worker for #408; #413 deferred for write-scope collision."
+  - timestamp: 2026-07-20T23:36:04Z
+    decision: local_critical_path
+    issue_numbers: [408]
+    reason: "Shepherd RETRY correction active with exact four authorized Charm pins; execute completion remains false pending independent VERIFY."
+  - timestamp: 2026-07-20T23:36:04Z
+    decision: not_spawned_write_scope_collision
+    issue_numbers: [413]
+    reason: "#413 remains serialized behind #408; #419 remains human-deferred and approves no beta or other dependency. Phase 437 pending intake remains planning-only."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -457,14 +471,14 @@ subissues:
     automated_review: {primary_route: human, status: clean, head_sha: 1008f75ff8fe7d43a0a67a802ccf05ef296eae7f, reviewed_range: "#421-#437 parent range; #437 exact head covered by human fallback", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Umbrella dependency complete on parent; final parent/main review still pending.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"}
   - number: 408
     url: https://github.com/polymetrics-ai/cli/issues/408
-    branch: pending
+    branch: feat/408-flow-etl-dashboards
     pr_url: ""
-    worker: unassigned
-    status: worker_ready
+    worker: "Sol/high correction worker"
+    status: correction_in_progress
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, generated docs/goldens/website parity"
-    worker_directory: ""
-    verification: not_run_spawn_pending
-    automated_review: {primary_route: blocked, status: pending, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Ready to spawn after #437 integration; #413 deferred for collision.", disposition_url: ""}
+    worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards
+    verification: "execute completion false; independent VERIFY pending; preserved full-race timeouts"
+    automated_review: {primary_route: blocked, status: pending, head_sha: ff7be3bd8509684257f7d7a73e6fb9735f4baf80, reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Shepherd correction active; no review claimed.", disposition_url: ""}
   - number: 409
     url: https://github.com/polymetrics-ai/cli/issues/409
     branch: pending
@@ -510,11 +524,11 @@ subissues:
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: planned
+    status: worker_ready_deferred
     write_scope: "connector registration, shell completion, tests, and docs"
     worker_directory: ""
-    verification: not_run_dependency_blocked
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Blocked by #407.", disposition_url: ""}
+    verification: not_run_write_scope_collision
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "not_spawned_write_scope_collision with #408.", disposition_url: ""}
   - number: 414
     url: https://github.com/polymetrics-ai/cli/issues/414
     branch: pending
@@ -580,11 +594,11 @@ subissues:
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: planned
+    status: human_deferred
     write_scope: "optional pinned OpenTelemetry log bridge"
     worker_directory: ""
-    verification: not_run_human_decision_pending
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Optional phase; blocked by #404, #410, and later human decision.", disposition_url: ""}
+    verification: not_run_human_decision_pending_no_dependency_approval
+    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Human-deferred; no beta dependency and no other dependency approval granted.", disposition_url: ""}
   - number: 420
     url: https://github.com/polymetrics-ai/cli/issues/420
     branch: pending
@@ -796,4 +810,4 @@ human_gates:
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
   - Phase 437 pending intake implementation or GitHub issue edits without explicit authorization
-updated_at: 2026-07-20T20:15:00Z
+updated_at: 2026-07-20T23:36:04Z

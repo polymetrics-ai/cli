@@ -1,6 +1,6 @@
 # Phase 408 — Flow/ETL run dashboards
 
-Status: EXECUTE BLOCKED / implementation pushed; repeated full-race timeout requires orchestrator disposition
+Status: CORRECT ACTIVE / execute completion false pending Shepherd retry and independent VERIFY
 Issue: #408 `feat(ui): add flow and ETL run dashboards`  
 Parent: #397, base `feat/cli-architecture-v2`, parent PR #438  
 Worker branch: `feat/408-flow-etl-dashboards`  
@@ -178,6 +178,22 @@ make verify
 - [ ] Generated help/manual artifacts/goldens updated or marked not applicable.
 - [ ] Invalid actions still return usage errors.
 - [ ] JSON/plain/stdout/stderr paths documented and unchanged.
+
+## Shepherd correction slice — real Bubble Tea v2 (2026-07-20)
+
+Authority reconciled before production edits: accepted ADR-0003 decision 3, accepted parent plan Stage 10, and issue #408 authorize only these direct pins: `charm.land/bubbletea/v2@v2.0.8`, `charm.land/bubbles/v2@v2.1.1`, `charm.land/lipgloss/v2@v2.0.5`, and test-only `github.com/charmbracelet/x/exp/teatest/v2@v2.0.0-20260720091843-3eef36eaaa28`. Go-produced transitives are permitted; NTCharts, huh, glamour, beta OTel logs, and every other new direct module remain forbidden.
+
+Correction order:
+
+1. Add a strict compile/runtime RED proving the current dashboard is not a Bubble Tea v2 `tea.Model` and is not driven by `teatest/v2`; capture exact output before production edits.
+2. Replace the production custom headless-only session substitute with the smallest inline `tea.Program`: v2 `Init`, deterministic `Update`, `View`; event/cancel/resize/key messages flow through Tea; async wait/cancel work remains in `tea.Cmd`; no alt screen; final truthful frame stays in scrollback.
+3. Drive success/failure/cancel and responsive 160x45, 100x30, 80x24, compact, and guard frames through real `teatest/v2`; retain lifecycle delivery, bounded refresh, navigation/help, sanitation/redaction, and plain/JSON/non-TTY bypass behavior.
+4. Run focused GREEN/refactor/race gates, vet, build, and full non-race tests as feasible. Do **not** rerun `make verify` or full race during CORRECT. Independent VERIFY owns those gates and the preserved timeout disposition.
+5. Commit/push coherent RED, GREEN, and synchronized artifact checkpoints. Do not invoke VERIFY/REVIEW/INTEGRATE or open a sub-PR.
+
+Correction execution decision: `local_critical_path` — exactly one isolated Sol/high correction worker; no subagent tool and no other live worker. `execute_complete=false` until independent VERIFY.
+
+Prior evidence remains immutable: full `go test -race ./...` timed out at 10m; `go test -race -timeout 20m ./internal/cli` timed out without race findings. Prior `make verify` crossed the narrower worker dispatch boundary but used only a temporary local fixture and preserved reverse ETL plan → preview → approval → execute with no credential, remote, production, or persistent write. This is a prior dispatch-boundary deviation, not a fabricated verification failure; CORRECT will not rerun it.
 
 ## Safety notes
 

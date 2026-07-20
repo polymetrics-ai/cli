@@ -20,6 +20,22 @@ Mode: manual universal-loop fallback after `scripts/gsd prompt programming-loop 
 - `caveman` for final handoff only
 - `.pi/skills/go-implementation/SKILL.md` checked and absent; used available routed Go skills without inventing the wrapper
 
+## Shepherd correction cycle — planned before production edits
+
+Loaded skills remain: `gsd-core`; `bubble-tea-tui-design` interaction/layout, dashboard, and testing/accessibility references; `golang-how-to`; `golang-cli`; `golang-testing`; `golang-error-handling`; `golang-security`; `golang-safety`; `golang-context`; `golang-concurrency`; `golang-documentation`; `golang-spf13-cobra`; `caveman` handoff-only.
+
+Rules applied: Bubble Tea skill non-negotiable model/command/TTY contract and Bubble Tea v2 mechanics; `golang-testing` rules 1, 3, 5, and 10; `golang-concurrency` rules 1, 4, and 7; `golang-context` rules 1 and 5; `golang-security` trust-boundary and secret/logging rules; `golang-safety` nil/bounds/resource rules; `golang-error-handling` rules 1, 2, and 7; `golang-cli` stdout/stderr and signal rules; `golang-spf13-cobra` fresh-tree and injected-writer rules.
+
+Strict RED to capture before correction production code/dependency edits:
+
+```bash
+go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1
+```
+
+Expected: current head fails because `*run.Model` does not implement current v2 `tea.Model`, no real `tea.Program` drives the session, and `teatest/v2` is not in the module. GREEN must use exact authorized pins and real teatest programs for success/failure/cancel and responsive frames.
+
+Correction status: RED pending capture; execute completion false. Decision: `local_critical_path`.
+
 ## RED plan
 
 Before production edits, capture failing tests/validation for:
