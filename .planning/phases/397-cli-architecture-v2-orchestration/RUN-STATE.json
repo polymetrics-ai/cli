@@ -344,16 +344,40 @@
       "timestamp": "2026-07-20T19:28:58Z",
       "decision": "not_spawned_write_scope_collision",
       "issues": [
-        408,
-        437,
+        408
+      ],
+      "reason": "#408 source dependencies are satisfied after #468 integration, but it likely collides with open #437/PR #466 central CLI/help/golden/docs/website files; defer mutating worker until #466 is reviewed/integrated or a disjoint slice is proven."
+    },
+    {
+      "cycle": "review_wait_pr466_20260720T192858Z",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "not_spawned_review_blocked",
+      "issues": [
+        437
+      ],
+      "reason": "PR #466 is open at 26f98a72 with all current checks green but no recorded human/Claude/Copilot review; integration is blocked on human or enabled automation review coverage."
+    },
+    {
+      "cycle": "downstream_dependency_wait_20260720T192858Z",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "not_spawned_dependency_blocked",
+      "issues": [
         407,
         413,
         409,
         416,
-        469,
+        469
+      ],
+      "reason": "#407/#413 depend on #437 integration; #409 depends on #408; #416/#469 depend on #409. #462 design gate is integrated."
+    },
+    {
+      "cycle": "optional_dependency_gate_20260720T192858Z",
+      "timestamp": "2026-07-20T19:28:58Z",
+      "decision": "not_spawned_human_gate",
+      "issues": [
         419
       ],
-      "reason": "#408 source dependencies are satisfied after #468 integration, but it likely collides with open PR #466 central CLI/help/golden/docs/website files; #437 remains review-blocked; #407/#413 depend on #437; #409/#416/#469 are downstream of #408/#409; #419 remains human-gated."
+      "reason": "#419 requires explicit optional beta dependency inclusion or a recorded skip decision before implementation."
     }
   ],
   "units": [
@@ -669,7 +693,7 @@
     "mergeCommit": "19fe02ec900aba548a997165014624197b451a33",
     "strategy": "git merge --no-ff origin/main",
     "forcePush": "not_used",
-    "status": "local_merge_complete_push_pending"
+    "status": "local_merge_complete_state_commit_push_pending_at_artifact_time"
   },
   "automatedReviewAvailability": {
     "claudeWorkflow": "disabled_manually",

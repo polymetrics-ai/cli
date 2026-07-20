@@ -314,8 +314,20 @@ spawn_decisions:
     reason: "Merged origin/main into feat/cli-architecture-v2 using a normal no-ff merge commit; no force push and no parent PR merge to main."
   - timestamp: 2026-07-20T19:28:58Z
     decision: not_spawned_write_scope_collision
-    issue_numbers: [408, 437, 407, 413, 409, 416, 469, 419]
-    reason: "#408 is source-ready after #468 integration, but open PR #466 owns central CLI/help/golden/docs/website files; #437 remains review-blocked, #407/#413/#409/#416/#469 are downstream, and #419 is human-gated."
+    issue_numbers: [408]
+    reason: "#408 is source-ready after #468 integration, but open PR #466 owns central CLI/help/golden/docs/website files; defer mutating launch until the collision clears or a disjoint slice is proven."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: not_spawned_review_blocked
+    issue_numbers: [437]
+    reason: "PR #466 is open at 26f98a72 with current checks green but no recorded human/Claude/Copilot review; integration is blocked on review coverage."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: not_spawned_dependency_blocked
+    issue_numbers: [407, 413, 409, 416, 469]
+    reason: "#407/#413 depend on #437 integration; #409 depends on #408; #416/#469 depend on #409. #462 design gate is integrated."
+  - timestamp: 2026-07-20T19:28:58Z
+    decision: not_spawned_human_gate
+    issue_numbers: [419]
+    reason: "#419 requires explicit optional beta dependency inclusion or a recorded skip decision before implementation."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
