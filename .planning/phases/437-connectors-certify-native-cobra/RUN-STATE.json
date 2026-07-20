@@ -7,8 +7,8 @@
   "branch": "refactor/437-connectors-certify-native-cobra",
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
-  "endingImplementationHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
-  "terminalEvidenceParentHead": "f211562ef4fd64ee7d7de4f274a3facf6ff44f51",
+  "endingImplementationHead": "828be4de4145d1246347b820d433d52bd1e92002",
+  "terminalEvidenceParentHead": "828be4de4145d1246347b820d433d52bd1e92002",
   "currentLivePRHeadPolicy": "current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially in phase artifacts",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
@@ -23,8 +23,8 @@
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "ninth_ci_flake_correction_planned",
-  "verificationPassed": false,
+  "status": "ninth_ci_flake_correction_verified",
+  "verificationPassed": true,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
   "latestParentHead": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
@@ -32,6 +32,8 @@
   "ninthCorrectionSession": "issue-437-ninth-ci-flake-correction-20260720",
   "ninthCorrectionParentHead": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
   "ninthCorrectionCIFailure": "GitHub Actions run 29711194607 failed only internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit: elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)",
+  "ninthCorrectionParentMergeHead": "9678d4dda2fcf331b3199f042804001c06eccf64",
+  "ninthCorrectionImplementationHead": "828be4de4145d1246347b820d433d52bd1e92002",
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
@@ -330,11 +332,26 @@
       "cycle": "ninth-ci-correction-tdd-gate",
       "decision": "local_critical_path",
       "reason": "remote CI failure is captured as RED; local stress and deterministic barrier-based test harness replacement are pending after planning checkpoint and parent reconcile"
+    },
+    {
+      "cycle": "ninth-ci-correction-green",
+      "decision": "local_critical_path",
+      "reason": "test-only deterministic barrier/active-worker/max-concurrency/order-channel harness replaces wall-clock assertion; focused repeated and race gates passed"
+    },
+    {
+      "cycle": "ninth-ci-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "full certify, gofmt, diff, vet, go test ./..., build, make verify, fixture-only sample smoke, and connectorgen validation all passed without credentials, services, dependencies, or gate weakening"
+    },
+    {
+      "cycle": "ninth-ci-correction-summary",
+      "decision": "local_critical_path",
+      "reason": "terminal artifacts record successful ninth verification at implementation head 828be4de4145d1246347b820d433d52bd1e92002; PR body update and final push remain delivery actions; no bot review requested"
     }
   ],
-  "red": "remote CI RED captured: GitHub Actions run 29711194607 at head 9f004ac5d96d84bd1f8b186496e1f594a183a18b failed internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit with elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening); local stress pending and no fabricated local failure",
-  "green": "pending ninth test-only fix: replace wall-clock scheduling assertion with deterministic barrier/active-worker/max-concurrency/order-channel evidence",
-  "verification": "verificationPassed=false: full focused/repeated/race, gofmt, diff, vet, go test ./..., build, make verify, fixture-only sample smoke, and connector validation pending",
+  "red": "remote CI RED captured: GitHub Actions run 29711194607 at head 9f004ac5d96d84bd1f8b186496e1f594a183a18b failed internal/connectors/certify TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit with elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening); local stress did not reproduce (count=50 7.601s, race count=10 3.084s) and no local failure was fabricated",
+  "green": "ninth GREEN test-only fix: TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit now uses release barrier, active-worker/max-concurrency accounting, violation channel, and order/result channels over four connectors with parallel=3; no wall-clock threshold remains except deadlock guards",
+  "verification": "ninth verification passed: focused count=20 2.051s, focused race count=10 2.435s, full certify 358.903s, gofmt, diff, vet, go test ./... with CLI 453.338s and certify 355.074s, build, make verify with CLI 454.887s and certify 357.580s, fixture-only sample smoke exit 0, and connectorgen 547/0 all green",
   "files": [
     ".planning/phases/437-connectors-certify-native-cobra/{PLAN,TDD-LEDGER,VERIFICATION,SUMMARY,PROMPTS,RUN-STATE.json}",
     "cmd/pm/main.go",
@@ -362,9 +379,12 @@
     "45f190dc docs(planning): plan eighth certify correction",
     "ea5e412c test(certify): expose eighth review regressions",
     "af0e4dab fix(certify): close eighth review gaps",
-    "f211562e docs(planning): record eighth certify evidence"
+    "f211562e docs(planning): record eighth certify evidence",
+    "0398a5d6 docs(planning): plan ninth certify ci flake fix",
+    "9678d4dd merge(parent): reconcile cli architecture v2",
+    "828be4de test(certify): make batch concurrency proof deterministic"
   ],
-  "push": "ninth planning/test/evidence commits pending; prior delivery pushed through 9f004ac5d96d84bd1f8b186496e1f594a183a18b and PR #466 body currently reflects that head before CI-flake correction",
+  "push": "ninth planning 0398a5d6, parent merge 9678d4dd, and test fix 828be4de pushed; terminal evidence commit and PR #466 body update pending after artifact finalization",
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
   "reviewRoute": "human_parent_fallback_pending_no_bot_retry_requested",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, bot review, parent/main merge, or quality-gate reduction",
@@ -381,6 +401,6 @@
   "eighthCorrectionReviewedCodeHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
   "eighthCorrectionImplementationHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
   "eighthCorrectionTerminalEvidenceCommit": "f211562ef4fd64ee7d7de4f274a3facf6ff44f51",
-  "terminalEvidencePreviousPRHead": "f211562ef4fd64ee7d7de4f274a3facf6ff44f51",
+  "terminalEvidencePreviousPRHead": "828be4de4145d1246347b820d433d52bd1e92002",
   "terminalEvidenceCommitPolicy": "artifact commits cannot contain their own resulting SHA because Git computes the commit object after file content is fixed; artifacts record reviewedCodeHead/endingImplementationHead and terminalEvidenceParentHead/previous PR head, while the current live PR head is authoritative from Git/GitHub"
 }

@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: false — reopened for ninth bounded CI flake correction. PR #466 GitHub Actions run `29711194607` failed at head `9f004ac5d96d84bd1f8b186496e1f594a183a18b` only in `internal/connectors/certify` `TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit`: `elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)`. Keep false until a complete local rerun, including `make verify`, exits 0 after the deterministic concurrency test fix.
+`verificationPassed`: true — ninth bounded CI flake correction full local rerun passed at test-fix implementation head `828be4de4145d1246347b820d433d52bd1e92002`. PR #466 GitHub Actions run `29711194607` failed at prior head `9f004ac5d96d84bd1f8b186496e1f594a183a18b` only in `internal/connectors/certify` `TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit`: `elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)`. The wall-clock assertion is replaced by deterministic barrier/active-worker/max-concurrency/order evidence; complete `make verify` exited 0.
 
 ## TDD / behavior
 
@@ -309,7 +309,7 @@ Exact clean local/remote/PR start: `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. N
 
 Exact start: `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; identity `issue-437-ninth-ci-flake-correction-20260720`; parent reconcile target `c91b90cf9671b5caabc0ef4ec24d81897f870458`.
 
-`verificationPassed`: false until full local gates pass.
+`verificationPassed`: true for full local gates at `828be4de4145d1246347b820d433d52bd1e92002`; terminal artifact commit and PR-body update follow.
 
 - [x] Confirm clean branch, local head, remote head, and PR #466 head all equal `9f004ac5d96d84bd1f8b186496e1f594a183a18b` before edits.
 - [x] Capture CI RED from run `29711194607`: `--- FAIL: TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit (0.25s)` and `batch_test.go:372: elapsed = 252.003235ms, want well under 3x80ms serial time (parallelism not happening)`; all other reported packages/checks passed.
@@ -317,16 +317,16 @@ Exact start: `9f004ac5d96d84bd1f8b186496e1f594a183a18b`; identity `issue-437-nin
 - [x] Run `scripts/gsd doctor`; `scripts/gsd list`; `scripts/gsd prompt plan-phase 437 --skip-research`; capture missing `programming-loop` command and manual fallback.
 - [x] Record execution decision `local_critical_path` and parent-spawn note.
 - [x] Mark PLAN/TDD/VERIFICATION/SUMMARY/PROMPTS/RUN-STATE as reopened and `verificationPassed=false` before test edits.
-- [ ] Commit/push planning checkpoint before test edits.
-- [ ] Merge/reconcile `origin/feat/cli-architecture-v2` at `c91b90cf9671b5caabc0ef4ec24d81897f870458`; do not edit parent artifacts.
-- [ ] Reproduce/stress current focused test where feasible; record if local stress does not reproduce.
-- [ ] Replace wall-clock assertion with deterministic barrier/active-worker/max-concurrency/order-channel evidence; do not raise/remove threshold.
-- [ ] Focused deterministic test pass repeatedly.
-- [ ] Focused deterministic test pass under `-race`.
-- [ ] Full `go test ./internal/connectors/certify -count=1` pass.
-- [ ] Full CLI package if affected.
-- [ ] Runtime help/docs/website parity if behavior/help changes; expected not applicable for test-only fix.
-- [ ] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke pass.
-- [ ] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; final `make verify`; explicit `go run ./cmd/connectorgen validate internal/connectors/defs` all pass.
-- [ ] PR #466 body updated with CI failure disposition and final head.
-- [ ] No credentials, live certification, services, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
+- [x] Commit/push planning checkpoint before test edits: `0398a5d6`.
+- [x] Merge/reconcile `origin/feat/cli-architecture-v2` at `c91b90cf9671b5caabc0ef4ec24d81897f870458` without manual parent artifact edits: merge `9678d4dd`, no conflicts.
+- [x] Reproduce/stress current focused test where feasible; local stress did not reproduce (`-count=50` pass `7.601s`; `-race -count=10` pass `3.084s`).
+- [x] Replace wall-clock assertion with deterministic barrier/active-worker/max-concurrency/order-channel evidence; threshold not raised/removed.
+- [x] Focused deterministic test pass repeatedly: `go test ./internal/connectors/certify -run TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit -count=20` => `ok ... 2.051s`.
+- [x] Focused deterministic test pass under `-race`: `go test -race ./internal/connectors/certify -run TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit -count=10` => `ok ... 2.435s`.
+- [x] Full `go test ./internal/connectors/certify -count=1` pass (`358.903s`).
+- [x] Full CLI covered by `go test ./...` and `make verify` (CLI `453.338s` / `454.887s`); no CLI behavior changed.
+- [x] Runtime help/docs/website parity not applicable for test-only fix; no help/manual/website text changed.
+- [x] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke pass: `exit=0 kind=ConnectorCertification report_kind=ConnectorCertification connector=sample passed=True stderr_bytes=0`.
+- [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` (CLI `453.338s`, certify `355.074s`); `go build ./cmd/pm`; final `make verify` (CLI `454.887s`, certify `357.580s`, docs validate, local smoke `smoke ok`, lint `0 issues`, connectorgen green); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` (`547 connector(s) checked, 0 findings`) all pass.
+- [ ] PR #466 body updated with CI failure disposition and final head after terminal artifact commit.
+- [x] No credentials, live certification, services, external writes/sweeps, dependencies, connector defs, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
