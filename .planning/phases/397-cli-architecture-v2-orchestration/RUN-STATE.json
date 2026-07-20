@@ -214,6 +214,13 @@
       "decision": "not_spawned_review_blocked",
       "issues": [437, 462, 407, 408, 413],
       "reason": "PR #466 is green but lacks human/parent fallback review; PR #468 has local closure but CI/human review is pending. Downstream #407/#408/#413 remain blocked. #419 remains a separate human dependency-decision gate."
+    },
+    {
+      "cycle": "review_wait_after_ci_20260720T052105Z",
+      "timestamp": "2026-07-20T05:21:05Z",
+      "decision": "not_spawned_review_blocked",
+      "issues": [437, 462, 407, 408, 413],
+      "reason": "PR #466 and PR #468 current-head checks are green. Both lack required human/parent fallback review because Claude is disabled and Copilot quota is exhausted; downstream work remains blocked."
     }
   ],
   "units": [
@@ -376,8 +383,8 @@
       "parentIntegrationHead": "93a117100c6421955262aa32794a91a158d267e1",
       "pullRequests": [465, 467, 468],
       "pullRequestHead": "5092e115d4aa35ab4595a9b9537f64d3f63e6406",
-      "status": "sub_pr_open",
-      "verification": "pr_467_ci_green_pr_468_local_green_remote_ci_pending",
+      "status": "sub_pr_green",
+      "verification": "pr_467_ci_green_pr_468_local_and_remote_ci_green",
       "automatedReview": {
         "primaryRoute": "blocked",
         "status": "pending",
@@ -414,7 +421,7 @@
   "readyQueue": [
     {"issue": 437, "status": "sub_pr_green", "dependencies": [436], "writeScope": "connectors/certify CLI and directly applicable certify safety", "decision": "not_spawned_review_blocked"},
     {"issue": 407, "status": "blocked", "dependencies": [437], "writeScope": "umbrella ratification only", "decision": "not_spawned_dependency_blocked"},
-    {"issue": 462, "status": "sub_pr_open", "dependencies": [], "writeScope": "terminal design/docs/skill/planning corrections", "decision": "not_spawned_review_blocked"},
+    {"issue": 462, "status": "sub_pr_green", "dependencies": [], "writeScope": "terminal design/docs/skill/planning corrections", "decision": "not_spawned_review_blocked"},
     {"issue": 408, "status": "blocked", "dependencies": [405, 462], "writeScope": "flow and ETL dashboards", "decision": "not_spawned_review_blocked"},
     {"issue": 413, "status": "blocked", "dependencies": [407], "writeScope": "completion", "decision": "not_spawned_dependency_blocked"},
     {"issue": 419, "status": "blocked", "dependencies": [404, 410], "writeScope": "optional OTel log bridge", "decision": "not_spawned_human_gate"}
@@ -430,5 +437,5 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T05:05:56Z"
+  "updatedAt": "2026-07-20T05:21:05Z"
 }

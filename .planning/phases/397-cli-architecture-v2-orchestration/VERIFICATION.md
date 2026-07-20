@@ -26,7 +26,7 @@ Status: not yet run at final HEAD
 - [x] #462 first accepted correction batch integrated through PR #467 at parent `93a117100c6421955262aa32794a91a158d267e1`.
 - [x] #462 follow-up PR #468 opened at current head `5092e115d4aa35ab4595a9b9537f64d3f63e6406`; local docs checks and exact-file closure review pass.
 - [x] #462 GitHub blocked-by metadata directly updated for #408/#409/#411/#412/#414/#416/#418/#463.
-- [ ] #462 PR #468 current-head CI green.
+- [x] #462 PR #468 current-head CI green, including `verify` in 18m19s.
 - [ ] #462 human review coverage; local `pm-reviewer` is not substitute coverage.
 - [x] #437 / PR #466 phase planning/TDD/verification refreshed before every correction; current PR head `26f98a72419010b961b5b8378ef4a695b0c0a06f`.
 - [x] #437 local focused, repeated, race, full package, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certify, and connectorgen 547/0 gates passed.
@@ -38,7 +38,7 @@ Status: not yet run at final HEAD
 ## Current live blockers
 
 - [x] #462 accepted design/safety findings corrected in isolated stacked PRs #467/#468.
-- [ ] #462 PR #468 CI and human review coverage recorded; local `pm-reviewer` is not substitute coverage.
+- [ ] #462 PR #468 human review coverage recorded; local `pm-reviewer` is not substitute coverage.
 - [ ] #408 TUI worker launch unblocked only after #462 correction and review gate.
 - [ ] #419 explicit optional dependency decision.
 
