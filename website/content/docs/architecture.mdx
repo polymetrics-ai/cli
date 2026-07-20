@@ -66,7 +66,7 @@ pm etl run --connection sample_to_warehouse --stream customers --batch-size 500 
 pm etl status <run-id> --json
 ```
 
-Direct `check`, `catalog`, and `read` are useful for connector development and preflight. Configured `run` loads from a connection, adds Polymetrics metadata, and writes to the destination in bounded batches.
+Direct `check`, `catalog`, and `read` are useful for connector development and preflight. Configured `run` loads from a connection, adds Polymetrics metadata, and writes to the destination in bounded batches. On an eligible stdin+stdout TTY, `pm etl run` renders the same inline pipeline-rail dashboard pattern as flow runs; bypass flags and pipes keep deterministic plain or JSON output.
 
 Sync modes are configured on `pm connections create`, not on `pm etl run`. Incremental modes require a cursor. Deduped modes require a primary key.
 
@@ -100,7 +100,7 @@ pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 ```
 
-Flow manifests describe ordered ETL and query steps. `plan` and `preview` validate the manifest and DAG. `run` executes supported steps through existing app primitives and checkpoints progress. Add `--progress ndjson` when agents need sanitized flow progress events on stderr while stdout remains the final result; on failures, stderr may also include the final error diagnostic.
+Flow manifests describe ordered ETL and query steps. `plan` and `preview` validate the manifest and DAG. `run` executes supported steps through existing app primitives and checkpoints progress. On an eligible stdin+stdout TTY, `pm flow run` renders an inline pipeline-rail dashboard and leaves a truthful final frame in scrollback. Add `--progress ndjson` when agents need sanitized flow progress events on stderr while stdout remains the dashboard/final result or single JSON envelope; on failures, stderr may also include the final error diagnostic.
 Flow dependencies are inferred from `in` and `out` warehouse tables. Supported step kinds are `sync`, `query`, `rlm`, and approval-gated `action`. RLM steps reuse the same analyzers as `pm rlm run`; a relative `spec` path is resolved from the flow manifest file.
 
 ```json

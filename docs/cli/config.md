@@ -40,9 +40,9 @@ UI AND PROGRESS FLAGS
     envelope. Supported value: ndjson. On failures, stderr may also include the
     final error diagnostic after progress events.
 
-  Future TTY renderers are eligible only when stdout is a TTY. --json,
-  --plain, --no-input, non-empty PM_NO_TUI, non-empty CI, TERM=dumb, and
-  non-TTY stdout force the plain path.
+  Flow and ETL run dashboards render only when stdin and stdout are TTYs.
+  --json, --plain, --no-input, non-empty PM_NO_TUI, non-empty CI, TERM=dumb,
+  non-TTY stdin, and non-TTY stdout force the plain path.
 
 TELEMETRY
   telemetry.exporter defaults to none (off is accepted as a disabled alias). No

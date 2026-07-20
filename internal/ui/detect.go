@@ -18,6 +18,7 @@ const (
 // TTY and environment facts in rather than letting detection read globals, so
 // tests and agent runs stay deterministic.
 type DetectOptions struct {
+	StdinTTY  bool
 	StdoutTTY bool
 	JSON      bool
 	Plain     bool
@@ -33,10 +34,10 @@ type Detection struct {
 	Reasons []string
 }
 
-// Detect applies the ADR 0003 gate: TUI activates only when stdout is a TTY,
-// JSON/plain/no-input are all false, PM_NO_TUI and CI are unset, and TERM is
-// not dumb. Color and ASCII capability facts degrade independently so plain
-// paths never need ANSI or Unicode assumptions.
+// Detect applies the ADR 0003 gate: TUI activates only when stdin and stdout
+// are TTYs, JSON/plain/no-input are all false, PM_NO_TUI and CI are unset, and
+// TERM is not dumb. Color and ASCII capability facts degrade independently so
+// plain paths never need ANSI or Unicode assumptions.
 func Detect(opts DetectOptions) Detection {
 	term := strings.ToLower(strings.TrimSpace(envValue(opts.Env, "TERM")))
 	noColor := envNonEmpty(envValue(opts.Env, "NO_COLOR"))
@@ -44,7 +45,10 @@ func Detect(opts DetectOptions) Detection {
 	ascii := !opts.StdoutTTY || term == "dumb" || envTruthy(envValue(opts.Env, "PM_ASCII"))
 	color := opts.StdoutTTY && term != "dumb" && !noColor && !clicolorDisabled
 
-	reasons := make([]string, 0, 6)
+	reasons := make([]string, 0, 7)
+	if !opts.StdinTTY {
+		reasons = append(reasons, "stdin_not_tty")
+	}
 	if !opts.StdoutTTY {
 		reasons = append(reasons, "stdout_not_tty")
 	}

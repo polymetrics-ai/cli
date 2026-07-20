@@ -15,10 +15,13 @@ DESCRIPTION
   may reference a spec path relative to the flow manifest file.
 
 PROGRESS
-  Add --progress ndjson to stream sanitized flow progress events to stderr.
-  Stdout remains the final human line or single JSON envelope. On failures,
-  stderr may also include the final error diagnostic after progress events.
-  CI, PM_NO_TUI, --plain, --no-input, pipes, and TERM=dumb keep the plain path.
+  On an eligible stdin+stdout TTY, pm flow run renders an inline pipeline-rail
+  dashboard and leaves a truthful final frame in scrollback. Add --progress
+  ndjson to stream the same sanitized flow progress events to stderr for agents.
+  Stdout remains the dashboard/final human line or single JSON envelope. On
+  failures, stderr may also include the final error diagnostic after progress
+  events. CI, PM_NO_TUI, --plain, --json, --no-input, pipes, and TERM=dumb keep
+  the plain path.
 
 RLM STEP EXAMPLE
   {

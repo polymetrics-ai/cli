@@ -5,11 +5,11 @@
   "branch": "feat/408-flow-etl-dashboards",
   "baseBranch": "feat/cli-architecture-v2",
   "status": "in_progress",
-  "currentCycle": "plan",
+  "currentCycle": "verify",
   "gsdMode": "scripts/gsd_with_manual_universal_loop_fallback",
   "manualFallbackReason": "scripts/gsd prompt programming-loop init --phase 408-flow-etl-dashboards --dry-run failed: scripts/gsd: unknown GSD command: programming-loop",
   "verificationPassed": false,
-  "verificationBlocker": "production edits not started; make verify not yet run for phase",
+  "verificationBlocker": "focused GREEN, focused race, vet, build, parity, and manual dual-TTY checks pass; full go test, full race, and make verify remain pending",
   "phaseArtifacts": {
     "plan": ".planning/phases/408-flow-etl-dashboards/PLAN.md",
     "tddLedger": ".planning/phases/408-flow-etl-dashboards/TDD-LEDGER.md",
@@ -22,12 +22,41 @@
       "decision": "local_critical_path",
       "reason": "bounded mutating Pi worker owns exactly one issue/branch/cwd and has no subagent tool; executing issue-local plan inline",
       "timestamp": "2026-07-21T00:00:00Z"
+    },
+    {
+      "cycle": "execute-resume",
+      "decision": "local_critical_path",
+      "reason": "sole isolated mutating worker resumed committed plan head plus 19 dirty entries; recursive delegation unavailable by worker contract",
+      "timestamp": "2026-07-21T00:00:01Z"
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "captured resume RED for session, cancellation, navigation, resize, rate, and live final-frame behavior before additional production edits",
+      "timestamp": "2026-07-21T00:00:02Z"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "implemented and focused-verified the issue-local event-driven dashboard slice with no dependency delta",
+      "timestamp": "2026-07-21T00:00:03Z"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused race, vet, build, CLI parity, and safe manual dual-TTY checks pass; continuing full local gates inline",
+      "timestamp": "2026-07-21T00:00:04Z"
     }
   ],
   "commands": [
     {
       "command": "scripts/gsd doctor",
       "result": "pass"
+    },
+    {
+      "command": "scripts/gsd doctor",
+      "result": "pass",
+      "output": "execute resume: adapter healthy; 69 commands"
     },
     {
       "command": "scripts/gsd list",
@@ -46,6 +75,24 @@
       "command": "git fetch origin feat/cli-architecture-v2 && git merge --ff-only origin/feat/cli-architecture-v2",
       "result": "pass",
       "output": "fast-forwarded to b77d8f49"
+    },
+    {
+      "command": "go test ./internal/ui/run -run TestSessionRendersLiveUpdatesAndPersistsFinalFrame",
+      "result": "fail",
+      "output": "RED: unknown field Output in SessionOptions"
+    },
+    {
+      "command": "go test -race ./internal/ui/... && go test -race ./internal/cli -run dashboard-focused && go test -race ./internal/flow -run cancellation-focused",
+      "result": "pass"
+    },
+    {
+      "command": "go vet ./... && go build ./cmd/pm",
+      "result": "pass"
+    },
+    {
+      "command": "safe local script-allocated dual-TTY flow and ETL fixture runs",
+      "result": "pass",
+      "output": "ETL final=1 frames=6; flow final=1 frames=5"
     }
   ]
 }

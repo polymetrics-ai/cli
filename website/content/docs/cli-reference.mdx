@@ -23,7 +23,7 @@ This page is the public website contract for the `pm` CLI. Command/help, checked
   `--json` is the agent path for operational commands. A few developer-facing commands, such as `pm help`, are intentionally plain text because they return human manuals.
 </Callout>
 
-Future TTY renderers are eligible only when stdout is a TTY and `--json`, `--plain`, `--no-input`, non-empty `PM_NO_TUI`, non-empty `CI`, and `TERM=dumb` do not force the plain path. The current `cmd/pm` entrypoint keeps the plain path until a TTY renderer is wired intentionally. Use `--progress ndjson` on long-running commands when agents need live progress without polling checkpoint files.
+Flow and ETL run dashboards render only when stdin and stdout are TTYs and `--json`, `--plain`, `--no-input`, non-empty `PM_NO_TUI`, non-empty `CI`, and `TERM=dumb` do not force the plain path. Non-TTY stdin/stdout keeps deterministic plain output. Use `--progress ndjson` on long-running commands when agents need live progress without polling checkpoint files.
 
 OpenTelemetry tracing and metrics are default-off. Supported exporters are `none`, `off`, `file`, and `otlp`. Use `PM_TELEMETRY=file` to write stdouttrace JSONL spans and stdoutmetric JSONL metrics under `.polymetrics/telemetry`, or set `PM_TELEMETRY=otlp` with a trusted env/flag endpoint such as `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`, `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`, or `PM_TELEMETRY_ENDPOINT` for an OTLP HTTP/protobuf collector. Config-file OTLP exporter or endpoint values are ignored; any custom collector endpoint must come from trusted env/flag. Telemetry warnings go to stderr and never change command exit codes or stdout JSON envelopes. Connector HTTP spans record only method, scheme, host, path, status, and retry/attempt metadata; metrics use batched counters such as `pm.records.*` and `pm.batches.flushed` -- no request or response bodies, headers, query strings, raw argv, or credential values.
 
@@ -213,7 +213,7 @@ pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 
 pm etl status <run-id> --json
 ```
 
-Use direct `check`, `catalog`, and `read` while developing a connector or testing credentials. Use `pm etl run` for configured syncs. `--progress ndjson` writes progress events to stderr; stdout stays the final human line or one JSON envelope. On failures, stderr may also include the final error diagnostic.
+Use direct `check`, `catalog`, and `read` while developing a connector or testing credentials. Use `pm etl run` for configured syncs. On an eligible stdin+stdout TTY, ETL runs render an inline pipeline-rail dashboard with a truthful final frame. `--progress ndjson` writes the same progress events to stderr for agents; stdout stays the dashboard/final human line or one JSON envelope. On failures, stderr may also include the final error diagnostic.
 
 ```bash
 pm query run --table github_pull_requests --limit 20 --json
@@ -268,7 +268,7 @@ pm schedule install nightly --crontab --json
 pm schedule remove nightly --crontab --json
 ```
 
-Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. `--progress ndjson` streams flow progress events to stderr; on failures, stderr may also include the final error diagnostic. Schedules install named flows into the local scheduler backend.
+Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. On an eligible stdin+stdout TTY, flow runs render an inline pipeline-rail dashboard with a truthful final frame. `--progress ndjson` streams the same flow progress events to stderr for agents; on failures, stderr may also include the final error diagnostic. Schedules install named flows into the local scheduler backend.
 
 ## Operational commands
 

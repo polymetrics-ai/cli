@@ -56,10 +56,9 @@ GLOBAL OPTIONS
     On failures, stderr may also include the final error diagnostic.
 
 TTY GATE
-  Future TTY renderers are eligible only when stdout is a TTY and --json,
-  --plain, --no-input, PM_NO_TUI, CI, and TERM=dumb do not force the plain
-  path. The current cmd/pm entrypoint keeps the plain path until a TTY
-  renderer is wired intentionally.
+  Flow and ETL run dashboards render only when stdin and stdout are TTYs and
+  --json, --plain, --no-input, PM_NO_TUI, CI, and TERM=dumb do not force the
+  plain path. Machine and pipe paths keep deterministic plain output.
 
 OBSERVABILITY
   OpenTelemetry tracing and metrics are default-off. Supported exporters are
@@ -217,9 +216,9 @@ UI AND PROGRESS FLAGS
     envelope. Supported value: ndjson. On failures, stderr may also include the
     final error diagnostic after progress events.
 
-  Future TTY renderers are eligible only when stdout is a TTY. --json,
-  --plain, --no-input, non-empty PM_NO_TUI, non-empty CI, TERM=dumb, and
-  non-TTY stdout force the plain path.
+  Flow and ETL run dashboards render only when stdin and stdout are TTYs.
+  --json, --plain, --no-input, non-empty PM_NO_TUI, non-empty CI, TERM=dumb,
+  non-TTY stdin, and non-TTY stdout force the plain path.
 
 TELEMETRY
   telemetry.exporter defaults to none (off is accepted as a disabled alias). No
@@ -690,10 +689,13 @@ DESCRIPTION
   record after the local ETL completes.
 
 PROGRESS
-  Add --progress ndjson to stream sanitized ETL progress events to stderr.
-  Stdout remains the final human line or single JSON envelope. On failures,
-  stderr may also include the final error diagnostic after progress events.
-  CI, PM_NO_TUI, --plain, --no-input, pipes, and TERM=dumb keep the plain path.
+  On an eligible stdin+stdout TTY, pm etl run renders an inline pipeline-rail
+  dashboard and leaves a truthful final frame in scrollback. Add --progress
+  ndjson to stream the same sanitized ETL progress events to stderr for agents.
+  Stdout remains the dashboard/final human line or single JSON envelope. On
+  failures, stderr may also include the final error diagnostic after progress
+  events. CI, PM_NO_TUI, --plain, --json, --no-input, pipes, and TERM=dumb keep
+  the plain path.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -810,10 +812,13 @@ DESCRIPTION
   may reference a spec path relative to the flow manifest file.
 
 PROGRESS
-  Add --progress ndjson to stream sanitized flow progress events to stderr.
-  Stdout remains the final human line or single JSON envelope. On failures,
-  stderr may also include the final error diagnostic after progress events.
-  CI, PM_NO_TUI, --plain, --no-input, pipes, and TERM=dumb keep the plain path.
+  On an eligible stdin+stdout TTY, pm flow run renders an inline pipeline-rail
+  dashboard and leaves a truthful final frame in scrollback. Add --progress
+  ndjson to stream the same sanitized flow progress events to stderr for agents.
+  Stdout remains the dashboard/final human line or single JSON envelope. On
+  failures, stderr may also include the final error diagnostic after progress
+  events. CI, PM_NO_TUI, --plain, --json, --no-input, pipes, and TERM=dumb keep
+  the plain path.
 
 RLM STEP EXAMPLE
   {

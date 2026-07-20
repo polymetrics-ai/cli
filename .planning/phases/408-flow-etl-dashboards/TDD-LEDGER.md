@@ -18,6 +18,7 @@ Mode: manual universal-loop fallback after `scripts/gsd prompt programming-loop 
 - `golang-documentation`
 - `golang-spf13-cobra`
 - `caveman` for final handoff only
+- `.pi/skills/go-implementation/SKILL.md` checked and absent; used available routed Go skills without inventing the wrapper
 
 ## RED plan
 
@@ -56,12 +57,148 @@ Before production edits, capture failing tests/validation for:
 
 ## RED evidence
 
-Pending. Next action: inspect current `internal/ui`, `internal/events`, `internal/cli/flow_cli.go`, and `internal/cli/etl_cli.go`, then add focused failing tests before production edits.
+Captured before production edits.
+
+```bash
+go test ./internal/ui ./internal/ui/run ./internal/cli -run 'TestDetectModeUsesADRGate|TestDashboard|TestBridge|TestRunDashboards|TestETLRunDashboard'
+```
+
+Result: FAIL as expected.
+
+```text
+# polymetrics.ai/internal/ui [polymetrics.ai/internal/ui.test]
+internal/ui/detect_test.go:13:24: unknown field StdinTTY in struct literal of type DetectOptions
+internal/ui/detect_test.go:18:24: unknown field StdinTTY in struct literal of type DetectOptions
+internal/ui/detect_test.go:23:24: unknown field StdinTTY in struct literal of type DetectOptions
+internal/ui/detect_test.go:97:29: unknown field StdinTTY in struct literal of type DetectOptions
+FAIL	polymetrics.ai/internal/ui [build failed]
+# polymetrics.ai/internal/ui/run [polymetrics.ai/internal/ui/run.test]
+internal/ui/run/dashboard_test.go:13:11: undefined: NewModel
+internal/ui/run/dashboard_test.go:13:20: undefined: Config
+internal/ui/run/dashboard_test.go:20:12: undefined: Step
+internal/ui/run/dashboard_test.go:63:8: undefined: Config
+internal/ui/run/dashboard_test.go:68:10: undefined: Config
+internal/ui/run/dashboard_test.go:68:98: undefined: Step
+internal/ui/run/dashboard_test.go:73:10: undefined: Config
+internal/ui/run/dashboard_test.go:73:97: undefined: Step
+internal/ui/run/dashboard_test.go:78:10: undefined: Config
+internal/ui/run/dashboard_test.go:78:97: undefined: Step
+internal/ui/run/dashboard_test.go:78:97: too many errors
+FAIL	polymetrics.ai/internal/ui/run [build failed]
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/ui_options_test.go:228:30: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:249:84: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:250:85: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:251:49: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:252:56: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:253:56: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:254:58: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:255:59: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:269:103: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:285:30: unknown field StdinIsTerminal in struct literal of type RunOptions
+internal/cli/ui_options_test.go:285:30: too many errors
+FAIL	polymetrics.ai/internal/cli [build failed]
+FAIL
+```
+
+RED coverage introduced:
+
+- Dual-TTY detection requires stdin and stdout.
+- Flow/ETL TTY dashboard activation and bypass matrix.
+- Dashboard model success/failure/cancel, layout, accessibility/ASCII/no-color, sanitation/redaction.
+- Bridge throttling without lifecycle loss.
 
 ## GREEN evidence
 
-Pending.
+Focused dashboard slice green:
+
+```bash
+gofmt -w cmd internal && go test ./internal/ui ./internal/ui/run ./internal/cli -run 'TestDetectModeUsesADRGate|TestDashboard|TestBridge|TestRunDashboards|TestETLRunDashboard|TestGlobalUIFlagsDocumentedInHelp'
+```
+
+Result: PASS.
+
+```text
+ok  	polymetrics.ai/internal/ui	0.440s
+ok  	polymetrics.ai/internal/ui/run	0.668s
+ok  	polymetrics.ai/internal/cli	7.942s
+```
+
+Implemented minimal green:
+
+- Added stdin+stdout TTY gate support via `DetectOptions.StdinTTY` and `RunOptions.StdinIsTerminal`.
+- `cmd/pm` now uses `RunWithOptions(... ModeAuto)`; `cli.Run` remains plain for agent/certify seams.
+- Added `internal/ui/run` deterministic dashboard model and event bridge.
+- Wired `flow run` and `etl run` TTY path to render final inline dashboard frames; plain/JSON/no-input/bypass paths remain existing output.
+- Updated runtime help, `docs/cli/{flow,etl,config}.md`, and website docs for dashboard/bypass behavior.
+
+## Resume RED — live session/navigation/rate hardening
+
+Captured before additional production edits after adopting the focused GREEN slice.
+
+```bash
+go test ./internal/ui/run -run 'TestDashboardFramesCoverLifecycleLayoutsAndHygiene|TestDashboardNavigationHelpAndResize|TestSessionCancellationPropagatesAndDrainsFinalLifecycle'
+```
+
+Result: FAIL as expected.
+
+```text
+# polymetrics.ai/internal/ui/run [polymetrics.ai/internal/ui/run.test]
+internal/ui/run/dashboard_test.go:126:18: model.SelectedStep undefined (type *Model has no field or method SelectedStep)
+internal/ui/run/dashboard_test.go:130:18: model.SelectedStep undefined (type *Model has no field or method SelectedStep)
+internal/ui/run/dashboard_test.go:134:18: model.SelectedStep undefined (type *Model has no field or method SelectedStep)
+internal/ui/run/dashboard_test.go:139:18: model.SelectedStep undefined (type *Model has no field or method SelectedStep)
+internal/ui/run/dashboard_test.go:143:18: model.SelectedStep undefined (type *Model has no field or method SelectedStep)
+internal/ui/run/dashboard_test.go:155:8: model.Resize undefined (type *Model has no field or method Resize)
+internal/ui/run/dashboard_test.go:193:13: undefined: NewSession
+internal/ui/run/dashboard_test.go:193:32: undefined: SessionOptions
+FAIL polymetrics.ai/internal/ui/run [build failed]
+FAIL
+```
+
+Contract added: arrows/Vim-equivalent selection and help, one-layer `esc`, resize guard, exact `records/s` rate, and parent-context cancellation that drains terminal lifecycle events before returning.
+
+Additional live-render RED captured before renderer production edits:
+
+```bash
+go test ./internal/ui/run -run TestSessionRendersLiveUpdatesAndPersistsFinalFrame
+```
+
+Result: FAIL as expected.
+
+```text
+# polymetrics.ai/internal/ui/run [polymetrics.ai/internal/ui/run.test]
+internal/ui/run/dashboard_test.go:201:3: unknown field Output in struct literal of type SessionOptions
+FAIL polymetrics.ai/internal/ui/run [build failed]
+FAIL
+```
+
+## Resume GREEN evidence
+
+```bash
+gofmt -w cmd internal && go test ./internal/ui/run -run 'TestSession|TestDashboard|TestBridge' -count=1 && go test ./internal/cli -run 'TestRunDashboards|TestFlowRunDashboardCancellation|TestETLRunDashboard' -count=1
+```
+
+Result: PASS.
+
+```text
+ok  polymetrics.ai/internal/ui/run  0.461s
+ok  polymetrics.ai/internal/cli     7.623s
+```
+
+Minimal resumed GREEN:
+
+- event-driven session drains throttled progress and every lifecycle event before returning;
+- parent/SIGINT cancellation propagates to the flow/ETL run context and preserves the terminal frame;
+- live inline refreshes use the existing dependency set and leave the final frame in scrollback;
+- responsive initial dimensions, rate units, navigation/help state, sanitation/redaction, and plain/JSON bypasses remain deterministic.
 
 ## REFACTOR evidence
 
-Pending.
+```bash
+gofmt -w cmd internal && git diff --check && go test ./internal/ui/... -count=1 && go test ./internal/cli -run 'TestDashboard|TestSession|TestBridge|TestRunDashboards|TestFlowRunDashboardCancellation|TestETLRunDashboard|TestGlobalUIFlagsDocumentedInHelp|TestGoldenTranscripts|TestDocs' -count=1 && go test -race ./internal/ui/... -count=1 && go test -race ./internal/cli -run 'TestRunDashboards|TestFlowRunDashboardCancellation|TestETLRunDashboard' -count=1 && go test -race ./internal/flow -run 'TestEngineCancellationPreservesEventsTelemetryCheckpointLedgerAndLease' -count=1
+```
+
+Result: PASS. Focused model/CLI/race coverage green; full repository gates remain tracked in `VERIFICATION.md`.
+
+Dependency note: no `go.mod`/`go.sum` delta. Bubble Tea/teatest are absent from the live module and the EXECUTE instruction forbids new dependencies, so coverage uses deterministic headless semantic/model tests rather than adding teatest.

@@ -36,10 +36,13 @@ DESCRIPTION
   record after the local ETL completes.
 
 PROGRESS
-  Add --progress ndjson to stream sanitized ETL progress events to stderr.
-  Stdout remains the final human line or single JSON envelope. On failures,
-  stderr may also include the final error diagnostic after progress events.
-  CI, PM_NO_TUI, --plain, --no-input, pipes, and TERM=dumb keep the plain path.
+  On an eligible stdin+stdout TTY, pm etl run renders an inline pipeline-rail
+  dashboard and leaves a truthful final frame in scrollback. Add --progress
+  ndjson to stream the same sanitized ETL progress events to stderr for agents.
+  Stdout remains the dashboard/final human line or single JSON envelope. On
+  failures, stderr may also include the final error diagnostic after progress
+  events. CI, PM_NO_TUI, --plain, --json, --no-input, pipes, and TERM=dumb keep
+  the plain path.
 
 DIRECT CONNECTOR COMMANDS
   check

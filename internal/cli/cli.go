@@ -46,6 +46,7 @@ const (
 // TTY renderers. Nil StdoutIsTerminal falls back to os.File + x/term detection.
 type RunOptions struct {
 	Mode                RunMode
+	StdinIsTerminal     *bool
 	StdoutIsTerminal    *bool
 	Env                 map[string]string
 	ScheduleCrontabFile string
@@ -96,7 +97,8 @@ func RunWithContext(parent context.Context, args []string, stdout, stderr io.Wri
 		warnTelemetry(warning)
 	}
 	ctx, telemetryHandle := telemetry.Init(ctx, telemetryCfg, warnTelemetry)
-	_ = detectInvocationUI(globals, runOpts, stdout, cfg.JSON)
+	detection := detectInvocationUI(globals, runOpts, stdout, cfg.JSON)
+	ctx = context.WithValue(ctx, uiDetectionContextKey{}, detection)
 	if globals.progress == "ndjson" {
 		ctx = events.WithEmitter(ctx, events.NewNDJSON(stderr))
 	}
@@ -178,12 +180,32 @@ func detectInvocationUI(globals globalOptions, runOpts RunOptions, stdout io.Wri
 	}
 	plain := globals.plain || mode == ModePlain
 	return pmui.Detect(pmui.DetectOptions{
+		StdinTTY:  stdinIsTerminal(runOpts.StdinIsTerminal),
 		StdoutTTY: stdoutIsTerminal(stdout, runOpts.StdoutIsTerminal),
 		JSON:      jsonOut,
 		Plain:     plain,
 		NoInput:   globals.noInput,
 		Env:       invocationEnv(runOpts.Env),
 	})
+}
+
+type uiDetectionContextKey struct{}
+
+func uiDetectionFromContext(ctx context.Context) pmui.Detection {
+	if ctx == nil {
+		return pmui.Detection{Mode: pmui.ModePlain}
+	}
+	if detection, ok := ctx.Value(uiDetectionContextKey{}).(pmui.Detection); ok {
+		return detection
+	}
+	return pmui.Detection{Mode: pmui.ModePlain}
+}
+
+func stdinIsTerminal(override *bool) bool {
+	if override != nil {
+		return *override
+	}
+	return term.IsTerminal(int(os.Stdin.Fd()))
 }
 
 func stdoutIsTerminal(stdout io.Writer, override *bool) bool {
@@ -195,6 +217,19 @@ func stdoutIsTerminal(stdout io.Writer, override *bool) bool {
 		return false
 	}
 	return term.IsTerminal(int(file.Fd()))
+}
+
+func dashboardDimensions(stdout io.Writer) (int, int) {
+	const defaultWidth, defaultHeight = 100, 30
+	file, ok := stdout.(*os.File)
+	if !ok || file == nil {
+		return defaultWidth, defaultHeight
+	}
+	width, height, err := term.GetSize(int(file.Fd()))
+	if err != nil || width <= 0 || height <= 0 {
+		return defaultWidth, defaultHeight
+	}
+	return width, height
 }
 
 func invocationEnv(override map[string]string) map[string]string {

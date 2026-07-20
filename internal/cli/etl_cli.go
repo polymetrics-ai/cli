@@ -6,13 +6,17 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/spf13/cobra"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/events"
 	"polymetrics.ai/internal/safety"
+	pmui "polymetrics.ai/internal/ui"
+	rundashboard "polymetrics.ai/internal/ui/run"
 )
 
 type etlDirectFlags struct {
@@ -230,6 +234,9 @@ func runETLRun(ctx context.Context, cfg config.Config, a *app.App, flags etlRunF
 	if err != nil {
 		return err
 	}
+	if uiDetectionFromContext(ctx).Mode == pmui.ModeTUI {
+		return runETLRunDashboard(ctx, cfg, a, flags, batchSize, stdout)
+	}
 	run, err := a.RunETL(ctx, app.RunETLRequest{
 		Connection: lastString(flags.Connections),
 		Stream:     lastString(flags.Streams),
@@ -254,6 +261,42 @@ func runETLRun(ctx context.Context, cfg config.Config, a *app.App, flags etlRunF
 	}
 	fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
 	return nil
+}
+
+func runETLRunDashboard(ctx context.Context, cfg config.Config, a *app.App, flags etlRunFlags, batchSize int, stdout io.Writer) error {
+	detection := uiDetectionFromContext(ctx)
+	stream := lastString(flags.Streams)
+	width, height := dashboardDimensions(stdout)
+	session := rundashboard.NewSession(ctx, rundashboard.SessionOptions{
+		Config: rundashboard.Config{
+			Title:         "ETL",
+			Name:          stream,
+			Steps:         []rundashboard.Step{{ID: stream, Kind: "stream", Detail: lastString(flags.Connections)}},
+			Width:         width,
+			Height:        height,
+			ASCII:         detection.ASCII,
+			NoColor:       !detection.Color,
+			StartedAt:     time.Now(),
+			ResumeCommand: fmt.Sprintf("pm etl run --connection %s --stream %s", lastString(flags.Connections), stream),
+		},
+		Upstream: events.FromContext(ctx),
+		Interval: 100 * time.Millisecond,
+		Output:   stdout,
+	})
+	var run app.Run
+	err := session.Execute(func(runCtx context.Context) error {
+		var runErr error
+		run, runErr = a.RunETL(runCtx, app.RunETLRequest{
+			Connection: lastString(flags.Connections),
+			Stream:     stream,
+			BatchSize:  batchSize,
+		})
+		if runErr == nil && lastString(flags.Runtimes) == "true" {
+			runErr = recordRuntimeETL(runCtx, run, cfg)
+		}
+		return runErr
+	})
+	return err
 }
 
 func runETLStatus(a *app.App, runID string, stdout io.Writer, jsonOut bool) error {

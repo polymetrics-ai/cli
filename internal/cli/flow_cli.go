@@ -8,14 +8,18 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/events"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/rlm"
 	"polymetrics.ai/internal/safety"
+	pmui "polymetrics.ai/internal/ui"
+	rundashboard "polymetrics.ai/internal/ui/run"
 )
 
 type flowFileFlags struct {
@@ -270,6 +274,10 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, flags flowRunFl
 		LockDir:    dir,
 	}
 
+	if uiDetectionFromContext(ctx).Mode == pmui.ModeTUI {
+		return flowRunDashboard(ctx, e, m, stdout, flags.Force)
+	}
+
 	result, err := e.Run(ctx, flow.RunOptions{Force: flags.Force})
 	if err != nil {
 		return err
@@ -280,6 +288,53 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, flags flowRunFl
 	}
 	fmt.Fprintf(stdout, "Flow %s: %s\n", humanFlowField(result.FlowName), humanFlowField(result.Status))
 	return nil
+}
+
+func flowRunDashboard(ctx context.Context, engine *flow.Engine, manifest flow.FlowManifest, stdout io.Writer, force bool) error {
+	detection := uiDetectionFromContext(ctx)
+	width, height := dashboardDimensions(stdout)
+	session := rundashboard.NewSession(ctx, rundashboard.SessionOptions{
+		Config: rundashboard.Config{
+			Title:         "Flow",
+			Name:          manifest.Name,
+			Steps:         flowDashboardSteps(manifest),
+			Width:         width,
+			Height:        height,
+			ASCII:         detection.ASCII,
+			NoColor:       !detection.Color,
+			StartedAt:     time.Now(),
+			ResumeCommand: fmt.Sprintf("pm flow run %s", humanFlowField(manifest.Name)),
+		},
+		Upstream: events.FromContext(ctx),
+		Interval: 100 * time.Millisecond,
+		Output:   stdout,
+	})
+	err := session.Execute(func(runCtx context.Context) error {
+		_, runErr := engine.Run(runCtx, flow.RunOptions{Force: force})
+		return runErr
+	})
+	return err
+}
+
+func flowDashboardSteps(manifest flow.FlowManifest) []rundashboard.Step {
+	steps := make([]rundashboard.Step, 0, len(manifest.Steps))
+	for _, step := range manifest.Steps {
+		detail := ""
+		switch step.Kind {
+		case flow.KindSync:
+			detail = strings.Join(step.Streams, ", ")
+		case flow.KindQuery:
+			detail = "query"
+		case flow.KindRLM:
+			detail = filepath.Base(step.Spec)
+		case flow.KindAction:
+			if step.ActionCfg != nil {
+				detail = step.ActionCfg.SourceTable
+			}
+		}
+		steps = append(steps, rundashboard.Step{ID: step.ID, Kind: string(step.Kind), Detail: detail})
+	}
+	return steps
 }
 
 // flowStatus returns last checkpoint info for a named flow.

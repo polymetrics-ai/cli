@@ -1,6 +1,6 @@
 # Phase 408 — Flow/ETL run dashboards
 
-Status: PLANNED / TDD pending  
+Status: EXECUTING / focused GREEN recorded; broader verification pending
 Issue: #408 `feat(ui): add flow and ETL run dashboards`  
 Parent: #397, base `feat/cli-architecture-v2`, parent PR #438  
 Worker branch: `feat/408-flow-etl-dashboards`  
@@ -48,6 +48,13 @@ Out of scope / blocked by instruction:
 
 Phase artifacts were absent at worker start; this directory creates the issue-local plan set.
 
+## Resume checkpoint (2026-07-21)
+
+- Resumed at committed plan head `361a6bec0af1ed9cf84d5bdfdd10f16458d9da4d` on `feat/408-flow-etl-dashboards`.
+- Adopted all 19 pre-existing dirty entries, including untracked `internal/ui/run/dashboard.go` and `dashboard_test.go`; no reset/stash/clean/restart performed.
+- Existing RED and focused GREEN evidence below remain authoritative. EXECUTE continues from that green slice; production behavior still requires live Bubble Tea runner/cancellation reconciliation and broader gates.
+- Resume execution decision: `local_critical_path` (sole isolated mutating worker; recursive delegation unavailable by contract).
+
 ## Required skills loaded
 
 - `gsd-core` — repo-local GSD adapter; commands used below.
@@ -67,6 +74,7 @@ Phase artifacts were absent at worker start; this directory creates the issue-lo
 - `golang-documentation` — CLI help/docs/website parity.
 - `golang-spf13-cobra` — command wiring changes may touch cobra-backed CLI nodes.
 - `caveman` — compact status/handoff only.
+- `.pi/skills/go-implementation/SKILL.md` wrapper — absent in live tree (`test -e` => `absent`); no path invented. Available routed Go skills above are implementation authority.
 
 ## GSD command evidence
 
@@ -102,7 +110,7 @@ Manual universal-loop fallback is active for implementation because the adapter 
 - No production edits.
 - Commit/push plan checkpoint when clean.
 
-### Slice 1 — RED dashboard/model/bridge contract
+### Slice 1 — RED dashboard/model/bridge contract — RECORDED
 
 Add focused failing tests before production code:
 
@@ -118,7 +126,7 @@ Add focused failing tests before production code:
 
 Expected RED: tests fail to compile or assert missing dashboard package/wiring.
 
-### Slice 2 — Minimal GREEN dashboard package
+### Slice 2 — Minimal GREEN dashboard package — FOCUSED GREEN RECORDED; LIVE LOOP HARDENING IN PROGRESS
 
 - Implement `internal/ui/run` (or existing UI package if present) with pure model state and renderer.
 - Consume small view DTOs + `events.Event`; do not import business packages into `internal/ui/**`.

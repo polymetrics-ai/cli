@@ -9,63 +9,68 @@ func TestDetectModeUsesADRGate(t *testing.T) {
 		want Mode
 	}{
 		{
-			name: "tty default enables tui",
-			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			name: "dual tty default enables tui",
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color"}},
 			want: ModeTUI,
 		},
 		{
+			name: "stdin pipe forces plain",
+			opts: DetectOptions{StdinTTY: false, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			want: ModePlain,
+		},
+		{
 			name: "stdout pipe forces plain",
-			opts: DetectOptions{StdoutTTY: false, Env: map[string]string{"TERM": "xterm-256color"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: false, Env: map[string]string{"TERM": "xterm-256color"}},
 			want: ModePlain,
 		},
 		{
 			name: "json forces plain",
-			opts: DetectOptions{StdoutTTY: true, JSON: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, JSON: true, Env: map[string]string{"TERM": "xterm-256color"}},
 			want: ModePlain,
 		},
 		{
 			name: "plain flag forces plain",
-			opts: DetectOptions{StdoutTTY: true, Plain: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, Plain: true, Env: map[string]string{"TERM": "xterm-256color"}},
 			want: ModePlain,
 		},
 		{
 			name: "no input forces plain",
-			opts: DetectOptions{StdoutTTY: true, NoInput: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, NoInput: true, Env: map[string]string{"TERM": "xterm-256color"}},
 			want: ModePlain,
 		},
 		{
 			name: "pm no tui forces plain",
-			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_NO_TUI": "1"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_NO_TUI": "1"}},
 			want: ModePlain,
 		},
 		{
 			name: "pm no tui zero still forces plain",
-			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_NO_TUI": "0"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_NO_TUI": "0"}},
 			want: ModePlain,
 		},
 		{
 			name: "pm no tui false still forces plain",
-			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_NO_TUI": "false"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_NO_TUI": "false"}},
 			want: ModePlain,
 		},
 		{
 			name: "ci forces plain",
-			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "true"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "true"}},
 			want: ModePlain,
 		},
 		{
 			name: "ci zero still forces plain",
-			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "0"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "0"}},
 			want: ModePlain,
 		},
 		{
 			name: "ci false still forces plain",
-			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "false"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CI": "false"}},
 			want: ModePlain,
 		},
 		{
 			name: "dumb term forces plain",
-			opts: DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "dumb"}},
+			opts: DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "dumb"}},
 			want: ModePlain,
 		},
 	}
@@ -88,32 +93,32 @@ func TestDetectCapabilitiesDegradeForColorAndASCII(t *testing.T) {
 		wantASCII bool
 	}{
 		{
-			name:      "tty color unicode default",
-			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color"}},
+			name:      "dual tty color unicode default",
+			opts:      DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color"}},
 			wantColor: true,
 			wantASCII: false,
 		},
 		{
 			name:      "no color disables color",
-			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "1"}},
+			opts:      DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "1"}},
 			wantColor: false,
 			wantASCII: false,
 		},
 		{
 			name:      "no color zero disables color",
-			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "0"}},
+			opts:      DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "0"}},
 			wantColor: false,
 			wantASCII: false,
 		},
 		{
 			name:      "no color false disables color",
-			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "false"}},
+			opts:      DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "NO_COLOR": "false"}},
 			wantColor: false,
 			wantASCII: false,
 		},
 		{
 			name:      "clicolor zero disables color",
-			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CLICOLOR": "0"}},
+			opts:      DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "CLICOLOR": "0"}},
 			wantColor: false,
 			wantASCII: false,
 		},
@@ -125,13 +130,13 @@ func TestDetectCapabilitiesDegradeForColorAndASCII(t *testing.T) {
 		},
 		{
 			name:      "pm ascii requests ascii",
-			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_ASCII": "1"}},
+			opts:      DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "xterm-256color", "PM_ASCII": "1"}},
 			wantColor: true,
 			wantASCII: true,
 		},
 		{
 			name:      "dumb term disables color and uses ascii",
-			opts:      DetectOptions{StdoutTTY: true, Env: map[string]string{"TERM": "dumb"}},
+			opts:      DetectOptions{StdinTTY: true, StdoutTTY: true, Env: map[string]string{"TERM": "dumb"}},
 			wantColor: false,
 			wantASCII: true,
 		},

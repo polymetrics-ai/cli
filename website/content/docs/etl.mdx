@@ -77,7 +77,7 @@ pm etl run --connection <name> --stream <stream> [--batch-size <n>] [--json] [--
 | `--batch-size` | No | Records per write batch. Default is 1000. |
 | `--runtime` | No | After local ETL completes, record the run through optional PostgreSQL, DragonflyDB, and Temporal runtime checks. |
 | `--json` | No | Emit structured JSON to stdout instead of human-readable text. |
-| `--progress ndjson` | No | Stream sanitized progress events to stderr as NDJSON while stdout stays the final human line or single JSON envelope. On failures, stderr may also include the final error diagnostic. |
+| `--progress ndjson` | No | Stream sanitized progress events to stderr as NDJSON for agents. On an eligible stdin+stdout TTY, stdout renders an inline pipeline-rail dashboard with a truthful final frame; `--json`, `--plain`, `--no-input`, CI, `PM_NO_TUI`, `TERM=dumb`, or pipes keep the plain/JSON path. On failures, stderr may also include the final error diagnostic. |
 
 ### Example
 

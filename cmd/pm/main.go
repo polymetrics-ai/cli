@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"os"
+	"os/signal"
 
 	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors/certify"
@@ -27,5 +28,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 			ScheduleCrontabFile: opts.CrontabFile,
 		})
 	})
-	return cli.Run(args, stdout, stderr)
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+	return cli.RunWithContext(ctx, args, stdout, stderr, cli.RunOptions{Mode: cli.ModeAuto})
 }
