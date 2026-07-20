@@ -54,3 +54,32 @@ Downstream artifact: branch `docs/462-terminal-ui-design-review-fixes`; planning
 correction commits pushed; terminal evidence recorded in this phase artifact update.
 Verification result: docs-contract grep, dependency roster check, skill validation, JSON syntax,
 scope check, `git diff --check`, `scripts/gsd doctor`, and `make docs-check` pass.
+
+## Correction PR #467 TTY-gate/state invocation — 2026-07-20
+
+```bash
+scripts/gsd doctor
+scripts/gsd prompt plan-phase 462 --skip-research > /tmp/gsd-plan-462-correction-467.txt
+scripts/gsd prompt programming-loop init --phase 462 --dry-run
+```
+
+Observed: `scripts/gsd prompt programming-loop ...` returns `scripts/gsd: unknown GSD command:
+programming-loop`; manual universal-loop fallback remains recorded. `/gsd-programming-loop` is not
+available through the shell adapter for this run.
+
+```text
+Execute accepted review findings on correction PR #467 for issue #462 under parent #397 on branch
+`docs/462-terminal-ui-design-review-fixes`, starting from
+`e8286ea83a76ac2c6f6257c6e2d40fd21af81640`. No production Go edits and no merge. Reopen the #462
+phase artifacts first, then minimally update delegated docs/skill/prompt sources so every TUI/Huh
+prompt activation requires both stdin and stdout TTYs; piped/non-TTY stdin falls back to deterministic
+plain/noninteractive behavior without consuming scripted stdin, hanging, or bypassing through
+`/dev/tty`; future TUI workers record RED tests for `stdin-piped+stdout-TTY`, `stdout-piped`, `CI`,
+`--json`, `--plain`, and `--no-input`. Update RUN-STATE/SUMMARY to record PR #467 open at the
+starting head with CI green and human/parent review pending, then validate grep, JSON, skill, scope,
+GSD, and docs gates. Do not retry Claude/Copilot.
+```
+
+Downstream artifact: pending local finding disposition, human review, and parent integration gates;
+Git/GitHub remain the current source of truth for branch/PR head after this starting snapshot.
+Verification result: pending for this correction slice.

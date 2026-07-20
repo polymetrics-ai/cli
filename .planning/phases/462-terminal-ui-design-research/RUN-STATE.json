@@ -5,25 +5,38 @@
   "correctionBranch": "docs/462-terminal-ui-design-review-fixes",
   "baseBranch": "feat/cli-architecture-v2",
   "startCommit": "c91b90cf9671b5caabc0ef4ec24d81897f870458",
+  "correctionStartHead": "e8286ea83a76ac2c6f6257c6e2d40fd21af81640",
   "originalPr": 465,
   "originalPrHead": "6853fee28e0208381b49931fb1f5dfec42ee50ef",
-  "state": "correction_verified_pr_pending",
+  "correctionPr": 467,
+  "correctionPrStateAtStart": "open",
+  "correctionPrCiAtStart": "green",
+  "state": "correction_467_tty_gate_state_fix_in_progress",
   "classification": "docs_planning_skill_only",
   "research": "complete",
   "localReferenceLab": "complete",
   "productionGoChanges": false,
   "dependencyChanges": false,
-  "verificationPassed": true,
-  "verificationStatusReason": "docs-only declared phase equivalent make docs-check passed; full make verify not run by scope",
+  "verificationPassed": false,
+  "verificationStatusReason": "bounded correction reopened; final docs-check and scope gates pending for this slice",
   "review": {
-    "claude": "disabled_manually",
-    "copilot": "quota_exhausted",
-    "fallback": "human",
-    "acceptedCorrectionPr": "pending"
+    "claude": "disabled_manually_no_retry",
+    "copilot": "quota_exhausted_no_retry",
+    "fallback": "human_parent_review",
+    "status": "human_parent_pending",
+    "acceptedCorrectionPr": {
+      "number": 467,
+      "stateAtStart": "open",
+      "headAtStart": "e8286ea83a76ac2c6f6257c6e2d40fd21af81640",
+      "ciAtStart": "green",
+      "reviewStatus": "human_parent_pending",
+      "sourceOfTruth": "Git/GitHub current state after the starting snapshot; no invented final-head claim"
+    }
   },
   "humanGates": {
     "ntchartsV2": "required_before_go_mod",
-    "githubBlockedByMetadata": "parent_orchestrator_follow_up"
+    "githubBlockedByMetadata": "parent_orchestrator_follow_up",
+    "parentIntegration": "human_parent_review_pending"
   },
   "orchestrationDecisions": [
     {
@@ -40,29 +53,41 @@
       "cycle": "verify",
       "decision": "local_critical_path",
       "reason": "docs-only verification completed inline; no subagent tool available to this worker"
+    },
+    {
+      "cycle": "correction-467-plan",
+      "decision": "local_critical_path",
+      "reason": "accepted review findings require bounded docs correction in the assigned isolated branch/cwd"
+    },
+    {
+      "cycle": "correction-467-red",
+      "decision": "local_critical_path",
+      "reason": "docs-contract grep captured stdout-only/ambiguous TTY gate contradictions before delegated docs edits"
     }
   ],
   "next": [
-    "commit_push_terminal_evidence",
-    "open_correction_pr_to_parent"
+    "apply_local_finding_disposition",
+    "run_docs_contract_green_checks",
+    "human_review_gate",
+    "parent_integration_gate"
   ],
   "verification": {
     "declaredPhaseEquivalent": "make docs-check",
-    "result": "pass",
+    "result": "pending",
     "fullMakeVerify": "not_run_docs_only_scope",
     "checks": [
-      "docs_contract_grep_pass",
-      "dependency_roster_check_pass",
-      "query_export_token_status_marker_check_pass",
-      "skill_validation_pass",
-      "json_syntax_pass",
-      "scope_check_pass",
-      "git_diff_check_pass",
-      "gsd_doctor_pass_69_commands"
+      "docs_contract_red_captured",
+      "phase_artifacts_reopened",
+      "docs_contract_green_pending",
+      "dependency_roster_check_pending",
+      "query_export_token_status_marker_check_pending",
+      "skill_validation_pending",
+      "json_syntax_pending",
+      "scope_check_pending",
+      "git_diff_check_pending",
+      "gsd_doctor_pass_69_commands",
+      "docs_check_pending"
     ],
-    "docsCheckOutput": [
-      "go build ./cmd/pm",
-      "Validated connector docs in docs/connectors"
-    ]
+    "docsCheckOutput": []
   }
 }

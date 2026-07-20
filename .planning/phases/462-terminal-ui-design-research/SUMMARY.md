@@ -2,8 +2,10 @@
 
 Status: provisionally integrated / review blocked. PR #465 (`docs/462-terminal-ui-design-research`)
 was merged into the parent branch from head `6853fee28e0208381b49931fb1f5dfec42ee50ef`, but Claude
-review is disabled, Copilot backup exhausted quota, fallback is human review, and an accepted
-correction PR from `docs/462-terminal-ui-design-review-fixes` is pending.
+review is disabled, Copilot backup exhausted quota, and fallback is human review. Correction PR #467
+started open at head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640` with CI green at that head; review
+status is human/parent pending. Git/GitHub remain the current source of truth after that starting
+snapshot.
 
 The requested reference applications have been exercised in an isolated local lab and distilled
 into a Polymetrics-specific terminal design system. The chosen structural direction is a quiet
@@ -46,7 +48,8 @@ Accepted findings to fix across delegated docs:
 3. #462/D-TUI must appear directly in each affected TUI dependency row, not only in prose.
 4. Evidence status must remain provisionally integrated / review blocked: PR #465 head
    `6853fee28e0208381b49931fb1f5dfec42ee50ef`, Claude disabled, Copilot quota exhausted, fallback
-   human, accepted correction PR pending.
+   human; correction PR #467 started open at `e8286ea83a76ac2c6f6257c6e2d40fd21af81640` with CI
+   green and human/parent review pending.
 5. Query export must document a typed read-only, path-confined, no-overwrite-by-default contract
    with explicit TTY confirmation/noninteractive `--force`, sanitized command echo, and exact
    `--no-input` guidance.
@@ -55,3 +58,18 @@ Correction verification passes: docs-contract contradiction grep, direct #462/D-
 approval-token/query-export/status marker checks, skill validation (`Skill is valid!`), JSON syntax,
 exact scope diff, `git diff --check`, `scripts/gsd doctor`, and `make docs-check`. Full `make verify`
 was not run because this issue is docs-only and the task requested `make docs-check` when feasible.
+
+## Accepted review findings on correction PR #467 — 2026-07-20
+
+This bounded docs correction aligns the normative TUI gate after review found stdout-only and
+ambiguous TTY wording. Bubble Tea/Huh/prompt activation must require **both stdin and stdout TTYs**
+plus the existing disables (`--json`, `--plain`, `--no-input`, `PM_NO_TUI`, `CI`, `TERM=dumb`).
+With piped or non-TTY stdin, Polymetrics must fall back to deterministic plain/noninteractive
+behavior, never consume scripted stdin unexpectedly, never hang, and never bypass by opening
+`/dev/tty`.
+
+Future production TUI issues must record RED tests for `stdin-piped+stdout-TTY`, `stdout-piped`,
+`CI`, `--json`, `--plain`, and `--no-input`. The explicit `pm query grid`, `pm reverse guide`,
+read-only query export, approval-token secrecy, and accessibility/plain contracts remain preserved.
+Next gates are local finding disposition, human review, and parent integration; no Claude/Copilot
+retry is requested in this blocker window.

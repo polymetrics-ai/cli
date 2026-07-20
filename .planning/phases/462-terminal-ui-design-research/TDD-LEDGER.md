@@ -109,7 +109,7 @@ this correction changes only delegated documentation/planning/skill artifacts.
 - Dependency rows directly encode `#462`/`D-TUI` for affected TUI issues.
 - Phase status says provisionally integrated / review blocked with PR #465, head
   `6853fee28e0208381b49931fb1f5dfec42ee50ef`, Claude disabled, Copilot quota exhausted,
-  human fallback, accepted-correction PR pending.
+  human fallback, and correction PR #467 starting head/status captured explicitly.
 - Query export path contract is explicit and preserves no generic write-tool boundary.
 
 ## Review correction GREEN ledger — 2026-07-20
@@ -129,3 +129,61 @@ this correction changes only delegated documentation/planning/skill artifacts.
 | Docs gate | `make docs-check` built `./cmd/pm` and printed `Validated connector docs in docs/connectors` | Pass |
 
 No production behavior test was required; the correction is docs/planning/skill only.
+
+## Correction PR #467 TTY-gate/state RED ledger — 2026-07-20
+
+GSD/Pi evidence recaptured before delegated source/design/skill docs edits:
+
+```text
+scripts/gsd doctor                         # pass, ok commands 69
+scripts/gsd prompt plan-phase 462 --skip-research > /tmp/gsd-plan-462-correction-467.txt
+wc -c /tmp/gsd-plan-462-correction-467.txt # 10692
+scripts/gsd prompt programming-loop init --phase 462 --dry-run
+# scripts/gsd: unknown GSD command: programming-loop
+```
+
+Manual universal-loop fallback remains active for this correction because `programming-loop` is not
+registered in the shell adapter. Execution decision: `local_critical_path` — one assigned worker,
+isolated cwd/branch, no subagent tool, docs-only accepted-review correction. PR #467 starting
+snapshot: open at `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, CI green at that head,
+human/parent review pending.
+
+Loaded skills for this correction: `gsd-core`, `caveman`, `bubble-tea-tui-design`,
+`golang-how-to`, `golang-cli`, `golang-testing`, `golang-documentation`, `golang-security`,
+`golang-safety`, `golang-context`, `golang-concurrency`, and `golang-error-handling`. Skill-route
+mismatch persists: `.pi/skills/go-implementation/SKILL.md` is absent.
+
+### TTY gate missing-contract inventory
+
+```text
+RED: TTY gate contract inconsistent
+docs/adr/0003-interactive-tui-layer.md:38:2. **The TUI is affirmatively gated.** `ui.Detect` enables it only when stdout is a real
+docs/design/tui-ux-design.md:23:and always exists first. The TTY door opens only when `ui.Detect` says so
+docs/design/tui-ux-design.md:488:- **Gate**: `ui.Detect` table tests (pipes are non-TTY by construction; env/flag matrix).
+docs/plans/cli-architecture-v2-improvement-plan.md:63:**D. TUIs must be gated, degradable, and honest.** TTY-only activation; colorprofile
+docs/plans/cli-architecture-v2-improvement-plan.md:247:- **TTY gate** `ui.Detect`: TUI only when stdout is a TTY ∧ ¬`--json` ∧ ¬`--plain` ∧
+docs/prompts/cli-architecture-v2-gsd-execution-prompt.md:127:ui.Detect per ADR-0003 §2 (TTY ∧ ¬json ∧ ¬plain ∧ ¬no-input ∧ ¬PM_NO_TUI ∧ ¬CI ∧ TERM≠dumb);
+.agents/skills/bubble-tea-tui-design/references/testing-and-accessibility.md:12:`CI=1`, `PM_NO_TUI=1`, `--plain`, `--json`, and pipes bypass the TUI.
+MISSING future RED test marker: stdin-piped+stdout-TTY
+MISSING future RED test marker: stdout-piped
+```
+
+RED status: docs-contract grep failed as expected. The defect is documentation/prompt
+contradiction only: some delegated sources required stdout TTY or ambiguous `TTY`, while the plan
+correctly required both stdin and stdout TTYs. No production Go behavior test is required in this
+correction, but future TUI implementation issues must start with failing tests for
+`stdin-piped+stdout-TTY` fallback, `stdout-piped`, `CI`, `--json`, `--plain`, and `--no-input`.
+
+### Expected GREEN evidence for #467 accepted findings
+
+- All normative Bubble Tea/Huh/prompt activation language says both stdin and stdout must be TTYs.
+- Piped/non-TTY stdin always takes deterministic plain/noninteractive fallback, never consumes
+  scripted stdin unexpectedly, never hangs, and never opens `/dev/tty` to bypass the gate.
+- Existing disables stay normative: stdout-piped/non-TTY, `CI`, `PM_NO_TUI`, `TERM=dumb`, `--json`,
+  `--plain`, and `--no-input` all bypass TUI/prompt activation.
+- Future RED matrix is recorded in design docs, skill/test reference, execution/Pi prompts, and
+  phase verification.
+- Query grid/reverse guide, query export, approval-token secrecy, and accessibility/plain behavior
+  remain explicit and unchanged.
+- Run state records #467 open at starting head `e8286ea83a76ac2c6f6257c6e2d40fd21af81640`, CI green
+  at that head, and review status human/parent pending; no artifact claims an invented final head.
