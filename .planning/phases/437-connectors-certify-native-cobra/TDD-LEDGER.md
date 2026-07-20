@@ -44,7 +44,7 @@ Session `issue-437-review-correction-20260719T113319Z`; exact correction start `
 | C2 | GREEN | Hidden fail-closed controls; single connector span/validation/options ordering; batch injected load then parallel then wrapped run; exact-only connectors help normalization; canonical/generated/website docs | Complete: focused `3.004s`; native/certify/telemetry `108.532s` |
 | C3 | Refactor | Base/current differential; repeated/race; certify exit/redaction/replay-no-live; local sample; docs/golden/website parity | Complete: differential 5/5 byte-identical; focused race `29.046s`; ×10 `24.991s`; certify redaction/replay/concurrency race `349.263s`; exit focus `21.618s`; sample exit 0/pass/redacted; docs/golden `24.275s`; website regeneration hash-stable |
 | C4 | Full gate | gofmt, vet, full tests, build, `make verify`, connector validation | Complete: full CLI `435.572s`; certify `338.846s`; vet/build pass; validation 547/0; `make verify` exit 0 (`468.36s`, CLI `444.436s`, certify `346.018s`, smoke/lint/docs/validation green) |
-| C5 | Delivery | Finalize artifacts, commit/push, no services/credentials/PR/review | Complete: terminal verification artifact commit `2987f21b` pushed; final delivery marker follows |
+| C5 | Delivery | Finalize artifacts, commit/push, no services/credentials/PR/review | Complete: terminal verification artifact commit `2987f21b` pushed and final delivery marker later completed |
 
 Correction RED must be captured and committed before any production edit. Fixture/temp data only; no live credentials, HTTP writes, reverse ETL execution, or external sweep.
 
@@ -59,7 +59,7 @@ Session `issue-437-second-safety-correction-20260719`; exact start `0d743e54e06c
 | S2 | GREEN P1/P2 | Batch safe overrides; no discarded credential constraints; every declared certify flag used or fail-closed; only implemented skip values accepted | Complete: effect/no-op focus passed; unsupported single controls hidden/rejected; mode validation runs before runtime effects; batch disable overrides precede credential validation; sandbox gates writes; unsupported rate/budget/limit fail before factory |
 | S3 | GREEN P3 | Architecture/PRD/help claims corrected; CLI and website artifacts regenerated | Complete: stale rejected controls removed; help accurately names namespace manual; CLI docs/goldens and website docs data regenerated |
 | S4 | Verify | Focused/repeated/race/no-op audit/sample smoke/full CLI+certify/docs+website/gofmt+vet+test+build+make verify+connectorgen | Complete: repeated `0.661s`; race CLI `1.726s`/certify `2.535s`; full CLI `440.910s` then verify `434.190s`; full certify `346.271s` then verify `337.470s`; no-op/help/sample/docs/website pass; `make verify` exit 0 in `7m36.852s`; connectorgen 547/0 |
-| S5 | Delivery | Finalize artifacts and commit/push; no credentials/services/dependencies/PR/review | Complete: verification artifact `974495d5` pushed; final delivery marker follows |
+| S5 | Delivery | Finalize artifacts and commit/push; no credentials/services/dependencies/PR/review | Complete: verification artifact `974495d5` pushed and final delivery marker later completed |
 
 Strict TDD gate: S1 failing tests and observed failures must be captured and committed before any production edit. All data remains fixture/synthetic-reference/temp-only; no secret values, credential resolution, live checks, external writes, services, dependency changes, PR, or review.
 
@@ -215,9 +215,9 @@ Loaded skills: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-tes
 | R8-2 | RED whitespace values | Empty/whitespace space-form `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than` reject as usage exit 2 before logger/telemetry/credentials/runner/workspace/sweep effects | Complete: failed before production |
 | R8-3 | GREEN | Minimal future-timestamp skew validation and `TrimSpace(next)==""` required-value validation pass focused tests without weakening historical resume or valid value forms | Complete: focused/repeated/race, vet, and build pass |
 | R8-4 | Verify | Focused repeated/race, full `internal/connectors/certify` and `internal/cli`, runtime help/exit/no-effect, sample smoke, docs/golden/website if applicable, gofmt/diff/vet/full tests/build/`make verify`, connectorgen | Complete: full local gates pass |
-| R8-5 | Delivery | Coherent commits pushed, PR #466 body updated with final eighth head/gates, no bot review, clean/remote-matched branch; terminal artifact explains why it cannot contain its own SHA | Terminal artifact commit pending; PR body update follows commit |
+| R8-5 | Delivery | Coherent commits pushed, PR #466 body updated with final eighth head/gates, no bot review, clean/remote-matched branch; terminal artifact explains why it cannot contain its own SHA | Complete: terminal evidence and PR body update completed at parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially |
 
-Strict TDD gate: R8-1/R8-2 failing evidence must be captured and committed before production edits. Tests use deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.
+Strict TDD gate: R8-1/R8-2 failing evidence was captured and committed (`ea5e412c`) before production edits. Tests used deterministic fakes, temporary roots, synthetic non-secret markers, and existing fixture-only sample/outbox paths; no credential values, live services, or external writes/sweeps.
 
 ### Eighth-cycle RED evidence captured
 
@@ -236,7 +236,7 @@ Implementation adds a documented 5-minute resume-report clock-skew tolerance and
 
 ### Eighth-cycle terminal verification evidence
 
-Reviewed implementation head before terminal artifacts: `af0e4dab`. Terminal artifact SHA cannot be recorded inside its own content; after this artifact commit/push, PR #466 body records the actual final PR head.
+Reviewed implementation head remains `af0e4dabf5be70237c02403e6ef4f003042667d6`. Terminal evidence parent / previous PR head is `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; that head recorded the eighth terminal artifact and PR #466 body update. This docs-only closure intentionally avoids embedding its own resulting SHA, so the current live PR head is authoritative from Git/GitHub.
 
 - Full affected packages: `go test ./internal/connectors/certify -count=1` pass (`347.792s`); `go test ./internal/cli -count=1` pass (`443.361s`).
 - Runtime no-effect/help: built `./pm`; whitespace `--stream` exits 2, says `--stream requires a value`, and creates no `.polymetrics`; `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help` byte-identical (`8391` bytes).
@@ -261,3 +261,13 @@ Implementation accepts only the exact cleanup-failure absence-proof resume shape
 - Docs/golden/website: `go test ./internal/cli -run 'TestConnectorsManual|TestNativeConnectors|TestNativeCertify' -count=1` pass (`11.210s`); `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages with no tracked docs/website/golden drift.
 - Fixture-only sample smoke: `./pm connectors certify sample --root <temp> --json` exit `0`, kind `ConnectorCertification`, connector `sample`, passed `true`, stderr bytes `0`.
 - Full gates: `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` pass (CLI `444.782s`, certify `349.644s`); `go build ./cmd/pm`; `make verify` pass (CLI `442.999s`, certify `348.395s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen 547/0); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => `547 connector(s) checked, 0 findings`.
+
+## Docs-only evidence closure ledger
+
+Exact clean local/remote/PR start: `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. Worker decision: `local_critical_path`; parent records spawned. No behavior RED required because this is artifact-only evidence correction with no production edits.
+
+| Step | Kind | Evidence | Status |
+|---:|---|---|---|
+| D0 | Planning/docs | Read required contracts/artifacts/issue; refreshed `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt plan-phase 437 --skip-research`; loaded `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-documentation`, `golang-security` | Complete before artifact edits |
+| D1 | Closure edit | Clear stale terminal/PR delivery wording; retain reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`; record terminal-evidence parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; state current live PR head comes from Git/GitHub, not self-reference | Complete |
+| D2 | Validation | `python3 -m json.tool .planning/phases/437-connectors-certify-native-cobra/RUN-STATE.json`, stale terminal/PR marker `rg`, `git diff --check`, and exact `git diff --name-only` scope check | Complete: JSON parse ok; stale marker grep returned no matches; diff check passed; diff scope limited to the six phase artifacts |

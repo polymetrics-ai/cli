@@ -2,7 +2,7 @@
 
 Invocation `issue-437-pi-sol-high-20260719T095145Z`; Sol/high; start `6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b`.
 
-`verificationPassed`: true — eighth bounded correction completed through implementation head `af0e4dab` with terminal artifact commit pending. Terminal artifacts intentionally record the reviewed/implementation head; the artifact commit SHA is discoverable from `git log`/PR #466 after commit because a commit cannot contain its own resulting SHA.
+`verificationPassed`: true — full eighth-cycle local gates and `make verify` passed at reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`; terminal evidence and PR #466 body update were completed at parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. This docs-only evidence closure keeps that truth and intentionally does not embed its own resulting SHA; current live PR head is authoritative from Git/GitHub.
 
 ## TDD / behavior
 
@@ -94,7 +94,7 @@ Second-correction start: `0d743e54e06c9e27e550eacce9be7899a9e23d19`; session `is
 - [x] RED effect-recorder tests expose that `--write=false` and `--skip=write` do not override credential-file `write: true`.
 - [x] RED exposes configured credential-file sandbox/rate/budget/limit reaching batch/runner rather than failing closed.
 - [x] RED exposes visible/accepted `--credential`, `--limit`, and `--modes`, unrestricted skip values, and mode-inapplicable controls running effects.
-- [x] RED audit enumerates every declared certify flag by supported mode or explicit fail-closed expectation; GREEN mapping pending.
+- [x] RED audit enumerated every declared certify flag by supported mode or explicit fail-closed expectation; GREEN mapping later completed.
 - [x] P3 stale certification architecture/PRD examples and claims removed; connector-help name claim made accurate.
 - [x] Runtime help source, CLI docs, goldens, website docs, and generated data updated; final binary help checks remain in full verification.
 - [x] Focused effect/no-op audit tests pass, repeated ×10, and under race (CLI `1.726s`, certify `2.535s`).
@@ -157,7 +157,7 @@ Exact start `1e27b14012f65ffa24c01ed855d0405c24401eee`; launcher `openai-codex/g
 - [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; explicit `go test ./...` (real `456.93s`); and `go build ./cmd/pm` pass.
 - [x] Full `make verify` exits 0 on the required complete rerun (real `464.41s`; CLI `439.981s`, certify `330.355s`, lint 0, docs/smoke/connectorgen green).
 - [x] No go.mod/go.sum delta and no unjustified files outside #437 correction scope.
-- [x] Final commits pushed only to active branch; terminal artifact commit follows; no PR/integration/parent/main mutation.
+- [x] Final commits pushed only to active branch; terminal artifact was later committed/pushed in cycle history; no PR/integration/parent/main mutation.
 
 The first `make verify` attempt failed only at lint after tests because four new fixture writes did not check `fmt` return values. Commit `b06816ad` fixed all 17 fixture writes consistently; focused tests and targeted certify lint passed before the complete successful rerun. All runtime checks used temporary roots and the dependency-free sample/local smoke only.
 
@@ -190,7 +190,7 @@ Exact start `05d9c6658f52e542b6a74e87e29bdcad7275ea9d`; identity `issue-437-fift
 - [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; explicit `go test ./...` real `7m34.316s`; `go build ./cmd/pm` pass.
 - [x] Full `make verify` exits 0 in real `7m52.496s` (CLI `449.572s`, certify `332.793s`, docs/smoke/lint/connectorgen green).
 - [x] No go.mod/go.sum delta, connector defs, credentials, services, system crontab, external writes/sweeps, generic write tools, dependencies, PR, parent, integration, or main mutation.
-- [x] GREEN `e9ce945e` pushed; truthful terminal artifact commit/push follows and must finish clean/remote-matched.
+- [x] GREEN `e9ce945e` pushed; truthful terminal artifact was later committed/pushed clean and remote-matched.
 
 ## Continuation checklist — parent reconcile and stacked PR
 
@@ -290,5 +290,17 @@ Exact start: `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`; identity `issue-437-eig
 - [x] Fixture-only `./pm connectors certify sample --root <temp> --json` smoke passes without credentials/live services/external writes: exit 0, `ConnectorCertification`, sample, passed true, stderr bytes 0.
 - [x] Docs/golden/website parity checked: focused CLI docs/golden `11.208s`; `cd website && node scripts/gen-docs-data.mjs` wrote 11 pages; tracked docs/website diff clean.
 - [x] `gofmt -w cmd internal`; `git diff --check`; `go vet ./...`; `go test ./...` (CLI `446.588s`, certify `349.095s`); `go build ./cmd/pm`; final `make verify` (CLI `445.358s`, certify `348.425s`, docs validate, ordered local smoke `smoke ok`, lint `0 issues`, connectorgen green); explicit `go run ./cmd/connectorgen validate internal/connectors/defs` => 547/0 all pass.
-- [ ] PR #466 body update follows after terminal artifact commit so the final exact PR head is known.
+- [x] PR #466 body update completed at terminal-evidence parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; current live PR head is intentionally sourced from Git/GitHub instead of a self-referential artifact line.
 - [x] No credentials, live certification, services, external writes/sweeps, dependencies, generic write tools, bot review request, parent/main merge, or quality-gate reduction.
+
+## Docs-only evidence closure checklist
+
+Exact clean local/remote/PR start: `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. No production edit and no behavior RED required.
+
+- [x] Read issue #437 acceptance criteria, required contracts/workflows, phase artifacts, GSD adapter, skill routing, CLI parity, and required docs/architecture context.
+- [x] GSD route refreshed: `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt plan-phase 437 --skip-research`.
+- [x] Execution decision recorded as `local_critical_path`; parent records spawned.
+- [x] Reviewed implementation head retained as `af0e4dabf5be70237c02403e6ef4f003042667d6`.
+- [x] Terminal-evidence parent/previous PR head recorded as `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`.
+- [x] Current live PR head declared authoritative from Git/GitHub and intentionally not embedded self-referentially.
+- [x] JSON parse, stale terminal/PR marker grep, `git diff --check`, and exact diff-scope check only phase artifacts pass.

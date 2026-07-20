@@ -1,6 +1,6 @@
 # Phase 437 Summary
 
-Status: eighth bounded correction complete through reviewed implementation head `af0e4dab`; terminal artifact commit is pending and PR #466 body update follows after that commit so the final PR head can be named truthfully. Stacked PR #466 remains open with human/parent review fallback pending.
+Status: delivery evidence complete. Reviewed implementation head remains `af0e4dabf5be70237c02403e6ef4f003042667d6`; terminal evidence parent / previous PR head is `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`, which recorded the eighth terminal artifact and PR #466 body update. The current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially. Stacked PR #466 remains open with human/parent review fallback open.
 
 ## Identity
 
@@ -72,9 +72,9 @@ Session `issue-437-continuation-20260719T211738Z`; exact start `86eea0f966814e68
 Plan/TDD/verification were refreshed before parent merge or production edits. Diff audit is clean: 42 files are limited to #437 phase artifacts, native connectors/certify CLI code/tests/goldens, certify safety code/tests, the `cmd/pm` in-process harness seam, and required docs/website parity; no dependency or connector-def delta. Certify safety corrections are directly applicable to the native Cobra certify surface because declared flags, credential files, reports, ledgers, sweep, resume, and cleanup authority must fail closed before effects. Latest parent `a5474bcb` merged cleanly into `dc4aed23`; #462 design docs/skills/traces retained and not in the stacked PR diff. Verification passed: focused CLI `119.151s`, certify `7.344s`; runtime help byte-equal (`8391` bytes); docs/golden `10.347s`; website docs data regenerated with no drift; credential-free `./pm connectors certify sample --root <tmp> --json` exit 0/pass/stderr 0; gofmt/diff/vet/full tests/build; `make verify` exit 0 with local Makefile smoke, lint `0 issues`, and connectorgen green; explicit connectorgen validation 547/0. Delivery complete for worker scope: branch pushed and non-draft stacked PR opened at https://github.com/polymetrics-ai/cli/pull/466 targeting `feat/cli-architecture-v2`. CI queued on PR creation. Claude is disabled and Copilot quota is exhausted, so human/parent fallback review coverage remains pending. No new behavior edit was needed; existing RED evidence remains valid.
 
 
-## Sixth bounded exact-head review-correction cycle — reopened
+## Sixth bounded exact-head review-correction cycle
 
-Status: planning checkpoint in progress; verification reopened and false until full gates pass.
+Status: complete; sixth verification passed and later cycles superseded its temporary reopened state.
 
 Identity `issue-437-sixth-review-correction-20260719T220843Z`; exact clean/matched start `8e7e2533c75451114c4d6ae38f89b7fd1ede6c34` on branch `refactor/437-connectors-certify-native-cobra`, PR #466. Accepted findings require another bounded recovery-budget exception: unresolved High approval-replay resource authority and leak-dominance failures can leave live resources untracked or mask exit 3; Medium stale-leak consistency can make reports internally contradictory.
 
@@ -126,7 +126,7 @@ Safety: no credentials, live certification, services, system crontab, external w
 
 Status: verified; `verificationPassed=true` after seventh full gates.
 
-Identity: `issue-437-seventh-bounded-correction-20260720`; exact clean/matched start `6e9e7d9422050a609306d8900d6a06c8bb1fc223` on branch `refactor/437-connectors-certify-native-cobra`, PR #466. Local branch, remote branch, and PR head were confirmed equal. Sixth-cycle stale pending fields are corrected: PR #466 body already records head `6e9e7d9422050a609306d8900d6a06c8bb1fc223`; seventh terminal evidence is not claimed yet.
+Identity: `issue-437-seventh-bounded-correction-20260720`; exact clean/matched start `6e9e7d9422050a609306d8900d6a06c8bb1fc223` on branch `refactor/437-connectors-certify-native-cobra`, PR #466. Local branch, remote branch, and PR head were confirmed equal. Sixth-cycle stale pending fields were corrected; seventh terminal evidence and PR body update later completed at `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8`.
 
 Accepted findings: `validResumeEvidence` rejects the no-leak cleanup-failure/absence-proof shape introduced by the sixth cleanup fix, causing `--resume` to rerun and repeat effects; certify prevalidation lets bare value-required flags become `true`, so single/batch/sweep paths can reach runner, credential loading, telemetry, or wrong validation category before usage rejection. Recovery-budget exception: unresolved effect-before-usage and resume-replay risks justify this additional bounded cycle.
 
@@ -138,14 +138,18 @@ Verification: focused GREEN, repeated, race, full affected packages, runtime no-
 
 ## Eighth bounded correction
 
-Status: verified through reviewed implementation head `af0e4dab`; `verificationPassed=true` for eighth gates. Terminal artifact commit and PR body update follow so the final PR head can be named outside the self-referential artifact.
+Status: complete. `verificationPassed=true` for eighth gates at reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`; terminal evidence and PR body update completed at parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. Current live PR head is authoritative from Git/GitHub and intentionally not embedded in this self-referential artifact.
 
 Identity: `issue-437-eighth-bounded-correction-20260720`; exact clean/matched start `0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8` on branch `refactor/437-connectors-certify-native-cobra`, PR #466. Local branch, remote branch, and PR head were confirmed equal. The eighth recovery exception is recorded because accepted Medium findings can cause future-dated reports to suppress reruns and whitespace-only values to reach telemetry/credential/runner/sweep effects.
 
-Accepted corrections: reject materially future `StartedAt`/`CompletedAt` report timestamps using a documented small skew tolerance while preserving historical reports and `CompletedAt >= StartedAt`; reject empty/whitespace space-form values for all value-required certify flags before config/logger/telemetry/credential-file reads/runner/workspace/sweep; finalize artifacts and PR status without impossible commit self-reference. Terminal artifacts can record the reviewed/implementation head, but cannot contain their own commit SHA because Git computes it after the commit content exists.
+Accepted corrections: reject materially future `StartedAt`/`CompletedAt` report timestamps using a documented small skew tolerance while preserving historical reports and `CompletedAt >= StartedAt`; reject empty/whitespace space-form values for all value-required certify flags before config/logger/telemetry/credential-file reads/runner/workspace/sweep; finalize artifacts and PR status without impossible commit self-reference. Artifacts record reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6` and terminal-evidence parent/previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; live PR head comes from Git/GitHub.
 
 GSD: `scripts/gsd doctor` passed; `scripts/gsd prompt plan-phase 437 --skip-research` generated; `scripts/gsd prompt programming-loop init --phase 437 --dry-run` remains unavailable, so the manual universal-loop fallback applies. Execution decision: `local_critical_path`; parent records this worker as spawned. No bot review request or merge.
 
 Delivery: planning `45f190dc`, RED `ea5e412c`, and GREEN implementation `af0e4dab` are pushed. Future-dated resume reports beyond the documented five-minute skew rerun instead of suppressing execution; valid historical reports remain usable. Empty/whitespace space-form `from-env`, `config`, `stream`, `credentials-file`, `parallel`, and `older-than` now fail as usage exit 2 before logger/telemetry/credential/runner/workspace/sweep effects, while valid assigned/space values and boolean bare controls remain valid.
 
 Verification: RED failed before production (`certify` 0.662s; `cli` 23.561s). GREEN/final gates pass: focused `0.739s`/`2.559s`; repeated/race `1.192s`/`6.887s` and `2.450s`/`23.441s`; full affected packages `347.792s`/`443.361s`; runtime whitespace no-effect plus help parity `8391` bytes; docs/golden `11.208s`; website drift-free; sample smoke exit 0/pass/stderr 0; `gofmt`, diff, vet, full tests, build, final `make verify` (CLI `445.358s`, certify `348.425s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0 pass. No credentials, live services, external writes/sweeps, dependencies, connector defs, bot review, parent/main merge, or quality-gate reduction.
+
+## Docs-only evidence closure
+
+Exact clean local/remote/PR start: `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. Scope is artifact honesty only: clear stale terminal/PR delivery wording, preserve `verificationPassed=true`, retain reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`, record `f211562ef4fd64ee7d7de4f274a3facf6ff44f51` as terminal-evidence parent/previous PR head, and state current live PR head is authoritative from Git/GitHub. Worker decision is `local_critical_path`; parent records spawned. No behavior RED, production edits, bot review request, or merge.

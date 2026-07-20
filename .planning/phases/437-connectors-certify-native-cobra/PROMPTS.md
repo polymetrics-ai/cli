@@ -23,7 +23,7 @@ Safety prompt: preserve `cli.Run`, dynamic connector dispatch, exits 0/1/2/3, co
 
 Downstream artifact: native connectors/certify subtree, declared current flags and runtime seam, compatibility normalization, contextual direct/trailing help, focused parity tests, and canonical manual/docs/website updates.
 
-Verification result: superseded by the accepted correction cycle below; current phase verification is pending.
+Verification result: superseded by accepted correction cycles below; terminal phase verification is complete and `verificationPassed=true` remains tied to the full eighth `make verify` gate.
 
 ## Accepted correction kickoff snapshot
 
@@ -182,7 +182,7 @@ Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `g
 
 Recovery-budget exception: unresolved effect-before-usage and resume-replay findings require this extra bounded correction rather than stopping on prior cycle count.
 
-Downstream artifact: complete. Planning `82f59229`, RED `e0fb8c4b`, and GREEN `2ce0e10a` are pushed; terminal evidence artifact follows. Resume validation accepts only the exact cleanup-failure absence-proof shape, and certify syntax prevalidation rejects bare value-required flags before effects while preserving assigned/space values and boolean bare controls.
+Downstream artifact: complete. Planning `82f59229`, RED `e0fb8c4b`, GREEN `2ce0e10a`, and terminal evidence `0d515e6e` are pushed. Resume validation accepts only the exact cleanup-failure absence-proof shape, and certify syntax prevalidation rejects bare value-required flags before effects while preserving assigned/space values and boolean bare controls.
 
 Verification result: pass. RED failed as intended (`certify` 0.698s; `cli` 5.853s). GREEN/final gates pass: focused `0.599s`/`0.566s`; repeated/race `0.660s`/`0.575s` and `1.704s`/`1.729s`; full affected packages `353.654s`/`448.666s`; runtime bare `--stream` exits 2 with no `.polymetrics`; help byte parity `8391` bytes; docs/golden `11.210s`; website drift-free; sample smoke exit 0/pass/stderr 0; `gofmt`, diff, vet, full tests, build, final `make verify` (CLI `442.999s`, certify `348.395s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0 pass. Terminal evidence `0d515e6e` and PR #466 body update completed seventh delivery.
 
@@ -206,6 +206,14 @@ Required skills loaded: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `g
 
 Recovery-budget exception: unresolved future-evidence and whitespace effect-before-usage findings require this extra bounded correction rather than stopping on prior cycle count.
 
-Downstream artifact: complete through reviewed implementation head `af0e4dab`; terminal artifact commit follows. Planning `45f190dc`, RED `ea5e412c`, and GREEN `af0e4dab` are pushed. Future-dated resume reports beyond a documented five-minute skew rerun; whitespace/empty space-form value-required certify flags fail as usage exit 2 before effects. Final PR body update follows after the terminal artifact commit so it can name the actual PR head without impossible self-reference.
+Downstream artifact: complete. Planning `45f190dc`, RED `ea5e412c`, GREEN `af0e4dab`, and terminal evidence parent / previous PR head `f211562ef4fd64ee7d7de4f274a3facf6ff44f51` are pushed. Future-dated resume reports beyond a documented five-minute skew rerun; whitespace/empty space-form value-required certify flags fail as usage exit 2 before effects. PR #466 body update for eighth evidence completed at `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`; current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially.
 
 Verification result: pass for eighth cycle. RED failed before production (`certify` 0.662s; `cli` 23.561s). GREEN/final gates pass: focused/repeated/race, full affected packages (`347.792s` certify, `443.361s` CLI), runtime no-effect/help parity (`8391` bytes), docs/golden/website drift, sample smoke, gofmt/diff/vet/full tests/build, final `make verify` (CLI `445.358s`, certify `348.425s`, smoke/lint/docs/connectorgen green), and explicit connectorgen 547/0. No credentials, live services, external writes/sweeps, dependencies, bot review, parent/main merge, or quality-gate reduction.
+
+## Docs-only evidence closure kickoff snapshot
+
+Identity: docs-only evidence closure for #437 / PR #466; exact clean local/remote/PR start `f211562ef4fd64ee7d7de4f274a3facf6ff44f51`. Task: accepted Low artifact honesty fix only; clear stale terminal-evidence/PR-body delivery wording across the six phase artifacts; retain reviewed implementation head `af0e4dabf5be70237c02403e6ef4f003042667d6`; record `f211562ef4fd64ee7d7de4f274a3facf6ff44f51` as terminal-evidence parent/previous PR head; state current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially.
+
+Commands refreshed before artifact edits: `scripts/gsd doctor`; `scripts/gsd list`; `scripts/gsd prompt plan-phase 437 --skip-research`. Execution decision: `local_critical_path`; parent records spawned. Required skills loaded for closure: `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-documentation`, and `golang-security`.
+
+Downstream artifact: six phase artifacts only; no production edit and no behavior RED required. Verification result: JSON parse, stale terminal/PR marker grep, `git diff --check`, and exact diff-scope check are the closure gates.

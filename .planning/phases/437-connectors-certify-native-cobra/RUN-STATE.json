@@ -8,6 +8,8 @@
   "baseBranch": "feat/cli-architecture-v2",
   "startingHead": "6c038bb4ab4a5497fca28a0cab42d0a7fa4eb22b",
   "endingImplementationHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
+  "terminalEvidenceParentHead": "f211562ef4fd64ee7d7de4f274a3facf6ff44f51",
+  "currentLivePRHeadPolicy": "current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially in phase artifacts",
   "correctionStartingHead": "0d1792cec3ea829ceb6228fc600b6dc7bbd90eee",
   "secondCorrectionStartingHead": "0d743e54e06c9e27e550eacce9be7899a9e23d19",
   "thirdCorrectionStartingHead": "437d13cf",
@@ -21,7 +23,7 @@
   "correctionStartedAt": "20260719T113319Z",
   "modelProfile": "Sol",
   "thinking": "high",
-  "status": "eighth_review_correction_verified_terminal_artifact_pending",
+  "status": "eighth_review_correction_delivery_complete_docs_closure",
   "verificationPassed": true,
   "continuationSession": "issue-437-continuation-20260719T211738Z",
   "continuationStartingHead": "86eea0f966814e6848e5a52143eea15dd46ff801",
@@ -228,7 +230,7 @@
     {
       "cycle": "sixth-review-correction-tdd-gate",
       "decision": "local_critical_path",
-      "reason": "RED tests pending; no production edits until deterministic failures are captured and committed"
+      "reason": "RED tests were not yet captured at this cycle start; no production edits were allowed until deterministic failures were captured and committed"
     },
     {
       "cycle": "sixth-review-correction-red",
@@ -238,7 +240,7 @@
     {
       "cycle": "sixth-review-correction-green",
       "decision": "local_critical_path",
-      "reason": "minimal leak-authority and leak-dominance fixes passed focused, repeated, race, vet, and build gates; broader verification remains pending"
+      "reason": "minimal leak-authority and leak-dominance fixes passed focused, repeated, race, vet, and build gates; broader verification later passed in the sixth verify cycle"
     },
     {
       "cycle": "sixth-review-correction-verify",
@@ -258,7 +260,7 @@
     {
       "cycle": "seventh-review-correction-tdd-gate",
       "decision": "local_critical_path",
-      "reason": "RED tests pending; no production edits until deterministic failures are captured and committed"
+      "reason": "RED tests were not yet captured at this cycle start; no production edits were allowed until deterministic failures were captured and committed"
     },
     {
       "cycle": "seventh-review-correction-red",
@@ -288,17 +290,17 @@
     {
       "cycle": "eighth-review-correction-tdd-gate",
       "decision": "local_critical_path",
-      "reason": "RED tests pending; no production edits until deterministic failures are captured and committed"
+      "reason": "RED tests were not yet captured at this cycle start; no production edits were allowed until deterministic failures were captured and committed"
     },
     {
       "cycle": "eighth-review-correction-red",
       "decision": "local_critical_path",
-      "reason": "deterministic RED tests captured future-dated report resume and whitespace value-required effect/category findings before production edits; RED commit pending"
+      "reason": "deterministic RED tests captured future-dated report resume and whitespace value-required effect/category findings before production edits; RED commit was pushed before production edits"
     },
     {
       "cycle": "eighth-review-correction-green",
       "decision": "local_critical_path",
-      "reason": "minimal future timestamp and whitespace value-required fixes passed focused, repeated, race, vet, and build gates; broader verification remains pending"
+      "reason": "minimal future timestamp and whitespace value-required fixes passed focused, repeated, race, vet, and build gates; broader verification later passed in the eighth verify cycle"
     },
     {
       "cycle": "eighth-review-correction-verify",
@@ -308,7 +310,12 @@
     {
       "cycle": "eighth-review-correction-summary",
       "decision": "local_critical_path",
-      "reason": "terminal artifacts record successful eighth verification and reviewed implementation head; PR body update follows after commit so final PR head can be named without self-reference; no bot review requested"
+      "reason": "terminal artifacts record successful eighth verification and reviewed implementation head; eighth terminal evidence and PR body update are complete at parent/previous PR head f211562ef4fd64ee7d7de4f274a3facf6ff44f51; no bot review requested"
+    },
+    {
+      "cycle": "docs-only-evidence-closure",
+      "decision": "local_critical_path",
+      "reason": "accepted Low artifact-honesty finding only; no production edits or behavior RED required; worker owns isolated #437 branch/cwd and parent records this worker as spawned"
     }
   ],
   "red": "captured eighth RED: certify future-report focus 0.662s resumed ordinary and cleanup-failure/absence-proof future-dated reports; CLI focus 23.561s showed empty/whitespace value-required flags reached later validation, credential paths, fake runtime effects, or full sample certification instead of pre-effect usage",
@@ -340,9 +347,10 @@
     "0d515e6e docs(planning): record seventh certify evidence",
     "45f190dc docs(planning): plan eighth certify correction",
     "ea5e412c test(certify): expose eighth review regressions",
-    "af0e4dab fix(certify): close eighth review gaps"
+    "af0e4dab fix(certify): close eighth review gaps",
+    "f211562e docs(planning): record eighth certify evidence"
   ],
-  "push": "planning, RED, GREEN commits pushed; terminal artifact commit and PR body update pending for final head",
+  "push": "planning, RED, GREEN, and eighth terminal evidence commits pushed through f211562ef4fd64ee7d7de4f274a3facf6ff44f51; PR body update for that terminal evidence completed; current live PR head is authoritative from Git/GitHub and intentionally not embedded self-referentially",
   "pullRequest": "https://github.com/polymetrics-ai/cli/pull/466",
   "reviewRoute": "human_parent_fallback_pending_no_bot_retry_requested",
   "safety": "fixtures, fakes, in-process seams, temporary roots, dependency-free sample, and existing local smoke only; no credential values/live checks, external credential commands, system crontab, external writes/sweeps, services, connector defs, dependencies, generic tools, bot review, parent/main merge, or quality-gate reduction",
@@ -356,8 +364,9 @@
   "seventhCorrectionTerminalEvidenceHead": "0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8",
   "eighthCorrectionStartingHead": "0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8",
   "eighthCorrectionSession": "issue-437-eighth-bounded-correction-20260720",
-  "eighthCorrectionReviewedCodeHead": "0d515e6ec8ac11a6e049f8f7f8390725dc5b5dd8",
+  "eighthCorrectionReviewedCodeHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
   "eighthCorrectionImplementationHead": "af0e4dabf5be70237c02403e6ef4f003042667d6",
-  "eighthCorrectionTerminalEvidenceCommit": "pending_commit_sha_not_self_referencable",
-  "terminalEvidenceCommitPolicy": "artifact commits cannot contain their own resulting SHA because Git computes the commit object after file content is fixed; artifacts record reviewedCodeHead/endingImplementationHead and the final PR head is recorded in the PR body after push"
+  "eighthCorrectionTerminalEvidenceCommit": "f211562ef4fd64ee7d7de4f274a3facf6ff44f51",
+  "terminalEvidencePreviousPRHead": "f211562ef4fd64ee7d7de4f274a3facf6ff44f51",
+  "terminalEvidenceCommitPolicy": "artifact commits cannot contain their own resulting SHA because Git computes the commit object after file content is fixed; artifacts record reviewedCodeHead/endingImplementationHead and terminalEvidenceParentHead/previous PR head, while the current live PR head is authoritative from Git/GitHub"
 }
