@@ -3,9 +3,9 @@
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "worker_ready",
+  "status": "worker_in_progress",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "1008f75ff8fe7d43a0a67a802ccf05ef296eae7f",
+  "currentHead": "5b6037880eed78bc8bc276a3ced13302908cac53",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -416,6 +416,15 @@
         413
       ],
       "reason": "#413 is dependency-ready but collides with #408 on command tree, completion/help/docs/golden/website surfaces; serialize after #408."
+    },
+    {
+      "cycle": "spawn_408_flow_etl_dashboards",
+      "timestamp": "2026-07-20T20:15:00Z",
+      "decision": "spawned",
+      "issues": [
+        408
+      ],
+      "reason": "Created isolated worktree /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards on branch feat/408-flow-etl-dashboards from parent head 5b603788 and dispatched pm-gsd-worker for #408. #413 deferred for write-scope collision; #419 remains human-gated."
     }
   ],
   "units": [
@@ -650,14 +659,16 @@
   "readyQueue": [
     {
       "issue": 408,
-      "status": "worker_ready",
+      "status": "worker_in_progress",
       "dependencies": [
         405,
         462
       ],
       "writeScope": "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity",
-      "decision": "worker_ready",
-      "reason": "#405/#462 satisfied and #437 collision cleared; critical-path candidate to spawn next."
+      "decision": "spawned",
+      "reason": "pm-gsd-worker dispatched in isolated worktree for critical-path #408.",
+      "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards",
+      "branch": "feat/408-flow-etl-dashboards"
     },
     {
       "issue": 413,
@@ -795,7 +806,7 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T20:06:35Z",
+  "updatedAt": "2026-07-20T20:15:00Z",
   "mainSync": {
     "baseBeforeSync": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
     "originMain": "74ab381eb8236305170ffd44d5aed74f8d0d2936",

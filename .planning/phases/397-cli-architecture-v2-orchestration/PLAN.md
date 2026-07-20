@@ -133,3 +133,5 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 - #437 is provisionally integrated. #407 umbrella dependency state is complete on the parent branch because #421-#437 are now integrated.
 - Rebuilt queue: #408 is the critical-path ready implementation issue; #413 is ready but deferred by write-scope collision with #408; #419 remains human-gated.
 - Phase 437 pending intake remains planning-only under `.planning/traces/phase-437-pending-intake/`; no pending request is authorized for implementation.
+
+- #408 dispatch: `pm-gsd-worker` in `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards`, branch `feat/408-flow-etl-dashboards`, from parent head `5b6037880eed78bc8bc276a3ced13302908cac53`; #413 deferred for write-scope collision.
