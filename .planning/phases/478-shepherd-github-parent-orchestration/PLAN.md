@@ -597,3 +597,136 @@ production Shepherd modules, and pinned Pi 0.80.6 offline discovery succeeds. Im
 ancestry, full-range diff, exact 21-path ownership, JSON, and synthetic-marker scans pass. The broad
 serialized suite is recorded separately because the managed sandbox still rejects unrelated
 process-identity child spawns with `EPERM`. No prohibited or external action ran.
+
+## Cycle 7 consolidated exact-head correction: 2026-07-22
+
+Two independent Cycle 6 reviews inspected exact candidate
+`dbce5b7d0c698bc802594211072fed77eff23c1c` against immutable base
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both reports were read completely. Their unique union
+is accepted as one coherent correction: the test-only parent-ready authority oracle, escaping late
+effects, volatile ready identity, unauthenticated review-attempt audit fields, future broker
+chronology, incomplete credential grammar, ambiguous run state, and the missing #479-shaped
+production-port-only seam must close together.
+
+Required routing loaded before edits: `gsd-programming-loop`, `architecture-patterns`,
+`javascript-testing-patterns`, `github-issue-first-delivery`, `caveman`, required-skills routing,
+the issue-agent contract, Pi adapter and universal-loop references, and required GSD project
+artifacts. `scripts/gsd doctor` passes. `scripts/gsd prompt programming-loop init --phase
+478-shepherd-github-parent-orchestration --dry-run` reports that `programming-loop` is unavailable,
+so Cycle 7 records `manual_gsd_fallback` and follows strict PLAN -> RED -> GREEN -> REFACTOR. The
+phase-specific coverage matrix remains in this PLAN and `TDD-LEDGER.md`; adding a new
+`PRD-COVERAGE.md` path is unnecessary and would violate the exact owned scope.
+
+### Cycle 7 exact scope and frozen production
+
+The base-to-candidate allowlist remains exactly the Cycle 6 21 paths. No new path is required.
+Production blobs frozen at reviewed Cycle 6 candidate `dbce5b7d` are:
+
+- `github-orchestrator.ts`: `b3515a94e932a6206f2c32f083c1188882a01dfe`
+- `github-decision-broker.ts`: `25c98a3c224d660c7fe6b5de16a30fdf73f95621`
+- `human-decision.ts`: `4202ba001dd0d48b83d68a65b7004c8db49d0b65`
+- `review-router.ts`: `a113b4d6bb77f001e8b377c2696c934136b4ceb9`
+- `github-evidence.ts`: `23efd2c51280ba83836feef4fcb459e7da4571c0`
+
+No agent slot is available at planning time; the parent, #475 worker, #479 preflight, and this
+ordered #478 worker occupy all four slots. Cycle 7 therefore records `local_critical_path` rather
+than delaying or duplicating work. The parent-provided #479 preflight observation is incorporated
+as part of the typed-wiring finding below.
+
+### Cycle 7 architectural contract
+
+1. Replace `GitHubOrchestrationTransport.markParentReady` plus its fake-only callback with one
+   explicit production `ParentReadyDurableAuthorityBoundary`. Its conditional method owns the
+   authoritative compare, durable authorization consumption, exact PR draft/revision CAS, and
+   ready effect as one indivisible port operation. Its recovery method durably quarantines that
+   authorization before performing an idempotent rollback-to-draft. Export closed canonical
+   builders/validators so an implementation can compare current policy, review, exact paths,
+   canonical child receipts and literal ancestry, consumed decision, plan/head, and PR CAS without
+   reproducing private controller logic. Every coordinate movement inside the boundary conflicts
+   before draft is cleared; controller rereads and rollback are exceptional recovery only.
+2. Expose a production-typed prepare/commit split. `prepareParentReadiness` returns a canonical
+   prepared operation containing the authoritative consumed decision and durable mutation intent;
+   `commitPreparedParentReadiness` revalidates and submits it to the durable authority boundary.
+   This lets #479 durably journal prepare/decision-consume before the conditional effect and record
+   settlement afterward without private callbacks or invented protocol. The existing
+   `reconcileParentReadiness` remains a convenience wrapper. Prepared values are closed,
+   digest-bound, and unusable after semantic movement.
+3. Split parent-ready authorization into a stable semantic projection and a separately validated
+   freshness envelope. Stable identity includes repository/base/revision/policy digest (never
+   policy `observedAt`), exact ancestry repository/ancestor/descendant/literal result (never proof
+   revision/time), `independentReviewAuthorizationDigest`, stable exact paths, consumed decision
+   identity, canonical child-receipt identities, plan/head, and PR revision CAS. Equivalent policy
+   or ancestry observations and a later equivalent clean attempt preserve both idempotency key and
+   intent digest across retry/restart; real semantic movement conflicts.
+4. Bind each receipt's `reviewResultDigest` and `reviewCompletedAt` to the complete authoritative
+   controller-owned attestation history returned for that exact target. Stable review
+   authorization remains attempt-independent, but a forged full-attempt digest/time can never be
+   reused or authorize readiness. Later equivalent clean attempts remain compatible; the latest
+   ordered findings attempt still blocks.
+5. On uncertain parent-ready timeout/cancellation, immediately enter keyed quarantine, retain the
+   ensure lease through the original invocation's settlement and recovery, and drive the durable
+   boundary's quarantine+rollback until an exact newer draft is confirmed. Timeout-before-effect,
+   timeout-after-effect, late settlement, transient read/rollback failures, and restart-before-
+   visibility cannot release an unowned live effect or report a clean terminal join. `stop()` joins
+   finalizers and reports incomplete/unacknowledged work when a port remains uncooperative.
+6. Validate every canonical human-decision record against a broker/controller-owned observation
+   clock with exported explicit GitHub timestamp skew. Bound `createdAt`, request-comment time,
+   `decidedAt`, `consumedAt`, and `updatedAt` independently and together. The actual
+   `GitHubDecisionBroker` repository reread and the orchestrator adapter both enforce the bound;
+   impossible future evidence never reaches parent-ready.
+7. Replace the open-ended uppercase credential-assignment suffix with finite shared schema/prefix
+   rules. Add Kubernetes `client-key-data`/token forms, Docker config `auth`/identity-token forms,
+   AWS access-key/session assignments and closely related well-known prefixes. Table-drive every
+   new synthetic marker through human-decision persistence/comment, parent/child plan and
+   title/body fields, findings, and dispositions; rejection precedes persistence/effect and errors
+   never reflect the marker.
+8. Make `candidateRef: "HEAD"` the only current-candidate semantic in `RUN-STATE.json`. Nest exact
+   Cycle 6 SHA `dbce5b7d...` under historical prior-review state, remove the stale Cycle 5
+   `frozenCandidate` current field, and add a schema-level invariant rejecting any historical SHA
+   in current-candidate fields.
+9. Add one true #479-shaped wiring trajectory using only exported production interfaces and public
+   prepare/commit methods. It composes actual policy, real broker adapter, durable prepared-intent
+   journal, atomic authority/readiness, quarantine/rollback, and stop/join contracts. It has no
+   fake-only validator property, `Object.assign` seam, type cast, or private helper duplication.
+10. Retain all 206 passing Cycle 6 focused assertions plus the intentional live skip. Do not touch
+    Go, connectors, main/parent worktrees, controller/#479 implementation, dependencies, network,
+    live GitHub, reviewer dispatch, integration, or merge.
+
+### Cycle 7 RED matrix (46 planned behavior rows)
+
+| Family | Rows | Required failing behavior before GREEN |
+| --- | ---: | --- |
+| atomic authority movement | 10 | policy, review, paths, receipt, ancestry, decision, plan, head, PR revision, and durable authorization state move inside the effect; all remain draft without relying on reread/rollback |
+| late-effect ownership | 6 | timeout before/after effect, restart before visibility, read failure, rollback failure/retry, and no unowned live effect/false clean join |
+| semantic identity vs freshness | 7 | policy observation refresh, ancestry metadata refresh, equivalent later clean, combined retry, restart, and true policy/review/path semantic movement |
+| attested receipt attempt provenance | 5 | forged result digest, forged completion time, later equivalent clean, later findings, and restart/history ordering |
+| owned-clock broker chronology | 6 | future create, request comment, decision, consume, update, and all-at-once through actual broker plus ready path |
+| shared credential forms | 8 | Kubernetes key/token, Docker auth/identity-token, AWS access/secret/session assignments, and well-known temporary-access prefix across every durable/outbound boundary |
+| RUN-STATE schema | 2 | one HEAD current semantic and synthetic historical-SHA/current-field rejection |
+| #479 port-only wiring | 1 | public prepare/journal/commit/settle path over production interfaces only |
+| Cycle 6 retention | 1 | retained 207-test focused suite classification is unchanged |
+
+### Cycle 7 strict lifecycle and verification
+
+1. Commit this artifact-only plan, scope, finding matrix, run-state correction, and verification
+   checklist before any test or production edit.
+2. Make one comprehensive test/fixture-only RED commit. Retained Cycle 6 assertions must remain
+   green; each new contract family must demonstrate its intended failure. Prove all five frozen
+   production blobs above remain exact before GREEN.
+3. Implement one coherent GREEN/refactor only in the owned production modules and aligned tests.
+   Any post-RED test support change must preserve every expectation and be enumerated.
+4. Run the complete five-file focused matrix, strict owned and all-production TypeScript against
+   pinned Pi 0.80.6, pinned offline Pi RPC, immutable-base/ancestry/diff/exact-21-path/JSON/synthetic-
+   marker gates. Broad Shepherd may run only serialized; `/bin/ps`/spawn `EPERM` remains a separately
+   reported environment classification.
+5. Commit evidence only after the worktree is cleanable and artifacts describe exact HEAD. Report
+   PLAN/RED/GREEN/evidence commits, exact base and candidate, path list/count, counts, and known
+   environmental failures. Parent owns fresh review; no self-review or integration occurs.
+
+### Cycle 7 checkpoints
+
+- [ ] Artifact-only PLAN/finding matrix commit (this checkpoint; exact SHA reported after commit).
+- [ ] Comprehensive test/fixture-only RED with retained Cycle 6 and frozen production proof.
+- [ ] One coherent atomic-authority/lifecycle GREEN/refactor.
+- [ ] Exact-head local verification/evidence commit and clean candidate.
+- [ ] Fresh exact-head review remains parent-owned.

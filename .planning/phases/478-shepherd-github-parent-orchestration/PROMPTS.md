@@ -114,3 +114,22 @@
   The bounded read-only explorer has completed; implementation remains the local critical path.
 - Exclusions: push/network/live GitHub, #479, Go/connectors/certification/runtime/`make`, reviewer,
   integration, or merge.
+
+## Cycle 7 consolidated-review prompt
+
+- Inputs: `/tmp/478-REVIEW-CYCLE6-1.md` and `/tmp/478-REVIEW-CYCLE6-2.md`, both read completely.
+- Exact reviewed candidate/base: `dbce5b7d0c698bc802594211072fed77eff23c1c` /
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`.
+- Strict sequence: artifact-only PLAN with 46-row matrix; one comprehensive test/fixture-only RED
+  retaining Cycle 6 and frozen production; one coherent GREEN/refactor; exact-head evidence.
+- Architecture: public prepare/commit split lets #479 journal prepared intent plus consumed decision
+  before effect and settlement afterward; one production durable authority boundary atomically
+  compare-consumes stable policy/review/path/receipt/ancestry/decision/plan/head/PR-CAS authority,
+  while a separate freshness envelope carries observation metadata. The same boundary durably
+  quarantines uncertain effects and idempotently rolls them back before key/join release.
+- Other batch invariants: authoritative attested review-attempt history, owned-clock broker skew,
+  finite Kubernetes/Docker/AWS secret grammar, one HEAD current run-state semantic, true port-only
+  #479-shaped wiring, and complete Cycle 6 retention.
+- Exact scope remains the existing 21 owned paths; no new artifact is necessary. No Go, connector,
+  parent/main worktree, dependency, push/network/live GitHub, #479 implementation, reviewer,
+  integration, or merge action is authorized.

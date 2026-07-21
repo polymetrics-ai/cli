@@ -225,3 +225,22 @@
   review truth, and `cycle6EvidenceRef: "HEAD"`; the parent handoff binds the evidence commit SHA.
   No push, network, live GitHub, Go, connector, `make`, #479, reviewer, integration, or merge action
   ran. Two fresh exact-head `xhigh` reviews remain parent-owned.
+
+## 2026-07-22 Cycle 7 plan
+
+- Started from clean reviewed candidate `dbce5b7d` with immutable base/merge-base `3addb1f4` and
+  the exact existing 21-path issue-owned range. Read both Cycle 6 reports completely.
+- Loaded `gsd-programming-loop`, architecture/testing, issue delivery, compact handoff, routing,
+  adapter/universal-loop, and project references. Doctor passes; the absent `programming-loop`
+  command records `manual_gsd_fallback`.
+- All four agent slots were occupied by the parent, #475 worker, #479 preflight, and this worker;
+  orchestration decision is `local_critical_path`. The #479 preflight dependency risk is accepted:
+  Cycle 7 will expose a public prepare/commit split so the controller can journal exact prepared
+  intent and consumed decision before effect, then settlement afterward.
+- Chosen authority seam: one production durable boundary atomically compare-consumes stable current
+  authority with the PR draft/revision CAS and effect; its paired recovery durably quarantines
+  uncertain authorization and rolls back idempotently. Stable identity is separate from freshness.
+- Planned RED is 46 behavior rows spanning atomic coordinate movement, late effects, stable
+  identity, attested attempt provenance, owned-clock chronology, finite credential forms,
+  RUN-STATE schema, port-only wiring, and Cycle 6 retention. No test, production, network, GitHub,
+  reviewer, #479 implementation, or prohibited action ran before this plan checkpoint.

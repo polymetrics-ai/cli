@@ -153,6 +153,31 @@ parent-owned exact-head reviews remain pending.
 | Prohibited/live actions | not run |
 | Fresh review | pending; two exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews remain parent-owned |
 
+## Cycle 7 verification contract
+
+Status: planned from two blocking exact-head Cycle 6 reports at
+`dbce5b7d0c698bc802594211072fed77eff23c1c`; no Cycle 7 test or production edit has occurred.
+
+- [x] Read both Cycle 6 reports completely and consolidate every unique finding.
+- [x] Confirm immutable base, exact reviewed head, clean worktree, 21-path owned range, and frozen
+      production blob IDs.
+- [x] Load required skills/contracts; `scripts/gsd doctor` passes and the unavailable adapter
+      command is recorded as `manual_gsd_fallback`.
+- [x] Freeze the public prepare/commit journal seam and durable atomic authority/quarantine boundary
+      before RED.
+- [ ] Commit 46-row comprehensive RED while all five production blobs remain frozen.
+- [ ] Pass retained and complete focused tests after one coherent GREEN/refactor.
+- [ ] Pass strict owned and all-production Shepherd TypeScript against pinned Pi 0.80.6.
+- [ ] Pass pinned offline RPC and immutable-base/ancestry/diff/exact-21-path/JSON/secret-marker gates.
+- [ ] If serialized broad Shepherd runs, classify known `/bin/ps`/spawn `EPERM` separately and never
+      claim it as a pass.
+- [ ] Make RUN-STATE and all evidence artifacts describe exact HEAD with no current historical SHA.
+- [ ] Finish with clean worktree; parent owns exact-head review, publication, and integration.
+
+Prohibited for Cycle 7: Go, connectors, `make`, runtime services, dependencies, parent/main
+worktrees, controller/#479 implementation, network/live GitHub, self-review, reviewer dispatch,
+integration, or merge.
+
 ## Cycle 6 verification contract
 
 Status: locally verified at architectural GREEN

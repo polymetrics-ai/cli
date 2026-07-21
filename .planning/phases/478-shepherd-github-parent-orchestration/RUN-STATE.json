@@ -1,19 +1,17 @@
 {
-  "schemaVersion": "2.0",
+  "schemaVersion": "2.1",
   "phase": "478-shepherd-github-parent-orchestration",
   "issue": 478,
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 6 is locally verified at architectural GREEN 2c6371e7 with exact PLAN/RED/GREEN checkpoints and non-circular HEAD evidence semantics; both blocking Cycle 5 reviews remain explicit historical input and fresh exact-head parent-owned reviews are pending.",
+  "reason": "Cycle 7 consolidates both blocking exact-head Cycle 6 reviews into one 46-row strict PLAN -> RED -> GREEN -> REFACTOR correction; HEAD is the single current candidate semantic and exact prior review SHAs are historical only.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
-    "frozenCandidate": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
     "candidateRef": "HEAD",
-    "implementationHead": "2c6371e725d58b2dc05902d68f9e6812904664d6",
-    "verificationEvidenceHead": "HEAD",
+    "priorCycleImplementationHead": "2c6371e725d58b2dc05902d68f9e6812904664d6",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
@@ -21,13 +19,22 @@
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
     "verificationPassed": false,
     "reviewCoveragePassed": false,
-    "reviewState": {
-      "cycle": 5,
-      "candidate": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
+    "priorReviewState": {
+      "cycle": 6,
+      "priorReviewedCandidate": "dbce5b7d0c698bc802594211072fed77eff23c1c",
       "review1": "blocked",
       "review2": "blocked",
-      "findingsConsolidatedIntoCycle": 6
+      "findingsConsolidatedIntoCycle": 7
     },
+    "reviewHistory": [
+      {
+        "cycle": 5,
+        "priorReviewedCandidate": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 6
+      }
+    ],
     "checkpoints": {
       "cycle4Plan": "607e203ef1f76ff112c130ccff5d155973d984f6",
       "cycle4Red": "abbf388b8a852836e0dd10a55b9f17720b9fde22",
@@ -40,7 +47,8 @@
       "cycle6Plan": "2832993b93d07ea20197bad52ec23700fe21fc1e",
       "cycle6Red": "ca4d97d1100b1b44176da9d7dfd6ee6f56f4e1e6",
       "cycle6Green": "2c6371e725d58b2dc05902d68f9e6812904664d6",
-      "cycle6EvidenceRef": "HEAD"
+      "cycle6Evidence": "dbce5b7d0c698bc802594211072fed77eff23c1c",
+      "cycle7PlanRef": "HEAD"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -86,6 +94,16 @@
         "cycle": "cycle-6-publish",
         "decision": "not_authorized",
         "reason": "Cycle 6 excludes push, network, live GitHub mutation, reviewer dispatch, integration, and merge; the parent owns publication and two fresh exact-head reviews."
+      },
+      {
+        "cycle": "cycle-7-plan",
+        "decision": "local_critical_path_with_public_prepare_commit_seam",
+        "reason": "All agent slots were occupied; the #479 preflight risk is incorporated through a production-typed prepare/journal/commit boundary plus one durable atomic authority/quarantine port."
+      },
+      {
+        "cycle": "cycle-7-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 7 excludes push, network, live GitHub mutation, self-review, reviewer dispatch, integration, and merge; the parent owns all external and review actions."
       }
     ],
     "humanGates": [
@@ -99,5 +117,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T23:22:48.000Z"
+  "updatedAt": "2026-07-22T00:00:00.000Z"
 }

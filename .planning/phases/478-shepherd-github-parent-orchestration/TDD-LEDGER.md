@@ -313,3 +313,33 @@ be recorded.
   ownership, JSON parsing, and synthetic credential-marker scans pass. The broad serialized suite
   records 427 total, 361 pass, 65 unchanged unrelated managed-sandbox process-identity `spawn
   EPERM` failures, and 1 intentional skip; every Cycle 6 focused assertion passes.
+
+## Cycle 7 consolidated-review RED ledger
+
+Frozen exact candidate: `dbce5b7d0c698bc802594211072fed77eff23c1c`; immutable base:
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both Cycle 6 reports were read completely. The
+planned matrix contains 46 behavior rows and retains the complete Cycle 6 focused suite.
+
+| ID | Rows | RED contract | State |
+| --- | ---: | --- | --- |
+| C7-AUTH | 10 | production durable authority boundary atomically rejects movement of policy, review, paths, receipt, ancestry, decision, plan, head, PR revision, or authorization state without clearing draft or relying on recovery | planned |
+| C7-LATE | 6 | uncertain mark settlement is quarantined and joined across before/after-effect timeout, restart-before-visibility, read failure, rollback retry, and stop/key ownership | planned |
+| C7-STABLE | 7 | semantic authorization and mutation identity survive harmless policy/ancestry/review refresh and restart; actual semantic movement blocks | planned |
+| C7-REVIEW | 5 | receipt full-attempt digest/time must occur in exact authoritative attestation history; equivalent clean remains compatible and later findings blocks | planned |
+| C7-CLOCK | 6 | each broker event timestamp and the combined future chronology reject under broker/controller owned clocks through the actual adapter and readiness path | planned |
+| C7-SECRET | 8 | finite Kubernetes, Docker, AWS assignment/prefix families reject across persistence, comments, plans, titles/bodies, findings, and dispositions without marker reflection | planned |
+| C7-STATE | 2 | HEAD is the only current candidate semantic; historical SHA in a current slot fails schema invariant | planned |
+| C7-479 | 1 | production-port-only public prepare/journal/commit/settle trajectory composes real broker, policy, authority/readiness, rollback, stop, and join | planned |
+| C7-RET | 1 | all Cycle 6 focused assertions and intentional skip classification remain unchanged | planned |
+
+Frozen production blobs before RED: orchestrator `b3515a94e932a6206f2c32f083c1188882a01dfe`,
+broker `25c98a3c224d660c7fe6b5de16a30fdf73f95621`, human decision
+`4202ba001dd0d48b83d68a65b7004c8db49d0b65`, review router
+`a113b4d6bb77f001e8b377c2696c934136b4ceb9`, and GitHub evidence
+`23efd2c51280ba83836feef4fcb459e7da4571c0`. RED may change only the five matching tests,
+existing issue-478 fixtures when needed, and phase artifacts; production remains byte-identical.
+
+The public prepare/commit split is a testable product contract, not a fake seam: #479 can persist
+the prepared intent and exact consumed decision before invoking the conditional effect, then record
+settlement afterward. The atomic effect and durable quarantine/rollback share one production
+authority-boundary interface. `reconcileParentReadiness` remains the convenience composition.
