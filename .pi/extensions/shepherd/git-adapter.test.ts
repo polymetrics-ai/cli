@@ -276,6 +276,69 @@ test("pushes only the canonical branch and verifies the exact remote head", asyn
 	]);
 });
 
+test("push rejects all out-of-scope staged and dirty path forms before changing the remote", async (t) => {
+	const cases: Array<{
+		name: string;
+		prepare(fixture: LocalGitFixture, workspace: ClaimedWorkspace): Promise<void>;
+	}> = [
+		{
+			name: "untracked path",
+			prepare: async (_fixture, workspace) => write(workspace.cwd, "outside-untracked.txt", "preserve\n"),
+		},
+		{
+			name: "tracked modification",
+			prepare: async (_fixture, workspace) => write(workspace.cwd, "parent.txt", "dirty parent\n"),
+		},
+		{
+			name: "staged addition",
+			prepare: async (_fixture, workspace) => {
+				await write(workspace.cwd, "outside-staged.txt", "preserve\n");
+				await git(workspace.cwd, "add", "--", "outside-staged.txt");
+			},
+		},
+		{
+			name: "staged rename",
+			prepare: async (_fixture, workspace) => {
+				await git(workspace.cwd, "mv", "--", "parent.txt", "outside-renamed.txt");
+			},
+		},
+		{
+			name: "literal backslash path",
+			prepare: async (_fixture, workspace) => {
+				await write(workspace.cwd, String.raw`outside\dirty.txt`, "preserve\n");
+			},
+		},
+	];
+
+	for (const scenario of cases) {
+		await t.test(scenario.name, async (t) => {
+			const fixture = await createLocalGitFixture();
+			t.after(fixture.cleanup);
+			const adapter = new GitAdapter();
+			const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+			const { workspaceAdapter, workspace } = await claimedMutationWorkspace(adapter, fixture, ["allowed.txt"]);
+			t.after(() => workspace.release().catch(() => undefined));
+			await scenario.prepare(fixture, workspace);
+
+			const [push] = await Promise.allSettled([
+				workspaceAdapter.pushIssueBranch(workspace, {
+					issue: 476,
+					slug: "shepherd-worktree-git-adapter",
+					branch,
+					expectedHead: fixture.parentHead,
+					defaultBranch: "main",
+				}),
+			]);
+			const [remoteRef] = await Promise.allSettled([
+				git(fixture.remote, "show-ref", "--verify", `refs/heads/${branch}`),
+			]);
+			assert.equal(remoteRef.status, "rejected", `${scenario.name} reached the remote before scope rejection`);
+			assert.equal(push.status, "rejected", `${scenario.name} was accepted by push`);
+			if (push.status === "rejected") assert.match(String(push.reason), /dirty|staged|scope|backslash/i);
+		});
+	}
+});
+
 test("commit rejects a canonical branch whose head no longer descends from the immutable base", async (t) => {
 	const fixture = await createLocalGitFixture();
 	t.after(fixture.cleanup);
