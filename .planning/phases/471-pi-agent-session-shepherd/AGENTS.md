@@ -26,3 +26,9 @@ Shepherd child sessions run only focused issue tests, the full Shepherd TypeScri
 typechecking against pinned Pi `0.80.6`, offline Pi RPC, and diff/write-scope checks. They must not
 run Go, connector, certification, or root `make verify` gates. The parent orchestrator owns those
 broad gates and runs them once on the integrated parent head; GitHub CI may run them independently.
+
+For a stable-head review campaign, the parent temporarily prioritizes review capacity over maximum
+implementation concurrency. Independent xhigh specialists receive disjoint review domains and the
+same immutable base/head. They are read-only, must not stop at the first blocker, and must return an
+invariant coverage ledger. The parent may dispatch a correction only after every specialist result
+has been synthesized into one finding set and one planned behavior-level RED checkpoint.

@@ -57,6 +57,33 @@ parent head and independently in GitHub CI. A broad gate already started by a ch
 does not weaken the final parent gate and must be copied verbatim into every dispatched child or
 correction prompt.
 
+## Stable-head review convergence campaign
+
+Security-critical Shepherd changes, changes containing two independent state machines, or a
+candidate above 500 changed production lines use a stable-head review campaign instead of one
+generalist first-blocker pass:
+
+1. freeze one exact base/head range and do not dispatch a correction after the first BLOCKED result;
+2. reserve review capacity by pausing unrelated implementation lanes when necessary;
+3. dispatch independent `openai-codex/gpt-5.6-sol`/`xhigh` specialists for lifecycle/resource
+   ownership, security/parser/consumer behavior, and complexity/API/test quality as applicable;
+4. require every specialist to continue after P0/P1 findings, inspect every relevant production
+   function, and return both all findings and a completed invariant coverage ledger;
+5. let the parent synthesize and disposition every result only after all specialists finish against
+   the same frozen head;
+6. commit one behavior-level test-only RED checkpoint covering the complete synthesized finding
+   set before any production correction; and
+7. rerun the full stable-head campaign after a correction changes a state machine, parser, authority
+   boundary, or other architecture—not merely the latest delta.
+
+A missing-module, compile-only, or file-level failure does not establish RED for a broad feature.
+Create the smallest compiling/throwing scaffold needed for every planned behavior test to execute
+and fail for its intended assertion. Lifecycle work must define a phase × trigger × hook-outcome
+matrix with timer/handle accounting. Redaction work must define syntax × key × nesting × consumer ×
+preservation cases plus deterministic work metrics. Keep code review and planning/evidence review
+as separate specialist responsibilities so repetitive artifact diffs do not consume security
+review context.
+
 ## Human decision request template
 
 ```text
