@@ -51,7 +51,9 @@
 - Inputs: `/tmp/478-REVIEW-CORRECTED-1.md` and `/tmp/478-REVIEW-CORRECTED-2.md`, both read in full.
 - Frozen candidate/base: `3f285722a505ea426d53a34f95716781d1aca7c2` /
   `3addb1f48be1afe8b1e2b59b54247679d7293805`.
-- Route: Codex `openai-codex/gpt-5.6-sol:xhigh`, `local_critical_path`; no Claude/Copilot finding.
+- Implementation/correction route: Codex `openai-codex/gpt-5.6-sol:high`,
+  `local_critical_path`; `xhigh` remains parent-owned planning/review/orchestration only, and no
+  Claude/Copilot finding is imported.
 - Sequence: artifact-only plan commit; exactly one test/fixture-only RED commit proving all three
   production blobs unchanged; architectural GREEN/refactor; focused/authorized broad verification;
   evidence commit. Network publication remains deferred under the recorded DNS failure.

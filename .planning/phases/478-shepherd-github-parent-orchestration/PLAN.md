@@ -220,8 +220,9 @@ without editing #475, #479, controller, extension, or top-level integration file
 Two independent corrected review ledgers examined frozen candidate
 `3f285722a505ea426d53a34f95716781d1aca7c2` against immutable base
 `3addb1f48be1afe8b1e2b59b54247679d7293805`. Their overlapping findings are accepted as one
-fourteen-invariant batch. The implementation route remains local Codex
-`openai-codex/gpt-5.6-sol:xhigh`; no Claude/Copilot finding or controller/#479 work is imported.
+fourteen-invariant batch. The implementation/correction route remains local Codex
+`openai-codex/gpt-5.6-sol:high`; `xhigh` is reserved for parent-owned planning, review, and
+orchestration. No Claude/Copilot finding or controller/#479 work is imported.
 
 ### Cycle 3 correction contract
 

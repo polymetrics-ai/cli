@@ -87,7 +87,8 @@
 - Read `/tmp/478-REVIEW-CORRECTED-1.md` and `/tmp/478-REVIEW-CORRECTED-2.md` completely and
   synthesized every accepted finding into one fourteen-invariant correction contract.
 - Preserved the repository-required manual GSD/TDD route and Codex
-  `openai-codex/gpt-5.6-sol:xhigh` review provenance; no Claude/Copilot finding was introduced.
+  `openai-codex/gpt-5.6-sol:high` implementation/correction policy. Parent-owned planning,
+  review, and orchestration retain `xhigh`; no Claude/Copilot finding was introduced.
 - Updated phase artifacts only. Production and tests remain frozen until the next single
   all-invariants test/fixture-only RED commit.
 - Existing GitHub DNS failure is treated as deferred publication, not a reason to stop local work.
