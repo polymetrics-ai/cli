@@ -239,3 +239,55 @@ test("same-marker attempts bind attestations by digest and target independent of
 		],
 	} as never), /ambiguous|same.marker|digest/i);
 });
+
+test("cycle 4 rejects every pseudo or symbolic Git ref at review and attestation boundaries", () => {
+	for (const invalid of [
+		"HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD",
+		"REBASE_HEAD", "BISECT_HEAD", "AUTO_MERGE", "topic/FETCH_HEAD", "refs/heads/topic",
+	]) {
+		assert.throws(() => createIndependentReviewWork(target({ baseBranch: invalid })), /branch|ref|pseudo|symbolic/i, invalid);
+		assert.throws(() => createIndependentReviewWork(target({ headBranch: invalid })), /branch|ref|pseudo|symbolic/i, invalid);
+		assert.throws(() => validateIndependentReviewRecord({ ...cleanReview(), baseBranch: invalid }), /branch|ref|marker|review/i, invalid);
+	}
+});
+
+test("cycle 4 uses collision-free session and run tuple identities", () => {
+	const older = cleanReview({ completedAt: "2026-07-21T11:59:00.000Z" });
+	const newer = cleanReview({ completedAt: "2026-07-21T12:00:00.000Z" });
+	const distinct = [
+		attestation(older, { sessionId: "a:b", runId: "c" }),
+		attestation(newer, { sessionId: "a", runId: "b:c" }),
+	];
+	assert.equal(reconcileIndependentReview({ target: target(), reviews: [older, newer], attestations: distinct } as never).kind, "satisfied");
+	assert.throws(() => reconcileIndependentReview({
+		target: target(),
+		reviews: [older, newer],
+		attestations: [
+			attestation(older, { sessionId: "same", runId: "tuple" }),
+			attestation(newer, { sessionId: "same", runId: "tuple" }),
+		],
+	} as never), /duplicate|session|run|tuple/i);
+});
+
+test("cycle 4 rejects oversized arrays before materializing all property descriptors", () => {
+	const oversized = Array.from({ length: 65 }, (_, index) => `src/${index}.ts`);
+	const original = Object.getOwnPropertyDescriptors;
+	let traversed = false;
+	let rejection: unknown;
+	Object.getOwnPropertyDescriptors = ((value: object) => {
+		if (value === oversized) {
+			traversed = true;
+			throw new Error("descriptor traversal must not occur");
+		}
+		return original(value);
+	}) as typeof Object.getOwnPropertyDescriptors;
+	try {
+		createIndependentReviewWork(target({ changedPaths: oversized }));
+	} catch (error) {
+		rejection = error;
+	} finally {
+		Object.getOwnPropertyDescriptors = original;
+	}
+	assert.equal(traversed, false);
+	assert.match(String(rejection), /bounded|paths|64/i);
+});

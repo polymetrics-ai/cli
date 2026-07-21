@@ -50,6 +50,7 @@ const baseSha = "a".repeat(40);
 const headSha = "b".repeat(40);
 type PullRequestFixtureRequest = Omit<CreatePullRequestRequest, "mutation" | "policyDigest">
 	& Partial<Pick<CreatePullRequestRequest, "policyDigest">>;
+type TestCallContext = { signal?: AbortSignal };
 
 async function plan(): Promise<ParentOrchestrationPlan> {
 	return cycle3Plan();
@@ -175,6 +176,9 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	rosterVisibilityLag = 0;
 	integrationVisibilityLag = 0;
 	parentReadyVisibilityLag = 0;
+	rosterRevisionDelta = 1;
+	readyRevisionDelta = 1;
+	callContexts: Array<{ operation: string; signal: boolean }> = [];
 	incompleteIssueLookup = false;
 	incompletePullRequestLookup = false;
 	incompleteRosterLookup = false;
@@ -191,6 +195,10 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	#legacyMutation = 0;
 	#mutationRevision = 0;
 	#mutations = new Map<string, { digest: string; revision: number; value: unknown }>();
+
+	trackContext(operation: string, context?: TestCallContext): void {
+		this.callContexts.push({ operation, signal: context?.signal instanceof AbortSignal });
+	}
 
 	#applyMutation(request: Record<string, unknown>, operation: string, effect: (revision: number) => unknown): any {
 		const candidate = request.mutation as Record<string, unknown> | undefined;
@@ -224,7 +232,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		};
 	}
 
-	async findChildIssues(query: { repository: string; marker: string }): Promise<any> {
+	async findChildIssues(query: { repository: string; marker: string }, context?: TestCallContext): Promise<any> {
+		this.trackContext("findChildIssues", context);
 		const hidden = this.#issueInvisibleReads > 0;
 		if (hidden) this.#issueInvisibleReads -= 1;
 		return {
@@ -233,7 +242,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		};
 	}
 
-	async createChildIssue(request: CreateChildIssueRequest): Promise<any> {
+	async createChildIssue(request: CreateChildIssueRequest, context?: TestCallContext): Promise<any> {
+		this.trackContext("createChildIssue", context);
 		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "issue", () => {
 			this.createIssueCalls += 1;
 			const created = issueFrom(request, 810 + this.createIssueCalls);
@@ -248,7 +258,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return result;
 	}
 
-	async findPullRequests(query: PullRequestMarkerQuery): Promise<any> {
+	async findPullRequests(query: PullRequestMarkerQuery, context?: TestCallContext): Promise<any> {
+		this.trackContext("findPullRequests", context);
 		this.#pullRequestReads += 1;
 		const matches = this.pullRequests.filter((candidate) => candidate.marker === query.marker);
 		const hiddenAfterCreate = this.#pullRequestInvisibleReads > 0;
@@ -262,7 +273,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		} as never;
 	}
 
-	async createPullRequest(request: CreatePullRequestRequest): Promise<any> {
+	async createPullRequest(request: CreatePullRequestRequest, context?: TestCallContext): Promise<any> {
+		this.trackContext("createPullRequest", context);
 		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "pull-request", () => {
 			this.createPullRequestCalls += 1;
 			const created = cleanPullRequest(request, {
@@ -282,7 +294,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return result;
 	}
 
-	async findParentRosters(query: GitHubRosterQuery): Promise<any> {
+	async findParentRosters(query: GitHubRosterQuery, context?: TestCallContext): Promise<any> {
+		this.trackContext("findParentRosters", context);
 		const hidden = this.#rosterInvisibleReads > 0;
 		if (hidden) this.#rosterInvisibleReads -= 1;
 		return {
@@ -291,7 +304,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		};
 	}
 
-	async publishParentRoster(request: PublishRosterRequest): Promise<any> {
+	async publishParentRoster(request: PublishRosterRequest, context?: TestCallContext): Promise<any> {
+		this.trackContext("publishParentRoster", context);
 		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "roster", () => {
 			const existing = this.rosters.find((candidate) => candidate.marker === request.marker);
 			if (request.mutation.expectedResourceRevision !== (existing?.revision ?? null)) {
@@ -306,7 +320,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 				body: request.body,
 				statuses: { ...request.statuses },
 				statusEpoch: request.statusEpoch,
-				revision: (existing?.revision ?? 0) + 1,
+				revision: (existing?.revision ?? 0) + this.rosterRevisionDelta,
 				updatedAt: "2026-07-21T12:00:00.000Z",
 			};
 			if (existing) this.rosters.splice(this.rosters.indexOf(existing), 1, published);
@@ -321,7 +335,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return result;
 	}
 
-	async findChildIntegration(query: any): Promise<any> {
+	async findChildIntegration(query: any, context?: TestCallContext): Promise<any> {
+		this.trackContext("findChildIntegration", context);
 		const hidden = this.#integrationInvisibleReads > 0;
 		if (hidden) this.#integrationInvisibleReads -= 1;
 		return {
@@ -332,7 +347,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		};
 	}
 
-	async integrateChild(request: IntegrateChildRequest): Promise<any> {
+	async integrateChild(request: IntegrateChildRequest, context?: TestCallContext): Promise<any> {
+		this.trackContext("integrateChild", context);
 		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "integration", (revision) => {
 			this.integrateCalls += 1;
 			const receipt: ChildIntegrationReceipt = {
@@ -365,7 +381,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return result;
 	}
 
-	async markParentReady(request: MarkParentReadyRequest): Promise<any> {
+	async markParentReady(request: MarkParentReadyRequest, context?: TestCallContext): Promise<any> {
+		this.trackContext("markParentReady", context);
 		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "parent-ready", () => {
 			const index = this.pullRequests.findIndex((candidate) => candidate.number === request.pullRequest);
 			if (index < 0) throw new Error("parent pull request missing");
@@ -377,7 +394,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 				...this.pullRequests[index],
 				draft: false,
 				headSha: request.headSha,
-				revision: this.pullRequests[index].revision + 1,
+				revision: this.pullRequests[index].revision + this.readyRevisionDelta,
 			};
 			this.pullRequests.splice(index, 1, updated);
 			this.#parentReadyInvisibleReads = this.parentReadyVisibilityLag;
@@ -395,7 +412,8 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return this.ancestry;
 	}
 
-	async proveAncestry(query: GitAncestryQuery): Promise<any> {
+	async proveAncestry(query: GitAncestryQuery, context?: TestCallContext): Promise<any> {
+		this.trackContext("proveAncestry", context);
 		if (this.ancestryProof !== undefined) return this.ancestryProof(query);
 		return {
 			schemaVersion: 1,
@@ -410,9 +428,39 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	}
 }
 
-function orchestratorFor(transport: FakeTransport, broker?: ParentDecisionBroker): GitHubParentOrchestrator {
+function defaultPolicySource(transport: FakeTransport) {
+	return {
+		async findRequiredCheckPolicies(
+			query: { repository: string; baseBranch: string },
+			context?: TestCallContext,
+		): Promise<unknown> {
+			transport.trackContext("findRequiredCheckPolicies", context);
+			const policy = cycle3CheckPolicy(query.baseBranch);
+			return {
+				items: [{
+					schemaVersion: 1,
+					authority: "controller",
+					repository: query.repository,
+					baseBranch: query.baseBranch,
+					revision: policy.revision,
+					digest: policy.digest,
+					observedAt: "2026-07-21T12:06:00.000Z",
+				}],
+				complete: true,
+			};
+		},
+	};
+}
+
+function orchestratorFor(
+	transport: FakeTransport,
+	broker?: ParentDecisionBroker,
+	policySource: unknown = defaultPolicySource(transport),
+	timeoutMs = 25,
+): GitHubParentOrchestrator {
 	const sessionSource = {
-		async findAttestations(target: { pullRequest: number; workItemId: string }): Promise<unknown> {
+		async findAttestations(target: { pullRequest: number; workItemId: string }, context?: TestCallContext): Promise<unknown> {
+			transport.trackContext("findAttestations", context);
 			const attestations = transport.pullRequests
 				.filter((pullRequest) => pullRequest.number === target.pullRequest)
 				.flatMap((pullRequest) => pullRequest.reviews)
@@ -427,7 +475,8 @@ function orchestratorFor(transport: FakeTransport, broker?: ParentDecisionBroker
 			generation: number;
 			baseSha: string;
 			headSha: string;
-		}): Promise<unknown> {
+		}, context?: TestCallContext): Promise<unknown> {
+			transport.trackContext("findChangedPathEvidence", context);
 			const matches = transport.pullRequests
 				.filter((pullRequest) => pullRequest.number === target.pullRequest
 					&& pullRequest.repository === target.repository
@@ -452,7 +501,13 @@ function orchestratorFor(transport: FakeTransport, broker?: ParentDecisionBroker
 			return { items: matches, complete: true };
 		},
 	};
-	return new GitHubParentOrchestrator(transport, broker, sessionSource as never);
+	return new (GitHubParentOrchestrator as any)(
+		transport,
+		broker,
+		sessionSource,
+		policySource,
+		{ externalCallTimeoutMs: timeoutMs },
+	) as GitHubParentOrchestrator;
 }
 
 const approvedDecision: HumanDecisionEvidence = {
@@ -465,10 +520,12 @@ const approvedDecision: HumanDecisionEvidence = {
 class FakeDecisionBroker implements ParentDecisionBroker {
 	requests: GitHubDecisionRequest[] = [];
 	consumes = 0;
+	callContexts: Array<{ operation: string; signal: boolean }> = [];
 	pollResult: GitHubDecisionPollResult = { status: "decided", decision: approvedDecision, attempts: 1 };
 	recordStatus: HumanDecisionRecord["status"] = "pending";
 
-	async request(request: GitHubDecisionRequest): Promise<HumanDecisionRecord> {
+	async request(request: GitHubDecisionRequest, context?: TestCallContext): Promise<HumanDecisionRecord> {
+		this.callContexts.push({ operation: "broker.request", signal: context?.signal instanceof AbortSignal });
 		this.requests.push(request);
 		if (request.gate !== "parent_merge") throw new Error("fake parent broker accepts only parent_merge requests");
 		const record = createHumanDecisionRecord({
@@ -490,11 +547,18 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 			: record;
 	}
 
-	async poll(_requestId: string, _binding: HumanDecisionRecord["binding"], _options?: GitHubDecisionPollOptions): Promise<GitHubDecisionPollResult> {
+	async poll(
+		_requestId: string,
+		_binding: HumanDecisionRecord["binding"],
+		_options?: GitHubDecisionPollOptions,
+		context?: TestCallContext,
+	): Promise<GitHubDecisionPollResult> {
+		this.callContexts.push({ operation: "broker.poll", signal: context?.signal instanceof AbortSignal });
 		return this.pollResult;
 	}
 
-	async consume(_requestId: string, _binding: HumanDecisionRecord["binding"]): Promise<HumanDecisionEvidence> {
+	async consume(_requestId: string, _binding: HumanDecisionRecord["binding"], context?: TestCallContext): Promise<HumanDecisionEvidence> {
+		this.callContexts.push({ operation: "broker.consume", signal: context?.signal instanceof AbortSignal });
 		this.consumes += 1;
 		return this.pollResult.status === "decided" ? this.pollResult.decision : approvedDecision;
 	}
@@ -516,6 +580,28 @@ function childHandoff(issue: number, branch: string, prBase: string, overrides: 
 	};
 }
 
+function childPullRequestRequest(
+	candidate: ParentOrchestrationPlan,
+	child: ReturnType<typeof materializeChildRecord>,
+	handoff: WorkspaceHandoffEvidence,
+): PullRequestFixtureRequest {
+	return {
+		repository: candidate.repository,
+		workItemId: child.id,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		title: child.title,
+		body: `Refs #${child.issue}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+		draft: false,
+		baseBranch: child.prBase,
+		headBranch: child.branch,
+		baseSha: handoff.baseHead,
+		headSha: handoff.head,
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+	};
+}
+
 const decisionPolicy: ParentDecisionPolicy = {
 	requestId: "parent-471-generation-3",
 	actorAllowlist: ["maintainer"],
@@ -529,17 +615,25 @@ function seedIntegrationRoster(
 ): ChildIntegrationReceipt[] {
 	const receipts = candidate.children.map((child, index): ChildIntegrationReceipt => {
 		const pullRequestNumber = 812 + index;
+		const issueNumber = 811 + index;
 		const childHead = String(index + 1).repeat(40);
+		transport.issues.push(issueFrom({
+			repository: candidate.repository,
+			parentIssue: candidate.parentIssue,
+			marker: child.markers.issue,
+			title: child.title,
+			body: child.issueBody,
+		}, issueNumber));
 		const childPullRequest = cleanPullRequest({
 			repository: candidate.repository,
 			workItemId: child.id,
 			generation: candidate.generation,
 			marker: child.markers.pullRequest,
 			title: child.title,
-			body: `Refs #${811 + index}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+			body: `Refs #${issueNumber}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
 			draft: false,
 			baseBranch: candidate.parentBranch,
-			headBranch: `feat/${811 + index}-${child.branch.slug}`,
+			headBranch: `feat/${issueNumber}-${child.branch.slug}`,
 			baseSha,
 			headSha: childHead,
 			changedPaths: [child.writeScopes[0]],
@@ -594,6 +688,30 @@ function seedIntegrationRoster(
 	return receipts;
 }
 
+function addParentPullRequest(
+	candidate: ParentOrchestrationPlan,
+	transport: FakeTransport,
+	changedPaths = [candidate.children[0].writeScopes[0]],
+): GitHubPullRequestEvidence {
+	const parent = cleanPullRequest({
+		repository: candidate.repository,
+		workItemId: `parent-${candidate.parentIssue}`,
+		generation: candidate.generation,
+		marker: candidate.markers.parentPullRequest,
+		title: candidate.title,
+		body: `Closes #${candidate.parentIssue}\n\n${candidate.markers.parentPullRequest}`,
+		draft: true,
+		baseBranch: candidate.parentBaseBranch,
+		headBranch: candidate.parentBranch,
+		baseSha,
+		headSha: "e".repeat(40),
+		changedPaths,
+		allowedScopes: candidate.children.flatMap((child) => child.writeScopes),
+	}, { draft: true }, 900);
+	transport.pullRequests.push(parent);
+	return parent;
+}
+
 test("turns a parent objective into bounded canonical child records and reuses DAG scheduling", async () => {
 	const candidate = await plan();
 	assert.equal(candidate.children.length, 2);
@@ -618,7 +736,11 @@ test("rejects extra fields, cycles, unsafe scopes/branches, missing requirements
 	const children = source.children as Array<Record<string, unknown>>;
 	assert.throws(() => createPlanFromSource({ ...source, children: [{ ...children[0], dependsOn: ["evidence"] }] }), /cycle/i);
 	assert.throws(() => createPlanFromSource({ ...source, parentBranch: "../main" }), /branch/i);
-	for (const invalidRef of ["bad branch", ".hidden/topic", "topic.lock", "topic/.lock", "@", "HEAD", "refs/heads/HEAD", "topic@{one", "topic."]) {
+	for (const invalidRef of [
+		"bad branch", ".hidden/topic", "topic.lock", "topic/.lock", "@", "HEAD", "refs/heads/HEAD",
+		"FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD", "REBASE_HEAD",
+		"BISECT_HEAD", "AUTO_MERGE", "topic/FETCH_HEAD", "refs/heads/topic", "topic@{one", "topic.",
+	]) {
 		assert.throws(() => createPlanFromSource({ ...source, parentBranch: invalidRef }), /branch|ref/i, invalidRef);
 	}
 	for (const invalidGeneration of [0, -1]) {
@@ -1020,7 +1142,7 @@ test("review coverage must bind the planned repository, child, generation, paths
 	}
 });
 
-test("restart reuses an exact bound integration receipt after GitHub closes the merged child PR", async () => {
+test("restart reuses stable integration identity after a later merged-PR observation", async () => {
 	const candidate = await plan();
 	const issue = issueFrom({
 		repository: candidate.repository,
@@ -1093,6 +1215,11 @@ test("restart reuses an exact bound integration receipt after GitHub closes the 
 		},
 		integratedAt: "2026-07-21T12:01:00.000Z",
 	});
+	transport.pullRequests[0] = {
+		...mergedPullRequest,
+		revision: mergedPullRequest.revision + 1,
+		observedAt: "2026-07-21T12:06:00.000Z",
+	};
 	const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
 	assert.equal(result.kind, "integrated");
 	if (result.kind === "integrated") assert.equal(result.reused, true);
@@ -1542,7 +1669,8 @@ test("cycle 3 durable mutation metadata deduplicates issue, PR, roster, integrat
 test("cycle 3 retries authoritative visibility after every timeout-after-effect mutation", async () => {
 	const candidate = await cycle3Plan(true);
 	const transport = new FakeTransport();
-	const orchestrator = orchestratorFor(transport, new FakeDecisionBroker());
+	const broker = new FakeDecisionBroker();
+	const orchestrator = orchestratorFor(transport, broker);
 
 	transport.issueVisibilityLag = 2;
 	transport.throwAfterIssuePublish = true;
@@ -1606,6 +1734,17 @@ test("cycle 3 retries authoritative visibility after every timeout-after-effect 
 	const ready = await orchestrator.reconcileParentReadiness(candidate, [integrated.receipt], decisionPolicy);
 	assert.equal(ready.kind, "ready");
 	assert.equal(transport.markReadyCalls, 1);
+	for (const operation of [
+		"findChildIssues", "createChildIssue", "findPullRequests", "createPullRequest",
+		"findParentRosters", "publishParentRoster", "findChildIntegration", "integrateChild",
+		"findChangedPathEvidence", "findAttestations", "findRequiredCheckPolicies", "proveAncestry",
+		"markParentReady",
+	]) {
+		assert.ok(transport.callContexts.some((entry) => entry.operation === operation && entry.signal), operation);
+	}
+	for (const operation of ["broker.request", "broker.poll", "broker.consume"]) {
+		assert.ok(broker.callContexts.some((entry) => entry.operation === operation && entry.signal), operation);
+	}
 });
 
 test("cycle 3 roster revisions and status epochs reject regression and drain rejected FIFO work", async () => {
@@ -1678,4 +1817,324 @@ test("cycle 3 requires an exact literal-true ancestry proof and rejects truthy o
 		const decision = await setup(proof);
 		assert.equal(decision.kind, "blocked");
 	}
+});
+
+test("cycle 4 separates stable integrated PR identity from volatile observation evidence", async () => {
+	const candidate = await cycle3Plan(true);
+	const issue = issueFrom({
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		marker: candidate.children[0].markers.issue,
+		title: candidate.children[0].title,
+		body: candidate.children[0].issueBody,
+	}, 811);
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	const handoff = childHandoff(issue.number, child.branch, child.prBase);
+	const initial = cleanPullRequest(childPullRequestRequest(candidate, child, handoff), { state: "merged" });
+	const refreshed = { ...initial, revision: initial.revision + 9, observedAt: "2026-07-21T12:20:00.000Z" };
+	const initialSnapshot = createCanonicalPullRequestSnapshot(initial);
+	const refreshedSnapshot = createCanonicalPullRequestSnapshot(refreshed);
+	assert.equal(initialSnapshot.digest, refreshedSnapshot.digest);
+	assert.notEqual(initialSnapshot.revision, refreshedSnapshot.revision);
+	assert.notEqual(initialSnapshot.observedAt, refreshedSnapshot.observedAt);
+});
+
+test("cycle 4 rejects coherently re-digested wrong child topology before parent readiness", async () => {
+	for (const [name, changes] of [
+		["head branch", { headBranch: "attacker/topic" }],
+		["base branch", { baseBranch: "main" }],
+		["marker", { marker: "<!-- shepherd-child-pr:v1:471:evidence:ffffffffffffffffffffffff -->" }],
+		["out-of-scope path", { changedPaths: ["outside/owned-scope.ts"] }],
+	] as const) {
+		const candidate = await cycle3Plan(true);
+		const transport = new FakeTransport();
+		const receipts = seedIntegrationRoster(candidate, transport);
+		const child = candidate.children[0];
+		const index = transport.pullRequests.findIndex((pullRequest) => pullRequest.marker === child.markers.pullRequest);
+		const current = { ...transport.pullRequests[index], ...changes } as GitHubPullRequestEvidence;
+		transport.pullRequests[index] = current;
+		const snapshot = createCanonicalPullRequestSnapshot(current);
+		const receipt = { ...receipts[0], pullRequestSnapshot: snapshot };
+		const mutation = createDurableMutationIntent("child_integration", [candidate.repository, child.markers.pullRequest], {
+			repository: candidate.repository,
+			childId: child.id,
+			pullRequest: receipt.pullRequest,
+			generation: candidate.generation,
+			marker: child.markers.pullRequest,
+			baseSha: snapshot.baseSha,
+			headSha: snapshot.headSha,
+			parentBranch: candidate.parentBranch,
+			pullRequestSnapshot: snapshot,
+			controllerProvenance: receipt.controllerProvenance,
+		}, null);
+		receipt.transportProvenance = {
+			authority: "transport",
+			idempotencyKey: mutation.idempotencyKey,
+			intentDigest: mutation.intentDigest,
+			revision: receipt.transportProvenance.revision,
+		};
+		transport.integrations.splice(0, transport.integrations.length, receipt);
+		addParentPullRequest(candidate, transport);
+		const broker = new FakeDecisionBroker();
+		const result = await orchestratorFor(transport, broker).reconcileParentReadiness(candidate, [receipt], decisionPolicy);
+		assert.equal(result.kind, "blocked", name);
+		assert.equal(broker.requests.length, 0, name);
+		assert.equal(transport.markReadyCalls, 0, name);
+	}
+});
+
+test("cycle 4 re-reads one complete current required-check policy before integration and readiness", async () => {
+	const candidate = await cycle3Plan(true);
+	const variants: Array<[string, (query: { repository: string; baseBranch: string }) => unknown]> = [
+		["moved", (query) => {
+			const policy = cycle3CheckPolicy(query.baseBranch, { revision: 8 });
+			return { items: [{ schemaVersion: 1, authority: "controller", repository: query.repository, baseBranch: query.baseBranch, revision: 8, digest: policy.digest, observedAt: "2026-07-21T12:06:00.000Z" }], complete: true };
+		}],
+		["incomplete", (query) => {
+			const policy = cycle3CheckPolicy(query.baseBranch);
+			return { items: [{ schemaVersion: 1, authority: "controller", repository: query.repository, baseBranch: query.baseBranch, revision: 7, digest: policy.digest, observedAt: "2026-07-21T12:06:00.000Z" }], complete: false };
+		}],
+		["wrong repository", (query) => {
+			const policy = cycle3CheckPolicy(query.baseBranch);
+			return { items: [{ schemaVersion: 1, authority: "controller", repository: "other/cli", baseBranch: query.baseBranch, revision: 7, digest: policy.digest, observedAt: "2026-07-21T12:06:00.000Z" }], complete: true };
+		}],
+		["stale", (query) => {
+			const policy = cycle3CheckPolicy(query.baseBranch);
+			return { items: [{ schemaVersion: 1, authority: "controller", repository: query.repository, baseBranch: query.baseBranch, revision: 7, digest: policy.digest, observedAt: "2026-07-21T11:00:00.000Z" }], complete: true };
+		}],
+	];
+	for (const [name, response] of variants) {
+		const transport = new FakeTransport();
+		const issue = issueFrom({
+			repository: candidate.repository,
+			parentIssue: candidate.parentIssue,
+			marker: candidate.children[0].markers.issue,
+			title: candidate.children[0].title,
+			body: candidate.children[0].issueBody,
+		}, 811);
+		transport.issues.push(issue);
+		const child = materializeChildRecord(candidate, "evidence", issue);
+		const handoff = childHandoff(issue.number, child.branch, child.prBase);
+		transport.pullRequests.push(cleanPullRequest(childPullRequestRequest(candidate, child, handoff)));
+		const source = {
+			async findRequiredCheckPolicies(query: { repository: string; baseBranch: string }, context?: TestCallContext) {
+				transport.trackContext("findRequiredCheckPolicies", context);
+				return response(query);
+			},
+		};
+		const result = await orchestratorFor(transport, undefined, source).integrateChild(candidate, child, handoff);
+		assert.equal(result.kind, "blocked", name);
+		assert.equal(transport.integrateCalls, 0, name);
+	}
+
+	const readinessTransport = new FakeTransport();
+	const receipts = seedIntegrationRoster(candidate, readinessTransport);
+	addParentPullRequest(candidate, readinessTransport);
+	const broker = new FakeDecisionBroker();
+	const movedSource = {
+		async findRequiredCheckPolicies(query: { repository: string; baseBranch: string }, context?: TestCallContext) {
+			readinessTransport.trackContext("findRequiredCheckPolicies", context);
+			const policy = cycle3CheckPolicy(query.baseBranch, { revision: 8 });
+			return { items: [{ schemaVersion: 1, authority: "controller", repository: query.repository, baseBranch: query.baseBranch, revision: 8, digest: policy.digest, observedAt: "2026-07-21T12:06:00.000Z" }], complete: true };
+		},
+	};
+	const readiness = await orchestratorFor(readinessTransport, broker, movedSource)
+		.reconcileParentReadiness(candidate, receipts, decisionPolicy);
+	assert.equal(readiness.kind, "blocked");
+	assert.equal(broker.requests.length, 0);
+});
+
+function hangUntilAbort(context?: TestCallContext): Promise<never> {
+	return new Promise((_, reject) => {
+		if (context?.signal === undefined) return;
+		if (context.signal.aborted) {
+			reject(new Error("external operation aborted"));
+			return;
+		}
+		context.signal.addEventListener("abort", () => reject(new Error("external operation aborted")), { once: true });
+	});
+}
+
+async function settleWithin<T>(promise: Promise<T>, milliseconds = 100): Promise<T | "hung"> {
+	return Promise.race([
+		promise,
+		new Promise<"hung">((resolve) => setTimeout(() => resolve("hung"), milliseconds)),
+	]);
+}
+
+test("cycle 4 bounds and cancels never-settling calls, drains keyed work, and reconciles late effects", async () => {
+	const candidate = await cycle3Plan(true);
+	const transport = new FakeTransport();
+	const normalLookup = transport.findChildIssues.bind(transport);
+	transport.findChildIssues = (async (_query: unknown, context?: TestCallContext) => hangUntilAbort(context)) as never;
+	const orchestrator = orchestratorFor(transport, undefined, defaultPolicySource(transport), 15);
+	const first = orchestrator.ensureChildIssue(candidate, "evidence").then(
+		() => ({ kind: "success" as const }),
+		(error) => ({ kind: "error" as const, error }),
+	);
+	const firstOutcome = await settleWithin(first);
+	transport.findChildIssues = normalLookup as never;
+	const secondOutcome = await settleWithin(orchestrator.ensureChildIssue(candidate, "evidence"));
+	assert.notEqual(firstOutcome, "hung");
+	assert.notEqual(secondOutcome, "hung");
+	if (firstOutcome !== "hung" && firstOutcome.kind === "error") {
+		assert.ok(firstOutcome.error instanceof Error);
+		assert.equal((firstOutcome.error as any).code, "external_timeout");
+	}
+
+	const lateTransport = new FakeTransport();
+	lateTransport.createChildIssue = (async (request: CreateChildIssueRequest, context?: TestCallContext) => {
+		lateTransport.trackContext("createChildIssue", context);
+		return new Promise((_, reject) => {
+			context?.signal?.addEventListener("abort", () => {
+				lateTransport.createIssueCalls += 1;
+				lateTransport.issues.push(issueFrom(request, 811));
+				reject(new Error("Authorization: Bearer LATE_EFFECT_MARKER"));
+			}, { once: true });
+		});
+	}) as never;
+	const recovered = await settleWithin(orchestratorFor(lateTransport, undefined, defaultPolicySource(lateTransport), 15)
+		.ensureChildIssue(candidate, "evidence"));
+	assert.notEqual(recovered, "hung");
+	assert.equal(lateTransport.createIssueCalls, 1);
+});
+
+test("cycle 4 rejects sensitive valid-field text and normalizes every external rejection shape", async () => {
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const marker = "CYCLE4_SENSITIVE_MARKER";
+	const children = source.children as Array<Record<string, unknown>>;
+	const variants = [
+		{ ...source, title: `Authorization: Bearer ${marker}` },
+		{ ...source, objective: `token=${marker}` },
+		{ ...source, children: [{ ...children[0], title: `api_key=${marker}` }] },
+		{ ...source, children: [{ ...children[0], objective: `https://user:${marker}@example.invalid/path` }] },
+		{ ...source, children: [{ ...children[0], verification: [{ id: "focused", kind: "test", description: `password=${marker}` }] }] },
+	];
+	for (const variant of variants) {
+		let rejection: unknown;
+		try {
+			createPlanFromSource(variant);
+		} catch (error) {
+			rejection = error;
+		}
+		assert.ok(rejection instanceof Error);
+		assert.doesNotMatch(String(rejection), new RegExp(marker, "u"));
+		assert.match(String(rejection), /credential|secret|sensitive|plan/i);
+	}
+
+	for (const reason of [new Error(`token=${marker}`), `token=${marker}`, { message: `token=${marker}` }, undefined]) {
+		const transport = new FakeTransport();
+		transport.findChildIssues = (async () => Promise.reject(reason)) as never;
+		let rejection: unknown;
+		try {
+			await orchestratorFor(transport).ensureChildIssue(await cycle3Plan(true), "evidence");
+		} catch (error) {
+			rejection = error;
+		}
+		assert.ok(rejection instanceof Error);
+		assert.equal((rejection as any).code, "external_port_failed");
+		assert.doesNotMatch(String(rejection), new RegExp(marker, "u"));
+		assert.ok(String(rejection).length <= 256);
+	}
+});
+
+test("cycle 4 rejects sensitive decision questions before broker publication", async () => {
+	const candidate = await cycle3Plan(true);
+	const transport = new FakeTransport();
+	const receipts = seedIntegrationRoster(candidate, transport);
+	addParentPullRequest(candidate, transport);
+	const broker = new FakeDecisionBroker();
+	let result: Awaited<ReturnType<GitHubParentOrchestrator["reconcileParentReadiness"]>> | undefined;
+	let rejection: unknown;
+	try {
+		result = await orchestratorFor(transport, broker).reconcileParentReadiness(candidate, receipts, {
+			...decisionPolicy,
+			question: "Authorization: Bearer CYCLE4_DECISION_MARKER",
+		});
+	} catch (error) {
+		rejection = error;
+	}
+	if (result !== undefined) assert.notEqual(result.kind, "ready");
+	assert.equal(broker.requests.length, 0);
+	if (rejection !== undefined) assert.doesNotMatch(String(rejection), /CYCLE4_DECISION_MARKER/u);
+});
+
+test("cycle 4 requires authoritative CAS resource revisions to advance", async () => {
+	const candidate = await cycle3Plan(true);
+	const rosterTransport = new FakeTransport();
+	const orchestrator = orchestratorFor(rosterTransport);
+	await (orchestrator.reconcileParentRoster as any)(candidate, { evidence: "running" }, 1);
+	rosterTransport.rosterRevisionDelta = 0;
+	await assert.rejects(
+		(orchestrator.reconcileParentRoster as any)(candidate, { evidence: "succeeded" }, 2),
+		/CAS|revision|advance|stale|conditional/i,
+	);
+
+	const readyTransport = new FakeTransport();
+	const receipts = seedIntegrationRoster(candidate, readyTransport);
+	addParentPullRequest(candidate, readyTransport);
+	readyTransport.readyRevisionDelta = 0;
+	const ready = await orchestratorFor(readyTransport, new FakeDecisionBroker())
+		.reconcileParentReadiness(candidate, receipts, decisionPolicy);
+	assert.notEqual(ready.kind, "ready");
+});
+
+test("cycle 4 compares exact dense plan array lengths before generic descriptor traversal", async () => {
+	const candidate = await cycle3Plan();
+	const sparse = JSON.parse(JSON.stringify(candidate)) as ParentOrchestrationPlan;
+	sparse.children.length = 1_000_000;
+	assert.throws(
+		() => selectReadyChildren(sparse, { evidence: "pending", orchestrator: "pending" }, 1),
+		/bounded|dense|array|canonical|plan/i,
+	);
+
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const dense = Array.from({ length: 65 }, (_, index) => ({ ...(source.children as Array<Record<string, unknown>>)[0], id: `child-${index}` }));
+	const original = Object.getOwnPropertyDescriptors;
+	let traversed = false;
+	let rejection: unknown;
+	Object.getOwnPropertyDescriptors = ((value: object) => {
+		if (value === dense) {
+			traversed = true;
+			throw new Error("descriptor traversal must not occur");
+		}
+		return original(value);
+	}) as typeof Object.getOwnPropertyDescriptors;
+	try {
+		createPlanFromSource({ ...source, children: dense });
+	} catch (error) {
+		rejection = error;
+	} finally {
+		Object.getOwnPropertyDescriptors = original;
+	}
+	assert.equal(traversed, false);
+	assert.match(String(rejection), /bounded|children|64/i);
+});
+
+test("cycle 4 passes AbortSignal to workspace handoff and redacts workspace failures", async () => {
+	const candidate = await cycle3Plan(true);
+	const issue = issueFrom({
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		marker: candidate.children[0].markers.issue,
+		title: candidate.children[0].title,
+		body: candidate.children[0].issueBody,
+	}, 811);
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	let signal = false;
+	let rejection: unknown;
+	try {
+		await orchestratorFor(new FakeTransport()).captureChildHandoff(candidate, child, {} as ClaimedWorkspace, {
+			async captureHandoff(_workspace: ClaimedWorkspace, _state: "passed", context?: TestCallContext): Promise<WorkspaceHandoffEvidence> {
+				signal = context?.signal instanceof AbortSignal;
+				throw new Error("token=CYCLE4_WORKSPACE_MARKER");
+			},
+		} as never);
+	} catch (error) {
+		rejection = error;
+	}
+	assert.equal(signal, true);
+	assert.ok(rejection instanceof Error);
+	assert.equal((rejection as any).code, "external_port_failed");
+	assert.doesNotMatch(String(rejection), /CYCLE4_WORKSPACE_MARKER/u);
 });

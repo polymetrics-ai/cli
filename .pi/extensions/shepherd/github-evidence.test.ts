@@ -712,3 +712,75 @@ test("cycle 3 evidence rejects proxies, accessors, cycles, oversize, and secret-
 		assert.doesNotMatch(String(error), /SECRET_TOKEN_SHOULD_NOT_ESCAPE/u);
 	}
 });
+
+test("cycle 4 exposes a complete controller-owned current check-policy observation", () => {
+	const api = githubEvidenceApi as Record<string, unknown>;
+	assert.equal(typeof api.createRequiredGitHubCheckPolicyObservation, "function");
+	assert.equal(typeof api.validateRequiredGitHubCheckPolicyObservation, "function");
+	const create = api.createRequiredGitHubCheckPolicyObservation as (value: unknown) => Record<string, unknown>;
+	const validate = api.validateRequiredGitHubCheckPolicyObservation as (value: unknown) => Record<string, unknown>;
+	const observation = create({
+		schemaVersion: 1,
+		authority: "controller",
+		repository: basePolicy.repository,
+		baseBranch: basePolicy.baseBranch,
+		revision: basePolicy.revision,
+		digest: basePolicy.digest,
+		observedAt: "2026-07-21T12:06:00.000Z",
+	});
+	assert.deepEqual(validate(JSON.parse(JSON.stringify(observation))), observation);
+	for (const moved of [
+		{ ...observation, authority: "transport" },
+		{ ...observation, repository: "github.com/other/cli" },
+		{ ...observation, baseBranch: "main" },
+		{ ...observation, revision: Number(observation.revision) + 1 },
+		{ ...observation, digest: "f".repeat(64) },
+	]) {
+		assert.notDeepEqual(validate(moved), observation);
+	}
+});
+
+test("cycle 4 rejects every pseudo or symbolic ref in policies and PR evidence", async () => {
+	const pullRequest = await fixture();
+	for (const invalid of [
+		"HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD",
+		"REBASE_HEAD", "BISECT_HEAD", "AUTO_MERGE", "topic/ORIG_HEAD", "refs/heads/topic",
+	]) {
+		assert.throws(() => createRequiredGitHubCheckPolicy({
+			schemaVersion: 1,
+			repository: basePolicy.repository,
+			baseBranch: invalid,
+			revision: 7,
+			requiredChecks: [{ name: "verify", producerId: "github-actions:workflow-verify" }],
+		}), /branch|ref|pseudo|symbolic/i, invalid);
+		assert.throws(() => validateGitHubPullRequestEvidence({ ...pullRequest, baseBranch: invalid }), /branch|ref|evidence/i, invalid);
+		assert.throws(() => validateGitHubPullRequestEvidence({ ...pullRequest, headBranch: invalid }), /branch|ref|evidence/i, invalid);
+	}
+});
+
+test("cycle 4 pre-bounds dense and sparse evidence arrays before descriptor materialization", () => {
+	const dense = Array.from({ length: 129 }, (_, index) => ({ id: `check-${index}` }));
+	const original = Object.getOwnPropertyDescriptors;
+	let traversed = false;
+	let rejection: unknown;
+	Object.getOwnPropertyDescriptors = ((value: object) => {
+		if (value === dense) {
+			traversed = true;
+			throw new Error("descriptor traversal must not occur");
+		}
+		return original(value);
+	}) as typeof Object.getOwnPropertyDescriptors;
+	try {
+		validateGitHubPullRequestEvidence({ ...cycle3Evidence(), checks: dense });
+	} catch (error) {
+		rejection = error;
+	} finally {
+		Object.getOwnPropertyDescriptors = original;
+	}
+	assert.equal(traversed, false);
+	assert.match(String(rejection), /bounded|checks|128/i);
+
+	const sparse: unknown[] = [];
+	sparse.length = 1_000_000;
+	assert.throws(() => validateGitHubPullRequestEvidence({ ...cycle3Evidence(), reviews: sparse }), /bounded|dense|reviews|array/i);
+});
