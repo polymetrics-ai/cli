@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "issue": 474,
+  "phase": "474-shepherd-dependency-policy",
+  "mode": "manual_gsd_fallback",
+  "status": "in_progress",
+  "verificationPassed": false,
+  "adapterEvidence": {
+    "command": "scripts/gsd prompt programming-loop init --phase 474-shepherd-dependency-policy --dry-run",
+    "result": "unknown GSD command: programming-loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The isolated child worker owns one cohesive pure-policy boundary; nested delegation is unnecessary and was not requested."
+    }
+  ],
+  "gates": {
+    "red": "pending",
+    "green": "pending",
+    "refactor": "pending",
+    "focusedTests": "pending",
+    "fullShepherdTests": "pending",
+    "strictTypeScript": "pending",
+    "piExtensionDiscovery": "pending",
+    "goVet": "pending",
+    "goTest": "pending",
+    "goBuild": "pending",
+    "makeVerify": "pending"
+  }
+}
