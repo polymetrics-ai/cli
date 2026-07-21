@@ -1,3 +1,35 @@
+# Review Disposition — Issue #475 Cycle 11
+
+Frozen reviewed candidate: `1571dc4d4f45ad4285107d04f2d7c489a7f357ab`
+Immutable base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`
+Sources: `/tmp/475-REVIEW-CYCLE10-1.md`, `/tmp/475-REVIEW-CYCLE10-2.md`
+
+Both complete reports are accepted as one blocking correction batch. Their unique union is mapped
+below; no report row is declined, weakened, or deferred.
+
+| Cycle 11 group | Review findings | Disposition / proof boundary |
+|---|---|---|
+| Real Pi result compatibility | R1-1 | accept required extension `runtime` by own descriptor as inert compatibility evidence; actual no-model factory/result path cleans the real returned session |
+| Native signal operations | R1-2 | invoke only canonical `EventTarget` add/remove operations; shadow hooks cannot attach alternate tuples or defeat rollback |
+| Run-associated creation terminal | R2 BL-01 | `abort(runId)` joins terminal creation/cleanup or returns typed pending ownership while preserving observable quarantine |
+| Admission/close linearization | R2 BL-02 | admission begins before caller/SDK callbacks; close waits admissions and reservation rechecks closing before create/prompt |
+| Stateful bounded Pi streams | R1-3, R2 BL-03 | outer/inner snapshots agree; content families prove actual suffix growth; complete envelope and replacement state consume the aggregate bound |
+| Ordered complete terminal DTO | R1-4, R2 BL-04 | exactly one ordered terminal pair; required api/usage and all routing/response/diagnostic/error/content/tool identity fields compare |
+| Pre-materialization-safe adapters | R1-5, R2 BL-06 | fixed envelopes use allowlisted descriptors; bounded arbitrary JSON copies enumerable data without whole-source key collection; hidden/symbol peers are inert |
+| Total failure sanitizer | R1-7, R2 BL-05 | proxy/prototype traps collapse safely; AggregateError members are manually capped and iterator close is guarded |
+| Closed capability grammar | R1-6, R2 BL-07 | concatenated, separated, plural, and mixed forbidden authority compounds deny for every role |
+| AWS cache paths | R1-8 | AWS SSO and CLI cache families reject root/nested/case variants before callbacks |
+| Cookie header redaction | R2 BL-08 | Cookie and Set-Cookie auth/session values redact through every shared consumer while reviewed harmless prose remains exact |
+| Qualified-key redaction | R1-9 | final/compound dotted sensitive key segments redact in equals/colon forms through every shared consumer |
+
+Status after GREEN/refactor: all accepted groups are implemented at `d9b4eaee` with first GREEN
+`1e605675`; all 114 focused tests and both strict TypeScript scopes pass. The single RED checkpoint
+`c5886520` preserved all 102 prior tests, executed exactly 12 intended behavior failures, and left
+production frozen. Complete Shepherd remains honestly environment-blocked only at the unchanged 31
+controller/state-store `/bin/ps` `spawn EPERM` rows; isolation excluding those files passes
+177/177. Parent orchestration owns the permitted-environment rerun and fresh exact-head review; this
+lane performed no push, network, GitHub, Go, connector, service, credential, model, or `make` action.
+
 # Review Disposition — Issue #475 Cycle 10
 
 Frozen reviewed candidate: `f63957aed6fd1406eb3bd9a82adbd10b23b34c33`

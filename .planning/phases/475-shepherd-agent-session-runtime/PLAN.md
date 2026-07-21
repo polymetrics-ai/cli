@@ -907,3 +907,45 @@ GitHub, Go/connectors, `make`, service, credential, or model call is authorized.
 project, PRD, prompt, and workflow references. Execution decision is `read_only_spawned`: one
 read-only explorer maps the installed Pi 0.80.6 factory/result/event contract while this isolated
 worker retains the only mutating path.
+
+### Cycle 11 ordered result
+
+- Artifact-only PLAN: `9366296dcde200bf1f21e74d3cd8dec321581155`.
+- Read-only Pi contract-map trace: `a2a8b0e7da426f8c0c6fac91ead65d6a19c4534a`.
+- Comprehensive test-only RED: `c58865202623805f8877a583eecf5e301b589f3d`.
+  All 102 retained tests passed and exactly 12 named Cycle 11 rows failed their intended behavior
+  assertions; strict focused TypeScript passed; no test was skipped, cancelled, or marked todo;
+  runtime/policy/role-prompt production blobs remained exactly frozen.
+- First cohesive runtime/policy GREEN: `1e605675f8e021a14ed7f709451a2d3a8111c6ad`.
+- Stream-accounting refactor: `d9b4eaee71907c662f87f737c9b1a901c35146f9`.
+  It separately accounts the complete assistant envelope and replacement state, including
+  diagnostic and signature growth, while retaining linear cumulative-text accounting.
+
+The implementation accepts the real Pi result shape but treats `extensionsResult.runtime` only as
+descriptor-checked compatibility evidence. Native signal operations, admission/close and
+run-creation ownership, stateful assistant projections, total failure normalization, bounded
+descriptor/JSON adapters, AWS cache denial, forbidden capability compounds, and shared Cookie/
+dotted-key redaction satisfy C11-01 through C11-12. The public `HostCapability` and
+`ScopedWorkspace` ports remain unchanged: fixed envelopes are allowlisted own-descriptor DTOs;
+bounded arbitrary JSON copies enumerable own data and intentionally discards hidden/symbol peers.
+
+Post-RED test edits do not weaken any Cycle 11 assertion. They add terminal signature/diagnostic
+stream-accounting subcases and align retained fixtures with accepted interfaces: canonical Pi
+assistant `api`/`usage`, native-only shadow-hook expectations, and inert discarded hidden/symbol
+peers for arbitrary DTO/array inputs.
+
+### Cycle 11 terminal gate result
+
+- Focused runtime/tool-policy: 114 passed, 0 failed, 0 skipped/cancelled/todo.
+- Focused and all 12-production-file strict TypeScript pass with TypeScript 5.9.3 and explicit Pi
+  0.80.6 package/type roots.
+- Explicit Pi binary reports 0.80.6; offline RPC registers `pm-shepherd`; C11-01 traverses the real
+  no-model factory/result path and cleans the returned session.
+- Complete serialized Shepherd executes 251 tests: 220 pass and the unchanged 31 controller/
+  state-store rows are environment-blocked because the managed sandbox denies `/bin/ps` with
+  `spawn EPERM`. Excluding only those two parent-owned files passes 177/177; the complete run is
+  not represented as green.
+- Diff, immutable-base/frozen-head ancestry, JSON, issue-owned path scope, no-Go/no-connector, and
+  clean-head checks pass after the evidence commit. No push, network, GitHub, model, credential,
+  service, Go, connector, or `make` action was attempted. Parent orchestration owns the
+  process-capable rerun, fresh exact-head review, integration, and delivery.

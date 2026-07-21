@@ -884,3 +884,48 @@ weaken prior lifecycle, timer, parser, Pi typing, and disjoint-mutator guarantee
 - diff, immutable-base/frozen-head ancestry, JSON, credential-pattern, exact issue-owned scope, and
   clean-head checks;
 - no Go/connectors/`make`, runtime services, credentials, model calls, network, push, or GitHub.
+
+### RED result
+
+- PLAN checkpoint: `9366296dcde200bf1f21e74d3cd8dec321581155`.
+- Read-only installed-Pi contract trace: `a2a8b0e7da426f8c0c6fac91ead65d6a19c4534a`.
+- One comprehensive test-only RED checkpoint:
+  `c58865202623805f8877a583eecf5e301b589f3d`.
+- The augmented focused run executed 114 tests: all 102 retained assertions passed and exactly 12
+  named C11-01 through C11-12 rows failed their intended production assertions. There were zero
+  skipped, cancelled, or todo tests.
+- Strict focused TypeScript passed at RED. Production stayed exact: runtime
+  `134697a62252f500b3c58082bf766a5c84766a91`, policy
+  `539d061903549a764567cd1d7fad95d7d624edfe`, role prompts
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`.
+
+### GREEN / REFACTOR result
+
+- First cohesive runtime/policy GREEN:
+  `1e605675f8e021a14ed7f709451a2d3a8111c6ad`.
+- Complete-envelope stream-accounting refactor:
+  `d9b4eaee71907c662f87f737c9b1a901c35146f9`.
+- C11-01 through C11-12 pass through shared mechanisms: the real Pi 0.80.6 result adapter,
+  descriptor-checked/inert extension runtime, native signal lease, admission and per-run creation
+  state machines, cumulative assistant projections, complete terminal identity, fixed-envelope and
+  bounded JSON adapters, total aggregate/error sanitizer, capability/path classifiers, and shared
+  redaction grammar.
+- Focused GREEN remained 114/114 after the refactor; strict focused TypeScript passed.
+- Every Cycle 11 assertion remains intact. Additive stream cases prove large text signatures and
+  changed diagnostic envelopes consume the aggregate budget. Retained-fixture alignments are
+  limited to canonical assistant `api`/`usage`, native-only shadow hooks, and the accepted inert
+  discard of hidden/symbol peers at arbitrary JSON/array boundaries.
+
+### VERIFY result
+
+- Focused runtime/tool-policy: 114 passed, 0 failed, 0 skipped/cancelled/todo.
+- Strict no-emit TypeScript: focused production/tests and all 12 non-test Shepherd production
+  files pass against explicit Pi 0.80.6 roots with TypeScript 5.9.3.
+- Complete Shepherd: 251 executed, 220 passed, and 31 environment-blocked failures remain confined
+  to `controller.test.ts` and `state-store.test.ts`, all at the managed-sandbox `/bin/ps`
+  `spawn EPERM` boundary. Excluding only those files passes 177/177.
+- Explicit Pi reports 0.80.6; offline RPC `get_commands` registers `pm-shepherd`; the focused real
+  no-model factory/result row passes and cleans its actual session.
+- `git diff --check`, immutable-base/frozen-head ancestry, JSON, exact issue-owned scope,
+  no-Go/no-connector, and clean-head checks pass after terminal artifacts. No external mutation or
+  disallowed gate was attempted; parent owns the process-capable full rerun and exact-head review.

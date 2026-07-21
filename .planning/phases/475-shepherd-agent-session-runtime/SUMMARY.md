@@ -1,7 +1,25 @@
 # Summary — Issue #475
 
-Status: Cycle 9 is planned against frozen clean candidate `0cdcda7e`; production and tests remain
-unchanged pending the single consolidated behavior RED.
+Status: Cycle 11 is locally complete at refactor `d9b4eaee` against frozen reviewed candidate
+`1571dc4d`; parent orchestration owns the process-capable full-suite rerun, fresh exact-head review,
+integration, and delivery.
+
+Cycle 11 accepts both complete Cycle 10 review ledgers as one correction. The runtime now consumes
+the real Pi 0.80.6 creation/result shape without granting extension-runtime authority; invokes only
+native signal operations; linearizes admission, close, run abort, and creation cleanup; snapshots
+complete stateful assistant evidence under aggregate bounds; avoids whole-source key
+materialization; and normalizes hostile failure graphs totally. Tool policy closes compound
+capability aliases, AWS SSO/CLI caches, Cookie/Set-Cookie headers, and qualified sensitive keys.
+Public host/workspace ports and serialized handoff APIs are unchanged.
+
+The ordered Cycle 11 chain is PLAN `9366296d`, read-only Pi trace `a2a8b0e7`, comprehensive
+test-only RED `c5886520`, first GREEN `1e605675`, and stream-accounting refactor `d9b4eaee`. RED
+retained 102 passes and produced exactly 12 intended failures with production frozen; GREEN passes
+114/114 focused tests and both strict Pi 0.80.6 TypeScript scopes. Explicit offline RPC and the
+actual no-model factory/result cleanup pass. Complete Shepherd executes 251 tests with 220 passes
+and the unchanged 31 managed-sandbox `/bin/ps` `spawn EPERM` failures only in controller/state-store;
+safe isolation passes 177/177. No push, network, GitHub, Go, connector, service, credential, model,
+or `make` action was attempted.
 
 Cycle 8 batches the final lifecycle and security/parser findings into one strict test-first
 correction. It will normalize and freeze request authority once, own signal listeners and async

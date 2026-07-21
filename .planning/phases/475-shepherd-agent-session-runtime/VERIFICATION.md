@@ -1,5 +1,54 @@
 # Verification — Issue #475
 
+## Cycle 11 Verification Result
+
+Cycle 11 was executed against exact clean reviewed candidate
+`1571dc4d4f45ad4285107d04f2d7c489a7f357ab` and immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The complete
+`/tmp/475-REVIEW-CYCLE10-1.md` and `/tmp/475-REVIEW-CYCLE10-2.md` reports are fully accepted and
+mapped in `REVIEW.md` and `PRD-COVERAGE.md`.
+
+The ordered checkpoints are artifact-only PLAN
+`9366296dcde200bf1f21e74d3cd8dec321581155`, read-only installed-Pi trace
+`a2a8b0e7da426f8c0c6fac91ead65d6a19c4534a`, comprehensive test-only RED
+`c58865202623805f8877a583eecf5e301b589f3d`, first runtime/policy GREEN
+`1e605675f8e021a14ed7f709451a2d3a8111c6ad`, and complete-envelope stream refactor
+`d9b4eaee71907c662f87f737c9b1a901c35146f9`. RED executed all 114 focused tests: every one of
+the 102 retained assertions passed and exactly 12 named Cycle 11 rows failed their intended
+production assertions. Strict focused TypeScript passed and all three frozen production blobs
+remained exact. GREEN/refactor passes all 114 focused tests.
+
+| Cycle 11 gate | Status | Evidence |
+|---|---|---|
+| RED integrity | pass | 114 executed; 102 retained pass; exactly 12 intended behavior failures; strict TS pass; runtime/policy/role-prompt blobs unchanged |
+| Focused GREEN | pass | 114 passed, 0 failed, 0 skipped/cancelled/todo |
+| Complete Shepherd | environment-blocked | 251 executed: 220 passed; the unchanged 31 controller/state-store failures all originate from managed-sandbox `/bin/ps` `spawn EPERM` |
+| Environment isolation | pass | excluding only `controller.test.ts` and `state-store.test.ts`, 177 passed, 0 failed |
+| Strict TypeScript | pass | focused production/tests and all 12 non-test Shepherd `.ts`, TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Pi offline boundary | pass | explicit binary `0.80.6`; writable temporary agent directory; RPC `get_commands` registered `pm-shepherd`; C11-01 exercised the real no-model factory/result path and cleaned the actual session |
+| Repository integrity | pass | `git diff --check`, valid JSON, immutable-base/frozen-head ancestry, exact issue-owned path scope, no Go/connectors, and clean worktree |
+| External mutation | not attempted | no push, network, GitHub, review bot, merge, model, credential, service, Go, connector, or `make` action was authorized in this lane |
+
+The runtime now accepts Pi 0.80.6's required `extensionsResult.runtime` field as descriptor-checked
+compatibility evidence without storing or invoking it. Native-only signal leases, admission/close
+linearization, run-associated creation ownership, complete stateful assistant projections,
+replacement-safe aggregate stream accounting, fixed-envelope/bounded-JSON adapters, and total
+failure normalization close the runtime findings. The policy closes forbidden capability
+compounds, AWS SSO/CLI caches, Cookie/Set-Cookie headers, and qualified sensitive assignment keys.
+Public `HostCapability` and `ScopedWorkspace` interfaces and serialized handoff APIs are unchanged.
+
+All twelve Cycle 11 top-level RED assertions remain intact. Post-RED test edits are additive or
+fixture-only: signature and diagnostic-envelope accounting subcases were added; retained fixtures
+now provide canonical Pi assistant `api`/`usage`, expect native signal operations to ignore shadow
+hooks, and treat hidden/symbol peers as inert discarded source extras at bounded arbitrary DTO and
+array boundaries.
+
+The healthy GSD adapter still rejects `programming-loop`, so the required manual-GSD fallback is
+recorded without weakening PLAN -> RED -> GREEN/refactor -> verify. The complete-suite result is
+neither a pass nor a product regression; it reproduces the same parent-owned sandbox limitation,
+while every other Shepherd test passes in isolation. Parent orchestration owns the
+process-capable complete-suite rerun, fresh exact-head review, integration, and delivery.
+
 ## Cycle 10 Verification Result
 
 Cycle 10 was executed against exact clean reviewed candidate

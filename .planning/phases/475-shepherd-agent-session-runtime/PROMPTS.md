@@ -277,6 +277,15 @@
   0.80.6 contract while the issue worker owns the isolated mutating critical path.
 - Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `PROMPTS.md`, `RUN-STATE.json`, `AGENTS.md`,
   `agents/cycle11-pi-contract-map.md`, and `traces/cycle11-pi-contract-map-trace.md`.
-- Verification result: pending Cycle 11 RED and GREEN. Required evidence is retained/new focused
-  counts, both strict Pi scopes, pinned RPC plus actual no-model factory/result exercise, serialized
-  full-suite and 165-test isolation, and exact diff/base/scope/JSON/credential checks.
+- Ordered checkpoints: PLAN `9366296d`, read-only Pi contract trace `a2a8b0e7`, comprehensive
+  test-only RED `c5886520`, first runtime/policy GREEN `1e605675`, and complete-envelope stream
+  accounting refactor `d9b4eaee`. RED was 102 retained passes plus exactly 12 intended Cycle 11
+  failures with strict TypeScript green and production blobs frozen; GREEN is focused 114/114.
+- Test-only alignment decision: retain every Cycle 11 assertion; add only signature/diagnostic
+  stream-accounting subcases, and align older fixtures to canonical assistant `api`/`usage`,
+  native-only shadow hooks, and inert hidden/symbol peer discard at bounded DTO boundaries.
+- Verification result: both strict Pi scopes, explicit 0.80.6 RPC, actual no-model factory/result
+  cleanup, diff/ancestry/JSON/scope checks, and 177/177 safe isolation pass. Complete Shepherd is
+  environment-blocked at 251 executed / 220 passed / 31 unchanged controller/state-store
+  `/bin/ps` `spawn EPERM` failures. No external mutation or disallowed gate was attempted; parent
+  owns the process-capable rerun, exact-head review, integration, and delivery.

@@ -1,5 +1,35 @@
 # PRD Coverage — Issue #475
 
+## Cycle 11 Consolidated Review Coverage
+
+Frozen candidate: `1571dc4d4f45ad4285107d04f2d7c489a7f357ab`. Immutable base:
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The accepted issue contract and both complete Cycle 10
+review ledgers form the phase-equivalent requirement source.
+
+| Required outcome | RED boundary | Cycle 11 result |
+|---|---|---|
+| Real Pi factory/result shape is accepted without runtime authority | actual 0.80.6 no-model factory, required extension runtime, cancellation and cleanup | focused GREEN |
+| Signals use only canonical native operations | genuine request/parent signals with throwing, mutating, capture-registering, and no-op shadow hooks | focused GREEN |
+| Successful run-ID abort owns creation terminal state | resolve/reject/late-cleanup/hung/never-settle creation tables plus repeated abort | focused GREEN |
+| Close and admission have one linearization point | re-entrant close from request, capability, model, auth, setup, and reservation seams | focused GREEN |
+| Pi stream accounting is actual, monotonic, and jointly bounded | every content family, mismatch/shrink/skip/replay/one-above, terminal signatures, changed diagnostics | focused GREEN |
+| Terminal evidence is one ordered complete identity pair | duplicate/order/post-terminal and routing/api/usage/response/diagnostic/error/content/tool mismatch tables | focused GREEN |
+| Untrusted breadth cannot force whole-key materialization | hidden/symbol-heavy fixed envelopes, arrays, schemas, events, and result JSON with instrumentation ceilings | focused GREEN |
+| Failure normalization is total and bounded | proxy/prototype traps; 17/5000/infinite/throwing aggregate iterators; iterator close and every public graph | focused GREEN |
+| Capability authority rejects compound aliases | concatenated/separated/plural/mixed forbidden families across every role | focused GREEN |
+| AWS SSO and CLI caches never reach workspace reads | root/nested/case path tables with opaque content | focused GREEN |
+| Cookie and Set-Cookie secrets redact everywhere | direct, prompt, workspace, mutation/capability, handoff, and public-error consumers | focused GREEN |
+| Qualified sensitive assignment keys redact everywhere | dotted final/compound key segments in equals/colon forms plus harmless documentary controls | focused GREEN |
+| Cycle 10 behavior remains intact | all retained runtime, policy, Pi typing, lifecycle, timer, parser, and mutator assertions | 102 retained passes |
+
+Ordered evidence is PLAN `9366296d`, installed-Pi trace `a2a8b0e7`, test-only RED `c5886520`, first
+GREEN `1e605675`, and refactor `d9b4eaee`; focused GREEN is 114/114. Both strict Pi 0.80.6
+TypeScript scopes, pinned offline RPC, and the real no-model factory/result exercise pass. Complete
+Shepherd is environment-blocked at 251 executed / 220 passed / 31 unchanged `/bin/ps`
+`spawn EPERM` rows in controller/state-store; the remaining isolated files pass 177/177. No parent,
+Go, connector, dependency, service, credential, model, live GitHub, review-bot, push, `make`, or
+merge work was performed.
+
 ## Cycle 10 Consolidated Review Coverage
 
 Frozen candidate: `f63957aed6fd1406eb3bd9a82adbd10b23b34c33`. Immutable base:
