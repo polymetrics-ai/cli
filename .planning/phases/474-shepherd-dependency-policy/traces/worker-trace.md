@@ -191,6 +191,17 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
   reached the clone boundary before validation.
 - Execution decision: `local_critical_path`; RED gate satisfied, proceed to the minimum boundary fix.
 
+## Exact-head correction 3 GREEN cycle
+
+- Added Proxy detection ahead of reflection and descriptor-only exact validation for every record
+  and dense array in the reconciliation DTO.
+- No candidate property, array element, accessor, or iterator is read during validation. Only the
+  fully proven plain data graph reaches `structuredClone`, and only the private clone is frozen and
+  evaluated.
+- Focused GREEN: 41/41. Strict production TypeScript passes after narrowing the array descriptor
+  map and length local.
+- Execution decision: `local_critical_path`; proceed to final scoped verification.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

@@ -141,3 +141,10 @@ getters count and alternate their output. Focused result: **41 tests, 40 pass, 1
 exit 1. Each getter ran twice across repeated reconciliation, proving the clone-before-validation
 boundary executes caller behavior. GREEN requires zero getter calls and the same typed
 `invalid_snapshot` result on both calls.
+
+Minimum GREEN: **41/41 focused tests pass**. The boundary rejects Proxies before reflection,
+validates plain records and dense arrays entirely through exact own data descriptors, recursively
+validates descriptor values without property reads or caller iteration, and invokes
+`structuredClone` only after the full input is proven safe. The first strict TypeScript pass found
+the array overload inferring `descriptors.length` as a number; an explicit property-descriptor map
+and narrowed local length fixed the type-only issue. Strict production TypeScript then exited 0.

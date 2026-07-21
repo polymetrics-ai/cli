@@ -1,3 +1,5 @@
+import { types as nodeTypes } from "node:util";
+
 import {
 	decideFailurePolicy,
 	evaluateLifecycleTransition,
@@ -106,19 +108,55 @@ function spawnCapabilityDecision(input: ReconcileInput, selectedIds: readonly st
 	return undefined;
 }
 
-function isExactRecord(
+type OwnDataDescriptor = PropertyDescriptor & { value: unknown };
+type OwnDataDescriptorMap = Record<string, OwnDataDescriptor>;
+
+function isEnumerableDataDescriptor(descriptor: PropertyDescriptor | undefined): descriptor is OwnDataDescriptor {
+	return descriptor !== undefined && descriptor.enumerable === true && Object.hasOwn(descriptor, "value");
+}
+
+function exactOwnDataDescriptors(
 	value: unknown,
 	requiredKeys: readonly string[],
 	optionalKeys: readonly string[] = [],
-): value is Record<string, unknown> {
-	if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+): OwnDataDescriptorMap | undefined {
+	if (typeof value !== "object" || value === null || nodeTypes.isProxy(value) || Array.isArray(value)) return undefined;
 	const prototype = Object.getPrototypeOf(value);
-	if (prototype !== Object.prototype && prototype !== null) return false;
+	if (prototype !== Object.prototype && prototype !== null) return undefined;
 	const descriptors = Object.getOwnPropertyDescriptors(value);
-	const keys = Object.keys(descriptors);
+	const keys = Reflect.ownKeys(descriptors);
 	const allowed = new Set([...requiredKeys, ...optionalKeys]);
-	return requiredKeys.every((key) => Object.hasOwn(descriptors, key))
-		&& keys.every((key) => allowed.has(key) && Object.hasOwn(descriptors[key], "value"));
+	if (!requiredKeys.every((key) => Object.hasOwn(descriptors, key))) return undefined;
+	for (const key of keys) {
+		if (typeof key !== "string" || !allowed.has(key) || !isEnumerableDataDescriptor(descriptors[key])) {
+			return undefined;
+		}
+	}
+	return descriptors as OwnDataDescriptorMap;
+}
+
+function exactOwnArrayValues(value: unknown): unknown[] | undefined {
+	if (typeof value !== "object" || value === null || nodeTypes.isProxy(value) || !Array.isArray(value)) {
+		return undefined;
+	}
+	if (Object.getPrototypeOf(value) !== Array.prototype) return undefined;
+	const descriptors = Object.getOwnPropertyDescriptors(value) as Record<string, PropertyDescriptor>;
+	const keys = Reflect.ownKeys(descriptors);
+	if (keys.some((key) => typeof key !== "string")) return undefined;
+	const lengthDescriptor = descriptors.length;
+	if (lengthDescriptor === undefined
+		|| !Object.hasOwn(lengthDescriptor, "value")
+		|| lengthDescriptor.enumerable !== false) return undefined;
+	const length = lengthDescriptor.value;
+	if (!isNonNegativeSafeInteger(length) || keys.length !== length + 1) return undefined;
+
+	const values: unknown[] = [];
+	for (let index = 0; index < length; index += 1) {
+		const descriptor = descriptors[String(index)];
+		if (!isEnumerableDataDescriptor(descriptor)) return undefined;
+		values.push(descriptor.value);
+	}
+	return values;
 }
 
 function isNonNegativeSafeInteger(value: unknown): value is number {
@@ -135,51 +173,62 @@ const lifecycleBooleanFacts = new Set([
 ]);
 
 function isLifecycleFacts(value: unknown): value is LifecycleFacts {
-	if (!isExactRecord(value, [], [...lifecycleBooleanFacts, "humanDecision"])) return false;
-	return Object.entries(value).every(([key, fact]) => key === "humanDecision"
-		? fact === "pending" || fact === "approve_merge" || fact === "reject"
-		: lifecycleBooleanFacts.has(key) && typeof fact === "boolean");
+	const descriptors = exactOwnDataDescriptors(value, [], [...lifecycleBooleanFacts, "humanDecision"]);
+	if (descriptors === undefined) return false;
+	return Object.entries(descriptors).every(([key, descriptor]) => key === "humanDecision"
+		? descriptor.value === "pending" || descriptor.value === "approve_merge" || descriptor.value === "reject"
+		: lifecycleBooleanFacts.has(key) && typeof descriptor.value === "boolean");
 }
 
 function isWorkItemShape(value: unknown): value is DependencyWorkItem {
-	if (!isExactRecord(value, ["id", "dependsOn", "status", "access", "writeScopes"])) return false;
-	return typeof value.id === "string"
-		&& Array.isArray(value.dependsOn) && value.dependsOn.every((dependency) => typeof dependency === "string")
-		&& (value.status === "pending" || value.status === "running" || value.status === "succeeded"
-			|| value.status === "failed" || value.status === "blocked")
-		&& (value.access === "read_only" || value.access === "mutating")
-		&& Array.isArray(value.writeScopes) && value.writeScopes.every((scope) => typeof scope === "string");
+	const descriptors = exactOwnDataDescriptors(value, ["id", "dependsOn", "status", "access", "writeScopes"]);
+	if (descriptors === undefined) return false;
+	const dependencies = exactOwnArrayValues(descriptors.dependsOn.value);
+	const writeScopes = exactOwnArrayValues(descriptors.writeScopes.value);
+	return typeof descriptors.id.value === "string"
+		&& dependencies !== undefined && dependencies.every((dependency) => typeof dependency === "string")
+		&& (descriptors.status.value === "pending" || descriptors.status.value === "running"
+			|| descriptors.status.value === "succeeded" || descriptors.status.value === "failed"
+			|| descriptors.status.value === "blocked")
+		&& (descriptors.access.value === "read_only" || descriptors.access.value === "mutating")
+		&& writeScopes !== undefined && writeScopes.every((scope) => typeof scope === "string");
 }
 
 function isReconcileInput(value: unknown): value is ReconcileInput {
-	if (!isExactRecord(value, ["persisted", "canonical", "budget"], ["failure"])) return false;
-	if (!isExactRecord(value.persisted, ["stage", "retryAttempts", "correctionRounds"])
-		|| !isParentLifecycleStage(value.persisted.stage)
-		|| !isNonNegativeSafeInteger(value.persisted.retryAttempts)
-		|| !isNonNegativeSafeInteger(value.persisted.correctionRounds)) return false;
-	if (!isExactRecord(value.budget, ["maxRetries", "maxCorrectionRounds"])
-		|| !isNonNegativeSafeInteger(value.budget.maxRetries)
-		|| !isNonNegativeSafeInteger(value.budget.maxCorrectionRounds)) return false;
-	if (!isExactRecord(
-		value.canonical,
+	const root = exactOwnDataDescriptors(value, ["persisted", "canonical", "budget"], ["failure"]);
+	if (root === undefined) return false;
+	const persisted = exactOwnDataDescriptors(root.persisted.value, ["stage", "retryAttempts", "correctionRounds"]);
+	if (persisted === undefined
+		|| !isParentLifecycleStage(persisted.stage.value)
+		|| !isNonNegativeSafeInteger(persisted.retryAttempts.value)
+		|| !isNonNegativeSafeInteger(persisted.correctionRounds.value)) return false;
+	const budget = exactOwnDataDescriptors(root.budget.value, ["maxRetries", "maxCorrectionRounds"]);
+	if (budget === undefined
+		|| !isNonNegativeSafeInteger(budget.maxRetries.value)
+		|| !isNonNegativeSafeInteger(budget.maxCorrectionRounds.value)) return false;
+	const canonical = exactOwnDataDescriptors(
+		root.canonical.value,
 		["observedStage", "workItems", "maxConcurrency", "constraints"],
 		["proposedStage", "transitionFacts"],
-	)) return false;
-	const canonical = value.canonical;
-	if (!isParentLifecycleStage(canonical.observedStage)
-		|| !isNonNegativeSafeInteger(canonical.maxConcurrency)
-		|| !Array.isArray(canonical.workItems)
-		|| !canonical.workItems.every(isWorkItemShape)
-		|| (Object.hasOwn(canonical, "proposedStage") && !isParentLifecycleStage(canonical.proposedStage))
-		|| (Object.hasOwn(canonical, "transitionFacts") && !isLifecycleFacts(canonical.transitionFacts))) return false;
-	if (!isExactRecord(canonical.constraints, [
+	);
+	if (canonical === undefined) return false;
+	const workItems = exactOwnArrayValues(canonical.workItems.value);
+	if (!isParentLifecycleStage(canonical.observedStage.value)
+		|| !isNonNegativeSafeInteger(canonical.maxConcurrency.value)
+		|| workItems === undefined
+		|| !workItems.every(isWorkItemShape)
+		|| (Object.hasOwn(canonical, "proposedStage") && !isParentLifecycleStage(canonical.proposedStage.value))
+		|| (Object.hasOwn(canonical, "transitionFacts") && !isLifecycleFacts(canonical.transitionFacts.value))) return false;
+	const constraints = exactOwnDataDescriptors(canonical.constraints.value, [
 		"runtimeCapabilityAvailable", "isolationAvailable", "hardHumanGate",
 		"verificationBlocked", "reviewBlocked",
-	]) || !Object.values(canonical.constraints).every((constraint) => typeof constraint === "boolean")) return false;
-	return !Object.hasOwn(value, "failure")
-		|| value.failure === "transient_verification"
-		|| value.failure === "transient_review"
-		|| value.failure === "hard_human_gate";
+	]);
+	if (constraints === undefined
+		|| !Object.values(constraints).every((descriptor) => typeof descriptor.value === "boolean")) return false;
+	return !Object.hasOwn(root, "failure")
+		|| root.failure.value === "transient_verification"
+		|| root.failure.value === "transient_review"
+		|| root.failure.value === "hard_human_gate";
 }
 
 function deepFreeze<T>(value: T): T {
@@ -190,6 +239,7 @@ function deepFreeze<T>(value: T): T {
 
 function snapshotReconcileInput(candidate: unknown): ReconcileInput | undefined {
 	try {
+		if (!isReconcileInput(candidate)) return undefined;
 		const snapshot: unknown = structuredClone(candidate);
 		return isReconcileInput(snapshot) ? deepFreeze(snapshot) : undefined;
 	} catch {
