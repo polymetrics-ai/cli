@@ -1492,3 +1492,63 @@ test("cycle 11 workspace reads deny AWS SSO and CLI caches before host callbacks
 	}
 	assert.deepEqual({ accepted, reads: input.workspace.reads }, { accepted: [], reads: [] });
 });
+
+test("cycle 12 every hostile tool input fails as a typed bounded redacted DTO error", async () => {
+	const input = policyInput(false);
+	const policy = createToolPolicy(input);
+	const tools = new Map(policy.tools.map((tool) => [tool.name, tool]));
+	const markers = {
+		proxy: "synthetic-cycle12-tool-proxy-475",
+		accessor: "synthetic-cycle12-tool-accessor-475",
+		signal: "synthetic-cycle12-tool-signal-475",
+		toJSON: "synthetic-cycle12-tool-tojson-475",
+		cycle: "synthetic-cycle12-tool-cycle-475",
+	};
+	let proxyTraps = 0;
+	const proxy = new Proxy({ path: ".pi/extensions/shepherd/tool-policy.ts" }, {
+		ownKeys() {
+			proxyTraps += 1;
+			throw new Error(`token=${markers.proxy}`);
+		},
+	});
+	const accessor: Record<string, unknown> = { oldText: "old", newText: "new" };
+	Object.defineProperty(accessor, "path", {
+		enumerable: true,
+		get() { throw new Error(`client_secret=${markers.accessor}`); },
+	});
+	const signalController = new AbortController();
+	Object.defineProperty(signalController.signal, "aborted", {
+		configurable: true,
+		get() { throw new Error(`Cookie: session=${markers.signal}`); },
+	});
+	const toJSON = {
+		target: "owned",
+		toJSON() { throw new Error(`Set-Cookie: auth=${markers.toJSON}`); },
+	};
+	const cyclic: Record<string, unknown> = { target: "owned" };
+	cyclic.self = cyclic;
+	const cases = [
+		["proxy", tools.get("workspace_read")!, proxy, undefined],
+		["accessor", tools.get("workspace_edit")!, accessor, undefined],
+		["signal", tools.get("workspace_write")!, {
+			path: ".pi/extensions/shepherd/tool-policy.ts", content: "bounded",
+		}, signalController.signal],
+		["toJSON", tools.get("host_inspect")!, toJSON, undefined],
+		["cycle", tools.get("host_verify")!, cyclic, undefined],
+	] as const;
+	const problems: string[] = [];
+	for (const [name, tool, params, signal] of cases) {
+		const outcome = await toolOutcome(tool.execute(`cycle12-tool-input-${name}`, params, signal));
+		const reason = outcome.status === "rejected" ? outcome.reason : undefined;
+		if (!(reason instanceof ToolPolicyError)) problems.push(`${name}:${outcome.status}:untyped`);
+		const messages: string[] = [];
+		let current: unknown = reason;
+		for (let depth = 0; depth < 4 && current instanceof Error; depth += 1) {
+			messages.push(current.message);
+			current = Object.hasOwn(current, "cause") ? current.cause : undefined;
+		}
+		if (messages.some((message) => message.includes(markers[name]))) problems.push(`${name}:marker`);
+	}
+	if (proxyTraps > 0) problems.push(`proxy:traps-${proxyTraps}`);
+	assert.deepEqual(problems, []);
+});

@@ -36,6 +36,25 @@ async function loadPinnedPiSdk(): Promise<typeof import("@earendil-works/pi-codi
 	return import(pathToFileURL(modulePath).href);
 }
 
+async function loadPinnedPiAi(): Promise<{
+	createAssistantMessageEventStream(): {
+		push(event: unknown): void;
+		end(result?: unknown): void;
+	};
+}> {
+	const prefix = dirname(dirname(process.execPath));
+	const modulePath = join(
+		prefix,
+		"lib/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-ai/dist/index.js",
+	);
+	return import(pathToFileURL(modulePath).href) as Promise<{
+		createAssistantMessageEventStream(): {
+			push(event: unknown): void;
+			end(result?: unknown): void;
+		};
+	}>;
+}
+
 type MessageEndEvent = Extract<AgentSessionEvent, { type: "message_end" }>;
 type PiAssistantMessage = Extract<MessageEndEvent["message"], { role: "assistant" }>;
 
@@ -390,7 +409,8 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 	}
 	async createAgentSession(options: CreateAgentSessionOptions): Promise<{
 		session: FakeSession;
-		extensionsResult: { extensions: unknown[]; errors: unknown[] };
+		extensionsResult: { extensions: unknown[]; errors: unknown[]; runtime?: unknown };
+		modelFallbackMessage?: string;
 	}> {
 		this.options = options as unknown as Record<string, unknown>;
 		if (this.createGate) await this.createGate;
@@ -400,7 +420,8 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 		this.session.activeTools = this.activeToolsOverride ?? [...(options.tools as string[])];
 		return {
 			session: this.session,
-			extensionsResult: { extensions: [], errors: [] },
+			extensionsResult: { extensions: [], errors: [], runtime: {} },
+			modelFallbackMessage: undefined,
 		};
 	}
 	blockCreate(): void {
@@ -411,7 +432,10 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 	}
 }
 
-function runtime(sdk = new FakeSdk(), options: Record<string, unknown> = {}) {
+function runtime<T extends AgentSessionRuntimeSdk = FakeSdk>(
+	sdk: T = new FakeSdk() as unknown as T,
+	options: Record<string, unknown> = {},
+) {
 	return {
 		sdk,
 		runtime: new ShepherdAgentSessionRuntime(sdk, options),
@@ -528,7 +552,7 @@ function installDeferredCreation(
 
 async function beginAbandonedCreation(laneId: string): Promise<{
 	creation: ReturnType<typeof deferredValue<RuntimeCreationResult>>;
-	h: ReturnType<typeof runtime>;
+	h: ReturnType<typeof runtime<FakeSdk>>;
 	req: RoleRunRequest;
 	validResult: RuntimeCreationResult;
 }> {
@@ -4187,6 +4211,703 @@ test("cycle 11 qualified sensitive keys redact by final segment across every sha
 	].join("\n");
 	const rendered = await renderCycle11Consumers("cycle11-qualified", payload);
 	const harmless = "oauth.token: number of records processed";
+	assert.deepEqual({
+		leaks: leakedMarkers(rendered, markers),
+		harmless: redactSensitiveText(harmless),
+	}, { leaks: [], harmless });
+});
+
+type PiUserMessage = Extract<MessageEndEvent["message"], { role: "user" }>;
+type PiToolResultMessage = Extract<MessageEndEvent["message"], { role: "toolResult" }>;
+
+function emitSessionEvent(session: FakeSession, event: AgentSessionEvent): void {
+	for (const listener of [...session.listeners]) listener(event);
+}
+
+function piUserMessage(text: string): PiUserMessage {
+	return { role: "user", content: [{ type: "text", text }], timestamp: 475 };
+}
+
+function emitPiTextAssistant(session: FakeSession, text: string): PiAssistantMessage {
+	const initial = assistantMessage("", { content: [] });
+	emitSessionEvent(session, { type: "message_start", message: initial } as AgentSessionEvent);
+	const started = assistantMessage("");
+	emitSessionEvent(session, {
+		type: "message_update",
+		message: started,
+		assistantMessageEvent: { type: "text_start", contentIndex: 0, partial: started },
+	} as AgentSessionEvent);
+	const completed = assistantMessage(text);
+	emitSessionEvent(session, {
+		type: "message_update",
+		message: completed,
+		assistantMessageEvent: { type: "text_delta", contentIndex: 0, delta: text, partial: completed },
+	} as AgentSessionEvent);
+	emitSessionEvent(session, {
+		type: "message_update",
+		message: completed,
+		assistantMessageEvent: { type: "text_end", contentIndex: 0, content: text, partial: completed },
+	} as AgentSessionEvent);
+	emitSessionEvent(session, { type: "message_end", message: completed } as AgentSessionEvent);
+	return completed;
+}
+
+function emitPiToolAssistant(session: FakeSession): PiAssistantMessage {
+	const initial = assistantMessage("", { content: [], stopReason: "toolUse" });
+	emitSessionEvent(session, { type: "message_start", message: initial } as AgentSessionEvent);
+	const startedCall = {
+		type: "toolCall" as const,
+		id: "cycle12-tool-call",
+		name: "workspace_read",
+		arguments: {},
+		partialJson: "",
+	};
+	const started = assistantMessage("", {
+		content: [startedCall] as unknown as PiAssistantMessage["content"],
+		stopReason: "toolUse",
+	});
+	emitSessionEvent(session, {
+		type: "message_update",
+		message: started,
+		assistantMessageEvent: { type: "toolcall_start", contentIndex: 0, partial: started },
+	} as AgentSessionEvent);
+	const argumentsJson = JSON.stringify({ path: ".pi/extensions/shepherd/agent-session-runtime.ts" });
+	const growingCall = { ...startedCall, arguments: { path: ".pi/extensions/shepherd/agent-session-runtime.ts" }, partialJson: argumentsJson };
+	const growing = assistantMessage("", {
+		content: [growingCall] as unknown as PiAssistantMessage["content"],
+		stopReason: "toolUse",
+	});
+	emitSessionEvent(session, {
+		type: "message_update",
+		message: growing,
+		assistantMessageEvent: { type: "toolcall_delta", contentIndex: 0, delta: argumentsJson, partial: growing },
+	} as AgentSessionEvent);
+	const terminalCall = {
+		type: "toolCall" as const,
+		id: startedCall.id,
+		name: startedCall.name,
+		arguments: growingCall.arguments,
+	};
+	const terminal = assistantMessage("", {
+		content: [terminalCall],
+		stopReason: "toolUse",
+	});
+	emitSessionEvent(session, {
+		type: "message_update",
+		message: terminal,
+		assistantMessageEvent: { type: "toolcall_end", contentIndex: 0, toolCall: terminalCall, partial: terminal },
+	} as AgentSessionEvent);
+	emitSessionEvent(session, { type: "message_end", message: terminal } as AgentSessionEvent);
+	return terminal;
+}
+
+function drivePiLifecycle(
+	session: FakeSession,
+	handoff: string,
+	options: {
+		tool?: boolean;
+		unknown?: boolean;
+		outOfOrder?: boolean;
+		postSettled?: boolean;
+		missingSettled?: boolean;
+		willRetry?: boolean;
+	} = {},
+): void {
+	const user = piUserMessage("bounded cycle 12 prompt");
+	emitSessionEvent(session, { type: "agent_start" } as AgentSessionEvent);
+	if (options.unknown) emitSessionEvent(session, { type: "cycle12_unknown" } as unknown as AgentSessionEvent);
+	if (options.outOfOrder) {
+		emitSessionEvent(session, {
+			type: "turn_end", message: assistantMessage("out of order"), toolResults: [],
+		} as AgentSessionEvent);
+	}
+	emitSessionEvent(session, { type: "turn_start" } as AgentSessionEvent);
+	emitSessionEvent(session, { type: "message_start", message: user } as AgentSessionEvent);
+	emitSessionEvent(session, { type: "message_end", message: user } as AgentSessionEvent);
+	const messages: Array<PiUserMessage | PiAssistantMessage | PiToolResultMessage> = [user];
+	if (options.tool) {
+		const intermediate = emitPiToolAssistant(session);
+		messages.push(intermediate);
+		const result = {
+			content: [{ type: "text" as const, text: "bounded offline read" }],
+			details: null,
+		};
+		emitSessionEvent(session, {
+			type: "tool_execution_start",
+			toolCallId: "cycle12-tool-call",
+			toolName: "workspace_read",
+			args: { path: ".pi/extensions/shepherd/agent-session-runtime.ts" },
+		} as AgentSessionEvent);
+		emitSessionEvent(session, {
+			type: "tool_execution_update",
+			toolCallId: "cycle12-tool-call",
+			toolName: "workspace_read",
+			args: { path: ".pi/extensions/shepherd/agent-session-runtime.ts" },
+			partialResult: result,
+		} as AgentSessionEvent);
+		emitSessionEvent(session, {
+			type: "tool_execution_end",
+			toolCallId: "cycle12-tool-call",
+			toolName: "workspace_read",
+			result,
+			isError: false,
+		} as AgentSessionEvent);
+		const toolResult: PiToolResultMessage = {
+			role: "toolResult",
+			toolCallId: "cycle12-tool-call",
+			toolName: "workspace_read",
+			content: result.content,
+			details: result.details,
+			isError: false,
+			timestamp: 476,
+		};
+		emitSessionEvent(session, { type: "message_start", message: toolResult } as AgentSessionEvent);
+		emitSessionEvent(session, { type: "message_end", message: toolResult } as AgentSessionEvent);
+		emitSessionEvent(session, { type: "turn_end", message: intermediate, toolResults: [toolResult] } as AgentSessionEvent);
+		messages.push(toolResult);
+		emitSessionEvent(session, { type: "turn_start" } as AgentSessionEvent);
+	}
+	const finalAssistant = emitPiTextAssistant(session, handoff);
+	messages.push(finalAssistant);
+	emitSessionEvent(session, { type: "turn_end", message: finalAssistant, toolResults: [] } as AgentSessionEvent);
+	emitSessionEvent(session, { type: "agent_end", messages, willRetry: options.willRetry ?? false } as AgentSessionEvent);
+	const retained = [...session.listeners];
+	if (!options.missingSettled) emitSessionEvent(session, { type: "agent_settled" } as AgentSessionEvent);
+	if (options.postSettled) {
+		for (const listener of retained) listener({ type: "turn_start" } as AgentSessionEvent);
+	}
+}
+
+test("cycle 12 follows the complete Pi lifecycle and selects only the final settled assistant", async () => {
+	const cases = [
+		["no-tool", {}, "resolved"],
+		["one-tool", { tool: true }, "resolved"],
+		["unknown", { unknown: true }, "rejected"],
+		["out-of-order", { outOfOrder: true }, "rejected"],
+		["missing-settled", { missingSettled: true }, "rejected"],
+		["retrying-final", { willRetry: true }, "rejected"],
+		["post-settled", { postSettled: true }, "rejected"],
+	] as const;
+	const observed: string[] = [];
+	for (const [name, options, expected] of cases) {
+		const harness = runtime();
+		const req = request({
+			binding: { ...request().binding, runId: `cycle12-lifecycle-${name}`, laneId: `cycle12-lifecycle-${name}` },
+		});
+		Object.defineProperty(harness.sdk.session, "prompt", {
+			configurable: true,
+			async value() {
+				harness.sdk.session.promptCalls += 1;
+				drivePiLifecycle(harness.sdk.session, handoffFor(req), options);
+			},
+		});
+		const outcome = await observeSettlement(harness.runtime.run(req), 250);
+		if (outcome.status !== expected || (outcome.status === "rejected" && !isTypedOwnCause(outcome))) {
+			observed.push(`${name}:${outcome.status}`);
+		}
+		await observeSettlement(harness.runtime.close(), 150);
+	}
+	assert.deepEqual(observed, []);
+});
+
+test("cycle 12 transfers the entire actual pinned Pi session and requires its exact result shape", async () => {
+	const {
+		AuthStorage,
+		DefaultResourceLoader,
+		ModelRegistry,
+		SessionManager,
+		SettingsManager,
+		VERSION,
+		createAgentSession,
+	} = await loadPinnedPiSdk();
+	const { createAssistantMessageEventStream } = await loadPinnedPiAi();
+	const authStorage = AuthStorage.inMemory({});
+	const modelRegistry = ModelRegistry.inMemory(authStorage);
+	const offlineApi = "cycle12-offline-agent-session";
+	let requestedHandoff = "";
+	let streamCalls = 0;
+	let disposeCalls = 0;
+	modelRegistry.registerProvider("openai-codex", {
+		api: offlineApi as never,
+		apiKey: "offline-test-marker",
+		baseUrl: "offline:",
+		streamSimple: () => {
+			streamCalls += 1;
+			const stream = createAssistantMessageEventStream();
+			const initial = assistantMessage("", { content: [], api: offlineApi as PiAssistantMessage["api"] });
+			const terminal = assistantMessage(requestedHandoff, { api: offlineApi as PiAssistantMessage["api"] });
+			stream.push({ type: "start", partial: initial });
+			stream.push({ type: "done", reason: "stop", message: terminal });
+			stream.end();
+			return stream as never;
+		},
+		models: [{
+			id: "gpt-5.6-sol",
+			name: "Cycle 12 offline model",
+			api: offlineApi as never,
+			baseUrl: "offline:",
+			reasoning: true,
+			input: ["text"],
+			cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+			contextWindow: 32_768,
+			maxTokens: 4_096,
+		}],
+	});
+	const model = modelRegistry.find("openai-codex", "gpt-5.6-sol");
+	assert.ok(model);
+	let actualResult: Awaited<ReturnType<typeof createAgentSession>> | undefined;
+	const sdk: AgentSessionRuntimeSdk = {
+		version: VERSION,
+		requiredVersion: "0.80.6",
+		getAgentDir: () => "/tmp/pi-475-cycle12-offline",
+		findModel: () => model as never,
+		hasConfiguredAuth: (candidate) => modelRegistry.hasConfiguredAuth(candidate as never),
+		createSettingsManager: (settings, options) => SettingsManager.inMemory(settings as never, options) as never,
+		createSessionManager: (cwd) => SessionManager.inMemory(cwd) as never,
+		createResourceLoader: (options) => new DefaultResourceLoader(options as never) as never,
+		async createAgentSession(options) {
+			actualResult = await createAgentSession({ ...options, authStorage, modelRegistry });
+			const originalDispose = actualResult.session.dispose.bind(actualResult.session);
+			Object.defineProperty(actualResult.session, "dispose", {
+				configurable: true,
+				value() { disposeCalls += 1; return originalDispose(); },
+			});
+			return actualResult as never;
+		},
+	};
+	const harness = runtime(sdk, { cleanupTimeoutMs: 250 });
+	const req = request({
+		binding: { ...request().binding, runId: "cycle12-real-whole-session", laneId: "cycle12-real-whole-session" },
+	});
+	requestedHandoff = handoffFor(req);
+	const realOutcome = await observeSettlement(harness.runtime.run(req), 1_500);
+	const problems: string[] = [];
+	if (realOutcome.status !== "resolved") problems.push(`real:${realOutcome.status}`);
+	if (!actualResult || streamCalls !== 1) problems.push(`real:stream-${streamCalls}`);
+	if (disposeCalls !== 1) problems.push(`real:dispose-${disposeCalls}`);
+	if (actualResult && Reflect.ownKeys(actualResult).join(",") !== "session,extensionsResult,modelFallbackMessage") {
+		problems.push("real:result-shape");
+	}
+	await observeSettlement(harness.runtime.close(), 250);
+	modelRegistry.unregisterProvider("openai-codex");
+
+	let runtimeTrapCalls = 0;
+	const inertRuntime = new Proxy({}, {
+		get() { runtimeTrapCalls += 1; throw new Error("extension runtime is not authority"); },
+		ownKeys() { runtimeTrapCalls += 1; throw new Error("extension runtime is not evidence data"); },
+	});
+	const inertSdk = new FakeSdk();
+	inertSdk.createAgentSession = (async (options: CreateAgentSessionOptions) => {
+		inertSdk.session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
+		inertSdk.session.activeTools = [...(options.tools as string[])];
+		return {
+			session: inertSdk.session,
+			extensionsResult: { extensions: [], errors: [], runtime: inertRuntime },
+			modelFallbackMessage: undefined,
+		};
+	}) as typeof inertSdk.createAgentSession;
+	const inertHarness = runtime(inertSdk);
+	const inertRequest = request({
+		binding: { ...request().binding, runId: "cycle12-inert-runtime", laneId: "cycle12-inert-runtime" },
+	});
+	inertSdk.session.output = handoffFor(inertRequest);
+	const inertOutcome = await observeSettlement(inertHarness.runtime.run(inertRequest), 200);
+	if (inertOutcome.status !== "resolved") problems.push(`inert:${inertOutcome.status}`);
+	if (runtimeTrapCalls !== 0) problems.push(`inert:traps-${runtimeTrapCalls}`);
+	await observeSettlement(inertHarness.runtime.close(), 100);
+
+	for (const missing of ["modelFallbackMessage", "runtime"] as const) {
+		const fake = new FakeSdk();
+		fake.createAgentSession = (async (options: CreateAgentSessionOptions) => {
+			fake.session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
+			fake.session.activeTools = [...(options.tools as string[])];
+			if (missing === "modelFallbackMessage") {
+				return { session: fake.session, extensionsResult: { extensions: [], errors: [], runtime: {} } } as never;
+			}
+			return {
+				session: fake.session,
+				extensionsResult: { extensions: [], errors: [] },
+				modelFallbackMessage: undefined,
+			} as never;
+		}) as typeof fake.createAgentSession;
+		const missingHarness = runtime(fake);
+		const missingReq = request({
+			binding: { ...request().binding, runId: `cycle12-missing-${missing}`, laneId: `cycle12-missing-${missing}` },
+		});
+		fake.session.output = handoffFor(missingReq);
+		const outcome = await observeSettlement(missingHarness.runtime.run(missingReq), 200);
+		if (!isTypedOwnCause(outcome)) problems.push(`${missing}:${outcome.status}`);
+		await observeSettlement(missingHarness.runtime.close(), 150);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 12 run identity is abort-owned before request and SDK callbacks", async () => {
+	const problems: string[] = [];
+	let requestGetterCalls = 0;
+	const requestHarness = runtime();
+	const accessorRequest = request({
+		binding: { ...request().binding, runId: "cycle12-admission-request", laneId: "cycle12-admission-request" },
+	});
+	Object.defineProperty(accessorRequest, "task", {
+		enumerable: true,
+		get() { requestGetterCalls += 1; return "caller accessor must not run"; },
+	});
+	const requestOutcome = await observeSettlement(requestHarness.runtime.run(accessorRequest), 150);
+	if (!isTypedOwnCause(requestOutcome)) problems.push(`request:${requestOutcome.status}`);
+	if (requestGetterCalls !== 0) problems.push(`request:getter-${requestGetterCalls}`);
+	if (requestHarness.sdk.session.promptCalls !== 0) problems.push("request:prompted");
+	await observeSettlement(requestHarness.runtime.close(), 100);
+
+	const capabilityHarness = runtime();
+	const capability = inspectCapability();
+	let capabilityGetterCalls = 0;
+	let capabilityAbort: Promise<void> | undefined;
+	const capabilityRequest = request({
+		capabilities: [capability],
+		binding: { ...request().binding, runId: "cycle12-admission-capability", laneId: "cycle12-admission-capability" },
+	});
+	Object.defineProperty(capability, "description", {
+		enumerable: true,
+		get() {
+			capabilityGetterCalls += 1;
+			capabilityAbort ??= capabilityHarness.runtime.abort(capabilityRequest.binding.runId);
+			return "bounded typed inspection";
+		},
+	});
+	capabilityHarness.sdk.session.output = handoffFor(capabilityRequest);
+	const capabilityOutcome = await observeSettlement(capabilityHarness.runtime.run(capabilityRequest), 200);
+	if (!isTypedOwnCause(capabilityOutcome)) problems.push(`capability:${capabilityOutcome.status}`);
+	if (capabilityGetterCalls !== 0) problems.push(`capability:getter-${capabilityGetterCalls}`);
+	if (capabilityHarness.sdk.session.promptCalls !== 0) problems.push("capability:prompted");
+	if (capabilityAbort && (await observeSettlement(capabilityAbort, 100)).status !== "resolved") {
+		problems.push("capability:abort-pending");
+	}
+	await observeSettlement(capabilityHarness.runtime.close(), 100);
+
+	for (const seam of ["model", "auth", "setup"] as const) {
+		const sdk = new FakeSdk();
+		const harness = runtime(sdk);
+		const req = request({
+			binding: { ...request().binding, runId: `cycle12-admission-${seam}`, laneId: `cycle12-admission-${seam}` },
+		});
+		let abortPromise: Promise<void> | undefined;
+		const trigger = () => { abortPromise ??= harness.runtime.abort(req.binding.runId); };
+		if (seam === "model") {
+			sdk.findModel = (provider, id) => { trigger(); return { provider, id } as never; };
+		} else if (seam === "auth") {
+			sdk.hasConfiguredAuth = () => { trigger(); return true; };
+		} else {
+			sdk.createResourceLoader = (options) => {
+				trigger();
+				return FakeSdk.prototype.createResourceLoader.call(sdk, options);
+			};
+		}
+		sdk.session.output = handoffFor(req);
+		const outcome = await observeSettlement(harness.runtime.run(req), 250);
+		const abortOutcome = abortPromise ? await observeSettlement(abortPromise, 250) : { status: "missing" as const };
+		if (!isTypedOwnCause(outcome)) problems.push(`${seam}:run-${outcome.status}`);
+		if (abortOutcome.status !== "resolved") problems.push(`${seam}:abort-${abortOutcome.status}`);
+		if (sdk.options !== undefined || sdk.session.promptCalls !== 0) problems.push(`${seam}:work-started`);
+		await observeSettlement(harness.runtime.close(), 150);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 12 assistant content indexes enforce one matching start delta and end phase", async () => {
+	type PhaseCase = { name: string; updates: Array<(session: FakeSession) => void>; expected: "resolved" | "rejected" };
+	const update = (session: FakeSession, type: string, message: PiAssistantMessage, extra: Record<string, unknown>) => {
+		emitSessionEvent(session, {
+			type: "message_update", message, assistantMessageEvent: { type, contentIndex: 0, partial: message, ...extra },
+		} as unknown as AgentSessionEvent);
+	};
+	const emptyText = assistantMessage("");
+	const textA = assistantMessage("a");
+	const emptyThinking = assistantMessage("", { content: [{ type: "thinking", thinking: "" }] });
+	const thinkingA = assistantMessage("", { content: [{ type: "thinking", thinking: "a" }] });
+	const toolEmpty = assistantMessage("", { content: [{
+		type: "toolCall", id: "phase-call", name: "workspace_read", arguments: {}, partialJson: "",
+	}] as unknown as PiAssistantMessage["content"] });
+	const toolDoneBlock = { type: "toolCall" as const, id: "phase-call", name: "workspace_read", arguments: {} };
+	const toolDone = assistantMessage("", { content: [toolDoneBlock] });
+	const cases: PhaseCase[] = [
+		{
+			name: "text-valid",
+			updates: [
+				(session) => update(session, "text_start", emptyText, {}),
+				(session) => update(session, "text_delta", textA, { delta: "a" }),
+				(session) => update(session, "text_end", textA, { content: "a" }),
+			],
+			expected: "resolved",
+		},
+		{
+			name: "thinking-valid",
+			updates: [
+				(session) => update(session, "thinking_start", emptyThinking, {}),
+				(session) => update(session, "thinking_delta", thinkingA, { delta: "a" }),
+				(session) => update(session, "thinking_end", thinkingA, { content: "a" }),
+			],
+			expected: "resolved",
+		},
+		{
+			name: "tool-valid",
+			updates: [
+				(session) => update(session, "toolcall_start", toolEmpty, {}),
+				(session) => update(session, "toolcall_delta", toolEmpty, { delta: "" }),
+				(session) => update(session, "toolcall_end", toolDone, { toolCall: toolDoneBlock }),
+			],
+			expected: "resolved",
+		},
+		{
+			name: "text-delta-before-start",
+			updates: [(session) => update(session, "text_delta", textA, { delta: "a" })],
+			expected: "rejected",
+		},
+		{
+			name: "thinking-duplicate-start",
+			updates: [
+				(session) => update(session, "thinking_start", emptyThinking, {}),
+				(session) => update(session, "thinking_start", emptyThinking, {}),
+			],
+			expected: "rejected",
+		},
+		{
+			name: "tool-delta-after-end",
+			updates: [
+				(session) => update(session, "toolcall_start", toolEmpty, {}),
+				(session) => update(session, "toolcall_end", toolDone, { toolCall: toolDoneBlock }),
+				(session) => update(session, "toolcall_delta", toolEmpty, { delta: "" }),
+			],
+			expected: "rejected",
+		},
+		{
+			name: "kind-replacement",
+			updates: [
+				(session) => update(session, "text_start", emptyText, {}),
+				(session) => update(session, "thinking_start", emptyThinking, {}),
+			],
+			expected: "rejected",
+		},
+	];
+	const problems: string[] = [];
+	for (const spec of cases) {
+		const harness = runtime();
+		const req = request({
+			binding: { ...request().binding, runId: `cycle12-phase-${spec.name}`, laneId: `cycle12-phase-${spec.name}` },
+		});
+		Object.defineProperty(harness.sdk.session, "prompt", {
+			configurable: true,
+			async value() {
+				harness.sdk.session.promptCalls += 1;
+				emitSessionEvent(harness.sdk.session, {
+					type: "message_start", message: assistantMessage("", { content: [] }),
+				} as AgentSessionEvent);
+				for (const emit of spec.updates) emit(harness.sdk.session);
+				const terminal = assistantMessage(handoffFor(req));
+				emitSessionEvent(harness.sdk.session, { type: "message_end", message: terminal } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, {
+					type: "agent_end", messages: [terminal], willRetry: false,
+				} as AgentSessionEvent);
+			},
+		});
+		const outcome = await observeSettlement(harness.runtime.run(req), 200);
+		if (outcome.status !== spec.expected || (outcome.status === "rejected" && !isTypedOwnCause(outcome))) {
+			problems.push(`${spec.name}:${outcome.status}`);
+		}
+		await observeSettlement(harness.runtime.close(), 100);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 12 freezes and unsubscribes capture before idle and disposal callbacks", async () => {
+	const harness = runtime();
+	const req = request({
+		binding: { ...request().binding, runId: "cycle12-capture-freeze", laneId: "cycle12-capture-freeze" },
+	});
+	harness.sdk.session.output = handoffFor(req);
+	const listenerCounts: number[] = [];
+	Object.defineProperty(harness.sdk.session, "waitForIdle", {
+		configurable: true,
+		async value() {
+			harness.sdk.session.waitCalls += 1;
+			listenerCounts.push(harness.sdk.session.listeners.size);
+			emitSessionEvent(harness.sdk.session, { type: "agent_settled" } as AgentSessionEvent);
+		},
+	});
+	Object.defineProperty(harness.sdk.session, "dispose", {
+		configurable: true,
+		value() {
+			harness.sdk.session.disposeCalls += 1;
+			listenerCounts.push(harness.sdk.session.listeners.size);
+			emitSessionEvent(harness.sdk.session, { type: "turn_start" } as AgentSessionEvent);
+		},
+	});
+	const outcome = await observeSettlement(harness.runtime.run(req), 250);
+	await observeSettlement(harness.runtime.close(), 100);
+	assert.deepEqual({
+		status: outcome.status,
+		listenerCounts,
+		abortCalls: harness.sdk.session.abortCalls,
+	}, {
+		status: "resolved",
+		listenerCounts: [0, 0],
+		abortCalls: 0,
+	});
+});
+
+test("cycle 12 projects installed Pi diagnostics with optional undefined fields", async () => {
+	const piAi = await loadPinnedPiAi() as unknown as {
+		createAssistantMessageDiagnostic(type: string, error: unknown, details?: Record<string, unknown>): unknown;
+	};
+	const validDiagnostic = piAi.createAssistantMessageDiagnostic(
+		"provider_transport_failure",
+		new Error("bounded transport fallback"),
+		{
+			configuredTransport: "websocket",
+			fallbackTransport: undefined,
+			eventsEmitted: true,
+			phase: "after_message_stream_start",
+			requestBytes: 475,
+		},
+	);
+	const cases = [
+		["installed", [validDiagnostic], "resolved"],
+		["required-undefined", [{ type: undefined, timestamp: 475 }], "rejected"],
+		["arbitrary-field", [{ type: "bounded", timestamp: 475, arbitrary: true }], "rejected"],
+	] as const;
+	const problems: string[] = [];
+	for (const [name, diagnostics, expected] of cases) {
+		const harness = runtime();
+		const req = request({
+			binding: { ...request().binding, runId: `cycle12-diagnostic-${name}`, laneId: `cycle12-diagnostic-${name}` },
+		});
+		const terminal = assistantMessage(handoffFor(req), { diagnostics: diagnostics as never });
+		Object.defineProperty(harness.sdk.session, "prompt", {
+			configurable: true,
+			async value() {
+				harness.sdk.session.promptCalls += 1;
+				emitSessionEvent(harness.sdk.session, { type: "message_end", message: terminal } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, {
+					type: "agent_end", messages: [terminal], willRetry: false,
+				} as AgentSessionEvent);
+			},
+		});
+		const outcome = await observeSettlement(harness.runtime.run(req), 200);
+		if (outcome.status !== expected || (outcome.status === "rejected" && !isTypedOwnCause(outcome))) {
+			problems.push(`${name}:${outcome.status}`);
+		}
+		await observeSettlement(harness.runtime.close(), 100);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 12 request authority arrays are fresh dense descriptor-captured values", async () => {
+	let callerBehaviorCalls = 0;
+	const readPrefixes = [".pi/extensions/shepherd"];
+	Object.defineProperty(readPrefixes, "join", {
+		configurable: true,
+		value(separator?: string) {
+			callerBehaviorCalls += 1;
+			return Array.prototype.join.call(this, separator);
+		},
+	});
+	Object.freeze(readPrefixes);
+	const harness = runtime();
+	const req = request({
+		authority: { ...request().authority, readPrefixes },
+		binding: { ...request().binding, runId: "cycle12-array-join", laneId: "cycle12-array-join" },
+	});
+	harness.sdk.session.output = handoffFor(req);
+	await observeSettlement(harness.runtime.run(req), 200);
+	await observeSettlement(harness.runtime.close(), 100);
+
+	const iterated = [".pi/extensions/shepherd"];
+	Object.defineProperty(iterated, Symbol.iterator, {
+		configurable: true,
+		value: function* () {
+			callerBehaviorCalls += 1;
+			for (let index = 0; index < 65; index += 1) yield `.planning/cycle12/${index}`;
+		},
+	});
+	const iteratorHarness = runtime();
+	const iteratorRequest = request({
+		authority: { ...request().authority, readPrefixes: iterated },
+		binding: { ...request().binding, runId: "cycle12-array-iterator", laneId: "cycle12-array-iterator" },
+	});
+	const iteratorOutcome = await observeSettlement(iteratorHarness.runtime.run(iteratorRequest), 200);
+	if (!isTypedOwnCause(iteratorOutcome)) callerBehaviorCalls += 1_000;
+	await observeSettlement(iteratorHarness.runtime.close(), 100);
+
+	let outsideReads = 0;
+	const expandingPrefixes = ["allowed"];
+	Object.defineProperty(expandingPrefixes, "some", {
+		configurable: true,
+		value() { callerBehaviorCalls += 1; return true; },
+	});
+	Object.freeze(expandingPrefixes);
+	const policyInput = policyInputForRuntime(false);
+	policyInput.authority.readPrefixes = expandingPrefixes;
+	policyInput.workspace.readText = async () => { outsideReads += 1; return "outside"; };
+	const policy = createToolPolicy(policyInput);
+	const read = policy.tools.find((tool) => tool.name === "workspace_read");
+	assert.ok(read);
+	const outside = await observeSettlement(read.execute("cycle12-outside", { path: "outside/file.txt" }, undefined), 100);
+	if (!isTypedOwnCause(outside)) outsideReads += 1_000;
+	assert.deepEqual({ callerBehaviorCalls, outsideReads }, { callerBehaviorCalls: 0, outsideReads: 0 });
+});
+
+test("cycle 12 native abort state defeats false and throwing signal shadows without leaks", async () => {
+	const problems: string[] = [];
+	for (const owner of ["request", "parent"] as const) {
+		const controller = new AbortController();
+		controller.abort();
+		Object.defineProperty(controller.signal, "aborted", { configurable: true, value: false });
+		const harness = owner === "parent"
+			? runtime(new FakeSdk(), { parentSignal: controller.signal })
+			: runtime();
+		const req = request({
+			...(owner === "request" ? { signal: controller.signal } : {}),
+			binding: { ...request().binding, runId: `cycle12-signal-${owner}`, laneId: `cycle12-signal-${owner}` },
+		});
+		harness.sdk.session.output = handoffFor(req);
+		const outcome = await observeSettlement(harness.runtime.run(req), 200);
+		if (!isTypedOwnCause(outcome)) problems.push(`${owner}:${outcome.status}`);
+		if (harness.sdk.options !== undefined || harness.sdk.session.promptCalls !== 0) problems.push(`${owner}:work-started`);
+		await observeSettlement(harness.runtime.close(), 150);
+		if (getEventListeners(controller.signal, "abort").length !== 0) problems.push(`${owner}:listener-retained`);
+	}
+
+	const throwing = new AbortController();
+	let shadowReads = 0;
+	Object.defineProperty(throwing.signal, "aborted", {
+		configurable: true,
+		get() { shadowReads += 1; throw new Error("token=synthetic-cycle12-signal-shadow-475"); },
+	});
+	let constructed: ShepherdAgentSessionRuntime | undefined;
+	try {
+		constructed = runtime(new FakeSdk(), { parentSignal: throwing.signal }).runtime;
+	} catch {
+		problems.push("throwing:constructor-escaped");
+	}
+	if (constructed) await observeSettlement(constructed.close(), 150);
+	if (shadowReads !== 0) problems.push(`throwing:shadow-reads-${shadowReads}`);
+	if (getEventListeners(throwing.signal, "abort").length !== 0) problems.push("throwing:listener-retained");
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 12 Cookie headers redact in JSON quoted-flow and diagnostic-prefix contexts", async () => {
+	const markers = [
+		"synthetic-cycle12-json-cookie-475",
+		"synthetic-cycle12-json-set-cookie-475",
+		"synthetic-cycle12-prefix-cookie-475",
+	];
+	const payload = [
+		`{\"Cookie\":\"session=${markers[0]}\"}`,
+		`[\"Set-Cookie\": \"auth=${markers[1]}; HttpOnly\"]`,
+		`request headers Cookie: session=${markers[2]}`,
+	].join("\n");
+	const rendered = await renderCycle11Consumers("cycle12-cookie-structured", payload);
+	const harmless = "Cookie policy: number of browser headers processed";
 	assert.deepEqual({
 		leaks: leakedMarkers(rendered, markers),
 		harmless: redactSensitiveText(harmless),
