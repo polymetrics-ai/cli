@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "completed",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": true,
-  "currentCycle": "correction_cycle_6_complete",
+  "verificationPassed": false,
+  "currentCycle": "correction_cycle_7_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -158,15 +158,20 @@
       "cycle": "correction_cycle_6_summary",
       "decision": "local_critical_path",
       "reason": "Cycle 6 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_7_plan",
+      "decision": "local_critical_path",
+      "reason": "The 11 stable-head findings overlap the two issue-owned runtime/redaction modules and consumer tests; a read-only lifecycle sidecar was rejected by the runtime thread cap, so record the complete behavior matrix locally before the single test-only RED."
     }
   ],
   "gates": {
-    "focusedTests": "green_40_passed_0_failed",
-    "fullShepherdTests": "green_177_passed_0_failed",
-    "strictTypeScriptPi0806": "green_focused_and_all_production",
-    "offlineRpcSmoke": "green_pm_shepherd_registered",
-    "diffCheck": "green",
-    "ownedScope": "green_immutable_base_and_issue_owned_paths",
+    "focusedTests": "pending_cycle_7_red_green",
+    "fullShepherdTests": "pending_cycle_7_green",
+    "strictTypeScriptPi0806": "pending_cycle_7_green",
+    "offlineRpcSmoke": "pending_cycle_7_green",
+    "diffCheck": "pending_cycle_7",
+    "ownedScope": "pending_cycle_7_immutable_base_head_and_issue_owned_paths",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

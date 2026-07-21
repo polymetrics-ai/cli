@@ -1,7 +1,8 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 6 complete; every declared Shepherd-only gate passes and Cycle
-5 evidence is superseded.
+Status: stable-head correction Cycle 7 PLAN captured against
+`a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`; production and tests remain frozen pending the one
+complete behavior RED. Cycle 6 is the last green baseline.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -99,3 +100,23 @@ verification now passes at implementation head `93314a54302e84e053ad0d6ff44371fb
 diff, immutable-base, and issue-owned scope checks. Parent orchestration owns fresh independent
 exact-head review and integration; this lane did not invoke Go/connectors, `make verify`,
 runtime-backed services, live GitHub, merge, or review bots.
+
+The combined stable-head campaign at
+<https://github.com/polymetrics-ai/cli/pull/486#issuecomment-5037079867> reports 11 further
+actionable findings. Cycle 7 will prove exception-safe signal-listener cleanup; close-visible
+creation ownership through late resolve, reject, hang, and malformed fulfillment; and complete
+timer/reservation/hook/unhandled-rejection accounting. Successful close may not precede owned late
+work; an uncancellable creation instead causes bounded quarantine rejection.
+
+The redaction matrix covers multiline outer flow state, indented/key-only/continued YAML, numeric
+secrets, Basic and other non-Bearer Authorization values, unmatched quote recovery, Shepherd's
+repository secret aliases, generic PKCS#8, and byte-identical harmless multiline quotes. A compact
+marker payload crosses direct, serialized-prompt, `workspace_read`, typed-capability, and handoff
+summary/finding consumers. Deterministic 25/50/100 KiB padded-flow diagnostics will count all
+scanner character work, including structured-key discovery. The expected test-only RED is 40
+retained passes and 13 independent behavior failures before one architectural correction.
+
+Parent forensics/policy at `2a89142e` is read-only; the immutable base remains
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. This lane will push PLAN, RED, GREEN, and evidence but
+will not run Go/connectors, `make verify`, runtime-backed or live-GitHub checks, review bots, merge,
+or change shared parent artifacts.

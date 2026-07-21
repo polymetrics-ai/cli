@@ -503,3 +503,82 @@
 | Strict TypeScript | pass | focused owned inputs and all Shepherd production source against explicit Pi 0.80.6 types |
 | Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
 | Diff / scope | pass | immutable base retained; all changed paths remain issue #475-owned |
+
+## Cycle 7 — Stable-Head Lifecycle Ownership And Structured Redaction
+
+### PLAN
+
+- Status: captured against frozen candidate
+  `a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45` and immutable base
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; production and tests remain unchanged.
+- Trigger: the combined stable-head campaign comment
+  <https://github.com/polymetrics-ai/cli/pull/486#issuecomment-5037079867> synthesizes 11 actionable
+  findings (8 P1, 3 P2). Parent forensics/policy is read from `2a89142e` without merge or shared-
+  artifact edits.
+- GSD: `scripts/gsd doctor` passes; `scripts/gsd prompt programming-loop ...` remains absent from
+  the healthy 69-command registry, so `manual_gsd_fallback` preserves the required TDD sequence.
+- Skills/policy reloaded: `gsd-programming-loop`, `javascript-testing-patterns`,
+  `typescript-advanced-types`, `architecture-patterns`, `github-issue-first-delivery`, required
+  routing, issue contract, universal runtime loop, Pi adapter, and runtime/Pi guidance.
+- Orchestration: `local_critical_path`; a read-only lifecycle sidecar was attempted but rejected by
+  the four-thread runtime cap, while every finding overlaps the issue-owned runtime/redactor and
+  their tests.
+
+### Required behavior RED
+
+- Status: pending after the PLAN push. Exactly one test-only commit will contain every row; a
+  compile, module, or file-load failure is invalid, and production must remain byte-identical.
+- Expected focused result: 40 retained passes / 13 expected behavior failures.
+- Lifecycle rows (six separate tests):
+  1. throwing external-signal attachment cannot strand the admitted reservation or deadline timer;
+  2. throwing external-signal removal cannot skip scope finish, run release, or close settlement;
+  3. close begun after abandonment waits for late valid creation and exactly-once cleanup;
+  4. close begun after abandonment waits for late creation rejection and then succeeds cleanly;
+  5. a forever-pending creation makes close reject/quarantine within a bound, never falsely pass;
+  6. malformed late fulfillment is validated, consumed, and quarantined without
+     `unhandledRejection`.
+- Every lifecycle row records close outcome, referenced long timers, active reservation outcome,
+  prompt/abort/wait/dispose counts as applicable, and captured unhandled rejections.
+- Redaction rows (seven separate tests): one direct complete secret matrix; one byte-stable harmless
+  multiline-quote control; one each for serialized prompt, `workspace_read`, typed capability, and
+  handoff summary/finding; and one deterministic padded-flow work diagnostic.
+- Secret forms are multiline outer flow, indented assignment, key-only and continued YAML plain
+  scalar, numeric secret, Basic/non-Bearer Authorization, unmatched sensitive quote plus following
+  sibling recovery, repository aliases, and generic PKCS#8. Each consumer aggregates every leaked
+  marker before asserting, so the whole payload is exercised.
+- Complexity inputs are approximately 25/50/100 KiB and combine proportional leading indentation
+  with dense flow assignments. A typed optional diagnostics sink must report nonzero total scanner
+  character work, including key-start discovery, within a constant per byte and near-doubling as
+  size doubles; no timing threshold is allowed.
+
+### GREEN / REFACTOR contract
+
+- Status: blocked on the committed/pushed behavior RED.
+- Runtime architecture: exception-safe listener lease; runtime-owned session-creation terminal
+  records; bounded close join; quarantine on pending/malformed ownership; validation before late
+  session construction; total rejection-consumed continuations.
+- Redactor architecture: persistent structural flow/quote state; indentation-owned YAML
+  continuation; scheme-independent Authorization sensitivity; numeric secret handling; normalized
+  Shepherd alias predicate; generic PKCS#8 recognition; line-bounded unmatched-quote recovery;
+  cached monotonic line/key metadata with complete deterministic work metrics.
+- Preserve every prior lifecycle/redaction invariant and avoid new dependencies or widened
+  authority.
+
+### VERIFY contract
+
+- Focused and complete Shepherd tests, focused and all-production strict TypeScript against pinned
+  Pi 0.80.6, explicit offline Pi RPC, `git diff --check`, immutable-base/head equality, and
+  issue-owned changed paths only.
+- Forbidden in this lane: Go, connector/certification, `make verify`, runtime-backed services,
+  live-GitHub/CI/review-bot mutation, merge, and parent-artifact edits.
+
+## Cycle 7 Gate History
+
+| Checkpoint | Result | Evidence |
+|---|---|---|
+| PLAN | pending push | frozen candidate/base and full 11-finding matrix recorded before tests |
+| RED | pending | one test-only commit; expected 40 passed / 13 behavior failures; production identical |
+| GREEN / REFACTOR | pending | one architectural correction after RED |
+| Focused / full Shepherd | pending | declared phase-equivalent tests only |
+| Strict TypeScript / offline RPC | pending | explicit Pi 0.80.6 inputs and binary |
+| Diff / base / head / scope | pending | immutable base and issue-owned paths only |

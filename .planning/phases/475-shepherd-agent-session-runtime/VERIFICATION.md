@@ -1,5 +1,25 @@
 # Verification — Issue #475
 
+Cycle 7 verification is pending. Planning is frozen against candidate
+`a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`, immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`, and the combined 11-finding stable-head campaign at
+<https://github.com/polymetrics-ai/cli/pull/486#issuecomment-5037079867>. Production and tests remain
+unchanged until the PLAN checkpoint is pushed, then one complete behavior RED must precede the
+architectural correction. The required terminal gates are focused/full Shepherd tests, both pinned
+Pi 0.80.6 strict TypeScript scopes, offline RPC, diff, base/head equality, and issue-owned scope.
+
+The planned lifecycle verification accounts for throwing signal attachment/removal and abandoned
+creation across late resolve, reject, hang, and malformed fulfillment. A successful close cannot
+precede owned late work; an uncancellable create must instead reject/quarantine close within a
+bound. Each row records timers, reservations, cleanup hooks, close outcome, and unhandled
+rejections. The planned redaction verification spans multiline/indented/YAML continuation,
+numeric/Authorization/alias/PKCS#8 forms, unmatched quote recovery, safe multiline quote
+preservation, every direct/prompt/workspace/tool/handoff consumer, and deterministic total scanner
+work for padded 25/50/100 KiB flows.
+
+The remainder of this document is the retained Cycle 6 green baseline and will be superseded only
+after Cycle 7 GREEN/evidence passes.
+
 PR #486 correction Cycle 6 revalidation is complete. The independent-review findings against
 `d918617a19749cd16d6bfcf3d2fee3e5146e7380` are covered by PLAN checkpoint `4f9c5a96`, committed
 test-only RED checkpoint `e8422d53`, and pass at implementation head

@@ -138,3 +138,34 @@
   all-production strict TypeScript against pinned Pi 0.80.6; explicit offline RPC; diff,
   immutable-base, and issue-owned scope checks all pass. No Go, connector, `make verify`,
   runtime-backed, live-GitHub, merge, or review-bot gate was run.
+
+## Stable-Head Correction Cycle 7 Snapshot
+
+- Frozen candidate: `a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; parent policy source: `2a89142e` (read-only).
+- Campaign source: <https://github.com/polymetrics-ai/cli/pull/486#issuecomment-5037079867>, with
+  11 synthesized findings (8 P1, 3 P2).
+- Role/route: correction, `openai-codex/gpt-5.6-sol` with `high` reasoning.
+- Lifecycle objective: exception-safe signal-listener ownership and a close-visible creation
+  terminal registry across late resolve, reject, hang, and malformed fulfillment.
+- Redaction objective: one structured multiline/indent-aware lexer for outer flow state,
+  key-only/continued YAML, numeric values, every Authorization scheme, unmatched quote recovery,
+  repository aliases, generic PKCS#8, and byte-stable harmless multiline quotes.
+- Required RED: 13 independent behavior failures with all existing 40 cases retained; no compile,
+  module, or file-load RED is admissible. Each lifecycle row accounts for timers, reservations,
+  close outcome, cleanup hooks, and unhandled rejections. Shared redaction markers traverse direct,
+  prompt, workspace, typed-tool, and handoff consumers, while padded-flow diagnostics count all
+  scanner work deterministically.
+- Architecture: an exception-safe listener lease plus runtime-owned creation terminal promises;
+  close joins owned work within a bounded deadline and quarantines uncancellable/malformed work.
+  The typed scanner persists only structurally-originated multiline state, owns YAML continuation by
+  indentation, normalizes Shepherd aliases, accepts generic PKCS#8, and advances cached line/key
+  metadata monotonically.
+- Method: recorded manual-GSD PLAN -> one test-only RED -> one architectural GREEN/refactor ->
+  declared verification, with separate pushed checkpoints and production frozen through RED.
+- Execution decision: `local_critical_path`; the attempted read-only lifecycle sidecar was rejected
+  by the runtime thread cap, and the findings overlap the same issue-owned modules.
+- Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`.
+- Verification boundary: focused/full Shepherd, both pinned Pi 0.80.6 strict TypeScript scopes,
+  offline RPC, diff/base/head/scope only. Go/connectors, `make verify`, runtime services,
+  live-GitHub, review bots, parent-artifact changes, and merge remain forbidden.

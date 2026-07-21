@@ -340,3 +340,80 @@ with 33 passes and 7 expected failures; GREEN/refactor was pushed at
 both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-base, and
 issue-owned path gates pass. Fresh independent exact-head review and integration remain
 parent-owned.
+
+## Stable-Head Correction Cycle 7 — `a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`
+
+The combined stable-head campaign recorded 11 actionable findings (8 P1, 3 P2) against PR #486 at
+<https://github.com/polymetrics-ai/cli/pull/486#issuecomment-5037079867>. The immutable comparison
+base remains `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; parent forensics and stable-head policy are read
+from parent commit `2a89142e` without merging that branch or editing its shared artifacts. Cycle 7
+keeps both issue-owned production modules byte-identical until one complete synthesized behavior
+RED is committed and pushed.
+
+### Lifecycle state-and-handle matrix
+
+The lifecycle RED must execute six independent rows rather than rely on file-load, compile, or
+module-missing failures:
+
+| Phase / trigger | Expected ownership invariant | Required accounting |
+|---|---|---|
+| admitted run / external-signal attach throws | the run fails but reservation and scope finalize; close settles | no referenced deadline timer; no stranded active run |
+| admitted run / external-signal removal throws | listener failure cannot skip scope finish or reservation release; close settles | no referenced deadline timer; cleanup remains exactly once |
+| abandoned create / close then late resolve | close cannot report success before the created session is validated and cleaned | prompt 0; abort/wait/dispose 1 each; no unhandled rejection |
+| abandoned create / close then late reject | close waits for terminal creation rejection before successful completion | hooks 0; no timer, reservation, or unhandled-rejection residue |
+| abandoned create / close while create hangs | close is bounded and rejects/quarantines instead of succeeding or hanging | no hooks, referenced timer, or unhandled rejection; later dispatch fails closed |
+| abandoned create / malformed late fulfillment | malformed SDK output is consumed and quarantines close without a detached-chain rejection | hooks 0; exactly one terminal ownership outcome; no unhandled rejection |
+
+The architectural correction will give every admitted run an exception-safe listener lease whose
+finalizer cannot be skipped by an untrusted `AbortSignal` hook. Session creation becomes a tracked
+runtime-owned resource with an explicit terminal promise covering rejection, validation, and late
+cleanup. `close()` joins those ownership records within a bounded close deadline: it succeeds only
+after every owned late operation is terminal, while an uncancellable pending creation produces a
+bounded quarantine rejection and retains a consumed continuation for any eventual result. Late
+fulfillment is validated before session ownership is constructed; all detached continuations are
+total and rejection-consumed.
+
+### Redaction syntax, consumer, preservation, and work matrix
+
+The redaction RED must cover multiline outer flow state, indented assignments, key-only and
+continued YAML plain scalars, numeric sensitive values, Basic and other non-Bearer Authorization
+schemes, unmatched-quote recovery, repository vocabulary aliases, and generic PKCS#8
+`BEGIN PRIVATE KEY` blocks. One harmless multiline quoted scalar containing assignment-shaped
+documentation must remain byte-for-byte identical. A shared compact adversarial payload is checked
+at the direct transformer, serialized prompt, `workspace_read`, typed capability output, and
+handoff summary/finding boundaries; each consumer reports the complete leaked-marker set rather
+than stopping at its first marker.
+
+The correction remains one typed lexical architecture. Scanner state will retain only
+structurally-originated multiline quotes and flow delimiters; ordinary leading quote prose still
+recovers at a line boundary. YAML value ownership uses indentation so key-only and continued plain
+scalars redact their full owned block, while the next sibling remains parseable. Authorization is
+sensitive independent of its authentication scheme, sensitive keys do not treat numeric scalars as
+public, repository aliases use the same normalized vocabulary as Shepherd's existing secret-path
+and environment contracts, and private-key recognition accepts the empty algorithm label used by
+generic PKCS#8. Unmatched sensitive quotes fail closed only for their owned line/block and resume at
+the next structural sibling.
+
+Deterministic diagnostics will count all scanner character work, including structured-key and
+leading-indentation discovery, for proportionally padded 25/50/100 KiB flow inputs. The test asserts
+nonzero bounded near-linear work and approximate doubling, never wall-clock time. The implementation
+will cache or advance line/key metadata monotonically so repeated assignments cannot rescan the same
+padding outside the metric.
+
+Cycle 7 follows PLAN -> one test-only RED -> one architectural GREEN/refactor -> declared verify,
+with each checkpoint committed and pushed. Expected RED is 40 retained passes plus 13 independent
+behavior failures: two signal-listener rows, four creation/close rows, a direct secret matrix, a
+safe multiline preservation control, four serialized consumer rows, and one deterministic padded-
+flow work row. Focused and complete Shepherd tests, both pinned Pi 0.80.6 strict TypeScript scopes,
+offline RPC, diff, immutable-base/head, and issue-owned scope are the only permitted final gates.
+No Go, connector, certification, `make verify`, runtime-backed, live-GitHub, review-bot, merge, or
+parent-artifact command is permitted.
+
+GSD adapter health passes while its 69-command registry still rejects `programming-loop`, so the
+recorded `manual_gsd_fallback` remains active. Required skills reloaded for this cycle are
+`gsd-programming-loop`, `javascript-testing-patterns`, `typescript-advanced-types`,
+`architecture-patterns`, and `github-issue-first-delivery`, plus repository routing, the issue
+contract, universal runtime loop, Pi adapter, and runtime/Pi integration guidance. Execution is
+`local_critical_path`: the attempted read-only lifecycle sidecar was rejected by the four-thread
+runtime cap, and all findings collide in the two issue-owned runtime/redaction modules and their
+consumer tests.
