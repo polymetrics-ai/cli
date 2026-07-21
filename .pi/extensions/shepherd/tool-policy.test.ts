@@ -1406,3 +1406,89 @@ test("cycle 10 capability authority denies sensitive nouns regardless of acquisi
 	}
 	assert.deepEqual(accepted, []);
 });
+
+test("cycle 11 capability authority denies concatenated separated plural and mixed forbidden compounds", () => {
+	const names = [
+		"host_shellcommand",
+		"host_shellcommands",
+		"host_shell_command",
+		"host_execcommand",
+		"host_exec_commands",
+		"host_spawnagent",
+		"host_spawn_agents",
+		"host_agentrunner",
+		"host_agent_runner",
+		"host_recursiveagent",
+		"host_recursive_agents",
+		"host_httppost",
+		"host_http_posts",
+		"host_httpwrite",
+		"host_http_writes",
+		"host_webrequestwrite",
+		"host_web_request_writes",
+		"host_sqlquery",
+		"host_sql_queries",
+		"host_sqlwrite",
+		"host_sql_writes",
+		"host_secretstore_view",
+		"host_secretstoresview",
+		"host_credentialstore",
+		"host_credential_stores",
+		"host_accesstoken",
+		"host_access_tokens",
+		"host_refreshtoken",
+		"host_refresh_tokens",
+		"host_clientsecret",
+		"host_client_secrets",
+		"host_apikey",
+		"host_api_keys",
+		"host_privatekey",
+		"host_private_keys",
+		"host_tokencache",
+		"host_token_caches",
+	];
+	const accepted: string[] = [];
+	for (const readOnly of [true, false]) {
+		for (const name of names) {
+			try {
+				const input = policyInput(readOnly);
+				createToolPolicy({
+					...input,
+					authority: { ...input.authority, capabilityNames: [name] },
+					capabilities: [capability(name)],
+				});
+				accepted.push(`${readOnly ? "read" : "write"}:${name}`);
+			} catch (error) {
+				assert.ok(error instanceof ToolPolicyError, name);
+			}
+		}
+	}
+	assert.deepEqual(accepted, []);
+});
+
+test("cycle 11 workspace reads deny AWS SSO and CLI caches before host callbacks", async () => {
+	const input = policyInput(true, "opaque credential bytes without assignment syntax");
+	input.authority.readPrefixes = ["."];
+	input.authority.writePrefixes = [];
+	const policy = createToolPolicy(input);
+	const read = policy.tools.find((tool) => tool.name === "workspace_read");
+	assert.ok(read);
+	const paths = [
+		".aws/sso/cache/session.json",
+		"nested/.aws/sso/cache/session.json",
+		"nested/.AWS/SSO/CACHE/SESSION.JSON",
+		".aws/cli/cache/session.json",
+		"nested/.aws/cli/cache/session.json",
+		"nested/.AWS/CLI/CACHE/SESSION.JSON",
+	];
+	const accepted: string[] = [];
+	for (const path of paths) {
+		try {
+			await read.execute(`cycle11-path-${accepted.length}`, { path }, undefined);
+			accepted.push(path);
+		} catch (error) {
+			assert.ok(error instanceof ToolPolicyError, path);
+		}
+	}
+	assert.deepEqual({ accepted, reads: input.workspace.reads }, { accepted: [], reads: [] });
+});

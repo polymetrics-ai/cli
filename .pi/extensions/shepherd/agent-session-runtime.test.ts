@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { getEventListeners } from "node:events";
+import { dirname, join } from "node:path";
 import test from "node:test";
+import { pathToFileURL } from "node:url";
 
 import type {
 	AgentSessionEvent,
@@ -15,10 +17,52 @@ import {
 	type RuntimeAgentSession,
 } from "./agent-session-runtime.ts";
 import { routeForRole } from "./role-prompts.ts";
-import type { HostCapability, ScopedWorkspace } from "./tool-policy.ts";
+import {
+	createToolPolicy,
+	redactSensitiveText,
+	type HostCapability,
+	type ScopedWorkspace,
+} from "./tool-policy.ts";
 
 const HEAD = "a".repeat(40);
 const NONCE = "nonce-issue-475-abcdef";
+
+async function loadPinnedPiSdk(): Promise<typeof import("@earendil-works/pi-coding-agent")> {
+	const prefix = dirname(dirname(process.execPath));
+	const modulePath = join(
+		prefix,
+		"lib/node_modules/@earendil-works/pi-coding-agent/dist/index.js",
+	);
+	return import(pathToFileURL(modulePath).href);
+}
+
+type MessageEndEvent = Extract<AgentSessionEvent, { type: "message_end" }>;
+type PiAssistantMessage = Extract<MessageEndEvent["message"], { role: "assistant" }>;
+
+function assistantMessage(
+	text: string,
+	overrides: Partial<PiAssistantMessage> = {},
+): PiAssistantMessage {
+	const usage: PiAssistantMessage["usage"] = {
+		input: 0,
+		output: 0,
+		cacheRead: 0,
+		cacheWrite: 0,
+		totalTokens: 0,
+		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
+	};
+	return {
+		role: "assistant",
+		content: [{ type: "text", text }],
+		api: "openai-codex-responses",
+		provider: "openai-codex",
+		model: "gpt-5.6-sol",
+		usage,
+		stopReason: "stop",
+		timestamp: 475,
+		...overrides,
+	};
+}
 
 function workspace(): ScopedWorkspace {
 	return {
@@ -44,6 +88,21 @@ function inspectCapability(): HostCapability {
 		async execute() {
 			return { status: "ok", summary: "inspection complete", references: [] };
 		},
+	};
+}
+
+function policyInputForRuntime(readOnly: boolean) {
+	const req = request();
+	return {
+		readOnly,
+		workspace: req.workspace,
+		authority: {
+			workspaceId: req.authority.workspaceId,
+			readPrefixes: [...req.authority.readPrefixes],
+			writePrefixes: readOnly ? [] : [...req.authority.writePrefixes],
+			capabilityNames: ["host_inspect"],
+		},
+		capabilities: [inspectCapability()],
 	};
 }
 
@@ -3384,4 +3443,763 @@ test("cycle 10 rejects original handoff controls even when another substring is 
 		}
 	}
 	assert.deepEqual(accepted, []);
+});
+
+test("cycle 11 accepts the real Pi 0.80.6 factory result without extension-runtime authority", async () => {
+	const {
+		AuthStorage,
+		DefaultResourceLoader,
+		ModelRegistry,
+		SessionManager,
+		SettingsManager,
+		VERSION,
+		createAgentSession,
+	} = await loadPinnedPiSdk();
+	const cwd = process.cwd();
+	const authStorage = AuthStorage.inMemory({});
+	const modelRegistry = ModelRegistry.inMemory(authStorage);
+	const settingsManager = SettingsManager.inMemory({
+		packages: [], extensions: [], skills: [], prompts: [], themes: [],
+		compaction: { enabled: false }, retry: { enabled: false },
+	}, { projectTrusted: false });
+	const sessionManager = SessionManager.inMemory(cwd);
+	const resourceLoader = new DefaultResourceLoader({
+		cwd,
+		agentDir: "/tmp/pi-475-cycle11-contract",
+		settingsManager,
+		noExtensions: true,
+		noSkills: true,
+		noPromptTemplates: true,
+		noThemes: true,
+		noContextFiles: true,
+	});
+	await resourceLoader.reload();
+	const actual = await createAgentSession({
+		cwd,
+		agentDir: "/tmp/pi-475-cycle11-contract",
+		authStorage,
+		modelRegistry,
+		settingsManager,
+		sessionManager,
+		resourceLoader,
+		noTools: "all",
+		tools: [],
+		customTools: [],
+	});
+	try {
+		const sdk = new FakeSdk();
+		sdk.createAgentSession = async (options) => {
+			sdk.options = options as unknown as Record<string, unknown>;
+			sdk.session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
+			sdk.session.activeTools = [...(options.tools as string[])];
+			return {
+				session: sdk.session,
+				extensionsResult: actual.extensionsResult,
+				modelFallbackMessage: undefined,
+			};
+		};
+		const harness = runtime(sdk);
+		const req = request({
+			binding: { ...request().binding, runId: "cycle11-real-pi-result", laneId: "cycle11-real-pi-result" },
+		});
+		sdk.session.output = handoffFor(req);
+		const outcome = await observeSettlement(harness.runtime.run(req), 200);
+		const runtimeDescriptor = Object.getOwnPropertyDescriptor(actual.extensionsResult, "runtime");
+		assert.deepEqual({
+			version: VERSION,
+			creationKeys: Reflect.ownKeys(actual),
+			extensionKeys: Reflect.ownKeys(actual.extensionsResult),
+			sameLoaderResult: actual.extensionsResult === resourceLoader.getExtensions(),
+			runtimeDescriptor: runtimeDescriptor && "value" in runtimeDescriptor
+				? [runtimeDescriptor.enumerable, runtimeDescriptor.get, runtimeDescriptor.set]
+				: undefined,
+			outcome: outcome.status,
+			promptCalls: sdk.session.promptCalls,
+		}, {
+			version: "0.80.6",
+			creationKeys: ["session", "extensionsResult", "modelFallbackMessage"],
+			extensionKeys: ["extensions", "errors", "runtime"],
+			sameLoaderResult: true,
+			runtimeDescriptor: [true, undefined, undefined],
+			outcome: "resolved",
+			promptCalls: 1,
+		});
+		await observeSettlement(harness.runtime.close(), 100);
+	} finally {
+		await Promise.resolve(actual.session.dispose());
+	}
+});
+
+test("cycle 11 signal leases invoke only canonical native EventTarget operations", async () => {
+	const problems: string[] = [];
+	for (const owner of ["request", "parent"] as const) {
+		const controller = new AbortController();
+		let addCalls = 0;
+		let removeCalls = 0;
+		let capturedListener: EventListenerOrEventListenerObject | undefined;
+		Object.defineProperty(controller.signal, "addEventListener", {
+			configurable: true,
+			value(type: string, listener: EventListenerOrEventListenerObject) {
+				addCalls += 1;
+				capturedListener = listener;
+				EventTarget.prototype.addEventListener.call(this, type, listener, { capture: true });
+			},
+		});
+		Object.defineProperty(controller.signal, "removeEventListener", {
+			configurable: true,
+			value() { removeCalls += 1; },
+		});
+		try {
+			const harness = owner === "parent"
+				? runtime(new FakeSdk(), { parentSignal: controller.signal })
+				: runtime();
+			if (owner === "request") {
+				const req = request({
+					signal: controller.signal,
+					binding: { ...request().binding, runId: "cycle11-native-request", laneId: "cycle11-native-request" },
+				});
+				harness.sdk.session.output = handoffFor(req);
+				await observeSettlement(harness.runtime.run(req), 100);
+			}
+			await observeSettlement(harness.runtime.close(), 100);
+			if (addCalls !== 0) problems.push(`${owner}:shadow-add-${addCalls}`);
+			if (removeCalls !== 0) problems.push(`${owner}:shadow-remove-${removeCalls}`);
+			if (getEventListeners(controller.signal, "abort").length !== 0) problems.push(`${owner}:listener-retained`);
+		} finally {
+			if (capturedListener) {
+				EventTarget.prototype.removeEventListener.call(controller.signal, "abort", capturedListener, { capture: true });
+			}
+		}
+	}
+
+	const throwing = new AbortController();
+	let throwingHookCalls = 0;
+	Object.defineProperties(throwing.signal, {
+		addEventListener: {
+			configurable: true,
+			value() { throwingHookCalls += 1; throw new Error("shadow add must not execute"); },
+		},
+		removeEventListener: {
+			configurable: true,
+			value() { throwingHookCalls += 1; throw new Error("shadow remove must not execute"); },
+		},
+	});
+	let constructed: ShepherdAgentSessionRuntime | undefined;
+	try {
+		constructed = runtime(new FakeSdk(), { parentSignal: throwing.signal }).runtime;
+	} catch {
+		problems.push("constructor:shadow-hook-escaped");
+	}
+	if (constructed) await observeSettlement(constructed.close(), 100);
+	if (throwingHookCalls !== 0) problems.push(`constructor:shadow-calls-${throwingHookCalls}`);
+	if (getEventListeners(throwing.signal, "abort").length !== 0) problems.push("constructor:listener-retained");
+
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 11 run-ID abort settles associated creation ownership before terminal success", async () => {
+	const problems: string[] = [];
+
+	const resolvingSdk = new FakeSdk();
+	const resolvingCreation = deferredValue<RuntimeCreationResult>();
+	installDeferredCreation(resolvingSdk, resolvingCreation);
+	const resolvingHarness = runtime(resolvingSdk, { cleanupTimeoutMs: 15 });
+	const resolvingRequest = request({
+		timeoutMs: 500,
+		binding: { ...request().binding, runId: "cycle11-abort-resolve", laneId: "cycle11-abort-resolve" },
+	});
+	const resolvingRun = resolvingHarness.runtime.run(resolvingRequest);
+	await waitUntil(() => resolvingSdk.options !== undefined);
+	const resolvingAbort = resolvingHarness.runtime.abort(resolvingRequest.binding.runId);
+	const beforeResolve = await observeSettlement(resolvingAbort, 5);
+	if (beforeResolve.status !== "pending") problems.push(`resolve:abort-${beforeResolve.status}-before-ownership`);
+	resolvingCreation.resolve({
+		session: resolvingSdk.session,
+		extensionsResult: { extensions: [], errors: [], runtime: {} },
+	} as unknown as RuntimeCreationResult);
+	const afterResolve = await observeSettlement(resolvingAbort, 100);
+	await observeSettlement(resolvingRun, 100);
+	if (afterResolve.status !== "resolved") problems.push(`resolve:abort-${afterResolve.status}`);
+	if (resolvingSdk.session.promptCalls !== 0) problems.push("resolve:prompted-after-abort");
+	if (resolvingSdk.session.disposeCalls !== 1) problems.push(`resolve:dispose-${resolvingSdk.session.disposeCalls}`);
+	await observeSettlement(resolvingHarness.runtime.close(), 100);
+
+	const rejectingSdk = new FakeSdk();
+	const rejectingCreation = deferredValue<RuntimeCreationResult>();
+	installDeferredCreation(rejectingSdk, rejectingCreation);
+	const rejectingHarness = runtime(rejectingSdk, { cleanupTimeoutMs: 15 });
+	const rejectingRequest = request({
+		timeoutMs: 500,
+		binding: { ...request().binding, runId: "cycle11-abort-reject", laneId: "cycle11-abort-reject" },
+	});
+	const rejectingRun = rejectingHarness.runtime.run(rejectingRequest);
+	await waitUntil(() => rejectingSdk.options !== undefined);
+	const rejectingAbort = rejectingHarness.runtime.abort(rejectingRequest.binding.runId);
+	rejectingCreation.reject(new Error("synthetic creation rejection"));
+	if ((await observeSettlement(rejectingAbort, 100)).status !== "resolved") problems.push("reject:abort-not-terminal");
+	await observeSettlement(rejectingRun, 100);
+	await observeSettlement(rejectingHarness.runtime.close(), 100);
+
+	const pendingSdk = new FakeSdk();
+	pendingSdk.blockCreate();
+	const pendingHarness = runtime(pendingSdk, { cleanupTimeoutMs: 12 });
+	const pendingRequest = request({
+		timeoutMs: 500,
+		binding: { ...request().binding, runId: "cycle11-abort-pending", laneId: "cycle11-abort-pending" },
+	});
+	const pendingRun = pendingHarness.runtime.run(pendingRequest);
+	await waitUntil(() => pendingSdk.options !== undefined);
+	const repeated = await Promise.all([
+		observeSettlement(pendingHarness.runtime.abort(pendingRequest.binding.runId), 100),
+		observeSettlement(pendingHarness.runtime.abort(pendingRequest.binding.runId), 100),
+	]);
+	for (const [index, outcome] of repeated.entries()) {
+		if (!isTypedOwnCause(outcome) || !/pending|terminal|join/i.test(rejectionMessage(outcome))) {
+			problems.push(`pending:abort-${index}-${outcome.status}`);
+		}
+	}
+	await observeSettlement(pendingRun, 100);
+	const quarantine = await observeSettlement(pendingHarness.runtime.run(request({
+		binding: { ...request().binding, runId: "cycle11-abort-quarantine", laneId: "cycle11-abort-quarantine" },
+	})), 100);
+	if (!isTypedOwnCause(quarantine)) problems.push(`pending:quarantine-${quarantine.status}`);
+	await observeSettlement(pendingHarness.runtime.close(), 100);
+
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 11 run admission and close are linearizable across re-entrant callbacks", async () => {
+	type Probe = "request" | "capability" | "model" | "auth" | "setup";
+	const problems: string[] = [];
+	for (const probe of ["request", "capability", "model", "auth", "setup"] as const satisfies readonly Probe[]) {
+		const sdk = new FakeSdk();
+		const harness = runtime(sdk);
+		let closePromise: Promise<void> | undefined;
+		const close = () => { closePromise ??= harness.runtime.close(); };
+		let req = request({
+			binding: { ...request().binding, runId: `cycle11-reentrant-${probe}`, laneId: `cycle11-reentrant-${probe}` },
+		});
+		if (probe === "request") {
+			Object.defineProperty(req, "task", { enumerable: true, configurable: true, get() { close(); return "owned task"; } });
+		}
+		if (probe === "capability") {
+			const host = inspectCapability();
+			Object.defineProperty(host, "description", {
+				enumerable: true, configurable: true, get() { close(); return "typed inspection"; },
+			});
+			req = request({
+				capabilities: [host],
+				binding: { ...req.binding },
+			});
+		}
+		if (probe === "model") {
+			sdk.findModel = (provider, model) => { close(); return { provider, id: model } as never; };
+		}
+		if (probe === "auth") {
+			sdk.hasConfiguredAuth = () => { close(); return true; };
+		}
+		if (probe === "setup") {
+			sdk.createResourceLoader = (options) => {
+				close();
+				return FakeSdk.prototype.createResourceLoader.call(sdk, options);
+			};
+		}
+		sdk.session.output = handoffFor(req);
+		await observeSettlement(harness.runtime.run(req), 150);
+		if (closePromise) await observeSettlement(closePromise, 150);
+		if (sdk.options !== undefined) problems.push(`${probe}:created-after-close`);
+		if (sdk.session.promptCalls !== 0) problems.push(`${probe}:prompted-after-close`);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 11 Pi streams account actual monotonic state for every content family", async () => {
+	type StreamCase = {
+		name: string;
+		emit(session: FakeSession, initial: PiAssistantMessage): void;
+	};
+	const emit = (session: FakeSession, event: AgentSessionEvent): void => {
+		for (const listener of session.listeners) listener(event);
+	};
+	const huge = "x".repeat(20_000);
+	const dishonest: StreamCase[] = [
+		{
+			name: "tiny-claimed-delta",
+			emit(session, initial) {
+				const partial = assistantMessage(huge);
+				emit(session, {
+					type: "message_update", message: partial,
+					assistantMessageEvent: { type: "text_delta", contentIndex: 0, delta: "x", partial },
+				} as AgentSessionEvent);
+			},
+		},
+		{
+			name: "message-partial-mismatch",
+			emit(session) {
+				const message = assistantMessage("left");
+				const partial = assistantMessage("right");
+				emit(session, {
+					type: "message_update", message,
+					assistantMessageEvent: { type: "text_delta", contentIndex: 0, delta: "right", partial },
+				} as AgentSessionEvent);
+			},
+		},
+		{
+			name: "end-only-oversize",
+			emit(session) {
+				const partial = assistantMessage(huge);
+				emit(session, {
+					type: "message_update", message: partial,
+					assistantMessageEvent: { type: "text_end", contentIndex: 0, content: huge, partial },
+				} as AgentSessionEvent);
+			},
+		},
+		{
+			name: "shrink-replacement",
+			emit(session) {
+				const grown = assistantMessage("abcdef");
+				emit(session, {
+					type: "message_update", message: grown,
+					assistantMessageEvent: { type: "text_delta", contentIndex: 0, delta: "abcdef", partial: grown },
+				} as AgentSessionEvent);
+				const shrunk = assistantMessage("a");
+				emit(session, {
+					type: "message_update", message: shrunk,
+					assistantMessageEvent: { type: "text_delta", contentIndex: 0, delta: "", partial: shrunk },
+				} as AgentSessionEvent);
+			},
+		},
+		{
+			name: "skipped-content-index",
+			emit(session) {
+				const partial = assistantMessage("unexpected", {
+					content: [{ type: "text", text: "unexpected" }],
+				});
+				emit(session, {
+					type: "message_update", message: partial,
+					assistantMessageEvent: { type: "text_delta", contentIndex: 3, delta: "unexpected", partial },
+				} as AgentSessionEvent);
+			},
+		},
+		{
+			name: "tool-end-oversize",
+			emit(session) {
+				const toolCall = { type: "toolCall" as const, id: "call-475", name: "workspace_read", arguments: { path: huge } };
+				const partial = assistantMessage("", { content: [toolCall] });
+				emit(session, {
+					type: "message_update", message: partial,
+					assistantMessageEvent: { type: "toolcall_end", contentIndex: 0, toolCall, partial },
+				} as AgentSessionEvent);
+			},
+		},
+	];
+	const accepted: string[] = [];
+
+	const runStream = async (name: string, stream: (session: FakeSession, initial: PiAssistantMessage) => void): Promise<PromiseOutcome> => {
+		const harness = runtime(new FakeSdk(), { maxEventBytes: 4_096, maxAssistantBytes: 64 * 1024 });
+		const req = request({ binding: { ...request().binding, runId: `cycle11-stream-${name}`, laneId: `cycle11-stream-${name}` } });
+		const handoff = handoffFor(req);
+		Object.defineProperty(harness.sdk.session, "prompt", {
+			configurable: true,
+			async value() {
+				harness.sdk.session.promptCalls += 1;
+				const initial = assistantMessage("");
+				emit(harness.sdk.session, { type: "message_start", message: initial } as AgentSessionEvent);
+				stream(harness.sdk.session, initial);
+				const terminal = assistantMessage(handoff);
+				emit(harness.sdk.session, { type: "message_end", message: terminal } as AgentSessionEvent);
+				emit(harness.sdk.session, { type: "agent_end", messages: [terminal], willRetry: false } as AgentSessionEvent);
+			},
+		});
+		const outcome = await observeSettlement(harness.runtime.run(req), 200);
+		await observeSettlement(harness.runtime.close(), 100);
+		return outcome;
+	};
+
+	const honest = await runStream("honest", (session) => {
+		const start = assistantMessage("");
+		emit(session, {
+			type: "message_update", message: start,
+			assistantMessageEvent: { type: "text_start", contentIndex: 0, partial: start },
+		} as AgentSessionEvent);
+		const grown = assistantMessage("linear");
+		emit(session, {
+			type: "message_update", message: grown,
+			assistantMessageEvent: { type: "text_delta", contentIndex: 0, delta: "linear", partial: grown },
+		} as AgentSessionEvent);
+		emit(session, {
+			type: "message_update", message: grown,
+			assistantMessageEvent: { type: "text_end", contentIndex: 0, content: "linear", partial: grown },
+		} as AgentSessionEvent);
+	});
+	for (const spec of dishonest) {
+		const outcome = await runStream(spec.name, spec.emit);
+		if (outcome.status === "resolved") accepted.push(spec.name);
+		else if (!isTypedOwnCause(outcome)) accepted.push(`${spec.name}:untyped`);
+	}
+	assert.deepEqual({ honest: honest.status, accepted }, { honest: "resolved", accepted: [] });
+});
+
+test("cycle 11 terminal events form one ordered pair with complete assistant identity", async () => {
+	type TerminalCase = { name: string; emit(session: FakeSession, left: PiAssistantMessage, right: PiAssistantMessage): void };
+	const emit = (session: FakeSession, event: AgentSessionEvent): void => {
+		for (const listener of session.listeners) listener(event);
+	};
+	const cases: TerminalCase[] = [
+		{
+			name: "duplicate-message-end",
+			emit(session, left) {
+				emit(session, { type: "message_end", message: left } as AgentSessionEvent);
+				emit(session, { type: "message_end", message: left } as AgentSessionEvent);
+				emit(session, { type: "agent_end", messages: [left], willRetry: false } as AgentSessionEvent);
+			},
+		},
+		{
+			name: "out-of-order",
+			emit(session, left) {
+				emit(session, { type: "agent_end", messages: [left], willRetry: false } as AgentSessionEvent);
+				emit(session, { type: "message_end", message: left } as AgentSessionEvent);
+			},
+		},
+		{
+			name: "post-terminal",
+			emit(session, left) {
+				emit(session, { type: "message_end", message: left } as AgentSessionEvent);
+				emit(session, { type: "agent_end", messages: [left], willRetry: false } as AgentSessionEvent);
+				emit(session, { type: "message_end", message: left } as AgentSessionEvent);
+			},
+		},
+		{
+			name: "single-field-mismatch",
+			emit(session, left, right) {
+				emit(session, { type: "message_end", message: left } as AgentSessionEvent);
+				emit(session, { type: "agent_end", messages: [right], willRetry: false } as AgentSessionEvent);
+			},
+		},
+	];
+	const mismatchBuilders: Array<[string, (base: PiAssistantMessage) => PiAssistantMessage]> = [
+		["usage", (base) => ({ ...base, usage: { ...base.usage, output: base.usage.output + 1 } })],
+		["response", (base) => ({ ...base, responseId: "different-response" })],
+		["diagnostics", (base) => ({ ...base, diagnostics: [{ type: "different", timestamp: 476 }] })],
+		["error", (base) => ({ ...base, errorMessage: "different error evidence" })],
+		["thinking", (base) => ({ ...base, content: [
+			...base.content,
+			{ type: "thinking", thinking: "different", thinkingSignature: "sig-right", redacted: false },
+		] })],
+		["tool", (base) => ({ ...base, content: [
+			...base.content,
+			{ type: "toolCall", id: "call-475", name: "workspace_read", arguments: { path: "right" }, thoughtSignature: "sig" },
+		] })],
+	];
+	const accepted: string[] = [];
+
+	const execute = async (name: string, spec: TerminalCase, mutate?: (base: PiAssistantMessage) => PiAssistantMessage): Promise<PromiseOutcome> => {
+		const harness = runtime();
+		const req = request({ binding: { ...request().binding, runId: `cycle11-terminal-${name}`, laneId: `cycle11-terminal-${name}` } });
+		const left = assistantMessage(handoffFor(req), {
+			responseModel: "gpt-5.6-sol",
+			responseId: "response-475",
+			diagnostics: [{ type: "bounded", timestamp: 475, details: { phase: "terminal" } }],
+			content: [
+				{ type: "text", text: handoffFor(req), textSignature: "text-signature" },
+				{ type: "thinking", thinking: "bounded", thinkingSignature: "thinking-signature", redacted: false },
+				{ type: "toolCall", id: "call-475", name: "workspace_read", arguments: { path: "left" }, thoughtSignature: "thought-signature" },
+			],
+		});
+		const right = mutate ? mutate(left) : left;
+		Object.defineProperty(harness.sdk.session, "prompt", {
+			configurable: true,
+			async value() { harness.sdk.session.promptCalls += 1; spec.emit(harness.sdk.session, left, right); },
+		});
+		const outcome = await observeSettlement(harness.runtime.run(req), 150);
+		await observeSettlement(harness.runtime.close(), 100);
+		return outcome;
+	};
+
+	for (const spec of cases.slice(0, 3)) {
+		const outcome = await execute(spec.name, spec);
+		if (outcome.status === "resolved") accepted.push(spec.name);
+	}
+	const mismatchCase = cases[3]!;
+	for (const [name, mutate] of mismatchBuilders) {
+		const outcome = await execute(name, mismatchCase, mutate);
+		if (outcome.status === "resolved") accepted.push(name);
+	}
+	const missingRequired = await execute("missing-required", mismatchCase, (base) => {
+		const copy = { ...base } as Partial<PiAssistantMessage>;
+		delete copy.api;
+		delete copy.usage;
+		return copy as PiAssistantMessage;
+	});
+	if (missingRequired.status === "resolved") accepted.push("missing-required");
+
+	assert.deepEqual(accepted, []);
+});
+
+test("cycle 11 fixed envelopes and arbitrary JSON avoid whole-source key materialization", async () => {
+	const originalOwnKeys = Reflect.ownKeys;
+	const visits = new Map<object, number>();
+	const watch = <T extends object>(value: T): T => { visits.set(value, 0); return value; };
+	Reflect.ownKeys = ((target: object) => {
+		const keys = originalOwnKeys(target);
+		if (visits.has(target)) visits.set(target, (visits.get(target) ?? 0) + keys.length);
+		return keys;
+	}) as typeof Reflect.ownKeys;
+	const outcomes: string[] = [];
+	try {
+		const properties = watch(Object.create(null) as Record<PropertyKey, unknown>);
+		for (let index = 0; index < 2_000; index += 1) {
+			Object.defineProperty(properties, `hidden${index}`, { value: { type: "string" } });
+		}
+		const schemaInput = policyInputForRuntime(false);
+		schemaInput.authority.capabilityNames = ["host_inspect"];
+		schemaInput.capabilities = [{
+			...inspectCapability(),
+			parameters: { type: "object", additionalProperties: false, properties, required: [] },
+		}];
+		try { createToolPolicy(schemaInput); outcomes.push("schema:resolved"); } catch { outcomes.push("schema:rejected"); }
+
+		const eventHarness = runtime();
+		const eventRequest = request({ binding: { ...request().binding, runId: "cycle11-hidden-event", laneId: "cycle11-hidden-event" } });
+		const hiddenEvent = watch({ type: "message_end", message: assistantMessage(handoffFor(eventRequest)) } as Record<PropertyKey, unknown>);
+		for (let index = 0; index < 2_000; index += 1) Object.defineProperty(hiddenEvent, `hidden${index}`, { value: true });
+		Object.defineProperty(eventHarness.sdk.session, "prompt", {
+			configurable: true,
+			async value() {
+				eventHarness.sdk.session.promptCalls += 1;
+				for (const listener of eventHarness.sdk.session.listeners) listener(hiddenEvent as AgentSessionEvent);
+				const terminal = hiddenEvent.message as PiAssistantMessage;
+				for (const listener of eventHarness.sdk.session.listeners) listener({ type: "agent_end", messages: [terminal], willRetry: false } as AgentSessionEvent);
+			},
+		});
+		outcomes.push(`event:${(await observeSettlement(eventHarness.runtime.run(eventRequest), 150)).status}`);
+		await observeSettlement(eventHarness.runtime.close(), 100);
+
+		for (const boundary of ["creation", "extensions", "extension-array", "tool-array"] as const) {
+			const sdk = new FakeSdk();
+			const creation = watch({
+				session: sdk.session,
+				extensionsResult: { extensions: [], errors: [] },
+				modelFallbackMessage: undefined,
+			} as Record<PropertyKey, unknown>);
+			if (boundary === "creation") {
+				for (let index = 0; index < 2_000; index += 1) Object.defineProperty(creation, `hidden${index}`, { value: true });
+			}
+			if (boundary === "extensions") {
+				const extensionResult = watch(creation.extensionsResult as Record<PropertyKey, unknown>);
+				for (let index = 0; index < 2_000; index += 1) Object.defineProperty(extensionResult, `hidden${index}`, { value: true });
+			}
+			if (boundary === "extension-array") {
+				const extensions = watch((creation.extensionsResult as { extensions: unknown[] }).extensions);
+				for (let index = 0; index < 2_000; index += 1) Object.defineProperty(extensions, Symbol(`hidden${index}`), { value: true });
+			}
+			if (boundary === "tool-array") {
+				const names = watch(["workspace_read", "workspace_edit", "workspace_write", "host_inspect"]);
+				for (let index = 0; index < 2_000; index += 1) Object.defineProperty(names, Symbol(`hidden${index}`), { value: true });
+				Object.defineProperty(sdk.session, "getActiveToolNames", { configurable: true, value() { return names; } });
+			}
+			sdk.createAgentSession = async (options) => {
+				sdk.options = options as unknown as Record<string, unknown>;
+				sdk.session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
+				if (boundary !== "tool-array") sdk.session.activeTools = [...(options.tools as string[])];
+				return creation as unknown as RuntimeCreationResult;
+			};
+			const harness = runtime(sdk);
+			const req = request({ binding: { ...request().binding, runId: `cycle11-hidden-${boundary}`, laneId: `cycle11-hidden-${boundary}` } });
+			sdk.session.output = handoffFor(req);
+			outcomes.push(`${boundary}:${(await observeSettlement(harness.runtime.run(req), 150)).status}`);
+			await observeSettlement(harness.runtime.close(), 100);
+		}
+
+		const resultInput = policyInputForRuntime(false);
+		const mutation = watch({ changed: true, summary: "bounded" } as Record<PropertyKey, unknown>);
+		const capabilityResult = watch({ status: "ok", summary: "bounded", references: [] } as Record<PropertyKey, unknown>);
+		for (let index = 0; index < 2_000; index += 1) {
+			Object.defineProperty(mutation, `hidden${index}`, { value: true });
+			Object.defineProperty(capabilityResult, Symbol(`hidden${index}`), { value: true });
+		}
+		resultInput.workspace.editText = async () => mutation as never;
+		resultInput.capabilities = [{ ...inspectCapability(), async execute() { return capabilityResult as never; } }];
+		resultInput.authority.capabilityNames = ["host_inspect"];
+		const policy = createToolPolicy(resultInput);
+		const edit = policy.tools.find((tool) => tool.name === "workspace_edit")!;
+		const host = policy.tools.find((tool) => tool.name === "host_inspect")!;
+		outcomes.push(`mutation:${(await observeSettlement(edit.execute("cycle11-hidden-mutation", {
+			path: ".pi/extensions/shepherd/agent-session-runtime.ts", oldText: "a", newText: "b",
+		}, undefined), 100)).status}`);
+		outcomes.push(`capability:${(await observeSettlement(host.execute("cycle11-hidden-capability", { target: "owned" }, undefined), 100)).status}`);
+	} finally {
+		Reflect.ownKeys = originalOwnKeys;
+	}
+	const materialized = [...visits.values()];
+	assert.deepEqual({
+		allResolved: outcomes.every((entry) => entry.endsWith(":resolved")),
+		maximumMaterialized: Math.max(0, ...materialized),
+	}, { allResolved: true, maximumMaterialized: 0 });
+});
+
+test("cycle 11 failure normalization is total and incrementally bounds aggregate iterators", async () => {
+	const problems: string[] = [];
+	const proxyMarker = "synthetic-cycle11-proxy-token-475";
+	const hostileProxy = new Proxy({}, {
+		getPrototypeOf() { throw new Error(`token=${proxyMarker}`); },
+	}) as unknown;
+	const proxySdk = new FakeSdk();
+	proxySdk.findModel = () => { throw hostileProxy; };
+	const proxyOutcome = await observeSettlement(runtime(proxySdk).runtime.run(request()), 100);
+	if (!isTypedOwnCause(proxyOutcome)) problems.push(`proxy:${proxyOutcome.status}:untyped`);
+	if (errorMessages(proxyOutcome.status === "rejected" ? proxyOutcome.reason : undefined)
+		.some((message) => message.includes(proxyMarker))) problems.push("proxy:marker");
+
+	let nextCalls = 0;
+	let returnCalls = 0;
+	const aggregateMarker = "synthetic-cycle11-aggregate-secret-475";
+	const aggregate = new AggregateError([], "bounded aggregate");
+	Object.defineProperty(aggregate, "errors", {
+		configurable: true,
+		value: {
+			[Symbol.iterator]() {
+				return {
+					next() {
+						nextCalls += 1;
+						if (nextCalls > 5_000) throw new Error(`password=${aggregateMarker}`);
+						return { done: false as const, value: new Error(`client_secret=${aggregateMarker}`) };
+					},
+					return() { returnCalls += 1; return { done: true as const, value: undefined }; },
+				};
+			},
+		},
+	});
+	const aggregateSdk = new FakeSdk();
+	aggregateSdk.findModel = () => { throw aggregate; };
+	const aggregateOutcome = await observeSettlement(runtime(aggregateSdk).runtime.run(request()), 200);
+	if (!isTypedOwnCause(aggregateOutcome)) problems.push(`aggregate:${aggregateOutcome.status}:untyped`);
+	if (nextCalls > 17) problems.push(`aggregate:next-${nextCalls}`);
+	if (returnCalls !== 1) problems.push(`aggregate:return-${returnCalls}`);
+	if (errorMessages(aggregateOutcome.status === "rejected" ? aggregateOutcome.reason : undefined)
+		.some((message) => message.includes(aggregateMarker))) problems.push("aggregate:marker");
+
+	let cleanupPulls = 0;
+	const cleanupAggregate = new AggregateError([], "cleanup aggregate");
+	Object.defineProperty(cleanupAggregate, "errors", {
+		value: {
+			*[Symbol.iterator]() {
+				while (cleanupPulls < 100) {
+					cleanupPulls += 1;
+					yield new Error(`Cookie: session=synthetic-cycle11-cleanup-${cleanupPulls}`);
+				}
+			},
+		},
+	});
+	const cleanupHarness = runtime();
+	const cleanupRequest = request({ binding: { ...request().binding, runId: "cycle11-error-cleanup", laneId: "cycle11-error-cleanup" } });
+	cleanupHarness.sdk.session.output = handoffFor(cleanupRequest);
+	cleanupHarness.sdk.session.dispose = (() => { throw cleanupAggregate; }) as () => void;
+	const cleanupOutcome = await observeSettlement(cleanupHarness.runtime.run(cleanupRequest), 150);
+	const quarantineOutcome = await observeSettlement(cleanupHarness.runtime.run(request({
+		binding: { ...request().binding, runId: "cycle11-error-quarantine", laneId: "cycle11-error-quarantine" },
+	})), 100);
+	const closeOutcome = await observeSettlement(cleanupHarness.runtime.close(), 100);
+	for (const [name, outcome] of [["cleanup", cleanupOutcome], ["quarantine", quarantineOutcome], ["close", closeOutcome]] as const) {
+		if (!isTypedOwnCause(outcome)) problems.push(`${name}:${outcome.status}:untyped`);
+	}
+	if (cleanupPulls > 17) problems.push(`cleanup:pulls-${cleanupPulls}`);
+
+	assert.deepEqual(problems, []);
+});
+
+async function renderCycle11Consumers(label: string, payload: string): Promise<string> {
+	const input = policyInputForRuntime(false);
+	input.workspace.readText = async () => payload;
+	input.workspace.editText = async () => ({ changed: true, summary: payload });
+	input.workspace.writeText = async () => ({ changed: true, summary: payload });
+	input.capabilities = [{
+		...inspectCapability(),
+		async execute() { return { status: "ok" as const, summary: payload, references: [payload] }; },
+	}];
+	const policy = createToolPolicy(input, { maxToolOutputBytes: 64 * 1024 });
+	const tools = new Map(policy.tools.map((tool) => [tool.name, tool]));
+	const toolText = async (name: string, callId: string, value: Record<string, unknown>): Promise<string> => {
+		const result = await tools.get(name)!.execute(callId, value, undefined);
+		return result.content.map((part) => part.text).join("");
+	};
+	const toolOutput = [
+		await toolText("workspace_read", `${label}-read`, { path: ".pi/extensions/shepherd/agent-session-runtime.ts" }),
+		await toolText("workspace_edit", `${label}-edit`, {
+			path: ".pi/extensions/shepherd/agent-session-runtime.ts", oldText: "a", newText: "b",
+		}),
+		await toolText("workspace_write", `${label}-write`, {
+			path: ".pi/extensions/shepherd/agent-session-runtime.ts", content: "bounded",
+		}),
+		await toolText("host_inspect", `${label}-capability`, { target: "owned" }),
+	].join("\n");
+
+	const promptHarness = runtime();
+	const promptRequest = request({
+		task: payload,
+		context: [payload],
+		binding: { ...request().binding, runId: `${label}-prompt`, laneId: `${label}-prompt` },
+	});
+	promptHarness.sdk.session.output = handoffFor(promptRequest);
+	await promptHarness.runtime.run(promptRequest);
+	const promptOutput = `${String(promptHarness.sdk.loaderOptions?.systemPrompt)}\n${promptHarness.sdk.session.lastPrompt}`;
+	await promptHarness.runtime.close();
+
+	const handoffHarness = runtime();
+	const handoffRequest = request({
+		binding: { ...request().binding, runId: `${label}-handoff`, laneId: `${label}-handoff` },
+	});
+	const terminalSafe = payload.replaceAll("\n", " | ");
+	handoffHarness.sdk.session.output = handoffFor(handoffRequest, {
+		summary: terminalSafe,
+		findings: [terminalSafe],
+		verification: [{ name: `${label}-verification`, status: "passed", summary: terminalSafe }],
+	});
+	const handoff = await handoffHarness.runtime.run(handoffRequest);
+	await handoffHarness.runtime.close();
+
+	const errorSdk = new FakeSdk();
+	errorSdk.findModel = () => { throw new Error(payload); };
+	const errorOutcome = await observeSettlement(runtime(errorSdk).runtime.run(request({
+		binding: { ...request().binding, runId: `${label}-error`, laneId: `${label}-error` },
+	})), 100);
+	const publicError = errorMessages(errorOutcome.status === "rejected" ? errorOutcome.reason : undefined).join("\n");
+
+	return [redactSensitiveText(payload), toolOutput, promptOutput, JSON.stringify(handoff), publicError].join("\n");
+}
+
+test("cycle 11 Cookie and Set-Cookie credentials redact through every shared consumer", async () => {
+	const markers = [
+		"synthetic-cycle11-cookie-session-475",
+		"synthetic-cycle11-set-cookie-auth-475",
+	];
+	const payload = [
+		`Cookie: session=${markers[0]}; theme=public`,
+		`Set-Cookie: auth=${markers[1]}; HttpOnly; SameSite=Strict`,
+	].join("\n");
+	const rendered = await renderCycle11Consumers("cycle11-cookie", payload);
+	const harmless = "Cookie policy: number of browser headers processed";
+	assert.deepEqual({
+		leaks: leakedMarkers(rendered, markers),
+		harmless: redactSensitiveText(harmless),
+	}, { leaks: [], harmless });
+});
+
+test("cycle 11 qualified sensitive keys redact by final segment across every shared consumer", async () => {
+	const markers = [
+		"synthetic-cycle11-github-token-475",
+		"synthetic-cycle11-oauth-client-secret-475",
+		"synthetic-cycle11-config-access-token-475",
+	];
+	const payload = [
+		`github.token=${markers[0]}`,
+		`oauth.client_secret: ${markers[1]}`,
+		`config.auth.access_token = ${markers[2]}`,
+	].join("\n");
+	const rendered = await renderCycle11Consumers("cycle11-qualified", payload);
+	const harmless = "oauth.token: number of records processed";
+	assert.deepEqual({
+		leaks: leakedMarkers(rendered, markers),
+		harmless: redactSensitiveText(harmless),
+	}, { leaks: [], harmless });
 });
