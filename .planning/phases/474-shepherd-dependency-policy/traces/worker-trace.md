@@ -13,3 +13,12 @@
 - Execution decision: `local_critical_path`.
 
 Further RED/GREEN/refactor/verification evidence will be appended after each genuine command.
+
+## TDD gate cycle
+
+- Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,
+  ambiguous scopes, maximum-cardinality selection, collision serialization, all repository blocker
+  categories, and reconciliation idempotence.
+- Focused RED command produced 0 pass / 3 fail with `ERR_MODULE_NOT_FOUND` for the three intentionally
+  absent production modules.
+- Execution decision: `local_critical_path`.

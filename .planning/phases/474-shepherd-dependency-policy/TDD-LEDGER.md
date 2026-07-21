@@ -5,9 +5,9 @@ GSD mode: `manual_gsd_fallback` because the repository adapter does not register
 
 | Slice | RED evidence | GREEN evidence | Refactor/broader evidence | Status |
 |---|---|---|---|---|
-| Lifecycle and retry policy | pending | pending | pending | planned |
-| DAG/scopes/maximum ready queue | pending | pending | pending | planned |
-| Pure idempotent reconciler | pending | pending | pending | planned |
+| Lifecycle and retry policy | `node --test ...` failed because `autonomy-policy.ts` did not exist | pending | pending | red |
+| DAG/scopes/maximum ready queue | same run failed because `dependency-graph.ts` did not exist | pending | pending | red |
+| Pure idempotent reconciler | same run failed because `reconciler.ts`/its imports did not exist | pending | pending | red |
 
 Rules:
 
@@ -15,3 +15,18 @@ Rules:
   module/export behavior.
 - Tests are not weakened to fit implementation.
 - Every command, exit result, and exact failure/pass count is recorded after it runs.
+
+## RED checkpoint
+
+Command:
+
+```bash
+node --test .pi/extensions/shepherd/autonomy-policy.test.ts \
+  .pi/extensions/shepherd/dependency-graph.test.ts \
+  .pi/extensions/shepherd/reconciler.test.ts
+```
+
+Observed: 3 file-level tests, 0 pass, 3 fail. Each failed with `ERR_MODULE_NOT_FOUND` for the
+intentionally absent production modules. The surrounding evidence wrapper then also reported
+`zsh: read-only variable: status`; this shell-wrapper mistake did not cause or conceal the three
+expected Node failures and will not be reused.

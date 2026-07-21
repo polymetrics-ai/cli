@@ -14,10 +14,15 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "The isolated child worker owns one cohesive pure-policy boundary; nested delegation is unnecessary and was not requested."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Three matching table/property test files now fail on the intentionally absent policy modules; the strict RED gate is satisfied."
     }
   ],
   "gates": {
-    "red": "pending",
+    "red": "passed_expected_failure_3_of_3",
     "green": "pending",
     "refactor": "pending",
     "focusedTests": "pending",
