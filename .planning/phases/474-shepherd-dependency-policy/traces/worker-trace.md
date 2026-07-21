@@ -173,6 +173,16 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
 - No Go/connectors/root `make verify`, review bot, or merge action was performed.
 - Execution decision: `local_critical_path`; second correction gate complete.
 
+## Exact-head correction 3 planning cycle
+
+- Reconfirmed the one remaining blocker against PR #483 head
+  `f461f9c811cf9d1d0e6804a82dd1201aab41f0a6`.
+- Re-read required routing, GSD programming-loop, architecture, JavaScript testing, issue-first,
+  adapter, and runtime-loop guidance. `scripts/gsd doctor` passes while the adapter still reports
+  `unknown GSD command: programming-loop`; manual fallback continues.
+- A read-only recon sidecar could not start because the runtime agent limit was occupied.
+- Execution decision: `local_critical_path`; write an accessor-specific RED before production edits.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

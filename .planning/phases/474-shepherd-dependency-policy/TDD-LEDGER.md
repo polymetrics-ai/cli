@@ -132,3 +132,11 @@ production TypeScript remain green.
 Final review-2 verification: focused 40/40, full Shepherd 177/177, strict production TypeScript
 pass, offline Pi RPC pass, and diff/ownership pass. Verified implementation head before the final
 evidence-only commit: `55a8f8a5482311e9aa7a38a2bd2382ba4d9393b7`.
+
+## Exact-head correction loop 3
+
+Status: planned against reviewed `f461f9c811cf9d1d0e6804a82dd1201aab41f0a6`; production remains
+untouched. The next test adds accessor-bearing root/nested/array DTOs whose getters count or vary
+their output. Expected RED: reconciliation executes caller getters and/or returns non-typed,
+non-idempotent decisions. GREEN requires zero getter calls and the same typed `invalid_snapshot`
+result on repeated reconciliation.

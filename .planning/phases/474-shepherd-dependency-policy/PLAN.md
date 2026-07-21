@@ -213,3 +213,44 @@ and two consistency warnings. This reopens the same owned slice without broadeni
 - [x] Diff/ownership and clean branch/PR head checks pass.
 - [x] Primary RUN-STATE cycles/gates report 40/177 rather than historical 26/163.
 - [x] No Go, connectors, root `make verify`, review bot, or merge action was run.
+
+## Exact-head correction loop 3
+
+Independent xhigh review of `f461f9c811cf9d1d0e6804a82dd1201aab41f0a6` found one remaining
+runtime-boundary blocker: cloning an accessor-bearing DTO can execute caller code before validation
+and can produce different decisions from the same object.
+
+### RED contract
+
+1. Accessors at the root, nested record, or array-element boundary are rejected as
+   `invalid_snapshot` without invoking their getter.
+2. Reconciliation of the same accessor-bearing object remains typed, pure, and idempotent; caller
+   code cannot alternate spawn and completion decisions.
+
+### Implementation design
+
+- Reject Proxies before reflective inspection, then validate the entire DTO tree from own property
+  descriptors only. Required/optional keys must be enumerable own data properties, arrays must have
+  only their expected indexed data properties plus `length`, and nested values are validated from
+  descriptor values rather than property reads or iteration.
+- Only after the complete graph is proven to contain safe plain records, arrays, and primitives may
+  it be cloned into the private trusted snapshot and frozen.
+- Keep the public failure contract unchanged: all hostile input returns typed `invalid_snapshot`.
+
+### Checkpoints
+
+1. planning reopen;
+2. genuine accessor RED and captured failure;
+3. minimum descriptor-first fix and focused GREEN;
+4. full scoped verification and evidence-only checkpoint;
+5. push the exact PR #483 head for another independent xhigh review.
+
+### Verification checklist
+
+- [ ] Accessor RED captured before production edits.
+- [ ] Focused tests pass after the descriptor-first fix.
+- [ ] Full Shepherd suite passes.
+- [ ] Strict production TypeScript passes against installed Pi 0.80.6 declarations.
+- [ ] Offline Pi RPC discovers `pm-shepherd`.
+- [ ] Diff/ownership, clean branch, and local/remote/PR head checks pass.
+- [ ] No Go, connectors, root `make verify`, review bot, or merge action is run.

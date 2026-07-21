@@ -3,8 +3,8 @@
   "issue": 474,
   "phase": "474-shepherd-dependency-policy",
   "mode": "manual_gsd_fallback",
-  "status": "completed",
-  "verificationPassed": true,
+  "status": "third_correction_planned",
+  "verificationPassed": false,
   "verificationPolicy": "parent_declared_phase_equivalent_child_gate",
   "adapterEvidence": {
     "command": "scripts/gsd prompt programming-loop init --phase 474-shepherd-dependency-policy --dry-run",
@@ -55,6 +55,11 @@
       "cycle": "exact-head-correction-2-plan",
       "decision": "local_critical_path",
       "reason": "Fresh xhigh blockers reopen Unicode aliases, authoritative queue facts, and caller-owned DTO isolation under a new RED gate."
+    },
+    {
+      "cycle": "exact-head-correction-3-plan",
+      "decision": "local_critical_path",
+      "reason": "The remaining accessor-boundary blocker is one cohesive owned reconciliation slice; the runtime agent limit prevented a read-only sidecar, so local TDD is the critical path."
     }
   ],
   "gates": {
@@ -84,6 +89,9 @@
     "secondCorrectionRefactor": "passed_40_of_40",
     "secondCorrectionFullShepherd": "passed_177_of_177",
     "secondCorrectionOfflineRpc": "pm_shepherd_discovered",
-    "secondCorrectionOwnership": "passed"
+    "secondCorrectionOwnership": "passed",
+    "thirdCorrectionRed": "pending",
+    "thirdCorrectionGreen": "pending",
+    "thirdCorrectionVerification": "pending"
   }
 }
