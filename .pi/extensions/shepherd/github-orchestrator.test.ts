@@ -360,6 +360,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 				headSha: request.headSha,
 				parentBranch: request.parentBranch,
 				pullRequestSnapshot: request.pullRequestSnapshot,
+				observation: request.observation,
 				controllerProvenance: request.controllerProvenance,
 				transportProvenance: {
 					authority: "transport",
@@ -641,6 +642,11 @@ function seedIntegrationRoster(
 		}, { state: "merged" }, pullRequestNumber);
 		transport.pullRequests.push(childPullRequest);
 		const snapshot = createCanonicalPullRequestSnapshot(childPullRequest);
+		const observation = {
+			revision: childPullRequest.revision,
+			observedAt: childPullRequest.observedAt,
+			state: childPullRequest.state,
+		};
 		const controllerProvenance = {
 			authority: "controller" as const,
 			planDigest: candidate.canonical.digest,
@@ -661,6 +667,7 @@ function seedIntegrationRoster(
 				headSha: childHead,
 				parentBranch: candidate.parentBranch,
 				pullRequestSnapshot: snapshot,
+				observation,
 				controllerProvenance,
 			},
 			null,
@@ -674,6 +681,7 @@ function seedIntegrationRoster(
 			headSha: childHead,
 			parentBranch: candidate.parentBranch,
 			pullRequestSnapshot: snapshot,
+			observation,
 			controllerProvenance,
 			transportProvenance: {
 				authority: "transport",
@@ -1173,6 +1181,11 @@ test("restart reuses stable integration identity after a later merged-PR observa
 	const mergedPullRequest = cleanPullRequest(request, { state: "merged" });
 	transport.pullRequests.push(mergedPullRequest);
 	const snapshot = createCanonicalPullRequestSnapshot(mergedPullRequest);
+	const observation = {
+		revision: mergedPullRequest.revision,
+		observedAt: mergedPullRequest.observedAt,
+		state: mergedPullRequest.state,
+	};
 	const controllerProvenance = {
 		authority: "controller" as const,
 		planDigest: candidate.canonical.digest,
@@ -1193,6 +1206,7 @@ test("restart reuses stable integration identity after a later merged-PR observa
 			headSha: handoff.head,
 			parentBranch: candidate.parentBranch,
 			pullRequestSnapshot: snapshot,
+			observation,
 			controllerProvenance,
 		},
 		null,
@@ -1206,6 +1220,7 @@ test("restart reuses stable integration identity after a later merged-PR observa
 		headSha: handoff.head,
 		parentBranch: candidate.parentBranch,
 		pullRequestSnapshot: snapshot,
+		observation,
 		controllerProvenance,
 		transportProvenance: {
 			authority: "transport",
@@ -1852,6 +1867,7 @@ test("cycle 4 rejects coherently re-digested wrong child topology before parent 
 		const child = candidate.children[0];
 		const index = transport.pullRequests.findIndex((pullRequest) => pullRequest.marker === child.markers.pullRequest);
 		const current = { ...transport.pullRequests[index], ...changes } as GitHubPullRequestEvidence;
+		if ("marker" in changes) current.body = current.body.replace(child.markers.pullRequest, current.marker);
 		transport.pullRequests[index] = current;
 		const snapshot = createCanonicalPullRequestSnapshot(current);
 		const receipt = { ...receipts[0], pullRequestSnapshot: snapshot };
@@ -1865,6 +1881,7 @@ test("cycle 4 rejects coherently re-digested wrong child topology before parent 
 			headSha: snapshot.headSha,
 			parentBranch: candidate.parentBranch,
 			pullRequestSnapshot: snapshot,
+			observation: receipt.observation,
 			controllerProvenance: receipt.controllerProvenance,
 		}, null);
 		receipt.transportProvenance = {
@@ -1980,6 +1997,7 @@ test("cycle 4 bounds and cancels never-settling calls, drains keyed work, and re
 	if (firstOutcome !== "hung" && firstOutcome.kind === "error") {
 		assert.ok(firstOutcome.error instanceof Error);
 		assert.equal((firstOutcome.error as any).code, "external_timeout");
+		assert.equal((firstOutcome.error as any).uncertain, true);
 	}
 
 	const lateTransport = new FakeTransport();
@@ -2121,10 +2139,12 @@ test("cycle 4 passes AbortSignal to workspace handoff and redacts workspace fail
 		body: candidate.children[0].issueBody,
 	}, 811);
 	const child = materializeChildRecord(candidate, "evidence", issue);
+	const transport = new FakeTransport();
+	transport.issues.push(issue);
 	let signal = false;
 	let rejection: unknown;
 	try {
-		await orchestratorFor(new FakeTransport()).captureChildHandoff(candidate, child, {} as ClaimedWorkspace, {
+		await orchestratorFor(transport).captureChildHandoff(candidate, child, {} as ClaimedWorkspace, {
 			async captureHandoff(_workspace: ClaimedWorkspace, _state: "passed", context?: TestCallContext): Promise<WorkspaceHandoffEvidence> {
 				signal = context?.signal instanceof AbortSignal;
 				throw new Error("token=CYCLE4_WORKSPACE_MARKER");

@@ -16,23 +16,33 @@ import {
 	evaluateGitHubPullRequestEvidence,
 	validateGitHubChangedPathEvidence,
 	validateGitHubPullRequestEvidence,
+	validateRequiredGitHubCheckPolicyObservation,
 	type GitHubEvidenceBlocker,
 	type GitHubChangedPathEvidence,
 	type GitHubPullRequestEvidence,
 	type RequiredGitHubCheckPolicy,
+	type RequiredGitHubCheckPolicyObservation,
 	validateRequiredGitHubCheckPolicy,
 } from "./github-evidence.ts";
 import type {
-	GitHubDecisionBroker,
+	GitHubDecisionPollOptions,
+	GitHubDecisionPollResult,
 	GitHubDecisionRequest,
 } from "./github-decision-broker.ts";
 import {
 	assertHumanDecisionBinding,
 	type HumanDecisionBinding,
+	type HumanDecisionEvidence,
 	type HumanDecisionGate,
+	type HumanDecisionRecord,
 } from "./human-decision.ts";
 import { reconcileAutonomy } from "./reconciler.ts";
-import type { AgentSessionAttestation, IndependentReviewRecord, IndependentReviewTarget } from "./review-router.ts";
+import {
+	assertNoSensitiveText,
+	type AgentSessionAttestation,
+	type IndependentReviewRecord,
+	type IndependentReviewTarget,
+} from "./review-router.ts";
 import type {
 	ClaimedWorkspace,
 	WorkspaceHandoffEvidence,
@@ -244,9 +254,16 @@ export interface CanonicalPullRequestSnapshot {
 	headSha: string;
 	changedPaths: string[];
 	allowedScopes: string[];
+	policyDigest: string;
 	revision: number;
 	observedAt: string;
 	digest: string;
+}
+
+export interface PullRequestObservation {
+	revision: number;
+	observedAt: string;
+	state: GitHubPullRequestEvidence["state"];
 }
 
 export interface ControllerIntegrationProvenance {
@@ -273,6 +290,7 @@ export interface ChildIntegrationReceipt {
 	headSha: string;
 	parentBranch: string;
 	pullRequestSnapshot: CanonicalPullRequestSnapshot;
+	observation: PullRequestObservation;
 	controllerProvenance: ControllerIntegrationProvenance;
 	transportProvenance: TransportMutationProvenance;
 	integratedAt: string;
@@ -286,6 +304,7 @@ export interface IntegrateChildRequest extends GitHubPullRequestQuery {
 	headSha: string;
 	parentBranch: string;
 	pullRequestSnapshot: CanonicalPullRequestSnapshot;
+	observation: PullRequestObservation;
 	controllerProvenance: ControllerIntegrationProvenance;
 	mutation: DurableMutationIntent;
 }
@@ -297,25 +316,46 @@ export interface MarkParentReadyRequest extends GitHubPullRequestQuery {
 	mutation: DurableMutationIntent;
 }
 
+export interface ExternalCallContext {
+	signal: AbortSignal;
+	deadlineAt: string;
+}
+
 export interface GitHubOrchestrationTransport {
-	findChildIssues(query: ChildIssueMarkerQuery): Promise<AuthoritativeLookup<GitHubChildIssue>>;
-	createChildIssue(request: CreateChildIssueRequest): Promise<DurableMutationResult<GitHubChildIssue>>;
-	findPullRequests(query: PullRequestMarkerQuery): Promise<AuthoritativeLookup<GitHubPullRequestEvidence>>;
-	createPullRequest(request: CreatePullRequestRequest): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
-	findParentRosters(query: GitHubRosterQuery): Promise<AuthoritativeLookup<GitHubRosterSnapshot>>;
-	publishParentRoster(request: PublishRosterRequest): Promise<DurableMutationResult<GitHubRosterSnapshot>>;
-	findChildIntegration(query: ChildIntegrationQuery): Promise<AuthoritativeLookup<ChildIntegrationReceipt>>;
-	integrateChild(request: IntegrateChildRequest): Promise<DurableMutationResult<ChildIntegrationReceipt>>;
-	markParentReady(request: MarkParentReadyRequest): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
-	proveAncestry(query: GitAncestryQuery): Promise<GitAncestryProof>;
+	findChildIssues(query: ChildIssueMarkerQuery, context: ExternalCallContext): Promise<AuthoritativeLookup<GitHubChildIssue>>;
+	createChildIssue(request: CreateChildIssueRequest, context: ExternalCallContext): Promise<DurableMutationResult<GitHubChildIssue>>;
+	findPullRequests(query: PullRequestMarkerQuery, context: ExternalCallContext): Promise<AuthoritativeLookup<GitHubPullRequestEvidence>>;
+	createPullRequest(request: CreatePullRequestRequest, context: ExternalCallContext): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
+	findParentRosters(query: GitHubRosterQuery, context: ExternalCallContext): Promise<AuthoritativeLookup<GitHubRosterSnapshot>>;
+	publishParentRoster(request: PublishRosterRequest, context: ExternalCallContext): Promise<DurableMutationResult<GitHubRosterSnapshot>>;
+	findChildIntegration(query: ChildIntegrationQuery, context: ExternalCallContext): Promise<AuthoritativeLookup<ChildIntegrationReceipt>>;
+	integrateChild(request: IntegrateChildRequest, context: ExternalCallContext): Promise<DurableMutationResult<ChildIntegrationReceipt>>;
+	markParentReady(request: MarkParentReadyRequest, context: ExternalCallContext): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
+	proveAncestry(query: GitAncestryQuery, context: ExternalCallContext): Promise<GitAncestryProof>;
 }
 
 export interface AgentSessionAttestationSource {
-	findAttestations(target: IndependentReviewTarget): Promise<AuthoritativeLookup<AgentSessionAttestation>>;
-	findChangedPathEvidence(query: Omit<IndependentReviewTarget, "changedPaths" | "allowedScopes">): Promise<AuthoritativeLookup<GitHubChangedPathEvidence>>;
+	findAttestations(target: IndependentReviewTarget, context: ExternalCallContext): Promise<AuthoritativeLookup<AgentSessionAttestation>>;
+	findChangedPathEvidence(query: Omit<IndependentReviewTarget, "changedPaths" | "allowedScopes">, context: ExternalCallContext): Promise<AuthoritativeLookup<GitHubChangedPathEvidence>>;
 }
 
-export type ParentDecisionBroker = Pick<GitHubDecisionBroker, "request" | "poll" | "consume">;
+export interface ParentDecisionBroker {
+	request(request: GitHubDecisionRequest, context: ExternalCallContext): Promise<HumanDecisionRecord>;
+	poll(
+		requestId: string,
+		binding: HumanDecisionBinding,
+		options: GitHubDecisionPollOptions,
+		context: ExternalCallContext,
+	): Promise<GitHubDecisionPollResult>;
+	consume(requestId: string, binding: HumanDecisionBinding, context: ExternalCallContext): Promise<HumanDecisionEvidence>;
+}
+
+export interface RequiredCheckPolicySource {
+	findRequiredCheckPolicies(
+		query: { repository: string; baseBranch: string },
+		context: ExternalCallContext,
+	): Promise<AuthoritativeLookup<RequiredGitHubCheckPolicyObservation>>;
+}
 
 export interface ParentDecisionPolicy {
 	requestId: string;
@@ -325,12 +365,16 @@ export interface ParentDecisionPolicy {
 }
 
 export interface WorkspaceHandoffSource {
-	captureHandoff(workspace: ClaimedWorkspace, verificationState: "passed"): Promise<WorkspaceHandoffEvidence>;
+	captureHandoff(
+		workspace: ClaimedWorkspace,
+		verificationState: "passed",
+		context: ExternalCallContext,
+	): Promise<WorkspaceHandoffEvidence>;
 }
 
 export type ChildIntegrationDecision =
 	| { kind: "integrated"; receipt: ChildIntegrationReceipt; reused: boolean }
-	| { kind: "blocked"; blockers: Array<GitHubEvidenceBlocker | "handoff_invalid" | "pull_request_missing"> };
+	| { kind: "blocked"; blockers: Array<GitHubEvidenceBlocker | "handoff_invalid" | "pull_request_missing" | "policy_moved"> };
 
 export type ParentReadinessDecision =
 	| { kind: "ready"; pullRequest: GitHubPullRequestEvidence; reused: boolean }
@@ -369,6 +413,7 @@ function inlineText(value: unknown, description: string, maximum = 1_024): strin
 		|| value.trim() !== value || UNSAFE_INLINE.test(value)) {
 		throw new Error(`invalid ${description}`);
 	}
+	assertNoSensitiveText(value, description);
 	return value;
 }
 
@@ -377,6 +422,7 @@ function bodyText(value: unknown, description: string): string {
 		|| Buffer.byteLength(value) > MAX_BODY_BYTES || UNSAFE_BODY.test(value)) {
 		throw new Error(`${description} must be bounded safe text`);
 	}
+	assertNoSensitiveText(value, description);
 	return value.replace(/\r\n?/gu, "\n");
 }
 
@@ -419,7 +465,6 @@ function boundedArray(value: unknown, description: string, maximum = MAX_LIST, a
 	if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
 		throw new Error(`${description} must be a canonical array`);
 	}
-	const descriptors = Object.getOwnPropertyDescriptors(value);
 	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
 	if (lengthDescriptor === undefined || !Object.hasOwn(lengthDescriptor, "value")
 		|| !Number.isSafeInteger(lengthDescriptor.value) || lengthDescriptor.value < 0
@@ -427,6 +472,7 @@ function boundedArray(value: unknown, description: string, maximum = MAX_LIST, a
 		throw new Error(`${description} must be a bounded array of at most ${maximum} values`);
 	}
 	const length = lengthDescriptor.value as number;
+	const descriptors = Object.getOwnPropertyDescriptors(value);
 	const values: unknown[] = [];
 	for (const key of Reflect.ownKeys(descriptors)) {
 		if (key === "length") continue;
@@ -829,7 +875,8 @@ function validateRoster(value: unknown): GitHubRosterSnapshot {
 }
 
 function pullRequestSnapshotDigest(value: Omit<CanonicalPullRequestSnapshot, "digest">): string {
-	return createHash("sha256").update(JSON.stringify(value)).digest("hex");
+	const { revision: _revision, observedAt: _observedAt, ...stableIdentity } = value;
+	return createHash("sha256").update(JSON.stringify(stableIdentity)).digest("hex");
 }
 
 export function createCanonicalPullRequestSnapshot(value: GitHubPullRequestEvidence): CanonicalPullRequestSnapshot {
@@ -846,6 +893,7 @@ export function createCanonicalPullRequestSnapshot(value: GitHubPullRequestEvide
 		headSha: canonical.headSha,
 		changedPaths: [...canonical.changedPaths],
 		allowedScopes: [...canonical.allowedScopes],
+		policyDigest: canonical.policyDigest,
 		revision: canonical.revision,
 		observedAt: canonical.observedAt,
 	};
@@ -855,7 +903,7 @@ export function createCanonicalPullRequestSnapshot(value: GitHubPullRequestEvide
 function validatePullRequestSnapshot(value: unknown): CanonicalPullRequestSnapshot {
 	const candidate = exactRecord(value, [
 		"repository", "workItemId", "number", "generation", "marker", "baseBranch", "headBranch", "baseSha",
-		"headSha", "changedPaths", "allowedScopes", "revision", "observedAt", "digest",
+		"headSha", "changedPaths", "allowedScopes", "policyDigest", "revision", "observedAt", "digest",
 	]);
 	const snapshot = {
 		repository: repository(candidate.repository),
@@ -869,12 +917,31 @@ function validatePullRequestSnapshot(value: unknown): CanonicalPullRequestSnapsh
 		headSha: sha(candidate.headSha, "snapshot head SHA"),
 		changedPaths: validateStringList(candidate.changedPaths, "snapshot changed paths", undefined, true),
 		allowedScopes: validateStringList(candidate.allowedScopes, "snapshot allowed scopes"),
+		policyDigest: typeof candidate.policyDigest === "string" && IDENTITY.test(candidate.policyDigest)
+			? candidate.policyDigest
+			: (() => { throw new Error("invalid snapshot policy digest"); })(),
 		revision: generation(candidate.revision),
 		observedAt: timestamp(candidate.observedAt, "snapshot observation timestamp"),
 	};
 	if (typeof candidate.digest !== "string" || !IDENTITY.test(candidate.digest)
 		|| candidate.digest !== pullRequestSnapshotDigest(snapshot)) throw new Error("pull request snapshot digest mismatch");
 	return { ...snapshot, digest: candidate.digest };
+}
+
+function pullRequestObservation(value: GitHubPullRequestEvidence): PullRequestObservation {
+	return { revision: value.revision, observedAt: value.observedAt, state: value.state };
+}
+
+function validatePullRequestObservation(value: unknown): PullRequestObservation {
+	const candidate = exactRecord(value, ["revision", "observedAt", "state"]);
+	if (candidate.state !== "open" && candidate.state !== "closed" && candidate.state !== "merged") {
+		throw new Error("invalid pull request observation state");
+	}
+	return {
+		revision: generation(candidate.revision),
+		observedAt: timestamp(candidate.observedAt, "pull request observation timestamp"),
+		state: candidate.state,
+	};
 }
 
 function validateControllerProvenance(value: unknown): ControllerIntegrationProvenance {
@@ -915,6 +982,7 @@ function validateReceipt(value: unknown): ChildIntegrationReceipt {
 		"headSha",
 		"parentBranch",
 		"pullRequestSnapshot",
+		"observation",
 		"controllerProvenance",
 		"transportProvenance",
 		"integratedAt",
@@ -928,6 +996,7 @@ function validateReceipt(value: unknown): ChildIntegrationReceipt {
 		headSha: sha(candidate.headSha, "integrated head SHA"),
 		parentBranch: canonicalGitRef(candidate.parentBranch, "integration parent branch"),
 		pullRequestSnapshot: validatePullRequestSnapshot(candidate.pullRequestSnapshot),
+		observation: validatePullRequestObservation(candidate.observation),
 		controllerProvenance: validateControllerProvenance(candidate.controllerProvenance),
 		transportProvenance: validateTransportProvenance(candidate.transportProvenance),
 		integratedAt: timestamp(candidate.integratedAt, "integration timestamp"),
@@ -1092,10 +1161,35 @@ function canonicalDataEqual(
 	if (leftSeen.has(left) || rightSeen.has(right)) return false;
 	leftSeen.add(left);
 	rightSeen.add(right);
+	if (Array.isArray(left) && Array.isArray(right)) {
+		const leftLength = Object.getOwnPropertyDescriptor(left, "length");
+		const rightLength = Object.getOwnPropertyDescriptor(right, "length");
+		if (leftLength === undefined || rightLength === undefined
+			|| !Object.hasOwn(leftLength, "value") || !Object.hasOwn(rightLength, "value")
+			|| !Number.isSafeInteger(leftLength.value) || !Number.isSafeInteger(rightLength.value)
+			|| leftLength.value < 0 || rightLength.value < 0
+			|| leftLength.value !== rightLength.value || leftLength.value > MAX_LIST * 8) return false;
+		const length = leftLength.value as number;
+		const leftDescriptors = Object.getOwnPropertyDescriptors(left);
+		const rightDescriptors = Object.getOwnPropertyDescriptors(right);
+		for (const descriptors of [leftDescriptors, rightDescriptors]) {
+			const keys = Reflect.ownKeys(descriptors).filter((key) => key !== "length");
+			if (keys.length !== length) return false;
+			for (let index = 0; index < length; index += 1) {
+				const descriptor = descriptors[String(index)];
+				if (descriptor === undefined || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) return false;
+			}
+			if (keys.some((key) => typeof key !== "string" || !/^(?:0|[1-9]\d*)$/u.test(key) || Number(key) >= length)) return false;
+		}
+		for (let index = 0; index < length; index += 1) {
+			if (!canonicalDataEqual(leftDescriptors[String(index)].value, rightDescriptors[String(index)].value, leftSeen, rightSeen)) return false;
+		}
+		return true;
+	}
 	const leftDescriptors = Object.getOwnPropertyDescriptors(left);
 	const rightDescriptors = Object.getOwnPropertyDescriptors(right);
-	const leftKeys = Reflect.ownKeys(leftDescriptors).filter((key) => key !== "length");
-	const rightKeys = Reflect.ownKeys(rightDescriptors).filter((key) => key !== "length");
+	const leftKeys = Reflect.ownKeys(leftDescriptors);
+	const rightKeys = Reflect.ownKeys(rightDescriptors);
 	if (leftKeys.length > MAX_LIST * 8 || rightKeys.length > MAX_LIST * 8) return false;
 	if (leftKeys.length !== rightKeys.length) return false;
 	for (const key of leftKeys) {
@@ -1215,7 +1309,10 @@ function childPullRequestMatches(
 		&& pullRequest.body === childPullRequestBody(plan, child)
 		&& pullRequest.baseBranch === child.prBase
 		&& pullRequest.headBranch === child.branch
-		&& pullRequest.baseSha === handoff.baseHead;
+		&& pullRequest.baseSha === handoff.baseHead
+		&& pullRequest.headSha === handoff.head
+		&& sameStrings(pullRequest.changedPaths, handoff.changedScope)
+		&& pullRequest.changedPaths.every((path) => child.writeScopes.some((scope) => pathWithinScope(path, scope)));
 }
 
 function reviewMatchesChild(
@@ -1246,6 +1343,7 @@ function receiptMatchesChild(
 	pullRequestEvidence?: GitHubPullRequestEvidence,
 ): boolean {
 	const expectedSnapshot = pullRequestEvidence === undefined ? undefined : createCanonicalPullRequestSnapshot(pullRequestEvidence);
+	const currentObservation = pullRequestEvidence === undefined ? undefined : pullRequestObservation(pullRequestEvidence);
 	const expectedMutation = createDurableMutationIntent(
 		"child_integration",
 		[plan.repository, child.markers.pullRequest],
@@ -1259,6 +1357,7 @@ function receiptMatchesChild(
 			headSha: handoff.head,
 			parentBranch: plan.parentBranch,
 			pullRequestSnapshot: receipt.pullRequestSnapshot,
+			observation: receipt.observation,
 			controllerProvenance: receipt.controllerProvenance,
 		},
 		null,
@@ -1284,9 +1383,17 @@ function receiptMatchesChild(
 		&& receipt.pullRequestSnapshot.headBranch === child.branch
 		&& receipt.pullRequestSnapshot.baseSha === handoff.baseHead
 		&& receipt.pullRequestSnapshot.headSha === handoff.head
+		&& receipt.pullRequestSnapshot.policyDigest === policyFor(plan, child.prBase).digest
 		&& sameStrings(receipt.pullRequestSnapshot.changedPaths, handoff.changedScope)
 		&& sameStrings(receipt.pullRequestSnapshot.allowedScopes, child.writeScopes)
-		&& (expectedSnapshot === undefined || receipt.pullRequestSnapshot.digest === expectedSnapshot.digest);
+		&& receipt.observation.revision === receipt.pullRequestSnapshot.revision
+		&& receipt.observation.observedAt === receipt.pullRequestSnapshot.observedAt
+		&& (expectedSnapshot === undefined || receipt.pullRequestSnapshot.digest === expectedSnapshot.digest)
+		&& (currentObservation === undefined || (
+			currentObservation.revision >= receipt.observation.revision
+			&& currentObservation.observedAt >= receipt.observation.observedAt
+			&& (currentObservation.state === receipt.observation.state || receipt.observation.state === "open")
+		));
 }
 
 function parentPullRequestBody(plan: ParentOrchestrationPlan): string {
@@ -1362,16 +1469,80 @@ function validateDecisionPolicy(value: ParentDecisionPolicy): ParentDecisionPoli
 	};
 }
 
+export interface GitHubParentOrchestratorOptions {
+	externalCallTimeoutMs?: number;
+}
+
+export class ExternalPortError extends Error {
+	readonly code: "external_timeout" | "external_port_failed";
+	readonly operation: string;
+	readonly uncertain: boolean;
+
+	constructor(code: ExternalPortError["code"], operation: string, uncertain: boolean) {
+		super(code === "external_timeout" ? `external operation timed out: ${operation}` : `external operation failed: ${operation}`);
+		this.name = "ExternalPortError";
+		this.code = code;
+		this.operation = operation;
+		this.uncertain = uncertain;
+	}
+}
+
 export class GitHubParentOrchestrator {
 	readonly #transport: GitHubOrchestrationTransport;
 	readonly #broker?: ParentDecisionBroker;
 	readonly #attestations?: AgentSessionAttestationSource;
+	readonly #policySource?: RequiredCheckPolicySource;
+	readonly #externalCallTimeoutMs: number;
 	readonly #ensureLocks = new Map<string, Promise<void>>();
 
-	constructor(transport: GitHubOrchestrationTransport, broker?: ParentDecisionBroker, attestations?: AgentSessionAttestationSource) {
+	constructor(
+		transport: GitHubOrchestrationTransport,
+		broker?: ParentDecisionBroker,
+		attestations?: AgentSessionAttestationSource,
+		policySource?: RequiredCheckPolicySource,
+		options: GitHubParentOrchestratorOptions = {},
+	) {
 		this.#transport = transport;
 		this.#broker = broker;
 		this.#attestations = attestations;
+		this.#policySource = policySource;
+		const timeout = options.externalCallTimeoutMs ?? 15_000;
+		if (!Number.isSafeInteger(timeout) || timeout < 1 || timeout > 120_000) {
+			throw new Error("external call timeout must be a bounded positive integer");
+		}
+		this.#externalCallTimeoutMs = timeout;
+	}
+
+	private async callExternal<T>(
+		operation: string,
+		invoke: (context: ExternalCallContext) => Promise<T>,
+		uncertain = false,
+	): Promise<T> {
+		const controller = new AbortController();
+		const context: ExternalCallContext = {
+			signal: controller.signal,
+			deadlineAt: new Date(Date.now() + this.#externalCallTimeoutMs).toISOString(),
+		};
+		const invocation = Promise.resolve().then(() => invoke(context));
+		const guarded = invocation.then(
+			(value) => ({ kind: "value" as const, value }),
+			() => ({ kind: "failed" as const }),
+		);
+		let timer: ReturnType<typeof setTimeout> | undefined;
+		const timeout = new Promise<{ kind: "timeout" }>((resolve) => {
+			timer = setTimeout(() => {
+				controller.abort();
+				resolve({ kind: "timeout" });
+			}, this.#externalCallTimeoutMs);
+		});
+		const outcome = await Promise.race([guarded, timeout]);
+		if (timer !== undefined) clearTimeout(timer);
+		if (outcome.kind === "value") return outcome.value;
+		if (outcome.kind === "timeout") {
+			void invocation.catch(() => {});
+			throw new ExternalPortError("external_timeout", operation, true);
+		}
+		throw new ExternalPortError("external_port_failed", operation, uncertain);
 	}
 
 	private async serializeEnsure<T>(key: string, operation: () => Promise<T>): Promise<T> {
@@ -1398,7 +1569,9 @@ export class GitHubParentOrchestrator {
 	}
 
 	private async matchingIssues(plan: ParentOrchestrationPlan, child: BoundedChildRecord): Promise<GitHubChildIssue[]> {
-		const raw = await this.#transport.findChildIssues({ repository: plan.repository, marker: child.markers.issue });
+		const raw = await this.callExternal("findChildIssues", (context) => this.#transport.findChildIssues(
+			{ repository: plan.repository, marker: child.markers.issue }, context,
+		));
 		return authoritativeItems(raw, "child issue lookup").map(validateChildIssue);
 	}
 
@@ -1430,7 +1603,11 @@ export class GitHubParentOrchestrator {
 			const request: CreateChildIssueRequest = { ...requestIntent, mutation };
 			let mutationError: unknown;
 			try {
-				validateDurableMutationResult(await this.#transport.createChildIssue(request), mutation, validateChildIssue);
+				validateDurableMutationResult(
+					await this.callExternal("createChildIssue", (context) => this.#transport.createChildIssue(request, context), true),
+					mutation,
+					validateChildIssue,
+				);
 			} catch (error) {
 				mutationError = error;
 			}
@@ -1444,7 +1621,7 @@ export class GitHubParentOrchestrator {
 	}
 
 	private async matchingPullRequests(query: PullRequestMarkerQuery): Promise<GitHubPullRequestEvidence[]> {
-		const raw = await this.#transport.findPullRequests(query);
+		const raw = await this.callExternal("findPullRequests", (context) => this.#transport.findPullRequests(query, context));
 		return authoritativeItems(raw, "pull request lookup").map(validateGitHubPullRequestEvidence);
 	}
 
@@ -1486,7 +1663,9 @@ export class GitHubParentOrchestrator {
 			let mutationError: unknown;
 			try {
 				validateDurableMutationResult(
-					await this.#transport.createPullRequest(request), request.mutation, validateGitHubPullRequestEvidence,
+					await this.callExternal("createPullRequest", (context) => this.#transport.createPullRequest(request, context), true),
+					request.mutation,
+					validateGitHubPullRequestEvidence,
 				);
 			} catch (error) {
 				mutationError = error;
@@ -1519,7 +1698,7 @@ export class GitHubParentOrchestrator {
 	): Promise<WorkspaceHandoffEvidence> {
 		plan = validateParentOrchestrationPlan(plan);
 		const canonicalChild = await this.canonicalMaterializedChild(plan, child);
-		const handoff = await source.captureHandoff(workspace, "passed");
+		const handoff = await this.callExternal("captureChildHandoff", (context) => source.captureHandoff(workspace, "passed", context));
 		return validateHandoff(handoff, canonicalChild.issue, canonicalChild.branch, canonicalChild.prBase, canonicalChild.writeScopes);
 	}
 
@@ -1529,7 +1708,7 @@ export class GitHubParentOrchestrator {
 		source: WorkspaceHandoffSource,
 	): Promise<WorkspaceHandoffEvidence> {
 		plan = validateParentOrchestrationPlan(plan);
-		const handoff = await source.captureHandoff(workspace, "passed");
+		const handoff = await this.callExternal("captureParentHandoff", (context) => source.captureHandoff(workspace, "passed", context));
 		return validateHandoff(
 			handoff,
 			plan.parentIssue,
@@ -1596,7 +1775,9 @@ export class GitHubParentOrchestrator {
 	}
 
 	private async rosterMatches(plan: ParentOrchestrationPlan): Promise<GitHubRosterSnapshot[]> {
-		const raw = await this.#transport.findParentRosters({ repository: plan.repository, marker: plan.markers.roster });
+		const raw = await this.callExternal("findParentRosters", (context) => this.#transport.findParentRosters(
+			{ repository: plan.repository, marker: plan.markers.roster }, context,
+		));
 		return authoritativeItems(raw, "roster lookup").map(validateRoster);
 	}
 
@@ -1647,14 +1828,25 @@ export class GitHubParentOrchestrator {
 			);
 			const request: PublishRosterRequest = { ...requestIntent, mutation };
 			let mutationError: unknown;
+			let publishedRevision: number | undefined;
 			try {
-				validateDurableMutationResult(await this.#transport.publishParentRoster(request), mutation, validateRoster);
+				const result = validateDurableMutationResult(
+					await this.callExternal("publishParentRoster", (context) => this.#transport.publishParentRoster(request, context), true),
+					mutation,
+					validateRoster,
+				);
+				publishedRevision = result.value.revision;
+				if (existing !== null && publishedRevision <= existing.revision) {
+					throw new Error("parent roster CAS revision did not advance");
+				}
 			} catch (error) {
 				mutationError = error;
 			}
 			const recovered = await this.reconcileVisible(async () => {
 				const roster = this.resolveRoster(await this.rosterMatches(plan), plan);
 				return roster?.body === body && roster.statusEpoch === epoch
+					&& (existing === null || roster.revision > existing.revision)
+					&& (publishedRevision === undefined || roster.revision === publishedRevision)
 					&& canonicalDataEqual(statusesForPlan(plan, roster.statuses), statuses) ? roster : null;
 			});
 			if (recovered !== null) return recovered;
@@ -1692,13 +1884,15 @@ export class GitHubParentOrchestrator {
 			headSha: target.headSha,
 		};
 		const observations = authoritativeItems(
-			await this.#attestations.findChangedPathEvidence(query), "controller changed-path evidence lookup",
+			await this.callExternal("findChangedPathEvidence", (context) => this.#attestations!.findChangedPathEvidence(query, context)),
+			"controller changed-path evidence lookup",
 		).map(validateGitHubChangedPathEvidence);
 		if (observations.length !== 1) throw new Error("controller changed-path evidence is absent or ambiguous");
 		const observation = observations[0];
 		const canonicalTarget: IndependentReviewTarget = { ...target, changedPaths: observation.paths };
 		const attestations = authoritativeItems(
-			await this.#attestations.findAttestations(canonicalTarget), "AgentSession attestation lookup",
+			await this.callExternal("findAttestations", (context) => this.#attestations!.findAttestations(canonicalTarget, context)),
+			"AgentSession attestation lookup",
 		);
 		const decision = evaluateGitHubPullRequestEvidence(evidence, {
 			...expected,
@@ -1709,6 +1903,32 @@ export class GitHubParentOrchestrator {
 			attestations: attestations as AgentSessionAttestation[],
 		}, { allowDraft });
 		return { decision, observation, target: canonicalTarget };
+	}
+
+	private async currentPolicyObservation(
+		plan: ParentOrchestrationPlan,
+		baseBranch: string,
+		minimumObservedAt: string,
+	): Promise<RequiredGitHubCheckPolicyObservation | null> {
+		if (this.#policySource === undefined) return null;
+		const raw = await this.callExternal("findRequiredCheckPolicies", (context) => this.#policySource!.findRequiredCheckPolicies(
+			{ repository: plan.repository, baseBranch }, context,
+		));
+		let observations: RequiredGitHubCheckPolicyObservation[];
+		try {
+			observations = authoritativeItems(raw, "required-check policy observation lookup")
+				.map(validateRequiredGitHubCheckPolicyObservation);
+		} catch {
+			return null;
+		}
+		if (observations.length !== 1) return null;
+		const expected = policyFor(plan, baseBranch);
+		const observation = observations[0];
+		return observation.repository === plan.repository
+			&& observation.baseBranch === baseBranch
+			&& observation.revision === expected.revision
+			&& observation.digest === expected.digest
+			&& observation.observedAt >= minimumObservedAt ? observation : null;
 	}
 
 	async integrateChild(
@@ -1744,7 +1964,10 @@ export class GitHubParentOrchestrator {
 				headSha: handoff.head,
 			};
 			const integrationQuery = { repository: plan.repository, childId: canonicalChild.id, marker: canonicalChild.markers.pullRequest };
-			const existingItems = authoritativeItems(await this.#transport.findChildIntegration(integrationQuery), "child integration lookup");
+			const existingItems = authoritativeItems(
+				await this.callExternal("findChildIntegration", (context) => this.#transport.findChildIntegration(integrationQuery, context)),
+				"child integration lookup",
+			);
 			if (existingItems.length > 1) throw new Error("duplicate child integration receipt is ambiguous");
 			if (existingItems.length === 1) {
 				const receipt = validateReceipt(existingItems[0]);
@@ -1776,6 +1999,7 @@ export class GitHubParentOrchestrator {
 			}
 			const second = await this.singlePullRequest(query);
 			if (second === null) return { kind: "blocked", blockers: ["pull_request_missing"] };
+			if (second.headSha !== handoff.head) return { kind: "blocked", blockers: ["head_moved"] };
 			if (!childPullRequestMatches(second, plan, canonicalChild, handoff)
 				|| !sameStrings(second.changedPaths, handoff.changedScope)) {
 				return { kind: "blocked", blockers: ["resource_mismatch"] };
@@ -1786,7 +2010,11 @@ export class GitHubParentOrchestrator {
 				|| !reviewMatchesChild(revalidated.decision.review, plan, canonicalChild, second.number, handoff)) {
 				return { kind: "blocked", blockers: ["review_missing"] };
 			}
+			if (await this.currentPolicyObservation(plan, canonicalChild.prBase, second.observedAt) === null) {
+				return { kind: "blocked", blockers: ["policy_moved"] };
+			}
 			const snapshot = createCanonicalPullRequestSnapshot(second);
+			const observation = pullRequestObservation(second);
 			const controllerProvenance: ControllerIntegrationProvenance = {
 				authority: "controller",
 				planDigest: plan.canonical.digest,
@@ -1804,6 +2032,7 @@ export class GitHubParentOrchestrator {
 				headSha: handoff.head,
 				parentBranch: plan.parentBranch,
 				pullRequestSnapshot: snapshot,
+				observation,
 				controllerProvenance,
 			};
 			const mutation = createDurableMutationIntent(
@@ -1814,7 +2043,9 @@ export class GitHubParentOrchestrator {
 			let mutationApplied: boolean | undefined;
 			try {
 				const result = validateDurableMutationResult(
-					await this.#transport.integrateChild(request), mutation, validateReceipt,
+					await this.callExternal("integrateChild", (context) => this.#transport.integrateChild(request, context), true),
+					mutation,
+					validateReceipt,
 				);
 				mutationApplied = result.applied;
 				if (!canonicalDataEqual(result.value.transportProvenance, transportProvenance(result))) {
@@ -1825,7 +2056,8 @@ export class GitHubParentOrchestrator {
 			}
 			const recovered = await this.reconcileVisible(async () => {
 				const items = authoritativeItems(
-					await this.#transport.findChildIntegration(integrationQuery), "child integration recovery lookup",
+					await this.callExternal("findChildIntegration", (context) => this.#transport.findChildIntegration(integrationQuery, context)),
+					"child integration recovery lookup",
 				);
 				if (items.length > 1) throw new Error("duplicate child integration receipt is ambiguous");
 				if (items.length === 0) return null;
@@ -1875,20 +2107,35 @@ export class GitHubParentOrchestrator {
 				|| receipt.pullRequestSnapshot.baseBranch !== plan.parentBranch
 				|| receipt.pullRequestSnapshot.baseSha !== receipt.baseSha
 				|| receipt.pullRequestSnapshot.headSha !== receipt.headSha
+				|| receipt.pullRequestSnapshot.policyDigest !== policyFor(plan, plan.parentBranch).digest
 				|| !sameStrings(receipt.pullRequestSnapshot.allowedScopes, child.writeScopes)
+				|| receipt.observation.revision !== receipt.pullRequestSnapshot.revision
+				|| receipt.observation.observedAt !== receipt.pullRequestSnapshot.observedAt
 				|| receipt.controllerProvenance.evidenceRevision > receipt.pullRequestSnapshot.revision
 				|| receipt.controllerProvenance.observedAt > receipt.pullRequestSnapshot.observedAt;
 		})) return null;
 		const callerByChild = new Map(receipts.map((receipt) => [receipt.childId, receipt]));
 		const authoritative: ChildIntegrationReceipt[] = [];
 		for (const child of plan.children) {
+			let materialized: MaterializedChildRecord;
+			try {
+				const issues = await this.matchingIssues(plan, child);
+				if (issues.length !== 1) return null;
+				materialized = materializeChildRecord(plan, child.id, issues[0]);
+			} catch {
+				return null;
+			}
 			let items: unknown[];
 			try {
-				items = authoritativeItems(await this.#transport.findChildIntegration({
+				const integrationQuery = {
 					repository: plan.repository,
 					childId: child.id,
 					marker: child.markers.pullRequest,
-				}), "child integration roster lookup");
+				};
+				items = authoritativeItems(
+					await this.callExternal("findChildIntegration", (context) => this.#transport.findChildIntegration(integrationQuery, context)),
+					"child integration roster lookup",
+				);
 			} catch {
 				return null;
 			}
@@ -1911,7 +2158,21 @@ export class GitHubParentOrchestrator {
 			}
 			if (pullRequests.length !== 1) return null;
 			const pullRequest = pullRequests[0];
-			if (createCanonicalPullRequestSnapshot(pullRequest).digest !== receipt.pullRequestSnapshot.digest) return null;
+			const handoff: WorkspaceHandoffEvidence = {
+				issue: materialized.issue,
+				branch: materialized.branch,
+				prBase: materialized.prBase,
+				baseHead: receipt.baseSha,
+				head: receipt.headSha,
+				changedScope: [...receipt.pullRequestSnapshot.changedPaths],
+				verificationState: "passed",
+				repositoryIdentity: "0".repeat(64),
+				worktreeIdentity: "0".repeat(64),
+				dirty: false,
+			};
+			if (pullRequest.state === "closed"
+				|| !childPullRequestMatches(pullRequest, plan, materialized, handoff)
+				|| !receiptMatchesChild(receipt, plan, materialized, pullRequest.number, handoff, pullRequest)) return null;
 			const expectedMutation = createDurableMutationIntent(
 				"child_integration",
 				[plan.repository, child.markers.pullRequest],
@@ -1925,6 +2186,7 @@ export class GitHubParentOrchestrator {
 					headSha: receipt.pullRequestSnapshot.headSha,
 					parentBranch: plan.parentBranch,
 					pullRequestSnapshot: receipt.pullRequestSnapshot,
+					observation: receipt.observation,
 					controllerProvenance: receipt.controllerProvenance,
 				},
 				null,
@@ -1938,7 +2200,9 @@ export class GitHubParentOrchestrator {
 			};
 			try {
 				validateAncestryProof(
-					await this.#transport.proveAncestry(ancestryQuery), ancestryQuery, parentPullRequest.observedAt,
+					await this.callExternal("proveAncestry", (context) => this.#transport.proveAncestry(ancestryQuery, context)),
+					ancestryQuery,
+					parentPullRequest.observedAt,
 				);
 			} catch {
 				return null;
@@ -2024,6 +2288,9 @@ export class GitHubParentOrchestrator {
 			|| !reviewMatchesParent(assessed.decision.review, plan, first)) {
 			return { kind: "blocked", blockers: ["review_missing"] };
 		}
+		if (await this.currentPolicyObservation(plan, plan.parentBaseBranch, first.observedAt) === null) {
+			return { kind: "blocked", blockers: ["policy_moved"] };
+		}
 		if (this.#broker === undefined) return { kind: "awaiting_human", reason: "broker_unavailable" };
 		const policy = validateDecisionPolicy(policyValue);
 		const request: GitHubDecisionRequest = {
@@ -2045,16 +2312,20 @@ export class GitHubParentOrchestrator {
 			generation: plan.generation,
 			headSha: first.headSha,
 		};
-		const record = await this.#broker.request(request);
+		const record = await this.callExternal("broker.request", (context) => this.#broker!.request(request, context), true);
 		assertHumanDecisionBinding(record, binding);
 		let decision = record.status === "decided" || record.status === "consumed" ? record.decision : undefined;
 		if (decision === undefined) {
-			const polled = await this.#broker.poll(policy.requestId, binding);
+			const polled = await this.callExternal("broker.poll", (context) => this.#broker!.poll(
+				policy.requestId, binding, { signal: context.signal }, context,
+			));
 			if (polled.status === "pending") return { kind: "awaiting_human", reason: "pending" };
 			if (polled.status === "expired") return { kind: "awaiting_human", reason: "expired" };
 			decision = polled.decision;
 		}
-		if (record.status !== "consumed") decision = await this.#broker.consume(policy.requestId, binding);
+		if (record.status !== "consumed") {
+			decision = await this.callExternal("broker.consume", (context) => this.#broker!.consume(policy.requestId, binding, context), true);
+		}
 		if (decision.option === "reject") {
 			const lifecycle = this.humanDecisionLifecycle(plan, "reject");
 			if (lifecycle.kind !== "transition" || lifecycle.to !== "ABORTED") {
@@ -2079,6 +2350,9 @@ export class GitHubParentOrchestrator {
 			|| !reviewMatchesParent(revalidated.decision.review, plan, second)) {
 			return { kind: "blocked", blockers: ["review_missing"] };
 		}
+		if (await this.currentPolicyObservation(plan, plan.parentBaseBranch, second.observedAt) === null) {
+			return { kind: "blocked", blockers: ["policy_moved"] };
+		}
 		const lifecycle = this.humanDecisionLifecycle(plan, "approve_merge");
 		if (lifecycle.kind !== "transition" || lifecycle.to !== "MERGE") {
 			return { kind: "blocked", blockers: ["autonomy_policy_blocked_parent_ready"] };
@@ -2097,20 +2371,27 @@ export class GitHubParentOrchestrator {
 		if (!second.draft) return { kind: "ready", pullRequest: second, reused: true };
 		let mutationError: unknown;
 		let mutationApplied: boolean | undefined;
+		let readyRevision: number | undefined;
 		try {
 			const result = validateDurableMutationResult(
-				await this.#transport.markParentReady(markRequest), mutation, validateGitHubPullRequestEvidence,
+				await this.callExternal("markParentReady", (context) => this.#transport.markParentReady(markRequest, context), true),
+				mutation,
+				validateGitHubPullRequestEvidence,
 			);
 			mutationApplied = result.applied;
+			readyRevision = result.value.revision;
+			if (readyRevision <= second.revision) throw new Error("parent ready CAS revision did not advance");
 		} catch (error) {
 			mutationError = error;
 		}
 		const recovered = await this.reconcileVisible(async () => {
 			const ready = await this.singlePullRequest(query);
-			if (ready === null || ready.draft || !parentPullRequestMatches(ready, plan)) return null;
+			if (ready === null || ready.draft || !parentPullRequestMatches(ready, plan)
+				|| ready.revision <= second.revision || (readyRevision !== undefined && ready.revision !== readyRevision)) return null;
 			const readyDecision = await this.evaluateEvidence(ready, expected, reviewTarget, requiredCheckPolicy);
 			return readyDecision.decision.kind === "eligible"
 				&& sameStrings(readyDecision.observation.paths, ready.changedPaths)
+				&& await this.currentPolicyObservation(plan, plan.parentBaseBranch, ready.observedAt) !== null
 				&& reviewMatchesParent(readyDecision.decision.review, plan, ready) ? ready : null;
 		});
 		if (recovered !== null) return {
@@ -2118,6 +2399,9 @@ export class GitHubParentOrchestrator {
 			pullRequest: recovered,
 			reused: mutationError !== undefined || mutationApplied === false,
 		};
+		if (mutationError instanceof Error && mutationError.message === "parent ready CAS revision did not advance") {
+			return { kind: "blocked", blockers: ["parent_ready_revision_not_advanced"] };
+		}
 		if (mutationError !== undefined) throw mutationError;
 		throw new Error("parent ready mutation was not durably visible");
 		});

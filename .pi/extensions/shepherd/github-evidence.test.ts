@@ -736,7 +736,8 @@ test("cycle 4 exposes a complete controller-owned current check-policy observati
 		{ ...observation, revision: Number(observation.revision) + 1 },
 		{ ...observation, digest: "f".repeat(64) },
 	]) {
-		assert.notDeepEqual(validate(moved), observation);
+		if ("authority" in moved && moved.authority === "transport") assert.throws(() => validate(moved), /controller|authority|policy/i);
+		else assert.notDeepEqual(validate(moved), observation);
 	}
 });
 

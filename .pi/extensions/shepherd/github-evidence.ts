@@ -2,6 +2,8 @@ import { createHash } from "node:crypto";
 import { types as nodeTypes } from "node:util";
 
 import {
+	assertNoSensitiveText,
+	canonicalGitRef,
 	createIndependentReviewWork,
 	reconcileIndependentReview,
 	validateIndependentReviewRecord,
@@ -9,6 +11,8 @@ import {
 	type IndependentReviewRecord,
 	type IndependentReviewTarget,
 } from "./review-router.ts";
+
+export { canonicalGitRef } from "./review-router.ts";
 
 const MAX_GITHUB_NUMBER = 2_147_483_647;
 const MAX_COLLECTION = 128;
@@ -46,6 +50,16 @@ export interface RequiredGitHubCheckPolicy {
 	revision: number;
 	requiredChecks: RequiredGitHubCheck[];
 	digest: string;
+}
+
+export interface RequiredGitHubCheckPolicyObservation {
+	schemaVersion: 1;
+	authority: "controller";
+	repository: string;
+	baseBranch: string;
+	revision: number;
+	digest: string;
+	observedAt: string;
 }
 
 export interface GitHubChangedPathEvidence {
@@ -195,6 +209,7 @@ function inlineText(value: unknown, description: string, maximum = 1_024): strin
 		|| value.trim() !== value || UNSAFE_INLINE.test(value)) {
 		throw new Error(`invalid ${description}`);
 	}
+	assertNoSensitiveText(value, description);
 	return value;
 }
 
@@ -203,6 +218,7 @@ function bodyText(value: unknown): string {
 		|| Buffer.byteLength(value) > MAX_BODY_BYTES || UNSAFE_BODY.test(value)) {
 		throw new Error("pull request body must be bounded safe text");
 	}
+	assertNoSensitiveText(value, "pull request body");
 	return value.replace(/\r\n?/gu, "\n");
 }
 
@@ -234,23 +250,10 @@ function timestamp(value: unknown, description: string): string {
 	return canonical;
 }
 
-export function canonicalGitRef(value: unknown, description = "Git ref"): string {
-	const result = inlineText(value, description, 240);
-	if (result === "HEAD" || result.startsWith("refs/") || result.startsWith("-") || result.startsWith("/") || result.endsWith("/") || result.includes("\\")
-		|| result.includes("..") || result.includes("//") || result.includes("@{") || result === "@"
-		|| /[ ~^:?*\[\]{}]/u.test(result)
-		|| result.split("/").some((segment) => segment === "" || segment === "." || segment === ".."
-			|| segment === "HEAD" || segment.startsWith(".") || segment.endsWith(".") || segment.endsWith(".lock"))) {
-		throw new Error(`invalid ${description}`);
-	}
-	return result;
-}
-
 function boundedArray(value: unknown, description: string, maximum = MAX_COLLECTION): unknown[] {
 	if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
 		throw new Error(`${description} must be a canonical array`);
 	}
-	const descriptors = Object.getOwnPropertyDescriptors(value);
 	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
 	if (lengthDescriptor === undefined || !Object.hasOwn(lengthDescriptor, "value")
 		|| !Number.isSafeInteger(lengthDescriptor.value) || lengthDescriptor.value < 0
@@ -258,6 +261,7 @@ function boundedArray(value: unknown, description: string, maximum = MAX_COLLECT
 		throw new Error(`${description} must be a bounded array of at most ${maximum} values`);
 	}
 	const length = lengthDescriptor.value as number;
+	const descriptors = Object.getOwnPropertyDescriptors(value);
 	const values: unknown[] = [];
 	for (const key of Reflect.ownKeys(descriptors)) {
 		if (key === "length") continue;
@@ -367,6 +371,30 @@ export function createRequiredGitHubCheckPolicy(value: Omit<RequiredGitHubCheckP
 
 export function validateRequiredGitHubCheckPolicy(value: unknown): RequiredGitHubCheckPolicy {
 	return normalizePolicyInput(value, true);
+}
+
+export function validateRequiredGitHubCheckPolicyObservation(value: unknown): RequiredGitHubCheckPolicyObservation {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "authority", "repository", "baseBranch", "revision", "digest", "observedAt",
+	]);
+	if (candidate.schemaVersion !== 1) throw new Error("unsupported required-check policy observation schema");
+	if (candidate.authority !== "controller") throw new Error("required-check policy observation must be controller-owned");
+	if (typeof candidate.digest !== "string" || !DIGEST.test(candidate.digest)) {
+		throw new Error("invalid required-check policy observation digest");
+	}
+	return {
+		schemaVersion: 1,
+		authority: "controller",
+		repository: repository(candidate.repository, "required-check policy observation repository"),
+		baseBranch: canonicalGitRef(candidate.baseBranch, "required-check policy observation base branch"),
+		revision: githubNumber(candidate.revision, "required-check policy observation revision"),
+		digest: candidate.digest,
+		observedAt: timestamp(candidate.observedAt, "required-check policy observation timestamp"),
+	};
+}
+
+export function createRequiredGitHubCheckPolicyObservation(value: RequiredGitHubCheckPolicyObservation): RequiredGitHubCheckPolicyObservation {
+	return validateRequiredGitHubCheckPolicyObservation(value);
 }
 
 function validateRequestedChange(value: unknown): GitHubRequestedChangeEvidence {

@@ -121,11 +121,30 @@ function exactRecord(value: unknown, required: readonly string[], optional: read
 	return Object.fromEntries(Object.entries(descriptors).map(([key, descriptor]) => [key, descriptor.value]));
 }
 
+export function redactSensitiveText(input: string): string {
+	const secretName = "(?:authorization|token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret|private[_-]?key|database[_-]?url|credentials?)";
+	return input
+		.replace(/-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-\r\n]*PRIVATE KEY-----|$)/giu, "[REDACTED]")
+		.replace(/\bAuthorization\s*:\s*[^\r\n,;]+/giu, "Authorization: [REDACTED]")
+		.replace(/\b(?:Bearer|Basic|Token)\s+[^\s,;]+/giu, "[REDACTED]")
+		.replace(new RegExp(`(["']${secretName}["']\\s*:\\s*)(?:"[^"\\r\\n]*"|'[^'\\r\\n]*'|[^,}\\r\\n]+)`, "giu"), "$1\"[REDACTED]\"")
+		.replace(/\b[A-Z][A-Z0-9_]*(?:TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY|DATABASE_URL|CREDENTIALS?|SECRET_ACCESS_KEY|ACCESS_KEY)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/gu, "SECRET=[REDACTED]")
+		.replace(new RegExp(`\\b(${secretName})\\b\\s*[:=]\\s*(?:"[^"]*"|'[^']*'|[^\\s,;]+)`, "giu"), "$1=[REDACTED]")
+		.replace(/\b([a-z][a-z0-9+.-]*:\/\/)[^\s\/@:]+:[^\s\/@]+@/giu, "$1[REDACTED]@")
+		.replace(/([?&](?:token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret)=)[^&#\s]+/giu, "$1[REDACTED]")
+		.replace(/\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk_(?:live|test)_[A-Za-z0-9_-]{10,}|sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16})\b/gu, "[REDACTED]");
+}
+
+export function assertNoSensitiveText(value: string, description = "text"): void {
+	if (redactSensitiveText(value) !== value) throw new Error(`${description} appears to contain a credential or secret`);
+}
+
 function safeText(value: unknown, description: string, maximum = MAX_TEXT_BYTES): string {
 	if (typeof value !== "string" || value.length === 0 || value.length > maximum || Buffer.byteLength(value) > maximum
 		|| value.trim() !== value || UNSAFE_TEXT.test(value)) {
 		throw new Error(`invalid ${description}`);
 	}
+	assertNoSensitiveText(value, description);
 	return value;
 }
 
@@ -161,13 +180,18 @@ function pathValue(value: unknown, description: string): string {
 	return path;
 }
 
-function canonicalBranch(value: unknown, description: string): string {
+const PSEUDO_REFS = new Set([
+	"HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD",
+	"REBASE_HEAD", "BISECT_HEAD", "AUTO_MERGE",
+]);
+
+export function canonicalGitRef(value: unknown, description = "Git ref"): string {
 	const result = safeText(value, description, 240);
-	if (result === "HEAD" || result.startsWith("refs/") || result.startsWith("-") || result.startsWith("/")
+	if (result.startsWith("refs/") || result.startsWith("-") || result.startsWith("/")
 		|| result.endsWith("/") || result.includes("\\") || result.includes("..") || result.includes("//")
 		|| result.includes("@{") || result === "@" || /[ ~^:?*\[\]{}]/u.test(result)
 		|| result.split("/").some((segment) => segment === "" || segment === "." || segment === ".."
-			|| segment.startsWith(".") || segment.endsWith(".") || segment.endsWith(".lock") || segment === "HEAD")) {
+			|| segment.startsWith(".") || segment.endsWith(".") || segment.endsWith(".lock") || PSEUDO_REFS.has(segment))) {
 		throw new Error(`invalid ${description}`);
 	}
 	return result;
@@ -177,7 +201,6 @@ function exactArrayValues(value: unknown, description: string, allowEmpty: boole
 	if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
 		throw new Error(`${description} must be a canonical array`);
 	}
-	const descriptors = Object.getOwnPropertyDescriptors(value);
 	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
 	if (lengthDescriptor === undefined || !Object.hasOwn(lengthDescriptor, "value")
 		|| !Number.isSafeInteger(lengthDescriptor.value) || lengthDescriptor.value < 0
@@ -185,6 +208,7 @@ function exactArrayValues(value: unknown, description: string, allowEmpty: boole
 		throw new Error(`${description} must be a bounded array of at most ${MAX_ARRAY_ITEMS} values`);
 	}
 	const length = lengthDescriptor.value as number;
+	const descriptors = Object.getOwnPropertyDescriptors(value);
 	const values: unknown[] = [];
 	for (const key of Reflect.ownKeys(descriptors)) {
 		if (key === "length") continue;
@@ -238,8 +262,8 @@ function normalizeTarget(value: unknown): IndependentReviewTarget {
 		workItemId: safeText(candidate.workItemId, "work item ID"),
 		pullRequest: positiveNumber(candidate.pullRequest, "pull request"),
 		generation: positiveNumber(candidate.generation, "review generation"),
-		baseBranch: canonicalBranch(candidate.baseBranch, "review base branch"),
-		headBranch: canonicalBranch(candidate.headBranch, "review head branch"),
+		baseBranch: canonicalGitRef(candidate.baseBranch, "review base branch"),
+		headBranch: canonicalGitRef(candidate.headBranch, "review head branch"),
 		baseSha: sha(candidate.baseSha, "review base SHA"),
 		headSha: sha(candidate.headSha, "review head SHA"),
 		changedPaths,
@@ -481,7 +505,7 @@ export function reconcileIndependentReview(request: IndependentReviewReconcileRe
 		.map(validateIndependentReviewRecord);
 	const attestations = exactArrayValues(candidate.attestations ?? [], "AgentSession attestations", true, MAX_ARRAY_ITEMS)
 		.map((entry) => validateAgentSessionAttestation(entry));
-	if (new Set(attestations.map((entry) => `${entry.sessionId}:${entry.runId}`)).size !== attestations.length) {
+	if (new Set(attestations.map((entry) => JSON.stringify([entry.sessionId, entry.runId]))).size !== attestations.length) {
 		throw new Error("duplicate AgentSession attestation");
 	}
 	for (const attestation of attestations) {
