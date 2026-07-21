@@ -22,7 +22,11 @@ findings:
 status: issues_found
 ---
 
-# Phase 471: Code Review Report
+# Phase 471: Historical Foundation Code Review
+
+> This review covers the earlier read-only control-plane checkpoint only. Issue #471 was later
+> expanded into the complete autonomous replacement described by #472 and #473-#481. Findings and
+> fixes remain regression evidence; this document is not final release approval.
 
 **Reviewed:** 2026-07-21T09:36:01Z
 **Depth:** deep

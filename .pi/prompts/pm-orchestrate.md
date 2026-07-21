@@ -27,10 +27,10 @@ Operate as the live parent orchestrator in the main Pi session. Build the ready 
 confirm the parent branch and parent PR, and delegate independent ready work through the
 `subagent` tool using project agents from `.pi/agents/`:
 
-- Dispatch `pm-gsd-worker` (mutating, `model: openai-codex/gpt-5.5:high`, scoped to
+- Dispatch `pm-gsd-worker` (mutating, `model: openai-codex/gpt-5.6-sol:high`, scoped to
   `read,bash,edit,write,grep,find,ls`) for each independent ready sub-issue with disjoint write
   scope. Give every mutating worker its own `cwd` (prefer a git worktree).
-- Dispatch `pm-scout` (read-only, `model: openai-codex/gpt-5.4-mini:high`) for reconnaissance
+- Dispatch `pm-scout` (read-only, `model: openai-codex/gpt-5.6-sol:xhigh`) for reconnaissance
   sidecars.
 - Dispatch `pm-reviewer` (read-only, `thinking: xhigh`) for adversarial review sidecars.
 - Run coupled/critical-path slices that cannot be isolated as `local_critical_path` in the main

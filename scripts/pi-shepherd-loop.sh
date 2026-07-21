@@ -33,7 +33,7 @@
 #
 # Config (env; defaults shown):
 #   PI_BIN=pi
-#   ORCH_MODEL=openai-codex/gpt-5.5           # orchestrator model (thinking level via ":<level>")
+#   ORCH_MODEL=openai-codex/gpt-5.6-sol       # transitional shell orchestrator; use PI_EXTRA_FLAGS="--thinking xhigh"
 #   PI_TOOLS=read,bash,edit,write,grep,find,ls,subagent
 #   VALIDATOR_BIN=pi                          # Shepherd CLI (cross-model judging is a feature)
 #   VALIDATOR_ARGS="--model openai-codex/gpt-5.6-sol --thinking high --tools read,bash,edit,write,grep,find,ls --approve"
@@ -55,7 +55,7 @@ if [[ -x "$NODE_BIN_DIR/node" ]]; then
 fi
 
 PI_BIN="${PI_BIN:-pi}"
-ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.5}"
+ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.6-sol}"
 PI_TOOLS="${PI_TOOLS:-read,bash,edit,write,grep,find,ls,subagent}"
 VALIDATOR_BIN="${VALIDATOR_BIN:-pi}"
 VALIDATOR_ARGS="${VALIDATOR_ARGS:---model openai-codex/gpt-5.6-sol --thinking high --tools read,bash,edit,write,grep,find,ls --approve}"

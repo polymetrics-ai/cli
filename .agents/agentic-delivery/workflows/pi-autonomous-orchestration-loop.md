@@ -1,12 +1,13 @@
 # Pi Autonomous Orchestration Loop
 
-Fully automated, resumable, multi-model delivery loop. Given one prompt describing any problem
-(connector or implementation), the loop plans, creates issues, implements, verifies, reviews,
-corrects, and integrates — with Claude planning/verifying/reviewing and Codex implementing — and
-can be stopped and resumed at any point (including token exhaustion) without losing work.
+Fully autonomous, resumable delivery loop. Given one prompt describing any problem (connector or
+implementation), Shepherd researches, plans, creates issues, implements, verifies, reviews,
+corrects, and integrates through bounded in-process Pi `AgentSession` roles. It can be stopped and
+resumed after process or host interruption without losing authoritative progress.
 
-This is the runtime-generic contract. The Pi adapter is `pm-auto-loop` (`.pi/prompts/pm-auto-loop.md`)
-driven by `scripts/pi-auto-loop.sh`. It composes the existing
+This is the runtime-generic contract. The authoritative Pi implementation is the `/pm-shepherd`
+extension under `.pi/extensions/shepherd/`; `.pi/prompts/pm-auto-loop.md` and the shell drivers are
+transitional rollback surfaces until issue #471's canary and cutover pass. It composes the existing
 `parent-issue-orchestration-loop.md`, `pi-active-orchestration-loop.md`, `gsd-universal-runtime-loop.md`,
 `claude-review-loop.md`, and `code-review-disposition-template.md`.
 
@@ -14,17 +15,18 @@ driven by `scripts/pi-auto-loop.sh`. It composes the existing
 
 | Stage role | Agent | Model | Provider |
 |---|---|---|---|
-| Orchestrator (main session) | — | `openai-codex/gpt-5.5` | Codex |
-| Web / API research | `pm-web-researcher` | `openai-codex/gpt-5.5` | Codex |
-| Parent + task planning | `pm-planner` | `openai-codex/gpt-5.5` | Codex |
-| Issue creation | `pm-issue-creator` | `openai-codex/gpt-5.5` (xhigh) | Codex |
-| Execute / correct | `pm-gsd-worker` | `openai-codex/gpt-5.5` (xhigh) | Codex |
-| Verify | `pm-verifier` | `openai-codex/gpt-5.5` | Codex |
-| Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | `openai-codex/gpt-5.5` | Codex |
+| Orchestrator policy/controller | host code plus validation session | `openai-codex/gpt-5.6-sol` (`xhigh`) | Codex |
+| Web / API research | `pm-web-researcher` | `openai-codex/gpt-5.6-sol` (`xhigh`) | Codex |
+| Parent + task planning | `pm-planner` | `openai-codex/gpt-5.6-sol` (`xhigh`) | Codex |
+| Issue creation | typed host adapter plus `pm-issue-creator` proposal | `openai-codex/gpt-5.6-sol` (`xhigh`) | Codex |
+| Execute / correct | `pm-gsd-worker` | `openai-codex/gpt-5.6-sol` (`high`) | Codex |
+| Verify | `pm-verifier` | `openai-codex/gpt-5.6-sol` (`xhigh`) | Codex |
+| Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | `openai-codex/gpt-5.6-sol` (`xhigh`) | Codex |
 
-The orchestrator is the only spawner (recursive `subagent` calls are blocked). The loop is driven
-turn-by-turn by the orchestrator, which persists state after every transition so any turn is a
-safe resume point.
+The controller is the only spawner; child sessions cannot create sessions recursively. Every role
+is created through Pi's public `createAgentSession` API inside the current Pi process. The host
+controller—not model prose—owns transitions, typed external mutations, persistence, and authority.
+It persists state after every transition so any transition boundary is a safe resume point.
 
 ## Stage machine
 
@@ -46,16 +48,20 @@ PARENT_SETUP    create parent branch feat/<N>-<slug> from main; open DRAFT paren
                 (Orchestrator / pm-reviewer) re-review                    ┘ repeat ≤ max_correction_rounds
   INTEGRATE     merge sub-PR → parent branch; mark sub-issue complete
 ─────────────────────────────────────────────────────────────────────────────────────────
-PARENT_FINALIZE (Orchestrator) parent PR coverage + disposition → human-ready gate (stop for human)
+PARENT_FINALIZE parent PR coverage + disposition → durable exact-head human decision request
+HUMAN_DECISION  wait for an allowlisted `/shepherd decide <id> approve-merge` comment
+MERGE           revalidate exact head and gates, then merge through the typed host adapter
+COMPLETE        confirm GitHub/default-branch truth and close the durable run
 ```
 
 RESEARCH is skipped entirely for a fully-specified `implementation` task (no external unknown) — the
 `implementation` path stays first-class and light. Gates are hard: RESEARCH (connector) must be
 `complete` before `PARENT_PLAN`; `VERIFY` must pass before `REVIEW`; `REVIEW` must be clean (every
 finding fixed or dispositioned per `code-review-disposition-template.md`) before `INTEGRATE`. Branch
-and PR creation (`PARENT_SETUP`, `SUB_BRANCH`, `SUB_PR_OPEN`) are idempotent — check `gh pr list`/`gh
-issue list`/`git branch` and reuse what exists. Merges to `main` and final human-ready are human
-gates — the loop stops and reports there.
+and PR creation (`PARENT_SETUP`, `SUB_BRANCH`, `SUB_PR_OPEN`) are idempotent—reconcile GitHub and
+Git before creating anything. A parent merge is never inferred: Shepherd posts one durable
+head-bound decision request, waits, accepts one allowlisted response, revalidates, and only then
+may perform the merge. Without that response, the loop remains in `HUMAN_DECISION`.
 
 ## Durable state (source of truth for resume)
 
@@ -130,50 +136,47 @@ nothing is double-applied (issue creation and merges are checked for idempotency
 - **Isolation**: every mutating worker gets its own `cwd` (sibling checkout or worktree). A
   mutating worker without isolation is recorded `not_spawned_isolation_missing` and not spawned.
 
-## Hard stops (human gates — the loop stops and reports)
+## Human gates and durable waiting
 
-- Merge to `main`, and marking the parent PR human-ready.
-- Any secret request/print/store, new dependency, token-scope change, destructive external action,
-  production deploy, or quality-gate reduction.
-- Correction cap exceeded, or a finding marked `Needs human`.
+- Requirements/scope/authority decisions are requested on the parent issue; exact-head review and
+  merge decisions are requested on the relevant PR.
+- Every request has an idempotency marker, request ID, allowed options, generation, allowlisted
+  actor, and exact head when applicable. It is answered only by
+  `/shepherd decide <request-id> <option>` on the bound issue or PR.
+- Parent merge, any secret access, new dependency, token-scope change, destructive external action,
+  production deploy, quality-gate reduction, correction-cap exhaustion, or a finding marked
+  `Needs human` requires this durable wait/decision flow.
+- Silence, emoji, CI success, review prose, or an agent rating never grants authority.
 
 ## Termination
 
-The run ends only when: all sub-issues are `complete` and the parent reaches the human-ready gate
-(`terminal: "human_gate"`), or a hard stop/block is hit (`terminal: "blocked"`), or the budget
-ceiling is reached (`terminal: "budget"`, resumable). Success is not assumed from a missing error —
-it is asserted from `ORCHESTRATION-STATE.json` + GitHub + git agreeing that every sub-issue is
-integrated and verified.
+The run ends successfully only when all sub-issues are integrated and verified, the exact-head
+human merge decision was consumed, and GitHub plus the default branch prove the parent merge.
+Human-wait, blocked, and budget states are resumable terminal conditions for the current process,
+not successful completion. Success is never assumed from a missing error.
 
-## Runtimes: two ways to drive this loop
+## Runtime and migration policy
 
-The stage machine, durable state, and reconciler above are runtime-agnostic. Two supported drivers:
+The authoritative runtime is `/pm-shepherd`, using in-process Pi `AgentSession` children and typed
+host adapters. It must not depend on tmux, a Go Shepherd daemon, `pi-sub-agent`, or a second `pi`
+process. The Go Shepherd issues and PRs are abandoned and superseded by #471.
 
-- **Claude-orchestrated + Shepherd validator** (`scripts/claude-auto-loop.sh` +
-  `.agents/agentic-delivery/prompts/claude-orchestrator.md`): the first-party Claude Code CLI
-  (`claude -p`) is the orchestrator, billed to your **Claude subscription** (flat-rate). It
-  dispatches **Codex** (`pi --model openai-codex/gpt-5.5`, your ChatGPT subscription) for
-  implementation, with the Shepherd supervisor layer below. When this driver is used, the Claude
-  roles run **only** on the first-party `claude` CLI — never through a third-party gateway.
+`scripts/pi-shepherd-loop.sh`, `scripts/pi-auto-loop.sh`, and `scripts/claude-auto-loop.sh` remain
+temporary rollback paths while the in-process controller is under construction. They must be
+clearly labeled legacy and are deprecated only after crash/restart tests and the #397/#438 canary
+pass. Do not delete their branches, worktrees, or traces as part of the replacement.
 
-- **Codex-only + Shepherd validator** (`scripts/pi-shepherd-loop.sh` + `.pi/prompts/pm-auto-loop.md`
-  or `/pm-connector-loop`): every role — orchestrator, subagents, validator — runs on Codex via
-  `pi` (`openai-codex/*`, your ChatGPT subscription). Requires `pi install npm:pi-sub-agent` once.
-  The role tags above map to the pi orchestrator session; models come from `.pi/agents/*`
-  frontmatter (all `openai-codex/*`).
-
-Billing hard rule for BOTH drivers: never route any role through OpenRouter or another
-pay-per-token gateway. Claude roles (when used) stay on the first-party `claude` CLI; Codex roles
-stay on `openai-codex/*` via the ChatGPT plan.
+Billing hard rule: never route any role through OpenRouter or another pay-per-token gateway. Codex
+roles stay on `openai-codex/gpt-5.6-sol` through the configured ChatGPT subscription path.
 
 ## Validator layer (Shepherd supervisor meta-agent)
 
-Above the orchestrator sits an independent **Shepherd-style validator** that judges whether the
-orchestration is running correctly, step by step — see
+The controller dispatches an independent validation `AgentSession` that judges whether the
+orchestration is running correctly, step by step—see
 `.agents/agentic-delivery/workflows/shepherd-validator.md`. After every orchestrator turn it scores
 the `(state, action)` transition 1–5 on six dimensions (Anthropic trajectory rubric, geometric mean),
 writes `VALIDATION.jsonl`, and emits a verdict — `PROCEED` / `RETRY` / `REVERT` (restore the last
 checkpoint and replay the stage from that fork point) / `HALT` (hard-gate breach → human). It is
-independent of the orchestrator (re-derives truth from git/gh/artifacts), so a hallucinating
-orchestrator cannot self-certify, and it is the layer that catches skipped gates, no-op loops, and
-parallel-worker write conflicts before they compound.
+independent of the implementation worker (it re-derives truth through read-only typed evidence), so
+a hallucinating worker cannot self-certify. Deterministic host gates override every rating and
+catch skipped gates, no-op loops, stale evidence, and parallel-worker write conflicts.

@@ -2,17 +2,23 @@
 
 Phase: `471-pi-agent-session-shepherd`
 
-| Check | Status | Evidence |
-| --- | --- | --- |
-| GSD doctor | pass | `scripts/gsd doctor` passed all main-branch adapter checks. |
-| GSD programming-loop adapter | fallback | `scripts/gsd sources programming-loop` and prompt generation both returned unknown command. |
-| RED evidence | pass | Six focused Node test commands and offline Pi RPC discovery failed on absent production modules as expected. |
-| Focused TypeScript tests | pass | 82/82 Node tests passed; strict TypeScript no-emit passed for every production module including `index.ts`. Includes terminal-event, resume-target, canonical-worktree, structured-cancellation, CAS lease, no-follow state, setup-deadline, shared-close, Windows-path, shutdown-failure, and launch-race probes. |
-| Pi load/discovery smoke | pass | Offline Pi 0.80.6 RPC `get_commands` found `pm-shepherd` from the explicit extension entry point. |
-| PR #438 read-only canary | pass | Final candidate `c1c5e9e9` ran generation 3 through two zero-tool Pi AgentSessions at exact clean target head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`; score `0.9813`, no hard gates, both lanes succeeded, persisted summaries were fixed `lane_succeeded` categories in a mode-0600 file, lease release completed, and post-run local/GitHub state was unchanged. |
-| Root Go/static/build gates | pass | At exact head `c1c5e9e9`, `go vet ./...`, `go test ./...`, and `go build ./cmd/pm` all exited 0; the worktree stayed clean. |
-| `make verify` | pass | Exit 0 at `c1c5e9e9`: formatting/tidy diff, vet, full Go tests, build, connector docs, local smoke flow, golangci-lint (0 issues), and 547 connector validations all passed. |
-| Automated review | pending | Route after PR creation. |
-| Human merge approval | blocked by design | Agent must stop before `main` merge. |
+| Check | Status | Evidence / next gate |
+|---|---|---|
+| GitHub parent topology | pass | #471, draft PR #472, and dependency-linked child issues #473-#481 exist. |
+| Abandoned Go closure | pass | #372/#389/#470 closed `not_planned`; #390/#456 closed unmerged; history preserved. |
+| Role model policy | pending commit/test | Configuration now routes implementation to 5.6 Sol/high and all other roles to 5.6 Sol/xhigh; grep/smoke required. |
+| Historical read-only foundation | historical pass | Earlier 82-test/full-root gate and #438 read-only canary evidence is preserved; it does not verify autonomous mutation. |
+| #473 control-plane hardening | in progress | New adversarial code/tests exist; known lease/root/lifecycle/invariant blockers remain to close. |
+| #474-#477 parallel ports | pending dependency | Start only after #473 integration. |
+| #478 GitHub orchestration | pending dependency | Requires #474/#476/#477. |
+| #479 autonomous integration | pending dependency | Requires #474-#478. |
+| #480 recovery/cutover | pending dependency | Requires #479. |
+| #481 CLI Architecture canary | pending dependency | Requires #480; must not bypass #397/#438 gates. |
+| Full TypeScript/Pi smoke | pending final | All Shepherd tests, strict typecheck, and offline extension discovery on exact parent head. |
+| Root Go/build/verify | pending final | `go vet`, `go test`, build, and `make verify` on exact parent head. |
+| Automated review coverage | pending | Per-child exact ranges plus final parent coverage/dispositions. |
+| Human merge decision | pending by design | One fresh allowlisted `approve-merge` response on #472 exact verified head. |
 
-No credentialed connector or reverse-ETL check is authorized for this phase.
+No credentialed connector or reverse-ETL test is required to validate Shepherd. If a future bounded
+child requires live GitHub auth, it must use the host environment/keychain without printing or
+passing the token to a child session.

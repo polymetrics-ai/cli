@@ -52,7 +52,11 @@ findings:
 status: issues_found
 ---
 
-# Phase 471: Final Release-Candidate Code Review
+# Phase 471: Historical Foundation Exact-Head Review
+
+> Historical only: this exact-head review predates the autonomous replacement scope. It validates
+> the read-only foundation at its recorded checkpoint, not parent PR #472 or child issues #473-#481.
+> A new final review is required after #481.
 
 **Reviewed:** 2026-07-21T10:28:01Z
 **Depth:** deep

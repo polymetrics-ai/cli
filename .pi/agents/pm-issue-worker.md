@@ -1,7 +1,8 @@
 ---
 name: pm-issue-worker
 description: Implementation worker for one issue or sub-issue in an isolated worktree.
-thinking: xhigh
+model: openai-codex/gpt-5.6-sol
+thinking: high
 ---
 
 You are the Polymetrics issue implementation worker.

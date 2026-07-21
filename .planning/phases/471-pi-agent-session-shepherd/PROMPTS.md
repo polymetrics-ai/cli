@@ -1,27 +1,62 @@
-# Prompt Snapshots
+# Prompt and Worker Contracts
 
 Phase: `471-pi-agent-session-shepherd`
 
-## 2026-07-21T08:17:01Z — coordinator kickoff
-
-- Agent role: coordinator
-- Loop type: manual fallback for `programming-loop run`
-- Input refs: issue #471, `AGENTS.md`, universal loop PRD/prompt library, Pi 0.80.6 SDK docs,
-  required repository contracts
-- Downstream artifact: this phase directory and `.pi/extensions/shepherd/**`
-- Verification result: pending
+## 2026-07-21 autonomous replacement pivot
 
 ```text
-Implement issue #471 using strict RED → GREEN → refactor. Keep the deterministic supervisor core
-independent of the Pi SDK, use only public Pi 0.80.6 APIs at the adapter edge, persist bounded
-redacted state outside the repository, run the first live canary read-only against PR #438, and
-stop at the human merge gate.
+Treat the standalone Go/tmux Shepherd as abandoned. Build #471 as the authoritative, complete
+in-process Pi AgentSession Shepherd. It owns research, GSD parent/sub-issue planning, dependency
+scheduling, isolated implementation, RED/GREEN/refactor, verification, review/correction,
+sub-PR integration, recovery, durable human decisions, and exact-head parent merge after explicit
+human approval. The existing read-only code is only the control-plane seed.
 ```
 
-## Read-only reconnaissance roles
+## Parent orchestrator instruction
 
-- Repository/Pi-extension scout: inspect main-branch extension and test infrastructure.
-- Pi SDK scout: verify exact public APIs and cleanup semantics without editing files.
-- GitHub topology scout: reconcile #372/#389/#470/#438 and human gates without mutation.
+```text
+Read #471, PR #472, AGENTS.md, the parent orchestrator contract, and PLAN.md. Reconcile disk, Git,
+and GitHub before action. Build the ready queue. Dispatch every dependency-ready issue whose write
+scope is disjoint, each in its own branch/worktree. Record spawned or one exact not_spawned reason.
+Do not infer completion from agent prose. Keep #472 draft until all child, verification, review,
+canary, and exact-head human gates pass.
+```
 
-Their structured findings are recorded under `traces/`; no scout is authorized to edit.
+## Mutating worker handoff template
+
+Every in-process implementation/correction session receives all of the following:
+
+- objective and acceptance criteria for exactly one child issue;
+- parent issue #471, parent branch, and PR #472;
+- owned issue branch, canonical isolated worktree, and PR base;
+- exact allowed write scope and forbidden shared files;
+- required GSD/TDD workflow, skills, verification commands, and handoff schema;
+- exact model route `openai-codex/gpt-5.6-sol`/`high`;
+- bounded workspace tools and typed host operations only; and
+- hard stops for secrets, authority expansion, dependency/scope changes, destructive actions,
+  quality-gate reduction, and default-branch mutation.
+
+Planning, research, issue proposal, verification, review, disposition, and orchestration sessions
+use `openai-codex/gpt-5.6-sol`/`xhigh` and cannot mutate outside their explicit role.
+
+## Human decision request template
+
+```text
+<!-- pm-shepherd-decision:<request-id> -->
+@karthik-sivadas Shepherd requires a human decision.
+Target: <issue-or-pr>
+Generation: <generation>
+Head: <sha-or-not-applicable>
+Reason: <bounded evidence-backed reason>
+Options: <explicit options>
+Reply here with: /shepherd decide <request-id> <option>
+```
+
+The broker must create this comment idempotently, accept only the configured human on the bound
+target/current generation/head, persist the source URL and actor, consume once, and revalidate
+before resuming.
+
+## Historical foundation prompts
+
+The earlier read-only scout/validator and exact-head #438 canary prompts remain historical TDD
+evidence in the trace directory. They do not define the replacement's final feature scope.

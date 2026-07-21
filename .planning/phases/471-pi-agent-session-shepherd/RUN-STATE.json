@@ -1,79 +1,55 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "2.0",
   "phase": "471-pi-agent-session-shepherd",
   "issue": 471,
-  "status": "in_progress",
-  "reason": "All local gates and the hardened-head PR #438 canary pass; repeat exact-head review and PR review routing remain.",
+  "parentPr": 472,
+  "status": "parent_pr_open",
+  "reason": "Autonomous replacement topology is live; #473 is the only dependency-ready implementation issue.",
   "details": {
-    "branch": "feat/471-pi-agent-session-shepherd",
-    "baseHead": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
-    "verifiedImplementationHead": "c1c5e9e90a4a59b621bdfb94d0500b8124868d45",
-    "agentMode": "auto",
-    "adapter": "manual_fallback",
-    "adapterReason": "The current main branch GSD registry does not expose programming-loop and has no programming-loop or tdd-gate helper scripts.",
-    "coveragePassed": true,
-    "tddGatePassed": true,
-    "verificationPassed": true,
-    "canaryTarget": {
-      "pr": 438,
-      "head": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
-      "mode": "read_only"
+    "parentBranch": "feat/471-pi-agent-session-shepherd",
+    "baseBranch": "main",
+    "currentParentHead": "d2b52a75",
+    "agentMode": "autonomous_in_process_target",
+    "adapter": "manual_gsd_fallback",
+    "modelPolicy": {
+      "implementation": "openai-codex/gpt-5.6-sol:high",
+      "planningReviewOrchestration": "openai-codex/gpt-5.6-sol:xhigh"
     },
+    "verificationPassed": false,
+    "reviewCoveragePassed": false,
+    "children": [
+      {"issue": 473, "branch": "feat/473-shepherd-control-plane-foundation", "dependencies": [], "state": "worker_ready"},
+      {"issue": 474, "branch": "feat/474-shepherd-dependency-policy", "dependencies": [473], "state": "planned"},
+      {"issue": 475, "branch": "feat/475-shepherd-agent-session-runtime", "dependencies": [473], "state": "planned"},
+      {"issue": 476, "branch": "feat/476-shepherd-worktree-git-adapter", "dependencies": [473], "state": "planned"},
+      {"issue": 477, "branch": "feat/477-shepherd-github-decision-broker", "dependencies": [473], "state": "planned"},
+      {"issue": 478, "branch": "feat/478-shepherd-github-parent-orchestration", "dependencies": [474, 476, 477], "state": "planned"},
+      {"issue": 479, "branch": "feat/479-shepherd-autonomous-controller", "dependencies": [474, 475, 476, 477, 478], "state": "planned"},
+      {"issue": 480, "branch": "feat/480-shepherd-recovery-cutover", "dependencies": [479], "state": "planned"},
+      {"issue": 481, "branch": "test/481-shepherd-cli-architecture-canary", "dependencies": [480], "state": "planned"}
+    ],
     "orchestrationDecisions": [
       {
-        "cycle": "plan",
-        "decision": "read_only_spawned",
-        "reason": "Three independent scouts audited GitHub topology, main-branch Pi infrastructure, and the exact Pi SDK surface without mutation."
-      },
-      {
-        "cycle": "tdd-gate",
+        "cycle": "autonomous-replacement-pivot",
         "decision": "local_critical_path",
-        "reason": "Six focused test entries and offline Pi command discovery failed on absent production modules before implementation, satisfying the manual RED gate."
+        "reason": "Reframed #471, opened #472, created #473-#481, and closed the abandoned Go records before worker dispatch."
       },
       {
-        "cycle": "green-refactor",
-        "decision": "parallel_workers_integrated",
-        "reason": "Independent core and SDK workers were integrated, then reviewer findings became fail-closed regression tests; 38 focused tests, strict TypeScript, and offline Pi registration pass."
-      },
-      {
-        "cycle": "canary",
-        "decision": "read_only_completed",
-        "reason": "Two zero-tool openai-codex/gpt-5.6-sol xhigh AgentSessions independently assessed PR #438 at exact clean head 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f; both succeeded, score was 0.9819, hard gates were empty, and post-run target state was unchanged."
-      },
-      {
-        "cycle": "ownership-shutdown-review",
-        "decision": "blocking_findings_corrected",
-        "reason": "Cross-process double dispatch, early-stop, delayed-create abort, hung cleanup, and graceful-shutdown state reproductions were added and corrected with a global fenced lease, lifecycle cancellation, and bounded unconditional cleanup; 49 focused tests and strict TypeScript pass."
-      },
-      {
-        "cycle": "corrected-canary",
-        "decision": "read_only_completed",
-        "reason": "Checkpoint ccf0daf3 completed generation 2 against exact clean PR #438 head with both zero-tool lanes successful, score 0.9794, no hard gates, the global lease released, and target state unchanged."
-      },
-      {
-        "cycle": "deep-review-remediation",
-        "decision": "blocking_findings_corrected",
-        "reason": "Ten critical and six warning findings were reproduced and corrected in three parallel test-first lanes; root integration added a strict-TypeScript buffer correction and a launch-resolution race regression. The complete focused suite is 82/82 green, strict TypeScript and offline Pi registration pass, and the earlier canary is marked historical pending a hardened-head rerun."
-      },
-      {
-        "cycle": "final-root-verification",
-        "decision": "all_local_gates_passed",
-        "reason": "At c1c5e9e9, go vet, the full Go test suite, build, and make verify all exited 0; lint reported zero issues, 547 connector definitions validated, and the worktree stayed clean."
-      },
-      {
-        "cycle": "hardened-head-canary",
-        "decision": "read_only_completed",
-        "reason": "Generation 3 ran the c1c5e9e9 extension against exact clean PR #438 head 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f; both zero-tool lanes succeeded, score was 0.9813, hard gates were empty, fixed summary categories persisted mode 0600, ownership released, and local/GitHub target state was unchanged."
+        "cycle": "ready-queue",
+        "decision": "not_spawned_dependency_blocked",
+        "reason": "#474-#481 depend directly or transitively on #473; the coordinator is completing #473's existing uncommitted foundation remediation first."
       }
     ],
     "humanGates": [
-      "new_dependencies",
-      "auth_scope_changes",
-      "credential_access",
-      "mutating_pr_438",
-      "quality_gate_reductions",
-      "main_branch_merge"
+      "scope_or_authority_change",
+      "new_dependency",
+      "auth_scope_or_secret_access",
+      "destructive_external_action",
+      "production_change",
+      "quality_gate_reduction",
+      "correction_budget_exhausted",
+      "exact_head_parent_merge"
     ]
   },
-  "updatedAt": "2026-07-21T10:06:21Z"
+  "updatedAt": "2026-07-21T11:08:31Z"
 }

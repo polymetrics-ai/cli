@@ -8,7 +8,8 @@ workflows, skills, and guardrails.
 
 - Pi CLI: `@earendil-works/pi-coding-agent`
 - Project package: `npm:pi-sub-agent@0.1.5`
-- Default Pi model: `openai-codex/gpt-5.5` with `xhigh` thinking
+- Default planning/review model: `openai-codex/gpt-5.6-sol` with `xhigh` thinking
+- Implementation/correction model: `openai-codex/gpt-5.6-sol` with `high` thinking
 - OpenCode project model: `opencode-go/kimi-k2.7-code`
 - OpenCode small model: `opencode-go/deepseek-v4-flash`
 
@@ -44,7 +45,7 @@ subscription-backed `openai-codex` provider. Use Pi with `openai-codex/*` models
 
 ```bash
 unset OPENAI_API_KEY
-pi --provider openai-codex --model gpt-5.5
+pi --provider openai-codex --model gpt-5.6-sol --thinking xhigh
 ```
 
 ## Usage
@@ -79,39 +80,58 @@ Useful prompt templates:
   Export `SEARXNG_BASE` (and its token if proxied) first so research can query the audited `searxng`
   connector via `pm`.
 
-### Experimental in-process Shepherd
+### Autonomous in-process Shepherd
 
-`/pm-shepherd` is a deterministic Pi extension that creates independent Pi `AgentSession`
-contexts inside the current Pi process. The first release is intentionally read-only: it runs a
-scout and an independent validator at an exact clean PR head, validates run/generation/lane/head/
-nonce bindings, applies hard gates, and keeps bounded redacted summaries in memory while persisting
-only fixed lane-status categories plus diagnostic scores. Child sessions receive a bounded
-host-verified PR/check snapshot and no filesystem, shell,
-extension, custom, connector, or GitHub tools.
+`/pm-shepherd` is the authoritative replacement program tracked by parent issue #471 and draft
+parent PR #472. It uses Pi 0.80.6 public `createAgentSession` APIs inside the current Pi process;
+it does not start another `pi` process, use tmux as transport, or rely on the abandoned standalone
+Go Shepherd.
 
-From the exact target PR worktree:
+The target release owns the whole issue-to-merge loop: research, parent planning, dependency-linked
+sub-issues, parent/sub-branches and PRs, isolated parallel implementation workers, GSD
+red-green-refactor, verification, review/correction, sub-PR integration, crash reconciliation, and
+an exact-head human decision before the parent merge. Implementation roles use
+`openai-codex/gpt-5.6-sol`/`high`; planning, research, verification, review, and orchestration roles
+use the same model/`xhigh`.
+
+Current branch status: the checked-in command is the hardened read-only control-plane foundation.
+It is not the intended release boundary and must not be treated as a complete Shepherd. Until child
+issues #473-#481 are integrated, only the existing read-only canary/status/stop behavior is safe to
+exercise. The autonomous start/resume command contract will be enabled by #479 after the policy,
+worker, Git, GitHub, and human-decision ports are integrated.
+
+Target operator flow (not available until #479/#480 are complete):
 
 ~~~text
-/pm-shepherd status --issue 397
-/pm-shepherd canary --issue 397 --pr 438 --read-only --backend sdk-inproc --experimental
-/pm-shepherd stop --issue 397
+/pm-shepherd start --issue 471 --backend sdk-inproc
+/pm-shepherd status --issue 471
+/pm-shepherd stop --issue 471
+/pm-shepherd resume --issue 471 --backend sdk-inproc
 ~~~
 
-`start` and `resume` use the same explicit `--read-only --backend sdk-inproc --experimental`
-contract. Omission of `--read-only` fails closed; this extension does not yet dispatch mutating
-workers, push, comment, review, merge, call connectors, or execute reverse ETL. Its state lives
-outside the repository under Pi's agent directory, partitioned by a one-way repository
-fingerprint. Raw prompts, reasoning, credentials, and unrestricted tool output are not persisted.
-A mode-0600, atomically published repository/worktree lease journal fences the run across Pi
-processes and issues. A live owner fails closed; only `resume` may append a takeover after proving
-that the same issue's prior owner is stale.
+Mutating workers receive one issue, one branch, one isolated worktree, one declared write scope,
+and bounded workspace/host capabilities. Raw prompts, reasoning, credentials, and unrestricted tool
+output are never persisted. GitHub authentication remains in the host environment/keychain and is
+used only by typed host actions; a token is never passed into a worker prompt.
 
-This mode is interactive, not durable supervision. Embedded sessions share the parent Pi process,
-event loop, heap, environment, credentials boundary, and crash domain. Cancellation is
-cooperative. If Pi or the host stops, reopen Pi in the same target worktree and run `resume`; the
-controller reconciles any persisted running lane as interrupted and starts a fresh generation.
-A standalone durable Go Shepherd is planned design work; this repository does not yet provide an
-executable Go Shepherd command.
+When a genuine human gate is reached, Shepherd posts one idempotent request on the parent issue
+(requirements/scope/authority) or relevant PR (head-specific review/merge) and waits for an
+allowlisted response:
+
+~~~text
+/shepherd decide <request-id> <option>
+~~~
+
+The request is bound to its issue/PR, run generation, allowed options, actor, and exact head when
+applicable. Silence, emoji, CI success, review prose, or an agent score is not approval. A parent PR
+may merge only after a fresh `approve-merge` decision for its exact verified head and immediate
+gate revalidation.
+
+Embedded sessions share the parent Pi process, event loop, heap, environment, and crash domain.
+Durability comes from bounded persisted intent plus reconciliation with Git/GitHub truth after
+restart, not from process isolation. On macOS, the state root is trusted same-user local state; the
+implementation must not claim protection against a hostile same-UID process without native
+descriptor-relative filesystem operations.
 
 Registration can be checked without a model, auth, or network call:
 
@@ -141,7 +161,7 @@ scripts/pi-auto-loop.sh --resume        # continue the current run after a stop
 ### Claude-orchestrated driver + Shepherd validator (recommended)
 
 Uses the first-party **Claude Code CLI** (`claude -p`, subscription-backed — no third-party "extra
-usage" gate) as the orchestrator and **Codex** (`pi --model openai-codex/gpt-5.5`) for
+usage" gate) as the orchestrator and **Codex** (`pi --model openai-codex/gpt-5.6-sol --thinking high`) for
 implementation, with an independent **Shepherd supervisor** scoring every step (revert + replay on a
 bad step). See `.agents/agentic-delivery/workflows/shepherd-validator.md`.
 
@@ -158,7 +178,7 @@ The validator writes `.planning/auto-loop/VALIDATION.jsonl` (per-step scores) an
 `claude` CLI to be logged in (`claude -p "ok"` should work).
 
 Model routing is per-agent in `.pi/agents/*.md`; the Codex-only Shepherd profile pins project
-agents to `openai-codex/gpt-5.5` with each agent's declared thinking level, while the Shepherd
+agents to `openai-codex/gpt-5.6-sol` with the exact role thinking level, while the legacy Shepherd
 validator defaults to `openai-codex/gpt-5.6-sol --thinking high`. Confirm the exact model IDs your
 subscription exposes with `/model`, then set them once in the agent frontmatter and in the driver
 environment (`ORCH_MODEL` / `VALIDATOR_ARGS`). Connector research uses the repo's `searxng`

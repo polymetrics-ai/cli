@@ -1,95 +1,112 @@
-# Plan: Issue #471 Pi AgentSession Shepherd
+# Plan: Autonomous In-Process Shepherd
 
 ## Objective
 
-Deliver a dependency-free Pi extension that owns a deterministic, resumable interactive
-supervision cycle over embedded AgentSession lanes and proves the design through a merge-disabled,
-read-only canary against CLI Architecture v2 PR #438.
+Deliver the complete issue-to-merge Shepherd described by #471 through draft parent PR #472. The
+implementation must execute as bounded Pi `AgentSession` children inside the active Pi process,
+parallelize independent work, serialize dependencies/collisions, and wait for exact authenticated
+human decisions without relying on the abandoned Go program or an external shell driver.
 
-## Required Workflow And Skills
+## Required workflow and skills
 
-- GSD command attempted: `scripts/gsd prompt programming-loop run --phase 471-pi-agent-session-shepherd`.
-- Adapter result: unavailable on the current `main`; manual-GSD fallback recorded in `CONTEXT.md`.
-- Loaded skills: `gsd-programming-loop`, `github-issue-first-delivery`,
+- Parent issue orchestrator contract and stacked parent/sub-issue workflow.
+- `gsd-programming-loop` (manual fallback recorded while the adapter command is unavailable).
+- `gsd-workstreams`, `gsd-plan-phase`, `github-issue-first-delivery`,
   `architecture-patterns`, and `javascript-testing-patterns`.
-- Read repository contracts: required skill routing, Pi adapter, issue agent contract, parent
-  orchestration contract, universal runtime loop, automated review routing, and Claude review loop.
-- No Go implementation is in scope, so Go implementation skills are not required for production
-  edits. Root Go gates still run as compatibility checks.
+- Task-specific security, Git, CLI help/docs parity, and end-to-end testing skills routed by
+  `.agents/agentic-delivery/references/required-skills-routing.md`.
+
+Implementation workers run `openai-codex/gpt-5.6-sol`/`high`; planning, research, orchestration,
+verification, review, and disposition run `openai-codex/gpt-5.6-sol`/`xhigh`.
 
 ## Architecture
 
-Use ports and adapters so the deterministic core has no Pi SDK dependency:
+The deterministic controller depends on explicit ports:
 
-1. `domain.ts`: run/lane types, invariant validation, stale-evidence rejection, hard-gate
-   classification, geometric-mean rating, and restart reconciliation.
-2. `arguments.ts`: strict slash-command parser with bounded identifiers and fail-closed flags.
-3. `state-store.ts`: atomic mode-0600 JSON persistence plus one PID/token/inode-fenced global run
-   lease outside the repository under the Pi agent directory; injectable roots and liveness for tests.
-4. `runner.ts`: AgentRunner port plus a bounded child registry and concurrency governor.
-5. `sdk-runner.ts`: Pi 0.80.6 adapter with exact model/thinking/tool checks, in-memory child
-   sessions/settings, recursion prevention, pre-registration cancellation tombstones, and bounded
-   cleanup that always reaches dispose.
-6. `controller.ts`: read-only scout and validator orchestration, exact run/generation/head/nonce
-   binding, deterministic gating, rating, persistence, stop, and resume.
-7. `index.ts`: auto-discovered `/pm-shepherd` registration, concise status/help, lifecycle
-   notifications, and parent `session_shutdown` cleanup. Main-branch Pi discovery does not require
-   a `.pi/settings.json` edit.
+1. durable state/lease and target-evidence foundation;
+2. pure dependency DAG, stage policy, ready queue, retry budget, and reconciler;
+3. scoped in-process `AgentSession` role runtime and tool policy;
+4. isolated worktree plus typed Git operations;
+5. durable GitHub human-decision broker;
+6. parent issue/sub-issue/stacked-PR/review orchestration;
+7. autonomous controller and `/pm-shepherd` command integration; and
+8. crash recovery, bounded audit log, operator UX, and cutover/canary harness.
 
-## Command Surface
+Target stage machine:
 
-- Bare `/pm-shepherd`, `help`, and `status` never start a model.
-- `canary --issue 397 --pr 438 --read-only --backend sdk-inproc --experimental` is the first live
-  path and runs independent scout and validator sessions.
-- `start` and `resume` require the same explicit backend/experimental acknowledgement. Until a
-  mutating path has an isolated worktree and scope contract, omission of `--read-only` fails closed.
-- `stop --issue N` aborts only children owned by that exact run.
+```text
+INTAKE -> RESEARCH -> PARENT_PLAN -> ISSUE_CREATE -> PARENT_SETUP -> SCHEDULE
+       -> EXECUTE -> VERIFY -> REVIEW -> CORRECT -> INTEGRATE
+       -> FINAL_VERIFY -> HUMAN_DECISION -> MERGE -> COMPLETE
+```
 
-## TDD Tasks
+Every stage transition is host-validated and persisted. A wake begins by reconciling with current
+Git/GitHub truth. A correction loop is bounded; exhaustion becomes a durable human decision rather
+than an infinite retry.
 
-1. RED — command parsing and registration
-   - reject unknown actions, invalid IDs, duplicate flags, control characters, traversal, missing
-     experimental acknowledgement, and non-read-only initial runs;
-   - prove status/help do not dispatch an agent.
-2. RED — deterministic domain
-   - prove stale run/generation/lane/head/nonce evidence is rejected;
-   - prove hard gates override high diagnostic scores;
-   - prove concurrency is bounded at two and mutation at one;
-   - prove recovery converts persisted running lanes to interrupted.
-3. RED — persistence and controller
-   - prove atomic replacement, mode 0600, redacted/bounded summaries, duplicate-run rejection,
-     cooperative stop, and resume generation changes.
-4. RED — SDK adapter
-   - inject a fake SDK and prove exact Pi version/surface, model, thinking, tool allowlist,
-     no-extension resources, in-memory state, timeout abort, unsubscribe, and dispose.
-5. GREEN — implement the minimum production code to satisfy each failing slice.
-6. REFACTOR — centralize invariants, redaction, cleanup, and rendering only after focused tests pass.
-7. VERIFY — run focused tests, Pi extension discovery/load smoke, root compatibility gates, and an
-   independent exact-head read-only canary against PR #438.
+## Dependency waves
+
+| Wave | Issue | Scope | Dependencies | Parallel rule |
+|---|---|---|---|---|
+| 1 | #473 | control-plane/lease/state/lifecycle hardening | none | critical path now |
+| 2 | #474 | dependency policy/reconciler | #473 | parallel with #475-#477 |
+| 2 | #475 | in-process role runtime/tool policy | #473 | parallel with #474/#476/#477 |
+| 2 | #476 | worktree and typed Git adapter | #473 | parallel with #474/#475/#477 |
+| 2 | #477 | GitHub human-decision broker | #473 | parallel with #474-#476 |
+| 3 | #478 | parent/sub-issue/PR/review orchestration | #474/#476/#477 | after ports are stable |
+| 4 | #479 | shared autonomous controller and command wiring | #474-#478 | deliberate integration point |
+| 5 | #480 | recovery, audit, operator UX, legacy cutover | #479 | sequential safety gate |
+| 6 | #481 | #397/#438 canary and final evidence | #480 | final validation only |
+
+Each mutating child uses its issue branch/worktree and targets the parent branch. Child PRs use
+`Refs #<child>` and `Refs #471`; only #472 closes #471. #474-#477 have disjoint file ownership and
+must be dispatched together after #473 is reviewed and integrated.
+
+## TDD execution contract
+
+For each child:
+
+1. plan and seed the verification/TDD ledger before production edits;
+2. capture deterministic RED evidence for behavior, authority, race, or failure handling;
+3. implement the smallest GREEN slice and commit/push coherent checkpoints;
+4. refactor only while focused tests remain green;
+5. open/update a child PR against the parent branch;
+6. run issue gates, CI, adversarial review, and written disposition;
+7. correct accepted findings test-first and re-review the exact head; and
+8. integrate only after scope, verification, and review evidence meet the parent contract.
+
+## Human decision and merge contract
+
+- Requirement/scope/authority questions are posted on #471; head-specific review/merge questions
+  are posted on #472 or the relevant child PR.
+- The comment contains one durable marker, request ID, exact target/generation/head, allowed
+  options, and `/shepherd decide <request-id> <option>` syntax.
+- Only an allowlisted human answer on the bound target can be consumed, once.
+- Shepherd revalidates immediately after the decision. A changed head invalidates approval and
+  creates a new request.
+- No direct push to `main` is allowed. The parent PR may merge only after the fresh exact-head
+  human `approve-merge` decision and all repository gates.
+
+## Current critical path
+
+#473 is `worker_ready`. Its uncommitted remediation already contains useful foundation fixes but
+still has blocking state-store and cancellation findings. Finish its RED/GREEN/refactor cycle,
+open a child PR to #472, obtain review coverage, and integrate it. Then create four isolated
+worktrees and dispatch #474-#477 concurrently.
 
 ## Verification
 
-- `node --test .pi/extensions/shepherd/*.test.ts`
-- strict TypeScript no-emit check when the installed Pi package provides a compiler-compatible
-  resolution path; otherwise record the exact unsupported check and rely on Pi load plus Node tests
-- offline Pi RPC `get_commands` smoke proving `pm-shepherd` registration without a model call
-- `git diff --check`
-- `go vet ./...`
-- `go test ./...`
-- `go build ./cmd/pm`
-- `make verify`
+```bash
+node --test .pi/extensions/shepherd/*.test.ts
+pi --list-extensions
+git diff --check
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+```
 
-## Commit Checkpoints
-
-1. Plan and RED evidence.
-2. GREEN/refactor implementation.
-3. Verification and canary evidence.
-4. Review fixes, if any.
-
-## Hard Stops
-
-- new dependency or provider/auth change;
-- secret access or persistence;
-- mutating PR #438, connector calls, reverse ETL, production effects, or broad process control;
-- quality-gate reduction;
-- merge of this PR or any parent PR into `main`.
+Additional child-specific integration/fault-injection commands are recorded in issue bodies and
+verification artifacts. The overall phase remains unverified until #481 and exact-head parent
+review finish.

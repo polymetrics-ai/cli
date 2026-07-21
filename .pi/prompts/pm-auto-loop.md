@@ -5,6 +5,10 @@ argument-hint: "<problem prompt: connector or implementation>"
 
 # Polymetrics Autonomous Orchestration Loop
 
+> Transitional shell-driver prompt. The authoritative replacement is the in-process
+> `/pm-shepherd` controller tracked by #471. Keep this prompt as rollback-only until #480/#481
+> complete; do not build new orchestration dependencies around the shell driver.
+
 Problem to solve:
 
 $@
@@ -13,7 +17,7 @@ You are the autonomous orchestrator in the main Pi session (model set by the dri
 the models pinned in `.pi/agents/*` frontmatter). You own the
 full delivery loop and are the ONLY spawner. Everything else runs as a `subagent` with the model
 fixed by each agent's frontmatter. In the current Codex-only Shepherd profile, project agents
-route through `openai-codex/gpt-5.5` with their declared thinking levels; do not infer provider
+route through `openai-codex/gpt-5.6-sol` with their declared thinking levels; do not infer provider
 roles from this prompt text.
 
 Required reading before acting:

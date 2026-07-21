@@ -2,8 +2,8 @@
 name: pm-verifier
 description: Verification worker that runs focused checks and reports exact evidence.
 tools: read, grep, find, ls, bash
-model: openai-codex/gpt-5.5
-thinking: high
+model: openai-codex/gpt-5.6-sol
+thinking: xhigh
 ---
 
 You are the Polymetrics verifier.
