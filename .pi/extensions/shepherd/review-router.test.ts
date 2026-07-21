@@ -10,6 +10,7 @@ import {
 	type IndependentReviewRecord,
 	type IndependentReviewTarget,
 } from "./review-router.ts";
+import * as reviewRouterApi from "./review-router.ts";
 
 const baseSha = "a".repeat(40);
 const headSha = "b".repeat(40);
@@ -194,4 +195,78 @@ test("rejects proxied arrays without invoking their traps", () => {
 	});
 	assert.throws(() => createIndependentReviewWork(target({ changedPaths: paths })), /array|shape|paths|proxy/i);
 	assert.equal(trapInvoked, false);
+});
+
+test("exports one canonical controller attestation digest, constructor, and validator", () => {
+	const api = reviewRouterApi as Record<string, unknown>;
+	assert.equal(typeof api.independentReviewResultDigest, "function");
+	assert.equal(typeof api.createAgentSessionAttestation, "function");
+	assert.equal(typeof api.validateAgentSessionAttestation, "function");
+	const review = cleanReview();
+	const digest = (api.independentReviewResultDigest as (value: unknown) => string)(review);
+	const created = (api.createAgentSessionAttestation as (value: unknown) => unknown)({
+		sessionId: "session-478-exported-api",
+		runId: "run-478-exported-api-1",
+		review,
+	});
+	assert.equal((created as { resultDigest: string }).resultDigest, digest);
+	assert.deepEqual((api.validateAgentSessionAttestation as (value: unknown) => unknown)(
+		JSON.parse(JSON.stringify(created)),
+	), created);
+	assert.throws(
+		() => (api.validateAgentSessionAttestation as (value: unknown) => unknown)({
+			...(created as Record<string, unknown>),
+			resultDigest: "0".repeat(64),
+		}),
+		/digest|attestation/i,
+	);
+});
+
+test("binds review and attestation targets to exact base and head branches", () => {
+	const branched = {
+		...target(),
+		baseBranch: "feat/471-pi-agent-session-shepherd",
+		headBranch: "feat/811-github-evidence",
+	};
+	const work = createIndependentReviewWork(branched as never) as IndependentReviewRecord;
+	assert.equal((work as unknown as { baseBranch: string }).baseBranch, branched.baseBranch);
+	assert.equal((work as unknown as { headBranch: string }).headBranch, branched.headBranch);
+	assert.throws(
+		() => createIndependentReviewWork({ ...branched, baseBranch: "main" } as never),
+		/branch|target|marker/i,
+	);
+});
+
+test("same-marker attempts bind attestations by digest and target independent of ordering", () => {
+	const older = cleanReview({ completedAt: "2026-07-21T11:59:00.000Z" });
+	const newer = cleanReview({ completedAt: "2026-07-21T12:00:00.000Z" });
+	for (const reviews of [[older, newer], [newer, older]]) {
+		for (const attestations of [
+			[attestation(older, { sessionId: "session-older", runId: "run-older" }), attestation(newer, { sessionId: "session-newer", runId: "run-newer" })],
+			[attestation(newer, { sessionId: "session-newer", runId: "run-newer" }), attestation(older, { sessionId: "session-older", runId: "run-older" })],
+		]) {
+			const decision = reconcileIndependentReview({ target: target(), reviews, attestations } as never);
+			assert.equal(decision.kind, "satisfied");
+			if (decision.kind === "satisfied") assert.equal(decision.review.completedAt, newer.completedAt);
+		}
+	}
+
+	const ambiguousA = {
+		...cleanReview(),
+		verdict: "findings" as const,
+		findings: [{ id: "A", severity: "blocking" as const, summary: "First result." }],
+	};
+	const ambiguousB = {
+		...cleanReview(),
+		verdict: "findings" as const,
+		findings: [{ id: "B", severity: "blocking" as const, summary: "Second result." }],
+	};
+	assert.throws(() => reconcileIndependentReview({
+		target: target(),
+		reviews: [ambiguousA, ambiguousB],
+		attestations: [
+			attestation(ambiguousA, { sessionId: "session-a", runId: "run-a" }),
+			attestation(ambiguousB, { sessionId: "session-b", runId: "run-b" }),
+		],
+	} as never), /ambiguous|same.marker|digest/i);
 });

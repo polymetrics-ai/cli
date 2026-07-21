@@ -14,6 +14,8 @@ import {
 	type AgentSessionAttestation,
 	type IndependentReviewRecord,
 } from "./review-router.ts";
+import * as githubEvidenceApi from "./github-evidence.ts";
+import * as reviewRouterApi from "./review-router.ts";
 
 const fixturePath = ".pi/extensions/shepherd/fixtures/issue-478/green-pull-request.json";
 const baseSha = "a".repeat(40);
@@ -353,4 +355,325 @@ test("rejects proxied evidence arrays without invoking their traps", async () =>
 	});
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, checks }), /array|shape|checks|proxy/i);
 	assert.equal(trapInvoked, false);
+});
+
+const cycle3Repository = "github.com/polymetrics-ai/cli";
+const cycle3BaseBranch = "feat/471-pi-agent-session-shepherd";
+const cycle3HeadBranch = "feat/811-github-evidence";
+
+function cycle3Policy(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+	const input = {
+		schemaVersion: 1,
+		repository: cycle3Repository,
+		baseBranch: cycle3BaseBranch,
+		revision: 7,
+		requiredChecks: [
+			{ name: "shepherd-tests", producerId: "github-actions:workflow-verify" },
+			{ name: "strict-types", producerId: "github-actions:workflow-types" },
+		],
+		...overrides,
+	};
+	const create = (githubEvidenceApi as Record<string, unknown>).createRequiredGitHubCheckPolicy;
+	return typeof create === "function"
+		? (create as (value: unknown) => Record<string, unknown>)(input)
+		: { ...input, digest: "0".repeat(64) };
+}
+
+function cycle3Review(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+	return {
+		...cleanReview(),
+		baseBranch: cycle3BaseBranch,
+		headBranch: cycle3HeadBranch,
+		completedAt: "2026-07-21T12:03:00.000Z",
+		...overrides,
+	};
+}
+
+function cycle3Attestation(review: Record<string, unknown>, overrides: Record<string, unknown> = {}): Record<string, unknown> {
+	const create = (reviewRouterApi as Record<string, unknown>).createAgentSessionAttestation;
+	if (typeof create === "function") {
+		return {
+			...(create as (value: unknown) => Record<string, unknown>)({
+				sessionId: "session-478-cycle-3",
+				runId: "run-478-cycle-3-1",
+				review,
+			}),
+			...overrides,
+		};
+	}
+	return { ...attestation(review as unknown as IndependentReviewRecord), ...overrides } as Record<string, unknown>;
+}
+
+function cycle3Evidence(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+	const policy = cycle3Policy();
+	return {
+		schemaVersion: 2,
+		repository: cycle3Repository,
+		workItemId: "evidence",
+		generation: 3,
+		number: 812,
+		marker: expected.marker,
+		title: "feat(shepherd): add GitHub evidence",
+		body: `Refs #811\nRefs #471\n\n${expected.marker}`,
+		state: "open",
+		draft: false,
+		baseBranch: cycle3BaseBranch,
+		headBranch: cycle3HeadBranch,
+		baseSha,
+		headSha,
+		changedPathsComplete: true,
+		changedPaths: [...expected.changedPaths],
+		mergeState: "clean",
+		policyDigest: policy.digest,
+		checksComplete: true,
+		checks: [
+			{
+				id: "check-shepherd-tests",
+				name: "shepherd-tests",
+				producerId: "github-actions:workflow-verify",
+				sequence: 1,
+				status: "completed",
+				conclusion: "success",
+				headSha,
+				updatedAt: "2026-07-21T11:55:00.000Z",
+				completedAt: "2026-07-21T11:55:00.000Z",
+			},
+			{
+				id: "check-strict-types",
+				name: "strict-types",
+				producerId: "github-actions:workflow-types",
+				sequence: 1,
+				status: "completed",
+				conclusion: "success",
+				headSha,
+				updatedAt: "2026-07-21T11:56:00.000Z",
+				completedAt: "2026-07-21T11:56:00.000Z",
+			},
+		],
+		requestedChangesComplete: true,
+		requestedChanges: [],
+		threadsComplete: true,
+		threads: [],
+		reviewsComplete: true,
+		reviews: [cycle3Review()],
+		dispositionsComplete: true,
+		dispositions: [],
+		revision: 42,
+		observedAt: "2026-07-21T12:05:00.000Z",
+		...overrides,
+	};
+}
+
+function cycle3Expected(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+	const review = cycle3Review();
+	return {
+		repository: cycle3Repository,
+		workItemId: "evidence",
+		generation: 3,
+		number: 812,
+		marker: expected.marker,
+		baseBranch: cycle3BaseBranch,
+		headBranch: cycle3HeadBranch,
+		baseSha,
+		headSha,
+		changedPathEvidence: {
+			schemaVersion: 1,
+			authority: "controller",
+			repository: cycle3Repository,
+			workItemId: "evidence",
+			pullRequest: 812,
+			generation: 3,
+			baseSha,
+			headSha,
+			paths: [...expected.changedPaths],
+			complete: true,
+			revision: 41,
+			observedAt: "2026-07-21T11:58:00.000Z",
+		},
+		minimumObservation: {
+			revision: 41,
+			observedAt: "2026-07-21T11:58:00.000Z",
+		},
+		requiredCheckPolicy: cycle3Policy(),
+		reviewTarget: {
+			repository: cycle3Repository,
+			workItemId: "evidence",
+			pullRequest: 812,
+			generation: 3,
+			baseBranch: cycle3BaseBranch,
+			headBranch: cycle3HeadBranch,
+			baseSha,
+			headSha,
+			changedPaths: [...expected.changedPaths],
+			allowedScopes: [".pi/extensions/shepherd"],
+		},
+		attestations: [cycle3Attestation(review)],
+		...overrides,
+	};
+}
+
+function evaluateCycle3(evidenceValue = cycle3Evidence(), expectedValue = cycle3Expected()) {
+	return (evaluateGitHubPullRequestEvidence as unknown as (
+		evidence: unknown,
+		expectedValue: unknown,
+	) => ReturnType<typeof evaluateGitHubPullRequestEvidence>)(evidenceValue, expectedValue);
+}
+
+test("cycle 3 binds outer PR evidence and independent review identity at every coordinate", () => {
+	assert.equal(evaluateCycle3().kind, "eligible");
+	const cases: Array<[string, unknown]> = [
+		["repository", "github.com/other/cli"],
+		["workItemId", "other-work"],
+		["generation", 4],
+		["number", 999],
+		["baseBranch", "main"],
+		["headBranch", "feat/999-other"],
+		["baseSha", "c".repeat(40)],
+		["headSha", "d".repeat(40)],
+	];
+	for (const [field, value] of cases) {
+		const result = evaluateCycle3(cycle3Evidence({ [field]: value }));
+		assert.equal(result.kind, "blocked", field);
+		assert.ok(blockerCodes(result).some((code) => code === "resource_mismatch" || code === "topology_mismatch" || code === "head_moved"), field);
+	}
+});
+
+test("cycle 3 requires independently complete nested evidence and a fresh controller observation", () => {
+	for (const field of [
+		"changedPathsComplete",
+		"checksComplete",
+		"requestedChangesComplete",
+		"threadsComplete",
+		"reviewsComplete",
+		"dispositionsComplete",
+	]) {
+		const result = evaluateCycle3(cycle3Evidence({ [field]: false }));
+		assert.equal(result.kind, "blocked", field);
+		assert.ok(blockerCodes(result).includes("evidence_incomplete" as never), field);
+	}
+	const staleRevision = evaluateCycle3(cycle3Evidence({ revision: 40 }));
+	assert.ok(blockerCodes(staleRevision).includes("stale_evidence" as never));
+	const staleTime = evaluateCycle3(cycle3Evidence({ observedAt: "2026-07-21T11:57:00.000Z" }));
+	assert.ok(blockerCodes(staleTime).includes("stale_evidence" as never));
+	const wrongIndependentPaths = cycle3Expected({
+		changedPathEvidence: {
+			...(cycle3Expected().changedPathEvidence as Record<string, unknown>),
+			paths: [".pi/extensions/shepherd/review-router.ts"],
+		},
+	});
+	assert.ok(blockerCodes(evaluateCycle3(cycle3Evidence(), wrongIndependentPaths)).includes("resource_mismatch"));
+});
+
+test("cycle 3 enforces event causality, sequence rollups, and a post-disposition clean review", () => {
+	const baseCheck = (cycle3Evidence().checks as Array<Record<string, unknown>>)[0];
+	assert.throws(() => evaluateCycle3(cycle3Evidence({
+		checks: [{ ...baseCheck, status: "in_progress", conclusion: null, completedAt: baseCheck.completedAt }],
+	})), /completed|pending|check|chronolog/i);
+	assert.throws(() => evaluateCycle3(cycle3Evidence({
+		checks: [{ ...baseCheck, updatedAt: "2026-07-21T12:06:00.000Z", completedAt: "2026-07-21T12:06:00.000Z" }],
+	})), /future|observation|chronolog|timestamp/i);
+
+	const latestFailure = {
+		...baseCheck,
+		id: "check-shepherd-tests-2",
+		sequence: 2,
+		conclusion: "failure",
+		updatedAt: "2026-07-21T11:59:00.000Z",
+		completedAt: "2026-07-21T11:59:00.000Z",
+	};
+	const otherCheck = (cycle3Evidence().checks as Array<Record<string, unknown>>)[1];
+	assert.ok(blockerCodes(evaluateCycle3(cycle3Evidence({ checks: [latestFailure, otherCheck, baseCheck] }))).includes("ci_not_green"));
+	assert.throws(() => evaluateCycle3(cycle3Evidence({
+		checks: [baseCheck, { ...baseCheck, id: "duplicate-sequence" }, otherCheck],
+	})), /sequence|ambiguous|duplicate/i);
+
+	const findingReview = cycle3Review({
+		completedAt: "2026-07-21T12:01:00.000Z",
+		verdict: "findings",
+		findings: [{ id: "C3-F-1", severity: "blocking", summary: "Durable retry is missing." }],
+	});
+	const disposition = {
+		findingId: "C3-F-1",
+		kind: "fixed",
+		rationale: "Added durable conditional mutation reconciliation.",
+		actor: "maintainer",
+		headSha,
+		recordedAt: "2026-07-21T12:02:00.000Z",
+	};
+	const oldClean = cycle3Review({ completedAt: "2026-07-21T12:00:00.000Z" });
+	const expectedOld = cycle3Expected({ attestations: [cycle3Attestation(oldClean)] });
+	assert.ok(blockerCodes(evaluateCycle3(cycle3Evidence({
+		reviews: [oldClean, findingReview],
+		dispositions: [disposition],
+	}), expectedOld)).includes("review_missing"));
+	assert.ok(blockerCodes(evaluateCycle3(cycle3Evidence({
+		reviews: [oldClean, findingReview],
+		dispositions: [{ ...disposition, recordedAt: "2026-07-21T12:00:30.000Z" }],
+	}), expectedOld)).includes("undispositioned_finding"));
+	const finalClean = cycle3Review({ completedAt: "2026-07-21T12:03:00.000Z" });
+	assert.equal(evaluateCycle3(cycle3Evidence({
+		reviews: [oldClean, findingReview, finalClean],
+		dispositions: [disposition],
+	}), cycle3Expected({ attestations: [cycle3Attestation(finalClean)] })).kind, "eligible");
+});
+
+test("cycle 3 uses only a versioned repository/base policy and blocks policy movement", () => {
+	const api = githubEvidenceApi as Record<string, unknown>;
+	assert.equal(typeof api.createRequiredGitHubCheckPolicy, "function");
+	assert.equal(typeof api.validateRequiredGitHubCheckPolicy, "function");
+	const policy = cycle3Policy();
+	assert.match(String(policy.digest), /^[0-9a-f]{64}$/u);
+	for (const policyChanges of [
+		{ repository: "github.com/other/cli" },
+		{ baseBranch: "main" },
+		{ revision: 8 },
+		{ digest: "f".repeat(64) },
+	]) {
+		assert.throws(
+			() => evaluateCycle3(cycle3Evidence(), cycle3Expected({ requiredCheckPolicy: { ...policy, ...policyChanges } })),
+			/policy|digest|repository|base|revision/i,
+		);
+	}
+	const missingRequiredContext = cycle3Evidence({ checks: [(cycle3Evidence().checks as unknown[])[0]] });
+	assert.ok(blockerCodes(evaluateCycle3(missingRequiredContext)).includes("ci_not_green"));
+});
+
+test("cycle 3 evidence rejects proxies, accessors, cycles, oversize, and secret-bearing malformed input safely", () => {
+	let invoked = false;
+	const accessor = { ...cycle3Evidence() };
+	Object.defineProperty(accessor, "repository", {
+		enumerable: true,
+		get() {
+			invoked = true;
+			throw new Error("SECRET_TOKEN_SHOULD_NOT_ESCAPE");
+		},
+	});
+	assert.throws(() => evaluateCycle3(accessor), /shape|accessor|evidence/i);
+	assert.equal(invoked, false);
+	const proxied = new Proxy(cycle3Evidence(), {
+		get() {
+			invoked = true;
+			throw new Error("SECRET_TOKEN_SHOULD_NOT_ESCAPE");
+		},
+	});
+	assert.throws(() => evaluateCycle3(proxied), /shape|proxy|evidence/i);
+	assert.equal(invoked, false);
+	const cyclic = cycle3Evidence();
+	(cyclic.checks as unknown[]).push(cyclic);
+	assert.throws(() => evaluateCycle3(cyclic), /shape|check|cycle|evidence/i);
+	assert.throws(() => evaluateCycle3(cycle3Evidence({
+		requestedChanges: Array.from({ length: 129 }, (_, index) => ({
+			id: `R-${index}`,
+			actor: "reviewer",
+			commitSha: headSha,
+			dismissed: true,
+			submittedAt: "2026-07-21T11:00:00.000Z",
+		})),
+	})), /bounded|requested|128/i);
+	try {
+		evaluateCycle3({ ...cycle3Evidence(), unexpected: "SECRET_TOKEN_SHOULD_NOT_ESCAPE" });
+		assert.fail("unknown secret-bearing field must fail");
+	} catch (error) {
+		assert.doesNotMatch(String(error), /SECRET_TOKEN_SHOULD_NOT_ESCAPE/u);
+	}
 });

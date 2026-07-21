@@ -24,6 +24,8 @@ import {
 	type PublishRosterRequest,
 	type PullRequestMarkerQuery,
 } from "./github-orchestrator.ts";
+import * as githubOrchestratorApi from "./github-orchestrator.ts";
+import * as githubEvidenceApi from "./github-evidence.ts";
 import type { GitHubPullRequestEvidence } from "./github-evidence.ts";
 import { createIndependentReviewWork } from "./review-router.ts";
 import {
@@ -178,22 +180,60 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	incompleteRosterLookup = false;
 	incompleteIntegrationLookup = false;
 	ancestry = true;
+	ancestryProof?: (query: Record<string, unknown>) => Promise<unknown>;
 	onPullRequestRead?: (query: PullRequestMarkerQuery, matches: GitHubPullRequestEvidence[], read: number) => GitHubPullRequestEvidence[];
 	#pullRequestReads = 0;
+	#legacyMutation = 0;
+	#mutationRevision = 0;
+	#mutations = new Map<string, { digest: string; revision: number; value: unknown }>();
+
+	#applyMutation(request: Record<string, unknown>, operation: string, effect: () => unknown): any {
+		const candidate = request.mutation as Record<string, unknown> | undefined;
+		const key = typeof candidate?.idempotencyKey === "string"
+			? candidate.idempotencyKey
+			: `${operation}:legacy:${++this.#legacyMutation}`;
+		const digest = typeof candidate?.intentDigest === "string" ? candidate.intentDigest : "legacy";
+		const existing = this.#mutations.get(key);
+		if (existing !== undefined) {
+			if (existing.digest !== digest) throw new Error("durable mutation key reused with a different intent digest");
+			return {
+				schemaVersion: 1,
+				idempotencyKey: key,
+				intentDigest: digest,
+				revision: existing.revision,
+				applied: false,
+				value: existing.value,
+			};
+		}
+		const value = effect();
+		const revision = ++this.#mutationRevision;
+		this.#mutations.set(key, { digest, revision, value });
+		return {
+			schemaVersion: 1,
+			idempotencyKey: key,
+			intentDigest: digest,
+			revision,
+			applied: true,
+			value,
+		};
+	}
 
 	async findChildIssues(query: { repository: string; marker: string }): Promise<any> {
 		return { items: this.issues.filter((candidate) => candidate.marker === query.marker), complete: !this.incompleteIssueLookup };
 	}
 
-	async createChildIssue(request: CreateChildIssueRequest): Promise<GitHubChildIssue> {
-		this.createIssueCalls += 1;
-		const created = issueFrom(request, 810 + this.createIssueCalls);
-		this.issues.push(created);
+	async createChildIssue(request: CreateChildIssueRequest): Promise<any> {
+		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "issue", () => {
+			this.createIssueCalls += 1;
+			const created = issueFrom(request, 810 + this.createIssueCalls);
+			this.issues.push(created);
+			return created;
+		});
 		if (this.throwAfterIssuePublish) {
 			this.throwAfterIssuePublish = false;
 			throw new Error("simulated timeout after publish");
 		}
-		return created;
+		return result;
 	}
 
 	async findPullRequests(query: PullRequestMarkerQuery): Promise<any> {
@@ -202,44 +242,50 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return { items: this.onPullRequestRead?.(query, matches, this.#pullRequestReads) ?? matches, complete: !this.incompletePullRequestLookup } as never;
 	}
 
-	async createPullRequest(request: CreatePullRequestRequest): Promise<GitHubPullRequestEvidence> {
-		this.createPullRequestCalls += 1;
-		const created = cleanPullRequest(request, {
-			draft: request.draft,
-			checks: [],
-			reviews: [],
-		}, 900 + this.createPullRequestCalls);
-		this.pullRequests.push(created);
+	async createPullRequest(request: CreatePullRequestRequest): Promise<any> {
+		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "pull-request", () => {
+			this.createPullRequestCalls += 1;
+			const created = cleanPullRequest(request, {
+				draft: request.draft,
+				checks: [],
+				reviews: [],
+			}, 900 + this.createPullRequestCalls);
+			this.pullRequests.push(created);
+			return created;
+		});
 		if (this.throwAfterPullRequestPublish) {
 			this.throwAfterPullRequestPublish = false;
 			throw new Error("simulated timeout after pull request publish");
 		}
 		if (this.malformedPullRequestResponse) return { malformed: true } as never;
-		return created;
+		return result;
 	}
 
 	async findParentRosters(query: GitHubRosterQuery): Promise<any> {
 		return { items: this.rosters.filter((candidate) => candidate.marker === query.marker), complete: !this.incompleteRosterLookup };
 	}
 
-	async publishParentRoster(request: PublishRosterRequest): Promise<GitHubRosterSnapshot> {
-		this.publishRosterCalls += 1;
-		const existing = this.rosters.find((candidate) => candidate.marker === request.marker);
-		const published: GitHubRosterSnapshot = {
-			id: existing?.id ?? 1001,
-			marker: request.marker,
-			parentIssue: request.parentIssue,
-			generation: request.generation,
-			body: request.body,
-			updatedAt: "2026-07-21T12:00:00.000Z",
-		};
-		if (existing) this.rosters.splice(this.rosters.indexOf(existing), 1, published);
-		else this.rosters.push(published);
+	async publishParentRoster(request: PublishRosterRequest): Promise<any> {
+		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "roster", () => {
+			this.publishRosterCalls += 1;
+			const existing = this.rosters.find((candidate) => candidate.marker === request.marker);
+			const published: GitHubRosterSnapshot = {
+				id: existing?.id ?? 1001,
+				marker: request.marker,
+				parentIssue: request.parentIssue,
+				generation: request.generation,
+				body: request.body,
+				updatedAt: "2026-07-21T12:00:00.000Z",
+			};
+			if (existing) this.rosters.splice(this.rosters.indexOf(existing), 1, published);
+			else this.rosters.push(published);
+			return published;
+		});
 		if (this.throwAfterRosterPublish) {
 			this.throwAfterRosterPublish = false;
 			throw new Error("simulated timeout after roster publish");
 		}
-		return published;
+		return result;
 	}
 
 	async findChildIntegration(query: any): Promise<any> {
@@ -251,43 +297,63 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		};
 	}
 
-	async integrateChild(request: IntegrateChildRequest): Promise<ChildIntegrationReceipt> {
-		this.integrateCalls += 1;
-		const receipt: ChildIntegrationReceipt = {
-			childId: request.childId,
-			pullRequest: request.pullRequest,
-			generation: request.generation,
-			marker: request.marker,
-			baseSha: request.baseSha,
-			headSha: request.headSha,
-			parentBranch: request.parentBranch,
-			integratedAt: "2026-07-21T12:01:00.000Z",
-		};
-		this.integrations.push(receipt);
+	async integrateChild(request: IntegrateChildRequest): Promise<any> {
+		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "integration", () => {
+			this.integrateCalls += 1;
+			const receipt: ChildIntegrationReceipt = {
+				childId: request.childId,
+				pullRequest: request.pullRequest,
+				generation: request.generation,
+				marker: request.marker,
+				baseSha: request.baseSha,
+				headSha: request.headSha,
+				parentBranch: request.parentBranch,
+				integratedAt: "2026-07-21T12:01:00.000Z",
+			};
+			this.integrations.push(receipt);
+			return receipt;
+		});
 		if (this.throwAfterIntegration) {
 			this.throwAfterIntegration = false;
 			throw new Error("simulated timeout after integration");
 		}
 		if (this.malformedIntegrationResponse) return { malformed: true } as never;
-		return receipt;
+		return result;
 	}
 
-	async markParentReady(request: MarkParentReadyRequest): Promise<GitHubPullRequestEvidence> {
-		this.markReadyCalls += 1;
-		const index = this.pullRequests.findIndex((candidate) => candidate.number === request.pullRequest);
-		if (index < 0) throw new Error("parent pull request missing");
-		const updated = { ...this.pullRequests[index], draft: false, headSha: request.headSha };
-		this.pullRequests.splice(index, 1, updated);
+	async markParentReady(request: MarkParentReadyRequest): Promise<any> {
+		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "parent-ready", () => {
+			this.markReadyCalls += 1;
+			const index = this.pullRequests.findIndex((candidate) => candidate.number === request.pullRequest);
+			if (index < 0) throw new Error("parent pull request missing");
+			const updated = { ...this.pullRequests[index], draft: false, headSha: request.headSha };
+			this.pullRequests.splice(index, 1, updated);
+			return updated;
+		});
 		if (this.throwAfterReady) {
 			this.throwAfterReady = false;
 			throw new Error("simulated timeout after ready transition");
 		}
 		if (this.malformedReadyResponse) return { malformed: true } as never;
-		return updated;
+		return result;
 	}
 
 	async isAncestor(_query: { repository: string; ancestorSha: string; descendantSha: string }): Promise<boolean> {
 		return this.ancestry;
+	}
+
+	async proveAncestry(query: Record<string, unknown>): Promise<unknown> {
+		if (this.ancestryProof !== undefined) return this.ancestryProof(query);
+		return {
+			schemaVersion: 1,
+			authority: "transport",
+			repository: query.repository,
+			ancestorSha: query.ancestorSha,
+			descendantSha: query.descendantSha,
+			result: this.ancestry,
+			revision: 1,
+			observedAt: "2026-07-21T12:05:00.000Z",
+		};
 	}
 }
 
@@ -397,7 +463,7 @@ test("rejects extra fields, cycles, unsafe scopes/branches, missing requirements
 	const children = source.children as Array<Record<string, unknown>>;
 	assert.throws(() => createParentOrchestrationPlan({ ...source, children: [{ ...children[0], dependsOn: ["evidence"] }] }), /cycle/i);
 	assert.throws(() => createParentOrchestrationPlan({ ...source, parentBranch: "../main" }), /branch/i);
-	for (const invalidRef of ["bad branch", ".hidden/topic", "topic.lock", "topic/.lock", "@", "topic@{one", "topic."]) {
+	for (const invalidRef of ["bad branch", ".hidden/topic", "topic.lock", "topic/.lock", "@", "HEAD", "refs/heads/HEAD", "topic@{one", "topic."]) {
 		assert.throws(() => createParentOrchestrationPlan({ ...source, parentBranch: invalidRef }), /branch|ref/i, invalidRef);
 	}
 	for (const invalidGeneration of [0, -1]) {
@@ -1059,5 +1125,317 @@ test("parent ready transition recovers timeout and malformed responses only afte
 		assert.equal(result.kind, "ready", mode);
 		if (result.kind === "ready") assert.equal(result.reused, true, mode);
 		assert.equal(transport.markReadyCalls, 1, mode);
+	}
+});
+
+function cycle3CheckPolicy(baseBranch: string, overrides: Record<string, unknown> = {}): Record<string, unknown> {
+	const input = {
+		schemaVersion: 1,
+		repository: "polymetrics-ai/cli",
+		baseBranch,
+		revision: 7,
+		requiredChecks: [
+			{ name: "verify", producerId: "github-actions:workflow-verify" },
+			{ name: "strict-types", producerId: "github-actions:workflow-types" },
+		],
+		...overrides,
+	};
+	const create = (githubEvidenceApi as Record<string, unknown>).createRequiredGitHubCheckPolicy;
+	return typeof create === "function"
+		? (create as (value: unknown) => Record<string, unknown>)(input)
+		: { ...input, digest: "0".repeat(64) };
+}
+
+async function cycle3Plan(singleChild = false, policyOverrides: Record<string, unknown> = {}): Promise<ParentOrchestrationPlan> {
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	if (singleChild) source.children = [(source.children as unknown[])[0]];
+	const bundle = {
+		schemaVersion: 1,
+		requiredCheckPolicies: [
+			cycle3CheckPolicy(String(source.parentBranch), policyOverrides),
+			cycle3CheckPolicy(String(source.parentBaseBranch)),
+		],
+	};
+	return (createParentOrchestrationPlan as unknown as (
+		value: unknown,
+		policies: unknown,
+	) => ParentOrchestrationPlan)(source, bundle);
+}
+
+test("cycle 3 persists an opaque canonical plan and revalidates every cloned public boundary", async () => {
+	const candidate = await cycle3Plan();
+	const canonical = (candidate as unknown as { canonical: Record<string, unknown> }).canonical;
+	assert.equal(canonical.schemaVersion, 1);
+	assert.equal(typeof canonical.serialized, "string");
+	assert.match(String(canonical.digest), /^[0-9a-f]{64}$/u);
+	const persisted = JSON.parse(JSON.stringify(candidate)) as ParentOrchestrationPlan;
+	assert.deepEqual(selectReadyChildren(persisted, { evidence: "pending", orchestrator: "pending" }, 2), {
+		kind: "selected",
+		itemIds: ["evidence"],
+	});
+
+	const tamperedValues = [
+		{ ...persisted, repository: "other/cli" },
+		{ ...persisted, generation: persisted.generation + 1 },
+		{ ...persisted, parentBranch: "feat/tampered-parent" },
+		{ ...persisted, markers: { ...persisted.markers, roster: "<!-- forged -->" } },
+		{ ...persisted, children: persisted.children.map((child, index) => index === 0
+			? { ...child, title: "tampered title" }
+			: child) },
+		{ ...persisted, canonical: { ...canonical, digest: "f".repeat(64) } },
+		{ ...persisted, canonical: { ...canonical, serialized: `${String(canonical.serialized)} ` } },
+	];
+	for (const tampered of tamperedValues) {
+		assert.throws(
+			() => selectReadyChildren(tampered as ParentOrchestrationPlan, { evidence: "pending", orchestrator: "pending" }, 1),
+			/canonical|digest|plan|provenance|tamper/i,
+		);
+	}
+
+	const transport = new FakeTransport();
+	await assert.rejects(
+		orchestratorFor(transport).ensureChildIssue(tamperedValues[0] as ParentOrchestrationPlan, "evidence"),
+		/canonical|digest|plan|provenance|tamper/i,
+	);
+	assert.equal(transport.createIssueCalls, 0);
+});
+
+test("cycle 3 rejects plan proxies, accessors, cycles, unknown/oversized canonical state, and secrets before effects", async () => {
+	const candidate = await cycle3Plan();
+	let trapInvoked = false;
+	const proxied = new Proxy(candidate, {
+		get() {
+			trapInvoked = true;
+			throw new Error("SECRET_PLAN_TOKEN_SHOULD_NOT_ESCAPE");
+		},
+	});
+	assert.throws(
+		() => selectReadyChildren(proxied, { evidence: "pending", orchestrator: "pending" }, 1),
+		/plan|proxy|canonical|shape/i,
+	);
+	assert.equal(trapInvoked, false);
+
+	const accessor = { ...candidate } as Record<string, unknown>;
+	Object.defineProperty(accessor, "repository", {
+		enumerable: true,
+		get() {
+			trapInvoked = true;
+			throw new Error("SECRET_PLAN_TOKEN_SHOULD_NOT_ESCAPE");
+		},
+	});
+	assert.throws(
+		() => selectReadyChildren(accessor as unknown as ParentOrchestrationPlan, { evidence: "pending", orchestrator: "pending" }, 1),
+		/plan|accessor|canonical|shape/i,
+	);
+	assert.equal(trapInvoked, false);
+
+	const cycle = JSON.parse(JSON.stringify(candidate)) as ParentOrchestrationPlan & { loop?: unknown };
+	cycle.loop = cycle;
+	assert.throws(() => selectReadyChildren(cycle, { evidence: "pending", orchestrator: "pending" }, 1), /cycle|field|plan|canonical/i);
+	const canonical = (candidate as unknown as { canonical: Record<string, unknown> }).canonical;
+	assert.throws(() => selectReadyChildren({
+		...candidate,
+		canonical: { ...canonical, serialized: "x".repeat(1_000_001) },
+	} as unknown as ParentOrchestrationPlan, { evidence: "pending", orchestrator: "pending" }, 1), /bounded|canonical|serialized|plan/i);
+	try {
+		selectReadyChildren({ ...candidate, unexpected: "SECRET_PLAN_TOKEN_SHOULD_NOT_ESCAPE" } as ParentOrchestrationPlan,
+			{ evidence: "pending", orchestrator: "pending" }, 1);
+		assert.fail("unknown plan field must fail");
+	} catch (error) {
+		assert.doesNotMatch(String(error), /SECRET_PLAN_TOKEN_SHOULD_NOT_ESCAPE/u);
+	}
+});
+
+test("cycle 3 rejects top-level read-only children and binds versioned CI policy into markers and digest", async () => {
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const children = source.children as Array<Record<string, unknown>>;
+	await assert.rejects(async () => (createParentOrchestrationPlan as any)({
+		...source,
+		children: [{ ...children[0], access: "read_only", writeScopes: [] }],
+	}, {
+		schemaVersion: 1,
+		requiredCheckPolicies: [cycle3CheckPolicy(String(source.parentBranch)), cycle3CheckPolicy(String(source.parentBaseBranch))],
+	}), /read.only|mutating|scope|child/i);
+	const current = await cycle3Plan();
+	const moved = await cycle3Plan(false, { revision: 8 });
+	assert.notEqual(
+		(current as unknown as { canonical: { digest: string } }).canonical.digest,
+		(moved as unknown as { canonical: { digest: string } }).canonical.digest,
+	);
+	assert.notEqual(current.markers.parentPullRequest, moved.markers.parentPullRequest);
+});
+
+test("cycle 3 durable mutation metadata deduplicates issue, PR, roster, integration, and ready effects across orchestrators", async () => {
+	const candidate = await cycle3Plan(true);
+	const transport = new FakeTransport();
+	const firstOrchestrator = orchestratorFor(transport, new FakeDecisionBroker());
+	const secondOrchestrator = orchestratorFor(transport, new FakeDecisionBroker());
+	const [firstIssue, secondIssue] = await Promise.all([
+		firstOrchestrator.ensureChildIssue(candidate, "evidence"),
+		secondOrchestrator.ensureChildIssue(JSON.parse(JSON.stringify(candidate)), "evidence"),
+	]);
+	assert.deepEqual(firstIssue, secondIssue);
+	assert.equal(transport.createIssueCalls, 1);
+	const child = materializeChildRecord(candidate, "evidence", firstIssue);
+	const handoff = childHandoff(child.issue, child.branch, child.prBase);
+	const [firstPr, secondPr] = await Promise.all([
+		firstOrchestrator.ensureChildPullRequest(candidate, child, handoff),
+		secondOrchestrator.ensureChildPullRequest(JSON.parse(JSON.stringify(candidate)), child, handoff),
+	]);
+	assert.deepEqual(firstPr, secondPr);
+	assert.equal(transport.createPullRequestCalls, 1);
+
+	const statuses = { evidence: "running" } as const;
+	await Promise.all([
+		(firstOrchestrator.reconcileParentRoster as any)(candidate, statuses, 1),
+		(secondOrchestrator.reconcileParentRoster as any)(JSON.parse(JSON.stringify(candidate)), statuses, 1),
+	]);
+	assert.equal(transport.publishRosterCalls, 1);
+
+	const request: CreatePullRequestRequest = {
+		repository: candidate.repository,
+		workItemId: child.id,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		title: child.title,
+		body: `Refs #${child.issue}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+		draft: false,
+		baseBranch: child.prBase,
+		headBranch: child.branch,
+		baseSha: handoff.baseHead,
+		headSha: handoff.head,
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+	};
+	transport.pullRequests[0] = cleanPullRequest(request, {}, firstPr.number);
+	const [firstIntegration, secondIntegration] = await Promise.all([
+		firstOrchestrator.integrateChild(candidate, child, handoff),
+		secondOrchestrator.integrateChild(JSON.parse(JSON.stringify(candidate)), child, handoff),
+	]);
+	assert.equal(firstIntegration.kind, "integrated");
+	assert.equal(secondIntegration.kind, "integrated");
+	assert.equal(transport.integrateCalls, 1);
+	const receipt = firstIntegration.kind === "integrated" ? firstIntegration.receipt : undefined;
+	assert.ok(receipt);
+	assert.deepEqual(
+		{
+			repository: (receipt as any).pullRequestSnapshot.repository,
+			number: (receipt as any).pullRequestSnapshot.number,
+			marker: (receipt as any).pullRequestSnapshot.marker,
+			baseBranch: (receipt as any).pullRequestSnapshot.baseBranch,
+			headBranch: (receipt as any).pullRequestSnapshot.headBranch,
+			baseSha: (receipt as any).pullRequestSnapshot.baseSha,
+			headSha: (receipt as any).pullRequestSnapshot.headSha,
+			changedPaths: (receipt as any).pullRequestSnapshot.changedPaths,
+			generation: (receipt as any).pullRequestSnapshot.generation,
+		},
+		{
+			repository: candidate.repository,
+			number: firstPr.number,
+			marker: child.markers.pullRequest,
+			baseBranch: child.prBase,
+			headBranch: child.branch,
+			baseSha: handoff.baseHead,
+			headSha: handoff.head,
+			changedPaths: handoff.changedScope,
+			generation: candidate.generation,
+		},
+	);
+	assert.equal((receipt as any).controllerProvenance.planDigest,
+		(candidate as unknown as { canonical: { digest: string } }).canonical.digest);
+	assert.match((receipt as any).transportProvenance.intentDigest, /^[0-9a-f]{64}$/u);
+
+	const parentHead = "e".repeat(40);
+	transport.pullRequests.push(cleanPullRequest({
+		repository: candidate.repository,
+		workItemId: `parent-${candidate.parentIssue}`,
+		generation: candidate.generation,
+		marker: candidate.markers.parentPullRequest,
+		title: candidate.title,
+		body: `Closes #${candidate.parentIssue}\n\n${candidate.markers.parentPullRequest}`,
+		draft: true,
+		baseBranch: candidate.parentBaseBranch,
+		headBranch: candidate.parentBranch,
+		baseSha,
+		headSha: parentHead,
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+	}, { draft: true }, 900));
+	await Promise.all([
+		firstOrchestrator.reconcileParentReadiness(candidate, [receipt!], decisionPolicy),
+		secondOrchestrator.reconcileParentReadiness(JSON.parse(JSON.stringify(candidate)), [receipt!], decisionPolicy),
+	]);
+	assert.equal(transport.markReadyCalls, 1);
+});
+
+test("cycle 3 roster revisions and status epochs reject regression and drain rejected FIFO work", async () => {
+	const candidate = await cycle3Plan(true);
+	const transport = new FakeTransport();
+	const orchestrator = orchestratorFor(transport);
+	const succeeded = await (orchestrator.reconcileParentRoster as any)(candidate, { evidence: "succeeded" }, 2);
+	assert.equal((succeeded as any).statusEpoch, 2);
+	await assert.rejects(
+		(orchestratorFor(transport).reconcileParentRoster as any)(JSON.parse(JSON.stringify(candidate)), { evidence: "running" }, 1),
+		/epoch|stale|regress|revision|conditional/i,
+	);
+	assert.equal(transport.publishRosterCalls, 1);
+	const afterRejection = await (orchestrator.reconcileParentRoster as any)(candidate, { evidence: "succeeded" }, 3);
+	assert.equal((afterRejection as any).statusEpoch, 3);
+	assert.equal(transport.publishRosterCalls, 2);
+});
+
+test("cycle 3 requires an exact literal-true ancestry proof and rejects truthy or mismatched coordinates", async () => {
+	const candidate = await cycle3Plan(true);
+	const setup = async (proof: (query: Record<string, unknown>) => Promise<unknown>) => {
+		const transport = new FakeTransport();
+		transport.ancestryProof = proof;
+		const orchestrator = orchestratorFor(transport, new FakeDecisionBroker());
+		const issue = await orchestrator.ensureChildIssue(candidate, "evidence");
+		const child = materializeChildRecord(candidate, "evidence", issue);
+		const handoff = childHandoff(child.issue, child.branch, child.prBase);
+		const childRequest: CreatePullRequestRequest = {
+			repository: candidate.repository,
+			workItemId: child.id,
+			generation: candidate.generation,
+			marker: child.markers.pullRequest,
+			title: child.title,
+			body: `Refs #${child.issue}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+			draft: false,
+			baseBranch: child.prBase,
+			headBranch: child.branch,
+			baseSha: handoff.baseHead,
+			headSha: handoff.head,
+			changedPaths: handoff.changedScope,
+			allowedScopes: child.writeScopes,
+		};
+		transport.pullRequests.push(cleanPullRequest(childRequest));
+		const integrated = await orchestrator.integrateChild(candidate, child, handoff);
+		assert.equal(integrated.kind, "integrated");
+		if (integrated.kind !== "integrated") throw new Error("setup integration failed");
+		transport.pullRequests.push(cleanPullRequest({
+			repository: candidate.repository,
+			workItemId: `parent-${candidate.parentIssue}`,
+			generation: candidate.generation,
+			marker: candidate.markers.parentPullRequest,
+			title: candidate.title,
+			body: `Closes #${candidate.parentIssue}\n\n${candidate.markers.parentPullRequest}`,
+			draft: true,
+			baseBranch: candidate.parentBaseBranch,
+			headBranch: candidate.parentBranch,
+			baseSha,
+			headSha: "e".repeat(40),
+			changedPaths: handoff.changedScope,
+			allowedScopes: child.writeScopes,
+		}, { draft: true }, 900));
+		return orchestrator.reconcileParentReadiness(candidate, [integrated.receipt], decisionPolicy);
+	};
+
+	for (const proof of [
+		async (query: Record<string, unknown>) => ({ ...query, schemaVersion: 1, authority: "transport", result: "true", revision: 1, observedAt: "2026-07-21T12:05:00.000Z" }),
+		async (query: Record<string, unknown>) => ({ ...query, repository: "other/cli", schemaVersion: 1, authority: "transport", result: true, revision: 1, observedAt: "2026-07-21T12:05:00.000Z" }),
+		async (query: Record<string, unknown>) => ({ ...query, descendantSha: "f".repeat(40), schemaVersion: 1, authority: "transport", result: true, revision: 1, observedAt: "2026-07-21T12:05:00.000Z" }),
+	]) {
+		const decision = await setup(proof);
+		assert.equal(decision.kind, "blocked");
 	}
 });
