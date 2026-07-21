@@ -186,12 +186,23 @@
 
 ### RED
 
-- Status: pending test-only changes; production remains unchanged.
-- Expected result: 33 existing/new controls pass and 7 boundary/complexity regressions fail.
+- Status: captured with tests and phase evidence only; production remains unchanged at
+  `d918617a19749cd16d6bfcf3d2fee3e5146e7380`.
+- Focused command result: exit 1, 33 passed / 7 expected failures:
+  - serialized prompt retained a multiline-nested or punctuation-apostrophe marker;
+  - handoff summary/finding retained a multiline-nested or punctuation-apostrophe marker;
+  - direct multiline nested-value ownership hid the later sensitive sibling;
+  - direct `rock-'n-roll` quote state hid the later sensitive sibling;
+  - deterministic 25/50/100 KiB scale metrics were absent at the reviewed head;
+  - `workspace_read` retained a multiline-nested or punctuation-apostrophe marker;
+  - typed capability output retained both new marker classes.
+- Safe apostrophe byte-identity and every prior focused case remain green.
+- Focused strict TypeScript result: exit 0 against the explicit Pi 0.80.6 package/type roots,
+  proving the regression harness compiles cleanly.
 
 ### GREEN / REFACTOR / VERIFY
 
-- Status: blocked on committed RED evidence.
+- Status: blocked on committing and pushing this captured RED evidence.
 - Declared gates: focused issue tests, complete Shepherd suite, pinned Pi 0.80.6 strict TypeScript,
   pinned offline RPC, diff check, immutable base, and issue-owned paths only.
 - Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot

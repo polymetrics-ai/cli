@@ -84,3 +84,8 @@ open false quote state, and per-assignment line-end searches rescan large single
 Cycle 6 keeps lifecycle code unchanged and corrects the existing typed scanner. Production remains
 locked until all five consumer boundaries plus a deterministic 25/50/100 KiB scanner-work guard
 produce the expected committed RED.
+
+The Cycle 6 focused RED exits 1 with 33 passes and 7 expected failures, while the safe apostrophe
+control and focused strict TypeScript pass and production remains unchanged. The failures expose
+prompt, handoff, `workspace_read`, typed-capability, direct multiline-nested, direct punctuation-
+apostrophe, and deterministic scan-metric boundaries.

@@ -319,3 +319,10 @@ health passes while its 69-command registry rejects `programming-loop`, so
 Pi-adapter, and runtime/Pi references. Execution is `local_critical_path`: all findings overlap
 the same issue-owned scanner/consumer tests, and the attempted read-only architecture sidecar was
 rejected by the runtime thread cap.
+
+Cycle 6 RED result: the focused command exits 1 with 33 passes and 7 expected failures. Prompt,
+handoff, `workspace_read`, and typed-capability consumer tests retain a multiline-nested or
+punctuation-apostrophe marker; two direct tests isolate those lexical failures; and the scale guard
+reports the absent deterministic line-boundary metric. The safe apostrophe control and all prior
+cases pass. Focused strict TypeScript passes, and production remains unchanged at the reviewed
+head.
