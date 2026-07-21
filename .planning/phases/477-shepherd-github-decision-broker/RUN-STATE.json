@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "2.0",
+  "phase": "477-shepherd-github-decision-broker",
+  "issue": 477,
+  "parentIssue": 471,
+  "parentPr": 472,
+  "status": "planned",
+  "reason": "Plan and strict TDD matrix created before production edits.",
+  "details": {
+    "branch": "feat/477-shepherd-github-decision-broker",
+    "baseBranch": "feat/471-pi-agent-session-shepherd",
+    "exactBase": "e659d6f1b666f58748e2d8c86599ceb4bbc62ff8",
+    "adapter": "manual_gsd_fallback",
+    "modelPolicy": "openai-codex/gpt-5.6-sol:high",
+    "verificationPassed": false,
+    "reviewCoveragePassed": false,
+    "orchestrationDecisions": [
+      {
+        "cycle": "plan",
+        "decision": "local_critical_path",
+        "reason": "This is the assigned isolated issue worker; planning artifacts and threat/TDD matrix are the current critical path."
+      }
+    ],
+    "humanGates": [
+      "new_dependency",
+      "auth_scope_or_secret_access",
+      "live_non_sandbox_comment",
+      "production_or_destructive_action",
+      "quality_gate_reduction",
+      "exact_head_parent_merge",
+      "main_branch_merge"
+    ]
+  },
+  "updatedAt": "2026-07-21T12:32:10.000Z"
+}
