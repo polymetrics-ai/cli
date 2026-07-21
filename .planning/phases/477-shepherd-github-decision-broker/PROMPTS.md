@@ -23,4 +23,7 @@
 - Runtime decision: `local_critical_path` under the recorded manual-GSD fallback because the exact
   correction scope overlaps both owned modules and requires one ordered RED-before-GREEN history.
 - Downstream artifact: correction sections in `PLAN.md` and `TDD-LEDGER.md`.
-- Verification result: pending.
+- Verification result: passed the coordinator-declared child equivalent: focused #477 tests, the
+  complete Shepherd suite, strict TypeScript against pinned Pi 0.80.6, offline Pi RPC command
+  registration, diff/scope/base checks, and PR evidence. Fresh exact-head xhigh review remains
+  parent-owned and no Claude/Copilot request was made.

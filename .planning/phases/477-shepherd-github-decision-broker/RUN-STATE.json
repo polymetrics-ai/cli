@@ -4,15 +4,15 @@
   "issue": 477,
   "parentIssue": 471,
   "parentPr": 472,
-  "status": "in_progress",
-  "reason": "Independent exact-head review found seven blockers and one retry warning; a test-first correction cycle is active.",
+  "status": "completed",
+  "reason": "All exact-head review corrections and the coordinator-declared child verification equivalent passed; fresh parent-owned xhigh review remains pending.",
   "details": {
     "branch": "feat/477-shepherd-github-decision-broker",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "e659d6f1b666f58748e2d8c86599ceb4bbc62ff8",
     "adapter": "manual_gsd_fallback",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
-    "verificationPassed": false,
+    "verificationPassed": true,
     "reviewCoveragePassed": false,
     "orchestrationDecisions": [
       {
@@ -54,6 +54,21 @@
         "cycle": "review-correction-execute",
         "decision": "local_critical_path",
         "reason": "Implemented the reviewed boundary fixes and reached focused GREEN at 41 pass, 0 fail, and 1 sandbox skip with strict owned TypeScript green."
+      },
+      {
+        "cycle": "review-correction-refactor",
+        "decision": "local_critical_path",
+        "reason": "Refactored repository locking to atomically published unique token paths with deterministic election and token-fenced transition, reclaim, and release."
+      },
+      {
+        "cycle": "review-correction-verify",
+        "decision": "local_critical_path",
+        "reason": "Focused and complete Shepherd tests, strict pinned TypeScript, offline Pi RPC, diff, scope, and immutable-base checks passed; prohibited broad gates were not run."
+      },
+      {
+        "cycle": "review-correction-summary",
+        "decision": "local_critical_path",
+        "reason": "Recorded terminal correction evidence and prepared the new exact head for parent-owned xhigh review."
       }
     ],
     "humanGates": [
@@ -66,5 +81,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T15:00:00.000Z"
+  "updatedAt": "2026-07-21T14:04:22.000Z"
 }

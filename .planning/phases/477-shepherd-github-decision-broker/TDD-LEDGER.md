@@ -108,5 +108,16 @@ raw adapter error propagation. Duration: 282.318708 ms.
 Initial correction GREEN command reused the focused RED command. Result: exit 0; 42 tests total,
 41 passed, 0 failed, and 1 designated-sandbox test skipped; duration 796.597167 ms. Strict no-emit
 TypeScript for the two owned modules and their tests also exited 0 using TypeScript 5.9.3 with the
-explicit Pi 0.80.6 Node type root. Further refactor/adversarial and full-lane verification remain
-pending.
+explicit Pi 0.80.6 Node type root.
+
+Correction refactor kept each lock owner in an atomically published, UUID-token-named candidate or
+active file. Deterministic election prevents overlapping owners; acquisition, dead-owner reclaim,
+transition, and release all verify the exact token/PID path, so an obsolete owner cannot unlink a
+replacement. The focused consume-once regression exercises concurrent repository instances, while
+the added lock tests inspect complete publication and fenced reclaim/release behavior.
+
+Final correction focused result: exit 0; 42 tests total, 41 passed, 0 failed, and 1 designated-
+sandbox test skipped; duration 830.242542 ms. The complete Shepherd suite then passed with 179
+tests total, 178 passed, 0 failed, and 1 designated-sandbox skip; duration 52526.971417 ms. Strict
+no-emit TypeScript passed over all 11 production Shepherd modules using TypeScript 5.9.3, the
+installed Pi 0.80.6 package, and its Node type root.
