@@ -14,4 +14,3 @@
 - Downstream artifact: `.planning/phases/476-shepherd-worktree-git-adapter/SUMMARY.md` (completed)
 - Verification result: authoritative narrowed local gates pass; full Go/connectors rerun is owned
   by parent integration and GitHub CI under the updated parent policy.
-

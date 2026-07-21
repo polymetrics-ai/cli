@@ -187,4 +187,3 @@ test("pushes only the canonical branch and verifies the exact remote head", asyn
 	const push = requests.find((request) => request.args[0] === "push");
 	assert.deepEqual(push?.args, ["push", "--porcelain", "origin", branch]);
 });
-

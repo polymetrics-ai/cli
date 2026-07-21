@@ -46,4 +46,3 @@ commands, results, unsupported Pi flag fallback, timeout disposition, and cancel
 - Recommended state: `provisional_parent_integration`
 - Reason: implementation and local gates are green; exact-head independent review remains parent-owned.
 - Human gates: do not merge this sub-PR or the parent PR from this worker.
-

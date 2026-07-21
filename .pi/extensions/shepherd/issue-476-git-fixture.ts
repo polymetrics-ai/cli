@@ -68,4 +68,3 @@ export async function createLocalGitFixture(): Promise<LocalGitFixture> {
 		cleanup: () => rm(root, { recursive: true, force: true }),
 	};
 }
-

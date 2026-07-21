@@ -92,4 +92,3 @@
 - [ ] `make verify`
 - [ ] pushed branch exact head matches local head
 - [ ] ready sub-PR targets `feat/471-pi-agent-session-shepherd`
-

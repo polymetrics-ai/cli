@@ -49,4 +49,3 @@ Refs #471
 
 Independent Codex 5.6 Sol xhigh review will cover the exact pushed head. Per parent direction, this
 PR does not request Claude or Copilot review and must not be merged by this worker.
-
