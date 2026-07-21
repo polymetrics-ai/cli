@@ -1,5 +1,43 @@
 # Verification — Issue #475
 
+## Cycle 10 Verification Result
+
+Cycle 10 was executed against exact clean reviewed candidate
+`f63957aed6fd1406eb3bd9a82adbd10b23b34c33` and immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The complete
+`/tmp/475-REVIEW-CYCLE9-1.md` and `/tmp/475-REVIEW-CYCLE9-2.md` reports, including WR-01, are fully
+dispositioned in `REVIEW.md` and covered in `PRD-COVERAGE.md`.
+
+The ordered checkpoints are artifact-only PLAN `0eb7999f29e538c5a15d9c10f37b167be19817de`,
+one comprehensive test-only RED `6df77689d7bcd3a25d9028af258694e84d24f238`, and cohesive
+GREEN/refactor `a88cbe5242f070059ea49446ffac6914716a8c5d`. RED executed all 102 focused
+tests: every one of the 86 retained assertions passed and exactly 16 named Cycle 10 behavior tests
+failed their intended assertions. Strict focused TypeScript passed and all three production blobs
+remained exact. GREEN passes all 102 focused tests.
+
+| Cycle 10 gate | Status | Evidence |
+|---|---|---|
+| RED integrity | pass | 102 executed; 86 retained pass; exactly 16 intended behavior failures; strict TS pass; runtime/policy/role-prompt blobs unchanged |
+| Focused GREEN | pass | 102 passed, 0 failed, 0 skipped/cancelled/todo |
+| Complete Shepherd | environment-blocked | 239 executed: 208 passed; the unchanged 31 controller/state-store failures all originate from managed-sandbox `/bin/ps` `spawn EPERM` |
+| Environment isolation | pass | excluding only `controller.test.ts` and `state-store.test.ts`, 165 passed, 0 failed |
+| Strict TypeScript | pass | focused production/tests and all 12 non-test Shepherd `.ts`, TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Pi offline boundary | pass | explicit binary `0.80.6`; writable temporary agent directory; RPC `get_commands` registered `pm-shepherd`; retained real-validator/no-model tool exercise passed |
+| Repository integrity | pass | `git diff --check`, immutable-base/frozen-head ancestry, issue-owned path scope, and clean worktree |
+| External mutation | not attempted | no push, GitHub, review bot, merge, model, credential, service, Go, or connector action was authorized in this lane |
+
+All sixteen Cycle 10 RED assertions are preserved byte-for-byte through GREEN. Post-RED test changes
+only align older controls with the newly accepted interfaces: three legacy successful-handoff
+fixtures render equivalent sensitive evidence on one terminal-safe line because WR-01 rejects the
+original control-bearing string before redaction; the harmless documentary fixture uses the
+allowed colon form, and an additive assertion proves the former equals form redacts under BL-04.
+
+The healthy GSD adapter still rejects `programming-loop`, so the required manual-GSD fallback is
+recorded without weakening PLAN -> RED -> GREEN/refactor -> verify. The complete-suite limitation
+is neither called a pass nor a product regression: it is the same parent-owned sandbox denial, and
+isolation proves every other Shepherd test passes. Parent orchestration owns a permitted-environment
+complete-suite rerun, fresh exact-head review, integration, and any external delivery action.
+
 ## Cycle 9 Verification Result
 
 Cycle 9 is planned against exact clean reviewed candidate

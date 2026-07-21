@@ -247,6 +247,13 @@
 - Execution decision: `local_critical_path`; the attempted read-only explorer was rejected by the
   runtime thread cap and all production findings overlap the issue-owned runtime/policy boundary.
 - Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `PROMPTS.md`, and `RUN-STATE.json`.
-- Verification result: pending Cycle 10 RED and GREEN. Required evidence is focused retained/new
-  counts, both strict Pi 0.80.6 TypeScript scopes, pinned offline RPC/no-model validation, serialized
-  full-suite classification, exact diff/base/scope/head checks, and no external mutation.
+- Ordered checkpoints: PLAN `0eb7999f`, one test-only RED `6df77689`, and architectural GREEN
+  `a88cbe52`. RED was 86 retained passes plus exactly 16 intended behavior failures with production
+  frozen; GREEN is focused 102/102 and both strict Pi 0.80.6 TypeScript scopes pass.
+- Fixture-alignment decision: retain every Cycle 10 RED assertion; render only older successful
+  handoff records as one terminal-safe line for WR-01, and change the older harmless equals-form
+  documentary control to colon while additively proving the equals form redacts for BL-04.
+- Verification result: pinned Pi 0.80.6 RPC/no-model validation, diff, ancestry, scope, and clean
+  head pass. The complete suite is environment-blocked at 239 executed / 208 passed / 31 unchanged
+  `/bin/ps` `spawn EPERM` failures in controller/state-store; isolation passes 165/165. No external
+  mutation was attempted. Parent owns permitted-environment rerun, exact-head review, and delivery.

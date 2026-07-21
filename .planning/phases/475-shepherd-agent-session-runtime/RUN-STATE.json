@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "in_progress",
+  "status": "ready_for_parent_verification",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_10_plan",
+  "currentCycle": "correction_cycle_10_summary",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -223,15 +223,35 @@
       "cycle": "correction_cycle_10_plan",
       "decision": "local_critical_path",
       "reason": "Both complete Cycle 9 reports collapse into one overlapping runtime/policy correction lane; a read-only architecture explorer was attempted but rejected by the runtime thread cap, so the isolated issue worker records and executes the complete matrix locally."
+    },
+    {
+      "cycle": "correction_cycle_10_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 6df77689 executed all 102 focused tests with 86 retained passes and exactly 16 intended Cycle 10 assertion failures; strict focused TypeScript passed and all production blobs remained exact to frozen f63957ae."
+    },
+    {
+      "cycle": "correction_cycle_10_green",
+      "decision": "local_critical_path",
+      "reason": "Architectural GREEN a88cbe52 closes all 13 review groups through shared ownership, bounded snapshot/event/error, redaction, path, and capability mechanisms; focused 102/102 and both strict Pi 0.80.6 TypeScript scopes pass."
+    },
+    {
+      "cycle": "correction_cycle_10_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused, both strict TypeScript scopes, pinned offline Pi RPC/no-model validation, diff, ancestry, and owned-scope gates pass; complete Shepherd executes 239 with 208 passes and only the unchanged 31 controller/state-store failures where the managed sandbox denies /bin/ps with spawn EPERM. Isolation passes 165/165."
+    },
+    {
+      "cycle": "correction_cycle_10_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 10 issue-owned implementation and evidence are terminal locally; no external mutation was attempted, and parent orchestration owns permitted-environment rerun, fresh exact-head review, integration, and delivery."
     }
   ],
   "gates": {
-    "focusedTests": "pending_cycle_10_red_and_green; retained_cycle_9_green_86_passed_0_failed",
-    "fullShepherdTests": "pending_cycle_10; retained_cycle_9_environment_blocked_223_executed_192_passed_31_spawn_eperm_failures_only_controller_and_state_store",
-    "strictTypeScriptPi0806": "pending_cycle_10; retained_cycle_9_passed_focused_and_all_production",
-    "offlineRpcSmoke": "pending_cycle_10_rpc_and_no_model_tool_exercise; retained_cycle_9_pm_shepherd_registered_and_tool_validation_passed",
-    "diffCheck": "pending_cycle_10",
-    "ownedScope": "pending_cycle_10; immutable_base_e659d6f1_and_frozen_head_f63957ae; no_push_or_github_authorized",
+    "focusedTests": "passed_cycle_10_102_passed_0_failed_0_skipped_cancelled_todo; red_86_retained_passed_16_intended_failed",
+    "fullShepherdTests": "environment_blocked_cycle_10_239_executed_208_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_165_passed_0_failed",
+    "strictTypeScriptPi0806": "passed_cycle_10_focused_and_all_12_production_files_typescript_5_9_3",
+    "offlineRpcSmoke": "passed_cycle_10_explicit_pi_0_80_6_pm_shepherd_registered_and_real_validator_no_model_tool_exercise_passed",
+    "diffCheck": "passed_cycle_10",
+    "ownedScope": "passed_cycle_10; immutable_base_e659d6f1_and_frozen_head_f63957ae_ancestors; no_push_or_github_attempted",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [
@@ -239,6 +259,8 @@
     "repository-wide Go/connector gates intentionally deferred to parent integration and GitHub CI by explicit policy",
     "ambient PATH resolved Pi 0.80.10 at final verification; authoritative smoke and type checks used the explicit unchanged Pi 0.80.6 installation",
     "cycle_8 full Shepherd suite blocked where the managed sandbox denies the pre-existing Darwin /bin/ps process-identity child with spawn EPERM",
-    "cycle_8 push blocked before remote contact: ssh: Could not resolve hostname github.com: -65563"
+    "cycle_8 push blocked before remote contact: ssh: Could not resolve hostname github.com: -65563",
+    "cycle_10 complete Shepherd suite environment-blocked where the managed sandbox denies the pre-existing Darwin /bin/ps process-identity child with spawn EPERM; issue-focused isolation passes 165/165",
+    "cycle_10 external mutation intentionally not attempted by explicit lane policy; parent owns push, review, and integration"
   ]
 }

@@ -750,3 +750,31 @@ services, credentials, and model calls remain outside this lane.
 issue-contract, project prompt/PRD, and runtime/Pi references. Execution decision is
 `local_critical_path`: all findings collide in the two issue-owned runtime/policy modules, and the
 attempted read-only architecture sidecar was rejected by the runtime thread cap.
+
+### Cycle 10 execution result
+
+The required order is complete: artifact-only PLAN `0eb7999f`, comprehensive test-only RED
+`6df77689`, and architectural GREEN/refactor `a88cbe52`. RED executed all 102 focused tests: the 86
+retained Cycle 9 tests passed and exactly 16 Cycle 10 behavior tests failed their intended
+assertions. Strict focused TypeScript passed, and the runtime, policy, and role-prompt production
+blobs remained exactly `03cf916b`, `1c8f7010`, and `cfc2d253`.
+
+GREEN implements the thirteen binding invariants as shared ownership, deadline, snapshot, event,
+boundary-sanitizer, redaction, path, and capability-classifier mechanisms. The focused suite passes
+102/102; focused and all-production strict TypeScript pass against explicit Pi 0.80.6 roots; the
+pinned offline RPC registers `pm-shepherd`; and the retained no-model test validates and executes a
+real custom-tool call through Pi's validator. No dependency or authority was added.
+
+All sixteen Cycle 10 RED assertions remain intact. Two narrowly documented post-RED fixture
+alignments reconcile older controls with the stricter accepted contract: legacy successful-handoff
+fixtures now render the same sensitive evidence as one terminal-safe line because WR-01 requires
+control rejection before redaction, and the harmless documentary control now uses the allowed
+colon form while an added assertion proves its former equals form redacts under BL-04.
+
+Serialized complete-Shepherd verification executed 239 tests: 208 passed and the same 31
+controller/state-store tests were environment-blocked because the managed sandbox denies the
+pre-existing `/bin/ps` child with `spawn EPERM`. Isolation excluding those two parent-owned files
+passes 165/165. This result is not called green. Diff, immutable-base/frozen-head ancestry,
+issue-owned scope, and clean-head checks pass; no push, GitHub, service, credential, model, Go, or
+connector action was attempted. Parent orchestration owns the permitted-environment rerun, fresh
+exact-head review, integration, and external mutation.

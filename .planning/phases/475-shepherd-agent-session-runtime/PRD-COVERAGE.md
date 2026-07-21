@@ -1,5 +1,35 @@
 # PRD Coverage — Issue #475
 
+## Cycle 10 Consolidated Review Coverage
+
+Frozen candidate: `f63957aed6fd1406eb3bd9a82adbd10b23b34c33`. Immutable base:
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The accepted issue contract and both complete Cycle 9
+review ledgers, including WR-01, form the phase-equivalent requirement source.
+
+| Required outcome | RED boundary | Cycle 10 result |
+|---|---|---|
+| Native cancellation and detach cannot be shadowed | genuine request/parent signals with no-op, throwing, and mutating captured hooks | focused GREEN |
+| Any acquired session surface retains cleanup ownership | missing/invalid/throwing getters and methods in foreground and abandoned fulfillment | focused GREEN |
+| Detached late cleanup cannot pin process liveness | hung abort/idle/unsubscribe/dispose timeout-handle probes | focused GREEN |
+| Close joins started multi-phase cleanup without hanging pending creation | cumulative phase-delay, coalesced close, shutdown, and never-fulfilling create rows | focused GREEN |
+| SDK result/extension arrays are exact closed one-read snapshots | proxy, sparse, hidden, accessor, extra, symbol, and alternating-length containers | focused GREEN |
+| Pi cumulative updates and terminal handoff are jointly bounded | near-limit delta stream plus one-above delta/event/assistant/terminal rows | focused GREEN |
+| Schema/result snapshots preserve hostile keys without prototype authority | nested reserved-name own-descriptor, serialization, and inherited-field probes | focused GREEN |
+| Breadth rejects incrementally and event kinds are closed | wide enumerable visit counters and unknown terminal fields | focused GREEN |
+| Public errors are typed, bounded, terminal-safe, and detached from externals | unique markers across primary, dual, quarantine, and close failure graphs | focused GREEN |
+| Redaction closes the final accepted syntax forms | equals documentary forms, Proxy-Authorization, quoted YAML/flow, OAuth fragments, all consumers | focused GREEN |
+| Sensitive cloud/key paths reject before callback | root/nested/case tables for AWS/Azure/GCloud/envrc/DSA/ECDSA | focused GREEN |
+| Sensitive capability nouns cannot be exposed by aliases | verb/noun order, compounds, aliases, singular/plural, every role | focused GREEN |
+| Terminal controls are rejected on original handoff text | every field and forbidden control combined with a credential assignment | focused GREEN |
+| Cycle 9 behavior remains intact | all retained runtime, policy, Pi typing, parser, timer, rejection, and mutator assertions | 86 retained passes |
+
+Ordered evidence is PLAN `0eb7999f`, test-only RED `6df77689`, and GREEN `a88cbe52`; focused GREEN
+is 102/102. Both strict Pi 0.80.6 TypeScript scopes and pinned offline RPC/no-model validation pass.
+Complete Shepherd is environment-blocked at 239 executed / 208 passed / 31 unchanged `/bin/ps`
+`spawn EPERM` rows in controller/state-store; the remaining isolated files pass 165/165. No parent,
+Go, connector, dependency, service, credential, model, live GitHub, review-bot, push, or merge work
+was performed.
+
 ## Cycle 9 Consolidated Review Coverage
 
 Frozen candidate: `0cdcda7e049b7ecfa2fdc52027c66c5de161f2c8`. Immutable base:

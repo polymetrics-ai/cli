@@ -791,3 +791,45 @@ three production files against `f63957ae`; any production difference invalidates
   only while retained and Cycle 10 behavior remains green.
 - Terminal evidence must record exact counts, commands, commit IDs, head, production scope, and the
   serialized full-suite environment classification.
+
+### RED result
+
+- PLAN checkpoint: `0eb7999f29e538c5a15d9c10f37b167be19817de`.
+- One comprehensive test-only RED checkpoint:
+  `6df77689d7bcd3a25d9028af258694e84d24f238`.
+- The augmented focused run executed 102 tests. All 86 retained tests passed and exactly 16 named
+  Cycle 10 behavior tests failed their intended assertions; no test was skipped, cancelled, or
+  marked todo.
+- Strict focused TypeScript passed at RED.
+- Production stayed frozen: runtime `03cf916b59ef291dab309e6251a6f10ebf897eb0`, policy
+  `1c8f701091a49c60cf41f83a6c16f2ae49a896c3`, and role prompts
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`.
+
+### GREEN / REFACTOR result
+
+- Cohesive implementation checkpoint: `a88cbe5242f070059ea49446ffac6914716a8c5d`.
+- Native signal leasing, staged cleanup ownership, detached timer policy, close joining, exact SDK
+  result capture, cumulative event accounting, prototype-safe snapshots, bounded typed boundary
+  failures, redaction grammar, sensitive paths, capability names, and original-text terminal
+  validation now satisfy C10-01 through C10-13.
+- Focused GREEN: 102 passed, 0 failed; strict focused TypeScript passed.
+- Every Cycle 10 RED assertion remains unchanged. Post-RED test edits were limited to interface
+  alignment for retained controls: three older successful-handoff fixtures now express identical
+  sensitive records on one terminal-safe line because WR-01 rejects original controls before
+  redaction; one harmless documentary fixture now uses `password: ...`, while an additive exact
+  assertion proves `password = ...` redacts under BL-04.
+
+### VERIFY result
+
+- Focused runtime/tool-policy: 102 passed, 0 failed, 0 skipped/cancelled/todo.
+- Strict TypeScript: focused production/tests and all 12 non-test Shepherd production files pass
+  with TypeScript 5.9.3 and explicit Pi 0.80.6 package/type roots.
+- Complete serialized Shepherd suite: 239 executed, 208 passed, 31 environment-blocked only in
+  `controller.test.ts` and `state-store.test.ts` where the managed sandbox denies `/bin/ps` with
+  `spawn EPERM`. The isolation run excluding those files passes 165/165; the complete suite is not
+  represented as green.
+- Pinned Pi: binary reports `0.80.6`; offline RPC `get_commands` registers `pm-shepherd`; the focused
+  no-model row passes Pi's real argument validator and executes a custom tool.
+- `git diff --check`, immutable-base and frozen-head ancestry, exact issue-owned paths, and clean
+  worktree pass. No push or GitHub mutation was authorized or attempted; parent orchestration owns
+  the permitted-environment rerun and fresh exact-head review.
