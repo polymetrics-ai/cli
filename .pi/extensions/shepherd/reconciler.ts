@@ -212,6 +212,15 @@ function selectScheduleWork(input: ReconcileInput): ScheduleSelectionResult {
 	}
 }
 
+function scheduleSelectionMatchesStage(
+	selection: ReadyQueueSelection,
+	proposedStage: ParentLifecycleStage,
+): boolean {
+	if (proposedStage === "FINAL_VERIFY") return selection.kind === "complete";
+	if (proposedStage === "TASK_PLAN") return selection.kind === "selected";
+	return true;
+}
+
 export function reconcileAutonomy(candidate: unknown): ReconcileDecision {
 	const input = snapshotReconcileInput(candidate);
 	if (input === undefined) return { kind: "invalid_snapshot", reason: "invalid autonomy snapshot" };
@@ -298,12 +307,8 @@ export function reconcileAutonomy(candidate: unknown): ReconcileDecision {
 			return { kind: "await_stage_evidence", stage: input.canonical.observedStage };
 		}
 		if (input.canonical.observedStage === "SCHEDULE") {
-			const queueMatchesTransition = input.canonical.proposedStage === "FINAL_VERIFY"
-				? scheduleSelection?.kind === "complete"
-				: input.canonical.proposedStage === "TASK_PLAN"
-					? scheduleSelection?.kind === "selected"
-					: true;
-			if (!queueMatchesTransition) {
+			if (scheduleSelection === undefined
+				|| !scheduleSelectionMatchesStage(scheduleSelection, input.canonical.proposedStage)) {
 				return { kind: "invalid_snapshot", reason: "lifecycle facts conflict with authoritative work queue" };
 			}
 		}

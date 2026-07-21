@@ -22,9 +22,9 @@
       "reason": "Three matching table/property test files now fail on the intentionally absent policy modules; the strict RED gate is satisfied."
     },
     {
-      "cycle": "execute",
+      "cycle": "second-correction-execute",
       "decision": "local_critical_path",
-      "reason": "The minimum three-module implementation passes 23 focused tests and strict no-emit TypeScript; broader verification follows."
+      "reason": "The second correction implementation passes 40 focused tests and strict no-emit TypeScript; broader verification follows."
     },
     {
       "cycle": "gap-loop",
@@ -32,14 +32,14 @@
       "reason": "Adversarial runtime-boundary tests produced 4 expected failures, then passed 26/26 after minimal fail-closed refactoring."
     },
     {
-      "cycle": "refactor",
+      "cycle": "second-correction-refactor",
       "decision": "local_critical_path",
-      "reason": "The refactored pure policy passes 26 focused tests, strict production TypeScript, and the full 163-test Shepherd suite."
+      "reason": "Alias-set naming and lifecycle agreement refactoring preserve 40 focused passes and strict production TypeScript."
     },
     {
-      "cycle": "verify",
+      "cycle": "second-correction-verify-pending",
       "decision": "local_critical_path",
-      "reason": "The parent-declared phase-equivalent child gate passed: 26 focused tests, 163 full Shepherd tests, strict TypeScript against Pi 0.80.6, offline RPC extension discovery, and diff/ownership checks."
+      "reason": "Final scoped Shepherd, Pi, RPC, and ownership gates are pending after the behavior-preserving refactor."
     },
     {
       "cycle": "summary",
@@ -59,12 +59,12 @@
   ],
   "gates": {
     "red": "passed_expected_failure_3_of_3",
-    "green": "passed_26_of_26",
-    "refactor": "passed_gap_red_4_then_green_26_of_26",
-    "focusedTests": "passed_26_of_26",
-    "fullShepherdTests": "passed_163_of_163",
-    "strictTypeScript": "all_12_production_modules_passed_against_pi_0_80_6",
-    "piExtensionDiscovery": "unsupported_flag_but_offline_rpc_passed",
+    "green": "passed_40_of_40",
+    "refactor": "passed_40_of_40_after_second_correction_refactor",
+    "focusedTests": "passed_40_of_40",
+    "fullShepherdTests": "pending_second_correction_verification",
+    "strictTypeScript": "passed_second_correction_against_pi_0_80_6",
+    "piExtensionDiscovery": "pending_second_correction_verification",
     "goVet": "supplemental_passed",
     "goTest": "supplemental_passed_after_contention_timeout_retry",
     "goBuild": "supplemental_passed",
@@ -80,6 +80,7 @@
     "correctionOwnership": "passed",
     "secondCorrectionRed": "passed_expected_failure_5_of_40",
     "secondCorrectionGreen": "passed_40_of_40",
-    "secondCorrectionStrictTypeScript": "passed_after_discriminated_union_narrowing"
+    "secondCorrectionStrictTypeScript": "passed_after_discriminated_union_narrowing",
+    "secondCorrectionRefactor": "passed_40_of_40"
   }
 }

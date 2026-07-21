@@ -8,7 +8,7 @@ Ready stacked PR: https://github.com/polymetrics-ai/cli/pull/483
 | Gate | Result | Evidence |
 |---|---|---|
 | Correction RED | pass | reviewed head: 36 tests, 21 pass, 15 expected fail; 64-item child killed at one-second deadline |
-| Audit gap RED | pass | full case-fold and failed-status coherence: 2 tests, 0 pass, 2 expected fail |
+| Audit gap RED | pass | composed case aliases and failed-status coherence: 2 tests, 0 pass, 2 expected fail |
 | Focused policy tests | pass | 36 tests, 36 pass, 0 fail; hostile component typed-rejected in bounded time |
 | Full Shepherd tests | pass | 173 tests, 173 pass, 0 fail after refactor |
 | Strict TypeScript / Pi 0.80.6 | pass | `tsc` 5.9.3 `--noEmit --strict` over all 12 production Shepherd modules, resolving installed Pi 0.80.6 declarations |

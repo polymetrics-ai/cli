@@ -106,7 +106,7 @@ function scopeContainsCanonical(left: string, right: string): boolean {
 	return left === right || right.startsWith(`${left}/`);
 }
 
-function canonicalScopesCollide(left: readonly (readonly string[])[], right: readonly (readonly string[])[]): boolean {
+function scopeAliasSetsCollide(left: readonly (readonly string[])[], right: readonly (readonly string[])[]): boolean {
 	return left.some((leftAliases) => right.some((rightAliases) =>
 		leftAliases.some((leftScope) => rightAliases.some((rightScope) =>
 			scopeContainsCanonical(leftScope, rightScope) || scopeContainsCanonical(rightScope, leftScope),
@@ -114,8 +114,8 @@ function canonicalScopesCollide(left: readonly (readonly string[])[], right: rea
 	));
 }
 
-function scopeContains(left: string, right: string): boolean {
-	return canonicalScopesCollide([scopeAliases(left)], [scopeAliases(right)]);
+function scopesOverlap(left: string, right: string): boolean {
+	return scopeAliasSetsCollide([scopeAliases(left)], [scopeAliases(right)]);
 }
 
 function compareIds(left: Pick<DependencyWorkItem, "id">, right: Pick<DependencyWorkItem, "id">): number {
@@ -125,7 +125,7 @@ function compareIds(left: Pick<DependencyWorkItem, "id">, right: Pick<Dependency
 export function scopesCollide(left: readonly string[], right: readonly string[]): boolean {
 	for (const scope of left) validateScope(scope);
 	for (const scope of right) validateScope(scope);
-	return canonicalScopesCollide(left.map(scopeAliases), right.map(scopeAliases));
+	return scopeAliasSetsCollide(left.map(scopeAliases), right.map(scopeAliases));
 }
 
 export function validateDependencyGraph(input: unknown): ValidatedDependencyGraph {
@@ -176,7 +176,7 @@ export function validateDependencyGraph(input: unknown): ValidatedDependencyGrap
 		}
 		for (let index = 0; index < scopes.length; index += 1) {
 			for (let other = index + 1; other < scopes.length; other += 1) {
-				if (scopeContains(scopes[index], scopes[other]) || scopeContains(scopes[other], scopes[index])) {
+				if (scopesOverlap(scopes[index], scopes[other])) {
 					throw new DependencyGraphError("ambiguous_scope", `redundant write scopes for ${id}`);
 				}
 			}
@@ -284,7 +284,7 @@ interface ConflictGraph {
 function buildConflictGraph(candidates: readonly DependencyWorkItem[]): ConflictGraph {
 	const remaining = new Set(candidates.map((candidate) => candidate.id));
 	const byId = new Map(candidates.map((candidate) => [candidate.id, candidate]));
-	const canonicalScopes = new Map(candidates.map((candidate) => [
+	const scopeAliasIndex = new Map(candidates.map((candidate) => [
 		candidate.id,
 		candidate.writeScopes.map(scopeAliases),
 	]));
@@ -294,7 +294,7 @@ function buildConflictGraph(candidates: readonly DependencyWorkItem[]): Conflict
 			const left = candidates[index];
 			const right = candidates[other];
 			if (left.access === "mutating" && right.access === "mutating"
-				&& canonicalScopesCollide(canonicalScopes.get(left.id) ?? [], canonicalScopes.get(right.id) ?? [])) {
+				&& scopeAliasSetsCollide(scopeAliasIndex.get(left.id) ?? [], scopeAliasIndex.get(right.id) ?? [])) {
 				conflicts.get(left.id)?.add(right.id);
 				conflicts.get(right.id)?.add(left.id);
 			}

@@ -136,8 +136,8 @@ gaps. This loop reopens the phase under the same ownership and verification poli
 - Add exact JSON-like DTO shape validation at the reconciler boundary and exact work-item shape
   validation in the graph boundary. Invalid input returns `invalid_snapshot` or the existing typed
   graph blocker, never an exception.
-- Normalize scope collision keys with NFC plus locale-independent lowercase while retaining the
-  original canonical DTO text.
+- Build a bounded conservative alias closure from NFKC plus ECMAScript upper/lower mappings while
+  retaining original DTO text; this is collision-safe and does not claim full Unicode casefolding.
 - Partition ready mutators into connected collision components. Exact branch-and-bound is allowed
   only within a small declared component bound; overlarge components fail closed in polynomial
   preprocessing time. Read-only candidates remain unconstrained singleton lanes.

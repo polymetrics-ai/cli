@@ -86,13 +86,13 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
   guards, and a resumable `await_human_decision` result.
 - Replaced unbounded 64-item exact search with conflict components capped at 12 items, retaining
   exact maximum selection inside the declared bound.
-- Added explicit code-unit ordering, conservative NFKC/case-folded scope aliases, exact graph and
+- Added explicit code-unit ordering, conservative NFKC/case-mapped scope aliases, exact graph and
   reconciler DTO shapes, status/dependency coherence, and BigInt-safe fail-closed validation.
 - Reordered scheduler blockers ahead of spawn capability checks and limited isolation gating to
   selected mutators while retaining eligible readers.
 - First correction GREEN: 36/36. Production-only strict TypeScript then found and drove three DTO
   narrowing fixes before passing.
-- Audit gap RED: 0/2 for full case folding and failed-status coherence; final focused GREEN: 36/36,
+- Audit gap RED: 0/2 for composed case aliases and failed-status coherence; final focused GREEN: 36/36,
   hostile subprocess 80 ms, `git diff --check` pass.
 - Execution decision: `local_critical_path`; proceed to refactor and broader verification.
 
@@ -148,6 +148,16 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
 - Added terminal `blocked` reconciliation alongside `complete` and `aborted`.
 - Focused GREEN: 40/40. Strict production TypeScript: pass after type-only helper narrowing.
 - Execution decision: `local_critical_path`; proceed to behavior-preserving refactor.
+
+## Exact-head correction 2 refactor cycle
+
+- Renamed collision helpers and indexes around their real bounded alias-set semantics; no claim of
+  canonical or full Unicode case folding remains.
+- Extracted the SCHEDULE selection/stage agreement predicate from nested transition logic.
+- Updated primary RUN-STATE cycles and gates to current 40-test truth; the full-suite/RPC fields are
+  explicitly pending rather than retaining stale 26/163 values.
+- Focused suite remains 40/40 and strict production TypeScript remains clean.
+- Execution decision: `local_critical_path`; proceed to final scoped verification.
 
 ## TDD gate cycle
 

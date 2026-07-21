@@ -87,8 +87,8 @@ final focused run. The first production-only strict TypeScript pass found three 
 errors at the graph DTO boundary; explicit validated locals fixed them and the exact strict command
 then exited 0.
 
-Audit gap RED added full Unicode case folding (`Straße` / `STRASSE`) and failed work with an
-unsatisfied dependency. Targeted result: 2 tests, 0 pass, 2 fail. Minimal NFKC + upper/lower folding
+Audit gap RED added composed Unicode case mappings (`Straße` / `STRASSE`) and failed work with an
+unsatisfied dependency. Targeted result: 2 tests, 0 pass, 2 fail. Minimal NFKC + upper/lower aliases
 and terminal-status coherence extended the final focused GREEN to 36/36. `git diff --check` passes.
 
 Correction refactor precomputes one canonical collision index per ready queue, then reuses it for
@@ -123,3 +123,8 @@ advancement, dependency/collision precedence, and an explicit terminal BLOCKED r
 strict production TypeScript run exposed only an overly broad helper return type; narrowing
 `noSpawn`/`invalidGraphDecision` to their discriminated union members produced a clean strict pass
 without changing runtime behavior.
+
+Refactor renamed canonical-looking helpers to explicit alias-set/overlap vocabulary and extracted
+the SCHEDULE-stage agreement predicate. This removes any implication of complete case folding and
+makes lifecycle cross-validation auditable without changing behavior: focused 40/40 and strict
+production TypeScript remain green.
