@@ -3757,6 +3757,30 @@ test("cycle 11 Pi streams account actual monotonic state for every content famil
 				} as AgentSessionEvent);
 			},
 		},
+		{
+			name: "text-end-signature-growth",
+			emit(session) {
+				const partial = assistantMessage("", {
+					content: [{ type: "text", text: "", textSignature: "s".repeat(3_500) }],
+				});
+				emit(session, {
+					type: "message_update", message: partial,
+					assistantMessageEvent: { type: "text_end", contentIndex: 0, content: "", partial },
+				} as AgentSessionEvent);
+			},
+		},
+		{
+			name: "uncharged-envelope-growth",
+			emit(session) {
+				const message = assistantMessage("", {
+					diagnostics: [{ type: "cycle11", timestamp: 475, details: { payload: "d".repeat(3_500) } }],
+				});
+				emit(session, {
+					type: "message_update", message,
+					assistantMessageEvent: { type: "done", reason: "stop", message },
+				} as AgentSessionEvent);
+			},
+		},
 	];
 	const accepted: string[] = [];
 

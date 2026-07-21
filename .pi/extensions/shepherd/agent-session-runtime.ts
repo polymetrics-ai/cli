@@ -616,6 +616,7 @@ interface AssistantTerminal {
 	stopReason: string;
 	timestamp: number;
 	content: ReadonlyArray<Readonly<CapturedAssistantContent>>;
+	envelopeIdentity: string;
 	identity: string;
 }
 
@@ -1637,6 +1638,7 @@ function validateIndexedStreamTransition(
 	type: string,
 	fields: ReadonlyMap<string, unknown>,
 ): number {
+	const envelopeGrowth = cumulativeIdentityGrowth(previous?.envelopeIdentity, current.envelopeIdentity, 0);
 	const index = Number(fields.get("contentIndex"));
 	const previousContent = previous?.content ?? [];
 	if (index >= current.content.length || current.content.length < previousContent.length ||
@@ -1664,7 +1666,8 @@ function validateIndexedStreamTransition(
 		if (type === "text_end" && (fields.get("content") !== after || !after.startsWith(before))) {
 			throw new AgentSessionRuntimeError("Pi text_end replaced or misreported content");
 		}
-		return byteLength(after.slice(before.length));
+		const novelBytes = byteLength(after.slice(before.length));
+		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, novelBytes);
 	}
 	if (type.startsWith("thinking_")) {
 		if (next.type !== "thinking") throw new AgentSessionRuntimeError(`Pi ${type} content type is invalid`);
@@ -1677,27 +1680,28 @@ function validateIndexedStreamTransition(
 		if (type === "thinking_end" && (fields.get("content") !== after || !after.startsWith(before))) {
 			throw new AgentSessionRuntimeError("Pi thinking_end replaced or misreported content");
 		}
-		return byteLength(after.slice(before.length));
+		const novelBytes = byteLength(after.slice(before.length));
+		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, novelBytes);
 	}
 	if (!type.startsWith("toolcall_") || next.type !== "toolCall") {
 		throw new AgentSessionRuntimeError(`Pi ${type} content type is invalid`);
 	}
 	if (type === "toolcall_start") {
 		if ((next.partialJson ?? "") !== "") throw new AgentSessionRuntimeError("Pi toolcall_start must begin empty");
-		return byteLength(next.identity);
+		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, 0);
 	}
 	if (type === "toolcall_delta") {
 		const before = prior?.type === "toolCall" ? prior.partialJson ?? "" : "";
 		if (next.partialJson !== before + String(delta)) {
 			throw new AgentSessionRuntimeError("Pi toolcall_delta is not the actual novel suffix");
 		}
-		return byteLength(String(delta));
+		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, byteLength(String(delta)));
 	}
 	const toolCall = snapshotEventJson(fields.get("toolCall"), "Pi toolcall_end value", MAX_EVENT_BYTES);
 	if (canonicalJson(toolCall) !== canonicalToolContent(next, false)) {
 		throw new AgentSessionRuntimeError("Pi toolcall_end disagrees with cumulative content");
 	}
-	return prior ? Math.max(0, byteLength(next.identity) - byteLength(prior.identity)) : byteLength(next.identity);
+	return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, 0);
 }
 
 function streamSnapshotGrowth(previous: AssistantTerminal | undefined, current: AssistantTerminal): number {
@@ -1705,14 +1709,26 @@ function streamSnapshotGrowth(previous: AssistantTerminal | undefined, current: 
 	if (current.content.length < previous.content.length) {
 		throw new AgentSessionRuntimeError("Pi stream cumulative content shrank");
 	}
-	let growth = 0;
+	let growth = cumulativeIdentityGrowth(previous.envelopeIdentity, current.envelopeIdentity, 0);
 	for (let index = 0; index < current.content.length; index += 1) {
 		const before = previous.content[index];
 		const after = current.content[index]!;
-		if (!before) growth += byteLength(after.identity);
-		else if (before.identity !== after.identity) growth += Math.max(0, byteLength(after.identity) - byteLength(before.identity));
+		growth += cumulativeIdentityGrowth(before?.identity, after.identity, 0);
 	}
 	return growth;
+}
+
+function cumulativeIdentityGrowth(previous: string | undefined, current: string, novelBytes: number): number {
+	if (previous === undefined) return Math.max(novelBytes, byteLength(current));
+	if (previous === current) return novelBytes;
+	const previousBytes = byteLength(previous);
+	const currentBytes = byteLength(current);
+	if (novelBytes > 0 && currentBytes > previousBytes) {
+		return Math.max(novelBytes, currentBytes - previousBytes);
+	}
+	// A changed identity without provable append-only growth is replacement state. Charge the
+	// complete replacement so equal-size or shrinking metadata cannot evade the aggregate bound.
+	return Math.max(novelBytes, currentBytes);
 }
 
 function boundedEventBytes(root: unknown, maximum: number): number {
@@ -2050,7 +2066,7 @@ function captureAssistantTerminal(
 		}
 		throw new AgentSessionRuntimeError(`AgentSession assistant content type ${JSON.stringify(type)} is invalid`);
 	});
-	const identity = canonicalJson(snapshotEventJson({
+	const envelope = {
 		role: "assistant",
 		api,
 		provider,
@@ -2062,6 +2078,14 @@ function captureAssistantTerminal(
 		stopReason,
 		...(fields.has("errorMessage") ? { errorMessage: fields.get("errorMessage") } : {}),
 		timestamp,
+	};
+	const envelopeIdentity = canonicalJson(snapshotEventJson(
+		envelope,
+		"AgentSession assistant envelope identity",
+		maximum,
+	));
+	const identity = canonicalJson(snapshotEventJson({
+		...envelope,
 		content: content.map((part) => part.identity),
 	}, "AgentSession assistant identity", maximum));
 	return Object.freeze({
@@ -2072,6 +2096,7 @@ function captureAssistantTerminal(
 		stopReason,
 		timestamp,
 		content: Object.freeze(content),
+		envelopeIdentity,
 		identity,
 	});
 }
@@ -2442,9 +2467,10 @@ function snapshotAggregateMembers(error: AggregateError, depth: number, seen: We
 		const iteratorFactory = source?.[Symbol.iterator];
 		if (typeof iteratorFactory !== "function") throw new Error("aggregate members are not iterable");
 		iterator = Reflect.apply(iteratorFactory, source, []) as Iterator<unknown>;
-		if (!iterator || typeof iterator.next !== "function") throw new Error("aggregate iterator is invalid");
+		const next = iterator?.next;
+		if (typeof next !== "function") throw new Error("aggregate iterator is invalid");
 		for (let index = 0; index < 16; index += 1) {
-			const step = Reflect.apply(iterator.next, iterator, []) as IteratorResult<unknown>;
+			const step = Reflect.apply(next, iterator, []) as IteratorResult<unknown>;
 			if (!step || typeof step !== "object") throw new Error("aggregate iterator step is invalid");
 			if (step.done) {
 				exhausted = true;
