@@ -18,6 +18,8 @@ Refs #471
   audit every historically touched path, and push an exact audited SHA refspec
 - fence worktree/add/push from executable repository hooks, filters, credential helpers, includes,
   and transport configuration through deterministic sanitized Git config/environment
+- audit the union of committed history and staged/tracked-dirty/untracked status immediately before
+  push, including both rename endpoints, and reject out-of-scope state before remote mutation
 - preserve dirty, untracked, conflicted, stale, and unique state without exposing worktree removal,
   reset, clean, prune, force push, default-branch push, or arbitrary refspec capability
 
@@ -33,13 +35,16 @@ Refs #471
 - correction 3 RED: `fa607d31` — 36 tests, 26 passed and 10 failed on all five exact-head findings
 - correction 3 GREEN: `db6bdd67` — authority, ancestry/history, Git config, and default binding pass
 - correction 3 refactor: `f7cb0cab` — safe config centralized; focused and strict gates pass
+- correction 4 RED: `1ed10ad6` — 42 tests, 36 passed and 6 failed across five dirty-state forms
+- correction 4 GREEN: `b2d62bc6` — pre-transfer committed-plus-dirty scope audit passes
+- correction 4 refactor: `bb053535` — canonical status-path extraction shared by commit and push
 - skills: `gsd-programming-loop`, `gsd-workstreams`, `gsd-plan-phase`,
   `github-issue-first-delivery`, `architecture-patterns`, `javascript-testing-patterns`
 
 ## Verification
 
-- focused issue tests — 36 passed, 0 failed
-- full Shepherd suite with `--test-concurrency=1` — 173 passed, 0 failed in 107.5s
+- focused issue tests — 42 passed, 0 failed in 69.0s
+- full Shepherd suite with `--test-concurrency=1` — 179 passed, 0 failed in 115.2s
 - strict no-emit TypeScript against cached Pi 0.80.6 Node types — pass
 - documented offline Pi 0.80.6 RPC `get_commands` discovery — `true` for `pm-shepherd`
 - exact-range diff, scope, and pushed implementation-ref equality — pass
@@ -58,6 +63,7 @@ runner's intentional wall-clock assertions; no timeout was widened.
 
 ## Review route
 
-Independent xhigh reviews of `906a45c5`, `d5181cd2`, and `9728f9ed` produced the corrections addressed here. A
-fresh independent xhigh review must bind to the newly pushed exact candidate head. Claude and
+Independent xhigh reviews of `906a45c5`, `d5181cd2`, `9728f9ed`, and `1fe994a6` produced the
+corrections addressed here. A fresh independent xhigh review must bind to the newly pushed exact
+candidate head. Claude and
 Copilot are not requested, and this worker must not merge the sub-PR or parent PR.

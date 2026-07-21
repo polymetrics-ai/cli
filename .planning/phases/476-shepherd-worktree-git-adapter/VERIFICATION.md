@@ -1,17 +1,26 @@
 # Issue 476 Verification
 
-Status: `in_progress`
+Status: `pass`
 
-Correction 4 is active from reviewed head `1fe994a68ec3286ee69f1be4fadf71416d601257`.
-Production remained unchanged through a genuine test-only RED for the missing pre-transfer union
-of committed, staged, tracked-dirty, and untracked paths; the GREEN correction is pending.
-Correction-3 results below remain historical evidence for their exact head but do not satisfy
-correction 4.
+Correction 4 supersedes reviewed head `1fe994a68ec3286ee69f1be4fadf71416d601257` with GREEN
+checkpoint `b2d62bc64eda012362c0b125e6bb79e90a4a452e` and refactor checkpoint
+`bb0535353378a08210a5e1f106c8c07c1e4b32fe` on ready stacked PR
+https://github.com/polymetrics-ai/cli/pull/484.
 
 The genuine correction-4 RED is `1ed10ad6f9e7893cc4a921bc5f1f6fbb848c61f1`: the focused
 serialized run reported 42 tests, 36 passes, and six expected failures. All five dirty-state
 variants created the remote issue ref; production remained unchanged from reviewed head
 `1fe994a68ec3286ee69f1be4fadf71416d601257`.
+
+| Correction 4 gate | Result | Evidence |
+|---|---|---|
+| focused adapter tests | pass | 42 passed, 0 failed in 69.0s with serialized test files |
+| complete Shepherd tests | pass | 179 passed, 0 failed in 115.2s with `--test-concurrency=1` |
+| strict TypeScript / Pi 0.80.6 | pass | adapters and matching tests passed strict no-emit TypeScript against cached Pi 0.80.6 Node types |
+| offline Pi discovery | pass | pinned Pi 0.80.6 RPC `get_commands` returned `true` for `pm-shepherd` |
+| immutable-base diff | pass | `git diff --check e659d6f1...HEAD` exited 0 |
+| owned path scope | pass | only issue-owned adapters, matching tests/fixture, and phase 476 artifacts changed |
+| forbidden gates | not run | no Go, connector, certification, runtime-backed, or `make` command ran |
 
 Correction 3 supersedes reviewed head `9728f9ed12e8e545eabd8b9b1b8028af80150427` with GREEN
 checkpoint `db6bdd675aaced17f0d709b08a647258dfb87f15` and refactor checkpoint
@@ -50,6 +59,10 @@ https://github.com/polymetrics-ai/cli/pull/484. The reviewed predecessor
 
 ## Correction contract evidence
 
+- Push remains inside the existing lease-backed mutation queue. Immediately before transfer it
+  combines full committed-history evidence with untracked-aware porcelain status, includes both
+  rename endpoints, and rejects any path outside the immutable lease scopes before the remote ref
+  or object set can change.
 - WorkspaceAdapter no longer passes an issuer through caller-overridable `acquireMutationLease`;
   GitAdapter privately registers a one-way acquisition closure and exposes no public lease issuer.
 - Commit and push revalidate the immutable base as an ancestor. Handoff and push audit the union of
@@ -82,11 +95,11 @@ https://github.com/polymetrics-ai/cli/pull/484. The reviewed predecessor
 
 The full-suite warning came from running real Git subprocess fixtures concurrently with
 `sdk-runner.test.ts`, which intentionally contains narrow wall-clock deadline assertions. The
-authoritative full Shepherd command serializes test files with `--test-concurrency=1`; all 166 tests
+authoritative full Shepherd command serializes test files with `--test-concurrency=1`; all 179 tests
 pass and no production or test timeout was widened.
 
 ## Verification policy
 
 Per parent direction, issue #476 runs only focused tests, the full Shepherd suite, strict
 TypeScript, offline Pi RPC, and diff/scope checks. No Go, connector, certification,
-runtime-service, or `make verify` gate was run during correction 3.
+runtime-service, or `make verify` gate was run during correction 4.

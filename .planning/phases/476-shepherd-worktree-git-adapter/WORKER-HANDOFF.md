@@ -16,11 +16,15 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-476-shepherd-worktree-git-adapter`
 
-Reviewed predecessor: `9728f9ed12e8e545eabd8b9b1b8028af80150427`
+Reviewed predecessor: `1fe994a68ec3286ee69f1be4fadf71416d601257`
 
 Correction 3 GREEN head: `db6bdd675aaced17f0d709b08a647258dfb87f15`
 
 Correction 3 refactor head: `f7cb0cab0d2fb0c2ef01edc516bd3cdf950b5113`
+
+Correction 4 GREEN head: `b2d62bc64eda012362c0b125e6bb79e90a4a452e`
+
+Correction 4 refactor head: `bb0535353378a08210a5e1f106c8c07c1e4b32fe`
 
 ## Scope delivered
 
@@ -34,6 +38,8 @@ Correction 3 refactor head: `f7cb0cab0d2fb0c2ef01edc516bd3cdf950b5113`
   transfer, endpoint binding, and default-branch symbolic-HEAD revalidation.
 - Deterministic safe Git configuration for worktree/add/push; executable repository configuration
   is rejected before its marker can run.
+- Pre-transfer push scope is the union of committed history and canonical staged/dirty/untracked
+  status, including both rename endpoints, under the existing queued mutation and lease boundary.
 - Non-destructive branch/path reconciliation that preserves dirty, untracked, and unique state.
 
 ## GSD / TDD / skill evidence
@@ -54,22 +60,25 @@ Correction 3 refactor head: `f7cb0cab0d2fb0c2ef01edc516bd3cdf950b5113`
 - Correction 3 RED checkpoint `fa607d31`: focused 36 tests, 26 passed and ten failed while
   production remained at correction-2 head `6a22aa78`.
 - Correction 3 GREEN `db6bdd67` and refactor `f7cb0cab`: all five exact-head contracts pass.
+- Correction 4 RED `1ed10ad6`: 42 tests, 36 passed and six failed; every dirty-state variant
+  created the remote issue ref while production remained unchanged.
+- Correction 4 GREEN `b2d62bc6` and refactor `bb053535`: all five dirty-state variants reject
+  before remote mutation; status-path extraction is shared without adding post-GREEN behavior.
 
 ## Verification
 
-- Focused issue tests: 36/36 pass in 58.2s.
-- Serialized complete Shepherd suite: 173/173 pass in 107.5s.
+- Focused issue tests: 42/42 pass in 69.0s.
+- Serialized complete Shepherd suite: 179/179 pass in 115.2s.
 - Strict no-emit TypeScript against cached Pi 0.80.6 Node types: pass.
 - Offline Pi 0.80.6 RPC command discovery: `true` for `pm-shepherd` from `extension`.
 - Exact-range diff and scope hygiene: pass.
-- Pushed exact-head equality: evidence checkpoint `0a3cdfa4ce1ac46f87fc31ed14e295d17a4bb62c`
-  matched local, tracking, and remote refs before terminal attestation.
+- Pushed exact-head equality: pending the correction-4 evidence-only commit.
 - Go, connector, certification, runtime-service, and `make verify` gates: not run, per parent policy.
 
 ## Review and merge state
 
-- Independent xhigh review of `9728f9ed` produced five blockers; correction 3 addresses each with
-  deterministic local repository regressions and exact pre-transfer evidence.
+- Independent xhigh review of `1fe994a6` produced one High blocker; correction 4 addresses it with
+  five deterministic local repository variants and pre-transfer remote-ref evidence.
 - A fresh independent xhigh review must bind to the newly pushed exact candidate head.
 - Claude and Copilot were intentionally not requested.
 - Do not merge PR #484 or parent PR #472 from this worker; the human gate remains active.

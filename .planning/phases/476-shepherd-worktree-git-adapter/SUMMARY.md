@@ -38,7 +38,12 @@ The third correction cycle addresses independent xhigh review of `9728f9ed`:
 - the origin default branch is bound in schema-v4 claims and revalidated from live symbolic HEAD;
 - push transfers the exact audited SHA instead of resolving a mutable local branch during transfer.
 
-Focused tests pass 36/36 and the serialized full Shepherd suite passes 173/173. Strict TypeScript,
+The fourth correction cycle addresses independent xhigh review of `1fe994a6`: queued push now
+unions full committed history with canonical staged, tracked-dirty, untracked, rename-origin, and
+rename-destination status evidence immediately before lease revalidation and exact-SHA transfer.
+Every out-of-scope form rejects before the remote ref changes.
+
+Focused tests pass 42/42 and the serialized full Shepherd suite passes 179/179. Strict TypeScript,
 offline Pi 0.80.6 RPC command discovery, and exact diff/scope checks pass.
 
 ## Files delivered
@@ -65,6 +70,10 @@ offline Pi 0.80.6 RPC command discovery, and exact diff/scope checks pass.
 - `fa607d31`: correction 3 genuine test-only RED checkpoint.
 - `db6bdd67`: correction 3 GREEN checkpoint.
 - `f7cb0cab`: correction 3 safe-config refactor checkpoint.
+- `1eb2852a`: correction 4 plan checkpoint.
+- `1ed10ad6`: correction 4 genuine test-only RED checkpoint.
+- `b2d62bc6`: correction 4 GREEN checkpoint.
+- `bb053535`: correction 4 status-path refactor checkpoint.
 
 ## Deviations
 

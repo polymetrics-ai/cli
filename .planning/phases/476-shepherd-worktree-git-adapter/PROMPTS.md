@@ -82,3 +82,6 @@
 - RED result: test-only checkpoint `1ed10ad6`; focused serialized run reported 42 tests, 36 passes,
   and six failures. Each of the five dirty-state variants created the remote issue ref, while both
   production adapters remained identical to reviewed head `1fe994a6`.
+- Result: plan `1eb2852a`, RED `1ed10ad6`, GREEN `b2d62bc6`, refactor `bb053535`; focused
+  42/42, serialized Shepherd 179/179 in 115.2s, strict Pi 0.80.6 TypeScript, offline RPC `true`,
+  and immutable-base diff/path-scope gates pass.

@@ -193,9 +193,9 @@ Production is frozen until the correction-4 RED checkpoint. Baseline hashes at t
    canonical status evidence, union both rename endpoints with the already-audited committed
    history, validate the union against the immutable lease scopes, then retain the existing exact
    SHA/ref, endpoint, default-branch, and lease checks.
-3. REFACTOR only after GREEN: centralize status-path extraction/pre-transfer scope validation so
-   commit, handoff, and push use one canonical interpretation without widening capabilities or the
-   race window.
+3. REFACTOR only after GREEN: centralize Git-adapter status-path extraction for commit and push,
+   while preserving handoff's existing canonical status interpretation, without widening
+   capabilities or the race window.
 4. Commit and push plan, genuine test-only RED, minimal GREEN, refactor, and terminal evidence
    checkpoints. Run only focused adapter tests, serialized Shepherd tests, strict cached Pi 0.80.6
    TypeScript, offline Pi RPC, and immutable-base diff/path checks. Go, connector, certification,
@@ -203,14 +203,20 @@ Production is frozen until the correction-4 RED checkpoint. Baseline hashes at t
 
 ### Correction 4 verification checklist
 
-- [ ] focused adapter tests pass after a recorded test-only RED
-- [ ] complete Shepherd suite passes with `--test-concurrency=1`
-- [ ] strict no-emit TypeScript passes against cached Pi 0.80.6 types
-- [ ] documented offline Pi 0.80.6 RPC returns `true`
-- [ ] immutable-base diff check and exact changed-path scope pass
+- [x] focused adapter tests pass after a recorded test-only RED
+- [x] complete Shepherd suite passes with `--test-concurrency=1`
+- [x] strict no-emit TypeScript passes against cached Pi 0.80.6 types
+- [x] documented offline Pi 0.80.6 RPC returns `true`
+- [x] immutable-base diff check and exact changed-path scope pass
 - [ ] final local, tracking, and remote branch heads match exactly
 
 Correction 4 test-only RED checkpoint `1ed10ad6f9e7893cc4a921bc5f1f6fbb848c61f1`:
 the focused serialized run reported 42 tests, 36 passes, and six failures (five dirty-state
 subcases plus their parent). In every subcase, the remote issue ref existed after push completed.
 Both production adapter files remained byte-for-byte identical to reviewed head `1fe994a6`.
+
+Correction 4 result: plan `1eb2852a`, genuine test-only RED `1ed10ad6`, GREEN
+`b2d62bc64eda012362c0b125e6bb79e90a4a452e`, and refactor
+`bb0535353378a08210a5e1f106c8c07c1e4b32fe`. Focused 42/42, serialized Shepherd
+179/179 in 115.2s, strict cached-Pi TypeScript, offline Pi RPC `true`, and immutable-base
+diff/path-scope gates pass. Final exact-head equality follows the evidence-only commit.

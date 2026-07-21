@@ -20,7 +20,7 @@ Tests use bounded temporary local Git repositories and no credentials or network
 | Correction 3: ancestry and history scope | Focused run: commit/push accepted unrelated or historically out-of-scope heads; handoff accepted an add-then-remove path | Commit/push revalidate immutable-base ancestry; history audit unions every touched commit path; push transfers an exact SHA refspec | Unrelated and add/remove heads reject before remote refs/objects change; handoff rejects erased net diffs | green/refactored |
 | Correction 3: sanitized Git mutations | Focused run: worktree/add/push accepted executable hook/filter/helper/transport configuration and marker paths were reachable | Mutations use a deterministic config environment and reject executable/local transport configuration before Git mutation | Worktree, clean-filter, pre-push hook, credential-helper, and SSH-command markers remain absent | green/refactored |
 | Correction 3: bound default branch | Focused run: binding omitted `defaultBranch`, caller/live remote mismatch was accepted, and push used the mutable branch ref | Inspection and schema-v4 claims bind local origin symbolic HEAD; pre-push `ls-remote --symref` revalidates live HEAD | Caller and live-remote mismatch both reject before the issue ref exists remotely | green/refactored |
-| Correction 4: pre-transfer full workspace scope | Test-only checkpoint `1ed10ad6`: 42 tests, 36 passed and six failed; all five dirty-state variants created the remote issue ref | pending | pending | red |
+| Correction 4: pre-transfer full workspace scope | Test-only checkpoint `1ed10ad6`: 42 tests, 36 passed and six failed; all five dirty-state variants created the remote issue ref | Queued push unions canonical status paths (both rename endpoints) with audited history immediately before exact-SHA transfer | Shared status-path extraction covers commit/push; focused 42/42 and Shepherd 179/179 pass | green/refactored |
 
 Correction RED command: `node --test .pi/extensions/shepherd/workspace-adapter.test.ts
 .pi/extensions/shepherd/git-adapter.test.ts` → 21 tests, 16 passed, 5 failed. The five failures map
@@ -64,6 +64,13 @@ Correction 4 test-only RED checkpoint `1ed10ad6f9e7893cc4a921bc5f1f6fbb848c61f1`
 serialized command produced 42 tests, 36 passes, and six failures: the untracked, tracked-dirty,
 staged-addition, staged-rename, and literal-backslash subcases each found the remote issue ref after
 push, and the containing matrix failed with them.
+
+Correction 4 GREEN checkpoint `b2d62bc64eda012362c0b125e6bb79e90a4a452e` and refactor
+checkpoint `bb0535353378a08210a5e1f106c8c07c1e4b32fe`: focused 42/42 in 69.0s;
+serialized full Shepherd 179/179 in 115.2s; strict no-emit TypeScript passed against cached Pi
+0.80.6 types; offline Pi RPC returned `true`; exact immutable-base diff and owned-path checks
+passed. The refactor added no behavior or post-GREEN test contract; it only centralized the
+already-GREEN status-path extraction used by commit and push.
 
 ## Required safety cases
 
@@ -123,3 +130,12 @@ push, and the containing matrix failed with them.
 - Execution decision, correction 4 RED: `local_critical_path` — test-only checkpoint `1ed10ad6`
   deterministically exposes remote mutation for all five dirty-state classes while production
   remains byte-for-byte unchanged from the reviewed head.
+- Execution decision, correction 4 GREEN: `local_critical_path` — the queued push now audits the
+  committed-plus-staged-plus-dirty union immediately before lease revalidation and exact transfer;
+  the original 42-test RED contract passes.
+- Execution decision, correction 4 refactor: `local_critical_path` — canonical status-path
+  extraction is shared by commit and push without adding behavior or changing the test contract.
+- Execution decision, correction 4 verify: `local_critical_path` — focused 42/42, Shepherd 179/179,
+  strict Pi 0.80.6 TypeScript, offline RPC, and immutable-base diff/path scope pass.
+- Execution decision, correction 4 summary: `local_critical_path` — correction checkpoints and
+  exact gate evidence are durable; the parent owns fresh exact-head xhigh review and merge state.

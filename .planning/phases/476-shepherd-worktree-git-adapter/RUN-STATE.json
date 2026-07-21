@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "phase": "476-shepherd-worktree-git-adapter",
   "issue": 476,
-  "status": "in_progress",
+  "status": "completed",
   "gsdMode": "manual_gsd_fallback",
-  "verificationPassed": false,
-  "verificationBlocker": "correction4_green_not_yet_implemented",
+  "verificationPassed": true,
+  "verificationBlocker": null,
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -136,6 +136,26 @@
       "cycle": "correction4-red",
       "decision": "local_critical_path",
       "reason": "Test-only checkpoint 1ed10ad6 produced 42 tests, 36 passes, and six deterministic failures; every dirty-state variant changed the remote while production remained identical to the reviewed head."
+    },
+    {
+      "cycle": "correction4-green",
+      "decision": "local_critical_path",
+      "reason": "The queued push now unions audited committed history with canonical staged, tracked-dirty, untracked, rename, and literal-backslash status evidence immediately before lease revalidation and exact-SHA transfer; focused 42/42 passes."
+    },
+    {
+      "cycle": "correction4-refactor",
+      "decision": "local_critical_path",
+      "reason": "Status-path extraction is shared by commit and push without adding behavior or changing the committed RED contract; focused 42/42 and strict TypeScript pass."
+    },
+    {
+      "cycle": "correction4-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 42/42, serialized Shepherd 179/179, strict cached Pi 0.80.6 TypeScript, offline Pi RPC, and immutable-base diff/path scope pass; no forbidden gate ran."
+    },
+    {
+      "cycle": "correction4-summary",
+      "decision": "local_critical_path",
+      "reason": "Correction 4 checkpoints and exact gate evidence are durable; fresh exact-head xhigh review and merge decisions remain parent-owned."
     }
   ]
 }
