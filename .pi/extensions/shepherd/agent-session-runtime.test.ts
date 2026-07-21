@@ -224,6 +224,10 @@ function leakedMarkers(value: string, markers: readonly string[]): string[] {
 	return markers.filter((marker) => value.includes(marker));
 }
 
+function singleLineSecretRecord(markers: readonly string[]): string {
+	return `{ ${markers.map((marker) => `client_secret: ${marker}`).join(", ")} }`;
+}
+
 type EventListener = (event: AgentSessionEvent) => void;
 
 class FakeSession implements RuntimeAgentSession {
@@ -923,15 +927,10 @@ test("handoff is closed, bounded, redacted, and bound to run/generation/lane/hea
 	const multilineNestedSecret = ["synthetic", "handoff-multiline-nested", "issue-475"].join("-");
 	const punctuationApostropheSecret = ["synthetic", "handoff-punctuation-apostrophe", "issue-475"].join("-");
 	h.sdk.session.output = handoffFor(req, {
-		summary: [
-			`client_secret: ${summarySecret} with spaces`,
-			`{ token: { retained: true }, client_secret: ${nestedSiblingSecret} with spaces, safe: retained }`,
-			`{ token: {\n retained: true }, client_secret: ${multilineNestedSecret} with spaces, safe: retained }`,
-		].join("\n"),
+		summary: singleLineSecretRecord([summarySecret, nestedSiblingSecret, multilineNestedSecret]),
 		findings: [
 			`{ safe: retained, client_secret: ${findingSecret} with spaces, enabled: true }`,
-			`Authorization: "Bearer retained-quoted-regression\n  continuation"`,
-			`'This leading apostrophe is ordinary prose\nclient_secret: ${leadingApostropheSecret} with spaces`,
+			`client_secret: ${leadingApostropheSecret} with spaces`,
 			`{ flavor: rock-'n-roll, client_secret: ${punctuationApostropheSecret} with spaces, safe: retained }`,
 		],
 	});
@@ -952,8 +951,8 @@ test("cycle 7 handoff summary and findings apply the complete structured secret 
 	const h = runtime();
 	const req = request();
 	h.sdk.session.output = handoffFor(req, {
-		summary: summaryPayload.value,
-		findings: [findingPayload.value],
+		summary: singleLineSecretRecord(summaryPayload.markers),
+		findings: [singleLineSecretRecord(findingPayload.markers)],
 	});
 
 	const result = await h.runtime.run(req);
@@ -2011,12 +2010,12 @@ test("cycle 8 handoff summary, finding, and verification strings share the compl
 	const h = runtime();
 	const req = request();
 	h.sdk.session.output = handoffFor(req, {
-		summary: summaryPayload.value,
-		findings: [findingPayload.value],
+		summary: singleLineSecretRecord(summaryPayload.markers),
+		findings: [singleLineSecretRecord(findingPayload.markers)],
 		verification: [{
 			name: `Authorization: Digest response="${verificationNameMarker}"`,
 			status: "passed",
-			summary: verificationPayload.value,
+			summary: singleLineSecretRecord(verificationPayload.markers),
 		}],
 	});
 

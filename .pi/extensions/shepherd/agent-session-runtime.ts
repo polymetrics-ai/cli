@@ -201,14 +201,38 @@ class CancellationScope {
 	}
 }
 
+interface CapturedSessionOperation {
+	readonly available: boolean;
+	readonly operation?: (...args: unknown[]) => unknown;
+	readonly failurePresent: boolean;
+	readonly failure: unknown;
+}
+
+function captureSessionOperation(session: object, name: keyof RuntimeAgentSession): CapturedSessionOperation {
+	let candidate: unknown;
+	try {
+		candidate = (session as unknown as Record<PropertyKey, unknown>)[name];
+	} catch (error) {
+		return { available: false, failurePresent: true, failure: error };
+	}
+	if (typeof candidate !== "function") {
+		return {
+			available: false,
+			failurePresent: true,
+			failure: new AgentSessionRuntimeError(`Pi AgentSession operation ${String(name)} is missing or invalid`),
+		};
+	}
+	return { available: true, operation: candidate as (...args: unknown[]) => unknown, failurePresent: false, failure: undefined };
+}
+
 class OwnedSession {
 	readonly #session: RuntimeAgentSession;
-	readonly #abort: RuntimeAgentSession["abort"];
-	readonly #dispose: RuntimeAgentSession["dispose"];
-	readonly #prompt: RuntimeAgentSession["prompt"];
-	readonly #subscribe: RuntimeAgentSession["subscribe"];
-	readonly #waitForIdle: RuntimeAgentSession["waitForIdle"];
-	readonly #getActiveToolNames: RuntimeAgentSession["getActiveToolNames"];
+	readonly #abort: CapturedSessionOperation;
+	readonly #dispose: CapturedSessionOperation;
+	readonly #prompt: CapturedSessionOperation;
+	readonly #subscribe: CapturedSessionOperation;
+	readonly #waitForIdle: CapturedSessionOperation;
+	readonly #getActiveToolNames: CapturedSessionOperation;
 	#abortPromise: Promise<void> | undefined;
 	#disposePromise: Promise<void> | undefined;
 	#unsubscribe: (() => void | PromiseLike<void>) | undefined;
@@ -217,43 +241,49 @@ class OwnedSession {
 
 	constructor(session: RuntimeAgentSession) {
 		this.#session = session;
-		// Capture the exact acquired operations. Host mutation after ownership transfer must
-		// not redirect validation, prompting, cancellation, or cleanup to another surface.
-		this.#abort = session.abort;
-		this.#dispose = session.dispose;
-		this.#prompt = session.prompt;
-		this.#subscribe = session.subscribe;
-		this.#waitForIdle = session.waitForIdle;
-		this.#getActiveToolNames = session.getActiveToolNames;
-		if (typeof this.#abort !== "function" || typeof this.#dispose !== "function" ||
-			typeof this.#prompt !== "function" || typeof this.#subscribe !== "function" ||
-			typeof this.#waitForIdle !== "function" || typeof this.#getActiveToolNames !== "function") {
-			throw new AgentSessionRuntimeError("Pi returned an incomplete AgentSession surface");
-		}
+		// Capture every operation independently. A hostile getter for an operational method
+		// must never prevent us from acquiring a later dispose operation.
+		this.#abort = captureSessionOperation(session, "abort");
+		this.#waitForIdle = captureSessionOperation(session, "waitForIdle");
+		this.#dispose = captureSessionOperation(session, "dispose");
+		this.#prompt = captureSessionOperation(session, "prompt");
+		this.#subscribe = captureSessionOperation(session, "subscribe");
+		this.#getActiveToolNames = captureSessionOperation(session, "getActiveToolNames");
+	}
+
+	validationFailures(): readonly unknown[] {
+		return [this.#abort, this.#waitForIdle, this.#dispose, this.#prompt, this.#subscribe, this.#getActiveToolNames]
+			.filter((captured) => captured.failurePresent)
+			.map((captured) => captured.failure);
 	}
 
 	activeToolNames(): unknown {
-		return Reflect.apply(this.#getActiveToolNames, this.#session, []);
+		if (!this.#getActiveToolNames.available) throw this.#getActiveToolNames.failure;
+		return Reflect.apply(this.#getActiveToolNames.operation!, this.#session, []);
 	}
 
 	prompt(value: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<void> {
-		return Promise.resolve(Reflect.apply(this.#prompt, this.#session, [value, options]));
+		if (!this.#prompt.available) return Promise.reject(this.#prompt.failure);
+		return Promise.resolve(Reflect.apply(this.#prompt.operation!, this.#session, [value, options])).then(() => undefined);
 	}
 
 	subscribe(listener: (event: AgentSessionEvent) => void): void {
 		if (this.#unsubscribe !== undefined || this.#unsubscribePromise !== undefined) {
 			throw new AgentSessionRuntimeError("AgentSession subscription ownership was already acquired");
 		}
-		const unsubscribe = Reflect.apply(this.#subscribe, this.#session, [listener]);
+		if (!this.#subscribe.available) throw this.#subscribe.failure;
+		const unsubscribe = Reflect.apply(this.#subscribe.operation!, this.#session, [listener]);
 		if (typeof unsubscribe !== "function") {
 			throw new AgentSessionRuntimeError("AgentSession subscribe returned an invalid cleanup operation");
 		}
-		this.#unsubscribe = unsubscribe;
+		this.#unsubscribe = unsubscribe as () => void | PromiseLike<void>;
 	}
 
 	abortOnce(): Promise<void> {
 		if (!this.#abortPromise) {
-			this.#abortPromise = Promise.resolve().then(() => Reflect.apply(this.#abort, this.#session, []));
+			this.#abortPromise = this.#abort.available
+				? Promise.resolve().then(() => Reflect.apply(this.#abort.operation!, this.#session, [])).then(() => undefined)
+				: Promise.resolve();
 			this.#abortPromise.catch(() => undefined);
 		}
 		return this.#abortPromise;
@@ -261,7 +291,9 @@ class OwnedSession {
 
 	waitOnce(): Promise<void> {
 		if (!this.#waitPromise) {
-			this.#waitPromise = Promise.resolve().then(() => Reflect.apply(this.#waitForIdle, this.#session, []));
+			this.#waitPromise = this.#waitForIdle.available
+				? Promise.resolve().then(() => Reflect.apply(this.#waitForIdle.operation!, this.#session, [])).then(() => undefined)
+				: Promise.resolve();
 			this.#waitPromise.catch(() => undefined);
 		}
 		return this.#waitPromise;
@@ -281,8 +313,10 @@ class OwnedSession {
 
 	disposeOnce(): Promise<void> {
 		if (!this.#disposePromise) {
-			this.#disposePromise = Promise.resolve().then(() =>
-				Promise.resolve(Reflect.apply(this.#dispose, this.#session, [])));
+			this.#disposePromise = this.#dispose.available
+				? Promise.resolve().then(() =>
+					Promise.resolve(Reflect.apply(this.#dispose.operation!, this.#session, []))).then(() => undefined)
+				: Promise.reject(this.#dispose.failure);
 			this.#disposePromise.catch(() => undefined);
 		}
 		return this.#disposePromise;
@@ -393,6 +427,21 @@ class SessionCreationOwnership {
 		else if (this.#settlement?.status === "rejected") this.#settleTerminal();
 	}
 
+	async joinForClose(): Promise<boolean> {
+		if (this.#terminalSettled) return true;
+		// Once every active run has joined, an unclaimed creation belongs to close.
+		if (this.#state === "pending") this.abandon();
+		if (this.#state === "abandoned" && this.#settlement === undefined) {
+			const settlement = await settleWithin(this.promise, this.#cleanupTimeoutMs);
+			if (settlement.status === "pending") return false;
+		}
+		// A fulfilled abandoned creation now owns internally bounded abort/idle,
+		// unsubscribe, and dispose phases. Do not race those phases against a shorter
+		// outer timeout: their terminal is the close join contract.
+		await this.terminal;
+		return true;
+	}
+
 	#startLateCleanup(created: RuntimeSessionResult): void {
 		if (this.#lateCleanupStarted) return;
 		this.#lateCleanupStarted = true;
@@ -401,25 +450,29 @@ class SessionCreationOwnership {
 
 	async #finishLateCreation(created: RuntimeSessionResult): Promise<void> {
 		let claim: CreatedSessionClaim | undefined;
-		const failures: unknown[] = [];
+		let acquisitionFailurePresent = false;
+		let acquisitionFailure: unknown;
+		let cleanupFailurePresent = false;
+		let cleanupFailure: unknown;
 		try {
 			claim = this.#captureCreated(created);
 		} catch (error) {
-			failures.push(error);
+			acquisitionFailurePresent = true;
+			acquisitionFailure = error;
 		}
 		if (claim) {
 			try {
 				claim.validate();
-			} catch (error) {
-				failures.push(error);
-			}
+			} catch { /* Validation is primary and retryable after successful forced cleanup. */ }
 			try {
 				await this.#cleanup(claim.owned);
 			} catch (error) {
-				failures.push(error);
+				cleanupFailurePresent = true;
+				cleanupFailure = error;
 			}
 		}
-		if (failures.length > 0) this.#reportFailure(combineFailures(failures, "late AgentSession ownership failed"));
+		if (acquisitionFailurePresent) this.#reportFailure(acquisitionFailure);
+		if (cleanupFailurePresent) this.#reportFailure(cleanupFailure);
 		this.#settleTerminal();
 	}
 
@@ -444,12 +497,12 @@ class SessionCreationOwnership {
 			if (settlement.status === "rejected") failures.push(settlement.reason);
 		}
 		try {
-			await bounded(owned.unsubscribeOnce(), this.#cleanupTimeoutMs, "abandoned session unsubscribe");
+			await bounded(owned.unsubscribeOnce(), this.#cleanupTimeoutMs, "abandoned session unsubscribe", true);
 		} catch (error) {
 			failures.push(error);
 		}
 		try {
-			await bounded(owned.disposeOnce(), this.#cleanupTimeoutMs, "abandoned session dispose");
+			await bounded(owned.disposeOnce(), this.#cleanupTimeoutMs, "abandoned session dispose", true);
 		} catch (error) {
 			failures.push(error);
 		}
@@ -493,32 +546,43 @@ class AbortListenerLease {
 
 	attach(): void {
 		if (this.#mayBeAttached) return;
-		// EventTarget may mutate before a hostile wrapper throws. Own the possible lease first.
 		this.#mayBeAttached = true;
-		Reflect.apply(this.#add, this.#signal, ["abort", this.#listener, { once: true }]);
+		const failures: unknown[] = [];
+		try {
+			Reflect.apply(this.#add, this.#signal, ["abort", this.#listener, { once: true }]);
+		} catch (error) {
+			failures.push(error);
+		}
+		// The captured method is useful mutation evidence but cannot be trusted to attach.
+		// Native EventTarget registration is authoritative and duplicate registration is
+		// idempotent for the same type/callback/capture tuple.
+		try {
+			EventTarget.prototype.addEventListener.call(this.#signal, "abort", this.#listener, { once: true });
+		} catch (error) {
+			failures.push(error);
+		}
+		if (failures.length > 0) throw combineFailures(failures, "AbortSignal listener attach failed");
 	}
 
 	release(): void {
 		if (this.#released || !this.#mayBeAttached) return;
 		this.#released = true;
+		const failures: unknown[] = [];
 		try {
 			Reflect.apply(this.#remove, this.#signal, ["abort", this.#listener]);
-			if (!this.#removeWasOwn && Object.hasOwn(this.#signal, "removeEventListener")) {
-				throw new AgentSessionRuntimeError("AbortSignal listener operation mutated after acquisition");
-			}
 		} catch (error) {
-			let fallbackFailurePresent = false;
-			let fallbackFailure: unknown;
-			try {
-				EventTarget.prototype.removeEventListener.call(this.#signal, "abort", this.#listener);
-			} catch (fallbackError) {
-				fallbackFailurePresent = true;
-				fallbackFailure = fallbackError;
-			}
-			throw fallbackFailurePresent
-				? combineFailures([error, fallbackFailure], "AbortSignal listener detach failed")
-				: error;
+			failures.push(error);
 		}
+		// Always perform native detach: a captured method may silently no-op.
+		try {
+			EventTarget.prototype.removeEventListener.call(this.#signal, "abort", this.#listener);
+		} catch (error) {
+			failures.push(error);
+		}
+		if (!this.#removeWasOwn && Object.hasOwn(this.#signal, "removeEventListener")) {
+			failures.push(new AgentSessionRuntimeError("AbortSignal listener operation mutated after acquisition"));
+		}
+		if (failures.length > 0) throw combineFailures(failures, "AbortSignal listener detach failed");
 	}
 }
 
@@ -602,7 +666,7 @@ export class ShepherdAgentSessionRuntime {
 				lease.attach();
 			} catch (error) {
 				try { lease.release(); } catch { /* Preserve the attachment failure. */ }
-				throw error;
+				throw normalizeRuntimeError(error);
 			}
 			if (parentSignal.aborted) parentAbortListener();
 		}
@@ -724,9 +788,8 @@ export class ShepherdAgentSessionRuntime {
 		await Promise.all([...this.#active.values()].map((active) => active.done));
 		const creationOwners = [...this.#creations];
 		if (creationOwners.length > 0) {
-			const terminal = Promise.all(creationOwners.map((creation) => creation.terminal)).then(() => undefined);
-			const settlement = await settleWithin(terminal, this.#options.cleanupTimeoutMs);
-			if (settlement.status === "pending") {
+			const joined = await Promise.all(creationOwners.map((creation) => creation.joinForClose()));
+			if (joined.some((complete) => !complete)) {
 				this.#setQuarantine(new AgentSessionRuntimeError(
 					"AgentSession creation remained pending during bounded close",
 				));
@@ -847,7 +910,6 @@ export class ShepherdAgentSessionRuntime {
 			try {
 				claim.validate();
 			} catch (error) {
-				this.#setQuarantine(error);
 				throw error;
 			}
 
@@ -895,10 +957,9 @@ export class ShepherdAgentSessionRuntime {
 					try {
 						claim.validate();
 					} catch (error) {
-						this.#setQuarantine(error);
-						if (!cleanupFailurePresent) {
-							cleanupFailurePresent = true;
-							cleanupFailure = error;
+						if (!primaryFailurePresent) {
+							primaryFailurePresent = true;
+							primaryFailure = error;
 						}
 					}
 				}
@@ -912,7 +973,11 @@ export class ShepherdAgentSessionRuntime {
 		}
 		if (owned) {
 			try {
-				await cleanupOwnedSession(owned, scope.failure !== undefined, this.#options.cleanupTimeoutMs);
+				await cleanupOwnedSession(
+					owned,
+					scope.failure !== undefined || primaryFailurePresent,
+					this.#options.cleanupTimeoutMs,
+				);
 			} catch (error) {
 				if (!cleanupFailurePresent) {
 					cleanupFailurePresent = true;
@@ -1001,7 +1066,7 @@ export class ShepherdAgentSessionRuntime {
 	#setQuarantine(error: unknown): void {
 		if (this.#quarantineFailurePresent) return;
 		this.#quarantineFailurePresent = true;
-		this.#quarantineFailure = error;
+		this.#quarantineFailure = snapshotRuntimeFailure(error);
 	}
 }
 
@@ -1191,58 +1256,87 @@ function captureCreatedSession(
 	thinking: ShepherdAgentThinking,
 	expectedTools: readonly string[],
 ): CreatedSessionClaim {
-	if (!created || typeof created !== "object") {
+	if (!created || typeof created !== "object" || Array.isArray(created) || nodeTypes.isProxy(created)) {
 		throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result");
 	}
-	// This is the sole read of the SDK-owned result's session field. Every later operation is
-	// invoked through methods captured by OwnedSession from this exact object.
-	const session = created.session;
+	// Acquire the cleanup root before validating any peer field. The legacy public Pi result
+	// permits a session getter, so it is invoked exactly once; every other result field must be
+	// a data descriptor and is never read through ordinary property lookup.
+	const sessionDescriptor = Object.getOwnPropertyDescriptor(created, "session");
+	let session: unknown;
+	if (sessionDescriptor && "value" in sessionDescriptor) session = sessionDescriptor.value;
+	else if (sessionDescriptor?.get) session = Reflect.apply(sessionDescriptor.get, created, []);
 	if (!session || typeof session !== "object") {
 		throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result without a cleanable session");
 	}
-	const owned = new OwnedSession(session);
-	let captureFailurePresent = false;
-	let captureFailure: unknown;
-	let extensionShapeValid = false;
-	let extensionCount = 0;
-	let extensionErrorCount = 0;
-	let fallbackMessage: unknown;
+	const owned = new OwnedSession(session as RuntimeAgentSession);
+	const captureFailures: unknown[] = [...owned.validationFailures()];
 	let modelProvider: unknown;
 	let modelId: unknown;
 	let thinkingLevel: unknown;
 	let sessionFile: unknown;
 	let activeTools: readonly string[] | undefined;
+	const recordCaptureFailure = (error: unknown): void => { captureFailures.push(error); };
+	if (!sessionDescriptor?.enumerable || sessionDescriptor.set ||
+		(!("value" in sessionDescriptor) && !sessionDescriptor.get)) {
+		recordCaptureFailure(new AgentSessionRuntimeError("Pi session ownership descriptor is invalid"));
+	}
 	try {
-		const extensionsResult = created.extensionsResult;
-		fallbackMessage = created.modelFallbackMessage;
-		if (extensionsResult && typeof extensionsResult === "object") {
-			const extensions = extensionsResult.extensions;
-			const errors = extensionsResult.errors;
-			extensionShapeValid = Array.isArray(extensions) && Array.isArray(errors);
-			if (extensionShapeValid) {
-				extensionCount = extensions.length;
-				extensionErrorCount = errors.length;
-			}
+		const keys = Reflect.ownKeys(created);
+		const allowed = new Set(["session", "extensionsResult", "modelFallbackMessage"]);
+		if (keys.length < 2 || keys.length > 3 || keys.some((key) => typeof key !== "string" || !allowed.has(key))) {
+			throw new AgentSessionRuntimeError("Pi returned an AgentSession result with unknown fields");
 		}
-		const model = session.model;
+	} catch (error) {
+		recordCaptureFailure(error);
+	}
+	const extensionsDescriptor = Object.getOwnPropertyDescriptor(created, "extensionsResult");
+	if (!extensionsDescriptor?.enumerable || extensionsDescriptor.get || extensionsDescriptor.set ||
+		!("value" in extensionsDescriptor)) {
+		recordCaptureFailure(new AgentSessionRuntimeError("Pi returned an invalid extensions result descriptor"));
+	} else {
+		try {
+			captureEmptyExtensionsResult(extensionsDescriptor.value);
+		} catch (error) {
+			recordCaptureFailure(error);
+		}
+	}
+	const fallbackDescriptor = Object.getOwnPropertyDescriptor(created, "modelFallbackMessage");
+	if (fallbackDescriptor) {
+		if (!fallbackDescriptor.enumerable || fallbackDescriptor.get || fallbackDescriptor.set || !("value" in fallbackDescriptor)) {
+			recordCaptureFailure(new AgentSessionRuntimeError("Pi returned an invalid fallback descriptor"));
+		} else if (fallbackDescriptor.value !== undefined) {
+			recordCaptureFailure(new AgentSessionRuntimeError("Pi attempted a forbidden model fallback"));
+		}
+	}
+	try {
+		const model = (session as RuntimeAgentSession).model;
 		modelProvider = model?.provider;
 		modelId = model?.id;
-		thinkingLevel = session.thinkingLevel;
-		sessionFile = session.sessionFile;
+	} catch (error) {
+		recordCaptureFailure(error);
+	}
+	try {
+		thinkingLevel = (session as RuntimeAgentSession).thinkingLevel;
+	} catch (error) {
+		recordCaptureFailure(error);
+	}
+	try {
+		sessionFile = (session as RuntimeAgentSession).sessionFile;
+	} catch (error) {
+		recordCaptureFailure(error);
+	}
+	try {
 		activeTools = captureToolNameArray(owned.activeToolNames());
 	} catch (error) {
-		captureFailurePresent = true;
-		captureFailure = error;
+		recordCaptureFailure(error);
 	}
 
 	return Object.freeze({
 		owned,
 		validate(): void {
-			if (captureFailurePresent) throw captureFailure;
-			if (!extensionShapeValid) throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result");
-			if (fallbackMessage !== undefined) throw new AgentSessionRuntimeError("Pi attempted a forbidden model fallback");
-			if (extensionCount > 0 || extensionErrorCount > 0) {
-				throw new AgentSessionRuntimeError("embedded AgentSession unexpectedly loaded extensions or extension errors");
+			if (captureFailures.length > 0) {
+				throw combineFailures(captureFailures, "Pi AgentSession capture or validation failed");
 			}
 			if (modelProvider !== REQUIRED_PROVIDER || modelId !== REQUIRED_MODEL) {
 				throw new AgentSessionRuntimeError("embedded AgentSession model routing mismatch");
@@ -1255,6 +1349,39 @@ function captureCreatedSession(
 			}
 		},
 	});
+}
+
+function captureEmptyExtensionsResult(value: unknown): void {
+	if (!value || typeof value !== "object" || Array.isArray(value) || nodeTypes.isProxy(value)) {
+		throw new AgentSessionRuntimeError("Pi returned an invalid extensions result");
+	}
+	const keys = Reflect.ownKeys(value);
+	if (keys.length !== 2 || !keys.includes("extensions") || !keys.includes("errors") ||
+		keys.some((key) => typeof key !== "string")) {
+		throw new AgentSessionRuntimeError("Pi extensions result must be an exact closed record");
+	}
+	for (const key of ["extensions", "errors"] as const) {
+		const descriptor = Object.getOwnPropertyDescriptor(value, key);
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			throw new AgentSessionRuntimeError(`Pi extensions result ${key} must be an own data field`);
+		}
+		captureExactEmptyArray(descriptor.value, `Pi extensions result ${key}`);
+	}
+}
+
+function captureExactEmptyArray(value: unknown, description: string): void {
+	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+		throw new AgentSessionRuntimeError(`${description} must be an exact non-proxy empty array`);
+	}
+	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
+	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
+		lengthDescriptor.value !== 0) {
+		throw new AgentSessionRuntimeError(`${description} must be empty`);
+	}
+	const keys = Reflect.ownKeys(value);
+	if (keys.length !== 1 || keys[0] !== "length") {
+		throw new AgentSessionRuntimeError(`${description} contains hidden or extra fields`);
+	}
 }
 
 function captureToolNameArray(value: unknown): readonly string[] | undefined {
@@ -1288,36 +1415,74 @@ function captureEvent(
 		return;
 	}
 	try {
-		capture.eventBytes += boundedEventBytes(event, options.maxEventBytes - capture.eventBytes);
-	} catch (error) {
-		capture.failure = new AgentSessionRuntimeError("AgentSession emitted an event that exceeded bounded safe accounting", {
-			cause: error,
-		});
-		return;
-	}
-	if (capture.eventBytes > options.maxEventBytes) {
-		capture.failure = new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
-		return;
-	}
-	try {
 		const eventFields = captureClosedRecordFields(event, "AgentSession event", MAX_EVENT_RECORD_KEYS);
 		const eventType = eventFields.get("type");
-		if (typeof eventType !== "string") return;
+		if (typeof eventType !== "string") throw new AgentSessionRuntimeError("AgentSession event type is invalid");
+		let accountingValue: unknown = event;
+		if (eventType === "message_update") {
+			assertExactCapturedFields(eventFields, ["type", "message", "assistantMessageEvent"], "message_update event");
+			validateAssistantMessageEnvelope(eventFields.get("message"));
+			accountingValue = captureStreamingUpdateCharge(eventFields.get("assistantMessageEvent"));
+		}
 		if (eventType === "message_end") {
+			assertExactCapturedFields(eventFields, ["type", "message"], "message_end event");
 			capture.messageEnd = captureAssistantTerminal(eventFields.get("message"));
 		}
 		if (eventType === "agent_end") {
+			assertExactCapturedFields(eventFields, ["type", "messages", "willRetry"], "agent_end event");
 			capture.agentEndCount += 1;
-			capture.agentEndWillRetry ||= eventFields.get("willRetry") === true;
+			const willRetry = eventFields.get("willRetry");
+			if (typeof willRetry !== "boolean") throw new AgentSessionRuntimeError("agent_end willRetry is invalid");
+			capture.agentEndWillRetry ||= willRetry;
 			const messages = captureDenseArray(eventFields.get("messages"), "AgentSession terminal messages");
 			for (const message of messages) {
 				const terminal = captureAssistantTerminal(message);
 				if (terminal) capture.agentEnd = terminal;
 			}
 		}
+		capture.eventBytes += boundedEventBytes(accountingValue, options.maxEventBytes - capture.eventBytes);
+		if (capture.eventBytes > options.maxEventBytes) {
+			throw new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
+		}
 	} catch (error) {
-		capture.failure = new AgentSessionRuntimeError("AgentSession emitted an invalid terminal event", { cause: error });
+		capture.failure = new AgentSessionRuntimeError("AgentSession emitted an invalid or unbounded event", { cause: error });
 	}
+}
+
+function captureStreamingUpdateCharge(value: unknown): Readonly<Record<string, unknown>> {
+	const fields = captureClosedRecordFields(value, "Pi assistant streaming event", 8);
+	const type = fields.get("type");
+	if (typeof type !== "string") throw new AgentSessionRuntimeError("Pi assistant streaming event type is invalid");
+	const shapes: Readonly<Record<string, readonly string[]>> = {
+		start: ["type", "partial"],
+		text_start: ["type", "contentIndex", "partial"],
+		text_delta: ["type", "contentIndex", "delta", "partial"],
+		text_end: ["type", "contentIndex", "content", "partial"],
+		thinking_start: ["type", "contentIndex", "partial"],
+		thinking_delta: ["type", "contentIndex", "delta", "partial"],
+		thinking_end: ["type", "contentIndex", "content", "partial"],
+		toolcall_start: ["type", "contentIndex", "partial"],
+		toolcall_delta: ["type", "contentIndex", "delta", "partial"],
+		toolcall_end: ["type", "contentIndex", "toolCall", "partial"],
+		done: ["type", "reason", "message"],
+		error: ["type", "reason", "error"],
+	};
+	const shape = shapes[type];
+	if (!shape) throw new AgentSessionRuntimeError(`unsupported Pi assistant streaming event ${JSON.stringify(type)}`);
+	assertExactCapturedFields(fields, shape, `Pi ${type} streaming event`);
+	if (fields.has("partial")) validateAssistantMessageEnvelope(fields.get("partial"));
+	if (fields.has("message")) validateAssistantMessageEnvelope(fields.get("message"));
+	if (fields.has("error")) validateAssistantMessageEnvelope(fields.get("error"));
+	if (fields.has("contentIndex") && (!Number.isSafeInteger(fields.get("contentIndex")) || Number(fields.get("contentIndex")) < 0)) {
+		throw new AgentSessionRuntimeError(`Pi ${type} content index is invalid`);
+	}
+	const variable = fields.has("delta") ? fields.get("delta") : undefined;
+	if (variable !== undefined && typeof variable !== "string") {
+		throw new AgentSessionRuntimeError(`Pi ${type} delta is invalid`);
+	}
+	// Pi partial/message/content fields are cumulative snapshots. Charge only the novel
+	// delta here; message_end and agent_end each receive one bounded terminal charge.
+	return Object.freeze(variable === undefined ? { type } : { type, delta: variable });
 }
 
 function boundedEventBytes(root: unknown, maximum: number): number {
@@ -1352,17 +1517,24 @@ function boundedEventBytes(root: unknown, maximum: number): number {
 		if (seen.has(object)) throw new AgentSessionRuntimeError("AgentSession event contains a cycle");
 		seen.add(object);
 		const array = Array.isArray(value);
-		const keys = Reflect.ownKeys(object);
 		if (array) {
-			if (value.length > MAX_EVENT_ARRAY_ITEMS || keys.length !== value.length + 1) {
+			if (value.length > MAX_EVENT_ARRAY_ITEMS) {
 				throw new AgentSessionRuntimeError("AgentSession event contains a sparse or oversized array");
 			}
-			for (let index = 0; index < value.length; index += 1) {
-				if (!Object.hasOwn(value, String(index))) {
-					throw new AgentSessionRuntimeError("AgentSession event contains a sparse array");
+		} else {
+			let enumerableKeys = 0;
+			for (const key in value) {
+				if (!Object.hasOwn(value, key)) throw new AgentSessionRuntimeError("AgentSession event contains inherited fields");
+				enumerableKeys += 1;
+				if (enumerableKeys > MAX_EVENT_RECORD_KEYS) {
+					throw new AgentSessionRuntimeError("AgentSession event record is too wide");
 				}
 			}
-		} else if (keys.length > MAX_EVENT_RECORD_KEYS) {
+		}
+		const keys = Reflect.ownKeys(object);
+		if (array && keys.length !== value.length + 1) {
+			throw new AgentSessionRuntimeError("AgentSession event contains a sparse or oversized array");
+		} else if (!array && keys.length > MAX_EVENT_RECORD_KEYS) {
 			throw new AgentSessionRuntimeError("AgentSession event record is too wide");
 		}
 		add(2);
@@ -1391,6 +1563,16 @@ function captureClosedRecordFields(
 	if (!value || typeof value !== "object" || Array.isArray(value) || nodeTypes.isProxy(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be a plain non-proxy record`);
 	}
+	const prototype = Object.getPrototypeOf(value);
+	if (prototype !== Object.prototype && prototype !== null) {
+		throw new AgentSessionRuntimeError(`${description} must have a plain prototype`);
+	}
+	let enumerableKeys = 0;
+	for (const key in value) {
+		if (!Object.hasOwn(value, key)) throw new AgentSessionRuntimeError(`${description} contains inherited fields`);
+		enumerableKeys += 1;
+		if (enumerableKeys > maximumKeys) throw new AgentSessionRuntimeError(`${description} contains too many fields`);
+	}
 	const keys = Reflect.ownKeys(value);
 	if (keys.length > maximumKeys) throw new AgentSessionRuntimeError(`${description} contains too many fields`);
 	const fields = new Map<string, unknown>();
@@ -1404,6 +1586,16 @@ function captureClosedRecordFields(
 		fields.set(key, descriptor.value);
 	}
 	return fields;
+}
+
+function assertExactCapturedFields(
+	fields: ReadonlyMap<string, unknown>,
+	expected: readonly string[],
+	description: string,
+): void {
+	if (fields.size !== expected.length || expected.some((name) => !fields.has(name))) {
+		throw new AgentSessionRuntimeError(`${description} must be an exact closed record`);
+	}
 }
 
 function captureDenseArray(value: unknown, description: string): readonly unknown[] {
@@ -1429,6 +1621,10 @@ function captureAssistantTerminal(value: unknown): AssistantTerminal | undefined
 	const fields = captureClosedRecordFields(value, "AgentSession terminal message", 32);
 	const role = fields.get("role");
 	if (role !== "assistant") return undefined;
+	assertAllowedCapturedFields(fields, [
+		"role", "content", "api", "provider", "model", "responseModel", "responseId", "diagnostics", "usage",
+		"stopReason", "errorMessage", "timestamp",
+	], ["role", "content", "provider", "model", "stopReason", "timestamp"], "AgentSession assistant message");
 	const provider = fields.get("provider");
 	const model = fields.get("model");
 	const stopReason = fields.get("stopReason");
@@ -1440,11 +1636,30 @@ function captureAssistantTerminal(value: unknown): AssistantTerminal | undefined
 	const content = captureDenseArray(fields.get("content"), "AgentSession assistant terminal content").map((part) => {
 		const partFields = captureClosedRecordFields(part, "AgentSession assistant content part", 16);
 		const type = partFields.get("type");
-		const text = partFields.get("text");
-		if (typeof type !== "string" || (type === "text" && typeof text !== "string")) {
+		if (typeof type !== "string") {
 			throw new AgentSessionRuntimeError("AgentSession assistant content part is invalid");
 		}
-		return Object.freeze(type === "text" ? { type, text: text as string } : { type });
+		if (type === "text") {
+			assertAllowedCapturedFields(partFields, ["type", "text", "textSignature"], ["type", "text"],
+				"AgentSession assistant text content");
+			const text = partFields.get("text");
+			if (typeof text !== "string") throw new AgentSessionRuntimeError("AgentSession assistant text content is invalid");
+			return Object.freeze({ type, text });
+		}
+		if (type === "thinking") {
+			assertAllowedCapturedFields(partFields, ["type", "thinking", "thinkingSignature", "redacted"], ["type", "thinking"],
+				"AgentSession assistant thinking content");
+			if (typeof partFields.get("thinking") !== "string") {
+				throw new AgentSessionRuntimeError("AgentSession assistant thinking content is invalid");
+			}
+			return Object.freeze({ type });
+		}
+		if (type === "toolCall") {
+			assertAllowedCapturedFields(partFields, ["type", "id", "name", "arguments", "thoughtSignature"],
+				["type", "id", "name", "arguments"], "AgentSession assistant tool-call content");
+			return Object.freeze({ type });
+		}
+		throw new AgentSessionRuntimeError(`AgentSession assistant content type ${JSON.stringify(type)} is invalid`);
 	});
 	return Object.freeze({
 		role: "assistant",
@@ -1454,6 +1669,27 @@ function captureAssistantTerminal(value: unknown): AssistantTerminal | undefined
 		timestamp,
 		content: Object.freeze(content),
 	});
+}
+
+function validateAssistantMessageEnvelope(value: unknown): void {
+	if (!captureAssistantTerminal(value)) {
+		throw new AgentSessionRuntimeError("Pi streaming message is not an assistant message");
+	}
+}
+
+function assertAllowedCapturedFields(
+	fields: ReadonlyMap<string, unknown>,
+	allowed: readonly string[],
+	required: readonly string[],
+	description: string,
+): void {
+	const allowedSet = new Set(allowed);
+	for (const key of fields.keys()) {
+		if (!allowedSet.has(key)) throw new AgentSessionRuntimeError(`${description} contains unknown field ${JSON.stringify(key)}`);
+	}
+	if (required.some((key) => !fields.has(key))) {
+		throw new AgentSessionRuntimeError(`${description} is missing a required field`);
+	}
 }
 
 function verifyTerminalCapture(capture: TerminalCapture): AssistantTerminal {
@@ -1557,16 +1793,11 @@ function redactedBoundedString(value: unknown, description: string, max: number,
 	if (typeof value !== "string" || (!allowEmpty && value.length < 1) || value.length > max) {
 		throw new AgentSessionRuntimeError(`${description} must be ${allowEmpty ? "a" : "a non-empty"} bounded string`);
 	}
-	const redacted = redactSensitiveText(value);
 	const terminalControls = /[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/;
-	if (!terminalControls.test(redacted)) return redacted;
-	// Retained multiline structured diagnostics are allowed only when the redactor actually
-	// consumed credential material; remove every remaining terminal control before delivery.
-	// An unchanged string containing any such control remains a hard validation failure.
-	if (redacted === value) {
+	if (terminalControls.test(value)) {
 		throw new AgentSessionRuntimeError(`${description} contains a terminal control character`);
 	}
-	return redacted.replace(/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/g, " ");
+	return redactSensitiveText(value);
 }
 
 function computeDeadline(timeoutMs: number, deadlineAt: number | undefined): number {
@@ -1623,10 +1854,16 @@ function deferred(): { promise: Promise<void>; resolve(): void } {
 	return { promise, resolve: () => resolvePromise?.() };
 }
 
-async function bounded<T>(operation: Promise<T>, timeoutMs: number, description: string): Promise<T> {
+async function bounded<T>(
+	operation: Promise<T>,
+	timeoutMs: number,
+	description: string,
+	unref = false,
+): Promise<T> {
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	const timeout = new Promise<never>((_resolve, reject) => {
 		timer = setTimeout(() => reject(new AgentSessionRuntimeError(`${description} timed out after ${timeoutMs}ms`)), timeoutMs);
+		if (unref) unrefTimeout(timer);
 	});
 	try {
 		return await Promise.race([operation, timeout]);
@@ -1683,12 +1920,81 @@ async function settleWithin<T>(operation: Promise<T>, timeoutMs: number): Promis
 }
 
 function normalizeRuntimeError(error: unknown): AgentSessionRuntimeError {
-	return error instanceof AgentSessionRuntimeError
-		? error
-		: new AgentSessionRuntimeError(
-			`AgentSession run failed${error instanceof Error && error.message ? `: ${error.message}` : ""}`,
-			{ cause: error },
-		);
+	if (error instanceof AgentSessionRuntimeError) {
+		const message = safeRuntimeMessage(readErrorMessage(error), "AgentSession operation failed");
+		let cause: unknown;
+		try {
+			cause = Object.hasOwn(error, "cause") ? snapshotRuntimeFailure(error.cause) : undefined;
+		} catch {
+			cause = new Error("failure cause was unavailable");
+		}
+		return new AgentSessionRuntimeError(message, { cause });
+	}
+	const sourceMessage = readErrorMessage(error);
+	const safeMessage = sourceMessage ? safeRuntimeMessage(sourceMessage, "") : "";
+	return new AgentSessionRuntimeError(
+		`AgentSession run failed${safeMessage ? `: ${safeMessage}` : ""}`,
+		{ cause: snapshotRuntimeFailure(error) },
+	);
+}
+
+function snapshotRuntimeFailure(
+	error: unknown,
+	depth = 0,
+	seen: WeakSet<object> = new WeakSet<object>(),
+): unknown {
+	if (error === undefined || error === null || typeof error === "boolean" || typeof error === "number") return error;
+	if (typeof error === "string") return safeRuntimeMessage(error, "failure");
+	if (typeof error !== "object" && typeof error !== "function") return "unsupported failure";
+	const object = error as object;
+	if (seen.has(object)) return new Error("cyclic failure omitted");
+	if (depth >= 4) return new Error("nested failure omitted");
+	seen.add(object);
+	try {
+		if (error instanceof AggregateError) {
+			let nested: unknown[] = [];
+			try {
+				nested = Array.from(error.errors as Iterable<unknown>).slice(0, 16)
+					.map((entry) => snapshotRuntimeFailure(entry, depth + 1, seen));
+			} catch {
+				nested = [new Error("aggregate members were unavailable")];
+			}
+			let cause: unknown;
+			try {
+				cause = Object.hasOwn(error, "cause") ? snapshotRuntimeFailure(error.cause, depth + 1, seen) : undefined;
+			} catch {
+				cause = new Error("aggregate cause was unavailable");
+			}
+			return new AggregateError(nested, safeRuntimeMessage(readErrorMessage(error), "multiple failures"), { cause });
+		}
+		if (error instanceof Error) {
+			let cause: unknown;
+			try {
+				cause = Object.hasOwn(error, "cause") ? snapshotRuntimeFailure(error.cause, depth + 1, seen) : undefined;
+			} catch {
+				cause = new Error("failure cause was unavailable");
+			}
+			return new Error(safeRuntimeMessage(readErrorMessage(error), "external failure"), { cause });
+		}
+		return new Error("non-Error failure object");
+	} finally {
+		seen.delete(object);
+	}
+}
+
+function readErrorMessage(error: unknown): string {
+	try {
+		return error instanceof Error && typeof error.message === "string" ? error.message : "";
+	} catch {
+		return "";
+	}
+}
+
+function safeRuntimeMessage(value: string, fallback: string): string {
+	const source = value.length > 0 ? value.slice(0, 4_096) : fallback;
+	return redactSensitiveText(source)
+		.replace(/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/g, " ")
+		.slice(0, 2_048) || fallback;
 }
 
 function combineFailures(failures: readonly unknown[], message: string): unknown {

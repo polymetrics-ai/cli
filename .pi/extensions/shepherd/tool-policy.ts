@@ -34,8 +34,10 @@ const forbiddenCapabilityPatterns = [
 const sensitivePathPatterns = [
 	/(?:^|\/)\.git(?:\/|$)/i,
 	/(?:^|\/)\.env(?:\.|$)/i,
+	/(?:^|\/)\.envrc(?:$|\/)/i,
 	/(?:^|\/)(?:credentials?|secrets?|auth)(?:[._-]|$)/i,
-	/(?:^|\/)(?:id_rsa|id_ed25519|known_hosts)(?:\.|$)/i,
+	/(?:^|\/)\.ssh\/(?:id_rsa|id_dsa|id_ecdsa|id_ed25519)(?:\.|$)/i,
+	/(?:^|\/)(?:id_rsa|id_dsa|id_ecdsa|id_ed25519|known_hosts)(?:\.|$)/i,
 	/\.(?:pem|p12|pfx|key)$/i,
 	/(?:^|\/)\.(?:npmrc|yarnrc(?:\.yml)?|pnpmrc|pypirc|netrc)$/i,
 	/(?:^|\/)_netrc$/i,
@@ -44,8 +46,11 @@ const sensitivePathPatterns = [
 	/(?:^|\/)\.docker\/config\.json$/i,
 	/(?:^|\/)\.config\/containers\/auth\.json$/i,
 	/(?:^|\/)\.aws\/credentials$/i,
+	/(?:^|\/)\.aws\/config$/i,
 	/(?:^|\/)\.azure\/accesstokens\.json$/i,
+	/(?:^|\/)\.azure\/(?:msal[_-]?token[_-]?cache|token[_-]?cache)(?:[._/-]|$)/i,
 	/(?:^|\/)\.config\/gcloud\/application_default_credentials\.json$/i,
+	/(?:^|\/)\.config\/gcloud\/(?:legacy_credentials|access_tokens)(?:[._/-]|$)/i,
 	/(?:^|\/)\.config\/gh\/hosts\.ya?ml$/i,
 	/(?:^|\/)pip\/pip\.conf$/i,
 	/(?:^|\/)nuget\.config$/i,
@@ -330,10 +335,22 @@ function snapshotJsonData(
 		if (prototype !== Object.prototype && prototype !== null) {
 			throw new ToolPolicyError(`${description} must contain plain JSON objects only`);
 		}
+		// Reject ordinary enumerable breadth incrementally. Calling Reflect.ownKeys on a
+		// hostile 10k-field schema first would itself materialize the attacker-sized list.
+		let enumerableKeyCount = 0;
+		for (const key in value) {
+			if (!Object.hasOwn(value, key)) {
+				throw new ToolPolicyError(`${description} must contain own JSON fields only`);
+			}
+			enumerableKeyCount += 1;
+			if (budget.keys + enumerableKeyCount > MAX_CAPABILITY_SCHEMA_KEYS) {
+				throw new ToolPolicyError(`${description} exceeded its key bound`);
+			}
+		}
 		const keys = Reflect.ownKeys(value);
 		budget.keys += keys.length;
 		if (budget.keys > MAX_CAPABILITY_SCHEMA_KEYS) throw new ToolPolicyError(`${description} exceeded its key bound`);
-		const result: { [key: string]: JsonData } = {};
+		const result = Object.create(null) as { [key: string]: JsonData };
 		for (const key of keys) {
 			if (typeof key !== "string") throw new ToolPolicyError(`${description} contains a symbol key`);
 			addSchemaBytes(budget, byteLength(key) + 3, description);
@@ -341,7 +358,12 @@ function snapshotJsonData(
 			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 				throw new ToolPolicyError(`${description} contains an accessor or non-enumerable field`);
 			}
-			result[key] = snapshotJsonData(descriptor.value, depth + 1, budget, ancestors, description);
+			Object.defineProperty(result, key, {
+				value: snapshotJsonData(descriptor.value, depth + 1, budget, ancestors, description),
+				enumerable: true,
+				writable: false,
+				configurable: false,
+			});
 		}
 		return Object.freeze(result);
 	} finally {
@@ -379,7 +401,12 @@ function workspaceReadTool(
 			const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
 			const offset = optionalBoundedInteger(params.offset, "offset", 0, Number.MAX_SAFE_INTEGER);
 			const limit = optionalBoundedInteger(params.limit, "limit", 1, limits.maxReadCharacters);
-			const value = await workspace.readText(path, { offset, limit, signal });
+			let value: string;
+			try {
+				value = await workspace.readText(path, { offset, limit, signal });
+			} catch (error) {
+				throw sanitizedToolBoundaryError("workspace read", error);
+			}
 			if (typeof value !== "string") throw new ToolPolicyError("workspace read returned non-text data");
 			if (value.length > limits.maxReadCharacters) throw new ToolPolicyError("workspace read exceeded the bounded output limit");
 			return textResult(redactSensitiveText(value), limits.maxToolOutputBytes);
@@ -410,8 +437,12 @@ function workspaceEditTool(
 			const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
 			const oldText = boundedString(params.oldText, "oldText", limits.maxWriteCharacters, false);
 			const newText = boundedString(params.newText, "newText", limits.maxWriteCharacters, true);
-			const result = await workspace.editText(path, oldText, newText, signal);
-			return mutationResult(result, limits.maxToolOutputBytes);
+			try {
+				const result = await workspace.editText(path, oldText, newText, signal);
+				return mutationResult(result, limits.maxToolOutputBytes);
+			} catch (error) {
+				throw sanitizedToolBoundaryError("workspace edit", error);
+			}
 		},
 	};
 }
@@ -437,8 +468,12 @@ function workspaceWriteTool(
 			assertOnlyKeys(params, ["path", "content"], "workspace_write");
 			const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
 			const content = boundedString(params.content, "content", limits.maxWriteCharacters, true);
-			const result = await workspace.writeText(path, content, signal);
-			return mutationResult(result, limits.maxToolOutputBytes);
+			try {
+				const result = await workspace.writeText(path, content, signal);
+				return mutationResult(result, limits.maxToolOutputBytes);
+			} catch (error) {
+				throw sanitizedToolBoundaryError("workspace write", error);
+			}
 		},
 	};
 }
@@ -458,7 +493,12 @@ function hostCapabilityTool(
 			const params = recordParams(rawParams, capability.name);
 			const inputSize = byteLength(JSON.stringify(params));
 			if (inputSize > limits.maxWriteCharacters) throw new ToolPolicyError(`${capability.name} input exceeded its bound`);
-			const result = captureCapabilityResult(capability.name, await capability.execute(params, signal));
+			let result: Readonly<Required<CapabilityResult>>;
+			try {
+				result = captureCapabilityResult(capability.name, await capability.execute(params, signal));
+			} catch (error) {
+				throw sanitizedToolBoundaryError(`capability ${capability.name}`, error);
+			}
 			return textResult(JSON.stringify({
 				status: result.status,
 				summary: redactSensitiveText(result.summary),
@@ -886,6 +926,7 @@ function unquotedValueRedaction(
 
 	const scalar = value.slice(assignment.valueStart, scalarEnd);
 	const documentaryAssignmentProse = assignment.context === "line" &&
+		assignment.delimiter === ":" &&
 		assignment.keyColumn === 0 && continuation === undefined &&
 		isDocumentaryAssignmentProse(scalar);
 	const ambiguousLineProse = assignment.context === "line" &&
@@ -1024,7 +1065,7 @@ function redactPrivateKeyBlocks(value: string): string {
 function redactStrongCredentialSyntax(value: string): string {
 	return value
 		.replace(/\b([a-z][a-z0-9+.-]*:\/\/[^/\s:@]+:)([^@\s/]+)(@)/gi, `$1${REDACTED_TEXT}$3`)
-		.replace(/([?&](?:access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret)=)([^&#\s]+)/gi,
+		.replace(/([?&#](?:access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret)=)([^&#\s]+)/gi,
 			`$1${REDACTED_TEXT}`)
 		.replace(/((?:^|[/:])_authToken\s*=\s*)([^\s#]+)/gim, `$1${REDACTED_TEXT}`)
 		.replace(/(\bpassword[\t ]+)(?![=:])([^\s#]+)/gi, `$1${REDACTED_TEXT}`);
@@ -1032,7 +1073,7 @@ function redactStrongCredentialSyntax(value: string): string {
 
 function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
 	const normalized = key.toLowerCase().replace(/[-_]/g, "");
-	if (normalized === "authorization") return "authorization";
+	if (normalized.endsWith("authorization")) return "authorization";
 	if (secretAssignmentKeys.has(normalized) || normalized === "awssecretaccesskey" ||
 		normalized.endsWith("token") || normalized.endsWith("password") ||
 		normalized.endsWith("secret") || normalized.endsWith("apikey") ||
@@ -1174,10 +1215,17 @@ function looksLikeFlowSequence(value: string, index: number, metrics?: Redaction
 		recordTotalVisits(metrics, 1);
 	}
 	if (value[cursor] === "{" || value[cursor] === "[") return true;
+	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] as LexicalQuote : undefined;
 	const keyStart = cursor;
-	while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
-		cursor += 1;
-		recordTotalVisits(metrics, 1);
+	if (quote) {
+		const decoded = decodeQuotedAssignmentKey(value, cursor, quote, metrics);
+		if (!decoded) return false;
+		cursor = decoded.next;
+	} else {
+		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
+			cursor += 1;
+			recordTotalVisits(metrics, 1);
+		}
 	}
 	while (cursor < value.length && isHorizontalWhitespace(value[cursor])) {
 		cursor += 1;
@@ -1434,14 +1482,19 @@ function validateCapabilityName(name: string): void {
 		throw new ToolPolicyError(`capability name ${JSON.stringify(name)} must use the bounded host_ namespace`);
 	}
 	const tokens = name.slice("host_".length).split("_");
-	const sensitiveNouns = new Set(["secret", "credential", "token", "password", "auth", "apikey"]);
-	const acquisitionVerbs = new Set(["read", "get", "list", "dump", "export", "acquire", "fetch", "retrieve"]);
 	const normalizedTokens = tokens.map((token) => token.endsWith("s") ? token.slice(0, -1) : token);
-	const hasApiKey = normalizedTokens.some((token, index) => token === "api" && normalizedTokens[index + 1] === "key");
-	const hasSensitiveNoun = hasApiKey || normalizedTokens.some((token) => sensitiveNouns.has(token));
-	const hasAcquisitionVerb = normalizedTokens.some((token) => acquisitionVerbs.has(token));
+	const sensitiveNouns = new Set([
+		"secret", "credential", "token", "password", "passwd", "auth", "authorization", "apikey",
+	]);
+	const hasSensitivePair = normalizedTokens.some((token, index) =>
+		(token === "api" && normalizedTokens[index + 1] === "key") ||
+		(token === "private" && normalizedTokens[index + 1] === "key") ||
+		(token === "token" && normalizedTokens[index + 1] === "cache") ||
+		(token === "access" && normalizedTokens[index + 1] === "token") ||
+		(token === "refresh" && normalizedTokens[index + 1] === "token"));
+	const hasSensitiveNoun = hasSensitivePair || normalizedTokens.some((token) => sensitiveNouns.has(token));
 	if (forbiddenCapabilityPatterns.some((pattern) => pattern.test(name)) ||
-		(hasSensitiveNoun && hasAcquisitionVerb)) {
+		hasSensitiveNoun) {
 		throw new ToolPolicyError(`capability ${name} requests forbidden generic, secret, or recursive authority`);
 	}
 }
@@ -1477,10 +1530,11 @@ function captureCapabilityResult(name: string, result: CapabilityResult): Readon
 	if (!result || typeof result !== "object" || nodeTypes.isProxy(result)) {
 		throw new ToolPolicyError(`${name} returned an invalid result`);
 	}
-	const status = result.status;
-	const summarySource = result.summary;
-	const referencesSource = result.references;
-	if (!["ok", "blocked", "failed"].includes(status)) {
+	const fields = captureOwnResultFields(result, ["status", "summary", "references"], `${name} result`);
+	const status = fields.get("status");
+	const summarySource = fields.get("summary");
+	const referencesSource = fields.get("references");
+	if (typeof status !== "string" || !["ok", "blocked", "failed"].includes(status)) {
 		throw new ToolPolicyError(`${name} returned an invalid status`);
 	}
 	const summary = boundedString(summarySource, `${name} summary`, MAX_CAPABILITY_SUMMARY_CHARACTERS, false);
@@ -1490,24 +1544,68 @@ function captureCapabilityResult(name: string, result: CapabilityResult): Readon
 			throw new ToolPolicyError(`${name} returned too many references`);
 		}
 		for (let index = 0; index < referencesSource.length; index += 1) {
-			if (!Object.hasOwn(referencesSource, index)) throw new ToolPolicyError(`${name} returned sparse references`);
-			const reference = referencesSource[index];
+			const descriptor = Object.getOwnPropertyDescriptor(referencesSource, String(index));
+			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+				throw new ToolPolicyError(`${name} returned sparse or accessor references`);
+			}
+			const reference = descriptor.value;
 			references.push(boundedString(reference, `${name} reference`, MAX_REFERENCE_CHARACTERS, false));
 		}
 	}
 	Object.freeze(references);
-	return Object.freeze({ status, summary, references });
+	return Object.freeze({ status: status as CapabilityResult["status"], summary, references });
 }
 
 function mutationResult(result: WorkspaceMutationResult, maxBytes: number): SessionToolResult {
 	if (!result || typeof result !== "object" || nodeTypes.isProxy(result)) {
 		throw new ToolPolicyError("workspace mutation returned an invalid result");
 	}
-	const changed = result.changed;
-	const summarySource = result.summary;
+	const fields = captureOwnResultFields(result, ["changed", "summary"], "workspace mutation result");
+	const changed = fields.get("changed");
+	const summarySource = fields.get("summary");
 	if (typeof changed !== "boolean") throw new ToolPolicyError("workspace mutation returned an invalid result");
 	const summary = boundedString(summarySource, "workspace mutation summary", MAX_CAPABILITY_SUMMARY_CHARACTERS, false);
 	return textResult(JSON.stringify({ changed, summary: redactSensitiveText(summary) }), maxBytes);
+}
+
+function captureOwnResultFields(
+	value: object,
+	allowed: readonly string[],
+	description: string,
+): ReadonlyMap<string, unknown> {
+	const allowedSet = new Set(allowed);
+	const keys = Reflect.ownKeys(value);
+	if (keys.length > allowed.length) throw new ToolPolicyError(`${description} contains unknown fields`);
+	const fields = new Map<string, unknown>();
+	for (const key of keys) {
+		if (typeof key !== "string" || !allowedSet.has(key)) {
+			throw new ToolPolicyError(`${description} contains an unknown field`);
+		}
+		const descriptor = Object.getOwnPropertyDescriptor(value, key);
+		if (!descriptor?.enumerable || descriptor.set) {
+			throw new ToolPolicyError(`${description} contains an invalid field`);
+		}
+		if ("value" in descriptor) fields.set(key, descriptor.value);
+		else if (descriptor.get) fields.set(key, Reflect.apply(descriptor.get, value, []));
+		else throw new ToolPolicyError(`${description} contains an unreadable field`);
+	}
+	return fields;
+}
+
+function sanitizedToolBoundaryError(operation: string, error: unknown): ToolPolicyError {
+	let source = "external operation failed";
+	try {
+		if (error instanceof Error && typeof error.message === "string" && error.message.length > 0) {
+			source = error.message.slice(0, 4_096);
+		}
+	} catch {
+		// Hostile error accessors are reduced to the stable fallback.
+	}
+	const safe = redactSensitiveText(source)
+		.replace(/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/g, " ")
+		.slice(0, 2_048);
+	const cause = new Error(safe || "external operation failed");
+	return new ToolPolicyError(`${operation} failed: ${safe || "external operation failed"}`, { cause });
 }
 
 function textResult(value: string, maxBytes: number): SessionToolResult {

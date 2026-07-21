@@ -237,12 +237,16 @@ test("redaction preserves harmless assignment-like prose byte-identically", () =
 	const controls = [
 		"The token bucket algorithm uses bearer capabilities, and authorization is described here.",
 		"token: describes a lexical unit in parser documentation.",
-		"password = number of characters accepted by this form.",
+		"password: number of characters accepted by this form.",
 		"secret: a surprising detail in a story.",
 		"Authorization: Bearer is the HTTP authentication scheme discussed here.",
 		"In prose, client_secret: explains the OAuth field name without assigning a value.",
 	];
 	for (const control of controls) assert.equal(redactSensitiveText(control), control);
+	assert.equal(
+		redactSensitiveText("password = number of characters accepted by this form."),
+		"password = [REDACTED]",
+	);
 });
 
 test("redaction balances nested flow values before scanning later sensitive siblings", () => {
