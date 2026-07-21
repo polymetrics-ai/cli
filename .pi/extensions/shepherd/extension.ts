@@ -1,5 +1,12 @@
+import { execFile } from "node:child_process";
+import { realpath } from "node:fs/promises";
+import { isAbsolute } from "node:path";
+import { promisify } from "node:util";
+
 import { parseShepherdCommand, ShepherdArgumentError, type ShepherdCommand } from "./arguments.ts";
 import type { ShepherdRunState } from "./domain.ts";
+
+const execFileAsync = promisify(execFile);
 
 interface CommandUi {
 	notify(message: string, level: "info" | "warning" | "error"): void;
@@ -24,8 +31,14 @@ export interface ShepherdExtensionHost {
 	on(event: "session_shutdown", handler: () => Promise<void>): void;
 }
 
+export interface CanonicalWorktree {
+	cwd: string;
+	identity: string;
+}
+
 interface ExtensionDependencies {
-	createController(context: ShepherdCommandContext): ShepherdControllerPort;
+	resolveWorktree(context: ShepherdCommandContext): Promise<CanonicalWorktree>;
+	createController(context: ShepherdCommandContext, worktree: CanonicalWorktree): ShepherdControllerPort;
 }
 
 export interface ShepherdControllerPort {
@@ -63,6 +76,26 @@ async function settleBeforeShutdown(promise: Promise<unknown>): Promise<void> {
 	}
 }
 
+export async function canonicalizeGitWorktree(cwd: string): Promise<CanonicalWorktree> {
+	if (typeof cwd !== "string" || cwd.length === 0 || cwd.length > 4_096 || /[\u0000-\u001f\u007f]/.test(cwd)) {
+		throw new Error("Shepherd cwd must be a bounded path without control characters");
+	}
+	const result = await execFileAsync(
+		"git",
+		["-C", cwd, "rev-parse", "--show-toplevel"],
+		{ encoding: "utf8", maxBuffer: 64 * 1024 },
+	);
+	const topLevel = String(result.stdout).trim();
+	if (!isAbsolute(topLevel) || topLevel.length > 4_096 || /[\u0000-\u001f\u007f]/.test(topLevel)) {
+		throw new Error("Git returned an invalid Shepherd worktree root");
+	}
+	const canonicalCwd = await realpath(topLevel);
+	if (!isAbsolute(canonicalCwd) || canonicalCwd.length > 4_096 || /[\u0000-\u001f\u007f]/.test(canonicalCwd)) {
+		throw new Error("Git worktree resolves to an invalid canonical path");
+	}
+	return { cwd: canonicalCwd, identity: canonicalCwd };
+}
+
 function renderState(state: ShepherdRunState | undefined): string {
 	if (!state) return "No persisted Shepherd run exists for this issue.";
 	const lines = [
@@ -90,36 +123,50 @@ export function registerShepherdExtension(
 	host: ShepherdExtensionHost,
 	dependencies: ExtensionDependencies,
 ): void {
-	const controllers = new Map<number, ShepherdControllerPort>();
+	const controllers = new Map<string, ShepherdControllerPort>();
 	let activeRun: { issue: number; promise: Promise<ShepherdRunState> } | undefined;
+	let launchingIssue: number | undefined;
 	let shuttingDown = false;
 
-	const controllerFor = (issue: number, context: ShepherdCommandContext): ShepherdControllerPort => {
-		const existing = controllers.get(issue);
+	const controllerFor = async (issue: number, context: ShepherdCommandContext): Promise<ShepherdControllerPort> => {
+		const worktree = await dependencies.resolveWorktree(context);
+		const key = `${worktree.identity}\u0000${issue}`;
+		const existing = controllers.get(key);
 		if (existing) return existing;
-		const controller = dependencies.createController(context);
-		controllers.set(issue, controller);
+		const canonicalContext = { ...context, cwd: worktree.cwd };
+		const controller = dependencies.createController(canonicalContext, worktree);
+		controllers.set(key, controller);
 		return controller;
 	};
 
-	const launch = (
+	const launch = async (
 		command: Extract<ShepherdCommand, { action: "start" | "resume" | "canary" }>,
 		context: ShepherdCommandContext,
-	): void => {
+	): Promise<void> => {
 		const issue = commandIssue(command);
 		if (shuttingDown) {
 			context.ui.notify("The Shepherd is shutting down; start a fresh Pi session before retrying.", "warning");
 			return;
 		}
-		if (activeRun) {
-			context.ui.notify(`A Shepherd run is already active for issue #${activeRun.issue}.`, "warning");
+		if (activeRun || launchingIssue !== undefined) {
+			context.ui.notify(`A Shepherd run is already active for issue #${activeRun?.issue ?? launchingIssue}.`, "warning");
 			return;
 		}
 		if (!context.isIdle()) {
 			context.ui.notify("The parent Pi agent is busy. Retry after it becomes idle.", "warning");
 			return;
 		}
-		const controller = controllerFor(issue, context);
+		launchingIssue = issue;
+		let controller: ShepherdControllerPort;
+		try {
+			controller = await controllerFor(issue, context);
+		} finally {
+			if (launchingIssue === issue) launchingIssue = undefined;
+		}
+		if (shuttingDown) {
+			context.ui.notify("The Shepherd is shutting down; start a fresh Pi session before retrying.", "warning");
+			return;
+		}
 		const statusKey = `pm-shepherd-${issue}`;
 		context.ui.setStatus(statusKey, `issue #${issue}: starting`);
 		const promise =
@@ -142,7 +189,7 @@ export function registerShepherdExtension(
 				if (!shuttingDown) context.ui.notify(error instanceof Error ? error.message : String(error), "error");
 			})
 			.finally(() => {
-				if (activeRun === ownedRun) activeRun = undefined;
+				if (!shuttingDown && activeRun === ownedRun) activeRun = undefined;
 				if (!shuttingDown) context.ui.setStatus(statusKey, undefined);
 			});
 	};
@@ -169,16 +216,16 @@ export function registerShepherdExtension(
 
 			const issue = commandIssue(command);
 			if (command.action === "status") {
-				const controller = controllerFor(issue, context);
+				const controller = await controllerFor(issue, context);
 				context.ui.notify(renderState(await controller.status(issue)), "info");
 				return;
 			}
 			if (command.action === "stop") {
-				const controller = controllerFor(issue, context);
+				const controller = await controllerFor(issue, context);
 				context.ui.notify(renderState(await controller.stop(issue)), "info");
 				return;
 			}
-			launch(command, context);
+			await launch(command, context);
 		},
 	});
 
@@ -186,9 +233,17 @@ export function registerShepherdExtension(
 		shuttingDown = true;
 		const pending = activeRun?.promise;
 		await settleBeforeShutdown((async () => {
-			await Promise.allSettled([...controllers.values()].map((controller) => controller.shutdown()));
-			if (pending) await Promise.allSettled([pending]);
-		})()).catch(() => undefined);
+			const results = await Promise.allSettled([
+				...[...controllers.values()].map((controller) => controller.shutdown()),
+				...(pending ? [pending] : []),
+			]);
+			const failures = results
+				.filter((result): result is PromiseRejectedResult => result.status === "rejected")
+				.map((result) => result.reason);
+			if (failures.length > 0) {
+				throw new AggregateError(failures, "Shepherd extension shutdown failed");
+			}
+		})());
 		controllers.clear();
 		activeRun = undefined;
 	});

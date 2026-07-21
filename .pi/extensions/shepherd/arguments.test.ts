@@ -32,6 +32,12 @@ test("status is read-only and does not require experimental acknowledgement", ()
 	});
 });
 
+test("resume accepts either an omitted or explicit PR for persisted-target binding", () => {
+	const base = "resume --issue 397 --read-only --backend sdk-inproc --experimental";
+	assert.equal(parseShepherdCommand(base).pr, undefined);
+	assert.equal(parseShepherdCommand(`${base} --pr 438`).pr, 438);
+});
+
 test("rejects unsafe or ambiguous command shapes", () => {
 	const invalid = [
 		"canary --issue 397 --pr 438 --read-only --backend sdk-inproc",

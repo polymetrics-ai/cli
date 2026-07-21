@@ -19,11 +19,27 @@ const perfectDimensions = {
 
 class MemoryStore {
 	states = new Map();
+	lease;
 	async load(issue) {
 		return structuredClone(this.states.get(issue));
 	}
 	async save(state) {
 		this.states.set(state.issue, structuredClone(state));
+	}
+	async acquireLease(claim) {
+		if (this.lease) throw new Error("another Pi process owns the Shepherd lease");
+		const lease = {
+			claim,
+			async assertOwned() {
+				if (this.owner.lease !== lease) throw new Error("Shepherd lease ownership was lost");
+			},
+			async release() {
+				if (this.owner.lease === lease) this.owner.lease = undefined;
+			},
+			owner: this,
+		};
+		this.lease = lease;
+		return lease;
 	}
 }
 
@@ -82,7 +98,7 @@ function makeHarness(overrides = {}) {
 		store,
 		runner,
 		targetEvidence,
-		clock: () => "2026-07-21T08:30:00Z",
+		clock: () => "2026-07-21T08:30:00.000Z",
 		createRunId: () => "run-1",
 		createNonce: () => "nonce-1234567890",
 		...overrides,
@@ -274,6 +290,74 @@ test("resume creates a fresh generation, head binding, and nonce", async () => {
 	assert.equal(result.validationNonce, "nonce-fresh-12345");
 });
 
+test("resume inherits a persisted PR when --pr is omitted", async () => {
+	const captures = [];
+	const harness = makeHarness({
+		createRunId: () => "run-2",
+		targetEvidence: {
+			async capture(capturedCommand) {
+				captures.push(structuredClone(capturedCommand));
+				return {
+					cwd: "/tmp/read-only-pr",
+					branch: "feat/cli-architecture-v2",
+					candidateHead: head,
+					clean: true,
+					pr: capturedCommand.pr,
+				};
+			},
+		},
+	});
+	await harness.store.save({
+		schemaVersion: 1,
+		issue: 397,
+		pr: 438,
+		runId: "run-1",
+		generation: 1,
+		status: "interrupted",
+		candidateHead: "b".repeat(40),
+		validationNonce: "nonce-old",
+		createdAt: "2026-07-21T08:00:00Z",
+		updatedAt: "2026-07-21T08:10:00Z",
+		lanes: [],
+	});
+	const resume = command("resume");
+	delete resume.pr;
+	const result = await harness.controller.resume(resume);
+	assert.equal(result.pr, 438);
+	assert.deepEqual(captures.map((capture) => capture.pr), [438, 438]);
+	assert.equal((await harness.store.load(397)).pr, 438);
+});
+
+test("resume rejects a PR that differs from the persisted target", async () => {
+	let captures = 0;
+	const harness = makeHarness({
+		targetEvidence: {
+			async capture() {
+				captures += 1;
+				throw new Error("must not capture a mismatched target");
+			},
+		},
+	});
+	await harness.store.save({
+		schemaVersion: 1,
+		issue: 397,
+		pr: 438,
+		runId: "run-1",
+		generation: 1,
+		status: "interrupted",
+		candidateHead: head,
+		validationNonce: "nonce-old",
+		createdAt: "2026-07-21T08:00:00Z",
+		updatedAt: "2026-07-21T08:10:00Z",
+		lanes: [],
+	});
+	await assert.rejects(
+		harness.controller.resume({ ...command("resume"), pr: 999 }),
+		/persisted PR #438.*requested PR #999/i,
+	);
+	assert.equal(captures, 0);
+});
+
 test("stop refuses to rewrite an unowned persisted run", async () => {
 	const harness = makeHarness();
 	await harness.store.save({
@@ -318,7 +402,7 @@ test("parent shutdown cancels owned work and persists interrupted", async () => 
 			async abort(runId) { aborted.push(runId); release(); },
 			async close() { release(); },
 		},
-		clock: () => "2026-07-21T08:30:00Z",
+		clock: () => "2026-07-21T08:30:00.000Z",
 		createRunId: () => "run-shutdown",
 		createNonce: () => "nonce-shutdown-123",
 	});
@@ -455,4 +539,136 @@ test("a global file lease prevents two controllers from dispatching the same rep
 	const result = await pending;
 	assert.equal(result.status, "completed");
 	assert.equal(firstRuns, 2);
+});
+
+test("a lane persistence failure cancels and joins a running sibling before releasing the lease", async () => {
+	let releaseSibling;
+	const siblingGate = new Promise((resolve) => { releaseSibling = resolve; });
+	let siblingStarted;
+	const siblingStartedGate = new Promise((resolve) => { siblingStarted = resolve; });
+	let persistenceFailed;
+	const persistenceFailedGate = new Promise((resolve) => { persistenceFailed = resolve; });
+	let runningSaves = 0;
+	let leaseReleased = false;
+	const store = new MemoryStore();
+	const originalSave = store.save.bind(store);
+	store.save = async (state) => {
+		if (state.status === "running" && state.lanes.some((lane) => lane.status === "running")) {
+			runningSaves += 1;
+			if (runningSaves === 2) {
+				persistenceFailed();
+				throw new Error("injected lane persistence failure");
+			}
+		}
+		await originalSave(state);
+	};
+	const originalAcquire = store.acquireLease.bind(store);
+	store.acquireLease = async (claim) => {
+		const lease = await originalAcquire(claim);
+		const release = lease.release.bind(lease);
+		lease.release = async () => {
+			leaseReleased = true;
+			await release();
+		};
+		return lease;
+	};
+	let aborts = 0;
+	const controller = new ShepherdController({
+		store,
+		targetEvidence: {
+			async capture() {
+				return { cwd: "/tmp/read-only-pr", branch: "feat", candidateHead: head, clean: true };
+			},
+		},
+		runner: {
+			async run(request) {
+				siblingStarted();
+				await siblingGate;
+				return { ...request.binding, summary: "joined", dimensions: perfectDimensions, observedMutation: false };
+			},
+			async abort() { aborts += 1; },
+			async close() {},
+		},
+		createRunId: () => "run-structured",
+		createNonce: () => "nonce-structured-1",
+	});
+	const pending = controller.start(command("start"));
+	let settled = false;
+	void pending.then(() => { settled = true; }, () => { settled = true; });
+	await siblingStartedGate;
+	await persistenceFailedGate;
+	await new Promise((resolve) => setImmediate(resolve));
+	try {
+		assert.equal(settled, false);
+		assert.equal(leaseReleased, false);
+		assert.equal(aborts, 1);
+	} finally {
+		releaseSibling();
+	}
+	await assert.rejects(pending, /injected lane persistence failure/);
+	assert.equal(leaseReleased, true);
+});
+
+test("terminal commit makes stop unowned before lease release completes", async () => {
+	let releaseLease;
+	const releaseGate = new Promise((resolve) => { releaseLease = resolve; });
+	let releaseStarted;
+	const releaseStartedGate = new Promise((resolve) => { releaseStarted = resolve; });
+	const store = new MemoryStore();
+	const originalAcquire = store.acquireLease.bind(store);
+	store.acquireLease = async (claim) => {
+		const lease = await originalAcquire(claim);
+		const release = lease.release.bind(lease);
+		lease.release = async () => {
+			releaseStarted();
+			await releaseGate;
+			await release();
+		};
+		return lease;
+	};
+	const harness = makeHarness({ store });
+	const starting = harness.controller.start(command("start"));
+	await releaseStartedGate;
+	const stopping = harness.controller.stop(397);
+	let stopSettled = false;
+	void stopping.then(() => { stopSettled = true; }, () => { stopSettled = true; });
+	await new Promise((resolve) => setImmediate(resolve));
+	try {
+		assert.equal(stopSettled, true);
+	} finally {
+		releaseLease();
+	}
+	await assert.rejects(stopping, /not owned.*Pi session/i);
+	assert.equal((await starting).status, "completed");
+	assert.equal((await store.load(397)).status, "completed");
+});
+
+test("shutdown aggregates abort and close failures after owned work exits", async () => {
+	let release;
+	const gate = new Promise((resolve) => { release = resolve; });
+	let started;
+	const startedGate = new Promise((resolve) => { started = resolve; });
+	const harness = makeHarness({
+		runner: {
+			async run(request) {
+				started();
+				await gate;
+				return { ...request.binding, summary: "late", dimensions: perfectDimensions, observedMutation: false };
+			},
+			async abort() { throw new Error("abort cleanup failed"); },
+			async close() {
+				release();
+				throw new Error("runner close failed");
+			},
+		},
+	});
+	const starting = harness.controller.start(command("start"));
+	await startedGate;
+	await assert.rejects(
+		harness.controller.shutdown(),
+		(error) => error instanceof AggregateError
+			&& error.errors.some((entry) => /abort cleanup failed/.test(String(entry)))
+			&& error.errors.some((entry) => /runner close failed/.test(String(entry))),
+	);
+	assert.equal((await starting).status, "interrupted");
 });

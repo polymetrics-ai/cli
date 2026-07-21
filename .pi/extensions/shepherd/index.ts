@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { join, resolve } from "node:path";
+import { join } from "node:path";
 
 import {
 	DefaultResourceLoader,
@@ -14,6 +14,7 @@ import {
 
 import { ShepherdController } from "./controller.ts";
 import {
+	canonicalizeGitWorktree,
 	registerShepherdExtension,
 	type ShepherdCommandContext,
 	type ShepherdExtensionHost,
@@ -22,8 +23,8 @@ import { SdkAgentRunner, REQUIRED_PI_VERSION, type ShepherdSdk } from "./sdk-run
 import { FileStateStore } from "./state-store.ts";
 import { captureTargetEvidence } from "./target-evidence.ts";
 
-function repositoryFingerprint(cwd: string): string {
-	return createHash("sha256").update(resolve(cwd)).digest("hex").slice(0, 24);
+function repositoryFingerprint(worktreeIdentity: string): string {
+	return createHash("sha256").update(worktreeIdentity).digest("hex").slice(0, 24);
 }
 
 function embeddedSdk(): ShepherdSdk {
@@ -43,11 +44,12 @@ function embeddedSdk(): ShepherdSdk {
 export default function shepherdExtension(pi: ExtensionAPI): void {
 	const sdk = embeddedSdk();
 	registerShepherdExtension(pi as unknown as ShepherdExtensionHost, {
-		createController(context: ShepherdCommandContext) {
+		resolveWorktree: (context) => canonicalizeGitWorktree(context.cwd),
+		createController(context: ShepherdCommandContext, worktree) {
 			const root = join(
 				getAgentDir(),
 				"shepherd",
-				repositoryFingerprint(context.cwd),
+				repositoryFingerprint(worktree.identity),
 			);
 			return new ShepherdController({
 				store: new FileStateStore(root),

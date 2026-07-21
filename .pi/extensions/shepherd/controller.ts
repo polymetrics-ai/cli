@@ -37,7 +37,7 @@ export interface TargetEvidence {
 export interface StateStore {
 	load(issue: number): Promise<ShepherdRunState | undefined>;
 	save(state: ShepherdRunState): Promise<void>;
-	acquireLease?(claim: {
+	acquireLease(claim: {
 		issue: number;
 		runId: string;
 		mode: "start" | "resume";
@@ -74,6 +74,7 @@ interface LaneOutcome {
 
 interface ActiveRunLifecycle {
 	runId: string;
+	phase: "active" | "terminal";
 	cancelReason?: "stopped" | "interrupted";
 	abortController: AbortController;
 	done: Promise<void>;
@@ -158,18 +159,40 @@ async function mapWithLimit<T, R>(
 	items: T[],
 	limit: number,
 	worker: (item: T) => Promise<R>,
+	onFailure: (error: unknown) => Promise<void>,
 ): Promise<R[]> {
 	const results = new Array<R>(items.length);
 	let next = 0;
+	let stopped = false;
+	const failures: unknown[] = [];
+	let cancellation: Promise<void> | undefined;
 	async function consume(): Promise<void> {
-		while (true) {
+		while (!stopped) {
 			const index = next;
 			next += 1;
 			if (index >= items.length) return;
-			results[index] = await worker(items[index]);
+			try {
+				results[index] = await worker(items[index]);
+			} catch (error) {
+				failures.push(error);
+				if (!stopped) {
+					stopped = true;
+					cancellation = onFailure(error);
+				}
+				return;
+			}
 		}
 	}
-	await Promise.all(Array.from({ length: Math.min(limit, items.length) }, () => consume()));
+	await Promise.allSettled(Array.from({ length: Math.min(limit, items.length) }, () => consume()));
+	if (cancellation) {
+		try {
+			await cancellation;
+		} catch (error) {
+			failures.push(error);
+		}
+	}
+	if (failures.length === 1) throw failures[0];
+	if (failures.length > 1) throw new AggregateError(failures, "Shepherd lane task group failed");
 	return results;
 }
 
@@ -214,7 +237,7 @@ export class ShepherdController {
 	async start(command: ShepherdCommandConfig): Promise<ShepherdRunState> {
 		const lifecycle = this.reserve(command.issue);
 		try {
-			lifecycle.lease = await this.store.acquireLease?.({
+			lifecycle.lease = await this.store.acquireLease({
 				issue: command.issue,
 				runId: lifecycle.runId,
 				mode: "start",
@@ -226,6 +249,7 @@ export class ShepherdController {
 			const generation = existing ? existing.generation + 1 : 1;
 			return await this.execute(command, generation, lifecycle);
 		} finally {
+			lifecycle.phase = "terminal";
 			try {
 				await lifecycle.lease?.release();
 			} finally {
@@ -238,7 +262,7 @@ export class ShepherdController {
 	async resume(command: ShepherdCommandConfig): Promise<ShepherdRunState> {
 		const lifecycle = this.reserve(command.issue);
 		try {
-			lifecycle.lease = await this.store.acquireLease?.({
+			lifecycle.lease = await this.store.acquireLease({
 				issue: command.issue,
 				runId: lifecycle.runId,
 				mode: "resume",
@@ -247,6 +271,16 @@ export class ShepherdController {
 			if (!existing) {
 				throw new Error(`No persisted Shepherd run exists for issue #${command.issue}`);
 			}
+			if (command.pr !== undefined && command.pr !== existing.pr) {
+				const persistedTarget = existing.pr === undefined ? "no PR" : `PR #${existing.pr}`;
+				throw new Error(
+					`Cannot resume issue #${command.issue}: persisted ${persistedTarget} differs from requested PR #${command.pr}`,
+				);
+			}
+			const { pr: _requestedPr, ...commandWithoutPr } = command;
+			const effectiveCommand: ShepherdCommandConfig = existing.pr === undefined
+				? commandWithoutPr
+				: { ...commandWithoutPr, pr: existing.pr };
 			if (existing.status === "running") {
 				existing = reconcileInterruptedRun(existing, this.clock());
 				await this.persist(existing, lifecycle);
@@ -254,8 +288,9 @@ export class ShepherdController {
 			if (existing.status === "completed") {
 				throw new Error(`Shepherd run for issue #${command.issue} is already completed; use start for a fresh run`);
 			}
-			return await this.execute(command, existing.generation + 1, lifecycle);
+			return await this.execute(effectiveCommand, existing.generation + 1, lifecycle);
 		} finally {
+			lifecycle.phase = "terminal";
 			try {
 				await lifecycle.lease?.release();
 			} finally {
@@ -267,7 +302,7 @@ export class ShepherdController {
 
 	async stop(issue: number): Promise<ShepherdRunState> {
 		const active = this.activeRuns.get(issue);
-		if (!active) {
+		if (!active || active.phase !== "active") {
 			throw new Error(`Shepherd run for issue #${issue} is not owned by this Pi session`);
 		}
 		active.cancelReason = "stopped";
@@ -282,22 +317,21 @@ export class ShepherdController {
 	}
 
 	async shutdown(): Promise<void> {
-		const active = [...this.activeRuns.values()];
+		const owned = [...this.activeRuns.values()];
+		const active = owned.filter((lifecycle) => lifecycle.phase === "active");
 		for (const lifecycle of active) {
 			lifecycle.cancelReason ??= "interrupted";
 			lifecycle.abortController.abort("interrupted");
 		}
-		const aborts = await Promise.allSettled(active.map((lifecycle) => this.runner.abort(lifecycle.runId)));
-		let closeError: unknown;
-		try {
-			await this.runner.close();
-		} catch (error) {
-			closeError = error;
-		}
-		await Promise.all(active.map((lifecycle) => lifecycle.done));
-		const abortFailure = aborts.find((result) => result.status === "rejected");
-		if (closeError) throw closeError;
-		if (abortFailure?.status === "rejected") throw abortFailure.reason;
+		const cleanup = await Promise.allSettled([
+			...active.map((lifecycle) => this.runner.abort(lifecycle.runId)),
+			this.runner.close(),
+		]);
+		await Promise.all(owned.map((lifecycle) => lifecycle.done));
+		const failures = cleanup
+			.filter((result): result is PromiseRejectedResult => result.status === "rejected")
+			.map((result) => result.reason);
+		if (failures.length > 0) throw new AggregateError(failures, "Shepherd controller shutdown failed");
 	}
 
 	private async execute(
@@ -334,6 +368,10 @@ export class ShepherdController {
 			READ_ONLY_LANES,
 			command.maxConcurrency,
 			async (lane) => this.executeLane(run, command, target, lane, lifecycle),
+			async (error) => {
+				lifecycle.abortController.abort(error);
+				await this.runner.abort(lifecycle.runId);
+			},
 		);
 		if (lifecycle.cancelReason) return this.persistCancelled(run, lifecycle);
 
@@ -371,6 +409,7 @@ export class ShepherdController {
 		run.updatedAt = this.clock();
 		await this.persist(run, lifecycle);
 		if (lifecycle.cancelReason) return this.persistCancelled(run, lifecycle);
+		lifecycle.phase = "terminal";
 		return run;
 	}
 
@@ -385,7 +424,7 @@ export class ShepherdController {
 		if (laneState) laneState.status = "running";
 		run.updatedAt = this.clock();
 		await this.persist(run, lifecycle);
-		if (lifecycle.cancelReason) {
+		if (lifecycle.cancelReason || lifecycle.abortController.signal.aborted) {
 			return {
 				laneId: lane.id,
 				decision: "halt",
@@ -450,6 +489,7 @@ export class ShepherdController {
 		const done = new Promise<void>((resolve) => { resolveDone = resolve; });
 		const lifecycle: ActiveRunLifecycle = {
 			runId: this.createRunId(),
+			phase: "active",
 			abortController: new AbortController(),
 			done,
 			resolveDone,
@@ -475,6 +515,7 @@ export class ShepherdController {
 				: lane,
 		);
 		await this.persist(run, lifecycle);
+		lifecycle.phase = "terminal";
 		return run;
 	}
 }

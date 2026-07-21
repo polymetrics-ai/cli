@@ -108,7 +108,8 @@ This mode is interactive, not durable supervision. Embedded sessions share the p
 event loop, heap, environment, credentials boundary, and crash domain. Cancellation is
 cooperative. If Pi or the host stops, reopen Pi in the same target worktree and run `resume`; the
 controller reconciles any persisted running lane as interrupted and starts a fresh generation.
-The standalone Go Shepherd remains the durable option until a later human-approved consolidation.
+A standalone durable Go Shepherd is planned design work; this repository does not yet provide an
+executable Go Shepherd command.
 
 Registration can be checked without a model, auth, or network call:
 
