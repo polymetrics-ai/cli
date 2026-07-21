@@ -11,6 +11,7 @@
 - Scope: the two adapter files, matching tests/fixtures, and this issue phase directory only.
 - Human gates: destructive cleanup and any direct-default-branch action remain unavailable.
 - GSD command result: `programming-loop` absent from repo adapter; manual lifecycle required.
-- Downstream artifact: `.planning/phases/476-shepherd-worktree-git-adapter/SUMMARY.md` (in progress)
-- Verification result: pending
+- Downstream artifact: `.planning/phases/476-shepherd-worktree-git-adapter/SUMMARY.md` (completed)
+- Verification result: authoritative narrowed local gates pass; full Go/connectors rerun is owned
+  by parent integration and GitHub CI under the updated parent policy.
 

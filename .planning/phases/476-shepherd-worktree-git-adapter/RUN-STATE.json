@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "phase": "476-shepherd-worktree-git-adapter",
   "issue": 476,
-  "status": "running",
+  "status": "completed",
   "gsdMode": "manual_gsd_fallback",
-  "verificationPassed": false,
-  "verificationBlocker": "implementation and full verification are pending",
+  "verificationPassed": true,
+  "verificationBlocker": null,
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -26,6 +26,16 @@
       "cycle": "refactor",
       "decision": "local_critical_path",
       "reason": "Focused tests pass 16/16, the Shepherd suite passes 153/153, and strict production TypeScript passes after safety refactoring."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Focused issue tests, full Shepherd tests, strict TypeScript, offline Pi extension discovery, and diff hygiene pass; parent policy centralizes full Go/connectors reruns."
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "Issue evidence is complete and the branch is ready for a stacked PR and independent exact-head review."
     }
   ]
 }

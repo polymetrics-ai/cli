@@ -35,3 +35,7 @@ Tests use bounded temporary local Git repositories and no credentials or network
   adapters implemented inside the assigned files.
 - Execution decision, refactor cycle: `local_critical_path` — validation, canonical scope handling,
   root pinning, and secret-safe Git failure reduction completed; focused and full suites pass.
+- Execution decision, verify cycle: `local_critical_path` — authoritative narrowed local gates pass;
+  parent integration owns the full Go/connectors rerun under the updated policy.
+- Execution decision, summary cycle: `local_critical_path` — durable evidence and stacked PR handoff
+  finalized without automated-review or merge authority.
