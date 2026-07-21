@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "in_progress",
+  "status": "completed",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": false,
-  "currentCycle": "correction_cycle_5_green",
+  "verificationPassed": true,
+  "currentCycle": "correction_cycle_5_complete",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -123,15 +123,25 @@
       "cycle": "correction_cycle_5_green",
       "decision": "local_critical_path",
       "reason": "Reserve-before-scope admission and the explicit monotonic line/flow lexical state machine make all 36 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to refactor and declared gates."
+    },
+    {
+      "cycle": "correction_cycle_5_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 36/36, complete Shepherd 173/173, both strict TypeScript scopes, pinned offline Pi RPC, diff, immutable-base, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_cycle_5_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 5 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
     }
   ],
   "gates": {
     "focusedTests": "green_36_passed_0_failed",
-    "fullShepherdTests": "pending_cycle_5",
-    "strictTypeScriptPi0806": "focused_pass_full_production_pending_cycle_5",
-    "offlineRpcSmoke": "pending_cycle_5",
-    "diffCheck": "pending_cycle_5",
-    "ownedScope": "pending_cycle_5",
+    "fullShepherdTests": "green_173_passed_0_failed",
+    "strictTypeScriptPi0806": "green_focused_and_all_production",
+    "offlineRpcSmoke": "green_pm_shepherd_registered",
+    "diffCheck": "green",
+    "ownedScope": "green_immutable_base_and_issue_owned_paths",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

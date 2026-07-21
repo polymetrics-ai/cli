@@ -209,11 +209,35 @@
   own balanced nested delimiter stack and returns at the true outer sibling boundary.
 - Focused command result: exit 0, 36 passed / 0 failed.
 - Focused strict TypeScript result: exit 0 against explicit Pi 0.80.6 package/type roots.
-- REFACTOR/VERIFY status: pending the complete declared gate set.
+- REFACTOR/VERIFY status: complete at implementation head
+  `8ff2d9631809d09db26811b4cd1335b92a9c457c`.
+- Refactor notes: scanner state is represented by closed quote/mode/closer types; assignment-key
+  recognition uses bounded character classification; every search cursor advances monotonically;
+  balanced nested values are consumed once and the outer flow stack remains authoritative.
+- Results:
+  - focused tests: 36 passed / 0 failed;
+  - complete Shepherd tests: 173 passed / 0 failed;
+  - strict owned production/tests plus role prompt inputs: pass;
+  - strict all-Shepherd production inputs: pass;
+  - explicit Pi 0.80.6 offline RPC `get_commands`: pass, `pm-shepherd` registered;
+  - immutable-base diff check and issue-owned changed-path assertion: pass.
 - Declared gates: focused issue tests, complete Shepherd suite, pinned Pi 0.80.6 strict TypeScript,
   pinned offline RPC, diff check, immutable base, and issue-owned paths only.
 - Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot
   commands remain forbidden.
+
+## Cycle 5 Gate History
+
+| Checkpoint | Result | Evidence |
+|---|---|---|
+| PLAN | pass | exact reviewed head `e41f075a9b3bfb01d410296712740b54f943ba71`; scope pushed at `8087b539` |
+| RED | expected fail | exit 1; 29 passed / 7 expected failures; production unchanged; pushed at `333c7ad6` |
+| GREEN / REFACTOR | pass | implementation `8ff2d9631809d09db26811b4cd1335b92a9c457c`; 36 passed / 0 failed |
+| Focused strict TypeScript | pass | owned source/tests plus role prompt inputs against explicit Pi 0.80.6 types |
+| Complete Shepherd | pass | 173 passed / 0 failed |
+| Strict TypeScript | pass | focused owned inputs and all Shepherd production source against explicit Pi 0.80.6 types |
+| Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
+| Diff / scope | pass | immutable base retained; all changed paths remain issue #475-owned |
 
 ## Cycle 4 — Foreground Forced Disposal And Unquoted YAML Context
 

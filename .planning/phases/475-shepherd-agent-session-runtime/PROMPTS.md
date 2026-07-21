@@ -103,5 +103,8 @@
 - GREEN result: focused command exits 0 with 36 passed / 0 failed and focused strict Pi 0.80.6
   TypeScript passes. Reservation now creates a scope only after admission; the transformer is one
   explicit monotonic line/quote/comment/flow state machine with balanced nested-value consumption.
-- Verification status: focused GREEN captured; complete Shepherd and remaining declared gates
-  pending.
+- Verification result: complete at implementation head
+  `8ff2d9631809d09db26811b4cd1335b92a9c457c` — focused 36/36; full Shepherd 173/173; focused and
+  all-production strict TypeScript against pinned Pi 0.80.6; explicit offline RPC; diff,
+  immutable-base, and issue-owned scope checks all pass. No Go, connector, `make verify`,
+  runtime-backed, live-GitHub, merge, or review-bot gate was run.

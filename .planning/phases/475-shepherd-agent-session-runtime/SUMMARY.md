@@ -1,7 +1,7 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 5 planned; Cycle 4 evidence is superseded pending a fresh
-test-only RED and architectural correction.
+Status: exact-head correction Cycle 5 complete; every declared Shepherd-only gate passes and Cycle
+4 evidence is superseded.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -17,7 +17,7 @@ shutdown coalesce; child setup/session settlement joins once; failed cleanup qua
 dispatch. Handoffs accept one closed bounded JSON schema bound to run/generation/lane/head/nonce and
 redact secret-like material before return.
 
-The focused suite passes 31/31 and the complete Shepherd suite passes 168/168. Strict owned plus
+The focused suite passes 36/36 and the complete Shepherd suite passes 173/173. Strict owned plus
 all-Shepherd-production TypeScript passes against the explicit Pi 0.80.6 installation, as do the
 pinned offline RPC smoke and diff/scope checks. The healthy repo-local GSD adapter does not expose
 `programming-loop`, so the phase completed under the recorded `manual_gsd_fallback`.
@@ -70,7 +70,10 @@ TypeScript passes and production remains unchanged. The failures independently e
 ownership plus prompt, handoff, direct nested-flow, direct apostrophe, brace/comment control, and
 typed-tool redaction boundaries.
 
-Cycle 5 focused GREEN now passes 36/36 with focused strict TypeScript. Admission checks precede
-scope construction, and a typed monotonic lexical state machine now owns newline quote reset,
-comment/prose discrimination, flow nesting, and balanced nested-value consumption. Complete
-Shepherd, all-production strict TypeScript, offline RPC, and diff/scope gates remain pending.
+At implementation head `8ff2d9631809d09db26811b4cd1335b92a9c457c`, Cycle 5 passes 36/36
+focused and 173/173 complete Shepherd tests. Admission checks precede scope construction, and a
+typed monotonic lexical state machine owns newline quote reset, comment/prose discrimination, flow
+nesting, and balanced nested-value consumption. Both strict TypeScript scopes, explicit Pi 0.80.6
+offline RPC, diff, immutable-base, and issue-owned path gates pass. Parent orchestration owns fresh
+exact-head review and integration; this lane did not invoke Go/connectors, `make verify`,
+runtime-backed services, live GitHub, merge, or review bots.

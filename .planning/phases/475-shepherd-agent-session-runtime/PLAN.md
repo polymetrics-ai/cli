@@ -269,4 +269,11 @@ Cycle 5 GREEN result: admission checks now precede `CancellationScope` construct
 duplicate/capacity/mutator rejection creates no deadline timer. The assignment transformer is one
 typed lexical state machine with a monotonic cursor, explicit per-line quote reset, comment skips,
 validated flow openers, a delimiter stack, and balanced nested-value consumption. The focused
-suite passes 36/36 and focused strict TypeScript passes; complete verification remains pending.
+suite passes 36/36 and focused strict TypeScript passes; the terminal result is recorded below.
+
+Cycle 5 terminal result: PLAN was pushed at `8087b539`; test-only RED was pushed at `333c7ad6`
+with 29 passes and 7 expected failures; GREEN/refactor was pushed at
+`8ff2d9631809d09db26811b4cd1335b92a9c457c`. Focused 36/36 and complete Shepherd 173/173 tests,
+both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-base, and
+issue-owned path gates pass. Fresh independent exact-head review and integration remain
+parent-owned.

@@ -12,9 +12,9 @@ findings, and existing PLAN define the phase-equivalent coverage gate.
 | Nested flow values cannot hide later sensitive siblings | direct, prompt, tool-output, and handoff tests | focused GREEN |
 | Unmatched apostrophe prose cannot hide the next structured assignment | direct, prompt, tool-output, and handoff tests | focused GREEN |
 | Ordinary braces and flow-shaped comments cannot mutate harmless prose | byte-identical direct controls | focused GREEN |
-| Prior structured, multiline, block, Bearer, flow, and spaced redaction remains intact | existing focused regression suite | retained |
-| Scanner remains bounded and single-pass | explicit line/flow lexical state machine; monotonic cursors and balanced delimiters | focused GREEN |
-| Declared phase verification | focused/full Shepherd tests, pinned Pi 0.80.6 strict TypeScript, offline RPC, diff/base/scope | pending |
+| Prior structured, multiline, block, Bearer, flow, and spaced redaction remains intact | existing focused regression suite | pass |
+| Scanner remains bounded and single-pass | explicit line/flow lexical state machine; monotonic cursors and balanced delimiters | pass |
+| Declared phase verification | focused/full Shepherd tests, pinned Pi 0.80.6 strict TypeScript, offline RPC, diff/base/scope | pass |
 
 No dependency, CLI/help/docs/website, Go, connector, runtime-backed service, live credential, or
 external mutation work is required. Parent orchestration owns fresh exact-head review and
