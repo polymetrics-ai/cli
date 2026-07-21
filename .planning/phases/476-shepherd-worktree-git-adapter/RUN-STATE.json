@@ -11,7 +11,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "The assigned worker owns one isolated sub-issue worktree and bounded files; no further delegation is authorized or required."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Deterministic RED tests fail because the two production adapter modules are absent; implementation may now begin."
     }
   ]
 }
-

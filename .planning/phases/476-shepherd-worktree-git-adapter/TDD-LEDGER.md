@@ -7,9 +7,9 @@ Tests use bounded temporary local Git repositories and no credentials or network
 
 | Slice | RED command/evidence | GREEN command/evidence | Refactor/broad evidence | Status |
 |---|---|---|---|---|
-| Typed Git adapter | Pending | Pending | Pending | planned |
-| Isolated workspace ownership | Pending | Pending | Pending | planned |
-| Crash/retry and collision safety | Pending | Pending | Pending | planned |
+| Typed Git adapter | `node --test .pi/extensions/shepherd/workspace-adapter.test.ts .pi/extensions/shepherd/git-adapter.test.ts` → exit 1, `ERR_MODULE_NOT_FOUND` for absent `git-adapter.ts` | Pending | Pending | red |
+| Isolated workspace ownership | Same command → exit 1 before collection because the required adapter modules do not exist | Pending | Pending | red |
+| Crash/retry and collision safety | Deterministic genuine-repository cases are present but cannot collect until the missing adapters exist | Pending | Pending | red |
 
 ## Required safety cases
 
@@ -29,4 +29,5 @@ Tests use bounded temporary local Git repositories and no credentials or network
 - Adapter failure: `scripts/gsd: unknown GSD command or prompt: programming-loop`
 - Execution decision, plan cycle: `local_critical_path` — this worker already owns one isolated
   sub-issue worktree and no further delegation is authorized or needed.
-
+- Execution decision, TDD gate cycle: `local_critical_path` — RED evidence captured before either
+  production adapter file exists.
