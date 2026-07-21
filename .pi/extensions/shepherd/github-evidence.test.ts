@@ -127,6 +127,10 @@ test("every blocking finding needs an exact-current-head disposition plus a late
 	}];
 	assert.equal(evaluateGitHubPullRequestEvidence(await evidence({ reviews, dispositions }), expected).kind, "eligible");
 	assert.ok(blockerCodes(evaluateGitHubPullRequestEvidence(await evidence({ reviews, dispositions: [{ ...dispositions[0], headSha: staleHead }] }), expected)).includes("undispositioned_finding"));
+	assert.ok(blockerCodes(evaluateGitHubPullRequestEvidence(await evidence({
+		reviews,
+		dispositions: [{ ...dispositions[0], kind: "not_actionable" }],
+	}), expected)).includes("undispositioned_finding"));
 });
 
 test("head movement, stale reviewed ranges, topology drift, draft state, and merge conflicts fail closed", async () => {
@@ -166,4 +170,52 @@ test("rejects aggregate review claims, unknown fields, duplicate IDs, and unboun
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, checks: [duplicateCheck, duplicateCheck] }), /duplicate|check/i);
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, threads: Array.from({ length: 129 }, (_, index) => ({ id: `T-${index}`, resolved: true, headSha })) }), /bounded|threads|128/i);
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, body: "x".repeat(65_537) }), /body|bounded/i);
+});
+
+test("rejects ambiguous duplicate finding IDs across review generations", async () => {
+	const raw = await fixture();
+	const first = {
+		...createIndependentReviewWork({
+			repository: "github.com/polymetrics-ai/cli",
+			workItemId: "evidence",
+			pullRequest: 812,
+			generation: 2,
+			baseSha,
+			headSha: "9".repeat(40),
+			changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
+			allowedScopes: [".pi/extensions/shepherd"],
+		}),
+		completedAt: "2026-07-21T10:00:00.000Z",
+		verdict: "findings" as const,
+		findings: [{ id: "F-duplicate", severity: "blocking" as const, summary: "First finding." }],
+	};
+	const second = {
+		...createIndependentReviewWork({
+			repository: "github.com/polymetrics-ai/cli",
+			workItemId: "evidence",
+			pullRequest: 812,
+			generation: 3,
+			baseSha,
+			headSha,
+			changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
+			allowedScopes: [".pi/extensions/shepherd"],
+		}),
+		completedAt: "2026-07-21T12:00:00.000Z",
+		verdict: "findings" as const,
+		findings: [{ id: "F-duplicate", severity: "blocking" as const, summary: "Ambiguous second finding." }],
+	};
+	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, reviews: [first, second] }), /duplicate|finding/i);
+});
+
+test("rejects proxied evidence arrays without invoking their traps", async () => {
+	const raw = await fixture();
+	let trapInvoked = false;
+	const checks = new Proxy([], {
+		get() {
+			trapInvoked = true;
+			throw new Error("proxy trap must not execute");
+		},
+	});
+	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, checks }), /array|shape|checks|proxy/i);
+	assert.equal(trapInvoked, false);
 });

@@ -45,3 +45,11 @@ production-file absence is the manual strict-TDD gate.
   readiness.
 - Strict no-emit TypeScript over all three owned modules and matching tests passes using TypeScript
   5.9.3 with the cached Pi 0.80.6 Node type root.
+
+## Adversarial correction RED
+
+The same focused command against unchanged GREEN production reports 27 total: 17 pass and 10
+expected failures. Failures cover proxy-trap execution, duplicate finding ambiguity,
+`not_actionable` bypass, missing parent handoff capture, unbound receipt schema, plan/review binding,
+merged-PR restart reuse, and the downstream parent completeness cases that now require bound
+receipts. Production remains exactly at pushed GREEN checkpoint `90321ffb` for this test-only RED.

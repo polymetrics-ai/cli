@@ -124,3 +124,23 @@ git diff --check 3addb1f48be1afe8b1e2b59b54247679d7293805..HEAD
 - [ ] Refactor and all authorized gates pass.
 - [ ] Ready stacked PR opened with correct title/base/body.
 - [ ] Final exact-head independent review and human parent merge remain parent-owned.
+
+## Adversarial correction slice: 2026-07-21
+
+Local review of GREEN head `90321ffb` found restart and binding gaps that need another strict TDD
+slice before broad verification:
+
+1. Bind child integration receipts to the plan generation, stable PR marker, reviewed base SHA,
+   exact head SHA, child ID, PR number, and parent branch.
+2. Reuse an exact receipt after GitHub transitions the integrated child PR from open to merged;
+   do not falsely regress a successful integration on restart.
+3. Require the clean review record used for integration/readiness to match the planned repository,
+   work item, generation, changed paths, and allowed scopes in addition to base/head.
+4. Capture parent branch setup through the same upstream `captureHandoff` boundary used by children.
+5. Reject proxied arrays before invoking traps, reject duplicate cross-review finding IDs, and do
+   not let a local `not_actionable` label satisfy a blocking finding without a brokered exception.
+6. Remove the fake-only PR-number hint from the production transport request during refactor.
+
+The test-only correction run passes 17 and fails 10 expected cases against unchanged GREEN
+production. A review-agent spawn was retried after GREEN and remains unavailable because the
+runtime is at its thread cap, so this is recorded as another `local_critical_path` correction.

@@ -28,3 +28,11 @@
   type root.
 - No controller/index integration, live GitHub mutation, external review request, merge, Go gate,
   connector gate, runtime gate, or `make` command ran.
+
+## 2026-07-21 adversarial correction RED
+
+- A post-GREEN read-only review-agent spawn was again rejected by the runtime thread cap.
+- Local adversarial review identified receipt generation/marker/range binding, merged-PR restart,
+  exact planned review-target binding, parent handoff capture, proxy-array, and disposition gaps.
+- Test-only focused run against unchanged GREEN production: 27 total, 17 pass, 10 expected fail.
+- No prohibited broad verification or external mutation ran.

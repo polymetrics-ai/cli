@@ -178,6 +178,9 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		const receipt: ChildIntegrationReceipt = {
 			childId: request.childId,
 			pullRequest: request.pullRequest,
+			generation: request.generation,
+			marker: request.marker,
+			baseSha: request.baseSha,
 			headSha: request.headSha,
 			parentBranch: request.parentBranch,
 			integratedAt: "2026-07-21T12:01:00.000Z",
@@ -379,6 +382,27 @@ test("captures upstream workspace handoff and rejects dirty, failed, mismatched,
 	}
 });
 
+test("captures parent workspace setup through the upstream handoff boundary", async () => {
+	const candidate = await plan();
+	const expected = childHandoff(candidate.parentIssue, candidate.parentBranch, candidate.parentBaseBranch, {
+		changedScope: [".pi/extensions/shepherd/github-orchestrator.ts"],
+	});
+	let requestedState = "";
+	const source = {
+		async captureHandoff(_workspace: ClaimedWorkspace, verificationState: "passed"): Promise<WorkspaceHandoffEvidence> {
+			requestedState = verificationState;
+			return expected;
+		},
+	};
+	const captured = await new GitHubParentOrchestrator(new FakeTransport()).captureParentHandoff(
+		candidate,
+		{} as ClaimedWorkspace,
+		source,
+	);
+	assert.deepEqual(captured, expected);
+	assert.equal(requestedState, "passed");
+});
+
 test("roster publication reconciles before update and recovers timeout-after-publish", async () => {
 	const candidate = await plan();
 	const transport = new FakeTransport();
@@ -442,6 +466,110 @@ test("integrates only green reviewed exact-head scoped children and rechecks hea
 	assert.equal(outside.kind, "blocked");
 });
 
+test("review coverage must bind the planned repository, child, generation, paths, and scopes", async () => {
+	const candidate = await plan();
+	const issue = issueFrom({
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		marker: candidate.children[0].markers.issue,
+		title: candidate.children[0].title,
+		body: candidate.children[0].issueBody,
+	}, 811);
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	const handoff = childHandoff(issue.number, child.branch, child.prBase);
+	const request: CreatePullRequestRequest = {
+		repository: candidate.repository,
+		workItemId: child.id,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		title: child.title,
+		body: `Refs #${issue.number}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+		draft: false,
+		baseBranch: child.prBase,
+		headBranch: child.branch,
+		baseSha: handoff.baseHead,
+		headSha: handoff.head,
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+		numberHint: 812,
+	};
+	for (const targetChanges of [
+		{ repository: "other/cli" },
+		{ workItemId: "other-child" },
+		{ generation: candidate.generation + 1 },
+		{ changedPaths: [] },
+		{ allowedScopes: [".pi/extensions/shepherd"] },
+	]) {
+		const transport = new FakeTransport();
+		const pr = cleanPullRequest(request);
+		pr.reviews = [{
+			...createIndependentReviewWork({
+				repository: candidate.repository,
+				workItemId: child.id,
+				pullRequest: pr.number,
+				generation: candidate.generation,
+				baseSha: handoff.baseHead,
+				headSha: handoff.head,
+				changedPaths: handoff.changedScope,
+				allowedScopes: child.writeScopes,
+				...targetChanges,
+			}),
+			completedAt: "2026-07-21T12:00:00.000Z",
+			verdict: "clean",
+			findings: [],
+		}];
+		transport.pullRequests.push(pr);
+		const result = await new GitHubParentOrchestrator(transport).integrateChild(candidate, child, handoff);
+		assert.equal(result.kind, "blocked", JSON.stringify(targetChanges));
+		assert.equal(transport.integrateCalls, 0);
+	}
+});
+
+test("restart reuses an exact bound integration receipt after GitHub closes the merged child PR", async () => {
+	const candidate = await plan();
+	const issue = issueFrom({
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		marker: candidate.children[0].markers.issue,
+		title: candidate.children[0].title,
+		body: candidate.children[0].issueBody,
+	}, 811);
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	const handoff = childHandoff(issue.number, child.branch, child.prBase);
+	const request: CreatePullRequestRequest = {
+		repository: candidate.repository,
+		workItemId: child.id,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		title: child.title,
+		body: `Refs #${issue.number}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+		draft: false,
+		baseBranch: child.prBase,
+		headBranch: child.branch,
+		baseSha: handoff.baseHead,
+		headSha: handoff.head,
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+		numberHint: 812,
+	};
+	const transport = new FakeTransport();
+	transport.pullRequests.push(cleanPullRequest(request, { state: "merged" }));
+	transport.integrations.push({
+		childId: child.id,
+		pullRequest: 812,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		baseSha: handoff.baseHead,
+		headSha: handoff.head,
+		parentBranch: candidate.parentBranch,
+		integratedAt: "2026-07-21T12:01:00.000Z",
+	});
+	const result = await new GitHubParentOrchestrator(transport).integrateChild(candidate, child, handoff);
+	assert.equal(result.kind, "integrated");
+	if (result.kind === "integrated") assert.equal(result.reused, true);
+	assert.equal(transport.integrateCalls, 0);
+});
+
 test("keeps the parent draft until all children and an exact-generation/head consumed human decision pass", async () => {
 	const candidate = await plan();
 	const transport = new FakeTransport();
@@ -467,6 +595,9 @@ test("keeps the parent draft until all children and an exact-generation/head con
 	const receipts: ChildIntegrationReceipt[] = candidate.children.map((child, index) => ({
 		childId: child.id,
 		pullRequest: 812 + index,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		baseSha,
 		headSha: String(index + 1).repeat(40),
 		parentBranch: candidate.parentBranch,
 		integratedAt: "2026-07-21T12:01:00.000Z",
@@ -508,6 +639,9 @@ test("pending/rejected decisions and parent head movement never mark ready", asy
 	const receipts: ChildIntegrationReceipt[] = candidate.children.map((child, index) => ({
 		childId: child.id,
 		pullRequest: 812 + index,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		baseSha,
 		headSha: String(index + 1).repeat(40),
 		parentBranch: candidate.parentBranch,
 		integratedAt: "2026-07-21T12:01:00.000Z",

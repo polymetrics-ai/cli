@@ -29,6 +29,11 @@
         "cycle": "execute",
         "decision": "local_critical_path",
         "reason": "Implemented the three-file typed boundary; 21 focused tests and strict owned TypeScript now pass."
+      },
+      {
+        "cycle": "adversarial-correction-tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "Review-agent capacity remained unavailable; test-only receipt, review-binding, restart, proxy, and disposition regressions produce 17 passes and 10 expected failures against unchanged GREEN production."
       }
     ],
     "humanGates": [
@@ -42,5 +47,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T17:01:29.000Z"
+  "updatedAt": "2026-07-21T17:13:52.000Z"
 }

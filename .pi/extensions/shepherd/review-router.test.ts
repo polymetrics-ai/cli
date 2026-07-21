@@ -117,3 +117,15 @@ test("fails closed on unknown fields, unsafe paths, oversized arrays, and marker
 	assert.throws(() => validateIndependentReviewRecord({ ...cleanReview(), unexpected: true }), /field|shape|review/i);
 	assert.throws(() => validateIndependentReviewRecord({ ...cleanReview(), idempotencyMarker: "<!-- forged -->" }), /marker/i);
 });
+
+test("rejects proxied arrays without invoking their traps", () => {
+	let trapInvoked = false;
+	const paths = new Proxy([".pi/extensions/shepherd/review-router.ts"], {
+		get() {
+			trapInvoked = true;
+			throw new Error("proxy trap must not execute");
+		},
+	});
+	assert.throws(() => createIndependentReviewWork(target({ changedPaths: paths })), /array|shape|paths|proxy/i);
+	assert.equal(trapInvoked, false);
+});
