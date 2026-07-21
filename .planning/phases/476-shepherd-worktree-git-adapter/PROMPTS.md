@@ -23,3 +23,6 @@
 - Warning disposition plan: serialize full Shepherd test files so real Git subprocess load cannot
   invalidate the SDK runner's intentional wall-clock assertions; do not widen those assertions.
 - Authorized gates remain TypeScript/Shepherd/Pi/diff-only; no Go, connector, or `make verify` run.
+- Result: correction RED `36860ec5`, GREEN `e3669fc4`, and refactor `d91b41a8`; focused 21/21,
+  serialized full Shepherd 158/158, strict TypeScript, offline Pi 0.80.6 RPC, and diff/scope pass.
+- Ready stacked PR: https://github.com/polymetrics-ai/cli/pull/484.

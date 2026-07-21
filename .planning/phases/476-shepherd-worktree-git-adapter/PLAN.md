@@ -21,7 +21,7 @@
 - `gitops-workflow` is intentionally not applied: the available skill targets Kubernetes
   Argo/Flux GitOps, not local typed Git process boundaries. This plan instead applies issue #476,
   repository safety rules, and the Shepherd runtime contract.
-- Go skills: not applicable to the TypeScript production slice. Go repository gates remain required.
+- Go skills and Go repository gates: not applicable under the parent-authorized correction policy.
 - CLI help/docs/website parity: not applicable; this slice adds no `pm` CLI surface.
 
 ## Architecture
@@ -34,9 +34,10 @@
    worktree path, validates parent base and repository identity, reconciles an existing exact
    workspace, and fails closed on aliases, duplicate ownership, collisions, dirty state, or stale
    base evidence.
-3. Git metadata is authoritative for crash/retry reconciliation. Existing exact ownership is
-   adopted idempotently; a branch or path owned elsewhere is reported and preserved. No removal,
-   prune, reset, force push, default-branch push, or arbitrary refspec API exists.
+3. Git metadata and immutable claim/binding records are authoritative for crash/retry
+   reconciliation. The existing append-only Shepherd lease fences the one writable mutator;
+   a branch or path owned elsewhere is reported and preserved. No removal, prune, reset, force
+   push, default-branch push, or arbitrary refspec API exists.
 
 ## TDD slices
 
@@ -81,13 +82,13 @@
 
 ## Verification checklist
 
-- [ ] `node --test .pi/extensions/shepherd/workspace-adapter.test.ts .pi/extensions/shepherd/git-adapter.test.ts`
-- [ ] `node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts`
-- [ ] strict no-emit TypeScript against pinned Pi 0.80.6 types
-- [ ] `pi --list-extensions`
-- [ ] `git diff --check`
-- [ ] pushed branch exact head matches local head
-- [ ] ready sub-PR targets `feat/471-pi-agent-session-shepherd`
+- [x] `node --test .pi/extensions/shepherd/workspace-adapter.test.ts .pi/extensions/shepherd/git-adapter.test.ts`
+- [x] `node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts`
+- [x] strict no-emit TypeScript against pinned Pi 0.80.6 types
+- [x] documented offline Pi 0.80.6 RPC `get_commands` discovery
+- [x] `git diff --check`
+- [x] pushed implementation/refactor branch head matched local and PR head
+- [x] ready sub-PR targets `feat/471-pi-agent-session-shepherd`
 
 ## Exact-head correction cycle
 

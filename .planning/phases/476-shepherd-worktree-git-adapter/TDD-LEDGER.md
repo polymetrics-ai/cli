@@ -9,10 +9,10 @@ Tests use bounded temporary local Git repositories and no credentials or network
 |---|---|---|---|---|
 | Typed Git adapter | `node --test .pi/extensions/shepherd/workspace-adapter.test.ts .pi/extensions/shepherd/git-adapter.test.ts` → exit 1, `ERR_MODULE_NOT_FOUND` for absent `git-adapter.ts` | Same command → 16/16 pass | Strict no-emit TypeScript passed; raw Git errors reduced to bounded exit evidence | green/refactored |
 | Isolated workspace ownership | Same command → exit 1 before collection because the required adapter modules do not exist | Genuine temporary bare-remote/worktree cases pass | Full Shepherd suite 153/153 pass | green/refactored |
-| Crash/retry and collision safety | Deterministic genuine-repository cases were present but could not collect until the missing adapters existed | Exact retry, owner collision, concurrent owners, alias branch, path collision, stale base, dirty preservation, and unrelated-head cases pass | Canonical claim metadata stores owner hashes rather than caller text; no release/cleanup API | green/refactored |
-| Correction: state identity parity | Focused run: adapter identity differed from `target-evidence.ts` for the same checkout | v1 repository/worktree identity parity passes for coordinator and linked worktree | Strict production TypeScript passes | green |
-| Correction: immutable handoff claim | Focused run: all three mutable handoff variants were accepted and persisted claim lacked `allowedScopes` | atomic claim/binding records reject workspace and persisted-field tampering | Strict production TypeScript passes | green |
-| Correction: exclusive writable lease | Focused run: both same-owner contenders fulfilled; returned workspace had no lease capability | same-owner race yields one lease; release/retry and dead-owner resume pass | Existing append-only `FileStateStore` fencing reused | green |
+| Crash/retry and collision safety | Deterministic genuine-repository cases were present but could not collect until the missing adapters existed | Exact retry, owner collision, concurrent owners, alias branch, path collision, stale base, dirty preservation, and unrelated-head cases pass | Superseded by the correction lease/binding contract below | green/refactored |
+| Correction: state identity parity | Focused run: adapter identity differed from `target-evidence.ts` for the same checkout | v1 repository/worktree identity parity passes for coordinator and linked worktree | Local/HTTPS/SSH/SCP/file/no-origin parity; strict TypeScript and full suite pass | green/refactored |
+| Correction: immutable handoff claim | Focused run: all three mutable handoff variants were accepted and persisted claim lacked `allowedScopes` | atomic claim/binding records reject workspace and persisted-field tampering | Direct live-object and on-disk mutation cases; full suite passes | green/refactored |
+| Correction: exclusive writable lease | Focused run: both same-owner contenders fulfilled; returned workspace had no lease capability | same-owner race yields one lease; release/retry and dead-owner resume pass | Existing append-only `FileStateStore` fencing reused; full suite passes | green/refactored |
 
 Correction RED command: `node --test .pi/extensions/shepherd/workspace-adapter.test.ts
 .pi/extensions/shepherd/git-adapter.test.ts` → 21 tests, 16 passed, 5 failed. The five failures map
@@ -21,6 +21,10 @@ directly to the reviewed contracts; no production file was changed before this r
 Correction GREEN command: the same focused command → 21 tests passed, 0 failed. Strict no-emit
 TypeScript over both production adapters and their imports also passed against the cached Pi 0.80.6
 Node type surface.
+
+Correction REFACTOR/broad evidence: focused 21/21; serialized full Shepherd 158/158; strict
+TypeScript pass; offline Pi RPC returned `true`; exact diff/scope hygiene pass. Test-file
+serialization addresses concurrent Git load without changing SDK deadline assertions.
 
 ## Required safety cases
 
@@ -50,3 +54,5 @@ Node type surface.
   parent integration owns the full Go/connectors rerun under the updated policy.
 - Execution decision, summary cycle: `local_critical_path` — durable evidence and stacked PR handoff
   finalized without automated-review or merge authority.
+- Execution decision, correction cycles: `local_critical_path` — the identity, claim, and lease
+  fixes share one owned adapter boundary; focused RED preceded GREEN, then refactor and broad gates.

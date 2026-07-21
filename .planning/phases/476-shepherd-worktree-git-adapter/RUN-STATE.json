@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "phase": "476-shepherd-worktree-git-adapter",
   "issue": 476,
-  "status": "running",
+  "status": "completed",
   "gsdMode": "manual_gsd_fallback",
-  "verificationPassed": false,
-  "verificationBlocker": "Exact-head review blockers at 906a45c5 are in the RED correction cycle.",
+  "verificationPassed": true,
+  "verificationBlocker": null,
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -51,6 +51,21 @@
       "cycle": "correction-green",
       "decision": "local_critical_path",
       "reason": "The same 21 focused tests now pass and strict production TypeScript passes after v1 identity alignment, immutable two-phase claim binding, and FileStateStore lease integration."
+    },
+    {
+      "cycle": "correction-refactor",
+      "decision": "local_critical_path",
+      "reason": "Remote-form identity parity, direct handoff tampering, stale-start guidance, explicit resume, and idempotent release evidence were strengthened without widening capabilities."
+    },
+    {
+      "cycle": "correction-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 21/21, serialized full Shepherd 158/158, strict TypeScript, offline Pi RPC, and exact diff/scope gates pass; no Go or connector gate ran."
+    },
+    {
+      "cycle": "correction-summary",
+      "decision": "local_critical_path",
+      "reason": "PR #484 and concrete reviewed/correction checkpoint evidence are recorded; fresh exact-head independent review remains parent-owned."
     }
   ]
 }
