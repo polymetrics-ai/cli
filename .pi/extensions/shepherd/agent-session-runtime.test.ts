@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { getEventListeners } from "node:events";
 import test from "node:test";
 
 import type {
@@ -175,6 +176,45 @@ function cycle8SecretPayload(prefix: string): { value: string; markers: string[]
 			`{"client\\u005fsecret":"${markers.escapedClientSecret}","safe":true}`,
 			`{"to\\u006ben":"${markers.escapedToken}"}`,
 			`{"client_secret\\u00ZZ":"${markers.malformedEscapedSecret}"}`,
+		].join("\n"),
+		markers: Object.values(markers),
+	};
+}
+
+function cycle9SecretPayload(prefix: string): { value: string; markers: string[] } {
+	const markers = {
+		tokenEquals: `synthetic-${prefix}-token-equals-475`,
+		passwordEquals: `synthetic-${prefix}-password-equals-475`,
+		secretEquals: `synthetic-${prefix}-secret-equals-475`,
+		opaqueAuthorization: `synthetic-${prefix}-opaque-authorization-475`,
+		implicitFlow: `synthetic-${prefix}-implicit-flow-475`,
+		urlUserinfo: `synthetic-${prefix}-url-userinfo-475`,
+		urlQuery: `synthetic-${prefix}-url-query-475`,
+		registryAuth: `synthetic-${prefix}-registry-auth-475`,
+		malformedMiddle: `synthetic-${prefix}-malformed-middle-475`,
+		escaped63: `synthetic-${prefix}-escaped-63-475`,
+		escaped64: `synthetic-${prefix}-escaped-64-475`,
+		escaped65: `synthetic-${prefix}-escaped-65-475`,
+	};
+	const fullyEscapedKey = (length: number): string => {
+		const decoded = `${"a".repeat(length - "token".length)}token`;
+		return [...decoded].map((character) =>
+			`\\u${character.charCodeAt(0).toString(16).padStart(4, "0")}`).join("");
+	};
+	return {
+		value: [
+			`token=${markers.tokenEquals} with spaces`,
+			`password = ${markers.passwordEquals} with spaces`,
+			`secret=${markers.secretEquals} with spaces`,
+			`Authorization: ${markers.opaqueAuthorization}`,
+			`[client_secret: ${markers.implicitFlow}]`,
+			`request failed https://public:${markers.urlUserinfo}@x.invalid/path`,
+			`request failed https://x.invalid/path?access_token=${markers.urlQuery}&safe=retained`,
+			`//registry.npmjs.org/:_authToken=${markers.registryAuth}`,
+			`{"to\\u00ZZken":"${markers.malformedMiddle}"}`,
+			`{"${fullyEscapedKey(63)}":"${markers.escaped63}"}`,
+			`{"${fullyEscapedKey(64)}":"${markers.escaped64}"}`,
+			`{"${fullyEscapedKey(65)}":"${markers.escaped65}"}`,
 		].join("\n"),
 		markers: Object.values(markers),
 	};
@@ -389,6 +429,28 @@ async function observeSettlement(operation: Promise<unknown>, timeoutMs: number)
 function rejectionMessage(outcome: PromiseOutcome): string {
 	if (outcome.status !== "rejected") return "";
 	return outcome.reason instanceof Error ? outcome.reason.message : String(outcome.reason);
+}
+
+function isTypedOwnCause(outcome: PromiseOutcome): boolean {
+	return outcome.status === "rejected" && outcome.reason instanceof AgentSessionRuntimeError &&
+		Object.hasOwn(outcome.reason, "cause");
+}
+
+function errorMessages(value: unknown): string[] {
+	const messages: string[] = [];
+	const pending: unknown[] = [value];
+	const seen = new Set<unknown>();
+	while (pending.length > 0) {
+		const current = pending.shift();
+		if (current === undefined || seen.has(current)) continue;
+		seen.add(current);
+		if (current instanceof Error) {
+			messages.push(current.message);
+			if (Object.hasOwn(current, "cause")) pending.push(current.cause);
+			if (current instanceof AggregateError) pending.push(...current.errors);
+		}
+	}
+	return messages;
 }
 
 function installDeferredCreation(
@@ -1967,4 +2029,706 @@ test("cycle 8 handoff summary, finding, and verification strings share the compl
 		verificationNameMarker,
 	]), []);
 	assert.match(serialized, /\[REDACTED\]/);
+});
+
+test("cycle 9 captures the SDK creation result and owned session exactly once in foreground and late paths", async () => {
+	const foregroundSdk = new FakeSdk();
+	const foregroundOwned = new FakeSession();
+	const foregroundEscaped = new FakeSession();
+	const foregroundRequest = request({
+		binding: { ...request().binding, runId: "cycle9-foreground-owner", laneId: "cycle9-foreground-owner" },
+	});
+	foregroundOwned.output = handoffFor(foregroundRequest);
+	foregroundEscaped.output = handoffFor(foregroundRequest, { summary: "escaped session ran" });
+	let foregroundReads = 0;
+	foregroundSdk.createAgentSession = async (options) => {
+		foregroundSdk.options = options as Record<string, unknown>;
+		for (const session of [foregroundOwned, foregroundEscaped]) {
+			session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
+			session.activeTools = [...(options.tools ?? [])];
+		}
+		const created = {
+			extensionsResult: { extensions: [], errors: [] },
+		} as Record<string, unknown>;
+		Object.defineProperty(created, "session", {
+			enumerable: true,
+			get() {
+				foregroundReads += 1;
+				return foregroundReads === 1 ? foregroundOwned : foregroundEscaped;
+			},
+		});
+		return created as RuntimeCreationResult;
+	};
+	const foreground = runtime(foregroundSdk);
+	const foregroundOutcome = await observeSettlement(foreground.runtime.run(foregroundRequest), 100);
+
+	const lateSdk = new FakeSdk();
+	const lateOwned = new FakeSession();
+	const lateEscaped = new FakeSession();
+	const lateCreation = deferredValue<RuntimeCreationResult>();
+	installDeferredCreation(lateSdk, lateCreation);
+	const lateHarness = runtime(lateSdk, { cleanupTimeoutMs: 15 });
+	const lateRequest = request({
+		timeoutMs: 8,
+		binding: { ...request().binding, runId: "cycle9-late-owner", laneId: "cycle9-late-owner" },
+	});
+	const lateRun = lateHarness.runtime.run(lateRequest);
+	await waitUntil(() => lateSdk.options !== undefined);
+	const lateRunOutcome = await observeSettlement(lateRun, 100);
+	let lateReads = 0;
+	for (const session of [lateOwned, lateEscaped]) {
+		session.thinkingLevel = "high";
+		session.activeTools = ["workspace_read", "workspace_edit", "workspace_write", "host_inspect"];
+	}
+	const lateCreated = {
+		extensionsResult: { extensions: [], errors: [] },
+	} as Record<string, unknown>;
+	Object.defineProperty(lateCreated, "session", {
+		enumerable: true,
+		get() {
+			lateReads += 1;
+			return lateReads === 1 ? lateOwned : lateEscaped;
+		},
+	});
+	lateCreation.resolve(lateCreated as RuntimeCreationResult);
+	await waitUntil(() => lateOwned.disposeCalls === 1);
+	const lateCloseOutcome = await observeSettlement(lateHarness.runtime.close(), 100);
+
+	const throwingSdk = new FakeSdk();
+	let throwingReads = 0;
+	throwingSdk.createAgentSession = async () => {
+		const created = { extensionsResult: { extensions: [], errors: [] } } as Record<string, unknown>;
+		Object.defineProperty(created, "session", {
+			enumerable: true,
+			get() { throwingReads += 1; throw undefined; },
+		});
+		return created as RuntimeCreationResult;
+	};
+	const throwingOutcome = await observeSettlement(runtime(throwingSdk).runtime.run(request({
+		binding: { ...request().binding, runId: "cycle9-throwing-owner", laneId: "cycle9-throwing-owner" },
+	})), 100);
+
+	assert.deepEqual({
+		foreground: {
+			status: foregroundOutcome.status,
+			reads: foregroundReads,
+			owned: [foregroundOwned.promptCalls, foregroundOwned.disposeCalls],
+			escaped: [foregroundEscaped.promptCalls, foregroundEscaped.disposeCalls],
+		},
+		late: {
+			run: lateRunOutcome.status,
+			close: lateCloseOutcome.status,
+			reads: lateReads,
+			owned: [lateOwned.promptCalls, lateOwned.disposeCalls],
+			escaped: [lateEscaped.promptCalls, lateEscaped.disposeCalls],
+		},
+		throwing: [throwingOutcome.status, isTypedOwnCause(throwingOutcome), throwingReads],
+	}, {
+		foreground: { status: "resolved", reads: 1, owned: [1, 1], escaped: [0, 0] },
+		late: { run: "rejected", close: "resolved", reads: 1, owned: [0, 1], escaped: [0, 0] },
+		throwing: ["rejected", true, 1],
+	});
+});
+
+test("cycle 9 keeps a private frozen tool oracle across SDK mutation, reorder, and replacement", async () => {
+	const sdk = new FakeSdk();
+	const req = request({ binding: { ...request().binding, runId: "cycle9-tool-oracle", laneId: "cycle9-tool-oracle" } });
+	sdk.session.output = handoffFor(req);
+	let toolsFrozen = false;
+	let customToolsFrozen = false;
+	let toolsMutationBlocked = false;
+	let customMutationBlocked = false;
+	sdk.createAgentSession = async (options) => {
+		sdk.options = options as Record<string, unknown>;
+		assert.ok(options.tools);
+		assert.ok(options.customTools);
+		const expected = [...options.tools];
+		toolsFrozen = Object.isFrozen(options.tools);
+		customToolsFrozen = Object.isFrozen(options.customTools);
+		try { options.tools.push("bash"); } catch { toolsMutationBlocked = true; }
+		try { options.tools.reverse(); } catch { toolsMutationBlocked = true; }
+		try { options.customTools.push(options.customTools[0]); } catch { customMutationBlocked = true; }
+		sdk.session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
+		sdk.session.activeTools = expected;
+		return { session: sdk.session, extensionsResult: { extensions: [], errors: [] } };
+	};
+	const safeOutcome = await observeSettlement(runtime(sdk).runtime.run(req), 100);
+
+	const replacementSdk = new FakeSdk();
+	replacementSdk.createAgentSession = async (options) => {
+		options.tools = ["bash"];
+		replacementSdk.session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
+		replacementSdk.session.activeTools = ["bash"];
+		return { session: replacementSdk.session, extensionsResult: { extensions: [], errors: [] } };
+	};
+	const replacementOutcome = await observeSettlement(runtime(replacementSdk).runtime.run(request({
+		binding: { ...request().binding, runId: "cycle9-tool-replacement", laneId: "cycle9-tool-replacement" },
+	})), 100);
+
+	assert.deepEqual({
+		safe: safeOutcome.status,
+		toolsFrozen,
+		customToolsFrozen,
+		toolsMutationBlocked,
+		customMutationBlocked,
+		replacement: [replacementOutcome.status, /tool|authority|drift/i.test(rejectionMessage(replacementOutcome))],
+	}, {
+		safe: "resolved",
+		toolsFrozen: true,
+		customToolsFrozen: true,
+		toolsMutationBlocked: true,
+		customMutationBlocked: true,
+		replacement: ["rejected", true],
+	});
+});
+
+test("cycle 9 settled reload and creation rejection stays primary, retryable, and non-quarantining", async () => {
+	const observations: Array<Record<string, unknown>> = [];
+	for (const seam of ["reload", "create"] as const) {
+		const sdk = new FakeSdk();
+		let attempts = 0;
+		if (seam === "reload") {
+			sdk.createResourceLoader = (options) => {
+				sdk.loaderOptions = options;
+				return { reload: async () => { attempts += 1; if (attempts === 1) throw undefined; } };
+			};
+		} else {
+			const originalCreate = sdk.createAgentSession.bind(sdk);
+			sdk.createAgentSession = async (options) => {
+				attempts += 1;
+				if (attempts === 1) throw undefined;
+				return originalCreate(options);
+			};
+		}
+		const h = runtime(sdk, { cleanupTimeoutMs: 10 });
+		const firstRequest = request({
+			binding: { ...request().binding, runId: `cycle9-${seam}-first`, laneId: `cycle9-${seam}-first` },
+		});
+		const first = await observeSettlement(h.runtime.run(firstRequest), 100);
+		const retryRequest = request({
+			binding: { ...request().binding, runId: `cycle9-${seam}-retry`, laneId: `cycle9-${seam}-retry` },
+		});
+		sdk.session.output = handoffFor(retryRequest);
+		const retry = await observeSettlement(h.runtime.run(retryRequest), 100);
+		observations.push({
+			seam,
+			first: first.status,
+			firstTyped: isTypedOwnCause(first),
+			firstPreserved: !/cleanup|quarantined/i.test(rejectionMessage(first)),
+			firstCauseUndefined: first.status === "rejected" && first.reason instanceof Error && first.reason.cause === undefined,
+			retry: retry.status,
+		});
+	}
+
+	for (const seam of ["cleanup-grace-create", "late-create"] as const) {
+		const sdk = new FakeSdk();
+		const originalCreate = sdk.createAgentSession.bind(sdk);
+		const creation = deferredValue<RuntimeCreationResult>();
+		installDeferredCreation(sdk, creation);
+		const h = runtime(sdk, { cleanupTimeoutMs: 20 });
+		const firstRequest = request({
+			timeoutMs: 8,
+			binding: { ...request().binding, runId: `cycle9-${seam}-first`, laneId: `cycle9-${seam}-first` },
+		});
+		const firstPromise = h.runtime.run(firstRequest);
+		void firstPromise.catch(() => undefined);
+		await waitUntil(() => sdk.options !== undefined);
+		if (seam === "cleanup-grace-create") {
+			await new Promise((resolve) => setTimeout(resolve, 12));
+			creation.reject(undefined);
+		} else {
+			await new Promise((resolve) => setTimeout(resolve, 30));
+			creation.reject(undefined);
+		}
+		const first = await observeSettlement(firstPromise, 100);
+		await new Promise<void>((resolve) => setImmediate(resolve));
+		sdk.createAgentSession = originalCreate;
+		const retryRequest = request({
+			binding: { ...request().binding, runId: `cycle9-${seam}-retry`, laneId: `cycle9-${seam}-retry` },
+		});
+		sdk.session.output = handoffFor(retryRequest);
+		const retry = await observeSettlement(h.runtime.run(retryRequest), 100);
+		observations.push({
+			seam,
+			first: first.status,
+			firstTyped: isTypedOwnCause(first),
+			firstPreserved: !/cleanup|quarantined/i.test(rejectionMessage(first)),
+			firstCauseUndefined: first.status === "rejected" && first.reason instanceof Error && first.reason.cause === undefined,
+			retry: retry.status,
+		});
+	}
+
+	assert.deepEqual(observations, ["reload", "create", "cleanup-grace-create", "late-create"].map((seam) => ({
+		seam,
+		first: "rejected",
+		firstTyped: true,
+		firstPreserved: true,
+		firstCauseUndefined: true,
+		retry: "resolved",
+	})));
+});
+
+test("cycle 9 independently bounds unsubscribe and dispose across every terminal control", async () => {
+	type Trigger = "normal" | "abort" | "deadline" | "close" | "parent";
+	const observations: Array<Record<string, unknown>> = [];
+	for (const hook of ["unsubscribe", "dispose"] as const) {
+		for (const trigger of ["normal", "abort", "deadline", "close", "parent"] as const satisfies readonly Trigger[]) {
+			const sdk = new FakeSdk();
+			const parent = new AbortController();
+			const h = runtime(sdk, {
+				cleanupTimeoutMs: 8,
+				...(trigger === "parent" ? { parentSignal: parent.signal } : {}),
+			});
+			const req = request({
+				timeoutMs: trigger === "deadline" ? 12 : 100,
+				binding: { ...request().binding, runId: `cycle9-${hook}-${trigger}`, laneId: `cycle9-${hook}-${trigger}` },
+			});
+			sdk.session.output = handoffFor(req);
+			if (trigger !== "normal") sdk.session.blockPrompt();
+			let unsubscribeCalls = 0;
+			sdk.session.subscribe = ((listener: EventListener) => {
+				sdk.session.listeners.add(listener);
+				return (() => {
+					unsubscribeCalls += 1;
+					sdk.session.listeners.delete(listener);
+					if (hook === "unsubscribe") return new Promise<void>(() => undefined);
+				}) as () => void;
+			}) as RuntimeAgentSession["subscribe"];
+			sdk.session.dispose = (() => {
+				sdk.session.disposeCalls += 1;
+				if (hook === "dispose") return new Promise<void>(() => undefined);
+			}) as () => void;
+			const runPromise = h.runtime.run(req);
+			if (trigger !== "normal") await waitUntil(() => sdk.session.promptCalls === 1);
+			let controlPromise: Promise<unknown> | undefined;
+			if (trigger === "abort") controlPromise = h.runtime.abort(req.binding.runId);
+			if (trigger === "close") controlPromise = h.runtime.close();
+			if (trigger === "parent") {
+				parent.abort();
+				controlPromise = h.runtime.close();
+			}
+			const runOutcome = await observeSettlement(runPromise, 80);
+			const controlOutcome = controlPromise ? await observeSettlement(controlPromise, 80) : undefined;
+			const later = await observeSettlement(h.runtime.run(request({
+				binding: {
+					...request().binding,
+					runId: `cycle9-after-${hook}-${trigger}`,
+					laneId: `cycle9-after-${hook}-${trigger}`,
+				},
+			})), 30);
+			observations.push({
+				hook,
+				trigger,
+				run: runOutcome.status,
+				runTyped: isTypedOwnCause(runOutcome),
+				control: controlOutcome?.status,
+				controlTyped: controlOutcome?.status === "rejected" ? isTypedOwnCause(controlOutcome) : true,
+				unsubscribeCalls,
+				disposeCalls: sdk.session.disposeCalls,
+				later: later.status,
+				laterTyped: isTypedOwnCause(later),
+				laterQuarantined: /quarantined/i.test(rejectionMessage(later)),
+			});
+		}
+	}
+	assert.deepEqual(observations, observations.map(({ hook, trigger }) => ({
+		hook,
+		trigger,
+		run: "rejected",
+		runTyped: true,
+		control: trigger === "abort" ? "resolved" : trigger === "close" || trigger === "parent" ? "rejected" : undefined,
+		controlTyped: true,
+		unsubscribeCalls: 1,
+		disposeCalls: 1,
+		later: "rejected",
+		laterTyped: true,
+		laterQuarantined: true,
+	})));
+});
+
+test("cycle 9 late-session disposal has its own bounded phase and reports the exact cleanup failure", async () => {
+	const sdk = new FakeSdk();
+	const creation = deferredValue<RuntimeCreationResult>();
+	installDeferredCreation(sdk, creation);
+	sdk.session.dispose = (() => {
+		sdk.session.disposeCalls += 1;
+		return new Promise<void>(() => undefined);
+	}) as () => void;
+	const h = runtime(sdk, { cleanupTimeoutMs: 10 });
+	const req = request({
+		timeoutMs: 8,
+		binding: { ...request().binding, runId: "cycle9-late-dispose", laneId: "cycle9-late-dispose" },
+	});
+	const runOutcome = await observeSettlement(h.runtime.run(req), 100);
+	creation.resolve({ session: sdk.session, extensionsResult: { extensions: [], errors: [] } });
+	await waitUntil(() => sdk.session.disposeCalls === 1);
+	await new Promise((resolve) => setTimeout(resolve, 20));
+	const closeOutcome = await observeSettlement(h.runtime.close(), 100);
+	assert.deepEqual({
+		run: runOutcome.status,
+		close: closeOutcome.status,
+		closeTyped: isTypedOwnCause(closeOutcome),
+		exactFailure: errorMessages(closeOutcome.status === "rejected" ? closeOutcome.reason : undefined)
+			.some((message) => /dispose/i.test(message) && /timed out|deadline|bound/i.test(message)),
+		disposeCalls: sdk.session.disposeCalls,
+	}, {
+		run: "rejected",
+		close: "rejected",
+		closeTyped: true,
+		exactFailure: true,
+		disposeCalls: 1,
+	});
+});
+
+test("cycle 9 listener leases capture exact operations and native fallback-detach request and parent signals", async () => {
+	const installProbe = (throwBeforeDetach = false) => {
+		const controller = new AbortController();
+		const signal = controller.signal;
+		const nativeAdd = signal.addEventListener.bind(signal);
+		const nativeRemove = signal.removeEventListener.bind(signal);
+		let originalRemoveCalls = 0;
+		let replacementRemoveCalls = 0;
+		Object.defineProperty(signal, "addEventListener", {
+			configurable: true,
+			value(type: string, listener: EventListenerOrEventListenerObject, options?: AddEventListenerOptions | boolean) {
+				nativeAdd(type, listener, options);
+			},
+		});
+		Object.defineProperty(signal, "removeEventListener", {
+			configurable: true,
+			value(type: string, listener: EventListenerOrEventListenerObject, options?: EventListenerOptions | boolean) {
+				originalRemoveCalls += 1;
+				if (throwBeforeDetach) throw new Error("synthetic pre-detach failure");
+				nativeRemove(type, listener, options);
+			},
+		});
+		return {
+			controller,
+			signal,
+			mutateRemove() {
+				Object.defineProperty(signal, "removeEventListener", {
+					configurable: true,
+					value() { replacementRemoveCalls += 1; },
+				});
+			},
+			observed() {
+				return { originalRemoveCalls, replacementRemoveCalls, listeners: getEventListeners(signal, "abort").length };
+			},
+		};
+	};
+
+	const requestMutation = installProbe();
+	const mutationSdk = new FakeSdk();
+	mutationSdk.blockReload();
+	const mutationRequest = request({
+		signal: requestMutation.signal,
+		binding: { ...request().binding, runId: "cycle9-request-method-mutation", laneId: "cycle9-request-method-mutation" },
+	});
+	mutationSdk.session.output = handoffFor(mutationRequest);
+	const mutationHarness = runtime(mutationSdk);
+	const mutationRun = mutationHarness.runtime.run(mutationRequest);
+	await waitUntil(() => mutationSdk.loaderOptions !== undefined);
+	requestMutation.mutateRemove();
+	mutationSdk.reloadGateResolve?.();
+	const mutationOutcome = await observeSettlement(mutationRun, 100);
+
+	const requestThrow = installProbe(true);
+	const throwHarness = runtime();
+	const throwRequest = request({
+		signal: requestThrow.signal,
+		binding: { ...request().binding, runId: "cycle9-request-pre-detach", laneId: "cycle9-request-pre-detach" },
+	});
+	throwHarness.sdk.session.output = handoffFor(throwRequest);
+	const throwOutcome = await observeSettlement(throwHarness.runtime.run(throwRequest), 100);
+
+	const parentMutation = installProbe();
+	const parentMutationHarness = runtime(new FakeSdk(), { parentSignal: parentMutation.signal });
+	parentMutation.mutateRemove();
+	const parentMutationOutcome = await observeSettlement(parentMutationHarness.runtime.close(), 100);
+
+	const parentThrow = installProbe(true);
+	const parentThrowHarness = runtime(new FakeSdk(), { parentSignal: parentThrow.signal });
+	const parentThrowOutcome = await observeSettlement(parentThrowHarness.runtime.close(), 100);
+
+	assert.deepEqual({
+		requestMutation: [mutationOutcome.status, requestMutation.observed()],
+		requestThrow: [throwOutcome.status, isTypedOwnCause(throwOutcome), requestThrow.observed()],
+		parentMutation: [parentMutationOutcome.status, parentMutation.observed()],
+		parentThrow: [parentThrowOutcome.status, isTypedOwnCause(parentThrowOutcome), parentThrow.observed()],
+	}, {
+		requestMutation: ["resolved", { originalRemoveCalls: 1, replacementRemoveCalls: 0, listeners: 0 }],
+		requestThrow: ["rejected", true, { originalRemoveCalls: 1, replacementRemoveCalls: 0, listeners: 0 }],
+		parentMutation: ["resolved", { originalRemoveCalls: 1, replacementRemoveCalls: 0, listeners: 0 }],
+		parentThrow: ["rejected", true, { originalRemoveCalls: 1, replacementRemoveCalls: 0, listeners: 0 }],
+	});
+});
+
+test("cycle 9 every public asynchronous boundary returns typed own-cause errors and aggregates cleanup", async () => {
+	const outcomes: Array<[string, PromiseOutcome]> = [];
+	const topLevel = request() as RoleRunRequest;
+	Object.defineProperty(topLevel, "task", { enumerable: true, get() { throw undefined; } });
+	outcomes.push(["top-level", await observeSettlement(runtime().runtime.run(topLevel), 100)]);
+	const nested = request();
+	Object.defineProperty(nested.authority, "issue", { enumerable: true, get() { throw undefined; } });
+	outcomes.push(["nested", await observeSettlement(runtime().runtime.run(nested), 100)]);
+	const lookupSdk = new FakeSdk();
+	lookupSdk.findModel = () => { throw undefined; };
+	outcomes.push(["lookup", await observeSettlement(runtime(lookupSdk).runtime.run(request()), 100)]);
+	const authSdk = new FakeSdk();
+	authSdk.hasConfiguredAuth = () => { throw undefined; };
+	outcomes.push(["auth", await observeSettlement(runtime(authSdk).runtime.run(request()), 100)]);
+	const reloadSdk = new FakeSdk();
+	reloadSdk.createResourceLoader = (options) => {
+		reloadSdk.loaderOptions = options;
+		return { reload: async () => { throw undefined; } };
+	};
+	outcomes.push(["reload", await observeSettlement(runtime(reloadSdk).runtime.run(request({
+		binding: { ...request().binding, runId: "cycle9-public-reload", laneId: "cycle9-public-reload" },
+	})), 100)]);
+	const createSdk = new FakeSdk();
+	createSdk.createAgentSession = async () => { throw undefined; };
+	outcomes.push(["create", await observeSettlement(runtime(createSdk).runtime.run(request({
+		binding: { ...request().binding, runId: "cycle9-public-create", laneId: "cycle9-public-create" },
+	})), 100)]);
+	const addSignal = new AbortController().signal;
+	Object.defineProperty(addSignal, "addEventListener", { configurable: true, value() { throw undefined; } });
+	outcomes.push(["signal-add", await observeSettlement(runtime().runtime.run(request({
+		signal: addSignal,
+		binding: { ...request().binding, runId: "cycle9-public-add", laneId: "cycle9-public-add" },
+	})), 100)]);
+	const removeSignal = new AbortController().signal;
+	Object.defineProperty(removeSignal, "removeEventListener", { configurable: true, value() { throw undefined; } });
+	const removeHarness = runtime();
+	const removeRequest = request({
+		signal: removeSignal,
+		binding: { ...request().binding, runId: "cycle9-public-remove", laneId: "cycle9-public-remove" },
+	});
+	removeHarness.sdk.session.output = handoffFor(removeRequest);
+	outcomes.push(["signal-remove", await observeSettlement(removeHarness.runtime.run(removeRequest), 100)]);
+	outcomes.push(["abort", await observeSettlement(runtime().runtime.abort("invalid id with spaces"), 100)]);
+	const parentSignal = new AbortController().signal;
+	const parentHarness = runtime(new FakeSdk(), { parentSignal });
+	Object.defineProperty(parentSignal, "removeEventListener", { configurable: true, value() { throw undefined; } });
+	outcomes.push(["parent-release", await observeSettlement(parentHarness.runtime.close(), 100)]);
+
+	const dual = runtime();
+	const dualRequest = request({
+		binding: { ...request().binding, runId: "cycle9-dual-error", laneId: "cycle9-dual-error" },
+	});
+	dual.sdk.session.prompt = async () => { throw new Error("synthetic primary failure"); };
+	dual.sdk.session.dispose = (() => {
+		dual.sdk.session.disposeCalls += 1;
+		throw new Error("synthetic cleanup failure");
+	}) as () => void;
+	const dualOutcome = await observeSettlement(dual.runtime.run(dualRequest), 100);
+
+	assert.deepEqual({
+		boundaries: outcomes.map(([name, outcome]) => [name, outcome.status, isTypedOwnCause(outcome)]),
+		dual: {
+			status: dualOutcome.status,
+			typed: isTypedOwnCause(dualOutcome),
+			aggregate: dualOutcome.status === "rejected" && dualOutcome.reason instanceof Error &&
+				dualOutcome.reason.cause instanceof AggregateError,
+			messages: errorMessages(dualOutcome.status === "rejected" ? dualOutcome.reason : undefined)
+				.filter((message) => /synthetic (?:primary|cleanup) failure/.test(message)).sort(),
+		},
+	}, {
+		boundaries: outcomes.map(([name]) => [name, "rejected", true]),
+		dual: {
+			status: "rejected",
+			typed: true,
+			aggregate: true,
+			messages: ["synthetic cleanup failure", "synthetic primary failure"],
+		},
+	});
+});
+
+test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy or sparse materialization", async () => {
+	const mutationHarness = runtime();
+	const mutationRequest = request({
+		binding: { ...request().binding, runId: "cycle9-event-mutation", laneId: "cycle9-event-mutation" },
+	});
+	const originalHandoff = handoffFor(mutationRequest, { summary: "original terminal summary" });
+	const mutatedHandoff = handoffFor(mutationRequest, { summary: "mutated terminal summary" });
+	mutationHarness.sdk.session.prompt = async function () {
+		this.promptCalls += 1;
+		const message = {
+			role: "assistant",
+			provider: "openai-codex",
+			model: "gpt-5.6-sol",
+			stopReason: "stop",
+			timestamp: 475,
+			content: [{ type: "text", text: originalHandoff }],
+		};
+		for (const listener of this.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
+		for (const listener of this.listeners) listener({ type: "agent_end", messages: [message], willRetry: false } as AgentSessionEvent);
+		message.content[0].text = mutatedHandoff;
+	};
+	const mutationOutcome = await mutationHarness.runtime.run(mutationRequest);
+
+	let proxyOwnKeys = 0;
+	const proxyTarget = { type: "adversarial" };
+	const proxyEvent = new Proxy(proxyTarget as Record<string, unknown>, {
+		ownKeys() {
+			proxyOwnKeys += 1;
+			return ["type", ...Array.from({ length: 256 }, (_value, index) => `wide${index}`)];
+		},
+		getOwnPropertyDescriptor(target, key) {
+			if (Reflect.has(target, key)) return Reflect.getOwnPropertyDescriptor(target, key);
+			return { configurable: true, enumerable: true, writable: false, value: "x" };
+		},
+	});
+	const proxyHarness = runtime(new FakeSdk(), { maxEventBytes: 128 });
+	proxyHarness.sdk.session.prompt = async function () {
+		this.promptCalls += 1;
+		for (const listener of this.listeners) listener(proxyEvent as AgentSessionEvent);
+	};
+	const proxyOutcome = await observeSettlement(proxyHarness.runtime.run(request({
+		binding: { ...request().binding, runId: "cycle9-event-proxy", laneId: "cycle9-event-proxy" },
+	})), 100);
+
+	const sparseHarness = runtime();
+	const sparseRequest = request({
+		binding: { ...request().binding, runId: "cycle9-event-sparse", laneId: "cycle9-event-sparse" },
+	});
+	sparseHarness.sdk.session.prompt = async function () {
+		this.promptCalls += 1;
+		const message = {
+			role: "assistant",
+			provider: "openai-codex",
+			model: "gpt-5.6-sol",
+			stopReason: "stop",
+			timestamp: 475,
+			content: [{ type: "text", text: handoffFor(sparseRequest) }],
+		};
+		const messages = new Array<typeof message>(1_000);
+		messages[999] = message;
+		for (const listener of this.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
+		for (const listener of this.listeners) listener({ type: "agent_end", messages, willRetry: false } as AgentSessionEvent);
+	};
+	const sparseOutcome = await observeSettlement(sparseHarness.runtime.run(sparseRequest), 100);
+
+	let hiddenReads = 0;
+	const hiddenHarness = runtime();
+	const hiddenRequest = request({
+		binding: { ...request().binding, runId: "cycle9-event-hidden", laneId: "cycle9-event-hidden" },
+	});
+	hiddenHarness.sdk.session.prompt = async function () {
+		this.promptCalls += 1;
+		const message = {
+			role: "assistant",
+			provider: "openai-codex",
+			model: "gpt-5.6-sol",
+			stopReason: "stop",
+			timestamp: 475,
+			content: [{ type: "text", text: handoffFor(hiddenRequest) }],
+		};
+		const event = { type: "message_end", message } as Record<string, unknown>;
+		Object.defineProperty(event, "hidden", { get() { hiddenReads += 1; return "hidden"; } });
+		for (const listener of this.listeners) listener(event as AgentSessionEvent);
+		for (const listener of this.listeners) listener({ type: "agent_end", messages: [message], willRetry: false } as AgentSessionEvent);
+	};
+	const hiddenOutcome = await observeSettlement(hiddenHarness.runtime.run(hiddenRequest), 100);
+
+	assert.deepEqual({
+		mutationSummary: mutationOutcome.summary,
+		proxy: [proxyOutcome.status, isTypedOwnCause(proxyOutcome), proxyOwnKeys],
+		sparse: [sparseOutcome.status, isTypedOwnCause(sparseOutcome)],
+		hidden: [hiddenOutcome.status, isTypedOwnCause(hiddenOutcome), hiddenReads],
+	}, {
+		mutationSummary: "original terminal summary",
+		proxy: ["rejected", true, 0],
+		sparse: ["rejected", true],
+		hidden: ["rejected", true, 0],
+	});
+});
+
+test("cycle 9 prompts and every handoff string consumer share the closed redaction grammar", async () => {
+	const taskPayload = cycle9SecretPayload("prompt-task");
+	const contextPayload = cycle9SecretPayload("prompt-context");
+	const promptHarness = runtime();
+	const promptRequest = request({
+		task: taskPayload.value,
+		context: [contextPayload.value],
+		binding: { ...request().binding, runId: "cycle9-prompt-redaction", laneId: "cycle9-prompt-redaction" },
+	});
+	promptHarness.sdk.session.output = handoffFor(promptRequest);
+	await promptHarness.runtime.run(promptRequest);
+	const serializedPrompts = `${String(promptHarness.sdk.loaderOptions?.systemPrompt)}\n${promptHarness.sdk.session.lastPrompt}`;
+	const promptLeaks = leakedMarkers(serializedPrompts, [...taskPayload.markers, ...contextPayload.markers]);
+
+	const handoffPayload = cycle9SecretPayload("handoff");
+	const lines = handoffPayload.value.split("\n");
+	const leaks: string[] = [];
+	const unsafeRejections: string[] = [];
+	for (const [index, line] of lines.entries()) {
+		const marker = handoffPayload.markers[index];
+		for (const field of ["summary", "finding", "verification-name", "verification-summary"] as const) {
+			const h = runtime();
+			const req = request({
+				binding: { ...request().binding, runId: `cycle9-redact-${index}-${field}`, laneId: `cycle9-redact-${index}-${field}` },
+			});
+			const override: Record<string, unknown> = field === "summary"
+				? { summary: line }
+				: field === "finding"
+					? { findings: [line] }
+					: field === "verification-name"
+						? { verification: [{ name: line, status: "passed", summary: "ok" }] }
+						: { verification: [{ name: "focused", status: "passed", summary: line }] };
+			h.sdk.session.output = handoffFor(req, override);
+			const outcome = await observeSettlement(h.runtime.run(req), 100);
+			if (outcome.status === "resolved") {
+				if (JSON.stringify(outcome).includes(marker)) leaks.push(`${index}:${field}`);
+			} else if (!isTypedOwnCause(outcome)) {
+				unsafeRejections.push(`${index}:${field}`);
+			}
+		}
+	}
+	assert.deepEqual({ promptLeaks, leaks, unsafeRejections }, { promptLeaks: [], leaks: [], unsafeRejections: [] });
+});
+
+test("cycle 9 rejects every terminal control and key line or bidi control in every handoff string field", async () => {
+	const everyControl = [
+		...Array.from({ length: 0x20 }, (_value, code) => code),
+		...Array.from({ length: 0x21 }, (_value, offset) => 0x7f + offset),
+		0x061c,
+		0x200e,
+		0x200f,
+		0x2028,
+		0x2029,
+		...Array.from({ length: 5 }, (_value, offset) => 0x202a + offset),
+		...Array.from({ length: 4 }, (_value, offset) => 0x2066 + offset),
+	];
+	const acceptedControls: number[] = [];
+	for (const code of everyControl) {
+		const h = runtime();
+		const name = `cycle9-control-${code.toString(16)}`;
+		const req = request({ binding: { ...request().binding, runId: name, laneId: name } });
+		h.sdk.session.output = handoffFor(req, { summary: `unsafe${String.fromCodePoint(code)}summary` });
+		const outcome = await observeSettlement(h.runtime.run(req), 100);
+		if (outcome.status === "resolved") acceptedControls.push(code);
+		else assert.equal(isTypedOwnCause(outcome), true, name);
+	}
+	const representative = ["\t", "\n", "\r", "\r\n", "\u2028", "\u2029", "\u202e", "\u2066"];
+	const acceptedFields: string[] = [];
+	for (const [controlIndex, control] of representative.entries()) {
+		for (const field of ["summary", "finding", "verification-name", "verification-summary"] as const) {
+			const h = runtime();
+			const name = `cycle9-field-${controlIndex}-${field}`;
+			const req = request({ binding: { ...request().binding, runId: name, laneId: name } });
+			const value = `unsafe${control}value`;
+			const override: Record<string, unknown> = field === "summary"
+				? { summary: value }
+				: field === "finding"
+					? { findings: [value] }
+					: field === "verification-name"
+						? { verification: [{ name: value, status: "passed", summary: "ok" }] }
+						: { verification: [{ name: "focused", status: "passed", summary: value }] };
+			h.sdk.session.output = handoffFor(req, override);
+			const outcome = await observeSettlement(h.runtime.run(req), 100);
+			if (outcome.status === "resolved") acceptedFields.push(`${controlIndex}:${field}`);
+			else assert.equal(isTypedOwnCause(outcome), true, name);
+		}
+	}
+	assert.deepEqual({ acceptedControls, acceptedFields }, { acceptedControls: [], acceptedFields: [] });
 });

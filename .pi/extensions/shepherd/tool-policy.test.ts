@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { dirname, join } from "node:path";
 import test from "node:test";
+import { pathToFileURL } from "node:url";
 
 import {
 	ToolPolicyError,
@@ -160,6 +162,45 @@ function cycle8SecretPayload(prefix: string): { value: string; markers: string[]
 			`{"client\\u005fsecret":"${markers.escapedClientSecret}","safe":true}`,
 			`{"to\\u006ben":"${markers.escapedToken}"}`,
 			`{"client_secret\\u00ZZ":"${markers.malformedEscapedSecret}"}`,
+		].join("\n"),
+		markers: Object.values(markers),
+	};
+}
+
+function cycle9SecretPayload(prefix: string): { value: string; markers: string[] } {
+	const markers = {
+		tokenEquals: `synthetic-${prefix}-token-equals-475`,
+		passwordEquals: `synthetic-${prefix}-password-equals-475`,
+		secretEquals: `synthetic-${prefix}-secret-equals-475`,
+		opaqueAuthorization: `synthetic-${prefix}-opaque-authorization-475`,
+		implicitFlow: `synthetic-${prefix}-implicit-flow-475`,
+		urlUserinfo: `synthetic-${prefix}-url-userinfo-475`,
+		urlQuery: `synthetic-${prefix}-url-query-475`,
+		registryAuth: `synthetic-${prefix}-registry-auth-475`,
+		malformedMiddle: `synthetic-${prefix}-malformed-middle-475`,
+		escaped63: `synthetic-${prefix}-escaped-63-475`,
+		escaped64: `synthetic-${prefix}-escaped-64-475`,
+		escaped65: `synthetic-${prefix}-escaped-65-475`,
+	};
+	const fullyEscapedKey = (length: number): string => {
+		const decoded = `${"a".repeat(length - "token".length)}token`;
+		return [...decoded].map((character) =>
+			`\\u${character.charCodeAt(0).toString(16).padStart(4, "0")}`).join("");
+	};
+	return {
+		value: [
+			`token=${markers.tokenEquals} with spaces`,
+			`password = ${markers.passwordEquals} with spaces`,
+			`secret=${markers.secretEquals} with spaces`,
+			`Authorization: ${markers.opaqueAuthorization}`,
+			`[client_secret: ${markers.implicitFlow}]`,
+			`request failed https://public:${markers.urlUserinfo}@x.invalid/path`,
+			`request failed https://x.invalid/path?access_token=${markers.urlQuery}&safe=retained`,
+			`//registry.npmjs.org/:_authToken=${markers.registryAuth}`,
+			`{"to\\u00ZZken":"${markers.malformedMiddle}"}`,
+			`{"${fullyEscapedKey(63)}":"${markers.escaped63}"}`,
+			`{"${fullyEscapedKey(64)}":"${markers.escaped64}"}`,
+			`{"${fullyEscapedKey(65)}":"${markers.escaped65}"}`,
 		].join("\n"),
 		markers: Object.values(markers),
 	};
@@ -694,4 +735,345 @@ test("cycle 8 tool-policy options reject one above every embedded hard ceiling",
 		}
 	}
 	assert.deepEqual(accepted, []);
+});
+
+test("cycle 9 capability schemas are bounded accessor-free deep immutable snapshots", () => {
+	const enumValues = ["read"];
+	const nestedSchema = {
+		type: "object",
+		additionalProperties: false,
+		properties: {
+			action: { type: "string", enum: enumValues },
+		},
+		required: ["action"],
+	};
+	const input = policyInput(false);
+	input.capabilities = [
+		{ ...capability("host_inspect"), parameters: nestedSchema },
+		capability("host_verify", { mutates: true }),
+	];
+	const policy = createToolPolicy(input);
+	const inspect = policy.tools.find((tool) => tool.name === "host_inspect");
+	assert.ok(inspect);
+	enumValues[0] = "delete";
+	const parameters = inspect.parameters as {
+		properties: { action: { enum: string[] } };
+	};
+
+	let accessorReads = 0;
+	const accessorProperties: Record<string, unknown> = {};
+	Object.defineProperty(accessorProperties, "action", {
+		enumerable: true,
+		get() {
+			accessorReads += 1;
+			return { type: "string" };
+		},
+	});
+	const cyclic: Record<string, unknown> = { type: "object", additionalProperties: false, properties: {} };
+	cyclic.self = cyclic;
+	const deep: Record<string, unknown> = { type: "object", additionalProperties: false, properties: {} };
+	let cursor = deep.properties as Record<string, unknown>;
+	for (let index = 0; index < 80; index += 1) {
+		const next = { type: "object", additionalProperties: false, properties: {} as Record<string, unknown> };
+		cursor[`level${index}`] = next;
+		cursor = next.properties;
+	}
+	const symbolSchema = { type: "object", additionalProperties: false, properties: {} } as Record<PropertyKey, unknown>;
+	symbolSchema[Symbol("hidden")] = "forbidden";
+	const sparseEnum = new Array<string>(1_000);
+	sparseEnum[999] = "read";
+	const sparse = {
+		type: "object",
+		additionalProperties: false,
+		properties: { action: { type: "string", enum: sparseEnum } },
+	};
+	let proxyOwnKeys = 0;
+	const proxy = new Proxy({ type: "object", additionalProperties: false, properties: {} }, {
+		ownKeys(target) {
+			proxyOwnKeys += 1;
+			return Reflect.ownKeys(target);
+		},
+	});
+	const invalidSchemas: Array<[string, Readonly<Record<string, unknown>>]> = [
+		["accessor", { type: "object", additionalProperties: false, properties: accessorProperties }],
+		["cycle", cyclic],
+		["deep", deep],
+		["symbol", symbolSchema],
+		["sparse", sparse],
+		["proxy", proxy],
+	];
+	const accepted: string[] = [];
+	for (const [name, parameters] of invalidSchemas) {
+		try {
+			createToolPolicy({
+				...policyInput(false),
+				authority: { ...policyInput(false).authority, capabilityNames: ["host_inspect"] },
+				capabilities: [{ ...capability("host_inspect"), parameters }],
+			});
+			accepted.push(name);
+		} catch (error) {
+			assert.ok(error instanceof ToolPolicyError, name);
+		}
+	}
+
+	assert.deepEqual({
+		retainedEnum: parameters.properties.action.enum,
+		deepFrozen: [
+			inspect.parameters,
+			(inspect.parameters as { properties: object }).properties,
+			parameters.properties.action,
+			parameters.properties.action.enum,
+		].every(Object.isFrozen),
+		accepted,
+		accessorReads,
+		proxyOwnKeys,
+		policyNamesFrozen: Object.isFrozen(policy.names),
+		policyToolsFrozen: Object.isFrozen(policy.tools),
+	}, {
+		retainedEnum: ["read"],
+		deepFrozen: true,
+		accepted: [],
+		accessorReads: 0,
+		proxyOwnKeys: 0,
+		policyNamesFrozen: true,
+		policyToolsFrozen: true,
+	});
+});
+
+test("cycle 9 workspace and capability results are captured once into immutable DTOs", async () => {
+	const workspaceInput = policyInput(false);
+	let changedReads = 0;
+	let mutationSummaryReads = 0;
+	workspaceInput.workspace.editText = async () => {
+		const result = {} as { changed: boolean; summary: string };
+		Object.defineProperties(result, {
+			changed: {
+				enumerable: true,
+				get() { changedReads += 1; return changedReads === 1; },
+			},
+			summary: {
+				enumerable: true,
+				get() { mutationSummaryReads += 1; return mutationSummaryReads === 1 ? "original mutation" : "mutated mutation"; },
+			},
+		});
+		return result;
+	};
+	let statusReads = 0;
+	let capabilitySummaryReads = 0;
+	let referencesReads = 0;
+	workspaceInput.capabilities = [
+		{
+			...capability("host_inspect"),
+			async execute() {
+				const result = {} as { status: "ok"; summary: string; references: string[] };
+				Object.defineProperties(result, {
+					status: { enumerable: true, get() { statusReads += 1; return "ok"; } },
+					summary: {
+						enumerable: true,
+						get() { capabilitySummaryReads += 1; return "original capability"; },
+					},
+					references: { enumerable: true, get() { referencesReads += 1; return ["original reference"]; } },
+				});
+				return result;
+			},
+		},
+		capability("host_verify", { mutates: true }),
+	];
+	const policy = createToolPolicy(workspaceInput);
+	const edit = policy.tools.find((tool) => tool.name === "workspace_edit");
+	const inspect = policy.tools.find((tool) => tool.name === "host_inspect");
+	assert.ok(edit);
+	assert.ok(inspect);
+	const editResult = await edit.execute("cycle9-edit", {
+		path: ".pi/extensions/shepherd/tool-policy.ts",
+		oldText: "old",
+		newText: "new",
+	}, undefined);
+	const capabilityResult = await inspect.execute("cycle9-inspect", { target: "owned" }, undefined);
+
+	assert.deepEqual({
+		edit: JSON.parse(text(editResult)),
+		capability: JSON.parse(text(capabilityResult)),
+		reads: { changedReads, mutationSummaryReads, statusReads, capabilitySummaryReads, referencesReads },
+		details: [editResult, capabilityResult].map((result) => [Object.hasOwn(result, "details"), result.details]),
+		immutableContent: [editResult, capabilityResult].every((result) =>
+			Object.isFrozen(result) && Object.isFrozen(result.content) && result.content.every(Object.isFrozen)),
+	}, {
+		edit: { changed: true, summary: "original mutation" },
+		capability: { status: "ok", summary: "original capability", references: ["original reference"] },
+		reads: { changedReads: 1, mutationSummaryReads: 1, statusReads: 1, capabilitySummaryReads: 1, referencesReads: 1 },
+		details: [[true, null], [true, null]],
+		immutableContent: true,
+	});
+});
+
+test("cycle 9 redaction grammar closes equals, opaque auth, URLs, implicit flow, and escaped-key boundaries", async () => {
+	const direct = cycle9SecretPayload("direct");
+	const workspacePayload = cycle9SecretPayload("workspace");
+	const mutationPayload = cycle9SecretPayload("mutation");
+	const capabilitySummary = cycle9SecretPayload("capability-summary");
+	const capabilityReference = cycle9SecretPayload("capability-reference");
+	const input = policyInput(false, workspacePayload.value);
+	input.workspace.editText = async () => ({ changed: true, summary: mutationPayload.value });
+	input.workspace.writeText = async () => ({ changed: true, summary: mutationPayload.value });
+	input.capabilities = [
+		{
+			...capability("host_inspect"),
+			async execute() {
+				return { status: "ok" as const, summary: capabilitySummary.value, references: capabilityReference.value.split("\n") };
+			},
+		},
+		capability("host_verify", { mutates: true }),
+	];
+	const policy = createToolPolicy(input, { maxToolOutputBytes: 64 * 1024 });
+	const read = policy.tools.find((tool) => tool.name === "workspace_read");
+	const edit = policy.tools.find((tool) => tool.name === "workspace_edit");
+	const inspect = policy.tools.find((tool) => tool.name === "host_inspect");
+	assert.ok(read);
+	assert.ok(edit);
+	assert.ok(inspect);
+	const rendered = [
+		redactSensitiveText(direct.value),
+		text(await read.execute("cycle9-read", { path: ".pi/extensions/shepherd/tool-policy.ts" }, undefined)),
+		text(await edit.execute("cycle9-edit", {
+			path: ".pi/extensions/shepherd/tool-policy.ts",
+			oldText: "old",
+			newText: "new",
+		}, undefined)),
+		text(await inspect.execute("cycle9-inspect", { target: "owned" }, undefined)),
+	].join("\n");
+	const markers = [
+		...direct.markers,
+		...workspacePayload.markers,
+		...mutationPayload.markers,
+		...capabilitySummary.markers,
+		...capabilityReference.markers,
+	];
+	assert.deepEqual(leakedMarkers(rendered, markers), []);
+	assert.match(rendered, /\[REDACTED\]/);
+});
+
+test("cycle 9 root-scoped reads deny credential stores before invoking the workspace", async () => {
+	const input = policyInput(true, "must never be read");
+	input.authority.readPrefixes = ["."];
+	input.authority.writePrefixes = [];
+	const policy = createToolPolicy(input);
+	const read = policy.tools.find((tool) => tool.name === "workspace_read");
+	assert.ok(read);
+	const paths = [
+		".npmrc",
+		"nested/.NPMRC",
+		".yarnrc",
+		".yarnrc.yml",
+		".pnpmrc",
+		".pypirc",
+		".netrc",
+		"nested/_NETRC",
+		".git-credentials",
+		".kube/config",
+		"nested/.KUBE/config",
+		".docker/config.json",
+		".config/containers/auth.json",
+		".aws/credentials",
+		".azure/accessTokens.json",
+		".config/gcloud/application_default_credentials.json",
+		".config/gh/hosts.yml",
+		"pip/pip.conf",
+		"nuget.config",
+	];
+	const accepted: string[] = [];
+	for (const path of paths) {
+		try {
+			await read.execute(`credential-${accepted.length}`, { path }, undefined);
+			accepted.push(path);
+		} catch (error) {
+			assert.ok(error instanceof ToolPolicyError, path);
+		}
+	}
+	assert.deepEqual({ accepted, reads: input.workspace.reads }, { accepted: [], reads: [] });
+});
+
+test("cycle 9 capability names deny sensitive noun and acquisition verb permutations for every role", () => {
+	const nouns = ["secret", "secrets", "credential", "credentials", "token", "tokens", "password", "passwords", "auth", "api_key"];
+	const verbs = ["read", "get", "list", "dump", "export", "acquire", "fetch", "retrieve"];
+	const accepted: string[] = [];
+	for (const readOnly of [true, false]) {
+		for (const noun of nouns) {
+			for (const verb of verbs) {
+				for (const suffix of [`${noun}_${verb}`, `${verb}_${noun}`]) {
+					const name = `host_${suffix}`;
+					try {
+						createToolPolicy({
+							...policyInput(readOnly),
+							authority: { ...policyInput(readOnly).authority, capabilityNames: [name] },
+							capabilities: [capability(name)],
+						});
+						accepted.push(`${readOnly ? "read" : "write"}:${name}`);
+					} catch (error) {
+						assert.ok(error instanceof ToolPolicyError, name);
+					}
+				}
+			}
+		}
+	}
+	assert.deepEqual(accepted, []);
+});
+
+test("cycle 9 Pi 0.80.6 validates a real custom-tool call and receives required result details offline", async () => {
+	type PiValidationTool = {
+		name: string;
+		description: string;
+		parameters: Readonly<Record<string, unknown>>;
+	};
+	type PiValidationCall = {
+		type: "toolCall";
+		id: string;
+		name: string;
+		arguments: Record<string, unknown>;
+	};
+	type PiValidationModule = {
+		validateToolArguments(tool: PiValidationTool, toolCall: PiValidationCall): Readonly<Record<string, unknown>>;
+	};
+	const piAiPath = join(
+		dirname(process.execPath),
+		"..",
+		"lib",
+		"node_modules",
+		"@earendil-works",
+		"pi-coding-agent",
+		"node_modules",
+		"@earendil-works",
+		"pi-ai",
+		"dist",
+		"index.js",
+	);
+	const piValidation = await import(pathToFileURL(piAiPath).href) as PiValidationModule;
+	const input = policyInput(true, "offline result");
+	const policy = createToolPolicy(input);
+	const read = policy.tools.find((tool) => tool.name === "workspace_read");
+	assert.ok(read);
+	const validCall: PiValidationCall = {
+		type: "toolCall",
+		id: "cycle9-offline-valid",
+		name: read.name,
+		arguments: { path: ".pi/extensions/shepherd/tool-policy.ts", offset: 0, limit: 32 },
+	};
+	const params = piValidation.validateToolArguments(read, validCall);
+	assert.throws(() => piValidation.validateToolArguments(read, {
+		...validCall,
+		id: "cycle9-offline-invalid",
+		arguments: { path: ".pi/extensions/shepherd/tool-policy.ts", forbidden: true },
+	}), /invalid|additional|unexpected|properties|argument/i);
+	const result = await read.execute(validCall.id, params, undefined);
+	assert.deepEqual({
+		reads: input.workspace.reads,
+		hasDetails: Object.hasOwn(result, "details"),
+		details: result.details,
+		content: text(result),
+	}, {
+		reads: [".pi/extensions/shepherd/tool-policy.ts"],
+		hasDetails: true,
+		details: null,
+		content: "offline result",
+	});
 });
