@@ -277,3 +277,45 @@ with 29 passes and 7 expected failures; GREEN/refactor was pushed at
 both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-base, and
 issue-owned path gates pass. Fresh independent exact-head review and integration remain
 parent-owned.
+
+## Exact-Head Correction Cycle 6 — `d918617a19749cd16d6bfcf3d2fee3e5146e7380`
+
+Fresh `codex_independent` xhigh review found three remaining text-transformer invariants. The
+admission and lifecycle implementation is clean and remains unchanged. Cycle 6 stays inside the
+issue-owned tool-policy source/tests, runtime consumer tests, and phase artifacts; production is
+locked at the reviewed head until a committed test-only RED exists.
+
+1. An unquoted sensitive value containing a nested mapping can cross a newline. The value-local
+   closer stack currently stops at the first line boundary, so the global flow stack consumes the
+   nested close as the outer close and a later same-line `client_secret` sibling can leak.
+2. The apostrophe in the unquoted scalar `rock-'n-roll` is treated as a quote opener because it
+   follows `-`. That false quote state can hide a later sensitive sibling.
+3. Every assignment recomputes its line end from the value start. Many assignments on one flow
+   line therefore rescan the remaining suffix and make the claimed monotonic scanner quadratic.
+
+The smallest correction preserves the typed lexer. A value-local balanced closer stack may span
+line boundaries and owns only the exact nested value, leaving the outer flow stack authoritative.
+Quote opening becomes token-context-aware: an apostrophe inside an unquoted word is ordinary text,
+while line-start, assignment, flow-delimiter, and YAML-list quote boundaries remain supported.
+Assignment decisions receive the scanner's current line end; line discovery advances monotonically
+instead of rescanning each suffix. An optional typed diagnostics sink counts line-boundary byte
+visits so 25/50/100 KiB single-line flow inputs can assert bounded near-linear work without wall
+clock thresholds.
+
+The seven expected RED failures cover multiline-nested and punctuation-apostrophe markers through
+direct calls, serialized prompts, `workspace_read`, typed capability output, and handoff
+summary/finding consumers, plus the deterministic scale guard. The harmless
+`{ flavor: rock-'n-roll, safe: retained }` control must remain byte-identical, and all 36 existing
+focused cases remain mandatory. Strict order is PLAN → test-only RED → smallest GREEN → REFACTOR/
+verify, with pushed checkpoints.
+
+The declared phase equivalent remains focused tests, complete Shepherd tests, pinned Pi 0.80.6
+strict TypeScript, offline Pi RPC, and diff/immutable-base/owned-scope only. No Go, connector,
+`make verify`, runtime-backed, live-GitHub, merge, or review-bot command is permitted. GSD adapter
+health passes while its 69-command registry rejects `programming-loop`, so
+`manual_gsd_fallback` remains recorded. Required skills reloaded: `gsd-programming-loop`,
+`javascript-testing-patterns`, `typescript-advanced-types`, `architecture-patterns`, and
+`github-issue-first-delivery`, plus required routing, issue contract, universal runtime loop,
+Pi-adapter, and runtime/Pi references. Execution is `local_critical_path`: all findings overlap
+the same issue-owned scanner/consumer tests, and the attempted read-only architecture sidecar was
+rejected by the runtime thread cap.

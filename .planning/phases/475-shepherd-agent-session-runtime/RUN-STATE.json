@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "completed",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": true,
-  "currentCycle": "correction_cycle_5_complete",
+  "verificationPassed": false,
+  "currentCycle": "correction_cycle_6_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -133,15 +133,20 @@
       "cycle": "correction_cycle_5_summary",
       "decision": "local_critical_path",
       "reason": "Cycle 5 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_6_plan",
+      "decision": "local_critical_path",
+      "reason": "All three transformer findings overlap the issue-owned scanner/consumer tests; a read-only architecture sidecar was rejected by the thread cap, so record multiline ownership, token-aware quote, and monotonic line-end corrections locally before tests."
     }
   ],
   "gates": {
-    "focusedTests": "green_36_passed_0_failed",
-    "fullShepherdTests": "green_173_passed_0_failed",
-    "strictTypeScriptPi0806": "green_focused_and_all_production",
-    "offlineRpcSmoke": "green_pm_shepherd_registered",
-    "diffCheck": "green",
-    "ownedScope": "green_immutable_base_and_issue_owned_paths",
+    "focusedTests": "pending_cycle_6_red",
+    "fullShepherdTests": "pending_cycle_6",
+    "strictTypeScriptPi0806": "pending_cycle_6",
+    "offlineRpcSmoke": "pending_cycle_6",
+    "diffCheck": "pending_cycle_6",
+    "ownedScope": "pending_cycle_6",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

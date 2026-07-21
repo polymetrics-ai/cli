@@ -108,3 +108,22 @@
   all-production strict TypeScript against pinned Pi 0.80.6; explicit offline RPC; diff,
   immutable-base, and issue-owned scope checks all pass. No Go, connector, `make verify`,
   runtime-backed, live-GitHub, merge, or review-bot gate was run.
+
+## Exact-Head Correction Cycle 6 Snapshot
+
+- Reviewed head: `d918617a19749cd16d6bfcf3d2fee3e5146e7380` on PR #486.
+- Role/route: correction, `openai-codex/gpt-5.6-sol` with `high` reasoning.
+- Objective: retain nested-value ownership across newlines, treat word-internal apostrophes as
+  unquoted scalar text, and make line-end discovery demonstrably near-linear.
+- Required RED: multiline nested-map and `rock-'n-roll` cases must remove later sensitive markers
+  at direct, prompt, `workspace_read`, typed-capability, and handoff boundaries; a safe apostrophe
+  control remains byte-identical; 25/50/100 KiB flows satisfy deterministic scanner-work bounds.
+- Architecture: a value-local closer stack spans lines without mutating the outer flow stack;
+  quote opening uses token context; assignment decisions reuse the current line end; an optional
+  typed diagnostics sink counts line-boundary byte visits.
+- Method: manual-GSD PLAN → test-only RED → smallest GREEN → REFACTOR, production locked until the
+  RED checkpoint is committed and pushed.
+- Execution decision: `local_critical_path`; a read-only architecture sidecar was attempted but the
+  runtime thread cap rejected it, and all findings overlap the issue-owned scanner/consumer scope.
+- Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`.
+- Verification status: pending Cycle 6 RED/GREEN and the declared Shepherd-only gates.

@@ -1,5 +1,10 @@
 # Verification — Issue #475
 
+> Superseded pending Cycle 6 revalidation. Exact-head review at
+> `d918617a19749cd16d6bfcf3d2fee3e5146e7380` found multiline nested-value ownership,
+> punctuation-apostrophe quote-boundary, and line-end complexity failures. Cycle 5 results below
+> remain historical evidence only.
+
 PR #486 correction Cycle 5 revalidation is complete. The independent-review findings against
 `e41f075a9b3bfb01d410296712740b54f943ba71` are covered by PLAN checkpoint `8087b539`, committed
 test-only RED checkpoint `333c7ad6`, and pass at implementation head

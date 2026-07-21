@@ -150,6 +150,53 @@
 | Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
 | Diff / scope | pass | immutable base retained; all changed paths remain issue #475-owned |
 
+## Cycle 6 — Multiline Value Ownership, Quote Boundaries, And Linear Work
+
+### PLAN
+
+- Status: captured against reviewed head
+  `d918617a19749cd16d6bfcf3d2fee3e5146e7380`; production remains locked until the pushed test-only
+  RED checkpoint.
+- GSD: `scripts/gsd doctor` passes; the 69-command registry rejects `programming-loop`, so the
+  existing `manual_gsd_fallback` remains active.
+- Skills/policy reloaded: `gsd-programming-loop`, `javascript-testing-patterns`,
+  `typescript-advanced-types`, `architecture-patterns`, `github-issue-first-delivery`, required
+  routing, issue-agent contract, universal runtime loop, Pi adapter, and runtime/Pi reference.
+- Orchestration: `local_critical_path`; a read-only architecture sidecar was attempted but rejected
+  by the four-thread runtime cap, while all findings overlap this worker's owned scanner/consumer
+  scope.
+- Multiline RED uses a nested mapping value that crosses a newline and closes before a later
+  same-line outer `client_secret`. Direct, serialized-prompt, `workspace_read`, typed capability,
+  and handoff summary/finding boundaries must remove its marker.
+- Apostrophe RED places `rock-'n-roll` before a later sensitive sibling at the same five consumer
+  boundaries. A harmless flow value containing only that scalar must remain byte-identical.
+- Complexity RED builds approximately 25/50/100 KiB single-line flow maps with many assignments.
+  An optional typed scan-metrics sink must report nonzero line-boundary byte visits bounded by a
+  constant per input byte and near-doubling between sizes; no wall-clock assertion is allowed.
+- Implementation contract: allow the exact value-local closer stack to span lines, make quote
+  opening token-context-aware, pass the scanner's current line end into assignment decisions, and
+  advance all subsequent line discovery monotonically. Preserve the typed lexer and all 36 prior
+  focused cases.
+- Expected focused command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+### RED
+
+- Status: pending test-only changes; production remains unchanged.
+- Expected result: 33 existing/new controls pass and 7 boundary/complexity regressions fail.
+
+### GREEN / REFACTOR / VERIFY
+
+- Status: blocked on committed RED evidence.
+- Declared gates: focused issue tests, complete Shepherd suite, pinned Pi 0.80.6 strict TypeScript,
+  pinned offline RPC, diff check, immutable base, and issue-owned paths only.
+- Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot
+  commands remain forbidden.
+
 ## Cycle 5 — Reservation Timer Ownership And Lexical State Machine
 
 ### PLAN

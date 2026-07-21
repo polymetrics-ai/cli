@@ -1,7 +1,7 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 5 complete; every declared Shepherd-only gate passes and Cycle
-4 evidence is superseded.
+Status: exact-head correction Cycle 6 planned; Cycle 5 evidence is superseded pending a fresh
+test-only RED and scanner correction.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -77,3 +77,10 @@ nesting, and balanced nested-value consumption. Both strict TypeScript scopes, e
 offline RPC, diff, immutable-base, and issue-owned path gates pass. Parent orchestration owns fresh
 exact-head review and integration; this lane did not invoke Go/connectors, `make verify`,
 runtime-backed services, live GitHub, merge, or review bots.
+
+Review at `d918617a19749cd16d6bfcf3d2fee3e5146e7380` found three narrower transformer invariants:
+nested value-local delimiter ownership stops at a newline, punctuation-adjacent apostrophes can
+open false quote state, and per-assignment line-end searches rescan large single-line suffixes.
+Cycle 6 keeps lifecycle code unchanged and corrects the existing typed scanner. Production remains
+locked until all five consumer boundaries plus a deterministic 25/50/100 KiB scanner-work guard
+produce the expected committed RED.
