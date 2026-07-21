@@ -228,3 +228,6 @@
 - Verification result: pending Cycle 9 RED and GREEN. Required evidence is focused/full Shepherd,
   both explicit Pi 0.80.6 strict TypeScript scopes, pinned offline RPC plus no-model tool exercise,
   and diff/base/head/owned-scope checks; `/bin/ps` and DNS blockers remain separately classified.
+- Read-only agent prompt and structured result: `agents/cycle9-seam-map.md` and
+  `traces/cycle9-seam-map-trace.md`. The result prohibits generic hostile-Proxy enumeration and
+  brittle imports from Pi's nested transitive TypeBox installation.

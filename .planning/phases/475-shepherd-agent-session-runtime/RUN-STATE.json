@@ -213,6 +213,11 @@
       "cycle": "correction_cycle_9_plan",
       "decision": "read_only_spawned",
       "reason": "One read-only explorer maps the two overlapping stable-head review ledgers while the isolated issue #475 lane retains the only mutating path for the consolidated Cycle 9 PLAN, RED, GREEN, and evidence chain."
+    },
+    {
+      "cycle": "correction_cycle_9_plan_amendment",
+      "decision": "local_critical_path",
+      "reason": "The completed read-only seam map is committed as the required multi-agent trace and binds Cycle 9 to closed-field terminal parsing plus public Pi 0.80.6 tool types without a brittle transitive TypeBox import or new dependency."
     }
   ],
   "gates": {

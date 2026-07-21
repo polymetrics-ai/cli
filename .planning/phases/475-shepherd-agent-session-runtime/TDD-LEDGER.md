@@ -669,6 +669,9 @@
   repository-required routing/runtime/issue/GSD references.
 - Orchestration: `read_only_spawned`; one read-only explorer maps overlapping seams while this
   isolated lane owns all writes.
+- Delegation trace: `AGENTS.md`, `agents/cycle9-seam-map.md`, and
+  `traces/cycle9-seam-map-trace.md`; the explorer made no edits and returned the closed-field event
+  parser and public-Pi-type/plain-schema constraints before RED.
 
 ### One behavior-level RED contract
 

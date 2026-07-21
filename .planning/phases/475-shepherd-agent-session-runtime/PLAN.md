@@ -633,3 +633,9 @@ ancestry, clean head, and issue-owned path scope.
 `github-issue-first-delivery`, plus required routing, Pi adapter, universal runtime loop, issue
 contract, and runtime/Pi guidance. Execution decision: `read_only_spawned`; a read-only seam mapper
 supports this plan while the isolated #475 worker retains the only mutating path.
+
+The completed read-only delegation is recorded in `AGENTS.md`, `agents/cycle9-seam-map.md`, and
+`traces/cycle9-seam-map-trace.md`. Its two binding design corrections are now part of this PLAN:
+known terminal DTOs must avoid generic hostile-Proxy enumeration, and Pi tools must use public Pi
+0.80.6 types plus supported plain-JSON-schema compatibility without a transitive TypeBox import or
+new dependency.
