@@ -88,3 +88,20 @@ all earlier pass statements are historical and do not satisfy the fourteen accep
       Claude/Copilot, reviewer, or merge action runs.
 - [x] Final evidence names exact GREEN `41e8e76e`; the evidence commit is reported in handoff
       because it cannot contain its own hash. Push remains deferred under the recorded DNS blocker.
+
+## Cycle 4 verification contract
+
+Status: planned against frozen candidate `d3b6b5e226b17db6ec8350163acdbb41368ec3bf`.
+All prior pass statements are historical until the consolidated correction is complete.
+
+- [ ] Artifact-only plan precedes every Cycle 4 test and production edit.
+- [ ] Exactly one behavior-level test/fixture-only RED covers all ten contracts with frozen
+      production blob proof.
+- [ ] Focused #478 passes after one architectural GREEN/refactor.
+- [ ] Strict owned and all-production TypeScript passes against pinned Pi 0.80.6 declarations.
+- [ ] Serialized Shepherd is recorded with unrelated sandbox failures separated from owned tests.
+- [ ] Pinned offline RPC, immutable base/ancestry, full-range diff, owned scope, and data scans pass.
+- [ ] No Go, connector, certification, runtime, `make`, network, GitHub, #479 controller,
+      reviewer, or merge action runs.
+- [ ] Exact PLAN/RED/GREEN/evidence SHAs and clean candidate are handed to the parent for two
+      fresh exact-head reviews.

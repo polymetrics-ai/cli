@@ -64,3 +64,18 @@
   bounds, partial effects, and secret safety.
 - Exclusions: #479 controller, parent planning artifacts, live GitHub, Go/connectors/certification,
   runtime services, `make`, external reviewer, integration, or merge.
+
+## Cycle 4 consolidated-review prompt
+
+- Inputs: `/tmp/478-REVIEW-CYCLE3-1.md` and `/tmp/478-REVIEW-CYCLE3-2.md`, read completely.
+- Frozen candidate/base: `d3b6b5e226b17db6ec8350163acdbb41368ec3bf` /
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`.
+- Implementation route: `openai-codex/gpt-5.6-sol:high`; parent-owned review is `xhigh`.
+- Strict sequence: artifact-only PLAN, exactly one all-contract behavior-level test/fixture RED
+  with frozen production blobs, one architectural GREEN/refactor, then authorized evidence.
+- Batch: stable receipt/observation split; canonical readiness topology; cancellable bounded and
+  redacted ports; sensitive text; current CI policy source; complete pseudo-ref rejection;
+  post-mutation CAS progression; descriptor-first dense bounds; tuple-safe identities; all Cycle 3
+  invariants and #479-facing typed ports.
+- Exclusions: #479/controller, parent artifacts, Go/connectors/certification/runtime/`make`,
+  network/live GitHub, reviewer, integration, or merge.

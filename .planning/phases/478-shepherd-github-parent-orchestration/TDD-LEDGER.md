@@ -160,3 +160,23 @@ has been captured.
   17-path scope, full-range diff, and credential-literal scan pass.
 - Serialized Shepherd ran 317 tests: 251 pass, 65 unrelated sandbox `spawn EPERM` failures, and
   1 intentional skip; every #478 test passes.
+
+## Cycle 4 consolidated-review RED matrix
+
+Frozen candidate: `d3b6b5e226b17db6ec8350163acdbb41368ec3bf`.
+
+| Contract | Behavior-level RED requirement | State |
+| --- | --- | --- |
+| stable receipt identity | observation revision/time and merged state can advance without identity drift; wrong planned head branch fails | planned RED |
+| canonical restart/readiness topology | recomputed wrong branch/base/marker/path receipts and PRs fail before broker/ready | planned RED |
+| bounded cancellable ports | every never-settling external read/mutation/source/workspace/broker/policy call aborts, drains its key, and late effects reconcile once | planned RED |
+| sensitive text and external errors | valid-field secret shapes never persist/publish/escape; Error/string/object/undefined rejections become bounded codes | planned RED |
+| current CI policy source | current exact policy passes; movement/incomplete/stale/wrong coordinates block existing plan/PR | planned RED |
+| complete pseudo-ref grammar | all pseudo/symbolic and segment variants fail across plan/policy/evidence/review/snapshot/receipt | planned RED |
+| post-mutation CAS progression | unchanged/regressed roster or ready revision and out-of-order stale writers fail | planned RED |
+| descriptor-first dense bounds | large dense and million-length sparse nested arrays reject before descriptor traversal/effects; exact lengths compare | planned RED |
+| collision-free tuple identities | colon-bearing distinct session/run pairs pass and exact tuple duplicates reject | planned RED |
+| Cycle 3 retention | prior 53 focused contracts and partial-effect/proxy/accessor/cycle/error cases remain green after correction | planned RED |
+
+The next commit after the Cycle 4 plan checkpoint may change only tests and issue-478 fixtures.
+Production blob identity and the focused expected-failure matrix must be recorded before GREEN.

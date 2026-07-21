@@ -111,3 +111,13 @@
   full-range diff, 17-path scope, and credential scan pass.
 - Serialized Shepherd: 317 total, 251 pass, 65 unrelated process-identity `spawn EPERM`
   failures, 1 intentional skip. No prohibited or live gate ran.
+
+## 2026-07-22 Cycle 4 plan
+
+- Verified clean frozen head `d3b6b5e2`, immutable base `3addb1f4`, and production blob IDs.
+- Read both final Cycle 3 review ledgers completely and consolidated every finding into ten
+  contracts before production/test changes.
+- Loaded `gsd-programming-loop`, required routing, Pi adapter, runtime reference, and required
+  project artifacts. `scripts/gsd doctor` passes; the missing adapter command activates
+  `manual_gsd_fallback`.
+- Collaboration capacity was full, so this isolated worker remains `local_critical_path`.

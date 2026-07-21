@@ -284,3 +284,73 @@ orchestration. No Claude/Copilot finding or controller/#479 work is imported.
 - [x] Architectural GREEN/refactor commit: `41e8e76e`.
 - [x] Focused and authorized broad verification evidence commit (this artifact checkpoint).
 - [ ] Push/PR #487 synchronization when network access returns.
+
+## Cycle 4 consolidated stable-head correction: 2026-07-22
+
+Two final deep-review ledgers examined frozen candidate
+`d3b6b5e226b17db6ec8350163acdbb41368ec3bf` against immutable base
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. All findings are accepted as one ten-contract
+correction batch. Implementation uses `openai-codex/gpt-5.6-sol:high`; fresh review remains
+parent-owned `xhigh`.
+
+Required routing loaded: `gsd-programming-loop`, required-skills routing, the Pi adapter
+reference, and the Pi/runtime integration reference. `scripts/gsd doctor` passes, but
+`scripts/gsd prompt programming-loop ...` is unavailable, so the recorded route is
+`manual_gsd_fallback`. The collaboration runtime is at its thread cap, so execution is the
+`local_critical_path`.
+
+### Cycle 4 correction contract
+
+1. Split stable integrated-PR identity from volatile observation evidence. Stable identity binds
+   repository, work item, PR, generation, marker, both branches, reviewed SHAs, exact paths/scopes,
+   and required-policy identity; observation revision/time remains separate. Later identical
+   topology and merged-state observations reuse while wrong head branch fails.
+2. At restart and readiness, reconstruct the authoritative materialized child from its canonical
+   issue and validate current PR plus receipt through the same topology used at integration,
+   including exact branches/marker/generation/SHAs, path-within-scope, stable identity, controller
+   provenance, and durable transport provenance. Recomputed digests never authorize wrong topology.
+3. Put a bounded deadline and `AbortSignal` on every transport, evidence, workspace, policy, and
+   broker call. Normalize timeout into an uncertain typed failure, release keyed queues in
+   `finally`, and reconcile late effects by durable mutation key without unmanaged bare races.
+4. Apply one sensitive-text grammar before canonical persistence or outbound human text, covering
+   titles, objectives, verification, decision questions, and issue/PR/roster bodies. Normalize
+   every external rejection shape to bounded redacted typed errors/codes.
+5. Add a controller-owned `RequiredCheckPolicySource` that returns exactly one complete current
+   repository/base observation with revision, digest, and observation time. Re-read immediately
+   before child integration and parent readiness; incomplete, stale, moved, or wrong-coordinate
+   policy blocks the existing generation.
+6. Centralize one canonical Git branch/ref validator and reject the complete pseudo/symbolic set:
+   `HEAD`, `FETCH_HEAD`, `ORIG_HEAD`, `MERGE_HEAD`, `CHERRY_PICK_HEAD`,
+   `REVERT_HEAD`, `REBASE_HEAD`, `BISECT_HEAD`, `AUTO_MERGE`, `refs/*`, and segment forms.
+7. Validate post-mutation CAS semantics. Durable result intent/revision and authoritative resource
+   revision must strictly advance beyond the expected revision for roster and parent-ready
+   mutations; stale/regressing out-of-order writers fail.
+8. Pre-bound every array/envelope from its own `length` data descriptor before descriptor/key
+   materialization, require dense indices, and compare exact array lengths in canonical equality.
+   Large dense and million-length sparse nested values reject before traversal or effects.
+9. Use collision-free tuple keys for session/run and every compound identity. Colon-bearing
+   distinct pairs remain distinct while exact duplicate tuples reject.
+10. Retain every Cycle 3 invariant, extend partial-effect/proxy/accessor/cycle/bounds/error
+    regressions, and preserve the typed #479-facing ports without controller implementation.
+
+### Cycle 4 strict lifecycle
+
+1. Commit this artifact-only plan while all production and test blobs equal frozen `d3b6b5e2`.
+2. Make exactly one behavior-level test/fixture-only RED commit covering all ten contracts. Before
+   committing, prove `github-orchestrator.ts`, `github-evidence.ts`, and `review-router.ts`
+   retain blob IDs `ed576e64`, `a3076e39`, and `ca0c8116`.
+3. Implement one architectural GREEN/refactor only in #478-owned modules/tests/fixtures.
+4. Run focused #478, serialized Shepherd, strict owned and all-production TypeScript against
+   pinned Pi 0.80.6, offline RPC, immutable-base/diff/scope/data scans. Record unrelated sandbox
+   `spawn EPERM` separately. Do not run Go, connectors, certification, runtime, `make`, network,
+   live GitHub, #479 controller, reviewer, or merge actions.
+5. Commit evidence and report exact PLAN/RED/GREEN/evidence SHAs plus the clean candidate for two
+   fresh parent-owned reviews. Preserve the existing DNS-deferred local-only state.
+
+### Cycle 4 checkpoints
+
+- [ ] Artifact-only PLAN commit.
+- [ ] One all-contract test/fixture-only RED with frozen production blob proof.
+- [ ] One architectural GREEN/refactor commit.
+- [ ] Authorized verification/evidence commit and clean candidate.
+- [ ] Two fresh exact-head independent reviews remain parent-owned.

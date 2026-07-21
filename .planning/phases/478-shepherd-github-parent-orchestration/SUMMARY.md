@@ -61,3 +61,9 @@ Cycle 3 is locally complete at GREEN `41e8e76e`: all fourteen invariants are imp
 discovery, immutable-base/diff/17-path ownership, and credential scans pass. The serialized suite
 records 251 pass, 65 unrelated sandbox `spawn EPERM` failures, and one intentional skip across
 317 tests; every #478 test passes. Exact-head review and publication remain parent-owned/deferred.
+
+Cycle 4 begins from frozen `d3b6b5e2` after two final deep reviews. The consolidated correction
+separates stable receipt topology from observations, validates canonical child topology at restart
+and readiness, introduces bounded cancellable/redacted external ports and a current policy source,
+completes pseudo-ref/CAS/dense-bound/tuple-key safety, and retains all Cycle 3 contracts. This
+artifact-only checkpoint precedes the single required test-only RED; production/tests are unchanged.

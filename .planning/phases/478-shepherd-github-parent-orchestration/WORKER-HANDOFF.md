@@ -138,3 +138,13 @@ session-attestation contract and fixtures required to verify independent-review 
   base/ancestry, full-range diff, 17-path scope, and credential scan pass.
 - Serialized Shepherd: 317 total, 251 pass, 65 unrelated sandbox `spawn EPERM` failures, and
   1 intentional skip; every #478 test passes. No prohibited or live action ran.
+
+## Cycle 4 correction in progress
+
+- Frozen candidate `d3b6b5e2`; immutable base `3addb1f4`; initial worktree clean.
+- Both final ledgers were read completely and consolidated into ten contracts before production
+  changes. Required `gsd-programming-loop`/routing/runtime references were loaded.
+- `scripts/gsd doctor` passes; the adapter lacks `programming-loop`, so
+  `manual_gsd_fallback` is active. Thread capacity forces `local_critical_path`.
+- Implementation route is `openai-codex/gpt-5.6-sol:high`. Parent owns #479, planning, two fresh
+  exact-head reviews, publication, integration, and human merge gates.
