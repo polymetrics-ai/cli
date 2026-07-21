@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "phase": "476-shepherd-worktree-git-adapter",
   "issue": 476,
-  "status": "completed",
+  "status": "running",
   "gsdMode": "manual_gsd_fallback",
-  "verificationPassed": true,
-  "verificationBlocker": null,
+  "verificationPassed": false,
+  "verificationBlocker": "Independent xhigh re-review of d5181cd2 found mutation-capability fencing, complete handoff scope auditing, and effective push-endpoint binding blockers.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -66,6 +66,16 @@
       "cycle": "correction-summary",
       "decision": "local_critical_path",
       "reason": "PR #484 and concrete reviewed/correction checkpoint evidence are recorded; fresh exact-head independent review remains parent-owned."
+    },
+    {
+      "cycle": "correction2-plan",
+      "decision": "local_critical_path",
+      "reason": "The three remaining blockers share the issue-owned Git/workspace adapter boundary; deterministic RED cases precede all production edits and only parent-authorized narrow gates will run."
+    },
+    {
+      "cycle": "correction2-red",
+      "decision": "local_critical_path",
+      "reason": "Focused 25-test run produced four deterministic failures: alternate pushurl contamination, post-release mutation through a replacement lease, missing capability-bound mutation API/release serialization, and omitted committed out-of-scope handoff paths."
     }
   ]
 }

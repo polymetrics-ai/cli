@@ -226,3 +226,31 @@ test("pushes only the canonical branch and verifies the exact remote head", asyn
 	const push = requests.find((request) => request.args[0] === "push");
 	assert.deepEqual(push?.args, ["push", "--porcelain", "origin", branch]);
 });
+
+test("rejects a changed effective push endpoint before the alternate remote receives objects", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const alternate = join(fixture.root, "alternate-push.git");
+	await git(fixture.root, "init", "--bare", "--initial-branch=main", alternate);
+	const adapter = new GitAdapter();
+	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+	await git(fixture.coordinator, "switch", "-c", branch);
+	const binding = await adapter.inspect(fixture.coordinator);
+	await git(fixture.coordinator, "config", "remote.origin.pushurl", alternate);
+
+	const [push] = await Promise.allSettled([adapter.pushIssueBranch(binding, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: fixture.parentHead,
+		defaultBranch: "main",
+	})]);
+	const [alternateRef, alternateObject] = await Promise.allSettled([
+		git(alternate, "show-ref", "--verify", `refs/heads/${branch}`),
+		git(alternate, "cat-file", "-e", `${fixture.parentHead}^{commit}`),
+	]);
+	assert.equal(alternateRef.status, "rejected", "the changed pushurl received the issue branch before validation");
+	assert.equal(alternateObject.status, "rejected", "the changed pushurl received Git objects before validation");
+	assert.equal(push.status, "rejected");
+	if (push.status === "rejected") assert.match(String(push.reason), /push endpoint|remote.*mismatch/i);
+});

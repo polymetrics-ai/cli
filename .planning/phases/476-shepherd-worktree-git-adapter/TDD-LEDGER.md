@@ -13,6 +13,9 @@ Tests use bounded temporary local Git repositories and no credentials or network
 | Correction: state identity parity | Focused run: adapter identity differed from `target-evidence.ts` for the same checkout | v1 repository/worktree identity parity passes for coordinator and linked worktree | Local/HTTPS/SSH/SCP/file/no-origin parity; strict TypeScript and full suite pass | green/refactored |
 | Correction: immutable handoff claim | Focused run: all three mutable handoff variants were accepted and persisted claim lacked `allowedScopes` | atomic claim/binding records reject workspace and persisted-field tampering | Direct live-object and on-disk mutation cases; full suite passes | green/refactored |
 | Correction: exclusive writable lease | Focused run: both same-owner contenders fulfilled; returned workspace had no lease capability | same-owner race yields one lease; release/retry and dead-owner resume pass | Existing append-only `FileStateStore` fencing reused; full suite passes | green/refactored |
+| Correction 2: mutation capability fencing | Focused run: released claim committed through a replacement lease; workspace had no capability-bound mutation API | pending | pending | red |
+| Correction 2: complete handoff scope | Focused run: a passed handoff omitted a clean committed path outside immutable scopes | pending | pending | red |
+| Correction 2: effective push endpoint | Focused run: alternate local bare `pushurl` received the issue ref and object before the eventual verification error | pending | pending | red |
 
 Correction RED command: `node --test .pi/extensions/shepherd/workspace-adapter.test.ts
 .pi/extensions/shepherd/git-adapter.test.ts` → 21 tests, 16 passed, 5 failed. The five failures map
@@ -25,6 +28,13 @@ Node type surface.
 Correction REFACTOR/broad evidence: focused 21/21; serialized full Shepherd 158/158; strict
 TypeScript pass; offline Pi RPC returned `true`; exact diff/scope hygiene pass. Test-file
 serialization addresses concurrent Git load without changing SDK deadline assertions.
+
+Correction 2 is active from reviewed head `d5181cd25d108e7748309216b14d91313f112fcd`.
+Production remained unchanged for the RED command: `node --test
+.pi/extensions/shepherd/workspace-adapter.test.ts .pi/extensions/shepherd/git-adapter.test.ts` →
+25 tests, 21 passed, 4 failed. Failures were: alternate `pushurl` received the issue branch;
+released claim retained commit authority; no adapter-minted workspace mutation API existed for
+release serialization; and handoff passed after omitting a committed out-of-scope path.
 
 ## Required safety cases
 

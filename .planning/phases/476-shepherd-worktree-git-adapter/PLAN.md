@@ -105,3 +105,23 @@ blocking contracts. This correction cycle keeps the original base and owned-file
    TypeScript, offline Pi RPC discovery, and exact diff/scope checks. Serial test-file execution
    isolates existing SDK wall-clock deadline assertions from the Git fixture process load without
    changing production or test timeouts.
+
+## Exact-head correction cycle 2
+
+Independent xhigh re-review of `d5181cd25d108e7748309216b14d91313f112fcd` found three
+remaining mutation-boundary blockers. This cycle preserves the immutable base and issue-owned
+file boundary:
+
+1. Add deterministic RED coverage proving a released claim cannot mutate after a replacement
+   lease is active, and proving release must serialize behind an already accepted Git mutation.
+   Then move mutation authority to an adapter-minted, identity-checked lease capability and require
+   it for fetch, worktree creation, commit, and push.
+2. Add RED handoff coverage for a clean commit containing both allowed and out-of-scope paths.
+   Then inspect the complete canonical `baseHead..head` path set before validating immutable scopes;
+   dirty paths receive the same validation and no successful handoff may omit a changed path.
+3. Add a local bare-repository RED proving a late `remote.origin.pushurl` cannot receive refs or
+   objects. Then bind Git's effective fetch/push endpoints during inspection, revalidate them before
+   push, reject divergence, and execute plus verify against the exact validated endpoint.
+4. Checkpoint and push RED before production edits, then checkpoint GREEN/refactor/evidence. Run
+   only focused #476 tests, serialized Shepherd tests, strict cached Pi 0.80.6 TypeScript, offline
+   Pi RPC, and exact diff/scope gates; do not run Go, connector, or `make` gates.

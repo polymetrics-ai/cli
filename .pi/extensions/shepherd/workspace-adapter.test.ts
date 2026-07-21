@@ -1,9 +1,14 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import { mkdir, readFile, symlink, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import test from "node:test";
 
-import { GitAdapter, canonicalIssueBranch } from "./git-adapter.ts";
+import {
+	GitAdapter,
+	canonicalIssueBranch,
+	type GitCommandExecutor,
+} from "./git-adapter.ts";
 import { createLocalGitFixture, git, write } from "./issue-476-git-fixture.ts";
 import {
 	WorkspaceAdapter,
@@ -13,6 +18,25 @@ import {
 
 function adapterWithLeaseOptions(leaseOptions: NonNullable<WorkspaceAdapterOptions["leaseOptions"]>): WorkspaceAdapter {
 	return new WorkspaceAdapter(new GitAdapter(), { leaseOptions });
+}
+
+function executorGatedOnAdd(started: () => void, waitUntilReleased: Promise<void>): GitCommandExecutor {
+	return async (request) => {
+		if (request.args[0] === "add") {
+			started();
+			await waitUntilReleased;
+		}
+		return new Promise((resolve, reject) => {
+			execFile("git", request.args, {
+				cwd: request.cwd,
+				encoding: "buffer",
+				env: request.env,
+				maxBuffer: request.maxOutputBytes,
+				timeout: request.timeoutMs,
+				killSignal: "SIGTERM",
+			}, (error, stdout) => error ? reject(error) : resolve(stdout));
+		});
+	};
 }
 
 async function requestFor(
@@ -114,6 +138,67 @@ test("same-owner overlapping retries receive one writable lease and release perm
 	assert.equal(retry.reused, true);
 	assert.equal(retry.worktreeIdentity, first.worktreeIdentity);
 	await retry.release();
+});
+
+test("a released workspace cannot commit after an exact replacement lease becomes active", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const gitAdapter = new GitAdapter();
+	const adapter = new WorkspaceAdapter(gitAdapter);
+	const request = await requestFor(fixture);
+	const released = await adapter.claim(request);
+	await released.release();
+	const replacement = await adapter.claim(request);
+	await write(replacement.cwd, ".pi/extensions/shepherd/post-release.ts", "export const fenced = true;\n");
+	const before = (await git(replacement.cwd, "rev-parse", "HEAD")).trim();
+	const [mutation] = await Promise.allSettled([
+		gitAdapter.commitIssueChanges(released, {
+			issue: released.issue,
+			slug: released.slug,
+			branch: released.branch,
+			expectedHead: before,
+			message: "test(shepherd): reject released mutator",
+			scopes: [".pi/extensions/shepherd/post-release.ts"],
+		}),
+	]);
+	const after = (await git(replacement.cwd, "rev-parse", "HEAD")).trim();
+	await replacement.release();
+	assert.equal(mutation.status, "rejected", "the released claim retained a usable Git mutation authority");
+	assert.equal(after, before, "a released claim advanced the replacement owner's branch");
+});
+
+test("release waits for an already accepted Git mutation to finish", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	let signalAddStarted!: () => void;
+	const addStarted = new Promise<void>((resolve) => signalAddStarted = resolve);
+	let unblockAdd!: () => void;
+	const addGate = new Promise<void>((resolve) => unblockAdd = resolve);
+	const gitAdapter = new GitAdapter({ execute: executorGatedOnAdd(signalAddStarted, addGate) });
+	const adapter = new WorkspaceAdapter(gitAdapter);
+	const workspace = await adapter.claim(await requestFor(fixture));
+	t.after(() => workspace.release().catch(() => undefined));
+	await write(workspace.cwd, ".pi/extensions/shepherd/in-flight.ts", "export const inFlight = true;\n");
+	const commitIssueChanges = Reflect.get(adapter, "commitIssueChanges");
+	assert.equal(typeof commitIssueChanges, "function", "workspace mutations require an adapter-minted active claim capability");
+	const mutation = Reflect.apply(commitIssueChanges, adapter, [workspace, {
+		issue: workspace.issue,
+		slug: workspace.slug,
+		branch: workspace.branch,
+		expectedHead: workspace.head,
+		message: "test(shepherd): serialize release",
+		scopes: [".pi/extensions/shepherd/in-flight.ts"],
+	}]) as Promise<unknown>;
+	await addStarted;
+	let releaseSettled = false;
+	const release = workspace.release().finally(() => releaseSettled = true);
+	await new Promise<void>((resolve) => setImmediate(resolve));
+	const settledWhileMutationBlocked = releaseSettled;
+	unblockAdd();
+	const [mutationResult, releaseResult] = await Promise.allSettled([mutation, release]);
+	assert.equal(settledWhileMutationBlocked, false, "release completed while an accepted mutation was in flight");
+	assert.equal(mutationResult.status, "fulfilled");
+	assert.equal(releaseResult.status, "fulfilled");
 });
 
 test("resume recovers an exact stale same-request lease without reviving the fenced owner", async (t) => {
@@ -241,6 +326,23 @@ test("handoff fails closed if the immutable persisted claim is modified after ac
 	await writeFile(claimPath, `${JSON.stringify(persisted)}\n`, { mode: 0o600 });
 	await assert.rejects(adapter.captureHandoff(workspace, "passed"), /persisted|claim|immutable/i);
 	await workspace.release();
+});
+
+test("handoff audits the complete committed path set before applying immutable scopes", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const adapter = new WorkspaceAdapter(new GitAdapter());
+	const workspace = await adapter.claim(await requestFor(fixture, {
+		allowedScopes: [".pi/extensions/shepherd"],
+	}));
+	await write(workspace.cwd, ".pi/extensions/shepherd/allowed.ts", "export const allowed = true;\n");
+	await write(workspace.cwd, "outside.txt", "must not be omitted\n");
+	await git(workspace.cwd, "add", "--", ".pi/extensions/shepherd/allowed.ts", "outside.txt");
+	await git(workspace.cwd, "commit", "-m", "test(shepherd): mixed handoff scope");
+	const [handoff] = await Promise.allSettled([adapter.captureHandoff(workspace, "passed")]);
+	await workspace.release();
+	assert.equal(handoff.status, "rejected", "handoff passed after omitting a committed path outside the immutable scopes");
+	if (handoff.status === "rejected") assert.match(String(handoff.reason), /outside.*scope|scope.*outside/i);
 });
 
 test("fails handoff exact-head verification when the parent base is not an ancestor", async (t) => {

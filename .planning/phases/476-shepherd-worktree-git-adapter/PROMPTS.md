@@ -26,3 +26,16 @@
 - Result: correction RED `36860ec5`, GREEN `e3669fc4`, and refactor `d91b41a8`; focused 21/21,
   serialized full Shepherd 158/158, strict TypeScript, offline Pi 0.80.6 RPC, and diff/scope pass.
 - Ready stacked PR: https://github.com/polymetrics-ai/cli/pull/484.
+
+## Exact-head review correction 2
+
+- Reviewed head: `d5181cd25d108e7748309216b14d91313f112fcd`.
+- Blockers: Git mutations are not fenced by the active workspace lease; handoff filters committed
+  paths before auditing immutable scope; and push does not bind Git's effective push endpoint.
+- RED plan: deterministic released/replacement and in-flight-release mutation cases, a clean
+  mixed-scope commit, and a separate local bare `pushurl` that must remain object-free.
+- RED result: focused 25 tests produced 21 passes and four expected failures: the alternate
+  `pushurl` received the branch, a released claim committed through its replacement, the required
+  capability-bound mutation API was absent, and handoff omitted the out-of-scope committed path.
+- Authorized gates remain focused TypeScript/Shepherd/Pi/diff-only; no Go, connector, or
+  `make verify` run.
