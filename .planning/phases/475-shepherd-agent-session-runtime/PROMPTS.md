@@ -27,4 +27,7 @@
   runtime leave no safe independent delegation seam.
 - RED result: focused command exited 1 with 19 passed / 5 expected failures across late creation,
   direct redaction, prompt serialization, tool output, and handoff fields; production was unchanged.
-- Verification status: GREEN implementation pending; prior terminal evidence is superseded.
+- GREEN result: the same focused command exits 0 with 24 passed / 0 failed after the minimal
+  creation-ownership continuation and quoted-redaction grammar were implemented.
+- Verification status: REFACTOR and declared correction gates pending; prior terminal evidence is
+  superseded.

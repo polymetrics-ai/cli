@@ -112,7 +112,15 @@
 
 ### GREEN
 
-- Status: ready; RED evidence is committed before production changes.
+- Status: captured after RED commit `93b9eca9`.
+- Minimal implementation:
+  - added a claimed/abandoned creation owner whose attached continuation cleans a session that
+    resolves after the bounded request teardown has stopped waiting;
+  - preserved bounded run completion while coalescing late abort/wait/dispose exactly once and
+    quarantining any eventual cleanup failure;
+  - extended line-bounded redaction for quoted JSON/YAML secret assignments and quoted/unquoted
+    Authorization Bearer values while preserving their syntax delimiters.
+- Focused command result: exit 0, 24 passed / 0 failed.
 
 ### REFACTOR / VERIFY
 

@@ -339,9 +339,13 @@ export function validateScopedPath(path: string, prefixes: readonly string[]): s
 export function redactSensitiveText(value: string): string {
 	if (typeof value !== "string") return "[REDACTED]";
 	return value
-		.replace(/\b(authorization\s*:\s*bearer\s+)[^\s"']+/gi, "$1[REDACTED]")
-		.replace(/\b(api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|passwd|secret)\b(\s*[:=]\s*)[^\s,;"']+/gi, "$1$2[REDACTED]")
-		.replace(/-----BEGIN [^-]+ PRIVATE KEY-----[\s\S]*?-----END [^-]+ PRIVATE KEY-----/gi, "[REDACTED PRIVATE KEY]");
+		.replace(/-----BEGIN [^-]+ PRIVATE KEY-----[\s\S]*?-----END [^-]+ PRIVATE KEY-----/gi, "[REDACTED PRIVATE KEY]")
+		.replace(/\b(authorization\b["']?\s*[:=]\s*)"(\s*bearer\s+)(?:\\.|[^"\\\r\n])*"/gi, '$1"$2[REDACTED]"')
+		.replace(/\b(authorization\b["']?\s*[:=]\s*)'(\s*bearer\s+)(?:''|[^'\r\n])*'/gi, "$1'$2[REDACTED]'")
+		.replace(/\b(authorization\b["']?\s*[:=]\s*bearer\s+)[^\s,;"'\]}\r\n]+/gi, "$1[REDACTED]")
+		.replace(/\b(api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|passwd|secret)\b(["']?\s*[:=]\s*)"(?:\\.|[^"\\\r\n])*"/gi, '$1$2"[REDACTED]"')
+		.replace(/\b(api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|passwd|secret)\b(["']?\s*[:=]\s*)'(?:''|[^'\r\n])*'/gi, "$1$2'[REDACTED]'")
+		.replace(/\b(api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|passwd|secret)\b(["']?\s*[:=]\s*)[^\s,;"'\]}\r\n]+/gi, "$1$2[REDACTED]");
 }
 
 function validateCapabilityName(name: string): void {

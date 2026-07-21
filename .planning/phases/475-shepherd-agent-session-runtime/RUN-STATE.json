@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_red",
+  "currentCycle": "correction_green",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -43,10 +43,15 @@
       "cycle": "correction_red",
       "decision": "local_critical_path",
       "reason": "Focused test-only regressions produced five expected failures with production unchanged; proceed to the smallest owned lifecycle and redaction fixes."
+    },
+    {
+      "cycle": "correction_green",
+      "decision": "local_critical_path",
+      "reason": "The minimal claimed/abandoned creation owner and quoted-value redaction grammar made all 24 focused tests pass; continue to refactor and the declared Shepherd-only gates."
     }
   ],
   "gates": {
-    "focusedTests": "red_captured_19_passed_5_expected_failures",
+    "focusedTests": "passed_24_of_24_green",
     "fullShepherdTests": "pending_correction",
     "strictTypeScriptPi0806": "pending_correction",
     "offlineRpcSmoke": "pending_correction",

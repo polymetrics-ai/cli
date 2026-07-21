@@ -229,6 +229,65 @@ class OwnedSession {
 	}
 }
 
+class SessionCreationOwnership {
+	readonly promise: Promise<RuntimeSessionResult>;
+	readonly #onCleanupFailure: (error: unknown) => void;
+	#state: "pending" | "claimed" | "abandoned" = "pending";
+	#created: RuntimeSessionResult | undefined;
+	#lateCleanupStarted = false;
+
+	constructor(
+		promise: Promise<RuntimeSessionResult>,
+		onCleanupFailure: (error: unknown) => void,
+	) {
+		this.promise = promise;
+		this.#onCleanupFailure = onCleanupFailure;
+		void promise.then(
+			(created) => {
+				this.#created = created;
+				if (this.#state === "abandoned") this.#startLateCleanup(created);
+			},
+			() => undefined,
+		);
+	}
+
+	claim(created: RuntimeSessionResult): OwnedSession {
+		if (this.#state !== "pending") {
+			throw new AgentSessionRuntimeError("AgentSession creation ownership was already settled");
+		}
+		this.#state = "claimed";
+		return new OwnedSession(created.session);
+	}
+
+	abandon(): void {
+		if (this.#state !== "pending") return;
+		this.#state = "abandoned";
+		if (this.#created) this.#startLateCleanup(this.#created);
+	}
+
+	#startLateCleanup(created: RuntimeSessionResult): void {
+		if (this.#lateCleanupStarted) return;
+		this.#lateCleanupStarted = true;
+		const owned = new OwnedSession(created.session);
+		void this.#cleanup(owned);
+	}
+
+	async #cleanup(owned: OwnedSession): Promise<void> {
+		let firstError: unknown;
+		try {
+			await owned.abortOnce();
+		} catch (error) {
+			firstError = error;
+		}
+		try {
+			await owned.joinOnce();
+		} catch (error) {
+			firstError ??= error;
+		}
+		if (firstError !== undefined) this.#onCleanupFailure(firstError);
+	}
+}
+
 interface ActiveRun {
 	key: string;
 	runId: string;
@@ -387,7 +446,7 @@ export class ShepherdAgentSessionRuntime {
 			},
 		});
 
-		let createPromise: Promise<RuntimeSessionResult> | undefined;
+		let creation: SessionCreationOwnership | undefined;
 		let reloadPromise: Promise<void> | undefined;
 		let owned: OwnedSession | undefined;
 		let primaryFailure: unknown;
@@ -422,7 +481,7 @@ export class ShepherdAgentSessionRuntime {
 			await scope.race(reloadPromise);
 			scope.assertActive();
 
-			createPromise = Promise.resolve().then(() => this.#sdk.createAgentSession({
+			const createPromise = Promise.resolve().then(() => this.#sdk.createAgentSession({
 				cwd: request.workspace.cwd,
 				agentDir: this.#sdk.getAgentDir(),
 				model,
@@ -436,8 +495,11 @@ export class ShepherdAgentSessionRuntime {
 				sessionManager,
 				settingsManager,
 			} as unknown as CreateAgentSessionOptions));
+			creation = new SessionCreationOwnership(createPromise, (error) => {
+				this.#quarantineFailure ??= error;
+			});
 			const created = await scope.race(createPromise);
-			owned = new OwnedSession(created.session);
+			owned = creation.claim(created);
 			active.owned = owned;
 			scope.setOnCancel(() => { void owned?.abortOnce().catch(() => undefined); });
 			scope.assertActive();
@@ -468,11 +530,15 @@ export class ShepherdAgentSessionRuntime {
 			if (reloadPromise) {
 				await bounded(reloadPromise, this.#options.cleanupTimeoutMs, "resource loader settlement");
 			}
-			if (!owned && createPromise) {
-				const created = await bounded(createPromise, this.#options.cleanupTimeoutMs, "late session creation");
-				owned = new OwnedSession(created.session);
-				active.owned = owned;
-				await bounded(owned.abortOnce(), this.#options.cleanupTimeoutMs, "late session abort");
+			if (!owned && creation) {
+				const settlement = await settleWithin(creation.promise, this.#options.cleanupTimeoutMs);
+				if (settlement.settled) {
+					owned = creation.claim(settlement.value);
+					active.owned = owned;
+					await bounded(owned.abortOnce(), this.#options.cleanupTimeoutMs, "late session abort");
+				} else {
+					creation.abandon();
+				}
 			}
 			if (owned) {
 				if (scope.failure) await bounded(owned.abortOnce(), this.#options.cleanupTimeoutMs, "session abort");
@@ -827,6 +893,25 @@ async function bounded<T>(operation: Promise<T>, timeoutMs: number, description:
 	});
 	try {
 		return await Promise.race([operation, timeout]);
+	} finally {
+		if (timer) clearTimeout(timer);
+	}
+}
+
+type BoundedSettlement<T> =
+	| { settled: true; value: T }
+	| { settled: false };
+
+async function settleWithin<T>(operation: Promise<T>, timeoutMs: number): Promise<BoundedSettlement<T>> {
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	const timeout = new Promise<BoundedSettlement<T>>((resolve) => {
+		timer = setTimeout(() => resolve({ settled: false }), timeoutMs);
+	});
+	try {
+		return await Promise.race([
+			operation.then((value): BoundedSettlement<T> => ({ settled: true, value })),
+			timeout,
+		]);
 	} finally {
 		if (timer) clearTimeout(timer);
 	}
