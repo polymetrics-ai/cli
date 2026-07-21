@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_4_plan",
+  "currentCycle": "correction_cycle_4_red",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -88,10 +88,15 @@
       "cycle": "correction_cycle_4_plan",
       "decision": "local_critical_path",
       "reason": "Both exact-head findings collide in the issue-owned runtime/tool-policy source and tests; a read-only design sidecar was rejected by the runtime thread cap, so record the four-case cleanup and structured-redaction plan locally."
+    },
+    {
+      "cycle": "correction_cycle_4_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only regressions produced eight expected failures with production unchanged: four forced-disposal rows and four redaction consumer boundaries; proceed to the smallest owned fixes."
     }
   ],
   "gates": {
-    "focusedTests": "pending_cycle_4_red",
+    "focusedTests": "red_captured_23_passed_8_expected_failures",
     "fullShepherdTests": "pending_cycle_4",
     "strictTypeScriptPi0806": "pending_cycle_4",
     "offlineRpcSmoke": "pending_cycle_4",

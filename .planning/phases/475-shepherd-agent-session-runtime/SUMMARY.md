@@ -46,4 +46,5 @@ Review at `b4061d4e1a1545b0c8810b14b510cf048385a567` found that the foreground/m
 still skip disposal when abort or idle never settles, both for a session obtained during cleanup
 grace and for an ordinary claimed session. It also found unquoted YAML flow-map and spaced
 line-start `client_secret` gaps. Cycle 4 is active under a fresh strict test-only RED gate and the
-same narrow Shepherd-only verification boundary.
+same narrow Shepherd-only verification boundary. RED is now captured with 23 passes and 8 expected
+failures; production remained unchanged.

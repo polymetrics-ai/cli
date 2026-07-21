@@ -86,6 +86,8 @@ test("redaction covers single-line and multiline structured secret forms", () =>
 		{ secret: "block-yaml", value: (secret: string) => `client_secret: |-\n  ${secret}\n  continuation\nsafe: retained` },
 		{ secret: "client-assignment", value: (secret: string) => `clientSecret=${secret}` },
 		{ secret: "quoted-bearer", value: (secret: string) => `Authorization: "Bearer ${secret}\n  continuation"` },
+		{ secret: "flow-yaml", value: (secret: string) => `{ safe: retained, client_secret: ${secret} with spaces, enabled: true }` },
+		{ secret: "spaced-yaml", value: (secret: string) => `client_secret: ${secret} with spaces\nsafe: retained` },
 	];
 
 	for (const probe of probes) {
@@ -104,7 +106,7 @@ test("redaction preserves harmless assignment-like prose byte-identically", () =
 		"password = number of characters accepted by this form.",
 		"secret: a surprising detail in a story.",
 		"Authorization: Bearer is the HTTP authentication scheme discussed here.",
-		"client_secret: explains the OAuth field name in this documentation.",
+		"The client_secret field name is documented here without assigning a value.",
 	];
 	for (const control of controls) assert.equal(redactSensitiveText(control), control);
 });
@@ -245,10 +247,16 @@ test("policy rejects workspace identity mismatch, duplicate capabilities, and un
 });
 
 test("tool inputs and outputs are bounded and host summaries are redacted", async () => {
-	const secret = ["synthetic", "tool-output", "issue-475"].join("-");
+	const blockSecret = ["synthetic", "tool-block", "issue-475"].join("-");
+	const flowSecret = ["synthetic", "tool-flow", "issue-475"].join("-");
+	const spacedSecret = ["synthetic", "tool-spaced", "issue-475"].join("-");
 	const input = policyInput(false);
 	input.capabilities = [
-		capability("host_inspect", { output: `client_secret: |-\n  ${secret}\n  continuation` }),
+		capability("host_inspect", { output: [
+			`client_secret: |-\n  ${blockSecret}\n  continuation`,
+			`{ safe: retained, client_secret: ${flowSecret} with spaces, enabled: true }`,
+			`client_secret: ${spacedSecret} with spaces\nsafe: retained`,
+		].join("\n") }),
 		capability("host_verify", { mutates: true }),
 	];
 	const policy = createToolPolicy(input, { maxToolOutputBytes: 256 });
@@ -258,7 +266,9 @@ test("tool inputs and outputs are bounded and host summaries are redacted", asyn
 	assert.ok(write);
 
 	const result = await inspect.execute("inspect", { target: "owned" }, undefined);
-	assert.equal(text(result).includes(secret), false);
+	assert.equal(text(result).includes(blockSecret), false);
+	assert.equal(text(result).includes(flowSecret), false);
+	assert.equal(text(result).includes(spacedSecret), false);
 	assert.match(text(result), /\[REDACTED\]/);
 
 	await assert.rejects(

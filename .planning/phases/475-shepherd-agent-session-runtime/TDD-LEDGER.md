@@ -177,11 +177,24 @@
 
 ### RED
 
-- Status: ready; tests only, with production source locked at the reviewed head.
+- Status: captured; tests and phase evidence only, with production source still locked at reviewed
+  head `b4061d4e1a1545b0c8810b14b510cf048385a567`.
+- Focused result: exit 1, 23 passed / 8 expected failures:
+  - prompt serialization leaked a flow-map unquoted `client_secret` marker;
+  - handoff summary/finding redaction leaked a spaced/flow unquoted marker;
+  - cleanup-grace plus hung abort reached quarantine but disposed 0 times;
+  - cleanup-grace plus hung idle reached quarantine but disposed 0 times;
+  - claimed-before-cancel plus hung abort reached quarantine but disposed 0 times;
+  - claimed-before-cancel plus hung idle reached quarantine but disposed 0 times;
+  - the direct structured matrix leaked its flow-map marker;
+  - typed tool output leaked its flow-map marker.
+- Both spaced-scalar and flow-map gaps are represented independently: the handoff summary reaches
+  the line-start spaced scalar before its finding assertion, while direct/tool/prompt failures reach
+  flow-map inputs. Harmless controls remained green.
 
 ### GREEN / REFACTOR / VERIFY
 
-- Status: blocked on committed RED evidence.
+- Status: ready after the RED checkpoint is committed and pushed.
 - Declared gates remain focused issue tests, the complete Shepherd suite, strict TypeScript against
   explicit Pi 0.80.6 types, pinned offline RPC, diff check, immutable-base, and owned-scope checks.
 - Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot
