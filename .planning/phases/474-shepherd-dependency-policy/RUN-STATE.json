@@ -3,7 +3,7 @@
   "issue": 474,
   "phase": "474-shepherd-dependency-policy",
   "mode": "manual_gsd_fallback",
-  "status": "correction_red_captured",
+  "status": "correction_green",
   "verificationPassed": false,
   "verificationPolicy": "parent_declared_phase_equivalent_child_gate",
   "adapterEvidence": {
@@ -65,6 +65,8 @@
     "goBuild": "supplemental_passed",
     "makeVerify": "cancelled_by_parent_policy_not_a_functional_failure",
     "phaseEquivalentChildGate": "reopened_for_exact_head_corrections",
-    "correctionRed": "passed_expected_failure_15_of_36"
+    "correctionRed": "passed_expected_failure_15_of_36",
+    "correctionGreen": "passed_36_of_36",
+    "correctionAuditGap": "red_2_of_2_then_green_36_of_36"
   }
 }

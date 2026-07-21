@@ -74,6 +74,7 @@ test("scope collision is segment-aware and detects ancestor overlap", () => {
 test("scope collision conservatively folds Darwin/Git case and Unicode aliases", () => {
 	assert.equal(scopesCollide(["src/Readme.md"], ["src/README.md"]), true);
 	assert.equal(scopesCollide(["src/caf\u00e9/file.ts"], ["src/cafe\u0301/file.ts"]), true);
+	assert.equal(scopesCollide(["src/Stra\u00dfe/file.ts"], ["src/STRASSE/file.ts"]), true);
 	assert.throws(
 		() => validateDependencyGraph([item({ id: "aliases", writeScopes: ["src/Readme.md", "src/README.md"] })]),
 		(error: unknown) => error instanceof DependencyGraphError && error.code === "ambiguous_scope",
@@ -90,7 +91,7 @@ test("canonical ordering is explicit ECMAScript code-unit order, independent of 
 });
 
 test("dependency/status-incoherent and non-exact work-item snapshots fail closed", () => {
-	for (const status of ["running", "succeeded"] as const) {
+	for (const status of ["running", "succeeded", "failed"] as const) {
 		assert.throws(
 			() => validateDependencyGraph([
 				item({ id: "dependency", status: "pending" }),

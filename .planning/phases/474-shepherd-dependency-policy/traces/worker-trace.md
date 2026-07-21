@@ -80,6 +80,22 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
   isolation, blocker precedence, correction gating, and ordinary-evidence classification.
 - Execution decision: `local_critical_path`; RED gate satisfied.
 
+## Exact-head correction GREEN cycle
+
+- Added authenticated HUMAN_DECISION approval/rejection, terminal ABORTED, correction advancement
+  guards, and a resumable `await_human_decision` result.
+- Replaced unbounded 64-item exact search with conflict components capped at 12 items, retaining
+  exact maximum selection inside the declared bound.
+- Added explicit code-unit ordering, conservative NFKC/case-folded scope aliases, exact graph and
+  reconciler DTO shapes, status/dependency coherence, and BigInt-safe fail-closed validation.
+- Reordered scheduler blockers ahead of spawn capability checks and limited isolation gating to
+  selected mutators while retaining eligible readers.
+- First correction GREEN: 36/36. Production-only strict TypeScript then found and drove three DTO
+  narrowing fixes before passing.
+- Audit gap RED: 0/2 for full case folding and failed-status coherence; final focused GREEN: 36/36,
+  hostile subprocess 80 ms, `git diff --check` pass.
+- Execution decision: `local_critical_path`; proceed to refactor and broader verification.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

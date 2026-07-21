@@ -80,3 +80,13 @@ Correction RED command: the focused three-file Node test command. Observed: **36
 15 fail**, including all six correction slices. The isolated 64-item cycle reproduced the scheduler
 DoS safely: its subprocess exceeded the one-second deadline and was terminated while the main test
 runner completed in 1.09 seconds. No production file changed before this evidence was captured.
+
+Correction GREEN: the minimum lifecycle, graph, and reconciliation changes produced **36/36 pass**.
+The hostile 64-item cycle is now rejected with typed `conflict_component_too_large` in 80 ms in the
+final focused run. The first production-only strict TypeScript pass found three `unknown` narrowing
+errors at the graph DTO boundary; explicit validated locals fixed them and the exact strict command
+then exited 0.
+
+Audit gap RED added full Unicode case folding (`Straße` / `STRASSE`) and failed work with an
+unsatisfied dependency. Targeted result: 2 tests, 0 pass, 2 fail. Minimal NFKC + upper/lower folding
+and terminal-status coherence extended the final focused GREEN to 36/36. `git diff --check` passes.

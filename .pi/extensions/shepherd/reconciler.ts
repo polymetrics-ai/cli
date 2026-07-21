@@ -55,24 +55,25 @@ export type ReconcileDecision =
 	| { kind: "transition"; from: ParentLifecycleStage; to: ParentLifecycleStage; reason: string }
 	| { kind: "spawn"; itemIds: string[] }
 	| { kind: "no_spawn"; blocker: RepositoryBlocker; reason: string }
+	| { kind: "await_human_decision"; blocker: "not_spawned_human_gate"; reason: "hard_human_gate" | "retry_budget_exhausted" | "pending_authenticated_decision" }
 	| { kind: "retry"; failure: Exclude<FailureClass, "hard_human_gate">; nextRetryAttempts: number; remainingRetries: number }
 	| { kind: "correct"; failure: Exclude<FailureClass, "hard_human_gate">; nextCorrectionRounds: number; remainingCorrections: number }
 	| { kind: "at_capacity" }
 	| { kind: "await_stage_evidence"; stage: ParentLifecycleStage }
+	| { kind: "invalid_snapshot"; reason: string }
+	| { kind: "aborted"; reason: "human_rejected" }
 	| { kind: "complete" };
 
 function noSpawn(blocker: RepositoryBlocker, reason: string): ReconcileDecision {
 	return { kind: "no_spawn", blocker, reason };
 }
 
-function blockerForUnsafeTransition(from: ParentLifecycleStage, to: ParentLifecycleStage): RepositoryBlocker {
-	if (from === "VERIFY" && to === "REVIEW") return "not_spawned_verification_blocked";
-	if (from === "REVIEW" && to === "INTEGRATE") return "not_spawned_review_blocked";
-	return "not_spawned_human_gate";
+function awaitHuman(reason: Extract<ReconcileDecision, { kind: "await_human_decision" }>["reason"]): ReconcileDecision {
+	return { kind: "await_human_decision", blocker: "not_spawned_human_gate", reason };
 }
 
 function invalidGraphDecision(error: DependencyGraphError): ReconcileDecision {
-	const blocker: RepositoryBlocker = error.code === "ambiguous_scope"
+	const blocker: RepositoryBlocker = error.code === "ambiguous_scope" || error.code === "conflict_component_too_large"
 		? "not_spawned_write_scope_collision"
 		: "not_spawned_dependency_blocked";
 	return noSpawn(blocker, `invalid dependency graph: ${error.code}`);
@@ -81,7 +82,7 @@ function invalidGraphDecision(error: DependencyGraphError): ReconcileDecision {
 function qualityConstraintDecision(input: ReconcileInput): ReconcileDecision | undefined {
 	const constraints = input.canonical.constraints;
 	if (constraints.hardHumanGate) {
-		return noSpawn("not_spawned_human_gate", "hard human gate requires an authenticated decision");
+		return awaitHuman("hard_human_gate");
 	}
 	if (constraints.verificationBlocked) {
 		return noSpawn("not_spawned_verification_blocked", "verification is blocked");
@@ -90,26 +91,105 @@ function qualityConstraintDecision(input: ReconcileInput): ReconcileDecision | u
 	return undefined;
 }
 
-function spawnCapabilityDecision(input: ReconcileInput): ReconcileDecision | undefined {
+function spawnCapabilityDecision(input: ReconcileInput, selectedIds: readonly string[]): ReconcileDecision | undefined {
 	const constraints = input.canonical.constraints;
 	if (!constraints.runtimeCapabilityAvailable) {
 		return noSpawn("not_spawned_runtime_capability_missing", "required runtime capability is unavailable");
 	}
-	const mutatingWorkRemains = input.canonical.workItems.some((candidate) =>
-		candidate.status === "pending" && candidate.access === "mutating",
+	const selectedMutator = input.canonical.workItems.some((candidate) =>
+		selectedIds.includes(candidate.id) && candidate.access === "mutating",
 	);
-	if (!constraints.isolationAvailable && mutatingWorkRemains) {
+	if (!constraints.isolationAvailable && selectedMutator) {
 		return noSpawn("not_spawned_isolation_missing", "mutating work lacks an isolated worktree");
 	}
 	return undefined;
 }
 
-export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
-	if (!isParentLifecycleStage(input.persisted.stage)
-		|| !isParentLifecycleStage(input.canonical.observedStage)
-		|| (input.canonical.proposedStage !== undefined && !isParentLifecycleStage(input.canonical.proposedStage))) {
-		return noSpawn("not_spawned_human_gate", "invalid lifecycle stage");
+function isExactRecord(
+	value: unknown,
+	requiredKeys: readonly string[],
+	optionalKeys: readonly string[] = [],
+): value is Record<string, unknown> {
+	if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+	const prototype = Object.getPrototypeOf(value);
+	if (prototype !== Object.prototype && prototype !== null) return false;
+	const descriptors = Object.getOwnPropertyDescriptors(value);
+	const keys = Object.keys(descriptors);
+	const allowed = new Set([...requiredKeys, ...optionalKeys]);
+	return requiredKeys.every((key) => Object.hasOwn(descriptors, key))
+		&& keys.every((key) => allowed.has(key) && Object.hasOwn(descriptors[key], "value"));
+}
+
+function isNonNegativeSafeInteger(value: unknown): value is number {
+	return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+}
+
+const lifecycleBooleanFacts = new Set([
+	"researchRequired", "researchComplete", "parentPlanComplete", "issuesCreated",
+	"parentSetupComplete", "readyWorkAvailable", "allTasksIntegrated", "taskPlanComplete",
+	"isolatedBranchReady", "executionCheckpointed", "subPrOpen", "verificationPassed",
+	"reviewClean", "correctionRequired", "correctionCheckpointed", "integrationConfirmed",
+	"finalVerificationPassed", "humanDecisionAuthenticated", "exactHeadRevalidated", "mergeConfirmed",
+	"hardHumanGate",
+]);
+
+function isLifecycleFacts(value: unknown): value is LifecycleFacts {
+	if (!isExactRecord(value, [], [...lifecycleBooleanFacts, "humanDecision"])) return false;
+	return Object.entries(value).every(([key, fact]) => key === "humanDecision"
+		? fact === "pending" || fact === "approve_merge" || fact === "reject"
+		: lifecycleBooleanFacts.has(key) && typeof fact === "boolean");
+}
+
+function isWorkItemShape(value: unknown): value is DependencyWorkItem {
+	if (!isExactRecord(value, ["id", "dependsOn", "status", "access", "writeScopes"])) return false;
+	return typeof value.id === "string"
+		&& Array.isArray(value.dependsOn) && value.dependsOn.every((dependency) => typeof dependency === "string")
+		&& (value.status === "pending" || value.status === "running" || value.status === "succeeded"
+			|| value.status === "failed" || value.status === "blocked")
+		&& (value.access === "read_only" || value.access === "mutating")
+		&& Array.isArray(value.writeScopes) && value.writeScopes.every((scope) => typeof scope === "string");
+}
+
+function isReconcileInput(value: unknown): value is ReconcileInput {
+	if (!isExactRecord(value, ["persisted", "canonical", "budget"], ["failure"])) return false;
+	if (!isExactRecord(value.persisted, ["stage", "retryAttempts", "correctionRounds"])
+		|| !isParentLifecycleStage(value.persisted.stage)
+		|| !isNonNegativeSafeInteger(value.persisted.retryAttempts)
+		|| !isNonNegativeSafeInteger(value.persisted.correctionRounds)) return false;
+	if (!isExactRecord(value.budget, ["maxRetries", "maxCorrectionRounds"])
+		|| !isNonNegativeSafeInteger(value.budget.maxRetries)
+		|| !isNonNegativeSafeInteger(value.budget.maxCorrectionRounds)) return false;
+	if (!isExactRecord(
+		value.canonical,
+		["observedStage", "workItems", "maxConcurrency", "constraints"],
+		["proposedStage", "transitionFacts"],
+	)) return false;
+	const canonical = value.canonical;
+	if (!isParentLifecycleStage(canonical.observedStage)
+		|| !isNonNegativeSafeInteger(canonical.maxConcurrency)
+		|| !Array.isArray(canonical.workItems)
+		|| !canonical.workItems.every(isWorkItemShape)
+		|| (Object.hasOwn(canonical, "proposedStage") && !isParentLifecycleStage(canonical.proposedStage))
+		|| (Object.hasOwn(canonical, "transitionFacts") && !isLifecycleFacts(canonical.transitionFacts))) return false;
+	if (!isExactRecord(canonical.constraints, [
+		"runtimeCapabilityAvailable", "isolationAvailable", "hardHumanGate",
+		"verificationBlocked", "reviewBlocked",
+	]) || !Object.values(canonical.constraints).every((constraint) => typeof constraint === "boolean")) return false;
+	return !Object.hasOwn(value, "failure")
+		|| value.failure === "transient_verification"
+		|| value.failure === "transient_review"
+		|| value.failure === "hard_human_gate";
+}
+
+export function reconcileAutonomy(candidate: unknown): ReconcileDecision {
+	let valid: boolean;
+	try {
+		valid = isReconcileInput(candidate);
+	} catch {
+		valid = false;
 	}
+	if (!valid) return { kind: "invalid_snapshot", reason: "invalid autonomy snapshot" };
+	const input = candidate as ReconcileInput;
 	if (input.persisted.stage !== input.canonical.observedStage) {
 		return { kind: "reconcile_stage", stage: input.canonical.observedStage, reason: "canonical_stage_differs" };
 	}
@@ -122,6 +202,7 @@ export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
 	}
 
 	if (input.canonical.observedStage === "COMPLETE") return { kind: "complete" };
+	if (input.canonical.observedStage === "ABORTED") return { kind: "aborted", reason: "human_rejected" };
 
 	const constrained = qualityConstraintDecision(input);
 	if (constrained !== undefined) return constrained;
@@ -135,7 +216,7 @@ export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
 			maxCorrectionRounds: input.budget.maxCorrectionRounds,
 		});
 		if (input.failure === "hard_human_gate") {
-			return noSpawn("not_spawned_human_gate", "hard human gate requires an authenticated decision");
+			return awaitHuman("hard_human_gate");
 		}
 		if (failureDecision.action === "retry") {
 			return {
@@ -153,7 +234,7 @@ export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
 				remainingCorrections: failureDecision.remainingCorrections,
 			};
 		}
-		return noSpawn("not_spawned_human_gate", "retry and correction budgets are exhausted");
+		return awaitHuman("retry_budget_exhausted");
 	}
 
 	if (input.canonical.proposedStage !== undefined) {
@@ -163,10 +244,22 @@ export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
 			facts: input.canonical.transitionFacts ?? {},
 		});
 		if (!transition.allowed) {
-			return noSpawn(
-				blockerForUnsafeTransition(input.canonical.observedStage, input.canonical.proposedStage),
-				transition.reason,
-			);
+			if (transition.reason.startsWith("unsafe lifecycle transition")) {
+				return { kind: "invalid_snapshot", reason: transition.reason };
+			}
+			if (input.canonical.observedStage === "HUMAN_DECISION") {
+				return awaitHuman("pending_authenticated_decision");
+			}
+			if (input.canonical.transitionFacts?.correctionRequired === true) {
+				return { kind: "await_stage_evidence", stage: input.canonical.observedStage };
+			}
+			if (input.canonical.observedStage === "VERIFY" && input.canonical.proposedStage === "REVIEW") {
+				return noSpawn("not_spawned_verification_blocked", transition.reason);
+			}
+			if (input.canonical.observedStage === "REVIEW" && input.canonical.proposedStage === "INTEGRATE") {
+				return noSpawn("not_spawned_review_blocked", transition.reason);
+			}
+			return { kind: "await_stage_evidence", stage: input.canonical.observedStage };
 		}
 		return {
 			kind: "transition",
@@ -176,6 +269,9 @@ export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
 		};
 	}
 
+	if (input.canonical.observedStage === "HUMAN_DECISION") {
+		return awaitHuman("pending_authenticated_decision");
+	}
 	if (input.canonical.observedStage !== "SCHEDULE") {
 		return { kind: "await_stage_evidence", stage: input.canonical.observedStage };
 	}
@@ -183,6 +279,7 @@ export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
 	try {
 		selection = selectReadyWork(input.canonical.workItems, { maxConcurrency: input.canonical.maxConcurrency });
 	} catch (error) {
+		if (error instanceof DependencyGraphError) return invalidGraphDecision(error);
 		if (error instanceof RangeError) {
 			return noSpawn("not_spawned_runtime_capability_missing", "invalid concurrency policy");
 		}
@@ -192,9 +289,19 @@ export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
 		return { kind: "transition", from: "SCHEDULE", to: "FINAL_VERIFY", reason: "all_tasks_integrated" };
 	}
 	if (selection.kind === "at_capacity") return { kind: "at_capacity" };
-	const spawnConstrained = spawnCapabilityDecision(input);
-	if (spawnConstrained !== undefined) return spawnConstrained;
-	if (selection.kind === "selected") return { kind: "spawn", itemIds: selection.itemIds };
 	if (selection.kind === "blocked") return noSpawn(selection.blocker, selection.blocker);
+	if (selection.kind === "selected") {
+		let selectedIds = selection.itemIds;
+		if (!input.canonical.constraints.isolationAvailable) {
+			const readerSelection = selectReadyWork(input.canonical.workItems, {
+				maxConcurrency: input.canonical.maxConcurrency,
+				allowMutating: false,
+			});
+			if (readerSelection.kind === "selected") selectedIds = readerSelection.itemIds;
+		}
+		const spawnConstrained = spawnCapabilityDecision(input, selectedIds);
+		if (spawnConstrained !== undefined) return spawnConstrained;
+		return { kind: "spawn", itemIds: selectedIds };
+	}
 	return { kind: "at_capacity" };
 }

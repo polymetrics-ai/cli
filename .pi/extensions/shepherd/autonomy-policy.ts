@@ -17,6 +17,7 @@ export const PARENT_LIFECYCLE_STAGES = [
 	"HUMAN_DECISION",
 	"MERGE",
 	"COMPLETE",
+	"ABORTED",
 	"BLOCKED",
 ] as const;
 
@@ -53,6 +54,7 @@ export interface LifecycleFacts {
 	integrationConfirmed?: boolean;
 	finalVerificationPassed?: boolean;
 	humanDecision?: "pending" | "approve_merge" | "reject";
+	humanDecisionAuthenticated?: boolean;
 	exactHeadRevalidated?: boolean;
 	mergeConfirmed?: boolean;
 	hardHumanGate?: boolean;
@@ -75,7 +77,7 @@ interface TransitionRule {
 	failureReason: string;
 }
 
-const transitionRules: Readonly<Record<Exclude<ParentLifecycleStage, "COMPLETE" | "BLOCKED">, readonly TransitionRule[]>> = {
+const transitionRules: Readonly<Record<Exclude<ParentLifecycleStage, "COMPLETE" | "ABORTED" | "BLOCKED">, readonly TransitionRule[]>> = {
 	INTAKE: [
 		{ to: "RESEARCH", guard: (facts) => facts.researchRequired === true, failureReason: "research is not required" },
 		{ to: "PARENT_PLAN", guard: (facts) => facts.researchRequired === false, failureReason: "required research cannot be skipped" },
@@ -109,11 +111,19 @@ const transitionRules: Readonly<Record<Exclude<ParentLifecycleStage, "COMPLETE" 
 		{ to: "VERIFY", guard: (facts) => facts.subPrOpen === true, failureReason: "sub-PR evidence is missing" },
 	],
 	VERIFY: [
-		{ to: "REVIEW", guard: (facts) => facts.verificationPassed === true, failureReason: "verification evidence is not passing" },
+		{
+			to: "REVIEW",
+			guard: (facts) => facts.verificationPassed === true && facts.correctionRequired !== true,
+			failureReason: "verification evidence is not passing",
+		},
 		{ to: "CORRECT", guard: (facts) => facts.correctionRequired === true, failureReason: "correction evidence is missing" },
 	],
 	REVIEW: [
-		{ to: "INTEGRATE", guard: (facts) => facts.reviewClean === true, failureReason: "review evidence is not clean" },
+		{
+			to: "INTEGRATE",
+			guard: (facts) => facts.reviewClean === true && facts.correctionRequired !== true,
+			failureReason: "review evidence is not clean",
+		},
 		{ to: "CORRECT", guard: (facts) => facts.correctionRequired === true, failureReason: "correction evidence is missing" },
 	],
 	CORRECT: [
@@ -128,8 +138,15 @@ const transitionRules: Readonly<Record<Exclude<ParentLifecycleStage, "COMPLETE" 
 	HUMAN_DECISION: [
 		{
 			to: "MERGE",
-			guard: (facts) => facts.humanDecision === "approve_merge" && facts.exactHeadRevalidated === true,
-			failureReason: "an approve-merge decision and exact-head revalidation are required",
+			guard: (facts) => facts.humanDecision === "approve_merge"
+				&& facts.humanDecisionAuthenticated === true
+				&& facts.exactHeadRevalidated === true,
+			failureReason: "an authenticated approve-merge decision and exact-head revalidation are required",
+		},
+		{
+			to: "ABORTED",
+			guard: (facts) => facts.humanDecision === "reject" && facts.humanDecisionAuthenticated === true,
+			failureReason: "an authenticated rejection decision is required",
 		},
 	],
 	MERGE: [
@@ -148,13 +165,8 @@ export function evaluateLifecycleTransition(request: LifecycleTransitionRequest)
 		return { allowed: false, reason: "invalid lifecycle stage" };
 	}
 	const facts = request.facts as LifecycleFacts;
-	if (from === "COMPLETE" || from === "BLOCKED") {
+	if (from === "COMPLETE" || from === "ABORTED" || from === "BLOCKED") {
 		return { allowed: false, reason: `${from} is a terminal lifecycle stage` };
-	}
-	if (to === "BLOCKED") {
-		return facts.hardHumanGate === true
-			? { allowed: true, reason: "transition_allowed" }
-			: { allowed: false, reason: "BLOCKED requires an explicit hard human gate" };
 	}
 	const rule = transitionRules[from].find((candidate) => candidate.to === to);
 	if (rule === undefined) return { allowed: false, reason: `unsafe lifecycle transition ${from} -> ${to}` };

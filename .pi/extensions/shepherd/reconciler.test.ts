@@ -284,6 +284,11 @@ test("each repository contract condition emits exactly one no-spawn blocker cate
 	assert.deepEqual(cases.map(([blocker]) => blocker).sort(), [...REPOSITORY_BLOCKERS].sort());
 	for (const [expected, candidate] of cases) {
 		const decision = reconcileAutonomy(candidate);
+		if (expected === "not_spawned_human_gate") {
+			assert.equal(decision.kind, "await_human_decision", expected);
+			if (decision.kind === "await_human_decision") assert.equal(decision.blocker, expected);
+			continue;
+		}
 		assert.equal(decision.kind, "no_spawn", expected);
 		if (decision.kind !== "no_spawn") continue;
 		assert.equal(decision.blocker, expected);
