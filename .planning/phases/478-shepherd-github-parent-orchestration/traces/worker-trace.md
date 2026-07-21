@@ -36,3 +36,31 @@
   exact planned review-target binding, parent handoff capture, proxy-array, and disposition gaps.
 - Test-only focused run against unchanged GREEN production: 27 total, 17 pass, 10 expected fail.
 - No prohibited broad verification or external mutation ran.
+
+## 2026-07-21 adversarial correction GREEN
+
+- Resumed after the parent stable-head pause and reconciled pushed branch head `db9fbc33`; no
+  prior commit or uncommitted correction work was discarded.
+- Bound integration receipts to child, PR, generation, marker, base, head, and parent branch, then
+  reconciled exact receipts before quality gating so a successfully merged child remains reusable
+  after restart.
+- Bound child and parent reviews to their planned repository/work item/generation/range/scopes,
+  added parent handoff capture, and revalidated exact parent evidence after the ready mutation.
+- Hardened arrays and DTOs with descriptor-first canonical validation, rejected duplicate finding
+  IDs, and required exact-head `fixed` dispositions for blocking findings.
+- Removed the fake-only PR allocation hint from the production transport request.
+- Focused #478: 27/27 pass. Strict owned TypeScript: pass.
+- Pushed GREEN correction `40ce66d4b5010b92089895a05709687143d15a05`.
+
+## 2026-07-21 final authorized verification
+
+- Focused #478: 27 pass, 0 fail in 230.914417 ms.
+- Complete serialized Shepherd suite: 291 total, 290 pass, 0 fail, 1 intentional sandbox skip in
+  127120.23075 ms.
+- Strict all-production TypeScript: all 20 modules pass with TypeScript 5.9.3, cached Pi 0.80.6,
+  its enclosing package resolver, and its Node type root.
+- Pinned Pi 0.80.6 offline RPC `get_commands`: `true`; `pm-shepherd` source is `extension`.
+- Exact merge base, ancestry, full-range `git diff --check`, and coordinator-owned path gate pass.
+- Local, tracking, and remote refs all matched the implementation head before evidence edits.
+- No Go, connector, certification, runtime-service, `make`, live orchestration transport,
+  reviewer, Claude/Copilot, or merge command ran.

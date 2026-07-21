@@ -121,7 +121,7 @@ git diff --check 3addb1f48be1afe8b1e2b59b54247679d7293805..HEAD
 - [x] Plan, TDD ledger, and verification checklist created before production edits.
 - [x] Test-only RED matrix committed and pushed.
 - [x] Minimal GREEN implemented.
-- [ ] Refactor and all authorized gates pass.
+- [x] Refactor and all authorized gates pass.
 - [ ] Ready stacked PR opened with correct title/base/body.
 - [ ] Final exact-head independent review and human parent merge remain parent-owned.
 
@@ -144,3 +144,9 @@ slice before broad verification:
 The test-only correction run passes 17 and fails 10 expected cases against unchanged GREEN
 production. A review-agent spawn was retried after GREEN and remains unavailable because the
 runtime is at its thread cap, so this is recorded as another `local_critical_path` correction.
+
+The matching correction is pushed at `40ce66d4b5010b92089895a05709687143d15a05`. Focused #478
+tests pass 27/27; the serialized Shepherd suite passes 290 with one intentional sandbox skip;
+strict owned and all-production TypeScript pass with TypeScript 5.9.3 against the cached Pi 0.80.6
+package/type surface; pinned offline Pi RPC discovers `pm-shepherd`; and immutable-base, diff, and
+owned-path checks pass. Review dispatch remains parent-owned under the later stable-head policy.

@@ -53,3 +53,31 @@ expected failures. Failures cover proxy-trap execution, duplicate finding ambigu
 `not_actionable` bypass, missing parent handoff capture, unbound receipt schema, plan/review binding,
 merged-PR restart reuse, and the downstream parent completeness cases that now require bound
 receipts. Production remains exactly at pushed GREEN checkpoint `90321ffb` for this test-only RED.
+
+## Adversarial correction GREEN and refactor
+
+- Correction implementation checkpoint:
+  `40ce66d4b5010b92089895a05709687143d15a05`.
+- Focused command: 27 pass, 0 fail in 230.914417 ms.
+- Strict owned TypeScript: pass with TypeScript 5.9.3 and the cached Pi 0.80.6 Node type root.
+- Receipts now bind child ID, PR, generation, stable marker, base SHA, exact head SHA, and parent
+  branch; a merged PR with an exact receipt is reused safely after restart.
+- The eligible review returned by authoritative evidence must also bind the planned repository,
+  work item, generation, changed paths, and exact allowed scopes before integration/readiness.
+- Parent handoff setup uses the upstream `captureHandoff` boundary. Transport arrays and caller
+  DTOs are descriptor-validated without invoking Proxy/accessor code. Cross-review finding IDs are
+  unique, and a blocking finding requires an exact-head `fixed` disposition.
+- The fake-only PR number hint was removed from the production transport contract.
+
+## Final authorized verification
+
+- Focused #478: 27/27 pass.
+- Complete serialized Shepherd: 291 total, 290 pass, 0 fail, 1 intentional sandbox skip;
+  127120.23075 ms.
+- Strict all-production TypeScript: 20 production modules pass with TypeScript 5.9.3 using the
+  cached Pi 0.80.6 package resolver and Node type root.
+- Pinned Pi 0.80.6 offline RPC `get_commands`: `true` for `pm-shepherd` from `extension`.
+- Immutable merge base equals `3addb1f48be1afe8b1e2b59b54247679d7293805`; full-range
+  `git diff --check` and coordinator-owned path validation pass.
+- No Go, connector, certification, runtime-service, `make`, live orchestration transport,
+  reviewer, or merge command ran.

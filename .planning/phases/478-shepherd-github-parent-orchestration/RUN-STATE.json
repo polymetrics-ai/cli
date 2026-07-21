@@ -5,14 +5,15 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Focused behavior and strict owned TypeScript are GREEN; adversarial refactor and broader authorized verification are next.",
+  "reason": "Implementation head 40ce66d4 is locally verified by every authorized gate; stacked PR publication and parent-owned exact-head review remain.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
+    "implementationHead": "40ce66d4b5010b92089895a05709687143d15a05",
     "adapter": "manual_gsd_fallback",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
-    "verificationPassed": false,
+    "verificationPassed": true,
     "reviewCoveragePassed": false,
     "orchestrationDecisions": [
       {
@@ -34,6 +35,16 @@
         "cycle": "adversarial-correction-tdd-gate",
         "decision": "local_critical_path",
         "reason": "Review-agent capacity remained unavailable; test-only receipt, review-binding, restart, proxy, and disposition regressions produce 17 passes and 10 expected failures against unchanged GREEN production."
+      },
+      {
+        "cycle": "adversarial-correction-green",
+        "decision": "local_critical_path",
+        "reason": "Receipt generation/marker/range binding, exact planned review targets, merged-PR restart, parent handoff capture, descriptor-safe arrays, and disposition policy now pass 27 focused tests and strict owned TypeScript."
+      },
+      {
+        "cycle": "verify",
+        "decision": "local_critical_path",
+        "reason": "Focused 27/27, serialized Shepherd 290 pass with one intentional skip, strict pinned Pi 0.80.6 TypeScript, pinned offline RPC, and immutable-base/diff/owned-scope gates pass; no prohibited broad gate or reviewer ran."
       }
     ],
     "humanGates": [
@@ -47,5 +58,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T17:13:52.000Z"
+  "updatedAt": "2026-07-21T17:40:15.000Z"
 }
