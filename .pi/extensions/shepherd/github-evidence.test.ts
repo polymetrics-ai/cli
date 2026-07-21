@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
@@ -40,6 +41,48 @@ function cleanReview(overrides: Partial<IndependentReviewRecord> = {}): Independ
 	};
 }
 
+function reviewDigest(review: IndependentReviewRecord): string {
+	return createHash("sha256").update(JSON.stringify({
+		idempotencyMarker: review.idempotencyMarker,
+		repository: review.repository,
+		workItemId: review.workItemId,
+		pullRequest: review.pullRequest,
+		generation: review.generation,
+		baseSha: review.baseSha,
+		headSha: review.headSha,
+		changedPaths: review.changedPaths,
+		allowedScopes: review.allowedScopes,
+		completedAt: review.completedAt,
+		verdict: review.verdict,
+		findings: review.findings,
+	})).digest("hex");
+}
+
+function attestation(review: IndependentReviewRecord, overrides: Record<string, unknown> = {}) {
+	return {
+		schemaVersion: 1,
+		authority: "controller",
+		sessionId: "session-478-evidence",
+		runId: "run-478-evidence-1",
+		provider: "openai-codex",
+		model: "gpt-5.6-sol",
+		reasoningEffort: "xhigh",
+		readOnly: true,
+		repository: review.repository,
+		workItemId: review.workItemId,
+		pullRequest: review.pullRequest,
+		generation: review.generation,
+		baseSha: review.baseSha,
+		headSha: review.headSha,
+		changedPaths: review.changedPaths,
+		allowedScopes: review.allowedScopes,
+		reviewMarker: review.idempotencyMarker,
+		resultDigest: reviewDigest(review),
+		completedAt: review.completedAt,
+		...overrides,
+	};
+}
+
 async function evidence(overrides: Record<string, unknown> = {}): Promise<GitHubPullRequestEvidence> {
 	return validateGitHubPullRequestEvidence({
 		...await fixture(),
@@ -48,6 +91,7 @@ async function evidence(overrides: Record<string, unknown> = {}): Promise<GitHub
 	});
 }
 
+const canonicalReview = cleanReview();
 const expected = {
 	number: 812,
 	marker: "<!-- shepherd-child-pr:v1:471:evidence:0123456789abcdef01234567 -->",
@@ -55,6 +99,19 @@ const expected = {
 	headBranch: "feat/811-github-evidence",
 	baseSha,
 	headSha,
+	changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
+	requiredChecks: [{ name: "shepherd-tests", producerId: "github-actions:workflow-verify" }],
+	reviewTarget: {
+		repository: canonicalReview.repository,
+		workItemId: canonicalReview.workItemId,
+		pullRequest: canonicalReview.pullRequest,
+		generation: canonicalReview.generation,
+		baseSha: canonicalReview.baseSha,
+		headSha: canonicalReview.headSha,
+		changedPaths: canonicalReview.changedPaths,
+		allowedScopes: canonicalReview.allowedScopes,
+	},
+	attestations: [attestation(canonicalReview)],
 };
 
 function blockerCodes(result: ReturnType<typeof evaluateGitHubPullRequestEvidence>): GitHubEvidenceBlocker[] {
@@ -69,16 +126,93 @@ test("accepts only an open, green, resolved, exact-range independently reviewed 
 });
 
 test("failed, pending, skipped, missing, or stale-head checks are not green", async () => {
+	const baseCheck = {
+		id: "check-verify-case",
+		name: "shepherd-tests",
+		producerId: "github-actions:workflow-verify",
+		headSha,
+		completedAt: "2026-07-21T11:55:00.000Z",
+	};
 	for (const checks of [
 		[],
-		[{ name: "verify", status: "queued", conclusion: null, headSha }],
-		[{ name: "verify", status: "in_progress", conclusion: null, headSha }],
-		[{ name: "verify", status: "completed", conclusion: "failure", headSha }],
-		[{ name: "verify", status: "completed", conclusion: "skipped", headSha }],
-		[{ name: "verify", status: "completed", conclusion: "success", headSha: "c".repeat(40) }],
+		[{ ...baseCheck, status: "queued", conclusion: null }],
+		[{ ...baseCheck, status: "in_progress", conclusion: null }],
+		[{ ...baseCheck, status: "completed", conclusion: "failure" }],
+		[{ ...baseCheck, status: "completed", conclusion: "skipped" }],
+		[{ ...baseCheck, status: "completed", conclusion: "success", headSha: "c".repeat(40) }],
 	]) {
 		assert.ok(blockerCodes(evaluateGitHubPullRequestEvidence(await evidence({ checks }), expected)).includes("ci_not_green"));
 	}
+});
+
+test("required CI contexts use trusted producers and a complete deterministic latest rollup", async () => {
+	const trusted = {
+		id: "trusted-latest",
+		name: "shepherd-tests",
+		producerId: "github-actions:workflow-verify",
+		status: "completed",
+		conclusion: "success",
+		headSha,
+		completedAt: "2026-07-21T11:55:00.000Z",
+	};
+	for (const changes of [
+		{ checksComplete: false },
+		{ checks: [{ ...trusted, producerId: "untrusted-app:42" }] },
+		{ checks: [{ ...trusted, name: "unrelated-success" }] },
+		{ checks: [{ ...trusted, status: "in_progress", conclusion: null }] },
+	]) {
+		assert.ok(blockerCodes(evaluateGitHubPullRequestEvidence(await evidence(changes), expected as never)).includes("ci_not_green"));
+	}
+	const oldFailure = { ...trusted, id: "old-failure", conclusion: "failure", completedAt: "2026-07-21T11:00:00.000Z" };
+	assert.equal(evaluateGitHubPullRequestEvidence(await evidence({ checks: [trusted, oldFailure] }), expected as never).kind, "eligible");
+	assert.equal(evaluateGitHubPullRequestEvidence(await evidence({ checks: [oldFailure, trusted] }), expected as never).kind, "eligible");
+});
+
+test("authoritative changed paths require exact set equality independent of ordering", async () => {
+	const secondPath = ".pi/extensions/shepherd/review-router.ts";
+	const review = cleanReview({
+		...createIndependentReviewWork({
+			...expected.reviewTarget,
+			changedPaths: [secondPath, ...expected.changedPaths],
+		}),
+	});
+	const exactExpected = {
+		...expected,
+		changedPaths: [...expected.changedPaths, secondPath],
+		reviewTarget: { ...expected.reviewTarget, changedPaths: [secondPath, ...expected.changedPaths] },
+		attestations: [attestation(review)],
+	};
+	assert.equal(evaluateGitHubPullRequestEvidence(await evidence({
+		changedPaths: [secondPath, ...expected.changedPaths],
+		reviews: [review],
+	}), exactExpected as never).kind, "eligible");
+	for (const claimed of [[], expected.changedPaths, [...exactExpected.changedPaths, "extra.ts"]]) {
+		const mismatched = cleanReview({
+			...createIndependentReviewWork({ ...exactExpected.reviewTarget, changedPaths: claimed }),
+		});
+		const result = evaluateGitHubPullRequestEvidence(await evidence({
+			changedPaths: exactExpected.changedPaths,
+			reviews: [mismatched],
+		}), { ...exactExpected, attestations: [attestation(mismatched)] } as never);
+		assert.ok(blockerCodes(result).includes("review_missing"));
+	}
+});
+
+test("expected target makes equal-generation selection independent of review and page order", async () => {
+	const correct = cleanReview();
+	const unrelated = cleanReview({
+		...createIndependentReviewWork({ ...expected.reviewTarget, workItemId: "unrelated" }),
+		completedAt: "2026-07-21T12:01:00.000Z",
+	});
+	for (const reviews of [[correct, unrelated], [unrelated, correct]]) {
+		const result = evaluateGitHubPullRequestEvidence(await evidence({ reviews }), {
+			...expected,
+			attestations: [attestation(correct), attestation(unrelated)],
+		} as never);
+		assert.equal(result.kind, "eligible");
+		if (result.kind === "eligible") assert.equal(result.review.workItemId, "evidence");
+	}
+	assert.ok(blockerCodes(evaluateGitHubPullRequestEvidence(await evidence({ reviewsComplete: false }), expected as never)).includes("review_missing"));
 });
 
 test("authoritative requested changes and unresolved review threads block integration", async () => {
@@ -166,7 +300,7 @@ test("head movement, stale reviewed ranges, topology drift, draft state, and mer
 test("rejects aggregate review claims, unknown fields, duplicate IDs, and unbounded evidence", async () => {
 	const raw = await fixture();
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, reviewDecision: "APPROVED" }), /field|shape|evidence/i);
-	const duplicateCheck = { name: "verify", status: "completed", conclusion: "success", headSha };
+	const duplicateCheck = { id: "duplicate", name: "verify", producerId: "producer", status: "completed", conclusion: "success", headSha, completedAt: "2026-07-21T11:00:00.000Z" };
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, checks: [duplicateCheck, duplicateCheck] }), /duplicate|check/i);
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, threads: Array.from({ length: 129 }, (_, index) => ({ id: `T-${index}`, resolved: true, headSha })) }), /bounded|threads|128/i);
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, body: "x".repeat(65_537) }), /body|bounded/i);

@@ -10,18 +10,24 @@
   "headBranch": "feat/811-github-evidence",
   "baseSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "headSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "changedPaths": [".pi/extensions/shepherd/github-evidence.ts"],
   "mergeState": "clean",
+  "checksComplete": true,
   "checks": [
     {
+      "id": "check-verify-1",
       "name": "shepherd-tests",
+      "producerId": "github-actions:workflow-verify",
       "status": "completed",
       "conclusion": "success",
-      "headSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      "headSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "completedAt": "2026-07-21T11:55:00.000Z"
     }
   ],
   "requestedChanges": [],
   "threads": [],
   "reviews": [],
+  "reviewsComplete": true,
   "dispositions": [],
   "observedAt": "2026-07-21T12:00:00.000Z"
 }

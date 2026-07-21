@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import test from "node:test";
 
 import {
@@ -38,6 +39,48 @@ function cleanReview(overrides: Partial<IndependentReviewRecord> = {}): Independ
 	};
 }
 
+function reviewDigest(review: IndependentReviewRecord): string {
+	return createHash("sha256").update(JSON.stringify({
+		idempotencyMarker: review.idempotencyMarker,
+		repository: review.repository,
+		workItemId: review.workItemId,
+		pullRequest: review.pullRequest,
+		generation: review.generation,
+		baseSha: review.baseSha,
+		headSha: review.headSha,
+		changedPaths: review.changedPaths,
+		allowedScopes: review.allowedScopes,
+		completedAt: review.completedAt,
+		verdict: review.verdict,
+		findings: review.findings,
+	})).digest("hex");
+}
+
+function attestation(review: IndependentReviewRecord, overrides: Record<string, unknown> = {}) {
+	return {
+		schemaVersion: 1,
+		authority: "controller",
+		sessionId: "session-478-review",
+		runId: "run-478-review-1",
+		provider: "openai-codex",
+		model: "gpt-5.6-sol",
+		reasoningEffort: "xhigh",
+		readOnly: true,
+		repository: review.repository,
+		workItemId: review.workItemId,
+		pullRequest: review.pullRequest,
+		generation: review.generation,
+		baseSha: review.baseSha,
+		headSha: review.headSha,
+		changedPaths: review.changedPaths,
+		allowedScopes: review.allowedScopes,
+		reviewMarker: review.idempotencyMarker,
+		resultDigest: reviewDigest(review),
+		completedAt: review.completedAt,
+		...overrides,
+	};
+}
+
 test("creates a deterministic declarative xhigh independent Codex review record", () => {
 	const first = createIndependentReviewWork(target());
 	const second = createIndependentReviewWork(target());
@@ -63,10 +106,10 @@ test("creates a deterministic declarative xhigh independent Codex review record"
 	assert.equal("session" in first, false);
 });
 
-test("an exact clean review satisfies the route while head or base movement invalidates it", () => {
+test("an exact clean review with controller-owned session attestation satisfies the route while movement invalidates it", () => {
 	const review = cleanReview();
 	assert.equal(reviewCoversExactRange(review, baseSha, headSha), true);
-	assert.deepEqual(reconcileIndependentReview({ target: target(), reviews: [review] }), {
+	assert.deepEqual(reconcileIndependentReview({ target: target(), reviews: [review], attestations: [attestation(review)] } as never), {
 		kind: "satisfied",
 		review,
 	});
@@ -75,12 +118,35 @@ test("an exact clean review satisfies the route while head or base movement inva
 		target({ headSha: "c".repeat(40) }),
 		target({ baseSha: "d".repeat(40) }),
 	]) {
-		const decision = reconcileIndependentReview({ target: moved, reviews: [review] });
+		const decision = reconcileIndependentReview({ target: moved, reviews: [review], attestations: [attestation(review)] } as never);
 		assert.equal(decision.kind, "dispatch");
 		if (decision.kind === "dispatch") {
 			assert.notEqual(decision.work.idempotencyMarker, review.idempotencyMarker);
 		}
 	}
+});
+
+test("reviewer-self-attested execution metadata cannot replace controller-owned session provenance", () => {
+	const review = cleanReview();
+	assert.equal(reconcileIndependentReview({ target: target(), reviews: [review] }).kind, "dispatch");
+	for (const forged of [
+		attestation(review, { authority: "reviewer" }),
+		attestation(review, { provider: "anthropic" }),
+		attestation(review, { model: "gpt-5.5" }),
+		attestation(review, { reasoningEffort: "high" }),
+		attestation(review, { readOnly: false }),
+		attestation(review, { resultDigest: "0".repeat(64) }),
+	]) {
+		assert.throws(
+			() => reconcileIndependentReview({ target: target(), reviews: [review], attestations: [forged] } as never),
+			/attestation|session|provenance|digest|route|provider|model|read.only/i,
+		);
+	}
+});
+
+test("review generation is positive at target and record boundaries", () => {
+	assert.throws(() => createIndependentReviewWork(target({ generation: 0 })), /generation|positive/i);
+	assert.throws(() => validateIndependentReviewRecord({ ...cleanReview(), generation: 0 }), /generation|marker|positive/i);
 });
 
 test("a findings verdict never claims clean coverage", () => {

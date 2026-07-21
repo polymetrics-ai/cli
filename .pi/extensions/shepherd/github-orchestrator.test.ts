@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
@@ -91,14 +92,66 @@ function cleanPullRequest(
 		headBranch: request.headBranch,
 		baseSha: request.baseSha,
 		headSha: request.headSha,
+		changedPaths: [...request.changedPaths],
 		mergeState: "clean",
-		checks: [{ name: "verify", status: "completed", conclusion: "success", headSha: request.headSha }],
+		checksComplete: true,
+		checks: [{
+			id: "check-verify-1",
+			name: "verify",
+			producerId: "github-actions:workflow-verify",
+			status: "completed",
+			conclusion: "success",
+			headSha: request.headSha,
+			completedAt: "2026-07-21T11:55:00.000Z",
+		}],
 		requestedChanges: [],
 		threads: [],
 		reviews: [review],
+		reviewsComplete: true,
 		dispositions: [],
 		observedAt: "2026-07-21T12:00:00.000Z",
 		...overrides,
+	};
+}
+
+function reviewDigest(review: GitHubPullRequestEvidence["reviews"][number]): string {
+	return createHash("sha256").update(JSON.stringify({
+		idempotencyMarker: review.idempotencyMarker,
+		repository: review.repository,
+		workItemId: review.workItemId,
+		pullRequest: review.pullRequest,
+		generation: review.generation,
+		baseSha: review.baseSha,
+		headSha: review.headSha,
+		changedPaths: review.changedPaths,
+		allowedScopes: review.allowedScopes,
+		completedAt: review.completedAt,
+		verdict: review.verdict,
+		findings: review.findings,
+	})).digest("hex");
+}
+
+function attestReview(review: GitHubPullRequestEvidence["reviews"][number]) {
+	return {
+		schemaVersion: 1,
+		authority: "controller",
+		sessionId: `session-${review.pullRequest}-${review.workItemId}`,
+		runId: `run-${review.pullRequest}-${review.generation}`,
+		provider: "openai-codex",
+		model: "gpt-5.6-sol",
+		reasoningEffort: "xhigh",
+		readOnly: true,
+		repository: review.repository,
+		workItemId: review.workItemId,
+		pullRequest: review.pullRequest,
+		generation: review.generation,
+		baseSha: review.baseSha,
+		headSha: review.headSha,
+		changedPaths: review.changedPaths,
+		allowedScopes: review.allowedScopes,
+		reviewMarker: review.idempotencyMarker,
+		resultDigest: reviewDigest(review),
+		completedAt: review.completedAt,
 	};
 }
 
@@ -113,12 +166,23 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	integrateCalls = 0;
 	markReadyCalls = 0;
 	throwAfterIssuePublish = false;
+	throwAfterPullRequestPublish = false;
 	throwAfterRosterPublish = false;
+	throwAfterIntegration = false;
+	throwAfterReady = false;
+	malformedPullRequestResponse = false;
+	malformedIntegrationResponse = false;
+	malformedReadyResponse = false;
+	incompleteIssueLookup = false;
+	incompletePullRequestLookup = false;
+	incompleteRosterLookup = false;
+	incompleteIntegrationLookup = false;
+	ancestry = true;
 	onPullRequestRead?: (query: PullRequestMarkerQuery, matches: GitHubPullRequestEvidence[], read: number) => GitHubPullRequestEvidence[];
 	#pullRequestReads = 0;
 
-	async findChildIssues(query: { repository: string; marker: string }): Promise<GitHubChildIssue[]> {
-		return this.issues.filter((candidate) => candidate.marker === query.marker);
+	async findChildIssues(query: { repository: string; marker: string }): Promise<any> {
+		return { items: this.issues.filter((candidate) => candidate.marker === query.marker), complete: !this.incompleteIssueLookup };
 	}
 
 	async createChildIssue(request: CreateChildIssueRequest): Promise<GitHubChildIssue> {
@@ -135,7 +199,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	async findPullRequests(query: PullRequestMarkerQuery): Promise<GitHubPullRequestEvidence[]> {
 		this.#pullRequestReads += 1;
 		const matches = this.pullRequests.filter((candidate) => candidate.marker === query.marker);
-		return this.onPullRequestRead?.(query, matches, this.#pullRequestReads) ?? matches;
+		return { items: this.onPullRequestRead?.(query, matches, this.#pullRequestReads) ?? matches, complete: !this.incompletePullRequestLookup } as never;
 	}
 
 	async createPullRequest(request: CreatePullRequestRequest): Promise<GitHubPullRequestEvidence> {
@@ -146,11 +210,16 @@ class FakeTransport implements GitHubOrchestrationTransport {
 			reviews: [],
 		}, 900 + this.createPullRequestCalls);
 		this.pullRequests.push(created);
+		if (this.throwAfterPullRequestPublish) {
+			this.throwAfterPullRequestPublish = false;
+			throw new Error("simulated timeout after pull request publish");
+		}
+		if (this.malformedPullRequestResponse) return { malformed: true } as never;
 		return created;
 	}
 
-	async findParentRosters(query: GitHubRosterQuery): Promise<GitHubRosterSnapshot[]> {
-		return this.rosters.filter((candidate) => candidate.marker === query.marker);
+	async findParentRosters(query: GitHubRosterQuery): Promise<any> {
+		return { items: this.rosters.filter((candidate) => candidate.marker === query.marker), complete: !this.incompleteRosterLookup };
 	}
 
 	async publishParentRoster(request: PublishRosterRequest): Promise<GitHubRosterSnapshot> {
@@ -173,8 +242,13 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return published;
 	}
 
-	async findChildIntegration(query: GitHubPullRequestQuery): Promise<ChildIntegrationReceipt | null> {
-		return this.integrations.find((candidate) => candidate.pullRequest === query.pullRequest) ?? null;
+	async findChildIntegration(query: GitHubPullRequestQuery & { childId?: string; marker?: string }): Promise<any> {
+		return {
+			items: this.integrations.filter((candidate) => query.pullRequest !== undefined
+				? candidate.pullRequest === query.pullRequest
+				: candidate.childId === query.childId && candidate.marker === query.marker),
+			complete: !this.incompleteIntegrationLookup,
+		};
 	}
 
 	async integrateChild(request: IntegrateChildRequest): Promise<ChildIntegrationReceipt> {
@@ -190,6 +264,11 @@ class FakeTransport implements GitHubOrchestrationTransport {
 			integratedAt: "2026-07-21T12:01:00.000Z",
 		};
 		this.integrations.push(receipt);
+		if (this.throwAfterIntegration) {
+			this.throwAfterIntegration = false;
+			throw new Error("simulated timeout after integration");
+		}
+		if (this.malformedIntegrationResponse) return { malformed: true } as never;
 		return receipt;
 	}
 
@@ -199,8 +278,31 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		if (index < 0) throw new Error("parent pull request missing");
 		const updated = { ...this.pullRequests[index], draft: false, headSha: request.headSha };
 		this.pullRequests.splice(index, 1, updated);
+		if (this.throwAfterReady) {
+			this.throwAfterReady = false;
+			throw new Error("simulated timeout after ready transition");
+		}
+		if (this.malformedReadyResponse) return { malformed: true } as never;
 		return updated;
 	}
+
+	async isAncestor(_query: { repository: string; ancestorSha: string; descendantSha: string }): Promise<boolean> {
+		return this.ancestry;
+	}
+}
+
+function orchestratorFor(transport: FakeTransport, broker?: ParentDecisionBroker): GitHubParentOrchestrator {
+	const sessionSource = {
+		async findAttestations(target: { pullRequest: number; workItemId: string }): Promise<unknown> {
+			const attestations = transport.pullRequests
+				.filter((pullRequest) => pullRequest.number === target.pullRequest)
+				.flatMap((pullRequest) => pullRequest.reviews)
+				.filter((review) => review.workItemId === target.workItemId)
+				.map(attestReview);
+			return { items: attestations, complete: true };
+		},
+	};
+	return new GitHubParentOrchestrator(transport, broker, sessionSource as never);
 }
 
 const approvedDecision: HumanDecisionEvidence = {
@@ -295,18 +397,42 @@ test("rejects extra fields, cycles, unsafe scopes/branches, missing requirements
 	const children = source.children as Array<Record<string, unknown>>;
 	assert.throws(() => createParentOrchestrationPlan({ ...source, children: [{ ...children[0], dependsOn: ["evidence"] }] }), /cycle/i);
 	assert.throws(() => createParentOrchestrationPlan({ ...source, parentBranch: "../main" }), /branch/i);
+	for (const invalidRef of ["bad branch", ".hidden/topic", "topic.lock", "topic/.lock", "@", "topic@{one", "topic."]) {
+		assert.throws(() => createParentOrchestrationPlan({ ...source, parentBranch: invalidRef }), /branch|ref/i, invalidRef);
+	}
+	for (const invalidGeneration of [0, -1]) {
+		assert.throws(() => createParentOrchestrationPlan({ ...source, generation: invalidGeneration }), /generation|positive/i);
+	}
 	assert.throws(() => createParentOrchestrationPlan({ ...source, children: [{ ...children[0], writeScopes: ["../outside"] }] }), /scope/i);
 	assert.throws(() => createParentOrchestrationPlan({ ...source, children: [{ ...children[0], requiredSkills: [] }] }), /skills/i);
 	assert.throws(() => createParentOrchestrationPlan({ ...source, children: Array.from({ length: 65 }, (_, index) => ({ ...children[0], id: `child-${index}`, slug: `child-${index}`, dependsOn: [] })) }), /64|bounded|children/i);
+});
+
+test("serializes concurrent issue ensures, reconciles after create, and fails closed on incomplete lookup", async () => {
+	const candidate = await plan();
+	const transport = new FakeTransport();
+	const orchestrator = orchestratorFor(transport);
+	const [first, second] = await Promise.all([
+		orchestrator.ensureChildIssue(candidate, "evidence"),
+		orchestrator.ensureChildIssue(candidate, "evidence"),
+	]);
+	assert.deepEqual(first, second);
+	assert.equal(transport.createIssueCalls, 1);
+	assert.equal(transport.issues.length, 1);
+
+	const incomplete = new FakeTransport();
+	incomplete.incompleteIssueLookup = true;
+	await assert.rejects(orchestratorFor(incomplete).ensureChildIssue(candidate, "evidence"), /complete|pagination|authoritative/i);
+	assert.equal(incomplete.createIssueCalls, 0);
 });
 
 test("recovers timeout-after-issue-publish and restart without duplicate mutation", async () => {
 	const candidate = await plan();
 	const transport = new FakeTransport();
 	transport.throwAfterIssuePublish = true;
-	const orchestrator = new GitHubParentOrchestrator(transport);
+	const orchestrator = orchestratorFor(transport);
 	const first = await orchestrator.ensureChildIssue(candidate, "evidence");
-	const restarted = await new GitHubParentOrchestrator(transport).ensureChildIssue(candidate, "evidence");
+	const restarted = await orchestratorFor(transport).ensureChildIssue(candidate, "evidence");
 	assert.deepEqual(restarted, first);
 	assert.equal(transport.createIssueCalls, 1);
 	assert.equal(transport.issues.length, 1);
@@ -324,16 +450,16 @@ test("fails closed on marker collision or duplicate matching resources", async (
 		state: "open",
 		parentIssue: candidate.parentIssue,
 	});
-	await assert.rejects(new GitHubParentOrchestrator(transport).ensureChildIssue(candidate, child.id), /marker|collision|mismatch/i);
+	await assert.rejects(orchestratorFor(transport).ensureChildIssue(candidate, child.id), /marker|collision|mismatch/i);
 	transport.issues.push({ ...transport.issues[0], number: 812 });
-	await assert.rejects(new GitHubParentOrchestrator(transport).ensureChildIssue(candidate, child.id), /duplicate|ambiguous|marker/i);
+	await assert.rejects(orchestratorFor(transport).ensureChildIssue(candidate, child.id), /duplicate|ambiguous|marker/i);
 	assert.equal(transport.createIssueCalls, 0);
 });
 
 test("creates a draft parent PR and stacked child PR with exclusive Closes versus Refs linkage", async () => {
 	const candidate = await plan();
 	const transport = new FakeTransport();
-	const orchestrator = new GitHubParentOrchestrator(transport);
+	const orchestrator = orchestratorFor(transport);
 	const issue = await orchestrator.ensureChildIssue(candidate, "evidence");
 	const child = materializeChildRecord(candidate, "evidence", issue);
 	const childPr = await orchestrator.ensureChildPullRequest(candidate, child, childHandoff(issue.number, child.branch, child.prBase));
@@ -355,6 +481,56 @@ test("creates a draft parent PR and stacked child PR with exclusive Closes versu
 	assert.equal(transport.createPullRequestCalls, 2);
 });
 
+test("serializes concurrent PR ensures and recovers timeout or malformed mutation responses only by complete re-read", async () => {
+	const candidate = await plan();
+	const transport = new FakeTransport();
+	const orchestrator = orchestratorFor(transport);
+	const issue = await orchestrator.ensureChildIssue(candidate, "evidence");
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	const handoff = childHandoff(issue.number, child.branch, child.prBase);
+	const [first, second] = await Promise.all([
+		orchestrator.ensureChildPullRequest(candidate, child, handoff),
+		orchestrator.ensureChildPullRequest(candidate, child, handoff),
+	]);
+	assert.deepEqual(first, second);
+	assert.equal(transport.createPullRequestCalls, 1);
+	assert.equal(transport.pullRequests.length, 1);
+
+	for (const mode of ["timeout", "malformed"] as const) {
+		const recovery = new FakeTransport();
+		if (mode === "timeout") recovery.throwAfterPullRequestPublish = true;
+		else recovery.malformedPullRequestResponse = true;
+		const recoveryOrchestrator = orchestratorFor(recovery);
+		const recoveryIssue = await recoveryOrchestrator.ensureChildIssue(candidate, "evidence");
+		const recoveryChild = materializeChildRecord(candidate, "evidence", recoveryIssue);
+		const recovered = await recoveryOrchestrator.ensureChildPullRequest(
+			candidate,
+			recoveryChild,
+			childHandoff(recoveryIssue.number, recoveryChild.branch, recoveryChild.prBase),
+		);
+		assert.equal(recovered.number, 901);
+		assert.equal(recovery.createPullRequestCalls, 1);
+	}
+
+	const incomplete = new FakeTransport();
+	incomplete.incompletePullRequestLookup = true;
+	const incompleteOrchestrator = orchestratorFor(incomplete);
+	const incompleteIssue = issueFrom({
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		marker: candidate.children[0].markers.issue,
+		title: candidate.children[0].title,
+		body: candidate.children[0].issueBody,
+	});
+	const incompleteChild = materializeChildRecord(candidate, "evidence", incompleteIssue);
+	await assert.rejects(incompleteOrchestrator.ensureChildPullRequest(
+		candidate,
+		incompleteChild,
+		childHandoff(incompleteIssue.number, incompleteChild.branch, incompleteChild.prBase),
+	), /complete|pagination|authoritative/i);
+	assert.equal(incomplete.createPullRequestCalls, 0);
+});
+
 test("captures upstream workspace handoff and rejects dirty, failed, mismatched, or out-of-scope evidence", async () => {
 	const candidate = await plan();
 	const issue = issueFrom({
@@ -373,7 +549,7 @@ test("captures upstream workspace handoff and rejects dirty, failed, mismatched,
 			return expected;
 		},
 	};
-	const orchestrator = new GitHubParentOrchestrator(new FakeTransport());
+	const orchestrator = orchestratorFor(new FakeTransport());
 	assert.deepEqual(await orchestrator.captureChildHandoff(candidate, child, {} as ClaimedWorkspace, source), expected);
 	assert.equal(requestedState, "passed");
 	for (const invalid of [
@@ -383,6 +559,48 @@ test("captures upstream workspace handoff and rejects dirty, failed, mismatched,
 		{ ...expected, changedScope: ["cmd/pm/main.go"] },
 	]) {
 		await assert.rejects(orchestrator.captureChildHandoff(candidate, child, {} as ClaimedWorkspace, { captureHandoff: async () => invalid }), /handoff|dirty|verification|head|branch|scope/i);
+	}
+});
+
+test("validates every immutable materialized-child field and canonical issue before any downstream transport", async () => {
+	const candidate = await plan();
+	const transport = new FakeTransport();
+	const issue = issueFrom({
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		marker: candidate.children[0].markers.issue,
+		title: candidate.children[0].title,
+		body: candidate.children[0].issueBody,
+	}, 811);
+	transport.issues.push(issue);
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	const mutations: Array<[string, (value: any) => void]> = [
+		["issue", (value) => { value.issue = 999; value.branch = "feat/999-github-evidence"; }],
+		["branch", (value) => { value.branch = "feat/811-forged"; }],
+		["prBase", (value) => { value.prBase = "evil/parent"; }],
+		["title", (value) => { value.title = "forged title"; }],
+		["objective", (value) => { value.objective = "forged objective"; }],
+		["dependsOn", (value) => { value.dependsOn = ["forged"]; }],
+		["status", (value) => { value.status = "running"; }],
+		["access", (value) => { value.access = "read_only"; }],
+		["writeScopes", (value) => { value.writeScopes = ["evil/scope"]; }],
+		["requiredSkills", (value) => { value.requiredSkills = ["forged-skill"]; }],
+		["verification", (value) => { value.verification = [{ id: "forged", kind: "test", description: "forged" }]; }],
+		["humanGates", (value) => { value.humanGates = ["merge"]; }],
+		["markers", (value) => { value.markers = { ...value.markers, pullRequest: "<!-- forged -->" }; }],
+		["issueBody", (value) => { value.issueBody = "forged body"; }],
+	];
+	for (const [field, mutate] of mutations) {
+		const forged = structuredClone(child);
+		mutate(forged);
+		let captures = 0;
+		await assert.rejects(orchestratorFor(transport).captureChildHandoff(
+			candidate,
+			forged,
+			{} as ClaimedWorkspace,
+			{ captureHandoff: async () => { captures += 1; return childHandoff(forged.issue, forged.branch, forged.prBase); } },
+		), /materialized|canonical|plan|issue|topology/i, field);
+		assert.equal(captures, 0, field);
 	}
 });
 
@@ -398,7 +616,7 @@ test("captures parent workspace setup through the upstream handoff boundary", as
 			return expected;
 		},
 	};
-	const captured = await new GitHubParentOrchestrator(new FakeTransport()).captureParentHandoff(
+	const captured = await orchestratorFor(new FakeTransport()).captureParentHandoff(
 		candidate,
 		{} as ClaimedWorkspace,
 		source,
@@ -411,10 +629,10 @@ test("roster publication reconciles before update and recovers timeout-after-pub
 	const candidate = await plan();
 	const transport = new FakeTransport();
 	transport.throwAfterRosterPublish = true;
-	const orchestrator = new GitHubParentOrchestrator(transport);
+	const orchestrator = orchestratorFor(transport);
 	const pending = { evidence: "pending", orchestrator: "pending" } as const;
 	const first = await orchestrator.reconcileParentRoster(candidate, pending);
-	const restarted = await new GitHubParentOrchestrator(transport).reconcileParentRoster(candidate, pending);
+	const restarted = await orchestratorFor(transport).reconcileParentRoster(candidate, pending);
 	assert.deepEqual(restarted, first);
 	assert.equal(transport.publishRosterCalls, 1);
 	await orchestrator.reconcileParentRoster(candidate, { evidence: "succeeded", orchestrator: "pending" });
@@ -425,7 +643,7 @@ test("roster publication reconciles before update and recovers timeout-after-pub
 test("integrates only green reviewed exact-head scoped children and rechecks head immediately before mutation", async () => {
 	const candidate = await plan();
 	const transport = new FakeTransport();
-	const orchestrator = new GitHubParentOrchestrator(transport);
+	const orchestrator = orchestratorFor(transport);
 	const issue = issueFrom({
 		repository: candidate.repository,
 		parentIssue: candidate.parentIssue,
@@ -460,13 +678,60 @@ test("integrates only green reviewed exact-head scoped children and rechecks hea
 	movedTransport.onPullRequestRead = (_query, matches, read) => read < 2
 		? matches
 		: matches.map((candidatePr) => ({ ...candidatePr, headSha: "c".repeat(40) }));
-	const moved = await new GitHubParentOrchestrator(movedTransport).integrateChild(candidate, child, handoff);
+	const moved = await orchestratorFor(movedTransport).integrateChild(candidate, child, handoff);
 	assert.equal(moved.kind, "blocked");
 	if (moved.kind === "blocked") assert.ok(moved.blockers.includes("head_moved"));
 	assert.equal(movedTransport.integrateCalls, 0);
 
-	const outside = await new GitHubParentOrchestrator(transport).integrateChild(candidate, child, { ...handoff, changedScope: ["cmd/pm/main.go"] });
+	const outside = await orchestratorFor(transport).integrateChild(candidate, child, { ...handoff, changedScope: ["cmd/pm/main.go"] });
 	assert.equal(outside.kind, "blocked");
+});
+
+test("integration recovers timeout and malformed mutation responses, but incomplete receipt lookup fails closed", async () => {
+	const candidate = await plan();
+	const issue = issueFrom({
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		marker: candidate.children[0].markers.issue,
+		title: candidate.children[0].title,
+		body: candidate.children[0].issueBody,
+	}, 811);
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	const handoff = childHandoff(issue.number, child.branch, child.prBase);
+	const request: CreatePullRequestRequest = {
+		repository: candidate.repository,
+		workItemId: child.id,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		title: child.title,
+		body: `Refs #${issue.number}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+		draft: false,
+		baseBranch: child.prBase,
+		headBranch: child.branch,
+		baseSha: handoff.baseHead,
+		headSha: handoff.head,
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+	};
+	for (const mode of ["timeout", "malformed"] as const) {
+		const transport = new FakeTransport();
+		transport.issues.push(issue);
+		transport.pullRequests.push(cleanPullRequest(request));
+		if (mode === "timeout") transport.throwAfterIntegration = true;
+		else transport.malformedIntegrationResponse = true;
+		const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
+		assert.equal(result.kind, "integrated", mode);
+		if (result.kind === "integrated") assert.equal(result.reused, true, mode);
+		assert.equal(transport.integrateCalls, 1, mode);
+		assert.equal(transport.integrations.length, 1, mode);
+	}
+
+	const incomplete = new FakeTransport();
+	incomplete.issues.push(issue);
+	incomplete.pullRequests.push(cleanPullRequest(request));
+	incomplete.incompleteIntegrationLookup = true;
+	await assert.rejects(orchestratorFor(incomplete).integrateChild(candidate, child, handoff), /complete|pagination|authoritative/i);
+	assert.equal(incomplete.integrateCalls, 0);
 });
 
 test("review coverage must bind the planned repository, child, generation, paths, and scopes", async () => {
@@ -521,7 +786,7 @@ test("review coverage must bind the planned repository, child, generation, paths
 			findings: [],
 		}];
 		transport.pullRequests.push(pr);
-		const result = await new GitHubParentOrchestrator(transport).integrateChild(candidate, child, handoff);
+		const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
 		assert.equal(result.kind, "blocked", JSON.stringify(targetChanges));
 		assert.equal(transport.integrateCalls, 0);
 	}
@@ -565,7 +830,7 @@ test("restart reuses an exact bound integration receipt after GitHub closes the 
 		parentBranch: candidate.parentBranch,
 		integratedAt: "2026-07-21T12:01:00.000Z",
 	});
-	const result = await new GitHubParentOrchestrator(transport).integrateChild(candidate, child, handoff);
+	const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
 	assert.equal(result.kind, "integrated");
 	if (result.kind === "integrated") assert.equal(result.reused, true);
 	assert.equal(transport.integrateCalls, 0);
@@ -605,8 +870,9 @@ test("keeps the parent draft until all children and an exact-generation/head con
 		parentBranch: candidate.parentBranch,
 		integratedAt: "2026-07-21T12:01:00.000Z",
 	}));
+	transport.integrations.push(...receipts);
 
-	const orchestrator = new GitHubParentOrchestrator(transport, broker);
+	const orchestrator = orchestratorFor(transport, broker);
 	const blocked = await orchestrator.reconcileParentReadiness(candidate, receipts.slice(0, 1), decisionPolicy);
 	assert.equal(blocked.kind, "blocked");
 	assert.equal(broker.requests.length, 0);
@@ -669,6 +935,7 @@ test("pending/rejected decisions and parent head movement never mark ready", asy
 				".pi/extensions/shepherd/github-orchestrator.ts",
 			],
 		}, { draft: true }, 900));
+		transport.integrations.push(...receipts);
 		return transport;
 	};
 
@@ -679,7 +946,7 @@ test("pending/rejected decisions and parent head movement never mark ready", asy
 		const transport = makeTransport();
 		const broker = new FakeDecisionBroker();
 		broker.pollResult = pollResult;
-		const result = await new GitHubParentOrchestrator(transport, broker).reconcileParentReadiness(candidate, receipts, decisionPolicy);
+		const result = await orchestratorFor(transport, broker).reconcileParentReadiness(candidate, receipts, decisionPolicy);
 		assert.notEqual(result.kind, "ready");
 		assert.equal(transport.markReadyCalls, 0);
 	}
@@ -688,7 +955,103 @@ test("pending/rejected decisions and parent head movement never mark ready", asy
 	movedTransport.onPullRequestRead = (_query, matches, read) => read < 2
 		? matches
 		: matches.map((candidatePr) => ({ ...candidatePr, headSha: "f".repeat(40) }));
-	const moved = await new GitHubParentOrchestrator(movedTransport, new FakeDecisionBroker()).reconcileParentReadiness(candidate, receipts, decisionPolicy);
+	const moved = await orchestratorFor(movedTransport, new FakeDecisionBroker()).reconcileParentReadiness(candidate, receipts, decisionPolicy);
 	assert.equal(moved.kind, "blocked");
 	assert.equal(movedTransport.markReadyCalls, 0);
+});
+
+test("parent readiness reconciles caller receipts against complete authoritative records and current ancestry", async () => {
+	const candidate = await plan();
+	const parentHead = "e".repeat(40);
+	const receipts: ChildIntegrationReceipt[] = candidate.children.map((child, index) => ({
+		childId: child.id,
+		pullRequest: 812 + index,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		baseSha,
+		headSha: String(index + 1).repeat(40),
+		parentBranch: candidate.parentBranch,
+		integratedAt: "2026-07-21T12:01:00.000Z",
+	}));
+	const setup = (): FakeTransport => {
+		const transport = new FakeTransport();
+		transport.integrations.push(...receipts);
+		transport.pullRequests.push(cleanPullRequest({
+			repository: candidate.repository,
+			workItemId: `parent-${candidate.parentIssue}`,
+			generation: candidate.generation,
+			marker: candidate.markers.parentPullRequest,
+			title: candidate.title,
+			body: `Closes #${candidate.parentIssue}\n\n${candidate.markers.parentPullRequest}`,
+			draft: true,
+			baseBranch: candidate.parentBaseBranch,
+			headBranch: candidate.parentBranch,
+			baseSha,
+			headSha: parentHead,
+			changedPaths: [".pi/extensions/shepherd/github-orchestrator.ts"],
+			allowedScopes: candidate.children.flatMap((child) => child.writeScopes),
+		}, { draft: true }, 900));
+		return transport;
+	};
+
+	const forgedTransport = setup();
+	const forged = receipts.map((receipt, index) => index === 0 ? { ...receipt, pullRequest: 9_999 } : receipt);
+	const forgedResult = await orchestratorFor(forgedTransport, new FakeDecisionBroker())
+		.reconcileParentReadiness(candidate, forged, decisionPolicy);
+	assert.equal(forgedResult.kind, "blocked");
+	assert.equal(forgedTransport.markReadyCalls, 0);
+
+	const forcePushed = setup();
+	forcePushed.ancestry = false;
+	const stale = await orchestratorFor(forcePushed, new FakeDecisionBroker())
+		.reconcileParentReadiness(candidate, receipts, decisionPolicy);
+	assert.equal(stale.kind, "blocked");
+	assert.equal(forcePushed.markReadyCalls, 0);
+
+	const incomplete = setup();
+	incomplete.incompleteIntegrationLookup = true;
+	const incompleteResult = await orchestratorFor(incomplete, new FakeDecisionBroker())
+		.reconcileParentReadiness(candidate, receipts, decisionPolicy);
+	assert.equal(incompleteResult.kind, "blocked");
+	assert.equal(incomplete.markReadyCalls, 0);
+});
+
+test("parent ready transition recovers timeout and malformed responses only after exact authoritative re-read", async () => {
+	const candidate = await plan();
+	const receipts: ChildIntegrationReceipt[] = candidate.children.map((child, index) => ({
+		childId: child.id,
+		pullRequest: 812 + index,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		baseSha,
+		headSha: String(index + 1).repeat(40),
+		parentBranch: candidate.parentBranch,
+		integratedAt: "2026-07-21T12:01:00.000Z",
+	}));
+	for (const mode of ["timeout", "malformed"] as const) {
+		const transport = new FakeTransport();
+		transport.integrations.push(...receipts);
+		transport.pullRequests.push(cleanPullRequest({
+			repository: candidate.repository,
+			workItemId: `parent-${candidate.parentIssue}`,
+			generation: candidate.generation,
+			marker: candidate.markers.parentPullRequest,
+			title: candidate.title,
+			body: `Closes #${candidate.parentIssue}\n\n${candidate.markers.parentPullRequest}`,
+			draft: true,
+			baseBranch: candidate.parentBaseBranch,
+			headBranch: candidate.parentBranch,
+			baseSha,
+			headSha: "e".repeat(40),
+			changedPaths: [".pi/extensions/shepherd/github-orchestrator.ts"],
+			allowedScopes: candidate.children.flatMap((child) => child.writeScopes),
+		}, { draft: true }, 900));
+		if (mode === "timeout") transport.throwAfterReady = true;
+		else transport.malformedReadyResponse = true;
+		const result = await orchestratorFor(transport, new FakeDecisionBroker())
+			.reconcileParentReadiness(candidate, receipts, decisionPolicy);
+		assert.equal(result.kind, "ready", mode);
+		if (result.kind === "ready") assert.equal(result.reused, true, mode);
+		assert.equal(transport.markReadyCalls, 1, mode);
+	}
 });
