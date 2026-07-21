@@ -42,6 +42,30 @@ function request(overrides = {}) {
 	return { ...base, ...overrides };
 }
 
+function mutatingRequest(overrides = {}) {
+	const base = request();
+	const candidate = {
+		...base,
+		laneId: "worker",
+		role: "worker",
+		readOnly: false,
+		thinking: "high",
+		...overrides,
+	};
+	return {
+		...candidate,
+		binding: {
+			...base.binding,
+			runId: candidate.runId,
+			generation: overrides.binding?.generation ?? base.binding.generation,
+			laneId: candidate.laneId,
+			readOnly: false,
+			thinking: "high",
+			...overrides.binding,
+		},
+	};
+}
+
 function evidenceText(overrides = {}) {
 	return JSON.stringify({
 		...request().binding,
@@ -183,6 +207,23 @@ test("fails closed on SDK, model, extension, tool, and persistence drift", async
 	await assert.rejects(new SdkAgentRunner(persistent.sdk, persistent.modelRegistry).run(request()), /unexpectedly enabled persistence/);
 });
 
+test("rejects terminal events emitted by a drifted provider or model", async () => {
+	const harness = makeSdk();
+	harness.session.prompt = async () => {
+		const message = {
+			...terminalMessage(),
+			provider: "other-provider",
+			model: "fallback-model",
+		};
+		harness.emit({ type: "message_end", message });
+		harness.emit({ type: "agent_end", messages: [message], willRetry: false });
+	};
+	await assert.rejects(
+		new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request()),
+		/terminal.*model|routing mismatch/i,
+	);
+});
+
 test("rejects every requested built-in or custom child tool before session creation", async () => {
 	const harness = makeSdk();
 	await assert.rejects(
@@ -303,6 +344,252 @@ test("abort racing prompt resolution rejects otherwise valid late evidence", asy
 	assert.equal(harness.calls.dispose, 1);
 });
 
+test("abort during waitForIdle rejects already parsed evidence", async () => {
+	let idleStarted;
+	const idleStartedGate = new Promise((resolve) => { idleStarted = resolve; });
+	let releaseIdle;
+	const idleGate = new Promise((resolve) => { releaseIdle = resolve; });
+	const harness = makeSdk();
+	harness.session.waitForIdle = async () => {
+		harness.calls.idle += 1;
+		idleStarted();
+		await idleGate;
+	};
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry);
+	const pending = runner.run(request());
+	await idleStartedGate;
+	await runner.abort("run-1");
+	releaseIdle();
+	await assert.rejects(pending, /cancel/i);
+	assert.equal(harness.calls.unsubscribe, 1);
+	assert.equal(harness.calls.dispose, 1);
+});
+
+test("close during waitForIdle rejects already parsed evidence and joins cleanup", async () => {
+	let idleStarted;
+	const idleStartedGate = new Promise((resolve) => { idleStarted = resolve; });
+	let releaseIdle;
+	const idleGate = new Promise((resolve) => { releaseIdle = resolve; });
+	const harness = makeSdk();
+	harness.session.waitForIdle = async () => {
+		harness.calls.idle += 1;
+		idleStarted();
+		await idleGate;
+	};
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry);
+	const pending = runner.run(request());
+	await idleStartedGate;
+	const closing = runner.close();
+	releaseIdle();
+	await assert.rejects(pending, /closed|cancel/i);
+	await closing;
+	assert.equal(harness.calls.unsubscribe, 1);
+	assert.equal(harness.calls.dispose, 1);
+});
+
+test("deadline expiring during teardown rejects already parsed evidence", async () => {
+	const harness = makeSdk();
+	harness.session.dispose = () => {
+		harness.calls.dispose += 1;
+		const unblockAt = Date.now() + 20;
+		while (Date.now() < unblockAt) {
+			// Block the timer callback so only the post-cleanup deadline check can reject success.
+		}
+	};
+	await assert.rejects(
+		new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request({ timeoutMs: 10 })),
+		/timed out after 10ms/i,
+	);
+	assert.equal(harness.calls.unsubscribe, 1);
+	assert.equal(harness.calls.dispose, 1);
+});
+
+test("request timeout grants teardown its own bounded cleanup interval", async () => {
+	let idleStarted;
+	const idleStartedGate = new Promise((resolve) => { idleStarted = resolve; });
+	let releaseIdle;
+	const idleGate = new Promise((resolve) => { releaseIdle = resolve; });
+	const harness = makeSdk();
+	harness.session.prompt = () => new Promise(() => undefined);
+	harness.session.waitForIdle = async () => {
+		harness.calls.idle += 1;
+		idleStarted();
+		await idleGate;
+	};
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry, { cleanupTimeoutMs: 1_000 });
+	const pending = runner.run(request({ timeoutMs: 10 }));
+	let settled = false;
+	void pending.then(() => { settled = true; }, () => { settled = true; });
+	await idleStartedGate;
+	await new Promise((resolve) => setTimeout(resolve, 10));
+	assert.equal(settled, false, "request expiry must not turn the teardown allowance into zero");
+	assert.equal(harness.calls.dispose, 0);
+	releaseIdle();
+	await assert.rejects(pending, /timed out after 10ms/i);
+	assert.equal(harness.calls.dispose, 1);
+});
+
+test("timed-out child cleanup stays quarantined and blocks another mutating generation", async () => {
+	let releaseAbort;
+	const abortGate = new Promise((resolve) => { releaseAbort = resolve; });
+	let releaseIdle;
+	const idleGate = new Promise((resolve) => { releaseIdle = resolve; });
+	let hooksBlocked = true;
+	let disposed;
+	const disposedGate = new Promise((resolve) => { disposed = resolve; });
+	const harness = makeSdk();
+	harness.session.thinkingLevel = "high";
+	let promptCount = 0;
+	harness.session.prompt = async () => {
+		promptCount += 1;
+		if (promptCount === 1) await new Promise(() => undefined);
+		harness.emitTerminal("stop", evidenceText({
+			runId: "run-2",
+			generation: 2,
+			laneId: "worker-2",
+			readOnly: false,
+			thinking: "high",
+			summary: "second mutator completed",
+		}));
+	};
+	harness.session.abort = async () => {
+		harness.calls.abort += 1;
+		if (hooksBlocked) await abortGate;
+	};
+	harness.session.waitForIdle = async () => {
+		harness.calls.idle += 1;
+		if (hooksBlocked) await idleGate;
+	};
+	harness.session.dispose = () => {
+		harness.calls.dispose += 1;
+		disposed();
+	};
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry, { cleanupTimeoutMs: 10 });
+	await assert.rejects(
+		runner.run(mutatingRequest({ timeoutMs: 10 })),
+		/timed out after 10ms/i,
+	);
+	assert.equal(harness.calls.dispose, 0, "an unsettled child must not be disposed");
+	await assert.rejects(
+		runner.run(mutatingRequest({
+			runId: "run-2",
+			laneId: "worker-2",
+			binding: { generation: 2 },
+		})),
+		/only one mutating AgentSession/i,
+	);
+	hooksBlocked = false;
+	releaseAbort();
+	releaseIdle();
+	await disposedGate;
+	await new Promise((resolve) => setImmediate(resolve));
+	const result = await runner.run(mutatingRequest({
+		runId: "run-2",
+		laneId: "worker-2",
+		binding: { generation: 2 },
+	}));
+	assert.equal(result.summary, "second mutator completed");
+});
+
+test("rejected child settlement poisons the runner and never releases the mutator fence", async () => {
+	const harness = makeSdk();
+	harness.session.thinkingLevel = "high";
+	harness.session.abort = async () => {
+		harness.calls.abort += 1;
+		throw new Error("abort settlement failed");
+	};
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry, { cleanupTimeoutMs: 100 });
+	await assert.rejects(
+		runner.run(mutatingRequest()),
+		/cleanup failed/i,
+	);
+	await assert.rejects(
+		runner.run(mutatingRequest({
+			runId: "run-2",
+			laneId: "worker-2",
+			binding: { generation: 2 },
+		})),
+		/quarantined|only one mutating/i,
+	);
+	await assert.rejects(runner.close(), /failed to close|quarantined|cleanup/i);
+	assert.equal(harness.calls.dispose, 1);
+});
+
+test("close joins a quarantined child after the bounded run teardown returns", async () => {
+	let releaseAbort;
+	const abortGate = new Promise((resolve) => { releaseAbort = resolve; });
+	let releaseIdle;
+	const idleGate = new Promise((resolve) => { releaseIdle = resolve; });
+	const harness = makeSdk();
+	harness.session.thinkingLevel = "high";
+	harness.session.prompt = () => new Promise(() => undefined);
+	harness.session.abort = async () => {
+		harness.calls.abort += 1;
+		await abortGate;
+	};
+	harness.session.waitForIdle = async () => {
+		harness.calls.idle += 1;
+		await idleGate;
+	};
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry, { cleanupTimeoutMs: 50 });
+	await assert.rejects(runner.run(mutatingRequest({ timeoutMs: 10 })), /timed out after 10ms/i);
+	assert.equal(harness.calls.dispose, 0);
+	const closing = runner.close();
+	let closeSettled = false;
+	void closing.then(() => { closeSettled = true; }, () => { closeSettled = true; });
+	await new Promise((resolve) => setImmediate(resolve));
+	assert.equal(closeSettled, false, "close must join the quarantined child");
+	releaseAbort();
+	releaseIdle();
+	await closing;
+	assert.equal(harness.calls.dispose, 1);
+});
+
+test("timed-out setup keeps mutating ownership until late-session cleanup settles", async () => {
+	let releaseCreation;
+	const creationGate = new Promise((resolve) => { releaseCreation = resolve; });
+	let creationStarted;
+	const creationStartedGate = new Promise((resolve) => { creationStarted = resolve; });
+	let disposed;
+	const disposedGate = new Promise((resolve) => { disposed = resolve; });
+	const harness = makeSdk();
+	harness.session.thinkingLevel = "high";
+	const originalCreate = harness.sdk.createSession;
+	let creationCount = 0;
+	harness.sdk.createSession = async (options) => {
+		creationCount += 1;
+		if (creationCount === 1) {
+			creationStarted();
+			await creationGate;
+		}
+		return originalCreate(options);
+	};
+	harness.session.dispose = () => {
+		harness.calls.dispose += 1;
+		disposed();
+	};
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry, { cleanupTimeoutMs: 20 });
+	const first = runner.run(mutatingRequest({ timeoutMs: 10 }));
+	await creationStartedGate;
+	await assert.rejects(first, /timed out after 10ms/i);
+	await assert.rejects(
+		runner.run(mutatingRequest({
+			runId: "run-2",
+			laneId: "worker-2",
+			binding: { generation: 2 },
+		})),
+		/only one mutating AgentSession/i,
+	);
+	releaseCreation();
+	await disposedGate;
+	await new Promise((resolve) => setImmediate(resolve));
+	await runner.run(mutatingRequest({
+		runId: "run-2",
+		laneId: "worker-2",
+		binding: { generation: 2 },
+	}));
+});
+
 test("abort during session creation prevents every later prompt and disposes the child", async () => {
 	let releaseCreation;
 	const creationGate = new Promise((resolve) => { releaseCreation = resolve; });
@@ -326,7 +613,7 @@ test("abort during session creation prevents every later prompt and disposes the
 	assert.equal(harness.calls.dispose, 1);
 });
 
-test("hung abort and idle hooks are bounded and disposal still runs", async () => {
+test("hung abort and idle hooks are bounded without disposing an unsettled child", async () => {
 	const harness = makeSdk();
 	harness.session.abort = () => new Promise(() => undefined);
 	harness.session.waitForIdle = () => new Promise(() => undefined);
@@ -336,10 +623,11 @@ test("hung abort and idle hooks are bounded and disposal still runs", async () =
 		new Promise((_, reject) => setTimeout(() => reject(new Error("runner cleanup did not settle")), 200)),
 	]);
 	await assert.rejects(bounded, /cleanup.*timed out/i);
-	assert.equal(harness.calls.dispose, 1);
+	assert.equal(harness.calls.unsubscribe, 0);
+	assert.equal(harness.calls.dispose, 0);
 });
 
-test("close settles within its cleanup deadline and disposes a hung active child", async () => {
+test("close settles within its cleanup deadline and quarantines a hung active child", async () => {
 	let releasePrompt;
 	const promptGate = new Promise((resolve) => { releasePrompt = resolve; });
 	let promptStarted;
@@ -352,7 +640,8 @@ test("close settles within its cleanup deadline and disposes a hung active child
 	const pendingFailure = assert.rejects(pending, /cleanup.*timed out|cancel/i);
 	await promptStartedGate;
 	await assert.rejects(runner.close(), /close timed out|failed to close/i);
-	assert.equal(harness.calls.dispose, 1);
+	assert.equal(harness.calls.unsubscribe, 0);
+	assert.equal(harness.calls.dispose, 0);
 	releasePrompt();
 	await pendingFailure;
 });
@@ -422,7 +711,7 @@ test("late session creation after timeout is immediately cleaned up without prom
 	assert.equal(harness.calls.dispose, 1);
 });
 
-test("one end-to-end deadline spans setup, prompt, and teardown", async () => {
+test("request deadline spans setup and prompt while teardown has a dedicated bound", async () => {
 	const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 	const promptDeadline = makeSdk({
 		createResourceLoader() {
@@ -454,9 +743,9 @@ test("one end-to-end deadline spans setup, prompt, and teardown", async () => {
 	const teardownStartedAt = Date.now();
 	await assert.rejects(
 		new SdkAgentRunner(teardownDeadline.sdk, teardownDeadline.modelRegistry).run(request({ timeoutMs: 100 })),
-		/cleanup.*timed out/i,
+		/timed out after 100ms/i,
 	);
-	assert.ok(Date.now() - teardownStartedAt < 150, "teardown must use only the request deadline remainder");
+	assert.ok(Date.now() - teardownStartedAt < 150, "teardown must remain independently bounded");
 	assert.equal(teardownDeadline.calls.dispose, 1);
 });
 
@@ -482,7 +771,8 @@ test("concurrent close callers share cleanup completion and the same failure", a
 	const retryFailure = await runner.close().catch((error) => error);
 	assert.strictEqual(secondFailure, firstFailure);
 	assert.strictEqual(retryFailure, firstFailure);
-	assert.equal(harness.calls.dispose, 1);
+	assert.equal(harness.calls.unsubscribe, 0);
+	assert.equal(harness.calls.dispose, 0);
 	releasePrompt();
 	await pendingFailure;
 });

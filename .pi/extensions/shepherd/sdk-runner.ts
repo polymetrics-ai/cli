@@ -88,7 +88,8 @@ class OwnedChild {
 	unsubscribe: (() => void) | undefined;
 
 	#abortPromise: Promise<void> | undefined;
-	#cleanupPromise: Promise<void> | undefined;
+	#idlePromise: Promise<void> | undefined;
+	#settlementPromise: Promise<void> | undefined;
 	readonly #cleanupTimeoutMs: number;
 
 	constructor(runId: string, laneKey: string, session: EmbeddedSession, cleanupTimeoutMs: number) {
@@ -105,27 +106,37 @@ class OwnedChild {
 		return this.#abortPromise;
 	}
 
-	cleanup(deadlineAt = Date.now() + this.#cleanupTimeoutMs): Promise<void> {
-		if (!this.#cleanupPromise) {
-			this.#cleanupPromise = this.#cleanup(deadlineAt);
+	settle(): Promise<void> {
+		if (!this.#settlementPromise) {
+			this.#settlementPromise = this.#settle();
+			this.#settlementPromise.catch(() => undefined);
 		}
-		return this.#cleanupPromise;
+		return this.#settlementPromise;
 	}
 
-	async #cleanup(deadlineAt: number): Promise<void> {
-		let firstError: unknown;
-		let timedOut = false;
+	async cleanup(deadlineAt = Date.now() + this.#cleanupTimeoutMs): Promise<void> {
 		try {
-			await boundedCleanupUntil(this.abortOnce(), deadlineAt, "abort");
+			await boundedCleanupUntil(this.settle(), deadlineAt, "child-settlement");
 		} catch (error) {
-			firstError = error;
-			timedOut ||= isCleanupTimeout(error);
+			if (isCleanupTimeout(error)) {
+				throw new AgentRunnerError("AgentSession cleanup timed out", { cause: error });
+			}
+			throw error;
 		}
-		try {
-			await boundedCleanupUntil(this.session.waitForIdle(), deadlineAt, "wait-for-idle");
-		} catch (error) {
-			firstError ??= error;
-			timedOut ||= isCleanupTimeout(error);
+	}
+
+	#waitForIdleOnce(): Promise<void> {
+		if (!this.#idlePromise) {
+			this.#idlePromise = Promise.resolve().then(() => this.session.waitForIdle());
+		}
+		return this.#idlePromise;
+	}
+
+	async #settle(): Promise<void> {
+		let firstError: unknown;
+		const hooks = await Promise.allSettled([this.abortOnce(), this.#waitForIdleOnce()]);
+		for (const hook of hooks) {
+			if (hook.status === "rejected") firstError ??= hook.reason;
 		}
 		try {
 			this.unsubscribe?.();
@@ -140,7 +151,6 @@ class OwnedChild {
 			firstError ??= error;
 		}
 		if (firstError) {
-			if (timedOut) throw new AgentRunnerError("AgentSession cleanup timed out", { cause: firstError });
 			throw new AgentRunnerError("AgentSession cleanup failed", { cause: firstError });
 		}
 	}
@@ -151,11 +161,14 @@ class RunScope {
 	readonly signal: AbortSignal;
 	readonly #controller = new AbortController();
 	readonly #termination: Promise<never>;
+	readonly #timeoutMs: number;
 	#rejectTermination: ((error: AgentRunnerError) => void) | undefined;
+	#failure: AgentRunnerError | undefined;
 	#timer: ReturnType<typeof setTimeout> | undefined;
 	#finished = false;
 
 	constructor(timeoutMs: number) {
+		this.#timeoutMs = timeoutMs;
 		this.deadlineAt = Date.now() + timeoutMs;
 		this.signal = this.#controller.signal;
 		this.#termination = new Promise<never>((_resolve, reject) => {
@@ -164,8 +177,7 @@ class RunScope {
 		this.#termination.catch(() => undefined);
 		this.#timer = setTimeout(() => {
 			if (this.#finished || this.signal.aborted) return;
-			this.#controller.abort();
-			this.#rejectTermination?.(new AgentRunnerError(`AgentSession timed out after ${timeoutMs}ms`));
+			this.#terminate(new AgentRunnerError(`AgentSession timed out after ${timeoutMs}ms`));
 		}, timeoutMs);
 	}
 
@@ -175,8 +187,14 @@ class RunScope {
 
 	abort(): void {
 		if (this.#finished || this.signal.aborted) return;
-		this.#controller.abort();
-		this.#rejectTermination?.(new AgentRunnerError("AgentSession run was cancelled"));
+		this.#terminate(new AgentRunnerError("AgentSession run was cancelled"));
+	}
+
+	assertActive(): void {
+		if (!this.#finished && !this.#failure && Date.now() >= this.deadlineAt) {
+			this.#terminate(new AgentRunnerError(`AgentSession timed out after ${this.#timeoutMs}ms`));
+		}
+		if (this.#failure) throw this.#failure;
 	}
 
 	finish(): void {
@@ -184,6 +202,13 @@ class RunScope {
 		if (this.#timer) clearTimeout(this.#timer);
 		this.#timer = undefined;
 		this.#rejectTermination = undefined;
+	}
+
+	#terminate(error: AgentRunnerError): void {
+		if (this.#finished || this.#failure) return;
+		this.#failure = error;
+		this.#controller.abort();
+		this.#rejectTermination?.(error);
 	}
 }
 
@@ -209,12 +234,14 @@ export class SdkAgentRunner implements AgentRunner {
 	#cancelledRuns = new Set<string>();
 	#runScopes = new Map<string, Set<RunScope>>();
 	#setupTasks = new Set<Promise<void>>();
+	#retirementTasks = new Set<Promise<void>>();
 	#idleWaiters = new Set<() => void>();
 	#activeCount = 0;
 	#activeMutator = false;
 	#closing = false;
 	#closed = false;
 	#closePromise: Promise<void> | undefined;
+	#quarantineFailure: unknown;
 
 	constructor(
 		sdk: ShepherdSdk,
@@ -263,6 +290,8 @@ export class SdkAgentRunner implements AgentRunner {
 		let child: OwnedChild | undefined;
 		let onScopeAbort: (() => void) | undefined;
 		let primaryFailed = false;
+		let result!: AgentRunResult;
+		const ownedSetupTasks: Promise<void>[] = [];
 
 		try {
 			this.#assertRunActive(request);
@@ -294,7 +323,7 @@ export class SdkAgentRunner implements AgentRunner {
 				systemPrompt: request.systemPrompt,
 			});
 			const reloadPromise = Promise.resolve().then(() => resourceLoader.reload());
-			this.#trackSetup(reloadPromise);
+			ownedSetupTasks.push(this.#trackSetup(reloadPromise));
 			await scope.race(reloadPromise);
 			this.#assertRunActive(request);
 
@@ -321,10 +350,10 @@ export class SdkAgentRunner implements AgentRunner {
 						created.session,
 						this.#options.cleanupTimeoutMs,
 					);
-					await lateChild.cleanup();
+					await lateChild.settle();
 				}
 			}, () => undefined);
-			this.#trackSetup(creationLifecycle);
+			ownedSetupTasks.push(this.#trackSetup(creationLifecycle));
 
 			let created: Awaited<typeof creationPromise>;
 			try {
@@ -387,25 +416,33 @@ export class SdkAgentRunner implements AgentRunner {
 				agentEndCount,
 				agentEndWillRetry,
 			});
+			if (terminal.provider !== request.provider || terminal.model !== request.model) {
+				throw new AgentRunnerError("AgentSession terminal model routing mismatch");
+			}
 			const assistantText = assistantTextFromTerminal(terminal);
-			return parseEvidence(assistantText, this.#options.maxAssistantBytes, this.#options.maxSummaryCharacters);
+			result = parseEvidence(assistantText, this.#options.maxAssistantBytes, this.#options.maxSummaryCharacters);
 		} catch (error) {
 			primaryFailed = true;
 			throw error;
 		} finally {
 			try {
-				await child?.cleanup(Math.min(scope.deadlineAt, Date.now() + this.#options.cleanupTimeoutMs));
+				await child?.cleanup(Date.now() + this.#options.cleanupTimeoutMs);
+				if (!primaryFailed) {
+					scope.assertActive();
+					this.#assertRunActive(request);
+				}
 			} catch (error) {
 				if (!primaryFailed) throw error;
 			} finally {
 				if (onScopeAbort) scope.signal.removeEventListener("abort", onScopeAbort);
 				request.signal?.removeEventListener("abort", onAbort);
-				if (child) this.#unregister(child);
 				scope.finish();
 				this.#unregisterScope(request.runId, scope);
-				this.#release(request, laneKey);
+				const resources = child ? [...ownedSetupTasks, child.settle()] : ownedSetupTasks;
+				this.#retireReservation(request, laneKey, child, resources);
 			}
 		}
+		return result;
 	}
 
 	async abort(runId: string): Promise<void> {
@@ -435,20 +472,29 @@ export class SdkAgentRunner implements AgentRunner {
 		const childResultsPromise = Promise.allSettled(
 			children.map((child) => child.cleanup(deadlineAt)),
 		);
-		let setupResults: PromiseSettledResult<void>[];
+		const setupResultsPromise = Promise.allSettled([...this.#setupTasks]);
+		const retirementResultsPromise = Promise.allSettled([...this.#retirementTasks]);
 		try {
-			setupResults = await boundedCleanupUntil(
-				Promise.allSettled([...this.#setupTasks]),
+			await boundedCleanupUntil(
+				this.#waitForIdle(),
 				deadlineAt,
 				"runner-close",
 			);
 		} catch (error) {
-			await childResultsPromise;
 			throw new AgentRunnerError("AgentSession runner close timed out", { cause: error });
 		}
-		const childResults = await childResultsPromise;
-		await this.#waitForIdle();
-		const failure = [...setupResults, ...childResults].find((result) => result.status === "rejected");
+		const [setupResults, childResults, retirementResults] = await Promise.all([
+			setupResultsPromise,
+			childResultsPromise,
+			retirementResultsPromise,
+		]);
+		const failure = [...setupResults, ...childResults, ...retirementResults]
+			.find((result) => result.status === "rejected");
+		if (this.#quarantineFailure !== undefined) {
+			throw new AgentRunnerError("AgentSession runner is quarantined after failed cleanup", {
+				cause: this.#quarantineFailure,
+			});
+		}
 		if (failure?.status === "rejected") {
 			throw new AgentRunnerError("one or more AgentSessions failed to close", { cause: failure.reason });
 		}
@@ -477,6 +523,11 @@ export class SdkAgentRunner implements AgentRunner {
 	}
 
 	#assertOpen(): void {
+		if (this.#quarantineFailure !== undefined) {
+			throw new AgentRunnerError("AgentSession runner is quarantined after failed cleanup", {
+				cause: this.#quarantineFailure,
+			});
+		}
 		if (this.#closing || this.#closed) throw new AgentRunnerError("AgentSession runner is closed");
 	}
 
@@ -539,11 +590,35 @@ export class SdkAgentRunner implements AgentRunner {
 		if (scopes.size === 0) this.#runScopes.delete(runId);
 	}
 
-	#trackSetup(operation: Promise<unknown>): void {
+	#trackSetup(operation: Promise<unknown>): Promise<void> {
 		let tracked: Promise<void>;
 		tracked = operation.then(() => undefined).finally(() => this.#setupTasks.delete(tracked));
 		tracked.catch(() => undefined);
 		this.#setupTasks.add(tracked);
+		return tracked;
+	}
+
+	#retireReservation(
+		request: AgentRunRequest,
+		laneKey: string,
+		child: OwnedChild | undefined,
+		resources: Promise<void>[],
+	): void {
+		let retirement: Promise<void>;
+		retirement = Promise.allSettled(resources).then((results) => {
+			const failure = results.find((result) => result.status === "rejected");
+			if (failure?.status === "rejected") {
+				this.#quarantineFailure ??= failure.reason;
+				this.#release(request, laneKey);
+				throw new AgentRunnerError("AgentSession runner quarantined after failed cleanup", {
+					cause: failure.reason,
+				});
+			}
+			if (child) this.#unregister(child);
+			this.#release(request, laneKey);
+		}).finally(() => this.#retirementTasks.delete(retirement));
+		retirement.catch(() => undefined);
+		this.#retirementTasks.add(retirement);
 	}
 
 	#unregister(child: OwnedChild): void {

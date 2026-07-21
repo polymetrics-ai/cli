@@ -23,7 +23,7 @@ import { SdkAgentRunner, REQUIRED_PI_VERSION, type ShepherdSdk } from "./sdk-run
 import { FileStateStore } from "./state-store.ts";
 import { captureTargetEvidence } from "./target-evidence.ts";
 
-function repositoryFingerprint(worktreeIdentity: string): string {
+function stateFingerprint(worktreeIdentity: string): string {
 	return createHash("sha256").update(worktreeIdentity).digest("hex").slice(0, 24);
 }
 
@@ -44,22 +44,31 @@ function embeddedSdk(): ShepherdSdk {
 export default function shepherdExtension(pi: ExtensionAPI): void {
 	const sdk = embeddedSdk();
 	registerShepherdExtension(pi as unknown as ShepherdExtensionHost, {
-		resolveWorktree: (context) => canonicalizeGitWorktree(context.cwd),
+		resolveWorktree: (context, options) => canonicalizeGitWorktree(context.cwd, options),
 		createController(context: ShepherdCommandContext, worktree) {
 			const root = join(
 				getAgentDir(),
 				"shepherd",
-				repositoryFingerprint(worktree.identity),
+				stateFingerprint(worktree.worktreeIdentity),
 			);
 			return new ShepherdController({
 				store: new FileStateStore(root),
 				runner: new SdkAgentRunner(sdk, context.modelRegistry as never, { maxConcurrency: 2 }),
 				targetEvidence: {
-					capture: (command) => captureTargetEvidence({
-						cwd: context.cwd,
-						issue: command.issue,
-						...(command.pr === undefined ? {} : { pr: command.pr }),
-					}),
+					capture: async (command) => {
+						const current = await canonicalizeGitWorktree(context.cwd);
+						if (current.repositoryIdentity !== worktree.repositoryIdentity
+							|| current.worktreeIdentity !== worktree.worktreeIdentity) {
+							throw new Error("Shepherd target repository/worktree identity changed");
+						}
+						return captureTargetEvidence({
+							cwd: current.cwd,
+							repositoryIdentity: current.repositoryIdentity,
+							worktreeIdentity: current.worktreeIdentity,
+							issue: command.issue,
+							...(command.pr === undefined ? {} : { pr: command.pr }),
+						});
+					},
 				},
 			});
 		},

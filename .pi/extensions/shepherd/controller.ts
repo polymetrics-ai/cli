@@ -21,6 +21,8 @@ export interface ShepherdCommandConfig {
 
 export interface TargetEvidence {
 	cwd: string;
+	repositoryIdentity: string;
+	worktreeIdentity: string;
 	branch: string;
 	candidateHead: string;
 	clean: boolean;
@@ -74,7 +76,7 @@ interface LaneOutcome {
 
 interface ActiveRunLifecycle {
 	runId: string;
-	phase: "active" | "terminal";
+	phase: "initializing" | "active" | "cancelling" | "terminal";
 	cancelReason?: "stopped" | "interrupted";
 	abortController: AbortController;
 	done: Promise<void>;
@@ -281,14 +283,16 @@ export class ShepherdController {
 			const effectiveCommand: ShepherdCommandConfig = existing.pr === undefined
 				? commandWithoutPr
 				: { ...commandWithoutPr, pr: existing.pr };
+			if (existing.status === "completed") {
+				throw new Error(`Shepherd run for issue #${command.issue} is already completed; use start for a fresh run`);
+			}
+			const target = await this.targetEvidence.capture(effectiveCommand);
+			this.assertResumeTarget(existing, target);
 			if (existing.status === "running") {
 				existing = reconcileInterruptedRun(existing, this.clock());
 				await this.persist(existing, lifecycle);
 			}
-			if (existing.status === "completed") {
-				throw new Error(`Shepherd run for issue #${command.issue} is already completed; use start for a fresh run`);
-			}
-			return await this.execute(effectiveCommand, existing.generation + 1, lifecycle);
+			return await this.execute(effectiveCommand, existing.generation + 1, lifecycle, target);
 		} finally {
 			lifecycle.phase = "terminal";
 			try {
@@ -302,11 +306,9 @@ export class ShepherdController {
 
 	async stop(issue: number): Promise<ShepherdRunState> {
 		const active = this.activeRuns.get(issue);
-		if (!active || active.phase !== "active") {
+		if (!active || !this.requestCancellation(active, "stopped")) {
 			throw new Error(`Shepherd run for issue #${issue} is not owned by this Pi session`);
 		}
-		active.cancelReason = "stopped";
-		active.abortController.abort("stopped");
 		await this.runner.abort(active.runId).catch(() => undefined);
 		await active.done;
 		const state = await this.store.load(issue);
@@ -318,13 +320,9 @@ export class ShepherdController {
 
 	async shutdown(): Promise<void> {
 		const owned = [...this.activeRuns.values()];
-		const active = owned.filter((lifecycle) => lifecycle.phase === "active");
-		for (const lifecycle of active) {
-			lifecycle.cancelReason ??= "interrupted";
-			lifecycle.abortController.abort("interrupted");
-		}
+		const interrupted = owned.filter((lifecycle) => this.requestCancellation(lifecycle, "interrupted"));
 		const cleanup = await Promise.allSettled([
-			...active.map((lifecycle) => this.runner.abort(lifecycle.runId)),
+			...interrupted.map((lifecycle) => this.runner.abort(lifecycle.runId)),
 			this.runner.close(),
 		]);
 		await Promise.all(owned.map((lifecycle) => lifecycle.done));
@@ -338,14 +336,18 @@ export class ShepherdController {
 		command: ShepherdCommandConfig,
 		generation: number,
 		lifecycle: ActiveRunLifecycle,
+		capturedTarget?: TargetEvidence,
 	): Promise<ShepherdRunState> {
-		const target = await this.targetEvidence.capture(command);
+		const target = capturedTarget ?? await this.targetEvidence.capture(command);
 		if (!target.clean) throw new Error("Target worktree must be clean");
 		const now = this.clock();
 		const run: ShepherdRunState = {
 			schemaVersion: 1,
 			issue: command.issue,
 			...(command.pr ? { pr: command.pr } : {}),
+			...(target.prUrl ? { prUrl: target.prUrl } : {}),
+			repositoryIdentity: target.repositoryIdentity,
+			worktreeIdentity: target.worktreeIdentity,
 			runId: lifecycle.runId,
 			generation,
 			status: "running",
@@ -363,6 +365,7 @@ export class ShepherdController {
 		};
 		await this.persist(run, lifecycle);
 		if (lifecycle.cancelReason) return this.persistCancelled(run, lifecycle);
+		lifecycle.phase = "active";
 
 		const outcomes = await mapWithLimit(
 			READ_ONLY_LANES,
@@ -375,31 +378,39 @@ export class ShepherdController {
 		);
 		if (lifecycle.cancelReason) return this.persistCancelled(run, lifecycle);
 
+		const score = overallScore(outcomes);
+		const hardGates = [...new Set(outcomes.flatMap((outcome) => outcome.hardGates))];
+		try {
+			const finalTarget = await this.targetEvidence.capture(command);
+			if (!sameTarget(target, finalTarget)) hardGates.push("target_changed");
+		} catch {
+			hardGates.push("target_revalidation_failed");
+		}
+		if (lifecycle.cancelReason) return this.persistCancelled(run, lifecycle);
+		const aggregateHalted = hardGates.length > 0
+			|| outcomes.some((outcome) => outcome.decision === "halt");
+
 		for (const outcome of outcomes) {
 			const lane = run.lanes.find((candidate) => candidate.id === outcome.laneId);
 			if (!lane) continue;
-			lane.status =
-				outcome.decision === "proceed"
-					? "succeeded"
-					: outcome.decision === "correct"
-						? "failed"
-						: "halted";
+			const laneHardGates = [...outcome.hardGates];
+			lane.status = outcome.decision === "proceed"
+				? "succeeded"
+				: aggregateHalted
+					? "halted"
+					: "failed";
+			if (lane.status === "halted" && laneHardGates.length === 0) {
+				laneHardGates.push("run_halted");
+				hardGates.push("run_halted");
+			}
 			lane.summary = sanitizeSummary(outcome.summary, 2000);
 			lane.score = outcome.score;
-			lane.hardGates = [...outcome.hardGates];
+			lane.hardGates = laneHardGates;
 		}
 
-		run.score = overallScore(outcomes);
-		run.hardGates = [...new Set(outcomes.flatMap((outcome) => outcome.hardGates))].sort();
-		try {
-			const finalTarget = await this.targetEvidence.capture(command);
-			if (!sameTarget(target, finalTarget)) run.hardGates.push("target_changed");
-		} catch {
-			run.hardGates.push("target_revalidation_failed");
-		}
-		run.hardGates = [...new Set(run.hardGates)].sort();
-		if (lifecycle.cancelReason) return this.persistCancelled(run, lifecycle);
-		if (run.hardGates.length > 0 || outcomes.some((outcome) => outcome.decision === "halt")) {
+		run.score = score;
+		run.hardGates = [...new Set(hardGates)].sort();
+		if (aggregateHalted) {
 			run.status = "halted";
 		} else if (outcomes.some((outcome) => outcome.decision === "correct")) {
 			run.status = "failed";
@@ -407,9 +418,8 @@ export class ShepherdController {
 			run.status = "completed";
 		}
 		run.updatedAt = this.clock();
-		await this.persist(run, lifecycle);
-		if (lifecycle.cancelReason) return this.persistCancelled(run, lifecycle);
 		lifecycle.phase = "terminal";
+		await this.persist(run, lifecycle);
 		return run;
 	}
 
@@ -489,7 +499,7 @@ export class ShepherdController {
 		const done = new Promise<void>((resolve) => { resolveDone = resolve; });
 		const lifecycle: ActiveRunLifecycle = {
 			runId: this.createRunId(),
-			phase: "active",
+			phase: "initializing",
 			abortController: new AbortController(),
 			done,
 			resolveDone,
@@ -498,8 +508,30 @@ export class ShepherdController {
 		return lifecycle;
 	}
 
+	private requestCancellation(
+		lifecycle: ActiveRunLifecycle,
+		reason: "stopped" | "interrupted",
+	): boolean {
+		const cancellable = lifecycle.phase === "active"
+			|| (lifecycle.phase === "initializing" && reason === "interrupted");
+		if (!cancellable) return false;
+		lifecycle.phase = "cancelling";
+		lifecycle.cancelReason = reason;
+		lifecycle.abortController.abort(reason);
+		return true;
+	}
+
 	private release(issue: number, lifecycle: ActiveRunLifecycle): void {
 		if (this.activeRuns.get(issue) === lifecycle) this.activeRuns.delete(issue);
+	}
+
+	private assertResumeTarget(existing: ShepherdRunState, target: TargetEvidence): void {
+		if (target.repositoryIdentity !== existing.repositoryIdentity
+			|| target.worktreeIdentity !== existing.worktreeIdentity
+			|| target.pr !== existing.pr
+			|| target.prUrl !== existing.prUrl) {
+			throw new Error(`Cannot resume issue #${existing.issue}: persisted repository, worktree, or PR identity differs from the fresh target`);
+		}
 	}
 
 	private async persistCancelled(
@@ -523,6 +555,8 @@ export class ShepherdController {
 function sameTarget(initial: TargetEvidence, final: TargetEvidence): boolean {
 	return initial.clean === final.clean
 		&& initial.cwd === final.cwd
+		&& initial.repositoryIdentity === final.repositoryIdentity
+		&& initial.worktreeIdentity === final.worktreeIdentity
 		&& initial.branch === final.branch
 		&& initial.candidateHead === final.candidateHead
 		&& initial.pr === final.pr

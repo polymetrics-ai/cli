@@ -49,6 +49,9 @@ export interface ShepherdRunState {
 	schemaVersion: number;
 	issue: number;
 	pr?: number;
+	prUrl?: string;
+	repositoryIdentity: string;
+	worktreeIdentity: string;
 	runId: string;
 	generation: number;
 	status: ShepherdRunStatus;
@@ -166,13 +169,16 @@ export function selectReadyLanes<T extends LaneDefinition>(
 
 export function reconcileInterruptedRun<T extends ShepherdRunState>(run: T, now: string): T {
 	if (typeof now !== "string" || now.length === 0) throw new TypeError("reconciliation timestamp is required");
+	const wasRunning = run.status === "running";
 	const lanes = run.lanes.map((lane) => ({
 		...lane,
-		status: lane.status === "running" ? "interrupted" as const : lane.status,
+		status: wasRunning && (lane.status === "running" || lane.status === "pending")
+			? "interrupted" as const
+			: lane.status,
 	}));
 	return {
 		...run,
-		status: run.status === "running" ? "interrupted" : run.status,
+		status: wasRunning ? "interrupted" : run.status,
 		updatedAt: now,
 		lanes,
 	};

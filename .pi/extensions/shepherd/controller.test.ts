@@ -8,6 +8,14 @@ import { ShepherdController } from "./controller.ts";
 import { FileStateStore } from "./state-store.ts";
 
 const head = "a".repeat(40);
+const targetIdentity = {
+	repositoryIdentity: "c".repeat(64),
+	worktreeIdentity: "d".repeat(64),
+};
+const targetPullRequest = {
+	pr: 438,
+	prUrl: "https://github.com/polymetrics-ai/cli/pull/438",
+};
 const perfectDimensions = {
 	correctStage: 1,
 	artifactValid: 1,
@@ -88,6 +96,8 @@ function makeHarness(overrides = {}) {
 		async capture() {
 			return {
 				cwd: "/tmp/read-only-pr",
+				...targetIdentity,
+				...targetPullRequest,
 				branch: "feat/cli-architecture-v2",
 				candidateHead: head,
 				clean: true,
@@ -116,6 +126,9 @@ test("runs independent read-only lanes concurrently and persists a completed rat
 	assert.deepEqual(harness.requests.map((request) => request.thinking), ["xhigh", "xhigh"]);
 	assert.equal(result.status, "completed");
 	assert.equal(result.score, 1);
+	assert.equal(result.repositoryIdentity, targetIdentity.repositoryIdentity);
+	assert.equal(result.worktreeIdentity, targetIdentity.worktreeIdentity);
+	assert.equal(result.prUrl, targetPullRequest.prUrl);
 	assert.equal((await harness.store.load(397)).status, "completed");
 });
 
@@ -127,6 +140,8 @@ test("revalidates the exact target after the lanes and halts if the head changes
 				captures += 1;
 				return {
 					cwd: "/tmp/read-only-pr",
+					...targetIdentity,
+					...targetPullRequest,
 					branch: "feat/cli-architecture-v2",
 					candidateHead: captures === 1 ? head : "b".repeat(40),
 					clean: true,
@@ -148,6 +163,8 @@ test("halts if host-verified PR gate evidence changes during the run", async () 
 				captures += 1;
 				return {
 					cwd: "/tmp/read-only-pr",
+					...targetIdentity,
+					...targetPullRequest,
 					branch: "feat/cli-architecture-v2",
 					candidateHead: head,
 					clean: true,
@@ -160,6 +177,57 @@ test("halts if host-verified PR gate evidence changes during the run", async () 
 	const result = await harness.controller.start(command());
 	assert.equal(result.status, "halted");
 	assert.ok(result.hardGates.includes("target_changed"));
+});
+
+test("file-backed halted runs normalize low-score and hard-gated lane outcomes", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-mixed-halt-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const store = new FileStateStore(root);
+	const controller = new ShepherdController({
+		store,
+		targetEvidence: {
+			async capture() {
+				return {
+					cwd: "/tmp/read-only-pr",
+					...targetIdentity,
+					...targetPullRequest,
+					branch: "feat/cli-architecture-v2",
+					candidateHead: head,
+					clean: true,
+				};
+			},
+		},
+		runner: {
+			async run(request) {
+				return request.laneId === "scout"
+					? {
+						...request.binding,
+						summary: "low score",
+						dimensions: { ...perfectDimensions, correctStage: 0.01 },
+						observedMutation: false,
+					}
+					: {
+						...request.binding,
+						candidateHead: "b".repeat(40),
+						summary: "stale binding",
+						dimensions: perfectDimensions,
+						observedMutation: false,
+					};
+			},
+			async abort() {},
+			async close() {},
+		},
+		clock: () => "2026-07-21T08:30:00.000Z",
+		createRunId: () => "run-mixed-halt",
+		createNonce: () => "nonce-mixed-halt",
+	});
+
+	const result = await controller.start(command("start"));
+	assert.equal(result.status, "halted");
+	assert.equal(result.lanes.every((lane) => lane.status === "halted"), true);
+	assert.ok(result.hardGates.includes("stale_head"));
+	assert.ok(result.hardGates.includes("run_halted"));
+	assert.equal((await store.load(397)).status, "halted");
 });
 
 test("a stop request cannot be overwritten by a finishing lane", async () => {
@@ -193,7 +261,133 @@ test("a stop request cannot be overwritten by a finishing lane", async () => {
 	assert.equal((await harness.store.load(397)).status, "stopped");
 });
 
-test("stop during initial target capture prevents every lane from starting", async () => {
+test("shutdown wins a concurrent cancellation race and a later stop is rejected", async () => {
+	let release;
+	const gate = new Promise((resolve) => { release = resolve; });
+	let started;
+	const startedGate = new Promise((resolve) => { started = resolve; });
+	const harness = makeHarness({
+		runner: {
+			async run(request) {
+				started();
+				await gate;
+				return { ...request.binding, summary: "late", dimensions: perfectDimensions, observedMutation: false };
+			},
+			async abort() {},
+			async close() {},
+		},
+	});
+	const starting = harness.controller.start(command("start"));
+	await startedGate;
+	const shuttingDown = harness.controller.shutdown();
+	const stopping = harness.controller.stop(397);
+	release();
+	await shuttingDown;
+	await assert.rejects(stopping, /not owned.*Pi session/i);
+	assert.equal((await starting).status, "interrupted");
+	assert.equal((await harness.store.load(397)).status, "interrupted");
+});
+
+test("stop wins a concurrent shutdown race and persists stopped", async () => {
+	let release;
+	const gate = new Promise((resolve) => { release = resolve; });
+	let started;
+	const startedGate = new Promise((resolve) => { started = resolve; });
+	const harness = makeHarness({
+		runner: {
+			async run(request) {
+				started();
+				await gate;
+				return { ...request.binding, summary: "late", dimensions: perfectDimensions, observedMutation: false };
+			},
+			async abort() {},
+			async close() {},
+		},
+	});
+	const starting = harness.controller.start(command("start"));
+	await startedGate;
+	const stopping = harness.controller.stop(397);
+	const shuttingDown = harness.controller.shutdown();
+	release();
+	const stopped = await stopping;
+	await shuttingDown;
+	assert.equal(stopped.status, "stopped");
+	assert.equal((await starting).status, "stopped");
+	assert.equal((await harness.store.load(397)).status, "stopped");
+});
+
+test("stop is rejected until target capture produces a durable checkpoint, then retry succeeds", async () => {
+	let releaseCapture;
+	const captureGate = new Promise((resolve) => { releaseCapture = resolve; });
+	let captureStarted;
+	const captureStartedGate = new Promise((resolve) => { captureStarted = resolve; });
+	let releaseLane;
+	const laneGate = new Promise((resolve) => { releaseLane = resolve; });
+	let laneStarted;
+	const laneStartedGate = new Promise((resolve) => { laneStarted = resolve; });
+	const harness = makeHarness({
+		targetEvidence: {
+			async capture() {
+				captureStarted();
+				await captureGate;
+				return {
+					cwd: "/tmp/read-only-pr",
+					...targetIdentity,
+					...targetPullRequest,
+					branch: "feat/cli-architecture-v2",
+					candidateHead: head,
+					clean: true,
+				};
+			},
+		},
+		runner: {
+			async run(request) {
+				laneStarted();
+				await laneGate;
+				return { ...request.binding, summary: "cancelled after checkpoint", dimensions: perfectDimensions, observedMutation: false };
+			},
+			async abort() {},
+			async close() {},
+		},
+	});
+	const pending = harness.controller.start(command());
+	await captureStartedGate;
+	await assert.rejects(harness.controller.stop(397), /not owned.*Pi session/i);
+	releaseCapture();
+	await laneStartedGate;
+	const stopping = harness.controller.stop(397);
+	releaseLane();
+	const [result, stopped] = await Promise.all([pending, stopping]);
+	assert.equal(result.status, "stopped");
+	assert.equal(stopped.status, "stopped");
+	assert.equal((await harness.store.load(397)).status, "stopped");
+});
+
+test("stop is not acknowledged before a failing target capture can be durably represented", async () => {
+	let releaseCapture;
+	const captureGate = new Promise((resolve) => { releaseCapture = resolve; });
+	let captureStarted;
+	const captureStartedGate = new Promise((resolve) => { captureStarted = resolve; });
+	const harness = makeHarness({
+		targetEvidence: {
+			async capture() {
+				captureStarted();
+				await captureGate;
+				throw new Error("target capture failed before checkpoint");
+			},
+		},
+	});
+	const starting = harness.controller.start(command("start"));
+	const startFailure = assert.rejects(starting, /target capture failed before checkpoint/i);
+	await captureStartedGate;
+	const stopping = harness.controller.stop(397);
+	releaseCapture();
+	await assert.rejects(stopping, /not owned.*Pi session/i);
+	await startFailure;
+	assert.equal(await harness.store.load(397), undefined);
+});
+
+test("shutdown during initialization persists interruption before any lane dispatch", async () => {
 	let releaseCapture;
 	const captureGate = new Promise((resolve) => { releaseCapture = resolve; });
 	let captureStarted;
@@ -206,6 +400,8 @@ test("stop during initial target capture prevents every lane from starting", asy
 				await captureGate;
 				return {
 					cwd: "/tmp/read-only-pr",
+					...targetIdentity,
+					...targetPullRequest,
 					branch: "feat/cli-architecture-v2",
 					candidateHead: head,
 					clean: true,
@@ -213,27 +409,81 @@ test("stop during initial target capture prevents every lane from starting", asy
 			},
 		},
 		runner: {
-			async run() { runs += 1; throw new Error("must not run"); },
+			async run() { runs += 1; throw new Error("must not dispatch after shutdown"); },
 			async abort() {},
 			async close() {},
 		},
 	});
-	const pending = harness.controller.start(command());
+	const starting = harness.controller.start(command("start"));
 	await captureStartedGate;
-	const stopping = harness.controller.stop(397);
+	const shuttingDown = harness.controller.shutdown();
 	releaseCapture();
-	const [result, stopped] = await Promise.all([pending, stopping]);
-	assert.equal(result.status, "stopped");
-	assert.equal(stopped.status, "stopped");
+	await shuttingDown;
+	const result = await starting;
+	assert.equal(result.status, "interrupted");
+	assert.equal(result.lanes.every((lane) => lane.status === "interrupted"), true);
 	assert.equal(runs, 0);
-	assert.equal((await harness.store.load(397)).status, "stopped");
+	assert.equal((await harness.store.load(397)).status, "interrupted");
 });
+
+for (const { cancellation, expectedStatus } of [
+	{ cancellation: "stop", expectedStatus: "stopped" },
+	{ cancellation: "shutdown", expectedStatus: "interrupted" },
+]) {
+	test(`${cancellation} during final target recapture wins before terminal lane outcomes`, async () => {
+		let captures = 0;
+		let finalCaptureStarted;
+		const finalCaptureStartedGate = new Promise((resolve) => { finalCaptureStarted = resolve; });
+		let releaseFinalCapture;
+		const finalCaptureGate = new Promise((resolve) => { releaseFinalCapture = resolve; });
+		const harness = makeHarness({
+			targetEvidence: {
+				async capture() {
+					captures += 1;
+					if (captures === 2) {
+						finalCaptureStarted();
+						await finalCaptureGate;
+					}
+					return {
+						cwd: "/tmp/read-only-pr",
+						...targetIdentity,
+						...targetPullRequest,
+						branch: "feat/cli-architecture-v2",
+						candidateHead: head,
+						clean: true,
+					};
+				},
+			},
+			runner: {
+				async run(request) {
+					return { ...request.binding, summary: "complete", dimensions: perfectDimensions, observedMutation: false };
+				},
+				async abort() {},
+				async close() {},
+			},
+		});
+		const starting = harness.controller.start(command("start"));
+		await finalCaptureStartedGate;
+		const cancelling = cancellation === "stop"
+			? harness.controller.stop(397)
+			: harness.controller.shutdown();
+		releaseFinalCapture();
+		await cancelling;
+		const result = await starting;
+		assert.equal(result.status, expectedStatus);
+		assert.equal(result.lanes.every((lane) => lane.status === expectedStatus), true);
+		const persisted = await harness.store.load(397);
+		assert.equal(persisted.status, expectedStatus);
+		assert.equal(persisted.lanes.every((lane) => lane.status === expectedStatus), true);
+	});
+}
 
 test("rejects duplicate active ownership before dispatch", async () => {
 	const harness = makeHarness();
 	await harness.store.save({
 		schemaVersion: 1,
 		issue: 397,
+		...targetIdentity,
 		runId: "already-running",
 		generation: 1,
 		status: "running",
@@ -274,6 +524,8 @@ test("resume creates a fresh generation, head binding, and nonce", async () => {
 		schemaVersion: 1,
 		issue: 397,
 		pr: 438,
+		prUrl: targetPullRequest.prUrl,
+		...targetIdentity,
 		runId: "run-1",
 		generation: 1,
 		status: "interrupted",
@@ -299,6 +551,8 @@ test("resume inherits a persisted PR when --pr is omitted", async () => {
 				captures.push(structuredClone(capturedCommand));
 				return {
 					cwd: "/tmp/read-only-pr",
+					...targetIdentity,
+					prUrl: targetPullRequest.prUrl,
 					branch: "feat/cli-architecture-v2",
 					candidateHead: head,
 					clean: true,
@@ -311,6 +565,8 @@ test("resume inherits a persisted PR when --pr is omitted", async () => {
 		schemaVersion: 1,
 		issue: 397,
 		pr: 438,
+		prUrl: targetPullRequest.prUrl,
+		...targetIdentity,
 		runId: "run-1",
 		generation: 1,
 		status: "interrupted",
@@ -342,6 +598,8 @@ test("resume rejects a PR that differs from the persisted target", async () => {
 		schemaVersion: 1,
 		issue: 397,
 		pr: 438,
+		prUrl: targetPullRequest.prUrl,
+		...targetIdentity,
 		runId: "run-1",
 		generation: 1,
 		status: "interrupted",
@@ -358,11 +616,61 @@ test("resume rejects a PR that differs from the persisted target", async () => {
 	assert.equal(captures, 0);
 });
 
+for (const [field, mismatchedValue] of [
+	["repositoryIdentity", "e".repeat(64)],
+	["worktreeIdentity", "f".repeat(64)],
+	["prUrl", "https://github.com/polymetrics-ai/other/pull/438"],
+]) {
+	test(`resume rejects a changed ${field} before persistence or lane dispatch`, async () => {
+		const harness = makeHarness({
+			createRunId: () => "run-2",
+			targetEvidence: {
+				async capture() {
+					return {
+						cwd: "/tmp/read-only-pr",
+						...targetIdentity,
+						...targetPullRequest,
+						[field]: mismatchedValue,
+						branch: "feat/cli-architecture-v2",
+						candidateHead: head,
+						clean: true,
+					};
+				},
+			},
+		});
+		await harness.store.save({
+			schemaVersion: 1,
+			issue: 397,
+			...targetIdentity,
+			...targetPullRequest,
+			runId: "run-1",
+			generation: 1,
+			status: "interrupted",
+			candidateHead: head,
+			validationNonce: "nonce-old",
+			createdAt: "2026-07-21T08:00:00Z",
+			updatedAt: "2026-07-21T08:10:00Z",
+			lanes: [],
+		});
+		let saves = 0;
+		const save = harness.store.save.bind(harness.store);
+		harness.store.save = async (state) => {
+			saves += 1;
+			await save(state);
+		};
+		await assert.rejects(harness.controller.resume(command("resume")), /persisted repository, worktree, or PR identity differs/i);
+		assert.equal(saves, 0);
+		assert.equal(harness.requests.length, 0);
+		assert.equal((await harness.store.load(397)).runId, "run-1");
+	});
+}
+
 test("stop refuses to rewrite an unowned persisted run", async () => {
 	const harness = makeHarness();
 	await harness.store.save({
 		schemaVersion: 1,
 		issue: 397,
+		...targetIdentity,
 		runId: "run-owned",
 		generation: 1,
 		status: "completed",
@@ -388,10 +696,10 @@ test("parent shutdown cancels owned work and persists interrupted", async () => 
 	const aborted = [];
 	const controller = new ShepherdController({
 		store,
-		targetEvidence: {
-			async capture() {
-				return { cwd: "/tmp/read-only-pr", branch: "feat/cli-architecture-v2", candidateHead: head, clean: true };
-			},
+			targetEvidence: {
+				async capture() {
+					return { cwd: "/tmp/read-only-pr", ...targetIdentity, ...targetPullRequest, branch: "feat/cli-architecture-v2", candidateHead: head, clean: true };
+				},
 		},
 		runner: {
 			async run(request) {
@@ -470,6 +778,8 @@ test("resume treats a persisted running state as interrupted after process resta
 		schemaVersion: 1,
 		issue: 397,
 		pr: 438,
+		prUrl: targetPullRequest.prUrl,
+		...targetIdentity,
 		runId: "orphaned-run",
 		generation: 4,
 		status: "running",
@@ -498,7 +808,7 @@ test("a global file lease prevents two controllers from dispatching the same rep
 	let secondRuns = 0;
 	const targetEvidence = {
 		async capture() {
-			return { cwd: "/tmp/read-only-pr", branch: "feat/cli-architecture-v2", candidateHead: head, clean: true };
+			return { cwd: "/tmp/read-only-pr", ...targetIdentity, ...targetPullRequest, branch: "feat/cli-architecture-v2", candidateHead: head, clean: true };
 		},
 	};
 	const first = new ShepherdController({
@@ -575,10 +885,10 @@ test("a lane persistence failure cancels and joins a running sibling before rele
 	let aborts = 0;
 	const controller = new ShepherdController({
 		store,
-		targetEvidence: {
-			async capture() {
-				return { cwd: "/tmp/read-only-pr", branch: "feat", candidateHead: head, clean: true };
-			},
+			targetEvidence: {
+				async capture() {
+					return { cwd: "/tmp/read-only-pr", ...targetIdentity, ...targetPullRequest, branch: "feat", candidateHead: head, clean: true };
+				},
 		},
 		runner: {
 			async run(request) {
@@ -642,6 +952,106 @@ test("terminal commit makes stop unowned before lease release completes", async 
 	assert.equal((await starting).status, "completed");
 	assert.equal((await store.load(397)).status, "completed");
 });
+
+for (const terminalStatus of ["completed", "failed", "halted"]) {
+	test(`stop cannot cancel a ${terminalStatus} run after its final file save starts`, async (t) => {
+		const root = await mkdtemp(join(tmpdir(), `pm-shepherd-final-${terminalStatus}-stop-`));
+		t.after(() => rm(root, { recursive: true, force: true }));
+		const fileStore = new FileStateStore(root);
+		let releaseFinalSave;
+		const finalSaveGate = new Promise((resolve) => { releaseFinalSave = resolve; });
+		let finalSaveStarted;
+		const finalSaveStartedGate = new Promise((resolve) => { finalSaveStarted = resolve; });
+		const store = {
+			load: fileStore.load.bind(fileStore),
+			acquireLease: fileStore.acquireLease.bind(fileStore),
+			async save(state) {
+				if (state.status === terminalStatus) {
+					finalSaveStarted();
+					await finalSaveGate;
+				}
+				await fileStore.save(state);
+			},
+		};
+		const dimensions = terminalStatus === "failed"
+			? { ...perfectDimensions, correctStage: 0.1 }
+			: perfectDimensions;
+		const harness = makeHarness({
+			store,
+			runner: {
+				async run(request) {
+					return {
+						...request.binding,
+						...(terminalStatus === "halted" ? { candidateHead: "b".repeat(40) } : {}),
+						summary: terminalStatus,
+						dimensions,
+						observedMutation: false,
+					};
+				},
+				async abort() {},
+				async close() {},
+			},
+		});
+		const starting = harness.controller.start(command("start"));
+		await finalSaveStartedGate;
+		const stopping = harness.controller.stop(397);
+		releaseFinalSave();
+		await assert.rejects(stopping, /not owned.*Pi session/i);
+		assert.equal((await starting).status, terminalStatus);
+		assert.equal((await fileStore.load(397)).status, terminalStatus);
+	});
+
+	test(`shutdown joins a ${terminalStatus} run whose final file save has started`, async (t) => {
+		const root = await mkdtemp(join(tmpdir(), `pm-shepherd-final-${terminalStatus}-shutdown-`));
+		t.after(() => rm(root, { recursive: true, force: true }));
+		const fileStore = new FileStateStore(root);
+		let releaseFinalSave;
+		const finalSaveGate = new Promise((resolve) => { releaseFinalSave = resolve; });
+		let finalSaveStarted;
+		const finalSaveStartedGate = new Promise((resolve) => { finalSaveStarted = resolve; });
+		const store = {
+			load: fileStore.load.bind(fileStore),
+			acquireLease: fileStore.acquireLease.bind(fileStore),
+			async save(state) {
+				if (state.status === terminalStatus) {
+					finalSaveStarted();
+					await finalSaveGate;
+				}
+				await fileStore.save(state);
+			},
+		};
+		const dimensions = terminalStatus === "failed"
+			? { ...perfectDimensions, correctStage: 0.1 }
+			: perfectDimensions;
+		const harness = makeHarness({
+			store,
+			runner: {
+				async run(request) {
+					return {
+						...request.binding,
+						...(terminalStatus === "halted" ? { candidateHead: "b".repeat(40) } : {}),
+						summary: terminalStatus,
+						dimensions,
+						observedMutation: false,
+					};
+				},
+				async abort() {},
+				async close() {},
+			},
+		});
+		const starting = harness.controller.start(command("start"));
+		await finalSaveStartedGate;
+		const shuttingDown = harness.controller.shutdown();
+		let shutdownSettled = false;
+		void shuttingDown.then(() => { shutdownSettled = true; }, () => { shutdownSettled = true; });
+		await new Promise((resolve) => setImmediate(resolve));
+		assert.equal(shutdownSettled, false, "shutdown must join the gated terminal save");
+		releaseFinalSave();
+		await shuttingDown;
+		assert.equal((await starting).status, terminalStatus);
+		assert.equal((await fileStore.load(397)).status, terminalStatus);
+	});
+}
 
 test("shutdown aggregates abort and close failures after owned work exits", async () => {
 	let release;
