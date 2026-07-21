@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "in_progress",
+  "status": "completed",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": false,
-  "currentCycle": "correction_green",
+  "verificationPassed": true,
+  "currentCycle": "correction_summary",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -48,15 +48,25 @@
       "cycle": "correction_green",
       "decision": "local_critical_path",
       "reason": "The minimal claimed/abandoned creation owner and quoted-value redaction grammar made all 24 focused tests pass; continue to refactor and the declared Shepherd-only gates."
+    },
+    {
+      "cycle": "correction_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 24/24, complete Shepherd 161/161, both strict TypeScript scopes, pinned offline Pi RPC, diff, immutable-base, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_summary",
+      "decision": "local_critical_path",
+      "reason": "Exact-head correction evidence is terminal; parent orchestration owns the next independent PR review and all integration gates."
     }
   ],
   "gates": {
-    "focusedTests": "passed_24_of_24_green",
-    "fullShepherdTests": "pending_correction",
-    "strictTypeScriptPi0806": "pending_correction",
-    "offlineRpcSmoke": "pending_correction",
-    "diffCheck": "pending_correction",
-    "ownedScope": "pending_correction",
+    "focusedTests": "passed_24_of_24",
+    "fullShepherdTests": "passed_161_of_161",
+    "strictTypeScriptPi0806": "passed_owned_and_all_production",
+    "offlineRpcSmoke": "passed_pm_shepherd_registered",
+    "diffCheck": "passed",
+    "ownedScope": "passed",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

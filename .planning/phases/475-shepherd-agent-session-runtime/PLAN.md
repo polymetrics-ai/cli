@@ -147,3 +147,8 @@ The correction uses a fresh strict RED → GREEN → REFACTOR cycle. Production 
 until both regressions fail on the reviewed exact head. Execution remains `local_critical_path`:
 all four runtime slots are occupied and both findings overlap this worker's exclusive source/test
 scope, so nested delegation would add collision risk rather than an independent workstream.
+
+Correction result: RED was captured at `93b9eca9`; the minimal GREEN implementation was committed
+at `f788cf16`. Focused 24/24 and complete Shepherd 161/161 tests, both strict TypeScript scopes,
+pinned offline Pi 0.80.6 RPC, diff, immutable-base, and changed-path checks pass. Repository-wide
+Go, connector, and `make verify` gates remain outside this lane by explicit instruction.

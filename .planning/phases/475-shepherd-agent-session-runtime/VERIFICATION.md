@@ -1,9 +1,8 @@
 # Verification — Issue #475
 
-> Superseded pending exact-head correction revalidation. PR #486 review at
-> `4e41c2ec1175a109c10f125203dc54d381b982bd` found late-session ownership and quoted-redaction
-> gaps. The prior results remain historical evidence only until Cycle 2 completes every declared
-> gate again.
+PR #486 exact-head correction revalidation is complete. The review findings against
+`4e41c2ec1175a109c10f125203dc54d381b982bd` are covered by committed RED tests and pass at the
+corrected implementation head `f788cf160e61760ebd80b54d2f9939b6f7f8d753`.
 
 ## Declared Phase Equivalent
 
@@ -13,10 +12,10 @@ means every declared command here passed; it does not claim parent-level Go/conn
 
 | Gate | Status | Evidence |
 |---|---|---|
-| Focused AgentSession/tool-policy tests | pass | 22 passed, 0 failed, exit 0 |
-| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 159 passed, 0 failed, exit 0 |
+| Focused AgentSession/tool-policy tests | pass | 24 passed, 0 failed, exit 0 |
+| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 161 passed, 0 failed, exit 0 |
 | Strict no-emit TypeScript against installed Pi 0.80.6 types | pass | owned production/tests plus all Shepherd production `.ts`; exit 0 |
-| Supported offline Pi extension/RPC smoke | pass | explicit 0.80.6 binary, `PI_OFFLINE=1`, RPC `get_commands`; `true`, exit 0 |
+| Supported offline Pi extension/RPC smoke | pass | explicit 0.80.6 binary, `PI_OFFLINE=1`, RPC `get_commands`; `pm-shepherd` registered, exit 0 |
 | `git diff --check` | pass | exit 0 |
 | Owned-scope diff check | pass | every base diff path matches issue #475 production/test/phase scope |
 
@@ -40,10 +39,10 @@ skip, pass, or failure.
 ```bash
 node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
   .pi/extensions/shepherd/tool-policy.test.ts
-# 22 passed, 0 failed
+# 24 passed, 0 failed
 
 node --test .pi/extensions/shepherd/*.test.ts
-# 159 passed, 0 failed
+# 161 passed, 0 failed
 ```
 
 TypeScript used the already-installed TypeScript 5.9.3 compiler and explicit Pi 0.80.6 package/type
@@ -60,18 +59,24 @@ issues inside the globally installed SDK dependency graph; all Shepherd inputs r
 `--strict`, and the new runtime imports Pi 0.80.6 `AgentSessionEvent` and
 `CreateAgentSessionOptions` directly.
 
-The supported smoke used the explicit pinned binary because the ambient PATH changed during the
-lane and now resolves another Pi installation:
+The supported smoke used the explicit pinned binary:
 
 ```bash
-printf '{"id":"commands","type":"get_commands"}\n' |
+printf '%s\n' '{"type":"get_commands"}' |
   PI_OFFLINE=1 /Users/karthiksivadas/.nvm/versions/node/v24.13.1/bin/pi \
-    --mode rpc --no-session --approve \
+    --mode rpc --no-session \
     --no-extensions --no-skills --no-prompt-templates --no-context-files \
-    -e .pi/extensions/shepherd/index.ts
+    --extension .pi/extensions/shepherd/index.ts
 ```
 
-The explicit binary reports `0.80.6`; the RPC registration assertion returned `true`.
+The explicit binary reports `0.80.6`; RPC `get_commands` returned success with the `pm-shepherd`
+command registered.
+
+Cycle 2 additionally proved that a session resolving only after both request deadline and cleanup
+bound is never prompted and eventually receives exactly one abort, wait-for-idle, and dispose.
+Synthetic quoted JSON/YAML secret assignments and quoted Bearer credentials are absent and
+`[REDACTED]` is present in direct probes, serialized role prompts, typed tool output, and handoff
+summary/finding fields; an ordinary-prose control is byte-for-byte unchanged.
 
 ## Deviations
 

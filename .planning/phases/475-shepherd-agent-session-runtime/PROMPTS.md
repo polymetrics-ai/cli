@@ -12,8 +12,9 @@
   offline RPC smoke, diff/scope checks; no lane-local repository-wide Go gates.
 - Execution decision: `local_critical_path`.
 - Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`
-- Verification result: complete — focused 22/22; full Shepherd 159/159; strict pinned Pi 0.80.6
-  TypeScript; offline RPC smoke; diff and owned-scope checks all pass.
+- Initial verification result (superseded by the exact-head correction below): focused 22/22;
+  full Shepherd 159/159; strict pinned Pi 0.80.6 TypeScript; offline RPC smoke; diff and owned-scope
+  checks passed.
 
 ## Exact-Head Correction Snapshot
 
@@ -29,5 +30,6 @@
   direct redaction, prompt serialization, tool output, and handoff fields; production was unchanged.
 - GREEN result: the same focused command exits 0 with 24 passed / 0 failed after the minimal
   creation-ownership continuation and quoted-redaction grammar were implemented.
-- Verification status: REFACTOR and declared correction gates pending; prior terminal evidence is
-  superseded.
+- Verification result: complete — focused 24/24; full Shepherd 161/161; owned and all-production
+  strict TypeScript against pinned Pi 0.80.6; offline RPC; diff, immutable-base, and owned-scope
+  checks pass. No Go, connector, `make verify`, live-GitHub, merge, or review-bot gate was run.

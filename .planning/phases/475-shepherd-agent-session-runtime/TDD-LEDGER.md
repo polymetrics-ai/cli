@@ -124,6 +124,28 @@
 
 ### REFACTOR / VERIFY
 
-- Status: blocked on GREEN.
+- Status: captured.
 - Declared gates remain only issue-focused tests, the complete Shepherd TypeScript suite, strict
   no-emit TypeScript against pinned Pi 0.80.6, offline Pi RPC, diff check, and changed-path scope.
+- Local adversarial review found no further actionable lifecycle, redaction, or strict-TypeScript
+  issue. A nested reviewer was unavailable because the four-slot runtime remained saturated, so
+  the recorded execution decision remained `local_critical_path`.
+- Results:
+  - focused tests: 24 passed / 0 failed;
+  - complete Shepherd tests: 161 passed / 0 failed;
+  - strict owned production/tests plus role prompt inputs: pass;
+  - strict all-Shepherd production inputs: pass;
+  - explicit Pi 0.80.6 offline RPC `get_commands`: pass, `pm-shepherd` registered;
+  - immutable-base diff check and issue-owned changed-path assertion: pass.
+
+## Cycle 2 Gate History
+
+| Checkpoint | Result | Evidence |
+|---|---|---|
+| PLAN | pass | exact reviewed head `4e41c2ec1175a109c10f125203dc54d381b982bd`; correction scope recorded before tests |
+| RED | expected fail | exit 1; 19 passed / 5 expected failures; production unchanged |
+| GREEN | pass | exit 0; 24 passed / 0 failed at implementation head `f788cf16` |
+| Complete Shepherd | pass | 161 passed / 0 failed |
+| Strict TypeScript | pass | owned source/tests and all Shepherd production source against explicit Pi 0.80.6 types |
+| Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
+| Diff / scope | pass | immutable base retained; all changed paths remain issue #475-owned |
