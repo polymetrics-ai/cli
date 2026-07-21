@@ -332,4 +332,11 @@ quote opening accepts `-` only as a line-local YAML sequence marker, and assignm
 the scanner-owned line end. A typed optional diagnostics sink reports exact line-boundary visits of
 25,618 / 51,218 / 102,418 for inputs of the same sizes. The overloaded redaction entry point ignores
 `Array.map`'s numeric callback index, preserving every existing callback consumer. Focused tests
-pass 40/40 and focused strict TypeScript passes; full declared verification remains pending.
+pass 40/40 and focused strict TypeScript passes; the terminal result is recorded below.
+
+Cycle 6 terminal result: PLAN was pushed at `4f9c5a96`; test-only RED was pushed at `e8422d53`
+with 33 passes and 7 expected failures; GREEN/refactor was pushed at
+`93314a54302e84e053ad0d6ff44371fbf1a167e0`. Focused 40/40 and complete Shepherd 177/177 tests,
+both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-base, and
+issue-owned path gates pass. Fresh independent exact-head review and integration remain
+parent-owned.

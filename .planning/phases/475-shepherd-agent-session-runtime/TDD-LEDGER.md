@@ -215,11 +215,33 @@
   callback contract and ignore its numeric index instead of treating it as diagnostics.
 - Focused command result: exit 0, 40 passed / 0 failed.
 - Focused strict TypeScript result: exit 0 against explicit Pi 0.80.6 package/type roots.
-- REFACTOR/VERIFY status: pending implementation commit and declared full gates.
+- REFACTOR/VERIFY status: complete at implementation head
+  `93314a54302e84e053ad0d6ff44371fbf1a167e0`.
+- Results:
+  - focused tests: 40 passed / 0 failed;
+  - complete Shepherd tests: 177 passed / 0 failed;
+  - strict owned production/tests plus role prompt inputs: pass;
+  - strict all-Shepherd production inputs: pass;
+  - explicit Pi 0.80.6 offline RPC `get_commands`: pass, `pm-shepherd` registered;
+  - immutable-base diff check and exact issue-owned changed-path assertion: pass.
 - Declared gates: focused issue tests, complete Shepherd suite, pinned Pi 0.80.6 strict TypeScript,
   pinned offline RPC, diff check, immutable base, and issue-owned paths only.
 - Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot
   commands remain forbidden.
+
+## Cycle 6 Gate History
+
+| Checkpoint | Result | Evidence |
+|---|---|---|
+| PLAN | pass | exact reviewed head `d918617a19749cd16d6bfcf3d2fee3e5146e7380`; scope pushed at `4f9c5a96` |
+| RED | expected fail | exit 1; 33 passed / 7 expected failures; production unchanged; pushed at `e8422d53` |
+| GREEN / REFACTOR | pass | implementation `93314a54302e84e053ad0d6ff44371fbf1a167e0`; 40 passed / 0 failed |
+| Deterministic scale | pass | 25,618 / 51,218 / 102,418 line-boundary visits for equal-sized inputs |
+| Focused strict TypeScript | pass | owned source/tests plus role prompt inputs against explicit Pi 0.80.6 types |
+| Complete Shepherd | pass | 177 passed / 0 failed |
+| Strict TypeScript | pass | focused owned inputs and all Shepherd production source against explicit Pi 0.80.6 types |
+| Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
+| Diff / scope | pass | immutable base retained; exact changed-path assertion remains issue #475-owned |
 
 ## Cycle 5 — Reservation Timer Ownership And Lexical State Machine
 

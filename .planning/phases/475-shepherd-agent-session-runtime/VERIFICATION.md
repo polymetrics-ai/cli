@@ -1,14 +1,9 @@
 # Verification — Issue #475
 
-> Superseded pending Cycle 6 revalidation. Exact-head review at
-> `d918617a19749cd16d6bfcf3d2fee3e5146e7380` found multiline nested-value ownership,
-> punctuation-apostrophe quote-boundary, and line-end complexity failures. Cycle 5 results below
-> remain historical evidence only.
-
-PR #486 correction Cycle 5 revalidation is complete. The independent-review findings against
-`e41f075a9b3bfb01d410296712740b54f943ba71` are covered by PLAN checkpoint `8087b539`, committed
-test-only RED checkpoint `333c7ad6`, and pass at implementation head
-`8ff2d9631809d09db26811b4cd1335b92a9c457c`.
+PR #486 correction Cycle 6 revalidation is complete. The independent-review findings against
+`d918617a19749cd16d6bfcf3d2fee3e5146e7380` are covered by PLAN checkpoint `4f9c5a96`, committed
+test-only RED checkpoint `e8422d53`, and pass at implementation head
+`93314a54302e84e053ad0d6ff44371fbf1a167e0`.
 
 ## Declared Phase Equivalent
 
@@ -18,8 +13,9 @@ means every declared command here passed; it does not claim parent-level Go/conn
 
 | Gate | Status | Evidence |
 |---|---|---|
-| Focused AgentSession/tool-policy tests | pass | 36 passed, 0 failed, exit 0 |
-| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 173 passed, 0 failed, exit 0 |
+| Focused AgentSession/tool-policy tests | pass | 40 passed, 0 failed, exit 0 |
+| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 177 passed, 0 failed, exit 0 |
+| Deterministic scanner scale | pass | line-boundary visits equal 25,618 / 51,218 / 102,418-byte inputs |
 | Strict no-emit TypeScript against installed Pi 0.80.6 types | pass | owned production/tests plus all Shepherd production `.ts`; exit 0 |
 | Supported offline Pi extension/RPC smoke | pass | explicit 0.80.6 binary, `PI_OFFLINE=1`, RPC `get_commands`; `pm-shepherd` registered, exit 0 |
 | `git diff --check` | pass | exit 0 |
@@ -45,10 +41,10 @@ skip, pass, or failure.
 ```bash
 node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
   .pi/extensions/shepherd/tool-policy.test.ts
-# 36 passed, 0 failed
+# 40 passed, 0 failed
 
 node --test .pi/extensions/shepherd/*.test.ts
-# 173 passed, 0 failed
+# 177 passed, 0 failed
 ```
 
 TypeScript used the already-installed TypeScript 5.9.3 compiler and explicit Pi 0.80.6 package/type
@@ -78,19 +74,18 @@ printf '%s\n' '{"type":"get_commands"}' |
 The explicit binary reports `0.80.6`; RPC `get_commands` returned success with the `pm-shepherd`
 command registered.
 
-Cycle 5 proves an immediate duplicate long-timeout rejection creates no referenced cancellation
-timer while the admitted run still aborts, joins, and disposes normally. Since all duplicate,
-capacity, and mutating-admission checks precede scope construction, every early admission rejection
-shares the same no-timer invariant.
+Cycle 6 proves that a nested sensitive mapping value retains its value-local delimiter ownership
+across a newline, so its close cannot remove the outer flow-map closer and hide a later same-line
+`client_secret`. It also proves that `rock-'n-roll` remains one unquoted scalar: `-` is a quote
+boundary only when it is a line-local YAML sequence marker. Direct probes, serialized role prompts,
+`workspace_read`, typed capability output, and handoff summary/finding fields remove every synthetic
+marker and retain `[REDACTED]`; the harmless apostrophe control remains byte-identical.
 
-The explicit lexical state machine proves balanced nested mapping values cannot hide a later
-unquoted sensitive sibling and an unmatched leading apostrophe cannot carry quote state across a
-newline. Direct probes, serialized role prompts, typed tool output, and handoff summary/finding
-fields all remove synthetic markers and retain `[REDACTED]`. Ordinary unmatched braces and
-flow-shaped comments preserve harmless assignment-like prose byte-for-byte, while every earlier
-single-line, multiline, block, Bearer, flow, spaced-scalar, and nested-flow regression remains
-green. Monotonic cursors, bounded key discovery, and balanced delimiter stacks avoid repeated
-global-regex rescans.
+Assignment decisions reuse the scanner-owned current line end instead of scanning each remaining
+suffix. The typed metrics sink reports exactly 25,618 / 51,218 / 102,418 line-boundary visits for
+inputs of the same sizes, establishing linear line discovery without wall-clock assertions. The
+overloaded entry point also preserves `Array.map(redactSensitiveText)` callback behavior by
+ignoring its numeric index. Every earlier lifecycle and redaction regression remains green.
 
 The immutable-base check retained
 `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; every changed path is an issue-owned Shepherd

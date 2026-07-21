@@ -133,4 +133,8 @@
   TypeScript passes. Nested value-local closers span lines, hyphen quote boundaries require a YAML
   sequence marker, and assignment decisions reuse the current line end. Deterministic visits equal
   input bytes at 25,618 / 51,218 / 102,418.
-- Verification status: GREEN captured; full declared Shepherd-only gates pending.
+- Verification result: complete at implementation head
+  `93314a54302e84e053ad0d6ff44371fbf1a167e0` — focused 40/40; full Shepherd 177/177; focused and
+  all-production strict TypeScript against pinned Pi 0.80.6; explicit offline RPC; diff,
+  immutable-base, and issue-owned scope checks all pass. No Go, connector, `make verify`,
+  runtime-backed, live-GitHub, merge, or review-bot gate was run.

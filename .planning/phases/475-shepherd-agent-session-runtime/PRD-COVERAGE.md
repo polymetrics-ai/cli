@@ -14,7 +14,7 @@ findings, and existing PLAN define the phase-equivalent coverage gate.
 | Line-end discovery is near-linear for many same-line assignments | deterministic scan metrics at approximately 25/50/100 KiB | focused GREEN; visits equal bytes |
 | Prior lifecycle and redaction invariants remain intact | existing 36 focused regressions | pass |
 | Typed lexer remains the single transformer architecture | value-local multiline closers, token-aware quotes, monotonic line cursor | implemented |
-| Declared phase verification | focused/full Shepherd tests, pinned Pi 0.80.6 strict TypeScript, offline RPC, diff/base/scope | pending |
+| Declared phase verification | focused/full Shepherd tests, pinned Pi 0.80.6 strict TypeScript, offline RPC, diff/base/scope | pass |
 
 No dependency, CLI/help/docs/website, Go, connector, runtime-backed service, live credential, or
 external mutation work is required. Parent orchestration owns fresh exact-head review and

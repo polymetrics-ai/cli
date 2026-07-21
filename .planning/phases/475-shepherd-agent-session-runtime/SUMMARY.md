@@ -1,7 +1,7 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 6 planned; Cycle 5 evidence is superseded pending a fresh
-test-only RED and scanner correction.
+Status: exact-head correction Cycle 6 complete; every declared Shepherd-only gate passes and Cycle
+5 evidence is superseded.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -17,7 +17,7 @@ shutdown coalesce; child setup/session settlement joins once; failed cleanup qua
 dispatch. Handoffs accept one closed bounded JSON schema bound to run/generation/lane/head/nonce and
 redact secret-like material before return.
 
-The focused suite passes 36/36 and the complete Shepherd suite passes 173/173. Strict owned plus
+The focused suite passes 40/40 and the complete Shepherd suite passes 177/177. Strict owned plus
 all-Shepherd-production TypeScript passes against the explicit Pi 0.80.6 installation, as do the
 pinned offline RPC smoke and diff/scope checks. The healthy repo-local GSD adapter does not expose
 `programming-loop`, so the phase completed under the recorded `manual_gsd_fallback`.
@@ -94,4 +94,8 @@ Cycle 6 GREEN now passes 40/40 focused tests and focused strict Pi 0.80.6 TypeSc
 scanner carries a value-local closer stack across lines, distinguishes a YAML sequence marker from
 a word-internal hyphen, and reuses the current line end for assignment decisions. Deterministic
 line-boundary visits equal the 25,618 / 51,218 / 102,418-byte input sizes. Full declared
-verification remains pending.
+verification now passes at implementation head `93314a54302e84e053ad0d6ff44371fbf1a167e0`:
+177/177 complete Shepherd tests, both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC,
+diff, immutable-base, and issue-owned scope checks. Parent orchestration owns fresh independent
+exact-head review and integration; this lane did not invoke Go/connectors, `make verify`,
+runtime-backed services, live GitHub, merge, or review bots.

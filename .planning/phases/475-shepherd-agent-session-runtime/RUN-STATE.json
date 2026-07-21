@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "in_progress",
+  "status": "completed",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": false,
-  "currentCycle": "correction_cycle_6_green",
+  "verificationPassed": true,
+  "currentCycle": "correction_cycle_6_complete",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -148,15 +148,25 @@
       "cycle": "correction_cycle_6_green",
       "decision": "local_critical_path",
       "reason": "Multiline value-local ownership, token-aware hyphen quote boundaries, and reused scanner line ends make all 40 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to declared verification."
+    },
+    {
+      "cycle": "correction_cycle_6_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 40/40, complete Shepherd 177/177, both strict TypeScript scopes, pinned offline Pi RPC, diff, immutable-base, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_cycle_6_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 6 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
     }
   ],
   "gates": {
     "focusedTests": "green_40_passed_0_failed",
-    "fullShepherdTests": "pending_cycle_6",
-    "strictTypeScriptPi0806": "green_focused_full_pending_cycle_6",
-    "offlineRpcSmoke": "pending_cycle_6",
-    "diffCheck": "pending_cycle_6",
-    "ownedScope": "pending_cycle_6",
+    "fullShepherdTests": "green_177_passed_0_failed",
+    "strictTypeScriptPi0806": "green_focused_and_all_production",
+    "offlineRpcSmoke": "green_pm_shepherd_registered",
+    "diffCheck": "green",
+    "ownedScope": "green_immutable_base_and_issue_owned_paths",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [
