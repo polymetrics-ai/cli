@@ -42,15 +42,29 @@ Review coverage is intentionally pending after local verification. Fresh exact-h
 Status: planned at reviewed head `093b3c90409cedc6b7008b7510f53937eb1ebbc1`; prior local-pass
 evidence above is historical and does not satisfy the accepted correction findings.
 
-- [ ] Plan/TDD/verification/review artifact checkpoint committed and pushed before test or
-      production edits.
-- [ ] One test-only RED commit covers all eleven findings and proves production byte identity with
+- [x] Plan/TDD/verification/review artifact checkpoint committed before test or production edits;
+      push attempted but blocked by GitHub DNS.
+- [x] One test-only RED commit covers all eleven findings and proves production byte identity with
       `093b3c90`.
-- [ ] Focused #478 tests pass after coherent GREEN.
+- [x] Focused #478 tests pass after coherent GREEN: 38/38.
 - [ ] Full `.pi/extensions/shepherd/*.test.ts` passes serialized.
-- [ ] Strict owned and all-Shepherd-production TypeScript pass against pinned Pi 0.80.6.
-- [ ] Offline pinned Pi RPC discovers `pm-shepherd`.
-- [ ] Frozen base/head ancestry, diff check, and #478 owned-path scope pass.
-- [ ] PR #487 reflects the correction commits and verification evidence.
-- [ ] No Go, connector, certification, runtime-service, `make`, live GitHub mutation, secret,
+- [x] Strict owned and all-Shepherd-production TypeScript pass against pinned Pi 0.80.6.
+- [x] Offline pinned Pi RPC discovers `pm-shepherd`.
+- [x] Frozen base/head ancestry, diff check, and #478 owned-path scope pass.
+- [ ] PR #487 reflects the correction commits and verification evidence; push/update is blocked by
+      GitHub DNS resolution.
+- [x] No Go, connector, certification, runtime-service, `make`, live GitHub mutation, secret,
       controller/#479 wiring, or merge action runs.
+
+### Correction gate results
+
+| Gate | Result |
+| --- | --- |
+| Focused #478 | pass; 38 pass, 0 fail; 175.527833 ms |
+| Serialized Shepherd | environmental failure; 302 total, 236 pass, 65 fail, 1 intentional skip; all owned #478 tests pass and all failures report `spawn EPERM` outside owned files |
+| Strict owned TypeScript | pass; TypeScript 5.9.3, pinned Pi 0.80.6 type root |
+| Strict production TypeScript | pass; all 20 Shepherd production modules |
+| Offline extension discovery | pass; pinned Pi 0.80.6 returned `true`; sandbox-only global-settings lock warnings |
+| Base/head/diff/scope | pass at GREEN `8e32896a`; frozen base and reviewed head are ancestors and changed paths remain #478-owned |
+| Push / PR #487 update | blocked; `ssh: Could not resolve hostname github.com: -65563` followed by `fatal: Could not read from remote repository.` |
+| Prohibited gates | not run |

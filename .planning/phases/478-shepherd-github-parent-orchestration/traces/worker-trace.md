@@ -60,6 +60,21 @@
 - Strict all-production TypeScript: all 20 modules pass with TypeScript 5.9.3, cached Pi 0.80.6,
   its enclosing package resolver, and its Node type root.
 - Pinned Pi 0.80.6 offline RPC `get_commands`: `true`; `pm-shepherd` source is `extension`.
+
+## 2026-07-21 stable-head functional review correction
+
+- Plan-only checkpoint `5dd7897e`; push blocked by GitHub DNS.
+- One test-only RED checkpoint `4e02d059`: 38 total, 9 pass, 29 expected fail; owned production
+  blob IDs match frozen reviewed head `093b3c90`.
+- Coherent GREEN `8e32896a`: focused 38/38 and strict TypeScript 5.9.3 for owned files/tests plus
+  all 20 Shepherd production modules against pinned Pi 0.80.6 pass.
+- Full serialized command: 302 total, 236 pass, 65 fail, 1 intentional skip. Every correction test
+  passes; all failures are outside #478 ownership and report the managed sandbox's `spawn EPERM`
+  from the process-identity child-process probe.
+- Offline pinned Pi 0.80.6 RPC returned `true`; frozen base/head ancestry, diff check, and owned
+  scope pass.
+- Repeated push attempt failed: `ssh: Could not resolve hostname github.com: -65563`; PR #487 was
+  not externally updated. No reviewer or merge ran.
 - Exact merge base, ancestry, full-range `git diff --check`, and coordinator-owned path gate pass.
 - Local, tracking, and remote refs all matched the implementation head before evidence edits.
 - No Go, connector, certification, runtime-service, `make`, live orchestration transport,

@@ -47,3 +47,9 @@ Refs #471
   selection, keyed idempotency, canonical generations/refs, complete lookups, and partial failures
 - no controller/#479 wiring, live GitHub mutation, secret access, Go gate, or merge is included
 - fresh exact-head xhigh review remains parent-owned after corrected local verification
+
+Correction evidence: RED `4e02d059` (9 pass / 29 expected fail with production identical to
+`093b3c90`), GREEN `8e32896a` (38/38 focused and strict owned/all-production TypeScript pass).
+Pinned Pi 0.80.6 offline registration and base/head/diff/scope pass. The serialized suite ran 302
+tests but is environmentally blocked at 236 pass / 65 unrelated `spawn EPERM` failures / 1 skip.
+Push and live PR-body update are blocked by GitHub DNS resolution in the worker environment.

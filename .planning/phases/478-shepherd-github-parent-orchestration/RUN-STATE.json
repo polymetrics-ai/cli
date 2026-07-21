@@ -5,12 +5,12 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Deep functional review of frozen head 093b3c90 found eleven accepted corrections; the artifact-first strict TDD correction slice is in progress.",
+  "reason": "All eleven corrections are focused-green at local head 8e32896a, but the serialized suite is environmentally blocked by 65 unrelated spawn EPERM failures and GitHub DNS prevents push/PR update.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
-    "implementationHead": "40ce66d4b5010b92089895a05709687143d15a05",
+    "implementationHead": "8e32896aff5a0a04e47efc437aeb6bac1e0d3967",
     "verificationEvidenceHead": "568c98e2bf09ac751eb474df20cd37a5af3cbd70",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
@@ -58,6 +58,16 @@
         "cycle": "stable-head-functional-review-plan",
         "decision": "local_critical_path",
         "reason": "Eleven accepted findings are mapped to one artifact-first, test-only RED, coherent GREEN correction slice in the isolated #478 clone; fresh review remains parent-owned."
+      },
+      {
+        "cycle": "stable-head-functional-review-red-green",
+        "decision": "local_critical_path",
+        "reason": "Test-only RED 4e02d059 produced 9 passes and 29 expected failures with frozen production blobs; GREEN 8e32896a passes all 38 focused tests and strict owned/all-production TypeScript."
+      },
+      {
+        "cycle": "stable-head-functional-review-verify",
+        "decision": "not_spawned_verification_blocked",
+        "reason": "Serialized Shepherd ran 302 tests but 65 unrelated process-identity/filesystem/git tests fail with managed-sandbox spawn EPERM; GitHub DNS also blocks push and PR #487 update."
       }
     ],
     "humanGates": [
@@ -71,5 +81,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T19:00:00.000Z"
+  "updatedAt": "2026-07-21T20:00:00.000Z"
 }

@@ -88,19 +88,37 @@ Reviewed production baseline: `093b3c90409cedc6b7008b7510f53937eb1ebbc1`.
 
 | Finding | Behavior-level RED contract | State |
 | --- | --- | --- |
-| CR-01 | exact authoritative changed-path equality rejects empty/subset/superset and accepts reordered equality | planned |
-| CR-02 | authoritative integration lookup plus current-parent ancestry rejects forged, stale, mismatched, and orphaned receipts | planned |
-| CR-03 | capture, ensure, and integrate reject every forged immutable materialized-child topology field | planned |
-| CR-04 | required CI contexts and trusted producer IDs require a complete successful deterministic rollup | planned |
-| CR-05 | controller-owned session/run attestation and digest binding reject reviewer-self-attested execution metadata | planned |
-| CR-06 | expected review target is direct input and equal-generation selection is permutation-independent | planned |
-| CR-07 | keyed concurrent ensures create once, reconcile after create, and reject post-create ambiguity | planned |
-| WR-01 | zero and negative generations fail at plan, expected evidence, target, review, receipt, and attestation boundaries | planned |
-| WR-02 | canonical ref validation rejects spaces, `.lock`, leading dot, `@`, and other invalid Git ref forms | planned |
-| WR-03 | incomplete bounded lookup snapshots fail closed for issue, PR, roster, and integration reconciliation | planned |
-| WR-04 | timeout/malformed-response recovery covers PR create, integration, ready transition, lookup failure, and restart | planned |
+| CR-01 | exact authoritative changed-path equality rejects empty/subset/superset and accepts reordered equality | green |
+| CR-02 | authoritative integration lookup plus current-parent ancestry rejects forged, stale, mismatched, and orphaned receipts | green |
+| CR-03 | capture, ensure, and integrate reject every forged immutable materialized-child topology field | green |
+| CR-04 | required CI contexts and trusted producer IDs require a complete successful deterministic rollup | green |
+| CR-05 | controller-owned session/run attestation and digest binding reject reviewer-self-attested execution metadata | green |
+| CR-06 | expected review target is direct input and equal-generation selection is permutation-independent | green |
+| CR-07 | keyed concurrent ensures create once, reconcile after create, and reject post-create ambiguity | green |
+| WR-01 | zero and negative generations fail at plan, expected evidence, target, review, receipt, and attestation boundaries | green |
+| WR-02 | canonical ref validation rejects spaces, `.lock`, leading dot, `@`, and other invalid Git ref forms | green |
+| WR-03 | incomplete bounded lookup snapshots fail closed for issue, PR, roster, and integration reconciliation | green |
+| WR-04 | timeout/malformed-response recovery covers PR create, integration, ready transition, lookup failure, and restart | green |
 
 Checkpoint discipline: the next commit after the plan checkpoint is test/fixture-only. Before that
 RED commit, `git diff 093b3c90 -- .pi/extensions/shepherd/*.ts` must show changes only in test files,
 and production blob IDs must match the frozen reviewed head. GREEN evidence is intentionally blank
 until the RED suite has failed for the new behavior.
+
+## Stable-head correction RED and GREEN evidence
+
+- Artifact-only checkpoint: `5dd7897e1a906fd16a88001cc5830a0db305c5ba`.
+- Test-only RED checkpoint: `4e02d059050aa8fe6f9a60b519c61500b00d9f44`; 38 tests, 9 pass, 29
+  expected fail. Before commit, all three production blob IDs exactly matched frozen reviewed head
+  `093b3c90409cedc6b7008b7510f53937eb1ebbc1`.
+- Coherent GREEN checkpoint: `8e32896aff5a0a04e47efc437aeb6bac1e0d3967`; focused 38/38 pass
+  in 175.527833 ms, strict owned TypeScript 5.9.3 passes, and strict all-production Shepherd
+  TypeScript passes against pinned Pi 0.80.6 types.
+- Full serialized Shepherd command ran 302 tests: 236 pass, 65 fail, 1 intentional skip. Every
+  #478 test passed; all 65 failures are outside the owned files and report the managed sandbox's
+  `spawn EPERM` from the process-identity child-process probe. This is recorded as an environmental
+  broad-gate failure, not a GREEN claim.
+- Pinned Pi 0.80.6 offline RPC registration returned `true` for `pm-shepherd`; startup emitted only
+  sandbox write warnings for the global settings lock.
+- Push attempts for all three checkpoints failed with `ssh: Could not resolve hostname github.com:
+  -65563`; commits remain local.

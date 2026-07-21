@@ -36,3 +36,11 @@ paths and integrations, trusted CI/session provenance, deterministic review sele
 idempotency, positive generations, canonical Git refs, complete pagination evidence, and mutation
 recovery. This artifact checkpoint precedes the required single test-only RED commit; no correction
 production code has been edited yet. Manual GSD fallback and `local_critical_path` remain recorded.
+
+The correction now has test-only RED `4e02d059` and coherent GREEN `8e32896a`. Focused 38/38,
+strict owned/all-production TypeScript, offline pinned Pi registration, and base/head/diff/scope
+checks pass. The full serialized command ran all 302 tests; 65 unrelated tests fail solely because
+the managed sandbox rejects their process-identity child process with `spawn EPERM`, while every
+#478 test passes. Accordingly the phase remains `in_progress` with `verificationPassed: false`.
+GitHub DNS resolution failed on every push attempt, so plan, RED, and GREEN commits remain local and
+PR #487 could not be updated from this environment.

@@ -106,3 +106,14 @@ recommendation and local verification are historical. The correction is now exec
 artifact-only plan checkpoint, one behavior-level test-only RED commit, coherent GREEN, and fresh
 authorized verification. Controller wiring remains #479-owned; #478 may add only the scoped
 session-attestation contract and fixtures required to verify independent-review provenance.
+
+## Correction handoff status
+
+- Plan: `5dd7897e`; test-only RED: `4e02d059`; coherent GREEN: `8e32896a`.
+- Focused: 38/38 pass. Strict owned and all-production TypeScript 5.9.3 against pinned Pi 0.80.6:
+  pass. Offline pinned Pi RPC: `true`. Base/head/diff/scope: pass.
+- Serialized Shepherd: 302 total, 236 pass, 65 fail, 1 intentional skip. All correction tests pass;
+  every failure is outside #478 scope and reports sandbox `spawn EPERM` from the process-identity
+  child-process probe. `verificationPassed` remains false.
+- Push/PR #487 update: blocked by `ssh: Could not resolve hostname github.com: -65563`; local
+  commits retained. No live reviewer, GitHub mutation, controller/#479 edit, or merge ran.

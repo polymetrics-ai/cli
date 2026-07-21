@@ -204,3 +204,13 @@ without editing #475, #479, controller, extension, or top-level integration file
    certification, runtime-service, or `make` gates.
 5. Commit/push GREEN and final evidence checkpoints and update PR #487. Fresh stable-head xhigh
    review remains parent-owned.
+
+### Correction checkpoint outcome
+
+- [x] Artifact-only plan checkpoint committed: `5dd7897e`.
+- [x] One test-only RED committed: `4e02d059`; production byte-identical to `093b3c90`.
+- [x] Coherent architectural GREEN committed: `8e32896a`; focused 38/38 and strict TypeScript pass.
+- [x] Offline Pi RPC and immutable base/head/diff/scope checks pass.
+- [ ] Full serialized suite is green: blocked by 65 unrelated `spawn EPERM` sandbox failures
+      (236 pass, 65 fail, 1 skip; all #478 tests pass).
+- [ ] Push/update PR #487: blocked by GitHub DNS resolution; all commits retained locally.
