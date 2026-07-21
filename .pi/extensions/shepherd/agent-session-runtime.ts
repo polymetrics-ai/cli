@@ -584,12 +584,18 @@ interface ActiveRun {
 }
 
 interface TerminalCapture {
+	mode?: "legacy" | "pi";
 	messageEnd?: AssistantTerminal;
 	agentEnd?: AssistantTerminal;
 	messageEndCount: number;
 	agentEndCount: number;
 	agentEndWillRetry: boolean;
 	phase: "open" | "message-ended" | "agent-ended";
+	piPhase: "initial" | "agent" | "turn" | "turn-ended" | "agent-ended" | "settled";
+	piOpenMessageRole?: "user" | "assistant" | "toolResult";
+	piTurnAssistant?: AssistantTerminal;
+	piSettled: boolean;
+	frozen: boolean;
 	stream?: AssistantTerminal;
 	failure?: AgentSessionRuntimeError;
 	eventCount: number;
@@ -1358,12 +1364,10 @@ function captureCreatedSession(
 		}
 	}
 	const fallbackDescriptor = Object.getOwnPropertyDescriptor(created, "modelFallbackMessage");
-	if (fallbackDescriptor) {
-		if (!fallbackDescriptor.enumerable || fallbackDescriptor.get || fallbackDescriptor.set || !("value" in fallbackDescriptor)) {
-			recordCaptureFailure(new AgentSessionRuntimeError("Pi returned an invalid fallback descriptor"));
-		} else if (fallbackDescriptor.value !== undefined) {
-			recordCaptureFailure(new AgentSessionRuntimeError("Pi attempted a forbidden model fallback"));
-		}
+	if (!fallbackDescriptor?.enumerable || fallbackDescriptor.get || fallbackDescriptor.set || !("value" in fallbackDescriptor)) {
+		recordCaptureFailure(new AgentSessionRuntimeError("Pi returned an invalid fallback descriptor"));
+	} else if (fallbackDescriptor.value !== undefined) {
+		recordCaptureFailure(new AgentSessionRuntimeError("Pi attempted a forbidden model fallback"));
 	}
 	try {
 		const model = (session as RuntimeAgentSession).model;
@@ -1420,8 +1424,8 @@ function captureEmptyExtensionsResult(value: unknown): void {
 		captureExactEmptyArray(descriptor.value, `Pi extensions result ${key}`);
 	}
 	const runtimeDescriptor = Object.getOwnPropertyDescriptor(value, "runtime");
-	if (runtimeDescriptor && (!runtimeDescriptor.enumerable || runtimeDescriptor.get || runtimeDescriptor.set ||
-		!("value" in runtimeDescriptor))) {
+	if (!runtimeDescriptor?.enumerable || runtimeDescriptor.get || runtimeDescriptor.set ||
+		!("value" in runtimeDescriptor)) {
 		throw new AgentSessionRuntimeError("Pi extensions result runtime must be an own data field");
 	}
 }
@@ -1486,6 +1490,9 @@ function newTerminalCapture(): TerminalCapture {
 		agentEndCount: 0,
 		agentEndWillRetry: false,
 		phase: "open",
+		piPhase: "initial",
+		piSettled: false,
+		frozen: false,
 		eventCount: 0,
 		eventBytes: 0,
 	};
@@ -1497,6 +1504,10 @@ function captureEvent(
 	options: Required<Omit<AgentSessionRuntimeOptions, "parentSignal">>,
 ): void {
 	if (capture.failure) return;
+	if (capture.frozen) {
+		capture.failure = new AgentSessionRuntimeError("AgentSession emitted an event after its settled boundary");
+		return;
+	}
 	capture.eventCount += 1;
 	if (capture.eventCount > options.maxEvents) {
 		capture.failure = new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
@@ -1506,6 +1517,16 @@ function captureEvent(
 		const eventFields = captureClosedRecordFields(event, "AgentSession event", MAX_EVENT_RECORD_KEYS);
 		const eventType = eventFields.get("type");
 		if (typeof eventType !== "string") throw new AgentSessionRuntimeError("AgentSession event type is invalid");
+		if (eventType === "agent_start" || capture.mode === "pi") {
+			capture.mode = "pi";
+			const directCharge = capturePiLifecycleEvent(capture, eventFields, eventType, options);
+			capture.eventBytes += directCharge ?? boundedEventBytes(event, options.maxEventBytes - capture.eventBytes);
+			if (capture.eventBytes > options.maxEventBytes) {
+				throw new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
+			}
+			return;
+		}
+		capture.mode = "legacy";
 		if (capture.phase === "agent-ended") {
 			throw new AgentSessionRuntimeError("AgentSession emitted an event after its terminal pair");
 		}
@@ -1574,6 +1595,133 @@ function captureEvent(
 			{ cause: error },
 		);
 	}
+}
+
+function capturePiLifecycleEvent(
+	capture: TerminalCapture,
+	fields: ReadonlyMap<string, unknown>,
+	type: string,
+	options: Required<Omit<AgentSessionRuntimeOptions, "parentSignal">>,
+): number | undefined {
+	switch (type) {
+		case "agent_start":
+			assertExactCapturedFields(fields, ["type"], "agent_start event");
+			if (capture.piPhase !== "initial") throw new AgentSessionRuntimeError("agent_start is out of order");
+			capture.piPhase = "agent";
+			return undefined;
+		case "turn_start":
+			assertExactCapturedFields(fields, ["type"], "turn_start event");
+			if (capture.piPhase !== "agent" && capture.piPhase !== "turn-ended") {
+				throw new AgentSessionRuntimeError("turn_start is out of order");
+			}
+			capture.piPhase = "turn";
+			capture.piTurnAssistant = undefined;
+			capture.stream = undefined;
+			return undefined;
+		case "message_start": {
+			assertExactCapturedFields(fields, ["type", "message"], "message_start event");
+			if (capture.piPhase !== "turn" || capture.piOpenMessageRole !== undefined) {
+				throw new AgentSessionRuntimeError("message_start is out of order");
+			}
+			const role = capturePiMessageRole(fields.get("message"));
+			capture.piOpenMessageRole = role;
+			if (role === "assistant") {
+				const initial = captureAssistantTerminal(fields.get("message"), true, options.maxEventBytes);
+				if (!initial) throw new AgentSessionRuntimeError("assistant message_start is invalid");
+				capture.stream = initial;
+			}
+			return undefined;
+		}
+		case "message_update":
+			assertExactCapturedFields(fields, ["type", "message", "assistantMessageEvent"], "message_update event");
+			if (capture.piPhase !== "turn" || capture.piOpenMessageRole !== "assistant") {
+				throw new AgentSessionRuntimeError("message_update is out of order");
+			}
+			return captureStreamingUpdateCharge(
+				capture,
+				fields.get("message"),
+				fields.get("assistantMessageEvent"),
+				options.maxEventBytes,
+			);
+		case "message_end": {
+			assertExactCapturedFields(fields, ["type", "message"], "message_end event");
+			if (capture.piPhase !== "turn" || capture.piOpenMessageRole === undefined) {
+				throw new AgentSessionRuntimeError("message_end is out of order");
+			}
+			const role = capturePiMessageRole(fields.get("message"));
+			if (role !== capture.piOpenMessageRole) {
+				throw new AgentSessionRuntimeError("message_start and message_end roles disagree");
+			}
+			if (role === "assistant") {
+				const terminal = captureAssistantTerminal(fields.get("message"), false, options.maxEventBytes);
+				if (!terminal) throw new AgentSessionRuntimeError("assistant message_end is invalid");
+				capture.messageEndCount += 1;
+				capture.messageEnd = terminal;
+				capture.piTurnAssistant = terminal;
+			}
+			capture.piOpenMessageRole = undefined;
+			return undefined;
+		}
+		case "turn_end": {
+			assertExactCapturedFields(fields, ["type", "message", "toolResults"], "turn_end event");
+			if (capture.piPhase !== "turn" || capture.piOpenMessageRole !== undefined || !capture.piTurnAssistant) {
+				throw new AgentSessionRuntimeError("turn_end is out of order");
+			}
+			const terminal = captureAssistantTerminal(fields.get("message"), false, options.maxEventBytes);
+			if (!terminal || !sameTerminal(terminal, capture.piTurnAssistant)) {
+				throw new AgentSessionRuntimeError("turn_end assistant does not match message_end");
+			}
+			captureDenseArray(fields.get("toolResults"), "turn_end tool results");
+			capture.piPhase = "turn-ended";
+			return undefined;
+		}
+		case "agent_end": {
+			assertExactCapturedFields(fields, ["type", "messages", "willRetry"], "agent_end event");
+			if (capture.piPhase !== "turn-ended" || capture.agentEndCount !== 0) {
+				throw new AgentSessionRuntimeError("agent_end is out of order");
+			}
+			const willRetry = fields.get("willRetry");
+			if (typeof willRetry !== "boolean") throw new AgentSessionRuntimeError("agent_end willRetry is invalid");
+			capture.agentEndWillRetry = willRetry;
+			if (willRetry) throw new AgentSessionRuntimeError("retrying agent_end is not terminal evidence");
+			let lastAssistant: AssistantTerminal | undefined;
+			for (const message of captureDenseArray(fields.get("messages"), "AgentSession terminal messages")) {
+				const assistant = captureAssistantTerminal(message, false, options.maxEventBytes);
+				if (assistant) lastAssistant = assistant;
+			}
+			if (!lastAssistant || !capture.messageEnd || !sameTerminal(lastAssistant, capture.messageEnd)) {
+				throw new AgentSessionRuntimeError("agent_end final assistant does not match message_end");
+			}
+			capture.agentEndCount = 1;
+			capture.agentEnd = lastAssistant;
+			capture.piPhase = "agent-ended";
+			return undefined;
+		}
+		case "agent_settled":
+			assertExactCapturedFields(fields, ["type"], "agent_settled event");
+			if (capture.piPhase !== "agent-ended" || capture.piSettled) {
+				throw new AgentSessionRuntimeError("agent_settled is out of order");
+			}
+			capture.piSettled = true;
+			capture.piPhase = "settled";
+			capture.frozen = true;
+			return undefined;
+		case "tool_execution_start":
+		case "tool_execution_update":
+		case "tool_execution_end":
+			throw new AgentSessionRuntimeError("tool execution lifecycle is not yet accepted");
+		default:
+			throw new AgentSessionRuntimeError(`unsupported Pi AgentSession event ${JSON.stringify(type)}`);
+	}
+}
+
+function capturePiMessageRole(value: unknown): "user" | "assistant" | "toolResult" {
+	const fields = captureClosedRecordFields(value, "Pi lifecycle message", MAX_EVENT_RECORD_KEYS);
+	const role = fields.get("role");
+	if (role !== "user" && role !== "assistant" && role !== "toolResult") {
+		throw new AgentSessionRuntimeError("Pi lifecycle message role is invalid");
+	}
+	return role;
 }
 
 function captureStreamingUpdateCharge(
@@ -2152,6 +2300,18 @@ function assertAllowedCapturedFields(
 }
 
 function verifyTerminalCapture(capture: TerminalCapture): AssistantTerminal {
+	if (capture.mode === "pi") {
+		if (capture.piPhase !== "settled" || !capture.piSettled || !capture.frozen ||
+			capture.piOpenMessageRole !== undefined || capture.agentEndCount !== 1 ||
+			capture.agentEndWillRetry || !capture.messageEnd || !capture.agentEnd ||
+			!sameTerminal(capture.messageEnd, capture.agentEnd)) {
+			throw new AgentSessionRuntimeError("AgentSession returned an invalid settled lifecycle");
+		}
+		if (capture.agentEnd.stopReason !== "stop") {
+			throw new AgentSessionRuntimeError(`AgentSession terminal stop reason ${capture.agentEnd.stopReason} is not accepted`);
+		}
+		return capture.agentEnd;
+	}
 	if (capture.phase !== "agent-ended" || capture.messageEndCount !== 1 || capture.agentEndCount !== 1 ||
 		capture.agentEndWillRetry || !capture.messageEnd || !capture.agentEnd ||
 		!sameTerminal(capture.messageEnd, capture.agentEnd)) {
