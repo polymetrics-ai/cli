@@ -24,10 +24,14 @@ const SAFE_MUTATION_CONFIG = [
 	["core.fsmonitor", "false"],
 	["core.untrackedCache", "false"],
 	["core.attributesFile", NULL_DEVICE],
+	["core.askPass", ""],
 	["credential.helper", ""],
 	["commit.gpgSign", "false"],
+	["push.gpgSign", "false"],
+	["push.pushOption", ""],
 	["tag.gpgSign", "false"],
 	["protocol.ext.allow", "never"],
+	["submodule.recurse", "false"],
 ] as const;
 
 export interface GitCommandRequest {
@@ -315,16 +319,18 @@ function unsafeMutationConfigKey(rawKey: string): boolean {
 	return key === "core.hookspath"
 		|| key === "core.fsmonitor"
 		|| key === "core.sshcommand"
+		|| key === "core.gitproxy"
+		|| key === "core.askpass"
+		|| key === "ssh.variant"
 		|| key === "credential.helper"
-		|| /^credential\..+\.helper$/.test(key)
+		|| key.startsWith("credential.")
 		|| /^filter\..+\.(clean|smudge|process|required)$/.test(key)
 		|| /^remote\..+\.(receivepack|uploadpack|vcs|proxy)$/.test(key)
-		|| key === "http.proxy"
 		|| key === "https.proxy"
-		|| key === "http.extraheader"
-		|| /^http\..+\.(proxy|extraheader)$/.test(key)
+		|| key.startsWith("http.")
 		|| key === "protocol.allow"
 		|| /^protocol\..+\.allow$/.test(key)
+		|| key.startsWith("push.")
 		|| /^submodule\..+\.update$/.test(key)
 		|| key === "include.path"
 		|| /^includeif\..+\.path$/.test(key);
@@ -567,26 +573,21 @@ export class GitAdapter {
 	}
 
 	async #localConfigKeys(cwd: string, scope: "--local" | "--worktree"): Promise<string[]> {
-		try {
-			const raw = (await this.#run(cwd, [
-				"config", scope, "--no-includes", "--null", "--name-only", "--list",
-			])).toString("utf8");
-			return raw.split("\0").filter(Boolean).map((key) => {
-				if (!safeText(key, 512)) throw new GitAdapterError("repository Git configuration key is invalid");
-				return key;
-			});
-		} catch (error) {
-			if (scope === "--worktree" && error instanceof GitCommandFailure) return [];
-			throw error;
-		}
+		const raw = (await this.#run(cwd, [
+			"config", scope, "--no-includes", "--null", "--name-only", "--list",
+		])).toString("utf8");
+		return raw.split("\0").filter(Boolean).map((key) => {
+			if (!safeText(key, 512)) throw new GitAdapterError("repository Git configuration key is invalid");
+			return key;
+		});
 	}
 
 	async #assertSafeMutationConfiguration(cwd: string): Promise<void> {
-		const keys = await Promise.all([
-			this.#localConfigKeys(cwd, "--local"),
-			this.#localConfigKeys(cwd, "--worktree"),
-		]);
-		const unsafe = [...new Set(keys.flat().filter(unsafeMutationConfigKey))].sort();
+		const localKeys = await this.#localConfigKeys(cwd, "--local");
+		const worktreeKeys = localKeys.some((key) => key.toLowerCase() === "extensions.worktreeconfig")
+			? await this.#localConfigKeys(cwd, "--worktree")
+			: [];
+		const unsafe = [...new Set([...localKeys, ...worktreeKeys].filter(unsafeMutationConfigKey))].sort();
 		if (unsafe.length > 0) {
 			throw new GitAdapterError(`repository contains unsafe Git mutation configuration: ${unsafe.join(", ")}`);
 		}
@@ -1024,6 +1025,7 @@ export class GitAdapter {
 		const actual = await this.assertBinding(binding);
 		const raw = (await this.#run(actual.cwd, [
 			"log", "--format=", "--name-only", "-z", "--no-renames", "--no-ext-diff", "--no-textconv",
+			"--no-show-signature",
 			"--full-history", "-m", `${baseHead}..${head}`, "--",
 		])).toString("utf8");
 		return [...new Set(raw.split("\0").filter(Boolean).map((path) => {
@@ -1084,11 +1086,7 @@ export class GitAdapter {
 				throw new GitAdapterError("canonical issue head changed while staging; commit was not attempted");
 			}
 			await this.#assertLeaseOwnedForMutation(state);
-			await this.#runMutation(actual.cwd, [
-				"-c", "core.hooksPath=/dev/null",
-				"-c", "commit.gpgSign=false",
-				"commit", "--no-verify", "-m", request.message,
-			]);
+			await this.#runMutation(actual.cwd, ["commit", "--no-verify", "-m", request.message]);
 			const head = await this.resolveBranchHead(actual, request.branch);
 			if (head === previousHead) throw new GitAdapterError("commit did not advance the exact head");
 			await this.#assertHistoryWithinScopes(actual, state.baseHead, head, state.allowedScopes);
