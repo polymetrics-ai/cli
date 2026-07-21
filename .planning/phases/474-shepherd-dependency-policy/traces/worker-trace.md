@@ -12,6 +12,19 @@
   `manual_gsd_fallback`.
 - Execution decision: `local_critical_path`.
 
+## Execute cycle
+
+- Implemented lifecycle transition guards, retry/correction budget policy, closed-world dependency
+  validation, canonical segment-aware scopes, maximum safe ready-set selection, and pure
+  reconciliation.
+- First GREEN run: lifecycle tests passed; dependency/reconciler files rejected a parameter property
+  unsupported by Node's TypeScript strip mode. Converted it to an explicit field.
+- Final focused GREEN: 23/23 pass.
+- Strict no-emit TypeScript over the three production modules: pass after annotating one callback
+  narrowed through runtime array validation.
+- `git diff --check`: pass.
+- Execution decision: `local_critical_path`.
+
 Further RED/GREEN/refactor/verification evidence will be appended after each genuine command.
 
 ## TDD gate cycle
