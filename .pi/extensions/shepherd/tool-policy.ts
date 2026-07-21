@@ -22,6 +22,8 @@ const MAX_CAPABILITY_SCHEMA_DEPTH = 64;
 const MAX_CAPABILITY_SCHEMA_NODES = 4_096;
 const MAX_CAPABILITY_SCHEMA_KEYS = 4_096;
 const MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS = 512;
+const MAX_TOOL_INPUT_BYTES = MAX_WRITE_CHARACTERS + 64 * 1024;
+const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
 
 const forbiddenCapabilityPatterns = [
 	/(?:^|_)(?:bash|shell|exec|command)(?:_|$)/,
@@ -254,6 +256,7 @@ interface JsonSnapshotBudget {
 	nodes: number;
 	keys: number;
 	bytes: number;
+	maximumBytes?: number;
 }
 
 function snapshotCapabilitySchema(source: unknown, name: string): PlainJsonSchema {
@@ -383,7 +386,7 @@ function snapshotJsonData(
 
 function addSchemaBytes(budget: JsonSnapshotBudget, bytes: number, description: string): void {
 	budget.bytes += bytes;
-	if (budget.bytes > MAX_CAPABILITY_SCHEMA_BYTES) {
+	if (budget.bytes > (budget.maximumBytes ?? MAX_CAPABILITY_SCHEMA_BYTES)) {
 		throw new ToolPolicyError(`${description} exceeded its incremental byte bound`);
 	}
 }
@@ -405,21 +408,18 @@ function workspaceReadTool(
 		}, ["path"]),
 		executionMode: "parallel",
 		async execute(_callId, rawParams, signal) {
-			assertSignal(signal);
-			const params = recordParams(rawParams, "workspace_read");
-			assertOnlyKeys(params, ["path", "offset", "limit"], "workspace_read");
-			const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
-			const offset = optionalBoundedInteger(params.offset, "offset", 0, Number.MAX_SAFE_INTEGER);
-			const limit = optionalBoundedInteger(params.limit, "limit", 1, limits.maxReadCharacters);
-			let value: string;
-			try {
-				value = await workspace.readText(path, { offset, limit, signal });
-			} catch (error) {
-				throw sanitizedToolBoundaryError("workspace read", error);
-			}
-			if (typeof value !== "string") throw new ToolPolicyError("workspace read returned non-text data");
-			if (value.length > limits.maxReadCharacters) throw new ToolPolicyError("workspace read exceeded the bounded output limit");
-			return textResult(redactSensitiveText(value), limits.maxToolOutputBytes);
+			return toolBoundary("workspace read", async () => {
+				assertSignal(signal);
+				const params = recordParams(rawParams, "workspace_read");
+				assertOnlyKeys(params, ["path", "offset", "limit"], "workspace_read");
+				const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
+				const offset = optionalBoundedInteger(params.offset, "offset", 0, Number.MAX_SAFE_INTEGER);
+				const limit = optionalBoundedInteger(params.limit, "limit", 1, limits.maxReadCharacters);
+				const value = await workspace.readText(path, { offset, limit, signal });
+				if (typeof value !== "string") throw new ToolPolicyError("workspace read returned non-text data");
+				if (value.length > limits.maxReadCharacters) throw new ToolPolicyError("workspace read exceeded the bounded output limit");
+				return textResult(redactSensitiveText(value), limits.maxToolOutputBytes);
+			});
 		},
 	};
 }
@@ -441,18 +441,16 @@ function workspaceEditTool(
 		}, ["path", "oldText", "newText"]),
 		executionMode: "sequential",
 		async execute(_callId, rawParams, signal) {
-			assertSignal(signal);
-			const params = recordParams(rawParams, "workspace_edit");
-			assertOnlyKeys(params, ["path", "oldText", "newText"], "workspace_edit");
-			const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
-			const oldText = boundedString(params.oldText, "oldText", limits.maxWriteCharacters, false);
-			const newText = boundedString(params.newText, "newText", limits.maxWriteCharacters, true);
-			try {
+			return toolBoundary("workspace edit", async () => {
+				assertSignal(signal);
+				const params = recordParams(rawParams, "workspace_edit");
+				assertOnlyKeys(params, ["path", "oldText", "newText"], "workspace_edit");
+				const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
+				const oldText = boundedString(params.oldText, "oldText", limits.maxWriteCharacters, false);
+				const newText = boundedString(params.newText, "newText", limits.maxWriteCharacters, true);
 				const result = await workspace.editText(path, oldText, newText, signal);
 				return mutationResult(result, limits.maxToolOutputBytes);
-			} catch (error) {
-				throw sanitizedToolBoundaryError("workspace edit", error);
-			}
+			});
 		},
 	};
 }
@@ -473,17 +471,15 @@ function workspaceWriteTool(
 		}, ["path", "content"]),
 		executionMode: "sequential",
 		async execute(_callId, rawParams, signal) {
-			assertSignal(signal);
-			const params = recordParams(rawParams, "workspace_write");
-			assertOnlyKeys(params, ["path", "content"], "workspace_write");
-			const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
-			const content = boundedString(params.content, "content", limits.maxWriteCharacters, true);
-			try {
+			return toolBoundary("workspace write", async () => {
+				assertSignal(signal);
+				const params = recordParams(rawParams, "workspace_write");
+				assertOnlyKeys(params, ["path", "content"], "workspace_write");
+				const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
+				const content = boundedString(params.content, "content", limits.maxWriteCharacters, true);
 				const result = await workspace.writeText(path, content, signal);
 				return mutationResult(result, limits.maxToolOutputBytes);
-			} catch (error) {
-				throw sanitizedToolBoundaryError("workspace write", error);
-			}
+			});
 		},
 	};
 }
@@ -499,21 +495,18 @@ function hostCapabilityTool(
 		parameters: capability.parameters,
 		executionMode: capability.mutates ? "sequential" : "parallel",
 		async execute(_callId, rawParams, signal) {
-			assertSignal(signal);
-			const params = recordParams(rawParams, capability.name);
-			const inputSize = byteLength(JSON.stringify(params));
-			if (inputSize > limits.maxWriteCharacters) throw new ToolPolicyError(`${capability.name} input exceeded its bound`);
-			let result: Readonly<Required<CapabilityResult>>;
-			try {
-				result = captureCapabilityResult(capability.name, await capability.execute(params, signal));
-			} catch (error) {
-				throw sanitizedToolBoundaryError(`capability ${capability.name}`, error);
-			}
-			return textResult(JSON.stringify({
-				status: result.status,
-				summary: redactSensitiveText(result.summary),
-				references: result.references.map(redactSensitiveText),
-			}), limits.maxToolOutputBytes);
+			return toolBoundary(`capability ${capability.name}`, async () => {
+				assertSignal(signal);
+				const params = recordParams(rawParams, capability.name);
+				const inputSize = byteLength(JSON.stringify(params));
+				if (inputSize > limits.maxWriteCharacters) throw new ToolPolicyError(`${capability.name} input exceeded its bound`);
+				const result = captureCapabilityResult(capability.name, await capability.execute(params, signal));
+				return textResult(JSON.stringify({
+					status: result.status,
+					summary: redactSensitiveText(result.summary),
+					references: result.references.map(redactSensitiveText),
+				}), limits.maxToolOutputBytes);
+			});
 		},
 	};
 }
@@ -532,7 +525,15 @@ export function validateScopedPath(path: string, prefixes: readonly string[]): s
 	if (sensitivePathPatterns.some((pattern) => pattern.test(normalized))) {
 		throw new ToolPolicyError("sensitive workspace paths are outside agent authority");
 	}
-	if (!prefixes.some((prefix) => prefix === "." || normalized === prefix || normalized.startsWith(`${prefix}/`))) {
+	let allowed = false;
+	for (let index = 0; index < prefixes.length; index += 1) {
+		const prefix = prefixes[index];
+		if (prefix === "." || normalized === prefix || normalized.startsWith(`${prefix}/`)) {
+			allowed = true;
+			break;
+		}
+	}
+	if (!allowed) {
 		throw new ToolPolicyError(`workspace path ${JSON.stringify(normalized)} is outside the declared scope`);
 	}
 	return normalized;
@@ -605,6 +606,8 @@ const secretAssignmentKeys = new Set([
 	"passwd",
 	"secret",
 	"clientsecret",
+	"cookie",
+	"setcookie",
 ]);
 
 function redactStructuredAssignments(value: string, metrics?: RedactionScanMetrics): string {
@@ -1075,6 +1078,8 @@ function redactPrivateKeyBlocks(value: string): string {
 function redactStrongCredentialSyntax(value: string): string {
 	return value
 		.replace(/^(\s*(?:set-cookie|cookie)\s*:\s*)([^\r\n]*)/gim, `$1${REDACTED_TEXT}`)
+		.replace(/(\b(?:request|response)\s+headers?\s+(?:set-cookie|cookie)\s*:\s*)([^\r\n]*)/gi,
+			`$1${REDACTED_TEXT}`)
 		.replace(/\b([a-z][a-z0-9+.-]*:\/\/[^/\s:@]+:)([^@\s/]+)(@)/gi, `$1${REDACTED_TEXT}$3`)
 		.replace(/([?&#](?:access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret)=)([^&#\s]+)/gi,
 			`$1${REDACTED_TEXT}`)
@@ -1543,9 +1548,6 @@ export function normalizeScopedPrefixes(prefixes: unknown, description: string):
 		normalized.push(value);
 	}
 	if (new Set(normalized).size !== normalized.length) throw new ToolPolicyError(`duplicate ${description} prefix`);
-	if (Object.isFrozen(prefixes) && normalized.every((value, index) => value === prefixes[index])) {
-		return prefixes as string[];
-	}
 	return normalized;
 }
 
@@ -1637,6 +1639,14 @@ function sanitizedToolBoundaryError(operation: string, error: unknown): ToolPoli
 	return new ToolPolicyError(`${operation} failed: ${safe || "external operation failed"}`, { cause });
 }
 
+async function toolBoundary(operation: string, execute: () => Promise<SessionToolResult>): Promise<SessionToolResult> {
+	try {
+		return await execute();
+	} catch (error) {
+		throw sanitizedToolBoundaryError(operation, error);
+	}
+}
+
 function textResult(value: string, maxBytes: number): SessionToolResult {
 	if (byteLength(value) > maxBytes) throw new ToolPolicyError("tool output exceeded the bounded output limit");
 	const content = [{ type: "text" as const, text: value }];
@@ -1668,8 +1678,15 @@ function assertOnlyKeys(value: Readonly<Record<string, unknown>>, allowed: reado
 }
 
 function recordParams(value: unknown, description: string): Readonly<Record<string, unknown>> {
-	if (!isRecord(value)) throw new ToolPolicyError(`${description} input must be an object`);
-	return value;
+	const snapshot = snapshotJsonData(
+		value,
+		0,
+		{ nodes: 0, keys: 0, bytes: 0, maximumBytes: MAX_TOOL_INPUT_BYTES },
+		new WeakSet<object>(),
+		`${description} input`,
+	);
+	if (!isRecord(snapshot)) throw new ToolPolicyError(`${description} input must be an object`);
+	return snapshot;
 }
 
 function requiredString(value: unknown, name: string): string {
@@ -1700,7 +1717,11 @@ function boundedPositiveInteger(value: number, name: string, maximum: number): n
 }
 
 function assertSignal(signal: AbortSignal | undefined): void {
-	if (signal?.aborted) throw new ToolPolicyError("tool execution was cancelled");
+	if (signal === undefined) return;
+	if (!(signal instanceof AbortSignal) || Object.hasOwn(signal, "aborted") || typeof NATIVE_ABORTED_GETTER !== "function") {
+		throw new ToolPolicyError("tool execution signal is invalid");
+	}
+	if (Reflect.apply(NATIVE_ABORTED_GETTER, signal, [])) throw new ToolPolicyError("tool execution was cancelled");
 }
 
 function validIdentifier(value: unknown): value is string {

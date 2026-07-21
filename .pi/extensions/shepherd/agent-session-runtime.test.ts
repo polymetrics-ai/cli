@@ -20,6 +20,7 @@ import { routeForRole } from "./role-prompts.ts";
 import {
 	createToolPolicy,
 	redactSensitiveText,
+	ToolPolicyError,
 	type HostCapability,
 	type ScopedWorkspace,
 } from "./tool-policy.ts";
@@ -341,16 +342,12 @@ class FakeSession implements RuntimeAgentSession {
 		this.lastPrompt = prompt;
 		assert.deepEqual(options, { expandPromptTemplates: false, source: "extension" });
 		if (this.promptGate) await this.promptGate;
-		const message = assistantMessage(this.output, {
-			provider: this.terminalProvider,
-			model: this.terminalModel,
+		drivePiLifecycle(this, this.output, {
+			assistantOverrides: {
+				provider: this.terminalProvider,
+				model: this.terminalModel,
+			},
 		});
-		for (const listener of this.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
-		for (const listener of this.listeners) listener({
-			type: "agent_end",
-			messages: [message],
-			willRetry: false,
-		} as AgentSessionEvent);
 	}
 	async abort(): Promise<void> {
 		this.abortCalls += 1;
@@ -409,8 +406,8 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 	}
 	async createAgentSession(options: CreateAgentSessionOptions): Promise<{
 		session: FakeSession;
-		extensionsResult: { extensions: unknown[]; errors: unknown[]; runtime?: unknown };
-		modelFallbackMessage?: string;
+		extensionsResult: { extensions: unknown[]; errors: unknown[]; runtime: unknown };
+		modelFallbackMessage: string | undefined;
 	}> {
 		this.options = options as unknown as Record<string, unknown>;
 		if (this.createGate) await this.createGate;
@@ -573,7 +570,8 @@ async function beginAbandonedCreation(laneId: string): Promise<{
 		req,
 		validResult: {
 			session: sdk.session,
-			extensionsResult: { extensions: [], errors: [] },
+			extensionsResult: { extensions: [], errors: [], runtime: {} },
+			modelFallbackMessage: undefined,
 		},
 	};
 }
@@ -956,7 +954,11 @@ test("runtime rejects Pi version drift, extension loading, persistence, tool dri
 	);
 
 	for (const configure of [
-		(sdk: FakeSdk) => { sdk.createAgentSession = async () => ({ session: sdk.session, extensionsResult: { extensions: [{}], errors: [] } }); },
+		(sdk: FakeSdk) => { sdk.createAgentSession = async () => ({
+			session: sdk.session,
+			extensionsResult: { extensions: [{}], errors: [], runtime: {} },
+			modelFallbackMessage: undefined,
+		}); },
 		(sdk: FakeSdk) => { (sdk.session as { sessionFile: string | undefined }).sessionFile = "/tmp/persisted.jsonl"; },
 		(sdk: FakeSdk) => { sdk.activeToolsOverride = ["bash"]; },
 		(sdk: FakeSdk) => { sdk.session.model = { provider: "openai", id: "gpt-5.5" }; },
@@ -1522,7 +1524,6 @@ test("cycle 8 native signal listener leases ignore shadow hooks and mutated targ
 	const original = probeSignal();
 	const replacement = probeSignal();
 	const mutationSdk = new FakeSdk();
-	mutationSdk.blockReload();
 	const mutationHarness = runtime(mutationSdk);
 	const stableRequest = request();
 	let selectedSignal = original.signal;
@@ -1537,9 +1538,7 @@ test("cycle 8 native signal listener leases ignore shadow hooks and mutated targ
 	});
 	mutationSdk.session.output = handoffFor(stableRequest);
 	const mutationRun = mutationHarness.runtime.run(stableRequest);
-	await waitUntil(() => mutationSdk.loaderOptions !== undefined);
 	selectedSignal = replacement.signal;
-	mutationSdk.reloadGateResolve?.();
 	const mutationOutcome = await observeSettlement(mutationRun, 100);
 	const mutationClose = await observeSettlement(mutationHarness.runtime.close(), 50);
 
@@ -1555,7 +1554,7 @@ test("cycle 8 native signal listener leases ignore shadow hooks and mutated targ
 	}, {
 		attach: ["resolved", "resolved", 0, 0, 0],
 		remove: ["resolved", "resolved", 0, 0, 0],
-		mutation: ["resolved", "resolved", 1, 0, 0, 0],
+		mutation: ["rejected", "resolved", 0, 0, 0, 0],
 		parent: ["resolved", 0, 0, 0],
 	});
 });
@@ -1741,7 +1740,7 @@ test("cycle 8 reads request accessors once and freezes the normalized snapshot a
 
 	assert.deepEqual({
 		accessorStatus: accessorOutcome.status,
-		allAccessorsReadOnce: Object.values(observedReads).every((count) => count === 1),
+		noAccessorReads: Object.values(observedReads).length === 0,
 		observedReads,
 		mutationStatus: mutationOutcome.status,
 		createCwd: mutationSdk.options?.cwd,
@@ -1750,9 +1749,9 @@ test("cycle 8 reads request accessors once and freezes the normalized snapshot a
 		promptContainsMutation: mutationSdk.session.lastPrompt.includes("MUTATED"),
 		resultHead: mutationOutcome.status === "resolved" ? originalHead : undefined,
 	}, {
-		accessorStatus: "resolved",
-		allAccessorsReadOnce: true,
-		observedReads: Object.fromEntries(Object.keys(source).sort().map((key) => [key, 1])),
+		accessorStatus: "rejected",
+		noAccessorReads: true,
+		observedReads: {},
 		mutationStatus: "resolved",
 		createCwd: originalCwd,
 		loaderCwd: originalCwd,
@@ -1764,7 +1763,6 @@ test("cycle 8 reads request accessors once and freezes the normalized snapshot a
 
 test("cycle 8 hostile authority accessors cannot bypass the mutator fence", async () => {
 	const sdk = new FakeSdk();
-	sdk.blockReload();
 	const h = runtime(sdk);
 	const baseAuthority = request().authority;
 	let readOnlyReads = 0;
@@ -1777,25 +1775,21 @@ test("cycle 8 hostile authority accessors cannot bypass the mutator fence", asyn
 		},
 	});
 	const firstRequest = request({ authority: baseAuthority });
-	const firstRun = h.runtime.run(firstRequest);
-	await waitUntil(() => sdk.loaderOptions !== undefined);
-	const secondRequest = request({
-		binding: { ...request().binding, runId: "second-mutator", laneId: "second-mutator" },
-	});
-	const secondRun = h.runtime.run(secondRequest);
-	const secondOutcome = await observeSettlement(secondRun, 10);
-	const closePromise = h.runtime.close();
-	sdk.reloadGateResolve?.();
-	await Promise.allSettled([firstRun, secondRun, closePromise]);
+	const firstOutcome = await observeSettlement(h.runtime.run(firstRequest), 100);
+	const closeOutcome = await observeSettlement(h.runtime.close(), 100);
 
 	assert.deepEqual({
 		readOnlyReads,
-		secondStatus: secondOutcome.status,
-		secondRejectedByFence: /mutating|concurrency/i.test(rejectionMessage(secondOutcome)),
+		firstStatus: firstOutcome.status,
+		firstTyped: isTypedOwnCause(firstOutcome),
+		promptCalls: sdk.session.promptCalls,
+		closeStatus: closeOutcome.status,
 	}, {
-		readOnlyReads: 1,
-		secondStatus: "rejected",
-		secondRejectedByFence: true,
+		readOnlyReads: 0,
+		firstStatus: "rejected",
+		firstTyped: true,
+		promptCalls: 0,
+		closeStatus: "resolved",
 	});
 });
 
@@ -1814,7 +1808,11 @@ test("cycle 8 admits bounded disjoint mutator leases and releases only the compl
 			session.activeTools = [...(options.tools as string[])];
 			session.blockPrompt();
 			this.sessions.push({ cwd, session });
-			return { session, extensionsResult: { extensions: [], errors: [] } };
+			return {
+				session,
+				extensionsResult: { extensions: [], errors: [], runtime: {} },
+				modelFallbackMessage: undefined,
+			};
 		}
 	}
 
@@ -2126,7 +2124,8 @@ test("cycle 9 captures the SDK creation result and owned session exactly once in
 			session.activeTools = [...(options.tools ?? [])];
 		}
 		const created = {
-			extensionsResult: { extensions: [], errors: [] },
+			extensionsResult: { extensions: [], errors: [], runtime: {} },
+			modelFallbackMessage: undefined,
 		} as Record<string, unknown>;
 		Object.defineProperty(created, "session", {
 			enumerable: true,
@@ -2159,7 +2158,8 @@ test("cycle 9 captures the SDK creation result and owned session exactly once in
 		session.activeTools = ["workspace_read", "workspace_edit", "workspace_write", "host_inspect"];
 	}
 	const lateCreated = {
-		extensionsResult: { extensions: [], errors: [] },
+		extensionsResult: { extensions: [], errors: [], runtime: {} },
+		modelFallbackMessage: undefined,
 	} as Record<string, unknown>;
 	Object.defineProperty(lateCreated, "session", {
 		enumerable: true,
@@ -2175,7 +2175,10 @@ test("cycle 9 captures the SDK creation result and owned session exactly once in
 	const throwingSdk = new FakeSdk();
 	let throwingReads = 0;
 	throwingSdk.createAgentSession = async () => {
-		const created = { extensionsResult: { extensions: [], errors: [] } } as Record<string, unknown>;
+		const created = {
+			extensionsResult: { extensions: [], errors: [], runtime: {} },
+			modelFallbackMessage: undefined,
+		} as Record<string, unknown>;
 		Object.defineProperty(created, "session", {
 			enumerable: true,
 			get() { throwingReads += 1; throw undefined; },
@@ -2228,7 +2231,11 @@ test("cycle 9 keeps a private frozen tool oracle across SDK mutation, reorder, a
 		try { options.customTools.push(options.customTools[0]); } catch { customMutationBlocked = true; }
 		sdk.session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
 		sdk.session.activeTools = expected;
-		return { session: sdk.session, extensionsResult: { extensions: [], errors: [] } };
+		return {
+			session: sdk.session,
+			extensionsResult: { extensions: [], errors: [], runtime: {} },
+			modelFallbackMessage: undefined,
+		};
 	};
 	const safeOutcome = await observeSettlement(runtime(sdk).runtime.run(req), 100);
 
@@ -2237,7 +2244,11 @@ test("cycle 9 keeps a private frozen tool oracle across SDK mutation, reorder, a
 		options.tools = ["bash"];
 		replacementSdk.session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
 		replacementSdk.session.activeTools = ["bash"];
-		return { session: replacementSdk.session, extensionsResult: { extensions: [], errors: [] } };
+		return {
+			session: replacementSdk.session,
+			extensionsResult: { extensions: [], errors: [], runtime: {} },
+			modelFallbackMessage: undefined,
+		};
 	};
 	const replacementOutcome = await observeSettlement(runtime(replacementSdk).runtime.run(request({
 		binding: { ...request().binding, runId: "cycle9-tool-replacement", laneId: "cycle9-tool-replacement" },
@@ -2438,7 +2449,11 @@ test("cycle 9 late-session disposal has its own bounded phase and reports the ex
 		binding: { ...request().binding, runId: "cycle9-late-dispose", laneId: "cycle9-late-dispose" },
 	});
 	const runOutcome = await observeSettlement(h.runtime.run(req), 100);
-	creation.resolve({ session: sdk.session, extensionsResult: { extensions: [], errors: [] } });
+	creation.resolve({
+		session: sdk.session,
+		extensionsResult: { extensions: [], errors: [], runtime: {} },
+		modelFallbackMessage: undefined,
+	});
 	await waitUntil(() => sdk.session.disposeCalls === 1);
 	await new Promise((resolve) => setTimeout(resolve, 20));
 	const closeOutcome = await observeSettlement(h.runtime.close(), 100);
@@ -2633,9 +2648,7 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 	const mutatedHandoff = handoffFor(mutationRequest, { summary: "mutated terminal summary" });
 	mutationHarness.sdk.session.prompt = async function () {
 		this.promptCalls += 1;
-		const message = assistantMessage(originalHandoff);
-		for (const listener of this.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
-		for (const listener of this.listeners) listener({ type: "agent_end", messages: [message], willRetry: false } as AgentSessionEvent);
+		const message = drivePiLifecycle(this, originalHandoff);
 		const textPart = message.content[0];
 		if (textPart?.type === "text") textPart.text = mutatedHandoff;
 	};
@@ -2668,10 +2681,17 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 	});
 	sparseHarness.sdk.session.prompt = async function () {
 		this.promptCalls += 1;
+		const user = piUserMessage("cycle 9 sparse transcript");
 		const message = assistantMessage(handoffFor(sparseRequest));
 		const messages = new Array<typeof message>(1_000);
 		messages[999] = message;
-		for (const listener of this.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "agent_start" } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "turn_start" } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "message_start", message: user } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "message_end", message: user } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "message_start", message } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "message_end", message } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "turn_end", message, toolResults: [] } as AgentSessionEvent);
 		for (const listener of this.listeners) listener({ type: "agent_end", messages, willRetry: false } as AgentSessionEvent);
 	};
 	const sparseOutcome = await observeSettlement(sparseHarness.runtime.run(sparseRequest), 100);
@@ -2683,11 +2703,19 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 	});
 	hiddenHarness.sdk.session.prompt = async function () {
 		this.promptCalls += 1;
+		const user = piUserMessage("cycle 9 hidden event");
 		const message = assistantMessage(handoffFor(hiddenRequest));
 		const event = { type: "message_end", message } as Record<string, unknown>;
 		Object.defineProperty(event, "hidden", { get() { hiddenReads += 1; return "hidden"; } });
+		emitSessionEvent(this, { type: "agent_start" } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "turn_start" } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "message_start", message: user } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "message_end", message: user } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "message_start", message } as AgentSessionEvent);
 		for (const listener of this.listeners) listener(event as AgentSessionEvent);
-		for (const listener of this.listeners) listener({ type: "agent_end", messages: [message], willRetry: false } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "turn_end", message, toolResults: [] } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "agent_end", messages: [user, message], willRetry: false } as AgentSessionEvent);
+		emitSessionEvent(this, { type: "agent_settled" } as AgentSessionEvent);
 	};
 	const hiddenOutcome = await observeSettlement(hiddenHarness.runtime.run(hiddenRequest), 100);
 
@@ -2978,7 +3006,11 @@ test("cycle 10 staged session capture cleans every malformed foreground and late
 					await observeSettlement(runPromise, 50);
 					malformed.thinkingLevel = "high";
 					malformed.activeTools = [...(sdk.options?.tools as string[])];
-					creation.resolve({ session: malformed, extensionsResult: { extensions: [], errors: [] } });
+					creation.resolve({
+						session: malformed,
+						extensionsResult: { extensions: [], errors: [], runtime: {} },
+						modelFallbackMessage: undefined,
+					});
 					await new Promise((resolve) => setTimeout(resolve, 20));
 				}
 
@@ -3108,7 +3140,11 @@ test("cycle 10 creation result and extension arrays are exact descriptor-safe cl
 						return Reflect.get(target, property, receiver);
 					},
 				});
-				return { result: { session, extensionsResult: { extensions, errors: [] } }, observed: () => reads };
+				return { result: {
+					session,
+					extensionsResult: { extensions, errors: [], runtime: {} },
+					modelFallbackMessage: undefined,
+				}, observed: () => reads };
 			},
 		},
 		{
@@ -3116,7 +3152,11 @@ test("cycle 10 creation result and extension arrays are exact descriptor-safe cl
 			build(session) {
 				const extensions: unknown[] = [];
 				Object.defineProperty(extensions, "hidden", { value: "forbidden" });
-				return { result: { session, extensionsResult: { extensions, errors: [] } }, observed: () => 0 };
+				return { result: {
+					session,
+					extensionsResult: { extensions, errors: [], runtime: {} },
+					modelFallbackMessage: undefined,
+				}, observed: () => 0 };
 			},
 		},
 		{
@@ -3124,21 +3164,30 @@ test("cycle 10 creation result and extension arrays are exact descriptor-safe cl
 			build(session) {
 				const extensions: unknown[] = [];
 				(extensions as unknown as Record<PropertyKey, unknown>)[Symbol("hidden")] = "forbidden";
-				return { result: { session, extensionsResult: { extensions, errors: [] } }, observed: () => 0 };
+				return { result: {
+					session,
+					extensionsResult: { extensions, errors: [], runtime: {} },
+					modelFallbackMessage: undefined,
+				}, observed: () => 0 };
 			},
 		},
 		{
 			name: "extension-result-extra",
 			build(session) {
-				const extensionsResult = { extensions: [], errors: [], hidden: true };
-				return { result: { session, extensionsResult }, observed: () => 0 };
+				const extensionsResult = { extensions: [], errors: [], runtime: {}, hidden: true };
+				return { result: { session, extensionsResult, modelFallbackMessage: undefined }, observed: () => 0 };
 			},
 		},
 		{
 			name: "creation-result-extra",
 			build(session) {
 				return {
-					result: { session, extensionsResult: { extensions: [], errors: [] }, hidden: true } as RuntimeCreationResult,
+					result: {
+						session,
+						extensionsResult: { extensions: [], errors: [], runtime: {} },
+						modelFallbackMessage: undefined,
+						hidden: true,
+					} as RuntimeCreationResult,
 					observed: () => 0,
 				};
 			},
@@ -3147,7 +3196,10 @@ test("cycle 10 creation result and extension arrays are exact descriptor-safe cl
 			name: "fallback-accessor",
 			build(session) {
 				let reads = 0;
-				const result = { session, extensionsResult: { extensions: [], errors: [] } } as RuntimeCreationResult;
+				const result = {
+					session,
+					extensionsResult: { extensions: [], errors: [], runtime: {} },
+				} as unknown as RuntimeCreationResult;
 				Object.defineProperty(result, "modelFallbackMessage", {
 					enumerable: true,
 					get() { reads += 1; return undefined; },
@@ -3168,7 +3220,11 @@ test("cycle 10 creation result and extension arrays are exact descriptor-safe cl
 			session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
 			session.activeTools = [...(options.tools as string[])];
 			if (first) { first = false; return built.result; }
-			return { session, extensionsResult: { extensions: [], errors: [] } };
+			return {
+				session,
+				extensionsResult: { extensions: [], errors: [], runtime: {} },
+				modelFallbackMessage: undefined,
+			};
 		};
 		const harness = runtime(sdk, { cleanupTimeoutMs: 15 });
 		const req = request({ binding: { ...request().binding, runId: `cycle10-${spec.name}`, laneId: `cycle10-${spec.name}` } });
@@ -3228,6 +3284,20 @@ test("cycle 10 Pi 0.80.6 cumulative message updates are delta-accounted once", a
 			harness.sdk.session.promptCalls += 1;
 			harness.sdk.session.lastPrompt = prompt;
 			assert.deepEqual(options, { expandPromptTemplates: false, source: "extension" });
+			const user = piUserMessage("cycle 10 cumulative prompt");
+			emitSessionEvent(harness.sdk.session, { type: "agent_start" } as AgentSessionEvent);
+			emitSessionEvent(harness.sdk.session, { type: "turn_start" } as AgentSessionEvent);
+			emitSessionEvent(harness.sdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+			emitSessionEvent(harness.sdk.session, { type: "message_end", message: user } as AgentSessionEvent);
+			const initial = assistantMessage("");
+			for (const listener of harness.sdk.session.listeners) listener({
+				type: "message_start", message: initial,
+			} as AgentSessionEvent);
+			for (const listener of harness.sdk.session.listeners) listener({
+				type: "message_update",
+				message: initial,
+				assistantMessageEvent: { type: "text_start", contentIndex: 0, partial: initial },
+			} as AgentSessionEvent);
 			for (let end = 4; end < output.length; end += 4) {
 				const partial = assistantMessage(output.slice(0, end));
 				for (const listener of harness.sdk.session.listeners) listener({
@@ -3237,10 +3307,19 @@ test("cycle 10 Pi 0.80.6 cumulative message updates are delta-accounted once", a
 				} as AgentSessionEvent);
 			}
 			const message = assistantMessage(output);
+			for (const listener of harness.sdk.session.listeners) listener({
+				type: "message_update",
+				message,
+				assistantMessageEvent: { type: "text_end", contentIndex: 0, content: output, partial: message },
+			} as AgentSessionEvent);
 			for (const listener of harness.sdk.session.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
 			for (const listener of harness.sdk.session.listeners) listener({
-				type: "agent_end", messages: [message], willRetry: false,
+				type: "turn_end", message, toolResults: [],
 			} as AgentSessionEvent);
+			for (const listener of harness.sdk.session.listeners) listener({
+				type: "agent_end", messages: [user, message], willRetry: false,
+			} as AgentSessionEvent);
+			for (const listener of harness.sdk.session.listeners) listener({ type: "agent_settled" } as AgentSessionEvent);
 		},
 	});
 	assert.ok(new TextEncoder().encode(output).byteLength < 64 * 1024);
@@ -3605,6 +3684,7 @@ test("cycle 11 run-ID abort settles associated creation ownership before termina
 	resolvingCreation.resolve({
 		session: resolvingSdk.session,
 		extensionsResult: { extensions: [], errors: [], runtime: {} },
+		modelFallbackMessage: undefined,
 	} as unknown as RuntimeCreationResult);
 	const afterResolve = await observeSettlement(resolvingAbort, 100);
 	await observeSettlement(resolvingRun, 100);
@@ -3809,19 +3889,26 @@ test("cycle 11 Pi streams account actual monotonic state for every content famil
 	const accepted: string[] = [];
 
 	const runStream = async (name: string, stream: (session: FakeSession, initial: PiAssistantMessage) => void): Promise<PromiseOutcome> => {
-		const harness = runtime(new FakeSdk(), { maxEventBytes: 4_096, maxAssistantBytes: 64 * 1024 });
+		const harness = runtime(new FakeSdk(), { maxEventBytes: 8_192, maxAssistantBytes: 64 * 1024 });
 		const req = request({ binding: { ...request().binding, runId: `cycle11-stream-${name}`, laneId: `cycle11-stream-${name}` } });
 		const handoff = handoffFor(req);
 		Object.defineProperty(harness.sdk.session, "prompt", {
 			configurable: true,
 			async value() {
 				harness.sdk.session.promptCalls += 1;
+				const user = piUserMessage(`cycle 11 stream ${name}`);
+				emit(harness.sdk.session, { type: "agent_start" } as AgentSessionEvent);
+				emit(harness.sdk.session, { type: "turn_start" } as AgentSessionEvent);
+				emit(harness.sdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+				emit(harness.sdk.session, { type: "message_end", message: user } as AgentSessionEvent);
 				const initial = assistantMessage("");
 				emit(harness.sdk.session, { type: "message_start", message: initial } as AgentSessionEvent);
 				stream(harness.sdk.session, initial);
 				const terminal = assistantMessage(handoff);
 				emit(harness.sdk.session, { type: "message_end", message: terminal } as AgentSessionEvent);
-				emit(harness.sdk.session, { type: "agent_end", messages: [terminal], willRetry: false } as AgentSessionEvent);
+				emit(harness.sdk.session, { type: "turn_end", message: terminal, toolResults: [] } as AgentSessionEvent);
+				emit(harness.sdk.session, { type: "agent_end", messages: [user, terminal], willRetry: false } as AgentSessionEvent);
+				emit(harness.sdk.session, { type: "agent_settled" } as AgentSessionEvent);
 			},
 		});
 		const outcome = await observeSettlement(harness.runtime.run(req), 200);
@@ -3980,9 +4067,19 @@ test("cycle 11 fixed envelopes and arbitrary JSON avoid whole-source key materia
 			configurable: true,
 			async value() {
 				eventHarness.sdk.session.promptCalls += 1;
-				for (const listener of eventHarness.sdk.session.listeners) listener(hiddenEvent as AgentSessionEvent);
+				const user = piUserMessage("cycle 11 hidden event");
+				emitSessionEvent(eventHarness.sdk.session, { type: "agent_start" } as AgentSessionEvent);
+				emitSessionEvent(eventHarness.sdk.session, { type: "turn_start" } as AgentSessionEvent);
+				emitSessionEvent(eventHarness.sdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+				emitSessionEvent(eventHarness.sdk.session, { type: "message_end", message: user } as AgentSessionEvent);
 				const terminal = hiddenEvent.message as PiAssistantMessage;
-				for (const listener of eventHarness.sdk.session.listeners) listener({ type: "agent_end", messages: [terminal], willRetry: false } as AgentSessionEvent);
+				emitSessionEvent(eventHarness.sdk.session, { type: "message_start", message: terminal } as AgentSessionEvent);
+				for (const listener of eventHarness.sdk.session.listeners) listener(hiddenEvent as AgentSessionEvent);
+				emitSessionEvent(eventHarness.sdk.session, { type: "turn_end", message: terminal, toolResults: [] } as AgentSessionEvent);
+				emitSessionEvent(eventHarness.sdk.session, {
+					type: "agent_end", messages: [user, terminal], willRetry: false,
+				} as AgentSessionEvent);
+				emitSessionEvent(eventHarness.sdk.session, { type: "agent_settled" } as AgentSessionEvent);
 			},
 		});
 		outcomes.push(`event:${(await observeSettlement(eventHarness.runtime.run(eventRequest), 150)).status}`);
@@ -3992,7 +4089,7 @@ test("cycle 11 fixed envelopes and arbitrary JSON avoid whole-source key materia
 			const sdk = new FakeSdk();
 			const creation = watch({
 				session: sdk.session,
-				extensionsResult: { extensions: [], errors: [] },
+				extensionsResult: { extensions: [], errors: [], runtime: {} },
 				modelFallbackMessage: undefined,
 			} as Record<PropertyKey, unknown>);
 			if (boundary === "creation") {
@@ -4228,7 +4325,11 @@ function piUserMessage(text: string): PiUserMessage {
 	return { role: "user", content: [{ type: "text", text }], timestamp: 475 };
 }
 
-function emitPiTextAssistant(session: FakeSession, text: string): PiAssistantMessage {
+function emitPiTextAssistant(
+	session: FakeSession,
+	text: string,
+	overrides: Partial<PiAssistantMessage> = {},
+): PiAssistantMessage {
 	const initial = assistantMessage("", { content: [] });
 	emitSessionEvent(session, { type: "message_start", message: initial } as AgentSessionEvent);
 	const started = assistantMessage("");
@@ -4237,7 +4338,7 @@ function emitPiTextAssistant(session: FakeSession, text: string): PiAssistantMes
 		message: started,
 		assistantMessageEvent: { type: "text_start", contentIndex: 0, partial: started },
 	} as AgentSessionEvent);
-	const completed = assistantMessage(text);
+	const completed = assistantMessage(text, overrides);
 	emitSessionEvent(session, {
 		type: "message_update",
 		message: completed,
@@ -4311,8 +4412,9 @@ function drivePiLifecycle(
 		postSettled?: boolean;
 		missingSettled?: boolean;
 		willRetry?: boolean;
+		assistantOverrides?: Partial<PiAssistantMessage>;
 	} = {},
-): void {
+): PiAssistantMessage {
 	const user = piUserMessage("bounded cycle 12 prompt");
 	emitSessionEvent(session, { type: "agent_start" } as AgentSessionEvent);
 	if (options.unknown) emitSessionEvent(session, { type: "cycle12_unknown" } as unknown as AgentSessionEvent);
@@ -4367,7 +4469,7 @@ function drivePiLifecycle(
 		messages.push(toolResult);
 		emitSessionEvent(session, { type: "turn_start" } as AgentSessionEvent);
 	}
-	const finalAssistant = emitPiTextAssistant(session, handoff);
+	const finalAssistant = emitPiTextAssistant(session, handoff, options.assistantOverrides);
 	messages.push(finalAssistant);
 	emitSessionEvent(session, { type: "turn_end", message: finalAssistant, toolResults: [] } as AgentSessionEvent);
 	emitSessionEvent(session, { type: "agent_end", messages, willRetry: options.willRetry ?? false } as AgentSessionEvent);
@@ -4376,6 +4478,7 @@ function drivePiLifecycle(
 	if (options.postSettled) {
 		for (const listener of retained) listener({ type: "turn_start" } as AgentSessionEvent);
 	}
+	return finalAssistant;
 }
 
 test("cycle 12 follows the complete Pi lifecycle and selects only the final settled assistant", async () => {
@@ -4425,16 +4528,63 @@ test("cycle 12 transfers the entire actual pinned Pi session and requires its ex
 	const modelRegistry = ModelRegistry.inMemory(authStorage);
 	const offlineApi = "cycle12-offline-agent-session";
 	let requestedHandoff = "";
+	let providerMode: "no-tool" | "one-tool" = "no-tool";
+	let providerStep = 0;
 	let streamCalls = 0;
 	let disposeCalls = 0;
+	let promptCalls = 0;
+	const providerContextRoles: string[] = [];
 	modelRegistry.registerProvider("openai-codex", {
 		api: offlineApi as never,
 		apiKey: "offline-test-marker",
 		baseUrl: "offline:",
-		streamSimple: () => {
+		streamSimple: (_model, context) => {
 			streamCalls += 1;
+			providerContextRoles.push(context.messages.map((message) => message.role).join(","));
 			const stream = createAssistantMessageEventStream();
 			const initial = assistantMessage("", { content: [], api: offlineApi as PiAssistantMessage["api"] });
+			if (providerMode === "one-tool" && providerStep === 0) {
+				providerStep += 1;
+				const path = ".pi/extensions/shepherd/agent-session-runtime.ts";
+				const startedCall = {
+					type: "toolCall" as const,
+					id: "cycle12-real-tool-call",
+					name: "workspace_read",
+					arguments: {},
+					partialJson: "",
+				};
+				const started = assistantMessage("", {
+					content: [startedCall] as unknown as PiAssistantMessage["content"],
+					api: offlineApi as PiAssistantMessage["api"],
+					stopReason: "toolUse",
+				});
+				const argumentsJson = JSON.stringify({ path });
+				const growingCall = { ...startedCall, arguments: { path }, partialJson: argumentsJson };
+				const growing = assistantMessage("", {
+					content: [growingCall] as unknown as PiAssistantMessage["content"],
+					api: offlineApi as PiAssistantMessage["api"],
+					stopReason: "toolUse",
+				});
+				const terminalCall = {
+					type: "toolCall" as const,
+					id: startedCall.id,
+					name: startedCall.name,
+					arguments: { path },
+				};
+				const terminal = assistantMessage("", {
+					content: [terminalCall],
+					api: offlineApi as PiAssistantMessage["api"],
+					stopReason: "toolUse",
+				});
+				stream.push({ type: "start", partial: initial });
+				stream.push({ type: "toolcall_start", contentIndex: 0, partial: started });
+				stream.push({ type: "toolcall_delta", contentIndex: 0, delta: argumentsJson, partial: growing });
+				stream.push({ type: "toolcall_end", contentIndex: 0, toolCall: terminalCall, partial: terminal });
+				stream.push({ type: "done", reason: "toolUse", message: terminal });
+				stream.end();
+				return stream as never;
+			}
+			providerStep += 1;
 			const terminal = assistantMessage(requestedHandoff, { api: offlineApi as PiAssistantMessage["api"] });
 			stream.push({ type: "start", partial: initial });
 			stream.push({ type: "done", reason: "stop", message: terminal });
@@ -4455,7 +4605,10 @@ test("cycle 12 transfers the entire actual pinned Pi session and requires its ex
 	});
 	const model = modelRegistry.find("openai-codex", "gpt-5.6-sol");
 	assert.ok(model);
-	let actualResult: Awaited<ReturnType<typeof createAgentSession>> | undefined;
+	type ActualSessionResult = Awaited<ReturnType<typeof createAgentSession>>;
+	type ActualSessionTrace = { events: string[]; disposedAt: number };
+	const actualResults: ActualSessionResult[] = [];
+	const actualTraces: ActualSessionTrace[] = [];
 	const sdk: AgentSessionRuntimeSdk = {
 		version: VERSION,
 		requiredVersion: "0.80.6",
@@ -4466,30 +4619,123 @@ test("cycle 12 transfers the entire actual pinned Pi session and requires its ex
 		createSessionManager: (cwd) => SessionManager.inMemory(cwd) as never,
 		createResourceLoader: (options) => new DefaultResourceLoader(options as never) as never,
 		async createAgentSession(options) {
-			actualResult = await createAgentSession({ ...options, authStorage, modelRegistry });
-			const originalDispose = actualResult.session.dispose.bind(actualResult.session);
-			Object.defineProperty(actualResult.session, "dispose", {
+			const created = await createAgentSession({ ...options, authStorage, modelRegistry });
+			actualResults.push(created);
+			const trace: ActualSessionTrace = { events: [], disposedAt: -1 };
+			actualTraces.push(trace);
+			created.session.subscribe((event) => { trace.events.push(event.type); });
+			const originalPrompt = created.session.prompt.bind(created.session);
+			Object.defineProperty(created.session, "prompt", {
 				configurable: true,
-				value() { disposeCalls += 1; return originalDispose(); },
+				value(...args: Parameters<typeof originalPrompt>) {
+					promptCalls += 1;
+					return originalPrompt(...args);
+				},
 			});
-			return actualResult as never;
+			const originalDispose = created.session.dispose.bind(created.session);
+			Object.defineProperty(created.session, "dispose", {
+				configurable: true,
+				value() {
+					disposeCalls += 1;
+					trace.disposedAt = trace.events.length;
+					return originalDispose();
+				},
+			});
+			return created as never;
 		},
 	};
-	const harness = runtime(sdk, { cleanupTimeoutMs: 250 });
-	const req = request({
-		binding: { ...request().binding, runId: "cycle12-real-whole-session", laneId: "cycle12-real-whole-session" },
-	});
-	requestedHandoff = handoffFor(req);
-	const realOutcome = await observeSettlement(harness.runtime.run(req), 1_500);
 	const problems: string[] = [];
-	if (realOutcome.status !== "resolved") problems.push(`real:${realOutcome.status}`);
-	if (!actualResult || streamCalls !== 1) problems.push(`real:stream-${streamCalls}`);
-	if (disposeCalls !== 1) problems.push(`real:dispose-${disposeCalls}`);
-	if (actualResult && Reflect.ownKeys(actualResult).join(",") !== "session,extensionsResult,modelFallbackMessage") {
+	let workspaceReadCalls = 0;
+	const workspaceReadPaths: string[] = [];
+	const toolWorkspace = workspace();
+	toolWorkspace.readText = async (path) => {
+		workspaceReadCalls += 1;
+		workspaceReadPaths.push(path);
+		return "bounded offline read";
+	};
+	let fetchCalls = 0;
+	const originalFetch = globalThis.fetch;
+	globalThis.fetch = (async () => {
+		fetchCalls += 1;
+		throw new Error("cycle 12 actual Pi test forbids network access");
+	}) as typeof globalThis.fetch;
+	try {
+		providerMode = "no-tool";
+		providerStep = 0;
+		const noToolHarness = runtime(sdk, { cleanupTimeoutMs: 250 });
+		const noToolRequest = request({
+			binding: {
+				...request().binding,
+				runId: "cycle12-real-no-tool-session",
+				laneId: "cycle12-real-no-tool-session",
+			},
+		});
+		requestedHandoff = handoffFor(noToolRequest);
+		const noToolOutcome = await observeSettlement(noToolHarness.runtime.run(noToolRequest), 1_500);
+		if (noToolOutcome.status !== "resolved") {
+			problems.push(`real-no-tool:${noToolOutcome.status}:${errorMessages(
+				noToolOutcome.status === "rejected" ? noToolOutcome.reason : undefined,
+			).join("|")}`);
+		}
+		await observeSettlement(noToolHarness.runtime.close(), 250);
+
+		providerMode = "one-tool";
+		providerStep = 0;
+		const oneToolHarness = runtime(sdk, { cleanupTimeoutMs: 250 });
+		const oneToolRequest = request({
+			workspace: toolWorkspace,
+			binding: {
+				...request().binding,
+				runId: "cycle12-real-one-tool-session",
+				laneId: "cycle12-real-one-tool-session",
+			},
+		});
+		requestedHandoff = handoffFor(oneToolRequest);
+		const oneToolOutcome = await observeSettlement(oneToolHarness.runtime.run(oneToolRequest), 1_500);
+		if (oneToolOutcome.status !== "resolved") {
+			problems.push(`real-one-tool:${oneToolOutcome.status}:${errorMessages(
+				oneToolOutcome.status === "rejected" ? oneToolOutcome.reason : undefined,
+			).join("|")}`);
+		}
+		await observeSettlement(oneToolHarness.runtime.close(), 250);
+	} finally {
+		globalThis.fetch = originalFetch;
+		modelRegistry.unregisterProvider("openai-codex");
+	}
+
+	const expectedNoToolEvents = [
+		"agent_start", "turn_start", "message_start", "message_end", "message_start", "message_end",
+		"turn_end", "agent_end", "agent_settled",
+	];
+	const expectedOneToolEvents = [
+		"agent_start", "turn_start", "message_start", "message_end", "message_start",
+		"message_update", "message_update", "message_update", "message_end",
+		"tool_execution_start", "tool_execution_end", "message_start", "message_end", "turn_end",
+		"turn_start", "message_start", "message_end", "turn_end", "agent_end", "agent_settled",
+	];
+	if (fetchCalls !== 0) problems.push(`real:network-${fetchCalls}`);
+	if (streamCalls !== 3) problems.push(`real:stream-${streamCalls}`);
+	if (promptCalls !== 2) problems.push(`real:prompt-${promptCalls}`);
+	if (disposeCalls !== 2) problems.push(`real:dispose-${disposeCalls}`);
+	if (workspaceReadCalls !== 1 || workspaceReadPaths.join(",") !== ".pi/extensions/shepherd/agent-session-runtime.ts") {
+		problems.push(`real:workspace-read-${workspaceReadCalls}:${workspaceReadPaths.join(",")}`);
+	}
+	if (providerContextRoles.join("|") !== "user|user|user,assistant,toolResult") {
+		problems.push(`real:contexts-${providerContextRoles.join("|")}`);
+	}
+	if (actualResults.length !== 2 || actualResults.some((created) =>
+		Reflect.ownKeys(created).join(",") !== "session,extensionsResult,modelFallbackMessage")) {
 		problems.push("real:result-shape");
 	}
-	await observeSettlement(harness.runtime.close(), 250);
-	modelRegistry.unregisterProvider("openai-codex");
+	if (actualTraces.length !== 2 || actualTraces[0]?.events.join(",") !== expectedNoToolEvents.join(",")) {
+		problems.push(`real:no-tool-events-${actualTraces[0]?.events.join(",") ?? "missing"}`);
+	}
+	if (actualTraces.length !== 2 || actualTraces[1]?.events.join(",") !== expectedOneToolEvents.join(",")) {
+		problems.push(`real:one-tool-events-${actualTraces[1]?.events.join(",") ?? "missing"}`);
+	}
+	if (actualTraces.some((trace) => trace.disposedAt !== trace.events.length || trace.events.at(-1) !== "agent_settled")) {
+		problems.push("real:cleanup-order");
+	}
 
 	let runtimeTrapCalls = 0;
 	const inertRuntime = new Proxy({}, {
@@ -4699,15 +4945,22 @@ test("cycle 12 assistant content indexes enforce one matching start delta and en
 			configurable: true,
 			async value() {
 				harness.sdk.session.promptCalls += 1;
+				const user = piUserMessage(`cycle 12 phase ${spec.name}`);
+				emitSessionEvent(harness.sdk.session, { type: "agent_start" } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "turn_start" } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "message_end", message: user } as AgentSessionEvent);
 				emitSessionEvent(harness.sdk.session, {
 					type: "message_start", message: assistantMessage("", { content: [] }),
 				} as AgentSessionEvent);
 				for (const emit of spec.updates) emit(harness.sdk.session);
 				const terminal = assistantMessage(handoffFor(req));
 				emitSessionEvent(harness.sdk.session, { type: "message_end", message: terminal } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "turn_end", message: terminal, toolResults: [] } as AgentSessionEvent);
 				emitSessionEvent(harness.sdk.session, {
-					type: "agent_end", messages: [terminal], willRetry: false,
+					type: "agent_end", messages: [user, terminal], willRetry: false,
 				} as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "agent_settled" } as AgentSessionEvent);
 			},
 		});
 		const outcome = await observeSettlement(harness.runtime.run(req), 200);
@@ -4786,10 +5039,18 @@ test("cycle 12 projects installed Pi diagnostics with optional undefined fields"
 			configurable: true,
 			async value() {
 				harness.sdk.session.promptCalls += 1;
+				const user = piUserMessage(`cycle 12 diagnostic ${name}`);
+				emitSessionEvent(harness.sdk.session, { type: "agent_start" } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "turn_start" } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "message_end", message: user } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "message_start", message: terminal } as AgentSessionEvent);
 				emitSessionEvent(harness.sdk.session, { type: "message_end", message: terminal } as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "turn_end", message: terminal, toolResults: [] } as AgentSessionEvent);
 				emitSessionEvent(harness.sdk.session, {
-					type: "agent_end", messages: [terminal], willRetry: false,
+					type: "agent_end", messages: [user, terminal], willRetry: false,
 				} as AgentSessionEvent);
+				emitSessionEvent(harness.sdk.session, { type: "agent_settled" } as AgentSessionEvent);
 			},
 		});
 		const outcome = await observeSettlement(harness.runtime.run(req), 200);
@@ -4852,7 +5113,8 @@ test("cycle 12 request authority arrays are fresh dense descriptor-captured valu
 	const read = policy.tools.find((tool) => tool.name === "workspace_read");
 	assert.ok(read);
 	const outside = await observeSettlement(read.execute("cycle12-outside", { path: "outside/file.txt" }, undefined), 100);
-	if (!isTypedOwnCause(outside)) outsideReads += 1_000;
+	if (outside.status !== "rejected" || !(outside.reason instanceof ToolPolicyError) ||
+		!Object.hasOwn(outside.reason, "cause")) outsideReads += 1_000;
 	assert.deepEqual({ callerBehaviorCalls, outsideReads }, { callerBehaviorCalls: 0, outsideReads: 0 });
 });
 

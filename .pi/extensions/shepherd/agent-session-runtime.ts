@@ -45,6 +45,7 @@ const MAX_EVENT_ARRAY_ITEMS = 4_096;
 const MAX_HANDOFF_SUMMARY_CHARACTERS = 4 * 1024;
 const MAX_HANDOFF_ARRAY_ITEMS = 32;
 const MAX_HANDOFF_ITEM_CHARACTERS = 2 * 1024;
+const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
 
 interface RuntimeResourceLoader {
 	reload(): Promise<void>;
@@ -74,8 +75,8 @@ export interface RuntimeAgentSession {
 
 interface RuntimeSessionResult {
 	session: RuntimeAgentSession;
-	extensionsResult: { extensions: unknown[]; errors: unknown[]; runtime?: unknown };
-	modelFallbackMessage?: string;
+	extensionsResult: { extensions: unknown[]; errors: unknown[]; runtime: unknown };
+	modelFallbackMessage: string | undefined;
 }
 
 /** Injected adapter over the public Pi 0.80.6 createAgentSession API and in-memory services. */
@@ -542,12 +543,15 @@ class AbortListenerLease {
 		this.#listener = listener;
 	}
 
-	attach(): void {
-		if (this.#mayBeAttached) return;
+	attach(): boolean {
+		if (this.#mayBeAttached) return nativeSignalAborted(this.#signal);
 		this.#mayBeAttached = true;
 		try {
 			EventTarget.prototype.addEventListener.call(this.#signal, "abort", this.#listener, { once: true });
+			return nativeSignalAborted(this.#signal);
 		} catch (error) {
+			try { EventTarget.prototype.removeEventListener.call(this.#signal, "abort", this.#listener); } catch { /* Preserve primary. */ }
+			this.#mayBeAttached = false;
 			throw new AgentSessionRuntimeError("AbortSignal listener attach failed", { cause: error });
 		}
 	}
@@ -561,6 +565,13 @@ class AbortListenerLease {
 			throw new AgentSessionRuntimeError("AbortSignal listener detach failed", { cause: error });
 		}
 	}
+}
+
+function nativeSignalAborted(signal: AbortSignal): boolean {
+	if (typeof NATIVE_ABORTED_GETTER !== "function") {
+		throw new AgentSessionRuntimeError("native AbortSignal state getter is unavailable");
+	}
+	return Boolean(Reflect.apply(NATIVE_ABORTED_GETTER, signal, []));
 }
 
 interface MutationLease {
@@ -583,14 +594,41 @@ interface ActiveRun {
 	resolveDone(): void;
 }
 
+class RunAdmissionOwnership {
+	readonly runId: string;
+	readonly done: Promise<void>;
+	readonly #resolveDone: () => void;
+	#failure: AgentSessionRuntimeError | undefined;
+	#finished = false;
+
+	constructor(runId: string) {
+		this.runId = runId;
+		const completion = deferred();
+		this.done = completion.promise;
+		this.#resolveDone = completion.resolve;
+	}
+
+	cancel(): void {
+		this.#failure ??= new AgentSessionRuntimeError(`AgentSession run ${this.runId} was aborted during admission`);
+	}
+
+	assertActive(): void {
+		if (this.#failure) throw this.#failure;
+	}
+
+	finish(): void {
+		if (this.#finished) return;
+		this.#finished = true;
+		this.#resolveDone();
+	}
+}
+
 interface TerminalCapture {
-	mode?: "legacy" | "pi";
 	messageEnd?: AssistantTerminal;
 	agentEnd?: AssistantTerminal;
 	messageEndCount: number;
 	agentEndCount: number;
 	agentEndWillRetry: boolean;
-	phase: "open" | "message-ended" | "agent-ended";
 	piPhase: "initial" | "agent" | "turn" | "turn-ended" | "agent-ended" | "settled";
 	piOpenMessageRole?: "user" | "assistant" | "toolResult";
 	piTurnAssistant?: AssistantTerminal;
@@ -635,6 +673,7 @@ export class ShepherdAgentSessionRuntime {
 	readonly #mutatorLeases = new Map<string, MutationLease>();
 	readonly #creations = new Set<SessionCreationOwnership>();
 	readonly #creationsByRunId = new Map<string, Set<SessionCreationOwnership>>();
+	readonly #runAdmissions = new Map<string, Set<RunAdmissionOwnership>>();
 	readonly #parentListenerLease: AbortListenerLease | undefined = undefined;
 	#admissions = 0;
 	#admissionsDrained: ReturnType<typeof deferred> | undefined;
@@ -670,12 +709,11 @@ export class ShepherdAgentSessionRuntime {
 			const lease = new AbortListenerLease(parentSignal, parentAbortListener);
 			this.#parentListenerLease = lease;
 			try {
-				lease.attach();
+				if (lease.attach()) parentAbortListener();
 			} catch (error) {
 				try { lease.release(); } catch { /* Preserve the attachment failure. */ }
 				throw normalizeRuntimeError(error);
 			}
-			if (parentSignal.aborted) parentAbortListener();
 		}
 	}
 
@@ -689,14 +727,18 @@ export class ShepherdAgentSessionRuntime {
 
 	async #run(request: RoleRunRequest): Promise<AgentSessionHandoff> {
 		const releaseAdmission = this.#beginAdmission();
+		let runAdmission: RunAdmissionOwnership | undefined;
 		let normalizedRequest: RoleRunRequest;
 		let toolPolicy: ToolPolicy;
 		let thinking: ShepherdAgentThinking;
 		let model: RuntimeModel;
 		let active: ActiveRun;
 		try {
+			runAdmission = this.#registerRunAdmission(request);
 			normalizedRequest = normalizeRunRequest(request);
+			runAdmission.assertActive();
 			this.#assertSdk();
+			runAdmission.assertActive();
 			// Capability schemas become bounded immutable Pi tools before any SDK lookup or await.
 			toolPolicy = createToolPolicy({
 				readOnly: normalizedRequest.authority.readOnly,
@@ -704,9 +746,11 @@ export class ShepherdAgentSessionRuntime {
 				authority: normalizedRequest.authority,
 				capabilities: normalizedRequest.capabilities,
 			});
+			runAdmission.assertActive();
 			const route = routeForRole(normalizedRequest.role);
 			thinking = route.thinking;
 			const foundModel = this.#sdk.findModel(route.provider, route.model);
+			runAdmission.assertActive();
 			if (!isRecord(foundModel) || foundModel.provider !== REQUIRED_PROVIDER || foundModel.id !== REQUIRED_MODEL) {
 				throw new AgentSessionRuntimeError(`required model ${REQUIRED_PROVIDER}/${REQUIRED_MODEL} is unavailable; fallback is forbidden`);
 			}
@@ -714,6 +758,7 @@ export class ShepherdAgentSessionRuntime {
 			if (!this.#sdk.hasConfiguredAuth(model)) {
 				throw new AgentSessionRuntimeError(`required model ${REQUIRED_PROVIDER}/${REQUIRED_MODEL} has no configured auth`);
 			}
+			runAdmission.assertActive();
 			const effectiveDeadline = computeDeadline(normalizedRequest.timeoutMs, normalizedRequest.deadlineAt);
 			active = this.#reserve(
 				normalizedRequest,
@@ -723,6 +768,7 @@ export class ShepherdAgentSessionRuntime {
 					: `AgentSession timed out after ${normalizedRequest.timeoutMs}ms`,
 			);
 		} finally {
+			if (runAdmission) this.#finishRunAdmission(runAdmission);
 			releaseAdmission();
 		}
 		const scope = active.scope;
@@ -734,8 +780,7 @@ export class ShepherdAgentSessionRuntime {
 		try {
 			if (normalizedRequest.signal) {
 				listenerLease = new AbortListenerLease(normalizedRequest.signal, externalAbort);
-				listenerLease?.attach();
-				if (normalizedRequest.signal.aborted) externalAbort();
+				if (listenerLease.attach()) externalAbort();
 			}
 			result = await this.#execute(normalizedRequest, thinking, model, active, toolPolicy);
 		} catch (error) {
@@ -770,6 +815,8 @@ export class ShepherdAgentSessionRuntime {
 	async abort(runId: string): Promise<void> {
 		try {
 			if (!validIdentifier(runId)) throw new AgentSessionRuntimeError("abort runId is invalid");
+			const admissions = [...(this.#runAdmissions.get(runId) ?? [])];
+			for (const admission of admissions) admission.cancel();
 			const matches = [...this.#active.values()].filter((active) => active.runId === runId);
 			const owners = new Set(this.#creationsByRunId.get(runId) ?? []);
 			for (const active of matches) {
@@ -777,7 +824,7 @@ export class ShepherdAgentSessionRuntime {
 				void active.owned?.abortOnce().catch(() => undefined);
 				if (active.creation) owners.add(active.creation);
 			}
-			await Promise.all(matches.map((active) => active.done));
+			await Promise.all([...admissions.map((admission) => admission.done), ...matches.map((active) => active.done)]);
 			for (const owner of this.#creationsByRunId.get(runId) ?? []) owners.add(owner);
 			if (owners.size > 0) {
 				const joined = await Promise.all([...owners].map((owner) => owner.joinForAbort()));
@@ -962,6 +1009,12 @@ export class ShepherdAgentSessionRuntime {
 				source: "extension",
 			}));
 			scope.assertActive();
+			// Prompt settlement follows Pi's synchronous agent_settled dispatch. Freeze before
+			// releasing the listener, then await release so idle/dispose callbacks cannot mutate
+			// evidence that is about to be verified.
+			capture.frozen = true;
+			await scope.race(bounded(owned.unsubscribeOnce(), this.#options.cleanupTimeoutMs, "session unsubscribe"));
+			scope.assertActive();
 			if (capture.failure) throw capture.failure;
 			const terminal = verifyTerminalCapture(capture);
 			if (terminal.provider !== REQUIRED_PROVIDER || terminal.model !== REQUIRED_MODEL) {
@@ -1122,6 +1175,22 @@ export class ShepherdAgentSessionRuntime {
 		};
 	}
 
+	#registerRunAdmission(request: RoleRunRequest): RunAdmissionOwnership {
+		const runId = captureAdmissionRunId(request);
+		const admission = new RunAdmissionOwnership(runId);
+		const peers = this.#runAdmissions.get(runId) ?? new Set<RunAdmissionOwnership>();
+		peers.add(admission);
+		this.#runAdmissions.set(runId, peers);
+		return admission;
+	}
+
+	#finishRunAdmission(admission: RunAdmissionOwnership): void {
+		const peers = this.#runAdmissions.get(admission.runId);
+		peers?.delete(admission);
+		if (peers?.size === 0) this.#runAdmissions.delete(admission.runId);
+		admission.finish();
+	}
+
 	async #waitForAdmissions(): Promise<void> {
 		if (this.#admissions === 0) return;
 		await this.#admissionsDrained?.promise;
@@ -1134,22 +1203,39 @@ export class ShepherdAgentSessionRuntime {
 	}
 }
 
+function captureAdmissionRunId(request: RoleRunRequest): string {
+	if (!request || typeof request !== "object" || Array.isArray(request) || nodeTypes.isProxy(request)) {
+		throw new AgentSessionRuntimeError("AgentSession request must be an object");
+	}
+	const bindingDescriptor = Reflect.getOwnPropertyDescriptor(request, "binding");
+	if (!bindingDescriptor?.enumerable || bindingDescriptor.get || bindingDescriptor.set || !("value" in bindingDescriptor) ||
+		!bindingDescriptor.value || typeof bindingDescriptor.value !== "object" ||
+		Array.isArray(bindingDescriptor.value) || nodeTypes.isProxy(bindingDescriptor.value)) {
+		throw new AgentSessionRuntimeError("request binding must be an own data field");
+	}
+	const runIdDescriptor = Reflect.getOwnPropertyDescriptor(bindingDescriptor.value, "runId");
+	if (!runIdDescriptor?.enumerable || runIdDescriptor.get || runIdDescriptor.set || !("value" in runIdDescriptor) ||
+		!validIdentifier(runIdDescriptor.value)) {
+		throw new AgentSessionRuntimeError("request runId must be an own data field");
+	}
+	return runIdDescriptor.value;
+}
+
 function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
-	if (!isRecord(request)) throw new AgentSessionRuntimeError("AgentSession request must be an object");
-	assertOnlyKeys(request, [
+	const requestFields = captureClosedRecordFields(request, "AgentSession request", 11);
+	assertAllowedCapturedFields(requestFields, [
 		"role", "task", "context", "timeoutMs", "deadlineAt", "signal", "workspace", "capabilities", "authority", "binding",
-	], "request");
-	// Read every caller-owned top-level field exactly once, then use only the frozen snapshot.
-	const role = request.role;
-	const task = request.task;
-	const contextSource = request.context;
-	const timeoutMs = request.timeoutMs;
-	const deadlineAt = request.deadlineAt;
-	const signal = request.signal;
-	const workspaceSource = request.workspace;
-	const capabilitiesSource = request.capabilities;
-	const authoritySource = request.authority;
-	const bindingSource = request.binding;
+	], ["role", "task", "context", "timeoutMs", "workspace", "capabilities", "authority", "binding"], "request");
+	const role = requestFields.get("role") as ShepherdAgentRole;
+	const task = requestFields.get("task") as string;
+	const contextSource = requestFields.get("context");
+	const timeoutMs = requestFields.get("timeoutMs") as number;
+	const deadlineAt = requestFields.get("deadlineAt") as number | undefined;
+	const signal = requestFields.get("signal") as AbortSignal | undefined;
+	const workspaceSource = requestFields.get("workspace");
+	const capabilitiesSource = requestFields.get("capabilities");
+	const authoritySource = requestFields.get("authority");
+	const bindingSource = requestFields.get("binding");
 
 	routeForRole(role);
 	if (!Number.isSafeInteger(timeoutMs) || timeoutMs <= 0 || timeoutMs > MAX_TIMEOUT_MS) {
@@ -1162,18 +1248,20 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		throw new AgentSessionRuntimeError("request signal is invalid");
 	}
 
-	if (!isRecord(authoritySource)) throw new AgentSessionRuntimeError("request authority is required");
-	assertOnlyKeys(authoritySource, [
+	const authorityFields = captureClosedRecordFields(authoritySource, "request authority", 7);
+	assertExactCapturedFields(authorityFields, [
 		"issue", "branch", "workspaceId", "readOnly", "readPrefixes", "writePrefixes", "capabilityNames",
 	], "authority");
-	const issue = authoritySource.issue;
-	const branch = authoritySource.branch;
-	const authorityWorkspaceId = authoritySource.workspaceId;
-	const readOnly = authoritySource.readOnly;
-	const readPrefixesSource = authoritySource.readPrefixes;
-	const writePrefixesSource = authoritySource.writePrefixes;
-	const capabilityNamesSource = authoritySource.capabilityNames;
-	if (!Number.isSafeInteger(issue) || issue < 1) throw new AgentSessionRuntimeError("authority issue is invalid");
+	const issue = authorityFields.get("issue");
+	const branch = authorityFields.get("branch");
+	const authorityWorkspaceId = authorityFields.get("workspaceId");
+	const readOnly = authorityFields.get("readOnly");
+	const readPrefixesSource = captureFreshDenseArray(authorityFields.get("readPrefixes"), "authority read prefixes", 64, false);
+	const writePrefixesSource = captureFreshDenseArray(authorityFields.get("writePrefixes"), "authority write prefixes", 64, true);
+	const capabilityNamesSource = captureFreshDenseArray(authorityFields.get("capabilityNames"), "authority capability names", 32, true);
+	if (typeof issue !== "number" || !Number.isSafeInteger(issue) || issue < 1) {
+		throw new AgentSessionRuntimeError("authority issue is invalid");
+	}
 	if (typeof branch !== "string" || branch.length < 1 || branch.length > 255 ||
 		/[\u0000-\u001f\u007f]/.test(branch) || branch === "main") {
 		throw new AgentSessionRuntimeError("authority branch is invalid or targets main");
@@ -1181,16 +1269,15 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	if (!validIdentifier(authorityWorkspaceId)) throw new AgentSessionRuntimeError("authority workspace identity is invalid");
 	if (typeof readOnly !== "boolean") throw new AgentSessionRuntimeError("authority readOnly is invalid");
 	const readPrefixes = frozenArray(normalizeScopedPrefixes(readPrefixesSource, "read"));
-	const writePrefixes = readOnly && Array.isArray(writePrefixesSource) && writePrefixesSource.length === 0
+	const writePrefixes = readOnly && writePrefixesSource.length === 0
 		? frozenArray<string>([])
 		: frozenArray(normalizeScopedPrefixes(writePrefixesSource, "write"));
-	if (!Array.isArray(capabilityNamesSource) || capabilityNamesSource.length > 32) {
-		throw new AgentSessionRuntimeError("authority capability names must be a bounded array");
-	}
-	const capabilityNames = frozenArray(capabilityNamesSource.map((name) => {
+	const capabilityNames: string[] = [];
+	for (const name of capabilityNamesSource) {
 		if (typeof name !== "string") throw new AgentSessionRuntimeError("authority capability name is invalid");
-		return name;
-	}));
+		capabilityNames.push(name);
+	}
+	Object.freeze(capabilityNames);
 	const authority = Object.freeze({
 		issue: Number(issue),
 		branch,
@@ -1201,29 +1288,28 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		capabilityNames,
 	}) as RoleAuthority;
 
-	if (!isRecord(bindingSource)) throw new AgentSessionRuntimeError("request binding is required");
-	assertOnlyKeys(bindingSource, ["runId", "generation", "laneId", "candidateHead", "validationNonce"], "binding");
-	const runId = bindingSource.runId;
-	const generation = bindingSource.generation;
-	const laneId = bindingSource.laneId;
-	const candidateHead = bindingSource.candidateHead;
-	const validationNonce = bindingSource.validationNonce;
+	const bindingFields = captureClosedRecordFields(bindingSource, "request binding", 5);
+	assertExactCapturedFields(bindingFields, ["runId", "generation", "laneId", "candidateHead", "validationNonce"], "binding");
+	const runId = bindingFields.get("runId");
+	const generation = bindingFields.get("generation");
+	const laneId = bindingFields.get("laneId");
+	const candidateHead = bindingFields.get("candidateHead");
+	const validationNonce = bindingFields.get("validationNonce");
 	if (!validIdentifier(runId) || !validIdentifier(laneId) ||
-		!Number.isSafeInteger(generation) || generation < 1 ||
+		typeof generation !== "number" || !Number.isSafeInteger(generation) || generation < 1 ||
 		typeof candidateHead !== "string" || !/^[0-9a-f]{40}$/.test(candidateHead) ||
 		!validIdentifier(validationNonce) || validationNonce.length < 12) {
 		throw new AgentSessionRuntimeError("request binding is invalid");
 	}
 	const binding = Object.freeze({ runId, generation: Number(generation), laneId, candidateHead, validationNonce });
 
-	if (!workspaceSource || typeof workspaceSource !== "object") {
-		throw new AgentSessionRuntimeError("workspace capability is required");
-	}
-	const workspaceId = workspaceSource.id;
-	const workspaceCwd = workspaceSource.cwd;
-	const readText = workspaceSource.readText;
-	const editText = workspaceSource.editText;
-	const writeText = workspaceSource.writeText;
+	const workspaceFields = captureClosedRecordFields(workspaceSource, "workspace capability", 5);
+	assertExactCapturedFields(workspaceFields, ["id", "cwd", "readText", "editText", "writeText"], "workspace capability");
+	const workspaceId = workspaceFields.get("id");
+	const workspaceCwd = workspaceFields.get("cwd");
+	const readText = workspaceFields.get("readText");
+	const editText = workspaceFields.get("editText");
+	const writeText = workspaceFields.get("writeText");
 	if (workspaceId !== authorityWorkspaceId || !isAbsoluteNonTraversingPath(workspaceCwd) ||
 		typeof readText !== "function" || typeof editText !== "function" || typeof writeText !== "function") {
 		throw new AgentSessionRuntimeError("workspace identity, cwd, or capability does not match the immutable authority envelope");
@@ -1233,22 +1319,29 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		id: workspaceId,
 		cwd: canonicalCwd,
 		readText(path: string, options: { offset?: number; limit?: number; signal?: AbortSignal }) {
-			return Reflect.apply(readText, workspaceSource, [path, options]);
+			return Reflect.apply(readText, workspaceSource as object, [path, options]);
 		},
 		editText(path: string, oldText: string, newText: string, operationSignal?: AbortSignal) {
-			return Reflect.apply(editText, workspaceSource, [path, oldText, newText, operationSignal]);
+			return Reflect.apply(editText, workspaceSource as object, [path, oldText, newText, operationSignal]);
 		},
 		writeText(path: string, content: string, operationSignal?: AbortSignal) {
-			return Reflect.apply(writeText, workspaceSource, [path, content, operationSignal]);
+			return Reflect.apply(writeText, workspaceSource as object, [path, content, operationSignal]);
 		},
 	}) satisfies ScopedWorkspace;
 
-	if (!Array.isArray(capabilitiesSource) || capabilitiesSource.length > 32) {
-		throw new AgentSessionRuntimeError("typed host capabilities must be a bounded array");
+	const capabilityValues = captureFreshDenseArray(capabilitiesSource, "typed host capabilities", 32, true);
+	const capabilities: HostCapability[] = [];
+	for (const capability of capabilityValues) {
+		capabilities.push(normalizeCapability(capability as HostCapability));
 	}
-	const capabilities = frozenArray(capabilitiesSource.map((capability) => normalizeCapability(capability)));
-	if (!Array.isArray(contextSource)) throw new AgentSessionRuntimeError("role context must be a bounded array");
-	const context = frozenArray(contextSource.map((item) => item));
+	Object.freeze(capabilities);
+	const contextValues = captureFreshDenseArray(contextSource, "role context", 64, true);
+	const context: string[] = [];
+	for (const entry of contextValues) {
+		if (typeof entry !== "string") throw new AgentSessionRuntimeError("role context item is invalid");
+		context.push(entry);
+	}
+	Object.freeze(context);
 	const normalized = Object.freeze({
 		role,
 		task,
@@ -1282,12 +1375,13 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 }
 
 function normalizeCapability(capability: HostCapability): HostCapability {
-	if (!capability || typeof capability !== "object") throw new AgentSessionRuntimeError("capability must be an object");
-	const name = capability.name;
-	const description = capability.description;
-	const mutates = capability.mutates;
-	const parameters = capability.parameters;
-	const execute = capability.execute;
+	const fields = captureClosedRecordFields(capability, "capability", 5);
+	assertExactCapturedFields(fields, ["name", "description", "mutates", "parameters", "execute"], "capability");
+	const name = fields.get("name") as string;
+	const description = fields.get("description") as string;
+	const mutates = fields.get("mutates") as boolean;
+	const parameters = fields.get("parameters") as HostCapability["parameters"];
+	const execute = fields.get("execute");
 	if (typeof execute !== "function") throw new AgentSessionRuntimeError("capability execute must be a function");
 	return Object.freeze({
 		name,
@@ -1298,6 +1392,39 @@ function normalizeCapability(capability: HostCapability): HostCapability {
 			return Reflect.apply(execute, capability, [input, signal]);
 		},
 	});
+}
+
+function captureFreshDenseArray(
+	value: unknown,
+	description: string,
+	maximum: number,
+	allowEmpty: boolean,
+): unknown[] {
+	if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+		throw new AgentSessionRuntimeError(`${description} must be a plain non-proxy array`);
+	}
+	const lengthDescriptor = Reflect.getOwnPropertyDescriptor(value, "length");
+	const lengthValue = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
+	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
+		typeof lengthValue !== "number" || !Number.isSafeInteger(lengthValue) || lengthValue < (allowEmpty ? 0 : 1) ||
+		lengthValue > maximum) {
+		throw new AgentSessionRuntimeError(`${description} has an invalid authoritative length`);
+	}
+	const length = lengthValue;
+	const ownKeys = Reflect.ownKeys(value);
+	if (ownKeys.length !== length + 1 || ownKeys.some((key) =>
+		typeof key !== "string" || (key !== "length" && !/^(?:0|[1-9][0-9]*)$/.test(key)))) {
+		throw new AgentSessionRuntimeError(`${description} contains hidden, symbol, sparse, or extra behavior`);
+	}
+	const captured: unknown[] = [];
+	for (let index = 0; index < length; index += 1) {
+		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			throw new AgentSessionRuntimeError(`${description} contains a sparse or accessor element`);
+		}
+		captured.push(descriptor.value);
+	}
+	return captured;
 }
 
 function mutationLeaseFor(request: RoleRunRequest): MutationLease {
@@ -1491,7 +1618,6 @@ function newTerminalCapture(): TerminalCapture {
 		messageEndCount: 0,
 		agentEndCount: 0,
 		agentEndWillRetry: false,
-		phase: "open",
 		piPhase: "initial",
 		piSettled: false,
 		frozen: false,
@@ -1521,77 +1647,8 @@ function captureEvent(
 		const eventFields = captureClosedRecordFields(event, "AgentSession event", MAX_EVENT_RECORD_KEYS);
 		const eventType = eventFields.get("type");
 		if (typeof eventType !== "string") throw new AgentSessionRuntimeError("AgentSession event type is invalid");
-		if (eventType === "agent_start" || capture.mode === "pi") {
-			capture.mode = "pi";
-			const directCharge = capturePiLifecycleEvent(capture, eventFields, eventType, options);
-			capture.eventBytes += directCharge ?? boundedEventBytes(event, options.maxEventBytes - capture.eventBytes);
-			if (capture.eventBytes > options.maxEventBytes) {
-				throw new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
-			}
-			return;
-		}
-		capture.mode = "legacy";
-		if (capture.phase === "agent-ended") {
-			throw new AgentSessionRuntimeError("AgentSession emitted an event after its terminal pair");
-		}
-		if (capture.phase === "message-ended" && eventType !== "agent_end") {
-			throw new AgentSessionRuntimeError("AgentSession terminal events are out of order");
-		}
-		let accountingValue: unknown = event;
-		let directCharge: number | undefined;
-		switch (eventType) {
-			case "message_start": {
-				assertExactCapturedFields(eventFields, ["type", "message"], "message_start event");
-				const initial = captureAssistantTerminal(eventFields.get("message"), true, options.maxEventBytes);
-				if (!initial) throw new AgentSessionRuntimeError("message_start did not contain an assistant message");
-				capture.stream = initial;
-				capture.contentPhases.clear();
-				break;
-			}
-			case "message_update":
-				assertExactCapturedFields(eventFields, ["type", "message", "assistantMessageEvent"], "message_update event");
-				directCharge = captureStreamingUpdateCharge(
-					capture,
-					eventFields.get("message"),
-					eventFields.get("assistantMessageEvent"),
-					options.maxEventBytes,
-				);
-				break;
-			case "message_end": {
-				assertExactCapturedFields(eventFields, ["type", "message"], "message_end event");
-				capture.messageEndCount += 1;
-				assertCompletedContentPhases(capture);
-				if (capture.messageEndCount !== 1 || capture.phase !== "open") {
-					throw new AgentSessionRuntimeError("AgentSession emitted duplicate or out-of-order message_end evidence");
-				}
-				capture.messageEnd = captureAssistantTerminal(eventFields.get("message"), false, options.maxEventBytes);
-				capture.phase = "message-ended";
-				break;
-			}
-			case "agent_end": {
-				assertExactCapturedFields(eventFields, ["type", "messages", "willRetry"], "agent_end event");
-				if (capture.phase !== "message-ended") {
-					throw new AgentSessionRuntimeError("AgentSession emitted agent_end before message_end");
-				}
-				capture.agentEndCount += 1;
-				const willRetry = eventFields.get("willRetry");
-				if (typeof willRetry !== "boolean") throw new AgentSessionRuntimeError("agent_end willRetry is invalid");
-				capture.agentEndWillRetry ||= willRetry;
-				const messages = captureDenseArray(eventFields.get("messages"), "AgentSession terminal messages");
-				let assistantCount = 0;
-				for (const message of messages) {
-					const terminal = captureAssistantTerminal(message, false, options.maxEventBytes);
-					if (terminal) {
-						assistantCount += 1;
-						capture.agentEnd = terminal;
-					}
-				}
-				if (assistantCount !== 1) throw new AgentSessionRuntimeError("agent_end must contain exactly one assistant terminal");
-				capture.phase = "agent-ended";
-				break;
-			}
-		}
-		capture.eventBytes += directCharge ?? boundedEventBytes(accountingValue, options.maxEventBytes - capture.eventBytes);
+		const directCharge = capturePiLifecycleEvent(capture, eventFields, eventType, options);
+		capture.eventBytes += directCharge ?? boundedEventBytes(event, options.maxEventBytes - capture.eventBytes);
 		if (capture.eventBytes > options.maxEventBytes) {
 			throw new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
 		}
@@ -2246,7 +2303,7 @@ function captureAssistantTerminal(
 	}
 	const usage = captureAssistantUsage(fields.get("usage"), maximum);
 	const diagnostics = fields.has("diagnostics")
-		? snapshotEventJson(fields.get("diagnostics"), "AgentSession assistant diagnostics", maximum)
+		? captureAssistantDiagnostics(fields.get("diagnostics"), maximum)
 		: undefined;
 	const content = captureDenseArray(fields.get("content"), "AgentSession assistant terminal content").map((part) => {
 		const partFields = captureClosedRecordFields(part, "AgentSession assistant content part", 16);
@@ -2346,6 +2403,116 @@ function captureAssistantTerminal(
 	});
 }
 
+function captureAssistantDiagnostics(value: unknown, maximum: number): JsonEventValue {
+	const diagnostics = captureDenseArray(value, "AgentSession assistant diagnostics");
+	const projected: JsonEventValue[] = [];
+	for (const diagnostic of diagnostics) {
+		const fields = captureClosedRecordFields(diagnostic, "AgentSession assistant diagnostic", 4);
+		assertAllowedCapturedFields(fields, ["type", "timestamp", "error", "details"], ["type", "timestamp"],
+			"AgentSession assistant diagnostic");
+		const type = fields.get("type");
+		const timestamp = fields.get("timestamp");
+		if (typeof type !== "string" || type.length === 0 || type.length > 256 ||
+			typeof timestamp !== "number" || !Number.isFinite(timestamp)) {
+			throw new AgentSessionRuntimeError("AgentSession assistant diagnostic identity is invalid");
+		}
+		const output: Record<string, JsonEventValue> = { type, timestamp };
+		const errorValue = fields.get("error");
+		if (errorValue !== undefined) {
+			const errorFields = captureClosedRecordFields(errorValue, "AgentSession assistant diagnostic error", 4);
+			assertAllowedCapturedFields(errorFields, ["name", "message", "stack", "code"], ["message"],
+				"AgentSession assistant diagnostic error");
+			const message = errorFields.get("message");
+			if (typeof message !== "string") {
+				throw new AgentSessionRuntimeError("AgentSession assistant diagnostic error message is invalid");
+			}
+			const errorOutput: Record<string, JsonEventValue> = { message };
+			for (const name of ["name", "stack"] as const) {
+				const entry = errorFields.get(name);
+				if (entry === undefined) continue;
+				if (typeof entry !== "string") {
+					throw new AgentSessionRuntimeError(`AgentSession assistant diagnostic error ${name} is invalid`);
+				}
+				errorOutput[name] = entry;
+			}
+			const code = errorFields.get("code");
+			if (code !== undefined) {
+				if (typeof code !== "string" && (typeof code !== "number" || !Number.isFinite(code))) {
+					throw new AgentSessionRuntimeError("AgentSession assistant diagnostic error code is invalid");
+				}
+				errorOutput.code = code;
+			}
+			output.error = errorOutput;
+		}
+		const detailsValue = fields.get("details");
+		if (detailsValue !== undefined) {
+			const details = projectDiagnosticJson(detailsValue, 0, { nodes: 0, keys: 0 }, new WeakSet<object>());
+			if (details === undefined || !details || Array.isArray(details) || typeof details !== "object") {
+				throw new AgentSessionRuntimeError("AgentSession assistant diagnostic details are invalid");
+			}
+			output.details = details;
+		}
+		projected.push(snapshotEventJson(output, "AgentSession assistant diagnostic snapshot", maximum));
+	}
+	return snapshotEventJson(projected, "AgentSession assistant diagnostics snapshot", maximum);
+}
+
+function projectDiagnosticJson(
+	value: unknown,
+	depth: number,
+	budget: { nodes: number; keys: number },
+	ancestors: WeakSet<object>,
+): JsonEventValue | undefined {
+	budget.nodes += 1;
+	if (budget.nodes > MAX_EVENT_NODES || depth > MAX_EVENT_DEPTH) {
+		throw new AgentSessionRuntimeError("AgentSession assistant diagnostic exceeded its node or depth bound");
+	}
+	if (value === undefined) return undefined;
+	if (value === null || typeof value === "string" || typeof value === "boolean") return value;
+	if (typeof value === "number") {
+		if (!Number.isFinite(value)) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a non-JSON number");
+		return value;
+	}
+	if (typeof value !== "object" || nodeTypes.isProxy(value)) {
+		throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a non-JSON value");
+	}
+	if (ancestors.has(value)) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a cycle");
+	ancestors.add(value);
+	try {
+		if (Array.isArray(value)) {
+			const items = captureDenseArray(value, "AgentSession assistant diagnostic array");
+			budget.keys += items.length;
+			if (budget.keys > MAX_EVENT_NODES) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic is too wide");
+			const output: JsonEventValue[] = [];
+			for (const item of items) {
+				const projected = projectDiagnosticJson(item, depth + 1, budget, ancestors);
+				if (projected === undefined) {
+					throw new AgentSessionRuntimeError("AgentSession assistant diagnostic array contains undefined");
+				}
+				output.push(projected);
+			}
+			return Object.freeze(output);
+		}
+		const fields = captureClosedRecordFields(value, "AgentSession assistant diagnostic record", MAX_EVENT_RECORD_KEYS);
+		budget.keys += fields.size;
+		if (budget.keys > MAX_EVENT_NODES) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic is too wide");
+		const output = Object.create(null) as Record<string, JsonEventValue>;
+		for (const [key, entry] of fields) {
+			const projected = projectDiagnosticJson(entry, depth + 1, budget, ancestors);
+			if (projected === undefined) continue;
+			Object.defineProperty(output, key, {
+				value: projected,
+				enumerable: true,
+				writable: false,
+				configurable: false,
+			});
+		}
+		return Object.freeze(output);
+	} finally {
+		ancestors.delete(value);
+	}
+}
+
 function optionalCapturedString(
 	fields: ReadonlyMap<string, unknown>,
 	name: string,
@@ -2397,22 +2564,11 @@ function assertAllowedCapturedFields(
 }
 
 function verifyTerminalCapture(capture: TerminalCapture): AssistantTerminal {
-	if (capture.mode === "pi") {
-		if (capture.piPhase !== "settled" || !capture.piSettled || !capture.frozen ||
-			capture.piOpenMessageRole !== undefined || capture.agentEndCount !== 1 ||
-			capture.agentEndWillRetry || !capture.messageEnd || !capture.agentEnd ||
-			!sameTerminal(capture.messageEnd, capture.agentEnd)) {
-			throw new AgentSessionRuntimeError("AgentSession returned an invalid settled lifecycle");
-		}
-		if (capture.agentEnd.stopReason !== "stop") {
-			throw new AgentSessionRuntimeError(`AgentSession terminal stop reason ${capture.agentEnd.stopReason} is not accepted`);
-		}
-		return capture.agentEnd;
-	}
-	if (capture.phase !== "agent-ended" || capture.messageEndCount !== 1 || capture.agentEndCount !== 1 ||
+	if (capture.piPhase !== "settled" || !capture.piSettled || !capture.frozen ||
+		capture.piOpenMessageRole !== undefined || capture.agentEndCount !== 1 ||
 		capture.agentEndWillRetry || !capture.messageEnd || !capture.agentEnd ||
 		!sameTerminal(capture.messageEnd, capture.agentEnd)) {
-		throw new AgentSessionRuntimeError("AgentSession returned an invalid terminal event sequence");
+		throw new AgentSessionRuntimeError("AgentSession returned an invalid settled lifecycle");
 	}
 	if (capture.agentEnd.stopReason !== "stop") {
 		throw new AgentSessionRuntimeError(`AgentSession terminal stop reason ${capture.agentEnd.stopReason} is not accepted`);
