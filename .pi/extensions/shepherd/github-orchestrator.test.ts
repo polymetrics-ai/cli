@@ -26,6 +26,7 @@ import {
 	type ParentOrchestrationPlan,
 	type PublishRosterRequest,
 	type PullRequestMarkerQuery,
+	type RollbackParentReadyRequest,
 } from "./github-orchestrator.ts";
 import * as githubOrchestratorApi from "./github-orchestrator.ts";
 import * as githubEvidenceApi from "./github-evidence.ts";
@@ -33,6 +34,7 @@ import type { GitHubPullRequestEvidence } from "./github-evidence.ts";
 import {
 	createAgentSessionAttestation,
 	createIndependentReviewWork,
+	independentReviewAuthorizationDigest,
 	independentReviewResultDigest,
 } from "./review-router.ts";
 import {
@@ -173,6 +175,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	publishRosterCalls = 0;
 	integrateCalls = 0;
 	markReadyCalls = 0;
+	rollbackReadyCalls = 0;
 	throwAfterIssuePublish = false;
 	throwAfterPullRequestPublish = false;
 	throwAfterRosterPublish = false;
@@ -194,6 +197,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	incompleteRosterLookup = false;
 	incompleteIntegrationLookup = false;
 	ancestry = true;
+	parentReadyAuthorizationValidator?: (request: MarkParentReadyRequest) => boolean;
 	ancestryProof?: (query: GitAncestryQuery) => Promise<unknown>;
 	onPullRequestRead?: (query: PullRequestMarkerQuery, matches: GitHubPullRequestEvidence[], read: number) => GitHubPullRequestEvidence[];
 	#pullRequestReads = 0;
@@ -378,7 +382,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 					intentDigest: request.mutation.intentDigest,
 					revision,
 				},
-				integratedAt: "2026-07-21T12:01:00.000Z",
+				integratedAt: "2026-07-21T12:10:00.000Z",
 			};
 			this.integrations.push(receipt);
 			this.#integrationInvisibleReads = this.integrationVisibilityLag;
@@ -394,6 +398,31 @@ class FakeTransport implements GitHubOrchestrationTransport {
 
 	async markParentReady(request: MarkParentReadyRequest, context?: TestCallContext): Promise<any> {
 		this.trackContext("markParentReady", context);
+		const authorization = request.authorization;
+		const { digest, ...authorizationPayload } = authorization;
+		const digests = [
+			digest,
+			authorization.decisionDigest,
+			authorization.childRosterDigest,
+			authorization.policySetDigest,
+			authorization.parentReviewDigest,
+			authorization.parentPathDigest,
+			authorization.planDigest,
+		];
+		if (
+			authorization.schemaVersion !== 1
+			|| authorization.repository !== request.repository
+			|| authorization.generation !== request.generation
+			|| authorization.pullRequest !== request.pullRequest
+			|| authorization.decisionRequestId !== request.decisionRequestId
+			|| authorization.headSha !== request.headSha
+			|| authorization.pullRequestRevision !== request.mutation.expectedResourceRevision
+			|| createHash("sha256").update(JSON.stringify(authorizationPayload)).digest("hex") !== digest
+			|| digests.some((digest) => !/^[0-9a-f]{64}$/u.test(digest))
+			|| this.parentReadyAuthorizationValidator?.(request) === false
+		) {
+			throw new Error("simulated parent ready authorization conflict");
+		}
 		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "parent-ready", () => {
 			const index = this.pullRequests.findIndex((candidate) => candidate.number === request.pullRequest);
 			if (index < 0) throw new Error("parent pull request missing");
@@ -417,6 +446,26 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		}
 		if (this.malformedReadyResponse) return { malformed: true } as never;
 		return result;
+	}
+
+	async rollbackParentReady(request: RollbackParentReadyRequest, context?: TestCallContext): Promise<any> {
+		this.trackContext("rollbackParentReady", context);
+		return this.#applyMutation(request as unknown as Record<string, unknown>, "parent-ready-rollback", () => {
+			const index = this.pullRequests.findIndex((candidate) => candidate.number === request.pullRequest);
+			if (index < 0) throw new Error("parent pull request missing");
+			if (request.mutation.expectedResourceRevision !== this.pullRequests[index].revision) {
+				throw new Error("simulated parent ready rollback conditional revision conflict");
+			}
+			this.rollbackReadyCalls += 1;
+			const updated = {
+				...this.pullRequests[index],
+				draft: true,
+				headSha: request.headSha,
+				revision: this.pullRequests[index].revision + 1,
+			};
+			this.pullRequests.splice(index, 1, updated);
+			return updated;
+		});
 	}
 
 	async isAncestor(_query: { repository: string; ancestorSha: string; descendantSha: string }): Promise<boolean> {
@@ -524,7 +573,7 @@ function orchestratorFor(
 const approvedDecision: HumanDecisionEvidence = {
 	option: "approve-merge",
 	actor: "maintainer",
-	sourceUrl: "https://github.com/polymetrics-ai/cli/pull/900#issuecomment-1",
+	sourceUrl: "https://github.com/polymetrics-ai/cli/pull/900#issuecomment-2",
 	decidedAt: "2026-07-21T12:00:30.000Z",
 };
 
@@ -536,7 +585,7 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 	recordStatus: HumanDecisionRecord["status"] = "pending";
 
 	private recordFor(request: GitHubDecisionRequest): HumanDecisionRecord {
-		return createHumanDecisionRecord({
+		const record = createHumanDecisionRecord({
 			requestId: request.requestId,
 			gate: request.gate,
 			binding: {
@@ -550,6 +599,16 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 			expiresAt: request.expiresAt,
 			question: request.question,
 		} as Parameters<typeof createHumanDecisionRecord>[0], new Date("2026-07-21T12:00:00.000Z"));
+		return {
+			...record,
+			requestComment: {
+				id: 1,
+				url: `https://github.com/${request.repository}/pull/${request.pullRequest}#issuecomment-1`,
+				actor: "shepherd-host",
+				createdAt: "2026-07-21T12:00:00.000Z",
+			},
+			updatedAt: "2026-07-21T12:00:00.000Z",
+		};
 	}
 
 	async request(request: GitHubDecisionRequest, context?: TestCallContext): Promise<HumanDecisionRecord> {
@@ -561,7 +620,7 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 			? {
 				...record,
 				status: "consumed",
-				decision: approvedDecision,
+				decision: this.pollResult.status === "decided" ? this.pollResult.decision : approvedDecision,
 				consumedAt: "2026-07-21T12:00:40.000Z",
 				updatedAt: "2026-07-21T12:00:40.000Z",
 			}
@@ -592,6 +651,7 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 		this.callContexts.push({ operation: "broker.consume", signal: context?.signal instanceof AbortSignal });
 		this.consumes += 1;
 		const decision = this.pollResult.status === "decided" ? this.pollResult.decision : approvedDecision;
+		this.recordStatus = "consumed";
 		return {
 			...this.recordFor(this.requests.at(-1)!),
 			status: "consumed",
@@ -701,7 +761,9 @@ function controllerProvenanceFor(
 		policyRevision: Number(policy.revision),
 		policyObservedAt: "2026-07-21T12:06:00.000Z",
 		changedPathDigest: createHash("sha256").update(JSON.stringify(stableChangedPathEvidence)).digest("hex"),
+		reviewAuthorizationDigest: independentReviewAuthorizationDigest(review),
 		reviewResultDigest: independentReviewResultDigest(review),
+		reviewCompletedAt: review.completedAt,
 		evidenceRevision: changedPathEvidence.revision,
 		observedAt: changedPathEvidence.observedAt,
 	};
@@ -733,7 +795,7 @@ function integrationMutationProjection(value: {
 		policyDigest: value.controllerProvenance.policyDigest,
 		policyRevision: value.controllerProvenance.policyRevision,
 		changedPathDigest: value.controllerProvenance.changedPathDigest,
-		reviewResultDigest: value.controllerProvenance.reviewResultDigest,
+		reviewAuthorizationDigest: value.controllerProvenance.reviewAuthorizationDigest,
 	};
 }
 
@@ -809,7 +871,7 @@ function seedIntegrationRoster(
 				intentDigest: mutation.intentDigest,
 				revision: index + 1,
 			},
-			integratedAt: "2026-07-21T12:01:00.000Z",
+			integratedAt: "2026-07-21T12:10:00.000Z",
 		};
 	});
 	transport.integrations.push(...receipts);
@@ -1341,7 +1403,7 @@ test("restart reuses stable integration identity after a later merged-PR observa
 			intentDigest: existingMutation.intentDigest,
 			revision: 1,
 		},
-		integratedAt: "2026-07-21T12:01:00.000Z",
+		integratedAt: "2026-07-21T12:10:00.000Z",
 	});
 	transport.pullRequests[0] = {
 		...mergedPullRequest,
@@ -2737,7 +2799,14 @@ test("cycle 6 composes the actual broker through its owned canonical record boun
 test("cycle 6 fails closed on incomplete chronology and hostile foreign broker DTOs", async (t) => {
 	await t.test("a consumed record without persisted request-comment provenance cannot authorize ready", async () => {
 		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
-		await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, new FakeDecisionBroker())
+		const broker = new FakeDecisionBroker();
+		const consume = broker.consume.bind(broker);
+		broker.consume = (async (requestId: string, binding: HumanDecisionRecord["binding"], context?: TestCallContext) => {
+			const record = await consume(requestId, binding, context);
+			const { requestComment: _requestComment, ...withoutRequestComment } = record;
+			return withoutRequestComment as HumanDecisionRecord;
+		}) as never;
+		await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, broker)
 			.reconcileParentReadiness(candidate, receipts, decisionPolicy));
 	});
 

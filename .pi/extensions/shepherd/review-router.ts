@@ -98,6 +98,10 @@ export interface CreateAgentSessionAttestationInput {
 
 type ExactRecord = Record<string, unknown>;
 
+const typedArrayByteLengthGetter = Object.getOwnPropertyDescriptor(
+	Object.getPrototypeOf(Uint8Array.prototype) as object,
+	"byteLength",
+)?.get;
 
 export function decodeBoundedJsonPayload(value: string | Uint8Array, maximumBytes = MAX_RAW_JSON_BYTES): unknown {
 	if (!Number.isSafeInteger(maximumBytes) || maximumBytes < 1 || maximumBytes > MAX_RAW_JSON_BYTES) {
@@ -108,8 +112,15 @@ export function decodeBoundedJsonPayload(value: string | Uint8Array, maximumByte
 	if (typeof value === "string") {
 		if (Buffer.byteLength(value) > maximumBytes) throw new Error("bounded JSON payload is oversized");
 		serialized = value;
-	} else if (value instanceof Uint8Array) {
-		if (value.byteLength > maximumBytes) throw new Error("bounded JSON payload is oversized");
+	} else if (value instanceof Uint8Array && Object.getPrototypeOf(value) === Uint8Array.prototype) {
+		if (typedArrayByteLengthGetter === undefined) throw new Error("bounded JSON payload byte length is unavailable");
+		let byteLength: number;
+		try {
+			byteLength = typedArrayByteLengthGetter.call(value) as number;
+		} catch {
+			throw new Error("invalid bounded JSON payload shape");
+		}
+		if (byteLength > maximumBytes) throw new Error("bounded JSON payload is oversized");
 		try {
 			serialized = new TextDecoder("utf-8", { fatal: true }).decode(value);
 		} catch {
@@ -137,7 +148,7 @@ export function readBoundedExactRecord(
 	const value = typeof input === "string" || serializedBytes
 		? decodeBoundedJsonPayload(input as string | Uint8Array)
 		: input;
-	if (typeof value !== "object" || value === null || Array.isArray(value) || nodeTypes.isProxy(value)) {
+	if (typeof value !== "object" || value === null || nodeTypes.isProxy(value) || Array.isArray(value)) {
 		throw new Error(`invalid ${description} shape`);
 	}
 	const prototype = Object.getPrototypeOf(value);
@@ -178,7 +189,10 @@ export function redactSensitiveText(input: string): string {
 		.replace(/\bAuthorization\s*:\s*[^\r\n,;]+/giu, "Authorization: [REDACTED]")
 		.replace(/\b(?:Bearer|Basic|Token)\s+[^\s,;]+/giu, "[REDACTED]")
 		.replace(new RegExp(`(["']${secretName}["']\\s*:\\s*)(?:"[^"\\r\\n]*"|'[^'\\r\\n]*'|[^,}\\r\\n]+)`, "giu"), "$1\"[REDACTED]\"")
-		.replace(/\b[A-Z][A-Z0-9_]*(?:TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY|DATABASE_URL|CREDENTIALS?|SECRET_ACCESS_KEY|ACCESS_KEY)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/gu, "SECRET=[REDACTED]")
+		.replace(/(?:^|[\r\n])([ \t]*(?:(?:machine|default)[ \t]+[^\r\n]+?[ \t]+)?password[ \t]+)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/giu, "$1[REDACTED]")
+		.replace(/((?:^|[^A-Za-z0-9])(?:\/\/[^\s:]+\/)?_(?:authToken|auth|password)\s*=\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/giu, "$1[REDACTED]")
+		.replace(/\b[A-Z][A-Z0-9_]*(?:TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY|DATABASE_URL|CREDENTIALS?|SECRET_ACCESS_KEY|ACCESS_KEY)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/giu, "SECRET=[REDACTED]")
+		.replace(/\b((?:credentials?|credential)[_-](?:file|path)|google_application_credentials)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/giu, "$1=[REDACTED]")
 		.replace(new RegExp(`\\b(${secretName})\\b\\s*[:=]\\s*(?:"[^"]*"|'[^']*'|[^\\s,;]+)`, "giu"), "$1=[REDACTED]")
 		.replace(/\b([a-z][a-z0-9+.-]*:\/\/)[^\s\/@:]+:[^\s\/@]+@/giu, "$1[REDACTED]@")
 		.replace(/([?&](?:token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret)=)[^&#\s]+/giu, "$1[REDACTED]")
@@ -248,7 +262,7 @@ export function canonicalGitRef(value: unknown, description = "Git ref"): string
 }
 
 function exactArrayValues(value: unknown, description: string, allowEmpty: boolean, maximum: number): unknown[] {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+	if (nodeTypes.isProxy(value) || !Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) {
 		throw new Error(`${description} must be a canonical array`);
 	}
 	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
@@ -452,6 +466,25 @@ export function independentReviewResultDigest(value: IndependentReviewRecord): s
 	})).digest("hex");
 }
 
+export function independentReviewAuthorizationDigest(value: IndependentReviewRecord): string {
+	const review = validateIndependentReviewRecord(value);
+	if (review.verdict !== "clean") throw new Error("independent review authorization requires a clean verdict");
+	return createHash("sha256").update(JSON.stringify({
+		idempotencyMarker: review.idempotencyMarker,
+		repository: review.repository,
+		workItemId: review.workItemId,
+		pullRequest: review.pullRequest,
+		generation: review.generation,
+		baseBranch: review.baseBranch,
+		headBranch: review.headBranch,
+		baseSha: review.baseSha,
+		headSha: review.headSha,
+		changedPaths: review.changedPaths,
+		allowedScopes: review.allowedScopes,
+		verdict: review.verdict,
+	})).digest("hex");
+}
+
 export function validateAgentSessionAttestation(
 	value: unknown,
 	reviewValue?: IndependentReviewRecord,
@@ -578,7 +611,8 @@ export function reconcileIndependentReview(request: IndependentReviewReconcileRe
 	if ([...attempts.values()].some((digests) => digests.size > 1)) {
 		throw new Error("ambiguous same-marker review attempts at one completion boundary");
 	}
-	const exact = reviews.filter((review) => reviewCoversExactRange(review, work.baseSha, work.headSha)
+	const exact = attested.filter((review) => review.baseSha === work.baseSha
+		&& review.headSha === work.headSha
 		&& review.pullRequest === work.pullRequest
 		&& review.generation === work.generation
 		&& review.repository === work.repository
@@ -587,9 +621,10 @@ export function reconcileIndependentReview(request: IndependentReviewReconcileRe
 		&& review.headBranch === work.headBranch
 		&& review.idempotencyMarker === work.idempotencyMarker
 		&& sameStrings(review.changedPaths, work.changedPaths)
-		&& sameStrings(review.allowedScopes, work.allowedScopes)
-		&& attestations.some((attestation) => attestsReview(attestation, review)))
+		&& sameStrings(review.allowedScopes, work.allowedScopes))
 		.sort((left, right) => right.completedAt.localeCompare(left.completedAt)
 			|| independentReviewResultDigest(left).localeCompare(independentReviewResultDigest(right)));
-	return exact.length > 0 ? { kind: "satisfied", review: exact[0] } : { kind: "dispatch", work };
+	return exact.length > 0 && exact[0].verdict === "clean"
+		? { kind: "satisfied", review: exact[0] }
+		: { kind: "dispatch", work };
 }

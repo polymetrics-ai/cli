@@ -405,7 +405,7 @@ test("cycle 6 pre-bounds exact Uint8Array receivers and normalizes revoked proxy
 	revoked.revoke();
 	let rejection: unknown;
 	try {
-		reviewRouterApi.readBoundedExactRecord(revoked.proxy, [], [], "cycle 6 revoked record");
+		reviewRouterApi.readBoundedExactRecord(revoked.proxy, [], [], "cycle 6 record");
 	} catch (error) {
 		rejection = error;
 	}

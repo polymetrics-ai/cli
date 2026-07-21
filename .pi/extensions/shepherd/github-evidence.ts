@@ -237,7 +237,7 @@ function timestamp(value: unknown, description: string): string {
 }
 
 function boundedArray(value: unknown, description: string, maximum = MAX_COLLECTION): unknown[] {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+	if (nodeTypes.isProxy(value) || !Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) {
 		throw new Error(`${description} must be a canonical array`);
 	}
 	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");

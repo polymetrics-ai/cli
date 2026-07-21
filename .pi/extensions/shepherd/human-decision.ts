@@ -2,6 +2,9 @@ import { createHash, randomUUID } from "node:crypto";
 import { constants } from "node:fs";
 import { link, lstat, mkdir, open, readdir, rename, rm, unlink } from "node:fs/promises";
 import { isAbsolute, join } from "node:path";
+import { types as nodeTypes } from "node:util";
+
+import { assertNoSensitiveText, readBoundedExactRecord } from "./review-router.ts";
 
 const SCHEMA_VERSION = 1;
 const MAX_GITHUB_NUMBER = Number.MAX_SAFE_INTEGER;
@@ -127,11 +130,44 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function assertOnlyFields(value: Record<string, unknown>, allowed: readonly string[], description: string): void {
-	const allowedFields = new Set(allowed);
-	for (const field of Object.keys(value)) {
-		if (!allowedFields.has(field)) throw new Error(`invalid human decision ${description} field ${JSON.stringify(field)}`);
+function decisionRecord(
+	value: unknown,
+	required: readonly string[],
+	optional: readonly string[] = [],
+	description = "record",
+): Record<string, unknown> {
+	return readBoundedExactRecord(value, required, optional, `human decision ${description}`);
+}
+
+function decisionArray(value: unknown, description: string, maximum: number): unknown[] {
+	if (nodeTypes.isProxy(value) || !Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+		throw new Error(`human decision ${description} must be a canonical array`);
 	}
+	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
+	if (lengthDescriptor === undefined || !Object.hasOwn(lengthDescriptor, "value")
+		|| !Number.isSafeInteger(lengthDescriptor.value) || lengthDescriptor.value < 1
+		|| lengthDescriptor.value > maximum) {
+		throw new Error(`human decision ${description} must be a bounded non-empty array`);
+	}
+	const length = lengthDescriptor.value as number;
+	const result: unknown[] = [];
+	let entries = 0;
+	for (const key in value) {
+		if (!Object.hasOwn(value, key)) continue;
+		if (entries >= length || !/^(?:0|[1-9]\d*)$/u.test(key)) {
+			throw new Error(`human decision ${description} has an invalid array field`);
+		}
+		const index = Number(key);
+		const descriptor = Object.getOwnPropertyDescriptor(value, key);
+		if (index >= length || descriptor === undefined || !Object.hasOwn(descriptor, "value")
+			|| descriptor.enumerable !== true) {
+			throw new Error(`human decision ${description} must contain only dense data values`);
+		}
+		result[index] = descriptor.value;
+		entries += 1;
+	}
+	if (entries !== length) throw new Error(`human decision ${description} must be a dense canonical array`);
+	return result;
 }
 
 function validGitHubNumber(value: unknown): value is number {
@@ -159,24 +195,6 @@ function safeText(value: unknown, maximum: number, description: string, allowNew
 	return value;
 }
 
-function redactSensitiveText(input: string): string {
-	const secretName = "(?:authorization|token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret|private[_-]?key|database[_-]?url|credentials?)";
-	return input
-		.replace(/-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-\r\n]*PRIVATE KEY-----|$)/gi, "[REDACTED]")
-		.replace(/\bAuthorization\s*:\s*[^\r\n,;]+/gi, "Authorization: [REDACTED]")
-		.replace(/\b(?:Bearer|Basic|Token)\s+[^\s,;]+/gi, "[REDACTED]")
-		.replace(new RegExp(`(["']${secretName}["']\\s*:\\s*)(?:"[^"\\r\\n]*"|'[^'\\r\\n]*'|[^,}\\r\\n]+)`, "gi"), "$1\"[REDACTED]\"")
-		.replace(/\b[A-Z][A-Z0-9_]*(?:TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY|DATABASE_URL|CREDENTIALS?|SECRET_ACCESS_KEY|ACCESS_KEY)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/g, "SECRET=[REDACTED]")
-		.replace(new RegExp(`\\b(${secretName})\\b\\s*[:=]\\s*(?:"[^"]*"|'[^']*'|[^\\s,;]+)`, "gi"), "$1=[REDACTED]")
-		.replace(/\b([a-z][a-z0-9+.-]*:\/\/)[^\s\/@:]+:[^\s\/@]+@/gi, "$1[REDACTED]@")
-		.replace(/([?&](?:token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret)=)[^&#\s]+/gi, "$1[REDACTED]")
-		.replace(/\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk_(?:live|test)_[A-Za-z0-9_-]{10,}|sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16})\b/g, "[REDACTED]");
-}
-
-function assertNoSecret(value: string): void {
-	if (redactSensitiveText(value) !== value) throw new Error("human decision text appears to contain a credential or secret");
-}
-
 function normalizeRepository(value: unknown): string {
 	const repository = safeText(value, 201, "repository");
 	const parts = repository.split("/");
@@ -188,20 +206,20 @@ function normalizeRepository(value: unknown): string {
 }
 
 function normalizeTarget(value: unknown): HumanDecisionTarget {
-	if (!isRecord(value) || (value.kind !== "issue" && value.kind !== "pull_request") || !validGitHubNumber(value.number)) {
+	const candidate = decisionRecord(value, ["kind", "number"], [], "target");
+	if ((candidate.kind !== "issue" && candidate.kind !== "pull_request") || !validGitHubNumber(candidate.number)) {
 		throw new Error("invalid human decision target");
 	}
-	assertOnlyFields(value, ["kind", "number"], "target");
-	return { kind: value.kind, number: value.number };
+	return { kind: candidate.kind, number: candidate.number };
 }
 
-function normalizeBinding(value: HumanDecisionBinding): HumanDecisionBinding {
-	if (!isRecord(value) || !Number.isSafeInteger(value.generation) || value.generation < 1) {
+function normalizeBinding(value: unknown): HumanDecisionBinding {
+	const candidate = decisionRecord(value, ["repository", "target", "generation"], ["headSha"], "binding");
+	if (!Number.isSafeInteger(candidate.generation) || (candidate.generation as number) < 1) {
 		throw new Error("invalid human decision generation binding");
 	}
-	assertOnlyFields(value, ["repository", "target", "generation", "headSha"], "binding");
-	const target = normalizeTarget(value.target);
-	const headSha = value.headSha;
+	const target = normalizeTarget(candidate.target);
+	const headSha = candidate.headSha;
 	if (target.kind === "pull_request") {
 		if (typeof headSha !== "string" || !HEAD_SHA.test(headSha)) {
 			throw new Error("pull request human decision requires an exact lowercase head SHA");
@@ -210,9 +228,9 @@ function normalizeBinding(value: HumanDecisionBinding): HumanDecisionBinding {
 		throw new Error("issue human decision must not include a head SHA");
 	}
 	return {
-		repository: normalizeRepository(value.repository),
+		repository: normalizeRepository(candidate.repository),
 		target,
-		generation: value.generation,
+		generation: candidate.generation as number,
 		...(headSha ? { headSha } : {}),
 	};
 }
@@ -222,10 +240,7 @@ export function validateHumanDecisionBinding(value: HumanDecisionBinding): Human
 }
 
 function normalizeOptions(values: unknown): string[] {
-	if (!Array.isArray(values) || values.length === 0 || values.length > 16) {
-		throw new Error("human decision allowed options must be a bounded non-empty array");
-	}
-	const normalized = values.map((value) => {
+	const normalized = decisionArray(values, "allowed options", 16).map((value) => {
 		if (typeof value !== "string" || !OPTION.test(value)) throw new Error("invalid human decision option");
 		return value;
 	});
@@ -242,10 +257,7 @@ function normalizeParentMergeOptions(values: unknown): ParentMergeDecisionOption
 }
 
 function normalizeActors(values: unknown): string[] {
-	if (!Array.isArray(values) || values.length === 0 || values.length > 64) {
-		throw new Error("human decision actor allowlist must be a bounded non-empty array");
-	}
-	const normalized = values.map((value) => {
+	const normalized = decisionArray(values, "actor allowlist", 64).map((value) => {
 		if (typeof value !== "string") throw new Error("invalid human decision actor");
 		const login = value.toLowerCase();
 		if (!LOGIN.test(login)) throw new Error("invalid human decision actor");
@@ -268,7 +280,7 @@ function normalizeQuestion(value: unknown): string {
 		throw new Error("invalid human decision question");
 	}
 	if (GITHUB_MENTION.test(question)) throw new Error("invalid human decision question mention");
-	assertNoSecret(question);
+	assertNoSensitiveText(question, "human decision question");
 	return question;
 }
 
@@ -277,31 +289,35 @@ function gateTargetKind(gate: HumanDecisionGate): HumanDecisionTarget["kind"] {
 }
 
 function normalizeSpec(spec: HumanDecisionRequestSpec, now: Date): HumanDecisionRequestSpec {
-	if (!isRecord(spec) || typeof spec.requestId !== "string" || !REQUEST_ID.test(spec.requestId)) {
+	const candidate = decisionRecord(spec, [
+		"requestId", "gate", "binding", "allowedOptions", "actorAllowlist", "expiresAt", "question",
+	], [], "request specification");
+	if (typeof candidate.requestId !== "string" || !REQUEST_ID.test(candidate.requestId)) {
 		throw new Error("invalid human decision request ID");
 	}
-	if (!["requirements", "scope", "review", "head", "merge", "parent_merge"].includes(spec.gate)) {
+	if (!["requirements", "scope", "review", "head", "merge", "parent_merge"].includes(candidate.gate as string)) {
 		throw new Error("invalid human decision gate");
 	}
-	const binding = normalizeBinding(spec.binding);
-	if (binding.target.kind !== gateTargetKind(spec.gate)) {
-		throw new Error(`human decision gate ${spec.gate} is bound to the wrong target kind`);
+	const gate = candidate.gate as HumanDecisionGate;
+	const binding = normalizeBinding(candidate.binding);
+	if (binding.target.kind !== gateTargetKind(gate)) {
+		throw new Error(`human decision gate ${gate} is bound to the wrong target kind`);
 	}
-	const expiresAt = canonicalTimestamp(spec.expiresAt, "expiry");
+	const expiresAt = canonicalTimestamp(candidate.expiresAt, "expiry");
 	if (!Number.isFinite(now.valueOf()) || new Date(expiresAt).valueOf() <= now.valueOf()) {
 		throw new Error("human decision request is already expired");
 	}
-	const allowedOptions = spec.gate === "parent_merge"
-		? normalizeParentMergeOptions(spec.allowedOptions)
-		: normalizeOptions(spec.allowedOptions);
+	const allowedOptions = gate === "parent_merge"
+		? normalizeParentMergeOptions(candidate.allowedOptions)
+		: normalizeOptions(candidate.allowedOptions);
 	return {
-		requestId: spec.requestId,
-		gate: spec.gate,
+		requestId: candidate.requestId,
+		gate,
 		binding,
 		allowedOptions,
-		actorAllowlist: normalizeActors(spec.actorAllowlist),
+		actorAllowlist: normalizeActors(candidate.actorAllowlist),
 		expiresAt,
-		question: normalizeQuestion(spec.question),
+		question: normalizeQuestion(candidate.question),
 	} as HumanDecisionRequestSpec;
 }
 
@@ -403,16 +419,16 @@ export function validateHumanDecisionRequestComment(
 	record: HumanDecisionRecord,
 	evidence: HumanDecisionRequestComment,
 ): HumanDecisionRequestComment {
-	if (!isRecord(evidence) || !validGitHubNumber(evidence.id)) throw new Error("invalid human decision request comment ID");
-	assertOnlyFields(evidence, ["id", "url", "actor", "createdAt"], "request comment");
-	const actor = normalizeGitHubActor(evidence.actor, "request comment actor");
-	const url = validateSourceUrl(record.binding, evidence.url, "request comment URL");
-	const createdAt = canonicalTimestamp(evidence.createdAt, "request comment timestamp");
+	const candidate = decisionRecord(evidence, ["id", "url", "actor", "createdAt"], [], "request comment");
+	if (!validGitHubNumber(candidate.id)) throw new Error("invalid human decision request comment ID");
+	const actor = normalizeGitHubActor(candidate.actor, "request comment actor");
+	const url = validateSourceUrl(record.binding, candidate.url, "request comment URL");
+	const createdAt = canonicalTimestamp(candidate.createdAt, "request comment timestamp");
 	if (new Date(createdAt).valueOf() + GITHUB_SECOND_RESOLUTION_SKEW_MS < new Date(record.createdAt).valueOf()
 		|| new Date(createdAt).valueOf() >= new Date(record.expiresAt).valueOf()) {
 		throw new Error("human decision request comment timestamp is outside the request lifetime");
 	}
-	return { id: evidence.id, url, actor, createdAt };
+	return { id: candidate.id, url, actor, createdAt };
 }
 
 export async function recordHumanDecisionRequestComment(
@@ -432,7 +448,11 @@ export async function recordHumanDecisionRequestComment(
 			}
 			return { state: existing, value: existing };
 		}
-		const updated = { ...existing, requestComment: normalized, updatedAt: canonicalNow(now) };
+		const nowTimestamp = canonicalNow(now);
+		const updatedAt = new Date(nowTimestamp).valueOf() < new Date(normalized.createdAt).valueOf()
+			? normalized.createdAt
+			: nowTimestamp;
+		const updated = { ...existing, requestComment: normalized, updatedAt };
 		return { state: updated, value: updated };
 	});
 }
@@ -454,26 +474,29 @@ function validateSourceUrl(binding: HumanDecisionBinding, value: unknown, descri
 }
 
 function normalizeDecision(record: HumanDecisionRecord, evidence: HumanDecisionEvidence): HumanDecisionEvidence {
-	if (!isRecord(evidence)
-		|| typeof evidence.option !== "string"
-		|| !(record.allowedOptions as readonly string[]).includes(evidence.option)) {
+	const candidate = decisionRecord(evidence, ["option", "actor", "sourceUrl", "decidedAt"], [], "decision evidence");
+	if (typeof candidate.option !== "string"
+		|| !(record.allowedOptions as readonly string[]).includes(candidate.option)) {
 		throw new Error("human decision option is not allowed");
 	}
-	assertOnlyFields(evidence, ["option", "actor", "sourceUrl", "decidedAt"], "decision evidence");
-	const actor = safeText(evidence.actor, 39, "actor").toLowerCase();
+	if (record.requestComment === undefined) throw new Error("human decision requires persisted request comment provenance");
+	const actor = safeText(candidate.actor, 39, "actor").toLowerCase();
 	if (!LOGIN.test(actor) || !record.actorAllowlist.includes(actor)) {
 		throw new Error("human decision actor is not allowlisted");
 	}
-	const decidedAt = canonicalTimestamp(evidence.decidedAt, "decision timestamp");
+	const decidedAt = canonicalTimestamp(candidate.decidedAt, "decision timestamp");
 	const decidedTime = new Date(decidedAt).valueOf();
 	if (decidedTime + GITHUB_SECOND_RESOLUTION_SKEW_MS < new Date(record.createdAt).valueOf()
 		|| decidedTime >= new Date(record.expiresAt).valueOf()) {
 		throw new Error("human decision timestamp is outside the request lifetime");
 	}
+	if (decidedTime < new Date(record.requestComment.createdAt).valueOf()) {
+		throw new Error("human decision chronology precedes its request comment");
+	}
 	return {
-		option: evidence.option,
+		option: candidate.option,
 		actor,
-		sourceUrl: validateSourceUrl(record.binding, evidence.sourceUrl, "source URL"),
+		sourceUrl: validateSourceUrl(record.binding, candidate.sourceUrl, "source URL"),
 		decidedAt,
 	};
 }
@@ -523,49 +546,66 @@ export async function consumeHumanDecision(
 		if (existing.status !== "decided" || !existing.decision) throw new Error("human decision is not ready to consume");
 		const decision = { ...existing.decision };
 		const timestamp = canonicalNow(now);
+		if (new Date(timestamp).valueOf() < new Date(decision.decidedAt).valueOf()) {
+			throw new Error("human decision consumption chronology precedes the decision");
+		}
 		const updated = { ...existing, status: "consumed" as const, consumedAt: timestamp, updatedAt: timestamp };
 		return { state: updated, value: decision };
 	});
 }
 
 function validateRecord(value: unknown): HumanDecisionRecord {
-	if (!isRecord(value) || value.schemaVersion !== SCHEMA_VERSION) throw new Error("invalid human decision state schema");
-	assertOnlyFields(value, [
+	const candidate = decisionRecord(value, [
 		"schemaVersion", "requestId", "gate", "binding", "allowedOptions", "actorAllowlist", "expiresAt",
-		"question", "idempotencyMarker", "status", "createdAt", "updatedAt", "requestComment", "decision", "consumedAt",
-	], "state");
-	const createdAt = canonicalTimestamp(value.createdAt, "creation timestamp");
+		"question", "idempotencyMarker", "status", "createdAt", "updatedAt",
+	], ["requestComment", "decision", "consumedAt"], "state");
+	if (candidate.schemaVersion !== SCHEMA_VERSION) throw new Error("invalid human decision state schema");
+	const createdAt = canonicalTimestamp(candidate.createdAt, "creation timestamp");
 	const proposed = createHumanDecisionRecord({
-		requestId: value.requestId as string,
-		gate: value.gate as HumanDecisionGate,
-		binding: value.binding as HumanDecisionBinding,
-		allowedOptions: value.allowedOptions as string[],
-		actorAllowlist: value.actorAllowlist as string[],
-		expiresAt: value.expiresAt as string,
-		question: value.question as string,
+		requestId: candidate.requestId as string,
+		gate: candidate.gate as HumanDecisionGate,
+		binding: candidate.binding as HumanDecisionBinding,
+		allowedOptions: candidate.allowedOptions as string[],
+		actorAllowlist: candidate.actorAllowlist as string[],
+		expiresAt: candidate.expiresAt as string,
+		question: candidate.question as string,
 	} as HumanDecisionRequestSpec, new Date(new Date(createdAt).valueOf() - 1));
-	if (value.idempotencyMarker !== proposed.idempotencyMarker) throw new Error("invalid human decision idempotency marker");
-	if (!["pending", "decided", "consumed", "expired"].includes(value.status as string)) throw new Error("invalid human decision status");
-	const updatedAt = canonicalTimestamp(value.updatedAt, "update timestamp");
+	if (candidate.idempotencyMarker !== proposed.idempotencyMarker) throw new Error("invalid human decision idempotency marker");
+	if (!["pending", "decided", "consumed", "expired"].includes(candidate.status as string)) throw new Error("invalid human decision status");
+	const updatedAt = canonicalTimestamp(candidate.updatedAt, "update timestamp");
 	if (new Date(updatedAt).valueOf() < new Date(createdAt).valueOf()) throw new Error("invalid human decision update chronology");
 	const record: HumanDecisionRecord = {
 		...proposed,
-		status: value.status as HumanDecisionRecord["status"],
+		status: candidate.status as HumanDecisionRecord["status"],
 		createdAt,
 		updatedAt,
 	};
-	if (value.requestComment !== undefined) record.requestComment = validateHumanDecisionRequestComment(record, value.requestComment as HumanDecisionRequestComment);
-	if (value.decision !== undefined) record.decision = normalizeDecision(record, value.decision as HumanDecisionEvidence);
-	if (value.consumedAt !== undefined) record.consumedAt = canonicalTimestamp(value.consumedAt, "consumption timestamp");
+	if (candidate.requestComment !== undefined) {
+		record.requestComment = validateHumanDecisionRequestComment(record, candidate.requestComment as HumanDecisionRequestComment);
+	}
+	if (candidate.decision !== undefined) record.decision = normalizeDecision(record, candidate.decision as HumanDecisionEvidence);
+	if (candidate.consumedAt !== undefined) record.consumedAt = canonicalTimestamp(candidate.consumedAt, "consumption timestamp");
 	if ((record.status === "decided" || record.status === "consumed") !== Boolean(record.decision)) {
 		throw new Error("invalid human decision state/decision coherence");
+	}
+	if ((record.status === "decided" || record.status === "consumed") && record.requestComment === undefined) {
+		throw new Error("invalid human decision request comment provenance");
 	}
 	if ((record.status === "consumed") !== Boolean(record.consumedAt)) {
 		throw new Error("invalid human decision consumption coherence");
 	}
+	if (record.requestComment && new Date(record.updatedAt).valueOf() < new Date(record.requestComment.createdAt).valueOf()) {
+		throw new Error("invalid human decision update/request-comment chronology");
+	}
 	if (record.consumedAt && record.decision
 		&& new Date(record.consumedAt).valueOf() < new Date(record.decision.decidedAt).valueOf()) {
 		throw new Error("invalid human decision consumption chronology");
+	}
+	if (record.decision && new Date(record.updatedAt).valueOf() < new Date(record.decision.decidedAt).valueOf()) {
+		throw new Error("invalid human decision update/decision chronology");
+	}
+	if (record.consumedAt && new Date(record.updatedAt).valueOf() < new Date(record.consumedAt).valueOf()) {
+		throw new Error("invalid human decision update/consumption chronology");
 	}
 	if (record.status === "expired" && new Date(record.updatedAt).valueOf() < new Date(record.expiresAt).valueOf()) {
 		throw new Error("invalid human decision expiry chronology");

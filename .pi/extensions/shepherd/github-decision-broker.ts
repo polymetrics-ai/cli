@@ -400,6 +400,14 @@ export class GitHubDecisionBroker {
 		throw new Error("unreachable GitHub request-comment retry state");
 	}
 
+	async readRecord(requestId: string, binding: HumanDecisionBinding): Promise<HumanDecisionRecord> {
+		const stored = await this.repository.load(requestId);
+		if (stored === null) throw new Error("human decision request does not exist");
+		const record = validateHumanDecisionRecord(stored);
+		assertHumanDecisionBinding(record, binding);
+		return record;
+	}
+
 	async request(request: GitHubDecisionRequest): Promise<HumanDecisionRecord> {
 		const persisted = await persistHumanDecisionRequest(this.repository, requestSpec(request), this.now());
 		return this.repository.transact(persisted.requestId, async (existing) => {
@@ -432,9 +440,7 @@ export class GitHubDecisionBroker {
 	): Promise<GitHubDecisionPollResult> {
 		for (let attempt = 1; attempt <= this.polling.maxAttempts; attempt += 1) {
 			if (options.signal?.aborted) throw options.signal.reason ?? new Error("human decision polling aborted");
-			const record = await this.repository.load(requestId);
-			if (record === null) throw new Error("human decision request does not exist");
-			assertHumanDecisionBinding(record, binding);
+			const record = await this.readRecord(requestId, binding);
 			if ((record.status === "decided" || record.status === "consumed") && record.decision) {
 				return { status: "decided", decision: { ...record.decision }, attempts: attempt };
 			}

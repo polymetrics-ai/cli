@@ -10,6 +10,7 @@ import {
 	createHumanDecisionRecord,
 	persistHumanDecisionRequest,
 	recordHumanDecision,
+	recordHumanDecisionRequestComment,
 	routeHumanDecisionTarget,
 	validateHumanDecisionRecord,
 	validateHumanDecisionRequestComment,
@@ -190,6 +191,12 @@ test("persists minimal accepted evidence and consumes it exactly once across rep
 	const first = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
 	const second = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
 	await persistHumanDecisionRequest(first, spec(), new Date("2026-07-21T10:00:00.000Z"));
+	await recordHumanDecisionRequestComment(first, "req-477", issueBinding, {
+		id: 1001,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1001",
+		actor: "shepherd-host",
+		createdAt: "2026-07-21T10:00:10.000Z",
+	}, new Date("2026-07-21T10:00:10.000Z"));
 	await recordHumanDecision(first, "req-477", issueBinding, {
 		option: "approve",
 		actor: "maintainer-one",
