@@ -90,3 +90,8 @@ then exited 0.
 Audit gap RED added full Unicode case folding (`Straße` / `STRASSE`) and failed work with an
 unsatisfied dependency. Targeted result: 2 tests, 0 pass, 2 fail. Minimal NFKC + upper/lower folding
 and terminal-status coherence extended the final focused GREEN to 36/36. `git diff --check` passes.
+
+Correction refactor precomputes one canonical collision index per ready queue, then reuses it for
+component discovery and bounded exact selection. This removes repeated scope normalization and
+pairwise collision evaluation from recursive search without changing decisions. Focused tests
+remain 36/36 and strict production TypeScript remains clean.

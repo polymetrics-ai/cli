@@ -96,6 +96,15 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
   hostile subprocess 80 ms, `git diff --check` pass.
 - Execution decision: `local_critical_path`; proceed to refactor and broader verification.
 
+## Exact-head correction refactor cycle
+
+- Precomputed canonical scope collisions once per ready queue and reused the index during component
+  discovery and exact search, eliminating repeated normalization from recursion.
+- Focused behavior remains 36/36 and strict production TypeScript remains clean.
+- Broader pre-refactor evidence also passed: full Shepherd 173/173 and offline Pi 0.80.6 RPC
+  discovered `pm-shepherd`; these gates are rerun/frozen after the refactor commit.
+- Execution decision: `local_critical_path`; refactor is behavior-preserving.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

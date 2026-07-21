@@ -89,10 +89,18 @@ function validateScope(scope: unknown): asserts scope is string {
 	}
 }
 
+function scopeContainsCanonical(left: string, right: string): boolean {
+	return left === right || right.startsWith(`${left}/`);
+}
+
+function canonicalScopesCollide(left: readonly string[], right: readonly string[]): boolean {
+	return left.some((leftScope) => right.some((rightScope) =>
+		scopeContainsCanonical(leftScope, rightScope) || scopeContainsCanonical(rightScope, leftScope),
+	));
+}
+
 function scopeContains(left: string, right: string): boolean {
-	const canonicalLeft = canonicalScope(left);
-	const canonicalRight = canonicalScope(right);
-	return canonicalLeft === canonicalRight || canonicalRight.startsWith(`${canonicalLeft}/`);
+	return scopeContainsCanonical(canonicalScope(left), canonicalScope(right));
 }
 
 function compareIds(left: Pick<DependencyWorkItem, "id">, right: Pick<DependencyWorkItem, "id">): number {
@@ -102,9 +110,7 @@ function compareIds(left: Pick<DependencyWorkItem, "id">, right: Pick<Dependency
 export function scopesCollide(left: readonly string[], right: readonly string[]): boolean {
 	for (const scope of left) validateScope(scope);
 	for (const scope of right) validateScope(scope);
-	return left.some((leftScope) => right.some((rightScope) =>
-		scopeContains(leftScope, rightScope) || scopeContains(rightScope, leftScope),
-	));
+	return canonicalScopesCollide(left.map(canonicalScope), right.map(canonicalScope));
 }
 
 export function validateDependencyGraph(input: unknown): ValidatedDependencyGraph {
@@ -230,7 +236,11 @@ function lexicographicallyEarlier(left: readonly DependencyWorkItem[], right: re
 	return left.length < right.length;
 }
 
-function maximumSafeSet(candidates: readonly DependencyWorkItem[], limit: number): DependencyWorkItem[] {
+function maximumSafeSet(
+	candidates: readonly DependencyWorkItem[],
+	limit: number,
+	conflicts: ReadonlyMap<string, ReadonlySet<string>>,
+): DependencyWorkItem[] {
 	let best: DependencyWorkItem[] = [];
 	const chosen: DependencyWorkItem[] = [];
 	const search = (index: number): boolean => {
@@ -240,7 +250,7 @@ function maximumSafeSet(candidates: readonly DependencyWorkItem[], limit: number
 		if (best.length === limit) return true;
 		if (index >= candidates.length || chosen.length + (candidates.length - index) <= best.length) return false;
 		const candidate = candidates[index];
-		if (!chosen.some((selected) => itemsCollide(selected, candidate))) {
+		if (!chosen.some((selected) => conflicts.get(selected.id)?.has(candidate.id) === true)) {
 			chosen.push(candidate);
 			if (search(index + 1)) return true;
 			chosen.pop();
@@ -251,9 +261,30 @@ function maximumSafeSet(candidates: readonly DependencyWorkItem[], limit: number
 	return best;
 }
 
-function conflictComponents(candidates: readonly DependencyWorkItem[]): DependencyWorkItem[][] {
+interface ConflictGraph {
+	components: DependencyWorkItem[][];
+	conflicts: Map<string, Set<string>>;
+}
+
+function buildConflictGraph(candidates: readonly DependencyWorkItem[]): ConflictGraph {
 	const remaining = new Set(candidates.map((candidate) => candidate.id));
 	const byId = new Map(candidates.map((candidate) => [candidate.id, candidate]));
+	const canonicalScopes = new Map(candidates.map((candidate) => [
+		candidate.id,
+		candidate.writeScopes.map(canonicalScope),
+	]));
+	const conflicts = new Map(candidates.map((candidate) => [candidate.id, new Set<string>()]));
+	for (let index = 0; index < candidates.length; index += 1) {
+		for (let other = index + 1; other < candidates.length; other += 1) {
+			const left = candidates[index];
+			const right = candidates[other];
+			if (left.access === "mutating" && right.access === "mutating"
+				&& canonicalScopesCollide(canonicalScopes.get(left.id) ?? [], canonicalScopes.get(right.id) ?? [])) {
+				conflicts.get(left.id)?.add(right.id);
+				conflicts.get(right.id)?.add(left.id);
+			}
+		}
+	}
 	const components: DependencyWorkItem[][] = [];
 	for (const root of candidates) {
 		if (!remaining.delete(root.id)) continue;
@@ -263,12 +294,10 @@ function conflictComponents(candidates: readonly DependencyWorkItem[]): Dependen
 			const current = queue.shift();
 			if (current === undefined) break;
 			component.push(current);
-			for (const id of [...remaining]) {
+			for (const id of conflicts.get(current.id) ?? []) {
+				if (!remaining.delete(id)) continue;
 				const candidate = byId.get(id);
-				if (candidate !== undefined && itemsCollide(current, candidate)) {
-					remaining.delete(id);
-					queue.push(candidate);
-				}
+				if (candidate !== undefined) queue.push(candidate);
 			}
 		}
 		component.sort(compareIds);
@@ -280,12 +309,13 @@ function conflictComponents(candidates: readonly DependencyWorkItem[]): Dependen
 		}
 		components.push(component);
 	}
-	return components;
+	return { components, conflicts };
 }
 
 function maximumSafeSelection(candidates: readonly DependencyWorkItem[], limit: number): DependencyWorkItem[] {
-	const selected = conflictComponents(candidates).flatMap((component) =>
-		maximumSafeSet(component, Math.min(limit, component.length)),
+	const graph = buildConflictGraph(candidates);
+	const selected = graph.components.flatMap((component) =>
+		maximumSafeSet(component, Math.min(limit, component.length), graph.conflicts),
 	);
 	selected.sort(compareIds);
 	return selected.slice(0, limit);
