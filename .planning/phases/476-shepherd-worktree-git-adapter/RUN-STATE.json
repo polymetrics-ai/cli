@@ -101,6 +101,11 @@
       "cycle": "correction3-plan",
       "decision": "local_critical_path",
       "reason": "Five exact-head findings share the two issue-owned adapters; a read-only design sidecar could not start because the runtime thread cap was occupied, so the bounded implementation remains on the local critical path."
+    },
+    {
+      "cycle": "correction3-red",
+      "decision": "local_critical_path",
+      "reason": "Test-only checkpoint fa607d31 produced 26 passes and ten deterministic failures across all five reviewed contracts while both production adapters remained unchanged."
     }
   ]
 }

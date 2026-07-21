@@ -55,6 +55,8 @@
 - RED plan: wrapper authority capture with alternate-root use, unrelated/out-of-scope canonical
   heads, add/commit/remove/commit history, bounded hook/filter/helper/transport markers, and remote
   default-branch mismatch.
+- RED result: test-only checkpoint `fa607d31`; focused 36 tests produced 26 passes and ten expected
+  failures while both production adapters remained at correction-2 implementation `6a22aa78`.
 - GSD command: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop ...` remains
   unavailable (`unknown GSD command`), so the recorded manual strict-TDD lifecycle continues.
 - Authorized gates remain focused adapter tests, serialized Shepherd tests, strict cached Pi 0.80.6

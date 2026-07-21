@@ -7,6 +7,9 @@ Correction 3 is active from reviewed head
 genuine test-only RED and the smallest GREEN implementation. Historical correction-2 results below
 remain valid evidence for their exact head but do not satisfy correction 3.
 
+The genuine correction-3 RED is `fa607d31`: focused 36 tests yielded 26 passes and ten expected
+failures, with no production-adapter changes relative to the correction-2 implementation.
+
 Correction 2 verification covers implementation/refactor checkpoint
 `6a22aa789095da67c5b10f51476de41d3f5643ca` on ready stacked PR
 https://github.com/polymetrics-ai/cli/pull/484. The reviewed predecessor

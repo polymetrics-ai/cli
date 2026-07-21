@@ -16,10 +16,10 @@ Tests use bounded temporary local Git repositories and no credentials or network
 | Correction 2: mutation capability fencing | Focused run: released claim committed through a replacement lease; workspace had no capability-bound mutation API | Workspace-held nonforgeable issuer plus adapter WeakMap capability fence fetch/worktree/commit/push; release drains accepted mutations | Alternate-root issuer forgery, forged capability, replacement success, recovery, and in-flight release cases pass | green/refactored |
 | Correction 2: complete handoff scope | Focused run: a passed handoff omitted a clean committed path outside immutable scopes | Unfiltered `--no-renames` diff audits the complete canonical set before scope validation | Mixed committed scope, exact returned scope, and committed/dirty literal-backslash alias cases pass | green/refactored |
 | Correction 2: effective push endpoint | Focused run: alternate local bare `pushurl` received the issue ref and object before the eventual verification error | Inspection binds effective fetch/push endpoint identities; push revalidates and uses the exact stable endpoint | Late `pushurl` and chained `insteadOf` bare remotes remain ref- and object-free | green/refactored |
-| Correction 3: private lease acquisition | Planned wrapper captures the issuer passed through the overridable public method and attempts alternate-root issuance | pending | pending | planned |
-| Correction 3: ancestry and history scope | Planned unrelated/out-of-scope head plus add-then-remove history cases reach commit, push, or handoff | pending | pending | planned |
-| Correction 3: sanitized Git mutations | Planned bounded hook/filter/helper/transport markers can be selected by repository configuration | pending | pending | planned |
-| Correction 3: bound default branch | Planned caller default differs from remote symbolic HEAD yet push is accepted | pending | pending | planned |
+| Correction 3: private lease acquisition | Focused run: wrapper captured the workspace issuer and used it to acquire/release a lease under an alternate state root | pending | pending | red |
+| Correction 3: ancestry and history scope | Focused run: commit/push accepted unrelated or historically out-of-scope heads; handoff accepted an add-then-remove path | pending | pending | red |
+| Correction 3: sanitized Git mutations | Focused run: worktree/add/push accepted executable hook/filter/helper/transport configuration and marker paths were reachable | pending | pending | red |
+| Correction 3: bound default branch | Focused run: binding omitted `defaultBranch`, caller/live remote mismatch was accepted, and push used the mutable branch ref | pending | pending | red |
 
 Correction RED command: `node --test .pi/extensions/shepherd/workspace-adapter.test.ts
 .pi/extensions/shepherd/git-adapter.test.ts` → 21 tests, 16 passed, 5 failed. The five failures map
@@ -46,6 +46,12 @@ the cached Pi 0.80.6 Node type surface; offline Pi RPC returned `true`; exact di
 passed. Read-only adversarial probes found alternate-root issuer, literal-backslash path alias, and
 chained URL-rewrite variants during refactor; each received a deterministic regression before the
 final gate.
+
+Correction 3 test-only RED checkpoint `fa607d31`: focused 36-test run produced 26 passes and ten
+expected failures while both production adapters remained at `6a22aa78`. Failures covered missing
+bound default evidence, mutable branch-ref push, commit/push ancestry gaps, pre-transfer history
+scope gaps, executable worktree/add/push Git configuration, caller/live default mismatch, captured
+issuer alternate-root authority, and add-then-remove handoff omission.
 
 ## Required safety cases
 
@@ -86,3 +92,5 @@ final gate.
 - Execution decision, correction 3 plan: `local_critical_path` — all five findings are coupled in
   the two issue-owned adapters. A read-only design sidecar was attempted but the runtime thread cap
   was already occupied; local planning continues without widening the write scope.
+- Execution decision, correction 3 RED: `local_critical_path` — test-only checkpoint `fa607d31`
+  produced ten deterministic failures across all five reviewed contracts before production edits.
