@@ -121,6 +121,50 @@ function cycle7SecretPayload(prefix: string): { value: string; markers: string[]
 	};
 }
 
+function cycle8SecretPayload(prefix: string): { value: string; markers: string[] } {
+	const markers = {
+		digest: `synthetic-${prefix}-digest-475`,
+		signature: `synthetic-${prefix}-signature-475`,
+		awsAuth: `synthetic-${prefix}-aws-auth-475`,
+		commaSuffix: `synthetic-${prefix}-comma-suffix-475`,
+		flowKeyOnly: `synthetic-${prefix}-flow-key-only-475`,
+		flowContinued: `synthetic-${prefix}-flow-continued-475`,
+		sequenceKeyOnly: `synthetic-${prefix}-sequence-key-only-475`,
+		sequenceContinued: `synthetic-${prefix}-sequence-continued-475`,
+		escapedClientSecret: `synthetic-${prefix}-escaped-client-secret-475`,
+		escapedToken: `synthetic-${prefix}-escaped-token-475`,
+		malformedEscapedSecret: `synthetic-${prefix}-malformed-escaped-secret-475`,
+	};
+	return {
+		value: [
+			`Authorization: Digest username="public", realm="example", response="${markers.digest}"`,
+			`Authorization: Signature keyId="public", algorithm="rsa-sha256", signature="${markers.signature}"`,
+			`Authorization: AWS4-HMAC-SHA256 Credential=public, SignedHeaders=host, Signature=${markers.awsAuth}`,
+			`client_secret: prefix,${markers.commaSuffix}`,
+			"{",
+			"  client_secret:",
+			`    ${markers.flowKeyOnly},`,
+			"  safe: retained",
+			"}",
+			"{",
+			"  client_secret: prefix",
+			`    ${markers.flowContinued},`,
+			"  safe: retained",
+			"}",
+			"[",
+			"  { client_secret:",
+			`      ${markers.sequenceKeyOnly}, safe: retained },`,
+			"  { client_secret: prefix",
+			`      ${markers.sequenceContinued}, safe: retained }`,
+			"]",
+			`{"client\\u005fsecret":"${markers.escapedClientSecret}","safe":true}`,
+			`{"to\\u006ben":"${markers.escapedToken}"}`,
+			`{"client_secret\\u00ZZ":"${markers.malformedEscapedSecret}"}`,
+		].join("\n"),
+		markers: Object.values(markers),
+	};
+}
+
 function leakedMarkers(value: string, markers: readonly string[]): string[] {
 	return markers.filter((marker) => value.includes(marker));
 }
@@ -296,6 +340,14 @@ test("cycle 7 padded-flow diagnostics account for all scanner work near-linearly
 	});
 });
 
+test("cycle 8 direct redaction closes line commas, multiline-flow scalars, and escaped quoted keys", () => {
+	const payload = cycle8SecretPayload("direct");
+	const redacted = redactSensitiveText(payload.value);
+
+	assert.deepEqual(leakedMarkers(redacted, payload.markers), []);
+	assert.match(redacted, /\[REDACTED\]/);
+});
+
 test("read-only policy exposes workspace reads and non-mutating typed capabilities only", async () => {
 	const input = policyInput(true);
 	const policy = createToolPolicy(input);
@@ -348,6 +400,22 @@ test("cycle 7 workspace reads apply the complete structured secret vocabulary", 
 
 	const result = text(await read.execute(
 		"read-cycle-7",
+		{ path: ".pi/extensions/shepherd/controller.ts", offset: 0, limit: 4096 },
+		undefined,
+	));
+	assert.deepEqual(leakedMarkers(result, payload.markers), []);
+	assert.match(result, /\[REDACTED\]/);
+});
+
+test("cycle 8 workspace reads close line commas, multiline-flow scalars, and escaped quoted keys", async () => {
+	const payload = cycle8SecretPayload("workspace");
+	const input = policyInput(true, payload.value);
+	const policy = createToolPolicy(input);
+	const read = policy.tools.find((tool) => tool.name === "workspace_read");
+	assert.ok(read);
+
+	const result = text(await read.execute(
+		"read-cycle-8",
 		{ path: ".pi/extensions/shepherd/controller.ts", offset: 0, limit: 4096 },
 		undefined,
 	));
@@ -560,4 +628,70 @@ test("cycle 7 typed capability output applies the complete structured secret voc
 	const result = text(await inspect.execute("inspect-cycle-7", { target: "owned" }, undefined));
 	assert.deepEqual(leakedMarkers(result, payload.markers), []);
 	assert.match(result, /\[REDACTED\]/);
+});
+
+test("cycle 8 mutation and typed capability outputs share the complete parser closure", async () => {
+	const mutationPayload = cycle8SecretPayload("mutation");
+	const capabilityPayload = cycle8SecretPayload("typed-tool");
+	const referenceMarker = "synthetic-typed-reference-escaped-key-475";
+	const input = policyInput(false);
+	input.workspace.editText = async () => ({ changed: true, summary: mutationPayload.value });
+	input.workspace.writeText = async () => ({ changed: true, summary: mutationPayload.value });
+	input.capabilities = [
+		{
+			...capability("host_inspect"),
+			async execute() {
+				return {
+					status: "ok" as const,
+					summary: capabilityPayload.value,
+					references: [`{"client\\u005fsecret":"${referenceMarker}"}`],
+				};
+			},
+		},
+		capability("host_verify", { mutates: true }),
+	];
+	const policy = createToolPolicy(input, { maxToolOutputBytes: 16 * 1024 });
+	const edit = policy.tools.find((tool) => tool.name === "workspace_edit");
+	const write = policy.tools.find((tool) => tool.name === "workspace_write");
+	const inspect = policy.tools.find((tool) => tool.name === "host_inspect");
+	assert.ok(edit);
+	assert.ok(write);
+	assert.ok(inspect);
+
+	const rendered = [
+		text(await edit.execute("edit-cycle-8", {
+			path: ".pi/extensions/shepherd/tool-policy.ts",
+			oldText: "old",
+			newText: "new",
+		}, undefined)),
+		text(await write.execute("write-cycle-8", {
+			path: ".pi/extensions/shepherd/tool-policy.ts",
+			content: "new",
+		}, undefined)),
+		text(await inspect.execute("inspect-cycle-8", { target: "owned" }, undefined)),
+	].join("\n");
+	assert.deepEqual(leakedMarkers(rendered, [
+		...mutationPayload.markers,
+		...capabilityPayload.markers,
+		referenceMarker,
+	]), []);
+	assert.match(rendered, /\[REDACTED\]/);
+});
+
+test("cycle 8 tool-policy options reject one above every embedded hard ceiling", () => {
+	const cases = [
+		["maxToolOutputBytes", { maxToolOutputBytes: 256 * 1024 + 1 }],
+		["maxReadCharacters", { maxReadCharacters: 256 * 1024 + 1 }],
+		["maxWriteCharacters", { maxWriteCharacters: 1024 * 1024 + 1 }],
+	] as const;
+	const accepted: string[] = [];
+	for (const [name, options] of cases) {
+		try {
+			createToolPolicy(policyInput(false), options);
+			accepted.push(name);
+		} catch (error) {
+			assert.match(String(error), /bound|maximum|max|limit|exceed/i, name);
+		}
+	}
+	assert.deepEqual(accepted, []);
 });

@@ -136,6 +136,50 @@ function cycle7SecretPayload(prefix: string): { value: string; markers: string[]
 	};
 }
 
+function cycle8SecretPayload(prefix: string): { value: string; markers: string[] } {
+	const markers = {
+		digest: `synthetic-${prefix}-digest-475`,
+		signature: `synthetic-${prefix}-signature-475`,
+		awsAuth: `synthetic-${prefix}-aws-auth-475`,
+		commaSuffix: `synthetic-${prefix}-comma-suffix-475`,
+		flowKeyOnly: `synthetic-${prefix}-flow-key-only-475`,
+		flowContinued: `synthetic-${prefix}-flow-continued-475`,
+		sequenceKeyOnly: `synthetic-${prefix}-sequence-key-only-475`,
+		sequenceContinued: `synthetic-${prefix}-sequence-continued-475`,
+		escapedClientSecret: `synthetic-${prefix}-escaped-client-secret-475`,
+		escapedToken: `synthetic-${prefix}-escaped-token-475`,
+		malformedEscapedSecret: `synthetic-${prefix}-malformed-escaped-secret-475`,
+	};
+	return {
+		value: [
+			`Authorization: Digest username="public", realm="example", response="${markers.digest}"`,
+			`Authorization: Signature keyId="public", algorithm="rsa-sha256", signature="${markers.signature}"`,
+			`Authorization: AWS4-HMAC-SHA256 Credential=public, SignedHeaders=host, Signature=${markers.awsAuth}`,
+			`client_secret: prefix,${markers.commaSuffix}`,
+			"{",
+			"  client_secret:",
+			`    ${markers.flowKeyOnly},`,
+			"  safe: retained",
+			"}",
+			"{",
+			"  client_secret: prefix",
+			`    ${markers.flowContinued},`,
+			"  safe: retained",
+			"}",
+			"[",
+			"  { client_secret:",
+			`      ${markers.sequenceKeyOnly}, safe: retained },`,
+			"  { client_secret: prefix",
+			`      ${markers.sequenceContinued}, safe: retained }`,
+			"]",
+			`{"client\\u005fsecret":"${markers.escapedClientSecret}","safe":true}`,
+			`{"to\\u006ben":"${markers.escapedToken}"}`,
+			`{"client_secret\\u00ZZ":"${markers.malformedEscapedSecret}"}`,
+		].join("\n"),
+		markers: Object.values(markers),
+	};
+}
+
 function leakedMarkers(value: string, markers: readonly string[]): string[] {
 	return markers.filter((marker) => value.includes(marker));
 }
@@ -1286,4 +1330,641 @@ test("duplicate long-timeout rejection leaves no referenced cancellation-scope t
 	await h.runtime.abort(req.binding.runId);
 	await assert.rejects(running, /abort|cancel/i);
 	assert.equal(referencedAfterRejection, 0);
+});
+
+test("cycle 8 signal listener leases own attach-then-throw, remove-throw, parent, and mutated targets", async () => {
+	type SignalProbe = {
+		signal: AbortSignal;
+		listeners: Set<unknown>;
+		addCalls: number;
+		removeCalls: number;
+	};
+	const probeSignal = (options: { throwAfterAdd?: boolean; throwAfterRemove?: boolean } = {}): SignalProbe => {
+		const signal = new AbortController().signal;
+		const nativeAdd = signal.addEventListener.bind(signal);
+		const nativeRemove = signal.removeEventListener.bind(signal);
+		const probe: SignalProbe = { signal, listeners: new Set(), addCalls: 0, removeCalls: 0 };
+		Object.defineProperty(signal, "addEventListener", {
+			configurable: true,
+			value(type: string, listener: EventListenerOrEventListenerObject, listenerOptions?: AddEventListenerOptions | boolean) {
+				probe.addCalls += 1;
+				nativeAdd(type, listener, listenerOptions);
+				probe.listeners.add(listener);
+				if (options.throwAfterAdd) throw new Error("synthetic attach-after-add failure");
+			},
+		});
+		Object.defineProperty(signal, "removeEventListener", {
+			configurable: true,
+			value(type: string, listener: EventListenerOrEventListenerObject, listenerOptions?: EventListenerOptions | boolean) {
+				probe.removeCalls += 1;
+				nativeRemove(type, listener, listenerOptions);
+				probe.listeners.delete(listener);
+				if (options.throwAfterRemove) throw new Error("synthetic remove-after-detach failure");
+			},
+		});
+		return probe;
+	};
+
+	const attach = probeSignal({ throwAfterAdd: true });
+	const attachHarness = runtime();
+	const attachRequest = request({ signal: attach.signal });
+	attachHarness.sdk.session.output = handoffFor(attachRequest);
+	const attachOutcome = await observeSettlement(attachHarness.runtime.run(attachRequest), 100);
+	const attachClose = await observeSettlement(attachHarness.runtime.close(), 50);
+
+	const remove = probeSignal({ throwAfterRemove: true });
+	const removeHarness = runtime();
+	const removeRequest = request({ signal: remove.signal });
+	removeHarness.sdk.session.output = handoffFor(removeRequest);
+	const removeOutcome = await observeSettlement(removeHarness.runtime.run(removeRequest), 100);
+	const removeClose = await observeSettlement(removeHarness.runtime.close(), 50);
+
+	const original = probeSignal();
+	const replacement = probeSignal();
+	const mutationSdk = new FakeSdk();
+	mutationSdk.blockReload();
+	const mutationHarness = runtime(mutationSdk);
+	const stableRequest = request();
+	let selectedSignal = original.signal;
+	let signalReads = 0;
+	Object.defineProperty(stableRequest, "signal", {
+		configurable: true,
+		enumerable: true,
+		get() {
+			signalReads += 1;
+			return selectedSignal;
+		},
+	});
+	mutationSdk.session.output = handoffFor(stableRequest);
+	const mutationRun = mutationHarness.runtime.run(stableRequest);
+	await waitUntil(() => mutationSdk.loaderOptions !== undefined);
+	selectedSignal = replacement.signal;
+	mutationSdk.reloadGateResolve?.();
+	const mutationOutcome = await observeSettlement(mutationRun, 100);
+	const mutationClose = await observeSettlement(mutationHarness.runtime.close(), 50);
+
+	const parent = probeSignal();
+	const parentHarness = runtime(new FakeSdk(), { parentSignal: parent.signal });
+	const parentClose = await observeSettlement(parentHarness.runtime.close(), 50);
+
+	assert.deepEqual({
+		attach: [attachOutcome.status, attachClose.status, attach.addCalls, attach.removeCalls, attach.listeners.size],
+		remove: [removeOutcome.status, removeClose.status, remove.addCalls, remove.removeCalls, remove.listeners.size],
+		mutation: [mutationOutcome.status, mutationClose.status, signalReads, original.removeCalls, original.listeners.size, replacement.removeCalls],
+		parent: [parentClose.status, parent.addCalls, parent.removeCalls, parent.listeners.size],
+	}, {
+		attach: ["rejected", "resolved", 1, 1, 0],
+		remove: ["rejected", "resolved", 1, 1, 0],
+		mutation: ["resolved", "resolved", 1, 1, 0, 0],
+		parent: ["resolved", 1, 1, 0],
+	});
+});
+
+test("cycle 8 preserves literal undefined validation and cleanup failures", async () => {
+	const validationHarness = runtime();
+	Object.defineProperty(validationHarness.sdk.session, "model", {
+		configurable: true,
+		get() { throw undefined; },
+	});
+	const validationOutcome = await observeSettlement(validationHarness.runtime.run(request()), 100);
+
+	const cleanupHarness = runtime();
+	const cleanupRequest = request();
+	cleanupHarness.sdk.session.output = handoffFor(cleanupRequest);
+	cleanupHarness.sdk.session.dispose = (() => {
+		cleanupHarness.sdk.session.disposeCalls += 1;
+		throw undefined;
+	}) as () => void;
+	const cleanupOutcome = await observeSettlement(cleanupHarness.runtime.run(cleanupRequest), 100);
+	const laterOutcome = await observeSettlement(cleanupHarness.runtime.run(request({
+		binding: { ...cleanupRequest.binding, runId: "after-undefined-cleanup", laneId: "after-undefined-cleanup" },
+	})), 50);
+
+	assert.deepEqual({
+		validation: {
+			status: validationOutcome.status,
+			message: rejectionMessage(validationOutcome),
+			hasCause: validationOutcome.status === "rejected" && validationOutcome.reason instanceof Error
+				? Object.hasOwn(validationOutcome.reason, "cause")
+				: false,
+		},
+		cleanup: {
+			status: cleanupOutcome.status,
+			message: rejectionMessage(cleanupOutcome),
+			hasCause: cleanupOutcome.status === "rejected" && cleanupOutcome.reason instanceof Error
+				? Object.hasOwn(cleanupOutcome.reason, "cause")
+				: false,
+		},
+		later: [laterOutcome.status, /quarantined/i.test(rejectionMessage(laterOutcome))],
+	}, {
+		validation: { status: "rejected", message: "AgentSession run failed", hasCause: true },
+		cleanup: { status: "rejected", message: "AgentSession cleanup/join failed; runtime quarantined", hasCause: true },
+		later: ["rejected", true],
+	});
+});
+
+test("cycle 8 awaits promise-returning unsubscribe and dispose before settling", async () => {
+	const h = runtime();
+	const req = request();
+	h.sdk.session.output = handoffFor(req);
+	const unsubscribeGate = deferredValue<void>();
+	const disposeGate = deferredValue<void>();
+	let unsubscribeCalls = 0;
+	h.sdk.session.subscribe = ((listener: EventListener) => {
+		h.sdk.session.listeners.add(listener);
+		return (() => {
+			unsubscribeCalls += 1;
+			h.sdk.session.listeners.delete(listener);
+			return unsubscribeGate.promise;
+		}) as unknown as () => void;
+	}) as RuntimeAgentSession["subscribe"];
+	h.sdk.session.dispose = (() => {
+		h.sdk.session.disposeCalls += 1;
+		return disposeGate.promise;
+	}) as unknown as () => void;
+
+	const runPromise = h.runtime.run(req);
+	await waitUntil(() => unsubscribeCalls === 1);
+	const beforeUnsubscribe = await observeSettlement(runPromise, 5);
+	unsubscribeGate.resolve(undefined);
+	await waitUntil(() => h.sdk.session.disposeCalls === 1);
+	const beforeDispose = await observeSettlement(runPromise, 5);
+	disposeGate.resolve(undefined);
+	const terminal = await observeSettlement(runPromise, 100);
+
+	assert.deepEqual({
+		beforeUnsubscribe: beforeUnsubscribe.status,
+		beforeDispose: beforeDispose.status,
+		terminal: terminal.status,
+		unsubscribeCalls,
+		disposeCalls: h.sdk.session.disposeCalls,
+	}, {
+		beforeUnsubscribe: "pending",
+		beforeDispose: "pending",
+		terminal: "resolved",
+		unsubscribeCalls: 1,
+		disposeCalls: 1,
+	});
+});
+
+test("cycle 8 assimilates rejecting cleanup thenables and quarantines once", async () => {
+	const rejectingUndefined = {
+		then(_resolve: unknown, reject: ((reason: unknown) => unknown) | undefined) {
+			reject?.(undefined);
+		},
+	} as unknown as PromiseLike<void>;
+	const observations: Array<Record<string, unknown>> = [];
+	for (const hook of ["unsubscribe", "dispose"] as const) {
+		const h = runtime();
+		const req = request({ binding: { ...request().binding, runId: `thenable-${hook}`, laneId: `thenable-${hook}` } });
+		h.sdk.session.output = handoffFor(req);
+		let unsubscribeCalls = 0;
+		if (hook === "unsubscribe") {
+			h.sdk.session.subscribe = ((listener: EventListener) => {
+				h.sdk.session.listeners.add(listener);
+				return (() => {
+					unsubscribeCalls += 1;
+					h.sdk.session.listeners.delete(listener);
+					return rejectingUndefined;
+				}) as unknown as () => void;
+			}) as RuntimeAgentSession["subscribe"];
+		} else {
+			h.sdk.session.dispose = (() => {
+				h.sdk.session.disposeCalls += 1;
+				return rejectingUndefined;
+			}) as unknown as () => void;
+		}
+		const outcome = await observeSettlement(h.runtime.run(req), 100);
+		const later = await observeSettlement(h.runtime.run(request({
+			binding: { ...req.binding, runId: `after-${hook}`, laneId: `after-${hook}` },
+		})), 50);
+		observations.push({
+			hook,
+			status: outcome.status,
+			hasCause: outcome.status === "rejected" && outcome.reason instanceof Error
+				? Object.hasOwn(outcome.reason, "cause")
+				: false,
+			laterQuarantined: later.status === "rejected" && /quarantined/i.test(rejectionMessage(later)),
+			unsubscribeCalls,
+			disposeCalls: h.sdk.session.disposeCalls,
+		});
+	}
+
+	assert.deepEqual(observations, [
+		{ hook: "unsubscribe", status: "rejected", hasCause: true, laterQuarantined: true, unsubscribeCalls: 1, disposeCalls: 1 },
+		{ hook: "dispose", status: "rejected", hasCause: true, laterQuarantined: true, unsubscribeCalls: 0, disposeCalls: 1 },
+	]);
+});
+
+test("cycle 8 reads request accessors once and freezes the normalized snapshot across reload", async () => {
+	const source = request({
+		deadlineAt: Date.now() + 1_000,
+		signal: new AbortController().signal,
+	});
+	const reads = new Map<string, number>();
+	const tracked = {} as RoleRunRequest;
+	for (const key of Object.keys(source) as Array<keyof RoleRunRequest>) {
+		Object.defineProperty(tracked, key, {
+			configurable: true,
+			enumerable: true,
+			get() {
+				reads.set(key, (reads.get(key) ?? 0) + 1);
+				return source[key];
+			},
+		});
+	}
+	const accessorHarness = runtime();
+	accessorHarness.sdk.session.output = handoffFor(source);
+	const accessorOutcome = await observeSettlement(accessorHarness.runtime.run(tracked), 100);
+	const observedReads = Object.fromEntries([...reads.entries()].sort(([left], [right]) => left.localeCompare(right)));
+
+	const mutationSdk = new FakeSdk();
+	mutationSdk.blockReload();
+	const mutationHarness = runtime(mutationSdk);
+	const mutationRequest = request();
+	const originalCwd = mutationRequest.workspace.cwd;
+	const originalHead = mutationRequest.binding.candidateHead;
+	const originalTask = mutationRequest.task;
+	mutationSdk.session.output = handoffFor(mutationRequest);
+	const mutationRun = mutationHarness.runtime.run(mutationRequest);
+	await waitUntil(() => mutationSdk.loaderOptions !== undefined);
+	(mutationRequest.workspace as { cwd: string }).cwd = "/mutated/outside";
+	mutationRequest.task = "MUTATED TASK MUST NOT REACH THE PROMPT";
+	mutationRequest.context.push("MUTATED CONTEXT MUST NOT REACH THE PROMPT");
+	mutationRequest.authority.branch = "main";
+	mutationRequest.authority.workspaceId = "mutated-workspace";
+	mutationRequest.authority.writePrefixes.splice(0, mutationRequest.authority.writePrefixes.length, "other/path");
+	mutationRequest.binding.candidateHead = "b".repeat(40);
+	mutationRequest.binding.validationNonce = "mutated-nonce-475";
+	mutationSdk.reloadGateResolve?.();
+	const mutationOutcome = await observeSettlement(mutationRun, 100);
+
+	assert.deepEqual({
+		accessorStatus: accessorOutcome.status,
+		allAccessorsReadOnce: Object.values(observedReads).every((count) => count === 1),
+		observedReads,
+		mutationStatus: mutationOutcome.status,
+		createCwd: mutationSdk.options?.cwd,
+		loaderCwd: mutationSdk.loaderOptions?.cwd,
+		promptRetainedTask: mutationSdk.session.lastPrompt.includes(originalTask),
+		promptContainsMutation: mutationSdk.session.lastPrompt.includes("MUTATED"),
+		resultHead: mutationOutcome.status === "resolved" ? originalHead : undefined,
+	}, {
+		accessorStatus: "resolved",
+		allAccessorsReadOnce: true,
+		observedReads: Object.fromEntries(Object.keys(source).sort().map((key) => [key, 1])),
+		mutationStatus: "resolved",
+		createCwd: originalCwd,
+		loaderCwd: originalCwd,
+		promptRetainedTask: true,
+		promptContainsMutation: false,
+		resultHead: originalHead,
+	});
+});
+
+test("cycle 8 hostile authority accessors cannot bypass the mutator fence", async () => {
+	const sdk = new FakeSdk();
+	sdk.blockReload();
+	const h = runtime(sdk);
+	const baseAuthority = request().authority;
+	let readOnlyReads = 0;
+	Object.defineProperty(baseAuthority, "readOnly", {
+		configurable: true,
+		enumerable: true,
+		get() {
+			readOnlyReads += 1;
+			return readOnlyReads === 1 ? false : true;
+		},
+	});
+	const firstRequest = request({ authority: baseAuthority });
+	const firstRun = h.runtime.run(firstRequest);
+	await waitUntil(() => sdk.loaderOptions !== undefined);
+	const secondRequest = request({
+		binding: { ...request().binding, runId: "second-mutator", laneId: "second-mutator" },
+	});
+	const secondRun = h.runtime.run(secondRequest);
+	const secondOutcome = await observeSettlement(secondRun, 10);
+	const closePromise = h.runtime.close();
+	sdk.reloadGateResolve?.();
+	await Promise.allSettled([firstRun, secondRun, closePromise]);
+
+	assert.deepEqual({
+		readOnlyReads,
+		secondStatus: secondOutcome.status,
+		secondRejectedByFence: /mutating|concurrency/i.test(rejectionMessage(secondOutcome)),
+	}, {
+		readOnlyReads: 1,
+		secondStatus: "rejected",
+		secondRejectedByFence: true,
+	});
+});
+
+test("cycle 8 admits bounded disjoint mutator leases and releases only the completed authority", async () => {
+	class ConcurrentFakeSdk extends FakeSdk {
+		readonly sessions: Array<{ cwd: string; session: FakeSession }> = [];
+
+		override async createAgentSession(options: CreateAgentSessionOptions): Promise<RuntimeCreationResult> {
+			this.options = options as unknown as Record<string, unknown>;
+			const thinking = options.thinkingLevel;
+			const cwd = options.cwd;
+			assert.ok(thinking === "high" || thinking === "xhigh");
+			if (typeof cwd !== "string") throw new Error("test SDK requires a cwd");
+			const session = new FakeSession();
+			session.thinkingLevel = thinking;
+			session.activeTools = [...(options.tools as string[])];
+			session.blockPrompt();
+			this.sessions.push({ cwd, session });
+			return { session, extensionsResult: { extensions: [], errors: [] } };
+		}
+	}
+
+	const scopedRequest = (scope: "a" | "b" | "c", generation = 1): RoleRunRequest => {
+		const workspaceId = `workspace-475-${scope}`;
+		const cwd = `/opaque/worktrees/issue-475-${scope}`;
+		const prefix = `.planning/phases/475-${scope}`;
+		return request({
+			workspace: { ...workspace(), id: workspaceId, cwd },
+			authority: {
+				...request().authority,
+				issue: 4750 + scope.charCodeAt(0),
+				branch: `feat/475-${scope}`,
+				workspaceId,
+				readPrefixes: [prefix],
+				writePrefixes: [prefix],
+			},
+			binding: {
+				...request().binding,
+				runId: `run-475-${scope}-${generation}`,
+				generation,
+				laneId: `implementation-475-${scope}-${generation}`,
+			},
+		});
+	};
+	const complete = async (sdk: ConcurrentFakeSdk, req: RoleRunRequest): Promise<void> => {
+		const record = [...sdk.sessions].reverse().find(({ cwd }) => cwd === req.workspace.cwd);
+		assert.ok(record, `missing session for ${req.workspace.cwd}`);
+		record.session.output = handoffFor(req, {
+			changedPaths: [`${req.authority.writePrefixes[0]}/result.ts`],
+		});
+		record.session.promptGateResolve?.();
+	};
+
+	const sdk = new ConcurrentFakeSdk();
+	const h = runtime(sdk, { maxConcurrency: 2 });
+	const a = scopedRequest("a");
+	const b = scopedRequest("b");
+	const c = scopedRequest("c");
+	const runA = h.runtime.run(a);
+	await waitUntil(() => sdk.sessions.some(({ cwd, session }) => cwd === a.workspace.cwd && session.promptCalls === 1));
+	const runB = h.runtime.run(b);
+	const bAdmission = await observeSettlement(runB, 10);
+	const aCollision = await observeSettlement(h.runtime.run(scopedRequest("a", 2)), 20);
+	const capacity = await observeSettlement(h.runtime.run(c), 20);
+
+	await complete(sdk, a);
+	const aOutcome = await observeSettlement(runA, 50);
+	const bAfterA = await observeSettlement(runB, 10);
+	const aReplacement = scopedRequest("a", 3);
+	const replacementRun = h.runtime.run(aReplacement);
+	const replacementAdmission = await observeSettlement(replacementRun, 10);
+	const bCollision = await observeSettlement(h.runtime.run(scopedRequest("b", 2)), 20);
+
+	await complete(sdk, aReplacement);
+	const replacementOutcome = await observeSettlement(replacementRun, 50);
+	if (sdk.sessions.some(({ cwd }) => cwd === b.workspace.cwd)) await complete(sdk, b);
+	const bOutcome = await observeSettlement(runB, 50);
+	const closeOutcome = await observeSettlement(h.runtime.close(), 50);
+
+	assert.deepEqual({
+		bAdmission: bAdmission.status,
+		aCollision: aCollision.status,
+		aCollisionDenied: /mutating|overlap|collid|lease/i.test(rejectionMessage(aCollision)),
+		capacity: capacity.status,
+		capacityDeniedByBound: /concurrency|limit/i.test(rejectionMessage(capacity)),
+		aOutcome: aOutcome.status,
+		bAfterA: bAfterA.status,
+		replacementAdmission: replacementAdmission.status,
+		bCollision: bCollision.status,
+		bCollisionDenied: /mutating|overlap|collid|lease/i.test(rejectionMessage(bCollision)),
+		replacementOutcome: replacementOutcome.status,
+		bOutcome: bOutcome.status,
+		closeOutcome: closeOutcome.status,
+		sessions: sdk.sessions.map(({ cwd, session }) => [cwd, session.disposeCalls]),
+	}, {
+		bAdmission: "pending",
+		aCollision: "rejected",
+		aCollisionDenied: true,
+		capacity: "rejected",
+		capacityDeniedByBound: true,
+		aOutcome: "resolved",
+		bAfterA: "pending",
+		replacementAdmission: "pending",
+		bCollision: "rejected",
+		bCollisionDenied: true,
+		replacementOutcome: "resolved",
+		bOutcome: "resolved",
+		closeOutcome: "resolved",
+		sessions: [
+			[a.workspace.cwd, 1],
+			[b.workspace.cwd, 1],
+			[aReplacement.workspace.cwd, 1],
+		],
+	});
+});
+
+test("cycle 8 runtime options reject one above every hard size, count, concurrency, and timer ceiling", async () => {
+	const cases = [
+		["maxConcurrency", { maxConcurrency: 32 + 1 }],
+		["maxEvents", { maxEvents: 65_536 + 1 }],
+		["maxEventBytes", { maxEventBytes: 16 * 1024 * 1024 + 1 }],
+		["maxAssistantBytes", { maxAssistantBytes: 1024 * 1024 + 1 }],
+		["cleanupTimeoutMs", { cleanupTimeoutMs: 24 * 60 * 60 * 1_000 + 1 }],
+		["cleanupTimeoutMs-node", { cleanupTimeoutMs: 2_147_483_647 + 1 }],
+	] as const;
+	const accepted: string[] = [];
+	for (const [name, options] of cases) {
+		try {
+			new ShepherdAgentSessionRuntime(new FakeSdk(), options);
+			accepted.push(name);
+		} catch (error) {
+			assert.match(String(error), /bound|maximum|max|limit|exceed/i, name);
+		}
+	}
+	const timeoutOutcome = await observeSettlement(runtime().runtime.run(request({
+		timeoutMs: 24 * 60 * 60 * 1_000 + 1,
+	})), 50);
+
+	assert.deepEqual({
+		accepted,
+		timeoutStatus: timeoutOutcome.status,
+		timeoutRejectedByCeiling: /bound|timeout|limit/i.test(rejectionMessage(timeoutOutcome)),
+	}, {
+		accepted: [],
+		timeoutStatus: "rejected",
+		timeoutRejectedByCeiling: true,
+	});
+});
+
+test("cycle 8 event accounting rejects bounded, deep, accessor, and cyclic events before materialization", async () => {
+	const probes: Array<{ name: string; event: Record<string, unknown>; materializations(): number }> = [];
+	let toJSONCalls = 0;
+	probes.push({
+		name: "toJSON",
+		event: {
+			type: "adversarial",
+			toJSON() {
+				toJSONCalls += 1;
+				return { type: "adversarial", payload: "x".repeat(10_000) };
+			},
+		},
+		materializations: () => toJSONCalls,
+	});
+	let accessorCalls = 0;
+	const accessorEvent: Record<string, unknown> = { type: "adversarial" };
+	Object.defineProperty(accessorEvent, "payload", {
+		enumerable: true,
+		get() {
+			accessorCalls += 1;
+			return "x".repeat(10_000);
+		},
+	});
+	probes.push({ name: "accessor", event: accessorEvent, materializations: () => accessorCalls });
+	let deepAccessorCalls = 0;
+	const deepRoot: Record<string, unknown> = { type: "adversarial" };
+	let deepCursor = deepRoot;
+	for (let index = 0; index < 512; index += 1) {
+		const next: Record<string, unknown> = {};
+		deepCursor.next = next;
+		deepCursor = next;
+	}
+	Object.defineProperty(deepCursor, "payload", {
+		enumerable: true,
+		get() {
+			deepAccessorCalls += 1;
+			return "deep materialization";
+		},
+	});
+	probes.push({ name: "deep", event: deepRoot, materializations: () => deepAccessorCalls });
+	const cyclicEvent: Record<string, unknown> = { type: "adversarial" };
+	cyclicEvent.self = cyclicEvent;
+	probes.push({ name: "cycle", event: cyclicEvent, materializations: () => 0 });
+
+	const observations: Array<Record<string, unknown>> = [];
+	for (const probe of probes) {
+		const h = runtime(new FakeSdk(), { maxEventBytes: 128 });
+		h.sdk.session.prompt = async function () {
+			this.promptCalls += 1;
+			for (const listener of this.listeners) listener(probe.event as unknown as AgentSessionEvent);
+		};
+		const outcome = await observeSettlement(h.runtime.run(request({
+			binding: { ...request().binding, runId: `event-${probe.name}`, laneId: `event-${probe.name}` },
+		})), 100);
+		observations.push({
+			name: probe.name,
+			status: outcome.status,
+			boundedFailure: /event|bound|serializ|cycle|depth|accessor/i.test(rejectionMessage(outcome)),
+			materializations: probe.materializations(),
+		});
+	}
+
+	assert.deepEqual(observations, probes.map((probe) => ({
+		name: probe.name,
+		status: "rejected",
+		boundedFailure: true,
+		materializations: 0,
+	})));
+});
+
+test("cycle 8 canonical normalized prefixes are identical in tools, prompts, and handoff validation", async () => {
+	const h = runtime();
+	const req = request({
+		authority: {
+			...request().authority,
+			readPrefixes: [".pi//extensions/shepherd/", ".planning//phases/475-shepherd-agent-session-runtime/"],
+			writePrefixes: [".pi//extensions/shepherd/", ".planning//phases/475-shepherd-agent-session-runtime/"],
+		},
+	});
+	h.sdk.session.output = handoffFor(req, {
+		changedPaths: [".pi/extensions/shepherd/agent-session-runtime.ts"],
+	});
+	const outcome = await observeSettlement(h.runtime.run(req), 100);
+	const systemPrompt = String(h.sdk.loaderOptions?.systemPrompt);
+
+	assert.deepEqual({
+		status: outcome.status,
+		canonicalReadPrefix: systemPrompt.includes(".pi/extensions/shepherd"),
+		canonicalWritePrefix: systemPrompt.includes(".planning/phases/475-shepherd-agent-session-runtime"),
+		rawPrefixAbsent: !systemPrompt.includes(".pi//extensions") && !systemPrompt.includes("475-shepherd-agent-session-runtime/"),
+		changedPaths: outcome.status === "resolved" ? outcome : undefined,
+	}, {
+		status: "resolved",
+		canonicalReadPrefix: true,
+		canonicalWritePrefix: true,
+		rawPrefixAbsent: true,
+		changedPaths: { status: "resolved" },
+	});
+});
+
+test("cycle 8 handoff string fields reject C0 and C1 terminal controls", async () => {
+	const cases: Array<[string, Record<string, unknown>]> = [
+		["summary-escape", { summary: "unsafe\u001b[31mred" }],
+		["summary-c1", { summary: "unsafe\u009b31mred" }],
+		["finding-backspace", { findings: ["unsafe\btext"] }],
+		["verification-name-form-feed", { verification: [{ name: "unsafe\fname", status: "passed", summary: "ok" }] }],
+		["verification-summary-c1", { verification: [{ name: "focused", status: "passed", summary: "unsafe\u0085summary" }] }],
+	];
+	const accepted: string[] = [];
+	for (const [name, override] of cases) {
+		const h = runtime();
+		const req = request({ binding: { ...request().binding, runId: name, laneId: name } });
+		h.sdk.session.output = handoffFor(req, override);
+		const outcome = await observeSettlement(h.runtime.run(req), 100);
+		if (outcome.status === "resolved") accepted.push(name);
+		else assert.match(rejectionMessage(outcome), /handoff|bounded|string|control|terminal/i, name);
+	}
+	assert.deepEqual(accepted, []);
+});
+
+test("cycle 8 serialized prompts apply comma, multiline-flow, and escaped-key parser closure", async () => {
+	const taskPayload = cycle8SecretPayload("prompt-task");
+	const contextPayload = cycle8SecretPayload("prompt-context");
+	const h = runtime();
+	const req = request({ task: taskPayload.value, context: [contextPayload.value] });
+	h.sdk.session.output = handoffFor(req);
+	await h.runtime.run(req);
+
+	const serializedPrompts = `${String(h.sdk.loaderOptions?.systemPrompt)}\n${h.sdk.session.lastPrompt}`;
+	assert.deepEqual(leakedMarkers(serializedPrompts, [
+		...taskPayload.markers,
+		...contextPayload.markers,
+	]), []);
+	assert.match(serializedPrompts, /\[REDACTED\]/);
+});
+
+test("cycle 8 handoff summary, finding, and verification strings share the complete parser closure", async () => {
+	const summaryPayload = cycle8SecretPayload("handoff-summary");
+	const findingPayload = cycle8SecretPayload("handoff-finding");
+	const verificationPayload = cycle8SecretPayload("handoff-verification");
+	const verificationNameMarker = "synthetic-handoff-verification-name-digest-475";
+	const h = runtime();
+	const req = request();
+	h.sdk.session.output = handoffFor(req, {
+		summary: summaryPayload.value,
+		findings: [findingPayload.value],
+		verification: [{
+			name: `Authorization: Digest response="${verificationNameMarker}"`,
+			status: "passed",
+			summary: verificationPayload.value,
+		}],
+	});
+
+	const result = await h.runtime.run(req);
+	const serialized = JSON.stringify(result);
+	assert.deepEqual(leakedMarkers(serialized, [
+		...summaryPayload.markers,
+		...findingPayload.markers,
+		...verificationPayload.markers,
+		verificationNameMarker,
+	]), []);
+	assert.match(serialized, /\[REDACTED\]/);
 });
