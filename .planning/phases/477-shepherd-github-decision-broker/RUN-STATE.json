@@ -74,6 +74,11 @@
         "cycle": "lock-snapshot-correction-plan",
         "decision": "local_critical_path",
         "reason": "The remaining race shares the owned lock implementation/test scope and requires one ordered high-contention RED-before-GREEN history."
+      },
+      {
+        "cycle": "lock-snapshot-correction-tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "Captured genuine high-contention RED at 18 pass and 1 failure, reproducing both ENOENT and invalid-owner snapshot races while stable malformed-lock coverage remained green."
       }
     ],
     "humanGates": [
@@ -86,5 +91,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T14:30:31.000Z"
+  "updatedAt": "2026-07-21T14:32:28.000Z"
 }

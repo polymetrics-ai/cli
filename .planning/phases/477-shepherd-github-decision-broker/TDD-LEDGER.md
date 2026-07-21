@@ -133,4 +133,16 @@ section. The current implementation is expected to reject benign candidate-to-ac
 active-to-released snapshot races with `ENOENT` or `human decision lock owner record is invalid`.
 
 Stable malformed-lock coverage remains required so retrying vanished entries cannot turn malformed
-live state into an availability bypass. RED result pending.
+live state into an availability bypass.
+
+RED command, before any lock implementation edit:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts
+```
+
+Result: exit 1; 19 tests total, 18 passed, 1 failed, 0 skipped; duration 889.260542 ms.
+The three-round, 32-independent-repository contention case failed in round 0 with both expected
+failure kinds: `ENOENT` from a vanished candidate path and `invalid-owner` when transition/release
+occurred between metadata and owner reads. The stable malformed live-lock test passed, preserving
+the fail-closed baseline that the implementation must retain.

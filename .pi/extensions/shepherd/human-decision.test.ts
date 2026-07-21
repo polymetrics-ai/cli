@@ -260,6 +260,72 @@ test("publishes a complete atomic lock owner record before entering a transactio
 	assert.match(value, /^[0-9a-f-]{36}$/);
 });
 
+test("rescans candidate transitions and active releases under high contention", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-lock-snapshot-race-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+
+	for (let round = 0; round < 3; round += 1) {
+		let active = 0;
+		let maximumActive = 0;
+		const contenders = Array.from({ length: 32 }, (_, index) => {
+			const repository = new FileHumanDecisionRepository(root, {
+				lockRetryMs: 1,
+				lockMaxAttempts: 2_000,
+			});
+			return repository.transact(`req-race-${round}`, async () => {
+				active += 1;
+				maximumActive = Math.max(maximumActive, active);
+				try {
+					await new Promise((resolve) => setTimeout(resolve, 2));
+					return { state: null, value: index };
+				} finally {
+					active -= 1;
+				}
+			});
+		});
+		const settled = await Promise.allSettled(contenders);
+		const failureKinds = [...new Set(settled
+			.filter((result): result is PromiseRejectedResult => result.status === "rejected")
+			.map((result) => {
+				if (!(result.reason instanceof Error)) return "non-error rejection";
+				const code = (result.reason as NodeJS.ErrnoException).code;
+				if (code) return code;
+				return /lock owner record is invalid/i.test(result.reason.message)
+					? "invalid-owner"
+					: result.reason.name;
+			}))];
+		assert.deepEqual(failureKinds, [], `round ${round} leaked benign lock-snapshot races`);
+		assert.equal(maximumActive, 1, `round ${round} admitted overlapping lock owners`);
+		assert.deepEqual(
+			settled.map((result) => result.status === "fulfilled" ? result.value : -1).sort((left, right) => left - right),
+			Array.from({ length: 32 }, (_, index) => index),
+		);
+		assert.deepEqual(
+			(await readdir(root)).filter((name) => name.startsWith(`req-race-${round}.lock.`)),
+			[],
+			`round ${round} leaked a lock after bounded completion`,
+		);
+	}
+});
+
+test("a stable malformed live lock still fails closed", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-malformed-live-lock-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const token = "44444444-4444-4444-8444-444444444444";
+	const lockPath = join(root, `req-477.lock.${token}.active`);
+	await writeFile(lockPath, '{"schemaVersion":1,"pid":', { mode: 0o600 });
+	const repository = new FileHumanDecisionRepository(root, {
+		lockRetryMs: 1,
+		lockMaxAttempts: 3,
+		lockStaleMs: 60_000,
+	});
+	await assert.rejects(
+		repository.transact("req-477", () => ({ state: null, value: undefined })),
+		/lock owner record is invalid/i,
+	);
+	assert.equal(await readFile(lockPath, "utf8"), '{"schemaVersion":1,"pid":');
+});
+
 test("an obsolete lock owner cannot delete a replacement lock during release", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-fenced-release-"));
 	t.after(() => rm(root, { recursive: true, force: true }));
