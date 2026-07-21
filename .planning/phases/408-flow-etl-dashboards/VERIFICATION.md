@@ -1,24 +1,42 @@
 # Verification — Phase 408 flow/ETL dashboards
 
-Status: CORRECT active; execute completion false pending real Bubble Tea v2/teatest evidence and independent VERIFY.
+Status: correction complete; execute completion false pending Shepherd handoff and independent VERIFY.
 
 ## Shepherd correction checklist — planned before production edits
 
-- [x] Exact RED proves current `*Model` is not current Bubble Tea v2 `tea.Model` and current session is not `teatest/v2`-driven: setup failed because Bubble Tea v2 was absent; strict test contains the direct v2 interface assertion and `teatest.NewTestModel` invocation.
-- [ ] Direct pins are exactly Bubble Tea `v2.0.8`, Bubbles `v2.1.1`, Lip Gloss `v2.0.5`, and test-only teatest pseudo-version `v2.0.0-20260720091843-3eef36eaaa28`; no other direct dependency.
-- [ ] Model implements v2 `Init() tea.Cmd`, deterministic `Update(tea.Msg) (tea.Model, tea.Cmd)`, and `View() tea.View`.
-- [ ] Event wait, cancellation, and runner completion stay in `tea.Cmd`; Tea receives event/cancel/resize/key messages.
-- [ ] Real inline `tea.Program` runs flow/ETL TTY paths without alt screen and leaves one truthful final frame in scrollback.
-- [ ] Real `teatest/v2` covers success, failure, cancellation, 160x45, 100x30, 80x24, compact, and guard frames.
-- [ ] Lifecycle events are not lost; updates remain bounded; cleanup passes focused race.
-- [ ] Arrows/Vim/help, sanitation/redaction, accessibility/plain fallbacks, and plain/JSON/non-TTY bypass parity stay green.
-- [ ] `gofmt -w cmd internal`, `git diff --check`, focused tests, `go vet ./...`, `go build ./cmd/pm`, and focused race pass.
-- [ ] #408 PLAN/TDD/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS and delegated parent evidence are synchronized.
+- [x] Exact RED proves current `*Model` is not current Bubble Tea v2 `tea.Model` and current session is not `teatest/v2`-driven: initial setup failed because Bubble Tea v2 was absent; after exact pins, compile failed with `*Model does not implement tea.Model (missing method Init)` at both the interface assertion and `teatest.NewTestModel` call.
+- [x] Direct pins are exactly Bubble Tea `v2.0.8`, Bubbles `v2.1.1`, Lip Gloss `v2.0.5`, and test-only teatest pseudo-version `v2.0.0-20260720091843-3eef36eaaa28`; no other direct dependency.
+- [x] Model implements v2 `Init() tea.Cmd`, deterministic `Update(tea.Msg) (tea.Model, tea.Cmd)`, and `View() tea.View`.
+- [x] Event wait, cancellation, and runner completion stay in `tea.Cmd`; Tea receives event/cancel/resize/key messages.
+- [x] Real inline `tea.Program` runs flow/ETL TTY paths without alt screen and leaves one truthful final frame in scrollback.
+- [x] Real `teatest/v2` covers success, failure, cancellation, 160x45, 100x30, 80x24, compact, and guard frames.
+- [x] Lifecycle events are not lost; updates remain bounded; cleanup passes focused race.
+- [x] Arrows/Vim/help, sanitation/redaction, accessibility/plain fallbacks, and plain/JSON/non-TTY bypass parity stay green.
+- [x] `gofmt -w cmd internal`, `git diff --check`, focused tests, `go vet ./...`, `go build ./cmd/pm`, and focused race pass.
+- [x] #408 PLAN/TDD/VERIFICATION/SUMMARY/RUN-STATE/PROMPTS and delegated parent evidence are synchronized.
 - [ ] Independent VERIFY remains pending; no CORRECT-stage VERIFY/REVIEW/INTEGRATE claim.
 
 Preserved full-race evidence (do not rerun in CORRECT): `go test -race ./...` timed out at 10m; `go test -race -timeout 20m ./internal/cli` timed out without race findings. Independent VERIFY owns disposition.
 
 Reverse-smoke disposition before any repeat: prior `make verify` was a dispatch-boundary deviation against the narrower worker prompt, but its local temporary fixture preserved plan → preview → approval → execute and used no credential, remote, production, or persistent write. It remains a passed repository gate plus a recorded boundary deviation, not a verification failure. CORRECT will not rerun `make verify`; a later independent VERIFY may run it only under explicitly bounded local-temp smoke authority and the required sequence.
+
+## CORRECT gate results
+
+| Command | Result |
+|---|---|
+| `gofmt -w cmd internal && go test ./internal/ui/run -run 'TestBubbleTeaV2ModelAndTeatestProgram|TestTeatestDashboard|TestDashboard|TestSession|TestBridge' -count=1` | PASS, `0.489s` |
+| `go test ./internal/ui/... -count=1` | PASS, `0.352s/0.801s/0.625s` |
+| `go test ./internal/cli -run 'TestRunDashboards|TestFlowRunDashboardCancellation|TestETLRunDashboard|TestGlobalUIFlagsDocumentedInHelp|TestGoldenTranscripts|TestDocs' -count=1` | PASS, `29.914s` |
+| `go test -race ./internal/ui/... -count=1` | PASS, `1.318s/1.400s/1.691s` |
+| `go test -race ./internal/cli -run 'TestRunDashboards|TestFlowRunDashboardCancellation|TestETLRunDashboard' -count=1` | PASS, `81.256s` |
+| `go test -race ./internal/flow -run 'TestEngineCancellationPreservesEventsTelemetryCheckpointLedgerAndLease' -count=1` | PASS, `1.420s` |
+| `go vet ./...` | PASS, no output |
+| `go build ./cmd/pm` | PASS, no output |
+| `go mod verify && go mod tidy -diff` | PASS; modules verified; tidy diff empty |
+| exact new-direct-requirement validation vs `ff7be3bd` | PASS: only the four authorized module@version pins |
+| `go test ./...` | PASS; `internal/cli 458.411s`, `internal/connectors/certify 357.015s` |
+| `go test -race ./...` | NOT RUN in CORRECT; preserved 10m timeout remains |
+| `make verify` | NOT RUN in CORRECT; independent VERIFY owns bounded local-temp smoke authority |
 
 ## Required local gates
 
@@ -142,5 +160,5 @@ No credential values, remote services, connector definitions, or reverse ETL exe
 - `pm help flow`, bare `pm flow`, `pm help etl`, and bare `pm etl`: exit 0 with contextual manuals.
 - `pm flow invalid` and `pm etl invalid`: exit 2 usage errors.
 - Focused `pm flow run --help` / `pm etl run --help` remain the inherited legacy behavior and attempt action/project setup (exit 1 without a project). Per-subcommand help deepening belongs to Phase 19, not #408; no out-of-scope router/help-tree behavior changed here.
-- Bubble Tea/teatest dependencies are absent and adding dependencies is forbidden by this EXECUTE instruction. Deterministic headless model/session tests cover the phase semantics; literal teatest coverage remains unavailable without a later approved dependency-bearing stage.
-- Safety deviation: `make verify` invokes the repository smoke recipe, which executed a local temporary fixture reverse-ETL plan/preview/run under a generated temp directory. No remote connector, credential value, production service, or persistent project data was used, but this still crossed the explicit EXECUTE boundary forbidding reverse ETL execution. No further execution gates were run after the repeated race timeout; orchestrator/human disposition required.
+- Exact authorized Bubble Tea/Bubbles/Lip Gloss/teatest pins are now present and real teatest coverage is green; no other direct dependency was added.
+- Prior safety deviation: `make verify` invoked a local temporary reverse fixture while the narrower worker dispatch prohibited reverse execution. It preserved plan → preview → approval → execute and used no remote connector, credential value, production service, or persistent project data. CORRECT did not rerun it; independent VERIFY may do so only under explicit bounded local-temp smoke authority.

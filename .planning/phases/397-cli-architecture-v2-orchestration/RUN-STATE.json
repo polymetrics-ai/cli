@@ -3,7 +3,7 @@
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "correction_worker_in_progress",
+  "status": "correction_complete_waiting_for_shepherd",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "currentHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
   "executeComplete": false,
@@ -450,6 +450,15 @@
         413
       ],
       "reason": "#413 still collides with #408 command/help/docs/golden surfaces; #419 remains separately human-deferred with no beta or other dependency approval."
+    },
+    {
+      "cycle": "unit_408_shepherd_correct_handoff",
+      "timestamp": "2026-07-21T00:01:00Z",
+      "decision": "not_spawned_verification_blocked",
+      "issues": [
+        408
+      ],
+      "reason": "#408 correction implementation and focused gates pass at c70ecf64; execute completion remains false pending independent VERIFY; no parent verification or review claimed."
     }
   ],
   "units": [
@@ -679,19 +688,39 @@
         "dispositionSummary": "Umbrella dependency state complete on parent branch; final parent/main review still pending.",
         "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557"
       }
+    },
+    {
+      "issue": 408,
+      "branch": "feat/408-flow-etl-dashboards",
+      "startingHead": "ff7be3bd8509684257f7d7a73e6fb9735f4baf80",
+      "implementationHead": "c70ecf64",
+      "status": "correction_complete_waiting_for_shepherd",
+      "worker": "Sol/high correction worker",
+      "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards",
+      "verification": "Strict RED, real teatest GREEN, focused/full non-race, focused race, vet, build, direct-pin, and module gates pass; full race and make verify not rerun in CORRECT.",
+      "automatedReview": {
+        "primaryRoute": "blocked",
+        "status": "pending",
+        "headSha": "c70ecf64",
+        "reviewedRange": "",
+        "coverageRoute": "blocked",
+        "fallbackRoute": "human",
+        "dispositionSummary": "No review invoked or claimed; independent VERIFY remains pending.",
+        "dispositionUrl": ""
+      }
     }
   ],
   "readyQueue": [
     {
       "issue": 408,
-      "status": "correction_in_progress",
+      "status": "correction_complete_waiting_for_shepherd",
       "dependencies": [
         405,
         462
       ],
       "writeScope": "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity",
       "decision": "local_critical_path",
-      "reason": "Shepherd RETRY at ff7be3bd: exact Phase-10 Charm pins approved; real Bubble Tea v2/teatest correction active; execute completion false pending independent VERIFY.",
+      "reason": "Shepherd correction complete at c70ecf64 with exact Phase-10 Charm pins; execute completion false pending independent VERIFY.",
       "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards",
       "branch": "feat/408-flow-etl-dashboards"
     },
@@ -831,7 +860,7 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T23:36:04Z",
+  "updatedAt": "2026-07-21T00:01:00Z",
   "mainSync": {
     "baseBeforeSync": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
     "originMain": "74ab381eb8236305170ffd44d5aed74f8d0d2936",

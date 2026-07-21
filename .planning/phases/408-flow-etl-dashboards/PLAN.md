@@ -1,6 +1,6 @@
 # Phase 408 — Flow/ETL run dashboards
 
-Status: CORRECT ACTIVE / execute completion false pending Shepherd retry and independent VERIFY
+Status: CORRECTION COMPLETE / execute completion false pending Shepherd handoff and independent VERIFY
 Issue: #408 `feat(ui): add flow and ETL run dashboards`  
 Parent: #397, base `feat/cli-architecture-v2`, parent PR #438  
 Worker branch: `feat/408-flow-etl-dashboards`  
@@ -126,7 +126,7 @@ Add focused failing tests before production code:
 
 Expected RED: tests fail to compile or assert missing dashboard package/wiring.
 
-### Slice 2 — Minimal GREEN dashboard package — FOCUSED GREEN RECORDED; LIVE LOOP HARDENING IN PROGRESS
+### Slice 2 — Minimal GREEN dashboard package — SUPERSEDED BY SHEPHERD CORRECTION; REAL TEA GREEN RECORDED ABOVE
 
 - Implement `internal/ui/run` (or existing UI package if present) with pure model state and renderer.
 - Consume small view DTOs + `events.Event`; do not import business packages into `internal/ui/**`.
@@ -191,7 +191,7 @@ Correction order:
 4. Run focused GREEN/refactor/race gates, vet, build, and full non-race tests as feasible. Do **not** rerun `make verify` or full race during CORRECT. Independent VERIFY owns those gates and the preserved timeout disposition.
 5. Commit/push coherent RED, GREEN, and synchronized artifact checkpoints. Do not invoke VERIFY/REVIEW/INTEGRATE or open a sub-PR.
 
-Correction execution decision: `local_critical_path` — exactly one isolated Sol/high correction worker; no subagent tool and no other live worker. `execute_complete=false` until independent VERIFY.
+Correction execution decision: `local_critical_path` — exactly one isolated Sol/high correction worker; no subagent tool and no other live worker. Implementation and focused gates are green at `c70ecf64`; `execute_complete=false` until independent VERIFY.
 
 Prior evidence remains immutable: full `go test -race ./...` timed out at 10m; `go test -race -timeout 20m ./internal/cli` timed out without race findings. Prior `make verify` crossed the narrower worker dispatch boundary but used only a temporary local fixture and preserved reverse ETL plan → preview → approval → execute with no credential, remote, production, or persistent write. This is a prior dispatch-boundary deviation, not a fabricated verification failure; CORRECT will not rerun it.
 

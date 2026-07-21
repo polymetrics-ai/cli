@@ -4,18 +4,19 @@
   "parentIssue": 397,
   "branch": "feat/408-flow-etl-dashboards",
   "baseBranch": "feat/cli-architecture-v2",
-  "status": "correction_active",
-  "currentCycle": "shepherd-correct-plan",
+  "status": "correction_complete_waiting_for_shepherd",
+  "currentCycle": "shepherd-correct-handoff",
   "gsdMode": "scripts/gsd_with_manual_universal_loop_fallback",
   "manualFallbackReason": "scripts/gsd prompt programming-loop init --phase 408-flow-etl-dashboards --dry-run failed: scripts/gsd: unknown GSD command: programming-loop",
   "verificationPassed": false,
   "executeComplete": false,
-  "verificationBlocker": "Shepherd correction active: real Bubble Tea v2 model/program and teatest/v2 evidence pending; independent VERIFY owns preserved full-race timeout disposition and any bounded make verify rerun",
+  "verificationBlocker": "Correction implementation and focused gates pass; executeComplete remains false because independent VERIFY owns preserved full-race timeout disposition and any bounded make verify rerun",
   "phaseArtifacts": {
     "plan": ".planning/phases/408-flow-etl-dashboards/PLAN.md",
     "tddLedger": ".planning/phases/408-flow-etl-dashboards/TDD-LEDGER.md",
     "verification": ".planning/phases/408-flow-etl-dashboards/VERIFICATION.md",
-    "summary": ".planning/phases/408-flow-etl-dashboards/SUMMARY.md"
+    "summary": ".planning/phases/408-flow-etl-dashboards/SUMMARY.md",
+    "prompts": ".planning/phases/408-flow-etl-dashboards/PROMPTS.md"
   },
   "orchestrationDecisions": [
     {
@@ -59,6 +60,24 @@
       "decision": "local_critical_path",
       "reason": "exactly one isolated Sol/high correction worker owns #408; correction artifacts updated before production edits; recursive delegation unavailable by contract",
       "timestamp": "2026-07-20T23:36:04Z"
+    },
+    {
+      "cycle": "shepherd-correct-tdd-execute",
+      "decision": "local_critical_path",
+      "reason": "strict RED captured; exact four authorized direct pins added; real Bubble Tea v2 inline program and teatest lifecycle/responsive coverage implemented at c70ecf64",
+      "timestamp": "2026-07-21T00:00:58Z"
+    },
+    {
+      "cycle": "shepherd-correct-focused-gates",
+      "decision": "local_critical_path",
+      "reason": "focused/full non-race, focused race, vet, build, module integrity, direct-pin, and parity gates pass; full race and make verify intentionally not rerun in CORRECT",
+      "timestamp": "2026-07-21T00:00:59Z"
+    },
+    {
+      "cycle": "shepherd-correct-handoff",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "correction complete; independent VERIFY still owns preserved full-race timeouts and bounded local-temp make verify authority; executeComplete remains false",
+      "timestamp": "2026-07-21T00:01:00Z"
     }
   ],
   "commands": [
@@ -135,6 +154,41 @@
       "command": "go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1",
       "result": "fail",
       "output": "RED before dependency/production edits: no required module provides package charm.land/bubbletea/v2; strict test asserts tea.Model and invokes teatest.NewTestModel"
+    },
+    {
+      "command": "go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1 after exact authorized pins and before production edits",
+      "result": "fail",
+      "output": "RED: *Model does not implement tea.Model (missing method Init); cannot pass model to teatest.NewTestModel"
+    },
+    {
+      "command": "gofmt -w cmd internal && go test ./internal/ui/run -run 'TestBubbleTeaV2ModelAndTeatestProgram|TestTeatestDashboard|TestDashboard|TestSession|TestBridge' -count=1",
+      "result": "pass",
+      "output": "ok polymetrics.ai/internal/ui/run 0.489s"
+    },
+    {
+      "command": "go test ./internal/ui/... -count=1 && go test ./internal/cli -run focused-dashboard-help-golden-docs -count=1",
+      "result": "pass",
+      "output": "UI 0.352s/0.801s/0.625s; CLI 29.914s"
+    },
+    {
+      "command": "go test -race ./internal/ui/... -count=1 && go test -race ./internal/cli -run focused-dashboard -count=1 && go test -race ./internal/flow -run cancellation-focused -count=1",
+      "result": "pass",
+      "output": "UI 1.318s/1.400s/1.691s; CLI 81.256s; flow 1.420s"
+    },
+    {
+      "command": "go vet ./... && go build ./cmd/pm && go mod verify && go mod tidy -diff",
+      "result": "pass",
+      "output": "vet/build no output; all modules verified; tidy diff empty"
+    },
+    {
+      "command": "go test ./...",
+      "result": "pass",
+      "output": "full non-race suite passed; internal/cli 458.411s; internal/connectors/certify 357.015s"
+    },
+    {
+      "command": "go test -race ./... and make verify",
+      "result": "not_run_in_correct",
+      "output": "preserved full-race timeouts and prior reverse-smoke dispatch-boundary deviation delegated to independent VERIFY"
     }
   ]
 }

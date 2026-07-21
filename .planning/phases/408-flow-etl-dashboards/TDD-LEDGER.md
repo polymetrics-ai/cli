@@ -52,7 +52,66 @@ FAIL	polymetrics.ai/internal/ui/run [setup failed]
 FAIL
 ```
 
-The strict test imports current v2 `tea.Model`, asserts `var _ tea.Model = (*Model)(nil)`, and instantiates `teatest.NewTestModel`; current production has neither dependency nor interface/program implementation. Next RED after adding only authorized pins must expose the incompatible `View() string`/missing `Init`/`Update` contract before production edits.
+The strict test imports current v2 `tea.Model`, asserts `var _ tea.Model = (*Model)(nil)`, and instantiates `teatest.NewTestModel`; current production had neither dependency nor interface/program implementation.
+
+After adding only the authorized pins and still before production edits, the same command produced the direct interface RED:
+
+```text
+# polymetrics.ai/internal/ui/run [polymetrics.ai/internal/ui/run.test]
+internal/ui/run/bubbletea_v2_test.go:11:19: cannot use (*Model)(nil) (value of type *Model) as tea.Model value in variable declaration: *Model does not implement tea.Model (missing method Init)
+internal/ui/run/bubbletea_v2_test.go:22:32: cannot use model (variable of type *Model) as tea.Model value in argument to teatest.NewTestModel: *Model does not implement tea.Model (missing method Init)
+internal/ui/run/bubbletea_v2_test.go:25:14: impossible type assertion: final.(*Model)
+	*Model does not implement tea.Model (missing method Init)
+FAIL	polymetrics.ai/internal/ui/run [build failed]
+FAIL
+```
+
+This proves current production was neither a v2 `tea.Model` nor executable by real `teatest/v2`.
+
+## Shepherd GREEN / REFACTOR evidence
+
+Authorized dependency command:
+
+```bash
+go get charm.land/bubbletea/v2@v2.0.8 charm.land/bubbles/v2@v2.1.1 charm.land/lipgloss/v2@v2.0.5 github.com/charmbracelet/x/exp/teatest/v2@v2.0.0-20260720091843-3eef36eaaa28
+go mod tidy
+```
+
+Only those four direct pins were added; Go-produced transitives include `golang.org/x/sync v0.21.0` and `golang.org/x/sys v0.46.0`. No NTCharts, huh, glamour, beta OTel logs, or unrelated direct module.
+
+GREEN:
+
+```bash
+gofmt -w cmd internal && go test ./internal/ui/run -run 'TestBubbleTeaV2ModelAndTeatestProgram|TestTeatestDashboard|TestDashboard|TestSession|TestBridge' -count=1
+```
+
+Result: PASS (`ok polymetrics.ai/internal/ui/run 0.489s`). Real `teatest/v2` covers success, failure, cancel, arrow/Vim/help keys, and 160x45, 100x30, 80x24, 64x20, 50x12 frames.
+
+```bash
+go test ./internal/ui/... -count=1
+go test ./internal/cli -run 'TestRunDashboards|TestFlowRunDashboardCancellation|TestETLRunDashboard|TestGlobalUIFlagsDocumentedInHelp|TestGoldenTranscripts|TestDocs' -count=1
+```
+
+Result: PASS (`internal/ui 0.352s`, `internal/ui/run 0.801s`, `internal/ui/styles 0.625s`; `internal/cli 29.914s`).
+
+REFACTOR/focused race:
+
+```bash
+go vet ./...
+go build ./cmd/pm
+go test -race ./internal/ui/... -count=1
+go test -race ./internal/cli -run 'TestRunDashboards|TestFlowRunDashboardCancellation|TestETLRunDashboard' -count=1
+go test -race ./internal/flow -run 'TestEngineCancellationPreservesEventsTelemetryCheckpointLedgerAndLease' -count=1
+go mod verify
+go mod tidy -diff
+go test ./...
+```
+
+Result: PASS. Focused race: UI `1.318s/1.400s/1.691s`, CLI `81.256s`, flow `1.420s`; full non-race suite passed (`internal/cli 458.411s`, `internal/connectors/certify 357.015s`); all modules verified; tidy diff empty; vet/build emitted no output.
+
+Production correction: `*Model` implements current v2 `tea.Model`; `Session.Execute` now runs `tea.NewProgram` inline, with runner/event/cancel waits owned by `tea.Cmd`; `Update` receives event/cancel/resize/key messages; no alt screen; final frame persists. Custom `inlineRenderer` and custom select/goroutine session loop were removed. Plain/JSON/non-TTY paths remain gated before Session creation.
+
+No full race and no `make verify` were run in CORRECT. Preserved timeout and reverse-smoke dispositions remain for independent VERIFY.
 
 ## RED plan
 
@@ -235,6 +294,6 @@ gofmt -w cmd internal && git diff --check && go test ./internal/ui/... -count=1 
 
 Result: PASS. Focused model/CLI/race coverage green; full repository gates remain tracked in `VERIFICATION.md`.
 
-Dependency note: no `go.mod`/`go.sum` delta. Bubble Tea/teatest are absent from the live module and the EXECUTE instruction forbids new dependencies, so coverage uses deterministic headless semantic/model tests rather than adding teatest.
+Historical pre-correction dependency note: original EXECUTE had no `go.mod`/`go.sum` delta and used only deterministic headless tests. Shepherd correction supersedes that gap under explicit ADR/Stage/#408 authority with the exact four pins and real teatest evidence above.
 
 Broader REFACTOR gates: `go test ./...` PASS; `make verify` PASS. Full `go test -race ./...` timed out in `internal/cli` and `internal/connectors/certify` at the default 10m package limit; focused issue races passed. A targeted `go test -race -timeout 20m ./internal/cli` retry also timed out with no race finding, triggering the repeated-verification-failure hard stop. Exact details are in `VERIFICATION.md`.

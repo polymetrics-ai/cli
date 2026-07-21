@@ -28,7 +28,7 @@ Verification result:
 - Original implementation reached focused/full non-race green, but literal Bubble Tea v2/teatest coverage was absent.
 - Preserved: full race timed out at 10m; targeted `internal/cli` race timed out at 20m without race findings.
 - Prior `make verify` passed but crossed the narrower worker dispatch boundary through a local temporary reverse-smoke fixture; sequence remained plan → preview → approval → execute with no credential, remote, production, or persistent write.
-- Shepherd correction active; `execute_complete=false`; independent VERIFY pending.
+- Shepherd correction complete at implementation commit `c70ecf64`; `execute_complete=false`; independent VERIFY pending.
 
 ## Shepherd RETRY snapshot — 2026-07-20
 
@@ -44,7 +44,7 @@ Result: doctor passed; adapter still reports `scripts/gsd: unknown GSD command: 
 Downstream artifact:
 
 - Correction slice in `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, and `RUN-STATE.json`.
-- Real Bubble Tea v2 model/program and `teatest/v2` RED→GREEN evidence will be recorded in the issue artifacts.
+- Real Bubble Tea v2 model/program and `teatest/v2` RED→GREEN evidence recorded in issue TDD/verification artifacts and implementation commit `c70ecf64`.
 - Delegated shared-parent state will be synchronized to live parent head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f` without claiming parent verification or review.
 
-Verification result: strict RED captured with `go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1`; setup failed because `charm.land/bubbletea/v2` was not required. Test directly asserts the v2 `tea.Model` interface and invokes `teatest.NewTestModel`. GREEN pending; execute completion false; no CORRECT-stage `make verify`, full race, independent VERIFY, REVIEW, or INTEGRATE.
+Verification result: strict RED captured with `go test ./internal/ui/run -run '^TestBubbleTeaV2ModelAndTeatestProgram$' -count=1`; setup failed because `charm.land/bubbletea/v2` was not required. After exact authorized pins, the direct interface RED failed because `*Model` lacked `Init`; GREEN then passed through real `teatest/v2`. Focused/full non-race/focused-race/module gates pass at `c70ecf64`. `execute_complete=false`; no CORRECT-stage `make verify`, full race, independent VERIFY, REVIEW, or INTEGRATE.

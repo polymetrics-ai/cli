@@ -112,7 +112,7 @@ For every remaining unit:
 
 - [x] `git ls-remote origin refs/heads/feat/cli-architecture-v2` reports `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`.
 - [x] Graph evidence synchronized as 44 nodes / 43 subissue edges / 65 dependency edges / 0 errors.
-- [x] #408 correction active and execute completion false pending independent VERIFY.
+- [x] #408 correction complete at implementation commit `c70ecf64`; execute completion remains false pending Shepherd handoff and independent VERIFY.
 - [x] #413 remains `not_spawned_write_scope_collision`.
 - [x] #419 remains human-deferred with no beta dependency and no other dependency approval.
 - [x] Phase 437 pending intake remains planning-only.

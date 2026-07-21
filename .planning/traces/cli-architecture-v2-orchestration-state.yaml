@@ -17,7 +17,7 @@ default_branch: main
 orchestrator:
   mode: active_owner
   runtime: pi
-  status: correction_worker_in_progress
+  status: correction_complete_waiting_for_shepherd
 live_graph:
   nodes: 44
   subissue_edges: 43
@@ -26,11 +26,11 @@ live_graph:
 execute_complete: false
 ready_queue:
   - number: 408
-    status: correction_in_progress
+    status: correction_complete_waiting_for_shepherd
     dependencies: [405, 462]
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity"
-    decision: local_critical_path
-    reason: "Exactly one isolated Sol/high worker is applying Shepherd RETRY at ff7be3bd; real Bubble Tea v2/teatest evidence pending; execute completion false until independent VERIFY."
+    decision: not_spawned_verification_blocked
+    reason: "Correction implementation and focused gates pass at c70ecf64; execute completion remains false pending independent VERIFY."
   - number: 413
     status: worker_ready_deferred
     dependencies: [407]
@@ -368,6 +368,10 @@ spawn_decisions:
     decision: not_spawned_write_scope_collision
     issue_numbers: [413]
     reason: "#413 remains serialized behind #408; #419 remains human-deferred and approves no beta or other dependency. Phase 437 pending intake remains planning-only."
+  - timestamp: 2026-07-21T00:01:00Z
+    decision: not_spawned_verification_blocked
+    issue_numbers: [408]
+    reason: "Correction complete at c70ecf64; independent VERIFY owns preserved full-race timeouts and bounded local-temp make verify authority; no parent verification or review claimed."
 subissues:
   - number: 398
     url: https://github.com/polymetrics-ai/cli/issues/398
@@ -474,11 +478,11 @@ subissues:
     branch: feat/408-flow-etl-dashboards
     pr_url: ""
     worker: "Sol/high correction worker"
-    status: correction_in_progress
+    status: correction_complete_waiting_for_shepherd
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, generated docs/goldens/website parity"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards
-    verification: "execute completion false; independent VERIFY pending; preserved full-race timeouts"
-    automated_review: {primary_route: blocked, status: pending, head_sha: ff7be3bd8509684257f7d7a73e6fb9735f4baf80, reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Shepherd correction active; no review claimed.", disposition_url: ""}
+    verification: "strict RED and focused/full non-race/focused race/module gates pass; execute completion false; independent VERIFY pending; preserved full-race timeouts"
+    automated_review: {primary_route: blocked, status: pending, head_sha: c70ecf64, reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Correction complete; no review invoked or claimed.", disposition_url: ""}
   - number: 409
     url: https://github.com/polymetrics-ai/cli/issues/409
     branch: pending
@@ -810,4 +814,4 @@ human_gates:
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
   - Phase 437 pending intake implementation or GitHub issue edits without explicit authorization
-updated_at: 2026-07-20T23:36:04Z
+updated_at: 2026-07-21T00:01:00Z

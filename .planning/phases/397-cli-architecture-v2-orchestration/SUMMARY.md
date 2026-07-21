@@ -9,7 +9,7 @@ GitHub graph records #409/#462 → #469 → #417/#418, and the missing #411 → 
 PR #468 is now integrated into the parent branch at `c3d8a757`; production TUI work remains
 sequenced behind the rebuilt dependency queue and the open #437/#408 write-scope collision.
 
-Status: ACTIVE — not final; #408 Shepherd correction in progress, execute completion false
+Status: ACTIVE — not final; #408 correction complete, execute completion false pending independent VERIFY
 Starting HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
 Parent PR: #438 (draft)
 
@@ -58,7 +58,7 @@ The parent branch was safely synced with `origin/main` using ordinary no-ff merg
 
 ## #408 Shepherd correction — 2026-07-20T23:36Z
 
-Delegated evidence scope synchronized the live parent remote head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f` and graph 44 nodes / 43 subissue edges / 65 dependency edges / 0 errors. #408 is retrying the accepted Phase-10 implementation with only the four authorized Charm pins and remains incomplete pending independent VERIFY. #413 remains `not_spawned_write_scope_collision`. #419 remains human-deferred and grants no beta or other dependency approval. Phase 437 pending intake remains planning-only. No parent verification, review, readiness, integration, or merge claim was made.
+Delegated evidence scope synchronized the live parent remote head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f` and graph 44 nodes / 43 subissue edges / 65 dependency edges / 0 errors. #408 completed the accepted Phase-10 correction at `c70ecf64` with only the four authorized Charm pins and remains execute-incomplete pending Shepherd handoff and independent VERIFY. #413 remains `not_spawned_write_scope_collision`. #419 remains human-deferred and grants no beta or other dependency approval. Phase 437 pending intake remains planning-only. No parent verification, review, readiness, integration, or merge claim was made.
 
 ## #437 integration — 2026-07-20T20:06Z
 

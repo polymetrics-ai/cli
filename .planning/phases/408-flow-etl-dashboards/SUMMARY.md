@@ -1,13 +1,21 @@
 # Summary — Phase 408 flow/ETL dashboards
 
-Status: Shepherd CORRECT active; execute completion false pending real Bubble Tea v2/teatest correction and independent VERIFY.
+Status: correction complete; execute completion false pending Shepherd handoff and independent VERIFY.
 
 ## Shepherd correction state — 2026-07-20
 
 - Retry, not reimplementation: preserve prior behavior/docs and replace the custom headless-only production session substitute where required with a real inline Bubble Tea v2 program.
 - Accepted authority: ADR-0003 + parent Stage 10 + #408 approve exact Bubble Tea `v2.0.8`, Bubbles `v2.1.1`, Lip Gloss `v2.0.5`, and test-only teatest pseudo-version `v2.0.0-20260720091843-3eef36eaaa28`; no other direct modules.
-- Strict RED, GREEN, focused race, and artifacts remain pending. No independent VERIFY/REVIEW/INTEGRATE claim.
+- Strict RED captured; GREEN/full non-race/focused race passed at implementation commit `c70ecf64`. Artifact checkpoint pending. No independent VERIFY/REVIEW/INTEGRATE claim.
 - Preserve race timeouts and prior local-temp reverse-smoke dispatch-boundary deviation exactly; do not rerun full race or `make verify` in CORRECT.
+
+## Correction delivered
+
+- Added exact authorized direct pins: Bubble Tea `v2.0.8`, Bubbles `v2.1.1`, Lip Gloss `v2.0.5`, teatest/v2 `v2.0.0-20260720091843-3eef36eaaa28`; only Go-produced transitives changed.
+- `run.Model` now implements current v2 `tea.Model`; deterministic `Update` owns event/cancel/resize/key transitions and all runner/event/cancel waits execute as `tea.Cmd`.
+- `Session.Execute` uses a real inline `tea.Program`; custom `inlineRenderer`/select-loop substitute removed; no alt screen; truthful final frame remains.
+- Real teatest success/failure/cancel, navigation/help, responsive frames, sanitation/redaction, plus existing bypass/accessibility/bounded-event tests pass.
+- Vet, build, full non-race, module integrity/tidy, and focused races pass. Full race and `make verify` intentionally not rerun in CORRECT.
 
 ## Current state
 
@@ -32,15 +40,14 @@ Status: Shepherd CORRECT active; execute completion false pending real Bubble Te
 
 ## Next
 
-1. Push the artifact-only verification checkpoint and return control.
-2. Orchestrator/human decides whether focused race coverage is sufficient or schedules a separately approved long-timeout/sharded full-race gate.
-3. Resolve the literal teatest dependency gap only in a dependency-approved stage. Do not open a PR in this EXECUTE stage.
+1. Push the artifact-only correction checkpoint and return control.
+2. Shepherd dispatches independent VERIFY. That stage owns the preserved full-race disposition and may run `make verify` only under explicit bounded local-temp smoke authority with plan → preview → approval → execute.
+3. Do not open a sub-PR or invoke REVIEW/INTEGRATE from CORRECT.
 
 ## Blockers / human gates
 
-- No current human gate.
-- New dependencies beyond ADR-0003 approved phase budget remain a hard stop.
-- NTCharts remains unapproved and forbidden.
-- Bubble Tea/teatest are absent from the live module and this EXECUTE instruction forbids new dependencies; literal teatest coverage remains an explicit verification gap, with deterministic headless model/session coverage used instead.
-- Repeated full-race timeout: default 10m full race and 20m `internal/cli` retry both timed out without race findings; hard stop.
-- `make verify` passed, but its repository smoke recipe executed local temporary fixture reverse ETL. No remote/credentialed/production action occurred; this crossed the user's explicit no-reverse-execution boundary and requires disposition.
+- No new human dependency gate: accepted ADR-0003 + Stage 10 + #408 authorize the exact four direct pins now present.
+- New dependencies beyond that exact budget remain a hard stop; NTCharts, huh, glamour, beta OTel logs, and unrelated direct modules remain forbidden.
+- Independent VERIFY remains outstanding; execute completion stays false.
+- Preserved full-race evidence: default 10m full race and 20m `internal/cli` retry timed out without race findings. CORRECT did not rerun them.
+- Prior `make verify` passed but crossed the narrower dispatch boundary through a local temporary reverse fixture. The required sequence was preserved and no credential, remote, production, or persistent write occurred; this is a recorded prior deviation, not a fabricated verification failure.
