@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdir, mkdtemp, rm, symlink } from "node:fs/promises";
+import { mkdir, mkdtemp, rename, rm, symlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -58,7 +58,11 @@ function harness() {
 		context,
 		get command() { return command; },
 		get shutdown() { return shutdown; },
-		register(factory, resolveWorktree = async (ctx) => ({ cwd: ctx.cwd, identity: ctx.cwd })) {
+		register(factory, resolveWorktree = async (ctx) => ({
+			cwd: ctx.cwd,
+			repositoryIdentity: "a".repeat(64),
+			worktreeIdentity: "b".repeat(64),
+		})) {
 			registerShepherdExtension(hosts, {
 				resolveWorktree,
 				createController(ctx, worktree) {
@@ -177,8 +181,59 @@ test("canonical Git identity converges root, subdirectory, and symlink while sep
 	const otherWorktreeIdentity = await canonicalizeGitWorktree(secondary);
 	assert.deepEqual(subdirIdentity, rootIdentity);
 	assert.deepEqual(symlinkIdentity, rootIdentity);
-	assert.notEqual(otherWorktreeIdentity.identity, rootIdentity.identity);
+	assert.equal(otherWorktreeIdentity.repositoryIdentity, rootIdentity.repositoryIdentity);
+	assert.notEqual(otherWorktreeIdentity.worktreeIdentity, rootIdentity.worktreeIdentity);
 	assert.notEqual(otherWorktreeIdentity.cwd, rootIdentity.cwd);
+	assert.match(rootIdentity.repositoryIdentity, /^[0-9a-f]{64}$/);
+	assert.match(rootIdentity.worktreeIdentity, /^[0-9a-f]{64}$/);
+	assert.deepEqual(Object.keys(rootIdentity).sort(), ["cwd", "repositoryIdentity", "worktreeIdentity"]);
+});
+
+test("canonical identity survives moves but changes for replacement repositories and remotes", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-stable-identity-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const original = join(root, "original");
+	const moved = join(root, "moved");
+	await mkdir(original);
+	await execFileAsync("git", ["init", "--quiet", original]);
+	await execFileAsync("git", ["-C", original, "remote", "add", "origin", "https://user-a@example.invalid/org/repo.git"]);
+	const initial = await canonicalizeGitWorktree(original);
+	await execFileAsync("git", ["-C", original, "remote", "set-url", "origin", "https://user-b@example.invalid/org/repo.git"]);
+	const credentialVariant = await canonicalizeGitWorktree(original);
+	assert.equal(credentialVariant.repositoryIdentity, initial.repositoryIdentity);
+	assert.equal(credentialVariant.worktreeIdentity, initial.worktreeIdentity);
+
+	await rename(original, moved);
+	const afterMove = await canonicalizeGitWorktree(moved);
+	assert.equal(afterMove.repositoryIdentity, initial.repositoryIdentity);
+	assert.equal(afterMove.worktreeIdentity, initial.worktreeIdentity);
+
+	await execFileAsync("git", ["-C", moved, "remote", "set-url", "origin", "https://example.invalid/org/other.git"]);
+	const changedRemote = await canonicalizeGitWorktree(moved);
+	assert.notEqual(changedRemote.repositoryIdentity, initial.repositoryIdentity);
+	assert.notEqual(changedRemote.worktreeIdentity, initial.worktreeIdentity);
+
+	await rm(moved, { recursive: true, force: true });
+	await mkdir(moved);
+	await execFileAsync("git", ["init", "--quiet", moved]);
+	await execFileAsync("git", ["-C", moved, "remote", "add", "origin", "https://user-c@example.invalid/org/repo.git"]);
+	const replacement = await canonicalizeGitWorktree(moved);
+	assert.notEqual(replacement.repositoryIdentity, initial.repositoryIdentity);
+	assert.notEqual(replacement.worktreeIdentity, initial.worktreeIdentity);
+});
+
+test("canonical Git lookup rejects an already-aborted setup signal", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-aborted-identity-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const repo = join(root, "repo");
+	await mkdir(repo);
+	await execFileAsync("git", ["init", "--quiet", repo]);
+	const abortController = new AbortController();
+	abortController.abort(new Error("cancel canonical lookup"));
+	await assert.rejects(
+		canonicalizeGitWorktree(repo, { signal: abortController.signal }),
+		/lookup was aborted/,
+	);
 });
 
 test("controller cache is keyed by canonical worktree and issue", async () => {
@@ -198,8 +253,8 @@ test("controller cache is keyed by canonical worktree and issue", async () => {
 			return controller();
 		},
 		async (ctx) => ctx.cwd.startsWith("/alias-a")
-			? { cwd: "/real/worktree-a", identity: "worktree-a" }
-			: { cwd: "/real/worktree-b", identity: "worktree-b" },
+			? { cwd: "/real/worktree-a", repositoryIdentity: "a".repeat(64), worktreeIdentity: "b".repeat(64) }
+			: { cwd: "/real/worktree-b", repositoryIdentity: "a".repeat(64), worktreeIdentity: "c".repeat(64) },
 	);
 	await h.command.handler("status --issue 471", { ...h.context, cwd: "/alias-a/nested" });
 	await h.command.handler("status --issue 471", { ...h.context, cwd: "/alias-a/symlink" });
@@ -253,4 +308,90 @@ test("shutdown propagates its deadline and retains a controller that has not exi
 	await assert.rejects(shuttingDown, /shutdown deadline exceeded/i);
 	await h.command.handler("status --issue 471", h.context);
 	assert.equal(creates, 1);
+});
+
+test("shutdown aborts and joins pre-controller worktree resolution", async () => {
+	const h = harness();
+	let resolutionStarted;
+	const started = new Promise((resolve) => { resolutionStarted = resolve; });
+	let observedAbort = false;
+	h.register(
+		() => { throw new Error("controller must not be created after setup cancellation"); },
+		async (_ctx, options) => {
+			resolutionStarted();
+			await new Promise((resolve, reject) => {
+				options.signal.addEventListener("abort", () => {
+					observedAbort = true;
+					reject(options.signal.reason);
+				}, { once: true });
+			});
+			throw new Error("unreachable");
+		},
+	);
+	const handling = h.command.handler(
+		"canary --issue 397 --pr 438 --read-only --backend sdk-inproc --experimental",
+		h.context,
+	);
+	await started;
+	await h.shutdown();
+	await handling;
+	assert.equal(observedAbort, true);
+	assert.equal(h.controllers.length, 0);
+});
+
+test("shutdown closes a controller created late by an abort-ignoring resolver", async () => {
+	const h = harness();
+	let releaseResolution;
+	const gate = new Promise((resolve) => { releaseResolution = resolve; });
+	let resolutionStarted;
+	const started = new Promise((resolve) => { resolutionStarted = resolve; });
+	let starts = 0;
+	let closes = 0;
+	h.register(
+		() => ({
+			async status() { return undefined; },
+			async start(command) { starts += 1; return state(command.issue); },
+			async resume(command) { starts += 1; return state(command.issue); },
+			async stop(issue) { return state(issue, "stopped"); },
+			async shutdown() { closes += 1; },
+		}),
+		async (ctx) => {
+			resolutionStarted();
+			await gate;
+			return { cwd: ctx.cwd, repositoryIdentity: "a".repeat(64), worktreeIdentity: "b".repeat(64) };
+		},
+	);
+	const handling = h.command.handler(
+		"canary --issue 397 --pr 438 --read-only --backend sdk-inproc --experimental",
+		h.context,
+	);
+	await started;
+	const shuttingDown = h.shutdown();
+	releaseResolution();
+	await Promise.all([handling, shuttingDown]);
+	assert.equal(starts, 0);
+	assert.equal(closes, 1);
+});
+
+test("shutdown fails its deadline when pre-controller resolution ignores abort forever", async (t) => {
+	t.mock.timers.enable({ apis: ["setTimeout"] });
+	const h = harness();
+	let resolutionStarted;
+	const started = new Promise((resolve) => { resolutionStarted = resolve; });
+	h.register(
+		() => { throw new Error("controller must not be created"); },
+		async () => {
+			resolutionStarted();
+			await new Promise(() => {});
+			throw new Error("unreachable");
+		},
+	);
+	void h.command.handler(
+		"canary --issue 397 --pr 438 --read-only --backend sdk-inproc --experimental",
+		h.context,
+	);
+	await started;
+	const shuttingDown = h.shutdown();
+	t.mock.timers.tick(45_000);
+	await assert.rejects(shuttingDown, /shutdown deadline exceeded/i);
 });

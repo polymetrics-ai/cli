@@ -102,6 +102,8 @@ test("restart reconciliation never trusts persisted running work", () => {
 	const run = {
 		schemaVersion: 1,
 		issue: 471,
+		repositoryIdentity: "b".repeat(64),
+		worktreeIdentity: "c".repeat(64),
 		runId: "run-1",
 		generation: 1,
 		status: "running",
@@ -120,4 +122,30 @@ test("restart reconciliation never trusts persisted running work", () => {
 	assert.equal(reconciled.lanes[1].status, "succeeded");
 	assert.equal(reconciled.updatedAt, "2026-07-21T09:00:00Z");
 	assert.equal(run.status, "running", "input must not be mutated");
+});
+
+test("restart reconciliation interrupts every unfinished lane in an all-pending running checkpoint", () => {
+	const run = {
+		schemaVersion: 1,
+		issue: 471,
+		repositoryIdentity: "b".repeat(64),
+		worktreeIdentity: "c".repeat(64),
+		runId: "run-before-dispatch",
+		generation: 1,
+		status: "running",
+		candidateHead: head,
+		validationNonce: "nonce-1234567890",
+		createdAt: "2026-07-21T08:00:00Z",
+		updatedAt: "2026-07-21T08:00:00Z",
+		lanes: [
+			{ id: "scout", role: "scout", mutating: false, dependsOn: [], status: "pending" },
+			{ id: "validator", role: "validator", mutating: false, dependsOn: [], status: "pending" },
+		],
+	};
+
+	const reconciled = reconcileInterruptedRun(run, "2026-07-21T09:00:00Z");
+
+	assert.equal(reconciled.status, "interrupted");
+	assert.deepEqual(reconciled.lanes.map((lane) => lane.status), ["interrupted", "interrupted"]);
+	assert.deepEqual(run.lanes.map((lane) => lane.status), ["pending", "pending"], "input must not be mutated");
 });
