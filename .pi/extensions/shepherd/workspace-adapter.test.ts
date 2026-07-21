@@ -152,7 +152,7 @@ test("a released workspace cannot commit after an exact replacement lease become
 	await write(replacement.cwd, ".pi/extensions/shepherd/post-release.ts", "export const fenced = true;\n");
 	const before = (await git(replacement.cwd, "rev-parse", "HEAD")).trim();
 	const [mutation] = await Promise.allSettled([
-		gitAdapter.commitIssueChanges(released, {
+		adapter.commitIssueChanges(released, {
 			issue: released.issue,
 			slug: released.slug,
 			branch: released.branch,
@@ -162,9 +162,21 @@ test("a released workspace cannot commit after an exact replacement lease become
 		}),
 	]);
 	const after = (await git(replacement.cwd, "rev-parse", "HEAD")).trim();
+	const replacementMutation = await adapter.commitIssueChanges(replacement, {
+		issue: replacement.issue,
+		slug: replacement.slug,
+		branch: replacement.branch,
+		expectedHead: before,
+		message: "test(shepherd): replacement owns mutation",
+		scopes: [".pi/extensions/shepherd/post-release.ts"],
+	});
+	const replacementHead = (await git(replacement.cwd, "rev-parse", "HEAD")).trim();
 	await replacement.release();
 	assert.equal(mutation.status, "rejected", "the released claim retained a usable Git mutation authority");
 	assert.equal(after, before, "a released claim advanced the replacement owner's branch");
+	assert.equal(replacementMutation.committed, true);
+	assert.equal(replacementHead, replacementMutation.head);
+	assert.notEqual(replacementHead, before);
 });
 
 test("release waits for an already accepted Git mutation to finish", async (t) => {
@@ -272,7 +284,9 @@ test("reports and preserves dirty unique state on retry and emits exact handoff 
 	const fixture = await createLocalGitFixture();
 	t.after(fixture.cleanup);
 	const adapter = new WorkspaceAdapter(new GitAdapter());
-	const request = await requestFor(fixture);
+	const request = await requestFor(fixture, {
+		allowedScopes: ["parent.txt", "unique.txt"],
+	});
 	const first = await adapter.claim(request);
 	await write(first.cwd, "parent.txt", "modified but preserved\n");
 	await write(first.cwd, "unique.txt", "unique and preserved\n");
@@ -345,11 +359,26 @@ test("handoff audits the complete committed path set before applying immutable s
 	if (handoff.status === "rejected") assert.match(String(handoff.reason), /outside.*scope|scope.*outside/i);
 });
 
+test("handoff rejects a dirty literal backslash path instead of aliasing it into an allowed scope", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const adapter = new WorkspaceAdapter(new GitAdapter());
+	const workspace = await adapter.claim(await requestFor(fixture, {
+		allowedScopes: [".pi/extensions/shepherd"],
+	}));
+	const escaped = String.raw`.pi\extensions\shepherd\dirty.ts`;
+	await write(workspace.cwd, escaped, "must remain a root-level filename\n");
+	const [handoff] = await Promise.allSettled([adapter.captureHandoff(workspace, "passed")]);
+	await workspace.release();
+	assert.equal(handoff.status, "rejected");
+	if (handoff.status === "rejected") assert.match(String(handoff.reason), /scope|backslash/i);
+});
+
 test("fails handoff exact-head verification when the parent base is not an ancestor", async (t) => {
 	const fixture = await createLocalGitFixture();
 	t.after(fixture.cleanup);
 	const adapter = new WorkspaceAdapter(new GitAdapter());
-	const workspace = await adapter.claim(await requestFor(fixture));
+	const workspace = await adapter.claim(await requestFor(fixture, { allowedScopes: ["new.txt"] }));
 	await git(workspace.cwd, "config", "user.name", "Shepherd Test");
 	await git(workspace.cwd, "config", "user.email", "shepherd@example.invalid");
 	await write(workspace.cwd, "new.txt", "new\n");
@@ -358,6 +387,7 @@ test("fails handoff exact-head verification when the parent base is not an ances
 	const handoff = await adapter.captureHandoff(workspace, "pending");
 	assert.notEqual(handoff.head, workspace.head);
 	assert.equal(handoff.baseHead, fixture.parentHead);
+	assert.deepEqual(handoff.changedScope, ["new.txt"]);
 	await git(workspace.cwd, "checkout", "--orphan", "unrelated");
 	await git(workspace.cwd, "rm", "-rf", ".");
 	await write(workspace.cwd, "unrelated.txt", "unrelated\n");

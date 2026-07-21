@@ -10,12 +10,17 @@ import {
 	canonicalIssueBranch,
 	canonicalIssueWorktreeName,
 	type GitBinding,
+	type GitCommitEvidence,
+	type GitCommitRequest,
+	type GitMutationLease,
+	type GitPushEvidence,
+	type GitPushRequest,
 	type GitStatusEvidence,
 } from "./git-adapter.ts";
-import { FileStateStore, type FileStateStoreOptions, type RunLease } from "./state-store.ts";
+import type { FileStateStoreOptions } from "./state-store.ts";
 
 const CLAIM_DIRECTORY = ".shepherd-workspace-claims";
-const CLAIM_SCHEMA_VERSION = 2;
+const CLAIM_SCHEMA_VERSION = 3;
 const BINDING_SCHEMA_VERSION = 1;
 const MAX_CLAIM_BYTES = 32_768;
 const MAX_PATH_BYTES = 4_096;
@@ -23,6 +28,13 @@ const MAX_OWNERSHIP_BYTES = 256;
 const SAFE_OWNERSHIP = /^[A-Za-z0-9](?:[A-Za-z0-9._:-]*[A-Za-z0-9])?$/;
 const SHA_PATTERN = /^[0-9a-f]{40}$/;
 const IDENTITY_PATTERN = /^[0-9a-f]{64}$/;
+const workspaceMutationIssuers = new WeakSet<object>();
+
+export type WorkspaceMutationIssuer = object;
+
+export function isWorkspaceMutationIssuer(value: unknown): value is WorkspaceMutationIssuer {
+	return typeof value === "object" && value !== null && workspaceMutationIssuers.has(value);
+}
 
 export type VerificationState = "pending" | "passed" | "failed";
 
@@ -74,7 +86,7 @@ export interface WorkspaceAdapterOptions {
 }
 
 interface WorkspaceClaimRecord {
-	schemaVersion: 2;
+	schemaVersion: 3;
 	issue: number;
 	slug: string;
 	branch: string;
@@ -85,6 +97,8 @@ interface WorkspaceClaimRecord {
 	allowedScopes: string[];
 	repositoryIdentity: string;
 	remoteIdentity: string;
+	fetchEndpointIdentity: string;
+	pushEndpointIdentity: string;
 	ownerHash: string;
 	requestHash: string;
 }
@@ -100,7 +114,8 @@ interface ActiveClaimContext {
 	bindingPath: string;
 	claim: WorkspaceClaimRecord;
 	binding: WorkspaceBindingRecord;
-	lease: RunLease;
+	coordinator: GitBinding;
+	lease: GitMutationLease;
 }
 
 export class WorkspaceAdapterError extends Error {
@@ -179,7 +194,8 @@ function parseClaim(raw: string): WorkspaceClaimRecord {
 	const record = parseJsonRecord(raw, "workspace ownership claim");
 	assertOnlyFields(record, new Set([
 		"schemaVersion", "issue", "slug", "branch", "path", "trustedWorktreeRoot", "prBase", "baseHead",
-		"allowedScopes", "repositoryIdentity", "remoteIdentity", "ownerHash", "requestHash",
+		"allowedScopes", "repositoryIdentity", "remoteIdentity", "fetchEndpointIdentity", "pushEndpointIdentity",
+		"ownerHash", "requestHash",
 	]), "workspace ownership claim");
 	let allowedScopes: string[];
 	try {
@@ -199,6 +215,8 @@ function parseClaim(raw: string): WorkspaceClaimRecord {
 		|| typeof record.baseHead !== "string" || !SHA_PATTERN.test(record.baseHead)
 		|| typeof record.repositoryIdentity !== "string" || !IDENTITY_PATTERN.test(record.repositoryIdentity)
 		|| typeof record.remoteIdentity !== "string" || !IDENTITY_PATTERN.test(record.remoteIdentity)
+		|| typeof record.fetchEndpointIdentity !== "string" || !IDENTITY_PATTERN.test(record.fetchEndpointIdentity)
+		|| typeof record.pushEndpointIdentity !== "string" || !IDENTITY_PATTERN.test(record.pushEndpointIdentity)
 		|| typeof record.ownerHash !== "string" || !IDENTITY_PATTERN.test(record.ownerHash)
 		|| typeof record.requestHash !== "string" || !IDENTITY_PATTERN.test(record.requestHash)) {
 		throw new WorkspaceAdapterError("workspace ownership claim is malformed; existing state was preserved");
@@ -230,6 +248,8 @@ function serializedClaim(record: WorkspaceClaimRecord): string {
 		allowedScopes: record.allowedScopes,
 		repositoryIdentity: record.repositoryIdentity,
 		remoteIdentity: record.remoteIdentity,
+		fetchEndpointIdentity: record.fetchEndpointIdentity,
+		pushEndpointIdentity: record.pushEndpointIdentity,
 		ownerHash: record.ownerHash,
 		requestHash: record.requestHash,
 	});
@@ -244,7 +264,7 @@ function serializedBinding(record: WorkspaceBindingRecord): string {
 }
 
 function claimIdentity(record: WorkspaceClaimRecord): string {
-	return hash(["shepherd-workspace-claim-v2", serializedClaim(record)]);
+	return hash(["shepherd-workspace-claim-v3", serializedClaim(record)]);
 }
 
 async function readImmutable(path: string, description: string): Promise<string> {
@@ -301,7 +321,9 @@ async function acquireClaim(path: string, expected: WorkspaceClaimRecord): Promi
 		|| current.path !== expected.path
 		|| current.trustedWorktreeRoot !== expected.trustedWorktreeRoot
 		|| current.repositoryIdentity !== expected.repositoryIdentity
-		|| current.remoteIdentity !== expected.remoteIdentity) {
+		|| current.remoteIdentity !== expected.remoteIdentity
+		|| current.fetchEndpointIdentity !== expected.fetchEndpointIdentity
+		|| current.pushEndpointIdentity !== expected.pushEndpointIdentity) {
 		throw new WorkspaceAdapterError("issue has aliased or mismatched workspace ownership; existing state was preserved");
 	}
 	if (current.ownerHash !== expected.ownerHash) {
@@ -326,6 +348,7 @@ export class WorkspaceAdapter {
 	readonly #git: GitAdapter;
 	readonly #leaseOptions: Omit<FileStateStoreOptions, "trustedRoot">;
 	readonly #activeClaims = new WeakMap<ClaimedWorkspace, ActiveClaimContext>();
+	readonly #mutationIssuer: WorkspaceMutationIssuer;
 
 	constructor(git: GitAdapter, options: WorkspaceAdapterOptions = {}) {
 		this.#git = git;
@@ -334,17 +357,32 @@ export class WorkspaceAdapter {
 			throw new WorkspaceAdapterError("workspace adapter options are invalid");
 		}
 		this.#leaseOptions = { ...(options.leaseOptions ?? {}) };
+		this.#mutationIssuer = Object.freeze({});
+		workspaceMutationIssuers.add(this.#mutationIssuer);
 	}
 
-	async #acquireLease(claimDirectory: string, request: WorkspaceClaimRequest): Promise<RunLease> {
+	async #acquireLease(
+		coordinator: GitBinding,
+		claimDirectory: string,
+		target: string,
+		branch: string,
+		allowedScopes: readonly string[],
+		request: WorkspaceClaimRequest,
+	): Promise<GitMutationLease> {
 		const mode = request.leaseMode ?? "start";
 		if (mode !== "start" && mode !== "resume") throw new WorkspaceAdapterError("workspace lease mode must be start or resume");
-		const leaseRoot = join(claimDirectory, "leases", `issue-${request.issue}`);
 		try {
-			return await new FileStateStore(leaseRoot, {
-				...this.#leaseOptions,
-				trustedRoot: claimDirectory,
-			}).acquireLease({ issue: request.issue, runId: request.ownershipId, mode });
+			return await this.#git.acquireMutationLease(this.#mutationIssuer, coordinator, {
+				issue: request.issue,
+				slug: request.slug,
+				branch,
+				baseHead: request.parentHead,
+				targetCwd: target,
+				allowedScopes,
+				stateRoot: claimDirectory,
+				runId: request.ownershipId,
+				mode,
+			}, this.#leaseOptions);
 		} catch (error) {
 			const message = error instanceof Error ? error.message : "";
 			if (/held by live process/i.test(message)) {
@@ -406,7 +444,7 @@ export class WorkspaceAdapter {
 			|| (claimDirectoryMetadata.mode & 0o077) !== 0) {
 			throw new WorkspaceAdapterError("workspace claim directory is unsafe");
 		}
-		const lease = await this.#acquireLease(claimDirectory, request);
+		const lease = await this.#acquireLease(coordinator, claimDirectory, target, branch, allowedScopes, request);
 		try {
 			const branches = await this.#git.listLocalBranches(coordinator);
 			const issuePrefix = `feat/${request.issue}-`;
@@ -438,12 +476,14 @@ export class WorkspaceAdapter {
 
 			const ownerHash = hash(["shepherd-workspace-owner-v1", request.ownershipId]);
 			const requestHash = hash([
-				"shepherd-workspace-request-v2",
+				"shepherd-workspace-request-v3",
 				branch,
 				target,
 				prBase,
 				request.parentHead,
 				allowedScopes.join("\0"),
+				coordinator.fetchEndpointIdentity,
+				coordinator.pushEndpointIdentity,
 			]);
 			const requestedClaim: WorkspaceClaimRecord = {
 				schemaVersion: CLAIM_SCHEMA_VERSION,
@@ -457,6 +497,8 @@ export class WorkspaceAdapter {
 				allowedScopes,
 				repositoryIdentity: coordinator.repositoryIdentity,
 				remoteIdentity: coordinator.remoteIdentity,
+				fetchEndpointIdentity: coordinator.fetchEndpointIdentity,
+				pushEndpointIdentity: coordinator.pushEndpointIdentity,
 				ownerHash,
 				requestHash,
 			};
@@ -475,7 +517,7 @@ export class WorkspaceAdapter {
 				binding = await this.#git.inspect(target);
 			} else {
 				try {
-					binding = await this.#git.addIssueWorktree(coordinator, {
+					binding = await this.#git.addIssueWorktree(lease, coordinator, {
 						trustedRoot,
 						path: target,
 						issue: request.issue,
@@ -496,7 +538,10 @@ export class WorkspaceAdapter {
 				}
 			}
 
-			if (binding.repositoryIdentity !== coordinator.repositoryIdentity || binding.remoteIdentity !== coordinator.remoteIdentity) {
+			if (binding.repositoryIdentity !== coordinator.repositoryIdentity
+				|| binding.remoteIdentity !== coordinator.remoteIdentity
+				|| binding.fetchEndpointIdentity !== coordinator.fetchEndpointIdentity
+				|| binding.pushEndpointIdentity !== coordinator.pushEndpointIdentity) {
 				throw new WorkspaceAdapterError("workspace repository identity mismatch");
 			}
 			if (await this.#git.currentBranch(binding) !== branch) throw new WorkspaceAdapterError("workspace branch ownership mismatch");
@@ -544,6 +589,7 @@ export class WorkspaceAdapter {
 				bindingPath,
 				claim: persistedClaim,
 				binding: persistedBinding,
+				coordinator,
 				lease,
 			});
 			return workspace;
@@ -551,6 +597,57 @@ export class WorkspaceAdapter {
 			await lease.release().catch(() => undefined);
 			throw error;
 		}
+	}
+
+	#mutationContext(workspace: ClaimedWorkspace): ActiveClaimContext {
+		const context = this.#activeClaims.get(workspace);
+		if (context === undefined) {
+			throw new WorkspaceAdapterError("workspace mutation requires an active claim issued by this adapter");
+		}
+		if (workspace.claimId !== context.binding.claimId
+			|| workspace.issue !== context.claim.issue
+			|| workspace.slug !== context.claim.slug
+			|| workspace.branch !== context.claim.branch
+			|| workspace.cwd !== context.claim.path
+			|| workspace.trustedWorktreeRoot !== context.claim.trustedWorktreeRoot
+			|| workspace.prBase !== context.claim.prBase
+			|| workspace.baseHead !== context.claim.baseHead
+			|| !equalStrings(workspace.allowedScopes, context.claim.allowedScopes)
+			|| workspace.repositoryIdentity !== context.claim.repositoryIdentity
+			|| workspace.remoteIdentity !== context.claim.remoteIdentity
+			|| workspace.fetchEndpointIdentity !== context.claim.fetchEndpointIdentity
+			|| workspace.pushEndpointIdentity !== context.claim.pushEndpointIdentity
+			|| workspace.worktreeIdentity !== context.binding.worktreeIdentity) {
+			throw new WorkspaceAdapterError("workspace mutation does not match its immutable active claim");
+		}
+		return context;
+	}
+
+	#worktreeBinding(context: ActiveClaimContext): GitBinding {
+		return {
+			cwd: context.claim.path,
+			repositoryIdentity: context.claim.repositoryIdentity,
+			worktreeIdentity: context.binding.worktreeIdentity,
+			remoteName: "origin",
+			remoteIdentity: context.claim.remoteIdentity,
+			fetchEndpointIdentity: context.claim.fetchEndpointIdentity,
+			pushEndpointIdentity: context.claim.pushEndpointIdentity,
+		};
+	}
+
+	async commitIssueChanges(workspace: ClaimedWorkspace, request: GitCommitRequest): Promise<GitCommitEvidence> {
+		const context = this.#mutationContext(workspace);
+		return this.#git.commitIssueChanges(context.lease, this.#worktreeBinding(context), request);
+	}
+
+	async fetchBranch(workspace: ClaimedWorkspace, branch: string): Promise<string> {
+		const context = this.#mutationContext(workspace);
+		return this.#git.fetchBranch(context.lease, context.coordinator, branch);
+	}
+
+	async pushIssueBranch(workspace: ClaimedWorkspace, request: GitPushRequest): Promise<GitPushEvidence> {
+		const context = this.#mutationContext(workspace);
+		return this.#git.pushIssueBranch(context.lease, this.#worktreeBinding(context), request);
 	}
 
 	async captureHandoff(workspace: ClaimedWorkspace, verificationState: VerificationState): Promise<WorkspaceHandoffEvidence> {
@@ -578,6 +675,8 @@ export class WorkspaceAdapter {
 			|| !equalStrings(workspace.allowedScopes, persistedClaim.allowedScopes)
 			|| workspace.repositoryIdentity !== persistedClaim.repositoryIdentity
 			|| workspace.remoteIdentity !== persistedClaim.remoteIdentity
+			|| workspace.fetchEndpointIdentity !== persistedClaim.fetchEndpointIdentity
+			|| workspace.pushEndpointIdentity !== persistedClaim.pushEndpointIdentity
 			|| workspace.worktreeIdentity !== persistedBinding.worktreeIdentity) {
 			throw new WorkspaceAdapterError("handoff evidence does not match its immutable persisted original claim");
 		}
@@ -591,6 +690,8 @@ export class WorkspaceAdapter {
 			worktreeIdentity: persistedBinding.worktreeIdentity,
 			remoteName: "origin",
 			remoteIdentity: persistedClaim.remoteIdentity,
+			fetchEndpointIdentity: persistedClaim.fetchEndpointIdentity,
+			pushEndpointIdentity: persistedClaim.pushEndpointIdentity,
 		});
 		if (await this.#git.currentBranch(binding) !== canonicalBranch) {
 			throw new WorkspaceAdapterError("handoff current branch is not canonical");
@@ -607,7 +708,14 @@ export class WorkspaceAdapter {
 				scopes: persistedClaim.allowedScopes,
 			}),
 		]);
-		const changedScope = [...new Set([...diff.changedScope, ...changedPaths(status)])].sort();
+		const dirtyPaths = changedPaths(status);
+		const outsideDirty = dirtyPaths.filter((path) => !persistedClaim.allowedScopes.some(
+			(scope) => path === scope || path.startsWith(`${scope}/`),
+		));
+		if (outsideDirty.length > 0) {
+			throw new WorkspaceAdapterError(`handoff contains dirty paths outside immutable allowed scopes: ${outsideDirty.join(", ")}`);
+		}
+		const changedScope = [...new Set([...diff.changedScope, ...dirtyPaths])].sort();
 		return {
 			issue: persistedClaim.issue,
 			branch: canonicalBranch,
