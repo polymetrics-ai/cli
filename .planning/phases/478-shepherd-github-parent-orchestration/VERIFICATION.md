@@ -68,3 +68,22 @@ evidence above is historical and does not satisfy the accepted correction findin
 | Base/head/diff/scope | pass at GREEN `8e32896a`; frozen base and reviewed head are ancestors and changed paths remain #478-owned |
 | Push / PR #487 update | blocked; `ssh: Could not resolve hostname github.com: -65563` followed by `fatal: Could not read from remote repository.` |
 | Prohibited gates | not run |
+
+## Cycle 3 verification contract
+
+Status: planned against frozen candidate `3f285722a505ea426d53a34f95716781d1aca7c2`;
+all earlier pass statements are historical and do not satisfy the fourteen accepted invariants.
+
+- [ ] Artifact-only checkpoint precedes any test or production edit.
+- [ ] One test-only RED commit covers all fourteen invariants and records exact frozen production
+      blob identity.
+- [ ] Focused #478 tests pass after one architectural GREEN/refactor.
+- [ ] Strict TypeScript passes for owned files/tests and all Shepherd production modules against
+      pinned Pi 0.80.6 declarations.
+- [ ] Serialized Shepherd suite result is recorded without hiding unrelated sandbox failures.
+- [ ] Offline pinned Pi RPC still discovers `pm-shepherd`.
+- [ ] Immutable base, ancestry, full-range diff, owned scope, and secret scans pass.
+- [ ] No Go, connector, certification, runtime-service, `make`, live GitHub, #479 controller,
+      Claude/Copilot, reviewer, or merge action runs.
+- [ ] Final evidence names the exact GREEN and verification commits; push remains deferred only for
+      the already-recorded DNS blocker.

@@ -122,3 +122,29 @@ until the RED suite has failed for the new behavior.
   sandbox write warnings for the global settings lock.
 - Push attempts for all three checkpoints failed with `ssh: Could not resolve hostname github.com:
   -65563`; commits remain local.
+
+## Cycle 3 corrected-review RED matrix
+
+Frozen production candidate: `3f285722a505ea426d53a34f95716781d1aca7c2`.
+
+| Invariant | Test-only RED contract | State |
+| --- | --- | --- |
+| canonical persisted plan provenance | clone/deserialization/proxy/accessor/cycle/unknown/oversize/tamper cases fail closed at every public boundary; canonical serialization/digest survives persistence | planned RED |
+| mutating child topology | top-level `read_only` children and empty mutating scopes are rejected | planned RED |
+| outer evidence/review identity | PR number, branches, SHAs, repository, work item, generation, paths, and scopes must all agree | planned RED |
+| canonical integration receipt | full child PR snapshot plus controller/transport mutation provenance is required and rechecked before parent readiness | planned RED |
+| independent evidence completeness | expected diff source is independently complete; nested path/check/change/thread/review/disposition evidence and minimum observation revision are complete/fresh | planned RED |
+| causal chronology | future/backward timestamps, pending completions, stale revision, pre-finding dispositions, and pre-blocker clean reviews fail; sequence rollups are authoritative | planned RED |
+| durable cross-instance mutations | two orchestrators create/integrate/ready/publish once; retries reconcile visibility; rejected local queues drain FIFO and remain bounded | planned RED |
+| ancestry proof | malformed/truthy/wrong-coordinate/stale proofs fail; exact literal-true proof passes | planned RED |
+| same-marker attempts | marker+digest+target matching is permutation-invariant and true ambiguity fails | planned RED |
+| canonical Git refs | `HEAD`, symbolic, and pseudo refs fail at plan/evidence/receipt boundaries | planned RED |
+| versioned CI policy | repository/base/revision/context/producer/digest is plan-bound; movement/staleness/missing producer fail | planned RED |
+| monotonic roster CAS | stale revision/status epoch cannot overwrite newer roster state | planned RED |
+| exported attestation API | controller constructor/digest/validator round-trip exact targets and reject tampering | planned RED |
+| bounds/partial effects/secrets | proxies/accessors/cycles/oversize and malformed post-effect responses do not leak secrets or duplicate effects | planned RED |
+
+The next commit after the Cycle 3 plan checkpoint must modify only tests/fixtures. Before that commit,
+the blob IDs for `github-orchestrator.ts`, `github-evidence.ts`, and `review-router.ts` must equal
+their IDs at `3f285722`. GREEN and verification cells remain blank until the single RED checkpoint
+has been captured.

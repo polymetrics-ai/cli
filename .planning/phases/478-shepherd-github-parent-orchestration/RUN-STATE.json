@@ -5,13 +5,13 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "All eleven corrections are focused-green at local head 8e32896a, but the serialized suite is environmentally blocked by 65 unrelated spawn EPERM failures and GitHub DNS prevents push/PR update.",
+  "reason": "Cycle 3 accepts two corrected review ledgers as one fourteen-invariant TDD batch against frozen candidate 3f285722; artifact-only planning is in progress and GitHub DNS publication remains deferred.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
-    "implementationHead": "8e32896aff5a0a04e47efc437aeb6bac1e0d3967",
-    "verificationEvidenceHead": "568c98e2bf09ac751eb474df20cd37a5af3cbd70",
+    "implementationHead": "3f285722a505ea426d53a34f95716781d1aca7c2",
+    "verificationEvidenceHead": "3f285722a505ea426d53a34f95716781d1aca7c2",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
@@ -68,6 +68,11 @@
         "cycle": "stable-head-functional-review-verify",
         "decision": "not_spawned_verification_blocked",
         "reason": "Serialized Shepherd ran 302 tests but 65 unrelated process-identity/filesystem/git tests fail with managed-sandbox spawn EPERM; GitHub DNS also blocks push and PR #487 update."
+      },
+      {
+        "cycle": "cycle-3-corrected-review-plan",
+        "decision": "local_critical_path",
+        "reason": "Two corrected ledgers are synthesized into one fourteen-invariant artifact-first, single-RED, architectural-GREEN correction while controller/#479 and parent planning remain excluded."
       }
     ],
     "humanGates": [
@@ -81,5 +86,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T20:00:00.000Z"
+  "updatedAt": "2026-07-22T00:00:00.000Z"
 }

@@ -44,3 +44,14 @@ the managed sandbox rejects their process-identity child process with `spawn EPE
 #478 test passes. Accordingly the phase remains `in_progress` with `verificationPassed: false`.
 GitHub DNS resolution failed on every push attempt, so plan, RED, and GREEN commits remain local and
 PR #487 could not be updated from this environment.
+
+## Cycle 3 correction status
+
+Two corrected deep-review ledgers for frozen candidate `3f285722` converge on one fourteen-invariant
+architectural correction. The new slice covers durable canonical plan provenance, mutating-only
+top-level children, complete PR/review/integration binding, independent complete evidence and causal
+freshness, cross-instance conditional mutations, exact ancestry proofs, deterministic same-marker
+attestations, symbolic-ref rejection, versioned plan-bound CI policy, monotonic roster publication,
+an exported controller attestation API, and adversarial bounds/partial-effect safety. This is the
+artifact-only checkpoint; tests and production remain unchanged until the required single RED
+commit. Network publication remains deferred under the existing DNS blocker.

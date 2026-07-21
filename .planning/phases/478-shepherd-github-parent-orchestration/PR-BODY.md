@@ -53,3 +53,15 @@ Correction evidence: RED `4e02d059` (9 pass / 29 expected fail with production i
 Pinned Pi 0.80.6 offline registration and base/head/diff/scope pass. The serialized suite ran 302
 tests but is environmentally blocked at 236 pass / 65 unrelated `spawn EPERM` failures / 1 skip.
 Push and live PR-body update are blocked by GitHub DNS resolution in the worker environment.
+
+## Cycle 3 corrected-review slice (in progress)
+
+- accepted both corrected review ledgers as one fourteen-invariant batch against frozen candidate
+  `3f285722`
+- planned persisted canonical plan/digest validation, durable cross-instance conditional mutation
+  ports, full PR/integration/review provenance, independent nested evidence freshness, exact ancestry
+  proofs, plan-bound CI policy, monotonic roster CAS, and exported controller attestation helpers
+- retained one artifact-only → one all-invariants test-only RED → architectural GREEN → verification
+  lifecycle; no controller/#479, parent planning, live GitHub, Go, connector, `make`, or reviewer work
+- push and PR synchronization remain deferred because the existing GitHub DNS failure is external
+  to the local correction lifecycle

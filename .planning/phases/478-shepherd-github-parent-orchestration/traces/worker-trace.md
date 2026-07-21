@@ -80,6 +80,18 @@
 - No Go, connector, certification, runtime-service, `make`, live orchestration transport,
   reviewer, Claude/Copilot, or merge command ran.
 
+## 2026-07-22 Cycle 3 corrected-review plan
+
+- Reconciled clean local head `3f285722a505ea426d53a34f95716781d1aca7c2` and immutable base
+  `3addb1f48be1afe8b1e2b59b54247679d7293805` before edits.
+- Read `/tmp/478-REVIEW-CORRECTED-1.md` and `/tmp/478-REVIEW-CORRECTED-2.md` completely and
+  synthesized every accepted finding into one fourteen-invariant correction contract.
+- Preserved the repository-required manual GSD/TDD route and Codex
+  `openai-codex/gpt-5.6-sol:xhigh` review provenance; no Claude/Copilot finding was introduced.
+- Updated phase artifacts only. Production and tests remain frozen until the next single
+  all-invariants test/fixture-only RED commit.
+- Existing GitHub DNS failure is treated as deferred publication, not a reason to stop local work.
+
 ## 2026-07-21 stacked PR publication
 
 - Pushed verification evidence checkpoint `568c98e2bf09ac751eb474df20cd37a5af3cbd70`.

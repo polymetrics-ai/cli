@@ -117,3 +117,16 @@ session-attestation contract and fixtures required to verify independent-review 
   child-process probe. `verificationPassed` remains false.
 - Push/PR #487 update: blocked by `ssh: Could not resolve hostname github.com: -65563`; local
   commits retained. No live reviewer, GitHub mutation, controller/#479 edit, or merge ran.
+
+## Cycle 3 handoff in progress
+
+- Frozen candidate: `3f285722a505ea426d53a34f95716781d1aca7c2`; exact base:
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`.
+- Both corrected review ledgers are accepted as one fourteen-invariant correction batch.
+- Strict sequence: artifact-only plan, exactly one test/fixture-only RED with all production blobs
+  unchanged, one architectural GREEN/refactor, then authorized verification evidence.
+- New contracts cover canonical persisted plan provenance, mutating-only child topology, complete
+  evidence/receipt identity and chronology, durable conditional mutations, exact ancestry, CI-policy
+  provenance, monotonic roster state, and the exported controller attestation protocol.
+- Parent still owns #479 wiring, parent planning, exact-head independent review, integration, and
+  human merge gates. Existing GitHub DNS failure defers push/PR synchronization only.

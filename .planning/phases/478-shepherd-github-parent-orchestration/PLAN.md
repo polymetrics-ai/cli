@@ -214,3 +214,72 @@ without editing #475, #479, controller, extension, or top-level integration file
 - [ ] Full serialized suite is green: blocked by 65 unrelated `spawn EPERM` sandbox failures
       (236 pass, 65 fail, 1 skip; all #478 tests pass).
 - [ ] Push/update PR #487: blocked by GitHub DNS resolution; all commits retained locally.
+
+## Cycle 3 deep-review correction: 2026-07-22
+
+Two independent corrected review ledgers examined frozen candidate
+`3f285722a505ea426d53a34f95716781d1aca7c2` against immutable base
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Their overlapping findings are accepted as one
+fourteen-invariant batch. The implementation route remains local Codex
+`openai-codex/gpt-5.6-sol:xhigh`; no Claude/Copilot finding or controller/#479 work is imported.
+
+### Cycle 3 correction contract
+
+1. Give every plan a persistence-safe opaque canonical serialization and digest. Revalidate and
+   rebuild it at every public mutation/readiness boundary, rejecting clones, deserialized or
+   tampered envelopes, proxies, accessors, cycles, unknown fields, oversized input, and altered
+   repository/generation/branch/marker/topology values.
+2. Reject top-level `read_only` children. Every planned child mutates through an issue/PR/integration
+   lifecycle and therefore requires non-empty scopes; read-only roles remain #479-internal.
+3. Bind outer PR evidence and the independent-review target to the same repository, work item,
+   generation, PR number, base/head SHA, base/head branch, exact paths, and scopes.
+4. Bind an integration receipt to the complete canonical child PR snapshot and its controller and
+   durable-transport mutation provenance before parent readiness can consume it.
+5. Require independently complete changed-path evidence plus complete checks, requested changes,
+   threads, reviews, dispositions, and a controller minimum observation revision/time. No expected
+   path set may be copied tautologically from the evidence snapshot under evaluation.
+6. Enforce causal event chronology and freshness: no future/backward event, no fake pending
+   completion, sequence-authoritative check rollups, disposition after finding, and a clean review
+   after all blocking findings and satisfying dispositions. Stale same-head evidence blocks.
+7. Introduce durable, cross-instance conditional mutation/idempotency contracts for issue, PR,
+   integration, parent-ready, and roster publication. Keep local keyed queues as bounded FIFO
+   optimization only; serialize integration/ready, reconcile after success and retry visibility,
+   and prove two orchestrators produce one external effect.
+8. Replace ancestry booleans with an exact runtime-validated proof binding repository, ancestor,
+   descendant, result, revision, and observation time. Only literal `true` at exact coordinates
+   satisfies readiness.
+9. Reconcile same-marker review attempts by marker, result digest, and target; reject true
+   ambiguity and remain permutation-invariant.
+10. Reject `HEAD` and all pseudo/symbolic refs through the single canonical Git-ref validator.
+11. Inject a repository/base-branch-scoped, versioned required-CI policy whose contexts,
+   producers, revision, and digest are bound into the canonical plan/generation. Policy movement
+   or stale digest blocks; no hard-coded single-check fallback remains.
+12. Give roster snapshots monotonic revision/status epochs and conditional durable publication so
+   an older orchestrator cannot overwrite newer status.
+13. Export the controller-side attestation result digest, constructor, and validator so #479 and
+   tests consume one canonical protocol rather than copying a private hash implementation.
+14. Extend partial-effect and bound tests across proxy/accessor/cycle/oversize/secret inputs,
+   retry-before-visibility, queue rejection/cleanup, and concurrent orchestrator instances.
+
+### Cycle 3 strict lifecycle
+
+1. Commit this artifact-only plan checkpoint while every #478 production/test blob remains equal
+   to frozen candidate `3f285722`.
+2. Make exactly one test/fixture-only RED commit covering all fourteen invariants. Before committing,
+   prove every #478 production blob is identical to `3f285722`; record the focused failing matrix.
+3. Implement one architectural GREEN/refactor within the three owned production modules plus their
+   tests and issue-478 fixtures. No #479 controller or parent planning file may change.
+4. Run focused #478, strict owned and all-production TypeScript, serialized Shepherd, pinned offline
+   Pi RPC, immutable-base/diff/scope checks, and secret scans. Record sandbox `spawn EPERM` as an
+   environmental broad-gate failure if it recurs; do not run Go, connectors, certification,
+   runtime services, `make`, or live GitHub.
+5. Commit verification evidence. Push/PR synchronization remains deferred while the recorded DNS
+   failure persists; fresh exact-head independent review and human integration remain parent-owned.
+
+### Cycle 3 checkpoints
+
+- [ ] Artifact-only PLAN commit.
+- [ ] Single all-invariants test-only RED commit with production blob identity proof.
+- [ ] Architectural GREEN/refactor commit.
+- [ ] Focused and authorized broad verification evidence commit.
+- [ ] Push/PR #487 synchronization when network access returns.
