@@ -5,7 +5,10 @@ import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { FileStateStore, type FileStateStoreOptions, type RunLease } from "./state-store.ts";
-import { isWorkspaceMutationIssuer, type WorkspaceMutationIssuer } from "./workspace-adapter.ts";
+import {
+	registerGitAdapterMutationLeaseAcquirer,
+	type GitAdapterMutationLeaseAcquirer,
+} from "./workspace-adapter.ts";
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 const DEFAULT_MAX_OUTPUT_BYTES = 1024 * 1024;
@@ -15,6 +18,17 @@ const MAX_SCOPES = 64;
 const SHA_PATTERN = /^[0-9a-f]{40}$/;
 const IDENTITY_PATTERN = /^[0-9a-f]{64}$/;
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const NULL_DEVICE = process.platform === "win32" ? "NUL" : "/dev/null";
+const SAFE_MUTATION_CONFIG = [
+	["core.hooksPath", NULL_DEVICE],
+	["core.fsmonitor", "false"],
+	["core.untrackedCache", "false"],
+	["core.attributesFile", NULL_DEVICE],
+	["credential.helper", ""],
+	["commit.gpgSign", "false"],
+	["tag.gpgSign", "false"],
+	["protocol.ext.allow", "never"],
+] as const;
 
 export interface GitCommandRequest {
 	cwd: string;
@@ -40,6 +54,7 @@ export interface GitBinding {
 	remoteIdentity: string;
 	fetchEndpointIdentity: string;
 	pushEndpointIdentity: string;
+	defaultBranch?: string;
 }
 
 export interface GitMutationLease {
@@ -264,26 +279,55 @@ function pathWithinScope(path: string, scopes: readonly string[]): boolean {
 	return scopes.some((scope) => path === scope || path.startsWith(`${scope}/`));
 }
 
-function sanitizedGitEnvironment(): NodeJS.ProcessEnv {
+function sanitizedGitEnvironment(mutation: boolean): NodeJS.ProcessEnv {
 	const env = { ...process.env };
 	for (const key of Object.keys(env)) {
-		if (key === "GIT_DIR"
-			|| key === "GIT_WORK_TREE"
-			|| key === "GIT_COMMON_DIR"
-			|| key === "GIT_INDEX_FILE"
-			|| key === "GIT_OBJECT_DIRECTORY"
-			|| key === "GIT_ALTERNATE_OBJECT_DIRECTORIES"
-			|| key === "GIT_CEILING_DIRECTORIES"
-			|| key === "GIT_CONFIG_COUNT"
-			|| key.startsWith("GIT_CONFIG_KEY_")
-			|| key.startsWith("GIT_CONFIG_VALUE_")) delete env[key];
+		const upper = key.toUpperCase();
+		if (upper.startsWith("GIT_")
+			|| upper === "SSH_ASKPASS"
+			|| upper === "SSH_ASKPASS_REQUIRE"
+			|| upper === "GCM_INTERACTIVE"
+			|| upper === "PAGER"
+			|| upper === "EDITOR"
+			|| upper === "VISUAL"
+			|| upper.endsWith("_PROXY")
+			|| upper === "LD_PRELOAD"
+			|| upper.startsWith("DYLD_")) delete env[key];
 	}
 	env.GIT_CONFIG_NOSYSTEM = "1";
-	env.GIT_CONFIG_GLOBAL = process.platform === "win32" ? "NUL" : "/dev/null";
+	env.GIT_CONFIG_GLOBAL = NULL_DEVICE;
 	env.GIT_TERMINAL_PROMPT = "0";
 	env.GIT_OPTIONAL_LOCKS = "0";
+	env.GIT_PAGER = "";
 	env.LC_ALL = "C";
+	if (mutation) {
+		env.GIT_CONFIG_COUNT = String(SAFE_MUTATION_CONFIG.length);
+		for (const [index, [key, value]] of SAFE_MUTATION_CONFIG.entries()) {
+			env[`GIT_CONFIG_KEY_${index}`] = key;
+			env[`GIT_CONFIG_VALUE_${index}`] = value;
+		}
+	}
 	return env;
+}
+
+function unsafeMutationConfigKey(rawKey: string): boolean {
+	const key = rawKey.toLowerCase();
+	return key === "core.hookspath"
+		|| key === "core.fsmonitor"
+		|| key === "core.sshcommand"
+		|| key === "credential.helper"
+		|| /^credential\..+\.helper$/.test(key)
+		|| /^filter\..+\.(clean|smudge|process|required)$/.test(key)
+		|| /^remote\..+\.(receivepack|uploadpack|vcs|proxy)$/.test(key)
+		|| key === "http.proxy"
+		|| key === "https.proxy"
+		|| key === "http.extraheader"
+		|| /^http\..+\.(proxy|extraheader)$/.test(key)
+		|| key === "protocol.allow"
+		|| /^protocol\..+\.allow$/.test(key)
+		|| /^submodule\..+\.update$/.test(key)
+		|| key === "include.path"
+		|| /^includeif\..+\.path$/.test(key);
 }
 
 const defaultExecutor: GitCommandExecutor = (request) => new Promise((resolvePromise, reject) => {
@@ -500,14 +544,18 @@ export class GitAdapter {
 		if (!Number.isSafeInteger(this.#maxOutputBytes) || this.#maxOutputBytes < 1024 || this.#maxOutputBytes > 8 * 1024 * 1024) {
 			throw new GitAdapterError("Git output bound is invalid");
 		}
+		const acquireMutationLease: GitAdapterMutationLeaseAcquirer = (binding, request, leaseOptions) => (
+			this.#acquireMutationLease(binding, request, leaseOptions)
+		);
+		registerGitAdapterMutationLeaseAcquirer(this, acquireMutationLease);
 	}
 
-	async #run(cwd: string, args: readonly string[]): Promise<Buffer> {
+	async #run(cwd: string, args: readonly string[], mutation = false): Promise<Buffer> {
 		try {
 			return await this.#execute({
 				cwd,
 				args: [...args],
-				env: sanitizedGitEnvironment(),
+				env: sanitizedGitEnvironment(mutation),
 				timeoutMs: this.#timeoutMs,
 				maxOutputBytes: this.#maxOutputBytes,
 			});
@@ -516,6 +564,36 @@ export class GitAdapter {
 			// the bounded exit status needed for typed control flow.
 			throw new GitCommandFailure(errorExitCode(error));
 		}
+	}
+
+	async #localConfigKeys(cwd: string, scope: "--local" | "--worktree"): Promise<string[]> {
+		try {
+			const raw = (await this.#run(cwd, [
+				"config", scope, "--no-includes", "--null", "--name-only", "--list",
+			])).toString("utf8");
+			return raw.split("\0").filter(Boolean).map((key) => {
+				if (!safeText(key, 512)) throw new GitAdapterError("repository Git configuration key is invalid");
+				return key;
+			});
+		} catch (error) {
+			if (scope === "--worktree" && error instanceof GitCommandFailure) return [];
+			throw error;
+		}
+	}
+
+	async #assertSafeMutationConfiguration(cwd: string): Promise<void> {
+		const keys = await Promise.all([
+			this.#localConfigKeys(cwd, "--local"),
+			this.#localConfigKeys(cwd, "--worktree"),
+		]);
+		const unsafe = [...new Set(keys.flat().filter(unsafeMutationConfigKey))].sort();
+		if (unsafe.length > 0) {
+			throw new GitAdapterError(`repository contains unsafe Git mutation configuration: ${unsafe.join(", ")}`);
+		}
+	}
+
+	#runMutation(cwd: string, args: readonly string[]): Promise<Buffer> {
+		return this.#run(cwd, args, true);
 	}
 
 	async #effectiveEndpointValues(cwd: string, push: boolean): Promise<string[] | undefined> {
@@ -550,6 +628,37 @@ export class GitAdapter {
 			fetch: { value: fetchValues[0], identity: endpointIdentity(fetchNormalized) },
 			push: { value: pushValues[0], identity: endpointIdentity(pushNormalized) },
 		};
+	}
+
+	async #localDefaultBranch(cwd: string): Promise<string | undefined> {
+		let raw: string;
+		try {
+			raw = stripLineEnding((await this.#run(cwd, [
+				"symbolic-ref", "--quiet", "--short", "refs/remotes/origin/HEAD",
+			])).toString("utf8"));
+		} catch (error) {
+			if (error instanceof GitCommandFailure && (error.exitCode === 1 || error.exitCode === 128)) return undefined;
+			throw error;
+		}
+		if (!raw.startsWith("origin/")) throw new GitAdapterError("origin symbolic HEAD is malformed");
+		const branch = raw.slice("origin/".length);
+		assertSafeBranch(branch, "origin default branch");
+		return branch;
+	}
+
+	async #remoteDefaultBranch(cwd: string, endpoint: string): Promise<string> {
+		const raw = stripLineEnding((await this.#runMutation(cwd, [
+			"ls-remote", "--symref", "--", endpoint, "HEAD",
+		])).toString("utf8"));
+		const symbolic = raw.split("\n").filter((line) => line.startsWith("ref: "));
+		if (symbolic.length !== 1) throw new GitAdapterError("remote symbolic HEAD evidence is missing or ambiguous");
+		const [reference, name, ...extra] = symbolic[0].slice("ref: ".length).split("\t");
+		if (extra.length > 0 || name !== "HEAD" || !reference.startsWith("refs/heads/")) {
+			throw new GitAdapterError("remote symbolic HEAD evidence is malformed");
+		}
+		const branch = reference.slice("refs/heads/".length);
+		assertSafeBranch(branch, "remote default branch");
+		return branch;
 	}
 
 	async #assertEndpointRewriteStable(cwd: string, endpoint: string, push: boolean): Promise<void> {
@@ -644,7 +753,8 @@ export class GitAdapter {
 			|| binding.repositoryIdentity !== state.coordinator.repositoryIdentity
 			|| binding.remoteIdentity !== state.coordinator.remoteIdentity
 			|| binding.fetchEndpointIdentity !== state.coordinator.fetchEndpointIdentity
-			|| binding.pushEndpointIdentity !== state.coordinator.pushEndpointIdentity) {
+			|| binding.pushEndpointIdentity !== state.coordinator.pushEndpointIdentity
+			|| binding.defaultBranch !== state.coordinator.defaultBranch) {
 			throw new GitAdapterError(`Git mutation ${target} binding does not match its immutable lease claim`);
 		}
 		const actual = await this.assertBinding(binding);
@@ -660,15 +770,11 @@ export class GitAdapter {
 		return actual;
 	}
 
-	async acquireMutationLease(
-		issuer: WorkspaceMutationIssuer,
+	async #acquireMutationLease(
 		binding: GitBinding,
 		request: GitMutationLeaseRequest,
 		options: Omit<FileStateStoreOptions, "trustedRoot"> = {},
 	): Promise<GitMutationLease> {
-		if (!isWorkspaceMutationIssuer(issuer)) {
-			throw new GitAdapterError("Git mutation leases can only be issued by the owning workspace adapter");
-		}
 		if (typeof request !== "object" || request === null) throw new GitAdapterError("Git mutation lease request is required");
 		assertCanonicalIssueBranch(request.issue, request.slug, request.branch);
 		assertSha(request.baseHead, "mutation lease base head");
@@ -733,6 +839,9 @@ export class GitAdapter {
 			filesystemIdentity(worktreeDirectory),
 			this.#effectiveRemote(repositoryRoot),
 		]);
+		const defaultBranch = effectiveRemote.fetch.value === undefined
+			? undefined
+			: await this.#localDefaultBranch(repositoryRoot);
 		const remoteIdentity = hashIdentity(["shepherd-origin-v1", normalizedRemote]);
 		const repositoryIdentity = hashIdentity(["shepherd-repository-v1", repositoryFilesystemIdentity, normalizedRemote]);
 		const worktreeIdentity = hashIdentity(["shepherd-worktree-v1", repositoryIdentity, worktreeFilesystemIdentity]);
@@ -744,6 +853,7 @@ export class GitAdapter {
 			remoteIdentity,
 			fetchEndpointIdentity: effectiveRemote.fetch.identity,
 			pushEndpointIdentity: effectiveRemote.push.identity,
+			...(defaultBranch === undefined ? {} : { defaultBranch }),
 		};
 	}
 
@@ -754,6 +864,7 @@ export class GitAdapter {
 		assertIdentity(binding.remoteIdentity, "remote identity");
 		assertIdentity(binding.fetchEndpointIdentity, "fetch endpoint identity");
 		assertIdentity(binding.pushEndpointIdentity, "push endpoint identity");
+		if (binding.defaultBranch !== undefined) assertSafeBranch(binding.defaultBranch, "default branch");
 		if (binding.remoteName !== "origin") throw new GitAdapterError("only the origin remote is supported");
 		const actual = await this.inspect(binding.cwd);
 		if (actual.repositoryIdentity !== binding.repositoryIdentity) throw new GitAdapterError("repository identity mismatch");
@@ -761,6 +872,7 @@ export class GitAdapter {
 		if (actual.remoteIdentity !== binding.remoteIdentity) throw new GitAdapterError("origin remote identity mismatch");
 		if (actual.fetchEndpointIdentity !== binding.fetchEndpointIdentity) throw new GitAdapterError("origin fetch endpoint mismatch");
 		if (actual.pushEndpointIdentity !== binding.pushEndpointIdentity) throw new GitAdapterError("origin push endpoint mismatch");
+		if (actual.defaultBranch !== binding.defaultBranch) throw new GitAdapterError("origin default branch mismatch");
 		return actual;
 	}
 
@@ -829,13 +941,14 @@ export class GitAdapter {
 			assertSafeBranch(branch);
 			if (branch !== state.branch) throw new GitAdapterError("fetched branch does not match the immutable lease claim");
 			const actual = await this.#assertMutationBinding(state, binding, "coordinator");
+			await this.#assertSafeMutationConfiguration(actual.cwd);
 			const endpoint = (await this.#effectiveRemote(actual.cwd)).fetch;
 			if (endpoint.value === undefined || endpoint.identity !== state.coordinator.fetchEndpointIdentity) {
 				throw new GitAdapterError("origin fetch endpoint no longer matches the immutable lease claim");
 			}
 			await this.#assertEndpointRewriteStable(actual.cwd, endpoint.value, false);
 			await this.#assertLeaseOwnedForMutation(state);
-			await this.#run(actual.cwd, ["fetch", "--no-tags", "--", endpoint.value, branch]);
+			await this.#runMutation(actual.cwd, ["fetch", "--no-tags", "--", endpoint.value, branch]);
 			const fetched = stripLineEnding((await this.#run(actual.cwd, ["rev-parse", "--verify", "FETCH_HEAD^{commit}"])).toString("utf8"));
 			assertSha(fetched, "fetched head");
 			return fetched;
@@ -848,6 +961,7 @@ export class GitAdapter {
 			assertSha(request.baseHead, "base head");
 			if (request.baseHead !== state.baseHead) throw new GitAdapterError("worktree base does not match the immutable lease claim");
 			const actual = await this.#assertMutationBinding(state, binding, "coordinator");
+			await this.#assertSafeMutationConfiguration(actual.cwd);
 			await this.#assertCommitObject(actual, request.baseHead, "base head");
 			if (!safeText(request.trustedRoot, MAX_PATH_BYTES) || !isAbsolute(request.trustedRoot)) {
 				throw new GitAdapterError("trusted worktree root must be an absolute bounded path");
@@ -865,9 +979,9 @@ export class GitAdapter {
 			try {
 				await this.#assertLeaseOwnedForMutation(state);
 				if (existing === undefined) {
-					await this.#run(actual.cwd, ["worktree", "add", "-b", request.branch, "--", request.path, request.baseHead]);
+					await this.#runMutation(actual.cwd, ["worktree", "add", "-b", request.branch, "--", request.path, request.baseHead]);
 				} else {
-					await this.#run(actual.cwd, ["worktree", "add", "--", request.path, request.branch]);
+					await this.#runMutation(actual.cwd, ["worktree", "add", "--", request.path, request.branch]);
 				}
 			} catch (error) {
 				throw new GitAdapterError("typed Git worktree creation failed; existing state was preserved", { cause: error });
@@ -876,7 +990,8 @@ export class GitAdapter {
 			if (created.repositoryIdentity !== actual.repositoryIdentity
 				|| created.remoteIdentity !== actual.remoteIdentity
 				|| created.fetchEndpointIdentity !== actual.fetchEndpointIdentity
-				|| created.pushEndpointIdentity !== actual.pushEndpointIdentity) {
+				|| created.pushEndpointIdentity !== actual.pushEndpointIdentity
+				|| created.defaultBranch !== actual.defaultBranch) {
 				throw new GitAdapterError("created worktree repository identity mismatch");
 			}
 			state.targetWorktreeIdentity = created.worktreeIdentity;
@@ -900,20 +1015,40 @@ export class GitAdapter {
 		}
 	}
 
-	async diff(binding: GitBinding, request: { baseHead: string; head: string; scopes: readonly string[] }): Promise<GitDiffEvidence> {
-		const scopes = validateScopes(request.scopes);
-		await this.#assertCommitObject(binding, request.baseHead, "base head");
-		await this.#assertCommitObject(binding, request.head, "head");
+	async #historyPaths(binding: GitBinding, baseHead: string, head: string): Promise<string[]> {
+		await this.#assertCommitObject(binding, baseHead, "base head");
+		await this.#assertCommitObject(binding, head, "head");
+		if (!(await this.isAncestor(binding, baseHead, head))) {
+			throw new GitAdapterError("immutable base head is not an ancestor of canonical head");
+		}
 		const actual = await this.assertBinding(binding);
-		const raw = (await this.#run(actual.cwd, ["diff", "--name-only", "--no-renames", "-z", request.baseHead, request.head, "--"])).toString("utf8");
-		const changedScope = [...new Set(raw.split("\0").filter(Boolean).map((path) => {
+		const raw = (await this.#run(actual.cwd, [
+			"log", "--format=", "--name-only", "-z", "--no-renames", "--no-ext-diff", "--no-textconv",
+			"--full-history", "-m", `${baseHead}..${head}`, "--",
+		])).toString("utf8");
+		return [...new Set(raw.split("\0").filter(Boolean).map((path) => {
 			validateScope(path);
 			return path;
 		}))].sort();
+	}
+
+	async #assertHistoryWithinScopes(
+		binding: GitBinding,
+		baseHead: string,
+		head: string,
+		scopes: readonly string[],
+	): Promise<string[]> {
+		const changedScope = await this.#historyPaths(binding, baseHead, head);
 		const outside = changedScope.filter((path) => !pathWithinScope(path, scopes));
 		if (outside.length > 0) {
-			throw new GitAdapterError(`Git diff contains paths outside immutable allowed scopes: ${outside.join(", ")}`);
+			throw new GitAdapterError(`Git history contains paths outside immutable allowed scopes: ${outside.join(", ")}`);
 		}
+		return changedScope;
+	}
+
+	async diff(binding: GitBinding, request: { baseHead: string; head: string; scopes: readonly string[] }): Promise<GitDiffEvidence> {
+		const scopes = validateScopes(request.scopes);
+		const changedScope = await this.#assertHistoryWithinScopes(binding, request.baseHead, request.head, scopes);
 		return { baseHead: request.baseHead, head: request.head, changedScope };
 	}
 
@@ -927,30 +1062,36 @@ export class GitAdapter {
 				throw new GitAdapterError("commit scopes exceed the immutable lease claim");
 			}
 			const actual = await this.#assertMutationBinding(state, binding, "worktree");
+			await this.#assertSafeMutationConfiguration(actual.cwd);
 			if (await this.currentBranch(actual) !== request.branch) throw new GitAdapterError("current branch does not match canonical issue branch");
 			const previousHead = await this.resolveBranchHead(actual, request.branch);
 			if (previousHead !== request.expectedHead) throw new GitAdapterError("stale expected head; commit was not attempted");
+			await this.#assertHistoryWithinScopes(actual, state.baseHead, previousHead, state.allowedScopes);
 			const status = await this.status(actual);
 			const outside = status.entries.flatMap((entry) => [entry.path, ...(entry.originalPath ? [entry.originalPath] : [])])
 				.filter((path) => !pathWithinScope(path, scopes));
 			if (outside.length > 0) throw new GitAdapterError(`dirty or staged state exists outside declared scopes: ${outside.sort().join(", ")}`);
 			if (status.clean) return { committed: false, previousHead, head: previousHead };
 			await this.#assertLeaseOwnedForMutation(state);
-			await this.#run(actual.cwd, ["add", "-A", "--", ...scopes]);
+			await this.#runMutation(actual.cwd, ["add", "-A", "--", ...scopes]);
 			const staged = (await this.#run(actual.cwd, ["diff", "--cached", "--name-only", "-z"])).toString("utf8")
 				.split("\0").filter(Boolean);
 			if (staged.some((path) => !pathWithinScope(path, scopes))) {
 				throw new GitAdapterError("staged state escaped declared scopes; state was preserved for inspection");
 			}
 			if (staged.length === 0) return { committed: false, previousHead, head: previousHead };
+			if (await this.resolveBranchHead(actual, request.branch) !== previousHead) {
+				throw new GitAdapterError("canonical issue head changed while staging; commit was not attempted");
+			}
 			await this.#assertLeaseOwnedForMutation(state);
-			await this.#run(actual.cwd, [
+			await this.#runMutation(actual.cwd, [
 				"-c", "core.hooksPath=/dev/null",
 				"-c", "commit.gpgSign=false",
 				"commit", "--no-verify", "-m", request.message,
 			]);
 			const head = await this.resolveBranchHead(actual, request.branch);
 			if (head === previousHead) throw new GitAdapterError("commit did not advance the exact head");
+			await this.#assertHistoryWithinScopes(actual, state.baseHead, head, state.allowedScopes);
 			return { committed: true, previousHead, head };
 		});
 	}
@@ -960,12 +1101,17 @@ export class GitAdapter {
 			this.#assertLeaseRequest(state, request.issue, request.slug, request.branch);
 			assertSafeBranch(request.defaultBranch, "default branch");
 			assertSha(request.expectedHead, "expected head");
-			if (["main", "master", "trunk", request.defaultBranch].includes(request.branch)) {
+			if (state.coordinator.defaultBranch === undefined
+				|| request.defaultBranch !== state.coordinator.defaultBranch) {
+				throw new GitAdapterError("requested default branch does not match bound origin symbolic HEAD evidence");
+			}
+			if (["main", "master", "trunk", state.coordinator.defaultBranch].includes(request.branch)) {
 				throw new GitAdapterError("direct default branch push is unavailable");
 			}
 			const actual = await this.#assertMutationBinding(state, binding, "worktree");
+			await this.#assertSafeMutationConfiguration(actual.cwd);
 			if (await this.currentBranch(actual) !== request.branch) throw new GitAdapterError("current branch does not match canonical issue branch");
-			const head = await this.resolveBranchHead(actual, request.branch);
+			let head = await this.resolveBranchHead(actual, request.branch);
 			if (head !== request.expectedHead) throw new GitAdapterError("stale expected head; push was not attempted");
 			const endpoints = await this.#effectiveRemote(actual.cwd);
 			if (endpoints.fetch.value === undefined || endpoints.push.value === undefined
@@ -975,9 +1121,18 @@ export class GitAdapter {
 				throw new GitAdapterError("origin push endpoint does not match the inspected and bound fetch endpoint");
 			}
 			await this.#assertEndpointRewriteStable(actual.cwd, endpoints.push.value, true);
+			const remoteDefaultBranch = await this.#remoteDefaultBranch(actual.cwd, endpoints.push.value);
+			if (remoteDefaultBranch !== state.coordinator.defaultBranch) {
+				throw new GitAdapterError("remote symbolic HEAD no longer matches the bound default branch");
+			}
+			head = await this.resolveBranchHead(actual, request.branch);
+			if (head !== request.expectedHead) throw new GitAdapterError("canonical issue head changed before push");
+			await this.#assertHistoryWithinScopes(actual, state.baseHead, head, state.allowedScopes);
 			await this.#assertLeaseOwnedForMutation(state);
-			await this.#run(actual.cwd, ["push", "--porcelain", "--", endpoints.push.value, request.branch]);
-			const remote = stripLineEnding((await this.#run(actual.cwd, [
+			await this.#runMutation(actual.cwd, [
+				"push", "--porcelain", "--", endpoints.push.value, `${head}:refs/heads/${request.branch}`,
+			]);
+			const remote = stripLineEnding((await this.#runMutation(actual.cwd, [
 				"ls-remote", "--heads", "--", endpoints.push.value, `refs/heads/${request.branch}`,
 			])).toString("utf8"));
 			const [remoteHead, remoteRef, ...extra] = remote.split("\t");
