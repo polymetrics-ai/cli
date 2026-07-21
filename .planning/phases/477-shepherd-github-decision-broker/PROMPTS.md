@@ -12,3 +12,15 @@
 - Downstream artifact: `.planning/phases/477-shepherd-github-decision-broker/PLAN.md`.
 - Verification result: declared child equivalent passed. The parent orchestrator superseded and
   intentionally cancelled the child full-repo gate; see `VERIFICATION.md` for exact evidence.
+
+## Exact-head correction snapshot
+
+- Input: independent xhigh review of `87eb80f561d416da245e753a5dbc887a3384a05d` with seven blockers
+  and one transient/permanent transport warning.
+- GSD command retried: `scripts/gsd prompt programming-loop init --phase
+  477-shepherd-github-decision-broker --dry-run`; result remains `unknown GSD command:
+  programming-loop` after `scripts/gsd doctor` passed.
+- Runtime decision: `local_critical_path` under the recorded manual-GSD fallback because the exact
+  correction scope overlaps both owned modules and requires one ordered RED-before-GREEN history.
+- Downstream artifact: correction sections in `PLAN.md` and `TDD-LEDGER.md`.
+- Verification result: pending.

@@ -18,3 +18,13 @@
 No auth-scope change, secret access, new dependency, production mutation, reverse ETL, destructive
 action, or default-branch merge occurred. Automated review remains the parent orchestrator's exact
 head/range `codex_independent` route and is not represented as Claude, Copilot, or a human decision.
+
+## Exact-head correction verification
+
+Status: in progress after independent review of
+`87eb80f561d416da245e753a5dbc887a3384a05d`.
+
+The correction gate will run only focused #477 tests, the complete Shepherd test suite, strict
+TypeScript against the explicit Pi 0.80.6 package/type roots, offline Pi RPC discovery,
+`git diff --check`, owned-scope validation, and immutable-base validation. No Go, connector,
+`make verify`, live GitHub mutation, Claude/Copilot request, or merge is authorized for this cycle.

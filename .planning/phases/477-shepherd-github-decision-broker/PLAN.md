@@ -89,3 +89,36 @@ verification with the declared child equivalent of focused tests, the full Sheph
 Pi 0.80.6 TypeScript, offline Pi RPC/extension discovery, and `git diff --check`. It intentionally
 terminated the in-flight `make verify` attempt and instructed this worker not to retry. The earlier
 standalone Go gates remain supplemental evidence only.
+
+## Exact-head correction cycle: 2026-07-21
+
+Independent `codex_independent` review of exact head
+`87eb80f561d416da245e753a5dbc887a3384a05d` found seven blockers and one warning. This correction
+cycle remains inside the original two production files, matching tests/fixtures, and this phase
+directory.
+
+Planned RED slices:
+
+1. Accept and canonicalize GitHub's RFC3339 second-resolution timestamps while allowing only the
+   sub-second chronology tolerance needed when GitHub truncates a local millisecond timestamp.
+2. Preserve safe-integer GitHub comment IDs above signed 32-bit range, and accept digits in valid
+   repository names and human logins.
+3. Replace directory-before-owner locks with atomically published owner records; carry the lock
+   token through acquire/reclaim/release and fail closed rather than deleting a replacement lock.
+4. Make `parent_merge` a discriminated request whose only affirmative option is the literal
+   `approve-merge`; reject generic `approve` at both type and runtime boundaries.
+5. Reject centralized-style credential key/value forms, URLs with credentials, private keys,
+   vendor tokens, control/format/bidi characters, and untrusted mentions. Render the question as
+   escaped quoted Markdown and mention only validated configured humans from a dedicated field.
+6. Classify GitHub transport failures as transient or permanent, redact adapter-facing errors, and
+   retry only transient failures with an independently bounded exponential backoff.
+
+Execution decision for this correction cycle: `local_critical_path`. The assignment is an exact
+review-fix lane with one owned write scope; another mutating worker would collide with the same two
+modules and invalidate the requested RED-before-GREEN sequence. Fresh xhigh review remains
+parent-owned after a new exact head is pushed.
+
+Correction verification is limited by coordinator policy to focused #477 tests, the full Shepherd
+suite, strict no-emit TypeScript using the explicitly pinned Pi 0.80.6 installation, offline Pi RPC,
+diff/scope/base checks, and PR evidence updates. Go, connector, `make verify`, live GitHub comments,
+Claude/Copilot requests, and merge remain out of scope.

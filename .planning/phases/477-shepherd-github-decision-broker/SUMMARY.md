@@ -1,6 +1,6 @@
 # Summary: #477
 
-Status: implementation complete; declared child verification equivalent green; ready stacked PR.
+Status: exact-head review correction in progress; prior declared child verification was green.
 
 The owned slice adds a pure durable human-decision aggregate and a typed GitHub comment broker
 without controller wiring. The broker routes issue-vs-PR gates deterministically, binds every
@@ -23,3 +23,8 @@ separate exact-head human gate and is never inferred from automated review, CI, 
 or generic review text. Final evidence: focused 26 pass + 1 sandbox skip; full Shepherd 163 pass +
 1 sandbox skip; strict TypeScript, Pi RPC discovery, and diff check pass. The parent intentionally
 superseded and cancelled the child `make verify` run; supplemental standalone Go gates passed.
+
+Independent review of head `87eb80f561d416da245e753a5dbc887a3384a05d` subsequently identified
+timestamp/ID validation, lock fencing, parent-merge option typing, display/secret safety, allowlist
+mentioning, and transport retry gaps. Those findings supersede the earlier ready status until the
+new RED/GREEN/refactor and bounded verification cycle is complete.

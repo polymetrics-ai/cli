@@ -4,15 +4,15 @@
   "issue": 477,
   "parentIssue": 471,
   "parentPr": 472,
-  "status": "completed",
-  "reason": "The parent-declared child verification equivalent is green; the full-repo child gate was superseded and intentionally cancelled by parent policy.",
+  "status": "in_progress",
+  "reason": "Independent exact-head review found seven blockers and one retry warning; a test-first correction cycle is active.",
   "details": {
     "branch": "feat/477-shepherd-github-decision-broker",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "e659d6f1b666f58748e2d8c86599ceb4bbc62ff8",
     "adapter": "manual_gsd_fallback",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
-    "verificationPassed": true,
+    "verificationPassed": false,
     "reviewCoveragePassed": false,
     "orchestrationDecisions": [
       {
@@ -39,6 +39,11 @@
         "cycle": "summary",
         "decision": "local_critical_path",
         "reason": "Updated terminal phase evidence and prepared the ready stacked PR handoff."
+      },
+      {
+        "cycle": "review-correction-plan",
+        "decision": "local_critical_path",
+        "reason": "The exact-head correction owns both affected modules, so another mutating worker would collide; planned all review findings as RED regression slices before production edits."
       }
     ],
     "humanGates": [
@@ -51,5 +56,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T13:06:22.000Z"
+  "updatedAt": "2026-07-21T15:00:00.000Z"
 }

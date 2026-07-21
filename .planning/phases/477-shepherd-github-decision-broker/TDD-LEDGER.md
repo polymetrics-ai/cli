@@ -70,3 +70,26 @@ without ever admitting them to the human actor allowlist. Final focused result: 
 
 Final full Shepherd result: 164 tests total, 163 passed, 0 failed, 1 sandbox-only skip, duration
 48877.375042 ms. Strict no-emit TypeScript then passed over all 11 production Shepherd modules.
+
+## Exact-head review correction cycle
+
+Reviewed head: `87eb80f561d416da245e753a5dbc887a3384a05d`.
+
+RED cases to add before correction production edits:
+
+- GitHub timestamps such as `2026-07-21T12:30:12Z` normalize to canonical milliseconds and remain
+  valid when a local creation time is within the bounded sub-second truncation window;
+- request comment ID `5034006493`, repository `owner2/repo3`, and actor `maintainer2` are valid;
+- a published transaction lock is a complete atomic owner record, dead owners are reclaimed, and
+  release with an obsolete token cannot delete a replacement lock;
+- `parent_merge` rejects `approve` and accepts only the exact affirmative `approve-merge` contract;
+- credential-like `token=...`, JSON key/value, environment, URL-userinfo/query, private-key, and
+  vendor-token forms are rejected without echoing their value;
+- control/bidi/format characters and untrusted mentions cannot enter the durable question or alter
+  the rendered Markdown structure; configured validated humans are explicitly mentioned;
+- transient transport failures receive bounded backoff and retry, while permanent failures fail
+  immediately without sleeping or exposing raw transport text.
+
+Correction RED command and evidence: pending test-first edit.
+
+Correction GREEN/refactor evidence: pending.
