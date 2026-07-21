@@ -8,8 +8,9 @@ Phase: `471-pi-agent-session-shepherd`
 Treat the standalone Go/tmux Shepherd as abandoned. Build #471 as the authoritative, complete
 in-process Pi AgentSession Shepherd. It owns research, GSD parent/sub-issue planning, dependency
 scheduling, isolated implementation, RED/GREEN/refactor, verification, review/correction,
-sub-PR integration, recovery, durable human decisions, and exact-head parent merge after explicit
-human approval. The existing read-only code is only the control-plane seed.
+sub-PR integration, recovery, durable human decisions, and exact-head human merge readiness after
+explicit approval. It exposes no parent-to-`main` mutation and completes only after observing the
+human-owned merge. The existing read-only code is only the control-plane seed.
 ```
 
 ## Parent orchestrator instruction

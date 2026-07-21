@@ -50,7 +50,7 @@ PARENT_SETUP    create parent branch feat/<N>-<slug> from main; open DRAFT paren
 ─────────────────────────────────────────────────────────────────────────────────────────
 PARENT_FINALIZE parent PR coverage + disposition → durable exact-head human decision request
 HUMAN_DECISION  wait for an allowlisted `/shepherd decide <id> approve-merge` comment
-MERGE           revalidate exact head and gates, then merge through the typed host adapter
+MERGE           revalidate exact head and gates, then wait for and observe the human-owned merge
 COMPLETE        confirm GitHub/default-branch truth and close the durable run
 ```
 
@@ -60,8 +60,10 @@ RESEARCH is skipped entirely for a fully-specified `implementation` task (no ext
 finding fixed or dispositioned per `code-review-disposition-template.md`) before `INTEGRATE`. Branch
 and PR creation (`PARENT_SETUP`, `SUB_BRANCH`, `SUB_PR_OPEN`) are idempotent—reconcile GitHub and
 Git before creating anything. A parent merge is never inferred: Shepherd posts one durable
-head-bound decision request, waits, accepts one allowlisted response, revalidates, and only then
-may perform the merge. Without that response, the loop remains in `HUMAN_DECISION`.
+head-bound decision request, waits, accepts one allowlisted response, revalidates, and records that
+the exact head is ready for the human-owned merge. Shepherd exposes no parent-to-`main` merge
+operation. Until GitHub and the default branch authoritatively show that a human completed the
+merge, the loop remains in observer-only `MERGE` rather than claiming success.
 
 ## Durable state (source of truth for resume)
 
@@ -151,7 +153,8 @@ nothing is double-applied (issue creation and merges are checked for idempotency
 ## Termination
 
 The run ends successfully only when all sub-issues are integrated and verified, the exact-head
-human merge decision was consumed, and GitHub plus the default branch prove the parent merge.
+human merge decision was consumed, and GitHub plus the default branch prove the human-owned parent
+merge. Consuming approval never authorizes Shepherd itself to merge or push to `main`.
 Human-wait, blocked, and budget states are resumable terminal conditions for the current process,
 not successful completion. Success is never assumed from a missing error.
 

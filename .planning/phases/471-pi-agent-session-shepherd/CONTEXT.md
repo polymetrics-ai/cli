@@ -36,7 +36,8 @@ Given one objective or parent issue, Shepherd must:
    decisions before any new mutation;
 8. request human decisions on the ideal issue/PR, wait durably, consume one authenticated answer,
    revalidate, and resume; and
-9. merge the exact verified parent head only after a fresh explicit human `approve-merge` decision.
+9. request a fresh explicit human `approve-merge` decision for the exact verified parent head,
+   expose no parent-to-`main` mutation, and complete only after observing the human-owned merge.
 
 ## Pi SDK boundary
 

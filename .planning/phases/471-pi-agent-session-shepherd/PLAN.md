@@ -2,7 +2,8 @@
 
 ## Objective
 
-Deliver the complete issue-to-merge Shepherd described by #471 through draft parent PR #472. The
+Deliver the complete issue-to-human-merge-readiness Shepherd described by #471 through draft parent
+PR #472. The
 implementation must execute as bounded Pi `AgentSession` children inside the active Pi process,
 parallelize independent work, serialize dependencies/collisions, and wait for exact authenticated
 human decisions without relying on the abandoned Go program or an external shell driver.
@@ -39,7 +40,7 @@ Target stage machine:
 ```text
 INTAKE -> RESEARCH -> PARENT_PLAN -> ISSUE_CREATE -> PARENT_SETUP -> SCHEDULE
        -> EXECUTE -> VERIFY -> REVIEW -> CORRECT -> INTEGRATE
-       -> FINAL_VERIFY -> HUMAN_DECISION -> MERGE -> COMPLETE
+       -> FINAL_VERIFY -> HUMAN_DECISION -> MERGE (observer-only) -> COMPLETE
 ```
 
 Every stage transition is host-validated and persisted. A wake begins by reconciling with current
@@ -86,8 +87,10 @@ For each child:
 - Only an allowlisted human answer on the bound target can be consumed, once.
 - Shepherd revalidates immediately after the decision. A changed head invalidates approval and
   creates a new request.
-- No direct push to `main` is allowed. The parent PR may merge only after the fresh exact-head
-  human `approve-merge` decision and all repository gates.
+- No direct push to `main` is allowed, and no Shepherd port may merge the parent PR. After the fresh
+  exact-head human `approve-merge` decision and all repository gates, Shepherd records readiness,
+  waits for a human-owned merge, and reaches `COMPLETE` only after authoritative GitHub/default-
+  branch observation proves that exact merge.
 
 ## Current critical path
 

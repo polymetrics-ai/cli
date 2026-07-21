@@ -3,8 +3,8 @@
 ## Objective
 
 Replace the abandoned standalone Go/tmux Shepherd program with a first-class Pi extension that
-owns the complete issue-to-merge delivery loop. Shepherd must decompose a parent objective into
-small issue-scoped workstreams, schedule independent work in parallel and dependent work in order,
+owns the complete issue-to-human-merge-readiness delivery loop. Shepherd must decompose a parent
+objective into small issue-scoped workstreams, schedule independent work in parallel and dependent work in order,
 run bounded Pi `AgentSession` workers inside the current Pi process, verify and review every result,
 correct failures, integrate eligible sub-PRs, and remain active until the parent work is complete or
 a genuine human decision is required.
@@ -43,7 +43,8 @@ First end-to-end consumer: #397 and draft PR #438 (CLI Architecture v2).
 ## End-to-end state machine
 
 `INTAKE -> RESEARCH -> PARENT_PLAN -> ISSUE_CREATE -> PARENT_SETUP -> SCHEDULE -> EXECUTE -> VERIFY
--> REVIEW -> CORRECT (when needed) -> INTEGRATE -> FINAL_VERIFY -> HUMAN_DECISION -> MERGE -> COMPLETE`
+-> REVIEW -> CORRECT (when needed) -> INTEGRATE -> FINAL_VERIFY -> HUMAN_DECISION
+-> MERGE (observer-only) -> COMPLETE`
 
 The scheduler derives a dependency DAG and bounded ready queue. Independent, non-colliding issues
 may run concurrently; dependency or write-scope collisions serialize automatically. Restarts
@@ -103,7 +104,8 @@ cost, external production state, or the parent merge.
   and record the outcome. Stale, edited, duplicate, bot-authored, or ambiguous replies fail closed.
 - Shepherd must never infer approval from silence, emoji, review text, an agent score, or CI success.
 - A parent PR may merge to `main` only after an explicit fresh human `approve-merge` decision for
-  the exact verified head. Shepherd revalidates immediately before merge; otherwise it waits.
+  the exact verified head. Shepherd revalidates readiness, exposes no parent-to-`main` mutation,
+  waits for the human-owned merge, and completes only after observing it authoritatively.
 
 ## Acceptance criteria
 
@@ -159,7 +161,8 @@ make verify
 ```
 
 Runtime/GitHub integration tests must use isolated fixtures or a designated sandbox/canary target,
-must not print tokens, and must not merge a parent PR without the exact human gate above.
+must not print tokens. Shepherd must never merge or push the parent PR to `main`; it only observes
+the human-owned merge after the exact gate above.
 
 ## Source links
 
