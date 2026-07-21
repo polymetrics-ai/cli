@@ -13,7 +13,7 @@ test("parent lifecycle vocabulary covers intake through complete including corre
 	assert.deepEqual(PARENT_LIFECYCLE_STAGES, [
 		"INTAKE", "RESEARCH", "PARENT_PLAN", "ISSUE_CREATE", "PARENT_SETUP", "SCHEDULE",
 		"TASK_PLAN", "SUB_BRANCH", "EXECUTE", "SUB_PR_OPEN", "VERIFY", "REVIEW", "CORRECT",
-		"INTEGRATE", "FINAL_VERIFY", "HUMAN_DECISION", "MERGE", "COMPLETE", "BLOCKED",
+		"INTEGRATE", "FINAL_VERIFY", "HUMAN_DECISION", "MERGE", "COMPLETE", "ABORTED", "BLOCKED",
 	]);
 	assert.equal(new Set(PARENT_LIFECYCLE_STAGES).size, PARENT_LIFECYCLE_STAGES.length);
 	assert.equal(REPOSITORY_BLOCKERS.length, 7);
@@ -40,7 +40,10 @@ test("allows every safe lifecycle edge with its required canonical fact", () => 
 		["CORRECT", "VERIFY", { correctionCheckpointed: true }],
 		["INTEGRATE", "SCHEDULE", { integrationConfirmed: true }],
 		["FINAL_VERIFY", "HUMAN_DECISION", { finalVerificationPassed: true }],
-		["HUMAN_DECISION", "MERGE", { humanDecision: "approve_merge", exactHeadRevalidated: true }],
+		["HUMAN_DECISION", "MERGE", {
+			humanDecision: "approve_merge", humanDecisionAuthenticated: true, exactHeadRevalidated: true,
+		}],
+		["HUMAN_DECISION", "ABORTED", { humanDecision: "reject", humanDecisionAuthenticated: true }],
 		["MERGE", "COMPLETE", { mergeConfirmed: true }],
 	];
 
@@ -60,7 +63,9 @@ test("unsafe, skipped, stale-head, and under-evidenced transitions fail closed",
 		["REVIEW", "INTEGRATE", { reviewClean: false }],
 		["SCHEDULE", "FINAL_VERIFY", { allTasksIntegrated: false }],
 		["FINAL_VERIFY", "HUMAN_DECISION", { finalVerificationPassed: false }],
-		["HUMAN_DECISION", "MERGE", { humanDecision: "approve_merge", exactHeadRevalidated: false }],
+		["HUMAN_DECISION", "MERGE", {
+			humanDecision: "approve_merge", humanDecisionAuthenticated: true, exactHeadRevalidated: false,
+		}],
 		["HUMAN_DECISION", "MERGE", { humanDecision: "pending", exactHeadRevalidated: true }],
 		["MERGE", "COMPLETE", { mergeConfirmed: false }],
 		["INTAKE", "COMPLETE", {}],
@@ -73,16 +78,40 @@ test("unsafe, skipped, stale-head, and under-evidenced transitions fail closed",
 	}
 });
 
-test("only an explicit hard gate can enter BLOCKED and BLOCKED is terminal", () => {
+test("human wait is resumable while authenticated rejection reaches a separate terminal abort", () => {
 	assert.equal(evaluateLifecycleTransition({ from: "EXECUTE", to: "BLOCKED", facts: {} }).allowed, false);
-	assert.deepEqual(
-		evaluateLifecycleTransition({ from: "EXECUTE", to: "BLOCKED", facts: { hardHumanGate: true } }),
-		{ allowed: true, reason: "transition_allowed" },
+	assert.equal(
+		evaluateLifecycleTransition({ from: "EXECUTE", to: "BLOCKED", facts: { hardHumanGate: true } }).allowed,
+		false,
 	);
+	assert.equal(evaluateLifecycleTransition({
+		from: "HUMAN_DECISION",
+		to: "MERGE",
+		facts: { humanDecision: "approve_merge", humanDecisionAuthenticated: false, exactHeadRevalidated: true },
+	}).allowed, false);
+	assert.equal(evaluateLifecycleTransition({
+		from: "HUMAN_DECISION",
+		to: "ABORTED",
+		facts: { humanDecision: "reject", humanDecisionAuthenticated: false },
+	}).allowed, false);
 	assert.equal(
 		evaluateLifecycleTransition({ from: "BLOCKED", to: "SCHEDULE", facts: { hardHumanGate: false } }).allowed,
 		false,
 	);
+	assert.equal(evaluateLifecycleTransition({ from: "ABORTED", to: "SCHEDULE", facts: {} }).allowed, false);
+});
+
+test("outstanding corrections block otherwise passing verification and review advancement", () => {
+	assert.equal(evaluateLifecycleTransition({
+		from: "VERIFY",
+		to: "REVIEW",
+		facts: { verificationPassed: true, correctionRequired: true },
+	}).allowed, false);
+	assert.equal(evaluateLifecycleTransition({
+		from: "REVIEW",
+		to: "INTEGRATE",
+		facts: { reviewClean: true, correctionRequired: true },
+	}).allowed, false);
 });
 
 test("runtime-invalid lifecycle and failure vocabulary fails closed", () => {

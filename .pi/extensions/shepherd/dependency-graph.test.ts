@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 
 import {
@@ -68,6 +69,43 @@ test("scope collision is segment-aware and detects ancestor overlap", () => {
 	assert.equal(scopesCollide(["src/policy"], ["src/policy/file.ts"]), true);
 	assert.equal(scopesCollide(["src/policy"], ["src/policy-two"]), false);
 	assert.equal(scopesCollide(["a/file.ts"], ["b/file.ts"]), false);
+});
+
+test("scope collision conservatively folds Darwin/Git case and Unicode aliases", () => {
+	assert.equal(scopesCollide(["src/Readme.md"], ["src/README.md"]), true);
+	assert.equal(scopesCollide(["src/caf\u00e9/file.ts"], ["src/cafe\u0301/file.ts"]), true);
+	assert.throws(
+		() => validateDependencyGraph([item({ id: "aliases", writeScopes: ["src/Readme.md", "src/README.md"] })]),
+		(error: unknown) => error instanceof DependencyGraphError && error.code === "ambiguous_scope",
+	);
+});
+
+test("canonical ordering is explicit ECMAScript code-unit order, independent of locale collation", () => {
+	const graph = validateDependencyGraph([
+		item({ id: "\u00e4", access: "read_only", writeScopes: [] }),
+		item({ id: "z", access: "read_only", writeScopes: [] }),
+	]);
+	assert.deepEqual(graph.items.map((candidate) => candidate.id), ["z", "\u00e4"]);
+	assert.deepEqual(graph.topologicalOrder, ["z", "\u00e4"]);
+});
+
+test("dependency/status-incoherent and non-exact work-item snapshots fail closed", () => {
+	for (const status of ["running", "succeeded"] as const) {
+		assert.throws(
+			() => validateDependencyGraph([
+				item({ id: "dependency", status: "pending" }),
+				item({ id: "dependent", status, dependsOn: ["dependency"] }),
+			]),
+			(error: unknown) => error instanceof DependencyGraphError && error.code === "incoherent_status",
+		);
+	}
+	assert.throws(
+		() => validateDependencyGraph([{
+			...item({ id: "extra" }),
+			unexpected: true,
+		} as DependencyWorkItem]),
+		(error: unknown) => error instanceof DependencyGraphError && error.code === "invalid_item",
+	);
 });
 
 test("selects a maximum safe set instead of a greedy first-fit set", () => {
@@ -141,4 +179,34 @@ test("selection is deterministic and does not mutate caller-owned items", () => 
 	assert.deepEqual(first, second);
 	assert.deepEqual(first, { kind: "selected", itemIds: ["a", "b"] });
 	assert.deepEqual(items, before);
+});
+
+test("a hostile 64-item conflict component is rejected within a bounded subprocess deadline", () => {
+	const script = `
+		import { selectReadyWork } from "./.pi/extensions/shepherd/dependency-graph.ts";
+		const count = 64;
+		const items = Array.from({ length: count }, (_, index) => ({
+			id: String(index).padStart(2, "0"),
+			dependsOn: [],
+			status: "pending",
+			access: "mutating",
+			writeScopes: ["edges/" + index, "edges/" + ((index + count - 1) % count)],
+		}));
+		try {
+			selectReadyWork(items, { maxConcurrency: 64 });
+			process.stdout.write("not_rejected");
+		} catch (error) {
+			process.stdout.write(error && typeof error === "object" && "code" in error ? String(error.code) : "untyped");
+		}
+	`;
+	const started = performance.now();
+	const result = spawnSync(process.execPath, ["--input-type=module", "--eval", script], {
+		cwd: process.cwd(),
+		encoding: "utf8",
+		timeout: 1_000,
+	});
+	assert.equal(result.signal, null, `scheduler exceeded deadline: ${result.signal ?? result.error?.message}`);
+	assert.equal(result.status, 0, result.stderr);
+	assert.equal(result.stdout, "conflict_component_too_large");
+	assert.ok(performance.now() - started < 1_000, "scheduler must remain below the subprocess deadline");
 });

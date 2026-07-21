@@ -68,6 +68,18 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
   components, and a hard per-component exact-search limit.
 - Execution decision: `local_critical_path`; no nested worker is requested or authorized.
 
+## Exact-head correction RED cycle
+
+- Added adversarial expectations only; all three production modules remained byte-identical to the
+  reviewed head.
+- Focused RED: 36 tests, 21 pass, 15 fail across all six correction slices.
+- The 64-item cycle reproduced the event-loop hazard in an isolated subprocess, which was killed by
+  the one-second timeout (`SIGTERM`) without freezing the parent test runner.
+- Other failures proved missing authenticated abort semantics, locale-dependent ordering,
+  case/NFD scope aliases, status incoherence, non-exact/BigInt-hostile DTO handling, selected-only
+  isolation, blocker precedence, correction gating, and ordinary-evidence classification.
+- Execution decision: `local_critical_path`; RED gate satisfied.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

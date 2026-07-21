@@ -78,7 +78,38 @@ test("safe proposed transitions advance and unsafe transitions fail closed", () 
 	});
 });
 
-test("transient failures retry, then correct, while hard gates wait for a human", () => {
+test("ordinary missing evidence waits, skipped transitions are invalid, and corrections block advancement", () => {
+	const missing = input({
+		persisted: { stage: "PARENT_PLAN", retryAttempts: 0, correctionRounds: 0 },
+		canonical: {
+			...input().canonical,
+			observedStage: "PARENT_PLAN",
+			proposedStage: "ISSUE_CREATE",
+			transitionFacts: { parentPlanComplete: false },
+		},
+	});
+	assert.deepEqual(reconcileAutonomy(missing), { kind: "await_stage_evidence", stage: "PARENT_PLAN" });
+
+	const skipped = structuredClone(missing);
+	skipped.canonical.proposedStage = "MERGE";
+	assert.deepEqual(reconcileAutonomy(skipped), {
+		kind: "invalid_snapshot",
+		reason: "unsafe lifecycle transition PARENT_PLAN -> MERGE",
+	});
+
+	const correction = input({
+		persisted: { stage: "VERIFY", retryAttempts: 0, correctionRounds: 0 },
+		canonical: {
+			...input().canonical,
+			observedStage: "VERIFY",
+			proposedStage: "REVIEW",
+			transitionFacts: { verificationPassed: true, correctionRequired: true },
+		},
+	});
+	assert.deepEqual(reconcileAutonomy(correction), { kind: "await_stage_evidence", stage: "VERIFY" });
+});
+
+test("transient failures retry, then correct, while real decision points enter resumable human wait", () => {
 	const retry = input({ failure: "transient_verification" });
 	assert.deepEqual(reconcileAutonomy(retry), {
 		kind: "retry",
@@ -100,10 +131,58 @@ test("transient failures retry, then correct, while hard gates wait for a human"
 	});
 
 	assert.deepEqual(reconcileAutonomy(input({ failure: "hard_human_gate" })), {
-		kind: "no_spawn",
+		kind: "await_human_decision",
 		blocker: "not_spawned_human_gate",
-		reason: "hard human gate requires an authenticated decision",
+		reason: "hard_human_gate",
 	});
+
+	const exhausted = input({
+		persisted: { stage: "VERIFY", retryAttempts: 2, correctionRounds: 1 },
+		canonical: { ...input().canonical, observedStage: "VERIFY" },
+		failure: "transient_verification",
+	});
+	assert.deepEqual(reconcileAutonomy(exhausted), {
+		kind: "await_human_decision",
+		blocker: "not_spawned_human_gate",
+		reason: "retry_budget_exhausted",
+	});
+});
+
+test("authenticated human approval resumes work and rejection reaches terminal abort", () => {
+	const human = input({
+		persisted: { stage: "HUMAN_DECISION", retryAttempts: 0, correctionRounds: 0 },
+		canonical: { ...input().canonical, observedStage: "HUMAN_DECISION" },
+	});
+	assert.deepEqual(reconcileAutonomy(human), {
+		kind: "await_human_decision",
+		blocker: "not_spawned_human_gate",
+		reason: "pending_authenticated_decision",
+	});
+
+	const approved = structuredClone(human);
+	approved.canonical.proposedStage = "MERGE";
+	approved.canonical.transitionFacts = {
+		humanDecision: "approve_merge",
+		humanDecisionAuthenticated: true,
+		exactHeadRevalidated: true,
+	};
+	assert.equal(reconcileAutonomy(approved).kind, "transition");
+
+	const rejected = structuredClone(human);
+	rejected.canonical.proposedStage = "ABORTED" as "HUMAN_DECISION";
+	rejected.canonical.transitionFacts = { humanDecision: "reject", humanDecisionAuthenticated: true };
+	assert.deepEqual(reconcileAutonomy(rejected), {
+		kind: "transition",
+		from: "HUMAN_DECISION",
+		to: "ABORTED",
+		reason: "transition_allowed",
+	});
+
+	const aborted = input({
+		persisted: { stage: "ABORTED" as "BLOCKED", retryAttempts: 0, correctionRounds: 0 },
+		canonical: { ...input().canonical, observedStage: "ABORTED" as "BLOCKED" },
+	});
+	assert.deepEqual(reconcileAutonomy(aborted), { kind: "aborted", reason: "human_rejected" });
 });
 
 test("dependency-ready work produces one deterministic bounded spawn decision", () => {
@@ -121,6 +200,49 @@ test("dependency-ready work produces one deterministic bounded spawn decision", 
 	assert.deepEqual(reconcileAutonomy(candidate), {
 		kind: "spawn",
 		itemIds: ["leaf-a", "leaf-b"],
+	});
+});
+
+test("missing isolation removes only selected mutators and preserves selected readers", () => {
+	const candidate = input({ canonical: {
+		...input().canonical,
+		maxConcurrency: 4,
+		constraints: { ...input().canonical.constraints, isolationAvailable: false },
+		workItems: [
+			item({ id: "running", status: "running", writeScopes: ["src/shared"] }),
+			item({ id: "waiting-writer", writeScopes: ["src/shared/file.ts"] }),
+			item({ id: "safe-reader", access: "read_only", writeScopes: [] }),
+		],
+	} });
+	assert.deepEqual(reconcileAutonomy(candidate), { kind: "spawn", itemIds: ["safe-reader"] });
+});
+
+test("dependency and collision blockers take precedence over spawn capability blockers", () => {
+	const unavailable = {
+		...input().canonical.constraints,
+		runtimeCapabilityAvailable: false,
+		isolationAvailable: false,
+	};
+	assert.deepEqual(reconcileAutonomy(input({ canonical: {
+		...input().canonical,
+		constraints: unavailable,
+		workItems: [item({ id: "failed", status: "failed" }), item({ id: "waiting", dependsOn: ["failed"] })],
+	} })), {
+		kind: "no_spawn",
+		blocker: "not_spawned_dependency_blocked",
+		reason: "not_spawned_dependency_blocked",
+	});
+	assert.deepEqual(reconcileAutonomy(input({ canonical: {
+		...input().canonical,
+		constraints: unavailable,
+		workItems: [
+			item({ id: "running", status: "running", writeScopes: ["src/shared"] }),
+			item({ id: "waiting", writeScopes: ["src/shared/file.ts"] }),
+		],
+	} })), {
+		kind: "no_spawn",
+		blocker: "not_spawned_write_scope_collision",
+		reason: "not_spawned_write_scope_collision",
 	});
 });
 
@@ -230,9 +352,8 @@ test("runtime-invalid stages and concurrency facts fail closed without throwing"
 		canonical: { ...input().canonical, observedStage: "UNKNOWN" as "SCHEDULE" },
 	});
 	assert.deepEqual(reconcileAutonomy(invalidStage), {
-		kind: "no_spawn",
-		blocker: "not_spawned_human_gate",
-		reason: "invalid lifecycle stage",
+		kind: "invalid_snapshot",
+		reason: "invalid autonomy snapshot",
 	});
 
 	const invalidConcurrency = input({
@@ -243,6 +364,30 @@ test("runtime-invalid stages and concurrency facts fail closed without throwing"
 		blocker: "not_spawned_runtime_capability_missing",
 		reason: "invalid concurrency policy",
 	});
+});
+
+test("complete exact runtime DTO validation is BigInt-safe and returns one typed fail-closed result", () => {
+	const expected = { kind: "invalid_snapshot", reason: "invalid autonomy snapshot" } as const;
+	const hostile: unknown[] = [
+		null,
+		{},
+		{ ...input(), unexpected: true },
+		{ ...input(), persisted: { ...input().persisted, retryAttempts: 1n } },
+		{ ...input(), budget: { ...input().budget, maxRetries: 1n } },
+		{ ...input(), canonical: { ...input().canonical, maxConcurrency: 1n } },
+		{ ...input(), canonical: {
+			...input().canonical,
+			constraints: { ...input().canonical.constraints, reviewBlocked: "false" },
+		} },
+		{ ...input(), canonical: {
+			...input().canonical,
+			workItems: [{ ...item({ id: "worker" }), writeScopes: [1n] }],
+		} },
+	];
+	for (const candidate of hostile) {
+		assert.doesNotThrow(() => reconcileAutonomy(candidate as ReconcileInput));
+		assert.deepEqual(reconcileAutonomy(candidate as ReconcileInput), expected);
+	}
 });
 
 test("reconciliation is pure and idempotent for the same persisted and canonical snapshot", () => {

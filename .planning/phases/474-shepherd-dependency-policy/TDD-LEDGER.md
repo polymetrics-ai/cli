@@ -64,14 +64,19 @@ the minimal validation and decision-order changes: 26/26 pass. Strict production
 
 ## Exact-head correction loop
 
-Status: RED tests pending. Production edits are prohibited until the new adversarial expectations
-fail for the reviewed `28f165412de4c8165ba7717a1690c36b00af8857` behavior.
+Status: RED captured against reviewed `28f165412de4c8165ba7717a1690c36b00af8857`; production remained
+untouched through this checkpoint.
 
 | Correction slice | Expected RED signal | Status |
 |---|---|---|
-| Authenticated resumable human decision and terminal abort | missing stage/result/guards | pending |
-| Bounded conflict-component scheduling | hostile 64-item case exceeds deadline or lacks typed rejection | pending |
-| Code-unit ordering and Darwin/Git aliases | locale/case/NFD expectations differ | pending |
-| Dependency/status coherence and exact DTO validation | incoherent/hostile values are accepted or throw | pending |
-| Reconciliation precedence and selected-only isolation | wrong blocker/result or safe readers suppressed | pending |
-| Correction-required and ordinary evidence handling | unsafe advancement or human-gate misclassification | pending |
+| Authenticated resumable human decision and terminal abort | missing stage/result/guards | red |
+| Bounded conflict-component scheduling | 64-cycle subprocess killed by `SIGTERM` at 1,004 ms | red |
+| Code-unit ordering and Darwin/Git aliases | locale/case/NFD expectations differ | red |
+| Dependency/status coherence and exact DTO validation | incoherent/hostile values accepted; `null` throws | red |
+| Reconciliation precedence and selected-only isolation | capability blocker masks dependency; reader suppressed | red |
+| Correction-required and ordinary evidence handling | unsafe advancement and human-gate misclassification | red |
+
+Correction RED command: the focused three-file Node test command. Observed: **36 tests, 21 pass,
+15 fail**, including all six correction slices. The isolated 64-item cycle reproduced the scheduler
+DoS safely: its subprocess exceeded the one-second deadline and was terminated while the main test
+runner completed in 1.09 seconds. No production file changed before this evidence was captured.
