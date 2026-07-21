@@ -14,3 +14,12 @@
 - Downstream artifact: `.planning/phases/476-shepherd-worktree-git-adapter/SUMMARY.md` (completed)
 - Verification result: authoritative narrowed local gates pass; full Go/connectors rerun is owned
   by parent integration and GitHub CI under the updated parent policy.
+
+## Exact-head review correction
+
+- Reviewed head: `906a45c53ae1a19c9d2efe1c3f24a64e36ef4d63`.
+- Blockers: v1 Shepherd identity compatibility, immutable persisted handoff bindings, and an
+  exclusive same-owner writable lease with release and dead-owner resume.
+- Warning disposition plan: serialize full Shepherd test files so real Git subprocess load cannot
+  invalidate the SDK runner's intentional wall-clock assertions; do not widen those assertions.
+- Authorized gates remain TypeScript/Shepherd/Pi/diff-only; no Go, connector, or `make verify` run.

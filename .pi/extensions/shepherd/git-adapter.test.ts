@@ -11,6 +11,7 @@ import {
 	type GitCommandRequest,
 } from "./git-adapter.ts";
 import { createLocalGitFixture, git, write } from "./issue-476-git-fixture.ts";
+import { resolveCanonicalGitWorktree } from "./target-evidence.ts";
 
 function recordingExecutor(requests: GitCommandRequest[]): GitCommandExecutor {
 	return (request) => new Promise((resolve, reject) => {
@@ -46,6 +47,23 @@ test("binds canonical repository identity across linked worktrees", async (t) =>
 	assert.equal(coordinator.remoteIdentity, linked.remoteIdentity);
 	assert.notEqual(coordinator.worktreeIdentity, linked.worktreeIdentity);
 	assert.equal(coordinator.remoteName, "origin");
+});
+
+test("uses the canonical identities already persisted by Shepherd target evidence", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const sibling = join(fixture.root, "state-identity-worktree");
+	await git(fixture.coordinator, "worktree", "add", "-b", "feat/901-state-identity", "--", sibling, fixture.parentHead);
+	const adapter = new GitAdapter();
+	for (const cwd of [fixture.coordinator, sibling]) {
+		const [adapterBinding, stateBinding] = await Promise.all([
+			adapter.inspect(cwd),
+			resolveCanonicalGitWorktree(cwd),
+		]);
+		assert.equal(adapterBinding.cwd, stateBinding.cwd);
+		assert.equal(adapterBinding.repositoryIdentity, stateBinding.repositoryIdentity);
+		assert.equal(adapterBinding.worktreeIdentity, stateBinding.worktreeIdentity);
+	}
 });
 
 test("rejects credential-bearing or mismatched remote identity without echoing credentials", async (t) => {

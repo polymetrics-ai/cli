@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "phase": "476-shepherd-worktree-git-adapter",
   "issue": 476,
-  "status": "completed",
+  "status": "running",
   "gsdMode": "manual_gsd_fallback",
-  "verificationPassed": true,
-  "verificationBlocker": null,
+  "verificationPassed": false,
+  "verificationBlocker": "Exact-head review blockers at 906a45c5 are in the RED correction cycle.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -36,6 +36,16 @@
       "cycle": "summary",
       "decision": "local_critical_path",
       "reason": "Issue evidence is complete and the branch is ready for a stacked PR and independent exact-head review."
+    },
+    {
+      "cycle": "correction-plan",
+      "decision": "local_critical_path",
+      "reason": "The three review blockers are coupled inside the two issue-owned adapters; RED identity, immutable-claim, and exclusive-lease regressions precede production corrections."
+    },
+    {
+      "cycle": "correction-red",
+      "decision": "local_critical_path",
+      "reason": "Focused tests produced five deterministic failures: identity mismatch, dual same-owner mutators, missing recovery capability, mutable handoff acceptance, and missing persisted scopes."
     }
   ]
 }

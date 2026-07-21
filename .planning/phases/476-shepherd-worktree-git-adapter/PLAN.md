@@ -82,13 +82,25 @@
 ## Verification checklist
 
 - [ ] `node --test .pi/extensions/shepherd/workspace-adapter.test.ts .pi/extensions/shepherd/git-adapter.test.ts`
-- [ ] `node --test .pi/extensions/shepherd/*.test.ts`
+- [ ] `node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts`
 - [ ] strict no-emit TypeScript against pinned Pi 0.80.6 types
 - [ ] `pi --list-extensions`
 - [ ] `git diff --check`
-- [ ] `go vet ./...`
-- [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make verify`
 - [ ] pushed branch exact head matches local head
 - [ ] ready sub-PR targets `feat/471-pi-agent-session-shepherd`
+
+## Exact-head correction cycle
+
+Independent xhigh review of `906a45c53ae1a19c9d2efe1c3f24a64e36ef4d63` found three
+blocking contracts. This correction cycle keeps the original base and owned-file boundary:
+
+1. Add RED parity tests against `resolveCanonicalGitWorktree` so the Git port emits the same
+   repository/worktree identities already persisted in Shepherd controller state.
+2. Add RED handoff-tamper tests, then atomically persist canonical scopes plus the exact worktree
+   binding and make handoff reread that immutable claim.
+3. Add RED same-owner race, release, and dead-owner resume cases, then reuse Shepherd's existing
+   append-only `FileStateStore` lease/fencing primitive instead of introducing a second lock design.
+4. Verify only the parent-authorized focused tests, serialized full Shepherd suite, strict no-emit
+   TypeScript, offline Pi RPC discovery, and exact diff/scope checks. Serial test-file execution
+   isolates existing SDK wall-clock deadline assertions from the Git fixture process load without
+   changing production or test timeouts.
