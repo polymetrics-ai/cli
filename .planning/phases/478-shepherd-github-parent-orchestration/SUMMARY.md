@@ -55,3 +55,9 @@ attestations, symbolic-ref rejection, versioned plan-bound CI policy, monotonic 
 an exported controller attestation API, and adversarial bounds/partial-effect safety. This is the
 artifact-only checkpoint; tests and production remain unchanged until the required single RED
 commit. Network publication remains deferred under the existing DNS blocker.
+
+Cycle 3 is locally complete at GREEN `41e8e76e`: all fourteen invariants are implemented and
+53/53 focused tests pass. Strict owned/all-production TypeScript, pinned Pi 0.80.6 offline
+discovery, immutable-base/diff/17-path ownership, and credential scans pass. The serialized suite
+records 251 pass, 65 unrelated sandbox `spawn EPERM` failures, and one intentional skip across
+317 tests; every #478 test passes. Exact-head review and publication remain parent-owned/deferred.

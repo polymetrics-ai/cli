@@ -74,16 +74,17 @@ evidence above is historical and does not satisfy the accepted correction findin
 Status: planned against frozen candidate `3f285722a505ea426d53a34f95716781d1aca7c2`;
 all earlier pass statements are historical and do not satisfy the fourteen accepted invariants.
 
-- [ ] Artifact-only checkpoint precedes any test or production edit.
-- [ ] One test-only RED commit covers all fourteen invariants and records exact frozen production
+- [x] Artifact-only checkpoint precedes any test or production edit.
+- [x] One test-only RED commit covers all fourteen invariants and records exact frozen production
       blob identity.
-- [ ] Focused #478 tests pass after one architectural GREEN/refactor.
-- [ ] Strict TypeScript passes for owned files/tests and all Shepherd production modules against
+- [x] Focused #478 tests pass after one architectural GREEN/refactor: 53/53 at `41e8e76e`.
+- [x] Strict TypeScript passes for owned files/tests and all Shepherd production modules against
       pinned Pi 0.80.6 declarations.
-- [ ] Serialized Shepherd suite result is recorded without hiding unrelated sandbox failures.
-- [ ] Offline pinned Pi RPC still discovers `pm-shepherd`.
-- [ ] Immutable base, ancestry, full-range diff, owned scope, and secret scans pass.
-- [ ] No Go, connector, certification, runtime-service, `make`, live GitHub, #479 controller,
+- [x] Serialized Shepherd is recorded: 317 total, 251 pass, 65 unrelated `spawn EPERM` failures,
+      1 intentional skip; every #478 test passes.
+- [x] Offline pinned Pi RPC still discovers `pm-shepherd`.
+- [x] Immutable base, ancestry, full-range diff, 17-path owned scope, and secret scans pass.
+- [x] No Go, connector, certification, runtime-service, `make`, live GitHub, #479 controller,
       Claude/Copilot, reviewer, or merge action runs.
-- [ ] Final evidence names the exact GREEN and verification commits; push remains deferred only for
-      the already-recorded DNS blocker.
+- [x] Final evidence names exact GREEN `41e8e76e`; the evidence commit is reported in handoff
+      because it cannot contain its own hash. Push remains deferred under the recorded DNS blocker.

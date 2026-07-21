@@ -279,8 +279,8 @@ orchestration. No Claude/Copilot finding or controller/#479 work is imported.
 
 ### Cycle 3 checkpoints
 
-- [ ] Artifact-only PLAN commit.
-- [ ] Single all-invariants test-only RED commit with production blob identity proof.
-- [ ] Architectural GREEN/refactor commit.
-- [ ] Focused and authorized broad verification evidence commit.
+- [x] Artifact-only PLAN commit: `d97faf44` (model-policy correction: `d2c7f374`).
+- [x] Single all-invariants test-only RED commit with production blob identity proof: `faf2e8f8`.
+- [x] Architectural GREEN/refactor commit: `41e8e76e`.
+- [x] Focused and authorized broad verification evidence commit (this artifact checkpoint).
 - [ ] Push/PR #487 synchronization when network access returns.

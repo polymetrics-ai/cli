@@ -102,3 +102,12 @@
   `Refs #471` linkage. The body contains no issue-closing keyword.
 - Did not request any reviewer, ready transition beyond initial non-draft publication, integration,
   or merge. Parent owns the stable-head review campaign.
+
+## 2026-07-22 Cycle 3 GREEN and verification
+
+- RED `faf2e8f8` preserved frozen production blobs; GREEN `41e8e76e` closes all fourteen
+  invariants and passes 53/53 focused tests.
+- Strict owned/all-production TypeScript, pinned Pi 0.80.6 offline RPC, immutable base/ancestry,
+  full-range diff, 17-path scope, and credential scan pass.
+- Serialized Shepherd: 317 total, 251 pass, 65 unrelated process-identity `spawn EPERM`
+  failures, 1 intentional skip. No prohibited or live gate ran.

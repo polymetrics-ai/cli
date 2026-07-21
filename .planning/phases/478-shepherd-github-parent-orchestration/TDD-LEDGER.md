@@ -148,3 +148,15 @@ The next commit after the Cycle 3 plan checkpoint must modify only tests/fixture
 the blob IDs for `github-orchestrator.ts`, `github-evidence.ts`, and `review-router.ts` must equal
 their IDs at `3f285722`. GREEN and verification cells remain blank until the single RED checkpoint
 has been captured.
+
+## Cycle 3 GREEN and verification evidence
+
+- Plan `d97faf44` plus policy correction `d2c7f374` preceded test and production edits. RED
+  `faf2e8f8` ran 52 tests (37 pass, 15 expected fail) with all production blobs equal to
+  frozen `3f285722`.
+- GREEN `41e8e76e` passes 53/53 focused tests, including bounded retry-before-visibility for
+  every durable mutation and authoritative receipt-provenance tamper rejection.
+- Strict owned/all-production TypeScript, pinned Pi 0.80.6 offline RPC, immutable base/ancestry,
+  17-path scope, full-range diff, and credential-literal scan pass.
+- Serialized Shepherd ran 317 tests: 251 pass, 65 unrelated sandbox `spawn EPERM` failures, and
+  1 intentional skip; every #478 test passes.

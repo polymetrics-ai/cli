@@ -130,3 +130,11 @@ session-attestation contract and fixtures required to verify independent-review 
   provenance, monotonic roster state, and the exported controller attestation protocol.
 - Parent still owns #479 wiring, parent planning, exact-head independent review, integration, and
   human merge gates. Existing GitHub DNS failure defers push/PR synchronization only.
+
+## Cycle 3 completed local handoff
+
+- Checkpoints: plan `d97faf44`, policy correction `d2c7f374`, RED `faf2e8f8`, GREEN `41e8e76e`.
+- Focused #478: 53/53 pass. Strict TypeScript, pinned Pi 0.80.6 offline RPC, immutable
+  base/ancestry, full-range diff, 17-path scope, and credential scan pass.
+- Serialized Shepherd: 317 total, 251 pass, 65 unrelated sandbox `spawn EPERM` failures, and
+  1 intentional skip; every #478 test passes. No prohibited or live action ran.
