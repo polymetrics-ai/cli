@@ -31,8 +31,9 @@ Use ports and adapters so the deterministic core has no Pi SDK dependency:
    sessions/settings, recursion prevention, timeouts, and idempotent cleanup.
 6. `controller.ts`: read-only scout and validator orchestration, exact run/generation/head/nonce
    binding, deterministic gating, rating, persistence, stop, and resume.
-7. `index.ts`: `/pm-shepherd` registration, concise status/help, lifecycle notifications, and
-   parent `session_shutdown` cleanup.
+7. `index.ts`: auto-discovered `/pm-shepherd` registration, concise status/help, lifecycle
+   notifications, and parent `session_shutdown` cleanup. Main-branch Pi discovery does not require
+   a `.pi/settings.json` edit.
 
 ## Command Surface
 
@@ -70,8 +71,7 @@ Use ports and adapters so the deterministic core has no Pi SDK dependency:
 - `node --test .pi/extensions/shepherd/*.test.ts`
 - strict TypeScript no-emit check when the installed Pi package provides a compiler-compatible
   resolution path; otherwise record the exact unsupported check and rely on Pi load plus Node tests
-- `pi --list-extensions`
-- project-local Pi extension load smoke without a model call
+- offline Pi RPC `get_commands` smoke proving `pm-shepherd` registration without a model call
 - `git diff --check`
 - `go vet ./...`
 - `go test ./...`
