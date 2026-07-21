@@ -443,8 +443,12 @@ orchestrator symbols while this isolated worker owns the ordered production crit
 
 ### Cycle 5 checkpoints
 
-- [ ] Artifact-only PLAN/finding-to-RED commit (record after commit).
-- [ ] One comprehensive test/fixture-only RED with retained-68 and production-blob proofs.
-- [ ] One coherent architectural GREEN/refactor commit.
+- [x] Artifact-only PLAN/finding-to-RED commit: `7cf9c88ddadee395020444c19ee9f001b0807a53`.
+- [x] One comprehensive test/fixture-only RED: `6cb21902244e4bccf390c4e7556eb615e5e1697f`;
+      retained 68/68 passed, 37 intended Cycle 5 assertions failed, and production blobs remained
+      frozen.
+- [x] One coherent architectural GREEN/refactor commit (this checkpoint; exact SHA is recorded in
+      the evidence handoff after commit). Focused 109/109 and strict owned/all-production
+      TypeScript pass.
 - [ ] Authorized local evidence commit and clean candidate.
 - [ ] Two fresh exact-head independent reviews remain parent-owned.

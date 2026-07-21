@@ -5,6 +5,7 @@ import {
 	assertNoSensitiveText,
 	canonicalGitRef,
 	createIndependentReviewWork,
+	readBoundedExactRecord,
 	reconcileIndependentReview,
 	validateIndependentReviewRecord,
 	type AgentSessionAttestation,
@@ -180,28 +181,13 @@ export type GitHubPullRequestDecision =
 
 interface PullRequestEvaluationOptions {
 	allowDraft?: boolean;
+	allowIntegrated?: boolean;
 }
 
 type ExactRecord = Record<string, unknown>;
 
 function exactRecord(value: unknown, required: readonly string[]): ExactRecord {
-	if (typeof value !== "object" || value === null || Array.isArray(value) || nodeTypes.isProxy(value)) {
-		throw new Error("invalid GitHub evidence shape");
-	}
-	const prototype = Object.getPrototypeOf(value);
-	if (prototype !== Object.prototype && prototype !== null) throw new Error("invalid GitHub evidence shape");
-	const descriptors = Object.getOwnPropertyDescriptors(value);
-	if (Reflect.ownKeys(descriptors).length !== required.length) throw new Error("unknown GitHub evidence field");
-	for (const key of required) {
-		const descriptor = descriptors[key];
-		if (descriptor === undefined || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
-			throw new Error("invalid GitHub evidence shape");
-		}
-	}
-	for (const key of Reflect.ownKeys(descriptors)) {
-		if (typeof key !== "string" || !required.includes(key)) throw new Error("unknown GitHub evidence field");
-	}
-	return Object.fromEntries(Object.entries(descriptors).map(([key, descriptor]) => [key, descriptor.value]));
+	return readBoundedExactRecord(value, required, [], "GitHub evidence");
 }
 
 function inlineText(value: unknown, description: string, maximum = 1_024): string {
@@ -261,18 +247,21 @@ function boundedArray(value: unknown, description: string, maximum = MAX_COLLECT
 		throw new Error(`${description} must be a bounded array of at most ${maximum} values`);
 	}
 	const length = lengthDescriptor.value as number;
-	const descriptors = Object.getOwnPropertyDescriptors(value);
 	const values: unknown[] = [];
-	for (const key of Reflect.ownKeys(descriptors)) {
-		if (key === "length") continue;
+	let entries = 0;
+	for (const key in value) {
+		if (!Object.hasOwn(value, key)) continue;
+		if (entries >= length) throw new Error(`${description} has an invalid array field`);
 		if (typeof key !== "string" || !/^(?:0|[1-9]\d*)$/u.test(key)) throw new Error(`${description} has an invalid array field`);
 		const index = Number(key);
-		const descriptor = descriptors[key];
-		if (index >= length || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
+		const descriptor = Object.getOwnPropertyDescriptor(value, key);
+		if (index >= length || descriptor === undefined || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
 			throw new Error(`${description} must contain only dense data values`);
 		}
 		values[index] = descriptor.value;
+		entries += 1;
 	}
+	if (entries !== length) throw new Error(`${description} must be a dense canonical array`);
 	for (let index = 0; index < length; index += 1) {
 		if (!Object.hasOwn(values, index)) throw new Error(`${description} must be a dense canonical array`);
 	}
@@ -642,7 +631,9 @@ export function evaluateGitHubPullRequestEvidence(
 	if (evidence.repository !== expected.repository || evidence.workItemId !== expected.workItemId
 		|| evidence.generation !== expected.generation || evidence.number !== expected.number) blockers.add("resource_mismatch");
 	if (evidence.marker !== expected.marker) blockers.add("marker_collision");
-	if (evidence.state !== "open") blockers.add("pr_not_open");
+	if (evidence.state !== "open" && !(options.allowIntegrated === true && evidence.state === "merged")) {
+		blockers.add("pr_not_open");
+	}
 	if (evidence.draft && options.allowDraft !== true) blockers.add("draft");
 	if (evidence.baseBranch !== expected.baseBranch || evidence.headBranch !== expected.headBranch
 		|| evidence.baseSha !== expected.baseSha) blockers.add("topology_mismatch");

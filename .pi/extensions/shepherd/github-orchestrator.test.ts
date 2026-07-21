@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
@@ -29,7 +30,11 @@ import {
 import * as githubOrchestratorApi from "./github-orchestrator.ts";
 import * as githubEvidenceApi from "./github-evidence.ts";
 import type { GitHubPullRequestEvidence } from "./github-evidence.ts";
-import { createAgentSessionAttestation, createIndependentReviewWork } from "./review-router.ts";
+import {
+	createAgentSessionAttestation,
+	createIndependentReviewWork,
+	independentReviewResultDigest,
+} from "./review-router.ts";
 import {
 	createHumanDecisionRecord,
 	type HumanDecisionEvidence,
@@ -525,11 +530,8 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 	pollResult: GitHubDecisionPollResult = { status: "decided", decision: approvedDecision, attempts: 1 };
 	recordStatus: HumanDecisionRecord["status"] = "pending";
 
-	async request(request: GitHubDecisionRequest, context?: TestCallContext): Promise<HumanDecisionRecord> {
-		this.callContexts.push({ operation: "broker.request", signal: context?.signal instanceof AbortSignal });
-		this.requests.push(request);
-		if (request.gate !== "parent_merge") throw new Error("fake parent broker accepts only parent_merge requests");
-		const record = createHumanDecisionRecord({
+	private recordFor(request: GitHubDecisionRequest): HumanDecisionRecord {
+		return createHumanDecisionRecord({
 			requestId: request.requestId,
 			gate: request.gate,
 			binding: {
@@ -542,9 +544,22 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 			actorAllowlist: request.actorAllowlist,
 			expiresAt: request.expiresAt,
 			question: request.question,
-		}, new Date("2026-07-21T12:00:00.000Z"));
+		} as Parameters<typeof createHumanDecisionRecord>[0], new Date("2026-07-21T12:00:00.000Z"));
+	}
+
+	async request(request: GitHubDecisionRequest, context?: TestCallContext): Promise<HumanDecisionRecord> {
+		this.callContexts.push({ operation: "broker.request", signal: context?.signal instanceof AbortSignal });
+		this.requests.push(request);
+		if (request.gate !== "parent_merge") throw new Error("fake parent broker accepts only parent_merge requests");
+		const record = this.recordFor(request);
 		return this.recordStatus === "consumed"
-			? { ...record, status: "consumed", decision: approvedDecision, consumedAt: "2026-07-21T12:00:40.000Z" }
+			? {
+				...record,
+				status: "consumed",
+				decision: approvedDecision,
+				consumedAt: "2026-07-21T12:00:40.000Z",
+				updatedAt: "2026-07-21T12:00:40.000Z",
+			}
 			: record;
 	}
 
@@ -553,15 +568,32 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 		_binding: HumanDecisionRecord["binding"],
 		_options?: GitHubDecisionPollOptions,
 		context?: TestCallContext,
-	): Promise<GitHubDecisionPollResult> {
+	): Promise<HumanDecisionRecord> {
 		this.callContexts.push({ operation: "broker.poll", signal: context?.signal instanceof AbortSignal });
-		return this.pollResult;
+		const record = this.recordFor(this.requests.at(-1)!);
+		if (this.pollResult.status === "pending") return record;
+		if (this.pollResult.status === "expired") {
+			return { ...record, status: "expired", updatedAt: record.expiresAt };
+		}
+		return {
+			...record,
+			status: "decided",
+			decision: this.pollResult.decision,
+			updatedAt: this.pollResult.decision.decidedAt,
+		};
 	}
 
-	async consume(_requestId: string, _binding: HumanDecisionRecord["binding"], context?: TestCallContext): Promise<HumanDecisionEvidence> {
+	async consume(_requestId: string, _binding: HumanDecisionRecord["binding"], context?: TestCallContext): Promise<HumanDecisionRecord> {
 		this.callContexts.push({ operation: "broker.consume", signal: context?.signal instanceof AbortSignal });
 		this.consumes += 1;
-		return this.pollResult.status === "decided" ? this.pollResult.decision : approvedDecision;
+		const decision = this.pollResult.status === "decided" ? this.pollResult.decision : approvedDecision;
+		return {
+			...this.recordFor(this.requests.at(-1)!),
+			status: "consumed",
+			decision,
+			consumedAt: "2026-07-21T12:00:40.000Z",
+			updatedAt: "2026-07-21T12:00:40.000Z",
+		};
 	}
 }
 
@@ -610,6 +642,71 @@ const decisionPolicy: ParentDecisionPolicy = {
 	question: "Approve the exact reviewed parent head for the human merge gate?",
 };
 
+function controllerProvenanceFor(
+	candidate: ParentOrchestrationPlan,
+	pullRequest: GitHubPullRequestEvidence,
+) {
+	const changedPathEvidence = {
+		schemaVersion: 1 as const,
+		authority: "controller" as const,
+		repository: pullRequest.repository,
+		workItemId: pullRequest.workItemId,
+		pullRequest: pullRequest.number,
+		generation: pullRequest.generation,
+		baseSha: pullRequest.baseSha,
+		headSha: pullRequest.headSha,
+		paths: [...pullRequest.changedPaths],
+		complete: true as const,
+		revision: Math.max(1, pullRequest.revision - 1),
+		observedAt: "2026-07-21T11:58:00.000Z",
+	};
+	const { revision: _revision, observedAt: _observedAt, ...stableChangedPathEvidence } = changedPathEvidence;
+	const review = pullRequest.reviews[0];
+	assert.ok(review);
+	const policy = cycle3CheckPolicy(pullRequest.baseBranch);
+	return {
+		authority: "controller" as const,
+		planDigest: candidate.canonical.digest,
+		policyDigest: String(policy.digest),
+		policyRevision: Number(policy.revision),
+		policyObservedAt: "2026-07-21T12:06:00.000Z",
+		changedPathDigest: createHash("sha256").update(JSON.stringify(stableChangedPathEvidence)).digest("hex"),
+		reviewResultDigest: independentReviewResultDigest(review),
+		evidenceRevision: changedPathEvidence.revision,
+		observedAt: changedPathEvidence.observedAt,
+	};
+}
+
+function integrationMutationProjection(value: {
+	repository: string;
+	childId: string;
+	pullRequest: number;
+	generation: number;
+	marker: string;
+	baseSha: string;
+	headSha: string;
+	parentBranch: string;
+	pullRequestSnapshot: ReturnType<typeof createCanonicalPullRequestSnapshot>;
+	controllerProvenance: ReturnType<typeof controllerProvenanceFor>;
+}) {
+	return {
+		repository: value.repository,
+		childId: value.childId,
+		pullRequest: value.pullRequest,
+		generation: value.generation,
+		marker: value.marker,
+		baseSha: value.baseSha,
+		headSha: value.headSha,
+		parentBranch: value.parentBranch,
+		pullRequestIdentityDigest: value.pullRequestSnapshot.digest,
+		planDigest: value.controllerProvenance.planDigest,
+		policyDigest: value.controllerProvenance.policyDigest,
+		policyRevision: value.controllerProvenance.policyRevision,
+		changedPathDigest: value.controllerProvenance.changedPathDigest,
+		reviewResultDigest: value.controllerProvenance.reviewResultDigest,
+	};
+}
+
 function seedIntegrationRoster(
 	candidate: ParentOrchestrationPlan,
 	transport: FakeTransport,
@@ -647,17 +744,11 @@ function seedIntegrationRoster(
 			observedAt: childPullRequest.observedAt,
 			state: childPullRequest.state,
 		};
-		const controllerProvenance = {
-			authority: "controller" as const,
-			planDigest: candidate.canonical.digest,
-			policyDigest: String(cycle3CheckPolicy(candidate.parentBranch).digest),
-			evidenceRevision: 41,
-			observedAt: "2026-07-21T11:58:00.000Z",
-		};
+		const controllerProvenance = controllerProvenanceFor(candidate, childPullRequest);
 		const mutation = createDurableMutationIntent(
 			"child_integration",
 			[candidate.repository, child.markers.pullRequest],
-			{
+			integrationMutationProjection({
 				repository: candidate.repository,
 				childId: child.id,
 				pullRequest: pullRequestNumber,
@@ -667,9 +758,8 @@ function seedIntegrationRoster(
 				headSha: childHead,
 				parentBranch: candidate.parentBranch,
 				pullRequestSnapshot: snapshot,
-				observation,
 				controllerProvenance,
-			},
+			}),
 			null,
 		);
 		return {
@@ -1186,17 +1276,11 @@ test("restart reuses stable integration identity after a later merged-PR observa
 		observedAt: mergedPullRequest.observedAt,
 		state: mergedPullRequest.state,
 	};
-	const controllerProvenance = {
-		authority: "controller" as const,
-		planDigest: candidate.canonical.digest,
-		policyDigest: String(cycle3CheckPolicy(candidate.parentBranch).digest),
-		evidenceRevision: 41,
-		observedAt: "2026-07-21T11:58:00.000Z",
-	};
+	const controllerProvenance = controllerProvenanceFor(candidate, mergedPullRequest);
 	const existingMutation = createDurableMutationIntent(
 		"child_integration",
 		[candidate.repository, child.markers.pullRequest],
-		{
+		integrationMutationProjection({
 			repository: candidate.repository,
 			childId: child.id,
 			pullRequest: 812,
@@ -1206,9 +1290,8 @@ test("restart reuses stable integration identity after a later merged-PR observa
 			headSha: handoff.head,
 			parentBranch: candidate.parentBranch,
 			pullRequestSnapshot: snapshot,
-			observation,
 			controllerProvenance,
-		},
+		}),
 		null,
 	);
 	transport.integrations.push({
@@ -2514,7 +2597,7 @@ test("cycle 5 links caller lifecycle and retains keyed ownership until live port
 	let observedDeadline = "";
 	deadlineTransport.findChildIssues = (async (_query: unknown, context?: TestCallContext & { deadlineAt?: string }) => {
 		observedDeadline = context?.deadlineAt ?? "";
-		return { items: [], complete: true };
+		return { items: [...deadlineTransport.issues], complete: true };
 	}) as never;
 	const callerDeadline = new Date(Date.now() + 5).toISOString();
 	await (orchestratorFor(deadlineTransport, undefined, defaultPolicySource(deadlineTransport), 50).ensureChildIssue as any)(
@@ -2555,6 +2638,6 @@ test("cycle 5 durable run state names current review truth and exact available c
 	assert.equal(state.details.reviewState.review1, "blocked");
 	assert.equal(state.details.reviewState.review2, "blocked");
 	assert.equal(state.details.checkpoints.cycle5Plan, "7cf9c88ddadee395020444c19ee9f001b0807a53");
-	assert.match(state.details.checkpoints.cycle5Red, /^[0-9a-f]{40}$/u);
+	assert.equal(state.details.checkpoints.cycle5Red, "6cb21902244e4bccf390c4e7556eb615e5e1697f");
 	assert.doesNotMatch(raw, /3f285722a505ea426d53a34f95716781d1aca7c2/u);
 });

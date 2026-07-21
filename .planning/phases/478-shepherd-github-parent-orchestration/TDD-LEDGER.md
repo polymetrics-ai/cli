@@ -225,3 +225,17 @@ Frozen candidate: `ca6f6873d168db707bbe58291b5ee1b582e9404f`.
 The next commit after the Cycle 5 plan checkpoint may modify only the three matching tests and the
 two issue-478 fixtures. The retained 68 tests, each new expected failure row, and exact frozen
 production blob IDs must be recorded before any Cycle 5 production edit.
+
+## Cycle 5 RED and first GREEN evidence
+
+- PLAN `7cf9c88ddadee395020444c19ee9f001b0807a53` preceded every Cycle 5 test and
+  production edit.
+- Single test-only RED `6cb21902244e4bccf390c4e7556eb615e5e1697f` retained 68/68 Cycle 4
+  cases and produced 37 intended failures across every new top-level Cycle 5 contract. Production
+  blobs remained exactly `c60f2f09b62a11b2eb17fb48fc8197f938ec8eff` (orchestrator),
+  `165d483aaaea5d4d67a2b0f88efce1b36118460a` (evidence), and
+  `ab8718eb8c2f5a4e2fe3a993283a166fd8e4e961` (router).
+- First architectural GREEN passes 109/109 focused tests: retained 68 plus all 41 Cycle 5 cases.
+  Strict owned TypeScript 5.9.3 and all 20 production Shepherd modules pass against the cached
+  Pi 0.80.6 package and Node declarations. Broader serialized, offline RPC, scope, and data gates
+  remain pending until after the GREEN checkpoint.

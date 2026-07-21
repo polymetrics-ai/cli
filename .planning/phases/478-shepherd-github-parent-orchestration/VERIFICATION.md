@@ -124,11 +124,11 @@ All prior pass statements are historical until the consolidated correction is co
 Status: planned against frozen candidate `ca6f6873d168db707bbe58291b5ee1b582e9404f`.
 Cycle 4 is historical and blocked by two exact-head review ledgers until this contract completes.
 
-- [ ] Artifact-only plan/finding matrix precedes every Cycle 5 test and production edit.
-- [ ] One test/fixture-only RED proves retained 68/68, intended failure for every new row, and
+- [x] Artifact-only plan/finding matrix precedes every Cycle 5 test and production edit.
+- [x] One test/fixture-only RED proves retained 68/68, intended failure for every new row, and
       exact frozen production blob identity.
-- [ ] Focused #478 suite passes after one coherent architectural GREEN/refactor.
-- [ ] Strict owned/all-production TypeScript passes against pinned Pi 0.80.6.
+- [x] Focused #478 suite passes after one coherent architectural GREEN/refactor: 109/109.
+- [x] Strict owned/all-production TypeScript passes against pinned Pi 0.80.6.
 - [ ] Pinned offline RPC, serialized classification, immutable base/ancestry, full-range diff,
       17-path scope, `git diff --check`, and credential scans are recorded.
 - [ ] `RUN-STATE.json` atomically names current Cycle 5 checkpoints and review truth.

@@ -1,9 +1,10 @@
 import { createHash } from "node:crypto";
-import { types as nodeTypes } from "node:util";
+import { TextDecoder, types as nodeTypes } from "node:util";
 
 const MAX_ARRAY_ITEMS = 64;
 const MAX_TEXT_BYTES = 512;
 const MAX_PATH_BYTES = 4_096;
+const MAX_RAW_JSON_BYTES = 1_048_576;
 const SHA = /^[0-9a-f]{40}$/;
 const REPOSITORY = /^(?:[a-z0-9.-]+(?::[0-9]{1,5})?\/)?[A-Za-z0-9][A-Za-z0-9._-]{0,99}\/[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/;
 const RFC3339_UTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,3}))?Z$/;
@@ -97,34 +98,83 @@ export interface CreateAgentSessionAttestationInput {
 
 type ExactRecord = Record<string, unknown>;
 
-function exactRecord(value: unknown, required: readonly string[], optional: readonly string[] = []): ExactRecord {
+
+export function decodeBoundedJsonPayload(value: string | Uint8Array, maximumBytes = MAX_RAW_JSON_BYTES): unknown {
+	if (!Number.isSafeInteger(maximumBytes) || maximumBytes < 1 || maximumBytes > MAX_RAW_JSON_BYTES) {
+		throw new Error("invalid bounded JSON payload byte limit");
+	}
+	if (nodeTypes.isProxy(value)) throw new Error("invalid bounded JSON payload shape");
+	let serialized: string;
+	if (typeof value === "string") {
+		if (Buffer.byteLength(value) > maximumBytes) throw new Error("bounded JSON payload is oversized");
+		serialized = value;
+	} else if (value instanceof Uint8Array) {
+		if (value.byteLength > maximumBytes) throw new Error("bounded JSON payload is oversized");
+		try {
+			serialized = new TextDecoder("utf-8", { fatal: true }).decode(value);
+		} catch {
+			throw new Error("bounded JSON payload is not valid UTF-8");
+		}
+		if (Buffer.byteLength(serialized) > maximumBytes) throw new Error("bounded JSON payload is oversized");
+	} else {
+		throw new Error("bounded JSON payload must be serialized UTF-8 JSON");
+	}
+	try {
+		return JSON.parse(serialized) as unknown;
+	} catch {
+		throw new Error("bounded JSON payload is invalid");
+	}
+}
+
+export function readBoundedExactRecord(
+	input: unknown,
+	required: readonly string[],
+	optional: readonly string[] = [],
+	description = "record",
+): ExactRecord {
+	const serializedBytes = typeof input === "object" && input !== null
+		&& !nodeTypes.isProxy(input) && input instanceof Uint8Array;
+	const value = typeof input === "string" || serializedBytes
+		? decodeBoundedJsonPayload(input as string | Uint8Array)
+		: input;
 	if (typeof value !== "object" || value === null || Array.isArray(value) || nodeTypes.isProxy(value)) {
-		throw new Error("invalid independent review record shape");
+		throw new Error(`invalid ${description} shape`);
 	}
 	const prototype = Object.getPrototypeOf(value);
-	if (prototype !== Object.prototype && prototype !== null) throw new Error("invalid independent review record shape");
-	const descriptors = Object.getOwnPropertyDescriptors(value);
+	if (prototype !== Object.prototype && prototype !== null) throw new Error(`invalid ${description} shape`);
 	const allowed = new Set([...required, ...optional]);
+	if (allowed.size !== required.length + optional.length) throw new Error(`invalid ${description} schema`);
+	const enumerable = new Set<string>();
+	for (const key in value) {
+		if (!Object.hasOwn(value, key)) continue;
+		if (enumerable.size >= allowed.size) throw new Error(`${description} bounded envelope is oversized`);
+		if (!allowed.has(key)) throw new Error(`unknown ${description} field`);
+		enumerable.add(key);
+	}
+	const result: ExactRecord = {};
+	for (const key of allowed) {
+		const descriptor = Object.getOwnPropertyDescriptor(value, key);
+		if (descriptor === undefined) continue;
+		if (!Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true || !enumerable.has(key)) {
+			throw new Error(`invalid ${description} shape`);
+		}
+		result[key] = descriptor.value;
+	}
 	for (const key of required) {
-		const descriptor = descriptors[key];
-		if (descriptor === undefined || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
-			throw new Error("invalid independent review record shape");
-		}
+		if (!Object.hasOwn(result, key)) throw new Error(`invalid ${description} shape`);
 	}
-	for (const key of Reflect.ownKeys(descriptors)) {
-		if (typeof key !== "string" || !allowed.has(key)) throw new Error("unknown independent review record field");
-		const descriptor = descriptors[key];
-		if (!Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
-			throw new Error("invalid independent review record shape");
-		}
-	}
-	return Object.fromEntries(Object.entries(descriptors).map(([key, descriptor]) => [key, descriptor.value]));
+	return result;
+}
+
+function exactRecord(value: unknown, required: readonly string[], optional: readonly string[] = []): ExactRecord {
+	return readBoundedExactRecord(value, required, optional, "independent review record");
 }
 
 export function redactSensitiveText(input: string): string {
-	const secretName = "(?:authorization|token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret|private[_-]?key|database[_-]?url|credentials?)";
+	const secretName = "(?:authorization|token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret|private[_-]?key|database[_-]?url|credentials?|cookies?|set[_-]?cookie|session(?:[_ -]?(?:id|token|cookie))?|csrf[_-]?token)";
 	return input
 		.replace(/-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-\r\n]*PRIVATE KEY-----|$)/giu, "[REDACTED]")
+		.replace(/\b((?:Set-Cookie|Cookie|X-(?:Session|Auth|CSRF)(?:-Id|-Token)?))\s*:\s*[^\r\n]+/giu, "$1: [REDACTED]")
 		.replace(/\bAuthorization\s*:\s*[^\r\n,;]+/giu, "Authorization: [REDACTED]")
 		.replace(/\b(?:Bearer|Basic|Token)\s+[^\s,;]+/giu, "[REDACTED]")
 		.replace(new RegExp(`(["']${secretName}["']\\s*:\\s*)(?:"[^"\\r\\n]*"|'[^'\\r\\n]*'|[^,}\\r\\n]+)`, "giu"), "$1\"[REDACTED]\"")
@@ -208,18 +258,21 @@ function exactArrayValues(value: unknown, description: string, allowEmpty: boole
 		throw new Error(`${description} must be a bounded array of at most ${MAX_ARRAY_ITEMS} values`);
 	}
 	const length = lengthDescriptor.value as number;
-	const descriptors = Object.getOwnPropertyDescriptors(value);
 	const values: unknown[] = [];
-	for (const key of Reflect.ownKeys(descriptors)) {
-		if (key === "length") continue;
+	let entries = 0;
+	for (const key in value) {
+		if (!Object.hasOwn(value, key)) continue;
+		if (entries >= length) throw new Error(`${description} has an invalid array field`);
 		if (typeof key !== "string" || !/^(?:0|[1-9]\d*)$/u.test(key)) throw new Error(`${description} has an invalid array field`);
 		const index = Number(key);
-		const descriptor = descriptors[key];
-		if (index >= length || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
+		const descriptor = Object.getOwnPropertyDescriptor(value, key);
+		if (index >= length || descriptor === undefined || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
 			throw new Error(`${description} must contain only dense data values`);
 		}
 		values[index] = descriptor.value;
+		entries += 1;
 	}
+	if (entries !== length) throw new Error(`${description} must be a dense canonical array`);
 	for (let index = 0; index < length; index += 1) {
 		if (!Object.hasOwn(values, index)) throw new Error(`${description} must be a dense canonical array`);
 	}

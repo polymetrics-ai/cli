@@ -152,3 +152,13 @@
   acknowledgement, ensure-scope key retention until live calls settle, bounded incomplete-aware
   stop/join.
 - No test, production, push, network, GitHub, reviewer, #479 implementation, or prohibited gate ran.
+
+## 2026-07-22 Cycle 5 RED and first GREEN
+
+- PLAN `7cf9c88d` and RED `6cb21902` preserve the ordered artifact-only then test-only lifecycle.
+  RED retained 68/68 and produced 37 intended failures while the three production blobs remained
+  frozen at Cycle 4.
+- First GREEN passes the complete focused 109/109 suite. Strict TypeScript 5.9.3 passes for the
+  six owned production/test files and all 20 Shepherd production modules against pinned Pi 0.80.6.
+- Broader serialized, offline RPC, immutable-base/diff/scope, and synthetic-data scans remain for
+  the post-GREEN evidence checkpoint. No prohibited or external action has run.
