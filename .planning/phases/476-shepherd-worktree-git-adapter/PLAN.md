@@ -208,7 +208,7 @@ Production is frozen until the correction-4 RED checkpoint. Baseline hashes at t
 - [x] strict no-emit TypeScript passes against cached Pi 0.80.6 types
 - [x] documented offline Pi 0.80.6 RPC returns `true`
 - [x] immutable-base diff check and exact changed-path scope pass
-- [ ] final local, tracking, and remote branch heads match exactly
+- [x] final local, tracking, and remote branch heads match exactly
 
 Correction 4 test-only RED checkpoint `1ed10ad6f9e7893cc4a921bc5f1f6fbb848c61f1`:
 the focused serialized run reported 42 tests, 36 passes, and six failures (five dirty-state
@@ -219,4 +219,5 @@ Correction 4 result: plan `1eb2852a`, genuine test-only RED `1ed10ad6`, GREEN
 `b2d62bc64eda012362c0b125e6bb79e90a4a452e`, and refactor
 `bb0535353378a08210a5e1f106c8c07c1e4b32fe`. Focused 42/42, serialized Shepherd
 179/179 in 115.2s, strict cached-Pi TypeScript, offline Pi RPC `true`, and immutable-base
-diff/path-scope gates pass. Final exact-head equality follows the evidence-only commit.
+diff/path-scope gates pass. Evidence checkpoint `947946d0feca7f241de1d166f4432ceb64b6a7a2`
+matched the local, tracking, and remote branch refs exactly before this terminal attestation.

@@ -20,6 +20,7 @@ variants created the remote issue ref; production remained unchanged from review
 | offline Pi discovery | pass | pinned Pi 0.80.6 RPC `get_commands` returned `true` for `pm-shepherd` |
 | immutable-base diff | pass | `git diff --check e659d6f1...HEAD` exited 0 |
 | owned path scope | pass | only issue-owned adapters, matching tests/fixture, and phase 476 artifacts changed |
+| pushed exact-head equality | pass | evidence checkpoint `947946d0feca7f241de1d166f4432ceb64b6a7a2` matched local, tracking, and remote refs |
 | forbidden gates | not run | no Go, connector, certification, runtime-backed, or `make` command ran |
 
 Correction 3 supersedes reviewed head `9728f9ed12e8e545eabd8b9b1b8028af80150427` with GREEN

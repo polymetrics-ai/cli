@@ -72,7 +72,8 @@ Correction 4 refactor head: `bb0535353378a08210a5e1f106c8c07c1e4b32fe`
 - Strict no-emit TypeScript against cached Pi 0.80.6 Node types: pass.
 - Offline Pi 0.80.6 RPC command discovery: `true` for `pm-shepherd` from `extension`.
 - Exact-range diff and scope hygiene: pass.
-- Pushed exact-head equality: pending the correction-4 evidence-only commit.
+- Pushed exact-head equality: evidence checkpoint `947946d0feca7f241de1d166f4432ceb64b6a7a2`
+  matched local, tracking, and remote refs before terminal attestation.
 - Go, connector, certification, runtime-service, and `make verify` gates: not run, per parent policy.
 
 ## Review and merge state
