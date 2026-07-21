@@ -239,3 +239,18 @@ production blob IDs must be recorded before any Cycle 5 production edit.
   Strict owned TypeScript 5.9.3 and all 20 production Shepherd modules pass against the cached
   Pi 0.80.6 package and Node declarations. Broader serialized, offline RPC, scope, and data gates
   remain pending until after the GREEN checkpoint.
+
+## Cycle 5 final local verification
+
+- Architectural GREEN `3ae10dc2303409230153e32e6b6231b27b18cdcf` passes 109/109
+  focused tests and strict owned plus all-production TypeScript.
+- The serialized suite classifies 373 tests as 307 pass, 65 unrelated managed-sandbox
+  process-identity `spawn EPERM` failures, and one intentional live-GitHub skip. Every #478 test
+  passes; the environmental broad-gate failure is not reported as a full-suite pass.
+- Pinned Pi 0.80.6 offline RPC discovers `pm-shepherd` from `extension`; immutable base and frozen
+  candidate are ancestors; the exact merge base is `3addb1f4`; full-range `git diff --check`,
+  exact 17-path ownership, JSON parsing, and high-confidence credential-literal scans pass.
+- GREEN adjusted only `github-orchestrator.test.ts` support fixtures after RED: the fake broker now
+  emits the newly required full canonical records, seeded receipts carry authoritative provenance,
+  lifecycle recovery observes the created resource, and RUN-STATE asserts the exact RED SHA. These
+  edits align fixtures with the stronger contract and do not remove or weaken any RED assertion.

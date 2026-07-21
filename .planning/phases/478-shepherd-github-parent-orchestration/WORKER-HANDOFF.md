@@ -16,9 +16,9 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-478-shepherd-github-parent-orchestration`
 
-Implementation head: `40ce66d4b5010b92089895a05709687143d15a05`
+Implementation head: `3ae10dc2303409230153e32e6b6231b27b18cdcf`
 
-Verification evidence head: `568c98e2bf09ac751eb474df20cd37a5af3cbd70`
+Verification evidence head: this evidence commit; exact SHA reported externally after commit
 
 ## Scope Delivered
 
@@ -178,3 +178,26 @@ session-attestation contract and fixtures required to verify independent-review 
   reports uncooperative work incomplete.
 - Adapter doctor passes; missing command/helper activates `manual_gsd_fallback`. One read-only
   explorer maps coupled symbols; isolated worker owns implementation. No push/network/GitHub.
+
+## Cycle 5 completed local handoff
+
+- Checkpoints: PLAN `7cf9c88ddadee395020444c19ee9f001b0807a53`; comprehensive test-only
+  RED `6cb21902244e4bccf390c4e7556eb615e5e1697f`; architectural GREEN
+  `3ae10dc2303409230153e32e6b6231b27b18cdcf`; the evidence commit is reported by the worker
+  after commit because it cannot contain its own identity.
+- Focused #478: 109/109 pass. Strict TypeScript 5.9.3 passes for the six owned production/test
+  files and all 20 Shepherd production modules against pinned Pi 0.80.6 declarations. Pinned
+  offline Pi RPC discovers `pm-shepherd` from `extension`.
+- Serialized Shepherd: 373 total, 307 pass, 65 unrelated managed-sandbox process-identity
+  `spawn EPERM` failures, and 1 intentional live-GitHub skip. Every #478 test passes; this
+  environmental result is not represented as a full-suite pass.
+- Immutable base and frozen candidate ancestry, exact merge base, full-range `git diff --check`,
+  exact 17-path ownership, JSON parsing, and high-confidence credential-literal scans pass.
+- GREEN changed only support fixtures in `github-orchestrator.test.ts` after RED: fake broker
+  records became fully canonical, seeded receipts gained authoritative provenance, lifecycle
+  recovery observes the created resource, and RUN-STATE checks the exact RED checkpoint. No RED
+  expectation was removed or weakened.
+- No Go, connector, certification, runtime, `make`, network, live GitHub, controller/#479,
+  reviewer, integration, or merge action ran. Parent next runs two fresh exact-head
+  `openai-codex/gpt-5.6-sol:xhigh` reviews and owns disposition, publication, integration, and all
+  human gates.

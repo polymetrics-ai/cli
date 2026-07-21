@@ -162,3 +162,20 @@
   six owned production/test files and all 20 Shepherd production modules against pinned Pi 0.80.6.
 - Broader serialized, offline RPC, immutable-base/diff/scope, and synthetic-data scans remain for
   the post-GREEN evidence checkpoint. No prohibited or external action has run.
+
+## 2026-07-22 Cycle 5 final local verification
+
+- Architectural GREEN `3ae10dc2303409230153e32e6b6231b27b18cdcf` passes all 109 focused
+  #478 tests and strict TypeScript 5.9.3 for the six owned production/test files plus all 20
+  Shepherd production modules against pinned Pi 0.80.6.
+- Serialized Shepherd: 373 total, 307 pass, 65 unrelated managed-sandbox process-identity
+  `spawn EPERM` failures, and 1 intentional live-GitHub skip; every #478 test passes. This is an
+  environmental failure classification, not a full-suite pass.
+- Pinned Pi 0.80.6 offline RPC discovers `pm-shepherd` from `extension`. Immutable base and frozen
+  candidate ancestry, exact merge base, full-range `git diff --check`, exact 17-path ownership,
+  JSON parsing, and high-confidence credential-literal scans pass.
+- GREEN adjusted only `github-orchestrator.test.ts` support fixtures after RED to emit full broker
+  records, seed authoritative receipt provenance, observe the lifecycle recovery resource, and
+  assert the exact RED RUN-STATE checkpoint. No RED expectation was removed or weakened.
+- No Go, connector, certification, runtime, `make`, network, live GitHub, controller/#479,
+  reviewer, integration, or merge action ran. Parent owns two fresh exact-head `xhigh` reviews.

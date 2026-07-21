@@ -80,3 +80,21 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   unrelated sandbox `spawn EPERM` failures (266 pass, 1 skip)
 - no controller/#479, live GitHub, reviewer, network, Go, connector, `make`, or merge action ran;
   two fresh exact-head `xhigh` reviews remain parent-owned
+
+## Cycle 5 consolidated-review correction
+
+- PLAN `7cf9c88d`, comprehensive test-only RED `6cb21902`, and architectural GREEN `3ae10dc2`
+  close the unique union of both blocking Cycle 4 review ledgers
+- full canonical broker records, generation-wide policy refresh, independent receipt
+  reauthorization, centralized child eligibility, revision-bound CAS identity, and expanded
+  cookie/session redaction now fail closed
+- caller-linked deadlines/cancellation, tracked settlement and abort acknowledgement, live-call
+  keyed exclusion, bounded stop/join, byte-bounded raw JSON, and schema-directed record reads
+  harden lifecycle and pre-materialization boundaries
+- focused 109/109, strict owned/all-production TypeScript, pinned Pi 0.80.6 offline discovery, and
+  base/diff/exact-17-path/JSON/credential gates pass; serialized Shepherd records 307 pass, 65
+  unrelated sandbox `spawn EPERM` failures, and 1 skip across 373 tests
+- post-RED test edits only align support fixtures with the stronger contract; no RED expectation
+  was removed or weakened
+- no controller/#479, live GitHub, reviewer, network, Go, connector, `make`, integration, or merge
+  action ran; two fresh exact-head `xhigh` reviews remain parent-owned

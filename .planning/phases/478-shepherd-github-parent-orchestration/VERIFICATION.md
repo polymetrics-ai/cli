@@ -1,9 +1,11 @@
 # Verification: #478
 
-Status: locally passed at implementation head
-`40ce66d4b5010b92089895a05709687143d15a05`; parent-owned exact-head review pending.
+Status: Cycle 5 locally verified at architectural GREEN
+`3ae10dc2303409230153e32e6b6231b27b18cdcf`; two fresh parent-owned exact-head reviews pending.
+Earlier cycle gate sections below are retained as historical evidence and do not supersede the
+current Cycle 5 contract.
 
-## Authorized gate checklist
+## Initial delivery authorized gate checklist (historical)
 
 - [x] Focused #478 tests pass: 27/27.
 - [x] Complete serialized Shepherd test suite passes: 290 pass, 0 fail, 1 sandbox skip.
@@ -15,7 +17,7 @@ Status: locally passed at implementation head
 - [x] Fake orchestration transports only; no live issue/comment/ready/merge transport ran.
 - [x] Go, connector, certification, runtime-service, and `make` gates were not run.
 
-## Exact evidence
+## Initial delivery exact evidence (historical)
 
 | Gate | Result |
 | --- | --- |
@@ -121,16 +123,32 @@ All prior pass statements are historical until the consolidated correction is co
 
 ## Cycle 5 verification contract
 
-Status: planned against frozen candidate `ca6f6873d168db707bbe58291b5ee1b582e9404f`.
-Cycle 4 is historical and blocked by two exact-head review ledgers until this contract completes.
+Status: locally verified at architectural GREEN
+`3ae10dc2303409230153e32e6b6231b27b18cdcf`; Cycle 4 is historical and its two blocking
+exact-head review ledgers are consolidated into this completed local correction. Two fresh
+parent-owned exact-head reviews remain pending.
 
 - [x] Artifact-only plan/finding matrix precedes every Cycle 5 test and production edit.
 - [x] One test/fixture-only RED proves retained 68/68, intended failure for every new row, and
       exact frozen production blob identity.
 - [x] Focused #478 suite passes after one coherent architectural GREEN/refactor: 109/109.
 - [x] Strict owned/all-production TypeScript passes against pinned Pi 0.80.6.
-- [ ] Pinned offline RPC, serialized classification, immutable base/ancestry, full-range diff,
+- [x] Pinned offline RPC, serialized classification, immutable base/ancestry, full-range diff,
       17-path scope, `git diff --check`, and credential scans are recorded.
-- [ ] `RUN-STATE.json` atomically names current Cycle 5 checkpoints and review truth.
-- [ ] No Go, connector, certification, runtime, `make`, network, live GitHub, #479 implementation,
+- [x] `RUN-STATE.json` atomically names current Cycle 5 checkpoints and review truth.
+- [x] No Go, connector, certification, runtime, `make`, network, live GitHub, #479 implementation,
       reviewer, integration, or merge action runs.
+
+### Cycle 5 gate results
+
+| Gate | Result |
+| --- | --- |
+| Focused #478 | pass; 109 pass, 0 fail |
+| Strict owned TypeScript | pass; TypeScript 5.9.3, six owned production/test files, pinned Pi 0.80.6 declarations |
+| Strict production TypeScript | pass; all 20 Shepherd production modules against pinned Pi 0.80.6 |
+| Serialized Shepherd | environmental failure; 373 total, 307 pass, 65 unrelated managed-sandbox process-identity `spawn EPERM` failures, 1 intentional live-GitHub skip; every #478 test passes |
+| Offline extension discovery | pass; pinned Pi 0.80.6 discovers `pm-shepherd` from `extension`; only expected settings-lock `EPERM` warnings |
+| Base/head/diff/scope/data | pass; immutable base and frozen candidate are ancestors, exact merge base `3addb1f4`, full-range `git diff --check`, exact 17-path ownership, JSON parsing, and high-confidence credential-literal scans pass |
+| Post-RED test edits | support-fixture alignment only in `github-orchestrator.test.ts`; no RED assertion was removed or weakened |
+| Prohibited/live actions | not run |
+| Fresh review | pending; two exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews remain parent-owned |

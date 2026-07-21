@@ -1,6 +1,7 @@
 # Summary: #478
 
-Status: ready stacked PR #487 open; parent-owned exact-head review pending.
+Status: Cycle 5 locally complete at GREEN `3ae10dc2`; two fresh parent-owned exact-head reviews
+pending. Earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -85,3 +86,12 @@ mutation identity; cookie/session redaction; caller-linked lifecycle with live-c
 and bounded stop/join; pre-materialization raw/schema-directed envelope bounds; and atomic current
 run state. This plan checkpoint precedes the one comprehensive test-only RED; production and tests
 remain frozen. Push/network/GitHub and parent-owned review remain excluded.
+
+Cycle 5 is locally complete at PLAN `7cf9c88d`, comprehensive test-only RED `6cb21902`, and
+architectural GREEN `3ae10dc2`. Focused #478 passes 109/109; strict owned/all-production
+TypeScript and pinned Pi 0.80.6 offline discovery pass; immutable-base/ancestry, full-range diff,
+exact 17-path scope, JSON, and credential scans pass. The serialized suite records 307 pass, 65
+unrelated managed-sandbox `spawn EPERM` failures, and 1 intentional skip across 373 tests; every
+#478 test passes. Post-RED test edits only align support fixtures with the strengthened production
+contract and do not weaken expectations. No prohibited, network, GitHub, reviewer, integration,
+or merge action ran; two fresh exact-head `xhigh` reviews remain parent-owned.

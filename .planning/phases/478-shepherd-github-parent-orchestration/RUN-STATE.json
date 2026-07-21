@@ -4,21 +4,21 @@
   "issue": 478,
   "parentIssue": 471,
   "parentPr": 472,
-  "status": "in_progress",
-  "reason": "Cycle 5 consolidates two blocking reviews of frozen candidate ca6f6873 into one plan-first RED-to-GREEN architecture correction; implementation is in progress after exact PLAN and RED checkpoints.",
+  "status": "awaiting_review",
+  "reason": "Cycle 5 is locally verified at architectural GREEN 3ae10dc2; the two Cycle 4 blocking reviews remain historical truth and two fresh parent-owned exact-head reviews are pending for the corrected candidate.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
     "frozenCandidate": "ca6f6873d168db707bbe58291b5ee1b582e9404f",
-    "implementationHead": null,
-    "verificationEvidenceHead": null,
+    "implementationHead": "3ae10dc2303409230153e32e6b6231b27b18cdcf",
+    "verificationEvidenceHead": "3ae10dc2303409230153e32e6b6231b27b18cdcf",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
     "adapterHealth": "doctor_passed_programming_loop_unavailable",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
-    "verificationPassed": false,
+    "verificationPassed": true,
     "reviewCoveragePassed": false,
     "reviewState": {
       "cycle": 4,
@@ -34,7 +34,7 @@
       "cycle4Evidence": "ca6f6873d168db707bbe58291b5ee1b582e9404f",
       "cycle5Plan": "7cf9c88ddadee395020444c19ee9f001b0807a53",
       "cycle5Red": "6cb21902244e4bccf390c4e7556eb615e5e1697f",
-      "cycle5Green": null,
+      "cycle5Green": "3ae10dc2303409230153e32e6b6231b27b18cdcf",
       "cycle5Evidence": null
     },
     "verification": {
@@ -43,7 +43,7 @@
       "cycle4StrictProductionTypeScript": "pass",
       "cycle4OfflineRpc": "pass",
       "cycle4Serialized": "332 total; 266 pass; 65 unrelated managed-sandbox spawn EPERM failures; 1 intentional skip",
-      "cycle5": "focused_109_of_109_and_strict_typescript_pass_broader_gates_pending"
+      "cycle5": "focused 109/109 pass; strict owned and all-production TypeScript pass; offline RPC pass; serialized 373 total, 307 pass, 65 unrelated managed-sandbox spawn EPERM failures, 1 intentional skip; immutable base, ancestry, full-range diff, exact 17-path scope, JSON, and credential scans pass"
     },
     "orchestrationDecisions": [
       {
@@ -55,6 +55,11 @@
         "cycle": "cycle-5-publish",
         "decision": "not_authorized",
         "reason": "Cycle 5 explicitly excludes push, network, and GitHub mutation; parent owns publication and exact-head review."
+      },
+      {
+        "cycle": "cycle-5-verification",
+        "decision": "locally_verified_awaiting_parent_reviews",
+        "reason": "All #478-focused, strict TypeScript, offline extension, base, scope, data, and integrity gates pass; the broad serialized suite is classified as environmentally failing only in 65 unrelated process-identity spawn EPERM tests."
       }
     ],
     "humanGates": [
@@ -68,5 +73,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-22T00:00:00.000Z"
+  "updatedAt": "2026-07-21T22:09:43.000Z"
 }
