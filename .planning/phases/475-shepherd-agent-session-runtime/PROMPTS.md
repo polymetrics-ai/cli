@@ -46,4 +46,9 @@
 - RED result: focused command exits 1 with 20 passed / 7 expected failures across direct,
   prompt/tool/handoff redaction, prose preservation, and both independently hung late-cleanup hooks;
   production was unchanged.
-- Verification status: GREEN implementation pending; Cycle 2 terminal evidence is superseded.
+- GREEN result: focused command exits 0 with 27 passed / 0 failed. A bounded structured scanner now
+  covers multiline credential forms without changing ambiguous multiword prose; detached late
+  cleanup shares one deadline, forces coalesced disposal, consumes rejections, and quarantines on
+  timeout/failure. Focused strict TypeScript also passes against explicit Pi 0.80.6 types.
+- Verification status: REFACTOR and the complete Cycle 3 gate set remain pending; Cycle 2 terminal
+  evidence is superseded.

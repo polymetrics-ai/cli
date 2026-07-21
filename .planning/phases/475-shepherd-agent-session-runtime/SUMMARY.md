@@ -1,6 +1,7 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 3 in progress; Cycle 2 verification is superseded.
+Status: exact-head correction Cycle 3 GREEN; full revalidation pending and Cycle 2 verification is
+superseded.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -33,4 +34,8 @@ without changing ordinary prose. The strict correction cycle and every declared 
 Re-review at `526dfec4282b442c4b32138ab036d4cc7e97b475` found that multiline YAML/quoted credential forms
 still escape the line-limited patterns and that ambiguous assignment prose can be modified. It also
 found that abandoned-session cleanup can wait forever on abort or idle, preventing forced disposal
-and quarantine. Cycle 3 is active under the same narrow Shepherd-only verification boundary.
+and quarantine. The Cycle 3 focused suite now passes 27/27: structured multiline forms are redacted,
+ambiguous multiword prose is byte-identical, and independently hung abort/wait hooks reach one
+forced disposal plus quarantine within the shared cleanup bound without unhandled rejection. The
+complete Shepherd, strict production TypeScript, pinned offline RPC, and diff/scope gates remain
+pending under the same narrow verification boundary.

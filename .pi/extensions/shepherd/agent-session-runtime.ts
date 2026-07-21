@@ -187,6 +187,7 @@ class OwnedSession {
 	readonly session: RuntimeAgentSession;
 	unsubscribe: (() => void) | undefined;
 	#abortPromise: Promise<void> | undefined;
+	#disposePromise: Promise<void> | undefined;
 	#joinPromise: Promise<void> | undefined;
 
 	constructor(session: RuntimeAgentSession) {
@@ -206,6 +207,29 @@ class OwnedSession {
 		return this.#joinPromise;
 	}
 
+	disposeOnce(): Promise<void> {
+		if (!this.#disposePromise) {
+			this.#disposePromise = Promise.resolve().then(() => {
+				let firstError: unknown;
+				try {
+					this.unsubscribe?.();
+				} catch (error) {
+					firstError = error;
+				} finally {
+					this.unsubscribe = undefined;
+				}
+				try {
+					this.session.dispose();
+				} catch (error) {
+					firstError ??= error;
+				}
+				if (firstError !== undefined) throw firstError;
+			});
+			this.#disposePromise.catch(() => undefined);
+		}
+		return this.#disposePromise;
+	}
+
 	async #join(): Promise<void> {
 		let firstError: unknown;
 		try {
@@ -214,14 +238,7 @@ class OwnedSession {
 			firstError = error;
 		}
 		try {
-			this.unsubscribe?.();
-		} catch (error) {
-			firstError ??= error;
-		} finally {
-			this.unsubscribe = undefined;
-		}
-		try {
-			this.session.dispose();
+			await this.disposeOnce();
 		} catch (error) {
 			firstError ??= error;
 		}
@@ -231,6 +248,7 @@ class OwnedSession {
 
 class SessionCreationOwnership {
 	readonly promise: Promise<RuntimeSessionResult>;
+	readonly #cleanupTimeoutMs: number;
 	readonly #onCleanupFailure: (error: unknown) => void;
 	#state: "pending" | "claimed" | "abandoned" = "pending";
 	#created: RuntimeSessionResult | undefined;
@@ -238,9 +256,11 @@ class SessionCreationOwnership {
 
 	constructor(
 		promise: Promise<RuntimeSessionResult>,
+		cleanupTimeoutMs: number,
 		onCleanupFailure: (error: unknown) => void,
 	) {
 		this.promise = promise;
+		this.#cleanupTimeoutMs = cleanupTimeoutMs;
 		this.#onCleanupFailure = onCleanupFailure;
 		void promise.then(
 			(created) => {
@@ -273,14 +293,27 @@ class SessionCreationOwnership {
 	}
 
 	async #cleanup(owned: OwnedSession): Promise<void> {
+		const deadlineAt = Date.now() + this.#cleanupTimeoutMs;
 		let firstError: unknown;
-		try {
-			await owned.abortOnce();
-		} catch (error) {
-			firstError = error;
+		const abort = boundedUntil(
+			owned.abortOnce(),
+			deadlineAt,
+			"abandoned session abort",
+			true,
+		);
+		// Let abort() start before waitForIdle(), while still bounding both by one deadline.
+		await Promise.resolve();
+		const join = boundedUntil(
+			owned.joinOnce(),
+			deadlineAt,
+			"abandoned session join",
+			true,
+		);
+		for (const settlement of await Promise.allSettled([abort, join])) {
+			if (settlement.status === "rejected") firstError ??= settlement.reason;
 		}
 		try {
-			await owned.joinOnce();
+			await owned.disposeOnce();
 		} catch (error) {
 			firstError ??= error;
 		}
@@ -495,7 +528,7 @@ export class ShepherdAgentSessionRuntime {
 				sessionManager,
 				settingsManager,
 			} as unknown as CreateAgentSessionOptions));
-			creation = new SessionCreationOwnership(createPromise, (error) => {
+			creation = new SessionCreationOwnership(createPromise, this.#options.cleanupTimeoutMs, (error) => {
 				this.#quarantineFailure ??= error;
 			});
 			const created = await scope.race(createPromise);
@@ -896,6 +929,30 @@ async function bounded<T>(operation: Promise<T>, timeoutMs: number, description:
 	} finally {
 		if (timer) clearTimeout(timer);
 	}
+}
+
+async function boundedUntil<T>(
+	operation: Promise<T>,
+	deadlineAt: number,
+	description: string,
+	unref: boolean,
+): Promise<T> {
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	const timeoutMs = Math.max(0, deadlineAt - Date.now());
+	const timeout = new Promise<never>((_resolve, reject) => {
+		timer = setTimeout(() => reject(new AgentSessionRuntimeError(`${description} timed out after ${timeoutMs}ms`)), timeoutMs);
+		if (unref) unrefTimeout(timer);
+	});
+	try {
+		return await Promise.race([operation, timeout]);
+	} finally {
+		if (timer) clearTimeout(timer);
+	}
+}
+
+function unrefTimeout(timer: ReturnType<typeof setTimeout>): void {
+	const candidate = timer as ReturnType<typeof setTimeout> & { unref?: () => void };
+	candidate.unref?.();
 }
 
 type BoundedSettlement<T> =

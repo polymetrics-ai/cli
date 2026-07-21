@@ -191,10 +191,29 @@
 
 ### GREEN
 
-- Status: ready; RED evidence precedes all production edits.
+- Status: captured after the test-only RED commit `9c4ed5fd`.
+- Minimal implementation:
+  - replaced line-local secret regexes with a bounded structured scanner that recognizes normalized
+    credential keys, multiline quoted values, YAML block scalars, and quoted/unquoted Bearer
+    credentials while leaving ambiguous multiword assignment prose unchanged;
+  - bounded abandoned-session abort and join against one cleanup deadline, unref'ed only the
+    detached cleanup timers, coalesced forced dispose, consumed detached rejections, and
+    quarantined on either timeout or hook/dispose failure.
+- Focused command result: exit 0, 27 passed / 0 failed.
+- Strict focused TypeScript result: exit 0 against the explicit Pi 0.80.6 package/type roots.
 
 ### REFACTOR / VERIFY
 
-- Status: blocked on GREEN.
+- Status: pending the complete declared gate set.
 - No Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, or review-bot
   command is permitted in this lane.
+
+## Cycle 3 Gate History
+
+| Checkpoint | Result | Evidence |
+|---|---|---|
+| PLAN | pass | exact reviewed head `526dfec4282b442c4b32138ab036d4cc7e97b475`; correction scope recorded before tests |
+| RED | expected fail | exit 1; 20 passed / 7 expected failures; production unchanged |
+| GREEN | pass | exit 0; 27 passed / 0 failed |
+| Focused strict TypeScript | pass | owned source/tests plus role prompt inputs against explicit Pi 0.80.6 types |
+| Complete Shepherd / final gates | pending | runs after the GREEN checkpoint |

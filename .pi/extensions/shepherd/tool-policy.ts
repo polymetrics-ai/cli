@@ -338,14 +338,353 @@ export function validateScopedPath(path: string, prefixes: readonly string[]): s
 
 export function redactSensitiveText(value: string): string {
 	if (typeof value !== "string") return "[REDACTED]";
-	return value
-		.replace(/-----BEGIN [^-]+ PRIVATE KEY-----[\s\S]*?-----END [^-]+ PRIVATE KEY-----/gi, "[REDACTED PRIVATE KEY]")
-		.replace(/\b(authorization\b["']?\s*[:=]\s*)"(\s*bearer\s+)(?:\\.|[^"\\\r\n])*"/gi, '$1"$2[REDACTED]"')
-		.replace(/\b(authorization\b["']?\s*[:=]\s*)'(\s*bearer\s+)(?:''|[^'\r\n])*'/gi, "$1'$2[REDACTED]'")
-		.replace(/\b(authorization\b["']?\s*[:=]\s*bearer\s+)[^\s,;"'\]}\r\n]+/gi, "$1[REDACTED]")
-		.replace(/\b(api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|passwd|secret)\b(["']?\s*[:=]\s*)"(?:\\.|[^"\\\r\n])*"/gi, '$1$2"[REDACTED]"')
-		.replace(/\b(api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|passwd|secret)\b(["']?\s*[:=]\s*)'(?:''|[^'\r\n])*'/gi, "$1$2'[REDACTED]'")
-		.replace(/\b(api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|passwd|secret)\b(["']?\s*[:=]\s*)[^\s,;"'\]}\r\n]+/gi, "$1$2[REDACTED]");
+	return redactStructuredAssignments(redactPrivateKeyBlocks(value));
+}
+
+type SensitiveAssignmentKind = "authorization" | "secret";
+
+interface SensitiveAssignment {
+	kind: SensitiveAssignmentKind;
+	keyColumn: number;
+	valueStart: number;
+}
+
+interface RedactionRange {
+	start: number;
+	end: number;
+	replacement: string;
+}
+
+interface RedactionDecision {
+	range?: RedactionRange;
+	resumeAt: number;
+}
+
+const REDACTED_TEXT = "[REDACTED]";
+const secretAssignmentKeys = new Set([
+	"apikey",
+	"accesstoken",
+	"refreshtoken",
+	"token",
+	"password",
+	"passwd",
+	"secret",
+	"clientsecret",
+]);
+
+function redactStructuredAssignments(value: string): string {
+	const ranges: RedactionRange[] = [];
+	let index = 0;
+	let lineStart = 0;
+	let structuredKeyStart = findStructuredKeyStart(value, lineStart);
+	while (index < value.length) {
+		const character = value[index];
+		if (character === "\n" || character === "\r") {
+			index = afterLineEnding(value, index);
+			lineStart = index;
+			structuredKeyStart = findStructuredKeyStart(value, lineStart);
+			continue;
+		}
+		const assignment = sensitiveAssignmentAt(value, index, lineStart, index === structuredKeyStart);
+		if (!assignment) {
+			index += 1;
+			continue;
+		}
+		const decision = redactionForAssignment(value, assignment);
+		if (decision.range) ranges.push(decision.range);
+		const resumeAt = Math.max(index + 1, decision.resumeAt);
+		lineStart = advanceLineStart(value, index, resumeAt, lineStart);
+		index = resumeAt;
+		const nextStructuredKeyStart = findStructuredKeyStart(value, lineStart);
+		structuredKeyStart = nextStructuredKeyStart !== undefined && nextStructuredKeyStart >= index
+			? nextStructuredKeyStart
+			: undefined;
+	}
+	if (ranges.length === 0) return value;
+	let output = "";
+	let cursor = 0;
+	for (const range of ranges) {
+		output += value.slice(cursor, range.start) + range.replacement;
+		cursor = range.end;
+	}
+	return output + value.slice(cursor);
+}
+
+function sensitiveAssignmentAt(
+	value: string,
+	index: number,
+	lineStart: number,
+	allowUnquoted: boolean,
+): SensitiveAssignment | undefined {
+	let cursor = index;
+	let key: string;
+	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] : undefined;
+	if (quote) {
+		cursor += 1;
+		const keyStart = cursor;
+		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) cursor += 1;
+		if (cursor === keyStart || value[cursor] !== quote) return undefined;
+		key = value.slice(keyStart, cursor);
+		cursor += 1;
+	} else {
+		if (!allowUnquoted) return undefined;
+		const keyStart = cursor;
+		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) cursor += 1;
+		if (cursor === keyStart) return undefined;
+		key = value.slice(keyStart, cursor);
+	}
+
+	const kind = sensitiveAssignmentKind(key);
+	if (!kind) return undefined;
+	while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+	if (value[cursor] !== ":" && value[cursor] !== "=") return undefined;
+	cursor += 1;
+	while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+	return { kind, keyColumn: index - lineStart, valueStart: cursor };
+}
+
+function redactionForAssignment(value: string, assignment: SensitiveAssignment): RedactionDecision {
+	const lineEnd = findLineEnd(value, assignment.valueStart);
+	const quote = value[assignment.valueStart];
+	if (quote === '"' || quote === "'") {
+		return quotedValueRedaction(value, assignment, quote);
+	}
+	if (assignment.kind === "secret" && isYamlBlockHeader(value.slice(assignment.valueStart, lineEnd))) {
+		return yamlBlockRedaction(value, assignment, lineEnd);
+	}
+	return unquotedValueRedaction(value, assignment, lineEnd);
+}
+
+function quotedValueRedaction(
+	value: string,
+	assignment: SensitiveAssignment,
+	quote: string,
+): RedactionDecision {
+	const contentStart = assignment.valueStart + 1;
+	const quoteEnd = findQuotedValueEnd(value, contentStart, quote);
+	const contentEnd = quoteEnd ?? value.length;
+	const resumeAt = quoteEnd === undefined ? value.length : quoteEnd + 1;
+	if (assignment.kind === "secret") {
+		if (value.slice(contentStart, contentEnd).trim().length === 0) return { resumeAt };
+		return { range: { start: contentStart, end: contentEnd, replacement: REDACTED_TEXT }, resumeAt };
+	}
+
+	let cursor = contentStart;
+	while (cursor < contentEnd && isWhitespace(value[cursor])) cursor += 1;
+	if (value.slice(cursor, cursor + 6).toLowerCase() !== "bearer" || !isWhitespace(value[cursor + 6])) {
+		return { resumeAt };
+	}
+	cursor += 6;
+	while (cursor < contentEnd && isWhitespace(value[cursor])) cursor += 1;
+	if (cursor >= contentEnd) return { resumeAt };
+	return { range: { start: cursor, end: contentEnd, replacement: REDACTED_TEXT }, resumeAt };
+}
+
+function yamlBlockRedaction(
+	value: string,
+	assignment: SensitiveAssignment,
+	headerEnd: number,
+): RedactionDecision {
+	const contentStart = afterLineEnding(value, headerEnd);
+	if (contentStart === headerEnd) return { resumeAt: headerEnd };
+	let cursor = contentStart;
+	let blockEnd = contentStart;
+	let contentIndent: string | undefined;
+	while (cursor < value.length) {
+		const lineEnd = findLineEnd(value, cursor);
+		const line = value.slice(cursor, lineEnd);
+		const indentLength = leadingIndentLength(line);
+		const blank = line.slice(indentLength).length === 0;
+		if (!blank && indentLength <= assignment.keyColumn) break;
+		if (!blank && contentIndent === undefined) contentIndent = line.slice(0, indentLength);
+		blockEnd = afterLineEnding(value, lineEnd);
+		if (blockEnd === lineEnd) break;
+		cursor = blockEnd;
+	}
+	const block = value.slice(contentStart, blockEnd);
+	if (block.trim().length === 0) return { resumeAt: blockEnd };
+	const indent = contentIndent ?? " ".repeat(assignment.keyColumn + 2);
+	return {
+		range: {
+			start: contentStart,
+			end: blockEnd,
+			replacement: `${indent}${REDACTED_TEXT}${trailingLineEnding(block)}`,
+		},
+		resumeAt: blockEnd,
+	};
+}
+
+function unquotedValueRedaction(
+	value: string,
+	assignment: SensitiveAssignment,
+	lineEnd: number,
+): RedactionDecision {
+	let scalarEnd = findUnquotedTerminator(value, assignment.valueStart, lineEnd);
+	scalarEnd = trimHorizontalEnd(value, assignment.valueStart, scalarEnd);
+	if (scalarEnd <= assignment.valueStart) return { resumeAt: lineEnd };
+	if (assignment.kind === "authorization") {
+		let cursor = assignment.valueStart;
+		if (value.slice(cursor, cursor + 6).toLowerCase() !== "bearer" || !isHorizontalWhitespace(value[cursor + 6])) {
+			return { resumeAt: lineEnd };
+		}
+		cursor += 6;
+		while (cursor < scalarEnd && isHorizontalWhitespace(value[cursor])) cursor += 1;
+		const credential = value.slice(cursor, scalarEnd);
+		if (credential.length === 0 || containsWhitespace(credential)) return { resumeAt: lineEnd };
+		return { range: { start: cursor, end: scalarEnd, replacement: REDACTED_TEXT }, resumeAt: lineEnd };
+	}
+
+	const scalar = value.slice(assignment.valueStart, scalarEnd);
+	if (containsWhitespace(scalar) || isPublicScalar(scalar)) return { resumeAt: lineEnd };
+	return {
+		range: { start: assignment.valueStart, end: scalarEnd, replacement: REDACTED_TEXT },
+		resumeAt: lineEnd,
+	};
+}
+
+function redactPrivateKeyBlocks(value: string): string {
+	const lower = value.toLowerCase();
+	const beginPrefix = "-----begin ";
+	const headerSuffix = " private key-----";
+	let cursor = 0;
+	let searchAt = 0;
+	let output = "";
+	while (searchAt < value.length) {
+		const begin = lower.indexOf(beginPrefix, searchAt);
+		if (begin < 0) break;
+		const labelStart = begin + beginPrefix.length;
+		const headerWindow = lower.slice(labelStart, labelStart + 64 + headerSuffix.length);
+		const relativeHeaderEnd = headerWindow.indexOf(headerSuffix);
+		if (relativeHeaderEnd <= 0 || relativeHeaderEnd > 64) {
+			searchAt = labelStart;
+			continue;
+		}
+		const headerEnd = labelStart + relativeHeaderEnd;
+		const label = lower.slice(labelStart, headerEnd);
+		if (!/^[a-z0-9 ]+$/.test(label)) {
+			searchAt = labelStart;
+			continue;
+		}
+		const endMarker = `-----end ${label} private key-----`;
+		const end = lower.indexOf(endMarker, headerEnd + headerSuffix.length);
+		if (end < 0) {
+			output += value.slice(cursor, begin) + "[REDACTED PRIVATE KEY]";
+			return output;
+		}
+		output += value.slice(cursor, begin) + "[REDACTED PRIVATE KEY]";
+		cursor = end + endMarker.length;
+		searchAt = cursor;
+	}
+	return output + value.slice(cursor);
+}
+
+function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
+	const normalized = key.toLowerCase().replace(/[-_]/g, "");
+	if (normalized === "authorization") return "authorization";
+	return secretAssignmentKeys.has(normalized) ? "secret" : undefined;
+}
+
+function findStructuredKeyStart(value: string, lineStart: number): number | undefined {
+	let cursor = lineStart;
+	while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+	if (value[cursor] === "-") {
+		cursor += 1;
+		if (!isHorizontalWhitespace(value[cursor])) return undefined;
+		while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+	} else if (value.slice(cursor, cursor + 6).toLowerCase() === "export" && isHorizontalWhitespace(value[cursor + 6])) {
+		cursor += 6;
+		while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+	}
+	return isAssignmentKeyCharacter(value[cursor]) ? cursor : undefined;
+}
+
+function isAssignmentKeyCharacter(character: string | undefined): boolean {
+	return character !== undefined && /[A-Za-z0-9_-]/.test(character);
+}
+
+function isHorizontalWhitespace(character: string | undefined): boolean {
+	return character === " " || character === "\t";
+}
+
+function isWhitespace(character: string | undefined): boolean {
+	return isHorizontalWhitespace(character) || character === "\n" || character === "\r" || character === "\f";
+}
+
+function containsWhitespace(value: string): boolean {
+	for (const character of value) if (isWhitespace(character)) return true;
+	return false;
+}
+
+function findQuotedValueEnd(value: string, start: number, quote: string): number | undefined {
+	for (let index = start; index < value.length; index += 1) {
+		if (quote === '"' && value[index] === "\\") {
+			index += 1;
+			continue;
+		}
+		if (quote === "'" && value[index] === "'" && value[index + 1] === "'") {
+			index += 1;
+			continue;
+		}
+		if (value[index] === quote) return index;
+	}
+	return undefined;
+}
+
+function findLineEnd(value: string, start: number): number {
+	let index = start;
+	while (index < value.length && value[index] !== "\n" && value[index] !== "\r") index += 1;
+	return index;
+}
+
+function afterLineEnding(value: string, lineEnd: number): number {
+	if (value[lineEnd] === "\r" && value[lineEnd + 1] === "\n") return lineEnd + 2;
+	if (value[lineEnd] === "\r" || value[lineEnd] === "\n") return lineEnd + 1;
+	return lineEnd;
+}
+
+function leadingIndentLength(value: string): number {
+	let index = 0;
+	while (isHorizontalWhitespace(value[index])) index += 1;
+	return index;
+}
+
+function trailingLineEnding(value: string): string {
+	if (value.endsWith("\r\n")) return "\r\n";
+	if (value.endsWith("\n")) return "\n";
+	if (value.endsWith("\r")) return "\r";
+	return "";
+}
+
+function isYamlBlockHeader(value: string): boolean {
+	return /^[|>](?:(?:[1-9][+-]?)|(?:[+-][1-9]?))?[ \t]*(?:#.*)?$/.test(value);
+}
+
+function findUnquotedTerminator(value: string, start: number, lineEnd: number): number {
+	for (let index = start; index < lineEnd; index += 1) {
+		if (value[index] === "," || value[index] === ";" || value[index] === "]" || value[index] === "}") return index;
+		if (value[index] === "#" && index > start && isHorizontalWhitespace(value[index - 1])) {
+			let commentStart = index - 1;
+			while (commentStart > start && isHorizontalWhitespace(value[commentStart - 1])) commentStart -= 1;
+			return commentStart;
+		}
+	}
+	return lineEnd;
+}
+
+function trimHorizontalEnd(value: string, start: number, end: number): number {
+	while (end > start && isHorizontalWhitespace(value[end - 1])) end -= 1;
+	return end;
+}
+
+function isPublicScalar(value: string): boolean {
+	return /^(?:true|false|null|~|[-+]?\d[\d._-]*)$/i.test(value);
+}
+
+function advanceLineStart(value: string, start: number, end: number, lineStart: number): number {
+	for (let index = start; index < end; index += 1) {
+		if (value[index] === "\n" || value[index] === "\r") lineStart = index + 1;
+	}
+	return lineStart;
 }
 
 function validateCapabilityName(name: string): void {
