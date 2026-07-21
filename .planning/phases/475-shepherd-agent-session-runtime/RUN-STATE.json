@@ -13,6 +13,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "An isolated sub-issue worker owns a single exclusive TypeScript scope; nested delegation is neither required nor authorized."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Fake-injected Pi SDK authority and lifecycle tests were authored and produced the expected missing-production-module RED result."
     }
   ],
   "gates": {

@@ -12,12 +12,22 @@
 
 ### RED
 
-- Status: planned
+- Status: captured
 - Test files: `agent-session-runtime.test.ts`, `tool-policy.test.ts`, optional
   `role-prompts.test.ts`
 - Expected coverage: exact route, bounded context, least authority, recursion prevention,
   cancellation/deadline/close/shutdown races, join once, quarantine, and bound/redacted handoff.
-- Command and observed failure: pending.
+- Command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+- Observed failure: exit 1, 0 passed / 2 file-level failures. Node reported
+  `ERR_MODULE_NOT_FOUND` for `agent-session-runtime.ts` and `tool-policy.ts`. This is the expected
+  pre-production RED state: the fake-SDK authority/lifecycle test contracts exist and the owned
+  production adapters do not.
 
 ### GREEN
 
@@ -36,3 +46,4 @@
 |---|---|---|---|
 | Adapter | `scripts/gsd doctor` | pass | Pi adapter and registry healthy |
 | GSD command | `scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run` | unavailable | `unknown GSD command: programming-loop`; manual fallback activated |
+| RED | `node --test .pi/extensions/shepherd/agent-session-runtime.test.ts .pi/extensions/shepherd/tool-policy.test.ts` | expected fail | 0 passed; missing owned production modules |
