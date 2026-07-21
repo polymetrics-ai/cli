@@ -53,8 +53,8 @@ node --test .pi/extensions/shepherd/human-decision.test.ts \
   .pi/extensions/shepherd/github-decision-broker.test.ts
 ```
 
-Result after the aggregate, file repository, broker, fake transport, and typed `gh api` adapter:
-25 passed, 0 failed, 1 skipped (the live sandbox mutation), duration 794.79625 ms.
+Initial GREEN after the aggregate, file repository, broker, fake transport, and typed `gh api`
+adapter: 25 passed, 0 failed, 1 skipped (the live sandbox mutation), duration 794.79625 ms.
 
 Refactor additions remained green while adding strict persisted-schema validation, no-follow state
 reads, fsync+atomic replacement, dead-process lock recovery, concurrent request serialization,
@@ -63,3 +63,10 @@ and a request-specific transport write method rather than a generic comment-writ
 
 Strict no-emit TypeScript for both production modules passed against the TypeScript/Node types
 bundled with installed Pi 0.80.6.
+
+Final-review hardening added support for a bot-authenticated host and ordinary `name[bot]` comments
+without ever admitting them to the human actor allowlist. Final focused result: 27 tests total,
+26 passed, 0 failed, 1 sandbox-only skip, duration 305.387208 ms.
+
+Final full Shepherd result: 164 tests total, 163 passed, 0 failed, 1 sandbox-only skip, duration
+48877.375042 ms. Strict no-emit TypeScript then passed over all 11 production Shepherd modules.

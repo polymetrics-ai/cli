@@ -83,3 +83,9 @@ make verify
 `pi --list-extensions` is executed exactly as required even though existing parent evidence says Pi
 0.80.6 may reject that flag; any rejection is recorded rather than concealed. The offline
 registration probe is an additional fallback, not a substitute for reporting the exact command.
+
+Parent-policy update during verification: the parent orchestrator superseded child-lane full-repo
+verification with the declared child equivalent of focused tests, the full Shepherd suite, strict
+Pi 0.80.6 TypeScript, offline Pi RPC/extension discovery, and `git diff --check`. It intentionally
+terminated the in-flight `make verify` attempt and instructed this worker not to retry. The earlier
+standalone Go gates remain supplemental evidence only.

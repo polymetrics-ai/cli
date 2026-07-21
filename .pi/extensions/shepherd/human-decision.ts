@@ -188,6 +188,13 @@ function normalizeActors(values: unknown): string[] {
 	return normalized;
 }
 
+function normalizeGitHubActor(value: unknown, description: string): string {
+	const actor = safeText(value, 64, description).toLowerCase();
+	const base = actor.endsWith("[bot]") ? actor.slice(0, -5) : actor;
+	if (!LOGIN.test(base)) throw new Error(`invalid human decision ${description}`);
+	return actor;
+}
+
 function normalizeQuestion(value: unknown): string {
 	const question = safeText(value, 4_096, "question", true).trim();
 	if (question.length === 0 || question.includes("<!-- shepherd-decision:")) {
@@ -327,8 +334,7 @@ export function validateHumanDecisionRequestComment(
 ): HumanDecisionRequestComment {
 	if (!isRecord(evidence) || !validGitHubNumber(evidence.id)) throw new Error("invalid human decision request comment ID");
 	assertOnlyFields(evidence, ["id", "url", "actor", "createdAt"], "request comment");
-	const actor = safeText(evidence.actor, 39, "request comment actor").toLowerCase();
-	if (!LOGIN.test(actor)) throw new Error("invalid human decision request comment actor");
+	const actor = normalizeGitHubActor(evidence.actor, "request comment actor");
 	const url = validateSourceUrl(record.binding, evidence.url, "request comment URL");
 	const createdAt = canonicalTimestamp(evidence.createdAt, "request comment timestamp");
 	if (new Date(createdAt).valueOf() < new Date(record.createdAt).valueOf()

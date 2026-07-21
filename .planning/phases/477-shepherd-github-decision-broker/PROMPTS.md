@@ -10,4 +10,5 @@
 - Runtime decision: `manual_gsd_fallback`; execute the universal plan/RED/GREEN/refactor/verify
   lifecycle inline in the already isolated issue worktree.
 - Downstream artifact: `.planning/phases/477-shepherd-github-decision-broker/PLAN.md`.
-- Verification result: pending.
+- Verification result: declared child equivalent passed. The parent orchestrator superseded and
+  intentionally cancelled the child full-repo gate; see `VERIFICATION.md` for exact evidence.

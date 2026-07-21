@@ -95,10 +95,11 @@ function canonicalTimestamp(value: unknown, description: string): string {
 	return value;
 }
 
-function normalizedLogin(value: unknown, description: string): string {
+function normalizedActorLogin(value: unknown, description: string): string {
 	if (typeof value !== "string") throw new Error(`GitHub returned invalid ${description}`);
 	const login = value.toLowerCase();
-	if (!LOGIN.test(login)) throw new Error(`GitHub returned invalid ${description}`);
+	const base = login.endsWith("[bot]") ? login.slice(0, -5) : login;
+	if (login.length > 64 || !LOGIN.test(base)) throw new Error(`GitHub returned invalid ${description}`);
 	return login;
 }
 
@@ -119,7 +120,7 @@ function validateComment(value: unknown): GitHubComment {
 		id: value.id as number,
 		url: value.url,
 		body: value.body,
-		actor: { login: normalizedLogin(value.actor.login, "comment actor"), type: value.actor.type },
+		actor: { login: normalizedActorLogin(value.actor.login, "comment actor"), type: value.actor.type },
 		createdAt: canonicalTimestamp(value.createdAt, "comment creation timestamp"),
 		updatedAt: canonicalTimestamp(value.updatedAt, "comment update timestamp"),
 	};
@@ -289,7 +290,7 @@ export class GitHubDecisionBroker {
 				const expired = { ...existing, status: "expired" as const, updatedAt: timestamp };
 				return { state: expired, value: expired };
 			}
-			const authenticatedActor = normalizedLogin(await this.transport.getAuthenticatedActor(), "authenticated actor");
+			const authenticatedActor = normalizedActorLogin(await this.transport.getAuthenticatedActor(), "authenticated actor");
 			const comments = await this.transport.listComments(existing.binding);
 			const markers = markerComments(existing, comments);
 			if (markers.length > 1) throw new Error("duplicate human decision marker comments are ambiguous");
@@ -401,7 +402,7 @@ export class GhCliDecisionTransport implements GitHubDecisionTransport {
 	async getAuthenticatedActor(): Promise<string> {
 		const payload = parseJson(await this.execute("gh", ["api", "--method", "GET", "/user"]), "authenticated user");
 		if (!isRecord(payload)) throw new Error("GitHub returned malformed authenticated user evidence");
-		return normalizedLogin(payload.login, "authenticated user login");
+		return normalizedActorLogin(payload.login, "authenticated user login");
 	}
 
 	async listComments(binding: HumanDecisionBinding): Promise<GitHubComment[]> {

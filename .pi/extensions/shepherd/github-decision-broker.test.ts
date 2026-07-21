@@ -189,6 +189,7 @@ test("ignores bot, edited, disallowed, unknown, hostile multiline, emoji, review
 	await harness.broker.request(harness.request);
 	harness.transport.comments.push(
 		fixture.bot,
+		{ ...fixture.bot, id: 2020, actor: { login: "github-actions[bot]", type: "Bot" } },
 		fixture.edited,
 		fixture.hostileMultiline,
 		fixture.emoji,
@@ -200,6 +201,15 @@ test("ignores bot, edited, disallowed, unknown, hostile multiline, emoji, review
 	assert.equal(result.status, "pending");
 	assert.equal(result.attempts, 3);
 	assert.deepEqual(harness.sleeps, [10, 15]);
+});
+
+test("allows a bot-authenticated host to own the marker while never treating it as a human response", async () => {
+	const harness = brokerHarness();
+	harness.transport.authenticatedActor = "shepherd-app[bot]";
+	const record = await harness.broker.request(harness.request);
+	assert.equal(record.requestComment?.actor, "shepherd-app[bot]");
+	const result = await harness.broker.poll("req-477", issueBinding);
+	assert.equal(result.status, "pending");
 });
 
 test("duplicate or conflicting valid commands are ambiguous and fail closed", async () => {
