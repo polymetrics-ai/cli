@@ -29,5 +29,10 @@ Status: locally passed at implementation head
 | Prohibited gates | not run; no Go, connector, certification, runtime-service, or `make` command |
 | Automated review | pending parent stable-head specialist campaign; no reviewer started by this worker |
 
+Ready stacked PR #487 is open at https://github.com/polymetrics-ai/cli/pull/487 against
+`feat/471-pi-agent-session-shepherd`. Its verified title, ready state, base, head branch, and body
+linkage match the coordinator contract. GitHub reported `UNSTABLE` immediately after publication;
+that host status is not treated as local verification or review coverage.
+
 Review coverage is intentionally pending after local verification. Fresh exact-head
 `codex_independent` review and human parent ready/merge decisions are parent-orchestrator gates.

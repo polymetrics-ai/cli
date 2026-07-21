@@ -64,3 +64,13 @@
 - Local, tracking, and remote refs all matched the implementation head before evidence edits.
 - No Go, connector, certification, runtime-service, `make`, live orchestration transport,
   reviewer, Claude/Copilot, or merge command ran.
+
+## 2026-07-21 stacked PR publication
+
+- Pushed verification evidence checkpoint `568c98e2bf09ac751eb474df20cd37a5af3cbd70`.
+- Opened ready PR #487, `feat(shepherd): orchestrate parent issues and stacked PRs`, from the issue
+  branch to `feat/471-pi-agent-session-shepherd`.
+- Verified the PR is open and non-draft, with exact base/head branches and required `Refs #478` and
+  `Refs #471` linkage. The body contains no issue-closing keyword.
+- Did not request any reviewer, ready transition beyond initial non-draft publication, integration,
+  or merge. Parent owns the stable-head review campaign.

@@ -8,7 +8,7 @@ Worker agent: Codex `gpt-5.6-sol` / high
 
 Branch: `feat/478-shepherd-github-parent-orchestration`
 
-Sub-PR: pending publication
+Sub-PR: https://github.com/polymetrics-ai/cli/pull/487
 
 Parent PR: #472
 
@@ -17,6 +17,8 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 Worker directory: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-478-shepherd-github-parent-orchestration`
 
 Implementation head: `40ce66d4b5010b92089895a05709687143d15a05`
+
+Verification evidence head: `568c98e2bf09ac751eb474df20cd37a5af3cbd70`
 
 ## Scope Delivered
 

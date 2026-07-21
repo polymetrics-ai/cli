@@ -5,12 +5,15 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Implementation head 40ce66d4 is locally verified by every authorized gate; stacked PR publication and parent-owned exact-head review remain.",
+  "reason": "Ready stacked PR #487 is open on the required parent base after all authorized local gates passed; parent-owned exact-head review remains.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
     "implementationHead": "40ce66d4b5010b92089895a05709687143d15a05",
+    "verificationEvidenceHead": "568c98e2bf09ac751eb474df20cd37a5af3cbd70",
+    "subPr": 487,
+    "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
     "verificationPassed": true,
@@ -45,6 +48,11 @@
         "cycle": "verify",
         "decision": "local_critical_path",
         "reason": "Focused 27/27, serialized Shepherd 290 pass with one intentional skip, strict pinned Pi 0.80.6 TypeScript, pinned offline RPC, and immutable-base/diff/owned-scope gates pass; no prohibited broad gate or reviewer ran."
+      },
+      {
+        "cycle": "publish-pr",
+        "decision": "local_critical_path",
+        "reason": "Ready stacked PR #487 targets feat/471-pi-agent-session-shepherd with the required title and Refs linkage; no reviewer or merge was requested."
       }
     ],
     "humanGates": [
@@ -58,5 +66,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T17:40:15.000Z"
+  "updatedAt": "2026-07-21T17:44:56.000Z"
 }

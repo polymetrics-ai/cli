@@ -1,6 +1,6 @@
 # Summary: #478
 
-Status: implementation locally verified; stacked PR and parent-owned review pending.
+Status: ready stacked PR #487 open; parent-owned exact-head review pending.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -23,3 +23,7 @@ reports 290 pass, 0 fail, and one intentional sandbox skip; strict owned and all
 TypeScript pass with TypeScript 5.9.3 against cached Pi 0.80.6; pinned offline Pi RPC returns `true`
 for `pm-shepherd`; and exact diff, immutable-base, and owned-path checks pass. No reviewer was
 started; stable-head independent review remains parent-owned.
+
+Ready PR https://github.com/polymetrics-ai/cli/pull/487 targets
+`feat/471-pi-agent-session-shepherd` with the required Conventional Commit title and `Refs #478` /
+`Refs #471` linkage. The worker requested no reviewer and performed no integration or merge.

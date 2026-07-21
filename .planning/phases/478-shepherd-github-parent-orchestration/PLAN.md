@@ -122,7 +122,7 @@ git diff --check 3addb1f48be1afe8b1e2b59b54247679d7293805..HEAD
 - [x] Test-only RED matrix committed and pushed.
 - [x] Minimal GREEN implemented.
 - [x] Refactor and all authorized gates pass.
-- [ ] Ready stacked PR opened with correct title/base/body.
+- [x] Ready stacked PR #487 opened with correct title/base/body.
 - [ ] Final exact-head independent review and human parent merge remain parent-owned.
 
 ## Adversarial correction slice: 2026-07-21
