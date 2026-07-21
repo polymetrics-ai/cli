@@ -1,6 +1,7 @@
-import { createHash } from "node:crypto";
-import { lstat, mkdir, open, readFile, realpath, stat } from "node:fs/promises";
-import { isAbsolute, join, relative, resolve, sep } from "node:path";
+import { createHash, randomUUID } from "node:crypto";
+import { constants } from "node:fs";
+import { link, lstat, mkdir, open, realpath, rm, stat } from "node:fs/promises";
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 
 import {
 	GitAdapter,
@@ -11,9 +12,12 @@ import {
 	type GitBinding,
 	type GitStatusEvidence,
 } from "./git-adapter.ts";
+import { FileStateStore, type FileStateStoreOptions, type RunLease } from "./state-store.ts";
 
 const CLAIM_DIRECTORY = ".shepherd-workspace-claims";
-const CLAIM_SCHEMA_VERSION = 1;
+const CLAIM_SCHEMA_VERSION = 2;
+const BINDING_SCHEMA_VERSION = 1;
+const MAX_CLAIM_BYTES = 32_768;
 const MAX_PATH_BYTES = 4_096;
 const MAX_OWNERSHIP_BYTES = 256;
 const SAFE_OWNERSHIP = /^[A-Za-z0-9](?:[A-Za-z0-9._:-]*[A-Za-z0-9])?$/;
@@ -32,6 +36,7 @@ export interface WorkspaceClaimRequest {
 	parentHead: string;
 	ownershipId: string;
 	allowedScopes: readonly string[];
+	leaseMode?: "start" | "resume";
 }
 
 export interface ClaimedWorkspace extends GitBinding {
@@ -43,9 +48,12 @@ export interface ClaimedWorkspace extends GitBinding {
 	head: string;
 	trustedWorktreeRoot: string;
 	allowedScopes: readonly string[];
+	claimId: string;
 	reused: boolean;
 	status: GitStatusEvidence;
 	changedScope: string[];
+	assertOwned(): Promise<void>;
+	release(): Promise<void>;
 }
 
 export interface WorkspaceHandoffEvidence {
@@ -61,17 +69,38 @@ export interface WorkspaceHandoffEvidence {
 	dirty: boolean;
 }
 
+export interface WorkspaceAdapterOptions {
+	leaseOptions?: Omit<FileStateStoreOptions, "trustedRoot">;
+}
+
 interface WorkspaceClaimRecord {
-	schemaVersion: 1;
+	schemaVersion: 2;
 	issue: number;
+	slug: string;
 	branch: string;
 	path: string;
+	trustedWorktreeRoot: string;
 	prBase: string;
 	baseHead: string;
+	allowedScopes: string[];
 	repositoryIdentity: string;
 	remoteIdentity: string;
 	ownerHash: string;
 	requestHash: string;
+}
+
+interface WorkspaceBindingRecord {
+	schemaVersion: 1;
+	claimId: string;
+	worktreeIdentity: string;
+}
+
+interface ActiveClaimContext {
+	claimPath: string;
+	bindingPath: string;
+	claim: WorkspaceClaimRecord;
+	binding: WorkspaceBindingRecord;
+	lease: RunLease;
 }
 
 export class WorkspaceAdapterError extends Error {
@@ -86,6 +115,10 @@ function safeText(value: unknown, maximum: number): value is string {
 		&& value.length > 0
 		&& Buffer.byteLength(value) <= maximum
 		&& !/[\u0000-\u001f\u007f-\u009f]/.test(value);
+}
+
+function validIssue(value: unknown): value is number {
+	return Number.isSafeInteger(value) && (value as number) > 0 && (value as number) <= 2_147_483_647;
 }
 
 function hash(parts: readonly string[]): string {
@@ -113,32 +146,55 @@ function changedPaths(status: GitStatusEvidence): string[] {
 	return [...new Set(status.entries.flatMap((entry) => [entry.path, ...(entry.originalPath ? [entry.originalPath] : [])]))].sort();
 }
 
+function equalStrings(left: readonly string[], right: readonly string[]): boolean {
+	return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
 function assertVerificationState(value: unknown): asserts value is VerificationState {
 	if (!new Set(["pending", "passed", "failed"]).has(value as string)) {
 		throw new WorkspaceAdapterError("verification state is invalid");
 	}
 }
 
-function parseClaim(raw: string): WorkspaceClaimRecord {
+function assertOnlyFields(record: Record<string, unknown>, allowed: ReadonlySet<string>, description: string): void {
+	if (Object.keys(record).some((key) => !allowed.has(key))) {
+		throw new WorkspaceAdapterError(`${description} is malformed; existing state was preserved`);
+	}
+}
+
+function parseJsonRecord(raw: string, description: string): Record<string, unknown> {
 	let value: unknown;
 	try {
 		value = JSON.parse(raw);
 	} catch (error) {
-		throw new WorkspaceAdapterError("workspace ownership claim is malformed; existing state was preserved", { cause: error });
+		throw new WorkspaceAdapterError(`${description} is malformed; existing state was preserved`, { cause: error });
 	}
 	if (typeof value !== "object" || value === null || Array.isArray(value)) {
-		throw new WorkspaceAdapterError("workspace ownership claim is malformed; existing state was preserved");
+		throw new WorkspaceAdapterError(`${description} is malformed; existing state was preserved`);
 	}
-	const record = value as Record<string, unknown>;
-	const allowed = new Set([
-		"schemaVersion", "issue", "branch", "path", "prBase", "baseHead",
-		"repositoryIdentity", "remoteIdentity", "ownerHash", "requestHash",
-	]);
-	if (Object.keys(record).some((key) => !allowed.has(key))
-		|| record.schemaVersion !== CLAIM_SCHEMA_VERSION
-		|| !Number.isSafeInteger(record.issue)
+	return value as Record<string, unknown>;
+}
+
+function parseClaim(raw: string): WorkspaceClaimRecord {
+	const record = parseJsonRecord(raw, "workspace ownership claim");
+	assertOnlyFields(record, new Set([
+		"schemaVersion", "issue", "slug", "branch", "path", "trustedWorktreeRoot", "prBase", "baseHead",
+		"allowedScopes", "repositoryIdentity", "remoteIdentity", "ownerHash", "requestHash",
+	]), "workspace ownership claim");
+	let allowedScopes: string[];
+	try {
+		if (!Array.isArray(record.allowedScopes) || record.allowedScopes.some((scope) => typeof scope !== "string")) throw new Error();
+		allowedScopes = canonicalGitScopes(record.allowedScopes as string[]);
+		if (!equalStrings(allowedScopes, record.allowedScopes as string[])) throw new Error();
+	} catch (error) {
+		throw new WorkspaceAdapterError("workspace ownership claim is malformed; existing state was preserved", { cause: error });
+	}
+	if (record.schemaVersion !== CLAIM_SCHEMA_VERSION
+		|| !validIssue(record.issue)
+		|| !safeText(record.slug, 100)
 		|| !safeText(record.branch, 240)
-		|| !safeText(record.path, MAX_PATH_BYTES)
+		|| !safeText(record.path, MAX_PATH_BYTES) || !isAbsolute(record.path)
+		|| !safeText(record.trustedWorktreeRoot, MAX_PATH_BYTES) || !isAbsolute(record.trustedWorktreeRoot)
 		|| !safeText(record.prBase, 240)
 		|| typeof record.baseHead !== "string" || !SHA_PATTERN.test(record.baseHead)
 		|| typeof record.repositoryIdentity !== "string" || !IDENTITY_PATTERN.test(record.repositoryIdentity)
@@ -147,41 +203,103 @@ function parseClaim(raw: string): WorkspaceClaimRecord {
 		|| typeof record.requestHash !== "string" || !IDENTITY_PATTERN.test(record.requestHash)) {
 		throw new WorkspaceAdapterError("workspace ownership claim is malformed; existing state was preserved");
 	}
-	return record as unknown as WorkspaceClaimRecord;
+	return { ...record, allowedScopes } as unknown as WorkspaceClaimRecord;
 }
 
-async function assertRegularClaim(path: string): Promise<void> {
-	const metadata = await lstat(path);
-	if (!metadata.isFile() || metadata.isSymbolicLink() || metadata.size > 16_384) {
-		throw new WorkspaceAdapterError("workspace ownership claim is not a bounded regular file");
+function parseBinding(raw: string): WorkspaceBindingRecord {
+	const record = parseJsonRecord(raw, "workspace identity binding");
+	assertOnlyFields(record, new Set(["schemaVersion", "claimId", "worktreeIdentity"]), "workspace identity binding");
+	if (record.schemaVersion !== BINDING_SCHEMA_VERSION
+		|| typeof record.claimId !== "string" || !IDENTITY_PATTERN.test(record.claimId)
+		|| typeof record.worktreeIdentity !== "string" || !IDENTITY_PATTERN.test(record.worktreeIdentity)) {
+		throw new WorkspaceAdapterError("workspace identity binding is malformed; existing state was preserved");
 	}
+	return record as unknown as WorkspaceBindingRecord;
 }
 
-async function acquireClaim(path: string, expected: WorkspaceClaimRecord): Promise<void> {
+function serializedClaim(record: WorkspaceClaimRecord): string {
+	return JSON.stringify({
+		schemaVersion: record.schemaVersion,
+		issue: record.issue,
+		slug: record.slug,
+		branch: record.branch,
+		path: record.path,
+		trustedWorktreeRoot: record.trustedWorktreeRoot,
+		prBase: record.prBase,
+		baseHead: record.baseHead,
+		allowedScopes: record.allowedScopes,
+		repositoryIdentity: record.repositoryIdentity,
+		remoteIdentity: record.remoteIdentity,
+		ownerHash: record.ownerHash,
+		requestHash: record.requestHash,
+	});
+}
+
+function serializedBinding(record: WorkspaceBindingRecord): string {
+	return JSON.stringify({
+		schemaVersion: record.schemaVersion,
+		claimId: record.claimId,
+		worktreeIdentity: record.worktreeIdentity,
+	});
+}
+
+function claimIdentity(record: WorkspaceClaimRecord): string {
+	return hash(["shepherd-workspace-claim-v2", serializedClaim(record)]);
+}
+
+async function readImmutable(path: string, description: string): Promise<string> {
 	let handle: Awaited<ReturnType<typeof open>> | undefined;
 	try {
-		handle = await open(path, "wx", 0o600);
-		await handle.writeFile(`${JSON.stringify(expected)}\n`, "utf8");
-		await handle.sync();
-		return;
+		handle = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW);
+		const metadata = await handle.stat();
+		if (!metadata.isFile() || metadata.size < 1 || metadata.size > MAX_CLAIM_BYTES || (metadata.mode & 0o777) !== 0o600) {
+			throw new WorkspaceAdapterError(`${description} is not a bounded mode-0600 regular file`);
+		}
+		return await handle.readFile("utf8");
 	} catch (error) {
-		if (fileErrorCode(error) !== "EEXIST") throw new WorkspaceAdapterError("failed to acquire workspace ownership", { cause: error });
+		if (error instanceof WorkspaceAdapterError) throw error;
+		throw new WorkspaceAdapterError(`failed to read ${description}; existing state was preserved`, { cause: error });
 	} finally {
-		await handle?.close();
+		await handle?.close().catch(() => undefined);
 	}
-	await assertRegularClaim(path);
-	let current: WorkspaceClaimRecord;
+}
+
+async function publishImmutable(path: string, payload: string, description: string): Promise<boolean> {
+	if (Buffer.byteLength(payload) > MAX_CLAIM_BYTES) throw new WorkspaceAdapterError(`${description} exceeds its byte limit`);
+	const temporary = join(dirname(path), `.${basename(path)}.${process.pid}.${randomUUID()}.tmp`);
+	let handle: Awaited<ReturnType<typeof open>> | undefined;
 	try {
-		current = parseClaim(await readFile(path, "utf8"));
-	} catch (error) {
-		// A concurrently created claim can be observed between O_EXCL creation and its bounded write.
-		await new Promise<void>((resolvePromise) => setTimeout(resolvePromise, 5));
-		await assertRegularClaim(path);
-		current = parseClaim(await readFile(path, "utf8"));
+		handle = await open(
+			temporary,
+			constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY | constants.O_NOFOLLOW,
+			0o600,
+		);
+		await handle.chmod(0o600);
+		await handle.writeFile(payload, "utf8");
+		await handle.sync();
+		await handle.close();
+		handle = undefined;
+		try {
+			await link(temporary, path);
+			return true;
+		} catch (error) {
+			if (fileErrorCode(error) === "EEXIST") return false;
+			throw new WorkspaceAdapterError(`failed to publish ${description} atomically`, { cause: error });
+		}
+	} finally {
+		await handle?.close().catch(() => undefined);
+		await rm(temporary, { force: true }).catch(() => undefined);
 	}
+}
+
+async function acquireClaim(path: string, expected: WorkspaceClaimRecord): Promise<WorkspaceClaimRecord> {
+	await publishImmutable(path, `${serializedClaim(expected)}\n`, "workspace ownership claim");
+	const current = parseClaim(await readImmutable(path, "workspace ownership claim"));
 	if (current.issue !== expected.issue
+		|| current.slug !== expected.slug
 		|| current.branch !== expected.branch
 		|| current.path !== expected.path
+		|| current.trustedWorktreeRoot !== expected.trustedWorktreeRoot
 		|| current.repositoryIdentity !== expected.repositoryIdentity
 		|| current.remoteIdentity !== expected.remoteIdentity) {
 		throw new WorkspaceAdapterError("issue has aliased or mismatched workspace ownership; existing state was preserved");
@@ -189,16 +307,54 @@ async function acquireClaim(path: string, expected: WorkspaceClaimRecord): Promi
 	if (current.ownerHash !== expected.ownerHash) {
 		throw new WorkspaceAdapterError("canonical issue workspace is already owned by another mutator");
 	}
-	if (current.requestHash !== expected.requestHash) {
+	if (current.requestHash !== expected.requestHash || serializedClaim(current) !== serializedClaim(expected)) {
 		throw new WorkspaceAdapterError("workspace retry does not match its original exact base or scope binding");
 	}
+	return current;
+}
+
+async function acquireBinding(path: string, expected: WorkspaceBindingRecord): Promise<WorkspaceBindingRecord> {
+	await publishImmutable(path, `${serializedBinding(expected)}\n`, "workspace identity binding");
+	const current = parseBinding(await readImmutable(path, "workspace identity binding"));
+	if (serializedBinding(current) !== serializedBinding(expected)) {
+		throw new WorkspaceAdapterError("workspace identity no longer matches its immutable original claim");
+	}
+	return current;
 }
 
 export class WorkspaceAdapter {
 	readonly #git: GitAdapter;
+	readonly #leaseOptions: Omit<FileStateStoreOptions, "trustedRoot">;
+	readonly #activeClaims = new WeakMap<ClaimedWorkspace, ActiveClaimContext>();
 
-	constructor(git: GitAdapter) {
+	constructor(git: GitAdapter, options: WorkspaceAdapterOptions = {}) {
 		this.#git = git;
+		if (typeof options !== "object" || options === null
+			|| (options.leaseOptions !== undefined && (typeof options.leaseOptions !== "object" || options.leaseOptions === null))) {
+			throw new WorkspaceAdapterError("workspace adapter options are invalid");
+		}
+		this.#leaseOptions = { ...(options.leaseOptions ?? {}) };
+	}
+
+	async #acquireLease(claimDirectory: string, request: WorkspaceClaimRequest): Promise<RunLease> {
+		const mode = request.leaseMode ?? "start";
+		if (mode !== "start" && mode !== "resume") throw new WorkspaceAdapterError("workspace lease mode must be start or resume");
+		const leaseRoot = join(claimDirectory, "leases", `issue-${request.issue}`);
+		try {
+			return await new FileStateStore(leaseRoot, {
+				...this.#leaseOptions,
+				trustedRoot: claimDirectory,
+			}).acquireLease({ issue: request.issue, runId: request.ownershipId, mode });
+		} catch (error) {
+			const message = error instanceof Error ? error.message : "";
+			if (/held by live process/i.test(message)) {
+				throw new WorkspaceAdapterError("canonical issue workspace is already owned by an active writable mutator", { cause: error });
+			}
+			if (/stale.*resume/i.test(message)) {
+				throw new WorkspaceAdapterError("workspace mutator lease is stale; use leaseMode resume for explicit crash recovery", { cause: error });
+			}
+			throw new WorkspaceAdapterError("failed to acquire exclusive workspace mutator lease", { cause: error });
+		}
 	}
 
 	async claim(request: WorkspaceClaimRequest): Promise<ClaimedWorkspace> {
@@ -241,140 +397,222 @@ export class WorkspaceAdapter {
 		}
 		if (parentHead !== request.parentHead) throw new WorkspaceAdapterError("parent head mismatch; workspace creation was not attempted");
 
-		const branches = await this.#git.listLocalBranches(coordinator);
-		const issuePrefix = `feat/${request.issue}-`;
-		const aliases = branches.filter((candidate) => candidate.branch.startsWith(issuePrefix) && candidate.branch !== branch);
-		if (aliases.length > 0) {
-			throw new WorkspaceAdapterError(`aliased branch ownership detected: ${aliases.map((candidate) => candidate.branch).sort().join(", ")}`);
-		}
-		const inventory = await this.#git.listWorktrees(coordinator);
-		const branchOwners = inventory.filter((entry) => entry.branch === branch);
-		if (branchOwners.length > 1) throw new WorkspaceAdapterError("canonical issue branch has duplicate active worktree owners");
-		const targetOwner = inventory.find((entry) => resolve(entry.cwd) === target);
-		if (targetOwner !== undefined && targetOwner.branch !== branch) {
-			throw new WorkspaceAdapterError("canonical worktree path is owned by another branch; existing state was preserved");
-		}
-		if (branchOwners.length === 1 && resolve(branchOwners[0].cwd) !== target) {
-			throw new WorkspaceAdapterError("canonical issue branch is already active in another worktree");
-		}
-		if (targetOwner === undefined) {
-			try {
-				await lstat(target);
-				throw new WorkspaceAdapterError("worktree path collision contains unique state; existing state was preserved");
-			} catch (error) {
-				if (error instanceof WorkspaceAdapterError) throw error;
-				if (fileErrorCode(error) !== "ENOENT") throw new WorkspaceAdapterError("failed to inspect canonical worktree path", { cause: error });
-			}
-		}
-
 		const claimDirectory = join(trustedRoot, CLAIM_DIRECTORY);
 		await mkdir(claimDirectory, { recursive: true, mode: 0o700 });
 		const claimDirectoryMetadata = await lstat(claimDirectory);
-		if (!claimDirectoryMetadata.isDirectory() || claimDirectoryMetadata.isSymbolicLink() || await realpath(claimDirectory) !== claimDirectory) {
+		if (!claimDirectoryMetadata.isDirectory()
+			|| claimDirectoryMetadata.isSymbolicLink()
+			|| await realpath(claimDirectory) !== claimDirectory
+			|| (claimDirectoryMetadata.mode & 0o077) !== 0) {
 			throw new WorkspaceAdapterError("workspace claim directory is unsafe");
 		}
-		const ownerHash = hash(["shepherd-workspace-owner-v1", request.ownershipId]);
-		const scopeBinding = allowedScopes.join("\0");
-		const requestHash = hash(["shepherd-workspace-request-v1", branch, target, prBase, request.parentHead, scopeBinding]);
-		const claim: WorkspaceClaimRecord = {
-			schemaVersion: CLAIM_SCHEMA_VERSION,
-			issue: request.issue,
-			branch,
-			path: target,
-			prBase,
-			baseHead: request.parentHead,
-			repositoryIdentity: coordinator.repositoryIdentity,
-			remoteIdentity: coordinator.remoteIdentity,
-			ownerHash,
-			requestHash,
-		};
-		await acquireClaim(join(claimDirectory, `issue-${request.issue}.json`), claim);
-
-		const rootAfterClaim = await stat(trustedRoot);
-		if (rootAfterClaim.dev !== rootMetadata.dev || rootAfterClaim.ino !== rootMetadata.ino) {
-			throw new WorkspaceAdapterError("trusted worktree root identity changed during claim");
-		}
-
-		let reused = targetOwner !== undefined;
-		let binding: GitBinding;
-		if (targetOwner !== undefined) {
-			binding = await this.#git.inspect(target);
-		} else {
-			try {
-				binding = await this.#git.addIssueWorktree(coordinator, {
-					trustedRoot,
-					path: target,
-					issue: request.issue,
-					slug: request.slug,
-					branch,
-					baseHead: request.parentHead,
-				});
-			} catch (error) {
-				// Reconcile the exact outcome of a crash or same-owner racing retry. Never remove state.
-				const afterFailure = await this.#git.listWorktrees(coordinator);
-				const exact = afterFailure.filter((entry) => entry.branch === branch && resolve(entry.cwd) === target);
-				if (exact.length !== 1) throw new WorkspaceAdapterError("workspace creation failed and no exact retry state exists", { cause: error });
-				binding = await this.#git.inspect(target);
-				reused = true;
+		const lease = await this.#acquireLease(claimDirectory, request);
+		try {
+			const branches = await this.#git.listLocalBranches(coordinator);
+			const issuePrefix = `feat/${request.issue}-`;
+			const aliases = branches.filter((candidate) => candidate.branch.startsWith(issuePrefix) && candidate.branch !== branch);
+			if (aliases.length > 0) {
+				throw new WorkspaceAdapterError(`aliased branch ownership detected: ${aliases.map((candidate) => candidate.branch).sort().join(", ")}`);
 			}
-		}
+			const inventory = await this.#git.listWorktrees(coordinator);
+			const branchOwners = inventory.filter((entry) => entry.branch === branch);
+			if (branchOwners.length > 1) throw new WorkspaceAdapterError("canonical issue branch has duplicate active worktree owners");
+			const targetOwner = inventory.find((entry) => resolve(entry.cwd) === target);
+			if (targetOwner !== undefined && targetOwner.branch !== branch) {
+				throw new WorkspaceAdapterError("canonical worktree path is owned by another branch; existing state was preserved");
+			}
+			if (branchOwners.length === 1 && resolve(branchOwners[0].cwd) !== target) {
+				throw new WorkspaceAdapterError("canonical issue branch is already active in another worktree");
+			}
+			if (targetOwner === undefined) {
+				try {
+					await lstat(target);
+					throw new WorkspaceAdapterError("worktree path collision contains unique state; existing state was preserved");
+				} catch (error) {
+					if (error instanceof WorkspaceAdapterError) throw error;
+					if (fileErrorCode(error) !== "ENOENT") {
+						throw new WorkspaceAdapterError("failed to inspect canonical worktree path", { cause: error });
+					}
+				}
+			}
 
-		if (binding.repositoryIdentity !== coordinator.repositoryIdentity || binding.remoteIdentity !== coordinator.remoteIdentity) {
-			throw new WorkspaceAdapterError("workspace repository identity mismatch");
+			const ownerHash = hash(["shepherd-workspace-owner-v1", request.ownershipId]);
+			const requestHash = hash([
+				"shepherd-workspace-request-v2",
+				branch,
+				target,
+				prBase,
+				request.parentHead,
+				allowedScopes.join("\0"),
+			]);
+			const requestedClaim: WorkspaceClaimRecord = {
+				schemaVersion: CLAIM_SCHEMA_VERSION,
+				issue: request.issue,
+				slug: request.slug,
+				branch,
+				path: target,
+				trustedWorktreeRoot: trustedRoot,
+				prBase,
+				baseHead: request.parentHead,
+				allowedScopes,
+				repositoryIdentity: coordinator.repositoryIdentity,
+				remoteIdentity: coordinator.remoteIdentity,
+				ownerHash,
+				requestHash,
+			};
+			const claimPath = join(claimDirectory, `issue-${request.issue}.json`);
+			const persistedClaim = await acquireClaim(claimPath, requestedClaim);
+			const claimId = claimIdentity(persistedClaim);
+
+			const rootAfterClaim = await stat(trustedRoot);
+			if (rootAfterClaim.dev !== rootMetadata.dev || rootAfterClaim.ino !== rootMetadata.ino) {
+				throw new WorkspaceAdapterError("trusted worktree root identity changed during claim");
+			}
+
+			let reused = targetOwner !== undefined;
+			let binding: GitBinding;
+			if (targetOwner !== undefined) {
+				binding = await this.#git.inspect(target);
+			} else {
+				try {
+					binding = await this.#git.addIssueWorktree(coordinator, {
+						trustedRoot,
+						path: target,
+						issue: request.issue,
+						slug: request.slug,
+						branch,
+						baseHead: request.parentHead,
+					});
+				} catch (error) {
+					// A dead process can leave the exact Git operation complete but the binding unpublished.
+					// Reconcile that one exact outcome and never remove or rewrite unique state.
+					const afterFailure = await this.#git.listWorktrees(coordinator);
+					const exact = afterFailure.filter((entry) => entry.branch === branch && resolve(entry.cwd) === target);
+					if (exact.length !== 1) {
+						throw new WorkspaceAdapterError("workspace creation failed and no exact retry state exists", { cause: error });
+					}
+					binding = await this.#git.inspect(target);
+					reused = true;
+				}
+			}
+
+			if (binding.repositoryIdentity !== coordinator.repositoryIdentity || binding.remoteIdentity !== coordinator.remoteIdentity) {
+				throw new WorkspaceAdapterError("workspace repository identity mismatch");
+			}
+			if (await this.#git.currentBranch(binding) !== branch) throw new WorkspaceAdapterError("workspace branch ownership mismatch");
+			const head = await this.#git.resolveBranchHead(binding, branch);
+			if (!(await this.#git.isAncestor(binding, request.parentHead, head))) {
+				throw new WorkspaceAdapterError("exact parent base is not an ancestor of workspace head");
+			}
+			const finalInventory = await this.#git.listWorktrees(coordinator);
+			if (finalInventory.filter((entry) => entry.branch === branch).length !== 1) {
+				throw new WorkspaceAdapterError("two active mutators were detected for the canonical issue branch");
+			}
+			const requestedBinding: WorkspaceBindingRecord = {
+				schemaVersion: BINDING_SCHEMA_VERSION,
+				claimId,
+				worktreeIdentity: binding.worktreeIdentity,
+			};
+			const bindingPath = join(claimDirectory, `issue-${request.issue}.binding.json`);
+			const persistedBinding = await acquireBinding(bindingPath, requestedBinding);
+			const status = await this.#git.status(binding);
+			const rootAfterCreation = await stat(trustedRoot);
+			if (rootAfterCreation.dev !== rootMetadata.dev || rootAfterCreation.ino !== rootMetadata.ino) {
+				throw new WorkspaceAdapterError("trusted worktree root identity changed during creation; created state was preserved");
+			}
+
+			let releasePromise: Promise<void> | undefined;
+			const workspace: ClaimedWorkspace = {
+				...binding,
+				issue: request.issue,
+				slug: request.slug,
+				branch,
+				prBase,
+				baseHead: request.parentHead,
+				head,
+				trustedWorktreeRoot: trustedRoot,
+				allowedScopes: [...allowedScopes],
+				claimId,
+				reused,
+				status,
+				changedScope: changedPaths(status),
+				assertOwned: () => lease.assertOwned(),
+				release: () => releasePromise ??= lease.release(),
+			};
+			this.#activeClaims.set(workspace, {
+				claimPath,
+				bindingPath,
+				claim: persistedClaim,
+				binding: persistedBinding,
+				lease,
+			});
+			return workspace;
+		} catch (error) {
+			await lease.release().catch(() => undefined);
+			throw error;
 		}
-		if (await this.#git.currentBranch(binding) !== branch) throw new WorkspaceAdapterError("workspace branch ownership mismatch");
-		const head = await this.#git.resolveBranchHead(binding, branch);
-		if (!(await this.#git.isAncestor(binding, request.parentHead, head))) {
-			throw new WorkspaceAdapterError("exact parent base is not an ancestor of workspace head");
-		}
-		const finalInventory = await this.#git.listWorktrees(coordinator);
-		if (finalInventory.filter((entry) => entry.branch === branch).length !== 1) {
-			throw new WorkspaceAdapterError("two active mutators were detected for the canonical issue branch");
-		}
-		const status = await this.#git.status(binding);
-		const rootAfterCreation = await stat(trustedRoot);
-		if (rootAfterCreation.dev !== rootMetadata.dev || rootAfterCreation.ino !== rootMetadata.ino) {
-			throw new WorkspaceAdapterError("trusted worktree root identity changed during creation; created state was preserved");
-		}
-		return {
-			...binding,
-			issue: request.issue,
-			slug: request.slug,
-			branch,
-			prBase,
-			baseHead: request.parentHead,
-			head,
-			trustedWorktreeRoot: trustedRoot,
-			allowedScopes,
-			reused,
-			status,
-			changedScope: changedPaths(status),
-		};
 	}
 
 	async captureHandoff(workspace: ClaimedWorkspace, verificationState: VerificationState): Promise<WorkspaceHandoffEvidence> {
 		assertVerificationState(verificationState);
-		const canonicalBranch = canonicalIssueBranch(workspace.issue, workspace.slug);
-		if (workspace.branch !== canonicalBranch) throw new WorkspaceAdapterError("handoff branch is not the canonical branch for this issue");
-		const binding = await this.#git.assertBinding(workspace);
-		if (binding.repositoryIdentity !== workspace.repositoryIdentity || binding.worktreeIdentity !== workspace.worktreeIdentity) {
-			throw new WorkspaceAdapterError("handoff workspace identity mismatch");
+		const context = this.#activeClaims.get(workspace);
+		if (context === undefined) {
+			throw new WorkspaceAdapterError("handoff workspace was not issued with an active immutable claim by this adapter");
 		}
-		if (await this.#git.currentBranch(binding) !== canonicalBranch) throw new WorkspaceAdapterError("handoff current branch is not canonical");
+		await context.lease.assertOwned();
+		const persistedClaim = parseClaim(await readImmutable(context.claimPath, "workspace ownership claim"));
+		const persistedBinding = parseBinding(await readImmutable(context.bindingPath, "workspace identity binding"));
+		if (serializedClaim(persistedClaim) !== serializedClaim(context.claim)
+			|| serializedBinding(persistedBinding) !== serializedBinding(context.binding)
+			|| claimIdentity(persistedClaim) !== persistedBinding.claimId) {
+			throw new WorkspaceAdapterError("immutable persisted workspace claim changed before handoff");
+		}
+		if (workspace.claimId !== persistedBinding.claimId
+			|| workspace.issue !== persistedClaim.issue
+			|| workspace.slug !== persistedClaim.slug
+			|| workspace.branch !== persistedClaim.branch
+			|| workspace.cwd !== persistedClaim.path
+			|| workspace.trustedWorktreeRoot !== persistedClaim.trustedWorktreeRoot
+			|| workspace.prBase !== persistedClaim.prBase
+			|| workspace.baseHead !== persistedClaim.baseHead
+			|| !equalStrings(workspace.allowedScopes, persistedClaim.allowedScopes)
+			|| workspace.repositoryIdentity !== persistedClaim.repositoryIdentity
+			|| workspace.remoteIdentity !== persistedClaim.remoteIdentity
+			|| workspace.worktreeIdentity !== persistedBinding.worktreeIdentity) {
+			throw new WorkspaceAdapterError("handoff evidence does not match its immutable persisted original claim");
+		}
+		const canonicalBranch = canonicalIssueBranch(persistedClaim.issue, persistedClaim.slug);
+		if (persistedClaim.branch !== canonicalBranch) {
+			throw new WorkspaceAdapterError("handoff branch is not the canonical branch for this issue");
+		}
+		const binding = await this.#git.assertBinding({
+			cwd: persistedClaim.path,
+			repositoryIdentity: persistedClaim.repositoryIdentity,
+			worktreeIdentity: persistedBinding.worktreeIdentity,
+			remoteName: "origin",
+			remoteIdentity: persistedClaim.remoteIdentity,
+		});
+		if (await this.#git.currentBranch(binding) !== canonicalBranch) {
+			throw new WorkspaceAdapterError("handoff current branch is not canonical");
+		}
 		const head = await this.#git.resolveBranchHead(binding, canonicalBranch);
-		if (!(await this.#git.isAncestor(binding, workspace.baseHead, head))) {
+		if (!(await this.#git.isAncestor(binding, persistedClaim.baseHead, head))) {
 			throw new WorkspaceAdapterError("handoff exact base is not an ancestor of exact head");
 		}
 		const [status, diff] = await Promise.all([
 			this.#git.status(binding),
-			this.#git.diff(binding, { baseHead: workspace.baseHead, head, scopes: workspace.allowedScopes }),
+			this.#git.diff(binding, {
+				baseHead: persistedClaim.baseHead,
+				head,
+				scopes: persistedClaim.allowedScopes,
+			}),
 		]);
 		const changedScope = [...new Set([...diff.changedScope, ...changedPaths(status)])].sort();
 		return {
-			issue: workspace.issue,
+			issue: persistedClaim.issue,
 			branch: canonicalBranch,
-			prBase: workspace.prBase,
-			baseHead: workspace.baseHead,
+			prBase: persistedClaim.prBase,
+			baseHead: persistedClaim.baseHead,
 			head,
 			changedScope,
 			verificationState,

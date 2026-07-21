@@ -46,6 +46,11 @@
       "cycle": "correction-red",
       "decision": "local_critical_path",
       "reason": "Focused tests produced five deterministic failures: identity mismatch, dual same-owner mutators, missing recovery capability, mutable handoff acceptance, and missing persisted scopes."
+    },
+    {
+      "cycle": "correction-green",
+      "decision": "local_critical_path",
+      "reason": "The same 21 focused tests now pass and strict production TypeScript passes after v1 identity alignment, immutable two-phase claim binding, and FileStateStore lease integration."
     }
   ]
 }

@@ -69,7 +69,7 @@ test("reconciles an exact crash retry without creating a duplicate branch or wor
 	const first = await adapter.claim(request);
 	await releaseIfPresent(first);
 	const second = await new WorkspaceAdapter(new GitAdapter()).claim(request);
-	t.after(() => releaseIfPresent(second));
+	t.after(() => releaseIfPresent(second).catch(() => undefined));
 	assert.equal(second.reused, true);
 	assert.equal(second.cwd, first.cwd);
 	assert.equal(second.worktreeIdentity, first.worktreeIdentity);
@@ -119,7 +119,7 @@ test("same-owner overlapping retries receive one writable lease and release perm
 	await withLease(first).release();
 	await assert.rejects(withLease(first).assertOwned(), /released|ownership.*lost/i);
 	const retry = await new WorkspaceAdapter(new GitAdapter()).claim(request);
-	t.after(() => releaseIfPresent(retry));
+	t.after(() => releaseIfPresent(retry).catch(() => undefined));
 	assert.equal(retry.reused, true);
 	assert.equal(retry.worktreeIdentity, first.worktreeIdentity);
 });
@@ -142,7 +142,7 @@ test("resume recovers an exact stale same-request lease without reviving the fen
 		tokenFactory: () => "workspace-recovered-owner",
 	});
 	const recovered = await recovering.claim({ ...request, leaseMode: "resume" } as WorkspaceClaimRequest);
-	t.after(() => releaseIfPresent(recovered));
+	t.after(() => releaseIfPresent(recovered).catch(() => undefined));
 	await withLease(recovered).assertOwned();
 	await assert.rejects(withLease(first).assertOwned(), /ownership.*lost|token mismatch/i);
 	assert.equal(recovered.reused, true);
@@ -194,7 +194,7 @@ test("reports and preserves dirty unique state on retry and emits exact handoff 
 	await write(first.cwd, "unique.txt", "unique and preserved\n");
 	await releaseIfPresent(first);
 	const retried = await adapter.claim(request);
-	t.after(() => releaseIfPresent(retried));
+	t.after(() => releaseIfPresent(retried).catch(() => undefined));
 	assert.equal(retried.reused, true);
 	assert.equal(retried.status.clean, false);
 	assert.deepEqual(retried.changedScope, ["parent.txt", "unique.txt"]);
@@ -213,7 +213,7 @@ test("handoff rejects mutable PR-base, base-head, and scope evidence not bound b
 	t.after(fixture.cleanup);
 	const adapter = new WorkspaceAdapter(new GitAdapter());
 	const workspace = await adapter.claim(await requestFor(fixture));
-	t.after(() => releaseIfPresent(workspace));
+	t.after(() => releaseIfPresent(workspace).catch(() => undefined));
 	const ancestor = (await git(workspace.cwd, "rev-parse", `${fixture.parentHead}^`)).trim();
 	const attempts = await Promise.allSettled([
 		adapter.captureHandoff({ ...workspace, prBase: "feat/999-forged-parent" }, "passed"),
@@ -228,7 +228,7 @@ test("handoff fails closed if the immutable persisted claim is modified after ac
 	t.after(fixture.cleanup);
 	const adapter = new WorkspaceAdapter(new GitAdapter());
 	const workspace = await adapter.claim(await requestFor(fixture));
-	t.after(() => releaseIfPresent(workspace));
+	t.after(() => releaseIfPresent(workspace).catch(() => undefined));
 	const claimPath = join(fixture.worktreeRoot, ".shepherd-workspace-claims", "issue-476.json");
 	const persisted = JSON.parse(await readFile(claimPath, "utf8")) as Record<string, unknown>;
 	assert.deepEqual(persisted.allowedScopes, [...workspace.allowedScopes]);
@@ -255,5 +255,8 @@ test("fails handoff exact-head verification when the parent base is not an ances
 	await write(workspace.cwd, "unrelated.txt", "unrelated\n");
 	await git(workspace.cwd, "add", "--", "unrelated.txt");
 	await git(workspace.cwd, "commit", "-m", "test: unrelated head");
-	await assert.rejects(adapter.captureHandoff({ ...workspace, branch: "unrelated" }, "failed"), /canonical branch|base is not an ancestor/);
+	await assert.rejects(
+		adapter.captureHandoff({ ...workspace, branch: "unrelated" }, "failed"),
+		/canonical branch|base is not an ancestor|active immutable claim/,
+	);
 });

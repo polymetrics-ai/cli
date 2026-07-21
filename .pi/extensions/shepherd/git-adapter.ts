@@ -259,17 +259,22 @@ function hashIdentity(parts: readonly string[]): string {
 	return hash.digest("hex");
 }
 
-function metadataIdentity(metadata: Awaited<ReturnType<typeof stat>>): string {
-	return `${metadata.dev}:${metadata.ino}:${metadata.birthtimeMs}`;
+async function filesystemIdentity(path: string): Promise<string> {
+	const metadata = await stat(path, { bigint: true });
+	const birthtime = "birthtimeNs" in metadata ? metadata.birthtimeNs : 0n;
+	return `${metadata.dev}:${metadata.ino}:${birthtime > 0n ? birthtime : 0n}`;
 }
 
 function stripLineEnding(value: string): string {
 	return value.endsWith("\r\n") ? value.slice(0, -2) : value.endsWith("\n") ? value.slice(0, -1) : value;
 }
 
-async function normalizeRemote(rawOutput: string, repositoryRoot: string): Promise<string> {
+function normalizeRemote(rawOutput: string): string {
 	const raw = stripLineEnding(rawOutput);
-	if (!safeText(raw, MAX_PATH_BYTES)) throw new GitAdapterError("origin remote identity is missing or invalid");
+	if (raw === "") return "no-remote";
+	if (raw.length > MAX_PATH_BYTES || /[\u0000-\u001f\u007f-\u009f]/.test(raw)) {
+		throw new GitAdapterError("origin remote identity is missing or invalid");
+	}
 	const scp = /^(?:([^@/:]+)@)?([^/:]+):(.+)$/.exec(raw);
 	if (scp && !/^[a-z][a-z0-9+.-]*:\/\//i.test(raw)) {
 		const [, user, host, remotePath] = scp;
@@ -277,7 +282,7 @@ async function normalizeRemote(rawOutput: string, repositoryRoot: string): Promi
 		if (!safeText(host, 255) || !safeText(remotePath, MAX_PATH_BYTES) || remotePath.startsWith("/") || remotePath.includes("..")) {
 			throw new GitAdapterError("origin remote identity is invalid");
 		}
-		return `ssh://${host.toLowerCase()}/${remotePath.replace(/\.git$/i, "")}`;
+		return `${host.toLowerCase()}/${remotePath.replace(/^\/+|\/+$/g, "").replace(/\.git$/i, "")}`;
 	}
 
 	let url: URL | undefined;
@@ -293,15 +298,14 @@ async function normalizeRemote(rawOutput: string, repositoryRoot: string): Promi
 		if (url.search !== "" || url.hash !== "" || !["https:", "ssh:", "file:"].includes(url.protocol)) {
 			throw new GitAdapterError("origin remote uses an unsafe URL shape");
 		}
-		if (url.protocol === "file:") return `file://${await realpath(url.pathname)}`;
 		const path = url.pathname.replace(/^\/+|\/+$/g, "").replace(/\.git$/i, "");
-		if (!safeText(url.hostname, 255) || !safeText(path, MAX_PATH_BYTES)) {
+		if (url.protocol !== "file:" && (!safeText(url.hostname, 255) || !safeText(path, MAX_PATH_BYTES))) {
 			throw new GitAdapterError("origin remote identity is invalid");
 		}
-		return `${url.protocol}//${url.hostname.toLowerCase()}${url.port ? `:${url.port}` : ""}/${path}`;
+		if (url.protocol === "file:") return `file/${path}`;
+		return `${url.hostname.toLowerCase()}${url.port ? `:${url.port}` : ""}/${path}`;
 	}
-	const local = resolve(repositoryRoot, raw);
-	return `file://${await realpath(local)}`;
+	return `local/${raw.replace(/\\/g, "/").replace(/\/+$/g, "").replace(/\.git$/i, "")}`;
 }
 
 function parseStatus(raw: Buffer): GitStatusEvidence {
@@ -416,17 +420,22 @@ export class GitAdapter {
 			throw new GitAdapterError("Git returned invalid canonical repository paths");
 		}
 		const [repositoryRoot, commonDirectory, worktreeDirectory] = await Promise.all(paths.map((path) => realpath(path)));
-		let rawRemote: string;
+		let rawRemote = "";
 		try {
 			rawRemote = (await this.#run(repositoryRoot, ["config", "--local", "--no-includes", "--get", "remote.origin.url"])).toString("utf8");
 		} catch (error) {
-			throw new GitAdapterError("origin remote identity is missing or invalid", { cause: error });
+			if (!(error instanceof GitCommandFailure) || error.exitCode !== 1) {
+				throw new GitAdapterError("origin remote identity is missing or invalid", { cause: error });
+			}
 		}
-		const normalizedRemote = await normalizeRemote(rawRemote, repositoryRoot);
-		const [commonMetadata, worktreeMetadata] = await Promise.all([stat(commonDirectory), stat(worktreeDirectory)]);
+		const normalizedRemote = normalizeRemote(rawRemote);
+		const [repositoryFilesystemIdentity, worktreeFilesystemIdentity] = await Promise.all([
+			filesystemIdentity(commonDirectory),
+			filesystemIdentity(worktreeDirectory),
+		]);
 		const remoteIdentity = hashIdentity(["shepherd-origin-v1", normalizedRemote]);
-		const repositoryIdentity = hashIdentity(["shepherd-repository-v2", metadataIdentity(commonMetadata), remoteIdentity]);
-		const worktreeIdentity = hashIdentity(["shepherd-worktree-v2", repositoryIdentity, metadataIdentity(worktreeMetadata)]);
+		const repositoryIdentity = hashIdentity(["shepherd-repository-v1", repositoryFilesystemIdentity, normalizedRemote]);
+		const worktreeIdentity = hashIdentity(["shepherd-worktree-v1", repositoryIdentity, worktreeFilesystemIdentity]);
 		return { cwd: repositoryRoot, repositoryIdentity, worktreeIdentity, remoteName: "origin", remoteIdentity };
 	}
 
