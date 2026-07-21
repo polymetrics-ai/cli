@@ -949,3 +949,113 @@ peers for arbitrary DTO/array inputs.
   clean-head checks pass after the evidence commit. No push, network, GitHub, model, credential,
   service, Go, connector, or `make` action was attempted. Parent orchestration owns the
   process-capable rerun, fresh exact-head review, integration, and delivery.
+
+## Cycle 12 — Pi-Faithful Lifecycle, Admission Authority, And Boundary DTOs
+
+### PLAN
+
+- Immutable comparison base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; frozen Cycle 12
+  start: `7882cd70c25971e889ec04f63b98c936d605003e`; initial worktree clean.
+- Review sources read completely: `/tmp/475-REVIEW-CYCLE11-1.md` and
+  `/tmp/475-REVIEW-CYCLE11-2.md`. Their ten unique open families are accepted together as
+  C12-01 through C12-10; C12-11 retains every Cycle 11 closure.
+- Baseline focused run: 114 passed, 0 failed/skipped/cancelled/todo.
+- GSD: `scripts/gsd doctor` passes, but
+  `scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run`
+  still returns `unknown GSD command: programming-loop`; the permitted manual-GSD
+  PLAN -> RED -> GREEN/refactor -> verify fallback remains active.
+- Skills loaded completely: `gsd-programming-loop`, `javascript-testing-patterns` plus its
+  advanced-testing reference, `typescript-advanced-types`, `architecture-patterns`, and
+  `github-issue-first-delivery`, plus all required repo GSD/Pi/runtime/issue references.
+- Orchestration decision: `read_only_spawned`; one no-write explorer maps the explicit installed
+  Pi 0.80.6 lifecycle and public offline whole-session seam while this issue worker owns the only
+  mutating PLAN, RED, GREEN, verification, commit, and handoff path.
+- Production lock at `7882cd70`: runtime Git blob
+  `cfb1b40b8835c7bdffe162a7b4d368bde30d54f8`, policy Git blob
+  `734927712eaadc9bb8eca383621740d59c5bb7b6`, and role-prompts Git blob
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`.
+
+### Pi 0.80.6 lifecycle and ownership map
+
+The authoritative normal no-tool run is:
+
+`agent_start -> turn_start -> user message_start -> user message_end -> assistant message_start ->
+assistant message_update* -> assistant message_end -> turn_end -> agent_end(willRetry=false) ->
+agent_settled`.
+
+A one-tool run inserts an intermediate assistant terminal whose stop reason is `toolUse`, then
+`tool_execution_start -> tool_execution_update* -> tool_execution_end -> toolResult message_start
+-> toolResult message_end -> turn_end -> turn_start`, followed by the final assistant stream,
+`turn_end -> agent_end(willRetry=false) -> agent_settled`. `agent_end.messages` contains the user,
+every intermediate assistant, every tool result, and the final assistant in transcript order.
+`AgentSession._runAgentPrompt()` emits `agent_settled` in `finally` after retry/continuation handling
+and before `prompt()` settles. Thus `agent_end` is attempt-terminal, while `agent_settled` is the
+session-owned authoritative completion boundary.
+
+The real-result ownership gate will call the actual pinned `createAgentSession` with public
+in-memory services and a unique programmatic provider registered through
+`ModelRegistry.registerProvider`. Its inert scripted `streamSimple` returns a public
+`AssistantMessageEventStream`; a non-secret offline sentinel satisfies Pi's mandatory prompt-auth
+preflight but is never transmitted. The entire unwrapped factory result is returned to Shepherd;
+no live auth, model, network, credential, or service path is entered. Shepherd, not the test, owns the
+real session's subscribe, prompt, abort/wait, unsubscribe, and dispose lifecycle. The exact factory
+result has own enumerable `session`, `extensionsResult`, and `modelFallbackMessage` fields, even
+when fallback is `undefined`; `extensionsResult` has exact own enumerable `extensions`, `errors`,
+and `runtime` fields. `runtime` is descriptor-validated compatibility evidence and never authority.
+Pi forwards inner content events as outer `message_update`; inner `done` produces the assistant
+`message_end` rather than a separate outer update. Public session listeners are synchronous/void,
+so capture remains subscribed through `agent_settled` and verification occurs after `prompt()`
+returns. The unique dynamic API/provider is serialized and unregistered during test cleanup.
+
+### Comprehensive test-only RED matrix
+
+| ID | Review source | Independent behavior row required to fail at frozen head |
+|---|---|---|
+| C12-01 | R1-1 / R2-1 | One shared Pi-faithful event driver proves real no-tool and one-tool/multi-turn order; user/tool-result messages are bounded but never terminal candidates; the final non-retrying assistant must match the last assistant in `agent_end.messages`, and success requires the subsequent `agent_settled`. Unknown, out-of-order, and in-capture post-settled events reject. |
+| C12-02 | R1-6 / R2-6 | The actual pinned factory result and its actual session cross into runtime ownership through the public inert stream seam. Exact own-enumerable result fields and exact `{extensions, errors, runtime}` are mandatory; runtime access is ignored and success fakes use the same exact shape. |
+| C12-03 | R1-2 | Descriptor capture establishes a run-ID-owned admission/abort terminal before any caller or SDK callback. Abort during request, capability, model, auth, or setup seams prevents reserve/create/prompt and joins deterministically. |
+| C12-04 | R1-3 | Every assistant content index has explicit `{kind, phase, state}` ownership. Exactly one matching start/delta*/end is accepted for text, thinking, and tool-call/`partialJson`; duplicate start/end, delta before/after, kind/index replacement, and cumulative mismatch reject. |
+| C12-05 | R1-4 | Capture freezes and unsubscribes at the authoritative settled boundary, then rechecks failure after prompt settlement. Delayed events during idle/unsubscribe/dispose or through a retained post-settled callback cannot turn invalid evidence into a successful handoff or mutate a completed capture. |
+| C12-06 | R1-5 | A bounded SDK-aware diagnostic projector accepts installed `createAssistantMessageDiagnostic` and Codex fallback DTOs, consistently omits optional own `undefined`, rejects undefined required fields and arbitrary fields, and keeps diagnostic bytes in the aggregate budget. |
+| C12-07 | R2-2 | Every request/authority array is a fresh dense plain own-data array captured through indexed descriptors with authoritative length cap 64. Caller iterator/map/some/join hooks and identity are never used; proxies, accessors, custom prototypes, sparse/extra/hidden behavior, and one-above lengths reject. Only captured arrays feed policy and prompts. |
+| C12-08 | R2-3 | Native `AbortSignal.prototype.aborted` brand/state reads occur inside rollback-safe native listener acquisition. False or throwing own shadows on request and parent signals cannot bypass pre-abort, leak a listener tuple, or retain runtime state. |
+| C12-09 | R2-4 | Every workspace/capability tool input is captured as a bounded non-proxy own-data DTO before any field access or serialization. Signal/input proxy, accessor, `toJSON`, cycle, and host callback failures reject only as typed bounded redacted public errors. |
+| C12-10 | R2-5 | Shared redaction covers Cookie/Set-Cookie strong keys inside JSON, quoted-flow, and bounded diagnostic-prefix contexts through direct, prompt, workspace, mutation/capability, handoff, and public-error consumers while preserving harmless controls. |
+| C12-11 | retention | All 114 Cycle 11 focused tests, exact public Pi tool/session types, ownership/timer/error/parser/path/capability closures, and disjoint mutator authority remain green throughout RED and GREEN. |
+
+RED acceptance is one test-only commit. The preexisting focused suite first passes 114/114. The
+augmented suite then executes all retained tests plus exactly ten named C12-01 through C12-10
+top-level rows: all 114 retained tests remain green and every new row fails its intended production
+assertion, with no compile/load failure and zero skip/cancel/todo. Strict focused TypeScript must
+pass and all three production Git blobs above must remain exact. No production edit may enter RED.
+
+### Architectural GREEN / REFACTOR target
+
+- Replace the assistant-only terminal pair with one bounded Pi lifecycle state machine. It accepts
+  known normal session events, separately owns assistant-turn stream phases, selects only the final
+  assistant named by the non-retrying `agent_end`, and completes only at `agent_settled`.
+- Make settled capture an explicit freeze/unsubscribe operation whose terminal verification runs
+  after prompt settlement and whose cleanup callbacks cannot mutate frozen evidence.
+- Create an admission registry from descriptor-captured run identity before normalization and all
+  caller/SDK seams; share its abort intent and terminal join with reserve/create/active ownership.
+- Centralize fresh dense descriptor-array capture, native signal state/lease acquisition, exact Pi
+  result projection, SDK-aware diagnostic projection, and typed tool-input projection. Downstream
+  code uses only these captured DTOs.
+- Extend the existing monotonic redactor with the remaining structured/prefixed Cookie forms while
+  preserving its bounded work and harmless-control behavior.
+
+No dependency, tool authority, scheduler/controller/#478/#479 file, Go/connector, GitHub, service,
+credential, model, or network scope is added.
+
+### Ordered checkpoints and declared gates
+
+The mandatory order is artifact-only PLAN + Pi map + finding-to-RED matrix -> one comprehensive
+test-only RED -> real-Pi/no-tool first GREEN -> one-tool/multi-turn GREEN -> remaining cohesive
+GREEN/refactor -> terminal evidence/freeze. Partial GREEN checkpoints must run their named targeted
+rows plus strict focused TypeScript and may not weaken any still-RED assertion. Final GREEN requires
+focused runtime/tool-policy, both explicit Pi 0.80.6 strict TypeScript scopes, pinned offline RPC
+and actual whole-session no-tool/one-tool exercises, serialized complete Shepherd classification,
+safe isolation, `git diff --check`, immutable-base/frozen-head ancestry, JSON and credential-pattern
+scans, exact issue-owned path scope, and a clean head. The known `/bin/ps` `spawn EPERM` family is
+classified, never called green. No push, network, GitHub, live model/auth, Go/connectors, `make`, or
+runtime-service action is authorized.

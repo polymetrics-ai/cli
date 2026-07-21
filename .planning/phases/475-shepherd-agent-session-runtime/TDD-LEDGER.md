@@ -929,3 +929,50 @@ weaken prior lifecycle, timer, parser, Pi typing, and disjoint-mutator guarantee
 - `git diff --check`, immutable-base/frozen-head ancestry, JSON, exact issue-owned scope,
   no-Go/no-connector, and clean-head checks pass after terminal artifacts. No external mutation or
   disallowed gate was attempted; parent owns the process-capable full rerun and exact-head review.
+
+## Cycle 12 — Pi-Faithful Lifecycle And Authority Boundaries
+
+### PLAN / baseline
+
+- Frozen start: `7882cd70c25971e889ec04f63b98c936d605003e`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; worktree clean.
+- Complete review union: `/tmp/475-REVIEW-CYCLE11-1.md` and
+  `/tmp/475-REVIEW-CYCLE11-2.md`; ten independent RED rows C12-01 through C12-10, with C12-11
+  retaining all prior behavior.
+- Focused baseline command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+  Result: 114 passed, 0 failed, 0 skipped/cancelled/todo.
+- Frozen production Git blobs: runtime `cfb1b40b8835c7bdffe162a7b4d368bde30d54f8`, policy
+  `734927712eaadc9bb8eca383621740d59c5bb7b6`, role prompts
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`.
+- GSD adapter result: doctor passes; `programming-loop` remains absent, so
+  `manual_gsd_fallback` is recorded. Required testing/type/architecture/issue-delivery skills and
+  repo Pi/runtime/GSD contracts were loaded before edits.
+- Execution decision: `read_only_spawned`; the lifecycle mapper is read-only, and the issue worker
+  alone owns artifacts, tests, production, commits, and verification.
+
+### RED contract
+
+One comprehensive test-only checkpoint adds exactly ten named top-level rows. Acceptance is 124
+executed: all 114 retained assertions pass and exactly C12-01 through C12-10 fail at their intended
+behavior assertions, with strict focused TypeScript green, no skip/cancel/todo, and all frozen
+production blobs unchanged. The rows cover full Pi lifecycle/final selection/settled ownership,
+real whole-session result ownership, pre-callback run admission, per-index phases, settled freeze,
+SDK diagnostics, dense descriptor arrays, native abort state, hostile tool-input DTOs, and
+structured/prefixed Cookie redaction.
+
+### Ordered GREEN checkpoints
+
+1. Real pinned whole-session no-tool prompt and lifecycle selection.
+2. Real/shared one-tool multi-turn lifecycle and per-content phase machine.
+3. Remaining admission/freeze/diagnostic/array/signal/tool-input/redaction mechanisms and refactor.
+4. Final evidence/freeze with the complete Cycle 12 suite and declared Shepherd-only gates.
+
+No RED assertion may be weakened. Any retained-fixture alignment must be minimal, explicit in the
+GREEN record, and preserve all Cycle 11 behavioral assertions. No push/network/GitHub/live model,
+Go/connectors, `make`, credentials, services, or parent-owned integration gate is permitted.

@@ -289,3 +289,24 @@
   environment-blocked at 251 executed / 220 passed / 31 unchanged controller/state-store
   `/bin/ps` `spawn EPERM` failures. No external mutation or disallowed gate was attempted; parent
   owns the process-capable rerun, exact-head review, integration, and delivery.
+
+## Consolidated Stable-Head Correction Cycle 12 Snapshot
+
+- Frozen start: `7882cd70c25971e889ec04f63b98c936d605003e`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`.
+- Inputs: complete `/tmp/475-REVIEW-CYCLE11-1.md` and
+  `/tmp/475-REVIEW-CYCLE11-2.md`; all ten unique open families are accepted together.
+- Objective: make the runtime follow the complete installed Pi 0.80.6 AgentSession lifecycle and
+  transfer an actual offline session into Shepherd ownership; linearize run-ID admission/abort;
+  close per-index stream phases, settled freeze, diagnostics, arrays, native signal state, tool
+  input DTOs, and remaining Cookie contexts without widening authority.
+- Method: recorded manual-GSD artifact-only PLAN + Pi lifecycle/ownership map + finding-to-RED
+  matrix -> one comprehensive test-only RED -> real-Pi/no-tool first GREEN -> one-tool GREEN ->
+  cohesive remaining GREEN/refactor -> terminal evidence. Production is frozen through RED.
+- Baseline: focused 114/114. Planned RED: 114 retained passes plus exactly ten intended C12
+  failures, strict TypeScript green, exact production blobs frozen.
+- Execution decision: `read_only_spawned`; a bounded no-write lifecycle mapper assists while the
+  issue worker owns the only mutating path.
+- Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `PROMPTS.md`, `RUN-STATE.json`, `AGENTS.md`,
+  `agents/cycle12-pi-lifecycle-map.md`, and `traces/cycle12-pi-lifecycle-map-trace.md`.
+- No push, network, GitHub, live model/auth, Go/connectors, `make`, services, or credentials.

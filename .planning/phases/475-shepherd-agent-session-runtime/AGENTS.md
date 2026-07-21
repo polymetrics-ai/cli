@@ -22,3 +22,17 @@ Pi 0.80.6 factory/result/event contract against frozen candidate `1571dc4d`.
 The explorer had no edit, commit, network, model, credential, or gate authority. Its committed
 result at `a2a8b0e7` is advisory; the issue worker retained the complete mutating and verification
 critical path through refactor `d9b4eaee` and terminal evidence.
+
+## Cycle 12 Agent Delegation
+
+The issue worker owns every write in Cycle 12. One read-only explorer maps the installed, explicit
+Pi 0.80.6 AgentSession lifecycle and a supported no-network real-session prompt seam against frozen
+start `7882cd70`.
+
+| Role | Mode | Scope | Trace |
+|---|---|---|---|
+| `cycle12-pi-lifecycle-map` | read-only | exact no-tool/one-tool event order, authoritative settled boundary, actual factory-result ownership, public inert stream/provider seam, diagnostic shapes | `traces/cycle12-pi-lifecycle-map-trace.md` |
+
+The explorer has no edit, commit, network, model, credential, or gate authority. Its result is
+advisory; the issue worker retains PLAN, RED, every GREEN checkpoint, verification, commit, and
+handoff ownership.
