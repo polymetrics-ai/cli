@@ -27,3 +27,16 @@
   complete Shepherd suite, strict TypeScript against pinned Pi 0.80.6, offline Pi RPC command
   registration, diff/scope/base checks, and PR evidence. Fresh exact-head xhigh review remains
   parent-owned and no Claude/Copilot request was made.
+
+## Lock-snapshot correction snapshot
+
+- Input: fresh xhigh review of `f5a4dc68a7b76f708858542a7190ca3d1f375044` identified benign
+  candidate rename and active release races between directory snapshot, metadata inspection, and
+  owner read.
+- GSD command retried after `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init
+  --phase 477-shepherd-github-decision-broker --dry-run` remains unavailable with `unknown GSD
+  command: programming-loop`.
+- Runtime decision: `local_critical_path` under the recorded manual-GSD fallback; the one production
+  lock implementation and its regression test share the same write scope.
+- Downstream artifact: lock-snapshot sections in `PLAN.md` and `TDD-LEDGER.md`.
+- Verification result: pending genuine high-contention RED, fix, and bounded lane verification.

@@ -39,3 +39,12 @@ Status: passed for corrected implementation checkpoint
 
 The correction introduced no auth-scope change, secret access, dependency, live GitHub mutation,
 production/destructive action, merge, or default-branch write.
+
+## Lock-snapshot correction verification
+
+Status: in progress after fresh review of
+`f5a4dc68a7b76f708858542a7190ca3d1f375044`.
+
+The declared equivalent remains focused #477 tests, the complete Shepherd suite, strict TypeScript
+against pinned Pi 0.80.6, offline Pi RPC registration, and full-range diff/base/owned-scope checks.
+No Go, connector, `make verify`, live GitHub comment, Claude/Copilot, or merge action is authorized.

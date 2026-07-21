@@ -121,3 +121,16 @@ sandbox test skipped; duration 830.242542 ms. The complete Shepherd suite then p
 tests total, 178 passed, 0 failed, and 1 designated-sandbox skip; duration 52526.971417 ms. Strict
 no-emit TypeScript passed over all 11 production Shepherd modules using TypeScript 5.9.3, the
 installed Pi 0.80.6 package, and its Node type root.
+
+## Remaining lock-snapshot review correction
+
+Reviewed head: `f5a4dc68a7b76f708858542a7190ca3d1f375044`.
+
+Planned RED: start many transactions through independent `FileHumanDecisionRepository` instances
+against one request and one private root. The regression must assert that all transactions finish
+within the configured acquisition bound and that at most one callback occupies the critical
+section. The current implementation is expected to reject benign candidate-to-active and
+active-to-released snapshot races with `ENOENT` or `human decision lock owner record is invalid`.
+
+Stable malformed-lock coverage remains required so retrying vanished entries cannot turn malformed
+live state into an availability bypass. RED result pending.

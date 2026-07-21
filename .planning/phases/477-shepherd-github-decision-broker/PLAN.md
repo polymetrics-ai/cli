@@ -122,3 +122,28 @@ Correction verification is limited by coordinator policy to focused #477 tests, 
 suite, strict no-emit TypeScript using the explicitly pinned Pi 0.80.6 installation, offline Pi RPC,
 diff/scope/base checks, and PR evidence updates. Go, connector, `make verify`, live GitHub comments,
 Claude/Copilot requests, and merge remain out of scope.
+
+## Exact-head lock-snapshot correction: 2026-07-21
+
+Fresh xhigh review of `f5a4dc68a7b76f708858542a7190ca3d1f375044` found one remaining
+high-contention race: a `readdir` snapshot can name a candidate or active lock that another owner
+renames or releases before `lstat`/owner read. That benign disappearance currently escapes as
+`ENOENT` or is misclassified as an invalid owner.
+
+Plan:
+
+1. Add a high-contention RED regression using many independent repository instances. Require every
+   bounded transaction to finish, prove the critical section never overlaps, and fail on leaked
+   `ENOENT`/invalid-owner errors.
+2. Make lock discovery distinguish a vanished snapshot entry from a stable malformed live lock.
+   Vanished or transitioned entries request a bounded acquisition rescan; a stable malformed file
+   continues to fail closed.
+3. Keep all rescans inside the existing attempt/sleep budget so the fix cannot create a busy loop or
+   weaken live-owner timeout behavior.
+4. Run focused #477 tests, the complete Shepherd suite, strict pinned Pi 0.80.6 TypeScript, offline
+   Pi RPC registration, and full-range diff/base/scope checks only; then push RED/fix/evidence
+   checkpoints for another parent-owned exact-head xhigh review.
+
+Execution decision: `local_critical_path`. The finding affects the one owned lock implementation
+and regression file, so a parallel mutating worker would collide with the required RED-before-GREEN
+history.

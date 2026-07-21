@@ -4,15 +4,15 @@
   "issue": 477,
   "parentIssue": 471,
   "parentPr": 472,
-  "status": "completed",
-  "reason": "All exact-head review corrections and the coordinator-declared child verification equivalent passed; fresh parent-owned xhigh review remains pending.",
+  "status": "in_progress",
+  "reason": "Fresh exact-head review found one remaining high-contention lock-snapshot race; a strict test-first correction is active.",
   "details": {
     "branch": "feat/477-shepherd-github-decision-broker",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "e659d6f1b666f58748e2d8c86599ceb4bbc62ff8",
     "adapter": "manual_gsd_fallback",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
-    "verificationPassed": true,
+    "verificationPassed": false,
     "reviewCoveragePassed": false,
     "orchestrationDecisions": [
       {
@@ -69,6 +69,11 @@
         "cycle": "review-correction-summary",
         "decision": "local_critical_path",
         "reason": "Recorded terminal correction evidence and prepared the new exact head for parent-owned xhigh review."
+      },
+      {
+        "cycle": "lock-snapshot-correction-plan",
+        "decision": "local_critical_path",
+        "reason": "The remaining race shares the owned lock implementation/test scope and requires one ordered high-contention RED-before-GREEN history."
       }
     ],
     "humanGates": [
@@ -81,5 +86,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T14:04:22.000Z"
+  "updatedAt": "2026-07-21T14:30:31.000Z"
 }

@@ -1,7 +1,7 @@
 # Summary: #477
 
-Status: exact-head review correction implemented and locally verified; fresh parent-owned xhigh
-review is pending on the new exact head.
+Status: one lock-snapshot race from fresh exact-head review is in a new test-first correction cycle;
+all earlier review corrections remain locally verified.
 
 The owned slice adds a pure durable human-decision aggregate and a typed GitHub comment broker
 without controller wiring. The broker routes issue-vs-PR gates deterministically, binds every
@@ -33,3 +33,8 @@ Live comment mutation remains skipped without a designated sandbox. Parent-merge
 separate exact-head human gate and is never inferred from automated review, CI, reactions, silence,
 or generic review text. Per coordinator policy, no Go, connector, `make verify`, Claude/Copilot,
 live GitHub, or merge action was run in the correction cycle.
+
+Fresh review of `f5a4dc68a7b76f708858542a7190ca3d1f375044` found that benign lock-file
+rename/release between `readdir`, `lstat`, and owner read can surface as a transaction failure under
+contention. The follow-up preserves the token-fenced design while adding bounded rescans for
+vanished snapshot entries and retaining fail-closed handling for stable malformed locks.
