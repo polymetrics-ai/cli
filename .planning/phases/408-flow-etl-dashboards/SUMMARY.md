@@ -6,7 +6,7 @@ Status: correction complete; execute completion false pending Shepherd handoff a
 
 - Retry, not reimplementation: preserve prior behavior/docs and replace the custom headless-only production session substitute where required with a real inline Bubble Tea v2 program.
 - Accepted authority: ADR-0003 + parent Stage 10 + #408 approve exact Bubble Tea `v2.0.8`, Bubbles `v2.1.1`, Lip Gloss `v2.0.5`, and test-only teatest pseudo-version `v2.0.0-20260720091843-3eef36eaaa28`; no other direct modules.
-- Strict RED captured; GREEN/full non-race/focused race passed at implementation commit `c70ecf64`. Artifact checkpoint pending. No independent VERIFY/REVIEW/INTEGRATE claim.
+- Strict RED captured; GREEN/full non-race/focused race passed at implementation commit `c70ecf64`; correction evidence was committed and pushed at `64f1a920`. No independent VERIFY/REVIEW/INTEGRATE claim.
 - Preserve race timeouts and prior local-temp reverse-smoke dispatch-boundary deviation exactly; do not rerun full race or `make verify` in CORRECT.
 
 ## Correction delivered
@@ -25,7 +25,7 @@ Status: correction complete; execute completion false pending Shepherd handoff a
 - Worker branch fast-forwarded from `5b603788` to parent `b77d8f49` before production edits.
 - Issue-local phase artifacts created.
 - EXECUTE resumed at `361a6bec0af1ed9cf84d5bdfdd10f16458d9da4d`; all 19 existing dirty entries adopted intact.
-- Focused GREEN/race, full non-race suite, and `make verify` pass. Full race timed out twice without race findings; hard stop active.
+- Focused GREEN/race and the full non-race suite pass for the correction. The earlier `make verify` pass and both full-race timeouts remain preserved evidence; independent VERIFY is the active gate.
 
 ## Delivered so far
 
@@ -40,8 +40,8 @@ Status: correction complete; execute completion false pending Shepherd handoff a
 
 ## Next
 
-1. Push the artifact-only correction checkpoint and return control.
-2. Shepherd dispatches independent VERIFY. That stage owns the preserved full-race disposition and may run `make verify` only under explicit bounded local-temp smoke authority with plan → preview → approval → execute.
+1. Artifact-only correction checkpoint `64f1a920` is pushed; control returned to Shepherd.
+2. After Shepherd validates CORRECT, a separate independent VERIFY stage owns the preserved full-race disposition and may run `make verify` only under explicit bounded local-temp smoke authority with plan → preview → approval → execute.
 3. Do not open a sub-PR or invoke REVIEW/INTEGRATE from CORRECT.
 
 ## Blockers / human gates

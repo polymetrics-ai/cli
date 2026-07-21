@@ -74,11 +74,12 @@ ready_queue:
     decision: not_spawned_dependency_blocked
     reason: "Blocked by #409."
   - number: 419
-    status: blocked
+    status: complete
     dependencies: [404, 410]
     write_scope: "optional OTel log bridge"
     decision: not_spawned_human_gate
-    reason: "Explicit optional beta dependency inclusion or skip decision remains required."
+    reason: "Human explicitly chose SKIP/DEFER from parent #397; no beta dependency or implementation is authorized, and no other dependency is approved."
+    deferred: true
 spawn_decisions:
   - timestamp: 2026-07-16T09:05:00Z
     decision: local_critical_path
@@ -598,11 +599,12 @@ subissues:
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: human_deferred
+    status: complete
     write_scope: "optional pinned OpenTelemetry log bridge"
     worker_directory: ""
-    verification: not_run_human_decision_pending_no_dependency_approval
-    automated_review: {primary_route: blocked, status: blocked, head_sha: "", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "Human-deferred; no beta dependency and no other dependency approval granted.", disposition_url: ""}
+    verification: "Explicit human SKIP/DEFER decision; no implementation or dependency delta."
+    deferred: true
+    automated_review: {primary_route: human, status: clean, head_sha: "", reviewed_range: "not implemented; explicitly deferred", coverage_route: blocked, fallback_route: none, disposition_summary: "Human-deferred; no beta dependency and no other dependency approval granted.", disposition_url: "https://github.com/polymetrics-ai/cli/issues/419#issuecomment-5027674080"}
   - number: 420
     url: https://github.com/polymetrics-ai/cli/issues/420
     branch: pending

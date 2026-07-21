@@ -34,8 +34,8 @@ Preserve parent commits through #410 at starting HEAD. Do not reimplement #398-#
    connection setup. #411 owns the human-first bare query workspace plus its `query grid` alias.
 7. Complete #417 after #411/#412/#413/#414/#416/#469.
 8. Complete #418 after #411/#412/#414/#416/#469 and #463 when the chart slice is included.
-9. #419 remains human-gated because its issue requires explicit inclusion of an optional beta dependency; if no approval exists, record an explicit skip rather than implementing it.
-10. Complete #420 after #415/#417/#418 and the #419 decision record.
+9. #419 is explicitly human-deferred from parent #397. Do not implement its optional beta dependency; the recorded skip satisfies this parent acceptance item and grants no approval for any other dependency.
+10. Complete #420 after #415/#417/#418; the #419 decision-record prerequisite is satisfied.
 
 ## Per-unit lifecycle
 
@@ -75,7 +75,7 @@ Also run module-boundary, dependency/ADR delta, generated docs/help/manual, webs
 
 Then run independent Sol/xhigh correctness, security, architecture, issue-coverage, and evidence reviews against that exact HEAD. Any actionable finding becomes a Sol/high correction unit; repeat affected gates and exact-head review until clean.
 
-## 2026-07-20 Pi active continuation
+## Historical 2026-07-20 Pi active continuation snapshot (superseded below)
 
 - GSD evidence: `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt plan-phase 397 --skip-research`; `programming-loop` remains absent from the 69-command registry, so the recorded manual universal-loop fallback continues.
 - Parent branch/PR reconciled at live head `c3d8a7573bfaf661bdcab737db84e3497929cdff`, then locally merged `origin/main` at safe checkpoint `19fe02ec900aba548a997165014624197b451a33`; PR #438 remains draft and targets `main`.
@@ -85,7 +85,7 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 - Actual Pi worker runtime used project `pm-gsd-worker` with `openai-codex/gpt-5.5:xhigh`; the project agent currently declares `thinking: xhigh`, while the requested routing policy says implementation `high`. The subagent API has no per-call model override; this mismatch is recorded rather than hidden.
 - Reviewer discovery attempt was blocked because the parent runtime did not expose `grep/find/ls`; bounded exact-file `read` reviews succeeded. This does not satisfy Claude/Copilot/human coverage.
 
-### Ready queue after live reconciliation
+### Historical ready queue at that reconciliation checkpoint
 
 | Issue | State | Dependencies | Decision |
 |---|---|---|---|
@@ -96,7 +96,7 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 | #409 | dependency blocked | #408 | `not_spawned_dependency_blocked` |
 | #416 | dependency blocked | #409; #462 integrated | `not_spawned_dependency_blocked`; reverse-only ownership remains |
 | #469 | dependency blocked | #409; #462 integrated | `not_spawned_dependency_blocked`; setup remains separate from #416 |
-| #419 | human-gated | #404/#410 complete | `not_spawned_human_gate` for optional beta dependency decision |
+| #419 | historical human gate, now satisfied by explicit defer | #404/#410 complete | `not_spawned_human_gate` applied at that checkpoint; current decision is human-deferred |
 
 ### Phase 437 pending intake preservation
 
@@ -131,7 +131,7 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 ## Human gates
 
 - Never merge PR #438 to `main`.
-- No new dependencies beyond an explicit accepted ADR/approval record; #419 still requires its issue-specific explicit inclusion decision.
+- No new dependencies beyond an explicit accepted ADR/approval record; #419 is explicitly deferred and grants no dependency approval.
 - No secrets, auth-scope changes, credentialed connector checks, production operations, destructive actions, quality-gate reductions, or generic write tools.
 - Reverse ETL execution remains plan -> preview -> approval -> execute and is not part of ordinary verification.
 
@@ -141,7 +141,7 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 - Pre-integration gate passed: head unchanged, required checks green, active review threads empty.
 - PR #466 merged only into `feat/cli-architecture-v2` at parent merge commit `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`; parent PR #438 remains draft and unmerged to `main`.
 - #437 is provisionally integrated. #407 umbrella dependency state is complete on the parent branch because #421-#437 are now integrated.
-- Rebuilt queue: #408 is the critical-path ready implementation issue; #413 is ready but deferred by write-scope collision with #408; #419 remains human-gated.
+- Rebuilt queue at that checkpoint: #408 was the critical-path ready implementation issue and #413 was deferred by write-scope collision. #419 is now explicitly human-deferred.
 - Phase 437 pending intake remains planning-only under `.planning/traces/phase-437-pending-intake/`; no pending request is authorized for implementation.
 
 - #408 dispatch: `pm-gsd-worker` in `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards`, branch `feat/408-flow-etl-dashboards`, from parent head `5b6037880eed78bc8bc276a3ced13302908cac53`; #413 deferred for write-scope collision.

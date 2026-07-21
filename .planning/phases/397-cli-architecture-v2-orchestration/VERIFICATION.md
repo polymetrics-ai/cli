@@ -74,8 +74,8 @@ Status: not yet run at final HEAD
 - [x] #462 accepted design/safety findings corrected in isolated stacked PRs #467/#468 and integrated into parent.
 - [ ] #462 external review coverage recorded; local `pm-reviewer` is not substitute coverage.
 - [x] #437 external/human review coverage recorded and PR #466 integrated.
-- [ ] #408 TUI worker launch/spawn from the post-#437 parent head.
-- [ ] #419 explicit optional dependency decision.
+- [x] #408 exactly-one-worker correction completed with real Bubble Tea v2/teatest evidence; execute completion remains false pending independent VERIFY.
+- [x] #419 explicit optional dependency decision: human chose SKIP/DEFER; no beta dependency or other dependency approval.
 
 ## Per-unit gate
 

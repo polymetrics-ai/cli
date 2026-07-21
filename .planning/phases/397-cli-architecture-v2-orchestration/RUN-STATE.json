@@ -827,14 +827,15 @@
     },
     {
       "issue": 419,
-      "status": "blocked",
+      "status": "complete",
       "dependencies": [
         404,
         410
       ],
       "writeScope": "optional OTel log bridge",
       "decision": "not_spawned_human_gate",
-      "reason": "Explicit optional beta dependency inclusion or skip decision required."
+      "reason": "Human explicitly chose SKIP/DEFER from parent #397; no beta dependency or implementation is authorized, and no other dependency is approved.",
+      "deferred": true
     },
     {
       "issue": 420,
@@ -846,12 +847,11 @@
       ],
       "writeScope": "architecture cleanup and final verification",
       "decision": "not_spawned_dependency_blocked",
-      "reason": "Blocked by #417/#418 and #419 decision record."
+      "reason": "Blocked by #417/#418; the #419 decision-record prerequisite is satisfied by explicit human defer."
     }
   ],
   "humanGates": [
     "parent PR merge to main",
-    "issue 419 explicit optional beta dependency inclusion",
     "new unapproved dependencies",
     "auth scope changes",
     "secrets or credential values",

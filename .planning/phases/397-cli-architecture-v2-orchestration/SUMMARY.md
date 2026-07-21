@@ -6,8 +6,8 @@ PR #468 now carries the GSD-verified Phase 18 interaction contract. #416 owns th
 reverse workspace and `reverse guide` alias; #411 owns the equivalent bare query workspace and
 `query grid` alias. Child #469 owns TTY-progressive credential and connection setup. The live
 GitHub graph records #409/#462 → #469 → #417/#418, and the missing #411 → #463 edge is restored.
-PR #468 is now integrated into the parent branch at `c3d8a757`; production TUI work remains
-sequenced behind the rebuilt dependency queue and the open #437/#408 write-scope collision.
+PR #468 integrated into the parent branch at `c3d8a757`; at that historical checkpoint, production
+TUI work remained sequenced behind the rebuilt dependency queue and the open #437/#408 write-scope collision.
 
 Status: ACTIVE — not final; #408 correction complete, execute completion false pending independent VERIFY
 Starting HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
@@ -45,7 +45,7 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #437 / PR #466 contains the final serialized Phase 9 connectors/certify migration. After safety/correctness correction cycles, remote CI exposed a wall-clock concurrency-test flake. The worker replaced it with a deterministic barrier/counter proof without raising or removing the gate. Head `26f98a72` passes focused/repeated/race tests, full CLI/certify packages, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certification, connectorgen 547/0, and all current GitHub checks. Exact-path local re-review found no remaining actionable runtime/code issue.
 
-#437 is not integrated because human/parent fallback review coverage remains pending. #408 is source-ready after #462 integration but is not spawned because it would collide with open PR #466 central CLI/help/golden/docs/website files. #407/#413 remain dependency-blocked on #437; #409/#416/#469 remain downstream; #419 remains an explicit human dependency-decision gate. Final parent verification and final parent review have not run; `verificationPassed` remains false.
+Historical pre-integration snapshot, superseded by the dated sections below: #437 was not yet integrated because human/parent fallback review coverage was pending; #408 had not spawned because of the open PR #466 write-scope collision; #407/#413 and downstream work were blocked; #419 still awaited its decision. Final parent verification and final parent review remain unrun; `verificationPassed` remains false.
 
 ## Live reconciliation — 2026-07-20T19:28Z
 
@@ -64,4 +64,4 @@ Delegated evidence scope synchronized the live parent remote head `21d195aff0c7b
 
 The human coordinator explicitly reviewed and tested PR #466 at exact head `26f98a72419010b961b5b8378ef4a695b0c0a06f` and approved integration into `feat/cli-architecture-v2`. The orchestrator verified the head was unchanged, checks were green, and active review threads were empty, then recorded human fallback review coverage at https://github.com/polymetrics-ai/cli/pull/466#issuecomment-5026616557.
 
-PR #466 was merged only into the parent branch at `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`. Parent PR #438 remains draft and unmerged to `main`. #437 is provisionally integrated and the #407 umbrella dependency is complete on the parent branch. The ready queue now selects #408 as the critical-path ready implementation issue; #413 is ready but deferred for write-scope collision with #408, downstream UI/help issues remain dependency-blocked, and #419 remains a human dependency gate. Phase 437 pending intake remains planning-only.
+PR #466 was merged only into the parent branch at `1008f75ff8fe7d43a0a67a802ccf05ef296eae7f`. Parent PR #438 remains draft and unmerged to `main`. #437 is provisionally integrated and the #407 umbrella dependency is complete on the parent branch. At that checkpoint #408 became the critical-path issue and #413 was deferred for write-scope collision; downstream UI/help issues remain dependency-blocked. #419 is now explicitly human-deferred. Phase 437 pending intake remains planning-only.
