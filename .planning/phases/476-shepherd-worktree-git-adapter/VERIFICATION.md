@@ -3,9 +3,15 @@
 Status: `in_progress`
 
 Correction 4 is active from reviewed head `1fe994a68ec3286ee69f1be4fadf71416d601257`.
-Production remains unchanged pending a genuine test-only RED for the missing pre-transfer union of
-committed, staged, tracked-dirty, and untracked paths. Correction-3 results below remain historical
-evidence for their exact head but do not satisfy correction 4.
+Production remained unchanged through a genuine test-only RED for the missing pre-transfer union
+of committed, staged, tracked-dirty, and untracked paths; the GREEN correction is pending.
+Correction-3 results below remain historical evidence for their exact head but do not satisfy
+correction 4.
+
+The genuine correction-4 RED is `1ed10ad6f9e7893cc4a921bc5f1f6fbb848c61f1`: the focused
+serialized run reported 42 tests, 36 passes, and six expected failures. All five dirty-state
+variants created the remote issue ref; production remained unchanged from reviewed head
+`1fe994a68ec3286ee69f1be4fadf71416d601257`.
 
 Correction 3 supersedes reviewed head `9728f9ed12e8e545eabd8b9b1b8028af80150427` with GREEN
 checkpoint `db6bdd675aaced17f0d709b08a647258dfb87f15` and refactor checkpoint

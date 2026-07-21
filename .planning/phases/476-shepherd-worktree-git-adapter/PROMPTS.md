@@ -79,3 +79,6 @@
   unavailable (`unknown GSD command`), so the recorded manual strict-TDD lifecycle continues.
 - Authorized gates remain focused adapter tests, serialized Shepherd tests, strict cached Pi 0.80.6
   TypeScript, offline Pi RPC, and immutable-base diff/path-scope checks only.
+- RED result: test-only checkpoint `1ed10ad6`; focused serialized run reported 42 tests, 36 passes,
+  and six failures. Each of the five dirty-state variants created the remote issue ref, while both
+  production adapters remained identical to reviewed head `1fe994a6`.

@@ -209,3 +209,8 @@ Production is frozen until the correction-4 RED checkpoint. Baseline hashes at t
 - [ ] documented offline Pi 0.80.6 RPC returns `true`
 - [ ] immutable-base diff check and exact changed-path scope pass
 - [ ] final local, tracking, and remote branch heads match exactly
+
+Correction 4 test-only RED checkpoint `1ed10ad6f9e7893cc4a921bc5f1f6fbb848c61f1`:
+the focused serialized run reported 42 tests, 36 passes, and six failures (five dirty-state
+subcases plus their parent). In every subcase, the remote issue ref existed after push completed.
+Both production adapter files remained byte-for-byte identical to reviewed head `1fe994a6`.

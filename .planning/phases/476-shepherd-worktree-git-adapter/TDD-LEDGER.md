@@ -20,7 +20,7 @@ Tests use bounded temporary local Git repositories and no credentials or network
 | Correction 3: ancestry and history scope | Focused run: commit/push accepted unrelated or historically out-of-scope heads; handoff accepted an add-then-remove path | Commit/push revalidate immutable-base ancestry; history audit unions every touched commit path; push transfers an exact SHA refspec | Unrelated and add/remove heads reject before remote refs/objects change; handoff rejects erased net diffs | green/refactored |
 | Correction 3: sanitized Git mutations | Focused run: worktree/add/push accepted executable hook/filter/helper/transport configuration and marker paths were reachable | Mutations use a deterministic config environment and reject executable/local transport configuration before Git mutation | Worktree, clean-filter, pre-push hook, credential-helper, and SSH-command markers remain absent | green/refactored |
 | Correction 3: bound default branch | Focused run: binding omitted `defaultBranch`, caller/live remote mismatch was accepted, and push used the mutable branch ref | Inspection and schema-v4 claims bind local origin symbolic HEAD; pre-push `ls-remote --symref` revalidates live HEAD | Caller and live-remote mismatch both reject before the issue ref exists remotely | green/refactored |
-| Correction 4: pre-transfer full workspace scope | pending test-only RED matrix for untracked, tracked-dirty, staged, rename, and literal-backslash paths | pending | pending | planned |
+| Correction 4: pre-transfer full workspace scope | Test-only checkpoint `1ed10ad6`: 42 tests, 36 passed and six failed; all five dirty-state variants created the remote issue ref | pending | pending | red |
 
 Correction RED command: `node --test .pi/extensions/shepherd/workspace-adapter.test.ts
 .pi/extensions/shepherd/git-adapter.test.ts` → 21 tests, 16 passed, 5 failed. The five failures map
@@ -59,6 +59,12 @@ checkpoint `f7cb0cab0d2fb0c2ef01edc516bd3cdf950b5113`: focused 36/36; serialized
 Shepherd 173/173 in 107.5s; strict no-emit TypeScript passed against cached Pi 0.80.6 types;
 offline Pi RPC returned `true`; exact immutable-base diff and owned-path checks passed.
 
+Correction 4 test-only RED checkpoint `1ed10ad6f9e7893cc4a921bc5f1f6fbb848c61f1` kept
+`git-adapter.ts` and `workspace-adapter.ts` identical to reviewed head `1fe994a6`. The focused
+serialized command produced 42 tests, 36 passes, and six failures: the untracked, tracked-dirty,
+staged-addition, staged-rename, and literal-backslash subcases each found the remote issue ref after
+push, and the containing matrix failed with them.
+
 ## Required safety cases
 
 - canonical repository identity is stable across linked worktrees and rejects a mismatched binding
@@ -78,6 +84,9 @@ offline Pi RPC returned `true`; exact immutable-base diff and owned-path checks 
 
 - Mode: `manual_gsd_fallback`
 - Adapter failure: `scripts/gsd: unknown GSD command or prompt: programming-loop`
+- Correction 4 TDD helper: `node scripts/tdd-gate.mjs --phase
+  476-shepherd-worktree-git-adapter` was unavailable (`MODULE_NOT_FOUND`); the committed test-only
+  RED and unchanged production hashes provide the manual strict-TDD gate.
 - Execution decision, plan cycle: `local_critical_path` — this worker already owns one isolated
   sub-issue worktree and no further delegation is authorized or needed.
 - Execution decision, TDD gate cycle: `local_critical_path` — RED evidence captured before either
@@ -111,3 +120,6 @@ offline Pi RPC returned `true`; exact immutable-base diff and owned-path checks 
 - Execution decision, correction 4 plan: `local_critical_path` — the single finding is confined to
   the owned Git push boundary. A read-only recon sidecar was attempted, but the runtime thread cap
   was occupied; production remains frozen while the local test-only RED matrix is prepared.
+- Execution decision, correction 4 RED: `local_critical_path` — test-only checkpoint `1ed10ad6`
+  deterministically exposes remote mutation for all five dirty-state classes while production
+  remains byte-for-byte unchanged from the reviewed head.

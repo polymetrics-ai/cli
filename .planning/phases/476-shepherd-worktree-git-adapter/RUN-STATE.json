@@ -5,7 +5,7 @@
   "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "verificationPassed": false,
-  "verificationBlocker": "correction4_red_not_yet_captured",
+  "verificationBlocker": "correction4_green_not_yet_implemented",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -131,6 +131,11 @@
       "cycle": "correction4-plan",
       "decision": "local_critical_path",
       "reason": "The one exact-head finding is confined to the owned Git push boundary; a read-only recon sidecar could not start because the runtime thread cap was occupied, so production remains frozen while the local test-only RED matrix is prepared."
+    },
+    {
+      "cycle": "correction4-red",
+      "decision": "local_critical_path",
+      "reason": "Test-only checkpoint 1ed10ad6 produced 42 tests, 36 passes, and six deterministic failures; every dirty-state variant changed the remote while production remained identical to the reviewed head."
     }
   ]
 }
