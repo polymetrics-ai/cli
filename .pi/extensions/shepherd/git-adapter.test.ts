@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { access, mkdir, readFile, realpath } from "node:fs/promises";
+import { access, chmod, mkdir, readFile, realpath } from "node:fs/promises";
 import { join } from "node:path";
 import test from "node:test";
 
@@ -9,6 +9,7 @@ import {
 	canonicalIssueBranch,
 	type GitCommandExecutor,
 	type GitCommandRequest,
+	type GitMutationLease,
 } from "./git-adapter.ts";
 import { createLocalGitFixture, git, write, type LocalGitFixture } from "./issue-476-git-fixture.ts";
 import { resolveCanonicalGitWorktree } from "./target-evidence.ts";
@@ -48,6 +49,24 @@ async function claimedMutationWorkspace(
 	return { workspaceAdapter, workspace };
 }
 
+async function executableMarker(fixture: LocalGitFixture, name: string): Promise<{ executable: string; marker: string }> {
+	const executable = join(fixture.root, `${name}.cjs`);
+	const marker = join(fixture.root, `${name}.ran`);
+	await write(fixture.root, `${name}.cjs`, [
+		`#!${process.execPath}`,
+		`require("node:fs").writeFileSync(${JSON.stringify(marker)}, "executed\\n");`,
+		"process.stdin.pipe(process.stdout);",
+		"",
+	].join("\n"));
+	await chmod(executable, 0o700);
+	return { executable, marker };
+}
+
+async function parentlessCommit(cwd: string, treeish: string, message: string): Promise<string> {
+	const tree = (await git(cwd, "rev-parse", `${treeish}^{tree}`)).trim();
+	return (await git(cwd, "commit-tree", tree, "-m", message)).trim();
+}
+
 test("derives one canonical safe issue branch", () => {
 	assert.equal(canonicalIssueBranch(476, "shepherd-worktree-git-adapter"), "feat/476-shepherd-worktree-git-adapter");
 	assert.throws(() => canonicalIssueBranch(0, "valid"), /issue/);
@@ -68,6 +87,8 @@ test("binds canonical repository identity across linked worktrees", async (t) =>
 	assert.equal(coordinator.remoteIdentity, linked.remoteIdentity);
 	assert.equal(coordinator.fetchEndpointIdentity, linked.fetchEndpointIdentity);
 	assert.equal(coordinator.pushEndpointIdentity, linked.pushEndpointIdentity);
+	assert.equal(coordinator.defaultBranch, "main");
+	assert.equal(linked.defaultBranch, "main");
 	assert.notEqual(coordinator.worktreeIdentity, linked.worktreeIdentity);
 	assert.equal(coordinator.remoteName, "origin");
 });
@@ -249,7 +270,175 @@ test("pushes only the canonical branch and verifies the exact remote head", asyn
 		assert.equal(flattened.includes(forbidden), false);
 	}
 	const push = requests.find((request) => request.args[0] === "push");
-	assert.deepEqual(push?.args, ["push", "--porcelain", "--", fixture.remote, branch]);
+	assert.deepEqual(push?.args, [
+		"push", "--porcelain", "--", fixture.remote,
+		`${fixture.parentHead}:refs/heads/${branch}`,
+	]);
+});
+
+test("commit rejects a canonical branch whose head no longer descends from the immutable base", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const adapter = new GitAdapter();
+	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+	const { workspaceAdapter, workspace } = await claimedMutationWorkspace(adapter, fixture, ["allowed.txt"]);
+	t.after(() => workspace.release().catch(() => undefined));
+	const unrelated = await parentlessCommit(workspace.cwd, fixture.parentHead, "test: unrelated canonical head");
+	await git(workspace.cwd, "update-ref", `refs/heads/${branch}`, unrelated, fixture.parentHead);
+	await write(workspace.cwd, "allowed.txt", "must not be committed\n");
+	await assert.rejects(workspaceAdapter.commitIssueChanges(workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: unrelated,
+		message: "test(shepherd): reject unrelated head",
+		scopes: ["allowed.txt"],
+	}), /base.*ancestor|ancestry/i);
+	assert.equal((await git(workspace.cwd, "rev-parse", `refs/heads/${branch}`)).trim(), unrelated);
+});
+
+test("push rejects unrelated and historically out-of-scope canonical heads before remote changes", async (t) => {
+	const unrelatedFixture = await createLocalGitFixture();
+	t.after(unrelatedFixture.cleanup);
+	const unrelatedAdapter = new GitAdapter();
+	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+	const unrelatedClaim = await claimedMutationWorkspace(unrelatedAdapter, unrelatedFixture, ["allowed.txt"]);
+	t.after(() => unrelatedClaim.workspace.release().catch(() => undefined));
+	const unrelated = await parentlessCommit(
+		unrelatedClaim.workspace.cwd, unrelatedFixture.parentHead, "test: unrelated push head",
+	);
+	await git(
+		unrelatedClaim.workspace.cwd, "update-ref", `refs/heads/${branch}`, unrelated,
+		unrelatedFixture.parentHead,
+	);
+	await assert.rejects(unrelatedClaim.workspaceAdapter.pushIssueBranch(unrelatedClaim.workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: unrelated,
+		defaultBranch: "main",
+	}), /base.*ancestor|ancestry/i);
+	await assert.rejects(git(unrelatedFixture.remote, "show-ref", "--verify", `refs/heads/${branch}`));
+
+	const scopeFixture = await createLocalGitFixture();
+	t.after(scopeFixture.cleanup);
+	const scopeAdapter = new GitAdapter();
+	const scopeClaim = await claimedMutationWorkspace(scopeAdapter, scopeFixture, ["allowed.txt"]);
+	t.after(() => scopeClaim.workspace.release().catch(() => undefined));
+	await write(scopeClaim.workspace.cwd, "outside.txt", "transient but committed\n");
+	await git(scopeClaim.workspace.cwd, "add", "--", "outside.txt");
+	await git(scopeClaim.workspace.cwd, "commit", "-m", "test: add outside path");
+	await git(scopeClaim.workspace.cwd, "rm", "--", "outside.txt");
+	await git(scopeClaim.workspace.cwd, "commit", "-m", "test: remove outside path");
+	const historicalHead = (await git(scopeClaim.workspace.cwd, "rev-parse", "HEAD")).trim();
+	await assert.rejects(scopeClaim.workspaceAdapter.pushIssueBranch(scopeClaim.workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: historicalHead,
+		defaultBranch: "main",
+	}), /outside.*scope|scope.*outside/i);
+	await assert.rejects(git(scopeFixture.remote, "show-ref", "--verify", `refs/heads/${branch}`));
+});
+
+test("typed worktree creation rejects executable repository hooks before marker execution", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const { executable, marker } = await executableMarker(fixture, "post-checkout");
+	const hooks = join(fixture.root, "hooks");
+	await mkdir(hooks);
+	await write(fixture.root, "hooks/post-checkout", await readFile(executable, "utf8"));
+	await chmod(join(hooks, "post-checkout"), 0o700);
+	await git(fixture.coordinator, "config", "core.hooksPath", hooks);
+	const adapter = new GitAdapter();
+	await assert.rejects(
+		claimedMutationWorkspace(adapter, fixture, ["allowed.txt"]),
+		/unsafe.*Git.*configuration|hooks/i,
+	);
+	await assert.rejects(access(marker), /ENOENT/);
+});
+
+test("typed add rejects executable clean filters before marker execution", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const adapter = new GitAdapter();
+	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+	const { workspaceAdapter, workspace } = await claimedMutationWorkspace(
+		adapter, fixture, [".gitattributes", "payload.marker"],
+	);
+	t.after(() => workspace.release().catch(() => undefined));
+	const { executable, marker } = await executableMarker(fixture, "clean-filter");
+	await git(workspace.cwd, "config", "filter.marker.clean", executable);
+	await git(workspace.cwd, "config", "filter.marker.required", "true");
+	await write(workspace.cwd, ".gitattributes", "payload.marker filter=marker\n");
+	await write(workspace.cwd, "payload.marker", "payload\n");
+	await assert.rejects(workspaceAdapter.commitIssueChanges(workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: fixture.parentHead,
+		message: "test(shepherd): reject executable filter",
+		scopes: [".gitattributes", "payload.marker"],
+	}), /unsafe.*Git.*configuration|filter/i);
+	await assert.rejects(access(marker), /ENOENT/);
+});
+
+test("typed push rejects executable hook, helper, and transport config before marker execution", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const adapter = new GitAdapter();
+	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+	const { workspaceAdapter, workspace } = await claimedMutationWorkspace(adapter, fixture, ["allowed.txt"]);
+	t.after(() => workspace.release().catch(() => undefined));
+	const { executable, marker } = await executableMarker(fixture, "push-config");
+	const hooks = join(fixture.root, "push-hooks");
+	await mkdir(hooks);
+	await write(fixture.root, "push-hooks/pre-push", await readFile(executable, "utf8"));
+	await chmod(join(hooks, "pre-push"), 0o700);
+	await git(workspace.cwd, "config", "core.hooksPath", hooks);
+	await git(workspace.cwd, "config", "credential.helper", `!${executable}`);
+	await git(workspace.cwd, "config", "core.sshCommand", executable);
+	await assert.rejects(workspaceAdapter.pushIssueBranch(workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: fixture.parentHead,
+		defaultBranch: "main",
+	}), /unsafe.*Git.*configuration|hook|helper|transport/i);
+	await assert.rejects(access(marker), /ENOENT/);
+	await assert.rejects(git(fixture.remote, "show-ref", "--verify", `refs/heads/${branch}`));
+});
+
+test("push binds caller and live remote default branches to inspected symbolic HEAD evidence", async (t) => {
+	const callerFixture = await createLocalGitFixture();
+	t.after(callerFixture.cleanup);
+	const callerAdapter = new GitAdapter();
+	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+	const callerClaim = await claimedMutationWorkspace(callerAdapter, callerFixture, ["allowed.txt"]);
+	t.after(() => callerClaim.workspace.release().catch(() => undefined));
+	await assert.rejects(callerClaim.workspaceAdapter.pushIssueBranch(callerClaim.workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: callerFixture.parentHead,
+		defaultBranch: "release",
+	}), /default branch|symbolic HEAD/i);
+	await assert.rejects(git(callerFixture.remote, "show-ref", "--verify", `refs/heads/${branch}`));
+
+	const liveFixture = await createLocalGitFixture();
+	t.after(liveFixture.cleanup);
+	const liveAdapter = new GitAdapter();
+	const liveClaim = await claimedMutationWorkspace(liveAdapter, liveFixture, ["allowed.txt"]);
+	t.after(() => liveClaim.workspace.release().catch(() => undefined));
+	await git(liveFixture.remote, "symbolic-ref", "HEAD", "refs/heads/release");
+	await assert.rejects(liveClaim.workspaceAdapter.pushIssueBranch(liveClaim.workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: liveFixture.parentHead,
+		defaultBranch: "main",
+	}), /default branch|symbolic HEAD/i);
+	await assert.rejects(git(liveFixture.remote, "show-ref", "--verify", `refs/heads/${branch}`));
 });
 
 test("rejects a changed effective push endpoint before the alternate remote receives objects", async (t) => {
@@ -333,26 +522,43 @@ test("rejects literal backslash paths instead of canonicalizing them into an all
 	}), /scope|backslash/i);
 });
 
-test("rejects forged mutation leases and alternate-root lease issuance during an active claim", async (t) => {
+test("keeps lease issuance off overridable adapters and rejects forged mutation capabilities", async (t) => {
 	const fixture = await createLocalGitFixture();
 	t.after(fixture.cleanup);
-	const adapter = new GitAdapter();
+	let capturedIssuer: unknown;
+	class CapturingGitAdapter extends GitAdapter {
+		async acquireMutationLease(...args: any[]): Promise<GitMutationLease> {
+			[capturedIssuer] = args;
+			const acquire = Reflect.get(GitAdapter.prototype, "acquireMutationLease");
+			if (typeof acquire !== "function") throw new Error("public lease acquisition is unavailable");
+			return Reflect.apply(acquire, this, args) as Promise<GitMutationLease>;
+		}
+	}
+	const adapter = new CapturingGitAdapter();
 	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
 	const { workspace } = await claimedMutationWorkspace(adapter, fixture, ["README.md"]);
 	t.after(() => workspace.release().catch(() => undefined));
 	const alternateStateRoot = join(fixture.root, "alternate-state");
 	await mkdir(alternateStateRoot, { mode: 0o700 });
-	await assert.rejects(adapter.acquireMutationLease({}, workspace, {
-		issue: 476,
-		slug: "shepherd-worktree-git-adapter",
-		branch,
-		baseHead: fixture.parentHead,
-		targetCwd: workspace.cwd,
-		allowedScopes: ["README.md"],
-		stateRoot: await realpath(alternateStateRoot),
-		runId: "forged-alternate-owner",
-		mode: "start",
-	}), /only be issued by the owning workspace adapter/i);
+	let capturedLease: { release(): Promise<void> } | undefined;
+	if (capturedIssuer !== undefined) {
+		const alternateAdapter = new GitAdapter();
+		const acquire = Reflect.get(alternateAdapter, "acquireMutationLease");
+		if (typeof acquire !== "function") throw new Error("captured authority unexpectedly had no acquisition path");
+		capturedLease = await Reflect.apply(acquire, alternateAdapter, [capturedIssuer, workspace, {
+			issue: 476,
+			slug: "shepherd-worktree-git-adapter",
+			branch,
+			baseHead: fixture.parentHead,
+			targetCwd: workspace.cwd,
+			allowedScopes: ["README.md"],
+			stateRoot: await realpath(alternateStateRoot),
+			runId: "captured-alternate-owner",
+			mode: "start",
+		}]) as GitMutationLease;
+		await capturedLease.release();
+	}
+	assert.equal(capturedIssuer, undefined, "workspace authority crossed an overridable adapter method");
 	await assert.rejects(access(join(alternateStateRoot, "leases")));
 
 	const forgedLease = {

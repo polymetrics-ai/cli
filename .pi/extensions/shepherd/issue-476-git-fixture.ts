@@ -52,6 +52,7 @@ export async function createLocalGitFixture(): Promise<LocalGitFixture> {
 	await git(coordinator, "add", "--", "README.md");
 	await git(coordinator, "commit", "-m", "test: seed repository");
 	await git(coordinator, "push", "origin", "main");
+	await git(coordinator, "remote", "set-head", "origin", "main");
 	await git(coordinator, "switch", "-c", parentBranch);
 	await write(coordinator, "parent.txt", "parent\n");
 	await git(coordinator, "add", "--", "parent.txt");

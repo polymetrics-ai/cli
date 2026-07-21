@@ -359,6 +359,24 @@ test("handoff audits the complete committed path set before applying immutable s
 	if (handoff.status === "rejected") assert.match(String(handoff.reason), /outside.*scope|scope.*outside/i);
 });
 
+test("handoff audits paths added and removed across commit history even when the final tree is unchanged", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const adapter = new WorkspaceAdapter(new GitAdapter());
+	const workspace = await adapter.claim(await requestFor(fixture, {
+		allowedScopes: [".pi/extensions/shepherd"],
+	}));
+	await write(workspace.cwd, "outside-history.txt", "transient but committed\n");
+	await git(workspace.cwd, "add", "--", "outside-history.txt");
+	await git(workspace.cwd, "commit", "-m", "test(shepherd): add historical outside path");
+	await git(workspace.cwd, "rm", "--", "outside-history.txt");
+	await git(workspace.cwd, "commit", "-m", "test(shepherd): remove historical outside path");
+	const [handoff] = await Promise.allSettled([adapter.captureHandoff(workspace, "passed")]);
+	await workspace.release();
+	assert.equal(handoff.status, "rejected", "handoff ignored an out-of-scope path removed before the final tree");
+	if (handoff.status === "rejected") assert.match(String(handoff.reason), /outside.*scope|scope.*outside/i);
+});
+
 test("handoff rejects a dirty literal backslash path instead of aliasing it into an allowed scope", async (t) => {
 	const fixture = await createLocalGitFixture();
 	t.after(fixture.cleanup);
