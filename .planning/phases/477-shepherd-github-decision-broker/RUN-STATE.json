@@ -4,8 +4,8 @@
   "issue": 477,
   "parentIssue": 471,
   "parentPr": 472,
-  "status": "planned",
-  "reason": "Plan and strict TDD matrix created before production edits.",
+  "status": "red",
+  "reason": "Issue tests fail because both owned production modules are absent; implementation may begin.",
   "details": {
     "branch": "feat/477-shepherd-github-decision-broker",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
@@ -19,6 +19,11 @@
         "cycle": "plan",
         "decision": "local_critical_path",
         "reason": "This is the assigned isolated issue worker; planning artifacts and threat/TDD matrix are the current critical path."
+      },
+      {
+        "cycle": "tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "The worker authored and ran fake-transport and durable-state contract tests before either production module existed."
       }
     ],
     "humanGates": [
@@ -31,5 +36,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T12:32:10.000Z"
+  "updatedAt": "2026-07-21T12:38:00.000Z"
 }

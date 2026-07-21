@@ -1,6 +1,6 @@
 # TDD Ledger: #477
 
-Status: planned; no production edit has been made.
+Status: RED captured; no production edit had been made when the failure below was recorded.
 
 ## Slice 1: durable decision aggregate
 
@@ -35,4 +35,15 @@ Planned RED cases against issue-namespaced fake fixtures:
 
 ## RED / GREEN / refactor evidence
 
-Pending. Exact commands, counts, and failure causes will be appended as each checkpoint runs.
+Initial RED command:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts \
+  .pi/extensions/shepherd/github-decision-broker.test.ts
+```
+
+Result: exit 1; 0 passed, 2 failed test-file entries. Both failed with
+`ERR_MODULE_NOT_FOUND` for `.pi/extensions/shepherd/human-decision.ts`, proving the contract tests
+precede both production modules. Duration: 66.299917 ms.
+
+GREEN/refactor evidence remains pending.
