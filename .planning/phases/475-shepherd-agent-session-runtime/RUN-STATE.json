@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_plan",
+  "currentCycle": "correction_red",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -38,10 +38,15 @@
       "cycle": "correction_plan",
       "decision": "local_critical_path",
       "reason": "Both exact-head findings overlap issue-owned runtime/tool-policy tests and source while all four runtime slots are occupied; keep one collision-free correction lane."
+    },
+    {
+      "cycle": "correction_red",
+      "decision": "local_critical_path",
+      "reason": "Focused test-only regressions produced five expected failures with production unchanged; proceed to the smallest owned lifecycle and redaction fixes."
     }
   ],
   "gates": {
-    "focusedTests": "pending_correction",
+    "focusedTests": "red_captured_19_passed_5_expected_failures",
     "fullShepherdTests": "pending_correction",
     "strictTypeScriptPi0806": "pending_correction",
     "offlineRpcSmoke": "pending_correction",

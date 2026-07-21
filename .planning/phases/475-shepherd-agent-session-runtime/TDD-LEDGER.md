@@ -89,17 +89,30 @@
 
 ### RED
 
-- Status: pending.
+- Status: captured; production source remained unchanged.
 - Lifecycle contract: creation resolves only after request deadline plus cleanup bound; the run
   settles without waiting forever, the late session is never prompted, and abort/wait/dispose are
   each eventually called exactly once.
 - Redaction contract: synthetic quoted JSON/YAML assignments and quoted Bearer values do not leak
   through direct redaction, prompt serialization, tool output, or handoff summary/finding fields;
   ordinary prose remains unchanged.
+- Command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+- Observed result: exit 1, 19 passed / 5 failed. Expected failures:
+  - prompt injection quoted-secret boundary leaked the task/context marker;
+  - handoff quoted-secret boundary leaked summary/finding markers;
+  - post-deadline plus post-cleanup-bound session creation never reached dispose;
+  - direct quoted JSON/YAML/Bearer redaction probe leaked its marker;
+  - typed capability tool output leaked its quoted Bearer marker.
 
 ### GREEN
 
-- Status: blocked on RED evidence.
+- Status: ready; RED evidence is committed before production changes.
 
 ### REFACTOR / VERIFY
 

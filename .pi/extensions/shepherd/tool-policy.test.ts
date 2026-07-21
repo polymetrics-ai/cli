@@ -4,6 +4,7 @@ import test from "node:test";
 import {
 	ToolPolicyError,
 	createToolPolicy,
+	redactSensitiveText,
 	type HostCapability,
 	type ScopedWorkspace,
 	type SessionTool,
@@ -76,6 +77,25 @@ function policyInput(readOnly: boolean) {
 		capabilities: [capability("host_inspect"), capability("host_verify", { mutates: true })],
 	};
 }
+
+test("redaction covers quoted JSON/YAML assignments and quoted Bearer values without changing ordinary prose", () => {
+	const secret = ["synthetic", "credential", "issue-475"].join("-");
+	const probes = [
+		`"token": "${secret}"`,
+		`password: '${secret}'`,
+		`"Authorization": "Bearer ${secret}"`,
+		`Authorization: 'Bearer ${secret}'`,
+	];
+
+	for (const probe of probes) {
+		const redacted = redactSensitiveText(probe);
+		assert.equal(redacted.includes(secret), false, probe);
+		assert.match(redacted, /\[REDACTED\]/, probe);
+	}
+
+	const ordinary = "The token bucket algorithm uses bearer capabilities, and authorization is described here.";
+	assert.equal(redactSensitiveText(ordinary), ordinary);
+});
 
 test("read-only policy exposes workspace reads and non-mutating typed capabilities only", async () => {
 	const input = policyInput(true);
@@ -213,9 +233,10 @@ test("policy rejects workspace identity mismatch, duplicate capabilities, and un
 });
 
 test("tool inputs and outputs are bounded and host summaries are redacted", async () => {
+	const secret = ["synthetic", "tool-output", "issue-475"].join("-");
 	const input = policyInput(false);
 	input.capabilities = [
-		capability("host_inspect", { output: "Authorization: Bearer secret-token-value" }),
+		capability("host_inspect", { output: `{"Authorization": "Bearer ${secret}"}` }),
 		capability("host_verify", { mutates: true }),
 	];
 	const policy = createToolPolicy(input, { maxToolOutputBytes: 256 });
@@ -225,7 +246,7 @@ test("tool inputs and outputs are bounded and host summaries are redacted", asyn
 	assert.ok(write);
 
 	const result = await inspect.execute("inspect", { target: "owned" }, undefined);
-	assert.doesNotMatch(text(result), /secret-token-value/);
+	assert.equal(text(result).includes(secret), false);
 	assert.match(text(result), /\[REDACTED\]/);
 
 	await assert.rejects(
