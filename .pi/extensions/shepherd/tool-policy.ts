@@ -8,6 +8,7 @@ const MAX_CAPABILITIES = 32;
 const MAX_REFERENCES = 32;
 const MAX_REFERENCE_CHARACTERS = 512;
 const MAX_CAPABILITY_SUMMARY_CHARACTERS = 4 * 1024;
+const MAX_CAPABILITY_SCHEMA_BYTES = 32 * 1024;
 
 const forbiddenCapabilityPatterns = [
 	/(?:^|_)(?:bash|shell|exec|command)(?:_|$)/,
@@ -178,7 +179,8 @@ function validatePolicyInput(input: ToolPolicyInput): void {
 		if (!declared.has(capability.name)) {
 			throw new ToolPolicyError(`undeclared capability ${capability.name} cannot expand authority`);
 		}
-		if (typeof capability.description !== "string" || capability.description.length < 1 || capability.description.length > 512) {
+		if (typeof capability.description !== "string" || capability.description.length < 1 || capability.description.length > 512 ||
+			/[\u0000-\u001f\u007f]/.test(capability.description)) {
 			throw new ToolPolicyError(`capability ${capability.name} has an invalid description`);
 		}
 		if (typeof capability.mutates !== "boolean" || typeof capability.execute !== "function") {
@@ -186,6 +188,17 @@ function validatePolicyInput(input: ToolPolicyInput): void {
 		}
 		if (!isRecord(capability.parameters)) {
 			throw new ToolPolicyError(`capability ${capability.name} requires a bounded parameter schema`);
+		}
+		if (capability.parameters.type !== "object" || capability.parameters.additionalProperties !== false) {
+			throw new ToolPolicyError(`capability ${capability.name} parameter schema must be a closed object`);
+		}
+		try {
+			if (byteLength(JSON.stringify(capability.parameters)) > MAX_CAPABILITY_SCHEMA_BYTES) {
+				throw new ToolPolicyError(`capability ${capability.name} parameter schema exceeded its bound`);
+			}
+		} catch (error) {
+			if (error instanceof ToolPolicyError) throw error;
+			throw new ToolPolicyError(`capability ${capability.name} parameter schema is not serializable`, { cause: error });
 		}
 	}
 	for (const name of declared) {

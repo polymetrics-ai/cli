@@ -1,5 +1,10 @@
 import { posix, win32 } from "node:path";
 
+import type {
+	AgentSessionEvent,
+	CreateAgentSessionOptions,
+} from "@earendil-works/pi-coding-agent";
+
 import {
 	buildRolePrompts,
 	routeForRole,
@@ -44,7 +49,7 @@ export interface RuntimeAgentSession {
 	thinkingLevel: ShepherdAgentThinking | string;
 	sessionFile: string | undefined;
 	getActiveToolNames(): string[];
-	subscribe(listener: (event: unknown) => void): () => void;
+	subscribe(listener: (event: AgentSessionEvent) => void): () => void;
 	prompt(prompt: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<void>;
 	abort(): Promise<void>;
 	waitForIdle(): Promise<void>;
@@ -67,7 +72,7 @@ export interface AgentSessionRuntimeSdk {
 	createSettingsManager(settings: Record<string, unknown>, options: Record<string, unknown>): unknown;
 	createSessionManager(cwd: string): unknown;
 	createResourceLoader(options: Record<string, unknown>): RuntimeResourceLoader;
-	createAgentSession(options: Record<string, unknown>): Promise<RuntimeSessionResult>;
+	createAgentSession(options: CreateAgentSessionOptions): Promise<RuntimeSessionResult>;
 }
 
 export interface RoleAuthority extends ToolAuthority {
@@ -383,6 +388,7 @@ export class ShepherdAgentSessionRuntime {
 		});
 
 		let createPromise: Promise<RuntimeSessionResult> | undefined;
+		let reloadPromise: Promise<void> | undefined;
 		let owned: OwnedSession | undefined;
 		let primaryFailure: unknown;
 		let result: AgentSessionHandoff | undefined;
@@ -412,7 +418,8 @@ export class ShepherdAgentSessionRuntime {
 				noContextFiles: true,
 				systemPrompt: prompts.systemPrompt,
 			});
-			await scope.race(Promise.resolve().then(() => resourceLoader.reload()));
+			reloadPromise = Promise.resolve().then(() => resourceLoader.reload());
+			await scope.race(reloadPromise);
 			scope.assertActive();
 
 			createPromise = Promise.resolve().then(() => this.#sdk.createAgentSession({
@@ -424,11 +431,11 @@ export class ShepherdAgentSessionRuntime {
 				noTools: "all",
 				tools: toolPolicy.names,
 				excludeTools: ["bash"],
-				customTools: toolPolicy.tools as SessionTool[],
+				customTools: toolPolicy.tools as unknown as CreateAgentSessionOptions["customTools"],
 				resourceLoader,
 				sessionManager,
 				settingsManager,
-			}));
+			} as unknown as CreateAgentSessionOptions));
 			const created = await scope.race(createPromise);
 			owned = new OwnedSession(created.session);
 			active.owned = owned;
@@ -458,6 +465,9 @@ export class ShepherdAgentSessionRuntime {
 
 		let cleanupFailure: unknown;
 		try {
+			if (reloadPromise) {
+				await bounded(reloadPromise, this.#options.cleanupTimeoutMs, "resource loader settlement");
+			}
 			if (!owned && createPromise) {
 				const created = await bounded(createPromise, this.#options.cleanupTimeoutMs, "late session creation");
 				owned = new OwnedSession(created.session);
@@ -477,6 +487,9 @@ export class ShepherdAgentSessionRuntime {
 			throw new AgentSessionRuntimeError("AgentSession cleanup/join failed; runtime quarantined", { cause: cleanupFailure });
 		}
 		if (primaryFailure) throw normalizeRuntimeError(primaryFailure);
+		// Cancellation may win after terminal evidence is parsed but before child settlement completes.
+		// Never return otherwise-valid late evidence after close, shutdown, abort, or deadline.
+		if (scope.failure) throw scope.failure;
 		if (!result) throw new AgentSessionRuntimeError("AgentSession completed without a handoff");
 		return result;
 	}

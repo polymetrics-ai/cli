@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import type {
+	AgentSessionEvent,
+	CreateAgentSessionOptions,
+} from "@earendil-works/pi-coding-agent";
+
 import {
 	AgentSessionRuntimeError,
 	ShepherdAgentSessionRuntime,
@@ -88,7 +93,7 @@ function handoffFor(req: RoleRunRequest, overrides: Record<string, unknown> = {}
 	});
 }
 
-type EventListener = (event: unknown) => void;
+type EventListener = (event: AgentSessionEvent) => void;
 
 class FakeSession implements RuntimeAgentSession {
 	model = { provider: "openai-codex", id: "gpt-5.6-sol" };
@@ -104,18 +109,22 @@ class FakeSession implements RuntimeAgentSession {
 	promptGate: Promise<void> | undefined;
 	promptGateResolve: (() => void) | undefined;
 	waitError: Error | undefined;
+	waitGate: Promise<void> | undefined;
+	waitGateResolve: (() => void) | undefined;
 	disposeError: Error | undefined;
 	abortError: Error | undefined;
 	terminalProvider = "openai-codex";
 	terminalModel = "gpt-5.6-sol";
+	lastPrompt = "";
 
 	getActiveToolNames(): string[] { return [...this.activeTools]; }
 	subscribe(listener: EventListener): () => void {
 		this.listeners.add(listener);
 		return () => this.listeners.delete(listener);
 	}
-	async prompt(_prompt: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<void> {
+	async prompt(prompt: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<void> {
 		this.promptCalls += 1;
+		this.lastPrompt = prompt;
 		assert.deepEqual(options, { expandPromptTemplates: false, source: "extension" });
 		if (this.promptGate) await this.promptGate;
 		const message = {
@@ -126,12 +135,12 @@ class FakeSession implements RuntimeAgentSession {
 			timestamp: 475,
 			content: [{ type: "text", text: this.output }],
 		};
-		for (const listener of this.listeners) listener({ type: "message_end", message });
+		for (const listener of this.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
 		for (const listener of this.listeners) listener({
 			type: "agent_end",
 			messages: [message],
 			willRetry: false,
-		});
+		} as AgentSessionEvent);
 	}
 	async abort(): Promise<void> {
 		this.abortCalls += 1;
@@ -140,6 +149,7 @@ class FakeSession implements RuntimeAgentSession {
 	}
 	async waitForIdle(): Promise<void> {
 		this.waitCalls += 1;
+		if (this.waitGate) await this.waitGate;
 		if (this.waitError) throw this.waitError;
 	}
 	dispose(): void {
@@ -148,6 +158,9 @@ class FakeSession implements RuntimeAgentSession {
 	}
 	blockPrompt(): void {
 		this.promptGate = new Promise((resolve) => { this.promptGateResolve = resolve; });
+	}
+	blockWait(): void {
+		this.waitGate = new Promise((resolve) => { this.waitGateResolve = resolve; });
 	}
 }
 
@@ -160,6 +173,8 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 	loaderOptions: Record<string, unknown> | undefined;
 	createGate: Promise<void> | undefined;
 	createGateResolve: (() => void) | undefined;
+	reloadGate: Promise<void> | undefined;
+	reloadGateResolve: (() => void) | undefined;
 	activeToolsOverride: string[] | undefined;
 
 	getAgentDir(): string { return "/opaque/pi-agent"; }
@@ -176,10 +191,13 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 	createSessionManager(cwd: string): unknown { return { kind: "memory", cwd }; }
 	createResourceLoader(options: Record<string, unknown>) {
 		this.loaderOptions = options;
-		return { reload: async () => undefined };
+		return { reload: async () => { if (this.reloadGate) await this.reloadGate; } };
 	}
-	async createAgentSession(options: Record<string, unknown>) {
-		this.options = options;
+	async createAgentSession(options: CreateAgentSessionOptions): Promise<{
+		session: FakeSession;
+		extensionsResult: { extensions: unknown[]; errors: unknown[] };
+	}> {
+		this.options = options as unknown as Record<string, unknown>;
 		if (this.createGate) await this.createGate;
 		const route = options.thinkingLevel;
 		assert.ok(route === "high" || route === "xhigh");
@@ -192,6 +210,9 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 	}
 	blockCreate(): void {
 		this.createGate = new Promise((resolve) => { this.createGateResolve = resolve; });
+	}
+	blockReload(): void {
+		this.reloadGate = new Promise((resolve) => { this.reloadGateResolve = resolve; });
 	}
 }
 
@@ -301,6 +322,9 @@ test("prompt injection remains untrusted data and cannot expand issue, branch, w
 	assert.match(systemPrompt, /untrusted/i);
 	assert.match(systemPrompt, /never delegate|do not delegate/i);
 	assert.doesNotMatch(systemPrompt, /do-not-forward/);
+	assert.match(h.sdk.session.lastPrompt, /shepherd_role_task_v1/);
+	assert.doesNotMatch(h.sdk.session.lastPrompt, /do-not-forward/);
+	assert.match(h.sdk.session.lastPrompt, /\[REDACTED\]/);
 	assert.deepEqual(h.sdk.options?.tools, [
 		"workspace_read",
 		"workspace_edit",
@@ -431,6 +455,25 @@ test("explicit abort, close, and parent shutdown race but abort and join each se
 	assert.equal(h.sdk.session.disposeCalls, 1);
 });
 
+test("close during child settlement rejects already-valid late evidence and coalesces join", async () => {
+	const h = runtime();
+	const req = request();
+	h.sdk.session.output = handoffFor(req);
+	h.sdk.session.blockWait();
+	const runPromise = h.runtime.run(req);
+	await new Promise((resolve) => setTimeout(resolve, 5));
+	const closePromise = h.runtime.close();
+	await new Promise((resolve) => setTimeout(resolve, 5));
+	assert.equal(h.sdk.session.waitCalls, 1);
+	assert.equal(h.sdk.session.disposeCalls, 0);
+	h.sdk.session.waitGateResolve?.();
+	await closePromise;
+	await assert.rejects(runPromise, /closed|cancel|shutdown/i);
+	assert.equal(h.sdk.session.abortCalls, 1);
+	assert.equal(h.sdk.session.waitCalls, 1);
+	assert.equal(h.sdk.session.disposeCalls, 1);
+});
+
 test("timeout and explicit deadline terminate and join exactly once", async () => {
 	for (const makeOverride of [
 		() => ({ timeoutMs: 15 }),
@@ -465,6 +508,37 @@ test("late session creation after cancellation is still aborted, joined once, an
 	assert.equal(sdk.session.disposeCalls, 1);
 });
 
+test("close during resource loading joins setup before returning and never creates a session", async () => {
+	const sdk = new FakeSdk();
+	sdk.blockReload();
+	const h = runtime(sdk, { cleanupTimeoutMs: 500 });
+	const req = request();
+	const runPromise = h.runtime.run(req);
+	await new Promise((resolve) => setTimeout(resolve, 5));
+	const closePromise = h.runtime.close();
+	let closeSettled = false;
+	void closePromise.finally(() => { closeSettled = true; });
+	await new Promise((resolve) => setTimeout(resolve, 5));
+	assert.equal(closeSettled, false);
+	sdk.reloadGateResolve?.();
+	await closePromise;
+	await assert.rejects(runPromise, /closed|cancel/i);
+	assert.equal(sdk.options, undefined);
+});
+
+test("hung setup cleanup quarantines the runtime after the bounded teardown interval", async () => {
+	const sdk = new FakeSdk();
+	sdk.blockReload();
+	const h = runtime(sdk, { cleanupTimeoutMs: 15 });
+	const req = request({ timeoutMs: 10 });
+	await assert.rejects(() => h.runtime.run(req), /cleanup|settlement|quarantined/i);
+	await assert.rejects(
+		() => h.runtime.run(request({ binding: { ...req.binding, laneId: "after-hung-setup" } })),
+		/quarantined/i,
+	);
+	sdk.reloadGateResolve?.();
+});
+
 test("cleanup failure quarantines the runtime and prevents later dispatch", async () => {
 	const h = runtime();
 	const req = request();
@@ -496,7 +570,7 @@ test("runtime bounds task/context/event/output sizes and rejects malformed termi
 	const h2 = runtime();
 	h2.sdk.session.prompt = async function () {
 		this.promptCalls += 1;
-		for (const listener of this.listeners) listener({ type: "agent_end", messages: [], willRetry: false });
+		for (const listener of this.listeners) listener({ type: "agent_end", messages: [], willRetry: false } as AgentSessionEvent);
 	};
 	await assert.rejects(() => h2.runtime.run(request()), /terminal|sequence|handoff/i);
 });
