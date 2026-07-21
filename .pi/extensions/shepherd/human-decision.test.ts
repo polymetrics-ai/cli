@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -29,7 +29,15 @@ const prBinding: HumanDecisionBinding = {
 	headSha: head,
 };
 
-function spec(overrides: Partial<HumanDecisionRequestSpec> = {}): HumanDecisionRequestSpec {
+function spec(overrides: {
+	requestId?: string;
+	gate?: HumanDecisionRequestSpec["gate"];
+	binding?: HumanDecisionBinding;
+	allowedOptions?: string[];
+	actorAllowlist?: string[];
+	expiresAt?: string;
+	question?: string;
+} = {}): HumanDecisionRequestSpec {
 	return {
 		requestId: "req-477",
 		gate: "requirements",
@@ -39,7 +47,7 @@ function spec(overrides: Partial<HumanDecisionRequestSpec> = {}): HumanDecisionR
 		expiresAt: "2026-07-22T10:00:00.000Z",
 		question: "Approve the exact requirements for issue #471?",
 		...overrides,
-	};
+	} as HumanDecisionRequestSpec;
 }
 
 test("routes requirements and scope only to the parent issue", () => {
@@ -132,7 +140,9 @@ test("rejects centralized credential forms without reflecting their values", () 
 	const candidates = [
 		["token", credentialMarker].join("="),
 		`{"api_key":"${credentialMarker}"}`,
+		`{"password":${credentialMarker}}`,
 		["OPENAI_API_KEY", credentialMarker].join("="),
+		["AWS_SECRET_ACCESS_KEY", credentialMarker].join("="),
 		`https://user:${credentialMarker}@example.invalid/path`,
 		`https://example.invalid/path?access_token=${credentialMarker}`,
 		["sk", "live", credentialMarker].join("_"),
@@ -151,6 +161,7 @@ test("rejects centralized credential forms without reflecting their values", () 
 test("rejects invisible bidi controls and untrusted mentions in decision questions", () => {
 	for (const question of [
 		"Approve this exact gate?\u202Edetarapes",
+		"Approve this exact gate?\u2028Spoofed line",
 		"Ask @attacker to approve this gate",
 	]) {
 		assert.throws(() => createHumanDecisionRecord(spec({ question })), /question|format|mention/i);
@@ -238,7 +249,9 @@ test("publishes a complete atomic lock owner record before entering a transactio
 	t.after(() => rm(root, { recursive: true, force: true }));
 	const repository = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
 	const value = await repository.transact("req-477", async () => {
-		const owner = JSON.parse(await readFile(join(root, "req-477.lock"), "utf8"));
+		const locks = (await readdir(root)).filter((name) => /^req-477\.lock\.[0-9a-f-]{36}\.active$/.test(name));
+		assert.equal(locks.length, 1);
+		const owner = JSON.parse(await readFile(join(root, locks[0]), "utf8"));
 		assert.equal(owner.schemaVersion, 1);
 		assert.equal(owner.pid, process.pid);
 		assert.match(owner.token, /^[0-9a-f-]{36}$/);
@@ -250,10 +263,12 @@ test("publishes a complete atomic lock owner record before entering a transactio
 test("an obsolete lock owner cannot delete a replacement lock during release", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-fenced-release-"));
 	t.after(() => rm(root, { recursive: true, force: true }));
-	const lockPath = join(root, "req-477.lock");
 	const replacementToken = "11111111-1111-4111-8111-111111111111";
 	const repository = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
 	await assert.rejects(repository.transact("req-477", async () => {
+		const locks = (await readdir(root)).filter((name) => /^req-477\.lock\.[0-9a-f-]{36}\.active$/.test(name));
+		assert.equal(locks.length, 1);
+		const lockPath = join(root, locks[0]);
 		await rm(lockPath, { recursive: true, force: true });
 		await writeFile(lockPath, JSON.stringify({
 			schemaVersion: 1,
@@ -263,21 +278,48 @@ test("an obsolete lock owner cannot delete a replacement lock during release", a
 		}), { mode: 0o600, flag: "wx" });
 		return { state: null, value: undefined };
 	}), /ownership|token|replacement/i);
-	const replacement = JSON.parse(await readFile(lockPath, "utf8"));
+	const [replacementPath] = (await readdir(root)).filter((name) => name.endsWith(".active"));
+	const replacement = JSON.parse(await readFile(join(root, replacementPath), "utf8"));
 	assert.equal(replacement.token, replacementToken);
 });
 
 test("reclaims a dead-process transaction lock immediately after restart", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-orphan-lock-"));
 	t.after(() => rm(root, { recursive: true, force: true }));
-	const lock = join(root, "req-477.lock");
+	const token = "00000000-0000-4000-8000-000000000000";
+	const lock = join(root, `req-477.lock.${token}.active`);
 	await writeFile(lock, JSON.stringify({
 		schemaVersion: 1,
 		pid: 2_147_483_647,
-		token: "00000000-0000-4000-8000-000000000000",
+		token,
 		createdAt: "2026-07-21T10:00:00Z",
 	}), { mode: 0o600 });
 	const repository = new FileHumanDecisionRepository(root, { lockRetryMs: 1, lockMaxAttempts: 3 });
 	const persisted = await persistHumanDecisionRequest(repository, spec(), new Date("2026-07-21T10:00:00.000Z"));
 	assert.equal(persisted.requestId, "req-477");
+});
+
+test("reclaim removes only a dead token path and preserves a live replacement owner", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-reclaim-fence-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const deadToken = "22222222-2222-4222-8222-222222222222";
+	const liveToken = "33333333-3333-4333-8333-333333333333";
+	const deadPath = join(root, `req-477.lock.${deadToken}.active`);
+	const livePath = join(root, `req-477.lock.${liveToken}.active`);
+	for (const [path, pid, token] of [
+		[deadPath, 2_147_483_647, deadToken],
+		[livePath, process.pid, liveToken],
+	] as const) {
+		await writeFile(path, JSON.stringify({
+			schemaVersion: 1,
+			pid,
+			token,
+			createdAt: "2026-07-21T10:00:00Z",
+		}), { mode: 0o600 });
+	}
+	const repository = new FileHumanDecisionRepository(root, { lockRetryMs: 1, lockMaxAttempts: 1 });
+	await assert.rejects(repository.transact("req-477", () => ({ state: null, value: undefined })), /timed out/i);
+	await assert.rejects(readFile(deadPath, "utf8"), /ENOENT/);
+	const liveOwner = JSON.parse(await readFile(livePath, "utf8"));
+	assert.equal(liveOwner.token, liveToken);
 });

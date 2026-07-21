@@ -68,6 +68,7 @@ class FakeTransport implements GitHubDecisionTransport {
 	comments: GitHubComment[] = [];
 	authenticatedActor = "shepherd-host";
 	createFailure?: unknown;
+	createFailureAfterPublish?: unknown;
 	listFailures: unknown[] = [];
 	requestCommentId = 1001;
 	requestCommentTimestamp = "2026-07-21T10:00:00.000Z";
@@ -92,6 +93,11 @@ class FakeTransport implements GitHubDecisionTransport {
 			updatedAt: this.requestCommentTimestamp,
 		};
 		this.comments.push(comment);
+		if (this.createFailureAfterPublish) {
+			const failure = this.createFailureAfterPublish;
+			this.createFailureAfterPublish = undefined;
+			throw failure;
+		}
 		return structuredClone(comment);
 	}
 }
@@ -246,7 +252,7 @@ test("parent merge requires the exact approve-merge affirmative command", async 
 		...invalid.request,
 		gate: "parent_merge",
 		allowedOptions: ["approve", "reject"],
-	}), /approve-merge/i);
+	} as unknown as Parameters<GitHubDecisionBroker["request"]>[0]), /approve-merge/i);
 
 	const harness = brokerHarness(prBinding);
 	await harness.broker.request({
@@ -257,6 +263,7 @@ test("parent merge requires the exact approve-merge affirmative command", async 
 	harness.setNow("2026-07-21T10:02:00.000Z");
 	harness.transport.comments.push({
 		...fixture.allowlistedHuman,
+		url: "https://github.com/polymetrics-ai/cli/pull/477#issuecomment-2001",
 		body: "/shepherd decide req-477 approve-merge",
 	});
 	const result = await harness.broker.poll("req-477", prBinding);
@@ -347,6 +354,38 @@ test("retries transient transport failures with bounded backoff", async () => {
 	const result = await harness.broker.poll("req-477", issueBinding);
 	assert.equal(result.status, "pending");
 	assert.deepEqual(harness.sleeps, [2]);
+});
+
+test("recovers a transient create response without publishing a duplicate marker", async () => {
+	const harness = brokerHarness(issueBinding, {
+		transportRetry: { maxAttempts: 3, initialDelayMs: 2, maxDelayMs: 4 },
+	});
+	harness.transport.createFailureAfterPublish = classifiedTransportFailure(true, "post-create-marker");
+	const record = await harness.broker.request(harness.request);
+	assert.equal(harness.transport.created.length, 1);
+	assert.equal(harness.transport.comments.length, 1);
+	assert.equal(record.requestComment?.id, harness.transport.requestCommentId);
+	assert.deepEqual(harness.sleeps, [2]);
+});
+
+test("caps transient transport retries and backoff", async () => {
+	const harness = brokerHarness(issueBinding, {
+		polling: { maxAttempts: 1, initialDelayMs: 10, maxDelayMs: 10 },
+		transportRetry: { maxAttempts: 3, initialDelayMs: 2, maxDelayMs: 4 },
+	});
+	await harness.broker.request(harness.request);
+	harness.transport.listFailures.push(
+		classifiedTransportFailure(true, "transient-one"),
+		classifiedTransportFailure(true, "transient-two"),
+		classifiedTransportFailure(true, "transient-three"),
+	);
+	await assert.rejects(harness.broker.poll("req-477", issueBinding), (error: unknown) => {
+		assert.ok(error instanceof Error);
+		assert.equal((error as Error & { retryable?: boolean }).retryable, true);
+		assert.equal(error.message, "GitHub transport transient failure");
+		return true;
+	});
+	assert.deepEqual(harness.sleeps, [2, 4]);
 });
 
 test("fails permanent transport errors immediately with a redacted classification", async () => {

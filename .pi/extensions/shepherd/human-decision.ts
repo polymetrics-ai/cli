@@ -1,23 +1,27 @@
 import { createHash, randomUUID } from "node:crypto";
 import { constants } from "node:fs";
-import { lstat, mkdir, open, rename, rm } from "node:fs/promises";
+import { link, lstat, mkdir, open, readdir, rename, rm, unlink } from "node:fs/promises";
 import { isAbsolute, join } from "node:path";
 
 const SCHEMA_VERSION = 1;
-const MAX_GITHUB_NUMBER = 2_147_483_647;
+const MAX_GITHUB_NUMBER = Number.MAX_SAFE_INTEGER;
 const MAX_STATE_BYTES = 256 * 1024;
 const DEFAULT_LOCK_RETRY_MS = 10;
 const DEFAULT_LOCK_MAX_ATTEMPTS = 500;
 const DEFAULT_LOCK_STALE_MS = 600_000;
-const LOCK_OWNER_PUBLICATION_GRACE_MS = 1_000;
+const GITHUB_SECOND_RESOLUTION_SKEW_MS = 999;
 const REQUEST_ID = /^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/;
 const OPTION = /^[a-z][a-z0-9_-]{0,63}$/;
-const LOGIN = /^[a-zd](?:[a-zd-]{0,37}[a-zd])?$/;
-const REPOSITORY = /^[A-Za-zd_.-]{1,100}\/([A-Za-zd_.-]{1,100})$/;
+const LOGIN = /^[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?$/;
+const REPOSITORY_PART = /^[A-Za-z\d](?:[A-Za-z\d_.-]{0,98}[A-Za-z\d_.-])?$/;
 const HEAD_SHA = /^[0-9a-f]{40}$/;
-const SECRET_PATTERN = /(?:github_pat_[A-Za-z0-9_]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|authorization\s*:|bearer\s+[A-Za-z0-9._~+\/-]{8,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|AKIA[0-9A-Z]{16})/i;
+const RFC3339_UTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,3}))?Z$/;
+const UNSAFE_UNICODE_FORMAT = /[\u00ad\u061c\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff]/u;
+const GITHUB_MENTION = /(^|[^A-Za-z0-9_])@[A-Za-z\d](?:[A-Za-z\d-]{0,37}[A-Za-z\d])?/u;
 
 export type HumanDecisionGate = "requirements" | "scope" | "review" | "head" | "merge" | "parent_merge";
+export type StandardHumanDecisionGate = Exclude<HumanDecisionGate, "parent_merge">;
+export type ParentMergeDecisionOption = "approve-merge" | "reject";
 export type HumanDecisionTarget =
 	| { kind: "issue"; number: number }
 	| { kind: "pull_request"; number: number };
@@ -29,15 +33,23 @@ export interface HumanDecisionBinding {
 	headSha?: string;
 }
 
-export interface HumanDecisionRequestSpec {
+interface HumanDecisionRequestBase {
 	requestId: string;
-	gate: HumanDecisionGate;
 	binding: HumanDecisionBinding;
-	allowedOptions: string[];
 	actorAllowlist: string[];
 	expiresAt: string;
 	question: string;
 }
+
+export type HumanDecisionRequestSpec =
+	| (HumanDecisionRequestBase & {
+		gate: StandardHumanDecisionGate;
+		allowedOptions: string[];
+	})
+	| (HumanDecisionRequestBase & {
+		gate: "parent_merge";
+		allowedOptions: ParentMergeDecisionOption[];
+	});
 
 export interface HumanDecisionRequestComment {
 	id: number;
@@ -53,7 +65,7 @@ export interface HumanDecisionEvidence {
 	decidedAt: string;
 }
 
-export interface HumanDecisionRecord extends HumanDecisionRequestSpec {
+interface HumanDecisionRecordState {
 	schemaVersion: 1;
 	idempotencyMarker: string;
 	status: "pending" | "decided" | "consumed" | "expired";
@@ -63,6 +75,8 @@ export interface HumanDecisionRecord extends HumanDecisionRequestSpec {
 	decision?: HumanDecisionEvidence;
 	consumedAt?: string;
 }
+
+export type HumanDecisionRecord = HumanDecisionRequestSpec & HumanDecisionRecordState;
 
 export interface HumanDecisionTransaction<T> {
 	state: HumanDecisionRecord | null;
@@ -83,6 +97,23 @@ export interface FileHumanDecisionRepositoryOptions {
 	lockStaleMs?: number;
 }
 
+interface HumanDecisionLockOwner {
+	pid: number;
+	token: string;
+	createdAt: string;
+}
+
+interface HumanDecisionLockLease extends HumanDecisionLockOwner {
+	requestId: string;
+	path: string;
+	state: "candidate" | "active";
+}
+
+function compareLocks(left: HumanDecisionLockLease, right: HumanDecisionLockLease): number {
+	return new Date(left.createdAt).valueOf() - new Date(right.createdAt).valueOf()
+		|| left.token.localeCompare(right.token);
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -100,29 +131,48 @@ function validGitHubNumber(value: unknown): value is number {
 
 function canonicalTimestamp(value: unknown, description: string): string {
 	if (typeof value !== "string" || value.length > 128) throw new Error(`invalid human decision ${description}`);
-	const parsed = new Date(value);
-	if (!Number.isFinite(parsed.valueOf()) || parsed.toISOString() !== value) {
+	const match = RFC3339_UTC.exec(value);
+	if (!match) throw new Error(`invalid human decision ${description}`);
+	const canonical = `${match[1]}.${(match[2] ?? "").padEnd(3, "0")}Z`;
+	const parsed = new Date(canonical);
+	if (!Number.isFinite(parsed.valueOf()) || parsed.toISOString() !== canonical) {
 		throw new Error(`invalid human decision ${description}`);
 	}
-	return value;
+	return canonical;
 }
 
 function safeText(value: unknown, maximum: number, description: string, allowNewlines = false): string {
 	if (typeof value !== "string" || value.length === 0 || value.length > maximum) {
 		throw new Error(`invalid human decision ${description}`);
 	}
-	const forbidden = allowNewlines ? /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/ : /[\u0000-\u001f\u007f-\u009f]/;
-	if (forbidden.test(value)) throw new Error(`invalid human decision ${description}`);
+	const forbidden = allowNewlines ? /[\u0000-\u0009\u000b\u000c\u000e-\u001f\u007f-\u009f]/ : /[\u0000-\u001f\u007f-\u009f]/;
+	if (forbidden.test(value) || UNSAFE_UNICODE_FORMAT.test(value)) throw new Error(`invalid human decision ${description}`);
 	return value;
 }
 
+function redactSensitiveText(input: string): string {
+	const secretName = "(?:authorization|token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret|private[_-]?key|database[_-]?url|credentials?)";
+	return input
+		.replace(/-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-\r\n]*PRIVATE KEY-----|$)/gi, "[REDACTED]")
+		.replace(/\bAuthorization\s*:\s*[^\r\n,;]+/gi, "Authorization: [REDACTED]")
+		.replace(/\b(?:Bearer|Basic|Token)\s+[^\s,;]+/gi, "[REDACTED]")
+		.replace(new RegExp(`(["']${secretName}["']\\s*:\\s*)(?:"[^"\\r\\n]*"|'[^'\\r\\n]*'|[^,}\\r\\n]+)`, "gi"), "$1\"[REDACTED]\"")
+		.replace(/\b[A-Z][A-Z0-9_]*(?:TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY|DATABASE_URL|CREDENTIALS?|SECRET_ACCESS_KEY|ACCESS_KEY)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/g, "SECRET=[REDACTED]")
+		.replace(new RegExp(`\\b(${secretName})\\b\\s*[:=]\\s*(?:"[^"]*"|'[^']*'|[^\\s,;]+)`, "gi"), "$1=[REDACTED]")
+		.replace(/\b([a-z][a-z0-9+.-]*:\/\/)[^\s\/@:]+:[^\s\/@]+@/gi, "$1[REDACTED]@")
+		.replace(/([?&](?:token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret)=)[^&#\s]+/gi, "$1[REDACTED]")
+		.replace(/\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk_(?:live|test)_[A-Za-z0-9_-]{10,}|sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16})\b/g, "[REDACTED]");
+}
+
 function assertNoSecret(value: string): void {
-	if (SECRET_PATTERN.test(value)) throw new Error("human decision text appears to contain a credential or secret");
+	if (redactSensitiveText(value) !== value) throw new Error("human decision text appears to contain a credential or secret");
 }
 
 function normalizeRepository(value: unknown): string {
 	const repository = safeText(value, 201, "repository");
-	if (!REPOSITORY.test(repository) || repository.startsWith(".") || repository.includes("..")) {
+	const parts = repository.split("/");
+	if (parts.length !== 2
+		|| parts.some((part) => !REPOSITORY_PART.test(part) || part.startsWith(".") || part.endsWith(".") || part.includes(".."))) {
 		throw new Error("invalid human decision repository");
 	}
 	return repository.toLowerCase();
@@ -174,6 +224,14 @@ function normalizeOptions(values: unknown): string[] {
 	return normalized;
 }
 
+function normalizeParentMergeOptions(values: unknown): ParentMergeDecisionOption[] {
+	const normalized = normalizeOptions(values);
+	if (normalized.length !== 2 || normalized[0] !== "approve-merge" || normalized[1] !== "reject") {
+		throw new Error("parent_merge requires exact allowed options approve-merge and reject");
+	}
+	return ["approve-merge", "reject"];
+}
+
 function normalizeActors(values: unknown): string[] {
 	if (!Array.isArray(values) || values.length === 0 || values.length > 64) {
 		throw new Error("human decision actor allowlist must be a bounded non-empty array");
@@ -196,10 +254,11 @@ function normalizeGitHubActor(value: unknown, description: string): string {
 }
 
 function normalizeQuestion(value: unknown): string {
-	const question = safeText(value, 4_096, "question", true).trim();
+	const question = safeText(value, 4_096, "question", true).replace(/\r\n?/g, "\n").trim();
 	if (question.length === 0 || question.includes("<!-- shepherd-decision:")) {
 		throw new Error("invalid human decision question");
 	}
+	if (GITHUB_MENTION.test(question)) throw new Error("invalid human decision question mention");
 	assertNoSecret(question);
 	return question;
 }
@@ -223,15 +282,18 @@ function normalizeSpec(spec: HumanDecisionRequestSpec, now: Date): HumanDecision
 	if (!Number.isFinite(now.valueOf()) || new Date(expiresAt).valueOf() <= now.valueOf()) {
 		throw new Error("human decision request is already expired");
 	}
+	const allowedOptions = spec.gate === "parent_merge"
+		? normalizeParentMergeOptions(spec.allowedOptions)
+		: normalizeOptions(spec.allowedOptions);
 	return {
 		requestId: spec.requestId,
 		gate: spec.gate,
 		binding,
-		allowedOptions: normalizeOptions(spec.allowedOptions),
+		allowedOptions,
 		actorAllowlist: normalizeActors(spec.actorAllowlist),
 		expiresAt,
 		question: normalizeQuestion(spec.question),
-	};
+	} as HumanDecisionRequestSpec;
 }
 
 function markerFor(spec: HumanDecisionRequestSpec): string {
@@ -297,7 +359,7 @@ export function createHumanDecisionRecord(
 		status: "pending",
 		createdAt: timestamp,
 		updatedAt: timestamp,
-	};
+	} as HumanDecisionRecord;
 }
 
 function immutableProjection(record: HumanDecisionRecord): unknown {
@@ -337,7 +399,7 @@ export function validateHumanDecisionRequestComment(
 	const actor = normalizeGitHubActor(evidence.actor, "request comment actor");
 	const url = validateSourceUrl(record.binding, evidence.url, "request comment URL");
 	const createdAt = canonicalTimestamp(evidence.createdAt, "request comment timestamp");
-	if (new Date(createdAt).valueOf() < new Date(record.createdAt).valueOf()
+	if (new Date(createdAt).valueOf() + GITHUB_SECOND_RESOLUTION_SKEW_MS < new Date(record.createdAt).valueOf()
 		|| new Date(createdAt).valueOf() >= new Date(record.expiresAt).valueOf()) {
 		throw new Error("human decision request comment timestamp is outside the request lifetime");
 	}
@@ -383,7 +445,9 @@ function validateSourceUrl(binding: HumanDecisionBinding, value: unknown, descri
 }
 
 function normalizeDecision(record: HumanDecisionRecord, evidence: HumanDecisionEvidence): HumanDecisionEvidence {
-	if (!isRecord(evidence) || typeof evidence.option !== "string" || !record.allowedOptions.includes(evidence.option)) {
+	if (!isRecord(evidence)
+		|| typeof evidence.option !== "string"
+		|| !(record.allowedOptions as readonly string[]).includes(evidence.option)) {
 		throw new Error("human decision option is not allowed");
 	}
 	assertOnlyFields(evidence, ["option", "actor", "sourceUrl", "decidedAt"], "decision evidence");
@@ -393,7 +457,8 @@ function normalizeDecision(record: HumanDecisionRecord, evidence: HumanDecisionE
 	}
 	const decidedAt = canonicalTimestamp(evidence.decidedAt, "decision timestamp");
 	const decidedTime = new Date(decidedAt).valueOf();
-	if (decidedTime < new Date(record.createdAt).valueOf() || decidedTime >= new Date(record.expiresAt).valueOf()) {
+	if (decidedTime + GITHUB_SECOND_RESOLUTION_SKEW_MS < new Date(record.createdAt).valueOf()
+		|| decidedTime >= new Date(record.expiresAt).valueOf()) {
 		throw new Error("human decision timestamp is outside the request lifetime");
 	}
 	return {
@@ -469,7 +534,7 @@ function validateRecord(value: unknown): HumanDecisionRecord {
 		actorAllowlist: value.actorAllowlist as string[],
 		expiresAt: value.expiresAt as string,
 		question: value.question as string,
-	}, new Date(new Date(createdAt).valueOf() - 1));
+	} as HumanDecisionRequestSpec, new Date(new Date(createdAt).valueOf() - 1));
 	if (value.idempotencyMarker !== proposed.idempotencyMarker) throw new Error("invalid human decision idempotency marker");
 	if (!["pending", "decided", "consumed", "expired"].includes(value.status as string)) throw new Error("invalid human decision status");
 	const updatedAt = canonicalTimestamp(value.updatedAt, "update timestamp");
@@ -567,43 +632,83 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 		return this.readState(requestId);
 	}
 
-	private async acquireLock(requestId: string): Promise<string> {
-		await this.ensureRoot();
-		const lockPath = join(this.root, `${requestId}.lock`);
-		for (let attempt = 0; attempt < this.lockMaxAttempts; attempt += 1) {
-			try {
-				await mkdir(lockPath, { mode: 0o700 });
-				try {
-					const owner = await open(join(lockPath, "owner.json"), "wx", 0o600);
-					try {
-						await owner.writeFile(JSON.stringify({
-							schemaVersion: 1,
-							pid: process.pid,
-							token: randomUUID(),
-							createdAt: new Date().toISOString(),
-						}), "utf8");
-						await owner.sync();
-					} finally {
-						await owner.close();
-					}
-				} catch (error) {
-					await rm(lockPath, { recursive: true, force: true });
-					throw error;
-				}
-				return lockPath;
-			} catch (error) {
-				if (!isRecord(error) || error.code !== "EEXIST") throw error;
-				if (await this.reclaimAbandonedLock(lockPath)) continue;
-				await new Promise((resolve) => setTimeout(resolve, this.lockRetryMs));
-			}
-		}
-		throw new Error("timed out acquiring human decision repository lock");
+	private async syncRoot(): Promise<void> {
+		if (process.platform === "win32") return;
+		const directory = await open(this.root, constants.O_RDONLY);
+		try { await directory.sync(); } finally { await directory.close(); }
 	}
 
-	private async readLockOwner(lockPath: string): Promise<{ pid: number; token: string } | null> {
+	private lockPath(requestId: string, token: string, state: HumanDecisionLockLease["state"]): string {
+		return join(this.root, `${requestId}.lock.${token}.${state}`);
+	}
+
+	private async publishLock(requestId: string): Promise<HumanDecisionLockLease> {
+		const token = randomUUID();
+		const createdAt = new Date().toISOString();
+		const lockPath = this.lockPath(requestId, token, "candidate");
+		const candidatePath = join(this.root, `.${requestId}.${token}.lock-owner.tmp`);
+		const owner = await open(candidatePath, "wx", 0o600);
+		try {
+			await owner.writeFile(JSON.stringify({
+				schemaVersion: 1,
+				pid: process.pid,
+				token,
+				createdAt,
+			}), "utf8");
+			await owner.sync();
+		} finally {
+			await owner.close();
+		}
+		try {
+			await link(candidatePath, lockPath);
+			try {
+				await this.syncRoot();
+			} catch (error) {
+				const published = await this.readLockOwner(lockPath);
+				if (published?.token === token && published.pid === process.pid) await unlink(lockPath);
+				throw error;
+			}
+			return { requestId, path: lockPath, pid: process.pid, token, createdAt, state: "candidate" };
+		} finally {
+			await rm(candidatePath, { force: true });
+		}
+	}
+
+	private async acquireLock(requestId: string): Promise<HumanDecisionLockLease> {
+		await this.ensureRoot();
+		let lease = await this.publishLock(requestId);
+		try {
+			for (let attempt = 0; attempt <= this.lockMaxAttempts; attempt += 1) {
+				await new Promise((resolve) => setTimeout(resolve, this.lockRetryMs));
+				const locks = await this.liveLocks(requestId);
+				const own = locks.find((lock) => lock.token === lease.token);
+				if (!own) throw new Error("human decision lock candidate disappeared before acquisition");
+				lease = own;
+				const active = locks.filter((lock) => lock.state === "active").sort(compareLocks);
+				if (lease.state === "active") {
+					if (active[0]?.token !== lease.token) {
+						lease = await this.moveLock(lease, "candidate");
+						continue;
+					}
+					if (active.length === 1) return lease;
+					continue;
+				}
+				if (active.length > 0) continue;
+				const candidates = locks.filter((lock) => lock.state === "candidate").sort(compareLocks);
+				if (candidates[0]?.token !== lease.token) continue;
+				lease = await this.moveLock(lease, "active");
+			}
+			throw new Error("timed out acquiring human decision repository lock");
+		} catch (error) {
+			await this.removeOwnedLock(lease, true);
+			throw error;
+		}
+	}
+
+	private async readLockOwner(lockPath: string): Promise<HumanDecisionLockOwner | null> {
 		let handle: Awaited<ReturnType<typeof open>>;
 		try {
-			handle = await open(join(lockPath, "owner.json"), constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+			handle = await open(lockPath, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
 		} catch (error) {
 			if (isRecord(error) && error.code === "ENOENT") return null;
 			throw error;
@@ -618,8 +723,11 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 				|| !Number.isSafeInteger(value.pid)
 				|| (value.pid as number) < 1
 				|| typeof value.token !== "string"
-				|| !/^[0-9a-f-]{36}$/.test(value.token)) return null;
-			return { pid: value.pid as number, token: value.token };
+				|| !/^[0-9a-f-]{36}$/.test(value.token)
+				|| typeof value.createdAt !== "string") return null;
+			let createdAt: string;
+			try { createdAt = canonicalTimestamp(value.createdAt, "lock creation timestamp"); } catch { return null; }
+			return { pid: value.pid as number, token: value.token, createdAt };
 		} finally {
 			await handle.close();
 		}
@@ -634,31 +742,68 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 		}
 	}
 
-	private async reclaimAbandonedLock(lockPath: string): Promise<boolean> {
-		let metadata: Awaited<ReturnType<typeof lstat>>;
-		try {
-			metadata = await lstat(lockPath);
-		} catch (error) {
-			if (isRecord(error) && error.code === "ENOENT") return true;
-			throw error;
+	private async moveLock(
+		lease: HumanDecisionLockLease,
+		state: HumanDecisionLockLease["state"],
+	): Promise<HumanDecisionLockLease> {
+		const owner = await this.readLockOwner(lease.path);
+		if (!owner || owner.token !== lease.token || owner.pid !== lease.pid) {
+			throw new Error("human decision lock ownership changed before transition");
 		}
-		if (!metadata.isDirectory() || metadata.isSymbolicLink()) throw new Error("human decision lock is not a trusted directory");
-		const owner = await this.readLockOwner(lockPath);
-		if (owner && this.processIsAlive(owner.pid)) return false;
-		if (!owner && Date.now() - metadata.mtimeMs <= Math.min(this.lockStaleMs, LOCK_OWNER_PUBLICATION_GRACE_MS)) return false;
-		if (owner) {
-			const confirmed = await this.readLockOwner(lockPath);
-			if (!confirmed || confirmed.token !== owner.token || this.processIsAlive(confirmed.pid)) return false;
+		const path = this.lockPath(lease.requestId, lease.token, state);
+		await rename(lease.path, path);
+		await this.syncRoot();
+		return { ...lease, path, state };
+	}
+
+	private async removeOwnedLock(lease: HumanDecisionLockLease, allowMissing = false): Promise<void> {
+		const owner = await this.readLockOwner(lease.path);
+		if (!owner) {
+			if (allowMissing) return;
+			throw new Error("human decision lock ownership disappeared before release");
 		}
-		const tombstone = join(this.root, `.abandoned-lock.${randomUUID()}`);
-		try {
-			await rename(lockPath, tombstone);
-		} catch (error) {
-			if (isRecord(error) && error.code === "ENOENT") return true;
-			throw error;
+		if (owner.token !== lease.token || owner.pid !== lease.pid) {
+			throw new Error("human decision lock ownership changed before release; replacement lock preserved");
 		}
-		await rm(tombstone, { recursive: true, force: true });
-		return true;
+		await unlink(lease.path);
+		await this.syncRoot();
+	}
+
+	private async liveLocks(requestId: string): Promise<HumanDecisionLockLease[]> {
+		const expression = new RegExp(`^${requestId}\\.lock\\.([0-9a-f-]{36})\\.(candidate|active)$`);
+		const locks: HumanDecisionLockLease[] = [];
+		for (const entry of await readdir(this.root, { withFileTypes: true })) {
+			const match = expression.exec(entry.name);
+			if (!match) continue;
+			const path = join(this.root, entry.name);
+			if (!entry.isFile() || entry.isSymbolicLink()) throw new Error("human decision lock is not a trusted regular file");
+			const metadata = await lstat(path);
+			const owner = await this.readLockOwner(path);
+			if (!owner || owner.token !== match[1]) {
+				if (Date.now() - metadata.mtimeMs <= this.lockStaleMs) {
+					throw new Error("human decision lock owner record is invalid");
+				}
+				await rm(path, { force: true });
+				continue;
+			}
+			const lock: HumanDecisionLockLease = {
+				...owner,
+				requestId,
+				path,
+				state: match[2] as HumanDecisionLockLease["state"],
+			};
+			if (!this.processIsAlive(owner.pid)) {
+				await this.removeOwnedLock(lock);
+				continue;
+			}
+			locks.push(lock);
+		}
+		return locks;
+	}
+
+	private async releaseLock(lease: HumanDecisionLockLease): Promise<void> {
+		if (lease.state !== "active") throw new Error("human decision lock was not active at release");
+		await this.removeOwnedLock(lease);
 	}
 
 	private async writeState(requestId: string, state: HumanDecisionRecord): Promise<void> {
@@ -675,10 +820,7 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 		}
 		try {
 			await rename(temporary, this.statePath(requestId));
-			if (process.platform !== "win32") {
-				const directory = await open(this.root, constants.O_RDONLY);
-				try { await directory.sync(); } finally { await directory.close(); }
-			}
+			await this.syncRoot();
 		} catch (error) {
 			await rm(temporary, { force: true });
 			throw error;
@@ -690,7 +832,7 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 		operation: (state: HumanDecisionRecord | null) => Promise<HumanDecisionTransaction<T>> | HumanDecisionTransaction<T>,
 	): Promise<T> {
 		if (!REQUEST_ID.test(requestId)) throw new Error("invalid human decision request ID");
-		const lockPath = await this.acquireLock(requestId);
+		const lock = await this.acquireLock(requestId);
 		try {
 			const existing = await this.readState(requestId);
 			const transaction = await operation(existing === null ? null : structuredClone(existing));
@@ -704,7 +846,7 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 			}
 			return transaction.value;
 		} finally {
-			await rm(lockPath, { recursive: true, force: true });
+			await this.releaseLock(lock);
 		}
 	}
 }

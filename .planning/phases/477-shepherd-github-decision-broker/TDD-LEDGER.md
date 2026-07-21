@@ -105,4 +105,8 @@ credential/bidi/mention acceptance; directory-before-owner lock publication; unf
 deletion; regular-file dead-lock reclaim; unclassified transient/permanent transport errors; and
 raw adapter error propagation. Duration: 282.318708 ms.
 
-Correction GREEN/refactor evidence: pending.
+Initial correction GREEN command reused the focused RED command. Result: exit 0; 42 tests total,
+41 passed, 0 failed, and 1 designated-sandbox test skipped; duration 796.597167 ms. Strict no-emit
+TypeScript for the two owned modules and their tests also exited 0 using TypeScript 5.9.3 with the
+explicit Pi 0.80.6 Node type root. Further refactor/adversarial and full-lane verification remain
+pending.

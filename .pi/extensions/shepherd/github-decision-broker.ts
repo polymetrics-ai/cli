@@ -12,10 +12,11 @@ import {
 	validateHumanDecisionRequestComment,
 	type HumanDecisionBinding,
 	type HumanDecisionEvidence,
-	type HumanDecisionGate,
 	type HumanDecisionRecord,
 	type HumanDecisionRepository,
 	type HumanDecisionRequestSpec,
+	type ParentMergeDecisionOption,
+	type StandardHumanDecisionGate,
 } from "./human-decision.ts";
 
 const GH_TIMEOUT_MS = 15_000;
@@ -26,6 +27,7 @@ const MAX_COMMENT_BODY_BYTES = 64 * 1024;
 const MAX_COMMENT_ID = Number.MAX_SAFE_INTEGER;
 const LOGIN = /^[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?$/;
 const EXACT_COMMAND = /^\/shepherd decide ([A-Za-z0-9][A-Za-z0-9_-]{0,127}) ([a-z][a-z0-9_-]{0,63})$/;
+const RFC3339_UTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,3}))?Z$/;
 
 export interface GitHubComment {
 	id: number;
@@ -45,19 +47,27 @@ export interface GitHubDecisionTransport {
 	createDecisionRequestComment(record: HumanDecisionRecord): Promise<GitHubComment>;
 }
 
-export interface GitHubDecisionRequest {
+interface GitHubDecisionRequestBase {
 	requestId: string;
-	gate: HumanDecisionGate;
 	repository: string;
 	parentIssue: number;
 	pullRequest: number;
 	generation: number;
 	headSha?: string;
-	allowedOptions: string[];
 	actorAllowlist: string[];
 	expiresAt: string;
 	question: string;
 }
+
+export type GitHubDecisionRequest =
+	| (GitHubDecisionRequestBase & {
+		gate: StandardHumanDecisionGate;
+		allowedOptions: string[];
+	})
+	| (GitHubDecisionRequestBase & {
+		gate: "parent_merge";
+		allowedOptions: ParentMergeDecisionOption[];
+	});
 
 export interface DecisionPollingPolicy {
 	maxAttempts: number;
@@ -69,6 +79,7 @@ export interface GitHubDecisionBrokerOptions {
 	now?: () => Date;
 	sleep?: (delayMs: number, signal?: AbortSignal) => Promise<void>;
 	polling?: Partial<DecisionPollingPolicy>;
+	transportRetry?: Partial<DecisionPollingPolicy>;
 }
 
 export type GitHubDecisionPollResult =
@@ -82,17 +93,54 @@ export interface GitHubDecisionPollOptions {
 
 export type GhDecisionExecutor = (file: string, args: string[]) => Promise<string>;
 
+interface ClassifiedTransportFailure extends Error {
+	readonly retryable: boolean;
+}
+
+class GitHubTransportFailure extends Error implements ClassifiedTransportFailure {
+	readonly retryable: boolean;
+
+	constructor(retryable: boolean) {
+		super(`GitHub transport ${retryable ? "transient" : "permanent"} failure`);
+		this.name = "GitHubTransportFailure";
+		this.retryable = retryable;
+	}
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function canonicalTimestamp(value: unknown, description: string): string {
 	if (typeof value !== "string" || value.length > 128) throw new Error(`GitHub returned invalid ${description}`);
-	const timestamp = new Date(value);
-	if (!Number.isFinite(timestamp.valueOf()) || timestamp.toISOString() !== value) {
+	const match = RFC3339_UTC.exec(value);
+	if (!match) throw new Error(`GitHub returned invalid ${description}`);
+	const canonical = `${match[1]}.${(match[2] ?? "").padEnd(3, "0")}Z`;
+	const timestamp = new Date(canonical);
+	if (!Number.isFinite(timestamp.valueOf()) || timestamp.toISOString() !== canonical) {
 		throw new Error(`GitHub returned invalid ${description}`);
 	}
-	return value;
+	return canonical;
+}
+
+function classifyTransportFailure(error: unknown, inspectExecutorDetails = false): ClassifiedTransportFailure {
+	if (error instanceof GitHubTransportFailure) return error;
+	if (isRecord(error) && typeof error.retryable === "boolean") {
+		return new GitHubTransportFailure(error.retryable);
+	}
+	if (!inspectExecutorDetails) return new GitHubTransportFailure(false);
+	const code = isRecord(error) && typeof error.code === "string" ? error.code.toUpperCase() : "";
+	const killed = isRecord(error) && error.killed === true;
+	const signal = isRecord(error) && typeof error.signal === "string" ? error.signal.toUpperCase() : "";
+	const message = error instanceof Error ? error.message : "";
+	const stderr = isRecord(error) && typeof error.stderr === "string" ? error.stderr.slice(0, 16_384) : "";
+	const diagnostic = `${message}\n${stderr}`;
+	const retryable = killed
+		|| signal === "SIGTERM"
+		|| ["EAI_AGAIN", "ECONNABORTED", "ECONNREFUSED", "ECONNRESET", "ENETDOWN", "ENETUNREACH", "ETIMEDOUT"].includes(code)
+		|| /\b(?:408|425|429|500|502|503|504)\b/.test(diagnostic)
+		|| /(?:timed?\s*out|timeout|temporar(?:y|ily) unavailable|connection reset|secondary rate limit|rate limit exceeded)/i.test(diagnostic);
+	return new GitHubTransportFailure(retryable);
 }
 
 function normalizedActorLogin(value: unknown, description: string): string {
@@ -161,6 +209,18 @@ function normalizePolling(value: Partial<DecisionPollingPolicy> = {}): DecisionP
 	return policy;
 }
 
+function normalizeTransportRetry(value: Partial<DecisionPollingPolicy> = {}): DecisionPollingPolicy {
+	const policy = {
+		maxAttempts: pollingValue(value.maxAttempts, 3, 10, "transport retry attempt count"),
+		initialDelayMs: pollingValue(value.initialDelayMs, 250, 30_000, "transport retry initial delay"),
+		maxDelayMs: pollingValue(value.maxDelayMs, 2_000, 30_000, "transport retry maximum delay"),
+	};
+	if (policy.maxDelayMs < policy.initialDelayMs) {
+		throw new Error("human decision transport retry maximum delay is below its initial delay");
+	}
+	return policy;
+}
+
 function requestSpec(request: GitHubDecisionRequest): HumanDecisionRequestSpec {
 	const target = routeHumanDecisionTarget(request.gate, request.parentIssue, request.pullRequest);
 	return {
@@ -176,7 +236,17 @@ function requestSpec(request: GitHubDecisionRequest): HumanDecisionRequestSpec {
 		actorAllowlist: request.actorAllowlist,
 		expiresAt: request.expiresAt,
 		question: request.question,
-	};
+	} as HumanDecisionRequestSpec;
+}
+
+function escapeMarkdownText(value: string): string {
+	return value
+		.replace(/[\\`*_{}\[\]()<>#+.!|>~-]/g, "\\$&")
+		.replace(/@/g, "&#64;");
+}
+
+function renderQuotedQuestion(value: string): string {
+	return value.split("\n").map((line) => `> ${escapeMarkdownText(line)}`).join("\n");
 }
 
 export function renderDecisionRequestComment(record: HumanDecisionRecord): string {
@@ -189,7 +259,7 @@ export function renderDecisionRequestComment(record: HumanDecisionRecord): strin
 		validated.idempotencyMarker,
 		"### Shepherd human decision required",
 		"",
-		validated.question,
+		renderQuotedQuestion(validated.question),
 		"",
 		`- Request: \`${validated.requestId}\``,
 		`- Gate: \`${validated.gate}\``,
@@ -199,6 +269,7 @@ export function renderDecisionRequestComment(record: HumanDecisionRecord): strin
 		`- Exact head: \`${head}\``,
 		`- Expires: \`${validated.expiresAt}\``,
 		`- Allowed options: ${validated.allowedOptions.map((option) => `\`${option}\``).join(", ")}`,
+		`- Allowed humans: ${validated.actorAllowlist.map((actor) => `@${actor}`).join(", ")}`,
 		"",
 		`Reply with exactly \`/shepherd decide ${validated.requestId} <option>\` from an allowlisted human account.`,
 		gateWarning,
@@ -256,7 +327,9 @@ function parseValidDecision(record: HumanDecisionRecord, comment: GitHubComment,
 	if (!record.actorAllowlist.includes(comment.actor.login)) return null;
 	if (!Number.isFinite(observedAt.valueOf()) || new Date(comment.createdAt).valueOf() > observedAt.valueOf()) return null;
 	const match = EXACT_COMMAND.exec(comment.body);
-	if (!match || match[1] !== record.requestId || !record.allowedOptions.includes(match[2])) return null;
+	if (!match
+		|| match[1] !== record.requestId
+		|| !(record.allowedOptions as readonly string[]).includes(match[2])) return null;
 	return { option: match[2], actor: comment.actor.login, sourceUrl: comment.url, decidedAt: comment.createdAt };
 }
 
@@ -266,6 +339,7 @@ export class GitHubDecisionBroker {
 	private readonly now: () => Date;
 	private readonly sleep: (delayMs: number, signal?: AbortSignal) => Promise<void>;
 	private readonly polling: DecisionPollingPolicy;
+	private readonly transportRetry: DecisionPollingPolicy;
 
 	constructor(
 		repository: HumanDecisionRepository,
@@ -277,6 +351,53 @@ export class GitHubDecisionBroker {
 		this.now = options.now ?? (() => new Date());
 		this.sleep = options.sleep ?? defaultSleep;
 		this.polling = normalizePolling(options.polling);
+		this.transportRetry = normalizeTransportRetry(options.transportRetry);
+	}
+
+	private retryDelay(attempt: number): number {
+		return Math.min(
+			this.transportRetry.maxDelayMs,
+			this.transportRetry.initialDelayMs * (2 ** (attempt - 1)),
+		);
+	}
+
+	private async callTransport<T>(
+		operation: () => Promise<T>,
+		signal?: AbortSignal,
+	): Promise<T> {
+		for (let attempt = 1; attempt <= this.transportRetry.maxAttempts; attempt += 1) {
+			try {
+				return await operation();
+			} catch (error) {
+				const failure = classifyTransportFailure(error);
+				if (!failure.retryable || attempt === this.transportRetry.maxAttempts) throw failure;
+				await this.sleep(this.retryDelay(attempt), signal);
+			}
+		}
+		throw new Error("unreachable GitHub transport retry state");
+	}
+
+	private async ensureRequestComment(
+		record: HumanDecisionRecord,
+		authenticatedActor: string,
+	): Promise<GitHubComment> {
+		for (let attempt = 1; attempt <= this.transportRetry.maxAttempts; attempt += 1) {
+			const comments = await this.callTransport(() => this.transport.listComments(record.binding));
+			const markers = markerComments(record, comments);
+			if (markers.length > 1) throw new Error("duplicate human decision marker comments are ambiguous");
+			if (markers.length === 1) return assertOwnedRequestComment(record, markers[0], authenticatedActor);
+			let created: GitHubComment;
+			try {
+				created = await this.transport.createDecisionRequestComment(record);
+			} catch (error) {
+				const failure = classifyTransportFailure(error);
+				if (!failure.retryable || attempt === this.transportRetry.maxAttempts) throw failure;
+				await this.sleep(this.retryDelay(attempt));
+				continue;
+			}
+			return assertOwnedRequestComment(record, created, authenticatedActor);
+		}
+		throw new Error("unreachable GitHub request-comment retry state");
 	}
 
 	async request(request: GitHubDecisionRequest): Promise<HumanDecisionRecord> {
@@ -290,17 +411,11 @@ export class GitHubDecisionBroker {
 				const expired = { ...existing, status: "expired" as const, updatedAt: timestamp };
 				return { state: expired, value: expired };
 			}
-			const authenticatedActor = normalizedActorLogin(await this.transport.getAuthenticatedActor(), "authenticated actor");
-			const comments = await this.transport.listComments(existing.binding);
-			const markers = markerComments(existing, comments);
-			if (markers.length > 1) throw new Error("duplicate human decision marker comments are ambiguous");
-			const comment = markers.length === 1
-				? assertOwnedRequestComment(existing, markers[0], authenticatedActor)
-				: assertOwnedRequestComment(
-					existing,
-					await this.transport.createDecisionRequestComment(existing),
-					authenticatedActor,
-				);
+			const authenticatedActor = normalizedActorLogin(
+				await this.callTransport(() => this.transport.getAuthenticatedActor()),
+				"authenticated actor",
+			);
+			const comment = await this.ensureRequestComment(existing, authenticatedActor);
 			const updated = {
 				...existing,
 				requestComment: requestCommentEvidence(existing, comment),
@@ -328,7 +443,10 @@ export class GitHubDecisionBroker {
 				return { status: "expired", attempts: attempt };
 			}
 			if (record.status !== "pending") throw new Error(`human decision request cannot be polled while ${record.status}`);
-			const comments = await this.transport.listComments(record.binding);
+			const comments = await this.callTransport(
+				() => this.transport.listComments(record.binding),
+				options.signal,
+			);
 			assertPersistedRequestComment(record, comments);
 			const candidates = comments.map(validateComment)
 				.map((comment) => parseValidDecision(record, comment, this.now()))
@@ -378,7 +496,7 @@ function defaultGhExecutor(file: string, args: string[]): Promise<string> {
 			killSignal: "SIGTERM",
 		}, (error, stdout) => {
 			if (error) {
-				reject(new Error("typed GitHub decision command failed", { cause: error }));
+				reject(error);
 				return;
 			}
 			resolve(stdout);
@@ -399,8 +517,16 @@ export class GhCliDecisionTransport implements GitHubDecisionTransport {
 		this.execute = execute;
 	}
 
+	private async executeGh(args: string[]): Promise<string> {
+		try {
+			return await this.execute("gh", args);
+		} catch (error) {
+			throw classifyTransportFailure(error, true);
+		}
+	}
+
 	async getAuthenticatedActor(): Promise<string> {
-		const payload = parseJson(await this.execute("gh", ["api", "--method", "GET", "/user"]), "authenticated user");
+		const payload = parseJson(await this.executeGh(["api", "--method", "GET", "/user"]), "authenticated user");
 		if (!isRecord(payload)) throw new Error("GitHub returned malformed authenticated user evidence");
 		return normalizedActorLogin(payload.login, "authenticated user login");
 	}
@@ -409,7 +535,7 @@ export class GhCliDecisionTransport implements GitHubDecisionTransport {
 		const comments: GitHubComment[] = [];
 		for (let page = 1; page <= GH_MAX_COMMENT_PAGES; page += 1) {
 			const payload = parseJson(
-				await this.execute("gh", ["api", "--method", "GET", commentsEndpoint(binding, page)]),
+				await this.executeGh(["api", "--method", "GET", commentsEndpoint(binding, page)]),
 				"issue comments",
 			);
 			if (!Array.isArray(payload) || payload.length > GH_COMMENTS_PER_PAGE) {
@@ -427,7 +553,7 @@ export class GhCliDecisionTransport implements GitHubDecisionTransport {
 		if (Buffer.byteLength(body) > MAX_COMMENT_BODY_BYTES) {
 			throw new Error("human decision request comment is empty or oversized");
 		}
-		const payload = parseJson(await this.execute("gh", [
+		const payload = parseJson(await this.executeGh([
 			"api", "--method", "POST", commentsEndpoint(validated.binding), "-f", `body=${body}`,
 		]), "created issue comment");
 		return parseGitHubApiComment(payload);
