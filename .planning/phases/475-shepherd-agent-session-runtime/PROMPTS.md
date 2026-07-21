@@ -14,3 +14,15 @@
 - Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`
 - Verification result: complete — focused 22/22; full Shepherd 159/159; strict pinned Pi 0.80.6
   TypeScript; offline RPC smoke; diff and owned-scope checks all pass.
+
+## Exact-Head Correction Snapshot
+
+- Reviewed head: `4e41c2ec1175a109c10f125203dc54d381b982bd` on PR #486.
+- Role: issue #475 correction worker using `openai-codex/gpt-5.6-sol` with `high` reasoning.
+- Objective: retain ownership of sessions created after deadline/cleanup abandonment and close
+  quoted-assignment/Bearer redaction gaps across prompts, tool outputs, and handoffs.
+- Method: strict manual-GSD RED → GREEN → REFACTOR; production stays unchanged until test-only RED
+  is committed and pushed.
+- Execution decision: `local_critical_path`; overlapping owned files plus a saturated four-slot
+  runtime leave no safe independent delegation seam.
+- Verification status: pending correction evidence; prior terminal evidence is superseded.

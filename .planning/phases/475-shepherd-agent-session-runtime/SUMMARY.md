@@ -1,6 +1,6 @@
 # Summary — Issue #475
 
-Status: implementation and declared lane verification complete.
+Status: exact-head correction in progress; prior verification is superseded.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -22,3 +22,8 @@ pinned offline RPC smoke and diff/scope checks. The healthy repo-local GSD adapt
 `programming-loop`, so the phase completed under the recorded `manual_gsd_fallback`.
 
 No dependency, external state, credential, GitHub state, or parent artifact has been changed.
+
+PR #486 review at `4e41c2ec1175a109c10f125203dc54d381b982bd` identified two P1 corrections:
+late session creation can escape lifecycle ownership after the cleanup bound, and quoted
+JSON/YAML/Bearer secret values can escape redaction. A new strict TDD cycle is active; terminal
+results below must not be treated as current until the correction gates are rerun.

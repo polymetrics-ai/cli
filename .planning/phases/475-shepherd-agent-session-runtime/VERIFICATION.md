@@ -1,5 +1,10 @@
 # Verification — Issue #475
 
+> Superseded pending exact-head correction revalidation. PR #486 review at
+> `4e41c2ec1175a109c10f125203dc54d381b982bd` found late-session ownership and quoted-redaction
+> gaps. The prior results remain historical evidence only until Cycle 2 completes every declared
+> gate again.
+
 ## Declared Phase Equivalent
 
 The user/parent explicitly replaced generic repository-wide verification for this sub-worker with

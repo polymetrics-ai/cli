@@ -72,3 +72,37 @@
 | TypeScript | pinned TypeScript 5.9.3 `tsc --noEmit --strict ...` against explicit Pi 0.80.6 base/type roots | pass | owned tests/production and all Shepherd production files |
 | Offline smoke | explicit Pi 0.80.6 RPC `get_commands` with `PI_OFFLINE=1` | pass | `pm-shepherd` extension command registered |
 | Scope/diff | `git diff --check` plus immutable-base owned-path assertion | pass | only issue #475 files changed |
+
+## Cycle 2 — Exact-Head Review Corrections
+
+### PLAN
+
+- Status: captured against `4e41c2ec1175a109c10f125203dc54d381b982bd`.
+- Trigger: PR #486 independent review reported two P1 blockers: abandoned late session creation and
+  quoted secret forms escaping redaction.
+- Orchestration decision: `local_critical_path`; the correction overlaps the same two owned source
+  and test modules, and all available agent slots are already occupied.
+- Skills/policy retained: `gsd-programming-loop` via recorded manual fallback,
+  `javascript-testing-patterns`, `typescript-advanced-types`, `architecture-patterns`,
+  `github-issue-first-delivery`, required skills routing, issue-agent contract, universal runtime
+  loop, Pi adapter, and runtime/RLM/Pi integration guidance.
+
+### RED
+
+- Status: pending.
+- Lifecycle contract: creation resolves only after request deadline plus cleanup bound; the run
+  settles without waiting forever, the late session is never prompted, and abort/wait/dispose are
+  each eventually called exactly once.
+- Redaction contract: synthetic quoted JSON/YAML assignments and quoted Bearer values do not leak
+  through direct redaction, prompt serialization, tool output, or handoff summary/finding fields;
+  ordinary prose remains unchanged.
+
+### GREEN
+
+- Status: blocked on RED evidence.
+
+### REFACTOR / VERIFY
+
+- Status: blocked on GREEN.
+- Declared gates remain only issue-focused tests, the complete Shepherd TypeScript suite, strict
+  no-emit TypeScript against pinned Pi 0.80.6, offline Pi RPC, diff check, and changed-path scope.

@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "completed",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": true,
-  "currentCycle": "summary",
+  "verificationPassed": false,
+  "currentCycle": "correction_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -33,15 +33,20 @@
       "cycle": "summary",
       "decision": "local_critical_path",
       "reason": "Phase evidence and terminal artifacts were updated; PR creation and independent exact-head review remain parent delivery steps."
+    },
+    {
+      "cycle": "correction_plan",
+      "decision": "local_critical_path",
+      "reason": "Both exact-head findings overlap issue-owned runtime/tool-policy tests and source while all four runtime slots are occupied; keep one collision-free correction lane."
     }
   ],
   "gates": {
-    "focusedTests": "passed_22_of_22",
-    "fullShepherdTests": "passed_159_of_159",
-    "strictTypeScriptPi0806": "passed",
-    "offlineRpcSmoke": "passed",
-    "diffCheck": "passed",
-    "ownedScope": "passed",
+    "focusedTests": "pending_correction",
+    "fullShepherdTests": "pending_correction",
+    "strictTypeScriptPi0806": "pending_correction",
+    "offlineRpcSmoke": "pending_correction",
+    "diffCheck": "pending_correction",
+    "ownedScope": "pending_correction",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

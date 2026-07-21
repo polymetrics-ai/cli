@@ -127,3 +127,23 @@ boundary supersedes the generic repo verification block for this worker.
 - No human gate is expected for the owned local implementation.
 - Never merge this sub-PR or request Claude/Copilot review; independent exact-head Codex review is
   owned by the parent lane.
+
+## Exact-Head Correction Cycle — `4e41c2ec1175a109c10f125203dc54d381b982bd`
+
+Independent `codex_independent` review found two P1 boundary failures at the reviewed PR #486
+head. This correction remains inside the original issue-owned runtime, tool-policy, tests, and
+phase artifacts.
+
+1. A `createAgentSession` promise that settles after both the request deadline and bounded cleanup
+   interval can currently yield an unowned live session. Add a claimed/abandoned creation owner:
+   normal execution claims the session, while a bounded waiter may abandon it and return; an
+   attached continuation must then abort, wait for idle, and dispose every late session exactly
+   once without extending request completion indefinitely.
+2. Secret redaction currently misses quoted JSON/YAML-style assignments and quoted Bearer values.
+   Extend the bounded redaction grammar while preserving unrelated prose, then prove the boundary
+   through direct probes and through role prompts, tool results, and handoff summary/finding fields.
+
+The correction uses a fresh strict RED → GREEN → REFACTOR cycle. Production edits remain blocked
+until both regressions fail on the reviewed exact head. Execution remains `local_critical_path`:
+all four runtime slots are occupied and both findings overlap this worker's exclusive source/test
+scope, so nested delegation would add collision risk rather than an independent workstream.
