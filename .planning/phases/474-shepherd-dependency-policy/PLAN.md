@@ -51,7 +51,7 @@
 - RED: cycles, self/unknown dependencies, duplicate IDs, ambiguous/broad/path-traversing scopes,
   ancestor collisions, read-only coexistence, occupied running scopes, deterministic ordering, and
   a star-conflict case requiring maximum safe selection rather than first-fit selection.
-- GREEN: closed-world graph validator plus bounded branch-and-bound independent-set selection.
+- GREEN: closed-world graph validator plus component-bounded exact independent-set selection.
 - Refactor: canonical comparison keys and immutable copies.
 
 ### Slice 3: reconciler
@@ -64,7 +64,8 @@
 
 ## Verification checklist
 
-- [ ] Genuine focused RED test failures captured before production files exist.
+- [x] Genuine focused RED test failures captured before production files exist (3 file-level
+  `ERR_MODULE_NOT_FOUND` failures, as recorded in `TDD-LEDGER.md`).
 - [x] Focused three-file test command passes.
 - [x] Full `.pi/extensions/shepherd/*.test.ts` suite passes with exact test count.
 - [x] Strict `tsc --noEmit` passes against pinned Pi 0.80.6 types.
@@ -102,3 +103,51 @@ phase equivalent)” rule.
 This child issue is already isolated in its assigned worktree. Its three modules form one cohesive
 pure policy boundary, so each child lifecycle cycle runs as `local_critical_path`; no nested worker
 is necessary or authorized.
+
+## Exact-head correction loop
+
+Independent xhigh review of `28f165412de4c8165ba7717a1690c36b00af8857` found ten adversarial
+gaps. This loop reopens the phase under the same ownership and verification policy.
+
+### Correction RED contract
+
+1. Human waits are resumable decisions, authenticated approval/rejection are distinct, and
+   rejection reaches a separate terminal abort state.
+2. Ready selection partitions the conflict graph and rejects overlarge mutating conflict
+   components before exact search; a 64-item hostile graph must complete within a bounded test
+   deadline.
+3. Every canonical order uses explicit ECMAScript code-unit comparison, never locale collation.
+4. Scope collision keys conservatively fold Unicode normalization and case aliases used by
+   Darwin/Git worktrees.
+5. Missing isolation filters only selected mutators and still schedules safe selected readers.
+6. A running or succeeded item whose dependency is not succeeded is an incoherent snapshot.
+7. The complete reconciler DTO is runtime-validated with exact keys and safe integers; hostile
+   values including `bigint` return a typed fail-closed decision without throwing.
+8. `correctionRequired: true` prevents successful VERIFY/REVIEW advancement.
+9. Missing evidence returns `await_stage_evidence`; invalid snapshots are distinct; dependency and
+   collision blockers are chosen before spawn capability blockers; human wait is reserved for an
+   actual authenticated decision point.
+10. Planning checkboxes and ledger evidence remain mechanically consistent.
+
+### Correction implementation design
+
+- Add a resumable `await_human_decision` reconciliation result and authenticated HUMAN_DECISION
+  transitions to MERGE or terminal ABORTED.
+- Add exact JSON-like DTO shape validation at the reconciler boundary and exact work-item shape
+  validation in the graph boundary. Invalid input returns `invalid_snapshot` or the existing typed
+  graph blocker, never an exception.
+- Normalize scope collision keys with NFC plus locale-independent lowercase while retaining the
+  original canonical DTO text.
+- Partition ready mutators into connected collision components. Exact branch-and-bound is allowed
+  only within a small declared component bound; overlarge components fail closed in polynomial
+  preprocessing time. Read-only candidates remain unconstrained singleton lanes.
+- Evaluate dependency/collision selection before runtime/isolation spawn constraints, then apply
+  isolation only to the selected mutators and retain selected readers.
+
+### Correction checkpoints
+
+1. planning reopen;
+2. adversarial RED tests and captured failures;
+3. minimal GREEN fixes;
+4. refactor plus phase-equivalent verification and evidence;
+5. push exact head to existing PR #483 for a fresh independent review.

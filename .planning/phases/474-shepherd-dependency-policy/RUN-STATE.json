@@ -3,8 +3,8 @@
   "issue": 474,
   "phase": "474-shepherd-dependency-policy",
   "mode": "manual_gsd_fallback",
-  "status": "completed",
-  "verificationPassed": true,
+  "status": "correction_red_pending",
+  "verificationPassed": false,
   "verificationPolicy": "parent_declared_phase_equivalent_child_gate",
   "adapterEvidence": {
     "command": "scripts/gsd prompt programming-loop init --phase 474-shepherd-dependency-policy --dry-run",
@@ -45,6 +45,11 @@
       "cycle": "summary",
       "decision": "local_critical_path",
       "reason": "Artifacts record exact RED/GREEN/refactor evidence, supplemental Go results, unsupported Pi flag deviation, and make verify cancellation by superseding parent policy."
+    },
+    {
+      "cycle": "exact-head-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "Independent xhigh findings reopen the owned pure-policy slice; adversarial RED tests precede all production corrections."
     }
   ],
   "gates": {
@@ -59,6 +64,7 @@
     "goTest": "supplemental_passed_after_contention_timeout_retry",
     "goBuild": "supplemental_passed",
     "makeVerify": "cancelled_by_parent_policy_not_a_functional_failure",
-    "phaseEquivalentChildGate": "passed"
+    "phaseEquivalentChildGate": "reopened_for_exact_head_corrections",
+    "correctionRed": "pending"
   }
 }

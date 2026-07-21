@@ -61,3 +61,17 @@ An adversarial pass added four fail-closed expectations before editing productio
 Gap RED: 26 tests, 22 pass, 4 fail with the expected uncaught/incorrect decisions. Gap GREEN after
 the minimal validation and decision-order changes: 26/26 pass. Strict production TypeScript and
 `git diff --check` pass. The compact full Shepherd suite then passed 163/163.
+
+## Exact-head correction loop
+
+Status: RED tests pending. Production edits are prohibited until the new adversarial expectations
+fail for the reviewed `28f165412de4c8165ba7717a1690c36b00af8857` behavior.
+
+| Correction slice | Expected RED signal | Status |
+|---|---|---|
+| Authenticated resumable human decision and terminal abort | missing stage/result/guards | pending |
+| Bounded conflict-component scheduling | hostile 64-item case exceeds deadline or lacks typed rejection | pending |
+| Code-unit ordering and Darwin/Git aliases | locale/case/NFD expectations differ | pending |
+| Dependency/status coherence and exact DTO validation | incoherent/hostile values are accepted or throw | pending |
+| Reconciliation precedence and selected-only isolation | wrong blocker/result or safe readers suppressed | pending |
+| Correction-required and ordinary evidence handling | unsafe advancement or human-gate misclassification | pending |

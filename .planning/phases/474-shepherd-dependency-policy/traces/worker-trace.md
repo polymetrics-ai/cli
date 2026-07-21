@@ -56,6 +56,18 @@
 
 Further RED/GREEN/refactor/verification evidence will be appended after each genuine command.
 
+## Exact-head correction planning cycle
+
+- Reconfirmed the assigned branch is clean at independently reviewed head
+  `28f165412de4c8165ba7717a1690c36b00af8857` and PR #483 still targets the parent branch.
+- Re-ran adapter health; `scripts/gsd doctor` passed while the `programming-loop` command remains
+  unavailable, so the recorded manual-GSD fallback continues.
+- Mapped all ten findings to owned policy boundaries and reopened PLAN/TDD/RUN-STATE before any
+  production edit.
+- Selected a bounded exact scheduler: polynomial graph preprocessing, connected conflict
+  components, and a hard per-component exact-search limit.
+- Execution decision: `local_critical_path`; no nested worker is requested or authorized.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,
