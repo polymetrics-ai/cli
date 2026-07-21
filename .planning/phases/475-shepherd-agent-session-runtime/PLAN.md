@@ -471,6 +471,9 @@ The RED checkpoint will exercise independent assertion-level rows for:
    `JSON.stringify` or terminal-output materialization;
 7. one canonical normalized prefix set shared by tool construction, prompt authority, and handoff
    validation; and C0/C1 terminal controls rejected or neutralized in every handoff string field.
+8. bounded parallel mutator leases: two immutable, canonically disjoint issue/branch/workspace/write
+   authorities may run up to `maxConcurrency`, an overlapping authority is denied, and completing
+   one run releases only its own lease while another disjoint lease remains fenced.
 
 ### Structured redaction matrix
 
@@ -490,8 +493,9 @@ request and canonical authority once; acquire an explicit listener lease with a 
 target; represent failure as a discriminated/presence state; assimilate and await cleanup thenables;
 validate central hard limit constants; keep the structured redactor monotonic while decoding keys
 within a 64-character bound; estimate event size with bounded cycle-safe traversal before any
-serialization; reuse the canonical prefix set everywhere; and return only terminal-safe handoff
-text. No dependency or authority expansion is permitted.
+serialization; reuse the canonical prefix set everywhere; replace the singleton mutator flag with a
+bounded authority/scope lease map whose canonical collision predicate admits only disjoint isolated
+work; and return only terminal-safe handoff text. No dependency or authority expansion is permitted.
 
 Strict order is PLAN -> one test-only RED -> one architectural GREEN/refactor -> declared verify,
 with each checkpoint committed and pushed. RED must compile under strict pinned Pi 0.80.6 types,

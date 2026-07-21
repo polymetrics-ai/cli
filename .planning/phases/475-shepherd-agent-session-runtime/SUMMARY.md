@@ -147,3 +147,10 @@ offline RPC registers `pm-shepherd`. Diff, immutable-base, pushed-head equality,
 scope checks pass. Parent orchestration owns the fresh stable-head campaign and integration; this
 lane did not run Go/connectors, certification, `make verify`, runtime-backed services, live GitHub,
 review bots, or merge.
+
+Cycle 8 planning was amended before RED after the #479 consumer audit confirmed that the runtime's
+singleton mutator flag contradicts #471's bounded dispatch of all ready non-colliding isolated
+workers. The same test-only checkpoint will therefore prove two canonical disjoint authority/scope
+leases run concurrently up to the configured bound, overlapping authority is denied, and one
+cleanup cannot release another run's fence. GREEN will replace the singleton with a bounded lease
+map without changing scheduler or parent-owned files.

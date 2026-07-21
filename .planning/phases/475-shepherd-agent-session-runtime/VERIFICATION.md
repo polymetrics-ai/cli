@@ -10,6 +10,11 @@ suite, both strict TypeScript scopes against explicit Pi 0.80.6 package/type roo
 0.80.6 offline RPC registration, and diff/base/head/issue-owned-scope checks. No Cycle 7 result is
 being represented as Cycle 8 evidence.
 
+Before RED, local #471 contract evidence and the #479 consumer audit added one acceptance seam:
+bounded concurrent mutator leases for canonically disjoint isolated authorities, with overlap and
+capacity denial plus per-lease cleanup. This remains inside issue #475's runtime/test scope; no
+scheduler or parent artifact is changed.
+
 Cycle 7 terminal verification is complete at implementation head
 `5c638d7f21a3910f40e499dba5c82cb7646642ac`. The frozen candidate was
 `a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`, the immutable base remains

@@ -609,11 +609,12 @@
 
 ### Behavior RED contract
 
-- Exactly one test-only commit will cover all eleven deduplicated behavior families: listener lease
+- Exactly one test-only commit will cover all twelve deduplicated behavior families: listener lease
   attach/remove/parent/mutation, reasonless failures, awaited thenable cleanup, immutable normalized
-  request and mutator fence, all hard ceilings, comma/Auth-param redaction, multiline-flow YAML
-  continuation, escaped quoted keys, bounded cycle-safe event estimation, canonical normalized
-  prefixes, and terminal-safe handoff strings.
+  request and mutator fence, bounded disjoint mutator leases with collision-safe per-lease release,
+  all hard ceilings, comma/Auth-param redaction, multiline-flow YAML continuation, escaped quoted
+  keys, bounded cycle-safe event estimation, canonical normalized prefixes, and terminal-safe
+  handoff strings.
 - Every test must load and execute under strict pinned Pi 0.80.6 TypeScript. Only intended behavior
   assertions may fail; compile, module, fixture, and file-load failures are inadmissible.
 - Production source hashes must remain identical to frozen `f219b730` through the RED commit.
@@ -629,6 +630,7 @@
 - Normalize/freeze the request and authority once, capture explicit listener leases, use explicit
   failure-presence state, await cleanup thenables, validate central hard maxima, extend the monotonic
   structured redactor with bounded key decoding, add a bounded cycle-safe event estimator, share one
-  canonical prefix set, and enforce safe handoff text.
+  canonical prefix set, use a bounded canonical authority/scope lease map for mutator admission, and
+  enforce safe handoff text.
 - Preserve every prior 53 focused regression and add no dependency.
 - Terminal verification is pending the required RED and GREEN checkpoints.

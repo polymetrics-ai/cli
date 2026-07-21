@@ -189,14 +189,16 @@
 - Review inputs: `/tmp/475-REVIEW-SECURITY-CYCLE7.md` and the parent-provided final lifecycle
   disposition.
 - Role/route: correction, `openai-codex/gpt-5.6-sol` with `high` reasoning.
-- Objective: close the complete deduplicated request/lifecycle/resource/parser/event/handoff set
+- Objective: close the complete deduplicated request/lifecycle/resource/parser/event/handoff set,
+  including bounded parallel admission for canonically disjoint isolated mutator authorities,
   without widening authority or adding a dependency.
 - Method: manual-GSD PLAN -> one behavior-level test-only RED -> one architectural GREEN/refactor ->
   declared verification; production is frozen through the RED checkpoint.
 - Required architecture: immutable normalized request/authority snapshot, explicit listener lease,
   explicit failure-presence state, awaited cleanup thenables, central hard maxima, monotonic redactor
   with bounded decoded keys, bounded cycle-safe event estimator, canonical prefixes, safe handoff
-  text.
+  text, and a bounded authority/scope mutator lease map that denies collisions and releases only the
+  completed lease.
 - Execution decision: `read_only_spawned`; a read-only lifecycle sidecar supports the plan while the
   issue worker retains the isolated mutating critical path.
 - Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`.

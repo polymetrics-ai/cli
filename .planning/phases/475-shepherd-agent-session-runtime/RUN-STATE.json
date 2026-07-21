@@ -188,6 +188,11 @@
       "cycle": "correction_cycle_8_plan",
       "decision": "read_only_spawned",
       "reason": "A read-only lifecycle sidecar maps exact test and implementation seams while this isolated issue worker retains the single mutating critical path for the deduplicated Cycle 8 batch."
+    },
+    {
+      "cycle": "correction_cycle_8_plan_amendment",
+      "decision": "local_critical_path",
+      "reason": "The #479 consumer audit and local #471 contract confirm bounded parallel dispatch for disjoint isolated mutators; add a canonical authority/scope lease matrix before the one RED without editing scheduler-owned files."
     }
   ],
   "gates": {

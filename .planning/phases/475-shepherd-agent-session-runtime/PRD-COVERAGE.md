@@ -13,6 +13,7 @@ phase-equivalent coverage gate.
 | Literal `undefined` rejection/throw is not erased | cleanup and validation reasonless failures | pending RED |
 | Thenable dispose/unsubscribe is awaited and rejection quarantines | delayed and rejecting thenable hooks | pending RED |
 | Request, authority, workspace, binding, and signal normalize/freeze once | hostile getters, mutation, reload, mutator-fence, cwd/head/prompt assertions | pending RED |
+| Disjoint isolated mutators can use bounded concurrency without weakening collision fences | two active canonical authority leases, same-scope denial, capacity denial, per-lease release | pending RED |
 | Every configurable limit has a hard reviewed maximum | one-above-ceiling table including Node timer maximum | pending RED |
 | Comma-bearing line/Auth parameters redact completely | direct plus all shared-redactor consumers | pending RED |
 | Multiline-flow key-only/continued scalars redact | mapping and sequence cross-products | pending RED |
