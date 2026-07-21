@@ -1125,7 +1125,16 @@ export class GitAdapter {
 			}
 			head = await this.resolveBranchHead(actual, request.branch);
 			if (head !== request.expectedHead) throw new GitAdapterError("canonical issue head changed before push");
-			await this.#assertHistoryWithinScopes(actual, state.baseHead, head, state.allowedScopes);
+			const committedPaths = await this.#assertHistoryWithinScopes(actual, state.baseHead, head, state.allowedScopes);
+			const status = await this.status(actual);
+			const changedPaths = [...new Set([
+				...committedPaths,
+				...status.entries.flatMap((entry) => [entry.path, ...(entry.originalPath ? [entry.originalPath] : [])]),
+			])].sort();
+			const outside = changedPaths.filter((path) => !pathWithinScope(path, state.allowedScopes));
+			if (outside.length > 0) {
+				throw new GitAdapterError(`Git push contains paths outside immutable allowed scopes: ${outside.join(", ")}`);
+			}
 			await this.#assertLeaseOwnedForMutation(state);
 			await this.#runMutation(actual.cwd, [
 				"push", "--porcelain", "--", endpoints.push.value, `${head}:refs/heads/${request.branch}`,
