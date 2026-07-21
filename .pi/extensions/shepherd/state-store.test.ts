@@ -5,7 +5,25 @@ import { join } from "node:path";
 import test from "node:test";
 
 import type { ShepherdRunState } from "./domain.ts";
-import { FileStateStore, sanitizeSummary } from "./state-store.ts";
+import { FileStateStore, sanitizeSummary, type RunLease } from "./state-store.ts";
+
+const fixedNow = new Date("2026-07-21T09:30:00.000Z");
+
+function leaseRecord(overrides: Partial<Record<string, unknown>> = {}): Record<string, unknown> {
+	return {
+		schemaVersion: 1,
+		issue: 471,
+		runId: "run-old",
+		pid: 9001,
+		token: "old-owner-token",
+		createdAt: "2026-07-21T09:00:00.000Z",
+		...overrides,
+	};
+}
+
+async function writeLease(root: string, overrides: Partial<Record<string, unknown>> = {}): Promise<void> {
+	await writeFile(join(root, "active.lock"), `${JSON.stringify(leaseRecord(overrides))}\n`, { mode: 0o600 });
+}
 
 function runState(): ShepherdRunState {
 	return {
@@ -169,4 +187,125 @@ test("rejects control characters in structural lane fields", async (t) => {
 		}],
 	};
 	await assert.rejects(store.save(state as ShepherdRunState), /invalid lane role/);
+});
+
+test("exclusive repository lease permits only one concurrent acquisition", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-store-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const first = new FileStateStore(root, {
+		processId: 1001,
+		now: () => fixedNow,
+		isProcessAlive: () => true,
+		tokenFactory: () => "first-owner-token",
+	});
+	const second = new FileStateStore(root, {
+		processId: 1002,
+		now: () => fixedNow,
+		isProcessAlive: () => true,
+		tokenFactory: () => "second-owner-token",
+	});
+
+	const results = await Promise.allSettled([
+		first.acquireLease({ issue: 471, runId: "run-first", mode: "start" }),
+		second.acquireLease({ issue: 472, runId: "run-second", mode: "start" }),
+	]);
+	const fulfilled = results.filter((result): result is PromiseFulfilledResult<RunLease> => result.status === "fulfilled");
+	assert.equal(fulfilled.length, 1);
+	assert.equal(results.filter((result) => result.status === "rejected").length, 1);
+
+	const lockPath = join(root, "active.lock");
+	const persisted = JSON.parse(await readFile(lockPath, "utf8"));
+	assert.deepEqual(Object.keys(persisted).sort(), [
+		"createdAt",
+		"issue",
+		"pid",
+		"runId",
+		"schemaVersion",
+		"token",
+	].sort());
+	assert.equal((await stat(lockPath)).mode & 0o777, 0o600);
+	await fulfilled[0].value.release();
+});
+
+test("start rejects a dead-owner stale lease with explicit resume guidance", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-store-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	await writeLease(root);
+	const store = new FileStateStore(root, {
+		processId: 1001,
+		now: () => fixedNow,
+		isProcessAlive: () => false,
+		tokenFactory: () => "new-owner-token",
+	});
+
+	await assert.rejects(
+		store.acquireLease({ issue: 471, runId: "run-new", mode: "start" }),
+		/stale.*resume/i,
+	);
+	assert.equal(JSON.parse(await readFile(join(root, "active.lock"), "utf8")).token, "old-owner-token");
+});
+
+test("resume explicitly takes over a dead-owner stale lease", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-store-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	await writeLease(root);
+	const store = new FileStateStore(root, {
+		processId: 1001,
+		now: () => fixedNow,
+		isProcessAlive: (pid) => pid === 1001,
+		tokenFactory: () => "new-owner-token",
+	});
+
+	const lease = await store.acquireLease({ issue: 471, runId: "run-new", mode: "resume" });
+	await lease.assertOwned();
+	assert.deepEqual(JSON.parse(await readFile(join(root, "active.lock"), "utf8")), {
+		schemaVersion: 1,
+		issue: 471,
+		runId: "run-new",
+		pid: 1001,
+		token: "new-owner-token",
+		createdAt: fixedNow.toISOString(),
+	});
+	await lease.release();
+	await assert.rejects(stat(join(root, "active.lock")), { code: "ENOENT" });
+});
+
+test("resume rejects a lease whose owner process is still alive", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-store-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	await writeLease(root);
+	const store = new FileStateStore(root, {
+		processId: 1001,
+		now: () => fixedNow,
+		isProcessAlive: (pid) => pid === 9001,
+		tokenFactory: () => "new-owner-token",
+	});
+
+	await assert.rejects(
+		store.acquireLease({ issue: 471, runId: "run-new", mode: "resume" }),
+		/live process 9001/i,
+	);
+	assert.equal(JSON.parse(await readFile(join(root, "active.lock"), "utf8")).token, "old-owner-token");
+});
+
+test("lease ownership is fenced and release never deletes another owner's lock", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-store-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const store = new FileStateStore(root, {
+		processId: 1001,
+		now: () => fixedNow,
+		isProcessAlive: () => true,
+		tokenFactory: () => "first-owner-token",
+	});
+	const lease = await store.acquireLease({ issue: 471, runId: "run-first", mode: "start" });
+	await writeLease(root, {
+		runId: "run-replacement",
+		pid: 1002,
+		token: "replacement-owner-token",
+		createdAt: "2026-07-21T09:31:00.000Z",
+	});
+
+	await assert.rejects(lease.assertOwned(), /ownership.*lost|token.*mismatch/i);
+	await assert.rejects(lease.release(), /ownership.*lost|token.*mismatch/i);
+	assert.equal(JSON.parse(await readFile(join(root, "active.lock"), "utf8")).token, "replacement-owner-token");
 });
