@@ -100,4 +100,8 @@
 - RED result: focused command exits 1 with 29 passed / 7 expected failures across timer ownership,
   prompt, handoff, direct nested-flow, direct leading-apostrophe, brace/comment controls, and typed
   tool output. Focused strict TypeScript passes and production remains unchanged.
-- Verification status: RED captured; GREEN/refactor and declared Shepherd-only gates pending.
+- GREEN result: focused command exits 0 with 36 passed / 0 failed and focused strict Pi 0.80.6
+  TypeScript passes. Reservation now creates a scope only after admission; the transformer is one
+  explicit monotonic line/quote/comment/flow state machine with balanced nested-value consumption.
+- Verification status: focused GREEN captured; complete Shepherd and remaining declared gates
+  pending.

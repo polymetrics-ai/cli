@@ -69,3 +69,8 @@ The Cycle 5 focused RED now exits 1 with 29 passes and 7 expected failures, whil
 TypeScript passes and production remains unchanged. The failures independently expose timer
 ownership plus prompt, handoff, direct nested-flow, direct apostrophe, brace/comment control, and
 typed-tool redaction boundaries.
+
+Cycle 5 focused GREEN now passes 36/36 with focused strict TypeScript. Admission checks precede
+scope construction, and a typed monotonic lexical state machine now owns newline quote reset,
+comment/prose discrimination, flow nesting, and balanced nested-value consumption. Complete
+Shepherd, all-production strict TypeScript, offline RPC, and diff/scope gates remain pending.

@@ -264,3 +264,9 @@ failing tests isolate prompt serialization, handoff redaction, the referenced du
 nested-flow direct redaction, leading-apostrophe direct redaction, byte-identical brace/comment
 controls, and typed tool output. Focused strict TypeScript passes, and production remains unchanged
 at the reviewed head.
+
+Cycle 5 GREEN result: admission checks now precede `CancellationScope` construction, so every
+duplicate/capacity/mutator rejection creates no deadline timer. The assignment transformer is one
+typed lexical state machine with a monotonic cursor, explicit per-line quote reset, comment skips,
+validated flow openers, a delimiter stack, and balanced nested-value consumption. The focused
+suite passes 36/36 and focused strict TypeScript passes; complete verification remains pending.

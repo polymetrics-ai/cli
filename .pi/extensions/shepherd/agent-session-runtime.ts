@@ -406,13 +406,14 @@ export class ShepherdAgentSessionRuntime {
 		}
 
 		const effectiveDeadline = computeDeadline(request.timeoutMs, request.deadlineAt);
-		const scope = new CancellationScope(
+		const active = this.#reserve(
+			request,
 			effectiveDeadline,
 			request.deadlineAt !== undefined && effectiveDeadline === request.deadlineAt
 				? "AgentSession deadline expired"
 				: `AgentSession timed out after ${request.timeoutMs}ms`,
 		);
-		const active = this.#reserve(request, scope);
+		const scope = active.scope;
 		const externalAbort = () => scope.cancel(new AgentSessionRuntimeError("AgentSession run was cancelled by its parent signal"));
 		request.signal?.addEventListener("abort", externalAbort, { once: true });
 		if (request.signal?.aborted) externalAbort();
@@ -603,7 +604,7 @@ export class ShepherdAgentSessionRuntime {
 		return result;
 	}
 
-	#reserve(request: RoleRunRequest, scope: CancellationScope): ActiveRun {
+	#reserve(request: RoleRunRequest, deadlineAt: number, timeoutDescription: string): ActiveRun {
 		const key = `${request.binding.runId}:${request.binding.generation}:${request.binding.laneId}`;
 		if (this.#active.has(key)) throw new AgentSessionRuntimeError("run/lane/generation is already active");
 		if (this.#active.size >= this.#options.maxConcurrency) {
@@ -612,6 +613,7 @@ export class ShepherdAgentSessionRuntime {
 		if (!request.authority.readOnly && this.#activeMutator) {
 			throw new AgentSessionRuntimeError("only one mutating AgentSession may run at a time");
 		}
+		const scope = new CancellationScope(deadlineAt, timeoutDescription);
 		const completion = deferred();
 		const active: ActiveRun = {
 			key,

@@ -343,6 +343,21 @@ export function redactSensitiveText(value: string): string {
 
 type SensitiveAssignmentKind = "authorization" | "secret";
 type SensitiveAssignmentContext = "flow" | "line";
+type LexicalQuote = "\"" | "'";
+type FlowCloser = "}" | "]";
+
+type LexicalMode =
+	| { kind: "plain" }
+	| { kind: "quoted"; quote: LexicalQuote };
+
+interface StructuredScannerState {
+	index: number;
+	lineStart: number;
+	lineEnd: number;
+	structuredKeyStart: number | undefined;
+	mode: LexicalMode;
+	flowClosers: FlowCloser[];
+}
 
 interface SensitiveAssignment {
 	kind: SensitiveAssignmentKind;
@@ -377,65 +392,61 @@ const secretAssignmentKeys = new Set([
 
 function redactStructuredAssignments(value: string): string {
 	const ranges: RedactionRange[] = [];
-	let index = 0;
-	let lineStart = 0;
-	let flowDepth = 0;
-	let scannedQuote: '"' | "'" | undefined;
-	let structuredKeyStart = findStructuredKeyStart(value, lineStart);
-	while (index < value.length) {
-		const character = value[index];
-		if (scannedQuote) {
-			if (character === "\n" || character === "\r") {
-				index = afterLineEnding(value, index);
-				lineStart = index;
-				structuredKeyStart = findStructuredKeyStart(value, lineStart);
-				continue;
-			}
-			if (scannedQuote === '"' && character === "\\") {
-				index = Math.min(value.length, index + 2);
-				continue;
-			}
-			if (scannedQuote === "'" && character === "'" && value[index + 1] === "'") {
-				index += 2;
-				continue;
-			}
-			if (character === scannedQuote) scannedQuote = undefined;
-			index += 1;
+	// One monotonic cursor owns line, quote, comment, and balanced flow transitions. Value parsers
+	// consume their complete span before the cursor resumes, so skipped nested delimiters cannot
+	// corrupt the outer flow state and no global regex repeatedly rescans the input.
+	const state: StructuredScannerState = {
+		index: 0,
+		lineStart: 0,
+		lineEnd: findLineEnd(value, 0),
+		structuredKeyStart: findStructuredKeyStart(value, 0),
+		mode: { kind: "plain" },
+		flowClosers: [],
+	};
+	while (state.index < value.length) {
+		if (state.index >= state.lineEnd) {
+			advanceScannerLine(value, state);
 			continue;
 		}
-		if (character === "\n" || character === "\r") {
-			index = afterLineEnding(value, index);
-			lineStart = index;
-			structuredKeyStart = findStructuredKeyStart(value, lineStart);
+
+		const character = value[state.index];
+		if (state.mode.kind === "quoted") {
+			if (state.mode.quote === '"' && character === "\\") {
+				state.index = Math.min(state.lineEnd, state.index + 2);
+				continue;
+			}
+			if (state.mode.quote === "'" && character === "'" && value[state.index + 1] === "'") {
+				state.index = Math.min(state.lineEnd, state.index + 2);
+				continue;
+			}
+			if (character === state.mode.quote) state.mode = { kind: "plain" };
+			state.index += 1;
 			continue;
 		}
-		const context: SensitiveAssignmentContext = flowDepth > 0 ? "flow" : "line";
-		const allowUnquoted = index === structuredKeyStart ||
-			(context === "flow" && isFlowMappingKeyStart(value, index, lineStart));
-		const assignment = sensitiveAssignmentAt(value, index, lineStart, allowUnquoted, context);
+
+		const context: SensitiveAssignmentContext = state.flowClosers.length > 0 ? "flow" : "line";
+		const allowKey = state.index === state.structuredKeyStart ||
+			(context === "flow" && isFlowMappingKeyStart(value, state.index, state));
+		const assignment = sensitiveAssignmentAt(value, state.index, state.lineStart, allowKey, context);
 		if (!assignment) {
-			if ((character === '"' || character === "'") && isQuotedSegmentStart(value, index, lineStart)) {
-				scannedQuote = character;
+			if (isCommentStart(value, state.index, state.lineStart)) {
+				state.index = state.lineEnd;
+				continue;
 			}
-			else if (character === "{") flowDepth += 1;
-			else if (character === "}" && flowDepth > 0) flowDepth -= 1;
-			index += 1;
+			if ((character === '"' || character === "'") && isQuotedSegmentStart(value, state.index, state.lineStart)) {
+				state.mode = { kind: "quoted", quote: character };
+				state.index += 1;
+				continue;
+			}
+			const closer = flowCloserForOpener(value, state.index, state);
+			if (closer) state.flowClosers.push(closer);
+			else if (character === state.flowClosers[state.flowClosers.length - 1]) state.flowClosers.pop();
+			state.index += 1;
 			continue;
 		}
 		const decision = redactionForAssignment(value, assignment);
 		if (decision.range) ranges.push(decision.range);
-		const resumeAt = Math.max(index + 1, decision.resumeAt);
-		const previousLineStart = lineStart;
-		lineStart = advanceLineStart(value, index, resumeAt, lineStart);
-		index = resumeAt;
-		if (lineStart !== previousLineStart) {
-			const nextStructuredKeyStart = findStructuredKeyStart(value, lineStart);
-			structuredKeyStart = nextStructuredKeyStart !== undefined && nextStructuredKeyStart >= index
-				? nextStructuredKeyStart
-				: undefined;
-		} else if (structuredKeyStart !== undefined && structuredKeyStart < index) {
-			structuredKeyStart = undefined;
-		}
+		advanceScannerTo(value, state, Math.max(state.index + 1, decision.resumeAt));
 	}
 	if (ranges.length === 0) return value;
 	let output = "";
@@ -451,9 +462,10 @@ function sensitiveAssignmentAt(
 	value: string,
 	index: number,
 	lineStart: number,
-	allowUnquoted: boolean,
+	allowKey: boolean,
 	context: SensitiveAssignmentContext,
 ): SensitiveAssignment | undefined {
+	if (!allowKey) return undefined;
 	let cursor = index;
 	let key: string;
 	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] : undefined;
@@ -465,7 +477,6 @@ function sensitiveAssignmentAt(
 		key = value.slice(keyStart, cursor);
 		cursor += 1;
 	} else {
-		if (!allowUnquoted) return undefined;
 		const keyStart = cursor;
 		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) cursor += 1;
 		if (cursor === keyStart) return undefined;
@@ -558,7 +569,7 @@ function unquotedValueRedaction(
 	assignment: SensitiveAssignment,
 	lineEnd: number,
 ): RedactionDecision {
-	let scalarEnd = findUnquotedTerminator(value, assignment.valueStart, lineEnd);
+	let scalarEnd = findUnquotedValueEnd(value, assignment.valueStart, lineEnd);
 	scalarEnd = trimHorizontalEnd(value, assignment.valueStart, scalarEnd);
 	const resumeAt = assignment.context === "flow" ? scalarEnd : lineEnd;
 	const unredactedResumeAt = assignment.context === "flow" ? scalarEnd : assignment.valueStart;
@@ -639,14 +650,102 @@ function findStructuredKeyStart(value: string, lineStart: number): number | unde
 		cursor += 6;
 		while (isHorizontalWhitespace(value[cursor])) cursor += 1;
 	}
-	return isAssignmentKeyCharacter(value[cursor]) ? cursor : undefined;
+	return isPotentialAssignmentKeyStart(value[cursor]) ? cursor : undefined;
 }
 
-function isFlowMappingKeyStart(value: string, index: number, lineStart: number): boolean {
-	if (!isAssignmentKeyCharacter(value[index])) return false;
+function advanceScannerLine(value: string, state: StructuredScannerState): void {
+	const nextLineStart = afterLineEnding(value, state.lineEnd);
+	state.mode = { kind: "plain" };
+	if (nextLineStart <= state.lineEnd) {
+		state.index = value.length;
+		state.structuredKeyStart = undefined;
+		return;
+	}
+	state.index = nextLineStart;
+	state.lineStart = nextLineStart;
+	state.lineEnd = findLineEnd(value, nextLineStart);
+	state.structuredKeyStart = findStructuredKeyStart(value, nextLineStart);
+}
+
+function advanceScannerTo(value: string, state: StructuredScannerState, resumeAt: number): void {
+	const target = Math.min(value.length, resumeAt);
+	while (state.lineEnd < target) {
+		const nextLineStart = afterLineEnding(value, state.lineEnd);
+		if (nextLineStart <= state.lineEnd) break;
+		state.lineStart = nextLineStart;
+		state.lineEnd = findLineEnd(value, nextLineStart);
+	}
+	state.index = target;
+	state.mode = { kind: "plain" };
+	const structuredKeyStart = findStructuredKeyStart(value, state.lineStart);
+	state.structuredKeyStart = structuredKeyStart !== undefined && structuredKeyStart >= target
+		? structuredKeyStart
+		: undefined;
+}
+
+function isFlowMappingKeyStart(value: string, index: number, state: StructuredScannerState): boolean {
+	if (state.flowClosers[state.flowClosers.length - 1] !== "}" || !isPotentialAssignmentKeyStart(value[index])) {
+		return false;
+	}
 	let cursor = index - 1;
-	while (cursor >= lineStart && isHorizontalWhitespace(value[cursor])) cursor -= 1;
+	while (cursor >= state.lineStart && isHorizontalWhitespace(value[cursor])) cursor -= 1;
 	return value[cursor] === "{" || value[cursor] === ",";
+}
+
+function flowCloserForOpener(
+	value: string,
+	index: number,
+	state: StructuredScannerState,
+): FlowCloser | undefined {
+	if (value[index] === "{") {
+		return state.flowClosers.length > 0 || looksLikeFlowMapping(value, index, state.lineEnd)
+			? "}"
+			: undefined;
+	}
+	if (value[index] === "[") {
+		return state.flowClosers.length > 0 || looksLikeFlowSequence(value, index, state.lineEnd)
+			? "]"
+			: undefined;
+	}
+	return undefined;
+}
+
+function looksLikeFlowMapping(value: string, index: number, lineEnd: number): boolean {
+	let cursor = index + 1;
+	while (cursor < lineEnd && isHorizontalWhitespace(value[cursor])) cursor += 1;
+	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] as LexicalQuote : undefined;
+	if (quote) {
+		cursor += 1;
+		let keyLength = 0;
+		while (cursor < lineEnd && keyLength <= 64) {
+			if (quote === '"' && value[cursor] === "\\") {
+				cursor += 2;
+				keyLength += 1;
+				continue;
+			}
+			if (value[cursor] === quote) break;
+			cursor += 1;
+			keyLength += 1;
+		}
+		if (keyLength === 0 || keyLength > 64 || value[cursor] !== quote) return false;
+		cursor += 1;
+	} else {
+		const keyStart = cursor;
+		while (cursor < lineEnd && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) cursor += 1;
+		if (cursor === keyStart || cursor - keyStart > 64) return false;
+	}
+	while (cursor < lineEnd && isHorizontalWhitespace(value[cursor])) cursor += 1;
+	return value[cursor] === ":";
+}
+
+function looksLikeFlowSequence(value: string, index: number, lineEnd: number): boolean {
+	let cursor = index + 1;
+	while (cursor < lineEnd && isHorizontalWhitespace(value[cursor])) cursor += 1;
+	return value[cursor] === "{" || value[cursor] === "[";
+}
+
+function isCommentStart(value: string, index: number, lineStart: number): boolean {
+	return value[index] === "#" && (index === lineStart || isHorizontalWhitespace(value[index - 1]));
 }
 
 function isQuotedSegmentStart(value: string, index: number, lineStart: number): boolean {
@@ -658,7 +757,14 @@ function isQuotedSegmentStart(value: string, index: number, lineStart: number): 
 }
 
 function isAssignmentKeyCharacter(character: string | undefined): boolean {
-	return character !== undefined && /[A-Za-z0-9_-]/.test(character);
+	if (character === undefined) return false;
+	const code = character.charCodeAt(0);
+	return (code >= 48 && code <= 57) || (code >= 65 && code <= 90) ||
+		(code >= 97 && code <= 122) || character === "_" || character === "-";
+}
+
+function isPotentialAssignmentKeyStart(character: string | undefined): boolean {
+	return isAssignmentKeyCharacter(character) || character === '"' || character === "'";
 }
 
 function isHorizontalWhitespace(character: string | undefined): boolean {
@@ -718,14 +824,43 @@ function isYamlBlockHeader(value: string): boolean {
 	return /^[|>](?:(?:[1-9][+-]?)|(?:[+-][1-9]?))?[ \t]*(?:#.*)?$/.test(value);
 }
 
-function findUnquotedTerminator(value: string, start: number, lineEnd: number): number {
+function findUnquotedValueEnd(value: string, start: number, lineEnd: number): number {
+	const nestedClosers: FlowCloser[] = [];
+	let quote: LexicalQuote | undefined;
 	for (let index = start; index < lineEnd; index += 1) {
-		if (value[index] === "," || value[index] === ";" || value[index] === "]" || value[index] === "}") return index;
-		if (value[index] === "#" && index > start && isHorizontalWhitespace(value[index - 1])) {
-			let commentStart = index - 1;
-			while (commentStart > start && isHorizontalWhitespace(value[commentStart - 1])) commentStart -= 1;
-			return commentStart;
+		const character = value[index];
+		if (quote) {
+			if (quote === '"' && character === "\\") {
+				index += 1;
+				continue;
+			}
+			if (quote === "'" && character === "'" && value[index + 1] === "'") {
+				index += 1;
+				continue;
+			}
+			if (character === quote) quote = undefined;
+			continue;
 		}
+		if (isCommentStart(value, index, start)) return index;
+		if ((character === '"' || character === "'") && isQuotedSegmentStart(value, index, start)) {
+			quote = character;
+			continue;
+		}
+		if (character === "{") {
+			nestedClosers.push("}");
+			continue;
+		}
+		if (character === "[") {
+			nestedClosers.push("]");
+			continue;
+		}
+		if (character === "}" || character === "]") {
+			if (nestedClosers.length === 0) return index;
+			if (nestedClosers[nestedClosers.length - 1] !== character) return index;
+			nestedClosers.pop();
+			continue;
+		}
+		if (nestedClosers.length === 0 && (character === "," || character === ";")) return index;
 	}
 	return lineEnd;
 }
@@ -737,13 +872,6 @@ function trimHorizontalEnd(value: string, start: number, end: number): number {
 
 function isPublicScalar(value: string): boolean {
 	return /^(?:true|false|null|~|[-+]?\d[\d._-]*)$/i.test(value);
-}
-
-function advanceLineStart(value: string, start: number, end: number, lineStart: number): number {
-	for (let index = start; index < end; index += 1) {
-		if (value[index] === "\n" || value[index] === "\r") lineStart = index + 1;
-	}
-	return lineStart;
 }
 
 function validateCapabilityName(name: string): void {

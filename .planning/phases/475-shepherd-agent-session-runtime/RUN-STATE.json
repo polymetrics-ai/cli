@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_5_red",
+  "currentCycle": "correction_cycle_5_green",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -118,12 +118,17 @@
       "cycle": "correction_cycle_5_red",
       "decision": "local_critical_path",
       "reason": "Test-only regressions produced seven expected failures with production unchanged: referenced duplicate timer plus prompt, handoff, direct, control, and typed-tool lexical boundaries; proceed to the architectural minimum fixes."
+    },
+    {
+      "cycle": "correction_cycle_5_green",
+      "decision": "local_critical_path",
+      "reason": "Reserve-before-scope admission and the explicit monotonic line/flow lexical state machine make all 36 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to refactor and declared gates."
     }
   ],
   "gates": {
-    "focusedTests": "expected_red_29_passed_7_failed",
+    "focusedTests": "green_36_passed_0_failed",
     "fullShepherdTests": "pending_cycle_5",
-    "strictTypeScriptPi0806": "red_test_harness_focused_pass_full_pending_cycle_5",
+    "strictTypeScriptPi0806": "focused_pass_full_production_pending_cycle_5",
     "offlineRpcSmoke": "pending_cycle_5",
     "diffCheck": "pending_cycle_5",
     "ownedScope": "pending_cycle_5",

@@ -199,7 +199,17 @@
 
 ### GREEN / REFACTOR / VERIFY
 
-- Status: blocked on committing and pushing this captured RED evidence.
+- GREEN status: captured after pushed test-only RED commit `333c7ad6`.
+- Minimal lifecycle implementation: `#reserve()` performs duplicate, capacity, and mutator
+  admission checks before constructing the `CancellationScope`; rejected admission therefore owns
+  no deadline timer to clear.
+- Minimal redaction implementation: replaced the accumulated depth/quote traversal with one typed
+  lexical state machine. A monotonic cursor owns line boundaries, per-line quote state, comment
+  skips, validated flow openers, and the outer delimiter stack; unquoted value consumption uses its
+  own balanced nested delimiter stack and returns at the true outer sibling boundary.
+- Focused command result: exit 0, 36 passed / 0 failed.
+- Focused strict TypeScript result: exit 0 against explicit Pi 0.80.6 package/type roots.
+- REFACTOR/VERIFY status: pending the complete declared gate set.
 - Declared gates: focused issue tests, complete Shepherd suite, pinned Pi 0.80.6 strict TypeScript,
   pinned offline RPC, diff check, immutable base, and issue-owned paths only.
 - Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot
