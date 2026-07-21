@@ -5,24 +5,14 @@ import test from "node:test";
 
 import { GitAdapter, canonicalIssueBranch } from "./git-adapter.ts";
 import { createLocalGitFixture, git, write } from "./issue-476-git-fixture.ts";
-import { WorkspaceAdapter, type WorkspaceClaimRequest } from "./workspace-adapter.ts";
+import {
+	WorkspaceAdapter,
+	type WorkspaceAdapterOptions,
+	type WorkspaceClaimRequest,
+} from "./workspace-adapter.ts";
 
-interface WorkspaceLeaseCapability {
-	assertOwned(): Promise<void>;
-	release(): Promise<void>;
-}
-
-function withLease(workspace: object): WorkspaceLeaseCapability {
-	return workspace as WorkspaceLeaseCapability;
-}
-
-async function releaseIfPresent(workspace: object): Promise<void> {
-	const candidate = workspace as Partial<WorkspaceLeaseCapability>;
-	if (typeof candidate.release === "function") await candidate.release();
-}
-
-function adapterWithLeaseOptions(leaseOptions: Record<string, unknown>): WorkspaceAdapter {
-	return Reflect.construct(WorkspaceAdapter, [new GitAdapter(), { leaseOptions }]) as WorkspaceAdapter;
+function adapterWithLeaseOptions(leaseOptions: NonNullable<WorkspaceAdapterOptions["leaseOptions"]>): WorkspaceAdapter {
+	return new WorkspaceAdapter(new GitAdapter(), { leaseOptions });
 }
 
 async function requestFor(
@@ -59,6 +49,7 @@ test("creates one canonical isolated issue worktree from the exact parent base",
 	assert.equal(basename(workspace.cwd), "issue-476-shepherd-worktree-git-adapter");
 	assert.notEqual(workspace.cwd, fixture.coordinator);
 	assert.equal((await git(workspace.cwd, "branch", "--show-current")).trim(), workspace.branch);
+	await workspace.release();
 });
 
 test("reconciles an exact crash retry without creating a duplicate branch or worktree", async (t) => {
@@ -67,14 +58,14 @@ test("reconciles an exact crash retry without creating a duplicate branch or wor
 	const adapter = new WorkspaceAdapter(new GitAdapter());
 	const request = await requestFor(fixture);
 	const first = await adapter.claim(request);
-	await releaseIfPresent(first);
+	await first.release();
 	const second = await new WorkspaceAdapter(new GitAdapter()).claim(request);
-	t.after(() => releaseIfPresent(second).catch(() => undefined));
 	assert.equal(second.reused, true);
 	assert.equal(second.cwd, first.cwd);
 	assert.equal(second.worktreeIdentity, first.worktreeIdentity);
 	const inventory = await new GitAdapter().listWorktrees(request.coordinator);
 	assert.equal(inventory.filter((entry) => entry.branch === first.branch).length, 1);
+	await second.release();
 });
 
 test("fails closed for a second owner and preserves the first owner's workspace", async (t) => {
@@ -85,6 +76,7 @@ test("fails closed for a second owner and preserves the first owner's workspace"
 	const first = await adapter.claim(request);
 	await assert.rejects(adapter.claim({ ...request, ownershipId: "different-owner" }), /already owned/);
 	assert.equal((await git(first.cwd, "branch", "--show-current")).trim(), first.branch);
+	await first.release();
 });
 
 test("two concurrent distinct owners cannot become active mutators", async (t) => {
@@ -97,7 +89,7 @@ test("two concurrent distinct owners cannot become active mutators", async (t) =
 	]);
 	assert.equal(results.filter((result) => result.status === "fulfilled").length, 1);
 	assert.equal(results.filter((result) => result.status === "rejected").length, 1);
-	for (const result of results) if (result.status === "fulfilled") await releaseIfPresent(result.value);
+	for (const result of results) if (result.status === "fulfilled") await result.value.release();
 	const inventory = await new GitAdapter().listWorktrees(request.coordinator);
 	assert.equal(inventory.filter((entry) => entry.branch === canonicalIssueBranch(476, request.slug)).length, 1);
 });
@@ -114,14 +106,14 @@ test("same-owner overlapping retries receive one writable lease and release perm
 	assert.equal(fulfilled.length, 1);
 	assert.equal(results.filter((result) => result.status === "rejected").length, 1);
 	const first = fulfilled[0].value;
-	await withLease(first).assertOwned();
-	await withLease(first).release();
-	await withLease(first).release();
-	await assert.rejects(withLease(first).assertOwned(), /released|ownership.*lost/i);
+	await first.assertOwned();
+	await first.release();
+	await first.release();
+	await assert.rejects(first.assertOwned(), /released|ownership.*lost/i);
 	const retry = await new WorkspaceAdapter(new GitAdapter()).claim(request);
-	t.after(() => releaseIfPresent(retry).catch(() => undefined));
 	assert.equal(retry.reused, true);
 	assert.equal(retry.worktreeIdentity, first.worktreeIdentity);
+	await retry.release();
 });
 
 test("resume recovers an exact stale same-request lease without reviving the fenced owner", async (t) => {
@@ -135,18 +127,25 @@ test("resume recovers an exact stale same-request lease without reviving the fen
 		tokenFactory: () => "workspace-crashed-owner",
 	});
 	const first = await crashed.claim(request);
-	const recovering = adapterWithLeaseOptions({
+	const startOnly = adapterWithLeaseOptions({
 		processId: 10_002,
 		processIdentity: "process-10002-start-1",
 		isProcessAlive: (pid: number) => pid === 10_002,
+		tokenFactory: () => "workspace-start-only-owner",
+	});
+	await assert.rejects(startOnly.claim(request), /stale.*resume/i);
+	const recovering = adapterWithLeaseOptions({
+		processId: 10_003,
+		processIdentity: "process-10003-start-1",
+		isProcessAlive: (pid: number) => pid === 10_003,
 		tokenFactory: () => "workspace-recovered-owner",
 	});
-	const recovered = await recovering.claim({ ...request, leaseMode: "resume" } as WorkspaceClaimRequest);
-	t.after(() => releaseIfPresent(recovered).catch(() => undefined));
-	await withLease(recovered).assertOwned();
-	await assert.rejects(withLease(first).assertOwned(), /ownership.*lost|token mismatch/i);
+	const recovered = await recovering.claim({ ...request, leaseMode: "resume" });
+	await recovered.assertOwned();
+	await assert.rejects(first.assertOwned(), /ownership.*lost|token mismatch/i);
 	assert.equal(recovered.reused, true);
 	assert.equal(recovered.worktreeIdentity, first.worktreeIdentity);
+	await recovered.release();
 });
 
 test("rejects branch aliases and path collisions while preserving unique state", async (t) => {
@@ -192,9 +191,8 @@ test("reports and preserves dirty unique state on retry and emits exact handoff 
 	const first = await adapter.claim(request);
 	await write(first.cwd, "parent.txt", "modified but preserved\n");
 	await write(first.cwd, "unique.txt", "unique and preserved\n");
-	await releaseIfPresent(first);
+	await first.release();
 	const retried = await adapter.claim(request);
-	t.after(() => releaseIfPresent(retried).catch(() => undefined));
 	assert.equal(retried.reused, true);
 	assert.equal(retried.status.clean, false);
 	assert.deepEqual(retried.changedScope, ["parent.txt", "unique.txt"]);
@@ -206,6 +204,7 @@ test("reports and preserves dirty unique state on retry and emits exact handoff 
 	assert.deepEqual(handoff.changedScope, ["parent.txt", "unique.txt"]);
 	assert.equal(await readFile(join(first.cwd, "parent.txt"), "utf8"), "modified but preserved\n");
 	assert.equal(await readFile(join(first.cwd, "unique.txt"), "utf8"), "unique and preserved\n");
+	await retried.release();
 });
 
 test("handoff rejects mutable PR-base, base-head, and scope evidence not bound by the persisted claim", async (t) => {
@@ -213,14 +212,21 @@ test("handoff rejects mutable PR-base, base-head, and scope evidence not bound b
 	t.after(fixture.cleanup);
 	const adapter = new WorkspaceAdapter(new GitAdapter());
 	const workspace = await adapter.claim(await requestFor(fixture));
-	t.after(() => releaseIfPresent(workspace).catch(() => undefined));
 	const ancestor = (await git(workspace.cwd, "rev-parse", `${fixture.parentHead}^`)).trim();
-	const attempts = await Promise.allSettled([
-		adapter.captureHandoff({ ...workspace, prBase: "feat/999-forged-parent" }, "passed"),
-		adapter.captureHandoff({ ...workspace, baseHead: ancestor }, "passed"),
-		adapter.captureHandoff({ ...workspace, allowedScopes: ["parent.txt"] }, "passed"),
-	]);
-	assert.deepEqual(attempts.map((result) => result.status), ["rejected", "rejected", "rejected"]);
+	const mutable = workspace as unknown as {
+		prBase: string;
+		baseHead: string;
+		allowedScopes: readonly string[];
+	};
+	mutable.prBase = "feat/999-forged-parent";
+	await assert.rejects(adapter.captureHandoff(workspace, "passed"), /immutable persisted original claim/i);
+	mutable.prBase = fixture.parentBranch;
+	mutable.baseHead = ancestor;
+	await assert.rejects(adapter.captureHandoff(workspace, "passed"), /immutable persisted original claim/i);
+	mutable.baseHead = fixture.parentHead;
+	mutable.allowedScopes = ["parent.txt"];
+	await assert.rejects(adapter.captureHandoff(workspace, "passed"), /immutable persisted original claim/i);
+	await workspace.release();
 });
 
 test("handoff fails closed if the immutable persisted claim is modified after acquisition", async (t) => {
@@ -228,13 +234,13 @@ test("handoff fails closed if the immutable persisted claim is modified after ac
 	t.after(fixture.cleanup);
 	const adapter = new WorkspaceAdapter(new GitAdapter());
 	const workspace = await adapter.claim(await requestFor(fixture));
-	t.after(() => releaseIfPresent(workspace).catch(() => undefined));
 	const claimPath = join(fixture.worktreeRoot, ".shepherd-workspace-claims", "issue-476.json");
 	const persisted = JSON.parse(await readFile(claimPath, "utf8")) as Record<string, unknown>;
 	assert.deepEqual(persisted.allowedScopes, [...workspace.allowedScopes]);
 	persisted.prBase = "feat/999-forged-parent";
 	await writeFile(claimPath, `${JSON.stringify(persisted)}\n`, { mode: 0o600 });
 	await assert.rejects(adapter.captureHandoff(workspace, "passed"), /persisted|claim|immutable/i);
+	await workspace.release();
 });
 
 test("fails handoff exact-head verification when the parent base is not an ancestor", async (t) => {
@@ -259,4 +265,5 @@ test("fails handoff exact-head verification when the parent base is not an ances
 		adapter.captureHandoff({ ...workspace, branch: "unrelated" }, "failed"),
 		/canonical branch|base is not an ancestor|active immutable claim/,
 	);
+	await workspace.release();
 });

@@ -64,6 +64,27 @@ test("uses the canonical identities already persisted by Shepherd target evidenc
 		assert.equal(adapterBinding.repositoryIdentity, stateBinding.repositoryIdentity);
 		assert.equal(adapterBinding.worktreeIdentity, stateBinding.worktreeIdentity);
 	}
+	for (const remote of [
+		"https://Example.invalid/Owner/Repo.git",
+		"ssh://git@Example.invalid/Owner/Repo.git",
+		"git@Example.invalid:Owner/Repo.git",
+		`file://${fixture.remote}`,
+	]) {
+		await git(fixture.coordinator, "remote", "set-url", "origin", remote);
+		const [adapterBinding, stateBinding] = await Promise.all([
+			adapter.inspect(fixture.coordinator),
+			resolveCanonicalGitWorktree(fixture.coordinator),
+		]);
+		assert.equal(adapterBinding.repositoryIdentity, stateBinding.repositoryIdentity);
+		assert.equal(adapterBinding.worktreeIdentity, stateBinding.worktreeIdentity);
+	}
+	await git(fixture.coordinator, "remote", "remove", "origin");
+	const [adapterWithoutRemote, stateWithoutRemote] = await Promise.all([
+		adapter.inspect(fixture.coordinator),
+		resolveCanonicalGitWorktree(fixture.coordinator),
+	]);
+	assert.equal(adapterWithoutRemote.repositoryIdentity, stateWithoutRemote.repositoryIdentity);
+	assert.equal(adapterWithoutRemote.worktreeIdentity, stateWithoutRemote.worktreeIdentity);
 });
 
 test("rejects credential-bearing or mismatched remote identity without echoing credentials", async (t) => {
