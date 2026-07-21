@@ -34,9 +34,9 @@ finished test-first before integration.
 2. Open/review/integrate the #473 child PR into #472.
 3. Dispatch #474-#477 concurrently in isolated worktrees.
 4. Complete #478 parent/GitHub orchestration, #479 controller/UX integration, and #480 recovery/
-   audit/cutover.
-5. Run #481 against #397/#438, full local/CI gates, exact-head independent review, and the durable
-   parent merge decision.
+   audit/reversible-cutover preparation.
+5. Run #481 against #397/#438; only after it passes, activate legacy-shell deprecation, then run
+   full local/CI gates, exact-head independent review, and the durable parent merge decision.
 
 Overall verification remains false until those steps complete. #472 stays draft and cannot merge
 without a fresh allowlisted human `approve-merge` decision for its exact verified head.

@@ -31,7 +31,8 @@ The deterministic controller depends on explicit ports:
 6. parent issue/sub-issue/stacked-PR/review orchestration;
 7. autonomous controller, v2 state/effect journal, typed parent refresh/rebase, concrete host
    adapters, and `/pm-shepherd` command integration; and
-8. crash recovery, bounded audit log, operator UX, and cutover/canary harness.
+8. crash recovery, bounded audit log, operator UX, reversible cutover preparation, and a canary
+   harness whose successful result is required before deprecation activation.
 
 Target stage machine:
 
@@ -56,8 +57,8 @@ than an infinite retry.
 | 2 | #477 | GitHub human-decision broker | #473 | parallel with #474-#476 |
 | 3 | #478 | parent/sub-issue/PR/review orchestration | #474/#476/#477 | after ports are stable |
 | 4 | #479 | shared autonomous controller and command wiring | #474-#478 | deliberate integration point |
-| 5 | #480 | recovery, audit, operator UX, legacy cutover | #479 | sequential safety gate |
-| 6 | #481 | #397/#438 canary and final evidence | #480 | final validation only |
+| 5 | #480 | recovery, audit, operator UX, reversible legacy-cutover preparation | #479 | sequential safety gate |
+| 6 | #481 | #397/#438 canary, post-pass deprecation activation, and final evidence | #480 | final validation and activation |
 
 Each mutating child uses its issue branch/worktree and targets the parent branch. Child PRs use
 `Refs #<child>` and `Refs #471`; only #472 closes #471. #474-#477 have disjoint file ownership and

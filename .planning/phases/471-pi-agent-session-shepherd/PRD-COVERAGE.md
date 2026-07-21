@@ -11,7 +11,7 @@ Phase: `471-pi-agent-session-shepherd`
 | Universal GSD/programming loop | Plan-first RED/GREEN/refactor, verification, review, correction, checkpoints, and handoffs. |
 | CLI Architecture v2 #397 / PR #438 | First end-to-end consumer/canary; unchanged until its own parent contract authorizes action. |
 | #372/#389/#470 and PRs #390/#456 | Explicitly abandoned/superseded historical Go/tmux path; no completion claimed. |
-| Legacy shell loops | Temporary rollback path only; deprecation/cutover belongs to #480. |
+| Legacy shell loops | Temporary rollback path; #480 prepares a reversible cutover and #481/post-canary parent finalization alone may activate deprecation. |
 
 The replacement covers full autonomous execution, not just read-only validation. Connector-specific,
 runtime-service, credential, reverse-ETL, and TUI behavior remains outside Shepherd itself unless a

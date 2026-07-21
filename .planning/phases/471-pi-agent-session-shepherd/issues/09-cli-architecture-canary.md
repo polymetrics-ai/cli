@@ -15,6 +15,8 @@ PR base: `feat/471-pi-agent-session-shepherd`
 - Shepherd integration tests/fixtures and canary harness
 - `.planning/phases/471-pi-agent-session-shepherd/**` final traces/evidence
 - parent PR/issue status records owned by the orchestrator
+- `.pi/README.md` and Shepherd-specific `.agents/agentic-delivery/**` documentation only for the
+  parent-owned post-canary deprecation activation after every canary gate passes
 
 CLI Architecture v2 code, issue roster, parent branch, and PR #438 may be mutated only through its
 own parent-orchestrator contract and explicit existing human gates. The canary must not merge #438.
@@ -31,6 +33,10 @@ own parent-orchestrator contract and explicit existing human gates. The canary m
       restart, consumes one allowlisted response, and resumes.
 - [ ] No credential appears in prompt, state, logs, comments, screenshots, or test output.
 - [ ] #438 remains draft/unmerged unless its own exact human gate is separately satisfied.
+- [ ] A failed or interrupted canary leaves legacy-shell rollback documentation unchanged; only a
+      fully passing canary permits the parent-owned deprecation activation commit.
+- [ ] After a fully passing canary, the parent orchestrator applies the pre-reviewed deprecation
+      documentation/status delta, reruns affected gates, and records its exact commit as evidence.
 - [ ] Parent #472 full gates and independent exact-head review pass; #472 reaches
       `ready_for_human`, not self-approved.
 

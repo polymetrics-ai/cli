@@ -17,8 +17,8 @@ The replacement TDD queue is issue-scoped:
 | #477 | idempotent comments, actor/head binding, consume-once decisions | blocked by #473 |
 | #478 | issue/PR idempotency, review coverage, scoped integration | blocked by #474/#476/#477 |
 | #479 | full fake-port autonomous trajectories and command UX | blocked by #474-#478 |
-| #480 | fault-injected restart/audit/cutover | blocked by #479 |
-| #481 | sandbox/live canary and exact-head parent readiness | blocked by #480 |
+| #480 | fault-injected restart/audit/reversible cutover preparation | blocked by #479 |
+| #481 | sandbox/live canary, post-pass deprecation activation, and exact-head parent readiness | blocked by #480 |
 
 Every child must append its exact failing command/output summary before production changes, then
 record GREEN/refactor commits and verification. Historical canary success cannot be reused as a

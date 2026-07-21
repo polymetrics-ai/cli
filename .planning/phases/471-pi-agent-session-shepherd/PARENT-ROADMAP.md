@@ -65,8 +65,9 @@ Planned dependency waves:
 3. Implement parent/sub-issue/stacked-PR and independent Codex-review orchestration on those ports.
 4. Integrate the autonomous parallel scheduler, v2 state/effect journal, typed parent refresh and
    child rebase/reclaim, correction loop, and command surface.
-5. Prove crash recovery, auditability, operator UX, and legacy-shell cutover.
-6. Run an end-to-end canary against CLI Architecture v2 and finish exact-head parent verification.
+5. Prove crash recovery, auditability, operator UX, and a reversible legacy-shell cutover plan.
+6. Run an end-to-end canary against CLI Architecture v2, activate legacy-shell deprecation only
+   after that canary passes, and finish exact-head parent verification.
 
 ## Sub-issue roster and dependency queue
 
@@ -79,8 +80,8 @@ Planned dependency waves:
 | 2 | #477 | `feat/477-shepherd-github-decision-broker` | #473 | durable authenticated human decisions | `planned` |
 | 3 | #478 | `feat/478-shepherd-github-parent-orchestration` | #474, #476, #477 | parent/sub-issue/PR/review orchestration | `planned` |
 | 4 | #479 | `feat/479-shepherd-autonomous-controller` | #474-#478 | scheduler/controller/command integration | `planned` |
-| 5 | #480 | `feat/480-shepherd-recovery-cutover` | #479 | recovery, auditability, operator UX, cutover | `planned` |
-| 6 | #481 | `test/481-shepherd-cli-architecture-canary` | #480 | #397/#438 end-to-end canary and final evidence | `planned` |
+| 5 | #480 | `feat/480-shepherd-recovery-cutover` | #479 | recovery, auditability, operator UX, reversible cutover preparation | `planned` |
+| 6 | #481 | `test/481-shepherd-cli-architecture-canary` | #480 | #397/#438 canary, post-pass deprecation activation, and final evidence | `planned` |
 
 Each issue body owns its exact write scope, required skills, verification, and human gates. #474,
 #475, #476, and #477 are intentionally disjoint and launch in parallel after #473 is integrated.
@@ -127,8 +128,9 @@ cost, external production state, or the parent merge.
       comes from the existing host environment/keychain and is exposed only to typed host actions.
 - [ ] The full local gates, Pi extension smoke, restart tests, GitHub sandbox tests, and a canary
       against #397/PR #438 pass with an auditable trace.
-- [ ] The legacy shell Shepherd is marked deprecated only after the canary passes; abandoned Go
-      issues/PRs are closed with cross-links and their branches are retained as history.
+- [ ] #480 proves a reversible cutover without activating it; the legacy shell Shepherd is marked
+      deprecated only by parent-owned finalization after #481 passes. Abandoned Go issues/PRs are
+      closed with cross-links and their branches are retained as history.
 - [ ] The parent PR remains draft until every required child is integrated, exact-head verification
       and review coverage are clean, and the only remaining gate is explicit human merge approval.
 

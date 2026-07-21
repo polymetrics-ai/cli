@@ -18,7 +18,9 @@ driver. The existing read-only `AgentSession` code on the parent branch is a har
 seed; it is neither the product boundary nor a supported fallback.
 
 The legacy shell loops remain rollback-only until #481 proves the replacement. They do not define
-the new architecture and are deprecated only during #480 after the recovery/cutover gates pass.
+the new architecture. #480 prepares and verifies the reversible cutover, but deprecation is
+activated only by the parent-owned post-canary finalization after #481 passes; a failed canary must
+leave the rollback path unchanged.
 
 ## Required outcome
 
