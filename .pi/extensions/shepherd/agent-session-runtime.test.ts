@@ -160,6 +160,7 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 	loaderOptions: Record<string, unknown> | undefined;
 	createGate: Promise<void> | undefined;
 	createGateResolve: (() => void) | undefined;
+	activeToolsOverride: string[] | undefined;
 
 	getAgentDir(): string { return "/opaque/pi-agent"; }
 	findModel(provider: string, model: string): unknown {
@@ -183,7 +184,7 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 		const route = options.thinkingLevel;
 		assert.ok(route === "high" || route === "xhigh");
 		this.session.thinkingLevel = route;
-		this.session.activeTools = [...(options.tools as string[])];
+		this.session.activeTools = this.activeToolsOverride ?? [...(options.tools as string[])];
 		return {
 			session: this.session,
 			extensionsResult: { extensions: [], errors: [] },
@@ -343,7 +344,7 @@ test("runtime rejects Pi version drift, extension loading, persistence, tool dri
 	for (const configure of [
 		(sdk: FakeSdk) => { sdk.createAgentSession = async () => ({ session: sdk.session, extensionsResult: { extensions: [{}], errors: [] } }); },
 		(sdk: FakeSdk) => { (sdk.session as { sessionFile: string | undefined }).sessionFile = "/tmp/persisted.jsonl"; },
-		(sdk: FakeSdk) => { sdk.session.activeTools = ["bash"]; },
+		(sdk: FakeSdk) => { sdk.activeToolsOverride = ["bash"]; },
 		(sdk: FakeSdk) => { sdk.session.model = { provider: "openai", id: "gpt-5.5" }; },
 		(sdk: FakeSdk) => { sdk.session.terminalModel = "gpt-5.5"; },
 	] as Array<(sdk: FakeSdk) => void>) {
@@ -431,12 +432,12 @@ test("explicit abort, close, and parent shutdown race but abort and join each se
 });
 
 test("timeout and explicit deadline terminate and join exactly once", async () => {
-	for (const override of [
-		{ timeoutMs: 15 },
-		{ timeoutMs: 2_000, deadlineAt: Date.now() + 15 },
+	for (const makeOverride of [
+		() => ({ timeoutMs: 15 }),
+		() => ({ timeoutMs: 2_000, deadlineAt: Date.now() + 15 }),
 	]) {
 		const h = runtime();
-		const req = request(override);
+		const req = request(makeOverride());
 		h.sdk.session.output = handoffFor(req);
 		h.sdk.session.blockPrompt();
 		await assert.rejects(() => h.runtime.run(req), /timed out|deadline/i);

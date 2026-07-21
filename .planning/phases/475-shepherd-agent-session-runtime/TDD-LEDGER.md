@@ -31,9 +31,21 @@
 
 ### GREEN
 
-- Status: blocked on RED evidence.
-- Minimal implementation: pending.
-- Command and observed pass: pending.
+- Status: captured.
+- Minimal implementation: exact role router and trusted prompt envelope; opaque workspace and
+  typed-capability tool policy; injected Pi 0.80.6 `createAgentSession` lifecycle owner; strict
+  bounded/redacted handoff parser.
+- Command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+- Observed pass: exit 0, 19 passed / 0 failed. Coverage includes 5.5/fallback/tool/terminal drift,
+  injection and read-only authority, path and secret boundaries, abort/timeout/deadline/close/
+  parent-shutdown races, late creation, join-once, cleanup quarantine, schema/binding/bounds, and
+  mutator concurrency.
 
 ### REFACTOR
 
@@ -47,3 +59,4 @@
 | Adapter | `scripts/gsd doctor` | pass | Pi adapter and registry healthy |
 | GSD command | `scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run` | unavailable | `unknown GSD command: programming-loop`; manual fallback activated |
 | RED | `node --test .pi/extensions/shepherd/agent-session-runtime.test.ts .pi/extensions/shepherd/tool-policy.test.ts` | expected fail | 0 passed; missing owned production modules |
+| GREEN | `node --test .pi/extensions/shepherd/agent-session-runtime.test.ts .pi/extensions/shepherd/tool-policy.test.ts` | pass | 19 passed; 0 failed |
