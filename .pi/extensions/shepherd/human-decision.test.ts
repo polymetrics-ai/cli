@@ -11,6 +11,7 @@ import {
 	persistHumanDecisionRequest,
 	recordHumanDecision,
 	routeHumanDecisionTarget,
+	validateHumanDecisionRecord,
 	validateHumanDecisionRequestComment,
 	type HumanDecisionBinding,
 	type HumanDecisionRequestSpec,
@@ -388,4 +389,110 @@ test("reclaim removes only a dead token path and preserves a live replacement ow
 	await assert.rejects(readFile(deadPath, "utf8"), /ENOENT/);
 	const liveOwner = JSON.parse(await readFile(livePath, "utf8"));
 	assert.equal(liveOwner.token, liveToken);
+});
+
+test("cycle 6 rejects the shared credential grammar at the native human-decision boundary", async (t) => {
+	const samples = [
+		"//registry.invalid/:_authToken=SYNTHETIC_NPM_MARKER",
+		"machine github.com login maintainer password SYNTHETIC_NETRC_MARKER",
+		"aws_secret_access_key = SYNTHETIC_AWS_MARKER",
+		"azure_client_secret=SYNTHETIC_AZURE_MARKER",
+		"credentials_file = /tmp/SYNTHETIC_CREDENTIAL_FILE",
+	];
+	for (const question of samples) {
+		await t.test(question.split("SYNTHETIC_")[0].trim(), () => assert.throws(
+			() => createHumanDecisionRecord(spec({ question })),
+			(error: unknown) => error instanceof Error
+				&& /credential|secret|sensitive/i.test(error.message)
+				&& !error.message.includes("SYNTHETIC_"),
+		));
+	}
+});
+
+test("cycle 6 closes canonical decision records before reading hostile values", async (t) => {
+	const pending = createHumanDecisionRecord(spec(), new Date("2026-07-21T10:00:00.000Z"));
+	const requestComment = {
+		id: 1001,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1001",
+		actor: "shepherd-host",
+		createdAt: "2026-07-21T10:00:10.000Z",
+	};
+	const decision = {
+		option: "approve",
+		actor: "maintainer-one",
+		sourceUrl: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1002",
+		decidedAt: "2026-07-21T10:01:00.000Z",
+	};
+	const decided = {
+		...pending,
+		requestComment,
+		status: "decided",
+		decision,
+		updatedAt: decision.decidedAt,
+	};
+	const consumed = {
+		...decided,
+		status: "consumed",
+		consumedAt: "2026-07-21T10:02:00.000Z",
+		updatedAt: "2026-07-21T10:02:00.000Z",
+	};
+
+	await t.test("decided requires request-comment provenance", () => assert.throws(
+		() => validateHumanDecisionRecord({ ...decided, requestComment: undefined }),
+		/request.?comment|provenance|coherence/i,
+	));
+	await t.test("decision follows request comment", () => assert.throws(
+		() => validateHumanDecisionRecord({
+			...decided,
+			requestComment: { ...requestComment, createdAt: "2026-07-21T10:01:30.000Z" },
+		}),
+		/chronology|timestamp|request.?comment/i,
+	));
+	await t.test("updatedAt covers the decision", () => assert.throws(
+		() => validateHumanDecisionRecord({ ...decided, updatedAt: "2026-07-21T10:00:30.000Z" }),
+		/chronology|update|decision/i,
+	));
+	await t.test("updatedAt covers consumption", () => assert.throws(
+		() => validateHumanDecisionRecord({ ...consumed, updatedAt: "2026-07-21T10:01:30.000Z" }),
+		/chronology|update|consum/i,
+	));
+
+	await t.test("wide records reject before accessors", () => {
+		let accessed = false;
+		const wide: Record<string, unknown> = {};
+		Object.defineProperty(wide, "schemaVersion", {
+			enumerable: true,
+			get() {
+				accessed = true;
+				throw new Error("SYNTHETIC_CYCLE6_ACCESSOR_MARKER");
+			},
+		});
+		for (let index = 0; index < 300; index += 1) wide[`field${index}`] = index;
+		assert.throws(() => validateHumanDecisionRecord(wide), /bounded|field|shape|record/i);
+		assert.equal(accessed, false);
+	});
+
+	await t.test("normal and revoked proxies reject without traps or host text", () => {
+		let trapped = false;
+		const proxied = new Proxy(consumed, {
+			ownKeys() {
+				trapped = true;
+				throw new Error("SYNTHETIC_CYCLE6_PROXY_MARKER");
+			},
+		});
+		assert.throws(() => validateHumanDecisionRecord(proxied), /proxy|shape|record|invalid/i);
+		assert.equal(trapped, false);
+
+		const revoked = Proxy.revocable(consumed, {});
+		revoked.revoke();
+		let rejection: unknown;
+		try {
+			validateHumanDecisionRecord(revoked.proxy);
+		} catch (error) {
+			rejection = error;
+		}
+		assert.ok(rejection instanceof Error);
+		assert.match(String(rejection), /proxy|shape|record|invalid/i);
+		assert.doesNotMatch(String(rejection), /Cannot perform|revoked/i);
+	});
 });

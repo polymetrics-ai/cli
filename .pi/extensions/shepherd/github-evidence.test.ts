@@ -837,3 +837,55 @@ test("cycle 5 rejects cookie/session values in every PR review and disposition t
 		});
 	}
 });
+
+test("cycle 6 normalizes revoked evidence-array proxies before host array operations", () => {
+	const revoked = Proxy.revocable([], {});
+	revoked.revoke();
+	let rejection: unknown;
+	try {
+		validateGitHubPullRequestEvidence({ ...cycle3Evidence(), reviews: revoked.proxy });
+	} catch (error) {
+		rejection = error;
+	}
+	assert.ok(rejection instanceof Error);
+	assert.match(String(rejection), /invalid|bounded|shape|proxy|array/i);
+	assert.doesNotMatch(String(rejection), /Cannot perform ['"]?IsArray|revoked/i);
+});
+
+test("cycle 6 applies the complete shared credential grammar to PR review boundaries", async (t) => {
+	const candidate = await evidence();
+	const findingReview: IndependentReviewRecord = {
+		...canonicalReview,
+		verdict: "findings",
+		findings: [{ id: "cycle-6-finding", severity: "warning", summary: "Synthetic review finding" }],
+	};
+	const cases: Array<[string, Record<string, unknown>]> = [
+		["PR title", { ...candidate, title: "//registry.invalid/:_authToken=SYNTHETIC_NPM_MARKER" }],
+		["PR body", { ...candidate, body: `${candidate.body}\npassword SYNTHETIC_NETRC_MARKER` }],
+		["review finding", {
+			...candidate,
+			reviews: [{
+				...findingReview,
+				findings: [{ id: "cycle-6-finding", severity: "warning", summary: "aws_secret_access_key = SYNTHETIC_AWS_MARKER" }],
+			}],
+		}],
+		["finding disposition", {
+			...candidate,
+			reviews: [findingReview],
+			dispositions: [{
+				findingId: "cycle-6-finding",
+				kind: "fixed",
+				rationale: "credentials_file = /tmp/SYNTHETIC_CREDENTIAL_FILE",
+				actor: "maintainer",
+				headSha,
+				recordedAt: "2026-07-21T12:01:00.000Z",
+			}],
+		}],
+	];
+	for (const [name, value] of cases) {
+		await t.test(name, () => assert.throws(
+			() => validateGitHubPullRequestEvidence(value),
+			/credential|secret|sensitive/i,
+		));
+	}
+});

@@ -346,3 +346,84 @@ test("cycle 4 rejects oversized arrays before materializing all property descrip
 	assert.equal(traversed, false);
 	assert.match(String(rejection), /bounded|paths|64/i);
 });
+
+test("cycle 6 orders every attested exact-head attempt and separates stable clean authorization", () => {
+	const olderClean = cleanReview({ completedAt: "2026-07-21T12:00:00.000Z" });
+	const laterFindings = cleanReview({
+		completedAt: "2026-07-21T12:01:00.000Z",
+		verdict: "findings",
+		findings: [{ id: "cycle-6-later-blocker", severity: "blocking", summary: "Later exact-head blocker." }],
+	});
+	const latestClean = cleanReview({ completedAt: "2026-07-21T12:02:00.000Z" });
+	const attestations = (reviews: IndependentReviewRecord[]) => reviews.map((review, index) => attestation(review, {
+		sessionId: `cycle-6-session-${index}`,
+		runId: `cycle-6-run-${index}`,
+	}));
+
+	assert.equal(reconcileIndependentReview({
+		target: target(),
+		reviews: [olderClean, laterFindings],
+		attestations: attestations([olderClean, laterFindings]),
+	} as never).kind, "dispatch", "a later findings attempt must invalidate earlier clean authority");
+
+	const recovered = reconcileIndependentReview({
+		target: target(),
+		reviews: [laterFindings, latestClean, olderClean],
+		attestations: attestations([laterFindings, latestClean, olderClean]),
+	} as never);
+	assert.equal(recovered.kind, "satisfied");
+	if (recovered.kind === "satisfied") assert.equal(recovered.review.completedAt, latestClean.completedAt);
+
+	const semanticDigest = (reviewRouterApi as Record<string, unknown>).independentReviewAuthorizationDigest as
+		| ((review: IndependentReviewRecord) => string)
+		| undefined;
+	assert.equal(typeof semanticDigest, "function");
+	assert.notEqual(independentReviewResultDigest(olderClean), independentReviewResultDigest(latestClean));
+	assert.equal(semanticDigest!(olderClean), semanticDigest!(latestClean));
+});
+
+test("cycle 6 pre-bounds exact Uint8Array receivers and normalizes revoked proxy host errors", () => {
+	const payload = new Uint8Array(128);
+	Object.defineProperty(payload, "byteLength", { value: 1, enumerable: true });
+	const originalDecode = TextDecoder.prototype.decode;
+	let decoded = false;
+	TextDecoder.prototype.decode = function (...args: Parameters<TextDecoder["decode"]>): string {
+		decoded = true;
+		return originalDecode.apply(this, args);
+	};
+	try {
+		assert.throws(
+			() => reviewRouterApi.decodeBoundedJsonPayload(payload, 16),
+			/oversized|byte|bound/i,
+		);
+	} finally {
+		TextDecoder.prototype.decode = originalDecode;
+	}
+	assert.equal(decoded, false, "physical byte length must reject before decode");
+
+	const revoked = Proxy.revocable({}, {});
+	revoked.revoke();
+	let rejection: unknown;
+	try {
+		reviewRouterApi.readBoundedExactRecord(revoked.proxy, [], [], "cycle 6 revoked record");
+	} catch (error) {
+		rejection = error;
+	}
+	assert.ok(rejection instanceof Error);
+	assert.match(String(rejection), /invalid|bounded|shape|proxy/i);
+	assert.doesNotMatch(String(rejection), /Cannot perform ['"]?IsArray|revoked/i);
+});
+
+test("cycle 6 shared credential grammar covers standard credential-file forms", () => {
+	const samples = [
+		"//registry.invalid/:_authToken=SYNTHETIC_NPM_MARKER",
+		"password SYNTHETIC_NETRC_MARKER",
+		"aws_secret_access_key = SYNTHETIC_AWS_MARKER",
+		"azure_client_secret=SYNTHETIC_AZURE_MARKER",
+		"credentials_file = /tmp/SYNTHETIC_CREDENTIAL_FILE",
+	];
+	for (const sample of samples) {
+		assert.throws(() => reviewRouterApi.assertNoSensitiveText(sample, "cycle 6 credential fixture"), /credential|secret|sensitive/i, sample);
+		assert.notEqual(reviewRouterApi.redactSensitiveText(sample), sample, sample);
+	}
+});

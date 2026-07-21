@@ -35,6 +35,8 @@ const prBinding: HumanDecisionBinding = {
 	headSha: head,
 };
 
+type Cycle6ReadRecord = GitHubDecisionBroker["readRecord"];
+
 class MemoryRepository implements HumanDecisionRepository {
 	readonly states = new Map<string, HumanDecisionRecord>();
 	private queue = Promise.resolve();
@@ -493,4 +495,35 @@ test("live GitHub comment test is skipped without an explicitly designated sandb
 
 test("file repository type remains usable by the broker without a live transport", () => {
 	assert.equal(typeof FileHumanDecisionRepository, "function");
+});
+
+test("cycle 6 rereads the broker-owned canonical record across compact poll and evidence consume", async () => {
+	const harness = brokerHarness();
+	const readRecord: Cycle6ReadRecord = harness.broker.readRecord.bind(harness.broker);
+	const requested = await harness.broker.request(harness.request);
+	assert.ok(requested.requestComment);
+
+	const pending = await readRecord(harness.request.requestId, issueBinding);
+	assert.equal(pending.status, "pending");
+	pending.question = "mutated caller copy";
+	assert.equal((await readRecord(harness.request.requestId, issueBinding)).question, harness.request.question);
+
+	harness.setNow("2026-07-21T10:02:00.000Z");
+	harness.transport.comments.push(fixture.allowlistedHuman);
+	const polled = await harness.broker.poll(harness.request.requestId, issueBinding);
+	assert.equal(polled.status, "decided");
+	const decided = await readRecord(harness.request.requestId, issueBinding);
+	assert.equal(decided.status, "decided");
+	if (polled.status === "decided") assert.deepEqual(decided.decision, polled.decision);
+
+	const evidence = await harness.broker.consume(harness.request.requestId, issueBinding);
+	const consumed = await readRecord(harness.request.requestId, issueBinding);
+	assert.equal(consumed.status, "consumed");
+	assert.deepEqual(consumed.decision, evidence);
+	assert.ok(consumed.requestComment);
+	assert.ok(consumed.consumedAt);
+	await assert.rejects(
+		readRecord(harness.request.requestId, { ...issueBinding, generation: issueBinding.generation + 1 }),
+		/binding|stale|generation/i,
+	);
 });
