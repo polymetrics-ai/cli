@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
 	GitHubParentOrchestrator,
+	createCanonicalPullRequestSnapshot,
+	createDurableMutationIntent,
 	createParentOrchestrationPlan,
 	materializeChildRecord,
 	selectReadyChildren,
@@ -13,6 +14,7 @@ import {
 	type CreatePullRequestRequest,
 	type GitHubChildIssue,
 	type GitHubOrchestrationTransport,
+	type GitAncestryQuery,
 	type GitHubPullRequestQuery,
 	type GitHubRosterQuery,
 	type GitHubRosterSnapshot,
@@ -27,7 +29,7 @@ import {
 import * as githubOrchestratorApi from "./github-orchestrator.ts";
 import * as githubEvidenceApi from "./github-evidence.ts";
 import type { GitHubPullRequestEvidence } from "./github-evidence.ts";
-import { createIndependentReviewWork } from "./review-router.ts";
+import { createAgentSessionAttestation, createIndependentReviewWork } from "./review-router.ts";
 import {
 	createHumanDecisionRecord,
 	type HumanDecisionEvidence,
@@ -46,12 +48,24 @@ import type {
 const objectivePath = ".pi/extensions/shepherd/fixtures/issue-478/parent-objective.json";
 const baseSha = "a".repeat(40);
 const headSha = "b".repeat(40);
+type PullRequestFixtureRequest = Omit<CreatePullRequestRequest, "mutation" | "policyDigest">
+	& Partial<Pick<CreatePullRequestRequest, "policyDigest">>;
 
 async function plan(): Promise<ParentOrchestrationPlan> {
-	return createParentOrchestrationPlan(JSON.parse(await readFile(objectivePath, "utf8")));
+	return cycle3Plan();
 }
 
-function issueFrom(request: CreateChildIssueRequest, number = 811): GitHubChildIssue {
+function createPlanFromSource(source: Record<string, unknown>): ParentOrchestrationPlan {
+	return createParentOrchestrationPlan(source, {
+		schemaVersion: 1,
+		requiredCheckPolicies: [
+			cycle3CheckPolicy(String(source.parentBranch)),
+			cycle3CheckPolicy(String(source.parentBaseBranch)),
+		] as never,
+	});
+}
+
+function issueFrom(request: Omit<CreateChildIssueRequest, "mutation">, number = 811): GitHubChildIssue {
 	return {
 		number,
 		marker: request.marker,
@@ -63,7 +77,7 @@ function issueFrom(request: CreateChildIssueRequest, number = 811): GitHubChildI
 }
 
 function cleanPullRequest(
-	request: CreatePullRequestRequest,
+	request: PullRequestFixtureRequest,
 	overrides: Partial<GitHubPullRequestEvidence> = {},
 	number = 812,
 ): GitHubPullRequestEvidence {
@@ -73,6 +87,8 @@ function cleanPullRequest(
 			workItemId: request.workItemId,
 			pullRequest: number,
 			generation: request.generation,
+			baseBranch: request.baseBranch,
+			headBranch: request.headBranch,
 			baseSha: request.baseSha,
 			headSha: request.headSha,
 			changedPaths: request.changedPaths,
@@ -83,7 +99,10 @@ function cleanPullRequest(
 		findings: [],
 	};
 	return {
-		schemaVersion: 1,
+		schemaVersion: 2,
+		repository: request.repository,
+		workItemId: request.workItemId,
+		generation: request.generation,
 		number,
 		marker: request.marker,
 		title: request.title,
@@ -94,67 +113,43 @@ function cleanPullRequest(
 		headBranch: request.headBranch,
 		baseSha: request.baseSha,
 		headSha: request.headSha,
+		changedPathsComplete: true,
 		changedPaths: [...request.changedPaths],
+		allowedScopes: [...request.allowedScopes],
 		mergeState: "clean",
+		policyDigest: request.policyDigest ?? String(cycle3CheckPolicy(request.baseBranch).digest),
 		checksComplete: true,
 		checks: [{
 			id: "check-verify-1",
 			name: "verify",
 			producerId: "github-actions:workflow-verify",
+			sequence: 1,
 			status: "completed",
 			conclusion: "success",
 			headSha: request.headSha,
+			updatedAt: "2026-07-21T11:55:00.000Z",
 			completedAt: "2026-07-21T11:55:00.000Z",
 		}],
+		requestedChangesComplete: true,
 		requestedChanges: [],
+		threadsComplete: true,
 		threads: [],
 		reviews: [review],
 		reviewsComplete: true,
+		dispositionsComplete: true,
 		dispositions: [],
-		observedAt: "2026-07-21T12:00:00.000Z",
+		revision: 42,
+		observedAt: "2026-07-21T12:05:00.000Z",
 		...overrides,
 	};
 }
 
-function reviewDigest(review: GitHubPullRequestEvidence["reviews"][number]): string {
-	return createHash("sha256").update(JSON.stringify({
-		idempotencyMarker: review.idempotencyMarker,
-		repository: review.repository,
-		workItemId: review.workItemId,
-		pullRequest: review.pullRequest,
-		generation: review.generation,
-		baseSha: review.baseSha,
-		headSha: review.headSha,
-		changedPaths: review.changedPaths,
-		allowedScopes: review.allowedScopes,
-		completedAt: review.completedAt,
-		verdict: review.verdict,
-		findings: review.findings,
-	})).digest("hex");
-}
-
 function attestReview(review: GitHubPullRequestEvidence["reviews"][number]) {
-	return {
-		schemaVersion: 1,
-		authority: "controller",
+	return createAgentSessionAttestation({
 		sessionId: `session-${review.pullRequest}-${review.workItemId}`,
 		runId: `run-${review.pullRequest}-${review.generation}`,
-		provider: "openai-codex",
-		model: "gpt-5.6-sol",
-		reasoningEffort: "xhigh",
-		readOnly: true,
-		repository: review.repository,
-		workItemId: review.workItemId,
-		pullRequest: review.pullRequest,
-		generation: review.generation,
-		baseSha: review.baseSha,
-		headSha: review.headSha,
-		changedPaths: review.changedPaths,
-		allowedScopes: review.allowedScopes,
-		reviewMarker: review.idempotencyMarker,
-		resultDigest: reviewDigest(review),
-		completedAt: review.completedAt,
-	};
+		review,
+	});
 }
 
 class FakeTransport implements GitHubOrchestrationTransport {
@@ -175,19 +170,29 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	malformedPullRequestResponse = false;
 	malformedIntegrationResponse = false;
 	malformedReadyResponse = false;
+	issueVisibilityLag = 0;
+	pullRequestVisibilityLag = 0;
+	rosterVisibilityLag = 0;
+	integrationVisibilityLag = 0;
+	parentReadyVisibilityLag = 0;
 	incompleteIssueLookup = false;
 	incompletePullRequestLookup = false;
 	incompleteRosterLookup = false;
 	incompleteIntegrationLookup = false;
 	ancestry = true;
-	ancestryProof?: (query: Record<string, unknown>) => Promise<unknown>;
+	ancestryProof?: (query: GitAncestryQuery) => Promise<unknown>;
 	onPullRequestRead?: (query: PullRequestMarkerQuery, matches: GitHubPullRequestEvidence[], read: number) => GitHubPullRequestEvidence[];
 	#pullRequestReads = 0;
+	#issueInvisibleReads = 0;
+	#pullRequestInvisibleReads = 0;
+	#rosterInvisibleReads = 0;
+	#integrationInvisibleReads = 0;
+	#parentReadyInvisibleReads = 0;
 	#legacyMutation = 0;
 	#mutationRevision = 0;
 	#mutations = new Map<string, { digest: string; revision: number; value: unknown }>();
 
-	#applyMutation(request: Record<string, unknown>, operation: string, effect: () => unknown): any {
+	#applyMutation(request: Record<string, unknown>, operation: string, effect: (revision: number) => unknown): any {
 		const candidate = request.mutation as Record<string, unknown> | undefined;
 		const key = typeof candidate?.idempotencyKey === "string"
 			? candidate.idempotencyKey
@@ -205,8 +210,9 @@ class FakeTransport implements GitHubOrchestrationTransport {
 				value: existing.value,
 			};
 		}
-		const value = effect();
-		const revision = ++this.#mutationRevision;
+		const revision = this.#mutationRevision + 1;
+		const value = effect(revision);
+		this.#mutationRevision = revision;
 		this.#mutations.set(key, { digest, revision, value });
 		return {
 			schemaVersion: 1,
@@ -219,7 +225,12 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	}
 
 	async findChildIssues(query: { repository: string; marker: string }): Promise<any> {
-		return { items: this.issues.filter((candidate) => candidate.marker === query.marker), complete: !this.incompleteIssueLookup };
+		const hidden = this.#issueInvisibleReads > 0;
+		if (hidden) this.#issueInvisibleReads -= 1;
+		return {
+			items: hidden ? [] : this.issues.filter((candidate) => candidate.marker === query.marker),
+			complete: !this.incompleteIssueLookup,
+		};
 	}
 
 	async createChildIssue(request: CreateChildIssueRequest): Promise<any> {
@@ -227,6 +238,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 			this.createIssueCalls += 1;
 			const created = issueFrom(request, 810 + this.createIssueCalls);
 			this.issues.push(created);
+			this.#issueInvisibleReads = this.issueVisibilityLag;
 			return created;
 		});
 		if (this.throwAfterIssuePublish) {
@@ -239,7 +251,15 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	async findPullRequests(query: PullRequestMarkerQuery): Promise<any> {
 		this.#pullRequestReads += 1;
 		const matches = this.pullRequests.filter((candidate) => candidate.marker === query.marker);
-		return { items: this.onPullRequestRead?.(query, matches, this.#pullRequestReads) ?? matches, complete: !this.incompletePullRequestLookup } as never;
+		const hiddenAfterCreate = this.#pullRequestInvisibleReads > 0;
+		const hiddenAfterReady = this.#parentReadyInvisibleReads > 0 && matches.some((candidate) => !candidate.draft);
+		if (hiddenAfterCreate) this.#pullRequestInvisibleReads -= 1;
+		if (hiddenAfterReady) this.#parentReadyInvisibleReads -= 1;
+		const visible = hiddenAfterCreate || hiddenAfterReady ? [] : matches;
+		return {
+			items: this.onPullRequestRead?.(query, visible, this.#pullRequestReads) ?? visible,
+			complete: !this.incompletePullRequestLookup,
+		} as never;
 	}
 
 	async createPullRequest(request: CreatePullRequestRequest): Promise<any> {
@@ -251,6 +271,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 				reviews: [],
 			}, 900 + this.createPullRequestCalls);
 			this.pullRequests.push(created);
+			this.#pullRequestInvisibleReads = this.pullRequestVisibilityLag;
 			return created;
 		});
 		if (this.throwAfterPullRequestPublish) {
@@ -262,23 +283,35 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	}
 
 	async findParentRosters(query: GitHubRosterQuery): Promise<any> {
-		return { items: this.rosters.filter((candidate) => candidate.marker === query.marker), complete: !this.incompleteRosterLookup };
+		const hidden = this.#rosterInvisibleReads > 0;
+		if (hidden) this.#rosterInvisibleReads -= 1;
+		return {
+			items: hidden ? [] : this.rosters.filter((candidate) => candidate.marker === query.marker),
+			complete: !this.incompleteRosterLookup,
+		};
 	}
 
 	async publishParentRoster(request: PublishRosterRequest): Promise<any> {
 		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "roster", () => {
-			this.publishRosterCalls += 1;
 			const existing = this.rosters.find((candidate) => candidate.marker === request.marker);
+			if (request.mutation.expectedResourceRevision !== (existing?.revision ?? null)) {
+				throw new Error("simulated roster conditional revision conflict");
+			}
+			this.publishRosterCalls += 1;
 			const published: GitHubRosterSnapshot = {
 				id: existing?.id ?? 1001,
 				marker: request.marker,
 				parentIssue: request.parentIssue,
 				generation: request.generation,
 				body: request.body,
+				statuses: { ...request.statuses },
+				statusEpoch: request.statusEpoch,
+				revision: (existing?.revision ?? 0) + 1,
 				updatedAt: "2026-07-21T12:00:00.000Z",
 			};
 			if (existing) this.rosters.splice(this.rosters.indexOf(existing), 1, published);
 			else this.rosters.push(published);
+			this.#rosterInvisibleReads = this.rosterVisibilityLag;
 			return published;
 		});
 		if (this.throwAfterRosterPublish) {
@@ -289,8 +322,10 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	}
 
 	async findChildIntegration(query: any): Promise<any> {
+		const hidden = this.#integrationInvisibleReads > 0;
+		if (hidden) this.#integrationInvisibleReads -= 1;
 		return {
-			items: this.integrations.filter((candidate) => query.pullRequest !== undefined
+			items: hidden ? [] : this.integrations.filter((candidate) => query.pullRequest !== undefined
 				? candidate.pullRequest === query.pullRequest
 				: candidate.childId === query.childId && candidate.marker === query.marker),
 			complete: !this.incompleteIntegrationLookup,
@@ -298,7 +333,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 	}
 
 	async integrateChild(request: IntegrateChildRequest): Promise<any> {
-		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "integration", () => {
+		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "integration", (revision) => {
 			this.integrateCalls += 1;
 			const receipt: ChildIntegrationReceipt = {
 				childId: request.childId,
@@ -308,9 +343,18 @@ class FakeTransport implements GitHubOrchestrationTransport {
 				baseSha: request.baseSha,
 				headSha: request.headSha,
 				parentBranch: request.parentBranch,
+				pullRequestSnapshot: request.pullRequestSnapshot,
+				controllerProvenance: request.controllerProvenance,
+				transportProvenance: {
+					authority: "transport",
+					idempotencyKey: request.mutation.idempotencyKey,
+					intentDigest: request.mutation.intentDigest,
+					revision,
+				},
 				integratedAt: "2026-07-21T12:01:00.000Z",
 			};
 			this.integrations.push(receipt);
+			this.#integrationInvisibleReads = this.integrationVisibilityLag;
 			return receipt;
 		});
 		if (this.throwAfterIntegration) {
@@ -323,11 +367,20 @@ class FakeTransport implements GitHubOrchestrationTransport {
 
 	async markParentReady(request: MarkParentReadyRequest): Promise<any> {
 		const result = this.#applyMutation(request as unknown as Record<string, unknown>, "parent-ready", () => {
-			this.markReadyCalls += 1;
 			const index = this.pullRequests.findIndex((candidate) => candidate.number === request.pullRequest);
 			if (index < 0) throw new Error("parent pull request missing");
-			const updated = { ...this.pullRequests[index], draft: false, headSha: request.headSha };
+			if (request.mutation.expectedResourceRevision !== this.pullRequests[index].revision) {
+				throw new Error("simulated parent ready conditional revision conflict");
+			}
+			this.markReadyCalls += 1;
+			const updated = {
+				...this.pullRequests[index],
+				draft: false,
+				headSha: request.headSha,
+				revision: this.pullRequests[index].revision + 1,
+			};
 			this.pullRequests.splice(index, 1, updated);
+			this.#parentReadyInvisibleReads = this.parentReadyVisibilityLag;
 			return updated;
 		});
 		if (this.throwAfterReady) {
@@ -342,7 +395,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return this.ancestry;
 	}
 
-	async proveAncestry(query: Record<string, unknown>): Promise<unknown> {
+	async proveAncestry(query: GitAncestryQuery): Promise<any> {
 		if (this.ancestryProof !== undefined) return this.ancestryProof(query);
 		return {
 			schemaVersion: 1,
@@ -366,6 +419,37 @@ function orchestratorFor(transport: FakeTransport, broker?: ParentDecisionBroker
 				.filter((review) => review.workItemId === target.workItemId)
 				.map(attestReview);
 			return { items: attestations, complete: true };
+		},
+		async findChangedPathEvidence(target: {
+			repository: string;
+			workItemId: string;
+			pullRequest: number;
+			generation: number;
+			baseSha: string;
+			headSha: string;
+		}): Promise<unknown> {
+			const matches = transport.pullRequests
+				.filter((pullRequest) => pullRequest.number === target.pullRequest
+					&& pullRequest.repository === target.repository
+					&& pullRequest.workItemId === target.workItemId
+					&& pullRequest.generation === target.generation
+					&& pullRequest.baseSha === target.baseSha
+					&& pullRequest.headSha === target.headSha)
+				.map((pullRequest) => ({
+					schemaVersion: 1,
+					authority: "controller",
+					repository: target.repository,
+					workItemId: target.workItemId,
+					pullRequest: target.pullRequest,
+					generation: target.generation,
+					baseSha: target.baseSha,
+					headSha: target.headSha,
+					paths: [...pullRequest.changedPaths],
+					complete: true,
+					revision: Math.max(1, pullRequest.revision - 1),
+					observedAt: "2026-07-21T11:58:00.000Z",
+				}));
+			return { items: matches, complete: true };
 		},
 	};
 	return new GitHubParentOrchestrator(transport, broker, sessionSource as never);
@@ -439,6 +523,77 @@ const decisionPolicy: ParentDecisionPolicy = {
 	question: "Approve the exact reviewed parent head for the human merge gate?",
 };
 
+function seedIntegrationRoster(
+	candidate: ParentOrchestrationPlan,
+	transport: FakeTransport,
+): ChildIntegrationReceipt[] {
+	const receipts = candidate.children.map((child, index): ChildIntegrationReceipt => {
+		const pullRequestNumber = 812 + index;
+		const childHead = String(index + 1).repeat(40);
+		const childPullRequest = cleanPullRequest({
+			repository: candidate.repository,
+			workItemId: child.id,
+			generation: candidate.generation,
+			marker: child.markers.pullRequest,
+			title: child.title,
+			body: `Refs #${811 + index}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+			draft: false,
+			baseBranch: candidate.parentBranch,
+			headBranch: `feat/${811 + index}-${child.branch.slug}`,
+			baseSha,
+			headSha: childHead,
+			changedPaths: [child.writeScopes[0]],
+			allowedScopes: child.writeScopes,
+		}, { state: "merged" }, pullRequestNumber);
+		transport.pullRequests.push(childPullRequest);
+		const snapshot = createCanonicalPullRequestSnapshot(childPullRequest);
+		const controllerProvenance = {
+			authority: "controller" as const,
+			planDigest: candidate.canonical.digest,
+			policyDigest: String(cycle3CheckPolicy(candidate.parentBranch).digest),
+			evidenceRevision: 41,
+			observedAt: "2026-07-21T11:58:00.000Z",
+		};
+		const mutation = createDurableMutationIntent(
+			"child_integration",
+			[candidate.repository, child.markers.pullRequest],
+			{
+				repository: candidate.repository,
+				childId: child.id,
+				pullRequest: pullRequestNumber,
+				generation: candidate.generation,
+				marker: child.markers.pullRequest,
+				baseSha,
+				headSha: childHead,
+				parentBranch: candidate.parentBranch,
+				pullRequestSnapshot: snapshot,
+				controllerProvenance,
+			},
+			null,
+		);
+		return {
+			childId: child.id,
+			pullRequest: pullRequestNumber,
+			generation: candidate.generation,
+			marker: child.markers.pullRequest,
+			baseSha,
+			headSha: childHead,
+			parentBranch: candidate.parentBranch,
+			pullRequestSnapshot: snapshot,
+			controllerProvenance,
+			transportProvenance: {
+				authority: "transport",
+				idempotencyKey: mutation.idempotencyKey,
+				intentDigest: mutation.intentDigest,
+				revision: index + 1,
+			},
+			integratedAt: "2026-07-21T12:01:00.000Z",
+		};
+	});
+	transport.integrations.push(...receipts);
+	return receipts;
+}
+
 test("turns a parent objective into bounded canonical child records and reuses DAG scheduling", async () => {
 	const candidate = await plan();
 	assert.equal(candidate.children.length, 2);
@@ -459,19 +614,19 @@ test("turns a parent objective into bounded canonical child records and reuses D
 
 test("rejects extra fields, cycles, unsafe scopes/branches, missing requirements, and oversized rosters", async () => {
 	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
-	assert.throws(() => createParentOrchestrationPlan({ ...source, unexpected: true }), /field|shape|parent/i);
+	assert.throws(() => createPlanFromSource({ ...source, unexpected: true }), /field|shape|parent/i);
 	const children = source.children as Array<Record<string, unknown>>;
-	assert.throws(() => createParentOrchestrationPlan({ ...source, children: [{ ...children[0], dependsOn: ["evidence"] }] }), /cycle/i);
-	assert.throws(() => createParentOrchestrationPlan({ ...source, parentBranch: "../main" }), /branch/i);
+	assert.throws(() => createPlanFromSource({ ...source, children: [{ ...children[0], dependsOn: ["evidence"] }] }), /cycle/i);
+	assert.throws(() => createPlanFromSource({ ...source, parentBranch: "../main" }), /branch/i);
 	for (const invalidRef of ["bad branch", ".hidden/topic", "topic.lock", "topic/.lock", "@", "HEAD", "refs/heads/HEAD", "topic@{one", "topic."]) {
-		assert.throws(() => createParentOrchestrationPlan({ ...source, parentBranch: invalidRef }), /branch|ref/i, invalidRef);
+		assert.throws(() => createPlanFromSource({ ...source, parentBranch: invalidRef }), /branch|ref/i, invalidRef);
 	}
 	for (const invalidGeneration of [0, -1]) {
-		assert.throws(() => createParentOrchestrationPlan({ ...source, generation: invalidGeneration }), /generation|positive/i);
+		assert.throws(() => createPlanFromSource({ ...source, generation: invalidGeneration }), /generation|positive/i);
 	}
-	assert.throws(() => createParentOrchestrationPlan({ ...source, children: [{ ...children[0], writeScopes: ["../outside"] }] }), /scope/i);
-	assert.throws(() => createParentOrchestrationPlan({ ...source, children: [{ ...children[0], requiredSkills: [] }] }), /skills/i);
-	assert.throws(() => createParentOrchestrationPlan({ ...source, children: Array.from({ length: 65 }, (_, index) => ({ ...children[0], id: `child-${index}`, slug: `child-${index}`, dependsOn: [] })) }), /64|bounded|children/i);
+	assert.throws(() => createPlanFromSource({ ...source, children: [{ ...children[0], writeScopes: ["../outside"] }] }), /scope/i);
+	assert.throws(() => createPlanFromSource({ ...source, children: [{ ...children[0], requiredSkills: [] }] }), /skills/i);
+	assert.throws(() => createPlanFromSource({ ...source, children: Array.from({ length: 65 }, (_, index) => ({ ...children[0], id: `child-${index}`, slug: `child-${index}`, dependsOn: [] })) }), /64|bounded|children/i);
 });
 
 test("serializes concurrent issue ensures, reconciles after create, and fails closed on incomplete lookup", async () => {
@@ -699,11 +854,11 @@ test("roster publication reconciles before update and recovers timeout-after-pub
 	transport.throwAfterRosterPublish = true;
 	const orchestrator = orchestratorFor(transport);
 	const pending = { evidence: "pending", orchestrator: "pending" } as const;
-	const first = await orchestrator.reconcileParentRoster(candidate, pending);
-	const restarted = await orchestratorFor(transport).reconcileParentRoster(candidate, pending);
+	const first = await orchestrator.reconcileParentRoster(candidate, pending, 1);
+	const restarted = await orchestratorFor(transport).reconcileParentRoster(candidate, pending, 1);
 	assert.deepEqual(restarted, first);
 	assert.equal(transport.publishRosterCalls, 1);
-	await orchestrator.reconcileParentRoster(candidate, { evidence: "succeeded", orchestrator: "pending" });
+	await orchestrator.reconcileParentRoster(candidate, { evidence: "succeeded", orchestrator: "pending" }, 2);
 	assert.equal(transport.publishRosterCalls, 2);
 	assert.equal(transport.rosters.length, 1);
 });
@@ -722,7 +877,7 @@ test("integrates only green reviewed exact-head scoped children and rechecks hea
 	const child = materializeChildRecord(candidate, "evidence", issue);
 	transport.issues.push(issue);
 	const handoff = childHandoff(issue.number, child.branch, child.prBase);
-	const request: CreatePullRequestRequest = {
+	const request: PullRequestFixtureRequest = {
 		repository: candidate.repository,
 		workItemId: child.id,
 		generation: candidate.generation,
@@ -768,7 +923,7 @@ test("integration recovers timeout and malformed mutation responses, but incompl
 	}, 811);
 	const child = materializeChildRecord(candidate, "evidence", issue);
 	const handoff = childHandoff(issue.number, child.branch, child.prBase);
-	const request: CreatePullRequestRequest = {
+	const request: PullRequestFixtureRequest = {
 		repository: candidate.repository,
 		workItemId: child.id,
 		generation: candidate.generation,
@@ -815,7 +970,7 @@ test("review coverage must bind the planned repository, child, generation, paths
 	}, 811);
 	const child = materializeChildRecord(candidate, "evidence", issue);
 	const handoff = childHandoff(issue.number, child.branch, child.prBase);
-	const request: CreatePullRequestRequest = {
+	const request: PullRequestFixtureRequest = {
 		repository: candidate.repository,
 		workItemId: child.id,
 		generation: candidate.generation,
@@ -846,6 +1001,8 @@ test("review coverage must bind the planned repository, child, generation, paths
 				workItemId: child.id,
 				pullRequest: pr.number,
 				generation: candidate.generation,
+				baseBranch: child.prBase,
+				headBranch: child.branch,
 				baseSha: handoff.baseHead,
 				headSha: handoff.head,
 				changedPaths: handoff.changedScope,
@@ -874,7 +1031,7 @@ test("restart reuses an exact bound integration receipt after GitHub closes the 
 	}, 811);
 	const child = materializeChildRecord(candidate, "evidence", issue);
 	const handoff = childHandoff(issue.number, child.branch, child.prBase);
-	const request: CreatePullRequestRequest = {
+	const request: PullRequestFixtureRequest = {
 		repository: candidate.repository,
 		workItemId: child.id,
 		generation: candidate.generation,
@@ -891,7 +1048,33 @@ test("restart reuses an exact bound integration receipt after GitHub closes the 
 	};
 	const transport = new FakeTransport();
 	transport.issues.push(issue);
-	transport.pullRequests.push(cleanPullRequest(request, { state: "merged" }));
+	const mergedPullRequest = cleanPullRequest(request, { state: "merged" });
+	transport.pullRequests.push(mergedPullRequest);
+	const snapshot = createCanonicalPullRequestSnapshot(mergedPullRequest);
+	const controllerProvenance = {
+		authority: "controller" as const,
+		planDigest: candidate.canonical.digest,
+		policyDigest: String(cycle3CheckPolicy(candidate.parentBranch).digest),
+		evidenceRevision: 41,
+		observedAt: "2026-07-21T11:58:00.000Z",
+	};
+	const existingMutation = createDurableMutationIntent(
+		"child_integration",
+		[candidate.repository, child.markers.pullRequest],
+		{
+			repository: candidate.repository,
+			childId: child.id,
+			pullRequest: 812,
+			generation: candidate.generation,
+			marker: child.markers.pullRequest,
+			baseSha: handoff.baseHead,
+			headSha: handoff.head,
+			parentBranch: candidate.parentBranch,
+			pullRequestSnapshot: snapshot,
+			controllerProvenance,
+		},
+		null,
+	);
 	transport.integrations.push({
 		childId: child.id,
 		pullRequest: 812,
@@ -900,6 +1083,14 @@ test("restart reuses an exact bound integration receipt after GitHub closes the 
 		baseSha: handoff.baseHead,
 		headSha: handoff.head,
 		parentBranch: candidate.parentBranch,
+		pullRequestSnapshot: snapshot,
+		controllerProvenance,
+		transportProvenance: {
+			authority: "transport",
+			idempotencyKey: existingMutation.idempotencyKey,
+			intentDigest: existingMutation.intentDigest,
+			revision: 1,
+		},
 		integratedAt: "2026-07-21T12:01:00.000Z",
 	});
 	const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
@@ -913,7 +1104,7 @@ test("keeps the parent draft until all children and an exact-generation/head con
 	const transport = new FakeTransport();
 	const broker = new FakeDecisionBroker();
 	const parentHead = "e".repeat(40);
-	const parentRequest: CreatePullRequestRequest = {
+	const parentRequest: PullRequestFixtureRequest = {
 		repository: candidate.repository,
 		workItemId: `parent-${candidate.parentIssue}`,
 		generation: candidate.generation,
@@ -932,17 +1123,7 @@ test("keeps the parent draft until all children and an exact-generation/head con
 		],
 	};
 	transport.pullRequests.push(cleanPullRequest(parentRequest, { draft: true }, 900));
-	const receipts: ChildIntegrationReceipt[] = candidate.children.map((child, index) => ({
-		childId: child.id,
-		pullRequest: 812 + index,
-		generation: candidate.generation,
-		marker: child.markers.pullRequest,
-		baseSha,
-		headSha: String(index + 1).repeat(40),
-		parentBranch: candidate.parentBranch,
-		integratedAt: "2026-07-21T12:01:00.000Z",
-	}));
-	transport.integrations.push(...receipts);
+	const receipts = seedIntegrationRoster(candidate, transport);
 
 	const orchestrator = orchestratorFor(transport, broker);
 	const blocked = await orchestrator.reconcileParentReadiness(candidate, receipts.slice(0, 1), decisionPolicy);
@@ -977,18 +1158,11 @@ test("keeps the parent draft until all children and an exact-generation/head con
 
 test("pending/rejected decisions and parent head movement never mark ready", async () => {
 	const candidate = await plan();
-	const receipts: ChildIntegrationReceipt[] = candidate.children.map((child, index) => ({
-		childId: child.id,
-		pullRequest: 812 + index,
-		generation: candidate.generation,
-		marker: child.markers.pullRequest,
-		baseSha,
-		headSha: String(index + 1).repeat(40),
-		parentBranch: candidate.parentBranch,
-		integratedAt: "2026-07-21T12:01:00.000Z",
-	}));
+	const seed = new FakeTransport();
+	const receipts = seedIntegrationRoster(candidate, seed);
 	const makeTransport = (): FakeTransport => {
 		const transport = new FakeTransport();
+		transport.pullRequests.push(...structuredClone(seed.pullRequests));
 		transport.pullRequests.push(cleanPullRequest({
 			repository: candidate.repository,
 			workItemId: `parent-${candidate.parentIssue}`,
@@ -1035,18 +1209,11 @@ test("pending/rejected decisions and parent head movement never mark ready", asy
 test("parent readiness reconciles caller receipts against complete authoritative records and current ancestry", async () => {
 	const candidate = await plan();
 	const parentHead = "e".repeat(40);
-	const receipts: ChildIntegrationReceipt[] = candidate.children.map((child, index) => ({
-		childId: child.id,
-		pullRequest: 812 + index,
-		generation: candidate.generation,
-		marker: child.markers.pullRequest,
-		baseSha,
-		headSha: String(index + 1).repeat(40),
-		parentBranch: candidate.parentBranch,
-		integratedAt: "2026-07-21T12:01:00.000Z",
-	}));
+	const seed = new FakeTransport();
+	const receipts = seedIntegrationRoster(candidate, seed);
 	const setup = (): FakeTransport => {
 		const transport = new FakeTransport();
+		transport.pullRequests.push(...structuredClone(seed.pullRequests));
 		transport.integrations.push(...receipts);
 		transport.pullRequests.push(cleanPullRequest({
 			repository: candidate.repository,
@@ -1073,6 +1240,21 @@ test("parent readiness reconciles caller receipts against complete authoritative
 	assert.equal(forgedResult.kind, "blocked");
 	assert.equal(forgedTransport.markReadyCalls, 0);
 
+	for (const forge of [
+		(receipt: any) => { receipt.controllerProvenance.planDigest = "f".repeat(64); },
+		(receipt: any) => { receipt.transportProvenance.intentDigest = "f".repeat(64); },
+		(receipt: any) => { receipt.pullRequestSnapshot.number = 9_999; },
+	]) {
+		const transport = setup();
+		const authoritativeForgery = structuredClone(receipts);
+		forge(authoritativeForgery[0]);
+		transport.integrations.splice(0, transport.integrations.length, ...authoritativeForgery);
+		const result = await orchestratorFor(transport, new FakeDecisionBroker())
+			.reconcileParentReadiness(candidate, authoritativeForgery, decisionPolicy);
+		assert.equal(result.kind, "blocked");
+		assert.equal(transport.markReadyCalls, 0);
+	}
+
 	const forcePushed = setup();
 	forcePushed.ancestry = false;
 	const stale = await orchestratorFor(forcePushed, new FakeDecisionBroker())
@@ -1090,19 +1272,9 @@ test("parent readiness reconciles caller receipts against complete authoritative
 
 test("parent ready transition recovers timeout and malformed responses only after exact authoritative re-read", async () => {
 	const candidate = await plan();
-	const receipts: ChildIntegrationReceipt[] = candidate.children.map((child, index) => ({
-		childId: child.id,
-		pullRequest: 812 + index,
-		generation: candidate.generation,
-		marker: child.markers.pullRequest,
-		baseSha,
-		headSha: String(index + 1).repeat(40),
-		parentBranch: candidate.parentBranch,
-		integratedAt: "2026-07-21T12:01:00.000Z",
-	}));
 	for (const mode of ["timeout", "malformed"] as const) {
 		const transport = new FakeTransport();
-		transport.integrations.push(...receipts);
+		const receipts = seedIntegrationRoster(candidate, transport);
 		transport.pullRequests.push(cleanPullRequest({
 			repository: candidate.repository,
 			workItemId: `parent-${candidate.parentIssue}`,
@@ -1136,7 +1308,6 @@ function cycle3CheckPolicy(baseBranch: string, overrides: Record<string, unknown
 		revision: 7,
 		requiredChecks: [
 			{ name: "verify", producerId: "github-actions:workflow-verify" },
-			{ name: "strict-types", producerId: "github-actions:workflow-types" },
 		],
 		...overrides,
 	};
@@ -1292,7 +1463,7 @@ test("cycle 3 durable mutation metadata deduplicates issue, PR, roster, integrat
 	]);
 	assert.equal(transport.publishRosterCalls, 1);
 
-	const request: CreatePullRequestRequest = {
+	const request: PullRequestFixtureRequest = {
 		repository: candidate.repository,
 		workItemId: child.id,
 		generation: candidate.generation,
@@ -1368,6 +1539,75 @@ test("cycle 3 durable mutation metadata deduplicates issue, PR, roster, integrat
 	assert.equal(transport.markReadyCalls, 1);
 });
 
+test("cycle 3 retries authoritative visibility after every timeout-after-effect mutation", async () => {
+	const candidate = await cycle3Plan(true);
+	const transport = new FakeTransport();
+	const orchestrator = orchestratorFor(transport, new FakeDecisionBroker());
+
+	transport.issueVisibilityLag = 2;
+	transport.throwAfterIssuePublish = true;
+	const issue = await orchestrator.ensureChildIssue(candidate, "evidence");
+	assert.equal(transport.createIssueCalls, 1);
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	const handoff = childHandoff(child.issue, child.branch, child.prBase);
+
+	transport.pullRequestVisibilityLag = 2;
+	transport.throwAfterPullRequestPublish = true;
+	const pullRequest = await orchestrator.ensureChildPullRequest(candidate, child, handoff);
+	assert.equal(transport.createPullRequestCalls, 1);
+
+	transport.rosterVisibilityLag = 2;
+	transport.throwAfterRosterPublish = true;
+	const roster = await (orchestrator.reconcileParentRoster as any)(candidate, { evidence: "running" }, 1);
+	assert.equal((roster as GitHubRosterSnapshot).statusEpoch, 1);
+	assert.equal(transport.publishRosterCalls, 1);
+
+	const request: PullRequestFixtureRequest = {
+		repository: candidate.repository,
+		workItemId: child.id,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		title: child.title,
+		body: `Refs #${child.issue}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+		draft: false,
+		baseBranch: child.prBase,
+		headBranch: child.branch,
+		baseSha: handoff.baseHead,
+		headSha: handoff.head,
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+	};
+	const pullRequestIndex = transport.pullRequests.findIndex((candidatePr) => candidatePr.number === pullRequest.number);
+	transport.pullRequests[pullRequestIndex] = cleanPullRequest(request, {}, pullRequest.number);
+	transport.integrationVisibilityLag = 2;
+	transport.throwAfterIntegration = true;
+	const integrated = await orchestrator.integrateChild(candidate, child, handoff);
+	assert.equal(integrated.kind, "integrated");
+	assert.equal(transport.integrateCalls, 1);
+	if (integrated.kind !== "integrated") throw new Error("integration visibility recovery failed");
+
+	transport.pullRequests.push(cleanPullRequest({
+		repository: candidate.repository,
+		workItemId: `parent-${candidate.parentIssue}`,
+		generation: candidate.generation,
+		marker: candidate.markers.parentPullRequest,
+		title: candidate.title,
+		body: `Closes #${candidate.parentIssue}\n\n${candidate.markers.parentPullRequest}`,
+		draft: true,
+		baseBranch: candidate.parentBaseBranch,
+		headBranch: candidate.parentBranch,
+		baseSha,
+		headSha: "e".repeat(40),
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+	}, { draft: true }, 900));
+	transport.parentReadyVisibilityLag = 2;
+	transport.throwAfterReady = true;
+	const ready = await orchestrator.reconcileParentReadiness(candidate, [integrated.receipt], decisionPolicy);
+	assert.equal(ready.kind, "ready");
+	assert.equal(transport.markReadyCalls, 1);
+});
+
 test("cycle 3 roster revisions and status epochs reject regression and drain rejected FIFO work", async () => {
 	const candidate = await cycle3Plan(true);
 	const transport = new FakeTransport();
@@ -1386,14 +1626,14 @@ test("cycle 3 roster revisions and status epochs reject regression and drain rej
 
 test("cycle 3 requires an exact literal-true ancestry proof and rejects truthy or mismatched coordinates", async () => {
 	const candidate = await cycle3Plan(true);
-	const setup = async (proof: (query: Record<string, unknown>) => Promise<unknown>) => {
+	const setup = async (proof: (query: GitAncestryQuery) => Promise<unknown>) => {
 		const transport = new FakeTransport();
 		transport.ancestryProof = proof;
 		const orchestrator = orchestratorFor(transport, new FakeDecisionBroker());
 		const issue = await orchestrator.ensureChildIssue(candidate, "evidence");
 		const child = materializeChildRecord(candidate, "evidence", issue);
 		const handoff = childHandoff(child.issue, child.branch, child.prBase);
-		const childRequest: CreatePullRequestRequest = {
+		const childRequest: PullRequestFixtureRequest = {
 			repository: candidate.repository,
 			workItemId: child.id,
 			generation: candidate.generation,
@@ -1431,9 +1671,9 @@ test("cycle 3 requires an exact literal-true ancestry proof and rejects truthy o
 	};
 
 	for (const proof of [
-		async (query: Record<string, unknown>) => ({ ...query, schemaVersion: 1, authority: "transport", result: "true", revision: 1, observedAt: "2026-07-21T12:05:00.000Z" }),
-		async (query: Record<string, unknown>) => ({ ...query, repository: "other/cli", schemaVersion: 1, authority: "transport", result: true, revision: 1, observedAt: "2026-07-21T12:05:00.000Z" }),
-		async (query: Record<string, unknown>) => ({ ...query, descendantSha: "f".repeat(40), schemaVersion: 1, authority: "transport", result: true, revision: 1, observedAt: "2026-07-21T12:05:00.000Z" }),
+		async (query: GitAncestryQuery) => ({ ...query, schemaVersion: 1, authority: "transport", result: "true", revision: 1, observedAt: "2026-07-21T12:05:00.000Z" }),
+		async (query: GitAncestryQuery) => ({ ...query, repository: "other/cli", schemaVersion: 1, authority: "transport", result: true, revision: 1, observedAt: "2026-07-21T12:05:00.000Z" }),
+		async (query: GitAncestryQuery) => ({ ...query, descendantSha: "f".repeat(40), schemaVersion: 1, authority: "transport", result: true, revision: 1, observedAt: "2026-07-21T12:05:00.000Z" }),
 	]) {
 		const decision = await setup(proof);
 		assert.equal(decision.kind, "blocked");

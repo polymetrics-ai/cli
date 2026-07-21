@@ -1,5 +1,8 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "repository": "github.com/polymetrics-ai/cli",
+  "workItemId": "evidence",
+  "generation": 3,
   "number": 812,
   "marker": "<!-- shepherd-child-pr:v1:471:evidence:0123456789abcdef01234567 -->",
   "title": "feat(shepherd): add GitHub evidence",
@@ -10,24 +13,33 @@
   "headBranch": "feat/811-github-evidence",
   "baseSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "headSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "changedPathsComplete": true,
   "changedPaths": [".pi/extensions/shepherd/github-evidence.ts"],
+  "allowedScopes": [".pi/extensions/shepherd"],
   "mergeState": "clean",
+  "policyDigest": "0000000000000000000000000000000000000000000000000000000000000000",
   "checksComplete": true,
   "checks": [
     {
       "id": "check-verify-1",
       "name": "shepherd-tests",
       "producerId": "github-actions:workflow-verify",
+      "sequence": 1,
       "status": "completed",
       "conclusion": "success",
       "headSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "updatedAt": "2026-07-21T11:55:00.000Z",
       "completedAt": "2026-07-21T11:55:00.000Z"
     }
   ],
+  "requestedChangesComplete": true,
   "requestedChanges": [],
+  "threadsComplete": true,
   "threads": [],
   "reviews": [],
   "reviewsComplete": true,
+  "dispositionsComplete": true,
   "dispositions": [],
-  "observedAt": "2026-07-21T12:00:00.000Z"
+  "revision": 42,
+  "observedAt": "2026-07-21T12:05:00.000Z"
 }

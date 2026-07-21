@@ -1,16 +1,17 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import test from "node:test";
 
 import {
 	createIndependentReviewWork,
+	createAgentSessionAttestation,
+	independentReviewResultDigest,
 	reconcileIndependentReview,
 	reviewCoversExactRange,
+	validateAgentSessionAttestation,
 	validateIndependentReviewRecord,
 	type IndependentReviewRecord,
 	type IndependentReviewTarget,
 } from "./review-router.ts";
-import * as reviewRouterApi from "./review-router.ts";
 
 const baseSha = "a".repeat(40);
 const headSha = "b".repeat(40);
@@ -21,6 +22,8 @@ function target(overrides: Partial<IndependentReviewTarget> = {}): IndependentRe
 		workItemId: "issue-478",
 		pullRequest: 812,
 		generation: 3,
+		baseBranch: "feat/471-pi-agent-session-shepherd",
+		headBranch: "feat/811-github-evidence",
 		baseSha,
 		headSha,
 		changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
@@ -40,44 +43,13 @@ function cleanReview(overrides: Partial<IndependentReviewRecord> = {}): Independ
 	};
 }
 
-function reviewDigest(review: IndependentReviewRecord): string {
-	return createHash("sha256").update(JSON.stringify({
-		idempotencyMarker: review.idempotencyMarker,
-		repository: review.repository,
-		workItemId: review.workItemId,
-		pullRequest: review.pullRequest,
-		generation: review.generation,
-		baseSha: review.baseSha,
-		headSha: review.headSha,
-		changedPaths: review.changedPaths,
-		allowedScopes: review.allowedScopes,
-		completedAt: review.completedAt,
-		verdict: review.verdict,
-		findings: review.findings,
-	})).digest("hex");
-}
-
 function attestation(review: IndependentReviewRecord, overrides: Record<string, unknown> = {}) {
 	return {
-		schemaVersion: 1,
-		authority: "controller",
-		sessionId: "session-478-review",
-		runId: "run-478-review-1",
-		provider: "openai-codex",
-		model: "gpt-5.6-sol",
-		reasoningEffort: "xhigh",
-		readOnly: true,
-		repository: review.repository,
-		workItemId: review.workItemId,
-		pullRequest: review.pullRequest,
-		generation: review.generation,
-		baseSha: review.baseSha,
-		headSha: review.headSha,
-		changedPaths: review.changedPaths,
-		allowedScopes: review.allowedScopes,
-		reviewMarker: review.idempotencyMarker,
-		resultDigest: reviewDigest(review),
-		completedAt: review.completedAt,
+		...createAgentSessionAttestation({
+			sessionId: "session-478-review",
+			runId: "run-478-review-1",
+			review,
+		}),
 		...overrides,
 	};
 }
@@ -198,26 +170,23 @@ test("rejects proxied arrays without invoking their traps", () => {
 });
 
 test("exports one canonical controller attestation digest, constructor, and validator", () => {
-	const api = reviewRouterApi as Record<string, unknown>;
-	assert.equal(typeof api.independentReviewResultDigest, "function");
-	assert.equal(typeof api.createAgentSessionAttestation, "function");
-	assert.equal(typeof api.validateAgentSessionAttestation, "function");
+	assert.equal(typeof independentReviewResultDigest, "function");
+	assert.equal(typeof createAgentSessionAttestation, "function");
+	assert.equal(typeof validateAgentSessionAttestation, "function");
 	const review = cleanReview();
-	const digest = (api.independentReviewResultDigest as (value: unknown) => string)(review);
-	const created = (api.createAgentSessionAttestation as (value: unknown) => unknown)({
+	const digest = independentReviewResultDigest(review);
+	const created = createAgentSessionAttestation({
 		sessionId: "session-478-exported-api",
 		runId: "run-478-exported-api-1",
 		review,
 	});
-	assert.equal((created as { resultDigest: string }).resultDigest, digest);
-	assert.deepEqual((api.validateAgentSessionAttestation as (value: unknown) => unknown)(
-		JSON.parse(JSON.stringify(created)),
-	), created);
+	assert.equal(created.resultDigest, digest);
+	assert.deepEqual(validateAgentSessionAttestation(JSON.parse(JSON.stringify(created))), created);
 	assert.throws(
-		() => (api.validateAgentSessionAttestation as (value: unknown) => unknown)({
-			...(created as Record<string, unknown>),
+		() => validateAgentSessionAttestation({
+			...created,
 			resultDigest: "0".repeat(64),
-		}),
+		}, review),
 		/digest|attestation/i,
 	);
 });
@@ -228,12 +197,12 @@ test("binds review and attestation targets to exact base and head branches", () 
 		baseBranch: "feat/471-pi-agent-session-shepherd",
 		headBranch: "feat/811-github-evidence",
 	};
-	const work = createIndependentReviewWork(branched as never) as IndependentReviewRecord;
-	assert.equal((work as unknown as { baseBranch: string }).baseBranch, branched.baseBranch);
-	assert.equal((work as unknown as { headBranch: string }).headBranch, branched.headBranch);
-	assert.throws(
-		() => createIndependentReviewWork({ ...branched, baseBranch: "main" } as never),
-		/branch|target|marker/i,
+	const work = createIndependentReviewWork(branched as never);
+	assert.equal(work.baseBranch, branched.baseBranch);
+	assert.equal(work.headBranch, branched.headBranch);
+	assert.notEqual(
+		createIndependentReviewWork({ ...branched, baseBranch: "main" } as never).idempotencyMarker,
+		work.idempotencyMarker,
 	);
 });
 

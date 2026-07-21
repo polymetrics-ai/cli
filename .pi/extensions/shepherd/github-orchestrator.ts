@@ -14,10 +14,13 @@ import { canonicalIssueBranch } from "./git-adapter.ts";
 import {
 	canonicalGitRef,
 	evaluateGitHubPullRequestEvidence,
+	validateGitHubChangedPathEvidence,
 	validateGitHubPullRequestEvidence,
 	type GitHubEvidenceBlocker,
+	type GitHubChangedPathEvidence,
 	type GitHubPullRequestEvidence,
-	type RequiredGitHubCheck,
+	type RequiredGitHubCheckPolicy,
+	validateRequiredGitHubCheckPolicy,
 } from "./github-evidence.ts";
 import type {
 	GitHubDecisionBroker,
@@ -39,6 +42,7 @@ const MAX_CHILDREN = 64;
 const MAX_LIST = 64;
 const MAX_BODY_BYTES = 65_536;
 const MAX_GITHUB_NUMBER = 2_147_483_647;
+const MAX_CANONICAL_PLAN_BYTES = 1_000_000;
 const SHA = /^[0-9a-f]{40}$/;
 const IDENTITY = /^[0-9a-f]{64}$/;
 const CHILD_ID = /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/;
@@ -97,7 +101,37 @@ export interface ParentOrchestrationPlan {
 		parentPullRequest: string;
 		roster: string;
 	};
+	requiredCheckPolicies: RequiredGitHubCheckPolicy[];
 	children: BoundedChildRecord[];
+	canonical: {
+		schemaVersion: 1;
+		serialized: string;
+		digest: string;
+	};
+}
+
+export interface ParentOrchestrationPolicyBundle {
+	schemaVersion: 1;
+	requiredCheckPolicies: readonly RequiredGitHubCheckPolicy[];
+}
+
+export type DurableMutationOperation = "child_issue" | "pull_request" | "parent_roster" | "child_integration" | "parent_ready";
+
+export interface DurableMutationIntent {
+	schemaVersion: 1;
+	operation: DurableMutationOperation;
+	idempotencyKey: string;
+	intentDigest: string;
+	expectedResourceRevision: number | null;
+}
+
+export interface DurableMutationResult<T> {
+	schemaVersion: 1;
+	idempotencyKey: string;
+	intentDigest: string;
+	revision: number;
+	applied: boolean;
+	value: T;
 }
 
 export interface GitHubChildIssue {
@@ -118,6 +152,7 @@ export interface CreateChildIssueRequest extends ChildIssueMarkerQuery {
 	parentIssue: number;
 	title: string;
 	body: string;
+	mutation: DurableMutationIntent;
 }
 
 export interface PullRequestMarkerQuery {
@@ -137,6 +172,8 @@ export interface CreatePullRequestRequest extends PullRequestMarkerQuery {
 	headSha: string;
 	changedPaths: readonly string[];
 	allowedScopes: readonly string[];
+	policyDigest: string;
+	mutation: DurableMutationIntent;
 }
 
 export interface GitHubRosterQuery {
@@ -150,6 +187,9 @@ export interface GitHubRosterSnapshot {
 	parentIssue: number;
 	generation: number;
 	body: string;
+	statuses: Record<string, WorkItemStatus>;
+	statusEpoch: number;
+	revision: number;
 	updatedAt: string;
 }
 
@@ -157,6 +197,9 @@ export interface PublishRosterRequest extends GitHubRosterQuery {
 	parentIssue: number;
 	generation: number;
 	body: string;
+	statuses: Readonly<Record<string, WorkItemStatus>>;
+	statusEpoch: number;
+	mutation: DurableMutationIntent;
 }
 
 export interface GitHubPullRequestQuery {
@@ -181,6 +224,46 @@ export interface GitAncestryQuery {
 	descendantSha: string;
 }
 
+export interface GitAncestryProof extends GitAncestryQuery {
+	schemaVersion: 1;
+	authority: "transport";
+	result: boolean;
+	revision: number;
+	observedAt: string;
+}
+
+export interface CanonicalPullRequestSnapshot {
+	repository: string;
+	workItemId: string;
+	number: number;
+	generation: number;
+	marker: string;
+	baseBranch: string;
+	headBranch: string;
+	baseSha: string;
+	headSha: string;
+	changedPaths: string[];
+	allowedScopes: string[];
+	revision: number;
+	observedAt: string;
+	digest: string;
+}
+
+export interface ControllerIntegrationProvenance {
+	authority: "controller";
+	planDigest: string;
+	policyDigest: string;
+	evidenceRevision: number;
+	observedAt: string;
+}
+
+export interface TransportMutationProvenance {
+	authority: "transport";
+	idempotencyKey: string;
+	intentDigest: string;
+	revision: number;
+}
+
 export interface ChildIntegrationReceipt {
 	childId: string;
 	pullRequest: number;
@@ -189,6 +272,9 @@ export interface ChildIntegrationReceipt {
 	baseSha: string;
 	headSha: string;
 	parentBranch: string;
+	pullRequestSnapshot: CanonicalPullRequestSnapshot;
+	controllerProvenance: ControllerIntegrationProvenance;
+	transportProvenance: TransportMutationProvenance;
 	integratedAt: string;
 }
 
@@ -199,29 +285,34 @@ export interface IntegrateChildRequest extends GitHubPullRequestQuery {
 	baseSha: string;
 	headSha: string;
 	parentBranch: string;
+	pullRequestSnapshot: CanonicalPullRequestSnapshot;
+	controllerProvenance: ControllerIntegrationProvenance;
+	mutation: DurableMutationIntent;
 }
 
 export interface MarkParentReadyRequest extends GitHubPullRequestQuery {
 	headSha: string;
 	generation: number;
 	decisionRequestId: string;
+	mutation: DurableMutationIntent;
 }
 
 export interface GitHubOrchestrationTransport {
 	findChildIssues(query: ChildIssueMarkerQuery): Promise<AuthoritativeLookup<GitHubChildIssue>>;
-	createChildIssue(request: CreateChildIssueRequest): Promise<GitHubChildIssue>;
+	createChildIssue(request: CreateChildIssueRequest): Promise<DurableMutationResult<GitHubChildIssue>>;
 	findPullRequests(query: PullRequestMarkerQuery): Promise<AuthoritativeLookup<GitHubPullRequestEvidence>>;
-	createPullRequest(request: CreatePullRequestRequest): Promise<GitHubPullRequestEvidence>;
+	createPullRequest(request: CreatePullRequestRequest): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
 	findParentRosters(query: GitHubRosterQuery): Promise<AuthoritativeLookup<GitHubRosterSnapshot>>;
-	publishParentRoster(request: PublishRosterRequest): Promise<GitHubRosterSnapshot>;
+	publishParentRoster(request: PublishRosterRequest): Promise<DurableMutationResult<GitHubRosterSnapshot>>;
 	findChildIntegration(query: ChildIntegrationQuery): Promise<AuthoritativeLookup<ChildIntegrationReceipt>>;
-	integrateChild(request: IntegrateChildRequest): Promise<ChildIntegrationReceipt>;
-	markParentReady(request: MarkParentReadyRequest): Promise<GitHubPullRequestEvidence>;
-	isAncestor(query: GitAncestryQuery): Promise<boolean>;
+	integrateChild(request: IntegrateChildRequest): Promise<DurableMutationResult<ChildIntegrationReceipt>>;
+	markParentReady(request: MarkParentReadyRequest): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
+	proveAncestry(query: GitAncestryQuery): Promise<GitAncestryProof>;
 }
 
 export interface AgentSessionAttestationSource {
 	findAttestations(target: IndependentReviewTarget): Promise<AuthoritativeLookup<AgentSessionAttestation>>;
+	findChangedPathEvidence(query: Omit<IndependentReviewTarget, "changedPaths" | "allowedScopes">): Promise<AuthoritativeLookup<GitHubChangedPathEvidence>>;
 }
 
 export type ParentDecisionBroker = Pick<GitHubDecisionBroker, "request" | "poll" | "consume">;
@@ -431,9 +522,9 @@ function validateChildIntent(value: unknown): ChildIntent {
 	if (!CHILD_ID.test(id)) throw new Error("invalid child ID");
 	const slug = inlineText(candidate.slug, "child branch slug", 100);
 	if (!SLUG.test(slug)) throw new Error("invalid child branch slug");
-	if (candidate.access !== "read_only" && candidate.access !== "mutating") throw new Error("invalid child access");
+	if (candidate.access !== "mutating") throw new Error("top-level child work must be mutating");
 	const dependencies = validateStringList(candidate.dependsOn, "child dependencies", CHILD_ID, true);
-	const scopes = validateStringList(candidate.writeScopes, "child write scopes", undefined, true);
+	const scopes = validateStringList(candidate.writeScopes, "child write scopes");
 	const skills = validateStringList(candidate.requiredSkills, "required skills", SKILL);
 	const verification = boundedArray(candidate.verification, "verification requirements").map(validateVerification);
 	unique(verification, (requirement) => requirement.id, "verification requirement ID");
@@ -471,7 +562,9 @@ function renderChildIssueBody(parentIssue: number, child: ChildIntent, marker: s
 	].join("\n");
 }
 
-export function createParentOrchestrationPlan(value: unknown): ParentOrchestrationPlan {
+type CanonicalPlanData = Omit<ParentOrchestrationPlan, "canonical">;
+
+function buildParentOrchestrationPlan(value: unknown, policyValue: unknown): CanonicalPlanData {
 	const candidate = exactRecord(value, [
 		"repository",
 		"parentIssue",
@@ -482,6 +575,8 @@ export function createParentOrchestrationPlan(value: unknown): ParentOrchestrati
 		"parentBaseBranch",
 		"children",
 	]);
+	const bundle = exactRecord(policyValue, ["schemaVersion", "requiredCheckPolicies"]);
+	if (bundle.schemaVersion !== 1) throw new Error("unsupported parent orchestration policy bundle");
 	const canonicalRepository = repository(candidate.repository);
 	const parentIssue = githubNumber(candidate.parentIssue, "parent issue number");
 	const canonicalGeneration = generation(candidate.generation);
@@ -490,6 +585,16 @@ export function createParentOrchestrationPlan(value: unknown): ParentOrchestrati
 	const parentBranch = canonicalGitRef(candidate.parentBranch, "parent branch");
 	const parentBaseBranch = canonicalGitRef(candidate.parentBaseBranch, "parent base branch");
 	if (parentBranch === parentBaseBranch) throw new Error("parent branch and base branch must differ");
+	const requiredCheckPolicies = boundedArray(bundle.requiredCheckPolicies, "required-check policies")
+		.map(validateRequiredGitHubCheckPolicy)
+		.sort((left, right) => left.baseBranch.localeCompare(right.baseBranch));
+	unique(requiredCheckPolicies, (policy) => `${policy.repository}\u0000${policy.baseBranch}`, "required-check policy coordinate");
+	const requiredPolicyBranches = [parentBaseBranch, parentBranch].sort();
+	if (requiredCheckPolicies.length !== requiredPolicyBranches.length
+		|| requiredCheckPolicies.some((policy, index) => policy.repository !== canonicalRepository
+			|| policy.baseBranch !== requiredPolicyBranches[index])) {
+		throw new Error("required-check policies must exactly cover the repository parent base and parent branch");
+	}
 	const intents = boundedArray(candidate.children, "children", MAX_CHILDREN).map(validateChildIntent);
 	unique(intents, (child) => child.id, "child ID");
 	unique(intents, (child) => child.slug, "child branch slug");
@@ -515,6 +620,7 @@ export function createParentOrchestrationPlan(value: unknown): ParentOrchestrati
 		const markerIntent = {
 			parentIssue,
 			generation: canonicalGeneration,
+			requiredCheckPolicies: requiredCheckPolicies.map((policy) => policy.digest),
 			...child,
 			prBase: parentBranch,
 		};
@@ -545,6 +651,13 @@ export function createParentOrchestrationPlan(value: unknown): ParentOrchestrati
 		objective,
 		parentBranch,
 		parentBaseBranch,
+		requiredCheckPolicies: requiredCheckPolicies.map((policy) => ({
+			repository: policy.repository,
+			baseBranch: policy.baseBranch,
+			revision: policy.revision,
+			digest: policy.digest,
+			requiredChecks: policy.requiredChecks,
+		})),
 		children: children.map((child) => ({ id: child.id, markers: child.markers })),
 	};
 	return deepFreeze({
@@ -560,7 +673,62 @@ export function createParentOrchestrationPlan(value: unknown): ParentOrchestrati
 			parentPullRequest: stableMarker("parent-pr", [parentIssue, canonicalGeneration], parentIntent),
 			roster: stableMarker("parent-roster", [parentIssue, canonicalGeneration], parentIntent),
 		},
+		requiredCheckPolicies,
 		children,
+	});
+}
+
+function canonicalObjective(plan: CanonicalPlanData): Record<string, unknown> {
+	return {
+		repository: plan.repository,
+		parentIssue: plan.parentIssue,
+		generation: plan.generation,
+		title: plan.title,
+		objective: plan.objective,
+		parentBranch: plan.parentBranch,
+		parentBaseBranch: plan.parentBaseBranch,
+		children: plan.children.map((child) => ({
+			id: child.id,
+			title: child.title,
+			objective: child.objective,
+			slug: child.branch.slug,
+			dependsOn: child.dependsOn,
+			access: child.access,
+			writeScopes: child.writeScopes,
+			requiredSkills: child.requiredSkills,
+			verification: child.verification,
+			humanGates: child.humanGates,
+		})),
+	};
+}
+
+function canonicalPolicyBundle(plan: CanonicalPlanData): ParentOrchestrationPolicyBundle {
+	return {
+		schemaVersion: 1,
+		requiredCheckPolicies: plan.requiredCheckPolicies.map((policy) => ({
+			...policy,
+			requiredChecks: policy.requiredChecks.map((check) => ({ ...check })),
+		})),
+	};
+}
+
+function canonicalPlanDigest(serialized: string): string {
+	return createHash("sha256").update(serialized).digest("hex");
+}
+
+export function createParentOrchestrationPlan(
+	value: unknown,
+	policyValue: ParentOrchestrationPolicyBundle,
+): ParentOrchestrationPlan {
+	const built = buildParentOrchestrationPlan(value, policyValue);
+	const serialized = JSON.stringify({
+		objective: canonicalObjective(built),
+		policyBundle: canonicalPolicyBundle(built),
+	});
+	if (Buffer.byteLength(serialized) > MAX_CANONICAL_PLAN_BYTES) throw new Error("canonical plan serialization is oversized");
+	return deepFreeze({
+		...built,
+		canonical: { schemaVersion: 1, serialized, digest: canonicalPlanDigest(serialized) },
 	});
 }
 
@@ -575,8 +743,9 @@ export function selectReadyChildren(
 	statuses: Readonly<Record<string, WorkItemStatus>>,
 	maxConcurrency: number,
 ): ReadyQueueSelection {
-	const canonicalStatuses = statusesForPlan(plan, statuses);
-	const items = plan.children.map((child): DependencyWorkItem => ({
+	const canonicalPlan = validateParentOrchestrationPlan(plan);
+	const canonicalStatuses = statusesForPlan(canonicalPlan, statuses);
+	const items = canonicalPlan.children.map((child): DependencyWorkItem => ({
 		id: child.id,
 		dependsOn: [...child.dependsOn],
 		status: canonicalStatuses[child.id],
@@ -612,9 +781,10 @@ export function materializeChildRecord(
 	childId: string,
 	issueValue: GitHubChildIssue,
 ): MaterializedChildRecord {
-	const child = childFor(plan, childId);
+	const canonicalPlan = validateParentOrchestrationPlan(plan);
+	const child = childFor(canonicalPlan, childId);
 	const issue = validateChildIssue(issueValue);
-	assertChildIssueMatches(issue, plan, child);
+	assertChildIssueMatches(issue, canonicalPlan, child);
 	return {
 		...child,
 		issue: issue.number,
@@ -622,15 +792,116 @@ export function materializeChildRecord(
 	};
 }
 
+function validateStatusRecord(value: unknown): Record<string, WorkItemStatus> {
+	if (typeof value !== "object" || value === null || Array.isArray(value) || nodeTypes.isProxy(value)
+		|| (Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null)) {
+		throw new Error("invalid roster status snapshot");
+	}
+	const descriptors = Object.getOwnPropertyDescriptors(value);
+	if (Reflect.ownKeys(descriptors).length > MAX_CHILDREN) throw new Error("roster statuses are oversized");
+	const allowed: readonly WorkItemStatus[] = ["pending", "running", "succeeded", "failed", "blocked"];
+	const result: Record<string, WorkItemStatus> = {};
+	for (const key of Reflect.ownKeys(descriptors)) {
+		const descriptor = descriptors[key as keyof typeof descriptors];
+		if (typeof key !== "string" || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true
+			|| !allowed.includes(descriptor.value as WorkItemStatus)) throw new Error("invalid roster status");
+		result[key] = descriptor.value as WorkItemStatus;
+	}
+	return result;
+}
+
 function validateRoster(value: unknown): GitHubRosterSnapshot {
-	const candidate = exactRecord(value, ["id", "marker", "parentIssue", "generation", "body", "updatedAt"]);
+	const candidate = exactRecord(value, [
+		"id", "marker", "parentIssue", "generation", "body", "statuses", "statusEpoch", "revision", "updatedAt",
+	]);
+	const statuses = validateStatusRecord(candidate.statuses);
 	return {
 		id: githubNumber(candidate.id, "roster resource ID"),
 		marker: inlineText(candidate.marker, "roster marker", 512),
 		parentIssue: githubNumber(candidate.parentIssue, "roster parent issue"),
 		generation: generation(candidate.generation),
 		body: bodyText(candidate.body, "roster body"),
+		statuses,
+		statusEpoch: generation(candidate.statusEpoch),
+		revision: generation(candidate.revision),
 		updatedAt: timestamp(candidate.updatedAt, "roster update timestamp"),
+	};
+}
+
+function pullRequestSnapshotDigest(value: Omit<CanonicalPullRequestSnapshot, "digest">): string {
+	return createHash("sha256").update(JSON.stringify(value)).digest("hex");
+}
+
+export function createCanonicalPullRequestSnapshot(value: GitHubPullRequestEvidence): CanonicalPullRequestSnapshot {
+	const canonical = validateGitHubPullRequestEvidence(value);
+	const snapshot = {
+		repository: canonical.repository,
+		workItemId: canonical.workItemId,
+		number: canonical.number,
+		generation: canonical.generation,
+		marker: canonical.marker,
+		baseBranch: canonical.baseBranch,
+		headBranch: canonical.headBranch,
+		baseSha: canonical.baseSha,
+		headSha: canonical.headSha,
+		changedPaths: [...canonical.changedPaths],
+		allowedScopes: [...canonical.allowedScopes],
+		revision: canonical.revision,
+		observedAt: canonical.observedAt,
+	};
+	return { ...snapshot, digest: pullRequestSnapshotDigest(snapshot) };
+}
+
+function validatePullRequestSnapshot(value: unknown): CanonicalPullRequestSnapshot {
+	const candidate = exactRecord(value, [
+		"repository", "workItemId", "number", "generation", "marker", "baseBranch", "headBranch", "baseSha",
+		"headSha", "changedPaths", "allowedScopes", "revision", "observedAt", "digest",
+	]);
+	const snapshot = {
+		repository: repository(candidate.repository),
+		workItemId: inlineText(candidate.workItemId, "snapshot work item ID"),
+		number: githubNumber(candidate.number, "snapshot pull request"),
+		generation: generation(candidate.generation),
+		marker: inlineText(candidate.marker, "snapshot pull request marker", 512),
+		baseBranch: canonicalGitRef(candidate.baseBranch, "snapshot base branch"),
+		headBranch: canonicalGitRef(candidate.headBranch, "snapshot head branch"),
+		baseSha: sha(candidate.baseSha, "snapshot base SHA"),
+		headSha: sha(candidate.headSha, "snapshot head SHA"),
+		changedPaths: validateStringList(candidate.changedPaths, "snapshot changed paths", undefined, true),
+		allowedScopes: validateStringList(candidate.allowedScopes, "snapshot allowed scopes"),
+		revision: generation(candidate.revision),
+		observedAt: timestamp(candidate.observedAt, "snapshot observation timestamp"),
+	};
+	if (typeof candidate.digest !== "string" || !IDENTITY.test(candidate.digest)
+		|| candidate.digest !== pullRequestSnapshotDigest(snapshot)) throw new Error("pull request snapshot digest mismatch");
+	return { ...snapshot, digest: candidate.digest };
+}
+
+function validateControllerProvenance(value: unknown): ControllerIntegrationProvenance {
+	const candidate = exactRecord(value, ["authority", "planDigest", "policyDigest", "evidenceRevision", "observedAt"]);
+	if (candidate.authority !== "controller" || typeof candidate.planDigest !== "string" || !IDENTITY.test(candidate.planDigest)
+		|| typeof candidate.policyDigest !== "string" || !IDENTITY.test(candidate.policyDigest)) {
+		throw new Error("invalid controller integration provenance");
+	}
+	return {
+		authority: "controller",
+		planDigest: candidate.planDigest,
+		policyDigest: candidate.policyDigest,
+		evidenceRevision: generation(candidate.evidenceRevision),
+		observedAt: timestamp(candidate.observedAt, "controller evidence observation timestamp"),
+	};
+}
+
+function validateTransportProvenance(value: unknown): TransportMutationProvenance {
+	const candidate = exactRecord(value, ["authority", "idempotencyKey", "intentDigest", "revision"]);
+	if (candidate.authority !== "transport" || typeof candidate.intentDigest !== "string" || !IDENTITY.test(candidate.intentDigest)) {
+		throw new Error("invalid transport mutation provenance");
+	}
+	return {
+		authority: "transport",
+		idempotencyKey: inlineText(candidate.idempotencyKey, "transport mutation key", 512),
+		intentDigest: candidate.intentDigest,
+		revision: generation(candidate.revision),
 	};
 }
 
@@ -643,6 +914,9 @@ function validateReceipt(value: unknown): ChildIntegrationReceipt {
 		"baseSha",
 		"headSha",
 		"parentBranch",
+		"pullRequestSnapshot",
+		"controllerProvenance",
+		"transportProvenance",
 		"integratedAt",
 	]);
 	return {
@@ -653,7 +927,86 @@ function validateReceipt(value: unknown): ChildIntegrationReceipt {
 		baseSha: sha(candidate.baseSha, "integrated base SHA"),
 		headSha: sha(candidate.headSha, "integrated head SHA"),
 		parentBranch: canonicalGitRef(candidate.parentBranch, "integration parent branch"),
+		pullRequestSnapshot: validatePullRequestSnapshot(candidate.pullRequestSnapshot),
+		controllerProvenance: validateControllerProvenance(candidate.controllerProvenance),
+		transportProvenance: validateTransportProvenance(candidate.transportProvenance),
 		integratedAt: timestamp(candidate.integratedAt, "integration timestamp"),
+	};
+}
+
+export function createDurableMutationIntent(
+	operation: DurableMutationOperation,
+	coordinates: readonly (string | number)[],
+	intent: unknown,
+	expectedResourceRevision: number | null,
+): DurableMutationIntent {
+	const intentDigest = createHash("sha256").update(JSON.stringify(intent)).digest("hex");
+	const keyDigest = createHash("sha256").update(JSON.stringify({ operation, coordinates })).digest("hex").slice(0, 32);
+	return {
+		schemaVersion: 1,
+		operation,
+		idempotencyKey: `shepherd-mutation:v1:${operation}:${keyDigest}`,
+		intentDigest,
+		expectedResourceRevision,
+	};
+}
+
+function validateDurableMutationResult<T>(
+	value: unknown,
+	intent: DurableMutationIntent,
+	validateValue: (entry: unknown) => T,
+): DurableMutationResult<T> {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "idempotencyKey", "intentDigest", "revision", "applied", "value",
+	]);
+	if (candidate.schemaVersion !== 1 || candidate.idempotencyKey !== intent.idempotencyKey
+		|| candidate.intentDigest !== intent.intentDigest || typeof candidate.applied !== "boolean") {
+		throw new Error("durable mutation result provenance does not match its intent");
+	}
+	return {
+		schemaVersion: 1,
+		idempotencyKey: intent.idempotencyKey,
+		intentDigest: intent.intentDigest,
+		revision: generation(candidate.revision),
+		applied: candidate.applied,
+		value: validateValue(candidate.value),
+	};
+}
+
+function transportProvenance(result: DurableMutationResult<unknown>): TransportMutationProvenance {
+	return {
+		authority: "transport",
+		idempotencyKey: result.idempotencyKey,
+		intentDigest: result.intentDigest,
+		revision: result.revision,
+	};
+}
+
+function validateAncestryProof(
+	value: unknown,
+	query: GitAncestryQuery,
+	minimumObservedAt: string,
+): GitAncestryProof {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "authority", "repository", "ancestorSha", "descendantSha", "result", "revision", "observedAt",
+	]);
+	if (candidate.schemaVersion !== 1 || candidate.authority !== "transport" || candidate.result !== true
+		|| repository(candidate.repository) !== query.repository
+		|| sha(candidate.ancestorSha, "ancestry proof ancestor SHA") !== query.ancestorSha
+		|| sha(candidate.descendantSha, "ancestry proof descendant SHA") !== query.descendantSha) {
+		throw new Error("ancestry proof does not bind exact coordinates with a literal true result");
+	}
+	const observedAt = timestamp(candidate.observedAt, "ancestry proof observation timestamp");
+	if (observedAt < minimumObservedAt) throw new Error("ancestry proof is stale");
+	return {
+		schemaVersion: 1,
+		authority: "transport",
+		repository: query.repository,
+		ancestorSha: query.ancestorSha,
+		descendantSha: query.descendantSha,
+		result: true,
+		revision: generation(candidate.revision),
+		observedAt,
 	};
 }
 
@@ -725,16 +1078,25 @@ function sameStrings(left: readonly string[], right: readonly string[]): boolean
 	return left.length === right.length && left.every((value, index) => value === right[index]);
 }
 
-function canonicalDataEqual(left: unknown, right: unknown): boolean {
+function canonicalDataEqual(
+	left: unknown,
+	right: unknown,
+	leftSeen = new WeakSet<object>(),
+	rightSeen = new WeakSet<object>(),
+): boolean {
 	if (Object.is(left, right)) return true;
 	if (typeof left !== "object" || left === null || typeof right !== "object" || right === null
 		|| nodeTypes.isProxy(left) || nodeTypes.isProxy(right)
 		|| Array.isArray(left) !== Array.isArray(right)
 		|| Object.getPrototypeOf(left) !== Object.getPrototypeOf(right)) return false;
+	if (leftSeen.has(left) || rightSeen.has(right)) return false;
+	leftSeen.add(left);
+	rightSeen.add(right);
 	const leftDescriptors = Object.getOwnPropertyDescriptors(left);
 	const rightDescriptors = Object.getOwnPropertyDescriptors(right);
 	const leftKeys = Reflect.ownKeys(leftDescriptors).filter((key) => key !== "length");
 	const rightKeys = Reflect.ownKeys(rightDescriptors).filter((key) => key !== "length");
+	if (leftKeys.length > MAX_LIST * 8 || rightKeys.length > MAX_LIST * 8) return false;
 	if (leftKeys.length !== rightKeys.length) return false;
 	for (const key of leftKeys) {
 		if (!rightKeys.includes(key)) return false;
@@ -742,9 +1104,63 @@ function canonicalDataEqual(left: unknown, right: unknown): boolean {
 		const rightDescriptor = rightDescriptors[key as keyof typeof rightDescriptors];
 		if (!Object.hasOwn(leftDescriptor, "value") || !Object.hasOwn(rightDescriptor, "value")
 			|| leftDescriptor.enumerable !== rightDescriptor.enumerable
-			|| !canonicalDataEqual(leftDescriptor.value, rightDescriptor.value)) return false;
+			|| !canonicalDataEqual(leftDescriptor.value, rightDescriptor.value, leftSeen, rightSeen)) return false;
 	}
 	return true;
+}
+
+function validateParentOrchestrationPlan(value: unknown): ParentOrchestrationPlan {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "repository", "parentIssue", "generation", "title", "objective", "parentBranch",
+		"parentBaseBranch", "markers", "requiredCheckPolicies", "children", "canonical",
+	]);
+	if (candidate.schemaVersion !== 1) throw new Error("unsupported canonical parent orchestration plan schema");
+	const canonical = exactRecord(candidate.canonical, ["schemaVersion", "serialized", "digest"]);
+	if (canonical.schemaVersion !== 1 || typeof canonical.serialized !== "string"
+		|| canonical.serialized.length === 0 || Buffer.byteLength(canonical.serialized) > MAX_CANONICAL_PLAN_BYTES
+		|| typeof canonical.digest !== "string" || !IDENTITY.test(canonical.digest)
+		|| canonical.digest !== canonicalPlanDigest(canonical.serialized)) {
+		throw new Error("canonical parent orchestration plan digest or serialization is invalid");
+	}
+	let seed: unknown;
+	try {
+		seed = JSON.parse(canonical.serialized);
+	} catch {
+		throw new Error("canonical parent orchestration plan serialization is invalid");
+	}
+	const parsed = exactRecord(seed, ["objective", "policyBundle"]);
+	const rebuilt = buildParentOrchestrationPlan(parsed.objective, parsed.policyBundle);
+	const canonicalSerialized = JSON.stringify({
+		objective: canonicalObjective(rebuilt),
+		policyBundle: canonicalPolicyBundle(rebuilt),
+	});
+	if (canonicalSerialized !== canonical.serialized) {
+		throw new Error("canonical parent orchestration plan serialization is not normalized");
+	}
+	const supplied: CanonicalPlanData = {
+		schemaVersion: candidate.schemaVersion as 1,
+		repository: candidate.repository as string,
+		parentIssue: candidate.parentIssue as number,
+		generation: candidate.generation as number,
+		title: candidate.title as string,
+		objective: candidate.objective as string,
+		parentBranch: candidate.parentBranch as string,
+		parentBaseBranch: candidate.parentBaseBranch as string,
+		markers: candidate.markers as ParentOrchestrationPlan["markers"],
+		requiredCheckPolicies: candidate.requiredCheckPolicies as RequiredGitHubCheckPolicy[],
+		children: candidate.children as BoundedChildRecord[],
+	};
+	if (!canonicalDataEqual(supplied, rebuilt)) {
+		throw new Error("canonical parent orchestration plan provenance or derived topology was tampered");
+	}
+	return deepFreeze({
+		...rebuilt,
+		canonical: {
+			schemaVersion: 1,
+			serialized: canonical.serialized,
+			digest: canonical.digest,
+		},
+	});
 }
 
 function validateMaterializedChild(plan: ParentOrchestrationPlan, value: unknown): MaterializedChildRecord {
@@ -772,9 +1188,12 @@ function validateMaterializedChild(plan: ParentOrchestrationPlan, value: unknown
 	};
 }
 
-const REQUIRED_CHECKS: readonly RequiredGitHubCheck[] = [
-	{ name: "verify", producerId: "github-actions:workflow-verify" },
-];
+function policyFor(plan: ParentOrchestrationPlan, baseBranch: string): RequiredGitHubCheckPolicy {
+	const matches = plan.requiredCheckPolicies.filter((policy) => policy.repository === plan.repository
+		&& policy.baseBranch === baseBranch);
+	if (matches.length !== 1) throw new Error("canonical plan does not contain one exact required-check policy");
+	return matches[0];
+}
 
 function childPullRequestBody(plan: ParentOrchestrationPlan, child: MaterializedChildRecord): string {
 	return `Refs #${child.issue}\nRefs #${plan.parentIssue}\n\n${child.markers.pullRequest}`;
@@ -786,7 +1205,12 @@ function childPullRequestMatches(
 	child: MaterializedChildRecord,
 	handoff: WorkspaceHandoffEvidence,
 ): boolean {
-	return pullRequest.marker === child.markers.pullRequest
+	return pullRequest.repository === plan.repository
+		&& pullRequest.workItemId === child.id
+		&& pullRequest.generation === plan.generation
+		&& pullRequest.policyDigest === policyFor(plan, child.prBase).digest
+		&& sameStrings(pullRequest.allowedScopes, child.writeScopes)
+		&& pullRequest.marker === child.markers.pullRequest
 		&& pullRequest.title === child.title
 		&& pullRequest.body === childPullRequestBody(plan, child)
 		&& pullRequest.baseBranch === child.prBase
@@ -805,6 +1229,8 @@ function reviewMatchesChild(
 		&& review.workItemId === child.id
 		&& review.pullRequest === pullRequest
 		&& review.generation === plan.generation
+		&& review.baseBranch === child.prBase
+		&& review.headBranch === child.branch
 		&& review.baseSha === handoff.baseHead
 		&& review.headSha === handoff.head
 		&& sameStrings(review.changedPaths, handoff.changedScope)
@@ -815,16 +1241,52 @@ function receiptMatchesChild(
 	receipt: ChildIntegrationReceipt,
 	plan: ParentOrchestrationPlan,
 	child: MaterializedChildRecord,
-	pullRequest: number,
+	pullRequestNumber: number,
 	handoff: WorkspaceHandoffEvidence,
+	pullRequestEvidence?: GitHubPullRequestEvidence,
 ): boolean {
+	const expectedSnapshot = pullRequestEvidence === undefined ? undefined : createCanonicalPullRequestSnapshot(pullRequestEvidence);
+	const expectedMutation = createDurableMutationIntent(
+		"child_integration",
+		[plan.repository, child.markers.pullRequest],
+		{
+			repository: plan.repository,
+			childId: child.id,
+			pullRequest: pullRequestNumber,
+			generation: plan.generation,
+			marker: child.markers.pullRequest,
+			baseSha: handoff.baseHead,
+			headSha: handoff.head,
+			parentBranch: plan.parentBranch,
+			pullRequestSnapshot: receipt.pullRequestSnapshot,
+			controllerProvenance: receipt.controllerProvenance,
+		},
+		null,
+	);
 	return receipt.childId === child.id
-		&& receipt.pullRequest === pullRequest
+		&& receipt.pullRequest === pullRequestNumber
 		&& receipt.generation === plan.generation
 		&& receipt.marker === child.markers.pullRequest
 		&& receipt.baseSha === handoff.baseHead
 		&& receipt.headSha === handoff.head
-		&& receipt.parentBranch === plan.parentBranch;
+		&& receipt.parentBranch === plan.parentBranch
+		&& receipt.controllerProvenance.authority === "controller"
+		&& receipt.controllerProvenance.planDigest === plan.canonical.digest
+		&& receipt.controllerProvenance.policyDigest === policyFor(plan, child.prBase).digest
+		&& receipt.transportProvenance.idempotencyKey === expectedMutation.idempotencyKey
+		&& receipt.transportProvenance.intentDigest === expectedMutation.intentDigest
+		&& receipt.pullRequestSnapshot.repository === plan.repository
+		&& receipt.pullRequestSnapshot.workItemId === child.id
+		&& receipt.pullRequestSnapshot.number === pullRequestNumber
+		&& receipt.pullRequestSnapshot.generation === plan.generation
+		&& receipt.pullRequestSnapshot.marker === child.markers.pullRequest
+		&& receipt.pullRequestSnapshot.baseBranch === child.prBase
+		&& receipt.pullRequestSnapshot.headBranch === child.branch
+		&& receipt.pullRequestSnapshot.baseSha === handoff.baseHead
+		&& receipt.pullRequestSnapshot.headSha === handoff.head
+		&& sameStrings(receipt.pullRequestSnapshot.changedPaths, handoff.changedScope)
+		&& sameStrings(receipt.pullRequestSnapshot.allowedScopes, child.writeScopes)
+		&& (expectedSnapshot === undefined || receipt.pullRequestSnapshot.digest === expectedSnapshot.digest);
 }
 
 function parentPullRequestBody(plan: ParentOrchestrationPlan): string {
@@ -835,7 +1297,12 @@ function parentPullRequestMatches(
 	pullRequest: GitHubPullRequestEvidence,
 	plan: ParentOrchestrationPlan,
 ): boolean {
-	return pullRequest.marker === plan.markers.parentPullRequest
+	return pullRequest.repository === plan.repository
+		&& pullRequest.workItemId === `parent-${plan.parentIssue}`
+		&& pullRequest.generation === plan.generation
+		&& pullRequest.policyDigest === policyFor(plan, plan.parentBaseBranch).digest
+		&& sameStrings(pullRequest.allowedScopes, aggregateScopes(plan))
+		&& pullRequest.marker === plan.markers.parentPullRequest
 		&& pullRequest.title === plan.title
 		&& pullRequest.body === parentPullRequestBody(plan)
 		&& pullRequest.baseBranch === plan.parentBaseBranch
@@ -852,6 +1319,8 @@ function reviewMatchesParent(
 		&& review.workItemId === `parent-${plan.parentIssue}`
 		&& review.pullRequest === pullRequest.number
 		&& review.generation === plan.generation
+		&& review.baseBranch === plan.parentBaseBranch
+		&& review.headBranch === plan.parentBranch
 		&& review.baseSha === pullRequest.baseSha
 			&& review.headSha === pullRequest.headSha
 			&& sameStrings(review.allowedScopes, scopes)
@@ -871,6 +1340,15 @@ function statusesForPlan(plan: ParentOrchestrationPlan, value: Readonly<Record<s
 function renderRoster(plan: ParentOrchestrationPlan, statuses: Readonly<Record<string, WorkItemStatus>>): string {
 	const lines = plan.children.map((child) => `- ${child.id}: ${statuses[child.id]}`);
 	return [`Shepherd child roster generation ${plan.generation}`, "", ...lines, "", plan.markers.roster].join("\n");
+}
+
+function assertMonotonicStatuses(previous: Readonly<Record<string, WorkItemStatus>>, next: Readonly<Record<string, WorkItemStatus>>): void {
+	const rank: Record<WorkItemStatus, number> = { pending: 0, running: 1, succeeded: 2, failed: 2, blocked: 2 };
+	for (const [child, prior] of Object.entries(previous)) {
+		const current = next[child];
+		if (current === undefined || rank[current] < rank[prior]
+			|| (rank[prior] === 2 && current !== prior)) throw new Error("roster status regression is not allowed");
+	}
 }
 
 function validateDecisionPolicy(value: ParentDecisionPolicy): ParentDecisionPolicy {
@@ -911,6 +1389,14 @@ export class GitHubParentOrchestrator {
 		}
 	}
 
+	private async reconcileVisible<T>(read: () => Promise<T | null>): Promise<T | null> {
+		for (let attempt = 0; attempt < 3; attempt += 1) {
+			const value = await read();
+			if (value !== null) return value;
+		}
+		return null;
+	}
+
 	private async matchingIssues(plan: ParentOrchestrationPlan, child: BoundedChildRecord): Promise<GitHubChildIssue[]> {
 		const raw = await this.#transport.findChildIssues({ repository: plan.repository, marker: child.markers.issue });
 		return authoritativeItems(raw, "child issue lookup").map(validateChildIssue);
@@ -928,24 +1414,29 @@ export class GitHubParentOrchestrator {
 	}
 
 	async ensureChildIssue(plan: ParentOrchestrationPlan, childId: string): Promise<GitHubChildIssue> {
+		plan = validateParentOrchestrationPlan(plan);
 		const child = childFor(plan, childId);
 		return this.serializeEnsure(`${plan.repository}:issue:${child.markers.issue}`, async () => {
 			const existing = this.resolveIssueMatches(await this.matchingIssues(plan, child), plan, child);
 			if (existing !== null) return existing;
-			const request: CreateChildIssueRequest = {
+			const requestIntent = {
 				repository: plan.repository,
 				parentIssue: plan.parentIssue,
 				marker: child.markers.issue,
 				title: child.title,
 				body: child.issueBody,
 			};
+			const mutation = createDurableMutationIntent("child_issue", [plan.repository, child.markers.issue], requestIntent, null);
+			const request: CreateChildIssueRequest = { ...requestIntent, mutation };
 			let mutationError: unknown;
 			try {
-				validateChildIssue(await this.#transport.createChildIssue(request));
+				validateDurableMutationResult(await this.#transport.createChildIssue(request), mutation, validateChildIssue);
 			} catch (error) {
 				mutationError = error;
 			}
-			const recovered = this.resolveIssueMatches(await this.matchingIssues(plan, child), plan, child);
+			const recovered = await this.reconcileVisible(async () => this.resolveIssueMatches(
+				await this.matchingIssues(plan, child), plan, child,
+			));
 			if (recovered !== null) return recovered;
 			if (mutationError !== undefined) throw mutationError;
 			throw new Error("child issue create did not produce one authoritative canonical resource");
@@ -969,26 +1460,38 @@ export class GitHubParentOrchestrator {
 	): GitHubPullRequestEvidence {
 		if (value.marker !== request.marker || value.title !== request.title || value.body !== request.body
 			|| value.state !== "open" || value.draft !== request.draft
+			|| value.repository !== request.repository || value.workItemId !== request.workItemId
+			|| value.generation !== request.generation || value.policyDigest !== request.policyDigest
 			|| value.baseBranch !== request.baseBranch || value.headBranch !== request.headBranch
 			|| value.baseSha !== request.baseSha || value.headSha !== request.headSha
-			|| !sameStrings(value.changedPaths, [...request.changedPaths].sort())) {
+			|| !sameStrings(value.changedPaths, [...request.changedPaths].sort())
+			|| !sameStrings(value.allowedScopes, [...request.allowedScopes].sort())) {
 			throw new Error("pull request marker collision or canonical resource mismatch");
 		}
 		return value;
 	}
 
-	private async ensurePullRequest(request: CreatePullRequestRequest): Promise<GitHubPullRequestEvidence> {
+	private async ensurePullRequest(requestValue: Omit<CreatePullRequestRequest, "mutation">): Promise<GitHubPullRequestEvidence> {
+		const mutation = createDurableMutationIntent(
+			"pull_request",
+			[requestValue.repository, requestValue.marker],
+			requestValue,
+			null,
+		);
+		const request: CreatePullRequestRequest = { ...requestValue, mutation };
 		return this.serializeEnsure(`${request.repository}:pr:${request.marker}`, async () => {
 			const query = { repository: request.repository, marker: request.marker };
 			const existing = await this.singlePullRequest(query);
 			if (existing !== null) return this.assertPublishedPullRequest(existing, request);
 			let mutationError: unknown;
 			try {
-				validateGitHubPullRequestEvidence(await this.#transport.createPullRequest(request));
+				validateDurableMutationResult(
+					await this.#transport.createPullRequest(request), request.mutation, validateGitHubPullRequestEvidence,
+				);
 			} catch (error) {
 				mutationError = error;
 			}
-			const recovered = await this.singlePullRequest(query);
+			const recovered = await this.reconcileVisible(() => this.singlePullRequest(query));
 			if (recovered !== null) return this.assertPublishedPullRequest(recovered, request);
 			if (mutationError !== undefined) throw mutationError;
 			throw new Error("pull request create did not produce one authoritative canonical resource");
@@ -1014,6 +1517,7 @@ export class GitHubParentOrchestrator {
 		workspace: ClaimedWorkspace,
 		source: WorkspaceHandoffSource,
 	): Promise<WorkspaceHandoffEvidence> {
+		plan = validateParentOrchestrationPlan(plan);
 		const canonicalChild = await this.canonicalMaterializedChild(plan, child);
 		const handoff = await source.captureHandoff(workspace, "passed");
 		return validateHandoff(handoff, canonicalChild.issue, canonicalChild.branch, canonicalChild.prBase, canonicalChild.writeScopes);
@@ -1024,6 +1528,7 @@ export class GitHubParentOrchestrator {
 		workspace: ClaimedWorkspace,
 		source: WorkspaceHandoffSource,
 	): Promise<WorkspaceHandoffEvidence> {
+		plan = validateParentOrchestrationPlan(plan);
 		const handoff = await source.captureHandoff(workspace, "passed");
 		return validateHandoff(
 			handoff,
@@ -1039,6 +1544,7 @@ export class GitHubParentOrchestrator {
 		child: MaterializedChildRecord,
 		handoffValue: WorkspaceHandoffEvidence,
 	): Promise<GitHubPullRequestEvidence> {
+		plan = validateParentOrchestrationPlan(plan);
 		const canonicalChild = await this.canonicalMaterializedChild(plan, child);
 		const handoff = validateHandoff(handoffValue, canonicalChild.issue, canonicalChild.branch, canonicalChild.prBase, canonicalChild.writeScopes);
 		return this.ensurePullRequest({
@@ -1055,6 +1561,7 @@ export class GitHubParentOrchestrator {
 			headSha: handoff.head,
 			changedPaths: handoff.changedScope,
 			allowedScopes: canonicalChild.writeScopes,
+			policyDigest: policyFor(plan, canonicalChild.prBase).digest,
 		});
 	}
 
@@ -1062,6 +1569,7 @@ export class GitHubParentOrchestrator {
 		plan: ParentOrchestrationPlan,
 		handoffValue: WorkspaceHandoffEvidence,
 	): Promise<GitHubPullRequestEvidence> {
+		plan = validateParentOrchestrationPlan(plan);
 		const handoff = validateHandoff(
 			handoffValue,
 			plan.parentIssue,
@@ -1083,6 +1591,7 @@ export class GitHubParentOrchestrator {
 			headSha: handoff.head,
 			changedPaths: handoff.changedScope,
 			allowedScopes: aggregateScopes(plan),
+			policyDigest: policyFor(plan, plan.parentBaseBranch).digest,
 		});
 	}
 
@@ -1105,57 +1614,101 @@ export class GitHubParentOrchestrator {
 	async reconcileParentRoster(
 		plan: ParentOrchestrationPlan,
 		statusValue: Readonly<Record<string, WorkItemStatus>>,
+		statusEpoch: number,
 	): Promise<GitHubRosterSnapshot> {
+		plan = validateParentOrchestrationPlan(plan);
 		const statuses = statusesForPlan(plan, statusValue);
-		const body = renderRoster(plan, statuses);
-		const existing = this.resolveRoster(await this.rosterMatches(plan), plan);
-		if (existing?.body === body) return existing;
-		const request: PublishRosterRequest = {
-			repository: plan.repository,
-			marker: plan.markers.roster,
-			parentIssue: plan.parentIssue,
-			generation: plan.generation,
-			body,
-		};
-		try {
-			const published = validateRoster(await this.#transport.publishParentRoster(request));
-			if (published.marker !== request.marker || published.parentIssue !== request.parentIssue
-				|| published.generation !== request.generation || published.body !== request.body) {
-				throw new Error("published parent roster does not match requested state");
+		const epoch = generation(statusEpoch);
+		return this.serializeEnsure(`${plan.repository}:roster:${plan.markers.roster}`, async () => {
+			const body = renderRoster(plan, statuses);
+			const existing = this.resolveRoster(await this.rosterMatches(plan), plan);
+			if (existing !== null) {
+				const canonicalExistingStatuses = statusesForPlan(plan, existing.statuses);
+				if (existing.statusEpoch > epoch) throw new Error("stale roster status epoch");
+				if (existing.statusEpoch === epoch) {
+					if (existing.body !== body || !canonicalDataEqual(canonicalExistingStatuses, statuses)) {
+						throw new Error("roster status epoch conflicts with existing state");
+					}
+					return existing;
+				}
+				assertMonotonicStatuses(canonicalExistingStatuses, statuses);
 			}
-			return published;
-		} catch (error) {
-			const recovered = this.resolveRoster(await this.rosterMatches(plan), plan);
-			if (recovered?.body === body) return recovered;
-			throw error;
-		}
+			const requestIntent = {
+				repository: plan.repository,
+				marker: plan.markers.roster,
+				parentIssue: plan.parentIssue,
+				generation: plan.generation,
+				body,
+				statuses,
+				statusEpoch: epoch,
+			};
+			const mutation = createDurableMutationIntent(
+				"parent_roster", [plan.repository, plan.markers.roster, epoch], requestIntent, existing?.revision ?? null,
+			);
+			const request: PublishRosterRequest = { ...requestIntent, mutation };
+			let mutationError: unknown;
+			try {
+				validateDurableMutationResult(await this.#transport.publishParentRoster(request), mutation, validateRoster);
+			} catch (error) {
+				mutationError = error;
+			}
+			const recovered = await this.reconcileVisible(async () => {
+				const roster = this.resolveRoster(await this.rosterMatches(plan), plan);
+				return roster?.body === body && roster.statusEpoch === epoch
+					&& canonicalDataEqual(statusesForPlan(plan, roster.statuses), statuses) ? roster : null;
+			});
+			if (recovered !== null) return recovered;
+			if (mutationError !== undefined) throw mutationError;
+			throw new Error("parent roster mutation was not durably visible");
+		});
 	}
 
 	private async evaluateEvidence(
 		evidence: GitHubPullRequestEvidence,
 		expected: {
+			repository: string;
+			workItemId: string;
+			generation: number;
 			number: number;
 			marker: string;
 			baseBranch: string;
 			headBranch: string;
 			baseSha: string;
 			headSha: string;
-			changedPaths: readonly string[];
 		},
-		target: IndependentReviewTarget,
+		target: Omit<IndependentReviewTarget, "changedPaths">,
+		requiredCheckPolicy: RequiredGitHubCheckPolicy,
 		allowDraft = false,
 	) {
-		let attestations: unknown[] = [];
-		if (this.#attestations !== undefined) {
-			attestations = authoritativeItems(await this.#attestations.findAttestations(target), "AgentSession attestation lookup");
-		}
-		return evaluateGitHubPullRequestEvidence(evidence, {
+		if (this.#attestations === undefined) throw new Error("controller evidence source is unavailable");
+		const query = {
+			repository: target.repository,
+			workItemId: target.workItemId,
+			pullRequest: target.pullRequest,
+			generation: target.generation,
+			baseBranch: target.baseBranch,
+			headBranch: target.headBranch,
+			baseSha: target.baseSha,
+			headSha: target.headSha,
+		};
+		const observations = authoritativeItems(
+			await this.#attestations.findChangedPathEvidence(query), "controller changed-path evidence lookup",
+		).map(validateGitHubChangedPathEvidence);
+		if (observations.length !== 1) throw new Error("controller changed-path evidence is absent or ambiguous");
+		const observation = observations[0];
+		const canonicalTarget: IndependentReviewTarget = { ...target, changedPaths: observation.paths };
+		const attestations = authoritativeItems(
+			await this.#attestations.findAttestations(canonicalTarget), "AgentSession attestation lookup",
+		);
+		const decision = evaluateGitHubPullRequestEvidence(evidence, {
 			...expected,
-			changedPaths: [...expected.changedPaths].sort(),
-			requiredChecks: REQUIRED_CHECKS,
-			reviewTarget: target,
+			changedPathEvidence: observation,
+			minimumObservation: { revision: observation.revision, observedAt: observation.observedAt },
+			requiredCheckPolicy,
+			reviewTarget: canonicalTarget,
 			attestations: attestations as AgentSessionAttestation[],
 		}, { allowDraft });
+		return { decision, observation, target: canonicalTarget };
 	}
 
 	async integrateChild(
@@ -1163,101 +1716,137 @@ export class GitHubParentOrchestrator {
 		child: MaterializedChildRecord,
 		handoffValue: WorkspaceHandoffEvidence,
 	): Promise<ChildIntegrationDecision> {
+		plan = validateParentOrchestrationPlan(plan);
 		const canonicalChild = await this.canonicalMaterializedChild(plan, child);
-		let handoff: WorkspaceHandoffEvidence;
-		try {
-			handoff = validateHandoff(handoffValue, canonicalChild.issue, canonicalChild.branch, canonicalChild.prBase, canonicalChild.writeScopes);
-		} catch {
-			return { kind: "blocked", blockers: ["handoff_invalid"] };
-		}
-		const query = { repository: plan.repository, marker: canonicalChild.markers.pullRequest };
-		const first = await this.singlePullRequest(query);
-		if (first === null) return { kind: "blocked", blockers: ["pull_request_missing"] };
-		if (!childPullRequestMatches(first, plan, canonicalChild, handoff)
-			|| !sameStrings(first.changedPaths, handoff.changedScope)) {
-			return { kind: "blocked", blockers: ["resource_mismatch"] };
-		}
-		const expected = {
-			number: first.number,
-			marker: canonicalChild.markers.pullRequest,
-			baseBranch: canonicalChild.prBase,
-			headBranch: canonicalChild.branch,
-			baseSha: handoff.baseHead,
-			headSha: handoff.head,
-			changedPaths: handoff.changedScope,
-		};
-		const integrationQuery = { repository: plan.repository, childId: canonicalChild.id, marker: canonicalChild.markers.pullRequest };
-		const existingItems = authoritativeItems(await this.#transport.findChildIntegration(integrationQuery), "child integration lookup");
-		if (existingItems.length > 1) throw new Error("duplicate child integration receipt is ambiguous");
-		if (existingItems.length === 1) {
-			const receipt = validateReceipt(existingItems[0]);
-			if (!receiptMatchesChild(receipt, plan, canonicalChild, first.number, handoff)) {
-				throw new Error("existing child integration receipt is stale or mismatched");
+		return this.serializeEnsure(`${plan.repository}:integration:${canonicalChild.markers.pullRequest}`, async () => {
+			let handoff: WorkspaceHandoffEvidence;
+			try {
+				handoff = validateHandoff(handoffValue, canonicalChild.issue, canonicalChild.branch, canonicalChild.prBase, canonicalChild.writeScopes);
+			} catch {
+				return { kind: "blocked", blockers: ["handoff_invalid"] };
 			}
-			if (first.headSha !== handoff.head) return { kind: "blocked", blockers: ["head_moved"] };
-			if (first.state === "closed") return { kind: "blocked", blockers: ["pr_not_open"] };
-			if (first.draft) return { kind: "blocked", blockers: ["draft"] };
-			return { kind: "integrated", receipt, reused: true };
-		}
-		const reviewTarget: IndependentReviewTarget = {
-			repository: plan.repository,
-			workItemId: canonicalChild.id,
-			pullRequest: first.number,
-			generation: plan.generation,
-			baseSha: handoff.baseHead,
-			headSha: handoff.head,
-			changedPaths: handoff.changedScope,
-			allowedScopes: canonicalChild.writeScopes,
-		};
-		const assessed = await this.evaluateEvidence(first, expected, reviewTarget);
-		if (assessed.kind === "blocked") return assessed;
-		if (!reviewMatchesChild(assessed.review, plan, canonicalChild, first.number, handoff)) {
-			return { kind: "blocked", blockers: ["review_missing"] };
-		}
-		const second = await this.singlePullRequest(query);
-		if (second === null) return { kind: "blocked", blockers: ["pull_request_missing"] };
-		if (!childPullRequestMatches(second, plan, canonicalChild, handoff)
-			|| !sameStrings(second.changedPaths, handoff.changedScope)) {
-			return { kind: "blocked", blockers: ["resource_mismatch"] };
-		}
-		const revalidated = await this.evaluateEvidence(second, expected, reviewTarget);
-		if (revalidated.kind === "blocked") return revalidated;
-		if (!reviewMatchesChild(revalidated.review, plan, canonicalChild, second.number, handoff)) {
-			return { kind: "blocked", blockers: ["review_missing"] };
-		}
-		const request: IntegrateChildRequest = {
-			repository: plan.repository,
-			childId: canonicalChild.id,
-			pullRequest: second.number,
-			generation: plan.generation,
-			marker: canonicalChild.markers.pullRequest,
-			baseSha: handoff.baseHead,
-			headSha: handoff.head,
-			parentBranch: plan.parentBranch,
-		};
-		try {
-			const receipt = validateReceipt(await this.#transport.integrateChild(request));
-			if (!receiptMatchesChild(receipt, plan, canonicalChild, request.pullRequest, handoff)) {
-				throw new Error("child integration receipt does not match requested exact head");
+			const query = { repository: plan.repository, marker: canonicalChild.markers.pullRequest };
+			const first = await this.singlePullRequest(query);
+			if (first === null) return { kind: "blocked", blockers: ["pull_request_missing"] };
+			if (!childPullRequestMatches(first, plan, canonicalChild, handoff)
+				|| !sameStrings(first.changedPaths, handoff.changedScope)) {
+				return { kind: "blocked", blockers: ["resource_mismatch"] };
 			}
-			return { kind: "integrated", receipt, reused: false };
-		} catch (error) {
-			const recoveredItems = authoritativeItems(await this.#transport.findChildIntegration(integrationQuery), "child integration recovery lookup");
-			if (recoveredItems.length > 1) throw new Error("duplicate child integration receipt is ambiguous");
-			if (recoveredItems.length === 1) {
-				const receipt = validateReceipt(recoveredItems[0]);
-				if (receiptMatchesChild(receipt, plan, canonicalChild, request.pullRequest, handoff)) {
-					return { kind: "integrated", receipt, reused: true };
+			const expected = {
+				repository: plan.repository,
+				workItemId: canonicalChild.id,
+				generation: plan.generation,
+				number: first.number,
+				marker: canonicalChild.markers.pullRequest,
+				baseBranch: canonicalChild.prBase,
+				headBranch: canonicalChild.branch,
+				baseSha: handoff.baseHead,
+				headSha: handoff.head,
+			};
+			const integrationQuery = { repository: plan.repository, childId: canonicalChild.id, marker: canonicalChild.markers.pullRequest };
+			const existingItems = authoritativeItems(await this.#transport.findChildIntegration(integrationQuery), "child integration lookup");
+			if (existingItems.length > 1) throw new Error("duplicate child integration receipt is ambiguous");
+			if (existingItems.length === 1) {
+				const receipt = validateReceipt(existingItems[0]);
+				if (!receiptMatchesChild(receipt, plan, canonicalChild, first.number, handoff, first)) {
+					throw new Error("existing child integration receipt is stale or mismatched");
 				}
+				if (first.headSha !== handoff.head) return { kind: "blocked", blockers: ["head_moved"] };
+				if (first.state === "closed") return { kind: "blocked", blockers: ["pr_not_open"] };
+				if (first.draft) return { kind: "blocked", blockers: ["draft"] };
+				return { kind: "integrated", receipt, reused: true };
 			}
-			throw error;
-		}
+			const reviewTarget: Omit<IndependentReviewTarget, "changedPaths"> = {
+				repository: plan.repository,
+				workItemId: canonicalChild.id,
+				pullRequest: first.number,
+				generation: plan.generation,
+				baseBranch: canonicalChild.prBase,
+				headBranch: canonicalChild.branch,
+				baseSha: handoff.baseHead,
+				headSha: handoff.head,
+				allowedScopes: canonicalChild.writeScopes,
+			};
+			const policy = policyFor(plan, canonicalChild.prBase);
+			const assessed = await this.evaluateEvidence(first, expected, reviewTarget, policy);
+			if (assessed.decision.kind === "blocked") return assessed.decision;
+			if (!sameStrings(assessed.observation.paths, handoff.changedScope)
+				|| !reviewMatchesChild(assessed.decision.review, plan, canonicalChild, first.number, handoff)) {
+				return { kind: "blocked", blockers: ["review_missing"] };
+			}
+			const second = await this.singlePullRequest(query);
+			if (second === null) return { kind: "blocked", blockers: ["pull_request_missing"] };
+			if (!childPullRequestMatches(second, plan, canonicalChild, handoff)
+				|| !sameStrings(second.changedPaths, handoff.changedScope)) {
+				return { kind: "blocked", blockers: ["resource_mismatch"] };
+			}
+			const revalidated = await this.evaluateEvidence(second, expected, reviewTarget, policy);
+			if (revalidated.decision.kind === "blocked") return revalidated.decision;
+			if (!sameStrings(revalidated.observation.paths, handoff.changedScope)
+				|| !reviewMatchesChild(revalidated.decision.review, plan, canonicalChild, second.number, handoff)) {
+				return { kind: "blocked", blockers: ["review_missing"] };
+			}
+			const snapshot = createCanonicalPullRequestSnapshot(second);
+			const controllerProvenance: ControllerIntegrationProvenance = {
+				authority: "controller",
+				planDigest: plan.canonical.digest,
+				policyDigest: policy.digest,
+				evidenceRevision: revalidated.observation.revision,
+				observedAt: revalidated.observation.observedAt,
+			};
+			const requestIntent = {
+				repository: plan.repository,
+				childId: canonicalChild.id,
+				pullRequest: second.number,
+				generation: plan.generation,
+				marker: canonicalChild.markers.pullRequest,
+				baseSha: handoff.baseHead,
+				headSha: handoff.head,
+				parentBranch: plan.parentBranch,
+				pullRequestSnapshot: snapshot,
+				controllerProvenance,
+			};
+			const mutation = createDurableMutationIntent(
+				"child_integration", [plan.repository, canonicalChild.markers.pullRequest], requestIntent, null,
+			);
+			const request: IntegrateChildRequest = { ...requestIntent, mutation };
+			let mutationError: unknown;
+			let mutationApplied: boolean | undefined;
+			try {
+				const result = validateDurableMutationResult(
+					await this.#transport.integrateChild(request), mutation, validateReceipt,
+				);
+				mutationApplied = result.applied;
+				if (!canonicalDataEqual(result.value.transportProvenance, transportProvenance(result))) {
+					throw new Error("integration receipt transport provenance mismatch");
+				}
+			} catch (error) {
+				mutationError = error;
+			}
+			const recovered = await this.reconcileVisible(async () => {
+				const items = authoritativeItems(
+					await this.#transport.findChildIntegration(integrationQuery), "child integration recovery lookup",
+				);
+				if (items.length > 1) throw new Error("duplicate child integration receipt is ambiguous");
+				if (items.length === 0) return null;
+				const receipt = validateReceipt(items[0]);
+				return receiptMatchesChild(receipt, plan, canonicalChild, request.pullRequest, handoff, second)
+					? receipt : null;
+			});
+			if (recovered !== null) return {
+				kind: "integrated",
+				receipt: recovered,
+				reused: mutationError !== undefined || mutationApplied === false,
+			};
+			if (mutationError !== undefined) throw mutationError;
+			throw new Error("child integration mutation was not durably visible");
+		});
 	}
 
 	private async completeIntegrationRoster(
 		plan: ParentOrchestrationPlan,
 		values: readonly ChildIntegrationReceipt[],
-		parentHead: string,
+		parentPullRequest: GitHubPullRequestEvidence,
 	): Promise<ChildIntegrationReceipt[] | null> {
 		let receipts: ChildIntegrationReceipt[];
 		try {
@@ -1275,7 +1864,20 @@ export class GitHubParentOrchestrator {
 			return child === undefined
 				|| receipt.generation !== plan.generation
 				|| receipt.marker !== child.markers.pullRequest
-				|| receipt.parentBranch !== plan.parentBranch;
+				|| receipt.parentBranch !== plan.parentBranch
+				|| receipt.controllerProvenance.planDigest !== plan.canonical.digest
+				|| receipt.controllerProvenance.policyDigest !== policyFor(plan, plan.parentBranch).digest
+				|| receipt.pullRequestSnapshot.repository !== plan.repository
+				|| receipt.pullRequestSnapshot.workItemId !== child.id
+				|| receipt.pullRequestSnapshot.number !== receipt.pullRequest
+				|| receipt.pullRequestSnapshot.generation !== plan.generation
+				|| receipt.pullRequestSnapshot.marker !== child.markers.pullRequest
+				|| receipt.pullRequestSnapshot.baseBranch !== plan.parentBranch
+				|| receipt.pullRequestSnapshot.baseSha !== receipt.baseSha
+				|| receipt.pullRequestSnapshot.headSha !== receipt.headSha
+				|| !sameStrings(receipt.pullRequestSnapshot.allowedScopes, child.writeScopes)
+				|| receipt.controllerProvenance.evidenceRevision > receipt.pullRequestSnapshot.revision
+				|| receipt.controllerProvenance.observedAt > receipt.pullRequestSnapshot.observedAt;
 		})) return null;
 		const callerByChild = new Map(receipts.map((receipt) => [receipt.childId, receipt]));
 		const authoritative: ChildIntegrationReceipt[] = [];
@@ -1301,11 +1903,46 @@ export class GitHubParentOrchestrator {
 			if (supplied === undefined || !canonicalDataEqual(receipt, supplied)
 				|| receipt.childId !== child.id || receipt.marker !== child.markers.pullRequest
 				|| receipt.generation !== plan.generation || receipt.parentBranch !== plan.parentBranch) return null;
-			if (!await this.#transport.isAncestor({
+			let pullRequests: GitHubPullRequestEvidence[];
+			try {
+				pullRequests = await this.matchingPullRequests({ repository: plan.repository, marker: child.markers.pullRequest });
+			} catch {
+				return null;
+			}
+			if (pullRequests.length !== 1) return null;
+			const pullRequest = pullRequests[0];
+			if (createCanonicalPullRequestSnapshot(pullRequest).digest !== receipt.pullRequestSnapshot.digest) return null;
+			const expectedMutation = createDurableMutationIntent(
+				"child_integration",
+				[plan.repository, child.markers.pullRequest],
+				{
+					repository: plan.repository,
+					childId: child.id,
+					pullRequest: pullRequest.number,
+					generation: plan.generation,
+					marker: child.markers.pullRequest,
+					baseSha: receipt.pullRequestSnapshot.baseSha,
+					headSha: receipt.pullRequestSnapshot.headSha,
+					parentBranch: plan.parentBranch,
+					pullRequestSnapshot: receipt.pullRequestSnapshot,
+					controllerProvenance: receipt.controllerProvenance,
+				},
+				null,
+			);
+			if (receipt.transportProvenance.idempotencyKey !== expectedMutation.idempotencyKey
+				|| receipt.transportProvenance.intentDigest !== expectedMutation.intentDigest) return null;
+			const ancestryQuery = {
 				repository: plan.repository,
 				ancestorSha: receipt.headSha,
-				descendantSha: parentHead,
-			})) return null;
+				descendantSha: parentPullRequest.headSha,
+			};
+			try {
+				validateAncestryProof(
+					await this.#transport.proveAncestry(ancestryQuery), ancestryQuery, parentPullRequest.observedAt,
+				);
+			} catch {
+				return null;
+			}
 			authoritative.push(receipt);
 		}
 		return authoritative;
@@ -1347,37 +1984,44 @@ export class GitHubParentOrchestrator {
 		integrationValues: readonly ChildIntegrationReceipt[],
 		policyValue: ParentDecisionPolicy,
 	): Promise<ParentReadinessDecision> {
+		plan = validateParentOrchestrationPlan(plan);
+		return this.serializeEnsure(`${plan.repository}:ready:${plan.markers.parentPullRequest}`, async () => {
 		const query = { repository: plan.repository, marker: plan.markers.parentPullRequest };
 		const first = await this.singlePullRequest(query);
 		if (first === null) return { kind: "blocked", blockers: ["parent_pull_request_missing"] };
 		if (!parentPullRequestMatches(first, plan)) {
 			return { kind: "blocked", blockers: ["parent_pull_request_collision"] };
 		}
-		if (await this.completeIntegrationRoster(plan, integrationValues, first.headSha) === null) {
+		if (await this.completeIntegrationRoster(plan, integrationValues, first) === null) {
 			return { kind: "blocked", blockers: ["children_incomplete"] };
 		}
 		const expected = {
+			repository: plan.repository,
+			workItemId: `parent-${plan.parentIssue}`,
+			generation: plan.generation,
 			number: first.number,
 			marker: plan.markers.parentPullRequest,
 			baseBranch: plan.parentBaseBranch,
 			headBranch: plan.parentBranch,
 			baseSha: first.baseSha,
 			headSha: first.headSha,
-			changedPaths: first.changedPaths,
 		};
-		const reviewTarget: IndependentReviewTarget = {
+		const reviewTarget: Omit<IndependentReviewTarget, "changedPaths"> = {
 			repository: plan.repository,
 			workItemId: `parent-${plan.parentIssue}`,
 			pullRequest: first.number,
 			generation: plan.generation,
+			baseBranch: plan.parentBaseBranch,
+			headBranch: plan.parentBranch,
 			baseSha: first.baseSha,
 			headSha: first.headSha,
-			changedPaths: first.changedPaths,
 			allowedScopes: aggregateScopes(plan),
 		};
-		const assessed = await this.evaluateEvidence(first, expected, reviewTarget, true);
-		if (assessed.kind === "blocked") return assessed;
-		if (!reviewMatchesParent(assessed.review, plan, first)) {
+		const requiredCheckPolicy = policyFor(plan, plan.parentBaseBranch);
+		const assessed = await this.evaluateEvidence(first, expected, reviewTarget, requiredCheckPolicy, true);
+		if (assessed.decision.kind === "blocked") return assessed.decision;
+		if (!sameStrings(assessed.observation.paths, first.changedPaths)
+			|| !reviewMatchesParent(assessed.decision.review, plan, first)) {
 			return { kind: "blocked", blockers: ["review_missing"] };
 		}
 		if (this.#broker === undefined) return { kind: "awaiting_human", reason: "broker_unavailable" };
@@ -1426,43 +2070,56 @@ export class GitHubParentOrchestrator {
 		if (!parentPullRequestMatches(second, plan)) {
 			return { kind: "blocked", blockers: ["parent_pull_request_collision"] };
 		}
-		if (await this.completeIntegrationRoster(plan, integrationValues, second.headSha) === null) {
+		if (await this.completeIntegrationRoster(plan, integrationValues, second) === null) {
 			return { kind: "blocked", blockers: ["children_incomplete"] };
 		}
-		const revalidated = await this.evaluateEvidence(second, expected, reviewTarget, true);
-		if (revalidated.kind === "blocked") return revalidated;
-		if (!reviewMatchesParent(revalidated.review, plan, second)) {
+		const revalidated = await this.evaluateEvidence(second, expected, reviewTarget, requiredCheckPolicy, true);
+		if (revalidated.decision.kind === "blocked") return revalidated.decision;
+		if (!sameStrings(revalidated.observation.paths, second.changedPaths)
+			|| !reviewMatchesParent(revalidated.decision.review, plan, second)) {
 			return { kind: "blocked", blockers: ["review_missing"] };
 		}
 		const lifecycle = this.humanDecisionLifecycle(plan, "approve_merge");
 		if (lifecycle.kind !== "transition" || lifecycle.to !== "MERGE") {
 			return { kind: "blocked", blockers: ["autonomy_policy_blocked_parent_ready"] };
 		}
-		const markRequest: MarkParentReadyRequest = {
+		const markIntent = {
 			repository: plan.repository,
 			pullRequest: second.number,
 			headSha: second.headSha,
 			generation: plan.generation,
 			decisionRequestId: policy.requestId,
 		};
+		const mutation = createDurableMutationIntent(
+			"parent_ready", [plan.repository, plan.markers.parentPullRequest, second.headSha], markIntent, second.revision,
+		);
+		const markRequest: MarkParentReadyRequest = { ...markIntent, mutation };
 		if (!second.draft) return { kind: "ready", pullRequest: second, reused: true };
+		let mutationError: unknown;
+		let mutationApplied: boolean | undefined;
 		try {
-			const ready = validateGitHubPullRequestEvidence(await this.#transport.markParentReady(markRequest));
-			const readyDecision = await this.evaluateEvidence(ready, expected, reviewTarget);
-			if (!parentPullRequestMatches(ready, plan) || readyDecision.kind !== "eligible"
-				|| !reviewMatchesParent(readyDecision.review, plan, ready)) {
-				throw new Error("parent ready result does not match approved exact head");
-			}
-			return { kind: "ready", pullRequest: ready, reused: false };
+			const result = validateDurableMutationResult(
+				await this.#transport.markParentReady(markRequest), mutation, validateGitHubPullRequestEvidence,
+			);
+			mutationApplied = result.applied;
 		} catch (error) {
-			const recovered = await this.singlePullRequest(query);
-			if (recovered !== null && parentPullRequestMatches(recovered, plan)) {
-				const recoveredDecision = await this.evaluateEvidence(recovered, expected, reviewTarget);
-				if (recoveredDecision.kind === "eligible" && reviewMatchesParent(recoveredDecision.review, plan, recovered)) {
-					return { kind: "ready", pullRequest: recovered, reused: true };
-				}
-			}
-			throw error;
+			mutationError = error;
 		}
+		const recovered = await this.reconcileVisible(async () => {
+			const ready = await this.singlePullRequest(query);
+			if (ready === null || ready.draft || !parentPullRequestMatches(ready, plan)) return null;
+			const readyDecision = await this.evaluateEvidence(ready, expected, reviewTarget, requiredCheckPolicy);
+			return readyDecision.decision.kind === "eligible"
+				&& sameStrings(readyDecision.observation.paths, ready.changedPaths)
+				&& reviewMatchesParent(readyDecision.decision.review, plan, ready) ? ready : null;
+		});
+		if (recovered !== null) return {
+			kind: "ready",
+			pullRequest: recovered,
+			reused: mutationError !== undefined || mutationApplied === false,
+		};
+		if (mutationError !== undefined) throw mutationError;
+		throw new Error("parent ready mutation was not durably visible");
+		});
 	}
 }

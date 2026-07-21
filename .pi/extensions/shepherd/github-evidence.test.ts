@@ -1,16 +1,18 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
 	evaluateGitHubPullRequestEvidence,
+	createRequiredGitHubCheckPolicy,
 	validateGitHubPullRequestEvidence,
 	type GitHubEvidenceBlocker,
 	type GitHubPullRequestEvidence,
 } from "./github-evidence.ts";
 import {
 	createIndependentReviewWork,
+	createAgentSessionAttestation,
+	independentReviewResultDigest,
 	type AgentSessionAttestation,
 	type IndependentReviewRecord,
 } from "./review-router.ts";
@@ -22,7 +24,10 @@ const baseSha = "a".repeat(40);
 const headSha = "b".repeat(40);
 
 async function fixture(): Promise<Record<string, unknown>> {
-	return JSON.parse(await readFile(fixturePath, "utf8")) as Record<string, unknown>;
+	return {
+		...JSON.parse(await readFile(fixturePath, "utf8")) as Record<string, unknown>,
+		policyDigest: basePolicy.digest,
+	};
 }
 
 function cleanReview(overrides: Partial<IndependentReviewRecord> = {}): IndependentReviewRecord {
@@ -30,9 +35,11 @@ function cleanReview(overrides: Partial<IndependentReviewRecord> = {}): Independ
 		...createIndependentReviewWork({
 			repository: "github.com/polymetrics-ai/cli",
 			workItemId: "evidence",
-			pullRequest: 812,
-			generation: 3,
-			baseSha,
+		pullRequest: 812,
+		generation: 3,
+		baseBranch: "feat/471-pi-agent-session-shepherd",
+		headBranch: "feat/811-github-evidence",
+		baseSha,
 			headSha,
 			changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
 			allowedScopes: [".pi/extensions/shepherd"],
@@ -44,44 +51,13 @@ function cleanReview(overrides: Partial<IndependentReviewRecord> = {}): Independ
 	};
 }
 
-function reviewDigest(review: IndependentReviewRecord): string {
-	return createHash("sha256").update(JSON.stringify({
-		idempotencyMarker: review.idempotencyMarker,
-		repository: review.repository,
-		workItemId: review.workItemId,
-		pullRequest: review.pullRequest,
-		generation: review.generation,
-		baseSha: review.baseSha,
-		headSha: review.headSha,
-		changedPaths: review.changedPaths,
-		allowedScopes: review.allowedScopes,
-		completedAt: review.completedAt,
-		verdict: review.verdict,
-		findings: review.findings,
-	})).digest("hex");
-}
-
 function attestation(review: IndependentReviewRecord, overrides: Record<string, unknown> = {}): AgentSessionAttestation {
 	return {
-		schemaVersion: 1,
-		authority: "controller",
-		sessionId: "session-478-evidence",
-		runId: "run-478-evidence-1",
-		provider: "openai-codex",
-		model: "gpt-5.6-sol",
-		reasoningEffort: "xhigh",
-		readOnly: true,
-		repository: review.repository,
-		workItemId: review.workItemId,
-		pullRequest: review.pullRequest,
-		generation: review.generation,
-		baseSha: review.baseSha,
-		headSha: review.headSha,
-		changedPaths: review.changedPaths,
-		allowedScopes: review.allowedScopes,
-		reviewMarker: review.idempotencyMarker,
-		resultDigest: reviewDigest(review),
-		completedAt: review.completedAt,
+		...createAgentSessionAttestation({
+			sessionId: "session-478-evidence",
+			runId: "run-478-evidence-1",
+			review,
+		}),
 		...overrides,
 	} as AgentSessionAttestation;
 }
@@ -95,20 +71,46 @@ async function evidence(overrides: Record<string, unknown> = {}): Promise<GitHub
 }
 
 const canonicalReview = cleanReview();
+const basePolicy = createRequiredGitHubCheckPolicy({
+	schemaVersion: 1,
+	repository: canonicalReview.repository,
+	baseBranch: canonicalReview.baseBranch,
+	revision: 7,
+	requiredChecks: [{ name: "shepherd-tests", producerId: "github-actions:workflow-verify" }],
+});
 const expected = {
+	repository: canonicalReview.repository,
+	workItemId: canonicalReview.workItemId,
+	generation: canonicalReview.generation,
 	number: 812,
 	marker: "<!-- shepherd-child-pr:v1:471:evidence:0123456789abcdef01234567 -->",
 	baseBranch: "feat/471-pi-agent-session-shepherd",
 	headBranch: "feat/811-github-evidence",
 	baseSha,
 	headSha,
-	changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
-	requiredChecks: [{ name: "shepherd-tests", producerId: "github-actions:workflow-verify" }],
+	changedPathEvidence: {
+		schemaVersion: 1 as const,
+		authority: "controller" as const,
+		repository: canonicalReview.repository,
+		workItemId: canonicalReview.workItemId,
+		pullRequest: canonicalReview.pullRequest,
+		generation: canonicalReview.generation,
+		baseSha,
+		headSha,
+		paths: [".pi/extensions/shepherd/github-evidence.ts"],
+		complete: true as const,
+		revision: 41,
+		observedAt: "2026-07-21T11:58:00.000Z",
+	},
+	minimumObservation: { revision: 41, observedAt: "2026-07-21T11:58:00.000Z" },
+	requiredCheckPolicy: basePolicy,
 	reviewTarget: {
 		repository: canonicalReview.repository,
 		workItemId: canonicalReview.workItemId,
 		pullRequest: canonicalReview.pullRequest,
 		generation: canonicalReview.generation,
+		baseBranch: canonicalReview.baseBranch,
+		headBranch: canonicalReview.headBranch,
 		baseSha: canonicalReview.baseSha,
 		headSha: canonicalReview.headSha,
 		changedPaths: canonicalReview.changedPaths,
@@ -133,13 +135,15 @@ test("failed, pending, skipped, missing, or stale-head checks are not green", as
 		id: "check-verify-case",
 		name: "shepherd-tests",
 		producerId: "github-actions:workflow-verify",
+		sequence: 1,
 		headSha,
+		updatedAt: "2026-07-21T11:55:00.000Z",
 		completedAt: "2026-07-21T11:55:00.000Z",
 	};
 	for (const checks of [
 		[],
-		[{ ...baseCheck, status: "queued", conclusion: null }],
-		[{ ...baseCheck, status: "in_progress", conclusion: null }],
+		[{ ...baseCheck, status: "queued", conclusion: null, completedAt: null }],
+		[{ ...baseCheck, status: "in_progress", conclusion: null, completedAt: null }],
 		[{ ...baseCheck, status: "completed", conclusion: "failure" }],
 		[{ ...baseCheck, status: "completed", conclusion: "skipped" }],
 		[{ ...baseCheck, status: "completed", conclusion: "success", headSha: "c".repeat(40) }],
@@ -153,48 +157,51 @@ test("required CI contexts use trusted producers and a complete deterministic la
 		id: "trusted-latest",
 		name: "shepherd-tests",
 		producerId: "github-actions:workflow-verify",
+		sequence: 2,
 		status: "completed",
 		conclusion: "success",
 		headSha,
+		updatedAt: "2026-07-21T11:55:00.000Z",
 		completedAt: "2026-07-21T11:55:00.000Z",
 	};
 	for (const changes of [
 		{ checksComplete: false },
 		{ checks: [{ ...trusted, producerId: "untrusted-app:42" }] },
 		{ checks: [{ ...trusted, name: "unrelated-success" }] },
-		{ checks: [{ ...trusted, status: "in_progress", conclusion: null }] },
+		{ checks: [{ ...trusted, status: "in_progress", conclusion: null, completedAt: null }] },
 	]) {
 		assert.ok(blockerCodes(evaluateGitHubPullRequestEvidence(await evidence(changes), expected as never)).includes("ci_not_green"));
 	}
-	const oldFailure = { ...trusted, id: "old-failure", conclusion: "failure", completedAt: "2026-07-21T11:00:00.000Z" };
+	const oldFailure = { ...trusted, id: "old-failure", sequence: 1, conclusion: "failure", updatedAt: "2026-07-21T11:00:00.000Z", completedAt: "2026-07-21T11:00:00.000Z" };
 	assert.equal(evaluateGitHubPullRequestEvidence(await evidence({ checks: [trusted, oldFailure] }), expected as never).kind, "eligible");
 	assert.equal(evaluateGitHubPullRequestEvidence(await evidence({ checks: [oldFailure, trusted] }), expected as never).kind, "eligible");
 });
 
 test("authoritative changed paths require exact set equality independent of ordering", async () => {
 	const secondPath = ".pi/extensions/shepherd/review-router.ts";
+	const expectedPaths = expected.changedPathEvidence.paths;
 	const review = cleanReview({
 		...createIndependentReviewWork({
 			...expected.reviewTarget,
-			changedPaths: [secondPath, ...expected.changedPaths],
+			changedPaths: [secondPath, ...expectedPaths],
 		}),
 	});
 	const exactExpected = {
 		...expected,
-		changedPaths: [...expected.changedPaths, secondPath],
-		reviewTarget: { ...expected.reviewTarget, changedPaths: [secondPath, ...expected.changedPaths] },
+		changedPathEvidence: { ...expected.changedPathEvidence, paths: [...expectedPaths, secondPath] },
+		reviewTarget: { ...expected.reviewTarget, changedPaths: [secondPath, ...expectedPaths] },
 		attestations: [attestation(review)],
 	};
 	assert.equal(evaluateGitHubPullRequestEvidence(await evidence({
-		changedPaths: [secondPath, ...expected.changedPaths],
+		changedPaths: [secondPath, ...expectedPaths],
 		reviews: [review],
 	}), exactExpected as never).kind, "eligible");
-	for (const claimed of [[], expected.changedPaths, [...exactExpected.changedPaths, ".pi/extensions/shepherd/extra.ts"]]) {
+	for (const claimed of [[], expectedPaths, [...exactExpected.changedPathEvidence.paths, ".pi/extensions/shepherd/extra.ts"]]) {
 		const mismatched = cleanReview({
 			...createIndependentReviewWork({ ...exactExpected.reviewTarget, changedPaths: claimed }),
 		});
 		const result = evaluateGitHubPullRequestEvidence(await evidence({
-			changedPaths: exactExpected.changedPaths,
+			changedPaths: exactExpected.changedPathEvidence.paths,
 			reviews: [mismatched],
 		}), { ...exactExpected, attestations: [attestation(mismatched)] } as never);
 		assert.ok(blockerCodes(result).includes("review_missing"));
@@ -229,7 +236,7 @@ test("authoritative requested changes and unresolved review threads block integr
 	assert.ok(blockerCodes(evaluateGitHubPullRequestEvidence(await evidence({ requestedChanges: [change] }), expected)).includes("changes_requested"));
 	assert.equal(evaluateGitHubPullRequestEvidence(await evidence({ requestedChanges: [{ ...change, dismissed: true }] }), expected).kind, "eligible");
 
-	const thread = { id: "RT-1", resolved: false, headSha };
+	const thread = { id: "RT-1", resolved: false, headSha, updatedAt: "2026-07-21T11:30:00.000Z" };
 	assert.ok(blockerCodes(evaluateGitHubPullRequestEvidence(await evidence({ threads: [thread] }), expected)).includes("unresolved_thread"));
 	assert.equal(evaluateGitHubPullRequestEvidence(await evidence({ threads: [{ ...thread, resolved: true }] }), expected).kind, "eligible");
 });
@@ -242,6 +249,8 @@ test("every blocking finding needs an exact-current-head disposition plus a late
 			workItemId: "evidence",
 			pullRequest: 812,
 			generation: 2,
+			baseBranch: expected.baseBranch,
+			headBranch: expected.headBranch,
 			baseSha,
 			headSha: staleHead,
 			changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
@@ -277,6 +286,8 @@ test("head movement, stale reviewed ranges, topology drift, draft state, and mer
 			workItemId: "evidence",
 			pullRequest: 812,
 			generation: 3,
+			baseBranch: expected.baseBranch,
+			headBranch: expected.headBranch,
 			baseSha,
 			headSha: "c".repeat(40),
 			changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
@@ -303,9 +314,9 @@ test("head movement, stale reviewed ranges, topology drift, draft state, and mer
 test("rejects aggregate review claims, unknown fields, duplicate IDs, and unbounded evidence", async () => {
 	const raw = await fixture();
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, reviewDecision: "APPROVED" }), /field|shape|evidence/i);
-	const duplicateCheck = { id: "duplicate", name: "verify", producerId: "producer", status: "completed", conclusion: "success", headSha, completedAt: "2026-07-21T11:00:00.000Z" };
+	const duplicateCheck = { id: "duplicate", name: "verify", producerId: "producer", sequence: 1, status: "completed", conclusion: "success", headSha, updatedAt: "2026-07-21T11:00:00.000Z", completedAt: "2026-07-21T11:00:00.000Z" };
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, checks: [duplicateCheck, duplicateCheck] }), /duplicate|check/i);
-	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, threads: Array.from({ length: 129 }, (_, index) => ({ id: `T-${index}`, resolved: true, headSha })) }), /bounded|threads|128/i);
+	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, threads: Array.from({ length: 129 }, (_, index) => ({ id: `T-${index}`, resolved: true, headSha, updatedAt: "2026-07-21T11:00:00.000Z" })) }), /bounded|threads|128/i);
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...raw, body: "x".repeat(65_537) }), /body|bounded/i);
 });
 
@@ -317,6 +328,8 @@ test("rejects ambiguous duplicate finding IDs across review generations", async 
 			workItemId: "evidence",
 			pullRequest: 812,
 			generation: 2,
+			baseBranch: expected.baseBranch,
+			headBranch: expected.headBranch,
 			baseSha,
 			headSha: "9".repeat(40),
 			changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
@@ -332,6 +345,8 @@ test("rejects ambiguous duplicate finding IDs across review generations", async 
 			workItemId: "evidence",
 			pullRequest: 812,
 			generation: 3,
+			baseBranch: expected.baseBranch,
+			headBranch: expected.headBranch,
 			baseSha,
 			headSha,
 			changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
@@ -422,7 +437,8 @@ function cycle3Evidence(overrides: Record<string, unknown> = {}): Record<string,
 		baseSha,
 		headSha,
 		changedPathsComplete: true,
-		changedPaths: [...expected.changedPaths],
+		changedPaths: [...expected.changedPathEvidence.paths],
+		allowedScopes: [".pi/extensions/shepherd"],
 		mergeState: "clean",
 		policyDigest: policy.digest,
 		checksComplete: true,
@@ -485,7 +501,7 @@ function cycle3Expected(overrides: Record<string, unknown> = {}): Record<string,
 			generation: 3,
 			baseSha,
 			headSha,
-			paths: [...expected.changedPaths],
+			paths: [...expected.changedPathEvidence.paths],
 			complete: true,
 			revision: 41,
 			observedAt: "2026-07-21T11:58:00.000Z",
@@ -504,7 +520,7 @@ function cycle3Expected(overrides: Record<string, unknown> = {}): Record<string,
 			headBranch: cycle3HeadBranch,
 			baseSha,
 			headSha,
-			changedPaths: [...expected.changedPaths],
+			changedPaths: [...expected.changedPathEvidence.paths],
 			allowedScopes: [".pi/extensions/shepherd"],
 		},
 		attestations: [cycle3Attestation(review)],
@@ -553,13 +569,32 @@ test("cycle 3 requires independently complete nested evidence and a fresh contro
 	}
 	const staleRevision = evaluateCycle3(cycle3Evidence({ revision: 40 }));
 	assert.ok(blockerCodes(staleRevision).includes("stale_evidence" as never));
-	const staleTime = evaluateCycle3(cycle3Evidence({ observedAt: "2026-07-21T11:57:00.000Z" }));
+	const staleTimeExpected = cycle3Expected({
+		changedPathEvidence: {
+			...(cycle3Expected().changedPathEvidence as Record<string, unknown>),
+			observedAt: "2026-07-21T12:05:00.000Z",
+		},
+		minimumObservation: { revision: 41, observedAt: "2026-07-21T12:05:00.000Z" },
+	});
+	const staleTime = evaluateCycle3(cycle3Evidence({ observedAt: "2026-07-21T12:04:00.000Z" }), staleTimeExpected);
 	assert.ok(blockerCodes(staleTime).includes("stale_evidence" as never));
+	const independentPaths = [".pi/extensions/shepherd/review-router.ts"];
+	const independentReview = {
+		...createIndependentReviewWork({
+			...(cycle3Expected().reviewTarget as IndependentReviewRecord),
+			changedPaths: independentPaths,
+		}),
+		completedAt: "2026-07-21T12:03:00.000Z",
+		verdict: "clean" as const,
+		findings: [],
+	};
 	const wrongIndependentPaths = cycle3Expected({
 		changedPathEvidence: {
 			...(cycle3Expected().changedPathEvidence as Record<string, unknown>),
-			paths: [".pi/extensions/shepherd/review-router.ts"],
+			paths: independentPaths,
 		},
+		reviewTarget: { ...(cycle3Expected().reviewTarget as Record<string, unknown>), changedPaths: independentPaths },
+		attestations: [cycle3Attestation(independentReview)],
 	});
 	assert.ok(blockerCodes(evaluateCycle3(cycle3Evidence(), wrongIndependentPaths)).includes("resource_mismatch"));
 });

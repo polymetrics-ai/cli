@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { types as nodeTypes } from "node:util";
 
 import {
@@ -14,6 +15,8 @@ const MAX_COLLECTION = 128;
 const MAX_REVIEWS = 64;
 const MAX_BODY_BYTES = 65_536;
 const SHA = /^[0-9a-f]{40}$/;
+const DIGEST = /^[0-9a-f]{64}$/;
+const REPOSITORY = /^(?:[a-z0-9.-]+(?::[0-9]{1,5})?\/)?[A-Za-z0-9][A-Za-z0-9._-]{0,99}\/[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/;
 const MARKER = /^<!-- shepherd-(?:child|parent)-pr:v1:[A-Za-z0-9:._-]{1,300} -->$/;
 const RFC3339_UTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,3}))?Z$/;
 const UNSAFE_INLINE = /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff]/u;
@@ -23,15 +26,46 @@ export interface GitHubCheckEvidence {
 	id: string;
 	name: string;
 	producerId: string;
+	sequence: number;
 	status: "queued" | "in_progress" | "completed";
 	conclusion: "success" | "failure" | "cancelled" | "timed_out" | "action_required" | "neutral" | "skipped" | null;
 	headSha: string;
-	completedAt: string;
+	updatedAt: string;
+	completedAt: string | null;
 }
 
 export interface RequiredGitHubCheck {
 	name: string;
 	producerId: string;
+}
+
+export interface RequiredGitHubCheckPolicy {
+	schemaVersion: 1;
+	repository: string;
+	baseBranch: string;
+	revision: number;
+	requiredChecks: RequiredGitHubCheck[];
+	digest: string;
+}
+
+export interface GitHubChangedPathEvidence {
+	schemaVersion: 1;
+	authority: "controller";
+	repository: string;
+	workItemId: string;
+	pullRequest: number;
+	generation: number;
+	baseSha: string;
+	headSha: string;
+	paths: string[];
+	complete: true;
+	revision: number;
+	observedAt: string;
+}
+
+export interface GitHubMinimumObservation {
+	revision: number;
+	observedAt: string;
 }
 
 export interface GitHubRequestedChangeEvidence {
@@ -46,6 +80,7 @@ export interface GitHubReviewThreadEvidence {
 	id: string;
 	resolved: boolean;
 	headSha: string;
+	updatedAt: string;
 }
 
 export interface GitHubFindingDisposition {
@@ -58,7 +93,10 @@ export interface GitHubFindingDisposition {
 }
 
 export interface GitHubPullRequestEvidence {
-	schemaVersion: 1;
+	schemaVersion: 2;
+	repository: string;
+	workItemId: string;
+	generation: number;
 	number: number;
 	marker: string;
 	title: string;
@@ -69,33 +107,47 @@ export interface GitHubPullRequestEvidence {
 	headBranch: string;
 	baseSha: string;
 	headSha: string;
+	changedPathsComplete: boolean;
 	changedPaths: string[];
+	allowedScopes: string[];
 	mergeState: "clean" | "blocked" | "behind" | "conflicting" | "unknown";
+	policyDigest: string;
 	checksComplete: boolean;
 	checks: GitHubCheckEvidence[];
+	requestedChangesComplete: boolean;
 	requestedChanges: GitHubRequestedChangeEvidence[];
+	threadsComplete: boolean;
 	threads: GitHubReviewThreadEvidence[];
 	reviews: IndependentReviewRecord[];
 	reviewsComplete: boolean;
+	dispositionsComplete: boolean;
 	dispositions: GitHubFindingDisposition[];
+	revision: number;
 	observedAt: string;
 }
 
 export interface ExpectedPullRequestEvidence {
+	repository: string;
+	workItemId: string;
+	generation: number;
 	number: number;
 	marker: string;
 	baseBranch: string;
 	headBranch: string;
 	baseSha: string;
 	headSha: string;
-	changedPaths: readonly string[];
-	requiredChecks: readonly RequiredGitHubCheck[];
+	changedPathEvidence: GitHubChangedPathEvidence;
+	minimumObservation: GitHubMinimumObservation;
+	requiredCheckPolicy: RequiredGitHubCheckPolicy;
 	reviewTarget: IndependentReviewTarget;
 	attestations: readonly AgentSessionAttestation[];
 }
 
 export type GitHubEvidenceBlocker =
 	| "resource_mismatch"
+	| "evidence_incomplete"
+	| "stale_evidence"
+	| "policy_mismatch"
 	| "marker_collision"
 	| "pr_not_open"
 	| "draft"
@@ -161,6 +213,12 @@ function githubNumber(value: unknown, description: string): number {
 	return value as number;
 }
 
+function repository(value: unknown, description = "repository"): string {
+	const result = inlineText(value, description, 512).toLowerCase();
+	if (!REPOSITORY.test(result)) throw new Error(`invalid ${description}`);
+	return result;
+}
+
 function sha(value: unknown, description: string): string {
 	if (typeof value !== "string" || !SHA.test(value)) throw new Error(`invalid ${description}`);
 	return value;
@@ -178,11 +236,11 @@ function timestamp(value: unknown, description: string): string {
 
 export function canonicalGitRef(value: unknown, description = "Git ref"): string {
 	const result = inlineText(value, description, 240);
-	if (result.startsWith("-") || result.startsWith("/") || result.endsWith("/") || result.includes("\\")
+	if (result === "HEAD" || result.startsWith("refs/") || result.startsWith("-") || result.startsWith("/") || result.endsWith("/") || result.includes("\\")
 		|| result.includes("..") || result.includes("//") || result.includes("@{") || result === "@"
 		|| /[ ~^:?*\[\]{}]/u.test(result)
 		|| result.split("/").some((segment) => segment === "" || segment === "." || segment === ".."
-			|| segment.startsWith(".") || segment.endsWith(".") || segment.endsWith(".lock"))) {
+			|| segment === "HEAD" || segment.startsWith(".") || segment.endsWith(".") || segment.endsWith(".lock"))) {
 		throw new Error(`invalid ${description}`);
 	}
 	return result;
@@ -240,7 +298,7 @@ function stringArray(value: unknown, description: string, allowEmpty = false): s
 }
 
 function validateCheck(value: unknown): GitHubCheckEvidence {
-	const candidate = exactRecord(value, ["id", "name", "producerId", "status", "conclusion", "headSha", "completedAt"]);
+	const candidate = exactRecord(value, ["id", "name", "producerId", "sequence", "status", "conclusion", "headSha", "updatedAt", "completedAt"]);
 	if (candidate.status !== "queued" && candidate.status !== "in_progress" && candidate.status !== "completed") {
 		throw new Error("invalid check status");
 	}
@@ -249,14 +307,22 @@ function validateCheck(value: unknown): GitHubCheckEvidence {
 	if (candidate.status === "completed" ? candidate.conclusion === null : candidate.conclusion !== null) {
 		throw new Error("check status and conclusion disagree");
 	}
+	if (candidate.status === "completed" ? candidate.completedAt === null : candidate.completedAt !== null) {
+		throw new Error("pending check must not claim a completion timestamp");
+	}
+	const updatedAt = timestamp(candidate.updatedAt, "check update timestamp");
+	const completedAt = candidate.completedAt === null ? null : timestamp(candidate.completedAt, "check completion timestamp");
+	if (completedAt !== null && completedAt > updatedAt) throw new Error("check completion is after its update timestamp");
 	return {
 		id: inlineText(candidate.id, "check ID"),
 		name: inlineText(candidate.name, "check name"),
 		producerId: inlineText(candidate.producerId, "check producer ID"),
+		sequence: githubNumber(candidate.sequence, "check sequence"),
 		status: candidate.status,
 		conclusion: candidate.conclusion as GitHubCheckEvidence["conclusion"],
 		headSha: sha(candidate.headSha, "check head SHA"),
-		completedAt: timestamp(candidate.completedAt, "check completion timestamp"),
+		updatedAt,
+		completedAt,
 	};
 }
 
@@ -266,6 +332,41 @@ function validateRequiredCheck(value: unknown): RequiredGitHubCheck {
 		name: inlineText(candidate.name, "required check name"),
 		producerId: inlineText(candidate.producerId, "required check producer ID"),
 	};
+}
+
+function policyDigest(value: Omit<RequiredGitHubCheckPolicy, "digest">): string {
+	return createHash("sha256").update(JSON.stringify(value)).digest("hex");
+}
+
+function normalizePolicyInput(value: unknown, withDigest: boolean): RequiredGitHubCheckPolicy {
+	const candidate = exactRecord(value, withDigest
+		? ["schemaVersion", "repository", "baseBranch", "revision", "requiredChecks", "digest"]
+		: ["schemaVersion", "repository", "baseBranch", "revision", "requiredChecks"]);
+	if (candidate.schemaVersion !== 1) throw new Error("unsupported required-check policy schema");
+	const requiredChecks = boundedArray(candidate.requiredChecks, "required checks").map(validateRequiredCheck)
+		.sort((left, right) => left.name.localeCompare(right.name) || left.producerId.localeCompare(right.producerId));
+	if (requiredChecks.length === 0) throw new Error("required checks must not be empty");
+	unique(requiredChecks, (check) => `${check.name}\u0000${check.producerId}`, "required check context");
+	const normalized = {
+		schemaVersion: 1 as const,
+		repository: repository(candidate.repository, "required-check policy repository"),
+		baseBranch: canonicalGitRef(candidate.baseBranch, "required-check policy base branch"),
+		revision: githubNumber(candidate.revision, "required-check policy revision"),
+		requiredChecks,
+	};
+	const digest = policyDigest(normalized);
+	if (withDigest && (typeof candidate.digest !== "string" || !DIGEST.test(candidate.digest) || candidate.digest !== digest)) {
+		throw new Error("required-check policy digest mismatch");
+	}
+	return { ...normalized, digest };
+}
+
+export function createRequiredGitHubCheckPolicy(value: Omit<RequiredGitHubCheckPolicy, "digest">): RequiredGitHubCheckPolicy {
+	return normalizePolicyInput(value, false);
+}
+
+export function validateRequiredGitHubCheckPolicy(value: unknown): RequiredGitHubCheckPolicy {
+	return normalizePolicyInput(value, true);
 }
 
 function validateRequestedChange(value: unknown): GitHubRequestedChangeEvidence {
@@ -281,12 +382,13 @@ function validateRequestedChange(value: unknown): GitHubRequestedChangeEvidence 
 }
 
 function validateThread(value: unknown): GitHubReviewThreadEvidence {
-	const candidate = exactRecord(value, ["id", "resolved", "headSha"]);
+	const candidate = exactRecord(value, ["id", "resolved", "headSha", "updatedAt"]);
 	if (typeof candidate.resolved !== "boolean") throw new Error("invalid review-thread resolution state");
 	return {
 		id: inlineText(candidate.id, "review-thread ID"),
 		resolved: candidate.resolved,
 		headSha: sha(candidate.headSha, "review-thread head SHA"),
+		updatedAt: timestamp(candidate.updatedAt, "review-thread update timestamp"),
 	};
 }
 
@@ -303,31 +405,51 @@ function validateDisposition(value: unknown): GitHubFindingDisposition {
 	};
 }
 
+export function validateGitHubChangedPathEvidence(value: unknown): GitHubChangedPathEvidence {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "authority", "repository", "workItemId", "pullRequest", "generation",
+		"baseSha", "headSha", "paths", "complete", "revision", "observedAt",
+	]);
+	if (candidate.schemaVersion !== 1 || candidate.authority !== "controller" || candidate.complete !== true) {
+		throw new Error("changed-path evidence must be a complete controller observation");
+	}
+	return {
+		schemaVersion: 1,
+		authority: "controller",
+		repository: repository(candidate.repository, "changed-path repository"),
+		workItemId: inlineText(candidate.workItemId, "changed-path work item ID"),
+		pullRequest: githubNumber(candidate.pullRequest, "changed-path pull request"),
+		generation: githubNumber(candidate.generation, "changed-path generation"),
+		baseSha: sha(candidate.baseSha, "changed-path base SHA"),
+		headSha: sha(candidate.headSha, "changed-path head SHA"),
+		paths: stringArray(candidate.paths, "changed-path snapshot paths", true),
+		complete: true,
+		revision: githubNumber(candidate.revision, "changed-path revision"),
+		observedAt: timestamp(candidate.observedAt, "changed-path observation timestamp"),
+	};
+}
+
+function validateMinimumObservation(value: unknown): GitHubMinimumObservation {
+	const candidate = exactRecord(value, ["revision", "observedAt"]);
+	return {
+		revision: githubNumber(candidate.revision, "minimum observation revision"),
+		observedAt: timestamp(candidate.observedAt, "minimum observation timestamp"),
+	};
+}
+
+function sameStrings(left: readonly string[], right: readonly string[]): boolean {
+	return left.length === right.length && left.every((entry, index) => entry === right[index]);
+}
+
 export function validateGitHubPullRequestEvidence(value: unknown): GitHubPullRequestEvidence {
 	const candidate = exactRecord(value, [
-		"schemaVersion",
-		"number",
-		"marker",
-		"title",
-		"body",
-		"state",
-		"draft",
-		"baseBranch",
-		"headBranch",
-		"baseSha",
-		"headSha",
-		"changedPaths",
-		"mergeState",
-		"checksComplete",
-		"checks",
-		"requestedChanges",
-		"threads",
-		"reviews",
-		"reviewsComplete",
-		"dispositions",
-		"observedAt",
+		"schemaVersion", "repository", "workItemId", "generation", "number", "marker", "title", "body",
+		"state", "draft", "baseBranch", "headBranch", "baseSha", "headSha", "changedPathsComplete",
+		"changedPaths", "allowedScopes", "mergeState", "policyDigest", "checksComplete", "checks",
+		"requestedChangesComplete", "requestedChanges", "threadsComplete", "threads", "reviews",
+		"reviewsComplete", "dispositionsComplete", "dispositions", "revision", "observedAt",
 	]);
-	if (candidate.schemaVersion !== 1) throw new Error("unsupported GitHub evidence schema");
+	if (candidate.schemaVersion !== 2) throw new Error("unsupported GitHub evidence schema");
 	const marker = inlineText(candidate.marker, "pull request marker", 512);
 	if (!MARKER.test(marker)) throw new Error("invalid pull request marker");
 	const body = bodyText(candidate.body);
@@ -336,12 +458,19 @@ export function validateGitHubPullRequestEvidence(value: unknown): GitHubPullReq
 		throw new Error("invalid pull request state");
 	}
 	if (typeof candidate.draft !== "boolean") throw new Error("invalid pull request draft state");
-	if (typeof candidate.checksComplete !== "boolean" || typeof candidate.reviewsComplete !== "boolean") {
-		throw new Error("invalid evidence completeness attestation");
+	for (const completeness of [
+		candidate.changedPathsComplete, candidate.checksComplete, candidate.requestedChangesComplete,
+		candidate.threadsComplete, candidate.reviewsComplete, candidate.dispositionsComplete,
+	]) {
+		if (typeof completeness !== "boolean") throw new Error("invalid evidence completeness attestation");
 	}
 	if (!["clean", "blocked", "behind", "conflicting", "unknown"].includes(candidate.mergeState as string)) {
 		throw new Error("invalid pull request merge state");
 	}
+	if (typeof candidate.policyDigest !== "string" || !DIGEST.test(candidate.policyDigest)) {
+		throw new Error("invalid required-check policy digest");
+	}
+	const observedAt = timestamp(candidate.observedAt, "pull request observation timestamp");
 	const checks = boundedArray(candidate.checks, "checks").map(validateCheck);
 	const requestedChanges = boundedArray(candidate.requestedChanges, "requested changes").map(validateRequestedChange);
 	const threads = boundedArray(candidate.threads, "threads").map(validateThread);
@@ -357,8 +486,36 @@ export function validateGitHubPullRequestEvidence(value: unknown): GitHubPullReq
 	for (const disposition of dispositions) {
 		if (!findingIds.has(disposition.findingId)) throw new Error("finding disposition does not reference authoritative review evidence");
 	}
+	for (const eventTime of [
+		...checks.flatMap((check) => [check.updatedAt, ...(check.completedAt === null ? [] : [check.completedAt])]),
+		...requestedChanges.map((change) => change.submittedAt),
+		...threads.map((thread) => thread.updatedAt),
+		...reviews.map((review) => review.completedAt),
+		...dispositions.map((disposition) => disposition.recordedAt),
+	]) {
+		if (eventTime > observedAt) throw new Error("evidence event occurs after its authoritative observation");
+	}
+	const checkGroups = new Map<string, GitHubCheckEvidence[]>();
+	for (const check of checks) {
+		const key = `${check.name}\u0000${check.producerId}\u0000${check.headSha}`;
+		const group = checkGroups.get(key) ?? [];
+		group.push(check);
+		checkGroups.set(key, group);
+	}
+	for (const group of checkGroups.values()) {
+		unique(group, (check) => String(check.sequence), "check sequence");
+		const ordered = [...group].sort((left, right) => left.sequence - right.sequence);
+		for (let index = 1; index < ordered.length; index += 1) {
+			if (ordered[index].updatedAt < ordered[index - 1].updatedAt) {
+				throw new Error("check sequence chronology moved backward");
+			}
+		}
+	}
 	return {
-		schemaVersion: 1,
+		schemaVersion: 2,
+		repository: repository(candidate.repository),
+		workItemId: inlineText(candidate.workItemId, "work item ID"),
+		generation: githubNumber(candidate.generation, "evidence generation"),
 		number: githubNumber(candidate.number, "pull request number"),
 		marker,
 		title: inlineText(candidate.title, "pull request title", 256),
@@ -369,49 +526,53 @@ export function validateGitHubPullRequestEvidence(value: unknown): GitHubPullReq
 		headBranch: canonicalGitRef(candidate.headBranch, "head branch"),
 		baseSha: sha(candidate.baseSha, "pull request base SHA"),
 		headSha: sha(candidate.headSha, "pull request head SHA"),
+		changedPathsComplete: candidate.changedPathsComplete as boolean,
 		changedPaths: stringArray(candidate.changedPaths, "pull request changed paths", true),
+		allowedScopes: stringArray(candidate.allowedScopes, "pull request allowed scopes"),
 		mergeState: candidate.mergeState as GitHubPullRequestEvidence["mergeState"],
-		checksComplete: candidate.checksComplete,
+		policyDigest: candidate.policyDigest,
+		checksComplete: candidate.checksComplete as boolean,
 		checks,
+		requestedChangesComplete: candidate.requestedChangesComplete as boolean,
 		requestedChanges,
+		threadsComplete: candidate.threadsComplete as boolean,
 		threads,
 		reviews,
-		reviewsComplete: candidate.reviewsComplete,
+		reviewsComplete: candidate.reviewsComplete as boolean,
+		dispositionsComplete: candidate.dispositionsComplete as boolean,
 		dispositions,
-		observedAt: timestamp(candidate.observedAt, "pull request observation timestamp"),
+		revision: githubNumber(candidate.revision, "evidence revision"),
+		observedAt,
 	};
 }
 
 function expectedEvidence(value: ExpectedPullRequestEvidence): ExpectedPullRequestEvidence {
 	const candidate = exactRecord(value, [
-		"number", "marker", "baseBranch", "headBranch", "baseSha", "headSha", "changedPaths",
-		"requiredChecks", "reviewTarget", "attestations",
+		"repository", "workItemId", "generation", "number", "marker", "baseBranch", "headBranch",
+		"baseSha", "headSha", "changedPathEvidence", "minimumObservation", "requiredCheckPolicy",
+		"reviewTarget", "attestations",
 	]);
-	const marker = inlineText(candidate.marker, "expected pull request marker", 512);
-	if (!MARKER.test(marker)) throw new Error("invalid expected pull request marker");
-	const requiredChecks = boundedArray(candidate.requiredChecks, "required checks").map(validateRequiredCheck);
-	if (requiredChecks.length === 0) throw new Error("required checks must not be empty");
-	unique(requiredChecks, (check) => `${check.name}\u0000${check.producerId}`, "required check context");
 	const work = createIndependentReviewWork(candidate.reviewTarget as IndependentReviewTarget);
-	const changedPaths = stringArray(candidate.changedPaths, "expected changed paths", true);
-	if (changedPaths.length !== work.changedPaths.length
-		|| changedPaths.some((path, index) => path !== work.changedPaths[index])) {
-		throw new Error("expected review target must bind the authoritative changed-path set");
-	}
-	return {
+	const result = {
+		repository: repository(candidate.repository, "expected repository"),
+		workItemId: inlineText(candidate.workItemId, "expected work item ID"),
+		generation: githubNumber(candidate.generation, "expected generation"),
 		number: githubNumber(candidate.number, "expected pull request number"),
-		marker,
+		marker: inlineText(candidate.marker, "expected pull request marker", 512),
 		baseBranch: canonicalGitRef(candidate.baseBranch, "expected base branch"),
 		headBranch: canonicalGitRef(candidate.headBranch, "expected head branch"),
 		baseSha: sha(candidate.baseSha, "expected base SHA"),
 		headSha: sha(candidate.headSha, "expected head SHA"),
-		changedPaths,
-		requiredChecks,
+		changedPathEvidence: validateGitHubChangedPathEvidence(candidate.changedPathEvidence),
+		minimumObservation: validateMinimumObservation(candidate.minimumObservation),
+		requiredCheckPolicy: validateRequiredGitHubCheckPolicy(candidate.requiredCheckPolicy),
 		reviewTarget: {
 			repository: work.repository,
 			workItemId: work.workItemId,
 			pullRequest: work.pullRequest,
 			generation: work.generation,
+			baseBranch: work.baseBranch,
+			headBranch: work.headBranch,
 			baseSha: work.baseSha,
 			headSha: work.headSha,
 			changedPaths: work.changedPaths,
@@ -419,6 +580,27 @@ function expectedEvidence(value: ExpectedPullRequestEvidence): ExpectedPullReque
 		},
 		attestations: boundedArray(candidate.attestations, "AgentSession attestations") as unknown as AgentSessionAttestation[],
 	};
+	if (!MARKER.test(result.marker)) throw new Error("invalid expected pull request marker");
+	const diff = result.changedPathEvidence;
+	const target = result.reviewTarget;
+	const identityMatches = diff.repository === result.repository && diff.workItemId === result.workItemId
+		&& diff.pullRequest === result.number && diff.generation === result.generation
+		&& diff.baseSha === result.baseSha && diff.headSha === result.headSha
+		&& target.repository === result.repository && target.workItemId === result.workItemId
+		&& target.pullRequest === result.number && target.generation === result.generation
+		&& target.baseBranch === result.baseBranch && target.headBranch === result.headBranch
+		&& target.baseSha === result.baseSha && target.headSha === result.headSha
+		&& result.requiredCheckPolicy.repository === result.repository
+		&& result.requiredCheckPolicy.baseBranch === result.baseBranch;
+	if (!identityMatches) throw new Error("expected evidence target, diff, and policy coordinates do not match");
+	if (!sameStrings(diff.paths, target.changedPaths)) {
+		throw new Error("expected review target must bind the independent changed-path evidence");
+	}
+	if (diff.revision < result.minimumObservation.revision
+		|| diff.observedAt < result.minimumObservation.observedAt) {
+		throw new Error("changed-path evidence is older than the controller minimum observation");
+	}
+	return result;
 }
 
 export function evaluateGitHubPullRequestEvidence(
@@ -429,48 +611,57 @@ export function evaluateGitHubPullRequestEvidence(
 	const evidence = validateGitHubPullRequestEvidence(value);
 	const expected = expectedEvidence(expectedValue);
 	const blockers = new Set<GitHubEvidenceBlocker>();
-	if (evidence.number !== expected.number) blockers.add("resource_mismatch");
+	if (evidence.repository !== expected.repository || evidence.workItemId !== expected.workItemId
+		|| evidence.generation !== expected.generation || evidence.number !== expected.number) blockers.add("resource_mismatch");
 	if (evidence.marker !== expected.marker) blockers.add("marker_collision");
 	if (evidence.state !== "open") blockers.add("pr_not_open");
 	if (evidence.draft && options.allowDraft !== true) blockers.add("draft");
 	if (evidence.baseBranch !== expected.baseBranch || evidence.headBranch !== expected.headBranch
 		|| evidence.baseSha !== expected.baseSha) blockers.add("topology_mismatch");
 	if (evidence.headSha !== expected.headSha) blockers.add("head_moved");
-	if (evidence.changedPaths.length !== expected.changedPaths.length
-		|| evidence.changedPaths.some((path, index) => path !== expected.changedPaths[index])) blockers.add("resource_mismatch");
+	if (!sameStrings(evidence.changedPaths, expected.changedPathEvidence.paths)) blockers.add("resource_mismatch");
+	if (!sameStrings(evidence.allowedScopes, expected.reviewTarget.allowedScopes)) blockers.add("resource_mismatch");
 	if (evidence.mergeState !== "clean") blockers.add("merge_blocked");
+	if (!evidence.changedPathsComplete || !evidence.checksComplete || !evidence.requestedChangesComplete
+		|| !evidence.threadsComplete || !evidence.reviewsComplete || !evidence.dispositionsComplete) {
+		blockers.add("evidence_incomplete");
+	}
+	if (evidence.revision < expected.minimumObservation.revision
+		|| evidence.observedAt < expected.minimumObservation.observedAt) blockers.add("stale_evidence");
+	if (evidence.policyDigest !== expected.requiredCheckPolicy.digest) blockers.add("policy_mismatch");
 	let ciGreen = evidence.checksComplete;
-	for (const required of expected.requiredChecks) {
+	for (const required of expected.requiredCheckPolicy.requiredChecks) {
 		const matches = evidence.checks
 			.filter((check) => check.name === required.name && check.producerId === required.producerId
 				&& check.headSha === expected.headSha)
-			.sort((left, right) => right.completedAt.localeCompare(left.completedAt) || left.id.localeCompare(right.id));
+			.sort((left, right) => right.sequence - left.sequence || left.id.localeCompare(right.id));
 		const latest = matches[0];
-		if (latest === undefined || latest.status !== "completed" || latest.conclusion !== "success"
-			|| (matches[1] !== undefined && matches[1].completedAt === latest.completedAt)) ciGreen = false;
+		if (latest === undefined || latest.status !== "completed" || latest.conclusion !== "success") ciGreen = false;
 	}
-	if (!ciGreen) {
-		blockers.add("ci_not_green");
-	}
+	if (!ciGreen) blockers.add("ci_not_green");
 	if (evidence.requestedChanges.some((change) => !change.dismissed)) blockers.add("changes_requested");
 	if (evidence.threads.some((thread) => !thread.resolved)) blockers.add("unresolved_thread");
 	const dispositions = new Map(evidence.dispositions.map((disposition) => [disposition.findingId, disposition]));
-	const blockingFindings = evidence.reviews.flatMap((review) => review.findings)
-		.filter((finding) => finding.severity === "blocking");
-	if (blockingFindings.some((finding) => {
+	const blockingFindings = evidence.reviews.flatMap((review) => review.findings
+		.filter((finding) => finding.severity === "blocking")
+		.map((finding) => ({ finding, completedAt: review.completedAt })));
+	let latestBlockingBoundary = "";
+	if (blockingFindings.some(({ finding, completedAt }) => {
 		const disposition = dispositions.get(finding.id);
-		return disposition?.kind !== "fixed" || disposition.headSha !== expected.headSha;
-	})) {
-		blockers.add("undispositioned_finding");
-	}
+		if (disposition === undefined || disposition.kind !== "fixed" || disposition.headSha !== expected.headSha
+			|| disposition.recordedAt <= completedAt) return true;
+		latestBlockingBoundary = [latestBlockingBoundary, completedAt, disposition.recordedAt].sort().at(-1) ?? "";
+		return false;
+	})) blockers.add("undispositioned_finding");
 	const reviewDecision = reconcileIndependentReview({
 		target: expected.reviewTarget,
 		reviews: evidence.reviews,
 		attestations: expected.attestations,
 	});
-	if (!evidence.reviewsComplete || reviewDecision.kind !== "satisfied") blockers.add("review_missing");
-	if (blockers.size > 0 || reviewDecision.kind !== "satisfied") {
-		return { kind: "blocked", blockers: [...blockers] };
+	if (!evidence.reviewsComplete || reviewDecision.kind !== "satisfied"
+		|| (reviewDecision.kind === "satisfied" && reviewDecision.review.completedAt <= latestBlockingBoundary)) {
+		blockers.add("review_missing");
 	}
+	if (blockers.size > 0 || reviewDecision.kind !== "satisfied") return { kind: "blocked", blockers: [...blockers] };
 	return { kind: "eligible", review: reviewDecision.review };
 }
