@@ -573,9 +573,27 @@ Any additional path is a stop-and-replan event, never a silent scope expansion.
 
 - [x] Initial artifact-only PLAN/finding-matrix commit:
       `88513259ffc31fd0853679234c6a42ab6cd04ef6`.
-- [ ] Artifact-only broker-map scope amendment from 18 to 21 paths (this checkpoint; exact SHA
-      reported after commit).
-- [ ] One comprehensive test/fixture-only RED with retained 109/109 and frozen production proof.
-- [ ] One coherent architectural GREEN/refactor.
-- [ ] Authorized local verification/evidence commit and clean candidate.
+- [x] Artifact-only broker-map scope amendment from 18 to 21 paths:
+      `2832993b93d07ea20197bad52ec23700fe21fc1e`.
+- [x] One comprehensive test/fixture-only RED with retained 109/109 and frozen production proof:
+      `ca4d97d1100b1b44176da9d7dfd6ee6f56f4e1e6`.
+- [x] One coherent architectural GREEN/refactor:
+      `2c6371e725d58b2dc05902d68f9e6812904664d6`.
+- [x] Authorized local verification/evidence uses non-circular `HEAD` state; the parent handoff
+      records the resulting evidence commit SHA externally.
 - [ ] Two fresh exact-head independent reviews remain parent-owned.
+
+### Cycle 6 local result
+
+The coherent GREEN composes the actual repository-owning `GitHubDecisionBroker`, closes hostile
+decision DTO and chronology boundaries, makes ready transition a complete conditional
+authorization with verified rollback, leases cancellation through native intrinsics, orders all
+attested exact-head review attempts while preserving stable semantic authorization, hardens raw
+and proxy bounds, centralizes the credential grammar, and enforces receipt chronology.
+
+The five focused files pass 206 assertions with zero failures and one intentional live-GitHub skip;
+the retained Cycle 5 slice remains 109/109. Strict TypeScript passes for all owned files and all 20
+production Shepherd modules, and pinned Pi 0.80.6 offline discovery succeeds. Immutable-base,
+ancestry, full-range diff, exact 21-path ownership, JSON, and synthetic-marker scans pass. The broad
+serialized suite is recorded separately because the managed sandbox still rejects unrelated
+process-identity child spawns with `EPERM`. No prohibited or external action ran.

@@ -1,9 +1,9 @@
 # Verification: #478
 
-Status: Cycle 5 locally verified at architectural GREEN
-`3ae10dc2303409230153e32e6b6231b27b18cdcf`; two fresh parent-owned exact-head reviews pending.
+Status: Cycle 6 locally verified at architectural GREEN
+`2c6371e725d58b2dc05902d68f9e6812904664d6`; two fresh parent-owned exact-head reviews pending.
 Earlier cycle gate sections below are retained as historical evidence and do not supersede the
-current Cycle 5 contract.
+current Cycle 6 contract.
 
 ## Initial delivery authorized gate checklist (historical)
 
@@ -155,8 +155,9 @@ parent-owned exact-head reviews remain pending.
 
 ## Cycle 6 verification contract
 
-Status: planned against frozen candidate `63ac436fdac5fc46be7004f8109c4f068aa5749c`.
-Both Cycle 5 reviews are blocking historical input until this consolidated correction completes.
+Status: locally verified at architectural GREEN
+`2c6371e725d58b2dc05902d68f9e6812904664d6`. Both Cycle 5 blocking reviews are explicit
+historical input; two fresh parent-owned exact-head reviews remain pending.
 
 - [x] Both review ledgers read completely and mapped to one finding-to-RED matrix.
 - [x] Initial artifact-only PLAN checkpoint is
@@ -164,12 +165,29 @@ Both Cycle 5 reviews are blocking historical input until this consolidated corre
 - [x] Completed broker mapping proves and records the exact 21-path boundary: add
       `github-decision-broker.ts` plus its test for broker-owned canonical rereads, and
       `human-decision.ts` plus its test for shared credential grammar and record chronology.
-- [ ] Artifact-only 21-path scope amendment precedes the RED commit and every production edit.
-- [ ] One test/fixture-only RED retains 109/109 and fails every new behavior row while actual
+- [x] Artifact-only 21-path scope amendment `2832993b` precedes the RED commit and every
+      production edit.
+- [x] One test/fixture-only RED `ca4d97d1` retains 109/109 and fails every new behavior row while actual
       `GitHubDecisionBroker` composition is exercised and production blobs remain frozen.
-- [ ] One coherent architectural GREEN passes the focused five-file suite and real broker route.
-- [ ] Strict owned/all-production TypeScript, offline RPC, serialized classification, immutable
+- [x] One coherent architectural GREEN `2c6371e7` passes the focused five-file suite and real
+      broker route.
+- [x] Strict owned/all-production TypeScript, offline RPC, serialized classification, immutable
       base/ancestry, expanded exact scope, diff, JSON, and synthetic-marker scans are recorded.
-- [ ] RUN-STATE uses the non-self-referential exact-current candidate contract.
-- [ ] No Go, connector, certification, runtime, `make`, network, live GitHub, #479 implementation,
+- [x] RUN-STATE uses the non-self-referential exact-current candidate contract.
+- [x] No Go, connector, certification, runtime, `make`, network, live GitHub, #479 implementation,
       reviewer, integration, or merge action runs.
+
+### Cycle 6 gate results
+
+| Gate | Result |
+| --- | --- |
+| Focused #478 | pass; 207 total, 206 pass, 0 fail, 1 intentional live-GitHub skip |
+| Retained Cycle 5 | pass; 109/109 |
+| Strict owned TypeScript | pass; TypeScript 5.9.3 over five production modules and five focused tests |
+| Strict production TypeScript | pass; all 20 Shepherd production modules against cached Pi 0.80.6 with third-party declaration checking skipped |
+| Serialized Shepherd | environmental failure; 427 total, 361 pass, 65 unrelated managed-sandbox process-identity `spawn EPERM` failures, 1 intentional live-GitHub skip; every Cycle 6 focused assertion passes |
+| Offline extension discovery | pass; pinned Pi 0.80.6 discovers `pm-shepherd` from `extension`; only expected global-settings lock warnings |
+| Base/head/diff/scope/data | pass; immutable base and frozen Cycle 5 candidate are ancestors, exact merge base `3addb1f4`, full-range `git diff --check`, exact 21-path ownership, JSON parsing, and high-confidence credential-literal scan pass |
+| Post-RED test edits | support-fixture alignment only across review-router, human-decision, and orchestrator tests; no RED assertion removed or weakened |
+| Prohibited/live actions | not run |
+| Fresh review | pending; two exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews remain parent-owned |

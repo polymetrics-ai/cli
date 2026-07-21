@@ -270,16 +270,16 @@ Frozen production blobs:
 
 | Contract | Behavior-level RED requirement | State |
 | --- | --- | --- |
-| real broker composition | strict TypeScript and runtime test instantiate actual `GitHubDecisionBroker`; adapter drives real request record, pending/decided poll result, consumed evidence, and canonical repository reload without invented fields | planned RED |
-| bounded broker DTO/provenance | request/poll/consume/reload reject wide, accessor, normal/revoked proxy, unknown-field, missing request comment, and impossible updated/decision/consume chronology with typed sanitized errors before ready | planned RED |
-| conditional parent-ready authorization | token digest binds complete policies, exact consumed decision, current parent review/path authority, child receipt+ancestry roster, plan, head, and PR revision; movement inside effect leaves draft true; after-effect drift rolls back idempotently | planned RED |
-| intrinsic signal lease | pre-aborted/live genuine signals with own shadows never start/escape calls; signal proxies/incompatible receivers reject; attach/recheck closes races; early/duplicate/late abort acknowledgement reports accurately for ordinary and real-broker calls | planned RED |
-| ordered reviews/stable semantic authority | later findings blocks earlier clean, findings-then-clean recovers, equivalent later clean keeps stable authorization/mutation intent, and timeout/restart/receipt reuse remains deterministic | planned RED |
-| intrinsic raw/proxy totality | shadowed `Uint8Array.byteLength` cannot bypass predecode bounds; incompatible/subclass/revoked proxies and revoked array/object inputs reject with normalized bounded errors before traps/materialization | planned RED |
-| complete shared credential grammar | synthetic npm `_authToken`, netrc whitespace password, lowercase cloud credential keys, and credential-file forms reject/redact in plan/outbound/review/human-decision fields through one exported helper | planned RED |
-| receipt chronology | integration before snapshot/path/review/policy/controller observations or in the future rejects; repaired happy fixtures integrate after every authority observation | planned RED |
-| non-self-referential RUN-STATE | current cycle 6 uses `candidateRef: "HEAD"`, exact completed checkpoint commits, explicit Cycle 5 blocked review truth, no Cycle 4-as-current state, and no null Cycle 5/6 evidence field | planned RED |
-| Cycle 5 retention | all existing 109 focused tests pass unchanged at RED and after GREEN; policy, reauthorization, eligibility, CAS, lifecycle, bounds, and no-merge guarantees remain intact | planned RED |
+| real broker composition | strict TypeScript and runtime test instantiate actual `GitHubDecisionBroker`; adapter drives real request record, pending/decided poll result, consumed evidence, and canonical repository reload without invented fields | green |
+| bounded broker DTO/provenance | request/poll/consume/reload reject wide, accessor, normal/revoked proxy, unknown-field, missing request comment, and impossible updated/decision/consume chronology with typed sanitized errors before ready | green |
+| conditional parent-ready authorization | token digest binds complete policies, exact consumed decision, current parent review/path authority, child receipt+ancestry roster, plan, head, and PR revision; movement inside effect leaves draft true; after-effect drift rolls back idempotently | green |
+| intrinsic signal lease | pre-aborted/live genuine signals with own shadows never start/escape calls; signal proxies/incompatible receivers reject; attach/recheck closes races; early/duplicate/late abort acknowledgement reports accurately for ordinary and real-broker calls | green |
+| ordered reviews/stable semantic authority | later findings blocks earlier clean, findings-then-clean recovers, equivalent later clean keeps stable authorization/mutation intent, and timeout/restart/receipt reuse remains deterministic | green |
+| intrinsic raw/proxy totality | shadowed `Uint8Array.byteLength` cannot bypass predecode bounds; incompatible/subclass/revoked proxies and revoked array/object inputs reject with normalized bounded errors before traps/materialization | green |
+| complete shared credential grammar | synthetic npm `_authToken`, netrc whitespace password, lowercase cloud credential keys, and credential-file forms reject/redact in plan/outbound/review/human-decision fields through one exported helper | green |
+| receipt chronology | integration before snapshot/path/review/policy/controller observations or in the future rejects; repaired happy fixtures integrate after every authority observation | green |
+| non-self-referential RUN-STATE | current cycle 6 uses `candidateRef: "HEAD"`, exact completed checkpoint commits, explicit Cycle 5 blocked review truth, no Cycle 4-as-current state, and no null Cycle 5/6 evidence field | green |
+| Cycle 5 retention | all existing 109 focused tests pass unchanged at RED and after GREEN; policy, reauthorization, eligibility, CAS, lifecycle, bounds, and no-merge guarantees remain intact | green |
 
 The first Cycle 6 plan checkpoint is `88513259ffc31fd0853679234c6a42ab6cd04ef6`.
 The completed broker map then proved the production class must expose a canonical `readRecord` over
@@ -291,3 +291,25 @@ tests and two issue-478 fixtures. Existing production behavior remains untouched
 is captured; the composition row uses the actual broker without casts or invented fields. Before
 GREEN, retained 109/109, every intended new failure, and all frozen production blob IDs above must
 be recorded.
+
+## Cycle 6 RED, GREEN, and local verification evidence
+
+- Artifact-only scope amendment `2832993b93d07ea20197bad52ec23700fe21fc1e` fixed the exact
+  21-path range before RED.
+- Comprehensive five-test-file RED `ca4d97d1100b1b44176da9d7dfd6ee6f56f4e1e6` retained the
+  prior 109/109 Cycle 5 assertions. Its full run recorded 207 total: 152 pass, 54 intentional
+  contract failures, and 1 intentional live skip. Strict TypeScript reported only the six intended
+  absent-contract errors, and all five production blob IDs remained byte-identical to `63ac436f`.
+- Architectural GREEN `2c6371e725d58b2dc05902d68f9e6812904664d6` passes the five focused
+  files with 206 pass, 0 fail, and 1 intentional live-GitHub skip. Strict TypeScript passes for the
+  owned production/tests and all 20 Shepherd production modules.
+- Post-RED test support edits preserve every expectation: the review-router fixture description no
+  longer contains a credential-grammar trigger word; the native decision fixture first persists its
+  request comment; the orchestrator fakes now expose canonical request-comment/consumed state,
+  validate and roll back the typed ready authorization, carry stable review provenance, use
+  post-authority integration times, and explicitly remove request-comment provenance only in the
+  negative test. No RED assertion was removed or weakened.
+- Pinned Pi 0.80.6 offline discovery, immutable base/ancestry, full-range diff, exact 21-path
+  ownership, JSON parsing, and synthetic credential-marker scans pass. The broad serialized suite
+  records 427 total, 361 pass, 65 unchanged unrelated managed-sandbox process-identity `spawn
+  EPERM` failures, and 1 intentional skip; every Cycle 6 focused assertion passes.

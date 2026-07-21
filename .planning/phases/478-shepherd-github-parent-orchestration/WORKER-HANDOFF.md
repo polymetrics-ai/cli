@@ -14,9 +14,9 @@ Parent PR: #472
 
 Base branch: `feat/471-pi-agent-session-shepherd`
 
-Worker directory: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-478-shepherd-github-parent-orchestration`
+Worker directory: `/tmp/shepherd-478-correction`
 
-Implementation head: `3ae10dc2303409230153e32e6b6231b27b18cdcf`
+Implementation head: `2c6371e725d58b2dc05902d68f9e6812904664d6`
 
 Verification evidence head: this evidence commit; exact SHA reported externally after commit
 
@@ -36,6 +36,10 @@ Verification evidence head: this evidence commit; exact SHA reported externally 
 - `.pi/extensions/shepherd/github-orchestrator.ts` and matching test: orchestration domain/port.
 - `.pi/extensions/shepherd/github-evidence.ts` and matching test: authoritative evidence policy.
 - `.pi/extensions/shepherd/review-router.ts` and matching test: declarative independent review work.
+- `.pi/extensions/shepherd/github-decision-broker.ts` and matching test: broker-owned canonical
+  record rereads and actual production composition.
+- `.pi/extensions/shepherd/human-decision.ts` and matching test: closed decision DTO chronology and
+  the shared sensitive-text grammar.
 - `.pi/extensions/shepherd/fixtures/issue-478/**`: bounded fake evidence/objective fixtures.
 - `.planning/phases/478-shepherd-github-parent-orchestration/**`: plan, TDD, verification, and handoff.
 
@@ -71,15 +75,19 @@ Verification evidence head: this evidence commit; exact SHA reported externally 
 ```bash
 node --test .pi/extensions/shepherd/github-orchestrator.test.ts \
   .pi/extensions/shepherd/review-router.test.ts \
-  .pi/extensions/shepherd/github-evidence.test.ts
+  .pi/extensions/shepherd/github-evidence.test.ts \
+  .pi/extensions/shepherd/github-decision-broker.test.ts \
+  .pi/extensions/shepherd/human-decision.test.ts
 node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
 # strict TypeScript 5.9.3 with cached Pi 0.80.6 package/types
 # pinned Pi 0.80.6 offline RPC get_commands discovery
 git diff --check 3addb1f48be1afe8b1e2b59b54247679d7293805..HEAD
 ```
 
-Result: pass. Focused 27/27; serialized Shepherd 290 pass, 0 fail, 1 intentional skip; strict owned
-and all-production TypeScript pass; pinned offline RPC returns `true`; diff/base/scope pass.
+Current Cycle 6 result: focused 207 total / 206 pass / 0 fail / 1 intentional live-GitHub skip;
+serialized Shepherd 427 total / 361 pass / 65 unchanged unrelated sandbox `spawn EPERM` failures /
+1 intentional skip; strict owned and all-production TypeScript pass; pinned offline RPC returns
+`true`; immutable-base, exact-21-path scope, diff, JSON, and credential scans pass.
 
 ## Automated Review
 
@@ -218,3 +226,30 @@ session-attestation contract and fixtures required to verify independent-review 
 - Adapter command unavailable after healthy doctor, so `manual_gsd_fallback` remains recorded.
   The bounded read-only explorer completed its exact symbol map; isolated worker owns implementation. No push,
   network, live GitHub, Go, connector, runtime, `make`, reviewer, integration, or merge action.
+
+## Cycle 6 completed local handoff
+
+- Checkpoints: amended PLAN `2832993b93d07ea20197bad52ec23700fe21fc1e`; comprehensive
+  five-test-file RED `ca4d97d1100b1b44176da9d7dfd6ee6f56f4e1e6`; architectural GREEN
+  `2c6371e725d58b2dc05902d68f9e6812904664d6`; the evidence commit is reported after commit
+  because RUN-STATE deliberately uses the non-circular `HEAD` reference.
+- Actual `GitHubDecisionBroker` composition passes pending -> decided -> consumed using its own
+  repository-backed `readRecord`; no second repository, stronger fake API, or synthesized evidence
+  is involved.
+- Focused five-file route: 207 total, 206 pass, 0 fail, 1 intentional live-GitHub skip. Retained
+  Cycle 5 is 109/109. Strict TypeScript 5.9.3 passes for the five owned production/test pairs and
+  all 20 Shepherd production modules. Pinned Pi 0.80.6 offline RPC discovers `pm-shepherd` from
+  `extension`.
+- Serialized Shepherd: 427 total, 361 pass, 65 unchanged unrelated managed-sandbox
+  process-identity `spawn EPERM` failures, 1 intentional skip. Every Cycle 6 focused assertion
+  passes; the environmental result is not represented as a full-suite pass.
+- Immutable base and frozen candidate ancestry, exact merge base, full-range `git diff --check`,
+  exact 21-path ownership, JSON parsing, and high-confidence credential-literal scans pass.
+- Post-RED test edits are support-only: one fixture description stopped triggering the credential
+  grammar; direct human-decision setup now persists its request comment; orchestrator fakes now
+  match canonical broker/authorization/receipt/provenance shapes and the negative test explicitly
+  removes request-comment evidence. No assertion was removed or weakened.
+- No Go, connector, certification, runtime, `make`, network, live GitHub, controller/#479,
+  reviewer, integration, or merge action ran. Parent next publishes the exact evidence candidate,
+  runs two fresh exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews, and owns disposition,
+  integration, and all human gates.

@@ -98,3 +98,26 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   was removed or weakened
 - no controller/#479, live GitHub, reviewer, network, Go, connector, `make`, integration, or merge
   action ran; two fresh exact-head `xhigh` reviews remain parent-owned
+
+## Cycle 6 consolidated-review correction
+
+- amended PLAN `2832993b`, comprehensive five-test-file RED `ca4d97d1`, and architectural GREEN
+  `2c6371e7` close the unique union of both blocking Cycle 5 review ledgers within the exact
+  expanded 21-path scope
+- the actual `GitHubDecisionBroker` now composes through its own canonical repository reread while
+  preserving full request, compact poll, and evidence-only consume shapes; hostile records and
+  impossible request/comment/decision/consume chronology fail closed
+- parent-ready carries a complete canonical conditional authorization and has a typed idempotent
+  verified rollback; intrinsic abort/raw/proxy bounds, ordered stable review authority, one shared
+  credential grammar, and receipt chronology are enforced
+- focused five-file route records 207 total / 206 pass / 0 fail / 1 intentional skip; strict owned
+  and all-production TypeScript plus pinned Pi 0.80.6 offline discovery pass
+- serialized Shepherd records 427 total / 361 pass / 65 unchanged unrelated sandbox `spawn EPERM`
+  failures / 1 skip; immutable-base/ancestry, exact merge base, full diff, exact 21-path scope, JSON,
+  and synthetic credential scans pass
+- post-RED test changes only align fixture descriptions, request-comment persistence, canonical
+  fake broker/authorization/provenance shapes, and post-authority receipt times; no expectation was
+  removed or weakened
+- RUN-STATE uses non-circular `HEAD` evidence semantics with exact completed checkpoints; no push,
+  network, live GitHub, reviewer, Go, connector, `make`, #479, integration, or merge action ran;
+  two fresh exact-head `xhigh` reviews remain parent-owned

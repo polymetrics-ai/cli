@@ -5,14 +5,15 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 6 consolidates both blocking reviews of exact Cycle 5 candidate 63ac436f into one plan-first architecture correction; the completed broker map amended the exact scope from 18 to 21 paths before RED or production edits.",
+  "reason": "Cycle 6 is locally verified at architectural GREEN 2c6371e7 with exact PLAN/RED/GREEN checkpoints and non-circular HEAD evidence semantics; both blocking Cycle 5 reviews remain explicit historical input and fresh exact-head parent-owned reviews are pending.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
     "frozenCandidate": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
-    "implementationHead": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
-    "verificationEvidenceHead": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
+    "candidateRef": "HEAD",
+    "implementationHead": "2c6371e725d58b2dc05902d68f9e6812904664d6",
+    "verificationEvidenceHead": "HEAD",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
@@ -36,9 +37,9 @@
       "cycle5Red": "6cb21902244e4bccf390c4e7556eb615e5e1697f",
       "cycle5Green": "3ae10dc2303409230153e32e6b6231b27b18cdcf",
       "cycle5Evidence": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
-      "cycle6Plan": null,
-      "cycle6Red": null,
-      "cycle6Green": null,
+      "cycle6Plan": "2832993b93d07ea20197bad52ec23700fe21fc1e",
+      "cycle6Red": "ca4d97d1100b1b44176da9d7dfd6ee6f56f4e1e6",
+      "cycle6Green": "2c6371e725d58b2dc05902d68f9e6812904664d6",
       "cycle6EvidenceRef": "HEAD"
     },
     "verification": {
@@ -48,7 +49,7 @@
       "cycle4OfflineRpc": "pass",
       "cycle4Serialized": "332 total; 266 pass; 65 unrelated managed-sandbox spawn EPERM failures; 1 intentional skip",
       "cycle5": "focused 109/109 pass; strict owned and all-production TypeScript pass; offline RPC pass; serialized 373 total, 307 pass, 65 unrelated managed-sandbox spawn EPERM failures, 1 intentional skip; immutable base, ancestry, full-range diff, exact 17-path scope, JSON, and credential scans pass",
-      "cycle6": "plan checkpoint only; RED, GREEN, and final verification pending"
+      "cycle6": "focused five-file suite: 207 total, 206 pass, 0 fail, 1 intentional live-GitHub skip; retained Cycle 5 109/109; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized 427 total, 361 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base, ancestry, full-range diff, exact 21-path scope, JSON, and synthetic credential scans pass"
     },
     "orchestrationDecisions": [
       {
@@ -75,6 +76,16 @@
         "cycle": "cycle-6-scope-amendment",
         "decision": "broker_owned_reread_requires_21_paths",
         "reason": "The completed contract map proves an honest adapter requires GitHubDecisionBroker.readRecord over its own repository plus native broker and human-decision tests; the exact allowlist is amended before RED from 18 to 21 paths."
+      },
+      {
+        "cycle": "cycle-6-verification",
+        "decision": "locally_verified_awaiting_parent_reviews",
+        "reason": "All Cycle 6 focused, strict TypeScript, pinned offline extension, immutable-base, exact-scope, JSON, and synthetic-data gates pass; broad unrelated process-identity tests remain classified separately under the managed sandbox."
+      },
+      {
+        "cycle": "cycle-6-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 6 excludes push, network, live GitHub mutation, reviewer dispatch, integration, and merge; the parent owns publication and two fresh exact-head reviews."
       }
     ],
     "humanGates": [
@@ -88,5 +99,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T22:46:37.000Z"
+  "updatedAt": "2026-07-21T23:22:48.000Z"
 }

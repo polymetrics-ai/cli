@@ -198,3 +198,30 @@
   its test to the prior 17. `GitHubDecisionBroker.readRecord` owns canonical repository rereads;
   native broker and orchestrator tests prove actual composition. Any further path requires
   stop-and-replan. No production, push, network, GitHub, reviewer, or prohibited gate ran.
+
+## 2026-07-22 Cycle 6 RED, GREEN, and final local verification
+
+- Artifact-only amended PLAN `2832993b93d07ea20197bad52ec23700fe21fc1e` fixed the exact
+  21-path boundary. Comprehensive test-only RED
+  `ca4d97d1100b1b44176da9d7dfd6ee6f56f4e1e6` retained Cycle 5 at 109/109 and recorded 54
+  intentional failures with all five frozen production blobs unchanged.
+- Architectural GREEN `2c6371e725d58b2dc05902d68f9e6812904664d6` adds the broker-owned
+  canonical reread adapter, closed decision chronology, complete conditional ready authorization
+  plus durable rollback, intrinsic cancellation/raw-data bounds, ordered semantic review authority,
+  shared credential grammar, and receipt chronology.
+- Post-RED support changes preserve all expectations: renamed one review-router fixture description
+  that itself matched the credential grammar; persisted a request comment in the native direct-
+  decision fixture; and aligned orchestrator fakes with canonical request comments/consumed state,
+  typed authorization validation/rollback, stable review provenance, post-authority receipt times,
+  and explicit request-comment removal only in the negative test.
+- Focused five-file suite: 207 total, 206 pass, 0 fail, 1 intentional live-GitHub skip. Strict owned
+  and all 20 production TypeScript modules pass. Pinned Pi 0.80.6 offline RPC discovers
+  `pm-shepherd` from `extension`.
+- Serialized Shepherd: 427 total, 361 pass, 65 unchanged unrelated managed-sandbox process-identity
+  `spawn EPERM` failures, 1 intentional skip; every Cycle 6 focused assertion passes. Immutable
+  base/ancestry, exact merge base, full-range diff, exact 21-path scope, JSON, and high-confidence
+  credential-literal scans pass.
+- RUN-STATE uses `candidateRef: "HEAD"`, exact PLAN/RED/GREEN commits, explicit blocked Cycle 5
+  review truth, and `cycle6EvidenceRef: "HEAD"`; the parent handoff binds the evidence commit SHA.
+  No push, network, live GitHub, Go, connector, `make`, #479, reviewer, integration, or merge action
+  ran. Two fresh exact-head `xhigh` reviews remain parent-owned.

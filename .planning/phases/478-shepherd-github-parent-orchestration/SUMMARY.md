@@ -1,6 +1,6 @@
 # Summary: #478
 
-Status: Cycle 5 locally complete at GREEN `3ae10dc2`; two fresh parent-owned exact-head reviews
+Status: Cycle 6 locally complete at GREEN `2c6371e7`; two fresh parent-owned exact-head reviews
 pending. Earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
@@ -106,5 +106,14 @@ non-self-referential current RUN-STATE. The completed broker contract map amende
 from 18 to 21 paths before RED: broker-owned `readRecord` and its native test are required to compose
 the real compact poll/evidence-only consume API without a second repository, while
 `human-decision.ts` and its native test own canonical chronology and reuse the shared
-`review-router.ts` credential grammar. Production files remain frozen at this amended plan
-checkpoint. No prohibited or external action ran.
+`review-router.ts` credential grammar.
+
+Cycle 6 is locally complete at amended PLAN `2832993b`, comprehensive five-test-file RED
+`ca4d97d1`, and architectural GREEN `2c6371e7`. The focused route passes 206 assertions with zero
+failures and one intentional live-GitHub skip; retained Cycle 5 remains 109/109. Strict owned and all
+20 production TypeScript modules pass, pinned Pi 0.80.6 offline discovery succeeds, and immutable
+base/ancestry, full-range diff, exact 21-path scope, JSON, and synthetic credential scans pass. The
+broad serialized suite records 361 pass, 65 unrelated managed-sandbox `spawn EPERM` failures, and
+one intentional skip across 427 tests. RUN-STATE now uses non-circular `HEAD` evidence semantics
+with exact completed checkpoints. No push, network, live GitHub, Go, connector, `make`, #479,
+reviewer, integration, or merge action ran; two fresh exact-head reviews remain parent-owned.
