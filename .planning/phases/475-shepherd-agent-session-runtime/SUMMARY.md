@@ -1,7 +1,7 @@
 # Summary — Issue #475
 
-Status: Cycle 8 GREEN is complete locally at `c4d34c37`; focused/strict/RPC/scope gates pass, while
-the complete-suite `/bin/ps` probe and remote push are environment-blocked.
+Status: Cycle 9 is planned against frozen clean candidate `0cdcda7e`; production and tests remain
+unchanged pending the single consolidated behavior RED.
 
 Cycle 8 batches the final lifecycle and security/parser findings into one strict test-first
 correction. It will normalize and freeze request authority once, own signal listeners and async
@@ -169,3 +169,14 @@ returns `spawn EPERM`. Only controller/state-store test files are affected in pe
 The post-GREEN push also cannot reach GitHub because DNS returns
 `ssh: Could not resolve hostname github.com: -65563`. The local commit chain is ready for the parent
 to rerun in a process-capable environment, push, and submit for fresh exact-head review.
+
+Cycle 9 accepts both complete Cycle 8 stable-head reviews as one batch. It will close SDK-result and
+active-tool ownership, bounded deep schema/result snapshots, retryable settled setup failures,
+independently bounded unsubscribe/dispose, exact signal operations, typed public errors, immutable
+known-event DTOs, the remaining shared redaction and credential-path grammar, secret-capability
+aliases, full terminal-control rejection, and the direct Pi 0.80.6 custom-tool type contract.
+
+The strict lifecycle is artifact-only PLAN, one test-only RED with production blobs matching
+`0cdcda7e`, one cohesive GREEN/refactor, then declared evidence. A read-only seam mapper supports
+the plan while this isolated worker retains all writes. Cycle 8 disjoint mutator leases and every
+prior lifecycle/parser regression remain mandatory. DNS-deferred push does not pause local TDD.

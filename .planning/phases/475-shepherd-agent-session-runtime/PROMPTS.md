@@ -207,3 +207,24 @@
   blocks only the complete controller/state-store paths at the existing `/bin/ps` probe
   (`spawn EPERM`), and DNS blocks push with
   `ssh: Could not resolve hostname github.com: -65563`; parent rerun/push/review remain required.
+
+## Consolidated Stable-Head Correction Cycle 9 Snapshot
+
+- Frozen candidate: `0cdcda7e049b7ecfa2fdc52027c66c5de161f2c8`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`.
+- Review inputs: complete `/tmp/475-REVIEW-CYCLE8-1.md` and
+  `/tmp/475-REVIEW-CYCLE8-2.md`, dispositioned together in this phase's `REVIEW.md`.
+- Role/route: implementation correction, `openai-codex/gpt-5.6-sol` with `high` reasoning;
+  orchestration/review remains `xhigh`.
+- Objective: close every accepted SDK ownership, immutable DTO, setup settlement, cleanup deadline,
+  signal lease, public error, event snapshot, redaction/path/capability, terminal-control, and Pi
+  custom-tool typing finding without widening authority or adding a dependency.
+- Method: recorded manual-GSD artifact-only PLAN -> one behavior-level test-only RED -> one cohesive
+  architectural GREEN/refactor -> declared verification. Production remains frozen through RED.
+- Execution decision: `read_only_spawned`; a read-only seam mapper assists while the issue worker
+  retains the isolated mutating path.
+- Downstream artifacts: `PLAN.md`, `REVIEW.md`, `TDD-LEDGER.md`, `PRD-COVERAGE.md`, and
+  `VERIFICATION.md`.
+- Verification result: pending Cycle 9 RED and GREEN. Required evidence is focused/full Shepherd,
+  both explicit Pi 0.80.6 strict TypeScript scopes, pinned offline RPC plus no-model tool exercise,
+  and diff/base/head/owned-scope checks; `/bin/ps` and DNS blockers remain separately classified.

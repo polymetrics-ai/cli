@@ -652,3 +652,59 @@
   `ssh: Could not resolve hostname github.com: -65563`.
 - Disposition: keep the local ordered commits intact; parent reruns the complete suite in a process-
   capable environment, pushes, verifies remote-head equality, and requests fresh exact-head review.
+
+## Cycle 9 — Closed SDK Ownership, Bounded DTOs, And Total Public Settlement
+
+### PLAN
+
+- Frozen candidate: `0cdcda7e049b7ecfa2fdc52027c66c5de161f2c8`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`.
+- Review sources: complete `/tmp/475-REVIEW-CYCLE8-1.md` and
+  `/tmp/475-REVIEW-CYCLE8-2.md`, deduplicated into the fourteen invariants in `PLAN.md` and
+  `REVIEW.md`.
+- GSD: `scripts/gsd doctor` passes; the healthy registry still has no `programming-loop` command,
+  so the manual-GSD fallback remains explicit.
+- Skills: `gsd-programming-loop`, `javascript-testing-patterns`,
+  `typescript-advanced-types`, `architecture-patterns`, `github-issue-first-delivery`, and the
+  repository-required routing/runtime/issue/GSD references.
+- Orchestration: `read_only_spawned`; one read-only explorer maps overlapping seams while this
+  isolated lane owns all writes.
+
+### One behavior-level RED contract
+
+One and only one test-only commit will add the consolidated matrix. It will cover:
+
+- one-read foreground/late SDK result and same-session ownership;
+- private frozen expected tools versus SDK array mutation/reorder/replacement;
+- bounded accessor-free deep schemas and one-read workspace/capability/mutation results;
+- fulfilled/rejected/pending reload/create settlement and retry without quarantine;
+- bounded independent unsubscribe/dispose across normal and cancellation/late paths;
+- captured request/parent signal operations plus fallback detach;
+- typed own-cause errors and deterministic primary+cleanup aggregation at every public boundary;
+- closed immutable terminal event DTOs with wide/proxy/sparse/accessor/mutation probes;
+- the complete redaction, sensitive-path, capability-name, and terminal-control matrices;
+- direct Pi 0.80.6 tool types, required `details`, and offline no-model argument/result behavior;
+- retained Cycle 8 mutator alias/capacity/per-lease cleanup, timer, and rejection accounting.
+
+RED acceptance is assertion-level failure only: every test must load and execute, strict focused
+TypeScript must pass, and SHA-256 for `agent-session-runtime.ts`, `tool-policy.ts`, and
+`role-prompts.ts` must equal the frozen candidate blobs. Production edits are forbidden before the
+RED commit.
+
+### GREEN / REFACTOR contract
+
+Implement one cohesive correction around normalized ownership, discriminated settlement,
+independent bounded cleanup, captured listener operations, bounded immutable data snapshots/event
+DTOs, a private tool oracle, and directly typed Pi tools. Extend only the shared redaction/path/
+capability classifiers and terminal-text validator needed by the tests. Do not weaken old tests,
+add dependencies, change scheduler/parent files, or widen tools.
+
+### VERIFY contract
+
+- focused runtime/tool-policy tests;
+- complete serialized Shepherd suite, with only the already-known `/bin/ps` sandbox denial recorded
+  as environment-blocked when reproduced;
+- focused and all-production strict TypeScript against explicit Pi 0.80.6 roots;
+- pinned offline RPC registration and offline no-model custom-tool exercise;
+- diff check, immutable-base/frozen-head ancestry, issue-owned paths, exact clean head;
+- no Go/connectors/certification/`make`/runtime services/live GitHub/review bot/merge.

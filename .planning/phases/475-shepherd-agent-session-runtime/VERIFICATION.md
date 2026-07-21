@@ -1,5 +1,29 @@
 # Verification — Issue #475
 
+## Cycle 9 Pending Verification
+
+Cycle 9 is planned against exact clean reviewed candidate
+`0cdcda7e049b7ecfa2fdc52027c66c5de161f2c8` and immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The two complete Cycle 8 reviews are dispositioned in
+`REVIEW.md`; all deduplicated lifecycle, typed-boundary, data-snapshot, event, parser, path,
+capability, and terminal-safety findings are accepted into one correction.
+
+Verification is intentionally pending the required test-only RED and architectural GREEN. No
+Cycle 8 result is represented as Cycle 9 evidence. Required terminal gates are:
+
+| Cycle 9 gate | Required evidence |
+|---|---|
+| RED integrity | all focused tests execute; only new assertions fail; focused strict TS passes; three production blobs equal `0cdcda7e` |
+| Focused GREEN | every retained and Cycle 9 runtime/tool-policy test passes |
+| Complete Shepherd | serialized `.pi/extensions/shepherd/*.test.ts`; known managed-sandbox `/bin/ps` `spawn EPERM` recorded separately if reproduced |
+| Strict TypeScript | focused inputs and all non-test Shepherd production under TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Pi offline boundary | explicit Pi 0.80.6 RPC registration plus no-model custom-tool argument/result exercise |
+| Repository integrity | `git diff --check`, base/frozen-head ancestry, issue-owned paths, clean exact head |
+
+The healthy 69-command GSD adapter registry still rejects `programming-loop`; Cycle 9 uses the
+recorded manual-GSD fallback. DNS push failure remains an external environment condition, not
+permission to alter commit order or omit local evidence.
+
 ## Cycle 8 Verification Result
 
 Cycle 8 was executed against frozen reviewed head `f219b730c63adc9188c93093a40511433a3d0110`

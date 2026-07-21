@@ -535,3 +535,101 @@ passes. The required push was attempted after GREEN and failed before remote con
 `ssh: Could not resolve hostname github.com: -65563`. Parent orchestration must rerun the complete
 suite in an environment that permits `/bin/ps` and push the local commit chain before requesting
 fresh exact-head review.
+
+## Consolidated Stable-Head Correction Cycle 9 — `0cdcda7e049b7ecfa2fdc52027c66c5de161f2c8`
+
+Cycle 9 treats `/tmp/475-REVIEW-CYCLE8-1.md` and `/tmp/475-REVIEW-CYCLE8-2.md` as one
+deduplicated contract against the exact clean reviewed candidate above. The immutable comparison
+base remains `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. This issue worker owns only the three #475
+production modules, their focused tests, and this phase's artifacts. Parent, #478, #479, Go,
+connectors, certification, `make`, live GitHub, merge, and dependencies remain outside authority.
+
+### Cycle 9 behavior matrix
+
+The single test-only RED checkpoint will execute every retained test plus independent behavior rows
+for the following deduplicated invariants:
+
+1. A creation result whose `session`, extension result, extension/error arrays, or fallback fields
+   alternate or throw is captured exactly once into one closed immutable result. Foreground and
+   abandoned creation validate, prompt, abort, wait, unsubscribe, dispose, and report only through
+   the same owned session; an alternate session receives zero calls.
+2. The exact active-tool oracle is a private frozen copy. Pi receives distinct immutable tool-name
+   and custom-tool arrays, so push/splice/reorder/replacement attempts cannot alter the oracle or
+   validate `bash` or any other forbidden tool.
+3. Capability parameter schemas are data-only, cycle-safe, accessor-free deep snapshots before the
+   first await/SDK call. Depth, node, key, array-length, and incremental byte ceilings reject
+   accessor, symbol, proxy, sparse, wide, deep, cyclic, or non-JSON graphs before serialization.
+   Capability and workspace read/edit/write results are captured once into immutable DTOs before
+   validation, redaction, or rendering.
+4. Reload and creation settlement use the explicit union `fulfilled | rejected | pending`.
+   Ordinary settled reload/create rejection is the primary retryable run error, releases every
+   timer/run/mutator/creation lease, consumes late rejection, permits another dispatch, and never
+   quarantines. Pending, malformed fulfillment, or actual cleanup failure remains fail-closed and
+   quarantining.
+5. Unsubscribe and dispose are independent exactly-once owned operations. Each has its own bounded
+   cleanup phase; dispose is attempted even after unsubscribe timeout. Normal, abort, deadline,
+   close, parent shutdown, and abandoned creation settle within declared bounds, consume late
+   rejection, release leases/timers, and quarantine on cleanup timeout/failure.
+6. Signal leases capture the exact add/remove operations at acquisition and retain native
+   `EventTarget` fallback detach. Caller method mutation is irrelevant; a remover throwing before
+   detach still gets a reliable fallback detach while its cleanup failure remains observable and
+   reservations are released. Request and parent variants share the same invariant.
+7. Every public asynchronous boundary—admission/getters, SDK lookup/setup/reload/create, request
+   signal attach/release, `run`, `abort`, `close`, shutdown, and parent release—rejects with
+   `AgentSessionRuntimeError` containing an own `cause`, including literal `undefined`. Primary and
+   cleanup failures are deterministically aggregated rather than overwritten.
+8. Listener delivery parses only known terminal event kinds into bounded immutable DTOs. It checks
+   type, own-key count, array length, descriptors, scalar sizes, and content incrementally; rejects
+   proxies, accessors, symbols, sparse/non-enumerable surprises, mutation-after-delivery, and wide
+   graphs before spreads, descriptor maps, `filter`, `reverse`, or raw-reference retention.
+9. The shared redactor closes column-zero `token/password/secret =` multiword assignments, opaque
+   one-token Authorization, URL userinfo/query credentials, YAML implicit flow pairs, malformed or
+   mid-escaped keys, and the full 63/64/65 decoded-key boundary including all-`\\uXXXX` encoding.
+   Every direct/prompt/workspace/capability/mutation/handoff consumer is covered while harmless
+   syntax-aware prose remains byte-identical.
+10. Root-scoped reads deny common credential-bearing registry/package-manager, netrc, Git
+    credential, Kubernetes, cloud-provider, and container/Docker authentication paths, including
+    nested and case variants, before invoking the workspace callback.
+11. Host capability names are tokenized. Sensitive-data nouns combined with acquisition/read/list/
+    get/export verbs in either order, plural, or alias form are absent for both mutating and
+    read-only roles; generic transport/orchestration denials remain intact.
+12. Every handoff summary, finding, verification name, and verification summary rejects raw HT,
+    LF, CR, CRLF, C0/C1, Unicode line/paragraph separators, and bidi formatting controls.
+13. The Pi boundary uses exported Pi 0.80.6 `ToolDefinition`/`AgentToolResult` plus TypeBox
+    `TSchema` directly, always supplies `details`, contains no `unknown` cast hiding custom tools,
+    and has an offline no-model argument-validation/result exercise.
+14. Cycle 8 disjoint mutator aliases/capacity/per-lease cleanup, all prior lifecycle/parser rows,
+    no referenced timers, and no unhandled rejections remain green.
+
+### Cohesive GREEN architecture
+
+The implementation will introduce four bounded ownership primitives rather than isolated patches:
+
+- a normalized creation-result/session owner plus discriminated async settlement;
+- independent bounded cleanup operations and captured listener operations with fallback detach;
+- one reusable bounded data snapshot/closed-field reader for schemas, tool results, and terminal
+  events, producing deeply frozen DTOs without whole-graph serialization;
+- directly typed frozen Pi tool definitions backed by one private expected-name oracle.
+
+The structured redactor and path/capability classifiers will be extended in their existing shared
+policy boundary so all consumers inherit the fix. Handoff text will remain single-line terminal-
+safe data. No authority or dependency expansion is permitted.
+
+### Checkpoints and declared verification
+
+Strict order is artifact-only PLAN -> one behavior-level test-only RED -> one architectural
+GREEN/refactor -> evidence. RED must load and run every focused test under strict TypeScript,
+fail only the new behavior assertions, and prove the three production blobs exactly match
+`0cdcda7e`. GREEN verification comprises focused runtime/tool-policy tests, serialized complete
+Shepherd tests with the known managed-sandbox `/bin/ps` `spawn EPERM` recorded separately,
+focused and all-production strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots, explicit Pi
+0.80.6 offline RPC plus a no-model tool exercise, `git diff --check`, immutable-base/frozen-head
+ancestry, clean head, and issue-owned path scope.
+
+`scripts/gsd doctor` passes, but the healthy 69-command registry rejects
+`scripts/gsd prompt programming-loop ...`; Cycle 9 therefore records the required
+`manual_gsd_fallback` without weakening TDD. Loaded skills are `gsd-programming-loop`,
+`javascript-testing-patterns`, `typescript-advanced-types`, `architecture-patterns`, and
+`github-issue-first-delivery`, plus required routing, Pi adapter, universal runtime loop, issue
+contract, and runtime/Pi guidance. Execution decision: `read_only_spawned`; a read-only seam mapper
+supports this plan while the isolated #475 worker retains the only mutating path.

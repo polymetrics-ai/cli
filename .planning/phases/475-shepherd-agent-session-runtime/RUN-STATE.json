@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_8_plan",
+  "currentCycle": "correction_cycle_9_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -208,15 +208,20 @@
       "cycle": "correction_cycle_8_verify",
       "decision": "blocked_external_environment",
       "reason": "Focused, strict TypeScript, pinned offline Pi RPC, diff, ancestry, and owned-scope gates pass; the managed sandbox denies the pre-existing /bin/ps process-identity probe and DNS prevents pushing the local ordered commits."
+    },
+    {
+      "cycle": "correction_cycle_9_plan",
+      "decision": "read_only_spawned",
+      "reason": "One read-only explorer maps the two overlapping stable-head review ledgers while the isolated issue #475 lane retains the only mutating path for the consolidated Cycle 9 PLAN, RED, GREEN, and evidence chain."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_8_green_70_passed_0_failed",
-    "fullShepherdTests": "environment_blocked_207_executed_176_passed_31_spawn_eperm_failures_only_controller_and_state_store",
-    "strictTypeScriptPi0806": "cycle_8_passed_focused_and_all_production",
-    "offlineRpcSmoke": "cycle_8_passed_explicit_pi_0_80_6_pm_shepherd_registered",
-    "diffCheck": "cycle_8_passed",
-    "ownedScope": "cycle_8_passed_immutable_base_e659d6f1_frozen_head_f219b730_issue_paths_only; remote_head_equality_blocked_by_dns",
+    "focusedTests": "pending_cycle_9_red_and_green; retained_cycle_8_green_70_passed_0_failed",
+    "fullShepherdTests": "pending_cycle_9; retained_cycle_8_environment_blocked_207_executed_176_passed_31_spawn_eperm_failures_only_controller_and_state_store",
+    "strictTypeScriptPi0806": "pending_cycle_9; retained_cycle_8_passed_focused_and_all_production",
+    "offlineRpcSmoke": "pending_cycle_9_rpc_and_no_model_tool_exercise; retained_cycle_8_pm_shepherd_registered",
+    "diffCheck": "pending_cycle_9",
+    "ownedScope": "pending_cycle_9; immutable_base_e659d6f1_and_frozen_head_0cdcda7e; remote_push_deferred_by_dns",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [
