@@ -90,6 +90,19 @@ RED cases to add before correction production edits:
 - transient transport failures receive bounded backoff and retry, while permanent failures fail
   immediately without sleeping or exposing raw transport text.
 
-Correction RED command and evidence: pending test-first edit.
+Correction RED command:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts \
+  .pi/extensions/shepherd/github-decision-broker.test.ts
+```
+
+Result before any correction production edit: exit 1; 39 tests total, 23 passed, 15 failed, and
+1 designated-sandbox test skipped. The expected failures independently exposed the reviewed gaps:
+second-resolution expiry/comment timestamps; safe-integer comment IDs; numeric repository/login
+validation; generic parent-merge approval; unescaped Markdown/missing allowlist mentions;
+credential/bidi/mention acceptance; directory-before-owner lock publication; unfenced replacement
+deletion; regular-file dead-lock reclaim; unclassified transient/permanent transport errors; and
+raw adapter error propagation. Duration: 282.318708 ms.
 
 Correction GREEN/refactor evidence: pending.

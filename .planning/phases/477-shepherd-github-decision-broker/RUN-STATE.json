@@ -44,6 +44,11 @@
         "cycle": "review-correction-plan",
         "decision": "local_critical_path",
         "reason": "The exact-head correction owns both affected modules, so another mutating worker would collide; planned all review findings as RED regression slices before production edits."
+      },
+      {
+        "cycle": "review-correction-tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "Captured genuine RED evidence at 23 pass, 15 expected failures, and 1 sandbox skip before changing either production module."
       }
     ],
     "humanGates": [

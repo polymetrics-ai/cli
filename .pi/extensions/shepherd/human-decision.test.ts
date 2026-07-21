@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -11,6 +11,7 @@ import {
 	persistHumanDecisionRequest,
 	recordHumanDecision,
 	routeHumanDecisionTarget,
+	validateHumanDecisionRequestComment,
 	type HumanDecisionBinding,
 	type HumanDecisionRequestSpec,
 } from "./human-decision.ts";
@@ -60,10 +61,54 @@ test("requires exact head binding for every PR gate and rejects head binding for
 });
 
 test("parent merge remains a distinct exact-head request", () => {
-	const parentMerge = createHumanDecisionRecord(spec({ gate: "parent_merge", binding: prBinding }));
+	assert.throws(() => createHumanDecisionRecord(spec({
+		gate: "parent_merge",
+		binding: prBinding,
+		allowedOptions: ["approve", "reject"],
+	})), /approve-merge/i);
+	const parentMerge = createHumanDecisionRecord(spec({
+		gate: "parent_merge",
+		binding: prBinding,
+		allowedOptions: ["approve-merge", "reject"],
+	}));
 	const merge = createHumanDecisionRecord(spec({ gate: "merge", binding: prBinding }));
 	assert.equal(parentMerge.gate, "parent_merge");
+	assert.deepEqual(parentMerge.allowedOptions, ["approve-merge", "reject"]);
 	assert.notEqual(parentMerge.idempotencyMarker, merge.idempotencyMarker);
+});
+
+test("accepts digits in GitHub repositories and human logins", () => {
+	const record = createHumanDecisionRecord(spec({
+		binding: { ...issueBinding, repository: "Owner2/Repo3" },
+		actorAllowlist: ["Maintainer2"],
+	}));
+	assert.equal(record.binding.repository, "owner2/repo3");
+	assert.deepEqual(record.actorAllowlist, ["maintainer2"]);
+});
+
+test("normalizes GitHub second-resolution timestamps and safe-integer comment IDs with bounded skew", () => {
+	const record = createHumanDecisionRecord(spec({
+		expiresAt: "2026-07-22T10:00:00Z",
+	}), new Date("2026-07-21T12:30:12.750Z"));
+	assert.equal(record.expiresAt, "2026-07-22T10:00:00.000Z");
+	const comment = validateHumanDecisionRequestComment(record, {
+		id: 5_034_006_493,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-5034006493",
+		actor: "shepherd-host",
+		createdAt: "2026-07-21T12:30:12Z",
+	});
+	assert.deepEqual(comment, {
+		id: 5_034_006_493,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-5034006493",
+		actor: "shepherd-host",
+		createdAt: "2026-07-21T12:30:12.000Z",
+	});
+	assert.throws(() => validateHumanDecisionRequestComment(record, {
+		...comment,
+		id: 5_034_006_494,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-5034006494",
+		createdAt: "2026-07-21T12:30:11Z",
+	}), /lifetime|timestamp/i);
 });
 
 test("canonicalizes actors/options and rejects duplicate, malformed, expired, or secret-bearing requests", () => {
@@ -79,6 +124,36 @@ test("canonicalizes actors/options and rejects duplicate, malformed, expired, or
 		spec({ question: "token github_pat_1234567890123456789012" }),
 	]) {
 		assert.throws(() => createHumanDecisionRecord(candidate, new Date("2026-07-21T10:00:00.000Z")));
+	}
+});
+
+test("rejects centralized credential forms without reflecting their values", () => {
+	const credentialMarker = "synthetic-credential-marker";
+	const candidates = [
+		["token", credentialMarker].join("="),
+		`{"api_key":"${credentialMarker}"}`,
+		["OPENAI_API_KEY", credentialMarker].join("="),
+		`https://user:${credentialMarker}@example.invalid/path`,
+		`https://example.invalid/path?access_token=${credentialMarker}`,
+		["sk", "live", credentialMarker].join("_"),
+	];
+	for (const question of candidates) {
+		assert.throws(
+			() => createHumanDecisionRecord(spec({ question })),
+			(error: unknown) => error instanceof Error
+				&& /credential|secret/i.test(error.message)
+				&& !error.message.includes(credentialMarker),
+			question,
+		);
+	}
+});
+
+test("rejects invisible bidi controls and untrusted mentions in decision questions", () => {
+	for (const question of [
+		"Approve this exact gate?\u202Edetarapes",
+		"Ask @attacker to approve this gate",
+	]) {
+		assert.throws(() => createHumanDecisionRecord(spec({ question })), /question|format|mention/i);
 	}
 });
 
@@ -158,16 +233,49 @@ test("rejects unknown persisted fields and symbolic-link state after restart", a
 	await assert.rejects(repository.load("req-link"), /ELOOP|symbolic|link/i);
 });
 
+test("publishes a complete atomic lock owner record before entering a transaction", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-atomic-lock-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const repository = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
+	const value = await repository.transact("req-477", async () => {
+		const owner = JSON.parse(await readFile(join(root, "req-477.lock"), "utf8"));
+		assert.equal(owner.schemaVersion, 1);
+		assert.equal(owner.pid, process.pid);
+		assert.match(owner.token, /^[0-9a-f-]{36}$/);
+		return { state: null, value: owner.token as string };
+	});
+	assert.match(value, /^[0-9a-f-]{36}$/);
+});
+
+test("an obsolete lock owner cannot delete a replacement lock during release", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-fenced-release-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const lockPath = join(root, "req-477.lock");
+	const replacementToken = "11111111-1111-4111-8111-111111111111";
+	const repository = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
+	await assert.rejects(repository.transact("req-477", async () => {
+		await rm(lockPath, { recursive: true, force: true });
+		await writeFile(lockPath, JSON.stringify({
+			schemaVersion: 1,
+			pid: process.pid,
+			token: replacementToken,
+			createdAt: "2026-07-21T12:30:12Z",
+		}), { mode: 0o600, flag: "wx" });
+		return { state: null, value: undefined };
+	}), /ownership|token|replacement/i);
+	const replacement = JSON.parse(await readFile(lockPath, "utf8"));
+	assert.equal(replacement.token, replacementToken);
+});
+
 test("reclaims a dead-process transaction lock immediately after restart", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-orphan-lock-"));
 	t.after(() => rm(root, { recursive: true, force: true }));
 	const lock = join(root, "req-477.lock");
-	await mkdir(lock, { mode: 0o700 });
-	await writeFile(join(lock, "owner.json"), JSON.stringify({
+	await writeFile(lock, JSON.stringify({
 		schemaVersion: 1,
 		pid: 2_147_483_647,
 		token: "00000000-0000-4000-8000-000000000000",
-		createdAt: "2026-07-21T10:00:00.000Z",
+		createdAt: "2026-07-21T10:00:00Z",
 	}), { mode: 0o600 });
 	const repository = new FileHumanDecisionRepository(root, { lockRetryMs: 1, lockMaxAttempts: 3 });
 	const persisted = await persistHumanDecisionRequest(repository, spec(), new Date("2026-07-21T10:00:00.000Z"));

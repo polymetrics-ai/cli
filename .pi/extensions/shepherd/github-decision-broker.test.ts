@@ -67,11 +67,15 @@ class FakeTransport implements GitHubDecisionTransport {
 	readonly listed: HumanDecisionBinding[] = [];
 	comments: GitHubComment[] = [];
 	authenticatedActor = "shepherd-host";
-	createFailure?: Error;
+	createFailure?: unknown;
+	listFailures: unknown[] = [];
+	requestCommentId = 1001;
+	requestCommentTimestamp = "2026-07-21T10:00:00.000Z";
 
 	async getAuthenticatedActor(): Promise<string> { return this.authenticatedActor; }
 	async listComments(binding: HumanDecisionBinding): Promise<GitHubComment[]> {
 		this.listed.push(structuredClone(binding));
+		if (this.listFailures.length > 0) throw this.listFailures.shift();
 		return structuredClone(this.comments);
 	}
 	async createDecisionRequestComment(record: HumanDecisionRecord): Promise<GitHubComment> {
@@ -80,19 +84,25 @@ class FakeTransport implements GitHubDecisionTransport {
 		const body = renderDecisionRequestComment(record);
 		this.created.push({ binding: structuredClone(binding), body });
 		const comment: GitHubComment = {
-			id: 1000 + this.created.length,
-			url: `https://github.com/${binding.repository}/${binding.target.kind === "issue" ? "issues" : "pull"}/${binding.target.number}#issuecomment-${1000 + this.created.length}`,
+			id: this.requestCommentId,
+			url: `https://github.com/${binding.repository}/${binding.target.kind === "issue" ? "issues" : "pull"}/${binding.target.number}#issuecomment-${this.requestCommentId}`,
 			body,
 			actor: { login: this.authenticatedActor, type: "User" },
-			createdAt: "2026-07-21T10:00:00.000Z",
-			updatedAt: "2026-07-21T10:00:00.000Z",
+			createdAt: this.requestCommentTimestamp,
+			updatedAt: this.requestCommentTimestamp,
 		};
 		this.comments.push(comment);
 		return structuredClone(comment);
 	}
 }
 
-function brokerHarness(binding = issueBinding) {
+function brokerHarness(
+	binding = issueBinding,
+	overrides: {
+		polling?: { maxAttempts: number; initialDelayMs: number; maxDelayMs: number };
+		transportRetry?: { maxAttempts: number; initialDelayMs: number; maxDelayMs: number };
+	} = {},
+) {
 	const repository = new MemoryRepository();
 	const transport = new FakeTransport();
 	let now = new Date("2026-07-21T10:00:00.000Z");
@@ -100,7 +110,8 @@ function brokerHarness(binding = issueBinding) {
 	const broker = new GitHubDecisionBroker(repository, transport, {
 		now: () => now,
 		sleep: async (delayMs) => { sleeps.push(delayMs); now = new Date(now.valueOf() + delayMs); },
-		polling: { maxAttempts: 3, initialDelayMs: 10, maxDelayMs: 15 },
+		polling: overrides.polling ?? { maxAttempts: 3, initialDelayMs: 10, maxDelayMs: 15 },
+		transportRetry: overrides.transportRetry,
 	});
 	const request = {
 		requestId: "req-477",
@@ -118,6 +129,10 @@ function brokerHarness(binding = issueBinding) {
 	return { repository, transport, broker, request, sleeps, setNow: (value: string) => { now = new Date(value); } };
 }
 
+function classifiedTransportFailure(retryable: boolean, marker: string): Error & { retryable: boolean } {
+	return Object.assign(new Error(`raw transport failure ${marker}`), { retryable });
+}
+
 test("creates exactly one marker-owned request across retry and broker restart", async () => {
 	const harness = brokerHarness();
 	const first = await harness.broker.request(harness.request);
@@ -129,6 +144,19 @@ test("creates exactly one marker-owned request across retry and broker restart",
 	assert.equal(second.requestComment?.id, third.requestComment?.id);
 	assert.match(harness.transport.created[0].body, /<!-- shepherd-decision:v1:req-477:/);
 	assert.equal(harness.transport.created[0].body, renderDecisionRequestComment(first));
+});
+
+test("accepts a real safe-integer comment ID and second-resolution GitHub timestamp", async () => {
+	const harness = brokerHarness();
+	harness.transport.requestCommentId = 5_034_006_493;
+	harness.transport.requestCommentTimestamp = "2026-07-21T10:00:00Z";
+	harness.setNow("2026-07-21T10:00:00.750Z");
+	const record = await harness.broker.request({
+		...harness.request,
+		expiresAt: "2026-07-22T10:00:00Z",
+	});
+	assert.equal(record.requestComment?.id, 5_034_006_493);
+	assert.equal(record.requestComment?.createdAt, "2026-07-21T10:00:00.000Z");
 });
 
 test("serializes concurrent request creation to one external comment", async () => {
@@ -212,6 +240,46 @@ test("allows a bot-authenticated host to own the marker while never treating it 
 	assert.equal(result.status, "pending");
 });
 
+test("parent merge requires the exact approve-merge affirmative command", async () => {
+	const invalid = brokerHarness(prBinding);
+	await assert.rejects(invalid.broker.request({
+		...invalid.request,
+		gate: "parent_merge",
+		allowedOptions: ["approve", "reject"],
+	}), /approve-merge/i);
+
+	const harness = brokerHarness(prBinding);
+	await harness.broker.request({
+		...harness.request,
+		gate: "parent_merge",
+		allowedOptions: ["approve-merge", "reject"],
+	});
+	harness.setNow("2026-07-21T10:02:00.000Z");
+	harness.transport.comments.push({
+		...fixture.allowlistedHuman,
+		body: "/shepherd decide req-477 approve-merge",
+	});
+	const result = await harness.broker.poll("req-477", prBinding);
+	assert.equal(result.status, "decided");
+	assert.equal(result.decision?.option, "approve-merge");
+});
+
+test("escapes untrusted Markdown structure and safely mentions configured humans", () => {
+	const record = createHumanDecisionRecord({
+		requestId: "req-display",
+		gate: "requirements",
+		binding: issueBinding,
+		allowedOptions: ["approve", "reject"],
+		actorAllowlist: ["maintainer-one", "maintainer2"],
+		expiresAt: "2026-07-22T10:00:00.000Z",
+		question: "### Fake approval\n- merged\n<details>spoof</details>",
+	}, new Date("2026-07-21T10:00:00.000Z"));
+	const body = renderDecisionRequestComment(record);
+	assert.doesNotMatch(body, /\n### Fake approval|\n- merged\n|<details>/);
+	assert.match(body, /> \\#\\#\\# Fake approval/);
+	assert.match(body, /Allowed humans: @maintainer-one, @maintainer2/);
+});
+
 test("duplicate or conflicting valid commands are ambiguous and fail closed", async () => {
 	for (const secondOption of ["approve", "reject"] as const) {
 		const harness = brokerHarness();
@@ -269,6 +337,35 @@ test("does not accept an allowlisted command whose authoritative timestamp is st
 	assert.equal(result.status, "pending");
 });
 
+test("retries transient transport failures with bounded backoff", async () => {
+	const harness = brokerHarness(issueBinding, {
+		polling: { maxAttempts: 1, initialDelayMs: 10, maxDelayMs: 10 },
+		transportRetry: { maxAttempts: 3, initialDelayMs: 2, maxDelayMs: 4 },
+	});
+	await harness.broker.request(harness.request);
+	harness.transport.listFailures.push(classifiedTransportFailure(true, "transient-marker"));
+	const result = await harness.broker.poll("req-477", issueBinding);
+	assert.equal(result.status, "pending");
+	assert.deepEqual(harness.sleeps, [2]);
+});
+
+test("fails permanent transport errors immediately with a redacted classification", async () => {
+	const harness = brokerHarness(issueBinding, {
+		polling: { maxAttempts: 1, initialDelayMs: 10, maxDelayMs: 10 },
+		transportRetry: { maxAttempts: 3, initialDelayMs: 2, maxDelayMs: 4 },
+	});
+	await harness.broker.request(harness.request);
+	harness.transport.listFailures.push(classifiedTransportFailure(false, "permanent-marker"));
+	await assert.rejects(harness.broker.poll("req-477", issueBinding), (error: unknown) => {
+		assert.ok(error instanceof Error);
+		assert.equal(error.message, "GitHub transport permanent failure");
+		assert.equal((error as Error & { retryable?: boolean }).retryable, false);
+		assert.doesNotMatch(error.message, /permanent-marker/);
+		return true;
+	});
+	assert.deepEqual(harness.sleeps, []);
+});
+
 test("issue and PR routes preserve the exact typed repository, target, generation, and head", async () => {
 	for (const binding of [issueBinding, prBinding]) {
 		const harness = brokerHarness(binding);
@@ -280,12 +377,12 @@ test("issue and PR routes preserve the exact typed repository, target, generatio
 test("typed gh adapter uses ambient host auth, bounded argv calls, pagination, and strict payload parsing", async () => {
 	const calls: Array<{ file: string; args: string[] }> = [];
 	const page = JSON.stringify([{
-		id: 7,
-		html_url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-7",
+		id: 5_034_006_493,
+		html_url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-5034006493",
 		body: "safe",
-		user: { login: "maintainer-one", type: "User" },
-		created_at: "2026-07-21T10:00:00.000Z",
-		updated_at: "2026-07-21T10:00:00.000Z",
+		user: { login: "maintainer2", type: "User" },
+		created_at: "2026-07-21T10:00:00Z",
+		updated_at: "2026-07-21T10:00:00Z",
 	}]);
 	const transport = new GhCliDecisionTransport(async (file, args) => {
 		calls.push({ file, args });
@@ -307,6 +404,25 @@ test("typed gh adapter uses ambient host auth, bounded argv calls, pagination, a
 	assert.ok(calls.every((call) => call.file === "gh"));
 	assert.ok(calls.every((call) => !call.args.some((arg) => /token|authorization|bearer/i.test(arg))));
 	assert.ok(calls.some((call) => call.args.includes("repos/polymetrics-ai/cli/issues/471/comments?per_page=100&page=1")));
+});
+
+test("typed gh adapter classifies transient and permanent executor failures without leaking raw text", async () => {
+	for (const [status, retryable] of [[503, true], [401, false]] as const) {
+		const marker = `raw-adapter-marker-${status}`;
+		const transport = new GhCliDecisionTransport(async () => {
+			throw Object.assign(new Error(`executor failed ${marker}`), {
+				code: 1,
+				stderr: `HTTP ${status}: ${marker}`,
+			});
+		});
+		await assert.rejects(transport.listComments(issueBinding), (error: unknown) => {
+			assert.ok(error instanceof Error);
+			assert.equal((error as Error & { retryable?: boolean }).retryable, retryable);
+			assert.equal(error.message, `GitHub transport ${retryable ? "transient" : "permanent"} failure`);
+			assert.doesNotMatch(error.message, new RegExp(marker));
+			return true;
+		});
+	}
 });
 
 test("typed gh adapter fails closed when pagination exceeds its fixed window or binding is hostile", async () => {
