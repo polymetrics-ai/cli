@@ -202,6 +202,18 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
   map and length local.
 - Execution decision: `local_critical_path`; proceed to final scoped verification.
 
+## Exact-head correction 3 verification cycle
+
+- Post-fix focused suite: 41/41 pass.
+- Post-fix full Shepherd suite: 178/178 pass in 42.5 seconds.
+- Strict production-only TypeScript against installed Pi 0.80.6 declarations: pass.
+- Offline Pi RPC `get_commands`: pass; `pm-shepherd` discovered.
+- `git diff --check`, assigned-path ownership, clean branch, and PR base/head checks: pass.
+- Verified implementation head before the evidence-only commit:
+  `9b630ded17520aee69ddc67ef7fa8fc5e10367a7`.
+- No Go/connectors/root `make verify`, review bot, or merge action was performed.
+- Execution decision: `local_critical_path`; third correction gate complete.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

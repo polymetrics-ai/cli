@@ -8,7 +8,7 @@
 - Lifecycle: plan -> RED -> GREEN -> refactor -> full verification -> stacked PR.
 - GSD route: manual fallback after the repository adapter returned
   `unknown GSD command: programming-loop`.
-- Downstream artifact: exact-head accessor-boundary correction in progress under the same owned
-  policy/reconciler slice.
-- Verification result: pending correction-loop-3 RED/GREEN and phase-equivalent scoped gates;
-  full-repo `make verify` remains excluded by superseding parent policy.
+- Downstream artifact: pure policy/reconciler implemented with three exact-head correction loops
+  and final GSD/TDD/verification artifacts.
+- Verification result: parent-declared phase-equivalent child gate passed at 41 focused and 178
+  full Shepherd tests; full-repo `make verify` remains excluded by superseding parent policy.

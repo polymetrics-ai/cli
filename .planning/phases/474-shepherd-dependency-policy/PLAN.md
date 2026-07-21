@@ -249,8 +249,8 @@ and can produce different decisions from the same object.
 
 - [x] Accessor RED captured before production edits: 41 tests, 40 pass, 1 expected failure.
 - [x] Focused tests pass 41/41 after the descriptor-first fix.
-- [ ] Full Shepherd suite passes.
-- [ ] Strict production TypeScript passes against installed Pi 0.80.6 declarations.
-- [ ] Offline Pi RPC discovers `pm-shepherd`.
-- [ ] Diff/ownership, clean branch, and local/remote/PR head checks pass.
-- [ ] No Go, connectors, root `make verify`, review bot, or merge action is run.
+- [x] Full Shepherd suite passes 178/178.
+- [x] Strict production TypeScript passes against installed Pi 0.80.6 declarations.
+- [x] Offline Pi RPC discovers `pm-shepherd`.
+- [x] Diff/ownership, clean branch, and local/remote/PR head checks pass.
+- [x] No Go, connectors, root `make verify`, review bot, or merge action is run.

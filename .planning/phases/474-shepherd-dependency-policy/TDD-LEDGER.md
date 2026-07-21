@@ -148,3 +148,8 @@ validates descriptor values without property reads or caller iteration, and invo
 `structuredClone` only after the full input is proven safe. The first strict TypeScript pass found
 the array overload inferring `descriptors.length` as a number; an explicit property-descriptor map
 and narrowed local length fixed the type-only issue. Strict production TypeScript then exited 0.
+
+Final correction-3 verification: focused 41/41, full Shepherd 178/178, strict production
+TypeScript pass against installed Pi 0.80.6 declarations, offline Pi RPC pass, and diff/ownership
+pass. Verified implementation head before the final evidence-only commit:
+`9b630ded17520aee69ddc67ef7fa8fc5e10367a7`.

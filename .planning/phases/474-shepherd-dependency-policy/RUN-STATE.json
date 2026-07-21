@@ -3,8 +3,8 @@
   "issue": 474,
   "phase": "474-shepherd-dependency-policy",
   "mode": "manual_gsd_fallback",
-  "status": "third_correction_green",
-  "verificationPassed": false,
+  "status": "completed",
+  "verificationPassed": true,
   "verificationPolicy": "parent_declared_phase_equivalent_child_gate",
   "adapterEvidence": {
     "command": "scripts/gsd prompt programming-loop init --phase 474-shepherd-dependency-policy --dry-run",
@@ -70,6 +70,11 @@
       "cycle": "exact-head-correction-3-green",
       "decision": "local_critical_path",
       "reason": "Descriptor-first exact validation prevents accessor and Proxy execution; focused tests pass 41/41 and strict production TypeScript passes."
+    },
+    {
+      "cycle": "exact-head-correction-3-verify",
+      "decision": "local_critical_path",
+      "reason": "Final scoped gates pass: 41 focused tests, 178 full Shepherd tests, strict Pi 0.80.6 TypeScript, offline RPC, and diff/ownership."
     }
   ],
   "gates": {
@@ -77,14 +82,14 @@
     "green": "passed_41_of_41",
     "refactor": "passed_41_of_41_after_descriptor_boundary_refactor",
     "focusedTests": "passed_41_of_41",
-    "fullShepherdTests": "pending_third_correction_verification",
+    "fullShepherdTests": "passed_178_of_178",
     "strictTypeScript": "passed_third_correction_against_pi_0_80_6",
-    "piExtensionDiscovery": "pending_third_correction_verification",
+    "piExtensionDiscovery": "offline_rpc_pm_shepherd_discovered",
     "goVet": "supplemental_passed",
     "goTest": "supplemental_passed_after_contention_timeout_retry",
     "goBuild": "supplemental_passed",
     "makeVerify": "cancelled_by_parent_policy_not_a_functional_failure",
-    "phaseEquivalentChildGate": "reopened_for_third_exact_head_correction",
+    "phaseEquivalentChildGate": "passed_after_third_exact_head_correction",
     "correctionRed": "passed_expected_failure_15_of_36",
     "correctionGreen": "passed_36_of_36",
     "correctionAuditGap": "red_2_of_2_then_green_36_of_36",
@@ -102,6 +107,10 @@
     "secondCorrectionOwnership": "passed",
     "thirdCorrectionRed": "passed_expected_failure_1_of_41",
     "thirdCorrectionGreen": "passed_41_of_41",
-    "thirdCorrectionVerification": "pending"
+    "thirdCorrectionFullShepherd": "passed_178_of_178",
+    "thirdCorrectionStrictTypeScript": "passed_against_pi_0_80_6",
+    "thirdCorrectionOfflineRpc": "pm_shepherd_discovered",
+    "thirdCorrectionOwnership": "passed",
+    "thirdCorrectionVerification": "passed"
   }
 }

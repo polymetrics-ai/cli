@@ -23,8 +23,12 @@ The second correction closes capital sharp-S alias gaps with an explicitly bound
 alias set, cross-validates lifecycle claims against the authoritative queue, snapshots and freezes
 caller DTOs before graph traversal, and gives legacy BLOCKED a terminal reconciliation result.
 
-Latest TDD evidence: review-2 RED 35/40 pass with 5 expected failures, final focused 40/40, and full
-Shepherd 177/177. Strict no-emit TypeScript passes over all production Shepherd modules against
+The third correction moves exact-shape validation ahead of cloning. It rejects Proxies before
+reflection, inspects only own data descriptors for records and dense arrays, and rejects accessors
+without executing caller code before creating the private frozen snapshot.
+
+Latest TDD evidence: accessor RED 40/41 pass with 1 expected failure, final focused 41/41, and full
+Shepherd 178/178. Strict no-emit TypeScript passes over all production Shepherd modules against
 installed Pi 0.80.6 types; offline RPC discovers `pm-shepherd`.
 
 The parent orchestrator superseded the child-lane full-repository gate while final verification was
