@@ -113,6 +113,33 @@ test("redaction preserves harmless assignment-like prose byte-identically", () =
 	for (const control of controls) assert.equal(redactSensitiveText(control), control);
 });
 
+test("redaction balances nested flow values before scanning later sensitive siblings", () => {
+	const secret = ["synthetic", "nested-sibling", "issue-475"].join("-");
+	const value = `{ token: { retained: true }, client_secret: ${secret} with spaces, safe: retained }`;
+	const redacted = redactSensitiveText(value);
+
+	assert.equal(redacted.includes(secret), false);
+	assert.match(redacted, /\[REDACTED\]/);
+});
+
+test("redaction resets unmatched leading prose apostrophes at the next structured line", () => {
+	const secret = ["synthetic", "leading-apostrophe", "issue-475"].join("-");
+	const value = `'This leading apostrophe is ordinary prose, not a YAML scalar\nclient_secret: ${secret} with spaces`;
+	const redacted = redactSensitiveText(value);
+
+	assert.equal(redacted.includes(secret), false);
+	assert.match(redacted, /\[REDACTED\]/);
+});
+
+test("redaction leaves ordinary braces and flow-shaped comments byte-identical", () => {
+	const controls = [
+		"Use { to denote an opening delimiter in parser prose.\ntoken: describes a lexical unit in documentation.",
+		"# example only: { client_secret: placeholder }\nsecret: a surprising detail in a story.",
+	];
+
+	assert.deepEqual(controls.map(redactSensitiveText), controls);
+});
+
 test("read-only policy exposes workspace reads and non-mutating typed capabilities only", async () => {
 	const input = policyInput(true);
 	const policy = createToolPolicy(input);
@@ -280,4 +307,36 @@ test("tool inputs and outputs are bounded and host summaries are redacted", asyn
 		}, undefined),
 		/bounded|large|limit/i,
 	);
+});
+
+test("typed tool output redacts nested-flow siblings and post-apostrophe assignments", async () => {
+	const probes = [
+		{
+			secret: ["synthetic", "tool-nested-sibling", "issue-475"].join("-"),
+			value(secret: string) {
+				return `{ token: { retained: true }, client_secret: ${secret} with spaces, safe: retained }`;
+			},
+		},
+		{
+			secret: ["synthetic", "tool-leading-apostrophe", "issue-475"].join("-"),
+			value(secret: string) {
+				return `'This leading apostrophe is ordinary prose\nclient_secret: ${secret} with spaces`;
+			},
+		},
+	];
+	const rendered: string[] = [];
+	for (const probe of probes) {
+		const input = policyInput(false);
+		input.capabilities = [
+			capability("host_inspect", { output: probe.value(probe.secret) }),
+			capability("host_verify", { mutates: true }),
+		];
+		const policy = createToolPolicy(input, { maxToolOutputBytes: 512 });
+		const inspect = policy.tools.find((tool) => tool.name === "host_inspect");
+		assert.ok(inspect);
+		rendered.push(text(await inspect.execute("inspect", { target: "owned" }, undefined)));
+	}
+
+	assert.deepEqual(rendered.map((value, index) => value.includes(probes[index].secret)), [false, false]);
+	assert.deepEqual(rendered.map((value) => /\[REDACTED\]/.test(value)), [true, true]);
 });

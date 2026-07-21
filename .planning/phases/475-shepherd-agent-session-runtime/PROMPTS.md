@@ -97,4 +97,7 @@
 - Execution decision: `local_critical_path`; a read-only architecture sidecar was attempted but the
   runtime thread cap rejected it, and both production findings overlap this issue-owned scope.
 - Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`.
-- Verification status: pending Cycle 5 RED/GREEN and the declared Shepherd-only gates.
+- RED result: focused command exits 1 with 29 passed / 7 expected failures across timer ownership,
+  prompt, handoff, direct nested-flow, direct leading-apostrophe, brace/comment controls, and typed
+  tool output. Focused strict TypeScript passes and production remains unchanged.
+- Verification status: RED captured; GREEN/refactor and declared Shepherd-only gates pending.

@@ -8,12 +8,12 @@ findings, and existing PLAN define the phase-equivalent coverage gate.
 
 | Required outcome | Artifact / test boundary | Status before Cycle 5 execution |
 |---|---|---|
-| No referenced deadline timer from rejected duplicate/concurrent reservation | `agent-session-runtime.test.ts`; reservation ordering in `agent-session-runtime.ts` | planned RED |
-| Nested flow values cannot hide later sensitive siblings | direct, prompt, tool-output, and handoff tests | planned RED |
-| Unmatched apostrophe prose cannot hide the next structured assignment | direct, prompt, tool-output, and handoff tests | planned RED |
-| Ordinary braces and flow-shaped comments cannot mutate harmless prose | byte-identical direct controls | planned RED |
+| No referenced deadline timer from rejected duplicate/concurrent reservation | `agent-session-runtime.test.ts`; reservation ordering in `agent-session-runtime.ts` | expected RED captured |
+| Nested flow values cannot hide later sensitive siblings | direct, prompt, tool-output, and handoff tests | expected RED captured |
+| Unmatched apostrophe prose cannot hide the next structured assignment | direct, prompt, tool-output, and handoff tests | expected RED captured |
+| Ordinary braces and flow-shaped comments cannot mutate harmless prose | byte-identical direct controls | expected RED captured |
 | Prior structured, multiline, block, Bearer, flow, and spaced redaction remains intact | existing focused regression suite | retained |
-| Scanner remains bounded and single-pass | explicit line/flow lexical state machine; monotonic cursors and balanced delimiters | planned implementation |
+| Scanner remains bounded and single-pass | explicit line/flow lexical state machine; monotonic cursors and balanced delimiters | implementation pending |
 | Declared phase verification | focused/full Shepherd tests, pinned Pi 0.80.6 strict TypeScript, offline RPC, diff/base/scope | pending |
 
 No dependency, CLI/help/docs/website, Go, connector, runtime-backed service, live credential, or

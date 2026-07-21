@@ -184,11 +184,22 @@
 
 ### RED
 
-- Status: pending test-only changes; production remains unchanged.
+- Status: captured with tests and phase evidence only; production remains unchanged at
+  `e41f075a9b3bfb01d410296712740b54f943ba71`.
+- Focused command result: exit 1, 29 passed / 7 expected failures:
+  - serialized prompt retained a nested-flow or post-apostrophe marker;
+  - handoff summary/finding retained a nested-flow or post-apostrophe marker;
+  - immediate duplicate long-timeout rejection left one referenced, uncleared scope timer;
+  - direct nested mapping consumption hid the later sensitive sibling;
+  - direct unmatched leading apostrophe hid the next structured line;
+  - ordinary unmatched brace and flow-shaped comment controls were modified;
+  - typed tool output retained both nested-flow and post-apostrophe markers.
+- Focused strict TypeScript result: exit 0 against the explicit Pi 0.80.6 package/type roots,
+  proving the timer instrumentation and regression harness compile cleanly.
 
 ### GREEN / REFACTOR / VERIFY
 
-- Status: blocked on committed RED evidence.
+- Status: blocked on committing and pushing this captured RED evidence.
 - Declared gates: focused issue tests, complete Shepherd suite, pinned Pi 0.80.6 strict TypeScript,
   pinned offline RPC, diff check, immutable base, and issue-owned paths only.
 - Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot

@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_5_plan",
+  "currentCycle": "correction_cycle_5_red",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -113,12 +113,17 @@
       "cycle": "correction_cycle_5_plan",
       "decision": "local_critical_path",
       "reason": "The timer and lexical-state findings overlap the issue-owned runtime/tool-policy modules; a read-only architecture sidecar was rejected by the thread cap, so record the architectural correction locally before tests."
+    },
+    {
+      "cycle": "correction_cycle_5_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only regressions produced seven expected failures with production unchanged: referenced duplicate timer plus prompt, handoff, direct, control, and typed-tool lexical boundaries; proceed to the architectural minimum fixes."
     }
   ],
   "gates": {
-    "focusedTests": "pending_cycle_5_red",
+    "focusedTests": "expected_red_29_passed_7_failed",
     "fullShepherdTests": "pending_cycle_5",
-    "strictTypeScriptPi0806": "pending_cycle_5",
+    "strictTypeScriptPi0806": "red_test_harness_focused_pass_full_pending_cycle_5",
     "offlineRpcSmoke": "pending_cycle_5",
     "diffCheck": "pending_cycle_5",
     "ownedScope": "pending_cycle_5",

@@ -258,3 +258,9 @@ permitted. GSD adapter health passes while its 69-command registry still rejects
 repo routing, issue contract, universal loop, Pi-adapter, and runtime/Pi references. Execution is
 `local_critical_path`: both source findings overlap this worker's exclusive modules, and the
 attempted read-only architecture sidecar was rejected by the runtime thread cap.
+
+Cycle 5 RED result: the focused command exits 1 with 29 passes and 7 expected failures. The seven
+failing tests isolate prompt serialization, handoff redaction, the referenced duplicate-run timer,
+nested-flow direct redaction, leading-apostrophe direct redaction, byte-identical brace/comment
+controls, and typed tool output. Focused strict TypeScript passes, and production remains unchanged
+at the reviewed head.

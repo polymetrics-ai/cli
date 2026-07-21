@@ -64,3 +64,8 @@ leading apostrophe prose, and ordinary braces/comments. Cycle 5 replaces that tr
 explicit deterministic line/flow lexical state machine and moves reservation ahead of scope
 creation. Production remains unchanged until the timer, all four redaction consumers, and
 byte-identical prose controls produce the expected committed RED.
+
+The Cycle 5 focused RED now exits 1 with 29 passes and 7 expected failures, while focused strict
+TypeScript passes and production remains unchanged. The failures independently expose timer
+ownership plus prompt, handoff, direct nested-flow, direct apostrophe, brace/comment control, and
+typed-tool redaction boundaries.
