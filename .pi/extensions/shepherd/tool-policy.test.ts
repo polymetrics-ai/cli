@@ -1077,3 +1077,328 @@ test("cycle 9 Pi 0.80.6 validates a real custom-tool call and receives required 
 		content: "offline result",
 	});
 });
+
+function cycle10SecretPayload(prefix: string): { value: string; markers: string[] } {
+	const markers = {
+		documentaryEquals: `synthetic-${prefix}-documentary-equals-475`,
+		proxyAuthorization: `synthetic-${prefix}-proxy-authorization-475`,
+		quotedFlow: `synthetic-${prefix}-quoted-flow-475`,
+		oauthFragment: `synthetic-${prefix}-oauth-fragment-475`,
+	};
+	return {
+		value: [
+			`token=number of ${markers.documentaryEquals} documentary entries`,
+			`Proxy-Authorization: Basic ${markers.proxyAuthorization}`,
+			`["client_secret": ${markers.quotedFlow}]`,
+			`https://x.invalid/callback#access_token=${markers.oauthFragment}`,
+		].join("\n"),
+		markers: Object.values(markers),
+	};
+}
+
+function toolErrorGraphContains(root: unknown, target: unknown): boolean {
+	const pending: unknown[] = [root];
+	const seen = new Set<unknown>();
+	while (pending.length > 0) {
+		const current = pending.shift();
+		if (current === target) return true;
+		if (current === null || current === undefined || seen.has(current)) continue;
+		seen.add(current);
+		if (current instanceof Error) {
+			if (Object.hasOwn(current, "cause")) pending.push(current.cause);
+			if (current instanceof AggregateError) pending.push(...current.errors);
+		}
+	}
+	return false;
+}
+
+async function toolOutcome(operation: Promise<unknown>): Promise<{ status: "resolved" } | { status: "rejected"; reason: unknown }> {
+	return operation.then(
+		() => ({ status: "resolved" as const }),
+		(reason: unknown) => ({ status: "rejected" as const, reason }),
+	);
+}
+
+test("cycle 10 schema and result snapshots preserve own prototype-named data fields", async () => {
+	const defineData = (target: Record<PropertyKey, unknown>, key: PropertyKey, value: unknown): void => {
+		Object.defineProperty(target, key, { configurable: true, enumerable: true, writable: true, value });
+	};
+	const properties = Object.create(null) as Record<PropertyKey, unknown>;
+	defineData(properties, "__proto__", { type: "string" });
+	defineData(properties, "prototype", { type: "string" });
+	defineData(properties, "constructor", {
+		type: "object",
+		additionalProperties: false,
+		properties: Object.assign(Object.create(null), {
+			prototype: { type: "boolean" },
+			constructor: { type: "number" },
+		}),
+	});
+	const schema = Object.create(null) as Record<PropertyKey, unknown>;
+	defineData(schema, "type", "object");
+	defineData(schema, "additionalProperties", false);
+	defineData(schema, "properties", properties);
+	defineData(schema, "required", ["__proto__", "prototype", "constructor"]);
+
+	const input = policyInput(true);
+	input.authority.capabilityNames = ["host_inspect"];
+	input.capabilities = [{ ...capability("host_inspect"), parameters: schema as Readonly<Record<string, unknown>> }];
+	const policy = createToolPolicy(input);
+	const inspect = policy.tools.find((tool) => tool.name === "host_inspect");
+	assert.ok(inspect);
+	const snapshot = inspect.parameters as Record<string, unknown>;
+	const snapshotProperties = snapshot.properties as Record<string, unknown>;
+
+	const inheritedSchema = Object.create(null) as Record<PropertyKey, unknown>;
+	defineData(inheritedSchema, "__proto__", {
+		type: "object",
+		additionalProperties: false,
+		properties: {},
+	});
+	let inheritedAccepted = false;
+	try {
+		createToolPolicy({
+			...policyInput(true),
+			authority: { ...policyInput(true).authority, capabilityNames: ["host_inspect"] },
+			capabilities: [{ ...capability("host_inspect"), parameters: inheritedSchema as Readonly<Record<string, unknown>> }],
+		});
+		inheritedAccepted = true;
+	} catch (error) {
+		assert.ok(error instanceof ToolPolicyError);
+	}
+
+	const inheritedWorkspaceResult = Object.create({ changed: true, summary: "inherited mutation" }) as {
+		changed: boolean;
+		summary: string;
+	};
+	const inheritedCapabilityResult = Object.create({ status: "ok", summary: "inherited capability", references: [] }) as {
+		status: "ok";
+		summary: string;
+		references: string[];
+	};
+	const resultInput = policyInput(false);
+	resultInput.workspace.editText = async () => inheritedWorkspaceResult;
+	resultInput.capabilities = [
+		{ ...capability("host_inspect"), async execute() { return inheritedCapabilityResult; } },
+		capability("host_verify", { mutates: true }),
+	];
+	const resultPolicy = createToolPolicy(resultInput);
+	const edit = resultPolicy.tools.find((tool) => tool.name === "workspace_edit");
+	const resultInspect = resultPolicy.tools.find((tool) => tool.name === "host_inspect");
+	assert.ok(edit);
+	assert.ok(resultInspect);
+	const editOutcome = await toolOutcome(edit.execute("cycle10-prototype-edit", {
+		path: ".pi/extensions/shepherd/tool-policy.ts", oldText: "old", newText: "new",
+	}, undefined));
+	const capabilityOutcome = await toolOutcome(resultInspect.execute("cycle10-prototype-capability", { target: "owned" }, undefined));
+
+	assert.deepEqual({
+		ownPrototypeKeys: ["__proto__", "prototype", "constructor"].map((key) => Object.hasOwn(snapshotProperties, key)),
+		serializedIdentically: JSON.stringify(snapshot) === JSON.stringify(schema),
+		frozen: Object.isFrozen(snapshot) && Object.isFrozen(snapshotProperties),
+		inheritedAccepted,
+		editStatus: editOutcome.status,
+		capabilityStatus: capabilityOutcome.status,
+	}, {
+		ownPrototypeKeys: [true, true, true],
+		serializedIdentically: true,
+		frozen: true,
+		inheritedAccepted: false,
+		editStatus: "rejected",
+		capabilityStatus: "rejected",
+	});
+});
+
+test("cycle 10 schema breadth rejects incrementally before complete own-key materialization", () => {
+	const wideProperties: Record<string, unknown> = {};
+	for (let index = 0; index < 10_000; index += 1) wideProperties[`field${index}`] = { type: "string" };
+	const schema = { type: "object", additionalProperties: false, properties: wideProperties };
+	const originalOwnKeys = Reflect.ownKeys;
+	let materializedKeys = 0;
+	Reflect.ownKeys = ((target: object) => {
+		const keys = originalOwnKeys(target);
+		if (target === wideProperties) materializedKeys += keys.length;
+		return keys;
+	}) as typeof Reflect.ownKeys;
+	let rejected = false;
+	try {
+		createToolPolicy({
+			...policyInput(true),
+			authority: { ...policyInput(true).authority, capabilityNames: ["host_inspect"] },
+			capabilities: [{ ...capability("host_inspect"), parameters: schema }],
+		});
+	} catch (error) {
+		rejected = error instanceof ToolPolicyError;
+	} finally {
+		Reflect.ownKeys = originalOwnKeys;
+	}
+	assert.deepEqual({ rejected, materializedWithinCeiling: materializedKeys <= 4_097 }, {
+		rejected: true,
+		materializedWithinCeiling: true,
+	});
+});
+
+test("cycle 10 workspace and capability failures cross tool boundaries only as sanitized typed errors", async () => {
+	const markers = {
+		read: "synthetic-cycle10-workspace-read-secret-475",
+		edit: "synthetic-cycle10-workspace-edit-secret-475",
+		write: "synthetic-cycle10-workspace-write-secret-475",
+		capability: "synthetic-cycle10-capability-secret-475",
+	};
+	const raw = {
+		read: new Error(`token=${markers.read}`),
+		edit: new Error(`password=${markers.edit}`),
+		write: new Error(`client_secret=${markers.write}`),
+		capability: new Error(`Proxy-Authorization: Basic ${markers.capability}`),
+	};
+	const input = policyInput(false);
+	input.workspace.readText = async () => { throw raw.read; };
+	input.workspace.editText = async () => { throw raw.edit; };
+	input.workspace.writeText = async () => { throw raw.write; };
+	input.capabilities = [
+		{ ...capability("host_inspect"), async execute() { throw raw.capability; } },
+		capability("host_verify", { mutates: true }),
+	];
+	const policy = createToolPolicy(input);
+	const tools = new Map(policy.tools.map((tool) => [tool.name, tool]));
+	const outcomes = [
+		["read", await toolOutcome(tools.get("workspace_read")!.execute("cycle10-error-read", {
+			path: ".pi/extensions/shepherd/tool-policy.ts",
+		}, undefined))],
+		["edit", await toolOutcome(tools.get("workspace_edit")!.execute("cycle10-error-edit", {
+			path: ".pi/extensions/shepherd/tool-policy.ts", oldText: "old", newText: "new",
+		}, undefined))],
+		["write", await toolOutcome(tools.get("workspace_write")!.execute("cycle10-error-write", {
+			path: ".pi/extensions/shepherd/tool-policy.ts", content: "new",
+		}, undefined))],
+		["capability", await toolOutcome(tools.get("host_inspect")!.execute("cycle10-error-capability", {
+			target: "owned",
+		}, undefined))],
+	] as const;
+	const problems: string[] = [];
+	for (const [name, outcome] of outcomes) {
+		const reason = outcome.status === "rejected" ? outcome.reason : undefined;
+		const marker = markers[name];
+		if (!(reason instanceof ToolPolicyError)) problems.push(`${name}:untyped`);
+		if (String(reason).includes(marker)) problems.push(`${name}:marker`);
+		if (toolErrorGraphContains(reason, raw[name])) problems.push(`${name}:raw-cause`);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 10 redaction closes documentary equals, proxy auth, quoted flow, and OAuth fragments in every tool consumer", async () => {
+	const direct = cycle10SecretPayload("direct");
+	const workspacePayload = cycle10SecretPayload("workspace");
+	const mutationPayload = cycle10SecretPayload("mutation");
+	const capabilitySummary = cycle10SecretPayload("capability-summary");
+	const capabilityReference = cycle10SecretPayload("capability-reference");
+	const input = policyInput(false, workspacePayload.value);
+	input.workspace.editText = async () => ({ changed: true, summary: mutationPayload.value });
+	input.workspace.writeText = async () => ({ changed: true, summary: mutationPayload.value });
+	input.capabilities = [
+		{
+			...capability("host_inspect"),
+			async execute() {
+				return { status: "ok" as const, summary: capabilitySummary.value, references: capabilityReference.value.split("\n") };
+			},
+		},
+		capability("host_verify", { mutates: true }),
+	];
+	const policy = createToolPolicy(input, { maxToolOutputBytes: 64 * 1024 });
+	const tools = new Map(policy.tools.map((tool) => [tool.name, tool]));
+	const rendered = [
+		redactSensitiveText(direct.value),
+		text(await tools.get("workspace_read")!.execute("cycle10-redact-read", {
+			path: ".pi/extensions/shepherd/tool-policy.ts",
+		}, undefined)),
+		text(await tools.get("workspace_edit")!.execute("cycle10-redact-edit", {
+			path: ".pi/extensions/shepherd/tool-policy.ts", oldText: "old", newText: "new",
+		}, undefined)),
+		text(await tools.get("workspace_write")!.execute("cycle10-redact-write", {
+			path: ".pi/extensions/shepherd/tool-policy.ts", content: "new",
+		}, undefined)),
+		text(await tools.get("host_inspect")!.execute("cycle10-redact-capability", { target: "owned" }, undefined)),
+	].join("\n");
+	const markers = [
+		...direct.markers,
+		...workspacePayload.markers,
+		...mutationPayload.markers,
+		...capabilitySummary.markers,
+		...capabilityReference.markers,
+	];
+	const harmlessColonProse = "token: number of records processed";
+	assert.deepEqual({
+		leaks: leakedMarkers(rendered, markers),
+		harmlessColonProse: redactSensitiveText(harmlessColonProse),
+	}, {
+		leaks: [],
+		harmlessColonProse,
+	});
+});
+
+test("cycle 10 root reads deny cloud stores envrc and common private-key names segment-wise", async () => {
+	const input = policyInput(true, "opaque credential bytes without assignment syntax");
+	input.authority.readPrefixes = ["."];
+	input.authority.writePrefixes = [];
+	const policy = createToolPolicy(input);
+	const read = policy.tools.find((tool) => tool.name === "workspace_read");
+	assert.ok(read);
+	const paths = [
+		".aws/config",
+		"nested/.AWS/CONFIG",
+		".azure/msal_token_cache.json",
+		"nested/.Azure/MSAL_TOKEN_CACHE.JSON",
+		".config/gcloud/legacy_credentials/user@example.invalid/adc.json",
+		"nested/.CONFIG/GCLOUD/LEGACY_CREDENTIALS/user/ADC.JSON",
+		".config/gcloud/access_tokens.db",
+		".envrc",
+		"nested/.ENVRC",
+		".ssh/id_dsa",
+		".ssh/id_ecdsa",
+		"nested/.SSH/ID_RSA",
+		"nested/.ssh/id_ed25519",
+	];
+	const accepted: string[] = [];
+	for (const path of paths) {
+		try {
+			await read.execute(`cycle10-path-${accepted.length}`, { path }, undefined);
+			accepted.push(path);
+		} catch (error) {
+			assert.ok(error instanceof ToolPolicyError, path);
+		}
+	}
+	assert.deepEqual({ accepted, reads: input.workspace.reads }, { accepted: [], reads: [] });
+});
+
+test("cycle 10 capability authority denies sensitive nouns regardless of acquisition synonym or order", () => {
+	const names = [
+		"host_show_secrets",
+		"host_view_credentials",
+		"host_download_tokens",
+		"host_obtain_password",
+		"host_copy_auth",
+		"host_reveal_api_key",
+		"host_lookup_private_key",
+		"host_token_cache_print",
+		"host_secret_status",
+		"host_credentials_metadata",
+		"host_tokens_show",
+		"host_password_obtain",
+	];
+	const accepted: string[] = [];
+	for (const readOnly of [true, false]) {
+		for (const name of names) {
+			try {
+				createToolPolicy({
+					...policyInput(readOnly),
+					authority: { ...policyInput(readOnly).authority, capabilityNames: [name] },
+					capabilities: [capability(name)],
+				});
+				accepted.push(`${readOnly ? "read" : "write"}:${name}`);
+			} catch (error) {
+				assert.ok(error instanceof ToolPolicyError, name);
+			}
+		}
+	}
+	assert.deepEqual(accepted, []);
+});

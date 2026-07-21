@@ -2732,3 +2732,657 @@ test("cycle 9 rejects every terminal control and key line or bidi control in eve
 	}
 	assert.deepEqual({ acceptedControls, acceptedFields }, { acceptedControls: [], acceptedFields: [] });
 });
+
+function cycle10SecretPayload(prefix: string): { value: string; markers: string[] } {
+	const markers = {
+		documentaryEquals: `synthetic-${prefix}-documentary-equals-475`,
+		proxyAuthorization: `synthetic-${prefix}-proxy-authorization-475`,
+		quotedFlow: `synthetic-${prefix}-quoted-flow-475`,
+		oauthFragment: `synthetic-${prefix}-oauth-fragment-475`,
+	};
+	return {
+		value: [
+			`token=number of ${markers.documentaryEquals} documentary entries`,
+			`Proxy-Authorization: Basic ${markers.proxyAuthorization}`,
+			`["client_secret": ${markers.quotedFlow}]`,
+			`https://x.invalid/callback#access_token=${markers.oauthFragment}`,
+		].join("\n"),
+		markers: Object.values(markers),
+	};
+}
+
+function runtimeErrorGraphContains(root: unknown, target: unknown): boolean {
+	const pending: unknown[] = [root];
+	const seen = new Set<unknown>();
+	while (pending.length > 0) {
+		const current = pending.shift();
+		if (current === target) return true;
+		if (current === null || current === undefined || seen.has(current)) continue;
+		seen.add(current);
+		if (current instanceof Error) {
+			if (Object.hasOwn(current, "cause")) pending.push(current.cause);
+			if (current instanceof AggregateError) pending.push(...current.errors);
+		}
+	}
+	return false;
+}
+
+function captureTimersAtDelay(delayMs: number): {
+	referenced(): number;
+	restoreAndClear(): void;
+} {
+	const originalSetTimeout = globalThis.setTimeout;
+	const originalClearTimeout = globalThis.clearTimeout;
+	const captured = new Set<ReturnType<typeof setTimeout>>();
+	const cleared = new Set<ReturnType<typeof setTimeout>>();
+	globalThis.setTimeout = ((...args: Parameters<typeof setTimeout>) => {
+		const handle = originalSetTimeout(...args);
+		if (args[1] === delayMs) captured.add(handle);
+		return handle;
+	}) as typeof setTimeout;
+	globalThis.clearTimeout = ((...args: Parameters<typeof clearTimeout>) => {
+		const handle = args[0] as ReturnType<typeof setTimeout> | undefined;
+		if (handle && captured.has(handle)) cleared.add(handle);
+		return originalClearTimeout(...args);
+	}) as typeof clearTimeout;
+	return {
+		referenced() {
+			return [...captured].filter((handle) => {
+				if (cleared.has(handle)) return false;
+				const timer = handle as ReturnType<typeof setTimeout> & { hasRef?: () => boolean };
+				return typeof timer.hasRef !== "function" || timer.hasRef();
+			}).length;
+		},
+		restoreAndClear() {
+			globalThis.setTimeout = originalSetTimeout;
+			globalThis.clearTimeout = originalClearTimeout;
+			for (const handle of captured) originalClearTimeout(handle);
+		},
+	};
+}
+
+test("cycle 10 native signal leases defeat silent no-op request and parent hooks", async () => {
+	const problems: string[] = [];
+
+	const requestAddController = new AbortController();
+	Object.defineProperty(requestAddController.signal, "addEventListener", {
+		configurable: true,
+		value() { /* captured hostile no-op */ },
+	});
+	const requestAddHarness = runtime();
+	const requestAddRequest = request({
+		signal: requestAddController.signal,
+		binding: { ...request().binding, runId: "cycle10-request-add", laneId: "cycle10-request-add" },
+	});
+	requestAddHarness.sdk.session.output = handoffFor(requestAddRequest);
+	requestAddHarness.sdk.session.blockPrompt();
+	const requestAddRun = requestAddHarness.runtime.run(requestAddRequest);
+	await waitUntil(() => requestAddHarness.sdk.session.promptCalls === 1);
+	requestAddController.abort();
+	const requestAddOutcome = await observeSettlement(requestAddRun, 30);
+	if (requestAddOutcome.status !== "rejected") problems.push(`request-add:${requestAddOutcome.status}`);
+	requestAddHarness.sdk.session.promptGateResolve?.();
+	await observeSettlement(requestAddRun, 100);
+	await observeSettlement(requestAddHarness.runtime.close(), 100);
+
+	const requestRemoveController = new AbortController();
+	const requestNativeAdd = requestRemoveController.signal.addEventListener;
+	Object.defineProperty(requestRemoveController.signal, "addEventListener", {
+		configurable: true,
+		value: requestNativeAdd,
+	});
+	Object.defineProperty(requestRemoveController.signal, "removeEventListener", {
+		configurable: true,
+		value() { /* captured hostile no-op */ },
+	});
+	const requestRemoveHarness = runtime();
+	const requestRemoveRequest = request({
+		signal: requestRemoveController.signal,
+		binding: { ...request().binding, runId: "cycle10-request-remove", laneId: "cycle10-request-remove" },
+	});
+	requestRemoveHarness.sdk.session.output = handoffFor(requestRemoveRequest);
+	await requestRemoveHarness.runtime.run(requestRemoveRequest);
+	if (getEventListeners(requestRemoveController.signal, "abort").length !== 0) problems.push("request-remove:retained");
+	await requestRemoveHarness.runtime.close();
+
+	const parentAddController = new AbortController();
+	Object.defineProperty(parentAddController.signal, "addEventListener", {
+		configurable: true,
+		value() { /* captured hostile no-op */ },
+	});
+	const parentAddHarness = runtime(new FakeSdk(), { parentSignal: parentAddController.signal });
+	parentAddController.abort();
+	await new Promise<void>((resolve) => setImmediate(resolve));
+	const parentAddRequest = request({
+		binding: { ...request().binding, runId: "cycle10-parent-add", laneId: "cycle10-parent-add" },
+	});
+	parentAddHarness.sdk.session.output = handoffFor(parentAddRequest);
+	const parentAddOutcome = await observeSettlement(parentAddHarness.runtime.run(parentAddRequest), 100);
+	if (parentAddOutcome.status !== "rejected") problems.push(`parent-add:${parentAddOutcome.status}`);
+	await observeSettlement(parentAddHarness.runtime.close(), 100);
+
+	const parentRemoveController = new AbortController();
+	const parentNativeAdd = parentRemoveController.signal.addEventListener;
+	Object.defineProperty(parentRemoveController.signal, "addEventListener", {
+		configurable: true,
+		value: parentNativeAdd,
+	});
+	Object.defineProperty(parentRemoveController.signal, "removeEventListener", {
+		configurable: true,
+		value() { /* captured hostile no-op */ },
+	});
+	const parentRemoveHarness = runtime(new FakeSdk(), { parentSignal: parentRemoveController.signal });
+	await parentRemoveHarness.runtime.close();
+	if (getEventListeners(parentRemoveController.signal, "abort").length !== 0) problems.push("parent-remove:retained");
+	parentRemoveController.abort();
+
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 10 staged session capture cleans every malformed foreground and late surface", async () => {
+	type SessionField = "abort" | "waitForIdle" | "dispose" | "prompt" | "subscribe" | "getActiveToolNames";
+	const fields: SessionField[] = ["abort", "waitForIdle", "dispose", "prompt", "subscribe", "getActiveToolNames"];
+	const problems: string[] = [];
+
+	for (const mode of ["foreground", "late"] as const) {
+		for (const kind of ["missing", "throwing-getter"] as const) {
+			for (const field of fields) {
+				const sdk = new FakeSdk();
+				const malformed = sdk.session;
+				Object.defineProperty(malformed, field, kind === "missing"
+					? { configurable: true, value: undefined }
+					: {
+						configurable: true,
+						get() { throw new Error(`synthetic ${field} getter failure`); },
+					});
+				const cleanupShouldSucceed = field !== "dispose";
+				const lane = `cycle10-${mode}-${kind}-${field}`;
+				let harness: ReturnType<typeof runtime>;
+				if (mode === "foreground") {
+					harness = runtime(sdk, { cleanupTimeoutMs: 12 });
+					const req = request({ binding: { ...request().binding, runId: lane, laneId: lane } });
+					malformed.output = handoffFor(req);
+					const outcome = await observeSettlement(harness.runtime.run(req), 100);
+					if (outcome.status !== "rejected") problems.push(`${lane}:primary-${outcome.status}`);
+				} else {
+					const creation = deferredValue<RuntimeCreationResult>();
+					installDeferredCreation(sdk, creation);
+					harness = runtime(sdk, { cleanupTimeoutMs: 12 });
+					const req = request({
+						timeoutMs: 5,
+						binding: { ...request().binding, runId: lane, laneId: lane },
+					});
+					const runPromise = harness.runtime.run(req);
+					await waitUntil(() => sdk.options !== undefined);
+					await observeSettlement(runPromise, 50);
+					malformed.thinkingLevel = "high";
+					malformed.activeTools = [...(sdk.options?.tools as string[])];
+					creation.resolve({ session: malformed, extensionsResult: { extensions: [], errors: [] } });
+					await new Promise((resolve) => setTimeout(resolve, 20));
+				}
+
+				const expectedDisposeCalls = cleanupShouldSucceed ? 1 : 0;
+				if (malformed.disposeCalls !== expectedDisposeCalls) {
+					problems.push(`${lane}:dispose-${malformed.disposeCalls}`);
+				}
+				const retrySession = new FakeSession();
+				const retry = request({
+					binding: { ...request().binding, runId: `${lane}-retry`, laneId: `${lane}-retry` },
+				});
+				retrySession.output = handoffFor(retry);
+				sdk.session = retrySession;
+				sdk.createAgentSession = FakeSdk.prototype.createAgentSession.bind(sdk);
+				const retryOutcome = await observeSettlement(harness.runtime.run(retry), 100);
+				const expectedRetry = cleanupShouldSucceed ? "resolved" : "rejected";
+				if (retryOutcome.status !== expectedRetry) problems.push(`${lane}:retry-${retryOutcome.status}`);
+				await observeSettlement(harness.runtime.close(), 100);
+			}
+		}
+	}
+
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 10 detached late cleanup uses only unreferenced phase timers", async () => {
+	const cleanupTimeoutMs = 17;
+	const timers = captureTimersAtDelay(cleanupTimeoutMs);
+	let referencedWhileDisposePending = -1;
+	try {
+		const sdk = new FakeSdk();
+		sdk.blockCreate();
+		Object.defineProperty(sdk.session, "dispose", {
+			configurable: true,
+			value() {
+				sdk.session.disposeCalls += 1;
+				return new Promise<void>(() => undefined);
+			},
+		});
+		const harness = runtime(sdk, { cleanupTimeoutMs });
+		const req = request({
+			timeoutMs: 5,
+			binding: { ...request().binding, runId: "cycle10-detached-timers", laneId: "cycle10-detached-timers" },
+		});
+		await assert.rejects(harness.runtime.run(req), /timed out|deadline|settlement/i);
+		sdk.createGateResolve?.();
+		await waitUntil(() => sdk.session.disposeCalls === 1);
+		referencedWhileDisposePending = timers.referenced();
+		await new Promise((resolve) => setTimeout(resolve, cleanupTimeoutMs + 8));
+	} finally {
+		timers.restoreAndClear();
+	}
+	assert.equal(referencedWhileDisposePending, 0);
+});
+
+test("cycle 10 close joins a healthy multi-phase late cleanup terminal without a shorter outer bound", async () => {
+	const cleanupTimeoutMs = 20;
+	const sdk = new FakeSdk();
+	sdk.blockCreate();
+	let disposeFinished = false;
+	Object.defineProperties(sdk.session, {
+		abort: {
+			configurable: true,
+			async value() {
+				sdk.session.abortCalls += 1;
+				await new Promise((resolve) => setTimeout(resolve, 10));
+			},
+		},
+		waitForIdle: {
+			configurable: true,
+			async value() {
+				sdk.session.waitCalls += 1;
+				await new Promise((resolve) => setTimeout(resolve, 10));
+			},
+		},
+		dispose: {
+			configurable: true,
+			async value() {
+				sdk.session.disposeCalls += 1;
+				await new Promise((resolve) => setTimeout(resolve, 15));
+				disposeFinished = true;
+			},
+		},
+	});
+	const harness = runtime(sdk, { cleanupTimeoutMs });
+	const req = request({
+		timeoutMs: 5,
+		binding: { ...request().binding, runId: "cycle10-close-terminal", laneId: "cycle10-close-terminal" },
+	});
+	await assert.rejects(harness.runtime.run(req), /timed out|deadline|settlement/i);
+	const startedAt = Date.now();
+	const closePromises = [harness.runtime.close(), harness.runtime.shutdown(), harness.runtime.close()];
+	sdk.createGateResolve?.();
+	const outcomes = await Promise.allSettled(closePromises);
+	const elapsedAtClose = Date.now() - startedAt;
+	const disposeAtClose = disposeFinished;
+	await new Promise((resolve) => setTimeout(resolve, 25));
+
+	assert.deepEqual({
+		statuses: outcomes.map((outcome) => outcome.status),
+		disposeAtClose,
+		disposeFinished,
+		disposeCalls: sdk.session.disposeCalls,
+		elapsedAtCloseAtLeastOnePhase: elapsedAtClose >= cleanupTimeoutMs,
+	}, {
+		statuses: ["fulfilled", "fulfilled", "fulfilled"],
+		disposeAtClose: true,
+		disposeFinished: true,
+		disposeCalls: 1,
+		elapsedAtCloseAtLeastOnePhase: true,
+	});
+});
+
+test("cycle 10 creation result and extension arrays are exact descriptor-safe closed snapshots", async () => {
+	type ResultCase = {
+		name: string;
+		build(session: FakeSession): { result: RuntimeCreationResult; observed(): number };
+	};
+	const cases: ResultCase[] = [
+		{
+			name: "proxy-hidden-extension",
+			build(session) {
+				let reads = 0;
+				const extensions = new Proxy([{ name: "forbidden" }], {
+					get(target, property, receiver) {
+						if (property === "length") { reads += 1; return 0; }
+						return Reflect.get(target, property, receiver);
+					},
+				});
+				return { result: { session, extensionsResult: { extensions, errors: [] } }, observed: () => reads };
+			},
+		},
+		{
+			name: "hidden-array-field",
+			build(session) {
+				const extensions: unknown[] = [];
+				Object.defineProperty(extensions, "hidden", { value: "forbidden" });
+				return { result: { session, extensionsResult: { extensions, errors: [] } }, observed: () => 0 };
+			},
+		},
+		{
+			name: "symbol-array-field",
+			build(session) {
+				const extensions: unknown[] = [];
+				(extensions as unknown as Record<PropertyKey, unknown>)[Symbol("hidden")] = "forbidden";
+				return { result: { session, extensionsResult: { extensions, errors: [] } }, observed: () => 0 };
+			},
+		},
+		{
+			name: "extension-result-extra",
+			build(session) {
+				const extensionsResult = { extensions: [], errors: [], hidden: true };
+				return { result: { session, extensionsResult }, observed: () => 0 };
+			},
+		},
+		{
+			name: "creation-result-extra",
+			build(session) {
+				return {
+					result: { session, extensionsResult: { extensions: [], errors: [] }, hidden: true } as RuntimeCreationResult,
+					observed: () => 0,
+				};
+			},
+		},
+		{
+			name: "fallback-accessor",
+			build(session) {
+				let reads = 0;
+				const result = { session, extensionsResult: { extensions: [], errors: [] } } as RuntimeCreationResult;
+				Object.defineProperty(result, "modelFallbackMessage", {
+					enumerable: true,
+					get() { reads += 1; return undefined; },
+				});
+				return { result, observed: () => reads };
+			},
+		},
+	];
+	const problems: string[] = [];
+
+	for (const spec of cases) {
+		const sdk = new FakeSdk();
+		const built = spec.build(sdk.session);
+		let first = true;
+		sdk.createAgentSession = async (options) => {
+			sdk.options = options as unknown as Record<string, unknown>;
+			const session = first ? built.result.session as FakeSession : sdk.session;
+			session.thinkingLevel = options.thinkingLevel as "high" | "xhigh";
+			session.activeTools = [...(options.tools as string[])];
+			if (first) { first = false; return built.result; }
+			return { session, extensionsResult: { extensions: [], errors: [] } };
+		};
+		const harness = runtime(sdk, { cleanupTimeoutMs: 15 });
+		const req = request({ binding: { ...request().binding, runId: `cycle10-${spec.name}`, laneId: `cycle10-${spec.name}` } });
+		sdk.session.output = handoffFor(req);
+		const outcome = await observeSettlement(harness.runtime.run(req), 100);
+		if (outcome.status !== "rejected") problems.push(`${spec.name}:accepted`);
+		if (sdk.session.disposeCalls !== 1) problems.push(`${spec.name}:dispose-${sdk.session.disposeCalls}`);
+		if (built.observed() !== 0) problems.push(`${spec.name}:host-read-${built.observed()}`);
+		const retry = request({
+			binding: { ...request().binding, runId: `cycle10-${spec.name}-retry`, laneId: `cycle10-${spec.name}-retry` },
+		});
+		sdk.session = new FakeSession();
+		sdk.session.output = handoffFor(retry);
+		const retryOutcome = await observeSettlement(harness.runtime.run(retry), 100);
+		if (retryOutcome.status !== "resolved") problems.push(`${spec.name}:retry-${retryOutcome.status}`);
+		await observeSettlement(harness.runtime.close(), 100);
+	}
+
+	for (const spec of cases.slice(0, 2)) {
+		const sdk = new FakeSdk();
+		const creation = deferredValue<RuntimeCreationResult>();
+		installDeferredCreation(sdk, creation);
+		const built = spec.build(sdk.session);
+		const harness = runtime(sdk, { cleanupTimeoutMs: 15 });
+		const req = request({
+			timeoutMs: 5,
+			binding: { ...request().binding, runId: `cycle10-late-${spec.name}`, laneId: `cycle10-late-${spec.name}` },
+		});
+		await assert.rejects(harness.runtime.run(req), /timed out|deadline|settlement/i);
+		sdk.session.thinkingLevel = "high";
+		sdk.session.activeTools = [...(sdk.options?.tools as string[])];
+		creation.resolve(built.result);
+		await waitUntil(() => sdk.session.disposeCalls === 1);
+		if (built.observed() !== 0) problems.push(`late-${spec.name}:host-read-${built.observed()}`);
+		await observeSettlement(harness.runtime.close(), 100);
+	}
+
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 10 Pi 0.80.6 cumulative message updates are delta-accounted once", async () => {
+	const harness = runtime();
+	const req = request({
+		binding: { ...request().binding, runId: "cycle10-cumulative-stream", laneId: "cycle10-cumulative-stream" },
+	});
+	const output = handoffFor(req, {
+		summary: "s".repeat(3_900),
+		findings: ["f".repeat(1_900), "g".repeat(1_900)],
+	});
+	harness.sdk.session.output = output;
+	Object.defineProperty(harness.sdk.session, "prompt", {
+		configurable: true,
+		async value(prompt: string, options: { expandPromptTemplates: false; source: "extension" }) {
+			harness.sdk.session.promptCalls += 1;
+			harness.sdk.session.lastPrompt = prompt;
+			assert.deepEqual(options, { expandPromptTemplates: false, source: "extension" });
+			for (let end = 4; end < output.length; end += 4) {
+				const partial = {
+					role: "assistant",
+					provider: "openai-codex",
+					model: "gpt-5.6-sol",
+					stopReason: "stop",
+					timestamp: 475,
+					content: [{ type: "text", text: output.slice(0, end) }],
+				};
+				for (const listener of harness.sdk.session.listeners) listener({
+					type: "message_update",
+					message: partial,
+					assistantMessageEvent: { type: "text_delta", contentIndex: 0, delta: output.slice(end - 4, end), partial },
+				} as AgentSessionEvent);
+			}
+			const message = {
+				role: "assistant",
+				provider: "openai-codex",
+				model: "gpt-5.6-sol",
+				stopReason: "stop",
+				timestamp: 475,
+				content: [{ type: "text", text: output }],
+			};
+			for (const listener of harness.sdk.session.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
+			for (const listener of harness.sdk.session.listeners) listener({
+				type: "agent_end", messages: [message], willRetry: false,
+			} as AgentSessionEvent);
+		},
+	});
+	assert.ok(new TextEncoder().encode(output).byteLength < 64 * 1024);
+	assert.ok(Math.ceil(output.length / 4) + 2 < 4_096);
+	const outcome = await observeSettlement(harness.runtime.run(req), 1_000);
+	assert.deepEqual({ status: outcome.status, message: rejectionMessage(outcome) }, { status: "resolved", message: "" });
+});
+
+test("cycle 10 event breadth is rejected before whole-key materialization and terminal kinds are closed", async () => {
+	const originalOwnKeys = Reflect.ownKeys;
+	const wide = { type: "message_update" } as Record<string, unknown>;
+	for (let index = 0; index < 10_000; index += 1) wide[`field${index}`] = index;
+	let materializedKeys = 0;
+	Reflect.ownKeys = ((target: object) => {
+		const keys = originalOwnKeys(target);
+		if (target === wide) materializedKeys += keys.length;
+		return keys;
+	}) as typeof Reflect.ownKeys;
+	let wideOutcome: PromiseOutcome = { status: "pending" };
+	try {
+		const wideHarness = runtime();
+		const req = request({ binding: { ...request().binding, runId: "cycle10-wide-event", laneId: "cycle10-wide-event" } });
+		wideHarness.sdk.session.output = handoffFor(req);
+		Object.defineProperty(wideHarness.sdk.session, "prompt", {
+			configurable: true,
+			async value() {
+				for (const listener of wideHarness.sdk.session.listeners) listener(wide as AgentSessionEvent);
+			},
+		});
+		wideOutcome = await observeSettlement(wideHarness.runtime.run(req), 200);
+	} finally {
+		Reflect.ownKeys = originalOwnKeys;
+	}
+
+	const closedHarness = runtime();
+	const closedRequest = request({
+		binding: { ...request().binding, runId: "cycle10-closed-terminal", laneId: "cycle10-closed-terminal" },
+	});
+	const closedOutput = handoffFor(closedRequest);
+	Object.defineProperty(closedHarness.sdk.session, "prompt", {
+		configurable: true,
+		async value() {
+			const message = {
+				role: "assistant", provider: "openai-codex", model: "gpt-5.6-sol", stopReason: "stop", timestamp: 475,
+				content: [{ type: "text", text: closedOutput }],
+			};
+			for (const listener of closedHarness.sdk.session.listeners) listener({
+				type: "message_end", message, unexpected: "forbidden",
+			} as unknown as AgentSessionEvent);
+			for (const listener of closedHarness.sdk.session.listeners) listener({
+				type: "agent_end", messages: [message], willRetry: false,
+			} as AgentSessionEvent);
+		},
+	});
+	const closedOutcome = await observeSettlement(closedHarness.runtime.run(closedRequest), 200);
+
+	assert.deepEqual({
+		wideStatus: wideOutcome.status,
+		materializedWithinCeiling: materializedKeys <= 257,
+		closedStatus: closedOutcome.status,
+	}, {
+		wideStatus: "rejected",
+		materializedWithinCeiling: true,
+		closedStatus: "rejected",
+	});
+});
+
+test("cycle 10 runtime boundary failures are typed bounded redacted snapshots without raw causes", async () => {
+	const records: Array<{ name: string; marker: string; raw: Error; outcome: PromiseOutcome }> = [];
+
+	const lookupMarker = "synthetic-cycle10-sdk-lookup-secret-475";
+	const lookupRaw = new Error(`token=${lookupMarker}`);
+	const lookupSdk = new FakeSdk();
+	lookupSdk.findModel = () => { throw lookupRaw; };
+	records.push({
+		name: "sdk-lookup", marker: lookupMarker, raw: lookupRaw,
+		outcome: await observeSettlement(runtime(lookupSdk).runtime.run(request()), 100),
+	});
+
+	const listenerMarker = "synthetic-cycle10-listener-secret-475";
+	const listenerRaw = new Error(`password=${listenerMarker}`);
+	const listenerController = new AbortController();
+	Object.defineProperty(listenerController.signal, "removeEventListener", {
+		configurable: true,
+		value() { throw listenerRaw; },
+	});
+	const listenerHarness = runtime();
+	const listenerRequest = request({
+		signal: listenerController.signal,
+		binding: { ...request().binding, runId: "cycle10-error-listener", laneId: "cycle10-error-listener" },
+	});
+	listenerHarness.sdk.session.output = handoffFor(listenerRequest);
+	records.push({
+		name: "listener", marker: listenerMarker, raw: listenerRaw,
+		outcome: await observeSettlement(listenerHarness.runtime.run(listenerRequest), 100),
+	});
+
+	const cleanupMarker = "synthetic-cycle10-cleanup-secret-475";
+	const cleanupRaw = new Error(`client_secret=${cleanupMarker}`);
+	const cleanupHarness = runtime();
+	const cleanupRequest = request({
+		binding: { ...request().binding, runId: "cycle10-error-cleanup", laneId: "cycle10-error-cleanup" },
+	});
+	cleanupHarness.sdk.session.output = handoffFor(cleanupRequest);
+	cleanupHarness.sdk.session.disposeError = cleanupRaw;
+	const cleanupOutcome = await observeSettlement(cleanupHarness.runtime.run(cleanupRequest), 100);
+	records.push({ name: "cleanup", marker: cleanupMarker, raw: cleanupRaw, outcome: cleanupOutcome });
+	const quarantineOutcome = await observeSettlement(cleanupHarness.runtime.run(request({
+		binding: { ...request().binding, runId: "cycle10-error-quarantine", laneId: "cycle10-error-quarantine" },
+	})), 100);
+	records.push({ name: "quarantine", marker: cleanupMarker, raw: cleanupRaw, outcome: quarantineOutcome });
+	const closeOutcome = await observeSettlement(cleanupHarness.runtime.close(), 100);
+	records.push({ name: "close", marker: cleanupMarker, raw: cleanupRaw, outcome: closeOutcome });
+
+	const problems: string[] = [];
+	for (const record of records) {
+		if (!isTypedOwnCause(record.outcome)) problems.push(`${record.name}:untyped`);
+		if (errorMessages(record.outcome.status === "rejected" ? record.outcome.reason : undefined)
+			.some((message) => message.includes(record.marker))) problems.push(`${record.name}:marker`);
+		if (runtimeErrorGraphContains(record.outcome.status === "rejected" ? record.outcome.reason : undefined, record.raw)) {
+			problems.push(`${record.name}:raw-cause`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 10 prompts and handoffs close documentary equals, proxy auth, quoted flow, and OAuth fragments", async () => {
+	const taskPayload = cycle10SecretPayload("prompt-task");
+	const contextPayload = cycle10SecretPayload("prompt-context");
+	const promptHarness = runtime();
+	const promptRequest = request({
+		task: taskPayload.value,
+		context: [contextPayload.value],
+		binding: { ...request().binding, runId: "cycle10-prompt-redaction", laneId: "cycle10-prompt-redaction" },
+	});
+	promptHarness.sdk.session.output = handoffFor(promptRequest);
+	await promptHarness.runtime.run(promptRequest);
+	const promptText = `${String(promptHarness.sdk.loaderOptions?.systemPrompt)}\n${promptHarness.sdk.session.lastPrompt}`;
+
+	const fieldPayloads = {
+		summary: cycle10SecretPayload("handoff-summary"),
+		finding: cycle10SecretPayload("handoff-finding"),
+		verificationName: cycle10SecretPayload("handoff-verification-name"),
+		verificationSummary: cycle10SecretPayload("handoff-verification-summary"),
+	};
+	const handoffHarness = runtime();
+	const handoffRequest = request({
+		binding: { ...request().binding, runId: "cycle10-handoff-redaction", laneId: "cycle10-handoff-redaction" },
+	});
+	handoffHarness.sdk.session.output = handoffFor(handoffRequest, {
+		summary: fieldPayloads.summary.value.replaceAll("\n", " | "),
+		findings: [fieldPayloads.finding.value.replaceAll("\n", " | ")],
+		verification: [{
+			name: `token=number of ${fieldPayloads.verificationName.markers[0]} entries`,
+			status: "passed",
+			summary: fieldPayloads.verificationSummary.value.replaceAll("\n", " | "),
+		}],
+	});
+	const handoff = await handoffHarness.runtime.run(handoffRequest);
+	const rendered = `${promptText}\n${JSON.stringify(handoff)}`;
+	const markers = [
+		...taskPayload.markers,
+		...contextPayload.markers,
+		...fieldPayloads.summary.markers,
+		...fieldPayloads.finding.markers,
+		fieldPayloads.verificationName.markers[0]!,
+		...fieldPayloads.verificationSummary.markers,
+	];
+	assert.deepEqual(leakedMarkers(rendered, markers), []);
+});
+
+test("cycle 10 rejects original handoff controls even when another substring is redacted", async () => {
+	const controls = ["\t", "\n", "\r", "\r\n", "\u2028", "\u2029", "\u202e", "\u2066"];
+	const accepted: string[] = [];
+	for (const [controlIndex, control] of controls.entries()) {
+		for (const field of ["summary", "finding", "verification-name", "verification-summary"] as const) {
+			const harness = runtime();
+			const name = `cycle10-original-control-${controlIndex}-${field}`;
+			const req = request({ binding: { ...request().binding, runId: name, laneId: name } });
+			const value = `token=synthetic-cycle10-redacted-475${control}forged-status`;
+			const override: Record<string, unknown> = field === "summary"
+				? { summary: value }
+				: field === "finding"
+					? { findings: [value] }
+					: field === "verification-name"
+						? { verification: [{ name: value, status: "passed", summary: "ok" }] }
+						: { verification: [{ name: "focused", status: "passed", summary: value }] };
+			harness.sdk.session.output = handoffFor(req, override);
+			const outcome = await observeSettlement(harness.runtime.run(req), 100);
+			if (outcome.status === "resolved") accepted.push(`${controlIndex}:${field}`);
+			else assert.equal(isTypedOwnCause(outcome), true, name);
+		}
+	}
+	assert.deepEqual(accepted, []);
+});
