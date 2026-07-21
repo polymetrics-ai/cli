@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "phase": "476-shepherd-worktree-git-adapter",
   "issue": 476,
-  "status": "completed",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
-  "verificationPassed": true,
-  "verificationBlocker": null,
+  "verificationPassed": false,
+  "verificationBlocker": "correction3_not_yet_verified",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -96,6 +96,11 @@
       "cycle": "correction2-summary",
       "decision": "local_critical_path",
       "reason": "Correction checkpoints and exact gate evidence are durable for PR #484; fresh exact-head independent review remains parent-owned."
+    },
+    {
+      "cycle": "correction3-plan",
+      "decision": "local_critical_path",
+      "reason": "Five exact-head findings share the two issue-owned adapters; a read-only design sidecar could not start because the runtime thread cap was occupied, so the bounded implementation remains on the local critical path."
     }
   ]
 }

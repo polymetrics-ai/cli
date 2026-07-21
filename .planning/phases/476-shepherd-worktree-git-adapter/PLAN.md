@@ -131,3 +131,38 @@ Correction 2 result: RED `e8d1a3d7f0d463ea6ea3acfd928ea17e2acdf026`; GREEN/refac
 166/166, strict cached-Pi TypeScript, offline Pi RPC, and exact diff/scope gates pass. Refactor
 also closes reproduced alternate-root issuer, literal-backslash path, and chained URL-rewrite
 bypasses without widening the owned file boundary.
+
+## Exact-head correction cycle 3
+
+Independent xhigh review of `9728f9ed12e8e545eabd8b9b1b8028af80150427` found five
+remaining authority, history, and Git-process boundary blockers. This cycle preserves immutable
+base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8` and the existing issue-owned files.
+
+1. Add a wrapper RED proving `WorkspaceAdapter` never passes mutation authority through an
+   overridable `GitAdapter` method. Replace the public issuer API with a module-private registered
+   lease-acquisition closure; caller wrappers never receive or capture the authority.
+2. Add RED cases for unrelated and out-of-scope canonical heads. Commit and push must revalidate
+   the immutable `baseHead` ancestry, and push must audit the complete committed path history
+   immediately before transferring an exact SHA refspec.
+3. Add an add/commit/remove/commit out-of-scope RED. Handoff and push audit the sorted union of
+   every path touched by commits in `baseHead..head`, plus dirty paths for handoff, rather than
+   trusting only the final tree diff.
+4. Add bounded marker RED cases for repository hooks, filters, credential helpers, and transport
+   commands. All typed mutations use a deterministic sanitized environment/config prefix and fail
+   closed on executable local Git configuration before a marker can run.
+5. Add a remote symbolic-HEAD mismatch RED. Inspection binds the canonical remote default branch;
+   mutation binding and a pre-push remote `HEAD` query revalidate it, and caller input must match
+   the bound value.
+6. Commit/push a plan checkpoint, a genuine test-only RED checkpoint, the smallest GREEN, and any
+   separate refactor/evidence checkpoint. Verification is limited to focused adapter tests, the
+   serialized Shepherd suite, strict cached Pi 0.80.6 TypeScript, offline Pi RPC, and exact
+   diff/path scope. Go, connector, certification, runtime-backed, and `make` gates remain forbidden.
+
+### Correction 3 verification checklist
+
+- [ ] focused adapter tests pass after a recorded test-only RED
+- [ ] complete Shepherd suite passes with `--test-concurrency=1`
+- [ ] strict no-emit TypeScript passes against cached Pi 0.80.6 types
+- [ ] documented offline Pi 0.80.6 RPC returns `true`
+- [ ] immutable-base diff check and exact changed-path scope pass
+- [ ] final local, tracking, and remote branch heads match exactly

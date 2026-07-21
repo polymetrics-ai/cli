@@ -44,3 +44,18 @@
 - Refactor probes additionally reproduced and closed alternate-root issuer forgery, literal
   backslash scope aliasing, and chained Git URL rewrite redirection; their alternate bare remotes
   remain ref- and object-free.
+
+## Exact-head review correction 3
+
+- Reviewed head: `9728f9ed12e8e545eabd8b9b1b8028af80150427`.
+- Blockers: issuer authority crosses an overridable public method; commit/push omit immutable-base
+  ancestry and pre-transfer full-history scope checks; add-then-remove paths evade handoff; typed
+  mutations can honor executable repository Git configuration; and push trusts a caller-supplied
+  default branch instead of bound remote symbolic-HEAD evidence.
+- RED plan: wrapper authority capture with alternate-root use, unrelated/out-of-scope canonical
+  heads, add/commit/remove/commit history, bounded hook/filter/helper/transport markers, and remote
+  default-branch mismatch.
+- GSD command: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop ...` remains
+  unavailable (`unknown GSD command`), so the recorded manual strict-TDD lifecycle continues.
+- Authorized gates remain focused adapter tests, serialized Shepherd tests, strict cached Pi 0.80.6
+  TypeScript, offline Pi RPC, and exact diff/scope checks only.

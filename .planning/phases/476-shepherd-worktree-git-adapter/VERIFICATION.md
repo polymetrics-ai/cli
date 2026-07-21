@@ -1,6 +1,11 @@
 # Issue 476 Verification
 
-Status: `pass`
+Status: `in_progress`
+
+Correction 3 is active from reviewed head
+`9728f9ed12e8e545eabd8b9b1b8028af80150427`. Its authorized verification campaign is pending a
+genuine test-only RED and the smallest GREEN implementation. Historical correction-2 results below
+remain valid evidence for their exact head but do not satisfy correction 3.
 
 Correction 2 verification covers implementation/refactor checkpoint
 `6a22aa789095da67c5b10f51476de41d3f5643ca` on ready stacked PR
