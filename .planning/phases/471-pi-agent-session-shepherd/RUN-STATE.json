@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "471-pi-agent-session-shepherd",
+  "issue": 471,
+  "status": "in_progress",
+  "reason": "Planning is complete and the strict RED gate is next.",
+  "details": {
+    "branch": "feat/471-pi-agent-session-shepherd",
+    "baseHead": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
+    "agentMode": "auto",
+    "adapter": "manual_fallback",
+    "adapterReason": "The current main branch GSD registry does not expose programming-loop and has no programming-loop or tdd-gate helper scripts.",
+    "coveragePassed": true,
+    "tddGatePassed": false,
+    "verificationPassed": false,
+    "canaryTarget": {
+      "pr": 438,
+      "head": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+      "mode": "read_only"
+    },
+    "orchestrationDecisions": [
+      {
+        "cycle": "plan",
+        "decision": "read_only_spawned",
+        "reason": "Three independent scouts audited GitHub topology, main-branch Pi infrastructure, and the exact Pi SDK surface without mutation."
+      }
+    ],
+    "humanGates": [
+      "new_dependencies",
+      "auth_scope_changes",
+      "credential_access",
+      "mutating_pr_438",
+      "quality_gate_reductions",
+      "main_branch_merge"
+    ]
+  },
+  "updatedAt": "2026-07-21T08:17:01Z"
+}
