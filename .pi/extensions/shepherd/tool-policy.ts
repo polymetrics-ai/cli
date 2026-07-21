@@ -342,10 +342,13 @@ export function redactSensitiveText(value: string): string {
 }
 
 type SensitiveAssignmentKind = "authorization" | "secret";
+type SensitiveAssignmentContext = "flow" | "line";
 
 interface SensitiveAssignment {
 	kind: SensitiveAssignmentKind;
+	context: SensitiveAssignmentContext;
 	keyColumn: number;
+	normalizedKey: string;
 	valueStart: number;
 }
 
@@ -376,29 +379,63 @@ function redactStructuredAssignments(value: string): string {
 	const ranges: RedactionRange[] = [];
 	let index = 0;
 	let lineStart = 0;
+	let flowDepth = 0;
+	let scannedQuote: '"' | "'" | undefined;
 	let structuredKeyStart = findStructuredKeyStart(value, lineStart);
 	while (index < value.length) {
 		const character = value[index];
+		if (scannedQuote) {
+			if (character === "\n" || character === "\r") {
+				index = afterLineEnding(value, index);
+				lineStart = index;
+				structuredKeyStart = findStructuredKeyStart(value, lineStart);
+				continue;
+			}
+			if (scannedQuote === '"' && character === "\\") {
+				index = Math.min(value.length, index + 2);
+				continue;
+			}
+			if (scannedQuote === "'" && character === "'" && value[index + 1] === "'") {
+				index += 2;
+				continue;
+			}
+			if (character === scannedQuote) scannedQuote = undefined;
+			index += 1;
+			continue;
+		}
 		if (character === "\n" || character === "\r") {
 			index = afterLineEnding(value, index);
 			lineStart = index;
 			structuredKeyStart = findStructuredKeyStart(value, lineStart);
 			continue;
 		}
-		const assignment = sensitiveAssignmentAt(value, index, lineStart, index === structuredKeyStart);
+		const context: SensitiveAssignmentContext = flowDepth > 0 ? "flow" : "line";
+		const allowUnquoted = index === structuredKeyStart ||
+			(context === "flow" && isFlowMappingKeyStart(value, index, lineStart));
+		const assignment = sensitiveAssignmentAt(value, index, lineStart, allowUnquoted, context);
 		if (!assignment) {
+			if ((character === '"' || character === "'") && isQuotedSegmentStart(value, index, lineStart)) {
+				scannedQuote = character;
+			}
+			else if (character === "{") flowDepth += 1;
+			else if (character === "}" && flowDepth > 0) flowDepth -= 1;
 			index += 1;
 			continue;
 		}
 		const decision = redactionForAssignment(value, assignment);
 		if (decision.range) ranges.push(decision.range);
 		const resumeAt = Math.max(index + 1, decision.resumeAt);
+		const previousLineStart = lineStart;
 		lineStart = advanceLineStart(value, index, resumeAt, lineStart);
 		index = resumeAt;
-		const nextStructuredKeyStart = findStructuredKeyStart(value, lineStart);
-		structuredKeyStart = nextStructuredKeyStart !== undefined && nextStructuredKeyStart >= index
-			? nextStructuredKeyStart
-			: undefined;
+		if (lineStart !== previousLineStart) {
+			const nextStructuredKeyStart = findStructuredKeyStart(value, lineStart);
+			structuredKeyStart = nextStructuredKeyStart !== undefined && nextStructuredKeyStart >= index
+				? nextStructuredKeyStart
+				: undefined;
+		} else if (structuredKeyStart !== undefined && structuredKeyStart < index) {
+			structuredKeyStart = undefined;
+		}
 	}
 	if (ranges.length === 0) return value;
 	let output = "";
@@ -415,6 +452,7 @@ function sensitiveAssignmentAt(
 	index: number,
 	lineStart: number,
 	allowUnquoted: boolean,
+	context: SensitiveAssignmentContext,
 ): SensitiveAssignment | undefined {
 	let cursor = index;
 	let key: string;
@@ -436,11 +474,12 @@ function sensitiveAssignmentAt(
 
 	const kind = sensitiveAssignmentKind(key);
 	if (!kind) return undefined;
+	const normalizedKey = key.toLowerCase().replace(/[-_]/g, "");
 	while (isHorizontalWhitespace(value[cursor])) cursor += 1;
 	if (value[cursor] !== ":" && value[cursor] !== "=") return undefined;
 	cursor += 1;
 	while (isHorizontalWhitespace(value[cursor])) cursor += 1;
-	return { kind, keyColumn: index - lineStart, valueStart: cursor };
+	return { kind, context, keyColumn: index - lineStart, normalizedKey, valueStart: cursor };
 }
 
 function redactionForAssignment(value: string, assignment: SensitiveAssignment): RedactionDecision {
@@ -521,24 +560,29 @@ function unquotedValueRedaction(
 ): RedactionDecision {
 	let scalarEnd = findUnquotedTerminator(value, assignment.valueStart, lineEnd);
 	scalarEnd = trimHorizontalEnd(value, assignment.valueStart, scalarEnd);
-	if (scalarEnd <= assignment.valueStart) return { resumeAt: lineEnd };
+	const resumeAt = assignment.context === "flow" ? scalarEnd : lineEnd;
+	const unredactedResumeAt = assignment.context === "flow" ? scalarEnd : assignment.valueStart;
+	if (scalarEnd <= assignment.valueStart) return { resumeAt };
 	if (assignment.kind === "authorization") {
 		let cursor = assignment.valueStart;
 		if (value.slice(cursor, cursor + 6).toLowerCase() !== "bearer" || !isHorizontalWhitespace(value[cursor + 6])) {
-			return { resumeAt: lineEnd };
+			return { resumeAt: unredactedResumeAt };
 		}
 		cursor += 6;
 		while (cursor < scalarEnd && isHorizontalWhitespace(value[cursor])) cursor += 1;
 		const credential = value.slice(cursor, scalarEnd);
-		if (credential.length === 0 || containsWhitespace(credential)) return { resumeAt: lineEnd };
-		return { range: { start: cursor, end: scalarEnd, replacement: REDACTED_TEXT }, resumeAt: lineEnd };
+		if (credential.length === 0 || containsWhitespace(credential)) return { resumeAt: unredactedResumeAt };
+		return { range: { start: cursor, end: scalarEnd, replacement: REDACTED_TEXT }, resumeAt };
 	}
 
 	const scalar = value.slice(assignment.valueStart, scalarEnd);
-	if (containsWhitespace(scalar) || isPublicScalar(scalar)) return { resumeAt: lineEnd };
+	const ambiguousLineProse = assignment.context === "line" &&
+		assignment.normalizedKey !== "clientsecret" && containsWhitespace(scalar);
+	if (ambiguousLineProse) return { resumeAt: unredactedResumeAt };
+	if (isPublicScalar(scalar)) return { resumeAt };
 	return {
 		range: { start: assignment.valueStart, end: scalarEnd, replacement: REDACTED_TEXT },
-		resumeAt: lineEnd,
+		resumeAt,
 	};
 }
 
@@ -596,6 +640,21 @@ function findStructuredKeyStart(value: string, lineStart: number): number | unde
 		while (isHorizontalWhitespace(value[cursor])) cursor += 1;
 	}
 	return isAssignmentKeyCharacter(value[cursor]) ? cursor : undefined;
+}
+
+function isFlowMappingKeyStart(value: string, index: number, lineStart: number): boolean {
+	if (!isAssignmentKeyCharacter(value[index])) return false;
+	let cursor = index - 1;
+	while (cursor >= lineStart && isHorizontalWhitespace(value[cursor])) cursor -= 1;
+	return value[cursor] === "{" || value[cursor] === ",";
+}
+
+function isQuotedSegmentStart(value: string, index: number, lineStart: number): boolean {
+	if (value[index - 1] === "\\") return false;
+	let cursor = index - 1;
+	while (cursor >= lineStart && isHorizontalWhitespace(value[cursor])) cursor -= 1;
+	return cursor < lineStart || value[cursor] === "{" || value[cursor] === "[" ||
+		value[cursor] === "," || value[cursor] === ":" || value[cursor] === "=" || value[cursor] === "-";
 }
 
 function isAssignmentKeyCharacter(character: string | undefined): boolean {

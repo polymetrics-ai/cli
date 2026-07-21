@@ -194,7 +194,26 @@
 
 ### GREEN / REFACTOR / VERIFY
 
-- Status: ready after the RED checkpoint is committed and pushed.
+- GREEN status: captured after test-only RED commit `21535513`.
+- Minimal lifecycle implementation:
+  - separated coalesced idle waiting from coalesced disposal;
+  - foreground cleanup independently bounds abort and idle phases, preserves the first failure,
+    and always reaches exactly-once disposal before quarantine/return;
+  - removed the duplicate cleanup-grace abort step so the claimed session follows the same pipeline.
+- Minimal redaction implementation:
+  - tracks bounded flow-map lexical context and discovers unquoted keys after `{` and `,` without
+    rescanning line prefixes;
+  - treats flow-map scalars and normalized `client_secret` assignments as strong structured values,
+    while non-assignment and ambiguous non-client prose remain unchanged;
+  - resumes scanning preserved prose so nested flow mappings cannot hide a later credential.
+- Local adversarial REFACTOR added two test-first probes after initial GREEN:
+  - an apostrophe in ordinary prose previously opened an unmatched quote state and hid the next
+    assignment (targeted 0/1 RED, then fixed with structured quote-opening boundaries);
+  - a preserved ambiguous `token:` line previously skipped a nested flow map (targeted 0/1 RED,
+    then fixed by resuming within unredacted prose).
+- Focused result after refactor: exit 0, 31 passed / 0 failed.
+- Strict focused TypeScript: exit 0 against explicit Pi 0.80.6 package/type roots.
+- REFACTOR/VERIFY status: pending the complete declared gate set.
 - Declared gates remain focused issue tests, the complete Shepherd suite, strict TypeScript against
   explicit Pi 0.80.6 types, pinned offline RPC, diff check, immutable-base, and owned-scope checks.
 - Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot

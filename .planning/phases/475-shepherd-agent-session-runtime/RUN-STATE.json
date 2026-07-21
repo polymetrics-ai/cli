@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_4_red",
+  "currentCycle": "correction_cycle_4_green",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -93,12 +93,17 @@
       "cycle": "correction_cycle_4_red",
       "decision": "local_critical_path",
       "reason": "Test-only regressions produced eight expected failures with production unchanged: four forced-disposal rows and four redaction consumer boundaries; proceed to the smallest owned fixes."
+    },
+    {
+      "cycle": "correction_cycle_4_green",
+      "decision": "local_critical_path",
+      "reason": "The explicit bounded cleanup pipeline and linear flow-aware redactor made all 31 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to the declared Shepherd-only gates."
     }
   ],
   "gates": {
-    "focusedTests": "red_captured_23_passed_8_expected_failures",
+    "focusedTests": "green_31_passed_0_failed",
     "fullShepherdTests": "pending_cycle_4",
-    "strictTypeScriptPi0806": "pending_cycle_4",
+    "strictTypeScriptPi0806": "focused_pass_full_production_pending_cycle_4",
     "offlineRpcSmoke": "pending_cycle_4",
     "diffCheck": "pending_cycle_4",
     "ownedScope": "pending_cycle_4",

@@ -88,6 +88,8 @@ test("redaction covers single-line and multiline structured secret forms", () =>
 		{ secret: "quoted-bearer", value: (secret: string) => `Authorization: "Bearer ${secret}\n  continuation"` },
 		{ secret: "flow-yaml", value: (secret: string) => `{ safe: retained, client_secret: ${secret} with spaces, enabled: true }` },
 		{ secret: "spaced-yaml", value: (secret: string) => `client_secret: ${secret} with spaces\nsafe: retained` },
+		{ secret: "apostrophe-prefix", value: (secret: string) => `Don't skip the structured value below.\nclient_secret: "${secret}"` },
+		{ secret: "nested-flow", value: (secret: string) => `token: harmless prose before { client_secret: ${secret} with spaces, safe: retained }` },
 	];
 
 	for (const probe of probes) {
@@ -106,7 +108,7 @@ test("redaction preserves harmless assignment-like prose byte-identically", () =
 		"password = number of characters accepted by this form.",
 		"secret: a surprising detail in a story.",
 		"Authorization: Bearer is the HTTP authentication scheme discussed here.",
-		"The client_secret field name is documented here without assigning a value.",
+		"In prose, client_secret: explains the OAuth field name without assigning a value.",
 	];
 	for (const control of controls) assert.equal(redactSensitiveText(control), control);
 });

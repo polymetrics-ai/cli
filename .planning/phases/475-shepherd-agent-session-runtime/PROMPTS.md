@@ -69,4 +69,9 @@
 - RED result: focused command exits 1 with 23 passed / 8 expected failures. Four lifecycle matrix
   rows reached quarantine but disposed zero times; prompt, handoff, direct, and tool-output
   consumers exposed the unquoted flow/spaced YAML gaps. Production remained unchanged.
-- Verification status: GREEN implementation pending; all Cycle 3 terminal evidence is superseded.
+- GREEN result: focused command exits 0 with 31 passed / 0 failed and focused strict Pi 0.80.6
+  TypeScript passes. Foreground cleanup bounds abort and idle independently before unconditional
+  coalesced disposal; the linear scanner recognizes flow mappings and spaced structured
+  `client_secret` values while preserving harmless prose. Two local adversarial probes also close
+  apostrophe quote-state and nested-flow hiding regressions.
+- Verification status: complete Cycle 4 gates pending; all Cycle 3 terminal evidence is superseded.

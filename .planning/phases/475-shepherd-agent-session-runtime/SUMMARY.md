@@ -1,6 +1,7 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 4 planned; Cycle 3 verification is superseded.
+Status: exact-head correction Cycle 4 GREEN; complete revalidation pending and Cycle 3 evidence is
+superseded.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -47,4 +48,7 @@ still skip disposal when abort or idle never settles, both for a session obtaine
 grace and for an ordinary claimed session. It also found unquoted YAML flow-map and spaced
 line-start `client_secret` gaps. Cycle 4 is active under a fresh strict test-only RED gate and the
 same narrow Shepherd-only verification boundary. RED is now captured with 23 passes and 8 expected
-failures; production remained unchanged.
+failures; production remained unchanged. The focused suite now passes 31/31 after independently
+bounded abort/idle phases with unconditional exactly-once disposal and a linear flow-aware scanner
+for spaced structured `client_secret` values. Complete Shepherd, all-production strict TypeScript,
+pinned offline RPC, and diff/scope gates remain pending.

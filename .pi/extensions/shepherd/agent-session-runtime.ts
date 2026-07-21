@@ -188,7 +188,7 @@ class OwnedSession {
 	unsubscribe: (() => void) | undefined;
 	#abortPromise: Promise<void> | undefined;
 	#disposePromise: Promise<void> | undefined;
-	#joinPromise: Promise<void> | undefined;
+	#waitPromise: Promise<void> | undefined;
 
 	constructor(session: RuntimeAgentSession) {
 		this.session = session;
@@ -199,12 +199,12 @@ class OwnedSession {
 		return this.#abortPromise;
 	}
 
-	joinOnce(): Promise<void> {
-		if (!this.#joinPromise) {
-			this.#joinPromise = this.#join();
-			this.#joinPromise.catch(() => undefined);
+	waitOnce(): Promise<void> {
+		if (!this.#waitPromise) {
+			this.#waitPromise = Promise.resolve().then(() => this.session.waitForIdle());
+			this.#waitPromise.catch(() => undefined);
 		}
-		return this.#joinPromise;
+		return this.#waitPromise;
 	}
 
 	disposeOnce(): Promise<void> {
@@ -229,21 +229,33 @@ class OwnedSession {
 		}
 		return this.#disposePromise;
 	}
+}
 
-	async #join(): Promise<void> {
-		let firstError: unknown;
+async function cleanupOwnedSession(
+	owned: OwnedSession,
+	abort: boolean,
+	timeoutMs: number,
+): Promise<void> {
+	let firstError: unknown;
+	if (abort) {
 		try {
-			await this.session.waitForIdle();
+			await bounded(owned.abortOnce(), timeoutMs, "session abort");
 		} catch (error) {
 			firstError = error;
 		}
-		try {
-			await this.disposeOnce();
-		} catch (error) {
-			firstError ??= error;
-		}
-		if (firstError) throw firstError;
 	}
+	try {
+		await bounded(owned.waitOnce(), timeoutMs, "session idle wait");
+	} catch (error) {
+		firstError ??= error;
+	}
+	// Disposal is synchronous at the Pi port and must remain reachable after either bounded phase.
+	try {
+		await owned.disposeOnce();
+	} catch (error) {
+		firstError ??= error;
+	}
+	if (firstError !== undefined) throw firstError;
 }
 
 class SessionCreationOwnership {
@@ -303,13 +315,13 @@ class SessionCreationOwnership {
 		);
 		// Let abort() start before waitForIdle(), while still bounding both by one deadline.
 		await Promise.resolve();
-		const join = boundedUntil(
-			owned.joinOnce(),
+		const idle = boundedUntil(
+			owned.waitOnce(),
 			deadlineAt,
-			"abandoned session join",
+			"abandoned session idle wait",
 			true,
 		);
-		for (const settlement of await Promise.allSettled([abort, join])) {
+		for (const settlement of await Promise.allSettled([abort, idle])) {
 			if (settlement.status === "rejected") firstError ??= settlement.reason;
 		}
 		try {
@@ -568,14 +580,12 @@ export class ShepherdAgentSessionRuntime {
 				if (settlement.settled) {
 					owned = creation.claim(settlement.value);
 					active.owned = owned;
-					await bounded(owned.abortOnce(), this.#options.cleanupTimeoutMs, "late session abort");
 				} else {
 					creation.abandon();
 				}
 			}
 			if (owned) {
-				if (scope.failure) await bounded(owned.abortOnce(), this.#options.cleanupTimeoutMs, "session abort");
-				await bounded(owned.joinOnce(), this.#options.cleanupTimeoutMs, "session join");
+				await cleanupOwnedSession(owned, scope.failure !== undefined, this.#options.cleanupTimeoutMs);
 			}
 		} catch (error) {
 			cleanupFailure = error;
