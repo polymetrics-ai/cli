@@ -99,3 +99,15 @@ remain 36/36 and strict production TypeScript remains clean.
 Final correction verification: focused 36/36, full Shepherd 173/173, strict production TypeScript
 pass, offline Pi 0.80.6 RPC pass, and diff/ownership pass. The implementation head verified before
 this evidence-only checkpoint was `ef2fd1e280128ccb2a0e46b749f9638472fad865`.
+
+## Exact-head correction loop 2
+
+Status: RED pending against reviewed `82ec59c0b3161639893ff2bce7a40dbafe7745df`.
+
+| Slice | Expected reviewed-head failure | Status |
+|---|---|---|
+| Conservative sharp-S aliases | `ẞ` does not collide with `ß`/`ss` | pending |
+| Lifecycle/queue cross-validation | asserted facts bypass pending or dependency-blocked work | pending |
+| Caller-owned Proxy snapshot | hostile iterator is reached after validation and can throw | pending |
+| Terminal BLOCKED | returns ordinary `await_stage_evidence` | pending |
+| Primary run-state truth | primary fields remain at historical 26/163 | pending |

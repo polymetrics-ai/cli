@@ -117,6 +117,18 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
 - No Go/root `make verify`, Claude/Copilot request, or merge action was performed.
 - Execution decision: `local_critical_path`; correction gate complete.
 
+## Exact-head correction 2 planning cycle
+
+- Reconfirmed clean branch, origin, and PR #483 at reviewed head
+  `82ec59c0b3161639893ff2bce7a40dbafe7745df`.
+- Re-read required skill routing and the GSD programming loop, architecture, JavaScript testing,
+  issue-first delivery, and verification guidance. The adapter command remains unavailable, so the
+  recorded manual fallback continues.
+- The optional no-mistakes pipeline was inspected but not invoked because it would broaden the
+  explicitly limited local gate and automated-review policy.
+- Mapped all three blockers and two warnings to owned modules/tests/artifacts before production
+  edits. Execution decision: `local_critical_path`.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

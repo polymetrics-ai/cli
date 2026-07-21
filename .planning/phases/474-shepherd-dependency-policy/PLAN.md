@@ -164,3 +164,41 @@ gaps. This loop reopens the phase under the same ownership and verification poli
 - [x] Diff and ownership checks pass; only assigned modules/tests and phase artifacts changed.
 - [x] PR #483 remains open, ready, and stacked on `feat/471-pi-agent-session-shepherd`.
 - [x] No Go, root `make verify`, Claude, Copilot, or merge action was run.
+
+## Exact-head correction loop 2
+
+Independent xhigh review of `82ec59c0b3161639893ff2bce7a40dbafe7745df` found three blockers
+and two consistency warnings. This reopens the same owned slice without broadening verification.
+
+### RED contract
+
+1. Capital sharp-S (`ẞ`) collides with both small sharp-S (`ß`) and `ss`; the implementation
+   documents a conservative deterministic alias closure, not unsupported full Unicode casefolding.
+2. `SCHEDULE -> FINAL_VERIFY` cannot advance while authoritative work remains, even when
+   `allTasksIntegrated` is asserted. `SCHEDULE -> TASK_PLAN` cannot advance when failed/blocked
+   dependencies make the queue unready, and the dependency blocker wins over claimed facts.
+3. A Proxy-provided iterator that changes or throws after shape validation returns the typed
+   `invalid_snapshot` result; later graph evaluation never touches caller-owned behavior.
+4. Canonical `BLOCKED` produces a terminal reconciliation result rather than ordinary evidence wait.
+5. Primary RUN-STATE cycle and gate fields carry the latest focused/full counts, not historical
+   26/163 values.
+
+### Implementation design
+
+- Represent each scope with a finite NFKC-normalized alias set derived from ECMAScript lower/upper
+  mappings and their deterministic compositions. Collision is conservative set/ancestor overlap;
+  no claim of full Unicode case folding is made.
+- Compute the authoritative SCHEDULE queue decision once before lifecycle advancement. Dependency
+  and collision blockers return first; completion and readiness facts must agree with that decision.
+- `structuredClone` the entire candidate inside the guarded validation boundary, validate and
+  freeze the plain snapshot, and use only that snapshot afterwards. Non-cloneable Proxy input is an
+  `invalid_snapshot` result.
+- Add an explicit terminal `blocked` decision alongside existing `complete` and `aborted` results.
+
+### Checkpoints
+
+1. planning reopen;
+2. genuine review-2 RED tests and captured failures;
+3. minimal fixes;
+4. behavior-preserving refactor and final phase-equivalent evidence;
+5. push exact PR #483 head for another independent xhigh review.
