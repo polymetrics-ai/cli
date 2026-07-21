@@ -54,3 +54,16 @@
   — focused 27/27; full Shepherd 164/164; focused and all-production strict TypeScript against
   pinned Pi 0.80.6; explicit offline RPC; diff, immutable-base, and owned-scope checks all pass.
   No Go, connector, `make verify`, live-GitHub, merge, or review-bot gate was run.
+
+## Exact-Head Correction Cycle 4 Snapshot
+
+- Reviewed head: `b4061d4e1a1545b0c8810b14b510cf048385a567` on PR #486.
+- Role/route: correction, `openai-codex/gpt-5.6-sol` with `high` reasoning.
+- Objective: make forced disposal reachable when foreground abort/idle hooks hang, across both
+  cleanup-grace and normally claimed sessions; close flow-map and spaced unquoted
+  `client_secret` redaction gaps without broad prose mutation.
+- Method: manual-GSD PLAN → test-only RED → smallest GREEN → REFACTOR with separate pushed
+  checkpoints; production locked until RED is recorded.
+- Execution decision: `local_critical_path`; both findings overlap the same issue-owned modules and
+  the runtime thread cap rejected the attempted read-only design sidecar.
+- Verification status: Cycle 4 RED pending; all Cycle 3 terminal evidence is superseded.

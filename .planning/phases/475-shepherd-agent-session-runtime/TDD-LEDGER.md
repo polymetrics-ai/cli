@@ -150,6 +150,43 @@
 | Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
 | Diff / scope | pass | immutable base retained; all changed paths remain issue #475-owned |
 
+## Cycle 4 — Foreground Forced Disposal And Unquoted YAML Context
+
+### PLAN
+
+- Status: captured against exact reviewed head
+  `b4061d4e1a1545b0c8810b14b510cf048385a567`.
+- Production remains unchanged until the focused test-only RED checkpoint is committed and pushed.
+- Lifecycle RED matrix:
+  - creation settles within the cleanup grace; `abort()` never settles;
+  - creation settles within the cleanup grace; `waitForIdle()` never settles;
+  - session is claimed and prompted before cancellation; `abort()` never settles;
+  - session is claimed and prompted before cancellation; `waitForIdle()` never settles.
+- Every lifecycle row requires bounded settlement, exactly-one forced disposal, quarantine and
+  rejected subsequent dispatch without another prompt, plus zero unhandled rejections. Idle wait
+  is optional only for the hung-abort rows.
+- Redaction RED spans direct calls, prompt serialization, typed tool output, and handoff
+  summary/finding fields for flow-map unquoted assignments and line-start spaced
+  `client_secret` scalars. Non-assignment prose remains byte-identical.
+- Expected focused command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+### RED
+
+- Status: ready; tests only, with production source locked at the reviewed head.
+
+### GREEN / REFACTOR / VERIFY
+
+- Status: blocked on committed RED evidence.
+- Declared gates remain focused issue tests, the complete Shepherd suite, strict TypeScript against
+  explicit Pi 0.80.6 types, pinned offline RPC, diff check, immutable-base, and owned-scope checks.
+- Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot
+  commands remain forbidden in this lane.
+
 ## Cycle 3 — Multiline Redaction And Bounded Abandoned Cleanup
 
 ### PLAN

@@ -179,3 +179,36 @@ and 7 expected failures; GREEN/refactor was pushed at
 `d499e721a85abbe1a1d1be7fb0069649927c923c`. Focused 27/27 and complete Shepherd 164/164 tests,
 both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-base, and issue-owned
 path gates pass. Fresh independent exact-head review and integration remain parent-owned.
+
+## Exact-Head Correction Cycle 4 — `b4061d4e1a1545b0c8810b14b510cf048385a567`
+
+Fresh `codex_independent` xhigh review found two P1 boundaries at the Cycle 3 evidence head. This
+cycle remains restricted to the same issue-owned runtime, tool-policy, tests, and phase artifacts.
+
+1. The foreground/main cleanup path still lets a timeout from `abortOnce()` or `joinOnce()` skip
+   forced disposal. RED will cover a four-case matrix: session creation resolving inside the
+   cleanup grace versus an ordinary session claimed before cancellation, each with either
+   `abort()` or `waitForIdle()` never settling. Every case must settle within a test bound,
+   quarantine and reject subsequent dispatch before another prompt, dispose exactly once, consume
+   detached rejections, and produce no unhandled rejection. Waiting for idle may be skipped only
+   after abort itself exceeds its bound; forced disposal is unconditional.
+2. The structured redactor still misses unquoted sensitive keys in YAML flow mappings and
+   line-start `client_secret` scalars whose values contain spaces. RED will prove direct,
+   serialized-prompt, typed-tool-output, handoff-summary, and handoff-finding consumers. Synthetic
+   markers must be absent, `[REDACTED]` present, and non-assignment prose controls byte-identical.
+   The clarified contract treats a line-start `client_secret:` form as a structured assignment;
+   the harmless control uses prose that is not itself valid assignment syntax.
+
+The implementation target is one explicit cleanup pipeline whose abort and idle phases are bounded
+independently and whose `finally`-style coalesced disposal always executes. The redactor will add
+linear flow-mapping key discovery and a strong structured-value signal without rescanning input or
+introducing broad multiline regexes. Strict order remains PLAN → test-only RED → smallest GREEN →
+REFACTOR/verify, with a pushed checkpoint at each stage.
+
+GSD adapter health still passes while the 69-command registry rejects `programming-loop`, so the
+recorded `manual_gsd_fallback` remains active. Skills reloaded for Cycle 4:
+`gsd-programming-loop`, `javascript-testing-patterns` plus its async/timer reference,
+`typescript-advanced-types`, `architecture-patterns`, and `github-issue-first-delivery`, together
+with required routing, issue-agent, universal-loop, Pi-adapter, and runtime/Pi guidance. Execution
+decision is `local_critical_path`: both findings collide in the two issue-owned source/test modules,
+and a read-only design sidecar was rejected by the runtime thread cap.

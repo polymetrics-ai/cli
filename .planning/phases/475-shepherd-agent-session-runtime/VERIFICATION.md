@@ -1,5 +1,9 @@
 # Verification — Issue #475
 
+> Superseded pending Cycle 4 revalidation. Exact-head review at
+> `b4061d4e1a1545b0c8810b14b510cf048385a567` found foreground forced-disposal and unquoted YAML
+> flow/spaced-scalar gaps. Cycle 3 results below remain historical evidence only.
+
 PR #486 correction Cycle 3 revalidation is complete. The final-review findings against
 `526dfec4282b442c4b32138ab036d4cc7e97b475` are covered by the committed test-only RED checkpoint
 `9c4ed5fd` and pass at implementation head `d499e721a85abbe1a1d1be7fb0069649927c923c`.

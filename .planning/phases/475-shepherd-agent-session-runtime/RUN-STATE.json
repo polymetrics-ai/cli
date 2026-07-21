@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "completed",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": true,
-  "currentCycle": "correction_cycle_3_complete",
+  "verificationPassed": false,
+  "currentCycle": "correction_cycle_4_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -83,15 +83,20 @@
       "cycle": "correction_cycle_3_summary",
       "decision": "local_critical_path",
       "reason": "Cycle 3 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_4_plan",
+      "decision": "local_critical_path",
+      "reason": "Both exact-head findings collide in the issue-owned runtime/tool-policy source and tests; a read-only design sidecar was rejected by the runtime thread cap, so record the four-case cleanup and structured-redaction plan locally."
     }
   ],
   "gates": {
-    "focusedTests": "passed_27_of_27",
-    "fullShepherdTests": "passed_164_of_164",
-    "strictTypeScriptPi0806": "passed_focused_and_all_production",
-    "offlineRpcSmoke": "passed_pm_shepherd_registered",
-    "diffCheck": "passed",
-    "ownedScope": "passed_against_immutable_base_e659d6f1",
+    "focusedTests": "pending_cycle_4_red",
+    "fullShepherdTests": "pending_cycle_4",
+    "strictTypeScriptPi0806": "pending_cycle_4",
+    "offlineRpcSmoke": "pending_cycle_4",
+    "diffCheck": "pending_cycle_4",
+    "ownedScope": "pending_cycle_4",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

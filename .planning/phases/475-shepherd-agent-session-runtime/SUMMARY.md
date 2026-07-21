@@ -1,6 +1,6 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 3 complete; ready for fresh independent parent review.
+Status: exact-head correction Cycle 4 planned; Cycle 3 verification is superseded.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -41,3 +41,9 @@ the explicit Pi 0.80.6 installation; pinned offline RPC registers `pm-shepherd`;
 immutable-base, and issue-owned scope checks pass. Parent orchestration owns fresh exact-head review
 and integration; this lane did not invoke Go/connectors, `make verify`, live GitHub, merge, or review
 bots.
+
+Review at `b4061d4e1a1545b0c8810b14b510cf048385a567` found that the foreground/main cleanup path can
+still skip disposal when abort or idle never settles, both for a session obtained during cleanup
+grace and for an ordinary claimed session. It also found unquoted YAML flow-map and spaced
+line-start `client_secret` gaps. Cycle 4 is active under a fresh strict test-only RED gate and the
+same narrow Shepherd-only verification boundary.
