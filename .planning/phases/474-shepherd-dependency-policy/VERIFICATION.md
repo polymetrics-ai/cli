@@ -4,6 +4,8 @@ Overall: **passed** under the parent-declared phase-equivalent child gate. The p
 explicitly superseded full-repository `make verify` for child lanes and intentionally cancelled it;
 that cancellation is not a functional failure.
 
+Ready stacked PR: https://github.com/polymetrics-ai/cli/pull/483
+
 | Gate | Result | Evidence |
 |---|---|---|
 | Focused policy tests | pass | 26 tests, 26 pass, 0 fail |

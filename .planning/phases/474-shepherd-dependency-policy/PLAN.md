@@ -77,7 +77,7 @@
   `make verify` was intentionally cancelled by the parent under that superseding policy, not failed.
 - [x] Supplemental `go vet ./...`, `go test ./...`, and `go build ./cmd/pm` pass.
 - [x] Diff remains inside owned files.
-- [ ] Ready stacked PR targets `feat/471-pi-agent-session-shepherd`, includes `Refs #474` and
+- [x] Ready stacked PR #483 targets `feat/471-pi-agent-session-shepherd`, includes `Refs #474` and
   `Refs #471`, and does not request Claude or Copilot.
 
 ## Commit/push checkpoints

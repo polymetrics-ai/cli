@@ -2,6 +2,8 @@
 
 Status: implementation, refactor, and parent-declared child verification complete.
 
+Ready stacked PR: https://github.com/polymetrics-ai/cli/pull/483
+
 Delivered a three-module, I/O-free policy core covering:
 
 - the complete Shepherd parent lifecycle, guarded transition evidence, correction, durable human
