@@ -1,7 +1,6 @@
 # Summary — Issue #475
 
-Status: stable-head correction Cycle 7 GREEN/refactor complete; focused 53/53 and focused strict
-Pi 0.80.6 TypeScript pass. Terminal full-suite/RPC/diff/base/head/scope evidence is pending.
+Status: stable-head correction Cycle 7 complete; every declared Shepherd-only gate passes.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -132,4 +131,11 @@ Basic and other credential-bearing Authorization schemes, accepts generic PKCS#8
 unmatched sensitive quote, and preserves harmless multiline quoted prose exactly. Padded-flow
 diagnostics report 76,465 / 152,774 / 305,505 total visits for 25,645 / 51,235 / 102,453-byte
 inputs, including 8,533 / 17,066 / 34,133 key-start visits. Focused 53/53 and focused strict pinned
-TypeScript pass; the terminal declared gates remain for the evidence checkpoint.
+TypeScript pass.
+
+At implementation head `5c638d7f21a3910f40e499dba5c82cb7646642ac`, the complete Shepherd
+suite passes 190/190, both strict TypeScript scopes pass against explicit Pi 0.80.6, and the pinned
+offline RPC registers `pm-shepherd`. Diff, immutable-base, pushed-head equality, and issue-owned
+scope checks pass. Parent orchestration owns the fresh stable-head campaign and integration; this
+lane did not run Go/connectors, certification, `make verify`, runtime-backed services, live GitHub,
+review bots, or merge.

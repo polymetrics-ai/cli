@@ -1,30 +1,24 @@
 # Verification — Issue #475
 
-Cycle 7 terminal verification is pending after a green architectural correction. Planning is frozen against candidate
-`a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`, immutable base
-`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`, and the combined 11-finding stable-head campaign at
-<https://github.com/polymetrics-ai/cli/pull/486#issuecomment-5037079867>. Production and tests remain
-unchanged until the PLAN checkpoint is pushed, then one complete behavior RED must precede the
-architectural correction. The required terminal gates are focused/full Shepherd tests, both pinned
-Pi 0.80.6 strict TypeScript scopes, offline RPC, diff, base/head equality, and issue-owned scope.
-
-Focused verification currently passes 53/53, and focused strict TypeScript passes against the
-explicit Pi 0.80.6 package/type roots. Deterministic padded-flow diagnostics report 76,465 /
-152,774 / 305,505 total visits for 25,645 / 51,235 / 102,453-byte inputs, including 8,533 /
-17,066 / 34,133 key-start visits. Complete Shepherd, all-production strict TypeScript, pinned
-offline RPC, final diff, immutable-base/head, and owned-scope checks remain pending.
+Cycle 7 terminal verification is complete at implementation head
+`5c638d7f21a3910f40e499dba5c82cb7646642ac`. The frozen candidate was
+`a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`, the immutable base remains
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`, and the combined 11-finding stable-head campaign is
+<https://github.com/polymetrics-ai/cli/pull/486#issuecomment-5037079867>. PLAN `f40a08f1` preceded
+the one test-only RED `3b7e886a`; all findings pass after GREEN `5c638d7f`.
 
 The lifecycle verification accounts for throwing signal attachment/removal and abandoned
 creation across late resolve, reject, hang, and malformed fulfillment. A successful close cannot
 precede owned late work; an uncancellable create must instead reject/quarantine close within a
 bound. Each row records timers, reservations, cleanup hooks, close outcome, and unhandled
-rejections. The planned redaction verification spans multiline/indented/YAML continuation,
+rejections. The redaction verification spans multiline/indented/YAML continuation,
 numeric/Authorization/alias/PKCS#8 forms, unmatched quote recovery, safe multiline quote
 preservation, every direct/prompt/workspace/tool/handoff consumer, and deterministic total scanner
 work for padded 25/50/100 KiB flows.
 
-The remainder of this document is the retained Cycle 6 green baseline and will be superseded only
-after Cycle 7 GREEN/evidence passes.
+Deterministic padded-flow diagnostics report 76,465 / 152,774 / 305,505 total visits for 25,645 /
+51,235 / 102,453-byte inputs, including 8,533 / 17,066 / 34,133 key-start visits. The ratios remain
+near-linear without timing assertions.
 
 PR #486 correction Cycle 6 revalidation is complete. The independent-review findings against
 `d918617a19749cd16d6bfcf3d2fee3e5146e7380` are covered by PLAN checkpoint `4f9c5a96`, committed
@@ -39,9 +33,9 @@ means every declared command here passed; it does not claim parent-level Go/conn
 
 | Gate | Status | Evidence |
 |---|---|---|
-| Focused AgentSession/tool-policy tests | pass | 40 passed, 0 failed, exit 0 |
-| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 177 passed, 0 failed, exit 0 |
-| Deterministic scanner scale | pass | line-boundary visits equal 25,618 / 51,218 / 102,418-byte inputs |
+| Focused AgentSession/tool-policy tests | pass | 53 passed, 0 failed, exit 0 |
+| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 190 passed, 0 failed, exit 0 |
+| Deterministic scanner scale | pass | total/key-start visits are bounded and near-linear for padded 25/50/100 KiB inputs |
 | Strict no-emit TypeScript against installed Pi 0.80.6 types | pass | owned production/tests plus all Shepherd production `.ts`; exit 0 |
 | Supported offline Pi extension/RPC smoke | pass | explicit 0.80.6 binary, `PI_OFFLINE=1`, RPC `get_commands`; `pm-shepherd` registered, exit 0 |
 | `git diff --check` | pass | exit 0 |
@@ -67,10 +61,10 @@ skip, pass, or failure.
 ```bash
 node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
   .pi/extensions/shepherd/tool-policy.test.ts
-# 40 passed, 0 failed
+# 53 passed, 0 failed
 
 node --test .pi/extensions/shepherd/*.test.ts
-# 177 passed, 0 failed
+# 190 passed, 0 failed
 ```
 
 TypeScript used the already-installed TypeScript 5.9.3 compiler and explicit Pi 0.80.6 package/type
@@ -100,6 +94,18 @@ printf '%s\n' '{"type":"get_commands"}' |
 The explicit binary reports `0.80.6`; RPC `get_commands` returned success with the `pm-shepherd`
 command registered.
 
+Cycle 7 proves that signal-listener attach/remove exceptions cannot strand a reservation or
+referenced deadline timer. Creation ownership remains visible to close through late fulfillment,
+validation, and cleanup: late resolve and reject settle before successful close, while hung and
+malformed creation boundedly quarantine and reject close without an unhandled rejection.
+
+The structured redactor covers multiline outer flows, indented/key-only/continued YAML, numeric
+secrets, credential-bearing Basic and non-Bearer Authorization values, unmatched-quote recovery,
+repository secret aliases, and generic PKCS#8 at direct, prompt, workspace, typed-tool, and handoff
+boundaries. Harmless structurally quoted multiline prose remains byte-identical.
+
+## Retained Cycle 6 Baseline
+
 Cycle 6 proves that a nested sensitive mapping value retains its value-local delimiter ownership
 across a newline, so its close cannot remove the outer flow-map closer and hide a later same-line
 `client_secret`. It also proves that `rock-'n-roll` remains one unquoted scalar: `-` is a quote
@@ -113,10 +119,10 @@ inputs of the same sizes, establishing linear line discovery without wall-clock 
 overloaded entry point also preserves `Array.map(redactSensitiveText)` callback behavior by
 ignoring its numeric index. Every earlier lifecycle and redaction regression remains green.
 
-The immutable-base check retained
+The Cycle 7 immutable-base check retained
 `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; every changed path is an issue-owned Shepherd
-production/test file or one of the phase's durable planning artifacts. Local HEAD and the local
-remote-tracking branch were identical after the GREEN push.
+production/test file or one of the phase's durable planning artifacts. Implementation HEAD and the
+local remote-tracking branch were identical after the GREEN push.
 
 ## Deviations
 

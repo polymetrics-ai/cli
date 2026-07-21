@@ -22,7 +22,7 @@ findings, and existing PLAN define the phase-equivalent coverage gate. The froze
 | Total scanner work is near-linear with leading padding and dense flow assignments | deterministic 25/50/100 KiB diagnostics, including key-start work | focused GREEN |
 | Every redaction form reaches every relevant trust boundary | direct, prompt, `workspace_read`, typed capability, handoff summary/finding | focused GREEN |
 | Prior lifecycle and redaction invariants remain intact | existing 40 focused regressions | mandatory retained passes |
-| Declared phase verification | focused/full Shepherd tests, pinned Pi 0.80.6 strict TypeScript, offline RPC, diff/base/head/scope | focused + focused strict pass; terminal gates pending |
+| Declared phase verification | focused/full Shepherd tests, pinned Pi 0.80.6 strict TypeScript, offline RPC, diff/base/head/scope | pass: 53/53 focused, 190/190 full, both strict scopes, RPC, and scope gates |
 
 No dependency, CLI/help/docs/website, Go, connector, runtime-backed service, live credential, or
 external mutation work is required. Parent orchestration owns the stable-head review campaign and

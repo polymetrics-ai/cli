@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "in_progress",
+  "status": "completed",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": false,
-  "currentCycle": "correction_cycle_7_green",
+  "verificationPassed": true,
+  "currentCycle": "correction_cycle_7_complete",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -173,15 +173,25 @@
       "cycle": "correction_cycle_7_green",
       "decision": "local_critical_path",
       "reason": "Exception-safe listener and creation ownership plus the multiline/indent-aware monotonic redactor make all 53 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to declared terminal gates."
+    },
+    {
+      "cycle": "correction_cycle_7_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 53/53, complete Shepherd 190/190, both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-base, pushed-head equality, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_cycle_7_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 7 evidence is terminal; parent orchestration owns the fresh stable-head review campaign and every integration gate."
     }
   ],
   "gates": {
     "focusedTests": "green_53_passed_0_failed",
-    "fullShepherdTests": "pending_cycle_7_green",
-    "strictTypeScriptPi0806": "green_focused_pending_all_production",
-    "offlineRpcSmoke": "pending_cycle_7_green",
-    "diffCheck": "green_current_worktree",
-    "ownedScope": "pending_cycle_7_immutable_base_head_and_issue_owned_paths",
+    "fullShepherdTests": "green_190_passed_0_failed",
+    "strictTypeScriptPi0806": "green_focused_and_all_production",
+    "offlineRpcSmoke": "green_pm_shepherd_registered",
+    "diffCheck": "green",
+    "ownedScope": "green_immutable_base_pushed_head_and_issue_owned_paths",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

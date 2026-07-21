@@ -566,11 +566,15 @@
 - Preserve every prior lifecycle/redaction invariant and avoid new dependencies or widened
   authority.
 
-### VERIFY contract
+### VERIFY
 
-- Focused and complete Shepherd tests, focused and all-production strict TypeScript against pinned
-  Pi 0.80.6, explicit offline Pi RPC, `git diff --check`, immutable-base/head equality, and
-  issue-owned changed paths only.
+- Status: captured at implementation head `5c638d7f21a3910f40e499dba5c82cb7646642ac`.
+- Focused tests: 53 passed / 0 failed; complete Shepherd: 190 passed / 0 failed.
+- Focused and all-production strict TypeScript pass with TypeScript 5.9.3 against explicit Pi
+  0.80.6 package/type roots.
+- Explicit Pi 0.80.6 offline RPC `get_commands` passes with `pm-shepherd` registered.
+- `git diff --check`, immutable-base, local/remote-tracking head equality, and issue-owned changed
+  paths pass.
 - Forbidden in this lane: Go, connector/certification, `make verify`, runtime-backed services,
   live-GitHub/CI/review-bot mutation, merge, and parent-artifact edits.
 
@@ -581,6 +585,6 @@
 | PLAN | pass | frozen candidate/base and full 11-finding matrix pushed at `f40a08f1` before tests |
 | RED | expected fail | pushed `3b7e886a`; 40 passed / 13 assertion failures; production identical |
 | GREEN / REFACTOR | pass | 53 passed / 0 failed; one lifecycle/redactor architectural correction |
-| Focused / full Shepherd | partial | focused 53/53; complete suite pending evidence checkpoint |
-| Strict TypeScript / offline RPC | partial | focused strict explicit Pi 0.80.6 pass; all-production/RPC pending |
-| Diff / base / head / scope | pending | immutable base and issue-owned paths only |
+| Focused / full Shepherd | pass | focused 53/53; complete 190/190 |
+| Strict TypeScript / offline RPC | pass | both strict scopes and explicit Pi 0.80.6 RPC registration |
+| Diff / base / head / scope | pass | immutable base, pushed implementation head, and issue-owned paths only |
