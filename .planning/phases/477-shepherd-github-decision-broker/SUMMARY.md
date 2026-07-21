@@ -1,7 +1,7 @@
 # Summary: #477
 
-Status: one lock-snapshot race from fresh exact-head review is in a new test-first correction cycle;
-all earlier review corrections remain locally verified.
+Status: the final lock-snapshot review correction is implemented and locally verified; fresh
+parent-owned xhigh review is pending on the new exact head.
 
 The owned slice adds a pure durable human-decision aggregate and a typed GitHub comment broker
 without controller wiring. The broker routes issue-vs-PR gates deterministically, binds every
@@ -36,5 +36,11 @@ live GitHub, or merge action was run in the correction cycle.
 
 Fresh review of `f5a4dc68a7b76f708858542a7190ca3d1f375044` found that benign lock-file
 rename/release between `readdir`, `lstat`, and owner read can surface as a transaction failure under
-contention. The follow-up preserves the token-fenced design while adding bounded rescans for
-vanished snapshot entries and retaining fail-closed handling for stable malformed locks.
+contention. The follow-up preserves the token-fenced design while discriminating valid, missing,
+and invalid owner reads. Vanished/transitioned snapshots rescan only through the existing slept,
+attempt-bounded acquisition loop; stable malformed locks still fail closed.
+
+The test-first correction recorded 18 pass/1 expected failure at RED, exposing both `ENOENT` and
+`invalid-owner`, then reached focused GREEN at 43 pass/0 fail/1 skip. The complete Shepherd suite is
+180 pass/0 fail/1 skip; strict owned and all-production TypeScript, offline Pi 0.80.6 RPC, and
+full-range diff/base/scope checks pass. No broad, live, review-bot, or merge gate was run.

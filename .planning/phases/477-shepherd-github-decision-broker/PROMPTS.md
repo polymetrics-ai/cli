@@ -39,4 +39,7 @@
 - Runtime decision: `local_critical_path` under the recorded manual-GSD fallback; the one production
   lock implementation and its regression test share the same write scope.
 - Downstream artifact: lock-snapshot sections in `PLAN.md` and `TDD-LEDGER.md`.
-- Verification result: pending genuine high-contention RED, fix, and bounded lane verification.
+- Verification result: passed genuine high-contention RED/GREEN, focused #477 tests, complete
+  Shepherd tests, strict owned and all-production TypeScript against pinned Pi 0.80.6, offline Pi
+  RPC registration, and full-range diff/base/scope checks. Fresh exact-head xhigh review remains
+  parent-owned.

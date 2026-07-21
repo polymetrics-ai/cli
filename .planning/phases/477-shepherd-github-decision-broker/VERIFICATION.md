@@ -42,9 +42,20 @@ production/destructive action, merge, or default-branch write.
 
 ## Lock-snapshot correction verification
 
-Status: in progress after fresh review of
-`f5a4dc68a7b76f708858542a7190ca3d1f375044`.
+Status: passed for corrected implementation checkpoint
+`31d4eef6b4286f9acad511e4ea2b140ea16346bb`; fresh exact-head xhigh review remains parent-owned.
 
-The declared equivalent remains focused #477 tests, the complete Shepherd suite, strict TypeScript
-against pinned Pi 0.80.6, offline Pi RPC registration, and full-range diff/base/owned-scope checks.
-No Go, connector, `make verify`, live GitHub comment, Claude/Copilot, or merge action is authorized.
+| Lock-snapshot gate | Status | Evidence |
+|---|---|---|
+| Genuine high-contention RED | pass | Before production edits: 19 total, 18 pass, 1 fail, 0 skip; 889.260542 ms. The 32-independent-repository regression exposed both `ENOENT` and `invalid-owner`; stable malformed-lock coverage passed. |
+| Focused #477 GREEN | pass | 44 total, 43 pass, 0 fail, 1 sandbox skip; 8794.958958 ms. Three rounds/96 transactions completed with maximum critical-section occupancy of one. |
+| Complete Shepherd tests | pass | 181 total, 180 pass, 0 fail, 1 sandbox skip; 45835.6605 ms. |
+| Strict owned TypeScript | pass | Both owned modules and tests passed TypeScript 5.9.3 strict no-emit with the explicit Pi 0.80.6 Node type root. |
+| Strict production TypeScript | pass | All 11 production Shepherd modules passed with the installed Pi 0.80.6 package resolver/type root. |
+| Offline Pi registration | pass | Pi 0.80.6 RPC `get_commands` exited 0 and returned `pm-shepherd` from the explicit extension in offline mode with automatic discovery disabled. |
+| Diff/base/scope | pass | Full-range `git diff --check` exited 0; merge-base remains `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; changed files remain within the two owned modules, matching tests/fixture, and issue-local planning artifacts. |
+| Broad/live/review-bot gates | not run by policy | No Go, connector, `make verify`, live GitHub comment, Claude/Copilot, or merge action was run. |
+
+Snapshot-change retries use the existing acquisition sleep and attempt budget. Stable malformed
+owners still fail closed, the existing live-owner low-attempt test still reaches its bounded timeout,
+and no lock remains after successful high-contention rounds.

@@ -162,5 +162,8 @@ node --test .pi/extensions/shepherd/human-decision.test.ts \
 
 Result: exit 0; 44 tests total, 43 passed, 0 failed, and 1 designated-sandbox skip; duration
 8794.958958 ms. Strict no-emit TypeScript over both owned modules and tests then exited 0 using
-TypeScript 5.9.3 and the explicit Pi 0.80.6 Node type root. Complete-lane verification remains
-pending.
+TypeScript 5.9.3 and the explicit Pi 0.80.6 Node type root.
+
+Complete Shepherd verification then exited 0 with 181 tests total, 180 passed, 0 failed, and 1
+designated-sandbox skip; duration 45835.6605 ms. Strict no-emit TypeScript passed over all 11
+production Shepherd modules using the installed Pi 0.80.6 package resolver and Node type root.
