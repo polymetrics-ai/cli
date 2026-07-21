@@ -5,7 +5,7 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 6 consolidates both blocking reviews of exact Cycle 5 candidate 63ac436f into one plan-first architecture correction; test and production files remain frozen at this plan checkpoint.",
+  "reason": "Cycle 6 consolidates both blocking reviews of exact Cycle 5 candidate 63ac436f into one plan-first architecture correction; the completed broker map amended the exact scope from 18 to 21 paths before RED or production edits.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
@@ -70,6 +70,11 @@
         "cycle": "cycle-6-plan",
         "decision": "read_only_spawned_and_local_critical_path",
         "reason": "One read-only explorer maps real broker and shared-boundary symbols; this isolated worker owns the ordered PLAN, RED, GREEN, and evidence path."
+      },
+      {
+        "cycle": "cycle-6-scope-amendment",
+        "decision": "broker_owned_reread_requires_21_paths",
+        "reason": "The completed contract map proves an honest adapter requires GitHubDecisionBroker.readRecord over its own repository plus native broker and human-decision tests; the exact allowlist is amended before RED from 18 to 21 paths."
       }
     ],
     "humanGates": [
@@ -83,5 +88,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T22:40:51.000Z"
+  "updatedAt": "2026-07-21T22:46:37.000Z"
 }

@@ -206,11 +206,15 @@ session-attestation contract and fixtures required to verify independent-review 
 
 - Frozen candidate `63ac436f`; immutable base `3addb1f4`; initial worktree clean.
 - Both Cycle 5 review ledgers were read completely and consolidated before test/production edits.
-- Narrow review-proven scope expansion: prior 17 paths plus only `human-decision.ts`, enabling one
-  authoritative credential grammar and coherent canonical decision chronology.
-- Real `GitHubDecisionBroker` composition remains in the owned orchestrator/test files through an
-  explicit adapter and canonical repository rereads; production broker code remains frozen unless
-  RED proves its public contract insufficient.
+- The initial 18-path plan was amended before RED after the completed broker contract map proved the
+  minimum honest boundary is 21 paths: add `github-decision-broker.ts` plus its test and
+  `human-decision.ts` plus its test to the prior 17.
+- `GitHubDecisionBroker.readRecord` must use its own repository. The orchestrator adapter consumes
+  the real request/full-record, poll/compact-result, and consume/evidence shapes, then verifies each
+  against that broker-owned canonical reread; a second repository or reconstructed record is
+  forbidden. Native broker and orchestrator composition tests prove the boundary.
+- `human-decision.ts` imports the authoritative credential assertion from `review-router.ts` and
+  owns descriptor-safe closed-record chronology; native tests exercise both contracts.
 - Adapter command unavailable after healthy doctor, so `manual_gsd_fallback` remains recorded.
-  One read-only explorer maps coupled symbols; isolated worker owns implementation. No push,
+  The bounded read-only explorer completed its exact symbol map; isolated worker owns implementation. No push,
   network, live GitHub, Go, connector, runtime, `make`, reviewer, integration, or merge action.

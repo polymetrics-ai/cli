@@ -469,30 +469,51 @@ still does not expose `programming-loop`, so `manual_gsd_fallback` remains expli
 explorer maps real broker/shared-boundary symbols while this isolated worker owns the ordered
 PLAN/RED/GREEN/evidence critical path (`read_only_spawned` plus `local_critical_path`).
 
-### Cycle 6 narrow scope expansion
+### Cycle 6 bounded scope expansion
 
-The reviewed 17-path range is expanded by exactly one production path:
-`.pi/extensions/shepherd/human-decision.ts`. Review finding 6 proves that file contains a separate,
-narrower credential grammar, while finding 2/3 proves its canonical record chronology is incomplete.
-The non-duplicative correction makes `human-decision.ts` export the single shared grammar and makes
-`review-router.ts` reuse/re-export it; orchestrator-level RED rows exercise the hardened record
-chronology. No `human-decision.test.ts` expansion is needed. The explicit production adapter and
-strict/runtime real-`GitHubDecisionBroker` composition test stay in the already-owned
-`github-orchestrator.ts` and `github-orchestrator.test.ts`; `github-decision-broker.ts` remains
-byte-identical unless RED proves an adapter cannot be expressed against its public contract.
+The first Cycle 6 plan checkpoint conservatively proposed an 18-path range. The completed read-only
+broker contract map proved that range cannot support an honest production composition: the real
+broker owns its repository and publicly returns a full record from `request`, a compact poll result
+from `poll`, and decision evidence from `consume`. A consumer-supplied repository would permit the
+adapter to reread a different store, while an orchestrator-only adapter cannot canonically reread
+the broker-owned record. This artifact-only amendment therefore expands the reviewed 17-path range
+by exactly four coupled paths:
 
-Expected exact base-to-candidate allowlist: the prior 17 paths plus
-`.pi/extensions/shepherd/human-decision.ts` (18 total). Any additional path is a stop-and-replan
-event, never a silent scope expansion.
+- `.pi/extensions/shepherd/github-decision-broker.ts`
+- `.pi/extensions/shepherd/github-decision-broker.test.ts`
+- `.pi/extensions/shepherd/human-decision.ts`
+- `.pi/extensions/shepherd/human-decision.test.ts`
+
+`GitHubDecisionBroker.readRecord` must use the broker's own repository, validate the canonical
+record, and enforce the exact binding. The explicit adapter remains in `github-orchestrator.ts` and
+maps the real request/poll/consume shapes to the controller contract only after broker-owned
+canonical rereads and exact result/reload coherence. Its composition test instantiates the actual
+broker without type casts or invented fields. `human-decision.ts` imports the authoritative
+credential assertion from `review-router.ts`; focused human-decision tests prove that shared grammar
+and the descriptor-safe canonical record chronology at their native boundary.
+
+Expected exact base-to-candidate allowlist: the prior 17 paths plus the four paths above (21 total).
+Any additional path is a stop-and-replan event, never a silent scope expansion.
+
+### Cycle 6 exact symbol map
+
+| Contract | Required production symbols |
+| --- | --- |
+| real broker composition | `GitHubDecisionBroker.readRecord`; an exported orchestrator adapter over `request`, `poll`, `consume`, and the broker-owned reread; real composition coverage in both broker and orchestrator tests |
+| shared credential grammar | `review-router.ts` `redactSensitiveText`/`assertNoSensitiveText`; `human-decision.ts` `normalizeQuestion` imports the shared assertion and removes its duplicate grammar |
+| intrinsic signal lease | `GitHubParentOrchestrator.lifecycleContext`, `withLifecycle`, `waitForLifecycle`, `callExternal`, `stop`, `#lifecycleScope`, and `ExternalCallContext.acknowledgeAbort` |
+| intrinsic raw/proxy bounds | `review-router.ts` `decodeBoundedJsonPayload`, `readBoundedExactRecord`, and `exactArrayValues`; `github-evidence.ts` and `github-orchestrator.ts` `boundedArray` |
+| ordered stable reviews | `review-router.ts` `reconcileIndependentReview` and a separate stable semantic clean-authorization digest while retaining the full attempt digest for attestation |
+| canonical decision DTO | `human-decision.ts` record/field readers, normalizers, `validateHumanDecisionRequestComment`, and `validateHumanDecisionRecord` |
 
 ### Cycle 6 correction contract
 
 1. Preserve the real `GitHubDecisionBroker` request/full-record, poll/result, and
-   consume/evidence shapes through one explicit production adapter backed by canonical repository
-   rereads. The adapter owns context linkage, bounded validation, and exact request/result/reload
-   coherence; it cannot synthesize decision evidence. Strict compile and runtime composition use
-   an actual `GitHubDecisionBroker` through pending -> decided -> consumed. Test fakes expose the
-   same production shapes.
+   consume/evidence shapes through one explicit production adapter backed by the broker's own
+   canonical `readRecord` boundary. The adapter owns context linkage, bounded validation, and exact
+   request/result/reload coherence; it cannot accept a second repository or synthesize decision
+   evidence. Strict compile and runtime composition use an actual `GitHubDecisionBroker` through
+   pending -> decided -> consumed. Test fakes expose the same production shapes.
 2. Capture every request, poll, consume, and reload value through byte/descriptor-bounded,
    proxy/accessor-safe closed DTOs before canonical human-decision validation. All failures become
    stable typed/sanitized boundary errors. Decided/consumed records require persisted request-comment
@@ -540,7 +561,7 @@ event, never a silent scope expansion.
    production blobs still equal frozen `63ac436f` before GREEN.
 3. Implement one coherent architectural GREEN/refactor. Any post-RED fixture edit must preserve
    production shapes, must not weaken/remove expectations, and must be enumerated in evidence.
-4. Run the focused three files including the real broker composition test, strict owned and all 20
+4. Run the focused five files including the real broker composition test, strict owned and all 20
    production Shepherd modules against pinned Pi 0.80.6, pinned offline RPC, serialized Shepherd
    classification, immutable-base/ancestry/diff/exact-expanded-scope, JSON, and synthetic-marker
    scans. Do not run Go, connectors, certification, runtime services, `make`, network/live GitHub,
@@ -550,8 +571,10 @@ event, never a silent scope expansion.
 
 ### Cycle 6 checkpoints
 
-- [ ] Artifact-only PLAN/scope/finding-matrix commit (this checkpoint; exact SHA reported after
-      commit).
+- [x] Initial artifact-only PLAN/finding-matrix commit:
+      `88513259ffc31fd0853679234c6a42ab6cd04ef6`.
+- [ ] Artifact-only broker-map scope amendment from 18 to 21 paths (this checkpoint; exact SHA
+      reported after commit).
 - [ ] One comprehensive test/fixture-only RED with retained 109/109 and frozen production proof.
 - [ ] One coherent architectural GREEN/refactor.
 - [ ] Authorized local verification/evidence commit and clean candidate.

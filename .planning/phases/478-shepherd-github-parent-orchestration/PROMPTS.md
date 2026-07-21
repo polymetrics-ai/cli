@@ -106,8 +106,11 @@
   conditional parent-ready authorization plus rollback; intrinsic signal ownership; ordered review
   attempts with stable semantic authority; intrinsic raw/proxy totality; one complete credential
   grammar; receipt chronology; non-self-referential exact-current RUN-STATE; Cycle 5 retention.
-- Scope: prior exact 17 paths plus only `.pi/extensions/shepherd/human-decision.ts`; any further
-  path requires stop-and-replan. One read-only explorer is spawned; implementation remains local
-  critical path.
+- Scope after the completed broker contract map: prior exact 17 paths plus
+  `.pi/extensions/shepherd/github-decision-broker.ts`, its test, `human-decision.ts`, and its test
+  (21 total); any further path requires stop-and-replan. The broker exposes a repository-owned
+  `readRecord`, and the orchestrator adapter proves the actual request/full-record,
+  poll/compact-result, consume/evidence composition without a second repository or invented fields.
+  The bounded read-only explorer has completed; implementation remains the local critical path.
 - Exclusions: push/network/live GitHub, #479, Go/connectors/certification/runtime/`make`, reviewer,
   integration, or merge.

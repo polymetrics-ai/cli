@@ -189,7 +189,12 @@
 - Loaded GSD programming-loop, compact handoff, architecture/testing, routing, adapter/runtime,
   issue-contract, and project references. Doctor passes; missing adapter command records
   `manual_gsd_fallback`.
-- Spawn decision: `read_only_spawned` for broker/shared-boundary mapping plus
+- Spawn decision: `read_only_completed` for the bounded broker/shared-boundary contract map plus
   `local_critical_path` for the ordered implementation in this isolated checkout.
-- Scope decision: exact prior 17 paths plus only `human-decision.ts`; any further path requires
-  stop-and-replan. No test, production, push, network, GitHub, reviewer, or prohibited gate ran.
+- Initial PLAN checkpoint `88513259ffc31fd0853679234c6a42ab6cd04ef6` proposed 18 paths. The
+  completed map proved that a canonical adapter cannot accept a second repository or reconstruct a
+  full record from compact poll/evidence consume results. The exact scope is therefore amended
+  before RED to 21 paths: add `github-decision-broker.ts` plus its test and `human-decision.ts` plus
+  its test to the prior 17. `GitHubDecisionBroker.readRecord` owns canonical repository rereads;
+  native broker and orchestrator tests prove actual composition. Any further path requires
+  stop-and-replan. No production, push, network, GitHub, reviewer, or prohibited gate ran.

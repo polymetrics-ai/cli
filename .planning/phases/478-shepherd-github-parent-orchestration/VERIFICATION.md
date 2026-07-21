@@ -159,13 +159,15 @@ Status: planned against frozen candidate `63ac436fdac5fc46be7004f8109c4f068aa574
 Both Cycle 5 reviews are blocking historical input until this consolidated correction completes.
 
 - [x] Both review ledgers read completely and mapped to one finding-to-RED matrix.
-- [x] Narrow scope expansion records exactly one added production path,
-      `.pi/extensions/shepherd/human-decision.ts`, for the single credential grammar and record
-      chronology correction.
-- [ ] Artifact-only PLAN checkpoint precedes every Cycle 6 test and production edit.
+- [x] Initial artifact-only PLAN checkpoint is
+      `88513259ffc31fd0853679234c6a42ab6cd04ef6`.
+- [x] Completed broker mapping proves and records the exact 21-path boundary: add
+      `github-decision-broker.ts` plus its test for broker-owned canonical rereads, and
+      `human-decision.ts` plus its test for shared credential grammar and record chronology.
+- [ ] Artifact-only 21-path scope amendment precedes the RED commit and every production edit.
 - [ ] One test/fixture-only RED retains 109/109 and fails every new behavior row while actual
       `GitHubDecisionBroker` composition is exercised and production blobs remain frozen.
-- [ ] One coherent architectural GREEN passes the focused three-file suite and real broker route.
+- [ ] One coherent architectural GREEN passes the focused five-file suite and real broker route.
 - [ ] Strict owned/all-production TypeScript, offline RPC, serialized classification, immutable
       base/ancestry, expanded exact scope, diff, JSON, and synthetic-marker scans are recorded.
 - [ ] RUN-STATE uses the non-self-referential exact-current candidate contract.

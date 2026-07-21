@@ -102,6 +102,9 @@ Both Cycle 5 reviews block exact candidate `63ac436f`. Cycle 6 consolidates thei
 both warnings: real production broker composition; bounded canonical decision provenance;
 conditional ready authorization and rollback; intrinsic signal/raw ownership; ordered review
 attempts with stable semantic authority; one complete credential grammar; receipt chronology; and
-non-self-referential current RUN-STATE. The exact scope expands from 17 to 18 paths only for
-`.pi/extensions/shepherd/human-decision.ts`; test and production files remain frozen at this plan
+non-self-referential current RUN-STATE. The completed broker contract map amended the exact scope
+from 18 to 21 paths before RED: broker-owned `readRecord` and its native test are required to compose
+the real compact poll/evidence-only consume API without a second repository, while
+`human-decision.ts` and its native test own canonical chronology and reuse the shared
+`review-router.ts` credential grammar. Production files remain frozen at this amended plan
 checkpoint. No prohibited or external action ran.

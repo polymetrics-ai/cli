@@ -264,8 +264,8 @@ Frozen production blobs:
 - `github-orchestrator.ts`: `dfa8c189bc116c212f5623df508ef918e4d17943`
 - `github-evidence.ts`: `ee3cd46f663c6a4cd15db137fb5a8f2cc539f773`
 - `review-router.ts`: `611aa0679a84c4a470d19c102b540ea5b3fc103d`
-- narrow scope expansion `human-decision.ts`: `0c26e61808a577b3197f9373b659d95739ab20b3`
-- production broker compatibility control `github-decision-broker.ts`:
+- scope expansion `human-decision.ts`: `0c26e61808a577b3197f9373b659d95739ab20b3`
+- scope expansion `github-decision-broker.ts`:
   `a04d331443e6ffda4b66996766a6d4111d664931`
 
 | Contract | Behavior-level RED requirement | State |
@@ -281,7 +281,13 @@ Frozen production blobs:
 | non-self-referential RUN-STATE | current cycle 6 uses `candidateRef: "HEAD"`, exact completed checkpoint commits, explicit Cycle 5 blocked review truth, no Cycle 4-as-current state, and no null Cycle 5/6 evidence field | planned RED |
 | Cycle 5 retention | all existing 109 focused tests pass unchanged at RED and after GREEN; policy, reauthorization, eligibility, CAS, lifecycle, bounds, and no-merge guarantees remain intact | planned RED |
 
-The next commit after the Cycle 6 plan checkpoint may modify only the three matching tests and the
-two issue-478 fixtures. Existing fake behavior remains untouched until RED evidence is captured;
-the new real-broker composition row uses the actual production class. Before GREEN, retained
-109/109, every intended new failure, and all frozen production blob IDs above must be recorded.
+The first Cycle 6 plan checkpoint is `88513259ffc31fd0853679234c6a42ab6cd04ef6`.
+The completed broker map then proved the production class must expose a canonical `readRecord` over
+its own repository: supplying a second repository to the adapter could validate a different store,
+and the current public compact poll/evidence consume results cannot reconstruct a canonical record.
+The amended exact scope is the prior 17 paths plus `github-decision-broker.ts`, its test,
+`human-decision.ts`, and its test (21 total). The comprehensive RED may modify the five matching
+tests and two issue-478 fixtures. Existing production behavior remains untouched until RED evidence
+is captured; the composition row uses the actual broker without casts or invented fields. Before
+GREEN, retained 109/109, every intended new failure, and all frozen production blob IDs above must
+be recorded.
